@@ -37,3 +37,10 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+.angular
+
+# Project
+.env
+.docker/nginx/ssl/certs
+.docker/nginx/ssl/dhparam

@@ -1,0 +1,14 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "platon",
+      "Group": "Servers",
+      "Port": 5432,
+      "SSLMode": "prefer",
+      "Username": "platon",
+      "Password": "test",
+      "MaintenanceDB": "postgres",
+      "Host": "postgres"
+    }
+  }
+}

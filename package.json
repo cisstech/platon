@@ -1,16 +1,133 @@
 {
   "name": "platon",
   "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cisstech/platon"
+  },
+  "bugs": {
+    "url": "https://github.com/cisstech/platon/issues"
+  },
+  "homepage": "https://github.com/cisstech/platon",
+  "author": {
+    "name": "Mamadou Cisse",
+    "email": "mciissee@gmail.com"
+  },
   "license": "MIT",
   "scripts": {
+    "serve:web": "npx nx serve web",
+    "serve:api": "npx nx serve api",
+    "build:web": "npx nx build web --configuration=production",
+    "build:api": "npx nx build api --configuration=production",
+    "test": "nx run-many --target=test --all --code-coverage --watch=false --browsers=ChromeHeadless && node coverage-merger.js",
+    "lint": "nx workspace-lint && nx run-many --target=lint --all",
+    "stats": "npm run build:web && webpack-bundle-analyzer dist/apps/web/stats.json",
+    "e2e": "ng e2e",
+    "affected:apps": "nx affected:apps",
+    "affected:libs": "nx affected:libs",
+    "affected:build": "nx affected:build",
+    "affected:e2e": "nx affected:e2e",
+    "affected:test": "nx affected:test --code-coverage --browsers=ChromeHeadless && node coverage-merger.js",
+    "affected:lint": "nx affected:lint",
+    "affected:dep-graph": "nx affected:dep-graph",
+    "affected": "nx affected",
+    "format": "nx format:write",
+    "format:write": "nx format:write",
+    "format:check": "nx format:check",
+    "update": "nx migrate latest",
+    "dep-graph": "nx dep-graph",
+    "workspace-schematic": "nx workspace-schematic",
+    "clear:nx": "rimraf -rf ./node_modules/.cache/nx",
+    "clear:modules": "rimraf -rf ./node_modules",
+    "clear:webpack": "rimraf -rf ./node_modules/.cache/webpack",
+    "clear:dist": "rimraf -rf ./dist/",
+    "typeorm": "export DB_HOST=localhost; ts-node -O '{\"module\":\"commonjs\"}' -P tsconfig.base.json -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
+    "typeorm:run": "export DB_HOST=localhost; ts-node -O '{\"module\":\"commonjs\"}' -P tsconfig.base.json -r tsconfig-paths/register ./node_modules/typeorm/cli.js -d libs/core/server/src/lib/database/database.cli.ts",
+    "help": "nx help"
   },
   "private": true,
-  "dependencies": {
-  },
   "devDependencies": {
-    "nx": "15.5.3",
+    "@angular-devkit/build-angular": "~15.1.0",
+    "@angular-eslint/eslint-plugin": "~15.0.0",
+    "@angular-eslint/eslint-plugin-template": "~15.0.0",
+    "@angular-eslint/template-parser": "~15.0.0",
+    "@angular/cli": "~15.1.0",
+    "@angular/compiler-cli": "~15.1.0",
+    "@angular/language-service": "~15.1.0",
+    "@commitlint/cli": "^17.4.2",
+    "@commitlint/config-conventional": "^17.4.2",
+    "@nestjs/schematics": "^9.0.0",
+    "@nestjs/testing": "^9.0.0",
+    "@nrwl/angular": "^15.5.3",
+    "@nrwl/cypress": "15.5.3",
+    "@nrwl/eslint-plugin-nx": "15.5.3",
+    "@nrwl/jest": "15.5.3",
+    "@nrwl/linter": "15.5.3",
+    "@nrwl/nest": "15.5.3",
+    "@nrwl/node": "15.5.3",
+    "@nrwl/storybook": "^15.5.3",
+    "@nrwl/webpack": "15.5.3",
     "@nrwl/workspace": "15.5.3",
+    "@types/jest": "28.1.1",
+    "@types/node": "18.7.1",
+    "@typescript-eslint/eslint-plugin": "^5.36.1",
+    "@typescript-eslint/parser": "^5.36.1",
+    "cypress": "^12.2.0",
+    "cz-conventional-changelog": "^3.3.0",
+    "eslint": "~8.15.0",
+    "eslint-config-prettier": "8.1.0",
+    "eslint-plugin-cypress": "^2.10.3",
+    "fs": "^0.0.1-security",
+    "husky": "^8.0.3",
+    "jest": "28.1.1",
+    "jest-environment-jsdom": "28.1.1",
+    "jest-preset-angular": "~12.2.3",
+    "node-postgres": "^0.6.2",
+    "nx": "15.5.3",
+    "prettier": "^2.6.2",
+    "standard-version": "^9.5.0",
+    "sync-json": "^1.0.2",
+    "ts-jest": "28.0.5",
+    "ts-node": "^10.9.1",
     "typescript": "~4.8.2",
-    "prettier": "^2.6.2"
+    "wait-on": "^7.0.1",
+    "webpack-bundle-analyzer": "^4.7.0"
+  },
+  "dependencies": {
+    "@angular/animations": "~15.1.0",
+    "@angular/common": "~15.1.0",
+    "@angular/compiler": "~15.1.0",
+    "@angular/core": "~15.1.0",
+    "@angular/forms": "~15.1.0",
+    "@angular/platform-browser": "~15.1.0",
+    "@angular/platform-browser-dynamic": "~15.1.0",
+    "@angular/router": "~15.1.0",
+    "@nestjs/common": "^9.0.0",
+    "@nestjs/config": "^2.2.0",
+    "@nestjs/core": "^9.0.0",
+    "@nestjs/platform-express": "^9.0.0",
+    "@nestjs/typeorm": "^9.0.1",
+    "dotenv": "^16.0.3",
+    "pg": "^8.9.0",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^7.0.0",
+    "tslib": "^2.3.0",
+    "typeorm": "^0.3.11",
+    "zone.js": "~0.11.4"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
   }
 }

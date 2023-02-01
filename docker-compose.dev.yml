@@ -1,0 +1,117 @@
+version: '3.7'
+
+services:
+  redis:
+    restart: on-failure
+    image: redis:6
+    container_name: platon_redis
+    ports:
+      - 6379
+    volumes:
+      - redisdata:/data
+    networks:
+      - platon-network
+
+  postgres:
+    restart: on-failure
+    image: postgres:13
+    container_name: platon_postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgresdata:/var/lib/postgresql/data
+    networks:
+      - platon-network
+    env_file:
+      - .env
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: platon_pgadmin
+    ports:
+      - '8082:80'
+    volumes:
+      - ~/data/pgadmin:/root/.pgadmin
+      - .docker/db/servers.json:/pgadmin4/servers.json
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+    networks:
+      - platon-network
+
+  api:
+    restart: on-failure
+    build:
+      context: .
+      dockerfile: .docker/node/Dockerfile
+    image: platon/node
+    container_name: platon_api
+    command: npm run serve:api -- --host 0.0.0.0
+    ports:
+      - 4201
+    volumes:
+      - ./:/src
+      # https://burnedikt.com/dockerized-node-development-and-mounting-node-volumes/
+      - /src/node_modules
+    environment:
+      - 'PORT=4201'
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - postgres
+    networks:
+      - platon-network
+
+  web:
+    restart: on-failure
+    image: platon/node
+    container_name: platon_web
+    command: npm run serve:web -- --host 0.0.0.0 --disable-host-check
+    ports:
+      - 4200
+    volumes:
+      - ./:/src
+      # https://burnedikt.com/dockerized-node-development-and-mounting-node-volumes/
+      - /src/node_modules
+    env_file:
+      - .env
+    depends_on:
+      - api
+      - redis
+      - postgres
+    networks:
+      - platon-network
+
+  nginx:
+    restart: on-failure
+    build:
+      context: .
+      dockerfile: .docker/nginx/Dockerfile.dev
+    image: platon/nginx
+    container_name: platon_nginx
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - .docker/nginx/nginx.dev.conf:/etc/nginx/nginx.conf
+      - .docker/nginx/ssl/dhparam/dhparam.pem:/etc/nginx/dhparam.pem
+      - .docker/nginx/ssl/certs/platon.dev.crt:/etc/nginx/ssl/platon.dev.crt
+      - .docker/nginx/ssl/certs/platon.dev.key:/etc/nginx/ssl/platon.dev.key
+    networks:
+      - platon-network
+    links:
+      - api:api
+      - web:web
+    depends_on:
+      - api
+      - web
+
+volumes:
+  redisdata:
+  postgresdata:
+
+networks:
+  platon-network:
+    driver: bridge
