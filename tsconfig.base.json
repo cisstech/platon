@@ -25,7 +25,8 @@
     "noImplicitOverride": true,
     "baseUrl": "./",
     "paths": {
-      "@platon/core/server": ["libs/core/server/src/index.ts"],
+      "@platon/core/common": ["libs/core/common/src/index.ts"],
+      "@platon/core/server": ["libs/core/server/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"],
