@@ -21,6 +21,12 @@ export class AuthService {
     if (!user.password ||!(await bcrypt.compare(input.password, user.password))) {
       throw new BadRequestException('Password is incorrect')
     }
+    user.lastLogin = new Date();
+    if (!user.firstLogin) {
+      user.firstLogin = new Date();
+    }
+
+    await this.userService.update(user.id, user);
     return this.authenticate(user.id, user.username);
   }
 

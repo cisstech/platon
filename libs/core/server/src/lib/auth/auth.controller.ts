@@ -10,11 +10,11 @@ import { Public } from './decorators/public.decorator';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @Public()
   @Post('signup')
-  async signUp(@Body() input: SignUpInput) {
+  async signUp(@Body() input: SignUpInput): Promise<HttpResponse<AuthToken>> {
     return new DetailSuccessResponse({
       resource: await this.authService.signUp(input)
     });
