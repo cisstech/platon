@@ -1,6 +1,6 @@
 import { UserRoles } from '@platon/core/common';
 import { Column, Entity, Unique } from 'typeorm';
-import { BaseEntity } from '../../database/base-entity';
+import { BaseEntity } from '../database/base-entity';
 
 @Entity('Users')
 @Unique('Users_unique_idx', ['username'])

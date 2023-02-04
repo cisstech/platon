@@ -6,7 +6,10 @@ import { config } from './database.config';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
-      useFactory: () => (config),
+      useFactory: () => ({
+        ...config,
+        autoLoadEntities: true
+      }),
       inject: [ConfigService]
     }),
   ],

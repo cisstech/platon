@@ -2,7 +2,7 @@ import { HTTP_STATUS_CODE } from "./status-code"
 
 export interface HttpResponse<T> {
   success: boolean
-  status: number
+  statusCode: number
   message?: string
   resource?: Partial<T>
   resources?: Partial<T>[]
@@ -12,7 +12,7 @@ export interface HttpResponse<T> {
 // create, update, delete, archive
 export class ActionSuccessResponse<T> implements HttpResponse<T> {
   success = true
-  status = HTTP_STATUS_CODE.OK
+  statusCode = HTTP_STATUS_CODE.OK
   message: string
   resource: Partial<T>
 
@@ -27,7 +27,7 @@ export class ActionSuccessResponse<T> implements HttpResponse<T> {
 
 export class DetailSuccessResponse<T> implements HttpResponse<T> {
   success = true
-  status = HTTP_STATUS_CODE.OK
+  statusCode = HTTP_STATUS_CODE.OK
   resource: Partial<T>
 
   constructor(options: {
@@ -39,7 +39,7 @@ export class DetailSuccessResponse<T> implements HttpResponse<T> {
 
 export class ListSuccessResponse<T> implements HttpResponse<T> {
   success = true
-  status = HTTP_STATUS_CODE.OK
+  statusCode = HTTP_STATUS_CODE.OK
   resources: Partial<T>[]
   total: number
 
@@ -54,14 +54,14 @@ export class ListSuccessResponse<T> implements HttpResponse<T> {
 
 export class ErrorResponse implements HttpResponse<null> {
   success = false
-  status: number
+  statusCode: number
   message: string
 
   constructor(options: {
     status: number
     message: string
   }) {
-    this.status = options.status
+    this.statusCode = options.status
     this.message = options.message
   }
 }

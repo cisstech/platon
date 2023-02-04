@@ -30,6 +30,6 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
     this.logger.error(exception.stack ?? exception)
 
-    response.status(error.status).json(error);
+    response.status(error.statusCode).json(error);
   }
 }
