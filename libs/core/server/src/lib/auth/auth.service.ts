@@ -46,7 +46,7 @@ export class AuthService {
           username,
         },
         {
-          secret: this.configService.get('auth.secret', { infer: true }),
+          secret: this.configService.get('secret', { infer: true }),
           expiresIn: this.configService.get('auth.accessLifetime', { infer: true }),
         },
       ),
@@ -56,7 +56,7 @@ export class AuthService {
           username,
         },
         {
-          secret: this.configService.get('auth.secret', { infer: true }),
+          secret: this.configService.get('secret', { infer: true }),
           expiresIn: this.configService.get('auth.refreshLifetime', { infer: true }),
         },
       ),

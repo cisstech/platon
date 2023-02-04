@@ -5,6 +5,7 @@
 
 import { Logger, LogLevel, ValidationPipe, VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 import { AppModule } from './app/app.module';
 
@@ -27,6 +28,18 @@ async function bootstrap() {
     type: VersioningType.URI,
     defaultVersion: '1',
   });
+
+  const config = new DocumentBuilder()
+    .setTitle('PLaTon API')
+    .setDescription('The PLaTon API description')
+    .setVersion('1.0')
+    .addTag('platon')
+    .addBearerAuth()
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api/doc', app, document);
+
 
   app.useLogger(app.get(Logger))
   app.useGlobalPipes(new ValidationPipe({ forbidUnknownValues: false }))
