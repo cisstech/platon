@@ -1,6 +1,6 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { CoreServerModule } from '@platon/core/server';
-import { FeatureLtiServerModule } from '@platon/feature/lti/server';
+import { FeatureLtiServerModule, LTIMiddleware } from '@platon/feature/lti/server';
 
 
 @Module({
@@ -9,4 +9,10 @@ import { FeatureLtiServerModule } from '@platon/feature/lti/server';
     FeatureLtiServerModule
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(LTIMiddleware)
+      .forRoutes('*');
+  }
+}

@@ -23,6 +23,7 @@
     "forceConsistentCasingInFileNames": true,
     "useDefineForClassFields": false,
     "noImplicitOverride": true,
+    "esModuleInterop": true,
     "baseUrl": "./",
     "paths": {
       "@platon/core/common": ["libs/core/common/src/index.ts"],
