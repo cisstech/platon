@@ -1,0 +1,52 @@
+:host {
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+section {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  text-align: center;
+  &:last-child {
+    background-image: linear-gradient(to bottom, #f8f8f8 1%, #f8f8f8 99%);
+  }
+}
+
+header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: white !important;
+  padding: 1rem;
+}
+
+.logo {
+  width: 64px;
+  height: 64px;
+  margin-right: 12px;
+}
+
+
+.illustration {
+  width: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 720px) {
+  :host {
+    display: block;
+  }
+  section:last-child {
+    display: none;
+  }
+}

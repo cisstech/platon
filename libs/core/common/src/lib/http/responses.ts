@@ -14,11 +14,11 @@ export class ActionSuccessResponse<T> implements HttpResponse<T> {
   success = true
   statusCode = HTTP_STATUS_CODE.OK
   message: string
-  resource: Partial<T>
+  resource: T
 
   constructor(options: {
     message: string,
-    resource: Partial<T>
+    resource: T
   }) {
     this.message = options.message
     this.resource = options.resource
@@ -28,7 +28,7 @@ export class ActionSuccessResponse<T> implements HttpResponse<T> {
 export class DetailSuccessResponse<T> implements HttpResponse<T> {
   success = true
   statusCode = HTTP_STATUS_CODE.OK
-  resource: Partial<T>
+  resource: T
 
   constructor(options: {
     resource: T

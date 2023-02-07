@@ -7,7 +7,7 @@ import { CoreService } from '@platon/core/browser';
   imports: [
     RouterModule,
   ],
-  selector: 'platon-root',
+  selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })

@@ -30,7 +30,8 @@
       "@platon/core/common": ["libs/core/common/src/index.ts"],
       "@platon/core/server": ["libs/core/server/src/index.ts"],
       "@platon/feature/lti/common": ["libs/feature/lti/common/src/index.ts"],
-      "@platon/feature/lti/server": ["libs/feature/lti/server/src/index.ts"]
+      "@platon/feature/lti/server": ["libs/feature/lti/server/src/index.ts"],
+      "@platon/shared/ui": ["libs/shared/ui/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"],
