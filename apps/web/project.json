@@ -12,11 +12,82 @@
         "outputPath": "dist/apps/web",
         "index": "apps/web/src/index.html",
         "main": "apps/web/src/main.ts",
-        "polyfills": ["zone.js"],
+        "polyfills": [
+          "zone.js",
+          "./node_modules/@ungap/custom-elements/index.js",
+          "./node_modules/@webcomponents/webcomponentsjs/bundles/webcomponents-sd-ce-pf.js",
+          "./node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js"
+        ],
         "tsConfig": "apps/web/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
-        "assets": ["apps/web/src/favicon.ico", "apps/web/src/assets"],
-        "styles": ["apps/web/src/styles.scss"],
+        "assets": [
+          "apps/web/src/favicon.ico",
+          "apps/web/src/assets",
+          {
+            "glob": "**/*",
+            "input": "shared/assets",
+            "output": "./assets"
+          },
+          {
+            "glob": "**/*",
+            "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
+            "output": "/assets/vendors/@ant-design/assets/"
+          },
+          {
+            "glob": "**/*",
+            "input": "./node_modules/@cisstech/nge/assets/",
+            "output": "./assets/vendors/nge/"
+          },
+          {
+            "glob": "**/*",
+            "input": "./node_modules/monaco-editor/min",
+            "output": "./assets/vendors/nge/monaco/min"
+          },
+          {
+            "glob": "**/*",
+            "input": "./node_modules/monaco-editor/min-maps",
+            "output": "./assets/vendors/nge/monaco/min-maps"
+          },
+          {
+            "glob": "**/*",
+            "input": "./node_modules/katex/dist/",
+            "output": "./assets/vendors/katex/"
+          },
+          {
+            "glob": "**/*.js",
+            "input": "./node_modules/emoji-toolkit/lib/js/",
+            "output": "./assets/vendors/emoji-toolkit/"
+          },
+          {
+            "glob": "**/*",
+            "input": "./node_modules/intro.js/",
+            "output": "./assets/vendors/intro.js/"
+          }
+        ],
+        "styles": [
+          "shared/styles/app.scss",
+          {
+            "input": "shared/styles/material/dark.scss",
+            "bundleName": "styles.material.dark",
+            "inject": false
+          },
+          {
+            "input": "shared/styles/material/light.scss",
+            "bundleName": "styles.material.light",
+            "inject": false
+          },
+          {
+            "input": "shared/styles/ng-zorro/dark.less",
+            "bundleName": "styles.ng-zorro.dark",
+            "inject": false
+          },
+          {
+            "input": "shared/styles/ng-zorro/light.less",
+            "bundleName": "styles.ng-zorro.light",
+            "inject": false
+          },
+          "apps/web/src/styles.scss"
+        ],
         "scripts": []
       },
       "configurations": {

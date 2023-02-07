@@ -1,0 +1,35 @@
+:root {
+  --brand-color-primary: #171C8F;
+  --brand-color-primary-rgb: 23,28,143;
+  --brand-color-primary-contrast: #ffffff;
+  --brand-color-primary-contrast-rgb: 255,255,255;
+  --brand-color-primary-shade: #14197e;
+  --brand-color-primary-tint: #2e339a;
+
+  --brand-color-secondary: #3466fe;
+  --brand-color-secondary-rgb: 52, 102, 254;
+  --brand-color-secondary-contrast: #ffffff;
+  --brand-color-secondary-contrast-rgb: 255, 255, 255;
+  --brand-color-secondary-shade: #2e5ae0;
+  --brand-color-secondary-tint: #4875fe;
+
+  --brand-color-tertiary: #7044ff;
+  --brand-color-tertiary-rgb: 112, 68, 255;
+  --brand-color-tertiary-contrast: #ffffff;
+  --brand-color-tertiary-contrast-rgb: 255, 255, 255;
+  --brand-color-tertiary-shade: #633ce0;
+  --brand-color-tertiary-tint: #7e57ff;
+
+  --brand-background-overlay: #fff;
+  --brand-background-primary: #fff;
+  --brand-background-secondary: #fafbfc;
+
+  --brand-text-primary: #24292e;
+  --brand-text-secondary: #586069;
+  --brand-border-color: #dddddd;
+
+  // https://www.smashingmagazine.com/2015/11/using-system-ui-fonts-practical-guide/
+  --brand-font: 'Source Sans Pro', system-ui, -apple-system, BlinkMacSystemFont,
+    'Fira Sans', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell',
+    'Droid Sans', 'Helvetica Neue', sans-serif;
+}

@@ -1,0 +1,6 @@
+@use '@angular/material' as mat;
+@import 'base';
+
+$theme: mat.define-dark-theme($mat-dark-theme);
+@include mat.all-component-themes($theme);
+

@@ -1,0 +1,32 @@
+@import 'normalize';
+@import 'fonts';
+@import 'variables';
+
+html {
+  width: 100vw;
+  height: 100vh;
+  overflow: auto;
+  color: var(--brand-text-primary);
+  background-color: var(--brand-background-color);
+  font-family: var(--brand-font);
+}
+
+.light-theme {
+  --brand-background-overlay: #fff;
+  --brand-background-primary: #fff;
+  --brand-background-secondary: #fafbfc;
+
+  --brand-text-primary: #24292e;
+  --brand-text-secondary: #586069;
+  --brand-border-color: #dddddd;
+}
+
+.dark-theme {
+  --brand-background-overlay: #323941;
+  --brand-background-primary: #22272e;
+  --brand-background-secondary: #22272e;
+
+  --brand-text-primary: #adbac7;
+  --brand-text-secondary: #768390;
+  --brand-border-color: #15202b;
+}

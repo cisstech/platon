@@ -1,4 +1,4 @@
-export * from './lib/core-server.module'
+export * from './lib/core.module'
 export * from './lib/config/configuration'
 export * from './lib/database'
 export * from './lib/users'
