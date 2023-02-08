@@ -18,4 +18,4 @@ import { TopicService } from './topic.service';
     TopicService
   ]
 })
-export class TopicModule { };
+export class TopicModule { }

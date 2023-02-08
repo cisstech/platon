@@ -3,6 +3,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigurationModule } from './config/configuration.module';
 import { DatabaseModule } from './database/database.module';
 import { ErrorsModule } from './errors/errors.module';
+import { LevelModule } from './levels';
 import { TopicModule } from './topics';
 import { UserModule } from './users/user.module';
 
@@ -13,6 +14,7 @@ import { UserModule } from './users/user.module';
     UserModule,
     AuthModule,
     TopicModule,
+    LevelModule,
     ErrorsModule,
   ],
   exports: [
@@ -21,6 +23,7 @@ import { UserModule } from './users/user.module';
     UserModule,
     AuthModule,
     TopicModule,
+    LevelModule,
     ErrorsModule,
   ],
 })
