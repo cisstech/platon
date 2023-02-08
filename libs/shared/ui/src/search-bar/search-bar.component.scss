@@ -1,0 +1,32 @@
+:host {
+  display: block;
+  width: 100%;
+  padding: 0;
+  height: 44px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  background-color: var(--brand-background-primary, 'white');
+}
+
+input {
+  height: 100%;
+  flex: 1;
+  border-radius: 8px;
+  background-color: transparent;
+  box-shadow: none;
+  border: none;
+}
+
+input:focus {
+  outline: none;
+}
+
+input:disabled {
+  cursor: not-allowed;
+}
+
+button {
+  padding: 0;
+  height: 44px !important;
+}

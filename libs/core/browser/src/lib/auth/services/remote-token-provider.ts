@@ -72,9 +72,7 @@ export class RemoteTokenProvider {
 
     try {
       const response = await lastValueFrom(
-        this.http.post<DetailSuccessResponse<AuthToken>>('/api/v1/auth/refresh/', {
-          refresh: token.refreshToken
-        })
+        this.http.post<DetailSuccessResponse<AuthToken>>('/api/v1/auth/refresh/', {})
       );
 
       token.accessToken = response.resource.accessToken;

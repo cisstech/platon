@@ -1,0 +1,37 @@
+<button mat-button (click)="onTrigger()">
+  <mat-icon>search</mat-icon>
+</button>
+<input
+  type="search"
+  [placeholder]="searchbar?.placeholder || ''"
+  [formControl]="control"
+  (keydown.enter)="onTrigger()"
+  [nzAutocomplete]="autocomplete">
+  <button *ngIf="showFilterButton" mat-button (click)="onFilter()">
+    <mat-icon>filter_list</mat-icon>
+  </button>
+<nz-autocomplete #autocomplete>
+  <ng-container *ngIf="suggesting; else: result;">
+    <nz-auto-option>
+      <div style="display: flex; justify-content: center;">
+        <nz-spin nzSimple></nz-spin>
+      </div>
+    </nz-auto-option>
+  </ng-container>
+  <ng-template #result>
+    <nz-auto-optgroup [nzLabel]="'SUGGESTIONS'">
+      <nz-auto-option
+        *ngFor="let suggestion of suggestions"
+        (selectionChange)="onSelect($event, suggestion)"
+        [nzValue]="onComplete(suggestion)">
+        <ng-container *ngIf="suggestionTemplate; else: defaultTemplate">
+          <ng-container *ngTemplateOutlet="suggestionTemplate; context: { $implicit: suggestion }"></ng-container>
+        </ng-container>
+        <ng-template #defaultTemplate>{{suggestion}}</ng-template>
+      </nz-auto-option>
+      <nz-auto-option *ngIf="!suggestions.length" nzDisabled>
+        Aucune suggestion
+      </nz-auto-option>
+    </nz-auto-optgroup>
+  </ng-template>
+</nz-autocomplete>

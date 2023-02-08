@@ -1,0 +1,68 @@
+:host {
+  --banner: url('/assets/images/illustrations/desk.svg');
+
+  position: relative;
+  border-radius: 8px;
+
+  height: 344px;
+  padding: 0 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  //max-width: 70%;
+  height: 280px;
+}
+
+.banner-image {
+  z-index: -1;
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4)), var(--banner);
+
+    /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  filter: blur(2px);
+  -webkit-filter: blur(2px);
+}
+
+h1 {
+  text-shadow: 0 1px 0 black;
+  font-weight: bold;
+  font-size: 2rem;
+  text-align: center;
+  color: white;
+}
+
+p {
+  text-shadow: 0 1px 0 black;
+  width: 50%;
+  font-weight: 500;
+  font-size: 1.2rem;
+  text-align: center;
+  color: white;
+  margin-top: 16px;
+}
+
+ui-search-bar {
+  width: 70%;
+}
+
+.banner-actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 12px;
+  &::ng-deep > * { // All direct child elements
+    margin: 0 4px;
+  }
+}
+

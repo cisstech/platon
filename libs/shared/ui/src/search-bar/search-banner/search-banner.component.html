@@ -1,0 +1,23 @@
+<div class="banner-image" [style.--banner]="bannerImageUrl"></div>
+<h1>{{bannerTitle}}</h1>
+<ui-search-bar [searchbar]="bannerSearchbar">
+  <ng-template let-context>
+    <ng-container *ngIf="bannerCompletion; else: nocompletion">
+      <ng-container *ngTemplateOutlet="
+        bannerCompletion;
+        context: {
+          $implicit: context
+        }">
+      </ng-container>
+    </ng-container>
+    <ng-template #nocompletion>
+      {{ context }}
+    </ng-template>
+  </ng-template>
+</ui-search-bar>
+<p>{{bannerDescription}}</p>
+<div class="banner-actions">
+  <ng-container *ngIf="bannerActions">
+    <ng-container *ngTemplateOutlet="bannerActions"></ng-container>
+  </ng-container>
+</div>

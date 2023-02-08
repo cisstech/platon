@@ -1,0 +1,32 @@
+:host {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+}
+
+mat-drawer-container  {
+  width: 100vw;
+  height: 100vh;
+}
+
+drawer-container  {
+  width: 100vw;
+  height: 100vh;
+  display: block;
+}
+
+mat-drawer  {
+  padding: 0;
+  width: 240px;
+  color: white !important;
+  background: #3c2864;
+  color: white;
+}
+
+mat-toolbar {
+  background-color: transparent;
+  app-toolbar {
+    display: block;
+    width: 100%;
+  }
+}
