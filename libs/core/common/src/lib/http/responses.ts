@@ -25,6 +25,12 @@ export class ActionSuccessResponse<T> implements HttpResponse<T> {
   }
 }
 
+export class DeleteSuccessResponse implements HttpResponse<void> {
+  success = true
+  statusCode = HTTP_STATUS_CODE.OK
+}
+
+
 export class DetailSuccessResponse<T> implements HttpResponse<T> {
   success = true
   statusCode = HTTP_STATUS_CODE.OK

@@ -8,6 +8,15 @@ export class UserDTO {
   @ApiProperty()
   readonly id!: string;
 
+  @IsDate()
+  @ApiProperty()
+  readonly createdAt!: Date;
+
+  @IsDate()
+  @IsOptional()
+  @ApiProperty()
+  readonly updatedAt?: Date;
+
   @IsEnum(UserRoles)
   @ApiProperty({ enum: UserRoles })
   readonly role!: UserRoles;

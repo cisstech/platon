@@ -8,48 +8,48 @@ import { UserEntity } from './user.entity';
 export class UserService {
   constructor(
     @InjectRepository(UserEntity)
-    private readonly userRepo: Repository<UserEntity>
+    private readonly repository: Repository<UserEntity>
   ) { }
 
   async findById(id: string): Promise<Optional<UserEntity>> {
     return Optional.ofNullable(
-      await this.userRepo.findOne({ where: { id } })
+      await this.repository.findOne({ where: { id } })
     );
   }
 
   async findByUsername(username: string): Promise<Optional<UserEntity>> {
     return Optional.ofNullable(
-      await this.userRepo.findOne({ where: { username } })
+      await this.repository.findOne({ where: { username } })
     );
   }
 
   async findAll(): Promise<UserEntity[]> {
-    return this.userRepo.find();
+    return this.repository.find();
   }
 
   async findAndCountAll(): Promise<[UserEntity[], number]> {
-    return this.userRepo.findAndCount();
+    return this.repository.findAndCount();
   }
 
   async create(user: Partial<UserEntity>): Promise<UserEntity> {
-    return this.userRepo.save(user);
+    return this.repository.save(user);
   }
 
   async update(id: string, changes: Partial<UserEntity>): Promise<UserEntity> {
-    const user = await this.userRepo.findOne({ where: { id }})
+    const user = await this.repository.findOne({ where: { id }})
     if (!user) {
       throw new NotFoundException(`User not found: ${id}`)
     }
     Object.assign(user, changes);
-    return this.userRepo.save(user);
+    return this.repository.save(user);
   }
 
   async updateByUsername(username: string, changes: Partial<UserEntity>): Promise<UserEntity> {
-    const user = await this.userRepo.findOne({ where: { username }})
+    const user = await this.repository.findOne({ where: { username }})
     if (!user) {
       throw new NotFoundException(`User not found: ${username}`)
     }
     Object.assign(user, changes);
-    return this.userRepo.save(user);
+    return this.repository.save(user);
   }
 }
