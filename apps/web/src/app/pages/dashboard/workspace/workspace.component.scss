@@ -1,0 +1,32 @@
+:host {
+  display: block;
+  width: 100%;
+  padding: 2rem;
+}
+h1 {
+  width: 100%;
+  text-align: center;
+  margin-top: 0;
+}
+
+ui-search-bar {
+  width: 70%;
+  margin: 0 auto;
+  margin-bottom: 2rem;
+}
+
+.content {
+  display: flex;
+}
+article {
+  width: 70%;
+}
+
+aside {
+  width: 30%;
+}
+
+section {
+  margin: 0;
+  margin-bottom: 2rem;
+}

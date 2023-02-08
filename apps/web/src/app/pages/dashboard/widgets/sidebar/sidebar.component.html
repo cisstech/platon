@@ -1,0 +1,30 @@
+<nav>
+  <img class="logo" src="assets/images/logo/platon.svg" alt="Logo PLaTon"/>
+<!--   <a class="nav-link" mat-button [routerLink]="''" [routerLinkActive]="'active'">
+    <mat-icon>dashboard</mat-icon>
+    Accueil
+  </a> -->
+  <a class="nav-link" mat-button [routerLink]="'/courses'" [routerLinkActive]="'active'">
+    <mat-icon>local_library</mat-icon>
+    Cours
+  </a>
+  <a class="nav-link" mat-button [routerLink]="'/workspace'" [routerLinkActive]="'active'">
+    <mat-icon>work</mat-icon>
+    Espace de travail
+  </a>
+  <a class="nav-link" mat-button [routerLink]="'/forum'" [routerLinkActive]="'active'">
+    <mat-icon>chat</mat-icon>
+    Forum
+  </a>
+  <a class="nav-link" mat-button [routerLink]="'/settings'" [routerLinkActive]="'active'">
+    <mat-icon>admin_panel_settings</mat-icon>
+    Paramètres
+  </a>
+
+  <div class="spacer"></div>
+  <img class="doc" src="assets/images/illustrations/doc.png" alt="Logo PLaTon"/>
+  <a mat-button [routerLink]="'/docs'">
+    <mat-icon>local_library</mat-icon>
+    Documentation
+  </a>
+</nav>

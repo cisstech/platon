@@ -1,0 +1,61 @@
+<form [formGroup]="form">
+  <!-- VISIBILITY -->
+  <section>
+    <mat-label id="visibility-label">Quels ressources voulez-vous afficher?</mat-label>
+    <mat-radio-group formControlName="visibility" aria-labelledby="visibility-label">
+      <mat-radio-button value="all">Toutes</mat-radio-button>
+      <mat-radio-button value="authored">Vos ressources</mat-radio-button>
+    </mat-radio-group>
+  </section>
+
+  <!-- TYPE -->
+  <section>
+    <mat-label id="type-label">Qu'est-ce que vous recherchez ?</mat-label>
+    <div class="checkbox-group">
+      <mat-checkbox formControlName="circles">
+        Cercles
+      </mat-checkbox>
+      <mat-checkbox formControlName="exercises">
+        Exercice
+      </mat-checkbox>
+      <mat-checkbox formControlName="activities">
+        Activité
+      </mat-checkbox>
+    </div>
+  </section>
+
+  <!-- STATUS -->
+  <section>
+    <mat-label id="status-label">Quel est le status de ce que vous recherchez ?</mat-label>
+    <mat-radio-group formControlName="status" aria-labelledby="status-label">
+      <mat-radio-button value="all">Tout</mat-radio-button>
+      <mat-radio-button value="ready">Prêt</mat-radio-button>
+      <mat-radio-button value="draft">Brouillon</mat-radio-button>
+      <mat-radio-button value="not_tested">Non tester</mat-radio-button>
+      <mat-radio-button value="bugged">Contient des bugs</mat-radio-button>
+      <mat-radio-button value="deprecated">À ne plus utiliser</mat-radio-button>
+    </mat-radio-group>
+  </section>
+
+  <!-- ORDER -->
+  <section>
+    <mat-label id="order-label">Comment voulez-vous trier les résultats ?</mat-label>
+    <mat-radio-group formControlName="order" aria-labelledby="order-label">
+      <mat-radio-button value="name">Nom</mat-radio-button>
+      <mat-radio-button value="date">Date de mise à jour</mat-radio-button>
+    </mat-radio-group>
+  </section>
+
+  <!-- DATE -->
+  <section>
+    <mat-label id="date-label">Souhaitez-vous limiter les résultats à une certaine période ?</mat-label>
+    <mat-radio-group formControlName="date" aria-labelledby="date-label">
+      <mat-radio-button [value]="0">Tout</mat-radio-button>
+      <mat-radio-button [value]="1">1 jour</mat-radio-button>
+      <mat-radio-button [value]="7">1 semaine</mat-radio-button>
+      <mat-radio-button [value]="31">1 mois</mat-radio-button>
+      <mat-radio-button [value]="180">6 mois</mat-radio-button>
+      <mat-radio-button [value]="365">1 an</mat-radio-button>
+    </mat-radio-group>
+  </section>
+</form>

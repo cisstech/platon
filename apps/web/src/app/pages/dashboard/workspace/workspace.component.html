@@ -1,0 +1,72 @@
+<h1>Espace de travail</h1>
+<ui-search-bar [searchbar]="searchbar" (filter)="showFilters = true">
+  <ng-template let-context> {{ context }}</ng-template>
+</ui-search-bar>
+<div class="content">
+  <article>
+    <h2>Voici ce qu'on a trouver selon vos critères de recherche...</h2>
+    <!--   <section>
+      <h2>Vues récentes</h2>
+    </section>
+     -->
+  </article>
+  <aside>
+    <section>
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>
+            <h2>Vues récentes</h2>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          ....
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-button>Voir plus</button>
+        </mat-card-actions>
+      </mat-card>
+    </section>
+    <section>
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>
+            <h2>Nouvelles créations</h2>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          ....
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-button>Voir plus</button>
+        </mat-card-actions>
+      </mat-card>
+    </section>
+    <section>
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>
+            <h2>Vos centres d'interêts</h2>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          ....
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-button>Modifier</button>
+        </mat-card-actions>
+      </mat-card>
+    </section>
+  </aside>
+</div>
+
+<nz-drawer
+  [nzClosable]="false"
+  [nzVisible]="showFilters"
+  nzPlacement="right"
+  nzTitle="Recherche avancée"
+  (nzOnClose)="showFilters = !showFilters"
+>
+  <ng-container *nzDrawerContent>
+    <app-workspace-filters></app-workspace-filters>
+  </ng-container>
+</nz-drawer>
