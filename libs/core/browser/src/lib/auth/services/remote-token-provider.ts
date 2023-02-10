@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { AuthToken, DetailSuccessResponse } from '@platon/core/common';
+import { AuthToken, ItemResponse } from '@platon/core/common';
 import { firstValueFrom, lastValueFrom } from 'rxjs';
 import { StorageService } from '../../services';
 
@@ -43,7 +43,7 @@ export class RemoteTokenProvider {
    */
   async obtain(username: string, password: string): Promise<AuthToken> {
     const response = await lastValueFrom(
-      this.http.post<DetailSuccessResponse<AuthToken>>('/api/v1/auth/signin/', {
+      this.http.post<ItemResponse<AuthToken>>('/api/v1/auth/signin/', {
         username,
         password
       })
@@ -72,7 +72,7 @@ export class RemoteTokenProvider {
 
     try {
       const response = await lastValueFrom(
-        this.http.post<DetailSuccessResponse<AuthToken>>('/api/v1/auth/refresh/', {})
+        this.http.post<ItemResponse<AuthToken>>('/api/v1/auth/refresh/', {})
       );
 
       token.accessToken = response.resource.accessToken;

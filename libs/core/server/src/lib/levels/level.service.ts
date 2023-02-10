@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Optional } from 'typescript-optional';
 import { LevelEntity } from './level.entity';
 
 @Injectable()
@@ -10,11 +11,13 @@ export class LevelService {
     private readonly repository: Repository<LevelEntity>
   ) { }
 
-  async findAll(): Promise<LevelEntity[]> {
-    return this.repository.find();
+  async findById(id: string): Promise<Optional<LevelEntity>> {
+    return Optional.ofNullable(
+      await this.repository.findOne({ where: { id } })
+    );
   }
 
-  async findAndCountAll(): Promise<[LevelEntity[], number]> {
+  async findAll(): Promise<[LevelEntity[], number]> {
     return this.repository.findAndCount();
   }
 

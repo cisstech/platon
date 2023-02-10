@@ -23,11 +23,7 @@ export class UserService {
     );
   }
 
-  async findAll(): Promise<UserEntity[]> {
-    return this.repository.find();
-  }
-
-  async findAndCountAll(): Promise<[UserEntity[], number]> {
+  async findAll(): Promise<[UserEntity[], number]> {
     return this.repository.findAndCount();
   }
 

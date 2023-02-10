@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Optional } from 'typescript-optional';
 import { TopicEntity } from './topic.entity';
 
 @Injectable()
@@ -10,11 +11,13 @@ export class TopicService {
     private readonly repository: Repository<TopicEntity>
   ) { }
 
-  async findAll(): Promise<TopicEntity[]> {
-    return this.repository.find();
+  async findById(id: string): Promise<Optional<TopicEntity>> {
+    return Optional.ofNullable(
+      await this.repository.findOne({ where: { id } })
+    );
   }
 
-  async findAndCountAll(): Promise<[TopicEntity[], number]> {
+  async findAll(): Promise<[TopicEntity[], number]> {
     return this.repository.findAndCount();
   }
 

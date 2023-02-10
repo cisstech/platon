@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { DetailSuccessResponse, UserDTO } from '@platon/core/common';
+import { ItemResponse, UserDTO } from '@platon/core/common';
 import { from, Observable } from 'rxjs';
 
 import { map, mergeMap, toArray } from 'rxjs/operators';
@@ -14,7 +14,7 @@ export class RemoteUserProvider extends UserProvider {
   }
 
   findByUserName(username: string): Observable<UserDTO | undefined> {
-    return this.http.get<DetailSuccessResponse<UserDTO>>(`/api/v1/users/${username}`).pipe(
+    return this.http.get<ItemResponse<UserDTO>>(`/api/v1/users/${username}`).pipe(
       map(response => response.resource)
     );
   }

@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
-import { CreateLevelDTO, DeleteSuccessResponse, DetailSuccessResponse, LevelDTO, ListSuccessResponse, Mapper, UpdateLevelDTO } from '@platon/core/common';
+import { CreatedResponse, CreateLevelDTO, NoContentResponse, ItemResponse, LevelDTO, ListResponse, Mapper, UpdateLevelDTO } from '@platon/core/common';
 import { LevelService } from './level.service';
 
 @Controller('levels')
@@ -9,40 +9,40 @@ export class LevelController {
   ) { }
 
   @Get()
-  async list(): Promise<ListSuccessResponse<LevelDTO>> {
-    const [levels, total] = await this.service.findAndCountAll();
+  async list(): Promise<ListResponse<LevelDTO>> {
+    const [levels, total] = await this.service.findAll();
     const resources = Mapper.mapAll(levels, LevelDTO);
-    return new ListSuccessResponse({ total, resources })
+    return new ListResponse({ total, resources })
   }
 
   @Post()
   async create(
     @Body() input: CreateLevelDTO
-  ): Promise<DetailSuccessResponse<LevelDTO>> {
+  ): Promise<CreatedResponse<LevelDTO>> {
     const resource = Mapper.map(
       await this.service.create(input),
       LevelDTO
     );
-    return new DetailSuccessResponse({ resource })
+    return new CreatedResponse({ resource })
   }
 
   @Patch('/:id')
   async update(
     @Param('id') id: string,
     @Body() input: UpdateLevelDTO
-  ): Promise<DetailSuccessResponse<LevelDTO>> {
+  ): Promise<ItemResponse<LevelDTO>> {
     const resource = Mapper.map(
       await this.service.update(id, input),
       LevelDTO
     );
-    return new DetailSuccessResponse({ resource })
+    return new ItemResponse({ resource })
   }
 
   @Delete('/:id')
   async delete(
     @Param('id') id: string
-  ): Promise<DeleteSuccessResponse> {
+  ): Promise<NoContentResponse> {
     await this.service.delete(id);
-    return new DeleteSuccessResponse();
+    return new NoContentResponse();
   }
 }

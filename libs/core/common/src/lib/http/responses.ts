@@ -9,31 +9,19 @@ export interface HttpResponse<T> {
   total?: number
 }
 
-// create, update, delete, archive
-export class ActionSuccessResponse<T> implements HttpResponse<T> {
-  success = true
-  statusCode = HTTP_STATUS_CODE.OK
-  message: string
-  resource: T
-
-  constructor(options: {
-    message: string,
-    resource: T
-  }) {
-    this.message = options.message
-    this.resource = options.resource
-  }
-}
-
-export class DeleteSuccessResponse implements HttpResponse<void> {
+export class SuccessResponse implements HttpResponse<void> {
   success = true
   statusCode = HTTP_STATUS_CODE.OK
 }
 
-
-export class DetailSuccessResponse<T> implements HttpResponse<T> {
+export class NoContentResponse implements HttpResponse<void> {
   success = true
-  statusCode = HTTP_STATUS_CODE.OK
+  statusCode = HTTP_STATUS_CODE.NO_CONTENT
+}
+
+export class CreatedResponse<T> implements HttpResponse<T> {
+  success = true
+  statusCode = HTTP_STATUS_CODE.CREATED
   resource: T
 
   constructor(options: {
@@ -43,7 +31,19 @@ export class DetailSuccessResponse<T> implements HttpResponse<T> {
   }
 }
 
-export class ListSuccessResponse<T> implements HttpResponse<T> {
+export class ItemResponse<T> implements HttpResponse<T> {
+  success = true
+  statusCode = HTTP_STATUS_CODE.OK
+  resource: T
+
+  constructor(options: {
+    resource: T
+  }) {
+    this.resource = options.resource
+  }
+}
+
+export class ListResponse<T> implements HttpResponse<T> {
   success = true
   statusCode = HTTP_STATUS_CODE.OK
   resources: Partial<T>[]

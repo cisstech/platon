@@ -1,22 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
-import { IsBoolean, IsDate, IsEmail, IsEnum, IsOptional, IsString, IsUUID } from 'class-validator';
+import { IsBoolean, IsDate, IsEmail, IsEnum, IsOptional, IsString } from 'class-validator';
+import { BaseDTO } from '../utils/base-dto';
 import { UserRoles } from './user-roles';
 
-export class UserDTO {
-  @IsUUID()
-  @ApiProperty()
-  readonly id!: string;
-
-  @IsDate()
-  @ApiProperty()
-  readonly createdAt!: Date;
-
-  @IsDate()
-  @IsOptional()
-  @ApiProperty()
-  readonly updatedAt?: Date;
-
+export class UserDTO extends BaseDTO {
   @IsEnum(UserRoles)
   @ApiProperty({ enum: UserRoles })
   readonly role!: UserRoles;
