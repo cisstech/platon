@@ -1,12 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { BaseDTO, LevelDTO, TopicDTO } from '@platon/core/common';
+import { BaseDTO, LevelDTO, TopicDTO } from '@platon/core/server';
+import { CreateResource, Resource, ResourceStatus, ResourceTypes, ResourceVisibilities, UpdateResource } from '@platon/feature/resource/common';
 import { IsArray, IsEnum, IsInstance, IsOptional, IsString, IsUUID } from 'class-validator';
-import { JoinTable } from 'typeorm';
-import { ResourceStatus } from '../enums/resource-status';
-import { ResourceTypes } from '../enums/resource-types';
-import { ResourceVisibilities } from '../enums/resource-visibility';
 
-export class ResourceDTO extends BaseDTO {
+export class ResourceDTO extends BaseDTO implements Resource {
   @IsString()
   @ApiProperty()
   name!: string
@@ -36,7 +33,6 @@ export class ResourceDTO extends BaseDTO {
   @IsArray()
   @IsInstance(TopicDTO)
   @ApiProperty()
-  @JoinTable()
   topics!: TopicDTO[]
 
   @IsUUID()
@@ -49,7 +45,7 @@ export class ResourceDTO extends BaseDTO {
   parentId?: string
 }
 
-export class CreateResourceDTO {
+export class CreateResourceDTO implements CreateResource {
   @IsString()
   @ApiProperty()
   name!: string
@@ -90,7 +86,7 @@ export class CreateResourceDTO {
   parentId?: string
 }
 
-export class UpdateResourceDTO {
+export class UpdateResourceDTO implements UpdateResource {
   @IsString()
   @IsOptional()
   @ApiProperty()

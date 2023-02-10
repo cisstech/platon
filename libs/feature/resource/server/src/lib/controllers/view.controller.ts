@@ -1,7 +1,8 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Request } from '@nestjs/common';
-import { CreatedResponse, NoContentResponse, ItemResponse, ListResponse, Mapper } from '@platon/core/common';
-import { IRequest } from '@platon/core/server';
-import { CreateResourceInvitationDTO, ResourceInvitationDTO, ResourceMemberDTO } from '@platon/feature/resource/common';
+import { CreatedResponse, ItemResponse, ListResponse, NoContentResponse } from '@platon/core/common';
+import { IRequest, Mapper } from '@platon/core/server';
+import { CreateResourceInvitationDTO, ResourceInvitationDTO } from '../dto/invitation.dto';
+import { ResourceMemberDTO } from '../dto/member.dto';
 import { ResourceInvitationService } from '../services/invitation.service';
 
 @Controller('resources/:resourceId/views')

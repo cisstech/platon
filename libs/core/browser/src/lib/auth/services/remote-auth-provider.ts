@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { AuthProvider } from '../models/auth-provider';
 import { RemoteTokenProvider } from './remote-token-provider';
 import { lastValueFrom } from 'rxjs';
-import { AuthToken, ItemResponse, UserDTO } from '@platon/core/common';
+import { AuthToken, ItemResponse, User } from '@platon/core/common';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable()
@@ -20,14 +20,14 @@ export class RemoteAuthProvider extends AuthProvider {
     return this.tokenProvider.token();
   }
 
-  async current(): Promise<UserDTO | undefined> {
+  async current(): Promise<User | undefined> {
     const token = await this.tokenProvider.token();
     if (token) {
       const helper = new JwtHelperService();
       const data = helper.decodeToken(token.accessToken);
       try {
         return await lastValueFrom(
-          this.http.get<ItemResponse<UserDTO>>('/api/v1/users/' + data.username)
+          this.http.get<ItemResponse<User>>('/api/v1/users/' + data.username)
         ).then(response => response.resource);
       } catch {
         await this.tokenProvider.remove();
@@ -36,10 +36,10 @@ export class RemoteAuthProvider extends AuthProvider {
     return undefined;
   }
 
-  async signIn(username: string, password: string): Promise<UserDTO> {
+  async signIn(username: string, password: string): Promise<User> {
     await this.tokenProvider.obtain(username, password);
     return lastValueFrom(
-      this.http.get<ItemResponse<UserDTO>>('/api/v1/users/' + username)
+      this.http.get<ItemResponse<User>>('/api/v1/users/' + username)
     ).then(response => response.resource);
   }
 

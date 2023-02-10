@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { InjectionToken, Type } from '@angular/core';
-import { UserDTO } from '@platon/core/common';
+import { User } from '@platon/core/common';
 
 export interface AuthChange {
-  user: UserDTO;
+  user: User;
   type: 'connection' | 'disconnection';
 }
 

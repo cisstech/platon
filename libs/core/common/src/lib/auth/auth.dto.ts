@@ -1,21 +1,21 @@
 import { UserRoles } from "../user/user-roles";
 
-export class SignInInput {
-  username!: string;
-  password!: string;
+export interface AuthToken {
+  accessToken: string;
+  refreshToken: string;
 }
 
-export class SignUpInput {
-  email!: string;
-  username!: string;
-  password!: string;
-  lastName!: string;
-  firstName!: string;
-  role!: UserRoles;
+export interface SignInInput {
+  username: string;
+  password: string;
 }
 
-export class AuthToken {
-  accessToken!: string;
-  refreshToken!: string;
+export interface SignUpInput {
+  email: string;
+  username: string;
+  password: string;
+  lastName: string;
+  firstName: string;
+  role: UserRoles;
 }
 

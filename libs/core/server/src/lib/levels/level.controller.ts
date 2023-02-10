@@ -1,5 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
-import { CreatedResponse, CreateLevelDTO, NoContentResponse, ItemResponse, LevelDTO, ListResponse, Mapper, UpdateLevelDTO } from '@platon/core/common';
+import { CreatedResponse, CreateLevel, ItemResponse, ListResponse, NoContentResponse, UpdateLevel } from '@platon/core/common';
+import { Mapper } from '../utils';
+import { LevelDTO } from './level.dto';
 import { LevelService } from './level.service';
 
 @Controller('levels')
@@ -17,7 +19,7 @@ export class LevelController {
 
   @Post()
   async create(
-    @Body() input: CreateLevelDTO
+    @Body() input: CreateLevel
   ): Promise<CreatedResponse<LevelDTO>> {
     const resource = Mapper.map(
       await this.service.create(input),
@@ -29,7 +31,7 @@ export class LevelController {
   @Patch('/:id')
   async update(
     @Param('id') id: string,
-    @Body() input: UpdateLevelDTO
+    @Body() input: UpdateLevel
   ): Promise<ItemResponse<LevelDTO>> {
     const resource = Mapper.map(
       await this.service.update(id, input),

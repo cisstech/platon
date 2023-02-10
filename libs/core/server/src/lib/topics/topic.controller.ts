@@ -1,5 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
-import { CreatedResponse, CreateTopicDTO, NoContentResponse, ItemResponse, ListResponse, Mapper, TopicDTO, UpdateTopicDTO } from '@platon/core/common';
+import { CreatedResponse, CreateTopic, ItemResponse, ListResponse, NoContentResponse, UpdateTopic } from '@platon/core/common';
+import { Mapper } from '../utils';
+import { TopicDTO } from './topic.dto';
 import { TopicService } from './topic.service';
 
 @Controller('topics')
@@ -17,7 +19,7 @@ export class TopicController {
 
   @Post()
   async create(
-    @Body() input: CreateTopicDTO
+    @Body() input: CreateTopic
   ): Promise<CreatedResponse<TopicDTO>> {
     const resource = Mapper.map(
       await this.service.create(input),
@@ -29,7 +31,7 @@ export class TopicController {
   @Patch('/:id')
   async update(
     @Param('id') id: string,
-    @Body() input: UpdateTopicDTO
+    @Body() input: UpdateTopic
   ): Promise<ItemResponse<TopicDTO>> {
     const resource = Mapper.map(
       await this.service.update(id, input),

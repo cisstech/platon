@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ItemResponse, UserDTO } from '@platon/core/common';
+import { ItemResponse, User } from '@platon/core/common';
 import { from, Observable } from 'rxjs';
 
 import { map, mergeMap, toArray } from 'rxjs/operators';
@@ -13,17 +13,17 @@ export class RemoteUserProvider extends UserProvider {
     super();
   }
 
-  findByUserName(username: string): Observable<UserDTO | undefined> {
-    return this.http.get<ItemResponse<UserDTO>>(`/api/v1/users/${username}`).pipe(
+  findByUserName(username: string): Observable<User | undefined> {
+    return this.http.get<ItemResponse<User>>(`/api/v1/users/${username}`).pipe(
       map(response => response.resource)
     );
   }
 
-  findAllByUserNames(userNames: string[]): Observable<UserDTO[]> {
+  findAllByUserNames(userNames: string[]): Observable<User[]> {
     const merge = from(userNames).pipe(
       mergeMap(username => this.findByUserName(username)),
       toArray()
     );
-    return merge as Observable<UserDTO[]>;
+    return merge as Observable<User[]>;
   }
 }

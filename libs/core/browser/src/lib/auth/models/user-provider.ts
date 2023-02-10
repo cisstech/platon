@@ -1,4 +1,4 @@
-import { UserDTO } from '@platon/core/common';
+import { User } from '@platon/core/common';
 import { Observable } from 'rxjs';
 
 /**
@@ -10,12 +10,12 @@ export abstract class UserProvider {
    * @param uid The username of the user to find.
    * @returns An observable that will emit the user found or `undefined` once the server will response.
    */
-  abstract findByUserName(username: string): Observable<UserDTO | undefined>;
+  abstract findByUserName(username: string): Observable<User | undefined>;
 
   /**
    * Finds All the users listed in the `userNames` array.
    * @param uid An array of user names to find.
    * @returns An observable that will emit the user found or `undefined` once the server will response.
    */
-  abstract findAllByUserNames(userNames: string[]): Observable<UserDTO[]>;
+  abstract findAllByUserNames(userNames: string[]): Observable<User[]>;
 }

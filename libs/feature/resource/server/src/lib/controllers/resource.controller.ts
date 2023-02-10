@@ -1,7 +1,7 @@
 import { Body, Controller, Get, NotFoundException, Param, Patch, Post, Request } from '@nestjs/common';
-import { CreatedResponse, ItemResponse, ListResponse, Mapper } from '@platon/core/common';
-import { IRequest } from '@platon/core/server';
-import { CreateResourceDTO, ResourceDTO, UpdateResourceDTO } from '@platon/feature/resource/common';
+import { CreatedResponse, ItemResponse, ListResponse } from '@platon/core/common';
+import { IRequest, Mapper } from '@platon/core/server';
+import { CreateResourceDTO, ResourceDTO, UpdateResourceDTO } from '../dto/resource.dto';
 import { ResourceService } from '../services/resource.service';
 
 @Controller('resources')

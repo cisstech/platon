@@ -1,9 +1,9 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LevelService, TopicService } from '@platon/core/server';
-import { CreateResourceDTO, UpdateResourceDTO } from '@platon/feature/resource/common';
 import { Repository } from 'typeorm';
 import { Optional } from "typescript-optional";
+import { CreateResourceDTO, UpdateResourceDTO } from '../dto/resource.dto';
 import { ResourceEntity } from '../entities/resource.entity';
 
 @Injectable()

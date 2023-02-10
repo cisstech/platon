@@ -1,10 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { BaseDTO } from '@platon/core/common';
+import { BaseDTO } from '@platon/core/server';
+import { CreateResourceInvitation, ResourceInvitation } from '@platon/feature/resource/common';
 import { Type } from 'class-transformer';
 import { IsUUID } from 'class-validator';
 import { MemberPermissionsDTO } from './permissions.dto';
 
-export class ResourceInvitationDTO extends BaseDTO {
+export class ResourceInvitationDTO extends BaseDTO implements ResourceInvitation {
   @IsUUID()
   @ApiProperty()
   inviterId!: string
@@ -22,7 +23,7 @@ export class ResourceInvitationDTO extends BaseDTO {
   permissions!: MemberPermissionsDTO
 }
 
-export class CreateResourceInvitationDTO {
+export class CreateResourceInvitationDTO implements CreateResourceInvitation {
   @IsUUID()
   @ApiProperty()
   inviteeId!: string

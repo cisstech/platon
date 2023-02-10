@@ -13,7 +13,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { Router } from '@angular/router';
-import { UserDTO } from '@platon/core/common';
+import { User } from '@platon/core/common';
 import { DialogModule, DialogService } from '../../../dialog';
 import { AuthService } from '../../api/auth.service';
 
@@ -44,7 +44,7 @@ export class SignInComponent implements OnInit {
   protected username = '';
   protected password = '';
   protected connecting = false;
-  protected user?: UserDTO;
+  protected user?: User;
 
   constructor(
     private readonly router: Router,

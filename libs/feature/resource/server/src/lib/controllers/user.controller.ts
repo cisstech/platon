@@ -1,7 +1,8 @@
 import { Body, Controller, Get, Post, Request } from '@nestjs/common';
-import { ListResponse, Mapper, SuccessResponse } from '@platon/core/common';
-import { IRequest } from '@platon/core/server';
-import { CreateResourceViewDTO, ResourceDTO } from '@platon/feature/resource/common';
+import { ListResponse, SuccessResponse } from '@platon/core/common';
+import { IRequest, Mapper } from '@platon/core/server';
+import { ResourceDTO } from '../dto/resource.dto';
+import { CreateResourceViewDTO } from '../dto/view.dto';
 import { ResourceViewService } from '../services/view.service';
 
 @Controller('users/:username')

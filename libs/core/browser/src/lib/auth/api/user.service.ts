@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { UserDTO } from '@platon/core/common';
+import { User } from '@platon/core/common';
 import { combineLatest, Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { UserProvider } from '../models/user-provider';
@@ -9,7 +9,7 @@ import { UserProvider } from '../models/user-provider';
  */
 @Injectable({ providedIn: 'root' })
 export class UserService {
-  private users = new Map<string, UserDTO>();
+  private users = new Map<string, User>();
 
   constructor(
     private readonly authUserProvider: UserProvider
@@ -25,7 +25,7 @@ export class UserService {
    * @param username The name of the user to find.
    * @returns An observable that will emit the user found or `undefined` once the server will response.
    */
-  findByUserName(username: string): Observable<UserDTO | undefined> {
+  findByUserName(username: string): Observable<User | undefined> {
     const cache = this.users.get(username);
     if (cache != null) {
       return of(cache);
@@ -49,7 +49,7 @@ export class UserService {
    * @param uid An array of user identifiers to find.
    * @returns An observable that will emit the user found or `undefined` once the server will response.
    */
-  findAllByUserNames(usernames: string[]): Observable<UserDTO[]> {
+  findAllByUserNames(usernames: string[]): Observable<User[]> {
     const notCached: string[] = [];
     const cacheElements = usernames.map(username => {
       const user = this.users.get(username);
@@ -57,7 +57,7 @@ export class UserService {
         notCached.push(username);
       }
       return user;
-    }).filter(e => e != null) as UserDTO[];
+    }).filter(e => e != null) as User[];
 
     return combineLatest([
       of(cacheElements),

@@ -1,5 +1,7 @@
 import { Body, Controller, Get, NotFoundException, Param, Patch } from '@nestjs/common';
-import { ItemResponse, ListResponse, Mapper, UpdateUserDTO, UserDTO } from '@platon/core/common';
+import { ItemResponse, ListResponse, UpdateUser } from '@platon/core/common';
+import { Mapper } from '../utils';
+import { UserDTO } from './user.dto';
 import { UserService } from './user.service';
 
 @Controller('users')
@@ -30,7 +32,7 @@ export class UserController {
   @Patch('/:username')
   async update(
     @Param('username') username: string,
-    @Body() input: UpdateUserDTO
+    @Body() input: UpdateUser
   ): Promise<ItemResponse<UserDTO>> {
     const resource = Mapper.map(
       await this.userService.updateByUsername(username, input),

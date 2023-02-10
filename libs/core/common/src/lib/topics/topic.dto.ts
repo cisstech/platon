@@ -1,29 +1,12 @@
-import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { IsDate, IsOptional, IsString, IsUUID } from 'class-validator';
-
-export class TopicDTO {
-  @IsUUID()
-  @ApiProperty()
-  readonly id!: string;
-
-  @IsString()
-  @ApiProperty()
-  readonly name!: string;
-
-  @IsDate()
-  @ApiProperty()
-  readonly createdAt!: Date;
-
-  @IsDate()
-  @IsOptional()
-  @ApiProperty()
+export interface Topic {
+  readonly id: string;
+  readonly createdAt: Date;
   readonly updatedAt?: Date;
+  readonly name: string;
 }
 
-export class CreateTopicDTO {
-  @IsString()
-  @ApiProperty()
-  readonly name!: string;
+export interface CreateTopic {
+  readonly name: string;
 }
 
-export class UpdateTopicDTO extends PartialType(CreateTopicDTO) {}
+export type UpdateTopic = Partial<CreateTopic>;

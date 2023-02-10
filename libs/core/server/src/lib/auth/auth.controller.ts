@@ -2,7 +2,8 @@ import {
   Body,
   Controller, Post, Req
 } from '@nestjs/common';
-import { AuthToken, CreatedResponse, ItemResponse, SignInInput, SignUpInput } from '@platon/core/common';
+import { CreatedResponse, ItemResponse } from '@platon/core/common';
+import { AuthTokenDTO, SignInInputDTO, SignUpInputDTO } from './auth.dto';
 import { AuthService } from './auth.service';
 import { IRequest } from './auth.types';
 import { Public } from './decorators/public.decorator';
@@ -14,7 +15,7 @@ export class AuthController {
 
   @Public()
   @Post('signup')
-  async signUp(@Body() input: SignUpInput): Promise<CreatedResponse<AuthToken>> {
+  async signUp(@Body() input: SignUpInputDTO): Promise<CreatedResponse<AuthTokenDTO>> {
     return new CreatedResponse({
       resource: await this.authService.signUp(input)
     });
@@ -22,14 +23,14 @@ export class AuthController {
 
   @Public()
   @Post('signin')
-  async signIn(@Body() input: SignInInput): Promise<ItemResponse<AuthToken>> {
+  async signIn(@Body() input: SignInInputDTO): Promise<ItemResponse<AuthTokenDTO>> {
     return new ItemResponse({
       resource: await this.authService.signIn(input)
     });
   }
 
   @Post('refresh')
-  async refresh(@Req() req: IRequest): Promise<ItemResponse<AuthToken>> {
+  async refresh(@Req() req: IRequest): Promise<ItemResponse<AuthTokenDTO>> {
     return new ItemResponse({
       resource: await this.authService.authenticate(req.user.id, req.user.username)
     });

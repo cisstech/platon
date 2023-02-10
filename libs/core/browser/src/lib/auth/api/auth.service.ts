@@ -1,6 +1,6 @@
 import { Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthToken, UserDTO } from '@platon/core/common';
+import { AuthToken, User } from '@platon/core/common';
 import { firstValueFrom, Observable } from 'rxjs';
 import { shareReplay, take } from 'rxjs/operators';
 import { AuthObserver, AUTH_OBSERVER } from '../models/auth';
@@ -11,8 +11,8 @@ import { AuthProvider } from '../models/auth-provider';
  */
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private user?: UserDTO;
-  private request?: Observable<UserDTO | undefined>;
+  private user?: User;
+  private request?: Observable<User | undefined>;
 
   private get observers(): AuthObserver[] {
     return this.injector.get<object[]>(AUTH_OBSERVER, []).map(type => {
@@ -38,7 +38,7 @@ export class AuthService {
    *
    * @returns An promise that will resolves with the authentificated user if it exists or `undefined`
    */
-  async ready(): Promise<UserDTO | undefined> {
+  async ready(): Promise<User | undefined> {
     if (this.request) {
       return firstValueFrom(this.request);
     }
@@ -48,7 +48,7 @@ export class AuthService {
     }
 
     if (!this.request) {
-      this.request = new Observable<UserDTO | undefined>(observer => {
+      this.request = new Observable<User | undefined>(observer => {
         this.connect().then((user) => {
           observer.next(user);
           observer.complete();
@@ -73,7 +73,7 @@ export class AuthService {
    * @param username the username of the user
    * @param password the password of the user
    */
-  signIn(username: string, password: string): Promise<UserDTO> {
+  signIn(username: string, password: string): Promise<User> {
     return this.authProvider.signIn(username, password);
   }
 
@@ -101,7 +101,7 @@ export class AuthService {
   }
 
 
-  private async connect(): Promise<UserDTO> {
+  private async connect(): Promise<User> {
     const user = await this.authProvider.current();
     if (user == null) {
       throw new Error('auth/not-connected');

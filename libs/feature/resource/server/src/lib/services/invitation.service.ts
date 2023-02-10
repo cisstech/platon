@@ -1,6 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ResourceMemberDTO } from '@platon/feature/resource/common';
 import { DataSource, Repository } from 'typeorm';
 import { ResourceInvitationEntity } from '../entities/invitation.entity';
 import { ResourceMemberEntity } from '../entities/member.entity';
@@ -21,7 +20,7 @@ export class ResourceInvitationService {
     return this.repository.save(input);
   }
 
-  async accept(id: string): Promise<ResourceMemberDTO> {
+  async accept(id: string): Promise<ResourceMemberEntity> {
     return this.dataSource.transaction(async manager => {
       const invitation = await manager.findOne(ResourceInvitationEntity, { where: { id } })
       if (!invitation) {

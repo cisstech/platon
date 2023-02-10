@@ -1,0 +1,16 @@
+<ui-list [items]="items" idField="id">
+  <ui-list-template slot="row">
+    <ng-template let-item="item">
+      <res-item [item]="item" (didTapTag)="didTapTag.emit($event)"></res-item>
+    </ng-template>
+  </ui-list-template>
+  <ui-list-template slot="empty">
+    <ng-template>
+      <nz-empty nzNotFoundImage="simple" [nzNotFoundContent]="content">
+        <ng-template #content>
+          <p><ng-content></ng-content></p>
+        </ng-template>
+      </nz-empty>
+    </ng-template>
+  </ui-list-template>
+</ui-list>

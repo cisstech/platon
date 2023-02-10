@@ -1,4 +1,4 @@
-import { AuthToken, UserDTO } from "@platon/core/common";
+import { AuthToken, User } from "@platon/core/common";
 
 export abstract class AuthProvider {
 
@@ -8,7 +8,7 @@ export abstract class AuthProvider {
    * Gets the current logged user.
    * @returns A promise that will resolves with the user found or `undefined` once the server will response.
    */
-  abstract current(): Promise<UserDTO | undefined>;
+  abstract current(): Promise<User | undefined>;
 
   /**
    * Signs in an user using email and password.
@@ -16,7 +16,7 @@ export abstract class AuthProvider {
    * @param password the password of the user.
    * @returns A promise that resolves with an authentification token.
    */
-  abstract signIn(username: string, password: string): Promise<UserDTO>;
+  abstract signIn(username: string, password: string): Promise<User>;
 
   /**
    * Sign out the current user

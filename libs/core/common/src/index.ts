@@ -7,5 +7,4 @@ export * from './lib/levels/level.dto';
 export * from './lib/topics/topic.dto';
 export * from './lib/user/user-roles';
 export * from './lib/user/user.dto';
-export * from './lib/utils/base-dto';
-export * from './lib/utils/mapper';
+
