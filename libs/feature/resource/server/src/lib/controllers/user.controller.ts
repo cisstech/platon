@@ -6,7 +6,7 @@ import { CreateResourceViewDTO } from '../dto/view.dto';
 import { ResourceService } from '../services/resource.service';
 import { ResourceViewService } from '../services/view.service';
 
-@Controller('user/:username')
+@Controller('users/:username')
 export class UserResourceController {
   constructor(
     private readonly viewService: ResourceViewService,
@@ -45,7 +45,10 @@ export class UserResourceController {
     }
 
     return new ItemResponse({
-      resource: await this.resourceService.findPersonalCircle(req.user.id)
+      resource: Mapper.map(
+        await this.resourceService.findPersonalCircle(req.user.id),
+        ResourceDTO
+      )
     })
   }
 

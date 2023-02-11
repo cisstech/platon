@@ -25,7 +25,7 @@ export class RemoteResourceProvider extends ResourceProvider {
   }
 
   circle(username: string): Observable<Resource> {
-    return this.http.get<ItemResponse<Resource>>(`/api/v1/user/${username}/circle`)
+    return this.http.get<ItemResponse<Resource>>(`/api/v1/users/${username}/circle`)
       .pipe(
         map(response => response.resource)
       );
