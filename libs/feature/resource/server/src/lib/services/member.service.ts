@@ -11,9 +11,9 @@ export class ResourceMemberService {
     private readonly repository: Repository<ResourceMemberEntity>
   ) { }
 
-  async findByUserId(userId: string): Promise<Optional<ResourceMemberEntity>> {
+  async findByUserId(resourceId: string, userId: string): Promise<Optional<ResourceMemberEntity>> {
     return Optional.ofNullable(
-      await this.repository.findOne({ where: { userId } })
+      await this.repository.findOne({ where: { resourceId, userId } })
     );
   }
 
@@ -21,8 +21,12 @@ export class ResourceMemberService {
     return this.repository.findAndCount({ where: { resourceId } });
   }
 
-  async updateByUserId(userId: string, changes: Partial<ResourceMemberEntity>): Promise<ResourceMemberEntity> {
-    const resource = await this.repository.findOne({ where: { userId } })
+  async updateByUserId(
+    resourceId: string,
+    userId: string,
+    changes: Partial<ResourceMemberEntity>
+  ): Promise<ResourceMemberEntity> {
+    const resource = await this.repository.findOne({ where: { resourceId, userId } })
     if (!resource) {
       throw new NotFoundException(`ResourceMember not found: ${userId}`)
     }
@@ -30,7 +34,11 @@ export class ResourceMemberService {
     return this.repository.save(resource);
   }
 
-  async deleteByUserId(userId: string) {
-    return this.repository.delete({ userId });
+  async deleteByUserId(resourceId: string, userId: string) {
+    return this.repository.remove(
+      (
+        await this.findByUserId(resourceId, userId)
+      ).orElseThrow(() => new NotFoundException(`ResourceMember not found: ${userId}`))
+    );
   }
 }

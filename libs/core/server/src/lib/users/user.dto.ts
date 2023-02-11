@@ -1,7 +1,7 @@
-import { UpdateUser, User, UserRoles } from '@platon/core/common';
-import { Exclude } from 'class-transformer';
-import { IsBoolean, IsDate, IsEmail, IsEnum, IsOptional, IsString } from 'class-validator';
-import { BaseDTO } from '../utils';
+import { OrderingDirections, UpdateUser, User, UserFilters, UserOrderings, UserRoles } from '@platon/core/common';
+import { Exclude, Transform } from 'class-transformer';
+import { IsArray, IsBoolean, IsDate, IsEmail, IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
+import { BaseDTO, toArray, toNumber } from '../utils';
 
 export class UserDTO extends BaseDTO implements User {
   @IsEnum(UserRoles)
@@ -57,4 +57,35 @@ export class UpdateUserDTO implements UpdateUser {
   @IsBoolean()
   @IsOptional()
   readonly active?: boolean;
+}
+
+
+export class UserFiltersDTO implements UserFilters {
+  @Transform(({ value }) => toArray(value))
+  @IsEnum(UserRoles, { each: true })
+  @IsArray()
+  @IsOptional()
+  readonly roles?: UserRoles[];
+
+  @IsString()
+  @IsOptional()
+  readonly search?: string;
+
+  @Transform(({ value }) => toNumber(value))
+  @IsNumber()
+  @IsOptional()
+  readonly offset?: number;
+
+  @Transform(({ value }) => toNumber(value))
+  @IsNumber()
+  @IsOptional()
+  readonly limit?: number;
+
+  @IsEnum(UserOrderings)
+  @IsOptional()
+  readonly order?: UserOrderings;
+
+  @IsEnum(OrderingDirections)
+  @IsOptional()
+  readonly direction?: OrderingDirections;
 }

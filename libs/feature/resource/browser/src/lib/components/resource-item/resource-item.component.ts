@@ -41,8 +41,8 @@ export class ResourceItemComponent implements OnInit {
 
   ngOnInit(): void {
     if (!this.simple) {
-      this.item.levels.concat(this.item.topics)
-        .forEach(tag => this.tags.push(tag.name))
+      this.item.levels?.forEach(level => this.tags.push(level.name))
+      this.item.topics?.forEach(topic => this.tags.push(topic.name))
     }
 
     this.name = this.item.name;

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch } from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, Patch } from '@nestjs/common';
 import { ItemResponse, ListResponse, NoContentResponse } from '@platon/core/common';
 import { Mapper } from '@platon/core/server';
 import { ResourceMemberDTO, UpdateResourceMemberDTO } from '../dto/member.dto';
@@ -19,13 +19,28 @@ export class ResourceMemberController {
     return new ListResponse({ total, resources })
   }
 
+  @Get('/:userId')
+  async find(
+    @Param('userId') userId: string,
+    @Param('resourceId') resourceId: string,
+  ): Promise<ItemResponse<ResourceMemberDTO>> {
+    const optional = await this.service.findByUserId(resourceId, userId);
+    const resource = Mapper.map(
+      optional.orElseThrow(() => new NotFoundException(`ResourceMember not found: ${userId}`)),
+      ResourceMemberDTO
+    );
+    return new ItemResponse({ resource })
+  }
+
+
   @Patch('/:userId')
   async update(
     @Param('userId') userId: string,
+    @Param('resourceId') resourceId: string,
     @Body() input: UpdateResourceMemberDTO
   ): Promise<ItemResponse<ResourceMemberDTO>> {
     const resource = Mapper.map(
-      await this.service.updateByUserId(userId, input),
+      await this.service.updateByUserId(resourceId, userId, input),
       ResourceMemberDTO
     )
     return new ItemResponse({ resource })
@@ -34,8 +49,9 @@ export class ResourceMemberController {
   @Delete('/:userId')
   async delete(
     @Param('userId') userId: string,
+    @Param('resourceId') resourceId: string,
   ): Promise<NoContentResponse> {
-    await this.service.deleteByUserId(userId)
+    await this.service.deleteByUserId(resourceId, userId)
     return new NoContentResponse()
   }
 }

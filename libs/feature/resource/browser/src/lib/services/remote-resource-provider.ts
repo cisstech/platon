@@ -58,9 +58,13 @@ export class RemoteResourceProvider extends ResourceProvider {
       params = params.append('members', e);
     });
 
-    filters.visibilities?.forEach(e => {
-      params = params.append('visibilities', e)
-    })
+    filters.owners?.forEach(e => {
+      params = params.append('owners', e);
+    });
+
+    filters.watchers?.forEach(e => {
+      params = params.append('watchers', e);
+    });
 
     if (filters.order) {
       params = params.append('order', filters.order);
@@ -84,6 +88,10 @@ export class RemoteResourceProvider extends ResourceProvider {
 
     if (filters.views) {
       params = params.append('views', 'true');
+    }
+
+    if (filters.parent) {
+      params = params.append('parent', filters.parent);
     }
 
     return this.http.get<ListResponse<Resource>>(`/api/v1/resources`, { params });

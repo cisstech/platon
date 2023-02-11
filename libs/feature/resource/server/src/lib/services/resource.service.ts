@@ -1,9 +1,11 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { OrderingDirections } from '@platon/core/common';
 import { LevelService, TopicService } from '@platon/core/server';
 import {
   ResourceCompletion,
   ResourceFilters,
+  ResourceOrderings,
   ResourceStatus,
   ResourceTypes,
   ResourceVisibilities
@@ -11,6 +13,7 @@ import {
 import { Repository } from 'typeorm';
 import { Optional } from 'typescript-optional';
 import { CreateResourceDTO, UpdateResourceDTO } from '../dto/resource.dto';
+import { ResourceMemberEntity, ResourceWatcherEntity } from '../entities';
 import { ResourceEntity } from '../entities/resource.entity';
 
 @Injectable()
@@ -51,9 +54,81 @@ export class ResourceService {
     return circle
   }
 
-  async findAll(filters: ResourceFilters = {}): Promise<[ResourceEntity[], number]> {
-    console.log(filters)
-    return this.repository.findAndCount();
+  async search(filters: ResourceFilters = {}): Promise<[ResourceEntity[], number]> {
+    const query = this.repository.createQueryBuilder('resource')
+    query.leftJoinAndSelect('resource.topics', 'topic')
+    query.leftJoinAndSelect('resource.levels', 'level')
+
+    if (filters.members) {
+      query.innerJoin(ResourceMemberEntity, 'member', 'member.user_id IN (:...ids)', { ids: filters.members })
+    }
+
+    if (filters.watchers) {
+      query.innerJoin(ResourceWatcherEntity, 'watcher', 'watcher.user_id IN (:...ids)', { ids: filters.watchers })
+    }
+
+    query.where('visibility <> :visibility', { visibility: ResourceVisibilities.PERSONAL })
+
+    if (filters.parent) {
+      query.andWhere('parent_id = :parent', { parent: filters.parent })
+    }
+
+    if (filters.types) {
+      query.andWhere('type IN (:...types)', { types: filters.types })
+    }
+
+    if (filters.status) {
+      query.andWhere('status IN (:...status)', { status: filters.status })
+    }
+
+    if (filters.owners) {
+      query.andWhere('owner_id IN (:...owners)', { owners: filters.owners })
+    }
+
+    if (filters.search) {
+      query.andWhere(`(
+        f_unaccent(resource.name) ILIKE f_unaccent(:search)
+        OR f_unaccent(topic.name) ILIKE f_unaccent(:search)
+        OR f_unaccent(level.name) ILIKE f_unaccent(:search)
+      )`, { search: `%${filters.search}%` })
+    }
+
+    if (filters.period) {
+      const subtractDays = (days: number): Date => {
+        const result = new Date();
+        result.setDate(result.getDate() - days);
+        return result;
+      }
+      query.andWhere('resource.updated_t >= :date', { date: subtractDays(filters.period) })
+    }
+
+    if (filters.order) {
+      const fields: Record<ResourceOrderings, string> = {
+        'NAME': 'name',
+        'CREATED_AT': 'resource.created_at',
+        'UPDATED_AT': 'resource.updated_at',
+        'RELEVANCE': 'resource.updated_at', // TODO implements ranking
+      }
+
+      const orderings: Record<ResourceOrderings, keyof typeof OrderingDirections> = {
+        'NAME': 'ASC',
+        'CREATED_AT': 'DESC',
+        'UPDATED_AT': 'DESC',
+        'RELEVANCE': 'DESC',
+      }
+
+      query.orderBy(fields[filters.order], filters.direction || orderings[filters.order])
+    }
+
+    if (filters.offset) {
+      query.offset(filters.offset)
+    }
+
+    if (filters.limit) {
+      query.limit(filters.limit)
+    }
+
+    return query.getManyAndCount();
   }
 
   async create(input: Partial<ResourceEntity>): Promise<ResourceEntity> {

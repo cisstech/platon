@@ -21,6 +21,13 @@ export class ResourceMemberEntity extends BaseEntity {
   @JoinColumn({ name: 'resource_id' })
   resource!: ResourceEntity
 
+  @Column({ name: 'inviter_id' })
+  inviterId!: string
+
+  @ManyToOne(() => UserEntity, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'inviter_id' })
+  inviter!: UserEntity
+
   @Column(() => MemberPermissions)
   permissions!: MemberPermissions
 }

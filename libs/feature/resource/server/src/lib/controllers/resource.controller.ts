@@ -26,7 +26,7 @@ export class ResourceController {
       resources = Mapper.mapAll(response[0].map(r => r.resource), ResourceDTO);
       total = response[1]
     } else {
-      const response = await this.resourceService.findAll(filters);
+      const response = await this.resourceService.search(filters);
       resources = Mapper.mapAll(response[0], ResourceDTO);
       total = response[1]
     }

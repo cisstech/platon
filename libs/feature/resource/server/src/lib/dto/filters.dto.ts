@@ -18,12 +18,6 @@ export class ResourceFiltersDTO implements ResourceFilters {
   @IsOptional()
   readonly status?: ResourceStatus[];
 
-  @Transform(({ value }) => toArray(value))
-  @IsEnum(ResourceVisibilities, { each: true })
-  @IsArray()
-  @IsOptional()
-  readonly visibilities?: ResourceVisibilities[];
-
   @IsString()
   @IsOptional()
   readonly search?: string;
@@ -38,6 +32,12 @@ export class ResourceFiltersDTO implements ResourceFilters {
   @IsArray()
   @IsOptional()
   readonly members?: string[];
+
+  @Transform(({ value }) => toArray(value))
+  @IsUUID(undefined, { each: true })
+  @IsArray()
+  @IsOptional()
+  readonly watchers?: string[];
 
   @Transform(({ value }) => toArray(value))
   @IsUUID(undefined, { each: true })
@@ -59,6 +59,10 @@ export class ResourceFiltersDTO implements ResourceFilters {
   @IsNumber()
   @IsOptional()
   readonly limit?: number;
+
+  @IsUUID()
+  @IsOptional()
+  readonly parent?: string;
 
   @IsEnum(ResourceOrderings)
   @IsOptional()

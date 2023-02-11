@@ -14,7 +14,7 @@ export class ResourceEventService {
     return this.repository.findAndCount({ where: { resourceId }});
   }
 
-  async create(user: Partial<ResourceEventEntity>): Promise<ResourceEventEntity> {
-    return this.repository.save(user);
+  async create(input: Partial<ResourceEventEntity>): Promise<ResourceEventEntity> {
+    return this.repository.save(input);
   }
 }

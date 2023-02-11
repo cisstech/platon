@@ -47,12 +47,13 @@ export class ResourceWatcherController {
   async delete(
     @Request() req: IRequest,
     @Param('userId') userId: string,
+    @Param('resourceId') resourceId: string,
   ): Promise<NoContentResponse> {
     if (userId !== req.user.id) {
       throw new UnauthorizedException("You cannot access other users' info")
     }
 
-    await this.service.deleteByUserId(userId)
+    await this.service.deleteByUserId(resourceId, userId)
     return new NoContentResponse()
   }
 }

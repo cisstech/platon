@@ -27,8 +27,12 @@ export class ResourceWatcherService {
     );
   }
 
-  async updateByUserId(userId: string, changes: Partial<ResourceWatcherEntity>): Promise<ResourceWatcherEntity> {
-    const resource = await this.repository.findOne({ where: { userId } })
+  async updateByUserId(
+    resourceId: string,
+    userId: string,
+    changes: Partial<ResourceWatcherEntity>
+  ): Promise<ResourceWatcherEntity> {
+    const resource = await this.repository.findOne({ where: { resourceId, userId } })
     if (!resource) {
       throw new NotFoundException(`ResourceWatcher not found: ${userId}`)
     }
@@ -36,7 +40,7 @@ export class ResourceWatcherService {
     return this.repository.save(resource);
   }
 
-  async deleteByUserId(userId: string) {
-    return this.repository.delete({ userId });
+  async deleteByUserId(resourceId: string, userId: string) {
+    return this.repository.delete({ resourceId, userId });
   }
 }

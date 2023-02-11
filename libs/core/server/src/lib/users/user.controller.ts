@@ -1,7 +1,7 @@
-import { Body, Controller, Get, NotFoundException, Param, Patch } from '@nestjs/common';
+import { Body, Controller, Get, NotFoundException, Param, Patch, Query } from '@nestjs/common';
 import { ItemResponse, ListResponse, UpdateUser } from '@platon/core/common';
 import { Mapper } from '../utils';
-import { UserDTO } from './user.dto';
+import { UserDTO, UserFiltersDTO } from './user.dto';
 import { UserService } from './user.service';
 
 @Controller('users')
@@ -11,8 +11,10 @@ export class UserController {
   ) { }
 
   @Get()
-  async list(): Promise<ListResponse<UserDTO>> {
-    const [users, total] = await this.userService.findAll();
+  async search(
+    @Query() filters: UserFiltersDTO
+  ): Promise<ListResponse<UserDTO>> {
+    const [users, total] = await this.userService.search(filters);
     const resources = Mapper.mapAll(users, UserDTO);
     return new ListResponse({ total, resources })
   }

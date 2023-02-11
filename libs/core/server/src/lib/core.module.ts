@@ -6,6 +6,7 @@ import { ErrorsModule } from './errors/errors.module';
 import { LevelModule } from './levels';
 import { TopicModule } from './topics';
 import { UserModule } from './users/user.module';
+import { ClsModule } from 'nestjs-cls';
 
 @Module({
   imports: [
@@ -16,6 +17,10 @@ import { UserModule } from './users/user.module';
     TopicModule,
     LevelModule,
     ErrorsModule,
+    ClsModule.forRoot({
+      global: true,
+      middleware: { mount: true },
+    }),
   ],
   exports: [
     ConfigurationModule,
@@ -25,6 +30,7 @@ import { UserModule } from './users/user.module';
     TopicModule,
     LevelModule,
     ErrorsModule,
+    ClsModule,
   ],
 })
-export class CoreServerModule {}
+export class CoreServerModule { }

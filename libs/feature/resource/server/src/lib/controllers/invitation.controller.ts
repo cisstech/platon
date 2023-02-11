@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Request } from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, Patch, Post, Request } from '@nestjs/common';
 import { CreatedResponse, ItemResponse, ListResponse, NoContentResponse } from '@platon/core/common';
 import { IRequest, Mapper } from '@platon/core/server';
 import { CreateResourceInvitationDTO, ResourceInvitationDTO } from '../dto/invitation.dto';
@@ -20,6 +20,19 @@ export class ResourceInvitationController {
     return new ListResponse({ total, resources })
   }
 
+  @Get('/:inviteeId')
+  async find(
+    @Param('inviteeId') inviteeId: string,
+    @Param('resourceId') resourceId: string,
+  ): Promise<ItemResponse<ResourceInvitationDTO>> {
+    const optional = await this.service.findByInviteeId(resourceId, inviteeId);
+    const resource = Mapper.map(
+      optional.orElseThrow(() => new NotFoundException(`ResourceInvitation not found: ${inviteeId}`)),
+      ResourceInvitationDTO
+    );
+    return new ItemResponse({ resource })
+  }
+
   @Post()
   async invite(
     @Request() req: IRequest,
@@ -37,22 +50,24 @@ export class ResourceInvitationController {
     return new ItemResponse({ resource })
   }
 
-  @Patch('/:id')
+  @Patch('/:inviteeId')
   async accept(
-    @Param('id') id: string,
+    @Param('inviteeId') inviteeId: string,
+    @Param('resourceId') resourceId: string,
   ): Promise<CreatedResponse<ResourceMemberDTO>> {
     const resource = Mapper.map(
-      await this.service.accept(id),
+      await this.service.accept(resourceId, inviteeId),
       ResourceMemberDTO
     )
     return new CreatedResponse({ resource })
   }
 
-  @Delete('/:id')
+  @Delete('/:inviteeId')
   async decline(
-    @Param('id') id: string,
+    @Param('inviteeId') inviteeId: string,
+    @Param('resourceId') resourceId: string,
   ): Promise<NoContentResponse> {
-    await this.service.delete(id)
+    await this.service.delete(resourceId, inviteeId)
     return new NoContentResponse()
   }
 }

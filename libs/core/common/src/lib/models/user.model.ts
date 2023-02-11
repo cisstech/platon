@@ -1,10 +1,17 @@
 import { Level } from "./level.model";
+import { OrderingDirections } from "./ordering.model";
 import { Topic } from "./topic.model";
 
 export enum UserRoles {
   admin = 'admin',
   teacher = 'teacher',
   student = 'student'
+}
+
+export enum UserOrderings {
+  NAME = 'NAME',
+  CREATED_AT = 'CREATED_AT',
+  UPDATED_AT = 'UPDATED_AT',
 }
 
 export interface User {
@@ -37,4 +44,13 @@ export interface UserPrefs {
 export class UpdateUserPrefs {
   readonly levels?: string[];
   readonly topics?: string[];
+}
+
+export interface UserFilters {
+  readonly roles?: UserRoles[];
+  readonly search?: string;
+  readonly offset?: number;
+  readonly limit?: number;
+  readonly order?: UserOrderings;
+  readonly direction?: OrderingDirections;
 }
