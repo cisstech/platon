@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { ResourceStatus } from '@platon/feature/resource/common';
 
-const LABELS: Record<ResourceStatus, string> = {
+export const RESOURCE_STATUS_NAMES: Record<ResourceStatus, string> = {
   NONE: 'Non défini',
   DRAFT: 'Brouillon',
   READY: "Prêt à l'utilisation",
@@ -11,10 +11,10 @@ const LABELS: Record<ResourceStatus, string> = {
 };
 
 @Pipe({
-  name: 'statusLabel'
+  name: 'resourceStatus'
 })
-export class StatusLabelPipe implements PipeTransform {
-  transform(status: ResourceStatus): string {
-    return LABELS[status];
+export class ResourceStatusPipe implements PipeTransform {
+  transform(status: ResourceStatus | string): string {
+    return RESOURCE_STATUS_NAMES[status as ResourceStatus];
   }
 }

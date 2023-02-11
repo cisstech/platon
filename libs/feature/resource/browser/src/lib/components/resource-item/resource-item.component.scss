@@ -3,5 +3,12 @@
     .ant-ribbon {
       color: white !important;
     }
+
+    .article-header {
+      color: var(--brand-color-primary);
+      h3 {
+        color: var(--brand-color-primary);
+      }
+    }
   }
 }

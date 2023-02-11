@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LevelService, TopicService } from '@platon/core/server';
+import { ResourceCompletion } from '@platon/feature/resource/common';
 import { Repository } from 'typeorm';
 import { Optional } from "typescript-optional";
 import { CreateResourceDTO, UpdateResourceDTO } from '../dto/resource.dto';
@@ -40,6 +41,20 @@ export class ResourceService {
 
   async delete(id: string) {
     return this.repository.delete(id);
+  }
+
+  async completion(): Promise<ResourceCompletion> {
+    const [levels, topics, names] = await Promise.all([
+      this.levelService.findAll(),
+      this.topicService.findAll(),
+      this.repository.query('SELECT name FROM "Resources"') as Promise<{ name: string }[]>
+    ])
+
+    return {
+      levels: levels[0].map(e => e.name),
+      topics: topics[0].map(e => e.name),
+      names: names.map(e => e.name),
+    }
   }
 
   async fromInput(input: CreateResourceDTO | UpdateResourceDTO): Promise<ResourceEntity> {

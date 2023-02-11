@@ -3,6 +3,7 @@
   width: 100%;
   padding: 2rem;
 }
+
 h1 {
   width: 100%;
   text-align: center;
@@ -12,21 +13,45 @@ h1 {
 ui-search-bar {
   width: 70%;
   margin: 0 auto;
-  margin-bottom: 2rem;
+  margin-bottom: 4rem;
 }
 
 .content {
-  display: flex;
+  display: grid;
+  grid-template-columns: 60% 40%;
+  column-gap: 2rem;
 }
+
+h2 {
+  margin-bottom: 2rem;
+}
+
 article {
-  width: 70%;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 aside {
-  width: 30%;
+  width: calc(100% - 2rem);
+  box-sizing: border-box;
 }
 
 section {
   margin: 0;
   margin-bottom: 2rem;
+}
+
+li {
+  list-style: none;
+}
+
+nz-spin {
+  display: flex;
+  justify-content: center;
+  margin: 10rem 0;
+}
+
+mat-chip {
+  margin: 4px;
+  cursor: pointer;
 }

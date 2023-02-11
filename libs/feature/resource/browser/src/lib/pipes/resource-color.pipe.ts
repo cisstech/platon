@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { ResourceTypes } from '@platon/feature/resource/common';
 
-const COLORS: Record<ResourceTypes, string> = {
+export const RESOURCE_STATUS_COLORS: Record<ResourceTypes, string> = {
   CIRCLE: '#d89614',
   EXERCISE: '#108ee9',
   ACTIVITY: '#f50'
@@ -11,7 +11,7 @@ const COLORS: Record<ResourceTypes, string> = {
   name: 'resourceColor',
 })
 export class ResourceColorPipe implements PipeTransform {
-  transform(type: ResourceTypes): string {
-    return COLORS[type];
+  transform(type: ResourceTypes | string): string {
+    return RESOURCE_STATUS_COLORS[type as ResourceTypes];
   }
 }

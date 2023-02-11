@@ -1,4 +1,4 @@
-<nz-ribbon [nzText]="item.status|statusLabel" [nzColor]="item.status|statusColor">
+<nz-ribbon [nzText]="item.status|resourceStatus" [nzColor]="item.status|resourceStatusColor">
   <ui-list-item-article
     [style.--border-color]="item.type|resourceColor"
     [articleTitle]="item.name"
@@ -11,19 +11,10 @@
       <mat-icon>{{item.type|resourceIcon}}</mat-icon>
     </ng-template>
     <ui-list-item-article-action
-      [actionTitle]="$any(item.updatedAt|date:'dd/MM/yyyy')"
+      *ngIf="!simple"
+      [actionTitle]="'Mise à jour le ' + $any(item.updatedAt|date:'dd/MM/yyyy')"
       matTooltip="Date de mise à jour">
       <mat-icon>update</mat-icon>
     </ui-list-item-article-action>
-<!--     <ui-list-item-article-action
-      [actionTitle]="item.name"
-      [matTooltip]="'Publié dans le cercle '  + item.circle.name">
-      <mat-icon>group_work</mat-icon>
-    </ui-list-item-article-action> -->
-<!--     <ui-list-item-article-action
-      [actionTitle]="item.versionsCount"
-      [matTooltip]="item.versionsCount + ' version(s)'">
-      <mat-icon>timeline</mat-icon>
-    </ui-list-item-article-action> -->
   </ui-list-item-article>
 </nz-ribbon>

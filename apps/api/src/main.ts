@@ -42,7 +42,10 @@ async function bootstrap() {
 
 
   app.useLogger(app.get(Logger))
-  app.useGlobalPipes(new ValidationPipe({ forbidUnknownValues: false }))
+  app.useGlobalPipes(new ValidationPipe({
+    forbidUnknownValues: false,
+    transform: true,
+  }))
 
   const port = process.env.PORT || 3333;
   await app.listen(port);

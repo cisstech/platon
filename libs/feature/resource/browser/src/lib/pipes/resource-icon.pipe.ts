@@ -2,7 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { ResourceTypes } from '@platon/feature/resource/common';
 
 const ICONS: Record<ResourceTypes, string> = {
-  CIRCLE: 'blue',
+  CIRCLE: 'group_work',
   EXERCISE: 'article',
   ACTIVITY: 'widgets'
 };
@@ -11,7 +11,7 @@ const ICONS: Record<ResourceTypes, string> = {
   name: 'resourceIcon',
 })
 export class ResourceIconPipe implements PipeTransform {
-  transform(type: ResourceTypes): string {
-    return ICONS[type];
+  transform(type: ResourceTypes | string): string {
+    return ICONS[type as ResourceTypes];
   }
 }

@@ -11,10 +11,10 @@ const COLORS: Record<ResourceStatus, string> = {
 };
 
 @Pipe({
-  name: 'statusColor',
+  name: 'resourceStatusColor',
 })
-export class StatusColorPipe implements PipeTransform {
-  transform(status: ResourceStatus): string {
-    return COLORS[status];
+export class ResourceStatusColorPipe implements PipeTransform {
+  transform(status: ResourceStatus | string): string {
+    return COLORS[status as ResourceStatus];
   }
 }

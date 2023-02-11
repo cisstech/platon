@@ -1,18 +1,19 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
+import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
-import { MatExpansionModule } from '@angular/material/expansion';
 
-import { MatRadioModule } from '@angular/material/radio';
-import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatRadioModule } from '@angular/material/radio';
+import { OrderingDirections } from '@platon/core/common';
+import { ResourcePipesModule } from '@platon/feature/resource/browser';
+import { ResourceFilters, ResourceOrderings, ResourceStatus, ResourceTypes } from '@platon/feature/resource/common';
 import { Subscription } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
+
 
 @Component({
   standalone: true,
@@ -25,55 +26,76 @@ import { ActivatedRoute } from '@angular/router';
     FormsModule,
     ReactiveFormsModule,
 
-    MatIconModule,
-    MatButtonModule,
+    MatChipsModule,
     MatDividerModule,
-    MatExpansionModule,
 
     MatRadioModule,
-    MatInputModule,
     MatCheckboxModule,
     MatFormFieldModule,
+
+    ResourcePipesModule,
   ]
 })
 export class FiltersComponent implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription[] = [];
 
   readonly form = new FormGroup({
-    date: new FormControl(0),
-    order: new FormControl('name'),
-    status: new FormControl('all'),
-    circles: new FormControl(false),
-    exercises: new FormControl(false),
-    activities: new FormControl(false),
-    visibility: new FormControl('all'),
+    order: new FormControl(ResourceOrderings.NAME),
+    direction: new FormControl(OrderingDirections.ASC),
+    period: new FormControl(0),
+    types: new FormGroup(
+      Object.keys(ResourceTypes).reduce((controls: any, type) => {
+        controls[type] = new FormControl(false)
+        return controls
+      }, {})
+    ),
+    status: new FormGroup(
+      Object.keys(ResourceStatus).reduce((controls: any, status) => {
+        controls[status] = new FormControl(false)
+        return controls
+      }, {})
+    )
   });
 
-  constructor(
-    private readonly activatedRoute: ActivatedRoute,
-  ) { }
+  @Input()
+  filters: ResourceFilters = {};
+
+  @Output()
+  filtersChange = new EventEmitter<ResourceFilters>();
 
   ngOnInit(): void {
+    this.filters.types?.forEach(type => {
+      this.form.get('types')?.patchValue({
+        [type]: true
+      })
+    });
+
+    this.filters.status?.forEach(type => {
+      this.form.get('status')?.patchValue({
+        [type]: true
+      })
+    });
+
+    this.form.patchValue({
+      period: this.filters.period,
+      order: this.filters.order,
+      direction: this.filters.direction
+    });
+
     this.subscriptions.push(
       this.form.valueChanges.subscribe(value => {
-        console.log(value);
-      })
-    );
-
-    this.subscriptions.push(
-      this.activatedRoute.queryParams.subscribe((e) => {
-        //this.filter.search = e.q ?? this.filter.search;
-
-        //const types = e.types || '';
-      /*   this.form.patchValue({
-          date: Number.parseInt(e.date, 10) || this.filter.updatedAt || 0,
-          order: e.order || this.filter.orderBy || 'name',
-          status: e.status ?? 'all',
-          visibility: e.visibility ?? 'all',
-          models: types.includes('model'),
-          exercises: types.includes('exercise'),
-          activities: types.includes('activity'),
-        }); */
+        this.filtersChange.emit(
+          this.filters = {
+            ...this.filters,
+            direction: value.direction as any,
+            order: value.order as any,
+            period: value.period as any,
+            types: Object.keys(value.types)
+              .filter(e => value.types[e]) as any,
+            status: Object.keys(value.status)
+              .filter(e => value.status[e]) as any,
+          }
+        );
       })
     );
   }

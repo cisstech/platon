@@ -1,4 +1,9 @@
-import { UserRoles } from './user-roles';
+export enum UserRoles {
+  admin = 'admin',
+  teacher = 'teacher',
+  student = 'student'
+}
+
 
 export interface User {
   readonly id: string;

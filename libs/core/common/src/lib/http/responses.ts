@@ -46,7 +46,7 @@ export class ItemResponse<T> implements HttpResponse<T> {
 export class ListResponse<T> implements HttpResponse<T> {
   success = true
   statusCode = HTTP_STATUS_CODE.OK
-  resources: Partial<T>[]
+  resources: T[]
   total: number
 
   constructor(options: {

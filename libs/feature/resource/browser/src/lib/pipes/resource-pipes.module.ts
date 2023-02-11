@@ -2,25 +2,28 @@
 import { NgModule } from '@angular/core';
 import { ResourceColorPipe } from './resource-color.pipe';
 import { ResourceIconPipe } from './resource-icon.pipe';
-import { ResourceNamePipe } from './resource-name.pipe';
-import { StatusColorPipe } from './status-color.pipe';
-import { StatusLabelPipe } from './status-label.pipe';
+import { ResourceTypePipe } from './resource-type.pipe';
+import { ResourceStatusColorPipe } from './resource-status-color.pipe';
+import { ResourceStatusPipe } from './resource-status.pipe';
+import { ResourceOrderingPipe } from './resource-ordering.pipe';
 
 
 @NgModule({
   exports: [
     ResourceColorPipe,
     ResourceIconPipe,
-    ResourceNamePipe,
-    StatusColorPipe,
-    StatusLabelPipe,
+    ResourceTypePipe,
+    ResourceStatusColorPipe,
+    ResourceStatusPipe,
+    ResourceOrderingPipe,
   ],
   declarations: [
     ResourceColorPipe,
     ResourceIconPipe,
-    ResourceNamePipe,
-    StatusColorPipe,
-    StatusLabelPipe,
+    ResourceTypePipe,
+    ResourceStatusColorPipe,
+    ResourceStatusPipe,
+    ResourceOrderingPipe,
   ],
 })
 export class ResourcePipesModule { }

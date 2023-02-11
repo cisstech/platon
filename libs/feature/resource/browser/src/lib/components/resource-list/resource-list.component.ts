@@ -22,5 +22,7 @@ import { ResourceItemComponent } from '../resource-item/resource-item.component'
 })
 export class ResourceListComponent {
   @Input() items: Resource[] = [];
+  @Input() simple = false;
+
   @Output() didTapTag = new EventEmitter<string>();
 }

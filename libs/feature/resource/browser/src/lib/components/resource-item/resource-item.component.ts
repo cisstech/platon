@@ -30,15 +30,18 @@ import { ResourcePipesModule } from '../../pipes';
     ResourcePipesModule,
   ]
 })
-export class ResourceItemComponent  implements OnInit {
+export class ResourceItemComponent implements OnInit {
   @Input() item!: Resource;
+  @Input() simple = false;
   @Output() didTapTag = new EventEmitter<string>();
 
   readonly tags: string[] = []
 
   ngOnInit(): void {
-    this.item.levels.concat(this.item.topics)
-      .forEach(tag => this.tags.push(tag.name))
+    if (!this.simple) {
+      this.item.levels.concat(this.item.topics)
+        .forEach(tag => this.tags.push(tag.name))
+    }
   }
 
 }
