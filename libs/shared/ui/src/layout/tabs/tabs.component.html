@@ -1,0 +1,34 @@
+<nz-skeleton [nzActive]="state === 'LOADING'" [nzLoading]="state === 'LOADING'">
+  <section>
+    <ng-content></ng-content>
+  </section>
+</nz-skeleton>
+<section>
+  <nz-tabset nzLinkRouter [nzLinkExact]="false" nzSize="default" nzType="card">
+    <ng-container *ngFor="let tab of tabs; trackBy: trackByIndex">
+      <nz-tab>
+        <a *nzTabLink nz-tab-link class="tab-title" [routerLink]="tab.title.link">
+          <ng-container *ngTemplateOutlet="tab.title.templateRef"></ng-container>
+        </a>
+      </nz-tab>
+    </ng-container>
+  </nz-tabset>
+</section>
+<nz-skeleton [nzActive]="state === 'LOADING'" [nzLoading]="state === 'LOADING'">
+  <section>
+    <ng-container [ngSwitch]="state">
+      <ng-container *ngSwitchCase="'READY'">
+        <router-outlet></router-outlet>
+      </ng-container>
+      <ng-container *ngSwitchCase="'SERVER_ERROR'">
+        <ui-error-500></ui-error-500>
+      </ng-container>
+      <ng-container *ngSwitchCase="'UNAUTHORIZED'">
+        <ui-error-403></ui-error-403>
+      </ng-container>
+      <ng-container *ngSwitchCase="'NOT_FOUND'">
+        <ui-error-404></ui-error-404>
+      </ng-container>
+    </ng-container>
+  </section>
+</nz-skeleton>

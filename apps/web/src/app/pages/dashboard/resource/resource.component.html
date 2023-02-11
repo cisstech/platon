@@ -1,0 +1,63 @@
+<ui-layout-tabs [state]="context.state">
+  <ng-container *ngIf="context.resource">
+    <nz-breadcrumb>
+      <nz-breadcrumb-item *ngIf="context.resource.parentId">
+        <a [routerLink]="['/resource', context.resource.parentId]">Parent</a>
+      </nz-breadcrumb-item>
+      <nz-breadcrumb-item>
+        {{ context.resource.name }}
+        <mat-icon>{{ context.resource.type|resourceIcon }}</mat-icon>
+      </nz-breadcrumb-item>
+    </nz-breadcrumb>
+    <p>{{ context.resource!.desc }}</p>
+    <nz-button-group>
+      <a
+        nz-button
+        nzType="primary"
+        matTooltip="Éditer en ligne">
+        <i nz-icon nzType="edit" nzTheme="outline"></i>
+      </a>
+      <a
+        nz-button
+        nzType="primary"
+        matTooltip="Prévisualiser">
+        <i nz-icon nzType="play-circle" nzTheme="outline"></i>
+      </a>
+    </nz-button-group>
+    <nz-button-group>
+      <nz-select
+        id="status"
+        name="status"
+        nzShowSearch
+        [ngModel]="context.resource.status"
+        (ngModelChange)="updateStatus($event)"
+        [nzDisabled]="false">
+        <nz-option
+          *ngFor="let item of status; trackBy: trackByValue"
+          [nzLabel]="item|resourceStatus"
+          [nzValue]="item">
+        </nz-option>
+      </nz-select>
+    </nz-button-group>
+    <nz-button-group>
+      <button nz-button nzType="default">
+        <i nz-icon nzType="eye" nzTheme="outline"></i>
+        Suivre
+      </button>
+      <button nz-button nzType="default">
+       10
+      </button>
+    </nz-button-group>
+    <nz-button-group>
+      <button nz-button nzType="primary">
+        Accepter l'invitation
+      </button>
+      <button nz-button nzDanger>
+        Refuser l'invitation
+      </button>
+    </nz-button-group>
+  </ng-container>
+  <ng-container *uiLayoutTabsTitle="'overview'">
+    Vue d'ensemble
+  </ng-container>
+</ui-layout-tabs>

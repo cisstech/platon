@@ -10,13 +10,13 @@ export class ResourceEntity extends BaseEntity {
   @Column({ nullable: true })
   desc?: string
 
-  @Column({ enum: ResourceTypes })
+  @Column({ type: 'enum', enum: ResourceTypes })
   type!: ResourceTypes
 
-  @Column({ enum: ResourceVisibilities })
+  @Column({ type: 'enum', enum: ResourceVisibilities })
   visibility!: ResourceVisibilities
 
-  @Column({ enum: ResourceStatus, default: ResourceStatus.NONE })
+  @Column({ type: 'enum', enum: ResourceStatus, default: ResourceStatus.READY })
   status!: ResourceStatus
 
   @ManyToMany(() => LevelEntity, {

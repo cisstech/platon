@@ -5,5 +5,5 @@ export default [
   {
     path: '',
     component: WorkspaceComponent
-  },
+  }
 ] as Routes;

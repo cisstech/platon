@@ -4,32 +4,54 @@ import { IRequest, Mapper } from '@platon/core/server';
 import { ResourceFiltersDTO } from '../dto';
 import { CreateResourceDTO, ResourceDTO, UpdateResourceDTO } from '../dto/resource.dto';
 import { ResourceService } from '../services/resource.service';
+import { ResourceViewService } from '../services/view.service';
 
 @Controller('resources')
 export class ResourceController {
   constructor(
-    private readonly service: ResourceService,
+    private readonly viewService: ResourceViewService,
+    private readonly resourceService: ResourceService,
   ) { }
 
   @Get()
   async list(
+    @Request() req: IRequest,
     @Query() filters: ResourceFiltersDTO = {}
   ): Promise<ListResponse<ResourceDTO>> {
-    console.log(filters)
-    const [items, total] = await this.service.findAll();
-    const resources = Mapper.mapAll(items, ResourceDTO);
+    let resources: ResourceDTO[] = [];
+    let total = 0;
+    if (filters.views) {
+      console.log('views')
+      const response = await this.viewService.findAll(req.user.id);
+      resources = Mapper.mapAll(response[0].map(r => r.resource), ResourceDTO);
+      total = response[1]
+    } else {
+      const response = await this.resourceService.findAll(filters);
+      resources = Mapper.mapAll(response[0], ResourceDTO);
+      total = response[1]
+    }
     return new ListResponse({ total, resources })
   }
 
+
   @Get('/:id')
   async find(
-    @Param('id') id: string
+    @Request() req: IRequest,
+    @Param('id') id: string,
+    @Query('markAsViewed') markAsViewed?: string
   ): Promise<ItemResponse<ResourceDTO>> {
-    const optional = await this.service.findById(id);
+    const optional = await this.resourceService.findById(id);
     const resource = Mapper.map(
       optional.orElseThrow(() => new NotFoundException(`Resource not found: ${id}`)),
       ResourceDTO
     );
+
+    if (markAsViewed) {
+      this.viewService.create({
+        resourceId: id,
+        userId: req.user.id,
+      })
+    }
     return new ItemResponse({ resource })
   }
 
@@ -39,8 +61,8 @@ export class ResourceController {
     @Body() input: CreateResourceDTO
   ): Promise<CreatedResponse<ResourceDTO>> {
     const resource = Mapper.map(
-      await this.service.create({
-        ...(await this.service.fromInput(input)),
+      await this.resourceService.create({
+        ...(await this.resourceService.fromInput(input)),
         ownerId: req.user.id
       }),
       ResourceDTO
@@ -54,7 +76,7 @@ export class ResourceController {
     @Body() input: UpdateResourceDTO
   ): Promise<ItemResponse<ResourceDTO>> {
     const resource = Mapper.map(
-      await this.service.update(id, await this.service.fromInput(input)),
+      await this.resourceService.update(id, await this.resourceService.fromInput(input)),
       ResourceDTO
     );
     return new ItemResponse({ resource })

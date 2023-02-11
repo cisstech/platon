@@ -1,9 +1,15 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LevelService, TopicService } from '@platon/core/server';
-import { ResourceCompletion } from '@platon/feature/resource/common';
+import {
+  ResourceCompletion,
+  ResourceFilters,
+  ResourceStatus,
+  ResourceTypes,
+  ResourceVisibilities
+} from '@platon/feature/resource/common';
 import { Repository } from 'typeorm';
-import { Optional } from "typescript-optional";
+import { Optional } from 'typescript-optional';
 import { CreateResourceDTO, UpdateResourceDTO } from '../dto/resource.dto';
 import { ResourceEntity } from '../entities/resource.entity';
 
@@ -22,7 +28,31 @@ export class ResourceService {
     );
   }
 
-  async findAll(): Promise<[ResourceEntity[], number]> {
+  async findPersonalCircle(ownerId: string): Promise<ResourceEntity> {
+    let circle = await this.repository.findOne({
+      where: {
+        ownerId,
+        type: ResourceTypes.CIRCLE,
+        visibility: ResourceVisibilities.PERSONAL,
+      }
+    })
+
+    if (!circle) {
+      circle = (await this.repository.save(
+        this.repository.create({
+          ownerId,
+          name: ownerId,
+          type: ResourceTypes.CIRCLE,
+          visibility: ResourceVisibilities.PERSONAL,
+          status: ResourceStatus.READY
+        })
+      ))
+    }
+    return circle
+  }
+
+  async findAll(filters: ResourceFilters = {}): Promise<[ResourceEntity[], number]> {
+    console.log(filters)
     return this.repository.findAndCount();
   }
 
@@ -31,7 +61,7 @@ export class ResourceService {
   }
 
   async update(id: string, changes: Partial<ResourceEntity>): Promise<ResourceEntity> {
-    const resource = await this.repository.findOne({ where: { id }})
+    const resource = await this.repository.findOne({ where: { id } })
     if (!resource) {
       throw new NotFoundException(`Resource not found: ${id}`)
     }

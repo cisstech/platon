@@ -2,7 +2,6 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { ResourceStatus } from '@platon/feature/resource/common';
 
 export const RESOURCE_STATUS_NAMES: Record<ResourceStatus, string> = {
-  NONE: 'Non défini',
   DRAFT: 'Brouillon',
   READY: "Prêt à l'utilisation",
   BUGGED: 'Contient des bugs',

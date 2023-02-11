@@ -1,8 +1,8 @@
 import { OrderingDirections } from "@platon/core/common";
-import { toArray, toNumber } from "@platon/core/server";
+import { toArray, toBoolean, toNumber } from "@platon/core/server";
 import { ResourceFilters, ResourceOrderings, ResourceStatus, ResourceTypes, ResourceVisibilities } from "@platon/feature/resource/common";
 import { Transform } from "class-transformer";
-import { IsArray, IsEnum, IsNumber, IsOptional, IsString, IsUUID } from "class-validator";
+import { IsArray, IsBoolean, IsEnum, IsNumber, IsOptional, IsString, IsUUID } from "class-validator";
 
 export class ResourceFiltersDTO implements ResourceFilters {
   @Transform(({ value }) => toArray(value))
@@ -38,6 +38,17 @@ export class ResourceFiltersDTO implements ResourceFilters {
   @IsArray()
   @IsOptional()
   readonly members?: string[];
+
+  @Transform(({ value }) => toArray(value))
+  @IsUUID(undefined, { each: true })
+  @IsArray()
+  @IsOptional()
+  readonly owners?: string[];
+
+  @Transform(({ value }) => toBoolean(value))
+  @IsBoolean()
+  @IsOptional()
+  readonly views?: boolean;
 
   @Transform(({ value }) => toNumber(value))
   @IsNumber()

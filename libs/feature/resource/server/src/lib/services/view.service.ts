@@ -13,7 +13,10 @@ export class ResourceViewService {
   async findAll(userId: string): Promise<[ResourceViewEntity[], number]> {
     return this.repository.findAndCount({
       where: { userId },
-      relations: { resource: true }
+      relations: { resource: true },
+      order: {
+        updatedAt: 'DESC'
+      }
     })
   }
 
@@ -27,6 +30,7 @@ export class ResourceViewService {
     })
 
     if (lastView) {
+      lastView.updatedAt = new Date()
       await this.repository.save(lastView) // update timestamp
       return
     } else {

@@ -2,7 +2,6 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { ResourceStatus } from '@platon/feature/resource/common';
 
 const COLORS: Record<ResourceStatus, string> = {
-  NONE: 'gray',
   DRAFT: 'blue',
   READY: 'green',
   BUGGED: 'magenta',

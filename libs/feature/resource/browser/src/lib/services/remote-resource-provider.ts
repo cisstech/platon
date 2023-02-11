@@ -24,6 +24,13 @@ export class RemoteResourceProvider extends ResourceProvider {
     );
   }
 
+  circle(username: string): Observable<Resource> {
+    return this.http.get<ItemResponse<Resource>>(`/api/v1/user/${username}/circle`)
+      .pipe(
+        map(response => response.resource)
+      );
+  }
+
   completion(): Observable<ResourceCompletion> {
     return this.http.get<ItemResponse<ResourceCompletion>>('/api/v1/completion/resources')
       .pipe(
@@ -75,11 +82,22 @@ export class RemoteResourceProvider extends ResourceProvider {
       params = params.append('offset', filters.offset.toString());
     }
 
+    if (filters.views) {
+      params = params.append('views', 'true');
+    }
+
     return this.http.get<ListResponse<Resource>>(`/api/v1/resources`, { params });
   }
 
-  findResourceById(id: number): Observable<Resource> {
-    return this.http.get<ItemResponse<Resource>>(`/api/v1/resources/${id}`).pipe(
+  findResourceById(id: string, markAsViewed?: boolean): Observable<Resource> {
+    let params = new HttpParams();
+    if (markAsViewed) {
+      params = params.append('markAsViewed', 'true')
+    }
+
+    return this.http.get<ItemResponse<Resource>>(`/api/v1/resources/${id}`, {
+      params
+    }).pipe(
       map(response => response.resource)
     );
   }

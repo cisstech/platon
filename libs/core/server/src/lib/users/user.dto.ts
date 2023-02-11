@@ -1,4 +1,5 @@
 import { UpdateUser, User, UserRoles } from '@platon/core/common';
+import { Exclude } from 'class-transformer';
 import { IsBoolean, IsDate, IsEmail, IsEnum, IsOptional, IsString } from 'class-validator';
 import { BaseDTO } from '../utils';
 
@@ -31,6 +32,9 @@ export class UserDTO extends BaseDTO implements User {
   @IsDate()
   @IsOptional()
   readonly firstLogin?: Date;
+
+  @Exclude()
+  readonly password?: string
 }
 
 export class UpdateUserDTO implements UpdateUser {

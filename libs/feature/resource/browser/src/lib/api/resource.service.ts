@@ -20,6 +20,10 @@ export class ResourceService {
     return this.provider.levels();
   }
 
+  circle(username: string): Observable<Resource> {
+    return this.provider.circle(username);
+  }
+
   completion(): Observable<ResourceCompletion> {
     return this.provider.completion();
   }
@@ -29,8 +33,8 @@ export class ResourceService {
     return this.provider.search(filters);
   }
 
-  findResourceById(id: number): Observable<Resource> {
-    return this.provider.findResourceById(id);
+  findResourceById(id: string, markAsViewed?: boolean): Observable<Resource> {
+    return this.provider.findResourceById(id, markAsViewed);
   }
 
   updateResource(id: string, input: UpdateResource): Observable<Resource> {

@@ -1,17 +1,16 @@
 <nz-ribbon [nzText]="item.status|resourceStatus" [nzColor]="item.status|resourceStatusColor">
   <ui-list-item-article
     [style.--border-color]="item.type|resourceColor"
-    [articleTitle]="item.name"
+    [articleTitle]="name"
     [articleTags]="tags"
     [articleIconTemplate]="image"
-    [articleDescription]="item.desc"
-    [articleUrl]="['/resources/', item.id]"
+    [articleDescription]="desc"
+    [articleUrl]="['/resource/', item.id]"
     (didClickTag)="didTapTag.emit($event)">
     <ng-template #image>
       <mat-icon>{{item.type|resourceIcon}}</mat-icon>
     </ng-template>
     <ui-list-item-article-action
-      *ngIf="!simple"
       [actionTitle]="'Mise à jour le ' + $any(item.updatedAt|date:'dd/MM/yyyy')"
       matTooltip="Date de mise à jour">
       <mat-icon>update</mat-icon>

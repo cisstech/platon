@@ -16,6 +16,12 @@ export default [
         )
       },
       {
+        path: 'resource',
+        loadChildren: () => import(
+          /* webpackChunkName: "resource" */'./resource/resource.routes',
+        )
+      },
+      {
         path: 'courses',
         loadChildren: () => import(
           /* webpackChunkName: "courses" */

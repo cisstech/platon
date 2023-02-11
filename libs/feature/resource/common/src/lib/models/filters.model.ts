@@ -17,6 +17,8 @@ export interface ResourceFilters {
   readonly search?: string;
   readonly period?: number;
   readonly members?: string[];
+  readonly owners?: string[];
+  readonly views?: boolean;
   readonly offset?: number;
   readonly limit?: number;
   readonly order?: ResourceOrderings;

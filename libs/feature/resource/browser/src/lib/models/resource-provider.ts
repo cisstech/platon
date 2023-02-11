@@ -7,10 +7,11 @@ export abstract class ResourceProvider {
   // abstract tree(): Observable<CircleTree>;
   abstract topics(): Observable<Topic[]>;
   abstract levels(): Observable<Level[]>;
+  abstract circle(username: string): Observable<Resource>;
   abstract completion(): Observable<ResourceCompletion>;
 
   abstract search(filters?: ResourceFilters): Observable<ListResponse<Resource>>;
-  abstract findResourceById(id: number): Observable<Resource>;
+  abstract findResourceById(id: string, markAsViewed?: boolean): Observable<Resource>;
   abstract updateResource(id: string, input: UpdateResource): Observable<Resource>;
   abstract createResource(input: CreateResource): Observable<Resource>;
 
