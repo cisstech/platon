@@ -1,8 +1,8 @@
 import { Body, Controller, Get, NotFoundException, Param, Patch, Post, Query, Request } from '@nestjs/common';
 import { CreatedResponse, ItemResponse, ListResponse } from '@platon/core/common';
 import { IRequest, Mapper } from '@platon/core/server';
-import { ResourceFiltersDTO } from '../dto';
-import { CreateResourceDTO, ResourceDTO, UpdateResourceDTO } from '../dto/resource.dto';
+import { ResourceCompletionDTO, ResourceFiltersDTO } from '../dto';
+import { CircleTreeDTO, CreateResourceDTO, ResourceDTO, UpdateResourceDTO } from '../dto/resource.dto';
 import { ResourceService } from '../services/resource.service';
 import { ResourceViewService } from '../services/view.service';
 
@@ -10,7 +10,7 @@ import { ResourceViewService } from '../services/view.service';
 export class ResourceController {
   constructor(
     private readonly viewService: ResourceViewService,
-    private readonly resourceService: ResourceService,
+    private readonly service: ResourceService,
   ) { }
 
   @Get()
@@ -26,13 +26,34 @@ export class ResourceController {
       resources = Mapper.mapAll(response[0].map(r => r.resource), ResourceDTO);
       total = response[1]
     } else {
-      const response = await this.resourceService.search(filters);
+      const response = await this.service.search(filters);
       resources = Mapper.mapAll(response[0], ResourceDTO);
       total = response[1]
     }
     return new ListResponse({ total, resources })
   }
 
+  @Get('/tree')
+  async tree(
+  ): Promise<ItemResponse<CircleTreeDTO>> {
+    return new ItemResponse({
+      resource: Mapper.map(
+        await this.service.tree(),
+        CircleTreeDTO
+      )
+    })
+  }
+
+  @Get('/completion')
+  async completion(
+  ): Promise<ItemResponse<ResourceCompletionDTO>> {
+    return new ItemResponse({
+      resource: Mapper.map(
+        await this.service.completion(),
+        ResourceCompletionDTO
+      )
+    })
+  }
 
   @Get('/:id')
   async find(
@@ -40,7 +61,7 @@ export class ResourceController {
     @Param('id') id: string,
     @Query('markAsViewed') markAsViewed?: string
   ): Promise<ItemResponse<ResourceDTO>> {
-    const optional = await this.resourceService.findById(id);
+    const optional = await this.service.findById(id);
     const resource = Mapper.map(
       optional.orElseThrow(() => new NotFoundException(`Resource not found: ${id}`)),
       ResourceDTO
@@ -61,8 +82,8 @@ export class ResourceController {
     @Body() input: CreateResourceDTO
   ): Promise<CreatedResponse<ResourceDTO>> {
     const resource = Mapper.map(
-      await this.resourceService.create({
-        ...(await this.resourceService.fromInput(input)),
+      await this.service.create({
+        ...(await this.service.fromInput(input)),
         ownerId: req.user.id
       }),
       ResourceDTO
@@ -76,9 +97,10 @@ export class ResourceController {
     @Body() input: UpdateResourceDTO
   ): Promise<ItemResponse<ResourceDTO>> {
     const resource = Mapper.map(
-      await this.resourceService.update(id, await this.resourceService.fromInput(input)),
+      await this.service.update(id, await this.service.fromInput(input)),
       ResourceDTO
     );
     return new ItemResponse({ resource })
   }
+
 }

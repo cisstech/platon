@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { BaseDTO, LevelDTO, TopicDTO } from '@platon/core/server';
-import { CreateResource, Resource, ResourceStatus, ResourceTypes, ResourceVisibilities, UpdateResource } from '@platon/feature/resource/common';
+import { CircleTree, CreateResource, Resource, ResourceStatus, ResourceTypes, ResourceVisibilities, UpdateResource } from '@platon/feature/resource/common';
+import { Type } from 'class-transformer';
 import { IsArray, IsEnum, IsInstance, IsOptional, IsString, IsUUID } from 'class-validator';
 
 export class ResourceDTO extends BaseDTO implements Resource {
@@ -43,6 +44,24 @@ export class ResourceDTO extends BaseDTO implements Resource {
   @IsOptional()
   @ApiProperty()
   parentId?: string
+}
+
+export class CircleTreeDTO implements CircleTree {
+  @IsUUID()
+  @IsOptional()
+  @ApiProperty()
+  readonly id!: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty()
+  readonly name!: string;
+
+  @Type(() => CircleTreeDTO)
+  @IsArray()
+  @IsOptional()
+  @ApiProperty()
+  readonly children?: CircleTreeDTO[]
 }
 
 export class CreateResourceDTO implements CreateResource {

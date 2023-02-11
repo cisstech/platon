@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { OrderingDirections } from '@platon/core/common';
 import { LevelService, TopicService } from '@platon/core/server';
 import {
+  CircleTree,
   ResourceCompletion,
   ResourceFilters,
   ResourceOrderings,
@@ -10,7 +11,7 @@ import {
   ResourceTypes,
   ResourceVisibilities
 } from '@platon/feature/resource/common';
-import { Repository } from 'typeorm';
+import { In, Not, Repository } from 'typeorm';
 import { Optional } from 'typescript-optional';
 import { CreateResourceDTO, UpdateResourceDTO } from '../dto/resource.dto';
 import { ResourceMemberEntity, ResourceWatcherEntity } from '../entities';
@@ -24,6 +25,46 @@ export class ResourceService {
     private readonly levelService: LevelService,
     private readonly topicService: TopicService,
   ) { }
+
+  async tree(): Promise<CircleTree> {
+    const circles = await this.repository.find({
+      where: {
+        type: ResourceTypes.CIRCLE,
+        visibility: Not(ResourceVisibilities.PERSONAL)
+      }
+    })
+
+    const root = circles.find(c => !c.parentId) as ResourceEntity;
+    const tree: CircleTree = {
+      id: root.id,
+      name: root.name,
+      children: []
+    }
+
+    const traverse = (node: CircleTree) => {
+      const children = circles.filter(c => c.parentId === node.id)
+        .sort((a, b) => a.name.localeCompare(b.name))
+
+      children.forEach(child => {
+        const next: CircleTree = {
+          id: child.id,
+          name: child.name,
+          children: []
+        }
+        node.children?.push(next)
+        traverse(next)
+      })
+
+      if (!node.children?.length) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        delete (node as any).children
+      }
+    }
+
+    traverse(tree)
+
+    return tree
+  }
 
   async findById(id: string): Promise<Optional<ResourceEntity>> {
     return Optional.ofNullable(

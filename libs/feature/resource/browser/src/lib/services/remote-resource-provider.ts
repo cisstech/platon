@@ -32,7 +32,7 @@ export class RemoteResourceProvider extends ResourceProvider {
   }
 
   completion(): Observable<ResourceCompletion> {
-    return this.http.get<ItemResponse<ResourceCompletion>>('/api/v1/completion/resources')
+    return this.http.get<ItemResponse<ResourceCompletion>>('/api/v1/resources/completion')
       .pipe(
         map(response => response.resource)
       );

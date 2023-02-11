@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LevelModule, TopicModule } from '@platon/core/server';
-import { ResourceCompletionController } from './controllers/completion.controller';
 import { ResourceEventController } from './controllers/event.controller';
 import { ResourceInvitationController } from './controllers/invitation.controller';
 import { ResourceMemberController } from './controllers/member.controller';
@@ -31,7 +30,6 @@ import { ResourceSubscriber } from './subscribers/resource.subscriber';
     ResourceInvitationController,
     UserResourceController,
     ResourceWatcherController,
-    ResourceCompletionController,
   ],
   providers: [
     ResourceService,

@@ -18,6 +18,12 @@ export interface Resource {
   readonly parentId?: string
 }
 
+export interface CircleTree {
+  readonly id: string;
+  readonly name: string;
+  readonly children?: CircleTree[]
+}
+
 export interface CreateResource {
   readonly name: string
   readonly desc?: string
