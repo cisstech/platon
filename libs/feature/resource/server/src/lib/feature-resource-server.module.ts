@@ -7,6 +7,8 @@ import { ResourceInvitationController } from './controllers/invitation.controlle
 import { ResourceMemberController } from './controllers/member.controller';
 import { ResourceController } from './controllers/resource.controller';
 import { UserResourceController } from './controllers/user.controller';
+import { ResourceWatcherController } from './controllers/watcher.controller';
+import { ResourceWatcherEntity } from './entities';
 import { ResourceEventEntity } from './entities/event.entity';
 import { ResourceInvitationEntity } from './entities/invitation.entity';
 import { ResourceMemberEntity } from './entities/member.entity';
@@ -17,6 +19,7 @@ import { ResourceInvitationService } from './services/invitation.service';
 import { ResourceMemberService } from './services/member.service';
 import { ResourceService } from './services/resource.service';
 import { ResourceViewService } from './services/view.service';
+import { ResourceWatcherService } from './services/watcher.service';
 
 @Module({
   controllers: [
@@ -25,6 +28,7 @@ import { ResourceViewService } from './services/view.service';
     ResourceMemberController,
     ResourceInvitationController,
     UserResourceController,
+    ResourceWatcherController,
     ResourceCompletionController,
   ],
   providers: [
@@ -32,6 +36,7 @@ import { ResourceViewService } from './services/view.service';
     ResourceViewService,
     ResourceEventService,
     ResourceMemberService,
+    ResourceWatcherService,
     ResourceInvitationService,
   ],
   imports: [
@@ -40,6 +45,7 @@ import { ResourceViewService } from './services/view.service';
       ResourceInvitationEntity,
       ResourceMemberEntity,
       ResourceEntity,
+      ResourceWatcherEntity,
       ResourceViewEntity,
     ]),
     LevelModule,
@@ -50,6 +56,7 @@ import { ResourceViewService } from './services/view.service';
     ResourceViewService,
     ResourceEventService,
     ResourceMemberService,
+    ResourceWatcherService,
     ResourceInvitationService,
   ],
 })
