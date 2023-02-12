@@ -1,5 +1,5 @@
-import { Controller, Delete, Get, NotFoundException, Param, Post, Query, Request, UnauthorizedException } from '@nestjs/common';
-import { ItemResponse, ListResponse, NoContentResponse } from '@platon/core/common';
+import { Controller, Delete, Get, Param, Post, Query, Request, UnauthorizedException } from '@nestjs/common';
+import { ItemResponse, ListResponse, NoContentResponse, NotFoundResponse } from '@platon/core/common';
 import { IRequest, Mapper, UserDTO } from '@platon/core/server';
 import { ResourceWatcherFiltersDTO } from '../dto';
 import { ResourceWatcherService } from '../services/watcher.service';
@@ -27,7 +27,7 @@ export class ResourceWatcherController {
   ): Promise<ItemResponse<UserDTO>> {
     const optional = await this.service.findByUserId(resourceId, userId);
     const resource = Mapper.map(
-      optional.orElseThrow(() => new NotFoundException(`ResourceWatcher not found: ${userId}`))?.user,
+      optional.orElseThrow(() => new NotFoundResponse(`ResourceWatcher not found: ${userId}`)).user,
       UserDTO
     );
     return new ItemResponse({ resource })

@@ -122,6 +122,7 @@ export default class WorkspaceComponent implements OnInit, OnDestroy {
         this.filters = this.drawerFilters = {
           ...this.filters,
           search: e.q,
+          parent: e.parent,
           period: Number.parseInt(e.period, 10) || this.filters.period || 0,
           order: e.order,
           direction: e.direction,

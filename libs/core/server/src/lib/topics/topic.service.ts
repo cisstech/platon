@@ -1,5 +1,6 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { NotFoundResponse } from '@platon/core/common';
 import { Repository } from 'typeorm';
 import { Optional } from 'typescript-optional';
 import { TopicEntity } from './topic.entity';
@@ -28,7 +29,7 @@ export class TopicService {
   async update(id: string, changes: Partial<TopicEntity>): Promise<TopicEntity> {
     const topic = await this.repository.findOne({ where: { id } })
     if (!topic) {
-      throw new NotFoundException(`Topic not found: ${id}`)
+      throw new NotFoundResponse(`Topic not found: ${id}`)
     }
     Object.assign(topic, changes);
     return this.repository.save(topic);

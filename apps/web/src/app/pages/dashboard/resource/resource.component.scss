@@ -1,5 +1,6 @@
 nz-breadcrumb {
   font-size: 1.5em;
+  display: flex;
   &::ng-deep {
     .ant-breadcrumb-link {
       display: inline-flex;
@@ -20,12 +21,13 @@ button img, a img {
   height: 18px;
 }
 
-p {
-  margin: 8px 0;
-}
 
 nz-select {
   width: 164px;
+}
+
+.spacer {
+  flex: 1;
 }
 
 @media (min-width: 720px) {

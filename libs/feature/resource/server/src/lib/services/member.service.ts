@@ -1,6 +1,6 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { OrderingDirections, UserOrderings } from '@platon/core/common';
+import { NotFoundResponse, OrderingDirections, UserOrderings } from '@platon/core/common';
 import { ResourceMemberFilters } from '@platon/feature/resource/common';
 import { Repository } from 'typeorm';
 import { Optional } from "typescript-optional";
@@ -72,7 +72,7 @@ export class ResourceMemberService {
   ): Promise<ResourceMemberEntity> {
     const resource = await this.repository.findOne({ where: { resourceId, userId } })
     if (!resource) {
-      throw new NotFoundException(`ResourceMember not found: ${userId}`)
+      throw new NotFoundResponse(`ResourceMember not found: ${userId}`)
     }
     Object.assign(resource, changes);
     return this.repository.save(resource);
@@ -82,7 +82,7 @@ export class ResourceMemberService {
     return this.repository.remove(
       (
         await this.findByUserId(resourceId, userId)
-      ).orElseThrow(() => new NotFoundException(`ResourceMember not found: ${userId}`))
+      ).orElseThrow(() => new NotFoundResponse(`ResourceMember not found: ${userId}`))
     );
   }
 }

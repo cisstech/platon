@@ -1,5 +1,6 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { NotFoundResponse } from '@platon/core/common';
 import { Repository } from 'typeorm';
 import { Optional } from 'typescript-optional';
 import { LevelEntity } from './level.entity';
@@ -28,7 +29,7 @@ export class LevelService {
   async update(id: string, changes: Partial<LevelEntity>): Promise<LevelEntity> {
     const level = await this.repository.findOne({ where: { id } })
     if (!level) {
-      throw new NotFoundException(`Level not found: ${id}`)
+      throw new NotFoundResponse(`Level not found: ${id}`)
     }
     Object.assign(level, changes);
     return this.repository.save(level);

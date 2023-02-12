@@ -12,7 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { User } from '@platon/core/common';
 import { DialogModule, DialogService } from '../../../dialog';
 import { AuthService } from '../../api/auth.service';
@@ -50,6 +50,7 @@ export class SignInComponent implements OnInit {
     private readonly router: Router,
     private readonly authService: AuthService,
     private readonly dialogService: DialogService,
+    private readonly activatedRoute: ActivatedRoute,
   ) { }
 
   ngOnInit(): void {
@@ -59,15 +60,17 @@ export class SignInComponent implements OnInit {
   }
 
   signIn(): void {
+    const { next } = this.activatedRoute.snapshot.queryParams;
+
     if (this.user && this.user.username === this.username) {
-      this.router.navigateByUrl('/dashboard', { replaceUrl: true });
+      this.router.navigateByUrl(next || '/dashboard', { replaceUrl: true });
       return;
     }
 
     this.connecting = true;
     this.authService.signIn(this.username, this.password).then(() => {
       this.connecting = false;
-      this.router.navigateByUrl('/dashboard', { replaceUrl: true });
+      this.router.navigateByUrl(next || '/dashboard', { replaceUrl: true });
     }).catch((error) => {
       console.log(error)
       this.dialogService.error('Une erreur est survenue lors de la connexion !');

@@ -1,5 +1,5 @@
-import { Body, Controller, Get, NotFoundException, Param, Patch, Query } from '@nestjs/common';
-import { ItemResponse, ListResponse, UpdateUser } from '@platon/core/common';
+import { Body, Controller, Get, Param, Patch, Query } from '@nestjs/common';
+import { ItemResponse, ListResponse, NotFoundResponse, UpdateUser } from '@platon/core/common';
 import { Mapper } from '../utils';
 import { UserDTO, UserFiltersDTO } from './user.dto';
 import { UserService } from './user.service';
@@ -25,7 +25,7 @@ export class UserController {
   ): Promise<ItemResponse<UserDTO>> {
     const optional = await this.userService.findByUsername(username);
     const resource = Mapper.map(
-      optional.orElseThrow(() => new NotFoundException(`User not found: ${username}`)),
+      optional.orElseThrow(() => new NotFoundResponse(`User not found: ${username}`)),
       UserDTO
     );
     return new ItemResponse({ resource })

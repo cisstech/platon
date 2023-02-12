@@ -4,6 +4,7 @@ import { CircleTree, CreateResource, Resource, ResourceStatus, ResourceTypes, Re
 import { Type } from 'class-transformer';
 import { IsArray, IsEnum, IsInstance, IsOptional, IsString, IsUUID } from 'class-validator';
 
+
 export class ResourceDTO extends BaseDTO implements Resource {
   @IsString()
   @ApiProperty()

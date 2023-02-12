@@ -46,7 +46,7 @@ export class UserResourceController {
 
     return new ItemResponse({
       resource: Mapper.map(
-        await this.resourceService.findPersonalCircle(req.user.id),
+        await this.resourceService.findPersonal(req.user.id),
         ResourceDTO
       )
     })

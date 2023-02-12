@@ -26,7 +26,7 @@ import { LayoutTabsTitleDirective } from './directives/tab-title.directive';
     Error403Component,
     Error404Component,
     Error500Component,
-  ]
+  ],
 })
 export class LayoutTabsComponent implements AfterContentInit, OnDestroy {
   private readonly subscriptions: Subscription[] = [];
@@ -45,7 +45,6 @@ export class LayoutTabsComponent implements AfterContentInit, OnDestroy {
   ) { }
 
   ngAfterContentInit(): void {
-
     const handleChanges = (titles: LayoutTabsTitleDirective[]) => {
       this.tabs = [];
       for (let i = 0; i < titles.length; i++) {

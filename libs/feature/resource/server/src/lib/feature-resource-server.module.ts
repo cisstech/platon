@@ -21,6 +21,7 @@ import { ResourceViewService } from './services/view.service';
 import { ResourceWatcherService } from './services/watcher.service';
 import { ResourceMemberSubscriber } from './subscribers/member.subscriber';
 import { ResourceSubscriber } from './subscribers/resource.subscriber';
+import { ResourceStatsSubscriber } from './subscribers/stats.subscriber';
 
 @Module({
   controllers: [
@@ -41,6 +42,7 @@ import { ResourceSubscriber } from './subscribers/resource.subscriber';
 
     ResourceSubscriber,
     ResourceMemberSubscriber,
+    ResourceStatsSubscriber,
   ],
   imports: [
     TypeOrmModule.forFeature([

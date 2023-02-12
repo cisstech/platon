@@ -3,13 +3,20 @@ import { ClassConstructor, instanceToPlain, plainToInstance } from "class-transf
 export class Mapper {
   static map<T, R>(input: T, output: ClassConstructor<R>): R {
     const object = instanceToPlain(input);
-    return plainToInstance(output, object)
+    return plainToInstance(output, object, {
+      exposeDefaultValues: true,
+      enableImplicitConversion: true
+
+    })
   }
 
   static mapAll<T, R>(inputs: T[], output: ClassConstructor<R>): R[] {
     return inputs.map(input => {
       const object = instanceToPlain(input);
-      return plainToInstance(output, object)
+      return plainToInstance(output, object, {
+        exposeDefaultValues: true,
+        enableImplicitConversion: true
+      })
     })
   }
 }

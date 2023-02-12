@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
+import { ContentChild, Directive, Input, TemplateRef } from '@angular/core';
 
-@Directive({ standalone: true, selector: '[uiLayoutTabsTitle]' })
+// eslint-disable-next-line @angular-eslint/directive-selector
+@Directive({ standalone: true, selector: 'ui-layout-tab' })
 export class LayoutTabsTitleDirective {
-  @Input('uiLayoutTabsTitleLink')
+  @Input()
   link!: string | any[];
 
-  constructor(
-    readonly templateRef: TemplateRef<void>,
-    readonly viewContainerRef: ViewContainerRef
-  ) {}
+  @ContentChild(TemplateRef, { static: true })
+  templateRef!: TemplateRef<void>
 }

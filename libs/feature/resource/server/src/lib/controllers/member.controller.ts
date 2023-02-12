@@ -1,5 +1,5 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, Patch, Query } from '@nestjs/common';
-import { ItemResponse, ListResponse, NoContentResponse } from '@platon/core/common';
+import { Body, Controller, Delete, Get, Param, Patch, Query } from '@nestjs/common';
+import { ErrorResponse, ItemResponse, ListResponse, NoContentResponse } from '@platon/core/common';
 import { Mapper } from '@platon/core/server';
 import { ResourceMemberFiltersDTO } from '../dto';
 import { ResourceMemberDTO, UpdateResourceMemberDTO } from '../dto/member.dto';
@@ -28,7 +28,10 @@ export class ResourceMemberController {
   ): Promise<ItemResponse<ResourceMemberDTO>> {
     const optional = await this.service.findByUserId(resourceId, userId);
     const resource = Mapper.map(
-      optional.orElseThrow(() => new NotFoundException(`ResourceMember not found: ${userId}`)),
+      optional.orElseThrow(() => new ErrorResponse({
+        status: 404,
+        message: `ResourceMember not found: ${userId}`,
+      })),
       ResourceMemberDTO
     );
     return new ItemResponse({ resource })

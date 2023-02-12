@@ -1,6 +1,6 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { OrderingDirections, UserOrderings } from '@platon/core/common';
+import { NotFoundResponse, OrderingDirections, UserOrderings } from '@platon/core/common';
 import { ResourceWatcherFilters } from '@platon/feature/resource/common';
 import { Repository } from 'typeorm';
 import { Optional } from "typescript-optional";
@@ -78,7 +78,7 @@ export class ResourceWatcherService {
   ): Promise<ResourceWatcherEntity> {
     const resource = await this.repository.findOne({ where: { resourceId, userId } })
     if (!resource) {
-      throw new NotFoundException(`ResourceWatcher not found: ${userId}`)
+      throw new NotFoundResponse(`ResourceWatcher not found: ${userId}`)
     }
     Object.assign(resource, changes);
     return this.repository.save(resource);

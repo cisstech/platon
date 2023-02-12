@@ -4,10 +4,10 @@
   </section>
 </nz-skeleton>
 <section>
-  <nz-tabset nzLinkRouter [nzLinkExact]="false" nzSize="default" nzType="card">
+  <nz-tabset nzLinkRouter [nzLinkExact]="false" nzSize="default" nzType="line">
     <ng-container *ngFor="let tab of tabs; trackBy: trackByIndex">
       <nz-tab>
-        <a *nzTabLink nz-tab-link class="tab-title" [routerLink]="tab.title.link">
+        <a *nzTabLink nz-tab-link [routerLink]="tab.title.link">
           <ng-container *ngTemplateOutlet="tab.title.templateRef"></ng-container>
         </a>
       </nz-tab>

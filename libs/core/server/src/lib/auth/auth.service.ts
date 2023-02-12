@@ -1,7 +1,7 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { AuthToken, SignInInput, SignUpInput } from '@platon/core/common';
+import { AuthToken, NotFoundResponse, SignInInput, SignUpInput } from '@platon/core/common';
 import * as bcrypt from 'bcrypt';
 import { Configuration } from '../config/configuration';
 import { UserService } from '../users/user.service';
@@ -17,8 +17,8 @@ export class AuthService {
 
   async signIn(input: SignInInput): Promise<AuthToken> {
     const optionalUser = await this.userService.findByUsername(input.username);
-    const user = optionalUser.orElseThrow(() => new NotFoundException(`User not found: ${input.username}`));
-    if (!user.password ||!(await bcrypt.compare(input.password, user.password))) {
+    const user = optionalUser.orElseThrow(() => new NotFoundResponse(`User not found: ${input.username}`));
+    if (!user.password || !(await bcrypt.compare(input.password, user.password))) {
       throw new BadRequestException('Password is incorrect')
     }
     user.lastLogin = new Date();

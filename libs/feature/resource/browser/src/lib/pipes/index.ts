@@ -5,4 +5,4 @@ export * from './resource-pipes.module';
 export * from './resource-status-color.pipe';
 export * from './resource-status.pipe';
 export * from './resource-type.pipe';
-
+export * from './resource-visibility.pipe';

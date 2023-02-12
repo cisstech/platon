@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { ItemResponse, Level, ListResponse, Topic, User } from "@platon/core/common";
-import { CircleTree, CreateResource, CreateResourceInvitation, Resource, ResourceCompletion, ResourceEvent, ResourceFilters, ResourceInvitation, ResourceMember, ResourceMemberFilters, ResourceWatcherFilters, UpdateResource } from "@platon/feature/resource/common";
+import { CircleTree, CreateResource, CreateResourceInvitation, Resource, ResourceCompletion, ResourceEvent, ResourceFilters, ResourceInvitation, ResourceMember, ResourceMemberFilters, ResourceStatisic, ResourceWatcherFilters, UpdateResource } from "@platon/feature/resource/common";
 import { Observable, of } from "rxjs";
 import { catchError, map } from "rxjs/operators";
 import { ResourceProvider } from "../models/resource-provider";
@@ -37,6 +37,14 @@ export class RemoteResourceProvider extends ResourceProvider {
         map(response => response.resource)
       );
   }
+
+  statistic(resource: Resource): Observable<ResourceStatisic> {
+    return this.http.get<ItemResponse<ResourceStatisic>>(`/api/v1/resources/${resource.id}/statistic`)
+      .pipe(
+        map(response => response.resource)
+      );
+  }
+
 
   completion(): Observable<ResourceCompletion> {
     return this.http.get<ItemResponse<ResourceCompletion>>('/api/v1/resources/completion')

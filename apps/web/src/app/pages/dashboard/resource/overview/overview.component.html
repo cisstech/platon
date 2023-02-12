@@ -1,0 +1,79 @@
+<ng-container *ngIf="context.resource">
+  <nz-row [nzGutter]="[24, 24]" nzAlign="top">
+    <nz-col nzXs="24" nzSm="24" nzMd="18" nzLg="18" nzXl="18">
+      <section>
+        <mat-card>
+          <mat-card-content>
+            <ngx-charts-advanced-pie-chart
+              [view]="view"
+              [label]="'Ressources'"
+              [tooltipText]="formatStatus.bind(this)"
+              (select)="onClickStatus($event)"
+              [nameFormatting]="formatStatus.bind(this)"
+              [results]="statuses" />
+          </mat-card-content>
+        </mat-card>
+      </section>
+    </nz-col>
+    <nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6" nzXl="6">
+      <aside>
+        <mat-card>
+          <mat-card-content>
+            <nz-statistic [nzValue]="context.statistic?.watchers" [nzTitle]="'Observateurs'" />
+          </mat-card-content>
+        </mat-card>
+        <mat-card>
+          <mat-card-content>
+            <nz-statistic [nzValue]="context.statistic?.members" [nzTitle]="'Collaborateurs'" />
+          </mat-card-content>
+        </mat-card>
+        <mat-card>
+          <mat-card-content>
+            <nz-statistic [nzValue]="context.statistic?.circles" [nzTitle]="'Cercles'" />
+          </mat-card-content>
+          <mat-card-actions>
+            <a mat-button [routerLink]="['/workspace']"
+              [queryParams]="{
+                types: 'CIRCLE',
+                parent: context.resource.id
+              }"
+              [queryParamsHandling]="'merge'">
+              Rechercher
+            </a>
+          </mat-card-actions>
+        </mat-card>
+        <mat-card>
+          <mat-card-content>
+            <nz-statistic [nzValue]="context.statistic?.activities" [nzTitle]="'Activités'" />
+          </mat-card-content>
+          <mat-card-actions>
+            <a mat-button [routerLink]="['/workspace']"
+              [queryParams]="{
+                types: 'ACTIVITY',
+                parent: context.resource.id
+              }"
+              [queryParamsHandling]="'merge'">
+              Rechercher
+            </a>
+          </mat-card-actions>
+        </mat-card>
+        <mat-card>
+          <mat-card-content>
+            <nz-statistic [nzValue]="context.statistic?.exercises" [nzTitle]="'Exercices'" />
+          </mat-card-content>
+          <mat-card-actions>
+            <a mat-button [routerLink]="['/workspace']"
+              [queryParams]="{
+                types: 'EXERCISE',
+                parent: context.resource.id
+              }"
+              [queryParamsHandling]="'merge'">
+              Rechercher
+            </a>
+          </mat-card-actions>
+        </mat-card>
+      </aside>
+    </nz-col>
+  </nz-row>
+</ng-container>
+

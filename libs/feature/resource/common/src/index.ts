@@ -9,4 +9,6 @@ export * from './lib/models/invitation.model'
 export * from './lib/models/member.model'
 export * from './lib/models/permissions.model'
 export * from './lib/models/resource.model'
+export * from './lib/models/statistic.model'
 export * from './lib/models/view.model'
+

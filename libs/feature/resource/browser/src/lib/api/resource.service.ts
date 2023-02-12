@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Level, ListResponse, Topic, User } from '@platon/core/common';
-import { CircleTree, CreateResource, CreateResourceInvitation, Resource, ResourceCompletion, ResourceEvent, ResourceFilters, ResourceInvitation, ResourceMember, ResourceMemberFilters, ResourceWatcherFilters, UpdateResource } from '@platon/feature/resource/common';
+import { CircleTree, CreateResource, CreateResourceInvitation, Resource, ResourceCompletion, ResourceEvent, ResourceFilters, ResourceInvitation, ResourceMember, ResourceMemberFilters, ResourceStatisic, ResourceWatcherFilters, UpdateResource } from '@platon/feature/resource/common';
 import { Observable } from 'rxjs';
 import { ResourceProvider } from '../models/resource-provider';
 
@@ -26,6 +26,10 @@ export class ResourceService {
 
   circle(username: string): Observable<Resource> {
     return this.provider.circle(username);
+  }
+
+  statistic(resource: Resource): Observable<ResourceStatisic> {
+    return this.provider.statistic(resource);
   }
 
   completion(): Observable<ResourceCompletion> {

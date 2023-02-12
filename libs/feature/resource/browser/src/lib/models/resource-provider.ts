@@ -1,5 +1,5 @@
 import { Level, ListResponse, Topic, User } from "@platon/core/common";
-import { CircleTree, CreateResource, CreateResourceInvitation, Resource, ResourceCompletion, ResourceEvent, ResourceFilters, ResourceInvitation, ResourceMember, ResourceMemberFilters, ResourceWatcherFilters, UpdateResource } from "@platon/feature/resource/common";
+import { CircleTree, CreateResource, CreateResourceInvitation, Resource, ResourceCompletion, ResourceEvent, ResourceFilters, ResourceInvitation, ResourceMember, ResourceMemberFilters, ResourceStatisic, ResourceWatcherFilters, UpdateResource } from "@platon/feature/resource/common";
 import { Observable } from "rxjs";
 
 
@@ -8,6 +8,7 @@ export abstract class ResourceProvider {
   abstract topics(): Observable<Topic[]>;
   abstract levels(): Observable<Level[]>;
   abstract circle(username: string): Observable<Resource>;
+  abstract statistic(resource: Resource): Observable<ResourceStatisic>;
   abstract completion(): Observable<ResourceCompletion>;
 
   abstract search(filters?: ResourceFilters): Observable<ListResponse<Resource>>;

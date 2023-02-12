@@ -1,17 +1,18 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { OrderingDirections } from '@platon/core/common';
+import { NotFoundResponse, OrderingDirections } from '@platon/core/common';
 import { LevelService, TopicService } from '@platon/core/server';
 import {
   CircleTree,
   ResourceCompletion,
   ResourceFilters,
   ResourceOrderings,
+  ResourceStatisic,
   ResourceStatus,
   ResourceTypes,
   ResourceVisibilities
 } from '@platon/feature/resource/common';
-import { Not, Repository } from 'typeorm';
+import { DataSource, Not, Repository } from 'typeorm';
 import { Optional } from 'typescript-optional';
 import { CreateResourceDTO, UpdateResourceDTO } from '../dto/resource.dto';
 import { ResourceMemberEntity, ResourceWatcherEntity } from '../entities';
@@ -22,6 +23,7 @@ export class ResourceService {
   constructor(
     @InjectRepository(ResourceEntity)
     private readonly repository: Repository<ResourceEntity>,
+    private readonly dataSource: DataSource,
     private readonly levelService: LevelService,
     private readonly topicService: TopicService,
   ) { }
@@ -66,13 +68,24 @@ export class ResourceService {
     return tree
   }
 
+  async statistic(id: string): Promise<ResourceStatisic> {
+    return (this.dataSource.query(
+      'SELECT * FROM "ResourceStats" WHERE id = $1', [id]
+    ) as Promise<ResourceStatisic[]>).then(response => response[0])
+  }
+
   async findById(id: string): Promise<Optional<ResourceEntity>> {
+    const query = this.repository.createQueryBuilder('resource')
+    query.leftJoinAndSelect('resource.topics', 'topic')
+    query.leftJoinAndSelect('resource.levels', 'level')
+    query.leftJoinAndSelect('ResourceStats', 'stats', 'stats.id = resource.id')
+
     return Optional.ofNullable(
-      await this.repository.findOne({ where: { id } })
+      await query.where('resource.id = :id', { id }).getOne()
     );
   }
 
-  async findPersonalCircle(ownerId: string): Promise<ResourceEntity> {
+  async findPersonal(ownerId: string): Promise<ResourceEntity> {
     let circle = await this.repository.findOne({
       where: {
         ownerId,
@@ -99,6 +112,15 @@ export class ResourceService {
     const query = this.repository.createQueryBuilder('resource')
     query.leftJoinAndSelect('resource.topics', 'topic')
     query.leftJoinAndSelect('resource.levels', 'level')
+
+    filters = {
+      ...filters,
+      order: filters.order || ResourceOrderings.RELEVANCE
+    }
+
+    if (filters.order === ResourceOrderings.RELEVANCE) {
+      query.leftJoin('ResourceStats', 'stats', 'stats.id = resource.id')
+    }
 
     if (filters.members) {
       query.innerJoin(ResourceMemberEntity, 'member', 'member.user_id IN (:...ids)', { ids: filters.members })
@@ -145,10 +167,10 @@ export class ResourceService {
 
     if (filters.order) {
       const fields: Record<ResourceOrderings, string> = {
-        'NAME': 'name',
+        'NAME': 'resource.name',
         'CREATED_AT': 'resource.created_at',
         'UPDATED_AT': 'resource.updated_at',
-        'RELEVANCE': 'resource.updated_at', // TODO implements ranking
+        'RELEVANCE': 'stats.score',
       }
 
       const orderings: Record<ResourceOrderings, keyof typeof OrderingDirections> = {
@@ -179,7 +201,7 @@ export class ResourceService {
   async update(id: string, changes: Partial<ResourceEntity>): Promise<ResourceEntity> {
     const resource = await this.repository.findOne({ where: { id } })
     if (!resource) {
-      throw new NotFoundException(`Resource not found: ${id}`)
+      throw new NotFoundResponse(`Resource not found: ${id}`)
     }
     Object.assign(resource, changes);
     return this.repository.save(resource);

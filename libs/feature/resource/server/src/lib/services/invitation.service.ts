@@ -1,5 +1,6 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { NotFoundResponse } from '@platon/core/common';
 import { DataSource, Repository } from 'typeorm';
 import { Optional } from 'typescript-optional';
 import { ResourceInvitationEntity } from '../entities/invitation.entity';
@@ -37,7 +38,7 @@ export class ResourceInvitationService {
     return this.dataSource.transaction(async manager => {
       const invitation = await manager.findOne(ResourceInvitationEntity, { where: { resourceId, inviteeId } })
       if (!invitation) {
-        throw new NotFoundException(`ResourceInvitation not found for user: ${inviteeId}`)
+        throw new NotFoundResponse(`ResourceInvitation not found for user: ${inviteeId}`)
       }
       await manager.remove(invitation)
       return manager.save(

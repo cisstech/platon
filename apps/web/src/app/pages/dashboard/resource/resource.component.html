@@ -8,10 +8,15 @@
         {{ context.resource.name }}
         <mat-icon>{{ context.resource.type|resourceIcon }}</mat-icon>
       </nz-breadcrumb-item>
+      <div class="spacer"></div>
+      <mat-chip-set>
+        <mat-chip>{{context.resource.visibility|resourceVisibility}}</mat-chip>
+      </mat-chip-set>
     </nz-breadcrumb>
-    <p>{{ context.resource!.desc }}</p>
+    <p>{{ context.resource.desc }}</p>
     <nz-button-group>
       <a
+        *ngIf="context.resource.visibility === 'PUBLIC' || context.resource.ownerId === context.user?.id"
         nz-button
         nzType="primary"
         matTooltip="Éditer en ligne">
@@ -54,7 +59,34 @@
       </button>
     </nz-button-group>
   </ng-container>
-  <ng-container *uiLayoutTabsTitle="'overview'">
-    Vue d'ensemble
-  </ng-container>
+  <ui-layout-tab [link]="['overview']">
+    <ng-template>
+      <span nz-icon nzType="dashboard" nzTheme="outline"></span>
+      Vue d'ensemble
+    </ng-template>
+  </ui-layout-tab>
+  <ui-layout-tab [link]="['events']">
+    <ng-template>
+      <span nz-icon nzType="history" nzTheme="outline"></span>
+      Évènements
+    </ng-template>
+  </ui-layout-tab>
+  <ui-layout-tab [link]="['content']">
+    <ng-template>
+      <span nz-icon nzType="folder" nzTheme="outline"></span>
+      Contenu
+    </ng-template>
+  </ui-layout-tab>
+  <ui-layout-tab [link]="['members']">
+    <ng-template>
+      <span nz-icon nzType="usergroup-add" nzTheme="outline"></span>
+      Collaborateurs
+    </ng-template>
+  </ui-layout-tab>
+  <ui-layout-tab [link]="['settings']">
+    <ng-template>
+      <span nz-icon nzType="setting" nzTheme="outline"></span>
+      Paramètres
+    </ng-template>
+  </ui-layout-tab>
 </ui-layout-tabs>

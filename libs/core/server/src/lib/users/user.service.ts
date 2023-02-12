@@ -1,6 +1,6 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { OrderingDirections, UserFilters, UserOrderings } from '@platon/core/common';
+import { NotFoundResponse, OrderingDirections, UserFilters, UserOrderings } from '@platon/core/common';
 import { Repository } from 'typeorm';
 import { Optional } from "typescript-optional";
 import { UserEntity } from './user.entity';
@@ -76,7 +76,7 @@ export class UserService {
   async update(id: string, changes: Partial<UserEntity>): Promise<UserEntity> {
     const user = await this.repository.findOne({ where: { id } })
     if (!user) {
-      throw new NotFoundException(`User not found: ${id}`)
+      throw new NotFoundResponse(`User not found: ${id}`)
     }
     Object.assign(user, changes);
     return this.repository.save(user);
@@ -85,7 +85,7 @@ export class UserService {
   async updateByUsername(username: string, changes: Partial<UserEntity>): Promise<UserEntity> {
     const user = await this.repository.findOne({ where: { username } })
     if (!user) {
-      throw new NotFoundException(`User not found: ${username}`)
+      throw new NotFoundResponse(`User not found: ${username}`)
     }
     Object.assign(user, changes);
     return this.repository.save(user);

@@ -1,6 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
+import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 
@@ -9,8 +12,6 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 
-import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
 import { DialogModule } from '@platon/core/browser';
 import { ResourcePipesModule } from '@platon/feature/resource/browser';
 import { ResourceStatus } from '@platon/feature/resource/common';
@@ -32,7 +33,7 @@ import { ResourcePresenter } from './resource.presenter';
 
     MatIconModule,
     MatMenuModule,
-
+    MatChipsModule,
 
     NzIconModule,
     NzButtonModule,
@@ -73,11 +74,7 @@ export class ResourceComponent implements OnInit, OnDestroy {
   }
 
   protected async updateStatus(status: ResourceStatus) {
-    try {
-      await this.presenter.update({ status });
-    } finally {
-      this.changeDetectorRef.markForCheck();
-    }
+    await this.presenter.update({ status });
   }
 
   protected async acceptInvitation(): Promise<void> {

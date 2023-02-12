@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AuthService, DialogService } from '@platon/core/browser';
 import { ListResponse, User } from '@platon/core/common';
 import { ResourceService } from '@platon/feature/resource/browser';
-import { CreateResourceInvitation, Resource, ResourceEvent, ResourceInvitation, ResourceMember, ResourceMemberFilters, UpdateResource } from '@platon/feature/resource/common';
+import { CreateResourceInvitation, Resource, ResourceEvent, ResourceInvitation, ResourceMember, ResourceMemberFilters, ResourceStatisic, UpdateResource } from '@platon/feature/resource/common';
 import { LayoutState } from '@platon/shared/ui';
 import { BehaviorSubject, firstValueFrom, lastValueFrom, Subscription } from 'rxjs';
 
@@ -176,12 +176,13 @@ export class ResourcePresenter implements OnDestroy {
     ]);
 
 
-    const [parent, member, watcher, invitation] = await Promise.all([
+    const [parent, member, watcher, statistic, invitation] = await Promise.all([
       resource.parentId
         ? firstValueFrom(this.resourceService.findById(resource.parentId))
         : Promise.resolve(undefined),
       firstValueFrom(this.resourceService.findMember(resource, user!.id)),
       firstValueFrom(this.resourceService.findWatcher(resource, user!.id)),
+      firstValueFrom(this.resourceService.statistic(resource)),
       firstValueFrom(this.resourceService.findInvitation(resource, user!.id)),
     ]);
 
@@ -191,6 +192,7 @@ export class ResourcePresenter implements OnDestroy {
       parent,
       resource,
       member,
+      statistic,
       invitation,
       watcher: !!watcher,
     });
@@ -225,5 +227,6 @@ export interface Context {
 
   watcher?: boolean;
   member?: ResourceMember;
+  statistic?: ResourceStatisic;
   invitation?: ResourceInvitation;
 }

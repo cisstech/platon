@@ -71,3 +71,14 @@ export class ErrorResponse implements HttpResponse<null> {
     this.message = options.message
   }
 }
+
+export class NotFoundResponse extends ErrorResponse {
+  constructor(
+    message: string
+  ) {
+    super({
+      status: 404,
+      message
+    })
+  }
+}

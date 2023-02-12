@@ -1,7 +1,7 @@
-import { Body, Controller, Get, NotFoundException, Param, Patch, Post, Query, Request } from '@nestjs/common';
-import { CreatedResponse, ItemResponse, ListResponse } from '@platon/core/common';
+import { Body, Controller, Get, Param, Patch, Post, Query, Request } from '@nestjs/common';
+import { CreatedResponse, ItemResponse, ListResponse, NotFoundResponse } from '@platon/core/common';
 import { IRequest, Mapper } from '@platon/core/server';
-import { ResourceCompletionDTO, ResourceFiltersDTO } from '../dto';
+import { ResourceCompletionDTO, ResourceFiltersDTO, ResourceStatisticDTO } from '../dto';
 import { CircleTreeDTO, CreateResourceDTO, ResourceDTO, UpdateResourceDTO } from '../dto/resource.dto';
 import { ResourceService } from '../services/resource.service';
 import { ResourceViewService } from '../services/view.service';
@@ -62,7 +62,7 @@ export class ResourceController {
   ): Promise<ItemResponse<ResourceDTO>> {
     const optional = await this.service.findById(id);
     const resource = Mapper.map(
-      optional.orElseThrow(() => new NotFoundException(`Resource not found: ${id}`)),
+      optional.orElseThrow(() => new NotFoundResponse(`Resource not found: ${id}`)),
       ResourceDTO
     );
 
@@ -74,6 +74,19 @@ export class ResourceController {
     }
     return new ItemResponse({ resource })
   }
+
+  @Get('/:id/statistic')
+  async statistic(
+    @Param('id') id: string,
+  ): Promise<ItemResponse<ResourceStatisticDTO>> {
+    return new ItemResponse({
+      resource: Mapper.map(
+        await this.service.statistic(id),
+        ResourceStatisticDTO
+      )
+    })
+  }
+
 
   @Post()
   async create(
