@@ -1,31 +1,27 @@
-@use '@angular/material' as mat;
+$brand-color-primary: #171C8F;
+$brand-color-primary-rgb: 23,28,143;
+$brand-color-primary-contrast: #ffffff;
+$brand-color-primary-contrast-rgb: 255,255,255;
+$brand-color-primary-shade: #14197e;
+$brand-color-primary-tint: #2e339a;
 
-//#region Fonts
-$mat-typography: (
-  font-family: var(--brand-font),
-  display-4: mat.define-typography-level(112px, 112px, 300, var( --brand-font), -0.0134em),
-  display-3: mat.define-typography-level(56px, 56px, 400, var( --brand-font), -0.0089em),
-  display-2: mat.define-typography-level(45px, 48px, 400, var( --brand-font), 0.0000em),
-  display-1: mat.define-typography-level(34px, 40px, 400, var( --brand-font), 0.0074em),
-  headline: mat.define-typography-level(24px, 32px, 400, var( --brand-font), 0.0000em),
-  title: mat.define-typography-level(20px, 32px, 500, var( --brand-font), 0.0075em),
-  subheading-2: mat.define-typography-level(16px, 28px, 400, var( --brand-font), 0.0094em),
-  subheading-1: mat.define-typography-level(15px, 24px, 500, var( --brand-font), 0.0067em),
-  body-2: mat.define-typography-level(14px, 24px, 500, var( --brand-font), 0.0179em),
-  body-1: mat.define-typography-level(14px, 20px, 400, var( --brand-font), 0.0179em),
-  button: mat.define-typography-level(14px, 14px, 500, var( --brand-font), 0.0893em),
-  caption: mat.define-typography-level(12px, 20px, 400, var( --brand-font), 0.0333em),
-  input: mat.define-typography-level(inherit, 1.125, 400, var( --brand-font), 1.5px)
-);
+$brand-color-secondary: #3466fe;
+$brand-color-secondary-rgb: 52, 102, 254;
+$brand-color-secondary-contrast: #ffffff;
+$brand-color-secondary-contrast-rgb: 255, 255, 255;
+$brand-color-secondary-shade: #2e5ae0;
+$brand-color-secondary-tint: #4875fe;
+
+$brand-color-tertiary: #7044ff;
+$brand-color-tertiary-rgb: 112, 68, 255;
+$brand-color-tertiary-contrast: #ffffff;
+$brand-color-tertiary-contrast-rgb: 255, 255, 255;
+$brand-color-tertiary-shade: #633ce0;
+$brand-color-tertiary-tint: #7e57ff;
 
 
-//#endregion
+// FOREGROUND LIGHT
 
-@include mat.core();
-
-//#region LIGHT THEME
-
-// FOREGROUND
 $dark-text: #24292e;
 $dark-primary-text: rgba($dark-text, 0.87);
 $dark-accent-text: rgba($dark-primary-text, 0.54);
@@ -52,7 +48,8 @@ $mat-light-theme-foreground: (
   slider-off-active: $dark-disabled-text
 );
 
-// BACKGROUND
+// BACKGROUND LIGHT
+
 $light-background: #FFFFFF;
 $light-bg-darker-5: darken($light-background, 5%);
 $light-bg-darker-10: darken($light-background, 10%);
@@ -80,11 +77,8 @@ $mat-light-theme-background: (
   tooltip: $dark-bg-alpha-4,
 );
 
-//#endregion
+// FOREGROUND DARK
 
-//#region DARK THEME
-
-// FOREGROUND
 $light-text: #adbac7;
 $light-primary-text: $light-text;
 $light-accent-text: rgba($light-primary-text, 0.7);
@@ -111,7 +105,8 @@ $mat-dark-theme-foreground: (
   slider-off-active: rgba($light-text, 0.3)
 );
 
-// BACKGROUND
+// BACKGROUND DARK
+
 $dark-background: #22272e;
 $dark-bg-lighter-5: lighten($dark-background, 5%);
 $dark-bg-lighter-10: lighten($dark-background, 10%);
@@ -137,30 +132,8 @@ $mat-dark-theme-background: (
   disabled-list-option: $dark-bg-lighter-10,
   tooltip: $dark-bg-lighter-30,
 );
-//#endregion
 
-//#region PALETTES
-
-$brand-color-primary: #171C8F;
-$brand-color-primary-rgb: 23,28,143;
-$brand-color-primary-contrast: #ffffff;
-$brand-color-primary-contrast-rgb: 255,255,255;
-$brand-color-primary-shade: #14197e;
-$brand-color-primary-tint: #2e339a;
-
-$brand-color-secondary: #3466fe;
-$brand-color-secondary-rgb: 52, 102, 254;
-$brand-color-secondary-contrast: #ffffff;
-$brand-color-secondary-contrast-rgb: 255, 255, 255;
-$brand-color-secondary-shade: #2e5ae0;
-$brand-color-secondary-tint: #4875fe;
-
-$brand-color-tertiary: #7044ff;
-$brand-color-tertiary-rgb: 112, 68, 255;
-$brand-color-tertiary-contrast: #ffffff;
-$brand-color-tertiary-contrast-rgb: 255, 255, 255;
-$brand-color-tertiary-shade: #633ce0;
-$brand-color-tertiary-tint: #7e57ff;
+// PALETTES
 
 $mat-primary: (
   main: $brand-color-primary,
@@ -174,8 +147,6 @@ $mat-primary: (
   )
 );
 
-$theme-primary: mat.define-palette($mat-primary, main, lighter, darker);
-
 $mat-accent: (
   main: $brand-color-secondary,
   lighter: $brand-color-secondary-tint,
@@ -187,7 +158,6 @@ $mat-accent: (
     darker: $light-primary-text
   )
 );
-$theme-accent: mat.define-palette($mat-accent, main, lighter, darker);
 
 $mat-warn: (
   main: $brand-color-tertiary,
@@ -200,27 +170,8 @@ $mat-warn: (
     darker: $light-primary-text
   )
 );
+
+$theme-primary: mat.define-palette($mat-primary, main, lighter, darker);
+$theme-accent: mat.define-palette($mat-accent, main, lighter, darker);
 $theme-warn: mat.define-palette($mat-warn, main, lighter, darker);
-//#endregion
 
-$mat-dark-theme: (
-  color: (
-    primary: $theme-primary,
-    accent: $theme-accent,
-    warn: $theme-warn,
-    foreground: $mat-dark-theme-foreground,
-    background: $mat-dark-theme-background
-  ),
-  density: 0
-);
-
-$mat-light-theme: (
-  color: (
-    primary: $theme-primary,
-    accent: $theme-accent,
-    warn: $theme-warn,
-    foreground: $mat-light-theme-foreground,
-    background: $mat-light-theme-background
-  ),
-  density: 0
-);
