@@ -80,6 +80,22 @@ export class ResourceComponent implements OnInit, OnDestroy {
     }
   }
 
+  protected async acceptInvitation(): Promise<void> {
+    await this.presenter.acceptInvitation();
+  }
+
+  protected async declineInvitation(): Promise<void> {
+    await this.presenter.declineInvitation();
+  }
+
+  protected async changeWatchingState(): Promise<void> {
+    if (this.context.watcher) {
+      await this.presenter.unwatch();
+    } else {
+      await this.presenter.watch();
+    }
+  }
+
   protected trackByValue(_: number, item: unknown) {
     return item;
   }

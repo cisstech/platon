@@ -42,9 +42,9 @@ export class UserService {
 
     if (filters.order) {
       const fields: Record<UserOrderings, string> = {
-        'NAME': 'name',
-        'CREATED_AT': 'resource.created_at',
-        'UPDATED_AT': 'resource.updated_at',
+        'NAME': 'username',
+        'CREATED_AT': 'created_at',
+        'UPDATED_AT': 'updated_at',
       }
 
       const orderings: Record<UserOrderings, keyof typeof OrderingDirections> = {
@@ -54,6 +54,8 @@ export class UserService {
       }
 
       query.orderBy(fields[filters.order], filters.direction || orderings[filters.order])
+    } else {
+      query.orderBy('username', 'ASC')
     }
 
     if (filters.offset) {

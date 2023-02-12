@@ -1,9 +1,9 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { ItemResponse, Level, ListResponse, Topic } from "@platon/core/common";
-import { CreateResource, Resource, ResourceCompletion, ResourceFilters, UpdateResource } from "@platon/feature/resource/common";
-import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import { ItemResponse, Level, ListResponse, Topic, User } from "@platon/core/common";
+import { CircleTree, CreateResource, CreateResourceInvitation, Resource, ResourceCompletion, ResourceEvent, ResourceFilters, ResourceInvitation, ResourceMember, ResourceMemberFilters, ResourceWatcherFilters, UpdateResource } from "@platon/feature/resource/common";
+import { Observable, of } from "rxjs";
+import { catchError, map } from "rxjs/operators";
 import { ResourceProvider } from "../models/resource-provider";
 
 @Injectable()
@@ -11,6 +11,13 @@ export class RemoteResourceProvider extends ResourceProvider {
   constructor(private readonly http: HttpClient) {
     super();
   }
+
+  tree(): Observable<CircleTree> {
+    return this.http.get<ItemResponse<CircleTree>>('/api/v1/resources/tree').pipe(
+      map(response => response.resource)
+    );
+  }
+
 
   topics(): Observable<Topic[]> {
     return this.http.get<ListResponse<Topic>>('/api/v1/topics').pipe(
@@ -97,7 +104,7 @@ export class RemoteResourceProvider extends ResourceProvider {
     return this.http.get<ListResponse<Resource>>(`/api/v1/resources`, { params });
   }
 
-  findResourceById(id: string, markAsViewed?: boolean): Observable<Resource> {
+  findById(id: string, markAsViewed?: boolean): Observable<Resource> {
     let params = new HttpParams();
     if (markAsViewed) {
       params = params.append('markAsViewed', 'true')
@@ -110,13 +117,13 @@ export class RemoteResourceProvider extends ResourceProvider {
     );
   }
 
-  updateResource(id: string, input: UpdateResource): Observable<Resource> {
+  update(id: string, input: UpdateResource): Observable<Resource> {
     return this.http.patch<ItemResponse<Resource>>(`/api/v1/resources/${id}`, input).pipe(
       map(response => response.resource)
     );
   }
 
-  createResource(input: CreateResource): Observable<Resource> {
+  create(input: CreateResource): Observable<Resource> {
     return this.http.post<ItemResponse<Resource>>('/api/v1/resources', input).pipe(
       map(response => response.resource)
     );
@@ -124,123 +131,142 @@ export class RemoteResourceProvider extends ResourceProvider {
 
 
   // Members
+  findMember(resource: Resource, userId: string): Observable<ResourceMember | undefined> {
+    return this.http.get<ItemResponse<ResourceMember>>(
+      `/api/v1/resources/${resource.id}/members/${userId}`
+    ).pipe(
+      map(response => response.resource),
+      catchError(() => {
+        return of(undefined);
+      })
+    );
+  }
 
-  /*  findMember(circle: Circle, username: string): Observable<CircleMember | undefined> {
-     return this.http.get<CircleMember>(`${circle.membersUrl}${username}/`).pipe(
-       catchError(() => {
-         return of(undefined);
-       })
-     );
-   }
+  deleteMember(resource: Resource, userId: string): Observable<void> {
+    return this.http.delete<void>(
+      `/api/v1/resources/${resource.id}/members/${userId}`
+    );
+  }
 
-   deleteMember(member: CircleMember): Observable<any> {
-     return this.http.delete<any>(member.url);
-   }
+  searchMembers(resource: Resource, filters: ResourceMemberFilters): Observable<ListResponse<ResourceMember>> {
+    let params = new HttpParams();
+    if (filters.search) {
+      params = params.append('search', filters.search);
+    }
 
-   listMembers(filters: CircleMembersFilters): Observable<PageResult<CircleMember>> {
-     const { circle } = filters;
-     let params = new HttpParams();
-     if (filters.search) {
-       params = params.append('search', filters.search);
-     }
-     if (filters.limit) {
-       params = params.append('limit', filters.limit.toString());
-     }
+    if (filters.limit) {
+      params = params.append('limit', filters.limit.toString());
+    }
 
-     if (filters.offset) {
-       params = params.append('offset', filters.offset.toString());
-     }
-     return this.http.get<PageResult<CircleMember>>(circle.membersUrl, {
-       params
-     });
-   } */
+    if (filters.offset) {
+      params = params.append('offset', filters.offset.toString());
+    }
 
+    if (filters.order) {
+      params = params.append('order', filters.order.toString());
+    }
+
+    return this.http.get<ListResponse<ResourceMember>>(
+      `/api/v1/resources/${resource.id}/members`, {
+      params
+    });
+  }
   // Watchers
-  /*
-    findWatcher(circle: Circle, username: string): Observable<CircleWatcher | undefined> {
-      return this.http.get<CircleWatcher>(`${circle.watchersUrl}${username}/`).pipe(
-        catchError<any, any>(() => {
-          return of(undefined);
-        })
-      );
+
+  findWatcher(resource: Resource, userId: string): Observable<User | undefined> {
+    return this.http.get<ItemResponse<User>>(
+      `/api/v1/resources/${resource.id}/watchers/${userId}`
+    ).pipe(
+      map(response => response.resource),
+      catchError(() => {
+        return of(undefined);
+      })
+    );
+  }
+
+  createWatcher(resource: Resource): Observable<User> {
+    return this.http.post<ItemResponse<User>>(
+      `/api/v1/resources/${resource.id}/watchers`, {}
+    ).pipe(
+      map(response => response.resource),
+    );
+  }
+
+  deleteWatcher(resource: Resource, userId: string): Observable<void> {
+    return this.http.delete<void>(
+      `/api/v1/resources/${resource.id}/watchers/${userId}`
+    );
+  }
+
+  searchWatchers(resource: Resource, filters: ResourceWatcherFilters): Observable<ListResponse<User>> {
+    let params = new HttpParams();
+    if (filters.search) {
+      params = params.append('search', filters.search);
     }
 
-    createWatcher(circle: Circle): Observable<CircleWatcher> {
-      return this.http.post<CircleWatcher>(circle.watchersUrl, {});
+    if (filters.limit) {
+      params = params.append('limit', filters.limit.toString());
     }
 
-    deleteWatcher(watcher: CircleWatcher): Observable<any> {
-      return this.http.delete<CircleWatcher>(watcher.url);
+    if (filters.offset) {
+      params = params.append('offset', filters.offset.toString());
     }
 
-    listWatchers(filters: CircleWatchersFilters): Observable<PageResult<CircleWatcher>> {
-      const { circle } = filters;
-      let params = new HttpParams();
-      if (filters.search) {
-        params = params.append('search', filters.search);
-      }
-      if (filters.limit) {
-        params = params.append('limit', filters.limit.toString());
-      }
+    if (filters.order) {
+      params = params.append('order', filters.order.toString());
+    }
 
-      if (filters.offset) {
-        params = params.append('offset', filters.offset.toString());
-      }
-      return this.http.get<PageResult<CircleWatcher>>(circle.watchersUrl, {
-        params
-      });
-    } */
+    return this.http.get<ListResponse<User>>(
+      `/api/v1/resources/${resource.id}/watchers`, {
+      params
+    });
+  }
 
   // Invitations
 
-  /*  createInvitation(form: InvitationForm): Observable<CircleInvitation> {
-     return this.http.post<CircleInvitation>(form.circle.invitationsUrl, {
-       invitee: form.invitee,
-       status: form.status,
-     });
-   }
+  createInvitation(resource: Resource, input: CreateResourceInvitation): Observable<ResourceInvitation> {
+    return this.http.post<ItemResponse<ResourceInvitation>>(
+      `/api/v1/resources/${resource.id}/invitations`,
+      input
+    ).pipe(
+      map(response => response.resource)
+    );
+  }
 
-   deleteInvitation(invitation: CircleInvitation): Observable<any> {
-     return this.http.delete<any>(invitation.url);
-   }
+  deleteInvitation(invitation: ResourceInvitation): Observable<void> {
+    return this.http.delete<void>(
+      `/api/v1/resources/${invitation.resourceId}/invitations/${invitation.inviteeId}`
+    );
+  }
 
-   acceptInvitation(invitation: CircleInvitation): Observable<any> {
-     return this.http.patch<CircleInvitation>(invitation.url, {});
-   }
+  acceptInvitation(invitation: ResourceInvitation): Observable<void> {
+    return this.http.patch<void>(
+      `/api/v1/resources/${invitation.resourceId}/invitations/${invitation.inviteeId}`, {}
+    );
+  }
 
-   findInvitation(circle: Circle, username: string): Observable<CircleInvitation | undefined> {
-     return this.http.get<CircleInvitation>(`${circle.invitationsUrl}${username}/`).pipe(
-       catchError(() => {
-         return of(undefined);
-       })
-     );
-   }
+  findInvitation(resource: Resource, inviteeId: string): Observable<ResourceInvitation | undefined> {
+    return this.http.get<ItemResponse<ResourceInvitation>>(
+      `/api/v1/resources/${resource.id}/invitations/${inviteeId}`
+    ).pipe(
+      map(response => response.resource),
+      catchError(() => {
+        return of(undefined);
+      })
+    );
+  }
 
-   listInvitations(filters: CircleInvitationsFilters): Observable<PageResult<CircleInvitation>> {
-     const { circle } = filters;
-     let params = new HttpParams();
-     if (filters.search) {
-       params = params.append('search', filters.search);
-     }
-     if (filters.limit) {
-       params = params.append('limit', filters.limit.toString());
-     }
-
-     if (filters.offset) {
-       params = params.append('offset', filters.offset.toString());
-     }
-     return this.http.get<PageResult<CircleInvitation>>(circle.invitationsUrl, {
-       params
-     });
-   }
-  */
+  listInvitations(resource: Resource): Observable<ListResponse<ResourceInvitation>> {
+    return this.http.get<ListResponse<ResourceInvitation>>(
+      `/api/v1/resources/${resource.id}/invitations`
+    );
+  }
 
   // Events
-  /*  listEvents(circle: Circle): Observable<PageResult<CircleEvent>> {
-     return this.http.get<PageResult<CircleEvent>>(circle.eventsUrl);
-   }
 
-   deleteEvent(event: CircleEvent): Observable<any> {
-     return this.http.delete(event.url);
-   } */
+  listEvents(resource: Resource): Observable<ListResponse<ResourceEvent>> {
+    return this.http.get<ListResponse<ResourceEvent>>(
+      `/api/v1/resources/${resource.id}/events`
+    );
+  }
 }

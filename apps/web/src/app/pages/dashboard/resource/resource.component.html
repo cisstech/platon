@@ -1,8 +1,8 @@
 <ui-layout-tabs [state]="context.state">
   <ng-container *ngIf="context.resource">
     <nz-breadcrumb>
-      <nz-breadcrumb-item *ngIf="context.resource.parentId">
-        <a [routerLink]="['/resource', context.resource.parentId]">Parent</a>
+      <nz-breadcrumb-item *ngIf="context.parent">
+        <a [routerLink]="['/resource', context.parent.id]">{{context.parent.name}}</a>
       </nz-breadcrumb-item>
       <nz-breadcrumb-item>
         {{ context.resource.name }}
@@ -40,19 +40,17 @@
       </nz-select>
     </nz-button-group>
     <nz-button-group>
-      <button nz-button nzType="default">
+      <button nz-button nzType="default" (click)="changeWatchingState()">
         <i nz-icon nzType="eye" nzTheme="outline"></i>
-        Suivre
+        {{ context.watcher ? 'Ne plus suivre' : 'Suivre' }}
       </button>
-      <button nz-button nzType="default">
-       10
-      </button>
+      <!-- <button nz-button nzType="default"></button> -->
     </nz-button-group>
-    <nz-button-group>
-      <button nz-button nzType="primary">
+    <nz-button-group *ngIf="context.invitation">
+      <button nz-button nzType="primary" (click)="acceptInvitation()">
         Accepter l'invitation
       </button>
-      <button nz-button nzDanger>
+      <button nz-button nzDanger (click)="declineInvitation()">
         Refuser l'invitation
       </button>
     </nz-button-group>

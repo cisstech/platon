@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Level, ListResponse, Topic } from '@platon/core/common';
-import { CreateResource, Resource, ResourceCompletion, ResourceFilters, UpdateResource } from '@platon/feature/resource/common';
+import { Level, ListResponse, Topic, User } from '@platon/core/common';
+import { CircleTree, CreateResource, CreateResourceInvitation, Resource, ResourceCompletion, ResourceEvent, ResourceFilters, ResourceInvitation, ResourceMember, ResourceMemberFilters, ResourceWatcherFilters, UpdateResource } from '@platon/feature/resource/common';
 import { Observable } from 'rxjs';
 import { ResourceProvider } from '../models/resource-provider';
 
@@ -11,6 +11,10 @@ export class ResourceService {
   constructor(
     private readonly provider: ResourceProvider,
   ) { }
+
+  tree(): Observable<CircleTree> {
+    return this.provider.tree()
+  }
 
   topics(): Observable<Topic[]> {
     return this.provider.topics();
@@ -33,55 +37,67 @@ export class ResourceService {
     return this.provider.search(filters);
   }
 
-  findResourceById(id: string, markAsViewed?: boolean): Observable<Resource> {
-    return this.provider.findResourceById(id, markAsViewed);
+  findById(id: string, markAsViewed?: boolean): Observable<Resource> {
+    return this.provider.findById(id, markAsViewed);
   }
 
-  updateResource(id: string, input: UpdateResource): Observable<Resource> {
-    return this.provider.updateResource(id, input);
+  update(id: string, input: UpdateResource): Observable<Resource> {
+    return this.provider.update(id, input);
   }
 
-  createResource(input: CreateResource): Observable<Resource> {
-    return this.provider.createResource(input);
+  create(input: CreateResource): Observable<Resource> {
+    return this.provider.create(input);
   }
 
 
   // Members
-  /*
-    findMember(circle: Circle, username: string): Observable<CircleMember | undefined> {
-      return this.provider.findMember(circle, username);
-    }
-    deleteMember(member: CircleMember): Observable<any> {
-      return this.provider.deleteMember(member);
-    }
-    listMembers(filters: CircleMembersFilters): Observable<PageResult<CircleMember>> {
-      return this.provider.listMembers(filters);
-    } */
+
+  findMember(resource: Resource, userId: string): Observable<ResourceMember | undefined> {
+    return this.provider.findMember(resource, userId);
+  }
+
+  deleteMember(resource: Resource, userId: string): Observable<void> {
+    return this.provider.deleteMember(resource, userId);
+  }
+  searchMembers(resource: Resource, filters: ResourceMemberFilters): Observable<ListResponse<ResourceMember>> {
+    return this.provider.searchMembers(resource, filters);
+  }
+
+  // Watchers
+
+  findWatcher(resource: Resource, userId: string): Observable<User | undefined> {
+    return this.provider.findWatcher(resource, userId);
+  }
+  createWatcher(resource: Resource): Observable<User> {
+    return this.provider.createWatcher(resource);
+  }
+  deleteWatcher(resource: Resource, userId: string): Observable<void> {
+    return this.provider.deleteWatcher(resource, userId);
+  }
+  listWatchers(resource: Resource, filters: ResourceWatcherFilters): Observable<ListResponse<User>> {
+    return this.provider.searchWatchers(resource, filters);
+  }
 
   // Invitations
 
-  /*   createInvitation(form: InvitationForm): Observable<CircleInvitation> {
-      return this.provider.createInvitation(form);
-    }
-    deleteInvitation(invitation: CircleInvitation): Observable<any> {
-      return this.provider.deleteInvitation(invitation);
-    }
-    acceptInvitation(invitation: CircleInvitation): Observable<any> {
-      return this.provider.acceptInvitation(invitation);
-    }
-    findInvitation(circle: Circle, username: string): Observable<CircleInvitation | undefined> {
-      return this.provider.findInvitation(circle, username);
-    }
-    listInvitations(filters: CircleInvitationsFilters): Observable<PageResult<CircleInvitation>> {
-      return this.provider.listInvitations(filters);
-    } */
+  deleteInvitation(invitation: ResourceInvitation): Observable<void> {
+    return this.provider.deleteInvitation(invitation);
+  }
+  acceptInvitation(invitation: ResourceInvitation): Observable<void> {
+    return this.provider.acceptInvitation(invitation);
+  }
+  createInvitation(resource: Resource, input: CreateResourceInvitation): Observable<ResourceInvitation> {
+    return this.provider.createInvitation(resource, input);
+  }
+  findInvitation(resource: Resource, inviteeId: string): Observable<ResourceInvitation | undefined> {
+    return this.provider.findInvitation(resource, inviteeId);
+  }
+  listInvitations(resource: Resource): Observable<ListResponse<ResourceInvitation>> {
+    return this.provider.listInvitations(resource);
+  }
 
   // Events
-  /*   listEvents(circle: Circle): Observable<PageResult<CircleEvent>> {
-      return this.provider.listEvents(circle);
-    }
-
-    deleteEvent(event: CircleEvent): Observable<any> {
-      return this.provider.deleteEvent(event);
-    } */
+  listEvents(resource: Resource): Observable<ListResponse<ResourceEvent>> {
+    return this.provider.listEvents(resource);
+  }
 }

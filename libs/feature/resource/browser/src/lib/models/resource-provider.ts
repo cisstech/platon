@@ -1,42 +1,41 @@
-import { Level, ListResponse, Topic } from "@platon/core/common";
-import { CreateResource, Resource, ResourceCompletion, ResourceFilters, UpdateResource } from "@platon/feature/resource/common";
+import { Level, ListResponse, Topic, User } from "@platon/core/common";
+import { CircleTree, CreateResource, CreateResourceInvitation, Resource, ResourceCompletion, ResourceEvent, ResourceFilters, ResourceInvitation, ResourceMember, ResourceMemberFilters, ResourceWatcherFilters, UpdateResource } from "@platon/feature/resource/common";
 import { Observable } from "rxjs";
 
 
 export abstract class ResourceProvider {
-  // abstract tree(): Observable<CircleTree>;
+  abstract tree(): Observable<CircleTree>;
   abstract topics(): Observable<Topic[]>;
   abstract levels(): Observable<Level[]>;
   abstract circle(username: string): Observable<Resource>;
   abstract completion(): Observable<ResourceCompletion>;
 
   abstract search(filters?: ResourceFilters): Observable<ListResponse<Resource>>;
-  abstract findResourceById(id: string, markAsViewed?: boolean): Observable<Resource>;
-  abstract updateResource(id: string, input: UpdateResource): Observable<Resource>;
-  abstract createResource(input: CreateResource): Observable<Resource>;
+  abstract findById(id: string, markAsViewed?: boolean): Observable<Resource>;
+  abstract update(id: string, input: UpdateResource): Observable<Resource>;
+  abstract create(input: CreateResource): Observable<Resource>;
 
   // Members
 
-  // abstract findMember(circle: Circle, username: string): Observable<CircleMember | undefined>;
-  // abstract deleteMember(member: CircleMember): Observable<any>;
-  // abstract listMembers(filters: CircleMembersFilters): Observable<PageResult<CircleMember>>;
+  abstract findMember(resource: Resource, userId: string): Observable<ResourceMember | undefined>;
+  abstract deleteMember(resource: Resource, userId: string): Observable<void>;
+  abstract searchMembers(resource: Resource, filters: ResourceMemberFilters): Observable<ListResponse<ResourceMember>>;
 
   // Watchers
 
-  // abstract findWatcher(circle: Circle, username: string): Observable<CircleWatcher | undefined>;
-  // abstract createWatcher(circle: Circle): Observable<CircleWatcher>;
-  // abstract deleteWatcher(watcher: CircleWatcher): Observable<any>;
-  // abstract listWatchers(filters: CircleWatchersFilters): Observable<PageResult<CircleWatcher>>;
+  abstract findWatcher(resource: Resource, userId: string): Observable<User | undefined>;
+  abstract createWatcher(resource: Resource): Observable<User>;
+  abstract deleteWatcher(resource: Resource, userId: string): Observable<void>;
+  abstract searchWatchers(resource: Resource, filters: ResourceWatcherFilters): Observable<ListResponse<User>>;
 
   // Invitations
 
-  // abstract createInvitation(form: InvitationForm): Observable<CircleInvitation>;
-  // abstract deleteInvitation(invitation: CircleInvitation): Observable<any>;
-  // abstract acceptInvitation(invitation: CircleInvitation): Observable<any>;
-  // abstract findInvitation(circle: Circle, username: string): Observable<CircleInvitation | undefined>;
-  // abstract listInvitations(filters: CircleInvitationsFilters): Observable<PageResult<CircleInvitation>>;
+  abstract deleteInvitation(invitation: ResourceInvitation): Observable<void>;
+  abstract acceptInvitation(invitation: ResourceInvitation): Observable<void>;
+  abstract createInvitation(resource: Resource, input: CreateResourceInvitation): Observable<ResourceInvitation>;
+  abstract findInvitation(resource: Resource, inviteeId: string): Observable<ResourceInvitation | undefined>;
+  abstract listInvitations(resource: Resource): Observable<ListResponse<ResourceInvitation>>;
 
   // Events
-  //abstract listEvents(circle: Circle): Observable<PageResult<CircleEvent>>;
-  //abstract deleteEvent(event: CircleEvent): Observable<any>;
+  abstract listEvents(resource: Resource): Observable<ListResponse<ResourceEvent>>;
 }

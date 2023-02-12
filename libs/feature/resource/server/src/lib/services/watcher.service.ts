@@ -1,5 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { OrderingDirections, UserOrderings } from '@platon/core/common';
+import { ResourceWatcherFilters } from '@platon/feature/resource/common';
 import { Repository } from 'typeorm';
 import { Optional } from "typescript-optional";
 import { ResourceWatcherEntity } from '../entities';
@@ -17,8 +19,50 @@ export class ResourceWatcherService {
     );
   }
 
-  async findAll(resourceId: string): Promise<[ResourceWatcherEntity[], number]> {
-    return this.repository.findAndCount({ where: { resourceId }, relations: { user: true } });
+  async search(
+    resourceId: string,
+    filters: ResourceWatcherFilters = {}
+  ): Promise<[ResourceWatcherEntity[], number]> {
+    const query = this.repository.createQueryBuilder('watcher')
+    query.leftJoinAndSelect('watcher.user', 'user', 'user.id = watcher.user_id')
+    query.where('watcher.resource_id = :resourceId', { resourceId })
+
+    if (filters.search) {
+      query.andWhere(`(
+        user.username ILIKE :search
+        OR user.email ILIKE :search
+        OR f_unaccent(user.first_name) ILIKE f_unaccent(:search)
+        OR f_unaccent(user.last_name) ILIKE f_unaccent(:search)
+      )`, { search: `%${filters.search}%` })
+    }
+
+    if (filters.order) {
+      const fields: Record<UserOrderings, string> = {
+        'NAME': 'user.username',
+        'CREATED_AT': 'watcher.created_at',
+        'UPDATED_AT': 'watcher.updated_at',
+      }
+
+      const orderings: Record<UserOrderings, keyof typeof OrderingDirections> = {
+        'NAME': 'ASC',
+        'CREATED_AT': 'DESC',
+        'UPDATED_AT': 'DESC',
+      }
+
+      query.orderBy(fields[filters.order], filters.direction || orderings[filters.order])
+    } else {
+      query.orderBy('user.username', 'ASC')
+    }
+
+    if (filters.offset) {
+      query.offset(filters.offset)
+    }
+
+    if (filters.limit) {
+      query.limit(filters.limit)
+    }
+
+    return query.getManyAndCount()
   }
 
   async create(input: Partial<ResourceWatcherEntity>): Promise<ResourceWatcherEntity> {

@@ -1,9 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { Optional } from 'typescript-optional';
 import { ResourceInvitationEntity } from '../entities/invitation.entity';
 import { ResourceMemberEntity } from '../entities/member.entity';
+import { ResourceMemberService } from './member.service';
 
 @Injectable()
 export class ResourceInvitationService {
@@ -11,6 +12,7 @@ export class ResourceInvitationService {
     private readonly dataSource: DataSource,
     @InjectRepository(ResourceInvitationEntity)
     private readonly repository: Repository<ResourceInvitationEntity>,
+    private readonly memberService: ResourceMemberService,
   ) { }
 
   async findByInviteeId(resourceId: string, inviteeId: string): Promise<Optional<ResourceInvitationEntity>> {
@@ -24,6 +26,10 @@ export class ResourceInvitationService {
   }
 
   async create(input: Partial<ResourceInvitationEntity>): Promise<ResourceInvitationEntity> {
+    const member = await this.memberService.findByUserId(input.resourceId as string, input.inviteeId as string)
+    if (member.isPresent()) {
+      throw new BadRequestException('There is already a member entry for the given user')
+    }
     return this.repository.save(input);
   }
 

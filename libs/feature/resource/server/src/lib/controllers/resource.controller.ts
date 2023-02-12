@@ -14,14 +14,13 @@ export class ResourceController {
   ) { }
 
   @Get()
-  async list(
+  async search(
     @Request() req: IRequest,
     @Query() filters: ResourceFiltersDTO = {}
   ): Promise<ListResponse<ResourceDTO>> {
     let resources: ResourceDTO[] = [];
     let total = 0;
     if (filters.views) {
-      console.log('views')
       const response = await this.viewService.findAll(req.user.id);
       resources = Mapper.mapAll(response[0].map(r => r.resource), ResourceDTO);
       total = response[1]

@@ -1,6 +1,7 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, Patch } from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, Patch, Query } from '@nestjs/common';
 import { ItemResponse, ListResponse, NoContentResponse } from '@platon/core/common';
 import { Mapper } from '@platon/core/server';
+import { ResourceMemberFiltersDTO } from '../dto';
 import { ResourceMemberDTO, UpdateResourceMemberDTO } from '../dto/member.dto';
 import { ResourceMemberService } from '../services/member.service';
 
@@ -11,10 +12,11 @@ export class ResourceMemberController {
   ) { }
 
   @Get()
-  async list(
+  async search(
     @Param('resourceId') resourceId: string,
+    @Query() filters: ResourceMemberFiltersDTO = {}
   ): Promise<ListResponse<ResourceMemberDTO>> {
-    const [items, total] = await this.service.findAll(resourceId)
+    const [items, total] = await this.service.search(resourceId, filters)
     const resources = Mapper.mapAll(items, ResourceMemberDTO)
     return new ListResponse({ total, resources })
   }

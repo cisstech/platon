@@ -1,6 +1,7 @@
-import { Controller, Delete, Get, NotFoundException, Param, Post, Request, UnauthorizedException } from '@nestjs/common';
+import { Controller, Delete, Get, NotFoundException, Param, Post, Query, Request, UnauthorizedException } from '@nestjs/common';
 import { ItemResponse, ListResponse, NoContentResponse } from '@platon/core/common';
 import { IRequest, Mapper, UserDTO } from '@platon/core/server';
+import { ResourceWatcherFiltersDTO } from '../dto';
 import { ResourceWatcherService } from '../services/watcher.service';
 
 @Controller('resources/:resourceId/watchers')
@@ -10,10 +11,11 @@ export class ResourceWatcherController {
   ) { }
 
   @Get()
-  async list(
+  async search(
     @Param('resourceId') resourceId: string,
+    @Query() filters: ResourceWatcherFiltersDTO = {}
   ): Promise<ListResponse<UserDTO>> {
-    const [items, total] = await this.service.findAll(resourceId)
+    const [items, total] = await this.service.search(resourceId, filters)
     const resources = Mapper.mapAll(items.map(e => e.user), UserDTO)
     return new ListResponse({ total, resources })
   }

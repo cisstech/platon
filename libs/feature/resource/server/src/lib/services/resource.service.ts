@@ -11,7 +11,7 @@ import {
   ResourceTypes,
   ResourceVisibilities
 } from '@platon/feature/resource/common';
-import { In, Not, Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 import { Optional } from 'typescript-optional';
 import { CreateResourceDTO, UpdateResourceDTO } from '../dto/resource.dto';
 import { ResourceMemberEntity, ResourceWatcherEntity } from '../entities';
@@ -169,7 +169,7 @@ export class ResourceService {
       query.limit(filters.limit)
     }
 
-    return query.getManyAndCount();
+    return query.getManyAndCount()
   }
 
   async create(input: Partial<ResourceEntity>): Promise<ResourceEntity> {

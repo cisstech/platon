@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -28,12 +29,12 @@ export class AuthInterceptor implements HttpInterceptor {
     return from(this.tokenProvider.token()).pipe(
       switchMap(token => {
         if (token != null) {
-          return next.handle(this.addAuthorization(req, token)).pipe(
+          return next.handle(this.addAuthorization(req, this.isRefreshing ? token.refreshToken : token.accessToken)).pipe(
             catchError<any, any>(err => {
-              if (err?.error?.code === 'token_not_valid') {
+              if (err?.status === 403) {
                 return this.refreshToken(req, next);
               }
-              return throwError(() => new Error(err));
+              return throwError(() => err);
             })
           );
         }
@@ -54,7 +55,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
       return from(this.tokenProvider.refresh()).pipe(
         switchMap(token => {
-          return next.handle(this.addAuthorization(req, token));
+          return next.handle(this.addAuthorization(req, token!.accessToken));
         }),
         finalize(() => this.isRefreshing = false)
       );
@@ -64,18 +65,17 @@ export class AuthInterceptor implements HttpInterceptor {
       filter(token => token != null),
       take(1),
       switchMap(token => {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        return next.handle(this.addAuthorization(req, token!));
+        return next.handle(this.addAuthorization(req, token!.accessToken));
       })
     );
   }
 
   private addAuthorization(
     req: HttpRequest<any>,
-    token: AuthToken
+    token: string
   ): HttpRequest<any> {
     return req.clone({
-      headers: req.headers.set('Authorization', 'Bearer ' + token.accessToken),
+      headers: req.headers.set('Authorization', 'Bearer ' + token),
     });
   }
 

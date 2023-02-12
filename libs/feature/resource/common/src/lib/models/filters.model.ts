@@ -1,4 +1,4 @@
-import { OrderingDirections } from "@platon/core/common";
+import { OrderingDirections, UserOrderings } from "@platon/core/common";
 import { ResourceStatus } from "../enums/resource-status";
 import { ResourceTypes } from "../enums/resource-types";
 
@@ -23,4 +23,25 @@ export interface ResourceFilters {
   readonly parent?: string;
   readonly order?: ResourceOrderings;
   readonly direction?: OrderingDirections;
+}
+
+export interface ResourceMemberFilters {
+  readonly search?: string;
+  readonly offset?: number;
+  readonly limit?: number;
+  readonly order?: UserOrderings;
+  readonly direction?: OrderingDirections;
+}
+
+export interface ResourceWatcherFilters {
+  readonly search?: string;
+  readonly offset?: number;
+  readonly limit?: number;
+  readonly order?: UserOrderings;
+  readonly direction?: OrderingDirections;
+}
+
+export interface ResourceEventFilters {
+  readonly offset?: number;
+  readonly limit?: number;
 }
