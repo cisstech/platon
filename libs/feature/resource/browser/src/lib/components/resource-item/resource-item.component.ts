@@ -48,14 +48,6 @@ export class ResourceItemComponent implements OnInit {
     this.name = this.item.name;
     this.desc = this.item.desc as string;
 
-    if (this.item.type === ResourceTypes.CIRCLE && this.item.visibility === ResourceVisibilities.PERSONAL) {
-      this.name = 'Votre cercle personnel'
-      this.desc = `
-      Bienvenue dans votre cercle personnel dédié à la création de ressources pour vous entraîner à utiliser la plateforme en autonomie.
-      Ici, vous pouvez créer des ressources qui ne seront visibles que par vous.
-      `
-    }
-
     if (this.simple) {
       this.desc = '';
     }

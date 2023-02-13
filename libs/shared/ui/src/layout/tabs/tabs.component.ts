@@ -6,9 +6,9 @@ import { NzTabsModule } from 'ng-zorro-antd/tabs';
 
 import { RouterModule } from '@angular/router';
 import { combineLatest, Observable, Subscription } from 'rxjs';
-import { Error403Component, Error404Component, Error500Component } from '../../error';
+import { UiError403Component, UiError404Component, UiError500Component } from '../../error';
 import { LayoutState } from '../layout';
-import { LayoutTabsTitleDirective } from './directives/tab-title.directive';
+import { UiLayoutTabsTitleDirective } from './directives/tab-title.directive';
 
 @Component({
   standalone: true,
@@ -23,21 +23,21 @@ import { LayoutTabsTitleDirective } from './directives/tab-title.directive';
     NzTabsModule,
     NzSkeletonModule,
 
-    Error403Component,
-    Error404Component,
-    Error500Component,
+    UiError403Component,
+    UiError404Component,
+    UiError500Component,
   ],
 })
-export class LayoutTabsComponent implements AfterContentInit, OnDestroy {
+export class UiLayoutTabsComponent implements AfterContentInit, OnDestroy {
   private readonly subscriptions: Subscription[] = [];
 
   @Input() state: LayoutState = 'READY';
 
-  @ContentChildren(LayoutTabsTitleDirective)
-  titles!: QueryList<LayoutTabsTitleDirective>;
+  @ContentChildren(UiLayoutTabsTitleDirective)
+  titles!: QueryList<UiLayoutTabsTitleDirective>;
 
   protected tabs: {
-    title: LayoutTabsTitleDirective,
+    title: UiLayoutTabsTitleDirective,
   }[] = [];
 
   constructor(
@@ -45,7 +45,7 @@ export class LayoutTabsComponent implements AfterContentInit, OnDestroy {
   ) { }
 
   ngAfterContentInit(): void {
-    const handleChanges = (titles: LayoutTabsTitleDirective[]) => {
+    const handleChanges = (titles: UiLayoutTabsTitleDirective[]) => {
       this.tabs = [];
       for (let i = 0; i < titles.length; i++) {
         this.tabs.push({ title: titles[i] })
@@ -57,7 +57,7 @@ export class LayoutTabsComponent implements AfterContentInit, OnDestroy {
 
     this.subscriptions.push(
       combineLatest([
-        this.titles.changes as Observable<LayoutTabsTitleDirective[]>,
+        this.titles.changes as Observable<UiLayoutTabsTitleDirective[]>,
       ]).subscribe(([titles]) => {
         handleChanges(titles);
       })

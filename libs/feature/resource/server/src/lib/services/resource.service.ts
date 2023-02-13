@@ -98,7 +98,10 @@ export class ResourceService {
       circle = (await this.repository.save(
         this.repository.create({
           ownerId,
-          name: ownerId,
+          name: 'Votre cercle personnel',
+          desc: `Bienvenue dans votre cercle personnel dédié à la création de ressources pour vous entraîner à utiliser la plateforme en autonomie.
+          Ici, vous pouvez créer des ressources qui ne seront visibles que par vous.
+          `,
           type: ResourceTypes.CIRCLE,
           visibility: ResourceVisibilities.PERSONAL,
           status: ResourceStatus.READY

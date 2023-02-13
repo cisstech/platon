@@ -12,16 +12,11 @@ export class UserService {
     private readonly repository: Repository<UserEntity>
   ) { }
 
-  async findById(id: string): Promise<Optional<UserEntity>> {
-    return Optional.ofNullable(
-      await this.repository.findOne({ where: { id } })
-    );
-  }
-
-  async findByUsername(username: string): Promise<Optional<UserEntity>> {
-    return Optional.ofNullable(
-      await this.repository.findOne({ where: { username } })
-    );
+  async find(userIdOrName: string): Promise<Optional<UserEntity>> {
+    const result = userIdOrName.includes('-')
+      ? await this.repository.findOne({ where: { id: userIdOrName } })
+      : await this.repository.findOne({ where: { username: userIdOrName } })
+    return Optional.ofNullable(result);
   }
 
   async search(filters: UserFilters = {}): Promise<[UserEntity[], number]> {
@@ -73,20 +68,10 @@ export class UserService {
     return this.repository.save(user);
   }
 
-  async update(id: string, changes: Partial<UserEntity>): Promise<UserEntity> {
-    const user = await this.repository.findOne({ where: { id } })
-    if (!user) {
-      throw new NotFoundResponse(`User not found: ${id}`)
-    }
-    Object.assign(user, changes);
-    return this.repository.save(user);
-  }
-
-  async updateByUsername(username: string, changes: Partial<UserEntity>): Promise<UserEntity> {
-    const user = await this.repository.findOne({ where: { username } })
-    if (!user) {
-      throw new NotFoundResponse(`User not found: ${username}`)
-    }
+  async update(userIdOrName: string, changes: Partial<UserEntity>): Promise<UserEntity> {
+    const user = (
+      await this.find(userIdOrName)
+    ).orElseThrow(() => new NotFoundResponse(`User not found: ${userIdOrName}`));
     Object.assign(user, changes);
     return this.repository.save(user);
   }

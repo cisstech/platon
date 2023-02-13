@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { SignInComponent } from '@platon/core/browser';
+import { AuthSignInComponent } from '@platon/core/browser';
 
 
 @Component({
@@ -12,7 +12,7 @@ import { SignInComponent } from '@platon/core/browser';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
-    SignInComponent,
+    AuthSignInComponent,
   ]
 })
-export default class LoginComponent {}
+export default class LoginComponent { }

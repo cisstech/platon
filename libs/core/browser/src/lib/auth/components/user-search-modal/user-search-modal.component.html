@@ -1,0 +1,17 @@
+<ng-container *ngIf="isVisible">
+  <nz-modal [(nzVisible)]="isVisible" [nzTitle]="title" (nzOnCancel)="close()">
+    <ng-container *nzModalContent>
+      <user-search-bar
+        [roles]="roles"
+        [multi]="multi"
+        [excludes]="excludes"
+        [(ngModel)]="selection">
+      </user-search-bar>
+    </ng-container>
+    <ng-container *nzModalFooter>
+      <button nz-button nzType="default" (click)="close()">{{noTitle}}</button>
+      <button nz-button nzType="primary" (click)="submit()" [disabled]="!ready">{{okTitle}}</button>
+    </ng-container>
+  </nz-modal>
+</ng-container>
+

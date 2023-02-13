@@ -1,0 +1,20 @@
+<form
+  nz-form
+  nzLayout="vertical"
+  [formGroup]="form"
+  (ngSubmit)="sendInvitation()">
+  <nz-form-item>
+    <nz-form-label nzFor="invitee" nzRequired>Utilisateur</nz-form-label>
+    <nz-form-control>
+      <user-search-bar
+        id="invitee"
+        name="invitee"
+        formControlName="invitee"
+        [multi]="false"
+        [roles]="['admin', 'teacher']"
+        [excludes]="excludes">
+        <button mat-raised-button type="submit" color="primary" [disabled]="!form.valid">Inviter</button>
+      </user-search-bar>
+    </nz-form-control>
+  </nz-form-item>
+</form>

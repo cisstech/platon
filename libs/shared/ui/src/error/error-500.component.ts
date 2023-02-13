@@ -14,4 +14,4 @@ import { NzResultModule } from 'ng-zorro-antd/result';
   </nz-result>
   `
 })
-export class Error500Component { }
+export class UiError500Component { }

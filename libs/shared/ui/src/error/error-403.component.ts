@@ -15,4 +15,4 @@ import { NzResultModule } from 'ng-zorro-antd/result';
   `
 })
 
-export class Error403Component {}
+export class UiError403Component {}

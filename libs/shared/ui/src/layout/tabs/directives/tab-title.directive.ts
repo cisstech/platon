@@ -3,7 +3,7 @@ import { ContentChild, Directive, Input, TemplateRef } from '@angular/core';
 
 // eslint-disable-next-line @angular-eslint/directive-selector
 @Directive({ standalone: true, selector: 'ui-layout-tab' })
-export class LayoutTabsTitleDirective {
+export class UiLayoutTabsTitleDirective {
   @Input()
   link!: string | any[];
 

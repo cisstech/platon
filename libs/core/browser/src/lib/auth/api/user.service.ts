@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { User } from '@platon/core/common';
+import { ListResponse, User, UserFilters } from '@platon/core/common';
 import { combineLatest, Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { UserProvider } from '../models/user-provider';
@@ -12,9 +12,13 @@ export class UserService {
   private users = new Map<string, User>();
 
   constructor(
-    private readonly authUserProvider: UserProvider
+    private readonly provider: UserProvider
   ) { }
 
+
+  search(filters: UserFilters): Observable<ListResponse<User>> {
+    return this.provider.search(filters);
+  }
 
   /**
    * Finds the user identified by `username`.
@@ -31,7 +35,7 @@ export class UserService {
       return of(cache);
     }
 
-    return this.authUserProvider.findByUserName(username).pipe(
+    return this.provider.findByUserName(username).pipe(
       tap(user => {
         if (user != null) {
           this.users.set(username, user);
@@ -61,7 +65,7 @@ export class UserService {
 
     return combineLatest([
       of(cacheElements),
-      this.authUserProvider.findAllByUserNames(notCached),
+      this.provider.findAllByUserNames(notCached),
     ]).pipe(
       map(([fromCache, fromServer]) => {
         fromServer.forEach(e => {

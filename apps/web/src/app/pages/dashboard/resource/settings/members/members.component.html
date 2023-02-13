@@ -1,3 +1,27 @@
-<p>
-  members works!
-</p>
+<section>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Invitations</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <res-invitation-form [excludes]="excludes" (send)="sendInvitation($event)" />
+      <res-invitation-table
+        [invitations]="invitations"
+        [editable]="canEdit"
+        (deleted)="deleteInvitation($event)" />
+    </mat-card-content>
+  </mat-card>
+</section>
+<section>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Membres</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <res-member-table
+        [members]="members"
+        [editable]="canEdit"
+        (deleted)="deleteMember($event)" />
+    </mat-card-content>
+  </mat-card>
+</section>

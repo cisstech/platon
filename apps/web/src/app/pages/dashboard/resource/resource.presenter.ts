@@ -99,7 +99,7 @@ export class ResourcePresenter implements OnDestroy {
 
   // Invitation
 
-  async listInvitations(): Promise<ListResponse<ResourceInvitation>> {
+  async searchInvitations(): Promise<ListResponse<ResourceInvitation>> {
     const { resource } = this.context.value as Required<Context>;
     return firstValueFrom(
       this.resourceService.listInvitations(resource)

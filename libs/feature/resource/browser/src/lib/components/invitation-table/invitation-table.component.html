@@ -1,0 +1,34 @@
+<nz-table
+  #nzTable
+  nzSize="small"
+  [nzData]="invitations">
+  <thead>
+    <tr>
+      <th>Utilisateur</th>
+      <th>Date</th>
+      <th *ngIf="editable"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of nzTable.data">
+      <td>
+        <user-avatar #avatar [userIdOrName]="data.inviteeId" />
+      </td>
+      <td>{{data.createdAt|date}}</td>
+      <td *ngIf="editable">
+        <button
+          nz-button
+          nzDanger
+          nzType="primary"
+          nzShape="circle"
+          nz-popconfirm
+          nzOkText="Retirer"
+          nzOkType="danger"
+          [nzPopconfirmTitle]="'Voulez-vous vraiment retirer l\'invitation envoyée à “'+ avatar.username +'”?'"
+          (nzOnConfirm)="deleted.emit(data)">
+          <i nz-icon nzType="delete"></i>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>

@@ -8,7 +8,7 @@ import { MatChipsModule } from '@angular/material/chips';
 
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 
-import { SearchBar, SearchBarComponent } from '@platon/shared/ui';
+import { SearchBar, UiSearchBarComponent } from '@platon/shared/ui';
 
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, Params, Router } from '@angular/router';
@@ -42,7 +42,7 @@ import { FiltersComponent } from './filters/filters.component';
     ResourceListComponent,
 
     FiltersComponent,
-    SearchBarComponent,
+    UiSearchBarComponent,
   ]
 })
 

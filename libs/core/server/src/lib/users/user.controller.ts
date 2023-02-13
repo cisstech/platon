@@ -19,25 +19,25 @@ export class UserController {
     return new ListResponse({ total, resources })
   }
 
-  @Get('/:username')
+  @Get('/:userIdOrName')
   async find(
-    @Param('username') username: string
+    @Param('userIdOrName') userIdOrName: string
   ): Promise<ItemResponse<UserDTO>> {
-    const optional = await this.userService.findByUsername(username);
+    const optional = await this.userService.find(userIdOrName);
     const resource = Mapper.map(
-      optional.orElseThrow(() => new NotFoundResponse(`User not found: ${username}`)),
+      optional.orElseThrow(() => new NotFoundResponse(`User not found: ${userIdOrName}`)),
       UserDTO
     );
     return new ItemResponse({ resource })
   }
 
-  @Patch('/:username')
+  @Patch('/:userIdOrName')
   async update(
-    @Param('username') username: string,
+    @Param('userIdOrName') userIdOrName: string,
     @Body() input: UpdateUser
   ): Promise<ItemResponse<UserDTO>> {
     const resource = Mapper.map(
-      await this.userService.updateByUsername(username, input),
+      await this.userService.update(userIdOrName, input),
       UserDTO
     );
     return new ItemResponse({ resource })

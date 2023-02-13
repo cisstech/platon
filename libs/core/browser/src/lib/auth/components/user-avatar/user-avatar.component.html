@@ -1,0 +1,10 @@
+<nz-badge [nzCount]="user && user.role === 'admin' ? nzCount : undefined" [nzOffset]="[0, -6]">
+  <nz-avatar [nzSize]="avatarSize" [nzSrc]="'https://robohash.org/' + user?.username + '.png'" nzIcon="user"></nz-avatar>
+</nz-badge>
+<div>
+  <span>{{user?.firstName}} {{user?.lastName}}</span>
+  <span>{{user?.username}}</span>
+</div>
+<ng-template #nzCount>
+ <i matTooltip="Administrateur" nz-icon [nzType]="'safety-certificate'" [nzTheme]="'twotone'" ></i>
+</ng-template>

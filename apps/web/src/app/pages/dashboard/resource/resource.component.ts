@@ -15,7 +15,7 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { DialogModule } from '@platon/core/browser';
 import { ResourcePipesModule } from '@platon/feature/resource/browser';
 import { ResourceStatus } from '@platon/feature/resource/common';
-import { LayoutTabsComponent, LayoutTabsTitleDirective } from '@platon/shared/ui';
+import { UiLayoutTabsComponent, UiLayoutTabsTitleDirective } from '@platon/shared/ui';
 import { Subscription } from 'rxjs';
 import { ResourcePresenter } from './resource.presenter';
 
@@ -42,8 +42,8 @@ import { ResourcePresenter } from './resource.presenter';
 
     DialogModule,
 
-    LayoutTabsComponent,
-    LayoutTabsTitleDirective,
+    UiLayoutTabsComponent,
+    UiLayoutTabsTitleDirective,
 
     ResourcePipesModule,
   ]

@@ -19,7 +19,7 @@ import { AuthService } from '../../api/auth.service';
 
 @Component({
   standalone: true,
-  selector: 'core-sign-in',
+  selector: 'auth-sign-in',
   templateUrl: './sign-in.component.html',
   styleUrls: ['./sign-in.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -40,7 +40,7 @@ import { AuthService } from '../../api/auth.service';
     DialogModule,
   ]
 })
-export class SignInComponent implements OnInit {
+export class AuthSignInComponent implements OnInit {
   protected username = '';
   protected password = '';
   protected connecting = false;

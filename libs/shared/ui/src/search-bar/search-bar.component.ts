@@ -47,7 +47,7 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
     NgArrayPipesModule,
   ]
 })
-export class SearchBarComponent implements OnInit, OnChanges, OnDestroy {
+export class UiSearchBarComponent implements OnInit, OnChanges, OnDestroy {
   private readonly subscriptions: Subscription[] = [];
 
 

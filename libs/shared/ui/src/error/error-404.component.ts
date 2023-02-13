@@ -18,4 +18,4 @@ import { NzResultModule } from 'ng-zorro-antd/result';
   `
 })
 
-export class Error404Component { }
+export class UiError404Component { }

@@ -1,10 +1,17 @@
-import { User } from '@platon/core/common';
+import { ListResponse, User, UserFilters } from '@platon/core/common';
 import { Observable } from 'rxjs';
 
 /**
  * Provides an api to query user objects.
  */
 export abstract class UserProvider {
+  /**
+   * Finds the users based on the given `filters`.
+   * @param uid Filters to use.
+   * @returns An observable that will emit the users that match the filters once the server will response.
+   */
+  abstract search(filters: UserFilters): Observable<ListResponse<User>>;
+
   /**
    * Finds the user identified by `username`.
    * @param uid The username of the user to find.
