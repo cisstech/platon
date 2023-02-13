@@ -1,0 +1,31 @@
+:host {
+  display: block;
+  max-width: 720px;
+  padding: 0 12px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+nz-form-item {
+  margin-bottom: 12px;
+}
+
+nz-select,
+mat-form-field {
+  display: block;
+  width: 100%;
+}
+
+
+nz-spin,
+button {
+  align-self: flex-start;
+}
+
+nz-spin {
+  margin: 2rem 1rem;
+}
+

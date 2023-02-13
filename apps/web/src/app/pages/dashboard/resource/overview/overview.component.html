@@ -3,14 +3,59 @@
     <nz-col nzXs="24" nzSm="24" nzMd="18" nzLg="18" nzXl="18">
       <section>
         <mat-card>
+          <mat-card-header>
+            <mat-card-title>Suivi de l'État des Ressources</mat-card-title>
+            <mat-card-subtitle>
+              Tenir à jour les statuts des ressources aide à s'assurer que les enseignants peuvent rapidement trouver des ressources fiables pour leurs cours. Contribuez à la qualité de la plateforme en mettant à jour le statut de vos ressources.
+            </mat-card-subtitle>
+          </mat-card-header>
           <mat-card-content>
             <ngx-charts-advanced-pie-chart
               [view]="view"
               [label]="'Ressources'"
               [tooltipText]="formatStatus.bind(this)"
-              (select)="onClickStatus($event)"
+              (select)="searchByStatus($event.name)"
               [nameFormatting]="formatStatus.bind(this)"
               [results]="statuses" />
+          </mat-card-content>
+        </mat-card>
+      </section>
+      <section>
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Tags</mat-card-title>
+            <mat-card-subtitle>Les tags (topics et niveaux) permettent une classification et une organisation plus efficace de vos ressources.</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <nz-empty
+              *ngIf="!context.resource.levels.length && !context.resource.topics.length"
+              [nzNotFoundContent]="noTags"
+              [nzNotFoundFooter]="noTagsFooter">
+              <ng-template #noTags>
+                Il est donc important d'ajouter des tags à vos créations pour en faciliter la recherche et la découverte par d'autres enseignants.
+              </ng-template>
+              <ng-template #noTagsFooter>
+                <button mat-button color="primary" [routerLink]="['../settings']" [queryParams]="{ tab: 'informations' }">
+                  Ajouter des tags
+                </button>
+              </ng-template>
+            </nz-empty>
+            <mat-chip-set>
+              <ng-container *ngFor="let item of context.resource.levels; trackBy: trackById">
+                <mat-chip [routerLink]="['/workspace']"
+                  [queryParams]="{ q: item.name, parent: context.resource.id }"
+                  [queryParamsHandling]="'merge'">
+                  {{item.name}}
+                </mat-chip>
+              </ng-container>
+              <ng-container *ngFor="let item of context.resource.topics; trackBy: trackById">
+                <mat-chip [routerLink]="['/workspace']"
+                  [queryParams]="{ q: item.name, parent: context.resource.id }"
+                  [queryParamsHandling]="'merge'">
+                  {{item.name}}
+                </mat-chip>
+              </ng-container>
+            </mat-chip-set>
           </mat-card-content>
         </mat-card>
       </section>
@@ -32,11 +77,8 @@
             <nz-statistic [nzValue]="context.statistic?.circles" [nzTitle]="'Cercles'" />
           </mat-card-content>
           <mat-card-actions>
-            <a mat-button [routerLink]="['/workspace']"
-              [queryParams]="{
-                types: 'CIRCLE',
-                parent: context.resource.id
-              }"
+            <a mat-button color="primary" [routerLink]="['/workspace']"
+              [queryParams]="{ types: 'CIRCLE', parent: context.resource.id }"
               [queryParamsHandling]="'merge'">
               Rechercher
             </a>
@@ -47,11 +89,8 @@
             <nz-statistic [nzValue]="context.statistic?.activities" [nzTitle]="'Activités'" />
           </mat-card-content>
           <mat-card-actions>
-            <a mat-button [routerLink]="['/workspace']"
-              [queryParams]="{
-                types: 'ACTIVITY',
-                parent: context.resource.id
-              }"
+            <a mat-button color="primary" [routerLink]="['/workspace']"
+              [queryParams]="{ types: 'ACTIVITY', parent: context.resource.id}"
               [queryParamsHandling]="'merge'">
               Rechercher
             </a>
@@ -62,11 +101,8 @@
             <nz-statistic [nzValue]="context.statistic?.exercises" [nzTitle]="'Exercices'" />
           </mat-card-content>
           <mat-card-actions>
-            <a mat-button [routerLink]="['/workspace']"
-              [queryParams]="{
-                types: 'EXERCISE',
-                parent: context.resource.id
-              }"
+            <a mat-button color="primary" [routerLink]="['/workspace']"
+              [queryParams]="{ types: 'EXERCISE', parent: context.resource.id}"
               [queryParamsHandling]="'merge'">
               Rechercher
             </a>

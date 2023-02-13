@@ -2,22 +2,16 @@
   display: block;
 }
 
-mat-form-field {
-  width: 100%;
-}
-
 mat-card {
   margin-bottom: 1rem;
 }
 
-.status {
-  cursor: pointer;
-  display: block;
-  width: 100%;
-  margin-bottom: 8px;
-  nz-tag {
-    width: 100%;
-  }
+nz-empty {
+  margin: 2rem 0;
+}
+
+mat-chip-set {
+  margin: 1rem 0;
 }
 
 .spacer {

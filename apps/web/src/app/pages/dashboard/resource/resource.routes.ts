@@ -14,6 +14,13 @@ export default [
         )
       },
       {
+        path: 'content',
+        loadChildren: () => import(
+          /* webpackChunkName: "resource-content" */
+          './content/content.routes'
+        )
+      },
+      {
         path: 'events',
         loadChildren: () => import(
           /* webpackChunkName: "resource-events" */

@@ -3,11 +3,11 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService, DialogService } from '@platon/core/browser';
-import { ListResponse, User } from '@platon/core/common';
+import { Level, ListResponse, Topic, User } from '@platon/core/common';
 import { ResourceService } from '@platon/feature/resource/browser';
 import { CreateResourceInvitation, Resource, ResourceEvent, ResourceInvitation, ResourceMember, ResourceMemberFilters, ResourceStatisic, UpdateResource } from '@platon/feature/resource/common';
 import { LayoutState } from '@platon/shared/ui';
-import { BehaviorSubject, firstValueFrom, lastValueFrom, Subscription } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, lastValueFrom, Observable, Subscription } from 'rxjs';
 
 @Injectable()
 export class ResourcePresenter implements OnDestroy {
@@ -37,6 +37,14 @@ export class ResourcePresenter implements OnDestroy {
 
   defaultContext(): Context {
     return { state: 'LOADING' };
+  }
+
+  availableTopics(): Observable<Topic[]> {
+    return this.resourceService.topics();
+  }
+
+  availableLevels(): Observable<Level[]> {
+    return this.resourceService.levels();
   }
 
   // Watchers

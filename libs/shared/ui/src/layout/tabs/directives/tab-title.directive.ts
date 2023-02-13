@@ -7,6 +7,9 @@ export class LayoutTabsTitleDirective {
   @Input()
   link!: string | any[];
 
+  @Input()
+  linkParams?: any;
+
   @ContentChild(TemplateRef, { static: true })
   templateRef!: TemplateRef<void>
 }

@@ -65,25 +65,19 @@
       Vue d'ensemble
     </ng-template>
   </ui-layout-tab>
+  <ui-layout-tab [link]="['content']">
+    <ng-template>
+      <span nz-icon nzType="code" nzTheme="outline"></span>
+      Contenu
+    </ng-template>
+  </ui-layout-tab>
   <ui-layout-tab [link]="['events']">
     <ng-template>
       <span nz-icon nzType="history" nzTheme="outline"></span>
       Évènements
     </ng-template>
   </ui-layout-tab>
-  <ui-layout-tab [link]="['content']">
-    <ng-template>
-      <span nz-icon nzType="folder" nzTheme="outline"></span>
-      Contenu
-    </ng-template>
-  </ui-layout-tab>
-  <ui-layout-tab [link]="['members']">
-    <ng-template>
-      <span nz-icon nzType="usergroup-add" nzTheme="outline"></span>
-      Collaborateurs
-    </ng-template>
-  </ui-layout-tab>
-  <ui-layout-tab [link]="['settings']">
+  <ui-layout-tab [link]="['settings']" [linkParams]="{ 'tab': 'informations' }">
     <ng-template>
       <span nz-icon nzType="setting" nzTheme="outline"></span>
       Paramètres

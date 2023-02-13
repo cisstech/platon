@@ -72,6 +72,7 @@ export class ResourceController {
         userId: req.user.id,
       })
     }
+
     return new ItemResponse({ resource })
   }
 

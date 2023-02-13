@@ -19,7 +19,9 @@ export class TopicService {
   }
 
   async findAll(): Promise<[TopicEntity[], number]> {
-    return this.repository.findAndCount();
+    return this.repository.findAndCount({
+      order: { name: 'ASC' }
+    });
   }
 
   async create(user: Partial<TopicEntity>): Promise<TopicEntity> {

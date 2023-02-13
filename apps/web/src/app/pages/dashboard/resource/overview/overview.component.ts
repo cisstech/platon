@@ -15,6 +15,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { RESOURCE_STATUS_NAMES } from '@platon/feature/resource/browser';
 import { ResourceStatus } from '@platon/feature/resource/common';
 import { ResourcePresenter } from '../resource.presenter';
+import { MatChipsModule } from '@angular/material/chips';
+import { NzEmptyModule } from 'ng-zorro-antd/empty';
+
 
 @Component({
   standalone: true,
@@ -27,9 +30,11 @@ import { ResourcePresenter } from '../resource.presenter';
     RouterModule,
 
     MatCardModule,
+    MatChipsModule,
     MatButtonModule,
 
     NzGridModule,
+    NzEmptyModule,
     NzStatisticModule,
 
     NgxChartsModule,
@@ -77,19 +82,23 @@ export class ResourceOverviewComponent implements OnInit, AfterViewChecked, OnDe
     this.subscriptions.forEach(s => s.unsubscribe());
   }
 
-  formatStatus(status: string | unknown): string {
+  protected formatStatus(status: string | unknown): string {
     if (typeof status === 'object')
       return RESOURCE_STATUS_NAMES[(status as any).data?.name as ResourceStatus] || ''
     return RESOURCE_STATUS_NAMES[status as ResourceStatus]
   }
 
-  onClickStatus(data: Data) {
+  protected searchByStatus(status: string) {
     this.router.navigate(['/workspace'], {
       queryParams: {
-        status: data.name,
+        status,
         parent: this.context.resource?.id
       }
     })
+  }
+
+  protected trackById(index: number, item: any) {
+    return item.id || index;
   }
 }
 

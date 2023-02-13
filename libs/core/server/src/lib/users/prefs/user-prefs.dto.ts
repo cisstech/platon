@@ -1,17 +1,18 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { UpdateUserPrefs, UserPrefs } from '@platon/core/common';
-import { IsArray, IsInstance, IsOptional, IsUUID } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsArray, IsOptional, IsUUID } from 'class-validator';
 import { LevelDTO } from '../../levels';
 import { TopicDTO } from '../../topics';
 
 export class UserPrefsDTO implements UserPrefs {
   @IsArray()
-  @IsInstance(LevelDTO)
+  @Type(() => LevelDTO)
   @ApiProperty()
   levels!: LevelDTO[]
 
   @IsArray()
-  @IsInstance(TopicDTO)
+  @Type(() => TopicDTO)
   @ApiProperty()
   topics!: TopicDTO[]
 }
