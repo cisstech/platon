@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AuthService, DialogService } from '@platon/core/browser';
 import { Level, ListResponse, Topic, User } from '@platon/core/common';
 import { ResourceService } from '@platon/feature/resource/browser';
-import { CreateResourceInvitation, Resource, ResourceEvent, ResourceInvitation, ResourceMember, ResourceMemberFilters, ResourceStatisic, UpdateResource } from '@platon/feature/resource/common';
+import { CreateResourceInvitation, Resource, ResourceEvent, ResourceEventFilters, ResourceInvitation, ResourceMember, ResourceMemberFilters, ResourceStatisic, UpdateResource } from '@platon/feature/resource/common';
 import { LayoutState } from '@platon/shared/ui';
 import { BehaviorSubject, firstValueFrom, lastValueFrom, Observable, Subscription } from 'rxjs';
 
@@ -153,9 +153,9 @@ export class ResourcePresenter implements OnDestroy {
 
   // Event
 
-  async listEvents(): Promise<ListResponse<ResourceEvent>> {
+  async listEvents(filters?: ResourceEventFilters): Promise<ListResponse<ResourceEvent>> {
     const { resource } = this.context.value as Required<Context>;
-    return lastValueFrom(this.resourceService.listEvents(resource));
+    return lastValueFrom(this.resourceService.listEvents(resource, filters));
   }
 
   async update(input: UpdateResource): Promise<boolean> {

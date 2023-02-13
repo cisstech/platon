@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { ItemResponse, Level, ListResponse, Topic, User } from "@platon/core/common";
-import { CircleTree, CreateResource, CreateResourceInvitation, Resource, ResourceCompletion, ResourceEvent, ResourceFilters, ResourceInvitation, ResourceMember, ResourceMemberFilters, ResourceStatisic, ResourceWatcherFilters, UpdateResource } from "@platon/feature/resource/common";
+import { CircleTree, CreateResource, CreateResourceInvitation, Resource, ResourceCompletion, ResourceEvent, ResourceEventFilters, ResourceFilters, ResourceInvitation, ResourceMember, ResourceMemberFilters, ResourceStatisic, ResourceWatcherFilters, UpdateResource } from "@platon/feature/resource/common";
 import { Observable, of } from "rxjs";
 import { catchError, map } from "rxjs/operators";
 import { ResourceProvider } from "../models/resource-provider";
@@ -272,9 +272,20 @@ export class RemoteResourceProvider extends ResourceProvider {
 
   // Events
 
-  listEvents(resource: Resource): Observable<ListResponse<ResourceEvent>> {
+  listEvents(resource: Resource, filters?: ResourceEventFilters): Observable<ListResponse<ResourceEvent>> {
+    filters = filters || {}
+    let params = new HttpParams()
+
+    if (filters.limit) {
+      params = params.append('limit', filters.limit.toString());
+    }
+
+    if (filters.offset) {
+      params = params.append('offset', filters.offset.toString());
+    }
+
     return this.http.get<ListResponse<ResourceEvent>>(
-      `/api/v1/resources/${resource.id}/events`
+      `/api/v1/resources/${resource.id}/events`, { params }
     );
   }
 }

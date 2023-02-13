@@ -22,7 +22,9 @@ export class ResourceMemberSubscriber implements EntitySubscriberInterface<Resou
         actorId: event.entity.inviterId,
         resourceId: event.entity.resourceId,
         type: ResourceEventTypes.MEMBER_CREATE,
-        data: {}
+        data: {
+          userId: event.entity.userId,
+        }
       }),
       event.manager.create(ResourceWatcherEntity, {
         resourceId: event.entity.resourceId,

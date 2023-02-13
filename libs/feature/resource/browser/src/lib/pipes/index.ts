@@ -1,3 +1,4 @@
+export * from './event-type.pipe';
 export * from './resource-color.pipe';
 export * from './resource-icon.pipe';
 export * from './resource-ordering.pipe';

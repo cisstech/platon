@@ -1,9 +1,11 @@
-<ng-container *ngIf="items.length; else: noevent;">
+<ng-container *ngIf="events.length; else: noevent;">
   <nz-timeline>
-    <ng-container *ngFor="let event of items; trackBy:trackById">
+    <ng-container *ngFor="let item of events; trackBy:trackById">
       <nz-timeline-item>
-        <p> {{event.type}} - {{event.createdAt|date:'dd/MM/yyyy à HH:mm'}}</p>
-        <p>{{event.actorId}} on {{event.resourceId}}</p>
+        <p> {{item.event.type|resourceEventType}} - {{item.event.createdAt|date:'dd/MM/yyyy à HH:mm'}}</p>
+        <ng-container
+          *ngComponentOutlet="item.renderer; injector: item.injector">
+        </ng-container>
       </nz-timeline-item>
     </ng-container>
   </nz-timeline>
@@ -11,7 +13,7 @@
 <ng-template #noevent>
   <nz-empty [nzNotFoundContent]="content">
     <ng-template #content>
-      Aucun événement important n'est à signaler !
+      Il n'y a aucun événement important à signaler !
     </ng-template>
   </nz-empty>
 </ng-template>

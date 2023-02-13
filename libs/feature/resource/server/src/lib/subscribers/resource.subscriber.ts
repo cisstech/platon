@@ -28,7 +28,8 @@ export class ResourceSubscriber implements EntitySubscriberInterface<ResourceEnt
           type: ResourceEventTypes.RESOURCE_CREATE,
           data: {
             resourceId: event.entity.id,
-            resourceType: event.entity.type
+            resourceType: event.entity.type,
+            resourceName: event.entity.name,
           }
         })
       )
@@ -44,7 +45,9 @@ export class ResourceSubscriber implements EntitySubscriberInterface<ResourceEnt
           type: ResourceEventTypes.RESOURCE_STATUS_CHANGE,
           data: {
             resourceId: event.entity.id,
-            resourceType: event.entity.type
+            resourceType: event.entity.type,
+            resourceName: event.entity.name,
+            newStatus: event.entity.status,
           }
         })
       )
@@ -57,7 +60,9 @@ export class ResourceSubscriber implements EntitySubscriberInterface<ResourceEnt
             type: ResourceEventTypes.RESOURCE_STATUS_CHANGE,
             data: {
               resourceId: event.entity.id,
-              resourceType: event.entity.type
+              resourceType: event.entity.type,
+              resourceName: event.entity.name,
+              newStatus: event.entity.status,
             }
           })
         )

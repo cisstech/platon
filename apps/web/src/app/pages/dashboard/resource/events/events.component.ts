@@ -40,7 +40,9 @@ export class ResourceEventsComponent implements OnInit, OnDestroy {
       this.presenter.contextChange.subscribe(async context => {
         this.context = context;
         if (context.resource) {
-          this.events = (await this.presenter.listEvents()).resources;
+          this.events = (await this.presenter.listEvents({
+            limit: 50
+          })).resources;
         }
         this.changeDetectorRef.markForCheck();
       })

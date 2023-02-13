@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Level, ListResponse, Topic, User } from '@platon/core/common';
-import { CircleTree, CreateResource, CreateResourceInvitation, Resource, ResourceCompletion, ResourceEvent, ResourceFilters, ResourceInvitation, ResourceMember, ResourceMemberFilters, ResourceStatisic, ResourceWatcherFilters, UpdateResource } from '@platon/feature/resource/common';
+import { CircleTree, CreateResource, CreateResourceInvitation, Resource, ResourceCompletion, ResourceEvent, ResourceEventFilters, ResourceFilters, ResourceInvitation, ResourceMember, ResourceMemberFilters, ResourceStatisic, ResourceWatcherFilters, UpdateResource } from '@platon/feature/resource/common';
 import { Observable } from 'rxjs';
 import { ResourceProvider } from '../models/resource-provider';
 
@@ -101,7 +101,7 @@ export class ResourceService {
   }
 
   // Events
-  listEvents(resource: Resource): Observable<ListResponse<ResourceEvent>> {
-    return this.provider.listEvents(resource);
+  listEvents(resource: Resource, filters?: ResourceEventFilters): Observable<ListResponse<ResourceEvent>> {
+    return this.provider.listEvents(resource, filters);
   }
 }
