@@ -18,7 +18,7 @@ export function toDate(value: string): Date {
 
 export function toBoolean(value: string): boolean {
   value = value.toLowerCase();
-  return value === "true" || value === "1" ? true : false;
+  return value == null || value === '' || value === "true" || value === "1" ? true : false;
 }
 
 export function toNumber(value: string, opts: ToNumberOptions = {}): number {

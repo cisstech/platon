@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ClsModule } from 'nestjs-cls';
 import { AuthModule } from './auth/auth.module';
 import { ConfigurationModule } from './config/configuration.module';
 import { DatabaseModule } from './database/database.module';
@@ -6,7 +7,6 @@ import { ErrorsModule } from './errors/errors.module';
 import { LevelModule } from './levels';
 import { TopicModule } from './topics';
 import { UserModule } from './users/user.module';
-import { ClsModule } from 'nestjs-cls';
 
 @Module({
   imports: [
@@ -21,6 +21,7 @@ import { ClsModule } from 'nestjs-cls';
       global: true,
       middleware: { mount: true },
     }),
+
   ],
   exports: [
     ConfigurationModule,
