@@ -1,13 +1,9 @@
 import { toBoolean } from "@platon/core/server";
+import { FileCreate, FileMove, FileRelease, FileRetrieve, FileUpdate } from "@platon/feature/resource/common";
 import { Transform } from "class-transformer";
 import { IsBoolean, IsOptional, IsString } from "class-validator";
 
-export enum FileMoveActions {
-  move = 'move',
-  copy = 'copy'
-}
-
-export class FileRetrieveDTO {
+export class FileRetrieveDTO implements Partial<FileRetrieve> {
   @IsString()
   @IsOptional()
   version?: string;
@@ -53,7 +49,7 @@ export class FileRetrieveDTO {
   match_case?: boolean;
 }
 
-export class FileCreateDTO {
+export class FileCreateDTO implements FileCreate {
   @IsString()
   path!: string;
 
@@ -61,12 +57,12 @@ export class FileCreateDTO {
   content?: string;
 }
 
-export class FileUpdateDTO {
+export class FileUpdateDTO implements FileUpdate {
   @IsString()
   content!: string;
 }
 
-export class FileMoveDTO {
+export class FileMoveDTO implements FileMove {
   @Transform(({ value }) => toBoolean(value))
   @IsBoolean()
   @IsOptional()
@@ -76,8 +72,7 @@ export class FileMoveDTO {
   destination!: string;
 }
 
-
-export class FileReleaseDTO {
+export class FileReleaseDTO implements FileRelease {
   @IsString()
   name!: string;
   @IsString()

@@ -1,4 +1,5 @@
 export * from './event-list/event-list.component'
+export * from './files-tree/files-tree.component'
 export * from './invitation-form/invitation-form.component'
 export * from './invitation-table/invitation-table.component'
 export * from './member-table/member-table.component'

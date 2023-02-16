@@ -1,0 +1,41 @@
+nz-tree {
+  overflow: hidden;
+  margin: 12px 0;
+  padding: 12px 0;
+  min-height: 50vh;
+  border: 1px solid var(--brand-border-color);
+  background-color: transparent;
+}
+
+nz-spin {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px;
+}
+
+nz-select {
+  min-width: 100px;
+  margin-right: 8px;
+}
+
+.node {
+  cursor: pointer;
+  line-height: 24px;
+  margin-left: 4px;
+  display: inline-block;
+}
+
+.file-name,
+.folder-name {
+  margin-left: 4px;
+}
+
+
+header {
+  display: flex;
+  align-items: center;
+}
+
+.spacer {
+  flex: 1;
+}

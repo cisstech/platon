@@ -2,11 +2,14 @@
   <ng-container *ngIf="context.resource">
     <nz-breadcrumb>
       <nz-breadcrumb-item *ngIf="context.parent">
+        <mat-icon>{{ context.resource.type|resourceIcon }}</mat-icon>
         <a [routerLink]="['/resource', context.parent.id]">{{context.parent.name}}</a>
       </nz-breadcrumb-item>
       <nz-breadcrumb-item>
+        <ng-container>
+          <mat-icon *ngIf="!context.parent">{{ context.resource.type|resourceIcon }}</mat-icon>
+        </ng-container>
         {{ context.resource.name }}
-        <mat-icon>{{ context.resource.type|resourceIcon }}</mat-icon>
       </nz-breadcrumb-item>
       <div class="spacer"></div>
       <mat-chip-set>

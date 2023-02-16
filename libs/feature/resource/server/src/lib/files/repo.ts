@@ -1,5 +1,5 @@
 import { StreamableFile } from '@nestjs/common';
-import { FileTypes, ResourceFile } from '@platon/feature/resource/common';
+import { FileTypes, FileVersion, FileVersions, ResourceFile } from '@platon/feature/resource/common';
 import { FileExistsError, FileNotFoundError, isDirectory, isFile, NotADirectoryError, PermissionError, uniquifyFileName, withTempFile } from '@platon/shared/server';
 import * as fs from 'fs';
 import * as git from 'isomorphic-git';
@@ -221,6 +221,7 @@ export class Repo {
           version: version === 'HEAD' ? LATEST : version,
           url: '',
           bundleUrl: '',
+          resourceId: '',
           describeUrl: '',
           downloadUrl: '',
         };
@@ -350,12 +351,12 @@ export class Repo {
     return simpleGit(this.root).grep(query, args);
   }
 
-  async versions() {
+  async versions(): Promise<FileVersions> {
     const tags = await simpleGit(this.repo.dir).tags({
       '--format': '%(refname:lstrip=2) %(taggername) %(taggeremail) %(creatordate:iso-strict) %(subject)',
     });
 
-    const parse = (tag: string) => {
+    const parse = (tag: string): FileVersion => {
       const [name, taggerName, taggerEmail, createdAt, message] = tag.split(' ');
       return {
         tag: name,

@@ -1,3 +1,7 @@
-<p>
-  content works!
-</p>
+<ng-container *ngIf="tree && versions">
+  <res-files-tree
+    [tree]="tree"
+    [versions]="versions"
+    (refresh)="refreshFiles($event)" />
+</ng-container>
+

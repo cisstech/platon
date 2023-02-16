@@ -1,7 +1,7 @@
-import { Body, Controller, Get, Param, Patch, Post, Put, Query, Req, Res, StreamableFile, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, Req, Res, StreamableFile, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { SuccessResponse } from '@platon/core/common';
-import { IRequest } from '@platon/core/server';
+import { IRequest, Public } from '@platon/core/server';
 import { ResourceFile } from '@platon/feature/resource/common';
 import { Response } from 'express';
 import { createReadStream } from 'fs';
@@ -29,6 +29,7 @@ export class FileController {
     return repo.versions();
   }
 
+  @Public()
   @Get('/:resourceId/:path(*)')
   async get(
     @Req() request: IRequest,
@@ -83,6 +84,7 @@ export class FileController {
       node.downloadUrl = `${base}?download&version=${node.version}`;
       node.bundleUrl = `${base}?bundle`;
       node.describeUrl = `${base}?describe`;
+      node.resourceId = resourceId;
       node.children?.forEach(defineUrls)
     }
 
@@ -145,6 +147,17 @@ export class FileController {
   ) {
     const repo = await this.service.repo(resourceId, request.user);
     await repo.move(path, input.destination, input.copy);
+    return new SuccessResponse();
+  }
+
+  @Delete('/:resourceId/:path(*)')
+  async delete(
+    @Req() request: IRequest,
+    @Param('resourceId') resourceId: string,
+    @Param('path') path: string
+  ) {
+    const repo = await this.service.repo(resourceId, request.user);
+    await repo.remove(path);
     return new SuccessResponse();
   }
 }

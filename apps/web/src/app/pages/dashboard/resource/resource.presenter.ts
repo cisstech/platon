@@ -4,8 +4,8 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService, DialogService } from '@platon/core/browser';
 import { Level, ListResponse, Topic, User } from '@platon/core/common';
-import { ResourceService } from '@platon/feature/resource/browser';
-import { CreateResourceInvitation, Resource, ResourceEvent, ResourceEventFilters, ResourceInvitation, ResourceMember, ResourceMemberFilters, ResourceStatisic, UpdateResource } from '@platon/feature/resource/common';
+import { FileService, ResourceService } from '@platon/feature/resource/browser';
+import { CreateResourceInvitation, FileVersions, Resource, ResourceEvent, ResourceEventFilters, ResourceFile, ResourceInvitation, ResourceMember, ResourceMemberFilters, ResourceStatisic, UpdateResource } from '@platon/feature/resource/common';
 import { LayoutState } from '@platon/shared/ui';
 import { BehaviorSubject, firstValueFrom, lastValueFrom, Observable, Subscription } from 'rxjs';
 
@@ -20,6 +20,7 @@ export class ResourcePresenter implements OnDestroy {
 
   constructor(
     private readonly authService: AuthService,
+    private readonly fileService: FileService,
     private readonly dialogService: DialogService,
     private readonly activatedRoute: ActivatedRoute,
     private readonly resourceService: ResourceService,
@@ -71,6 +72,19 @@ export class ResourcePresenter implements OnDestroy {
       this.alertError();
       return false;
     }
+  }
+
+  // Files
+  async fileTree(version?: string): Promise<[ResourceFile, FileVersions]> {
+    const { resource } = this.context.value;
+    if (resource) {
+      const [tree, versions] = await Promise.all([
+        firstValueFrom(this.fileService.tree(resource, version)),
+        firstValueFrom(this.fileService.versions(resource))
+      ])
+      return [tree, versions]
+    }
+    throw new ReferenceError('missing resource');
   }
 
   // Members

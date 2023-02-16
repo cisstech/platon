@@ -1,4 +1,3 @@
-export * from './lib/enums/file-types'
 export * from './lib/enums/resource-event-types'
 export * from './lib/enums/resource-status'
 export * from './lib/enums/resource-types'
@@ -13,3 +12,4 @@ export * from './lib/models/permissions.model'
 export * from './lib/models/resource.model'
 export * from './lib/models/statistic.model'
 export * from './lib/models/view.model'
+
