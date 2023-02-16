@@ -22,7 +22,8 @@
         *ngIf="context.resource.visibility === 'PUBLIC' || context.resource.ownerId === context.user?.id"
         nz-button
         nzType="primary"
-        matTooltip="Éditer en ligne">
+        matTooltip="Éditer en ligne"
+        [routerLink]="['/editor', context.resource.id]">
         <i nz-icon nzType="edit" nzTheme="outline"></i>
       </a>
       <a

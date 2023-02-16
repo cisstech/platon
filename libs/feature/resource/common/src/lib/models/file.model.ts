@@ -43,6 +43,7 @@ export interface FileUpdate {
 
 export interface FileMove {
   copy?: boolean;
+  rename?: boolean;
   destination: string;
 }
 

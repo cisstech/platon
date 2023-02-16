@@ -26,12 +26,16 @@ export class FileService {
     return this.provider.read(resource, path);
   }
 
-  delete(file: ResourceFile): Observable<void> {
-    return this.provider.delete(file);
+  create(resource: string | Resource, input: FileCreate[]): Observable<void> {
+    return this.provider.create(resource, input);
   }
 
-  create(file: ResourceFile, input: FileCreate): Observable<void> {
-    return this.provider.create(file, input);
+  upload(file: ResourceFile, data: File): Observable<void> {
+    return this.provider.upload(file, data);
+  }
+
+  delete(file: ResourceFile): Observable<void> {
+    return this.provider.delete(file);
   }
 
   move(file: ResourceFile, input: FileMove): Observable<void> {

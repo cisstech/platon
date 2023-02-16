@@ -7,9 +7,10 @@ export abstract class FileProvider {
   abstract versions(resource: string | Resource): Observable<FileVersions>;
   abstract tree(resource: string | Resource, version?: string): Observable<ResourceFile>;
   abstract read(resource: string | Resource, path: string): Observable<ResourceFile>;
+  abstract create(resource: string | Resource, input: FileCreate[]): Observable<void>;
 
+  abstract upload(file: ResourceFile, data: File): Observable<void>;
   abstract delete(file: ResourceFile): Observable<void>;
-  abstract create(file: ResourceFile, input: FileCreate): Observable<void>;
   abstract move(file: ResourceFile, input: FileMove): Observable<void>;
   abstract update(file: ResourceFile, input: FileUpdate): Observable<void>;
   abstract search(file: ResourceFile, query: FileSearch): Observable<FileSearchResults>;

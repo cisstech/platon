@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, Req, Res
 import { FileInterceptor } from '@nestjs/platform-express';
 import { SuccessResponse } from '@platon/core/common';
 import { IRequest, Public } from '@platon/core/server';
-import { ResourceFile } from '@platon/feature/resource/common';
+import { FileTypes, ResourceFile } from '@platon/feature/resource/common';
 import { Response } from 'express';
 import { createReadStream } from 'fs';
 import { basename, join } from 'path';
@@ -48,12 +48,12 @@ export class FileController {
     }
 
     if (query?.download) {
-      const [node, download] = await repo.read(path, version);
+      const [node, content] = await repo.read(path, version);
       res.set('Content-Type', 'application/force-download');
       res.set('Content-Disposition', `attachment; filename=platon.zip`);
       if (node.type === 'file') {
         res.set('Content-Disposition', `attachment; filename=${basename(node.path)}`);
-        return new StreamableFile(await download as Uint8Array)
+        return new StreamableFile(await content as Uint8Array)
       }
       return new StreamableFile(
         createReadStream(await repo.archive(path, version))
@@ -77,7 +77,7 @@ export class FileController {
       })
     }
 
-    const [node] = await repo.read(path, version);
+    const [node, content] = await repo.read(path, version);
     const defineUrls = (node: ResourceFile) => {
       const base = `/api/v1/files/${resourceId}/${node.path === '.' ? '' : node.path}`;
       node.url = `${base}?version=${node.version}`;
@@ -86,6 +86,11 @@ export class FileController {
       node.describeUrl = `${base}?describe`;
       node.resourceId = resourceId;
       node.children?.forEach(defineUrls)
+    }
+
+    if (node.type === FileTypes.file) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      return Buffer.from((await content)!.buffer).toString();
     }
 
     defineUrls(node);
@@ -101,7 +106,7 @@ export class FileController {
   ) {
     const repo = await this.service.repo(resourceId, request.user);
     await repo.write(path, input.content);
-    return path;
+    return new SuccessResponse();
   }
 
   @Post('/:resourceId/:path(*)')
@@ -146,7 +151,11 @@ export class FileController {
     @Body() input: FileMoveDTO,
   ) {
     const repo = await this.service.repo(resourceId, request.user);
-    await repo.move(path, input.destination, input.copy);
+    if (input.rename) {
+      await repo.rename(path, input.destination);
+    } else {
+      await repo.move(path, input.destination, input.copy);
+    }
     return new SuccessResponse();
   }
 

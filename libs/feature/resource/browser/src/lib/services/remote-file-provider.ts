@@ -1,6 +1,6 @@
 import { map, Observable } from "rxjs";
 
-import { HttpClient, HttpParams } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { FileCreate, FileMove, FileRelease, FileSearch, FileSearchResults, FileUpdate, FileVersions, Resource, ResourceFile } from "@platon/feature/resource/common";
 import { FileProvider } from "../models/file-provider";
@@ -40,12 +40,24 @@ export class RemoteFileProvider extends FileProvider {
     return this.http.get<ResourceFile>(`/api/v1/files/${id}/${path}`);
   }
 
-  delete(file: ResourceFile): Observable<void> {
-    return this.http.delete<void>(file.url);
+  create(resource: string | Resource, input: FileCreate[]): Observable<void> {
+    const id = typeof resource === 'string' ? resource : resource.id;
+    return this.http.post<void>(`/api/v1/files/${id}/`, input);
   }
 
-  create(file: ResourceFile, input: FileCreate): Observable<void> {
-    return this.http.post<void>(file.url, input);
+  upload(file: ResourceFile, data: File): Observable<void> {
+    const formData = new FormData();
+    formData.append('file', data, data.name);
+    const headers = new HttpHeaders();
+    headers.set('Content-Type', 'null');
+    headers.set('Accept', 'multipart/form-data');
+    return this.http.post<void>(file.url, formData, {
+      headers: headers
+    });
+  }
+
+  delete(file: ResourceFile): Observable<void> {
+    return this.http.delete<void>(file.url);
   }
 
   move(file: ResourceFile, input: FileMove): Observable<void> {

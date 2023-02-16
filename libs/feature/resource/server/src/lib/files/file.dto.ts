@@ -63,10 +63,13 @@ export class FileUpdateDTO implements FileUpdate {
 }
 
 export class FileMoveDTO implements FileMove {
-  @Transform(({ value }) => toBoolean(value))
   @IsBoolean()
   @IsOptional()
   copy?: boolean;
+
+  @IsBoolean()
+  @IsOptional()
+  rename?: boolean;
 
   @IsString()
   destination!: string;

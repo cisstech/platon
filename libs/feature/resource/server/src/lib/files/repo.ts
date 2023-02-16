@@ -110,15 +110,10 @@ export class Repo {
    * @param dst Target directory path relative to the current directory.
    * @param copy Copy Source instead of moving?
    * @throws
-   * - `TypeError`: If any of `src` or `dst` is null or empty.
+   * - `TypeError`: If any of `src` is null or empty.
    * - `PermissionError`: If the operation is not permitted.
    */
   async move(src: string, dst: string, copy = false) {
-    if (!src || !dst) {
-      throw new TypeError('src and dst arguments are required');
-    }
-
-
     const absSrcPath = this.abspath(src);
     let absDstPath = this.abspath(dst, true);
 
@@ -397,11 +392,8 @@ export class Repo {
     }
   }
 
-  private abspath(path = '.', authorizeRoot = false) {
-    if (!path)
-      throw new TypeError("path is required")
-
-    path = path.trim();
+  private abspath(path = ROOT, authorizeRoot = false) {
+    path = (path || ROOT).trim();
     if (path.startsWith('/')) {
       // ensure that path does not point to a file outside of self.root
       if (!path.startsWith(this.root + '/')) {

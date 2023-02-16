@@ -3,7 +3,14 @@ import { withAuthGuard } from '@platon/core/browser';
 import { UiError403Component, UiError404Component, UiError500Component } from '@platon/shared/ui';
 
 export const appRoutes: Route[] = [
-  withAuthGuard({ path: '', loadChildren: () => import('./pages/dashboard/dashboard.routes')}),
+  withAuthGuard({ path: '', loadChildren: () => import('./pages/dashboard/dashboard.routes') }),
+  withAuthGuard({
+    path: 'editor',
+    loadChildren: () => import(
+      /* webpackChunkName: "editor" */
+      './pages/editor/editor.routes'
+    ),
+  }),
   {
     path: 'login',
     loadComponent: () => import(

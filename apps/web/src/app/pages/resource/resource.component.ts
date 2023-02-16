@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -34,6 +35,7 @@ import { ResourcePresenter } from './resource.presenter';
     MatIconModule,
     MatMenuModule,
     MatChipsModule,
+    MatTooltipModule,
 
     NzIconModule,
     NzButtonModule,

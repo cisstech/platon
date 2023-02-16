@@ -12,43 +12,43 @@ export default [
         path: 'workspace',
         loadChildren: () => import(
           /* webpackChunkName: "workspace" */
-          './workspace/workspace.routes'
+          '../workspace/workspace.routes'
         )
       },
       {
         path: 'resource',
         loadChildren: () => import(
-          /* webpackChunkName: "resource" */'./resource/resource.routes',
+          /* webpackChunkName: "resource" */'../resource/resource.routes',
         )
       },
       {
         path: 'courses',
         loadChildren: () => import(
           /* webpackChunkName: "courses" */
-          './courses/courses.routes'
+          '../courses/courses.routes'
         )
       },
       {
         path: 'docs',
         loadChildren: () => import(
           /* webpackChunkName: "docs" */
-          './docs/docs.routes'
+          '../docs/docs.routes'
         )
       },
       {
         path: 'forum',
         loadChildren: () => import(
           /* webpackChunkName: "forum" */
-          './forum/forum.routes'
+          '../forum/forum.routes'
         )
       },
       {
         path: 'settings',
         loadChildren: () => import(
           /* webpackChunkName: "settings" */
-          './settings/settings.routes'
+          '../settings/settings.routes'
         )
-      },
+      }
     ]
   },
 ] as Routes;
