@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AuthService, DialogService } from '@platon/core/browser';
 import { Level, ListResponse, Topic, User } from '@platon/core/common';
 import { FileService, ResourceService } from '@platon/feature/resource/browser';
-import { CreateResourceInvitation, FileVersions, Resource, ResourceEvent, ResourceEventFilters, ResourceFile, ResourceInvitation, ResourceMember, ResourceMemberFilters, ResourceStatisic, UpdateResource } from '@platon/feature/resource/common';
+import { CircleTree, CreateResourceInvitation, FileVersions, Resource, ResourceEvent, ResourceEventFilters, ResourceFile, ResourceInvitation, ResourceMember, ResourceMemberFilters, ResourceStatisic, UpdateResource } from '@platon/feature/resource/common';
 import { LayoutState } from '@platon/shared/ui';
 import { BehaviorSubject, firstValueFrom, lastValueFrom, Observable, Subscription } from 'rxjs';
 
@@ -198,7 +198,7 @@ export class ResourcePresenter implements OnDestroy {
     ]);
 
 
-    const [parent, member, watcher, statistic, invitation] = await Promise.all([
+    const [parent, member, watcher, statistic, invitation, circles] = await Promise.all([
       resource.parentId
         ? firstValueFrom(this.resourceService.findById(resource.parentId))
         : Promise.resolve(undefined),
@@ -206,6 +206,7 @@ export class ResourcePresenter implements OnDestroy {
       firstValueFrom(this.resourceService.findWatcher(resource, user!.id)),
       firstValueFrom(this.resourceService.statistic(resource)),
       firstValueFrom(this.resourceService.findInvitation(resource, user!.id)),
+      firstValueFrom(this.resourceService.tree())
     ]);
 
     this.context.next({
@@ -216,6 +217,7 @@ export class ResourcePresenter implements OnDestroy {
       member,
       statistic,
       invitation,
+      circles,
       watcher: !!watcher,
     });
   }
@@ -248,6 +250,7 @@ export interface Context {
   resource?: Resource;
 
   watcher?: boolean;
+  circles?: CircleTree;
   member?: ResourceMember;
   statistic?: ResourceStatisic;
   invitation?: ResourceInvitation;

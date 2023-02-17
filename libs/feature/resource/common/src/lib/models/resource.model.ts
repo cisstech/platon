@@ -42,3 +42,47 @@ export interface UpdateResource {
   readonly levels?: string[]
   readonly topics?: string[]
 }
+
+
+export const resourceAncestors = (tree: CircleTree, id: string): CircleTree[] => {
+  if (tree.id === id) {
+    return [];
+  }
+
+  if (tree.children) {
+    for (const child of tree.children) {
+      if (child.id === id) {
+        return [tree];
+      }
+    }
+  }
+
+  if (tree.children) {
+    for (const child of tree.children) {
+      const ancestors = resourceAncestors(child, id);
+      if (ancestors.length > 0) {
+        return [...ancestors, tree];
+      }
+    }
+  }
+
+  return [];
+}
+
+
+export const circleFromTree = (tree: CircleTree, id: string): CircleTree | undefined => {
+  if (tree.id === id)
+    return tree;
+
+
+  if (tree.children) {
+    for (const child of tree.children) {
+      const circle = circleFromTree(child, id);
+      if (circle) {
+        return circle;
+      }
+    }
+  }
+
+  return undefined;
+}

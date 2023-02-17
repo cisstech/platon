@@ -21,7 +21,7 @@ export class ResourceViewService {
   }
 
   async create(input: Partial<ResourceViewEntity>): Promise<void> {
-    const max = 2;
+    const max = 5;
     const lastView = await this.repository.findOne({
       where: {
         userId: input.userId,

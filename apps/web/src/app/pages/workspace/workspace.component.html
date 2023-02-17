@@ -5,7 +5,8 @@
 <div class="content">
   <article>
     <ng-container *ngIf="!searching; else: spinner">
-      <mat-chip-set>
+      <h2 *ngIf="items.length">Voici ce qu'on a trouver selon vos critères de recherche...</h2>
+      <mat-chip-set class="indicators">
         <ng-container *ngFor="let item of indicators">
           <mat-chip [removable]="true" (removed)="item.remove(filters)">
             {{item.label}}
@@ -13,7 +14,6 @@
           </mat-chip>
         </ng-container>
       </mat-chip-set>
-      <h2 *ngIf="items.length">Voici ce qu'on a trouver selon vos critères de recherche...</h2>
       <res-list
         [items]="items"
         (didTapTag)="search(filters, $event)">
@@ -39,9 +39,6 @@
         <mat-card-content>
           <res-list [items]="views" [simple]="true"></res-list>
         </mat-card-content>
-        <mat-card-actions>
-          <button mat-raised-button color="primary">Appliquer le filtre</button>
-        </mat-card-actions>
       </mat-card>
     </section>
     <section>
@@ -54,28 +51,6 @@
         <mat-card-content>
           <res-list [items]="recents" [simple]="true"></res-list>
         </mat-card-content>
-        <mat-card-actions>
-          <button mat-raised-button color="primary">Appliquer le filtre</button>
-        </mat-card-actions>
-      </mat-card>
-    </section>
-    <section>
-      <mat-card>
-        <mat-card-header>
-          <mat-card-title>
-            Vos centres d'interêts
-          </mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <ng-container *ngIf="completion|async as tmp">
-            <ng-container *ngFor="let item of tmp.topics">
-            <mat-chip (click)="search(filters, item)">{{item}}</mat-chip>
-            </ng-container>
-          </ng-container>
-        </mat-card-content>
-        <mat-card-actions>
-          <button mat-raised-button color="primary">Modifier</button>
-        </mat-card-actions>
       </mat-card>
     </section>
   </aside>

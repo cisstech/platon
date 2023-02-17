@@ -15,7 +15,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { AuthService } from '@platon/core/browser';
 import { OrderingDirections, User } from '@platon/core/common';
 import { ResourceItemComponent, ResourceListComponent, ResourceService, RESOURCE_ORDERING_NAMES, RESOURCE_STATUS_NAMES, RESOURCE_TYPE_NAMES } from '@platon/feature/resource/browser';
-import { Resource, ResourceFilters, ResourceOrderings, ResourceStatus, ResourceTypes } from '@platon/feature/resource/common';
+import { circleFromTree, CircleTree, Resource, ResourceFilters, ResourceOrderings, ResourceStatus, ResourceTypes } from '@platon/feature/resource/common';
 import Fuse from 'fuse.js';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { firstValueFrom, map, shareReplay, Subscription } from 'rxjs';
@@ -54,27 +54,36 @@ export default class WorkspaceComponent implements OnInit, OnDestroy {
         ? { label: RESOURCE_TYPE_NAMES[type], remove: (filters: ResourceFilters) => ({ ...filters, types: filters.types?.filter(e => e !== type) }) }
         : undefined
       )),
+
     ...Object.values(ResourceStatus)
       .map(status => ((filters: ResourceFilters) => filters.status?.includes(status)
         ? { label: RESOURCE_STATUS_NAMES[status], remove: (filters: ResourceFilters) => ({ ...filters, status: filters.status?.filter(e => e !== status) }) }
         : undefined
       )),
+
     ...Object.values(ResourceOrderings)
       .map(order => ((filters: ResourceFilters) => filters.order === order
         ? { label: 'Trier par ' + RESOURCE_ORDERING_NAMES[order], remove: (filters: ResourceFilters) => ({ ...filters, order: undefined }) }
         : undefined
       )),
+
     (filters) => filters.period !== 0
-      ? { label: 'Modifié il y a au moins ' + filters.period, remove: (filters: ResourceFilters) => ({ ...filters, period: 0 }) }
+      ? { label: `Modifié il y a au moins ${filters.period}`, remove: (filters: ResourceFilters) => ({ ...filters, period: 0 }) }
+      : undefined,
+
+      (filters) => filters.parent && this.tree
+      ? { label: `Appartient au cercle ${circleFromTree(this.tree, filters.parent)?.name}`, remove: (filters) => ({ ...filters, parent: undefined }) }
       : undefined
   ];
 
   private user?: User;
 
+  protected tree?: CircleTree;
   protected indicators: FilterIncidator[] = [];
   protected completion = this.resourceService.completion().pipe(
     shareReplay(1)
   );
+
 
   protected readonly searchbar: SearchBar<string> = {
     placeholder: 'Essayez un nom, un topic, un niveau...',
@@ -103,10 +112,11 @@ export default class WorkspaceComponent implements OnInit, OnDestroy {
   protected showFiltersDrawer = false;
   protected filters: ResourceFilters = {};
   protected drawerFilters: ResourceFilters = {};
+  protected circle!: Resource;
   protected items: Resource[] = [];
   protected views: Resource[] = [];
   protected recents: Resource[] = [];
-  protected circle!: Resource;
+
 
   constructor(
     private readonly router: Router,
@@ -117,6 +127,7 @@ export default class WorkspaceComponent implements OnInit, OnDestroy {
   ) { }
 
   async ngOnInit(): Promise<void> {
+
     this.subscriptions.push(
       this.activatedRoute.queryParams.subscribe(async (e: any) => {
         this.filters = this.drawerFilters = {
@@ -135,7 +146,9 @@ export default class WorkspaceComponent implements OnInit, OnDestroy {
         }
 
         this.searching = true;
-        this.items = (await firstValueFrom(this.resourceService.search(this.filters))).resources;
+        this.items = (
+          await firstValueFrom(this.resourceService.search(this.filters))
+        ).resources;
         this.searching = false;
 
         this.indicators = [];
@@ -158,7 +171,8 @@ export default class WorkspaceComponent implements OnInit, OnDestroy {
 
     this.user = await this.authService.ready() as User;
 
-    const [circle, views, recents] = await Promise.all([
+    const [tree, circle, views, recents] = await Promise.all([
+      firstValueFrom(this.resourceService.tree()),
       firstValueFrom(this.resourceService.circle(this.user.username)),
       firstValueFrom(this.resourceService.search({ views: true })),
       firstValueFrom(this.resourceService.search({
@@ -169,6 +183,7 @@ export default class WorkspaceComponent implements OnInit, OnDestroy {
       })),
     ])
 
+    this.tree = tree;
     this.circle = circle;
     this.views = views.resources;
     this.recents = recents.resources;
@@ -201,6 +216,7 @@ export default class WorkspaceComponent implements OnInit, OnDestroy {
       direction: filters.direction,
       types: filters.types,
       status: filters.status,
+      parent: filters.parent,
     };
 
     this.router.navigate([], {
@@ -209,6 +225,7 @@ export default class WorkspaceComponent implements OnInit, OnDestroy {
       queryParamsHandling: 'merge',
     });
   }
+
 }
 
 

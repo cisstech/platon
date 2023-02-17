@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
 
@@ -10,9 +11,9 @@ import { FileService, IdeService } from '@cisstech/nge-ide/core';
 import { NgeIdeNotificationsModule } from '@cisstech/nge-ide/notifications';
 import { NgeIdeProblemsModule } from '@cisstech/nge-ide/problems';
 import { ResourceFileSystemProvider } from '@platon/feature/resource/browser';
-import { Subscription } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
-import { Resource } from '@platon/feature/resource/common';
+import { Resource, resourceAncestors } from '@platon/feature/resource/common';
+import { firstValueFrom, Subscription } from 'rxjs';
+import { ResourcePresenter } from '../../resource.presenter';
 
 @Component({
   standalone: true,
@@ -44,23 +45,35 @@ export class ResourceEditorComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly ide: IdeService,
+    private readonly presenter: ResourcePresenter,
     private readonly fileService: FileService,
-    private readonly activatedRoute: ActivatedRoute,
     private readonly resourceFileSystem: ResourceFileSystemProvider,
   ) { }
 
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+
+    const { resource, circles } = await firstValueFrom(this.presenter.contextChange);
+    const ancestors = resourceAncestors(circles!, resource!.id);
+
     this.subscription = this.ide.onAfterStart(() => {
       this.fileService.registerProvider(this.resourceFileSystem);
-      this.fileService.registerFolders({
-        name: '/',
-        uri: this.resourceFileSystem.buildUri(
-          this.resource.id,
-          this.version
-        ),
-      },
-     );
+
+      this.fileService.registerFolders(
+        {
+          name: `${resource!.name}#${this.version}`,
+          uri: this.resourceFileSystem.buildUri(
+            this.resource.id,
+            this.version
+          )
+        },
+        ...ancestors.map(ancestor => ({
+          name: `${ancestor.name}#latest`,
+          uri: this.resourceFileSystem.buildUri(
+            ancestor.id
+          )
+        }))
+      );
     });
   }
 
