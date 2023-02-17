@@ -71,7 +71,7 @@ export default class WorkspaceComponent implements OnInit, OnDestroy {
       ? { label: `Modifié il y a au moins ${filters.period}`, remove: (filters: ResourceFilters) => ({ ...filters, period: 0 }) }
       : undefined,
 
-      (filters) => filters.parent && this.tree
+    (filters) => filters.parent && this.tree
       ? { label: `Appartient au cercle ${circleFromTree(this.tree, filters.parent)?.name}`, remove: (filters) => ({ ...filters, parent: undefined }) }
       : undefined
   ];

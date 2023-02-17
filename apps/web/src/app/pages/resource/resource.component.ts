@@ -8,15 +8,15 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
+import { DialogModule } from '@platon/core/browser';
+import { CircleTreeComponent, ResourcePipesModule } from '@platon/feature/resource/browser';
+import { ResourceStatus } from '@platon/feature/resource/common';
+import { UiLayoutTabsComponent, UiLayoutTabsTitleDirective } from '@platon/shared/ui';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { NzSelectModule } from 'ng-zorro-antd/select';
-
-import { DialogModule } from '@platon/core/browser';
-import { ResourcePipesModule } from '@platon/feature/resource/browser';
-import { ResourceStatus } from '@platon/feature/resource/common';
-import { UiLayoutTabsComponent, UiLayoutTabsTitleDirective } from '@platon/shared/ui';
 import { Subscription } from 'rxjs';
 import { ResourcePresenter } from './resource.presenter';
 
@@ -36,6 +36,8 @@ import { ResourcePresenter } from './resource.presenter';
     MatMenuModule,
     MatChipsModule,
     MatTooltipModule,
+    NzPopoverModule,
+
 
     NzIconModule,
     NzButtonModule,
@@ -47,6 +49,7 @@ import { ResourcePresenter } from './resource.presenter';
     UiLayoutTabsComponent,
     UiLayoutTabsTitleDirective,
 
+    CircleTreeComponent,
     ResourcePipesModule,
   ]
 })

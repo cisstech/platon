@@ -1,21 +1,34 @@
 <ui-layout-tabs [state]="context.state">
   <ng-container *ngIf="context.resource">
     <nz-breadcrumb>
+      <button
+        *ngIf="context.circles"
+        nz-button
+        nzType="text"
+        nzSize="small"
+        nz-popover
+        [nzPopoverContent]="treeTemplate">
+        <mat-icon>account_tree</mat-icon>
+        <ng-template #treeTemplate>
+          <res-circle-tree [tree]="context.circles" />
+        </ng-template>
+      </button>
+
       <nz-breadcrumb-item *ngIf="context.parent">
-        <mat-icon>{{ context.resource.type|resourceIcon }}</mat-icon>
         <a [routerLink]="['/resource', context.parent.id]">{{context.parent.name}}</a>
       </nz-breadcrumb-item>
       <nz-breadcrumb-item>
-        <ng-container>
-          <mat-icon *ngIf="!context.parent">{{ context.resource.type|resourceIcon }}</mat-icon>
-        </ng-container>
         {{ context.resource.name }}
+        <mat-icon>{{ context.resource.type|resourceIcon }}</mat-icon>
       </nz-breadcrumb-item>
+
       <div class="spacer"></div>
+
       <mat-chip-set>
         <mat-chip>{{context.resource.visibility|resourceVisibility}}</mat-chip>
       </mat-chip-set>
     </nz-breadcrumb>
+
     <p>{{ context.resource.desc }}</p>
     <nz-button-group>
       <nz-select

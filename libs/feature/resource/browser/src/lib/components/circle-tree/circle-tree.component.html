@@ -1,0 +1,24 @@
+<nz-tree-view
+  [nzTreeControl]="treeControl"
+  [nzDataSource]="dataSource"
+  [trackBy]="trackBy">
+  <nz-tree-node *nzTreeNodeDef="let node" nzTreeNodeIndentLine>
+    <nz-tree-node-checkbox
+      *ngIf="selectable"
+      [nzChecked]="checklistSelection.isSelected(node)"
+      (nzClick)="selectionToggle(node)">
+    </nz-tree-node-checkbox>
+    <nz-tree-node-option [routerLink]="selectable ? undefined : ['/resource', node.id]">{{ node.name }}</nz-tree-node-option>
+  </nz-tree-node>
+  <nz-tree-node *nzTreeNodeDef="let node; when: hasChild" nzTreeNodeIndentLine>
+    <nz-tree-node-toggle>
+      <i nz-icon nzType="caret-down" nzTreeNodeToggleRotateIcon></i>
+    </nz-tree-node-toggle>
+      <nz-tree-node-checkbox
+        *ngIf="selectable"
+        [nzChecked]="checklistSelection.isSelected(node)"
+        (nzClick)="selectionToggle(node)">
+      </nz-tree-node-checkbox>
+    <nz-tree-node-option [routerLink]="selectable ? undefined : ['/resource', node.id, 'overview']">{{ node.name }}</nz-tree-node-option>
+  </nz-tree-node>
+</nz-tree-view>

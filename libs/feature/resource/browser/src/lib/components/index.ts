@@ -5,4 +5,4 @@ export * from './member-table/member-table.component'
 export * from './resource-files/resource-files.component'
 export * from './resource-item/resource-item.component'
 export * from './resource-list/resource-list.component'
-
+export * from './circle-tree/circle-tree.component';
