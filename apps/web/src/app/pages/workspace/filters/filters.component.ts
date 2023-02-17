@@ -5,14 +5,15 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
-
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatRadioModule } from '@angular/material/radio';
 import { OrderingDirections } from '@platon/core/common';
 import { ResourcePipesModule } from '@platon/feature/resource/browser';
-import { ResourceFilters, ResourceOrderings, ResourceStatus, ResourceTypes } from '@platon/feature/resource/common';
+import { CircleTree, ResourceFilters, ResourceOrderings, ResourceStatus, ResourceTypes } from '@platon/feature/resource/common';
 import { Subscription } from 'rxjs';
+import { MatInputModule } from '@angular/material/input';
 
 
 @Component({
@@ -27,7 +28,9 @@ import { Subscription } from 'rxjs';
     ReactiveFormsModule,
 
     MatChipsModule,
+    MatInputModule,
     MatDividerModule,
+    MatAutocompleteModule,
 
     MatRadioModule,
     MatCheckboxModule,
@@ -40,6 +43,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription[] = [];
 
   readonly form = new FormGroup({
+    parent: new FormControl(''),
     order: new FormControl(ResourceOrderings.NAME),
     direction: new FormControl(OrderingDirections.ASC),
     period: new FormControl(0),
@@ -57,29 +61,25 @@ export class FiltersComponent implements OnInit, OnDestroy {
     )
   });
 
-  @Input()
-  filters: ResourceFilters = {};
+  @Input() circles: CircleTree[] = [];
+  @Input() filters: ResourceFilters = {};
+  @Output() filtersChange = new EventEmitter<ResourceFilters>();
 
-  @Output()
-  filtersChange = new EventEmitter<ResourceFilters>();
 
   ngOnInit(): void {
     this.filters.types?.forEach(type => {
-      this.form.get('types')?.patchValue({
-        [type]: true
-      })
+      this.form.get('types')?.patchValue({ [type]: true })
     });
 
     this.filters.status?.forEach(type => {
-      this.form.get('status')?.patchValue({
-        [type]: true
-      })
+      this.form.get('status')?.patchValue({ [type]: true })
     });
 
     this.form.patchValue({
       period: this.filters.period,
       order: this.filters.order,
-      direction: this.filters.direction
+      direction: this.filters.direction,
+      parent: this.filters.parent
     });
 
     this.subscriptions.push(
@@ -94,6 +94,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
               .filter(e => value.types[e]) as any,
             status: Object.keys(value.status)
               .filter(e => value.status[e]) as any,
+            parent: value.parent as any
           }
         );
       })
@@ -102,5 +103,9 @@ export class FiltersComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.forEach((s) => s.unsubscribe());
+  }
+
+  displayCircle(id: string): string {
+    return this.circles.find(c => c.id === id)?.name || '';
   }
 }

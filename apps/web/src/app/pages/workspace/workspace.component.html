@@ -27,7 +27,7 @@
   </article>
   <aside>
     <section>
-      <res-item *ngIf="circle" [item]="circle"></res-item>
+      <res-item *ngIf="circle" [item]="circle" />
     </section>
     <section>
       <mat-card>
@@ -37,7 +37,7 @@
           </mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <res-list [items]="views" [simple]="true"></res-list>
+          <res-list [items]="views" [simple]="true" />
         </mat-card-content>
       </mat-card>
     </section>
@@ -49,7 +49,7 @@
           </mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <res-list [items]="recents" [simple]="true"></res-list>
+          <res-list [items]="recents" [simple]="true" />
         </mat-card-content>
       </mat-card>
     </section>
@@ -68,7 +68,7 @@
   [nzFooter]="footer"
   (nzOnClose)="showFiltersDrawer = !showFiltersDrawer">
   <ng-container *nzDrawerContent>
-    <app-workspace-filters *ngIf="showFiltersDrawer" [(filters)]="drawerFilters"></app-workspace-filters>
+    <app-workspace-filters *ngIf="showFiltersDrawer" [(filters)]="drawerFilters" [circles]="circles" />
   </ng-container>
   <ng-template #footer>
     <button mat-button (click)="closeFilters()">Annuler</button>&nbsp;

@@ -86,3 +86,13 @@ export const circleFromTree = (tree: CircleTree, id: string): CircleTree | undef
 
   return undefined;
 }
+
+export const flattenCircleTree = (tree: CircleTree): CircleTree[] => {
+  const flat: CircleTree[] = [];
+  const flatten = (node: CircleTree) => {
+    flat.push(node);
+    node.children?.forEach(flatten);
+  }
+  flatten(tree);
+  return flat;
+}

@@ -15,7 +15,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { AuthService } from '@platon/core/browser';
 import { OrderingDirections, User } from '@platon/core/common';
 import { ResourceItemComponent, ResourceListComponent, ResourceService, RESOURCE_ORDERING_NAMES, RESOURCE_STATUS_NAMES, RESOURCE_TYPE_NAMES } from '@platon/feature/resource/browser';
-import { circleFromTree, CircleTree, Resource, ResourceFilters, ResourceOrderings, ResourceStatus, ResourceTypes } from '@platon/feature/resource/common';
+import { circleFromTree, CircleTree, flattenCircleTree, Resource, ResourceFilters, ResourceOrderings, ResourceStatus, ResourceTypes } from '@platon/feature/resource/common';
 import Fuse from 'fuse.js';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { firstValueFrom, map, shareReplay, Subscription } from 'rxjs';
@@ -79,6 +79,8 @@ export default class WorkspaceComponent implements OnInit, OnDestroy {
   private user?: User;
 
   protected tree?: CircleTree;
+  protected circles: CircleTree[] = [];
+
   protected indicators: FilterIncidator[] = [];
   protected completion = this.resourceService.completion().pipe(
     shareReplay(1)
@@ -127,7 +129,6 @@ export default class WorkspaceComponent implements OnInit, OnDestroy {
   ) { }
 
   async ngOnInit(): Promise<void> {
-
     this.subscriptions.push(
       this.activatedRoute.queryParams.subscribe(async (e: any) => {
         this.filters = this.drawerFilters = {
@@ -187,6 +188,11 @@ export default class WorkspaceComponent implements OnInit, OnDestroy {
     this.circle = circle;
     this.views = views.resources;
     this.recents = recents.resources;
+
+    this.circles = [];
+    if (this.tree) {
+      this.circles = flattenCircleTree(this.tree);
+    }
 
     this.changeDetectorRef.markForCheck();
   }
