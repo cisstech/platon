@@ -18,22 +18,6 @@
     </nz-breadcrumb>
     <p>{{ context.resource.desc }}</p>
     <nz-button-group>
-      <a
-        *ngIf="context.resource.visibility === 'PUBLIC' || context.resource.ownerId === context.user?.id"
-        nz-button
-        nzType="primary"
-        matTooltip="Éditer en ligne"
-        [routerLink]="['/editor', context.resource.id]">
-        <i nz-icon nzType="edit" nzTheme="outline"></i>
-      </a>
-      <a
-        nz-button
-        nzType="primary"
-        matTooltip="Prévisualiser">
-        <i nz-icon nzType="play-circle" nzTheme="outline"></i>
-      </a>
-    </nz-button-group>
-    <nz-button-group>
       <nz-select
         id="status"
         name="status"
@@ -69,10 +53,10 @@
       Vue d'ensemble
     </ng-template>
   </ui-layout-tab>
-  <ui-layout-tab [link]="['content']">
+  <ui-layout-tab [link]="['browse']">
     <ng-template>
-      <span nz-icon nzType="code" nzTheme="outline"></span>
-      Contenu
+      <span nz-icon nzType="folder" nzTheme="outline"></span>
+      Explorer
     </ng-template>
   </ui-layout-tab>
   <ui-layout-tab [link]="['events']">

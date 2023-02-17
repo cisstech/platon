@@ -1,7 +1,7 @@
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { importProvidersFrom } from '@angular/core';
-import { MatLegacyDialogModule } from '@angular/material/legacy-dialog';
-import { MatLegacySnackBarModule } from '@angular/material/legacy-snack-bar';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import {
@@ -22,8 +22,9 @@ bootstrapApplication(AppComponent, {
     ),
     importProvidersFrom(
       CoreBrowserModule,
-      MatLegacyDialogModule,
-      MatLegacySnackBarModule,
+
+      MatDialogModule,
+      MatSnackBarModule,
     ),
     provideRouter(appRoutes,
       withEnabledBlockingInitialNavigation(),

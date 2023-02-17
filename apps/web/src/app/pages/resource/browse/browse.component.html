@@ -1,0 +1,30 @@
+<ng-container *ngIf="tree && versions">
+  <app-resource-browse-header
+    [version]="version"
+    [versions]="versions!"
+    [resource]="context.resource!"
+    (edit)="editing = true"
+    (refresh)="refresh($event)" />
+    <res-files [tree]="tree!" />
+    <nz-modal
+      [(nzVisible)]="editing"
+      [nzBodyStyle]="{
+        padding: '0',
+        height: '90vh'
+      }"
+      nzClassName="editor-wrapper"
+      nzWidth="90vw"
+      nzMask="true"
+      nzClosable="false"
+      nzCentered="true"
+      nzMaskClosable="true"
+      (nzOnOk)="refresh(version)"
+      (nzOnCancel)="refresh(version)"
+      [nzFooter]="editorFooter">
+      <ng-container *nzModalContent>
+        <app-resource-editor [resource]="context.resource!" [version]="version" />
+      </ng-container>
+    </nz-modal>
+    <ng-template #editorFooter />
+</ng-container>
+

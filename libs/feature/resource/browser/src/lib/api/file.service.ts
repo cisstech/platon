@@ -6,7 +6,6 @@ import { FileProvider } from "../models/file-provider";
 
 @Injectable({ providedIn: 'root' })
 export class FileService {
-
   constructor(private readonly provider: FileProvider) {
   }
 
@@ -22,8 +21,8 @@ export class FileService {
     return this.provider.tree(resource, version);
   }
 
-  read(resource: string | Resource, path: string): Observable<ResourceFile> {
-    return this.provider.read(resource, path);
+  read(resource: string | Resource, path: string, version?: string): Observable<ResourceFile> {
+    return this.provider.read(resource, path, version);
   }
 
   create(resource: string | Resource, input: FileCreate[]): Observable<void> {

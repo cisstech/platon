@@ -1,10 +1,21 @@
+:host {
+  display: block;
+}
+
+mat-card {
+  margin: 1rem 0;
+}
+
 nz-tree {
   overflow: hidden;
-  margin: 12px 0;
-  padding: 12px 0;
+  padding: 1rem 0;
   min-height: 50vh;
-  border: 1px solid var(--brand-border-color);
   background-color: transparent;
+}
+
+nge-markdown {
+  display: block;
+  padding: 1rem 0;
 }
 
 nz-spin {
@@ -13,27 +24,17 @@ nz-spin {
   margin-top: 32px;
 }
 
-nz-select {
-  min-width: 100px;
-  margin-right: 8px;
-}
-
 .node {
   cursor: pointer;
   line-height: 24px;
   margin-left: 4px;
-  display: inline-block;
+  display: flex;
+  align-items: center;
 }
 
 .file-name,
 .folder-name {
   margin-left: 4px;
-}
-
-
-header {
-  display: flex;
-  align-items: center;
 }
 
 .spacer {

@@ -4,13 +4,6 @@ import { UiError403Component, UiError404Component, UiError500Component } from '@
 
 export const appRoutes: Route[] = [
   withAuthGuard({ path: '', loadChildren: () => import('./pages/dashboard/dashboard.routes') }),
-  withAuthGuard({
-    path: 'editor',
-    loadChildren: () => import(
-      /* webpackChunkName: "editor" */
-      './pages/editor/editor.routes'
-    ),
-  }),
   {
     path: 'login',
     loadComponent: () => import(

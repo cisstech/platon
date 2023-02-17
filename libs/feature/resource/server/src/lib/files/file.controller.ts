@@ -40,7 +40,6 @@ export class FileController {
   ): Promise<unknown> {
     const repo = await this.service.repo(resourceId, request.user)
     const version = query?.version || LATEST_VERSION;
-
     if (query?.bundle) {
       res.set('Content-Type', 'application/force-download');
       res.set('Content-Disposition', 'attachment; filename=file.txt');

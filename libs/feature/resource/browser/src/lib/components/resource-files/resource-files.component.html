@@ -1,0 +1,67 @@
+<ng-container *ngIf="!loading; else spinner">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Fichiers</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <nz-tree
+        *ngIf="nodes.length; else noFiles"
+        nzBlockNode
+        [nzData]="nodes"
+        [nzTreeTemplate]="nzTreeTemplate">
+      </nz-tree>
+    </mat-card-content>
+  </mat-card>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Documentation (readme.md)</mat-card-title>
+      <mat-card-subtitle>
+        Nous vous conseillons de documenter vos ressources pour faciliter leur utilisation par les autres enseignants.
+        Vous pouvez facilement le faire en modifiant le fichier <b>README.md</b> dans les fichiers de la ressource.
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <nge-markdown *ngIf="readme; else: noDoc" [file]="readme.url" />
+    </mat-card-content>
+  </mat-card>
+</ng-container>
+
+<nz-dropdown-menu #menu="nzDropdownMenu">
+  <ul nz-menu>
+    <li nz-menu-item (click)="download()">Télécharger</li>
+    <li nz-menu-item (click)="copyPath()">Copier le chemin</li>
+  </ul>
+</nz-dropdown-menu>
+
+<ng-template #nzTreeTemplate let-node let-origin="origin">
+  <ng-container>
+    <div class="node" *ngIf="!node.isLeaf" (contextmenu)="contextMenu($event, menu, node)">
+      <ui-icon [icon]="node.title|iconFile:{ alt: node.title, expanded: node.isExpanded, isDirectory: true}" />
+      <div class="folder-name">{{ node.title }}</div>
+    </div>
+    <div class="node"*ngIf="node.isLeaf" (contextmenu)="contextMenu($event, menu, node)">
+      <ui-icon [icon]="node.title|iconFile:{ alt: node.title }" />
+      <div class="file-name">{{ node.title }}</div>
+    </div>
+  </ng-container>
+</ng-template>
+
+<ng-template #noFiles>
+  <nz-empty nzNotFoundImage="simple" [nzNotFoundContent]="content">
+    <ng-template #content>
+      <p>Aucun fichier à afficher</p>
+    </ng-template>
+  </nz-empty>
+</ng-template>
+
+<ng-template #noDoc>
+  <nz-empty nzNotFoundImage="simple" [nzNotFoundContent]="content">
+    <ng-template #content>
+      <p>Aucune documentation</p>
+    </ng-template>
+  </nz-empty>
+</ng-template>
+
+<ng-template #spinner>
+  <nz-spin nzSimple nzSize="large"></nz-spin>
+</ng-template>

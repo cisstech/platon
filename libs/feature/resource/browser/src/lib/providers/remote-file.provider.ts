@@ -35,9 +35,11 @@ export class RemoteFileProvider extends FileProvider {
     );
   }
 
-  read(resource: string | Resource, path: string): Observable<ResourceFile> {
+  read(resource: string | Resource, path: string, version?: string): Observable<ResourceFile> {
     const id = typeof resource === 'string' ? resource : resource.id;
-    return this.http.get<ResourceFile>(`/api/v1/files/${id}/${path}`);
+    return this.http.get<ResourceFile>(`/api/v1/files/${id}/${path}`, {
+      params: new HttpParams().set('version', version || 'latest')
+    });
   }
 
   create(resource: string | Resource, input: FileCreate[]): Observable<void> {

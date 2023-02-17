@@ -7,7 +7,7 @@ import { AuthToken } from '@platon/core/common';
 import { BehaviorSubject, from, Observable, throwError } from 'rxjs';
 import { catchError, filter, finalize, switchMap, take } from 'rxjs/operators';
 
-import { RemoteTokenProvider } from '../services/remote-token-provider';
+import { RemoteTokenProvider } from '../providers/remote-token.provider';
 
 
 /**

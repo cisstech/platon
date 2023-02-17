@@ -14,10 +14,10 @@ export default [
         )
       },
       {
-        path: 'content',
+        path: 'browse',
         loadChildren: () => import(
-          /* webpackChunkName: "resource-content" */
-          './content/content.routes'
+          /* webpackChunkName: "resource-browse" */
+          './browse/browse.routes'
         )
       },
       {

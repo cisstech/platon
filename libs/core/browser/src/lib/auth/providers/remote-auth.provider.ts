@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { AuthProvider } from '../models/auth-provider';
-import { RemoteTokenProvider } from './remote-token-provider';
+import { RemoteTokenProvider } from './remote-token.provider';
 import { lastValueFrom } from 'rxjs';
 import { AuthToken, ItemResponse, User } from '@platon/core/common';
 import { JwtHelperService } from '@auth0/angular-jwt';

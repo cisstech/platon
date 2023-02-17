@@ -1,28 +1,40 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { ResourceFilesTreeComponent } from '@platon/feature/resource/browser';
+import { NgeUiIconModule } from '@cisstech/nge/ui/icon';
+import { ResourceFilesComponent } from '@platon/feature/resource/browser';
 import { FileVersions, ResourceFile } from '@platon/feature/resource/common';
-import { firstValueFrom, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { ResourcePresenter } from '../resource.presenter';
+import { ResourceBrowseHeaderComponent } from './header/header.component';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { ResourceEditorComponent } from './editor/editor.component';
+
 
 @Component({
   standalone: true,
-  selector: 'app-resource-content',
-  templateUrl: './content.component.html',
-  styleUrls: ['./content.component.scss'],
+  selector: 'app-resource-browse',
+  templateUrl: './browse.component.html',
+  styleUrls: ['./browse.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
-    ResourceFilesTreeComponent
+
+    NzModalModule,
+    NgeUiIconModule,
+
+    ResourceFilesComponent,
+    ResourceEditorComponent,
+    ResourceBrowseHeaderComponent,
   ]
 })
-export class ResourceContentComponent implements OnInit, OnDestroy {
+export class ResourceBrowseComponent implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription[] = [];
 
   protected context = this.presenter.defaultContext();
   protected tree?: ResourceFile;
+  protected editing = false;
+  protected version = 'latest';
   protected versions?: FileVersions;
-
 
   constructor(
     private readonly presenter: ResourcePresenter,
@@ -33,7 +45,7 @@ export class ResourceContentComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.presenter.contextChange.subscribe(async context => {
         this.context = context;
-        this.refreshFiles();
+        this.refresh();
       })
     );
   }
@@ -42,11 +54,13 @@ export class ResourceContentComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach(s => s.unsubscribe());
   }
 
-
-  protected async refreshFiles(version = 'latest') {
+  protected async refresh(version = 'latest') {
+    console.log('save');
+    this.editing = false;
+    this.version = version;
     const [tree, versions] = await this.presenter.fileTree(version)
     this.tree = tree;
-    this.versions= versions;
+    this.versions = versions;
     this.changeDetectorRef.markForCheck();
   }
 }

@@ -1,0 +1,22 @@
+:host {
+  display: block;
+}
+
+i[nzType=branches] {
+  display: inline-block;
+  margin-right: 8px;
+}
+
+nz-select {
+  min-width: 100px;
+  margin-right: 8px;
+}
+
+header {
+  display: flex;
+  align-items: center;
+}
+
+.spacer {
+  flex: 1;
+}

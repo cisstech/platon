@@ -1,10 +1,10 @@
+
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { FileSystemError, FileSystemProvider, FileSystemProviderCapabilities, IFile, Paths, SearchForm, SearchResult } from '@cisstech/nge-ide/core';
-import { FileService } from '@platon/feature/resource/browser';
 import { FileTypes, ResourceFile } from '@platon/feature/resource/common';
 import { firstValueFrom } from 'rxjs';
+import { FileService } from '../api/file.service';
 
 const removeLeadingSlash = (path: string) => path.replace(/^[\\/.]+/g, '');
 
@@ -15,27 +15,23 @@ class FileImpl implements IFile {
   readonly isFolder: boolean;
   readonly url: string;
 
-  constructor(
-    entry: ResourceFile,
-  ) {
-    const path = Paths.normalize(entry.path);
-    this.uri = monaco.Uri.parse(`file:///${removeLeadingSlash(path)}`);
+  constructor(uri: monaco.Uri, entry: ResourceFile) {
+    this.uri = uri;
     this.version = entry.version;
-    this.readOnly = false;
+    this.readOnly = entry.version !== 'latest';
     this.isFolder = entry.type === 'folder';
     this.url = entry.downloadUrl;
   }
 }
 
 
-@Injectable({ providedIn: 'root' })
-export class RemoteFileSystemProvider extends FileSystemProvider {
+@Injectable()
+export class ResourceFileSystemProvider extends FileSystemProvider {
   private readonly entries = new Map<string, ResourceFile>();
-  private readonly resourceId = this.activatedRoute.snapshot.paramMap.get('id') as string;
 
-  readonly scheme = 'file';
+  readonly scheme = 'platon';
 
-  readonly capabilities = FileSystemProviderCapabilities.FileRead |
+  capabilities = FileSystemProviderCapabilities.FileRead |
     FileSystemProviderCapabilities.FileWrite |
     FileSystemProviderCapabilities.FileMove |
     FileSystemProviderCapabilities.FileDelete |
@@ -45,46 +41,65 @@ export class RemoteFileSystemProvider extends FileSystemProvider {
   constructor(
     private readonly http: HttpClient,
     private readonly fileService: FileService,
-    private readonly activatedRoute: ActivatedRoute,
   ) {
     super()
   }
 
-  listFolders() {
-    return [
-      {
-        name: '/',
-        uri: monaco.Uri.parse(`${this.scheme}:///`)
-      }
-    ]
+
+  buildUri(resource: string, version = 'latest') {
+    return monaco.Uri.parse(`${this.scheme}://${resource}:${version}/`)
+  }
+
+  removeDirectory(uri: monaco.Uri) {
+    const prefix = uri.toString(true);
+    const keys = (
+      Array.from(this.entries.keys())
+    ).filter(k => k.startsWith(prefix));
+    keys.forEach(k => this.entries.delete(k));
   }
 
   override async readDirectory(uri: monaco.Uri): Promise<IFile[]> {
-    this.entries.clear();
-    const path = removeLeadingSlash(uri.path);
-    const tree = await firstValueFrom(this.fileService.read(this.resourceId, path));
+    this.removeDirectory(uri);
+
+    const {
+      resource,
+      version,
+      path
+    } = this.parseUri(uri);
+
+    const tree = await firstValueFrom(this.fileService.read(resource, path, version));
     const files: IFile[] = [];
+
     const transform = (entry: ResourceFile) => {
-      const file = new FileImpl(entry);
+      const file = new FileImpl(
+        monaco.Uri.parse(`${uri.scheme}://${uri.authority}/${removeLeadingSlash(entry.path)}`),
+        entry,
+      );
       files.push(file);
       this.entries.set(file.uri.toString(true), entry);
       entry.children?.forEach(transform);
     };
+
     transform(tree);
+
     return files;
   }
 
   override async createDirectory(uri: monaco.Uri): Promise<void> {
     this.lookupParentDirectory(uri);
+
     const file = this.lookup(uri, true);
     if (file) {
       throw FileSystemError.FileExists(uri);
     }
 
+    const {
+      resource,
+      path
+    } = this.parseUri(uri);
+
     await firstValueFrom(
-      this.fileService.create(this.resourceId, [{
-        path: removeLeadingSlash(uri.path),
-      }])
+      this.fileService.create(resource, [{ path }])
     );
   }
 
@@ -97,9 +112,9 @@ export class RemoteFileSystemProvider extends FileSystemProvider {
 
   override async read(uri: monaco.Uri): Promise<string> {
     const file = this.lookup(uri);
-    const content = await firstValueFrom(this.http.get<string>(file.url, {
-      responseType: 'text' as 'json'
-    }));
+    const content = await firstValueFrom(
+      this.http.get<string>(file.url, { responseType: 'text' as 'json' })
+    );
     return content;
   }
 
@@ -108,11 +123,13 @@ export class RemoteFileSystemProvider extends FileSystemProvider {
       const file = this.lookup(uri);
       await firstValueFrom(this.fileService.update(file, { content }));
     } else {
+
+      const {
+        resource,
+        path
+      } = this.parseUri(uri);
       await firstValueFrom(
-        this.fileService.create(this.resourceId, [{
-          path: removeLeadingSlash(uri.path),
-          content
-        }])
+        this.fileService.create(resource, [{ path, content }])
       );
     }
   }
@@ -128,12 +145,11 @@ export class RemoteFileSystemProvider extends FileSystemProvider {
     const file = this.lookup(uri);
     await firstValueFrom(
       this.fileService.move(
-        file, {
-        destination: removeLeadingSlash(
-          Paths.join([Paths.dirname(uri.path), name])
-        ),
-        rename: true
-      }
+        file,
+        {
+          destination: removeLeadingSlash(Paths.join([Paths.dirname(uri.path), name])),
+          rename: true
+        }
       )
     )
   }
@@ -143,10 +159,13 @@ export class RemoteFileSystemProvider extends FileSystemProvider {
     this.lookupAsDirectory(destination);
 
     await firstValueFrom(
-      this.fileService.move(src, {
-        destination: removeLeadingSlash(destination.path),
-        copy: options?.copy
-      })
+      this.fileService.move(
+        src,
+        {
+          destination: removeLeadingSlash(destination.path),
+          copy: options?.copy
+        }
+      )
     );
 
   }
@@ -163,8 +182,13 @@ export class RemoteFileSystemProvider extends FileSystemProvider {
       })
     )
 
+    const {
+      scheme,
+      authority
+    } = uri;
+
     const results = Object.keys(response.results).map(path => ({
-      entry: monaco.Uri.parse(`${this.scheme}:///${removeLeadingSlash(path)}`),
+      entry: monaco.Uri.parse(`${scheme}://${authority}/${removeLeadingSlash(path)}`),
       matches: response.results[path].map((match) => ({
         lineno: match.line,
         match: match.preview
@@ -201,5 +225,16 @@ export class RemoteFileSystemProvider extends FileSystemProvider {
   private lookupParentDirectory(uri: monaco.Uri): ResourceFile {
     const dirname = uri.with({ path: Paths.dirname(uri.path) });
     return this.lookupAsDirectory(dirname, false);
+  }
+
+
+  private parseUri(uri: monaco.Uri) {
+    const { authority, path } = uri;
+    const [resource, version] = authority.split(':');
+    return {
+      resource,
+      version,
+      path: removeLeadingSlash(path)
+    };
   }
 }
