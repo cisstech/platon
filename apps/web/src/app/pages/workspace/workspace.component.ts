@@ -11,12 +11,15 @@ import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { SearchBar, UiSearchBarComponent } from '@platon/shared/ui';
 
 import { MatIconModule } from '@angular/material/icon';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Params, Router, RouterModule } from '@angular/router';
 import { AuthService } from '@platon/core/browser';
 import { OrderingDirections, User } from '@platon/core/common';
-import { ResourceItemComponent, ResourceListComponent, ResourceService, RESOURCE_ORDERING_NAMES, RESOURCE_STATUS_NAMES, RESOURCE_TYPE_NAMES } from '@platon/feature/resource/browser';
+import { ResourceItemComponent, ResourceListComponent, ResourcePipesModule, ResourceService, RESOURCE_ORDERING_NAMES, RESOURCE_STATUS_NAMES, RESOURCE_TYPE_NAMES } from '@platon/feature/resource/browser';
 import { circleFromTree, CircleTree, flattenCircleTree, Resource, ResourceFilters, ResourceOrderings, ResourceStatus, ResourceTypes } from '@platon/feature/resource/common';
 import Fuse from 'fuse.js';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { firstValueFrom, map, shareReplay, Subscription } from 'rxjs';
 import { FiltersComponent } from './filters/filters.component';
@@ -29,6 +32,7 @@ import { FiltersComponent } from './filters/filters.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
+    RouterModule,
 
     MatCardModule,
     MatIconModule,
@@ -36,8 +40,12 @@ import { FiltersComponent } from './filters/filters.component';
     MatButtonModule,
 
     NzSpinModule,
+    NzIconModule,
+    NzButtonModule,
     NzDrawerModule,
+    NzPopoverModule,
 
+    ResourcePipesModule,
     ResourceItemComponent,
     ResourceListComponent,
 
@@ -129,6 +137,31 @@ export default class WorkspaceComponent implements OnInit, OnDestroy {
   ) { }
 
   async ngOnInit(): Promise<void> {
+    this.user = await this.authService.ready() as User;
+
+    const [tree, circle, views, recents] = await Promise.all([
+      firstValueFrom(this.resourceService.tree()),
+      firstValueFrom(this.resourceService.circle(this.user.username)),
+      firstValueFrom(this.resourceService.search({ views: true })),
+      firstValueFrom(this.resourceService.search({
+        period: 7,
+        limit: 5,
+        order: ResourceOrderings.UPDATED_AT,
+        direction: OrderingDirections.DESC,
+      })),
+    ])
+
+    this.tree = tree;
+    this.circle = circle;
+    this.views = views.resources;
+    this.recents = recents.resources;
+
+    this.circles = [];
+    if (this.tree) {
+      this.circles = flattenCircleTree(this.tree);
+    }
+
+
     this.subscriptions.push(
       this.activatedRoute.queryParams.subscribe(async (e: any) => {
         this.filters = this.drawerFilters = {
@@ -169,30 +202,6 @@ export default class WorkspaceComponent implements OnInit, OnDestroy {
         this.changeDetectorRef.markForCheck();
       })
     );
-
-    this.user = await this.authService.ready() as User;
-
-    const [tree, circle, views, recents] = await Promise.all([
-      firstValueFrom(this.resourceService.tree()),
-      firstValueFrom(this.resourceService.circle(this.user.username)),
-      firstValueFrom(this.resourceService.search({ views: true })),
-      firstValueFrom(this.resourceService.search({
-        period: 7,
-        limit: 5,
-        order: ResourceOrderings.UPDATED_AT,
-        direction: OrderingDirections.DESC,
-      })),
-    ])
-
-    this.tree = tree;
-    this.circle = circle;
-    this.views = views.resources;
-    this.recents = recents.resources;
-
-    this.circles = [];
-    if (this.tree) {
-      this.circles = flattenCircleTree(this.tree);
-    }
 
     this.changeDetectorRef.markForCheck();
   }

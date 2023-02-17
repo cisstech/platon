@@ -75,13 +75,12 @@ export class ResourcePresenter implements OnDestroy {
   }
 
   // Files
-  async fileTree(version?: string): Promise<[ResourceFile, FileVersions]> {
+  async files(version?: string): Promise<[ResourceFile, FileVersions]> {
     const { resource } = this.context.value;
     if (resource) {
-      const [tree, versions] = await Promise.all([
-        firstValueFrom(this.fileService.tree(resource, version)),
-        firstValueFrom(this.fileService.versions(resource))
-      ])
+      // using Promise.all here can be problematic since directories are created on demand.
+      const tree = await firstValueFrom(this.fileService.tree(resource, version))
+      const versions = await firstValueFrom(this.fileService.versions(resource))
       return [tree, versions]
     }
     throw new ReferenceError('missing resource');

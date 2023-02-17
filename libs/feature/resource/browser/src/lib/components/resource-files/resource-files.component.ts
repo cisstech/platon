@@ -39,18 +39,17 @@ import { NzTreeModule, NzTreeNode } from 'ng-zorro-antd/tree';
 })
 export class ResourceFilesComponent {
   private readonly index = new Map<string, ResourceFile>();
-  private root?: ResourceFile;
   private selection?: ResourceFile;
 
   protected loading = true;
+  protected code?: string;
+  protected version?: string;
   protected nodes: Node[] = [];
   protected readme?: ResourceFile;
-
 
   @Input()
   set tree(value: ResourceFile) {
     this.index.clear();
-    this.root = value;
 
     const createNode = (entry: ResourceFile): any => {
       this.index.set(entry.path, entry);
@@ -64,7 +63,8 @@ export class ResourceFilesComponent {
 
     this.nodes = value?.children?.map(createNode)?.sort(this.compareNodes) || []
     this.readme = value.children?.find(file => file.path.toLowerCase() === 'readme.md');
-
+    this.code = value.resourceCode;
+    this.version = value.version;
     this.loading = false;
     this.changeDetectionRef.markForCheck();
   }
@@ -87,9 +87,9 @@ export class ResourceFilesComponent {
   }
 
   protected copyPath(): void {
-    if (this.selection && this.root) {
+    if (this.selection) {
       this.clipboardService.copy(
-        `${this.root.resourceId}/${this.selection.path}?version=${this.selection.version}`
+        `${this.selection.resourceId}/${this.selection.path}?version=${this.selection.version}`
       );
       this.nzMessageService.success('Le chemin a été copié dans le presse-papiers');
     }

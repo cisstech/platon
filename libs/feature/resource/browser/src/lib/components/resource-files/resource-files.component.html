@@ -1,7 +1,14 @@
 <ng-container *ngIf="!loading; else spinner">
   <mat-card>
     <mat-card-header>
-      <mat-card-title>Fichiers</mat-card-title>
+      <mat-card-title>
+        Fichiers
+        <span>
+          <ng-container *ngIf="code">
+            @{{code}}:{{version}}
+          </ng-container>
+        </span>
+      </mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <nz-tree

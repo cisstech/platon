@@ -11,6 +11,22 @@ export class ResourceEntity extends BaseEntity {
   @Column({ nullable: true })
   desc?: string
 
+  @Index('Resources_code_idx', { unique: true })
+  @Column({ nullable: true })
+  code?: string
+
+  @Index('Resources_is_model_idx')
+  @Column({ type: 'boolean', name: 'is_model', default: false })
+  isModel!: string
+
+  @Index('Resources_model_id_idx')
+  @Column({ name: 'model_id', nullable: true })
+  model_id?: string
+
+  @ManyToOne(() => ResourceEntity, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'model_id' })
+  model?: ResourceEntity
+
   @Index('Resources_type_idx')
   @Column({ type: 'enum', enum: ResourceTypes })
   type!: ResourceTypes

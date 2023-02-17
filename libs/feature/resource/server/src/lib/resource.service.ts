@@ -41,6 +41,8 @@ export class ResourceService {
     const tree: CircleTree = {
       id: root.id,
       name: root.name,
+      code: root.code,
+      visibility: root.visibility,
       children: []
     }
 
@@ -52,6 +54,8 @@ export class ResourceService {
         const next: CircleTree = {
           id: child.id,
           name: child.name,
+          code: child.code,
+          visibility: child.visibility,
           children: []
         }
         node.children?.push(next)

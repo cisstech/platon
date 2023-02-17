@@ -8,24 +8,30 @@ export interface Resource {
   readonly createdAt: Date;
   readonly updatedAt?: Date;
   readonly name: string
+  readonly code?: string
   readonly desc?: string
   readonly type: ResourceTypes
   readonly visibility: ResourceVisibilities
   readonly status: ResourceStatus
   readonly levels: Level[]
   readonly topics: Topic[]
+  readonly isModel?: boolean
   readonly ownerId: string
+  readonly modelId?: string
   readonly parentId?: string
 }
 
 export interface CircleTree {
   readonly id: string;
   readonly name: string;
+  readonly code?: string;
+  readonly visibility: ResourceVisibilities;
   readonly children?: CircleTree[]
 }
 
 export interface CreateResource {
   readonly name: string
+  readonly code?: string
   readonly desc?: string
   readonly type: ResourceTypes
   readonly status?: ResourceStatus
@@ -33,6 +39,8 @@ export interface CreateResource {
   readonly levels?: string[]
   readonly topics?: string[]
   readonly parentId?: string
+  readonly isModel?: boolean
+  readonly modelId?: string
 }
 
 export interface UpdateResource {

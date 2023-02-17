@@ -50,7 +50,7 @@ export class CircleTreeComponent implements OnInit {
 
   ngOnInit(): void {
     this.dataSource.setData([this.tree]);
-    this.treeControl.expand(this.treeControl.dataNodes[0]);
+    this.treeControl.expandAll();
     if (this.selection) {
       for (const node of this.flatNodeMap.keys()) {
         if (node.id === this.selection) {

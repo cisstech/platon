@@ -3,6 +3,13 @@ import { ResourceComponent } from './resource.component';
 
 export default [
   {
+    path: 'create',
+    loadChildren: () => import(
+      /* webpackChunkName: "resource-create" */
+      './create/create.routes'
+    )
+  },
+  {
     path: ':id',
     component: ResourceComponent,
     children: [

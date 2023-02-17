@@ -24,7 +24,7 @@ export class FileController {
     @Param('resourceId') resourceId: string,
     @Body() input: FileReleaseDTO
   ) {
-    const repo = await this.service.repo(resourceId, request.user);
+    const [repo] = await this.service.repo(resourceId, request.user);
     await repo.release(input.name, input.message);
     return repo.versions();
   }
@@ -38,7 +38,7 @@ export class FileController {
     @Param('path') path?: string,
     @Query() query?: FileRetrieveDTO,
   ): Promise<unknown> {
-    const repo = await this.service.repo(resourceId, request.user)
+    const [repo, resource] = await this.service.repo(resourceId, request.user)
     const version = query?.version || LATEST_VERSION;
     if (query?.bundle) {
       res.set('Content-Type', 'application/force-download');
@@ -83,7 +83,8 @@ export class FileController {
       node.downloadUrl = `${base}?download&version=${node.version}`;
       node.bundleUrl = `${base}?bundle`;
       node.describeUrl = `${base}?describe`;
-      node.resourceId = resourceId;
+      node.resourceId = resource.id;
+      node.resourceCode = resource.code
       node.children?.forEach(defineUrls)
     }
 
@@ -103,7 +104,7 @@ export class FileController {
     @Param('path') path: string,
     @Body() input: FileUpdateDTO,
   ) {
-    const repo = await this.service.repo(resourceId, request.user);
+    const [repo] = await this.service.repo(resourceId, request.user);
     await repo.write(path, input.content);
     return new SuccessResponse();
   }
@@ -122,7 +123,7 @@ export class FileController {
     @UploadedFile() file: Express.Multer.File,
     @Param('path') path?: string
   ) {
-    const repo = await this.service.repo(resourceId, request.user);
+    const [repo] = await this.service.repo(resourceId, request.user);
     if (file) {
       await repo.upload(file.path, join(path || '', basename(file.originalname)));
       return new SuccessResponse();
@@ -149,7 +150,7 @@ export class FileController {
     @Param('path') path: string,
     @Body() input: FileMoveDTO,
   ) {
-    const repo = await this.service.repo(resourceId, request.user);
+    const [repo] = await this.service.repo(resourceId, request.user);
     if (input.rename) {
       await repo.rename(path, input.destination);
     } else {
@@ -164,7 +165,7 @@ export class FileController {
     @Param('resourceId') resourceId: string,
     @Param('path') path: string
   ) {
-    const repo = await this.service.repo(resourceId, request.user);
+    const [repo] = await this.service.repo(resourceId, request.user);
     await repo.remove(path);
     return new SuccessResponse();
   }

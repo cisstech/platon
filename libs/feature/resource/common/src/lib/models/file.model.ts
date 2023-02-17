@@ -14,6 +14,7 @@ export interface ResourceFile {
   type: FileTypes;
   version: string;
   resourceId: string;
+  resourceCode?: string;
 
   url: string;
   bundleUrl: string;

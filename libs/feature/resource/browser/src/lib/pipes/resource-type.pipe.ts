@@ -8,11 +8,19 @@ export const RESOURCE_TYPE_NAMES: Record<ResourceTypes, string> = {
   ACTIVITY: 'Activité'
 };
 
+const RESOURCE_TYPE_NAME_PRONOUNS: Record<ResourceTypes, string> = {
+  CIRCLE: 'Un cercle',
+  EXERCISE: 'un exercice',
+  ACTIVITY: 'Une activité'
+};
+
 @Pipe({
   name: 'resourceType',
 })
 export class ResourceTypePipe implements PipeTransform {
-  transform(type: ResourceTypes | string): string {
-    return RESOURCE_TYPE_NAMES[type as ResourceTypes];
+  transform(type: ResourceTypes | string, pronoun?: boolean): string {
+    return pronoun
+      ? RESOURCE_TYPE_NAME_PRONOUNS[type as ResourceTypes]
+      : RESOURCE_TYPE_NAMES[type as ResourceTypes];
   }
 }

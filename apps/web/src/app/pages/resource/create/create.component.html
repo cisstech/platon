@@ -1,0 +1,111 @@
+<header>
+  <h1>Créer {{type|resourceType:true|lowercase}}</h1>
+</header>
+<main>
+  <nz-skeleton [nzActive]="loading" [nzLoading]="loading">
+    <ui-stepper #stepper (finishd)="create()">
+      <ng-template uiStepperStep stepTitle="Choix du cercle" stepIcon="apartment" [stepValidator]="!!this.parent">
+        <section>
+          <h2>Sélectionnez le cercle dans lequel vous voulez ajouter {{type|resourceType:true|lowercase}}.</h2>
+          <res-circle-tree *ngIf="tree" [tree]="tree" [(selection)]="parent" />
+        </section>
+      </ng-template>
+      <ng-template uiStepperStep stepTitle="Informations" stepIcon="info-circle"[stepValidator]="!!infos.valid">
+        <section>
+          <h2>Entrez les informations de base pour votre {{type|resourceType}}.</h2>
+          <form [formGroup]="infos">
+            <mat-form-field appearance="fill">
+              <mat-label>Nom</mat-label>
+              <input matInput formControlName="name">
+            </mat-form-field>
+            <mat-form-field *ngIf="type === 'CIRCLE'" appearance="fill">
+              <mat-label>Code</mat-label>
+              <input matInput formControlName="code">
+              <mat-hint>
+                Choisissez un code unique (<b>non modifiable par la suite</b>) permettant de faire référence aux fichiers de ce cercle.
+              </mat-hint>
+              <mat-error *ngIf="infos.controls.code.hasError('code')">Ce code est déjà utilisé</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+              <mat-label>Description</mat-label>
+              <textarea cdkTextareaAutosize  matInput formControlName="desc"></textarea>
+            </mat-form-field>
+            <mat-checkbox
+              *ngIf="type === 'EXERCISE'"
+              formControlName="isModel">
+              Cet exercice est-il un modèle?
+            </mat-checkbox>
+            <mat-checkbox
+              *ngIf="type === 'CIRCLE'"
+              formControlName="opened">
+              Autoriser la création de ressource par tout le monde dans ce cercle?
+            </mat-checkbox>
+          </form>
+        </section>
+      </ng-template>
+      <ng-template uiStepperStep stepTitle="Tags" stepIcon="tags">
+        <section>
+          <h2>Voulez-vous associer des tags à votre {{type|resourceType|lowercase}} maintenant?</h2>
+          <p>
+            Les tags permettent une classification et une organisation plus efficace.
+            Il est donc important d'ajouter des tags à vos créations pour en faciliter la recherche et la découverte par d'autres enseignants.
+          </p>
+          <form [formGroup]="tags">
+            <nz-select
+              nzAllowClear
+              nzShowSearch
+              nzSize="large"
+              nzMode="multiple"
+              nzPlaceHolder="Selectionnez une liste de topics"
+              formControlName="topics">
+              <nz-option
+                *ngFor="let item of topics; trackBy: trackById;"
+                [nzLabel]="item.name"
+                [nzValue]="item.id" />
+            </nz-select>
+            <nz-select
+              nzAllowClear
+              nzShowSearch
+              nzSize="large"
+              nzMode="multiple"
+              nzPlaceHolder="Selectionnez une liste de levels"
+              formControlName="levels">
+              <nz-option
+                *ngFor="let item of levels; trackBy: trackById;"
+                [nzLabel]="item.name"
+                [nzValue]="item.id" />
+            </nz-select>
+          </form>
+        </section>
+      </ng-template>
+      <!-- TODO -->
+      <!--
+      <ng-container>
+        <ng-template uiStepperStep stepTitle="Modèle" stepIcon="layout">
+        </ng-template>
+      </ng-container>
+      -->
+    </ui-stepper>
+  </nz-skeleton>
+</main>
+<footer>
+  <ng-container *ngIf="creating; else: showControls">
+    <nz-spin nzTip="Création du nouveau cercle..."></nz-spin>
+  </ng-container>
+  <ng-template #showControls>
+    <button
+      *ngIf="!stepper.isFirst"
+      nz-button
+      [disabled]="stepper.isFirst"
+      (click)="stepper.prevStep()">
+      Précedent
+    </button>
+    <button
+      nz-button
+      color="primary"
+      [disabled]="!stepper.isValid"
+      (click)="infos.markAllAsTouched(); stepper.nextStep()">
+      {{ stepper.isLast ? 'Créer' : 'Suivant'}}
+    </button>
+  </ng-template>
+</footer>

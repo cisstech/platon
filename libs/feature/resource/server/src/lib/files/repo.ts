@@ -1,5 +1,5 @@
 import { StreamableFile } from '@nestjs/common';
-import { FileTypes, FileVersion, FileVersions, ResourceFile } from '@platon/feature/resource/common';
+import { FileTypes, FileVersion, FileVersions, ResourceFile, ResourceTypes } from '@platon/feature/resource/common';
 import { FileExistsError, FileNotFoundError, isDirectory, isFile, NotADirectoryError, PermissionError, uniquifyFileName, withTempFile } from '@platon/shared/server';
 import * as fs from 'fs';
 import * as git from 'isomorphic-git';
@@ -33,7 +33,11 @@ export class Repo {
   ) {
   }
 
-  static async get(name: string, options?: { user?: User, create?: boolean }) {
+  static async get(name: string, options?: {
+    user?: User,
+    create?: boolean,
+    type?: ResourceTypes,
+  }) {
     const dir = Path.join(BASE, name);
     const exists = fs.existsSync(dir);
     if (!exists && !options?.create) {
@@ -46,13 +50,20 @@ export class Repo {
     });
 
     if (!exists) {
-      fs.mkdirSync(dir, { recursive: true })
-      await git.init({
-        fs,
-        dir,
-        defaultBranch: DEFAULT_BRANCH,
-      })
-      await instance.touch('.keep');
+      await git.init({ fs, dir, defaultBranch: DEFAULT_BRANCH });
+      try {
+        await fs.promises.cp(
+          Path.join(BASE, 'templates', options?.type?.toLowerCase() as string),
+          dir,
+          {
+            recursive: true,
+            force: true,
+          }
+        )
+      } catch {
+        // can throw error if called twice by the frontend
+      }
+      await instance.commit('init')
     }
 
     return instance;

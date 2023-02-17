@@ -72,15 +72,15 @@ run(async (queryRunner, logger) => {
   const admin = (await queryRunner.query(`SELECT * FROM "Users" WHERE "role"='admin'`)).rows[0]
   logger.info('GENERATING CIRCLES');
   const root = (await queryRunner.query(`
-    INSERT INTO "Resources" (name, owner_id, "desc", type, status, visibility) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *
+    INSERT INTO "Resources" (name, code, owner_id, "desc", type, status, visibility) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *
   `, [
-    'Général',
+    'PLaTon',
+    'platon',
     admin.id,
     `Le cercle principal de notre plateforme est un espace dédié aux utilisateurs pour partager, explorer et découvrir les meilleures ressources pour se former en utilisant notre plateforme.`,
     'CIRCLE',
     'READY',
-    'PUBLIC',
+    'PRIVATE',
   ])).rows[0]
-
 
 });

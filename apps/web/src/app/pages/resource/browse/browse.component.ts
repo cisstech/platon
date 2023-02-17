@@ -55,10 +55,9 @@ export class ResourceBrowseComponent implements OnInit, OnDestroy {
   }
 
   protected async refresh(version = 'latest') {
-    console.log('save');
     this.editing = false;
     this.version = version;
-    const [tree, versions] = await this.presenter.fileTree(version)
+    const [tree, versions] = await this.presenter.files(version)
     this.tree = tree;
     this.versions = versions;
     this.changeDetectorRef.markForCheck();

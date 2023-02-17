@@ -47,5 +47,6 @@ Thumbs.db
 tools/database/init.json
 resources/*
 !resources/.gitkeep
+!resources/templates
 uploads/*
 !uploads/.gitkeep
