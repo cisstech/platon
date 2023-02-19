@@ -8,7 +8,7 @@ import { createReadStream } from 'fs';
 import { basename, join } from 'path';
 import { FileCreateDTO, FileMoveDTO, FileReleaseDTO, FileRetrieveDTO, FileUpdateDTO } from './file.dto';
 import { FileService } from './file.service';
-import { LATEST as LATEST_VERSION } from './repo';
+import { LATEST, LATEST as LATEST_VERSION } from './repo';
 
 
 
@@ -27,6 +27,15 @@ export class FileController {
     const [repo] = await this.service.repo(resourceId, request.user);
     await repo.release(input.name, input.message);
     return repo.versions();
+  }
+
+  @Post('/compile/:resourceId')
+  compile(
+    @Req() request: IRequest,
+    @Param('resourceId') resourceId: string,
+    @Query('version') version = LATEST,
+  ) {
+    return this.service.compile(resourceId, version, request.user);
   }
 
   @Public()
@@ -77,15 +86,9 @@ export class FileController {
     }
 
     const [node, content] = await repo.read(path, version);
-    const defineUrls = (node: ResourceFile) => {
-      const base = `/api/v1/files/${resourceId}/${node.path === '.' ? '' : node.path}`;
-      node.url = `${base}?version=${node.version}`;
-      node.downloadUrl = `${base}?download&version=${node.version}`;
-      node.bundleUrl = `${base}?bundle`;
-      node.describeUrl = `${base}?describe`;
-      node.resourceId = resource.id;
+    const defineCodes = (node: ResourceFile) => {
       node.resourceCode = resource.code
-      node.children?.forEach(defineUrls)
+      node.children?.forEach(defineCodes)
     }
 
     if (node.type === FileTypes.file) {
@@ -93,7 +96,7 @@ export class FileController {
       return Buffer.from((await content)!.buffer).toString();
     }
 
-    defineUrls(node);
+    defineCodes(node);
     return node;
   }
 

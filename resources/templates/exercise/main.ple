@@ -1,17 +1,20 @@
-@include platon::sandboxio.py
-@include platon::builders/builder.py
-@include platon::graders/grader.py
+@include /platon/utils/sandboxio.py
+@include /platon/builders/builder.py
+@include /platon/graders/grader.py
 
 title==
+EXERCISE TITLE
 ==
 
 statement==
+EXERCISE STATEMENT
 ==
-
-form=@content main.plform
 
 builder==
 ==
 
+form = @copycontent /relative/main.plform
+
 grader==
+grade = (100, 'OK')
 ==

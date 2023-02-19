@@ -7,65 +7,106 @@
 // VALUES
 
 interface PLValue {
-  readonly type: 'number' | 'boolean' | 'string' | 'array' | 'object' | 'component' | 'identifier';
-  readonly value: string | number | boolean | PLValue[] | Record<string, PLValue>;
+  readonly value: string | number | boolean | PLValue[] | {key: string, value: PLValue}[];
   readonly lineno: number;
-}
-
-export class PLString implements PLValue {
-  readonly type = 'string';
-  constructor(
-    readonly value: string,
-    readonly lineno: number,
-  ) {}
-}
-
-export class PLNumber implements PLValue {
-  readonly type = 'number';
-  constructor(
-    readonly value: number,
-    readonly lineno: number,
-  ) {}
-}
-
-export class PLBoolean implements PLValue {
-  readonly type = 'boolean';
-  constructor(
-    readonly value: boolean,
-    readonly lineno: number,
-  ) {}
-}
-
-export class PLComponent implements PLValue {
-  readonly type = 'component';
-  constructor(
-    readonly value: string,
-    readonly lineno: number,
-  ) {}
+  toJSON(visitor: PLVisitor): any | Promise<any>;
 }
 
 export class PLArray implements PLValue {
-  readonly type = 'array';
   constructor(
     readonly value: PLValue[],
     readonly lineno: number,
   ) {}
+  async toJSON(visitor: PLVisitor) {
+    const result: any[] = [];
+    // do not use promise.all to allow cache file operations (@copyurl, @copycontent...)
+    for (const e of this.value) {
+      result.push(await e.toJSON(visitor));
+    }
+    return result;
+  }
 }
 
 export class PLObject implements PLValue {
-  readonly type = 'array';
   constructor(
-    readonly value: Record<string, PLValue>,
+    readonly value: {key: string, value: PLValue}[],
     readonly lineno: number,
   ) {}
+  async toJSON(visitor: PLVisitor) {
+    // do not use promise.all to allow cache file operations (@copyurl, @copycontent...)
+    for (let i = 0; i < this.value.length; i++) {
+      this.value[i].value = await this.value[i].value.toJSON(visitor);
+    }
+    return this.value.reduce((acc: any, curr: any) => {
+      acc[curr.key] = curr.value;
+      return acc;
+    }, {} as any);
+  }
 }
 
-export class PLIdentifier implements PLValue {
-  readonly type = 'identifier';
+export class PLString implements PLValue {
   constructor(
     readonly value: string,
     readonly lineno: number,
   ) {}
+
+  toJSON() { return this.value.trim(); }
+}
+
+export class PLNumber implements PLValue {
+  constructor(
+    readonly value: number,
+    readonly lineno: number,
+  ) {}
+  toJSON() { return this.value; }
+}
+
+export class PLBoolean implements PLValue {
+  constructor(
+    readonly value: boolean,
+    readonly lineno: number,
+  ) {}
+  toJSON() { return this.value; }
+}
+
+export class PLComponent implements PLValue {
+  constructor(
+    readonly value: string,
+    readonly lineno: number,
+  ) {}
+  toJSON() { return { 'cid': '', type: this.value }; }
+}
+
+export class PLDict implements PLValue {
+  constructor(
+    readonly value: string,
+    readonly lineno: number,
+  ) {}
+  toJSON() { return { '__pldict': this.value }; }
+}
+
+export class PLFileURL implements PLValue {
+  constructor(
+    readonly value: string,
+    readonly lineno: number,
+  ) {}
+  toJSON(visitor: PLVisitor) { return visitor.visitCopyUrl(this); }
+}
+
+export class PLReference implements PLValue {
+  constructor(
+    readonly value: string,
+    readonly lineno: number,
+  ) {}
+  toJSON(visitor: PLVisitor) { return visitor.visitReference(this); }
+}
+
+export class PLFileContent implements PLValue {
+  constructor(
+    readonly value: string,
+    readonly lineno: number,
+  ) {}
+  toJSON(visitor: PLVisitor) { return visitor.visitCopyContent(this); }
 }
 
 // NODES
@@ -77,7 +118,6 @@ export interface PLNode {
 export class ExtendsNode implements PLNode {
   constructor(
     readonly path: string,
-    readonly alias: string,
     readonly lineno: number
   ) {}
   accept(visitor: PLVisitor): Promise<void> {
@@ -106,17 +146,6 @@ export class IncludeNode implements PLNode {
   }
 }
 
-export class CopyUrlNode implements PLNode {
-  constructor(
-    readonly path: string,
-    readonly into: string,
-    readonly lineno: number
-  ) {}
-  accept(visitor: PLVisitor): Promise<void> {
-    return visitor.visitCopyUrl(this);
-  }
-}
-
 export class AssignmentNode implements PLNode {
   constructor(
     readonly key: string,
@@ -128,44 +157,27 @@ export class AssignmentNode implements PLNode {
   }
 }
 
-export class CopyContentNode implements PLNode {
-  constructor(
-    readonly path: string,
-    readonly into: string,
-    readonly lineno: number
-  ) {}
-  accept(visitor: PLVisitor): Promise<void> {
-    return visitor.visitCopyContent(this);
-  }
-}
-
 
 // AST
-export interface PLMessage {
-  lineno: number;
-  filepath: string;
-  description: string;
-}
-
-export interface PLVariable<T = unknown> {
-  value: T;
-  doc?: string;
-  lineno: number;
-  filepath: string;
-}
-
-export interface PLDependency {
-  path: string;
-  type: 'use' | 'copyurl' | 'copycontent' | 'include';
-  lineno: number;
-  alias?: string;
-}
 
 export interface PLSourceFile {
-  errors: PLMessage[];
-  warnings: PLMessage[];
-  variables: Record<string, PLVariable>;
-  dependencies: PLDependency[];
+  errors: {
+    lineno: number,
+    abspath: string
+    description: string
+  }[];
+  warnings: {
+    lineno: number,
+    abspath: string
+    description: string
+  }[];
+  variables: Record<string, unknown>;
+  dependencies: {
+    alias?: string;
+    lineno: number;
+    content: string;
+    abspath: string;
+  }[];
 }
 
 // VISITOR
@@ -175,14 +187,15 @@ export interface PLVisitor {
   visitExtends(node: ExtendsNode): Promise<void>;
   visitInclude(node: IncludeNode): Promise<void>;
   visitComment(node: CommentNode): Promise<void>;
-  visitCopyUrl(node: CopyUrlNode): Promise<void>;
   visitAssignment(node: AssignmentNode): Promise<void>;
-  visitCopyContent(node: CopyContentNode): Promise<void>;
+  visitCopyUrl(node: PLFileURL): Promise<string>;
+  visitReference(node: PLReference): Promise<any>;
+  visitCopyContent(node: PLFileContent): Promise<string>;
 }
 
 
 
-import { JisonParser, JisonParserApi, StateType, SymbolsType, TerminalsType, ProductionsType, o } from '@ts-jison/parser';const $V0=[1,10],$V1=[1,11],$V2=[1,12],$V3=[1,13],$V4=[1,14],$V5=[1,15],$V6=[5,8,14,31,34,36,37],$V7=[1,29],$V8=[1,28],$V9=[1,30],$Va=[1,31],$Vb=[1,32],$Vc=[1,33],$Vd=[1,34],$Ve=[15,28],$Vf=[5,8,14,23,26,29,31,34,36,37],$Vg=[1,48],$Vh=[23,29],$Vi=[26,29];
+import { JisonParser, JisonParserApi, StateType, SymbolsType, TerminalsType, ProductionsType, o } from '@ts-jison/parser';const $V0=[1,8],$V1=[1,9],$V2=[1,11],$V3=[1,10],$V4=[5,8,12,19,33],$V5=[1,23],$V6=[1,22],$V7=[1,24],$V8=[1,25],$V9=[1,26],$Va=[1,27],$Vb=[1,28],$Vc=[1,29],$Vd=[1,30],$Ve=[1,31],$Vf=[13,30],$Vg=[5,8,12,19,25,28,31,33],$Vh=[1,45],$Vi=[25,31],$Vj=[28,31];
 
 export class PLParser extends JisonParser implements JisonParserApi {
     $?: any;
@@ -191,11 +204,11 @@ export class PLParser extends JisonParser implements JisonParserApi {
       super(yy, lexer);
     }
 
-    symbols_: SymbolsType = {"error":2,"program":3,"statements":4,"EOF":5,"statement":6,"comment":7,"COMMENT":8,"assignment_statement":9,"include_statement":10,"use_statement":11,"copyurl_statement":12,"copycontent_statement":13,"IDENTIFIER":14,"EQUALS":15,"value_multi":16,"value":17,"NUMBER":18,"BOOLEAN":19,"STRING":20,"COLON":21,"LBRACKET":22,"RBRACKET":23,"elements":24,"LBRACE":25,"RBRACE":26,"pairs":27,"ANY":28,"COMMA":29,"pair":30,"INCLUDE":31,"PATH":32,"AS":33,"EXTENDS":34,"INTO":35,"COPYURL":36,"COPYCONTENT":37,"$accept":0,"$end":1};
-    terminals_: TerminalsType = {2:"error",5:"EOF",8:"COMMENT",14:"IDENTIFIER",15:"EQUALS",18:"NUMBER",19:"BOOLEAN",20:"STRING",21:"COLON",22:"LBRACKET",23:"RBRACKET",25:"LBRACE",26:"RBRACE",28:"ANY",29:"COMMA",31:"INCLUDE",32:"PATH",33:"AS",34:"EXTENDS",35:"INTO",36:"COPYURL",37:"COPYCONTENT"};
-    productions_: ProductionsType = [0,[3,2],[4,1],[4,1],[4,2],[4,2],[7,1],[6,1],[6,1],[6,1],[6,1],[6,1],[9,3],[9,4],[9,3],[17,1],[17,1],[17,1],[17,1],[17,2],[17,2],[17,3],[17,2],[17,3],[16,2],[16,1],[24,1],[24,3],[27,1],[27,3],[30,3],[10,2],[10,4],[11,2],[11,4],[12,4],[13,4]];
-    table: Array<StateType> = [{3:1,4:2,6:3,7:4,8:$V0,9:5,10:6,11:7,12:8,13:9,14:$V1,31:$V2,34:$V3,36:$V4,37:$V5},{1:[3]},{5:[1,16],6:18,7:17,8:$V0,9:5,10:6,11:7,12:8,13:9,14:$V1,31:$V2,34:$V3,36:$V4,37:$V5},o($V6,[2,2]),o($V6,[2,3]),o($V6,[2,7]),o($V6,[2,8]),o($V6,[2,9]),o($V6,[2,10]),o($V6,[2,11]),o($V6,[2,6]),{15:[1,19]},{32:[1,20]},{32:[1,21]},{32:[1,22]},{32:[1,23]},{1:[2,1]},o($V6,[2,4]),o($V6,[2,5]),{14:$V7,15:[1,24],16:25,17:26,18:$V8,19:$V9,20:$Va,21:$Vb,22:$Vc,25:$Vd,28:[1,27]},o($V6,[2,31],{33:[1,35]}),o($V6,[2,33],{35:[1,36]}),{35:[1,37]},{35:[1,38]},o($V6,[2,12]),{15:[1,39],28:[1,40]},o($V6,[2,14]),o($Ve,[2,25]),o($Vf,[2,15]),o($Vf,[2,16]),o($Vf,[2,17]),o($Vf,[2,18]),{14:[1,41]},{14:$V7,17:44,18:$V8,19:$V9,20:$Va,21:$Vb,22:$Vc,23:[1,42],24:43,25:$Vd},{14:$Vg,26:[1,45],27:46,30:47},{32:[1,49]},{14:[1,50]},{14:[1,51]},{14:[1,52]},o($V6,[2,13]),o($Ve,[2,24]),o($Vf,[2,19]),o($Vf,[2,20]),{23:[1,53],29:[1,54]},o($Vh,[2,26]),o($Vf,[2,22]),{26:[1,55],29:[1,56]},o($Vi,[2,28]),{21:[1,57]},o($V6,[2,32]),o($V6,[2,34]),o($V6,[2,35]),o($V6,[2,36]),o($Vf,[2,21]),{14:$V7,17:58,18:$V8,19:$V9,20:$Va,21:$Vb,22:$Vc,25:$Vd},o($Vf,[2,23]),{14:$Vg,30:59},{14:$V7,17:60,18:$V8,19:$V9,20:$Va,21:$Vb,22:$Vc,25:$Vd},o($Vh,[2,27]),o($Vi,[2,29]),o($Vi,[2,30])];
-    defaultActions: {[key:number]: any} = {16:[2,1]};
+    symbols_: SymbolsType = {"error":2,"program":3,"statements":4,"EOF":5,"statement":6,"comment":7,"COMMENT":8,"assignment_statement":9,"include_statement":10,"extends_statement":11,"IDENTIFIER":12,"EQUALS":13,"value_multi":14,"value":15,"NUMBER":16,"BOOLEAN":17,"STRING":18,"EXTENDS":19,"PATH":20,"COPYURL":21,"COPYCONTENT":22,"COLON":23,"LBRACKET":24,"RBRACKET":25,"elements":26,"LBRACE":27,"RBRACE":28,"pairs":29,"ANY":30,"COMMA":31,"pair":32,"INCLUDE":33,"AS":34,"$accept":0,"$end":1};
+    terminals_: TerminalsType = {2:"error",5:"EOF",8:"COMMENT",12:"IDENTIFIER",13:"EQUALS",16:"NUMBER",17:"BOOLEAN",18:"STRING",19:"EXTENDS",20:"PATH",21:"COPYURL",22:"COPYCONTENT",23:"COLON",24:"LBRACKET",25:"RBRACKET",27:"LBRACE",28:"RBRACE",30:"ANY",31:"COMMA",33:"INCLUDE",34:"AS"};
+    productions_: ProductionsType = [0,[3,2],[4,1],[4,1],[4,2],[4,2],[7,1],[6,1],[6,1],[6,1],[9,3],[9,4],[9,3],[15,1],[15,1],[15,1],[15,1],[15,2],[15,2],[15,2],[15,2],[15,2],[15,3],[15,2],[15,3],[14,2],[14,1],[26,1],[26,3],[29,1],[29,3],[32,3],[10,2],[10,4],[11,2]];
+    table: Array<StateType> = [{3:1,4:2,6:3,7:4,8:$V0,9:5,10:6,11:7,12:$V1,19:$V2,33:$V3},{1:[3]},{5:[1,12],6:14,7:13,8:$V0,9:5,10:6,11:7,12:$V1,19:$V2,33:$V3},o($V4,[2,2]),o($V4,[2,3]),o($V4,[2,7]),o($V4,[2,8]),o($V4,[2,9]),o($V4,[2,6]),{13:[1,15]},{20:[1,16]},{20:[1,17]},{1:[2,1]},o($V4,[2,4]),o($V4,[2,5]),{12:$V5,13:[1,18],14:19,15:20,16:$V6,17:$V7,18:$V8,19:$V9,21:$Va,22:$Vb,23:$Vc,24:$Vd,27:$Ve,30:[1,21]},o($V4,[2,32],{34:[1,32]}),o($V4,[2,34]),o($V4,[2,10]),{13:[1,33],30:[1,34]},o($V4,[2,12]),o($Vf,[2,26]),o($Vg,[2,13]),o($Vg,[2,14]),o($Vg,[2,15]),o($Vg,[2,16]),{20:[1,35]},{20:[1,36]},{20:[1,37]},{12:[1,38]},{12:$V5,15:41,16:$V6,17:$V7,18:$V8,19:$V9,21:$Va,22:$Vb,23:$Vc,24:$Vd,25:[1,39],26:40,27:$Ve},{12:$Vh,28:[1,42],29:43,32:44},{20:[1,46]},o($V4,[2,11]),o($Vf,[2,25]),o($Vg,[2,17]),o($Vg,[2,18]),o($Vg,[2,19]),o($Vg,[2,20]),o($Vg,[2,21]),{25:[1,47],31:[1,48]},o($Vi,[2,27]),o($Vg,[2,23]),{28:[1,49],31:[1,50]},o($Vj,[2,29]),{23:[1,51]},o($V4,[2,33]),o($Vg,[2,22]),{12:$V5,15:52,16:$V6,17:$V7,18:$V8,19:$V9,21:$Va,22:$Vb,23:$Vc,24:$Vd,27:$Ve},o($Vg,[2,24]),{12:$Vh,32:53},{12:$V5,15:54,16:$V6,17:$V7,18:$V8,19:$V9,21:$Va,22:$Vb,23:$Vc,24:$Vd,27:$Ve},o($Vi,[2,28]),o($Vj,[2,30]),o($Vj,[2,31])];
+    defaultActions: {[key:number]: any} = {12:[2,1]};
 
     performAction (yytext:string, yyleng:number, yylineno:number, yy:any, yystate:number /* action[1] */, $$:any /* vstack */, _$:any /* lstack */): any {
 /* this == yyval */
@@ -204,7 +217,7 @@ export class PLParser extends JisonParser implements JisonParserApi {
 case 1:
  return $$[$0-1] 
 break;
-case 2: case 26: case 28:
+case 2: case 27: case 29:
  this.$ = [$$[$0]]; 
 break;
 case 3:
@@ -219,71 +232,71 @@ break;
 case 6:
  this.$ = new CommentNode($$[$0], yylineno + 1); 
 break;
-case 7: case 8: case 9: case 10: case 11:
+case 7: case 8: case 9:
  this.$ = $$[$0]; 
 break;
-case 12:
+case 10:
  this.$ = new AssignmentNode($$[$0-2], new PLString('', yylineno + 1), yylineno + 1); 
 break;
-case 13:
- this.$ = new AssignmentNode($$[$0-3], $$[$0-1], yylineno + 1); 
+case 11:
+ this.$ = new AssignmentNode($$[$0-3], new PLString($$[$0-1], yylineno + 1), yylineno + 1); 
 break;
-case 14:
+case 12:
  this.$ = new AssignmentNode($$[$0-2], $$[$0], yylineno + 1); 
 break;
-case 15:
+case 13:
  this.$ = new PLNumber(Number($$[$0]), yylineno + 1); 
 break;
-case 16:
- this.$ = new PLIdentifier($$[$0], yylineno + 1); 
+case 14:
+ this.$ = new PLReference($$[$0], yylineno + 1); 
 break;
-case 17:
+case 15:
  this.$ = new PLBoolean(Boolean($$[$0].toLowerCase()), yylineno + 1); 
 break;
-case 18:
+case 16:
  this.$ = new PLString($$[$0].slice(1, -1), yylineno + 1); 
 break;
+case 17:
+ this.$ = new PLDict($$[$0], yylineno + 1); 
+break;
+case 18:
+ this.$ = new PLFileURL($$[$0], yylineno + 1); 
+break;
 case 19:
- this.$ = new PLComponent($$[$0], yylineno + 1) 
+ this.$ = new PLFileContent($$[$0], yylineno + 1); 
 break;
 case 20:
- this.$ = new PLArray([], yylineno + 1); 
+ this.$ = new PLComponent($$[$0], yylineno + 1); 
 break;
 case 21:
- this.$ = new PLArray($$[$0-1], yylineno + 1); 
+ this.$ = new PLArray([], yylineno + 1); 
 break;
 case 22:
- this.$ = new PLObject({}, yylineno + 1); 
+ this.$ = new PLArray($$[$0-1], yylineno + 1); 
 break;
 case 23:
- this.$ = new PLObject($$[$0-1], yylineno + 1); 
+ this.$ = new PLObject([], yylineno + 1); 
 break;
 case 24:
- this.$ = $$[$0-1] + $$[$0] 
+ this.$ = new PLObject($$[$0-1], yylineno + 1); 
 break;
-case 27: case 29:
+case 25:
+ this.$ = $$[$0-1] + $$[$0]; 
+break;
+case 28: case 30:
  this.$ = $$[$0-2].concat($$[$0]); 
 break;
-case 30:
+case 31:
  this.$ = { key: $$[$0-2], value: $$[$0] }; 
 break;
-case 31:
+case 32:
  this.$ = new IncludeNode($$[$0], '', yylineno + 1); 
 break;
-case 32:
+case 33:
  this.$ = new IncludeNode($$[$0-2], $$[$0], yylineno + 1); 
 break;
-case 33:
- this.$ = new ExtendsNode($$[$0], '', yylineno + 1); 
-break;
 case 34:
- this.$ = new ExtendsNode($$[$0-2], $$[$0], yylineno + 1); 
-break;
-case 35:
- this.$ = new CopyUrlNode($$[$0-2], $$[$0], yylineno + 1); 
-break;
-case 36:
- this.$ = new CopyContentNode($$[$0-2], $$[$0], yylineno + 1); 
+ this.$ = new ExtendsNode($$[$0], yylineno + 1); 
 break;
         }
     }
@@ -298,8 +311,8 @@ export class PLLexer extends JisonLexer implements JisonLexerApi {
         super(yy);
     }
 
-    rules: RegExp[] = [/^(?:\s+)/,/^(?:\/\/.*)/,/^(?:\/\*([^*]|\*[^\/])*\*\/)/,/^(?:==)/,/^(?:=)/,/^(?:@copycontent\b)/,/^(?:@copyurl\b)/,/^(?:@include\b)/,/^(?:@extends\b)/,/^(?:as\b)/,/^(?:into\b)/,/^(?:\/[^\s\n]+)/,/^(?:[+-]?\d+)/,/^(?:[,])/,/^(?:[:])/,/^(?:[\{])/,/^(?:[\}])/,/^(?:[\[])/,/^(?:[\]])/,/^(?:true|false|True|False\b)/,/^(?:[a-zA-Z_](\.?[a-zA-Z0-9_])*)/,/^(?:"([^\\\"]|\\.)*")/,/^(?:$)/,/^(?:\s==)/,/^(?:\s+)/,/^(?:[^\s]*)/];
-    conditions: any = {"MULTI":{"rules":[22,23,24,25],"inclusive":true},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22],"inclusive":true}}
+    rules: RegExp[] = [/^(?:\s+)/,/^(?:\/\/.*)/,/^(?:\/\*([^*]|\*[^\/])*\*\/)/,/^(?:==)/,/^(?:=)/,/^(?:@copycontent\b)/,/^(?:@copyurl\b)/,/^(?:@include\b)/,/^(?:@extends\b)/,/^(?:as\b)/,/^(?:\/[^\s\n\,]+)/,/^(?:[+-]?\d+)/,/^(?:[,])/,/^(?:[:])/,/^(?:[\{])/,/^(?:[\}])/,/^(?:[\[])/,/^(?:[\]])/,/^(?:true|false|True|False\b)/,/^(?:[a-zA-Z_](\.?[a-zA-Z0-9_])*)/,/^(?:"([^\\\"]|\\.)*")/,/^(?:$)/,/^(?:\s==)/,/^(?:\s+)/,/^(?:[^\s]*)/];
+    conditions: any = {"MULTI":{"rules":[21,22,23,24],"inclusive":true},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21],"inclusive":true}}
     performAction (yy:any,yy_:any,$avoiding_name_collisions:any,YY_START:any): any {
           var YYSTATE=YY_START;
         switch($avoiding_name_collisions) {
@@ -309,51 +322,49 @@ export class PLLexer extends JisonLexer implements JisonLexerApi {
       break;
     case 2:return 8
       break;
-    case 3: this.begin('MULTI'); return 15; 
+    case 3: this.begin('MULTI'); return 13; 
       break;
-    case 4:return 15
+    case 4:return 13
       break;
-    case 5:return 37
+    case 5:return 22
       break;
-    case 6:return 36
+    case 6:return 21
       break;
-    case 7:return 31
+    case 7:return 33
       break;
-    case 8:return 34
+    case 8:return 19
       break;
-    case 9:return 33
+    case 9:return 34
       break;
-    case 10:return 35
+    case 10:return 20 // COMMA AT THE END ALLOW TO INCLUDES PATH INSIDE ARRAY
       break;
-    case 11:return 32
+    case 11:return 16
       break;
-    case 12:return 18
+    case 12:return 31
       break;
-    case 13:return 29
+    case 13:return 23
       break;
-    case 14:return 21
+    case 14:return 27
       break;
-    case 15:return 25
+    case 15:return 28
       break;
-    case 16:return 26
+    case 16:return 24
       break;
-    case 17:return 22
+    case 17:return 25
       break;
-    case 18:return 23
+    case 18:return 17
       break;
-    case 19:return 19
+    case 19:return 12
       break;
-    case 20:return 14
+    case 20:return 18
       break;
-    case 21:return 20
+    case 21:return 5
       break;
-    case 22:return 5
+    case 22:  this.popState(); return 13 
       break;
-    case 23:  this.popState(); return 15 
+    case 23:  return 30 
       break;
-    case 24:  return 28 
-      break;
-    case 25:  return 28 
+    case 24:  return 30 
       break;
         }
     }

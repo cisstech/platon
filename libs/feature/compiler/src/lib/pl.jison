@@ -4,65 +4,106 @@
 // VALUES
 
 interface PLValue {
-  readonly type: 'number' | 'boolean' | 'string' | 'array' | 'object' | 'component' | 'identifier';
-  readonly value: string | number | boolean | PLValue[] | Record<string, PLValue>;
+  readonly value: string | number | boolean | PLValue[] | {key: string, value: PLValue}[];
   readonly lineno: number;
-}
-
-export class PLString implements PLValue {
-  readonly type = 'string';
-  constructor(
-    readonly value: string,
-    readonly lineno: number,
-  ) {}
-}
-
-export class PLNumber implements PLValue {
-  readonly type = 'number';
-  constructor(
-    readonly value: number,
-    readonly lineno: number,
-  ) {}
-}
-
-export class PLBoolean implements PLValue {
-  readonly type = 'boolean';
-  constructor(
-    readonly value: boolean,
-    readonly lineno: number,
-  ) {}
-}
-
-export class PLComponent implements PLValue {
-  readonly type = 'component';
-  constructor(
-    readonly value: string,
-    readonly lineno: number,
-  ) {}
+  toJSON(visitor: PLVisitor): any | Promise<any>;
 }
 
 export class PLArray implements PLValue {
-  readonly type = 'array';
   constructor(
     readonly value: PLValue[],
     readonly lineno: number,
   ) {}
+  async toJSON(visitor: PLVisitor) {
+    const result: any[] = [];
+    // do not use promise.all to allow cache file operations (@copyurl, @copycontent...)
+    for (const e of this.value) {
+      result.push(await e.toJSON(visitor));
+    }
+    return result;
+  }
 }
 
 export class PLObject implements PLValue {
-  readonly type = 'array';
   constructor(
-    readonly value: Record<string, PLValue>,
+    readonly value: {key: string, value: PLValue}[],
     readonly lineno: number,
   ) {}
+  async toJSON(visitor: PLVisitor) {
+    // do not use promise.all to allow cache file operations (@copyurl, @copycontent...)
+    for (let i = 0; i < this.value.length; i++) {
+      this.value[i].value = await this.value[i].value.toJSON(visitor);
+    }
+    return this.value.reduce((acc: any, curr: any) => {
+      acc[curr.key] = curr.value;
+      return acc;
+    }, {} as any);
+  }
 }
 
-export class PLIdentifier implements PLValue {
-  readonly type = 'identifier';
+export class PLString implements PLValue {
   constructor(
     readonly value: string,
     readonly lineno: number,
   ) {}
+
+  toJSON() { return this.value.trim(); }
+}
+
+export class PLNumber implements PLValue {
+  constructor(
+    readonly value: number,
+    readonly lineno: number,
+  ) {}
+  toJSON() { return this.value; }
+}
+
+export class PLBoolean implements PLValue {
+  constructor(
+    readonly value: boolean,
+    readonly lineno: number,
+  ) {}
+  toJSON() { return this.value; }
+}
+
+export class PLComponent implements PLValue {
+  constructor(
+    readonly value: string,
+    readonly lineno: number,
+  ) {}
+  toJSON() { return { 'cid': '', type: this.value }; }
+}
+
+export class PLDict implements PLValue {
+  constructor(
+    readonly value: string,
+    readonly lineno: number,
+  ) {}
+  toJSON() { return { '__pldict': this.value }; }
+}
+
+export class PLFileURL implements PLValue {
+  constructor(
+    readonly value: string,
+    readonly lineno: number,
+  ) {}
+  toJSON(visitor: PLVisitor) { return visitor.visitCopyUrl(this); }
+}
+
+export class PLReference implements PLValue {
+  constructor(
+    readonly value: string,
+    readonly lineno: number,
+  ) {}
+  toJSON(visitor: PLVisitor) { return visitor.visitReference(this); }
+}
+
+export class PLFileContent implements PLValue {
+  constructor(
+    readonly value: string,
+    readonly lineno: number,
+  ) {}
+  toJSON(visitor: PLVisitor) { return visitor.visitCopyContent(this); }
 }
 
 // NODES
@@ -74,7 +115,6 @@ export interface PLNode {
 export class ExtendsNode implements PLNode {
   constructor(
     readonly path: string,
-    readonly alias: string,
     readonly lineno: number
   ) {}
   accept(visitor: PLVisitor): Promise<void> {
@@ -103,17 +143,6 @@ export class IncludeNode implements PLNode {
   }
 }
 
-export class CopyUrlNode implements PLNode {
-  constructor(
-    readonly path: string,
-    readonly into: string,
-    readonly lineno: number
-  ) {}
-  accept(visitor: PLVisitor): Promise<void> {
-    return visitor.visitCopyUrl(this);
-  }
-}
-
 export class AssignmentNode implements PLNode {
   constructor(
     readonly key: string,
@@ -125,44 +154,27 @@ export class AssignmentNode implements PLNode {
   }
 }
 
-export class CopyContentNode implements PLNode {
-  constructor(
-    readonly path: string,
-    readonly into: string,
-    readonly lineno: number
-  ) {}
-  accept(visitor: PLVisitor): Promise<void> {
-    return visitor.visitCopyContent(this);
-  }
-}
-
 
 // AST
-export interface PLMessage {
-  lineno: number;
-  filepath: string;
-  description: string;
-}
-
-export interface PLVariable<T = unknown> {
-  value: T;
-  doc?: string;
-  lineno: number;
-  filepath: string;
-}
-
-export interface PLDependency {
-  path: string;
-  type: 'use' | 'copyurl' | 'copycontent' | 'include';
-  lineno: number;
-  alias?: string;
-}
 
 export interface PLSourceFile {
-  errors: PLMessage[];
-  warnings: PLMessage[];
-  variables: Record<string, PLVariable>;
-  dependencies: PLDependency[];
+  errors: {
+    lineno: number,
+    abspath: string
+    description: string
+  }[];
+  warnings: {
+    lineno: number,
+    abspath: string
+    description: string
+  }[];
+  variables: Record<string, unknown>;
+  dependencies: {
+    alias?: string;
+    lineno: number;
+    content: string;
+    abspath: string;
+  }[];
 }
 
 // VISITOR
@@ -172,9 +184,10 @@ export interface PLVisitor {
   visitExtends(node: ExtendsNode): Promise<void>;
   visitInclude(node: IncludeNode): Promise<void>;
   visitComment(node: CommentNode): Promise<void>;
-  visitCopyUrl(node: CopyUrlNode): Promise<void>;
   visitAssignment(node: AssignmentNode): Promise<void>;
-  visitCopyContent(node: CopyContentNode): Promise<void>;
+  visitCopyUrl(node: PLFileURL): Promise<string>;
+  visitReference(node: PLReference): Promise<any>;
+  visitCopyContent(node: PLFileContent): Promise<string>;
 }
 
 %}
@@ -195,8 +208,7 @@ export interface PLVisitor {
 <INITIAL>'@include'                             return 'INCLUDE'
 <INITIAL>'@extends'                             return 'EXTENDS'
 <INITIAL>'as'                                   return 'AS'
-<INITIAL>'into'                                 return 'INTO'
-<INITIAL>\/[^\s\n]+                             return 'PATH'
+<INITIAL>\/[^\s\n\,]+                           return 'PATH' // COMMA AT THE END ALLOW TO INCLUDES PATH INSIDE ARRAY
 <INITIAL>[+-]?\d+                               return 'NUMBER'
 <INITIAL>[,]                                    return 'COMMA'
 <INITIAL>[:]                                    return 'COLON'
@@ -248,11 +260,7 @@ statement
         { $$ = $1; }
     | include_statement
         { $$ = $1; }
-    | use_statement
-        { $$ = $1; }
-    | copyurl_statement
-        { $$ = $1; }
-    | copycontent_statement
+    | extends_statement
         { $$ = $1; }
     ;
 
@@ -260,7 +268,7 @@ assignment_statement
     : IDENTIFIER EQUALS EQUALS
         { $$ = new AssignmentNode($1, new PLString('', yylineno + 1), yylineno + 1); }
     | IDENTIFIER EQUALS value_multi EQUALS
-        { $$ = new AssignmentNode($1, $3, yylineno + 1); }
+        { $$ = new AssignmentNode($1, new PLString($3, yylineno + 1), yylineno + 1); }
     | IDENTIFIER EQUALS value
         { $$ = new AssignmentNode($1, $3, yylineno + 1); }
     ;
@@ -269,26 +277,32 @@ value
     : NUMBER
       { $$ = new PLNumber(Number($1), yylineno + 1); }
     | IDENTIFIER
-      { $$ = new PLIdentifier($1, yylineno + 1); }
+      { $$ = new PLReference($1, yylineno + 1); }
     | BOOLEAN
       { $$ = new PLBoolean(Boolean($1.toLowerCase()), yylineno + 1); }
     | STRING
       { $$ = new PLString($1.slice(1, -1), yylineno + 1); }
+    | EXTENDS PATH
+      { $$ = new PLDict($2, yylineno + 1); }
+    | COPYURL PATH
+      { $$ = new PLFileURL($2, yylineno + 1); }
+    | COPYCONTENT PATH
+      { $$ = new PLFileContent($2, yylineno + 1); }
     | COLON IDENTIFIER
-      { $$ = new PLComponent($2, yylineno + 1) }
+      { $$ = new PLComponent($2, yylineno + 1); }
     | LBRACKET RBRACKET
       { $$ = new PLArray([], yylineno + 1); }
     | LBRACKET elements RBRACKET
       { $$ = new PLArray($2, yylineno + 1); }
     | LBRACE RBRACE
-      { $$ = new PLObject({}, yylineno + 1); }
+      { $$ = new PLObject([], yylineno + 1); }
     | LBRACE pairs RBRACE
       { $$ = new PLObject($2, yylineno + 1); }
     ;
 
 value_multi
     : value_multi ANY
-      { $$ = $1 + $2 }
+      { $$ = $1 + $2; }
     | ANY
     ;
 
@@ -318,21 +332,8 @@ include_statement
       { $$ = new IncludeNode($2, $4, yylineno + 1); }
     ;
 
-use_statement
+extends_statement
     : EXTENDS PATH
-      { $$ = new ExtendsNode($2, '', yylineno + 1); }
-    | EXTENDS PATH INTO IDENTIFIER
-      { $$ = new ExtendsNode($2, $4, yylineno + 1); }
+      { $$ = new ExtendsNode($2, yylineno + 1); }
     ;
-
-copyurl_statement
-    : COPYURL PATH INTO IDENTIFIER
-      { $$ = new CopyUrlNode($2, $4, yylineno + 1); }
-    ;
-
-copycontent_statement
-    : COPYCONTENT PATH INTO IDENTIFIER
-      { $$ = new CopyContentNode($2, $4, yylineno + 1); }
-    ;
-
 %%

@@ -12,6 +12,7 @@ import {
   ResourceTypes,
   ResourceVisibilities
 } from '@platon/feature/resource/common';
+import { isUUID4 } from '@platon/shared/server';
 import { DataSource, Not, Repository } from 'typeorm';
 import { Optional } from 'typescript-optional';
 import { ResourceMemberEntity } from './members/member.entity';
@@ -79,15 +80,29 @@ export class ResourceService {
     ) as Promise<ResourceStatisic[]>).then(response => response[0])
   }
 
-  async findById(id: string): Promise<Optional<ResourceEntity>> {
+  async findById(id: string, resolveRelations = true): Promise<Optional<ResourceEntity>> {
     const query = this.repository.createQueryBuilder('resource')
-    query.leftJoinAndSelect('resource.topics', 'topic')
-    query.leftJoinAndSelect('resource.levels', 'level')
-    query.leftJoinAndSelect('ResourceStats', 'stats', 'stats.id = resource.id')
+    if (resolveRelations) {
+      query.leftJoinAndSelect('resource.topics', 'topic')
+      query.leftJoinAndSelect('resource.levels', 'level')
+    }
 
     return Optional.ofNullable(
       await query.where('resource.id = :id', { id }).getOne()
     );
+  }
+
+  async findByIdOrCode(idOrCode: string, resolveRelations = true): Promise<Optional<ResourceEntity>> {
+    const query = this.repository.createQueryBuilder('resource')
+    if (resolveRelations) {
+      query.leftJoinAndSelect('resource.topics', 'topic')
+      query.leftJoinAndSelect('resource.levels', 'level')
+    }
+
+    if (isUUID4(idOrCode)) {
+      return Optional.ofNullable(await query.where('resource.id = :id', { id: idOrCode }).getOne());
+    }
+    return Optional.ofNullable(await query.where('resource.code = :code', { code: idOrCode }).getOne());
   }
 
   async findPersonal(ownerId: string): Promise<ResourceEntity> {

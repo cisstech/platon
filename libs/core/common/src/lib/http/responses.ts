@@ -77,7 +77,19 @@ export class NotFoundResponse extends ErrorResponse {
     message: string
   ) {
     super({
-      status: 404,
+      status: HTTP_STATUS_CODE.NOT_FOUND,
+      message
+    })
+  }
+}
+
+
+export class BadRequestResponse extends ErrorResponse {
+  constructor(
+    message: string
+  ) {
+    super({
+      status: HTTP_STATUS_CODE.BAD_REQUEST,
       message
     })
   }

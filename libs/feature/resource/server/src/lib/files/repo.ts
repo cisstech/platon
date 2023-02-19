@@ -22,10 +22,11 @@ type Node = ResourceFile;
 
 export class Repo {
   private ignoreCommits = false;
+  private readonly resource = this.root.split('/').pop() as string;
   private readonly repo = {
     fs,
     dir: this.root
-  };
+  }
 
   private constructor(
     private readonly root: string,
@@ -201,15 +202,16 @@ export class Repo {
 
   async read(path = ROOT, version = LATEST): Promise<[Node, Promise<Uint8Array>?]> {
     path = path || ROOT;
-    version = version === 'latest' ? 'HEAD' : version;
 
+    const ref = version === 'latest' ? 'HEAD' : version;
     const prefix = path === ROOT ? '' : path;
 
     let match: Node | undefined;
     let download: Promise<Uint8Array> | undefined;
+
     await git.walk({
       ...this.repo,
-      trees: [git.TREE({ ref: version || 'HEAD' })],
+      trees: [git.TREE({ ref })],
       map: async (filepath, [entry]) => {
         if (match && match.type === 'file')
           return
@@ -220,16 +222,18 @@ export class Repo {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const [oid, type] = await Promise.all([entry!.oid(), entry!.type()]);
 
+        const base = `/api/v1/files/${this.resource}/${filepath === '.' ? '' : filepath}`;
+
         const node: Node = {
           oid,
           type: type === 'tree' ? FileTypes.folder : FileTypes.file,
           path: filepath,
           version: version === 'HEAD' ? LATEST : version,
-          url: '',
-          bundleUrl: '',
-          resourceId: '',
-          describeUrl: '',
-          downloadUrl: '',
+          url: `${base}?version=${version}`,
+          bundleUrl: `${base}?bundle`,
+          resourceId: this.resource,
+          describeUrl: `${base}?describe`,
+          downloadUrl: `${base}?download&version=${version}`,
         };
 
         if (filepath === path) {
