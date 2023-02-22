@@ -7,7 +7,7 @@ import { ResourceService } from '../resource.service';
 import { LATEST, Repo } from './repo';
 
 @Injectable()
-export class FileService {
+export class ResourceFileService {
   constructor(
     private readonly resourceService: ResourceService
   ) { }
@@ -36,7 +36,7 @@ export class FileService {
     ];
   }
 
-  async compile(resourceId: string, version: string, user?: User) {
+  async compile(resourceId: string, version?: string, user?: User) {
     const [repo, resource] = await this.repo(resourceId, user);
     if (resource.type === 'CIRCLE')
       throw new BadRequestResponse(`Compiler: cannot compile circle resource`);
@@ -46,25 +46,31 @@ export class FileService {
       ACTIVITY: 'main.pla',
     }[resource.type];
 
-    const [mainfile, source] = await repo.read(main);
+    const [mainfile, source] = await repo.read(main, version);
     if (!source) {
       throw new NotFoundException('Compiler: missing main file')
     }
 
     const statements = new PLParser().parse(Buffer.from((await source).buffer).toString());
 
-    const compiler = new PLCompiler(resourceId, mainfile.path, mainfile.version, {
-      resolveUrl: async (resource, version, path) => {
-        const [repo] = await this.repo(resource, user);
-        const [file] = await repo.read(path, version || LATEST);
-        return file.downloadUrl;
-      },
-      resolveContent: async (resource, version, path) => {
-        const [repo] = await this.repo(resource, user);
-        const [, content] = await repo.read(path, version || LATEST);
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        return Buffer.from((await content!).buffer).toString()
-      },
+    const compiler = new PLCompiler({
+      type: resource.type === 'EXERCISE' ? 'exercise' : 'activity',
+      resource: resourceId,
+      filepath: mainfile.path,
+      version: mainfile.version,
+      resolver: {
+        resolveUrl: async (resource, version, path) => {
+          const [repo] = await this.repo(resource, user);
+          const [file] = await repo.read(path, version || LATEST);
+          return file.downloadUrl;
+        },
+        resolveContent: async (resource, version, path) => {
+          const [repo] = await this.repo(resource, user);
+          const [, content] = await repo.read(path, version || LATEST);
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          return Buffer.from((await content!).buffer).toString()
+        },
+      }
     });
 
     return await compiler.visit(statements);

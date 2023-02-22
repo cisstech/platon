@@ -1,0 +1,7 @@
+<ng-container *ngIf="layout.type === 'exercise'; else: activity">
+  <player-exercise [layout]="$any(layout)" />
+</ng-container>
+<ng-template #activity>
+  <player-activity [layout]="$any(layout)" />
+</ng-template>
+

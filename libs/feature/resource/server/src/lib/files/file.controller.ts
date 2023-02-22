@@ -7,15 +7,15 @@ import { Response } from 'express';
 import { createReadStream } from 'fs';
 import { basename, join } from 'path';
 import { FileCreateDTO, FileMoveDTO, FileReleaseDTO, FileRetrieveDTO, FileUpdateDTO } from './file.dto';
-import { FileService } from './file.service';
+import { ResourceFileService } from './file.service';
 import { LATEST, LATEST as LATEST_VERSION } from './repo';
 
 
 
 @Controller('files')
-export class FileController {
+export class ResourceFileController {
   constructor(
-    private readonly service: FileService
+    private readonly service: ResourceFileService
   ) { }
 
   @Post('/release/:resourceId')

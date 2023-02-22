@@ -33,5 +33,6 @@ export class ResourceBrowseHeaderComponent {
   @Input() resource!: Resource;
 
   @Output() edit = new EventEmitter<void>();
+  @Output() preview = new EventEmitter<void>();
   @Output() refresh = new EventEmitter<string>();
 }

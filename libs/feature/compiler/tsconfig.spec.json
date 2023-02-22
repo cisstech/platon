@@ -5,6 +5,7 @@
     "module": "commonjs",
     "types": ["jest", "node"],
     "composite": true,
+    "declaration": true,
     "emitDecoratorMetadata": true
   },
   "include": [

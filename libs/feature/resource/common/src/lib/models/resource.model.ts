@@ -51,6 +51,11 @@ export interface UpdateResource {
   readonly topics?: string[]
 }
 
+export interface PreviewResource {
+  version?: string;
+  content?: string;
+}
+
 
 export const resourceAncestors = (tree: CircleTree, id: string): CircleTree[] => {
   if (tree.id === id) {

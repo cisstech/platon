@@ -1,0 +1,34 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>{{ layout.title }}</mat-card-title>
+    <mat-card-subtitle>Auteur</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-divider />
+    <div class="exercise-statement">
+      {{ layout.statement }}
+    </div>
+    <mat-divider />
+    <div class="exercise-form">
+      {{ layout.form }}
+    </div>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="primary">
+      <mat-icon>check</mat-icon>
+      Valider
+    </button>
+    <div class="spacer"></div>
+    <button mat-raised-button>
+      <mat-icon>menu_book</mat-icon>
+      Théorie</button>
+    <button mat-raised-button>
+      <mat-icon>key</mat-icon>
+      Solution
+    </button>
+    <button mat-raised-button>
+      <mat-icon>lightbulb</mat-icon>
+      Aide
+    </button>
+  </mat-card-actions>
+</mat-card>

@@ -1,6 +1,7 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { CoreServerModule } from '@platon/core/server';
 import { FeatureLtiServerModule, LTIMiddleware } from '@platon/feature/lti/server';
+import { FeaturePlayerServerModule } from '@platon/feature/player/server';
 import { FeatureResourceServerModule } from '@platon/feature/resource/server';
 
 
@@ -8,6 +9,7 @@ import { FeatureResourceServerModule } from '@platon/feature/resource/server';
   imports: [
     CoreServerModule,
     FeatureLtiServerModule,
+    FeaturePlayerServerModule,
     FeatureResourceServerModule,
   ],
 })

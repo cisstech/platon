@@ -160,7 +160,10 @@ export class AssignmentNode implements PLNode {
 
 // AST
 
+export type PLSourceFileTypes = 'exercise' | 'activity'
+
 export interface PLSourceFile {
+  type: PLSourceFileTypes;
   errors: {
     lineno: number,
     abspath: string

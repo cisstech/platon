@@ -10,6 +10,13 @@ export default [
     )
   },
   {
+    path: 'preview',
+    loadChildren: () => import(
+      /* webpackChunkName: "resource-preview" */
+      './preview/preview.routes'
+    )
+  },
+  {
     path: ':id',
     component: ResourceComponent,
     children: [

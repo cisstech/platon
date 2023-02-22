@@ -14,7 +14,11 @@
       [nzValue]="item.tag" />
   </nz-select>
   <nz-button-group>
-    <a nz-button nzType="primary" nz-tooltip="Prévisualiser">
+    <a
+      nz-button
+      nzType="primary"
+      nz-tooltip="Prévisualiser"
+      (click)="preview.emit()">
       <i nz-icon nzType="play-circle" nzTheme="outline"></i>
     </a>
     <button

@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { BaseDTO, LevelDTO, TopicDTO } from '@platon/core/server';
-import { CircleTree, CreateResource, Resource, ResourceStatus, ResourceTypes, ResourceVisibilities, UpdateResource } from '@platon/feature/resource/common';
+import { CircleTree, CreateResource, Resource, ResourceStatus, ResourceTypes, ResourceVisibilities, UpdateResource, PreviewResource } from '@platon/feature/resource/common';
 import { Type } from 'class-transformer';
 import { IsArray, IsBoolean, IsEnum, IsOptional, IsString, IsUUID } from 'class-validator';
 
@@ -169,4 +169,16 @@ export class UpdateResourceDTO implements UpdateResource {
   @IsOptional()
   @ApiProperty()
   topics?: string[] = []
+}
+
+export class PreviewResourceDTO implements PreviewResource {
+  @IsString()
+  @IsOptional()
+  @ApiProperty()
+  version?: string
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty()
+  content?: string
 }

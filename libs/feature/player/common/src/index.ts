@@ -1,1 +1,1 @@
-export * from './lib/feature-player-common';
+export * from './lib/player.model';

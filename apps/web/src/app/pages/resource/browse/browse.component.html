@@ -4,6 +4,7 @@
     [versions]="versions!"
     [resource]="context.resource!"
     (edit)="editing = true"
+    (preview)="preview = true"
     (refresh)="refresh($event)" />
     <res-files [tree]="tree!" />
     <nz-modal
@@ -12,7 +13,7 @@
         padding: '0',
         height: '90vh'
       }"
-      nzClassName="editor-wrapper"
+      nzClassName="resource-browse-modal"
       nzWidth="90vw"
       nzMask="true"
       nzClosable="false"
@@ -20,11 +21,30 @@
       nzMaskClosable="true"
       (nzOnOk)="refresh(version)"
       (nzOnCancel)="refresh(version)"
-      [nzFooter]="editorFooter">
+      [nzFooter]="modalFooter">
       <ng-container *nzModalContent>
         <app-resource-editor [resource]="context.resource!" [version]="version" />
       </ng-container>
     </nz-modal>
-    <ng-template #editorFooter />
+    <nz-modal
+      [(nzVisible)]="preview"
+      [nzBodyStyle]="{
+        padding: '0',
+        height: '90vh'
+      }"
+      nzClassName="resource-browse-modal"
+      nzWidth="90vw"
+      nzMask="true"
+      nzClosable="false"
+      nzCentered="true"
+      nzMaskClosable="true"
+      (nzOnOk)="preview = false"
+      (nzOnCancel)="preview = false"
+      [nzFooter]="modalFooter">
+      <ng-container *nzModalContent>
+        <iframe [src]="previewUrl|safe:'resource'" frameborder="0"></iframe>
+      </ng-container>
+    </nz-modal>
+    <ng-template #modalFooter />
 </ng-container>
 

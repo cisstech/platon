@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { AssignmentNode, CommentNode, ExtendsNode, IncludeNode, PLFileContent, PLFileURL, PLNode, PLReference, PLSourceFile, PLVisitor } from "./pl.parser";
+import { AssignmentNode, CommentNode, ExtendsNode, IncludeNode, PLFileContent, PLFileURL, PLNode, PLReference, PLSourceFile, PLSourceFileTypes, PLVisitor } from "./pl.parser";
 
 /**
  * File reference resolver for the PL compiler.
@@ -28,21 +28,35 @@ export interface PLReferenceResolver {
 export class PLCompiler implements PLVisitor {
   private readonly urls = new Map<string, string>();
   private readonly contents = new Map<string, string>();
-
-  private readonly source: PLSourceFile = {
-    errors: [],
-    warnings: [],
-    variables: {},
-    dependencies: [],
-  }
+  private readonly resource: string;
+  private readonly filepath: string;
+  private readonly version: string;
+  private readonly resolver: PLReferenceResolver;
+  private readonly source: PLSourceFile;
   private lineno = 0;
 
   constructor(
-    private readonly resource: string,
-    private readonly filepath: string,
-    private readonly version: string,
-    private readonly resolver: PLReferenceResolver
-  ) { }
+    options: {
+
+      type: PLSourceFileTypes,
+      resource: string,
+      filepath: string,
+      version: string,
+      resolver: PLReferenceResolver
+    }
+  ) {
+    this.resource = options.resource;
+    this.filepath = options.filepath;
+    this.version = options.version;
+    this.resolver = options.resolver;
+    this.source = {
+      type: options.type,
+      errors: [],
+      warnings: [],
+      variables: {},
+      dependencies: [],
+    };
+  }
 
   async visit(nodes: PLNode[]): Promise<PLSourceFile> {
     // should not use Promise.all() since references should be resolved in sync.

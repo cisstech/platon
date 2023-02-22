@@ -11,9 +11,10 @@ import { ResourceViewService } from './views/view.service';
 @Controller('resources')
 export class ResourceController {
   constructor(
-    private readonly viewService: ResourceViewService,
-    private readonly service: ResourceService,
+    private readonly resourceService: ResourceService,
+    private readonly resourceViewService: ResourceViewService,
   ) { }
+
 
   @Get()
   async search(
@@ -23,11 +24,11 @@ export class ResourceController {
     let resources: ResourceDTO[] = [];
     let total = 0;
     if (filters.views) {
-      const response = await this.viewService.findAll(req.user.id);
+      const response = await this.resourceViewService.findAll(req.user.id);
       resources = Mapper.mapAll(response[0].map(r => r.resource), ResourceDTO);
       total = response[1]
     } else {
-      const response = await this.service.search(filters);
+      const response = await this.resourceService.search(filters);
       resources = Mapper.mapAll(response[0], ResourceDTO);
       total = response[1]
     }
@@ -39,7 +40,7 @@ export class ResourceController {
   ): Promise<ItemResponse<CircleTreeDTO>> {
     return new ItemResponse({
       resource: Mapper.map(
-        await this.service.tree(),
+        await this.resourceService.tree(),
         CircleTreeDTO
       )
     })
@@ -50,7 +51,7 @@ export class ResourceController {
   ): Promise<ItemResponse<ResourceCompletionDTO>> {
     return new ItemResponse({
       resource: Mapper.map(
-        await this.service.completion(),
+        await this.resourceService.completion(),
         ResourceCompletionDTO
       )
     })
@@ -62,14 +63,14 @@ export class ResourceController {
     @Param('id') id: string,
     @Query('markAsViewed') markAsViewed?: string
   ): Promise<ItemResponse<ResourceDTO>> {
-    const optional = await this.service.findById(id);
+    const optional = await this.resourceService.findById(id);
     const resource = Mapper.map(
       optional.orElseThrow(() => new NotFoundResponse(`Resource not found: ${id}`)),
       ResourceDTO
     );
 
     if (markAsViewed) {
-      this.viewService.create({
+      this.resourceViewService.create({
         resourceId: id,
         userId: req.user.id,
       })
@@ -84,12 +85,11 @@ export class ResourceController {
   ): Promise<ItemResponse<ResourceStatisticDTO>> {
     return new ItemResponse({
       resource: Mapper.map(
-        await this.service.statistic(id),
+        await this.resourceService.statistic(id),
         ResourceStatisticDTO
       )
     })
   }
-
 
   @Post()
   async create(
@@ -97,8 +97,8 @@ export class ResourceController {
     @Body() input: CreateResourceDTO
   ): Promise<CreatedResponse<ResourceDTO>> {
     const resource = Mapper.map(
-      await this.service.create({
-        ...(await this.service.fromInput(input)),
+      await this.resourceService.create({
+        ...(await this.resourceService.fromInput(input)),
         ownerId: req.user.id
       }),
       ResourceDTO
@@ -112,10 +112,9 @@ export class ResourceController {
     @Body() input: UpdateResourceDTO
   ): Promise<ItemResponse<ResourceDTO>> {
     const resource = Mapper.map(
-      await this.service.update(id, await this.service.fromInput(input)),
+      await this.resourceService.update(id, await this.resourceService.fromInput(input)),
       ResourceDTO
     );
     return new ItemResponse({ resource })
   }
-
 }

@@ -8,6 +8,7 @@ import { ResourcePresenter } from '../resource.presenter';
 import { ResourceBrowseHeaderComponent } from './header/header.component';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { ResourceEditorComponent } from './editor/editor.component';
+import { SafePipeModule } from '@cisstech/nge/pipes';
 
 
 @Component({
@@ -22,6 +23,8 @@ import { ResourceEditorComponent } from './editor/editor.component';
     NzModalModule,
     NgeUiIconModule,
 
+    SafePipeModule,
+
     ResourceFilesComponent,
     ResourceEditorComponent,
     ResourceBrowseHeaderComponent,
@@ -33,8 +36,13 @@ export class ResourceBrowseComponent implements OnInit, OnDestroy {
   protected context = this.presenter.defaultContext();
   protected tree?: ResourceFile;
   protected editing = false;
+  protected preview = false;
   protected version = 'latest';
   protected versions?: FileVersions;
+
+  get previewUrl(): string {
+    return `/resource/preview?resourceId=${this.context.resource?.id}&version=${this.version}`;
+  }
 
   constructor(
     private readonly presenter: ResourcePresenter,
