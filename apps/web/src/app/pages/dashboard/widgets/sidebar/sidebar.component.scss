@@ -27,7 +27,7 @@ a {
 a.nav-link {
   height: 4.5rem !important;
   width: 100%;
-  justify-content: start;
+  justify-content: flex-start;
   display: flex;
   &.active {
     border-left: 4px solid white;

@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
+import { SafePipeModule } from '@cisstech/nge/pipes';
 import { ExerciseLayout } from '@platon/feature/player/common';
 
 @Component({
@@ -18,6 +19,7 @@ import { ExerciseLayout } from '@platon/feature/player/common';
     MatCardModule,
     MatDividerModule,
     MatButtonModule,
+    SafePipeModule,
   ]
 })
 export class PlayerExerciseComponent {

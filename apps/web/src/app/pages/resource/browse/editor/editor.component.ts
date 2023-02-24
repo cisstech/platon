@@ -11,9 +11,10 @@ import { FileService, IdeService } from '@cisstech/nge-ide/core';
 import { NgeIdeNotificationsModule } from '@cisstech/nge-ide/notifications';
 import { NgeIdeProblemsModule } from '@cisstech/nge-ide/problems';
 import { ResourceFileSystemProvider } from '@platon/feature/resource/browser';
-import { Resource, resourceAncestors } from '@platon/feature/resource/common';
+import { Resource, resourceAncestors, ResourceTypes } from '@platon/feature/resource/common';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { ResourcePresenter } from '../../resource.presenter';
+import { PLFormEditorContributionModule } from './contributions/pl-form-editor/pl-form-editor.contribution';
 
 @Component({
   standalone: true,
@@ -32,6 +33,8 @@ import { ResourcePresenter } from '../../resource.presenter';
 
     NgeIdeProblemsModule,
     NgeIdeNotificationsModule,
+
+    PLFormEditorContributionModule,
   ],
   providers: [
     ResourceFileSystemProvider,
@@ -54,7 +57,10 @@ export class ResourceEditorComponent implements OnInit, OnDestroy {
   async ngOnInit(): Promise<void> {
 
     const { resource, circles } = await firstValueFrom(this.presenter.contextChange);
-    const ancestors = resourceAncestors(circles!, resource!.id);
+
+    const ancestors = resource!.type === ResourceTypes.CIRCLE
+      ? resourceAncestors(circles!, resource!.id)
+      : resourceAncestors(circles!, resource!.parentId!);
 
     this.subscription = this.ide.onAfterStart(() => {
       this.fileService.registerProvider(this.resourceFileSystem);

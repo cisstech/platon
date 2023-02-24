@@ -9,8 +9,7 @@
       {{ layout.statement }}
     </div>
     <mat-divider />
-    <div class="exercise-form">
-      {{ layout.form }}
+    <div class="exercise-form" [innerHTML]="layout.form|safe:'html' ">
     </div>
   </mat-card-content>
   <mat-card-actions>

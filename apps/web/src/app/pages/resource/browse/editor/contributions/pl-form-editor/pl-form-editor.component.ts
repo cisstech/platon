@@ -1,0 +1,58 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Editor, FileService, OpenRequest } from '@cisstech/nge-ide/core';
+import { OutputData } from '@editorjs/editorjs';
+import { Subscription } from 'rxjs';
+
+
+@Component({
+  selector: 'app-pl-form-editor',
+  templateUrl: './pl-form-editor.component.html',
+  styleUrls: ['./pl-form-editor.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class PLFormEditorComponent implements OnInit, OnDestroy {
+  private readonly subscriptions: Subscription[] = [];
+  private request!: OpenRequest;
+
+  protected data?: OutputData;
+  protected readOnly?: boolean;
+
+  @Input()
+  protected editor!: Editor;
+
+  constructor(
+    private readonly fileService: FileService,
+    private readonly changeDetectorRef: ChangeDetectorRef
+  ) { }
+
+  ngOnInit(): void {
+    this.subscriptions.push(
+      this.editor.onChangeRequest.subscribe((request) => {
+        this.request = request;
+        this.createEditor();
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(s => s.unsubscribe());
+  }
+
+  protected onChangeData(data: OutputData): void {
+    this.fileService.update(
+      this.request.uri,
+      JSON.stringify(data, null, 2)
+    );
+  }
+
+  private async createEditor(): Promise<void> {
+    const file = this.fileService.find(this.request.uri);
+    this.readOnly = file?.readOnly;
+
+    const content = await this.fileService.open(this.request.uri);
+    this.data = JSON.parse(content.current);
+
+    this.changeDetectorRef.markForCheck();
+  }
+}

@@ -71,6 +71,7 @@
       "@platon/shared/ui": ["libs/shared/ui/src/index.ts"]
     }
   },
+  "include": [],
   "exclude": ["node_modules", "tmp"],
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

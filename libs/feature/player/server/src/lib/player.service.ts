@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { PLSourceFile, PLSourceFileTypes } from '@platon/feature/compiler';
+import { ActivityLayout, ExerciseLayout, ResourceLayout } from '@platon/feature/player/common';
+import * as nunjucks from 'nunjucks';
 import { basename } from 'path';
 import { SandboxService } from './sandbox.service';
-import * as nunjucks from 'nunjucks';
-import { ActivityLayout, ExerciseLayout, ResourceLayout } from '@platon/feature/player/common';
 import { SandboxResponse } from './sandboxes';
-
 
 @Injectable()
 export class PlayerService {
