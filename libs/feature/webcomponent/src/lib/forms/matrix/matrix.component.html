@@ -1,0 +1,21 @@
+<div class="matrix">
+  <ng-container *ngFor="let item of state.cells; trackBy: trackBy">
+    <input
+      type="text"
+      tabindex="1"
+      [ngClass]="item.css | css : 'class'"
+      [ngStyle]="item.css | css : 'style'"
+      [disabled]="!!(state.disabled || item.disabled)"
+      [(ngModel)]="item.value"
+    />
+  </ng-container>
+</div>
+<button
+  mat-icon-button
+  nz-tooltip="Redimensionner"
+  (click)="resizer.open($event)"
+>
+  <mat-icon>aspect_ratio</mat-icon>
+</button>
+<wc-matrix-resizer #resizer (resized)="resize($event)"></wc-matrix-resizer>
+<wc-base [(state)]="state"></wc-base>

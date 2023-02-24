@@ -1,0 +1,26 @@
+<div
+  #container
+  class="automaton-editor-container"
+  [style.height]="state.height + 'px'"
+>
+  <div class="automaton-editor-actions-top">
+    <ng-container *ngFor="let action of actions">
+      <button mat-raised-button (click)="run(action)">
+        {{ action.name }}
+      </button>
+    </ng-container>
+  </div>
+  <div class="automaton-editor-canvas"></div>
+  <div class="automaton-editor-actions-bottom">
+    <button mat-icon-button (click)="zoomIn($event)">
+      <mat-icon>zoom_in</mat-icon>
+    </button>
+    <button mat-icon-button (click)="zoomOut($event)">
+      <mat-icon>zoom_out</mat-icon>
+    </button>
+    <!-- <button mat-icon-button >
+      <mat-icon>help</mat-icon>
+    </button> -->
+  </div>
+</div>
+<wc-base [(state)]="state"></wc-base>

@@ -1,0 +1,47 @@
+<mat-form-field [appearance]="state.appearance" floatLabel="always">
+  <mat-label *ngIf="state.placeholder">{{ state.placeholder }}</mat-label>
+  <mat-hint *ngIf="state.hint">{{ state.hint }}</mat-hint>
+  <ng-container [ngSwitch]="state.type">
+    <!-- NUMERIC -->
+    <ng-container *ngSwitchCase="'number'">
+      <input matInput type="text" inputmode="decimal" [formControl]="form" />
+    </ng-container>
+    <!-- TEXT -->
+    <ng-container *ngSwitchCase="'text'">
+      <input
+        matInput
+        type="text"
+        [formControl]="form"
+        [matAutocomplete]="auto"
+      />
+      <mat-autocomplete #auto="matAutocomplete">
+        <mat-option
+          *ngFor="let option of $autocomplete | async"
+          [value]="option"
+        >
+          {{ option }}
+        </mat-option>
+      </mat-autocomplete>
+    </ng-container>
+    <!-- TEXTAREA -->
+    <ng-container *ngSwitchCase="'textarea'">
+      <textarea
+        matInput
+        matTextareaAutosize
+        type="multiline"
+        [formControl]="form"
+      >
+      </textarea>
+    </ng-container>
+    <ng-container *ngSwitchDefault>
+      <mat-error>"{{ state.type }}" is not a valid input type</mat-error>
+    </ng-container>
+  </ng-container>
+  <div class="prefix" *ngIf="state.prefix" matPrefix>
+    <img [src]="state.prefix | icongr" alt="prefix icon" />
+  </div>
+  <div class="suffix" *ngIf="state.suffix" matSuffix>
+    <img [src]="state.suffix | icongr" alt="suffix icon" />
+  </div>
+</mat-form-field>
+<wc-base [(state)]="state"></wc-base>

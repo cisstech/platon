@@ -1,0 +1,25 @@
+<div
+  class="checkbox-items"
+  [class.disabled]="state.disabled"
+  [class.horizontal]="state.horizontal"
+>
+  <ng-container *ngFor="let item of state.items; trackBy: trackBy">
+    <div
+      class="checkbox-item"
+      [ngClass]="item.css|css:'class'"
+      [ngStyle]="item.css|css:'style'"
+      [class.checked]="item.checked"
+      (click)="item.checked = !item.checked"
+    >
+      <mat-checkbox
+        color="primary"
+        [checked]="!!item.checked"
+        (change)="item.checked = $event.checked;"
+        [disabled]="state.disabled"
+      >
+        <nge-markdown [data]="item.content" />
+      </mat-checkbox>
+    </div>
+  </ng-container>
+</div>
+<wc-base [(state)]="state"></wc-base>

@@ -1,0 +1,16 @@
+<div
+  class="drag-drop-component"
+  [ngClass]="state.css | css : 'class'"
+  [ngStyle]="state.css | css : 'style'"
+  dragNdrop
+  [class.dragzone]="state.draggable"
+  [class.dropzone]="!state.draggable"
+  [class.disabled]="state.disabled"
+  (dropped)="dropped($event)"
+>
+  <nge-markdown *ngIf="state.content" [data]="state.content"></nge-markdown>
+</div>
+<ng-container *ngIf="!state.draggable && state.content">
+  <span class="btn-clear" (click)="clear()">&times;</span>
+</ng-container>
+<wc-base [(state)]="state"></wc-base>

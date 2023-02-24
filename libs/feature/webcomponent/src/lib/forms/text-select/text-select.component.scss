@@ -1,0 +1,28 @@
+:host::ng-deep {
+  .cursor-pointer {
+    cursor: pointer;
+  }
+
+  .cursor-text {
+    cursor: text;
+  }
+
+  .highlight-state {
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+    color: var(--brand-color-primary);
+    background-color: #cce5ff;
+    border-color: #b8daff;
+  }
+
+  .error-state,
+  .warning-state,
+  .success-state {
+    border: unset;
+    border-radius: unset;
+  }
+
+  .error-state {
+    text-decoration: line-through;
+  }
+}

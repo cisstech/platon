@@ -1,0 +1,64 @@
+.match-list-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 8rem;
+  align-items: center;
+  position: relative;
+  min-height: 100px;
+  &.disabled {
+    cursor: not-allowed;
+    border: dashed 1px #ccc;
+  }
+  &::ng-deep {
+    svg.jtk-connector {
+      cursor: pointer;
+    }
+    .jtk-endpoint svg {
+      cursor: pointer;
+    }
+
+    .jtk-endpoint.selected circle {
+      fill: #ff4500;
+      stroke: #ff4500;
+    }
+
+    svg.error-state,
+    svg.warning-state,
+    svg.success-state {
+      background-color: unset !important;
+      border: unset !important;
+      border-radius: unset !important;
+    }
+
+    svg.error-state path {
+      stroke: #ff0000;
+    }
+
+    svg.warning-state path {
+      stroke: #ffff00;
+    }
+
+    svg.success-state path {
+      stroke: #00ff00;
+    }
+  }
+}
+
+.match-list-sources {
+  text-align: end;
+}
+
+.match-list-targets {
+  text-align: start;
+}
+
+nge-markdown {
+  display: block;
+  padding: 1rem;
+  border-bottom: 1px solid #f5f5f5;
+  &::ng-deep img {
+    width: 128px;
+    object-fit: cover;
+    height: auto;
+  }
+}

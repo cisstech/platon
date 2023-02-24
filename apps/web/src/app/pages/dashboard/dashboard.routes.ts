@@ -29,13 +29,6 @@ export default [
         )
       },
       {
-        path: 'docs',
-        loadChildren: () => import(
-          /* webpackChunkName: "docs" */
-          '../docs/docs.routes'
-        )
-      },
-      {
         path: 'forum',
         loadChildren: () => import(
           /* webpackChunkName: "forum" */

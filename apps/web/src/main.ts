@@ -12,6 +12,7 @@ import {
 import { CoreBrowserModule } from '@platon/core/browser';
 import { PLAYER_PROVIDERS } from '@platon/feature/player/browser';
 import { RESOURCE_PROVIDERS } from '@platon/feature/resource/browser';
+import { FeatureWebComponentModule } from '@platon/feature/webcomponent';
 import { AppComponent } from './app/app.component';
 import { appRoutes } from './app/app.routes';
 
@@ -23,6 +24,7 @@ bootstrapApplication(AppComponent, {
     ),
     importProvidersFrom(
       CoreBrowserModule,
+      FeatureWebComponentModule,
 
       MatDialogModule,
       MatSnackBarModule,

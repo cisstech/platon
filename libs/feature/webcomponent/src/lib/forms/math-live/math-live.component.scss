@@ -1,0 +1,40 @@
+.math-field-box {
+  display: flex;
+  align-items: center;
+  border: 1px solid #fafafa;
+  padding: 0.5rem;
+  margin: 10px 0 10px 0;
+  border-radius: 5px;
+  background-color: #fff;
+  font-size: large;
+  outline: none;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.3s ease-in-out;
+  &:hover {
+    box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.08);
+  }
+  &.disabled {
+    pointer-events: none;
+    border: 1px dashed;
+  }
+  &::ng-deep {
+    math-field {
+      width: 100%;
+    }
+  }
+  .prefix,
+  .suffix {
+    width: 18px;
+    height: 18px;
+    box-sizing: border-box;
+    margin: 0 8px;
+    position: relative;
+    img {
+      width: 18px;
+      height: 18px;
+      position: absolute;
+      bottom: -3px;
+      background-color: transparent !important;
+    }
+  }
+}

@@ -1,0 +1,50 @@
+:host {
+  width: 100vw;
+  height: 100vh;
+  padding: 4rem;
+  box-sizing: border-box;
+  overflow: hidden;
+  color: white;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1123 258'><path d='M1124,2c0,0 0,256 0,256l-1125,0l0,-48c0,0 16,5 55,5c116,0 197,-92 325,-92c121,0 114,46 254,46c140,0 214,-167 572,-166Z' style='fill: hsla(0, 0%, 100%, 1)' /></svg>")
+      no-repeat bottom,
+    linear-gradient(
+      to bottom,
+      #c55882 1%,
+      #ff9474 99%,
+      hsla(0, 0%, 100%, 1) 99%
+    );
+}
+
+:host {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+section {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+img {
+  width: 100%;
+  height: auto;
+}
+
+.logo {
+  width: 200px;
+  height: 200px;
+}
+
+p {
+  text-align: center;
+  font-size: 1.3em;
+  font-weight: 200;
+}
+
+a {
+  margin: 16px;
+}

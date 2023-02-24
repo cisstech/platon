@@ -38,7 +38,7 @@ COPY nx.json /src/nx.json
 COPY .npmrc /src/.npmrc
 
 # Install dependencies
-RUN npm ci
+RUN npm ci --force
 
 # Copy sources
 COPY libs /src/libs

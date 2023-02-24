@@ -1,0 +1,47 @@
+:host {
+  display: block;
+}
+
+.checkbox-items {
+  display: flex;
+  flex-direction: column;
+
+  &.disabled {
+    pointer-events: none;
+  }
+
+  &.horizontal {
+    flex-direction: row;
+    .checkbox-item {
+      margin-right: 12px;
+      margin-bottom: 0px;
+    }
+  }
+
+  &::ng-deep .mat-checkbox {
+    position: relative;
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+  }
+
+  &::ng-deep .mat-checkbox-layout {
+    margin-bottom: 0px;
+    white-space: normal;
+  }
+}
+
+.checkbox-item {
+  transition: all 0.25s ease-in-out;
+  border-radius: 7px;
+  border: 2px solid #f4f4f4;
+  margin-bottom: 12px;
+  padding: 12px 12px 12px 12px;
+  transition: border 0.25s ease-in-out;
+  position: relative;
+
+  &:hover,
+  &.checked {
+    border: 2px solid var(--brand-color-primary);
+  }
+}

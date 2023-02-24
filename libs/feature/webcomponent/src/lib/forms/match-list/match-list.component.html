@@ -1,0 +1,20 @@
+<div #container class="match-list-container" [class.disabled]="state.disabled">
+  <div class="match-list-sources">
+    <ng-container *ngFor="let node of sources; trackBy: trackBy">
+      <ng-container
+        *ngTemplateOutlet="nodeTemplate; context: { $implicit: node }"
+      ></ng-container>
+    </ng-container>
+  </div>
+  <div class="match-list-targets">
+    <ng-container *ngFor="let node of targets; trackBy: trackBy">
+      <ng-container
+        *ngTemplateOutlet="nodeTemplate; context: { $implicit: node }"
+      ></ng-container>
+    </ng-container>
+  </div>
+</div>
+<ng-template #nodeTemplate let-node>
+  <nge-markdown [id]="node.id" [data]="node.content"></nge-markdown>
+</ng-template>
+<wc-base [(state)]="state"></wc-base>

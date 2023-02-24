@@ -1,0 +1,16 @@
+<mat-form-field appearance="fill">
+  <mat-label>{{ state.placeholder }}</mat-label>
+  <mat-select [(ngModel)]="state.selection" [disabled]="state.disabled">
+    <mat-option *ngFor="let item of state.items" [value]="item">
+      {{ item }}
+    </mat-option>
+  </mat-select>
+  <mat-hint *ngIf="state.hint">{{ state.hint }}</mat-hint>
+  <div class="prefix" *ngIf="state.prefix" matPrefix>
+    <img [src]="state.prefix | icongr" alt="prefix" />
+  </div>
+  <div class="suffix" *ngIf="state.suffix" matSuffix>
+    <img [src]="state.suffix | icongr" alt="suffix" />
+  </div>
+</mat-form-field>
+<wc-base [(state)]="state"></wc-base>

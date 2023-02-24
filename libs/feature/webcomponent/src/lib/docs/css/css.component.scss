@@ -1,0 +1,55 @@
+.animations,
+.appearances {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 16px;
+}
+
+.active-animation {
+  text-align: center;
+  margin-top: 56px;
+  font-size: 1em;
+  font-family: sans-serif;
+  text-transform: uppercase;
+}
+
+.box-animation {
+  width: 100%;
+  height: 120px;
+  background: #347fc3;
+  border: 1px solid #fff;
+  overflow: hidden;
+  cursor: pointer;
+  .text {
+    text-align: center;
+    margin-top: 56px;
+    color: #fff;
+    font-size: 1em;
+    font-family: sans-serif;
+    text-transform: uppercase;
+  }
+}
+
+.box-appearance {
+  width: 100%;
+  height: 120px;
+  float: left;
+  overflow: hidden;
+  cursor: pointer;
+  margin: 0 2px;
+  box-sizing: border-box;
+  .text {
+    text-align: center;
+    margin-top: 56px;
+    font-size: 1em;
+    font-family: sans-serif;
+    text-transform: uppercase;
+  }
+}
+
+.animate__animated {
+  animation-duration: 1.5s;
+  animation-fill-mode: both;
+  animation-iteration-count: infinite;
+}

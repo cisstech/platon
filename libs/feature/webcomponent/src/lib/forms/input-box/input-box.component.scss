@@ -1,0 +1,23 @@
+mat-form-field {
+  width: inherit;
+  &::ng-deep {
+    .mat-form-field-prefix,
+    .mat-form-field-suffix {
+      padding: 0 4px;
+    }
+  }
+}
+
+.prefix,
+.suffix {
+  width: 18px;
+  height: 18px;
+  position: relative;
+  img {
+    width: 18px;
+    height: 18px;
+    position: absolute;
+    bottom: -3px;
+    background-color: transparent !important;
+  }
+}

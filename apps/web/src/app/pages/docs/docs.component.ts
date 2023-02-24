@@ -1,4 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { RouterModule } from '@angular/router';
 
 @Component({
   standalone: true,
@@ -6,5 +8,9 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   templateUrl: './docs.component.html',
   styleUrls: ['./docs.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    RouterModule,
+    MatButtonModule,
+  ]
 })
 export class DocsComponent { }

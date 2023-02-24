@@ -1,0 +1,58 @@
+:host {
+  --cols: 3;
+  --rows: 3;
+  --row-size: 2em;
+  --col-size: 4em;
+  --gap: 0.5em;
+}
+
+.matrix {
+  display: grid;
+  height: calc(
+    var(--row-size) * var(--rows) + var(--gap) * var(--rows) + 0.2rem
+  );
+  width: calc(
+    var(--col-size) * var(--cols) + var(--gap) * var(--cols) + 0.2rem
+  );
+  grid-template-rows: repeat(var(--rows), 1fr);
+  grid-template-columns: repeat(var(--cols), 1fr);
+  column-gap: var(--gap);
+  row-gap: var(--gap);
+  margin: 1rem;
+  vertical-align: middle;
+  position: relative;
+
+  &:before,
+  &:after {
+    content: '';
+    position: absolute;
+    top: -6px;
+    bottom: -6px;
+    border: 1px solid #000;
+    width: 6px;
+  }
+
+  &:before {
+    left: -12px;
+    border-right: 0;
+  }
+
+  &:after {
+    right: -12px;
+    border-left: 0;
+  }
+
+  input {
+    margin: 0;
+    position: relative;
+    width: var(--col-size);
+    height: var(--row-size);
+    border: none;
+    border-radius: 4px;
+    text-align: center;
+    border: 1px solid #f0f0f0;
+    &:disabled {
+      border: none;
+    }
+  }
+}

@@ -1,0 +1,38 @@
+<section class="showcase-demo"></section>
+<section class="showcase-meta">
+  <div class="showcase-actions">
+    <div
+      class="showcase-action"
+      aria-label="toggle editor"
+      nz-tooltip="Afficher/Cacher l'éditeur"
+      (click)="showEditor = !showEditor"
+    >
+      <img
+        src="https://icongr.am/octicons/code.svg?size=24&color=currentColor"
+      />
+    </div>
+    <div
+      class="showcase-action"
+      aria-label="Copy component state to the editor"
+      nz-tooltip="Copier l'état du composant dans l'éditeur"
+      (click)="componentToEditor()"
+    >
+      <img
+        src="https://icongr.am/octicons/arrow-down.svg?size=24&color=currentColor"
+      />
+    </div>
+    <div
+      class="showcase-action"
+      aria-label="Copy editor content to the component"
+      nz-tooltip="Copier le contenu de l'éditeur dans le composant"
+      (click)="editorToComponent()"
+    >
+      <img
+        src="https://icongr.am/octicons/arrow-up.svg?size=24&color=currentColor"
+      />
+    </div>
+  </div>
+  <ng-container *ngIf="showEditor">
+   <!--  <json-editor [options]="options" [data]="component.state"></json-editor> -->
+  </ng-container>
+</section>

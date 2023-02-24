@@ -1,0 +1,39 @@
+:host {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  margin: 0 0 16px;
+  border: 1px solid #f0f0f0;
+  border-radius: 2px;
+  transition: all 0.2s;
+}
+
+.showcase-demo {
+  padding: 1.3rem;
+  color: rgba(0, 0, 0, 0.85);
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.showcase-meta {
+  position: relative;
+  width: 100%;
+  padding-right: 25px;
+  font-size: 14px;
+  word-break: break-word;
+
+  .showcase-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 12px 24px;
+    text-align: center;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+    border-top: 1px dashed #f0f0f0;
+  }
+
+  .showcase-action {
+    cursor: pointer;
+    margin: 0 4px;
+  }
+}

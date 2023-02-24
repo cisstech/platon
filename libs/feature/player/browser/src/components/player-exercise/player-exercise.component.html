@@ -5,11 +5,9 @@
   </mat-card-header>
   <mat-card-content>
     <mat-divider />
-    <div class="exercise-statement">
-      {{ layout.statement }}
-    </div>
+    <div class="exercise-statement" [innerHTML]="layout.statement|safe:'html'"></div>
     <mat-divider />
-    <div class="exercise-form" [innerHTML]="layout.form|safe:'html' ">
+    <div class="exercise-form" [innerHTML]="layout.form|safe:'html'">
     </div>
   </mat-card-content>
   <mat-card-actions>

@@ -11,6 +11,13 @@ export const appRoutes: Route[] = [
       './pages/login/login.component'
     )
   },
+  {
+    path: 'docs',
+    loadChildren: () => import(
+      /* webpackChunkName: "docs" */
+      './pages/docs/docs.routes'
+    )
+  },
   { path: '403', component: UiError403Component },
   { path: '404', component: UiError404Component },
   { path: '500', component: UiError500Component },
