@@ -48,7 +48,7 @@ export interface IWebComponent {
 /**
  * Keeps a track to the changes that occurs in a web component state `@Input`.
  */
-export interface WebComponentHooks<T> {
+export interface WebComponentHooks<T = any> {
   /**
    * The state of the component.
    * The @WebComponent decorator create a getter and a setter during runtime to

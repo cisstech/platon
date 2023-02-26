@@ -20,6 +20,7 @@ import { AutomatonViewerComponentDefinition } from './widgets/automaton-viewer/a
 import { GraphViewerComponentDefinition } from './widgets/graph-viewer/graph-viewer';
 import { MarkdownComponentDefinition } from './widgets/markdown/markdown';
 import { DragDropComponentDefinition } from './forms/drag-drop/drag-drop';
+import { FeedbackComponentDefinition } from './widgets/feedback/feedback';
 
 export const WEB_COMPONENTS_BUNDLES: NgeElementDef[] = [
   {
@@ -141,6 +142,13 @@ export const WEB_COMPONENTS_BUNDLES: NgeElementDef[] = [
         /* webpackChunkName: "wc-drag-drop" */ './forms/drag-drop/drag-drop.module'
       ).then((m) => m.DragDropModule),
   },
+  {
+    selector: 'wc-feedback',
+    module: () =>
+      import(
+        /* webpackChunkName: "wc-feedback" */ './widgets/feedback/feedback.module'
+      ).then((m) => m.FeedbackModule),
+  },
 ];
 
 export const WEB_COMPONENTS_REGISTRY: Provider[] = [
@@ -228,5 +236,10 @@ export const WEB_COMPONENTS_REGISTRY: Provider[] = [
     provide: WEB_COMPONENT_DEFINITIONS,
     multi: true,
     useValue: DragDropComponentDefinition,
+  },
+  {
+    provide: WEB_COMPONENT_DEFINITIONS,
+    multi: true,
+    useValue: FeedbackComponentDefinition,
   },
 ];

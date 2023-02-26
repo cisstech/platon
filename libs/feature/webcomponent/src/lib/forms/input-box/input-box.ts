@@ -56,9 +56,9 @@ export const InputBoxComponentDefinition = defineWebComponent({
       },
       appearance: {
         type: 'string',
-        default: 'fill',
+        default: 'outline',
         description: "L'apparence du champ de saisi.",
-        enum: ['legacy', 'standard', 'fill', 'outline'],
+        enum: ['fill', 'outline'],
       },
       placeholder: {
         type: 'string',

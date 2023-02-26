@@ -1,0 +1,9 @@
+<nz-alert
+  nzShowIcon
+  [nzType]="state.type"
+  [nzMessage]="content">
+  <ng-template #content>
+    <nge-markdown [data]="state.content" />
+  </ng-template>
+</nz-alert>
+<wc-base [(state)]="state"></wc-base>
