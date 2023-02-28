@@ -46,12 +46,21 @@
       "@platon/feature/course/common": [
         "libs/feature/course/common/src/index.ts"
       ],
-        "@platon/feature/course/server": [
+      "@platon/feature/course/server": [
         "libs/feature/course/server/src/index.ts"
       ],
       "@platon/feature/lti/browser": ["libs/feature/lti/browser/src/index.ts"],
       "@platon/feature/lti/common": ["libs/feature/lti/common/src/index.ts"],
       "@platon/feature/lti/server": ["libs/feature/lti/server/src/index.ts"],
+      "@platon/feature/notification/browser": [
+        "libs/feature/notification/browser/src/index.ts"
+      ],
+      "@platon/feature/notification/common": [
+        "libs/feature/notification/common/src/index.ts"
+      ],
+      "@platon/feature/notification/server": [
+        "libs/feature/notification/server/src/index.ts"
+      ],
       "@platon/feature/player/browser": [
         "libs/feature/player/browser/src/index.ts"
       ],
