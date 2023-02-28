@@ -30,12 +30,13 @@ export class ResourceFileController {
   }
 
   @Post('/compile/:resourceId')
-  compile(
+  async compile(
     @Req() request: IRequest,
     @Param('resourceId') resourceId: string,
     @Query('version') version = LATEST,
   ) {
-    return this.service.compile(resourceId, version, request.user);
+    const [source] = await this.service.compile(resourceId, version, request.user);
+    return source;
   }
 
   @Public()

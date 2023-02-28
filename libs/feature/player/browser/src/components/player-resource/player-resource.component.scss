@@ -1,4 +1,23 @@
+:host {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  background-color: #F5F5F5;//#fdf6e8;
+  overflow-y: auto;
+}
+
 player-exercise {
   display: block;
-  margin: 0 5rem;
+  margin: 0 8rem;
+}
+
+header {
+  display: flex;
+  padding: 1rem 0;
+}
+
+img {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto;
 }

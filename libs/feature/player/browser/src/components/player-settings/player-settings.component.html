@@ -1,0 +1,62 @@
+<table>
+  <tbody>
+    <tr>
+      <td>Exercices</td>
+      <td>{{player.navigation.items.length}}</td>
+    </tr>
+    <tr>
+      <td>Durée</td>
+      <td>{{player.settings?.duration}}</td>
+    </tr>
+    <tr>
+      <td>Mode de navigation</td>
+      <td>
+        {{player.settings?.navigation?.mode}}
+      </td>
+    </tr>
+    <tr>
+      <td>Autorisation de changer de question</td>
+      <td>
+        <ng-container *ngTemplateOutlet="bool; context: { $implicit: player.settings?.actions?.reroll }" />
+      </td>
+    </tr>
+    <tr>
+      <td>Nombre d'essais maximum par question</td>
+      <td>{{player.settings?.actions?.retry}}</td>
+    </tr>
+    <tr>
+      <td>Feedback après chaque réponse</td>
+      <td>
+        <ng-container *ngTemplateOutlet="bool; context: { $implicit: player.settings?.feedback?.validation }" />
+      </td>
+    </tr>
+    <tr>
+      <td>Feedback à la fin de l'activité</td>
+      <td>
+        <ng-container *ngTemplateOutlet="bool; context: { $implicit: player.settings?.feedback?.review }" />
+      </td>
+    </tr>
+    <tr>
+      <td>Autorisation d'utiliser des aides</td>
+      <td>
+        <ng-container *ngTemplateOutlet="bool; context: { $implicit: player.settings?.actions?.hints}" />
+      </td>
+    </tr>
+    <tr>
+      <td>Autorisation d'accéder aux théories</td>
+      <td>
+        <ng-container *ngTemplateOutlet="bool; context: { $implicit: player.settings?.actions?.theories }" />
+      </td>
+    </tr>
+    <tr>
+      <td>Autorisation d'accéder à la solution</td>
+      <td>
+        <ng-container *ngTemplateOutlet="bool; context: { $implicit: player.settings?.actions?.solution }" />
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<ng-template #bool let-value>
+  <mat-icon [style.color]="value ? '#7CFC00' : '#FF0000'">{{value ? 'check_circle' : 'cancel' }}</mat-icon>
+</ng-template>

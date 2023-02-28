@@ -1,8 +1,42 @@
+@keyframes animate {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.05);
+  }
+}
+
+:host.animate {
+  animation-name: animate;
+  animation-duration: 0.5s;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+  transform-origin: center;
+  animation-iteration-count: infinite;
+}
+
+:host {
+  display: block;
+  transition: transform 0.5s ease-out;
+}
+
 button {
   margin-right: 8px;
 }
 
 mat-divider {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-width: 1px;
+  border-top-color: var(--brand-color-primary);
+}
+
+nz-alert {
+  margin-bottom: 0.5rem;
+}
+
+.exercise-statement {
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
 }
@@ -13,4 +47,9 @@ mat-divider {
 
 .spacer {
   flex: 1;
+}
+
+.danger {
+  color: white !important;
+  background-color: #ff4d4f !important;
 }

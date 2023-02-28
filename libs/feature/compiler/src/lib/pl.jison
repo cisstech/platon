@@ -1,6 +1,8 @@
 /* Lexer */
 %{
 
+import { v4 as uuidv4 } from 'uuid'
+
 // VALUES
 
 interface PLValue {
@@ -71,7 +73,7 @@ export class PLComponent implements PLValue {
     readonly value: string,
     readonly lineno: number,
   ) {}
-  toJSON() { return { 'cid': '', type: this.value }; }
+  toJSON() { return { 'cid': uuidv4(), selector: this.value }; }
 }
 
 export class PLDict implements PLValue {
@@ -157,10 +159,7 @@ export class AssignmentNode implements PLNode {
 
 // AST
 
-export type PLSourceFileTypes = 'exercise' | 'activity'
-
 export interface PLSourceFile {
-  type: PLSourceFileTypes;
   errors: {
     lineno: number,
     abspath: string
@@ -220,12 +219,13 @@ export interface PLVisitor {
 <INITIAL>[\[]                                   return 'LBRACKET'
 <INITIAL>[\]]                                   return 'RBRACKET'
 <INITIAL>true|false|True|False                  return 'BOOLEAN'
+<INITIAL>'wc-'[a-zA-Z0-9_-]+                    return 'SELECTOR'
 <INITIAL>[a-zA-Z_](\.?[a-zA-Z0-9_])*            return 'IDENTIFIER'
 <INITIAL>\"([^\\\"]|\\.)*\"                     return 'STRING'
 
 <<EOF>>                                         return 'EOF'
 
-<MULTI>\s'=='            {  this.popState(); return 'EQUALS' }
+<MULTI>\s'=='\s+         {  this.popState(); return 'EQUALS' }
 <MULTI>\s+               {  return 'ANY' }
 <MULTI>[^\s]*            {  return 'ANY' }
 
@@ -291,7 +291,7 @@ value
       { $$ = new PLFileURL($2, yylineno + 1); }
     | COPYCONTENT PATH
       { $$ = new PLFileContent($2, yylineno + 1); }
-    | COLON IDENTIFIER
+    | COLON SELECTOR
       { $$ = new PLComponent($2, yylineno + 1); }
     | LBRACKET RBRACKET
       { $$ = new PLArray([], yylineno + 1); }

@@ -1,98 +1,71 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { ActivityLayout, ExerciseGroupNavItem, ExerciseLayout, ExerciseNavItem, PlayerInput } from "@platon/feature/player/common";
-import { IsArray, IsBoolean, IsInstance, IsOptional, IsString } from "class-validator";
+import { ActivityPlayer, EvalExerciseInput, EvalExerciseOutput, ExercisePlayer, PlayActivityInput, PlayActivityOuput, PlayerActions, PlayerNavigation, PlayExerciseInput, PlayExerciseOuput, PreviewInput, PreviewOuput } from "@platon/feature/player/common";
+import { IsEnum, IsObject, IsOptional, IsString, IsUUID } from "class-validator";
 
-export class PlayerInputDTO implements PlayerInput {
-  @IsOptional()
-  @IsBoolean()
-  @ApiProperty()
-  isPreview?: boolean;
 
-  @IsOptional()
+export class PreviewInputDTO implements PreviewInput {
   @IsString()
   @ApiProperty()
-  resourceId?: string;
+  version!: string;
 
-  @IsOptional()
   @IsString()
   @ApiProperty()
-  resourceVersion?: string;
+  resource!: string;
 }
 
-export class ExerciseNavItemDTO implements ExerciseNavItem {
-  @IsOptional()
-  @IsString()
+export class PlayExerciseInputDTO implements PlayExerciseInput {
+  @IsUUID()
   @ApiProperty()
-  id!: string;
+  activitySessionId!: string;
 
-  @IsOptional()
-  @IsString()
+  @IsUUID(undefined, { each: true })
   @ApiProperty()
-  title!: string;
+  exerciseSessionIds!: string[];
+}
+
+export class PlayActivityInputDTO implements PlayActivityInput {
+  @IsUUID()
+  @ApiProperty()
+  courseActivityId!: string;
+}
+
+export class EvalExerciseInputDTO implements EvalExerciseInput {
+  @IsEnum(PlayerActions)
+  @ApiProperty()
+  action!: PlayerActions;
+
+  @IsUUID()
+  @ApiProperty()
+  sessionId!: string;
+
+  @IsObject()
+  @ApiProperty()
+  answers!: Record<string, unknown>;
 }
 
 
-export class ExerciseGroupNavItemDTO implements ExerciseGroupNavItem {
+export class PreviewOuputDTO implements PreviewOuput {
   @IsOptional()
-  @IsString()
-  @ApiProperty()
-  title!: string;
+  exercise?: ExercisePlayer;
 
-  @IsArray()
-  @IsInstance(ExerciseNavItemDTO, { each: true })
-  @ApiProperty()
-  exercises!: ExerciseNavItemDTO[];
+  @IsOptional()
+  activity?: ActivityPlayer;
 }
 
-export class ExerciseLayoutDTO implements ExerciseLayout {
-  @IsOptional()
-  @IsString()
-  @ApiProperty()
-  type!: 'exercise';
+export class PlayExerciseOuputDTO implements PlayExerciseOuput {
+  exercises!: ExercisePlayer[];
 
   @IsOptional()
-  @IsString()
-  @ApiProperty()
-  title!: string;
-
-  @IsOptional()
-  @IsString()
-  @ApiProperty()
-  statement!: string;
-
-  @IsOptional()
-  @IsString()
-  @ApiProperty()
-  form!: string;
-
-  @IsOptional()
-  @IsString()
-  @ApiProperty()
-  envid!: string;
+  navigation?: PlayerNavigation;
 }
 
-export class ActivityLayoutDTO implements ActivityLayout {
-  @IsOptional()
-  @IsString()
-  @ApiProperty()
-  type!: 'activity';
-
-  @IsOptional()
-  @IsString()
-  @ApiProperty()
-  title!: string;
-
-  @IsOptional()
-  @IsString()
-  @ApiProperty()
-  intro!: string;
-
-  @IsOptional()
-  @IsString()
-  @ApiProperty()
-  envid!: string;
-
-  navigation!: (ExerciseNavItemDTO | ExerciseGroupNavItemDTO)[];
+export class PlayActivityOutputDTO implements PlayActivityOuput {
+  activity!: ActivityPlayer;
 }
 
-export declare type ResourceLayoutDTO = ExerciseLayoutDTO | ActivityLayoutDTO;
+export class EvalExerciseOutputDTO implements EvalExerciseOutput {
+  exercise!: ExercisePlayer;
+
+  @IsOptional()
+  navigation?: PlayerNavigation;
+}

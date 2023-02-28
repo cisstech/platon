@@ -1,31 +1,91 @@
 <mat-card>
   <mat-card-header>
-    <mat-card-title>{{ layout.title }}</mat-card-title>
-    <mat-card-subtitle>Auteur</mat-card-subtitle>
+    <mat-card-title>{{ player.title }}</mat-card-title>
+    <mat-card-subtitle *ngIf="player.author">{{player.author}}</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-    <mat-divider />
-    <div class="exercise-statement" [innerHTML]="layout.statement|safe:'html'"></div>
-    <mat-divider />
-    <div class="exercise-form" [innerHTML]="layout.form|safe:'html'">
-    </div>
+    <ng-container *ngIf="player.statement">
+      <div class="exercise-statement" [innerHTML]="player.statement|safe:'html'"></div>
+    </ng-container>
+    <ng-container *ngIf="player.feedbacks">
+      <ng-container *ngFor="let feedback of player.feedbacks">
+        <nz-alert
+          nzShowIcon
+          [nzType]="feedback.type"
+          [nzMessage]="content">
+          <ng-template #content>
+            <nge-markdown [data]="feedback.content" />
+          </ng-template>
+        </nz-alert>
+      </ng-container>
+    </ng-container>
+    <ng-container *ngIf="player.hints">
+      <ng-container *ngFor="let hint of player.hints">
+        <nz-alert
+          nzShowIcon
+          [nzType]="'info'"
+          [nzMessage]="content">
+          <ng-template #content>
+            <nge-markdown [data]="hint" />
+          </ng-template>
+        </nz-alert>
+      </ng-container>
+    </ng-container>
+    <ng-container *ngIf="player.form">
+      <mat-divider />
+      <div class="exercise-form" [innerHTML]="player.form|safe:'html'"></div>
+    </ng-container>
+    <ng-container *ngIf="player.solution">
+      <mat-divider />
+      <div class="exercise-form" [innerHTML]="player.solution|safe:'html'"></div>
+    </ng-container>
   </mat-card-content>
   <mat-card-actions>
-    <button mat-raised-button color="primary">
+    <button
+      mat-raised-button
+      color="primary"
+      [class.danger]="player.remainingAttempts === 1"
+      [disabled]="disabled"
+      (click)="check()">
       <mat-icon>check</mat-icon>
-      Valider
+      Valider <ng-container *ngIf="player.remainingAttempts">({{player.remainingAttempts}})</ng-container>
+    </button>
+    <button
+      *ngIf="!!player.settings?.actions?.reroll"
+      mat-raised-button
+      (click)="reroll()">
+      <mat-icon>refresh</mat-icon>
+      Essayez une autre question du genre
     </button>
     <div class="spacer"></div>
-    <button mat-raised-button>
-      <mat-icon>menu_book</mat-icon>
-      Théorie</button>
-    <button mat-raised-button>
-      <mat-icon>key</mat-icon>
+    <button
+      *ngIf="player.theories?.length"
+      mat-button
+      [matMenuTriggerFor]="theories">
+      <mat-icon color="primary">menu_book</mat-icon>
+      Théorie
+    </button>
+    <button
+      *ngIf="player.settings?.actions?.solution && !player.solution"
+      mat-button
+      [disabled]="disabled"
+      (click)="solution()">
+      <mat-icon color="primary">key</mat-icon>
       Solution
     </button>
-    <button mat-raised-button>
-      <mat-icon>lightbulb</mat-icon>
+    <button
+      mat-button
+      [disabled]="disabled"
+      *ngIf="player.settings?.actions?.hints"
+      (click)="hint()">
+      <mat-icon color="primary">lightbulb</mat-icon>
       Aide
     </button>
   </mat-card-actions>
 </mat-card>
+
+<mat-menu #theories="matMenu">
+  <ng-container *ngFor="let item of player.theories">
+    <a mat-menu-item [href]="item.url" target="_blank">{{item.title}}</a>
+  </ng-container>
+  </mat-menu>

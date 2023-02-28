@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { AssignmentNode, CommentNode, ExtendsNode, IncludeNode, PLFileContent, PLFileURL, PLNode, PLReference, PLSourceFile, PLSourceFileTypes, PLVisitor } from "./pl.parser";
+import { AssignmentNode, CommentNode, ExtendsNode, IncludeNode, PLFileContent, PLFileURL, PLNode, PLReference, PLSourceFile, PLVisitor } from "./pl.parser";
 
 /**
  * File reference resolver for the PL compiler.
@@ -37,8 +37,6 @@ export class PLCompiler implements PLVisitor {
 
   constructor(
     options: {
-
-      type: PLSourceFileTypes,
       resource: string,
       filepath: string,
       version: string,
@@ -50,7 +48,6 @@ export class PLCompiler implements PLVisitor {
     this.version = options.version;
     this.resolver = options.resolver;
     this.source = {
-      type: options.type,
       errors: [],
       warnings: [],
       variables: {},

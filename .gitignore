@@ -50,3 +50,4 @@ resources/*
 !resources/templates
 uploads/*
 !uploads/.gitkeep
+envs/*

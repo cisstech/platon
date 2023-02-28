@@ -1,0 +1,34 @@
+:host {
+  display: block;
+  min-width: 60%;
+}
+
+table {
+  border-collapse: collapse;
+  margin: 1rem;
+  width: 100%;
+  font-size: 14px;
+}
+
+td {
+  border: 1px solid #ccc;
+  padding: 5px;
+}
+
+th {
+  background-color: #eee;
+  border: 1px solid #ccc;
+  padding: 5px;
+}
+
+td:first-child {
+  font-weight: bold;
+  width: 200px;
+  background-color: #f9f9f9;
+}
+
+td:last-child {
+  text-align: center;
+  width: 150px;
+  background-color: #fff;
+}

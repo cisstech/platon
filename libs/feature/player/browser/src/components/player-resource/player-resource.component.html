@@ -1,7 +1,10 @@
-<ng-container *ngIf="layout.type === 'exercise'; else: activity">
-  <player-exercise [layout]="$any(layout)" />
+<header>
+  <img src="assets/images/logo/platon.svg" alt="Logo PLaTon" [routerLink]="''" />
+</header>
+
+<ng-container *ngIf="player.type === 'exercise'; else activity">
+  <player-exercise [player]="$any(player)" />
 </ng-container>
 <ng-template #activity>
-  <player-activity [layout]="$any(layout)" />
+  <player-activity [player]="$any(player)" />
 </ng-template>
-

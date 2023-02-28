@@ -1,31 +1,26 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { Variables } from "@platon/feature/player/common";
 
-export interface SandboxBuildArgs {
-  files: {
+export interface SandboxInput {
+  envid?: string;
+  files?: {
     path: string;
     content: string;
   }[],
-  variables: Record<string, unknown>;
+  variables: Variables;
 }
 
-export interface SandboxEvaluateArgs {
-  envid: string;
-  variables: Record<string, unknown>;
-}
-
-export interface SandboxResponse {
-  envid: string;
-  variables: Record<string, unknown>;
+export interface SandboxOutput {
+  envid?: string;
+  variables: Variables;
 }
 
 export interface Sandbox {
-  build(input: SandboxBuildArgs): Promise<SandboxResponse>;
-  evaluate(input: SandboxEvaluateArgs): Promise<SandboxResponse>;
+  run(input: SandboxInput, script: string): Promise<SandboxOutput>;
 }
-
 
 export class SandboxError extends Error {
   constructor(error: any) {
-    super(`Execution of the builder script failed due to an unkwown error. Please contact your teacher : ${error.message}`);
+    super(`Execution of the sandbox script failed due to an unkwown error. Please contact your teacher : ${error.message}`);
   }
 }

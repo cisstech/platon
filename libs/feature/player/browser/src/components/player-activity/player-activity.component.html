@@ -1,3 +1,38 @@
-<p>
-  player-activity works!
-</p>
+<mat-card *ngIf="!exercises">
+  <mat-card-content class="centered">
+    <h3>{{ player.title }}</h3>
+    <h5 *ngIf="player.author">Activité créé par {{ player.author }}</h5>
+    <ng-container *ngIf="!player.navigation.started && !player.navigation.terminated">
+      <div [innerHTML]="player.introduction | safe : 'html'"></div>
+      <player-settings [player]="player" />
+      <button mat-raised-button color="primary" (click)="start()">
+        Commencer
+      </button>
+    </ng-container>
+    <ng-container *ngIf="player.navigation.terminated">
+      <div [innerHTML]="player.conclusion | safe : 'html'"></div>
+    </ng-container>
+  </mat-card-content>
+</mat-card>
+<ng-container *ngIf="exercises">
+  <main>
+    <ng-container *ngFor="let exercise of exercises; trackBy:trackPlayer; let i=index;">
+      <nz-ribbon [nzText]="ribbon">
+        <ng-template #ribbon>
+          {{(i + 1)}} / {{exercises.length}}
+        </ng-template>
+        <player-exercise
+          [id]="exercise.sessionId"
+          [player]="exercise"
+          (evaluated)="updateNavigation($event)"
+        />
+      </nz-ribbon>
+    </ng-container>
+  </main>
+  <aside>
+    <player-navigation
+      [player]="player"
+      (navigate)="play($event)"
+      (terminate)="terminate()" />
+  </aside>
+</ng-container>

@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { BadRequestResponse, NotFoundResponse, User } from '@platon/core/common';
-import { PLCompiler, PLParser } from '@platon/feature/compiler';
+import { PLCompiler, PLParser, PLSourceFile } from '@platon/feature/compiler';
 import path from 'path';
 import { ResourceEntity } from '../resource.entity';
 import { ResourceService } from '../resource.service';
@@ -36,28 +36,40 @@ export class ResourceFileService {
     ];
   }
 
-  async compile(resourceId: string, version?: string, user?: User) {
+  async compile(resourceId: string, version?: string, user?: User): Promise<[PLSourceFile, ResourceEntity]> {
     const [repo, resource] = await this.repo(resourceId, user);
-    if (resource.type === 'CIRCLE')
-      throw new BadRequestResponse(`Compiler: cannot compile circle resource`);
+    if (resource.type === 'CIRCLE') {
+      throw new BadRequestResponse(`Compiler: cannot compile circle`);
+    }
 
     const main = {
       EXERCISE: 'main.ple',
       ACTIVITY: 'main.pla',
     }[resource.type];
 
-    const [mainfile, source] = await repo.read(main, version);
-    if (!source) {
-      throw new NotFoundException('Compiler: missing main file')
+    const [file, content] = await repo.read(main, version);
+    if (!content) {
+      throw new NotFoundException(`Compiler: missing main file in resource: ${resource.id}`)
     }
 
-    const statements = new PLParser().parse(Buffer.from((await source).buffer).toString());
+    if (resource.type === 'ACTIVITY') {
+      const source: PLSourceFile = {
+        errors: [],
+        warnings: [],
+        dependencies: [],
+        variables: JSON.parse(Buffer.from((await content).buffer).toString())
+      };
+      return [source, resource];
+    }
 
-    const compiler = new PLCompiler({
-      type: resource.type === 'EXERCISE' ? 'exercise' : 'activity',
+    const statements = new PLParser().parse(
+      Buffer.from((await content).buffer).toString()
+    );
+
+    const source = await new PLCompiler({
       resource: resourceId,
-      filepath: mainfile.path,
-      version: mainfile.version,
+      filepath: file.path,
+      version: file.version,
       resolver: {
         resolveUrl: async (resource, version, path) => {
           const [repo] = await this.repo(resource, user);
@@ -71,8 +83,8 @@ export class ResourceFileService {
           return Buffer.from((await content!).buffer).toString()
         },
       }
-    });
+    }).visit(statements);
 
-    return await compiler.visit(statements);
+    return [source,resource]
   }
 }

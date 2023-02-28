@@ -3,12 +3,13 @@ import { CoreServerModule } from '@platon/core/server';
 import { FeatureLtiServerModule, LTIMiddleware } from '@platon/feature/lti/server';
 import { FeaturePlayerServerModule } from '@platon/feature/player/server';
 import { FeatureResourceServerModule } from '@platon/feature/resource/server';
-
+import { FeatureCourseServerModule } from '@platon/feature/course/server';
 
 @Module({
   imports: [
     CoreServerModule,
     FeatureLtiServerModule,
+    FeatureCourseServerModule,
     FeaturePlayerServerModule,
     FeatureResourceServerModule,
   ],
