@@ -7,9 +7,9 @@
   <button
     mat-icon-button
     class="spacing"
-    [matMenuTriggerFor]="notifMenu">
+    (click)="notifDrawer.open()">
     <mat-icon
-      matBadge="0"
+      [matBadge]="notifDrawer.count|async"
       matBadgeOverlap="false">
       notifications
     </mat-icon>
@@ -43,3 +43,5 @@
     <span>Déconnexion</span>
   </button>
 </mat-menu>
+
+<notif-drawer #notifDrawer/>

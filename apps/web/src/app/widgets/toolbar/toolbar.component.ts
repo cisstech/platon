@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { User } from '@platon/core/common';
 import { AuthService, UserAvatarComponent } from '@platon/core/browser';
+import { NotificationDrawerComponent } from '@platon/feature/notification/browser';
 
 @Component({
   standalone: true,
@@ -25,6 +26,7 @@ import { AuthService, UserAvatarComponent } from '@platon/core/browser';
     MatBadgeModule,
     MatButtonModule,
     UserAvatarComponent,
+    NotificationDrawerComponent,
   ]
 
 })

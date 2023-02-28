@@ -90,7 +90,7 @@
     <app-workspace-filters *ngIf="showFiltersDrawer" [(filters)]="drawerFilters" [circles]="circles" />
   </ng-container>
   <ng-template #footer>
-    <button mat-button (click)="closeFilters()">Annuler</button>&nbsp;
-    <button mat-raised-button color="primary" (click)="applyFilters()">Appliquer</button>
+    <button mat-stroked-button (click)="closeFilters()">Annuler</button>&nbsp;
+    <button mat-stroked-button color="primary" (click)="applyFilters()">Appliquer</button>
   </ng-template>
 </nz-drawer>
