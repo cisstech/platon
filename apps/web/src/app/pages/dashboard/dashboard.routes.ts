@@ -7,12 +7,18 @@ export default [
     path: '',
     component: DashboardComponent,
     children: [
-      { path: '', component: OverviewComponent },
+      { path: 'dashboard', component: OverviewComponent },
       {
         path: 'workspace',
         loadChildren: () => import(
           /* webpackChunkName: "workspace" */
           '../workspace/workspace.routes'
+        )
+      },
+      {
+        path: 'account',
+        loadChildren: () => import(
+          /* webpackChunkName: "account" */'../account/account.routes',
         )
       },
       {

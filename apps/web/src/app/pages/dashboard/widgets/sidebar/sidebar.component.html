@@ -1,12 +1,20 @@
 <nav>
-    <img class="logo" src="assets/images/logo/platon.svg" alt="Logo PLaTon" [routerLink]="''" />
-<!--   <a class="nav-link" mat-button [routerLink]="''" [routerLinkActive]="'active'">
+    <img class="logo" src="assets/images/logo/platon.svg" alt="Logo PLaTon" [routerLink]="'/dashboard'" />
+  <a class="nav-link" mat-button [routerLink]="'/dashboard'" [routerLinkActive]="'active'">
     <mat-icon>dashboard</mat-icon>
-    Accueil
-  </a> -->
+    Tableau de bord
+  </a>
   <a class="nav-link" mat-button [routerLink]="'/courses'" [routerLinkActive]="'active'">
     <mat-icon>local_library</mat-icon>
     Cours
+  </a>
+  <a class="nav-link" mat-button [routerLink]="'/activities'" [routerLinkActive]="'active'">
+    <mat-icon>widgets</mat-icon>
+    Activités
+  </a>
+  <a class="nav-link" mat-button [routerLink]="'/exercises'" [routerLinkActive]="'active'">
+    <mat-icon>article</mat-icon>
+    Exercices
   </a>
   <a class="nav-link" mat-button [routerLink]="'/workspace'" [routerLinkActive]="'active'">
     <mat-icon>work</mat-icon>

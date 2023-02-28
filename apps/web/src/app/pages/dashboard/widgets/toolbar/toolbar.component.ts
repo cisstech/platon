@@ -1,7 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { RouterModule } from '@angular/router';
+
 import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatButtonModule } from '@angular/material/button';
+
+import { User } from '@platon/core/common';
+import { AuthService, UserAvatarComponent } from '@platon/core/browser';
 
 @Component({
   standalone: true,
@@ -11,11 +18,33 @@ import { MatIconModule } from '@angular/material/icon';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
+    RouterModule,
+
     MatIconModule,
+    MatMenuModule,
+    MatBadgeModule,
     MatButtonModule,
+    UserAvatarComponent,
   ]
 
 })
-export class ToolbarComponent {
+export class ToolbarComponent implements OnInit {
   @Output() toggleMenu = new EventEmitter<void>();
+
+  protected user?: User | undefined;
+
+  constructor(
+    private readonly authService: AuthService,
+    private readonly changeDetectorRef: ChangeDetectorRef
+  ) {}
+
+  async ngOnInit(): Promise<void> {
+    this.user = await this.authService.ready();
+    this.changeDetectorRef.markForCheck();
+  }
+
+
+  signOut(): void {
+    this.authService.signOut();
+  }
 }

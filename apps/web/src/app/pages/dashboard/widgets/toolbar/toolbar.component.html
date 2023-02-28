@@ -1,13 +1,45 @@
 <header>
-  <button mat-button (click)="toggleMenu.emit()">
+  <button mat-icon-button (click)="toggleMenu.emit()">
     <mat-icon>menu</mat-icon>
   </button>
   <span>PLaTon</span>
   <div class="spacer"></div>
-  <button mat-button>
-    <mat-icon>notifications</mat-icon>
+  <button
+    mat-icon-button
+    class="spacing"
+    [matMenuTriggerFor]="notifMenu">
+    <mat-icon
+      matBadge="0"
+      matBadgeOverlap="false">
+      notifications
+    </mat-icon>
   </button>
-  <button mat-button>
-    <mat-icon>account_circle</mat-icon>
-  </button>
+  <user-avatar
+    *ngIf="user"
+    [user]="user"
+    [avatarSize]="24"
+    [attr.aria-label]="user.firstName"
+    [matMenuTriggerFor]="avatarMenu" />
 </header>
+
+<mat-menu #avatarMenu="matMenu">
+  <button mat-menu-item [routerLink]="'/account'">
+    <mat-icon>account_circle</mat-icon>
+    <span>Profil</span>
+  </button>
+  <button mat-menu-item (click)="signOut()">
+    <mat-icon>logout</mat-icon>
+    <span>Déconnexion</span>
+  </button>
+</mat-menu>
+
+<mat-menu #notifMenu="matMenu">
+  <button mat-menu-item>
+    <mat-icon>account_circle</mat-icon>
+    <span>Compte</span>
+  </button>
+  <button mat-menu-item (click)="signOut()">
+    <mat-icon>logout</mat-icon>
+    <span>Déconnexion</span>
+  </button>
+</mat-menu>

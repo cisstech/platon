@@ -1,6 +1,7 @@
 :host {
   display: inline-flex;
   align-items: center;
+  font-size: .9em;
   --color-username: #586069;
 }
 
@@ -22,7 +23,8 @@ i {
 div {
   display: inline-flex;
   flex-direction: column;
-  line-height: 16px;
+  line-height: 1em;
+  font-size: inherit;
   align-items: baseline;
   :last-child {
     color: var(--color-username);

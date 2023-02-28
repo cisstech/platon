@@ -1,3 +1,58 @@
-<p>
-  home works!
-</p>
+<!-- <h2>Cours ouvert récemment</h2>
+<h2>Activités en cours</h2>
+<h2>Calendrier</h2>
+<h2>Notifications</h2>
+ -->
+
+<ng-container>
+  <nz-row [nzGutter]="[24, 24]" nzAlign="top">
+    <nz-col nzXs="24" nzSm="24" nzMd="14" nzLg="14" nzXl="14">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Activités en cours</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <nz-empty
+            [nzNotFoundContent]="noOngoingSessions"
+            [nzNotFoundFooter]="sessionHistory">
+            <ng-template #noOngoingSessions>
+              Félicitations, vous avez terminé toutes les activités qui vous ont été attribuées !
+            </ng-template>
+            <ng-template #sessionHistory>
+              <button mat-button color="primary" [routerLink]="['/activities']" [queryParams]="{ tab: 'history' }">
+                Afficher l'historique de vos activités
+              </button>
+            </ng-template>
+          </nz-empty>
+        </mat-card-content>
+      </mat-card>
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Notifications</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <nz-empty
+            [nzNotFoundContent]="noNotifications">
+            <ng-template #noNotifications>
+              Aucune nouvelle notification pour le moment. Continuez à explorer la plateforme et à réaliser des activités pour recevoir des mises à jour.
+            </ng-template>
+          </nz-empty>
+        </mat-card-content>
+      </mat-card>
+    </nz-col>
+    <nz-col nzXs="24" nzSm="24" nzMd="10" nzLg="10" nzXl="10">
+      <aside>
+        <h2>Événements à venir</h2>
+        <nz-calendar
+          [nzFullscreen]="false">
+          <div *nzDateCell="let date">
+            <ng-container *ngIf="false"> <!-- TODO show modal with events -->
+              <nz-badge [nzStatus]="'warning'" />
+            </ng-container>
+          </div>
+        </nz-calendar>
+      </aside>
+    </nz-col>
+  </nz-row>
+</ng-container>
+

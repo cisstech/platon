@@ -7,3 +7,13 @@ header {
 .spacer {
   flex: 1;
 }
+
+.spacing {
+  margin: 0 16px;
+}
+
+user-avatar {
+  cursor: pointer;
+  font-size: .75em;
+  margin-right: 1rem;
+}
