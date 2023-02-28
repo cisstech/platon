@@ -1,71 +1,88 @@
-<form [formGroup]="form">
-  <!-- TYPE -->
-  <section formGroupName="types">
-    <mat-label id="type-label">Qu'est-ce que vous recherchez ?</mat-label>
-    <div class="checkbox-group">
-      <ng-container *ngFor="let item of form.get('types')!.value | keyvalue">
-        <mat-checkbox [formControlName]="item.key">{{$any(item.key)|resourceType}}</mat-checkbox>
-      </ng-container>
-    </div>
-  </section>
-  <mat-divider />
-  <!-- STATUS -->
-  <section formGroupName="status">
-    <mat-label id="status-label">Quel est son status?</mat-label>
-    <div class="checkbox-group">
-      <ng-container *ngFor="let item of form.get('status')!.value | keyvalue">
-        <mat-checkbox [formControlName]="item.key">
-          <mat-chip >{{$any(item.key)|resourceStatus}}</mat-chip>
-        </mat-checkbox>
-      </ng-container>
-    </div>
-  </section>
-  <mat-divider />
-  <!-- CIRCLE -->
-  <section>
-    <mat-label>Elle appartient à cercle?</mat-label>
-    <mat-form-field appearance="outline">
-      <mat-label id="parent">Choisir un cercle</mat-label>
-      <input type="text"
-          aria-labelledby="parent"
-          matInput
-          formControlName="parent"
-          [matAutocomplete]="auto">
-      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayCircle.bind(this)">
-        <mat-option *ngFor="let option of circles" [value]="option.id">
-          {{option.name}}
-        </mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
-  </section>
-  <mat-divider />
-  <!-- ORDER -->
-  <section>
-    <mat-label id="order-label">Comment voulez-vous trier les résultats ?</mat-label>
-    <mat-radio-group formControlName="order" aria-labelledby="order-label">
-      <mat-radio-button value="NAME">{{'NAME'|resourceOrdering}}</mat-radio-button>
-      <mat-radio-button value="CREATED_AT">{{'CREATED_AT'|resourceOrdering}}</mat-radio-button>
-      <mat-radio-button value="UPDATED_AT">{{'UPDATED_AT'|resourceOrdering}}</mat-radio-button>
-      <mat-radio-button value="RELEVANCE">{{'RELEVANCE'|resourceOrdering}}</mat-radio-button>
-    </mat-radio-group>
+<nz-drawer
+  [nzClosable]="false"
+  [nzVisible]="visible"
+  nzPlacement="right"
+  nzTitle="Recherche avancée"
+  [nzFooter]="footer"
+  (nzOnClose)="close()">
+  <ng-container *nzDrawerContent>
+    <ng-container *ngTemplateOutlet="content" />
+  </ng-container>
+  <ng-template #footer>
+    <button mat-stroked-button (click)="close()">Annuler</button>&nbsp;
+    <button mat-stroked-button color="primary" (click)="triggered.emit(this.filters); close();">Appliquer</button>
+  </ng-template>
+</nz-drawer>
 
-    <mat-label id="direction-label">Dans quel ordre ?</mat-label>
-    <mat-radio-group formControlName="direction" aria-labelledby="direction-label">
-      <mat-radio-button value="ASC">Croissant</mat-radio-button>
-      <mat-radio-button value="DESC">Décroissant</mat-radio-button>
-    </mat-radio-group>
-  </section>
-  <mat-divider />
-  <!-- PERIOD -->
-  <section>
-    <mat-label id="period-label">Souhaitez-vous limiter les résultats à une certaine période ?</mat-label>
-    <mat-radio-group formControlName="period" aria-labelledby="period-label">
-      <mat-radio-button [value]="0">Tout</mat-radio-button>
-      <mat-radio-button [value]="1">1 jour</mat-radio-button>
-      <mat-radio-button [value]="7">1 semaine</mat-radio-button>
-      <mat-radio-button [value]="31">1 mois</mat-radio-button>
-      <mat-radio-button [value]="180">6 mois</mat-radio-button>
-      <mat-radio-button [value]="365">1 an</mat-radio-button>
-    </mat-radio-group>
-  </section>
-</form>
+<ng-template #content>
+  <form [formGroup]="form">
+    <!-- TYPE -->
+    <section formGroupName="types">
+      <mat-label id="type-label">Qu'est-ce que vous recherchez ?</mat-label>
+      <div class="checkbox-group">
+        <ng-container *ngFor="let item of form.get('types')!.value | keyvalue">
+          <mat-checkbox [formControlName]="item.key">{{$any(item.key)|resourceType}}</mat-checkbox>
+        </ng-container>
+      </div>
+    </section>
+    <mat-divider />
+    <!-- STATUS -->
+    <section formGroupName="status">
+      <mat-label id="status-label">Quel est son status?</mat-label>
+      <div class="checkbox-group">
+        <ng-container *ngFor="let item of form.get('status')!.value | keyvalue">
+          <mat-checkbox [formControlName]="item.key">
+            <mat-chip >{{$any(item.key)|resourceStatus}}</mat-chip>
+          </mat-checkbox>
+        </ng-container>
+      </div>
+    </section>
+    <mat-divider />
+    <!-- CIRCLE -->
+    <section>
+      <mat-label>Elle appartient à cercle?</mat-label>
+      <mat-form-field appearance="outline">
+        <mat-label id="parent">Choisir un cercle</mat-label>
+        <input type="text"
+            aria-labelledby="parent"
+            matInput
+            formControlName="parent"
+            [matAutocomplete]="auto">
+        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayCircle.bind(this)">
+          <mat-option *ngFor="let option of circles" [value]="option.id">
+            {{option.name}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </section>
+    <mat-divider />
+    <!-- ORDER -->
+    <section>
+      <mat-label id="order-label">Comment voulez-vous trier les résultats ?</mat-label>
+      <mat-radio-group formControlName="order" aria-labelledby="order-label">
+        <mat-radio-button value="NAME">{{'NAME'|resourceOrdering}}</mat-radio-button>
+        <mat-radio-button value="CREATED_AT">{{'CREATED_AT'|resourceOrdering}}</mat-radio-button>
+        <mat-radio-button value="UPDATED_AT">{{'UPDATED_AT'|resourceOrdering}}</mat-radio-button>
+        <mat-radio-button value="RELEVANCE">{{'RELEVANCE'|resourceOrdering}}</mat-radio-button>
+      </mat-radio-group>
+      <mat-label id="direction-label">Dans quel ordre ?</mat-label>
+      <mat-radio-group formControlName="direction" aria-labelledby="direction-label">
+        <mat-radio-button value="ASC">Croissant</mat-radio-button>
+        <mat-radio-button value="DESC">Décroissant</mat-radio-button>
+      </mat-radio-group>
+    </section>
+    <mat-divider />
+    <!-- PERIOD -->
+    <section>
+      <mat-label id="period-label">Souhaitez-vous limiter les résultats à une certaine période de mise à jour?</mat-label>
+      <mat-radio-group formControlName="period" aria-labelledby="period-label">
+        <mat-radio-button [value]="0">Tout</mat-radio-button>
+        <mat-radio-button [value]="1">1 jour</mat-radio-button>
+        <mat-radio-button [value]="7">1 semaine</mat-radio-button>
+        <mat-radio-button [value]="31">1 mois</mat-radio-button>
+        <mat-radio-button [value]="180">6 mois</mat-radio-button>
+        <mat-radio-button [value]="365">1 an</mat-radio-button>
+      </mat-radio-group>
+    </section>
+  </form>
+</ng-template>

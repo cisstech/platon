@@ -1,6 +1,6 @@
 <h1>Espace de travail</h1>
 <header>
-  <ui-search-bar [searchbar]="searchbar" (filter)="showFilters()">
+  <ui-search-bar [searchbar]="searchbar" (filter)="filterDrawer.open()">
     <ng-template let-context> {{ context }}</ng-template>
   </ui-search-bar>
   <button nz-button nzType="primary" nzShape="round" nzSize="large" nz-popover [nzPopoverContent]="actions">
@@ -25,14 +25,9 @@
   <article>
     <ng-container *ngIf="!searching; else: spinner">
       <h2 *ngIf="items.length">Voici ce qu'on a trouver selon vos critères de recherche...</h2>
-      <mat-chip-set class="indicators">
-        <ng-container *ngFor="let item of indicators">
-          <mat-chip [removable]="true" (removed)="item.remove(filters)">
-            {{item.label}}
-            <mat-icon matChipRemove>cancel</mat-icon>
-          </mat-chip>
-        </ng-container>
-      </mat-chip-set>
+      <div class="indicators">
+        <ui-filter-indicators [filters]="filters" [indicators]="indicators" />
+      </div>
       <res-list
         [items]="items"
         (didTapTag)="search(filters, $event)">
@@ -79,18 +74,8 @@
   <nz-spin nzSimple nzSize="large" />
 </ng-template>
 
-<nz-drawer
-  [nzClosable]="false"
-  [nzVisible]="showFiltersDrawer"
-  nzPlacement="right"
-  nzTitle="Recherche avancée"
-  [nzFooter]="footer"
-  (nzOnClose)="showFiltersDrawer = !showFiltersDrawer">
-  <ng-container *nzDrawerContent>
-    <app-workspace-filters *ngIf="showFiltersDrawer" [(filters)]="drawerFilters" [circles]="circles" />
-  </ng-container>
-  <ng-template #footer>
-    <button mat-stroked-button (click)="closeFilters()">Annuler</button>&nbsp;
-    <button mat-stroked-button color="primary" (click)="applyFilters()">Appliquer</button>
-  </ng-template>
-</nz-drawer>
+<app-workspace-filters
+  #filterDrawer
+  [filters]="filters"
+  [circles]="circles"
+  (triggered)="this.search($event, this.filters.search)" />

@@ -1,0 +1,8 @@
+<mat-chip-set *ngIf="indicators && filters">
+  <ng-container *ngFor="let item of indicators; trackBy:trackByLabel;">
+    <mat-chip [removable]="true" (removed)="item.remove(filters)">
+      {{item.label}}
+      <mat-icon matChipRemove>cancel</mat-icon>
+    </mat-chip>
+  </ng-container>
+</mat-chip-set>

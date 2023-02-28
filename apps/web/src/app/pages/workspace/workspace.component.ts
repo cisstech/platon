@@ -1,28 +1,32 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Params, Router, RouterModule } from '@angular/router';
+import Fuse from 'fuse.js';
+import { firstValueFrom, map, shareReplay, Subscription } from 'rxjs';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatChipsModule } from '@angular/material/chips';
-
-import { NzDrawerModule } from 'ng-zorro-antd/drawer';
-
-import { SearchBar, UiSearchBarComponent } from '@platon/shared/ui';
-
 import { MatIconModule } from '@angular/material/icon';
-import { ActivatedRoute, Params, Router, RouterModule } from '@angular/router';
-import { AuthService } from '@platon/core/browser';
-import { OrderingDirections, User } from '@platon/core/common';
-import { ResourceItemComponent, ResourceListComponent, ResourcePipesModule, ResourceService, RESOURCE_ORDERING_NAMES, RESOURCE_STATUS_NAMES, RESOURCE_TYPE_NAMES } from '@platon/feature/resource/browser';
-import { circleFromTree, CircleTree, flattenCircleTree, Resource, ResourceFilters, ResourceOrderings, ResourceStatus, ResourceTypes } from '@platon/feature/resource/common';
-import Fuse from 'fuse.js';
+
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
-import { firstValueFrom, map, shareReplay, Subscription } from 'rxjs';
+
+import { FilterIndicator, FilterMatcher, matchIndicators, PeriodFilterMatcher, SearchBar, UiFilterIndicatorComponent, UiSearchBarComponent } from '@platon/shared/ui';
+
+import { AuthService } from '@platon/core/browser';
+import { OrderingDirections, User } from '@platon/core/common';
+import { ResourceItemComponent, ResourceListComponent, ResourcePipesModule, ResourceService } from '@platon/feature/resource/browser';
+import { circleFromTree, CircleTree, flattenCircleTree, Resource, ResourceFilters, ResourceOrderings, ResourceStatus, ResourceTypes } from '@platon/feature/resource/common';
+
+
 import { FiltersComponent } from './filters/filters.component';
+import { ResourceOrderingFilterMatcher } from './filters/matchers/resource-ordering.matcher';
+import { ResourceStatusFilterMatcher } from './filters/matchers/resource-status.matcher';
+import { ResourceTypeFilterMatcher } from './filters/matchers/resource-type.matcher';
+import { CircleFilterMatcher } from './filters/matchers/circle.matcher';
 
 @Component({
   standalone: true,
@@ -36,13 +40,11 @@ import { FiltersComponent } from './filters/filters.component';
 
     MatCardModule,
     MatIconModule,
-    MatChipsModule,
     MatButtonModule,
 
     NzSpinModule,
     NzIconModule,
     NzButtonModule,
-    NzDrawerModule,
     NzPopoverModule,
 
     ResourcePipesModule,
@@ -51,49 +53,19 @@ import { FiltersComponent } from './filters/filters.component';
 
     FiltersComponent,
     UiSearchBarComponent,
+    UiFilterIndicatorComponent,
   ]
 })
 
 export default class WorkspaceComponent implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription[] = [];
-  private readonly filterMatchers: FilterMatcher[] = [
-    ...Object.values(ResourceTypes)
-      .map(type => ((filters: ResourceFilters) => filters.types?.includes(type)
-        ? { label: RESOURCE_TYPE_NAMES[type], remove: (filters: ResourceFilters) => ({ ...filters, types: filters.types?.filter(e => e !== type) }) }
-        : undefined
-      )),
-
-    ...Object.values(ResourceStatus)
-      .map(status => ((filters: ResourceFilters) => filters.status?.includes(status)
-        ? { label: RESOURCE_STATUS_NAMES[status], remove: (filters: ResourceFilters) => ({ ...filters, status: filters.status?.filter(e => e !== status) }) }
-        : undefined
-      )),
-
-    ...Object.values(ResourceOrderings)
-      .map(order => ((filters: ResourceFilters) => filters.order === order
-        ? { label: 'Trier par ' + RESOURCE_ORDERING_NAMES[order], remove: (filters: ResourceFilters) => ({ ...filters, order: undefined }) }
-        : undefined
-      )),
-
-    (filters) => filters.period !== 0
-      ? { label: `Modifié il y a au moins ${filters.period}`, remove: (filters: ResourceFilters) => ({ ...filters, period: 0 }) }
-      : undefined,
-
-    (filters) => filters.parent && this.tree
-      ? { label: `Appartient au cercle ${circleFromTree(this.tree, filters.parent)?.name}`, remove: (filters) => ({ ...filters, parent: undefined }) }
-      : undefined
+  private readonly filterMatchers: FilterMatcher<ResourceFilters>[] = [
+    ...Object.values(ResourceTypes).map(ResourceTypeFilterMatcher),
+    ...Object.values(ResourceStatus).map(ResourceStatusFilterMatcher),
+    ...Object.values(ResourceOrderings).map(ResourceOrderingFilterMatcher),
+    PeriodFilterMatcher,
+    CircleFilterMatcher(() => this.tree),
   ];
-
-  private user?: User;
-
-  protected tree?: CircleTree;
-  protected circles: CircleTree[] = [];
-
-  protected indicators: FilterIncidator[] = [];
-  protected completion = this.resourceService.completion().pipe(
-    shareReplay(1)
-  );
-
 
   protected readonly searchbar: SearchBar<string> = {
     placeholder: 'Essayez un nom, un topic, un niveau...',
@@ -118,10 +90,18 @@ export default class WorkspaceComponent implements OnInit, OnDestroy {
     onSearch: (query) => this.search(this.filters, query),
   }
 
+  private user?: User;
+
+  protected tree?: CircleTree;
+  protected circles: CircleTree[] = [];
+
+  protected indicators: FilterIndicator<ResourceFilters>[] = [];
+  protected completion = this.resourceService.completion().pipe(
+    shareReplay(1)
+  )
+
   protected searching = true;
-  protected showFiltersDrawer = false;
   protected filters: ResourceFilters = {};
-  protected drawerFilters: ResourceFilters = {};
   protected circle!: Resource;
   protected items: Resource[] = [];
   protected views: Resource[] = [];
@@ -160,11 +140,11 @@ export default class WorkspaceComponent implements OnInit, OnDestroy {
     if (this.tree) {
       this.circles = flattenCircleTree(this.tree);
     }
-
+    this.changeDetectorRef.markForCheck();
 
     this.subscriptions.push(
       this.activatedRoute.queryParams.subscribe(async (e: any) => {
-        this.filters = this.drawerFilters = {
+        this.filters = {
           ...this.filters,
           search: e.q,
           parent: e.parent,
@@ -185,42 +165,19 @@ export default class WorkspaceComponent implements OnInit, OnDestroy {
         ).resources;
         this.searching = false;
 
-        this.indicators = [];
-        this.filterMatchers.forEach(matcher => {
-          const indicator = matcher(this.filters);
-          if (indicator) {
-            this.indicators.push({
-              ...indicator,
-              remove: (filters) => {
-                const data = indicator.remove(filters)
-                this.search(data, data.search);
-              },
-            } as FilterIncidator);
-          }
-        });
+        this.indicators = matchIndicators(
+          this.filters,
+          this.filterMatchers,
+          data => this.search(data, data.search)
+        );
 
         this.changeDetectorRef.markForCheck();
       })
     );
-
-    this.changeDetectorRef.markForCheck();
   }
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(s => s.unsubscribe());
-  }
-
-  protected showFilters() {
-    this.showFiltersDrawer = true;
-  }
-
-  protected closeFilters() {
-    this.showFiltersDrawer = false;
-  }
-
-  protected applyFilters() {
-    this.showFiltersDrawer = false;
-    this.search(this.drawerFilters, this.filters.search);
   }
 
   protected search(filters: ResourceFilters, query?: string) {
@@ -240,14 +197,4 @@ export default class WorkspaceComponent implements OnInit, OnDestroy {
       queryParamsHandling: 'merge',
     });
   }
-
 }
-
-
-
-interface FilterIncidator {
-  label: string,
-  remove: (filters: ResourceFilters) => ResourceFilters
-}
-
-type FilterMatcher = (filters: ResourceFilters) => FilterIncidator | undefined
