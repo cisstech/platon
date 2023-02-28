@@ -17,7 +17,7 @@ const ResourceEventToken = new InjectionToken<ResourceEvent>('ResourceEventToken
     UserAvatarComponent
   ],
   template: `
-  <user-avatar [userIdOrName]="event.actorId" /> à ajouté <user-avatar [userIdOrName]="event.data['userId']" />
+  <user-avatar [userIdOrName]="event.actorId" /> a ajouté <user-avatar [userIdOrName]="event.data['userId']" />
   `
 })
 
@@ -33,7 +33,7 @@ class MemberCreateEventComponent {
     UserAvatarComponent
   ],
   template: `
-  <user-avatar [userIdOrName]="event.actorId" /> à retiré <user-avatar [userIdOrName]="event.data['userId']" />
+  <user-avatar [userIdOrName]="event.actorId" /> a retiré <user-avatar [userIdOrName]="event.data['userId']" />
   `
 })
 
@@ -50,7 +50,7 @@ class MemberRemoveEventComponent {
     ResourcePipesModule,
   ],
   template: `
-  <user-avatar [userIdOrName]="event.actorId" /> à passé “{{event.data['resourceName']}}” à “{{event.data['newStatus']|resourceStatus}}”
+  <user-avatar [userIdOrName]="event.actorId" /> a passé “{{event.data['resourceName']}}” à “{{event.data['newStatus']|resourceStatus}}”
   `
 })
 

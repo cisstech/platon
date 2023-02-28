@@ -4,11 +4,14 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output
 import { MatIconModule } from '@angular/material/icon';
 
 
+import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 import { NgeUiListModule } from '@cisstech/nge/ui/list';
-import { Resource, ResourceTypes, ResourceVisibilities } from '@platon/feature/resource/common';
+import { Resource } from '@platon/feature/resource/common';
 
+import { UiModalIFrameComponent } from '@platon/shared/ui';
 
 import { ResourcePipesModule } from '../../pipes';
 
@@ -23,9 +26,12 @@ import { ResourcePipesModule } from '../../pipes';
     CommonModule,
 
     MatIconModule,
+    NzIconModule,
     NzBadgeModule,
+    NzToolTipModule,
 
     NgeUiListModule,
+    UiModalIFrameComponent,
 
     ResourcePipesModule,
   ]
@@ -35,9 +41,20 @@ export class ResourceItemComponent implements OnInit {
   @Input() simple = false;
   @Output() didTapTag = new EventEmitter<string>();
 
+
   protected name = '';
   protected desc = '';
   protected tags: string[] = []
+
+
+  get editorUrl(): string {
+    return `/editor/${this.item.id}?version=latest`;
+  }
+
+  get previewUrl(): string {
+    return `/player/preview/${this.item.id}?version=latest`;
+  }
+
 
   ngOnInit(): void {
     if (!this.simple) {
