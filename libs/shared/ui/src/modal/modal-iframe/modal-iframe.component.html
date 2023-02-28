@@ -1,0 +1,22 @@
+<nz-modal
+  [(nzVisible)]="visible"
+  [nzBodyStyle]="{
+    padding: '0',
+    height: '90vh'
+  }"
+  nzClassName="ui-modal"
+  nzWidth="90vw"
+  nzMask="true"
+  nzClosable="false"
+  nzCentered="true"
+  nzMaskClosable="true"
+  (nzOnOk)="close()"
+  (nzOnCancel)="close()"
+  [nzFooter]="modalFooter">
+  <ng-container *nzModalContent>
+    <ng-container *ngIf="visible && url">
+      <iframe [src]="url|safe:'resource'" frameborder="0"></iframe>
+    </ng-container>
+  </ng-container>
+</nz-modal>
+<ng-template #modalFooter />

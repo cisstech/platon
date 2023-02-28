@@ -1,14 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+
+import { SafePipeModule } from '@cisstech/nge/pipes';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+
 import { NgeUiIconModule } from '@cisstech/nge/ui/icon';
+
 import { ResourceFilesComponent } from '@platon/feature/resource/browser';
 import { FileVersions, ResourceFile } from '@platon/feature/resource/common';
-import { Subscription } from 'rxjs';
+import { UiModalIFrameComponent } from '@platon/shared/ui';
+
 import { ResourcePresenter } from '../resource.presenter';
 import { ResourceBrowseHeaderComponent } from './header/header.component';
-import { NzModalModule } from 'ng-zorro-antd/modal';
-import { ResourceEditorComponent } from './editor/editor.component';
-import { SafePipeModule } from '@cisstech/nge/pipes';
 
 
 @Component({
@@ -24,9 +28,9 @@ import { SafePipeModule } from '@cisstech/nge/pipes';
     NgeUiIconModule,
 
     SafePipeModule,
+    UiModalIFrameComponent,
 
     ResourceFilesComponent,
-    ResourceEditorComponent,
     ResourceBrowseHeaderComponent,
   ]
 })
@@ -34,14 +38,17 @@ export class ResourceBrowseComponent implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription[] = [];
 
   protected context = this.presenter.defaultContext();
+
   protected tree?: ResourceFile;
-  protected editing = false;
-  protected preview = false;
   protected version = 'latest';
   protected versions?: FileVersions;
 
+  get editorUrl(): string {
+    return `/editor/${this.context.resource?.id}?version=${this.version}`;
+  }
+
   get previewUrl(): string {
-    return `/resource/preview?resourceId=${this.context.resource?.id}&version=${this.version}`;
+    return `/player/preview/${this.context.resource?.id}?version=${this.version}`;
   }
 
   constructor(
@@ -63,7 +70,6 @@ export class ResourceBrowseComponent implements OnInit, OnDestroy {
   }
 
   protected async refresh(version = 'latest') {
-    this.editing = false;
     this.version = version;
     const [tree, versions] = await this.presenter.files(version)
     this.tree = tree;

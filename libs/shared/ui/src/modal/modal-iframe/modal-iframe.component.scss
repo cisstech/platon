@@ -1,0 +1,15 @@
+::ng-deep {
+  .ui-browse-modal {
+    height: 90vh;
+  }
+  .ant-modal-footer {
+    border: none;
+    border-radius: 0;
+    background-color: rgb(59, 66, 82);
+  }
+}
+
+iframe {
+  width: 100%;
+  height: 100%;
+}

@@ -7,3 +7,4 @@ export * from './lib/models/level.model';
 export * from './lib/models/ordering.model';
 export * from './lib/models/topic.model';
 export * from './lib/models/user.model';
+export * from './lib/utils/object';

@@ -1,19 +1,20 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 
 import { NgeIdeModule } from '@cisstech/nge-ide';
 import { NgeIdeExplorerModule } from '@cisstech/nge-ide/explorer';
 import { NgeIdeSearchModule } from '@cisstech/nge-ide/search';
 import { NgeIdeSettingsModule } from '@cisstech/nge-ide/settings';
 
+import { ActivatedRoute } from '@angular/router';
 import { FileService, IdeService } from '@cisstech/nge-ide/core';
 import { NgeIdeNotificationsModule } from '@cisstech/nge-ide/notifications';
 import { NgeIdeProblemsModule } from '@cisstech/nge-ide/problems';
-import { ResourceFileSystemProvider } from '@platon/feature/resource/browser';
+import { ResourceFileSystemProvider, ResourceService } from '@platon/feature/resource/browser';
 import { Resource, resourceAncestors, ResourceTypes } from '@platon/feature/resource/common';
 import { firstValueFrom, Subscription } from 'rxjs';
-import { ResourcePresenter } from '../../resource.presenter';
+import { ResourcePresenter } from '../resource/resource.presenter';
 import { PLFormEditorContributionModule } from './contributions/pl-form-editor/pl-form-editor.contribution';
 
 @Component({
@@ -40,42 +41,46 @@ import { PLFormEditorContributionModule } from './contributions/pl-form-editor/p
     ResourceFileSystemProvider,
   ]
 })
-export class ResourceEditorComponent implements OnInit, OnDestroy {
+export class EditorComponent implements OnInit, OnDestroy {
   private subscription?: Subscription;
-
-  @Input() resource!: Resource;
-  @Input() version = 'latest';
 
   constructor(
     private readonly ide: IdeService,
-    private readonly presenter: ResourcePresenter,
     private readonly fileService: FileService,
-    private readonly resourceFileSystem: ResourceFileSystemProvider,
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly resourceService: ResourceService,
+    private readonly resourceFileSystemProvider: ResourceFileSystemProvider,
   ) { }
 
 
   async ngOnInit(): Promise<void> {
 
-    const { resource, circles } = await firstValueFrom(this.presenter.contextChange);
+    const params = this.activatedRoute.snapshot.paramMap;
+    const queryParams = this.activatedRoute.snapshot.queryParamMap;
+
+    const id = params.get('id') as string;
+    const version = queryParams.get('version') || 'latest';
+
+
+    const [resource, circles] = await Promise.all([
+      firstValueFrom(this.resourceService.findById(id)),
+      firstValueFrom(this.resourceService.tree()),
+    ])
 
     const ancestors = resource!.type === ResourceTypes.CIRCLE
       ? resourceAncestors(circles!, resource!.id)
       : resourceAncestors(circles!, resource!.parentId!);
 
     this.subscription = this.ide.onAfterStart(() => {
-      this.fileService.registerProvider(this.resourceFileSystem);
-
+      this.fileService.registerProvider(this.resourceFileSystemProvider);
       this.fileService.registerFolders(
         {
-          name: `${resource!.name}#${this.version}`,
-          uri: this.resourceFileSystem.buildUri(
-            this.resource.id,
-            this.version
-          )
+          name: `${resource!.name}#${version}`,
+          uri: this.resourceFileSystemProvider.buildUri(id, version)
         },
         ...ancestors.map(ancestor => ({
           name: `${ancestor.name}#latest`,
-          uri: this.resourceFileSystem.buildUri(
+          uri: this.resourceFileSystemProvider.buildUri(
             ancestor.id
           )
         }))

@@ -94,3 +94,15 @@ export class BadRequestResponse extends ErrorResponse {
     })
   }
 }
+
+
+export class UnauthorizedResponse extends ErrorResponse {
+  constructor(
+    message: string
+  ) {
+    super({
+      status: HTTP_STATUS_CODE.UNAUTHORIZED,
+      message
+    })
+  }
+}
