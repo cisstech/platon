@@ -1,10 +1,11 @@
 import { OrderingDirections, UserOrderings } from "@platon/core/common";
 import { toNumber } from "@platon/core/server";
-import { ResourceMemberFilters } from "@platon/feature/resource/common";
+import { ResourceWatcherFilters } from "@platon/feature/resource/common";
 import { Transform } from "class-transformer";
 import { IsEnum, IsNumber, IsOptional, IsString } from "class-validator";
 
-export class ResourceMemberFiltersDTO implements ResourceMemberFilters {
+
+export class ResourceWatcherFiltersDTO implements ResourceWatcherFilters {
   @IsString()
   @IsOptional()
   readonly search?: string;

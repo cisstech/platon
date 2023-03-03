@@ -2,8 +2,7 @@ import { Body, Controller, Get, Param, Patch, Post, Query, Request } from '@nest
 import { CreatedResponse, ItemResponse, ListResponse, NotFoundResponse } from '@platon/core/common';
 import { IRequest, Mapper } from '@platon/core/server';
 import { ResourceCompletionDTO } from './completion';
-import { CircleTreeDTO, CreateResourceDTO, ResourceDTO, UpdateResourceDTO } from './resource.dto';
-import { ResourceFiltersDTO } from './resource.filter';
+import { CircleTreeDTO, CreateResourceDTO, ResourceDTO, UpdateResourceDTO, ResourceFiltersDTO } from './resource.dto';
 import { ResourceService } from './resource.service';
 import { ResourceStatisticDTO } from './statistics';
 import { ResourceViewService } from './views/view.service';

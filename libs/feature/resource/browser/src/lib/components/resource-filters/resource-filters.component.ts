@@ -1,3 +1,4 @@
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
@@ -15,16 +16,16 @@ import { MatRadioModule } from '@angular/material/radio';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 
 import { OrderingDirections } from '@platon/core/common';
-import { ResourcePipesModule } from '@platon/feature/resource/browser';
 import { CircleTree, ResourceFilters, ResourceOrderings, ResourceStatus, ResourceTypes } from '@platon/feature/resource/common';
 import { Subscription } from 'rxjs';
+import { ResourcePipesModule } from '../../pipes';
 
 
 @Component({
   standalone: true,
-  selector: 'app-workspace-filters',
-  templateUrl: './filters.component.html',
-  styleUrls: ['./filters.component.scss'],
+  selector: 'res-filters',
+  templateUrl: './resource-filters.component.html',
+  styleUrls: ['./resource-filters.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
@@ -45,7 +46,7 @@ import { Subscription } from 'rxjs';
     ResourcePipesModule,
   ]
 })
-export class FiltersComponent implements OnDestroy {
+export class ResourceFiltersComponent implements OnDestroy {
   private readonly subscriptions: Subscription[] = [];
 
   protected form = this.createForm();

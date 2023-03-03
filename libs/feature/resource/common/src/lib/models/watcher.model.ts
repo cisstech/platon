@@ -1,7 +1,9 @@
-export interface ResourceWatcher {
-  readonly id: string;
-  readonly createdAt: Date;
-  readonly updatedAt?: Date;
-  readonly resourceId: string
-  readonly userId: string
+import { OrderingDirections, UserOrderings } from "@platon/core/common";
+
+export interface ResourceWatcherFilters {
+  readonly search?: string;
+  readonly offset?: number;
+  readonly limit?: number;
+  readonly order?: UserOrderings;
+  readonly direction?: OrderingDirections;
 }

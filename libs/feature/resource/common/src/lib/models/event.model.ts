@@ -12,3 +12,8 @@ export interface ResourceEvent {
   readonly data: Record<string, any>
 }
 
+
+export interface ResourceEventFilters {
+  readonly offset?: number;
+  readonly limit?: number;
+}

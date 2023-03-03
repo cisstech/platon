@@ -1,8 +1,7 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { ListResponse } from '@platon/core/common';
 import { Mapper } from '@platon/core/server';
-import { ResourceEventDTO } from './event.dto';
-import { ResourceEventFiltersDTO } from './event.filter';
+import { ResourceEventDTO, ResourceEventFiltersDTO } from './event.dto';
 import { ResourceEventService } from './event.service';
 
 @Controller('resources/:resourceId/events')

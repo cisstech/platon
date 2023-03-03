@@ -10,6 +10,11 @@ h1 {
   margin-top: 0;
 }
 
+h2 {
+  margin-bottom: 1rem;
+}
+
+
 header {
   margin-bottom: 4rem;
   display: flex;
@@ -18,33 +23,6 @@ header {
   button {
     margin: 1rem 0;
   }
-}
-
-button {
-  display: inline-flex;
-  align-items: center;
-  mat-icon {
-    margin-right: 4px;
-  }
-}
-
-ui-search-bar {
-  width: 70%;
-  margin: 0 auto;
-}
-
-.content {
-  display: grid;
-  grid-template-columns: 60% 40%;
-  column-gap: 2rem;
-}
-
-h2 {
-  margin-bottom: 1rem;
-}
-
-.indicators {
-  margin-bottom: 1rem;
 }
 
 article {
@@ -66,8 +44,32 @@ li {
   list-style: none;
 }
 
+button {
+  display: inline-flex;
+  align-items: center;
+  mat-icon {
+    margin-right: 4px;
+  }
+}
+
 nz-spin {
   display: flex;
   justify-content: center;
   margin: 10rem 0;
+}
+
+ui-search-bar {
+  width: 70%;
+  margin: 0 auto;
+}
+
+
+.content {
+  display: grid;
+  grid-template-columns: 60% 40%;
+  column-gap: 2rem;
+}
+
+.indicators {
+  margin-bottom: 1rem;
 }

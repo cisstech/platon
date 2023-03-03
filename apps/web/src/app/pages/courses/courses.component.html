@@ -1,3 +1,32 @@
-<p>
-  courses works!
-</p>
+<h1>Cours</h1>
+<header>
+  <ui-search-bar [searchbar]="searchbar" (filter)="filterDrawer.open()">
+    <ng-template let-context> {{ context }}</ng-template>
+  </ui-search-bar>
+  <button nz-button nzType="primary" nzShape="round" nzSize="large">
+    <span nz-icon nzType="plus" nzTheme="outline"></span>
+  </button>
+</header>
+<article>
+  <ng-container *ngIf="!searching; else: spinner">
+    <h2 *ngIf="items.length">Voici ce qu'on a trouver selon vos critères de recherche...</h2>
+    <div class="indicators">
+      <ui-filter-indicators [filters]="filters" [indicators]="indicators" />
+    </div>
+    <course-list
+      [items]="items">
+      <h2>Aucun cours ne correspond à votre recherche</h2>
+      <ul>
+        <li>Vérifiez les termes de votre recherche</li>
+        <li>Essayez d'autres critères de recherche</li>
+      </ul>
+    </course-list>
+  </ng-container>
+</article>
+<ng-template #spinner>
+  <nz-spin nzSimple nzSize="large" />
+</ng-template>
+<course-filters
+  #filterDrawer
+  [filters]="filters"
+  (triggered)="this.search($event, this.filters.search)" />

@@ -1,3 +1,4 @@
+import { OrderingDirections, UserOrderings } from '@platon/core/common';
 import { MemberPermissions } from './permissions.model';
 
 export interface ResourceMember {
@@ -15,4 +16,12 @@ export interface CreateResourceMember {
 
 export interface UpdateResourceMember {
   readonly permissions?: MemberPermissions
+}
+
+export interface ResourceMemberFilters {
+  readonly search?: string;
+  readonly offset?: number;
+  readonly limit?: number;
+  readonly order?: UserOrderings;
+  readonly direction?: OrderingDirections;
 }

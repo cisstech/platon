@@ -12,11 +12,11 @@ export class CourseEntity extends BaseEntity {
   desc?: string
 
   @Index('Courses_owner_id_idx')
-  @Column({ name: 'owner_id', nullable: true })
-  ownerId?: string
+  @Column({ name: 'owner_id' })
+  ownerId!: string
 
   @ManyToOne(() => UserEntity, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'owner_id' })
-  owner?: UserEntity
+  owner!: UserEntity
 }
 

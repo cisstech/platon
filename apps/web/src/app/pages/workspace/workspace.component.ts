@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router, RouterModule } from '@angular/router';
@@ -18,15 +17,9 @@ import { FilterIndicator, FilterMatcher, matchIndicators, PeriodFilterMatcher, S
 
 import { AuthService } from '@platon/core/browser';
 import { OrderingDirections, User } from '@platon/core/common';
-import { ResourceItemComponent, ResourceListComponent, ResourcePipesModule, ResourceService } from '@platon/feature/resource/browser';
-import { circleFromTree, CircleTree, flattenCircleTree, Resource, ResourceFilters, ResourceOrderings, ResourceStatus, ResourceTypes } from '@platon/feature/resource/common';
+import { CircleFilterMatcher, ResourceFiltersComponent, ResourceItemComponent, ResourceListComponent, ResourceOrderingFilterMatcher, ResourcePipesModule, ResourceService, ResourceStatusFilterMatcher, ResourceTypeFilterMatcher } from '@platon/feature/resource/browser';
+import { CircleTree, flattenCircleTree, Resource, ResourceFilters, ResourceOrderings, ResourceStatus, ResourceTypes } from '@platon/feature/resource/common';
 
-
-import { FiltersComponent } from './filters/filters.component';
-import { ResourceOrderingFilterMatcher } from './filters/matchers/resource-ordering.matcher';
-import { ResourceStatusFilterMatcher } from './filters/matchers/resource-status.matcher';
-import { ResourceTypeFilterMatcher } from './filters/matchers/resource-type.matcher';
-import { CircleFilterMatcher } from './filters/matchers/circle.matcher';
 
 @Component({
   standalone: true,
@@ -40,7 +33,6 @@ import { CircleFilterMatcher } from './filters/matchers/circle.matcher';
 
     MatCardModule,
     MatIconModule,
-    MatButtonModule,
 
     NzSpinModule,
     NzIconModule,
@@ -50,8 +42,8 @@ import { CircleFilterMatcher } from './filters/matchers/circle.matcher';
     ResourcePipesModule,
     ResourceItemComponent,
     ResourceListComponent,
+    ResourceFiltersComponent,
 
-    FiltersComponent,
     UiSearchBarComponent,
     UiFilterIndicatorComponent,
   ]
@@ -143,6 +135,7 @@ export default class WorkspaceComponent implements OnInit, OnDestroy {
     this.changeDetectorRef.markForCheck();
 
     this.subscriptions.push(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       this.activatedRoute.queryParams.subscribe(async (e: any) => {
         this.filters = {
           ...this.filters,

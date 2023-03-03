@@ -1,0 +1,46 @@
+<nz-drawer
+  [nzClosable]="false"
+  [nzVisible]="visible"
+  nzPlacement="right"
+  nzTitle="Recherche avancée"
+  [nzFooter]="footer"
+  (nzOnClose)="close()">
+  <ng-container *nzDrawerContent>
+    <ng-container *ngTemplateOutlet="content" />
+  </ng-container>
+  <ng-template #footer>
+    <button mat-stroked-button (click)="close()">Annuler</button>&nbsp;
+    <button mat-stroked-button color="primary" (click)="triggered.emit(this.filters); close();">Appliquer</button>
+  </ng-template>
+</nz-drawer>
+<ng-template #content>
+  <form [formGroup]="form">
+    <!-- ORDER -->
+    <section>
+      <mat-label id="order-label">Comment voulez-vous trier les résultats ?</mat-label>
+      <mat-radio-group formControlName="order" aria-labelledby="order-label">
+        <mat-radio-button value="NAME">{{'NAME'|courseOrdering}}</mat-radio-button>
+        <mat-radio-button value="CREATED_AT">{{'CREATED_AT'|courseOrdering}}</mat-radio-button>
+        <mat-radio-button value="UPDATED_AT">{{'UPDATED_AT'|courseOrdering}}</mat-radio-button>
+      </mat-radio-group>
+      <mat-label id="direction-label">Dans quel ordre ?</mat-label>
+      <mat-radio-group formControlName="direction" aria-labelledby="direction-label">
+        <mat-radio-button value="ASC">Croissant</mat-radio-button>
+        <mat-radio-button value="DESC">Décroissant</mat-radio-button>
+      </mat-radio-group>
+    </section>
+    <mat-divider />
+    <!-- PERIOD -->
+    <section>
+      <mat-label id="period-label">Souhaitez-vous limiter les résultats à une certaine période de mise à jour?</mat-label>
+      <mat-radio-group formControlName="period" aria-labelledby="period-label">
+        <mat-radio-button [value]="0">Tout</mat-radio-button>
+        <mat-radio-button [value]="1">1 jour</mat-radio-button>
+        <mat-radio-button [value]="7">1 semaine</mat-radio-button>
+        <mat-radio-button [value]="31">1 mois</mat-radio-button>
+        <mat-radio-button [value]="180">6 mois</mat-radio-button>
+        <mat-radio-button [value]="365">1 an</mat-radio-button>
+      </mat-radio-group>
+    </section>
+  </form>
+</ng-template>

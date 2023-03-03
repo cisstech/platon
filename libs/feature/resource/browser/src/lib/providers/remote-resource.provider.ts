@@ -90,7 +90,7 @@ export class RemoteResourceProvider extends ResourceProvider {
     }
 
     if (filters.period) {
-      params = params.append('periode', filters.period.toString());
+      params = params.append('period', filters.period.toString());
     }
 
     if (filters.limit) {

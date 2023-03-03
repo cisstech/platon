@@ -1,6 +1,6 @@
 import { BaseEntity, UserEntity } from '@platon/core/server';
 import { Column, Entity, JoinColumn, ManyToOne, Unique } from 'typeorm';
-import { MemberPermissions } from '../members/permissions.entity';
+import { MemberPermissions } from '../permissions';
 import { ResourceEntity } from '../resource.entity';
 
 

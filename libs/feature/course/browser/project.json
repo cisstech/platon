@@ -3,7 +3,7 @@
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "libs/feature/course/browser/src",
-  "prefix": "play",
+  "prefix": "course",
   "targets": {
     "test": {
       "executor": "@nrwl/jest:jest",

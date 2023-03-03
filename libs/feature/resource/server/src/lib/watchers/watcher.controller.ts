@@ -1,7 +1,7 @@
 import { Controller, Delete, Get, Param, Post, Query, Request, UnauthorizedException } from '@nestjs/common';
 import { ItemResponse, ListResponse, NoContentResponse, NotFoundResponse } from '@platon/core/common';
 import { IRequest, Mapper, UserDTO } from '@platon/core/server';
-import { ResourceWatcherFiltersDTO } from './watcher.filter';
+import { ResourceWatcherFiltersDTO } from './watcher.dto';
 import { ResourceWatcherService } from './watcher.service';
 
 @Controller('resources/:resourceId/watchers')

@@ -1,4 +1,4 @@
-import { Level, Topic } from '@platon/core/common';
+import { Level, OrderingDirections, Topic } from '@platon/core/common';
 import { ResourceStatus } from '../enums/resource-status';
 import { ResourceTypes } from '../enums/resource-types';
 import { ResourceVisibilities } from '../enums/resource-visibility';
@@ -51,10 +51,29 @@ export interface UpdateResource {
   readonly topics?: string[]
 }
 
-export interface PreviewResource {
-  version?: string;
-  content?: string;
+export enum ResourceOrderings {
+  NAME = 'NAME',
+  CREATED_AT = 'CREATED_AT',
+  UPDATED_AT = 'UPDATED_AT',
+  RELEVANCE = 'RELEVANCE',
 }
+
+export interface ResourceFilters {
+  readonly types?: ResourceTypes[];
+  readonly status?: ResourceStatus[];
+  readonly search?: string;
+  readonly period?: number;
+  readonly members?: string[];
+  readonly watchers?: string[];
+  readonly owners?: string[];
+  readonly views?: boolean;
+  readonly offset?: number;
+  readonly limit?: number;
+  readonly parent?: string;
+  readonly order?: ResourceOrderings;
+  readonly direction?: OrderingDirections;
+}
+
 
 
 export const resourceAncestors = (tree: CircleTree, id: string): CircleTree[] => {
@@ -81,7 +100,6 @@ export const resourceAncestors = (tree: CircleTree, id: string): CircleTree[] =>
 
   return [];
 }
-
 
 export const circleFromTree = (tree: CircleTree, id: string): CircleTree | undefined => {
   if (tree.id === id)

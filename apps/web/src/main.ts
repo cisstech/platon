@@ -10,6 +10,7 @@ import {
   withPreloading
 } from '@angular/router';
 import { CoreBrowserModule } from '@platon/core/browser';
+import { COURSE_PROVIDERS } from '@platon/feature/course/browser';
 import { PLAYER_PROVIDERS } from '@platon/feature/player/browser';
 import { RESOURCE_PROVIDERS } from '@platon/feature/resource/browser';
 import { FeatureWebComponentModule } from '@platon/feature/webcomponent';
@@ -33,6 +34,7 @@ bootstrapApplication(AppComponent, {
       withEnabledBlockingInitialNavigation(),
       withPreloading(PreloadAllModules),
     ),
+    COURSE_PROVIDERS,
     RESOURCE_PROVIDERS,
     PLAYER_PROVIDERS,
   ],

@@ -1,0 +1,19 @@
+mat-label {
+  display: block;
+  font-weight: bold;
+  margin: 1rem 0;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+mat-radio-group,
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+}
+
+mat-divider {
+  margin: 1rem;
+}

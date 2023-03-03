@@ -1,8 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Patch, Query } from '@nestjs/common';
 import { ErrorResponse, ItemResponse, ListResponse, NoContentResponse } from '@platon/core/common';
 import { Mapper } from '@platon/core/server';
-import { ResourceMemberDTO, UpdateResourceMemberDTO } from './member.dto';
-import { ResourceMemberFiltersDTO } from './member.filter';
+import { ResourceMemberDTO, UpdateResourceMemberDTO, ResourceMemberFiltersDTO } from './member.dto';
 import { ResourceMemberService } from './member.service';
 
 @Controller('resources/:resourceId/members')
