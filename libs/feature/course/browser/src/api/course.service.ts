@@ -4,7 +4,7 @@ import { Course, CourseFilters, CourseMember, CourseMemberFilters, CreateCourse,
 import { Observable } from "rxjs";
 import { CourseProvider } from "../models/course-provider";
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class CourseService {
   constructor(
     private readonly provider: CourseProvider

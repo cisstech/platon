@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router, RouterModule } from '@angular/router';
 import Fuse from 'fuse.js';
-import { map, of, shareReplay, Subscription } from 'rxjs';
+import { firstValueFrom, map, of, shareReplay, Subscription } from 'rxjs';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -15,9 +15,10 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { FilterIndicator, FilterMatcher, matchIndicators, PeriodFilterMatcher, SearchBar, UiFilterIndicatorComponent, UiSearchBarComponent } from '@platon/shared/ui';
 
 import { AuthService } from '@platon/core/browser';
-import { User } from '@platon/core/common';
-import { CourseFiltersComponent, CourseListComponent, CourseOrderingFilterMatcher, CoursePipesModule } from '@platon/feature/course/browser';
+import { OrderingDirections, User } from '@platon/core/common';
+import { CourseFiltersComponent, CourseListComponent, CourseOrderingFilterMatcher, CoursePipesModule, CourseService } from '@platon/feature/course/browser';
 import { Course, CourseFilters, CourseOrderings } from '@platon/feature/course/common';
+import { ResourceOrderings } from '@platon/feature/resource/common';
 
 @Component({
   standalone: true,
@@ -81,42 +82,25 @@ export class CoursesComponent implements OnInit, OnDestroy {
   protected searching = true;
   protected filters: CourseFilters = {};
   protected items: Course[] = [];
-  protected views: Course[] = [];
-  protected recents: Course[] = [];
-
 
   constructor(
     private readonly router: Router,
     private readonly authService: AuthService,
+    private readonly courseService: CourseService,
     private readonly activatedRoute: ActivatedRoute,
     private readonly changeDetectorRef: ChangeDetectorRef,
   ) { }
 
   async ngOnInit(): Promise<void> {
     this.user = await this.authService.ready() as User;
-    /*
-    const [views, recents] = await Promise.all([
-      firstValueFrom(this.courseService.search({ views: true })),
-      firstValueFrom(this.courseService.search({
-        period: 7,
-        limit: 5,
-        order: CourseOrderings.UPDATED_AT,
-        direction: OrderingDirections.DESC,
-      })),
-    ])
-
-    this.views = views.resources;
-    this.recents = recents.resources;
-    */
     this.changeDetectorRef.markForCheck();
 
     this.subscriptions.push(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      this.activatedRoute.queryParams.subscribe(async (e: any) => {
+      this.activatedRoute.queryParams.subscribe(async (e: QueryParams) => {
         this.filters = {
           ...this.filters,
           search: e.q,
-          period: Number.parseInt(e.period, 10) || this.filters.period || 0,
+          period: Number.parseInt(e.period + '', 10) || this.filters.period || 0,
           order: e.order,
           direction: e.direction,
         };
@@ -127,9 +111,9 @@ export class CoursesComponent implements OnInit, OnDestroy {
 
 
         this.searching = true;
-         /*  this.items = (
-            await firstValueFrom(this.courseService.search(this.filters))
-          ).resources; */
+        this.items = (
+          await firstValueFrom(this.courseService.search(this.filters))
+        ).resources;
         this.searching = false;
 
 
@@ -149,7 +133,7 @@ export class CoursesComponent implements OnInit, OnDestroy {
   }
 
   protected search(filters: CourseFilters, query?: string) {
-    const queryParams: Params = {
+    const queryParams: QueryParams = {
       q: query,
       period: filters.period,
       order: filters.order,
@@ -164,3 +148,9 @@ export class CoursesComponent implements OnInit, OnDestroy {
   }
 }
 
+interface QueryParams {
+  q?: string,
+  period?: string | number,
+  order?: CourseOrderings,
+  direction?: OrderingDirections,
+}

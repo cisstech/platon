@@ -1,0 +1,41 @@
+<ui-layout-tabs [state]="context.state">
+  <ng-container *ngIf="context.course">
+    <nz-breadcrumb>
+      <nz-breadcrumb-item>
+        {{ context.course.name }}
+        <mat-icon>local_library</mat-icon>
+      </nz-breadcrumb-item>
+      <div class="spacer"></div>
+    </nz-breadcrumb>
+    <p>{{ context.course.desc }}</p>
+    <nz-button-group>
+      <button nz-button nzType="primary">
+        <i nz-icon nzType="plus" nzTheme="outline"></i>
+      </button>
+    </nz-button-group>
+  </ng-container>
+  <ui-layout-tab [link]="['overview']">
+    <ng-template>
+      <span nz-icon nzType="dashboard" nzTheme="outline"></span>
+      Vue d'ensemble
+    </ng-template>
+  </ui-layout-tab>
+  <ui-layout-tab [link]="['browse']">
+    <ng-template>
+      <span nz-icon nzType="folder" nzTheme="outline"></span>
+      Explorer
+    </ng-template>
+  </ui-layout-tab>
+  <ui-layout-tab [link]="['events']">
+    <ng-template>
+      <span nz-icon nzType="history" nzTheme="outline"></span>
+      Évènements
+    </ng-template>
+  </ui-layout-tab>
+  <ui-layout-tab [link]="['settings']" [linkParams]="{ 'tab': 'informations' }">
+    <ng-template>
+      <span nz-icon nzType="setting" nzTheme="outline"></span>
+      Paramètres
+    </ng-template>
+  </ui-layout-tab>
+</ui-layout-tabs>

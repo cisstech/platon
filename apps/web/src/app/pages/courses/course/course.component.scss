@@ -1,0 +1,48 @@
+nz-breadcrumb {
+  font-size: 1.5em;
+  display: flex;
+  align-items: center;
+
+  button {
+    padding-left: 0;
+  }
+
+  nz-breadcrumb-item {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  &::ng-deep {
+    .ant-breadcrumb-link {
+      display: inline-flex;
+      align-items: center;
+      mat-icon {
+        margin: 0 4px 0 4px;
+      }
+    }
+  }
+}
+
+nz-button-group {
+  margin: 0 8px 0 0;
+}
+
+button img,
+a img {
+  width: 18px;
+  height: 18px;
+}
+
+nz-select {
+  width: 164px;
+}
+
+.spacer {
+  flex: 1;
+}
+
+@media (min-width: 720px) {
+  p {
+    width: 70%;
+  }
+}

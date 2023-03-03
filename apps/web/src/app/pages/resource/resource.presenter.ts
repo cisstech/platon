@@ -7,7 +7,7 @@ import { Level, ListResponse, Topic, User } from '@platon/core/common';
 import { FileService, ResourceService } from '@platon/feature/resource/browser';
 import { CircleTree, CreateResourceInvitation, FileVersions, Resource, ResourceEvent, ResourceEventFilters, ResourceFile, ResourceInvitation, ResourceMember, ResourceMemberFilters, ResourceStatisic, UpdateResource } from '@platon/feature/resource/common';
 import { LayoutState } from '@platon/shared/ui';
-import { BehaviorSubject, firstValueFrom, lastValueFrom, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, Observable, Subscription } from 'rxjs';
 
 @Injectable()
 export class ResourcePresenter implements OnDestroy {
@@ -53,7 +53,7 @@ export class ResourcePresenter implements OnDestroy {
   async watch(): Promise<boolean> {
     const { resource } = this.context.value as Required<Context>;
     try {
-      await lastValueFrom(this.resourceService.createWatcher(resource));
+      await firstValueFrom(this.resourceService.createWatcher(resource));
       await this.refresh(resource.id);
       return true;
     } catch {
@@ -91,7 +91,7 @@ export class ResourcePresenter implements OnDestroy {
   async deleteMember(member: ResourceMember): Promise<boolean> {
     const { resource } = this.context.value as Required<Context>;;
     try {
-      await lastValueFrom(this.resourceService.deleteMember(resource, member.userId));
+      await firstValueFrom(this.resourceService.deleteMember(resource, member.userId));
       await this.refresh(resource.id);
       this.dialogService.success(`Membre supprimé !`);
       return true;
@@ -106,7 +106,7 @@ export class ResourcePresenter implements OnDestroy {
     filters: ResourceMemberFilters = {}
   ): Promise<ListResponse<ResourceMember>> {
     const { resource } = this.context.value as Required<Context>;
-    return lastValueFrom(this.resourceService.searchMembers(resource, filters));
+    return firstValueFrom(this.resourceService.searchMembers(resource, filters));
   }
 
 
@@ -168,7 +168,7 @@ export class ResourcePresenter implements OnDestroy {
 
   async listEvents(filters?: ResourceEventFilters): Promise<ListResponse<ResourceEvent>> {
     const { resource } = this.context.value as Required<Context>;
-    return lastValueFrom(this.resourceService.listEvents(resource, filters));
+    return firstValueFrom(this.resourceService.listEvents(resource, filters));
   }
 
   async update(input: UpdateResource): Promise<boolean> {

@@ -3,7 +3,14 @@
   <ui-search-bar [searchbar]="searchbar" (filter)="filterDrawer.open()">
     <ng-template let-context> {{ context }}</ng-template>
   </ui-search-bar>
-  <button nz-button nzType="primary" nzShape="round" nzSize="large">
+  <button
+    nz-button
+    nzType="primary"
+    nzShape="round"
+    nzSize="large"
+    [routerLink]="['/courses/create']"
+    [queryParamsHandling]="'merge'"
+    [queryParams]="null">
     <span nz-icon nzType="plus" nzTheme="outline"></span>
   </button>
 </header>

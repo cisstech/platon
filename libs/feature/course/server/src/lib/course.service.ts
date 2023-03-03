@@ -36,8 +36,6 @@ export class CourseService {
 
   async search(filters: CourseFilters = {}): Promise<[CourseEntity[], number]> {
     const query = this.courseRepository.createQueryBuilder('course')
-    query.leftJoinAndSelect('course.topics', 'topic')
-    query.leftJoinAndSelect('course.levels', 'level')
 
     filters = {
       ...filters,
@@ -60,7 +58,7 @@ export class CourseService {
         result.setDate(result.getDate() - days);
         return result;
       }
-      query.andWhere('course.updated_t >= :date', { date: subtractDays(filters.period) })
+      query.andWhere('course.updated_at >= :date', { date: subtractDays(filters.period) })
     }
 
     if (filters.order) {

@@ -185,7 +185,7 @@ export class ResourceService {
         result.setDate(result.getDate() - days);
         return result;
       }
-      query.andWhere('resource.updated_t >= :date', { date: subtractDays(filters.period) })
+      query.andWhere('resource.updated_at >= :date', { date: subtractDays(filters.period) })
     }
 
     if (filters.order) {

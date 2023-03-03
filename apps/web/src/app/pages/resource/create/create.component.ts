@@ -1,20 +1,24 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+
+import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { DialogModule, DialogService } from '@platon/core/browser';
-import { Level, Topic } from '@platon/core/common';
-import { CircleTreeComponent, ResourcePipesModule, ResourceService } from '@platon/feature/resource/browser';
-import { circleFromTree, CircleTree, flattenCircleTree, ResourceStatus, ResourceTypes, ResourceVisibilities } from '@platon/feature/resource/common';
-import { UiStepDirective, UiStepperComponent } from '@platon/shared/ui';
+
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
-import { NzSpinModule } from 'ng-zorro-antd/spin';
+
+import { Level, Topic } from '@platon/core/common';
+import { DialogModule, DialogService } from '@platon/core/browser';
+import { CircleTreeComponent, ResourcePipesModule, ResourceService } from '@platon/feature/resource/browser';
+import { circleFromTree, CircleTree, flattenCircleTree, ResourceStatus, ResourceTypes, ResourceVisibilities } from '@platon/feature/resource/common';
+import { UiStepDirective, UiStepperComponent } from '@platon/shared/ui';
 import { firstValueFrom } from 'rxjs';
+
 
 @Component({
   standalone: true,

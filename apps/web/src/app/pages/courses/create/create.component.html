@@ -1,0 +1,45 @@
+<header>
+  <h1>Créer un cours</h1>
+</header>
+<main>
+  <nz-skeleton [nzActive]="loading" [nzLoading]="loading">
+    <ui-stepper #stepper (finishd)="create()">
+      <ng-template uiStepperStep stepTitle="Informations" stepIcon="info-circle"[stepValidator]="!!infos.valid">
+        <section>
+          <h2>Entrez les informations de base pour votre cours.</h2>
+          <form [formGroup]="infos">
+            <mat-form-field appearance="fill">
+              <mat-label>Nom</mat-label>
+              <input matInput formControlName="name">
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+              <mat-label>Description</mat-label>
+              <textarea cdkTextareaAutosize  matInput formControlName="desc"></textarea>
+            </mat-form-field>
+          </form>
+        </section>
+      </ng-template>
+    </ui-stepper>
+  </nz-skeleton>
+</main>
+<footer>
+  <ng-container *ngIf="creating; else: showControls">
+    <nz-spin nzTip="Création du cours..."></nz-spin>
+  </ng-container>
+  <ng-template #showControls>
+    <button
+      *ngIf="!stepper.isFirst"
+      nz-button
+      [disabled]="stepper.isFirst"
+      (click)="stepper.prevStep()">
+      Précedent
+    </button>
+    <button
+      nz-button
+      color="primary"
+      [disabled]="!stepper.isValid"
+      (click)="infos.markAllAsTouched(); stepper.nextStep()">
+      {{ stepper.isLast ? 'Créer' : 'Suivant'}}
+    </button>
+  </ng-template>
+</footer>
