@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
-import { ResourceEventsComponent } from './events.component';
+import { ResourceEventsPage } from './events.page';
 
 export default [
   {
     path: '',
-    component: ResourceEventsComponent
+    component: ResourceEventsPage
   },
 ] as Routes;

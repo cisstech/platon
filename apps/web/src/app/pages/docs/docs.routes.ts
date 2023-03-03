@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { NgeDocSettings } from '@cisstech/nge/doc';
 import { createWebComponentDoc } from '@platon/feature/webcomponent';
-import { DocsComponent } from './docs.component';
+import { DocsPage } from './docs.page';
 
 const DeveloperDocs = {
   meta: {
@@ -23,7 +23,7 @@ const DeveloperDocs = {
 export default [
   {
     path: '',
-    component: DocsComponent
+    component: DocsPage
   },
   {
     path: '**',
@@ -31,7 +31,7 @@ export default [
     data: [
       DeveloperDocs,
       createWebComponentDoc({
-        root: '/docs/components/',
+        root: '/docs/pages/',
         backUrl: '/docs',
       }),
     ],

@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
-import { ResourceSettingsComponent } from './settings.component';
+import { ResourceSettingsPage } from './settings.page';
 
 export default [
   {
     path: '',
-    component: ResourceSettingsComponent
+    component: ResourceSettingsPage
   },
 ] as Routes;

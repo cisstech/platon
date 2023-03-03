@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
-import { CourseComponent } from './course.component';
+import { CoursePage } from './course.page';
 
 export default [
   {
     path: '',
-    component: CourseComponent,
+    component: CoursePage,
     children: [
       {
         path: 'overview',

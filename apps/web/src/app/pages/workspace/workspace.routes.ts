@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
-import WorkspaceComponent from './workspace.component';
+import WorkspacePage from './workspace.page';
 
 export default [
   {
     path: '',
-    component: WorkspaceComponent
+    component: WorkspacePage
   }
 ] as Routes;

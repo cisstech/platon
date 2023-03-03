@@ -14,10 +14,10 @@ import { COURSE_PROVIDERS } from '@platon/feature/course/browser';
 import { PLAYER_PROVIDERS } from '@platon/feature/player/browser';
 import { RESOURCE_PROVIDERS } from '@platon/feature/resource/browser';
 import { FeatureWebComponentModule } from '@platon/feature/webcomponent';
-import { AppComponent } from './app/app.component';
+import { AppPage } from './app/app.page';
 import { appRoutes } from './app/app.routes';
 
-bootstrapApplication(AppComponent, {
+bootstrapApplication(AppPage, {
   providers: [
     provideAnimations(),
     provideHttpClient(

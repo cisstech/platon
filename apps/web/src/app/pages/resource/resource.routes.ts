@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { ResourceComponent } from './resource.component';
+import { ResourcePage } from './resource.page';
 
 export default [
   {
@@ -11,7 +11,7 @@ export default [
   },
   {
     path: ':id',
-    component: ResourceComponent,
+    component: ResourcePage,
     children: [
       {
         path: 'overview',

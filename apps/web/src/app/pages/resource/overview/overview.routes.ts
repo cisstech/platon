@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
-import { ResourceOverviewComponent } from './overview.component';
+import { ResourceOverviewPage } from './overview.page';
 
 export default [
   {
     path: '',
-    component: ResourceOverviewComponent
+    component: ResourceOverviewPage
   },
 ] as Routes;

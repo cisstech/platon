@@ -1,13 +1,13 @@
 import { Routes } from '@angular/router';
-import { DashboardComponent } from './dashboard.component';
-import { OverviewComponent } from './overview/overview.component';
+import { DashboardPage } from './dashboard.page';
+import { OverviewPage } from './overview/overview.page';
 
 export default [
   {
     path: '',
-    component: DashboardComponent,
+    component: DashboardPage,
     children: [
-      { path: 'dashboard', component: OverviewComponent },
+      { path: 'dashboard', component: OverviewPage },
       {
         path: 'workspace',
         loadChildren: () => import(

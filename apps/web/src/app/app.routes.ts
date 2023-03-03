@@ -10,9 +10,9 @@ export const appRoutes: Route[] = [
   }),
   {
     path: 'login',
-    loadComponent: () => import(
+    loadChildren: () => import(
       /* webpackChunkName: "login" */
-      './pages/login/login.component'
+      './pages/login/login.routes'
     )
   },
   {

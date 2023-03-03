@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
-import { SettingsComponent } from './settings.component';
+import { SettingsPage } from './settings.page';
 
 export default [
   {
     path: '',
-    component: SettingsComponent
+    component: SettingsPage
   },
 ] as Routes;

@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
-import { EditorComponent } from './editor.component';
+import { EditorPage } from './editor.page';
 
 export default [
   {
     path: ':id',
-    component: EditorComponent
+    component: EditorPage
   },
 ] as Routes;

@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
-import { ResourceBrowsePage } from './browse.page';
+import { LoginPage } from './login.page';
 
 export default [
   {
     path: '',
-    component: ResourceBrowsePage
+    component: LoginPage
   },
 ] as Routes;
