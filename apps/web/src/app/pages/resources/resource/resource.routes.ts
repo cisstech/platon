@@ -3,14 +3,7 @@ import { ResourcePage } from './resource.page';
 
 export default [
   {
-    path: 'create',
-    loadChildren: () => import(
-      /* webpackChunkName: "resource-create" */
-      './create/create.routes'
-    )
-  },
-  {
-    path: ':id',
+    path: '',
     component: ResourcePage,
     children: [
       {

@@ -89,7 +89,7 @@ export class ResourceOverviewPage implements OnInit, AfterViewChecked, OnDestroy
   }
 
   protected searchByStatus(status: string) {
-    this.router.navigate(['/workspace'], {
+    this.router.navigate(['/resources'], {
       queryParams: {
         status,
         parent: this.context.resource?.id

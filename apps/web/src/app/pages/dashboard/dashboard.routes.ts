@@ -9,22 +9,16 @@ export default [
     children: [
       { path: 'dashboard', component: OverviewPage },
       {
-        path: 'workspace',
+        path: 'resources',
         loadChildren: () => import(
-          /* webpackChunkName: "workspace" */
-          '../workspace/workspace.routes'
+          /* webpackChunkName: "resources" */
+          '../resources/resources.routes'
         )
       },
       {
         path: 'account',
         loadChildren: () => import(
           /* webpackChunkName: "account" */'../account/account.routes',
-        )
-      },
-      {
-        path: 'resource',
-        loadChildren: () => import(
-          /* webpackChunkName: "resource" */'../resource/resource.routes',
         )
       },
       {

@@ -42,14 +42,14 @@
             </nz-empty>
             <mat-chip-set>
               <ng-container *ngFor="let item of context.resource.levels; trackBy: trackById">
-                <mat-chip [routerLink]="['/workspace']"
+                <mat-chip [routerLink]="['/resources']"
                   [queryParams]="{ q: item.name, parent: context.resource.id }"
                   [queryParamsHandling]="'merge'">
                   {{item.name}}
                 </mat-chip>
               </ng-container>
               <ng-container *ngFor="let item of context.resource.topics; trackBy: trackById">
-                <mat-chip [routerLink]="['/workspace']"
+                <mat-chip [routerLink]="['/resources']"
                   [queryParams]="{ q: item.name, parent: context.resource.id }"
                   [queryParamsHandling]="'merge'">
                   {{item.name}}
@@ -77,7 +77,7 @@
             <nz-statistic [nzValue]="context.statistic?.circles" [nzTitle]="'Cercles'" />
           </mat-card-content>
           <mat-card-actions>
-            <a mat-button color="primary" [routerLink]="['/workspace']"
+            <a mat-button color="primary" [routerLink]="['/resources']"
               [queryParams]="{ types: 'CIRCLE', parent: context.resource.id }"
               [queryParamsHandling]="'merge'">
               Rechercher
@@ -89,7 +89,7 @@
             <nz-statistic [nzValue]="context.statistic?.activities" [nzTitle]="'Activités'" />
           </mat-card-content>
           <mat-card-actions>
-            <a mat-button color="primary" [routerLink]="['/workspace']"
+            <a mat-button color="primary" [routerLink]="['/resources']"
               [queryParams]="{ types: 'ACTIVITY', parent: context.resource.id}"
               [queryParamsHandling]="'merge'">
               Rechercher
@@ -101,7 +101,7 @@
             <nz-statistic [nzValue]="context.statistic?.exercises" [nzTitle]="'Exercices'" />
           </mat-card-content>
           <mat-card-actions>
-            <a mat-button color="primary" [routerLink]="['/workspace']"
+            <a mat-button color="primary" [routerLink]="['/resources']"
               [queryParams]="{ types: 'EXERCISE', parent: context.resource.id}"
               [queryParamsHandling]="'merge'">
               Rechercher

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Params, Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import Fuse from 'fuse.js';
 import { firstValueFrom, map, shareReplay, Subscription } from 'rxjs';
 
@@ -22,9 +22,9 @@ import { CircleTree, flattenCircleTree, Resource, ResourceFilters, ResourceOrder
 
 @Component({
   standalone: true,
-  selector: 'app-workspace',
-  templateUrl: 'workspace.page.html',
-  styleUrls: ['workspace.page.scss'],
+  selector: 'app-resources',
+  templateUrl: 'resources.page.html',
+  styleUrls: ['resources.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
@@ -47,8 +47,7 @@ import { CircleTree, flattenCircleTree, Resource, ResourceFilters, ResourceOrder
     UiFilterIndicatorComponent,
   ]
 })
-
-export default class WorkspacePage implements OnInit, OnDestroy {
+export default class ResourcesPage implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription[] = [];
   private readonly filterMatchers: FilterMatcher<ResourceFilters>[] = [
     ...Object.values(ResourceTypes).map(ResourceTypeFilterMatcher),
@@ -134,13 +133,12 @@ export default class WorkspacePage implements OnInit, OnDestroy {
     this.changeDetectorRef.markForCheck();
 
     this.subscriptions.push(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      this.activatedRoute.queryParams.subscribe(async (e: any) => {
+      this.activatedRoute.queryParams.subscribe(async (e: QueryParams) => {
         this.filters = {
           ...this.filters,
           search: e.q,
           parent: e.parent,
-          period: Number.parseInt(e.period, 10) || this.filters.period || 0,
+          period: Number.parseInt(e.period + '', 10) || this.filters.period || 0,
           order: e.order,
           direction: e.direction,
           types: typeof e.types === 'string' ? [e.types] : e.types,
@@ -173,7 +171,7 @@ export default class WorkspacePage implements OnInit, OnDestroy {
   }
 
   protected search(filters: ResourceFilters, query?: string) {
-    const queryParams: Params = {
+    const queryParams: QueryParams = {
       q: query,
       period: filters.period,
       order: filters.order,
@@ -189,4 +187,14 @@ export default class WorkspacePage implements OnInit, OnDestroy {
       queryParamsHandling: 'merge',
     });
   }
+}
+
+interface QueryParams {
+  q?: string,
+  period?: string | number,
+  order?: ResourceOrderings,
+  direction?: OrderingDirections,
+  types?: ResourceTypes | ResourceTypes[],
+  status?: ResourceStatus | ResourceStatus[],
+  parent?: string,
 }
