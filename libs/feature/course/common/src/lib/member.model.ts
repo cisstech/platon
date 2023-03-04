@@ -1,10 +1,12 @@
 import { OrderingDirections, UserOrderings } from "@platon/core/common";
 
-
 export interface CourseMember {
   readonly userId: string;
   readonly courseId: string;
-  readonly groupId?: string;
+  readonly group?: {
+    id: string,
+    name: string
+  };
 }
 
 export interface CreateCourseMember {

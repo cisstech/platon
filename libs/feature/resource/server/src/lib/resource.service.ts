@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { NotFoundResponse, OrderingDirections } from '@platon/core/common';
 import { LevelService, TopicService } from '@platon/core/server';
@@ -142,15 +142,25 @@ export class ResourceService {
     }
 
     if (filters.order === ResourceOrderings.RELEVANCE) {
-      query.leftJoin('ResourceStats', 'stats', 'stats.id = resource.id')
+      query.leftJoin('ResourceStats', 'stats', 'stats.id = resource.id');
     }
 
-    if (filters.members) {
-      query.innerJoin(ResourceMemberEntity, 'member', 'member.user_id IN (:...ids)', { ids: filters.members })
+    if (filters.members?.length) {
+      query.innerJoin(
+        ResourceMemberEntity,
+        'member',
+        'member.resource_id = resource.id AND member.user_id IN (:...ids)',
+        { ids: filters.members }
+      );
     }
 
-    if (filters.watchers) {
-      query.innerJoin(ResourceWatcherEntity, 'watcher', 'watcher.user_id IN (:...ids)', { ids: filters.watchers })
+    if (filters.watchers?.length) {
+      query.innerJoin(
+        ResourceWatcherEntity,
+        'watcher',
+        'watcher.resource_id = resource.id AND watcher.user_id IN (:...ids)',
+        { ids: filters.watchers }
+      );
     }
 
     query.where('visibility <> :visibility', { visibility: ResourceVisibilities.PERSONAL })
@@ -159,15 +169,15 @@ export class ResourceService {
       query.andWhere('parent_id = :parent', { parent: filters.parent })
     }
 
-    if (filters.types) {
+    if (filters.types?.length) {
       query.andWhere('type IN (:...types)', { types: filters.types })
     }
 
-    if (filters.status) {
+    if (filters.status?.length) {
       query.andWhere('status IN (:...status)', { status: filters.status })
     }
 
-    if (filters.owners) {
+    if (filters.owners?.length) {
       query.andWhere('owner_id IN (:...owners)', { owners: filters.owners })
     }
 
@@ -218,7 +228,9 @@ export class ResourceService {
   }
 
   async create(input: Partial<ResourceEntity>): Promise<ResourceEntity> {
-    return this.repository.save(input);
+    return this.repository.save(
+      this.repository.create(input)
+    );
   }
 
   async update(id: string, changes: Partial<ResourceEntity>): Promise<ResourceEntity> {
@@ -228,10 +240,6 @@ export class ResourceService {
     }
     Object.assign(resource, changes);
     return this.repository.save(resource);
-  }
-
-  async delete(id: string) {
-    return this.repository.delete(id);
   }
 
   async completion(): Promise<ResourceCompletion> {
@@ -255,15 +263,23 @@ export class ResourceService {
     Object.assign(newRes, props);
 
     if (levels) {
-      newRes.levels = (await Promise.all(
-        levels.map(level => this.levelService.findById(level))
-      )).map(optional => optional.orElseThrow(() => new BadRequestException(`Level not found: ${levels}`)))
+      newRes.levels = (
+        await Promise.all(
+          levels.map(async levelId => {
+            const optional = await this.levelService.findById(levelId);
+            return optional.orElseThrow(() => new NotFoundResponse(`Level not found: ${levelId}`));
+          })
+        )
+      );
     }
 
     if (topics) {
       newRes.topics = (await Promise.all(
-        topics.map(topic => this.topicService.findById(topic))
-      )).map(optional => optional.orElseThrow(() => new BadRequestException(`Topic not found: ${topics}`)))
+        topics.map(async topicId => {
+          const optional = await this.topicService.findById(topicId);
+          return optional.orElseThrow(() => new NotFoundResponse(`Topic not found: ${topicId}`));
+        })
+      ));
     }
 
     return newRes

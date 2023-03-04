@@ -14,6 +14,13 @@ export enum UserOrderings {
   UPDATED_AT = 'UPDATED_AT',
 }
 
+export enum UserGroupOrderings {
+  NAME = 'NAME',
+  CREATED_AT = 'CREATED_AT',
+  UPDATED_AT = 'UPDATED_AT',
+}
+
+
 export interface User {
   readonly id: string;
   readonly createdAt: Date;
@@ -28,7 +35,7 @@ export interface User {
   readonly firstLogin?: Date;
 }
 
-export class UpdateUser {
+export interface UpdateUser {
   readonly role?: UserRoles;
   readonly firstName?: string;
   readonly lastName?: string;
@@ -49,8 +56,34 @@ export class UpdateUserPrefs {
 export interface UserFilters {
   readonly roles?: UserRoles[];
   readonly search?: string;
+  readonly groups?: string[];
   readonly offset?: number;
   readonly limit?: number;
   readonly order?: UserOrderings;
+  readonly direction?: OrderingDirections;
+}
+
+export interface UserGroup {
+  readonly id: string;
+  readonly createdAt: Date;
+  readonly updatedAt?: Date;
+  readonly name: string;
+}
+
+export interface CreateUserGroup {
+  readonly name: string;
+  readonly users?: string[];
+}
+
+export interface UpdateUserGroup {
+  readonly name?: string;
+  readonly users?: string[];
+}
+
+export interface UserGroupFilters {
+  readonly search?: string;
+  readonly offset?: number;
+  readonly limit?: number;
+  readonly order?: UserGroupOrderings;
   readonly direction?: OrderingDirections;
 }

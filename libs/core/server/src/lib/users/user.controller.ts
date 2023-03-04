@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, Patch, Query } from '@nestjs/common';
-import { ItemResponse, ListResponse, NotFoundResponse, UpdateUser } from '@platon/core/common';
+import { ItemResponse, ListResponse, NotFoundResponse } from '@platon/core/common';
 import { Mapper } from '../utils';
-import { UserDTO, UserFiltersDTO } from './user.dto';
+import { UpdateUserDTO, UserDTO, UserFiltersDTO } from './user.dto';
 import { UserService } from './user.service';
 
 @Controller('users')
@@ -23,7 +23,7 @@ export class UserController {
   async find(
     @Param('userIdOrName') userIdOrName: string
   ): Promise<ItemResponse<UserDTO>> {
-    const optional = await this.userService.find(userIdOrName);
+    const optional = await this.userService.findByIdOrName(userIdOrName);
     const resource = Mapper.map(
       optional.orElseThrow(() => new NotFoundResponse(`User not found: ${userIdOrName}`)),
       UserDTO
@@ -34,7 +34,7 @@ export class UserController {
   @Patch('/:userIdOrName')
   async update(
     @Param('userIdOrName') userIdOrName: string,
-    @Body() input: UpdateUser
+    @Body() input: UpdateUserDTO
   ): Promise<ItemResponse<UserDTO>> {
     const resource = Mapper.map(
       await this.userService.update(userIdOrName, input),

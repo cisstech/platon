@@ -35,7 +35,7 @@ export class CourseService {
   }
 
   async search(filters: CourseFilters = {}): Promise<[CourseEntity[], number]> {
-    const query = this.courseRepository.createQueryBuilder('course')
+    const query = this.courseRepository.createQueryBuilder('course');
 
     filters = {
       ...filters,
@@ -43,13 +43,18 @@ export class CourseService {
     }
 
     if (filters.members) {
-      query.innerJoin(CourseMemberEntity, 'member', 'member.user_id IN (:...ids)', { ids: filters.members })
+      query.innerJoin(
+        CourseMemberEntity,
+        'member',
+        'member.course_id = course.id AND member.user_id IN (:...ids)',
+        { ids: filters.members }
+      );
     }
 
     if (filters.search) {
       query.andWhere(`(
         f_unaccent(course.name) ILIKE f_unaccent(:search)
-      )`, { search: `%${filters.search}%` })
+      )`, { search: `%${filters.search}%` });
     }
 
     if (filters.period) {
@@ -58,7 +63,7 @@ export class CourseService {
         result.setDate(result.getDate() - days);
         return result;
       }
-      query.andWhere('course.updated_at >= :date', { date: subtractDays(filters.period) })
+      query.andWhere('course.updated_at >= :date', { date: subtractDays(filters.period) });
     }
 
     if (filters.order) {

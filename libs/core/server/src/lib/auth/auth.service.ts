@@ -16,7 +16,7 @@ export class AuthService {
   ) { }
 
   async signIn(input: SignInInput): Promise<AuthToken> {
-    const optionalUser = await this.userService.find(input.username);
+    const optionalUser = await this.userService.findByIdOrName(input.username);
     const user = optionalUser.orElseThrow(() => new NotFoundResponse(`User not found: ${input.username}`));
     if (!user.password || !(await bcrypt.compare(input.password, user.password))) {
       throw new BadRequestException('Password is incorrect')
@@ -31,7 +31,7 @@ export class AuthService {
   }
 
   async signUp(input: SignUpInput): Promise<AuthToken> {
-    const optionalUser = await this.userService.find(input.username);
+    const optionalUser = await this.userService.findByIdOrName(input.username);
     if (optionalUser.isPresent()) {
       throw new BadRequestException(`User already found: ${input.username}`)
     }

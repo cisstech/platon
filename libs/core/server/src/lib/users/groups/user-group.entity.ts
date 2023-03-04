@@ -1,6 +1,6 @@
 import { Column, Entity, Index, JoinTable, ManyToMany } from 'typeorm';
-import { BaseEntity } from '../database';
-import { UserEntity } from '../users/user.entity';
+import { BaseEntity } from '../../database';
+import { UserEntity } from '../user.entity';
 
 @Entity('UserGroups')
 export class UserGroupEntity extends BaseEntity {

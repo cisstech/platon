@@ -12,7 +12,7 @@ export class UserService {
     private readonly repository: Repository<UserEntity>
   ) { }
 
-  async find(userIdOrName: string): Promise<Optional<UserEntity>> {
+  async findByIdOrName(userIdOrName: string): Promise<Optional<UserEntity>> {
     const result = userIdOrName.includes('-')
       ? await this.repository.findOne({ where: { id: userIdOrName } })
       : await this.repository.findOne({ where: { username: userIdOrName } })
@@ -22,7 +22,16 @@ export class UserService {
   async search(filters: UserFilters = {}): Promise<[UserEntity[], number]> {
     const query = this.repository.createQueryBuilder('user')
 
-    if (filters.roles) {
+    if (filters.groups?.length) {
+      query.innerJoin(
+        'Groups',
+        'group',
+        'group.user_id = user.id AND group.group_id IN (:...ids)',
+        { ids: filters.groups
+      })
+    }
+
+    if (filters.roles?.length) {
       query.andWhere('role IN (:...roles)', { roles: filters.roles })
     }
 
@@ -70,7 +79,7 @@ export class UserService {
 
   async update(userIdOrName: string, changes: Partial<UserEntity>): Promise<UserEntity> {
     const user = (
-      await this.find(userIdOrName)
+      await this.findByIdOrName(userIdOrName)
     ).orElseThrow(() => new NotFoundResponse(`User not found: ${userIdOrName}`));
     Object.assign(user, changes);
     return this.repository.save(user);

@@ -1,6 +1,6 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UpdateUserPrefs } from '@platon/core/common';
+import { NotFoundResponse, UpdateUserPrefs } from '@platon/core/common';
 import { Repository } from 'typeorm';
 import { LevelService } from '../../levels';
 import { TopicService } from '../../topics';
@@ -34,21 +34,29 @@ export class UserPrefsService {
   async fromInput(input: UpdateUserPrefs): Promise<UserPrefsEntity> {
     const { levels, topics, ...props } = input;
 
-    const newRes = new UserPrefsEntity()
+    const newRes = new UserPrefsEntity();
     Object.assign(newRes, props);
 
     if (levels) {
-      newRes.levels = (await Promise.all(
-        levels.map(level => this.levelService.findById(level))
-      )).map(optional => optional.orElseThrow(() => new BadRequestException(`Level not found: ${levels}`)))
+      newRes.levels = (
+        await Promise.all(
+          levels.map(async levelId => {
+            const optional = await this.levelService.findById(levelId);
+            return optional.orElseThrow(() => new NotFoundResponse(`Level not found: ${levelId}`));
+          })
+        )
+      );
     }
 
     if (topics) {
       newRes.topics = (await Promise.all(
-        topics.map(topic => this.topicService.findById(topic))
-      )).map(optional => optional.orElseThrow(() => new BadRequestException(`Topic not found: ${topics}`)))
+        topics.map(async topicId => {
+          const optional = await this.topicService.findById(topicId);
+          return optional.orElseThrow(() => new NotFoundResponse(`Topic not found: ${topicId}`));
+        })
+      ));
     }
 
-    return newRes
+    return newRes;
   }
 }

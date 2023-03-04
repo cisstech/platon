@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserGroupModule } from '@platon/core/server';
+import { UserModule } from '@platon/core/server';
 import { CourseActivityController } from './activity/activity.controller';
 import { CourseActivityEntity } from './activity/activity.entity';
 import { CourseActivityService } from './activity/activity.service';
@@ -17,7 +17,7 @@ import { CourseSectionService } from './section/section.service';
 
 @Module({
   imports: [
-    UserGroupModule,
+    UserModule,
     TypeOrmModule.forFeature([
       CourseEntity,
       CourseMemberEntity,

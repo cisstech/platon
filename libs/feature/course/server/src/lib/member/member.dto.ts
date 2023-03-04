@@ -1,8 +1,33 @@
+import { ApiProperty } from "@nestjs/swagger";
 import { OrderingDirections, UserOrderings } from "@platon/core/common";
 import { toBoolean, toNumber } from "@platon/core/server";
-import { CourseMemberFilters, CreateCourseMember } from "@platon/feature/course/common";
-import { Transform } from "class-transformer";
+import { CourseMember, CourseMemberFilters, CreateCourseMember } from "@platon/feature/course/common";
+import { Transform, Type } from "class-transformer";
 import { IsBoolean, IsEnum, IsNumber, IsOptional, IsString, IsUUID } from "class-validator";
+
+
+class CourseMemberGroupDTO {
+  @IsUUID()
+  @ApiProperty()
+  id!: string;
+
+  @IsString()
+  @ApiProperty()
+  name!: string;
+}
+
+export class CourseMemberDTO implements CourseMember {
+  @IsUUID()
+  @ApiProperty()
+  readonly userId!: string;
+
+  @IsUUID()
+  @ApiProperty()
+  readonly courseId!: string;
+
+  @Type(() => CourseMemberGroupDTO)
+  readonly group?: CourseMemberGroupDTO;
+}
 
 export class CreateCourseMemberDTO implements CreateCourseMember {
   @IsUUID()
