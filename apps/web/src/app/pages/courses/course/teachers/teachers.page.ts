@@ -19,9 +19,9 @@ import { CoursePresenter } from '../course.presenter';
 
 @Component({
   standalone: true,
-  selector: 'app-course-overview',
-  templateUrl: './overview.page.html',
-  styleUrls: ['./overview.page.scss'],
+  selector: 'app-course-teachers',
+  templateUrl: './teachers.page.html',
+  styleUrls: ['./teachers.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
@@ -38,9 +38,8 @@ import { CoursePresenter } from '../course.presenter';
     NgxChartsModule,
   ]
 })
-export class CourseOverviewPage implements OnInit, OnDestroy {
+export class CourseTeachersPage implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription[] = [];
-  protected view: [number, number] = [0, 0];
   protected context = this.presenter.defaultContext();
 
 

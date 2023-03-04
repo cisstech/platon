@@ -1,40 +1,35 @@
 <ui-layout-tabs [state]="context.state">
   <ng-container *ngIf="context.course">
-    <nz-breadcrumb>
+    <nz-breadcrumb nzSeparator="">
       <nz-breadcrumb-item>
-        {{ context.course.name }}
         <mat-icon>local_library</mat-icon>
+        <span nz-typography nzEditable [nzContent]="context.course.name" (nzContentChange)="updateName($event)"></span>
       </nz-breadcrumb-item>
       <div class="spacer"></div>
     </nz-breadcrumb>
-    <p>{{ context.course.desc }}</p>
-    <nz-button-group>
-      <button nz-button nzType="primary">
-        <i nz-icon nzType="plus" nzTheme="outline"></i>
-      </button>
-    </nz-button-group>
+    <p nz-typography nzEditable [nzContent]="context.course.desc" (nzContentChange)="updateDesc($event)"></p>
   </ng-container>
-  <ui-layout-tab [link]="['overview']">
+  <ui-layout-tab [link]="['home']">
     <ng-template>
-      <span nz-icon nzType="dashboard" nzTheme="outline"></span>
-      Vue d'ensemble
+      <mat-icon>home</mat-icon>
+      Accueil
     </ng-template>
   </ui-layout-tab>
-  <ui-layout-tab [link]="['browse']">
+  <ui-layout-tab [link]="['teachers']">
     <ng-template>
-      <span nz-icon nzType="folder" nzTheme="outline"></span>
-      Explorer
+      <mat-icon>supervised_user_circle</mat-icon>
+      Enseignants
     </ng-template>
   </ui-layout-tab>
-  <ui-layout-tab [link]="['events']">
+  <ui-layout-tab [link]="['students']">
     <ng-template>
-      <span nz-icon nzType="history" nzTheme="outline"></span>
-      Évènements
+      <mat-icon>people</mat-icon>
+      Élèves
     </ng-template>
   </ui-layout-tab>
   <ui-layout-tab [link]="['settings']" [linkParams]="{ 'tab': 'informations' }">
     <ng-template>
-      <span nz-icon nzType="setting" nzTheme="outline"></span>
+      <mat-icon>settings</mat-icon>
       Paramètres
     </ng-template>
   </ui-layout-tab>

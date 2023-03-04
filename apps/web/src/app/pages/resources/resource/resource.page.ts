@@ -2,22 +2,23 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatTooltipModule } from '@angular/material/tooltip';
+
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzPopoverModule } from 'ng-zorro-antd/popover';
+import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
+import { NzTypographyModule } from 'ng-zorro-antd/typography';
 
 import { DialogModule } from '@platon/core/browser';
 import { CircleTreeComponent, ResourcePipesModule } from '@platon/feature/resource/browser';
 import { ResourceStatus } from '@platon/feature/resource/common';
 import { UiLayoutTabsComponent, UiLayoutTabsTitleDirective } from '@platon/shared/ui';
-import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzPopoverModule } from 'ng-zorro-antd/popover';
-import { NzSelectModule } from 'ng-zorro-antd/select';
-import { Subscription } from 'rxjs';
+
 import { ResourcePresenter } from './resource.presenter';
 
 @Component({
@@ -33,16 +34,14 @@ import { ResourcePresenter } from './resource.presenter';
     RouterModule,
 
     MatIconModule,
-    MatMenuModule,
     MatChipsModule,
-    MatTooltipModule,
+
     NzPopoverModule,
-
-
     NzIconModule,
     NzButtonModule,
     NzSelectModule,
     NzBreadCrumbModule,
+    NzTypographyModule,
 
     DialogModule,
 
@@ -76,6 +75,18 @@ export class ResourcePage implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(s => s.unsubscribe());
+  }
+
+  protected async updateName(name: string) {
+    if (name.trim()) {
+      await this.presenter.update({ name });
+    }
+  }
+
+  protected async updateDesc(desc: string) {
+    if (desc.trim()) {
+      await this.presenter.update({ desc });
+    }
   }
 
   protected async updateStatus(status: ResourceStatus) {

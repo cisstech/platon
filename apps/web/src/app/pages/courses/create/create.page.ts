@@ -75,7 +75,7 @@ export class CourseCreatePage {
         }));
 
       this.router.navigate([
-        '/courses', course.id, 'overview'
+        '/courses', course.id
       ], {
         replaceUrl: true
       });

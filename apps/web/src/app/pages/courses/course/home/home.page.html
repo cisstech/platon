@@ -1,0 +1,67 @@
+<ng-container *ngIf="context.course">
+  <ng-container *ngIf="sections.length; else: noSections">
+    <nz-collapse>
+      <nz-collapse-panel
+        *ngFor="let section of sections; trackBy: trackSection;"
+        [nzHeader]="header"
+        [nzExtra]="extra">
+        <ng-template #header>
+          <span
+            nz-typography
+            nzEditable
+            [nzContent]="section.name"
+            (nzContentChange)="renameSection(section, $event)"
+            (click)="$event.stopPropagation()">
+          </span>
+        </ng-template>
+        <ng-template #extra>
+          <nz-space>
+            <span
+              *nzSpaceItem
+              nz-icon
+              nzType="more"
+              (click)="$event.stopPropagation()"
+              [nz-popover]
+              [nzPopoverTrigger]="'click'"
+              [nzPopoverContent]="sectionActions">
+            </span>
+            <ng-template #sectionActions>
+              <nz-space nzDirection="vertical">
+                <button nz-button (click)="moveUpSection(section)" *ngIf="section.order !== 0">
+                  Monter
+                </button>
+                <button nz-button (click)="moveDownSection(section)" *ngIf="section.order !== sections.length -1">
+                  Descendre
+                </button>
+                <button nz-button>
+                  Ajouter une activité
+                </button>
+                <button nz-button (click)="addSection(section)">
+                  Insérer une section après
+                </button>
+                <button nz-button nzDanger (click)="deleteSection(section)">
+                  Supprimer la section
+                </button>
+              </nz-space>
+            </ng-template>
+          </nz-space>
+        </ng-template>
+        <ng-container></ng-container>
+      </nz-collapse-panel>
+    </nz-collapse>
+  </ng-container>
+</ng-container>
+<ng-template #noSections>
+  <nz-empty
+    [nzNotFoundContent]="noSectionsContent"
+    [nzNotFoundFooter]="noSectionsFooter">
+    <ng-template #noSectionsContent>
+      Ce cours ne contient aucune section. Les sections permettent d'organiser le contenu du cours en thématiques.
+    </ng-template>
+    <ng-template #noSectionsFooter>
+      <button mat-button color="primary" (click)="addSection()">
+        Ajouter une section
+      </button>
+    </ng-template>
+  </nz-empty>
+</ng-template>

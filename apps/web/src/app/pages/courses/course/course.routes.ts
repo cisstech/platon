@@ -7,13 +7,34 @@ export default [
     component: CoursePage,
     children: [
       {
-        path: 'overview',
+        path: 'home',
         loadChildren: () => import(
-          /* webpackChunkName: "resource-overview" */
-          './overview/overview.routes'
+          /* webpackChunkName: "resource-home" */
+          './home/home.routes'
         )
       },
-      { path: '**', pathMatch: 'full', redirectTo: 'overview' }
+      {
+        path: 'teachers',
+        loadChildren: () => import(
+          /* webpackChunkName: "resource-teachers" */
+          './teachers/teachers.routes'
+        )
+      },
+      {
+        path: 'students',
+        loadChildren: () => import(
+          /* webpackChunkName: "resource-students" */
+          './students/students.routes'
+        )
+      },
+      {
+        path: 'settings',
+        loadChildren: () => import(
+          /* webpackChunkName: "resource-settings" */
+          './settings/settings.routes'
+        )
+      },
+      { path: '**', pathMatch: 'full', redirectTo: 'home' }
     ],
   },
 ] as Routes;

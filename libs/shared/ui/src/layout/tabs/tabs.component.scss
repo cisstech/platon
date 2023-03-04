@@ -2,6 +2,9 @@
   display: block;
   padding: 0 2rem;
   ::ng-deep {
+    mat-icon, .ant-icon {
+      margin-right: 8px;
+    }
     .ant-tabs-nav {
       margin: 0 !important;
     }
@@ -13,4 +16,9 @@
 
 section {
   margin: 8px 0;
+}
+
+a {
+  display: flex;
+  align-items: center;
 }

@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { ListResponse } from "@platon/core/common";
-import { Course, CourseFilters, CourseMember, CourseMemberFilters, CreateCourse, UpdateCourse } from "@platon/feature/course/common";
+import { Course, CourseActivity, CourseActivityFilters, CourseFilters, CourseMember, CourseMemberFilters, CourseSection, CreateCourse, CreateCourseActivity, CreateCourseMember, CreateCourseSection, UpdateCourse, UpdateCourseActivity, UpdateCourseSection } from "@platon/feature/course/common";
 import { Observable } from "rxjs";
 import { CourseProvider } from "../models/course-provider";
 
@@ -30,15 +30,51 @@ export class CourseService {
 
   // Members
 
-  findMember(course: Course, userId: string): Observable<CourseMember | undefined> {
-    return this.provider.findMember(course, userId);
-  }
-
-  deleteMember(course: Course, userId: string): Observable<void> {
-    return this.provider.deleteMember(course, userId);
+  createMember(course: Course, input: CreateCourseMember): Observable<ListResponse<CourseMember>> {
+    return this.provider.createMember(course, input);
   }
 
   searchMembers(course: Course, filters: CourseMemberFilters): Observable<ListResponse<CourseMember>> {
     return this.provider.searchMembers(course, filters);
+  }
+
+  deleteMember(member: CourseMember): Observable<void> {
+    return this.provider.deleteMember(member);
+  }
+
+  // Sections
+
+  listSections(course: Course): Observable<ListResponse<CourseSection>> {
+    return this.provider.listSections(course);
+  }
+
+  createSection(course: Course, input: CreateCourseSection): Observable<CourseSection> {
+    return this.provider.createSection(course, input);
+  }
+
+  updateSection(section: CourseSection, input: UpdateCourseSection): Observable<CourseSection> {
+    return this.provider.updateSection(section, input);
+  }
+
+  deleteSection(section: CourseSection): Observable<void> {
+    return this.provider.deleteSection(section);
+  }
+
+  // Activities
+
+  listActivities(course: Course, filters?: CourseActivityFilters): Observable<ListResponse<CourseActivity>> {
+    return this.provider.listActivities(course, filters);
+  }
+
+  createActivity(course: Course, input: CreateCourseActivity): Observable<CourseActivity> {
+    return this.provider.createActivity(course, input);
+  }
+
+  updateActivity(activity: CourseActivity, input: UpdateCourseActivity): Observable<CourseActivity> {
+    return this.provider.updateActivity(activity, input);
+  }
+
+  deleteActivity(activity: CourseActivity): Observable<void> {
+    return this.provider.deleteActivity(activity);
   }
 }

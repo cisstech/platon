@@ -1,35 +1,31 @@
 <ui-layout-tabs [state]="context.state">
   <ng-container *ngIf="context.resource">
-    <nz-breadcrumb>
+    <nz-breadcrumb nzSeparator="">
       <button
         *ngIf="context.circles"
         nz-button
         nzType="text"
         nzSize="small"
-        nz-popover
+        [nz-popover]
         [nzPopoverContent]="treeTemplate">
         <mat-icon>account_tree</mat-icon>
         <ng-template #treeTemplate>
           <res-circle-tree [tree]="context.circles" />
         </ng-template>
       </button>
-
       <nz-breadcrumb-item *ngIf="context.parent">
-        <a [routerLink]="['/resource', context.parent.id]">{{context.parent.name}}</a>
+        <a [routerLink]="['/resources', context.parent.id]">{{context.parent.name}}</a>
       </nz-breadcrumb-item>
       <nz-breadcrumb-item>
-        {{ context.resource.name }}
         <mat-icon>{{ context.resource.type|resourceIcon }}</mat-icon>
+        <span nz-typography nzEditable [nzContent]="context.resource.name" (nzContentChange)="updateName($event)"></span>
       </nz-breadcrumb-item>
-
       <div class="spacer"></div>
-
       <mat-chip-set>
         <mat-chip>{{context.resource.visibility|resourceVisibility}}</mat-chip>
       </mat-chip-set>
     </nz-breadcrumb>
-
-    <p>{{ context.resource.desc }}</p>
+    <p nz-typography nzEditable [nzContent]="context.resource.desc" (nzContentChange)="updateDesc($event)"></p>
     <nz-button-group>
       <nz-select
         id="status"

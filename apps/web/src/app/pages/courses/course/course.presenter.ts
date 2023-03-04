@@ -5,8 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AuthService, DialogService } from '@platon/core/browser';
 import { ListResponse, User } from '@platon/core/common';
 import { CourseService } from '@platon/feature/course/browser';
-import { Course, CourseMember, CourseMemberFilters, UpdateCourse } from '@platon/feature/course/common';
-import { ResourceMember } from '@platon/feature/resource/common';
+import { Course, CourseMember, CourseMemberFilters, CourseSection, CreateCourseSection, UpdateCourse, UpdateCourseSection } from '@platon/feature/course/common';
 import { LayoutState } from '@platon/shared/ui';
 import { BehaviorSubject, firstValueFrom, Subscription } from 'rxjs';
 
@@ -40,42 +39,77 @@ export class CoursePresenter implements OnDestroy {
 
   // Members
 
-  async deleteMember(member: ResourceMember): Promise<boolean> {
-    const { course: resource } = this.context.value as Required<Context>;;
+  async deleteMember(member: CourseMember): Promise<void> {
+    const { course } = this.context.value as Required<Context>;;
     try {
-      await firstValueFrom(this.courseService.deleteMember(resource, member.userId));
-      await this.refresh(resource.id);
-      this.dialogService.success(`Membre supprimé !`);
-      return true;
+      await firstValueFrom(this.courseService.deleteMember(member));
+      await this.refresh(course.id);
     } catch {
-      // TODO show more precise error message
       this.alertError();
-      return false;
     }
   }
 
   async searchMembers(
     filters: CourseMemberFilters = {}
   ): Promise<ListResponse<CourseMember>> {
-    const { course: resource } = this.context.value as Required<Context>;
-    return firstValueFrom(this.courseService.searchMembers(resource, filters));
+    const { course } = this.context.value as Required<Context>;
+    return firstValueFrom(this.courseService.searchMembers(course, filters));
   }
 
 
-  // Event
+  // Sections
+
+  async listSections(course: Course): Promise<CourseSection[]> {
+    const response = await firstValueFrom(
+      this.courseService.listSections(course)
+    );
+    return response.resources;
+  }
+
+  async addSection(input: CreateCourseSection): Promise<void> {
+    const { course } = this.context.value as Required<Context>;;
+    try {
+      await firstValueFrom(
+        this.courseService.createSection(course, input)
+      );
+    } catch {
+      this.alertError();
+    }
+  }
+
+  async updateSection(section: CourseSection, input: UpdateCourseSection): Promise<void> {
+    try {
+      await firstValueFrom(
+        this.courseService.updateSection(section, input)
+      );
+    } catch {
+      this.alertError();
+    }
+  }
+
+  async deleteSection(section: CourseSection): Promise<void> {
+    try {
+      await firstValueFrom(
+        this.courseService.deleteSection(section)
+      );
+    } catch {
+      this.alertError();
+    }
+  }
+
 
   async update(input: UpdateCourse): Promise<boolean> {
-    const { course: resource } = this.context.value as Required<Context>;;
+    const { course } = this.context.value as Required<Context>;;
     try {
       const changes = await firstValueFrom(
-        this.courseService.update(resource.id, input)
+        this.courseService.update(course.id, input)
       );
       this.context.next({
         ...this.context.value,
         course: changes,
       });
 
-      this.dialogService.success('Les informations de la ressource ont bien été modifiées !');
+      this.dialogService.success('Les informations du cours ont bien été modifiées !');
       return true;
     } catch {
       this.alertError();
