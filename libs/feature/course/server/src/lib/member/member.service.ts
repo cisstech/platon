@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { NotFoundResponse, OrderingDirections, UserOrderings } from '@platon/core/common';
+import { NotFoundResponse, OrderingDirections, UserOrderings, UserRoles } from '@platon/core/common';
 import { UserEntity, UserGroupEntity } from '@platon/core/server';
 import { CourseMemberFilters } from '@platon/feature/course/common';
 import { DataSource, Repository } from 'typeorm';
@@ -15,7 +15,7 @@ export class CourseMemberService {
     private readonly repository: Repository<CourseMemberEntity>
   ) { }
 
-  async byCourseAndUserId(
+  async findByUserId(
     courseId: string,
     userId: string
   ): Promise<Optional<CourseMemberEntity>> {
@@ -38,6 +38,14 @@ export class CourseMemberService {
     query.leftJoinAndSelect('member.group', 'group', 'group.id = member.group_id');
 
     query.where('course_id = :courseId', { courseId });
+
+    if (filters.roles?.length) {
+      if (filters.roles.includes(UserRoles.student)) {
+        query.andWhere('group.id IS NOT NULL OR user.role IN (:...roles)', { roles: filters.roles })
+      } else {
+        query.andWhere('user.role IN (:...roles)', { roles: filters.roles })
+      }
+    }
 
     if (filters.search) {
       query.andWhere(`(
@@ -64,7 +72,8 @@ export class CourseMemberService {
 
       query.orderBy(fields[filters.order], filters.direction || orderings[filters.order]);
     } else {
-      query.orderBy('user.username', 'ASC');
+      query.orderBy('user.username', 'ASC')
+      .addOrderBy('group.name', 'ASC');
     }
 
     if (filters.offset) {
@@ -84,41 +93,13 @@ export class CourseMemberService {
     );
   }
 
-  async addGroup(courseId: string, groupId: string): Promise<CourseMemberEntity[]> {
-    return this.dataSource.transaction(async manager => {
-      const group = await manager.findOne(UserGroupEntity, {
-        where: { id: groupId }, relations: { users: true }
-      });
-      if (!group) {
-        throw new NotFoundResponse(`UserGroup not found: ${groupId}`);
-      }
-
-      const members = group.users.map(user => manager.create(CourseMemberEntity, {
-        courseId,
-        groupId,
-        userId: user.id
-      }));
-
-      await manager.upsert(CourseMemberEntity, members, {
-        conflictPaths: {
-          userId: true,
-          groupId: true
-        }
-      });
-
-      return manager.find(CourseMemberEntity, {
-        where: { courseId, groupId }
-      }).then(members => {
-        return members.map(member => ({
-          ...member,
-          group,
-          user: group.users.find(user => user.id === member.userId) as UserEntity
-        }))
-      });
-    });
+  async addGroup(courseId: string, groupId: string): Promise<CourseMemberEntity> {
+    return this.repository.save(
+      this.repository.create({ courseId, groupId })
+    );
   }
 
-  async delete(courseId: string, userId: string) {
-    return this.repository.delete({ courseId, userId });
+  async delete(courseId: string, memberId: string) {
+    return this.repository.delete({ courseId, id: memberId });
   }
 }

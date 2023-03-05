@@ -62,7 +62,6 @@ export class UpdateUserDTO implements UpdateUser {
 export class UserFiltersDTO implements UserFilters {
   @Transform(({ value }) => toArray(value))
   @IsEnum(UserRoles, { each: true })
-  @IsArray()
   @IsOptional()
   readonly roles?: UserRoles[];
 

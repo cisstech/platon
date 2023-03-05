@@ -1,7 +1,9 @@
 <div>
   <ui-search-bar [searchbar]="searchbar" [disabled]="disabled">
     <ng-template let-item>
-      <user-avatar [user]="item"></user-avatar>
+      <user-avatar
+        [user]="isUser(item) ? item : undefined"
+        [group]="!isUser(item) ? item : undefined" />
     </ng-template>
   </ui-search-bar>
   <ng-content></ng-content>
@@ -11,7 +13,9 @@
   <ui-list-template slot="row">
     <ng-template let-item="item">
       <div class="selection-item">
-        <user-avatar [user]="item"></user-avatar>
+        <user-avatar
+          [user]="isUser(item) ? item : undefined"
+          [group]="!isUser(item) ? item : undefined" />
         <div class="spacer"></div>
         <button mat-button (click)="remove(item)">
           <i nz-icon nzType="delete" nzTheme="outline"></i>

@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AuthService, DialogService } from '@platon/core/browser';
 import { ListResponse, User } from '@platon/core/common';
 import { CourseService } from '@platon/feature/course/browser';
-import { Course, CourseMember, CourseMemberFilters, CourseSection, CreateCourseSection, UpdateCourse, UpdateCourseSection } from '@platon/feature/course/common';
+import { Course, CourseMember, CourseMemberFilters, CourseSection, CreateCourseMember, CreateCourseSection, UpdateCourse, UpdateCourseSection } from '@platon/feature/course/common';
 import { LayoutState } from '@platon/shared/ui';
 import { BehaviorSubject, firstValueFrom, Subscription } from 'rxjs';
 
@@ -39,11 +39,18 @@ export class CoursePresenter implements OnDestroy {
 
   // Members
 
+  async addMember(input: CreateCourseMember): Promise<void> {
+    const { course } = this.context.value as Required<Context>;
+    try {
+      await firstValueFrom(this.courseService.createMember(course, input));
+    } catch {
+      this.alertError();
+    }
+  }
+
   async deleteMember(member: CourseMember): Promise<void> {
-    const { course } = this.context.value as Required<Context>;;
     try {
       await firstValueFrom(this.courseService.deleteMember(member));
-      await this.refresh(course.id);
     } catch {
       this.alertError();
     }
@@ -116,6 +123,8 @@ export class CoursePresenter implements OnDestroy {
       return false;
     }
   }
+
+
 
   private async refresh(id: string): Promise<void> {
     const [user, resource] = await Promise.all([

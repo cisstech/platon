@@ -1,32 +1,24 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { OrderingDirections, UserOrderings } from "@platon/core/common";
-import { toBoolean, toNumber } from "@platon/core/server";
+import { OrderingDirections, UserOrderings, UserRoles } from "@platon/core/common";
+import { BaseDTO, toArray, toBoolean, toNumber, UserGroupDTO } from "@platon/core/server";
 import { CourseMember, CourseMemberFilters, CreateCourseMember } from "@platon/feature/course/common";
 import { Transform, Type } from "class-transformer";
 import { IsBoolean, IsEnum, IsNumber, IsOptional, IsString, IsUUID } from "class-validator";
 
 
-class CourseMemberGroupDTO {
-  @IsUUID()
-  @ApiProperty()
-  id!: string;
-
-  @IsString()
-  @ApiProperty()
-  name!: string;
-}
-
-export class CourseMemberDTO implements CourseMember {
-  @IsUUID()
-  @ApiProperty()
-  readonly userId!: string;
-
+export class CourseMemberDTO extends BaseDTO implements CourseMember {
   @IsUUID()
   @ApiProperty()
   readonly courseId!: string;
 
-  @Type(() => CourseMemberGroupDTO)
-  readonly group?: CourseMemberGroupDTO;
+  @IsOptional()
+  @IsUUID()
+  @ApiProperty()
+  readonly userId?: string;
+
+  @IsOptional()
+  @Type(() => UserGroupDTO)
+  readonly group?: UserGroupDTO;
 }
 
 export class CreateCourseMemberDTO implements CreateCourseMember {
@@ -41,6 +33,11 @@ export class CreateCourseMemberDTO implements CreateCourseMember {
 
 
 export class CourseMemberFiltersDTO implements CourseMemberFilters {
+  @Transform(({ value }) => toArray(value))
+  @IsEnum(UserRoles, { each: true })
+  @IsOptional()
+  readonly roles?: UserRoles[];
+
   @IsString()
   @IsOptional()
   readonly search?: string;

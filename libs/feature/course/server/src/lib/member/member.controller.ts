@@ -28,9 +28,8 @@ export class CourseMemberController {
     @Body() input: CreateCourseMemberDTO,
   ): Promise<ItemResponse<CourseMemberDTO>> {
     if (input.isGroup) {
-      const members = await this.service.addGroup(courseId, input.id);
       return new ItemResponse({
-        resource: Mapper.map(members[0], CourseMemberDTO)
+        resource: Mapper.map(await this.service.addGroup(courseId, input.id), CourseMemberDTO)
       });
     } else {
       return new ItemResponse({
@@ -39,12 +38,12 @@ export class CourseMemberController {
     }
   }
 
-  @Delete('/:userId')
+  @Delete('/:memberId')
   async delete(
     @Param('courseId') courseId: string,
-    @Param('userId') userId: string,
+    @Param('memberId') memberId: string,
   ): Promise<NoContentResponse> {
-    await this.service.delete(courseId, userId);
+    await this.service.delete(courseId, memberId);
     return new NoContentResponse();
   }
 }

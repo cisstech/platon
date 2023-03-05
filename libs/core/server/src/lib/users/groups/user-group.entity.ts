@@ -10,7 +10,7 @@ export class UserGroupEntity extends BaseEntity {
 
   @ManyToMany(() => UserEntity)
   @JoinTable({
-    name: 'Groups',
+    name: 'UserGroupsUsers',
     joinColumn: {
       name: 'group_id',
       referencedColumnName: "id"

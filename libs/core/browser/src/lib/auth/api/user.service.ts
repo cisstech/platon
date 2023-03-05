@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ListResponse, User, UserFilters } from '@platon/core/common';
+import { CreateUserGroup, ListResponse, UpdateUserGroup, User, UserFilters, UserGroup, UserGroupFilters } from '@platon/core/common';
 import { combineLatest, Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { UserProvider } from '../models/user-provider';
@@ -74,5 +74,21 @@ export class UserService {
         return fromCache.concat(fromServer);
       })
     );
+  }
+
+  searchUserGroups(filters: UserGroupFilters): Observable<ListResponse<UserGroup>> {
+    return this.provider.searchUserGroups(filters);
+  }
+
+  createUserGroup(input: CreateUserGroup): Observable<UserGroup> {
+    return this.provider.createUserGroup(input);
+  }
+
+  updateUserGroup(groupId: string, input: UpdateUserGroup): Observable<UserGroup> {
+    return this.provider.updateUserGroup(groupId, input);
+  }
+
+  deleteUserGroup(groupId: string): Observable<void> {
+    return this.provider.deleteUserGroup(groupId);
   }
 }

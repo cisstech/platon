@@ -1,4 +1,4 @@
-import { ListResponse, User, UserFilters } from '@platon/core/common';
+import { CreateUserGroup, ItemResponse, ListResponse, UpdateUserGroup, User, UserFilters, UserGroup, UserGroupFilters } from '@platon/core/common';
 import { Observable } from 'rxjs';
 
 /**
@@ -25,4 +25,16 @@ export abstract class UserProvider {
    * @returns An observable that will emit the user found or `undefined` once the server will response.
    */
   abstract findAllByUserNames(userNames: string[]): Observable<User[]>;
+
+
+  /**
+   * Finds the user groups based on the given `filters`.
+   * @param uid Filters to use.
+   * @returns An observable that will emit the user groups that match the filters once the server will response.
+   */
+  abstract searchUserGroups(filters: UserGroupFilters): Observable<ListResponse<UserGroup>>;
+  abstract createUserGroup(input: CreateUserGroup): Observable<UserGroup>;
+  abstract updateUserGroup(groupId: string, input: UpdateUserGroup): Observable<UserGroup>;
+  abstract deleteUserGroup(groupId: string): Observable<void>;
+
 }

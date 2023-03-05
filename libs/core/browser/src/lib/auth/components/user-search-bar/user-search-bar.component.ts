@@ -1,19 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, Input, OnInit } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { MatButtonModule } from '@angular/material/button';
 
 import { NgeUiListModule } from '@cisstech/nge/ui/list';
-import { User, UserRoles } from '@platon/core/common';
+import { User, UserGroup, UserRoles } from '@platon/core/common';
 import { SearchBar, UiSearchBarComponent } from '@platon/shared/ui';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { UserService } from '../../api/user.service';
 import { UserAvatarComponent } from '../user-avatar/user-avatar.component';
 
+type Item = User | UserGroup;
 
 @Component({
   standalone: true,
@@ -41,31 +42,33 @@ import { UserAvatarComponent } from '../user-avatar/user-avatar.component';
     UiSearchBarComponent,
   ]
 })
-export class UserSearchBarComponent implements ControlValueAccessor {
+export class UserSearchBarComponent implements OnInit, ControlValueAccessor {
   @Input() roles?: (UserRoles | keyof typeof UserRoles)[];
   @Input() multi = true;
   @Input() excludes: string[] = [];
   @Input() disabled = false;
 
-  readonly searchbar: SearchBar<User> = {
+  @Input() allowGroup = false;
+
+  readonly searchbar: SearchBar<Item> = {
     placeholder: 'Essayez un nom, un email...',
     filterer: {
       run: this.search.bind(this),
     },
-    complete: item => item.username,
-    onSelect: user => {
+    complete: item => 'username' in item ? item.username : item.name,
+    onSelect: item => {
       this.searchbar.value = '';
 
       if (!this.multi) {
         this.selection = [];
       }
 
-      this.selection.push(user);
+      this.selection.push(item);
       this.onChangeSelection();
     }
   };
 
-  selection: User[] = [];
+  selection: Item[] = [];
 
   onTouch: any = () => {
     //
@@ -80,6 +83,11 @@ export class UserSearchBarComponent implements ControlValueAccessor {
     private readonly changeDetectorRef: ChangeDetectorRef,
   ) { }
 
+  ngOnInit(): void {
+    if (this.allowGroup) {
+      this.searchbar.placeholder = 'Essayez un nom, un email, un groupe...';
+    }
+  }
   // ControlValueAccessor methods
 
   writeValue(value: any): void {
@@ -99,31 +107,64 @@ export class UserSearchBarComponent implements ControlValueAccessor {
     this.disabled = isDisabled;
   }
 
-  search(query: string): Observable<User[]> {
-    return this.userService
-      .search({
-        roles: this.roles as unknown as UserRoles[],
-        search: query,
-      })
-      .pipe(
-        map((page) => {
-          return page.resources.filter(
-            this.isSelectable.bind(this)
-          ).slice(0, 5);
-        })
-      );
+  protected isUser(item: Item): item is User {
+    return 'username' in item;
   }
 
-  remove(item: User): void {
+  protected search(query: string): Observable<Item[]> {
+    const requests: Observable<Item[]>[] = [
+      this.userService
+        .search({
+          roles: this.roles as unknown as UserRoles[],
+          search: query,
+          limit: 5
+        })
+        .pipe(
+          map((page) => {
+            return page.resources.filter(
+              this.isSelectable.bind(this)
+            )
+          })
+        )
+    ];
+
+    if (this.allowGroup) {
+      requests.push(
+        this.userService
+          .searchUserGroups({
+            search: query,
+            limit: 5
+          })
+          .pipe(
+            map((page) => {
+              return page.resources.filter(
+                this.isSelectable.bind(this)
+              )
+            })
+          )
+      );
+    }
+
+    return combineLatest(requests).pipe(
+      map(res => res.flat().slice(0, 5))
+    )
+  }
+
+  protected remove(item: Item): void {
     this.selection = this.selection.filter(
       e => e.id !== item.id
     );
     this.onChangeSelection();
   }
 
-  private isSelectable(user: User): boolean {
-    const isSelected = this.selection.find(e => e.id === user.id)
-    const isExclued = this.excludes.find(e => e === user.username || e === user.id);
+  private isSelectable(item: Item): boolean {
+    const isSelected = this.selection.find(e => e.id === item.id)
+    const isExclued = this.excludes.find(userOrGroup => {
+      if ('username' in item) {
+        return userOrGroup === item.username || userOrGroup === item.id;
+      }
+      return userOrGroup === item.id;
+    });
     return !isSelected && !isExclued;
   }
 

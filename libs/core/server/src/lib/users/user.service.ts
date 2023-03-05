@@ -24,7 +24,7 @@ export class UserService {
 
     if (filters.groups?.length) {
       query.innerJoin(
-        'Groups',
+        'UserGroupsUsers',
         'group',
         'group.user_id = user.id AND group.group_id IN (:...ids)',
         { ids: filters.groups

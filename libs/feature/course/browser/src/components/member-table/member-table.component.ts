@@ -1,17 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { UserAvatarComponent } from '@platon/core/browser';
-import { ResourceInvitation } from '@platon/feature/resource/common';
+import { CourseMember } from '@platon/feature/course/common';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzTableModule } from 'ng-zorro-antd/table';
 
+
 @Component({
   standalone: true,
-  selector: 'res-invitation-table',
-  templateUrl: './invitation-table.component.html',
-  styleUrls: ['./invitation-table.component.scss'],
+  selector: 'course-member-table',
+  templateUrl: './member-table.component.html',
+  styleUrls: ['./member-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
@@ -24,19 +25,18 @@ import { NzTableModule } from 'ng-zorro-antd/table';
     UserAvatarComponent,
   ]
 })
-export class ResourceInvitationTableComponent implements OnChanges {
+export class CourseMemberTableComponent implements OnChanges {
+  @Input() members: CourseMember[] = [];
   @Input() editable = false;
-  @Input() invitations: ResourceInvitation[] = [];
+  @Input() nonDeletables: string[] = [];
 
-  @Output() deleted = new EventEmitter<ResourceInvitation>();
+  @Output() deleted = new EventEmitter<CourseMember>();
 
   protected loading = true;
 
-
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['invitations']) {
+    if (changes['members']) {
       this.loading = false;
     }
   }
-
 }

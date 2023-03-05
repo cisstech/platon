@@ -1,0 +1,5 @@
+<nz-avatar nz-tooltip="Groupe" [nzSize]="avatarSize" nzIcon="team"></nz-avatar>
+<div>
+  <span>{{group.name}}</span>
+  <span [routerLink]="['/groups', group.id]">Voir les membres</span>
+</div>

@@ -4,18 +4,18 @@
   [nzData]="members">
   <thead>
     <tr>
-      <th>Utilisateur</th>
+      <th>Utilisateur/Groupe</th>
       <th>Date d'ajout</th>
       <th *ngIf="editable"></th>
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let data of nzTable.data">
+    <tr *ngFor="let member of nzTable.data">
       <td>
-        <user-avatar #avatar [userIdOrName]="data.userId" />
+        <user-avatar #avatar [userIdOrName]="$any(member.userId)" [group]="$any(member.group)" />
       </td>
-      <td>{{data.createdAt|date}}</td>
-      <td *ngIf="editable">
+      <td>{{member.createdAt|date}}</td>
+      <td *ngIf="editable && member.userId && !nonDeletables.includes(member.userId)">
         <button
           nz-button
           nzDanger
@@ -24,8 +24,8 @@
           nz-popconfirm
           nzOkText="Retirer"
           nzOkType="danger"
-          [nzPopconfirmTitle]="'Voulez-vous vraiment retirer “'+ avatar.displayName +'” des membres du cercle?'"
-          (nzOnConfirm)="deleted.emit(data)">
+          [nzPopconfirmTitle]="'Voulez-vous vraiment retirer “'+ avatar.displayName +'” des membres du cours?'"
+          (nzOnConfirm)="deleted.emit(member)">
           <i nz-icon nzType="delete"></i>
         </button>
       </td>

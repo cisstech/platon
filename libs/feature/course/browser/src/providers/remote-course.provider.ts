@@ -73,9 +73,14 @@ export class RemoteCourseProvider extends CourseProvider {
 
   searchMembers(course: Course, filters: CourseMemberFilters): Observable<ListResponse<CourseMember>> {
     let params = new HttpParams();
+
     if (filters.search) {
       params = params.append('search', filters.search);
     }
+
+    filters.roles?.forEach(e => {
+      params = params.append('roles', e);
+    });
 
     if (filters.limit) {
       params = params.append('limit', filters.limit.toString());
@@ -101,7 +106,7 @@ export class RemoteCourseProvider extends CourseProvider {
 
   deleteMember(member: CourseMember): Observable<void> {
     return this.http.delete<void>(
-      `/api/v1/courses/${member.courseId}/members/${member.userId}`
+      `/api/v1/courses/${member.courseId}/members/${member.id}`
     );
   }
 
