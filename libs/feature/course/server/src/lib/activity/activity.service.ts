@@ -12,9 +12,9 @@ export class CourseActivityService {
     private readonly repository: Repository<CourseActivityEntity>
   ) { }
 
-  async byId(id: string): Promise<Optional<CourseActivityEntity>> {
+  async findById(courseId: string, id: string): Promise<Optional<CourseActivityEntity>> {
     return Optional.ofNullable(
-      await this.repository.findOne({ where: { id } })
+      await this.repository.findOne({ where: { courseId, id } })
     );
   }
 

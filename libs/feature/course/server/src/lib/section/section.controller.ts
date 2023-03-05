@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
-import { ItemResponse, ListResponse, NoContentResponse } from '@platon/core/common';
+import { ItemResponse, ListResponse, NoContentResponse, NotFoundResponse } from '@platon/core/common';
 import { Mapper } from '@platon/core/server';
 import { CourseSectionDTO, CreateCourseSectionDTO, UpdateCourseSectionDTO } from './section.dto';
 import { CourseSectionEntity } from './section.entity';
@@ -10,6 +10,19 @@ export class CourseSectionController {
   constructor(
     private readonly service: CourseSectionService
   ) { }
+
+  @Get('/:sectionId')
+  async find(
+    @Param('courseId') courseId: string,
+    @Param('sectionId') sectionId: string
+  ): Promise<ItemResponse<CourseSectionDTO>> {
+    const optional = await this.service.findById(courseId, sectionId);
+    const resource = Mapper.map(
+      optional.orElseThrow(() => new NotFoundResponse(`CourseSection not found: ${sectionId}`)),
+      CourseSectionDTO
+    );
+    return new ItemResponse({ resource })
+  }
 
   @Get()
   async list(

@@ -14,8 +14,8 @@ export class CourseService {
     return this.provider.search(filters);
   }
 
-  findById(id: string): Observable<Course> {
-    return this.provider.findById(id);
+  find(id: string): Observable<Course | undefined> {
+    return this.provider.find(id);
   }
 
   update(id: string, input: UpdateCourse): Observable<Course> {
@@ -43,6 +43,10 @@ export class CourseService {
   }
 
   // Sections
+
+  findSection(courseId: string, sectionId: string): Observable<CourseSection | undefined> {
+    return this.provider.findSection(courseId, sectionId);
+  }
 
   listSections(course: Course): Observable<ListResponse<CourseSection>> {
     return this.provider.listSections(course);

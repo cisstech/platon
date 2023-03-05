@@ -47,7 +47,7 @@ export class RemoteCourseProvider extends CourseProvider {
     return this.http.get<ListResponse<Course>>(`/api/v1/courses`, { params });
   }
 
-  findById(id: string): Observable<Course> {
+  find(id: string): Observable<Course> {
     return this.http.get<ItemResponse<Course>>(`/api/v1/courses/${id}`).pipe(
       map(response => response.resource)
     );
@@ -111,6 +111,14 @@ export class RemoteCourseProvider extends CourseProvider {
   }
 
   // Sections
+
+  findSection(courseId: string, sectionId: string): Observable<CourseSection> {
+    return this.http.get<ItemResponse<CourseSection>>(
+      `/api/v1/courses/${courseId}/sections/${sectionId}`
+    ).pipe(
+      map(response => response.resource)
+    );
+  }
 
   listSections(course: Course): Observable<ListResponse<CourseSection>> {
     return this.http.get<ListResponse<CourseSection>>(`/api/v1/courses/${course.id}/sections`);

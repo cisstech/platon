@@ -41,7 +41,7 @@ export class CourseController {
       CourseDTO
     );
 
-    return new ItemResponse({ resource })
+    return new ItemResponse({ resource });
   }
 
   @Post()

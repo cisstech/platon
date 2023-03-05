@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { NotFoundResponse } from '@platon/core/common';
 import { DataSource, Repository, MoreThanOrEqual, And, MoreThan, LessThanOrEqual, LessThan, Not } from 'typeorm';
+import { Optional } from 'typescript-optional';
 import { CourseSectionEntity } from './section.entity';
 
 @Injectable()
@@ -12,6 +13,12 @@ export class CourseSectionService {
     @InjectRepository(CourseSectionEntity)
     private readonly repository: Repository<CourseSectionEntity>
   ) { }
+
+  async findById(courseId: string, id: string): Promise<Optional<CourseSectionEntity>> {
+    return Optional.ofNullable(
+      await this.repository.findOne({ where: { courseId, id } })
+    );
+  }
 
   async ofCourse(courseId: string): Promise<[CourseSectionEntity[], number]> {
     return this.repository.findAndCount({
