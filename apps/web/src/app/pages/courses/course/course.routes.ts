@@ -9,28 +9,28 @@ export default [
       {
         path: 'home',
         loadChildren: () => import(
-          /* webpackChunkName: "resource-home" */
+          /* webpackChunkName: "course-home" */
           './home/home.routes'
         )
       },
       {
         path: 'teachers',
         loadChildren: () => import(
-          /* webpackChunkName: "resource-teachers" */
+          /* webpackChunkName: "course-teachers" */
           './teachers/teachers.routes'
         )
       },
       {
         path: 'students',
         loadChildren: () => import(
-          /* webpackChunkName: "resource-students" */
+          /* webpackChunkName: "course-students" */
           './students/students.routes'
         )
       },
       {
         path: 'settings',
         loadChildren: () => import(
-          /* webpackChunkName: "resource-settings" */
+          /* webpackChunkName: "course-settings" */
           './settings/settings.routes'
         )
       },
