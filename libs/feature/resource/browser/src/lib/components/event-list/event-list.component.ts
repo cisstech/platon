@@ -11,7 +11,7 @@ const ResourceEventToken = new InjectionToken<ResourceEvent>('ResourceEventToken
 
 @Component({
   standalone: true,
-  selector: 'res-event-member-remove',
+  selector: 'resource-event-member-remove',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     UserAvatarComponent
@@ -27,7 +27,7 @@ class MemberCreateEventComponent {
 
 @Component({
   standalone: true,
-  selector: 'res-event-member-remove',
+  selector: 'resource-event-member-remove',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     UserAvatarComponent
@@ -43,7 +43,7 @@ class MemberRemoveEventComponent {
 
 @Component({
   standalone: true,
-  selector: 'res-event-new-status',
+  selector: 'resource-event-new-status',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     UserAvatarComponent,
@@ -60,7 +60,7 @@ class NewStatusItemComponent {
 
 @Component({
   standalone: true,
-  selector: 'res-event-new-resource',
+  selector: 'resource-event-new-resource',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     UserAvatarComponent,
@@ -77,7 +77,7 @@ class NewResourceEventComponent {
 
 @Component({
   standalone: true,
-  selector: 'res-event-list',
+  selector: 'resource-event-list',
   templateUrl: './event-list.component.html',
   styleUrls: ['./event-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

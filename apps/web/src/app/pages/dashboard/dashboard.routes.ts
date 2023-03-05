@@ -18,7 +18,15 @@ export default [
       {
         path: 'account',
         loadChildren: () => import(
-          /* webpackChunkName: "account" */'../account/account.routes',
+          /* webpackChunkName: "account" */
+          '../account/account.routes',
+        )
+      },
+      {
+        path: 'activity',
+        loadChildren: () => import(
+          /* webpackChunkName: "activity" */
+          '../activity/activity.routes'
         )
       },
       {

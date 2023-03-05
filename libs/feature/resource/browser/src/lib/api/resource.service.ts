@@ -41,8 +41,8 @@ export class ResourceService {
     return this.provider.search(filters);
   }
 
-  findById(id: string, markAsViewed?: boolean): Observable<Resource> {
-    return this.provider.findById(id, markAsViewed);
+  find(id: string, markAsViewed?: boolean): Observable<Resource> {
+    return this.provider.find(id, markAsViewed);
   }
 
   update(id: string, input: UpdateResource): Observable<Resource> {
@@ -56,28 +56,32 @@ export class ResourceService {
 
   // Members
 
-  findMember(resource: Resource, userId: string): Observable<ResourceMember | undefined> {
+  findMember(resource: Resource, userId: string): Observable<ResourceMember> {
     return this.provider.findMember(resource, userId);
   }
 
   deleteMember(resource: Resource, userId: string): Observable<void> {
     return this.provider.deleteMember(resource, userId);
   }
+
   searchMembers(resource: Resource, filters: ResourceMemberFilters): Observable<ListResponse<ResourceMember>> {
     return this.provider.searchMembers(resource, filters);
   }
 
   // Watchers
 
-  findWatcher(resource: Resource, userId: string): Observable<User | undefined> {
+  findWatcher(resource: Resource, userId: string): Observable<User> {
     return this.provider.findWatcher(resource, userId);
   }
+
   createWatcher(resource: Resource): Observable<User> {
     return this.provider.createWatcher(resource);
   }
+
   deleteWatcher(resource: Resource, userId: string): Observable<void> {
     return this.provider.deleteWatcher(resource, userId);
   }
+
   listWatchers(resource: Resource, filters: ResourceWatcherFilters): Observable<ListResponse<User>> {
     return this.provider.searchWatchers(resource, filters);
   }
@@ -87,15 +91,19 @@ export class ResourceService {
   deleteInvitation(invitation: ResourceInvitation): Observable<void> {
     return this.provider.deleteInvitation(invitation);
   }
+
   acceptInvitation(invitation: ResourceInvitation): Observable<void> {
     return this.provider.acceptInvitation(invitation);
   }
+
   createInvitation(resource: Resource, input: CreateResourceInvitation): Observable<ResourceInvitation> {
     return this.provider.createInvitation(resource, input);
   }
-  findInvitation(resource: Resource, inviteeId: string): Observable<ResourceInvitation | undefined> {
+
+  findInvitation(resource: Resource, inviteeId: string): Observable<ResourceInvitation> {
     return this.provider.findInvitation(resource, inviteeId);
   }
+
   listInvitations(resource: Resource): Observable<ListResponse<ResourceInvitation>> {
     return this.provider.listInvitations(resource);
   }

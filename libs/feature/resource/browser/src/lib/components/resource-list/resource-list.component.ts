@@ -9,7 +9,7 @@ import { ResourceItemComponent } from '../resource-item/resource-item.component'
 
 @Component({
   standalone: true,
-  selector: 'res-list',
+  selector: 'resource-list',
   templateUrl: './resource-list.component.html',
   styleUrls: ['./resource-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

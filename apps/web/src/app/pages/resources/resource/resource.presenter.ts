@@ -7,7 +7,7 @@ import { Level, ListResponse, Topic, User } from '@platon/core/common';
 import { FileService, ResourceService } from '@platon/feature/resource/browser';
 import { CircleTree, CreateResourceInvitation, FileVersions, Resource, ResourceEvent, ResourceEventFilters, ResourceFile, ResourceInvitation, ResourceMember, ResourceMemberFilters, ResourceStatisic, UpdateResource } from '@platon/feature/resource/common';
 import { LayoutState } from '@platon/shared/ui';
-import { BehaviorSubject, firstValueFrom, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, catchError, firstValueFrom, Observable, of, Subscription } from 'rxjs';
 
 @Injectable()
 export class ResourcePresenter implements OnDestroy {
@@ -193,18 +193,30 @@ export class ResourcePresenter implements OnDestroy {
   private async refresh(id: string): Promise<void> {
     const [user, resource] = await Promise.all([
       this.authService.ready(),
-      firstValueFrom(this.resourceService.findById(id, this.isInitialLoading))
+      firstValueFrom(this.resourceService.find(id, this.isInitialLoading))
     ]);
 
 
-    const [parent, member, watcher, statistic, invitation, circles] = await Promise.all([
+    const [parent, member, watcher, invitation, statistic, circles] = await Promise.all([
       resource.parentId
-        ? firstValueFrom(this.resourceService.findById(resource.parentId))
+        ? firstValueFrom(this.resourceService.find(resource.parentId))
         : Promise.resolve(undefined),
-      firstValueFrom(this.resourceService.findMember(resource, user!.id)),
-      firstValueFrom(this.resourceService.findWatcher(resource, user!.id)),
+      firstValueFrom(
+        this.resourceService.findMember(resource, user!.id).pipe(
+          catchError(() => of(undefined))
+        )
+      ),
+      firstValueFrom(
+        this.resourceService.findWatcher(resource, user!.id).pipe(
+          catchError(() => of(undefined))
+        )
+      ),
+      firstValueFrom(
+        this.resourceService.findInvitation(resource, user!.id).pipe(
+          catchError(() => of(undefined))
+        )
+      ),
       firstValueFrom(this.resourceService.statistic(resource)),
-      firstValueFrom(this.resourceService.findInvitation(resource, user!.id)),
       firstValueFrom(this.resourceService.tree())
     ]);
 

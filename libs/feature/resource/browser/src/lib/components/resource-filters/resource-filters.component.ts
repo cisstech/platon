@@ -23,7 +23,7 @@ import { ResourcePipesModule } from '../../pipes';
 
 @Component({
   standalone: true,
-  selector: 'res-filters',
+  selector: 'resource-filters',
   templateUrl: './resource-filters.component.html',
   styleUrls: ['./resource-filters.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

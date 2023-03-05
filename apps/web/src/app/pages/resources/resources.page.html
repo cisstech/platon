@@ -28,7 +28,7 @@
       <div class="indicators">
         <ui-filter-indicators [filters]="filters" [indicators]="indicators" />
       </div>
-      <res-list
+      <resource-list
         [items]="items"
         (didTapTag)="search(filters, $event)">
         <h2>Aucune ressource ne correspond à votre recherche</h2>
@@ -36,12 +36,12 @@
           <li>Vérifiez les termes de votre recherche</li>
           <li>Essayez d'autres critères de recherche</li>
         </ul>
-      </res-list>
+      </resource-list>
     </ng-container>
   </article>
   <aside>
     <section>
-      <res-item *ngIf="circle" [item]="circle" />
+      <resource-item *ngIf="circle" [item]="circle" />
     </section>
     <section>
       <mat-card>
@@ -51,7 +51,7 @@
           </mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <res-list [items]="views" [simple]="true" />
+          <resource-list [items]="views" [simple]="true" />
         </mat-card-content>
       </mat-card>
     </section>
@@ -63,7 +63,7 @@
           </mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <res-list [items]="recents" [simple]="true" />
+          <resource-list [items]="recents" [simple]="true" />
         </mat-card-content>
       </mat-card>
     </section>
@@ -74,7 +74,7 @@
   <nz-spin nzSimple nzSize="large" />
 </ng-template>
 
-<res-filters
+<resource-filters
   #filterDrawer
   [filters]="filters"
   [circles]="circles"

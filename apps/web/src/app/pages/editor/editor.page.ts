@@ -63,7 +63,7 @@ export class EditorPage implements OnInit, OnDestroy {
 
 
     const [resource, circles] = await Promise.all([
-      firstValueFrom(this.resourceService.findById(id)),
+      firstValueFrom(this.resourceService.find(id)),
       firstValueFrom(this.resourceService.tree()),
     ])
 

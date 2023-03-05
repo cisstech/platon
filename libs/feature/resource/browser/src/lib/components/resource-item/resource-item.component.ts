@@ -18,7 +18,7 @@ import { ResourcePipesModule } from '../../pipes';
 
 @Component({
   standalone: true,
-  selector: 'res-item',
+  selector: 'resource-item',
   templateUrl: './resource-item.component.html',
   styleUrls: ['./resource-item.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

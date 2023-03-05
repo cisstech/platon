@@ -6,13 +6,13 @@
     <ui-stepper #stepper (finishd)="create()">
       <ng-template uiStepperStep stepTitle="Choix du cercle" stepIcon="apartment" [stepValidator]="!!this.parent">
         <section>
-          <h2>Sélectionnez le cercle dans lequel vous voulez ajouter {{type|resourceType:true|lowercase}}.</h2>
-          <res-circle-tree *ngIf="tree" [tree]="tree" [(selection)]="parent" />
+          <h3>Sélectionnez le cercle dans lequel vous voulez ajouter {{type|resourceType:true|lowercase}}.</h3>
+          <resource-circle-tree *ngIf="tree" [tree]="tree" [(selection)]="parent" />
         </section>
       </ng-template>
       <ng-template uiStepperStep stepTitle="Informations" stepIcon="info-circle"[stepValidator]="!!infos.valid">
         <section>
-          <h2>Entrez les informations de base pour votre {{type|resourceType}}.</h2>
+          <h3>Entrez les informations de base pour votre {{type|resourceType}}.</h3>
           <form [formGroup]="infos">
             <mat-form-field appearance="fill">
               <mat-label>Nom</mat-label>
@@ -45,7 +45,7 @@
       </ng-template>
       <ng-template uiStepperStep stepTitle="Tags" stepIcon="tags">
         <section>
-          <h2>Voulez-vous associer des tags à votre {{type|resourceType|lowercase}} maintenant?</h2>
+          <h3>Voulez-vous associer des tags à votre {{type|resourceType|lowercase}} maintenant?</h3>
           <p>
             Les tags permettent une classification et une organisation plus efficace.
             Il est donc important d'ajouter des tags à vos créations pour en faciliter la recherche et la découverte par d'autres enseignants.

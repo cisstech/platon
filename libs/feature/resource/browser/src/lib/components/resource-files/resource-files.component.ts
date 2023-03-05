@@ -17,7 +17,7 @@ import { NzTreeModule, NzTreeNode } from 'ng-zorro-antd/tree';
 
 @Component({
   standalone: true,
-  selector: 'res-files',
+  selector: 'resource-files',
   templateUrl: './resource-files.component.html',
   styleUrls: ['./resource-files.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

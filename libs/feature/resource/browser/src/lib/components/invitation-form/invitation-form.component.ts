@@ -12,7 +12,7 @@ import { CreateResourceInvitation } from '@platon/feature/resource/common';
 
 @Component({
   standalone: true,
-  selector: 'res-invitation-form',
+  selector: 'resource-invitation-form',
   templateUrl: './invitation-form.component.html',
   styleUrls: ['./invitation-form.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -9,7 +9,7 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 
 @Component({
   standalone: true,
-  selector: 'res-invitation-table',
+  selector: 'resource-invitation-table',
   templateUrl: './invitation-table.component.html',
   styleUrls: ['./invitation-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

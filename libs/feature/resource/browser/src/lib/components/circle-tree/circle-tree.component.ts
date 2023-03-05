@@ -9,7 +9,7 @@ import { NzTreeFlatDataSource, NzTreeFlattener, NzTreeViewModule } from 'ng-zorr
 
 @Component({
   standalone: true,
-  selector: 'res-circle-tree',
+  selector: 'resource-circle-tree',
   templateUrl: './circle-tree.component.html',
   styleUrls: ['./circle-tree.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

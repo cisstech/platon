@@ -68,7 +68,8 @@ export default class ResourcesPage implements OnInit, OnDestroy {
               ...completion.topics,
               ...completion.levels,
             ]);
-            return new Fuse(Array.from(suggestions), {
+            return new Fuse(
+              Array.from(suggestions), {
               includeMatches: true,
               findAllMatches: false,
               threshold: 0.2,

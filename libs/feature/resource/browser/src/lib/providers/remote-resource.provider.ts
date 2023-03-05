@@ -2,8 +2,8 @@ import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { ItemResponse, Level, ListResponse, Topic, User } from "@platon/core/common";
 import { CircleTree, CreateResource, CreateResourceInvitation, Resource, ResourceCompletion, ResourceEvent, ResourceEventFilters, ResourceFilters, ResourceInvitation, ResourceMember, ResourceMemberFilters, ResourceStatisic, ResourceWatcherFilters, UpdateResource } from "@platon/feature/resource/common";
-import { Observable, of } from "rxjs";
-import { catchError, map } from "rxjs/operators";
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
 import { ResourceProvider } from "../models/resource-provider";
 
 @Injectable()
@@ -112,7 +112,7 @@ export class RemoteResourceProvider extends ResourceProvider {
     return this.http.get<ListResponse<Resource>>(`/api/v1/resources`, { params });
   }
 
-  findById(id: string, markAsViewed?: boolean): Observable<Resource> {
+  find(id: string, markAsViewed?: boolean): Observable<Resource> {
     let params = new HttpParams();
     if (markAsViewed) {
       params = params.append('markAsViewed', 'true')
@@ -121,7 +121,7 @@ export class RemoteResourceProvider extends ResourceProvider {
     return this.http.get<ItemResponse<Resource>>(`/api/v1/resources/${id}`, {
       params
     }).pipe(
-      map(response => response.resource)
+      map(response => response.resource),
     );
   }
 
@@ -139,14 +139,11 @@ export class RemoteResourceProvider extends ResourceProvider {
 
 
   // Members
-  findMember(resource: Resource, userId: string): Observable<ResourceMember | undefined> {
+  findMember(resource: Resource, userId: string): Observable<ResourceMember> {
     return this.http.get<ItemResponse<ResourceMember>>(
       `/api/v1/resources/${resource.id}/members/${userId}`
     ).pipe(
       map(response => response.resource),
-      catchError(() => {
-        return of(undefined);
-      })
     );
   }
 
@@ -181,14 +178,11 @@ export class RemoteResourceProvider extends ResourceProvider {
   }
   // Watchers
 
-  findWatcher(resource: Resource, userId: string): Observable<User | undefined> {
+  findWatcher(resource: Resource, userId: string): Observable<User> {
     return this.http.get<ItemResponse<User>>(
       `/api/v1/resources/${resource.id}/watchers/${userId}`
     ).pipe(
       map(response => response.resource),
-      catchError(() => {
-        return of(undefined);
-      })
     );
   }
 
@@ -253,14 +247,11 @@ export class RemoteResourceProvider extends ResourceProvider {
     );
   }
 
-  findInvitation(resource: Resource, inviteeId: string): Observable<ResourceInvitation | undefined> {
+  findInvitation(resource: Resource, inviteeId: string): Observable<ResourceInvitation> {
     return this.http.get<ItemResponse<ResourceInvitation>>(
       `/api/v1/resources/${resource.id}/invitations/${inviteeId}`
     ).pipe(
-      map(response => response.resource),
-      catchError(() => {
-        return of(undefined);
-      })
+      map(response => response.resource)
     );
   }
 

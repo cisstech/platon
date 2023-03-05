@@ -10,7 +10,7 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 
 @Component({
   standalone: true,
-  selector: 'res-member-table',
+  selector: 'resource-member-table',
   templateUrl: './member-table.component.html',
   styleUrls: ['./member-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

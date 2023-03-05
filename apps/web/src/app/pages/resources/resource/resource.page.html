@@ -10,7 +10,7 @@
         [nzPopoverContent]="treeTemplate">
         <mat-icon>account_tree</mat-icon>
         <ng-template #treeTemplate>
-          <res-circle-tree [tree]="context.circles" />
+          <resource-circle-tree [tree]="context.circles" />
         </ng-template>
       </button>
       <nz-breadcrumb-item *ngIf="context.parent">

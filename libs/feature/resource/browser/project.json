@@ -3,7 +3,7 @@
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "libs/feature/resource/browser/src",
-  "prefix": "res",
+  "prefix": "resource",
   "targets": {
     "test": {
       "executor": "@nrwl/jest:jest",
