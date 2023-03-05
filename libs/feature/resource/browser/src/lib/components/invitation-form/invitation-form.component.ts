@@ -1,12 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { UserSearchBarComponent } from '@platon/core/browser';
-import { User } from '@platon/core/common';
-import { CreateResourceInvitation } from '@platon/feature/resource/common';
+
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+
+import { User } from '@platon/core/common';
+import { UserSearchBarComponent } from '@platon/core/browser';
+import { CreateResourceInvitation } from '@platon/feature/resource/common';
 
 @Component({
   standalone: true,
@@ -18,10 +20,11 @@ import { NzGridModule } from 'ng-zorro-antd/grid';
     CommonModule,
     ReactiveFormsModule,
 
-    MatButtonModule,
 
     NzGridModule,
     NzFormModule,
+    NzButtonModule,
+
     UserSearchBarComponent
   ]
 })

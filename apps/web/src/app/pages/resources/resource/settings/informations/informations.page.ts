@@ -7,10 +7,12 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
-import { Level, Topic, UserRoles } from '@platon/core/common';
 import { NzFormModule } from 'ng-zorro-antd/form';
-import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+
+import { Level, Topic, UserRoles } from '@platon/core/common';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { ResourcePresenter } from '../../resource.presenter';
 
@@ -31,6 +33,7 @@ import { ResourcePresenter } from '../../resource.presenter';
 
     NzSpinModule,
     NzFormModule,
+    NzButtonModule,
     NzSelectModule,
   ]
 })

@@ -1,12 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
+
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzGridModule } from 'ng-zorro-antd/grid';
+
 import { UserSearchBarComponent } from '@platon/core/browser';
 import { User, UserGroup, UserRoles } from '@platon/core/common';
 import { CreateCourseMember } from '@platon/feature/course/common';
-import { NzFormModule } from 'ng-zorro-antd/form';
-import { NzGridModule } from 'ng-zorro-antd/grid';
 
 @Component({
   standalone: true,
@@ -18,10 +20,10 @@ import { NzGridModule } from 'ng-zorro-antd/grid';
     CommonModule,
     ReactiveFormsModule,
 
-    MatButtonModule,
-
     NzGridModule,
     NzFormModule,
+    NzButtonModule,
+
     UserSearchBarComponent
   ]
 })

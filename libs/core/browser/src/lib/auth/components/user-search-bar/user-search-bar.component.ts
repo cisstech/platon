@@ -5,12 +5,12 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { MatButtonModule } from '@angular/material/button';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 
 import { NgeUiListModule } from '@cisstech/nge/ui/list';
 import { User, UserGroup, UserRoles } from '@platon/core/common';
 import { SearchBar, UiSearchBarComponent } from '@platon/shared/ui';
-import { NzIconModule } from 'ng-zorro-antd/icon';
 import { UserService } from '../../api/user.service';
 import { UserAvatarComponent } from '../user-avatar/user-avatar.component';
 
@@ -32,9 +32,8 @@ type Item = User | UserGroup;
   imports: [
     CommonModule,
 
-    MatButtonModule,
-
     NzIconModule,
+    NzButtonModule,
 
     NgeUiListModule,
 

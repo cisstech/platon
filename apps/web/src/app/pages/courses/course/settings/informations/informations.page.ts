@@ -1,16 +1,17 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
 
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
-import { UserRoles } from '@platon/core/common';
 import { NzFormModule } from 'ng-zorro-antd/form';
-import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+
+import { UserRoles } from '@platon/core/common';
 import { Subscription } from 'rxjs';
 import { CoursePresenter } from '../../course.presenter';
 
@@ -25,12 +26,12 @@ import { CoursePresenter } from '../../course.presenter';
     ReactiveFormsModule,
 
     MatInputModule,
-    MatButtonModule,
     MatCheckboxModule,
     MatFormFieldModule,
 
-    NzSpinModule,
     NzFormModule,
+    NzSpinModule,
+    NzButtonModule,
     NzSelectModule,
   ]
 })

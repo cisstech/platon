@@ -5,8 +5,11 @@ import { Router, RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
 
 import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzEmptyModule } from 'ng-zorro-antd/empty';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzStatisticModule } from 'ng-zorro-antd/statistic';
 
 import { NgxChartsModule } from '@swimlane/ngx-charts';
@@ -15,8 +18,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { RESOURCE_STATUS_NAMES } from '@platon/feature/resource/browser';
 import { ResourceStatus } from '@platon/feature/resource/common';
 import { ResourcePresenter } from '../resource.presenter';
-import { MatChipsModule } from '@angular/material/chips';
-import { NzEmptyModule } from 'ng-zorro-antd/empty';
 
 
 @Component({
@@ -35,6 +36,7 @@ import { NzEmptyModule } from 'ng-zorro-antd/empty';
 
     NzGridModule,
     NzEmptyModule,
+    NzButtonModule,
     NzStatisticModule,
 
     NgxChartsModule,

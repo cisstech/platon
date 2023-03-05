@@ -35,7 +35,7 @@
                 Il est donc important d'ajouter des tags à vos créations pour en faciliter la recherche et la découverte par d'autres enseignants.
               </ng-template>
               <ng-template #noTagsFooter>
-                <button mat-button color="primary" [routerLink]="['../settings']" [queryParams]="{ tab: 'informations' }">
+                <button nz-button nzType="primary" [routerLink]="['../settings']" [queryParams]="{ tab: 'informations' }">
                   Ajouter des tags
                 </button>
               </ng-template>
@@ -77,7 +77,7 @@
             <nz-statistic [nzValue]="context.statistic?.circles" [nzTitle]="'Cercles'" />
           </mat-card-content>
           <mat-card-actions>
-            <a mat-button color="primary" [routerLink]="['/resources']"
+            <a nz-button nzType="primary" [routerLink]="['/resources']"
               [queryParams]="{ types: 'CIRCLE', parent: context.resource.id }"
               [queryParamsHandling]="'merge'">
               Rechercher
@@ -89,7 +89,7 @@
             <nz-statistic [nzValue]="context.statistic?.activities" [nzTitle]="'Activités'" />
           </mat-card-content>
           <mat-card-actions>
-            <a mat-button color="primary" [routerLink]="['/resources']"
+            <a nz-button nzType="primary" [routerLink]="['/resources']"
               [queryParams]="{ types: 'ACTIVITY', parent: context.resource.id}"
               [queryParamsHandling]="'merge'">
               Rechercher
@@ -101,7 +101,7 @@
             <nz-statistic [nzValue]="context.statistic?.exercises" [nzTitle]="'Exercices'" />
           </mat-card-content>
           <mat-card-actions>
-            <a mat-button color="primary" [routerLink]="['/resources']"
+            <a nz-button nzType="primary" [routerLink]="['/resources']"
               [queryParams]="{ types: 'EXERCISE', parent: context.resource.id}"
               [queryParamsHandling]="'merge'">
               Rechercher

@@ -19,7 +19,7 @@
               Félicitations, vous avez terminé toutes les activités qui vous ont été attribuées !
             </ng-template>
             <ng-template #sessionHistory>
-              <button mat-button color="primary" [routerLink]="['/activities']" [queryParams]="{ tab: 'history' }">
+              <button nz-button nzType="primary" [routerLink]="['/activities']" [queryParams]="{ tab: 'history' }">
                 Afficher l'historique de vos activités
               </button>
             </ng-template>

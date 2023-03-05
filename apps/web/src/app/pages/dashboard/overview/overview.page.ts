@@ -3,11 +3,11 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
 
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzCalendarModule } from 'ng-zorro-antd/calendar';
 
 @Component({
@@ -21,11 +21,11 @@ import { NzCalendarModule } from 'ng-zorro-antd/calendar';
     RouterModule,
 
     MatCardModule,
-    MatButtonModule,
 
     NzEmptyModule,
     NzGridModule,
     NzBadgeModule,
+    NzButtonModule,
     NzCalendarModule,
   ]
 })

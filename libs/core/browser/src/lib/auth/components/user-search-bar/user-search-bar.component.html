@@ -17,7 +17,7 @@
           [user]="isUser(item) ? item : undefined"
           [group]="!isUser(item) ? item : undefined" />
         <div class="spacer"></div>
-        <button mat-button (click)="remove(item)">
+        <button nz-button nzDanger nzType="primary" nzShape="circle" (click)="remove(item)">
           <i nz-icon nzType="delete" nzTheme="outline"></i>
         </button>
       </div>
