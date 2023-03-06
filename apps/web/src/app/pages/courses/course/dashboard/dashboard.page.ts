@@ -8,19 +8,18 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzPopoverModule } from 'ng-zorro-antd/popover';
-import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
 
 import { CourseSection } from '@platon/feature/course/common';
 import { CoursePresenter } from '../course.presenter';
+import { CourseSectionActionsComponent } from './section-actions/section-actions.component';
 
 
 @Component({
   standalone: true,
-  selector: 'app-course-home',
-  templateUrl: './home.page.html',
-  styleUrls: ['./home.page.scss'],
+  selector: 'app-course-dashboard',
+  templateUrl: './dashboard.page.html',
+  styleUrls: ['./dashboard.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
@@ -28,14 +27,14 @@ import { CoursePresenter } from '../course.presenter';
 
     NzIconModule,
     NzEmptyModule,
-    NzSpaceModule,
     NzButtonModule,
-    NzPopoverModule,
     NzCollapseModule,
     NzTypographyModule,
+
+    CourseSectionActionsComponent,
   ]
 })
-export class CourseHomePage implements OnInit, OnDestroy {
+export class CourseDashboardPage implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription[] = [];
   protected context = this.presenter.defaultContext();
 
@@ -79,16 +78,12 @@ export class CourseHomePage implements OnInit, OnDestroy {
   }
 
   protected async moveUpSection(section: CourseSection): Promise<void> {
-    await this.presenter.updateSection(section, {
-      order: section.order - 1
-    });
+    await this.presenter.updateSection(section, { order: section.order - 1 });
     await this.refresh();
   }
 
   protected async moveDownSection(section: CourseSection): Promise<void> {
-    await this.presenter.updateSection(section, {
-      order: section.order + 1
-    });
+    await this.presenter.updateSection(section, { order: section.order + 1 });
     await this.refresh();
   }
 

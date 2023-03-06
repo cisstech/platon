@@ -69,13 +69,6 @@ export class UserSearchBarComponent implements OnInit, ControlValueAccessor {
 
   selection: Item[] = [];
 
-  onTouch: any = () => {
-    //
-  }
-  onChange: any = () => {
-    //
-  }
-
 
   constructor(
     private readonly userService: UserService,
@@ -89,8 +82,17 @@ export class UserSearchBarComponent implements OnInit, ControlValueAccessor {
   }
   // ControlValueAccessor methods
 
+  onTouch: any = () => {
+    //
+  }
+  onChange: any = () => {
+    //
+  }
+
   writeValue(value: any): void {
-    this.selection = value || [];
+    this.selection = Array.isArray(value)
+      ? value
+      : value ? [value] : [];
     this.changeDetectorRef.markForCheck();
   }
 

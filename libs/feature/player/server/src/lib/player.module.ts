@@ -6,7 +6,7 @@ import { PlayerAnswerEntity } from './answers/answer.entity';
 import { PlayerAnswerService } from './answers/answer.service';
 import { PlayerController } from './player.controller';
 import { PlayerService } from './player.service';
-import { SandboxService } from './sandbox.service';
+import { SandboxService } from './sandboxes/sandbox.service';
 import { PlayerSessionEntity } from './sessions/session.entity';
 import { PlayerSessionService } from './sessions/session.service';
 

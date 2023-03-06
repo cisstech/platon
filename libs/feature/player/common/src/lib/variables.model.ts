@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { PLSourceFile } from "@platon/feature/compiler";
 import { PlayerNavigation } from "./navigation.model";
 import { PlayerSettings } from "./settings.model";
 
@@ -7,7 +8,9 @@ export declare type Variables = {
   [k: string]: any
 }
 
-/** Representation of `hint` variable inside of an exercise source file. */
+/**
+ * Representation of `hint` variable inside of an exercise source file.
+ */
 export interface ExerciseHint {
   /** Script to be executed to check if there are any hint left */
   next: string;
@@ -17,7 +20,9 @@ export interface ExerciseHint {
   empty: boolean;
 }
 
-/** Representation of items of `theories` array variable inside of an exercise source file. */
+/**
+ * Representation of items of `theories` array variable inside of an exercise source file.
+ */
 export interface ExerciseTheory {
   /** Title of the theory document. */
   title: string;
@@ -25,18 +30,18 @@ export interface ExerciseTheory {
   url: string;
 }
 
-/** Representation of an exercise feedback. */
+/**
+ * Representation of an exercise feedback.
+ */
 export interface ExerciseFeedback {
   type: 'success' | 'info' | 'warning' | 'error';
   content: string;
 }
 
-
-
 /**
  * List of special variables of an exercise source file.
  */
-export declare type ExerciseVariables = {
+export interface ExerciseVariables {
   /** Template string to render inside the exercice answer area. */
   form: string;
   /** Template string to render inside the exercice author area. */
@@ -79,6 +84,13 @@ export declare type ExerciseVariables = {
   [k: string]: any
 }
 
+export interface ActivityExercise {
+  resource: string;
+  version: string;
+  overrides?: Variables;
+  source: PLSourceFile;
+}
+
 /**
  * List of special variables of an activity source file.
  */
@@ -86,6 +98,7 @@ export declare type ActivityVariables = {
   title: string;
   introduction: string;
   conclusion: string;
+  exerciseGroups: Record<string, ActivityExercise[]>,
   navigation: PlayerNavigation;
 
   author?: string;

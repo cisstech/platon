@@ -159,7 +159,18 @@ export class AssignmentNode implements PLNode {
 
 // AST
 
+
+export interface PLDependency {
+  alias?: string;
+  lineno: number;
+  content: string;
+  abspath: string;
+}
+
 export interface PLSourceFile {
+  resource: string;
+  version: string;
+  abspath: string;
   errors: {
     lineno: number,
     abspath: string
@@ -171,12 +182,7 @@ export interface PLSourceFile {
     description: string
   }[];
   variables: Record<string, unknown>;
-  dependencies: {
-    alias?: string;
-    lineno: number;
-    content: string;
-    abspath: string;
-  }[];
+  dependencies: PLDependency[];
 }
 
 // VISITOR

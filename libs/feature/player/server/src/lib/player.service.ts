@@ -1,14 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@nestjs/common';
 import { deepCopy, deepMerge, NotFoundResponse, UnauthorizedResponse, User } from '@platon/core/common';
+import { PLSourceFile } from '@platon/feature/compiler';
 import { CourseService } from '@platon/feature/course/server';
-import { ActivityVariables, answerStateFromGrade, AnswerStates, defaultPlayerSettings, ExerciseFeedback, ExerciseHint, ExerciseTheory, ExerciseVariables, Player, PlayerActions, ActivityPlayer, EvalExerciseInput, ExercisePlayer, PlayerNavigation, PlayerPage, PreviewInput, PlayerSettings, PlayExerciseOuput, Variables, PlayActivityOuput } from '@platon/feature/player/common';
-import { ResourceEntity } from '@platon/feature/resource/server';
+import { ActivityExercise, ActivityPlayer, ActivityVariables, answerStateFromGrade, AnswerStates, defaultPlayerSettings, EvalExerciseInput, ExerciseFeedback, ExerciseHint, ExercisePlayer, ExerciseTheory, ExerciseVariables, PlayActivityOuput, PlayerActions, PlayerNavigation, PlayerPage, PlayerSettings, PlayExerciseOuput, PreviewInput, Variables } from '@platon/feature/player/common';
+import { ResourceFileService } from '@platon/feature/resource/server';
 import * as nunjucks from 'nunjucks';
 import { DataSource, EntityManager } from 'typeorm';
 import { PlayerAnswerService } from './answers/answer.service';
 import { PreviewOuputDTO } from './player.dto';
-import { SandboxService } from './sandbox.service';
+import { SandboxService } from './sandboxes/sandbox.service';
 import { PlayerSessionEntity } from './sessions/session.entity';
 import { PlayerSessionService } from './sessions/session.service';
 
@@ -26,8 +27,9 @@ export class PlayerService {
 
   constructor(
     private readonly dataSource: DataSource,
-    private readonly sandboxService: SandboxService,
     private readonly courseService: CourseService,
+    private readonly fileService: ResourceFileService,
+    private readonly sandboxService: SandboxService,
     private readonly answerService: PlayerAnswerService,
     private readonly sessionService: PlayerSessionService,
   ) { }
@@ -46,10 +48,11 @@ export class PlayerService {
   async preview(
     input: PreviewInput
   ): Promise<PreviewOuputDTO> {
-    const [session, resource] = await this.startNewSession({
-      resourceId: input.resource,
-      resourceVersion: input.version || 'latest'
-    });
+    const [source, resource] = await this.fileService.compile(
+      input.resource,
+      input.version,
+    );
+    const session = await this.createNewSession({ source });
     return {
       exercise: resource.type === 'EXERCISE' ? this.withExercisePlayer(session) : undefined,
       activity: resource.type === 'ACTIVITY' ? this.withActivityPlayer(session) : undefined,
@@ -83,11 +86,10 @@ export class PlayerService {
       throw new UnauthorizedResponse(`User do not belong to the activity ${courseActivity}.`)
     }
 
-    const [session] = await this.startNewSession({
+    const session = await this.createNewSession({
       user,
+      source: courseActivity.source,
       courseActivityId: courseActivity.id,
-      resourceId: courseActivity.resourceId,
-      resourceVersion: courseActivity.resourceVersion
     });
 
     return {
@@ -127,7 +129,7 @@ export class PlayerService {
     // UPDATE NAVIGATION
     activityVariables.navigation.started = true;
     if ('manual' === activityVariables.settings?.navigation?.mode) {
-      activityVariables.navigation.current = activityVariables.navigation.items.find(item => {
+      activityVariables.navigation.current = activityVariables.navigation.exercises.find(item => {
         if (item.sessionId === exerciseSessionIds[0]) {
           if (item.state === AnswerStates.NOT_STARTED) {
             item.state = AnswerStates.STARTED;
@@ -137,7 +139,7 @@ export class PlayerService {
         return false;
       }) as PlayerPage;
     } else if ('composed' === activityVariables.settings?.navigation?.mode) {
-      activityVariables.navigation.items.forEach(item => {
+      activityVariables.navigation.exercises.forEach(item => {
         if (item.state === AnswerStates.NOT_STARTED) {
           item.state = AnswerStates.STARTED;
         }
@@ -238,7 +240,7 @@ export class PlayerService {
 
     exerciseSession.variables = variables;
 
-    await this.sessionService.update(exerciseSession.id, { variables });
+    await this.sessionService.update(exerciseSession.id, { variables: variables });
 
     return this.withExercisePlayer(exerciseSession);
   }
@@ -287,10 +289,10 @@ export class PlayerService {
     // UPDATE NAVIGATION ACCORDING TO GRADE
 
     if (activitySession && activityNavigation) {
-      const current = activityNavigation.items.find(item => item.sessionId === exerciseSession.id);
+      const current = activityNavigation.exercises.find(item => item.sessionId === exerciseSession.id);
       if (current) {
         current.state = answerStateFromGrade(answer.grade);
-        activityNavigation.items = activityNavigation.items.map(item => (
+        activityNavigation.exercises = activityNavigation.exercises.map(item => (
           item.sessionId === current.sessionId ? current : item
         ));
         promises.push(
@@ -360,65 +362,40 @@ export class PlayerService {
    * @param args Build args.
    * @returns An player instance for the created session.
    */
-  private async startNewSession(
+  private async createNewSession(
     args: CreateSessionArgs,
     entityManager?: EntityManager
-  ): Promise<[PlayerSessionEntity, ResourceEntity]> {
+  ): Promise<PlayerSessionEntity> {
     const create = async (
       manager: EntityManager
-    ): Promise<[PlayerSessionEntity, ResourceEntity]> => {
+    ): Promise<PlayerSessionEntity> => {
       const {
         user,
+        source,
         parentId,
-        resourceId,
-        resourceVersion,
         courseActivityId,
-        variableOverrides
       } = args;
 
-      const { envid, variables, resource } = await this.sandboxService.build(
-        resourceId,
-        resourceVersion,
-        variableOverrides
-      );
+      const { envid, variables } = await this.sandboxService.build(source);
 
       const session = await this.sessionService.create({
-        resourceId,
         envid: envid || null as any,
         userId: user?.id || null as any,
         parentId: parentId || null as any,
         courseActivityId: courseActivityId || null as any,
-        variables: resource.type === 'ACTIVITY'
-          ? this.withActivityNavigation(variables)
-          : variables
+        variables
       }, manager);
 
-      // CREATE SESSION FOR EACH EXERCISE OF THE ACTIVITY
-      if (resource.type === 'ACTIVITY') {
-        const navigation = session.variables.navigation as PlayerNavigation;
-        await Promise.all(
-          navigation.items.map(async item => {
-            const [exerciseSession] = (
-              await this.startNewSession({
-                user: user,
-                parentId: session.id,
-                resourceId: item.resourceId,
-                resourceVersion: item.resourceVersion || 'latest',
-                courseActivityId: session.courseActivityId,
-                variableOverrides: item.variableOverrides,
-              }, manager)
-            );
-            item.sessionId = exerciseSession.id;
-          })
+      if (source.abspath.endsWith('.pla')) {
+        session.variables = await this.withActivityNavigation(
+          variables as ActivityVariables, session, user, manager
         );
         await this.sessionService.update(session.id, {
-          variables: {
-            ...session.variables,
-            navigation
-          }
+          variables: session.variables
         }, manager);
       }
-      return [session, resource];
+
+      return session;
     }
 
     return entityManager
@@ -428,42 +405,55 @@ export class PlayerService {
   }
 
   /**
-   * Ensures that variables contains activity navigation.
+   * Ensures that every a session is created for each exercices of the given activity navigation
+   * for `user`.
    * @param variables Activity variables.
    * @returns Computed variables.
    */
-  private withActivityNavigation(
-    variables: Variables
-  ): Variables {
-    const navigation = (
-      variables.navigation || {}
-    ) as PlayerNavigation;
+  private async withActivityNavigation(
+    variables: ActivityVariables,
+    activitySession: PlayerSessionEntity,
+    user?: User,
+    manager?: EntityManager
+  ): Promise<ActivityVariables> {
+    const navigation = variables.navigation || {};
+    navigation.started = navigation.started ?? false;
+    navigation.terminated = navigation.terminated ?? false;
 
-    const items = navigation.items || [];
+    const groups = variables.exerciseGroups || {};
+    const exercises = (navigation.exercises || []) as (PlayerPage | ActivityExercise)[]
 
-    if (!items.length) {
-      const exercises = (variables.exercises || {}) as Record<string, Variables[]>;
-      Object.keys(exercises).forEach(group => {
-        (exercises[group] || []).forEach(exercise => {
-          items.push({
-            sessionId: '',
-            state: AnswerStates.NOT_STARTED,
-            resourceId: exercise.id,
-            resourceName: exercise.name,
-            resourceVersion: exercise.version,
-            variableOverrides: exercise.variableOverrides
-          });
+    if (!exercises.length) {
+      Object.keys(groups).forEach(group => {
+        (groups[group] || []).forEach(exercise => {
+          exercises.push(exercise);
         });
       });
     }
 
-    navigation.started = false;
-    navigation.terminated = false;
-    navigation.items = items;
+    navigation.exercises = await Promise.all(
+      exercises.map(async item => {
+        if (!('sessionId' in item)) {
+          const session = await this.createNewSession({
+            courseActivityId: activitySession.courseActivityId,
+            parentId: activitySession.id,
+            source: item.source,
+            user,
+          }, manager);
+          return {
+            title: item.source.variables.title as string,
+            state: AnswerStates.NOT_STARTED,
+            sessionId: session.id
+          };
+        }
+        return item;
+      })
+    );
 
-    variables.navigation = navigation;
-
-    return variables;
+    return {
+      ...variables,
+      navigation
+    }
   }
 
   /**
@@ -782,9 +772,8 @@ type ActionHandler = (input: EvalExerciseInput, user?: User) => Promise<Exercise
 
 interface CreateSessionArgs {
   user?: User,
+  source: PLSourceFile,
   parentId?: string,
-  resourceId: string,
-  resourceVersion: string
+  overrides?: Variables
   courseActivityId?: string,
-  variableOverrides?: Variables;
 }

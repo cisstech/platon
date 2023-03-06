@@ -1,13 +1,14 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { BaseDTO, toNumber } from "@platon/core/server";
+import { BaseDTO, toArray, toDate, toNumber } from "@platon/core/server";
 import { CourseActivity, CourseActivityFilters, CreateCourseActivity, UpdateCourseActivity } from "@platon/feature/course/common";
 import { Transform } from "class-transformer";
-import { IsOptional, IsNumber, IsUUID, IsString } from "class-validator";
+import { IsOptional, IsNumber, IsUUID, IsString, IsDate } from "class-validator";
 
 export class CourseActivityDTO extends BaseDTO implements CourseActivity {
   @IsNumber()
   @ApiProperty()
   readonly order!: number;
+
 
   @IsUUID()
   @ApiProperty()
@@ -17,13 +18,14 @@ export class CourseActivityDTO extends BaseDTO implements CourseActivity {
   @ApiProperty()
   readonly sectionId!: string;
 
-  @IsUUID()
-  @ApiProperty()
-  readonly resouceId!: string;
 
-  @IsString()
-  @ApiProperty()
-  readonly resourceVersion!: string;
+  @IsOptional()
+  @IsDate()
+  readonly openAt?: Date;
+
+  @IsOptional()
+  @IsDate()
+  readonly closeAt?: Date;
 }
 
 export class CourseActivityFiltersDTO implements CourseActivityFilters {
@@ -36,24 +38,35 @@ export class CourseActivityFiltersDTO implements CourseActivityFilters {
 export class CreateCourseActivityDTO implements CreateCourseActivity {
   @IsUUID()
   @ApiProperty()
-  readonly courseId!: string;
-
-  @IsUUID()
-  @ApiProperty()
   readonly sectionId!: string;
 
+
   @IsUUID()
   @ApiProperty()
-  readonly resouceId!: string;
+  readonly resourceId!: string;
 
   @IsString()
   @ApiProperty()
   readonly resourceVersion!: string;
 
-  @Transform(({ value }) => toNumber(value))
-  @IsNumber()
+
+  @Transform(({ value }) => toDate(value))
+  @IsDate()
+  @IsOptional()
   @ApiProperty()
-  readonly order!: number;
+  readonly openAt?: Date;
+
+  @Transform(({ value }) => toDate(value))
+  @IsDate()
+  @IsOptional()
+  @ApiProperty()
+  readonly closeAt?: Date;
+
+  @Transform(({ value }) => toArray(value))
+  @IsUUID(undefined, { each: true })
+  @IsOptional()
+  @ApiProperty()
+  readonly members?: string[];
 }
 
 export class UpdateCourseActivityDTO implements UpdateCourseActivity {
@@ -64,9 +77,21 @@ export class UpdateCourseActivityDTO implements UpdateCourseActivity {
   @ApiProperty()
   readonly order?: number;
 
+  @Transform(({ value }) => toDate(value))
+  @IsDate()
   @IsOptional()
-  @IsString()
   @ApiProperty()
-  readonly resourceVersion?: string;
+  readonly openAt?: Date;
 
+  @Transform(({ value }) => toDate(value))
+  @IsDate()
+  @IsOptional()
+  @ApiProperty()
+  readonly closeAt?: Date;
+
+  @Transform(({ value }) => toArray(value))
+  @IsUUID(undefined, { each: true })
+  @IsOptional()
+  @ApiProperty()
+  readonly members?: string[];
 }

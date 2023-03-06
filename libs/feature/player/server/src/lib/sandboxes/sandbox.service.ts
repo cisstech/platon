@@ -1,32 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@nestjs/common';
-import { ResourceFileService } from '@platon/feature/resource/server';
+import { PLSourceFile } from '@platon/feature/compiler';
 import { basename } from 'path';
-import { NodeSandbox, SandboxInput, SandboxOutput } from './sandboxes';
+import { NodeSandbox, SandboxInput, SandboxOutput } from '.';
 
 @Injectable()
 export class SandboxService {
   private node = new NodeSandbox();
 
-  constructor(
-    private readonly fileService: ResourceFileService
-  ) { }
-
-  async build(
-    resourceId: string,
-    resourceVersion: string,
-    variableOverrides?: Record<string, any>
-  ) {
-    const [source, resource] = await this.fileService.compile(
-      resourceId,
-      resourceVersion,
-    );
-
+  async build(source: PLSourceFile): Promise<SandboxOutput> {
     let envid: string | undefined;
-    let variables: Record<string, any> = {
-      ...source.variables,
-      ...(variableOverrides || {})
-    };
+    let variables = source.variables;
 
     if (variables.builder || source.dependencies.length) {
       const response = await this.node.run({
@@ -44,7 +28,6 @@ export class SandboxService {
 
     return {
       envid,
-      resource,
       variables
     }
   }

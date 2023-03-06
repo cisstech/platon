@@ -66,7 +66,7 @@ export class PlayerActivityComponent implements OnInit {
     if ('composed' === this.player.settings?.navigation?.mode) {
       this.playAll();
     } else {
-      this.play(this.player.navigation.items[0]);
+      this.play(this.player.navigation.exercises[0]);
     }
   }
 
@@ -118,7 +118,7 @@ export class PlayerActivityComponent implements OnInit {
     const output = await firstValueFrom(
       this.playerService.playExercises({
         activitySessionId: this.player.sessionId,
-        exerciseSessionIds: this.player.navigation.items.map(item => item.sessionId),
+        exerciseSessionIds: this.player.navigation.exercises.map(item => item.sessionId),
       })
     );
 

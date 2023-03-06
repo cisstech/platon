@@ -59,8 +59,8 @@ export enum ResourceOrderings {
 }
 
 export interface ResourceFilters {
-  readonly types?: ResourceTypes[];
-  readonly status?: ResourceStatus[];
+  readonly types?: (keyof typeof ResourceTypes)[];
+  readonly status?: (keyof typeof ResourceStatus)[];
   readonly search?: string;
   readonly period?: number;
   readonly members?: string[];
@@ -70,7 +70,7 @@ export interface ResourceFilters {
   readonly offset?: number;
   readonly limit?: number;
   readonly parent?: string;
-  readonly order?: ResourceOrderings;
+  readonly order?: ResourceOrderings
   readonly direction?: OrderingDirections;
 }
 

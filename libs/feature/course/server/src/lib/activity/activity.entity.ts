@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { BaseEntity } from '@platon/core/server';
-import { ResourceEntity } from '@platon/feature/resource/server';
-import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
+import { PLSourceFile } from '@platon/feature/compiler';
+import { Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
 import { CourseEntity } from '../course.entity';
+import { CourseMemberEntity } from '../member/member.entity';
 import { CourseSectionEntity } from '../section/section.entity';
 
 @Entity('CourseActivities')
@@ -26,13 +27,28 @@ export class CourseActivityEntity extends BaseEntity {
   @JoinColumn({ name: 'section_id' })
   section!: CourseSectionEntity
 
-  @Column({ name: 'resource_id' })
-  resourceId!: string
+  @Column({ type: 'jsonb', default: {} })
+  source!: PLSourceFile
 
-  @ManyToOne(() => ResourceEntity, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'resource_id' })
-  resource!: ResourceEntity
+  @Index('CourseActivities_open_at_idx')
+  @Column({ name: 'open_at', nullable: true, type: 'timestamp with time zone' })
+  openAt?: Date
 
-  @Column({ name: 'resource_version' })
-  resourceVersion!: string
+  @Index('CourseActivities_close_at_idx')
+  @Column({ name: 'close_at', nullable: true, type: 'timestamp with time zone' })
+  closeAt?: Date
+
+  @ManyToMany(() => CourseMemberEntity)
+  @JoinTable({
+    name: 'CourseActivityMembers',
+    joinColumn: {
+      name: 'activity_id',
+      referencedColumnName: "id"
+    },
+    inverseJoinColumn: {
+      name: "member_id",
+      referencedColumnName: "id"
+    }
+  })
+  members!: CourseMemberEntity[]
 }

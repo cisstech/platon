@@ -7,7 +7,7 @@
   <mat-card-content>
     <nz-timeline nzMode="alternate">
       <ng-container
-        *ngFor="let page of player.navigation.items; trackBy:trackPage;">
+        *ngFor="let page of player.navigation.exercises; trackBy:trackPage;">
         <nz-timeline-item
           [nzDot]="dot"
           [nzColor]="$any(page.state | answerStateColor)">
@@ -20,7 +20,7 @@
             class="timeline-content"
             [class.current]="isActiveSession(page.sessionId)"
             (click)="navigate.emit(page)">
-            <div class="timeline-title">{{ page.resourceName }}</div>
+            <div class="timeline-title">{{ page.title }}</div>
             <div class="timeline-status">
               {{ page.state | answerStateLabel }}
             </div>
@@ -45,9 +45,3 @@
   </mat-card-actions>
 </mat-card>
 
-
-<!--
-
-height: 50vh;
-
- -->

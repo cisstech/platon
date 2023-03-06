@@ -1,19 +1,33 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { NotFoundResponse, OrderingDirections, UserOrderings, UserRoles } from '@platon/core/common';
-import { UserEntity, UserGroupEntity } from '@platon/core/server';
+import { OrderingDirections, UserOrderings, UserRoles } from '@platon/core/common';
 import { CourseMemberFilters } from '@platon/feature/course/common';
-import { DataSource, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Optional } from 'typescript-optional';
 import { CourseMemberEntity } from './member.entity';
 
 @Injectable()
 export class CourseMemberService {
   constructor(
-    private readonly dataSource: DataSource,
     @InjectRepository(CourseMemberEntity)
     private readonly repository: Repository<CourseMemberEntity>
   ) { }
+
+
+  async findById(
+    courseId: string,
+    id: string
+  ): Promise<Optional<CourseMemberEntity>> {
+    return Optional.ofNullable(
+      await this.repository.findOne({
+        where: { courseId, id },
+        relations: {
+          user: true,
+          group: true
+        }
+      })
+    );
+  }
 
   async findByUserId(
     courseId: string,
@@ -73,7 +87,7 @@ export class CourseMemberService {
       query.orderBy(fields[filters.order], filters.direction || orderings[filters.order]);
     } else {
       query.orderBy('user.username', 'ASC')
-      .addOrderBy('group.name', 'ASC');
+        .addOrderBy('group.name', 'ASC');
     }
 
     if (filters.offset) {

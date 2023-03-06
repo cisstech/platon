@@ -29,8 +29,8 @@ export class CourseActivityController {
     return new ItemResponse({
       resource: Mapper.map(
         await this.service.create({
-          ...input,
-          courseId,
+          ...await this.service.fromInput(input),
+          courseId
         }),
         CourseActivityDTO
       )
@@ -45,7 +45,10 @@ export class CourseActivityController {
   ): Promise<ItemResponse<CourseActivityDTO>> {
     return new ItemResponse({
       resource: Mapper.map(
-        await this.service.update(courseId, activityId, input),
+        await this.service.update(courseId, activityId, {
+          ...await this.service.fromInput(input),
+          courseId
+        }),
         CourseActivityDTO
       )
     });

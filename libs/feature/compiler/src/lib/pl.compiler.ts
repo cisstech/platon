@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { AssignmentNode, CommentNode, ExtendsNode, IncludeNode, PLFileContent, PLFileURL, PLNode, PLReference, PLSourceFile, PLVisitor } from "./pl.parser";
+import { deepMerge } from "@platon/core/common";
+import { AssignmentNode, CommentNode, ExtendsNode, IncludeNode, PLFileContent, PLFileURL, PLNode, PLParser, PLReference, PLSourceFile, PLVisitor } from "./pl.parser";
 
 /**
  * File reference resolver for the PL compiler.
@@ -28,9 +29,6 @@ export interface PLReferenceResolver {
 export class PLCompiler implements PLVisitor {
   private readonly urls = new Map<string, string>();
   private readonly contents = new Map<string, string>();
-  private readonly resource: string;
-  private readonly filepath: string;
-  private readonly version: string;
   private readonly resolver: PLReferenceResolver;
   private readonly source: PLSourceFile;
   private lineno = 0;
@@ -38,16 +36,16 @@ export class PLCompiler implements PLVisitor {
   constructor(
     options: {
       resource: string,
-      filepath: string,
       version: string,
+      main: string,
       resolver: PLReferenceResolver
     }
   ) {
-    this.resource = options.resource;
-    this.filepath = options.filepath;
-    this.version = options.version;
     this.resolver = options.resolver;
     this.source = {
+      resource: options.resource,
+      version: options.version,
+      abspath: `${options.resource}:${options.version}/${options.main}`,
       errors: [],
       warnings: [],
       variables: {},
@@ -139,11 +137,52 @@ export class PLCompiler implements PLVisitor {
     return Promise.resolve();
   }
 
+
+  async compileExercise(content: string): Promise<PLSourceFile> {
+    return this.visit(new PLParser().parse(content));
+  }
+
+  async compileActivity(content: string): Promise<PLSourceFile> {
+    const variables = JSON.parse(content);
+
+    // TODO validation + typechecking
+    const groups = variables.exerciseGroups;
+    const exercises: any[] = [];
+    Object.keys(groups).forEach(groupName => {
+      groups[groupName].forEach((exercise: any) => {
+        exercises.push(exercise);
+      });
+    });
+
+    await Promise.all(
+      exercises.map(async (exercise: any) => {
+        const content = await this.resolver.resolveContent(exercise.resource, exercise.version, 'main.ple');
+        const compiler = new PLCompiler({
+          resource: exercise.resource,
+          version: exercise.version,
+          main: 'main.ple',
+          resolver: this.resolver
+        });
+        exercise.source = await compiler.compileExercise(content);
+        if (exercise.overrides) {
+          exercise.source.variables = deepMerge(
+            exercise.source.variables,
+            exercise.overrides
+          );
+        }
+      })
+    );
+
+    this.source.variables = variables;
+    return this.source;
+  }
+
+
   private error(description: string) {
     this.source.errors.push({
       description,
       lineno: this.lineno,
-      abspath: `${this.resource}:${this.version}/${this.filepath}`,
+      abspath: this.source.abspath,
     })
   }
 
@@ -151,7 +190,7 @@ export class PLCompiler implements PLVisitor {
     this.source.warnings.push({
       description,
       lineno: this.lineno,
-      abspath: `${this.resource}:${this.version}/${this.filepath}`,
+      abspath: this.source.abspath,
     })
   }
 
@@ -192,8 +231,8 @@ export class PLCompiler implements PLVisitor {
     let [resource, version] = parts[0].split(':');
     path = parts.slice(1).join('/');
 
-    resource = resource === 'relative' ? this.resource : resource;
-    version = resource === 'relative' ? this.version : version || 'latest';
+    resource = resource === 'relative' ? this.source.resource : resource;
+    version = resource === 'relative' ? this.source.version : version || 'latest';
 
     return {
       resource,

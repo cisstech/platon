@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from '@platon/core/server';
+import { FeatureResourceServerModule } from '@platon/feature/resource/server';
 import { CourseActivityController } from './activity/activity.controller';
 import { CourseActivityEntity } from './activity/activity.entity';
 import { CourseActivityService } from './activity/activity.service';
@@ -18,6 +19,7 @@ import { CourseSectionService } from './section/section.service';
 @Module({
   imports: [
     UserModule,
+    FeatureResourceServerModule,
     TypeOrmModule.forFeature([
       CourseEntity,
       CourseMemberEntity,

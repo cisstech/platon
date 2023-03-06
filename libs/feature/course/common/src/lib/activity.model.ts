@@ -2,11 +2,14 @@ export interface CourseActivity {
   readonly id: string;
   readonly createdAt: Date;
   readonly updatedAt?: Date;
+
   readonly order: number;
+
   readonly courseId: string;
   readonly sectionId: string;
-  readonly resouceId: string;
-  readonly resourceVersion: string;
+
+  readonly openAt?: Date;
+  readonly closeAt?: Date;
 }
 
 export interface CourseActivityFilters {
@@ -14,14 +17,23 @@ export interface CourseActivityFilters {
 }
 
 export interface CreateCourseActivity {
-  readonly courseId: string;
   readonly sectionId: string;
-  readonly resouceId: string;
+
+  readonly resourceId: string;
   readonly resourceVersion: string;
-  readonly order: number;
+
+  readonly openAt?: Date;
+  readonly closeAt?: Date;
+
+  readonly members?: string[];
+
 }
 
 export interface UpdateCourseActivity {
   readonly order?: number;
-  readonly resourceVersion?: string;
+
+  readonly openAt?: Date;
+  readonly closeAt?: Date;
+
+  readonly members?: string[];
 }

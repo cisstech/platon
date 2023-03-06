@@ -39,7 +39,7 @@ export class PlayerNavigationComponent {
 
 
   protected trackPage(_: number, page: PlayerPage): string {
-    return page.resourceId;
+    return page.sessionId;
   }
 
   protected isActiveSession(sessionId: string): boolean {

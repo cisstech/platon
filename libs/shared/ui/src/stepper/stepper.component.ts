@@ -28,7 +28,7 @@ export class UiStepperComponent implements AfterContentInit {
   protected steps!: QueryList<UiStepDirective>;
 
   @Output() changed = new EventEmitter<number>();
-  @Output() finishd = new EventEmitter<void>();
+  @Output() finished = new EventEmitter<void>();
 
 
   get isFirst(): boolean {
@@ -63,7 +63,7 @@ export class UiStepperComponent implements AfterContentInit {
       this.step++;
       this.changeStep();
     } else {
-      this.finishd.emit();
+      this.finished.emit();
     }
   }
 

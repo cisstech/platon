@@ -3,13 +3,12 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, Input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { firstValueFrom, Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 
 import { NgeUiListModule } from '@cisstech/nge/ui/list';
-import { Course, CourseFilters, CourseSection } from '@platon/feature/course/common';
+import { Course, CourseSection } from '@platon/feature/course/common';
 import { SearchBar, UiSearchBarComponent } from '@platon/shared/ui';
 import { CourseService } from '../../api/course.service';
 
@@ -19,6 +18,7 @@ import { CourseService } from '../../api/course.service';
   selector: 'course-section-search-bar',
   templateUrl: './course-section-search-bar.component.html',
   styleUrls: ['./course-section-search-bar.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -26,7 +26,6 @@ import { CourseService } from '../../api/course.service';
       multi: true
     }
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
 
@@ -81,13 +80,6 @@ export class CourseSectionSearchBarComponent implements ControlValueAccessor {
 
   selection: CourseSection[] = [];
 
-  onTouch: any = () => {
-    //
-  }
-  onChange: any = () => {
-    //
-  }
-
 
   constructor(
     private readonly courseService: CourseService,
@@ -96,6 +88,13 @@ export class CourseSectionSearchBarComponent implements ControlValueAccessor {
 
 
   // ControlValueAccessor methods
+
+  onTouch: any = () => {
+    //
+  }
+  onChange: any = () => {
+    //
+  }
 
   writeValue(value: any): void {
     this.selection = Array.isArray(value)

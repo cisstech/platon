@@ -15,38 +15,15 @@
           </span>
         </ng-template>
         <ng-template #extra>
-          <nz-space>
-            <span
-              *nzSpaceItem
-              nz-icon
-              nzType="more"
-              (click)="$event.stopPropagation()"
-              [nz-popover]
-              [nzPopoverTrigger]="'click'"
-              [nzPopoverContent]="sectionActions">
-            </span>
-            <ng-template #sectionActions>
-              <nz-space nzDirection="vertical">
-                <button nz-button (click)="moveUpSection(section)" *ngIf="section.order !== 0">
-                  Monter
-                </button>
-                <button nz-button (click)="moveDownSection(section)" *ngIf="section.order !== sections.length -1">
-                  Descendre
-                </button>
-                <button nz-button>
-                  Ajouter une activité
-                </button>
-                <button nz-button (click)="addSection(section)">
-                  Insérer une section après
-                </button>
-                <button nz-button nzDanger (click)="deleteSection(section)">
-                  Supprimer la section
-                </button>
-              </nz-space>
-            </ng-template>
-          </nz-space>
+          <app-course-section-actions
+            [section]="section"
+            [sectionCount]="sections.length"
+            (moveUp)="moveUpSection(section)"
+            (moveDown)="moveDownSection(section)"
+            (insertBelow)="addSection(section)"
+            (remove)="deleteSection(section)" />
         </ng-template>
-        <ng-container *ngTemplateOutlet="noActivities"></ng-container>
+        <ng-container *ngTemplateOutlet="noActivities; context: { $implicit: section }"></ng-container>
       </nz-collapse-panel>
     </nz-collapse>
   </ng-container>
@@ -68,7 +45,7 @@
   </nz-empty>
 </ng-template>
 
-<ng-template #noActivities>
+<ng-template let-section #noActivities>
   <nz-empty
     [nzNotFoundContent]="noActivitiesContent"
     [nzNotFoundFooter]="noActivitiesFooter">
@@ -76,7 +53,14 @@
       Cette section ne contient aucune activité.
     </ng-template>
     <ng-template #noActivitiesFooter>
-      <button nz-button nzType="primary" (click)="addSection()">
+      <button
+        nz-button
+        nzType="primary"
+        [routerLink]="['/activity/create']"
+        [queryParams]="{
+          course: section.courseId,
+          section: section.id
+        }">
         Ajouter une activité
       </button>
     </ng-template>

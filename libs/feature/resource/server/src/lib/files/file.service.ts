@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { BadRequestResponse, NotFoundResponse, User } from '@platon/core/common';
-import { PLCompiler, PLParser, PLSourceFile } from '@platon/feature/compiler';
+import { PLCompiler, PLReferenceResolver, PLSourceFile } from '@platon/feature/compiler';
 import path from 'path';
 import { ResourceEntity } from '../resource.entity';
 import { ResourceService } from '../resource.service';
@@ -52,39 +52,35 @@ export class ResourceFileService {
       throw new NotFoundException(`Compiler: missing main file in resource: ${resource.id}`)
     }
 
-    if (resource.type === 'ACTIVITY') {
-      const source: PLSourceFile = {
-        errors: [],
-        warnings: [],
-        dependencies: [],
-        variables: JSON.parse(Buffer.from((await content).buffer).toString())
-      };
-      return [source, resource];
-    }
+    const resolver: PLReferenceResolver = {
+      resolveUrl: async (resource, version, path) => {
+        const [repo] = await this.repo(resource, user);
+        const [file] = await repo.read(path, version || LATEST);
+        return file.downloadUrl;
+      },
+      resolveContent: async (resource, version, path) => {
+        const [repo] = await this.repo(resource, user);
+        const [, content] = await repo.read(path, version || LATEST);
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        return Buffer.from((await content!).buffer).toString()
+      },
+    };
 
-    const statements = new PLParser().parse(
-      Buffer.from((await content).buffer).toString()
-    );
-
-    const source = await new PLCompiler({
+    const compiler = new PLCompiler({
+      resolver,
       resource: resourceId,
-      filepath: file.path,
       version: file.version,
-      resolver: {
-        resolveUrl: async (resource, version, path) => {
-          const [repo] = await this.repo(resource, user);
-          const [file] = await repo.read(path, version || LATEST);
-          return file.downloadUrl;
-        },
-        resolveContent: async (resource, version, path) => {
-          const [repo] = await this.repo(resource, user);
-          const [, content] = await repo.read(path, version || LATEST);
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          return Buffer.from((await content!).buffer).toString()
-        },
-      }
-    }).visit(statements);
+      main: file.path,
+    });
 
-    return [source,resource]
+    const source = resource.type === 'EXERCISE'
+      ? await compiler.compileExercise(
+        Buffer.from((await content).buffer).toString()
+      )
+      : await compiler.compileActivity(
+        Buffer.from((await content).buffer).toString()
+      );
+
+    return [source, resource]
   }
 }

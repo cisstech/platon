@@ -3,10 +3,10 @@
 </header>
 <main>
   <nz-skeleton [nzActive]="loading" [nzLoading]="loading">
-    <ui-stepper #stepper (finishd)="create()">
+    <ui-stepper #stepper (finished)="create()">
       <ng-template uiStepperStep stepTitle="Informations" stepIcon="info-circle"[stepValidator]="!!infos.valid">
         <section>
-          <h2>Entrez les informations de base pour votre cours.</h2>
+          <h4>Entrez les informations de base pour votre cours.</h4>
           <form [formGroup]="infos">
             <mat-form-field appearance="fill">
               <mat-label>Nom</mat-label>

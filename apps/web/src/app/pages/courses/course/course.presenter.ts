@@ -129,7 +129,7 @@ export class CoursePresenter implements OnDestroy {
   private async refresh(id: string): Promise<void> {
     const [user, resource] = await Promise.all([
       this.authService.ready(),
-      firstValueFrom(this.courseService.findById(id))
+      firstValueFrom(this.courseService.find(id))
     ]);
 
 

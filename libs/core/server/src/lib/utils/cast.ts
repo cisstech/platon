@@ -12,8 +12,8 @@ export function trim(value: string): string {
   return value.trim();
 }
 
-export function toDate(value: string): Date {
-  return new Date(value);
+export function toDate(value: string): Date | null {
+  return value ? new Date(value) : null;
 }
 
 export function toBoolean(value: string): boolean {

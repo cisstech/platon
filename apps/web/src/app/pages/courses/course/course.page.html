@@ -9,10 +9,10 @@
     </nz-breadcrumb>
     <p nz-typography nzEditable [nzContent]="context.course.desc" (nzContentChange)="updateDesc($event)"></p>
   </ng-container>
-  <ui-layout-tab [link]="['home']">
+  <ui-layout-tab [link]="['dashboard']">
     <ng-template>
-      <mat-icon>home</mat-icon>
-      Accueil
+      <mat-icon>dashboard</mat-icon>
+      Tableau de bord
     </ng-template>
   </ui-layout-tab>
   <ui-layout-tab [link]="['teachers']">

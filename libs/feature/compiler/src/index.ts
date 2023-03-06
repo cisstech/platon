@@ -1,2 +1,2 @@
 export * from './lib/pl.parser';
-export * from './lib/pl.visitor';
+export * from './lib/pl.compiler';

@@ -11,4 +11,4 @@ export * from './resource-filters/matchers/resource-type.matcher'
 export * from './resource-filters/resource-filters.component'
 export * from './resource-item/resource-item.component'
 export * from './resource-list/resource-list.component'
-
+export * from './resource-search-bar/resource-search-bar.component'

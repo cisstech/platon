@@ -3,18 +3,13 @@ import { AnswerStates } from "./answer.model";
 
 export interface PlayerPage {
   state: AnswerStates;
+  title: string;
   sessionId: string;
-  resourceId: string;
-  resourceName: string;
-  resourceVersion?: string;
-  variableOverrides?: any;
 }
 
 export interface PlayerNavigation {
   started: boolean;
   terminated: boolean;
-
-  /** Current active page (undefined if ) */
   current?: PlayerPage;
-  items: PlayerPage[];
+  exercises: PlayerPage[];
 }

@@ -6,7 +6,7 @@ import { Directive, Input, TemplateRef } from '@angular/core';
 })
 export class UiStepDirective {
   @Input() stepTitle?: string;
-  @Input() stepIcon?: string;
+  @Input() stepIcon?: string | TemplateRef<void>;
   @Input() stepValidator?: boolean;
 
   constructor(

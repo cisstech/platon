@@ -195,7 +195,7 @@ interface QueryParams {
   period?: string | number,
   order?: ResourceOrderings,
   direction?: OrderingDirections,
-  types?: ResourceTypes | ResourceTypes[],
-  status?: ResourceStatus | ResourceStatus[],
+  types?: (keyof typeof ResourceTypes) | (keyof typeof ResourceTypes)[],
+  status?: (keyof typeof ResourceStatus) | (keyof typeof ResourceStatus)[],
   parent?: string,
 }

@@ -7,10 +7,10 @@ export default [
     component: CoursePage,
     children: [
       {
-        path: 'home',
+        path: 'dashboard',
         loadChildren: () => import(
-          /* webpackChunkName: "course-home" */
-          './home/home.routes'
+          /* webpackChunkName: "course-dashboard" */
+          './dashboard/dashboard.routes'
         )
       },
       {
@@ -34,7 +34,7 @@ export default [
           './settings/settings.routes'
         )
       },
-      { path: '**', pathMatch: 'full', redirectTo: 'home' }
+      { path: '**', pathMatch: 'full', redirectTo: 'dashboard' }
     ],
   },
 ] as Routes;

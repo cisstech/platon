@@ -1,5 +1,4 @@
 import { Body, Controller, Param, Post, Req } from '@nestjs/common';
-import { SuccessResponse } from '@platon/core/common';
 import { IRequest, Public } from '@platon/core/server';
 import { EvalExerciseInput } from '@platon/feature/player/common';
 import { EvalExerciseOutputDTO, PlayActivityInputDTO, PlayActivityOutputDTO, PlayExerciseInputDTO, PlayExerciseOuputDTO, PreviewInputDTO, PreviewOuputDTO } from './player.dto';

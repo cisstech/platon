@@ -10,7 +10,7 @@
   <ui-list-template slot="row">
     <ng-template let-item="item">
       <div class="selection-item">
-        <course-item [item]="item" />
+        <resource-item [item]="item" [simple]="false" />
         <div class="spacer"></div>
         <button [disabled]="disabled" nz-button nzDanger nzType="primary" nzShape="circle" (click)="remove(item)">
           <i nz-icon nzType="delete" nzTheme="outline"></i>

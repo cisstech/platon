@@ -47,11 +47,14 @@ h1 {
   text-align: center;
 }
 
-h2, h3 {
+h2,
+h3,
+h4 {
   width: 100%;
   text-align: center;
   margin-bottom: 12px;
 }
+
 
 p {
   text-align: center;
@@ -59,15 +62,16 @@ p {
 
 form {
   width: 100%;
-  mat-form-field {
-    display: block;
-    width: 100%;
-    margin: 12px 0;
-  }
 }
 
-nz-select {
+mat-form-field {
+  display: block;
   width: 100%;
+  margin: 12px 0;
+}
+
+mat-checkbox {
+  display: block;
 }
 
 nz-spin {
@@ -76,8 +80,8 @@ nz-spin {
   padding: 4rem;
 }
 
-mat-checkbox {
-  display: block;
+nz-select {
+  width: 100%;
 }
 
 .spacer {

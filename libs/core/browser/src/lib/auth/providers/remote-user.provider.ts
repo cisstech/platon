@@ -1,9 +1,9 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CreateUserGroup, ItemResponse, ListResponse, UpdateUserGroup, User, UserFilters, UserGroup, UserGroupFilters } from '@platon/core/common';
-import { from, Observable } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 
-import { map, mergeMap, toArray } from 'rxjs/operators';
+import { catchError, map, mergeMap, toArray } from 'rxjs/operators';
 import { UserProvider } from '../models/user-provider';
 
 
@@ -50,7 +50,8 @@ export class RemoteUserProvider extends UserProvider {
 
   findByUserName(username: string): Observable<User | undefined> {
     return this.http.get<ItemResponse<User>>(`/api/v1/users/${username}`).pipe(
-      map(response => response.resource)
+      map(response => response.resource),
+      catchError(() => of(undefined))
     );
   }
 

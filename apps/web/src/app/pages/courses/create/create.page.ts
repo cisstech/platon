@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
 
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -13,10 +14,8 @@ import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 import { DialogModule, DialogService } from '@platon/core/browser';
-import { Level, Topic } from '@platon/core/common';
 import { CourseService } from '@platon/feature/course/browser';
 import { UiStepDirective, UiStepperComponent } from '@platon/shared/ui';
-import { firstValueFrom } from 'rxjs';
 
 
 @Component({
@@ -80,14 +79,10 @@ export class CourseCreatePage {
         replaceUrl: true
       });
     } catch {
-      this.dialogService.error('Une erreur est survenue lors de cette action, veuillez réessayer un peu plus tard !');
+      this.dialogService.error('Une erreur est survenue lors de la création du cours, veuillez réessayer un peu plus tard !');
     } finally {
       this.creating = false;
       this.changeDetectorRef.markForCheck();
     }
-  }
-
-  protected trackById(_: number, value: Topic | Level): string {
-    return value.id;
   }
 }

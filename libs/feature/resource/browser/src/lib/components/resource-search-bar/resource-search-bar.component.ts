@@ -9,25 +9,25 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 
 import { NgeUiListModule } from '@cisstech/nge/ui/list';
-import { Course, CourseFilters } from '@platon/feature/course/common';
+import { Resource, ResourceFilters } from '@platon/feature/resource/common';
 import { SearchBar, UiSearchBarComponent } from '@platon/shared/ui';
-import { CourseService } from '../../api/course.service';
-import { CourseItemComponent } from '../course-item/course-item.component';
+import { ResourceService } from '../../api/resource.service';
+import { ResourceItemComponent } from '../resource-item/resource-item.component';
 
 
 @Component({
   standalone: true,
-  selector: 'course-search-bar',
-  templateUrl: './course-search-bar.component.html',
-  styleUrls: ['./course-search-bar.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'resource-search-bar',
+  templateUrl: './resource-search-bar.component.html',
+  styleUrls: ['./resource-search-bar.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => CourseSearchBarComponent),
+      useExisting: forwardRef(() => ResourceSearchBarComponent),
       multi: true
     }
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
 
@@ -36,17 +36,17 @@ import { CourseItemComponent } from '../course-item/course-item.component';
 
     NgeUiListModule,
     UiSearchBarComponent,
-    CourseItemComponent,
+    ResourceItemComponent,
   ]
 })
-export class CourseSearchBarComponent implements ControlValueAccessor {
+export class ResourceSearchBarComponent implements ControlValueAccessor {
   @Input() multi = false;
-  @Input() filters?: CourseFilters;
+  @Input() filters?: ResourceFilters;
   @Input() disabled = false;
   @Input() excludes: string[] = [];
 
-  readonly searchbar: SearchBar<Course> = {
-    placeholder: 'Essayez un nom de cours...',
+  readonly searchbar: SearchBar<Resource> = {
+    placeholder: 'Essayez un nom, un topic, un niveau...',
     filterer: {
       run: this.search.bind(this),
     },
@@ -63,11 +63,11 @@ export class CourseSearchBarComponent implements ControlValueAccessor {
     }
   }
 
-  selection: Course[] = [];
+  selection: Resource[] = [];
 
 
   constructor(
-    private readonly courseService: CourseService,
+    private readonly resourceService: ResourceService,
     private readonly changeDetectorRef: ChangeDetectorRef,
   ) { }
 
@@ -102,8 +102,8 @@ export class CourseSearchBarComponent implements ControlValueAccessor {
   }
 
 
-  protected search(query: string): Observable<Course[]> {
-    return this.courseService
+  protected search(query: string): Observable<Resource[]> {
+    return this.resourceService
       .search({
         ...(this.filters || {}),
         search: query,
@@ -117,14 +117,14 @@ export class CourseSearchBarComponent implements ControlValueAccessor {
       );
   }
 
-  protected remove(item: Course): void {
+  protected remove(item: Resource): void {
     this.selection = this.selection.filter(
       e => e.id !== item.id
     );
     this.onChangeSelection();
   }
 
-  private isSelectable(item: Course): boolean {
+  private isSelectable(item: Resource): boolean {
     const isSelected = this.selection.find(e => e.id === item.id)
     const isExclued = this.excludes.find(courseId => {
       return courseId === item.id;

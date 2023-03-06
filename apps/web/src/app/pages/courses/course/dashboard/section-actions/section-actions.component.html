@@ -1,0 +1,48 @@
+<nz-space>
+  <span
+    *nzSpaceItem
+    nz-icon
+    nzType="more"
+    (click)="$event.stopPropagation()"
+    [nz-popover]
+    [nzPopoverTrigger]="'click'"
+    [nzPopoverContent]="sectionActions">
+  </span>
+  <ng-template #sectionActions>
+    <nz-space nzDirection="vertical">
+      <button nz-button (click)="moveUp.emit()" *ngIf="section.order !== 0">
+        Monter
+      </button>
+      <button nz-button (click)="moveDown.emit()" *ngIf="section.order !== sectionCount">
+        Descendre
+      </button>
+      <button
+        nz-button
+        [routerLink]="['/activity/create']"
+        [queryParams]="{
+          course: section.courseId,
+          section: section.id
+        }">
+        Ajouter une activité
+      </button>
+      <button nz-button (click)="insertBelow.emit(section)">
+        Insérer une section après
+      </button>
+      <button
+        nz-button
+        nzDanger
+          nz-popconfirm
+          nzOkText="Supprimer"
+          nzOkType="danger"
+          [nzPopconfirmTitle]="removeGuard"
+          (nzOnConfirm)="remove.emit()">
+        Supprimer la section
+      </button>
+    </nz-space>
+  </ng-template>
+</nz-space>
+
+<ng-template #removeGuard>
+<h2>Voulez-vous vraiment supprimer la section “{{section.name}}”?</h2> <br/>
+<p>En supprimant cette section, vous supprimer aussi toutes les activités et données liées.</p>
+</ng-template>

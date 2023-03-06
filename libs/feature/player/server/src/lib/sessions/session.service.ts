@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EntityManager, FindOptionsRelations, Repository } from 'typeorm';
+import { EntityManager, FindOptionsRelations, IsNull, Repository } from 'typeorm';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { PlayerSessionEntity } from './session.entity';
 
 @Injectable()
@@ -29,7 +30,7 @@ export class PlayerSessionService {
       parent: false
     }) {
     return this.repository.findOne({
-      where: { courseActivityId, userId },
+      where: { parentId: IsNull(), courseActivityId, userId },
       relations
     });
   }
@@ -59,7 +60,7 @@ export class PlayerSessionService {
     );
   }
 
-  async update(id: string, changes: Partial<PlayerSessionEntity>, entityManager?: EntityManager) {
+  async update(id: string, changes: QueryDeepPartialEntity<PlayerSessionEntity>, entityManager?: EntityManager) {
     if (entityManager) {
       return entityManager.update(this.repository.target, { id }, changes);
     }
