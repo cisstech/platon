@@ -146,6 +146,14 @@ export class RemoteCourseProvider extends CourseProvider {
 
   // Activities
 
+  findActivity(courseId: string, activityId: string): Observable<CourseActivity> {
+    return this.http.get<ItemResponse<CourseActivity>>(
+      `/api/v1/courses/${courseId}/activities/${activityId}`
+    ).pipe(
+      map(response => response.resource)
+    );
+  }
+
   listActivities(course: Course, filters?: CourseActivityFilters): Observable<ListResponse<CourseActivity>> {
     filters = filters || {};
     let params = new HttpParams();

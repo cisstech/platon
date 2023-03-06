@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { BaseEntity, UserEntity } from '@platon/core/server';
 import { CourseActivityEntity } from '@platon/feature/course/server';
-import { Column, Entity, Index, JoinColumn, ManyToOne, Unique } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 
 
 @Entity('PlayerSessions')
 @Index('PlayerSessions_exercise_idx', ['parentId', 'id'])
-@Unique('PlayerSessions_activity_idx', ['courseActivityId', 'userId'])
+@Index('PlayerSessions_activity_user_idx', ['parentId', 'courseActivityId', 'userId'])
 export class PlayerSessionEntity extends BaseEntity {
   @Column({ name: 'parent_id', nullable: true })
   parentId?: string

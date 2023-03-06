@@ -5,7 +5,7 @@ import { Observable } from "rxjs";
 
 export abstract class CourseProvider {
   abstract search(filters?: CourseFilters): Observable<ListResponse<Course>>;
-  abstract find(id: string): Observable<Course | undefined>;
+  abstract find(id: string): Observable<Course>;
   abstract update(id: string, input: UpdateCourse): Observable<Course>;
   abstract create(input: CreateCourse): Observable<Course>;
 
@@ -17,7 +17,7 @@ export abstract class CourseProvider {
 
   // Sections
 
-  abstract findSection(courseId: string, sectionId: string): Observable<CourseSection | undefined>;
+  abstract findSection(courseId: string, sectionId: string): Observable<CourseSection>;
   abstract listSections(course: Course): Observable<ListResponse<CourseSection>>;
   abstract createSection(course: Course, input: CreateCourseSection): Observable<CourseSection>;
   abstract updateSection(section: CourseSection, input: UpdateCourseSection): Observable<CourseSection>;
@@ -25,6 +25,7 @@ export abstract class CourseProvider {
 
   // Activities
 
+  abstract findActivity(courseId: string, activityId: string): Observable<CourseActivity>;
   abstract listActivities(course: Course, filters?: CourseActivityFilters): Observable<ListResponse<CourseActivity>>;
   abstract createActivity(course: Course, input: CreateCourseActivity): Observable<CourseActivity>;
   abstract updateActivity(activity: CourseActivity, input: UpdateCourseActivity): Observable<CourseActivity>;

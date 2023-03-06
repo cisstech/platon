@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
-import { ItemResponse, ListResponse, NoContentResponse } from '@platon/core/common';
+import { ItemResponse, ListResponse, NoContentResponse, NotFoundResponse } from '@platon/core/common';
 import { Mapper } from '@platon/core/server';
 import { CourseActivityDTO, CreateCourseActivityDTO, UpdateCourseActivityDTO } from './activity.dto';
 import { CourseActivityService } from './activity.service';
@@ -20,6 +20,21 @@ export class CourseActivityController {
       resources: Mapper.mapAll(items, CourseActivityDTO)
     });
   }
+
+  @Get('/:activityId')
+  async find(
+    @Param('courseId') courseId: string,
+    @Param('activityId') activityId: string,
+  ): Promise<ItemResponse<CourseActivityDTO>> {
+    const optional = await this.service.findById(courseId, activityId);
+    const resource = Mapper.map(
+      optional.orElseThrow(() => new NotFoundResponse(`CourseActivity not found: ${activityId}`)),
+      CourseActivityDTO
+    );
+
+    return new ItemResponse({ resource })
+  }
+
 
   @Post()
   async create(

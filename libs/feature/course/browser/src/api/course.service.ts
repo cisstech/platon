@@ -14,7 +14,7 @@ export class CourseService {
     return this.provider.search(filters);
   }
 
-  find(id: string): Observable<Course | undefined> {
+  find(id: string): Observable<Course> {
     return this.provider.find(id);
   }
 
@@ -44,7 +44,7 @@ export class CourseService {
 
   // Sections
 
-  findSection(courseId: string, sectionId: string): Observable<CourseSection | undefined> {
+  findSection(courseId: string, sectionId: string): Observable<CourseSection> {
     return this.provider.findSection(courseId, sectionId);
   }
 
@@ -65,6 +65,9 @@ export class CourseService {
   }
 
   // Activities
+  findActivity(courseId: string, activityId: string): Observable<CourseActivity> {
+    return this.provider.findActivity(courseId, activityId);
+  }
 
   listActivities(course: Course, filters?: CourseActivityFilters): Observable<ListResponse<CourseActivity>> {
     return this.provider.listActivities(course, filters);

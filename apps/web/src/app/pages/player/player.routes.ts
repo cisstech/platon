@@ -8,4 +8,11 @@ export default [
       './preview/preview.routes'
     )
   },
+  {
+    path: 'activity',
+    loadChildren: () => import(
+      /* webpackChunkName: "player-activity" */
+      './activity/activity.routes'
+    )
+  },
 ] as Routes;
