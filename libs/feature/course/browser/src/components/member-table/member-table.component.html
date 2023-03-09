@@ -27,7 +27,7 @@
         <user-avatar #avatar [userIdOrName]="$any(member.userId)" [group]="$any(member.group)" />
       </td>
       <td>{{member.createdAt|date}}</td>
-      <td *ngIf="editable && !disabled && member.userId && !nonDeletables.includes(member.userId)">
+      <td *ngIf="editable && !disabled && !nonDeletables.includes($any(member.userId || member.group?.id))">
         <button
           nz-button
           nzDanger

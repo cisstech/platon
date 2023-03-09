@@ -81,6 +81,7 @@ export class ResourceFileService {
         Buffer.from((await content).buffer).toString()
       );
 
+    source.variables.author = resource.ownerId
     return [source, resource]
   }
 }

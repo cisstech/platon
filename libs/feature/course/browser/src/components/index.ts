@@ -1,3 +1,4 @@
+export * from './course-activity-grid/course-activity-grid.component';
 export * from './course-filters/course-filters.component';
 export * from './course-filters/matchers/course-ordering.matcher';
 export * from './course-item/course-item.component';

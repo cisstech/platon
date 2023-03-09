@@ -33,7 +33,7 @@ export class CourseMembersPage implements OnInit, OnDestroy {
   protected excludes: string[] = [];
   protected nonDeletables: string[] = [];
 
-  @Input() roles: (UserRoles | keyof typeof UserRoles)[] = [];
+  @Input() roles: (keyof typeof UserRoles)[] = [];
 
   protected get canEdit(): boolean {
     const { user } = this.context;
@@ -80,7 +80,7 @@ export class CourseMembersPage implements OnInit, OnDestroy {
     if (course) {
       this.nonDeletables = [course.ownerId];
       const response = await this.presenter.searchMembers({
-        roles: [UserRoles.teacher, UserRoles.admin]
+        roles: this.roles as UserRoles[]
       });
 
       this.members = response.resources;

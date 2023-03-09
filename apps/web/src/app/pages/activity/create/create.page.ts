@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { differenceInCalendarDays } from 'date-fns';
+import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
 
 import { MatIconModule } from '@angular/material/icon';
 

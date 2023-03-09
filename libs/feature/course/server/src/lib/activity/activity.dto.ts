@@ -1,14 +1,13 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { BaseDTO, toArray, toDate, toNumber } from "@platon/core/server";
-import { CourseActivity, CourseActivityFilters, CreateCourseActivity, UpdateCourseActivity } from "@platon/feature/course/common";
+import { BaseDTO, toArray, toDate } from "@platon/core/server";
+import { CourseActivity, CourseActivityFilters, CourseActivityStates, CreateCourseActivity, UpdateCourseActivity } from "@platon/feature/course/common";
 import { Transform } from "class-transformer";
-import { IsOptional, IsNumber, IsUUID, IsString, IsDate } from "class-validator";
+import { IsDate, IsNumber, IsOptional, IsString, IsUUID } from "class-validator";
 
 export class CourseActivityDTO extends BaseDTO implements CourseActivity {
   @IsNumber()
   @ApiProperty()
-  readonly order!: number;
-
+  readonly progression = 0;
 
   @IsUUID()
   @ApiProperty()
@@ -26,6 +25,12 @@ export class CourseActivityDTO extends BaseDTO implements CourseActivity {
   @IsOptional()
   @IsDate()
   readonly closeAt?: Date;
+
+  @IsString()
+  readonly title!: string;
+
+  @IsString()
+  readonly state!: CourseActivityStates;
 }
 
 export class CourseActivityFiltersDTO implements CourseActivityFilters {
@@ -70,13 +75,6 @@ export class CreateCourseActivityDTO implements CreateCourseActivity {
 }
 
 export class UpdateCourseActivityDTO implements UpdateCourseActivity {
-
-  @IsOptional()
-  @Transform(({ value }) => toNumber(value))
-  @IsNumber()
-  @ApiProperty()
-  readonly order?: number;
-
   @Transform(({ value }) => toDate(value))
   @IsDate()
   @IsOptional()

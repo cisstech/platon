@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AuthService, DialogService } from '@platon/core/browser';
 import { ListResponse, User } from '@platon/core/common';
 import { CourseService } from '@platon/feature/course/browser';
-import { Course, CourseMember, CourseMemberFilters, CourseSection, CreateCourseMember, CreateCourseSection, UpdateCourse, UpdateCourseSection } from '@platon/feature/course/common';
+import { Course, CourseActivity, CourseMember, CourseMemberFilters, CourseSection, CreateCourseMember, CreateCourseSection, UpdateCourse, UpdateCourseSection } from '@platon/feature/course/common';
 import { LayoutState } from '@platon/shared/ui';
 import { BehaviorSubject, firstValueFrom, Subscription } from 'rxjs';
 
@@ -66,7 +66,11 @@ export class CoursePresenter implements OnDestroy {
 
   // Sections
 
-  async listSections(course: Course): Promise<CourseSection[]> {
+  async listSections(): Promise<CourseSection[]> {
+    const { course } = this.context.value;
+    if (!course) {
+      return [];
+    }
     const response = await firstValueFrom(
       this.courseService.listSections(course)
     );
@@ -102,6 +106,20 @@ export class CoursePresenter implements OnDestroy {
     } catch {
       this.alertError();
     }
+  }
+
+
+  // Activities
+
+  async listActivities(): Promise<CourseActivity[]> {
+    const { course } = this.context.value;
+    if (!course) {
+      return [];
+    }
+    const response = await firstValueFrom(
+      this.courseService.listActivities(course)
+    );
+    return response.resources;
   }
 
 

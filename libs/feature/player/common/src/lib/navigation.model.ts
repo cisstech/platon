@@ -1,10 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AnswerStates } from "./answer.model";
 
 export interface PlayerPage {
+  id: string;
+  sessionId: string;
   state: AnswerStates;
   title: string;
-  sessionId: string;
 }
 
 export interface PlayerNavigation {

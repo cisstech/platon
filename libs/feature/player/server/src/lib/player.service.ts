@@ -72,9 +72,7 @@ export class PlayerService {
       await this.sessionService.update(activitySession.id, {
         startedAt: activitySession.startedAt || new Date(),
       });
-      return {
-        activity: this.withActivityPlayer(activitySession),
-      }
+      return { activity: this.withActivityPlayer(activitySession) }
     }
 
     const courseActivity = await this.courseService.findCourseActivityById(courseActivityId);
@@ -92,9 +90,7 @@ export class PlayerService {
       courseActivityId: courseActivity.id,
     });
 
-    return {
-      activity: this.withActivityPlayer(session)
-    }
+    return { activity: this.withActivityPlayer(session) }
   }
 
   async playExercises(
@@ -107,9 +103,9 @@ export class PlayerService {
       throw new NotFoundResponse(`ActivitySession not found: ${activitySessionId}`);
     }
 
-    const activityVariables = (activitySession.variables as ActivityVariables);
+    const activityVariables = activitySession.variables as ActivityVariables;
     if (activityVariables.navigation.terminated) {
-      throw new UnauthorizedResponse(`ActivitySession already terminated: ${activitySessionId}`);
+      throw new UnauthorizedResponse(`ActivitySession terminated: ${activitySessionId}`);
     }
 
     // CREATE PLAYERS
@@ -127,24 +123,7 @@ export class PlayerService {
     );
 
     // UPDATE NAVIGATION
-    activityVariables.navigation.started = true;
-    if ('manual' === activityVariables.settings?.navigation?.mode) {
-      activityVariables.navigation.current = activityVariables.navigation.exercises.find(item => {
-        if (item.sessionId === exerciseSessionIds[0]) {
-          if (item.state === AnswerStates.NOT_STARTED) {
-            item.state = AnswerStates.STARTED;
-          }
-          return true;
-        }
-        return false;
-      }) as PlayerPage;
-    } else if ('composed' === activityVariables.settings?.navigation?.mode) {
-      activityVariables.navigation.exercises.forEach(item => {
-        if (item.state === AnswerStates.NOT_STARTED) {
-          item.state = AnswerStates.STARTED;
-        }
-      });
-    }
+    this.updateActivityNavigation(activityVariables, exerciseSessionIds[0]);
 
     // SAVE ACTIVITY SESSION
     await this.sessionService.update(activitySessionId, {
@@ -240,7 +219,7 @@ export class PlayerService {
 
     exerciseSession.variables = variables;
 
-    await this.sessionService.update(exerciseSession.id, { variables: variables });
+    await this.sessionService.update(exerciseSession.id, { variables });
 
     return this.withExercisePlayer(exerciseSession);
   }
@@ -278,6 +257,7 @@ export class PlayerService {
 
     const answer = await this.answerService.create({
       sessionId: exerciseSession.id,
+      userId: exerciseSession.userId,
       variables: exerciseSession.variables,
       grade: Number.parseInt(exerciseSession.variables.grade) ?? -1,
     });
@@ -441,6 +421,7 @@ export class PlayerService {
             user,
           }, manager);
           return {
+            id: item.id,
             title: item.source.variables.title as string,
             state: AnswerStates.NOT_STARTED,
             sessionId: session.id
@@ -764,6 +745,30 @@ export class PlayerService {
       feedbacks = [];
     }
     return feedbacks;
+  }
+
+
+  private updateActivityNavigation(activityVariables: ActivityVariables, currentSessionId?: string) {
+    const { navigation, settings } = activityVariables
+
+    navigation.started = true;
+    if ('manual' === settings?.navigation?.mode) {
+      navigation.current = navigation.exercises.find(item => {
+        if (item.sessionId === currentSessionId) {
+          if (item.state === AnswerStates.NOT_STARTED) {
+            item.state = AnswerStates.STARTED;
+          }
+          return true;
+        }
+        return false;
+      }) as PlayerPage;
+    } else if ('composed' === settings?.navigation?.mode) {
+      navigation.exercises.forEach(item => {
+        if (item.state === AnswerStates.NOT_STARTED) {
+          item.state = AnswerStates.STARTED;
+        }
+      });
+    }
   }
 
 }

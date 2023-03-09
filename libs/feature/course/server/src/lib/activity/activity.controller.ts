@@ -1,6 +1,6 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Req } from '@nestjs/common';
 import { ItemResponse, ListResponse, NoContentResponse, NotFoundResponse } from '@platon/core/common';
-import { Mapper } from '@platon/core/server';
+import { IRequest, Mapper } from '@platon/core/server';
 import { CourseActivityDTO, CreateCourseActivityDTO, UpdateCourseActivityDTO } from './activity.dto';
 import { CourseActivityService } from './activity.service';
 
@@ -12,9 +12,10 @@ export class CourseActivityController {
 
   @Get()
   async list(
+    @Req() req: IRequest,
     @Param('courseId') courseId: string
   ): Promise<ListResponse<CourseActivityDTO>> {
-    const [items, total] = await this.service.ofCourse(courseId);
+    const [items, total] = await this.service.ofCourse(courseId, req.user);
     return new ListResponse({
       total,
       resources: Mapper.mapAll(items, CourseActivityDTO)
@@ -23,10 +24,11 @@ export class CourseActivityController {
 
   @Get('/:activityId')
   async find(
+    @Req() req: IRequest,
     @Param('courseId') courseId: string,
     @Param('activityId') activityId: string,
   ): Promise<ItemResponse<CourseActivityDTO>> {
-    const optional = await this.service.findById(courseId, activityId);
+    const optional = await this.service.findById(courseId, activityId, req.user);
     const resource = Mapper.map(
       optional.orElseThrow(() => new NotFoundResponse(`CourseActivity not found: ${activityId}`)),
       CourseActivityDTO
@@ -34,7 +36,6 @@ export class CourseActivityController {
 
     return new ItemResponse({ resource })
   }
-
 
   @Post()
   async create(

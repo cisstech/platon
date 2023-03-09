@@ -1,7 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { BaseEntity } from '@platon/core/server';
 import { PLSourceFile } from '@platon/feature/compiler';
-import { Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
+import { CourseActivityStates } from '@platon/feature/course/common';
+import { Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne, VirtualColumn } from 'typeorm';
 import { CourseEntity } from '../course.entity';
 import { CourseMemberEntity } from '../member/member.entity';
 import { CourseSectionEntity } from '../section/section.entity';
@@ -9,9 +9,6 @@ import { CourseSectionEntity } from '../section/section.entity';
 @Entity('CourseActivities')
 @Index('CourseActivities_section_idx', ['courseId', 'sectionId'])
 export class CourseActivityEntity extends BaseEntity {
-  @Column({ type: 'int' })
-  order!: number
-
   @Index('CourseActivities_course_id_idx')
   @Column({ name: 'course_id' })
   courseId!: string
@@ -51,4 +48,16 @@ export class CourseActivityEntity extends BaseEntity {
     }
   })
   members!: CourseMemberEntity[]
+
+  @VirtualColumn({ query: () => 'SELECT 0'})
+  progression!: number
+
+  @VirtualColumn({ query: () => `source->'variables'->>'title'`})
+
+  readonly title!: string;
+
+  @VirtualColumn({ query: () => `SELECT 'opened'`})
+
+  readonly state!: CourseActivityStates;
+
 }

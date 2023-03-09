@@ -1,0 +1,22 @@
+<ng-container *ngIf="!empty; else: emptyState">
+  <h2>Activités</h2>
+  <nz-tabset nzType="card">
+    <ng-container *ngFor="let tab of tabs; trackBy: trackTab;">
+      <nz-tab [nzTitle]="tab.title">
+        <ng-container *ngIf="tab.items.length; else: emptyState">
+          <nz-row [nzGutter]="[24, 24]" nzAlign="top">
+            <ng-container *ngFor="let item of tab.items; trackBy: trackActivity;">
+              <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
+                <course-activity-card [item]="item" />
+              </nz-col>
+            </ng-container>
+          </nz-row>
+        </ng-container>
+      </nz-tab>
+    </ng-container>
+  </nz-tabset>
+</ng-container>
+
+<ng-template #emptyState>
+  <ng-content></ng-content>
+</ng-template>

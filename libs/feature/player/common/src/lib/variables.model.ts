@@ -85,6 +85,7 @@ export interface ExerciseVariables {
 }
 
 export interface ActivityExercise {
+  id: string;
   resource: string;
   version: string;
   overrides?: Variables;

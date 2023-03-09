@@ -10,9 +10,10 @@ import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
 
-import { CourseSection } from '@platon/feature/course/common';
+import { CourseActivity, CourseSection } from '@platon/feature/course/common';
 import { CoursePresenter } from '../course.presenter';
 import { CourseSectionActionsComponent } from './section-actions/section-actions.component';
+import { CourseActivityGridComponent } from '@platon/feature/course/browser';
 
 
 @Component({
@@ -31,6 +32,7 @@ import { CourseSectionActionsComponent } from './section-actions/section-actions
     NzCollapseModule,
     NzTypographyModule,
 
+    CourseActivityGridComponent,
     CourseSectionActionsComponent,
   ]
 })
@@ -38,7 +40,7 @@ export class CourseDashboardPage implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription[] = [];
   protected context = this.presenter.defaultContext();
 
-  protected sections: CourseSection[] = [];
+  protected sections: SectionWithActivities[] = [];
 
   constructor(
     private readonly presenter: CoursePresenter,
@@ -69,8 +71,14 @@ export class CourseDashboardPage implements OnInit, OnDestroy {
   protected async renameSection(section: CourseSection, newName: string): Promise<void> {
     await this.presenter.updateSection(section, { name: newName });
     this.sections = this.sections.map(item => {
-      if (item.id === section.id) {
-        return { ...item, name: newName };
+      if (item.section.id === section.id) {
+        return {
+          ...item,
+          section: {
+            ...item.section,
+            name: newName
+          }
+        };
       }
       return item;
     })
@@ -92,20 +100,26 @@ export class CourseDashboardPage implements OnInit, OnDestroy {
     await this.refresh();
   }
 
-  protected trackSection(_: number, section: CourseSection): string {
-    return section.id;
+  protected trackSection(_: number, item: SectionWithActivities): string {
+    return item.section.id;
   }
 
   private async refresh(): Promise<void> {
-    const { course } = this.context;
-    if (course) {
-      const [sections] = await Promise.all([
-        this.presenter.listSections(course)
-      ]);
+    const [sections, activities] = await Promise.all([
+      this.presenter.listSections(),
+      this.presenter.listActivities(),
+    ]);
 
-      this.sections = sections;
-    }
+    this.sections = sections.map(section => ({
+      section,
+      activities: activities.filter(activity => activity.sectionId === section.id)
+    }));
 
     this.changeDetectorRef.markForCheck();
   }
+}
+
+interface SectionWithActivities {
+  section: CourseSection;
+  activities: CourseActivity[];
 }

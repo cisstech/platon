@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { deepMerge } from "@platon/core/common";
 import { AssignmentNode, CommentNode, ExtendsNode, IncludeNode, PLFileContent, PLFileURL, PLNode, PLParser, PLReference, PLSourceFile, PLVisitor } from "./pl.parser";
+import { v4 as uuidv4 } from 'uuid'
 
 /**
  * File reference resolver for the PL compiler.
@@ -163,6 +164,7 @@ export class PLCompiler implements PLVisitor {
           main: 'main.ple',
           resolver: this.resolver
         });
+        exercise.id = uuidv4()
         exercise.source = await compiler.compileExercise(content);
         if (exercise.overrides) {
           exercise.source.variables = deepMerge(

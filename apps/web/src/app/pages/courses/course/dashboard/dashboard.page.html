@@ -1,29 +1,32 @@
 <ng-container *ngIf="context.course">
   <ng-container *ngIf="sections.length; else: noSections">
-    <nz-collapse>
+    <nz-collapse nzBordered>
       <nz-collapse-panel
-        *ngFor="let section of sections; trackBy: trackSection;"
+        [nzActive]="true"
+        *ngFor="let item of sections; trackBy: trackSection;"
         [nzHeader]="header"
         [nzExtra]="extra">
         <ng-template #header>
           <span
             nz-typography
             nzEditable
-            [nzContent]="section.name"
-            (nzContentChange)="renameSection(section, $event)"
+            [nzContent]="item.section.name"
+            (nzContentChange)="renameSection(item.section, $event)"
             (click)="$event.stopPropagation()">
           </span>
         </ng-template>
         <ng-template #extra>
           <app-course-section-actions
-            [section]="section"
+            [section]="item.section"
             [sectionCount]="sections.length"
-            (moveUp)="moveUpSection(section)"
-            (moveDown)="moveDownSection(section)"
-            (insertBelow)="addSection(section)"
-            (remove)="deleteSection(section)" />
+            (moveUp)="moveUpSection(item.section)"
+            (moveDown)="moveDownSection(item.section)"
+            (insertBelow)="addSection(item.section)"
+            (remove)="deleteSection(item.section)" />
         </ng-template>
-        <ng-container *ngTemplateOutlet="noActivities; context: { $implicit: section }"></ng-container>
+        <course-activity-grid [items]="item.activities">
+          <ng-container *ngTemplateOutlet="noActivities; context: { $implicit: item.section}"></ng-container>
+        </course-activity-grid>
       </nz-collapse-panel>
     </nz-collapse>
   </ng-container>
