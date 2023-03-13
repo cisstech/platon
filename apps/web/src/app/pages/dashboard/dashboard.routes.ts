@@ -23,10 +23,10 @@ export default [
         )
       },
       {
-        path: 'activity',
+        path: 'activities',
         loadChildren: () => import(
-          /* webpackChunkName: "activity" */
-          '../activity/activity.routes'
+          /* webpackChunkName: "activities" */
+          '../activities/activities.routes'
         )
       },
       {

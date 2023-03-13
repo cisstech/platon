@@ -16,6 +16,7 @@ export interface CreateCourseMember {
 
 export interface CourseMemberFilters {
   readonly roles?: UserRoles[];
+  readonly activities?: string[];
   readonly search?: string;
   readonly offset?: number;
   readonly limit?: number;

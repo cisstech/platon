@@ -1,0 +1,9 @@
+::ng-deep {
+  .ui-browse-modal {
+    height: 90vh;
+  }
+  .ant-modal-footer {
+    border: none;
+    border-radius: 0;
+  }
+}

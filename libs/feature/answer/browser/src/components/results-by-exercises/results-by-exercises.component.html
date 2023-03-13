@@ -1,0 +1,46 @@
+<nz-table #nzTable [nzData]="results" [nzPageSize]="10" nzTableLayout="auto" nzBordered>
+  <thead>
+    <tr>
+      <th nzWidth="60px"></th>
+      <th>Exercice</th>
+      <ng-container *ngFor="let state of answerStates">
+        <th>{{state|answerStateLabel}}</th>
+      </ng-container>
+    </tr>
+  </thead>
+  <tbody>
+    <ng-container *ngFor="let item of nzTable.data">
+      <tr>
+        <td [nzExpand]="expandSet.has(item.id)" (nzExpandChange)="onExpandChange(item.id, $event)"></td>
+        <td>{{item.title}}</td>
+        <ng-container *ngFor="let state of answerStates">
+          <td nzAlign="center">{{item.states[state]}}</td>
+        </ng-container>
+      </tr>
+      <tr [nzExpand]="expandSet.has(item.id)">
+        <div nz-row nzType="flex" nzJustify="space-around" nzAlign="top">
+           <mat-card nz-col>
+            <mat-card-content>
+              <nz-statistic nzTitle="Tentative" [nzValue]="item.attempts.sum" />
+            </mat-card-content>
+          </mat-card>
+          <mat-card nz-col>
+            <mat-card-content>
+              <nz-statistic nzTitle="Moyenne tentative" [nzValue]="item.attempts.avg" />
+            </mat-card-content>
+          </mat-card>
+          <mat-card nz-col>
+            <mat-card-content>
+            <nz-statistic nzTitle="Moyenne note" [nzValue]="item.grades.avg" />
+            </mat-card-content>
+          </mat-card>
+          <mat-card nz-col>
+            <mat-card-content>
+            <nz-statistic nzTitle="Moyenne durée" [nzValue]="item.durations.avg|duration" />
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </tr>
+    </ng-container>
+  </tbody>
+</nz-table>

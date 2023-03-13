@@ -22,7 +22,7 @@ export class CourseActivityService {
   async findById(courseId: string, id: string, user: User): Promise<Optional<CourseActivityEntity>> {
     const qb = this.repository.createQueryBuilder('activity')
       .where(`course_id = :courseId`, { courseId })
-      .andWhere(`id = :id`, { id })
+      .andWhere(`activity.id = :id`, { id })
       .leftJoinAndSelect(
         'PlayerSessions',
         'session',

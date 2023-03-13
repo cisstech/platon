@@ -38,6 +38,11 @@ export class CourseMemberFiltersDTO implements CourseMemberFilters {
   @IsOptional()
   readonly roles?: UserRoles[];
 
+  @Transform(({ value }) => toArray(value))
+  @IsUUID(undefined, { each: true })
+  @IsOptional()
+  readonly activities?: string[];
+
   @IsString()
   @IsOptional()
   readonly search?: string;

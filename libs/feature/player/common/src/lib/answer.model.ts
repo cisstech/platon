@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export enum AnswerStates {
   SUCCEEDED = 'SUCCEEDED',
   PART_SUCC = 'PART_SUCC',
@@ -28,7 +27,7 @@ export const AnswerStateLabels: Record<AnswerStates, string> = {
 
 export const AnswerStateColors: Record<AnswerStates, string> = {
   SUCCEEDED: '#7CFC00',
-  PART_SUCC: '#00FF00',
+  PART_SUCC: 'orange',
   FAILED: '#FF0000',
   STARTED: '#87CEFA',
   NOT_STARTED: '#D3D3D3',

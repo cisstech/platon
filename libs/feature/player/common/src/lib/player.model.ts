@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { PlayerNavigation } from "./navigation.model";
-import { PlayerSettings } from "./settings.model";
-import { ExerciseFeedback } from "./variables.model";
+import { ActivitySettings, ActivityVariables, ExerciseFeedback } from "@platon/feature/compiler";
+import { AnswerStates } from "./answer.model";
 
 export enum PlayerActions {
   NEXT_HINT = 'NEXT_HINT',
@@ -11,6 +10,21 @@ export enum PlayerActions {
   SHOW_SOLUTION = 'SHOW_SOLUTION',
   REROLL_EXERCISE = 'REROLL_EXERCISE',
 }
+
+export interface PlayerExercise {
+  id: string;
+  sessionId: string;
+  state: AnswerStates;
+  title: string;
+}
+
+export interface PlayerNavigation {
+  started: boolean;
+  terminated: boolean;
+  current?: PlayerExercise;
+  exercises: PlayerExercise[];
+}
+
 
 /**
  * Representation of the `/player/preview` endpoint body.
@@ -84,7 +98,7 @@ export interface ExercisePlayer {
   author?: string;
   remainingAttempts?: number;
   solution?: string;
-  settings?: PlayerSettings;
+  settings?: ActivitySettings;
   feedbacks?: ExerciseFeedback[];
   theories?: {
     url: string;
@@ -100,8 +114,12 @@ export interface ActivityPlayer {
   introduction: string;
   conclusion: string;
   navigation: PlayerNavigation;
-  settings?: PlayerSettings;
+  settings?: ActivitySettings;
 }
 
 /** Representation of an exercise/activity player. */
 export declare type Player = ExercisePlayer | ActivityPlayer;
+
+export interface PlayerActivityVariables extends ActivityVariables {
+  navigation: PlayerNavigation;
+}

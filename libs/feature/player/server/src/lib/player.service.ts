@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@nestjs/common';
 import { deepCopy, deepMerge, NotFoundResponse, UnauthorizedResponse, User } from '@platon/core/common';
-import { PLSourceFile } from '@platon/feature/compiler';
+import { ActivityExercise, ActivitySettings, defaultActivitySettings, ExerciseFeedback, ExerciseHint, ExerciseTheory, ExerciseVariables, extractExercisesFromActivityVariables, PLSourceFile, Variables } from '@platon/feature/compiler';
 import { CourseService } from '@platon/feature/course/server';
-import { ActivityExercise, ActivityPlayer, ActivityVariables, answerStateFromGrade, AnswerStates, defaultPlayerSettings, EvalExerciseInput, ExerciseFeedback, ExerciseHint, ExercisePlayer, ExerciseTheory, ExerciseVariables, PlayActivityOuput, PlayerActions, PlayerNavigation, PlayerPage, PlayerSettings, PlayExerciseOuput, PreviewInput, Variables } from '@platon/feature/player/common';
+import { ActivityPlayer, answerStateFromGrade, AnswerStates, EvalExerciseInput, ExercisePlayer, PlayActivityOuput, PlayerActions, PlayerActivityVariables, PlayerExercise, PlayerNavigation, PlayExerciseOuput, PreviewInput } from '@platon/feature/player/common';
 import { ResourceFileService } from '@platon/feature/resource/server';
 import * as nunjucks from 'nunjucks';
 import { DataSource, EntityManager } from 'typeorm';
@@ -103,7 +103,7 @@ export class PlayerService {
       throw new NotFoundResponse(`ActivitySession not found: ${activitySessionId}`);
     }
 
-    const activityVariables = activitySession.variables as ActivityVariables;
+    const activityVariables = activitySession.variables as PlayerActivityVariables;
     if (activityVariables.navigation.terminated) {
       throw new UnauthorizedResponse(`ActivitySession terminated: ${activitySessionId}`);
     }
@@ -147,7 +147,7 @@ export class PlayerService {
     );
 
     const activitySession = session.parent || session;
-    const activityVariables = activitySession.variables as ActivityVariables;
+    const activityVariables = activitySession.variables as PlayerActivityVariables;
     activityVariables.navigation.terminated = true;
     await this.sessionService.update(activitySession.id, {
       variables: activityVariables
@@ -243,6 +243,7 @@ export class PlayerService {
     let variables = exerciseSession.variables as ExerciseVariables;
 
     const output = await this.sandboxService.run({ envid, variables }, variables.grader);
+    const grade = Number.parseInt(output.variables.grade) ?? -1;
 
     variables = output.variables as ExerciseVariables;
 
@@ -251,7 +252,9 @@ export class PlayerService {
       attempts: (variables['.meta']?.attempts || 0) + 1,
     };
 
-    exerciseSession.variables = variables
+    exerciseSession.grade = Math.max(exerciseSession.grade ?? -1, grade);
+    exerciseSession.attempts++;
+    exerciseSession.variables = variables;
 
     // SAVE ANSWER WITH GRADE
 
@@ -259,11 +262,16 @@ export class PlayerService {
       sessionId: exerciseSession.id,
       userId: exerciseSession.userId,
       variables: exerciseSession.variables,
-      grade: Number.parseInt(exerciseSession.variables.grade) ?? -1,
+      grade
     });
 
     const promises: Promise<unknown>[] = [
-      this.sessionService.update(exerciseSession.id, { variables: exerciseSession.variables })
+      this.sessionService.update(exerciseSession.id, {
+        grade: exerciseSession.grade,
+        attempts: exerciseSession.attempts,
+        variables: exerciseSession.variables,
+        lastGradedAt: new Date(),
+      })
     ];
 
     // UPDATE NAVIGATION ACCORDING TO GRADE
@@ -275,15 +283,26 @@ export class PlayerService {
         activityNavigation.exercises = activityNavigation.exercises.map(item => (
           item.sessionId === current.sessionId ? current : item
         ));
-        promises.push(
-          this.sessionService.update(activitySession.id, {
-            variables: {
-              ...activitySession.variables,
-              navigation: activityNavigation
-            } as ActivityVariables
-          })
-        );
       }
+
+      const childs = await this.sessionService.findAllWithParent(activitySession.id);
+      activitySession.grade = grade
+      childs.forEach(child => {
+        if (child.id !== exerciseSession.id && typeof child.grade === 'number' && child.grade !== -1) {
+          activitySession.grade += child.grade;
+        }
+      });
+      activitySession.attempts++;
+      promises.push(
+        this.sessionService.update(activitySession.id, {
+          attempts: activitySession.attempts,
+          grade: activitySession.grade,
+          variables: {
+            ...activitySession.variables,
+            navigation: activityNavigation
+          } as PlayerActivityVariables
+        })
+      );
     }
 
     await Promise.all(promises);
@@ -368,7 +387,7 @@ export class PlayerService {
 
       if (source.abspath.endsWith('.pla')) {
         session.variables = await this.withActivityNavigation(
-          variables as ActivityVariables, session, user, manager
+          variables as PlayerActivityVariables, session, user, manager
         );
         await this.sessionService.update(session.id, {
           variables: session.variables
@@ -391,24 +410,21 @@ export class PlayerService {
    * @returns Computed variables.
    */
   private async withActivityNavigation(
-    variables: ActivityVariables,
+    variables: PlayerActivityVariables,
     activitySession: PlayerSessionEntity,
     user?: User,
     manager?: EntityManager
-  ): Promise<ActivityVariables> {
+  ): Promise<PlayerActivityVariables> {
     const navigation = variables.navigation || {};
     navigation.started = navigation.started ?? false;
     navigation.terminated = navigation.terminated ?? false;
 
-    const groups = variables.exerciseGroups || {};
-    const exercises = (navigation.exercises || []) as (PlayerPage | ActivityExercise)[]
+    const exercises = (navigation.exercises || []) as (PlayerExercise | ActivityExercise)[]
 
     if (!exercises.length) {
-      Object.keys(groups).forEach(group => {
-        (groups[group] || []).forEach(exercise => {
-          exercises.push(exercise);
-        });
-      });
+      exercises.push(
+        ...extractExercisesFromActivityVariables(variables)
+      );
     }
 
     navigation.exercises = await Promise.all(
@@ -445,7 +461,7 @@ export class PlayerService {
   private withActivityPlayer(
     session: PlayerSessionEntity,
   ): ActivityPlayer {
-    const variables = session.variables as ActivityVariables;
+    const variables = session.variables as PlayerActivityVariables;
     return {
       type: 'activity',
       sessionId: session.id,
@@ -469,8 +485,8 @@ export class PlayerService {
     const variables = this.withRenderedTemplates(session.variables);
 
     const settings = (
-      session.parent ? deepCopy(session.parent.variables.settings || {}) : defaultPlayerSettings()
-    ) as PlayerSettings;
+      session.parent ? deepCopy(session.parent.variables.settings || {}) : defaultActivitySettings()
+    ) as ActivitySettings;
 
     const hint = this.withHintGuard(variables, settings);
     const solution = this.withSolutionGuard(variables, settings);
@@ -645,7 +661,7 @@ export class PlayerService {
     let activityNavigation: PlayerNavigation | undefined;
     if (exerciseSession.parent) {
       activitySession = exerciseSession.parent as PlayerSessionEntity;
-      const activityVariables = activitySession.variables as ActivityVariables;
+      const activityVariables = activitySession.variables as PlayerActivityVariables;
       activityNavigation = activityVariables.navigation;
 
       if ('composed' === activityVariables.settings?.navigation?.mode) {
@@ -669,7 +685,7 @@ export class PlayerService {
    */
   private withHintGuard(
     variables: ExerciseVariables,
-    settings: PlayerSettings
+    settings: ActivitySettings
   ): ExerciseHint | string[] | undefined {
     let hint = variables.hint;
 
@@ -697,7 +713,7 @@ export class PlayerService {
    */
   private withTheoriesGuard(
     variables: ExerciseVariables,
-    settings: PlayerSettings
+    settings: ActivitySettings
   ): ExerciseTheory[] | undefined {
     let theories = variables.theories;
     if (!settings.actions?.theories) {
@@ -714,7 +730,7 @@ export class PlayerService {
    */
   private withSolutionGuard(
     variables: ExerciseVariables,
-    settings: PlayerSettings
+    settings: ActivitySettings
   ): string | undefined {
     let solution = variables.solution;
     if (!solution) {
@@ -733,7 +749,7 @@ export class PlayerService {
    */
   private withFeedbacksGuard(
     variables: ExerciseVariables,
-    settings: PlayerSettings
+    settings: ActivitySettings
   ): ExerciseFeedback[] | undefined {
     let feedbacks = Array.isArray(variables.feedback)
       ? variables.feedback
@@ -748,7 +764,7 @@ export class PlayerService {
   }
 
 
-  private updateActivityNavigation(activityVariables: ActivityVariables, currentSessionId?: string) {
+  private updateActivityNavigation(activityVariables: PlayerActivityVariables, currentSessionId?: string) {
     const { navigation, settings } = activityVariables
 
     navigation.started = true;
@@ -761,7 +777,7 @@ export class PlayerService {
           return true;
         }
         return false;
-      }) as PlayerPage;
+      }) as PlayerExercise;
     } else if ('composed' === settings?.navigation?.mode) {
       navigation.exercises.forEach(item => {
         if (item.state === AnswerStates.NOT_STARTED) {

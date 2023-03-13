@@ -28,6 +28,11 @@ import { PlayerSessionService } from './sessions/session.service';
     PlayerAnswerService,
     PlayerSessionService,
   ],
-  exports: [PlayerService, SandboxService],
+  exports: [
+    TypeOrmModule,
+
+    PlayerService,
+    SandboxService
+  ],
 })
 export class FeaturePlayerServerModule { }

@@ -79,13 +79,13 @@ export class UpdateCourseActivityDTO implements UpdateCourseActivity {
   @IsDate()
   @IsOptional()
   @ApiProperty()
-  readonly openAt?: Date;
+  readonly openAt?: Date | null;
 
   @Transform(({ value }) => toDate(value))
   @IsDate()
   @IsOptional()
   @ApiProperty()
-  readonly closeAt?: Date;
+  readonly closeAt?: Date | null;
 
   @Transform(({ value }) => toArray(value))
   @IsUUID(undefined, { each: true })

@@ -10,6 +10,7 @@ import {
   withPreloading
 } from '@angular/router';
 import { CoreBrowserModule } from '@platon/core/browser';
+import { ANSWER_PROVIDERS } from '@platon/feature/answer/browser';
 import { COURSE_PROVIDERS } from '@platon/feature/course/browser';
 import { PLAYER_PROVIDERS } from '@platon/feature/player/browser';
 import { RESOURCE_PROVIDERS } from '@platon/feature/resource/browser';
@@ -37,5 +38,6 @@ bootstrapApplication(AppPage, {
     COURSE_PROVIDERS,
     RESOURCE_PROVIDERS,
     PLAYER_PROVIDERS,
+    ANSWER_PROVIDERS,
   ],
 }).catch((err) => console.error(err));

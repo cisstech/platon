@@ -7,7 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 
-import { ActivityPlayer, PlayerPage } from '@platon/feature/player/common';
+import { ActivityPlayer, PlayerExercise } from '@platon/feature/player/common';
 
 import { AnswerStatePipesModule } from '../../pipes/answer-state-pipes.module';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
@@ -34,11 +34,11 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 export class PlayerNavigationComponent {
   @Input() player!: ActivityPlayer;
 
-  @Output() navigate = new EventEmitter<PlayerPage>();
+  @Output() navigate = new EventEmitter<PlayerExercise>();
   @Output() terminate = new EventEmitter<void>();
 
 
-  protected trackPage(_: number, page: PlayerPage): string {
+  protected trackPage(_: number, page: PlayerExercise): string {
     return page.sessionId;
   }
 

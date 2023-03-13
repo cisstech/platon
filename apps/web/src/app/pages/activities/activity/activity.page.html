@@ -1,0 +1,32 @@
+<ng-container *ngIf="context.course && context.activity">
+  <nz-breadcrumb nzSeparator="">
+    <nz-breadcrumb-item>
+      <mat-icon class="no-margin-left">local_library</mat-icon>
+      <a [routerLink]="['/courses', context.course.id]">{{context.course.name}}</a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>
+      <mat-icon>widgets</mat-icon>
+      {{context.activity.title}}
+    </nz-breadcrumb-item>
+    <div class="spacer"></div>
+  </nz-breadcrumb>
+  <nz-row [nzGutter]="[24, 24]" nzAlign="top">
+    <nz-col nzXs="24" nzSm="24" nzMd="16" nzLg="16" nzXl="16">
+      <ng-container *ngIf="context.teacherResults">
+        <section>
+          <h4>Résultats par exercices</h4>
+          <answer-results-by-exercises [results]="context.teacherResults.exercises" />
+        </section>
+        <section>
+          <h4>Résultats par participants</h4>
+          <answer-results-by-members [results]="context.teacherResults.users" />
+        </section>
+      </ng-container>
+    </nz-col>
+    <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
+      <aside>
+        <course-activity-card [item]="context.activity" />
+      </aside>
+    </nz-col>
+  </nz-row>
+</ng-container>

@@ -44,7 +44,7 @@
           nz-button
           nzShape="round"
           nzType="default"
-          [routerLink]="['/player/activity', item.id]">
+          [routerLink]="['/activities', item.courseId, item.id]">
           <i nz-icon nzType="bar-chart" nzTheme="outline"></i>
         </a>
         <div class="spacer"></div>
@@ -53,10 +53,15 @@
           nz-button
           nzShape="round"
           nzType="default"
-          [routerLink]="['/player/activity', item.id]">
+          (click)="modal.open()">
           <i nz-icon nzType="setting" nzTheme="outline"></i>
         </a>
       </mat-card-actions>
     </mat-card>
   </nz-ribbon>
 </ng-container>
+<ui-modal-drawer size="large" [title]="item.title" #modal>
+  <ng-template>
+    <course-activity-settings [(activity)]="item" />
+  </ng-template>
+</ui-modal-drawer>

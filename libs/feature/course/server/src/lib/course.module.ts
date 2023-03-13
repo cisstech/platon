@@ -41,6 +41,15 @@ import { CourseSectionService } from './section/section.service';
     CourseSectionService,
     CourseActivityService,
   ],
-  exports: [CourseService],
+  exports: [
+    TypeOrmModule,
+
+    CourseService,
+
+    CourseMemberService,
+    CourseSectionService,
+    CourseActivityService,
+
+  ],
 })
 export class FeatureCourseServerModule { }

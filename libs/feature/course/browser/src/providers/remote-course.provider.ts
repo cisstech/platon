@@ -82,6 +82,10 @@ export class RemoteCourseProvider extends CourseProvider {
       params = params.append('roles', e);
     });
 
+    filters.activities?.forEach(e => {
+      params = params.append('activities', e);
+    });
+
     if (filters.limit) {
       params = params.append('limit', filters.limit.toString());
     }

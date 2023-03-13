@@ -1,0 +1,12 @@
+<nz-drawer
+  *ngIf="visible"
+  [nzClosable]="true"
+  [nzVisible]="visible"
+  [nzTitle]="title"
+  [nzSize]="size"
+  [nzPlacement]="placement"
+  (nzOnClose)="close()">
+  <ng-container *nzDrawerContent>
+    <ng-container *ngTemplateOutlet="template"></ng-container>
+  </ng-container>
+</nz-drawer>

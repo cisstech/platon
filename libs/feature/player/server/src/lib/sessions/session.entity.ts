@@ -35,7 +35,16 @@ export class PlayerSessionEntity extends BaseEntity {
   @Column({ type: 'jsonb', default: {} })
   variables!: Record<string, any>
 
+  @Column({ type: 'int', default: -1 })
+  grade!: number;
+
+  @Column({ type: 'int', default: 0 })
+  attempts!: number;
+
   @Column({ type: 'timestamp with time zone', name: 'started_at', nullable: true })
   startedAt?: Date;
+
+  @Column({ type: 'timestamp with time zone', name: 'last_graded_at', nullable: true })
+  lastGradedAt?: Date;
 }
 

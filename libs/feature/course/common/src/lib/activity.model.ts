@@ -32,8 +32,8 @@ export interface CreateCourseActivity {
 }
 
 export interface UpdateCourseActivity {
-  readonly openAt?: Date;
-  readonly closeAt?: Date;
+  readonly openAt?: Date | null;
+  readonly closeAt?: Date | null;
 
   readonly members?: string[];
 }

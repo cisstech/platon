@@ -7,11 +7,11 @@ import { CourseOrderingPipe } from './course-ordering.pipe';
 @NgModule({
   exports: [
     CourseOrderingPipe,
-    CourseActivityStatePipe
+    CourseActivityStatePipe,
   ],
   declarations: [
     CourseOrderingPipe,
-    CourseActivityStatePipe
+    CourseActivityStatePipe,
   ],
 })
 export class CoursePipesModule { }

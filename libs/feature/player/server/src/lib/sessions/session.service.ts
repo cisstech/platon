@@ -23,6 +23,14 @@ export class PlayerSessionService {
     });
   }
 
+  findAllWithParent(
+    parentId: string) {
+    return this.repository.find({
+      where: { parentId },
+    });
+  }
+
+
   ofCourseActivity(
     courseActivityId: string,
     userId: string,

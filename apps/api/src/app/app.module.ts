@@ -4,6 +4,7 @@ import { FeatureLtiServerModule, LTIMiddleware } from '@platon/feature/lti/serve
 import { FeaturePlayerServerModule } from '@platon/feature/player/server';
 import { FeatureResourceServerModule } from '@platon/feature/resource/server';
 import { FeatureCourseServerModule } from '@platon/feature/course/server';
+import { FeatureAnswerServerModule } from '@platon/feature/answer/server';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { FeatureCourseServerModule } from '@platon/feature/course/server';
     FeatureLtiServerModule,
     FeatureCourseServerModule,
     FeaturePlayerServerModule,
+    FeatureAnswerServerModule,
     FeatureResourceServerModule,
   ],
 })

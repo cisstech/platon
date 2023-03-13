@@ -6,6 +6,13 @@ import { Repository } from 'typeorm';
 import { Optional } from 'typescript-optional';
 import { CourseMemberEntity } from './member.entity';
 
+export interface ActivityUser {
+  id: string;
+  username: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+}
 @Injectable()
 export class CourseMemberService {
   constructor(
@@ -44,12 +51,54 @@ export class CourseMemberService {
     );
   }
 
+  async findUsersOfActivity(
+    courseId: string,
+    activityId: string,
+  ): Promise<ActivityUser[]> {
+    const activityMembers = (await this.repository.query(`
+      SELECT DISTINCT COALESCE(cm.user_id, gp.user_id) as id,
+        u.username,
+        u.first_name as "firstName",
+        u.last_name as "lastName",
+        u.email
+      FROM "CourseActivityMembers" cam
+      INNER JOIN "CourseMembers" cm ON cm.id = cam.member_id
+      LEFT JOIN "UserGroupsUsers" gp ON gp.group_id = cm.group_id
+      INNER JOIN "Users" u ON u.id = cm.user_id OR u.id = gp.user_id
+      WHERE cm.course_id = $1 AND cam.activity_id = $2
+    `, [courseId, activityId])) as ActivityUser[]
+    if (!activityMembers.length) {
+      return (await this.repository.query(`
+      SELECT DISTINCT COALESCE(cm.user_id, gp.user_id) as id,
+        u.username,
+        u.first_name as "firstName",
+        u.last_name as "lastName",
+        u.email
+        FROM "CourseMembers" cm
+        LEFT JOIN "UserGroupsUsers" gp ON gp.group_id = cm.group_id
+        INNER JOIN "Users" u ON u.id = cm.user_id OR u.id = gp.user_id
+        WHERE cm.course_id = $1
+    `, [courseId])) as ActivityUser[]
+    }
+    return activityMembers;
+  }
+
   async search(courseId: string, filters?: CourseMemberFilters): Promise<[CourseMemberEntity[], number]> {
     filters = filters || {};
 
     const query = this.repository.createQueryBuilder('member');
     query.leftJoinAndSelect('member.user', 'user', 'user.id = member.user_id');
     query.leftJoinAndSelect('member.group', 'group', 'group.id = member.group_id');
+
+
+    if (filters.activities) {
+      query.innerJoin(
+        'CourseActivityMembers',
+        'activitymember',
+        'activitymember.member_id = member.id AND activitymember.activity_id IN (:...ids)',
+        { ids: filters.activities }
+      );
+    }
 
     query.where('course_id = :courseId', { courseId });
 

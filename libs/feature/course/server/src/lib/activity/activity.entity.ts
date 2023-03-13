@@ -49,15 +49,14 @@ export class CourseActivityEntity extends BaseEntity {
   })
   members!: CourseMemberEntity[]
 
-  @VirtualColumn({ query: () => 'SELECT 0'})
+  @VirtualColumn({ query: () => 'SELECT 0' })
   progression!: number
 
-  @VirtualColumn({ query: () => `source->'variables'->>'title'`})
+  @VirtualColumn({ query: () => `source->'variables'->>'title'` })
 
   readonly title!: string;
 
-  @VirtualColumn({ query: () => `SELECT 'opened'`})
-
+  @VirtualColumn({ query: () => `SELECT 'opened'` })
   readonly state!: CourseActivityStates;
 
 }

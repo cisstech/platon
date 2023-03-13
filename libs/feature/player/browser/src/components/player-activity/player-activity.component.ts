@@ -9,7 +9,7 @@ import { MatCardModule } from '@angular/material/card';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 
 import { SafePipeModule } from '@cisstech/nge/pipes';
-import { ActivityPlayer, ExercisePlayer, Player, PlayerNavigation, PlayerPage } from '@platon/feature/player/common';
+import { ActivityPlayer, ExercisePlayer, Player, PlayerNavigation, PlayerExercise } from '@platon/feature/player/common';
 
 import { PlayerService } from '../../api/player.service';
 import { PlayerExerciseComponent } from '../player-exercise/player-exercise.component';
@@ -90,7 +90,7 @@ export class PlayerActivityComponent implements OnInit {
     return item.sessionId;
   }
 
-  protected async play(page: PlayerPage) {
+  protected async play(page: PlayerExercise) {
     if ('composed' === this.player.settings?.navigation?.mode) {
       this.jumpToExercise(page);
       return;
@@ -130,7 +130,7 @@ export class PlayerActivityComponent implements OnInit {
     this.changeDetectorRef.markForCheck();
   }
 
-  private jumpToExercise(page: PlayerPage) {
+  private jumpToExercise(page: PlayerExercise) {
     // TODO use Renderer2 if angular universal support is planned.
     const node = document.getElementById(page.sessionId);
     if (node) {

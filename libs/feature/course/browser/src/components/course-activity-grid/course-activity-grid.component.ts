@@ -3,9 +3,12 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
+import { NzSegmentedModule } from 'ng-zorro-antd/segmented';
+
 
 import { CourseActivity } from '@platon/feature/course/common';
 import { CourseActivityCardComponent } from '../course-activity-card/course-activity-card.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   standalone: true,
@@ -15,8 +18,11 @@ import { CourseActivityCardComponent } from '../course-activity-card/course-acti
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
+    FormsModule,
+
     NzGridModule,
     NzTabsModule,
+    NzSegmentedModule,
     CourseActivityCardComponent,
   ]
 })
@@ -24,11 +30,12 @@ export class CourseActivityGridComponent {
 
   protected tabs: Tab[] = [];
   protected empty = false;
+  protected selectedIndex = 0;
 
   @Input()
   set items(value: CourseActivity[]) {
     this.tabs = [
-      { title: 'En cours', items: value.filter(item => item.state === 'opened') },
+      { title: 'Ouvert', items: value.filter(item => item.state === 'opened') },
       { title: 'À venir', items: value.filter(item => item.state === 'planned') },
       { title: 'Fermé', items: value.filter(item => item.state === 'closed') }
     ];

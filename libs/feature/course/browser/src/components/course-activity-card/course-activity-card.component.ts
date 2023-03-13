@@ -8,12 +8,14 @@ import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzProgressModule } from 'ng-zorro-antd/progress';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 
 import { CourseActivity } from '@platon/feature/course/common';
+import { UiModalDrawerComponent } from '@platon/shared/ui';
 import { CoursePipesModule } from '../../pipes';
+import { CourseActivitySettingsComponent } from '../course-activity-settings/course-activity-settings.component';
 import { CourseItemComponent } from '../course-item/course-item.component';
 
 @Component({
@@ -25,7 +27,9 @@ import { CourseItemComponent } from '../course-item/course-item.component';
   imports: [
     CommonModule,
     RouterModule,
+
     MatCardModule,
+
     NzGridModule,
     NzIconModule,
     NzBadgeModule,
@@ -35,6 +39,9 @@ import { CourseItemComponent } from '../course-item/course-item.component';
 
     CoursePipesModule,
     CourseItemComponent,
+
+    UiModalDrawerComponent,
+    CourseActivitySettingsComponent
   ]
 })
 export class CourseActivityCardComponent {

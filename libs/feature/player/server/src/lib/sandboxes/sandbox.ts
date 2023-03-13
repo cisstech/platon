@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Variables } from "@platon/feature/player/common";
+
+import { Variables } from "@platon/feature/compiler";
 
 export interface SandboxInput {
   envid?: string;

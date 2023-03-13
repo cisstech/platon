@@ -1,0 +1,23 @@
+<nz-modal
+  *ngIf="visible"
+  [(nzVisible)]="visible"
+  [nzBodyStyle]="{
+    padding: '0',
+    height: '90vh'
+  }"
+  nzClassName="ui-modal"
+  nzWidth="90vw"
+  nzMask="true"
+  nzClosable="false"
+  nzCentered="true"
+  nzMaskClosable="true"
+  (nzOnOk)="close()"
+  (nzOnCancel)="close()"
+  [nzFooter]="modalFooter">
+  <ng-container *nzModalContent>
+    <ng-container *ngIf="visible">
+      <ng-container *ngTemplateOutlet="template"></ng-container>
+    </ng-container>
+  </ng-container>
+</nz-modal>
+<ng-template #modalFooter />
