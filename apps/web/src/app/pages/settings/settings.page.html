@@ -1,3 +1,23 @@
-<p>
-  settings works!
-</p>
+<ui-layout-tabs>
+  <nz-breadcrumb nzSeparator="">
+    <nz-breadcrumb-item> Paramètres </nz-breadcrumb-item>
+  </nz-breadcrumb>
+  <ui-layout-tab [link]="['users']">
+    <ng-template>
+      <mat-icon>manage_accounts</mat-icon>
+      Utilisateurs
+    </ng-template>
+  </ui-layout-tab>
+  <ui-layout-tab [link]="['groups']">
+    <ng-template>
+      <mat-icon>group</mat-icon>
+      Groupes
+    </ng-template>
+  </ui-layout-tab>
+  <ui-layout-tab [link]="['lmses']">
+    <ng-template>
+      <mat-icon>school</mat-icon>
+      LMS
+    </ng-template>
+  </ui-layout-tab>
+</ui-layout-tabs>

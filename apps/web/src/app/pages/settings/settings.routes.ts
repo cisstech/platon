@@ -4,6 +4,30 @@ import { SettingsPage } from './settings.page';
 export default [
   {
     path: '',
-    component: SettingsPage
+    component: SettingsPage,
+    children: [
+      {
+        path: 'users',
+        loadChildren: () => import(
+          /* webpackChunkName: "settings-users" */
+          './users/users.routes'
+        )
+      },
+      {
+        path: 'groups',
+        loadChildren: () => import(
+          /* webpackChunkName: "settings-groups" */
+          './groups/groups.routes'
+        )
+      },
+      {
+        path: 'lmses',
+        loadChildren: () => import(
+          /* webpackChunkName: "settings-lmses" */
+          './lmses/lmses.routes'
+        )
+      },
+      { path: '**', pathMatch: 'full', redirectTo: 'users' }
+    ],
   },
 ] as Routes;
