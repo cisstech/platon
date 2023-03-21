@@ -31,6 +31,15 @@ export class UserService {
       })
     }
 
+    if (filters.lmses?.length) {
+      query.innerJoin(
+        'LmsUsers',
+        'lms_user',
+        'lms_user.user_id = user.id AND lms_user.lms_id IN (:...ids)',
+        { ids: filters.lmses
+      })
+    }
+
     if (filters.roles?.length) {
       query.andWhere('role IN (:...roles)', { roles: filters.roles })
     }

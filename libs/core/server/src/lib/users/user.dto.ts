@@ -71,6 +71,12 @@ export class UserFiltersDTO implements UserFilters {
   @IsOptional()
   readonly groups?: string[];
 
+  @Transform(({ value }) => toArray(value))
+  @IsUUID(undefined, { each: true })
+  @IsArray()
+  @IsOptional()
+  readonly lmses?: string[];
+
   @IsString()
   @IsOptional()
   readonly search?: string;

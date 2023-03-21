@@ -1,18 +1,21 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserModule } from '@platon/core/server';
 import { LmsUserEntity } from './entities/lms-user.entity';
 import { LmsEntity } from './entities/lms.entity';
+import { LTIController } from './lti.controller';
 import { LTIService } from './lti.service';
 
 @Module({
   imports: [
+    UserModule,
     TypeOrmModule.forFeature([
       LmsEntity,
       LmsUserEntity
     ])
   ],
-  controllers: [],
+  controllers: [LTIController],
   providers: [LTIService],
   exports: [LTIService],
 })
-export class FeatureLtiServerModule {}
+export class FeatureLtiServerModule { }

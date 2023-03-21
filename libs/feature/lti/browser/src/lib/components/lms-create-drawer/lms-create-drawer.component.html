@@ -1,0 +1,39 @@
+<ui-modal-drawer
+  size="large"
+  [title]="'Ajouter un LMS'"
+  (closed)="form = createForm()"
+  #modal
+>
+  <ng-template>
+    <form [formGroup]="form">
+      <mat-form-field appearance="fill">
+        <mat-label>Nom du LMS</mat-label>
+        <input formControlName="name" matInput>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>URL</mat-label>
+        <input formControlName="url" type="url" matInput>
+        <mat-hint>L'URL de la page d'accueil de votre LMS.</mat-hint>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>URL de résultat</mat-label>
+        <input formControlName="outcomeUrl" type="url" matInput>
+        <mat-hint>L'URL du système qui recevra les résultats des élèves.</mat-hint>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Clé</mat-label>
+        <input formControlName="consumerKey" matInput>
+        <mat-hint>Identifiant unique utilisé pour authentifier les requêtes de votre LMS (idéalement un nom de domaine).</mat-hint>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Secret</mat-label>
+        <input formControlName="consumerSecret" matInput>
+        <mat-hint>Une chaîne de caractères utilisée pour vérifier l'authenticité des requêtes entre notre application et votre LMS.</mat-hint>
+      </mat-form-field>
+    </form>
+  </ng-template>
+  <ng-template>
+    <button nz-button nzType="default" (click)="modal.close()">Annuler</button>
+    <button nz-button nzType="primary" (click)="create()" [disabled]="!form.valid">Créer</button>
+  </ng-template>
+</ui-modal-drawer>

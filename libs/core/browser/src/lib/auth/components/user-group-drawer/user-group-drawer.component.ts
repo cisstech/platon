@@ -117,5 +117,4 @@ export class UserGroupDrawerComponent {
     this.selection = [];
     this.changeDetectorRef.markForCheck();
   }
-
 }

@@ -57,6 +57,7 @@ export interface UserFilters {
   readonly roles?: (UserRoles | keyof typeof UserRoles)[];
   readonly search?: string;
   readonly groups?: string[];
+  readonly lmses?: string[];
   readonly offset?: number;
   readonly limit?: number;
   readonly order?: UserOrderings;

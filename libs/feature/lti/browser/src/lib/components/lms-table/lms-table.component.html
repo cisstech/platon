@@ -1,0 +1,32 @@
+<nz-table
+  #nzTable
+  [nzSize]="'small'"
+  [nzShowSizeChanger]="true"
+  [nzShowPagination]="true"
+  [nzData]="lmses">
+  <thead>
+    <tr>
+      <th
+        *ngIf="selectable  && !disabled"
+        [nzChecked]="checked"
+        [nzIndeterminate]="indeterminate"
+        (nzCheckedChange)="onAllChecked($event)"></th>
+      <th>Nom</th>
+      <th>Url</th>
+      <th>Date d'ajout</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let lms of nzTable.data" (click)="drawer.open(lms)">
+      <td
+        *ngIf="selectable && !disabled"
+        [nzChecked]="selection.has(lms.id)"
+        (nzCheckedChange)="onItemChecked(lms.id, $event)">
+      </td>
+      <td>{{lms.name}}</td>
+      <td>{{lms.url}}</td>
+      <td>{{lms.createdAt|date}}</td>
+    </tr>
+  </tbody>
+</nz-table>
+<lms-drawer #drawer />

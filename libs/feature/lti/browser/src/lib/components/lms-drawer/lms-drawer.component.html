@@ -1,0 +1,44 @@
+<ui-modal-drawer
+  size="large"
+  [title]="lms?.name || ''"
+  (closed)="lms = undefined"
+  #modal>
+  <ng-template>
+    <h2>Informations</h2>
+    <form [formGroup]="form">
+      <mat-form-field appearance="fill">
+        <mat-label>Nom du LMS</mat-label>
+        <input formControlName="name" matInput>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>URL</mat-label>
+        <input formControlName="url" type="url" matInput>
+        <mat-hint>L'URL de la page d'accueil de votre LMS.</mat-hint>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>URL de résultat</mat-label>
+        <input formControlName="outcomeUrl" type="url" matInput>
+        <mat-hint>L'URL du système qui recevra les résultats des élèves.</mat-hint>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Clé</mat-label>
+        <input formControlName="consumerKey" matInput>
+        <mat-hint>Identifiant unique utilisé pour authentifier les requêtes de votre LMS (idéalement un nom de domaine).</mat-hint>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Secret</mat-label>
+        <input formControlName="consumerSecret" matInput>
+        <mat-hint>Une chaîne de caractères utilisée pour vérifier l'authenticité des requêtes entre notre application et votre LMS.</mat-hint>
+      </mat-form-field>
+    </form>
+    <h2>Membres</h2>
+    <user-search-bar
+      [(ngModel)]="members"
+      [autoSelect]="true"
+      [filters]="{ limit: 50, lmses: [lms!.id] }" />
+    <user-table [users]="members" />
+  </ng-template>
+  <ng-template>
+    <button nz-button nzType="primary" (click)="update()" [disabled]="!form.valid">Mettre à jour</button>
+  </ng-template>
+</ui-modal-drawer>

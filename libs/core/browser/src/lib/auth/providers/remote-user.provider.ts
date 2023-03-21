@@ -29,6 +29,10 @@ export class RemoteUserProvider extends UserProvider {
       params = params.append('groups', group);
     });
 
+    filters.lmses?.forEach(group => {
+      params = params.append('lmses', group);
+    });
+
     if (filters.order) {
       params = params.append('order', filters.order.toString());
     }

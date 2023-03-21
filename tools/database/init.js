@@ -36,7 +36,7 @@ run(async (queryRunner, logger) => {
   logger.info('GENERATING USERS');
   let users = []
   if (data.users) {
-    logger.info('GENERATING TOPIC');
+    logger.info('GENERATING USERS');
     users = await Promise.all(
       data.users.map((user) =>
         queryRunner.query(

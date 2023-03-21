@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChildren, EventEmitter, Input, Output, QueryList, TemplateRef } from '@angular/core';
 import { SafePipeModule } from '@cisstech/nge/pipes';
 import { NzDrawerModule, NzDrawerPlacement, NzDrawerSize } from 'ng-zorro-antd/drawer';
 
@@ -18,8 +18,8 @@ import { NzDrawerModule, NzDrawerPlacement, NzDrawerSize } from 'ng-zorro-antd/d
 export class UiModalDrawerComponent {
   protected visible = false;
 
-  @ContentChild(TemplateRef)
-  template!: TemplateRef<void>
+  @ContentChildren(TemplateRef)
+  protected templates!: QueryList<TemplateRef<void>>;
 
   @Output() closed = new EventEmitter();
 
@@ -40,8 +40,9 @@ export class UiModalDrawerComponent {
     this.changeDetectorRef.markForCheck();
   }
 
-  protected close(): void {
+  close(): void {
     this.visible = false;
     this.closed.emit();
+    this.changeDetectorRef.markForCheck();
   }
 }

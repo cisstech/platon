@@ -1,1 +1,22 @@
-<p>lmses</p>
+<nz-button-group>
+  <button
+    (click)="createDrawer.open()"
+    nz-button
+    nzType="primary"
+    nz-tooltip="Ajouter un LMS">
+    <span nz-icon nzType="plus" nzTheme="outline"></span>
+  </button>
+</nz-button-group>
+
+<lms-search-bar
+  [(ngModel)]="lmses"
+  [autoSelect]="true"
+  [filters]="{ limit: 50 }"/>
+
+<lms-table
+  [lmses]="lmses"
+  [selectable]="false" />
+
+<lms-create-drawer
+  #createDrawer
+  (created)="insert($event)" />

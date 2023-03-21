@@ -5,8 +5,10 @@
   [nzTitle]="title"
   [nzSize]="size"
   [nzPlacement]="placement"
+  [nzFooter]="templates.length > 1 ? templates.last : noFooter"
   (nzOnClose)="close()">
   <ng-container *nzDrawerContent>
-    <ng-container *ngTemplateOutlet="template"></ng-container>
+      <ng-container *ngTemplateOutlet="templates.first"></ng-container>
   </ng-container>
 </nz-drawer>
+<ng-template #noFooter />
