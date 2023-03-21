@@ -1,36 +1,36 @@
 import { Routes } from '@angular/router';
-import { SettingsPage } from './settings.page';
+import { AdminPage } from './admin.page';
 
 export default [
   {
     path: '',
-    component: SettingsPage,
+    component: AdminPage,
     children: [
       {
         path: 'users',
         loadChildren: () => import(
-          /* webpackChunkName: "settings-users" */
+          /* webpackChunkName: "admin-users" */
           './users/users.routes'
         )
       },
       {
         path: 'groups',
         loadChildren: () => import(
-          /* webpackChunkName: "settings-groups" */
+          /* webpackChunkName: "admin-groups" */
           './groups/groups.routes'
         )
       },
       {
         path: 'lmses',
         loadChildren: () => import(
-          /* webpackChunkName: "settings-lmses" */
+          /* webpackChunkName: "admin-lmses" */
           './lmses/lmses.routes'
         )
       },
       {
         path: 'tags',
         loadChildren: () => import(
-          /* webpackChunkName: "settings-tags" */
+          /* webpackChunkName: "admin-tags" */
           './tags/tags.routes'
         )
       },

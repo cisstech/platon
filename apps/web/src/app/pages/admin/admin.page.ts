@@ -16,9 +16,9 @@ import { UiLayoutTabsComponent, UiLayoutTabsTitleDirective } from '@platon/share
 
 @Component({
   standalone: true,
-  selector: 'app-settings',
-  templateUrl: './settings.page.html',
-  styleUrls: ['./settings.page.scss'],
+  selector: 'app-admin',
+  templateUrl: './admin.page.html',
+  styleUrls: ['./admin.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
@@ -38,4 +38,4 @@ import { UiLayoutTabsComponent, UiLayoutTabsTitleDirective } from '@platon/share
     UiLayoutTabsTitleDirective,
   ]
 })
-export class SettingsPage { }
+export class AdminPage { }

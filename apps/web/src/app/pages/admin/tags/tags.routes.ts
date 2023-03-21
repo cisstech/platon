@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
-import { SettingsLmsesPage } from './lmses.page';
+import { AdminTagsPage } from './tags.page';
 
 export default [
   {
     path: '',
-    component: SettingsLmsesPage
+    component: AdminTagsPage
   },
 ] as Routes;

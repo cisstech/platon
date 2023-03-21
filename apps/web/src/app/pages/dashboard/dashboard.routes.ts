@@ -44,10 +44,10 @@ export default [
         )
       },
       {
-        path: 'settings',
+        path: 'admin',
         loadChildren: () => import(
-          /* webpackChunkName: "settings" */
-          '../settings/settings.routes'
+          /* webpackChunkName: "admin" */
+          '../admin/admin.routes'
         )
       }
     ]

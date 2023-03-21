@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
-import { SettingsGroupsPage } from './groups.page';
+import { AdminUsersPage } from './users.page';
 
 export default [
   {
     path: '',
-    component: SettingsGroupsPage
+    component: AdminUsersPage
   },
 ] as Routes;

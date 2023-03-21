@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 import { UserGroupTableComponent, UserSearchBarComponent, UserService } from '@platon/core/browser';
@@ -13,7 +13,7 @@ import { firstValueFrom } from 'rxjs';
 
 @Component({
   standalone: true,
-  selector: 'app-settings-groups',
+  selector: 'app-admin-groups',
   templateUrl: './groups.page.html',
   styleUrls: ['./groups.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -29,7 +29,7 @@ import { firstValueFrom } from 'rxjs';
     UserGroupTableComponent,
   ]
 })
-export class SettingsGroupsPage {
+export class AdminGroupsPage {
   protected groups: UserGroup[] = [];
 
   constructor(

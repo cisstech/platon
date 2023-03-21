@@ -9,7 +9,7 @@ import { firstValueFrom } from 'rxjs';
 
 @Component({
   standalone: true,
-  selector: 'app-settings-tags',
+  selector: 'app-admin-tags',
   templateUrl: './tags.page.html',
   styleUrls: ['./tags.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -21,7 +21,7 @@ import { firstValueFrom } from 'rxjs';
     TagListComponent,
   ]
 })
-export class SettingsTagsPage implements OnInit {
+export class AdminTagsPage implements OnInit {
   protected topics: Topic[] = [];
   protected levels: Level[] = [];
 

@@ -12,7 +12,7 @@ import { Lms } from '@platon/feature/lti/common';
 
 @Component({
   standalone: true,
-  selector: 'app-settings-lmses',
+  selector: 'app-admin-lmses',
   templateUrl: './lmses.page.html',
   styleUrls: ['./lmses.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -29,7 +29,7 @@ import { Lms } from '@platon/feature/lti/common';
     LmsCreateDrawerComponent,
   ]
 })
-export class SettingsLmsesPage {
+export class AdminLmsesPage {
   protected lmses: Lms[] = [];
 
   protected insert(lms: Lms) {

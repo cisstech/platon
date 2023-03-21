@@ -8,7 +8,7 @@ import { User } from '@platon/core/common';
 
 @Component({
   standalone: true,
-  selector: 'app-settings-users',
+  selector: 'app-admin-users',
   templateUrl: './users.page.html',
   styleUrls: ['./users.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -20,6 +20,6 @@ import { User } from '@platon/core/common';
     UserSearchBarComponent,
   ]
 })
-export class SettingsUsersPage {
+export class AdminUsersPage {
   protected users: User[] = [];
 }
