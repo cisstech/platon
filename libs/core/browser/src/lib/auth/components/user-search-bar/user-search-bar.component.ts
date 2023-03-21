@@ -5,11 +5,11 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 
 import { NgeUiListModule } from '@cisstech/nge/ui/list';
-import { User, UserGroup, UserRoles } from '@platon/core/common';
+import { User, UserFilters, UserGroup } from '@platon/core/common';
 import { SearchBar, UiSearchBarComponent } from '@platon/shared/ui';
 import { UserService } from '../../api/user.service';
 import { UserAvatarComponent } from '../user-avatar/user-avatar.component';
@@ -42,12 +42,16 @@ type Item = User | UserGroup;
   ]
 })
 export class UserSearchBarComponent implements OnInit, ControlValueAccessor {
-  @Input() roles?: (UserRoles | keyof typeof UserRoles)[];
   @Input() multi = true;
   @Input() excludes: string[] = [];
   @Input() disabled = false;
-
   @Input() allowGroup = false;
+  @Input() onlyGroups = false;
+  @Input() autoSelect = false;
+
+  @Input() filters: UserFilters = {
+    limit: 5
+  }
 
   readonly searchbar: SearchBar<Item> = {
     placeholder: 'Essayez un nom, un email...',
@@ -56,8 +60,10 @@ export class UserSearchBarComponent implements OnInit, ControlValueAccessor {
     },
     complete: item => 'username' in item ? item.username : item.name,
     onSelect: item => {
-      this.searchbar.value = '';
+      if (this.autoSelect)
+        return;
 
+      this.searchbar.value = '';
       if (!this.multi) {
         this.selection = [];
       }
@@ -78,6 +84,9 @@ export class UserSearchBarComponent implements OnInit, ControlValueAccessor {
   ngOnInit(): void {
     if (this.allowGroup) {
       this.searchbar.placeholder = 'Essayez un nom, un email, un groupe...';
+    }
+    if (this.onlyGroups) {
+      this.searchbar.placeholder = 'Essayez un nom...';
     }
   }
   // ControlValueAccessor methods
@@ -113,31 +122,42 @@ export class UserSearchBarComponent implements OnInit, ControlValueAccessor {
   }
 
   protected search(query: string): Observable<Item[]> {
-    const requests: Observable<Item[]>[] = [
-      this.userService
-        .search({
-          roles: this.roles as unknown as UserRoles[],
-          search: query,
-          limit: 5
-        })
-        .pipe(
-          map((page) => {
-            return page.resources.filter(
-              this.isSelectable.bind(this)
-            )
-          })
-        )
-    ];
+    const requests: Observable<Item[]>[] = [];
 
-    if (this.allowGroup) {
+    if (!this.onlyGroups) {
+      requests.push(
+        this.userService
+          .search({
+            ...this.filters,
+            search: query,
+          })
+          .pipe(
+            map((page) => {
+              if (this.autoSelect) {
+                return page.resources;
+              }
+              return page.resources.filter(
+                this.isSelectable.bind(this)
+              )
+            })
+          )
+      )
+    }
+
+
+    if (this.allowGroup || this.onlyGroups) {
       requests.push(
         this.userService
           .searchUserGroups({
             search: query,
-            limit: 5
+            limit: this.filters.limit ?? 5
           })
           .pipe(
             map((page) => {
+              if (this.autoSelect) {
+                return page.resources;
+              }
+
               return page.resources.filter(
                 this.isSelectable.bind(this)
               )
@@ -147,7 +167,14 @@ export class UserSearchBarComponent implements OnInit, ControlValueAccessor {
     }
 
     return combineLatest(requests).pipe(
-      map(res => res.flat().slice(0, 5))
+      map(res => {
+        const flat = res.flat();
+        if (this.autoSelect) {
+          this.selection = flat;
+          this.onChangeSelection();
+        }
+        return flat.slice(0, 5)
+      })
     )
   }
 

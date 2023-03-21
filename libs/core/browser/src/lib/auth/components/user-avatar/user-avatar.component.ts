@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
 
 
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -32,6 +32,7 @@ export class UserAvatarComponent {
   @Input() avatarSize = 32;
   @Input() user?: User;
   @Input() group?: UserGroup;
+  @Output() showGroupMembers = new EventEmitter<UserGroup>();
 
   @Input()
   set userIdOrName(value: string) {

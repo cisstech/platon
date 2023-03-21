@@ -11,7 +11,7 @@
         formControlName="userOrGroup"
         [multi]="false"
         [allowGroup]="allowGroup"
-        [roles]="roles"
+        [filters]="{ roles, limit: 5}"
         [excludes]="excludes">
         <button nz-button type="submit" nzType="primary" [disabled]="!form.valid">Ajouter</button>
       </user-search-bar>

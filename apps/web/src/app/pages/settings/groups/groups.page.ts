@@ -1,5 +1,13 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+
+import { UserGroupTableComponent, UserSearchBarComponent, UserService } from '@platon/core/browser';
+import { UserGroup } from '@platon/core/common';
+import { firstValueFrom } from 'rxjs';
 
 
 @Component({
@@ -9,7 +17,37 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   styleUrls: ['./groups.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
+    CommonModule,
+    FormsModule,
 
+    NzIconModule,
+    NzButtonModule,
+
+    UserSearchBarComponent,
+    UserGroupTableComponent,
   ]
 })
-export class SettingsGroupsPage { }
+export class SettingsGroupsPage {
+  protected groups: UserGroup[] = [];
+
+  constructor(
+    private readonly userService: UserService,
+    private readonly changeDetectorRef: ChangeDetectorRef
+  ) { }
+
+  protected async addGroup(): Promise<void> {
+    const group = await firstValueFrom(
+      this.userService.createUserGroup({
+        name: 'Nouveau groupe'
+      })
+    );
+
+    this.groups = [
+      group,
+      ...this.groups
+    ];
+
+    this.changeDetectorRef.detectChanges();
+  }
+
+}

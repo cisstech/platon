@@ -11,5 +11,9 @@
   </ng-template>
 </ng-container>
 <ng-container *ngIf="group">
-  <user-group-avatar [avatarSize]="avatarSize" [group]="group" />
+  <user-group-avatar
+    [avatarSize]="avatarSize"
+    [group]="group"
+    [canShowMembers]="showGroupMembers.observed"
+    (showMembers)="showGroupMembers.emit(group)" />
 </ng-container>

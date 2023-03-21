@@ -1,12 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 
-import { User, UserRoles } from '@platon/core/common';
+import { User, UserFilters } from '@platon/core/common';
+import { UiModalTemplateComponent } from '@platon/shared/ui';
+
 import { UserSearchBarComponent } from '../user-search-bar/user-search-bar.component';
 
 @Component({
@@ -22,23 +24,26 @@ import { UserSearchBarComponent } from '../user-search-bar/user-search-bar.compo
     NzModalModule,
     NzButtonModule,
     UserSearchBarComponent,
+
+    UiModalTemplateComponent,
   ]
 })
 export class UserSearchModalComponent {
-  isVisible = false;
-
   @Input() title = '';
   @Input() okTitle = 'OK';
   @Input() noTitle = 'Annuler';
-  @Input() roles?: UserRoles[];
+  @Input() filters: UserFilters = {};
   @Input() multi = true;
   @Input() excludes: string[] = [];
 
-  @Output() didSubmit = new EventEmitter<User[]>();
+  @Output() closed = new EventEmitter<User[]>();
 
-  selection: User[] = [];
+  @ViewChild(UiModalTemplateComponent, { static: true })
+  protected modal!: UiModalTemplateComponent
 
-  get ready() {
+
+  protected selection: User[] = [];
+  protected get ready(): boolean {
     const n = this.selection.length;
     return !this.multi ? n === 1 : n > 0;
   }
@@ -48,17 +53,12 @@ export class UserSearchModalComponent {
   ) { }
 
   open(): void {
-    this.isVisible = true;
-    this.changeDetector.markForCheck();
+    this.modal.open();
   }
 
-  close(): void {
-    this.isVisible = false;
+  close(data: User[]): void {
+    this.closed.emit(data);
+    this.selection = [];
     this.changeDetector.markForCheck();
-  }
-
-  submit(): void {
-    this.close();
-    this.didSubmit.emit(this.selection);
   }
 }

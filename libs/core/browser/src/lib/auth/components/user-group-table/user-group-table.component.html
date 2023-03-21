@@ -1,0 +1,35 @@
+<nz-table
+  #nzTable
+  [nzSize]="'small'"
+  [nzShowSizeChanger]="true"
+  [nzShowPagination]="true"
+  [nzData]="groups">
+  <thead>
+    <tr>
+      <th
+        *ngIf="selectable  && !disabled"
+        [nzChecked]="checked"
+        [nzIndeterminate]="indeterminate"
+        (nzCheckedChange)="onAllChecked($event)"></th>
+      <th>Nom</th>
+      <th>Date d'ajout</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let group of nzTable.data">
+      <td
+        *ngIf="selectable && !disabled"
+        [nzChecked]="selection.has(group.id)"
+        (nzCheckedChange)="onItemChecked(group.id, $event)">
+      </td>
+      <td>
+        <user-avatar
+          #avatar
+          [group]="group"
+          (showGroupMembers)="drawer.open($event)" />
+      </td>
+      <td>{{group.createdAt|date}}</td>
+    </tr>
+  </tbody>
+</nz-table>
+<user-group-drawer #drawer />

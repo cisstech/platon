@@ -11,7 +11,7 @@
         name="invitee"
         formControlName="invitee"
         [multi]="false"
-        [roles]="['admin', 'teacher']"
+        [filters]="{ roles: ['admin', 'teacher'], limit: 5 }"
         [excludes]="excludes">
         <button nz-button type="submit" nzType="primary" [disabled]="!form.valid">Inviter</button>
       </user-search-bar>

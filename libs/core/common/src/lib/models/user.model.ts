@@ -54,7 +54,7 @@ export class UpdateUserPrefs {
 }
 
 export interface UserFilters {
-  readonly roles?: UserRoles[];
+  readonly roles?: (UserRoles | keyof typeof UserRoles)[];
   readonly search?: string;
   readonly groups?: string[];
   readonly offset?: number;

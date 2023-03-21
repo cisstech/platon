@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, EventEmitter, Output, TemplateRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChildren, EventEmitter, Input, Output, QueryList, TemplateRef } from '@angular/core';
 import { SafePipeModule } from '@cisstech/nge/pipes';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 
@@ -18,10 +18,18 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 export class UiModalTemplateComponent {
   protected visible = false;
 
-  @ContentChild(TemplateRef)
-  template!: TemplateRef<void>
+
+  @Input() title?: string;
+  @Input() width = '90vw';
+  @Input() height = '90vh';
 
   @Output() closed = new EventEmitter();
+  @Output() canceled = new EventEmitter();
+  @Output() accepted = new EventEmitter();
+
+  @ContentChildren(TemplateRef)
+  protected templates!: QueryList<TemplateRef<void>>;
+
 
   constructor(
     private readonly changeDetectorRef: ChangeDetectorRef
@@ -32,8 +40,10 @@ export class UiModalTemplateComponent {
     this.changeDetectorRef.markForCheck();
   }
 
-  protected close(): void {
+  close(accepted = false): void {
     this.visible = false;
+    accepted ? this.accepted.emit() : this.canceled.emit();
     this.closed.emit();
+    this.changeDetectorRef.markForCheck();
   }
 }

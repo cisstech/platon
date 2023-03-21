@@ -1,12 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 import { UserGroup } from '@platon/core/common';
-import { RouterModule } from '@angular/router';
-
 
 @Component({
   standalone: true,
@@ -16,7 +14,6 @@ import { RouterModule } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
-    RouterModule,
     NzAvatarModule,
     NzToolTipModule,
   ]
@@ -24,4 +21,6 @@ import { RouterModule } from '@angular/router';
 export class UserGroupAvatarComponent {
   @Input() avatarSize = 32;
   @Input() group!: UserGroup;
+  @Input() canShowMembers = false;
+  @Output() showMembers = new EventEmitter();
 }

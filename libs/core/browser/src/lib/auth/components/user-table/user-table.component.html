@@ -1,0 +1,46 @@
+<nz-table
+  #nzTable
+  [nzSize]="'small'"
+  [nzShowSizeChanger]="true"
+  [nzShowPagination]="true"
+  [nzData]="users">
+  <thead>
+    <tr>
+      <th
+        *ngIf="selectable  && !disabled"
+        [nzChecked]="checked"
+        [nzIndeterminate]="indeterminate"
+        (nzCheckedChange)="onAllChecked($event)"></th>
+      <th>Utilisateur</th>
+      <th>Date d'ajout</th>
+      <th>Email</th>
+      <th>Rôle</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of nzTable.data">
+      <td
+        *ngIf="selectable && !disabled"
+        [nzChecked]="selection.has(user.id)"
+        (nzCheckedChange)="onItemChecked(user.id, $event)">
+      </td>
+      <td>
+        <user-avatar #avatar [user]="user" />
+      </td>
+      <td>{{user.createdAt|date}}</td>
+      <td>{{user.email}}</td>
+      <td>
+        <div [ngSwitch]="user.role">
+          <div *ngSwitchCase="'admin'">Admin</div>
+          <div *ngSwitchCase="'student'">Élève</div>
+          <div *ngSwitchCase="'teacher'">Enseignant</div>
+        </div>
+      </td>
+      <td>
+        <nz-tag *ngIf="user.active" nzColor="green">Active</nz-tag>
+        <nz-tag *ngIf="!user.active" nzColor="red">Inactive</nz-tag>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>

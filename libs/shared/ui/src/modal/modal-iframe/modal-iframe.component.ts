@@ -20,6 +20,9 @@ export class UiModalIFrameComponent {
   protected url?: string;
 
   @Output() closed = new EventEmitter();
+  @Output() canceled = new EventEmitter();
+  @Output() accepted = new EventEmitter();
+
 
   constructor(
     private readonly changeDetectorRef: ChangeDetectorRef
@@ -31,8 +34,9 @@ export class UiModalIFrameComponent {
     this.changeDetectorRef.markForCheck();
   }
 
-  protected close(): void {
+  protected close(accepted = false): void {
     this.visible = false;
+    accepted ? this.accepted.emit() : this.canceled.emit();
     this.closed.emit();
   }
 }

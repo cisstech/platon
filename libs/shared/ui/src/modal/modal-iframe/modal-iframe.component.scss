@@ -1,11 +1,9 @@
 ::ng-deep {
-  .ui-browse-modal {
+  .ui-modal {
     height: 90vh;
   }
   .ant-modal-footer {
-    border: none;
-    border-radius: 0;
-    background-color: rgb(59, 66, 82);
+    display: none;
   }
 }
 

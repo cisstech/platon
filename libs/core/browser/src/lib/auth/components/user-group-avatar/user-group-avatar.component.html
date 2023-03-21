@@ -1,5 +1,8 @@
 <nz-avatar nz-tooltip="Groupe" [nzSize]="avatarSize" nzIcon="team"></nz-avatar>
 <div>
   <span>{{group.name}}</span>
-  <span [routerLink]="['/groups', group.id]">Voir les membres</span>
+  <ng-container *ngIf="canShowMembers">
+    <span (click)="showMembers.emit()">Voir les membres</span>
+  </ng-container>
 </div>
+
