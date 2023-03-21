@@ -1,19 +1,19 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
-import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
-import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 
+import { DialogModule, DialogService, TagService } from '@platon/core/browser';
 import { Level, Topic } from '@platon/core/common';
-import { DialogModule, DialogService } from '@platon/core/browser';
 import { CircleTreeComponent, ResourcePipesModule, ResourceService } from '@platon/feature/resource/browser';
 import { circleFromTree, CircleTree, flattenCircleTree, ResourceStatus, ResourceTypes, ResourceVisibilities } from '@platon/feature/resource/common';
 import { UiStepDirective, UiStepperComponent } from '@platon/shared/ui';
@@ -75,6 +75,7 @@ export class ResourceCreatePage implements OnInit {
 
   constructor(
     private readonly router: Router,
+    private readonly tagService: TagService,
     private readonly dialogService: DialogService,
     private readonly activatedRoute: ActivatedRoute,
     private readonly resourceService: ResourceService,
@@ -89,8 +90,8 @@ export class ResourceCreatePage implements OnInit {
 
     const [tree, topics, levels] = await Promise.all([
       firstValueFrom(this.resourceService.tree()),
-      firstValueFrom(this.resourceService.topics()),
-      firstValueFrom(this.resourceService.levels()),
+      firstValueFrom(this.tagService.listTopics()),
+      firstValueFrom(this.tagService.listLevels()),
     ]);
 
     if (this.type === 'CIRCLE' && tree) {

@@ -2,7 +2,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AuthService, DialogService } from '@platon/core/browser';
+import { AuthService, DialogService, TagService } from '@platon/core/browser';
 import { Level, ListResponse, Topic, User } from '@platon/core/common';
 import { FileService, ResourceService } from '@platon/feature/resource/browser';
 import { CircleTree, CreateResourceInvitation, FileVersions, Resource, ResourceEvent, ResourceEventFilters, ResourceFile, ResourceInvitation, ResourceMember, ResourceMemberFilters, ResourceStatisic, UpdateResource } from '@platon/feature/resource/common';
@@ -19,6 +19,7 @@ export class ResourcePresenter implements OnDestroy {
   readonly contextChange = this.context.asObservable();
 
   constructor(
+    private readonly tagService: TagService,
     private readonly authService: AuthService,
     private readonly fileService: FileService,
     private readonly dialogService: DialogService,
@@ -41,11 +42,11 @@ export class ResourcePresenter implements OnDestroy {
   }
 
   availableTopics(): Observable<Topic[]> {
-    return this.resourceService.topics();
+    return this.tagService.listTopics();
   }
 
   availableLevels(): Observable<Level[]> {
-    return this.resourceService.levels();
+    return this.tagService.listLevels();
   }
 
   // Watchers

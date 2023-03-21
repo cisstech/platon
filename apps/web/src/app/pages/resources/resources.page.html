@@ -7,15 +7,15 @@
     <span nz-icon nzType="plus" nzTheme="outline"></span>
   </button>
   <ng-template #actions>
-    <button nz-button nzType="link" [routerLink]="['/resource/create']" [queryParams]="{ type: 'CIRCLE' }">
+    <button nz-button nzType="link" [routerLink]="['/resources/create']" [queryParams]="{ type: 'CIRCLE' }">
       <mat-icon>{{'CIRCLE'|resourceIcon}}</mat-icon>
       <span>Créer un cercle</span>
     </button>
-    <button nz-button nzType="link" [routerLink]="['/resource/create']" [queryParams]="{ type: 'EXERCISE' }">
+    <button nz-button nzType="link" [routerLink]="['/resources/create']" [queryParams]="{ type: 'EXERCISE' }">
       <mat-icon>{{'EXERCISE'|resourceIcon}}</mat-icon>
       <span>Créer un exercice</span>
     </button>
-    <button nz-button nzType="link"[routerLink]="['/resource/create']" [queryParams]="{ type: 'ACTIVITY' }">
+    <button nz-button nzType="link"[routerLink]="['/resources/create']" [queryParams]="{ type: 'ACTIVITY' }">
       <mat-icon>{{'ACTIVITY'|resourceIcon}}</mat-icon>
       <span>Créer une activité</span>
     </button>

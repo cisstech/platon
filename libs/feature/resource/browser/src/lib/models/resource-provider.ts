@@ -1,12 +1,10 @@
-import { Level, ListResponse, Topic, User } from "@platon/core/common";
+import { ListResponse, User } from "@platon/core/common";
 import { CircleTree, CreateResource, CreateResourceInvitation, Resource, ResourceCompletion, ResourceEvent, ResourceEventFilters, ResourceFilters, ResourceInvitation, ResourceMember, ResourceMemberFilters, ResourceStatisic, ResourceWatcherFilters, UpdateResource } from "@platon/feature/resource/common";
 import { Observable } from "rxjs";
 
 
 export abstract class ResourceProvider {
   abstract tree(): Observable<CircleTree>;
-  abstract topics(): Observable<Topic[]>;
-  abstract levels(): Observable<Level[]>;
   abstract circle(username: string): Observable<Resource>;
   abstract statistic(resource: Resource): Observable<ResourceStatisic>;
   abstract completion(): Observable<ResourceCompletion>;

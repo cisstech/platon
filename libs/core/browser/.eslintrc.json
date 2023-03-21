@@ -9,7 +9,7 @@
           "error",
           {
             "type": "attribute",
-            "prefix": ["core", "auth", "user"],
+            "prefix": ["core", "auth", "user", "tag"],
             "style": "camelCase"
           }
         ],
@@ -17,7 +17,7 @@
           "error",
           {
             "type": "element",
-            "prefix": ["core", "auth", "user"],
+            "prefix": ["core", "auth", "user", "tag"],
             "style": "kebab-case"
           }
         ]

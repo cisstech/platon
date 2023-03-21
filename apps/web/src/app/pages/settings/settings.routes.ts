@@ -27,6 +27,13 @@ export default [
           './lmses/lmses.routes'
         )
       },
+      {
+        path: 'tags',
+        loadChildren: () => import(
+          /* webpackChunkName: "settings-tags" */
+          './tags/tags.routes'
+        )
+      },
       { path: '**', pathMatch: 'full', redirectTo: 'users' }
     ],
   },

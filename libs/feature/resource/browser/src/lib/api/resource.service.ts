@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Level, ListResponse, Topic, User } from '@platon/core/common';
+import { ListResponse, User } from '@platon/core/common';
 import { CircleTree, CreateResource, CreateResourceInvitation, Resource, ResourceCompletion, ResourceEvent, ResourceEventFilters, ResourceFilters, ResourceInvitation, ResourceMember, ResourceMemberFilters, ResourceStatisic, ResourceWatcherFilters, UpdateResource } from '@platon/feature/resource/common';
 import { Observable } from 'rxjs';
 import { ResourceProvider } from '../models/resource-provider';
@@ -14,14 +14,6 @@ export class ResourceService {
 
   tree(): Observable<CircleTree> {
     return this.provider.tree()
-  }
-
-  topics(): Observable<Topic[]> {
-    return this.provider.topics();
-  }
-
-  levels(): Observable<Level[]> {
-    return this.provider.levels();
   }
 
   circle(username: string): Observable<Resource> {

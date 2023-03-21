@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { ItemResponse, Level, ListResponse, Topic, User } from "@platon/core/common";
+import { ItemResponse, ListResponse, User } from "@platon/core/common";
 import { CircleTree, CreateResource, CreateResourceInvitation, Resource, ResourceCompletion, ResourceEvent, ResourceEventFilters, ResourceFilters, ResourceInvitation, ResourceMember, ResourceMemberFilters, ResourceStatisic, ResourceWatcherFilters, UpdateResource } from "@platon/feature/resource/common";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
@@ -15,19 +15,6 @@ export class RemoteResourceProvider extends ResourceProvider {
   tree(): Observable<CircleTree> {
     return this.http.get<ItemResponse<CircleTree>>('/api/v1/resources/tree').pipe(
       map(response => response.resource)
-    );
-  }
-
-
-  topics(): Observable<Topic[]> {
-    return this.http.get<ListResponse<Topic>>('/api/v1/topics').pipe(
-      map(response => response.resources)
-    );
-  }
-
-  levels(): Observable<Level[]> {
-    return this.http.get<ListResponse<Level>>('/api/v1/levels/').pipe(
-      map(response => response.resources)
     );
   }
 

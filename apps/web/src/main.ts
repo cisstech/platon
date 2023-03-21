@@ -9,7 +9,7 @@ import {
   provideRouter, withEnabledBlockingInitialNavigation,
   withPreloading
 } from '@angular/router';
-import { CoreBrowserModule } from '@platon/core/browser';
+import { CoreBrowserModule, TAG_PROVIDERS } from '@platon/core/browser';
 import { ANSWER_PROVIDERS } from '@platon/feature/answer/browser';
 import { COURSE_PROVIDERS } from '@platon/feature/course/browser';
 import { LTI_PROVIDERS } from '@platon/feature/lti/browser';
@@ -41,5 +41,6 @@ bootstrapApplication(AppPage, {
     PLAYER_PROVIDERS,
     ANSWER_PROVIDERS,
     LTI_PROVIDERS,
+    TAG_PROVIDERS,
   ],
 }).catch((err) => console.error(err));
