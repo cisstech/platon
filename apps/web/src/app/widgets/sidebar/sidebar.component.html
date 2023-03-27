@@ -1,4 +1,4 @@
-<nav>
+<nav *ngIf="user">
     <img class="logo" src="assets/images/logo/platon.svg" alt="Logo PLaTon" [routerLink]="'/dashboard'" />
   <a class="nav-link" mat-button [routerLink]="'/dashboard'" [routerLinkActive]="'active'">
     <mat-icon>dashboard</mat-icon>
@@ -12,15 +12,18 @@
     <mat-icon>chat</mat-icon>
     Forum
   </a>
-  <a class="nav-link" mat-button [routerLink]="'/resources'" [routerLinkActive]="'active'">
-    <mat-icon>work</mat-icon>
-    Espace de travail
-  </a>
-  <a class="nav-link" mat-button [routerLink]="'/admin'" [routerLinkActive]="'active'">
-    <mat-icon>admin_panel_settings</mat-icon>
-    Administration
-  </a>
-
+  <ng-container *ngIf="user.role !== 'student'">
+    <a class="nav-link" mat-button [routerLink]="'/resources'" [routerLinkActive]="'active'">
+      <mat-icon>work</mat-icon>
+      Espace de travail
+    </a>
+  </ng-container>
+  <ng-container *ngIf="user.role === 'admin'">
+    <a class="nav-link" mat-button [routerLink]="'/admin'" [routerLinkActive]="'active'">
+      <mat-icon>admin_panel_settings</mat-icon>
+      Administration
+    </a>
+  </ng-container>
   <div class="spacer"></div>
   <img class="doc" src="assets/images/illustrations/doc.png" alt="Logo PLaTon"/>
   <a mat-button [routerLink]="'/docs'">

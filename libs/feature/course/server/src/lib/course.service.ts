@@ -7,17 +7,12 @@ import { Optional } from 'typescript-optional';
 import { CourseActivityEntity } from './activity/activity.entity';
 import { CourseEntity } from './course.entity';
 import { CourseMemberEntity } from './member/member.entity';
-import { CourseSectionEntity } from './section/section.entity';
 
 @Injectable()
 export class CourseService {
   constructor(
     @InjectRepository(CourseEntity)
     private readonly courseRepository: Repository<CourseEntity>,
-
-    @InjectRepository(CourseSectionEntity)
-    private readonly sectionRepository: Repository<CourseSectionEntity>,
-
     @InjectRepository(CourseActivityEntity)
     private readonly activityRepository: Repository<CourseActivityEntity>,
   ) { }

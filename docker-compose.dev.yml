@@ -2,7 +2,6 @@ version: '3.7'
 
 services:
   redis:
-    restart: on-failure
     image: redis:6
     container_name: platon_redis
     ports:
@@ -13,7 +12,6 @@ services:
       - platon-network
 
   postgres:
-    restart: on-failure
     image: postgres:13
     container_name: platon_postgres
     ports:
@@ -41,7 +39,6 @@ services:
       - platon-network
 
   api:
-    restart: on-failure
     build:
       context: .
       dockerfile: .docker/node/Dockerfile
@@ -65,7 +62,6 @@ services:
       - platon-network
 
   web:
-    restart: on-failure
     image: platon/node
     container_name: platon_web
     command: npm run serve:web -- --host 0.0.0.0 --disable-host-check
@@ -85,7 +81,6 @@ services:
       - platon-network
 
   nginx:
-    restart: on-failure
     build:
       context: .
       dockerfile: .docker/nginx/Dockerfile.dev

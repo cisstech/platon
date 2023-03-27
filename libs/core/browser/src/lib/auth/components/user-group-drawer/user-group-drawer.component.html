@@ -11,6 +11,7 @@
         [(ngModel)]="groupName"
         (keyup.enter)="renameGroup()"
         matInput>
+        <mat-hint>Appuyez sur entrer pour enregistrer</mat-hint>
     </mat-form-field>
     <h2>Membres</h2>
     <nz-button-group>
@@ -46,6 +47,8 @@
       [users]="members"
       [selectable]="true"
       [(ngModel)]="selection" />
+  </ng-template>
+  <ng-template>
   </ng-template>
 </ui-modal-drawer>
 

@@ -132,7 +132,7 @@ export class ResourceCreatePage implements OnInit {
         }));
 
       this.router.navigate([
-        '/resource', resource.id, 'overview'
+        '/resources', resource.id, 'overview'
       ], {
         replaceUrl: true
       });
