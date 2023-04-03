@@ -1,13 +1,15 @@
 <nz-space>
-  <span
+  <button
     *nzSpaceItem
-    nz-icon
-    nzType="more"
+    nz-button
+    nzSize="small"
+    nzShape="round"
     (click)="$event.stopPropagation()"
     [nz-popover]
     [nzPopoverTrigger]="'click'"
     [nzPopoverContent]="sectionActions">
-  </span>
+    <span nz-icon nzType="more"></span>
+  </button>
   <ng-template #sectionActions>
     <nz-space nzDirection="vertical">
       <button nz-button (click)="moveUp.emit()" *ngIf="section.order !== 0">
@@ -41,7 +43,6 @@
     </nz-space>
   </ng-template>
 </nz-space>
-
 <ng-template #removeGuard>
 <h2>Voulez-vous vraiment supprimer la section “{{section.name}}”?</h2> <br/>
 <p>En supprimant cette section, vous supprimer aussi toutes les activités et données liées.</p>

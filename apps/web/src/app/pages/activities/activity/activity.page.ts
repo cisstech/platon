@@ -14,7 +14,7 @@ import { NzStatisticModule } from 'ng-zorro-antd/statistic';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
 
 import { DialogModule } from '@platon/core/browser';
-import { AnswerResultsByExercisesComponent, AnswerResultsByMembersComponent } from '@platon/feature/answer/browser';
+import { ResultByExercisesComponent, ResultByMembersComponent, ResultLegendComponent } from '@platon/feature/result/browser';
 import { CourseActivityCardComponent } from '@platon/feature/course/browser';
 
 import { ActivityPresenter } from './activity.presenter';
@@ -41,8 +41,9 @@ import { ActivityPresenter } from './activity.presenter';
     NzTypographyModule,
 
     CourseActivityCardComponent,
-    AnswerResultsByMembersComponent,
-    AnswerResultsByExercisesComponent,
+    ResultByMembersComponent,
+    ResultByExercisesComponent,
+    ResultLegendComponent,
 
     DialogModule,
   ]

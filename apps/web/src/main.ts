@@ -10,7 +10,7 @@ import {
   withPreloading
 } from '@angular/router';
 import { CoreBrowserModule, TAG_PROVIDERS } from '@platon/core/browser';
-import { ANSWER_PROVIDERS } from '@platon/feature/answer/browser';
+import { RESULT_PROVIDERS } from '@platon/feature/result/browser';
 import { COURSE_PROVIDERS } from '@platon/feature/course/browser';
 import { LTI_PROVIDERS } from '@platon/feature/lti/browser';
 import { PLAYER_PROVIDERS } from '@platon/feature/player/browser';
@@ -39,7 +39,7 @@ bootstrapApplication(AppPage, {
     COURSE_PROVIDERS,
     RESOURCE_PROVIDERS,
     PLAYER_PROVIDERS,
-    ANSWER_PROVIDERS,
+    RESULT_PROVIDERS,
     LTI_PROVIDERS,
     TAG_PROVIDERS,
   ],

@@ -12,20 +12,21 @@
   </nz-breadcrumb>
   <nz-row [nzGutter]="[24, 24]" nzAlign="top">
     <nz-col nzXs="24" nzSm="24" nzMd="16" nzLg="16" nzXl="16">
-      <ng-container *ngIf="context.teacherResults">
+      <ng-container *ngIf="context.results">
         <section>
           <h4>Résultats par exercices</h4>
-          <answer-results-by-exercises [results]="context.teacherResults.exercises" />
+          <result-by-exercises [results]="context.results.exercises" />
         </section>
         <section>
           <h4>Résultats par participants</h4>
-          <answer-results-by-members [results]="context.teacherResults.users" />
+          <result-by-members [results]="context.results.users" />
         </section>
       </ng-container>
     </nz-col>
     <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
       <aside>
         <course-activity-card [item]="context.activity" />
+        <result-legend />
       </aside>
     </nz-col>
   </nz-row>

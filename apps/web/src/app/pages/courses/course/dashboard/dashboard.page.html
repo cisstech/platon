@@ -1,6 +1,6 @@
 <ng-container *ngIf="context.course">
   <ng-container *ngIf="sections.length; else: noSections">
-    <nz-collapse nzBordered>
+    <nz-collapse nzGhost>
       <nz-collapse-panel
         [nzActive]="true"
         *ngFor="let item of sections; trackBy: trackSection;"

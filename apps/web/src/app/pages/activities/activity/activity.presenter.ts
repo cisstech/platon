@@ -4,8 +4,8 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService, DialogService } from '@platon/core/browser';
 import { ListResponse, User } from '@platon/core/common';
-import { AnswerService } from '@platon/feature/answer/browser';
-import { TeacherResultsData } from '@platon/feature/answer/common';
+import { ResultService } from '@platon/feature/result/browser';
+import { ActivityResults } from '@platon/feature/result/common';
 import { CourseService } from '@platon/feature/course/browser';
 import { Course, CourseActivity, CourseMember, CourseMemberFilters, CreateCourseMember, UpdateCourse } from '@platon/feature/course/common';
 import { LayoutState } from '@platon/shared/ui';
@@ -21,7 +21,7 @@ export class ActivityPresenter implements OnDestroy {
   constructor(
     private readonly authService: AuthService,
     private readonly dialogService: DialogService,
-    private readonly answerService: AnswerService,
+    private readonly resultService: ResultService,
     private readonly courseService: CourseService,
     private readonly activatedRoute: ActivatedRoute,
   ) {
@@ -93,12 +93,12 @@ export class ActivityPresenter implements OnDestroy {
       user,
       course,
       activity,
-      teacherResults
+      results
     ] = await Promise.all([
       this.authService.ready(),
       firstValueFrom(this.courseService.find(courseId)),
       firstValueFrom(this.courseService.findActivity(courseId, activityId)),
-      firstValueFrom(this.answerService.resultsForTeacher(activityId))
+      firstValueFrom(this.resultService.activityResults(activityId))
     ]);
 
     this.context.next({
@@ -106,7 +106,7 @@ export class ActivityPresenter implements OnDestroy {
       user,
       course,
       activity,
-      teacherResults
+      results
     });
   }
 
@@ -135,5 +135,5 @@ export interface Context {
   user?: User;
   course?: Course;
   activity?: CourseActivity
-  teacherResults?: TeacherResultsData;
+  results?: ActivityResults;
 }

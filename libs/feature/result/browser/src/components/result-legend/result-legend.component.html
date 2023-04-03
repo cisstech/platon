@@ -1,0 +1,12 @@
+<nz-list nzSize="small" nzHeader="Légende">
+  <nz-list-item *ngFor="let state of answerStates">
+    <mat-icon
+      [nz-tooltip]="state|answerStateLabel"
+      [style.color]="state|answerStateColor">
+      {{state|answerStateIcon}}
+    </mat-icon>
+    <span nz-typography>
+      {{state|answerStateLabel}}
+    </span>
+  </nz-list-item>
+</nz-list>

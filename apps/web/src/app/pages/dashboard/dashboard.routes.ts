@@ -49,7 +49,8 @@ export default [
           /* webpackChunkName: "admin" */
           '../admin/admin.routes'
         )
-      }
+      },
+      { path: '**', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
 ] as Routes;
