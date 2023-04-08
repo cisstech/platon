@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { BaseEntity, UserEntity } from '@platon/core/server';
-import { CourseActivityEntity } from '@platon/feature/course/server';
+import { ActivityEntity } from '@platon/feature/course/server';
 import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 
 
 @Entity('PlayerSessions')
 @Index('PlayerSessions_exercise_idx', ['parentId', 'id'])
-@Index('PlayerSessions_activity_user_idx', ['parentId', 'courseActivityId', 'userId'])
+@Index('PlayerSessions_activity_user_idx', ['parentId', 'activityId', 'userId'])
 export class PlayerSessionEntity extends BaseEntity {
   @Column({ name: 'parent_id', nullable: true })
   parentId?: string
@@ -25,18 +25,21 @@ export class PlayerSessionEntity extends BaseEntity {
   @JoinColumn({ name: 'user_id' })
   user?: UserEntity
 
-  @Column({ name: 'course_activity_id', nullable: true })
-  courseActivityId?: string
+  @Column({ name: 'activity_id', nullable: true })
+  activityId?: string
 
-  @ManyToOne(() => CourseActivityEntity, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'course_activity_id' })
-  courseActivity?: CourseActivityEntity
+  @ManyToOne(() => ActivityEntity, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'activity_id' })
+  activity?: ActivityEntity
 
   @Column({ type: 'jsonb', default: {} })
   variables!: Record<string, any>
 
   @Column({ type: 'int', default: -1 })
   grade!: number;
+
+  @Column({ type: 'int', nullable: true })
+  correction?: number;
 
   @Column({ type: 'int', default: 0 })
   attempts!: number;

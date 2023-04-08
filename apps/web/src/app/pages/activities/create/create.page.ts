@@ -13,8 +13,8 @@ import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 import { AuthService, DialogModule, DialogService } from '@platon/core/browser';
-import { User, UserRoles } from '@platon/core/common';
-import { CourseMemberTableComponent, CourseSearchBarComponent, CourseSectionSearchBarComponent, CourseService } from '@platon/feature/course/browser';
+import { User } from '@platon/core/common';
+import { CourseMemberSelectComponent, CourseSearchBarComponent, CourseSectionSearchBarComponent, CourseService } from '@platon/feature/course/browser';
 import { Course, CourseMember, CourseSection } from '@platon/feature/course/common';
 import { ResourceSearchBarComponent } from '@platon/feature/resource/browser';
 import { Resource } from '@platon/feature/resource/common';
@@ -47,8 +47,9 @@ import { catchError, firstValueFrom, of } from 'rxjs';
     UiStepperComponent,
 
     CourseSearchBarComponent,
-    CourseMemberTableComponent,
+    CourseMemberSelectComponent,
     CourseSectionSearchBarComponent,
+
     ResourceSearchBarComponent,
   ]
 })
@@ -57,6 +58,7 @@ export class ActivityCreatePage implements OnInit {
   protected loading = false;
   protected creating = false;
   protected members: CourseMember[] = [];
+  protected students: CourseMember[] = [];
 
   protected courseInfo = new FormGroup({
     course: new FormControl<Course | undefined>(undefined, [Validators.required]),
@@ -70,6 +72,7 @@ export class ActivityCreatePage implements OnInit {
   protected settingsInfo = new FormGroup({
     openDates: new FormControl<Date[] | undefined>(undefined),
     members: new FormControl<string[] | undefined>(undefined),
+    correctors: new FormControl<string[] | undefined>(undefined),
   });
 
   protected disabledDate = (current: Date): boolean => differenceInCalendarDays(current, new Date()) < 0;
@@ -121,20 +124,46 @@ export class ActivityCreatePage implements OnInit {
       this.creating = true;
       const { course, section } = this.courseInfo.value;
       const { resource } = this.resourceInfo.value;
-      const { openDates, members } = this.settingsInfo.value;
-      await firstValueFrom(
+      const { openDates, members, correctors } = this.settingsInfo.value;
+
+      const activity = await firstValueFrom(
         this.courseService.createActivity(course as Course, {
           sectionId: section?.id as string,
           resourceId: resource?.id as string,
           resourceVersion: 'latest',
           openAt: (openDates?.[0] || null) as Date,
           closeAt: (openDates?.[1] || null) as Date,
-          members: members as string[]
         })
       );
-      await this.router.navigateByUrl(`/courses/${course?.id}`, {
-        replaceUrl: true
-      });
+
+      await Promise.all([
+        firstValueFrom(
+          this.courseService.updateActivityMembers(
+            activity,
+            members?.map(m => {
+              const [memberId, userId] = m.split(':');
+              return {
+                userId,
+                memberId,
+              }
+            }) || []
+          )
+        ),
+        firstValueFrom(
+          this.courseService.updateActivityCorrectors(
+            activity,
+            correctors?.map(m => {
+              const [memberId, userId] = m.split(':');
+              return {
+                userId,
+                memberId,
+              }
+            }) || []
+          )
+        )
+      ]);
+
+      await this.router.navigateByUrl(`/courses/${course?.id}`, { replaceUrl: true });
     } catch {
       this.dialogService.error(
         'Une erreur est survenue lors de la création de l\'activité, veuillez réessayer un peu plus tard !'
@@ -149,9 +178,10 @@ export class ActivityCreatePage implements OnInit {
     const { course } = this.courseInfo.value;
     if (course) {
       const response = await firstValueFrom(
-        this.courseService.searchMembers(course, { roles: [UserRoles.student] })
+        this.courseService.searchMembers(course)
       );
       this.members = response.resources;
+      this.students = this.members.filter(member => member.group || member.user?.role === 'student');
       this.changeDetectorRef.markForCheck();
     }
   }

@@ -51,7 +51,7 @@ export interface PlayExerciseInput {
  */
 export interface PlayActivityInput {
   /** Identifier of the course activity to start/resume. */
-  courseActivityId: string;
+  activityId: string;
 }
 
 /**

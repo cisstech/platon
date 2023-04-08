@@ -41,7 +41,7 @@ export class PlayerActivityPage implements OnInit {
 
     const output = await firstValueFrom(
       this.playerService.playActivity({
-        courseActivityId: activityId
+        activityId: activityId
       })
     );
 

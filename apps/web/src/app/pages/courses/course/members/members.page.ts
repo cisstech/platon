@@ -87,8 +87,8 @@ export class CourseMembersPage implements OnInit, OnDestroy {
       this.excludes = [];
 
       this.members.forEach(member => {
-        if (member.userId) {
-          this.excludes.push(member.userId);
+        if (member.user) {
+          this.excludes.push(member.user.id);
         }
         if (member.group) {
           this.excludes.push(member.group.id);

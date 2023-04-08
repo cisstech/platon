@@ -60,11 +60,11 @@ export class PlayerService {
   }
 
   async playActivity(
-    courseActivityId: string,
+    activityId: string,
     user: User
   ): Promise<PlayActivityOuput> {
     const activitySession = await this.sessionService.ofCourseActivity(
-      courseActivityId,
+      activityId,
       user.id
     );
 
@@ -75,19 +75,19 @@ export class PlayerService {
       return { activity: this.withActivityPlayer(activitySession) }
     }
 
-    const courseActivity = await this.courseService.findCourseActivityById(courseActivityId);
-    if (!courseActivity) {
-      throw new NotFoundResponse(`CourseActivity not found: ${courseActivityId}.`);
+    const activity = await this.courseService.findActivityById(activityId);
+    if (!activity) {
+      throw new NotFoundResponse(`CourseActivity not found: ${activityId}.`);
     }
 
-    if (!await this.courseService.canViewActivity(user, courseActivity)) {
-      throw new UnauthorizedResponse(`User do not belong to the activity ${courseActivity}.`)
+    if (!await this.courseService.canViewActivity(user, activity)) {
+      throw new UnauthorizedResponse(`User do not belong to the activity ${activity}.`)
     }
 
     const session = await this.createNewSession({
       user,
-      source: courseActivity.source,
-      courseActivityId: courseActivity.id,
+      source: activity.source,
+      activityId: activity.id,
     });
 
     return { activity: this.withActivityPlayer(session) }
@@ -252,7 +252,7 @@ export class PlayerService {
       attempts: (variables['.meta']?.attempts || 0) + 1,
     };
 
-    exerciseSession.grade = Math.max(exerciseSession.grade ?? -1, grade);
+    exerciseSession.grade = Math.max(grade, exerciseSession.grade ?? -1);
     exerciseSession.attempts++;
     exerciseSession.variables = variables;
 
@@ -372,7 +372,7 @@ export class PlayerService {
         user,
         source,
         parentId,
-        courseActivityId,
+        activityId,
       } = args;
 
       const { envid, variables } = await this.sandboxService.build(source);
@@ -381,7 +381,7 @@ export class PlayerService {
         envid: envid || null as any,
         userId: user?.id || null as any,
         parentId: parentId || null as any,
-        courseActivityId: courseActivityId || null as any,
+        activityId: activityId || null as any,
         variables
       }, manager);
 
@@ -431,7 +431,7 @@ export class PlayerService {
       exercises.map(async item => {
         if (!('sessionId' in item)) {
           const session = await this.createNewSession({
-            courseActivityId: activitySession.courseActivityId,
+            activityId: activitySession.activityId,
             parentId: activitySession.id,
             source: item.source,
             user,
@@ -796,5 +796,5 @@ interface CreateSessionArgs {
   source: PLSourceFile,
   parentId?: string,
   overrides?: Variables
-  courseActivityId?: string,
+  activityId?: string,
 }

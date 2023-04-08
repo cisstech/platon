@@ -1,20 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { NotFoundResponse } from '@platon/core/common';
-import { ExerciseResults, ActivityResults, UserResults, emptyExerciseResults } from '@platon/feature/result/common';
 import { ActivityVariables, ExerciseVariables, extractExercisesFromActivityVariables } from '@platon/feature/compiler';
-import { CourseActivityEntity, CourseMemberService } from '@platon/feature/course/server';
+import { ActivityEntity, ActivityService } from '@platon/feature/course/server';
 import { AnswerStates, PlayerActivityVariables } from '@platon/feature/player/common';
 import { PlayerSessionEntity } from '@platon/feature/player/server';
+import { ActivityResults, ExerciseResults, UserResults, emptyExerciseResults } from '@platon/feature/result/common';
+import differenceInSeconds from 'date-fns/differenceInSeconds';
 import { IsNull, Not, Repository } from 'typeorm';
-import differenceInSeconds from 'date-fns/differenceInSeconds'
 
 @Injectable()
 export class ResultService {
   constructor(
-    private readonly memberService: CourseMemberService,
-    @InjectRepository(CourseActivityEntity)
-    private readonly activityRepository: Repository<CourseActivityEntity>,
+    private readonly activityService: ActivityService,
+
+    @InjectRepository(ActivityEntity)
+    private readonly activityRepository: Repository<ActivityEntity>,
+
     @InjectRepository(PlayerSessionEntity)
     private readonly sessionRepository: Repository<PlayerSessionEntity>
   ) { }
@@ -29,12 +31,12 @@ export class ResultService {
     }
 
     const users = (
-      await this.memberService.findUsersOfActivity(
+      await this.activityService.listUsers(
         activity.courseId,
         activity.id
       )
-    ).map(member => ({
-      ...member,
+    ).map(participant => ({
+      ...participant,
       exercises: {}
     }) as UserResults);
 
@@ -42,7 +44,6 @@ export class ResultService {
       acc[curr.id] = curr;
       return acc;
     }, {} as Record<string, UserResults>);
-
 
     const exercises = extractExercisesFromActivityVariables(
       activity?.source.variables as ActivityVariables
@@ -65,7 +66,6 @@ export class ResultService {
       });
     });
 
-
     const exercisesMap = exercises.reduce((acc, curr) => {
       acc[curr.id] = curr;
       return acc;
@@ -75,13 +75,12 @@ export class ResultService {
     const exerciseSessionCounterMap = new Map<string, number>();
 
     const activitySessions = await this.sessionRepository.find({
-      where: { courseActivityId: activityId, parentId: IsNull() }
+      where: { activityId: activityId, parentId: IsNull() }
     });
 
     const exerciseSessions = await this.sessionRepository.find({
-      where: { courseActivityId: activityId, parentId: Not(IsNull()) }
+      where: { activityId: activityId, parentId: Not(IsNull()) }
     });
-
 
     activitySessions.forEach(session => {
       const navigation = (session.variables as PlayerActivityVariables).navigation;
@@ -112,12 +111,14 @@ export class ResultService {
           ? differenceInSeconds(session.lastGradedAt, session.startedAt)
           : 0;
 
-        exercisesMap[exerciseId].grades.sum += (session.grade === -1 ? 0 : session.grade);
+        const grade = session.correction ?? session.grade;
+
+        exercisesMap[exerciseId].grades.sum += (grade === -1 ? 0 : grade);
         exercisesMap[exerciseId].attempts.sum += session.attempts;
         exercisesMap[exerciseId].durations.sum += duration;
 
         const userExercise = usersMap[session.userId as string].exercises[exerciseId];
-        userExercise.grade = session.grade;
+        userExercise.grade = grade;
         userExercise.attempts = session.attempts;
         userExercise.duration = duration;
       }

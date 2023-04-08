@@ -1,4 +1,4 @@
-export interface CourseActivity {
+export interface Activity {
   readonly id: string;
   readonly createdAt: Date;
   readonly updatedAt?: Date;
@@ -10,15 +10,15 @@ export interface CourseActivity {
   readonly closeAt?: Date;
 
   readonly title: string;
-  readonly state: CourseActivityStates;
+  readonly state: ActivityStates;
   readonly progression: number;
 }
 
-export interface CourseActivityFilters {
+export interface ActivityFilters {
   readonly sectionId?: string;
 }
 
-export interface CreateCourseActivity {
+export interface CreateActivity {
   readonly sectionId: string;
 
   readonly resourceId: string;
@@ -26,21 +26,16 @@ export interface CreateCourseActivity {
 
   readonly openAt?: Date;
   readonly closeAt?: Date;
-
-  readonly members?: string[];
-
 }
 
-export interface UpdateCourseActivity {
+export interface UpdateActivity {
   readonly openAt?: Date | null;
   readonly closeAt?: Date | null;
-
-  readonly members?: string[];
 }
 
-export type CourseActivityStates = 'opened' | 'closed' | 'planned'
+export type ActivityStates = 'opened' | 'closed' | 'planned'
 
-export const courseActivityState = (value: CourseActivity): CourseActivityStates => {
+export const calculateActivityState = (value: Activity): ActivityStates => {
   const now = new Date();
   const openAt = value.openAt ? new Date(value.openAt) : undefined
   const closeAt = value.closeAt ? new Date(value.closeAt) : undefined

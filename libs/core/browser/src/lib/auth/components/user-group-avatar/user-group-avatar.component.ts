@@ -5,6 +5,7 @@ import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 import { UserGroup } from '@platon/core/common';
+import { NzBadgeModule } from 'ng-zorro-antd/badge';
 
 @Component({
   standalone: true,
@@ -14,6 +15,7 @@ import { UserGroup } from '@platon/core/common';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
+    NzBadgeModule,
     NzAvatarModule,
     NzToolTipModule,
   ]

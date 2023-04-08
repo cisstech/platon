@@ -32,13 +32,13 @@ export class PlayerSessionService {
 
 
   ofCourseActivity(
-    courseActivityId: string,
+    activityId: string,
     userId: string,
     relations: FindOptionsRelations<PlayerSessionEntity> = {
       parent: false
     }) {
     return this.repository.findOne({
-      where: { parentId: IsNull(), courseActivityId, userId },
+      where: { parentId: IsNull(), activityId, userId },
       relations
     });
   }

@@ -1,0 +1,14 @@
+<nz-tree-select
+  [(ngModel)]="selection"
+  [nzNodes]="nodes"
+  (ngModelChange)="onChangeSelection($event)"
+  [nzShowSearch]="true"
+  [nzCheckable]="true"
+  [nzDisabled]="disabled"
+  [nzPlaceHolder]="placeholder || ''"
+  [nzTreeTemplate]="template"
+ />
+
+<ng-template #template let-node>
+  <user-avatar [avatarSize]="24" [user]="node.origin.value.user" [group]="node.origin.value.group" />
+</ng-template>

@@ -69,9 +69,14 @@ mat-form-field {
   margin: 12px 0;
 }
 
-nz-range-picker {
+nz-range-picker,
+course-member-select {
   width: 100%;
   margin: 12px 0;
+}
+
+course-member-select {
+  display: block;
 }
 
 mat-checkbox {

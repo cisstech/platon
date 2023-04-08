@@ -25,7 +25,7 @@ export class PlayerController {
     @Body() input: PlayActivityInputDTO
   ): Promise<PlayActivityOutputDTO> {
     return this.playerService.playActivity(
-      input.courseActivityId,
+      input.activityId,
       req.user
     );
   }

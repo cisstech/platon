@@ -7,7 +7,7 @@ import { ListResponse, User } from '@platon/core/common';
 import { ResultService } from '@platon/feature/result/browser';
 import { ActivityResults } from '@platon/feature/result/common';
 import { CourseService } from '@platon/feature/course/browser';
-import { Course, CourseActivity, CourseMember, CourseMemberFilters, CreateCourseMember, UpdateCourse } from '@platon/feature/course/common';
+import { Course, Activity, CourseMember, CourseMemberFilters, CreateCourseMember, UpdateCourse } from '@platon/feature/course/common';
 import { LayoutState } from '@platon/shared/ui';
 import { BehaviorSubject, firstValueFrom, Subscription } from 'rxjs';
 
@@ -134,6 +134,6 @@ export interface Context {
   state: LayoutState;
   user?: User;
   course?: Course;
-  activity?: CourseActivity
+  activity?: Activity
   results?: ActivityResults;
 }

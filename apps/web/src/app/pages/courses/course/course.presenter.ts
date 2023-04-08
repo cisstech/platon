@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AuthService, DialogService } from '@platon/core/browser';
 import { ListResponse, User } from '@platon/core/common';
 import { CourseService } from '@platon/feature/course/browser';
-import { Course, CourseActivity, CourseMember, CourseMemberFilters, CourseSection, CreateCourseMember, CreateCourseSection, UpdateCourse, UpdateCourseSection } from '@platon/feature/course/common';
+import { Course, Activity, CourseMember, CourseMemberFilters, CourseSection, CreateCourseMember, CreateCourseSection, UpdateCourse, UpdateCourseSection } from '@platon/feature/course/common';
 import { LayoutState } from '@platon/shared/ui';
 import { BehaviorSubject, firstValueFrom, Subscription } from 'rxjs';
 
@@ -111,7 +111,7 @@ export class CoursePresenter implements OnDestroy {
 
   // Activities
 
-  async listActivities(): Promise<CourseActivity[]> {
+  async listActivities(): Promise<Activity[]> {
     const { course } = this.context.value;
     if (!course) {
       return [];

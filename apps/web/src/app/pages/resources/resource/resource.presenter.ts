@@ -4,7 +4,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService, DialogService, TagService } from '@platon/core/browser';
 import { Level, ListResponse, Topic, User } from '@platon/core/common';
-import { FileService, ResourceService } from '@platon/feature/resource/browser';
+import { ResourceFileService, ResourceService } from '@platon/feature/resource/browser';
 import { CircleTree, CreateResourceInvitation, FileVersions, Resource, ResourceEvent, ResourceEventFilters, ResourceFile, ResourceInvitation, ResourceMember, ResourceMemberFilters, ResourceStatisic, UpdateResource } from '@platon/feature/resource/common';
 import { LayoutState } from '@platon/shared/ui';
 import { BehaviorSubject, catchError, firstValueFrom, Observable, of, Subscription } from 'rxjs';
@@ -21,7 +21,7 @@ export class ResourcePresenter implements OnDestroy {
   constructor(
     private readonly tagService: TagService,
     private readonly authService: AuthService,
-    private readonly fileService: FileService,
+    private readonly fileService: ResourceFileService,
     private readonly dialogService: DialogService,
     private readonly activatedRoute: ActivatedRoute,
     private readonly resourceService: ResourceService,

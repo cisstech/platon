@@ -69,6 +69,7 @@ export interface UserGroup {
   readonly createdAt: Date;
   readonly updatedAt?: Date;
   readonly name: string;
+  readonly users: User[];
 }
 
 export interface CreateUserGroup {
@@ -87,4 +88,9 @@ export interface UserGroupFilters {
   readonly limit?: number;
   readonly order?: UserGroupOrderings;
   readonly direction?: OrderingDirections;
+}
+
+
+export const userDisplayName = (user: User): string => {
+  return user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : user.username;
 }

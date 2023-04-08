@@ -2,7 +2,7 @@ import { Logger } from '@nestjs/common'
 import { Injectable } from '@nestjs/common';
 import { DataSource, EntitySubscriberInterface, InsertEvent } from 'typeorm';
 import { CourseEntity } from './course.entity';
-import { CourseMemberEntity } from './member/member.entity';
+import { CourseMemberEntity } from './course-member/course-member.entity';
 
 @Injectable()
 export class CourseSubscriber implements EntitySubscriberInterface<CourseEntity> {

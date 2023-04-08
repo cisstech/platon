@@ -1,16 +1,19 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { CreateUserGroup, OrderingDirections, UpdateUserGroup, UserGroup, UserGroupFilters, UserGroupOrderings } from '@platon/core/common';
-import { Exclude, Transform } from 'class-transformer';
-import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
+import { Transform, Type } from 'class-transformer';
+import { IsArray, IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
 import { BaseDTO, toNumber } from '../../utils';
+import { UserDTO } from '../user.dto';
 
 export class UserGroupDTO extends BaseDTO implements UserGroup {
   @IsString()
   @ApiProperty()
   readonly name!: string;
 
-  @Exclude()
-  readonly users?: unknown
+  @IsOptional()
+  @IsArray()
+  @Type(() => UserDTO)
+  readonly users!: UserDTO[]
 }
 
 export class CreateUserGroupDTO implements CreateUserGroup {

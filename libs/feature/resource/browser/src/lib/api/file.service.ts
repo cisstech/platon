@@ -2,11 +2,11 @@ import { Observable } from "rxjs";
 
 import { Injectable } from "@angular/core";
 import { FileCreate, FileMove, FileRelease, FileSearch, FileSearchResults, FileUpdate, FileVersions, Resource, ResourceFile } from "@platon/feature/resource/common";
-import { FileProvider } from "../models/file-provider";
+import { ResourceFileProvider } from "../models/resource-file-provider";
 
 @Injectable({ providedIn: 'root' })
-export class FileService {
-  constructor(private readonly provider: FileProvider) {
+export class ResourceFileService {
+  constructor(private readonly provider: ResourceFileProvider) {
   }
 
   release(resource: string | Resource, input: FileRelease): Observable<void> {

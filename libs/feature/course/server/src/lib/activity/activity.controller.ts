@@ -1,24 +1,25 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Req } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req } from '@nestjs/common';
 import { ItemResponse, ListResponse, NoContentResponse, NotFoundResponse } from '@platon/core/common';
 import { IRequest, Mapper } from '@platon/core/server';
-import { CourseActivityDTO, CreateCourseActivityDTO, UpdateCourseActivityDTO } from './activity.dto';
-import { CourseActivityService } from './activity.service';
+import { ActivityDTO, ActivityFiltersDTO, CreateCourseActivityDTO, UpdateCourseActivityDTO } from './activity.dto';
+import { ActivityService } from './activity.service';
 
 @Controller('courses/:courseId/activities')
-export class CourseActivityController {
+export class ActivityController {
   constructor(
-    private readonly service: CourseActivityService
+    private readonly service: ActivityService
   ) { }
 
   @Get()
   async list(
     @Req() req: IRequest,
-    @Param('courseId') courseId: string
-  ): Promise<ListResponse<CourseActivityDTO>> {
-    const [items, total] = await this.service.ofCourse(courseId, req.user);
+    @Param('courseId') courseId: string,
+    @Query() filters?: ActivityFiltersDTO,
+  ): Promise<ListResponse<ActivityDTO>> {
+    const [items, total] = await this.service.ofCourse(courseId, req.user, filters);
     return new ListResponse({
       total,
-      resources: Mapper.mapAll(items, CourseActivityDTO)
+      resources: Mapper.mapAll(items, ActivityDTO)
     });
   }
 
@@ -27,11 +28,11 @@ export class CourseActivityController {
     @Req() req: IRequest,
     @Param('courseId') courseId: string,
     @Param('activityId') activityId: string,
-  ): Promise<ItemResponse<CourseActivityDTO>> {
+  ): Promise<ItemResponse<ActivityDTO>> {
     const optional = await this.service.findById(courseId, activityId, req.user);
     const resource = Mapper.map(
       optional.orElseThrow(() => new NotFoundResponse(`CourseActivity not found: ${activityId}`)),
-      CourseActivityDTO
+      ActivityDTO
     );
 
     return new ItemResponse({ resource })
@@ -41,14 +42,14 @@ export class CourseActivityController {
   async create(
     @Param('courseId') courseId: string,
     @Body() input: CreateCourseActivityDTO,
-  ): Promise<ItemResponse<CourseActivityDTO>> {
+  ): Promise<ItemResponse<ActivityDTO>> {
     return new ItemResponse({
       resource: Mapper.map(
         await this.service.create({
           ...await this.service.fromInput(input),
           courseId
         }),
-        CourseActivityDTO
+        ActivityDTO
       )
     });
   }
@@ -58,14 +59,14 @@ export class CourseActivityController {
     @Param('courseId') courseId: string,
     @Param('activityId') activityId: string,
     @Body() input: UpdateCourseActivityDTO,
-  ): Promise<ItemResponse<CourseActivityDTO>> {
+  ): Promise<ItemResponse<ActivityDTO>> {
     return new ItemResponse({
       resource: Mapper.map(
         await this.service.update(courseId, activityId, {
           ...await this.service.fromInput(input),
           courseId
         }),
-        CourseActivityDTO
+        ActivityDTO
       )
     });
   }

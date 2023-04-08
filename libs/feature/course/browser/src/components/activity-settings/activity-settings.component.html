@@ -1,0 +1,30 @@
+<nz-skeleton [nzActive]="loading" [nzLoading]="loading">
+  <form [formGroup]="form">
+    <h4 id="openDates">Souhaitez-vous limiter l'accès de cette activité à une date en particulier?</h4>
+    <nz-range-picker
+      [nzShowTime]="true"
+      [nzDisabledDate]="disabledDate"
+      aria-labelledby="openDates"
+      formControlName="openDates" />
+    <h4 id="members">Souhaitez-vous limiter l'accès de cette activité à des utilisateurs en particulier?</h4>
+    <course-member-select
+      [members]="courseStudents"
+      formControlName="members"
+      placeholder="Laissez la sélection vide pour permettre l'accès à tous, y compris aux nouveaux membres."
+      />
+    <h4 id="correctors">Souhaitez-vous ajouter des correcteurs à cette activité?</h4>
+    <course-member-select
+      [members]="courseMembers"
+      formControlName="correctors"
+      placeholder="Laissez la sélection vide si cette activité est auto-corrigée."
+      />
+    <nz-spin *ngIf="updating" nzTip="Modification de l'activité..."></nz-spin>
+    <button
+      nz-button
+      [disabled]="!form.valid"
+      nzType="primary"
+      (click)="update()">
+      Modifier
+    </button>
+  </form>
+</nz-skeleton>

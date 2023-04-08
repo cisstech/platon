@@ -26,7 +26,7 @@ export class PlayExerciseInputDTO implements PlayExerciseInput {
 export class PlayActivityInputDTO implements PlayActivityInput {
   @IsUUID()
   @ApiProperty()
-  courseActivityId!: string;
+  activityId!: string;
 }
 
 export class EvalExerciseInputDTO implements EvalExerciseInput {

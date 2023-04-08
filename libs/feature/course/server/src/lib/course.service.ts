@@ -4,27 +4,27 @@ import { NotFoundResponse, OrderingDirections, User } from '@platon/core/common'
 import { CourseFilters, CourseOrderings } from '@platon/feature/course/common';
 import { Repository } from 'typeorm';
 import { Optional } from 'typescript-optional';
-import { CourseActivityEntity } from './activity/activity.entity';
+import { ActivityEntity } from './activity/activity.entity';
+import { CourseMemberEntity } from './course-member/course-member.entity';
 import { CourseEntity } from './course.entity';
-import { CourseMemberEntity } from './member/member.entity';
 
 @Injectable()
 export class CourseService {
   constructor(
     @InjectRepository(CourseEntity)
     private readonly courseRepository: Repository<CourseEntity>,
-    @InjectRepository(CourseActivityEntity)
-    private readonly activityRepository: Repository<CourseActivityEntity>,
+    @InjectRepository(ActivityEntity)
+    private readonly activityRepository: Repository<ActivityEntity>,
   ) { }
 
-  findCourseActivityById(id: string): Promise<CourseActivityEntity | undefined> {
+  findActivityById(id: string): Promise<ActivityEntity | undefined> {
     return this.activityRepository.findOne({
       where: { id }
-    }) as Promise<CourseActivityEntity | undefined>;
+    }) as Promise<ActivityEntity | undefined>;
   }
 
 
-  canViewActivity(user: User, activity: CourseActivityEntity): Promise<boolean> {
+  canViewActivity(user: User, activity: ActivityEntity): Promise<boolean> {
     // TODO
     return Promise.resolve(true);
   }

@@ -13,9 +13,10 @@ import { NgeIdeNotificationsModule } from '@cisstech/nge-ide/notifications';
 import { FileService, IdeService } from '@cisstech/nge-ide/core';
 
 import { resourceAncestors, ResourceTypes } from '@platon/feature/resource/common';
-import { ResourceFileSystemProvider, ResourceService } from '@platon/feature/resource/browser';
+import { ResourceService } from '@platon/feature/resource/browser';
 
 import { PLFormEditorContributionModule } from './contributions/pl-form-editor/pl-form-editor.contribution';
+import { ResourceFileSystemProvider } from './contributions/file-system';
 
 @Component({
   standalone: true,

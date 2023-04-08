@@ -1,15 +1,14 @@
 import { BaseEntity } from '@platon/core/server';
 import { PLSourceFile } from '@platon/feature/compiler';
-import { CourseActivityStates } from '@platon/feature/course/common';
-import { Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne, VirtualColumn } from 'typeorm';
+import { ActivityStates } from '@platon/feature/course/common';
+import { Column, Entity, Index, JoinColumn, ManyToOne, VirtualColumn } from 'typeorm';
 import { CourseEntity } from '../course.entity';
-import { CourseMemberEntity } from '../member/member.entity';
 import { CourseSectionEntity } from '../section/section.entity';
 
-@Entity('CourseActivities')
-@Index('CourseActivities_section_idx', ['courseId', 'sectionId'])
-export class CourseActivityEntity extends BaseEntity {
-  @Index('CourseActivities_course_id_idx')
+@Entity('Activities')
+@Index('Activities_section_idx', ['courseId', 'sectionId'])
+export class ActivityEntity extends BaseEntity {
+  @Index('Activities_course_id_idx')
   @Column({ name: 'course_id' })
   courseId!: string
 
@@ -27,27 +26,13 @@ export class CourseActivityEntity extends BaseEntity {
   @Column({ type: 'jsonb', default: {} })
   source!: PLSourceFile
 
-  @Index('CourseActivities_open_at_idx')
+  @Index('Activities_open_at_idx')
   @Column({ name: 'open_at', nullable: true, type: 'timestamp with time zone' })
   openAt?: Date
 
-  @Index('CourseActivities_close_at_idx')
+  @Index('Activities_close_at_idx')
   @Column({ name: 'close_at', nullable: true, type: 'timestamp with time zone' })
   closeAt?: Date
-
-  @ManyToMany(() => CourseMemberEntity)
-  @JoinTable({
-    name: 'CourseActivityMembers',
-    joinColumn: {
-      name: 'activity_id',
-      referencedColumnName: "id"
-    },
-    inverseJoinColumn: {
-      name: "member_id",
-      referencedColumnName: "id"
-    }
-  })
-  members!: CourseMemberEntity[]
 
   @VirtualColumn({ query: () => 'SELECT 0' })
   progression!: number
@@ -57,6 +42,5 @@ export class CourseActivityEntity extends BaseEntity {
   readonly title!: string;
 
   @VirtualColumn({ query: () => `SELECT 'opened'` })
-  readonly state!: CourseActivityStates;
-
+  readonly state!: ActivityStates;
 }

@@ -57,12 +57,17 @@
               aria-labelledby="openDates"
               formControlName="openDates" />
             <h4 id="members">Souhaitez-vous limiter l'accès de cette activité à des utilisateurs en particulier?</h4>
-            <p>Laissez la sélection vide pour permettre l'accès à tous, y compris aux nouveaux membres.</p>
-            <course-member-table
-              [members]="members"
-              [selectable]="true"
+            <course-member-select
+              [members]="students"
               aria-labelledby="members"
-              formControlName="members" />
+              formControlName="members"
+              placeholder="Laissez la sélection vide pour permettre l'accès à tous, y compris aux nouveaux membres." />
+            <h4 id="members">Souhaitez-vous limiter l'accès de cette activité à des utilisateurs en particulier?</h4>
+            <course-member-select
+              [members]="members"
+              aria-labelledby="correctors"
+              formControlName="correctors"
+              placeholder="Laissez la sélection vide si cette activité est auto-corrigée."/>
           </form>
         </section>
       </ng-template>

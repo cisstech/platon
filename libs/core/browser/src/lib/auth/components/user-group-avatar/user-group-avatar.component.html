@@ -1,4 +1,6 @@
-<nz-avatar nz-tooltip="Groupe" [nzSize]="avatarSize" nzIcon="team"></nz-avatar>
+<nz-badge [nzCount]="group.users.length" [nzOffset]="[-16, 6]">
+  <nz-avatar nz-tooltip="Groupe" [nzSize]="avatarSize" nzIcon="team"></nz-avatar>
+</nz-badge>
 <div>
   <span>{{group.name}}</span>
   <ng-container *ngIf="canShowMembers">

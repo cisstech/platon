@@ -13,8 +13,10 @@ export class UserGroupService {
 
     private readonly userService: UserService,
   ) { }
+
   async search(filters: UserGroupFilters = {}): Promise<[UserGroupEntity[], number]> {
     const query = this.repository.createQueryBuilder('group')
+    query.leftJoinAndSelect('group.users', 'users');
 
     if (filters.search) {
       query.andWhere(`(

@@ -10,7 +10,7 @@ import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
 
-import { CourseActivity, CourseSection } from '@platon/feature/course/common';
+import { Activity, CourseSection } from '@platon/feature/course/common';
 import { CoursePresenter } from '../course.presenter';
 import { CourseSectionActionsComponent } from './section-actions/section-actions.component';
 import { CourseActivityGridComponent } from '@platon/feature/course/browser';
@@ -121,5 +121,5 @@ export class CourseDashboardPage implements OnInit, OnDestroy {
 
 interface SectionWithActivities {
   section: CourseSection;
-  activities: CourseActivity[];
+  activities: Activity[];
 }
