@@ -11,12 +11,11 @@ export class ActivityController {
   ) { }
 
   @Get()
-  async list(
-    @Req() req: IRequest,
+  async search(
     @Param('courseId') courseId: string,
     @Query() filters?: ActivityFiltersDTO,
   ): Promise<ListResponse<ActivityDTO>> {
-    const [items, total] = await this.service.ofCourse(courseId, req.user, filters);
+    const [items, total] = await this.service.search(courseId, filters);
     return new ListResponse({
       total,
       resources: Mapper.mapAll(items, ActivityDTO)
@@ -25,32 +24,30 @@ export class ActivityController {
 
   @Get('/:activityId')
   async find(
-    @Req() req: IRequest,
     @Param('courseId') courseId: string,
     @Param('activityId') activityId: string,
   ): Promise<ItemResponse<ActivityDTO>> {
-    const optional = await this.service.findById(courseId, activityId, req.user);
-    const resource = Mapper.map(
+    const optional = await this.service.findByCourseIdAndId(courseId, activityId);
+    const activity = Mapper.map(
       optional.orElseThrow(() => new NotFoundResponse(`CourseActivity not found: ${activityId}`)),
       ActivityDTO
     );
-
-    return new ItemResponse({ resource })
+    return new ItemResponse({ resource: activity })
   }
 
   @Post()
   async create(
+    @Req() req: IRequest,
     @Param('courseId') courseId: string,
     @Body() input: CreateCourseActivityDTO,
   ): Promise<ItemResponse<ActivityDTO>> {
+    const activity = await this.service.create({
+      ...await this.service.fromInput(input),
+      courseId,
+      creatorId: req.user.id
+    })
     return new ItemResponse({
-      resource: Mapper.map(
-        await this.service.create({
-          ...await this.service.fromInput(input),
-          courseId
-        }),
-        ActivityDTO
-      )
+      resource: Mapper.map(activity, ActivityDTO)
     });
   }
 
@@ -60,14 +57,11 @@ export class ActivityController {
     @Param('activityId') activityId: string,
     @Body() input: UpdateCourseActivityDTO,
   ): Promise<ItemResponse<ActivityDTO>> {
+    const activity = await this.service.update(courseId, activityId, {
+      ...await this.service.fromInput(input),
+    });
     return new ItemResponse({
-      resource: Mapper.map(
-        await this.service.update(courseId, activityId, {
-          ...await this.service.fromInput(input),
-          courseId
-        }),
-        ActivityDTO
-      )
+      resource: Mapper.map(activity, ActivityDTO)
     });
   }
 

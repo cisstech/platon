@@ -8,8 +8,13 @@ import fr from 'date-fns/locale/fr';
   standalone: true,
 })
 export class DurationPipe implements PipeTransform {
-  transform(value: number): string {
-
-    return !value ? '0' : formatDuration(intervalToDuration({ start: 0, end: value * 1000 }), { locale: fr });
+  transform(value: number, format: 'seconds' | 'milliseconds' = 'seconds'): string {
+    return !value ? '0' : formatDuration(
+      intervalToDuration({
+        start: 0,
+        end: format === 'seconds' ? value * 1000 : value
+      }),
+      { locale: fr }
+    );
   }
 }

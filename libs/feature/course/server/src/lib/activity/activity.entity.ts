@@ -1,13 +1,20 @@
-import { BaseEntity } from '@platon/core/server';
+import { BaseEntity, UserEntity } from '@platon/core/server';
 import { PLSourceFile } from '@platon/feature/compiler';
-import { ActivityStates } from '@platon/feature/course/common';
+import { ActivityPermissions, ActivityStates } from '@platon/feature/course/common';
 import { Column, Entity, Index, JoinColumn, ManyToOne, VirtualColumn } from 'typeorm';
 import { CourseEntity } from '../course.entity';
 import { CourseSectionEntity } from '../section/section.entity';
 
 @Entity('Activities')
-@Index('Activities_section_idx', ['courseId', 'sectionId'])
 export class ActivityEntity extends BaseEntity {
+  @Index('Activities_creator_id_idx')
+  @Column({ name: 'creator_id' })
+  creatorId!: string
+
+  @ManyToOne(() => UserEntity, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'creator_id' })
+  creator!: UserEntity
+
   @Index('Activities_course_id_idx')
   @Column({ name: 'course_id' })
   courseId!: string
@@ -16,6 +23,7 @@ export class ActivityEntity extends BaseEntity {
   @JoinColumn({ name: 'course_id' })
   course!: CourseEntity
 
+  @Index('Activities_section_id_idx')
   @Column({ name: 'section_id' })
   sectionId!: string
 
@@ -34,8 +42,10 @@ export class ActivityEntity extends BaseEntity {
   @Column({ name: 'close_at', nullable: true, type: 'timestamp with time zone' })
   closeAt?: Date
 
+  // VIRTUAL COLUMNS
+
   @VirtualColumn({ query: () => 'SELECT 0' })
-  progression!: number
+  readonly progression!: number
 
   @VirtualColumn({ query: () => `source->'variables'->>'title'` })
 
@@ -43,4 +53,7 @@ export class ActivityEntity extends BaseEntity {
 
   @VirtualColumn({ query: () => `SELECT 'opened'` })
   readonly state!: ActivityStates;
+
+  @VirtualColumn({ query: () => `SELECT '{}'::jsonb` })
+  readonly permissions!: ActivityPermissions;
 }

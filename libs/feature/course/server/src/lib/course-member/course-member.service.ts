@@ -5,13 +5,16 @@ import { CourseMemberFilters } from '@platon/feature/course/common';
 import { Repository } from 'typeorm';
 import { Optional } from 'typescript-optional';
 import { CourseMemberEntity } from './course-member.entity';
-
+import { CourseMemberView } from './course-member.view';
 
 @Injectable()
 export class CourseMemberService {
   constructor(
+    @InjectRepository(CourseMemberView)
+    private readonly view: Repository<CourseMemberView>,
     @InjectRepository(CourseMemberEntity)
-    private readonly repository: Repository<CourseMemberEntity>
+    private readonly repository: Repository<CourseMemberEntity>,
+
   ) { }
 
   async findById(
@@ -103,5 +106,12 @@ export class CourseMemberService {
 
   async delete(courseId: string, memberId: string): Promise<void> {
     await this.repository.delete({ courseId, id: memberId });
+  }
+
+  async isMember(courseId: string, userId: string): Promise<boolean> {
+    const result = await this.view.findOne({
+      where: { courseId, id: userId }
+    })
+    return result != null;
   }
 }

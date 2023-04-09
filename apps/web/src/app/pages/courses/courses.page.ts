@@ -108,7 +108,6 @@ export class CoursesPage implements OnInit, OnDestroy {
           this.searchbar.value = e.q;
         }
 
-
         this.searching = true;
         this.items = (
           await firstValueFrom(this.courseService.search(this.filters))

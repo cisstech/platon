@@ -58,7 +58,6 @@ export class ActivityCreatePage implements OnInit {
   protected loading = false;
   protected creating = false;
   protected members: CourseMember[] = [];
-  protected students: CourseMember[] = [];
 
   protected courseInfo = new FormGroup({
     course: new FormControl<Course | undefined>(undefined, [Validators.required]),
@@ -181,7 +180,6 @@ export class ActivityCreatePage implements OnInit {
         this.courseService.searchMembers(course)
       );
       this.members = response.resources;
-      this.students = this.members.filter(member => member.group || member.user?.role === 'student');
       this.changeDetectorRef.markForCheck();
     }
   }

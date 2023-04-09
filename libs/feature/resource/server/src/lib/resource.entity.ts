@@ -4,7 +4,7 @@ import { Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne } f
 
 @Entity('Resources')
 export class ResourceEntity extends BaseEntity {
-  @Index('Resources_name_idx')
+  @Index('Resources_name_idx', { synchronize: false })
   @Column()
   name!: string
 

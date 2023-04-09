@@ -3,11 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { Optional } from 'typescript-optional';
 import { ActivityMemberEntity } from './activity-member.entity';
+import { ActivityMemberView } from './activity-member.view';
 
 @Injectable()
 export class ActivityMemberService {
   constructor(
     private readonly dataSource: DataSource,
+    @InjectRepository(ActivityMemberView)
+    private readonly view: Repository<ActivityMemberView>,
     @InjectRepository(ActivityMemberEntity)
     private readonly repository: Repository<ActivityMemberEntity>
   ) { }
@@ -63,5 +66,12 @@ export class ActivityMemberService {
 
   async delete(activityId: string, activityMemberId: string): Promise<void> {
     await this.repository.delete({ activityId, id: activityMemberId });
+  }
+
+  async isMember(activityId: string, userId: string): Promise<boolean> {
+    const result = await this.view.findOne({
+      where: { activityId, id: userId }
+    })
+    return result != null;
   }
 }

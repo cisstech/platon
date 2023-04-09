@@ -52,7 +52,6 @@ export class CourseActivitySettingsComponent implements OnInit {
   });
 
   protected courseMembers: CourseMember[] = [];
-  protected courseStudents: CourseMember[] = [];
   protected loading = false;
   protected updating = false;
 
@@ -78,7 +77,6 @@ export class CourseActivitySettingsComponent implements OnInit {
     ]);
 
     this.courseMembers = courseMembers.resources;
-    this.courseStudents = this.courseMembers.filter(member => member.group || member.user?.role === 'student');
 
     this.form.patchValue({
       openDates: this.activity.openAt && this.activity.closeAt ? [this.activity.openAt, this.activity.closeAt] : undefined,

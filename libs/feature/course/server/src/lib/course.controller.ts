@@ -1,13 +1,15 @@
 import { Body, Controller, Get, Param, Patch, Post, Query, Request } from '@nestjs/common';
-import { CreatedResponse, ItemResponse, ListResponse, NotFoundResponse } from '@platon/core/common';
+import { CreatedResponse, ForbiddenResponse, ItemResponse, ListResponse, NotFoundResponse } from '@platon/core/common';
 import { IRequest, Mapper } from '@platon/core/server';
+import { CourseMemberService } from './course-member/course-member.service';
 import { CourseDTO, CourseFiltersDTO, CreateCourseDTO, UpdateCourseDTO } from './course.dto';
 import { CourseService } from './course.service';
 
 @Controller('courses')
 export class CourseController {
   constructor(
-    private readonly service: CourseService,
+    private readonly courseService: CourseService,
+    private readonly courseMemberService: CourseMemberService
   ) { }
 
   @Get()
@@ -25,7 +27,7 @@ export class CourseController {
       )
     };
 
-    const [items, total] = await this.service.search(filters);
+    const [items, total] = await this.courseService.search(filters);
     const resources = Mapper.mapAll(items, CourseDTO);
     return new ListResponse({ total, resources })
   }
@@ -35,11 +37,15 @@ export class CourseController {
     @Request() req: IRequest,
     @Param('id') id: string,
   ): Promise<ItemResponse<CourseDTO>> {
-    const optional = await this.service.findById(id);
+    const optional = await this.courseService.findById(id);
     const resource = Mapper.map(
       optional.orElseThrow(() => new NotFoundResponse(`Course not found: ${id}`)),
       CourseDTO
     );
+
+    if (!await this.courseMemberService.isMember(id, req.user.id)) {
+      throw new ForbiddenResponse(`You are not a member of this course`);
+    }
 
     return new ItemResponse({ resource });
   }
@@ -50,7 +56,7 @@ export class CourseController {
     @Body() input: CreateCourseDTO
   ): Promise<CreatedResponse<CourseDTO>> {
     const resource = Mapper.map(
-      await this.service.create({
+      await this.courseService.create({
         ...input,
         ownerId: req.user.id
       }),
@@ -65,7 +71,7 @@ export class CourseController {
     @Body() input: UpdateCourseDTO
   ): Promise<ItemResponse<CourseDTO>> {
     const resource = Mapper.map(
-      await this.service.update(id, input),
+      await this.courseService.update(id, input),
       CourseDTO
     );
     return new ItemResponse({ resource })

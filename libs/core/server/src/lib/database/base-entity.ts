@@ -1,4 +1,4 @@
-import { CreateDateColumn, Index, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { CreateDateColumn, Index, ObjectLiteral, PrimaryGeneratedColumn, SelectQueryBuilder, UpdateDateColumn } from 'typeorm';
 
 export abstract class BaseEntity {
   @PrimaryGeneratedColumn("uuid")
@@ -11,4 +11,17 @@ export abstract class BaseEntity {
   @Index()
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt!: Date;
+}
+
+
+type JoinFunction<T extends ObjectLiteral> = (queryBuilder: SelectQueryBuilder<T>) => SelectQueryBuilder<T>;
+
+export const buildQuery = <T extends ObjectLiteral>(
+  queryBuilder: SelectQueryBuilder<T>,
+  ...joinFunctions: JoinFunction<T>[]
+): SelectQueryBuilder<T> => {
+  return joinFunctions.reduce(
+    (qb, fn) => fn(qb),
+    queryBuilder
+  );
 }

@@ -12,6 +12,7 @@ export interface Activity {
   readonly title: string;
   readonly state: ActivityStates;
   readonly progression: number;
+  readonly permissions: ActivityPermissions;
 }
 
 export interface ActivityFilters {
@@ -33,9 +34,18 @@ export interface UpdateActivity {
   readonly closeAt?: Date | null;
 }
 
+export interface ActivityPermissions {
+  readonly update: boolean;
+  readonly viewStats: boolean;
+}
+
 export type ActivityStates = 'opened' | 'closed' | 'planned'
 
-export const calculateActivityState = (value: Activity): ActivityStates => {
+
+export const calculateActivityState = (value: {
+  openAt?: Date | string | null;
+  closeAt?: Date | string | null;
+}): ActivityStates => {
   const now = new Date();
   const openAt = value.openAt ? new Date(value.openAt) : undefined
   const closeAt = value.closeAt ? new Date(value.closeAt) : undefined

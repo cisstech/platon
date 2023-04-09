@@ -3,7 +3,7 @@
     <ng-content></ng-content>
   </section>
 </nz-skeleton>
-<section>
+<section *ngIf="state === 'READY'">
   <nz-tabset nzLinkRouter [nzLinkExact]="false" nzSize="default" nzType="line">
     <ng-container *ngFor="let tab of tabs; trackBy: trackByIndex">
       <nz-tab>
@@ -18,16 +18,16 @@
   <section>
     <ng-container [ngSwitch]="state">
       <ng-container *ngSwitchCase="'READY'">
-        <router-outlet></router-outlet>
+        <router-outlet />
       </ng-container>
       <ng-container *ngSwitchCase="'SERVER_ERROR'">
-        <ui-error-500></ui-error-500>
+        <ui-error-500 />
       </ng-container>
-      <ng-container *ngSwitchCase="'UNAUTHORIZED'">
-        <ui-error-403></ui-error-403>
+      <ng-container *ngSwitchCase="'FORBIDDEN'">
+        <ui-error-403 />
       </ng-container>
       <ng-container *ngSwitchCase="'NOT_FOUND'">
-        <ui-error-404></ui-error-404>
+        <ui-error-404 />
       </ng-container>
     </ng-container>
   </section>

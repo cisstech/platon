@@ -4,14 +4,28 @@
       <td>Exercices</td>
       <td>{{player.navigation.exercises.length}}</td>
     </tr>
-    <tr>
+    <tr *ngIf="player.settings?.duration">
       <td>Durée</td>
-      <td>{{player.settings?.duration}}</td>
+      <td>
+        {{player.settings!.duration!|duration:'milliseconds'}}
+      </td>
     </tr>
-    <tr>
+    <tr *ngIf="player.openAt">
+      <td>Date d'ouverture</td>
+      <td>{{player.openAt | date: 'dd/MM/yyyy HH:mm'}}</td>
+    </tr>
+    <tr *ngIf="player.closeAt">
+      <td>Date de fermeture</td>
+      <td>{{player.closeAt | date: 'dd/MM/yyyy HH:mm'}}</td>
+    </tr>
+    <tr *ngIf="player.settings?.navigation?.mode">
       <td>Mode de navigation</td>
       <td>
-        {{player.settings?.navigation?.mode}}
+        <div [ngSwitch]="player.settings?.navigation?.mode">
+          <div *ngSwitchCase="'manual'">Manuelle</div>
+          <div *ngSwitchCase="'composed'">Composée</div>
+          <div *ngSwitchCase="'dynamic'">Dynamique</div>
+        </div>
       </td>
     </tr>
     <tr>

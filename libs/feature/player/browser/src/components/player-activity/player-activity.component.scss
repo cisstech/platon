@@ -41,3 +41,13 @@ player-exercise {
     margin-top: 1.5rem;
   }
 }
+
+.author {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  user-avatar {
+    margin: .5rem 0;
+  }
+}

@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { ActivityResults } from "@platon/feature/result/common";
+import { ActivityResults, UserResults } from "@platon/feature/result/common";
 import { Observable } from "rxjs";
 import { ResultProvider } from "../models/result-provider";
 
@@ -8,6 +8,10 @@ import { ResultProvider } from "../models/result-provider";
 export class RemoteResultProvider extends ResultProvider {
   constructor(private readonly http: HttpClient) {
     super();
+  }
+
+  userResults(activityId: string, userId: string): Observable<UserResults> {
+    return this.http.get<UserResults>(`/api/v1/results/${activityId}/${userId}`);
   }
 
   activityResults(activityId: string): Observable<ActivityResults> {

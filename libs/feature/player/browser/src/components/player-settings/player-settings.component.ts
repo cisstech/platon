@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
-
 import { MatIconModule } from '@angular/material/icon';
 
 import { ActivityPlayer } from '@platon/feature/player/common';
+import { DurationPipe } from '@platon/shared/ui';
 
 
 @Component({
@@ -16,6 +16,7 @@ import { ActivityPlayer } from '@platon/feature/player/common';
   imports: [
     CommonModule,
     MatIconModule,
+    DurationPipe,
   ]
 })
 export class PlayerSettingsComponent {

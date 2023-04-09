@@ -7,7 +7,7 @@ import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 @Entity('PlayerSessions')
 @Index('PlayerSessions_exercise_idx', ['parentId', 'id'])
 @Index('PlayerSessions_activity_user_idx', ['parentId', 'activityId', 'userId'])
-export class PlayerSessionEntity extends BaseEntity {
+export class PlayerSessionEntity<TVariables extends object = any> extends BaseEntity {
   @Column({ name: 'parent_id', nullable: true })
   parentId?: string
 
@@ -33,7 +33,7 @@ export class PlayerSessionEntity extends BaseEntity {
   activity?: ActivityEntity
 
   @Column({ type: 'jsonb', default: {} })
-  variables!: Record<string, any>
+  variables!: TVariables
 
   @Column({ type: 'int', default: -1 })
   grade!: number;

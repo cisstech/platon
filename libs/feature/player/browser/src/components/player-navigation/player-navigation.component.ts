@@ -11,6 +11,7 @@ import { ActivityPlayer, PlayerExercise } from '@platon/feature/player/common';
 
 import { AnswerStatePipesModule } from '../../pipes/answer-state-pipes.module';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { UserAvatarComponent } from '@platon/core/browser';
 
 @Component({
   standalone: true,
@@ -28,6 +29,7 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 
     NzTimelineModule,
 
+    UserAvatarComponent,
     AnswerStatePipesModule,
   ]
 })

@@ -9,6 +9,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
 
   catch(exception: any, host: ArgumentsHost) {
+    // TODO create util function to get request to handle both rest and graphql
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
 

@@ -3,11 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { Optional } from 'typescript-optional';
 import { ActivityCorrectorEntity } from './activity-corrector.entity';
+import { ActivityCorrectorView } from './activity-corrector.view';
 
 @Injectable()
 export class ActivityCorrectorService {
   constructor(
     private readonly dataSource: DataSource,
+    @InjectRepository(ActivityCorrectorView)
+    private readonly view: Repository<ActivityCorrectorView>,
     @InjectRepository(ActivityCorrectorEntity)
     private readonly repository: Repository<ActivityCorrectorEntity>
   ) { }
@@ -61,5 +64,12 @@ export class ActivityCorrectorService {
 
   async delete(activityId: string, activityCorrectorId: string): Promise<void> {
     await this.repository.delete({ activityId, id: activityCorrectorId });
+  }
+
+  async isCorrector(activityId: string, userId: string): Promise<boolean> {
+    const result = await this.view.findOne({
+      where: { activityId, id: userId }
+    })
+    return result != null;
   }
 }

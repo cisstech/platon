@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { NotFoundResponse, OrderingDirections, User } from '@platon/core/common';
+import { NotFoundResponse, OrderingDirections } from '@platon/core/common';
 import { CourseFilters, CourseOrderings } from '@platon/feature/course/common';
 import { Repository } from 'typeorm';
 import { Optional } from 'typescript-optional';
-import { ActivityEntity } from './activity/activity.entity';
-import { CourseMemberEntity } from './course-member/course-member.entity';
+import { CourseMemberView } from './course-member/course-member.view';
 import { CourseEntity } from './course.entity';
 
 @Injectable()
@@ -13,21 +12,7 @@ export class CourseService {
   constructor(
     @InjectRepository(CourseEntity)
     private readonly courseRepository: Repository<CourseEntity>,
-    @InjectRepository(ActivityEntity)
-    private readonly activityRepository: Repository<ActivityEntity>,
   ) { }
-
-  findActivityById(id: string): Promise<ActivityEntity | undefined> {
-    return this.activityRepository.findOne({
-      where: { id }
-    }) as Promise<ActivityEntity | undefined>;
-  }
-
-
-  canViewActivity(user: User, activity: ActivityEntity): Promise<boolean> {
-    // TODO
-    return Promise.resolve(true);
-  }
 
   async search(filters: CourseFilters = {}): Promise<[CourseEntity[], number]> {
     const query = this.courseRepository.createQueryBuilder('course');
@@ -39,9 +24,9 @@ export class CourseService {
 
     if (filters.members) {
       query.innerJoin(
-        CourseMemberEntity,
+        CourseMemberView,
         'member',
-        'member.course_id = course.id AND member.user_id IN (:...ids)',
+        'member.course_id = course.id AND member.id IN (:...ids)',
         { ids: filters.members }
       );
     }
@@ -88,14 +73,12 @@ export class CourseService {
     return query.getManyAndCount()
   }
 
-
   async findById(id: string): Promise<Optional<CourseEntity>> {
     const query = this.courseRepository.createQueryBuilder('course')
     return Optional.ofNullable(
       await query.where('course.id = :id', { id }).getOne()
     );
   }
-
 
   async create(input: Partial<CourseEntity>): Promise<CourseEntity> {
     return this.courseRepository.save(input);
@@ -113,5 +96,4 @@ export class CourseService {
   async delete(id: string) {
     return this.courseRepository.delete(id);
   }
-
 }

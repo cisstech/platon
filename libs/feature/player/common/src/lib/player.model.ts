@@ -113,6 +113,9 @@ export interface ActivityPlayer {
   author?: string;
   introduction: string;
   conclusion: string;
+  openAt?: Date;
+  closeAt?: Date;
+  startedAt?: Date;
   navigation: PlayerNavigation;
   settings?: ActivitySettings;
 }
@@ -122,4 +125,64 @@ export declare type Player = ExercisePlayer | ActivityPlayer;
 
 export interface PlayerActivityVariables extends ActivityVariables {
   navigation: PlayerNavigation;
+}
+
+/**
+ * Determines if an activity has timed out.
+ *
+ * The function prioritizes the `startedAt` time plus the `duration`. If either
+ * `startedAt` or `duration` is not available, it falls back to using the `closeAt`
+ * time.
+ *
+ * - If both `startedAt` and `duration` are available, it calculates the timeout based on `startedAt` + `duration`. This covers the case where the user leaves and resumes an activity, as the time continues even when the user is not active.
+ * - If either `startedAt` or `duration` is not available, it falls back to using `closeAt` to determine if the activity is timeouted.
+ * - If neither `closeAt` nor `startedAt` and `duration` are available, the function returns false, which means the activity is not considered timeouted.
+ *
+ * @param player - The activity player object containing the relevant time and settings.
+ * @returns True if the activity is timeouted, false otherwise.
+ */
+export const isTimeouted = (player: Partial<ActivityPlayer>): boolean => {
+  const closeAt = player.closeAt ? new Date(player.closeAt).getTime() : null;
+  const startedAt = player.startedAt ? new Date(player.startedAt).getTime() : null;
+  const duration = player.settings?.duration;
+
+  // Get the current timestamp
+  const currentTime = new Date().getTime();
+
+  // Check if the activity is timeouted
+  let isTimeouted = false;
+
+  if (duration != null && startedAt != null) {
+    // Prioritize startedAt + duration
+    isTimeouted = currentTime > startedAt + duration;
+  } else if (closeAt != null) {
+    // Fallback to closeAt if startedAt or duration is not available
+    isTimeouted = currentTime > closeAt;
+  }
+
+  return isTimeouted;
+}
+
+/**
+ * Calculates the time at which the activity will be closed.
+ *
+ * The function prioritizes the startedAt time plus the duration. If either
+ * startedAt or duration is not available, it falls back to using the closeAt
+ * time.
+ *
+ * @param player - The activity player object containing the relevant time and settings.
+ * @returns The timestamp at which the activity will be closed, or null if the closing time cannot be determined.
+ */
+export const getClosingTime = (player: Partial<ActivityPlayer>): number | null => {
+  const startedAt = player.startedAt ? new Date(player.startedAt).getTime() : null;
+  const closeAt = player.closeAt ? new Date(player.closeAt).getTime() : null;
+  const duration = player.settings?.duration;
+
+  if (duration != null && startedAt != null) {
+    return startedAt + duration;
+  } else if (closeAt != null) {
+    return closeAt;
+  }
+
+  return null;
 }

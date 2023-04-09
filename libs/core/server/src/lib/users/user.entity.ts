@@ -8,11 +8,11 @@ export class UserEntity extends BaseEntity {
   @Column()
   username!: string
 
-  @Index('Users_first_name_idx')
+  @Index('Users_first_name_idx', { synchronize: false })
   @Column({ name: 'first_name', default: '' })
   firstName!: string
 
-  @Index('Users_last_name_idx')
+  @Index('Users_last_name_idx', { synchronize: false })
   @Column({ name: 'last_name', default: '' })
   lastName!: string
 

@@ -2,13 +2,13 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 import { NzGridModule } from 'ng-zorro-antd/grid';
-import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzSegmentedModule } from 'ng-zorro-antd/segmented';
+import { NzTabsModule } from 'ng-zorro-antd/tabs';
 
 
+import { FormsModule } from '@angular/forms';
 import { Activity } from '@platon/feature/course/common';
 import { CourseActivityCardComponent } from '../activity-card/activity-card.component';
-import { FormsModule } from '@angular/forms';
 
 @Component({
   standalone: true,
@@ -27,7 +27,6 @@ import { FormsModule } from '@angular/forms';
   ]
 })
 export class CourseActivityGridComponent {
-
   protected tabs: Tab[] = [];
   protected empty = false;
   protected selectedIndex = 0;
@@ -42,14 +41,9 @@ export class CourseActivityGridComponent {
     this.empty = !value.length;
   }
 
-  trackTab(_: number, item: Tab): string {
-    return item.title;
-  }
-
-  trackActivity(_: number, item: Activity): string {
+  protected trackActivity(_: number, item: Activity): string {
     return item.id;
   }
-
 }
 
 interface Tab {

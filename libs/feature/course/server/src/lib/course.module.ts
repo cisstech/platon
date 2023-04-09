@@ -21,6 +21,9 @@ import { CourseSubscriber } from './course.subscriber';
 import { CourseSectionController } from './section/section.controller';
 import { CourseSectionEntity } from './section/section.entity';
 import { CourseSectionService } from './section/section.service';
+import { ActivityMemberView } from './activity-member/activity-member.view';
+import { ActivityCorrectorView } from './activity-corrector/activity-corrector.view';
+import { CourseMemberView } from './course-member/course-member.view';
 
 @Module({
   imports: [
@@ -28,10 +31,13 @@ import { CourseSectionService } from './section/section.service';
     FeatureResourceServerModule,
     TypeOrmModule.forFeature([
       CourseEntity,
+      CourseMemberView,
       CourseMemberEntity,
       CourseSectionEntity,
       ActivityEntity,
+      ActivityMemberView,
       ActivityMemberEntity,
+      ActivityCorrectorView,
       ActivityCorrectorEntity,
     ])
   ],

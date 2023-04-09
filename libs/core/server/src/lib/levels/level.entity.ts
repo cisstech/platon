@@ -3,7 +3,7 @@ import { BaseEntity } from '../database';
 
 @Entity('Levels')
 export class LevelEntity extends BaseEntity {
-  @Index('Levels_name_idx', { unique: true })
+  @Index('Levels_name_idx', { synchronize: false })
   @Column()
   name!: string
 }

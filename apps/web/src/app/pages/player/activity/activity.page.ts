@@ -9,6 +9,8 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 import { PlayerResourceComponent, PlayerService } from '@platon/feature/player/browser';
 import { Player } from '@platon/feature/player/common';
+import { UiErrorComponent } from '@platon/shared/ui';
+import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
 
 
 @Component({
@@ -20,14 +22,17 @@ import { Player } from '@platon/feature/player/common';
   imports: [
     CommonModule,
     NzSpinModule,
+    NzSkeletonModule,
     MatCardModule,
+
+    UiErrorComponent,
     PlayerResourceComponent,
   ]
 })
 export class PlayerActivityPage implements OnInit {
   protected player?: Player;
   protected loading = true;
-
+  protected error: unknown;
 
   constructor(
     private readonly playerService: PlayerService,
@@ -39,14 +44,19 @@ export class PlayerActivityPage implements OnInit {
     const params = this.activatedRoute.snapshot.paramMap;
     const activityId = params.get('id') as string;
 
-    const output = await firstValueFrom(
-      this.playerService.playActivity({
-        activityId: activityId
-      })
-    );
+    try {
+      const output = await firstValueFrom(
+        this.playerService.playActivity({ activityId })
+      );
+      this.player = output.activity;
 
-    this.player = output.activity;
-    this.loading = false;
-    this.changeDetectorRef.markForCheck();
+    } catch (error) {
+      this.error = error;
+      console.log(error)
+    } finally {
+      this.loading = false;
+      this.changeDetectorRef.markForCheck();
+    }
+
   }
 }

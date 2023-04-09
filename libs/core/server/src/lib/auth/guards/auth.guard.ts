@@ -2,10 +2,10 @@
 import { ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard as PassportGuard } from '@nestjs/passport';
-import { firstValueFrom, Observable } from 'rxjs';
-import { IS_PUBLIC_KEY } from './decorators/public.decorator';
+import { TOKEN_EXPIRED_ERROR_CODE, UnauthorizedResponse, User } from '@platon/core/common';
 import { TokenExpiredError } from 'jsonwebtoken';
-import { UnauthorizedResponse, TOKEN_EXPIRED_ERROR_CODE } from '@platon/core/common';
+import { Observable, firstValueFrom } from 'rxjs';
+import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 
 @Injectable()
 export class AuthGuard extends PassportGuard(['jwt']) {
@@ -20,16 +20,19 @@ export class AuthGuard extends PassportGuard(['jwt']) {
     ]);
 
     try {
-      const check = super.canActivate(context);
-      if (typeof check === 'boolean') {
-        return isPublic || check;
+      const loggedIn = super.canActivate(context);
+      if (typeof loggedIn === 'boolean') {
+        return isPublic || loggedIn;
       }
 
-      if (check instanceof Observable) {
-        return (await firstValueFrom(check)) || isPublic;
+      // loggedIn should be called first for promise and observables to trigger the authentication so
+      // public routes can also access user information in case of a valid token
+
+      if (loggedIn instanceof Observable) {
+        return (await firstValueFrom(loggedIn)) || isPublic;
       }
 
-      return (await check) || isPublic
+      return (await loggedIn) || isPublic
     } catch (error) {
       if (isPublic) {
         return true;
@@ -38,7 +41,7 @@ export class AuthGuard extends PassportGuard(['jwt']) {
     }
   }
 
-  override handleRequest(err: any, user: any, info: any, context: any, status: any) {
+  override handleRequest(err: any, user: User, info: any, context: ExecutionContext, status: any) {
     if (info instanceof TokenExpiredError || Array.isArray(info) && info.some((i) => i instanceof TokenExpiredError)) {
       throw new UnauthorizedResponse(TOKEN_EXPIRED_ERROR_CODE)
     }

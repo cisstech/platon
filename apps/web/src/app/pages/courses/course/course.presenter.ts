@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService, DialogService } from '@platon/core/browser';
 import { ListResponse, User } from '@platon/core/common';
 import { CourseService } from '@platon/feature/course/browser';
-import { Course, Activity, CourseMember, CourseMemberFilters, CourseSection, CreateCourseMember, CreateCourseSection, UpdateCourse, UpdateCourseSection } from '@platon/feature/course/common';
-import { LayoutState } from '@platon/shared/ui';
-import { BehaviorSubject, firstValueFrom, Subscription } from 'rxjs';
+import { Activity, Course, CourseMember, CourseMemberFilters, CourseSection, CreateCourseMember, CreateCourseSection, UpdateCourse, UpdateCourseSection } from '@platon/feature/course/common';
+import { LayoutState, layoutStateFromError } from '@platon/shared/ui';
+import { BehaviorSubject, Subscription, firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class CoursePresenter implements OnDestroy {
@@ -161,12 +160,7 @@ export class CoursePresenter implements OnDestroy {
     try {
       await this.refresh(id);
     } catch (error) {
-      const status = (error as HttpErrorResponse).status || 500;
-      if (status >= 400 && status < 500) {
-        this.context.next({ state: 'NOT_FOUND' });
-      } else {
-        this.context.next({ state: 'SERVER_ERROR' });
-      }
+      this.context.next({ state: layoutStateFromError(error) })
     }
   }
 

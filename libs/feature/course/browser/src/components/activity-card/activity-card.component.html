@@ -50,6 +50,7 @@
           <i nz-icon nzType="play-circle" nzTheme="outline"></i>
         </a>
         <a
+          *ngIf="item.permissions.viewStats"
           nz-tooltip="Statistiques"
           nz-button
           nzShape="round"
@@ -59,6 +60,7 @@
         </a>
         <div class="spacer"></div>
         <a
+          *ngIf="item.permissions.update"
           nz-tooltip="Paramètres"
           nz-button
           nzShape="round"

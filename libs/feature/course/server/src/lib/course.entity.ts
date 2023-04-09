@@ -4,7 +4,7 @@ import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 
 @Entity('Courses')
 export class CourseEntity extends BaseEntity {
-  @Index('Courses_name_idx')
+  @Index('Courses_name_idx', { synchronize: false })
   @Column()
   name!: string
 

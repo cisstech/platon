@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@nestjs/common';
-import { deepCopy, deepMerge, NotFoundResponse, UnauthorizedResponse, User } from '@platon/core/common';
+import { deepCopy, deepMerge, ForbiddenResponse, NotFoundResponse, User } from '@platon/core/common';
 import { ActivityExercise, ActivitySettings, defaultActivitySettings, ExerciseFeedback, ExerciseHint, ExerciseTheory, ExerciseVariables, extractExercisesFromActivityVariables, PLSourceFile, Variables } from '@platon/feature/compiler';
-import { CourseService } from '@platon/feature/course/server';
+import { ActivityEntity, ActivityService } from '@platon/feature/course/server';
 import { ActivityPlayer, answerStateFromGrade, AnswerStates, EvalExerciseInput, ExercisePlayer, PlayActivityOuput, PlayerActions, PlayerActivityVariables, PlayerExercise, PlayerNavigation, PlayExerciseOuput, PreviewInput } from '@platon/feature/player/common';
 import { ResourceFileService } from '@platon/feature/resource/server';
 import * as nunjucks from 'nunjucks';
@@ -14,6 +14,20 @@ import { PlayerSessionEntity } from './sessions/session.entity';
 import { PlayerSessionService } from './sessions/session.service';
 
 nunjucks.configure({ autoescape: false });
+
+
+type ActionHandler = (
+  input: EvalExerciseInput,
+  user?: User
+) => Promise<ExercisePlayer | [ExercisePlayer, PlayerNavigation]>;
+
+interface CreateSessionArgs {
+  user?: User,
+  source: PLSourceFile,
+  parentId?: string,
+  overrides?: Variables
+  activity?: ActivityEntity,
+}
 
 @Injectable()
 export class PlayerService {
@@ -27,14 +41,14 @@ export class PlayerService {
 
   constructor(
     private readonly dataSource: DataSource,
-    private readonly courseService: CourseService,
-    private readonly fileService: ResourceFileService,
     private readonly sandboxService: SandboxService,
+    private readonly activityService: ActivityService,
     private readonly answerService: PlayerAnswerService,
     private readonly sessionService: PlayerSessionService,
+    private readonly resourceFileService: ResourceFileService,
   ) { }
 
-  // ENDPOINTS
+  //#region ENDPOINTS
 
   /**
    * Creates new player session for the given resource for preview purpose.
@@ -48,7 +62,7 @@ export class PlayerService {
   async preview(
     input: PreviewInput
   ): Promise<PreviewOuputDTO> {
-    const [source, resource] = await this.fileService.compile(
+    const [source, resource] = await this.resourceFileService.compile(
       input.resource,
       input.version,
     );
@@ -63,34 +77,22 @@ export class PlayerService {
     activityId: string,
     user: User
   ): Promise<PlayActivityOuput> {
-    const activitySession = await this.sessionService.ofCourseActivity(
+    let activitySession = await this.sessionService.ofActivity(
       activityId,
       user.id
     );
-
-    if (activitySession) {
-      await this.sessionService.update(activitySession.id, {
-        startedAt: activitySession.startedAt || new Date(),
+    if (!activitySession) {
+      const activity = await this.activityService.findById(
+        activityId,
+        user
+      );
+      activitySession = await this.createNewSession({
+        user,
+        activity,
+        source: activity.source,
       });
-      return { activity: this.withActivityPlayer(activitySession) }
     }
-
-    const activity = await this.courseService.findActivityById(activityId);
-    if (!activity) {
-      throw new NotFoundResponse(`CourseActivity not found: ${activityId}.`);
-    }
-
-    if (!await this.courseService.canViewActivity(user, activity)) {
-      throw new UnauthorizedResponse(`User do not belong to the activity ${activity}.`)
-    }
-
-    const session = await this.createNewSession({
-      user,
-      source: activity.source,
-      activityId: activity.id,
-    });
-
-    return { activity: this.withActivityPlayer(session) }
+    return { activity: this.withActivityPlayer(activitySession) }
   }
 
   async playExercises(
@@ -98,41 +100,42 @@ export class PlayerService {
     exerciseSessionIds: string[],
     user?: User
   ): Promise<PlayExerciseOuput> {
-    const activitySession = await this.sessionService.findById(activitySessionId);
+    const activitySession = await this.sessionService.findById<PlayerActivityVariables>(
+      activitySessionId,
+      { parent: false, activity: true }
+    );
     if (!activitySession) {
       throw new NotFoundResponse(`ActivitySession not found: ${activitySessionId}`);
     }
 
-    const activityVariables = activitySession.variables as PlayerActivityVariables;
-    if (activityVariables.navigation.terminated) {
-      throw new UnauthorizedResponse(`ActivitySession terminated: ${activitySessionId}`);
-    }
-
     // CREATE PLAYERS
-    const exercises = await Promise.all(
+    const exercisePlayers = await Promise.all(
       exerciseSessionIds.map(async (sessionId) => {
         const exerciseSession = this.withSessionAccessGuard(
-          await this.sessionService.ofExercise(activitySessionId, sessionId, undefined),
+          await this.sessionService.ofExercise(activitySessionId, sessionId),
           user
         );
+        exerciseSession.parent = activitySession;
+        exerciseSession.startedAt = exerciseSession.startedAt || new Date()
         await this.sessionService.update(exerciseSession.id, {
-          startedAt: exerciseSession.startedAt || new Date()
+          startedAt: exerciseSession.startedAt
         });
         return this.withExercisePlayer(exerciseSession);
       })
     );
 
-    // UPDATE NAVIGATION
-    this.updateActivityNavigation(activityVariables, exerciseSessionIds[0]);
-
-    // SAVE ACTIVITY SESSION
+    // UPDATE ACTIVITY NAVIGATION
+    const activityVariables = activitySession.variables;
+    this.computeNavigation(activityVariables, exerciseSessionIds[0]);
+    activitySession.variables = activityVariables;
+    activitySession.startedAt = activitySession.startedAt || new Date();
     await this.sessionService.update(activitySessionId, {
-      variables: activityVariables,
-      startedAt: activitySession.startedAt ?? new Date(),
+      variables: activitySession.variables,
+      startedAt: activitySession.startedAt
     });
 
     return {
-      exercises,
+      exercises: exercisePlayers,
       navigation: activityVariables.navigation,
     }
   }
@@ -142,15 +145,16 @@ export class PlayerService {
     user?: User
   ): Promise<PlayActivityOuput> {
     const session = this.withSessionAccessGuard(
-      await this.sessionService.findById(sessionId),
-      user
+      await this.sessionService.findById(sessionId, { parent: true, activity: true }),
+      user,
     );
 
     const activitySession = session.parent || session;
     const activityVariables = activitySession.variables as PlayerActivityVariables;
     activityVariables.navigation.terminated = true;
+    activitySession.variables = activityVariables;
     await this.sessionService.update(activitySession.id, {
-      variables: activityVariables
+      variables: activitySession.variables
     });
 
     return {
@@ -158,8 +162,9 @@ export class PlayerService {
     }
   }
 
-  // EVAL
+  //#endregion
 
+  //#region EVAL
 
   async evaluate(
     input: EvalExerciseInput,
@@ -173,7 +178,7 @@ export class PlayerService {
     user?: User
   ): Promise<ExercisePlayer> {
     const exerciseSession = this.withSessionAccessGuard(
-      await this.sessionService.findById(input.sessionId),
+      await this.sessionService.findById(input.sessionId, { parent: true, activity: true }),
       user
     );
 
@@ -200,7 +205,7 @@ export class PlayerService {
     user?: User
   ): Promise<ExercisePlayer> {
     const exerciseSession = this.withSessionAccessGuard(
-      await this.sessionService.findById(input.sessionId),
+      await this.sessionService.findById(input.sessionId, { parent: true, activity: true }),
       user
     );
 
@@ -229,7 +234,7 @@ export class PlayerService {
     user?: User
   ): Promise<[ExercisePlayer, PlayerNavigation]> {
     const exerciseSession = this.withSessionAccessGuard(
-      await this.sessionService.findById(input.sessionId),
+      await this.sessionService.findById(input.sessionId, { parent: true, activity: true }),
       user
     );
 
@@ -318,15 +323,16 @@ export class PlayerService {
     user?: User
   ): Promise<ExercisePlayer> {
     const exerciseSession = this.withSessionAccessGuard(
-      await this.sessionService.findById(input.sessionId),
+      await this.sessionService.findById(input.sessionId, { parent: true, activity: true }),
       user
     );
 
     const activitySession = exerciseSession.parent;
     if (!activitySession) {
-      throw new UnauthorizedResponse(`This action can be called only with dynamic activities.`)
+      throw new ForbiddenResponse(`This action can be called only with dynamic activities.`)
     }
 
+    activitySession.activity = activitySession.activity ?? exerciseSession.activity;
     this.withAnswersInSession(exerciseSession, input.answers || {});
 
     // TODO define the api for dynamic activities
@@ -339,7 +345,7 @@ export class PlayerService {
     user?: User
   ): Promise<ExercisePlayer> {
     const exerciseSession = this.withSessionAccessGuard(
-      await this.sessionService.findById(input.sessionId),
+      await this.sessionService.findById(input.sessionId, { parent: true, activity: true }),
       user
     );
 
@@ -354,7 +360,9 @@ export class PlayerService {
     return this.withExercisePlayer(exerciseSession);
   }
 
-  // BUILD
+  //#endregion
+
+  //#region BUILD
 
   /**
    * Builds the given resource and creates new session.
@@ -372,23 +380,27 @@ export class PlayerService {
         user,
         source,
         parentId,
-        activityId,
+        activity,
       } = args;
-
       const { envid, variables } = await this.sandboxService.build(source);
 
       const session = await this.sessionService.create({
+        activity,
+        variables,
         envid: envid || null as any,
         userId: user?.id || null as any,
         parentId: parentId || null as any,
-        activityId: activityId || null as any,
-        variables
+        activityId: activity?.id || null as any,
       }, manager);
 
       if (source.abspath.endsWith('.pla')) {
         session.variables = await this.withActivityNavigation(
-          variables as PlayerActivityVariables, session, user, manager
+          variables as PlayerActivityVariables,
+          session,
+          user,
+          manager
         );
+
         await this.sessionService.update(session.id, {
           variables: session.variables
         }, manager);
@@ -396,7 +408,6 @@ export class PlayerService {
 
       return session;
     }
-
     return entityManager
       ? create(entityManager)
       : this.dataSource.transaction(create)
@@ -404,8 +415,7 @@ export class PlayerService {
   }
 
   /**
-   * Ensures that every a session is created for each exercices of the given activity navigation
-   * for `user`.
+   * Ensures that a session is created for each exercices of the given activity navigation for `user`.
    * @param variables Activity variables.
    * @returns Computed variables.
    */
@@ -431,7 +441,7 @@ export class PlayerService {
       exercises.map(async item => {
         if (!('sessionId' in item)) {
           const session = await this.createNewSession({
-            activityId: activitySession.activityId,
+            activity: activitySession.activity,
             parentId: activitySession.id,
             source: item.source,
             user,
@@ -467,6 +477,9 @@ export class PlayerService {
       sessionId: session.id,
       title: variables.title,
       author: variables.author,
+      startedAt: session.startedAt,
+      openAt: session.activity?.openAt,
+      closeAt: session.activity?.closeAt,
       introduction: variables.introduction,
       conclusion: variables.conclusion,
       settings: variables.settings,
@@ -519,7 +532,9 @@ export class PlayerService {
     }
   }
 
-  // RENDERING
+  //#endregion
+
+  //#region RENDERING
 
   /**
    * Transforms recursivly all component objects to HTML code from `object`.
@@ -616,7 +631,9 @@ export class PlayerService {
     return session;
   }
 
-  // SESSION GUARDS
+  //#endregion
+
+  //#region SESSION GUARDS
 
   /**
    * Ensures that `user` has access to `session`.
@@ -638,7 +655,7 @@ export class PlayerService {
     }
 
     if (session.userId && session.userId !== user?.id) {
-      throw new UnauthorizedResponse('You cannot access to this session.');
+      throw new ForbiddenResponse('You cannot access to this session.');
     }
 
     return session;
@@ -661,6 +678,8 @@ export class PlayerService {
     let activityNavigation: PlayerNavigation | undefined;
     if (exerciseSession.parent) {
       activitySession = exerciseSession.parent as PlayerSessionEntity;
+      activitySession.activity = activitySession.activity ?? exerciseSession.activity;
+
       const activityVariables = activitySession.variables as PlayerActivityVariables;
       activityNavigation = activityVariables.navigation;
 
@@ -669,13 +688,15 @@ export class PlayerService {
       }
 
       if (typeof activityNavigation.current !== 'object' || activityNavigation.current.sessionId !== exerciseSession.id) {
-        throw new UnauthorizedResponse('This exercise is not the most recents opened, please reload your page.');
+        throw new ForbiddenResponse('This exercise is not the most recents opened, please reload your page.');
       }
     }
     return { activitySession, activityNavigation };
   }
 
-  // SETTING GUARDS
+  //#endregion
+
+  //#region SETTING GUARDS
 
   /**
    * Ensures that hints are not sent to the user if disabled in `settings` or not already asked by the user.
@@ -763,38 +784,32 @@ export class PlayerService {
     return feedbacks;
   }
 
-
-  private updateActivityNavigation(activityVariables: PlayerActivityVariables, currentSessionId?: string) {
+  private computeNavigation(
+    activityVariables: PlayerActivityVariables,
+    currentSessionId?: string
+  ) {
     const { navigation, settings } = activityVariables
 
     navigation.started = true;
+
+    const markAsStarted = (exercise: PlayerExercise) => {
+      if (exercise.state === AnswerStates.NOT_STARTED) {
+        exercise.state = AnswerStates.STARTED;
+      }
+    }
+
     if ('manual' === settings?.navigation?.mode) {
       navigation.current = navigation.exercises.find(item => {
         if (item.sessionId === currentSessionId) {
-          if (item.state === AnswerStates.NOT_STARTED) {
-            item.state = AnswerStates.STARTED;
-          }
+          markAsStarted(item)
           return true;
         }
         return false;
       }) as PlayerExercise;
     } else if ('composed' === settings?.navigation?.mode) {
-      navigation.exercises.forEach(item => {
-        if (item.state === AnswerStates.NOT_STARTED) {
-          item.state = AnswerStates.STARTED;
-        }
-      });
+      navigation.exercises.forEach(markAsStarted);
     }
   }
 
-}
-
-type ActionHandler = (input: EvalExerciseInput, user?: User) => Promise<ExercisePlayer | [ExercisePlayer, PlayerNavigation]>;
-
-interface CreateSessionArgs {
-  user?: User,
-  source: PLSourceFile,
-  parentId?: string,
-  overrides?: Variables
-  activityId?: string,
+  //#endregion
 }

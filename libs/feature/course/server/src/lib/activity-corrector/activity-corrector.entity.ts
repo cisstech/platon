@@ -14,6 +14,7 @@ export class ActivityCorrectorEntity extends BaseEntity {
   @JoinColumn({ name: 'activity_id' })
   activity!: ActivityEntity
 
+  @Index('ActivityCorrectors_member_id_idx')
   @Column({ name: 'member_id' })
   memberId!: string
 
@@ -21,6 +22,7 @@ export class ActivityCorrectorEntity extends BaseEntity {
   @JoinColumn({ name: 'member_id', })
   member!: CourseMemberEntity
 
+  @Index('ActivityCorrectors_user_id_idx')
   @Column({ name: 'user_id', nullable: true })
   userId?: string
 

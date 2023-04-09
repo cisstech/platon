@@ -1,63 +1,35 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { NotFoundResponse, User } from '@platon/core/common';
+import { ForbiddenResponse, NotFoundResponse, User, UserRoles } from '@platon/core/common';
+import { IRequest, buildQuery } from '@platon/core/server';
 import { ActivityFilters, CreateActivity, UpdateActivity, calculateActivityState } from '@platon/feature/course/common';
 import { ResourceFileService } from '@platon/feature/resource/server';
-import { Repository } from 'typeorm';
+import { CLS_REQ } from 'nestjs-cls';
+import { Repository, SelectQueryBuilder } from 'typeorm';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { Optional } from 'typescript-optional';
+import { ActivityMemberView } from '../activity-member/activity-member.view';
 import { ActivityEntity } from './activity.entity';
-
-interface Participant {
-  id: string;
-  username: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-}
-
+import { ActivityMemberService } from '../activity-member/activity-member.service';
 
 @Injectable()
 export class ActivityService {
   constructor(
+    @Inject(CLS_REQ)
+    private readonly request: IRequest,
     private readonly fileService: ResourceFileService,
+    private readonly activityMemberService: ActivityMemberService,
 
     @InjectRepository(ActivityEntity)
     private readonly repository: Repository<ActivityEntity>
   ) { }
 
-  async findById(courseId: string, id: string, user: User): Promise<Optional<ActivityEntity>> {
-    const qb = this.repository.createQueryBuilder('activity')
-      .where(`course_id = :courseId`, { courseId })
-      .andWhere(`activity.id = :id`, { id })
-      .leftJoinAndSelect(
-        'PlayerSessions',
-        'session',
-        'session.parent_id IS NULL AND session.activity_id = activity.id AND session.user_id = :userId',
-        {
-          userId: user.id
-        }
-      )
-
-    const { entities, raw: raws } = await qb.getRawAndEntities()
-    entities.forEach(entity => {
-      this.calculateVirtualColumns(entity, raws.find(r => r.activity_id === entity.id));
-    });
-
-    return Optional.ofNullable(entities.pop());
-  }
-
-  async ofCourse(courseId: string, user: User, filters?: ActivityFilters): Promise<[ActivityEntity[], number]> {
-    const qb = this.repository.createQueryBuilder('activity')
-      .where(`course_id = :courseId`, { courseId })
-      .leftJoinAndSelect(
-        'PlayerSessions',
-        'session',
-        'session.parent_id IS NULL AND session.activity_id = activity.id AND session.user_id = :userId',
-        {
-          userId: user.id
-        }
-      )
+  async search(
+    courseId: string,
+    filters?: ActivityFilters
+  ): Promise<[ActivityEntity[], number]> {
+    const qb = this.createQueryBuilder(courseId)
 
     if (filters?.sectionId) {
       qb.andWhere(`section_id = :sectionId`, { sectionId: filters.sectionId })
@@ -65,16 +37,53 @@ export class ActivityService {
 
     const { entities, raw: raws } = await qb.getRawAndEntities()
     entities.forEach(entity => {
-      this.calculateVirtualColumns(entity, raws.find(r => r.activity_id === entity.id));
+      this.addVirtualColumns(entity, raws.find(r => r.activity_id === entity.id));
     });
+
     return [entities, entities.length]
   }
 
-  async create(activity: Partial<ActivityEntity>): Promise<ActivityEntity> {
-    return this.calculateVirtualColumns(
-      await this.repository.save({
-        ...activity,
-      })
+  async findById(
+    id: string,
+    user: User,
+  ): Promise<ActivityEntity> {
+    const qb = buildQuery(
+      this.repository.createQueryBuilder('activity'),
+      (qb) => qb.where('activity.id = :id', { id }),
+    )
+    const activity = await qb.getOne()
+    if (!activity) {
+      throw new NotFoundResponse(`Activity ${id} not found.`);
+    }
+
+    const isCreator = user.id === activity.creatorId;
+    if (!isCreator && !await this.activityMemberService.isMember(id, user.id)) {
+      throw new ForbiddenResponse(`You are not a member of this activity`);
+    }
+
+    return activity;
+  }
+
+  async findByCourseIdAndId(
+    courseId: string,
+    id: string,
+  ): Promise<Optional<ActivityEntity>> {
+    const qb = this.createQueryBuilder(courseId)
+    qb.andWhere(`activity.id = :id`, { id })
+
+    const { entities, raw: raws } = await qb.getRawAndEntities()
+    entities.forEach(entity => {
+      this.addVirtualColumns(entity, raws.find(r => r.activity_id === entity.id));
+    });
+
+    return Optional.ofNullable(entities.pop());
+  }
+
+  async create(
+    activity: Partial<ActivityEntity>
+  ): Promise<ActivityEntity> {
+    return this.addVirtualColumns(
+      await this.repository.save(activity)
     );
   }
 
@@ -83,21 +92,35 @@ export class ActivityService {
     activityId: string,
     changes: Partial<ActivityEntity>
   ): Promise<ActivityEntity> {
-    const activity = await this.repository.findOne({ where: { courseId, id: activityId } })
+    const activity = await this.repository.findOne({
+      where: {
+        courseId,
+        id: activityId
+      }
+    })
     if (!activity) {
       throw new NotFoundResponse(`CourseActivity not found: ${activityId}`)
     }
-    Object.assign(activity, changes);
-    return this.calculateVirtualColumns(
-      await this.repository.save(activity)
+
+    await this.repository.update(
+      { id: activityId },
+      changes as QueryDeepPartialEntity<ActivityEntity>
     );
+
+    Object.assign(activity, changes);
+    return this.addVirtualColumns(activity);
   }
 
-  async delete(courseId: string, activityId: string) {
+  async delete(
+    courseId: string,
+    activityId: string
+  ) {
     return this.repository.delete({ courseId, id: activityId });
   }
 
-  async fromInput(input: CreateActivity | UpdateActivity): Promise<ActivityEntity> {
+  async fromInput(
+    input: CreateActivity | UpdateActivity
+  ): Promise<ActivityEntity> {
     const activity = new ActivityEntity()
 
     if ('resourceId' in input) {
@@ -112,54 +135,68 @@ export class ActivityService {
     return activity
   }
 
-
-  async listUsers(
-    courseId: string,
-    activityId: string,
-  ): Promise<Participant[]> {
-    const activityMembers = (await this.repository.query(`
-      SELECT DISTINCT COALESCE(activity_member.user_id, course_member.user_id, gp.user_id) as id,
-        u.username,
-        u.first_name as "firstName",
-        u.last_name as "lastName",
-        u.email
-      FROM "ActivityMembers" activity_member
-      INNER JOIN "CourseMembers" course_member ON course_member.id = activity_member.member_id
-      LEFT JOIN "UserGroupsUsers" gp ON activity_member.user_id IS NULL AND gp.group_id = course_member.group_id
-      INNER JOIN "Users" u ON u.id=activity_member.user_id OR u.id = course_member.user_id OR u.id = gp.user_id
-      WHERE course_member.course_id = $1 AND activity_member.activity_id = $2
-    `, [courseId, activityId])) as Participant[]
-    if (!activityMembers.length) {
-      return (await this.repository.query(`
-      SELECT DISTINCT COALESCE(course_member.user_id, gp.user_id) as id,
-        u.username,
-        u.first_name as "firstName",
-        u.last_name as "lastName",
-        u.email
-        FROM "CourseMembers" course_member
-        LEFT JOIN "UserGroupsUsers" gp ON gp.group_id = course_member.group_id
-        INNER JOIN "Users" u ON u.id = course_member.user_id OR u.id = gp.user_id
-        WHERE course_member.course_id = $1
-    `, [courseId])) as Participant[]
-    }
-    return activityMembers;
+  private createQueryBuilder(courseId: string) {
+    const qb = buildQuery(
+      this.repository.createQueryBuilder('activity'),
+      (qb) => this.withSessionJoin(qb, this.request.user),
+      (qb) => this.withMemberJoin(qb, this.request.user),
+      (qb) => qb.where(`activity.course_id = :courseId`, { courseId }),
+      (qb) => this.withMemberClause(qb, this.request.user),
+    )
+    return qb;
   }
 
-  private calculateVirtualColumns(entity: ActivityEntity, raw?: any) {
-    // TODO move close to answer module
+  private addVirtualColumns(
+    entity: ActivityEntity,
+    rawResult?: any
+  ): ActivityEntity {
     Object.assign(entity, {
-      state: calculateActivityState(entity)
-    });
-
-    if (raw) {
-      const navigation = raw.session_variables?.navigation;
+      state: calculateActivityState(entity),
+      permissions: {
+        update: entity.creatorId === this.request.user.id,
+        viewStats: [UserRoles.admin, UserRoles.teacher].includes(this.request.user.role),
+      }
+    } as Partial<ActivityEntity>);
+    if (rawResult) {
+      const navigation = rawResult.session_variables?.navigation;
       if (navigation?.exercises) {
         const started = navigation.exercises.filter((e: any) => e.state !== 'NOT_STARTED').length;
         const graded = navigation.exercises.filter((e: any) => !['NOT_STARTED', 'STARTED'].includes(e.state)).length;
-        entity.progression = (100 * graded + 10 * (started - graded)) / navigation.exercises.length;
+        Object.assign(entity, {
+          progression: (100 * graded + 10 * (started - graded)) / navigation.exercises.length
+        } as Partial<ActivityEntity>)
       }
     }
-
     return entity
+  }
+
+  private withMemberJoin(
+    qb: SelectQueryBuilder<ActivityEntity>,
+    user: User
+  ) {
+    return qb.leftJoin(ActivityMemberView, 'member', 'member.activity_id = activity.id AND member.id = :userId', {
+      userId: user.id
+    })
+  }
+
+  private withSessionJoin(
+    qb: SelectQueryBuilder<ActivityEntity>,
+    user: User
+  ) {
+    return qb.leftJoinAndSelect(
+      'PlayerSessions',
+      'session',
+      'session.parent_id IS NULL AND session.activity_id = activity.id AND session.user_id = :userId',
+      {
+        userId: user.id
+      }
+    )
+  }
+
+  private withMemberClause(
+    qb: SelectQueryBuilder<ActivityEntity>,
+    user: User
+  ) {
+    return qb.andWhere(`(activity.creator_id = :userId OR member.id IS NOT NULL)`, { userId: user.id })
   }
 }

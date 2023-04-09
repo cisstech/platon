@@ -4,7 +4,7 @@ import { UserEntity } from '../user.entity';
 
 @Entity('UserGroups')
 export class UserGroupEntity extends BaseEntity {
-  @Index('UserGroups_name_idx')
+  @Index('UserGroups_name_idx', { synchronize: false })
   @Column()
   name!: string
 

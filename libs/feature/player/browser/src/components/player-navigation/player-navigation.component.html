@@ -2,7 +2,9 @@
 <mat-card>
   <mat-card-header>
     <mat-card-title>{{ player.title }}</mat-card-title>
-    <mat-card-subtitle *ngIf="player.author">{{player.author}}</mat-card-subtitle>
+    <mat-card-subtitle *ngIf="player.author">
+      <user-avatar [userIdOrName]="player.author" />
+    </mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
     <nz-timeline nzMode="alternate">

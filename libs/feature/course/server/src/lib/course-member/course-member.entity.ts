@@ -15,6 +15,7 @@ export class CourseMemberEntity extends BaseEntity {
   @JoinColumn({ name: 'course_id' })
   course!: CourseEntity
 
+  @Index('CourseMembers_user_id_idx')
   @Column({ name: 'user_id', nullable: true })
   userId?: string
 

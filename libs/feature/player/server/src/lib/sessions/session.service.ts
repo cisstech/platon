@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, FindOptionsRelations, IsNull, Repository } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { PlayerSessionEntity } from './session.entity';
+import { ExerciseVariables } from '@platon/feature/compiler';
+import { PlayerActivityVariables } from '@platon/feature/player/common';
 
 @Injectable()
 export class PlayerSessionService {
@@ -11,12 +13,10 @@ export class PlayerSessionService {
     private readonly repository: Repository<PlayerSessionEntity>,
   ) { }
 
-
-  findById(
+  findById<T extends object>(
     id: string,
-    relations: FindOptionsRelations<PlayerSessionEntity> = {
-      parent: true
-    }) {
+    relations: FindOptionsRelations<PlayerSessionEntity>
+  ): Promise<PlayerSessionEntity<T> | null> {
     return this.repository.findOne({
       where: { id },
       relations
@@ -24,39 +24,40 @@ export class PlayerSessionService {
   }
 
   findAllWithParent(
-    parentId: string) {
+    parentId: string
+  ): Promise<PlayerSessionEntity<ExerciseVariables>[]> {
     return this.repository.find({
       where: { parentId },
     });
   }
 
-
-  ofCourseActivity(
+  ofActivity(
     activityId: string,
-    userId: string,
-    relations: FindOptionsRelations<PlayerSessionEntity> = {
-      parent: false
-    }) {
+    userId: string
+  ): Promise<PlayerSessionEntity<PlayerActivityVariables> | null> {
     return this.repository.findOne({
       where: { parentId: IsNull(), activityId, userId },
-      relations
+      relations: {
+        activity: true
+      }
     });
   }
 
   ofExercise(
     parentId: string,
     sessionId: string,
-    relations: FindOptionsRelations<PlayerSessionEntity> = {
-      parent: true
-    }
-  ) {
+    relations?: FindOptionsRelations<PlayerSessionEntity>
+  ): Promise<PlayerSessionEntity<ExerciseVariables> | null> {
     return this.repository.findOne({
       where: { parentId, id: sessionId },
       relations
     });
   }
 
-  create(input: Partial<PlayerSessionEntity>, entityManager?: EntityManager): Promise<PlayerSessionEntity> {
+  create<T extends object>(
+    input: Partial<PlayerSessionEntity>,
+    entityManager?: EntityManager
+  ): Promise<PlayerSessionEntity<T>> {
     if (entityManager) {
       return entityManager.save(
         entityManager.create(this.repository.target, input as PlayerSessionEntity)
@@ -68,7 +69,11 @@ export class PlayerSessionService {
     );
   }
 
-  async update(id: string, changes: QueryDeepPartialEntity<PlayerSessionEntity>, entityManager?: EntityManager) {
+  async update(
+    id: string,
+    changes: QueryDeepPartialEntity<PlayerSessionEntity>,
+    entityManager?: EntityManager
+  ) {
     if (entityManager) {
       return entityManager.update(this.repository.target, { id }, changes);
     }

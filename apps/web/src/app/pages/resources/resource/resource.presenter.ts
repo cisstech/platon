@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService, DialogService, TagService } from '@platon/core/browser';
 import { Level, ListResponse, Topic, User } from '@platon/core/common';
 import { ResourceFileService, ResourceService } from '@platon/feature/resource/browser';
 import { CircleTree, CreateResourceInvitation, FileVersions, Resource, ResourceEvent, ResourceEventFilters, ResourceFile, ResourceInvitation, ResourceMember, ResourceMemberFilters, ResourceStatisic, UpdateResource } from '@platon/feature/resource/common';
-import { LayoutState } from '@platon/shared/ui';
-import { BehaviorSubject, catchError, firstValueFrom, Observable, of, Subscription } from 'rxjs';
+import { LayoutState, layoutStateFromError } from '@platon/shared/ui';
+import { BehaviorSubject, Observable, Subscription, catchError, firstValueFrom, of } from 'rxjs';
 
 @Injectable()
 export class ResourcePresenter implements OnDestroy {
@@ -238,12 +237,7 @@ export class ResourcePresenter implements OnDestroy {
     try {
       await this.refresh(id);
     } catch (error) {
-      const status = (error as HttpErrorResponse).status || 500;
-      if (status >= 400 && status < 500) {
-        this.context.next({ state: 'NOT_FOUND' });
-      } else {
-        this.context.next({ state: 'SERVER_ERROR' });
-      }
+      this.context.next({ state: layoutStateFromError(error) })
     }
     this.isInitialLoading = false;
   }
