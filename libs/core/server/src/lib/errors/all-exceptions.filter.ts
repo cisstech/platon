@@ -5,18 +5,17 @@ import { ErrorResponse } from '@platon/core/common';
 export class AllExceptionsFilter implements ExceptionFilter {
   constructor(
     private readonly logger: Logger
-  ) {}
+  ) { }
 
 
   catch(exception: any, host: ArgumentsHost) {
-    console.error(exception)
-
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
 
     let error: ErrorResponse;
-
-    if (exception instanceof HttpException) {
+    if (exception instanceof ErrorResponse) {
+      error = exception;
+    } else if (exception instanceof HttpException) {
       error = new ErrorResponse({
         status: exception.getStatus(),
         message: exception.message

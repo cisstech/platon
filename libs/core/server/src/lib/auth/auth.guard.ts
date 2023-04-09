@@ -1,8 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard as PassportGuard } from '@nestjs/passport';
 import { firstValueFrom, Observable } from 'rxjs';
 import { IS_PUBLIC_KEY } from './decorators/public.decorator';
+import { TokenExpiredError } from 'jsonwebtoken';
+import { UnauthorizedResponse, TOKEN_EXPIRED_ERROR_CODE } from '@platon/core/common';
 
 @Injectable()
 export class AuthGuard extends PassportGuard(['jwt']) {
@@ -33,5 +36,12 @@ export class AuthGuard extends PassportGuard(['jwt']) {
       }
       throw error;
     }
+  }
+
+  override handleRequest(err: any, user: any, info: any, context: any, status: any) {
+    if (info instanceof TokenExpiredError || Array.isArray(info) && info.some((i) => i instanceof TokenExpiredError)) {
+      throw new UnauthorizedResponse(TOKEN_EXPIRED_ERROR_CODE)
+    }
+    return super.handleRequest(err, user, info, context, status);
   }
 }

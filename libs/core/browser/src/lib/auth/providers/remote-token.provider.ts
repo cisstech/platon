@@ -74,11 +74,8 @@ export class RemoteTokenProvider {
       const response = await lastValueFrom(
         this.http.post<ItemResponse<AuthToken>>('/api/v1/auth/refresh/', {})
       );
-
       token.accessToken = response.resource.accessToken;
-
       await firstValueFrom(this.storage.set(KEY, token))
-
       return token;
     } catch (error) {
       await this.remove();

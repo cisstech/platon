@@ -30,7 +30,7 @@ export class RemoteAuthProvider extends AuthProvider {
           this.http.get<ItemResponse<User>>('/api/v1/users/' + data.username)
         ).then(response => response.resource);
       } catch {
-        await this.tokenProvider.remove();
+        this.signOut();
       }
     }
     return undefined;

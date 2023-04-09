@@ -19,3 +19,5 @@ export interface SignUpInput {
   role: UserRoles;
 }
 
+
+export const TOKEN_EXPIRED_ERROR_CODE = 'auth/token-expired'
