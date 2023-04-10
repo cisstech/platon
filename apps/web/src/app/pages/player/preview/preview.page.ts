@@ -8,7 +8,7 @@ import { MatCardModule } from '@angular/material/card';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 import { Player } from '@platon/feature/player/common';
-import { PlayerResourceComponent, PlayerService } from '@platon/feature/player/browser';
+import { PlayerWrapperComponent, PlayerService } from '@platon/feature/player/browser';
 
 
 @Component({
@@ -21,7 +21,7 @@ import { PlayerResourceComponent, PlayerService } from '@platon/feature/player/b
     CommonModule,
     NzSpinModule,
     MatCardModule,
-    PlayerResourceComponent,
+    PlayerWrapperComponent,
   ]
 })
 export class PlayerPreviewPage implements OnInit {

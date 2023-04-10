@@ -4,8 +4,8 @@ import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 import { SessionEntity } from '../sessions/session.entity';
 
 
-@Entity('PlayerAnswers')
-@Index('PlayerAnswers_user_id_session_id_idx', ['userId', 'sessionId'])
+@Entity('Answers')
+@Index('Answers_user_id_session_id_idx', ['userId', 'sessionId'])
 export class AnswerEntity extends BaseEntity {
   @Column({ name: 'user_id', nullable: true })
   userId?: string
@@ -14,6 +14,7 @@ export class AnswerEntity extends BaseEntity {
   @JoinColumn({ name: 'user_id' })
   user?: UserEntity
 
+  @Index('Answers_session_id_idx')
   @Column({ name: 'session_id' })
   sessionId!: string
 
@@ -24,7 +25,7 @@ export class AnswerEntity extends BaseEntity {
   @Column({ type: 'jsonb' })
   variables!: Record<string, any>
 
-  @Column({ type: 'int', default: -1 })
+  @Column({ type: 'float', default: -1 })
   grade!: number
 }
 

@@ -10,11 +10,11 @@ export class RemoteResultProvider extends ResultProvider {
     super();
   }
 
-  userResults(activityId: string, userId: string): Observable<UserResults> {
-    return this.http.get<UserResults>(`/api/v1/results/${activityId}/${userId}`);
+  sessionResults(sessionId: string): Observable<UserResults> {
+    return this.http.get<UserResults>(`/api/v1/results/session/${sessionId}`);
   }
 
   activityResults(activityId: string): Observable<ActivityResults> {
-    return this.http.get<ActivityResults>(`/api/v1/results/${activityId}`);
+    return this.http.get<ActivityResults>(`/api/v1/results/activity/${activityId}`);
   }
 }

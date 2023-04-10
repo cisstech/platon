@@ -11,20 +11,19 @@ export class ResultController {
   ) { }
 
   @Roles(UserRoles.teacher, UserRoles.admin)
-  @Get('/:activityId')
+  @Get('/activity/:activityId')
   activityResults(
     @Param('activityId') activityId: string
   ): Promise<ActivityResults> {
     return this.service.activityResults(activityId);
   }
 
-  @Get('/:activityId/:userId')
-  async userResults(
-    @Param('activityId') activityId: string,
-    @Param('userId') userId: string
+  @Get('/session/:sessionId')
+  async sessionResults(
+    @Param('sessionId') sessionId: string,
   ): Promise<UserResults> {
     return (
-      await this.service.activityResults(activityId, userId)
+      await this.service.sessionResults(sessionId)
     ).users[0];
   }
 }

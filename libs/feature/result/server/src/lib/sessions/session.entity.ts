@@ -2,11 +2,12 @@
 import { BaseEntity, UserEntity } from '@platon/core/server';
 import { ActivityEntity } from '@platon/feature/course/server';
 import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
+import { CorrectionEntity } from '../correction/correction.entity';
 
 
-@Entity('PlayerSessions')
-@Index('PlayerSessions_exercise_idx', ['parentId', 'id'])
-@Index('PlayerSessions_activity_user_idx', ['parentId', 'activityId', 'userId'])
+@Entity('Sessions')
+@Index('Sessions_exercise_idx', ['parentId', 'id'])
+@Index('Sessions_activity_user_idx', ['parentId', 'activityId', 'userId'])
 export class SessionEntity<TVariables extends object = any> extends BaseEntity {
   @Column({ name: 'parent_id', nullable: true })
   parentId?: string
@@ -32,14 +33,18 @@ export class SessionEntity<TVariables extends object = any> extends BaseEntity {
   @JoinColumn({ name: 'activity_id' })
   activity?: ActivityEntity
 
+  @Column({ name: 'correction_id', nullable: true })
+  correctionId?: string
+
+  @ManyToOne(() => CorrectionEntity, { onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'correction_id' })
+  correction?: CorrectionEntity
+
   @Column({ type: 'jsonb', default: {} })
   variables!: TVariables
 
-  @Column({ type: 'int', default: -1 })
+  @Column({ type: 'float', default: -1 })
   grade!: number;
-
-  @Column({ type: 'int', nullable: true })
-  correction?: number;
 
   @Column({ type: 'int', default: 0 })
   attempts!: number;

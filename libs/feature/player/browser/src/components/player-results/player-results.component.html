@@ -19,7 +19,8 @@
     </tr>
   </tbody>
 </table>
-<ng-container *ngIf="results">
+
+<ng-container *ngIf="results && !results.correcting; else: correcting">
   <h3>Résultats</h3>
   <table>
     <thead>
@@ -43,23 +44,25 @@
             </mat-icon>
           </td>
           <td>{{pair.value.grade}}</td>
-          <td>
-            <button nz-button nzType="primary" (click)="modal.open()">Réponses</button>
+          <td *ngIf="pair.value.attempts">
+            <button nz-button nzType="primary" (click)="playAnswers(pair.value)">Réponses</button>
           </td>
         </tr>
       </ng-container>
     </tbody>
   </table>
 </ng-container>
+
+<ng-template #correcting>
+<p>Nous vous informerons dès que les résultats seront disponibles. Merci d'avoir participé !</p>
+</ng-template>
+
 <ui-modal-template
   [width]="'70vw'"
   [height]="'70vh'"
-  #modal>
+  (accepted)="answers = []"
+  (canceled)="answers = []">
   <ng-template>
-    {{results|json}}
-  </ng-template>
-  <ng-template>
-    <button nz-button nzType="default" (click)="modal.close()">Fermer</button><!--
-    <button nz-button nzType="primary" (click)="modal.close(true)" [disabled]="!ready">{{okTitle}}</button> -->
+    <player-exercise [players]="answers" [reviewMode]="true" />
   </ng-template>
 </ui-modal-template>

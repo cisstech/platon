@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { EvalExerciseInput, EvalExerciseOutput, PlayActivityInput, PlayActivityOuput, PlayExerciseInput, PlayExerciseOuput, PreviewOuput } from '@platon/feature/player/common';
+import { EvalExerciseInput, EvalExerciseOutput, PlayActivityInput, PlayActivityOuput, PlayAnswersInput, PlayAnswersOutput, PlayExerciseInput, PlayExerciseOuput, PreviewOuput } from '@platon/feature/player/common';
 import { Observable } from 'rxjs';
 import { PlayerProvider } from '../models/player-provider';
 
@@ -12,6 +12,10 @@ export class PlayerService {
 
   preview(resource: string, version: string): Observable<PreviewOuput> {
     return this.provider.preview(resource, version);
+  }
+
+  playAnswers(input: PlayAnswersInput): Observable<PlayAnswersOutput> {
+    return this.provider.playAnswers(input);
   }
 
   playActivity(input: PlayActivityInput): Observable<PlayActivityOuput> {

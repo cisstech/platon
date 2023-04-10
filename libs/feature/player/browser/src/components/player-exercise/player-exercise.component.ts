@@ -1,12 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatMenuModule } from '@angular/material/menu';
+
 import { NgeMarkdownModule } from '@cisstech/nge/markdown';
 
 import { NzAlertModule } from 'ng-zorro-antd/alert';
@@ -34,6 +36,7 @@ import { PlayerService } from '../../api/player.service';
     MatMenuModule,
     MatButtonModule,
     MatDividerModule,
+    MatExpansionModule,
 
     NzAlertModule,
 
@@ -42,10 +45,15 @@ import { PlayerService } from '../../api/player.service';
     NgeMarkdownModule,
   ]
 })
-export class PlayerExerciseComponent {
+export class PlayerExerciseComponent implements OnInit {
   @Input() player!: ExercisePlayer;
+  @Input() players: ExercisePlayer[] = [];
+
+  @Input() reviewMode = false;
+
   @Output() evaluated = new EventEmitter<PlayerNavigation>();
 
+  protected index = 0;
   protected get disabled(): boolean {
     return !!this.player.solution || (
       this.player.remainingAttempts != null && this.player.remainingAttempts <= 0
@@ -58,6 +66,11 @@ export class PlayerExerciseComponent {
     private readonly changeDetectorRef: ChangeDetectorRef
   ) { }
 
+  ngOnInit(): void {
+    if (this.players?.length) {
+      this.player = this.players[0];
+    }
+  }
 
   protected hint(): Promise<void> {
     return this.evaluate(PlayerActions.NEXT_HINT);
@@ -73,6 +86,15 @@ export class PlayerExerciseComponent {
 
   protected solution(): Promise<void> {
     return this.evaluate(PlayerActions.SHOW_SOLUTION);
+  }
+
+  protected previousAttempt(): void {
+    this.player = this.players[--this.index];
+    this.changeDetectorRef.markForCheck();
+  }
+  protected nextAttempt(): void {
+    this.player = this.players[++this.index];
+    this.changeDetectorRef.markForCheck();
   }
 
   protected trackByUrl(_: number, item: ExerciseTheory): string {

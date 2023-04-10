@@ -70,7 +70,6 @@
     </tr>
   </tbody>
 </table>
-
 <ng-template #bool let-value>
-  <mat-icon [style.color]="value ? '#7CFC00' : '#FF0000'">{{value ? 'check_circle' : 'cancel' }}</mat-icon>
+  <mat-icon [style.color]="value ? '#7CFC00' : '#FF0000'">{{!!value ? 'check_circle' : 'cancel' }}</mat-icon>
 </ng-template>

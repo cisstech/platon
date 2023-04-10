@@ -7,8 +7,8 @@ import { ResultProvider } from "../models/result-provider";
 export class ResultService {
   constructor(private readonly provider: ResultProvider) { }
 
-  userResults(activityId: string, userId: string): Observable<UserResults> {
-    return this.provider.userResults(activityId, userId)
+  sessionResults(sessionId: string): Observable<UserResults> {
+    return this.provider.sessionResults(sessionId)
   }
 
   activityResults(activityId: string): Observable<ActivityResults> {

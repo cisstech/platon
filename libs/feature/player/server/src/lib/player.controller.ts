@@ -1,7 +1,7 @@
 import { Body, Controller, Param, Post, Req } from '@nestjs/common';
 import { IRequest, Public } from '@platon/core/server';
-import { EvalExerciseInput } from '@platon/feature/player/common';
-import { EvalExerciseOutputDTO, PlayActivityInputDTO, PlayActivityOutputDTO, PlayExerciseInputDTO, PlayExerciseOuputDTO, PreviewInputDTO, PreviewOuputDTO } from './player.dto';
+import { EvalExerciseInput, PlayAnswersInput } from '@platon/feature/player/common';
+import { EvalExerciseOutputDTO, PlayActivityInputDTO, PlayActivityOutputDTO, PlayAnswersOutputDTO, PlayExerciseInputDTO, PlayExerciseOuputDTO, PreviewInputDTO, PreviewOuputDTO } from './player.dto';
 import { PlayerService } from './player.service';
 
 @Controller('player')
@@ -16,6 +16,16 @@ export class PlayerController {
     @Body() input: PreviewInputDTO
   ): Promise<PreviewOuputDTO> {
     return this.playerService.preview(input);
+  }
+
+  @Public()
+  @Post('/play/answers')
+  async playAnswers(
+    @Body() input: PlayAnswersInput
+  ): Promise<PlayAnswersOutputDTO> {
+    return {
+      exercises: await this.playerService.answers(input.sessionId)
+    };
   }
 
   @Public()
@@ -42,6 +52,7 @@ export class PlayerController {
       req.user
     );
   }
+
 
   @Public()
   @Post('/terminate/:sessionId')

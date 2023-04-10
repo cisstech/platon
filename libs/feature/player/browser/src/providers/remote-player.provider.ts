@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { EvalExerciseInput, EvalExerciseOutput, PlayActivityInput, PlayActivityOuput, PlayExerciseInput, PlayExerciseOuput, PreviewInput, PreviewOuput } from '@platon/feature/player/common';
+import { EvalExerciseInput, EvalExerciseOutput, PlayActivityInput, PlayActivityOuput, PlayAnswersInput, PlayAnswersOutput, PlayExerciseInput, PlayExerciseOuput, PreviewInput, PreviewOuput } from '@platon/feature/player/common';
 import { Observable } from 'rxjs';
 import { PlayerProvider } from '../models/player-provider';
 
@@ -19,6 +19,9 @@ export class RemotePlayerService extends PlayerProvider {
     } as PreviewInput);
   }
 
+  playAnswers(input: PlayAnswersInput): Observable<PlayAnswersOutput> {
+    return this.http.post<PlayAnswersOutput>('/api/v1/player/play/answers', input);
+  }
   playActivity(input: PlayActivityInput): Observable<PlayActivityOuput> {
     return this.http.post<PlayActivityOuput>('/api/v1/player/play/activity', input);
   }

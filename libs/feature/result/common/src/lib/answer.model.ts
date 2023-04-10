@@ -1,4 +1,5 @@
 export enum AnswerStates {
+  ANSWERED = 'ANSWERED',
   SUCCEEDED = 'SUCCEEDED',
   PART_SUCC = 'PART_SUCC',
   FAILED = 'FAILED',
@@ -8,6 +9,7 @@ export enum AnswerStates {
 }
 
 export const AnswerStateIcons: Record<AnswerStates, string> = {
+  ANSWERED: 'assignment_turned_in',
   SUCCEEDED: 'check_circle',
   PART_SUCC: 'check_circle',
   FAILED: 'cancel',
@@ -17,6 +19,7 @@ export const AnswerStateIcons: Record<AnswerStates, string> = {
 }
 
 export const AnswerStateLabels: Record<AnswerStates, string> = {
+  ANSWERED: 'Réponse enregistrée',
   SUCCEEDED: 'Réussi',
   PART_SUCC: 'Partiellement Réussi',
   FAILED: 'Échoué',
@@ -26,6 +29,7 @@ export const AnswerStateLabels: Record<AnswerStates, string> = {
 }
 
 export const AnswerStateColors: Record<AnswerStates, string> = {
+  ANSWERED: '#00BFFF',
   SUCCEEDED: '#7CFC00',
   PART_SUCC: 'orange',
   FAILED: '#FF0000',

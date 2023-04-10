@@ -7,7 +7,7 @@ import { MatCardModule } from '@angular/material/card';
 
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 
-import { PlayerResourceComponent, PlayerService } from '@platon/feature/player/browser';
+import { PlayerService, PlayerWrapperComponent } from '@platon/feature/player/browser';
 import { Player } from '@platon/feature/player/common';
 import { UiErrorComponent } from '@platon/shared/ui';
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
@@ -26,7 +26,7 @@ import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
     MatCardModule,
 
     UiErrorComponent,
-    PlayerResourceComponent,
+    PlayerWrapperComponent,
   ]
 })
 export class PlayerActivityPage implements OnInit {

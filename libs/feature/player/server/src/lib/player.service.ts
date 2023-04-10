@@ -1,18 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@nestjs/common';
-import { deepCopy, deepMerge, ForbiddenResponse, NotFoundResponse, User } from '@platon/core/common';
-import { ActivityExercise, ActivitySettings, defaultActivitySettings, ExerciseFeedback, ExerciseHint, ExerciseTheory, ExerciseVariables, extractExercisesFromActivityVariables, PLSourceFile, Variables } from '@platon/feature/compiler';
+import { ForbiddenResponse, NotFoundResponse, User } from '@platon/core/common';
+import { ActivityExercise, ActivityVariables, ExerciseVariables, PLSourceFile, Variables, extractExercisesFromActivityVariables } from '@platon/feature/compiler';
 import { ActivityEntity, ActivityService } from '@platon/feature/course/server';
-import { ActivityPlayer, EvalExerciseInput, ExercisePlayer, PlayActivityOuput, PlayerActions, PlayerActivityVariables, PlayerExercise, PlayerNavigation, PlayExerciseOuput, PreviewInput } from '@platon/feature/player/common';
+import { EvalExerciseInput, ExercisePlayer, PlayActivityOuput, PlayExerciseOuput, PlayerActions, PlayerActivityVariables, PlayerExercise, PlayerNavigation, PreviewInput } from '@platon/feature/player/common';
 import { ResourceFileService } from '@platon/feature/resource/server';
-import { answerStateFromGrade, AnswerStates } from '@platon/feature/result/common';
+import { AnswerStates, answerStateFromGrade } from '@platon/feature/result/common';
 import { AnswerService, SessionEntity, SessionService } from '@platon/feature/result/server';
-import * as nunjucks from 'nunjucks';
 import { DataSource, EntityManager } from 'typeorm';
+import { withAnswersInSession } from './player-answer';
+import { withActivityFeedbacksGuard, withMultiSessionGuard, withSessionAccessGuard } from './player-guards';
+import { updateActivityNavigationState } from './player-navigation';
+import { withActivityPlayer, withExercisePlayer } from './player-renderer';
 import { PreviewOuputDTO } from './player.dto';
 import { SandboxService } from './sandboxes/sandbox.service';
-
-nunjucks.configure({ autoescape: false });
 
 
 type ActionHandler = (
@@ -47,8 +48,6 @@ export class PlayerService {
     private readonly resourceFileService: ResourceFileService,
   ) { }
 
-  //#region ENDPOINTS
-
   /**
    * Creates new player session for the given resource for preview purpose.
    *
@@ -67,9 +66,18 @@ export class PlayerService {
     );
     const session = await this.createNewSession({ source });
     return {
-      exercise: resource.type === 'EXERCISE' ? this.withExercisePlayer(session) : undefined,
-      activity: resource.type === 'ACTIVITY' ? this.withActivityPlayer(session) : undefined,
+      exercise: resource.type === 'EXERCISE' ? withExercisePlayer(session) : undefined,
+      activity: resource.type === 'ACTIVITY' ? withActivityPlayer(session) : undefined,
     }
+  }
+
+  async answers(sessionId: string): Promise<ExercisePlayer[]> {
+    const session = await this.sessionService.findById(
+      sessionId, { parent: true, activity: true, correction: true }
+    );
+    if (!session) throw new NotFoundResponse('Session not found');
+    const answers = await this.answerService.findAllOfSession(sessionId);
+    return answers.map(answer => withExercisePlayer(session, answer))
   }
 
   async playActivity(
@@ -91,7 +99,7 @@ export class PlayerService {
         source: activity.source,
       });
     }
-    return { activity: this.withActivityPlayer(activitySession) }
+    return { activity: withActivityPlayer(activitySession) }
   }
 
   async playExercises(
@@ -110,7 +118,7 @@ export class PlayerService {
     // CREATE PLAYERS
     const exercisePlayers = await Promise.all(
       exerciseSessionIds.map(async (sessionId) => {
-        const exerciseSession = this.withSessionAccessGuard(
+        const exerciseSession = withSessionAccessGuard(
           await this.sessionService.ofExercise(activitySessionId, sessionId),
           user
         );
@@ -119,13 +127,13 @@ export class PlayerService {
         await this.sessionService.update(exerciseSession.id, {
           startedAt: exerciseSession.startedAt
         });
-        return this.withExercisePlayer(exerciseSession);
+        return withExercisePlayer(exerciseSession);
       })
     );
 
     // UPDATE ACTIVITY NAVIGATION
     const activityVariables = activitySession.variables;
-    this.computeNavigation(activityVariables, exerciseSessionIds[0]);
+    updateActivityNavigationState(activityVariables, exerciseSessionIds[0]);
     activitySession.variables = activityVariables;
     activitySession.startedAt = activitySession.startedAt || new Date();
     await this.sessionService.update(activitySessionId, {
@@ -143,7 +151,7 @@ export class PlayerService {
     sessionId: string,
     user?: User
   ): Promise<PlayActivityOuput> {
-    const session = this.withSessionAccessGuard(
+    const session = withSessionAccessGuard(
       await this.sessionService.findById(sessionId, { parent: true, activity: true }),
       user,
     );
@@ -157,13 +165,9 @@ export class PlayerService {
     });
 
     return {
-      activity: this.withActivityPlayer(activitySession)
+      activity: withActivityPlayer(activitySession)
     }
   }
-
-  //#endregion
-
-  //#region EVAL
 
   async evaluate(
     input: EvalExerciseInput,
@@ -176,7 +180,7 @@ export class PlayerService {
     input: EvalExerciseInput,
     user?: User
   ): Promise<ExercisePlayer> {
-    const exerciseSession = this.withSessionAccessGuard(
+    const exerciseSession = withSessionAccessGuard(
       await this.sessionService.findById(input.sessionId, { parent: true, activity: true }),
       user
     );
@@ -196,14 +200,14 @@ export class PlayerService {
       variables: exerciseSession.variables
     });
 
-    return this.withExercisePlayer(exerciseSession);
+    return withExercisePlayer(exerciseSession);
   }
 
   async nextHint(
     input: EvalExerciseInput,
     user?: User
   ): Promise<ExercisePlayer> {
-    const exerciseSession = this.withSessionAccessGuard(
+    const exerciseSession = withSessionAccessGuard(
       await this.sessionService.findById(input.sessionId, { parent: true, activity: true }),
       user
     );
@@ -225,23 +229,23 @@ export class PlayerService {
 
     await this.sessionService.update(exerciseSession.id, { variables });
 
-    return this.withExercisePlayer(exerciseSession);
+    return withExercisePlayer(exerciseSession);
   }
 
   async checkAnswer(
     input: EvalExerciseInput,
     user?: User
   ): Promise<[ExercisePlayer, PlayerNavigation]> {
-    const exerciseSession = this.withSessionAccessGuard(
+    const exerciseSession = withSessionAccessGuard(
       await this.sessionService.findById(input.sessionId, { parent: true, activity: true }),
       user
     );
 
-    const { activitySession, activityNavigation } = this.withMultiSessionGuard(exerciseSession);
+    const { activitySession, activityNavigation } = withMultiSessionGuard(exerciseSession);
 
     // EVAL ANSWERS
 
-    this.withAnswersInSession(exerciseSession, input.answers || {});
+    withAnswersInSession(exerciseSession, input.answers || {});
 
     const envid = exerciseSession.envid;
     let variables = exerciseSession.variables as ExerciseVariables;
@@ -296,6 +300,11 @@ export class PlayerService {
           activitySession.grade += child.grade;
         }
       });
+
+      if (activitySession.grade && activitySession.grade > 0 && childs.length) {
+        activitySession.grade /= childs.length;
+      }
+
       activitySession.attempts++;
       promises.push(
         this.sessionService.update(activitySession.id, {
@@ -313,8 +322,12 @@ export class PlayerService {
     await Promise.all(promises);
 
     return [
-      this.withExercisePlayer(exerciseSession),
-      activityNavigation as PlayerNavigation
+      withExercisePlayer(exerciseSession),
+      activitySession
+        ? (
+          withActivityFeedbacksGuard(activitySession).variables as ActivityVariables
+        ).navigation
+        : undefined
     ]
   }
 
@@ -322,7 +335,7 @@ export class PlayerService {
     input: EvalExerciseInput,
     user?: User
   ): Promise<ExercisePlayer> {
-    const exerciseSession = this.withSessionAccessGuard(
+    const exerciseSession = withSessionAccessGuard(
       await this.sessionService.findById(input.sessionId, { parent: true, activity: true }),
       user
     );
@@ -333,23 +346,23 @@ export class PlayerService {
     }
 
     activitySession.activity = activitySession.activity ?? exerciseSession.activity;
-    this.withAnswersInSession(exerciseSession, input.answers || {});
+    withAnswersInSession(exerciseSession, input.answers || {});
 
     // TODO define the api for dynamic activities
 
-    return this.withExercisePlayer(exerciseSession);
+    return withExercisePlayer(exerciseSession);
   }
 
   async showSolution(
     input: EvalExerciseInput,
     user?: User
   ): Promise<ExercisePlayer> {
-    const exerciseSession = this.withSessionAccessGuard(
+    const exerciseSession = withSessionAccessGuard(
       await this.sessionService.findById(input.sessionId, { parent: true, activity: true }),
       user
     );
 
-    this.withAnswersInSession(exerciseSession, input.answers || {});
+    withAnswersInSession(exerciseSession, input.answers || {});
 
     const variables = exerciseSession.variables as ExerciseVariables;
     variables['.meta'] = {
@@ -357,12 +370,9 @@ export class PlayerService {
       showSolution: true,
     };
 
-    return this.withExercisePlayer(exerciseSession);
+    return withExercisePlayer(exerciseSession);
   }
 
-  //#endregion
-
-  //#region BUILD
 
   /**
    * Builds the given resource and creates new session.
@@ -394,7 +404,7 @@ export class PlayerService {
       }, manager);
 
       if (source.abspath.endsWith('.pla')) {
-        session.variables = await this.withActivityNavigation(
+        session.variables = await this.createNavigation(
           variables as PlayerActivityVariables,
           session,
           user,
@@ -419,7 +429,7 @@ export class PlayerService {
    * @param variables Activity variables.
    * @returns Computed variables.
    */
-  private async withActivityNavigation(
+  private async createNavigation(
     variables: PlayerActivityVariables,
     activitySession: SessionEntity,
     user?: User,
@@ -462,358 +472,4 @@ export class PlayerService {
       navigation
     }
   }
-
-  /**
-   * Creates new player for an activity session.
-   * @param session An activity session.
-   * @returns An activity player.
-   */
-  private withActivityPlayer(
-    session: SessionEntity,
-  ): ActivityPlayer {
-    const variables = session.variables as PlayerActivityVariables;
-    return {
-      type: 'activity',
-      sessionId: session.id,
-      activityId: session.activityId,
-      title: variables.title,
-      author: variables.author,
-      startedAt: session.startedAt,
-      openAt: session.activity?.openAt,
-      closeAt: session.activity?.closeAt,
-      lastGradedAt: session.lastGradedAt,
-      introduction: variables.introduction,
-      conclusion: variables.conclusion,
-      settings: variables.settings,
-      navigation: variables.navigation
-    };
-  }
-
-  /**
-   * Creates new player for an exercise session.
-   * @param session An exercise session.
-   * @returns An exercise player.
-   */
-  private withExercisePlayer(
-    session: SessionEntity,
-  ): ExercisePlayer {
-    const variables = this.withRenderedTemplates(session.variables);
-
-    const settings = (
-      session.parent ? deepCopy(session.parent.variables.settings || {}) : defaultActivitySettings()
-    ) as ActivitySettings;
-
-    const hint = this.withHintGuard(variables, settings);
-    const solution = this.withSolutionGuard(variables, settings);
-    const theories = this.withTheoriesGuard(variables, settings);
-    const feedbacks = this.withFeedbacksGuard(variables, settings);
-
-    // ATTEMPTS
-    let remainingAttempts: number | undefined;
-    if (settings.actions?.retry && settings.actions.retry !== -1) {
-      remainingAttempts = settings.actions.retry - (variables['.meta']?.attempts || 0)
-    }
-
-    return {
-      type: 'exercise',
-      settings,
-      solution,
-      feedbacks,
-      theories,
-      hints: !hint
-        ? undefined
-        : Array.isArray(hint)
-          ? (variables['.meta']?.consumedHints ? hint.slice(0, variables['.meta'].consumedHints) : [])
-          : hint.data,
-      remainingAttempts,
-      sessionId: session.id,
-      author: variables.author,
-      title: variables.title,
-      form: variables.form,
-      statement: variables.statement,
-      startedAt: session.startedAt,
-      lastGradedAt: session.lastGradedAt,
-    }
-  }
-
-  //#endregion
-
-  //#region RENDERING
-
-  /**
-   * Transforms recursivly all component objects to HTML code from `object`.
-   * A component is an object with both `cid` and `selector` properties.
-   * @param variables Object to transform.
-   * @returns A computed version of the object.
-   */
-  private withRenderedComponents(
-    variables: any
-  ): any {
-    if (Array.isArray(variables)) {
-      return variables.map(this.withRenderedComponents.bind(this));
-    }
-    if (typeof variables === 'object') {
-      if (variables.cid && variables.selector) {
-        return `<${variables.selector} cid='${variables.cid}' state='${JSON.stringify(variables)}' />`
-      }
-      return Object.keys(variables).reduce((o, k) => {
-        o[k] = this.withRenderedComponents(variables[k])
-        return o;
-      }, {} as any)
-    }
-    return variables;
-  }
-
-  /**
-   * Renders all keys of `variables` which are consired as nunjucks templates.
-   * @param variables A list of variables.
-   * @returns The variables with rendered templates.
-   */
-  private withRenderedTemplates(
-    variables: Variables
-  ): ExerciseVariables {
-
-    const computed = this.withRenderedComponents(variables) as ExerciseVariables;
-
-    const templates = ['title', 'statement', 'form', 'solution', 'feedback', 'hints'];
-
-    for (const k in computed) {
-      if (templates.includes(k)) {
-        if (typeof computed[k] === 'string') {
-          computed[k] = nunjucks.renderString(computed[k] as string, computed);
-        } else if (Array.isArray(computed[k])) {
-          computed[k] = computed[k].map((v: string) => {
-            return nunjucks.renderString(v, computed)
-          });
-        }
-      }
-    }
-
-    computed['.meta'] = {
-      ...(computed['.meta'] || {}),
-      attempts: computed['.meta']?.attempts || 0,
-    };
-
-    return computed;
-  }
-
-  /**
-   * Merges user answers with the session variables.
-   * @param session Session in which the answers must be merged
-   * @param answers Answers to merge in the session.
-   * @returns The session computed with the answers.
-   */
-  private withAnswersInSession(
-    session: SessionEntity,
-    answers: Variables
-  ): SessionEntity {
-    const components: Variables = {};
-
-    const search = (variables: Variables) => {
-      for (const key in variables) {
-        const value = variables[key];
-        if (typeof value === 'object') {
-          if (value.cid && value.selector) {
-            components[value.cid] = value;
-          } else {
-            search(value);
-          }
-        } else if (Array.isArray(value)) {
-          value.forEach(search);
-        }
-      }
-    }
-
-    search(session.variables);
-
-    for (const cid in answers) {
-      if (cid in components) {
-        Object.assign(components[cid], answers[cid]);
-      }
-    }
-
-    return session;
-  }
-
-  //#endregion
-
-  //#region SESSION GUARDS
-
-  /**
-   * Ensures that `user` has access to `session`.
-   *
-   * Note:
-   *
-   * Preview sessions are not bound to any user so an `undefined` value for `user` means that the session is a preview.
-   *
-   * @param session Session to check the user rights for.
-   * @param user User for which to check the rights.
-   * @returns The session.
-   */
-  private withSessionAccessGuard(
-    session?: SessionEntity | null,
-    user?: User
-  ): SessionEntity {
-    if (!session) {
-      throw new NotFoundResponse(`PlayerSession not found.`);
-    }
-
-    if (session.userId && session.userId !== user?.id) {
-      throw new ForbiddenResponse('You cannot access to this session.');
-    }
-
-    return session;
-  }
-
-  /**
-   * Ensures that user cannot have multiple sessions of the same exercise at the same time (in non composed navigation mode).
-   *
-   * Note :
-   * Exercise preview session are not bound to an activity.
-   *
-   * @param exerciseSession An exercise session.
-   * @returns An object containing the activitySession with it's navigation
-   *  or `undefined` if the exercise is not bound to an activity.
-   */
-  private withMultiSessionGuard(
-    exerciseSession: SessionEntity
-  ) {
-    let activitySession: SessionEntity | undefined;
-    let activityNavigation: PlayerNavigation | undefined;
-    if (exerciseSession.parent) {
-      activitySession = exerciseSession.parent as SessionEntity;
-      activitySession.activity = activitySession.activity ?? exerciseSession.activity;
-
-      const activityVariables = activitySession.variables as PlayerActivityVariables;
-      activityNavigation = activityVariables.navigation;
-
-      if ('composed' === activityVariables.settings?.navigation?.mode) {
-        return { activitySession, activityNavigation };
-      }
-
-      if (typeof activityNavigation.current !== 'object' || activityNavigation.current.sessionId !== exerciseSession.id) {
-        throw new ForbiddenResponse('This exercise is not the most recents opened, please reload your page.');
-      }
-    }
-    return { activitySession, activityNavigation };
-  }
-
-  //#endregion
-
-  //#region SETTING GUARDS
-
-  /**
-   * Ensures that hints are not sent to the user if disabled in `settings` or not already asked by the user.
-   * @param variables Exercise variables
-   * @param settings Exercise settings.
-   * @returns The hints to show to the user if applicable otherwise `undefined`.
-   */
-  private withHintGuard(
-    variables: ExerciseVariables,
-    settings: ActivitySettings
-  ): ExerciseHint | string[] | undefined {
-    let hint = variables.hint;
-
-    if (!hint) {
-      // disable hint button if there is not hint
-      deepMerge(settings, { actions: { hints: false } });
-    } else if (Array.isArray(hint) && hint.length === variables['.meta']?.consumedHints) {
-      // disable hint button if all automatic hints are consumed
-      deepMerge(settings, { actions: { hints: false } });
-    } else if (hint && !Array.isArray(hint) && hint.empty) {
-      // disable hint button if hint.empty is set by exercise script
-      deepMerge(settings, { actions: { hints: false } });
-    } else if (!settings.actions?.hints) { // disable hint if specified in settings
-      hint = undefined;
-    }
-
-    return hint;
-  }
-
-  /**
-   * Ensures that theory documents are not sent to the user if disabled in `settings`.
-   * @param variables Exercise variables
-   * @param settings Exercise settings.
-   * @returns The theories to show to the user if applicable otherwise `undefined`.
-   */
-  private withTheoriesGuard(
-    variables: ExerciseVariables,
-    settings: ActivitySettings
-  ): ExerciseTheory[] | undefined {
-    let theories = variables.theories;
-    if (!settings.actions?.theories) {
-      theories = [];
-    }
-    return theories;
-  }
-
-  /**
-   * Ensures that solution is not sent to the user if disabled in `settings` or not already asked by the user.
-   * @param variables Exercise variables
-   * @param settings Exercise settings.
-   * @returns The solution to show to the user if applicable otherwise `undefined`.
-   */
-  private withSolutionGuard(
-    variables: ExerciseVariables,
-    settings: ActivitySettings
-  ): string | undefined {
-    let solution = variables.solution;
-    if (!solution) {
-      deepMerge(settings, { actions: { solution: false } });
-    } else if (!settings?.actions?.solution || !variables['.meta']?.showSolution) {
-      solution = undefined;
-    }
-    return solution;
-  }
-
-  /**
-   * Ensures that feedbacks are not sent to the user if disabled in `settings`.
-   * @param variables Exercise variables
-   * @param settings Exercise settings.
-   * @returns The feedbacks to show to the user if applicable otherwise `undefined`.
-   */
-  private withFeedbacksGuard(
-    variables: ExerciseVariables,
-    settings: ActivitySettings
-  ): ExerciseFeedback[] | undefined {
-    let feedbacks = Array.isArray(variables.feedback)
-      ? variables.feedback
-      : variables.feedback
-        ? [variables.feedback]
-        : [];
-
-    if (!settings?.feedback?.validation) {
-      feedbacks = [];
-    }
-    return feedbacks;
-  }
-
-  private computeNavigation(
-    activityVariables: PlayerActivityVariables,
-    currentSessionId?: string
-  ) {
-    const { navigation, settings } = activityVariables
-
-    navigation.started = true;
-
-    const markAsStarted = (exercise: PlayerExercise) => {
-      if (exercise.state === AnswerStates.NOT_STARTED) {
-        exercise.state = AnswerStates.STARTED;
-      }
-    }
-
-    if ('manual' === settings?.navigation?.mode) {
-      navigation.current = navigation.exercises.find(item => {
-        if (item.sessionId === currentSessionId) {
-          markAsStarted(item)
-          return true;
-        }
-        return false;
-      }) as PlayerExercise;
-    } else if ('composed' === settings?.navigation?.mode) {
-      navigation.exercises.forEach(markAsStarted);
-    }
-  }
-
-  //#endregion
 }

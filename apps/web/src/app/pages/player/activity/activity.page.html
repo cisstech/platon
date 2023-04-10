@@ -1,7 +1,7 @@
 
 <ng-container *ngIf="!loading; else: spinner">
   <ng-container *ngIf="player">
-    <player-resource [player]="player" />
+    <player-wrapper [player]="player" />
   </ng-container>
   <ng-container *ngIf="error">
     <ui-error [error]="error" />

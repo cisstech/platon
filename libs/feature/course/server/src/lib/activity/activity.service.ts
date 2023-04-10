@@ -184,7 +184,7 @@ export class ActivityService {
     user: User
   ) {
     return qb.leftJoinAndSelect(
-      'PlayerSessions',
+      'Sessions',
       'session',
       'session.parent_id IS NULL AND session.activity_id = activity.id AND session.user_id = :userId',
       {

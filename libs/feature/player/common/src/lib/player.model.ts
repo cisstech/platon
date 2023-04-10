@@ -36,6 +36,14 @@ export interface PreviewInput {
 }
 
 /**
+ * Representation of the `/player/play/answers` endpoint body.
+ */
+export interface PlayAnswersInput {
+  /** Session id of the exercise.  */
+  sessionId: string;
+}
+
+/**
  * Representation of the `/player/play/exercises` endpoint body.
  */
 export interface PlayExerciseInput {
@@ -70,6 +78,10 @@ export interface PreviewOuput {
   activity?: ActivityPlayer;
 }
 
+export interface PlayAnswersOutput {
+  exercises: ExercisePlayer[];
+}
+
 export interface PlayExerciseOuput {
   exercises: ExercisePlayer[];
   navigation?: PlayerNavigation;
@@ -94,6 +106,12 @@ export interface ExercisePlayer {
   statement: string;
   hints?: string[];
   author?: string;
+  correction?: {
+    grade: number;
+    authorId?: string;
+    createdAt: Date;
+    updatedAt: Date;
+  };
   remainingAttempts?: number;
   solution?: string;
   settings?: ActivitySettings;

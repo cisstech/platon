@@ -36,12 +36,35 @@
       <div class="exercise-form" [innerHTML]="player.form|safe:'html'"></div>
     </ng-container>
     <ng-container *ngIf="player.solution">
-      <mat-divider />
-      <div class="exercise-form" [innerHTML]="player.solution|safe:'html'"></div>
+      <mat-accordion class="exercise-solution">
+        <mat-expansion-panel expanded>
+          <mat-expansion-panel-header>
+            <mat-panel-title>Solution</mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="exercise-form" [innerHTML]="player.solution|safe:'html'"></div>
+        </mat-expansion-panel>
+      </mat-accordion>
     </ng-container>
   </mat-card-content>
   <mat-card-actions>
+    <ng-container *ngIf="players.length">
+      <button
+        *ngIf="index > 0"
+        mat-raised-button
+        (click)="previousAttempt()">
+        <mat-icon>arrow_back</mat-icon>
+        Tentative précédente
+      </button>
+      <button
+        *ngIf="index < players.length - 1"
+        mat-raised-button
+        (click)="nextAttempt()">
+        <mat-icon>arrow_forward</mat-icon>
+        Tentative suivante
+      </button>
+    </ng-container>
     <button
+      *ngIf="!reviewMode"
       mat-raised-button
       color="primary"
       [class.danger]="player.remainingAttempts === 1"
@@ -51,7 +74,7 @@
       Valider <ng-container *ngIf="player.remainingAttempts">({{player.remainingAttempts}})</ng-container>
     </button>
     <button
-      *ngIf="!!player.settings?.actions?.reroll"
+      *ngIf="!reviewMode && !!player.settings?.actions?.reroll"
       mat-raised-button
       (click)="reroll()">
       <mat-icon>refresh</mat-icon>

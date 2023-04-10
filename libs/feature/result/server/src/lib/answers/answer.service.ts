@@ -10,6 +10,10 @@ export class AnswerService {
     private readonly repository: Repository<AnswerEntity>
   ) { }
 
+  findAllOfSession(sessionId: string): Promise<AnswerEntity[]> {
+    return this.repository.find({ where: { sessionId } });
+  }
+
   create(input: Partial<AnswerEntity>, entityManager?: EntityManager): Promise<AnswerEntity> {
     if (entityManager) {
       return entityManager.save(

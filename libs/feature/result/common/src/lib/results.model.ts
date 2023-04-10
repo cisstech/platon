@@ -1,20 +1,23 @@
 import { AnswerStates } from "./answer.model";
 
+export interface UserExerciseResults {
+  id: string;
+  state: AnswerStates;
+  title: string;
+  grade: number;
+  attempts: number;
+  duration: number;
+  sessionId?: string;
+}
+
 export interface UserResults {
   id: string;
   username: string;
   firstName: string;
   lastName: string;
   email: string;
-  exercises: Record<string, {
-    id: string;
-    state: AnswerStates;
-    title: string;
-    grade: number;
-    attempts: number;
-    duration: number;
-    sessionId?: string;
-  }>
+  correcting?: boolean;
+  exercises: Record<string, UserExerciseResults>
 }
 
 export interface ExerciseResults {
@@ -56,6 +59,7 @@ export const emptyExerciseResults = (): ExerciseResults => ({
     avg: 0,
   },
   states: {
+    ANSWERED: 0,
     SUCCEEDED: 0,
     PART_SUCC: 0,
     FAILED: 0,
