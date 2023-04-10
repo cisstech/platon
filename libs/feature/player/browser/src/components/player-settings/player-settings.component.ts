@@ -11,7 +11,7 @@ import { DurationPipe } from '@platon/shared/ui';
   standalone: true,
   selector: 'player-settings',
   templateUrl: './player-settings.component.html',
-  styleUrls: ['./player-settings.component.scss'],
+  styleUrls: ['./player-settings.component.scss', '../common.style.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,

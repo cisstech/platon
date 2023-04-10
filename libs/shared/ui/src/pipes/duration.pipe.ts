@@ -8,11 +8,17 @@ import fr from 'date-fns/locale/fr';
   standalone: true,
 })
 export class DurationPipe implements PipeTransform {
-  transform(value: number, format: 'seconds' | 'milliseconds' = 'seconds'): string {
-    return !value ? '0' : formatDuration(
+  transform(value: number | [string | Date, string | Date], format: 'seconds' | 'milliseconds' = 'seconds'): string {
+    const time = Array.isArray(value)
+      ? (new Date(value[1]).getTime() - new Date(value[0]).getTime())
+      : value;
+
+    format = Array.isArray(value) ? 'milliseconds' : format;
+
+    return !time ? '0' : formatDuration(
       intervalToDuration({
         start: 0,
-        end: format === 'seconds' ? value * 1000 : value
+        end: format === 'seconds' ? time * 1000 : time
       }),
       { locale: fr }
     );

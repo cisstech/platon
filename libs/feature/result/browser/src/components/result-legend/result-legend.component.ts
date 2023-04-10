@@ -6,8 +6,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { NzListModule } from 'ng-zorro-antd/list';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
-import { AnswerStatePipesModule } from '@platon/feature/player/browser';
-import { AnswerStates } from '@platon/feature/player/common';
+import { AnswerStates } from '@platon/feature/result/common';
+import { AnswerStatePipesModule } from '../../pipes';
 
 @Component({
   standalone: true,

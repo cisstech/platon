@@ -1,13 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { NotFoundResponse } from '@platon/core/common';
 import { ActivityVariables, ExerciseVariables, extractExercisesFromActivityVariables } from '@platon/feature/compiler';
 import { ActivityEntity, ActivityMemberView } from '@platon/feature/course/server';
-import { AnswerStates, PlayerActivityVariables } from '@platon/feature/player/common';
-import { PlayerSessionEntity } from '@platon/feature/player/server';
-import { ActivityResults, ExerciseResults, UserResults, emptyExerciseResults } from '@platon/feature/result/common';
+import { ActivityResults, AnswerStates, ExerciseResults, UserResults, emptyExerciseResults } from '@platon/feature/result/common';
 import differenceInSeconds from 'date-fns/differenceInSeconds';
 import { IsNull, Not, Repository } from 'typeorm';
+import { SessionEntity } from './sessions/session.entity';
+
 
 @Injectable()
 export class ResultService {
@@ -17,8 +18,8 @@ export class ResultService {
     @InjectRepository(ActivityMemberView)
     private readonly activityMemberView: Repository<ActivityMemberView>,
 
-    @InjectRepository(PlayerSessionEntity)
-    private readonly sessionRepository: Repository<PlayerSessionEntity>
+    @InjectRepository(SessionEntity)
+    private readonly sessionRepository: Repository<SessionEntity>
   ) { }
 
   async activityResults(activityId: string, userId?: string): Promise<ActivityResults> {
@@ -43,8 +44,8 @@ export class ResultService {
     const exerciseSessionsByExerciseId = new Map<string, number>();
 
     activitySessions.forEach(session => {
-      const navigation = (session.variables as PlayerActivityVariables).navigation;
-      navigation.exercises.forEach(exercise => {
+      const navigation = (session.variables).navigation;
+      navigation.exercises.forEach((exercise: any) => {
         exerciseIdBySessionId.set(exercise.sessionId, exercise.id);
         exerciseSessionsByExerciseId.set(exercise.id, 0);
         Object.values(AnswerStates).forEach(state => {
@@ -71,14 +72,16 @@ export class ResultService {
 
         const grade = session.correction ?? session.grade;
 
-        exerciseResultsMapIndex[exerciseId].grades.sum += (grade === -1 ? 0 : grade);
-        exerciseResultsMapIndex[exerciseId].attempts.sum += session.attempts;
-        exerciseResultsMapIndex[exerciseId].durations.sum += duration;
+        const exercise = exerciseResultsMapIndex[exerciseId];
+        exercise.grades.sum += (grade === -1 ? 0 : grade);
+        exercise.attempts.sum += session.attempts;
+        exercise.durations.sum += duration;
 
         const userExercise = userResultsIndex[session.userId as string].exercises[exerciseId];
         userExercise.grade = grade;
         userExercise.attempts = session.attempts;
         userExercise.duration = duration;
+        userExercise.sessionId = session.id;
       }
     });
 
@@ -132,7 +135,7 @@ export class ResultService {
         firstName: session.user?.firstName as string,
         lastName: session.user?.lastName as string,
         email: session.user?.email as string,
-      }))
+      }) as ActivityMemberView)
 
     activityUsers.push(...sessionUsers as ActivityMemberView[])
 

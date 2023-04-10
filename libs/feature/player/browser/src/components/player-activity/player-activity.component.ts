@@ -2,21 +2,22 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, Input, OnInit } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 
-
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { NzStatisticModule } from 'ng-zorro-antd/statistic';
 
 import { SafePipeModule } from '@cisstech/nge/pipes';
 import { ActivityPlayer, ExercisePlayer, Player, PlayerExercise, PlayerNavigation, getClosingTime, isTimeouted } from '@platon/feature/player/common';
 
 import { DialogModule, DialogService, UserAvatarComponent } from '@platon/core/browser';
 import { ActivityStates, calculateActivityState } from '@platon/feature/course/common';
-import { NzStatisticModule } from 'ng-zorro-antd/statistic';
+
 import { PlayerService } from '../../api/player.service';
 import { PlayerExerciseComponent } from '../player-exercise/player-exercise.component';
 import { PlayerNavigationComponent } from '../player-navigation/player-navigation.component';
+import { PlayerResultsComponent } from '../player-results/player-results.component';
 import { PlayerSettingsComponent } from '../player-settings/player-settings.component';
 
 @Component({
@@ -38,10 +39,10 @@ import { PlayerSettingsComponent } from '../player-settings/player-settings.comp
     SafePipeModule,
     UserAvatarComponent,
 
+    PlayerResultsComponent,
     PlayerExerciseComponent,
     PlayerSettingsComponent,
     PlayerNavigationComponent,
-
   ]
 })
 export class PlayerActivityComponent implements OnInit {

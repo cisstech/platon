@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { ActivitySettings, ActivityVariables, ExerciseFeedback } from "@platon/feature/compiler";
-import { AnswerStates } from "./answer.model";
+import { AnswerStates } from "@platon/feature/result/common";
 
 export enum PlayerActions {
   NEXT_HINT = 'NEXT_HINT',
@@ -24,7 +24,6 @@ export interface PlayerNavigation {
   current?: PlayerExercise;
   exercises: PlayerExercise[];
 }
-
 
 /**
  * Representation of the `/player/preview` endpoint body.
@@ -66,12 +65,10 @@ export interface EvalExerciseInput {
   answers?: Record<string, any>;
 }
 
-
 export interface PreviewOuput {
   exercise?: ExercisePlayer;
   activity?: ActivityPlayer;
 }
-
 
 export interface PlayExerciseOuput {
   exercises: ExercisePlayer[];
@@ -87,10 +84,11 @@ export interface EvalExerciseOutput {
   navigation?: PlayerNavigation;
 }
 
-
 export interface ExercisePlayer {
   type: 'exercise';
   sessionId: string;
+  startedAt?: Date;
+  lastGradedAt?: Date;
   form: string;
   title: string;
   statement: string;
@@ -109,6 +107,7 @@ export interface ExercisePlayer {
 export interface ActivityPlayer {
   type: 'activity';
   sessionId: string;
+  activityId?: string;
   title: string;
   author?: string;
   introduction: string;
@@ -116,6 +115,7 @@ export interface ActivityPlayer {
   openAt?: Date;
   closeAt?: Date;
   startedAt?: Date;
+  lastGradedAt?: Date;
   navigation: PlayerNavigation;
   settings?: ActivitySettings;
 }

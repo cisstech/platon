@@ -7,13 +7,13 @@ import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 @Entity('PlayerSessions')
 @Index('PlayerSessions_exercise_idx', ['parentId', 'id'])
 @Index('PlayerSessions_activity_user_idx', ['parentId', 'activityId', 'userId'])
-export class PlayerSessionEntity<TVariables extends object = any> extends BaseEntity {
+export class SessionEntity<TVariables extends object = any> extends BaseEntity {
   @Column({ name: 'parent_id', nullable: true })
   parentId?: string
 
-  @ManyToOne(() => PlayerSessionEntity, { onDelete: 'CASCADE' })
+  @ManyToOne(() => SessionEntity, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'parent_id' })
-  parent?: PlayerSessionEntity
+  parent?: SessionEntity
 
   @Column({ type: 'uuid', nullable: true })
   envid?: string

@@ -1,0 +1,65 @@
+<h3>Résumé</h3>
+<table>
+  <tbody>
+    <tr>
+      <td>Session</td>
+      <td>{{player.sessionId}}</td>
+    </tr>
+    <tr>
+      <td>Date de début</td>
+      <td>{{player.startedAt|date:'dd/MM:yyy à HH:mm'}}</td>
+    </tr>
+    <tr>
+      <td>Date de dernière réponse</td>
+      <td>{{player.lastGradedAt|date:'dd/MM:yyy à HH:mm'}}</td>
+    </tr>
+    <tr>
+      <td>Durée total</td>
+      <td>{{[player.startedAt!, player.lastGradedAt!]|duration}}</td>
+    </tr>
+  </tbody>
+</table>
+<ng-container *ngIf="results">
+  <h3>Résultats</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Exercice</th>
+        <th>Tentatives</th>
+        <th>Durée</th>
+        <th>État</th>
+        <th>Note</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let pair of results.exercises|keyvalue">
+        <tr>
+          <td>{{pair.value.title}}</td>
+          <td>{{pair.value.attempts}}</td>
+          <td>{{pair.value.duration|duration}}</td>
+          <td [nz-tooltip]="pair.value.state|answerStateLabel">
+            <mat-icon [style.color]="pair.value.state|answerStateColor">
+              {{pair.value.state|answerStateIcon}}
+            </mat-icon>
+          </td>
+          <td>{{pair.value.grade}}</td>
+          <td>
+            <button nz-button nzType="primary" (click)="modal.open()">Réponses</button>
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+</ng-container>
+<ui-modal-template
+  [width]="'70vw'"
+  [height]="'70vh'"
+  #modal>
+  <ng-template>
+    {{results|json}}
+  </ng-template>
+  <ng-template>
+    <button nz-button nzType="default" (click)="modal.close()">Fermer</button><!--
+    <button nz-button nzType="primary" (click)="modal.close(true)" [disabled]="!ready">{{okTitle}}</button> -->
+  </ng-template>
+</ui-modal-template>

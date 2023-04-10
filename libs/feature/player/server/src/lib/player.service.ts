@@ -3,15 +3,14 @@ import { Injectable } from '@nestjs/common';
 import { deepCopy, deepMerge, ForbiddenResponse, NotFoundResponse, User } from '@platon/core/common';
 import { ActivityExercise, ActivitySettings, defaultActivitySettings, ExerciseFeedback, ExerciseHint, ExerciseTheory, ExerciseVariables, extractExercisesFromActivityVariables, PLSourceFile, Variables } from '@platon/feature/compiler';
 import { ActivityEntity, ActivityService } from '@platon/feature/course/server';
-import { ActivityPlayer, answerStateFromGrade, AnswerStates, EvalExerciseInput, ExercisePlayer, PlayActivityOuput, PlayerActions, PlayerActivityVariables, PlayerExercise, PlayerNavigation, PlayExerciseOuput, PreviewInput } from '@platon/feature/player/common';
+import { ActivityPlayer, EvalExerciseInput, ExercisePlayer, PlayActivityOuput, PlayerActions, PlayerActivityVariables, PlayerExercise, PlayerNavigation, PlayExerciseOuput, PreviewInput } from '@platon/feature/player/common';
 import { ResourceFileService } from '@platon/feature/resource/server';
+import { answerStateFromGrade, AnswerStates } from '@platon/feature/result/common';
+import { AnswerService, SessionEntity, SessionService } from '@platon/feature/result/server';
 import * as nunjucks from 'nunjucks';
 import { DataSource, EntityManager } from 'typeorm';
-import { PlayerAnswerService } from './answers/answer.service';
 import { PreviewOuputDTO } from './player.dto';
 import { SandboxService } from './sandboxes/sandbox.service';
-import { PlayerSessionEntity } from './sessions/session.entity';
-import { PlayerSessionService } from './sessions/session.service';
 
 nunjucks.configure({ autoescape: false });
 
@@ -42,9 +41,9 @@ export class PlayerService {
   constructor(
     private readonly dataSource: DataSource,
     private readonly sandboxService: SandboxService,
+    private readonly answerService: AnswerService,
+    private readonly sessionService: SessionService,
     private readonly activityService: ActivityService,
-    private readonly answerService: PlayerAnswerService,
-    private readonly sessionService: PlayerSessionService,
     private readonly resourceFileService: ResourceFileService,
   ) { }
 
@@ -300,12 +299,13 @@ export class PlayerService {
       activitySession.attempts++;
       promises.push(
         this.sessionService.update(activitySession.id, {
-          attempts: activitySession.attempts,
           grade: activitySession.grade,
+          attempts: activitySession.attempts,
           variables: {
             ...activitySession.variables,
             navigation: activityNavigation
-          } as PlayerActivityVariables
+          } as PlayerActivityVariables,
+          lastGradedAt: new Date(),
         })
       );
     }
@@ -372,10 +372,10 @@ export class PlayerService {
   private async createNewSession(
     args: CreateSessionArgs,
     entityManager?: EntityManager
-  ): Promise<PlayerSessionEntity> {
+  ): Promise<SessionEntity> {
     const create = async (
       manager: EntityManager
-    ): Promise<PlayerSessionEntity> => {
+    ): Promise<SessionEntity> => {
       const {
         user,
         source,
@@ -421,7 +421,7 @@ export class PlayerService {
    */
   private async withActivityNavigation(
     variables: PlayerActivityVariables,
-    activitySession: PlayerSessionEntity,
+    activitySession: SessionEntity,
     user?: User,
     manager?: EntityManager
   ): Promise<PlayerActivityVariables> {
@@ -469,17 +469,19 @@ export class PlayerService {
    * @returns An activity player.
    */
   private withActivityPlayer(
-    session: PlayerSessionEntity,
+    session: SessionEntity,
   ): ActivityPlayer {
     const variables = session.variables as PlayerActivityVariables;
     return {
       type: 'activity',
       sessionId: session.id,
+      activityId: session.activityId,
       title: variables.title,
       author: variables.author,
       startedAt: session.startedAt,
       openAt: session.activity?.openAt,
       closeAt: session.activity?.closeAt,
+      lastGradedAt: session.lastGradedAt,
       introduction: variables.introduction,
       conclusion: variables.conclusion,
       settings: variables.settings,
@@ -493,7 +495,7 @@ export class PlayerService {
    * @returns An exercise player.
    */
   private withExercisePlayer(
-    session: PlayerSessionEntity,
+    session: SessionEntity,
   ): ExercisePlayer {
     const variables = this.withRenderedTemplates(session.variables);
 
@@ -528,7 +530,9 @@ export class PlayerService {
       author: variables.author,
       title: variables.title,
       form: variables.form,
-      statement: variables.statement
+      statement: variables.statement,
+      startedAt: session.startedAt,
+      lastGradedAt: session.lastGradedAt,
     }
   }
 
@@ -600,9 +604,9 @@ export class PlayerService {
    * @returns The session computed with the answers.
    */
   private withAnswersInSession(
-    session: PlayerSessionEntity,
+    session: SessionEntity,
     answers: Variables
-  ): PlayerSessionEntity {
+  ): SessionEntity {
     const components: Variables = {};
 
     const search = (variables: Variables) => {
@@ -647,9 +651,9 @@ export class PlayerService {
    * @returns The session.
    */
   private withSessionAccessGuard(
-    session?: PlayerSessionEntity | null,
+    session?: SessionEntity | null,
     user?: User
-  ): PlayerSessionEntity {
+  ): SessionEntity {
     if (!session) {
       throw new NotFoundResponse(`PlayerSession not found.`);
     }
@@ -672,12 +676,12 @@ export class PlayerService {
    *  or `undefined` if the exercise is not bound to an activity.
    */
   private withMultiSessionGuard(
-    exerciseSession: PlayerSessionEntity
+    exerciseSession: SessionEntity
   ) {
-    let activitySession: PlayerSessionEntity | undefined;
+    let activitySession: SessionEntity | undefined;
     let activityNavigation: PlayerNavigation | undefined;
     if (exerciseSession.parent) {
-      activitySession = exerciseSession.parent as PlayerSessionEntity;
+      activitySession = exerciseSession.parent as SessionEntity;
       activitySession.activity = activitySession.activity ?? exerciseSession.activity;
 
       const activityVariables = activitySession.variables as PlayerActivityVariables;

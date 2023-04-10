@@ -9,9 +9,9 @@ import { MatIconModule } from '@angular/material/icon';
 
 import { ActivityPlayer, PlayerExercise } from '@platon/feature/player/common';
 
-import { AnswerStatePipesModule } from '../../pipes/answer-state-pipes.module';
-import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { UserAvatarComponent } from '@platon/core/browser';
+import { AnswerStatePipesModule } from '@platon/feature/result/browser';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 
 @Component({
   standalone: true,

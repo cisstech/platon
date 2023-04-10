@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { AnswerStateColors, AnswerStates } from '@platon/feature/player/common';
+import { AnswerStateColors, AnswerStates } from '@platon/feature/result/common';
 
 @Pipe({
   name: 'answerStateColor'

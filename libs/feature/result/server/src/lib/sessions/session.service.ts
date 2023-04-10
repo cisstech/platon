@@ -2,21 +2,20 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, FindOptionsRelations, IsNull, Repository } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
-import { PlayerSessionEntity } from './session.entity';
-import { ExerciseVariables } from '@platon/feature/compiler';
-import { PlayerActivityVariables } from '@platon/feature/player/common';
+import { SessionEntity } from './session.entity';
+
 
 @Injectable()
-export class PlayerSessionService {
+export class SessionService {
   constructor(
-    @InjectRepository(PlayerSessionEntity)
-    private readonly repository: Repository<PlayerSessionEntity>,
+    @InjectRepository(SessionEntity)
+    private readonly repository: Repository<SessionEntity>,
   ) { }
 
   findById<T extends object>(
     id: string,
-    relations: FindOptionsRelations<PlayerSessionEntity>
-  ): Promise<PlayerSessionEntity<T> | null> {
+    relations: FindOptionsRelations<SessionEntity>
+  ): Promise<SessionEntity<T> | null> {
     return this.repository.findOne({
       where: { id },
       relations
@@ -25,7 +24,7 @@ export class PlayerSessionService {
 
   findAllWithParent(
     parentId: string
-  ): Promise<PlayerSessionEntity<ExerciseVariables>[]> {
+  ): Promise<SessionEntity[]> {
     return this.repository.find({
       where: { parentId },
     });
@@ -34,7 +33,7 @@ export class PlayerSessionService {
   ofActivity(
     activityId: string,
     userId: string
-  ): Promise<PlayerSessionEntity<PlayerActivityVariables> | null> {
+  ): Promise<SessionEntity | null> {
     return this.repository.findOne({
       where: { parentId: IsNull(), activityId, userId },
       relations: {
@@ -46,8 +45,8 @@ export class PlayerSessionService {
   ofExercise(
     parentId: string,
     sessionId: string,
-    relations?: FindOptionsRelations<PlayerSessionEntity>
-  ): Promise<PlayerSessionEntity<ExerciseVariables> | null> {
+    relations?: FindOptionsRelations<SessionEntity>
+  ): Promise<SessionEntity | null> {
     return this.repository.findOne({
       where: { parentId, id: sessionId },
       relations
@@ -55,12 +54,12 @@ export class PlayerSessionService {
   }
 
   create<T extends object>(
-    input: Partial<PlayerSessionEntity>,
+    input: Partial<SessionEntity>,
     entityManager?: EntityManager
-  ): Promise<PlayerSessionEntity<T>> {
+  ): Promise<SessionEntity<T>> {
     if (entityManager) {
       return entityManager.save(
-        entityManager.create(this.repository.target, input as PlayerSessionEntity)
+        entityManager.create(this.repository.target, input as SessionEntity)
       );
     }
 
@@ -71,7 +70,7 @@ export class PlayerSessionService {
 
   async update(
     id: string,
-    changes: QueryDeepPartialEntity<PlayerSessionEntity>,
+    changes: QueryDeepPartialEntity<SessionEntity>,
     entityManager?: EntityManager
   ) {
     if (entityManager) {

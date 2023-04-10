@@ -1,16 +1,29 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { FeatureCourseServerModule } from '@platon/feature/course/server';
-import { FeaturePlayerServerModule } from '@platon/feature/player/server';
+import { AnswerEntity } from './answers/answer.entity';
+import { AnswerService } from './answers/answer.service';
 import { ResultController } from './result.controller';
 import { ResultService } from './result.service';
+import { SessionEntity } from './sessions/session.entity';
+import { SessionService } from './sessions/session.service';
 
 @Module({
   imports: [
-    FeaturePlayerServerModule,
     FeatureCourseServerModule,
+    TypeOrmModule.forFeature([SessionEntity, AnswerEntity]),
   ],
   controllers: [ResultController],
-  providers: [ResultService],
-  exports: [ResultService],
+  providers: [
+    ResultService,
+    AnswerService,
+    SessionService
+  ],
+  exports: [
+    ResultService,
+    AnswerService,
+    SessionService,
+    TypeOrmModule
+  ],
 })
-export class FeatureResultServerModule {}
+export class FeatureResultServerModule { }

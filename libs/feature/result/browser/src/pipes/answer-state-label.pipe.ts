@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { AnswerStateLabels, AnswerStates } from '@platon/feature/player/common';
+import { AnswerStateLabels, AnswerStates } from '@platon/feature/result/common';
 
 @Pipe({
   name: 'answerStateLabel'

@@ -1,4 +1,4 @@
-import { AnswerStates } from "@platon/feature/player/common";
+import { AnswerStates } from "./answer.model";
 
 export interface UserResults {
   id: string;
@@ -13,6 +13,7 @@ export interface UserResults {
     grade: number;
     attempts: number;
     duration: number;
+    sessionId?: string;
   }>
 }
 

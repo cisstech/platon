@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { AnswerStateIcons, AnswerStates } from '@platon/feature/player/common';
+import { AnswerStateIcons, AnswerStates } from '@platon/feature/result/common';
 
 @Pipe({
   name: 'answerStateIcon'

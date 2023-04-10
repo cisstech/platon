@@ -14,9 +14,10 @@ import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { SafePipeModule } from '@cisstech/nge/pipes';
 
 import { DialogModule, DialogService } from '@platon/core/browser';
-import { WebComponentHooks } from '@platon/feature/webcomponent';
 import { ExercisePlayer, PlayerActions, PlayerNavigation } from '@platon/feature/player/common';
+import { WebComponentHooks } from '@platon/feature/webcomponent';
 
+import { ExerciseTheory } from '@platon/feature/compiler';
 import { PlayerService } from '../../api/player.service';
 
 @Component({
@@ -57,9 +58,6 @@ export class PlayerExerciseComponent {
     private readonly changeDetectorRef: ChangeDetectorRef
   ) { }
 
-  protected reroll(): Promise<void> {
-    return this.evaluate(PlayerActions.REROLL_EXERCISE);
-  }
 
   protected hint(): Promise<void> {
     return this.evaluate(PlayerActions.NEXT_HINT);
@@ -69,8 +67,16 @@ export class PlayerExerciseComponent {
     return this.evaluate(PlayerActions.CHECK_ANSWER);
   }
 
+  protected reroll(): Promise<void> {
+    return this.evaluate(PlayerActions.REROLL_EXERCISE);
+  }
+
   protected solution(): Promise<void> {
     return this.evaluate(PlayerActions.SHOW_SOLUTION);
+  }
+
+  protected trackByUrl(_: number, item: ExerciseTheory): string {
+    return item.url;
   }
 
   private answers(): Record<string, unknown> {
@@ -115,5 +121,4 @@ export class PlayerExerciseComponent {
       this.changeDetectorRef.markForCheck();
     }
   }
-
 }
