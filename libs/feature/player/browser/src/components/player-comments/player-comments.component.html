@@ -1,0 +1,29 @@
+<nz-list [nzDataSource]="comments" [nzRenderItem]="item" [nzItemLayout]="'horizontal'">
+  <ng-template #item let-item>
+    <nz-comment [nzAuthor]="author" [nzDatetime]="(item.createdAt|date:'dd/MM/yyy HH:mm')!">
+      <ng-template #author>
+        <user-avatar [userIdOrName]="item.authorId" />
+      </ng-template>
+      <nz-comment-content>
+        <p>{{ item.comment }}</p>
+      </nz-comment-content>
+    </nz-comment>
+  </ng-template>
+</nz-list>
+<nz-comment *ngIf="canComment">
+  <nz-comment-content>
+    <nz-form-item>
+      <textarea [(ngModel)]="input" nz-input rows="4"></textarea>
+    </nz-form-item>
+    <nz-form-item>
+      <button
+        nz-button
+        nzType="primary"
+        [nzLoading]="submitting"
+        [disabled]="!input.trim()"
+        (click)="onSubmitComment()">
+        Publier
+      </button>
+    </nz-form-item>
+  </nz-comment-content>
+</nz-comment>

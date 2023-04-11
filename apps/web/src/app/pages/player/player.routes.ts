@@ -15,4 +15,11 @@ export default [
       './activity/activity.routes'
     )
   },
+  {
+    path: 'correction',
+    loadChildren: () => import(
+      /* webpackChunkName: "player-correction" */
+      './correction/correction.routes'
+    )
+  },
 ] as Routes;

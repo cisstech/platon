@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
-import { MatIconModule } from '@angular/material/icon';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 
 import { NgeMarkdownModule } from '@cisstech/nge/markdown';
@@ -20,7 +20,9 @@ import { ExercisePlayer, PlayerActions, PlayerNavigation } from '@platon/feature
 import { WebComponentHooks } from '@platon/feature/webcomponent';
 
 import { ExerciseTheory } from '@platon/feature/compiler';
+import { UiModalDrawerComponent } from '@platon/shared/ui';
 import { PlayerService } from '../../api/player.service';
+import { PlayerCommentsComponent } from '../player-comments/player-comments.component';
 
 @Component({
   standalone: true,
@@ -43,13 +45,17 @@ import { PlayerService } from '../../api/player.service';
     DialogModule,
     SafePipeModule,
     NgeMarkdownModule,
+    UiModalDrawerComponent,
+
+    PlayerCommentsComponent,
   ]
 })
-export class PlayerExerciseComponent implements OnInit {
+export class PlayerExerciseComponent implements OnChanges {
   @Input() player!: ExercisePlayer;
   @Input() players: ExercisePlayer[] = [];
 
   @Input() reviewMode = false;
+  @Input() canComment = false;
 
   @Output() evaluated = new EventEmitter<PlayerNavigation>();
 
@@ -60,13 +66,17 @@ export class PlayerExerciseComponent implements OnInit {
     );
   }
 
+  get currentAttemptIndex(): number {
+    return this.index;
+  }
+
   constructor(
     private readonly dialogService: DialogService,
     private readonly playerService: PlayerService,
     private readonly changeDetectorRef: ChangeDetectorRef
   ) { }
 
-  ngOnInit(): void {
+  ngOnChanges(): void {
     if (this.players?.length) {
       this.player = this.players[0];
     }
@@ -92,6 +102,7 @@ export class PlayerExerciseComponent implements OnInit {
     this.player = this.players[--this.index];
     this.changeDetectorRef.markForCheck();
   }
+
   protected nextAttempt(): void {
     this.player = this.players[++this.index];
     this.changeDetectorRef.markForCheck();

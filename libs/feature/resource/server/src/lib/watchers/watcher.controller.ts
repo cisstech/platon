@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Param, Post, Query, Request, UnauthorizedException } from '@nestjs/common';
+import { Controller, Delete, Get, Param, Post, Query, Req, UnauthorizedException } from '@nestjs/common';
 import { ItemResponse, ListResponse, NoContentResponse, NotFoundResponse } from '@platon/core/common';
 import { IRequest, Mapper, UserDTO } from '@platon/core/server';
 import { ResourceWatcherFiltersDTO } from './watcher.dto';
@@ -35,7 +35,7 @@ export class ResourceWatcherController {
 
   @Post()
   async create(
-    @Request() req: IRequest,
+    @Req() req: IRequest,
     @Param('resourceId') resourceId: string,
   ): Promise<ItemResponse<UserDTO>> {
     const resource = Mapper.map(
@@ -47,7 +47,7 @@ export class ResourceWatcherController {
 
   @Delete('/:userId')
   async delete(
-    @Request() req: IRequest,
+    @Req() req: IRequest,
     @Param('userId') userId: string,
     @Param('resourceId') resourceId: string,
   ): Promise<NoContentResponse> {

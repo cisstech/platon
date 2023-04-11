@@ -30,7 +30,7 @@ export class SessionService {
     });
   }
 
-  ofActivity(
+  findUserActivity(
     activityId: string,
     userId: string
   ): Promise<SessionEntity | null> {
@@ -42,7 +42,7 @@ export class SessionService {
     });
   }
 
-  ofExercise(
+  findExercise(
     parentId: string,
     sessionId: string,
     relations?: FindOptionsRelations<SessionEntity>

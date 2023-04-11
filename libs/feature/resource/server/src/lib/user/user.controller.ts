@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Request, UnauthorizedException } from '@nestjs/common';
+import { Controller, Get, Param, Req, UnauthorizedException } from '@nestjs/common';
 import { ItemResponse } from '@platon/core/common';
 import { IRequest, Mapper } from '@platon/core/server';
 import { ResourceDTO } from '../resource.dto';
@@ -12,8 +12,8 @@ export class UserResourceController {
 
   @Get('/circle')
   async circle(
+    @Req() req: IRequest,
     @Param('username') username: string,
-    @Request() req: IRequest,
   ): Promise<ItemResponse<ResourceDTO>> {
     if (username !== req.user.username) {
       throw new UnauthorizedException("You cannot access other users' personal circles")

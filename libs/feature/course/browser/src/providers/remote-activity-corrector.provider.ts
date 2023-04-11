@@ -5,24 +5,26 @@ import { Activity, ActivityCorrector, CreateActivityCorrector } from "@platon/fe
 import { Observable, map } from "rxjs";
 import { ActivityCorrectorProvider } from "../models/activity-corrector.provider";
 
+const id = (activity: string | Activity) => typeof activity === 'string' ? activity : activity.id;
 @Injectable()
 export class RemoteActivityCorrectorProvider extends ActivityCorrectorProvider {
   constructor(private readonly http: HttpClient) {
     super();
   }
 
-  create(activity: Activity, input: CreateActivityCorrector): Observable<ActivityCorrector> {
-    return this.http.post<ItemResponse<ActivityCorrector>>(`/api/v1/activities/${activity.id}/correctors`, input).pipe(
+  create(activity: string | Activity, input: CreateActivityCorrector): Observable<ActivityCorrector> {
+    return this.http.post<ItemResponse<ActivityCorrector>>(`/api/v1/activities/${id(activity)}/correctors`, input).pipe(
       map(e => e.resource)
     );
   }
 
-  update(activity: Activity, input: CreateActivityCorrector[]): Observable<ListResponse<ActivityCorrector>> {
-    return this.http.put<ListResponse<ActivityCorrector>>(`/api/v1/activities/${activity.id}/correctors`, input);
+  update(activity: string | Activity, input: CreateActivityCorrector[]): Observable<ListResponse<ActivityCorrector>> {
+
+    return this.http.put<ListResponse<ActivityCorrector>>(`/api/v1/activities/${id(activity)}/correctors`, input);
   }
 
-  search(activity: Activity): Observable<ListResponse<ActivityCorrector>> {
-    return this.http.get<ListResponse<ActivityCorrector>>(`/api/v1/activities/${activity.id}/correctors`);
+  search(activity: string | Activity): Observable<ListResponse<ActivityCorrector>> {
+    return this.http.get<ListResponse<ActivityCorrector>>(`/api/v1/activities/${id(activity)}/correctors`);
   }
 
   delete(corrector: ActivityCorrector): Observable<void> {

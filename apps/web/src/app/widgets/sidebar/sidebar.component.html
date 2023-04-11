@@ -1,5 +1,5 @@
 <nav *ngIf="user">
-    <img class="logo" src="assets/images/logo/platon.svg" alt="Logo PLaTon" [routerLink]="'/dashboard'" />
+  <img class="logo" src="assets/images/logo/platon.svg" alt="Logo PLaTon" [routerLink]="'/dashboard'" />
   <a class="nav-link" mat-button [routerLink]="'/dashboard'" [routerLinkActive]="'active'">
     <mat-icon>dashboard</mat-icon>
     Tableau de bord
@@ -8,10 +8,17 @@
     <mat-icon>local_library</mat-icon>
     Cours
   </a>
+
+  <a class="nav-link" mat-button [routerLink]="'/corrections'" [routerLinkActive]="'active'">
+    <mat-icon>rate_review</mat-icon>
+    Corrections
+  </a>
+  <!--
   <a class="nav-link" mat-button [routerLink]="'/forum'" [routerLinkActive]="'active'">
     <mat-icon>chat</mat-icon>
     Forum
   </a>
+  -->
   <ng-container *ngIf="user.role !== 'student'">
     <a class="nav-link" mat-button [routerLink]="'/resources'" [routerLinkActive]="'active'">
       <mat-icon>work</mat-icon>

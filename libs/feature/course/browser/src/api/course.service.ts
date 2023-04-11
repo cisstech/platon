@@ -117,15 +117,15 @@ export class CourseService {
   //#endregion
 
   //#region Activity Correctors
-  createActivityCorrector(activity: Activity, input: CreateActivityCorrector): Observable<ActivityCorrector> {
+  createActivityCorrector(activity: string | Activity, input: CreateActivityCorrector): Observable<ActivityCorrector> {
     return this.activityCorrectorProvider.create(activity, input);
   }
 
-  updateActivityCorrectors(activity: Activity, input: CreateActivityCorrector[]): Observable<ListResponse<ActivityCorrector>> {
+  updateActivityCorrectors(activity: string | Activity, input: CreateActivityCorrector[]): Observable<ListResponse<ActivityCorrector>> {
     return this.activityCorrectorProvider.update(activity, input);
   }
 
-  searchActivityCorrector(activity: Activity): Observable<ListResponse<ActivityCorrector>> {
+  searchActivityCorrector(activity: string | Activity): Observable<ListResponse<ActivityCorrector>> {
     return this.activityCorrectorProvider.search(activity);
   }
 

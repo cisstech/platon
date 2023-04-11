@@ -32,13 +32,7 @@
 </mat-card>
 <ng-container *ngIf="exercises">
   <main>
-    <ng-container
-      *ngFor="
-        let exercise of exercises;
-        trackBy: trackBySessionId;
-        let i = index
-      "
-    >
+    <ng-container *ngFor="let exercise of exercises; trackBy: trackBySessionId; let i = index">
       <nz-ribbon [nzText]="ribbon">
         <ng-template #ribbon>
           {{ i + 1 }} / {{ exercises.length }}

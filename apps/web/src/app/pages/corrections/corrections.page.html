@@ -1,0 +1,17 @@
+<ui-layout-tabs>
+  <nz-breadcrumb nzSeparator="">
+    <nz-breadcrumb-item> Corrections </nz-breadcrumb-item>
+  </nz-breadcrumb>
+  <ui-layout-tab [link]="['pendings']">
+    <ng-template>
+      <mat-icon>schedule</mat-icon>
+      Corrections en attente
+    </ng-template>
+  </ui-layout-tab>
+  <ui-layout-tab [link]="['availables']">
+    <ng-template>
+      <mat-icon>assignment_turned_in</mat-icon>
+      Corrections disponibles
+    </ng-template>
+  </ui-layout-tab>
+</ui-layout-tabs>

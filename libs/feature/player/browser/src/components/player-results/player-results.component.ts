@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { AuthService } from '@platon/core/browser';
 import { ActivityPlayer, ExercisePlayer } from '@platon/feature/player/common';
 import { AnswerStatePipesModule, ResultService } from '@platon/feature/result/browser';
 import { UserExerciseResults, UserResults } from '@platon/feature/result/common';
@@ -38,8 +37,8 @@ export class PlayerResultsComponent implements OnInit {
   protected results?: UserResults;
   protected answers: ExercisePlayer[] = [];
 
+
   constructor(
-    private readonly authService: AuthService,
     private readonly resultService: ResultService,
     private readonly playerService: PlayerService,
     private readonly changeDetectorRef: ChangeDetectorRef,
@@ -47,9 +46,7 @@ export class PlayerResultsComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.results = await firstValueFrom(
-      this.resultService.sessionResults(
-        this.player.sessionId
-      )
+      this.resultService.sessionResults(this.player.sessionId)
     );
     this.changeDetectorRef.markForCheck();
   }

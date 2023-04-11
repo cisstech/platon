@@ -12,20 +12,25 @@ nunjucks.configure({ autoescape: false });
  * Transforms recursivly all component objects to HTML code from `object`.
  * A component is an object with both `cid` and `selector` properties.
  * @param variables Object to transform.
+ * @param reviewMode If true, the components will be disabled.
  * @returns A computed version of the object.
  */
 export const withRenderedComponents = (
-  variables: any
+  variables: any,
+  reviewMode?: boolean,
 ): any => {
   if (Array.isArray(variables)) {
-    return variables.map(withRenderedComponents);
+    return variables.map(v => withRenderedComponents(v, reviewMode));
   }
   if (typeof variables === 'object') {
     if (variables.cid && variables.selector) {
+      if (reviewMode) {
+        variables.disabled = true;
+      }
       return `<${variables.selector} cid='${variables.cid}' state='${JSON.stringify(variables)}' />`
     }
     return Object.keys(variables).reduce((o, k) => {
-      o[k] = withRenderedComponents(variables[k])
+      o[k] = withRenderedComponents(variables[k], reviewMode)
       return o;
     }, {} as any)
   }
@@ -35,13 +40,15 @@ export const withRenderedComponents = (
 /**
  * Renders all keys of `variables` which are consired as nunjucks templates.
  * @param variables A list of variables.
+ * @param reviewMode If true, the components will be disabled.
  * @returns The variables with rendered templates.
  */
 export const withRenderedTemplates = (
-  variables: Variables
+  variables: Variables,
+  reviewMode?: boolean,
 ): ExerciseVariables => {
 
-  const computed = withRenderedComponents(variables) as ExerciseVariables;
+  const computed = withRenderedComponents(variables, reviewMode) as ExerciseVariables;
 
   const templates = ['title', 'statement', 'form', 'solution', 'feedback', 'hints'];
 
@@ -103,7 +110,10 @@ export const withExercisePlayer = (
   session: SessionEntity,
   answer?: AnswerEntity,
 ): ExercisePlayer => {
-  const variables = withRenderedTemplates(answer?.variables || session.variables);
+  const variables = withRenderedTemplates(
+    answer?.variables || session.variables,
+    answer != null
+  );
 
   const activitySession = session.parent;
 
@@ -140,6 +150,7 @@ export const withExercisePlayer = (
         ? (variables['.meta']?.consumedHints ? hint.slice(0, variables['.meta'].consumedHints) : [])
         : hint.data,
     remainingAttempts,
+    answerId: answer?.id,
     sessionId: session.id,
     author: variables.author,
     title: variables.title,

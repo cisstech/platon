@@ -3,14 +3,12 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@
 import { ActivatedRoute } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 
-import { MatCardModule } from '@angular/material/card';
 
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 import { PlayerService, PlayerWrapperComponent } from '@platon/feature/player/browser';
 import { Player } from '@platon/feature/player/common';
 import { UiErrorComponent } from '@platon/shared/ui';
-import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
 
 
 @Component({
@@ -22,9 +20,6 @@ import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
   imports: [
     CommonModule,
     NzSpinModule,
-    NzSkeletonModule,
-    MatCardModule,
-
     UiErrorComponent,
     PlayerWrapperComponent,
   ]
@@ -41,22 +36,18 @@ export class PlayerActivityPage implements OnInit {
   ) { }
 
   async ngOnInit(): Promise<void> {
-    const params = this.activatedRoute.snapshot.paramMap;
-    const activityId = params.get('id') as string;
-
     try {
+      const params = this.activatedRoute.snapshot.paramMap;
+      const activityId = params.get('id') as string;
       const output = await firstValueFrom(
         this.playerService.playActivity({ activityId })
       );
       this.player = output.activity;
-
     } catch (error) {
       this.error = error;
-      console.log(error)
     } finally {
       this.loading = false;
       this.changeDetectorRef.markForCheck();
     }
-
   }
 }

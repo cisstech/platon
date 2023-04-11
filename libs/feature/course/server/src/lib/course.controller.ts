@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Post, Query, Request } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Query, Req } from '@nestjs/common';
 import { CreatedResponse, ForbiddenResponse, ItemResponse, ListResponse, NotFoundResponse } from '@platon/core/common';
 import { IRequest, Mapper } from '@platon/core/server';
 import { CourseMemberService } from './course-member/course-member.service';
@@ -14,7 +14,7 @@ export class CourseController {
 
   @Get()
   async search(
-    @Request() req: IRequest,
+    @Req() req: IRequest,
     @Query() filters: CourseFiltersDTO = {}
   ): Promise<ListResponse<CourseDTO>> {
     filters = {
@@ -34,7 +34,7 @@ export class CourseController {
 
   @Get('/:id')
   async find(
-    @Request() req: IRequest,
+    @Req() req: IRequest,
     @Param('id') id: string,
   ): Promise<ItemResponse<CourseDTO>> {
     const optional = await this.courseService.findById(id);
@@ -52,7 +52,7 @@ export class CourseController {
 
   @Post()
   async create(
-    @Request() req: IRequest,
+    @Req() req: IRequest,
     @Body() input: CreateCourseDTO
   ): Promise<CreatedResponse<CourseDTO>> {
     const resource = Mapper.map(

@@ -98,6 +98,7 @@ export interface EvalExerciseOutput {
 
 export interface ExercisePlayer {
   type: 'exercise';
+  answerId?: string;
   sessionId: string;
   startedAt?: Date;
   lastGradedAt?: Date;

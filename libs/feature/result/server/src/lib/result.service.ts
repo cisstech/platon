@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { BadRequestResponse, NotFoundResponse } from '@platon/core/common';
 import { ActivityVariables, ExerciseVariables, extractExercisesFromActivityVariables } from '@platon/feature/compiler';
 import { ActivityCorrectorView, ActivityEntity, ActivityMemberView } from '@platon/feature/course/server';
-import { ActivityResults, AnswerStates, ExerciseResults, UserResults, emptyExerciseResults } from '@platon/feature/result/common';
+import { ActivityResults, AnswerStates, ExerciseResults, UserResults, answerStateFromGrade, emptyExerciseResults } from '@platon/feature/result/common';
 import differenceInSeconds from 'date-fns/differenceInSeconds';
 import { IsNull, Not, Repository } from 'typeorm';
 import { SessionEntity } from './sessions/session.entity';
@@ -79,9 +79,22 @@ export class ResultService {
     const exerciseSessionCountByExerciseId = new Map<string, number>();
 
     activitySessions.forEach(activitySession => {
+
       const navigation = activitySession.variables.navigation;
       // TODO use real type instead of any
       navigation.exercises.forEach((navExercise: any) => {
+        const userResults = userResultsIndex[activitySession.userId as string];
+        const exerciseSession = exerciseSessions.find(session => session.id === navExercise.sessionId);
+        const correcting = correctionEnabled && !exerciseSession?.correction;
+        userResults.correcting = correcting ?? userResults.correcting;
+        if (!correcting) {
+          navExercise.state = answerStateFromGrade(
+            exerciseSession?.correction?.grade || exerciseSession?.grade
+          );
+          const userExercise = userResults.exercises[navExercise.id];
+          userExercise.state = navExercise.state;
+        }
+
         exerciseIdBySessionId.set(navExercise.sessionId, navExercise.id);
         exerciseSessionCountByExerciseId.set(navExercise.id, 0);
         Object.values(AnswerStates).forEach(state => {
@@ -89,15 +102,6 @@ export class ResultService {
             exerciseResultsMapIndex[navExercise.id].states[state]++;
           }
         });
-        const userResults = userResultsIndex[activitySession.userId as string];
-        const exerciseSession = exerciseSessions.find(session => session.id === navExercise.sessionId);
-
-        const correcting = correctionEnabled && !exerciseSession?.correction;
-        userResults.correcting = correcting ?? userResults.correcting;
-        if (!correcting) {
-          const userExercise = userResults.exercises[navExercise.id];
-          userExercise.state = navExercise.state;
-        }
       })
     });
 

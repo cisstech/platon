@@ -82,6 +82,13 @@
     </button>
     <div class="spacer"></div>
     <button
+      mat-button
+      *ngIf="player.answerId"
+      (click)="drawer.open()">
+      <mat-icon color="primary">reviews</mat-icon>
+      Commentaires
+    </button>
+    <button
       *ngIf="player.theories?.length"
       mat-button
       [matMenuTriggerFor]="theories">
@@ -111,3 +118,13 @@
     <a mat-menu-item [href]="item.url" target="_blank">{{item.title}}</a>
   </ng-container>
 </mat-menu>
+<ui-modal-drawer
+  #drawer
+  title="Commentaires">
+  <ng-template>
+    <player-comments
+      [canComment]="canComment"
+      [answerId]="player.answerId!"
+      [sessionId]="player.sessionId" />
+  </ng-template>
+</ui-modal-drawer>

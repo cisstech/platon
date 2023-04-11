@@ -44,6 +44,13 @@ export default [
         )
       },
       {
+        path: 'corrections',
+        loadChildren: () => import(
+          /* webpackChunkName: "corrections" */
+          '../corrections/corrections.routes'
+        )
+      },
+      {
         path: 'admin',
         loadChildren: () => import(
           /* webpackChunkName: "admin" */

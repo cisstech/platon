@@ -31,6 +31,10 @@ export class UiModalDrawerComponent {
   @Input()
   placement: NzDrawerPlacement = 'right'
 
+  get isVisible(): boolean {
+    return this.visible;
+  }
+
   constructor(
     private readonly changeDetectorRef: ChangeDetectorRef
   ) { }

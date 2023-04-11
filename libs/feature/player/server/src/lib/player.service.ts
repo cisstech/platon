@@ -84,7 +84,7 @@ export class PlayerService {
     activityId: string,
     user: User
   ): Promise<PlayActivityOuput> {
-    let activitySession = await this.sessionService.ofActivity(
+    let activitySession = await this.sessionService.findUserActivity(
       activityId,
       user.id
     );
@@ -119,7 +119,7 @@ export class PlayerService {
     const exercisePlayers = await Promise.all(
       exerciseSessionIds.map(async (sessionId) => {
         const exerciseSession = withSessionAccessGuard(
-          await this.sessionService.ofExercise(activitySessionId, sessionId),
+          await this.sessionService.findExercise(activitySessionId, sessionId),
           user
         );
         exerciseSession.parent = activitySession;

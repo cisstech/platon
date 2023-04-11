@@ -1,8 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Request } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Req } from '@nestjs/common';
 import { CreatedResponse, ItemResponse, ListResponse, NoContentResponse, NotFoundResponse } from '@platon/core/common';
 import { IRequest, Mapper } from '@platon/core/server';
-import { CreateResourceInvitationDTO, ResourceInvitationDTO } from './invitation.dto';
 import { ResourceMemberDTO } from '../members/member.dto';
+import { CreateResourceInvitationDTO, ResourceInvitationDTO } from './invitation.dto';
 import { ResourceInvitationService } from './invitation.service';
 
 @Controller('resources/:resourceId/invitations')
@@ -35,7 +35,7 @@ export class ResourceInvitationController {
 
   @Post()
   async invite(
-    @Request() req: IRequest,
+    @Req() req: IRequest,
     @Param('resourceId') resourceId: string,
     @Body() input: CreateResourceInvitationDTO
   ): Promise<ItemResponse<ResourceInvitationDTO>> {

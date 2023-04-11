@@ -3,8 +3,8 @@ import { Activity, ActivityCorrector, CreateActivityCorrector } from "@platon/fe
 import { Observable } from "rxjs";
 
 export abstract class ActivityCorrectorProvider {
-  abstract create(activity: Activity, input: CreateActivityCorrector): Observable<ActivityCorrector>;
-  abstract update(activity: Activity, input: CreateActivityCorrector[]): Observable<ListResponse<ActivityCorrector>>;
-  abstract search(activity: Activity): Observable<ListResponse<ActivityCorrector>>;
+  abstract create(activity: string | Activity, input: CreateActivityCorrector): Observable<ActivityCorrector>;
+  abstract update(activity: string | Activity, input: CreateActivityCorrector[]): Observable<ListResponse<ActivityCorrector>>;
+  abstract search(activity: string | Activity): Observable<ListResponse<ActivityCorrector>>;
   abstract delete(member: ActivityCorrector): Observable<void>;
 }

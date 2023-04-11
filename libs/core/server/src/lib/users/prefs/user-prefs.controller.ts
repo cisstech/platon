@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Request, UnauthorizedException } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Req, UnauthorizedException } from '@nestjs/common';
 import { ItemResponse } from '@platon/core/common';
 import { IRequest } from '../../auth';
 import { Mapper } from '../../utils';
@@ -14,8 +14,8 @@ export class UserPrefsController {
 
   @Get()
   async find(
+    @Req() req: IRequest,
     @Param('username') username: string,
-    @Request() req: IRequest,
   ): Promise<ItemResponse<UserPrefsDTO>> {
     if (username !== req.user.username) {
       throw new UnauthorizedException("You cannot access other users' prefs")
@@ -30,8 +30,8 @@ export class UserPrefsController {
 
   @Patch()
   async update(
+    @Req() req: IRequest,
     @Param('username') username: string,
-    @Request() req: IRequest,
     @Body() input: UpdateUserPrefsDTO,
   ): Promise<ItemResponse<UserPrefsDTO>> {
     if (username !== req.user.username) {
