@@ -44,7 +44,7 @@ services:
       dockerfile: .docker/node/Dockerfile
     image: platon/node
     container_name: platon_api
-    command: npm run serve:api -- --host 0.0.0.0
+    command: pnpm serve:api -- --host 0.0.0.0
     ports:
       - 4201
     volumes:
@@ -64,7 +64,7 @@ services:
   web:
     image: platon/node
     container_name: platon_web
-    command: npm run serve:web -- --host 0.0.0.0 --disable-host-check
+    command: pnpm serve:web -- --host 0.0.0.0 --disable-host-check
     ports:
       - 4200
     volumes:

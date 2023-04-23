@@ -21,7 +21,7 @@
     "build:api": "npx nx build api --configuration=production",
     "test": "nx run-many --target=test --all --code-coverage --watch=false --browsers=ChromeHeadless && node coverage-merger.js",
     "lint": "nx workspace-lint && nx run-many --target=lint --all",
-    "stats": "npm run build:web && webpack-bundle-analyzer dist/apps/web/stats.json",
+    "stats": "pnpm build:web && webpack-bundle-analyzer dist/apps/web/stats.json",
     "e2e": "ng e2e",
     "affected:apps": "nx affected:apps",
     "affected:libs": "nx affected:libs",

@@ -5,6 +5,7 @@ ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
 
 # Install python3, make, g++, Git, and NodeGit dependencies
 RUN apk add --no-cache --update \
+        bash \
         python3 \
         make \
         g++ \
@@ -27,7 +28,7 @@ COPY nx.json /src/nx.json
 COPY .npmrc /src/.npmrc
 
 # Install dependencies
-RUN pnpm i
+# RUN pnpm i
 
 # Copy sources
 COPY libs /src/libs

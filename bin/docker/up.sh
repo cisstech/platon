@@ -2,7 +2,7 @@
 
 # Authorize the execution of this script from anywhere
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-cd "$DIR/.."
+cd "$DIR/../.."
 
 # https://stackoverflow.com/a/14203146
 
@@ -26,6 +26,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 export SANDBOX_HOST=`./bin/find-ip.sh`
+echo "SANDBOX_HOST=$SANDBOX_HOST"
 export SANDBOX_PORT=7000
 
 if [ "$prod" = true ]
