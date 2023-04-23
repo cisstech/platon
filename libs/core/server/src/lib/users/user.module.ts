@@ -8,6 +8,7 @@ import { UserPrefsEntity, UserPrefsService } from './prefs';
 import { UserPrefsController } from './prefs/user-prefs.controller';
 import { UserController } from './user.controller';
 import { UserEntity } from './user.entity';
+import { UserResolver } from './user.resolver';
 import { UserService } from './user.service';
 
 @Module({
@@ -29,6 +30,7 @@ import { UserService } from './user.service';
     UserService,
     UserPrefsService,
     UserGroupService,
+    UserResolver
   ],
   exports: [
     UserService,

@@ -1,0 +1,66 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type UserPrefsModel {
+  levels: [String!]!
+  topics: [String!]!
+}
+
+type UserModel {
+  id: UUID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  role: UserRoles!
+  username: String!
+  active: Boolean!
+  firstName: String
+  lastName: String
+  email: String
+  lastLogin: DateTime
+  firstLogin: DateTime
+  prefs: UserPrefsModel!
+}
+
+"""
+The `UUID` scalar type represents UUID values as specified by [RFC 4122](https://tools.ietf.org/html/rfc4122).
+"""
+scalar UUID
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+enum UserRoles {
+  admin
+  teacher
+  student
+}
+
+type Query {
+  users(filters: UserFiltersInput): [UserModel!]!
+  user(input: String!): UserModel!
+}
+
+input UserFiltersInput {
+  roles: [UserRoles!]
+  groups: [UUID!]
+  lmses: [UUID!]
+  search: String
+  offset: Int
+  limit: Int
+  order: UserOrderings
+  direction: OrderingDirections
+}
+
+enum UserOrderings {
+  NAME
+  CREATED_AT
+  UPDATED_AT
+}
+
+enum OrderingDirections {
+  ASC
+  DESC
+}

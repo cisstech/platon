@@ -15,7 +15,6 @@ declare module 'editorjs-toggle-block';
 declare module 'editorjs-text-alignment-blocktune';
 declare module '@editorjs/underline';
 declare module '@editorjs/text-variant-tune';
-declare module '@calumk/editorjs-columns';
 declare module 'editorjs-text-color-plugin';
 declare module 'editorjs-undo';
 declare module 'editorjs-drag-drop';

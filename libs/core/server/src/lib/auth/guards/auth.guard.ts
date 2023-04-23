@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { ExecutionContextHost } from '@nestjs/core/helpers/execution-context-host';
+import { GqlContextType, GqlExecutionContext } from '@nestjs/graphql';
 import { AuthGuard as PassportGuard } from '@nestjs/passport';
 import { TOKEN_EXPIRED_ERROR_CODE, UnauthorizedResponse, User } from '@platon/core/common';
 import { TokenExpiredError } from 'jsonwebtoken';
@@ -13,6 +15,14 @@ export class AuthGuard extends PassportGuard(['jwt']) {
     super();
   }
 
+  private getRequest(context: ExecutionContext) {
+    if (context.getType<GqlContextType>() === 'graphql') {
+      const gqlContext = GqlExecutionContext.create(context);
+      return gqlContext.getContext().req;
+    }
+    return context.switchToHttp().getRequest();
+  }
+
   override async canActivate(context: ExecutionContext): Promise<boolean> {
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),
@@ -20,7 +30,9 @@ export class AuthGuard extends PassportGuard(['jwt']) {
     ]);
 
     try {
-      const loggedIn = super.canActivate(context);
+      const request = this.getRequest(context);
+      const loggedIn = super.canActivate(new ExecutionContextHost([request]));
+
       if (typeof loggedIn === 'boolean') {
         return isPublic || loggedIn;
       }

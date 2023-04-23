@@ -7,11 +7,15 @@ import { ErrorsModule } from './errors/errors.module';
 import { LevelModule } from './levels';
 import { TopicModule } from './topics';
 import { UserModule } from './users/user.module';
+import { GraphQLModule } from './graphql/graphql.module';
+import { PubSubModule } from './pubsub/pubsub.module';
 
 @Module({
   imports: [
     ConfigurationModule,
     DatabaseModule,
+    GraphQLModule,
+    PubSubModule,
     UserModule,
     AuthModule,
     TopicModule,
@@ -26,6 +30,8 @@ import { UserModule } from './users/user.module';
   exports: [
     ConfigurationModule,
     DatabaseModule,
+    GraphQLModule,
+    PubSubModule,
     UserModule,
     AuthModule,
     TopicModule,
