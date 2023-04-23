@@ -14,16 +14,15 @@ while [[ $# -gt 0 ]]; do
   case $key in
     -p|--prod)
       prod=true
-      shift # past argument
       ;;
-  esac
-
-  case $key in
     -d)
       detach='-d'
-      shift # past argument
+      ;;
+    *)
+      # unknown option
       ;;
   esac
+  shift # past argument
 done
 
 export SANDBOX_HOST=`./bin/find-ip.sh`
@@ -38,6 +37,3 @@ else
     docker-compose -f docker-compose.dev.yml build
     docker-compose -f docker-compose.dev.yml up $detach
 fi
-
-
-

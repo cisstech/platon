@@ -1,8 +1,20 @@
 #!/usr/bin/env bash
-
 # Authorize the execution of this script from anywhere
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 cd "$DIR/.."
+
+
+function print_status() {
+  local status="$1"
+  local message="$2"
+  local color="$3"
+
+  echo -e "${color}${status}: ${message}${Color_Off}"
+}
+
+function command_exists() {
+  command -v "$1" >/dev/null 2>&1
+}
 
 # COLORS
 # Reset
@@ -17,46 +29,60 @@ Cyan=$'\e[0;36m'   # Cyan
 
 OS=$(uname -s)
 
-echo -e "$Purple\nChecking dependencies...\n$Color_Off"
+echo -e "${Purple}\nChecking dependencies...\n${Color_Off}"
 
 # Checking if Docker is installed
-if ! hash docker 2>/dev/null; then
-  echo "docker:$Red ERROR - Docker must be installed (see: https://docs.docker.com/engine/installation/linux/docker-ce/debian/).$Color_Off" >&2
+if ! command_exists docker; then
+  print_status "docker" "ERROR - Docker must be installed (see: https://docs.docker.com/engine/installation/linux/docker-ce/debian/)." "$Red"
   exit 1
 fi
-echo -e "docker:$Green OK !$Color_Off"
+print_status "docker" "OK !" "$Green"
 
-if [ "$OS" = "Darwin" ]; then
+
+
+# Install pnpm if not installed
+if ! command_exists pnpm; then
+  npm install -g pnpm
+fi
+print_status "pnpm" "OK !" "$Green"
+
+
+if [ "$OS" = "Darwin" ]; then # Mac OS
   if ! hash brew; then
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   fi
-  echo -e "brew:$Green OK !$Color_Off"
+  print_status "brew" "OK !" "$Green"
 
-  if ! hash openssl 2>/dev/null; then
+  if ! command_exists openssl; then
     brew install openssl
   fi
-  echo -e "openssl:$Green OK !$Color_Off"
-else
-  if ! hash openssl 2>/dev/null; then
-    echo "ERROR:$Red brew should be installed. visit https://cloudwafer.com/blog/installing-openssl-on-ubuntu-16-04-18-04/$Color_Off"
+  print_status "openssl" "OK !" "$Green"
+else # Linux
+  if ! command_exists openssl; then
+    print_status "ERROR" "brew should be installed. visit https://cloudwafer.com/blog/installing-openssl-on-ubuntu-16-04-18-04/" "$Red"
     exit 1
   fi
-  echo -e "openssl:$Green OK !$Color_Off"
-
-  if ! hash update-ca-certificates 2>/dev/null; then
+  print_status "openssl" "OK !" "$Green"
+  if ! command_exists update-ca-certificates; then
     sudo apt-get install ca-certificates
   fi
-  echo -e "update-ca-certificates:$Green OK !$Color_Off"
+  print_status "update-ca-certificates" "OK !" "$Green"
 fi
 
-echo -e "$Purple\nGenerating files...\n$Color_Off"
+
+
+
+
+
+echo -e "${Purple}\nGenerating files...\n${Color_Off}"
 
 if [[ ! -f .env ]]; then
   echo -e "
+
 # INCREASE DOCKER COMPOSE TIMEOUT DELAY DO NOT REMOVE THIS VAR
 COMPOSE_HTTP_TIMEOUT=200
 
-# POSTGRES
+# POSTGRES SERVICE
 POSTGRES_USER=platon
 POSTGRES_PASSWORD=test
 POSTGRES_DB=platon_db
@@ -66,12 +92,12 @@ PG_DATA=/var/lib/postgresql/data
 PGADMIN_DEFAULT_EMAIL=test@test.com
 PGADMIN_DEFAULT_PASSWORD=test
 
-# API
+# API SERVICE
 DB_NAME=platon_db
 DB_USERNAME=platon
 DB_PASSWORD=test
 DB_HOST=postgres
-DB_PORT=5431
+DB_PORT=5432
 SECRET_KEY=secret
 PASSWORD_SALT=10
 JWT_ACCESS_TOKEN_LIFETIME=15m
@@ -80,51 +106,49 @@ JWT_REFRESH_TOKEN_LIFETIME=7d
 # REDIS
 REDIS_HOST=redis
 REDIS_PORT=6379
+
+# GRAPHQL
+GRAPHQL_PLAYGROUND=true
 " >>.env
 fi
 echo -e ".env:$Green OK !$Color_Off"
-
-if ! grep -q "platon.dev" /etc/hosts; then
-  sudo -- sh -c "echo \"127.0.0.1  platon.dev\" >> /etc/hosts"
-fi
-echo -e "/etc/hosts:$Green OK !$Color_Off"
 
 mkdir -p .docker/nginx/ssl/certs
 mkdir -p .docker/nginx/ssl/dhparam
 
 # https://support.kerioconnect.gfi.com/hc/en-us/articles/360015200119-Adding-Trusted-Root-Certificates-to-the-Server
 
-if [[ ! -f .docker/nginx/ssl/certs/platon.dev.crt ]]; then
+if [[ ! -f .docker/nginx/ssl/certs/localhost.crt ]]; then
   echo ""
-  # Generate a ssl certificate of 10 years for platon.dev domain
+  # Generate a ssl certificate of 10 years for localhost domain
   openssl req -x509 -sha256 -nodes -newkey rsa:2048 -days 3650 \
-    -keyout .docker/nginx/ssl/certs/platon.dev.key \
-    -out .docker/nginx/ssl/certs/platon.dev.crt <<EOF
+    -keyout .docker/nginx/ssl/certs/localhost.key \
+    -out .docker/nginx/ssl/certs/localhost.crt <<EOF
 fr
-Ile-de-france
-Champs-sur-marne
-IGM
+PROVINCE_STATE
+CITY
 PLaTon
-platon.dev
+PLaTon
+localhost
 nobody@nobody.com
 EOF
 
   if [ "$OS" = "Darwin" ]; then
-    security delete-certificate -c "platon.dev"
+    security delete-certificate -c "localhost"
     echo ""
-    security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain .docker/nginx/ssl/certs/platon.dev.crt
+    security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain .docker/nginx/ssl/certs/localhost.crt
     echo ""
   else
-    sudo rm -f /usr/local/share/ca-certificates/platon.dev.crt
+    sudo rm -f /usr/local/share/ca-certificates/localhost.crt
     sudo update-ca-certificates --fresh
 
-    sudo cp .docker/nginx/ssl/certs/platon.dev.crt /usr/local/share/ca-certificates/platon.dev.crt
+    sudo cp .docker/nginx/ssl/certs/localhost.crt /usr/local/share/ca-certificates/localhost.crt
     sudo update-ca-certificates
   fi
 fi
 
-echo -e ".docker/nginx/ssl/certs/platon.dev.key:$Green OK !$Color_Off"
-echo -e ".docker/nginx/ssl/certs/platon.dev.crt:$Green OK !$Color_Off"
+echo -e ".docker/nginx/ssl/certs/localhost.key:$Green OK !$Color_Off"
+echo -e ".docker/nginx/ssl/certs/localhost.crt:$Green OK !$Color_Off"
 
 if [[ ! -f .docker/nginx/ssl/dhparam/dhparam.pem ]]; then
   openssl dhparam -out .docker/nginx/ssl/dhparam/dhparam.pem 2048
