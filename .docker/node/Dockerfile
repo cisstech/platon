@@ -14,21 +14,21 @@ RUN apk add --no-cache --update \
         libgit2-dev \
     && rm -rf /var/cache/apk/* /tmp/* /var/tmp/*
 
-# Install pnpm
-RUN npm install -g pnpm
+# Install yarn
+RUN npm install -g yarn --force
 
 # Set work directory
 WORKDIR /src
 
 # Copy dependencies
-COPY pnpm-lock.yaml /src/pnpm-lock.yaml
+COPY yarn.lock /src/yarn.lock
 COPY package.json /src/package.json
 COPY tsconfig.base.json /src/tsconfig.base.json
 COPY nx.json /src/nx.json
 COPY .npmrc /src/.npmrc
 
 # Install dependencies
-# RUN pnpm i
+RUN yarn
 
 # Copy sources
 COPY libs /src/libs

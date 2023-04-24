@@ -1,0 +1,4 @@
+<p> {{_item.event.type|resourceEventType}} - {{_item.event.createdAt|date:'dd/MM/yyyy à HH:mm'}}</p>
+<ng-container
+  *ngComponentOutlet="_item.renderer; injector: _item.injector">
+</ng-container>

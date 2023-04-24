@@ -4,4 +4,4 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd "$DIR/../.."
 
-pnpm typeorm:run migration:generate migrations/$1
+yarn typeorm:run migration:generate migrations/$1

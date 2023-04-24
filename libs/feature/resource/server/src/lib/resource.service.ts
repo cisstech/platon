@@ -13,7 +13,7 @@ import {
   ResourceVisibilities
 } from '@platon/feature/resource/common';
 import { isUUID4 } from '@platon/shared/server';
-import { DataSource, Not, Repository } from 'typeorm';
+import { DataSource, EntityManager, Not, Repository } from 'typeorm';
 import { Optional } from 'typescript-optional';
 import { ResourceMemberEntity } from './members/member.entity';
 import { CreateResourceDTO, UpdateResourceDTO } from './resource.dto';
@@ -283,5 +283,15 @@ export class ResourceService {
     }
 
     return newRes
+  }
+
+  async notificationWatchers(resourceId: string, entityManager?: EntityManager): Promise<string[]> {
+    return (await (entityManager ?? this.dataSource).query(`
+      SELECT DISTINCT COALESCE(member.user_id, watcher.user_id) AS user_id
+      FROM "Resources" res
+      LEFT JOIN "ResourceMembers" member ON member.resource_id = res.id
+      LEFT JOIN "ResourceWatchers" watcher ON watcher.resource_id = res.id
+      WHERE res.id = $1
+    `, [resourceId])).map((row: any) => row.user_id)
   }
 }

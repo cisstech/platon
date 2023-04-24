@@ -6,7 +6,7 @@ import { GqlContextType, GqlExecutionContext } from '@nestjs/graphql';
 import { AuthGuard as PassportGuard } from '@nestjs/passport';
 import { TOKEN_EXPIRED_ERROR_CODE, UnauthorizedResponse, User } from '@platon/core/common';
 import { TokenExpiredError } from 'jsonwebtoken';
-import { Observable, firstValueFrom } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 
 @Injectable()
@@ -17,8 +17,11 @@ export class AuthGuard extends PassportGuard(['jwt']) {
 
   private getRequest(context: ExecutionContext) {
     if (context.getType<GqlContextType>() === 'graphql') {
-      const gqlContext = GqlExecutionContext.create(context);
-      return gqlContext.getContext().req;
+      const gqlContext = GqlExecutionContext.create(context).getContext();
+      const { req, connection } = gqlContext;
+      return connection && connection.context && connection.context.headers
+        ? connection.context
+        : req;
     }
     return context.switchToHttp().getRequest();
   }

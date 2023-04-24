@@ -2,13 +2,13 @@ import { Field, ObjectType } from "@nestjs/graphql";
 import { UserPrefsEntity } from "./user-prefs.entity";
 
 
-@ObjectType()
-export class UserPrefsModel {
+@ObjectType('UserPrefs')
+export class UserPrefsGraphModel {
   constructor(data: Partial<UserPrefsEntity>) {
     Object.assign(this, {
       levels: data.levels?.map((level) => level.name) || [],
       topics: data.topics?.map((topic) => topic.name) || [],
-    } as UserPrefsModel);
+    } as UserPrefsGraphModel);
   }
 
   @Field(() => [String])

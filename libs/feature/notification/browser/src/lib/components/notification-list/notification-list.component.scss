@@ -1,0 +1,13 @@
+nz-avatar {
+  background-color: var(--brand-color-primary);
+}
+
+nz-list-item {
+  cursor: pointer;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+nz-list-item.unread {
+  background-color: #f6f6f6;
+}

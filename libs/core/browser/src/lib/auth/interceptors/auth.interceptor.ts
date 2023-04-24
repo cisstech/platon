@@ -6,8 +6,8 @@ import { AuthToken, ErrorResponse, TOKEN_EXPIRED_ERROR_CODE } from '@platon/core
 
 import { BehaviorSubject, from, Observable, throwError } from 'rxjs';
 import { catchError, filter, finalize, switchMap, take } from 'rxjs/operators';
+import { TokenService } from '../api/token.service';
 
-import { RemoteTokenProvider } from '../providers/remote-token.provider';
 
 
 /**
@@ -19,14 +19,14 @@ export class AuthInterceptor implements HttpInterceptor {
   private readonly token$ = new BehaviorSubject<AuthToken | undefined>(undefined);
 
   constructor(
-    private readonly tokenProvider: RemoteTokenProvider
+    private readonly tokenService: TokenService
   ) { }
 
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    return from(this.tokenProvider.token()).pipe(
+    return from(this.tokenService.token()).pipe(
       switchMap(token => {
         if (token != null) {
           return next.handle(this.addAuthorization(req, this.isRefreshing ? token.refreshToken : token.accessToken)).pipe(
@@ -56,7 +56,7 @@ export class AuthInterceptor implements HttpInterceptor {
       // future requests will wait until the refresh token is resolved
       this.token$.next(undefined);
 
-      return from(this.tokenProvider.refresh()).pipe(
+      return from(this.tokenService.refresh()).pipe(
         switchMap(token => {
           return next.handle(this.addAuthorization(req, token!.accessToken));
         }),

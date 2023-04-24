@@ -1,4 +1,4 @@
-import { CreateUserGroup, ItemResponse, ListResponse, UpdateUserGroup, User, UserFilters, UserGroup, UserGroupFilters } from '@platon/core/common';
+import { CreateUserGroup, ListResponse, UpdateUserGroup, User, UserFilters, UserGroup, UserGroupFilters } from '@platon/core/common';
 import { Observable } from 'rxjs';
 
 /**

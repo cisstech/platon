@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { RedisPubSub } from 'graphql-redis-subscriptions';
 import { Configuration } from '../config/configuration';
 
-export const PUB_SUB = 'PUB_SUB';
+import { PubSubService, PUB_SUB } from './pubsub.service';
 
 @Global()
 @Module({
@@ -20,10 +20,12 @@ export const PUB_SUB = 'PUB_SUB';
         }
       }),
       inject: [ConfigService]
-    }
+    },
+    PubSubService
   ],
   exports: [
     PUB_SUB,
+    PubSubService
   ],
 })
 export class PubSubModule { }

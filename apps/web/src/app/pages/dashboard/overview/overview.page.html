@@ -1,9 +1,3 @@
-<!-- <h2>Cours ouvert récemment</h2>
-<h2>Activités en cours</h2>
-<h2>Calendrier</h2>
-<h2>Notifications</h2>
- -->
-
 <ng-container>
   <nz-row [nzGutter]="[24, 24]" nzAlign="top">
     <nz-col nzXs="24" nzSm="24" nzMd="14" nzLg="14" nzXl="14">
@@ -31,12 +25,7 @@
           <mat-card-title>Notifications</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <nz-empty
-            [nzNotFoundContent]="noNotifications">
-            <ng-template #noNotifications>
-              Aucune nouvelle notification pour le moment.
-            </ng-template>
-          </nz-empty>
+          <notif-list [(notifications)]="notifications" />
         </mat-card-content>
       </mat-card>
     </nz-col>

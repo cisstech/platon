@@ -1,0 +1,19 @@
+<nz-drawer
+  *ngIf="visible"
+  [nzClosable]="false"
+  [nzVisible]="visible"
+  nzPlacement="right"
+  nzTitle="Notifications"
+  [nzFooter]="footer"
+  [nzBodyStyle]="{ padding: 0 }"
+  (nzOnClose)="visible = !visible">
+  <ng-container *nzDrawerContent>
+    <notif-list [(notifications)]="notifications" />
+  </ng-container>
+  <ng-template #footer>
+    <footer>
+      <button nz-button (click)="markAllAsRead()">Tout marquer comme lu</button>
+      <button nz-button (click)="deleteAll()">Tout supprimer</button>
+    </footer>
+  </ng-template>
+</nz-drawer>

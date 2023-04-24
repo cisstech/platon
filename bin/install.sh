@@ -40,11 +40,11 @@ print_status "docker" "OK !" "$Green"
 
 
 
-# Install pnpm if not installed
-if ! command_exists pnpm; then
-  npm install -g pnpm
+# Install yarn if not installed
+if ! command_exists yarn; then
+  npm install -g yarn
 fi
-print_status "pnpm" "OK !" "$Green"
+print_status "yarn" "OK !" "$Green"
 
 
 if [ "$OS" = "Darwin" ]; then # Mac OS
@@ -71,9 +71,6 @@ fi
 
 
 
-
-
-
 echo -e "${Purple}\nGenerating files...\n${Color_Off}"
 
 if [[ ! -f .env ]]; then
@@ -96,7 +93,7 @@ PGADMIN_DEFAULT_PASSWORD=test
 DB_NAME=platon_db
 DB_USERNAME=platon
 DB_PASSWORD=test
-DB_HOST=postgres
+DB_HOST=localhost
 DB_PORT=5432
 SECRET_KEY=secret
 PASSWORD_SALT=10
@@ -104,7 +101,7 @@ JWT_ACCESS_TOKEN_LIFETIME=15m
 JWT_REFRESH_TOKEN_LIFETIME=7d
 
 # REDIS
-REDIS_HOST=redis
+REDIS_HOST=localhost
 REDIS_PORT=6379
 
 # GRAPHQL

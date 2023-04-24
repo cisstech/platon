@@ -6,7 +6,7 @@ import * as git from 'isomorphic-git';
 import * as Path from 'path';
 import { simpleGit } from 'simple-git';
 
-const BASE = '/src/resources';
+const BASE = Path.join(process.cwd(), 'resources');
 const ROOT = '.';
 const DEFAULT_BRANCH = 'main';
 

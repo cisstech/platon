@@ -29,7 +29,4 @@ export class ResourceEventService {
     return query.getManyAndCount()
   }
 
-  async create(input: Partial<ResourceEventEntity>): Promise<ResourceEventEntity> {
-    return this.repository.save(input);
-  }
 }

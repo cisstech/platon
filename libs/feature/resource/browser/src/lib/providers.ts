@@ -1,10 +1,12 @@
 import { Provider } from "@angular/core";
+import { NOTIFICATION_PARSER } from "@platon/feature/notification/browser";
 import { ResourceEventProvider } from "./models/resource-event-provider";
 import { ResourceFileProvider } from "./models/resource-file-provider";
 import { ResourceInvitationProvider } from "./models/resource-invitation-provider";
 import { ResourceMemberProvider } from "./models/resource-member-provider";
 import { ResourceProvider } from "./models/resource-provider";
 import { ResourceWatcherProvider } from "./models/resource-watcher-provider";
+import { ResourceEventNotificationParser } from "./providers/notification-parser.provider";
 import { RemoteResourceEventProvider } from "./providers/remote-resource-event.provider";
 import { RemoteResourceFileProvider } from "./providers/remote-resource-file.provider";
 import { RemoteResourceInvitationProvider } from "./providers/remote-resource-invitation.provider";
@@ -19,4 +21,9 @@ export const RESOURCE_PROVIDERS: Provider[] = [
   { provide: ResourceInvitationProvider, useClass: RemoteResourceInvitationProvider },
   { provide: ResourceMemberProvider, useClass: RemoteResourceMemberProvider },
   { provide: ResourceWatcherProvider, useClass: RemoteResourceWatcherProvider },
+  {
+    provide: NOTIFICATION_PARSER,
+    multi: true,
+    useValue: ResourceEventNotificationParser
+  }
 ];

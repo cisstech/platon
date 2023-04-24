@@ -1,7 +1,7 @@
 import { Field, InputType, ObjectType, registerEnumType } from "@nestjs/graphql";
 import { OrderingDirections, User, UserOrderings, UserRoles } from "@platon/core/common";
 import { UserEntity, UserFiltersDTO } from ".";
-import { BaseModel } from "../utils";
+import { BaseGraphModel } from "../graphql";
 
 registerEnumType(UserRoles, {
   name: 'UserRoles',
@@ -15,8 +15,8 @@ registerEnumType(UserOrderings, {
   name: 'UserOrderings',
 })
 
-@ObjectType()
-export class UserModel extends BaseModel implements User {
+@ObjectType('User')
+export class UserGraphModel extends BaseGraphModel implements User {
   constructor(data: Partial<UserEntity>) {
     super()
     Object.assign(this, data);
@@ -47,7 +47,6 @@ export class UserModel extends BaseModel implements User {
   readonly firstLogin?: Date;
 }
 
-
-@InputType()
+@InputType('UserFiltersInput')
 export class UserFiltersInput extends UserFiltersDTO {}
 

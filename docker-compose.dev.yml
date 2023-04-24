@@ -5,7 +5,7 @@ services:
     image: redis:6
     container_name: platon_redis
     ports:
-      - 6379
+      - '6379:6379'
     volumes:
       - redisdata:/data
     networks:
@@ -38,47 +38,47 @@ services:
     networks:
       - platon-network
 
-  api:
-    build:
-      context: .
-      dockerfile: .docker/node/Dockerfile
-    image: platon/node
-    container_name: platon_api
-    command: pnpm serve:api -- --host 0.0.0.0
-    ports:
-      - 4201
-    volumes:
-      - ./:/src
-      # https://burnedikt.com/dockerized-node-development-and-mounting-node-volumes/
-      - /src/node_modules
-    environment:
-      - 'PORT=4201'
-    env_file:
-      - .env
-    depends_on:
-      - redis
-      - postgres
-    networks:
-      - platon-network
-
-  web:
-    image: platon/node
-    container_name: platon_web
-    command: pnpm serve:web -- --host 0.0.0.0 --disable-host-check
-    ports:
-      - 4200
-    volumes:
-      - ./:/src
-      # https://burnedikt.com/dockerized-node-development-and-mounting-node-volumes/
-      - /src/node_modules
-    env_file:
-      - .env
-    depends_on:
-      - api
-      - redis
-      - postgres
-    networks:
-      - platon-network
+#  api:
+#    build:
+#      context: .
+#      dockerfile: .docker/node/Dockerfile
+#    image: platon/node
+#    container_name: platon_api
+#    command: yarn serve:api -- --host 0.0.0.0
+#    ports:
+#      - 4201
+#    volumes:
+#      - ./:/src
+#      # https://burnedikt.com/dockerized-node-development-and-mounting-node-volumes/
+#      - /src/node_modules
+#    environment:
+#      - 'PORT=4201'
+#    env_file:
+#      - .env
+#    depends_on:
+#      - redis
+#      - postgres
+#    networks:
+#      - platon-network
+#
+#  web:
+#    image: platon/node
+#    container_name: platon_web
+#    command: yarn serve:web -- --host 0.0.0.0 --disable-host-check
+#    ports:
+#      - 4200
+#    volumes:
+#      - ./:/src
+#      # https://burnedikt.com/dockerized-node-development-and-mounting-node-volumes/
+#      - /src/node_modules
+#    env_file:
+#      - .env
+#    depends_on:
+#      - api
+#      - redis
+#      - postgres
+#    networks:
+#      - platon-network
 
   nginx:
     build:
@@ -96,12 +96,14 @@ services:
       - .docker/nginx/ssl/certs/platon.dev.key:/etc/nginx/ssl/platon.dev.key
     networks:
       - platon-network
-    links:
-      - api:api
-      - web:web
-    depends_on:
-      - api
-      - web
+    extra_hosts: # https://stackoverflow.com/a/43541732
+        - "host.docker.internal:host-gateway"
+    #links:
+    #  - api:api
+    #  - web:web
+    #depends_on:
+    #  - api
+    #  - web
 
 volumes:
   redisdata:

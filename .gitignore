@@ -51,3 +51,7 @@ resources/*
 uploads/*
 !uploads/.gitkeep
 envs/*
+
+.graphql/*
+!.graphql/.gitkeep
+**/*.generated.ts

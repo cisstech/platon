@@ -10,7 +10,7 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
-    "lib": ["es2017", "dom"],
+    "lib": ["es2020", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "resolveJsonModule": true,
@@ -27,6 +27,7 @@
     "allowJs": true,
     "baseUrl": "./",
     "paths": {
+      "@platon/graphql": [".graphql/types.ts"],
       "@platon/core/browser": ["libs/core/browser/src/index.ts"],
       "@platon/core/common": ["libs/core/common/src/index.ts"],
       "@platon/core/server": ["libs/core/server/src/index.ts"],
@@ -86,7 +87,7 @@
       "@platon/shared/ui": ["libs/shared/ui/src/index.ts"]
     }
   },
-  "include": [],
+  "include": ["./graphql/*.ts"],
   "exclude": ["node_modules", "tmp"],
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

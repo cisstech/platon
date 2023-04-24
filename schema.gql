@@ -2,24 +2,24 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type UserPrefsModel {
+type UserPrefs {
   levels: [String!]!
   topics: [String!]!
 }
 
-type UserModel {
+type User {
   id: UUID!
-  createdAt: DateTime!
-  updatedAt: DateTime!
+  createdAt: Date!
+  updatedAt: Date
   role: UserRoles!
   username: String!
   active: Boolean!
   firstName: String
   lastName: String
   email: String
-  lastLogin: DateTime
-  firstLogin: DateTime
-  prefs: UserPrefsModel!
+  lastLogin: Date
+  firstLogin: Date
+  prefs: UserPrefs!
 }
 
 """
@@ -27,20 +27,38 @@ The `UUID` scalar type represents UUID values as specified by [RFC 4122](https:/
 """
 scalar UUID
 
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
 enum UserRoles {
   admin
   teacher
   student
 }
 
+type Notification {
+  id: UUID!
+  createdAt: Date!
+  updatedAt: Date
+  readAt: Date
+  data: JSON!
+  user: User!
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+type NotificationChange {
+  unreadCount: Float!
+  newNotification: Notification
+}
+
+scalar Date
+
 type Query {
-  users(filters: UserFiltersInput): [UserModel!]!
-  user(input: String!): UserModel!
+  users(filters: UserFiltersInput): [User!]!
+  user(input: String!): User!
+  unreadNotificationsCount: Int!
+  notifications(filters: NotificationFiltersInput): [Notification!]!
 }
 
 input UserFiltersInput {
@@ -63,4 +81,22 @@ enum UserOrderings {
 enum OrderingDirections {
   ASC
   DESC
+}
+
+input NotificationFiltersInput {
+  unread: Boolean
+  offset: Int
+  limit: Int
+}
+
+type Mutation {
+  markAsRead(id: UUID!): Notification!
+  markAsUnread(id: UUID!): Notification!
+  markAllAsRead: Boolean!
+  deleteNotification(id: UUID!): Boolean!
+  deleteAllNotifications: Boolean!
+}
+
+type Subscription {
+  onChangeNotifications: NotificationChange!
 }

@@ -1,27 +1,27 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 
-import { AuthProvider } from '../models/auth-provider';
-import { RemoteTokenProvider } from './remote-token.provider';
-import { lastValueFrom } from 'rxjs';
-import { AuthToken, ItemResponse, User } from '@platon/core/common';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { AuthToken, ItemResponse, User } from '@platon/core/common';
+import { lastValueFrom } from 'rxjs';
+import { TokenService } from '../api/token.service';
+import { AuthProvider } from '../models/auth-provider';
 
 @Injectable()
 export class RemoteAuthProvider extends AuthProvider {
   constructor(
     private readonly http: HttpClient,
-    private readonly tokenProvider: RemoteTokenProvider
+    private readonly tokenService: TokenService
   ) {
     super();
   }
 
   token(): Promise<AuthToken | undefined> {
-    return this.tokenProvider.token();
+    return this.tokenService.token();
   }
 
   async current(): Promise<User | undefined> {
-    const token = await this.tokenProvider.token();
+    const token = await this.tokenService.token();
     if (token) {
       const helper = new JwtHelperService();
       const data = helper.decodeToken(token.accessToken);
@@ -37,7 +37,7 @@ export class RemoteAuthProvider extends AuthProvider {
   }
 
   async signIn(username: string, password: string): Promise<User> {
-    await this.tokenProvider.obtain(username, password);
+    await this.tokenService.obtain(username, password);
     return lastValueFrom(
       this.http.get<ItemResponse<User>>('/api/v1/users/' + username)
     ).then(response => response.resource);
@@ -46,6 +46,6 @@ export class RemoteAuthProvider extends AuthProvider {
   async signOut(): Promise<void> {
     // TODO implements server sign-out to invalid token.
     // await lastValueFrom(this.http.post('/api/v1/auth/signout/', {}));
-    await this.tokenProvider.remove();
+    await this.tokenService.remove();
   }
 }

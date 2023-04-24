@@ -4,19 +4,32 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { AuthToken, ItemResponse } from '@platon/core/common';
 import { firstValueFrom, lastValueFrom } from 'rxjs';
 import { StorageService } from '../../services';
+import { TokenProvider } from '../models/token-provider';
 
 const KEY = "auth-token";
 
 /**
  * Handles JWT token generation/storage/refresh.
  */
-@Injectable({ providedIn: 'root' })
-export class RemoteTokenProvider {
+@Injectable()
+export class RemoteTokenProvider extends TokenProvider {
 
   constructor(
     private readonly http: HttpClient,
     private readonly storage: StorageService,
-  ) { }
+  ) {
+    super();
+  }
+
+  tokenSync(): AuthToken | undefined {
+    try {
+      return JSON.parse(
+        localStorage.getItem(KEY) || 'null'
+      ) as AuthToken
+    } catch {
+      return undefined;
+    }
+  }
 
   /**
    * Gets the current auth token if it exists.
@@ -28,6 +41,7 @@ export class RemoteTokenProvider {
 
   /** Deletes the current auth token */
   remove(): Promise<void> {
+    localStorage.removeItem(KEY);
     return firstValueFrom(this.storage.remove(KEY))
   }
 
@@ -50,6 +64,7 @@ export class RemoteTokenProvider {
     )
 
     await firstValueFrom(this.storage.set(KEY, response.resource))
+    localStorage.setItem(KEY, JSON.stringify(response.resource));
 
     return response.resource;
   }
@@ -76,6 +91,7 @@ export class RemoteTokenProvider {
       );
       token.accessToken = response.resource.accessToken;
       await firstValueFrom(this.storage.set(KEY, token))
+      localStorage.setItem(KEY, JSON.stringify(token));
       return token;
     } catch (error) {
       await this.remove();

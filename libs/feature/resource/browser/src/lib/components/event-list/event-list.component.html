@@ -1,11 +1,8 @@
-<ng-container *ngIf="events.length; else: noevent;">
+<ng-container *ngIf="items.length; else: noevent;">
   <nz-timeline>
-    <ng-container *ngFor="let item of events; trackBy:trackById">
+    <ng-container *ngFor="let item of items; trackBy:trackById">
       <nz-timeline-item>
-        <p> {{item.event.type|resourceEventType}} - {{item.event.createdAt|date:'dd/MM/yyyy à HH:mm'}}</p>
-        <ng-container
-          *ngComponentOutlet="item.renderer; injector: item.injector">
-        </ng-container>
+        <resource-event-item [item]="item" />
       </nz-timeline-item>
     </ng-container>
   </nz-timeline>

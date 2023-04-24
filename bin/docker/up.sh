@@ -26,7 +26,6 @@ while [[ $# -gt 0 ]]; do
 done
 
 export SANDBOX_HOST=`./bin/find-ip.sh`
-echo "SANDBOX_HOST=$SANDBOX_HOST"
 export SANDBOX_PORT=7000
 
 if [ "$prod" = true ]

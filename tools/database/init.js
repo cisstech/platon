@@ -19,7 +19,7 @@ run(async (queryRunner, logger) => {
     logger.info('GENERATING LEVELS');
     await Promise.all(
       data.levels.map((level) =>
-        queryRunner.query(`INSERT INTO "Levels" (name) VALUES ($1)`, [level])
+        queryRunner.query(`INSERT INTO "Levels" (name) VALUES ($1) ON CONFLICT DO NOTHING`, [level])
       )
     );
   }
@@ -28,7 +28,7 @@ run(async (queryRunner, logger) => {
     logger.info('GENERATING TOPIC');
     await Promise.all(
       data.topics.map((level) =>
-        queryRunner.query(`INSERT INTO "Topics" (name) VALUES ($1)`, [level])
+        queryRunner.query(`INSERT INTO "Topics" (name) VALUES ($1) ON CONFLICT DO NOTHING`, [level])
       )
     );
   }
@@ -41,7 +41,9 @@ run(async (queryRunner, logger) => {
       data.users.map((user) =>
         queryRunner.query(
           `INSERT INTO "Users" (username, first_name, last_name, email, role, password)
-          VALUES ($1, $2, $3, $4, $5, $6) RETURNING *
+          VALUES ($1, $2, $3, $4, $5, $6)
+          ON CONFLICT DO NOTHING
+          RETURNING *
         `,
           [
             user.username, user.first_name, user.last_name, user.email, user.role,
@@ -59,6 +61,7 @@ run(async (queryRunner, logger) => {
         queryRunner.query(
           `INSERT INTO "Lmses" (name, url, outcome_url, consumer_key, consumer_secret)
           VALUES ($1, $2, $3, $4, $5)
+          ON CONFLICT DO NOTHING
         `,
           [
             lms.name, lms.url, lms.outcome_url, lms.consumer_key, lms.consumer_secret
@@ -72,7 +75,11 @@ run(async (queryRunner, logger) => {
   const admin = (await queryRunner.query(`SELECT * FROM "Users" WHERE "role"='admin'`)).rows[0]
   logger.info('GENERATING CIRCLES');
   const root = (await queryRunner.query(`
-    INSERT INTO "Resources" (name, code, owner_id, "desc", type, status, visibility) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *
+    INSERT INTO "Resources"
+    (name, code, owner_id, "desc", type, status, visibility)
+    VALUES ($1, $2, $3, $4, $5, $6, $7)
+    ON CONFLICT DO NOTHING
+    RETURNING *
   `, [
     'PLaTon',
     'platon',

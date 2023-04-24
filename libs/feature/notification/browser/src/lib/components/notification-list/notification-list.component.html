@@ -1,0 +1,44 @@
+<ng-container *ngIf="notifications.length; else: empty">
+  <nz-list>
+    <ng-container *ngFor="let item of items">
+      <nz-list-item
+        [class.unread]="!item.notification.readAt"
+        (click)="markAsRead(item.notification); item.renderer?.onClick?.(item.injector)">
+        <nz-list-item-meta
+          [nzAvatar]="avatar"
+          [nzDescription]="$any(item.notification.createdAt|date:'dd/MM/yyyy à HH:mm')">
+          <ng-template #avatar>
+            <nz-avatar nzIcon="info" [nzShape]="'circle'" nzSize="small"></nz-avatar>
+          </ng-template>
+          <nz-list-item-meta-title>
+            <ng-container *ngIf="item.renderer">
+              <ng-container
+                *ngComponentOutlet="item.renderer.content; injector: item.injector">
+              </ng-container>
+            </ng-container>
+          </nz-list-item-meta-title>
+        </nz-list-item-meta>
+        <ul nz-list-item-actions>
+          <nz-list-item-action>
+            <button
+              nz-button
+              nzType="text"
+              nzDanger
+              (click)="delete(item.notification)">
+              <i nz-icon nzType="delete"></i>
+            </button>
+          </nz-list-item-action>
+        </ul>
+      </nz-list-item>
+    </ng-container>
+  </nz-list>
+</ng-container>
+<ng-template #empty>
+  <nz-empty
+    [nzNotFoundContent]="noNotifications">
+    <ng-template #noNotifications>
+      Aucune nouvelle notification pour le moment.
+    </ng-template>
+  </nz-empty>
+</ng-template>
+
