@@ -77,6 +77,10 @@ export class AuthService {
     return this.authProvider.signIn(username, password);
   }
 
+  signInWithToken(token: AuthToken): Promise<User> {
+    return this.authProvider.signInWithToken(token);
+  }
+
   /**
    * Sign out the current user.
    *

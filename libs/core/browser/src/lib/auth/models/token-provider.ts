@@ -29,4 +29,7 @@ export abstract class TokenProvider {
    * @returns A promise that resolves with an auth token.
    */
   abstract refresh(): Promise<AuthToken>;
+
+  abstract save(token: AuthToken): Promise<void>;
+
 }

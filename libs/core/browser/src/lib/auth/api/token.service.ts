@@ -27,4 +27,9 @@ export class TokenService {
   refresh(): Promise<AuthToken> {
     return this.provider.refresh();
   }
+
+  save(token: AuthToken): Promise<void> {
+    return this.provider.save(token);
+  }
+
 }

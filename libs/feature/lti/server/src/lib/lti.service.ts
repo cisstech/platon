@@ -8,6 +8,7 @@ import { Optional } from 'typescript-optional';
 import { LmsUserEntity } from './entities/lms-user.entity';
 import { LmsEntity } from './entities/lms.entity';
 import { LTIPayload } from './provider/payload';
+import { StudentRoles } from './provider/roles';
 
 @Injectable()
 export class LTIService {
@@ -85,79 +86,60 @@ export class LTIService {
     return this.lmsRepo.delete(id);
   }
 
-  async createLmsUser(lms: LmsEntity, payload: LTIPayload) {
+  /**
+   * Retrieves or generates an user for the LMS user based on the provided LTI payload.
+   * It first checks for the available username fields in the payload, and if none are found,
+   * it falls back to using the first character of the first name and the last name.
+   *
+   * @param {LmsEntity} lms - The LMS entity for which the user's information is being fetched.
+   * @param {LTIPayload} payload - The LTI payload containing the user's information.
+   * @returns {Promise<LmsUserEntity>} The LMS user based on the provided information.
+   */
+  async withLmsUser(lms: LmsEntity, payload: LTIPayload): Promise<LmsUserEntity> {
+    const existing = await this.lmsUserRepo.findOne({
+      where: {
+        lmsId: lms.id,
+        lmsUserId: payload.user_id + '',
+      },
+      relations: ['user'],
+    });
+    if (existing) {
+      return existing;
+    }
+
+    let name = payload.ext_user_username || payload.custom_lis_user_username || payload.ext_d2l_username;
+    if (!name && payload.lis_person_name_family && payload.lis_person_name_given) {
+      name = payload.lis_person_name_given[0].toLowerCase() + '_' + payload.lis_person_name_family.toLowerCase();
+    }
+
+    if (!name) {
+      name = 'user'
+    }
+
+    let count = 1;
+    let username = name;
+    while ((await this.userService.findByUsername(username)).isPresent()) {
+      count++;
+      username = `${username}${count}`;
+    }
+
+    const isStudent = Object.values(StudentRoles).find(role => payload.roles.includes(role))
+
     const user = await this.userService.create({
       email: payload.lis_person_contact_email_primary,
       lastName: payload.lis_person_name_family,
       firstName: payload.lis_person_name_given,
-      role: UserRoles.teacher,
-      username: 'random'
+      role: isStudent ? UserRoles.student : UserRoles.teacher,
+      username
     })
 
-    await this.lmsUserRepo.save(
-       this.lmsUserRepo.create({
+    return this.lmsUserRepo.save(
+      this.lmsUserRepo.create({
         userId: user.id,
         lmsId: lms.id,
         lmsUserId: payload.user_id + '',
-       })
-    )
-
+        user
+      })
+    );
   }
 }
-
-/*
-
-def create_lti_user(lms: LMS, params: LTIParams) -> User:
-    """Creates a `LTIUser` object from a LTI request params.
-
-    If the user already exists then it's informations will be updated
-
-    Args:
-        lms (LMS): LMS on which the user belongs to.
-        params (LTIParams): The LTI request parameters.
-
-    Returns:
-        User: Django user model object.
-    """
-
-    user_id = params.user_id
-    email = params.lis_person_contact_email_primary
-    last_name = params.lis_person_name_family
-    first_name = params.lis_person_name_given
-
-    username = params.ext_user_username
-
-    try:
-        lti_user = LTIUser.objects.get(lms=lms, lms_user_id=user_id)
-        logger.info(f'LTI: Found an existing user for {username}')
-    except ObjectDoesNotExist:
-        logger.info(f'LTI: Creating a new user for {username}')
-        i = -1
-        UserModel = get_user_model()
-        while True:
-            try:
-                if i == -1:  # attempt first with ext_user_username
-                    user = UserModel.objects.create_user(username=username)
-                else:
-                    user = UserModel.objects.create_user(
-                        username=username + ("" if not i else str(i))
-                    )
-            except IntegrityError:
-                username = (first_name[0].lower() + last_name.lower())
-                i += 1
-                continue
-            break
-
-        lti_user = LTIUser.objects.create(
-            lms=lms,
-            user=user,
-            lms_user_id=user_id
-        )
-
-    lti_user.user.email = email
-    lti_user.user.last_name = last_name
-    lti_user.user.first_name = first_name
-    lti_user.user.save()
-
-    return lti_user.user
- */

@@ -12,6 +12,16 @@ export class UserService {
     private readonly repository: Repository<UserEntity>
   ) { }
 
+  async findById(id: string): Promise<Optional<UserEntity>> {
+    const result =  await this.repository.findOne({ where: { id } })
+    return Optional.ofNullable(result);
+  }
+
+  async findByUsername(username: string): Promise<Optional<UserEntity>> {
+    const result =  await this.repository.findOne({ where: { username } })
+    return Optional.ofNullable(result);
+  }
+
   async findByIdOrName(userIdOrName: string): Promise<Optional<UserEntity>> {
     const result = userIdOrName.includes('-')
       ? await this.repository.findOne({ where: { id: userIdOrName } })

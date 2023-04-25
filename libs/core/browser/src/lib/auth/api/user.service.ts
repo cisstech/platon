@@ -50,7 +50,7 @@ export class UserService {
    * Note:
    * This method will make an http request only if the users that are not cached in the memory.
    *
-   * @param uid An array of user identifiers to find.
+   * @param usernames An array of user identifiers to find.
    * @returns An observable that will emit the user found or `undefined` once the server will response.
    */
   findAllByUserNames(usernames: string[]): Observable<User[]> {

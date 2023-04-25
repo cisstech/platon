@@ -98,4 +98,10 @@ export class RemoteTokenProvider extends TokenProvider {
       throw error;
     }
   }
+
+
+  async save(token: AuthToken) {
+    await firstValueFrom(this.storage.set(KEY, token))
+    localStorage.setItem(KEY, JSON.stringify(token));
+  }
 }

@@ -18,6 +18,8 @@ export abstract class AuthProvider {
    */
   abstract signIn(username: string, password: string): Promise<User>;
 
+  abstract signInWithToken(token: AuthToken): Promise<User>;
+
   /**
    * Sign out the current user
    */

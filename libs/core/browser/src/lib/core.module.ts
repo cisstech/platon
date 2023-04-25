@@ -8,10 +8,12 @@ import { NgZorroProviders } from './vendors/ng-zorro/ng-zorro.';
 import { NgeDocProviders } from './vendors/nge-doc/nge-doc';
 import { NgeMarkdownProviders } from './vendors/nge-markdown/nge-markdown';
 import { NgeMonacoImports } from './vendors/nge-monaco/nge-monaco';
+import { RouterModule } from '@angular/router';
 
 
 @NgModule({
   imports: [
+    RouterModule,
     NgeMonacoImports,
     GraphQLModule,
   ],

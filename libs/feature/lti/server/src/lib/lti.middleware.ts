@@ -1,6 +1,5 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
-import { UserRoles } from '@platon/core/common';
-import { UserService } from '@platon/core/server';
+import { AuthService } from '@platon/core/server';
 import { NextFunction, Request, Response } from 'express';
 import { LTIService } from './lti.service';
 import { LTIProvider } from './provider';
@@ -9,6 +8,7 @@ import { LTIProvider } from './provider';
 export class LTIMiddleware implements NestMiddleware {
   constructor(
     private readonly lti: LTIService,
+    private readonly authService: AuthService,
   ) { }
 
   async use(req: Request, res: Response, next: NextFunction) {
@@ -17,15 +17,31 @@ export class LTIMiddleware implements NestMiddleware {
     }
 
     const consumerKey = req.body.oauth_consumer_key;
-    const lms = (await this.lti.findLmsByConsumerKey(consumerKey)).get();
+    const optional = await this.lti.findLmsByConsumerKey(consumerKey)
+    if (optional.isEmpty()) {
+      res.redirect(302, '/');
+      return
+    }
+
+    const lms = optional.get();
     if (!lms) {
       return next();
     }
 
     const provider = new LTIProvider(lms.consumerKey, lms.consumerSecret);
-    //await this.lti.createLmsUser(lms, provider.body);
     await provider.validate(req);
 
-    return res.redirect(302, '/?lti=true')
+    const lmsUser = await this.lti.withLmsUser(lms, provider.body);
+    const token = await this.authService.authenticate(
+      lmsUser.user.id,
+      lmsUser.user.username,
+    );
+
+    const nextUrl = '/'; // TODO should be the url of a course if specified
+
+    return res.redirect(
+      302,
+      `/?lti-launch=true&access-token=${token.accessToken}&refresh-token=${token.refreshToken}&next=${nextUrl}`
+    )
   }
 }

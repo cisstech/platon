@@ -43,6 +43,15 @@ export class RemoteAuthProvider extends AuthProvider {
     ).then(response => response.resource);
   }
 
+  async signInWithToken(token: AuthToken): Promise<User> {
+    const helper = new JwtHelperService();
+    const data = helper.decodeToken(token.accessToken);
+    await this.tokenService.save(token);
+    return lastValueFrom(
+      this.http.get<ItemResponse<User>>('/api/v1/users/' + data.username)
+    ).then(response => response.resource);
+  }
+
   async signOut(): Promise<void> {
     // TODO implements server sign-out to invalid token.
     // await lastValueFrom(this.http.post('/api/v1/auth/signout/', {}));
