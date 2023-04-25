@@ -12,7 +12,7 @@ import { NgeIdeProblemsModule } from '@cisstech/nge-ide/problems';
 import { NgeIdeNotificationsModule } from '@cisstech/nge-ide/notifications';
 import { FileService, IdeService } from '@cisstech/nge-ide/core';
 
-import { resourceAncestors, ResourceTypes } from '@platon/feature/resource/common';
+import { circleFromTree, resourceAncestors, ResourceTypes } from '@platon/feature/resource/common';
 import { ResourceService } from '@platon/feature/resource/browser';
 
 import { PLFormEditorContributionModule } from './contributions/pl-form-editor/pl-form-editor.contribution';
@@ -62,7 +62,6 @@ export class EditorPage implements OnInit, OnDestroy {
     const id = params.get('id') as string;
     const version = queryParams.get('version') || 'latest';
 
-
     const [resource, circles] = await Promise.all([
       firstValueFrom(this.resourceService.find(id)),
       firstValueFrom(this.resourceService.tree()),
@@ -70,7 +69,10 @@ export class EditorPage implements OnInit, OnDestroy {
 
     const ancestors = resource!.type === ResourceTypes.CIRCLE
       ? resourceAncestors(circles!, resource!.id)
-      : resourceAncestors(circles!, resource!.parentId!);
+      : [
+        circleFromTree(circles!, resource!.parentId!)!,
+        ...resourceAncestors(circles!, resource!.parentId!)
+      ];
 
     this.subscription = this.ide.onAfterStart(() => {
       this.fileService.registerProvider(this.resourceFileSystemProvider);
@@ -80,7 +82,7 @@ export class EditorPage implements OnInit, OnDestroy {
           uri: this.resourceFileSystemProvider.buildUri(id, version)
         },
         ...ancestors.map(ancestor => ({
-          name: `${ancestor.name}#latest`,
+          name: `@${ancestor.code}#latest`,
           uri: this.resourceFileSystemProvider.buildUri(
             ancestor.id
           )

@@ -286,12 +286,15 @@ export class ResourceService {
   }
 
   async notificationWatchers(resourceId: string, entityManager?: EntityManager): Promise<string[]> {
-    return (await (entityManager ?? this.dataSource).query(`
-      SELECT DISTINCT COALESCE(member.user_id, watcher.user_id) AS user_id
+    const watchers = (await (entityManager ?? this.dataSource).query(`
+      SELECT DISTINCT COALESCE(member.user_id, watcher.user_id, res.owner_id) AS user_id
       FROM "Resources" res
       LEFT JOIN "ResourceMembers" member ON member.resource_id = res.id
       LEFT JOIN "ResourceWatchers" watcher ON watcher.resource_id = res.id
       WHERE res.id = $1
-    `, [resourceId])).map((row: any) => row.user_id)
+    `, [resourceId]))
+    .map((row: any) => row.user_id as string)
+    .filter((userId: string) => !!userId)
+    return watchers
   }
 }

@@ -44,7 +44,6 @@ export class PlayerPreviewPage implements OnInit {
         this.playerService.preview(resourceId as string, resourceVersion as string)
       );
       this.player = output.activity || output.exercise;
-      this.player = output.activity;
     } catch (error) {
       this.error = error;
     } finally {

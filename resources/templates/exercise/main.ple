@@ -1,20 +1,61 @@
-@include /platon/utils/sandboxio.py
-@include /platon/builders/builder.py
-@include /platon/graders/grader.py
+author = "Mamadou CISSE"
 
-title==
-EXERCISE TITLE
-==
+input = :wc-input-box
+input.type = "number"
+input.placeholder = "Entrez votre réponse ici"
 
-statement==
-EXERCISE STATEMENT
-==
+inputSolution = :wc-input-box
+inputSolution.type = "number"
+inputSolution.disabled = true
+inputSolution.placeholder = "Solution"
+
+max = 10
+
+theories = [
+  { title: "Cours 1", url: "https://google.com" },
+  { title: "Cours 2", url: "https://google.com" },
+  { title: "Cours 3", url: @copyurl /relative/readme.md }
+]
+
+hint = ["Aide 1", "Aide 2"]
 
 builder==
+a = Math.round(Math.random() * max)
+b = Math.round(Math.random() * max)
+inputSolution.value = a + b
 ==
-
-form = @copycontent /relative/main.plform
 
 grader==
-grade = (100, 'OK')
+grade = 0
+feedback = {}
+feedback.type = "error"
+feedback.content = "Mauvaise réponse"
+if (input.value === inputSolution.value) {
+  grade = 100
+  feedback.type = "success"
+  feedback.content = "Bonne réponse"
+}
 ==
+
+
+title==
+Addition aléatoire
+==
+
+statement ==
+Combien font {{a}} + {{b}} ?
+==
+
+form==
+{{input}}
+==
+
+solution==
+{{inputSolution}}
+==
+
+settings.score = true
+settings.hints = true
+settings.solution = true
+settings.theories = true
+settings.feedback = true
