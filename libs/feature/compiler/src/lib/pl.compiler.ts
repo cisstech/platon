@@ -2,6 +2,7 @@
 import { deepMerge } from "@platon/core/common";
 import { AssignmentNode, CommentNode, ExtendsNode, IncludeNode, PLFileContent, PLFileURL, PLNode, PLParser, PLReference, PLSourceFile, PLVisitor } from "./pl.parser";
 import { v4 as uuidv4 } from 'uuid'
+import { ActivityVariables, ExerciseVariables } from "./pl.variables";
 
 /**
  * File reference resolver for the PL compiler.
@@ -92,17 +93,7 @@ export class PLCompiler implements PLVisitor {
 
   async visitCopyUrl(node: PLFileURL): Promise<string> {
     this.lineno = node.lineno;
-
-    const { resource, version, relpath, abspath } = this.parsePath(node.value);
-    const cache = this.urls.get(abspath);
-    if (cache) {
-      return cache;
-    }
-
-    const url = await this.resolver.resolveUrl(resource, version, relpath);
-    this.urls.set(abspath, url);
-
-    return url;
+    return this.resolveUrl(node.value);
   }
 
   async visitReference(node: PLReference): Promise<any> {
@@ -113,17 +104,7 @@ export class PLCompiler implements PLVisitor {
   }
 
   async visitCopyContent(node: PLFileContent): Promise<string> {
-    const { resource, version, relpath, abspath } = this.parsePath(node.value);
-
-    const cache = this.contents.get(abspath);
-    if (cache) {
-      return cache;
-    }
-
-    const content = await this.resolver.resolveContent(resource, version, relpath);
-    this.contents.set(abspath, content);
-
-    return content;
+    return this.resolveContent(node.value);
   }
 
   async visitAssignment(node: AssignmentNode): Promise<void> {
@@ -144,7 +125,18 @@ export class PLCompiler implements PLVisitor {
   }
 
   async compileActivity(content: string): Promise<PLSourceFile> {
-    const variables = JSON.parse(content);
+    const variables = JSON.parse(content) as ActivityVariables;
+
+    const [
+      introduction,
+      conclusion,
+    ] = await Promise.all([
+      this.withResolvePath(variables.introduction),
+      this.withResolvePath(variables.conclusion),
+    ]);
+
+    variables.introduction = introduction || '';
+    variables.conclusion = conclusion || '';
 
     // TODO validation + typechecking
     const groups = variables.exerciseGroups;
@@ -156,8 +148,12 @@ export class PLCompiler implements PLVisitor {
     });
 
     await Promise.all(
-      exercises.map(async (exercise: any) => {
-        const content = await this.resolver.resolveContent(exercise.resource, exercise.version, 'main.ple');
+      exercises.map(async (exercise: ExerciseVariables) => {
+        const content = await this.resolver.resolveContent(
+          exercise.resource,
+          exercise.version,
+          'main.ple'
+        );
         const compiler = new PLCompiler({
           resource: exercise.resource,
           version: exercise.version,
@@ -169,7 +165,7 @@ export class PLCompiler implements PLVisitor {
         if (exercise.overrides) {
           exercise.source.variables = deepMerge(
             exercise.source.variables,
-            exercise.overrides
+            await this.withOverrides(exercise)
           );
         }
       })
@@ -228,6 +224,36 @@ export class PLCompiler implements PLVisitor {
     return [props[props.length - 1], parent];
   }
 
+  private async withOverrides(exercise: ExerciseVariables): Promise<any> {
+    const keys = Object.keys(exercise.overrides);
+    const promises = keys.map(async (key) => {
+      let value = exercise.overrides[key];
+      if (typeof value === 'string') {
+        value = await this.withResolvePath(value);
+      }
+      return { key, value };
+    });
+
+    const results = await Promise.all(promises);
+    return results.reduce((acc, { key, value }) => {
+      acc[key] = value;
+      return acc;
+    }, {} as any);
+  }
+
+  private withResolvePath(content?: string): Promise<string | undefined> {
+    if (!content)
+      return Promise.resolve(content);
+
+    if (content.startsWith('@copyurl')) {
+      return this.resolveUrl(content.replace('@copyurl', '').trim());
+    }
+    if (content.startsWith('@copycontent')) {
+      return this.resolveContent(content.replace('@copycontent', '').trim());
+    }
+    return Promise.resolve(content);
+  }
+
   private parsePath(path: string) {
     const parts = path.split('/').filter(e => !!e.trim());
     let [resource, version] = parts[0].split(':');
@@ -242,5 +268,27 @@ export class PLCompiler implements PLVisitor {
       relpath: path,
       abspath: `${resource}:${version}/${path}`
     };
+  }
+
+  private async resolveUrl(path: string) {
+    const { resource, version, relpath, abspath } = this.parsePath(path);
+    const cache = this.urls.get(abspath);
+    if (cache) {
+      return cache;
+    }
+    const url = await this.resolver.resolveUrl(resource, version, relpath);
+    this.urls.set(abspath, url);
+    return url
+  }
+
+  private async resolveContent(path: string) {
+    const { resource, version, relpath, abspath } = this.parsePath(path);
+    const cache = this.contents.get(abspath);
+    if (cache) {
+      return cache;
+    }
+    const content = await this.resolver.resolveContent(resource, version, relpath);
+    this.contents.set(abspath, content);
+    return content;
   }
 }

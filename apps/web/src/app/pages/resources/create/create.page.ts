@@ -146,7 +146,7 @@ export class ResourceCreatePage implements OnInit {
 
   private codeValidator(codes: string[]): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      const forbidden = codes.includes(control.value);
+      const forbidden = [...codes, 'relative'].includes(control.value);
       return forbidden ? { code: true } : null;
     };
   }

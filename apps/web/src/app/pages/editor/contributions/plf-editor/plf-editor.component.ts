@@ -6,12 +6,12 @@ import { Subscription } from 'rxjs';
 
 
 @Component({
-  selector: 'app-pl-form-editor',
-  templateUrl: './pl-form-editor.component.html',
-  styleUrls: ['./pl-form-editor.component.scss'],
+  selector: 'app-plf-editor',
+  templateUrl: './plf-editor.component.html',
+  styleUrls: ['./plf-editor.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PLFormEditorComponent implements OnInit, OnDestroy {
+export class PlfEditorComponent implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription[] = [];
   private request!: OpenRequest;
 
@@ -51,7 +51,13 @@ export class PLFormEditorComponent implements OnInit, OnDestroy {
     this.readOnly = file?.readOnly;
 
     const content = await this.fileService.open(this.request.uri);
-    this.data = JSON.parse(content.current);
+    try {
+      this.data = JSON.parse(content.current || '{}');
+    } catch {
+      this.data = {
+        blocks: []
+      }
+    }
 
     this.changeDetectorRef.markForCheck();
   }

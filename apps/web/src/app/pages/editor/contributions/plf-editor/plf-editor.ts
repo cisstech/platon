@@ -7,9 +7,9 @@ const extensions = [
   'plf',
 ];
 
-export class PLFormEditor extends Editor {
+export class PlfEditor extends Editor {
   component = () =>
-    import('./pl-form-editor.module').then((m) => m.PLFormEditorModule);
+    import('./plf-editor.module').then((m) => m.PlfEditorModule);
   canHandle(request: OpenRequest): boolean {
     const extension = Paths.extname(request.uri.path);
     return extensions.includes(extension);

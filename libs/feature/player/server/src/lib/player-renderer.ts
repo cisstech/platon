@@ -50,7 +50,7 @@ export const withRenderedTemplates = (
 
   const computed = withRenderedComponents(variables, reviewMode) as ExerciseVariables;
 
-  const templates = ['title', 'statement', 'form', 'solution', 'feedback', 'hints'];
+  const templates = ['title', 'statement', 'form', 'solution', 'feedback', 'hint'];
 
   for (const k in computed) {
     if (templates.includes(k)) {

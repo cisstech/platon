@@ -4,7 +4,7 @@
 <main>
   <nz-skeleton [nzActive]="loading" [nzLoading]="loading">
     <ui-stepper #stepper (finished)="create()">
-      <ng-template uiStepperStep stepTitle="Informations" stepIcon="info-circle"[stepValidator]="!!infos.valid">
+      <ng-template uiStepperStep stepTitle="Informations" stepIcon="info-circle" [stepValidator]="!!infos.valid">
         <section>
           <h4>Entrez les informations de base pour votre cours.</h4>
           <form [formGroup]="infos">

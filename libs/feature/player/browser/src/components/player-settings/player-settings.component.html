@@ -7,7 +7,7 @@
     <tr *ngIf="player.settings?.duration">
       <td>Durée</td>
       <td>
-        {{player.settings!.duration!|duration:'milliseconds'}}
+        {{player.settings!.duration!|duration:'seconds'}}
       </td>
     </tr>
     <tr *ngIf="player.openAt">

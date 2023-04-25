@@ -177,8 +177,7 @@ export class Repo {
     }
 
     await fs.promises.rename(oabspath, nabspath)
-
-    this.commit(`rename ${oldPath} to ${newPath}`)
+    await this.commit(`rename ${oldPath} to ${newPath}`)
   }
 
   /**

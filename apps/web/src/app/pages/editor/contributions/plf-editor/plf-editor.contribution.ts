@@ -4,18 +4,18 @@ import {
   EditorService, IContribution
 } from '@cisstech/nge-ide/core';
 import { Subscription } from 'rxjs';
-import { PLFormEditor } from './pl-form-editor';
+import { PlfEditor } from './plf-editor';
 
 
 @Injectable()
 export class Contribution implements IContribution {
   private readonly subscriptions: Subscription[] = [];
-  readonly id = 'platon.contrib.plform';
+  readonly id = 'platon.contrib.plf';
 
   activate(injector: Injector) {
     const editorService = injector.get(EditorService);
     editorService.registerEditors(
-      new PLFormEditor()
+      new PlfEditor()
     );
   }
 
@@ -33,4 +33,4 @@ export class Contribution implements IContribution {
     },
   ],
 })
-export class PLFormEditorContributionModule { }
+export class PlfEditorContributionModule { }

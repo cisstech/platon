@@ -12,6 +12,7 @@ import {
 } from '@cisstech/nge/markdown';
 
 import { NgeMonacoColorizerService } from '@cisstech/nge/monaco';
+import { PlfMarkdownParserContribution } from './plf-markdown.parser';
 
 export const NgeMarkdownProviders = [
   NgeMarkdownKatexProvider,
@@ -27,5 +28,7 @@ export const NgeMarkdownProviders = [
   }),
   NgeMarkdownEmojiOptionsProvider({
     url: 'assets/vendors/emoji-toolkit/joypixels.min.js'
-  })
+  }),
+
+  PlfMarkdownParserContribution,
 ];

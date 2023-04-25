@@ -8,14 +8,18 @@
       </div>
     </h5>
     <ng-container *ngIf="showIntroduction">
-      <div [innerHTML]="player.introduction | safe : 'html'"></div>
+      <div>
+        <nge-markdown [data]="player.introduction "/>
+      </div>
       <player-settings [player]="player" />
       <button mat-raised-button color="primary" (click)="start()">
         Commencer
       </button>
     </ng-container>
     <ng-container *ngIf="showConclusion">
-      <div [innerHTML]="player.conclusion | safe : 'html'"></div>
+      <div>
+         <nge-markdown [data]="player.conclusion "/>
+      </div>
       <player-results [player]="player" />
     </ng-container>
     <ng-container *ngIf="state === 'planned'">

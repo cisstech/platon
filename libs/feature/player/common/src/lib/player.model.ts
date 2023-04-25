@@ -195,7 +195,7 @@ export const isTimeouted = (player: Partial<ActivityPlayer>): boolean => {
 export const getClosingTime = (player: Partial<ActivityPlayer>): number | null => {
   const startedAt = player.startedAt ? new Date(player.startedAt).getTime() : null;
   const closeAt = player.closeAt ? new Date(player.closeAt).getTime() : null;
-  const duration = player.settings?.duration;
+  const duration = (player.settings?.duration || 0) * 1000;
 
   if (duration != null && startedAt != null) {
     return startedAt + duration;

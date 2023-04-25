@@ -13,7 +13,7 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
     CommonModule,
     NzModalModule,
     SafePipeModule,
-  ]
+  ],
 })
 export class UiModalIFrameComponent {
   protected visible = false;

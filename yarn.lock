@@ -1793,17 +1793,17 @@
   resolved "https://registry.yarnpkg.com/@braintree/sanitize-url/-/sanitize-url-6.0.2.tgz#6110f918d273fe2af8ea1c4398a88774bb9fc12f"
   integrity sha512-Tbsj02wXCbqGmzdnXNk0SOF19ChhRU70BsroIi4Pm6Ehp56in6vch94mfbdQ17DozxkL3BAVjbZ4Qc1a0HFRAg==
 
-"@cisstech/nge-ide@^15.1.0":
-  version "15.1.0"
-  resolved "https://registry.yarnpkg.com/@cisstech/nge-ide/-/nge-ide-15.1.0.tgz#9d91f7c485de6379aaa2edb86079f8c4faadcb9b"
-  integrity sha512-cxoDjOxhnlxMZVucGVxQSxFXe+GkkQbSNa1vS+lga/J1wwU97fTp519JkwPVpmNqZzy9J4JUJBxlBgZ+/tgdOg==
+"@cisstech/nge-ide@^15.1.1":
+  version "15.1.1"
+  resolved "https://registry.yarnpkg.com/@cisstech/nge-ide/-/nge-ide-15.1.1.tgz#33c670b530b636a7a2e5e486c8c3cdc31f8dd087"
+  integrity sha512-gux3hVh6puUSnL1NL2A49Afy7oqX5CQMAPja7XXBG7d/wTHxDhzPVgkprcFHTKB1Rwll/rOrW+82Y27oVeitnw==
   dependencies:
     tslib "^2.0.0"
 
-"@cisstech/nge@^15.2.0":
-  version "15.2.0"
-  resolved "https://registry.yarnpkg.com/@cisstech/nge/-/nge-15.2.0.tgz#d022705c03dd31e1657020dfbaded89fa801a2d9"
-  integrity sha512-G3G2ArzAtGdFb3yp7n5FgdJWl9JXRfGvqML9vT7vd9t1OIZyo0twljH6JifsdytBE4O6PMffLJo31iu00/ud/w==
+"@cisstech/nge@^15.2.1":
+  version "15.2.1"
+  resolved "https://registry.yarnpkg.com/@cisstech/nge/-/nge-15.2.1.tgz#78829d325118849150916277870aa38417e166a6"
+  integrity sha512-8zkfRs00xaaf1+Npr6tF6qdMGNFzDP8DWULEYB7bTd9OU77RbuPBTwlp5XJQNeGz2V+XnqJ1OFk3m7Jt5zrq1Q==
   dependencies:
     tslib "^2.3.0"
 
@@ -15326,17 +15326,10 @@ rxjs@6.6.7, rxjs@^6.5.4:
   dependencies:
     tslib "^1.9.0"
 
-rxjs@^7.5.1, rxjs@^7.5.5, rxjs@^7.8.0, rxjs@~7.8.0:
+rxjs@^7.5.1, rxjs@^7.5.2, rxjs@^7.5.5, rxjs@^7.8.0, rxjs@~7.8.0:
   version "7.8.0"
   resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-7.8.0.tgz#90a938862a82888ff4c7359811a595e14e1e09a4"
   integrity sha512-F2+gxDshqmIub1KdvZkaEfGDwLNpPvk9Fs6LD/MyQxNgMds/WH9OdDDXOmxUZpME+iSK3rQCctkL0DYyytUqMg==
-  dependencies:
-    tslib "^2.1.0"
-
-rxjs@~7.5.0:
-  version "7.5.7"
-  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-7.5.7.tgz#2ec0d57fdc89ece220d2e702730ae8f1e49def39"
-  integrity sha512-z9MzKh/UcOqB3i20H6rtrlaE/CgjLOvheWK/9ILrbhROGTweAi1BaFsTT9FbwZi5Trr1qNRs+MXkhmR06awzQA==
   dependencies:
     tslib "^2.1.0"
 

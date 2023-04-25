@@ -22,7 +22,7 @@
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
     "useDefineForClassFields": false,
-    "noImplicitOverride": true,
+    "noImplicitOverride": false,
     "esModuleInterop": true,
     "allowJs": true,
     "baseUrl": "./",
@@ -84,7 +84,7 @@
         "libs/feature/webcomponent/src/index.ts"
       ],
       "@platon/shared/server": ["libs/shared/server/src/index.ts"],
-      "@platon/shared/ui": ["libs/shared/ui/src/index.ts"]
+      "@platon/shared/ui": ["libs/shared/ui/src/index.ts"],
     }
   },
   "include": ["./graphql/*.ts"],

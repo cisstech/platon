@@ -5,7 +5,9 @@
   </mat-card-header>
   <mat-card-content>
     <ng-container *ngIf="player.statement">
-      <div class="exercise-statement" [innerHTML]="player.statement|safe:'html'"></div>
+      <div class="exercise-statement">
+        <nge-markdown [data]="player.statement" />
+      </div>
     </ng-container>
     <ng-container *ngIf="player.feedbacks">
       <ng-container *ngFor="let feedback of player.feedbacks">
@@ -33,7 +35,9 @@
     </ng-container>
     <ng-container *ngIf="player.form">
       <mat-divider />
-      <div class="exercise-form" [innerHTML]="player.form|safe:'html'"></div>
+      <div class="exercise-form">
+        <nge-markdown [data]="player.form" />
+      </div>
     </ng-container>
     <ng-container *ngIf="player.solution">
       <mat-accordion class="exercise-solution">

@@ -1,21 +1,23 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, OnDestroy, OnInit, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { firstValueFrom, Subscription } from 'rxjs';
 
 import { NgeIdeModule } from '@cisstech/nge-ide';
+import { FileService, IdeService } from '@cisstech/nge-ide/core';
 import { NgeIdeExplorerModule } from '@cisstech/nge-ide/explorer';
+import { NgeIdeNotificationsModule } from '@cisstech/nge-ide/notifications';
+import { NgeIdeProblemsModule } from '@cisstech/nge-ide/problems';
 import { NgeIdeSearchModule } from '@cisstech/nge-ide/search';
 import { NgeIdeSettingsModule } from '@cisstech/nge-ide/settings';
-import { NgeIdeProblemsModule } from '@cisstech/nge-ide/problems';
-import { NgeIdeNotificationsModule } from '@cisstech/nge-ide/notifications';
-import { FileService, IdeService } from '@cisstech/nge-ide/core';
 
-import { circleFromTree, resourceAncestors, ResourceTypes } from '@platon/feature/resource/common';
 import { ResourceService } from '@platon/feature/resource/browser';
+import { circleFromTree, resourceAncestors, ResourceTypes } from '@platon/feature/resource/common';
 
-import { PLFormEditorContributionModule } from './contributions/pl-form-editor/pl-form-editor.contribution';
+import { PlaEditorContributionModule } from './contributions/pla-editor';
+import { PlfEditorContributionModule } from './contributions/plf-editor';
+
 import { ResourceFileSystemProvider } from './contributions/file-system';
 
 @Component({
@@ -36,7 +38,8 @@ import { ResourceFileSystemProvider } from './contributions/file-system';
     NgeIdeProblemsModule,
     NgeIdeNotificationsModule,
 
-    PLFormEditorContributionModule,
+    PlfEditorContributionModule,
+    PlaEditorContributionModule,
   ],
   providers: [
     ResourceFileSystemProvider,

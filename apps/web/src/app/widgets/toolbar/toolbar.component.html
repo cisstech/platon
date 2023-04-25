@@ -1,19 +1,28 @@
 <header>
-  <button mat-icon-button (click)="toggleMenu.emit()">
+  <button nz-button nzType="text" (click)="toggleMenu.emit()">
     <mat-icon>menu</mat-icon>
   </button>
   <span>PLaTon</span>
   <div class="spacer"></div>
-  <button
-    mat-icon-button
-    class="spacing"
-    (click)="notifDrawer.open()">
-    <mat-icon
-      [matBadge]="notifDrawer.count|async"
-      matBadgeOverlap="false">
-      notifications
-    </mat-icon>
-  </button>
+
+  <ng-container *ngIf="user?.role !== 'student'">
+    <button nz-button nzType="primary" nzShape="round" nzSize="large"
+      [matMenuTriggerFor]="actionMenu" >
+      <span nz-icon nzType="plus" nzTheme="outline"></span>
+    </button>
+  </ng-container>
+
+  <nz-badge [nzCount]="(notifDrawer.count|async) || 0" [nzOffset]="[-16, 16]">
+    <button
+      nz-button nzType="text"
+      class="spacing"
+      (click)="notifDrawer.open()">
+      <mat-icon
+        matBadgeOverlap="false">
+        notifications
+      </mat-icon>
+    </button>
+  </nz-badge>
   <user-avatar
     *ngIf="user"
     [user]="user"
@@ -21,6 +30,22 @@
     [attr.aria-label]="user.firstName"
     [matMenuTriggerFor]="avatarMenu" />
 </header>
+
+<mat-menu #actionMenu="matMenu">
+  <button mat-menu-item  [routerLink]="['/courses/create']">
+    <span>Créer un cours</span>
+  </button>
+  <button mat-menu-item  [routerLink]="['/resources/create']" [queryParams]="{ type: 'CIRCLE' }">
+    <span>Créer un cercle</span>
+  </button>
+  <button mat-menu-item  [routerLink]="['/resources/create']" [queryParams]="{ type: 'EXERCISE' }">
+    <span>Créer un exercice</span>
+  </button>
+  <button mat-menu-item [routerLink]="['/resources/create']" [queryParams]="{ type: 'ACTIVITY' }">
+    <span>Créer une activité</span>
+  </button>
+</mat-menu>
+
 
 <mat-menu #avatarMenu="matMenu">
   <button mat-menu-item [routerLink]="'/account'">

@@ -39,6 +39,7 @@ import { ResourcePipesModule } from '../../pipes';
 export class ResourceItemComponent implements OnInit {
   @Input() item!: Resource;
   @Input() simple = false;
+  @Input() modalMode = false;
   @Output() didTapTag = new EventEmitter<string>();
 
 
@@ -70,4 +71,7 @@ export class ResourceItemComponent implements OnInit {
     }
   }
 
+  openUrl(url: string) {
+    window.open(url, '_blank');
+  }
 }

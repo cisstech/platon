@@ -1,3 +1,23 @@
 {
-
+  "title": "",
+  "introduction": "",
+  "conclusion": "",
+  "settings": {
+    "duration": 0,
+    "navigation": {
+      "mode": "composed"
+    },
+    "actions": {
+      "retry": 1,
+      "hints": true,
+      "reroll": true,
+      "theories": true,
+      "solution": true
+    },
+    "feedback": {
+      "review": true,
+      "validation": true
+    }
+  },
+  "exerciseGroups": {}
 }

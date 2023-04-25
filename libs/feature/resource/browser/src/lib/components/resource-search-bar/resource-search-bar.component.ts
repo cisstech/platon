@@ -45,6 +45,9 @@ export class ResourceSearchBarComponent implements ControlValueAccessor {
   @Input() disabled = false;
   @Input() excludes: string[] = [];
 
+  @Input() modalMode = false;
+  @Input() simpleLayout = false;
+
   readonly searchbar: SearchBar<Resource> = {
     placeholder: 'Essayez un nom, un topic, un niveau...',
     filterer: {

@@ -9,11 +9,12 @@ import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzStatisticModule } from 'ng-zorro-antd/statistic';
 
 import { SafePipeModule } from '@cisstech/nge/pipes';
-import { ActivityPlayer, ExercisePlayer, Player, PlayerExercise, PlayerNavigation, getClosingTime, isTimeouted } from '@platon/feature/player/common';
+import { ActivityPlayer, ExercisePlayer, getClosingTime, isTimeouted, Player, PlayerExercise, PlayerNavigation } from '@platon/feature/player/common';
 
 import { DialogModule, DialogService, UserAvatarComponent } from '@platon/core/browser';
 import { ActivityStates, calculateActivityState } from '@platon/feature/course/common';
 
+import { NgeMarkdownModule } from '@cisstech/nge/markdown';
 import { PlayerService } from '../../api/player.service';
 import { PlayerExerciseComponent } from '../player-exercise/player-exercise.component';
 import { PlayerNavigationComponent } from '../player-navigation/player-navigation.component';
@@ -38,6 +39,7 @@ import { PlayerSettingsComponent } from '../player-settings/player-settings.comp
     DialogModule,
     SafePipeModule,
     UserAvatarComponent,
+    NgeMarkdownModule,
 
     PlayerResultsComponent,
     PlayerExerciseComponent,
