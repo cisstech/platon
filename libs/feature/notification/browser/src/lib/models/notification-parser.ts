@@ -1,5 +1,6 @@
 import { ComponentType } from "@angular/cdk/portal";
 import { InjectionToken, Injector } from "@angular/core";
+import { Icon } from "@cisstech/nge/ui/icon";
 import { Notification } from "@platon/feature/notification/common";
 
 export interface NotificationParser {
@@ -8,7 +9,8 @@ export interface NotificationParser {
 }
 
 export interface NotificationRenderer {
-  content: ComponentType<unknown>
+  icon?: Icon;
+  content: string | ComponentType<unknown>
   onClick?: (injector: Injector) => void;
 }
 

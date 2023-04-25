@@ -28,10 +28,11 @@ export class ResourceEventSubscriber implements EntitySubscriberInterface<Resour
       );
 
       this.notificationService.sendToAllUsers<ResourceEventNotification>(
-        watchers,
+        watchers.filter(w => w !== event.entity.actorId),
         {
           type: 'RESOURCE-EVENT',
           eventInfo: {
+            id: event.entity.id,
             type: event.entity.type,
             actorId: event.entity.actorId,
             resourceId: event.entity.resourceId,

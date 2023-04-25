@@ -1,6 +1,6 @@
 <ng-container *ngIf="notifications.length; else: empty">
   <nz-list>
-    <ng-container *ngFor="let item of items">
+    <ng-container *ngFor="let item of items; trackBy: trackItemById;">
       <nz-list-item
         [class.unread]="!item.notification.readAt"
         (click)="markAsRead(item.notification); item.renderer?.onClick?.(item.injector)">
@@ -8,12 +8,25 @@
           [nzAvatar]="avatar"
           [nzDescription]="$any(item.notification.createdAt|date:'dd/MM/yyyy à HH:mm')">
           <ng-template #avatar>
-            <nz-avatar nzIcon="info" [nzShape]="'circle'" nzSize="small"></nz-avatar>
+            <ng-container *ngIf="item.renderer?.icon; else noIcon;">
+              <ui-icon [icon]="item.renderer?.icon" />
+            </ng-container>
+            <ng-template #noIcon>
+              <nz-avatar nzIcon="info" [nzShape]="'circle'" nzSize="small"></nz-avatar>
+            </ng-template>
           </ng-template>
           <nz-list-item-meta-title>
             <ng-container *ngIf="item.renderer">
-              <ng-container
-                *ngComponentOutlet="item.renderer.content; injector: item.injector">
+              <ng-container [ngSwitch]="item.renderer|rendererType">
+                <ng-container *ngSwitchCase="'string'">
+                  {{item.renderer.content}}
+                </ng-container>
+                <ng-container *ngSwitchCase="'component'">
+                  <ng-container
+                    *ngComponentOutlet="$any(item.renderer.content); injector: item.injector">
+                  </ng-container>
+                </ng-container>
+                <ng-container *ngSwitchDefault></ng-container>
               </ng-container>
             </ng-container>
           </nz-list-item-meta-title>
@@ -24,7 +37,7 @@
               nz-button
               nzType="text"
               nzDanger
-              (click)="delete(item.notification)">
+              (click)="$event.preventDefault(); $event.stopPropagation(); delete(item.notification)">
               <i nz-icon nzType="delete"></i>
             </button>
           </nz-list-item-action>

@@ -112,13 +112,14 @@ export class ResourceEventItemComponent {
   }
 
   protected _item!: Item;
+  protected isNotification = false;
 
   constructor(
     private readonly injector: Injector
   ) {
     const notification = injector.get(NOTIFICATION, null)
     if (notification) {
-
+      this.isNotification = true;
       this.item = (
         notification.data as unknown as ResourceEventNotification
       ).eventInfo as ResourceEvent;

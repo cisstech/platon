@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserGroup, NotFoundResponse, OrderingDirections, UpdateUserGroup, UserGroupFilters, UserGroupOrderings } from '@platon/core/common';
 import { Repository } from 'typeorm';
+import { UserEntity } from '../user.entity';
 import { UserService } from '../user.service';
 import { UserGroupEntity } from './user-group.entity';
 
@@ -92,4 +93,13 @@ export class UserGroupService {
 
     return newRes
   }
+
+  async listMembers(groupId: string): Promise<UserEntity[]> {
+    const group = await this.repository.findOne({ where: { id: groupId }, relations: ['users'] });
+    if (!group) {
+      throw new NotFoundResponse(`UserGroup not found: ${groupId}`);
+    }
+    return group.users;
+  }
+
 }

@@ -10,6 +10,8 @@ import { NzListModule } from 'ng-zorro-antd/list';
 import { Notification } from '@platon/feature/notification/common';
 import { NotificationService } from '../../api/notification.service';
 import { NOTIFICATION, NotificationParser, NotificationRenderer, NOTIFICATION_PARSER } from '../../models/notification-parser';
+import { NgeUiIconModule } from '@cisstech/nge/ui/icon';
+import { RendererTypePipe } from '../../pipes/renderer-type.pipe';
 
 interface Item {
   renderer?: NotificationRenderer;
@@ -32,6 +34,10 @@ interface Item {
     NzEmptyModule,
     NzAvatarModule,
     NzButtonModule,
+
+    NgeUiIconModule,
+
+    RendererTypePipe
   ]
 })
 export class NotificationListComponent implements OnChanges {
@@ -64,8 +70,6 @@ export class NotificationListComponent implements OnChanges {
         }),
       } as Item
     });
-
-    console.log(this.items)
   }
 
   protected delete(notification: Notification): void {
@@ -87,5 +91,9 @@ export class NotificationListComponent implements OnChanges {
       this.notificationsChange.emit(this.notifications);
       this.changeDetectorRef.markForCheck();
     });
+  }
+
+  protected trackItemById(_: number, item: Item) {
+    return item.notification.id;
   }
 }

@@ -4,6 +4,7 @@ import { OrderingDirections, UserOrderings, UserRoles } from '@platon/core/commo
 import { CourseMemberFilters } from '@platon/feature/course/common';
 import { Repository } from 'typeorm';
 import { Optional } from 'typescript-optional';
+import { CourseNotificationService } from '../course-notification/course-notification.service';
 import { CourseMemberEntity } from './course-member.entity';
 import { CourseMemberView } from './course-member.view';
 
@@ -14,7 +15,7 @@ export class CourseMemberService {
     private readonly view: Repository<CourseMemberView>,
     @InjectRepository(CourseMemberEntity)
     private readonly repository: Repository<CourseMemberEntity>,
-
+    private readonly notificationService: CourseNotificationService,
   ) { }
 
   async findById(
@@ -93,15 +94,19 @@ export class CourseMemberService {
   }
 
   async addUser(courseId: string, userId: string): Promise<CourseMemberEntity> {
-    return this.repository.save(
+    const member = await this.repository.save(
       this.repository.create({ courseId, userId })
-    );
+    )
+    await this.notificationService.sendMemberCreation(member);
+    return member;
   }
 
   async addGroup(courseId: string, groupId: string): Promise<CourseMemberEntity> {
-    return this.repository.save(
+    const member = await this.repository.save(
       this.repository.create({ courseId, groupId })
-    );
+    )
+    await this.notificationService.sendMemberCreation(member);
+    return member;
   }
 
   async delete(courseId: string, memberId: string): Promise<void> {

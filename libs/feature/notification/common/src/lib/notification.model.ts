@@ -1,10 +1,10 @@
-export interface Notification {
+export interface Notification<T = unknown> {
   id: string;
   userId: string;
   createdAt: Date;
   updatedAt?: Date;
   readAt?: Date;
-  data: Record<string, unknown>;
+  data: T;
 }
 
 export interface NotificationFilters {
