@@ -23,9 +23,9 @@ export class LTIMiddleware implements NestMiddleware {
     }
 
     const provider = new LTIProvider(lms.consumerKey, lms.consumerSecret);
-    await this.lti.createLmsUser(lms, provider.body);
+    //await this.lti.createLmsUser(lms, provider.body);
     await provider.validate(req);
 
-    return res.redirect(302, '/')
+    return res.redirect(302, '/?lti=true')
   }
 }

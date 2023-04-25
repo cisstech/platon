@@ -54,10 +54,10 @@ run(async (queryRunner, logger) => {
     );
   }
 
-  if (data.lms) {
+  if (data.lmses) {
     logger.info('GENERATING LMSES');
     await Promise.all(
-      data.lms.map((lms) =>
+      data.lmses.map((lms) =>
         queryRunner.query(
           `INSERT INTO "Lmses" (name, url, outcome_url, consumer_key, consumer_secret)
           VALUES ($1, $2, $3, $4, $5)
