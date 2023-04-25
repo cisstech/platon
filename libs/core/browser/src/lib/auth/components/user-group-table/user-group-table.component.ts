@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, forwardRef, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { NzTableModule } from 'ng-zorro-antd/table';
@@ -37,6 +37,8 @@ type Value = string[] | undefined;
 })
 export class UserGroupTableComponent implements OnChanges, ControlValueAccessor {
   @Input() groups: UserGroup[] = [];
+  @Output() groupsChange = new EventEmitter<UserGroup[]>();
+
   @Input() selectable = false;
 
   protected loading = true;
@@ -55,6 +57,7 @@ export class UserGroupTableComponent implements OnChanges, ControlValueAccessor 
   onTouch: any = () => {
     //
   }
+
   onChange: any = () => {
     //
   }
@@ -109,5 +112,11 @@ export class UserGroupTableComponent implements OnChanges, ControlValueAccessor 
     this.groups
       .forEach(({ id }) => this.updateSelection(id, checked));
     this.refreshSelection();
+  }
+
+  protected onChangedGroup(group: UserGroup): void {
+    this.groups = this.groups.map(g => g.id === group.id ? group : g);
+    this.groupsChange.emit(this.groups);
+    this.changeDetectorRef.markForCheck();
   }
 }

@@ -32,4 +32,4 @@
     </tr>
   </tbody>
 </nz-table>
-<user-group-drawer #drawer />
+<user-group-drawer #drawer (changedGroup)="onChangedGroup($event)" />

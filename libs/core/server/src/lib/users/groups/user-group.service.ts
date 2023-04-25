@@ -54,14 +54,20 @@ export class UserGroupService {
     return query.getManyAndCount();
   }
 
-  async create(user: Partial<UserGroupEntity>): Promise<UserGroupEntity> {
-    return this.repository.save(
-      this.repository.create(user)
+  async create(group: Partial<UserGroupEntity>): Promise<UserGroupEntity> {
+    const newGroup = await this.repository.save(
+      this.repository.create(group)
     );
+    newGroup.users = [];
+    return newGroup
   }
 
   async update(groupId: string, changes: Partial<UserGroupEntity>): Promise<UserGroupEntity> {
-    const group = await this.repository.findOne({ where: { id: groupId }});
+    const group = await this.repository.findOne({
+      where: { id: groupId },
+      relations: ['users']
+    });
+
     if (!group) {
       throw new NotFoundResponse(`UserGroup not found: ${groupId}`);
     }

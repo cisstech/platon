@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 
@@ -18,6 +18,7 @@ import { UserSearchBarComponent } from '../user-search-bar/user-search-bar.compo
 import { UserSearchModalComponent } from '../user-search-modal/user-search-modal.component';
 import { UserTableComponent } from '../user-table/user-table.component';
 import { UserService } from '../../api/user.service';
+import { NzBadgeModule } from 'ng-zorro-antd/badge';
 
 
 @Component({
@@ -34,6 +35,7 @@ import { UserService } from '../../api/user.service';
     MatFormFieldModule,
 
     NzIconModule,
+    NzBadgeModule,
     NzButtonModule,
     NzToolTipModule,
     NzPopconfirmModule,
@@ -55,6 +57,8 @@ export class UserGroupDrawerComponent {
   @ViewChild(UiModalDrawerComponent, { static: true })
   protected modal!: UiModalDrawerComponent
 
+  @Output() changedGroup = new EventEmitter<UserGroup>();
+
   protected get excludes(): string[] {
     return this.members.map(m => m.username);
   }
@@ -74,7 +78,7 @@ export class UserGroupDrawerComponent {
     if (!users.length)
       return;
 
-    await firstValueFrom(
+    this.group = await firstValueFrom(
       this.userService.updateUserGroup(this.group?.id as string, {
         users: [
           ...this.members.map(m => m.username),
@@ -88,6 +92,8 @@ export class UserGroupDrawerComponent {
       ...this.members,
     ];
 
+
+    this.changedGroup.emit(this.group);
     this.changeDetectorRef.detectChanges();
   }
 
@@ -101,11 +107,12 @@ export class UserGroupDrawerComponent {
       })
     );
 
+    this.changedGroup.emit(this.group);
     this.changeDetectorRef.markForCheck();
   }
 
   protected async removeMembers(): Promise<void> {
-    await firstValueFrom(
+   this.group =  await firstValueFrom(
       this.userService.updateUserGroup(this.group?.id as string, {
         users: this.members.filter(member => !this.selection.includes(member.id))
           .map(member => member.id)
@@ -115,6 +122,8 @@ export class UserGroupDrawerComponent {
     this.members = this.members.filter(member => !this.selection.includes(member.id));
 
     this.selection = [];
+
+    this.changedGroup.emit(this.group);
     this.changeDetectorRef.markForCheck();
   }
 }

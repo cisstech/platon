@@ -22,22 +22,22 @@
         nz-tooltip="Ajouter un membre au groupe">
         <span nz-icon nzType="plus" nzTheme="outline"></span>
       </button>
-      <button
-        *ngIf="selection.length as selectionCount"
-        nz-tooltip="Supprimer du groupe"
-        nz-button
-        nzDanger
-        nz-popconfirm
-        nzOkText="Supprimer"
-        nzOkType="danger"
-        [nzPopconfirmTitle]="removeGuard"
-        [nzPopconfirmPlacement]="'bottom'"
-        (nzOnConfirm)="removeMembers()">
-        <div nz-icon nzType="close" nzTheme="outline"></div>
-        <div  *ngIf="selectionCount > 1">
-          ({{selectionCount}})
-        </div>
-      </button>
+      <ng-container *ngIf="selection.length as selectionCount">
+        <nz-badge [nzCount]="selectionCount">
+          <button
+            nz-tooltip="Supprimer du groupe"
+            nz-button
+            nzDanger
+            nz-popconfirm
+            nzOkText="Supprimer"
+            nzOkType="danger"
+            [nzPopconfirmTitle]="removeGuard"
+            [nzPopconfirmPlacement]="'bottom'"
+            (nzOnConfirm)="removeMembers()">
+              <div nz-icon nzType="close" nzTheme="outline"></div>
+          </button>
+        </nz-badge>
+      </ng-container>
     </nz-button-group>
     <user-search-bar
       [(ngModel)]="members"
