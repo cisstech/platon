@@ -45,6 +45,9 @@ export class UserGraphModel extends BaseGraphModel implements User {
 
   @Field(() => Date, { nullable: true })
   readonly firstLogin?: Date;
+
+  @Field(() => Boolean, { nullable: true })
+  readonly hasPassword?: boolean;
 }
 
 @InputType('UserFiltersInput')

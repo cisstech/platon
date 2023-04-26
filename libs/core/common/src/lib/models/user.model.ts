@@ -33,6 +33,7 @@ export interface User {
   readonly email?: string;
   readonly lastLogin?: Date;
   readonly firstLogin?: Date;
+  readonly hasPassword?: boolean;
 }
 
 export interface UpdateUser {

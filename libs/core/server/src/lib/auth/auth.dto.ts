@@ -1,20 +1,50 @@
-import { AuthToken, SignInInput, SignUpInput, UserRoles } from "@platon/core/common";
+import { AuthToken, ResetPasswordInput, SignInInput, SignUpInput, UserRoles } from "@platon/core/common";
+import { IsEnum, IsOptional, IsString } from "class-validator";
 
 export class AuthTokenDTO implements AuthToken {
-  accessToken!: string;
-  refreshToken!: string;
+  @IsString()
+  readonly accessToken!: string;
+
+  @IsString()
+  readonly refreshToken!: string;
 }
 
 export class SignInInputDTO implements SignInInput {
-  username!: string;
-  password!: string;
+  @IsString()
+  readonly username!: string;
+
+  @IsString()
+  readonly password!: string;
 }
 
 export class SignUpInputDTO implements SignUpInput {
-  email!: string;
-  username!: string;
-  password!: string;
-  lastName!: string;
-  firstName!: string;
-  role!: UserRoles;
+  @IsString()
+  readonly email!: string;
+
+  @IsString()
+  readonly username!: string;
+
+  @IsString()
+  readonly password!: string;
+
+  @IsString()
+  readonly lastName!: string;
+
+  @IsString()
+  readonly firstName!: string;
+
+  @IsEnum(UserRoles)
+  readonly role!: UserRoles;
+}
+
+export class ResetPasswordInputDTO implements ResetPasswordInput {
+  @IsString()
+  readonly username!: string;
+
+  @IsString()
+  @IsOptional()
+  readonly password?: string;
+
+  @IsString()
+  readonly newPassword!: string;
 }

@@ -3,7 +3,7 @@ import {
   Controller, Post, Req
 } from '@nestjs/common';
 import { CreatedResponse, ItemResponse } from '@platon/core/common';
-import { AuthTokenDTO, SignInInputDTO, SignUpInputDTO } from './auth.dto';
+import { AuthTokenDTO, ResetPasswordInputDTO, SignInInputDTO, SignUpInputDTO } from './auth.dto';
 import { AuthService } from './auth.service';
 import { IRequest } from './auth.types';
 import { Public } from './decorators/public.decorator';
@@ -26,6 +26,14 @@ export class AuthController {
   async signIn(@Body() input: SignInInputDTO): Promise<ItemResponse<AuthTokenDTO>> {
     return new ItemResponse({
       resource: await this.authService.signIn(input)
+    });
+  }
+
+  @Public()
+  @Post('reset-password')
+  async resetPassword(@Body() input: ResetPasswordInputDTO): Promise<ItemResponse<AuthTokenDTO>> {
+    return new ItemResponse({
+      resource: await this.authService.resetPassword(input)
     });
   }
 

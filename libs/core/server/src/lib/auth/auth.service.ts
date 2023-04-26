@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { AuthToken, NotFoundResponse, SignInInput, SignUpInput } from '@platon/core/common';
+import { AuthToken, ForbiddenResponse, NotFoundResponse, ResetPasswordInput, SignInInput, SignUpInput } from '@platon/core/common';
 import * as bcrypt from 'bcrypt';
 import { Configuration } from '../config/configuration';
 import { UserService } from '../users/user.service';
@@ -42,6 +42,16 @@ export class AuthService {
     });
 
     return this.authenticate(user.id, user.username);
+  }
+
+  async resetPassword(input: ResetPasswordInput): Promise<AuthToken> {
+    const user = (await this.userService.findByUsername(input.username)).get();
+    if (user.password && !(await bcrypt.compare(input.password || '', user.password))) {
+      throw new ForbiddenResponse('New password is the same as the old one')
+    }
+    user.password = await this.hash(input.newPassword.trim());
+    await this.userService.update(input.username, user);
+    return this.authenticate(user.id, user.username)
   }
 
   async authenticate(userId: string, username: string): Promise<AuthToken> {

@@ -5,6 +5,7 @@ import { firstValueFrom } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 
+import { NzAffixModule } from 'ng-zorro-antd/affix';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzStatisticModule } from 'ng-zorro-antd/statistic';
 
@@ -33,6 +34,7 @@ import { PlayerSettingsComponent } from '../player-settings/player-settings.comp
     MatCardModule,
     MatButtonModule,
 
+    NzAffixModule,
     NzBadgeModule,
     NzStatisticModule,
 

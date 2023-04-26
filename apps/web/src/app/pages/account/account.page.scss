@@ -1,0 +1,26 @@
+:host::ng-deep {
+  .ant-breadcrumb-link {
+    display: inline-flex;
+    align-items: center;
+    mat-icon {
+      margin: 0 8px;
+    }
+  }
+}
+
+nz-breadcrumb {
+  font-size: 1.5em;
+  display: flex;
+  align-items: center;
+  button {
+    padding-left: 0;
+    mat-icon {
+      margin: 0;
+    }
+  }
+}
+
+nz-breadcrumb-item {
+  display: inline-flex;
+  align-items: center;
+}

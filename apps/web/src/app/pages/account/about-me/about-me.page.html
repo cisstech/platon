@@ -1,0 +1,66 @@
+<auth-protected [authorized]="onConnect.bind(this)">
+  <ng-template>
+    <form [formGroup]="form" (ngSubmit)="update()">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Informations</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-form-field appearance="fill">
+            <mat-label>Prénom</mat-label>
+            <input matInput formControlName="firstName" />
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Nom</mat-label>
+            <input matInput formControlName="lastName" />
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" />
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Rôle</mat-label>
+            <mat-select formControlName="role">
+              <mat-option *ngFor="let role of ['admin', 'teacher', 'student']" [value]="role">
+                <ng-container [ngSwitch]="role">
+                  <ng-container *ngSwitchCase="'admin'">Admin</ng-container>
+                  <ng-container *ngSwitchCase="'student'">Élève</ng-container>
+                  <ng-container *ngSwitchCase="'teacher'">Enseignant</ng-container>
+                </ng-container>
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-card-content>
+      </mat-card>
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Centre d'intêret</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <nz-select
+            nzMode="tags"
+            nzPlaceHolder="Sujets"
+            formControlName="topics">
+            <nz-option
+              *ngFor="let option of topics || []"
+              [nzLabel]="option.name" [nzValue]="option.id" />
+          </nz-select>
+          <nz-select
+            nzMode="tags"
+            nzPlaceHolder="Niveaux"
+            formControlName="levels">
+            <nz-option
+              *ngFor="let option of levels || []"
+              [nzLabel]="option.name" [nzValue]="option.id" />
+          </nz-select>
+        </mat-card-content>
+      </mat-card>
+      <button
+        nz-button
+        nzType="primary"
+        type="submit">
+        Enregistrer
+      </button>
+    </form>
+  </ng-template>
+</auth-protected>

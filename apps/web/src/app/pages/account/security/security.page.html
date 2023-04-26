@@ -1,0 +1,25 @@
+<auth-protected [authorized]="onConnect.bind(this)">
+  <ng-template let-user>
+    <form [formGroup]="form" (ngSubmit)="update()">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Mettre à jour votre mot de passe</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <auth-edit-password
+            #control
+            formControlName="password"
+            [username]="user.username"
+            [hasPassword]="user.hasPassword" />
+        </mat-card-content>
+      </mat-card>
+      <button
+        [disabled]="!control.isValid"
+        nz-button
+        nzType="primary"
+        type="submit">
+        Enregistrer
+      </button>
+    </form>
+  </ng-template>
+</auth-protected>

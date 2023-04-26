@@ -49,20 +49,22 @@
       </nz-ribbon>
     </ng-container>
   </main>
-  <aside>
-    <ng-container *ngIf="countdown">
-      <mat-card>
-        <mat-card-content>
-          <nz-countdown
-            nzTitle="Temps restant avant fermeture"
-            [nzValue]="countdown"
-            [nzValueStyle]="{ color: countdownColor }"
-            (nzCountdownFinish)="onFinishCountdown()"
-          />
-        </mat-card-content>
-      </mat-card>
-      <br />
-    </ng-container>
+  <aside #target>
+    <nz-affix [nzTarget]="target" nzOffsetTop="0">
+      <ng-container *ngIf="countdown">
+        <mat-card>
+          <mat-card-content>
+            <nz-countdown
+              nzTitle="Temps restant avant fermeture"
+              [nzValue]="countdown"
+              [nzValueStyle]="{ color: countdownColor }"
+              (nzCountdownFinish)="onFinishCountdown()"
+            />
+          </mat-card-content>
+        </mat-card>
+        <br />
+      </ng-container>
+    </nz-affix>
     <player-navigation
       [player]="player"
       (navigate)="play($event)"

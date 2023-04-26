@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import { CreateUserGroup, ListResponse, UpdateUserGroup, User, UserFilters, UserGroup, UserGroupFilters } from '@platon/core/common';
+import { CreateUserGroup, ListResponse, UpdateUserGroup, UpdateUserPrefs, User, UserFilters, UserGroup, UserGroupFilters, UserPrefs } from '@platon/core/common';
 import { combineLatest, Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
+import { UserGroupProvider } from '../models/user-group-provider';
+import { UserPrefsProvider } from '../models/user-prefs-provider';
 import { UserProvider } from '../models/user-provider';
 
 /**
@@ -12,12 +14,14 @@ export class UserService {
   private users = new Map<string, User>();
 
   constructor(
-    private readonly provider: UserProvider
+    private readonly userProvider: UserProvider,
+    private readonly userGroupProvider: UserGroupProvider,
+    private readonly userPrefsProvider: UserPrefsProvider,
   ) { }
 
 
   search(filters: UserFilters): Observable<ListResponse<User>> {
-    return this.provider.search(filters);
+    return this.userProvider.search(filters);
   }
 
   /**
@@ -35,7 +39,7 @@ export class UserService {
       return of(cache);
     }
 
-    return this.provider.findByUserName(username).pipe(
+    return this.userProvider.findByUserName(username).pipe(
       tap(user => {
         if (user != null) {
           this.users.set(username, user);
@@ -65,7 +69,7 @@ export class UserService {
 
     return combineLatest([
       of(cacheElements),
-      this.provider.findAllByUserNames(notCached),
+      this.userProvider.findAllByUserNames(notCached),
     ]).pipe(
       map(([fromCache, fromServer]) => {
         fromServer.forEach(e => {
@@ -77,18 +81,27 @@ export class UserService {
   }
 
   searchUserGroups(filters: UserGroupFilters): Observable<ListResponse<UserGroup>> {
-    return this.provider.searchUserGroups(filters);
+    return this.userGroupProvider.search(filters);
   }
 
   createUserGroup(input: CreateUserGroup): Observable<UserGroup> {
-    return this.provider.createUserGroup(input);
+    return this.userGroupProvider.create(input);
   }
 
   updateUserGroup(groupId: string, input: UpdateUserGroup): Observable<UserGroup> {
-    return this.provider.updateUserGroup(groupId, input);
+    return this.userGroupProvider.update(groupId, input);
   }
 
   deleteUserGroup(groupId: string): Observable<void> {
-    return this.provider.deleteUserGroup(groupId);
+    return this.userGroupProvider.delete(groupId);
+  }
+
+  findUserPrefs(username: string): Observable<UserPrefs> {
+    return this.userPrefsProvider.find(username);
+  }
+
+  updateUserPrefs(username: string, input: UpdateUserPrefs): Observable<UserPrefs> {
+    return this.userPrefsProvider.update(username, input);
+
   }
 }

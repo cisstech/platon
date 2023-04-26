@@ -1,5 +1,5 @@
 import { UserRoles } from '@platon/core/common';
-import { Column, Entity, Index } from 'typeorm';
+import { Column, Entity, Index, VirtualColumn } from 'typeorm';
 import { BaseEntity } from '../database/base-entity';
 
 @Entity('Users')
@@ -35,4 +35,9 @@ export class UserEntity extends BaseEntity {
 
   @Column({ name: 'first_login', nullable: true, type: 'timestamp with time zone' })
   firstLogin?: Date
+
+  @VirtualColumn({
+    query:() => 'SELECT password IS NOT NULL'
+  })
+  hasPassword = false
 }

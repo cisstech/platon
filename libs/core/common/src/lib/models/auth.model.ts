@@ -10,6 +10,12 @@ export interface SignInInput {
   password: string;
 }
 
+export interface ResetPasswordInput {
+  username: string;
+  password?: string;
+  newPassword: string;
+}
+
 export interface SignUpInput {
   email: string;
   username: string;

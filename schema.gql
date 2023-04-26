@@ -19,6 +19,7 @@ type User {
   email: String
   lastLogin: Date
   firstLogin: Date
+  hasPassword: Boolean
   prefs: UserPrefs!
 }
 

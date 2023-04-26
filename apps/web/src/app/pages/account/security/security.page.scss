@@ -1,0 +1,18 @@
+form {
+  margin: 1rem 0;
+}
+
+mat-card {
+  margin-bottom: 1rem;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+
+@media (min-width: 720px) {
+  form {
+    width: 70%;
+  }
+}

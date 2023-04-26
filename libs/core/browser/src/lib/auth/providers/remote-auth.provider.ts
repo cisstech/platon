@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { AuthToken, ItemResponse, User } from '@platon/core/common';
+import { AuthToken, ItemResponse, ResetPasswordInput, User } from '@platon/core/common';
 import { lastValueFrom } from 'rxjs';
 import { TokenService } from '../api/token.service';
 import { AuthProvider } from '../models/auth-provider';
@@ -38,18 +38,20 @@ export class RemoteAuthProvider extends AuthProvider {
 
   async signIn(username: string, password: string): Promise<User> {
     await this.tokenService.obtain(username, password);
-    return lastValueFrom(
-      this.http.get<ItemResponse<User>>('/api/v1/users/' + username)
-    ).then(response => response.resource);
+    return this.current() as Promise<User>;
   }
 
   async signInWithToken(token: AuthToken): Promise<User> {
-    const helper = new JwtHelperService();
-    const data = helper.decodeToken(token.accessToken);
     await this.tokenService.save(token);
-    return lastValueFrom(
-      this.http.get<ItemResponse<User>>('/api/v1/users/' + data.username)
+    return this.current() as Promise<User>;
+  }
+
+  async resetPassword(input: ResetPasswordInput): Promise<User> {
+    const token = await lastValueFrom(
+      this.http.post<ItemResponse<AuthToken>>('/api/v1/auth/reset-password/', input)
     ).then(response => response.resource);
+    await this.tokenService.save(token);
+    return this.current() as Promise<User>;
   }
 
   async signOut(): Promise<void> {

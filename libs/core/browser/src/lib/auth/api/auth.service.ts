@@ -1,7 +1,7 @@
 import { Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthToken, User } from '@platon/core/common';
-import { firstValueFrom, Observable } from 'rxjs';
+import { AuthToken, ResetPasswordInput, User } from '@platon/core/common';
+import { firstValueFrom, Observable, of } from 'rxjs';
 import { shareReplay, take } from 'rxjs/operators';
 import { AuthObserver, AUTH_OBSERVER } from '../models/auth';
 import { AuthProvider } from '../models/auth-provider';
@@ -73,12 +73,23 @@ export class AuthService {
    * @param username the username of the user
    * @param password the password of the user
    */
-  signIn(username: string, password: string): Promise<User> {
-    return this.authProvider.signIn(username, password);
+  async signIn(username: string, password: string): Promise<User> {
+    const user = await this.authProvider.signIn(username, password);
+    this.request = undefined;
+    return user;
   }
 
-  signInWithToken(token: AuthToken): Promise<User> {
-    return this.authProvider.signInWithToken(token);
+  async signInWithToken(token: AuthToken): Promise<User> {
+    const user = await this.authProvider.signInWithToken(token);
+    this.request = undefined;
+    return user;
+  }
+
+
+  async resetPassword(input: ResetPasswordInput): Promise<User> {
+    const user = await this.authProvider.resetPassword(input);
+    this.request = of(user);
+    return user;
   }
 
   /**

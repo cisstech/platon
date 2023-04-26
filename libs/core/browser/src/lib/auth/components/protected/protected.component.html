@@ -1,0 +1,24 @@
+<ng-container
+  *authIf="
+    authorizations;
+    else: denied;
+    pending: placeholder || spinner;
+    authorized: onConnect.bind(this);
+    denied: onError.bind(this);
+    let user=user">
+  <ng-container *ngTemplateOutlet="template; context: { $implicit: user }"></ng-container>
+</ng-container>
+<ng-template #shimmer>
+  <nz-skeleton [nzActive]="true" [nzLoading]="true" />
+</ng-template>
+<ng-template #spinner>
+  <div class="absolute-center">
+    <nz-spin nzTip="Veuillez patienter..."></nz-spin>
+  </div>
+</ng-template>
+<ng-template #denied>
+  <ui-error-403 />
+</ng-template>
+<ng-template #notFound>
+  <ui-error-404 />
+</ng-template>

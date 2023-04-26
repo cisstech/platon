@@ -31,11 +31,11 @@
       <td>{{user.createdAt|date}}</td>
       <td>{{user.email}}</td>
       <td>
-        <div [ngSwitch]="user.role">
-          <div *ngSwitchCase="'admin'">Admin</div>
-          <div *ngSwitchCase="'student'">Élève</div>
-          <div *ngSwitchCase="'teacher'">Enseignant</div>
-        </div>
+        <ng-container [ngSwitch]="user.role">
+          <ng-container *ngSwitchCase="'admin'">Admin</ng-container>
+          <ng-container *ngSwitchCase="'student'">Élève</ng-container>
+          <ng-container *ngSwitchCase="'teacher'">Enseignant</ng-container>
+        </ng-container>
       </td>
       <td>
         <nz-tag *ngIf="user.active" nzColor="green">Active</nz-tag>

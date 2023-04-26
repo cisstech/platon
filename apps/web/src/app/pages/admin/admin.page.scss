@@ -24,25 +24,3 @@ nz-breadcrumb-item {
   display: inline-flex;
   align-items: center;
 }
-
-p {
-  margin: 1rem 0;
-}
-
-nz-button-group {
-  margin: 0 8px 0 0;
-}
-
-nz-select {
-  width: 164px;
-}
-
-.spacer {
-  flex: 1;
-}
-
-@media (min-width: 720px) {
-  p {
-    width: 70%;
-  }
-}
