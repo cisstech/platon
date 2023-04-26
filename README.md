@@ -1,7 +1,7 @@
 # PLaTon - Plateforme for Learning and Teaching Online
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/cisstech/platon/df0476c77f6bf4356700a28ae51f207c76696658/shared/assets/images/logo/platon.svg" alt="Logo PLaTon" width="120px" />
+  <img src="https://raw.githubusercontent.com/cisstech/platon/main/shared/assets/images/logo/platon.svg" alt="Logo PLaTon" width="120px" />
 </p>
 
 ## Table of Contents
