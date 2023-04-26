@@ -1,0 +1,292 @@
+{
+  "lmses": [
+    {
+      "name": "ELEARNING UPEM",
+      "url": "https://elearning.u-pem.fr/",
+      "outcome_url": "https://elearning.u-pem.fr/mod/lti/service.php",
+      "consumer_key": "elearning.u-pem.fr",
+      "consumer_secret": "secret"
+    }
+  ],
+  "users": [
+    {
+      "first_name": "Madalyn",
+      "last_name": "Rhubottom",
+      "username": "mrhubottom",
+      "email": "mrhubottom0@prlog.org",
+      "role": "teacher",
+      "password": "password"
+    },
+    {
+      "first_name": "Yank",
+      "last_name": "Picker",
+      "username": "ypicker",
+      "email": "ypicker1@redcross.org",
+      "role": "admin",
+      "password": "password"
+    },
+    {
+      "first_name": "Rafa",
+      "last_name": "Raison",
+      "username": "rraison",
+      "email": "rraison2@soup.io",
+      "role": "admin",
+      "password": "password"
+    },
+    {
+      "first_name": "Gannon",
+      "last_name": "Lias",
+      "username": "glias",
+      "email": "glias3@dion.ne.jp",
+      "role": "student",
+      "password": "password"
+    },
+    {
+      "first_name": "Jeffy",
+      "last_name": "Ingman",
+      "username": "jingman",
+      "email": "jingman4@plala.or.jp",
+      "role": "teacher",
+      "password": "password"
+    },
+    {
+      "first_name": "Barton",
+      "last_name": "MacManus",
+      "username": "bcacManus",
+      "email": "bmacmanus5@chicagotribune.com",
+      "role": "teacher",
+      "password": "password"
+    },
+    {
+      "first_name": "Nahum",
+      "last_name": "Cawse",
+      "username": "ncawse",
+      "email": "ncawse6@cdbaby.com",
+      "role": "student",
+      "password": "password"
+    },
+    {
+      "first_name": "Terrie",
+      "last_name": "Palliser",
+      "username": "tpalliser",
+      "email": "tpalliser7@51.la",
+      "role": "teacher",
+      "password": "password"
+    },
+    {
+      "first_name": "Nicolette",
+      "last_name": "Loding",
+      "username": "nloding",
+      "email": "nloding8@irs.gov",
+      "role": "teacher",
+      "password": "password"
+    },
+    {
+      "first_name": "Cher",
+      "last_name": "Dzenisenka",
+      "username": "cdzenisenka",
+      "email": "cdzenisenka9@google.ru",
+      "role": "teacher",
+      "password": "password"
+    },
+    {
+      "first_name": "Ciel",
+      "last_name": "Brickhill",
+      "username": "cbrickhill",
+      "email": "cbrickhilla@sakura.ne.jp",
+      "role": "teacher",
+      "password": "password"
+    },
+    {
+      "first_name": "Orly",
+      "last_name": "Sutherden",
+      "username": "osutherden",
+      "email": "osutherdenb@timesonline.co.uk",
+      "role": "teacher",
+      "password": "password"
+    },
+    {
+      "first_name": "Lizbeth",
+      "last_name": "Scotfurth",
+      "username": "lscotfurth",
+      "email": "lscotfurthc@istockphoto.com",
+      "role": "student",
+      "password": "password"
+    },
+    {
+      "first_name": "Clyde",
+      "last_name": "Tevelov",
+      "username": "ctevelov",
+      "email": "ctevelovd@blogger.com",
+      "role": "student",
+      "password": "password"
+    },
+    {
+      "first_name": "Gauthier",
+      "last_name": "McCloughlin",
+      "username": "gmccloughlin",
+      "email": "gmccloughline@washington.edu",
+      "role": "teacher",
+      "password": "password"
+    },
+    {
+      "first_name": "Aubert",
+      "last_name": "Ruston",
+      "username": "aruston",
+      "email": "arustonf@mediafire.com",
+      "role": "student",
+      "password": "password"
+    },
+    {
+      "first_name": "Gill",
+      "last_name": "Finding",
+      "username": "gfinding",
+      "email": "gfindingg@a8.net",
+      "role": "student",
+      "password": "password"
+    },
+    {
+      "first_name": "Coriss",
+      "last_name": "Dabernott",
+      "username": "cdabernott",
+      "email": "cdabernotth@tiny.cc",
+      "role": "student",
+      "password": "password"
+    },
+    {
+      "first_name": "Matthiew",
+      "last_name": "Beisley",
+      "username": "mbeisley",
+      "email": "mbeisleyi@icio.us",
+      "role": "student",
+      "password": "password"
+    },
+    {
+      "first_name": "Nancee",
+      "last_name": "Leach",
+      "username": "nleach",
+      "email": "nleachj@cloudflare.com",
+      "role": "student",
+      "password": "password"
+    },
+    {
+      "first_name": "Kelila",
+      "last_name": "Twining",
+      "username": "ktwining",
+      "email": "ktwiningk@un.org",
+      "role": "teacher",
+      "password": "password"
+    },
+    {
+      "first_name": "Yancy",
+      "last_name": "MacGillavery",
+      "username": "ymacgillavery",
+      "email": "ymacgillaveryl@de.vu",
+      "role": "teacher",
+      "password": "password"
+    },
+    {
+      "first_name": "Colan",
+      "last_name": "Jaffrey",
+      "username": "cjaffrey",
+      "email": "cjaffreym@blog.com",
+      "role": "teacher",
+      "password": "password"
+    },
+    {
+      "first_name": "Karl",
+      "last_name": "Robathon",
+      "username": "krobathon",
+      "email": "krobathonn@huffingtonpost.com",
+      "role": "teacher",
+      "password": "password"
+    },
+    {
+      "first_name": "Eleonore",
+      "last_name": "Darrington",
+      "username": "edarrington",
+      "email": "edarringtono@cocolog-nifty.com",
+      "role": "teacher",
+      "password": "password"
+    },
+    {
+      "first_name": "Judon",
+      "last_name": "Penvarden",
+      "username": "jpenvarden",
+      "email": "jpenvardenp@huffingtonpost.com",
+      "role": "teacher",
+      "password": "password"
+    },
+    {
+      "first_name": "Tripp",
+      "last_name": "Pethybridge",
+      "username": "tpethybridge",
+      "email": "tpethybridgeq@pbs.org",
+      "role": "teacher",
+      "password": "password"
+    },
+    {
+      "first_name": "Brigg",
+      "last_name": "Smitherham",
+      "username": "bsmitherham",
+      "email": "bsmitherhamr@constantcontact.com",
+      "role": "student",
+      "password": "password"
+    },
+    {
+      "first_name": "Lancelot",
+      "last_name": "Talkington",
+      "username": "ltalkington",
+      "email": "ltalkingtons@zimbio.com",
+      "role": "student",
+      "password": "password"
+    },
+    {
+      "first_name": "Susanne",
+      "last_name": "Sawer",
+      "username": "ssawer",
+      "email": "ssawert@illinois.edu",
+      "role": "teacher",
+      "password": "password"
+    }
+  ],
+  "levels": [
+    "6E",
+    "5E",
+    "4E",
+    "3E",
+    "2nd",
+    "1ère",
+    "Terminal",
+    "Licence 1",
+    "Licence 2",
+    "Licence 3",
+    "Master 1",
+    "Master 2",
+    "BTS 1",
+    "BTS 2",
+    "DUT 1",
+    "DUT 2"
+  ],
+  "topics": [
+    "Mathématiques",
+    "Physique",
+    "Chimie",
+    "Biologie",
+    "Histoire",
+    "Géographie",
+    "Langues",
+    "Sciences",
+    "Philosophie",
+    "Sociologie",
+    "Psychologie",
+    "Economie",
+    "Gestion",
+    "Informatique",
+    "Arts",
+    "Musique",
+    "Sport",
+    "Technologie",
+    "Python"
+  ]
+}

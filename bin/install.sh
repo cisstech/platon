@@ -70,45 +70,18 @@ else # Linux
 fi
 
 
-
 echo -e "${Purple}\nGenerating files...\n${Color_Off}"
 
 if [[ ! -f .env ]]; then
-  echo -e "
-
-# INCREASE DOCKER COMPOSE TIMEOUT DELAY DO NOT REMOVE THIS VAR
-COMPOSE_HTTP_TIMEOUT=200
-
-# POSTGRES SERVICE
-POSTGRES_USER=platon
-POSTGRES_PASSWORD=test
-POSTGRES_DB=platon_db
-PG_DATA=/var/lib/postgresql/data
-
-# PGADMIN
-PGADMIN_DEFAULT_EMAIL=test@test.com
-PGADMIN_DEFAULT_PASSWORD=test
-
-# API SERVICE
-DB_NAME=platon_db
-DB_USERNAME=platon
-DB_PASSWORD=test
-DB_HOST=localhost
-DB_PORT=5432
-SECRET_KEY=secret
-PASSWORD_SALT=10
-JWT_ACCESS_TOKEN_LIFETIME=15m
-JWT_REFRESH_TOKEN_LIFETIME=7d
-
-# REDIS
-REDIS_HOST=localhost
-REDIS_PORT=6379
-
-# GRAPHQL
-GRAPHQL_PLAYGROUND=true
-" >>.env
+  cp ./templates/.env.example .env
 fi
 echo -e ".env:$Green OK !$Color_Off"
+
+if [[ ! -f ./tools/database/init.json ]]; then
+  cp ./templates/init.example.json ./tools/database/init.json
+fi
+echo -e "./tools/database/init.json:$Green OK !$Color_Off"
+
 
 mkdir -p .docker/nginx/ssl/certs
 mkdir -p .docker/nginx/ssl/dhparam

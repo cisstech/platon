@@ -65,7 +65,7 @@ describe('getClosingTime', () => {
     };
 
     const result = getClosingTime(player);
-    expect(result).toBe(105000);
+    expect(result).toBe(5100000);
   });
 
   it('should return closeAt when startedAt or duration is not available', () => {
