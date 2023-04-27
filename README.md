@@ -18,7 +18,7 @@
    3. [Codebase Structure](#codebase-structure)
    4. [Key Libraries and Frameworks](#key-libraries-and-frameworks)
    5. [Development Workflow](#development-workflow)
-      1. [Building and Running the Applications](#building-and-running-the-applications)
+      1. [Scripts](#scripts)
       2. [Testing](#testing)
       3. [Linting and Formatting](#linting-and-formatting)
    6. [Deployment](#deployment)
@@ -317,7 +317,7 @@ In the development mode, the NestJS and Angular applications run on the host mac
 
 ### Development Workflow
 
-#### Bin folder
+#### Scripts
 
 The `bin` folder contains a collection of scripts to perform various tasks related to the platform's development, deployment, and maintenance. These scripts are organized into subfolders based on their purpose, and they are designed to streamline the development process.
 
@@ -345,10 +345,6 @@ The `bin` folder contains a collection of scripts to perform various tasks relat
 - `nginx.sh`: Connects to the NGINX container.
 - `postgres.sh`: Connects to the Postgres container.
 - `redis.sh`: Connects to the Redis container.
-
-#### Building and Running the Applications
-
-[Explain how to build and run the applications using the scripts in `package.json`]
 
 #### Testing
 
