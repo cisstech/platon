@@ -6,7 +6,7 @@
 
 <p align="center">
   <a href="https://github.com/cisstech/platon/actions/">
-    <img src="https://github.com/cisstech/platon/workflows/ci/badge.svg" alt="Tests">
+    <img src="https://github.com/cisstech/platon/actions/workflows/ci.yml/badge.svg" alt="CI">
   </a>
   <a href="https://codecov.io/gh/cisstech/platon">
     <img src="https://codecov.io/gh/cisstech/platon/branch/main/graph/badge.svg" alt="codecov">
