@@ -3,15 +3,11 @@ name: CI
 on:
   push:
     branches:
-      - '*'
-      - '*/*'
+      - main
   pull_request:
     branches:
-      - '*'
-      - '*/*'
+      - main
   workflow_dispatch:
-  schedule:
-    - cron:  '0 6 * * 1'
 
 jobs:
   install:
@@ -52,7 +48,7 @@ jobs:
           path: '**/node_modules'
           key: ${{ runner.os }}-build-node-modules-cache-${{ hashFiles('**/yarn.lock') }}
       - name: Run linter
-        run: yarn affected:lint
+        run: yarn lint
 
   test:
     needs: install
@@ -68,7 +64,7 @@ jobs:
           key: ${{ runner.os }}-build-node-modules-cache-${{ hashFiles('**/yarn.lock') }}
 
       - name: Run tests
-        run: yarn affected:test
+        run: yarn test
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
