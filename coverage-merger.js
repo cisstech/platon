@@ -12,6 +12,7 @@ const getLcovFiles = function (src) {
 };
 
 (async function(){
+  fs.mkdirSync('coverage', { recursive: true })
   const files = await getLcovFiles('coverage');
   const mergedReport = files.reduce((mergedReport, currFile) => mergedReport += fs.readFileSync(currFile), '');
   await fs.writeFile(path.resolve('./coverage/lcov.info'), mergedReport, (err) => {

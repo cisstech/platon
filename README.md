@@ -4,6 +4,18 @@
   <img src="https://raw.githubusercontent.com/cisstech/platon/main/shared/assets/images/logo/platon.svg" alt="Logo PLaTon" width="120px" />
 </p>
 
+<p align="center">
+  <a href="https://github.com/cisstech/platon/actions/">
+    <img src="https://github.com/cisstech/platon/workflows/ci/badge.svg" alt="Tests">
+  </a>
+  <a href="https://codecov.io/gh/cisstech/platon">
+    <img src="https://codecov.io/gh/cisstech/platon/branch/main/graph/badge.svg" alt="codecov">
+  </a>
+  <a href="https://www.codefactor.io/repository/github/cisstech/platon/overview/main">
+    <img src="https://www.codefactor.io/repository/github/cisstech/platon/badge/main" alt="CodeFactor">
+  </a>
+</p>
+
 ## Table of Contents
 
 1. [Introduction](#introduction)
@@ -22,6 +34,8 @@
       2. [Testing](#testing)
       3. [Linting and Formatting](#linting-and-formatting)
    6. [Deployment](#deployment)
+      1. [On-premise](#on-premise)
+      2. [Cloud](#cloud)
 5. [Functional Documentation](#functional-documentation)
    1. [User Types](#user-types)
    2. [Resource Management](#resource-management)
@@ -415,6 +429,10 @@ If you plan to use a custom ssl files instead, update the docker-compose and the
   ./bin/init-db.sh
   ```
 
+#### Cloud
+
+[TODO]
+
 ## Functional Documentation
 
 ### User Types
@@ -443,7 +461,17 @@ If you plan to use a custom ssl files instead, update the docker-compose and the
 
 ## Contributing
 
-[TODO]
+Contributions are always welcome.
+
+Please read our [CONTRIBUTING.md](https://github.com/cisstech/platon/blob/main/CONTRIBUTING.md) first. You can submit any ideas as [pull requests](https://github.com/cisstech/platon/pulls) or as [GitHub issues](https://github.com/cisstech/platon/issues).
+
+Please just make sure that ...
+
+Your code style matches with the rest of the project
+
+Unit tests pass
+
+Linter passes
 
 ## License
 

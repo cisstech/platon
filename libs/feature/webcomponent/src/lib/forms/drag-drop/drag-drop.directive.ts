@@ -2,11 +2,9 @@ import {
   AfterContentInit,
   Directive,
   ElementRef,
-  EventEmitter,
-  Input,
-  OnDestroy,
+  EventEmitter, OnDestroy,
   Output,
-  Renderer2,
+  Renderer2
 } from '@angular/core';
 
 export interface DragDropEvent {
@@ -15,7 +13,7 @@ export interface DragDropEvent {
 }
 
 @Directive({
-  // tslint:disable-next-line: directive-selector
+  // eslint-disable-next-line @angular-eslint/directive-selector
   selector: '[dragNdrop]',
 })
 export class DragDropDirective implements OnDestroy, AfterContentInit {
@@ -77,13 +75,13 @@ export class DragDropDirective implements OnDestroy, AfterContentInit {
     };
     this.addListener(node, 'dragover', dragover);
 
-    const dragenter = (_: DragEvent) => {
+    const dragenter = () => {
       this.renderer.removeClass(node, 'dnd-over');
       return false;
     };
     this.addListener(node, 'dragenter', dragenter);
 
-    const dragleave = (_: DragEvent) => {
+    const dragleave = () => {
       this.renderer.removeClass(node, 'dnd-over');
       return false;
     };

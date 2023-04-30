@@ -1,0 +1,76 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - '*'
+      - '*/*'
+  pull_request:
+    branches:
+      - '*'
+      - '*/*'
+  workflow_dispatch:
+  schedule:
+    - cron:  '0 6 * * 1'
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        node-version: [16.14.2]
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: cache node_modules
+        id: cache-node-modules
+        uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-build-node-modules-cache-${{ hashFiles('**/yarn.lock') }}
+      - name: Use Node ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: git fetch --no-tags --prune --depth=5 origin main
+      - name: Install dependencies
+        if: steps.cache-node-modules.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
+
+  lint:
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: cache node_modules
+        uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-build-node-modules-cache-${{ hashFiles('**/yarn.lock') }}
+      - name: Run linter
+        run: yarn affected:lint
+
+  test:
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: cache node_modules
+        uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-build-node-modules-cache-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Run tests
+        run: yarn affected:test
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          file: ./coverage/lcov.info

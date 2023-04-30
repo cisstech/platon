@@ -223,88 +223,88 @@ export class PLParser extends JisonParser implements JisonParserApi {
           var $0 = $$.length - 1;
         switch (yystate) {
 case 1:
- return $$[$0-1] 
+ return $$[$0-1]
 break;
 case 2: case 27: case 29:
- this.$ = [$$[$0]]; 
+ this.$ = [$$[$0]];
 break;
 case 3:
- this.$ = [$$[$0]] 
+ this.$ = [$$[$0]]
 break;
 case 4:
- this.$ = $$[$0-1].concat($$[$0]) 
+ this.$ = $$[$0-1].concat($$[$0])
 break;
 case 5:
- this.$ = $$[$0-1].concat($$[$0]); 
+ this.$ = $$[$0-1].concat($$[$0]);
 break;
 case 6:
- this.$ = new CommentNode($$[$0], yylineno + 1); 
+ this.$ = new CommentNode($$[$0], yylineno + 1);
 break;
 case 7: case 8: case 9:
- this.$ = $$[$0]; 
+ this.$ = $$[$0];
 break;
 case 10:
- this.$ = new AssignmentNode($$[$0-2], new PLString('', yylineno + 1), yylineno + 1); 
+ this.$ = new AssignmentNode($$[$0-2], new PLString('', yylineno + 1), yylineno + 1);
 break;
 case 11:
- this.$ = new AssignmentNode($$[$0-3], new PLString($$[$0-1], yylineno + 1), yylineno + 1); 
+ this.$ = new AssignmentNode($$[$0-3], new PLString($$[$0-1], yylineno + 1), yylineno + 1);
 break;
 case 12:
- this.$ = new AssignmentNode($$[$0-2], $$[$0], yylineno + 1); 
+ this.$ = new AssignmentNode($$[$0-2], $$[$0], yylineno + 1);
 break;
 case 13:
- this.$ = new PLNumber(Number($$[$0]), yylineno + 1); 
+ this.$ = new PLNumber(Number($$[$0]), yylineno + 1);
 break;
 case 14:
- this.$ = new PLReference($$[$0], yylineno + 1); 
+ this.$ = new PLReference($$[$0], yylineno + 1);
 break;
 case 15:
- this.$ = new PLBoolean(Boolean($$[$0].toLowerCase()), yylineno + 1); 
+ this.$ = new PLBoolean(Boolean($$[$0].toLowerCase()), yylineno + 1);
 break;
 case 16:
- this.$ = new PLString($$[$0].slice(1, -1), yylineno + 1); 
+ this.$ = new PLString($$[$0].slice(1, -1), yylineno + 1);
 break;
 case 17:
- this.$ = new PLDict($$[$0], yylineno + 1); 
+ this.$ = new PLDict($$[$0], yylineno + 1);
 break;
 case 18:
- this.$ = new PLFileURL($$[$0], yylineno + 1); 
+ this.$ = new PLFileURL($$[$0], yylineno + 1);
 break;
 case 19:
- this.$ = new PLFileContent($$[$0], yylineno + 1); 
+ this.$ = new PLFileContent($$[$0], yylineno + 1);
 break;
 case 20:
- this.$ = new PLComponent($$[$0], yylineno + 1); 
+ this.$ = new PLComponent($$[$0], yylineno + 1);
 break;
 case 21:
- this.$ = new PLArray([], yylineno + 1); 
+ this.$ = new PLArray([], yylineno + 1);
 break;
 case 22:
- this.$ = new PLArray($$[$0-1], yylineno + 1); 
+ this.$ = new PLArray($$[$0-1], yylineno + 1);
 break;
 case 23:
- this.$ = new PLObject([], yylineno + 1); 
+ this.$ = new PLObject([], yylineno + 1);
 break;
 case 24:
- this.$ = new PLObject($$[$0-1], yylineno + 1); 
+ this.$ = new PLObject($$[$0-1], yylineno + 1);
 break;
 case 25:
- this.$ = $$[$0-1] + $$[$0]; 
+ this.$ = $$[$0-1] + $$[$0];
 break;
 case 28: case 30:
- this.$ = $$[$0-2].concat($$[$0]); 
+ this.$ = $$[$0-2].concat($$[$0]);
 break;
 case 31:
- this.$ = { key: $$[$0-2], value: $$[$0] }; 
+ this.$ = { key: $$[$0-2], value: $$[$0] };
 break;
 case 32:
- this.$ = new IncludeNode($$[$0], '', yylineno + 1); 
+ this.$ = new IncludeNode($$[$0], '', yylineno + 1);
 break;
 case 33:
- this.$ = new IncludeNode($$[$0-2], $$[$0], yylineno + 1); 
+ this.$ = new IncludeNode($$[$0-2], $$[$0], yylineno + 1);
 break;
 case 34:
- this.$ = new ExtendsNode($$[$0], yylineno + 1); 
+ this.$ = new ExtendsNode($$[$0], yylineno + 1);
 break;
         }
     }
@@ -330,7 +330,7 @@ export class PLLexer extends JisonLexer implements JisonLexerApi {
       break;
     case 2:return 8
       break;
-    case 3: this.begin('MULTI'); return 13; 
+    case 3: this.begin('MULTI'); return 13;
       break;
     case 4:return 13
       break;
@@ -370,11 +370,11 @@ export class PLLexer extends JisonLexer implements JisonLexerApi {
       break;
     case 22:return 5
       break;
-    case 23:  this.popState(); return 13 
+    case 23:  this.popState(); return 13
       break;
-    case 24:  return 31 
+    case 24:  return 31
       break;
-    case 25:  return 31 
+    case 25:  return 31
       break;
         }
     }
