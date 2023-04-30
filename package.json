@@ -19,7 +19,7 @@
     "serve:api": "nx serve api",
     "build:web": "nx build web --configuration=production",
     "build:api": "nx build api --configuration=production",
-    "test": "nx run-many --target=test --all --code-coverage --watch=false --browsers=ChromeHeadless && node coverage-merger.js",
+    "test": "nx run-many --target=test --all --coverage=true --coverageReporters=lcov --watch=false --browsers=ChromeHeadless && node coverage-merger.js",
     "lint": "nx workspace-lint && nx run-many --target=lint --all",
     "stats": "yarn build:web && webpack-bundle-analyzer dist/apps/web/stats.json",
     "e2e": "ng e2e",
