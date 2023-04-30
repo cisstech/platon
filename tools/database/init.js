@@ -3,13 +3,6 @@ const path = require('path');
 const { run } = require('../database/runner');
 const bcrypt = require('bcrypt');
 
-require('dotenv').config();
-
-/*
-      LEVELS.map(l => queryRunner.query(`INSERT INTO "Levels" (name) VALUES ($1)`, [l]))
-
- */
-
 run(async (queryRunner, logger) => {
   const file = fs.readFileSync(path.join(__dirname, 'init.json'));
 

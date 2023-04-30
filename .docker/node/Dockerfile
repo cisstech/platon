@@ -1,37 +1,49 @@
 FROM node:16-alpine
 
-# https://stackoverflow.com/a/70471892
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
-
 # Install python3, make, g++, Git, and NodeGit dependencies
 RUN apk add --no-cache --update \
-        bash \
-        python3 \
-        make \
-        g++ \
-        git \
-        openssh \
-        libgit2-dev \
-    && rm -rf /var/cache/apk/* /tmp/* /var/tmp/*
-
-# Install yarn
-RUN npm install -g yarn --force
+  bash \
+  python3 \
+  make \
+  g++ \
+  git \
+  openssh \
+  libgit2-dev \
+  && rm -rf /var/cache/apk/* /tmp/* /var/tmp/*
 
 # Set work directory
 WORKDIR /src
 
 # Copy dependencies
-COPY yarn.lock /src/yarn.lock
-COPY package.json /src/package.json
-COPY tsconfig.base.json /src/tsconfig.base.json
-COPY nx.json /src/nx.json
-COPY .npmrc /src/.npmrc
+COPY --chown=node:node package.json yarn.lock ./
 
 # Install dependencies
-RUN yarn
+RUN yarn install --frozen-lockfile --non-interactive
 
-# Copy sources
-COPY libs /src/libs
-COPY apps/web /src/apps/web
-COPY shared/assets /src/shared/assets
-COPY shared/styles /src/shared/styles
+# Bundle app source
+COPY --chown=node:node .graphql ./.graphql
+COPY --chown=node:node apps ./apps
+COPY --chown=node:node bin ./bin
+COPY --chown=node:node libs ./libs
+COPY --chown=node:node tools ./tools
+COPY --chown=node:node shared ./shared
+COPY --chown=node:node types ./types
+COPY --chown=node:node nx.json  ./nx.json
+COPY --chown=node:node codegen.ts ./codegen.ts
+COPY --chown=node:node schema.gql ./schema.gql
+COPY --chown=node:node tsconfig.base.json  ./tsconfig.base.json
+
+# Generate GraphQL types
+RUN ./bin/graphql/generate.sh
+
+# Build NestJS API and Angular web app
+RUN yarn build:api
+RUN yarn build:web
+
+
+COPY --chown=node:node uploads ./uploads
+COPY --chown=node:node resources ./resources
+COPY --chown=node:node templates ./templates
+COPY --chown=node:node migrations ./migrations
+
+USER node

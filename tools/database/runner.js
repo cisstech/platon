@@ -1,5 +1,4 @@
 const { Client } = require('pg')
-
 const { createLogger, transports, format } = require('winston')
 
 const logger = createLogger({
@@ -11,14 +10,16 @@ const logger = createLogger({
   ),
 })
 
-const DB_URL = process.env.DB_URL || 'localhost'
-const DB_USERNAME = process.env.DB_USERNAME || 'platon'
-const DB_PASSWORD = process.env.DB_PASSWORD || 'test'
-const DB_NAME = process.env.DB_NAME || 'platon_db'
-const DATABASE_PORT = process.env.DATABASE_PORT || 5432
+require('dotenv').config();
+
+const DB_HOST = process.env.DB_HOST
+const DB_USERNAME = process.env.DB_USERNAME
+const DB_PASSWORD = process.env.DB_PASSWORD
+const DB_NAME = process.env.DB_NAME
+const DATABASE_PORT = Number.parseInt(process.env.DATABASE_PORT)
 
 const queryRunner = new Client({
-  host: DB_URL,
+  host: DB_HOST,
   port: DATABASE_PORT,
   user: DB_USERNAME,
   password: DB_PASSWORD,

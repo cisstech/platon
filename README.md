@@ -230,7 +230,7 @@ Modular Design
 
 - In development mode, the architecture uses Docker to run the PostgreSQL, Redis, and PgAdmin services. The Nest.js and Angular applications are run on the host machine. Nginx is set up as a reverse proxy, directing requests to the appropriate services or applications.
 
-- The Nginx reverse proxy configuration is different for development and production environments. In development, Nginx is configured to proxy requests to the Angular and Nest.js applications running on the host machine. In production, the Angular and Nest.js applications are built and placed inside the Nginx container, which is then used as a full reverse proxy.
+- The Nginx reverse proxy configuration is different for development and production environments. In development, Nginx is configured to proxy requests to the Angular and Nest.js applications running on the host machine. In production, the Angular application is built and placed inside the Nginx container while the Nest.js application run on a different service inside docker, which is then used as a full reverse proxy.
 
 Here's a high-level overview of how the different parts interact:
 
@@ -247,7 +247,6 @@ Depending on the environment and request type:
 - The Nest.js application returns the response to the Nginx reverse proxy, which then forwards it to the user's browser.
 
 This hybrid approach allows for easy development and testing, while still leveraging the benefits of containerization for production deployments.
-
 
 ### Environment Configuration
 
@@ -274,6 +273,7 @@ This document describes the environnement configuration for the application, inc
 | JWT_ACCESS_TOKEN_LIFETIME | api | Access token lifetime for JWT authentication. | 7d |
 | JWT_REFRESH_TOKEN_LIFETIME | api | Refresh token lifetime for JWT authentication. | 7d |
 | GRAPHQL_PLAYGROUND | api | Enable/disable GraphQL Playground. | true |
+| SERVER_NAME | nginx | Defines nginx server name. | localhost |
 
 ### Codebase Structure
 
@@ -341,10 +341,13 @@ The `bin` folder contains a collection of scripts to perform various tasks relat
   - `generate.sh`: Generates the Jison parser from the `libs/feature/compiler/src/lib/pl.jison` file.
 
 - `/bin/shell`: These scripts are used to connect to Docker containers from the terminal.
+  - `api.sh`: Connects to the API container (available only in prod mode).
+  - `nginx.sh`: Connects to the NGINX container.
+  - `postgres.sh`: Connects to the Postgres container.
+  - `redis.sh`: Connects to the Redis container.
 
-- `nginx.sh`: Connects to the NGINX container.
-- `postgres.sh`: Connects to the Postgres container.
-- `redis.sh`: Connects to the Redis container.
+- `/bin/start`: This script is used to start the nestjs api in prod mode.
+  - `api.sh`: Waits for postgres to run migrations then starts nestjs api
 
 #### Testing
 
@@ -367,7 +370,50 @@ These scripts will analyze the codebase and provide a report of any linting issu
 
 ### Deployment
 
-[TODO]
+#### On-premise
+
+- **Clone the repository**: Clone the PLaTon repository from GitHub to your machine using the following command:
+
+  ```sh
+  git clone https://github.com/cisstech/platon.git
+  ```
+
+- **Install dependencies**: Navigate to the project's root directory and run the following command to install the required dependencies:
+
+  ```sh
+  yarn
+  ```
+
+- **Set up the environment**: After cloning and installing the repository, run the `./bin/install.sh` script to set up the necessary environment variables. This script generates an `.env` and `./tools/database/init.json` files with the default values from the `./templates` directory, which you can customize.
+
+  ```sh
+  ./bin/install.sh
+  ```
+
+  Make sure update the values. For more information on environment variables, refer to the Environment Configuration section of the documentation.
+
+- **Setup domain and SSL**: This project is configured to generate auto updated ssl certificates with let's encrypt and cerbot. If you plan to use this setup to generate ssl config for your domain, please follow theses steps first, otherwises you can ignore them.
+  
+  - Update the `./bin/init-letsencrypt.sh` by replacing the `example.com` by your domain inside `domains=(example.com www.example.com)`.
+  - Update the `.docker/nginx/nginx.prod.conf` by uncommenting all regions starting with `### BEGIN CERTBOT ONLY ###` and commenting all regions stating with `### BEGIN NON CERTBOT ONLY ###`.
+  - Update the `volumes` section of the nginx service inside the `docker-compose.prod.yml` to uncomment the `# LET'S ENCRYPT SSL CONF` area.
+
+If you plan to use a custom ssl files instead, update the docker-compose and the nginx conf by defining the path to your files.
+
+- **Start the Docker services** with --prod argument.
+
+  ```sh
+  ./bin/docker/up.sh --prod
+  ```
+
+- This script will build the docker images for backend services and start containers. If you wan't to use let's encrypt, you have to answer with `Y` at the question `Would you like to use letsencrypt for your domain? (y/N)`.
+
+- **Initialize the database inside the api service**: Set up the PostgreSQL database by running the init-db.sh script inside the `platon_api` container.
+
+  ```sh
+  ./bin/shell/api.sh
+  ./bin/init-db.sh
+  ```
 
 ## Functional Documentation
 

@@ -42,6 +42,7 @@ Thumbs.db
 
 # Project
 .env
+.env.prod
 .docker/nginx/ssl/certs
 .docker/nginx/ssl/dhparam
 tools/database/init.json
