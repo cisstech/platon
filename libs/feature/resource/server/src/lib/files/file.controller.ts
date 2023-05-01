@@ -116,7 +116,7 @@ export class ResourceFileController {
   @Post('/:resourceId/:path(*)')
   @UseInterceptors(
     FileInterceptor('file', {
-      dest: './uploads',
+      dest: './resources',
       preservePath: true,
     })
   )
