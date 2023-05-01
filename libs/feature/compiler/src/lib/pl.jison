@@ -231,9 +231,14 @@ export interface PLVisitor {
 
 <<EOF>>                                         return 'EOF'
 
-<MULTI>\s'=='\s+         {  this.popState(); return 'EQUALS' }
-<MULTI>\s+               {  return 'ANY' }
-<MULTI>[^\s]*            {  return 'ANY' }
+<MULTI>[^\n]*\n          {
+                          if (yytext.trim() === '==') {
+                            this.popState();
+                            return 'EQUALS';
+                          }
+                          return 'ANY'
+                         }
+
 
 /lex
 

@@ -223,88 +223,88 @@ export class PLParser extends JisonParser implements JisonParserApi {
           var $0 = $$.length - 1;
         switch (yystate) {
 case 1:
- return $$[$0-1]
+ return $$[$0-1] 
 break;
 case 2: case 27: case 29:
- this.$ = [$$[$0]];
+ this.$ = [$$[$0]]; 
 break;
 case 3:
- this.$ = [$$[$0]]
+ this.$ = [$$[$0]] 
 break;
 case 4:
- this.$ = $$[$0-1].concat($$[$0])
+ this.$ = $$[$0-1].concat($$[$0]) 
 break;
 case 5:
- this.$ = $$[$0-1].concat($$[$0]);
+ this.$ = $$[$0-1].concat($$[$0]); 
 break;
 case 6:
- this.$ = new CommentNode($$[$0], yylineno + 1);
+ this.$ = new CommentNode($$[$0], yylineno + 1); 
 break;
 case 7: case 8: case 9:
- this.$ = $$[$0];
+ this.$ = $$[$0]; 
 break;
 case 10:
- this.$ = new AssignmentNode($$[$0-2], new PLString('', yylineno + 1), yylineno + 1);
+ this.$ = new AssignmentNode($$[$0-2], new PLString('', yylineno + 1), yylineno + 1); 
 break;
 case 11:
- this.$ = new AssignmentNode($$[$0-3], new PLString($$[$0-1], yylineno + 1), yylineno + 1);
+ this.$ = new AssignmentNode($$[$0-3], new PLString($$[$0-1], yylineno + 1), yylineno + 1); 
 break;
 case 12:
- this.$ = new AssignmentNode($$[$0-2], $$[$0], yylineno + 1);
+ this.$ = new AssignmentNode($$[$0-2], $$[$0], yylineno + 1); 
 break;
 case 13:
- this.$ = new PLNumber(Number($$[$0]), yylineno + 1);
+ this.$ = new PLNumber(Number($$[$0]), yylineno + 1); 
 break;
 case 14:
- this.$ = new PLReference($$[$0], yylineno + 1);
+ this.$ = new PLReference($$[$0], yylineno + 1); 
 break;
 case 15:
- this.$ = new PLBoolean(Boolean($$[$0].toLowerCase()), yylineno + 1);
+ this.$ = new PLBoolean(Boolean($$[$0].toLowerCase()), yylineno + 1); 
 break;
 case 16:
- this.$ = new PLString($$[$0].slice(1, -1), yylineno + 1);
+ this.$ = new PLString($$[$0].slice(1, -1), yylineno + 1); 
 break;
 case 17:
- this.$ = new PLDict($$[$0], yylineno + 1);
+ this.$ = new PLDict($$[$0], yylineno + 1); 
 break;
 case 18:
- this.$ = new PLFileURL($$[$0], yylineno + 1);
+ this.$ = new PLFileURL($$[$0], yylineno + 1); 
 break;
 case 19:
- this.$ = new PLFileContent($$[$0], yylineno + 1);
+ this.$ = new PLFileContent($$[$0], yylineno + 1); 
 break;
 case 20:
- this.$ = new PLComponent($$[$0], yylineno + 1);
+ this.$ = new PLComponent($$[$0], yylineno + 1); 
 break;
 case 21:
- this.$ = new PLArray([], yylineno + 1);
+ this.$ = new PLArray([], yylineno + 1); 
 break;
 case 22:
- this.$ = new PLArray($$[$0-1], yylineno + 1);
+ this.$ = new PLArray($$[$0-1], yylineno + 1); 
 break;
 case 23:
- this.$ = new PLObject([], yylineno + 1);
+ this.$ = new PLObject([], yylineno + 1); 
 break;
 case 24:
- this.$ = new PLObject($$[$0-1], yylineno + 1);
+ this.$ = new PLObject($$[$0-1], yylineno + 1); 
 break;
 case 25:
- this.$ = $$[$0-1] + $$[$0];
+ this.$ = $$[$0-1] + $$[$0]; 
 break;
 case 28: case 30:
- this.$ = $$[$0-2].concat($$[$0]);
+ this.$ = $$[$0-2].concat($$[$0]); 
 break;
 case 31:
- this.$ = { key: $$[$0-2], value: $$[$0] };
+ this.$ = { key: $$[$0-2], value: $$[$0] }; 
 break;
 case 32:
- this.$ = new IncludeNode($$[$0], '', yylineno + 1);
+ this.$ = new IncludeNode($$[$0], '', yylineno + 1); 
 break;
 case 33:
- this.$ = new IncludeNode($$[$0-2], $$[$0], yylineno + 1);
+ this.$ = new IncludeNode($$[$0-2], $$[$0], yylineno + 1); 
 break;
 case 34:
- this.$ = new ExtendsNode($$[$0], yylineno + 1);
+ this.$ = new ExtendsNode($$[$0], yylineno + 1); 
 break;
         }
     }
@@ -319,8 +319,8 @@ export class PLLexer extends JisonLexer implements JisonLexerApi {
         super(yy);
     }
 
-    rules: RegExp[] = [/^(?:\s+)/,/^(?:\/\/.*)/,/^(?:\/\*([^*]|\*[^\/])*\*\/)/,/^(?:==)/,/^(?:=)/,/^(?:@copycontent\b)/,/^(?:@copyurl\b)/,/^(?:@include\b)/,/^(?:@extends\b)/,/^(?:as\b)/,/^(?:\/[^\s\n\,]+)/,/^(?:[+-]?\d+)/,/^(?:[,])/,/^(?:[:])/,/^(?:[\{])/,/^(?:[\}])/,/^(?:[\[])/,/^(?:[\]])/,/^(?:true|false|True|False\b)/,/^(?:wc-[a-zA-Z0-9_-]+)/,/^(?:[a-zA-Z_](\.?[a-zA-Z0-9_])*)/,/^(?:"([^\\\"]|\\.)*")/,/^(?:$)/,/^(?:\s==\s+)/,/^(?:\s+)/,/^(?:[^\s]*)/];
-    conditions: any = {"MULTI":{"rules":[22,23,24,25],"inclusive":true},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22],"inclusive":true}}
+    rules: RegExp[] = [/^(?:\s+)/,/^(?:\/\/.*)/,/^(?:\/\*([^*]|\*[^\/])*\*\/)/,/^(?:==)/,/^(?:=)/,/^(?:@copycontent\b)/,/^(?:@copyurl\b)/,/^(?:@include\b)/,/^(?:@extends\b)/,/^(?:as\b)/,/^(?:\/[^\s\n\,]+)/,/^(?:[+-]?\d+)/,/^(?:[,])/,/^(?:[:])/,/^(?:[\{])/,/^(?:[\}])/,/^(?:[\[])/,/^(?:[\]])/,/^(?:true|false|True|False\b)/,/^(?:wc-[a-zA-Z0-9_-]+)/,/^(?:[a-zA-Z_](\.?[a-zA-Z0-9_])*)/,/^(?:"([^\\\"]|\\.)*")/,/^(?:$)/,/^(?:[^\n]*\n)/];
+    conditions: any = {"MULTI":{"rules":[22,23],"inclusive":true},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22],"inclusive":true}}
     performAction (yy:any,yy_:any,$avoiding_name_collisions:any,YY_START:any): any {
           var YYSTATE=YY_START;
         switch($avoiding_name_collisions) {
@@ -330,7 +330,7 @@ export class PLLexer extends JisonLexer implements JisonLexerApi {
       break;
     case 2:return 8
       break;
-    case 3: this.begin('MULTI'); return 13;
+    case 3: this.begin('MULTI'); console.log('BEGIN', yy_.yytext); return 13; 
       break;
     case 4:return 13
       break;
@@ -370,11 +370,13 @@ export class PLLexer extends JisonLexer implements JisonLexerApi {
       break;
     case 22:return 5
       break;
-    case 23:  this.popState(); return 13
-      break;
-    case 24:  return 31
-      break;
-    case 25:  return 31
+    case 23:
+                          if (yy_.yytext.trim() === '==') {
+                            this.popState();
+                            return 13;
+                          }
+                          return 31
+                         
       break;
         }
     }
