@@ -9,6 +9,7 @@ import { NgeDocProviders } from './vendors/nge-doc/nge-doc';
 import { NgeMarkdownProviders } from './vendors/nge-markdown/nge-markdown';
 import { NgeMonacoImports } from './vendors/nge-monaco/nge-monaco';
 import { RouterModule } from '@angular/router';
+import { NgeIconProviders } from './vendors/nge-icon/nge-icon';
 
 
 @NgModule({
@@ -26,6 +27,7 @@ import { RouterModule } from '@angular/router';
     AuthProviders,
     NgeDocProviders,
     NgZorroProviders,
+    NgeIconProviders,
     NgeMarkdownProviders
   ]
 })

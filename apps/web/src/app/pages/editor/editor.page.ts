@@ -19,6 +19,7 @@ import { PlaEditorContributionModule } from './contributions/pla-editor';
 import { PlfEditorContributionModule } from './contributions/plf-editor';
 
 import { ResourceFileSystemProvider } from './contributions/file-system';
+import { PlPreviewContributionModule } from './contributions/pl-preview.contribution';
 
 @Component({
   standalone: true,
@@ -40,6 +41,7 @@ import { ResourceFileSystemProvider } from './contributions/file-system';
 
     PlfEditorContributionModule,
     PlaEditorContributionModule,
+    PlPreviewContributionModule,
   ],
   providers: [
     ResourceFileSystemProvider,

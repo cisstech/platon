@@ -5,6 +5,7 @@ import { CLS_REQ } from 'nestjs-cls';
 import { DataSource, EntitySubscriberInterface, InsertEvent, UpdateEvent } from 'typeorm';
 import { ResourceEventEntity } from './events/event.entity';
 import { ResourceEntity } from './resource.entity';
+import { ResourceWatcherEntity } from './watchers';
 
 @Injectable()
 export class ResourceSubscriber implements EntitySubscriberInterface<ResourceEntity> {
@@ -21,6 +22,13 @@ export class ResourceSubscriber implements EntitySubscriberInterface<ResourceEnt
   }
 
   async afterInsert(event: InsertEvent<ResourceEntity>): Promise<void> {
+    await event.manager.save(
+      event.manager.create(ResourceWatcherEntity, {
+        resourceId: event.entity.id,
+        userId: event.entity.ownerId,
+      })
+    );
+
     if (event.entity.parentId) {
       await event.manager.save(
         event.manager.create(ResourceEventEntity, {
