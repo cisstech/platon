@@ -59,7 +59,7 @@ if [ "$OS" = "Darwin" ]; then # Mac OS
   print_status "openssl" "OK !" "$Green"
 else # Linux
   if ! command_exists openssl; then
-    print_status "ERROR" "brew should be installed. visit https://cloudwafer.com/blog/installing-openssl-on-ubuntu-16-04-18-04/" "$Red"
+    print_status "ERROR" "openssl should be installed. visit https://cloudwafer.com/blog/installing-openssl-on-ubuntu-16-04-18-04/" "$Red"
     exit 1
   fi
   print_status "openssl" "OK !" "$Green"

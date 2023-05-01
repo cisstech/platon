@@ -6,3 +6,7 @@ yarn-error.log
 coverage
 tmp
 dist
+.angular
+coverage
+.env
+yarn-error.log

@@ -360,9 +360,6 @@ The `bin` folder contains a collection of scripts to perform various tasks relat
   - `postgres.sh`: Connects to the Postgres container.
   - `redis.sh`: Connects to the Redis container.
 
-- `/bin/start`: This script is used to start the nestjs api in prod mode.
-  - `api.sh`: Waits for postgres to run migrations then starts nestjs api
-
 #### Testing
 
 The test script in the `package.json` file allows developers to run tests for the Platon project. Tests help ensure that the code is working correctly and is of high quality. The tests are a part of the Continuous integration pipeline thanks to Github Actions and are runned before any merge to the master branch.
@@ -392,12 +389,6 @@ These scripts will analyze the codebase and provide a report of any linting issu
   git clone https://github.com/cisstech/platon.git
   ```
 
-- **Install dependencies**: Navigate to the project's root directory and run the following command to install the required dependencies:
-
-  ```sh
-  yarn
-  ```
-
 - **Set up the environment**: After cloning and installing the repository, run the `./bin/install.sh` script to set up the necessary environment variables. This script generates an `.env` and `./tools/database/init.json` files with the default values from the `./templates` directory, which you can customize.
 
   ```sh
@@ -414,19 +405,19 @@ These scripts will analyze the codebase and provide a report of any linting issu
 
 If you plan to use a custom ssl files instead, update the docker-compose and the nginx conf by defining the path to your files.
 
-- **Start the Docker services** with --prod argument.
+- **Start the Docker services** with --prod or -p argument. You can use -d or --detach argument to use docker detach mode.
 
   ```sh
   ./bin/docker/up.sh --prod
   ```
 
-- This script will build the docker images for backend services and start containers. If you wan't to use let's encrypt, you have to answer with `Y` at the question `Would you like to use letsencrypt for your domain? (y/N)`.
+  This script will build the docker images for backend services and start containers. If you wan't to use let's encrypt, you have to answer with `Y` at the question `Would you like to use letsencrypt for your domain? (y/N)`.
 
-- **Initialize the database inside the api service**: Set up the PostgreSQL database by running the init-db.sh script inside the `platon_api` container.
+- **Initialize the database**: Set up the PostgreSQL database by running the migrations and `init-db.sh` script if needed.
 
   ```sh
-  ./bin/shell/api.sh
-  ./bin/init-db.sh
+  DB_HOST=localhost ./bin/migrations/run.sh
+  DB_HOST=localhost ./bin/init-db.sh
   ```
 
 #### Cloud
