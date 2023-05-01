@@ -1,4 +1,4 @@
-# PLaTon - Plateforme for Learning and Teaching Online
+# PLaTon - Plateform for Learning and Teaching Online
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/cisstech/platon/main/shared/assets/images/logo/platon.svg" alt="Logo PLaTon" width="120px" />
