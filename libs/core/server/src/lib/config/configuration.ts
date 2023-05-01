@@ -21,6 +21,9 @@ export interface Configuration {
   graphql: {
     playground: boolean,
   },
+  sandbox: {
+    url: string,
+  }
 }
 
 export const configuration = (): Configuration => ({
@@ -44,5 +47,8 @@ export const configuration = (): Configuration => ({
   },
   graphql: {
     playground: Boolean(process.env['GRAPHQL_PLAYGROUND']),
+  },
+  sandbox: {
+    url: process.env['SANDBOX_URL'] as string,
   },
 })

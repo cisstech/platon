@@ -192,6 +192,7 @@ export class PlayerService {
     variables.feedback = undefined;
 
     if (variables.builder) {
+      variables.seed = (Date.now()) % 100
       const response = await this.sandboxService.run({ envid, variables }, variables.builder);
       exerciseSession.variables = response.variables;
     }
@@ -250,7 +251,10 @@ export class PlayerService {
     const envid = exerciseSession.envid;
     let variables = exerciseSession.variables as ExerciseVariables;
 
-    const output = await this.sandboxService.run({ envid, variables }, variables.grader);
+    const output = await this.sandboxService.run({
+      envid,
+      variables: { ...variables, feedback: { } }
+    }, variables.grader);
     const grade = Number.parseInt(output.variables.grade) ?? -1;
 
     variables = output.variables as ExerciseVariables;
@@ -392,6 +396,9 @@ export class PlayerService {
         parentId,
         activity,
       } = args;
+
+      source.variables.seed = (Number.parseInt(source.variables.seed + '') || Date.now()) % 100
+
       const { envid, variables } = await this.sandboxService.build(source);
 
       const session = await this.sessionService.create({

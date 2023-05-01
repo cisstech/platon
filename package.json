@@ -92,6 +92,7 @@
     "@types/passport-anonymous": "^1.0.3",
     "@types/passport-jwt": "^3.0.8",
     "@types/passport-local": "^1.0.35",
+    "@types/tar-stream": "^2.2.2",
     "@types/uuid": "^9.0.0",
     "@types/xml2js": "^0.4.11",
     "@typescript-eslint/eslint-plugin": "^5.36.1",
@@ -153,6 +154,7 @@
     "@editorjs/underline": "^1.1.0",
     "@golevelup/nestjs-discovery": "^3.0.0",
     "@nestjs/apollo": "^11.0.4",
+    "@nestjs/axios": "^2.0.0",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.0.0",
@@ -173,6 +175,7 @@
     "angular-split": "^14.1.0",
     "animate.css": "^4.1.1",
     "apollo-angular": "^4.2.1",
+    "axios": "^1.4.0",
     "bcrypt": "^5.1.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
@@ -221,6 +224,8 @@
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.5.2",
     "simple-git": "^3.16.0",
+    "tar": "^6.1.13",
+    "tar-stream": "^3.0.0",
     "tslib": "^2.3.0",
     "typeorm": "^0.3.11",
     "typescript-optional": "^3.0.0-alpha.3",
@@ -228,6 +233,7 @@
     "viz.js": "^2.1.2",
     "vm2": "^3.9.14",
     "xml2js": "^0.5.0",
+    "zlib": "^1.0.5",
     "zone.js": "~0.11.4"
   },
   "config": {
@@ -246,4 +252,3 @@
     ]
   }
 }
-

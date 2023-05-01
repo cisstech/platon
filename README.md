@@ -287,6 +287,7 @@ This document describes the environnement configuration for the application, inc
 | JWT_ACCESS_TOKEN_LIFETIME | api | Access token lifetime for JWT authentication. | 7d |
 | JWT_REFRESH_TOKEN_LIFETIME | api | Refresh token lifetime for JWT authentication. | 7d |
 | GRAPHQL_PLAYGROUND | api | Enable/disable GraphQL Playground. | true |
+| SANDBOX_URL | api | Defines python sandbox url. | <http://localhost:7000> |
 | SERVER_NAME | nginx | Defines nginx server name. | localhost |
 
 ### Codebase Structure
@@ -327,7 +328,7 @@ This project is built using a variety of key libraries and frameworks that provi
 - **[Angular](https://angular.io/)**: Angular is a platform for building web applications with a declarative approach to building UI components. In this project, Angular is used to create the frontend application, which communicates with the NestJS API to provide a seamless user experience.
 In the development mode, the NestJS and Angular applications run on the host machine, while the Postgres, Redis, and other services run inside Docker containers. This hybrid approach allows for easier debugging and faster development, while still leveraging the benefits of containerization for the backend services.
 
-- **[Jison](https://github.com/zaach/jison)**: Jison is a JavaScript parser generator inspired by Bison and Yacc. In this project, Jison is used to create custom parsers for specific domain languages or complex expressions, enabling advanced features and providing more flexibility in user interactions.
+- **[Jison](https://gerhobbelt.github.io/jison/docs/)**: Jison is a JavaScript parser generator inspired by Bison and Yacc. In this project, Jison is used to create custom parsers for specific domain languages or complex expressions, enabling advanced features and providing more flexibility in user interactions.
 
 ### Development Workflow
 

@@ -330,7 +330,7 @@ export class PLLexer extends JisonLexer implements JisonLexerApi {
       break;
     case 2:return 8
       break;
-    case 3: this.begin('MULTI'); console.log('BEGIN', yy_.yytext); return 13; 
+    case 3: this.begin('MULTI'); return 13; 
       break;
     case 4:return 13
       break;
