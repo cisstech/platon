@@ -61,8 +61,6 @@ WORKDIR /src
 COPY --chown=node:node --from=build /src/node_modules ./node_modules
 COPY --chown=node:node --from=build /src/dist ./dist
 COPY --chown=node:node --from=build /src/schema.gql ./schema.gql
-COPY --chown=node:node resources ./resources
 COPY --chown=node:node templates ./templates
-COPY --chown=node:node uploads ./uploads
 
 USER node

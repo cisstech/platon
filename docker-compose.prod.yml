@@ -51,6 +51,7 @@ services:
       - 4201
     volumes:
       - dist:/src/dist
+      - ./envs:/src/envs
       - ./uploads:/src/uploads
       - ./resources:/src/resources
     env_file:

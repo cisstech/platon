@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Injectable } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import { NodeVM } from 'vm2';
+
+import { Injectable } from '@nestjs/common';
 import { RegisterSandbox, Sandbox, SandboxError, SandboxInput, SandboxOutput } from './sandbox';
 
-const ENVS_DIR = '/src/envs';
+const ENVS_DIR = path.join(process.cwd(), 'envs');
 
 const builtinGlobales = [
   'global',

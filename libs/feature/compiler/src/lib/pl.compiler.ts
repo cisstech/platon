@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { deepMerge } from "@platon/core/common";
-import { AssignmentNode, CommentNode, ExtendsNode, IncludeNode, PLFileContent, PLFileURL, PLNode, PLParser, PLReference, PLSourceFile, PLVisitor } from "./pl.parser";
+import { AssignmentNode, CommentNode, ExtendsNode, IncludeNode, PLDict, PLFileContent, PLFileURL, PLNode, PLParser, PLReference, PLSourceFile, PLVisitor } from "./pl.parser";
 import { v4 as uuidv4 } from 'uuid'
 import { ActivityVariables, ExerciseVariables } from "./pl.variables";
 
@@ -63,10 +63,35 @@ export class PLCompiler implements PLVisitor {
     return this.source;
   }
 
-  async visitExtends(node: ExtendsNode): Promise<void> {
+  async visitExtends(node: ExtendsNode | PLDict, merge: boolean): Promise<PLSourceFile> {
     this.lineno = node.lineno;
-    // TODO implements extends
-    return Promise.resolve();
+    const { resource, version, relpath } = this.parsePath('path' in node ? node.path : node.value);
+
+    const content = await this.resolver.resolveContent(resource, version, relpath);
+    const compiler = new PLCompiler({
+      resource,
+      version,
+      main: relpath,
+      resolver: this.resolver
+    });
+
+    const source = await compiler.compileExercise(content);
+
+    this.source.variables = deepMerge(this.source.variables, source.variables);
+    this.source.errors = this.source.errors.concat(source.errors);
+    this.source.warnings = this.source.warnings.concat(source.warnings);
+
+    source.dependencies.forEach(a => {
+      if (!this.source.dependencies.find(b => b.abspath === a.abspath)) {
+        this.source.dependencies.push(a);
+      }
+    });
+
+    if (merge) {
+      this.source.variables = deepMerge(this.source.variables, source.variables);
+    }
+
+    return source;
   }
 
   async visitInclude(node: IncludeNode): Promise<void> {

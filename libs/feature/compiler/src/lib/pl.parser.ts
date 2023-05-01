@@ -84,7 +84,10 @@ export class PLDict implements PLValue {
     readonly value: string,
     readonly lineno: number,
   ) {}
-  toJSON() { return { '__pldict': this.value }; }
+  async toJSON(visitor: PLVisitor) {
+    const source = await visitor.visitExtends(this, false);
+    return source.variables
+  }
 }
 
 export class PLFileURL implements PLValue {
@@ -122,8 +125,8 @@ export class ExtendsNode implements PLNode {
     readonly path: string,
     readonly lineno: number
   ) {}
-  accept(visitor: PLVisitor): Promise<void> {
-    return visitor.visitExtends(this);
+  async accept(visitor: PLVisitor): Promise<void> {
+    await visitor.visitExtends(this, true);
   }
 }
 
@@ -192,7 +195,7 @@ export interface PLSourceFile {
 
 export interface PLVisitor {
   visit(nodes: PLNode[]): Promise<PLSourceFile>;
-  visitExtends(node: ExtendsNode): Promise<void>;
+  visitExtends(node: ExtendsNode | PLDict, merge: boolean): Promise<PLSourceFile>;
   visitInclude(node: IncludeNode): Promise<void>;
   visitComment(node: CommentNode): Promise<void>;
   visitAssignment(node: AssignmentNode): Promise<void>;
