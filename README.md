@@ -154,6 +154,7 @@ v16.14.2
 - **Run the frontend server**: In a separate terminal, navigate to the project's root directory and start the frontend server by running the following script:
 
   ```sh
+  yarn graphql:generate
   yarn serve:web 
   ```
 
