@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { deepMerge } from "@platon/core/common";
+import { deepMerge, resolveFileReference } from "@platon/core/common";
+import { v4 as uuidv4 } from 'uuid';
 import { AssignmentNode, CommentNode, ExtendsNode, IncludeNode, PLDict, PLFileContent, PLFileURL, PLNode, PLParser, PLReference, PLSourceFile, PLVisitor } from "./pl.parser";
-import { v4 as uuidv4 } from 'uuid'
 import { ActivityVariables, ExerciseVariables } from "./pl.variables";
 
 /**
@@ -65,7 +65,7 @@ export class PLCompiler implements PLVisitor {
 
   async visitExtends(node: ExtendsNode | PLDict, merge: boolean): Promise<PLSourceFile> {
     this.lineno = node.lineno;
-    const { resource, version, relpath } = this.parsePath('path' in node ? node.path : node.value);
+    const { resource, version, relpath } = this.resolveReference('path' in node ? node.path : node.value);
 
     const content = await this.resolver.resolveContent(resource, version, relpath);
     const compiler = new PLCompiler({
@@ -97,7 +97,7 @@ export class PLCompiler implements PLVisitor {
   async visitInclude(node: IncludeNode): Promise<void> {
     this.lineno = node.lineno;
 
-    const { resource, version, relpath, abspath } = this.parsePath(node.path);
+    const { resource, version, relpath, abspath } = this.resolveReference(node.path);
     const content = await this.resolver.resolveContent(resource, version, relpath);
 
     this.source.dependencies.push({
@@ -146,7 +146,9 @@ export class PLCompiler implements PLVisitor {
 
 
   async compileExercise(content: string): Promise<PLSourceFile> {
-    return this.visit(new PLParser().parse(content));
+    const nodes = await new PLParser().parse(content);
+    const source = await this.visit(nodes);
+    return source;
   }
 
   async compileActivity(content: string): Promise<PLSourceFile> {
@@ -279,24 +281,12 @@ export class PLCompiler implements PLVisitor {
     return Promise.resolve(content);
   }
 
-  private parsePath(path: string) {
-    const parts = path.split('/').filter(e => !!e.trim());
-    let [resource, version] = parts[0].split(':');
-    path = parts.slice(1).join('/');
-
-    resource = resource === 'relative' ? this.source.resource : resource;
-    version = resource === 'relative' ? this.source.version : version || 'latest';
-
-    return {
-      resource,
-      version,
-      relpath: path,
-      abspath: `${resource}:${version}/${path}`
-    };
+  private resolveReference(path: string) {
+    return resolveFileReference(path, this.source);
   }
 
   private async resolveUrl(path: string) {
-    const { resource, version, relpath, abspath } = this.parsePath(path);
+    const { resource, version, relpath, abspath } = this.resolveReference(path);
     const cache = this.urls.get(abspath);
     if (cache) {
       return cache;
@@ -307,7 +297,7 @@ export class PLCompiler implements PLVisitor {
   }
 
   private async resolveContent(path: string) {
-    const { resource, version, relpath, abspath } = this.parsePath(path);
+    const { resource, version, relpath, abspath } = this.resolveReference(path);
     const cache = this.contents.get(abspath);
     if (cache) {
       return cache;

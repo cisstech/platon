@@ -60,3 +60,16 @@ nz-alert {
   color: white !important;
   background-color: #ff4d4f !important;
 }
+
+@media (max-width: 720px) {
+  :host::ng-deep {
+    button {
+      .mat-icon {
+        margin: 0;
+      }
+      .mdc-button__label {
+        display: none;
+      }
+    }
+  }
+}

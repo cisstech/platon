@@ -209,6 +209,7 @@ export interface PLVisitor {
 %%
 
 <INITIAL>\s+                                    /* ignore whitespace */
+<INITIAL>\#.*                                   return 'COMMENT'
 <INITIAL>\/\/.*                                 return 'COMMENT'
 <INITIAL>\/\*([^*]|\*[^\/])*\*\/                return 'COMMENT'
 
@@ -220,7 +221,7 @@ export interface PLVisitor {
 <INITIAL>'@extends'                             return 'EXTENDS'
 <INITIAL>'as'                                   return 'AS'
 <INITIAL>\/[^\s\n\,]+                           return 'PATH' // COMMA AT THE END ALLOW TO INCLUDES PATH INSIDE ARRAY
-<INITIAL>[+-]?\d+                               return 'NUMBER'
+<INITIAL>[+-]?\d+((_|\.)+\d+)*                  return 'NUMBER'
 <INITIAL>[,]                                    return 'COMMA'
 <INITIAL>[:]                                    return 'COLON'
 <INITIAL>[\{]                                   return 'LBRACE'
@@ -282,7 +283,9 @@ statement
     ;
 
 assignment_statement
-    : IDENTIFIER EQUALS EQUALS
+    : IDENTIFIER EQUALS COMMENT EQUALS
+        { $$ = new AssignmentNode($1, new PLString('', yylineno + 1), yylineno + 1); }
+    | IDENTIFIER EQUALS EQUALS
         { $$ = new AssignmentNode($1, new PLString('', yylineno + 1), yylineno + 1); }
     | IDENTIFIER EQUALS value_multi EQUALS
         { $$ = new AssignmentNode($1, new PLString($3, yylineno + 1), yylineno + 1); }
@@ -291,8 +294,10 @@ assignment_statement
     ;
 
 value
-    : NUMBER
-      { $$ = new PLNumber(Number($1), yylineno + 1); }
+    : COMMENT value
+      { $$ = $2; }
+    | NUMBER
+      { $$ = new PLNumber(Number($1.replace(/_/g, '')), yylineno + 1); }
     | IDENTIFIER
       { $$ = new PLReference($1, yylineno + 1); }
     | BOOLEAN
@@ -319,8 +324,16 @@ value
 
 value_multi
     : value_multi ANY
-      { $$ = $1 + $2; }
-    | ANY
+      {
+        $$ = $1 + $2;
+      }
+    | ANY {
+        if ($1.trim().startsWith('#!lang=')) {
+          $$ = '';
+        } else {
+          $$ = $1;
+        }
+    }
     ;
 
 elements

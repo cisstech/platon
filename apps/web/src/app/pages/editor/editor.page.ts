@@ -89,7 +89,7 @@ export class EditorPage implements OnInit, OnDestroy {
         ...ancestors.map(ancestor => ({
           name: `@${ancestor.code}#latest`,
           uri: this.resourceFileSystemProvider.buildUri(
-            ancestor.id
+            ancestor.code || ancestor.id,
           )
         }))
       );

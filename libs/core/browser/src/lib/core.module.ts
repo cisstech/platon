@@ -7,7 +7,7 @@ import { HttpParamEncoderInterceptor } from './http/http-param-encoder.intercept
 import { NgZorroProviders } from './vendors/ng-zorro/ng-zorro.';
 import { NgeDocProviders } from './vendors/nge-doc/nge-doc';
 import { NgeMarkdownProviders } from './vendors/nge-markdown/nge-markdown';
-import { NgeMonacoImports } from './vendors/nge-monaco/nge-monaco';
+import { NgeMonacoImports, NgeMonacoProviders } from './vendors/nge-monaco/nge-monaco';
 import { RouterModule } from '@angular/router';
 import { NgeIconProviders } from './vendors/nge-icon/nge-icon';
 
@@ -28,6 +28,7 @@ import { NgeIconProviders } from './vendors/nge-icon/nge-icon';
     NgeDocProviders,
     NgZorroProviders,
     NgeIconProviders,
+    NgeMonacoProviders,
     NgeMarkdownProviders
   ]
 })

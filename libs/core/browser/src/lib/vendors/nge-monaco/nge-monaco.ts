@@ -1,4 +1,6 @@
-import { NgeMonacoModule, NGE_MONACO_THEMES } from '@cisstech/nge/monaco';
+import { Provider } from '@angular/core';
+import { NgeMonacoModule, NGE_MONACO_CONTRIBUTION, NGE_MONACO_THEMES } from '@cisstech/nge/monaco';
+import { PlLanguageContribution } from './contributions/pl-lang.contribution';
 
 export const NgeMonacoImports = [
   NgeMonacoModule.forRoot({
@@ -11,5 +13,13 @@ export const NgeMonacoImports = [
     options: {
       automaticLayout: true
     }
-  })
+  }),
 ];
+
+export const NgeMonacoProviders: Provider = [
+  {
+    provide: NGE_MONACO_CONTRIBUTION,
+    multi: true,
+    useClass: PlLanguageContribution,
+  },
+]

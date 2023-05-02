@@ -21,6 +21,7 @@ import { WebComponentHooks } from '@platon/feature/webcomponent';
 
 import { ExerciseTheory } from '@platon/feature/compiler';
 import { UiModalDrawerComponent } from '@platon/shared/ui';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { PlayerService } from '../../api/player.service';
 import { PlayerCommentsComponent } from '../player-comments/player-comments.component';
 
@@ -41,6 +42,7 @@ import { PlayerCommentsComponent } from '../player-comments/player-comments.comp
     MatExpansionModule,
 
     NzAlertModule,
+    NzToolTipModule,
 
     DialogModule,
     SafePipeModule,

@@ -53,6 +53,7 @@
   <mat-card-actions>
     <ng-container *ngIf="players.length">
       <button
+        nz-tooltip="Tentative précédente"
         *ngIf="index > 0"
         mat-raised-button
         (click)="previousAttempt()">
@@ -60,6 +61,7 @@
         Tentative précédente
       </button>
       <button
+        nz-tooltip="Tentative suivante"
         *ngIf="index < players.length - 1"
         mat-raised-button
         (click)="nextAttempt()">
@@ -68,6 +70,7 @@
       </button>
     </ng-container>
     <button
+      nz-tooltip="Valider"
       *ngIf="!reviewMode"
       mat-raised-button
       color="primary"
@@ -78,6 +81,7 @@
       Valider <ng-container *ngIf="player.remainingAttempts">({{player.remainingAttempts}})</ng-container>
     </button>
     <button
+      nz-tooltip="Essayez une autre question du genre"
       *ngIf="!reviewMode && !!player.settings?.actions?.reroll"
       mat-raised-button
       (click)="reroll()">
@@ -86,6 +90,7 @@
     </button>
     <div class="spacer"></div>
     <button
+      nz-tooltip="Commentaires"
       mat-button
       *ngIf="player.answerId"
       (click)="drawer.open()">
@@ -100,6 +105,7 @@
       Théorie
     </button>
     <button
+      nz-tooltip="Solution"
       *ngIf="player.settings?.actions?.solution && !player.solution"
       mat-button
       [disabled]="disabled"
@@ -108,6 +114,7 @@
       Solution
     </button>
     <button
+      nz-tooltip="Aide"
       mat-button
       [disabled]="disabled"
       *ngIf="player.settings?.actions?.hints"
