@@ -53,14 +53,26 @@ export const PlMonarchLanguage = (sandbox: 'py' | 'js' = 'js'): monaco.languages
 
   /** Recognizes octal integer literals, optionally containing underscores for better readability. */
   octaldigits: /[0-7]+(_+[0-7]+)*/,
+  /** Recognizes binary integer literals, optionally containing underscores for better readability. */
   binarydigits: /[0-1]+(_+[0-1]+)*/,
+  /** Recognizes hexadecimal integer literals, optionally containing underscores for better readability. */
   hexdigits: /[[0-9a-fA-F]+(_+[0-9a-fA-F]+)*/,
 
+  /**
+   * The tokenizer defines a set of rules to recognize tokens in the code and apply appropriate highlighting to them.
+   * The rules are organized into different states, each with its own set of rules.
+   */
   tokenizer: {
+    /**
+     * The default state of the tokenizer, which is used for the entire code.
+     */
     root: [
       [/[{}]/, 'delimiter.bracket'],
       { include: '@common' },
     ],
+    /**
+     * A common set of rules used by other states.
+     */
     common: [
       { include: '@whitespace' },
 
@@ -115,13 +127,14 @@ export const PlMonarchLanguage = (sandbox: 'py' | 'js' = 'js'): monaco.languages
       [/"/, 'string', '@string'],
     ],
 
+    /** A state used to recognize string literals. */
     string: [
       [/[^\\"]+/, 'string'],
       [/@escapes/, 'string.escape'],
       [/\\./, 'string.escape.invalid'],
       [/"/, 'string', '@pop']
     ],
-
+    /** A state used to recognize comments. */
     comment: [
       [/[^/*]+/, 'comment'],
       [/\/\*/, 'comment', '@push'], // nested comment
@@ -129,12 +142,14 @@ export const PlMonarchLanguage = (sandbox: 'py' | 'js' = 'js'): monaco.languages
       [/[/*]/, 'comment']
     ],
 
+    /** A state used to recognize whitespace and other non-visible characters. */
     whitespace: [
       [/[ \t\r\n]+/, 'white'],
       [/\/\*/, 'comment', '@comment'],
       [/(#|\/\/).*$/, 'comment'],
     ],
 
+    /** A state used to recognize code blocks. */
     block: [
       [
         /^==\s*$/,
@@ -146,6 +161,7 @@ export const PlMonarchLanguage = (sandbox: 'py' | 'js' = 'js'): monaco.languages
       ]
     ],
 
+    /** A state used to recognize code blocks with embedded code in a specific language. */
     blockcode: [
       [
         /==(?=@language)/,
@@ -163,6 +179,7 @@ export const PlMonarchLanguage = (sandbox: 'py' | 'js' = 'js'): monaco.languages
         }
       ]
     ],
+    /** A state used to recognize custom code blocks with embedded code in a specific language. */
     blockcustom: [
       [
         /@language/,
