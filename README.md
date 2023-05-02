@@ -146,7 +146,7 @@ v16.14.2
 - **Run the backend server**: Start the backend server by running the following script:
 
   ```sh
-  yarn api:serve
+  yarn serve:api
   ```
 
   This script will start the backend server, which handles all API requests, on <http://localhost:4201>
@@ -154,7 +154,7 @@ v16.14.2
 - **Run the frontend server**: In a separate terminal, navigate to the project's root directory and start the frontend server by running the following script:
 
   ```sh
-  yarn web:serve 
+  yarn serve:web 
   ```
 
   This script will start the frontend server, which serves the user interface, on <http://localhost:4200>. You can specify `--hmr` option to enable angular [Hot Module Replacement feature](https://medium.com/the-crazy-coder/watch-out-when-using-hmr-with-angular-b28a4dc7e19a)
@@ -341,7 +341,7 @@ The `bin` folder contains a collection of scripts to perform various tasks relat
   - up.sh: Starts the Docker containers. Use --prod to launch the containers with the docker-compose.prod.yml configuration and -d to run the containers in the background.
 
 - `/bin/graphql`: These scripts are used to generate GraphQL types based on the platform's schema.
-  - generate.sh: Generates GraphQL types in the .graphql/types.ts folder from the schema.gql file.
+  - build.sh: Generates GraphQL types in the .graphql/types.ts folder from the schema.gql file.
 
 - `/bin/migration`: These scripts are used to manage TypeORM migrations.
   - `generate.sh`: Generates migrations based on changes in entities. Entities can be placed anywhere and must have the `.entity.ts` extension.
@@ -353,7 +353,7 @@ The `bin` folder contains a collection of scripts to perform various tasks relat
   - `revert.sh`: Reverts the last migration.
 
 - `/bin/parser`: This script is used to generate the Jison parser.
-  - `generate.sh`: Generates the Jison parser from the `libs/feature/compiler/src/lib/pl.jison` file.
+  - `build.sh`: Generates the Jison parser from the `libs/feature/compiler/src/lib/pl.jison` file.
 
 - `/bin/shell`: These scripts are used to connect to Docker containers from the terminal.
   - `api.sh`: Connects to the API container (available only in prod mode).
