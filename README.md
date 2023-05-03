@@ -139,7 +139,7 @@ v16.14.2
 
   ```sh
 
-  ./bin/migrations/run.sh
+  ./bin/migration/run.sh
   ./bin/init-db.sh
   ```
 
@@ -165,7 +165,7 @@ v16.14.2
 At this point, you may see an error in your browser like the following one:
 
 <p align="left">
-    <img src="./.github/images/ssl-warning.png" alt="SSL warnings" width="620px" />
+  <img src="./.github/images/ssl-warning.png" alt="SSL warnings" width="620px" />
 </p>
 
 The message and the way you will fix it  might be different depending on the browser.
@@ -418,7 +418,7 @@ If you plan to use a custom ssl files instead, update the docker-compose and the
 - **Initialize the database**: Set up the PostgreSQL database by running the migrations and `init-db.sh` script if needed.
 
   ```sh
-  DB_HOST=localhost ./bin/migrations/run.sh
+  DB_HOST=localhost ./bin/migration/run.sh
   DB_HOST=localhost ./bin/init-db.sh
   ```
 
