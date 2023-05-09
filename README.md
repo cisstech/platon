@@ -179,7 +179,7 @@ The message and the way you will fix it  might be different depending on the bro
 Using your keyboard, type `thisisunsafe`. This will add the website to a safe list, where you should not be prompted again.
 Strange steps, but it surely works!
 
-- On **Safari** for mac, you should add `./docker/nginx/certs/localhost.crt` the Keychain app, then approve the `localhost` certificate by double click on it.
+- On **Safari** for mac, you should add `./docker/nginx/ssl/certs/localhost.crt` the Keychain app, then approve the `localhost` certificate by double click on it.
 
 <p align="left">
     <img src="./.github/images/keychain.png" alt="Keychain app" width="620px" />
