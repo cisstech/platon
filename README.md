@@ -91,6 +91,7 @@ v16.14.2
 
 > nvm --version
 0.37.2
+
 ```
 
 ### Recommendations
