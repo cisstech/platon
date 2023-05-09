@@ -119,7 +119,7 @@ v16.14.2
   yarn
   ```
 
-- **Set up the environment**: After cloning and installing the repository, run the `./bin/install.sh` script to set up the necessary environment variables. This script generates an `.env` and `./tools/database/init.json` files with the default values from the `./templates` directory, which you can customize according to your development or production environment. Also a self signed ssl certificate will be generated into `.docker/nginx/certs` to run the project in `https` during develop. Please note that these generated files are not kept in the Git history.
+- **Set up the environment**: After cloning and installing the repository, run the `./bin/install.sh` script to set up the necessary environment variables. This script generates an `.env` and `./tools/database/init.json` files with the default values from the `./templates` directory, which you can customize according to your development or production environment. Also a self signed ssl certificate will be generated into `.docker/nginx/ssl/certs` to run the project in `https` during develop. Please note that these generated files are not kept in the Git history.
 
   ```sh
   ./bin/install.sh
