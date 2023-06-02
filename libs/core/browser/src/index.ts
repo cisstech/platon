@@ -4,4 +4,4 @@ export * from './lib/core.service';
 export * from './lib/dialog';
 export * from './lib/services';
 export * from './lib/tags';
-
+export * from './lib/graphql';

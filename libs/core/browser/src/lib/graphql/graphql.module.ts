@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { ApolloModule, APOLLO_OPTIONS } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 import { TokenService } from '../auth';
-import { createDefaultApollo } from './graphql.config';
+import { GRAPHQL_ENV, createDefaultApollo } from './graphql.config';
 
 @NgModule({
   imports: [ApolloModule],
@@ -12,7 +12,7 @@ import { createDefaultApollo } from './graphql.config';
     {
       provide: APOLLO_OPTIONS,
       useFactory: createDefaultApollo,
-      deps: [HttpLink, TokenService],
+      deps: [HttpLink, TokenService, GRAPHQL_ENV],
     },
   ],
 })
