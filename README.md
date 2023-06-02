@@ -1,4 +1,4 @@
-# PLaTon - Plateform for Learning and Teaching Online
+# PLaTon - Platform for Learning and Teaching Online
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/cisstech/platon/main/shared/assets/images/logo/platon.svg" alt="Logo PLaTon" width="120px" />
@@ -119,7 +119,7 @@ v16.14.2
   yarn
   ```
 
-- **Set up the environment**: After cloning and installing the repository, run the `./bin/install.sh` script to set up the necessary environment variables. This script generates an `.env` and `./tools/database/init.json` files with the default values from the `./templates` directory, which you can customize according to your development or production environment. Also a self signed ssl certificate will be generated into `.docker/nginx/certs` to run the project in `https` during develop. Please note that these generated files are not kept in the Git history.
+- **Set up the environment**: After cloning and installing the repository, run the `./bin/install.sh` script to set up the necessary environment variables. This script generates an `.env` and `./tools/database/init.json` files with the default values from the `./templates` directory, which you can customize according to your development or production environment. Also a self signed ssl certificate will be generated into `.docker/nginx/ssl/certs` to run the project in `https` during develop. Please note that these generated files are not kept in the Git history.
 
   ```sh
   ./bin/install.sh
@@ -179,7 +179,7 @@ The message and the way you will fix it  might be different depending on the bro
 Using your keyboard, type `thisisunsafe`. This will add the website to a safe list, where you should not be prompted again.
 Strange steps, but it surely works!
 
-- On **Safari** for mac, you should add `./docker/nginx/certs/localhost.crt` the Keychain app, then approve the `localhost` certificate by double click on it.
+- On **Safari** for mac, you should add `./docker/nginx/ssl/certs/localhost.crt` the Keychain app, then approve the `localhost` certificate by double click on it.
 
 <p align="left">
     <img src="./.github/images/keychain.png" alt="Keychain app" width="620px" />
