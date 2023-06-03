@@ -1,5 +1,3 @@
-author = "Mamadou CISSE"
-
 input = :wc-input-box
 input.type = "number"
 input.placeholder = "Entrez votre réponse ici"
@@ -53,9 +51,3 @@ form==
 solution==
 {{inputSolution}}
 ==
-
-settings.score = true
-settings.hints = true
-settings.solution = true
-settings.theories = true
-settings.feedback = true

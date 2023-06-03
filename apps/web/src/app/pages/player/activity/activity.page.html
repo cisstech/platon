@@ -3,7 +3,7 @@
     <player-wrapper [player]="player" />
   </ng-container>
   <ng-container *ngIf="error">
-    <ui-error [error]="error" />
+    <ui-error [error]="error" [showMessage]="true" [showButtons]="false" />
   </ng-container>
 </ng-container>
 <ng-template #spinner>
