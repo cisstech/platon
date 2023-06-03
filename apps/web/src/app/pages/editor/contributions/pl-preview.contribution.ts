@@ -1,6 +1,10 @@
 import { Injectable, Injector, NgModule } from '@angular/core';
 import {
-  CONTRIBUTION, IContribution, PreviewService, PreviewHandler, Paths, FileService, Preview, PreviewTypes
+  CONTRIBUTION, IContribution,
+  Preview,
+  PreviewHandler,
+  PreviewService,
+  PreviewTypes
 } from '@cisstech/nge-ide/core';
 import { Subscription } from 'rxjs';
 
@@ -13,15 +17,17 @@ export class Contribution implements IContribution {
   activate(injector: Injector) {
     const previewService = injector.get(PreviewService);
     previewService.register(new (class implements PreviewHandler {
+      private counter = 0; // temporary solution to trigger change detection of the preview editor
       canHandle(uri: monaco.Uri) {
         return uri.path === '/main.ple' || uri.path === '/main.pla';
       }
 
       async handle(_: Injector, uri: monaco.Uri): Promise<Preview> {
         const [resource, version] = uri.authority.split(':');
+        console.log(`/player/preview/${resource}?version=${version}&counter=${++this.counter}`)
         return Promise.resolve({
           type: PreviewTypes.URL,
-          data: `/player/preview/${resource}?version=${version}`,
+          data: `/player/preview/${resource}?version=${version}&counter=${++this.counter}`,
         });
       }
     })())
