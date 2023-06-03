@@ -46,7 +46,7 @@ export function createDefaultApollo(
   });
 
   const ws = new WebSocketLink({
-    uri: 'wss://localhost/api/graphql',
+    uri: `wss://${location.host}/api/graphql`,
     options: {
       reconnect: true,
       connectionParams: {
