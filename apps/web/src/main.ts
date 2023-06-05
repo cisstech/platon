@@ -9,7 +9,7 @@ import {
   provideRouter, withEnabledBlockingInitialNavigation,
   withPreloading
 } from '@angular/router';
-import { CoreBrowserModule, GRAPHQL_ENV, GraphQLEnvironment, TAG_PROVIDERS } from '@platon/core/browser';
+import { CoreBrowserModule, TAG_PROVIDERS } from '@platon/core/browser';
 import { COURSE_PROVIDERS } from '@platon/feature/course/browser';
 import { LTI_PROVIDERS } from '@platon/feature/lti/browser';
 import { PLAYER_PROVIDERS } from '@platon/feature/player/browser';
@@ -18,7 +18,6 @@ import { RESULT_PROVIDERS } from '@platon/feature/result/browser';
 import { FeatureWebComponentModule } from '@platon/feature/webcomponent';
 import { AppPage } from './app/app.page';
 import { appRoutes } from './app/app.routes';
-import { environment } from './environments/environment';
 
 bootstrapApplication(AppPage, {
   providers: [
@@ -43,11 +42,5 @@ bootstrapApplication(AppPage, {
     RESULT_PROVIDERS,
     LTI_PROVIDERS,
     TAG_PROVIDERS,
-    {
-      provide: GRAPHQL_ENV,
-      useValue: {
-        host: environment.graphql.host,
-      } as GraphQLEnvironment
-    }
   ],
 }).catch((err) => console.error(err));

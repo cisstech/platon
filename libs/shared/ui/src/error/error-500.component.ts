@@ -12,6 +12,14 @@ import { NzResultModule } from 'ng-zorro-antd/result';
     nzStatus="500"
     nzSubTitle="Désolé, il y a une erreur sur le serveur.">
   </nz-result>
-  `
+  `,
+  styles: [`
+    :host {
+      --ui-error-padding: 1.5rem;
+    }
+    nz-result {
+      padding: var(--ui-error-padding);
+    }
+  `]
 })
 export class UiError500Component { }

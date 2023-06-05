@@ -6,13 +6,6 @@ import { HttpLink } from 'apollo-angular/http';
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { TokenService } from '../auth';
-import { InjectionToken } from '@angular/core';
-
-export interface GraphQLEnvironment {
-  host: string;
-}
-
-export const GRAPHQL_ENV = new InjectionToken<GraphQLEnvironment>('GRAPHQL_OPTIONS');
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   // React only on graphql errors
@@ -45,7 +38,6 @@ const basicContext = setContext((_, { headers }) => {
 export function createDefaultApollo(
   httpLink: HttpLink,
   tokenService: TokenService,
-  options: GraphQLEnvironment,
 ): ApolloClientOptions<any> {
   const cache = new InMemoryCache({});
 
@@ -54,7 +46,7 @@ export function createDefaultApollo(
   });
 
   const ws = new WebSocketLink({
-    uri: `wss://${options.host}/api/graphql`,
+    uri: `wss://${location.host}/api/graphql`,
     options: {
       reconnect: true,
       connectionParams: {

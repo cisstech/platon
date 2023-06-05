@@ -15,7 +15,15 @@ import { NzResultModule } from 'ng-zorro-antd/result';
     Il est possible qu'il soit temporairement indisponible ou supprimé.
     ">
   </nz-result>
-  `
+  `,
+  styles: [`
+    :host {
+      --ui-error-padding: 1.5rem;
+    }
+    nz-result {
+      padding: var(--ui-error-padding);
+    }
+  `]
 })
 
 export class UiError404Component { }

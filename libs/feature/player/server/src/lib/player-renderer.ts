@@ -27,13 +27,14 @@ export const withRenderedComponents = (
       if (reviewMode) {
         variables.disabled = true;
       }
-      return `<${variables.selector} cid='${variables.cid}' state='${JSON.stringify(variables)}' />`
+      return `<${variables.selector} cid='${variables.cid}' state='${JSON.stringify(variables)}'></${variables.selector}>`
     }
     return Object.keys(variables).reduce((o, k) => {
       o[k] = withRenderedComponents(variables[k], reviewMode)
       return o;
     }, {} as any)
   }
+
   return variables;
 }
 
