@@ -46,8 +46,9 @@ export class ResourceFileSystemProvider extends FileSystemProvider {
   }
 
 
-  buildUri(resource: string, version = 'latest') {
-    return monaco.Uri.parse(`${this.scheme}://${resource}:${version}/`)
+  buildUri(resource: string, version = 'latest', path?: string) {
+    path = path ? removeLeadingSlash(path) : ''
+    return monaco.Uri.parse(`${this.scheme}://${resource}:${version}/${path}`)
   }
 
   removeDirectory(uri: monaco.Uri) {
@@ -71,10 +72,8 @@ export class ResourceFileSystemProvider extends FileSystemProvider {
     const files: IFile[] = [];
 
     const transform = (entry: ResourceFile) => {
-      const file = new FileImpl(
-        monaco.Uri.parse(`${uri.scheme}://${uri.authority}/${removeLeadingSlash(entry.path)}`),
-        entry,
-      );
+      const fileUri = monaco.Uri.parse(`${uri.scheme}://${uri.authority}/${removeLeadingSlash(entry.path)}`)
+      const file = new FileImpl(fileUri, entry);
       files.push(file);
       this.entries.set(file.uri.toString(true), entry);
       entry.children?.forEach(transform);
