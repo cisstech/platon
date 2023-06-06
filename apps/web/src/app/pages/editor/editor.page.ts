@@ -2,10 +2,10 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { firstValueFrom, Subscription } from 'rxjs';
+import { delay, firstValueFrom, Subscription } from 'rxjs';
 
 import { NgeIdeModule } from '@cisstech/nge-ide';
-import { FileService, IdeService } from '@cisstech/nge-ide/core';
+import { EditorService, FileService, IdeService } from '@cisstech/nge-ide/core';
 import { NgeIdeExplorerModule } from '@cisstech/nge-ide/explorer';
 import { NgeIdeNotificationsModule } from '@cisstech/nge-ide/notifications';
 import { NgeIdeProblemsModule } from '@cisstech/nge-ide/problems';
@@ -53,6 +53,7 @@ export class EditorPage implements OnInit, OnDestroy {
   constructor(
     private readonly ide: IdeService,
     private readonly fileService: FileService,
+    private readonly editorService: EditorService,
     private readonly activatedRoute: ActivatedRoute,
     private readonly resourceService: ResourceService,
     private readonly resourceFileSystemProvider: ResourceFileSystemProvider,
@@ -66,6 +67,7 @@ export class EditorPage implements OnInit, OnDestroy {
 
     const id = params.get('id') as string;
     const version = queryParams.get('version') || 'latest';
+    const file = queryParams.get('file') || '/main.ple';
 
     const [resource, circles] = await Promise.all([
       firstValueFrom(this.resourceService.find(id)),
@@ -92,7 +94,9 @@ export class EditorPage implements OnInit, OnDestroy {
             ancestor.code || ancestor.id,
           )
         }))
-      );
+      ).then(() => {
+        this.editorService.open(this.resourceFileSystemProvider.buildUri(id, version).with({ path: file }));
+      });
     });
   }
 
