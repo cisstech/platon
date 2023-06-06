@@ -67,7 +67,8 @@ export class EditorPage implements OnInit, OnDestroy {
 
     const id = params.get('id') as string;
     const version = queryParams.get('version') || 'latest';
-    const filesToOpen = (queryParams.get('files') || '').split(',');
+    const filesToOpen = (queryParams.get('files') || '').split(',')
+      .filter(Boolean);
 
 
     const [resource, circles] = await Promise.all([
