@@ -265,7 +265,7 @@ case 16:
  this.$ = new PLReference($$[$0], yylineno + 1); 
 break;
 case 17:
- this.$ = new PLBoolean(Boolean($$[$0].toLowerCase()), yylineno + 1); 
+ this.$ = new PLBoolean($$[$0].toLowerCase() === 'true', yylineno + 1); 
 break;
 case 18:
  this.$ = new PLString($$[$0].slice(1, -1), yylineno + 1); 

@@ -301,7 +301,7 @@ value
     | IDENTIFIER
       { $$ = new PLReference($1, yylineno + 1); }
     | BOOLEAN
-      { $$ = new PLBoolean(Boolean($1.toLowerCase()), yylineno + 1); }
+      { $$ = new PLBoolean($1.toLowerCase() === 'true', yylineno + 1); }
     | STRING
       { $$ = new PLString($1.slice(1, -1), yylineno + 1); }
     | EXTENDS PATH
