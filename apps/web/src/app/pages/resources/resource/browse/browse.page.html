@@ -7,6 +7,9 @@
     (preview)="iframe.open(previewUrl)"
     (refresh)="refresh($event)"
   />
-  <resource-files [tree]="tree!" />
+  <resource-files
+    [tree]="tree!"
+    (selected)="iframe.open(editorUrl + '&files=' + $event.path)"
+  />
   <ui-modal-iframe #iframe (closed)="refresh(version)" />
 </ng-container>

@@ -35,6 +35,9 @@
 
 <nz-dropdown-menu #menu="nzDropdownMenu">
   <ul nz-menu>
+    <ng-container *ngIf="selection && selection.type === 'file'">
+      <li nz-menu-item (click)="selected.emit(selection)">Ouvrir</li>
+    </ng-container>
     <li nz-menu-item (click)="download()">Télécharger</li>
     <li nz-menu-item (click)="copyPath()">Copier le chemin</li>
   </ul>
@@ -42,11 +45,14 @@
 
 <ng-template #nzTreeTemplate let-node let-origin="origin">
   <ng-container>
-    <div class="node" *ngIf="!node.isLeaf" (contextmenu)="contextMenu($event, menu, node)">
+    <div class="node" *ngIf="!node.isLeaf"  (contextmenu)="contextMenu($event, menu, node)">
       <ui-icon [icon]="node.title|iconFile:{ alt: node.title, expanded: node.isExpanded, isDirectory: true}" />
       <div class="folder-name">{{ node.title }}</div>
     </div>
-    <div class="node"*ngIf="node.isLeaf" (contextmenu)="contextMenu($event, menu, node)">
+    <div
+      class="node"*ngIf="node.isLeaf"
+      (dblclick)="selected.emit($any(index.get(node.key)))"
+      (contextmenu)="contextMenu($event, menu, node)">
       <ui-icon [icon]="node.title|iconFile:{ alt: node.title }" />
       <div class="file-name">{{ node.title }}</div>
     </div>

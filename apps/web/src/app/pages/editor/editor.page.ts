@@ -2,7 +2,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { delay, firstValueFrom, Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 
 import { NgeIdeModule } from '@cisstech/nge-ide';
 import { EditorService, FileService, IdeService } from '@cisstech/nge-ide/core';
@@ -67,7 +67,8 @@ export class EditorPage implements OnInit, OnDestroy {
 
     const id = params.get('id') as string;
     const version = queryParams.get('version') || 'latest';
-    const file = queryParams.get('file') || '/main.ple';
+    const filesToOpen = (queryParams.get('files') || '').split(',')
+      .filter(Boolean);
 
     const [resource, circles] = await Promise.all([
       firstValueFrom(this.resourceService.find(id)),
@@ -81,9 +82,9 @@ export class EditorPage implements OnInit, OnDestroy {
         ...resourceAncestors(circles!, resource!.parentId!)
       ];
 
-    this.subscription = this.ide.onAfterStart(() => {
+    this.subscription = this.ide.onAfterStart(async () => {
       this.fileService.registerProvider(this.resourceFileSystemProvider);
-      this.fileService.registerFolders(
+      await this.fileService.registerFolders(
         {
           name: `${resource!.name}#${version}`,
           uri: this.resourceFileSystemProvider.buildUri(id, version)
@@ -94,9 +95,14 @@ export class EditorPage implements OnInit, OnDestroy {
             ancestor.code || ancestor.id,
           )
         }))
-      ).then(() => {
-        this.editorService.open(this.resourceFileSystemProvider.buildUri(id, version).with({ path: file }));
+      );
+
+      filesToOpen.forEach(path => {
+        this.editorService.open(
+          this.resourceFileSystemProvider.buildUri(id, version, path)
+        );
       });
+
     });
   }
 

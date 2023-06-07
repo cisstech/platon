@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { RouterModule } from '@angular/router';
@@ -38,8 +38,8 @@ import { NzTreeModule, NzTreeNode } from 'ng-zorro-antd/tree';
   ]
 })
 export class ResourceFilesComponent {
-  private readonly index = new Map<string, ResourceFile>();
-  private selection?: ResourceFile;
+  protected readonly index = new Map<string, ResourceFile>();
+  protected selection?: ResourceFile;
 
   protected loading = true;
   protected code?: string;
@@ -69,6 +69,7 @@ export class ResourceFilesComponent {
     this.changeDetectionRef.markForCheck();
   }
 
+  @Output() selected = new EventEmitter<ResourceFile>();
 
   constructor(
     private readonly nzMessageService: NzMessageService,
@@ -76,6 +77,7 @@ export class ResourceFilesComponent {
     private readonly changeDetectionRef: ChangeDetectorRef,
     private readonly nzContextMenuService: NzContextMenuService,
   ) { }
+
 
   protected contextMenu(
     event: MouseEvent,
