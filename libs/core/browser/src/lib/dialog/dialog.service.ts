@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
+import { PromptDialogComponent } from './prompt/prompt.component';
 
 @Injectable({ providedIn: 'root' })
 export class DialogService {
   constructor(
+    private modal: NzModalService,
     private readonly nzMessageService: NzMessageService
   ) { }
 
@@ -35,4 +38,38 @@ export class DialogService {
     }
   }
 
+
+  prompt(input: {
+    title: string,
+    value?: string
+    label?: string
+    okTitle?: string
+    noTitle?: string
+  }): Promise<string | undefined> {
+    const dialogRef: NzModalRef = this.modal.create({
+      nzTitle: input.title,
+      nzContent: PromptDialogComponent,
+      nzComponentParams: {
+        value: input.value,
+        label: input.label,
+        okTitle: input.okTitle,
+        noTitle: input.noTitle
+      },
+      nzClosable: false,
+      nzFooter: null
+    });
+
+    return new Promise<string>((resolve) => {
+      const subscription = dialogRef.componentInstance.confirmEvent.subscribe((result: string) => {
+        resolve(result);
+        dialogRef.close();
+      });
+
+      const afterClose = dialogRef.afterClose.subscribe(() => {
+        console.log('CLOSE')
+        subscription.unsubscribe();
+        afterClose.unsubscribe();
+      });
+    })
+  }
 }

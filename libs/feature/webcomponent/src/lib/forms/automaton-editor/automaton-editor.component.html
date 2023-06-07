@@ -5,22 +5,19 @@
 >
   <div class="automaton-editor-actions-top">
     <ng-container *ngFor="let action of actions">
-      <button mat-raised-button (click)="run(action)">
+      <button nz-button  (click)="run(action)">
         {{ action.name }}
       </button>
     </ng-container>
   </div>
   <div class="automaton-editor-canvas"></div>
   <div class="automaton-editor-actions-bottom">
-    <button mat-icon-button (click)="zoomIn($event)">
-      <mat-icon>zoom_in</mat-icon>
+    <button nz-button nzShape="circle" (click)="zoomIn($event)">
+      <span nz-icon nzType="zoom-in" nzTheme="outline"></span>
     </button>
-    <button mat-icon-button (click)="zoomOut($event)">
-      <mat-icon>zoom_out</mat-icon>
+    <button nz-button nzShape="circle" (click)="zoomOut($event)">
+      <span nz-icon nzType="zoom-out" nzTheme="outline"></span>
     </button>
-    <!-- <button mat-icon-button >
-      <mat-icon>help</mat-icon>
-    </button> -->
   </div>
 </div>
 <wc-base [(state)]="state"></wc-base>
