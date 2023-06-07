@@ -25,7 +25,6 @@ inputSolution.value = a + b
 
 grader==
 grade = 0
-feedback = {}
 feedback.type = "error"
 feedback.content = "Mauvaise réponse"
 if (input.value === inputSolution.value) {

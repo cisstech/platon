@@ -141,3 +141,7 @@
       [sessionId]="player.sessionId" />
   </ng-template>
 </ui-modal-drawer>
+
+<ng-template #errorTemplate let-data="data">
+  <pre>{{data.message}}</pre>
+</ng-template>
