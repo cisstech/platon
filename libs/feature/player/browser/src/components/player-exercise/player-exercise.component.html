@@ -45,7 +45,9 @@
           <mat-expansion-panel-header>
             <mat-panel-title>Solution</mat-panel-title>
           </mat-expansion-panel-header>
-          <div class="exercise-form" [innerHTML]="player.solution|safe:'html'"></div>
+          <div class="exercise-form">
+            <nge-markdown [data]="player.solution" />
+          </div>
         </mat-expansion-panel>
       </mat-accordion>
     </ng-container>

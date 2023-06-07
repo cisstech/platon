@@ -9,6 +9,7 @@ import {
   NgeMarkdownHighlighterMonacoProvider,
   NgeMarkdownKatexOptionsProvider,
   NgeMarkdownEmojiOptionsProvider,
+  NgeMarkdownThemeProvider,
 } from '@cisstech/nge/markdown';
 
 import { NgeMonacoColorizerService } from '@cisstech/nge/monaco';
@@ -23,6 +24,10 @@ export const NgeMarkdownProviders = [
   NgeMarkdownAdmonitionsProvider,
   NgeMarkdownHighlighterProvider,
   NgeMarkdownHighlighterMonacoProvider(NgeMonacoColorizerService),
+  NgeMarkdownThemeProvider({
+    name: 'github',
+    styleUrl: 'assets/vendors/nge/markdown/themes/github.css',
+  }),
   NgeMarkdownKatexOptionsProvider({
     baseUrl: 'assets/vendors/katex'
   }),
