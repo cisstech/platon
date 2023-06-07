@@ -64,7 +64,8 @@ if __name__ == "__main__":
         if key in variables and variables[key] == glob[key]:
             del variables[key]
 
-    print(jsonpickle.encode(jsonify(variables), unpicklable=False))
+    with open('output.json', 'w') as output:
+      print(jsonpickle.encode(jsonify(variables), unpicklable=False), file=output)
 
     sys.exit(0)
 `;
@@ -78,7 +79,7 @@ interface ExecutionResult {
     time: number;
   }[];
   total_time: number;
-  result: number;
+  result: string;
   environment: string;
   expire: string;
 }
@@ -113,6 +114,7 @@ export class PythonSandbox implements Sandbox {
             JSON.stringify({
               save: true,
               commands: ['python3 runner.py'],
+              result_path: 'output.json',
               ...(input.envid ? { environment: input.envid } : {}),
             })
           );
@@ -147,7 +149,7 @@ export class PythonSandbox implements Sandbox {
 
       return Promise.resolve({
         envid: response.environment,
-        variables: JSON.parse(response.execution[0].stdout),
+        variables: JSON.parse(response.result),
       });
     } catch (error) {
       if (error instanceof SandboxError) {
