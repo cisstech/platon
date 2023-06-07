@@ -1,8 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { deepMerge, resolveFileReference } from "@platon/core/common";
+import { deepMerge, resolveFileReference } from '@platon/core/common';
 import { v4 as uuidv4 } from 'uuid';
-import { AssignmentNode, CommentNode, ExtendsNode, IncludeNode, PLDict, PLFileContent, PLFileURL, PLNode, PLParser, PLReference, PLSourceFile, PLVisitor } from "./pl.parser";
-import { ActivityVariables, ExerciseVariables } from "./pl.variables";
+import {
+  AssignmentNode,
+  CommentNode,
+  ExtendsNode,
+  IncludeNode,
+  PLDict,
+  PLFileContent,
+  PLFileURL,
+  PLNode,
+  PLParser,
+  PLReference,
+  PLSourceFile,
+  PLVisitor,
+} from './pl.parser';
+import { ActivityVariables, ExerciseVariables } from './pl.variables';
 
 /**
  * File reference resolver for the PL compiler.
@@ -22,7 +35,11 @@ export interface PLReferenceResolver {
    * @param version Version of the resource.
    * @param path Path to resolves.
    */
-  resolveContent(resource: string, version: string, path: string): Promise<string>;
+  resolveContent(
+    resource: string,
+    version: string,
+    path: string
+  ): Promise<string>;
 }
 
 /**
@@ -35,14 +52,12 @@ export class PLCompiler implements PLVisitor {
   private readonly source: PLSourceFile;
   private lineno = 0;
 
-  constructor(
-    options: {
-      resource: string,
-      version: string,
-      main: string,
-      resolver: PLReferenceResolver
-    }
-  ) {
+  constructor(options: {
+    resource: string;
+    version: string;
+    main: string;
+    resolver: PLReferenceResolver;
+  }) {
     this.resolver = options.resolver;
     this.source = {
       resource: options.resource,
@@ -63,16 +78,25 @@ export class PLCompiler implements PLVisitor {
     return this.source;
   }
 
-  async visitExtends(node: ExtendsNode | PLDict, merge: boolean): Promise<PLSourceFile> {
+  async visitExtends(
+    node: ExtendsNode | PLDict,
+    merge: boolean
+  ): Promise<PLSourceFile> {
     this.lineno = node.lineno;
-    const { resource, version, relpath } = this.resolveReference('path' in node ? node.path : node.value);
+    const { resource, version, relpath } = this.resolveReference(
+      'path' in node ? node.path : node.value
+    );
 
-    const content = await this.resolver.resolveContent(resource, version, relpath);
+    const content = await this.resolver.resolveContent(
+      resource,
+      version,
+      relpath
+    );
     const compiler = new PLCompiler({
       resource,
       version,
       main: relpath,
-      resolver: this.resolver
+      resolver: this.resolver,
     });
 
     const source = await compiler.compileExercise(content);
@@ -81,14 +105,17 @@ export class PLCompiler implements PLVisitor {
     this.source.errors = this.source.errors.concat(source.errors);
     this.source.warnings = this.source.warnings.concat(source.warnings);
 
-    source.dependencies.forEach(a => {
-      if (!this.source.dependencies.find(b => b.abspath === a.abspath)) {
+    source.dependencies.forEach((a) => {
+      if (!this.source.dependencies.find((b) => b.abspath === a.abspath)) {
         this.source.dependencies.push(a);
       }
     });
 
     if (merge) {
-      this.source.variables = deepMerge(this.source.variables, source.variables);
+      this.source.variables = deepMerge(
+        this.source.variables,
+        source.variables
+      );
     }
 
     return source;
@@ -97,8 +124,14 @@ export class PLCompiler implements PLVisitor {
   async visitInclude(node: IncludeNode): Promise<void> {
     this.lineno = node.lineno;
 
-    const { resource, version, relpath, abspath } = this.resolveReference(node.path);
-    const content = await this.resolver.resolveContent(resource, version, relpath);
+    const { resource, version, relpath, abspath } = this.resolveReference(
+      node.path
+    );
+    const content = await this.resolver.resolveContent(
+      resource,
+      version,
+      relpath
+    );
 
     this.source.dependencies.push({
       abspath,
@@ -123,8 +156,7 @@ export class PLCompiler implements PLVisitor {
 
   async visitReference(node: PLReference): Promise<any> {
     const [prop, object] = this.withVariable(node.value, true);
-    if (prop && object)
-      return object[prop];
+    if (prop && object) return object[prop];
     return undefined;
   }
 
@@ -136,14 +168,12 @@ export class PLCompiler implements PLVisitor {
     this.lineno = node.lineno;
 
     const [id, obj] = this.withVariable(node.key);
-    if (!id || !obj)
-      return Promise.resolve();
+    if (!id || !obj) return Promise.resolve();
 
     obj[id] = await node.value.toJSON(this);
 
     return Promise.resolve();
   }
-
 
   async compileExercise(content: string): Promise<PLSourceFile> {
     const nodes = await new PLParser().parse(content);
@@ -154,10 +184,7 @@ export class PLCompiler implements PLVisitor {
   async compileActivity(content: string): Promise<PLSourceFile> {
     const variables = JSON.parse(content) as ActivityVariables;
 
-    const [
-      introduction,
-      conclusion,
-    ] = await Promise.all([
+    const [introduction, conclusion] = await Promise.all([
       this.withResolvePath(variables.introduction),
       this.withResolvePath(variables.conclusion),
     ]);
@@ -168,7 +195,7 @@ export class PLCompiler implements PLVisitor {
     // TODO validation + typechecking
     const groups = variables.exerciseGroups;
     const exercises: any[] = [];
-    Object.keys(groups).forEach(groupName => {
+    Object.keys(groups).forEach((groupName) => {
       groups[groupName].forEach((exercise: any) => {
         exercises.push(exercise);
       });
@@ -185,9 +212,9 @@ export class PLCompiler implements PLVisitor {
           resource: exercise.resource,
           version: exercise.version,
           main: 'main.ple',
-          resolver: this.resolver
+          resolver: this.resolver,
         });
-        exercise.id = uuidv4()
+        exercise.id = uuidv4();
         exercise.source = await compiler.compileExercise(content);
         if (exercise.overrides) {
           exercise.source.variables = deepMerge(
@@ -202,13 +229,12 @@ export class PLCompiler implements PLVisitor {
     return this.source;
   }
 
-
   private error(description: string) {
     this.source.errors.push({
       description,
       lineno: this.lineno,
       abspath: this.source.abspath,
-    })
+    });
   }
 
   private warning(description: string) {
@@ -216,12 +242,15 @@ export class PLCompiler implements PLVisitor {
       description,
       lineno: this.lineno,
       abspath: this.source.abspath,
-    })
+    });
   }
 
-  private withVariable(name: string, required = false): [string | null, Record<string, unknown> | null] {
-    const props = name.split(".");
-    if (props.find(prop => !prop)) {
+  private withVariable(
+    name: string,
+    required = false
+  ): [string | null, Record<string, unknown> | null] {
+    const props = name.split('.');
+    if (props.find((prop) => !prop)) {
       this.error(`SyntaxError: ${name}`);
       return [null, null];
     }
@@ -269,8 +298,7 @@ export class PLCompiler implements PLVisitor {
   }
 
   private withResolvePath(content?: string): Promise<string | undefined> {
-    if (!content)
-      return Promise.resolve(content);
+    if (!content) return Promise.resolve(content);
 
     if (content.startsWith('@copyurl')) {
       return this.resolveUrl(content.replace('@copyurl', '').trim());
@@ -293,7 +321,7 @@ export class PLCompiler implements PLVisitor {
     }
     const url = await this.resolver.resolveUrl(resource, version, relpath);
     this.urls.set(abspath, url);
-    return url
+    return url;
   }
 
   private async resolveContent(path: string) {
@@ -302,7 +330,11 @@ export class PLCompiler implements PLVisitor {
     if (cache) {
       return cache;
     }
-    const content = await this.resolver.resolveContent(resource, version, relpath);
+    const content = await this.resolver.resolveContent(
+      resource,
+      version,
+      relpath
+    );
     this.contents.set(abspath, content);
     return content;
   }
