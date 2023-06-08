@@ -17,19 +17,6 @@ mat-radio-group {
       margin-bottom: 0px;
     }
   }
-
-  &::ng-deep {
-    .mat-radio-button {
-      position: relative;
-      display: flex;
-      align-items: center;
-      font-size: 16px;
-    }
-    .mat-radio-label {
-      margin-bottom: 0px;
-      white-space: normal;
-    }
-  }
 }
 
 .radio-item {

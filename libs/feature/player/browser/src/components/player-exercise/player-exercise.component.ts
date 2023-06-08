@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, TemplateRef, ViewChild } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -24,6 +24,7 @@ import { UiModalDrawerComponent } from '@platon/shared/ui';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { PlayerService } from '../../api/player.service';
 import { PlayerCommentsComponent } from '../player-comments/player-comments.component';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   standalone: true,
@@ -53,6 +54,8 @@ import { PlayerCommentsComponent } from '../player-comments/player-comments.comp
   ]
 })
 export class PlayerExerciseComponent implements OnChanges {
+  private clearNotification?: () => void;
+
   @Input() player!: ExercisePlayer;
   @Input() players: ExercisePlayer[] = [];
 
@@ -60,6 +63,9 @@ export class PlayerExerciseComponent implements OnChanges {
   @Input() canComment = false;
 
   @Output() evaluated = new EventEmitter<PlayerNavigation>();
+
+  @ViewChild('errorTemplate', { read: TemplateRef, static: true })
+  errorTemplate!: TemplateRef<object>;
 
   protected index = 0;
   protected get disabled(): boolean {
@@ -81,6 +87,8 @@ export class PlayerExerciseComponent implements OnChanges {
   ngOnChanges(): void {
     if (this.players?.length) {
       this.player = this.players[0];
+      this.clearNotification?.();
+      this.clearNotification = undefined;
     }
   }
 
@@ -132,6 +140,10 @@ export class PlayerExerciseComponent implements OnChanges {
 
   private async evaluate(action: PlayerActions): Promise<void> {
     try {
+      this.clearNotification?.();
+      this.clearNotification = undefined;
+
+
       const answers = this.answers();
 
       const output = await firstValueFrom(
@@ -150,8 +162,16 @@ export class PlayerExerciseComponent implements OnChanges {
       if (!this.player.feedbacks?.length && action === PlayerActions.CHECK_ANSWER) {
         this.dialogService.info('Votre réponse a bien été prise en compte.');
       }
-    } catch {
-      this.dialogService.error('Une erreur est survenue lors de cette action.');
+    } catch (error) {
+      if (error instanceof HttpErrorResponse) {
+        const message = error.error?.message || error.message || 'Une erreur est survenue lors de cette action.';
+        this.clearNotification = this.dialogService.notification(this.errorTemplate, {
+          duration: 0,
+          data: {
+            message,
+          }
+        });
+      }
     } finally {
       this.changeDetectorRef.markForCheck();
     }

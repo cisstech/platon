@@ -1,0 +1,8 @@
+<div class="prompt-dialog">
+  <label *ngIf="label" for="input">{{ label }}</label>
+  <input id="input" (keyup.enter)="confirm()" [(ngModel)]="value" />
+</div>
+<div class="prompt-dialog-buttons">
+  <button [disabled]="!value?.length" nz-button nzType="primary" (click)="confirm()">{{okTitle || 'OK'}}</button>
+  <button nz-button nzType="default" (click)="cancel()">{{noTitle || 'Annuler'}}</button>
+</div>

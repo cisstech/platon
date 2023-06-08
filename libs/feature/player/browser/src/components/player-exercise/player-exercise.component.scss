@@ -73,3 +73,11 @@ nz-alert {
     }
   }
 }
+
+
+pre {
+  overflow-y: auto;
+  max-height: 75vh;
+  color: red;
+  margin: 2rem 0;
+}

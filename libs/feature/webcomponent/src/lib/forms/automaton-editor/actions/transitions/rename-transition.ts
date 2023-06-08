@@ -50,12 +50,9 @@ export class ActionRenameTransition implements AutomatonEditorAction {
 
   private async prompt(
     title: string,
-    val: string
+    value: string
   ): Promise<string> {
-    return new Promise<string>((resolve) => {
-      const data = window.prompt(title, val)
-      resolve(data || '');
-    })
+    return this.dialog.prompt({ title, value, okTitle: 'Renommer' }).then((result) => result || '');
   }
 }
 

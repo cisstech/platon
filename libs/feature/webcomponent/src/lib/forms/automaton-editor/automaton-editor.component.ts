@@ -12,17 +12,17 @@ import {
 } from '@angular/core';
 import {
   Connection as JsPlumbConnection,
+  OnConnectionBindInfo,
   jsPlumb,
   jsPlumbInstance,
-  OnConnectionBindInfo,
 } from 'jsplumb';
 import { Subscription } from 'rxjs';
 import { WebComponent, WebComponentHooks } from '../../web-component';
 import { WebComponentChangeDetectorService } from '../../web-component-change-detector.service';
 import {
+  AUTOMATON_EDITOR_ACTIONS,
   AutomatonEditorAction,
   AutomatonEditorActionContext,
-  AUTOMATON_EDITOR_ACTIONS,
 } from './actions/action';
 import { ActionDeleteStateProvider } from './actions/states/delete-state';
 import { ActionRenameStateProvider } from './actions/states/rename-state';
