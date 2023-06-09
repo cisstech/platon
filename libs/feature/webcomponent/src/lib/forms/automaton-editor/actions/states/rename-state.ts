@@ -17,7 +17,7 @@ export class ActionRenameState implements AutomatonEditorAction {
   constructor(
     private readonly dialog: DialogService,
     private readonly editor: AutomatonEditorService
-  ) {}
+  ) { }
 
   async run(context: AutomatonEditorActionContext) {
     if (!context.state) {
@@ -47,12 +47,9 @@ export class ActionRenameState implements AutomatonEditorAction {
 
   private async prompt(
     title: string,
-    val: string
+    value: string
   ): Promise<string> {
-    return new Promise<string>((resolve) => {
-      const data = window.prompt(title, val)
-      resolve(data || '');
-    })
+    return this.dialog.prompt({ title, value, okTitle: 'Renommer' }).then((result) => result || '')
   }
 }
 

@@ -1,24 +1,22 @@
 import { NgModule, Type } from '@angular/core';
 
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { IDynamicModule } from '@cisstech/nge/services';
-import { DialogModule } from '@platon/core/browser';
 
 import { BaseModule } from '../../shared/components/base/base.module';
 
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 import { AutomatonEditorComponent } from './automaton-editor.component';
+import { DialogModule } from '@platon/core/browser';
 
 @NgModule({
   declarations: [AutomatonEditorComponent],
   imports: [
     BaseModule,
-    MatIconModule,
-    MatButtonModule,
-    MatTooltipModule,
     DialogModule,
+    NzIconModule,
+    NzButtonModule,
   ],
   exports: [AutomatonEditorComponent],
 })

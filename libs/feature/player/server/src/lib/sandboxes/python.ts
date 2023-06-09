@@ -2,6 +2,7 @@ import FormData from 'form-data';
 import * as fs from 'fs';
 import * as tar from 'tar-stream';
 import * as zlib from 'zlib';
+import path from 'path';
 
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
@@ -18,57 +19,13 @@ import {
   SandboxOutput,
 } from './sandbox';
 
-const runner = `
-#!/usr/bin/env python3
-# coding: utf-8
-
-import uuid, sys, json, jsonpickle, types
-
-class StopExec(Exception):
-    pass
-
-def with_try_clause(code, excpt):
-    code = code.replace('\\t', '    ')
-    return (
-        "try:\\n    ...\\n"
-        + '\\n'.join(["    " + line for line in code.split('\\n')])
-        + "\\nexcept " + excpt.__name__ + ":\\n    pass"
-    )
-
-def component(selector):
-    return { 'selector': selector, 'cid': str(uuid.uuid4()) }
-
-def jsonify(d):
-    keys = ['Object', 'component', 'StopExec']
-    for k, v in list(d.items()):
-        if v is None or isinstance(v, types.ModuleType) or k in keys:
-            del d[k]
-    return d
-
-if __name__ == "__main__":
-    with open("script.py", "r") as f:
-      script = f.read()
-
-    with open("variables.json", "r") as f:
-      variables = json.load(f)
-
-    glob = {}
-
-    variables['component'] = component
-    variables['StopExec'] = StopExec
-
-    exec(with_try_clause(script, StopExec), variables)
-    exec("", glob)
-
-    for key in glob:
-        if key in variables and variables[key] == glob[key]:
-            del variables[key]
-
-    with open('output.json', 'w') as output:
-      print(jsonpickle.encode(jsonify(variables), unpicklable=False), file=output)
-
-    sys.exit(0)
-`;
+const runner = fs.readFileSync(
+  path.join(
+    process.cwd(),
+    './libs/feature/player/server/src/lib/sandboxes/runner.py'
+  ),
+  'utf8'
+);
 
 interface ExecutionResult {
   status: number;
@@ -97,6 +54,14 @@ export class PythonSandbox implements Sandbox {
     return sandbox === 'python';
   }
 
+  /**
+   * Executes the Python sandbox with the provided input and script.
+   * @param input The SandboxInput object.
+   * @param script The Python script to execute.
+   * @param timeout The timeout value for the execution.
+   * @returns A Promise that resolves to a SandboxOutput object.
+   * @throws {SandboxError} If an error occurs during execution.
+   */
   async run(
     input: SandboxInput,
     script: string,
@@ -159,6 +124,12 @@ export class PythonSandbox implements Sandbox {
     }
   }
 
+  /**
+   * Packs the environment files into a tarball with gzip compression.
+   * @param script The Python script.
+   * @param input The SandboxInput object.
+   * @param path The path of the temporary file to create.
+   */
   private async withEnvFiles(
     script: string,
     input: SandboxInput,
