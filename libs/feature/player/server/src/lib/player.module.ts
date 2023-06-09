@@ -1,14 +1,14 @@
+import { DiscoveryModule, DiscoveryService } from '@golevelup/nestjs-discovery';
 import { HttpModule } from '@nestjs/axios';
 import { Module, OnModuleInit } from '@nestjs/common';
-import { DiscoveryModule, DiscoveryService } from '@golevelup/nestjs-discovery'
 import { FeatureCourseServerModule } from '@platon/feature/course/server';
 import { FeatureResourceServerModule } from '@platon/feature/resource/server';
 import { FeatureResultServerModule } from '@platon/feature/result/server';
 import { PlayerController } from './player.controller';
 import { PlayerService } from './player.service';
+import { NodeSandbox, SANDBOX, Sandbox } from './sandboxes';
+import { PythonSandbox } from './sandboxes/python/python-sandbox';
 import { SandboxService } from './sandboxes/sandbox.service';
-import { NodeSandbox, Sandbox, SANDBOX } from './sandboxes';
-import { PythonSandbox } from './sandboxes/python';
 
 @Module({
   controllers: [

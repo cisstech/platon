@@ -19,10 +19,13 @@ export const withRenderedComponents = (
   variables: any,
   reviewMode?: boolean,
 ): any => {
+  if (variables == null) {
+    return variables;
+  }
   if (Array.isArray(variables)) {
     return variables.map(v => withRenderedComponents(v, reviewMode));
   }
-  if (typeof variables === 'object') {
+  if (typeof variables === 'object' ) {
     if (variables.cid && variables.selector) {
       if (reviewMode) {
         variables.disabled = true;
@@ -30,6 +33,9 @@ export const withRenderedComponents = (
       return `<${variables.selector} cid='${variables.cid}' state='${JSON.stringify(variables)}'></${variables.selector}>`
     }
     return Object.keys(variables).reduce((o, k) => {
+      if (o == null) {
+        console.log('NULL', k)
+      }
       o[k] = withRenderedComponents(variables[k], reviewMode)
       return o;
     }, {} as any)
