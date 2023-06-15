@@ -1,20 +1,28 @@
-import { Body, Controller, Param, Post, Req } from '@nestjs/common';
+import { Body, Controller, Param, Post, Req, Get } from '@nestjs/common';
 import { IRequest, Public } from '@platon/core/server';
-import { EvalExerciseInput, PlayAnswersInput } from '@platon/feature/player/common';
-import { EvalExerciseOutputDTO, PlayActivityInputDTO, PlayActivityOutputDTO, PlayAnswersOutputDTO, PlayExerciseInputDTO, PlayExerciseOuputDTO, PreviewInputDTO, PreviewOuputDTO } from './player.dto';
+import {
+  EvalExerciseInput,
+  PlayAnswersInput,
+} from '@platon/feature/player/common';
+import {
+  EvalExerciseOutputDTO,
+  PlayActivityInputDTO,
+  PlayActivityOutputDTO,
+  PlayAnswersOutputDTO,
+  PlayExerciseInputDTO,
+  PlayExerciseOuputDTO,
+  PreviewInputDTO,
+  PreviewOuputDTO,
+} from './player.dto';
 import { PlayerService } from './player.service';
 
 @Controller('player')
 export class PlayerController {
-  constructor(
-    private readonly playerService: PlayerService,
-  ) { }
+  constructor(private readonly playerService: PlayerService) {}
 
   @Public()
   @Post('/preview')
-  preview(
-    @Body() input: PreviewInputDTO
-  ): Promise<PreviewOuputDTO> {
+  preview(@Body() input: PreviewInputDTO): Promise<PreviewOuputDTO> {
     return this.playerService.preview(input);
   }
 
@@ -24,7 +32,7 @@ export class PlayerController {
     @Body() input: PlayAnswersInput
   ): Promise<PlayAnswersOutputDTO> {
     return {
-      exercises: await this.playerService.answers(input.sessionId)
+      exercises: await this.playerService.answers(input.sessionId),
     };
   }
 
@@ -34,10 +42,7 @@ export class PlayerController {
     @Req() req: IRequest,
     @Body() input: PlayActivityInputDTO
   ): Promise<PlayActivityOutputDTO> {
-    return this.playerService.playActivity(
-      input.activityId,
-      req.user
-    );
+    return this.playerService.playActivity(input.activityId, req.user);
   }
 
   @Public()
@@ -53,7 +58,6 @@ export class PlayerController {
     );
   }
 
-
   @Public()
   @Post('/terminate/:sessionId')
   async terminate(
@@ -62,7 +66,6 @@ export class PlayerController {
   ): Promise<PlayActivityOutputDTO> {
     return this.playerService.terminateSession(sessionId, req.user);
   }
-
 
   @Public()
   @Post('/evaluate')
@@ -73,8 +76,7 @@ export class PlayerController {
     const response = await this.playerService.evaluate(input, req.user);
     return {
       exercise: Array.isArray(response) ? response[0] : response,
-      navigation: Array.isArray(response) ? response[1] : undefined
-    }
+      navigation: Array.isArray(response) ? response[1] : undefined,
+    };
   }
 }
-

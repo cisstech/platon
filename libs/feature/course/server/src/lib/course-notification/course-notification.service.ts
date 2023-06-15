@@ -10,19 +10,16 @@ export class CourseNotificationService {
   constructor(
     private readonly courseService: CourseService,
     private readonly useGroupService: UserGroupService,
-    private readonly notificationService: NotificationService,
+    private readonly notificationService: NotificationService
   ) {}
 
   async sendMemberCreation(member: CourseMemberEntity) {
-    const course = (await this.courseService.findById(member.courseId))
-      .get();
+    const course = (await this.courseService.findById(member.courseId)).get();
 
     const userIds: string[] = [];
     if (member.groupId) {
       const users = await this.useGroupService.listMembers(member.groupId);
-      userIds.push(
-        ...users.map(user => user.id)
-      );
+      userIds.push(...users.map((user) => user.id));
     }
 
     if (member.userId) {

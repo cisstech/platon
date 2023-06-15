@@ -15,8 +15,8 @@ export class CoreService implements OnDestroy {
     private readonly themeService: ThemeService,
     private readonly iconRegistry: MatIconRegistry,
     private readonly nzIconService: NzIconService,
-    private readonly activatedRoute: ActivatedRoute,
-  ) { }
+    private readonly activatedRoute: ActivatedRoute
+  ) {}
 
   init() {
     this.themeService.loadTheme();
@@ -34,10 +34,9 @@ export class CoreService implements OnDestroy {
         }
       })
     );
-
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(subscription => subscription.unsubscribe());
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }

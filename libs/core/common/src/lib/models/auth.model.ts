@@ -1,8 +1,14 @@
-import { UserRoles } from "./user.model";
+import { UserRoles } from './user.model';
+import { UserEntity } from '@platon/core/server';
 
 export interface AuthToken {
   accessToken: string;
   refreshToken: string;
+}
+
+export interface SignInDemoOutput {
+  authToken: AuthToken;
+  userId: string;
 }
 
 export interface SignInInput {
@@ -25,5 +31,4 @@ export interface SignUpInput {
   role: UserRoles;
 }
 
-
-export const TOKEN_EXPIRED_ERROR_CODE = 'auth/token-expired'
+export const TOKEN_EXPIRED_ERROR_CODE = 'auth/token-expired';

@@ -5,4 +5,10 @@
     </a>
     <app-course-informations />
   </nz-tab>
+  <nz-tab>
+    <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'demo' }" queryParamsHandling="merge">
+      Demo
+    </a>
+    <app-course-demo />
+  </nz-tab>
 </nz-tabset>

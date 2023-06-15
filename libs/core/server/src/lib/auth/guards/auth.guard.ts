@@ -36,10 +36,6 @@ export class AuthGuard extends PassportGuard(['jwt']) {
       context.getClass(),
     ]);
 
-    if (isPublic) {
-      return true;
-    }
-
     try {
       const request = this.getRequest(context);
       const loggedIn = super.canActivate(new ExecutionContextHost([request]));

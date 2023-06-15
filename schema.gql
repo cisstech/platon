@@ -32,6 +32,7 @@ enum UserRoles {
   admin
   teacher
   student
+  demo
 }
 
 type Notification {

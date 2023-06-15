@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { CourseInformationsPage } from './informations/informations.page';
+import { CourseDemoPage } from './demo/demo.page';
 
 @Component({
   standalone: true,
@@ -17,6 +18,7 @@ import { CourseInformationsPage } from './informations/informations.page';
     NzTabsModule,
 
     CourseInformationsPage,
-  ]
+    CourseDemoPage,
+  ],
 })
 export class CourseSettingsPage {}
