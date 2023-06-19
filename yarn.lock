@@ -5968,10 +5968,10 @@ amdefine@>=0.0.4:
   resolved "https://registry.yarnpkg.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
   integrity sha512-S2Hw0TtNkMJhIabBwIojKL9YHO5T0n5eNqWJ7Lrlel/zDbftQpxpapi8tZs3X1HWa+u+QeydGmzzNU0m09+Rcg==
 
-ang-jsoneditor@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/ang-jsoneditor/-/ang-jsoneditor-2.0.0.tgz#01ab8823eb2aee0673ad36cacdf91a33c4461215"
-  integrity sha512-5i5VGQ8KWxbW0eXPi8jK+t3cuntrUUTgZRxvV+PYN3J6XqfXgjHOe01xR8Z9svM1ByT7yUD6I1f5abXWXPKoUw==
+ang-jsoneditor@3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/ang-jsoneditor/-/ang-jsoneditor-3.1.0.tgz#c07872926cd730e9eb5cb2320ea02f3d8efbbdd8"
+  integrity sha512-7D26LOhFxZ5S41GVE0I2OYDSikmmwQEHJCb29GfPU6rCElG2GgxbKMBO5meRUwnbmdEpG6UWXUDmvRbatCmCgg==
   dependencies:
     tslib "^2.3.0"
 
