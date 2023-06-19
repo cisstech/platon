@@ -6,38 +6,46 @@ import { BaseEntity } from '../database/base-entity';
 export class UserEntity extends BaseEntity {
   @Index('Users_username_idx', { unique: true })
   @Column()
-  username!: string
+  username!: string;
 
   @Index('Users_first_name_idx', { synchronize: false })
   @Column({ name: 'first_name', default: '' })
-  firstName!: string
+  firstName!: string;
 
   @Index('Users_last_name_idx', { synchronize: false })
   @Column({ name: 'last_name', default: '' })
-  lastName!: string
+  lastName!: string;
 
   @Column({ type: 'boolean', default: true })
-  active!: boolean
+  active!: boolean;
 
   @Index('Users_role_idx')
   @Column({ type: 'enum', enum: UserRoles })
-  role!: UserRoles
+  role!: UserRoles;
 
   @Index('Users_email_idx')
   @Column({ nullable: true })
-  email?: string
+  email?: string;
 
   @Column({ nullable: true })
-  password?: string
+  password?: string;
 
-  @Column({ name: 'last_login', nullable: true, type: 'timestamp with time zone' })
-  lastLogin?: Date
+  @Column({
+    name: 'last_login',
+    nullable: true,
+    type: 'timestamp with time zone',
+  })
+  lastLogin?: Date;
 
-  @Column({ name: 'first_login', nullable: true, type: 'timestamp with time zone' })
-  firstLogin?: Date
+  @Column({
+    name: 'first_login',
+    nullable: true,
+    type: 'timestamp with time zone',
+  })
+  firstLogin?: Date;
 
   @VirtualColumn({
-    query:() => 'SELECT password IS NOT NULL'
+    query: (alias) => `SELECT ${alias}.password IS NOT NULL`,
   })
-  hasPassword = false
+  hasPassword = false;
 }

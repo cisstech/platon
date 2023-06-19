@@ -18,33 +18,38 @@
 
 ## Table of Contents
 
-1. [Introduction](#introduction)
-2. [Key Features](#key-features)
-3. [Installation](#installation)
-   1. [Prerequisites](#prerequisites)
-   2. [Recommendations](#recommendations)
-   3. [Setup](#setup)
-4. [Technical Documentation](#technical-documentation)
-   1. [Platform Architecture](#platform-architecture)
-   2. [Environment Configuration](#environment-configuration)
-   3. [Codebase Structure](#codebase-structure)
-   4. [Key Libraries and Frameworks](#key-libraries-and-frameworks)
-   5. [Development Workflow](#development-workflow)
-      1. [Scripts](#scripts)
-      2. [Testing](#testing)
-      3. [Linting and Formatting](#linting-and-formatting)
-   6. [Deployment](#deployment)
-      1. [On-premise](#on-premise)
-      2. [Cloud](#cloud)
-5. [Functional Documentation](#functional-documentation)
-   1. [User Types](#user-types)
-   2. [Resource Management](#resource-management)
-   3. [Course and Activity Management](#course-and-activity-management)
-   4. [Tags and Topics](#tags-and-topics)
-   5. [User Groups and Notifications](#user-groups-and-notifications)
-   6. [LMS Integration](#lms-integration)
-6. [Contributing](#contributing)
-7. [License](#license)
+- [PLaTon - Platform for Learning and Teaching Online](#platon---platform-for-learning-and-teaching-online)
+  - [Table of Contents](#table-of-contents)
+  - [Introduction](#introduction)
+  - [Key Features](#key-features)
+  - [Planned features](#planned-features)
+  - [Installation](#installation)
+    - [Prerequisites](#prerequisites)
+    - [Recommendations](#recommendations)
+    - [Setup](#setup)
+  - [Technical Documentation](#technical-documentation)
+    - [Platform Architecture](#platform-architecture)
+      - [Technical Stack](#technical-stack)
+      - [Docker stack](#docker-stack)
+    - [Environment Configuration](#environment-configuration)
+    - [Codebase Structure](#codebase-structure)
+    - [Key Libraries and Frameworks](#key-libraries-and-frameworks)
+    - [Development Workflow](#development-workflow)
+      - [Scripts](#scripts)
+      - [Testing](#testing)
+      - [Linting and Formatting](#linting-and-formatting)
+    - [Deployment](#deployment)
+      - [On-premise](#on-premise)
+      - [Cloud](#cloud)
+  - [Functional Documentation](#functional-documentation)
+    - [User Types](#user-types)
+    - [Resource Management](#resource-management)
+    - [Course and Activity Management](#course-and-activity-management)
+    - [Tags and Topics](#tags-and-topics)
+    - [User Groups and Notifications](#user-groups-and-notifications)
+    - [LMS Integration](#lms-integration)
+  - [Contributing](#contributing)
+  - [License](#license)
 
 ## Introduction
 
@@ -91,6 +96,7 @@ v16.14.2
 
 > nvm --version
 0.37.2
+
 ```
 
 ### Recommendations

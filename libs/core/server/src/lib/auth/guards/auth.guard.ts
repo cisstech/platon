@@ -4,7 +4,11 @@ import { Reflector } from '@nestjs/core';
 import { ExecutionContextHost } from '@nestjs/core/helpers/execution-context-host';
 import { GqlContextType, GqlExecutionContext } from '@nestjs/graphql';
 import { AuthGuard as PassportGuard } from '@nestjs/passport';
-import { TOKEN_EXPIRED_ERROR_CODE, UnauthorizedResponse, User } from '@platon/core/common';
+import {
+  TOKEN_EXPIRED_ERROR_CODE,
+  UnauthorizedResponse,
+  User,
+} from '@platon/core/common';
 import { TokenExpiredError } from 'jsonwebtoken';
 import { firstValueFrom, Observable } from 'rxjs';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
@@ -47,7 +51,7 @@ export class AuthGuard extends PassportGuard(['jwt']) {
         return (await firstValueFrom(loggedIn)) || isPublic;
       }
 
-      return (await loggedIn) || isPublic
+      return (await loggedIn) || isPublic;
     } catch (error) {
       if (isPublic) {
         return true;
@@ -56,9 +60,18 @@ export class AuthGuard extends PassportGuard(['jwt']) {
     }
   }
 
-  override handleRequest(err: any, user: User, info: any, context: ExecutionContext, status: any) {
-    if (info instanceof TokenExpiredError || Array.isArray(info) && info.some((i) => i instanceof TokenExpiredError)) {
-      throw new UnauthorizedResponse(TOKEN_EXPIRED_ERROR_CODE)
+  override handleRequest(
+    err: any,
+    user: User,
+    info: any,
+    context: ExecutionContext,
+    status: any
+  ) {
+    if (
+      info instanceof TokenExpiredError ||
+      (Array.isArray(info) && info.some((i) => i instanceof TokenExpiredError))
+    ) {
+      throw new UnauthorizedResponse(TOKEN_EXPIRED_ERROR_CODE);
     }
     return super.handleRequest(err, user, info, context, status);
   }
