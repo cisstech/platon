@@ -102,6 +102,11 @@
             "glob": "**/*",
             "input": "./node_modules/jsoneditor/dist/",
             "output": "./assets/vendors/jsoneditor/"
+          },
+          {
+            "glob": "**/*",
+            "input": "./node_modules/reveal.js/dist/",
+            "output": "./assets/vendors/revealjs/"
           }
         ],
         "styles": [

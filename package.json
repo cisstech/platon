@@ -223,6 +223,7 @@
     "pg": "^8.9.0",
     "pyodide": "^0.22.1",
     "reflect-metadata": "^0.1.13",
+    "reveal.js": "^4.5.0",
     "rxjs": "^7.5.2",
     "simple-git": "^3.16.0",
     "tar": "^6.1.13",
