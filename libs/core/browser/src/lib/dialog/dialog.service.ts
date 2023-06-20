@@ -26,10 +26,10 @@ export class DialogService {
     private readonly nzNotificationService: NzNotificationService,
   ) { }
   
-  public static readonly DIALOG_DURATION : number = 4.5;
+  public static readonly DEFAULT_DIALOG_DURATION : number = 4.5;
 
-  error(content: string, options: MessageOptions = { duration: DialogService.DIALOG_DURATION }) {
-    if (options.duration == null) options.duration = DialogService.DIALOG_DURATION;
+  error(content: string, options: MessageOptions = { duration: DialogService.DEFAULT_DIALOG_DURATION }) {
+    if (options.duration == null) options.duration = DialogService.DEFAULT_DIALOG_DURATION;
     const ref = options?.notification
       ? this.nzNotificationService.error(options.notification.title, content, { nzDuration: options?.duration })
       : this.nzMessageService.error(content, { nzDuration: options?.duration });
@@ -39,8 +39,8 @@ export class DialogService {
     };
   }
 
-  info(content: string,  options: MessageOptions = { duration: DialogService.DIALOG_DURATION }) {
-    if (options.duration == null) options.duration = DialogService.DIALOG_DURATION;
+  info(content: string,  options: MessageOptions = { duration: DialogService.DEFAULT_DIALOG_DURATION }) {
+    if (options.duration == null) options.duration = DialogService.DEFAULT_DIALOG_DURATION;
     const ref = options?.notification
       ? this.nzNotificationService.info(options.notification.title, content, { nzDuration: options?.duration })
       : this.nzMessageService.info(content, { nzDuration: options?.duration });
@@ -50,8 +50,8 @@ export class DialogService {
     };
   }
 
-  success(content: string, options: MessageOptions = { duration: DialogService.DIALOG_DURATION }) {
-    if (options.duration == null) options.duration = DialogService.DIALOG_DURATION;
+  success(content: string, options: MessageOptions = { duration: DialogService.DEFAULT_DIALOG_DURATION }) {
+    if (options.duration == null) options.duration = DialogService.DEFAULT_DIALOG_DURATION;
     const ref = options?.notification
       ? this.nzNotificationService.success(options.notification.title, content, { nzDuration: options?.duration })
       : this.nzMessageService.success(content, { nzDuration: options?.duration });
@@ -61,8 +61,8 @@ export class DialogService {
     };
   }
 
-  warning(content: string,  options: MessageOptions = { duration: DialogService.DIALOG_DURATION }) {
-    if (options.duration == null) options.duration = DialogService.DIALOG_DURATION;
+  warning(content: string,  options: MessageOptions = { duration: DialogService.DEFAULT_DIALOG_DURATION }) {
+    if (options.duration == null) options.duration = DialogService.DEFAULT_DIALOG_DURATION;
     const ref = options?.notification
       ? this.nzNotificationService.warning(options.notification.title, content, { nzDuration: options?.duration })
       : this.nzMessageService.warning(content, { nzDuration: options?.duration });
@@ -72,8 +72,8 @@ export class DialogService {
     };
   }
 
-  notification(template: TemplateRef<object>, options: TemplateOptions = { duration: DialogService.DIALOG_DURATION }) {
-    if (options.duration == null) options.duration = DialogService.DIALOG_DURATION
+  notification(template: TemplateRef<object>, options: TemplateOptions = { duration: DialogService.DEFAULT_DIALOG_DURATION }) {
+    if (options.duration == null) options.duration = DialogService.DEFAULT_DIALOG_DURATION
     const ref = this.nzNotificationService.template(template, {
       nzDuration: options?.duration,
       nzData: options?.data as object
