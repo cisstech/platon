@@ -25,7 +25,7 @@ export class DialogService {
     private readonly nzMessageService: NzMessageService,
     private readonly nzNotificationService: NzNotificationService,
   ) { }
-
+  
   public static readonly DIALOG_DURATION : number = 4.5;
 
   error(content: string, options: MessageOptions = { duration: DialogService.DIALOG_DURATION }) {
