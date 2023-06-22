@@ -5212,6 +5212,11 @@
   resolved "https://registry.yarnpkg.com/@types/retry/-/retry-0.12.0.tgz#2b35eccfcee7d38cd72ad99232fbd58bffb3c84d"
   integrity sha512-wWKOClTTiizcZhXnPY4wikVAwmdYHp8q6DmC+EJUzAMsycb7HB32Kh9RN4+0gExjmPmZSAQjgURXIGATPegAvA==
 
+"@types/reveal.js@^4.4.2":
+  version "4.4.2"
+  resolved "https://registry.yarnpkg.com/@types/reveal.js/-/reveal.js-4.4.2.tgz#bc6248b6236ee7af7ef108eb5d8c947772a04ea9"
+  integrity sha512-z+lVPEWGPFrPv3S9Mx2qLKXA4zT+Mo3GxvW68OR7lbUcCmqjn4vjaQJ2qCW+xNkBUgfR8d3fzLWHmu1PIfRiIA==
+
 "@types/scheduler@*":
   version "0.16.3"
   resolved "https://registry.yarnpkg.com/@types/scheduler/-/scheduler-0.16.3.tgz#cef09e3ec9af1d63d2a6cc5b383a737e24e6dcf5"

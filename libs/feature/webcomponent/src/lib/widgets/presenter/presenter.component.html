@@ -1,2 +1,16 @@
-<ng-content></ng-content>
+<div class="presenter">
+  <button nz-button nzType="default" class="presenter-fs-toggle ant-btn-icon-only" [class.presenter-fs]="fullscreen" (click)="toggleFullscreen()">
+    <ng-container *ngIf="fullscreen; else: exit">
+      <span nz-icon nzType="fullscreen-exit"></span>
+    </ng-container>
+    <ng-template #exit>
+      <span nz-icon nzType="fullscreen"></span>
+    </ng-template>
+  </button>
+  <div class="reveal r-container presenter-container" [class.presenter-fs-content]="fullscreen" [class.presenter-fs]="fullscreen">
+    <div class="slides" [innerHtml]="template">
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>
 <wc-base [(state)]="state"></wc-base>

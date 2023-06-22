@@ -107,6 +107,11 @@
             "glob": "**/*",
             "input": "./node_modules/reveal.js/dist/",
             "output": "./assets/vendors/revealjs/"
+          },
+          {
+            "glob": "**/*",
+            "input": "./node_modules/reveal.js/plugin/",
+            "output": "./assets/vendors/revealjs/plugin/"
           }
         ],
         "styles": [
