@@ -98,7 +98,7 @@ export class CoursesPage implements OnInit, OnDestroy {
   };
 
   private user?: User;
-  protected canCreateCourse: boolean = false;
+  protected canCreateCourse = false;
 
   protected indicators: FilterIndicator<CourseFilters>[] = [];
 
