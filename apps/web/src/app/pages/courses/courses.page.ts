@@ -1,6 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import Fuse from 'fuse.js';
 import { firstValueFrom, map, of, shareReplay, Subscription } from 'rxjs';
@@ -12,12 +18,31 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 
-import { FilterIndicator, FilterMatcher, matchIndicators, PeriodFilterMatcher, SearchBar, UiFilterIndicatorComponent, UiSearchBarComponent } from '@platon/shared/ui';
+import {
+  FilterIndicator,
+  FilterMatcher,
+  matchIndicators,
+  PeriodFilterMatcher,
+  SearchBar,
+  UiFilterIndicatorComponent,
+  UiSearchBarComponent,
+} from '@platon/shared/ui';
 
 import { AuthService } from '@platon/core/browser';
 import { OrderingDirections, User } from '@platon/core/common';
-import { CourseFiltersComponent, CourseListComponent, CourseOrderingFilterMatcher, CoursePipesModule, CourseService } from '@platon/feature/course/browser';
-import { Course, CourseFilters, CourseOrderings } from '@platon/feature/course/common';
+import {
+  CourseFiltersComponent,
+  CourseListComponent,
+  CourseOrderingFilterMatcher,
+  CoursePipesModule,
+  CourseService,
+} from '@platon/feature/course/browser';
+import {
+  Course,
+  CourseFilters,
+  CourseOrderings,
+} from '@platon/feature/course/common';
+import { UserRoles } from '@platon/core/common';
 
 @Component({
   standalone: true,
@@ -42,7 +67,7 @@ import { Course, CourseFilters, CourseOrderings } from '@platon/feature/course/c
 
     UiSearchBarComponent,
     UiFilterIndicatorComponent,
-  ]
+  ],
 })
 export class CoursesPage implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription[] = [];
@@ -62,21 +87,25 @@ export class CoursesPage implements OnInit, OnDestroy {
               includeMatches: true,
               findAllMatches: false,
               threshold: 0.2,
-            }).search(query).map(e => e.item);
+            })
+              .search(query)
+              .map((e) => e.item);
           })
-        )
+        );
       },
     },
     onSearch: (query) => this.search(this.filters, query),
-  }
+  };
 
   private user?: User;
+  protected canCreateCourse: boolean = false;
 
   protected indicators: FilterIndicator<CourseFilters>[] = [];
 
-  protected completion = of([]).pipe(   // TODO implements server function
+  protected completion = of([]).pipe(
+    // TODO implements server function
     shareReplay(1)
-  )
+  );
 
   protected searching = true;
   protected filters: CourseFilters = {};
@@ -87,11 +116,14 @@ export class CoursesPage implements OnInit, OnDestroy {
     private readonly authService: AuthService,
     private readonly courseService: CourseService,
     private readonly activatedRoute: ActivatedRoute,
-    private readonly changeDetectorRef: ChangeDetectorRef,
-  ) { }
+    private readonly changeDetectorRef: ChangeDetectorRef
+  ) {}
 
   async ngOnInit(): Promise<void> {
-    this.user = await this.authService.ready() as User;
+    this.user = (await this.authService.ready()) as User;
+    this.canCreateCourse =
+      this.user?.role === UserRoles.teacher ||
+      this.user?.role === UserRoles.admin;
     this.changeDetectorRef.markForCheck();
 
     this.subscriptions.push(
@@ -99,7 +131,8 @@ export class CoursesPage implements OnInit, OnDestroy {
         this.filters = {
           ...this.filters,
           search: e.q,
-          period: Number.parseInt(e.period + '', 10) || this.filters.period || 0,
+          period:
+            Number.parseInt(e.period + '', 10) || this.filters.period || 0,
           order: e.order,
           direction: e.direction,
         };
@@ -114,11 +147,10 @@ export class CoursesPage implements OnInit, OnDestroy {
         ).resources;
         this.searching = false;
 
-
         this.indicators = matchIndicators(
           this.filters,
           this.filterMatchers,
-          data => this.search(data, data.search)
+          (data) => this.search(data, data.search)
         );
 
         this.changeDetectorRef.markForCheck();
@@ -127,7 +159,7 @@ export class CoursesPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(s => s.unsubscribe());
+    this.subscriptions.forEach((s) => s.unsubscribe());
   }
 
   protected search(filters: CourseFilters, query?: string) {
@@ -147,8 +179,8 @@ export class CoursesPage implements OnInit, OnDestroy {
 }
 
 interface QueryParams {
-  q?: string,
-  period?: string | number,
-  order?: CourseOrderings,
-  direction?: OrderingDirections,
+  q?: string;
+  period?: string | number;
+  order?: CourseOrderings;
+  direction?: OrderingDirections;
 }
