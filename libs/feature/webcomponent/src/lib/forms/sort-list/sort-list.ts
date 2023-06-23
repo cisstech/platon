@@ -11,6 +11,7 @@ export interface SortListItem {
 
 export interface SortListState extends IWebComponent {
   items: SortListItem[];
+  alignment?: 'center' | 'left';
   disabled: boolean;
 }
 
@@ -47,6 +48,12 @@ export const SortListComponentDefinition = defineWebComponent({
           },
         },
       },
+      alignment: {
+        type: 'string',
+        default: 'center',
+        description: 'Alignement des items du SortList',
+        enum: ['center', 'left']
+      },
       disabled: {
         type: 'boolean',
         default: false,
@@ -55,6 +62,6 @@ export const SortListComponentDefinition = defineWebComponent({
     },
   },
   showcase: {
-    items: ['Choix 1', 'Choix 2', 'Choix 3'],
+    items: ['Choix 1', 'Choix 2', 'Choix 3']
   },
 });
