@@ -21,6 +21,7 @@ import { GraphViewerComponentDefinition } from './widgets/graph-viewer/graph-vie
 import { MarkdownComponentDefinition } from './widgets/markdown/markdown';
 import { DragDropComponentDefinition } from './forms/drag-drop/drag-drop';
 import { FeedbackComponentDefinition } from './widgets/feedback/feedback';
+import { PresenterComponentDefinition } from './widgets/presenter/presenter';
 
 export const WEB_COMPONENTS_BUNDLES: NgeElementDef[] = [
   {
@@ -149,6 +150,13 @@ export const WEB_COMPONENTS_BUNDLES: NgeElementDef[] = [
         /* webpackChunkName: "wc-feedback" */ './widgets/feedback/feedback.module'
       ).then((m) => m.FeedbackModule),
   },
+  {
+    selector: 'wc-presenter',
+    module: () =>
+      import(
+        /* webpackChunkName: "wc-presenter" */ './widgets/presenter/presenter.module'
+      ).then((m) => m.PresenterModule),
+  },
 ];
 
 export const WEB_COMPONENTS_REGISTRY: Provider[] = [
@@ -241,5 +249,10 @@ export const WEB_COMPONENTS_REGISTRY: Provider[] = [
     provide: WEB_COMPONENT_DEFINITIONS,
     multi: true,
     useValue: FeedbackComponentDefinition,
+  },
+  {
+    provide: WEB_COMPONENT_DEFINITIONS,
+    multi: true,
+    useValue: PresenterComponentDefinition,
   },
 ];
