@@ -78,13 +78,13 @@ export const ChartViewerComponentDefinition = defineWebComponent({
       },
       yAxisLabel: {
         type: 'string',
-        default: 'Axe X',
-        description: 'Label de l\'axe horizontal',
+        default: 'Axe Y',
+        description: 'Label de l\'axe vertical',
       },
       showYAxisLabel: {
         type: 'boolean',
         default: true,
-        description: 'Afficher le label de l\'axe horizontal?',
+        description: 'Afficher le label de l\'axe vertical?',
       },
       showLegend: {
         type: 'boolean',
@@ -104,7 +104,7 @@ export const ChartViewerComponentDefinition = defineWebComponent({
       },
       colorScheme: {
         type: 'string',
-        default: 'natural',
+        default: 'horizon',
         description: 'Thème de couleur utilisé pour afficher les données',
         enum: [
           "vivid",
@@ -169,7 +169,7 @@ export const ChartViewerComponentDefinition = defineWebComponent({
           },
           {
             "name": "Set3",
-            "value": 42690
+            "value": 4269000
           }
         ]
       }

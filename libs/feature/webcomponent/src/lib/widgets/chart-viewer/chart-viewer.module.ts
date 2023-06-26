@@ -12,9 +12,7 @@ import { FormsModule } from '@angular/forms';
   imports: [
     BaseModule, 
     NgeMonacoModule,
-    NgxChartsModule,
-    NzSelectModule,
-    FormsModule
+    NgxChartsModule
   ],
   exports: [ChartViewerComponent],
 })
