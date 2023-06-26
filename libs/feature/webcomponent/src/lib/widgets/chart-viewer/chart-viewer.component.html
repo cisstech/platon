@@ -1,19 +1,23 @@
+<div style="display: flex; flex-direction:column;">
+<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Selectionner un thème" [(ngModel)]="this.state.colorScheme">
+    <nz-option *ngFor="let theme of AvailableThemes" [nzLabel]="theme" [nzValue]="theme"></nz-option>
+</nz-select>
 <ngx-charts-bar-horizontal-2d
-    [view]="view"
-    [scheme]="colorScheme"
-    [schemeType]="schemeType"
-    [results]="multi"
-    [gradient]="gradient"
-    [xAxis]="showXAxis"
-    [yAxis]="showYAxis"
-    [legend]="showLegend"
-    [legendPosition]="legendPosition"
-    [showXAxisLabel]="showXAxisLabel"
-    [showYAxisLabel]="showYAxisLabel"
-    [xAxisLabel]="xAxisLabel"
-    [yAxisLabel]="yAxisLabel"
+    [scheme]="this.state.colorScheme ?? default_colorScheme"
+    [schemeType]="this.state.schemeType ?? default_schemeType"
+    [results]="this.state.data"
+    [gradient]="this.state.gradient ?? default_gradient"
+    [xAxis]="this.state.showXAxis ?? default_showXAxis"
+    [yAxis]="this.state.showYAxis ?? default_showYAxis"
+    [legend]="this.state.showLegend ?? default_showLegend"
+    [legendPosition]="this.state.legendPosition ?? default_legendPosition"
+    [showXAxisLabel]="this.state.showXAxisLabel ?? default_showXAxisLabel"
+    [showYAxisLabel]="this.state.showYAxisLabel ?? default_showYAxisLabel"
+    [xAxisLabel]="this.state.xAxisLabel ?? default_xAxisLabel"
+    [yAxisLabel]="this.state.yAxisLabel ?? default_yAxisLabel"
     (select)="onSelect($event)"
     (activate)="onActivate($event)"
     (deactivate)="onDeactivate($event)"
 >
 </ngx-charts-bar-horizontal-2d>
+</div>

@@ -10,6 +10,7 @@ import {
   import {
     ChartViewerComponentDefinition,
     ChartViewerState,
+    AvailableThemes
   } from './chart-viewer';
 import { Color, LegendPosition, ScaleType } from '@swimlane/ngx-charts';
   
@@ -24,26 +25,21 @@ import { Color, LegendPosition, ScaleType } from '@swimlane/ngx-charts';
     implements WebComponentHooks<ChartViewerState>
   {
     @Input() state!: ChartViewerState;
-
-    multi: any[]; 
-    view: [number, number] = [700, 400];
     
-    // options
-    showXAxis = true;
-    showYAxis = true;
-    gradient = false;
-    showLegend = true;
-    legendPosition : LegendPosition = LegendPosition.Right;
-    showXAxisLabel = true;
-    yAxisLabel = 'Country';
-    showYAxisLabel = true;
-    xAxisLabel  = 'Population';
-  
-    colorScheme : string | Color = "forest"
-    schemeType : ScaleType = ScaleType.Linear;
-  
+    // default options to content compiler
+    default_showXAxis = true;
+    default_showYAxis = true;
+    default_gradient = false;
+    default_showLegend = true;
+    default_legendPosition : LegendPosition = LegendPosition.Right;
+    default_showXAxisLabel = true;
+    default_yAxisLabel = 'Axe Y';
+    default_showYAxisLabel = true;
+    default_xAxisLabel  = 'Axe X';
+    default_colorScheme : string | Color = "forest";
+    default_schemeType : ScaleType = ScaleType.Ordinal;
+    AvailableThemes = AvailableThemes;
     constructor(readonly injector: Injector) {
-      this.multi = multi;
     }
   
     onSelect(data: unknown): void {

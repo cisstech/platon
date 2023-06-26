@@ -4,13 +4,17 @@ import { NgeMonacoModule } from '@cisstech/nge/monaco';
 import { BaseModule } from '../../shared/components/base/base.module';
 import { IDynamicModule } from '@cisstech/nge/services';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [ChartViewerComponent],
   imports: [
     BaseModule, 
     NgeMonacoModule,
-    NgxChartsModule
+    NgxChartsModule,
+    NzSelectModule,
+    FormsModule
   ],
   exports: [ChartViewerComponent],
 })
