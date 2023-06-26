@@ -21,6 +21,7 @@ import { GraphViewerComponentDefinition } from './widgets/graph-viewer/graph-vie
 import { MarkdownComponentDefinition } from './widgets/markdown/markdown';
 import { DragDropComponentDefinition } from './forms/drag-drop/drag-drop';
 import { FeedbackComponentDefinition } from './widgets/feedback/feedback';
+import { ChartViewerComponentDefinition } from './widgets/chart-viewer/chart-viewer';
 
 export const WEB_COMPONENTS_BUNDLES: NgeElementDef[] = [
   {
@@ -64,6 +65,13 @@ export const WEB_COMPONENTS_BUNDLES: NgeElementDef[] = [
       import(
         /* webpackChunkName: "wc-graph-viewer" */ './widgets/graph-viewer/graph-viewer.module'
       ).then((m) => m.GraphViewerModule),
+  },
+  {
+    selector: 'wc-chart-viewer',
+    module: () =>
+      import(
+        /* webpackChunkName: "wc-graph-viewer" */ './widgets/chart-viewer/chart-viewer.module'
+      ).then((m) => m.ChartViewerModule),
   },
   {
     selector: 'wc-input-box',
@@ -181,6 +189,11 @@ export const WEB_COMPONENTS_REGISTRY: Provider[] = [
     provide: WEB_COMPONENT_DEFINITIONS,
     multi: true,
     useValue: GraphViewerComponentDefinition,
+  },
+  {
+    provide: WEB_COMPONENT_DEFINITIONS,
+    multi: true,
+    useValue: ChartViewerComponentDefinition,
   },
   {
     provide: WEB_COMPONENT_DEFINITIONS,
