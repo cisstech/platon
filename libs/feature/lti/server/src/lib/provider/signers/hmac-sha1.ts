@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import crypto from 'crypto';
 import url from 'url';
-import { encode } from '../utils';
 import { Signer } from './signer';
+import { encodeRFC3986 } from '../utils';
 
 function encodeBody(body: any, query: any) {
   const out: string[] = [];
-  const encodeParam = (key: string, val: any) => `${key}=${encode(val)}`;
+  const encodeParam = (key: string, val: any) => `${key}=${encodeRFC3986(val)}`;
   const cleanParams = (params: any) => {
     if (typeof params !== 'object') {
       return;
@@ -27,7 +27,7 @@ function encodeBody(body: any, query: any) {
   };
   cleanParams(body);
   cleanParams(query);
-  return encode(out.sort().join('&'));
+  return encodeRFC3986(out.sort().join('&'));
 }
 
 export class HmacSha1 implements Signer {
@@ -67,7 +67,7 @@ export class HmacSha1 implements Signer {
     consumerSecret: string,
     token?: string
   ): string {
-    const sig = [method.toUpperCase(), encode(reqUrl), encodeBody(params, parsedUrl.query)];
+    const sig = [method.toUpperCase(), encodeRFC3986(reqUrl), encodeBody(params, parsedUrl.query)];
     return this.sign(sig.join('&'), consumerSecret, token);
   }
 

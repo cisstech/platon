@@ -1,8 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-
-import { MatCardModule } from '@angular/material/card';
 
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 
@@ -11,9 +14,7 @@ import { Player } from '@platon/feature/player/common';
 import { ResultService } from '@platon/feature/result/browser';
 import { PendingCorrection } from '@platon/feature/result/common';
 import { UiErrorComponent } from '@platon/shared/ui';
-import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
 import { firstValueFrom } from 'rxjs';
-
 
 @Component({
   standalone: true,
@@ -26,7 +27,7 @@ import { firstValueFrom } from 'rxjs';
     NzSpinModule,
     UiErrorComponent,
     PlayerCorrectionComponent,
-  ]
+  ],
 })
 export class PlayerCorrectionPage implements OnInit {
   protected player?: Player;
@@ -38,7 +39,7 @@ export class PlayerCorrectionPage implements OnInit {
     private readonly resultService: ResultService,
     private readonly activatedRoute: ActivatedRoute,
     private readonly changeDetectorRef: ChangeDetectorRef
-  ) { }
+  ) {}
 
   async ngOnInit(): Promise<void> {
     try {
