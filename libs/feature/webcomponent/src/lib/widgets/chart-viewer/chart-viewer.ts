@@ -6,6 +6,7 @@ import {
 } from '../../web-component';
 
 export interface ChartViewerState extends IWebComponent {
+  mode?: 'horizontal' | 'vertical',
   showXAxis?: boolean,
   showXAxisLabel?: boolean,
   xAxisLabel?: string,
@@ -51,6 +52,12 @@ export const ChartViewerComponentDefinition = defineWebComponent({
     title: 'ChartViewer',
     required: ['chart'],
     properties: {
+      mode: {
+        type: 'string',
+        default: 'vertical',
+        description: 'Mode d\'affichage du graphe : horizontal ou vertical',
+        enum: ['horizontal', 'vertical']
+      },
       data: {
         type: 'array',
         default: [],
@@ -104,7 +111,7 @@ export const ChartViewerComponentDefinition = defineWebComponent({
       },
       colorScheme: {
         type: 'string',
-        default: 'horizon',
+        default: 'nightLights',
         description: 'Thème de couleur utilisé pour afficher les données',
         enum: [
           "vivid",

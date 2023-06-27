@@ -1,3 +1,4 @@
+<div *ngIf="this.state.mode === 'horizontal'; else elseBlock">
 <ngx-charts-bar-horizontal-2d
     [scheme]="this.state.colorScheme ?? default_colorScheme"
     [schemeType]="this.state.schemeType ?? default_schemeType"
@@ -16,3 +17,24 @@
     (deactivate)="onDeactivate($event)"
 >
 </ngx-charts-bar-horizontal-2d>
+</div>
+<ng-template #elseBlock>
+<ngx-charts-bar-vertical-2d
+    [scheme]="this.state.colorScheme ?? default_colorScheme"
+    [schemeType]="this.state.schemeType ?? default_schemeType"
+    [results]="this.state.data"
+    [gradient]="this.state.gradient ?? default_gradient"
+    [xAxis]="this.state.showXAxis ?? default_showXAxis"
+    [yAxis]="this.state.showYAxis ?? default_showYAxis"
+    [legend]="this.state.showLegend ?? default_showLegend"
+    [legendPosition]="this.state.legendPosition ?? default_legendPosition"
+    [showXAxisLabel]="this.state.showXAxisLabel ?? default_showXAxisLabel"
+    [showYAxisLabel]="this.state.showYAxisLabel ?? default_showYAxisLabel"
+    [xAxisLabel]="this.state.xAxisLabel ?? default_xAxisLabel"
+    [yAxisLabel]="this.state.yAxisLabel ?? default_yAxisLabel"
+    (select)="onSelect($event)"
+    (activate)="onActivate($event)"
+    (deactivate)="onDeactivate($event)"
+>
+</ngx-charts-bar-vertical-2d>
+</ng-template>
