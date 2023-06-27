@@ -1,5 +1,3 @@
-import { multi } from './data';
-
 import {
     ChangeDetectionStrategy,
     Component,
@@ -9,8 +7,7 @@ import {
   import { WebComponent, WebComponentHooks } from '../../web-component';
   import {
     ChartViewerComponentDefinition,
-    ChartViewerState,
-    AvailableThemes
+    ChartViewerState
   } from './chart-viewer';
 import { Color, LegendPosition, ScaleType } from '@swimlane/ngx-charts';
   
@@ -38,7 +35,6 @@ import { Color, LegendPosition, ScaleType } from '@swimlane/ngx-charts';
     default_xAxisLabel  = 'Axe X';
     default_colorScheme : string | Color = "forest";
     default_schemeType : ScaleType = ScaleType.Ordinal;
-    AvailableThemes = AvailableThemes;
     constructor(readonly injector: Injector) {
     }
   

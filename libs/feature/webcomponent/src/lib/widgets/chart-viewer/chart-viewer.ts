@@ -16,28 +16,10 @@ export interface ChartViewerState extends IWebComponent {
   showLegend?: boolean,
   legendPosition?: LegendPosition,
   gradient?:  boolean,
-  colorScheme?: string,
+  colorScheme?:   "vivid" | "natural" | "cool" | "fire" | "solar" | "air" |"aqua" | "flame" | "ocean" | "forest" | "horizon" | "neons" | "picnic" | "night" | "nightLights",
   schemeType? : ScaleType,
   data : any[]
 }
-
-export const AvailableThemes = [
-  "vivid",
-  "natural",
-  "cool",
-  "fire",
-  "solar",
-  "air",
-  "aqua",
-  "flame",
-  "ocean",
-  "forest",
-  "horizon",
-  "neons",
-  "picnic",
-  "night",
-  "nightLights"
-]
 
 export const ChartViewerComponentDefinition = defineWebComponent({
   type: WebComponentTypes.widget,
@@ -162,7 +144,6 @@ export const ChartViewerComponentDefinition = defineWebComponent({
           }
         ]
       },
-    
       {
         "name": "ValueC",
         "series": [
