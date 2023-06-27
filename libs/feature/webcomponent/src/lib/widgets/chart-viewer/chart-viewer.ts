@@ -84,7 +84,7 @@ export const ChartViewerComponentDefinition = defineWebComponent({
       },
       legendPosition: {
         type: 'object',
-        default: 'Right',
+        default: 'right',
         description: 'Position de la légende dans l\'affichage du graphe',
         enum: ["below", "right"]
       },
@@ -95,7 +95,7 @@ export const ChartViewerComponentDefinition = defineWebComponent({
       },
       colorScheme: {
         type: 'string',
-        default: 'picnic',
+        default: 'horizon',
         description: 'Thème de couleur utilisé pour afficher les données',
         enum: [
           "vivid",
