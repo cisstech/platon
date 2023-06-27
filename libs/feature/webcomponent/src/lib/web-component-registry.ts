@@ -21,7 +21,7 @@ import { GraphViewerComponentDefinition } from './widgets/graph-viewer/graph-vie
 import { MarkdownComponentDefinition } from './widgets/markdown/markdown';
 import { DragDropComponentDefinition } from './forms/drag-drop/drag-drop';
 import { FeedbackComponentDefinition } from './widgets/feedback/feedback';
-import { ChartViewerComponentDefinition } from './widgets/chart-viewer/chart-viewer';
+import { ChartViewerBarsComponentDefinition } from './widgets/chart-viewer-bars/chart-viewer-bars';
 import { PresenterComponentDefinition } from './widgets/presenter/presenter';
 
 export const WEB_COMPONENTS_BUNDLES: NgeElementDef[] = [
@@ -68,11 +68,11 @@ export const WEB_COMPONENTS_BUNDLES: NgeElementDef[] = [
       ).then((m) => m.GraphViewerModule),
   },
   {
-    selector: 'wc-chart-viewer',
+    selector: 'wc-chart-viewer-bars',
     module: () =>
       import(
-        /* webpackChunkName: "wc-graph-viewer" */ './widgets/chart-viewer/chart-viewer.module'
-      ).then((m) => m.ChartViewerModule),
+        /* webpackChunkName: "wc-graph-viewer" */ './widgets/chart-viewer-bars/chart-viewer-bars.module'
+      ).then((m) => m.ChartViewerBarsModule),
   },
   {
     selector: 'wc-input-box',
@@ -201,7 +201,7 @@ export const WEB_COMPONENTS_REGISTRY: Provider[] = [
   {
     provide: WEB_COMPONENT_DEFINITIONS,
     multi: true,
-    useValue: ChartViewerComponentDefinition,
+    useValue: ChartViewerBarsComponentDefinition,
   },
   {
     provide: WEB_COMPONENT_DEFINITIONS,

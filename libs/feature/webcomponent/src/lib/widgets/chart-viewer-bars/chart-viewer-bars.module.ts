@@ -1,21 +1,19 @@
 import { NgModule, Type } from '@angular/core';
-import { ChartViewerComponent } from './chart-viewer.component';
+import { ChartViewerBarsComponent } from './chart-viewer-bars.component';
 import { NgeMonacoModule } from '@cisstech/nge/monaco';
 import { BaseModule } from '../../shared/components/base/base.module';
 import { IDynamicModule } from '@cisstech/nge/services';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { NzSelectModule } from 'ng-zorro-antd/select';
-import { FormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [ChartViewerComponent],
+  declarations: [ChartViewerBarsComponent],
   imports: [
     BaseModule, 
     NgeMonacoModule,
     NgxChartsModule
   ],
-  exports: [ChartViewerComponent],
+  exports: [ChartViewerBarsComponent],
 })
-export class ChartViewerModule implements IDynamicModule {
-  component: Type<unknown> = ChartViewerComponent; 
+export class ChartViewerBarsModule implements IDynamicModule {
+  component: Type<unknown> = ChartViewerBarsComponent; 
 }

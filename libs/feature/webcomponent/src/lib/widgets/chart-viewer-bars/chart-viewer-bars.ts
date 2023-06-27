@@ -5,7 +5,7 @@ import {
   WebComponentTypes,
 } from '../../web-component';
 
-export interface ChartViewerState extends IWebComponent {
+export interface ChartViewerBarsState extends IWebComponent {
   mode?: 'horizontal' | 'vertical',
   showXAxis?: boolean,
   showXAxisLabel?: boolean,
@@ -21,15 +21,15 @@ export interface ChartViewerState extends IWebComponent {
   data : any[]
 }
 
-export const ChartViewerComponentDefinition = defineWebComponent({
+export const ChartViewerBarsComponentDefinition = defineWebComponent({
   type: WebComponentTypes.widget,
-  name: 'ChartViewer',
+  name: 'ChartViewer-Bars',
   icon: 'assets/images/components/forms/code-editor/code-editor.svg',
-  selector: 'wc-chart-viewer',
+  selector: 'wc-chart-viewer-bars',
   description:
     "Permets d'afficher une charte de type `histogramme` en fournissant des données",
   fullDescriptionUrl:
-    'assets/docs/components/widgets/chart-viewer/chart-viewer.md',
+    'assets/docs/components/widgets/chart-viewer/chart-viewer-bars.md',
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',
