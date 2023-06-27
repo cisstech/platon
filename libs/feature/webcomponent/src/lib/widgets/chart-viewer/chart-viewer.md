@@ -1,4 +1,5 @@
 Le format des éléments du tableau `data` est le suivant:
+
 ```typescript
 {
     "name"?: string, // Nom de la colonne

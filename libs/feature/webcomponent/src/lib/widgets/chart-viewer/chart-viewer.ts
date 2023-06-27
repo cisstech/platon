@@ -27,16 +27,18 @@ export const ChartViewerComponentDefinition = defineWebComponent({
   icon: 'assets/images/components/forms/code-editor/code-editor.svg',
   selector: 'wc-chart-viewer',
   description:
-    "Permets d'afficher un graph de type spécifier",
+    "Permets d'afficher une charte de type `histogramme` en fournissant des données",
+  fullDescriptionUrl:
+    'assets/docs/components/widgets/chart-viewer/chart-viewer.md',
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',
     title: 'ChartViewer',
-    required: ['chart'],
+    required: ['data'],
     properties: {
       mode: {
         type: 'string',
-        default: 'vertical',
+        default: 'horizontal',
         description: 'Mode d\'affichage du graphe : horizontal ou vertical',
         enum: ['horizontal', 'vertical']
       },
@@ -93,7 +95,7 @@ export const ChartViewerComponentDefinition = defineWebComponent({
       },
       colorScheme: {
         type: 'string',
-        default: 'nightLights',
+        default: 'picnic',
         description: 'Thème de couleur utilisé pour afficher les données',
         enum: [
           "vivid",
