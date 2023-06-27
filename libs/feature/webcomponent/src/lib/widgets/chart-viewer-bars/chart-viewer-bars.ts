@@ -21,6 +21,24 @@ export interface ChartViewerBarsState extends IWebComponent {
   data : any[]
 }
 
+export const availableColors = [
+  "vivid",
+  "natural",
+  "cool",
+  "fire",
+  "solar",
+  "air",
+  "aqua",
+  "flame",
+  "ocean",
+  "forest",
+  "horizon",
+  "neons",
+  "picnic",
+  "night",
+  "nightLights"
+]
+
 export const ChartViewerBarsComponentDefinition = defineWebComponent({
   type: WebComponentTypes.widget,
   name: 'ChartViewer-Bars',
@@ -29,7 +47,7 @@ export const ChartViewerBarsComponentDefinition = defineWebComponent({
   description:
     "Permets d'afficher une charte de type `histogramme` en fournissant des données",
   fullDescriptionUrl:
-    'assets/docs/components/widgets/chart-viewer/chart-viewer-bars.md',
+    'assets/docs/components/widgets/chart-viewer-bars/chart-viewer-bars.md',
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',
@@ -97,23 +115,7 @@ export const ChartViewerBarsComponentDefinition = defineWebComponent({
         type: 'string',
         default: 'horizon',
         description: 'Thème de couleur utilisé pour afficher les données',
-        enum: [
-          "vivid",
-          "natural",
-          "cool",
-          "fire",
-          "solar",
-          "air",
-          "aqua",
-          "flame",
-          "ocean",
-          "forest",
-          "horizon",
-          "neons",
-          "picnic",
-          "night",
-          "nightLights"
-        ]
+        enum: availableColors
       }
     },
   },

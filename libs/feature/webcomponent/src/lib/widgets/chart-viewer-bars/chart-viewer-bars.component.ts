@@ -13,7 +13,7 @@ import { Color, LegendPosition, ScaleType } from '@swimlane/ngx-charts';
   
 @Component({
   selector: 'wc-chart-viewer-bars, wc-cv-bars',
-  templateUrl: 'chart-viewer-bars.component.html',
+  templateUrl: './chart-viewer-bars.component.html',
   styleUrls: ['chart-viewer-bars.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -35,6 +35,7 @@ export class ChartViewerBarsComponent
   default_xAxisLabel  = 'Axe X';
   default_colorScheme : string | Color = "forest";
   default_schemeType : ScaleType = ScaleType.Ordinal;
+
   constructor(readonly injector: Injector) {
   }
 

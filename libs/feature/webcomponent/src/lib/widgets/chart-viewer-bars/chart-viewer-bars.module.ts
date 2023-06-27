@@ -5,12 +5,13 @@ import { BaseModule } from '../../shared/components/base/base.module';
 import { IDynamicModule } from '@cisstech/nge/services';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
+
 @NgModule({
   declarations: [ChartViewerBarsComponent],
   imports: [
     BaseModule, 
     NgeMonacoModule,
-    NgxChartsModule
+    NgxChartsModule,
   ],
   exports: [ChartViewerBarsComponent],
 })
