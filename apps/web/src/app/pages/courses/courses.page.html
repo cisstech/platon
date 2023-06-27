@@ -4,6 +4,7 @@
     <ng-template let-context> {{ context }}</ng-template>
   </ui-search-bar>
   <button
+    *ngIf="canCreateCourse"
     nz-button
     nzType="primary"
     nzShape="round"
