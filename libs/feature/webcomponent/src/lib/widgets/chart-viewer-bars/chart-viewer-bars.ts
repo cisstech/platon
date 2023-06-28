@@ -121,7 +121,7 @@ export const ChartViewerBarsComponentDefinition = defineWebComponent({
         type: 'string',
         default: 'ordinal',
         description: 'Type d\'affichage du graphe',
-        enum: ['ordinal', 'time', 'linear', 'quantile']
+        enum: ['ordinal', 'time', 'linear']
       }
     },
   },
