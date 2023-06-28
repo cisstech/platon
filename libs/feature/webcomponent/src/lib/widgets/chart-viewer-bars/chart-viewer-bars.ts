@@ -51,7 +51,7 @@ export const ChartViewerBarsComponentDefinition = defineWebComponent({
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',
-    title: 'ChartViewer',
+    title: 'ChartViewer-Bars',
     required: ['data'],
     properties: {
       mode: {
@@ -101,7 +101,7 @@ export const ChartViewerBarsComponentDefinition = defineWebComponent({
         description: 'Afficher la légende décrivant les données affichées?',
       },
       legendPosition: {
-        type: 'object',
+        type: 'string',
         default: 'right',
         description: 'Position de la légende dans l\'affichage du graphe',
         enum: ["below", "right"]
@@ -116,6 +116,12 @@ export const ChartViewerBarsComponentDefinition = defineWebComponent({
         default: 'horizon',
         description: 'Thème de couleur utilisé pour afficher les données',
         enum: availableColors
+      },
+      schemeType: {
+        type: 'string',
+        default: 'ordinal',
+        description: 'Type d\'affichage du graphe',
+        enum: ['ordinal', 'time', 'linear', 'quantile']
       }
     },
   },
