@@ -22,19 +22,6 @@ export class ChartViewerBarsComponent
   implements WebComponentHooks<ChartViewerBarsState>
 {
   @Input() state!: ChartViewerBarsState;
-  
-  // default options to content compiler
-  default_showXAxis = true;
-  default_showYAxis = true;
-  default_gradient = false;
-  default_showLegend = true;
-  default_legendPosition : LegendPosition = LegendPosition.Right;
-  default_showXAxisLabel = true;
-  default_yAxisLabel = 'Axe Y';
-  default_showYAxisLabel = true;
-  default_xAxisLabel  = 'Axe X';
-  default_colorScheme : string | Color = "forest";
-  default_schemeType : ScaleType = ScaleType.Ordinal;
 
   constructor(readonly injector: Injector) {
   }

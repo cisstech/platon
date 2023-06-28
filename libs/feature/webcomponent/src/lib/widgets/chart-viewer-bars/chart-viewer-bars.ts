@@ -6,18 +6,18 @@ import {
 } from '../../web-component';
 
 export interface ChartViewerBarsState extends IWebComponent {
-  mode?: 'horizontal' | 'vertical',
-  showXAxis?: boolean,
-  showXAxisLabel?: boolean,
-  xAxisLabel?: string,
-  showYAxis?: boolean,
-  showYAxisLabel?: boolean,
-  yAxisLabel?: string,
-  showLegend?: boolean,
-  legendPosition?: LegendPosition,
-  gradient?:  boolean,
-  colorScheme?:   "vivid" | "natural" | "cool" | "fire" | "solar" | "air" |"aqua" | "flame" | "ocean" | "forest" | "horizon" | "neons" | "picnic" | "night" | "nightLights",
-  schemeType? : ScaleType,
+  mode: 'horizontal' | 'vertical',
+  showXAxis: boolean,
+  showXAxisLabel: boolean,
+  xAxisLabel: string,
+  showYAxis: boolean,
+  showYAxisLabel: boolean,
+  yAxisLabel: string,
+  showLegend: boolean,
+  legendPosition: LegendPosition,
+  gradient:  boolean,
+  colorScheme:   "vivid" | "natural" | "cool" | "fire" | "solar" | "air" |"aqua" | "flame" | "ocean" | "forest" | "horizon" | "neons" | "picnic" | "night" | "nightLights",
+  schemeType : ScaleType,
   data : any[]
 }
 
