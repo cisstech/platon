@@ -1,11 +1,15 @@
-import { LegendPosition, ScaleType } from '@swimlane/ngx-charts';
+import { LegendPosition } from '@swimlane/ngx-charts';
 import {
   defineWebComponent,
   IWebComponent,
   WebComponentTypes,
 } from '../../web-component';
+import {
+  ChartViewerBase,
+  ChartViewerBaseProperties
+} from '../../shared/components/chart-viewer/base';
 
-export interface ChartViewerBarsState extends IWebComponent {
+export interface ChartViewerBarsState extends IWebComponent, ChartViewerBase {
   mode: 'horizontal' | 'vertical',
   showXAxis: boolean,
   showXAxisLabel: boolean,
@@ -15,29 +19,7 @@ export interface ChartViewerBarsState extends IWebComponent {
   yAxisLabel: string,
   showLegend: boolean,
   legendPosition: LegendPosition,
-  gradient:  boolean,
-  colorScheme:   "vivid" | "natural" | "cool" | "fire" | "solar" | "air" |"aqua" | "flame" | "ocean" | "forest" | "horizon" | "neons" | "picnic" | "night" | "nightLights",
-  schemeType : ScaleType,
-  data : any[]
 }
-
-export const availableColors = [
-  "vivid",
-  "natural",
-  "cool",
-  "fire",
-  "solar",
-  "air",
-  "aqua",
-  "flame",
-  "ocean",
-  "forest",
-  "horizon",
-  "neons",
-  "picnic",
-  "night",
-  "nightLights"
-]
 
 export const ChartViewerBarsComponentDefinition = defineWebComponent({
   type: WebComponentTypes.widget,
@@ -60,11 +42,6 @@ export const ChartViewerBarsComponentDefinition = defineWebComponent({
         description: 'Mode d\'affichage du graphe : horizontal ou vertical',
         enum: ['horizontal', 'vertical']
       },
-      data: {
-        type: 'array',
-        default: [],
-        description: 'Jeu de donnée à afficher, le format est décrit plus bas'
-      },
       showXAxis: {
         type: 'boolean',
         default: true,
@@ -86,7 +63,7 @@ export const ChartViewerBarsComponentDefinition = defineWebComponent({
         description: 'Afficher l\'axe vertical?',
       },
       yAxisLabel: {
-        type: 'string',
+        type: 'string', 
         default: 'Axe Y',
         description: 'Label de l\'axe vertical',
       },
@@ -106,24 +83,8 @@ export const ChartViewerBarsComponentDefinition = defineWebComponent({
         description: 'Position de la légende dans l\'affichage du graphe',
         enum: ["below", "right"]
       },
-      gradient: {
-        type: 'boolean',
-        default: false,
-        description: 'utiliser un gradian pour les couleurs des données?',
-      },
-      colorScheme: {
-        type: 'string',
-        default: 'horizon',
-        description: 'Thème de couleur utilisé pour afficher les données',
-        enum: availableColors
-      },
-      schemeType: {
-        type: 'string',
-        default: 'ordinal',
-        description: 'Type d\'affichage du graphe',
-        enum: ['ordinal', 'time', 'linear']
-      }
-    },
+      ...ChartViewerBaseProperties
+    }
   },
   showcase: {
     data: [
