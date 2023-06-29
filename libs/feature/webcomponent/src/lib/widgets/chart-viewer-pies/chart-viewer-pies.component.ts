@@ -24,16 +24,4 @@ export class ChartViewerPiesComponent
 
   constructor(readonly injector: Injector) {
   }
-
-  onSelect(data: unknown): void {
-    console.log('Item clicked', JSON.parse(JSON.stringify(data)));
-  }
-
-  onActivate(data: unknown): void {
-    console.log('Activate', JSON.parse(JSON.stringify(data)));
-  }
-
-  onDeactivate(data: unknown): void {
-    console.log('Deactivate', JSON.parse(JSON.stringify(data)));
-  }
 }

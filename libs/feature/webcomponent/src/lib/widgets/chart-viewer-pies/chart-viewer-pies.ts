@@ -24,7 +24,7 @@ selector: 'wc-chart-viewer-pies',
 description:
     "Permets d'afficher une charte de type `camembert` en fournissant des données",
 fullDescriptionUrl:
-    'assets/docs/components/widgets/chart-viewer-bars/chart-viewer-pies.md',
+    'assets/docs/components/widgets/chart-viewer-pies/chart-viewer-pies.md',
 schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',
@@ -34,8 +34,8 @@ schema: {
         mode: {
             type: 'string',
             default: 'simple',
-            description: 'Mode d\'affichage du graphe : simple ou advanced ou grid',
-            enum: ['simple', 'advanced', 'grid']
+            description: 'Mode d\'affichage du graphe : simple ou advanced',
+            enum: ['simple', 'advanced']
         },
         showLegend: {
             type: 'boolean',
@@ -69,9 +69,17 @@ showcase: {
             "name": "France",
             "value": 7200000
         },
-            {
+        {
             "name": "UK",
             "value": 6200000
+        },
+        {
+            "name": "Italy",
+            "value": 4200000
+        },
+        {
+            "name": "Spain",
+            "value": 8200000
         }
     ]
 }
