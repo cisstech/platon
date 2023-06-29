@@ -19,7 +19,7 @@ export interface ChartViewerRadarState extends IWebComponent, ChartViewerBase {
     showLegend: boolean,
     legendPosition: LegendPosition,
     legend: string,
-    mode: 'linear' | 'basis' | 'cardinal'
+    //mode: 'linear' | 'basis' | 'cardinal'
 }
 
 export const ChartViewerRadarComponentDefinition = defineWebComponent({
@@ -37,12 +37,12 @@ export const ChartViewerRadarComponentDefinition = defineWebComponent({
       title: 'ChartViewer-Radar',
       required: ['data'],
       properties: {
-        mode: {
-          type: 'string',
-          default: 'linear',
-          description: 'Décris le modèle de courbe à utiliser pour afficher le graphe',
-          enum: ['linear', 'basis', 'cardinal']
-        },
+        // mode: {
+        //   type: 'string',
+        //   default: 'linear',
+        //   description: 'Décris le modèle de courbe à utiliser pour afficher le graphe',
+        //   enum: ['linear', 'basis', 'cardinal']
+        // },
         showXAxis: {
           type: 'boolean',
           default: true,
