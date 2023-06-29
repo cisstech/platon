@@ -78,6 +78,10 @@ showcase: {
             "value": 4200000
         },
         {
+            "name": "Japan",
+            "value": 1285420
+        },
+        {
             "name": "Spain",
             "value": 8200000
         }

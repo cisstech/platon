@@ -24,6 +24,7 @@ import { FeedbackComponentDefinition } from './widgets/feedback/feedback';
 import { PresenterComponentDefinition } from './widgets/presenter/presenter';
 import { ChartViewerBarsComponentDefinition } from './widgets/chart-viewer-bars/chart-viewer-bars';
 import { ChartViewerPiesComponentDefinition } from './widgets/chart-viewer-pies/chart-viewer-pies';
+import { ChartViewerRadarComponentDefinition } from './widgets/chart-viewer-radar/chart-viewer-radar';
 
 export const WEB_COMPONENTS_BUNDLES: NgeElementDef[] = [
   {
@@ -173,6 +174,13 @@ export const WEB_COMPONENTS_BUNDLES: NgeElementDef[] = [
         /* webpackChunkName: "wc-graph-viewer" */ './widgets/chart-viewer-pies/chart-viewer-pies.module'
       ).then((m) => m.ChartViewerPiesModule),
   },
+  {
+    selector: 'wc-chart-viewer-radar',
+    module: () =>
+      import(
+        /* webpackChunkName: "wc-graph-viewer" */ './widgets/chart-viewer-radar/chart-viewer-radar.module'
+      ).then((m) => m.ChartViewerRadarModule),
+  },
 ];
 
 export const WEB_COMPONENTS_REGISTRY: Provider[] = [
@@ -280,5 +288,10 @@ export const WEB_COMPONENTS_REGISTRY: Provider[] = [
     provide: WEB_COMPONENT_DEFINITIONS,
     multi: true,
     useValue: ChartViewerPiesComponentDefinition,
+  },
+  {
+    provide: WEB_COMPONENT_DEFINITIONS,
+    multi: true,
+    useValue: ChartViewerRadarComponentDefinition,
   },
 ];
