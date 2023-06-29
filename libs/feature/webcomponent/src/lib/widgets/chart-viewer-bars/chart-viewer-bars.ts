@@ -19,6 +19,7 @@ export interface ChartViewerBarsState extends IWebComponent, ChartViewerBase {
   yAxisLabel: string,
   showLegend: boolean,
   legendPosition: LegendPosition,
+  legend : string
 }
 
 export const ChartViewerBarsComponentDefinition = defineWebComponent({
@@ -82,6 +83,11 @@ export const ChartViewerBarsComponentDefinition = defineWebComponent({
         default: 'right',
         description: 'Position de la légende dans l\'affichage du graphe',
         enum: ["below", "right"]
+      },
+      legend: {
+        type: 'string',
+        default: 'Légende',
+        description: 'Titre de la légende'
       },
       ...ChartViewerBaseProperties
     }

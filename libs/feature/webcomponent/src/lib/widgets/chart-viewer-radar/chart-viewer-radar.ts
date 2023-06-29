@@ -18,14 +18,15 @@ export interface ChartViewerRadarState extends IWebComponent, ChartViewerBase {
     yAxisLabel: string,
     showLegend: boolean,
     legendPosition: LegendPosition,
-    legend: string
+    legend: string,
+    mode: 'linear' | 'basis' | 'cardinal'
 }
 
 export const ChartViewerRadarComponentDefinition = defineWebComponent({
     type: WebComponentTypes.widget,
     name: 'ChartViewer-Radar',
     icon: 'assets/images/components/forms/code-editor/code-editor.svg',
-    selector: 'wc-chart-radar-bars',
+    selector: 'wc-chart-viewer-radar',
     description:
       "Permets d'afficher une charte de type `radar` en fournissant des données",
     fullDescriptionUrl:
@@ -38,9 +39,9 @@ export const ChartViewerRadarComponentDefinition = defineWebComponent({
       properties: {
         mode: {
           type: 'string',
-          default: 'horizontal',
-          description: 'Mode d\'affichage du graphe : horizontal ou vertical',
-          enum: ['horizontal', 'vertical']
+          default: 'linear',
+          description: 'Décris le modèle de courbe à utiliser pour afficher le graphe',
+          enum: ['linear', 'basis', 'cardinal']
         },
         showXAxis: {
           type: 'boolean',
@@ -83,52 +84,83 @@ export const ChartViewerRadarComponentDefinition = defineWebComponent({
           description: 'Position de la légende dans l\'affichage du graphe',
           enum: ["below", "right"]
         },
+        legend: {
+          type: 'string',
+          default: 'Légende',
+          description: 'Titre de la légende'
+        },
         ...ChartViewerBaseProperties
       }
     },
     showcase: {
       data: [
         {
-          "name": "ValueA",
+          "name": "Germany",
           "series": [
             {
-              "name": "Set1",
-              "value": 7300000
+              "name": "1990",
+              "value": 62000000
             },
             {
-              "name": "Set2",
-              "value": 8940000
+              "name": "2010",
+              "value": 73000000
+            },
+            {
+              "name": "2011",
+              "value": 89400000
             }
           ]
         },
       
         {
-          "name": "ValueB",
+          "name": "USA",
           "series": [
             {
-              "name": "Set1",
-              "value": 7870000
+              "name": "1990",
+              "value": 250000000
             },
             {
-              "name": "Set2",
-              "value": 8270000
+              "name": "2010",
+              "value": 309000000
+            },
+            {
+              "name": "2011",
+              "value": 311000000
+            }
+          ]
+        },
+      
+        {
+          "name": "France",
+          "series": [
+            {
+              "name": "1990",
+              "value": 58000000
+            },
+            {
+              "name": "2010",
+              "value": 50000020
+            },
+            {
+              "name": "2011",
+              "value": 58000000
             }
           ]
         },
         {
-          "name": "ValueC",
+          "name": "UK",
           "series": [
             {
-              "name": "Set1",
-              "value": 5000002
+              "name": "1990",
+              "value": 57000000
             },
             {
-              "name": "Set2",
-              "value": 5800000
+              "name": "2010",
+              "value": 62000000
             },
             {
-              "name": "Set3",
-              "value": 4269000
+              "name": "2011",
+              "value": 72000000
             }
           ]
         }

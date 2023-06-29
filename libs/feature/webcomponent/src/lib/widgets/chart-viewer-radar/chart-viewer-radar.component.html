@@ -1,10 +1,15 @@
 <ngx-charts-polar-chart
   [scheme]="this.state.colorScheme"
+  [gradient]="this.state.gradient"
   [showXAxisLabel]="this.state.showXAxisLabel"
   [showYAxisLabel]="this.state.showYAxisLabel"
   [xAxis]="this.state.showXAxis"
   [yAxis]="this.state.showYAxis"
   [xAxisLabel]="this.state.xAxisLabel"
   [yAxisLabel]="this.state.yAxisLabel"
-  [results]="this.state.data">
+  [results]="this.state.data"
+  [legendPosition]="this.state.legendPosition"
+  [legendTitle]="this.state.legend"
+  [legend]="this.state.showLegend"
+  [curve]="getCurve()">
 </ngx-charts-polar-chart>
