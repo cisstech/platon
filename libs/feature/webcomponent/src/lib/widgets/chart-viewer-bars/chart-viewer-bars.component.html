@@ -12,9 +12,7 @@
     [showYAxisLabel]="this.state.showYAxisLabel"
     [xAxisLabel]="this.state.xAxisLabel"
     [yAxisLabel]="this.state.yAxisLabel"
-    (select)="onSelect($event)"
-    (activate)="onActivate($event)"
-    (deactivate)="onDeactivate($event)"
+    [legendTitle]="this.state.legend"
 >
 </ngx-charts-bar-horizontal-2d>
 </div>
@@ -27,14 +25,12 @@
     [xAxis]="this.state.showXAxis"
     [yAxis]="this.state.showYAxis"
     [legend]="this.state.showLegend"
+    [legendTitle]="this.state.legend"
     [legendPosition]="this.state.legendPosition"
     [showXAxisLabel]="this.state.showXAxisLabel"
     [showYAxisLabel]="this.state.showYAxisLabel"
     [xAxisLabel]="this.state.xAxisLabel"
     [yAxisLabel]="this.state.yAxisLabel"
-    (select)="onSelect($event)"
-    (activate)="onActivate($event)"
-    (deactivate)="onDeactivate($event)"
 >
 </ngx-charts-bar-vertical-2d>
 </ng-template>
