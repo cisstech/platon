@@ -13,8 +13,8 @@ export function createWebComponentDoc(
       logo: 'assets/images/logo/platon.svg',
       backUrl: '/docs',
       repo: {
-        name: 'platon-front',
-        url: 'https://github.com/PremierLangage/platon-front',
+        name: 'platon',
+        url: 'https://github.com/PlatonOrg/platon',
       },
       ...(meta || {}),
     },
@@ -79,7 +79,7 @@ function links(
         {
           title: 'Éditer sur Github',
           icon: 'https://icongr.am/octicons/mark-github.svg',
-          run: `https://github.com/PremierLangage/platon-front/blob/master/libs/features/web-components/src/lib/${type}s/${name}`,
+          run: `https://github.com/PlatonOrg/platon/tree/main/libs/feature/webcomponent/src/lib/${type}s/${name}`,
         },
       ],
       inputs: {
