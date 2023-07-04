@@ -11,7 +11,7 @@ const DeveloperDocs = {
     backUrl: '/docs',
     repo: {
       name: 'platon',
-      url: 'https://github.com/cisstech/platon'
+      url: 'https://github.com/PlatonOrg/platon'
     },
   },
   pages: [
