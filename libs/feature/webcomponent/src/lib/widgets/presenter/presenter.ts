@@ -48,7 +48,7 @@ export const PresenterComponentDefinition = defineWebComponent({
           [Documentation](https://revealjs.com/code/)
           ---
           ## Math plugin
-          \`$$ J(\theta_0,\theta_1) = \sum_{i=0} $$\`
+          \`$$ J(\\theta_0,\\theta_1) = \\sum_{i=0} $$\`
           [Documentation](https://revealjs.com/math/)
         </textarea>
       </section>

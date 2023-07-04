@@ -7,14 +7,15 @@ import {
   Inject,
   Injector,
   Input,
-  OnDestroy,
+  OnDestroy
 } from '@angular/core';
 import { WebComponent, WebComponentHooks } from '../../web-component';
 import { PresenterComponentDefinition, PresenterState } from './presenter';
 import { ResourceLoaderService } from '@cisstech/nge/services';
-import { firstValueFrom } from 'rxjs';
+import { BehaviorSubject, ReplaySubject, Subscription, combineLatest, firstValueFrom } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { stripIndent } from 'common-tags';
 
 declare const Reveal: any;
 declare const RevealMarkdown: any;
@@ -30,9 +31,12 @@ declare const RevealMath: any;
 @WebComponent(PresenterComponentDefinition)
 export class PresenterComponent implements AfterViewInit, OnDestroy, WebComponentHooks<PresenterState> {
 
-  private reveal?: any;
   fullscreen = false;
   template: SafeHtml = '';
+
+  private _subscription?: Subscription;
+  private _load = new ReplaySubject<boolean>();
+  private _reveal?: any;
 
   @Input() state!: PresenterState;
 
@@ -42,7 +46,11 @@ export class PresenterComponent implements AfterViewInit, OnDestroy, WebComponen
   @HostListener('document:MSFullscreenChange', ['$event'])
   fullscreenChange(event: any) {
     this.fullscreen = this.document.fullscreenElement ? true : false;
+    this._reveal?.layout();
   }
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  private _state = new BehaviorSubject<PresenterState>(this.state);
 
   constructor(
     readonly injector: Injector,
@@ -50,16 +58,21 @@ export class PresenterComponent implements AfterViewInit, OnDestroy, WebComponen
     @Inject(DOCUMENT) private document: any,
     private readonly sanitizer: DomSanitizer,
     private readonly changeDetectorRef: ChangeDetectorRef
-  ) { }
+  ) {}
 
-  onChangeState() {
-    this.reveal?.destroy();
-    this.template = this.sanitizer.bypassSecurityTrustHtml(this.state.template);
-    this.changeDetectorRef.markForCheck();
-    this.initReveal();
+  async onChangeState() {
+    this._state.next(this.state);
   }
 
   async ngAfterViewInit(): Promise<void> {
+
+    this._subscription = combineLatest([this._state.asObservable(), this._load.asObservable()]).subscribe(([state, load]) => {
+      this._reveal?.destroy();
+      this.template = this.sanitizer.bypassSecurityTrustHtml(state.template);
+      this.changeDetectorRef.markForCheck();
+      this.initReveal();
+    })
+
     await firstValueFrom(this.resourceLoader.loadAllSync([
       ['style', 'assets/vendors/revealjs/reveal.css'],
       ['style', 'assets/vendors/revealjs/theme/white.css'],
@@ -69,16 +82,21 @@ export class PresenterComponent implements AfterViewInit, OnDestroy, WebComponen
       ['script', 'assets/vendors/revealjs/plugin/highlight/highlight.js'],
       ['script', 'assets/vendors/revealjs/plugin/math/math.js'],
     ]));
-    this.initReveal();
+
+    this._load.next(true);
+
   }
 
   ngOnDestroy(): void {
-    if (this.reveal) this.reveal.destroy();
+    this._reveal?.destroy();
+    this._subscription?.unsubscribe();
+    return;
   }
 
-  initReveal() {
+
+  private initReveal() {
     setTimeout(() => {
-      this.reveal = new Reveal((
+      this._reveal = new Reveal((
         document.querySelector('.r-container')
       ),{
         keyboard: {
@@ -86,8 +104,8 @@ export class PresenterComponent implements AfterViewInit, OnDestroy, WebComponen
         },
         plugins: [ RevealMarkdown, RevealHighlight, RevealMath.KaTeX ]
       });
-      this.reveal.initialize();
-    }, 100);
+      this._reveal.initialize();
+    }, 300);
   }
 
   toggleFullscreen() {
@@ -108,7 +126,7 @@ export class PresenterComponent implements AfterViewInit, OnDestroy, WebComponen
       element.msRequestFullscreen;
 
     fullscreenRequest?.apply(element);
-    this.reveal?.layout();
+    this._reveal?.layout();
   }
 
   closeFullscreen() {
@@ -120,7 +138,7 @@ export class PresenterComponent implements AfterViewInit, OnDestroy, WebComponen
       element.msExitFullscreen;
 
     fullscreenExitRequest?.apply(element);
-    this.reveal?.layout();
+    this._reveal?.layout();
   }
 
 }
