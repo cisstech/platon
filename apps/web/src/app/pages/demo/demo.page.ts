@@ -29,7 +29,6 @@ export class CourseDemoPage implements OnInit {
       this.courseService.accessDemo(courseId)
     );
     if (demoAnswer.auth) {
-      console.log(demoAnswer);
       await this.authService.signInWithToken({
         accessToken: demoAnswer.accessToken!,
         refreshToken: demoAnswer.refreshToken!,
