@@ -55,7 +55,7 @@ export class CourseDemoPage implements OnInit, OnDestroy {
     private readonly changeDetectorRef: ChangeDetectorRef,
     private readonly clipboard: Clipboard,
     private readonly dialogService: DialogService,
-    @Inject(DOCUMENT) private document: any
+    @Inject(DOCUMENT) private document: Document
   ) {}
 
   protected get canEdit(): boolean {
