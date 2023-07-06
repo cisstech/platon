@@ -1,0 +1,26 @@
+.presenter {
+  position: relative;
+  min-height: 500px;
+}
+
+.presenter-container {
+  position: absolute;
+}
+
+.presenter-fs-toggle {
+  position: absolute;
+  z-index: 3;
+  right: 0;
+  top: 0;
+  margin: 24px;
+}
+
+.presenter-fs-content {
+  z-index: 2;
+  inset: 0px;
+  background: white;
+}
+
+.presenter-fs {
+  position: fixed !important;
+}

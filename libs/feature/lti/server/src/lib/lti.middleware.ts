@@ -41,7 +41,7 @@ export class LTIMiddleware implements NestMiddleware {
 
     return res.redirect(
       302,
-      `/?lti-launch=true&access-token=${token.accessToken}&refresh-token=${token.refreshToken}&next=${nextUrl}`
+      `/login?lti-launch=true&access-token=${token.accessToken}&refresh-token=${token.refreshToken}&next=${nextUrl}`
     )
   }
 }

@@ -17,7 +17,7 @@ export class ShowcaseComponent implements OnInit {
   readonly editor?: JsonEditorComponent;
   readonly options = new JsonEditorOptions();
 
-  showEditor = true;
+  showEditor = false;
   component?: any;
 
   constructor(

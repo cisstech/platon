@@ -7,8 +7,8 @@
     <li
       cdkDrag
       *ngFor="let item of state.items; trackBy: trackBy"
-      [ngClass]="item.css | css : 'class'"
-      [ngStyle]="item.css | css : 'style'"
+      [ngClass]="(getHorizontal(item) + item.css) | css : 'class'"
+      [ngStyle]="(getHorizontal(item) + item.css) | css : 'style'"
     >
       <nge-markdown [data]="item.content"></nge-markdown>
       <mat-icon>reorder</mat-icon>
