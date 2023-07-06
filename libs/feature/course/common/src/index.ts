@@ -6,3 +6,4 @@ export * from './lib/course-member.model';
 export * from './lib/course.model';
 export * from './lib/notification.model';
 export * from './lib/section.model';
+export * from './lib/course-demo.model';

@@ -9,7 +9,7 @@
     Cours
   </a>
 
-  <a class="nav-link" mat-button [routerLink]="'/corrections'" [routerLinkActive]="'active'">
+  <a class="nav-link" mat-button [routerLink]="'/corrections'" *ngIf="user.role !== 'demo'" [routerLinkActive]="'active'">
     <mat-icon>rate_review</mat-icon>
     Corrections
   </a>
@@ -19,7 +19,7 @@
     Forum
   </a>
   -->
-  <ng-container *ngIf="user.role !== 'student'">
+  <ng-container *ngIf="user.role !== 'student' && user.role !== 'demo'">
     <a class="nav-link" mat-button [routerLink]="'/resources'" [routerLinkActive]="'active'">
       <mat-icon>work</mat-icon>
       Espace de travail

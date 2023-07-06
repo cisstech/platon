@@ -1,11 +1,12 @@
-import { Level } from "./level.model";
-import { OrderingDirections } from "./ordering.model";
-import { Topic } from "./topic.model";
+import { Level } from './level.model';
+import { OrderingDirections } from './ordering.model';
+import { Topic } from './topic.model';
 
 export enum UserRoles {
   admin = 'admin',
   teacher = 'teacher',
-  student = 'student'
+  student = 'student',
+  demo = 'demo',
 }
 
 export enum UserOrderings {
@@ -19,7 +20,6 @@ export enum UserGroupOrderings {
   CREATED_AT = 'CREATED_AT',
   UPDATED_AT = 'UPDATED_AT',
 }
-
 
 export interface User {
   readonly id: string;
@@ -91,7 +91,8 @@ export interface UserGroupFilters {
   readonly direction?: OrderingDirections;
 }
 
-
 export const userDisplayName = (user: User): string => {
-  return user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : user.username;
-}
+  return user.firstName && user.lastName
+    ? `${user.firstName} ${user.lastName}`
+    : user.username;
+};

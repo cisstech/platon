@@ -1,7 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { ActivitySettings, ActivityVariables, ExerciseFeedback } from "@platon/feature/compiler";
-import { AnswerStates } from "@platon/feature/result/common";
+import {
+  ActivitySettings,
+  ActivityVariables,
+  ExerciseFeedback,
+} from '@platon/feature/compiler';
+import { AnswerStates } from '@platon/feature/result/common';
 
 export enum PlayerActions {
   NEXT_HINT = 'NEXT_HINT',
@@ -162,7 +166,9 @@ export interface PlayerActivityVariables extends ActivityVariables {
  */
 export const isTimeouted = (player: Partial<ActivityPlayer>): boolean => {
   const closeAt = player.closeAt ? new Date(player.closeAt).getTime() : null;
-  const startedAt = player.startedAt ? new Date(player.startedAt).getTime() : null;
+  const startedAt = player.startedAt
+    ? new Date(player.startedAt).getTime()
+    : null;
   const duration = player.settings?.duration;
 
   // Get the current timestamp
@@ -180,7 +186,7 @@ export const isTimeouted = (player: Partial<ActivityPlayer>): boolean => {
   }
 
   return isTimeouted;
-}
+};
 
 /**
  * Calculates the time at which the activity will be closed.
@@ -192,8 +198,12 @@ export const isTimeouted = (player: Partial<ActivityPlayer>): boolean => {
  * @param player - The activity player object containing the relevant time and settings.
  * @returns The timestamp at which the activity will be closed, or null if the closing time cannot be determined.
  */
-export const getClosingTime = (player: Partial<ActivityPlayer>): number | null => {
-  const startedAt = player.startedAt ? new Date(player.startedAt).getTime() : null;
+export const getClosingTime = (
+  player: Partial<ActivityPlayer>
+): number | null => {
+  const startedAt = player.startedAt
+    ? new Date(player.startedAt).getTime()
+    : null;
   const closeAt = player.closeAt ? new Date(player.closeAt).getTime() : null;
   const duration = (player.settings?.duration || 0) * 1000;
 
@@ -204,4 +214,4 @@ export const getClosingTime = (player: Partial<ActivityPlayer>): number | null =
   }
 
   return null;
-}
+};

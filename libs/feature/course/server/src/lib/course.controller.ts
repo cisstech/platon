@@ -16,7 +16,7 @@ import {
   NotFoundResponse,
   UserRoles,
 } from '@platon/core/common';
-import { IRequest, Mapper, Roles } from '@platon/core/server';
+import { IRequest, Mapper, Roles, Public } from '@platon/core/server';
 import { CourseMemberService } from './course-member/course-member.service';
 import {
   CourseDTO,

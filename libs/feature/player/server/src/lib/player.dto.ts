@@ -1,7 +1,27 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { ActivityPlayer, EvalExerciseInput, EvalExerciseOutput, ExercisePlayer, PlayActivityInput, PlayActivityOuput, PlayAnswersInput, PlayAnswersOutput, PlayerActions, PlayerNavigation, PlayExerciseInput, PlayExerciseOuput, PreviewInput, PreviewOuput } from "@platon/feature/player/common";
-import { IsEnum, IsObject, IsOptional, IsString, IsUUID } from "class-validator";
-
+import { ApiProperty } from '@nestjs/swagger';
+import {
+  ActivityPlayer,
+  EvalExerciseInput,
+  EvalExerciseOutput,
+  ExercisePlayer,
+  PlayActivityInput,
+  PlayActivityOuput,
+  PlayAnswersInput,
+  PlayAnswersOutput,
+  PlayerActions,
+  PlayerNavigation,
+  PlayExerciseInput,
+  PlayExerciseOuput,
+  PreviewInput,
+  PreviewOuput,
+} from '@platon/feature/player/common';
+import {
+  IsEnum,
+  IsObject,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from 'class-validator';
 
 export class PreviewInputDTO implements PreviewInput {
   @IsString()
@@ -48,7 +68,6 @@ export class EvalExerciseInputDTO implements EvalExerciseInput {
   @ApiProperty()
   answers!: Record<string, unknown>;
 }
-
 
 export class PreviewOuputDTO implements PreviewOuput {
   @IsOptional()

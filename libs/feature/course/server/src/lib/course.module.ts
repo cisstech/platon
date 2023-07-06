@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserModule } from '@platon/core/server';
+import { AuthModule, AuthService, UserModule } from '@platon/core/server';
 import { FeatureNotificationServerModule } from '@platon/feature/notification/server';
 import { FeatureResourceServerModule } from '@platon/feature/resource/server';
 import { ActivityCorrectorController } from './activity-corrector/activity-corrector.controller';
@@ -26,12 +26,16 @@ import { CourseSubscriber } from './course.subscriber';
 import { CourseSectionController } from './section/section.controller';
 import { CourseSectionEntity } from './section/section.entity';
 import { CourseSectionService } from './section/section.service';
+import { CourseDemoController } from './course-demo/course-demo.controller';
+import { CourseDemoService } from './course-demo/course-demo.service';
+import { CourseDemoEntity } from './course-demo/course-demo.entity';
 
 @Module({
   imports: [
     UserModule,
     FeatureResourceServerModule,
     FeatureNotificationServerModule,
+    AuthModule,
     TypeOrmModule.forFeature([
       CourseEntity,
       CourseMemberView,
@@ -42,7 +46,8 @@ import { CourseSectionService } from './section/section.service';
       ActivityMemberEntity,
       ActivityCorrectorView,
       ActivityCorrectorEntity,
-    ])
+      CourseDemoEntity,
+    ]),
   ],
   controllers: [
     CourseController,
@@ -51,6 +56,7 @@ import { CourseSectionService } from './section/section.service';
     ActivityController,
     ActivityMemberController,
     ActivityCorrectorController,
+    CourseDemoController,
   ],
   providers: [
     CourseService,
@@ -63,6 +69,7 @@ import { CourseSectionService } from './section/section.service';
     ActivityCorrectorService,
 
     CourseNotificationService,
+    CourseDemoService,
   ],
   exports: [
     TypeOrmModule,
@@ -73,6 +80,7 @@ import { CourseSectionService } from './section/section.service';
     CourseSectionService,
     ActivityService,
     ActivityMemberService,
+    CourseDemoService,
   ],
 })
-export class FeatureCourseServerModule { }
+export class FeatureCourseServerModule {}

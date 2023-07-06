@@ -1,6 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -33,7 +44,7 @@ import { CoursePresenter } from '../../course.presenter';
     NzSpinModule,
     NzButtonModule,
     NzSelectModule,
-  ]
+  ],
 })
 export class CourseInformationsPage implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription[] = [];
@@ -48,32 +59,36 @@ export class CourseInformationsPage implements OnInit, OnDestroy {
 
   protected get canEdit(): boolean {
     const { user } = this.context;
-    if (!user)
-      return false;
+    if (!user) return false;
     return user.role === UserRoles.admin;
   }
 
   protected get canSubmit(): boolean {
     const { user } = this.context;
-    if (!user)
-      return false;
+    if (!user) return false;
     return this.form.valid && this.canEdit;
   }
 
   constructor(
     private readonly presenter: CoursePresenter,
-    private readonly changeDetectorRef: ChangeDetectorRef,
-  ) { }
+    private readonly changeDetectorRef: ChangeDetectorRef
+  ) {}
 
   async ngOnInit(): Promise<void> {
     this.subscriptions.push(
-      this.presenter.contextChange.subscribe(async context => {
+      this.presenter.contextChange.subscribe(async (context) => {
         this.context = context;
         const { course } = context;
         if (course) {
           this.form = new FormGroup({
-            name: new FormControl({ value: course.name, disabled: !this.canEdit }, [Validators.required]),
-            desc: new FormControl({ value: course.desc || '', disabled: !this.canEdit }, [Validators.required]),
+            name: new FormControl(
+              { value: course.name, disabled: !this.canEdit },
+              [Validators.required]
+            ),
+            desc: new FormControl(
+              { value: course.desc || '', disabled: !this.canEdit },
+              [Validators.required]
+            ),
           });
         }
 
@@ -83,7 +98,7 @@ export class CourseInformationsPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(s => s.unsubscribe());
+    this.subscriptions.forEach((s) => s.unsubscribe());
   }
 
   protected async saveChanges(): Promise<void> {
