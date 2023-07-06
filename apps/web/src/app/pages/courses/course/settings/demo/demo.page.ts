@@ -7,9 +7,8 @@ import {
   OnInit,
 } from '@angular/core';
 import { NzButtonModule } from 'ng-zorro-antd/button';
-import { Subscription, firstValueFrom } from 'rxjs';
+import { Subscription} from 'rxjs';
 import { CoursePresenter } from '../../course.presenter';
-import { CourseService } from '@platon/feature/course/browser';
 import { UserRoles } from '@platon/core/common';
 import { CommonModule } from '@angular/common';
 import { NzInputModule } from 'ng-zorro-antd/input';

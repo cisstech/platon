@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post, Req, Get } from '@nestjs/common';
+import { Body, Controller, Param, Post, Req } from '@nestjs/common';
 import { IRequest, Public } from '@platon/core/server';
 import {
   EvalExerciseInput,

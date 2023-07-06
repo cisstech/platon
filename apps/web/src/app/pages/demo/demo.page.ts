@@ -18,6 +18,7 @@ export class CourseDemoPage implements OnInit {
     private readonly courseService: CourseService,
     private readonly authService: AuthService
   ) {}
+  
   async ngOnInit(): Promise<void> {
     this.activatedRoute.paramMap.subscribe((params) => {
       this.redirectToDemo(params.get('id') as string);
@@ -30,8 +31,8 @@ export class CourseDemoPage implements OnInit {
     );
     if (demoAnswer.auth) {
       await this.authService.signInWithToken({
-        accessToken: demoAnswer.accessToken!,
-        refreshToken: demoAnswer.refreshToken!,
+        accessToken: demoAnswer.accessToken || '',
+        refreshToken: demoAnswer.refreshToken || '',
       });
     }
     this.router.navigate(['/courses', demoAnswer.courseId], {
