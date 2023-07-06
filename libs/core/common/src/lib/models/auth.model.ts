@@ -1,5 +1,4 @@
 import { UserRoles } from './user.model';
-import { UserEntity } from '@platon/core/server';
 
 export interface AuthToken {
   accessToken: string;
