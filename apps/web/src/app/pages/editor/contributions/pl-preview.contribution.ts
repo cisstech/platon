@@ -24,7 +24,6 @@ export class Contribution implements IContribution {
 
       async handle(_: Injector, uri: monaco.Uri): Promise<Preview> {
         const [resource, version] = uri.authority.split(':');
-        console.log(`/player/preview/${resource}?version=${version}&counter=${++this.counter}`)
         return Promise.resolve({
           type: PreviewTypes.URL,
           data: `/player/preview/${resource}?version=${version}&counter=${++this.counter}`,
