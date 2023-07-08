@@ -4,12 +4,12 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService, DialogService } from '@platon/core/browser';
 import { ListResponse, User } from '@platon/core/common';
+import { CourseService } from '@platon/feature/course/browser';
+import { Activity, Course, CourseMember, CourseMemberFilters, CreateCourseMember, UpdateCourse } from '@platon/feature/course/common';
 import { ResultService } from '@platon/feature/result/browser';
 import { ActivityResults } from '@platon/feature/result/common';
-import { CourseService } from '@platon/feature/course/browser';
-import { Course, Activity, CourseMember, CourseMemberFilters, CreateCourseMember, UpdateCourse } from '@platon/feature/course/common';
 import { LayoutState } from '@platon/shared/ui';
-import { BehaviorSubject, firstValueFrom, Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription, firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class ActivityPresenter implements OnDestroy {
@@ -17,6 +17,7 @@ export class ActivityPresenter implements OnDestroy {
   private readonly context = new BehaviorSubject<Context>(this.defaultContext());
 
   readonly contextChange = this.context.asObservable();
+  readonly onDeletedActivity = this.courseService.onDeletedActivity;
 
   constructor(
     private readonly authService: AuthService,

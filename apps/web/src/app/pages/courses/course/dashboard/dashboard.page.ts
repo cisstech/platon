@@ -10,10 +10,10 @@ import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
 
+import { CourseActivityGridComponent } from '@platon/feature/course/browser';
 import { Activity, CourseSection } from '@platon/feature/course/common';
 import { CoursePresenter } from '../course.presenter';
 import { CourseSectionActionsComponent } from './section-actions/section-actions.component';
-import { CourseActivityGridComponent } from '@platon/feature/course/browser';
 
 
 @Component({
@@ -52,6 +52,9 @@ export class CourseDashboardPage implements OnInit, OnDestroy {
       this.presenter.contextChange.subscribe(async context => {
         this.context = context;
         await this.refresh();
+      }),
+      this.presenter.onDeletedActivity.subscribe(activity => {
+        this.onDeleteActivity(activity);
       })
     );
   }
@@ -102,6 +105,16 @@ export class CourseDashboardPage implements OnInit, OnDestroy {
 
   protected trackSection(_: number, item: SectionWithActivities): string {
     return item.section.id;
+  }
+
+  protected onDeleteActivity(activity: Activity): void {
+    this.sections = this.sections.map(item => {
+      return {
+        ...item,
+        activities: item.activities.filter(a => a.id !== activity.id)
+      };
+    });
+    this.changeDetectorRef.markForCheck();
   }
 
   private async refresh(): Promise<void> {

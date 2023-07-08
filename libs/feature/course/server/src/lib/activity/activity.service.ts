@@ -2,16 +2,17 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ForbiddenResponse, NotFoundResponse, User, UserRoles } from '@platon/core/common';
-import { IRequest, buildQuery } from '@platon/core/server';
-import { ActivityFilters, CreateActivity, UpdateActivity, calculateActivityState } from '@platon/feature/course/common';
+import { EventService, IRequest, buildQuery } from '@platon/core/server';
+import { ActivityFilters, CreateActivity, ReloadActivity, UpdateActivity, calculateActivityState } from '@platon/feature/course/common';
 import { ResourceFileService } from '@platon/feature/resource/server';
 import { CLS_REQ } from 'nestjs-cls';
 import { Repository, SelectQueryBuilder } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { Optional } from 'typescript-optional';
+import { ActivityMemberService } from '../activity-member/activity-member.service';
 import { ActivityMemberView } from '../activity-member/activity-member.view';
 import { ActivityEntity } from './activity.entity';
-import { ActivityMemberService } from '../activity-member/activity-member.service';
+import { ON_RELOAD_ACTIVITY_EVENT } from './activity.event';
 
 @Injectable()
 export class ActivityService {
@@ -19,6 +20,7 @@ export class ActivityService {
     @Inject(CLS_REQ)
     private readonly request: IRequest,
     private readonly fileService: ResourceFileService,
+    private readonly eventService: EventService,
     private readonly activityMemberService: ActivityMemberService,
 
     @InjectRepository(ActivityEntity)
@@ -108,6 +110,32 @@ export class ActivityService {
     );
 
     Object.assign(activity, changes);
+    return this.addVirtualColumns(activity);
+  }
+
+  async reload(
+    courseId: string,
+    activityId: string,
+    input: ReloadActivity
+  ): Promise<ActivityEntity> {
+    let activity = await this.repository.findOne({
+      where: {
+        courseId,
+        id: activityId
+      }
+    })
+
+    if (!activity) {
+      throw new NotFoundResponse(`CourseActivity not found: ${activityId}`);
+    }
+
+    const [source] = await this.fileService.compile(activity.source.resource, input.version);
+    activity.source = source;
+
+    activity = await this.repository.save(activity);
+
+    this.eventService.emit(ON_RELOAD_ACTIVITY_EVENT, activity);
+
     return this.addVirtualColumns(activity);
   }
 

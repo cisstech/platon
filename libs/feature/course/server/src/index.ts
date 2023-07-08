@@ -14,4 +14,4 @@ export * from './lib/course.module';
 export * from './lib/course.service';
 export * from './lib/section/section.entity';
 export * from './lib/section/section.service';
-
+export * from './lib/activity/activity.event';

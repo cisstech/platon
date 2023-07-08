@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { ListResponse } from "@platon/core/common";
 import { Activity, ActivityCorrector, ActivityFilters, ActivityMember, Course, CourseFilters, CourseMember, CourseMemberFilters, CourseSection, CreateActivity, CreateActivityCorrector, CreateActivityMember, CreateCourse, CreateCourseMember, CreateCourseSection, UpdateActivity, UpdateCourse, UpdateCourseSection } from "@platon/feature/course/common";
-import { Observable } from "rxjs";
+import { Observable, Subject, tap } from "rxjs";
 import { ActivityCorrectorProvider } from "../models/activity-corrector.provider";
 import { ActivityMemberProvider } from "../models/activity-member.provider";
 import { ActivityProvider } from "../models/activity-provider";
@@ -11,6 +11,10 @@ import { CourseSectionProvider } from "../models/course-section-provider";
 
 @Injectable({ providedIn: 'root' })
 export class CourseService {
+  private readonly deleteActivityEvent = new Subject<Activity>();
+
+  readonly onDeletedActivity = this.deleteActivityEvent.asObservable();
+
   constructor(
     private readonly courseProvider: CourseProvider,
     private readonly courseMemberProvider: CourseMemberProvider,
@@ -93,9 +97,16 @@ export class CourseService {
     return this.activityProvider.update(activity, input);
   }
 
-  deleteActivity(activity: Activity): Observable<void> {
-    return this.activityProvider.delete(activity);
+  reloadActivity(activity: Activity, version?: string): Observable<Activity> {
+    return this.activityProvider.reload(activity, version);
   }
+
+  deleteActivity(activity: Activity): Observable<void> {
+    return this.activityProvider.delete(activity).pipe(
+      tap(() => this.deleteActivityEvent.next(activity))
+    );
+  }
+
   //#endregion
 
   //#region Activity Members

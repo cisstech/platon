@@ -17,6 +17,7 @@ interface TemplateOptions<T = unknown> {
   data?: T;
 }
 
+const DEFAULT_DIALOG_DURATION = 4500;
 
 @Injectable({ providedIn: 'root' })
 export class DialogService {
@@ -27,7 +28,8 @@ export class DialogService {
   ) { }
 
 
-  error(content: string, options?: MessageOptions) {
+  error(content: string, options: MessageOptions = { duration: DEFAULT_DIALOG_DURATION }) {
+    if (options.duration == undefined) options.duration = DEFAULT_DIALOG_DURATION;
     const ref = options?.notification
       ? this.nzNotificationService.error(options.notification.title, content, { nzDuration: options?.duration })
       : this.nzMessageService.error(content, { nzDuration: options?.duration });
@@ -37,7 +39,8 @@ export class DialogService {
     };
   }
 
-  info(content: string, options?: MessageOptions) {
+  info(content: string, options: MessageOptions = { duration: DEFAULT_DIALOG_DURATION }) {
+    if (options.duration == undefined) options.duration = DEFAULT_DIALOG_DURATION;
     const ref = options?.notification
       ? this.nzNotificationService.info(options.notification.title, content, { nzDuration: options?.duration })
       : this.nzMessageService.info(content, { nzDuration: options?.duration });
@@ -47,7 +50,8 @@ export class DialogService {
     };
   }
 
-  success(content: string, options?: MessageOptions) {
+  success(content: string, options: MessageOptions = { duration: DEFAULT_DIALOG_DURATION }) {
+    if (options.duration == undefined) options.duration = DEFAULT_DIALOG_DURATION;
     const ref = options?.notification
       ? this.nzNotificationService.success(options.notification.title, content, { nzDuration: options?.duration })
       : this.nzMessageService.success(content, { nzDuration: options?.duration });
@@ -57,7 +61,8 @@ export class DialogService {
     };
   }
 
-  warning(content: string, options?: MessageOptions) {
+  warning(content: string, options: MessageOptions = { duration: DEFAULT_DIALOG_DURATION }) {
+    if (options.duration == undefined) options.duration = DEFAULT_DIALOG_DURATION;
     const ref = options?.notification
       ? this.nzNotificationService.warning(options.notification.title, content, { nzDuration: options?.duration })
       : this.nzMessageService.warning(content, { nzDuration: options?.duration });
@@ -67,7 +72,8 @@ export class DialogService {
     };
   }
 
-  notification(template: TemplateRef<object>, options?: TemplateOptions) {
+  notification(template: TemplateRef<object>, options: TemplateOptions = { duration: DEFAULT_DIALOG_DURATION }) {
+    if (options.duration == undefined) options.duration = DEFAULT_DIALOG_DURATION
     const ref = this.nzNotificationService.template(template, {
       nzDuration: options?.duration,
       nzData: options?.data as object
@@ -116,7 +122,6 @@ export class DialogService {
       });
 
       const afterClose = dialogRef.afterClose.subscribe(() => {
-        console.log('CLOSE')
         subscription.unsubscribe();
         afterClose.unsubscribe();
       });

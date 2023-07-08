@@ -79,7 +79,7 @@ function links(
         {
           title: 'Éditer sur Github',
           icon: 'https://icongr.am/octicons/mark-github.svg',
-          run: `https://github.com/PremierLangage/platon-front/blob/master/libs/features/web-components/src/lib/${type}s/${name}`,
+          run: `https://github.com/cisstech/platon/blob/main/libs/feature/webcomponent/src/lib/${type}s/${name}`,
         },
       ],
       inputs: {

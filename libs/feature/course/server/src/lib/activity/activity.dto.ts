@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { BaseDTO, toArray, toDate } from "@platon/core/server";
-import { Activity, ActivityFilters, ActivityPermissions, ActivityStates, CreateActivity, UpdateActivity } from "@platon/feature/course/common";
+import { Activity, ActivityFilters, ActivityPermissions, ActivityStates, CreateActivity, ReloadActivity, UpdateActivity } from "@platon/feature/course/common";
 import { Transform, Type } from "class-transformer";
 import { IsBoolean, IsDate, IsNumber, IsOptional, IsString, IsUUID } from "class-validator";
 
@@ -101,4 +101,11 @@ export class UpdateCourseActivityDTO implements UpdateActivity {
   @IsOptional()
   @ApiProperty()
   readonly closeAt?: Date | null;
+}
+
+export class ReloadCourseActivityDTO implements ReloadActivity {
+  @IsString()
+  @IsOptional()
+  @ApiProperty()
+  readonly version?: string;
 }

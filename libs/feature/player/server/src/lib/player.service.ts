@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
+import { OnEvent } from '@nestjs/event-emitter';
 import { ForbiddenResponse, NotFoundResponse, User } from '@platon/core/common';
 import { ActivityExercise, ActivityVariables, ExerciseVariables, PLSourceFile, Variables, extractExercisesFromActivityVariables } from '@platon/feature/compiler';
-import { ActivityEntity, ActivityService } from '@platon/feature/course/server';
+import { ActivityEntity, ActivityService, ON_RELOAD_ACTIVITY_EVENT } from '@platon/feature/course/server';
 import { EvalExerciseInput, ExercisePlayer, PlayActivityOuput, PlayExerciseOuput, PlayerActions, PlayerActivityVariables, PlayerExercise, PlayerNavigation, PreviewInput } from '@platon/feature/player/common';
 import { ResourceFileService } from '@platon/feature/resource/server';
 import { AnswerStates, answerStateFromGrade } from '@platon/feature/result/common';
-import { AnswerService, SessionEntity, SessionService } from '@platon/feature/result/server';
-import { DataSource, EntityManager } from 'typeorm';
+import { AnswerService, CorrectionEntity, SessionEntity, SessionService } from '@platon/feature/result/server';
+import { DataSource, EntityManager, In } from 'typeorm';
 import { withAnswersInSession } from './player-answer';
 import { withActivityFeedbacksGuard, withMultiSessionGuard, withSessionAccessGuard } from './player-guards';
 import { updateActivityNavigationState } from './player-navigation';
@@ -32,6 +33,7 @@ interface CreateSessionArgs {
 
 @Injectable()
 export class PlayerService {
+  protected readonly logger: Logger;
   private readonly actionHandlers: Record<PlayerActions, ActionHandler> = {
     NEXT_HINT: this.nextHint.bind(this),
     CHECK_ANSWER: this.checkAnswer.bind(this),
@@ -47,7 +49,9 @@ export class PlayerService {
     private readonly sessionService: SessionService,
     private readonly activityService: ActivityService,
     private readonly resourceFileService: ResourceFileService,
-  ) { }
+  ) {
+    this.logger = new Logger(this.constructor.name)
+  }
 
   /**
    * Creates new player session for the given resource for preview purpose.
@@ -477,5 +481,25 @@ export class PlayerService {
       ...variables,
       navigation
     }
+  }
+
+
+  @OnEvent(ON_RELOAD_ACTIVITY_EVENT)
+  protected async onReloadActivity(activity: ActivityEntity): Promise<void> {
+    this.dataSource.transaction(async (manager) => {
+      this.logger.log(`Reload activity ${activity.id}`);
+      const sessions = await manager.find(SessionEntity, {
+        where: { activityId: activity.id }
+      });
+      this.logger.log(`Delete ${sessions.length} sessions`);
+      await Promise.all([
+        manager.delete(SessionEntity, {
+          activityId: activity.id
+        }),
+        manager.delete(CorrectionEntity, {
+          id: In(sessions.map(s => s.correctionId).filter(id => !!id) as string[])
+        }),
+      ]);
+    })
   }
 }

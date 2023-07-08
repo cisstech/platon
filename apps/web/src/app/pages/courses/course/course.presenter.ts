@@ -14,6 +14,7 @@ export class CoursePresenter implements OnDestroy {
   private readonly context = new BehaviorSubject<Context>(this.defaultContext());
 
   readonly contextChange = this.context.asObservable();
+  readonly onDeletedActivity = this.courseService.onDeletedActivity;
 
   constructor(
     private readonly authService: AuthService,

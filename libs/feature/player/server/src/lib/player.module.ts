@@ -1,6 +1,7 @@
 import { DiscoveryModule, DiscoveryService } from '@golevelup/nestjs-discovery';
 import { HttpModule } from '@nestjs/axios';
 import { Module, OnModuleInit } from '@nestjs/common';
+import { EventModule } from '@platon/core/server';
 import { FeatureCourseServerModule } from '@platon/feature/course/server';
 import { FeatureResourceServerModule } from '@platon/feature/resource/server';
 import { FeatureResultServerModule } from '@platon/feature/result/server';
@@ -16,6 +17,7 @@ import { SandboxService } from './sandboxes/sandbox.service';
   ],
   imports: [
     HttpModule,
+    EventModule,
     DiscoveryModule,
     FeatureCourseServerModule,
     FeatureResultServerModule,
