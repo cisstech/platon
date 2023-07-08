@@ -213,14 +213,20 @@ export class PlayerActivityComponent implements OnInit {
     this.player.startedAt = this.player.startedAt || new Date();
     this.countdown = getClosingTime(this.player);
 
+    const changeColor = (color: string, message: string) => {
+      this.countdownColor = color;
+      this.dialogService.info(message);
+    }
+
+
     if (this.countdown) {
       const endAt = this.countdown;
       const startAt = new Date(this.player.startedAt as Date).getTime();
       const duration = endAt - startAt;
       const currentTime = new Date().getTime();
-      const changeColor = (color: string, message: string) => {
-        this.countdownColor = color;
-        this.dialogService.info(message);
+      if (currentTime >= startAt + duration) {
+        this.countdown = null;
+        return
       }
 
       if (currentTime > startAt + duration * 0.5) {
