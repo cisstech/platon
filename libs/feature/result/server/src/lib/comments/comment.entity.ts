@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { BaseEntity, UserEntity } from '@platon/core/server';
-import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
-import { AnswerEntity } from '../answers/answer.entity';
-import { SessionEntity } from '../sessions/session.entity';
-
+import { BaseEntity, UserEntity } from '@platon/core/server'
+import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm'
+import { AnswerEntity } from '../answers/answer.entity'
+import { SessionEntity } from '../sessions/session.entity'
 
 @Entity('SessionComments')
 @Index('SessionComments_session_id_answer_id_idx', ['sessionId', 'answerId'])

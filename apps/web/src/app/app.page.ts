@@ -1,24 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { CoreService } from '@platon/core/browser';
-import { FeatureWebComponentModule } from '@platon/feature/webcomponent';
+import { Component, OnInit } from '@angular/core'
+import { RouterModule } from '@angular/router'
+import { CoreService } from '@platon/core/browser'
+import { FeatureWebComponentModule } from '@platon/feature/webcomponent'
 
 @Component({
   standalone: true,
-  imports: [
-    RouterModule,
-    FeatureWebComponentModule,
-  ],
+  imports: [RouterModule, FeatureWebComponentModule],
   selector: 'app-root',
   templateUrl: './app.page.html',
   styleUrls: ['./app.page.scss'],
 })
 export class AppPage implements OnInit {
-  constructor(
-    private readonly core: CoreService
-  ) { }
+  constructor(private readonly core: CoreService) {}
 
   ngOnInit(): void {
-    this.core.init();
+    this.core.init()
   }
 }

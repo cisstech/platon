@@ -1,7 +1,6 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { ResourceStatisic } from '@platon/feature/resource/common';
-import { IsNumber } from 'class-validator';
-
+import { ApiProperty } from '@nestjs/swagger'
+import { ResourceStatisic } from '@platon/feature/resource/common'
+import { IsNumber } from 'class-validator'
 
 export class ResourceStatisticDTO implements ResourceStatisic {
   @IsNumber()

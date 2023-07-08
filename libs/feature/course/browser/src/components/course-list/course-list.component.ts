@@ -1,12 +1,12 @@
-import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common'
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
 
-import { NzEmptyModule } from 'ng-zorro-antd/empty';
+import { NzEmptyModule } from 'ng-zorro-antd/empty'
 
-import { NgeUiListModule } from '@cisstech/nge/ui/list';
+import { NgeUiListModule } from '@cisstech/nge/ui/list'
 
-import { Course } from '@platon/feature/course/common';
-import { CourseItemComponent } from '../course-item/course-item.component';
+import { Course } from '@platon/feature/course/common'
+import { CourseItemComponent } from '../course-item/course-item.component'
 
 @Component({
   standalone: true,
@@ -14,14 +14,9 @@ import { CourseItemComponent } from '../course-item/course-item.component';
   templateUrl: './course-list.component.html',
   styleUrls: ['./course-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    CommonModule,
-    NzEmptyModule,
-    NgeUiListModule,
-    CourseItemComponent,
-  ]
+  imports: [CommonModule, NzEmptyModule, NgeUiListModule, CourseItemComponent],
 })
 export class CourseListComponent {
-  @Input() items: Course[] = [];
-  @Input() simple = false;
+  @Input() items: Course[] = []
+  @Input() simple = false
 }

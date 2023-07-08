@@ -1,14 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { Editor, FileService, OpenRequest } from '@cisstech/nge-ide/core';
-import { AuthService } from '@platon/core/browser';
-import { User } from '@platon/core/common';
-import { ActivityExercise, ActivityVariables } from '@platon/feature/compiler';
-import { Resource } from '@platon/feature/resource/common';
-import { debounceTime, skip, Subscription } from 'rxjs';
-import { v4 as uuidv4 } from 'uuid';
-
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+} from '@angular/core'
+import { FormBuilder, Validators } from '@angular/forms'
+import { Editor, FileService, OpenRequest } from '@cisstech/nge-ide/core'
+import { AuthService } from '@platon/core/browser'
+import { User } from '@platon/core/common'
+import { ActivityExercise, ActivityVariables } from '@platon/feature/compiler'
+import { Resource } from '@platon/feature/resource/common'
+import { debounceTime, skip, Subscription } from 'rxjs'
+import { v4 as uuidv4 } from 'uuid'
 
 @Component({
   selector: 'app-pla-editor',
@@ -17,8 +23,8 @@ import { v4 as uuidv4 } from 'uuid';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlaEditorComponent implements OnInit, OnDestroy {
-  private readonly subscriptions: Subscription[] = [];
-  private request!: OpenRequest;
+  private readonly subscriptions: Subscription[] = []
+  private request!: OpenRequest
 
   protected activity: ActivityVariables = {
     title: '',
@@ -36,17 +42,17 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
       feedback: {
         review: true,
         validation: true,
-      }
+      },
     },
     exerciseGroups: {},
-  };
+  }
 
-  protected readOnly?: boolean;
+  protected readOnly?: boolean
 
-  protected step = 0;
+  protected step = 0
 
   @Input()
-  protected editor!: Editor;
+  protected editor!: Editor
 
   protected form = this.fb.group({
     title: [this.activity.title, [Validators.required]],
@@ -67,62 +73,61 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
       review: [!!this.activity?.settings?.feedback?.review],
       validation: [!!this.activity?.settings?.feedback?.validation],
     }),
-  });
+  })
 
-  protected exerciseGroups: ActivityExercise[][] = [];
-  protected selectedGroup: ActivityExercise[] | undefined;
-  protected selectedGroupIndex: number | undefined;
-  protected selectedExercise: Resource | undefined;
+  protected exerciseGroups: ActivityExercise[][] = []
+  protected selectedGroup: ActivityExercise[] | undefined
+  protected selectedGroupIndex: number | undefined
+  protected selectedExercise: Resource | undefined
 
-  protected user!: User;
+  protected user!: User
 
   constructor(
     private readonly fb: FormBuilder,
     private readonly fileService: FileService,
     private readonly authService: AuthService,
     private readonly changeDetectorRef: ChangeDetectorRef
-  ) { }
+  ) {}
 
   async ngOnInit(): Promise<void> {
-    this.user = await this.authService.ready() as User;
+    this.user = (await this.authService.ready()) as User
 
     this.subscriptions.push(
       this.editor.onChangeRequest.subscribe((request) => {
-        this.request = request;
-        this.createEditor();
+        this.request = request
+        this.createEditor()
       })
-    );
+    )
 
     this.subscriptions.push(
-      this.form.valueChanges.pipe(
-        skip(1),
-        debounceTime(300)
-      ).subscribe(this.onChangeData.bind(this))
-    );
+      this.form.valueChanges
+        .pipe(skip(1), debounceTime(300))
+        .subscribe(this.onChangeData.bind(this))
+    )
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(s => s.unsubscribe());
+    this.subscriptions.forEach((s) => s.unsubscribe())
   }
 
   // Add the following methods to handle exercise groups
   protected selectGroup(index: number): void {
-    this.selectedGroup = this.exerciseGroups[index];
-    this.selectedGroupIndex = index;
+    this.selectedGroup = this.exerciseGroups[index]
+    this.selectedGroupIndex = index
   }
 
   protected addGroup(): void {
-    const newGroup: ActivityExercise[] = [];
-    this.exerciseGroups.push(newGroup);
-    this.selectedGroup = newGroup;
-    this.onChangeData();
+    const newGroup: ActivityExercise[] = []
+    this.exerciseGroups.push(newGroup)
+    this.selectedGroup = newGroup
+    this.onChangeData()
   }
 
   protected deleteGroup(index: number): void {
-    this.exerciseGroups.splice(index, 1);
-    this.selectedGroup = undefined;
-    this.selectedGroupIndex = undefined;
-    this.onChangeData();
+    this.exerciseGroups.splice(index, 1)
+    this.selectedGroup = undefined
+    this.selectedGroupIndex = undefined
+    this.onChangeData()
   }
 
   protected addExercise(): void {
@@ -131,30 +136,28 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
         id: uuidv4(),
         version: 'latest',
         resource: this.selectedExercise.id,
-      } as ActivityExercise);
-      this.selectedExercise = undefined;
+      } as ActivityExercise)
+      this.selectedExercise = undefined
     }
-    this.onChangeData();
+    this.onChangeData()
   }
 
   protected deleteExercise(index: number): void {
-    this.selectedGroup?.splice(index, 1);
-    this.onChangeData();
+    this.selectedGroup?.splice(index, 1)
+    this.onChangeData()
   }
 
   protected updateExercise(exercise: ActivityExercise): void {
-    this.selectedGroup = this.selectedGroup?.map(e => e.id === exercise.id ? exercise : e);
-    this.onChangeData();
+    this.selectedGroup = this.selectedGroup?.map((e) => (e.id === exercise.id ? exercise : e))
+    this.onChangeData()
   }
 
   protected onChangeData(): void {
-    const { value } = this.form;
+    const { value } = this.form
 
-    const time = value.duration;
+    const time = value.duration
 
-    const duration = time ?
-      time.getHours() * 3600 + time.getMinutes() * 60 + time.getSeconds()
-      : 0;
+    const duration = time ? time.getHours() * 3600 + time.getMinutes() * 60 + time.getSeconds() : 0
 
     this.activity = {
       ...this.activity,
@@ -180,41 +183,37 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
         },
       },
       exerciseGroups: this.exerciseGroups.reduce((acc, group, index) => {
-        acc[index] = group;
-        return acc;
-      }
-      , {} as Record<number, ActivityExercise[]>),
+        acc[index] = group
+        return acc
+      }, {} as Record<number, ActivityExercise[]>),
     }
 
-    this.fileService.update(
-      this.request.uri,
-      JSON.stringify(this.activity, null, 2)
-    );
+    this.fileService.update(this.request.uri, JSON.stringify(this.activity, null, 2))
 
-    this.exerciseGroups = Object.values(this.activity.exerciseGroups);
+    this.exerciseGroups = Object.values(this.activity.exerciseGroups)
   }
 
   protected trackByIndex(index: number) {
-    return index;
+    return index
   }
 
   protected trackByExerciseId(index: number, exercise: ActivityExercise) {
-    return exercise.id;
+    return exercise.id
   }
 
   private async createEditor(): Promise<void> {
-    const file = this.fileService.find(this.request.uri);
-    this.readOnly = file?.readOnly;
+    const file = this.fileService.find(this.request.uri)
+    this.readOnly = file?.readOnly
 
-    const content = await this.fileService.open(this.request.uri);
-    this.activity = JSON.parse(content.current) as ActivityVariables;
+    const content = await this.fileService.open(this.request.uri)
+    this.activity = JSON.parse(content.current) as ActivityVariables
 
-    const duration = this.activity.settings?.duration || 0;
-    const hours = Math.floor(duration / 3600);
-    const minutes = Math.floor((duration % 3600) / 60);
-    const seconds = duration % 60;
-    const durationDate = new Date();
-    durationDate.setHours(hours, minutes, seconds);
+    const duration = this.activity.settings?.duration || 0
+    const hours = Math.floor(duration / 3600)
+    const minutes = Math.floor((duration % 3600) / 60)
+    const seconds = duration % 60
+    const durationDate = new Date()
+    durationDate.setHours(hours, minutes, seconds)
 
     this.form.patchValue({
       title: this.activity.title,
@@ -235,10 +234,10 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
         review: this.activity.settings?.feedback?.review,
         validation: this.activity.settings?.feedback?.validation,
       },
-    });
+    })
 
-    this.exerciseGroups = Object.values(this.activity.exerciseGroups);
+    this.exerciseGroups = Object.values(this.activity.exerciseGroups)
 
-    this.changeDetectorRef.markForCheck();
+    this.changeDetectorRef.markForCheck()
   }
 }

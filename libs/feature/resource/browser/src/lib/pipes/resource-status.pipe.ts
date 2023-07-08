@@ -1,19 +1,19 @@
-import { Pipe, PipeTransform } from '@angular/core';
-import { ResourceStatus } from '@platon/feature/resource/common';
+import { Pipe, PipeTransform } from '@angular/core'
+import { ResourceStatus } from '@platon/feature/resource/common'
 
 export const RESOURCE_STATUS_NAMES: Record<ResourceStatus, string> = {
   DRAFT: 'Brouillon',
   READY: "Prêt à l'utilisation",
   BUGGED: 'Contient des bugs',
   NOT_TESTED: "Besoin d'être tester",
-  DEPRECATED: 'Ne pas utiliser'
-};
+  DEPRECATED: 'Ne pas utiliser',
+}
 
 @Pipe({
-  name: 'resourceStatus'
+  name: 'resourceStatus',
 })
 export class ResourceStatusPipe implements PipeTransform {
   transform(status: ResourceStatus | string): string {
-    return RESOURCE_STATUS_NAMES[status as ResourceStatus];
+    return RESOURCE_STATUS_NAMES[status as ResourceStatus]
   }
 }

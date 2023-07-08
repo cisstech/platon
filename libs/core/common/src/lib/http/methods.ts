@@ -3,5 +3,5 @@ export const HTTP_METHOD = {
   PUT: 'PUT',
   PATCH: 'PATCH',
   DELETE: 'DELETE',
-  GET: 'GET'
+  GET: 'GET',
 }

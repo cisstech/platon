@@ -1,7 +1,7 @@
-import { Field, InputType, ObjectType, registerEnumType } from "@nestjs/graphql";
-import { OrderingDirections, User, UserOrderings, UserRoles } from "@platon/core/common";
-import { UserEntity, UserFiltersDTO } from ".";
-import { BaseGraphModel } from "../graphql";
+import { Field, InputType, ObjectType, registerEnumType } from '@nestjs/graphql'
+import { OrderingDirections, User, UserOrderings, UserRoles } from '@platon/core/common'
+import { UserEntity, UserFiltersDTO } from '.'
+import { BaseGraphModel } from '../graphql'
 
 registerEnumType(UserRoles, {
   name: 'UserRoles',
@@ -19,37 +19,36 @@ registerEnumType(UserOrderings, {
 export class UserGraphModel extends BaseGraphModel implements User {
   constructor(data: Partial<UserEntity>) {
     super()
-    Object.assign(this, data);
+    Object.assign(this, data)
   }
 
   @Field(() => UserRoles)
-  readonly role!: UserRoles;
+  readonly role!: UserRoles
 
   @Field()
-  readonly username!: string;
+  readonly username!: string
 
   @Field(() => Boolean)
-  readonly active!: boolean;
+  readonly active!: boolean
 
   @Field({ nullable: true })
-  readonly firstName?: string;
+  readonly firstName?: string
 
   @Field({ nullable: true })
-  readonly lastName?: string;
+  readonly lastName?: string
 
   @Field({ nullable: true })
-  readonly email?: string;
+  readonly email?: string
 
   @Field(() => Date, { nullable: true })
-  readonly lastLogin?: Date;
+  readonly lastLogin?: Date
 
   @Field(() => Date, { nullable: true })
-  readonly firstLogin?: Date;
+  readonly firstLogin?: Date
 
   @Field(() => Boolean, { nullable: true })
-  readonly hasPassword?: boolean;
+  readonly hasPassword?: boolean
 }
 
 @InputType('UserFiltersInput')
 export class UserFiltersInput extends UserFiltersDTO {}
-

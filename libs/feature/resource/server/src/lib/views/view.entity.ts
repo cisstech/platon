@@ -1,7 +1,6 @@
-import { BaseEntity, UserEntity } from '@platon/core/server';
-import { Column, Entity, JoinColumn, ManyToOne, Unique } from 'typeorm';
-import { ResourceEntity } from '../resource.entity';
-
+import { BaseEntity, UserEntity } from '@platon/core/server'
+import { Column, Entity, JoinColumn, ManyToOne, Unique } from 'typeorm'
+import { ResourceEntity } from '../resource.entity'
 
 @Entity('ResourceViews')
 @Unique('ResourceViews_unique_idx', ['userId', 'resourceId'])
@@ -20,4 +19,3 @@ export class ResourceViewEntity extends BaseEntity {
   @JoinColumn({ name: 'resource_id' })
   resource!: ResourceEntity
 }
-

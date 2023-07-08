@@ -1,29 +1,28 @@
-import { UserRoles } from "./user.model";
+import { UserRoles } from './user.model'
 
 export interface AuthToken {
-  accessToken: string;
-  refreshToken: string;
+  accessToken: string
+  refreshToken: string
 }
 
 export interface SignInInput {
-  username: string;
-  password: string;
+  username: string
+  password: string
 }
 
 export interface ResetPasswordInput {
-  username: string;
-  password?: string;
-  newPassword: string;
+  username: string
+  password?: string
+  newPassword: string
 }
 
 export interface SignUpInput {
-  email: string;
-  username: string;
-  password: string;
-  lastName: string;
-  firstName: string;
-  role: UserRoles;
+  email: string
+  username: string
+  password: string
+  lastName: string
+  firstName: string
+  role: UserRoles
 }
-
 
 export const TOKEN_EXPIRED_ERROR_CODE = 'auth/token-expired'

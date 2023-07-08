@@ -1,8 +1,8 @@
-import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { NzTabsModule } from 'ng-zorro-antd/tabs';
-import { CourseInformationsPage } from './informations/informations.page';
+import { CommonModule } from '@angular/common'
+import { ChangeDetectionStrategy, Component } from '@angular/core'
+import { RouterModule } from '@angular/router'
+import { NzTabsModule } from 'ng-zorro-antd/tabs'
+import { CourseInformationsPage } from './informations/informations.page'
 
 @Component({
   standalone: true,
@@ -10,13 +10,6 @@ import { CourseInformationsPage } from './informations/informations.page';
   templateUrl: './settings.page.html',
   styleUrls: ['./settings.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    CommonModule,
-    RouterModule,
-
-    NzTabsModule,
-
-    CourseInformationsPage,
-  ]
+  imports: [CommonModule, RouterModule, NzTabsModule, CourseInformationsPage],
 })
 export class CourseSettingsPage {}

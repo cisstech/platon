@@ -1,13 +1,9 @@
-import { stripIndent } from 'common-tags';
-import {
-  defineWebComponent,
-  IWebComponent,
-  WebComponentTypes,
-} from '../../web-component';
+import { stripIndent } from 'common-tags'
+import { defineWebComponent, IWebComponent, WebComponentTypes } from '../../web-component'
 
 export interface MarkdownState extends IWebComponent {
-  data: string;
-  file: string;
+  data: string
+  file: string
 }
 
 export const MarkdownComponentDefinition = defineWebComponent({
@@ -51,4 +47,4 @@ export const MarkdownComponentDefinition = defineWebComponent({
         <https://mciissee.github.io/nge-markdown/cheatsheet>
         `,
   },
-});
+})

@@ -1,19 +1,38 @@
-import { Injectable } from "@angular/core";
-import { ListResponse } from "@platon/core/common";
-import { Activity, ActivityCorrector, ActivityFilters, ActivityMember, Course, CourseFilters, CourseMember, CourseMemberFilters, CourseSection, CreateActivity, CreateActivityCorrector, CreateActivityMember, CreateCourse, CreateCourseMember, CreateCourseSection, UpdateActivity, UpdateCourse, UpdateCourseSection } from "@platon/feature/course/common";
-import { Observable, Subject, tap } from "rxjs";
-import { ActivityCorrectorProvider } from "../models/activity-corrector.provider";
-import { ActivityMemberProvider } from "../models/activity-member.provider";
-import { ActivityProvider } from "../models/activity-provider";
-import { CourseMemberProvider } from "../models/course-member-provider";
-import { CourseProvider } from "../models/course-provider";
-import { CourseSectionProvider } from "../models/course-section-provider";
+import { Injectable } from '@angular/core'
+import { ListResponse } from '@platon/core/common'
+import {
+  Activity,
+  ActivityCorrector,
+  ActivityFilters,
+  ActivityMember,
+  Course,
+  CourseFilters,
+  CourseMember,
+  CourseMemberFilters,
+  CourseSection,
+  CreateActivity,
+  CreateActivityCorrector,
+  CreateActivityMember,
+  CreateCourse,
+  CreateCourseMember,
+  CreateCourseSection,
+  UpdateActivity,
+  UpdateCourse,
+  UpdateCourseSection,
+} from '@platon/feature/course/common'
+import { Observable, Subject, tap } from 'rxjs'
+import { ActivityCorrectorProvider } from '../models/activity-corrector.provider'
+import { ActivityMemberProvider } from '../models/activity-member.provider'
+import { ActivityProvider } from '../models/activity-provider'
+import { CourseMemberProvider } from '../models/course-member-provider'
+import { CourseProvider } from '../models/course-provider'
+import { CourseSectionProvider } from '../models/course-section-provider'
 
 @Injectable({ providedIn: 'root' })
 export class CourseService {
-  private readonly deleteActivityEvent = new Subject<Activity>();
+  private readonly deleteActivityEvent = new Subject<Activity>()
 
-  readonly onDeletedActivity = this.deleteActivityEvent.asObservable();
+  readonly onDeletedActivity = this.deleteActivityEvent.asObservable()
 
   constructor(
     private readonly courseProvider: CourseProvider,
@@ -22,126 +41,142 @@ export class CourseService {
 
     private readonly activityProvider: ActivityProvider,
     private readonly activityMemberProvider: ActivityMemberProvider,
-    private readonly activityCorrectorProvider: ActivityCorrectorProvider,
-  ) { }
+    private readonly activityCorrectorProvider: ActivityCorrectorProvider
+  ) {}
 
   //#region Courses
   search(filters?: CourseFilters): Observable<ListResponse<Course>> {
-    return this.courseProvider.search(filters);
+    return this.courseProvider.search(filters)
   }
 
   find(id: string): Observable<Course> {
-    return this.courseProvider.find(id);
+    return this.courseProvider.find(id)
   }
 
   update(id: string, input: UpdateCourse): Observable<Course> {
-    return this.courseProvider.update(id, input);
+    return this.courseProvider.update(id, input)
   }
 
   create(input: CreateCourse): Observable<Course> {
-    return this.courseProvider.create(input);
-
+    return this.courseProvider.create(input)
   }
   //#endregion
 
   //#region Members
   createMember(course: Course, input: CreateCourseMember): Observable<CourseMember> {
-    return this.courseMemberProvider.create(course, input);
+    return this.courseMemberProvider.create(course, input)
   }
 
-  searchMembers(course: Course, filters?: CourseMemberFilters): Observable<ListResponse<CourseMember>> {
-    return this.courseMemberProvider.search(course, filters);
+  searchMembers(
+    course: Course,
+    filters?: CourseMemberFilters
+  ): Observable<ListResponse<CourseMember>> {
+    return this.courseMemberProvider.search(course, filters)
   }
 
   deleteMember(member: CourseMember): Observable<void> {
-    return this.courseMemberProvider.delete(member);
+    return this.courseMemberProvider.delete(member)
   }
   //#endregion
 
   //#region Sections
   findSection(courseId: string, sectionId: string): Observable<CourseSection> {
-    return this.courseSectionProvider.find(courseId, sectionId);
+    return this.courseSectionProvider.find(courseId, sectionId)
   }
 
   listSections(course: Course): Observable<ListResponse<CourseSection>> {
-    return this.courseSectionProvider.list(course);
+    return this.courseSectionProvider.list(course)
   }
 
   createSection(course: Course, input: CreateCourseSection): Observable<CourseSection> {
-    return this.courseSectionProvider.create(course, input);
+    return this.courseSectionProvider.create(course, input)
   }
 
   updateSection(section: CourseSection, input: UpdateCourseSection): Observable<CourseSection> {
-    return this.courseSectionProvider.update(section, input);
+    return this.courseSectionProvider.update(section, input)
   }
 
   deleteSection(section: CourseSection): Observable<void> {
-    return this.courseSectionProvider.delete(section);
+    return this.courseSectionProvider.delete(section)
   }
   //#endregion
 
   //#region Activities
   findActivity(courseId: string, activityId: string): Observable<Activity> {
-    return this.activityProvider.find(courseId, activityId);
+    return this.activityProvider.find(courseId, activityId)
   }
 
   listActivities(course: Course, filters?: ActivityFilters): Observable<ListResponse<Activity>> {
-    return this.activityProvider.search(course, filters);
+    return this.activityProvider.search(course, filters)
   }
 
   createActivity(course: Course, input: CreateActivity): Observable<Activity> {
-    return this.activityProvider.create(course, input);
+    return this.activityProvider.create(course, input)
   }
 
   updateActivity(activity: Activity, input: UpdateActivity): Observable<Activity> {
-    return this.activityProvider.update(activity, input);
+    return this.activityProvider.update(activity, input)
   }
 
   reloadActivity(activity: Activity, version?: string): Observable<Activity> {
-    return this.activityProvider.reload(activity, version);
+    return this.activityProvider.reload(activity, version)
   }
 
   deleteActivity(activity: Activity): Observable<void> {
-    return this.activityProvider.delete(activity).pipe(
-      tap(() => this.deleteActivityEvent.next(activity))
-    );
+    return this.activityProvider
+      .delete(activity)
+      .pipe(tap(() => this.deleteActivityEvent.next(activity)))
   }
 
   //#endregion
 
   //#region Activity Members
-  createActivityMember(activity: Activity, input: CreateActivityMember): Observable<ActivityMember> {
-    return this.activityMemberProvider.create(activity, input);
+  createActivityMember(
+    activity: Activity,
+    input: CreateActivityMember
+  ): Observable<ActivityMember> {
+    return this.activityMemberProvider.create(activity, input)
   }
 
-  updateActivityMembers(activity: Activity, input: CreateActivityMember[]): Observable<ListResponse<ActivityMember>> {
-    return this.activityMemberProvider.update(activity, input);
+  updateActivityMembers(
+    activity: Activity,
+    input: CreateActivityMember[]
+  ): Observable<ListResponse<ActivityMember>> {
+    return this.activityMemberProvider.update(activity, input)
   }
 
   searchActivityMembers(activity: Activity): Observable<ListResponse<ActivityMember>> {
-    return this.activityMemberProvider.search(activity);
+    return this.activityMemberProvider.search(activity)
   }
 
   deleteActivityMember(member: ActivityMember): Observable<void> {
-    return this.activityMemberProvider.delete(member);
+    return this.activityMemberProvider.delete(member)
   }
   //#endregion
 
   //#region Activity Correctors
-  createActivityCorrector(activity: string | Activity, input: CreateActivityCorrector): Observable<ActivityCorrector> {
-    return this.activityCorrectorProvider.create(activity, input);
+  createActivityCorrector(
+    activity: string | Activity,
+    input: CreateActivityCorrector
+  ): Observable<ActivityCorrector> {
+    return this.activityCorrectorProvider.create(activity, input)
   }
 
-  updateActivityCorrectors(activity: string | Activity, input: CreateActivityCorrector[]): Observable<ListResponse<ActivityCorrector>> {
-    return this.activityCorrectorProvider.update(activity, input);
+  updateActivityCorrectors(
+    activity: string | Activity,
+    input: CreateActivityCorrector[]
+  ): Observable<ListResponse<ActivityCorrector>> {
+    return this.activityCorrectorProvider.update(activity, input)
   }
 
-  searchActivityCorrector(activity: string | Activity): Observable<ListResponse<ActivityCorrector>> {
-    return this.activityCorrectorProvider.search(activity);
+  searchActivityCorrector(
+    activity: string | Activity
+  ): Observable<ListResponse<ActivityCorrector>> {
+    return this.activityCorrectorProvider.search(activity)
   }
 
   deleteActivityCorrector(corrector: ActivityCorrector): Observable<void> {
-    return this.activityCorrectorProvider.delete(corrector);
+    return this.activityCorrectorProvider.delete(corrector)
   }
   //#endregion
 }

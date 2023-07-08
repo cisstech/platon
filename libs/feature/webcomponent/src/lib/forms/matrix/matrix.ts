@@ -1,21 +1,17 @@
-import {
-  defineWebComponent,
-  IWebComponent,
-  WebComponentTypes,
-} from '../../web-component';
+import { defineWebComponent, IWebComponent, WebComponentTypes } from '../../web-component'
 
 export interface MatrixCell {
-  css?: string;
-  value: string;
-  disabled?: string;
+  css?: string
+  value: string
+  disabled?: string
 }
 
 export interface MatrixState extends IWebComponent {
-  cols: number;
-  rows: number;
-  disabled: boolean;
-  resizable: boolean;
-  cells: MatrixCell[];
+  cols: number
+  rows: number
+  disabled: boolean
+  resizable: boolean
+  cells: MatrixCell[]
 }
 
 export const MatrixComponentDefinition = defineWebComponent({
@@ -83,4 +79,4 @@ export const MatrixComponentDefinition = defineWebComponent({
     cols: 3,
     resizable: true,
   },
-});
+})

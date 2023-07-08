@@ -1,18 +1,14 @@
-import {
-  defineWebComponent,
-  IWebComponent,
-  WebComponentTypes,
-} from '../../web-component';
+import { defineWebComponent, IWebComponent, WebComponentTypes } from '../../web-component'
 
 export interface CheckboxItem {
-  css?: string;
-  content: string;
-  checked?: boolean;
+  css?: string
+  content: string
+  checked?: boolean
 }
 export interface CheckboxGroupState extends IWebComponent {
-  items: CheckboxItem[];
-  disabled: boolean;
-  horizontal: boolean;
+  items: CheckboxItem[]
+  disabled: boolean
+  horizontal: boolean
 }
 
 export const CheckboxGroupComponentDefinition = defineWebComponent({
@@ -21,8 +17,7 @@ export const CheckboxGroupComponentDefinition = defineWebComponent({
   icon: 'assets/images/components/forms/checkbox-group/checkbox-group.svg',
   selector: 'wc-checkbox-group',
   description: 'Permets de choisir plusieurs propositions parmi une liste.',
-  fullDescriptionUrl:
-    'assets/docs/components/forms/checkbox-group/checkbox-group.md',
+  fullDescriptionUrl: 'assets/docs/components/forms/checkbox-group/checkbox-group.md',
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',
@@ -49,8 +44,7 @@ export const CheckboxGroupComponentDefinition = defineWebComponent({
       disabled: {
         type: 'boolean',
         default: false,
-        description:
-          'Désactiver la possibilité de sélectionner les propositions?',
+        description: 'Désactiver la possibilité de sélectionner les propositions?',
       },
       horizontal: {
         type: 'boolean',
@@ -63,4 +57,4 @@ export const CheckboxGroupComponentDefinition = defineWebComponent({
   showcase: {
     items: ['Choix 1', 'Choix 2', 'Choix 3'],
   },
-});
+})

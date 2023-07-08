@@ -1,7 +1,7 @@
-import { BaseEntity, UserEntity } from '@platon/core/server';
-import { Column, Entity, Index, JoinColumn, ManyToOne, Unique } from 'typeorm';
-import { ActivityEntity } from '../activity/activity.entity';
-import { CourseMemberEntity } from '../course-member/course-member.entity';
+import { BaseEntity, UserEntity } from '@platon/core/server'
+import { Column, Entity, Index, JoinColumn, ManyToOne, Unique } from 'typeorm'
+import { ActivityEntity } from '../activity/activity.entity'
+import { CourseMemberEntity } from '../course-member/course-member.entity'
 
 @Entity('ActivityCorrectors')
 @Unique('ActivityCorrectors_activity_member_user_idx', ['activityId', 'memberId', 'userId'])
@@ -19,7 +19,7 @@ export class ActivityCorrectorEntity extends BaseEntity {
   memberId!: string
 
   @ManyToOne(() => CourseMemberEntity, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'member_id', })
+  @JoinColumn({ name: 'member_id' })
   member!: CourseMemberEntity
 
   @Index('ActivityCorrectors_user_id_idx')

@@ -1,4 +1,4 @@
-import { ViewEntity, ViewColumn } from 'typeorm';
+import { ViewEntity, ViewColumn } from 'typeorm'
 
 /**
  * ActivityCorrectorView represents a database view that selects distinct corrector users from
@@ -22,23 +22,23 @@ import { ViewEntity, ViewColumn } from 'typeorm';
 })
 export class ActivityCorrectorView {
   @ViewColumn()
-  id!: string;
+  id!: string
 
   @ViewColumn()
-  username!: string;
+  username!: string
 
   @ViewColumn({ name: 'first_name' })
-  firstName!: string;
+  firstName!: string
 
   @ViewColumn({ name: 'last_name' })
-  lastName!: string;
+  lastName!: string
 
   @ViewColumn()
-  email!: string;
+  email!: string
 
   @ViewColumn({ name: 'course_id' })
-  courseId!: string;
+  courseId!: string
 
   @ViewColumn({ name: 'activity_id' })
-  activityId!: string;
+  activityId!: string
 }

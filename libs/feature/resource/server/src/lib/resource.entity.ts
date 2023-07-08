@@ -1,6 +1,10 @@
-import { BaseEntity, LevelEntity, TopicEntity, UserEntity } from '@platon/core/server';
-import { ResourceStatus, ResourceTypes, ResourceVisibilities } from '@platon/feature/resource/common';
-import { Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
+import { BaseEntity, LevelEntity, TopicEntity, UserEntity } from '@platon/core/server'
+import {
+  ResourceStatus,
+  ResourceTypes,
+  ResourceVisibilities,
+} from '@platon/feature/resource/common'
+import { Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne } from 'typeorm'
 
 @Entity('Resources')
 export class ResourceEntity extends BaseEntity {
@@ -40,34 +44,34 @@ export class ResourceEntity extends BaseEntity {
   status!: ResourceStatus
 
   @ManyToMany(() => LevelEntity, {
-    eager: true
+    eager: true,
   })
   @JoinTable({
     name: 'ResourceLevels',
     joinColumn: {
       name: 'resource_id',
-      referencedColumnName: "id"
+      referencedColumnName: 'id',
     },
     inverseJoinColumn: {
-      name: "level_id",
-      referencedColumnName: "id"
-    }
+      name: 'level_id',
+      referencedColumnName: 'id',
+    },
   })
   levels!: LevelEntity[]
 
   @ManyToMany(() => TopicEntity, {
-    eager: true
+    eager: true,
   })
   @JoinTable({
     name: 'ResourceTopics',
     joinColumn: {
       name: 'resource_id',
-      referencedColumnName: "id"
+      referencedColumnName: 'id',
     },
     inverseJoinColumn: {
-      name: "topic_id",
-      referencedColumnName: "id"
-    }
+      name: 'topic_id',
+      referencedColumnName: 'id',
+    },
   })
   topics!: TopicEntity[]
 

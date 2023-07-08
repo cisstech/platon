@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { NotFoundResponse, OrderingDirections } from '@platon/core/common';
-import { LevelService, TopicService } from '@platon/core/server';
+import { Injectable } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { NotFoundResponse, OrderingDirections } from '@platon/core/common'
+import { LevelService, TopicService } from '@platon/core/server'
 import {
   CircleTree,
   ResourceCompletion,
@@ -10,15 +10,15 @@ import {
   ResourceStatisic,
   ResourceStatus,
   ResourceTypes,
-  ResourceVisibilities
-} from '@platon/feature/resource/common';
-import { isUUID4 } from '@platon/shared/server';
-import { DataSource, EntityManager, Not, Repository } from 'typeorm';
-import { Optional } from 'typescript-optional';
-import { ResourceMemberEntity } from './members/member.entity';
-import { CreateResourceDTO, UpdateResourceDTO } from './resource.dto';
-import { ResourceEntity } from './resource.entity';
-import { ResourceWatcherEntity } from './watchers';
+  ResourceVisibilities,
+} from '@platon/feature/resource/common'
+import { isUUID4 } from '@platon/shared/server'
+import { DataSource, EntityManager, Not, Repository } from 'typeorm'
+import { Optional } from 'typescript-optional'
+import { ResourceMemberEntity } from './members/member.entity'
+import { CreateResourceDTO, UpdateResourceDTO } from './resource.dto'
+import { ResourceEntity } from './resource.entity'
+import { ResourceWatcherEntity } from './watchers'
 
 @Injectable()
 export class ResourceService {
@@ -27,37 +27,38 @@ export class ResourceService {
     private readonly repository: Repository<ResourceEntity>,
     private readonly dataSource: DataSource,
     private readonly levelService: LevelService,
-    private readonly topicService: TopicService,
-  ) { }
+    private readonly topicService: TopicService
+  ) {}
 
   async tree(): Promise<CircleTree> {
     const circles = await this.repository.find({
       where: {
         type: ResourceTypes.CIRCLE,
-        visibility: Not(ResourceVisibilities.PERSONAL)
-      }
+        visibility: Not(ResourceVisibilities.PERSONAL),
+      },
     })
 
-    const root = circles.find(c => !c.parentId) as ResourceEntity;
+    const root = circles.find((c) => !c.parentId) as ResourceEntity
     const tree: CircleTree = {
       id: root.id,
       name: root.name,
       code: root.code,
       visibility: root.visibility,
-      children: []
+      children: [],
     }
 
     const traverse = (node: CircleTree) => {
-      const children = circles.filter(c => c.parentId === node.id)
+      const children = circles
+        .filter((c) => c.parentId === node.id)
         .sort((a, b) => a.name.localeCompare(b.name))
 
-      children.forEach(child => {
+      children.forEach((child) => {
         const next: CircleTree = {
           id: child.id,
           name: child.name,
           code: child.code,
           visibility: child.visibility,
-          children: []
+          children: [],
         }
         node.children?.push(next)
         traverse(next)
@@ -75,9 +76,11 @@ export class ResourceService {
   }
 
   async statistic(id: string): Promise<ResourceStatisic> {
-    return (this.dataSource.query(
-      'SELECT * FROM "ResourceStats" WHERE id = $1', [id]
-    ) as Promise<ResourceStatisic[]>).then(response => response[0])
+    return (
+      this.dataSource.query('SELECT * FROM "ResourceStats" WHERE id = $1', [id]) as Promise<
+        ResourceStatisic[]
+      >
+    ).then((response) => response[0])
   }
 
   async findById(id: string, resolveRelations = true): Promise<Optional<ResourceEntity>> {
@@ -87,12 +90,13 @@ export class ResourceService {
       query.leftJoinAndSelect('resource.levels', 'level')
     }
 
-    return Optional.ofNullable(
-      await query.where('resource.id = :id', { id }).getOne()
-    );
+    return Optional.ofNullable(await query.where('resource.id = :id', { id }).getOne())
   }
 
-  async findByIdOrCode(idOrCode: string, resolveRelations = true): Promise<Optional<ResourceEntity>> {
+  async findByIdOrCode(
+    idOrCode: string,
+    resolveRelations = true
+  ): Promise<Optional<ResourceEntity>> {
     const query = this.repository.createQueryBuilder('resource')
     if (resolveRelations) {
       query.leftJoinAndSelect('resource.topics', 'topic')
@@ -100,9 +104,11 @@ export class ResourceService {
     }
 
     if (isUUID4(idOrCode)) {
-      return Optional.ofNullable(await query.where('resource.id = :id', { id: idOrCode }).getOne());
+      return Optional.ofNullable(await query.where('resource.id = :id', { id: idOrCode }).getOne())
     }
-    return Optional.ofNullable(await query.where('resource.code = :code', { code: idOrCode }).getOne());
+    return Optional.ofNullable(
+      await query.where('resource.code = :code', { code: idOrCode }).getOne()
+    )
   }
 
   async findPersonal(ownerId: string): Promise<ResourceEntity> {
@@ -111,11 +117,11 @@ export class ResourceService {
         ownerId,
         type: ResourceTypes.CIRCLE,
         visibility: ResourceVisibilities.PERSONAL,
-      }
+      },
     })
 
     if (!circle) {
-      circle = (await this.repository.save(
+      circle = await this.repository.save(
         this.repository.create({
           ownerId,
           name: 'Votre cercle personnel',
@@ -124,9 +130,9 @@ export class ResourceService {
           `,
           type: ResourceTypes.CIRCLE,
           visibility: ResourceVisibilities.PERSONAL,
-          status: ResourceStatus.READY
+          status: ResourceStatus.READY,
         })
-      ))
+      )
     }
     return circle
   }
@@ -138,11 +144,11 @@ export class ResourceService {
 
     filters = {
       ...filters,
-      order: filters.order || ResourceOrderings.RELEVANCE
+      order: filters.order || ResourceOrderings.RELEVANCE,
     }
 
     if (filters.order === ResourceOrderings.RELEVANCE) {
-      query.leftJoin('ResourceStats', 'stats', 'stats.id = resource.id');
+      query.leftJoin('ResourceStats', 'stats', 'stats.id = resource.id')
     }
 
     if (filters.members?.length) {
@@ -151,7 +157,7 @@ export class ResourceService {
         'member',
         'member.resource_id = resource.id AND member.user_id IN (:...ids)',
         { ids: filters.members }
-      );
+      )
     }
 
     if (filters.watchers?.length) {
@@ -160,7 +166,7 @@ export class ResourceService {
         'watcher',
         'watcher.resource_id = resource.id AND watcher.user_id IN (:...ids)',
         { ids: filters.watchers }
-      );
+      )
     }
 
     query.where('visibility <> :visibility', { visibility: ResourceVisibilities.PERSONAL })
@@ -182,35 +188,38 @@ export class ResourceService {
     }
 
     if (filters.search) {
-      query.andWhere(`(
+      query.andWhere(
+        `(
         f_unaccent(resource.name) ILIKE f_unaccent(:search)
         OR f_unaccent(topic.name) ILIKE f_unaccent(:search)
         OR f_unaccent(level.name) ILIKE f_unaccent(:search)
-      )`, { search: `%${filters.search}%` })
+      )`,
+        { search: `%${filters.search}%` }
+      )
     }
 
     if (filters.period) {
       const subtractDays = (days: number): Date => {
-        const result = new Date();
-        result.setDate(result.getDate() - days);
-        return result;
+        const result = new Date()
+        result.setDate(result.getDate() - days)
+        return result
       }
       query.andWhere('resource.updated_at >= :date', { date: subtractDays(filters.period) })
     }
 
     if (filters.order) {
       const fields: Record<ResourceOrderings, string> = {
-        'NAME': 'resource.name',
-        'CREATED_AT': 'resource.created_at',
-        'UPDATED_AT': 'resource.updated_at',
-        'RELEVANCE': 'stats.score',
+        NAME: 'resource.name',
+        CREATED_AT: 'resource.created_at',
+        UPDATED_AT: 'resource.updated_at',
+        RELEVANCE: 'stats.score',
       }
 
       const orderings: Record<ResourceOrderings, keyof typeof OrderingDirections> = {
-        'NAME': 'ASC',
-        'CREATED_AT': 'DESC',
-        'UPDATED_AT': 'DESC',
-        'RELEVANCE': 'DESC',
+        NAME: 'ASC',
+        CREATED_AT: 'DESC',
+        UPDATED_AT: 'DESC',
+        RELEVANCE: 'DESC',
       }
 
       query.orderBy(fields[filters.order], filters.direction || orderings[filters.order])
@@ -228,9 +237,7 @@ export class ResourceService {
   }
 
   async create(input: Partial<ResourceEntity>): Promise<ResourceEntity> {
-    return this.repository.save(
-      this.repository.create(input)
-    );
+    return this.repository.save(this.repository.create(input))
   }
 
   async update(id: string, changes: Partial<ResourceEntity>): Promise<ResourceEntity> {
@@ -238,63 +245,66 @@ export class ResourceService {
     if (!resource) {
       throw new NotFoundResponse(`Resource not found: ${id}`)
     }
-    Object.assign(resource, changes);
-    return this.repository.save(resource);
+    Object.assign(resource, changes)
+    return this.repository.save(resource)
   }
 
   async completion(): Promise<ResourceCompletion> {
     const [levels, topics, names] = await Promise.all([
       this.levelService.findAll(),
       this.topicService.findAll(),
-      this.repository.query('SELECT name FROM "Resources"') as Promise<{ name: string }[]>
+      this.repository.query('SELECT name FROM "Resources"') as Promise<{ name: string }[]>,
     ])
 
     return {
-      levels: levels[0].map(e => e.name),
-      topics: topics[0].map(e => e.name),
-      names: names.map(e => e.name),
+      levels: levels[0].map((e) => e.name),
+      topics: topics[0].map((e) => e.name),
+      names: names.map((e) => e.name),
     }
   }
 
   async fromInput(input: CreateResourceDTO | UpdateResourceDTO): Promise<ResourceEntity> {
-    const { levels, topics, ...props } = input;
+    const { levels, topics, ...props } = input
 
     const newRes = new ResourceEntity()
-    Object.assign(newRes, props);
+    Object.assign(newRes, props)
 
     if (levels) {
-      newRes.levels = (
-        await Promise.all(
-          levels.map(async levelId => {
-            const optional = await this.levelService.findById(levelId);
-            return optional.orElseThrow(() => new NotFoundResponse(`Level not found: ${levelId}`));
-          })
-        )
-      );
+      newRes.levels = await Promise.all(
+        levels.map(async (levelId) => {
+          const optional = await this.levelService.findById(levelId)
+          return optional.orElseThrow(() => new NotFoundResponse(`Level not found: ${levelId}`))
+        })
+      )
     }
 
     if (topics) {
-      newRes.topics = (await Promise.all(
-        topics.map(async topicId => {
-          const optional = await this.topicService.findById(topicId);
-          return optional.orElseThrow(() => new NotFoundResponse(`Topic not found: ${topicId}`));
+      newRes.topics = await Promise.all(
+        topics.map(async (topicId) => {
+          const optional = await this.topicService.findById(topicId)
+          return optional.orElseThrow(() => new NotFoundResponse(`Topic not found: ${topicId}`))
         })
-      ));
+      )
     }
 
     return newRes
   }
 
   async notificationWatchers(resourceId: string, entityManager?: EntityManager): Promise<string[]> {
-    const watchers = (await (entityManager ?? this.dataSource).query(`
+    const watchers = (
+      await (entityManager ?? this.dataSource).query(
+        `
       SELECT DISTINCT COALESCE(member.user_id, watcher.user_id, res.owner_id) AS user_id
       FROM "Resources" res
       LEFT JOIN "ResourceMembers" member ON member.resource_id = res.id
       LEFT JOIN "ResourceWatchers" watcher ON watcher.resource_id = res.id
       WHERE res.id = $1
-    `, [resourceId]))
-    .map((row: any) => row.user_id as string)
-    .filter((userId: string) => !!userId)
+    `,
+        [resourceId]
+      )
+    )
+      .map((row: any) => row.user_id as string)
+      .filter((userId: string) => !!userId)
     return watchers
   }
 }

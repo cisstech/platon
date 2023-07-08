@@ -1,9 +1,9 @@
-import { Routes } from '@angular/router';
-import { CorrectionsPendingsPage } from './pendings.page';
+import { Routes } from '@angular/router'
+import { CorrectionsPendingsPage } from './pendings.page'
 
 export default [
   {
     path: '',
-    component: CorrectionsPendingsPage
+    component: CorrectionsPendingsPage,
   },
-] as Routes;
+] as Routes

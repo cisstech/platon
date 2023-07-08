@@ -1,22 +1,27 @@
-import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
-import { firstValueFrom } from 'rxjs';
+import { CommonModule } from '@angular/common'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core'
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms'
+import { Router, RouterModule } from '@angular/router'
+import { firstValueFrom } from 'rxjs'
 
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
+import { MatCheckboxModule } from '@angular/material/checkbox'
+import { MatFormFieldModule } from '@angular/material/form-field'
+import { MatInputModule } from '@angular/material/input'
 
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzSelectModule } from 'ng-zorro-antd/select';
-import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
-import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzButtonModule } from 'ng-zorro-antd/button'
+import { NzSelectModule } from 'ng-zorro-antd/select'
+import { NzSkeletonModule } from 'ng-zorro-antd/skeleton'
+import { NzSpinModule } from 'ng-zorro-antd/spin'
 
-import { DialogModule, DialogService } from '@platon/core/browser';
-import { CourseService } from '@platon/feature/course/browser';
-import { UiStepDirective, UiStepperComponent } from '@platon/shared/ui';
-
+import { DialogModule, DialogService } from '@platon/core/browser'
+import { CourseService } from '@platon/feature/course/browser'
+import { UiStepDirective, UiStepperComponent } from '@platon/shared/ui'
 
 @Component({
   standalone: true,
@@ -42,47 +47,46 @@ import { UiStepDirective, UiStepperComponent } from '@platon/shared/ui';
     UiStepDirective,
     UiStepperComponent,
     DialogModule,
-  ]
+  ],
 })
 export class CourseCreatePage {
-  protected loading = false;
-  protected creating = false;
+  protected loading = false
+  protected creating = false
 
   protected infos = new FormGroup({
     name: new FormControl('', [Validators.required]),
     desc: new FormControl('', [Validators.required]),
-  });
-
+  })
 
   constructor(
     private readonly router: Router,
     private readonly dialogService: DialogService,
     private readonly courseService: CourseService,
-    private readonly changeDetectorRef: ChangeDetectorRef,
-  ) { }
+    private readonly changeDetectorRef: ChangeDetectorRef
+  ) {}
 
   protected async create(): Promise<void> {
     try {
-
-      const infos = this.infos.value;
-      this.creating = true;
+      const infos = this.infos.value
+      this.creating = true
 
       const course = await firstValueFrom(
         this.courseService.create({
           name: infos.name as string,
           desc: infos.desc as string,
-        }));
+        })
+      )
 
-      this.router.navigate([
-        '/courses', course.id
-      ], {
-        replaceUrl: true
-      });
+      this.router.navigate(['/courses', course.id], {
+        replaceUrl: true,
+      })
     } catch {
-      this.dialogService.error('Une erreur est survenue lors de la création du cours, veuillez réessayer un peu plus tard !');
+      this.dialogService.error(
+        'Une erreur est survenue lors de la création du cours, veuillez réessayer un peu plus tard !'
+      )
     } finally {
-      this.creating = false;
-      this.changeDetectorRef.markForCheck();
+      this.creating = false
+      this.changeDetectorRef.markForCheck()
     }
   }
 }

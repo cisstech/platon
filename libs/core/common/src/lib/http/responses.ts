@@ -1,4 +1,4 @@
-import { HTTP_STATUS_CODE } from "./status-code"
+import { HTTP_STATUS_CODE } from './status-code'
 
 export interface HttpResponse<T> {
   success: boolean
@@ -24,9 +24,7 @@ export class CreatedResponse<T> implements HttpResponse<T> {
   statusCode = HTTP_STATUS_CODE.CREATED
   resource: T
 
-  constructor(options: {
-    resource: T
-  }) {
+  constructor(options: { resource: T }) {
     this.resource = options.resource
   }
 }
@@ -36,9 +34,7 @@ export class ItemResponse<T> implements HttpResponse<T> {
   statusCode = HTTP_STATUS_CODE.OK
   resource: T
 
-  constructor(options: {
-    resource: T
-  }) {
+  constructor(options: { resource: T }) {
     this.resource = options.resource
   }
 }
@@ -49,10 +45,7 @@ export class ListResponse<T> implements HttpResponse<T> {
   resources: T[]
   total: number
 
-  constructor(options: {
-    resources: T[],
-    total: number
-  }) {
+  constructor(options: { resources: T[]; total: number }) {
     this.resources = options.resources
     this.total = options.total
   }
@@ -63,10 +56,7 @@ export class ErrorResponse implements HttpResponse<null> {
   statusCode: number
   message: string
 
-  constructor(options: {
-    status: number
-    message: string
-  }) {
+  constructor(options: { status: number; message: string }) {
     this.statusCode = options.status
     this.message = options.message
   }
@@ -78,12 +68,10 @@ export class ErrorResponse implements HttpResponse<null> {
  * The server can not find requested resource. In the browser, this means the URL is not recognized. In an API, this can also mean that the endpoint is valid but the resource itself does not exist. Servers may also send this response instead of 403 to hide the existence of a resource from an unauthorized client. This response code is probably the most famous one due to its frequent occurence on the web.
  */
 export class NotFoundResponse extends ErrorResponse {
-  constructor(
-    message: string
-  ) {
+  constructor(message: string) {
     super({
       status: HTTP_STATUS_CODE.NOT_FOUND,
-      message
+      message,
     })
   }
 }
@@ -94,12 +82,10 @@ export class NotFoundResponse extends ErrorResponse {
  * This response means that server could not understand the request due to invalid syntax.
  */
 export class BadRequestResponse extends ErrorResponse {
-  constructor(
-    message: string
-  ) {
+  constructor(message: string) {
     super({
       status: HTTP_STATUS_CODE.BAD_REQUEST,
-      message
+      message,
     })
   }
 }
@@ -110,12 +96,10 @@ export class BadRequestResponse extends ErrorResponse {
  * Although the HTTP standard specifies "unauthorized", semantically this response means "unauthenticated". That is, the client must authenticate itself to get the requested response.
  */
 export class UnauthorizedResponse extends ErrorResponse {
-  constructor(
-    message: string
-  ) {
+  constructor(message: string) {
     super({
       status: HTTP_STATUS_CODE.UNAUTHORIZED,
-      message
+      message,
     })
   }
 }
@@ -126,12 +110,10 @@ export class UnauthorizedResponse extends ErrorResponse {
  * The client does not have access rights to the content, i.e. they are unauthorized, so server is rejecting to give proper response. Unlike 401, the client's identity is known to the server.
  */
 export class ForbiddenResponse extends ErrorResponse {
-  constructor(
-    message: string
-  ) {
+  constructor(message: string) {
     super({
       status: HTTP_STATUS_CODE.FORBIDDEN,
-      message
+      message,
     })
   }
 }

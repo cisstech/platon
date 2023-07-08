@@ -1,15 +1,11 @@
-import {
-  defineWebComponent,
-  IWebComponent,
-  WebComponentTypes,
-} from '../../web-component';
+import { defineWebComponent, IWebComponent, WebComponentTypes } from '../../web-component'
 
 export interface MathLiveState extends IWebComponent {
-  value: string;
-  prefix: string;
-  suffix: string;
-  config: Record<string, any>;
-  disabled: boolean;
+  value: string
+  prefix: string
+  suffix: string
+  config: Record<string, any>
+  disabled: boolean
 }
 
 export const MathLiveComponentDefinition = defineWebComponent({
@@ -54,4 +50,4 @@ export const MathLiveComponentDefinition = defineWebComponent({
     value: '\\frac{\\sin(x)}{\\cos(x)}',
     suffix: 'clarity happy-face color=FF0000',
   },
-});
+})

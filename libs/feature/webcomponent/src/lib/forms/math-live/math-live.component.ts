@@ -6,11 +6,11 @@ import {
   Input,
   OnInit,
   ViewChild,
-} from '@angular/core';
-import { MathfieldElement } from 'mathlive';
-import { WebComponent, WebComponentHooks } from '../../web-component';
-import { WebComponentChangeDetectorService } from '../../web-component-change-detector.service';
-import { MathLiveComponentDefinition, MathLiveState } from './math-live';
+} from '@angular/core'
+import { MathfieldElement } from 'mathlive'
+import { WebComponent, WebComponentHooks } from '../../web-component'
+import { WebComponentChangeDetectorService } from '../../web-component-change-detector.service'
+import { MathLiveComponentDefinition, MathLiveState } from './math-live'
 
 @Component({
   selector: 'wc-math-live',
@@ -19,15 +19,13 @@ import { MathLiveComponentDefinition, MathLiveState } from './math-live';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 @WebComponent(MathLiveComponentDefinition)
-export class MathLiveComponent
-  implements OnInit, WebComponentHooks<MathLiveState>
-{
-  private mathfield!: MathfieldElement;
+export class MathLiveComponent implements OnInit, WebComponentHooks<MathLiveState> {
+  private mathfield!: MathfieldElement
 
-  @Input() state!: MathLiveState;
+  @Input() state!: MathLiveState
 
   @ViewChild('container', { static: true })
-  container!: ElementRef<HTMLElement>;
+  container!: ElementRef<HTMLElement>
 
   constructor(
     readonly injector: Injector,
@@ -35,7 +33,7 @@ export class MathLiveComponent
   ) {}
 
   async ngOnInit() {
-    this.mathfield = new MathfieldElement();
+    this.mathfield = new MathfieldElement()
     this.mathfield.setOptions({
       locale: 'fr',
       smartFence: false,
@@ -44,20 +42,20 @@ export class MathLiveComponent
       virtualKeyboardMode: 'manual',
       virtualKeyboardTheme: 'material',
       fontsDirectory: 'assets/vendors/mathlive/fonts',
-    });
+    })
     this.mathfield.oninput = () => {
       this.changeDetection.ignore(this, () => {
-        this.state.value = this.mathfield.getValue('latex');
-      });
-    };
-    this.container.nativeElement.replaceWith(this.mathfield);
+        this.state.value = this.mathfield.getValue('latex')
+      })
+    }
+    this.container.nativeElement.replaceWith(this.mathfield)
   }
 
   onChangeState() {
-    this.mathfield.disabled = this.state.disabled;
+    this.mathfield.disabled = this.state.disabled
     this.mathfield.setValue(this.state.value, {
       format: 'latex',
-    });
-    this.mathfield.setOptions(this.state.config || {});
+    })
+    this.mathfield.setOptions(this.state.config || {})
   }
 }

@@ -1,40 +1,40 @@
-import { Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, OneToOne } from 'typeorm';
-import { BaseEntity } from '../../database/base-entity';
-import { LevelEntity } from '../../levels';
-import { TopicEntity } from '../../topics';
-import { UserEntity } from '../user.entity';
+import { Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, OneToOne } from 'typeorm'
+import { BaseEntity } from '../../database/base-entity'
+import { LevelEntity } from '../../levels'
+import { TopicEntity } from '../../topics'
+import { UserEntity } from '../user.entity'
 
 @Entity('UserPrefs')
 export class UserPrefsEntity extends BaseEntity {
   @ManyToMany(() => LevelEntity, {
-    eager: true
+    eager: true,
   })
   @JoinTable({
     name: 'UserLevels',
     joinColumn: {
       name: 'user_prefs_id',
-      referencedColumnName: "id"
+      referencedColumnName: 'id',
     },
     inverseJoinColumn: {
-      name: "level_id",
-      referencedColumnName: "id"
-    }
+      name: 'level_id',
+      referencedColumnName: 'id',
+    },
   })
   levels!: LevelEntity[]
 
   @ManyToMany(() => TopicEntity, {
-    eager: true
+    eager: true,
   })
   @JoinTable({
     name: 'UserTopics',
     joinColumn: {
       name: 'user_prefs_id',
-      referencedColumnName: "id"
+      referencedColumnName: 'id',
     },
     inverseJoinColumn: {
-      name: "topic_id",
-      referencedColumnName: "id"
-    }
+      name: 'topic_id',
+      referencedColumnName: 'id',
+    },
   })
   topics!: TopicEntity[]
 

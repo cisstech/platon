@@ -1,9 +1,9 @@
-import { Routes } from '@angular/router';
-import { AccountNotificationPrefsPage } from './notification-prefs.page';
+import { Routes } from '@angular/router'
+import { AccountNotificationPrefsPage } from './notification-prefs.page'
 
 export default [
   {
     path: '',
-    component: AccountNotificationPrefsPage
+    component: AccountNotificationPrefsPage,
   },
-] as Routes;
+] as Routes

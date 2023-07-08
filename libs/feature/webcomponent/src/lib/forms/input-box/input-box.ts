@@ -1,19 +1,15 @@
-import {
-  defineWebComponent,
-  IWebComponent,
-  WebComponentTypes,
-} from '../../web-component';
+import { defineWebComponent, IWebComponent, WebComponentTypes } from '../../web-component'
 
 export interface InputBoxState extends IWebComponent {
-  type: 'number' | 'text' | 'textarea';
-  hint: string;
-  value: string | number;
-  prefix: string;
-  suffix: string;
-  appearance: 'fill' | 'outline';
-  placeholder: string;
-  disabled: boolean;
-  completion: string[];
+  type: 'number' | 'text' | 'textarea'
+  hint: string
+  value: string | number
+  prefix: string
+  suffix: string
+  appearance: 'fill' | 'outline'
+  placeholder: string
+  disabled: boolean
+  completion: string[]
 }
 
 export const InputBoxComponentDefinition = defineWebComponent({
@@ -76,8 +72,7 @@ export const InputBoxComponentDefinition = defineWebComponent({
         items: {
           type: 'string',
         },
-        description:
-          'Une liste de suggestions à proposer automatiquement lors de la saisi.',
+        description: 'Une liste de suggestions à proposer automatiquement lors de la saisi.',
       },
     },
   },
@@ -87,4 +82,4 @@ export const InputBoxComponentDefinition = defineWebComponent({
     suffix: 'clarity happy-face color=FF0000',
     completion: ['France', 'Espagne', 'Italie'],
   },
-});
+})

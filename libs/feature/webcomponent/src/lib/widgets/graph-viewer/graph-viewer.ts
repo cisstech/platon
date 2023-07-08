@@ -1,12 +1,8 @@
-import { stripIndent } from 'common-tags';
-import {
-  defineWebComponent,
-  IWebComponent,
-  WebComponentTypes,
-} from '../../web-component';
+import { stripIndent } from 'common-tags'
+import { defineWebComponent, IWebComponent, WebComponentTypes } from '../../web-component'
 
 export interface GraphViewerState extends IWebComponent {
-  graph: string;
+  graph: string
 }
 
 export const GraphViewerComponentDefinition = defineWebComponent({
@@ -15,8 +11,7 @@ export const GraphViewerComponentDefinition = defineWebComponent({
   icon: 'assets/images/components/widgets/graph-viewer/graph-viewer.svg',
   selector: 'wc-graph-viewer',
   description: "Permets d'afficher un graph.",
-  fullDescriptionUrl:
-    'assets/docs/components/widgets/graph-viewer/graph-viewer.md',
+  fullDescriptionUrl: 'assets/docs/components/widgets/graph-viewer/graph-viewer.md',
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',
@@ -39,4 +34,4 @@ export const GraphViewerComponentDefinition = defineWebComponent({
         }
         `,
   },
-});
+})

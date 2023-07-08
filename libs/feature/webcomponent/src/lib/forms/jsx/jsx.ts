@@ -1,20 +1,16 @@
-import { stripIndent } from 'common-tags';
-import {
-  defineWebComponent,
-  IWebComponent,
-  WebComponentTypes,
-} from '../../web-component';
+import { stripIndent } from 'common-tags'
+import { defineWebComponent, IWebComponent, WebComponentTypes } from '../../web-component'
 
 export interface Point {
-  x: number;
-  y: number;
+  x: number
+  y: number
 }
 
 export interface JsxState extends IWebComponent {
-  script: string;
-  points: Record<string, Point>;
-  disabled: boolean;
-  attributes: Record<string, unknown>;
+  script: string
+  points: Record<string, Point>
+  disabled: boolean
+  attributes: Record<string, unknown>
 }
 
 export const JsxComponentDefinition = defineWebComponent({
@@ -22,8 +18,7 @@ export const JsxComponentDefinition = defineWebComponent({
   name: 'Jsx',
   icon: 'assets/images/components/forms/jsx/jsx.svg',
   selector: 'wc-jsx',
-  description:
-    'Permets de dessiner, visualiser et interagir avec des figures géométriques.',
+  description: 'Permets de dessiner, visualiser et interagir avec des figures géométriques.',
   fullDescriptionUrl: 'assets/docs/components/forms/jsx/jsx.md',
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
@@ -64,4 +59,4 @@ export const JsxComponentDefinition = defineWebComponent({
         const secOAM = board.create('sector', [O, A, M], {color: 'orange'});
         `,
   },
-});
+})

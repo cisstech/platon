@@ -1,10 +1,10 @@
-import Code from '@editorjs/code';
-import { EditorJsExtension, EDITOR_JS_EXTENSION } from "../editorjs";
+import Code from '@editorjs/code'
+import { EditorJsExtension, EDITOR_JS_EXTENSION } from '../editorjs'
 
 const Extension: EditorJsExtension = {
   tools: {
     code: {
-      class: Code
+      class: Code,
     },
   },
 }
@@ -12,5 +12,5 @@ const Extension: EditorJsExtension = {
 export const CodeExtension = {
   provide: EDITOR_JS_EXTENSION,
   multi: true,
-  useValue: Extension
+  useValue: Extension,
 }

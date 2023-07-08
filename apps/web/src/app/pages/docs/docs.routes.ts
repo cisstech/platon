@@ -1,7 +1,7 @@
-import { Routes } from '@angular/router';
-import { NgeDocSettings } from '@cisstech/nge/doc';
-import { createWebComponentDoc } from '@platon/feature/webcomponent';
-import { DocsPage } from './docs.page';
+import { Routes } from '@angular/router'
+import { NgeDocSettings } from '@cisstech/nge/doc'
+import { createWebComponentDoc } from '@platon/feature/webcomponent'
+import { DocsPage } from './docs.page'
 
 const DeveloperDocs = {
   meta: {
@@ -11,23 +11,22 @@ const DeveloperDocs = {
     backUrl: '/docs',
     repo: {
       name: 'platon',
-      url: 'https://github.com/cisstech/platon'
+      url: 'https://github.com/cisstech/platon',
     },
   },
   pages: [
-    { title: 'Présentation', href: 'presentation', renderer: 'assets/docs/developers/index.md' }
+    { title: 'Présentation', href: 'presentation', renderer: 'assets/docs/developers/index.md' },
   ],
-} as NgeDocSettings;
-
+} as NgeDocSettings
 
 export default [
   {
     path: '',
-    component: DocsPage
+    component: DocsPage,
   },
   {
     path: '**',
-    loadChildren: () => import('@cisstech/nge/doc').then(m => m.NgeDocModule),
+    loadChildren: () => import('@cisstech/nge/doc').then((m) => m.NgeDocModule),
     data: [
       DeveloperDocs,
       createWebComponentDoc({
@@ -36,4 +35,4 @@ export default [
       }),
     ],
   },
-] as Routes;
+] as Routes

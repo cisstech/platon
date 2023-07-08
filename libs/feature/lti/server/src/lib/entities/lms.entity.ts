@@ -1,10 +1,9 @@
-import { BaseEntity } from '@platon/core/server';
-import { Column, Entity, Unique } from 'typeorm';
+import { BaseEntity } from '@platon/core/server'
+import { Column, Entity, Unique } from 'typeorm'
 
 @Entity('Lmses')
 @Unique('Lmses_unique_idx', ['consumerKey'])
 export class LmsEntity extends BaseEntity {
-
   /**
    * Name that identifies the LMS, for example: Moodle UPEM.
    */

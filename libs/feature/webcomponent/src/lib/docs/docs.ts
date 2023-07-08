@@ -1,11 +1,9 @@
-import { Injector } from '@angular/core';
-import { NgeDocLink, NgeDocMeta, NgeDocSettings } from '@cisstech/nge/doc';
-import { WebComponentTypes } from '../web-component';
-import { WebComponentService } from '../web-component.service';
+import { Injector } from '@angular/core'
+import { NgeDocLink, NgeDocMeta, NgeDocSettings } from '@cisstech/nge/doc'
+import { WebComponentTypes } from '../web-component'
+import { WebComponentService } from '../web-component.service'
 
-export function createWebComponentDoc(
-  meta?: Partial<NgeDocMeta>
-): NgeDocSettings {
+export function createWebComponentDoc(meta?: Partial<NgeDocMeta>): NgeDocSettings {
   return {
     meta: {
       name: 'Composants',
@@ -39,37 +37,32 @@ export function createWebComponentDoc(
       */
 
       (injector: Injector) => {
-        const api = injector.get(WebComponentService);
+        const api = injector.get(WebComponentService)
         return {
           title: 'Forms',
           href: 'forms',
-          renderer: () =>
-            import('./listing/listing.module').then((m) => m.ListingModule),
+          renderer: () => import('./listing/listing.module').then((m) => m.ListingModule),
           inputs: { type: WebComponentTypes.form },
           children: links(api, WebComponentTypes.form),
-        };
+        }
       },
       (injector: Injector) => {
-        const api = injector.get(WebComponentService);
+        const api = injector.get(WebComponentService)
         return {
           title: 'Widgets',
           href: 'widgets',
-          renderer: () =>
-            import('./listing/listing.module').then((m) => m.ListingModule),
+          renderer: () => import('./listing/listing.module').then((m) => m.ListingModule),
           inputs: { type: WebComponentTypes.widget },
           children: links(api, WebComponentTypes.widget),
-        };
+        }
       },
     ],
-  };
+  }
 }
 
-function links(
-  api: WebComponentService,
-  type: WebComponentTypes
-): NgeDocLink[] {
+function links(api: WebComponentService, type: WebComponentTypes): NgeDocLink[] {
   return api.ofType(type).map((e) => {
-    const name = e.selector.replace('wc-', '');
+    const name = e.selector.replace('wc-', '')
     return {
       href: e.selector,
       title: e.name,
@@ -85,6 +78,6 @@ function links(
       inputs: {
         definition: e,
       },
-    };
-  });
+    }
+  })
 }

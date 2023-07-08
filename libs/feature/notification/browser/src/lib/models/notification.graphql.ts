@@ -1,5 +1,4 @@
-import { gql } from "apollo-angular"
-
+import { gql } from 'apollo-angular'
 
 gql`
   fragment Notif on Notification {
@@ -49,5 +48,4 @@ gql`
   mutation DeleteAllNotifications {
     deleteAllNotifications
   }
-
 `

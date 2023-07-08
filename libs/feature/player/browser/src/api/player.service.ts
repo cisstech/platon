@@ -1,21 +1,28 @@
-import { Injectable } from '@angular/core';
-import { EvalExerciseInput, EvalExerciseOutput, PlayActivityInput, PlayActivityOuput, PlayAnswersInput, PlayAnswersOutput, PlayExerciseInput, PlayExerciseOuput, PreviewOuput } from '@platon/feature/player/common';
-import { Observable } from 'rxjs';
-import { PlayerProvider } from '../models/player-provider';
+import { Injectable } from '@angular/core'
+import {
+  EvalExerciseInput,
+  EvalExerciseOutput,
+  PlayActivityInput,
+  PlayActivityOuput,
+  PlayAnswersInput,
+  PlayAnswersOutput,
+  PlayExerciseInput,
+  PlayExerciseOuput,
+  PreviewOuput,
+} from '@platon/feature/player/common'
+import { Observable } from 'rxjs'
+import { PlayerProvider } from '../models/player-provider'
 
 @Injectable({ providedIn: 'root' })
 export class PlayerService {
-
-  constructor(
-    private readonly provider: PlayerProvider
-  ) { }
+  constructor(private readonly provider: PlayerProvider) {}
 
   preview(resource: string, version: string): Observable<PreviewOuput> {
-    return this.provider.preview(resource, version);
+    return this.provider.preview(resource, version)
   }
 
   playAnswers(input: PlayAnswersInput): Observable<PlayAnswersOutput> {
-    return this.provider.playAnswers(input);
+    return this.provider.playAnswers(input)
   }
 
   playActivity(input: PlayActivityInput): Observable<PlayActivityOuput> {
@@ -31,6 +38,6 @@ export class PlayerService {
   }
 
   terminate(sessionId: string): Observable<PlayActivityOuput> {
-    return this.provider.terminate(sessionId);
+    return this.provider.terminate(sessionId)
   }
 }

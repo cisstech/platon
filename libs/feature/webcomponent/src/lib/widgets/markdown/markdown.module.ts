@@ -1,11 +1,11 @@
-import { NgModule, Type } from '@angular/core';
+import { NgModule, Type } from '@angular/core'
 
-import { IDynamicModule } from '@cisstech/nge/services';
-import { NgeMarkdownModule } from '@cisstech/nge/markdown';
+import { IDynamicModule } from '@cisstech/nge/services'
+import { NgeMarkdownModule } from '@cisstech/nge/markdown'
 
-import { BaseModule } from '../../shared/components/base/base.module';
+import { BaseModule } from '../../shared/components/base/base.module'
 
-import { MarkdownComponent } from './markdown.component';
+import { MarkdownComponent } from './markdown.component'
 
 @NgModule({
   declarations: [MarkdownComponent],
@@ -13,5 +13,5 @@ import { MarkdownComponent } from './markdown.component';
   exports: [MarkdownComponent],
 })
 export class MarkdownModule implements IDynamicModule {
-  component: Type<unknown> = MarkdownComponent;
+  component: Type<unknown> = MarkdownComponent
 }

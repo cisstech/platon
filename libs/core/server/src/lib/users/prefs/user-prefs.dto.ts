@@ -1,9 +1,9 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { UpdateUserPrefs, UserPrefs } from '@platon/core/common';
-import { Type } from 'class-transformer';
-import { IsArray, IsOptional, IsUUID } from 'class-validator';
-import { LevelDTO } from '../../levels';
-import { TopicDTO } from '../../topics';
+import { ApiProperty } from '@nestjs/swagger'
+import { UpdateUserPrefs, UserPrefs } from '@platon/core/common'
+import { Type } from 'class-transformer'
+import { IsArray, IsOptional, IsUUID } from 'class-validator'
+import { LevelDTO } from '../../levels'
+import { TopicDTO } from '../../topics'
 
 export class UserPrefsDTO implements UserPrefs {
   @IsArray()
@@ -18,7 +18,6 @@ export class UserPrefsDTO implements UserPrefs {
 }
 
 export class UpdateUserPrefsDTO implements UpdateUserPrefs {
-
   @IsUUID(undefined, { each: true })
   @IsArray()
   @IsOptional()

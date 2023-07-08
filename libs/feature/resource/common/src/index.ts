@@ -13,4 +13,3 @@ export * from './lib/models/resource.model'
 export * from './lib/models/statistic.model'
 export * from './lib/models/view.model'
 export * from './lib/models/watcher.model'
-

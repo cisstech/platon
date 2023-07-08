@@ -1,5 +1,12 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
-import { ActivityExercise } from '@platon/feature/compiler';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  Output,
+} from '@angular/core'
+import { ActivityExercise } from '@platon/feature/compiler'
 
 @Component({
   selector: 'app-pla-exercise-editor',
@@ -8,18 +15,17 @@ import { ActivityExercise } from '@platon/feature/compiler';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlaExerciseEditorComponent implements OnDestroy {
-  private readonly disposables: monaco.IDisposable[] = [];
+  private readonly disposables: monaco.IDisposable[] = []
 
-  @Input() exercise!: ActivityExercise;
-  @Output() exerciseChange = new EventEmitter<ActivityExercise>();
+  @Input() exercise!: ActivityExercise
+  @Output() exerciseChange = new EventEmitter<ActivityExercise>()
 
-  @Output() deleteClicked = new EventEmitter<void>();
+  @Output() deleteClicked = new EventEmitter<void>()
 
-  protected overriding = false;
-
+  protected overriding = false
 
   ngOnDestroy() {
-    this.disposables.forEach(d => d.dispose());
+    this.disposables.forEach((d) => d.dispose())
   }
 
   onCreateEditor(editor: monaco.editor.IStandaloneCodeEditor) {
@@ -29,33 +35,29 @@ export class PlaExerciseEditorComponent implements OnDestroy {
       },
       scrollbar: {
         verticalSliderSize: 6,
-
       },
-      tabIndex: 2
-    });
+      tabIndex: 2,
+    })
 
-    let content = this.exercise.overrides?.toString() || '';
+    let content = this.exercise.overrides?.toString() || ''
     try {
-      content = JSON.stringify(this.exercise.overrides, null, 2);
+      content = JSON.stringify(this.exercise.overrides, null, 2)
     } catch {
-      content = '{}';
+      content = '{}'
     }
 
-    const model = monaco.editor.createModel(
-      content,
-      'json'
-    );
+    const model = monaco.editor.createModel(content, 'json')
 
-    editor.setModel(model);
+    editor.setModel(model)
     this.disposables.push(
       model.onDidChangeContent(() => {
         try {
-          this.exercise.overrides = JSON.parse(model.getValue());
-          this.exerciseChange.emit(this.exercise);
+          this.exercise.overrides = JSON.parse(model.getValue())
+          this.exerciseChange.emit(this.exercise)
         } catch {
           //
         }
       })
-    );
+    )
   }
 }
