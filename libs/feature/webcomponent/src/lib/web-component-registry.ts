@@ -23,6 +23,16 @@ import { DragDropComponentDefinition } from './forms/drag-drop/drag-drop'
 import { FeedbackComponentDefinition } from './widgets/feedback/feedback'
 
 export const WEB_COMPONENTS_BUNDLES: NgeElementDef[] = [
+  // INTERNALS
+  {
+    selector: 'wc-editorjs-viewer',
+    module: () =>
+      import(
+        /* webpackChunkName: "wc-editorjs-viewer" */ './internals/editorjs-viewer/editorjs-viewer.module'
+      ).then((m) => m.EditorjsViewerModule),
+  },
+
+  // PUBLICS
   {
     selector: 'wc-automaton-editor',
     module: () =>

@@ -62,6 +62,36 @@ export const withRenderedComponents = (variables: any, reviewMode?: boolean): an
 }
 
 /**
+ * Transforms recursivly all Editor.js content to HTML code from `object`.
+ * @param variables Object to transform.
+ * @returns A computed version of the object.
+ */
+const withEditorJsContent = (variables: any): any => {
+  if (variables == null) {
+    return variables
+  }
+  if (Array.isArray(variables)) {
+    return variables.map((v) => withEditorJsContent(v))
+  }
+  if (typeof variables === 'object') {
+    return Object.keys(variables).reduce((o, k) => {
+      o[k] = withEditorJsContent(variables[k])
+      return o
+    }, {} as any)
+  }
+
+  if (typeof variables === 'string') {
+    const editorJsOutputRegex = /^\s*\{[\s\S]*"blocks"\s*:\s*\[[\s\S]*\][\s\S]*\}\s*$/
+    const isEditorJsOutput = editorJsOutputRegex.test(variables)
+    if (isEditorJsOutput) {
+      return `<wc-editorjs-viewer>${variables}</wc-editorjs-viewer>`
+    }
+  }
+
+  return variables
+}
+
+/**
  * Renders all keys of `variables` which are consired as nunjucks templates.
  * @param variables A list of variables.
  * @param reviewMode If true, the components will be disabled.
@@ -71,7 +101,9 @@ export const withRenderedTemplates = (
   variables: Variables,
   reviewMode?: boolean
 ): ExerciseVariables => {
-  const computed = withRenderedComponents(variables, reviewMode) as ExerciseVariables
+  const computed = withEditorJsContent(
+    withRenderedComponents(variables, reviewMode)
+  ) as ExerciseVariables
 
   const templates = ['title', 'statement', 'form', 'solution', 'feedback', 'hint']
 
