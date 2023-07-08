@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, Output, TemplateRef, ViewChild } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -19,12 +19,12 @@ import { DialogModule, DialogService } from '@platon/core/browser';
 import { ExercisePlayer, PlayerActions, PlayerNavigation } from '@platon/feature/player/common';
 import { WebComponentHooks } from '@platon/feature/webcomponent';
 
+import { HttpErrorResponse } from '@angular/common/http';
 import { ExerciseTheory } from '@platon/feature/compiler';
 import { UiModalDrawerComponent } from '@platon/shared/ui';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { PlayerService } from '../../api/player.service';
 import { PlayerCommentsComponent } from '../player-comments/player-comments.component';
-import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   standalone: true,
@@ -67,6 +67,13 @@ export class PlayerExerciseComponent implements OnChanges {
   @ViewChild('errorTemplate', { read: TemplateRef, static: true })
   errorTemplate!: TemplateRef<object>;
 
+  @ViewChild('containerHints', { read: ElementRef })
+  containerHints!: ElementRef<HTMLElement>;
+
+  @ViewChild('containerSolution', { read: ElementRef })
+  containerSolution!: ElementRef<HTMLElement>;
+
+
   protected index = 0;
   protected get disabled(): boolean {
     return !!this.player.solution || (
@@ -92,8 +99,9 @@ export class PlayerExerciseComponent implements OnChanges {
     }
   }
 
-  protected hint(): Promise<void> {
-    return this.evaluate(PlayerActions.NEXT_HINT);
+  protected async hint(): Promise<void> {
+    await this.evaluate(PlayerActions.NEXT_HINT);
+    this.scrollIntoNode(this.containerHints?.nativeElement, 'center');
   }
 
   protected check(): Promise<void> {
@@ -104,8 +112,9 @@ export class PlayerExerciseComponent implements OnChanges {
     return this.evaluate(PlayerActions.REROLL_EXERCISE);
   }
 
-  protected solution(): Promise<void> {
-    return this.evaluate(PlayerActions.SHOW_SOLUTION);
+  protected async solution(): Promise<void> {
+    await this.evaluate(PlayerActions.SHOW_SOLUTION);
+    this.scrollIntoNode(this.containerSolution?.nativeElement, 'start');
   }
 
   protected previousAttempt(): void {
@@ -135,6 +144,20 @@ export class PlayerExerciseComponent implements OnChanges {
   ): void {
     document.querySelectorAll('[cid]').forEach(node => {
       consumer((node as unknown as WebComponentHooks));
+    });
+  }
+
+  private scrollIntoNode(node?: HTMLElement, position: ScrollLogicalPosition = 'start'): void {
+    if (!node) return;
+    setTimeout(() => {
+      node.scrollIntoView({
+        behavior: 'smooth',
+        block: position,
+      });
+      node.classList.add('animate');
+      setTimeout(() => {
+        node.classList.remove('animate');
+      }, 500);
     });
   }
 

@@ -4,53 +4,65 @@
     <mat-card-subtitle *ngIf="player.author">{{player.author}}</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-    <ng-container *ngIf="player.statement">
-      <div class="exercise-statement">
-        <nge-markdown [data]="player.statement" />
-      </div>
-    </ng-container>
-    <ng-container *ngIf="player.feedbacks">
-      <ng-container *ngFor="let feedback of player.feedbacks">
-        <nz-alert
-          nzShowIcon
-          [nzType]="feedback.type"
-          [nzMessage]="content">
-          <ng-template #content>
-            <nge-markdown [data]="feedback.content" />
-          </ng-template>
-        </nz-alert>
+    <section>
+      <ng-container *ngIf="player.statement">
+        <div class="exercise-statement">
+          <nge-markdown [data]="player.statement" />
+        </div>
       </ng-container>
-    </ng-container>
-    <ng-container *ngIf="player.hints">
-      <ng-container *ngFor="let hint of player.hints">
-        <nz-alert
-          nzShowIcon
-          [nzType]="'info'"
-          [nzMessage]="content">
-          <ng-template #content>
-            <nge-markdown [data]="hint" />
-          </ng-template>
-        </nz-alert>
+    </section>
+    <section>
+      <ng-container *ngIf="player.feedbacks">
+        <ng-container *ngFor="let feedback of player.feedbacks">
+          <nz-alert
+            nzShowIcon
+            [nzType]="feedback.type"
+            [nzMessage]="content">
+            <ng-template #content>
+              <nge-markdown [data]="feedback.content" />
+            </ng-template>
+          </nz-alert>
+        </ng-container>
       </ng-container>
-    </ng-container>
-    <ng-container *ngIf="player.form">
-      <mat-divider />
-      <div class="exercise-form">
-        <nge-markdown [data]="player.form" />
-      </div>
-    </ng-container>
-    <ng-container *ngIf="player.solution">
-      <mat-accordion class="exercise-solution">
-        <mat-expansion-panel expanded>
-          <mat-expansion-panel-header>
-            <mat-panel-title>Solution</mat-panel-title>
-          </mat-expansion-panel-header>
-          <div class="exercise-form">
-            <nge-markdown [data]="player.solution" />
-          </div>
-        </mat-expansion-panel>
-      </mat-accordion>
-    </ng-container>
+    </section>
+    <section #containerHints>
+      <ng-container *ngIf="player.hints">
+        <div class="exercise-hints">
+          <ng-container *ngFor="let hint of player.hints">
+            <nz-alert
+              nzShowIcon
+              [nzType]="'info'"
+              [nzMessage]="content">
+              <ng-template #content>
+                <nge-markdown [data]="hint" />
+              </ng-template>
+            </nz-alert>
+          </ng-container>
+        </div>
+      </ng-container>
+    </section>
+    <section>
+      <ng-container *ngIf="player.form">
+        <mat-divider />
+        <div class="exercise-form">
+          <nge-markdown [data]="player.form" />
+        </div>
+      </ng-container>
+    </section>
+    <section #containerSolution>
+      <ng-container *ngIf="player.solution">
+        <mat-accordion class="exercise-solution">
+          <mat-expansion-panel expanded>
+            <mat-expansion-panel-header>
+              <mat-panel-title>Solution</mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="exercise-form">
+              <nge-markdown [data]="player.solution" />
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </ng-container>
+    </section>
   </mat-card-content>
   <mat-card-actions>
     <ng-container *ngIf="players.length">
