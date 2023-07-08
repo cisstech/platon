@@ -30,12 +30,21 @@ export const withRenderedComponents = (
       if (reviewMode) {
         variables.disabled = true;
       }
-      return `<${variables.selector} cid='${variables.cid}' state='${JSON.stringify(variables)}'></${variables.selector}>`
+      const state = JSON.stringify(variables);
+      const buffer = Buffer.from(state).toString('base64');
+      return `
+        <${variables.selector} cid='${variables.cid}' state='${buffer}'></${variables.selector}>
+      `
+      /*
+        FOR NOW WE LOAD THE STATE BY ENCODING IT WITHIN THE STATE ATTRIBUTE
+        IF THERE IS ANY PROBLEM WITH THE DECODING ON BROWSER SIDE, WE CAN SWITCH TO THE FOLLOWING CODE
+         return `
+          <${variables.selector} cid='${variables.cid}'></${variables.selector}>
+          <script type="application/json" id='${variables.cid}'>${state}</script>
+        `
+      */
     }
     return Object.keys(variables).reduce((o, k) => {
-      if (o == null) {
-        console.log('NULL', k)
-      }
       o[k] = withRenderedComponents(variables[k], reviewMode)
       return o;
     }, {} as any)

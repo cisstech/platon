@@ -29,46 +29,61 @@ export class BaseComponent implements OnInit, OnDestroy {
   constructor(
     private readonly api: WebComponentService,
     private readonly elementRef: ElementRef
-  ) {}
+  ) { }
 
   ngOnInit() {
     const native: HTMLElement = this.elementRef.nativeElement;
     const selector = native.parentElement?.tagName.toLowerCase();
     this.definition = this.api.findBySelector(selector || '');
+
     this.observer = new MutationObserver((mutations) => {
-      mutations.forEach(this.createStateFromAttributes.bind(this));
+      mutations.forEach(this.onChangeAttributes.bind(this));
     });
+
     this.observer.observe(native.parentElement as HTMLElement, {
       attributes: true,
     });
-    this.createStateFromAttributes();
   }
 
   ngOnDestroy() {
     this.observer?.disconnect();
   }
 
-  private parseAttributeValue(value: string) {
-    if (value.trim().match(/^(true|false|\d+|\[|\{)/)) {
+  private parseValue(value: string) {
+    if (value.trim().match(/^(true$|false$|\d+$|\[|\{)/)) {
       return JSON.parse(value);
     } else {
       return value;
     }
   }
 
-  private createStateFromAttributes() {
+  private onChangeAttributes() {
     const native: HTMLElement = this.elementRef.nativeElement;
     const parent = native.parentElement as HTMLElement;
     const attributes = Array.from(parent.attributes);
 
-    const batch = attributes.find(attr => attr.name === 'state');
-    if (batch) {
-      this.stateChange.emit(
-        this.parseAttributeValue(batch.value)
-      );
+    // LOAD FROM STATE ATTRIBUTE
+    const stateAttribute = attributes.find(attr => attr.name === 'state');
+    if (stateAttribute) {
+      const stateValue = stateAttribute.value.startsWith('{')
+        ? stateAttribute.value
+        : window.atob(stateAttribute.value);
+      this.stateChange.emit(this.parseValue(stateValue));
       return;
     }
 
+    // LOAD FROM SCRIPT TAG
+    const cidAttribute = attributes.find(attr => attr.name === 'cid');
+    if (cidAttribute) {
+      const cidValue = cidAttribute.value
+      const script = document.querySelector(`script[id="${cidValue}"]`);
+      if (script) {
+        this.stateChange.emit(this.parseValue(script.textContent || '{}'))
+      }
+      return;
+    }
+
+    // LOAD INDIVIDUAL ATTRIBUTES
     const state: Record<string, any> = {};
     const properties = this.definition?.schema?.properties || {};
 
@@ -76,7 +91,11 @@ export class BaseComponent implements OnInit, OnDestroy {
     for (const attribute of attributes) {
       if (attribute.name in properties) {
         changed = true;
-        state[attribute.name] = this.parseAttributeValue(attribute.value);
+        try {
+          state[attribute.name] = this.parseValue(attribute.value);
+        } catch {
+          console.warn(`Invalid value "${attribute.value}" for ${attribute.name} attribute`);
+        }
       }
     }
 

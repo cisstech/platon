@@ -237,7 +237,11 @@ function stateSetter(
   }
 
   if (typeof newState === 'string') {
-    newState = JSON.parse(newState);
+    newState = JSON.parse(
+      newState.startsWith('{')
+        ? newState
+        : window.atob(newState)
+    );
   }
 
   const suspended = suspendChanges(component);
