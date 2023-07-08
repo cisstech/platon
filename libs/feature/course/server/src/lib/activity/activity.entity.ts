@@ -47,7 +47,7 @@ export class ActivityEntity extends BaseEntity {
   @VirtualColumn({ query: () => 'SELECT 0' })
   readonly progression!: number
 
-  @VirtualColumn({ query: () => `source->'variables'->>'title'` })
+  @VirtualColumn({ query: (alias) => `${alias}.source->'variables'->>'title'` })
 
   readonly title!: string;
 

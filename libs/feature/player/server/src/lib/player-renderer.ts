@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { deepCopy, deepMerge } from "@platon/core/common";
 import { ActivitySettings, ExerciseVariables, Variables, defaultActivitySettings } from "@platon/feature/compiler";
-import { ActivityPlayer, ExercisePlayer, PlayerActivityVariables } from "@platon/feature/player/common";
+import { ActivityPlayer, ExercisePlayer } from "@platon/feature/player/common";
 import { AnswerEntity, SessionEntity } from "@platon/feature/result/server";
 import * as nunjucks from 'nunjucks';
 import { withActivityFeedbacksGuard, withFeedbacksGuard, withHintGuard, withSolutionGuard, withTheoriesGuard } from "./player-guards";
@@ -87,10 +87,7 @@ export const withRenderedTemplates = (
 export const withActivityPlayer = (
   session: SessionEntity,
 ): ActivityPlayer => {
-  const variables = withActivityFeedbacksGuard(
-    session
-  ).variables as PlayerActivityVariables;
-
+  const { variables } = withActivityFeedbacksGuard(session);
   return {
     type: 'activity',
     sessionId: session.id,

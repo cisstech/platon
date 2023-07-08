@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ForbiddenResponse, NotFoundResponse, User, deepMerge } from "@platon/core/common";
 import { ActivitySettings, ExerciseFeedback, ExerciseHint, ExerciseTheory, ExerciseVariables } from "@platon/feature/compiler";
 import { PlayerActivityVariables, PlayerNavigation } from "@platon/feature/player/common";
@@ -103,9 +104,9 @@ export const withFeedbacksGuard = (
  * @param session An activity session.
  * @returns The session with feedback disabled if needed.
  */
-export const withActivityFeedbacksGuard = (
+export const withActivityFeedbacksGuard = <T extends object = PlayerActivityVariables>(
   session: SessionEntity
-): SessionEntity => {
+): SessionEntity<T> => {
   const variables = session.variables as PlayerActivityVariables;
 
   const { settings, navigation } = variables;
@@ -142,10 +143,10 @@ export const withActivityFeedbacksGuard = (
  * @param user User for which to check the rights.
  * @returns The session.
  */
-export const withSessionAccessGuard = (
+export const withSessionAccessGuard = <T extends object = any>(
   session?: SessionEntity | null,
   user?: User
-): SessionEntity => {
+): SessionEntity<T> => {
   if (!session) {
     throw new NotFoundResponse(`PlayerSession not found.`);
   }

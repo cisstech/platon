@@ -12,6 +12,7 @@ import { withAnswersInSession } from './player-answer';
 import { withActivityFeedbacksGuard, withMultiSessionGuard, withSessionAccessGuard } from './player-guards';
 import { updateActivityNavigationState } from './player-navigation';
 import { withActivityPlayer, withExercisePlayer } from './player-renderer';
+import { extractExerciseSourceFromSession } from './player-utils';
 import { PreviewOuputDTO } from './player.dto';
 import { SandboxService } from './sandboxes/sandbox.service';
 
@@ -181,16 +182,15 @@ export class PlayerService {
     user?: User
   ): Promise<ExercisePlayer> {
     const exerciseSession = withSessionAccessGuard(
-      await this.sessionService.findById(input.sessionId, { parent: true, activity: true }),
+      await this.sessionService.findById<ExerciseVariables>(input.sessionId, { parent: true, activity: true }),
       user
     );
 
     const envid = exerciseSession.envid;
-    const variables = exerciseSession.variables as ExerciseVariables;
+    const source = extractExerciseSourceFromSession(exerciseSession);
+    const variables = source?.variables ?? exerciseSession.variables;
 
-    variables['.meta'] = undefined;
-    variables.feedback = undefined;
-
+    exerciseSession.variables = variables;
     if (variables.builder) {
       variables.seed = (Date.now()) % 100
       const response = await this.sandboxService.run({ envid, variables }, variables.builder);
@@ -209,12 +209,12 @@ export class PlayerService {
     user?: User
   ): Promise<ExercisePlayer> {
     const exerciseSession = withSessionAccessGuard(
-      await this.sessionService.findById(input.sessionId, { parent: true, activity: true }),
+      await this.sessionService.findById<ExerciseVariables>(input.sessionId, { parent: true, activity: true }),
       user
     );
 
     const envid = exerciseSession.envid;
-    let variables = exerciseSession.variables as ExerciseVariables;
+    let variables = exerciseSession.variables;
 
     if (Array.isArray(variables.hint)) {
       variables['.meta'] = {
@@ -238,7 +238,7 @@ export class PlayerService {
     user?: User
   ): Promise<[ExercisePlayer, PlayerNavigation]> {
     const exerciseSession = withSessionAccessGuard(
-      await this.sessionService.findById(input.sessionId, { parent: true, activity: true }),
+      await this.sessionService.findById<ExerciseVariables>(input.sessionId, { parent: true, activity: true }),
       user
     );
 
@@ -249,11 +249,11 @@ export class PlayerService {
     withAnswersInSession(exerciseSession, input.answers || {});
 
     const envid = exerciseSession.envid;
-    let variables = exerciseSession.variables as ExerciseVariables;
+    let variables = exerciseSession.variables;
 
     const output = await this.sandboxService.run({
       envid,
-      variables: { ...variables, feedback: { } }
+      variables: { ...variables, feedback: {} }
     }, variables.grader);
     const grade = Number.parseInt(output.variables.grade) ?? -1;
 
@@ -328,9 +328,7 @@ export class PlayerService {
     return [
       withExercisePlayer(exerciseSession),
       activitySession
-        ? (
-          withActivityFeedbacksGuard(activitySession).variables as ActivityVariables
-        ).navigation
+        ? withActivityFeedbacksGuard<ActivityVariables>(activitySession).variables.navigation
         : undefined
     ]
   }
@@ -408,6 +406,7 @@ export class PlayerService {
         userId: user?.id || null as any,
         parentId: parentId || null as any,
         activityId: activity?.id || null as any,
+        source,
       }, manager);
 
       if (source.abspath.endsWith('.pla')) {

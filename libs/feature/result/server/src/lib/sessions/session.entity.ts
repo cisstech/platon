@@ -3,6 +3,7 @@ import { BaseEntity, UserEntity } from '@platon/core/server';
 import { ActivityEntity } from '@platon/feature/course/server';
 import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 import { CorrectionEntity } from '../correction/correction.entity';
+import { PLSourceFile } from '@platon/feature/compiler';
 
 
 @Entity('Sessions')
@@ -54,5 +55,8 @@ export class SessionEntity<TVariables extends object = any> extends BaseEntity {
 
   @Column({ type: 'timestamp with time zone', name: 'last_graded_at', nullable: true })
   lastGradedAt?: Date;
+
+  @Column({ type: 'jsonb', nullable: true })
+  source?: PLSourceFile
 }
 
