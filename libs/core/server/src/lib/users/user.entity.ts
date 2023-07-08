@@ -37,7 +37,7 @@ export class UserEntity extends BaseEntity {
   firstLogin?: Date
 
   @VirtualColumn({
-    query:() => 'SELECT password IS NOT NULL'
+    query:(alias) => `SELECT ${alias}.password IS NOT NULL`
   })
   hasPassword = false
 }

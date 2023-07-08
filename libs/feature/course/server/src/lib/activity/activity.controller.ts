@@ -1,7 +1,7 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req } from '@nestjs/common';
-import { ItemResponse, ListResponse, NoContentResponse, NotFoundResponse } from '@platon/core/common';
-import { IRequest, Mapper } from '@platon/core/server';
-import { ActivityDTO, ActivityFiltersDTO, CreateCourseActivityDTO, UpdateCourseActivityDTO } from './activity.dto';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, Req } from '@nestjs/common';
+import { ItemResponse, ListResponse, NoContentResponse, NotFoundResponse, UserRoles } from '@platon/core/common';
+import { IRequest, Mapper, Roles } from '@platon/core/server';
+import { ActivityDTO, ActivityFiltersDTO, CreateCourseActivityDTO, ReloadCourseActivityDTO, UpdateCourseActivityDTO } from './activity.dto';
 import { ActivityService } from './activity.service';
 
 @Controller('courses/:courseId/activities')
@@ -60,6 +60,19 @@ export class ActivityController {
     const activity = await this.service.update(courseId, activityId, {
       ...await this.service.fromInput(input),
     });
+    return new ItemResponse({
+      resource: Mapper.map(activity, ActivityDTO)
+    });
+  }
+
+  @Roles(UserRoles.teacher, UserRoles.admin)
+  @Put('/:activityId')
+  async reload(
+    @Param('courseId') courseId: string,
+    @Param('activityId') activityId: string,
+    @Body() input: ReloadCourseActivityDTO,
+  ): Promise<ItemResponse<ActivityDTO>> {
+    const activity = await this.service.reload(courseId, activityId, input);
     return new ItemResponse({
       resource: Mapper.map(activity, ActivityDTO)
     });

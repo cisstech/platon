@@ -48,6 +48,15 @@ export class RemoteActivityProvider extends ActivityProvider {
     );
   }
 
+  reload(activity: Activity, version?: string): Observable<Activity> {
+    return this.http.put<ItemResponse<Activity>>(
+      `/api/v1/courses/${activity.courseId}/activities/${activity.id}`,
+      version ? { version } : {}
+    ).pipe(
+      map(response => response.resource)
+    );
+  }
+
   delete(activity: Activity): Observable<void> {
     return this.http.delete<void>(
       `/api/v1/courses/${activity.courseId}/activities/${activity.id}`

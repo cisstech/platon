@@ -4097,6 +4097,13 @@
     path-to-regexp "3.2.0"
     tslib "2.5.0"
 
+"@nestjs/event-emitter@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@nestjs/event-emitter/-/event-emitter-2.0.0.tgz#2f003263a412e643a9790d1d5e1db86cfbfc24cc"
+  integrity sha512-fZRv3+PmqXcbqCDRXRWhKDa+v3gmPUq4x5sQE5reVlDtEaCoAXwtGrtNswPtqd0msjyo8OWZF9k1sFjeRL6Xag==
+  dependencies:
+    eventemitter2 "6.4.9"
+
 "@nestjs/graphql@^11.0.4":
   version "11.0.5"
   resolved "https://registry.yarnpkg.com/@nestjs/graphql/-/graphql-11.0.5.tgz#6b66a57319ce5772f5991a6147c9520f254fc51a"
@@ -5968,10 +5975,10 @@ amdefine@>=0.0.4:
   resolved "https://registry.yarnpkg.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
   integrity sha512-S2Hw0TtNkMJhIabBwIojKL9YHO5T0n5eNqWJ7Lrlel/zDbftQpxpapi8tZs3X1HWa+u+QeydGmzzNU0m09+Rcg==
 
-ang-jsoneditor@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/ang-jsoneditor/-/ang-jsoneditor-2.0.0.tgz#01ab8823eb2aee0673ad36cacdf91a33c4461215"
-  integrity sha512-5i5VGQ8KWxbW0eXPi8jK+t3cuntrUUTgZRxvV+PYN3J6XqfXgjHOe01xR8Z9svM1ByT7yUD6I1f5abXWXPKoUw==
+ang-jsoneditor@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/ang-jsoneditor/-/ang-jsoneditor-3.1.0.tgz#c07872926cd730e9eb5cb2320ea02f3d8efbbdd8"
+  integrity sha512-7D26LOhFxZ5S41GVE0I2OYDSikmmwQEHJCb29GfPU6rCElG2GgxbKMBO5meRUwnbmdEpG6UWXUDmvRbatCmCgg==
   dependencies:
     tslib "^2.3.0"
 
@@ -9534,6 +9541,11 @@ eventemitter2@6.4.7:
   version "6.4.7"
   resolved "https://registry.yarnpkg.com/eventemitter2/-/eventemitter2-6.4.7.tgz#a7f6c4d7abf28a14c1ef3442f21cb306a054271d"
   integrity sha512-tYUSVOGeQPKt/eC1ABfhHy5Xd96N3oIijJvN3O9+TsC28T5V9yX9oEfEK5faP0EFSNVOG97qtAS68GBrQB2hDg==
+
+eventemitter2@6.4.9:
+  version "6.4.9"
+  resolved "https://registry.yarnpkg.com/eventemitter2/-/eventemitter2-6.4.9.tgz#41f2750781b4230ed58827bc119d293471ecb125"
+  integrity sha512-JEPTiaOt9f04oa6NOkc4aH+nVp5I3wEjpHbIPqfgCdD5v5bUzy7xQqwcVO2aDQgOWhI28da57HksMrzK9HlRxg==
 
 eventemitter3@^3.1.0:
   version "3.1.2"

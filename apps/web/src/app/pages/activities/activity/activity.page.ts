@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -14,8 +14,8 @@ import { NzStatisticModule } from 'ng-zorro-antd/statistic';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
 
 import { DialogModule } from '@platon/core/browser';
-import { ResultByExercisesComponent, ResultByMembersComponent, ResultLegendComponent } from '@platon/feature/result/browser';
 import { CourseActivityCardComponent } from '@platon/feature/course/browser';
+import { ResultByExercisesComponent, ResultByMembersComponent, ResultLegendComponent } from '@platon/feature/result/browser';
 
 import { ActivityPresenter } from './activity.presenter';
 
@@ -53,6 +53,7 @@ export class CourseActivityPage implements OnInit, OnDestroy {
   protected context = this.presenter.defaultContext();
 
   constructor(
+    private readonly location: Location,
     private readonly presenter: ActivityPresenter,
     private readonly changeDetectorRef: ChangeDetectorRef,
   ) { }
@@ -62,6 +63,9 @@ export class CourseActivityPage implements OnInit, OnDestroy {
       this.presenter.contextChange.subscribe(async context => {
         this.context = context;
         this.changeDetectorRef.markForCheck();
+      }),
+      this.presenter.onDeletedActivity.subscribe(() => {
+        this.location.back();
       })
     );
   }
@@ -69,5 +73,4 @@ export class CourseActivityPage implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscriptions.forEach(s => s.unsubscribe());
   }
-
 }

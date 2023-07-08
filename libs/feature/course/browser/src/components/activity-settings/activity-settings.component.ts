@@ -13,6 +13,7 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 import { DialogModule, DialogService } from '@platon/core/browser';
 import { Activity, CourseMember } from '@platon/feature/course/common';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { firstValueFrom } from 'rxjs';
 import { CourseService } from '../../api/course.service';
 import { CourseMemberSelectComponent } from '../course-member-select/course-member-select.component';
@@ -35,6 +36,7 @@ import { CourseMemberSelectComponent } from '../course-member-select/course-memb
     NzButtonModule,
     NzSkeletonModule,
     NzDatePickerModule,
+    NzPopconfirmModule,
 
     DialogModule,
 
@@ -51,9 +53,9 @@ export class CourseActivitySettingsComponent implements OnInit {
     correctors: new FormControl<string[] | undefined>(undefined),
   });
 
-  protected courseMembers: CourseMember[] = [];
   protected loading = false;
   protected updating = false;
+  protected courseMembers: CourseMember[] = [];
 
   protected disabledDate = (current: Date): boolean => differenceInCalendarDays(current, new Date()) < 0;
 
@@ -87,7 +89,6 @@ export class CourseActivitySettingsComponent implements OnInit {
     this.loading = false;
     this.changeDetectorRef.markForCheck();
   }
-
 
   protected async update(): Promise<void> {
     this.updating = true;
@@ -136,10 +137,55 @@ export class CourseActivitySettingsComponent implements OnInit {
         }
       );
 
-      this.dialogService.success('Activité mise à jour !')
+      this.dialogService.success('Activité mise à jour !');
     } catch {
       this.dialogService.error(
         'Une erreur est survenue lors de la mise à jour de l\'activité, veuillez réessayer un peu plus tard !'
+      );
+    } finally {
+      this.updating = false;
+      this.changeDetectorRef.markForCheck();
+    }
+  }
+
+  protected async reload(): Promise<void> {
+    this.updating = true;
+    this.changeDetectorRef.detectChanges();
+    try {
+      const activity = await firstValueFrom(
+        this.courseService.reloadActivity(
+          this.activity
+        )
+      );
+
+      this.activityChange.emit(
+        this.activity = activity
+      );
+
+      this.dialogService.success('Activité rechargée !');
+    } catch {
+      this.dialogService.error(
+        'Une erreur est survenue lors du rechargement de l\'activité, veuillez réessayer un peu plus tard !'
+      );
+    } finally {
+      this.updating = false;
+      this.changeDetectorRef.markForCheck();
+    }
+  }
+
+  protected async delete(): Promise<void> {
+    this.updating = true;
+    this.changeDetectorRef.detectChanges();
+    try {
+      await firstValueFrom(
+        this.courseService.deleteActivity(
+          this.activity
+        )
+      );
+      this.dialogService.success('Activité supprimée !');
+    } catch {
+      this.dialogService.error(
+        'Une erreur est survenue lors de la suppression de l\'activité, veuillez réessayer un peu plus tard !'
       );
     } finally {
       this.updating = false;

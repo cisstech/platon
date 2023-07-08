@@ -34,6 +34,12 @@ export interface UpdateActivity {
   readonly closeAt?: Date | null;
 }
 
+
+export interface ReloadActivity {
+  readonly version?: string;
+}
+
+
 export interface ActivityPermissions {
   readonly update: boolean;
   readonly viewStats: boolean;
