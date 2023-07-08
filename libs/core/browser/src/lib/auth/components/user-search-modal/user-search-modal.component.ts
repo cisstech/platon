@@ -1,15 +1,22 @@
-import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common'
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+} from '@angular/core'
+import { FormsModule } from '@angular/forms'
 
+import { NzButtonModule } from 'ng-zorro-antd/button'
+import { NzModalModule } from 'ng-zorro-antd/modal'
 
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzModalModule } from 'ng-zorro-antd/modal';
+import { User, UserFilters } from '@platon/core/common'
+import { UiModalTemplateComponent } from '@platon/shared/ui'
 
-import { User, UserFilters } from '@platon/core/common';
-import { UiModalTemplateComponent } from '@platon/shared/ui';
-
-import { UserSearchBarComponent } from '../user-search-bar/user-search-bar.component';
+import { UserSearchBarComponent } from '../user-search-bar/user-search-bar.component'
 
 @Component({
   standalone: true,
@@ -26,39 +33,36 @@ import { UserSearchBarComponent } from '../user-search-bar/user-search-bar.compo
     UserSearchBarComponent,
 
     UiModalTemplateComponent,
-  ]
+  ],
 })
 export class UserSearchModalComponent {
-  @Input() title = '';
-  @Input() okTitle = 'OK';
-  @Input() noTitle = 'Annuler';
-  @Input() filters: UserFilters = {};
-  @Input() multi = true;
-  @Input() excludes: string[] = [];
+  @Input() title = ''
+  @Input() okTitle = 'OK'
+  @Input() noTitle = 'Annuler'
+  @Input() filters: UserFilters = {}
+  @Input() multi = true
+  @Input() excludes: string[] = []
 
-  @Output() closed = new EventEmitter<User[]>();
+  @Output() closed = new EventEmitter<User[]>()
 
   @ViewChild(UiModalTemplateComponent, { static: true })
   protected modal!: UiModalTemplateComponent
 
-
-  protected selection: User[] = [];
+  protected selection: User[] = []
   protected get ready(): boolean {
-    const n = this.selection.length;
-    return !this.multi ? n === 1 : n > 0;
+    const n = this.selection.length
+    return !this.multi ? n === 1 : n > 0
   }
 
-  constructor(
-    private readonly changeDetector: ChangeDetectorRef
-  ) { }
+  constructor(private readonly changeDetector: ChangeDetectorRef) {}
 
   open(): void {
-    this.modal.open();
+    this.modal.open()
   }
 
   close(data: User[]): void {
-    this.closed.emit(data);
-    this.selection = [];
-    this.changeDetector.markForCheck();
+    this.closed.emit(data)
+    this.selection = []
+    this.changeDetector.markForCheck()
   }
 }

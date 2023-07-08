@@ -1,16 +1,22 @@
-import { Body, Controller, Get, Param, Patch, Post, Query, Req } from '@nestjs/common';
-import { CreatedResponse, ForbiddenResponse, ItemResponse, ListResponse, NotFoundResponse } from '@platon/core/common';
-import { IRequest, Mapper } from '@platon/core/server';
-import { CourseMemberService } from './course-member/course-member.service';
-import { CourseDTO, CourseFiltersDTO, CreateCourseDTO, UpdateCourseDTO } from './course.dto';
-import { CourseService } from './course.service';
+import { Body, Controller, Get, Param, Patch, Post, Query, Req } from '@nestjs/common'
+import {
+  CreatedResponse,
+  ForbiddenResponse,
+  ItemResponse,
+  ListResponse,
+  NotFoundResponse,
+} from '@platon/core/common'
+import { IRequest, Mapper } from '@platon/core/server'
+import { CourseMemberService } from './course-member/course-member.service'
+import { CourseDTO, CourseFiltersDTO, CreateCourseDTO, UpdateCourseDTO } from './course.dto'
+import { CourseService } from './course.service'
 
 @Controller('courses')
 export class CourseController {
   constructor(
     private readonly courseService: CourseService,
     private readonly courseMemberService: CourseMemberService
-  ) { }
+  ) {}
 
   @Get()
   async search(
@@ -19,35 +25,27 @@ export class CourseController {
   ): Promise<ListResponse<CourseDTO>> {
     filters = {
       ...filters,
-      members: Array.from(
-        new Set([
-          req.user.id,
-          ...(filters.members || [])
-        ])
-      )
-    };
+      members: Array.from(new Set([req.user.id, ...(filters.members || [])])),
+    }
 
-    const [items, total] = await this.courseService.search(filters);
-    const resources = Mapper.mapAll(items, CourseDTO);
+    const [items, total] = await this.courseService.search(filters)
+    const resources = Mapper.mapAll(items, CourseDTO)
     return new ListResponse({ total, resources })
   }
 
   @Get('/:id')
-  async find(
-    @Req() req: IRequest,
-    @Param('id') id: string,
-  ): Promise<ItemResponse<CourseDTO>> {
-    const optional = await this.courseService.findById(id);
+  async find(@Req() req: IRequest, @Param('id') id: string): Promise<ItemResponse<CourseDTO>> {
+    const optional = await this.courseService.findById(id)
     const resource = Mapper.map(
       optional.orElseThrow(() => new NotFoundResponse(`Course not found: ${id}`)),
       CourseDTO
-    );
+    )
 
-    if (!await this.courseMemberService.isMember(id, req.user.id)) {
-      throw new ForbiddenResponse(`You are not a member of this course`);
+    if (!(await this.courseMemberService.isMember(id, req.user.id))) {
+      throw new ForbiddenResponse(`You are not a member of this course`)
     }
 
-    return new ItemResponse({ resource });
+    return new ItemResponse({ resource })
   }
 
   @Post()
@@ -58,10 +56,10 @@ export class CourseController {
     const resource = Mapper.map(
       await this.courseService.create({
         ...input,
-        ownerId: req.user.id
+        ownerId: req.user.id,
       }),
       CourseDTO
-    );
+    )
     return new CreatedResponse({ resource })
   }
 
@@ -70,10 +68,7 @@ export class CourseController {
     @Param('id') id: string,
     @Body() input: UpdateCourseDTO
   ): Promise<ItemResponse<CourseDTO>> {
-    const resource = Mapper.map(
-      await this.courseService.update(id, input),
-      CourseDTO
-    );
+    const resource = Mapper.map(await this.courseService.update(id, input), CourseDTO)
     return new ItemResponse({ resource })
   }
 }

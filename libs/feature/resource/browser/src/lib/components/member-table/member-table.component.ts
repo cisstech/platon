@@ -1,12 +1,19 @@
-import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { UserAvatarComponent } from '@platon/core/browser';
-import { ResourceMember } from '@platon/feature/resource/common';
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
-import { NzTableModule } from 'ng-zorro-antd/table';
-
+import { CommonModule } from '@angular/common'
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+} from '@angular/core'
+import { UserAvatarComponent } from '@platon/core/browser'
+import { ResourceMember } from '@platon/feature/resource/common'
+import { NzButtonModule } from 'ng-zorro-antd/button'
+import { NzIconModule } from 'ng-zorro-antd/icon'
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm'
+import { NzTableModule } from 'ng-zorro-antd/table'
 
 @Component({
   standalone: true,
@@ -23,20 +30,19 @@ import { NzTableModule } from 'ng-zorro-antd/table';
     NzPopconfirmModule,
 
     UserAvatarComponent,
-  ]
+  ],
 })
 export class ResourceMemberTableComponent implements OnChanges {
-  @Input() members: ResourceMember[] = [];
-  @Input() editable = false;
+  @Input() members: ResourceMember[] = []
+  @Input() editable = false
 
-  @Output() deleted = new EventEmitter<ResourceMember>();
+  @Output() deleted = new EventEmitter<ResourceMember>()
 
-  protected loading = true;
-
+  protected loading = true
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['members']) {
-      this.loading = false;
+      this.loading = false
     }
   }
 }

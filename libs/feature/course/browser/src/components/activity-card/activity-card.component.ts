@@ -1,22 +1,21 @@
-import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common'
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
+import { RouterModule } from '@angular/router'
 
-import { MatCardModule } from '@angular/material/card';
+import { MatCardModule } from '@angular/material/card'
 
-import { NzBadgeModule } from 'ng-zorro-antd/badge';
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzGridModule } from 'ng-zorro-antd/grid';
-import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzProgressModule } from 'ng-zorro-antd/progress';
-import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import { NzBadgeModule } from 'ng-zorro-antd/badge'
+import { NzButtonModule } from 'ng-zorro-antd/button'
+import { NzGridModule } from 'ng-zorro-antd/grid'
+import { NzIconModule } from 'ng-zorro-antd/icon'
+import { NzProgressModule } from 'ng-zorro-antd/progress'
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 
-
-import { Activity } from '@platon/feature/course/common';
-import { UiModalDrawerComponent } from '@platon/shared/ui';
-import { CoursePipesModule } from '../../pipes';
-import { CourseActivitySettingsComponent } from '../activity-settings/activity-settings.component';
-import { CourseItemComponent } from '../course-item/course-item.component';
+import { Activity } from '@platon/feature/course/common'
+import { UiModalDrawerComponent } from '@platon/shared/ui'
+import { CoursePipesModule } from '../../pipes'
+import { CourseActivitySettingsComponent } from '../activity-settings/activity-settings.component'
+import { CourseItemComponent } from '../course-item/course-item.component'
 
 @Component({
   standalone: true,
@@ -41,9 +40,9 @@ import { CourseItemComponent } from '../course-item/course-item.component';
     CourseItemComponent,
 
     UiModalDrawerComponent,
-    CourseActivitySettingsComponent
-  ]
+    CourseActivitySettingsComponent,
+  ],
 })
 export class CourseActivityCardComponent {
-  @Input() item!: Activity;
+  @Input() item!: Activity
 }

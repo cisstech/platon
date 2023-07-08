@@ -1,14 +1,14 @@
-import { Field, ObjectType } from "@nestjs/graphql";
-import { UUID } from "./scalars/uuid.scalar";
+import { Field, ObjectType } from '@nestjs/graphql'
+import { UUID } from './scalars/uuid.scalar'
 
 @ObjectType()
 export class BaseGraphModel {
   @Field(() => UUID)
-  readonly id!: string;
+  readonly id!: string
 
   @Field()
-  readonly createdAt!: Date;
+  readonly createdAt!: Date
 
   @Field({ nullable: true })
-  readonly updatedAt?: Date;
+  readonly updatedAt?: Date
 }

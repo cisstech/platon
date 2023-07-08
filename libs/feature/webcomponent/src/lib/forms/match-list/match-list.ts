@@ -1,24 +1,20 @@
-import {
-  defineWebComponent,
-  IWebComponent,
-  WebComponentTypes,
-} from '../../web-component';
+import { defineWebComponent, IWebComponent, WebComponentTypes } from '../../web-component'
 
 export interface MathListLink {
-  source: string;
-  target: string;
-  css?: string;
+  source: string
+  target: string
+  css?: string
 }
 
 export interface MatchListItem {
-  id: string;
-  type: 'source' | 'target';
-  content: string;
+  id: string
+  type: 'source' | 'target'
+  content: string
 }
 export interface MatchListState extends IWebComponent {
-  disabled: boolean;
-  links: MathListLink[];
-  nodes: MatchListItem[];
+  disabled: boolean
+  links: MathListLink[]
+  nodes: MatchListItem[]
 }
 
 export const MatchListComponentDefinition = defineWebComponent({
@@ -129,4 +125,4 @@ export const MatchListComponentDefinition = defineWebComponent({
       { id: 'Node10', type: 'target', content: 'un malloc' },
     ],
   },
-});
+})

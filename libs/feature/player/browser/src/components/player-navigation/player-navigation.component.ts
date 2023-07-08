@@ -1,17 +1,17 @@
-import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { CommonModule } from '@angular/common'
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core'
 
-import { NzTimelineModule } from 'ng-zorro-antd/timeline';
+import { NzTimelineModule } from 'ng-zorro-antd/timeline'
 
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button'
+import { MatCardModule } from '@angular/material/card'
+import { MatIconModule } from '@angular/material/icon'
 
-import { ActivityPlayer, PlayerExercise } from '@platon/feature/player/common';
+import { ActivityPlayer, PlayerExercise } from '@platon/feature/player/common'
 
-import { UserAvatarComponent } from '@platon/core/browser';
-import { AnswerStatePipesModule } from '@platon/feature/result/browser';
-import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { UserAvatarComponent } from '@platon/core/browser'
+import { AnswerStatePipesModule } from '@platon/feature/result/browser'
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm'
 
 @Component({
   standalone: true,
@@ -31,23 +31,22 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 
     UserAvatarComponent,
     AnswerStatePipesModule,
-  ]
+  ],
 })
 export class PlayerNavigationComponent {
-  @Input() player!: ActivityPlayer;
+  @Input() player!: ActivityPlayer
 
-  @Output() navigate = new EventEmitter<PlayerExercise>();
-  @Output() terminate = new EventEmitter<void>();
-
+  @Output() navigate = new EventEmitter<PlayerExercise>()
+  @Output() terminate = new EventEmitter<void>()
 
   protected trackPage(_: number, page: PlayerExercise): string {
-    return page.sessionId;
+    return page.sessionId
   }
 
   protected isActiveSession(sessionId: string): boolean {
     if ('composed' === this.player.settings?.navigation?.mode) {
-      return false;
+      return false
     }
-    return sessionId === this.player.navigation.current?.sessionId;
+    return sessionId === this.player.navigation.current?.sessionId
   }
 }

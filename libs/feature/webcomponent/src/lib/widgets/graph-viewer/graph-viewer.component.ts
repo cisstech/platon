@@ -1,14 +1,6 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Injector,
-  Input,
-} from '@angular/core';
-import { WebComponent, WebComponentHooks } from '../../web-component';
-import {
-  GraphViewerComponentDefinition,
-  GraphViewerState,
-} from './graph-viewer';
+import { ChangeDetectionStrategy, Component, Injector, Input } from '@angular/core'
+import { WebComponent, WebComponentHooks } from '../../web-component'
+import { GraphViewerComponentDefinition, GraphViewerState } from './graph-viewer'
 
 @Component({
   selector: 'wc-graph-viewer',
@@ -17,9 +9,7 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 @WebComponent(GraphViewerComponentDefinition)
-export class GraphViewerComponent
-  implements WebComponentHooks<GraphViewerState>
-{
-  @Input() state!: GraphViewerState;
+export class GraphViewerComponent implements WebComponentHooks<GraphViewerState> {
+  @Input() state!: GraphViewerState
   constructor(readonly injector: Injector) {}
 }

@@ -1,17 +1,17 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsDate, IsOptional, IsUUID } from "class-validator";
+import { ApiProperty } from '@nestjs/swagger'
+import { IsDate, IsOptional, IsUUID } from 'class-validator'
 
 export class BaseDTO {
   @IsUUID()
   @ApiProperty()
-  readonly id!: string;
+  readonly id!: string
 
   @IsDate()
   @ApiProperty()
-  readonly createdAt!: Date;
+  readonly createdAt!: Date
 
   @IsDate()
   @IsOptional()
   @ApiProperty()
-  readonly updatedAt?: Date;
+  readonly updatedAt?: Date
 }

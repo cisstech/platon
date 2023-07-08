@@ -1,4 +1,4 @@
-import { Index, ViewColumn, ViewEntity } from "typeorm";
+import { Index, ViewColumn, ViewEntity } from 'typeorm'
 /*
 SELECT
   resource.id,
@@ -53,25 +53,28 @@ GROUP BY resource.id, resource.name, resource.updated_at, resource.members, reso
 @ViewEntity({
   name: 'ResourceStats',
   materialized: true,
-  expression: dataSource => dataSource.createQueryBuilder()
-    .select('resource.id', 'id')
-    .addSelect('resource.name', 'name')
-    .addSelect('resource.members', 'members')
-    .addSelect('resource.watchers', 'watchers')
-    .addSelect('resource.events', 'events')
+  expression: (dataSource) =>
+    dataSource
+      .createQueryBuilder()
+      .select('resource.id', 'id')
+      .addSelect('resource.name', 'name')
+      .addSelect('resource.members', 'members')
+      .addSelect('resource.watchers', 'watchers')
+      .addSelect('resource.events', 'events')
 
-    .addSelect(`SUM(CASE WHEN resource.id = child.parent_id THEN 1 ELSE 0 END)`, 'children')
-    .addSelect(`SUM(CASE WHEN child.type = 'CIRCLE' THEN 1 ELSE 0 END)`, 'circles')
-    .addSelect(`SUM(CASE WHEN child.type = 'ACTIVITY' THEN 1 ELSE 0 END)`, 'activities')
-    .addSelect(`SUM(CASE WHEN child.type = 'EXERCISE' THEN 1 ELSE 0 END)`, 'exercises')
+      .addSelect(`SUM(CASE WHEN resource.id = child.parent_id THEN 1 ELSE 0 END)`, 'children')
+      .addSelect(`SUM(CASE WHEN child.type = 'CIRCLE' THEN 1 ELSE 0 END)`, 'circles')
+      .addSelect(`SUM(CASE WHEN child.type = 'ACTIVITY' THEN 1 ELSE 0 END)`, 'activities')
+      .addSelect(`SUM(CASE WHEN child.type = 'EXERCISE' THEN 1 ELSE 0 END)`, 'exercises')
 
-    .addSelect(`SUM(CASE WHEN child.status = 'READY' THEN 1 ELSE 0 END)`, 'ready')
-    .addSelect(`SUM(CASE WHEN child.status = 'DEPRECATED' THEN 1 ELSE 0 END)`, 'deprecated')
-    .addSelect(`SUM(CASE WHEN child.status = 'BUGGED' THEN 1 ELSE 0 END)`, 'bugged')
-    .addSelect(`SUM(CASE WHEN child.status = 'NOT_TESTED' THEN 1 ELSE 0 END)`, 'not_tested')
-    .addSelect(`SUM(CASE WHEN child.status = 'DRAFT' THEN 1 ELSE 0 END)`, 'draft')
+      .addSelect(`SUM(CASE WHEN child.status = 'READY' THEN 1 ELSE 0 END)`, 'ready')
+      .addSelect(`SUM(CASE WHEN child.status = 'DEPRECATED' THEN 1 ELSE 0 END)`, 'deprecated')
+      .addSelect(`SUM(CASE WHEN child.status = 'BUGGED' THEN 1 ELSE 0 END)`, 'bugged')
+      .addSelect(`SUM(CASE WHEN child.status = 'NOT_TESTED' THEN 1 ELSE 0 END)`, 'not_tested')
+      .addSelect(`SUM(CASE WHEN child.status = 'DRAFT' THEN 1 ELSE 0 END)`, 'draft')
 
-    .addSelect(`
+      .addSelect(
+        `
     (
       (
         resource.members +
@@ -87,26 +90,33 @@ GROUP BY resource.id, resource.name, resource.updated_at, resource.members, reso
         -- The more recently a resource is updated, the higher its score will be.
           (((EXTRACT(EPOCH FROM NOW()) - EXTRACT(EPOCH FROM resource.updated_at)) / (60 * 60 * 24)) / 30)
       )
-    `, 'score')
-    .from(subQuery => (
-      subQuery.select('resource.id', 'id')
-        .addSelect('resource.name', 'name')
-        .addSelect('resource.updated_at', 'updated_at')
+    `,
+        'score'
+      )
+      .from(
+        (subQuery) =>
+          subQuery
+            .select('resource.id', 'id')
+            .addSelect('resource.name', 'name')
+            .addSelect('resource.updated_at', 'updated_at')
 
-        .addSelect('COUNT(DISTINCT member.id)', 'members')
-        .addSelect('COUNT(DISTINCT watcher.id)', 'watchers')
-        .addSelect('COUNT(DISTINCT event.id)', 'events')
+            .addSelect('COUNT(DISTINCT member.id)', 'members')
+            .addSelect('COUNT(DISTINCT watcher.id)', 'watchers')
+            .addSelect('COUNT(DISTINCT event.id)', 'events')
 
-        .from('Resources', 'resource')
+            .from('Resources', 'resource')
 
-        .leftJoin('ResourceMembers', 'member', 'member.resource_id = resource.id')
-        .leftJoin('ResourceWatchers', 'watcher', 'watcher.resource_id = resource.id')
-        .leftJoin('ResourceEvents', 'event', 'event.resource_id = resource.id')
+            .leftJoin('ResourceMembers', 'member', 'member.resource_id = resource.id')
+            .leftJoin('ResourceWatchers', 'watcher', 'watcher.resource_id = resource.id')
+            .leftJoin('ResourceEvents', 'event', 'event.resource_id = resource.id')
 
-        .groupBy('resource.id')
-    ), 'resource')
-    .leftJoin('Resources', 'child', 'child.parent_id = resource.id')
-    .groupBy('resource.id, resource.name, resource.updated_at, resource.members, resource.watchers, resource.events')
+            .groupBy('resource.id'),
+        'resource'
+      )
+      .leftJoin('Resources', 'child', 'child.parent_id = resource.id')
+      .groupBy(
+        'resource.id, resource.name, resource.updated_at, resource.members, resource.watchers, resource.events'
+      ),
 })
 export class ResourceStatisticEntity {
   @Index()

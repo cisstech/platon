@@ -1,12 +1,12 @@
-import { ChangeDetectionStrategy, Component, Input, OnChanges } from '@angular/core';
-import { UiError403Component } from './error-403.component';
-import { UiError404Component } from './error-404.component';
-import { HttpErrorResponse } from '@angular/common/http';
-import { HTTP_STATUS_CODE } from '@platon/core/common';
-import { CommonModule } from '@angular/common';
-import { UiError500Component } from './error-500.component';
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { RouterModule } from '@angular/router';
+import { ChangeDetectionStrategy, Component, Input, OnChanges } from '@angular/core'
+import { UiError403Component } from './error-403.component'
+import { UiError404Component } from './error-404.component'
+import { HttpErrorResponse } from '@angular/common/http'
+import { HTTP_STATUS_CODE } from '@platon/core/common'
+import { CommonModule } from '@angular/common'
+import { UiError500Component } from './error-500.component'
+import { NzButtonModule } from 'ng-zorro-antd/button'
+import { RouterModule } from '@angular/router'
 
 @Component({
   standalone: true,
@@ -18,10 +18,10 @@ import { RouterModule } from '@angular/router';
     UiError403Component,
     UiError404Component,
     UiError500Component,
-    NzButtonModule
+    NzButtonModule,
   ],
   template: `
-     <ng-container [ngSwitch]="code">
+    <ng-container [ngSwitch]="code">
       <ng-container *ngSwitchCase="'SERVER_ERROR'">
         <ui-error-500 />
       </ng-container>
@@ -33,50 +33,57 @@ import { RouterModule } from '@angular/router';
       </ng-container>
     </ng-container>
     <ng-container *ngIf="showMessage">
-      <pre>{{message}}</pre>
+      <pre>{{ message }}</pre>
     </ng-container>
     <ng-container *ngIf="showButtons">
       <button [routerLink]="'/'" nz-button nzType="primary">Accueil</button>
     </ng-container>
   `,
-  styles: [`
-    :host {
-      display: inline-flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
+  styles: [
+    `
+      :host {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
 
-    ui-error-500, ui-error-403, ui-error-404 {
-      --ui-error-padding: 1.5rem;
-    }
-    
-    pre {
-      margin-bottom: 1.5rem;
-    }
-  `]
+      ui-error-500,
+      ui-error-403,
+      ui-error-404 {
+        --ui-error-padding: 1.5rem;
+      }
+
+      pre {
+        margin-bottom: 1.5rem;
+      }
+    `,
+  ],
 })
 export class UiErrorComponent implements OnChanges {
-  protected message = '';
-  protected code: 'FORBIDDEN' | 'NOT_FOUND' | 'SERVER_ERROR' = 'SERVER_ERROR';
+  protected message = ''
+  protected code: 'FORBIDDEN' | 'NOT_FOUND' | 'SERVER_ERROR' = 'SERVER_ERROR'
   @Input() error?: unknown
   @Input() showMessage = false
-  @Input() showButtons = true;
+  @Input() showButtons = true
 
   ngOnChanges(): void {
-    const status = (this.error as HttpErrorResponse)?.status || HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR;
+    const status =
+      (this.error as HttpErrorResponse)?.status || HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR
     if (status === HTTP_STATUS_CODE.UNAUTHORIZED || status === HTTP_STATUS_CODE.FORBIDDEN) {
       this.code = 'FORBIDDEN'
-    } else if (status >= HTTP_STATUS_CODE.BAD_REQUEST && status < HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR) {
-      this.code = 'NOT_FOUND';
+    } else if (
+      status >= HTTP_STATUS_CODE.BAD_REQUEST &&
+      status < HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR
+    ) {
+      this.code = 'NOT_FOUND'
     } else {
-      this.code = 'SERVER_ERROR';
+      this.code = 'SERVER_ERROR'
     }
 
-    this.message = '';
+    this.message = ''
     if (this.error instanceof HttpErrorResponse && this.showMessage) {
-      this.message = this.error.error.message;
+      this.message = this.error.error.message
     }
   }
-
 }

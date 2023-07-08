@@ -1,83 +1,88 @@
-import { toBoolean } from "@platon/core/server";
-import { FileCreate, FileMove, FileRelease, FileRetrieve, FileUpdate } from "@platon/feature/resource/common";
-import { Transform } from "class-transformer";
-import { IsBoolean, IsOptional, IsString } from "class-validator";
+import { toBoolean } from '@platon/core/server'
+import {
+  FileCreate,
+  FileMove,
+  FileRelease,
+  FileRetrieve,
+  FileUpdate,
+} from '@platon/feature/resource/common'
+import { Transform } from 'class-transformer'
+import { IsBoolean, IsOptional, IsString } from 'class-validator'
 
 export class FileRetrieveDTO implements Partial<FileRetrieve> {
   @IsString()
   @IsOptional()
-  version?: string;
+  version?: string
 
   @Transform(({ value }) => toBoolean(value))
   @IsBoolean()
   @IsOptional()
-  bundle?: boolean;
-
-
-  @Transform(({ value }) => toBoolean(value))
-  @IsBoolean()
-  @IsOptional()
-  versions?: boolean;
+  bundle?: boolean
 
   @Transform(({ value }) => toBoolean(value))
   @IsBoolean()
   @IsOptional()
-  describe?: boolean;
+  versions?: boolean
 
   @Transform(({ value }) => toBoolean(value))
   @IsBoolean()
   @IsOptional()
-  download?: boolean;
+  describe?: boolean
+
+  @Transform(({ value }) => toBoolean(value))
+  @IsBoolean()
+  @IsOptional()
+  download?: boolean
 
   @IsString()
   @IsOptional()
-  search?: string;
+  search?: string
 
   @Transform(({ value }) => toBoolean(value))
   @IsBoolean()
   @IsOptional()
-  use_regex?: boolean;
+  use_regex?: boolean
 
   @Transform(({ value }) => toBoolean(value))
   @IsBoolean()
   @IsOptional()
-  match_word?: boolean;
+  match_word?: boolean
 
   @Transform(({ value }) => toBoolean(value))
   @IsBoolean()
   @IsOptional()
-  match_case?: boolean;
+  match_case?: boolean
 }
 
 export class FileCreateDTO implements FileCreate {
   @IsString()
-  path!: string;
+  path!: string
 
   @IsString()
-  content?: string;
+  content?: string
 }
 
 export class FileUpdateDTO implements FileUpdate {
   @IsString()
-  content!: string;
+  content!: string
 }
 
 export class FileMoveDTO implements FileMove {
   @IsBoolean()
   @IsOptional()
-  copy?: boolean;
+  copy?: boolean
 
   @IsBoolean()
   @IsOptional()
-  rename?: boolean;
+  rename?: boolean
 
   @IsString()
-  destination!: string;
+  destination!: string
 }
 
 export class FileReleaseDTO implements FileRelease {
   @IsString()
-  name!: string;
+  name!: string
   @IsString()
-  message!: string;
+  message!: string
 }

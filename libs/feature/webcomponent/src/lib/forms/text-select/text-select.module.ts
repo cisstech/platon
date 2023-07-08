@@ -1,10 +1,10 @@
-import { NgModule, Type } from '@angular/core';
+import { NgModule, Type } from '@angular/core'
 
-import { IDynamicModule } from '@cisstech/nge/services';
+import { IDynamicModule } from '@cisstech/nge/services'
 
-import { BaseModule } from '../../shared/components/base/base.module';
-import { CssPipe, CssPipeModule } from '../../shared/pipes/css.pipe';
-import { TextSelectComponent } from './text-select.component';
+import { BaseModule } from '../../shared/components/base/base.module'
+import { CssPipe, CssPipeModule } from '../../shared/pipes/css.pipe'
+import { TextSelectComponent } from './text-select.component'
 
 @NgModule({
   declarations: [TextSelectComponent],
@@ -13,5 +13,5 @@ import { TextSelectComponent } from './text-select.component';
   providers: [CssPipe],
 })
 export class TextSelectModule implements IDynamicModule {
-  component: Type<unknown> = TextSelectComponent;
+  component: Type<unknown> = TextSelectComponent
 }

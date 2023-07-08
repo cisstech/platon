@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { BaseEntity } from '@platon/core/server';
-import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
-import { CourseEntity } from '../course.entity';
+import { BaseEntity } from '@platon/core/server'
+import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm'
+import { CourseEntity } from '../course.entity'
 
 @Entity('CourseSections')
 export class CourseSectionEntity extends BaseEntity {
@@ -22,4 +22,3 @@ export class CourseSectionEntity extends BaseEntity {
   @JoinColumn({ name: 'course_id' })
   course!: CourseEntity
 }
-

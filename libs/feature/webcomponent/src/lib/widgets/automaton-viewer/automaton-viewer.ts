@@ -1,12 +1,8 @@
-import { stripIndent } from 'common-tags';
-import {
-  defineWebComponent,
-  IWebComponent,
-  WebComponentTypes,
-} from '../../web-component';
+import { stripIndent } from 'common-tags'
+import { defineWebComponent, IWebComponent, WebComponentTypes } from '../../web-component'
 
 export interface AutomatonViewerState extends IWebComponent {
-  automaton: string;
+  automaton: string
 }
 
 export const AutomatonViewerComponentDefinition = defineWebComponent({
@@ -15,8 +11,7 @@ export const AutomatonViewerComponentDefinition = defineWebComponent({
   icon: 'assets/images/components/widgets/automaton-viewer/automaton-viewer.svg',
   selector: 'wc-automaton-viewer',
   description: "Permets d'afficher un automate.",
-  fullDescriptionUrl:
-    'assets/docs/components/widgets/automaton-viewer/automaton-viewer.md',
+  fullDescriptionUrl: 'assets/docs/components/widgets/automaton-viewer/automaton-viewer.md',
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',
@@ -48,4 +43,4 @@ export const AutomatonViewerComponentDefinition = defineWebComponent({
         s1:b>s2
         `,
   },
-});
+})

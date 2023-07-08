@@ -1,5 +1,5 @@
-import { Provider } from '@angular/core';
-import { NGE_DOC_RENDERERS } from '@cisstech/nge/doc';
+import { Provider } from '@angular/core'
+import { NGE_DOC_RENDERERS } from '@cisstech/nge/doc'
 
 export const NgeDocProviders: Provider[] = [
   {
@@ -9,5 +9,5 @@ export const NgeDocProviders: Provider[] = [
         component: () => import('@cisstech/nge/markdown').then((m) => m.NgeMarkdownComponent),
       },
     },
-  }
-];
+  },
+]

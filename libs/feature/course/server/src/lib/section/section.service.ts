@@ -1,9 +1,18 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { NotFoundResponse } from '@platon/core/common';
-import { DataSource, Repository, MoreThanOrEqual, And, MoreThan, LessThanOrEqual, LessThan, Not } from 'typeorm';
-import { Optional } from 'typescript-optional';
-import { CourseSectionEntity } from './section.entity';
+import { Injectable } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { NotFoundResponse } from '@platon/core/common'
+import {
+  DataSource,
+  Repository,
+  MoreThanOrEqual,
+  And,
+  MoreThan,
+  LessThanOrEqual,
+  LessThan,
+  Not,
+} from 'typeorm'
+import { Optional } from 'typescript-optional'
+import { CourseSectionEntity } from './section.entity'
 
 @Injectable()
 export class CourseSectionService {
@@ -12,21 +21,19 @@ export class CourseSectionService {
 
     @InjectRepository(CourseSectionEntity)
     private readonly repository: Repository<CourseSectionEntity>
-  ) { }
+  ) {}
 
   async findById(courseId: string, id: string): Promise<Optional<CourseSectionEntity>> {
-    return Optional.ofNullable(
-      await this.repository.findOne({ where: { courseId, id } })
-    );
+    return Optional.ofNullable(await this.repository.findOne({ where: { courseId, id } }))
   }
 
   async ofCourse(courseId: string): Promise<[CourseSectionEntity[], number]> {
     return this.repository.findAndCount({
       where: { courseId },
       order: {
-        order: { direction: 'ASC' }
-      }
-    });
+        order: { direction: 'ASC' },
+      },
+    })
   }
 
   async create(section: CourseSectionEntity): Promise<CourseSectionEntity> {
@@ -34,15 +41,15 @@ export class CourseSectionService {
       const after = await manager.find(CourseSectionEntity, {
         where: {
           courseId: section.courseId,
-          order: MoreThanOrEqual(section.order || 0)
-        }
-      });
-      after.forEach(s => { s.order++; });
-      await manager.save(after);
-      return manager.save(
-        manager.create(CourseSectionEntity, section)
-      );
-    });
+          order: MoreThanOrEqual(section.order || 0),
+        },
+      })
+      after.forEach((s) => {
+        s.order++
+      })
+      await manager.save(after)
+      return manager.save(manager.create(CourseSectionEntity, section))
+    })
   }
 
   async update(
@@ -51,10 +58,9 @@ export class CourseSectionService {
     changes: Partial<CourseSectionEntity>
   ): Promise<CourseSectionEntity> {
     return this.dataSource.transaction(async (manager) => {
-      const section = await manager.findOne(
-        CourseSectionEntity, {
-          where: { courseId, id: sectionId }
-      });
+      const section = await manager.findOne(CourseSectionEntity, {
+        where: { courseId, id: sectionId },
+      })
 
       if (!section) {
         throw new NotFoundResponse(`CourseSection not found: ${sectionId}`)
@@ -63,30 +69,35 @@ export class CourseSectionService {
       if (changes.order != null && section.order !== changes.order) {
         if (changes.order > section.order) {
           const up = await manager.find(CourseSectionEntity, {
-            where: { courseId, order: And(MoreThan(section.order), LessThanOrEqual(changes.order)) }
-          });
-          up.forEach(s => s.order--);
-          await manager.save(up);
+            where: {
+              courseId,
+              order: And(MoreThan(section.order), LessThanOrEqual(changes.order)),
+            },
+          })
+          up.forEach((s) => s.order--)
+          await manager.save(up)
         } else {
           const down = await manager.find(CourseSectionEntity, {
-            where: { courseId, order: And(MoreThanOrEqual(changes.order), LessThan(section.order)) }
-          });
-          down.forEach(s => s.order++);
-          await manager.save(down);
+            where: {
+              courseId,
+              order: And(MoreThanOrEqual(changes.order), LessThan(section.order)),
+            },
+          })
+          down.forEach((s) => s.order++)
+          await manager.save(down)
         }
       }
 
-      Object.assign(section, changes);
-      return manager.save(section);
-    });
+      Object.assign(section, changes)
+      return manager.save(section)
+    })
   }
 
   async delete(courseId: string, sectionId: string) {
     return this.dataSource.transaction(async (manager) => {
-      const section = await manager.findOne(
-        CourseSectionEntity, {
-          where: { courseId, id: sectionId }
-      });
+      const section = await manager.findOne(CourseSectionEntity, {
+        where: { courseId, id: sectionId },
+      })
 
       if (!section) {
         throw new NotFoundResponse(`CourseSection not found: ${sectionId}`)
@@ -94,18 +105,18 @@ export class CourseSectionService {
 
       const others = await manager.find(CourseSectionEntity, {
         where: { courseId, id: Not(sectionId) },
-        order: { order: { direction: 'ASC' }}
-      });
+        order: { order: { direction: 'ASC' } },
+      })
 
       others.forEach((s, i) => {
-        s.order = i;
-      });
+        s.order = i
+      })
 
       if (others.length) {
-        await manager.save(others);
+        await manager.save(others)
       }
 
-      return manager.remove(section);
-    });
+      return manager.remove(section)
+    })
   }
 }

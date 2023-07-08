@@ -1,27 +1,26 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { NotFoundResponse } from "@platon/core/common";
-import { PendingCorrection, PendingCorrectionExercise } from "@platon/feature/result/common";
-import { Repository } from "typeorm";
-import { SessionEntity } from "../sessions/session.entity";
-import { CorrectionEntity } from "./correction.entity";
+import { Injectable } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { NotFoundResponse } from '@platon/core/common'
+import { PendingCorrection, PendingCorrectionExercise } from '@platon/feature/result/common'
+import { Repository } from 'typeorm'
+import { SessionEntity } from '../sessions/session.entity'
+import { CorrectionEntity } from './correction.entity'
 
 interface PendingProjection {
-  userId: string;
-  activityId: string;
-  activityName: string;
-  activityNavigation: any;
-  activitySessionId: string;
-  exerciseSessionId: string;
-  courseId: string;
-  courseName: string;
-  correctedBy?: string;
-  correctedAt?: Date;
-  correctedGrade?: number;
-  grade?: number;
+  userId: string
+  activityId: string
+  activityName: string
+  activityNavigation: any
+  activitySessionId: string
+  exerciseSessionId: string
+  courseId: string
+  courseName: string
+  correctedBy?: string
+  correctedAt?: Date
+  correctedGrade?: number
+  grade?: number
 }
-
 
 @Injectable()
 export class CorrectionService {
@@ -29,11 +28,12 @@ export class CorrectionService {
     @InjectRepository(SessionEntity)
     private readonly sessionRepository: Repository<SessionEntity>,
     @InjectRepository(CorrectionEntity)
-    private readonly correctionRepository: Repository<CorrectionEntity>,
-  ) { }
+    private readonly correctionRepository: Repository<CorrectionEntity>
+  ) {}
 
   async list(userId: string, activityId?: string): Promise<PendingCorrection[]> {
-    const projections = await this.sessionRepository.query(`
+    const projections = (await this.sessionRepository.query(
+      `
       SELECT
           activity.id as "activityId",
           activity.source->'variables'->>'title' as "activityName",
@@ -61,11 +61,13 @@ export class CorrectionService {
           SELECT id FROM "ActivityCorrectorView" corrector
           WHERE corrector.activity_id=activity.id AND corrector.id=$1
         ) IS NOT NULL
-    `, [userId, ...(activityId ? [activityId] : [])]) as PendingProjection[];
+    `,
+      [userId, ...(activityId ? [activityId] : [])]
+    )) as PendingProjection[]
 
     return projections.reduce((acc, projection) => {
       const navItem = projection.activityNavigation.exercises.find((item: any) => {
-        return item.sessionId === projection.exerciseSessionId;
+        return item.sessionId === projection.exerciseSessionId
       })
       const exercise: PendingCorrectionExercise = {
         userId: projection.userId,
@@ -77,40 +79,40 @@ export class CorrectionService {
         grade: projection.grade,
         exerciseId: navItem.id,
         exerciseName: navItem.title,
-      };
-      const activity = acc.find(item => item.activityId === projection.activityId);
+      }
+      const activity = acc.find((item) => item.activityId === projection.activityId)
       if (activity) {
-        activity.exercises.push(exercise);
+        activity.exercises.push(exercise)
       } else {
         acc.push({
           activityId: projection.activityId,
           activityName: projection.activityName,
           courseId: projection.courseId,
           courseName: projection.courseName,
-          exercises: [exercise]
-        });
+          exercises: [exercise],
+        })
       }
-      return acc;
-    }, [] as PendingCorrection[]);
+      return acc
+    }, [] as PendingCorrection[])
   }
 
   async upsert(sessionId: string, input: Partial<CorrectionEntity>) {
     const session = await this.sessionRepository.findOne({
       where: { id: sessionId },
       relations: { correction: true },
-    });
+    })
 
-    if (!session) throw new NotFoundResponse(`Session not found: ${sessionId}`);
+    if (!session) throw new NotFoundResponse(`Session not found: ${sessionId}`)
     if (session.correction) {
-      Object.assign(session.correction, input);
-      await this.correctionRepository.save(session.correction);
-      return session.correction;
+      Object.assign(session.correction, input)
+      await this.correctionRepository.save(session.correction)
+      return session.correction
     } else {
-      const correction = await this.correctionRepository.save(input);
+      const correction = await this.correctionRepository.save(input)
       await this.sessionRepository.update(session.id, {
         correctionId: correction.id,
-      });
-      return correction;
+      })
+      return correction
     }
   }
 }

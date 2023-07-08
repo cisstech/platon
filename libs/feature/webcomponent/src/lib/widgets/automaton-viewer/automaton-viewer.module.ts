@@ -1,10 +1,10 @@
-import { NgModule, Type } from '@angular/core';
-import { IDynamicModule } from '@cisstech/nge/services';
+import { NgModule, Type } from '@angular/core'
+import { IDynamicModule } from '@cisstech/nge/services'
 
-import { RenderDotModule } from '../../shared/directives/render-dot.directive';
-import { BaseModule } from '../../shared/components/base/base.module';
+import { RenderDotModule } from '../../shared/directives/render-dot.directive'
+import { BaseModule } from '../../shared/components/base/base.module'
 
-import { AutomatonViewerComponent } from './automaton-viewer.component';
+import { AutomatonViewerComponent } from './automaton-viewer.component'
 
 @NgModule({
   declarations: [AutomatonViewerComponent],
@@ -12,5 +12,5 @@ import { AutomatonViewerComponent } from './automaton-viewer.component';
   exports: [AutomatonViewerComponent],
 })
 export class AutomatonViewerModule implements IDynamicModule {
-  component: Type<unknown> = AutomatonViewerComponent;
+  component: Type<unknown> = AutomatonViewerComponent
 }

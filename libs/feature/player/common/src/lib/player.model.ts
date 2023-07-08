@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { ActivitySettings, ActivityVariables, ExerciseFeedback } from "@platon/feature/compiler";
-import { AnswerStates } from "@platon/feature/result/common";
+import { ActivitySettings, ActivityVariables, ExerciseFeedback } from '@platon/feature/compiler'
+import { AnswerStates } from '@platon/feature/result/common'
 
 export enum PlayerActions {
   NEXT_HINT = 'NEXT_HINT',
@@ -12,17 +12,17 @@ export enum PlayerActions {
 }
 
 export interface PlayerExercise {
-  id: string;
-  sessionId: string;
-  state: AnswerStates;
-  title: string;
+  id: string
+  sessionId: string
+  state: AnswerStates
+  title: string
 }
 
 export interface PlayerNavigation {
-  started: boolean;
-  terminated: boolean;
-  current?: PlayerExercise;
-  exercises: PlayerExercise[];
+  started: boolean
+  terminated: boolean
+  current?: PlayerExercise
+  exercises: PlayerExercise[]
 }
 
 /**
@@ -30,9 +30,9 @@ export interface PlayerNavigation {
  */
 export interface PreviewInput {
   /** Version of the resource to preview (default: latest) */
-  version?: string;
+  version?: string
   /** Id of the resource to preview. */
-  resource: string;
+  resource: string
 }
 
 /**
@@ -40,7 +40,7 @@ export interface PreviewInput {
  */
 export interface PlayAnswersInput {
   /** Session id of the exercise.  */
-  sessionId: string;
+  sessionId: string
 }
 
 /**
@@ -48,9 +48,9 @@ export interface PlayAnswersInput {
  */
 export interface PlayExerciseInput {
   /** Session id of the activity containing the exercises to be played.  */
-  activitySessionId: string;
+  activitySessionId: string
   /** A list of exercise sessions to start/resume. */
-  exerciseSessionIds: string[];
+  exerciseSessionIds: string[]
 }
 
 /**
@@ -58,7 +58,7 @@ export interface PlayExerciseInput {
  */
 export interface PlayActivityInput {
   /** Identifier of the course activity to start/resume. */
-  activityId: string;
+  activityId: string
 }
 
 /**
@@ -66,84 +66,84 @@ export interface PlayActivityInput {
  */
 export interface EvalExerciseInput {
   /** Action to do. */
-  action: PlayerActions;
+  action: PlayerActions
   /** An exercise session. */
-  sessionId: string;
+  sessionId: string
   /** Current answers of the user inside of the exercise. */
-  answers?: Record<string, any>;
+  answers?: Record<string, any>
 }
 
 export interface PreviewOuput {
-  exercise?: ExercisePlayer;
-  activity?: ActivityPlayer;
+  exercise?: ExercisePlayer
+  activity?: ActivityPlayer
 }
 
 export interface PlayAnswersOutput {
-  exercises: ExercisePlayer[];
+  exercises: ExercisePlayer[]
 }
 
 export interface PlayExerciseOuput {
-  exercises: ExercisePlayer[];
-  navigation?: PlayerNavigation;
+  exercises: ExercisePlayer[]
+  navigation?: PlayerNavigation
 }
 
 export interface PlayActivityOuput {
-  activity: ActivityPlayer;
+  activity: ActivityPlayer
 }
 
 export interface EvalExerciseOutput {
-  exercise: ExercisePlayer;
-  navigation?: PlayerNavigation;
+  exercise: ExercisePlayer
+  navigation?: PlayerNavigation
 }
 
 export interface ExercisePlayer {
-  type: 'exercise';
-  answerId?: string;
-  sessionId: string;
-  startedAt?: Date;
-  lastGradedAt?: Date;
-  form: string;
-  title: string;
-  statement: string;
-  hints?: string[];
-  author?: string;
+  type: 'exercise'
+  answerId?: string
+  sessionId: string
+  startedAt?: Date
+  lastGradedAt?: Date
+  form: string
+  title: string
+  statement: string
+  hints?: string[]
+  author?: string
   correction?: {
-    grade: number;
-    authorId?: string;
-    createdAt: Date;
-    updatedAt: Date;
-  };
-  remainingAttempts?: number;
-  solution?: string;
-  settings?: ActivitySettings;
-  feedbacks?: ExerciseFeedback[];
+    grade: number
+    authorId?: string
+    createdAt: Date
+    updatedAt: Date
+  }
+  remainingAttempts?: number
+  solution?: string
+  settings?: ActivitySettings
+  feedbacks?: ExerciseFeedback[]
   theories?: {
-    url: string;
-    title: string;
-  }[];
+    url: string
+    title: string
+  }[]
 }
 
 export interface ActivityPlayer {
-  type: 'activity';
-  sessionId: string;
-  activityId?: string;
-  title: string;
-  author?: string;
-  introduction: string;
-  conclusion: string;
-  openAt?: Date;
-  closeAt?: Date;
-  startedAt?: Date;
-  lastGradedAt?: Date;
-  navigation: PlayerNavigation;
-  settings?: ActivitySettings;
+  type: 'activity'
+  sessionId: string
+  activityId?: string
+  title: string
+  author?: string
+  introduction: string
+  conclusion: string
+  openAt?: Date
+  closeAt?: Date
+  startedAt?: Date
+  lastGradedAt?: Date
+  navigation: PlayerNavigation
+  settings?: ActivitySettings
 }
 
 /** Representation of an exercise/activity player. */
-export declare type Player = ExercisePlayer | ActivityPlayer;
+export declare type Player = ExercisePlayer | ActivityPlayer
 
 export interface PlayerActivityVariables extends ActivityVariables {
-  navigation: PlayerNavigation;
+  navigation: PlayerNavigation
 }
 
 /**
@@ -161,25 +161,25 @@ export interface PlayerActivityVariables extends ActivityVariables {
  * @returns True if the activity is timeouted, false otherwise.
  */
 export const isTimeouted = (player: Partial<ActivityPlayer>): boolean => {
-  const closeAt = player.closeAt ? new Date(player.closeAt).getTime() : null;
-  const startedAt = player.startedAt ? new Date(player.startedAt).getTime() : null;
-  const duration = player.settings?.duration;
+  const closeAt = player.closeAt ? new Date(player.closeAt).getTime() : null
+  const startedAt = player.startedAt ? new Date(player.startedAt).getTime() : null
+  const duration = player.settings?.duration
 
   // Get the current timestamp
-  const currentTime = new Date().getTime();
+  const currentTime = new Date().getTime()
 
   // Check if the activity is timeouted
-  let isTimeouted = false;
+  let isTimeouted = false
 
   if (duration != null && startedAt != null) {
     // Prioritize startedAt + duration
-    isTimeouted = currentTime > startedAt + duration;
+    isTimeouted = currentTime > startedAt + duration
   } else if (closeAt != null) {
     // Fallback to closeAt if startedAt or duration is not available
-    isTimeouted = currentTime > closeAt;
+    isTimeouted = currentTime > closeAt
   }
 
-  return isTimeouted;
+  return isTimeouted
 }
 
 /**
@@ -193,15 +193,15 @@ export const isTimeouted = (player: Partial<ActivityPlayer>): boolean => {
  * @returns The timestamp at which the activity will be closed, or null if the closing time cannot be determined.
  */
 export const getClosingTime = (player: Partial<ActivityPlayer>): number | null => {
-  const startedAt = player.startedAt ? new Date(player.startedAt).getTime() : null;
-  const closeAt = player.closeAt ? new Date(player.closeAt).getTime() : null;
-  const duration = (player.settings?.duration || 0) * 1000;
+  const startedAt = player.startedAt ? new Date(player.startedAt).getTime() : null
+  const closeAt = player.closeAt ? new Date(player.closeAt).getTime() : null
+  const duration = (player.settings?.duration || 0) * 1000
 
   if (duration != null && startedAt != null) {
-    return startedAt + duration;
+    return startedAt + duration
   } else if (closeAt != null) {
-    return closeAt;
+    return closeAt
   }
 
-  return null;
+  return null
 }

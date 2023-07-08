@@ -1,15 +1,11 @@
-import {
-  defineWebComponent,
-  IWebComponent,
-  WebComponentTypes,
-} from '../../web-component';
+import { defineWebComponent, IWebComponent, WebComponentTypes } from '../../web-component'
 
 export interface DragDropState extends IWebComponent {
-  css: string;
-  group: string;
-  content: string;
-  disabled: boolean;
-  draggable: boolean;
+  css: string
+  group: string
+  content: string
+  disabled: boolean
+  draggable: boolean
 }
 
 export const DragDropComponentDefinition = defineWebComponent({
@@ -55,4 +51,4 @@ export const DragDropComponentDefinition = defineWebComponent({
     content: '$c = \\pm\\sqrt{a^2 + b^2}$',
     draggable: true,
   },
-});
+})

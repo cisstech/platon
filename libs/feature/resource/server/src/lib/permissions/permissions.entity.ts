@@ -1,4 +1,4 @@
-import { Column } from "typeorm"
+import { Column } from 'typeorm'
 
 export class MemberPermissions {
   @Column({ type: 'boolean', default: true })

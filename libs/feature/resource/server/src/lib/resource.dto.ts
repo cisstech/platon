@@ -1,10 +1,19 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { OrderingDirections } from '@platon/core/common';
-import { BaseDTO, LevelDTO, toArray, toBoolean, toNumber, TopicDTO } from '@platon/core/server';
-import { CircleTree, CreateResource, Resource, ResourceFilters, ResourceOrderings, ResourceStatus, ResourceTypes, ResourceVisibilities, UpdateResource } from '@platon/feature/resource/common';
-import { Transform, Type } from 'class-transformer';
-import { IsArray, IsBoolean, IsEnum, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
-
+import { ApiProperty } from '@nestjs/swagger'
+import { OrderingDirections } from '@platon/core/common'
+import { BaseDTO, LevelDTO, toArray, toBoolean, toNumber, TopicDTO } from '@platon/core/server'
+import {
+  CircleTree,
+  CreateResource,
+  Resource,
+  ResourceFilters,
+  ResourceOrderings,
+  ResourceStatus,
+  ResourceTypes,
+  ResourceVisibilities,
+  UpdateResource,
+} from '@platon/feature/resource/common'
+import { Transform, Type } from 'class-transformer'
+import { IsArray, IsBoolean, IsEnum, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator'
 
 export class ResourceDTO extends BaseDTO implements Resource {
   @IsString()
@@ -65,20 +74,20 @@ export class ResourceDTO extends BaseDTO implements Resource {
 export class CircleTreeDTO implements CircleTree {
   @IsUUID()
   @ApiProperty()
-  readonly id!: string;
+  readonly id!: string
 
   @IsString()
   @ApiProperty()
-  readonly name!: string;
+  readonly name!: string
 
   @IsString()
   @IsOptional()
   @ApiProperty()
-  readonly code?: string;
+  readonly code?: string
 
   @IsEnum(ResourceVisibilities)
   @ApiProperty()
-  readonly visibility!: ResourceVisibilities;
+  readonly visibility!: ResourceVisibilities
 
   @Type(() => CircleTreeDTO)
   @IsArray()
@@ -172,71 +181,70 @@ export class UpdateResourceDTO implements UpdateResource {
   topics?: string[] = []
 }
 
-
 export class ResourceFiltersDTO implements ResourceFilters {
   @Transform(({ value }) => toArray(value))
   @IsEnum(ResourceTypes, { each: true })
   @IsArray()
   @IsOptional()
-  readonly types?: ResourceTypes[];
+  readonly types?: ResourceTypes[]
 
   @Transform(({ value }) => toArray(value))
   @IsEnum(ResourceStatus, { each: true })
   @IsArray()
   @IsOptional()
-  readonly status?: ResourceStatus[];
+  readonly status?: ResourceStatus[]
 
   @IsString()
   @IsOptional()
-  readonly search?: string;
+  readonly search?: string
 
   @Transform(({ value }) => toNumber(value))
   @IsNumber()
   @IsOptional()
-  readonly period?: number;
+  readonly period?: number
 
   @Transform(({ value }) => toArray(value))
   @IsUUID(undefined, { each: true })
   @IsArray()
   @IsOptional()
-  readonly members?: string[];
+  readonly members?: string[]
 
   @Transform(({ value }) => toArray(value))
   @IsUUID(undefined, { each: true })
   @IsArray()
   @IsOptional()
-  readonly watchers?: string[];
+  readonly watchers?: string[]
 
   @Transform(({ value }) => toArray(value))
   @IsUUID(undefined, { each: true })
   @IsArray()
   @IsOptional()
-  readonly owners?: string[];
+  readonly owners?: string[]
 
   @Transform(({ value }) => toBoolean(value))
   @IsBoolean()
   @IsOptional()
-  readonly views?: boolean;
+  readonly views?: boolean
 
   @Transform(({ value }) => toNumber(value))
   @IsNumber()
   @IsOptional()
-  readonly offset?: number;
+  readonly offset?: number
 
   @Transform(({ value }) => toNumber(value))
   @IsNumber()
   @IsOptional()
-  readonly limit?: number;
+  readonly limit?: number
 
   @IsUUID()
   @IsOptional()
-  readonly parent?: string;
+  readonly parent?: string
 
   @IsEnum(ResourceOrderings)
   @IsOptional()
-  readonly order?: ResourceOrderings;
+  readonly order?: ResourceOrderings
 
   @IsEnum(OrderingDirections)
   @IsOptional()
-  readonly direction?: OrderingDirections;
+  readonly direction?: OrderingDirections
 }

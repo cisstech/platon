@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import url from 'url';
+import url from 'url'
 
 export interface Signer {
-  readonly method: string;
+  readonly method: string
 
-  buildSignature(req: any, secret: string, token?: string): string;
+  buildSignature(req: any, secret: string, token?: string): string
   buildSignatureRaw(
     reqUrl: string,
     parsedUrl: url.UrlWithParsedQuery,
@@ -12,5 +12,5 @@ export interface Signer {
     params: any,
     consumerSecret: string,
     token?: string
-  ): string;
+  ): string
 }

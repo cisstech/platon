@@ -1,6 +1,6 @@
-import 'dotenv/config';
+import 'dotenv/config'
 
-import { DataSourceOptions } from "typeorm";
+import { DataSourceOptions } from 'typeorm'
 
 export const config: DataSourceOptions = {
   type: 'postgres',
@@ -13,5 +13,5 @@ export const config: DataSourceOptions = {
   synchronize: false,
   migrationsRun: false,
   logging: ['error'],
-  logger: 'advanced-console'
+  logger: 'advanced-console',
 }

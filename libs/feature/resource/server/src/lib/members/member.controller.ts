@@ -1,14 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Patch, Query } from '@nestjs/common';
-import { ErrorResponse, ItemResponse, ListResponse, NoContentResponse } from '@platon/core/common';
-import { Mapper } from '@platon/core/server';
-import { ResourceMemberDTO, UpdateResourceMemberDTO, ResourceMemberFiltersDTO } from './member.dto';
-import { ResourceMemberService } from './member.service';
+import { Body, Controller, Delete, Get, Param, Patch, Query } from '@nestjs/common'
+import { ErrorResponse, ItemResponse, ListResponse, NoContentResponse } from '@platon/core/common'
+import { Mapper } from '@platon/core/server'
+import { ResourceMemberDTO, UpdateResourceMemberDTO, ResourceMemberFiltersDTO } from './member.dto'
+import { ResourceMemberService } from './member.service'
 
 @Controller('resources/:resourceId/members')
 export class ResourceMemberController {
-  constructor(
-    private readonly service: ResourceMemberService,
-  ) { }
+  constructor(private readonly service: ResourceMemberService) {}
 
   @Get()
   async search(
@@ -23,19 +21,21 @@ export class ResourceMemberController {
   @Get('/:userId')
   async find(
     @Param('userId') userId: string,
-    @Param('resourceId') resourceId: string,
+    @Param('resourceId') resourceId: string
   ): Promise<ItemResponse<ResourceMemberDTO>> {
-    const optional = await this.service.findByUserId(resourceId, userId);
+    const optional = await this.service.findByUserId(resourceId, userId)
     const resource = Mapper.map(
-      optional.orElseThrow(() => new ErrorResponse({
-        status: 404,
-        message: `ResourceMember not found: ${userId}`,
-      })),
+      optional.orElseThrow(
+        () =>
+          new ErrorResponse({
+            status: 404,
+            message: `ResourceMember not found: ${userId}`,
+          })
+      ),
       ResourceMemberDTO
-    );
+    )
     return new ItemResponse({ resource })
   }
-
 
   @Patch('/:userId')
   async update(
@@ -53,7 +53,7 @@ export class ResourceMemberController {
   @Delete('/:userId')
   async delete(
     @Param('userId') userId: string,
-    @Param('resourceId') resourceId: string,
+    @Param('resourceId') resourceId: string
   ): Promise<NoContentResponse> {
     await this.service.deleteByUserId(resourceId, userId)
     return new NoContentResponse()

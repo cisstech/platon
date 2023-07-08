@@ -1,6 +1,6 @@
-import Checklist from '@editorjs/checklist';
-import List from '@editorjs/nested-list';
-import { EditorJsExtension, EDITOR_JS_EXTENSION } from "../editorjs";
+import Checklist from '@editorjs/checklist'
+import List from '@editorjs/nested-list'
+import { EditorJsExtension, EDITOR_JS_EXTENSION } from '../editorjs'
 
 const Extension: EditorJsExtension = {
   tools: {
@@ -9,7 +9,7 @@ const Extension: EditorJsExtension = {
       inlineToolbar: true,
     },
     checklist: {
-      class: Checklist
+      class: Checklist,
     },
   },
 }
@@ -17,5 +17,5 @@ const Extension: EditorJsExtension = {
 export const ListExtension = {
   provide: EDITOR_JS_EXTENSION,
   multi: true,
-  useValue: Extension
+  useValue: Extension,
 }

@@ -1,30 +1,41 @@
-import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, Output, TemplateRef, ViewChild } from '@angular/core';
-import { firstValueFrom } from 'rxjs';
+import { CommonModule } from '@angular/common'
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core'
+import { firstValueFrom } from 'rxjs'
 
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { MatIconModule } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button'
+import { MatCardModule } from '@angular/material/card'
+import { MatDividerModule } from '@angular/material/divider'
+import { MatExpansionModule } from '@angular/material/expansion'
+import { MatIconModule } from '@angular/material/icon'
+import { MatMenuModule } from '@angular/material/menu'
 
-import { NgeMarkdownModule } from '@cisstech/nge/markdown';
+import { NgeMarkdownModule } from '@cisstech/nge/markdown'
 
-import { NzAlertModule } from 'ng-zorro-antd/alert';
+import { NzAlertModule } from 'ng-zorro-antd/alert'
 
-import { SafePipeModule } from '@cisstech/nge/pipes';
+import { SafePipeModule } from '@cisstech/nge/pipes'
 
-import { DialogModule, DialogService } from '@platon/core/browser';
-import { ExercisePlayer, PlayerActions, PlayerNavigation } from '@platon/feature/player/common';
-import { WebComponentHooks } from '@platon/feature/webcomponent';
+import { DialogModule, DialogService } from '@platon/core/browser'
+import { ExercisePlayer, PlayerActions, PlayerNavigation } from '@platon/feature/player/common'
+import { WebComponentHooks } from '@platon/feature/webcomponent'
 
-import { HttpErrorResponse } from '@angular/common/http';
-import { ExerciseTheory } from '@platon/feature/compiler';
-import { UiModalDrawerComponent } from '@platon/shared/ui';
-import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
-import { PlayerService } from '../../api/player.service';
-import { PlayerCommentsComponent } from '../player-comments/player-comments.component';
+import { HttpErrorResponse } from '@angular/common/http'
+import { ExerciseTheory } from '@platon/feature/compiler'
+import { UiModalDrawerComponent } from '@platon/shared/ui'
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
+import { PlayerService } from '../../api/player.service'
+import { PlayerCommentsComponent } from '../player-comments/player-comments.component'
 
 @Component({
   standalone: true,
@@ -51,123 +62,120 @@ import { PlayerCommentsComponent } from '../player-comments/player-comments.comp
     UiModalDrawerComponent,
 
     PlayerCommentsComponent,
-  ]
+  ],
 })
 export class PlayerExerciseComponent implements OnChanges {
-  private clearNotification?: () => void;
+  private clearNotification?: () => void
 
-  @Input() player!: ExercisePlayer;
-  @Input() players: ExercisePlayer[] = [];
+  @Input() player!: ExercisePlayer
+  @Input() players: ExercisePlayer[] = []
 
-  @Input() reviewMode = false;
-  @Input() canComment = false;
+  @Input() reviewMode = false
+  @Input() canComment = false
 
-  @Output() evaluated = new EventEmitter<PlayerNavigation>();
+  @Output() evaluated = new EventEmitter<PlayerNavigation>()
 
   @ViewChild('errorTemplate', { read: TemplateRef, static: true })
-  errorTemplate!: TemplateRef<object>;
+  errorTemplate!: TemplateRef<object>
 
   @ViewChild('containerHints', { read: ElementRef })
-  containerHints!: ElementRef<HTMLElement>;
+  containerHints!: ElementRef<HTMLElement>
 
   @ViewChild('containerSolution', { read: ElementRef })
-  containerSolution!: ElementRef<HTMLElement>;
+  containerSolution!: ElementRef<HTMLElement>
 
-
-  protected index = 0;
+  protected index = 0
   protected get disabled(): boolean {
-    return !!this.player.solution || (
-      this.player.remainingAttempts != null && this.player.remainingAttempts <= 0
-    );
+    return (
+      !!this.player.solution ||
+      (this.player.remainingAttempts != null && this.player.remainingAttempts <= 0)
+    )
   }
 
   get currentAttemptIndex(): number {
-    return this.index;
+    return this.index
   }
 
   constructor(
     private readonly dialogService: DialogService,
     private readonly playerService: PlayerService,
     private readonly changeDetectorRef: ChangeDetectorRef
-  ) { }
+  ) {}
 
   ngOnChanges(): void {
     if (this.players?.length) {
-      this.player = this.players[0];
-      this.clearNotification?.();
-      this.clearNotification = undefined;
+      this.player = this.players[0]
+      this.clearNotification?.()
+      this.clearNotification = undefined
     }
   }
 
   protected async hint(): Promise<void> {
-    await this.evaluate(PlayerActions.NEXT_HINT);
-    this.scrollIntoNode(this.containerHints?.nativeElement, 'center');
+    await this.evaluate(PlayerActions.NEXT_HINT)
+    this.scrollIntoNode(this.containerHints?.nativeElement, 'center')
   }
 
   protected check(): Promise<void> {
-    return this.evaluate(PlayerActions.CHECK_ANSWER);
+    return this.evaluate(PlayerActions.CHECK_ANSWER)
   }
 
   protected reroll(): Promise<void> {
-    return this.evaluate(PlayerActions.REROLL_EXERCISE);
+    return this.evaluate(PlayerActions.REROLL_EXERCISE)
   }
 
   protected async solution(): Promise<void> {
-    await this.evaluate(PlayerActions.SHOW_SOLUTION);
-    this.scrollIntoNode(this.containerSolution?.nativeElement, 'start');
+    await this.evaluate(PlayerActions.SHOW_SOLUTION)
+    this.scrollIntoNode(this.containerSolution?.nativeElement, 'start')
   }
 
   protected previousAttempt(): void {
-    this.player = this.players[--this.index];
-    this.changeDetectorRef.markForCheck();
+    this.player = this.players[--this.index]
+    this.changeDetectorRef.markForCheck()
   }
 
   protected nextAttempt(): void {
-    this.player = this.players[++this.index];
-    this.changeDetectorRef.markForCheck();
+    this.player = this.players[++this.index]
+    this.changeDetectorRef.markForCheck()
   }
 
   protected trackByUrl(_: number, item: ExerciseTheory): string {
-    return item.url;
+    return item.url
   }
 
   private answers(): Record<string, unknown> {
-    const answers: Record<string, unknown> = {};
-    this.forEachComponent(component => {
-      answers[component.state.cid] = Object.assign({}, component.state);
-    });
-    return answers;
+    const answers: Record<string, unknown> = {}
+    this.forEachComponent((component) => {
+      answers[component.state.cid] = Object.assign({}, component.state)
+    })
+    return answers
   }
 
-  private forEachComponent(
-    consumer: (component: WebComponentHooks) => void
-  ): void {
-    document.querySelectorAll('[cid]').forEach(node => {
-      consumer((node as unknown as WebComponentHooks));
-    });
+  private forEachComponent(consumer: (component: WebComponentHooks) => void): void {
+    document.querySelectorAll('[cid]').forEach((node) => {
+      consumer(node as unknown as WebComponentHooks)
+    })
   }
 
   private scrollIntoNode(node?: HTMLElement, position: ScrollLogicalPosition = 'start'): void {
-    if (!node) return;
+    if (!node) return
     setTimeout(() => {
       node.scrollIntoView({
         behavior: 'smooth',
         block: position,
-      });
-      node.classList.add('animate');
+      })
+      node.classList.add('animate')
       setTimeout(() => {
-        node.classList.remove('animate');
-      }, 500);
-    });
+        node.classList.remove('animate')
+      }, 500)
+    })
   }
 
   private async evaluate(action: PlayerActions): Promise<void> {
     try {
-      this.clearNotification?.();
-      this.clearNotification = undefined;
+      this.clearNotification?.()
+      this.clearNotification = undefined
 
-
-      const answers = this.answers();
+      const answers = this.answers()
 
       const output = await firstValueFrom(
         this.playerService.evaluate({
@@ -175,28 +183,29 @@ export class PlayerExerciseComponent implements OnChanges {
           action,
           sessionId: this.player.sessionId,
         })
-      );
+      )
 
-      this.player = output.exercise;
+      this.player = output.exercise
       if (output.navigation) {
-        this.evaluated.emit(output.navigation);
+        this.evaluated.emit(output.navigation)
       }
 
       if (!this.player.feedbacks?.length && action === PlayerActions.CHECK_ANSWER) {
-        this.dialogService.info('Votre réponse a bien été prise en compte.');
+        this.dialogService.info('Votre réponse a bien été prise en compte.')
       }
     } catch (error) {
       if (error instanceof HttpErrorResponse) {
-        const message = error.error?.message || error.message || 'Une erreur est survenue lors de cette action.';
+        const message =
+          error.error?.message || error.message || 'Une erreur est survenue lors de cette action.'
         this.clearNotification = this.dialogService.notification(this.errorTemplate, {
           duration: 0,
           data: {
             message,
-          }
-        });
+          },
+        })
       }
     } finally {
-      this.changeDetectorRef.markForCheck();
+      this.changeDetectorRef.markForCheck()
     }
   }
 }

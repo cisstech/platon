@@ -1,8 +1,7 @@
-import { BaseEntity, UserEntity } from '@platon/core/server';
-import { Column, Entity, JoinColumn, ManyToOne, Unique } from 'typeorm';
-import { MemberPermissions } from '../permissions';
-import { ResourceEntity } from '../resource.entity';
-
+import { BaseEntity, UserEntity } from '@platon/core/server'
+import { Column, Entity, JoinColumn, ManyToOne, Unique } from 'typeorm'
+import { MemberPermissions } from '../permissions'
+import { ResourceEntity } from '../resource.entity'
 
 @Entity('ResourceMembers')
 @Unique('ResourceMembers_unique_idx', ['userId', 'resourceId'])
@@ -31,4 +30,3 @@ export class ResourceMemberEntity extends BaseEntity {
   @Column(() => MemberPermissions)
   permissions!: MemberPermissions
 }
-

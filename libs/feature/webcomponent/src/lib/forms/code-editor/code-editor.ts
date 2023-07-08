@@ -1,16 +1,12 @@
-import { stripIndent } from 'common-tags';
-import {
-  defineWebComponent,
-  IWebComponent,
-  WebComponentTypes,
-} from '../../web-component';
+import { stripIndent } from 'common-tags'
+import { defineWebComponent, IWebComponent, WebComponentTypes } from '../../web-component'
 
 export interface CodeEditorState extends IWebComponent {
-  code: string;
-  height: number;
-  tabSize: number;
-  language: string;
-  quickSuggestions: boolean;
+  code: string
+  height: number
+  tabSize: number
+  language: string
+  quickSuggestions: boolean
 }
 
 export const CodeEditorComponentDefinition = defineWebComponent({
@@ -66,4 +62,4 @@ export const CodeEditorComponentDefinition = defineWebComponent({
         print('The sum of {0} and {1} is {2}'.format(num1, num2, sum))
         `,
   },
-});
+})

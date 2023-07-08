@@ -1,12 +1,20 @@
-import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, Input, TemplateRef, ViewChild } from '@angular/core';
-import { NzSpinModule } from 'ng-zorro-antd/spin';
-import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
+import { CommonModule } from '@angular/common'
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ContentChild,
+  Input,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core'
+import { NzSpinModule } from 'ng-zorro-antd/spin'
+import { NzSkeletonModule } from 'ng-zorro-antd/skeleton'
 
-import { UiError403Component, UiError404Component } from '@platon/shared/ui';
-import { User } from '@platon/core/common';
+import { UiError403Component, UiError404Component } from '@platon/shared/ui'
+import { User } from '@platon/core/common'
 
-import { AuthIfDirective } from '../../directives';
+import { AuthIfDirective } from '../../directives'
 
 @Component({
   standalone: true,
@@ -23,42 +31,40 @@ import { AuthIfDirective } from '../../directives';
     UiError404Component,
 
     AuthIfDirective,
-  ]
+  ],
 })
 export class ProtectedComponent {
   @ContentChild(TemplateRef)
-  template!: TemplateRef<unknown>;
+  template!: TemplateRef<unknown>
 
   @ViewChild('shimmer', { read: TemplateRef, static: true })
-  shimmerTemplate!: TemplateRef<unknown>;
+  shimmerTemplate!: TemplateRef<unknown>
 
   @ViewChild('denied', { read: TemplateRef, static: true })
-  deniedTemplate!: TemplateRef<unknown>;
+  deniedTemplate!: TemplateRef<unknown>
 
   @ViewChild('notFound', { read: TemplateRef, static: true })
-  notFoundTemplate!: TemplateRef<unknown>;
+  notFoundTemplate!: TemplateRef<unknown>
 
   @ViewChild('spinner', { read: TemplateRef, static: true })
-  spinnerTemplate!: TemplateRef<unknown>;
+  spinnerTemplate!: TemplateRef<unknown>
 
-  @Input() placeholder?: TemplateRef<unknown>;
-  @Input() authorizations: string[] = ['connected'];
-  @Input() authorized?: (user: User) => void | Promise<void>;
-  @Input() unauthorized?: (error?: unknown) => void | Promise<void>;
+  @Input() placeholder?: TemplateRef<unknown>
+  @Input() authorizations: string[] = ['connected']
+  @Input() authorized?: (user: User) => void | Promise<void>
+  @Input() unauthorized?: (error?: unknown) => void | Promise<void>
 
-  user!: User;
+  user!: User
 
-  constructor(
-    private readonly changeDetectorRef: ChangeDetectorRef,
-  ) { }
+  constructor(private readonly changeDetectorRef: ChangeDetectorRef) {}
 
   protected async onConnect(user: User): Promise<void> {
-    this.user = user;
-    await this.authorized?.(user);
-    this.changeDetectorRef.markForCheck();
+    this.user = user
+    await this.authorized?.(user)
+    this.changeDetectorRef.markForCheck()
   }
 
   protected async onError(error: unknown): Promise<void> {
-    await this.unauthorized?.(error);
+    await this.unauthorized?.(error)
   }
 }

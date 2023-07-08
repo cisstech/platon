@@ -1,5 +1,5 @@
-import Table from '@editorjs/table';
-import { EditorJsExtension, EDITOR_JS_EXTENSION } from "../editorjs";
+import Table from '@editorjs/table'
+import { EditorJsExtension, EDITOR_JS_EXTENSION } from '../editorjs'
 
 const Extension: EditorJsExtension = {
   tools: {
@@ -13,5 +13,5 @@ const Extension: EditorJsExtension = {
 export const TableExtension = {
   provide: EDITOR_JS_EXTENSION,
   multi: true,
-  useValue: Extension
+  useValue: Extension,
 }

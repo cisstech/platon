@@ -1,10 +1,9 @@
-import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { NzTabsModule } from 'ng-zorro-antd/tabs';
-import { ResourceInformationsPage } from './informations/informations.page';
-import { ResourceMembersPage } from './members/members.page';
-
+import { CommonModule } from '@angular/common'
+import { ChangeDetectionStrategy, Component } from '@angular/core'
+import { RouterModule } from '@angular/router'
+import { NzTabsModule } from 'ng-zorro-antd/tabs'
+import { ResourceInformationsPage } from './informations/informations.page'
+import { ResourceMembersPage } from './members/members.page'
 
 @Component({
   standalone: true,
@@ -19,7 +18,7 @@ import { ResourceMembersPage } from './members/members.page';
     NzTabsModule,
 
     ResourceInformationsPage,
-    ResourceMembersPage
-  ]
+    ResourceMembersPage,
+  ],
 })
 export class ResourceSettingsPage {}

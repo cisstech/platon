@@ -1,16 +1,15 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { EntityManager, FindOptionsRelations, IsNull, Repository } from 'typeorm';
-import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
-import { SessionEntity } from './session.entity';
-
+import { Injectable } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { EntityManager, FindOptionsRelations, IsNull, Repository } from 'typeorm'
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity'
+import { SessionEntity } from './session.entity'
 
 @Injectable()
 export class SessionService {
   constructor(
     @InjectRepository(SessionEntity)
-    private readonly repository: Repository<SessionEntity>,
-  ) { }
+    private readonly repository: Repository<SessionEntity>
+  ) {}
 
   findById<T extends object>(
     id: string,
@@ -18,28 +17,23 @@ export class SessionService {
   ): Promise<SessionEntity<T> | null> {
     return this.repository.findOne({
       where: { id },
-      relations
-    });
+      relations,
+    })
   }
 
-  findAllWithParent(
-    parentId: string
-  ): Promise<SessionEntity[]> {
+  findAllWithParent(parentId: string): Promise<SessionEntity[]> {
     return this.repository.find({
       where: { parentId },
-    });
+    })
   }
 
-  findUserActivity(
-    activityId: string,
-    userId: string
-  ): Promise<SessionEntity | null> {
+  findUserActivity(activityId: string, userId: string): Promise<SessionEntity | null> {
     return this.repository.findOne({
       where: { parentId: IsNull(), activityId, userId },
       relations: {
-        activity: true
-      }
-    });
+        activity: true,
+      },
+    })
   }
 
   findExercise(
@@ -49,8 +43,8 @@ export class SessionService {
   ): Promise<SessionEntity | null> {
     return this.repository.findOne({
       where: { parentId, id: sessionId },
-      relations
-    });
+      relations,
+    })
   }
 
   create<T extends object>(
@@ -60,12 +54,10 @@ export class SessionService {
     if (entityManager) {
       return entityManager.save(
         entityManager.create(this.repository.target, input as SessionEntity)
-      );
+      )
     }
 
-    return this.repository.save(
-      this.repository.create(input)
-    );
+    return this.repository.save(this.repository.create(input))
   }
 
   async update(
@@ -74,8 +66,8 @@ export class SessionService {
     entityManager?: EntityManager
   ) {
     if (entityManager) {
-      return entityManager.update(this.repository.target, { id }, changes);
+      return entityManager.update(this.repository.target, { id }, changes)
     }
-    return this.repository.update({ id }, changes);
+    return this.repository.update({ id }, changes)
   }
 }

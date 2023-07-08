@@ -1,7 +1,7 @@
-import { ResourceEvent } from "./event.model";
+import { ResourceEvent } from './event.model'
 
-export const RESOURCE_EVENT_NOTIFICATION = 'RESOURCE-EVENT' as const;
+export const RESOURCE_EVENT_NOTIFICATION = 'RESOURCE-EVENT' as const
 export interface ResourceEventNotification {
-  type: typeof RESOURCE_EVENT_NOTIFICATION,
+  type: typeof RESOURCE_EVENT_NOTIFICATION
   eventInfo: ResourceEvent
 }

@@ -1,9 +1,9 @@
-import { Routes } from '@angular/router';
-import { CourseDashboardPage } from './dashboard.page';
+import { Routes } from '@angular/router'
+import { CourseDashboardPage } from './dashboard.page'
 
 export default [
   {
     path: '',
-    component: CourseDashboardPage
+    component: CourseDashboardPage,
   },
-] as Routes;
+] as Routes

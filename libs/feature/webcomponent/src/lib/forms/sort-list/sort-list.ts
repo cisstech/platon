@@ -1,17 +1,13 @@
-import {
-  defineWebComponent,
-  IWebComponent,
-  WebComponentTypes,
-} from '../../web-component';
+import { defineWebComponent, IWebComponent, WebComponentTypes } from '../../web-component'
 
 export interface SortListItem {
-  css?: string;
-  content: string;
+  css?: string
+  content: string
 }
 
 export interface SortListState extends IWebComponent {
-  items: SortListItem[];
-  disabled: boolean;
+  items: SortListItem[]
+  disabled: boolean
 }
 
 export const SortListComponentDefinition = defineWebComponent({
@@ -57,4 +53,4 @@ export const SortListComponentDefinition = defineWebComponent({
   showcase: {
     items: ['Choix 1', 'Choix 2', 'Choix 3'],
   },
-});
+})

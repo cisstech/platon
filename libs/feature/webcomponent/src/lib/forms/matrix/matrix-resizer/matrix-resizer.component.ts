@@ -6,9 +6,9 @@ import {
   TemplateRef,
   ViewChild,
   ViewContainerRef,
-} from '@angular/core';
-import { Overlay, OverlayRef } from '@angular/cdk/overlay';
-import { TemplatePortal } from '@angular/cdk/portal';
+} from '@angular/core'
+import { Overlay, OverlayRef } from '@angular/cdk/overlay'
+import { TemplatePortal } from '@angular/cdk/portal'
 
 @Component({
   selector: 'wc-matrix-resizer',
@@ -16,55 +16,52 @@ import { TemplatePortal } from '@angular/cdk/portal';
   styleUrls: ['./matrix-resizer.component.scss'],
 })
 export class MatrixResizerComponent implements OnDestroy {
-  private readonly width = 10;
-  private resizer?: OverlayRef;
+  private readonly width = 10
+  private resizer?: OverlayRef
 
   readonly cells = Array.from(
     {
       length: this.width * this.width,
     },
     (_, k) => k
-  );
+  )
 
-  cols = 0;
-  rows = 0;
+  cols = 0
+  rows = 0
 
   @Output()
-  resized = new EventEmitter<{ cols: number; rows: number }>();
+  resized = new EventEmitter<{ cols: number; rows: number }>()
 
   @ViewChild('template', { read: TemplateRef })
-  template!: TemplateRef<unknown>;
+  template!: TemplateRef<unknown>
 
-  constructor(
-    private readonly overlay: Overlay,
-    private readonly container: ViewContainerRef
-  ) {}
+  constructor(private readonly overlay: Overlay, private readonly container: ViewContainerRef) {}
 
   ngOnDestroy() {
-    this.resizer?.dispose();
+    this.resizer?.dispose()
   }
 
   isOn(index: number) {
-    const cols = index % this.width;
-    const rows = Math.floor(index / this.width);
-    return rows <= this.rows && cols <= this.cols;
+    const cols = index % this.width
+    const rows = Math.floor(index / this.width)
+    return rows <= this.rows && cols <= this.cols
   }
 
   hover(index: number) {
-    this.cols = index % this.width;
-    this.rows = Math.floor(index / this.width);
+    this.cols = index % this.width
+    this.rows = Math.floor(index / this.width)
   }
 
   done(index: number) {
     this.resized.emit({
       cols: (index % this.width) + 1,
       rows: Math.floor(index / this.width) + 1,
-    });
-    this.close();
+    })
+    this.close()
   }
 
   open(event: MouseEvent) {
-    const { x, y } = event;
+    const { x, y } = event
     const positionStrategy = this.overlay
       .position()
       .flexibleConnectedTo({ x, y })
@@ -75,21 +72,21 @@ export class MatrixResizerComponent implements OnDestroy {
           overlayX: 'start',
           overlayY: 'bottom',
         },
-      ]);
+      ])
     this.resizer = this.overlay.create({
       positionStrategy,
       hasBackdrop: true,
       scrollStrategy: this.overlay.scrollStrategies.close(),
-    });
-    this.resizer.attach(new TemplatePortal(this.template, this.container));
+    })
+    this.resizer.attach(new TemplatePortal(this.template, this.container))
   }
 
   close() {
-    this.resizer?.dispose();
-    this.resizer = undefined;
+    this.resizer?.dispose()
+    this.resizer = undefined
   }
 
   trackBy(index: number) {
-    return index;
+    return index
   }
 }

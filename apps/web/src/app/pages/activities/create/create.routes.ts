@@ -1,9 +1,9 @@
-import { Routes } from '@angular/router';
-import { ActivityCreatePage } from './create.page';
+import { Routes } from '@angular/router'
+import { ActivityCreatePage } from './create.page'
 
 export default [
   {
     path: '',
-    component: ActivityCreatePage
+    component: ActivityCreatePage,
   },
-] as Routes;
+] as Routes

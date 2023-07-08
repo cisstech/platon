@@ -1,9 +1,9 @@
-import { Routes } from '@angular/router';
-import { AdminUsersPage } from './users.page';
+import { Routes } from '@angular/router'
+import { AdminUsersPage } from './users.page'
 
 export default [
   {
     path: '',
-    component: AdminUsersPage
+    component: AdminUsersPage,
   },
-] as Routes;
+] as Routes

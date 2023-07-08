@@ -1,15 +1,15 @@
-import { NgModule, Type } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgModule, Type } from '@angular/core'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatInputModule } from '@angular/material/input'
+import { MatFormFieldModule } from '@angular/material/form-field'
+import { MatAutocompleteModule } from '@angular/material/autocomplete'
 
-import { IDynamicModule } from '@cisstech/nge/services';
+import { IDynamicModule } from '@cisstech/nge/services'
 
-import { InputBoxComponent } from './input-box.component';
-import { IconGrPipeModule } from '@cisstech/nge/pipes';
-import { BaseModule } from '../../shared/components/base/base.module';
+import { InputBoxComponent } from './input-box.component'
+import { IconGrPipeModule } from '@cisstech/nge/pipes'
+import { BaseModule } from '../../shared/components/base/base.module'
 
 @NgModule({
   declarations: [InputBoxComponent],
@@ -27,5 +27,5 @@ import { BaseModule } from '../../shared/components/base/base.module';
   exports: [InputBoxComponent],
 })
 export class InputBoxModule implements IDynamicModule {
-  component: Type<unknown> = InputBoxComponent;
+  component: Type<unknown> = InputBoxComponent
 }

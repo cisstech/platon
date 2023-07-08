@@ -1,6 +1,6 @@
-import { UserRoles } from '@platon/core/common';
-import { Column, Entity, Index, VirtualColumn } from 'typeorm';
-import { BaseEntity } from '../database/base-entity';
+import { UserRoles } from '@platon/core/common'
+import { Column, Entity, Index, VirtualColumn } from 'typeorm'
+import { BaseEntity } from '../database/base-entity'
 
 @Entity('Users')
 export class UserEntity extends BaseEntity {
@@ -37,7 +37,7 @@ export class UserEntity extends BaseEntity {
   firstLogin?: Date
 
   @VirtualColumn({
-    query:(alias) => `SELECT ${alias}.password IS NOT NULL`
+    query: (alias) => `SELECT ${alias}.password IS NOT NULL`,
   })
   hasPassword = false
 }

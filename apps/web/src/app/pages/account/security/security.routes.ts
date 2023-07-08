@@ -1,9 +1,9 @@
-import { Routes } from '@angular/router';
-import { AcccountSecurityPage } from './security.page';
+import { Routes } from '@angular/router'
+import { AcccountSecurityPage } from './security.page'
 
 export default [
   {
     path: '',
-    component: AcccountSecurityPage
+    component: AcccountSecurityPage,
   },
-] as Routes;
+] as Routes
