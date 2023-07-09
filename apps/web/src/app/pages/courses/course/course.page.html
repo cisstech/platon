@@ -3,11 +3,21 @@
     <nz-breadcrumb nzSeparator="">
       <nz-breadcrumb-item>
         <mat-icon>local_library</mat-icon>
-        <span nz-typography nzEditable [nzContent]="context.course.name" (nzContentChange)="updateName($event)"></span>
+        <span
+          nz-typography
+          nzEditable
+          [nzContent]="context.course.name"
+          (nzContentChange)="updateName($event)"
+        ></span>
       </nz-breadcrumb-item>
       <div class="spacer"></div>
     </nz-breadcrumb>
-    <p nz-typography nzEditable [nzContent]="context.course.desc" (nzContentChange)="updateDesc($event)"></p>
+    <p
+      nz-typography
+      nzEditable
+      [nzContent]="context.course.desc"
+      (nzContentChange)="updateDesc($event)"
+    ></p>
   </ng-container>
   <ui-layout-tab [link]="['dashboard']">
     <ng-template>

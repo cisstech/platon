@@ -2,7 +2,8 @@
   display: block;
   padding: 0 2rem;
   ::ng-deep {
-    mat-icon, .ant-icon {
+    mat-icon,
+    .ant-icon {
       margin-right: 8px;
     }
     .ant-tabs-nav {

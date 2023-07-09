@@ -1,7 +1,7 @@
 <mat-card>
   <mat-card-header>
     <mat-card-title>{{ player.title }}</mat-card-title>
-    <mat-card-subtitle *ngIf="player.author">{{player.author}}</mat-card-subtitle>
+    <mat-card-subtitle *ngIf="player.author">{{ player.author }}</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
     <section>
@@ -14,10 +14,7 @@
     <section>
       <ng-container *ngIf="player.feedbacks">
         <ng-container *ngFor="let feedback of player.feedbacks">
-          <nz-alert
-            nzShowIcon
-            [nzType]="feedback.type"
-            [nzMessage]="content">
+          <nz-alert nzShowIcon [nzType]="feedback.type" [nzMessage]="content">
             <ng-template #content>
               <nge-markdown [data]="feedback.content" />
             </ng-template>
@@ -29,10 +26,7 @@
       <ng-container *ngIf="player.hints">
         <div class="exercise-hints">
           <ng-container *ngFor="let hint of player.hints">
-            <nz-alert
-              nzShowIcon
-              [nzType]="'info'"
-              [nzMessage]="content">
+            <nz-alert nzShowIcon [nzType]="'info'" [nzMessage]="content">
               <ng-template #content>
                 <nge-markdown [data]="hint" />
               </ng-template>
@@ -70,7 +64,8 @@
         nz-tooltip="Tentative précédente"
         *ngIf="index > 0"
         mat-raised-button
-        (click)="previousAttempt()">
+        (click)="previousAttempt()"
+      >
         <mat-icon>arrow_back</mat-icon>
         Tentative précédente
       </button>
@@ -78,7 +73,8 @@
         nz-tooltip="Tentative suivante"
         *ngIf="index < players.length - 1"
         mat-raised-button
-        (click)="nextAttempt()">
+        (click)="nextAttempt()"
+      >
         <mat-icon>arrow_forward</mat-icon>
         Tentative suivante
       </button>
@@ -90,31 +86,27 @@
       color="primary"
       [class.danger]="player.remainingAttempts === 1"
       [disabled]="disabled"
-      (click)="check()">
+      (click)="check()"
+    >
       <mat-icon>check</mat-icon>
-      Valider <ng-container *ngIf="player.remainingAttempts">({{player.remainingAttempts}})</ng-container>
+      Valider
+      <ng-container *ngIf="player.remainingAttempts">({{ player.remainingAttempts }})</ng-container>
     </button>
     <button
       nz-tooltip="Essayez une autre question du genre"
       *ngIf="!reviewMode && !!player.settings?.actions?.reroll"
       mat-raised-button
-      (click)="reroll()">
+      (click)="reroll()"
+    >
       <mat-icon>refresh</mat-icon>
       Essayez une autre question du genre
     </button>
     <div class="spacer"></div>
-    <button
-      nz-tooltip="Commentaires"
-      mat-button
-      *ngIf="player.answerId"
-      (click)="drawer.open()">
+    <button nz-tooltip="Commentaires" mat-button *ngIf="player.answerId" (click)="drawer.open()">
       <mat-icon color="primary">reviews</mat-icon>
       Commentaires
     </button>
-    <button
-      *ngIf="player.theories?.length"
-      mat-button
-      [matMenuTriggerFor]="theories">
+    <button *ngIf="player.theories?.length" mat-button [matMenuTriggerFor]="theories">
       <mat-icon color="primary">menu_book</mat-icon>
       Théorie
     </button>
@@ -123,7 +115,8 @@
       *ngIf="player.settings?.actions?.solution && !player.solution"
       mat-button
       [disabled]="disabled"
-      (click)="solution()">
+      (click)="solution()"
+    >
       <mat-icon color="primary">key</mat-icon>
       Solution
     </button>
@@ -132,7 +125,8 @@
       mat-button
       [disabled]="disabled"
       *ngIf="player.settings?.actions?.hints"
-      (click)="hint()">
+      (click)="hint()"
+    >
       <mat-icon color="primary">lightbulb</mat-icon>
       Aide
     </button>
@@ -140,20 +134,19 @@
 </mat-card>
 <mat-menu #theories="matMenu">
   <ng-container *ngFor="let item of player.theories; trackBy: trackByUrl">
-    <a mat-menu-item [href]="item.url" target="_blank">{{item.title}}</a>
+    <a mat-menu-item [href]="item.url" target="_blank">{{ item.title }}</a>
   </ng-container>
 </mat-menu>
-<ui-modal-drawer
-  #drawer
-  title="Commentaires">
+<ui-modal-drawer #drawer title="Commentaires">
   <ng-template>
     <player-comments
       [canComment]="canComment"
       [answerId]="player.answerId!"
-      [sessionId]="player.sessionId" />
+      [sessionId]="player.sessionId"
+    />
   </ng-template>
 </ui-modal-drawer>
 
 <ng-template #errorTemplate let-data="data">
-  <pre>{{data.message}}</pre>
+  <pre>{{ data.message }}</pre>
 </ng-template>

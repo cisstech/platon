@@ -4,22 +4,40 @@
     <mat-card-content>
       <mat-form-field appearance="fill">
         <mat-label>Nom d'utilisateur</mat-label>
-        <input name="username" autocomplete="username" [(ngModel)]="username" type="text" required matInput>
+        <input
+          name="username"
+          autocomplete="username"
+          [(ngModel)]="username"
+          type="text"
+          required
+          matInput
+        />
         <mat-error>Une nom d'utilisateur valide est requise !</mat-error>
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Mot de passe</mat-label>
-        <input name="password" autocomplete="current-password" [(ngModel)]="password" type="password" required matInput>
+        <input
+          name="password"
+          autocomplete="current-password"
+          [(ngModel)]="password"
+          type="password"
+          required
+          matInput
+        />
         <mat-error>Un mot de passe est requis !</mat-error>
       </mat-form-field>
     </mat-card-content>
     <mat-card-actions>
-        <mat-spinner
-          *ngIf="connecting"
-          [diameter]="32"
-          [mode]="'indeterminate'">
-        </mat-spinner>
-      <button *ngIf="!connecting" type="submit" mat-raised-button color="primary" [disabled]="!form.valid">SE CONNECTER</button>
+      <mat-spinner *ngIf="connecting" [diameter]="32" [mode]="'indeterminate'"> </mat-spinner>
+      <button
+        *ngIf="!connecting"
+        type="submit"
+        mat-raised-button
+        color="primary"
+        [disabled]="!form.valid"
+      >
+        SE CONNECTER
+      </button>
     </mat-card-actions>
   </mat-card>
 </form>

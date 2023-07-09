@@ -4,9 +4,7 @@
       <mat-card-title>
         Fichiers
         <span>
-          <ng-container *ngIf="code">
-            @{{code}}:{{version}}
-          </ng-container>
+          <ng-container *ngIf="code"> @{{ code }}:{{ version }} </ng-container>
         </span>
       </mat-card-title>
     </mat-card-header>
@@ -15,7 +13,8 @@
         *ngIf="nodes.length; else noFiles"
         nzBlockNode
         [nzData]="nodes"
-        [nzTreeTemplate]="nzTreeTemplate">
+        [nzTreeTemplate]="nzTreeTemplate"
+      >
       </nz-tree>
     </mat-card-content>
   </mat-card>
@@ -23,12 +22,13 @@
     <mat-card-header>
       <mat-card-title>Documentation (readme.md)</mat-card-title>
       <mat-card-subtitle>
-        Nous vous conseillons de documenter vos ressources pour faciliter leur utilisation par les autres enseignants.
-        Vous pouvez facilement le faire en modifiant le fichier <b>README.md</b> dans les fichiers de la ressource.
+        Nous vous conseillons de documenter vos ressources pour faciliter leur utilisation par les
+        autres enseignants. Vous pouvez facilement le faire en modifiant le fichier
+        <b>README.md</b> dans les fichiers de la ressource.
       </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-      <nge-markdown *ngIf="readme; else: noDoc" [file]="readme.url" />
+      <nge-markdown *ngIf="readme; else noDoc" [file]="readme.url" />
     </mat-card-content>
   </mat-card>
 </ng-container>
@@ -45,15 +45,21 @@
 
 <ng-template #nzTreeTemplate let-node let-origin="origin">
   <ng-container>
-    <div class="node" *ngIf="!node.isLeaf"  (contextmenu)="contextMenu($event, menu, node)">
-      <ui-icon [icon]="node.title|iconFile:{ alt: node.title, expanded: node.isExpanded, isDirectory: true}" />
+    <div class="node" *ngIf="!node.isLeaf" (contextmenu)="contextMenu($event, menu, node)">
+      <ui-icon
+        [icon]="
+          node.title | iconFile : { alt: node.title, expanded: node.isExpanded, isDirectory: true }
+        "
+      />
       <div class="folder-name">{{ node.title }}</div>
     </div>
     <div
-      class="node"*ngIf="node.isLeaf"
+      class="node"
+      *ngIf="node.isLeaf"
       (dblclick)="selected.emit($any(index.get(node.key)))"
-      (contextmenu)="contextMenu($event, menu, node)">
-      <ui-icon [icon]="node.title|iconFile:{ alt: node.title }" />
+      (contextmenu)="contextMenu($event, menu, node)"
+    >
+      <ui-icon [icon]="node.title | iconFile : { alt: node.title }" />
       <div class="file-name">{{ node.title }}</div>
     </div>
   </ng-container>

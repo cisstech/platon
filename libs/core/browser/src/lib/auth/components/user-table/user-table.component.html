@@ -3,14 +3,16 @@
   [nzSize]="'small'"
   [nzShowSizeChanger]="true"
   [nzShowPagination]="true"
-  [nzData]="users">
+  [nzData]="users"
+>
   <thead>
     <tr>
       <th
-        *ngIf="selectable  && !disabled"
+        *ngIf="selectable && !disabled"
         [nzChecked]="checked"
         [nzIndeterminate]="indeterminate"
-        (nzCheckedChange)="onAllChecked($event)"></th>
+        (nzCheckedChange)="onAllChecked($event)"
+      ></th>
       <th>Utilisateur</th>
       <th>Date d'ajout</th>
       <th>Email</th>
@@ -23,13 +25,13 @@
       <td
         *ngIf="selectable && !disabled"
         [nzChecked]="selection.has(user.id)"
-        (nzCheckedChange)="onItemChecked(user.id, $event)">
-      </td>
+        (nzCheckedChange)="onItemChecked(user.id, $event)"
+      ></td>
       <td>
         <user-avatar #avatar [user]="user" />
       </td>
-      <td>{{user.createdAt|date}}</td>
-      <td>{{user.email}}</td>
+      <td>{{ user.createdAt | date }}</td>
+      <td>{{ user.email }}</td>
       <td>
         <ng-container [ngSwitch]="user.role">
           <ng-container *ngSwitchCase="'admin'">Admin</ng-container>

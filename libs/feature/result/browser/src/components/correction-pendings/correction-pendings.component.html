@@ -5,7 +5,8 @@
   nzTableLayout="auto"
   [nzNoResult]="empty"
   nzBordered
-  nzShowPagination="false">
+  nzShowPagination="false"
+>
   <thead>
     <tr>
       <th>Cours</th>
@@ -17,12 +18,16 @@
     <ng-container *ngFor="let item of nzTable.data">
       <tr>
         <td>
-          <a nz-button nzType="link" [routerLink]="['/courses', item.courseId]">{{item.courseName}}</a>
+          <a nz-button nzType="link" [routerLink]="['/courses', item.courseId]">{{
+            item.courseName
+          }}</a>
         </td>
         <td>
-          <a nz-button nzType="link" [routerLink]="['/player/correction', item.activityId]">{{item.activityName}}</a>
+          <a nz-button nzType="link" [routerLink]="['/player/correction', item.activityId]">{{
+            item.activityName
+          }}</a>
         </td>
-        <td>{{item.exercises.length}}</td>
+        <td>{{ item.exercises.length }}</td>
       </tr>
     </ng-container>
   </tbody>

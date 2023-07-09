@@ -10,7 +10,8 @@
     nzSize="large"
     [routerLink]="['/courses/create']"
     [queryParamsHandling]="'merge'"
-    [queryParams]="null">
+    [queryParams]="null"
+  >
     <span nz-icon nzType="plus" nzTheme="outline"></span>
   </button>
 </header>
@@ -20,8 +21,7 @@
     <div class="indicators">
       <ui-filter-indicators [filters]="filters" [indicators]="indicators" />
     </div>
-    <course-list
-      [items]="items">
+    <course-list [items]="items">
       <h2>Aucun cours ne correspond à votre recherche</h2>
       <ul>
         <li>Vérifiez les termes de votre recherche</li>
@@ -36,4 +36,5 @@
 <course-filters
   #filterDrawer
   [filters]="filters"
-  (triggered)="this.search($event, this.filters.search)" />
+  (triggered)="this.search($event, this.filters.search)"
+/>

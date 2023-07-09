@@ -1,18 +1,24 @@
 <mat-drawer-container>
   <mat-drawer mode="side" opened #drawer>
     <nav>
-      <img class="logo" src="assets/images/logo/platon.svg" alt="Logo PLaTon" [routerLink]="'/dashboard'" />
+      <img
+        class="logo"
+        src="assets/images/logo/platon.svg"
+        alt="Logo PLaTon"
+        [routerLink]="'/dashboard'"
+      />
       <h2>Exercices</h2>
-      <ng-container *ngFor="let group of exerciseGroups; trackBy: trackByExerciseId;">
+      <ng-container *ngFor="let group of exerciseGroups; trackBy: trackByExerciseId">
         <button
           (click)="onChooseGroup(group)"
           mat-button
           class="nav-link"
-          [class.active]="group.exerciseId === currentGroup?.exerciseId">
+          [class.active]="group.exerciseId === currentGroup?.exerciseId"
+        >
           <mat-icon [style.color]="group.graded ? 'green' : 'white'">
-            {{group.graded ? 'check_circle' : 'cancel'}}
+            {{ group.graded ? 'check_circle' : 'cancel' }}
           </mat-icon>
-          {{group.exerciseName}}
+          {{ group.exerciseName }}
         </button>
       </ng-container>
     </nav>
@@ -21,7 +27,7 @@
     <mat-toolbar>
       <nz-breadcrumb>
         <nz-breadcrumb-item>Corrections</nz-breadcrumb-item>
-        <nz-breadcrumb-item>{{correction.activityName}}</nz-breadcrumb-item>
+        <nz-breadcrumb-item>{{ correction.activityName }}</nz-breadcrumb-item>
       </nz-breadcrumb>
     </mat-toolbar>
     <main>
@@ -29,55 +35,55 @@
         #segmented
         [ngModel]="selectedTabIndex"
         (ngModelChange)="onChooseTab($event)"
-        [nzOptions]="['Corrections en attente', 'Corrections disponibles']"/>
-      <ng-container *ngIf="exercises.length as exerciseCount; else: noExercises">
+        [nzOptions]="['Corrections en attente', 'Corrections disponibles']"
+      />
+      <ng-container *ngIf="exercises.length as exerciseCount; else noExercises">
         <ng-container *ngIf="answers.length as answerCount">
           <nz-ribbon [nzText]="ribbon">
             <ng-template #ribbon>
-             Exercice : {{ selectedExerciseIndex + 1 }}/{{ exerciseCount }}&nbsp;
-             Tentative : {{ player.currentAttemptIndex + 1 }}/{{ answerCount }}
+              Exercice : {{ selectedExerciseIndex + 1 }}/{{ exerciseCount }}&nbsp; Tentative :
+              {{ player.currentAttemptIndex + 1 }}/{{ answerCount }}
             </ng-template>
-            <player-exercise
-              #player
-              [players]="answers"
-              [reviewMode]="true"
-              [canComment]="true" />
+            <player-exercise #player [players]="answers" [reviewMode]="true" [canComment]="true" />
           </nz-ribbon>
           <footer *ngIf="currentExercise">
-            <h3>Note grader ({{currentExercise.grade}})</h3>
+            <h3>Note grader ({{ currentExercise.grade }})</h3>
             <nz-slider
               [disabled]="true"
               [(ngModel)]="currentExercise.grade"
               [nzMarks]="{ '-1': '-1', '100': '100' }"
               nzMin="-1"
               nzMax="100"
-              />
-            <h3>Note ajustée ({{correctedGrade}})</h3>
+            />
+            <h3>Note ajustée ({{ correctedGrade }})</h3>
             <nz-slider
               [nzMarks]="{ '-1': '-1', '100': '100' }"
               [(ngModel)]="correctedGrade"
               nzMin="-1"
               nzMax="100"
-              />
+            />
             <mat-toolbar>
               <button
                 (click)="onSaveGrade()"
                 [disabled]="!correctedGrade"
                 mat-raised-button
-                color="primary">
+                color="primary"
+              >
                 Enregistrer
               </button>
               <button
                 *ngIf="selectedExerciseIndex > 0"
                 mat-raised-button
-                (click)="onChoosePreviousExercise()">
+                (click)="onChoosePreviousExercise()"
+              >
                 <mat-icon>arrow_back</mat-icon>
                 Utilisateur précédent
               </button>
               <button
                 *ngIf="selectedExerciseIndex < exerciseCount - 1"
                 mat-raised-button
-                (click)="onChooseNextExercise()">
+                (click)="onChooseNextExercise()"
+              >
                 <mat-icon>arrow_forward</mat-icon>
                 Utilisateur suivant
               </button>
@@ -90,14 +96,14 @@
 </mat-drawer-container>
 
 <ng-template #noExercises>
-<div [ngSwitch]="selectedTabIndex">
-  <ng-container *ngSwitchCase="0">
-    <ng-container [ngTemplateOutlet]="noPendings" />
-  </ng-container>
-  <ng-container *ngSwitchCase="1">
-    <ng-container [ngTemplateOutlet]="noExercises" />
-  </ng-container>
-</div>
+  <div [ngSwitch]="selectedTabIndex">
+    <ng-container *ngSwitchCase="0">
+      <ng-container [ngTemplateOutlet]="noPendings" />
+    </ng-container>
+    <ng-container *ngSwitchCase="1">
+      <ng-container [ngTemplateOutlet]="noExercises" />
+    </ng-container>
+  </div>
 </ng-template>
 
 <ng-template #noPendings>
@@ -110,8 +116,6 @@
 
 <ng-template #noCorrections>
   <nz-empty [nzNotFoundContent]="content">
-    <ng-template #content>
-      Aucune correction disponible !
-    </ng-template>
+    <ng-template #content> Aucune correction disponible ! </ng-template>
   </nz-empty>
 </ng-template>

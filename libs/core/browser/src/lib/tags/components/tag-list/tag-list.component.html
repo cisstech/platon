@@ -1,8 +1,9 @@
 <nz-tag
-  *ngFor="let tag of tags; trackBy: trackById;"
+  *ngFor="let tag of tags; trackBy: trackById"
   [nzMode]="editable ? 'closeable' : 'default'"
-  (nzOnClose)="remove.emit(tag)">
-  {{tag.name}}
+  (nzOnClose)="remove.emit(tag)"
+>
+  {{ tag.name }}
 </nz-tag>
 <ng-container *ngIf="editable">
   <nz-tag *ngIf="!inputVisible" class="editable-tag" nzNoAnimation (click)="showInput()">
@@ -16,7 +17,8 @@
     *ngIf="inputVisible"
     type="text"
     [(ngModel)]="inputValue"
-    style="width: 78px;"
+    style="width: 78px"
     (blur)="handleInputConfirm()"
-    (keydown.enter)="handleInputConfirm()"/>
+    (keydown.enter)="handleInputConfirm()"
+  />
 </ng-container>

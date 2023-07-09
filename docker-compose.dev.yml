@@ -57,7 +57,7 @@ services:
     networks:
       - platon-network
     extra_hosts: # https://stackoverflow.com/a/43541732
-      - "host.docker.internal:host-gateway"
+      - 'host.docker.internal:host-gateway'
     links:
       - pgadmin:pgadmin
     depends_on:

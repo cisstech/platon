@@ -3,24 +3,24 @@
   <tbody>
     <tr>
       <td>Session</td>
-      <td>{{player.sessionId}}</td>
+      <td>{{ player.sessionId }}</td>
     </tr>
     <tr>
       <td>Date de début</td>
-      <td>{{player.startedAt|date:'dd/MM/yyy à HH:mm'}}</td>
+      <td>{{ player.startedAt | date : 'dd/MM/yyy à HH:mm' }}</td>
     </tr>
     <tr>
       <td>Date de dernière réponse</td>
-      <td>{{player.lastGradedAt|date:'dd/MM/yyy à HH:mm'}}</td>
+      <td>{{ player.lastGradedAt | date : 'dd/MM/yyy à HH:mm' }}</td>
     </tr>
     <tr>
       <td>Durée total</td>
-      <td>{{[player.startedAt!, player.lastGradedAt!]|duration}}</td>
+      <td>{{ [player.startedAt!, player.lastGradedAt!] | duration }}</td>
     </tr>
   </tbody>
 </table>
 
-<ng-container *ngIf="results && !results.correcting; else: correcting">
+<ng-container *ngIf="results && !results.correcting; else correcting">
   <h3>Résultats</h3>
   <table>
     <thead>
@@ -33,17 +33,17 @@
       </tr>
     </thead>
     <tbody>
-      <ng-container *ngFor="let pair of results.exercises|keyvalue">
+      <ng-container *ngFor="let pair of results.exercises | keyvalue">
         <tr>
-          <td>{{pair.value.title}}</td>
-          <td>{{pair.value.attempts}}</td>
-          <td>{{pair.value.duration|duration}}</td>
-          <td [nz-tooltip]="pair.value.state|answerStateLabel">
-            <mat-icon [style.color]="pair.value.state|answerStateColor">
-              {{pair.value.state|answerStateIcon}}
+          <td>{{ pair.value.title }}</td>
+          <td>{{ pair.value.attempts }}</td>
+          <td>{{ pair.value.duration | duration }}</td>
+          <td [nz-tooltip]="pair.value.state | answerStateLabel">
+            <mat-icon [style.color]="pair.value.state | answerStateColor">
+              {{ pair.value.state | answerStateIcon }}
             </mat-icon>
           </td>
-          <td>{{pair.value.grade}}</td>
+          <td>{{ pair.value.grade }}</td>
           <td *ngIf="pair.value.attempts">
             <button nz-button nzType="primary" (click)="playAnswers(pair.value)">Réponses</button>
           </td>
@@ -54,14 +54,15 @@
 </ng-container>
 
 <ng-template #correcting>
-<p>Nous vous informerons dès que les résultats seront disponibles. Merci d'avoir participé !</p>
+  <p>Nous vous informerons dès que les résultats seront disponibles. Merci d'avoir participé !</p>
 </ng-template>
 
 <ui-modal-template
   [width]="'70vw'"
   [height]="'70vh'"
   (accepted)="answers = []"
-  (canceled)="answers = []">
+  (canceled)="answers = []"
+>
   <ng-template>
     <player-exercise [players]="answers" [reviewMode]="true" />
   </ng-template>
