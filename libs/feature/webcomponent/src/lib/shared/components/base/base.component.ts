@@ -34,12 +34,14 @@ export class BaseComponent implements OnInit, OnDestroy {
     this.definition = this.api.findBySelector(selector || '')
 
     this.observer = new MutationObserver((mutations) => {
-      mutations.forEach(this.onChangeAttributes.bind(this))
+      mutations.forEach(this.onChangeAttributes.bind(this, false))
     })
 
     this.observer.observe(native.parentElement as HTMLElement, {
       attributes: true,
     })
+
+    this.onChangeAttributes(true)
   }
 
   ngOnDestroy() {
@@ -54,23 +56,14 @@ export class BaseComponent implements OnInit, OnDestroy {
     }
   }
 
-  private onChangeAttributes() {
+  private onChangeAttributes(initial?: boolean) {
     const native: HTMLElement = this.elementRef.nativeElement
     const parent = native.parentElement as HTMLElement
     const attributes = Array.from(parent.attributes)
 
-    // LOAD FROM STATE ATTRIBUTE
-    const stateAttribute = attributes.find((attr) => attr.name === 'state')
-    if (stateAttribute) {
-      const stateValue = stateAttribute.value.startsWith('{')
-        ? stateAttribute.value
-        : window.atob(stateAttribute.value)
-      this.stateChange.emit(this.parseValue(stateValue))
-      return
-    }
-
     // LOAD FROM SCRIPT TAG
     const cidAttribute = attributes.find((attr) => attr.name === 'cid')
+
     if (cidAttribute) {
       const cidValue = cidAttribute.value
       const script = document.querySelector(`script[id="${cidValue}"]`)
@@ -78,6 +71,11 @@ export class BaseComponent implements OnInit, OnDestroy {
         this.stateChange.emit(this.parseValue(script.textContent || '{}'))
       }
       return
+    }
+
+    const stateAttribute = attributes.find((attr) => attr.name === 'state')
+    if (stateAttribute && initial) {
+      return // ignore initial state since angular @Input() state is already set
     }
 
     // LOAD INDIVIDUAL ATTRIBUTES

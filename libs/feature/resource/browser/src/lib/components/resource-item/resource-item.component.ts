@@ -9,17 +9,22 @@ import {
 } from '@angular/core'
 
 import { MatIconModule } from '@angular/material/icon'
-
-import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzBadgeModule } from 'ng-zorro-antd/badge'
+import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
+import { v4 as uuidv4 } from 'uuid'
 
 import { NgeUiListModule } from '@cisstech/nge/ui/list'
 import { Resource } from '@platon/feature/resource/common'
 
 import { UiModalIFrameComponent } from '@platon/shared/ui'
 
+import { StorageService } from '@platon/core/browser'
+import { Variables } from '@platon/feature/compiler'
+import { firstValueFrom } from 'rxjs'
 import { ResourcePipesModule } from '../../pipes'
+
+export const getPreviewOverridesStorageKey = (sessionId: string) => `preview.overrides.${sessionId}`
 
 @Component({
   standalone: true,
@@ -45,6 +50,8 @@ export class ResourceItemComponent implements OnInit {
   @Input() item!: Resource
   @Input() simple = false
   @Input() modalMode = false
+  @Input() previewOverrides?: Variables
+
   @Output() didTapTag = new EventEmitter<string>()
 
   protected name = ''
@@ -56,8 +63,19 @@ export class ResourceItemComponent implements OnInit {
   }
 
   get previewUrl(): string {
-    return `/player/preview/${this.item.id}?version=latest`
+    const sessionId = uuidv4()
+    if (this.previewOverrides) {
+      firstValueFrom(
+        this.storageService.set(
+          getPreviewOverridesStorageKey(sessionId),
+          JSON.stringify(this.previewOverrides)
+        )
+      ).catch()
+    }
+    return `/player/preview/${this.item.id}?version=latest&sessionId=${sessionId}`
   }
+
+  constructor(private readonly storageService: StorageService) {}
 
   ngOnInit(): void {
     if (!this.simple) {

@@ -1,6 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { ActivitySettings, ActivityVariables, ExerciseFeedback } from '@platon/feature/compiler'
+import {
+  ActivitySettings,
+  ActivityVariables,
+  ExerciseFeedback,
+  Variables,
+} from '@platon/feature/compiler'
 import { AnswerStates } from '@platon/feature/result/common'
 
 export enum PlayerActions {
@@ -33,6 +38,8 @@ export interface PreviewInput {
   version?: string
   /** Id of the resource to preview. */
   resource: string
+  /** Optional variable overrides */
+  overrides?: Variables
 }
 
 /**

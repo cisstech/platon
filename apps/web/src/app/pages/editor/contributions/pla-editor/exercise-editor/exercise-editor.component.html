@@ -1,6 +1,11 @@
 <ng-container *ngIf="exercise.resource | resourceFind | async as resource">
   <div class="exercise">
-    <resource-item [item]="resource" [simple]="true" [modalMode]="true" />
+    <resource-item
+      [item]="resource"
+      [simple]="true"
+      [modalMode]="true"
+      [previewOverrides]="exercise.overrides"
+    />
     <ul nz-list-item-actions>
       <nz-list-item-action>
         <button

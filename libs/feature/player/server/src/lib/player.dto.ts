@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
+import { Variables } from '@platon/feature/compiler'
 import {
   ActivityPlayer,
   EvalExerciseInput,
@@ -25,6 +26,11 @@ export class PreviewInputDTO implements PreviewInput {
   @IsString()
   @ApiProperty()
   resource!: string
+
+  @IsObject()
+  @IsOptional()
+  @ApiProperty()
+  overrides?: Variables
 }
 
 export class PlayAnswersInputDTO implements PlayAnswersInput {
