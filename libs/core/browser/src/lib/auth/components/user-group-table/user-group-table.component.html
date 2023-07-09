@@ -3,14 +3,16 @@
   [nzSize]="'small'"
   [nzShowSizeChanger]="true"
   [nzShowPagination]="true"
-  [nzData]="groups">
+  [nzData]="groups"
+>
   <thead>
     <tr>
       <th
-        *ngIf="selectable  && !disabled"
+        *ngIf="selectable && !disabled"
         [nzChecked]="checked"
         [nzIndeterminate]="indeterminate"
-        (nzCheckedChange)="onAllChecked($event)"></th>
+        (nzCheckedChange)="onAllChecked($event)"
+      ></th>
       <th>Nom</th>
       <th>Date d'ajout</th>
     </tr>
@@ -20,15 +22,12 @@
       <td
         *ngIf="selectable && !disabled"
         [nzChecked]="selection.has(group.id)"
-        (nzCheckedChange)="onItemChecked(group.id, $event)">
-      </td>
+        (nzCheckedChange)="onItemChecked(group.id, $event)"
+      ></td>
       <td>
-        <user-avatar
-          #avatar
-          [group]="group"
-          (showGroupMembers)="drawer.open($event)" />
+        <user-avatar #avatar [group]="group" (showGroupMembers)="drawer.open($event)" />
       </td>
-      <td>{{group.createdAt|date}}</td>
+      <td>{{ group.createdAt | date }}</td>
     </tr>
   </tbody>
 </nz-table>

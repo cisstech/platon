@@ -1,9 +1,5 @@
 <nz-button-group>
-  <button
-    (click)="addGroup()"
-    nz-button
-    nzType="primary"
-    nz-tooltip="Ajouter un groupe">
+  <button (click)="addGroup()" nz-button nzType="primary" nz-tooltip="Ajouter un groupe">
     <span nz-icon nzType="plus" nzTheme="outline"></span>
   </button>
 </nz-button-group>
@@ -12,9 +8,7 @@
   [(ngModel)]="groups"
   [onlyGroups]="true"
   [autoSelect]="true"
-  [filters]="{ limit: 50 }"/>
+  [filters]="{ limit: 50 }"
+/>
 
-<user-group-table
-  [(groups)]="groups"
-  [selectable]="false" />
-
+<user-group-table [(groups)]="groups" [selectable]="false" />

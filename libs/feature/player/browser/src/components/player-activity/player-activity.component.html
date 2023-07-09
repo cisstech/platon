@@ -9,16 +9,14 @@
     </h5>
     <ng-container *ngIf="showIntroduction">
       <div>
-        <nge-markdown [data]="player.introduction "/>
+        <nge-markdown [data]="player.introduction" />
       </div>
       <player-settings [player]="player" />
-      <button mat-raised-button color="primary" (click)="start()">
-        Commencer
-      </button>
+      <button mat-raised-button color="primary" (click)="start()">Commencer</button>
     </ng-container>
     <ng-container *ngIf="showConclusion">
       <div>
-         <nge-markdown [data]="player.conclusion "/>
+        <nge-markdown [data]="player.conclusion" />
       </div>
       <player-results [player]="player" />
     </ng-container>
@@ -38,9 +36,7 @@
   <main>
     <ng-container *ngFor="let exercise of exercises; trackBy: trackBySessionId; let i = index">
       <nz-ribbon [nzText]="ribbon">
-        <ng-template #ribbon>
-          {{ i + 1 }} / {{ exercises.length }}
-        </ng-template>
+        <ng-template #ribbon> {{ i + 1 }} / {{ exercises.length }} </ng-template>
         <player-exercise
           [id]="exercise.sessionId"
           [player]="exercise"
@@ -65,11 +61,7 @@
         <br />
       </ng-container>
     </nz-affix>
-    <player-navigation
-      [player]="player"
-      (navigate)="play($event)"
-      (terminate)="terminate()"
-    />
+    <player-navigation [player]="player" (navigate)="play($event)" (terminate)="terminate()" />
   </aside>
 </ng-container>
 <ng-container *ngFor="let trigger of triggers">

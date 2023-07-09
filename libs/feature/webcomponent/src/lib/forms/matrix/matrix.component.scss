@@ -8,12 +8,8 @@
 
 .matrix {
   display: grid;
-  height: calc(
-    var(--row-size) * var(--rows) + var(--gap) * var(--rows) + 0.2rem
-  );
-  width: calc(
-    var(--col-size) * var(--cols) + var(--gap) * var(--cols) + 0.2rem
-  );
+  height: calc(var(--row-size) * var(--rows) + var(--gap) * var(--rows) + 0.2rem);
+  width: calc(var(--col-size) * var(--cols) + var(--gap) * var(--cols) + 0.2rem);
   grid-template-rows: repeat(var(--rows), 1fr);
   grid-template-columns: repeat(var(--cols), 1fr);
   column-gap: var(--gap);

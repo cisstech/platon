@@ -1,12 +1,24 @@
 <nz-tabset nzTabPosition="left" nzLinkRouter>
   <nz-tab>
-    <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'informations' }" queryParamsHandling="merge">
+    <a
+      *nzTabLink
+      nz-tab-link
+      [routerLink]="['.']"
+      [queryParams]="{ tab: 'informations' }"
+      queryParamsHandling="merge"
+    >
       Informations
     </a>
     <app-resource-informations />
   </nz-tab>
   <nz-tab>
-    <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'members' }" queryParamsHandling="merge">
+    <a
+      *nzTabLink
+      nz-tab-link
+      [routerLink]="['.']"
+      [queryParams]="{ tab: 'members' }"
+      queryParamsHandling="merge"
+    >
       Membres
     </a>
     <app-resource-members />

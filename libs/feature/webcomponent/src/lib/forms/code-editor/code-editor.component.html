@@ -1,7 +1,4 @@
-<nge-monaco-editor
-  [style.--editor-height]="state.height + 'px'"
-  (ready)="onCreateEditor($event)"
->
+<nge-monaco-editor [style.--editor-height]="state.height + 'px'" (ready)="onCreateEditor($event)">
 </nge-monaco-editor>
 <footer #footer>
   <span
@@ -25,9 +22,7 @@
   <span class="spacer"></span>
   <span
     class="footer-item"
-    [attr.aria-label]="
-      'Ln ' + cursor.lineNumber + ',' + 'Col  ' + cursor.column
-    "
+    [attr.aria-label]="'Ln ' + cursor.lineNumber + ',' + 'Col  ' + cursor.column"
     nz-tooltip="Aller à la ligne/colonne"
     (click)="goToLine()"
   >
@@ -41,11 +36,7 @@
   >
     Espaces: {{ state.tabSize }}
   </span>
-  <span
-    class="footer-item"
-    [attr.aria-label]="state.language"
-    nz-tooltip="Langage"
-  >
+  <span class="footer-item" [attr.aria-label]="state.language" nz-tooltip="Langage">
     {{ state.language }}
   </span>
 </footer>

@@ -155,12 +155,12 @@ v16.14.2
 
   ```sh
   yarn graphql:generate
-  yarn serve:web 
+  yarn serve:web
   ```
 
   This script will start the frontend server, which serves the user interface, on <http://localhost:4200>. You can specify `--hmr` option to enable angular [Hot Module Replacement feature](https://medium.com/the-crazy-coder/watch-out-when-using-hmr-with-angular-b28a4dc7e19a)
 
-**Verify installation**: To ensure that PLaTon has been successfully installed and set up, check that you can access the platform in your web browser at <https://localhost>  and that the backend server is responding to API requests. If everything is working as expected, you should be able to create and manage resources, courses, and activities, as well as register and log in as different user types.
+**Verify installation**: To ensure that PLaTon has been successfully installed and set up, check that you can access the platform in your web browser at <https://localhost> and that the backend server is responding to API requests. If everything is working as expected, you should be able to create and manage resources, courses, and activities, as well as register and log in as different user types.
 
 At this point, you may see an error in your browser like the following one:
 
@@ -168,7 +168,7 @@ At this point, you may see an error in your browser like the following one:
   <img src="./.github/images/ssl-warning.png" alt="SSL warnings" width="620px" />
 </p>
 
-The message and the way you will fix it  might be different depending on the browser.
+The message and the way you will fix it might be different depending on the browser.
 
 - On **Firefox**, you should open the page `about:config` in a new tab and toggle off the `network.stricttransportsecurity.preloadlist` setting then refresh the page, you will now see an option to bypass the warning.
 <p align="left">
@@ -176,8 +176,8 @@ The message and the way you will fix it  might be different depending on the bro
 </p>
 
 - On **Chrome**, click a blank section of the denial page.
-Using your keyboard, type `thisisunsafe`. This will add the website to a safe list, where you should not be prompted again.
-Strange steps, but it surely works!
+  Using your keyboard, type `thisisunsafe`. This will add the website to a safe list, where you should not be prompted again.
+  Strange steps, but it surely works!
 
 - On **Safari** for mac, you should add `./docker/nginx/ssl/certs/localhost.crt` the Keychain app, then approve the `localhost` certificate by double click on it.
 
@@ -211,7 +211,7 @@ The platform is built using a modern tech stack, ensuring high performance and r
 - **Angular**: A widely-used front-end framework for building single-page applications with a focus on performance, maintainability, and testability.
 
 - **PostgreSQL**: A robust and reliable open-source relational database management system that provides powerful features, excellent performance, and scalability.
-Redis: An in-memory data structure store, used as a cache for enhanced performance and scalability.
+  Redis: An in-memory data structure store, used as a cache for enhanced performance and scalability.
 
 - **Nginx**: A webserver used to reverse proxy all the connected parts of the application.
 
@@ -224,7 +224,7 @@ The platform is organized into three main components:
 - **Server-side (Back-end)**: The server-side application is built using NestJS and provides a GraphQL API for interacting with the platform's data and services. It manages user authentication, resource management, course and activity management, notifications, and LMS integration. It also handles communication with the PostgreSQL database and Redis cache.
 
 - **Database and Cache**: PostgreSQL is used as the primary database for storing the platform's data, while Redis is used as a cache to improve performance and scalability.
-Modular Design
+  Modular Design
 
 #### Docker stack
 
@@ -250,8 +250,8 @@ Modular Design
 Here's a high-level overview of how the different parts interact:
 
 - Users access the web application through their browsers.
-The browsers send requests to the Nginx reverse proxy.
-Depending on the environment and request type:
+  The browsers send requests to the Nginx reverse proxy.
+  Depending on the environment and request type:
 
 - a. In development, Nginx forwards requests to the appropriate Angular or Nest.js application running on the host machine.
 
@@ -267,29 +267,29 @@ This hybrid approach allows for easy development and testing, while still levera
 
 This document describes the environnement configuration for the application, including the required environment variables and their descriptions. Proper configuration is crucial for the smooth operation of the system. Make sure to set these variables before running the application in development or production mode.
 
-| Name | Service | Description | Default |
-| --- | --- | --- | -- |
-| COMPOSE_HTTP_TIMEOUT | docker | Increase docker build timeout which is set to 20 by default | 200 |
-| POSTGRES_USER | postgres | PostgreSQL database username. | platon |
-| POSTGRES_PASSWORD | postgres | PostgreSQL database password. | test |
-| POSTGRES_DB | postgres | PostgreSQL database name. | platon |
-| PG_DATA | postgres | PostgreSQL data directory. | PG_DATA=/var/lib/postgresql/data |
-| PGADMIN_DEFAULT_EMAIL | pgadmin | PgAdmin default email for login. | test@test.com |
-| PGADMIN_DEFAULT_PASSWORD | pgadmin | PgAdmin default password for login. | test |
-| DB_NAME | api | Database name for the API service. | platon_db |
-| DB_USERNAME | api | Database username for the API service. | platon |
-| DB_PASSWORD | api | Database password for the API service. | test |
-| DB_HOST | api | Database host for the API service. | localhost |
-| DB_PORT | api | Database port for the API service. | 5432 |
-| REDIS_HOST | api | Sets django's `REDIS_HOST` value setting | localhost |
-| REDIS_PORT | api | Sets django's `REDIS_PORT` value setting | 6379 |
-| SECRET_KEY | api | Secret key for the API service. | secret |
-| PASSWORD_SALT | api | Secret key for the API service. | 10 |
-| JWT_ACCESS_TOKEN_LIFETIME | api | Access token lifetime for JWT authentication. | 7d |
-| JWT_REFRESH_TOKEN_LIFETIME | api | Refresh token lifetime for JWT authentication. | 7d |
-| GRAPHQL_PLAYGROUND | api | Enable/disable GraphQL Playground. | true |
-| SANDBOX_URL | api | Defines python sandbox url. | <http://localhost:7000> |
-| SERVER_NAME | nginx | Defines nginx server name. | localhost |
+| Name                       | Service  | Description                                                 | Default                          |
+| -------------------------- | -------- | ----------------------------------------------------------- | -------------------------------- |
+| COMPOSE_HTTP_TIMEOUT       | docker   | Increase docker build timeout which is set to 20 by default | 200                              |
+| POSTGRES_USER              | postgres | PostgreSQL database username.                               | platon                           |
+| POSTGRES_PASSWORD          | postgres | PostgreSQL database password.                               | test                             |
+| POSTGRES_DB                | postgres | PostgreSQL database name.                                   | platon                           |
+| PG_DATA                    | postgres | PostgreSQL data directory.                                  | PG_DATA=/var/lib/postgresql/data |
+| PGADMIN_DEFAULT_EMAIL      | pgadmin  | PgAdmin default email for login.                            | test@test.com                    |
+| PGADMIN_DEFAULT_PASSWORD   | pgadmin  | PgAdmin default password for login.                         | test                             |
+| DB_NAME                    | api      | Database name for the API service.                          | platon_db                        |
+| DB_USERNAME                | api      | Database username for the API service.                      | platon                           |
+| DB_PASSWORD                | api      | Database password for the API service.                      | test                             |
+| DB_HOST                    | api      | Database host for the API service.                          | localhost                        |
+| DB_PORT                    | api      | Database port for the API service.                          | 5432                             |
+| REDIS_HOST                 | api      | Sets django's `REDIS_HOST` value setting                    | localhost                        |
+| REDIS_PORT                 | api      | Sets django's `REDIS_PORT` value setting                    | 6379                             |
+| SECRET_KEY                 | api      | Secret key for the API service.                             | secret                           |
+| PASSWORD_SALT              | api      | Secret key for the API service.                             | 10                               |
+| JWT_ACCESS_TOKEN_LIFETIME  | api      | Access token lifetime for JWT authentication.               | 7d                               |
+| JWT_REFRESH_TOKEN_LIFETIME | api      | Refresh token lifetime for JWT authentication.              | 7d                               |
+| GRAPHQL_PLAYGROUND         | api      | Enable/disable GraphQL Playground.                          | true                             |
+| SANDBOX_URL                | api      | Defines python sandbox url.                                 | <http://localhost:7000>          |
+| SERVER_NAME                | nginx    | Defines nginx server name.                                  | localhost                        |
 
 ### Codebase Structure
 
@@ -300,7 +300,7 @@ The platform's codebase is organized into a series of libraries and applications
 - **Feature**: Contains modules for specific features, such as resource management, course and activity management, LMS integration, notifications, and more.
 
 - **Shared**: Contains shared code and utility functions that can be used across different libraries and applications.
-Development Workflow
+  Development Workflow
 
 Each library is organised intro 3 sub-libs :
 
@@ -327,7 +327,7 @@ This project is built using a variety of key libraries and frameworks that provi
 - **[NestJS GraphQL](https://docs.nestjs.com/graphql/quick-start)**: NestJS GraphQL is a module for NestJS that integrates the powerful [GraphQL](https://graphql.org/) query language into the framework. It allows the API service to expose a flexible and efficient GraphQL API for the frontend, enabling more precise and optimized data fetching.
 
 - **[Angular](https://angular.io/)**: Angular is a platform for building web applications with a declarative approach to building UI components. In this project, Angular is used to create the frontend application, which communicates with the NestJS API to provide a seamless user experience.
-In the development mode, the NestJS and Angular applications run on the host machine, while the Postgres, Redis, and other services run inside Docker containers. This hybrid approach allows for easier debugging and faster development, while still leveraging the benefits of containerization for the backend services.
+  In the development mode, the NestJS and Angular applications run on the host machine, while the Postgres, Redis, and other services run inside Docker containers. This hybrid approach allows for easier debugging and faster development, while still leveraging the benefits of containerization for the backend services.
 
 - **[Jison](https://gerhobbelt.github.io/jison/docs/)**: Jison is a JavaScript parser generator inspired by Bison and Yacc. In this project, Jison is used to create custom parsers for specific domain languages or complex expressions, enabling advanced features and providing more flexibility in user interactions.
 
@@ -338,15 +338,18 @@ In the development mode, the NestJS and Angular applications run on the host mac
 The `bin` folder contains a collection of scripts to perform various tasks related to the platform's development, deployment, and maintenance. These scripts are organized into subfolders based on their purpose, and they are designed to streamline the development process.
 
 - `/bin/docker`: These scripts are used to manage the Docker containers for the platform.
+
   - down.sh: Stops the Docker containers.
   - up.sh: Starts the Docker containers. Use --prod to launch the containers with the docker-compose.prod.yml configuration and -d to run the containers in the background.
 
 - `/bin/graphql`: These scripts are used to generate GraphQL types based on the platform's schema.
+
   - build.sh: Generates GraphQL types in the .graphql/types.ts folder from the schema.gql file.
 
 - `/bin/migration`: These scripts are used to manage TypeORM migrations.
+
   - `generate.sh`: Generates migrations based on changes in entities. Entities can be placed anywhere and must have the `.entity.ts` extension.
-  Example usage: `./bin/migration/generate.sh MyMigrationName`
+    Example usage: `./bin/migration/generate.sh MyMigrationName`
 
   - `create.sh`: Creates a new empty migration. Example usage: `./bin/migration/create.sh MyEmptyMigrationName`
 
@@ -354,6 +357,7 @@ The `bin` folder contains a collection of scripts to perform various tasks relat
   - `revert.sh`: Reverts the last migration.
 
 - `/bin/parser`: This script is used to generate the Jison parser.
+
   - `build.sh`: Generates the Jison parser from the `libs/feature/compiler/src/lib/pl.jison` file.
 
 - `/bin/shell`: These scripts are used to connect to Docker containers from the terminal.
@@ -379,6 +383,15 @@ To run the linting process, you can use the following commands:
 - For the entire workspace: `yarn lint`
 - For affected projects: `yarn affected:lint`
 
+In addition to linting, formatting your code is also essential for maintaining a clean and consistent codebase. Prettier is a popular code formatting tool that can be integrated into your project's development workflow.
+
+Prettier automatically enforces a consistent code style by parsing your code and reformatting it according to predefined rules. It helps eliminate debates about code formatting and ensures that all developers working on the project follow the same formatting guidelines.
+
+To run the formatting process, you can use the following commands:
+
+- For checking the code without applying formating: `yarn format:check`
+- For formatting the entire workspace: `yarn format`
+
 These scripts will analyze the codebase and provide a report of any linting issues found, helping you maintain a clean and consistent code style across the project.
 
 ### Deployment
@@ -400,7 +413,7 @@ These scripts will analyze the codebase and provide a report of any linting issu
   Make sure update the values. For more information on environment variables, refer to the Environment Configuration section of the documentation.
 
 - **Setup domain and SSL**: This project is configured to generate auto updated ssl certificates with let's encrypt and cerbot. If you plan to use this setup to generate ssl config for your domain, please follow theses steps first, otherwises you can ignore them.
-  
+
   - Update the `./bin/init-letsencrypt.sh` by replacing the `example.com` by your domain inside `domains=(example.com www.example.com)`.
   - Update the `.docker/nginx/nginx.prod.conf` by uncommenting all regions starting with `### BEGIN CERTBOT ONLY ###` and commenting all regions stating with `### BEGIN NON CERTBOT ONLY ###`.
   - Update the `volumes` section of the nginx service inside the `docker-compose.prod.yml` to uncomment the `# LET'S ENCRYPT SSL CONF` area.

@@ -17,10 +17,7 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": [
-          "libs/shared/ui/**/*.ts",
-          "libs/shared/ui/**/*.html"
-        ]
+        "lintFilePatterns": ["libs/shared/ui/**/*.ts", "libs/shared/ui/**/*.html"]
       }
     }
   },

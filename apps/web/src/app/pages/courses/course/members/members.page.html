@@ -5,12 +5,14 @@
         [roles]="roles"
         [allowGroup]="allowGroup"
         [excludes]="excludes"
-        (send)="add($event)" />
+        (send)="add($event)"
+      />
       <course-member-table
         [members]="members"
         [nonDeletables]="nonDeletables"
         [editable]="canEdit"
-        (deleted)="remove($event)" />
+        (deleted)="remove($event)"
+      />
     </mat-card-content>
   </mat-card>
 </section>

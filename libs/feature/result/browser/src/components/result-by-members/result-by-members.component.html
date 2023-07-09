@@ -1,14 +1,9 @@
-<nz-table
-  #nzTable
-  [nzData]="results"
-  [nzPageSize]="10"
-  nzTableLayout="auto"
-  nzBordered>
+<nz-table #nzTable [nzData]="results" [nzPageSize]="10" nzTableLayout="auto" nzBordered>
   <thead>
     <tr>
       <th>Utilisateur</th>
-      <ng-container *ngFor="let pair of results[0].exercises|keyvalue">
-        <td nzAlign="center">{{pair.value.title}}</td>
+      <ng-container *ngFor="let pair of results[0].exercises | keyvalue">
+        <td nzAlign="center">{{ pair.value.title }}</td>
       </ng-container>
     </tr>
   </thead>
@@ -18,13 +13,14 @@
         <td>
           <user-avatar [userIdOrName]="item.id" />
         </td>
-        <ng-container *ngFor="let pair of item.exercises|keyvalue">
+        <ng-container *ngFor="let pair of item.exercises | keyvalue">
           <td nzAlign="center">
             <mat-icon
               [nz-popover]="popover"
-              [nz-tooltip]="pair.value.state|answerStateLabel"
-              [style.color]="pair.value.state|answerStateColor">
-              {{pair.value.state|answerStateIcon}}
+              [nz-tooltip]="pair.value.state | answerStateLabel"
+              [style.color]="pair.value.state | answerStateColor"
+            >
+              {{ pair.value.state | answerStateIcon }}
             </mat-icon>
           </td>
           <ng-template #popover>
@@ -36,12 +32,12 @@
               </mat-card>
               <mat-card class="spacing" nz-col>
                 <mat-card-content>
-                  <nz-statistic nzTitle="Durée" [nzValue]="pair.value.duration|duration" />
+                  <nz-statistic nzTitle="Durée" [nzValue]="pair.value.duration | duration" />
                 </mat-card-content>
               </mat-card>
               <mat-card class="spacing" nz-col>
                 <mat-card-content>
-                <nz-statistic nzTitle="Note" [nzValue]="pair.value.grade" />
+                  <nz-statistic nzTitle="Note" [nzValue]="pair.value.grade" />
                 </mat-card-content>
               </mat-card>
             </div>

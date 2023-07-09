@@ -4,17 +4,22 @@
 <main>
   <nz-skeleton [nzActive]="loading" [nzLoading]="loading">
     <ui-stepper #stepper (finished)="create()">
-      <ng-template uiStepperStep stepTitle="Informations" stepIcon="info-circle" [stepValidator]="!!infos.valid">
+      <ng-template
+        uiStepperStep
+        stepTitle="Informations"
+        stepIcon="info-circle"
+        [stepValidator]="!!infos.valid"
+      >
         <section>
           <h4>Entrez les informations de base pour votre cours.</h4>
           <form [formGroup]="infos">
             <mat-form-field appearance="fill">
               <mat-label>Nom</mat-label>
-              <input matInput formControlName="name">
+              <input matInput formControlName="name" />
             </mat-form-field>
             <mat-form-field appearance="fill">
               <mat-label>Description</mat-label>
-              <textarea cdkTextareaAutosize  matInput formControlName="desc"></textarea>
+              <textarea cdkTextareaAutosize matInput formControlName="desc"></textarea>
             </mat-form-field>
           </form>
         </section>
@@ -31,14 +36,16 @@
       *ngIf="!stepper.isFirst"
       nz-button
       [disabled]="stepper.isFirst"
-      (click)="stepper.prevStep()">
+      (click)="stepper.prevStep()"
+    >
       Précedent
     </button>
     <button
       nz-button
       nzType="primary"
       [disabled]="!stepper.isValid"
-      (click)="infos.markAllAsTouched(); stepper.nextStep()">
+      (click)="infos.markAllAsTouched(); stepper.nextStep()"
+    >
       {{ stepper.isLast ? 'Créer' : 'Suivant'}}
     </button>
   </ng-template>

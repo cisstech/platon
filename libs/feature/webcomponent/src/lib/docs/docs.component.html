@@ -37,13 +37,13 @@
         </td>
         <td>{{ pair.value.description }}</td>
         <td>
-           <ng-container *ngIf="pair.value.enum;else elseBlock">
-             {{ pair.value.enum.join(' | ') }}
-           </ng-container>
-           <ng-template #elseBlock>
-             {{ pair.value.type }}
-           </ng-template>
-         </td>
+          <ng-container *ngIf="pair.value.enum; else elseBlock">
+            {{ pair.value.enum.join(' | ') }}
+          </ng-container>
+          <ng-template #elseBlock>
+            {{ pair.value.type }}
+          </ng-template>
+        </td>
         <td>{{ pair.value.default | json }}</td>
       </tr>
     </ng-container>

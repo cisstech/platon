@@ -1,22 +1,25 @@
-const glob = require('glob');
-const fs = require('fs');
-const path = require('path');
+const glob = require('glob')
+const fs = require('fs')
+const path = require('path')
 
 const getLcovFiles = function (src) {
   return new Promise((resolve, reject) => {
     glob(`${src}/**/lcov.info`, (error, result) => {
-      if (error) return reject(error);
-      resolve(result);
-    });
+      if (error) return reject(error)
+      resolve(result)
+    })
   })
-};
+}
 
-(async function(){
+;(async function () {
   fs.mkdirSync('coverage', { recursive: true })
-  const files = await getLcovFiles('coverage');
-  const mergedReport = files.reduce((mergedReport, currFile) => mergedReport += fs.readFileSync(currFile), '');
+  const files = await getLcovFiles('coverage')
+  const mergedReport = files.reduce(
+    (mergedReport, currFile) => (mergedReport += fs.readFileSync(currFile)),
+    ''
+  )
   await fs.writeFile(path.resolve('./coverage/lcov.info'), mergedReport, (err) => {
-    if (err) throw err;
-    console.log('The file has been saved!');
-  });
-})();
+    if (err) throw err
+    console.log('The file has been saved!')
+  })
+})()

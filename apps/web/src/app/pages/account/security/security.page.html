@@ -10,14 +10,11 @@
             #control
             formControlName="password"
             [username]="user.username"
-            [hasPassword]="user.hasPassword" />
+            [hasPassword]="user.hasPassword"
+          />
         </mat-card-content>
       </mat-card>
-      <button
-        [disabled]="!control.isValid"
-        nz-button
-        nzType="primary"
-        type="submit">
+      <button [disabled]="!control.isValid" nz-button nzType="primary" type="submit">
         Enregistrer
       </button>
     </form>

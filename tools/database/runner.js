@@ -10,7 +10,7 @@ const logger = createLogger({
   ),
 })
 
-require('dotenv').config();
+require('dotenv').config()
 
 const DB_HOST = process.env.DB_HOST
 const DB_USERNAME = process.env.DB_USERNAME
@@ -25,7 +25,6 @@ const queryRunner = new Client({
   password: DB_PASSWORD,
   database: DB_NAME,
 })
-
 
 exports.run = async (consumer) => {
   const start = new Date()

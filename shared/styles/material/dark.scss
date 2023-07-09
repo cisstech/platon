@@ -2,22 +2,23 @@
 @import 'base';
 
 $mat-typography: mat.define-typography-config(
-  $font-family: var(--brand-font)
+  $font-family: var(--brand-font),
 );
 
 @include mat.core();
 
-
-$mat-light-theme: mat.define-dark-theme((
-  color: (
-    primary: $theme-primary,
-    accent: $theme-accent,
-    warn: $theme-warn,
-    foreground: $mat-light-theme-foreground,
-    background: $mat-light-theme-background
-  ),
-  typography: $mat-typography,
-  density: 0
-));
+$mat-light-theme: mat.define-dark-theme(
+  (
+    color: (
+      primary: $theme-primary,
+      accent: $theme-accent,
+      warn: $theme-warn,
+      foreground: $mat-light-theme-foreground,
+      background: $mat-light-theme-background,
+    ),
+    typography: $mat-typography,
+    density: 0,
+  )
+);
 
 @include mat.all-component-themes($mat-light-theme);

@@ -6,7 +6,8 @@
   nzTitle="Notifications"
   [nzFooter]="footer"
   [nzBodyStyle]="{ padding: 0 }"
-  (nzOnClose)="visible = !visible">
+  (nzOnClose)="visible = !visible"
+>
   <ng-container *nzDrawerContent>
     <notif-list [(notifications)]="notifications" />
   </ng-container>

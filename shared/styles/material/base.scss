@@ -1,7 +1,7 @@
-$brand-color-primary: #171C8F;
-$brand-color-primary-rgb: 23,28,143;
+$brand-color-primary: #171c8f;
+$brand-color-primary-rgb: 23, 28, 143;
 $brand-color-primary-contrast: #ffffff;
-$brand-color-primary-contrast-rgb: 255,255,255;
+$brand-color-primary-contrast-rgb: 255, 255, 255;
 $brand-color-primary-shade: #14197e;
 $brand-color-primary-tint: #2e339a;
 
@@ -18,7 +18,6 @@ $brand-color-tertiary-contrast: #ffffff;
 $brand-color-tertiary-contrast-rgb: 255, 255, 255;
 $brand-color-tertiary-shade: #633ce0;
 $brand-color-tertiary-tint: #7e57ff;
-
 
 // FOREGROUND LIGHT
 
@@ -45,12 +44,12 @@ $mat-light-theme-foreground: (
   text: $dark-primary-text,
   slider-min: $dark-primary-text,
   slider-off: rgba($dark-text, 0.26),
-  slider-off-active: $dark-disabled-text
+  slider-off-active: $dark-disabled-text,
 );
 
 // BACKGROUND LIGHT
 
-$light-background: #FFFFFF;
+$light-background: #ffffff;
 $light-bg-darker-5: darken($light-background, 5%);
 $light-bg-darker-10: darken($light-background, 10%);
 $light-bg-darker-20: darken($light-background, 20%);
@@ -102,7 +101,7 @@ $mat-dark-theme-foreground: (
   text: $light-text,
   slider-min: $light-text,
   slider-off: rgba($light-text, 0.3),
-  slider-off-active: rgba($light-text, 0.3)
+  slider-off-active: rgba($light-text, 0.3),
 );
 
 // BACKGROUND DARK
@@ -139,39 +138,44 @@ $mat-primary: (
   main: $brand-color-primary,
   lighter: $brand-color-primary-tint,
   darker: $brand-color-primary-shade,
-  200: $brand-color-primary, // SLIDE TOGGLE COLOR
-  contrast: (
-    main: $light-primary-text,
-    lighter: $light-primary-text,
-    darker: $light-primary-text
-  )
+  200: $brand-color-primary,
+  // SLIDE TOGGLE COLOR
+  contrast:
+    (
+      main: $light-primary-text,
+      lighter: $light-primary-text,
+      darker: $light-primary-text,
+    ),
 );
 
 $mat-accent: (
   main: $brand-color-secondary,
   lighter: $brand-color-secondary-tint,
   darker: $brand-color-secondary-shade,
-  200: $brand-color-primary, // SLIDE TOGGLE COLOR
-  contrast: (
-    main: $light-primary-text,
-    lighter: $dark-primary-text,
-    darker: $light-primary-text
-  )
+  200: $brand-color-primary,
+  // SLIDE TOGGLE COLOR
+  contrast:
+    (
+      main: $light-primary-text,
+      lighter: $dark-primary-text,
+      darker: $light-primary-text,
+    ),
 );
 
 $mat-warn: (
   main: $brand-color-tertiary,
   lighter: $brand-color-tertiary-tint,
   darker: $brand-color-tertiary-shade,
-  200: $brand-color-primary, // SLIDE TOGGLE COLOR
-  contrast: (
-    main: $light-primary-text,
-    lighter: $dark-primary-text,
-    darker: $light-primary-text
-  )
+  200: $brand-color-primary,
+  // SLIDE TOGGLE COLOR
+  contrast:
+    (
+      main: $light-primary-text,
+      lighter: $dark-primary-text,
+      darker: $light-primary-text,
+    ),
 );
 
 $theme-primary: mat.define-palette($mat-primary, main, lighter, darker);
 $theme-accent: mat.define-palette($mat-accent, main, lighter, darker);
 $theme-warn: mat.define-palette($mat-warn, main, lighter, darker);
-
