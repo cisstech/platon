@@ -1,22 +1,22 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { NotFoundResponse, OrderingDirections, UserOrderings } from '@platon/core/common';
-import { ResourceWatcherFilters } from '@platon/feature/resource/common';
-import { Repository } from 'typeorm';
-import { Optional } from "typescript-optional";
-import { ResourceWatcherEntity } from './watcher.entity';
+import { Injectable } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { NotFoundResponse, OrderingDirections, UserOrderings } from '@platon/core/common'
+import { ResourceWatcherFilters } from '@platon/feature/resource/common'
+import { Repository } from 'typeorm'
+import { Optional } from 'typescript-optional'
+import { ResourceWatcherEntity } from './watcher.entity'
 
 @Injectable()
 export class ResourceWatcherService {
   constructor(
     @InjectRepository(ResourceWatcherEntity)
     private readonly repository: Repository<ResourceWatcherEntity>
-  ) { }
+  ) {}
 
   async findByUserId(resourceId: string, userId: string): Promise<Optional<ResourceWatcherEntity>> {
     return Optional.ofNullable(
       await this.repository.findOne({ where: { resourceId, userId }, relations: { user: true } })
-    );
+    )
   }
 
   async search(
@@ -28,25 +28,28 @@ export class ResourceWatcherService {
     query.where('watcher.resource_id = :resourceId', { resourceId })
 
     if (filters.search) {
-      query.andWhere(`(
+      query.andWhere(
+        `(
         user.username ILIKE :search
         OR user.email ILIKE :search
         OR f_unaccent(user.first_name) ILIKE f_unaccent(:search)
         OR f_unaccent(user.last_name) ILIKE f_unaccent(:search)
-      )`, { search: `%${filters.search}%` })
+      )`,
+        { search: `%${filters.search}%` }
+      )
     }
 
     if (filters.order) {
       const fields: Record<UserOrderings, string> = {
-        'NAME': 'user.username',
-        'CREATED_AT': 'watcher.created_at',
-        'UPDATED_AT': 'watcher.updated_at',
+        NAME: 'user.username',
+        CREATED_AT: 'watcher.created_at',
+        UPDATED_AT: 'watcher.updated_at',
       }
 
       const orderings: Record<UserOrderings, keyof typeof OrderingDirections> = {
-        'NAME': 'ASC',
-        'CREATED_AT': 'DESC',
-        'UPDATED_AT': 'DESC',
+        NAME: 'ASC',
+        CREATED_AT: 'DESC',
+        UPDATED_AT: 'DESC',
       }
 
       query.orderBy(fields[filters.order], filters.direction || orderings[filters.order])
@@ -66,9 +69,7 @@ export class ResourceWatcherService {
   }
 
   async create(input: Partial<ResourceWatcherEntity>): Promise<ResourceWatcherEntity> {
-    return this.repository.save(
-      this.repository.create(input)
-    );
+    return this.repository.save(this.repository.create(input))
   }
 
   async updateByUserId(
@@ -80,11 +81,11 @@ export class ResourceWatcherService {
     if (!resource) {
       throw new NotFoundResponse(`ResourceWatcher not found: ${userId}`)
     }
-    Object.assign(resource, changes);
-    return this.repository.save(resource);
+    Object.assign(resource, changes)
+    return this.repository.save(resource)
   }
 
   async deleteByUserId(resourceId: string, userId: string) {
-    return this.repository.delete({ resourceId, userId });
+    return this.repository.delete({ resourceId, userId })
   }
 }

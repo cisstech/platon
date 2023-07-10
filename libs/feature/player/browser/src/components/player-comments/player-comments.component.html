@@ -1,6 +1,6 @@
 <nz-list [nzDataSource]="comments" [nzRenderItem]="item" [nzItemLayout]="'horizontal'">
   <ng-template #item let-item>
-    <nz-comment [nzAuthor]="author" [nzDatetime]="(item.createdAt|date:'dd/MM/yyy HH:mm')!">
+    <nz-comment [nzAuthor]="author" [nzDatetime]="(item.createdAt | date : 'dd/MM/yyy HH:mm')!">
       <ng-template #author>
         <user-avatar [userIdOrName]="item.authorId" />
       </ng-template>
@@ -21,7 +21,8 @@
         nzType="primary"
         [nzLoading]="submitting"
         [disabled]="!input.trim()"
-        (click)="onSubmitComment()">
+        (click)="onSubmitComment()"
+      >
         Publier
       </button>
     </nz-form-item>

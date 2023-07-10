@@ -1,9 +1,9 @@
-import { Routes } from '@angular/router';
-import { LoginPage } from './login.page';
+import { Routes } from '@angular/router'
+import { LoginPage } from './login.page'
 
 export default [
   {
     path: '',
-    component: LoginPage
+    component: LoginPage,
   },
-] as Routes;
+] as Routes

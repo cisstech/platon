@@ -1,14 +1,14 @@
-import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common'
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core'
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzFormModule } from 'ng-zorro-antd/form';
-import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzButtonModule } from 'ng-zorro-antd/button'
+import { NzFormModule } from 'ng-zorro-antd/form'
+import { NzGridModule } from 'ng-zorro-antd/grid'
 
-import { UserSearchBarComponent } from '@platon/core/browser';
-import { User, UserGroup, UserRoles } from '@platon/core/common';
-import { CreateCourseMember } from '@platon/feature/course/common';
+import { UserSearchBarComponent } from '@platon/core/browser'
+import { User, UserGroup, UserRoles } from '@platon/core/common'
+import { CreateCourseMember } from '@platon/feature/course/common'
 
 @Component({
   standalone: true,
@@ -24,27 +24,26 @@ import { CreateCourseMember } from '@platon/feature/course/common';
     NzFormModule,
     NzButtonModule,
 
-    UserSearchBarComponent
-  ]
+    UserSearchBarComponent,
+  ],
 })
 export class CourseMemberFormComponent {
   readonly form = new FormGroup({
-    'userOrGroup': new FormControl<User | UserGroup | undefined>(undefined, Validators.required),
-  });
+    userOrGroup: new FormControl<User | UserGroup | undefined>(undefined, Validators.required),
+  })
 
-  @Input() roles: (UserRoles | keyof typeof UserRoles)[] = [];
-  @Input() excludes: string[] = [];
-  @Input() allowGroup = false;
+  @Input() roles: (UserRoles | keyof typeof UserRoles)[] = []
+  @Input() excludes: string[] = []
+  @Input() allowGroup = false
 
-
-  @Output() send = new EventEmitter<CreateCourseMember>();
+  @Output() send = new EventEmitter<CreateCourseMember>()
 
   protected sendInvitation(): void {
-    const value = this.form.value.userOrGroup as (User | UserGroup);
+    const value = this.form.value.userOrGroup as User | UserGroup
     this.send.emit({
       id: value.id,
-      isGroup: !('username' in value)
-    });
-    this.form.patchValue({ userOrGroup: null });
+      isGroup: !('username' in value),
+    })
+    this.form.patchValue({ userOrGroup: null })
   }
 }

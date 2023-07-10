@@ -16,4 +16,14 @@ nz-spin {
 
 button {
   margin: 12px 0;
+  margin-right: 8px;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+}
+
+.spacer {
+  flex: 1;
 }

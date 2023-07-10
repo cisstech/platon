@@ -1,4 +1,4 @@
-import { ViewColumn, ViewEntity } from 'typeorm';
+import { ViewColumn, ViewEntity } from 'typeorm'
 
 /**
  * CourseMemberView represents a database view that selects distinct users from
@@ -23,20 +23,20 @@ import { ViewColumn, ViewEntity } from 'typeorm';
 })
 export class CourseMemberView {
   @ViewColumn()
-  id!: string;
+  id!: string
 
   @ViewColumn()
-  username!: string;
+  username!: string
 
   @ViewColumn({ name: 'first_name' })
-  firstName!: string;
+  firstName!: string
 
   @ViewColumn({ name: 'last_name' })
-  lastName!: string;
+  lastName!: string
 
   @ViewColumn()
-  email!: string;
+  email!: string
 
   @ViewColumn({ name: 'course_id' })
-  courseId!: string;
+  courseId!: string
 }

@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger'
 import {
   ActivityPlayer,
   EvalExerciseInput,
@@ -14,87 +14,81 @@ import {
   PlayExerciseOuput,
   PreviewInput,
   PreviewOuput,
-} from '@platon/feature/player/common';
-import {
-  IsEnum,
-  IsObject,
-  IsOptional,
-  IsString,
-  IsUUID,
-} from 'class-validator';
+} from '@platon/feature/player/common'
+import { IsEnum, IsObject, IsOptional, IsString, IsUUID } from 'class-validator'
 
 export class PreviewInputDTO implements PreviewInput {
   @IsString()
   @ApiProperty()
-  version!: string;
+  version!: string
 
   @IsString()
   @ApiProperty()
-  resource!: string;
+  resource!: string
 }
 
 export class PlayAnswersInputDTO implements PlayAnswersInput {
   @IsUUID()
   @ApiProperty()
-  sessionId!: string;
+  sessionId!: string
 }
 
 export class PlayExerciseInputDTO implements PlayExerciseInput {
   @IsUUID()
   @ApiProperty()
-  activitySessionId!: string;
+  activitySessionId!: string
 
   @IsUUID(undefined, { each: true })
   @ApiProperty()
-  exerciseSessionIds!: string[];
+  exerciseSessionIds!: string[]
 }
 
 export class PlayActivityInputDTO implements PlayActivityInput {
   @IsUUID()
   @ApiProperty()
-  activityId!: string;
+  activityId!: string
 }
 
 export class EvalExerciseInputDTO implements EvalExerciseInput {
   @IsEnum(PlayerActions)
   @ApiProperty()
-  action!: PlayerActions;
+  action!: PlayerActions
 
   @IsUUID()
   @ApiProperty()
-  sessionId!: string;
+  sessionId!: string
 
   @IsObject()
   @ApiProperty()
-  answers!: Record<string, unknown>;
+  answers!: Record<string, unknown>
 }
 
 export class PreviewOuputDTO implements PreviewOuput {
   @IsOptional()
-  exercise?: ExercisePlayer;
+  exercise?: ExercisePlayer
 
   @IsOptional()
-  activity?: ActivityPlayer;
+  activity?: ActivityPlayer
 }
 
 export class PlayAnswersOutputDTO implements PlayAnswersOutput {
-  exercises!: ExercisePlayer[];
+  exercises!: ExercisePlayer[]
 }
 
 export class PlayExerciseOuputDTO implements PlayExerciseOuput {
-  exercises!: ExercisePlayer[];
+  exercises!: ExercisePlayer[]
 
   @IsOptional()
-  navigation?: PlayerNavigation;
+  navigation?: PlayerNavigation
 }
 
 export class PlayActivityOutputDTO implements PlayActivityOuput {
-  activity!: ActivityPlayer;
+  activity!: ActivityPlayer
 }
 
 export class EvalExerciseOutputDTO implements EvalExerciseOutput {
-  exercise!: ExercisePlayer;
+  exercise!: ExercisePlayer
 
   @IsOptional()
-  navigation?: PlayerNavigation;
+  navigation?: PlayerNavigation
 }

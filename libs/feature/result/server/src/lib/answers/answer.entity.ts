@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { BaseEntity, UserEntity } from '@platon/core/server';
-import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
-import { SessionEntity } from '../sessions/session.entity';
-
+import { BaseEntity, UserEntity } from '@platon/core/server'
+import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm'
+import { SessionEntity } from '../sessions/session.entity'
 
 @Entity('Answers')
 @Index('Answers_user_id_session_id_idx', ['userId', 'sessionId'])
@@ -28,4 +27,3 @@ export class AnswerEntity extends BaseEntity {
   @Column({ type: 'float', default: -1 })
   grade!: number
 }
-

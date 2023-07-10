@@ -4,9 +4,7 @@
   [class.horizontal]="state.horizontal"
   [(ngModel)]="state.selection"
 >
-  <ng-container
-    *ngFor="let item of state.items; let i = index; trackBy: trackBy"
-  >
+  <ng-container *ngFor="let item of state.items; let i = index; trackBy: trackBy">
     <div
       class="radio-item"
       [ngClass]="item.css | css : 'class'"
@@ -14,11 +12,7 @@
       (click)="state.selection = item.content; $event.stopPropagation()"
       [class.selected]="state.selection === item.content"
     >
-      <mat-radio-button
-        color="primary"
-        [name]="item.content"
-        [value]="item.content"
-      >
+      <mat-radio-button color="primary" [name]="item.content" [value]="item.content">
         <nge-markdown [data]="item.content"></nge-markdown>
       </mat-radio-button>
     </div>

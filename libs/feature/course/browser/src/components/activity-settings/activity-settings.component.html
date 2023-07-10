@@ -1,30 +1,68 @@
 <nz-skeleton [nzActive]="loading" [nzLoading]="loading">
   <form [formGroup]="form">
-    <h4 id="openDates">Souhaitez-vous limiter l'accès de cette activité à une date en particulier?</h4>
+    <h4 id="openDates">
+      Souhaitez-vous limiter l'accès de cette activité à une date en particulier?
+    </h4>
     <nz-range-picker
       [nzShowTime]="true"
       [nzDisabledDate]="disabledDate"
       aria-labelledby="openDates"
-      formControlName="openDates" />
-    <h4 id="members">Souhaitez-vous limiter l'accès de cette activité à des utilisateurs en particulier?</h4>
+      formControlName="openDates"
+    />
+    <h4 id="members">
+      Souhaitez-vous limiter l'accès de cette activité à des utilisateurs en particulier?
+    </h4>
     <course-member-select
       [members]="courseMembers"
       formControlName="members"
       placeholder="Laissez la sélection vide pour permettre l'accès à tous, y compris aux nouveaux membres."
-      />
+    />
     <h4 id="correctors">Souhaitez-vous ajouter des correcteurs à cette activité?</h4>
     <course-member-select
       [members]="courseMembers"
       formControlName="correctors"
       placeholder="Laissez la sélection vide si cette activité est auto-corrigée."
-      />
+    />
     <nz-spin *ngIf="updating" nzTip="Modification de l'activité..."></nz-spin>
-    <button
-      nz-button
-      [disabled]="!form.valid"
-      nzType="primary"
-      (click)="update()">
-      Modifier
-    </button>
+    <div class="actions">
+      <button nz-button [disabled]="!form.valid" nzType="primary" (click)="update()">
+        Modifier
+      </button>
+      <div class="spacer"></div>
+      <button
+        nz-button
+        nzDanger
+        nz-popconfirm
+        [nzPopconfirmTitle]="confirmReload"
+        nzPopconfirmPlacement="top"
+        (nzOnConfirm)="reload()"
+      >
+        Recharger
+      </button>
+      <button
+        nz-button
+        nzDanger
+        nzType="primary"
+        nz-popconfirm
+        [nzPopconfirmTitle]="confirmDelete"
+        nzPopconfirmPlacement="top"
+        (nzOnConfirm)="delete()"
+      >
+        Supprimer
+      </button>
+    </div>
   </form>
 </nz-skeleton>
+
+<ng-template #confirmReload>
+  <p>Êtes-vous sûr de vouloir recharger cette activité?</p>
+  <ul>
+    <li>L'activité sera remplacée par sa dernière version publiée.</li>
+    <li>Après avoir supprimé l'activité, toutes ses réponses seront effacées.</li>
+  </ul>
+</ng-template>
+
+<ng-template #confirmDelete>
+  <p>Êtes-vous sûr de vouloir supprimer cette activité?</p>
+  <p>Après avoir supprimé l'activité, toutes ses réponses seront effacées.</p>
+</ng-template>

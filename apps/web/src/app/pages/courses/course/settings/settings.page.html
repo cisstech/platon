@@ -1,6 +1,12 @@
 <nz-tabset nzTabPosition="left" nzLinkRouter>
   <nz-tab>
-    <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'informations' }" queryParamsHandling="merge">
+    <a
+      *nzTabLink
+      nz-tab-link
+      [routerLink]="['.']"
+      [queryParams]="{ tab: 'informations' }"
+      queryParamsHandling="merge"
+    >
       Informations
     </a>
     <app-course-informations />

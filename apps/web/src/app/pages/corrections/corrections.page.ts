@@ -1,11 +1,11 @@
-import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { CommonModule } from '@angular/common'
+import { ChangeDetectionStrategy, Component } from '@angular/core'
 
-import { MatIconModule } from '@angular/material/icon';
+import { MatIconModule } from '@angular/material/icon'
 
-import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
+import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb'
 
-import { UiLayoutTabsComponent, UiLayoutTabsTitleDirective } from '@platon/shared/ui';
+import { UiLayoutTabsComponent, UiLayoutTabsTitleDirective } from '@platon/shared/ui'
 
 @Component({
   standalone: true,
@@ -19,6 +19,6 @@ import { UiLayoutTabsComponent, UiLayoutTabsTitleDirective } from '@platon/share
     NzBreadCrumbModule,
     UiLayoutTabsComponent,
     UiLayoutTabsTitleDirective,
-  ]
+  ],
 })
-export class CorrectionsPage { }
+export class CorrectionsPage {}

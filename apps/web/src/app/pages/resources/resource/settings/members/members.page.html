@@ -8,7 +8,8 @@
       <resource-invitation-table
         [invitations]="invitations"
         [editable]="canEdit"
-        (deleted)="deleteInvitation($event)" />
+        (deleted)="deleteInvitation($event)"
+      />
     </mat-card-content>
   </mat-card>
 </section>
@@ -21,7 +22,8 @@
       <resource-member-table
         [members]="members"
         [editable]="canEdit"
-        (deleted)="deleteMember($event)" />
+        (deleted)="deleteMember($event)"
+      />
     </mat-card-content>
   </mat-card>
 </section>

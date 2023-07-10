@@ -1,26 +1,20 @@
-import { Injectable, Injector, NgModule } from '@angular/core';
-import {
-  CONTRIBUTION,
-  EditorService, IContribution
-} from '@cisstech/nge-ide/core';
-import { Subscription } from 'rxjs';
-import { PlaEditor } from './pla-editor';
-
+import { Injectable, Injector, NgModule } from '@angular/core'
+import { CONTRIBUTION, EditorService, IContribution } from '@cisstech/nge-ide/core'
+import { Subscription } from 'rxjs'
+import { PlaEditor } from './pla-editor'
 
 @Injectable()
 export class Contribution implements IContribution {
-  private readonly subscriptions: Subscription[] = [];
-  readonly id = 'platon.contrib.pla';
+  private readonly subscriptions: Subscription[] = []
+  readonly id = 'platon.contrib.pla'
 
   activate(injector: Injector) {
-    const editorService = injector.get(EditorService);
-    editorService.registerEditors(
-      new PlaEditor()
-    );
+    const editorService = injector.get(EditorService)
+    editorService.registerEditors(new PlaEditor())
   }
 
   deactivate(): void | Promise<void> {
-    this.subscriptions.forEach(s => s.unsubscribe());
+    this.subscriptions.forEach((s) => s.unsubscribe())
   }
 }
 
@@ -33,4 +27,4 @@ export class Contribution implements IContribution {
     },
   ],
 })
-export class PlaEditorContributionModule { }
+export class PlaEditorContributionModule {}

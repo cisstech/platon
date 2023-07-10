@@ -2,3 +2,12 @@
 
 /dist
 /coverage
+/.angular
+/.github
+/.docker
+/.graphql
+/.vscode
+/tmp
+/node_modules
+.gql
+/resources

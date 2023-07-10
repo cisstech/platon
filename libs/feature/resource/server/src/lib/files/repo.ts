@@ -1,57 +1,70 @@
-import { StreamableFile } from '@nestjs/common';
-import { FileTypes, FileVersion, FileVersions, ResourceFile, ResourceTypes } from '@platon/feature/resource/common';
-import { FileExistsError, FileNotFoundError, isDirectory, isFile, NotADirectoryError, PermissionError, uniquifyFileName, withTempFile } from '@platon/shared/server';
-import * as fs from 'fs';
-import * as git from 'isomorphic-git';
-import * as Path from 'path';
-import { simpleGit } from 'simple-git';
+import { StreamableFile } from '@nestjs/common'
+import {
+  FileTypes,
+  FileVersion,
+  FileVersions,
+  ResourceFile,
+  ResourceTypes,
+} from '@platon/feature/resource/common'
+import {
+  FileExistsError,
+  FileNotFoundError,
+  isDirectory,
+  isFile,
+  NotADirectoryError,
+  PermissionError,
+  uniquifyFileName,
+  withTempFile,
+} from '@platon/shared/server'
+import * as fs from 'fs'
+import * as git from 'isomorphic-git'
+import * as Path from 'path'
+import { simpleGit } from 'simple-git'
 
-const BASE = Path.join(process.cwd(), 'resources');
-const ROOT = '.';
-const DEFAULT_BRANCH = 'main';
+const BASE = Path.join(process.cwd(), 'resources')
+const ROOT = '.'
+const DEFAULT_BRANCH = 'main'
 
-export const LATEST = 'latest';
-
+export const LATEST = 'latest'
 
 interface User {
-  name: string;
+  name: string
   email?: string
 }
 
-type Node = ResourceFile;
+type Node = ResourceFile
 
 export class Repo {
-  private ignoreCommits = false;
-  private readonly resource = this.root.split('/').pop() as string;
+  private ignoreCommits = false
+  private readonly resource = this.root.split('/').pop() as string
   private readonly repo = {
     fs,
-    dir: this.root
+    dir: this.root,
   }
 
-  private constructor(
-    private readonly root: string,
-    private readonly user: User
+  private constructor(private readonly root: string, private readonly user: User) {}
+
+  static async get(
+    name: string,
+    options?: {
+      user?: User
+      create?: boolean
+      type?: ResourceTypes
+    }
   ) {
-  }
-
-  static async get(name: string, options?: {
-    user?: User,
-    create?: boolean,
-    type?: ResourceTypes,
-  }) {
-    const dir = Path.join(BASE, name);
-    const exists = fs.existsSync(dir);
+    const dir = Path.join(BASE, name)
+    const exists = fs.existsSync(dir)
     if (!exists && !options?.create) {
-      throw new FileNotFoundError(name);
+      throw new FileNotFoundError(name)
     }
 
     const instance = new Repo(dir, {
       name: options?.user?.name || 'noname',
-      email: options?.user?.email || 'noname'
-    });
+      email: options?.user?.email || 'noname',
+    })
 
     if (!exists) {
-      await git.init({ fs, dir, defaultBranch: DEFAULT_BRANCH });
+      await git.init({ fs, dir, defaultBranch: DEFAULT_BRANCH })
       try {
         await fs.promises.cp(
           Path.join(BASE, 'templates', options?.type?.toLowerCase() as string),
@@ -67,21 +80,21 @@ export class Repo {
       await instance.commit('init')
     }
 
-    return instance;
+    return instance
   }
 
   // Creation
 
   exists(path: string) {
-    return fs.existsSync(this.abspath(path));
+    return fs.existsSync(this.abspath(path))
   }
 
   isDir(path: string) {
-    return isDirectory(this.abspath(path));
+    return isDirectory(this.abspath(path))
   }
 
   isFile(path: string) {
-    return isFile(this.abspath(path));
+    return isFile(this.abspath(path))
   }
 
   /**
@@ -94,10 +107,10 @@ export class Repo {
    * `PermissionError`: If `path` points to a file outside of the current directory.
    */
   async mkdir(path: string): Promise<void> {
-    const abspath = this.abspath(path);
-    await fs.promises.mkdir(abspath);
-    await fs.promises.writeFile(Path.join(abspath, '.keep'), ''); // allow to list empty directories
-    await this.commit(`create ${path}`);
+    const abspath = this.abspath(path)
+    await fs.promises.mkdir(abspath)
+    await fs.promises.writeFile(Path.join(abspath, '.keep'), '') // allow to list empty directories
+    await this.commit(`create ${path}`)
   }
 
   /**
@@ -111,9 +124,9 @@ export class Repo {
    * - `PermissionError`: If `path` points to a file outside of the current directory.
    */
   async touch(path: string, content?: string): Promise<void> {
-    const abspath = this.abspath(path);
-    await fs.promises.writeFile(abspath, content || '');
-    await this.commit(`create ${path}`);
+    const abspath = this.abspath(path)
+    await fs.promises.writeFile(abspath, content || '')
+    await this.commit(`create ${path}`)
   }
 
   /**
@@ -126,30 +139,30 @@ export class Repo {
    * - `PermissionError`: If the operation is not permitted.
    */
   async move(src: string, dst: string, copy = false) {
-    const absSrcPath = this.abspath(src);
-    let absDstPath = this.abspath(dst, true);
+    const absSrcPath = this.abspath(src)
+    let absDstPath = this.abspath(dst, true)
 
     if (!isDirectory(absDstPath)) {
-      throw new NotADirectoryError(dst);
+      throw new NotADirectoryError(dst)
     }
 
     //  move inside the same directory
     if (!copy && Path.dirname(absSrcPath) === Path.resolve(absDstPath)) {
-      return;
+      return
     }
 
-    absDstPath = uniquifyFileName(absDstPath, Path.basename(absSrcPath));
+    absDstPath = uniquifyFileName(absDstPath, Path.basename(absSrcPath))
     if (copy) {
       if (isDirectory(absSrcPath)) {
-        await fs.promises.cp(absSrcPath, absDstPath, { recursive: true });
+        await fs.promises.cp(absSrcPath, absDstPath, { recursive: true })
       } else {
-        await fs.promises.copyFile(absSrcPath, absDstPath, fs.constants.COPYFILE_EXCL);
+        await fs.promises.copyFile(absSrcPath, absDstPath, fs.constants.COPYFILE_EXCL)
       }
     } else {
-      await fs.promises.rename(absSrcPath, absDstPath);
+      await fs.promises.rename(absSrcPath, absDstPath)
     }
 
-    await this.commit(`${copy ? 'copy' : 'move'} ${src} to ${dst}`);
+    await this.commit(`${copy ? 'copy' : 'move'} ${src} to ${dst}`)
   }
 
   /**
@@ -166,11 +179,9 @@ export class Repo {
     const oabspath = this.abspath(oldPath)
     const nabspath = this.abspath(newPath)
 
-    if (!this.exists(oabspath))
-      throw new FileNotFoundError(oldPath)
+    if (!this.exists(oabspath)) throw new FileNotFoundError(oldPath)
 
-    if (this.exists(nabspath))
-      throw new FileExistsError(oldPath)
+    if (this.exists(nabspath)) throw new FileExistsError(oldPath)
 
     if (Path.dirname(oabspath) !== Path.dirname(nabspath)) {
       throw new PermissionError('new file name should be inside the same directory')
@@ -189,39 +200,41 @@ export class Repo {
    * - `PermissionError`: If `oldpath` or `newpath` points to a file outside of the current directory.
    */
   async remove(path: string): Promise<void> {
-    const abspath = this.abspath(path);
+    const abspath = this.abspath(path)
     if (!this.exists(abspath)) {
       throw new FileNotFoundError('path')
     }
-    await fs.promises.rm(abspath, { recursive: true });
-    await this.commit(`delete ${path}`);
+    await fs.promises.rm(abspath, { recursive: true })
+    await this.commit(`delete ${path}`)
   }
 
   // Write/Read
 
   async read(path = ROOT, version = LATEST): Promise<[Node, Promise<Uint8Array>?]> {
-    path = path || ROOT;
+    path = path || ROOT
 
-    const ref = version === 'latest' ? 'HEAD' : version;
-    const prefix = path === ROOT ? '' : path;
+    const ref = version === 'latest' ? 'HEAD' : version
+    const prefix = path === ROOT ? '' : path
 
-    let match: Node | undefined;
-    let download: Promise<Uint8Array> | undefined;
+    let match: Node | undefined
+    let download: Promise<Uint8Array> | undefined
 
     await git.walk({
       ...this.repo,
       trees: [git.TREE({ ref })],
       map: async (filepath, [entry]) => {
-        if (match && match.type === 'file')
+        if (match && match.type === 'file') return
+
+        if (
+          filepath !== ROOT &&
+          (!filepath.startsWith(prefix) || Path.basename(filepath).startsWith('.'))
+        )
           return
 
-        if (filepath !== ROOT && (!filepath.startsWith(prefix) || Path.basename(filepath).startsWith('.')))
-          return;
-
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const [oid, type] = await Promise.all([entry!.oid(), entry!.type()]);
+        const [oid, type] = await Promise.all([entry!.oid(), entry!.type()])
 
-        const base = `/api/v1/files/${this.resource}/${filepath === '.' ? '' : filepath}`;
+        const base = `/api/v1/files/${this.resource}/${filepath === '.' ? '' : filepath}`
 
         const node: Node = {
           oid,
@@ -233,30 +246,30 @@ export class Repo {
           resourceId: this.resource,
           describeUrl: `${base}?describe`,
           downloadUrl: `${base}?download&version=${version}`,
-        };
+        }
 
         if (filepath === path) {
-          match = node;
+          match = node
           if (type === 'blob') {
-            match = node;
-            download = (entry?.content() as Promise<Uint8Array>)
+            match = node
+            download = entry?.content() as Promise<Uint8Array>
           }
         }
-        return node;
+        return node
       },
       reduce: (parent, children) => {
         if (parent && parent.type !== FileTypes.file) {
           Object.assign(parent, { children })
         }
-        return parent;
-      }
-    });
+        return parent
+      },
+    })
 
     if (!match) {
-      throw new FileNotFoundError(path);
+      throw new FileNotFoundError(path)
     }
 
-    return [match, download];
+    return [match, download]
   }
 
   /**
@@ -269,104 +282,117 @@ export class Repo {
    * - `PermissionError`: If `path` points to a file outside of the current directory.
    */
   async write(path: string, data: string | Buffer) {
-    const abspath = this.abspath(path);
+    const abspath = this.abspath(path)
     if (!this.exists(abspath)) {
-      throw new FileNotFoundError(abspath);
+      throw new FileNotFoundError(abspath)
     }
-    await fs.promises.writeFile(abspath, data);
-    await this.commit(`update ${path}`);
+    await fs.promises.writeFile(abspath, data)
+    await this.commit(`update ${path}`)
   }
 
   async upload(src: string, dst: string) {
     const abspath = this.abspath(dst)
     const dirname = Path.dirname(abspath)
-    const basename = Path.basename(abspath);
-    await fs.promises.rename(src, uniquifyFileName(dirname, basename));
+    const basename = Path.basename(abspath)
+    await fs.promises.rename(src, uniquifyFileName(dirname, basename))
     await this.commit(`upload ${dst}`)
   }
 
   // Git
 
   async commit(message: string): Promise<boolean> {
-    if (this.ignoreCommits)
-      return false;
+    if (this.ignoreCommits) return false
 
     // add all
-    await git.statusMatrix(this.repo).then((status) =>
-      Promise.all(
-        status.map(([filepath, , worktreeStatus]) =>
-          worktreeStatus ? git.add({ ...this.repo, filepath }) : git.remove({ ...this.repo, filepath })
+    await git
+      .statusMatrix(this.repo)
+      .then((status) =>
+        Promise.all(
+          status.map(([filepath, , worktreeStatus]) =>
+            worktreeStatus
+              ? git.add({ ...this.repo, filepath })
+              : git.remove({ ...this.repo, filepath })
+          )
         )
       )
-    )
 
     await git.commit({
       ...this.repo,
       message,
       author: this.user,
-      committer: this.user
+      committer: this.user,
     })
 
-    return true;
+    return true
   }
 
   async bundle(version = LATEST) {
-    return await withTempFile(async path => {
-      await simpleGit(this.root).raw('bundle', 'create', path, 'HEAD', version === LATEST ? DEFAULT_BRANCH : 'latest')
-      const file = fs.createReadStream(path);
-      return new StreamableFile(file);
-    }, { prefix: 'bundles', suffix: '.git', cleanup: false })
+    return await withTempFile(
+      async (path) => {
+        await simpleGit(this.root).raw(
+          'bundle',
+          'create',
+          path,
+          'HEAD',
+          version === LATEST ? DEFAULT_BRANCH : 'latest'
+        )
+        const file = fs.createReadStream(path)
+        return new StreamableFile(file)
+      },
+      { prefix: 'bundles', suffix: '.git', cleanup: false }
+    )
   }
 
   async archive(path = ROOT, version = LATEST) {
-    version = version === LATEST ? 'HEAD' : version;
-    return withTempFile(async tmppath => {
-      await simpleGit(this.repo.dir).raw([
-        'archive', '-o', tmppath, `${version}:${path}`
-      ]);
-      return tmppath;
-    }, { prefix: 'archives', suffix: '.zip', cleanup: false })
+    version = version === LATEST ? 'HEAD' : version
+    return withTempFile(
+      async (tmppath) => {
+        await simpleGit(this.repo.dir).raw(['archive', '-o', tmppath, `${version}:${path}`])
+        return tmppath
+      },
+      { prefix: 'archives', suffix: '.zip', cleanup: false }
+    )
   }
 
   async search(options: {
-    query: string,
-    matchWord?: boolean,
-    matchCase?: boolean,
+    query: string
+    matchWord?: boolean
+    matchCase?: boolean
     useRegex?: boolean
   }) {
-
     if (!options.query) {
-      throw new TypeError('query is required');
+      throw new TypeError('query is required')
     }
 
-    const { query, matchCase, matchWord, useRegex } = options;
+    const { query, matchCase, matchWord, useRegex } = options
 
-    const args: string[] = [];
+    const args: string[] = []
 
     args.push('-I') // no binary files
 
     if (!useRegex) {
-      args.push('-F');
+      args.push('-F')
     }
 
     if (matchWord) {
-      args.push('-w');
+      args.push('-w')
     }
 
     if (!matchCase) {
-      args.push('-i');
+      args.push('-i')
     }
 
-    return simpleGit(this.root).grep(query, args);
+    return simpleGit(this.root).grep(query, args)
   }
 
   async versions(): Promise<FileVersions> {
     const tags = await simpleGit(this.repo.dir).tags({
-      '--format': '%(refname:lstrip=2) %(taggername) %(taggeremail) %(creatordate:iso-strict) %(subject)',
-    });
+      '--format':
+        '%(refname:lstrip=2) %(taggername) %(taggeremail) %(creatordate:iso-strict) %(subject)',
+    })
 
     const parse = (tag: string): FileVersion => {
-      const [name, taggerName, taggerEmail, createdAt, message] = tag.split(' ');
+      const [name, taggerName, taggerEmail, createdAt, message] = tag.split(' ')
       return {
         tag: name,
         tagger: {
@@ -375,12 +401,12 @@ export class Repo {
         },
         createdAt: createdAt,
         message: message,
-      };
+      }
     }
 
     return {
       all: tags.all.map(parse),
-      latest: tags.latest ? parse(tags.latest) : undefined
+      latest: tags.latest ? parse(tags.latest) : undefined,
     }
   }
 
@@ -398,35 +424,34 @@ export class Repo {
   }
 
   async withNoCommit<T = unknown>(consumer: () => Promise<T>): Promise<T> {
-    this.ignoreCommits = true;
+    this.ignoreCommits = true
     try {
-      return await consumer();
+      return await consumer()
     } finally {
-      this.ignoreCommits = false;
+      this.ignoreCommits = false
     }
   }
 
   private abspath(path = ROOT, authorizeRoot = false) {
-    path = (path || ROOT).trim();
+    path = (path || ROOT).trim()
     if (path.startsWith('/')) {
       // ensure that path does not point to a file outside of self.root
       if (!path.startsWith(this.root + '/')) {
         throw new PermissionError(`${path}: points to an invalid file`)
       }
-      return path;
+      return path
     }
 
     if (path === '.') {
-      if (authorizeRoot)
-        return this.root;
-      throw new PermissionError("path should not points to root.")
+      if (authorizeRoot) return this.root
+      throw new PermissionError('path should not points to root.')
     }
 
     // ensure that path does not point to a file outside of self.root
-    const abspath = Path.resolve(Path.join(this.root, path));
+    const abspath = Path.resolve(Path.join(this.root, path))
     if (!abspath.startsWith(this.root + '/')) {
       throw new PermissionError(`${path}: points to an invalid file`)
     }
-    return abspath;
+    return abspath
   }
 }

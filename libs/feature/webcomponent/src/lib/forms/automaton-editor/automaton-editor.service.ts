@@ -1,168 +1,162 @@
-import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
-import {
-  Automaton,
-  automatonFromString,
-  emptyAutomaton,
-  Point,
-  Transition,
-} from './automaton';
-import { AutomatonEditorState } from './automaton-editor';
+import { Injectable } from '@angular/core'
+import { Subject } from 'rxjs'
+import { Automaton, automatonFromString, emptyAutomaton, Point, Transition } from './automaton'
+import { AutomatonEditorState } from './automaton-editor'
 
 /**
  * Automaton editor API.
  */
 @Injectable()
 export class AutomatonEditorService {
-  private state!: AutomatonEditorState;
+  private state!: AutomatonEditorState
 
-  private readonly createStateEvent = new Subject<string>();
-  private readonly createTransitionEvent = new Subject<Transition>();
-  private readonly createInitialStateEvent = new Subject<string>();
-  private readonly createAcceptingStateEvent = new Subject<string>();
+  private readonly createStateEvent = new Subject<string>()
+  private readonly createTransitionEvent = new Subject<Transition>()
+  private readonly createInitialStateEvent = new Subject<string>()
+  private readonly createAcceptingStateEvent = new Subject<string>()
 
-  private readonly removeStateEvent = new Subject<string>();
-  private readonly removeTransitionEvent = new Subject<Transition>();
-  private readonly removeInitialStateEvent = new Subject<string>();
-  private readonly removeAcceptingStateEvent = new Subject<string>();
+  private readonly removeStateEvent = new Subject<string>()
+  private readonly removeTransitionEvent = new Subject<Transition>()
+  private readonly removeInitialStateEvent = new Subject<string>()
+  private readonly removeAcceptingStateEvent = new Subject<string>()
 
   private readonly renameStateEvent = new Subject<{
-    oldName: string;
-    newName: string;
-  }>();
-  private readonly renameTransitionEvent = new Subject<Transition>();
+    oldName: string
+    newName: string
+  }>()
+  private readonly renameTransitionEvent = new Subject<Transition>()
 
   get onCreateState() {
-    return this.createStateEvent.asObservable();
+    return this.createStateEvent.asObservable()
   }
   get onCreateTransition() {
-    return this.createTransitionEvent.asObservable();
+    return this.createTransitionEvent.asObservable()
   }
   get onCreateInitialState() {
-    return this.createInitialStateEvent.asObservable();
+    return this.createInitialStateEvent.asObservable()
   }
   get onCreateAcceptingState() {
-    return this.createAcceptingStateEvent.asObservable();
+    return this.createAcceptingStateEvent.asObservable()
   }
 
   get onRemoveState() {
-    return this.removeStateEvent.asObservable();
+    return this.removeStateEvent.asObservable()
   }
   get onRemoveTransition() {
-    return this.removeTransitionEvent.asObservable();
+    return this.removeTransitionEvent.asObservable()
   }
   get onRemoveInitialState() {
-    return this.removeInitialStateEvent.asObservable();
+    return this.removeInitialStateEvent.asObservable()
   }
   get onRemoveAcceptingState() {
-    return this.removeAcceptingStateEvent.asObservable();
+    return this.removeAcceptingStateEvent.asObservable()
   }
 
   get onRenameState() {
-    return this.renameStateEvent.asObservable();
+    return this.renameStateEvent.asObservable()
   }
   get onRenameTransition() {
-    return this.renameTransitionEvent.asObservable();
+    return this.renameTransitionEvent.asObservable()
   }
 
   private get automaton() {
     try {
       if (typeof this.state.automaton === 'string') {
-        this.state.automaton = automatonFromString(this.state.automaton);
+        this.state.automaton = automatonFromString(this.state.automaton)
       } else if (!this.state.automaton) {
-        this.state.automaton = emptyAutomaton();
+        this.state.automaton = emptyAutomaton()
       }
     } catch (error) {
-      console.log(error);
-      this.state.automaton = emptyAutomaton();
+      console.log(error)
+      this.state.automaton = emptyAutomaton()
     }
-    const automaton = this.state.automaton;
-    if (!automaton.position) automaton.position = {};
-    if (!automaton.states) automaton.states = [];
-    if (!automaton.initialStates) automaton.initialStates = [];
-    if (!automaton.acceptingStates) automaton.acceptingStates = [];
-    if (!automaton.alphabet) automaton.alphabet = [];
-    if (!automaton.transitions) automaton.transitions = [];
-    return automaton;
+    const automaton = this.state.automaton
+    if (!automaton.position) automaton.position = {}
+    if (!automaton.states) automaton.states = []
+    if (!automaton.initialStates) automaton.initialStates = []
+    if (!automaton.acceptingStates) automaton.acceptingStates = []
+    if (!automaton.alphabet) automaton.alphabet = []
+    if (!automaton.transitions) automaton.transitions = []
+    return automaton
   }
 
   private set automaton(value: Automaton) {
-    this.state.automaton = value;
+    this.state.automaton = value
   }
 
   private get alphabet() {
-    return this.automaton.alphabet;
+    return this.automaton.alphabet
   }
 
   private set alphabet(value: string[]) {
-    this.automaton.alphabet = value;
+    this.automaton.alphabet = value
   }
 
   private get states() {
-    return this.automaton.states;
+    return this.automaton.states
   }
 
   private set states(value: string[]) {
-    this.automaton.states = value;
+    this.automaton.states = value
   }
 
   private get position() {
     if (!this.automaton.position) {
-      this.automaton.position = {};
+      this.automaton.position = {}
     }
-    return this.automaton.position;
+    return this.automaton.position
   }
 
   private set position(value: Record<string, Point>) {
-    this.automaton.position = value;
+    this.automaton.position = value
   }
 
   private get transitions() {
-    return this.automaton.transitions;
+    return this.automaton.transitions
   }
 
   private set transitions(value: Transition[]) {
-    this.automaton.transitions = value;
+    this.automaton.transitions = value
   }
 
   private get initialStates() {
-    return this.automaton.initialStates;
+    return this.automaton.initialStates
   }
 
   private set initialStates(value: string[]) {
-    this.automaton.initialStates = value;
+    this.automaton.initialStates = value
   }
 
   private get acceptingStates() {
-    return this.automaton.acceptingStates;
+    return this.automaton.acceptingStates
   }
 
   private set acceptingStates(value: string[]) {
-    this.automaton.acceptingStates = value;
+    this.automaton.acceptingStates = value
   }
 
   sync(state: AutomatonEditorState) {
-    this.state = state;
-    this.validate();
+    this.state = state
+    this.validate()
   }
 
   findPosition(name: string) {
-    return this.position[name];
+    return this.position[name]
   }
 
   forEachState(consumer: (name: string) => void) {
-    this.states.forEach(consumer);
+    this.states.forEach(consumer)
   }
 
   forEachTransition(consumer: (transition: Transition) => void) {
-    this.transitions.forEach(consumer);
+    this.transitions.forEach(consumer)
   }
 
   /**
    * Generates new state name.
    */
   stateName() {
-    return 'S' + (this.states.length + 1);
+    return 'S' + (this.states.length + 1)
   }
 
   /**
@@ -170,7 +164,7 @@ export class AutomatonEditorService {
    * @param name The state name to test.
    */
   isState(name: string) {
-    return this.states.find((e) => e === name) != null;
+    return this.states.find((e) => e === name) != null
   }
 
   /**
@@ -178,9 +172,7 @@ export class AutomatonEditorService {
    * @param name The state name to test.
    */
   isInitial(state: string) {
-    return (
-      this.isState(state) && this.initialStates.find((e) => e === state) != null
-    );
+    return this.isState(state) && this.initialStates.find((e) => e === state) != null
   }
 
   /**
@@ -188,10 +180,7 @@ export class AutomatonEditorService {
    * @param name The state name to test.
    */
   isAccepting(state: string) {
-    return (
-      this.isState(state) &&
-      this.acceptingStates.find((e) => e === state) != null
-    );
+    return this.isState(state) && this.acceptingStates.find((e) => e === state) != null
   }
 
   /**
@@ -203,15 +192,15 @@ export class AutomatonEditorService {
    */
   addState(name: string, x: number, y: number) {
     if (!this.isState(name)) {
-      this.states.push(name);
-      this.moveState(name, x, y);
+      this.states.push(name)
+      this.moveState(name, x, y)
       if (!this.initialStates.length) {
-        this.addInitial(name);
+        this.addInitial(name)
       }
-      this.createStateEvent.next(name);
-      return true;
+      this.createStateEvent.next(name)
+      return true
     }
-    return false;
+    return false
   }
 
   /**
@@ -221,7 +210,7 @@ export class AutomatonEditorService {
    * @param y New y position.
    */
   moveState(name: string, x: number, y: number) {
-    this.position[name] = { x, y };
+    this.position[name] = { x, y }
   }
 
   /**
@@ -232,11 +221,11 @@ export class AutomatonEditorService {
    */
   addInitial(name: string) {
     if (!this.isInitial(name)) {
-      this.initialStates.push(name);
-      this.createInitialStateEvent.next(name);
-      return true;
+      this.initialStates.push(name)
+      this.createInitialStateEvent.next(name)
+      return true
     }
-    return false;
+    return false
   }
 
   /**
@@ -246,14 +235,14 @@ export class AutomatonEditorService {
    * @returns `true` if the state is added `false` otherwises.
    */
   addAccepting(name: string) {
-    if (!this.isState(name)) return false;
+    if (!this.isState(name)) return false
 
     if (!this.isAccepting(name)) {
-      this.acceptingStates.push(name);
-      this.createAcceptingStateEvent.next(name);
-      return true;
+      this.acceptingStates.push(name)
+      this.createAcceptingStateEvent.next(name)
+      return true
     }
-    return false;
+    return false
   }
 
   /**
@@ -270,18 +259,15 @@ export class AutomatonEditorService {
    */
   removeState(name: string) {
     if (this.remove(this.states, (e) => e === name)) {
-      delete this.position[name];
-      this.removeInitial(name);
-      this.removeAccepting(name);
-      this.remove(
-        this.transitions,
-        (t) => t.fromState === name || t.toState === name
-      );
-      this.validate();
-      this.removeStateEvent.next(name);
-      return true;
+      delete this.position[name]
+      this.removeInitial(name)
+      this.removeAccepting(name)
+      this.remove(this.transitions, (t) => t.fromState === name || t.toState === name)
+      this.validate()
+      this.removeStateEvent.next(name)
+      return true
     }
-    return false;
+    return false
   }
 
   /**
@@ -292,10 +278,10 @@ export class AutomatonEditorService {
    */
   removeInitial(name: string) {
     if (this.remove(this.initialStates, (e) => e === name)) {
-      this.removeInitialStateEvent.next(name);
-      return true;
+      this.removeInitialStateEvent.next(name)
+      return true
     }
-    return false;
+    return false
   }
 
   /**
@@ -306,10 +292,10 @@ export class AutomatonEditorService {
    */
   removeAccepting(name: string) {
     if (this.remove(this.acceptingStates, (e) => e === name)) {
-      this.removeAcceptingStateEvent.next(name);
-      return true;
+      this.removeAcceptingStateEvent.next(name)
+      return true
     }
-    return false;
+    return false
   }
 
   /**
@@ -320,51 +306,51 @@ export class AutomatonEditorService {
    */
   renameState(oldName: string, newName: string) {
     if (!this.isState(oldName)) {
-      return false;
+      return false
     }
 
     // replace in states
     this.states = [
       newName,
       ...this.states.filter((state) => {
-        return state !== oldName;
+        return state !== oldName
       }),
-    ];
+    ]
 
     // replace in initials
     this.initialStates = this.initialStates.map((state) => {
       if (state === oldName) {
-        return newName;
+        return newName
       }
-      return state;
-    });
+      return state
+    })
 
     // replace in finals
     this.acceptingStates = this.acceptingStates.map((state) => {
       if (state === oldName) {
-        return newName;
+        return newName
       }
-      return state;
-    });
+      return state
+    })
 
     // replace in transitions
     this.automaton.transitions.forEach((transition) => {
       if (transition.fromState === oldName) {
-        transition.fromState = newName;
+        transition.fromState = newName
       }
       if (transition.toState === oldName) {
-        transition.toState = newName;
+        transition.toState = newName
       }
-    });
+    })
 
     // replace in position
-    this.position[newName] = this.position[oldName];
+    this.position[newName] = this.position[oldName]
 
-    delete this.position[oldName];
+    delete this.position[oldName]
 
-    this.validate();
-    this.renameStateEvent.next({ oldName, newName });
-    return true;
+    this.validate()
+    this.renameStateEvent.next({ oldName, newName })
+    return true
   }
 
   /**
@@ -373,10 +359,8 @@ export class AutomatonEditorService {
    */
   isTransition(transition: Transition) {
     return this.transitions.find((e) => {
-      return (
-        e.fromState === transition.fromState && e.toState === transition.toState
-      );
-    });
+      return e.fromState === transition.fromState && e.toState === transition.toState
+    })
   }
 
   /**
@@ -387,12 +371,12 @@ export class AutomatonEditorService {
    */
   addTransition(transition: Transition) {
     if (!this.isTransition(transition)) {
-      this.transitions.push(transition);
-      this.validate();
-      this.createTransitionEvent.next(transition);
-      return true;
+      this.transitions.push(transition)
+      this.validate()
+      this.createTransitionEvent.next(transition)
+      return true
     }
-    return false;
+    return false
   }
 
   /**
@@ -404,17 +388,14 @@ export class AutomatonEditorService {
   removeTransition(transition: Transition) {
     if (
       this.remove(this.transitions, (e) => {
-        return (
-          e.fromState === transition.fromState &&
-          e.toState === transition.toState
-        );
+        return e.fromState === transition.fromState && e.toState === transition.toState
       })
     ) {
-      this.validate();
-      this.removeTransitionEvent.next(transition);
-      return true;
+      this.validate()
+      this.removeTransitionEvent.next(transition)
+      return true
     }
-    return false;
+    return false
   }
 
   /**
@@ -424,16 +405,15 @@ export class AutomatonEditorService {
    */
   renameTransition(transition: Transition, symbols: string[]) {
     const tr = this.transitions.find(
-      (e) =>
-        e.fromState === transition.fromState && e.toState === transition.toState
-    );
+      (e) => e.fromState === transition.fromState && e.toState === transition.toState
+    )
     if (tr) {
-      tr.symbols = [...symbols];
-      this.validate();
-      this.renameTransitionEvent.next(tr);
-      return true;
+      tr.symbols = [...symbols]
+      this.validate()
+      this.renameTransitionEvent.next(tr)
+      return true
     }
-    return false;
+    return false
   }
 
   /**
@@ -441,30 +421,30 @@ export class AutomatonEditorService {
    * @param predicate The predicate to test.
    */
   findTransition(predicate: (transition: Transition) => boolean) {
-    return this.transitions.find(predicate);
+    return this.transitions.find(predicate)
   }
 
   private validate() {
-    const alphabet: string[] = [];
+    const alphabet: string[] = []
     this.transitions.forEach((transition) => {
       transition.symbols.forEach((symbol) => {
         if (!alphabet.includes(symbol)) {
-          alphabet.push(symbol);
+          alphabet.push(symbol)
         }
-      });
-    });
-    this.alphabet = alphabet;
+      })
+    })
+    this.alphabet = alphabet
   }
 
   private remove<T>(array: T[], predicate: (e: T) => boolean) {
-    let i = 0;
+    let i = 0
     for (const e of array) {
       if (predicate(e)) {
-        array.splice(i, 1);
-        return true;
+        array.splice(i, 1)
+        return true
       }
-      i++;
+      i++
     }
-    return false;
+    return false
   }
 }

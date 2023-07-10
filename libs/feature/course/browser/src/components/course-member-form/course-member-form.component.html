@@ -1,8 +1,4 @@
-<form
-  nz-form
-  nzLayout="vertical"
-  [formGroup]="form"
-  (ngSubmit)="sendInvitation()">
+<form nz-form nzLayout="vertical" [formGroup]="form" (ngSubmit)="sendInvitation()">
   <nz-form-item>
     <nz-form-control>
       <user-search-bar
@@ -12,7 +8,8 @@
         [multi]="false"
         [allowGroup]="allowGroup"
         [filters]="{ roles, limit: 5}"
-        [excludes]="excludes">
+        [excludes]="excludes"
+      >
         <button nz-button type="submit" nzType="primary" [disabled]="!form.valid">Ajouter</button>
       </user-search-bar>
     </nz-form-control>

@@ -1,6 +1,6 @@
-import { Logger, Module } from '@nestjs/common';
-import { APP_FILTER } from '@nestjs/core';
-import { ErrorsFilter } from './errors.filter';
+import { Logger, Module } from '@nestjs/common'
+import { APP_FILTER } from '@nestjs/core'
+import { ErrorsFilter } from './errors.filter'
 
 @Module({
   controllers: [],
@@ -9,7 +9,7 @@ import { ErrorsFilter } from './errors.filter';
     {
       provide: APP_FILTER,
       useClass: ErrorsFilter,
-    }
+    },
   ],
   exports: [],
 })

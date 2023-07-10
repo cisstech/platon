@@ -1,15 +1,14 @@
-import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common'
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
 
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzTableModule } from 'ng-zorro-antd/table';
-import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import { NzButtonModule } from 'ng-zorro-antd/button'
+import { NzIconModule } from 'ng-zorro-antd/icon'
+import { NzTableModule } from 'ng-zorro-antd/table'
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 
-import { PendingCorrection } from '@platon/feature/result/common';
-import { NzEmptyModule } from 'ng-zorro-antd/empty';
-import { RouterModule } from '@angular/router';
-
+import { PendingCorrection } from '@platon/feature/result/common'
+import { NzEmptyModule } from 'ng-zorro-antd/empty'
+import { RouterModule } from '@angular/router'
 
 @Component({
   standalone: true,
@@ -26,8 +25,8 @@ import { RouterModule } from '@angular/router';
     NzTableModule,
     NzButtonModule,
     NzToolTipModule,
-  ]
+  ],
 })
 export class CorrectionPendingsComponent {
-  @Input() corrections!: PendingCorrection[];
+  @Input() corrections!: PendingCorrection[]
 }

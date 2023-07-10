@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { PubSubService } from '@platon/core/server';
-import { NotificationFilters } from '@platon/feature/notification/common';
-import { EntityManager, In, IsNull, Repository } from 'typeorm';
-import { NotificationEntity } from './notification.entity';
-import { ON_CHANGE_NOTIFICATIONS } from './notification.pubsub';
+import { Injectable } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { PubSubService } from '@platon/core/server'
+import { NotificationFilters } from '@platon/feature/notification/common'
+import { EntityManager, In, IsNull, Repository } from 'typeorm'
+import { NotificationEntity } from './notification.entity'
+import { ON_CHANGE_NOTIFICATIONS } from './notification.pubsub'
 
 @Injectable()
 export class NotificationService {
@@ -12,33 +12,45 @@ export class NotificationService {
     @InjectRepository(NotificationEntity)
     private readonly repository: Repository<NotificationEntity>,
 
-    private readonly pubSubService: PubSubService,
-  ) { }
+    private readonly pubSubService: PubSubService
+  ) {}
 
-  async sendToUser<T extends object>(userId: string, data: T, entityManager?: EntityManager): Promise<NotificationEntity> {
+  async sendToUser<T extends object>(
+    userId: string,
+    data: T,
+    entityManager?: EntityManager
+  ): Promise<NotificationEntity> {
     const newNotification = entityManager
       ? await entityManager.save(entityManager.create(NotificationEntity, { userId, data }))
       : await this.repository.save(this.repository.create({ userId, data }))
-      ;
-
     await this.pubSubService.publish(ON_CHANGE_NOTIFICATIONS, {
       onChangeNotifications: {
         userId: newNotification.userId,
         newNotification,
       },
-    });
+    })
 
-    return newNotification;
+    return newNotification
   }
 
-  async sendToAllUsers<T extends object>(users: string[], data: T, entityManager?: EntityManager): Promise<void> {
-    await Promise.all(users.map(userId => {
-      return this.sendToUser(userId, data, entityManager)
-    }));
+  async sendToAllUsers<T extends object>(
+    users: string[],
+    data: T,
+    entityManager?: EntityManager
+  ): Promise<void> {
+    await Promise.all(
+      users.map((userId) => {
+        return this.sendToUser(userId, data, entityManager)
+      })
+    )
   }
 
-  async ofUser(userId: string, filters: NotificationFilters = {}): Promise<[NotificationEntity[], number]> {
-    const query = this.repository.createQueryBuilder('notification')
+  async ofUser(
+    userId: string,
+    filters: NotificationFilters = {}
+  ): Promise<[NotificationEntity[], number]> {
+    const query = this.repository
+      .createQueryBuilder('notification')
       .where('user_id = :userId', { userId })
       .orderBy('created_at', 'DESC')
 
@@ -54,29 +66,32 @@ export class NotificationService {
       query.limit(filters.limit)
     }
 
-    return query.getManyAndCount();
+    return query.getManyAndCount()
   }
 
   async markAsRead(ids: string[]): Promise<NotificationEntity[]> {
     await this.repository.update(ids, { readAt: new Date() })
     return this.repository.find({
       where: { id: In(ids) },
-    });
+    })
   }
 
   async markAsUnread(ids: string[]): Promise<NotificationEntity[]> {
     await this.repository.update(ids, { readAt: null })
     return this.repository.find({
       where: { id: In(ids) },
-    });
+    })
   }
 
   async markAllAsRead(userId: string): Promise<boolean> {
-    await this.repository.update({
-      userId,
-      readAt: IsNull(),
-    }, { readAt: new Date() })
-    return true;
+    await this.repository.update(
+      {
+        userId,
+        readAt: IsNull(),
+      },
+      { readAt: new Date() }
+    )
+    return true
   }
 
   async delete(ids: string[]): Promise<number> {
@@ -94,8 +109,8 @@ export class NotificationService {
       where: {
         userId,
         readAt: IsNull(),
-      }
-    });
+      },
+    })
   }
 
   notifyUserAboutChanges(userId: string): Promise<void> {
@@ -103,6 +118,6 @@ export class NotificationService {
       onChangeNotifications: {
         userId,
       },
-    });
+    })
   }
 }

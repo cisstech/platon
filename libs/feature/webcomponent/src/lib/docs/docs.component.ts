@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { WebComponentDefinition } from '../web-component';
+import { Component } from '@angular/core'
+import { WebComponentDefinition } from '../web-component'
 
 @Component({
   selector: 'wc-docs',
@@ -7,5 +7,5 @@ import { WebComponentDefinition } from '../web-component';
   styleUrls: ['./docs.component.scss'],
 })
 export class DocsComponent {
-  definition!: WebComponentDefinition;
+  definition!: WebComponentDefinition
 }

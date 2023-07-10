@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { BaseEntity, UserEntity } from '@platon/core/server';
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
-
+import { BaseEntity, UserEntity } from '@platon/core/server'
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm'
 
 @Entity('Corrections')
 export class CorrectionEntity extends BaseEntity {

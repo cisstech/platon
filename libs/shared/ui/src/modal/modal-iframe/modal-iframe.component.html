@@ -13,10 +13,11 @@
   nzMaskClosable="true"
   (nzOnOk)="close(true)"
   (nzOnCancel)="close()"
-  [nzFooter]="modalFooter">
+  [nzFooter]="modalFooter"
+>
   <ng-container *nzModalContent>
     <ng-container *ngIf="visible && url">
-      <iframe [src]="url|safe:'resource'" frameborder="0"></iframe>
+      <iframe [src]="url | safe : 'resource'" frameborder="0"></iframe>
     </ng-container>
   </ng-container>
 </nz-modal>

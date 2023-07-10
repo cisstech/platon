@@ -1,13 +1,13 @@
-import * as fs from 'fs';
-import * as Path from 'path';
-import { v4 as uuidv4 } from 'uuid';
+import * as fs from 'fs'
+import * as Path from 'path'
+import { v4 as uuidv4 } from 'uuid'
 
 /**
  * Options for reading a file.
  */
 interface ReadFileOptions {
-  flag?: string;
-  encoding?: BufferEncoding;
+  flag?: string
+  encoding?: BufferEncoding
 }
 
 /**
@@ -28,11 +28,11 @@ export const createNodeSandboxAPI = (baseDir: string) => {
      * @throws {Error} If the path is not accessible within the sandbox environment.
      */
     readFile: (path: string, options?: ReadFileOptions) => {
-      path = Path.join(baseDir, path);
+      path = Path.join(baseDir, path)
       if (!path.startsWith(baseDir)) {
-        throw new Error(`You cannot access this path.`);
+        throw new Error(`You cannot access this path.`)
       }
-      return fs.readFileSync(path, options);
+      return fs.readFileSync(path, options)
     },
 
     /**
@@ -41,7 +41,7 @@ export const createNodeSandboxAPI = (baseDir: string) => {
      * @returns The component object with a CID and selector.
      */
     component: (selector: string) => {
-      return { cid: uuidv4(), selector };
-    }
-  };
-};
+      return { cid: uuidv4(), selector }
+    },
+  }
+}

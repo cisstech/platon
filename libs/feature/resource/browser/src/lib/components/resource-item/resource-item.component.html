@@ -1,20 +1,22 @@
-<nz-ribbon [nzText]="item.status|resourceStatus" [nzColor]="item.status|resourceStatusColor">
+<nz-ribbon [nzText]="item.status | resourceStatus" [nzColor]="item.status | resourceStatusColor">
   <ui-list-item-article
-    [style.--border-color]="item.type|resourceColor"
+    [style.--border-color]="item.type | resourceColor"
     [articleTitle]="name"
     [articleTags]="tags"
     [articleIconTemplate]="image"
     [articleDescription]="desc"
     [articleUrl]="['/resources/', item.id]"
-    (didClickTag)="didTapTag.emit($event)">
+    (didClickTag)="didTapTag.emit($event)"
+  >
     <ng-template #image>
-      <mat-icon>{{item.type|resourceIcon}}</mat-icon>
+      <mat-icon>{{ item.type | resourceIcon }}</mat-icon>
     </ng-template>
     <ui-list-item-article-action
-      (click)="modalMode ? openUrl(editorUrl) :  iframe.open(editorUrl)"
+      (click)="modalMode ? openUrl(editorUrl) : iframe.open(editorUrl)"
       class="action"
       actionTitle="Éditer"
-      nz-tooltip="Éditer">
+      nz-tooltip="Éditer"
+    >
       <i nz-icon nzType="edit" nzTheme="outline"></i>
     </ui-list-item-article-action>
     <ng-container *ngIf="item.type !== 'CIRCLE'">
@@ -22,14 +24,16 @@
         (click)="modalMode ? openUrl(previewUrl) : iframe.open(previewUrl)"
         class="action"
         actionTitle="Prévisualiser"
-        nz-tooltip="Prévisualiser">
+        nz-tooltip="Prévisualiser"
+      >
         <i nz-icon nzType="play-circle" nzTheme="outline"></i>
       </ui-list-item-article-action>
     </ng-container>
     <div class="spacer"></div>
     <ui-list-item-article-action
-      [actionTitle]="$any(item.updatedAt|date:'dd/MM/yyyy')"
-      [nz-tooltip]="'Mise à jour le ' + $any(item.updatedAt|date:'dd/MM/yyyy')">
+      [actionTitle]="$any(item.updatedAt | date : 'dd/MM/yyyy')"
+      [nz-tooltip]="'Mise à jour le ' + $any(item.updatedAt | date : 'dd/MM/yyyy')"
+    >
       <i nz-icon nzType="reload" nzTheme="outline"></i>
     </ui-list-item-article-action>
   </ui-list-item-article>

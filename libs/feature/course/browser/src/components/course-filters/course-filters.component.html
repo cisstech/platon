@@ -4,13 +4,16 @@
   nzPlacement="right"
   nzTitle="Recherche avancée"
   [nzFooter]="footer"
-  (nzOnClose)="close()">
+  (nzOnClose)="close()"
+>
   <ng-container *nzDrawerContent>
     <ng-container *ngTemplateOutlet="content" />
   </ng-container>
   <ng-template #footer>
     <button mat-stroked-button (click)="close()">Annuler</button>&nbsp;
-    <button mat-stroked-button color="primary" (click)="triggered.emit(this.filters); close();">Appliquer</button>
+    <button mat-stroked-button color="primary" (click)="triggered.emit(this.filters); close()">
+      Appliquer
+    </button>
   </ng-template>
 </nz-drawer>
 <ng-template #content>
@@ -19,9 +22,9 @@
     <section>
       <mat-label id="order-label">Comment voulez-vous trier les résultats ?</mat-label>
       <mat-radio-group formControlName="order" aria-labelledby="order-label">
-        <mat-radio-button value="NAME">{{'NAME'|courseOrdering}}</mat-radio-button>
-        <mat-radio-button value="CREATED_AT">{{'CREATED_AT'|courseOrdering}}</mat-radio-button>
-        <mat-radio-button value="UPDATED_AT">{{'UPDATED_AT'|courseOrdering}}</mat-radio-button>
+        <mat-radio-button value="NAME">{{ 'NAME' | courseOrdering }}</mat-radio-button>
+        <mat-radio-button value="CREATED_AT">{{ 'CREATED_AT' | courseOrdering }}</mat-radio-button>
+        <mat-radio-button value="UPDATED_AT">{{ 'UPDATED_AT' | courseOrdering }}</mat-radio-button>
       </mat-radio-group>
       <mat-label id="direction-label">Dans quel ordre ?</mat-label>
       <mat-radio-group formControlName="direction" aria-labelledby="direction-label">
@@ -32,7 +35,9 @@
     <mat-divider />
     <!-- PERIOD -->
     <section>
-      <mat-label id="period-label">Souhaitez-vous limiter les résultats à une certaine période de mise à jour?</mat-label>
+      <mat-label id="period-label"
+        >Souhaitez-vous limiter les résultats à une certaine période de mise à jour?</mat-label
+      >
       <mat-radio-group formControlName="period" aria-labelledby="period-label">
         <mat-radio-button [value]="0">Tout</mat-radio-button>
         <mat-radio-button [value]="1">1 jour</mat-radio-button>

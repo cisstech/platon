@@ -1,29 +1,29 @@
-import { Injectable, Provider } from '@angular/core';
-import { AutomatonEditorService } from '../../automaton-editor.service';
+import { Injectable, Provider } from '@angular/core'
+import { AutomatonEditorService } from '../../automaton-editor.service'
 import {
   AutomatonEditorAction,
   AutomatonEditorActionContext,
   AUTOMATON_EDITOR_ACTIONS,
-} from '../action';
+} from '../action'
 
 /**
  * Action to turn a state of an automaton to an non accepting state.
  */
 @Injectable()
 export class ActionSetNonAccepting implements AutomatonEditorAction {
-  readonly name = 'Non final';
+  readonly name = 'Non final'
 
   constructor(private readonly editor: AutomatonEditorService) {}
 
   run(context: AutomatonEditorActionContext) {
     if (!context.state) {
-      return;
+      return
     }
-    this.editor.removeAccepting(context.state);
+    this.editor.removeAccepting(context.state)
   }
 
   condition(context: AutomatonEditorActionContext) {
-    return !!context.state && this.editor.isAccepting(context.state);
+    return !!context.state && this.editor.isAccepting(context.state)
   }
 }
 
@@ -34,4 +34,4 @@ export const ActionSetNonAcceptingProvider: Provider = {
   provide: AUTOMATON_EDITOR_ACTIONS,
   multi: true,
   useClass: ActionSetNonAccepting,
-};
+}

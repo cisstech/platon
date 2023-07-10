@@ -1,4 +1,3 @@
-
 <ng-container *ngIf="!loading; else: spinner">
   <ng-container *ngIf="correction">
     <player-correction [correction]="correction" />
@@ -8,5 +7,5 @@
   </ng-container>
 </ng-container>
 <ng-template #spinner>
-  <nz-spin *ngIf="loading" nzSimple nzSize="large"  nzTip="Chargement..." />
+  <nz-spin *ngIf="loading" nzSimple nzSize="large" nzTip="Chargement..." />
 </ng-template>

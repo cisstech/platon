@@ -1,6 +1,6 @@
-import { Routes } from '@angular/router';
-import { DashboardPage } from './dashboard.page';
-import { OverviewPage } from './overview/overview.page';
+import { Routes } from '@angular/router'
+import { DashboardPage } from './dashboard.page'
+import { OverviewPage } from './overview/overview.page'
 
 export default [
   {
@@ -10,54 +10,61 @@ export default [
       { path: 'dashboard', component: OverviewPage },
       {
         path: 'resources',
-        loadChildren: () => import(
-          /* webpackChunkName: "resources" */
-          '../resources/resources.routes'
-        )
+        loadChildren: () =>
+          import(
+            /* webpackChunkName: "resources" */
+            '../resources/resources.routes'
+          ),
       },
       {
         path: 'account',
-        loadChildren: () => import(
-          /* webpackChunkName: "account" */
-          '../account/account.routes',
-        )
+        loadChildren: () =>
+          import(
+            /* webpackChunkName: "account" */
+            '../account/account.routes'
+          ),
       },
       {
         path: 'activities',
-        loadChildren: () => import(
-          /* webpackChunkName: "activities" */
-          '../activities/activities.routes'
-        )
+        loadChildren: () =>
+          import(
+            /* webpackChunkName: "activities" */
+            '../activities/activities.routes'
+          ),
       },
       {
         path: 'courses',
-        loadChildren: () => import(
-          /* webpackChunkName: "courses" */
-          '../courses/courses.routes'
-        )
+        loadChildren: () =>
+          import(
+            /* webpackChunkName: "courses" */
+            '../courses/courses.routes'
+          ),
       },
       {
         path: 'forum',
-        loadChildren: () => import(
-          /* webpackChunkName: "forum" */
-          '../forum/forum.routes'
-        )
+        loadChildren: () =>
+          import(
+            /* webpackChunkName: "forum" */
+            '../forum/forum.routes'
+          ),
       },
       {
         path: 'corrections',
-        loadChildren: () => import(
-          /* webpackChunkName: "corrections" */
-          '../corrections/corrections.routes'
-        )
+        loadChildren: () =>
+          import(
+            /* webpackChunkName: "corrections" */
+            '../corrections/corrections.routes'
+          ),
       },
       {
         path: 'admin',
-        loadChildren: () => import(
-          /* webpackChunkName: "admin" */
-          '../admin/admin.routes'
-        )
+        loadChildren: () =>
+          import(
+            /* webpackChunkName: "admin" */
+            '../admin/admin.routes'
+          ),
       },
-      { path: '**', redirectTo: 'dashboard', pathMatch: 'full' }
-    ]
+      { path: '**', redirectTo: 'dashboard', pathMatch: 'full' },
+    ],
   },
-] as Routes;
+] as Routes

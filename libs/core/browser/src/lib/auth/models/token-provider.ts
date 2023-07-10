@@ -1,13 +1,13 @@
-import { AuthToken } from '@platon/core/common';
+import { AuthToken } from '@platon/core/common'
 
 export abstract class TokenProvider {
-  abstract tokenSync(): AuthToken | undefined;
+  abstract tokenSync(): AuthToken | undefined
 
   /**
    * Gets the current auth token if it exists.
    * @returns A promise that resolves with an auth token or `undefined`.
    */
-  abstract token(): Promise<AuthToken | undefined>;
+  abstract token(): Promise<AuthToken | undefined>
 
   /** Deletes the current auth token */
   abstract remove(): Promise<void>
@@ -22,14 +22,13 @@ export abstract class TokenProvider {
    * @param password An user password.
    * @returns A promise that resolves with an auth token.
    */
-  abstract obtain(username: string, password: string): Promise<AuthToken>;
+  abstract obtain(username: string, password: string): Promise<AuthToken>
 
   /**
    * Refreshs the current auth token.
    * @returns A promise that resolves with an auth token.
    */
-  abstract refresh(): Promise<AuthToken>;
+  abstract refresh(): Promise<AuthToken>
 
-  abstract save(token: AuthToken): Promise<void>;
-
+  abstract save(token: AuthToken): Promise<void>
 }

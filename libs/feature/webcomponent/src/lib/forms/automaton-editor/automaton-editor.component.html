@@ -1,11 +1,7 @@
-<div
-  #container
-  class="automaton-editor-container"
-  [style.height]="state.height + 'px'"
->
+<div #container class="automaton-editor-container" [style.height]="state.height + 'px'">
   <div class="automaton-editor-actions-top">
     <ng-container *ngFor="let action of actions">
-      <button nz-button  (click)="run(action)">
+      <button nz-button (click)="run(action)">
         {{ action.name }}
       </button>
     </ng-container>

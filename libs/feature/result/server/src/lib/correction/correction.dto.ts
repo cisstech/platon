@@ -1,69 +1,73 @@
-import { BaseDTO } from "@platon/core/server";
-import { Correction, PendingCorrection, PendingCorrectionExercise, UpsertCorrection } from "@platon/feature/result/common";
-import { Type } from "class-transformer";
-import { IsArray, IsDate, IsNumber, IsOptional, IsString, IsUUID } from "class-validator";
+import { BaseDTO } from '@platon/core/server'
+import {
+  Correction,
+  PendingCorrection,
+  PendingCorrectionExercise,
+  UpsertCorrection,
+} from '@platon/feature/result/common'
+import { Type } from 'class-transformer'
+import { IsArray, IsDate, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator'
 
 export class CorrectionDTO extends BaseDTO implements Correction {
   @IsUUID()
-  authorId!: string;
+  authorId!: string
 
   @IsNumber()
-  grade!: number;
+  grade!: number
 }
 
 export class PendingCorrectionDTO implements PendingCorrection {
   @IsUUID()
-  activityId!: string;
+  activityId!: string
 
   @IsString()
-  activityName!: string;
+  activityName!: string
 
   @IsUUID()
-  courseId!: string;
+  courseId!: string
 
   @IsString()
-  courseName!: string;
+  courseName!: string
 
   @IsArray()
   @Type(() => PendingCorrectionExerciseDTO)
-  exercises!: PendingCorrectionExerciseDTO[];
+  exercises!: PendingCorrectionExerciseDTO[]
 }
 
 export class PendingCorrectionExerciseDTO implements PendingCorrectionExercise {
   @IsUUID()
-  userId!: string;
+  userId!: string
 
   @IsUUID()
-  exerciseId!: string;
+  exerciseId!: string
 
   @IsString()
-  exerciseName!: string;
+  exerciseName!: string
 
   @IsUUID()
-  activitySessionId!: string;
+  activitySessionId!: string
 
   @IsUUID()
-  exerciseSessionId!: string;
+  exerciseSessionId!: string
 
   @IsOptional()
   @IsUUID()
-  correctedBy?: string;
+  correctedBy?: string
 
   @IsOptional()
   @IsDate()
-  correctedAt?: Date;
+  correctedAt?: Date
 
   @IsOptional()
   @IsNumber()
-  correctedGrade?: number;
+  correctedGrade?: number
 
   @IsOptional()
   @IsNumber()
-  grade?: number;
+  grade?: number
 }
 
 export class UpsertCorrectionDTO implements UpsertCorrection {
-
   @IsNumber()
-  grade!: number;
+  grade!: number
 }

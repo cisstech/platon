@@ -1,18 +1,16 @@
-  <form nz-form [nzLayout]="'vertical'" [formGroup]="form" (ngSubmit)="saveChanges()">
-    <mat-form-field appearance="fill">
-      <mat-label>Nom</mat-label>
-      <input formControlName="name" matInput>
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Description</mat-label>
-      <textarea cdkTextareaAutosize formControlName="desc" matInput></textarea>
-    </mat-form-field>
-    <ng-container *ngIf="saving; else: actions">
-      <nz-spin></nz-spin>
-    </ng-container>
-    <ng-template #actions>
-      <button nz-button nzType="primary" type="submit" [disabled]="!canSubmit">
-        Sauvegarder
-      </button>
-    </ng-template>
-  </form>
+<form nz-form [nzLayout]="'vertical'" [formGroup]="form" (ngSubmit)="saveChanges()">
+  <mat-form-field appearance="fill">
+    <mat-label>Nom</mat-label>
+    <input formControlName="name" matInput />
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Description</mat-label>
+    <textarea cdkTextareaAutosize formControlName="desc" matInput></textarea>
+  </mat-form-field>
+  <ng-container *ngIf="saving; else: actions">
+    <nz-spin></nz-spin>
+  </ng-container>
+  <ng-template #actions>
+    <button nz-button nzType="primary" type="submit" [disabled]="!canSubmit">Sauvegarder</button>
+  </ng-template>
+</form>

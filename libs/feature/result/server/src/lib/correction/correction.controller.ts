@@ -1,22 +1,18 @@
-import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
-import { ItemResponse, ListResponse } from '@platon/core/common';
-import { IRequest, Mapper } from '@platon/core/server';
-import { PendingCorrection, UpsertCorrection } from '@platon/feature/result/common';
-import { CorrectionDTO, PendingCorrectionDTO } from './correction.dto';
-import { CorrectionService } from './correction.service';
+import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common'
+import { ItemResponse, ListResponse } from '@platon/core/common'
+import { IRequest, Mapper } from '@platon/core/server'
+import { PendingCorrection, UpsertCorrection } from '@platon/feature/result/common'
+import { CorrectionDTO, PendingCorrectionDTO } from './correction.dto'
+import { CorrectionService } from './correction.service'
 
 @Controller('results/corrections')
 export class CorrectionController {
-  constructor(
-    private readonly service: CorrectionService
-  ) { }
+  constructor(private readonly service: CorrectionService) {}
 
   @Get()
-  async list(
-    @Req() req: IRequest,
-  ): Promise<ListResponse<PendingCorrection>> {
-    const items = await this.service.list(req.user.id);
-    const resources = Mapper.mapAll(items, PendingCorrectionDTO);
+  async list(@Req() req: IRequest): Promise<ListResponse<PendingCorrection>> {
+    const items = await this.service.list(req.user.id)
+    const resources = Mapper.mapAll(items, PendingCorrectionDTO)
     return new ListResponse({ total: resources.length, resources })
   }
 
@@ -25,8 +21,8 @@ export class CorrectionController {
     @Req() req: IRequest,
     @Param('activityId') activityId: string
   ): Promise<ListResponse<PendingCorrection>> {
-    const items = await this.service.list(req.user.id, activityId);
-    const resources = Mapper.mapAll(items, PendingCorrectionDTO);
+    const items = await this.service.list(req.user.id, activityId)
+    const resources = Mapper.mapAll(items, PendingCorrectionDTO)
     return new ListResponse({ total: resources.length, resources })
   }
 
@@ -39,8 +35,8 @@ export class CorrectionController {
     return new ItemResponse({
       resource: await this.service.upsert(sessionId, {
         ...input,
-        authorId: req.user.id
-      })
-    });
+        authorId: req.user.id,
+      }),
+    })
   }
 }

@@ -1,22 +1,22 @@
-import { BaseDTO } from "@platon/core/server";
-import { CreateSessionComment, SessionComment } from "@platon/feature/result/common";
-import { IsString, IsUUID } from "class-validator";
+import { BaseDTO } from '@platon/core/server'
+import { CreateSessionComment, SessionComment } from '@platon/feature/result/common'
+import { IsString, IsUUID } from 'class-validator'
 
 export class SessionCommentDTO extends BaseDTO implements SessionComment {
   @IsUUID()
-  authorId!: string;
+  authorId!: string
 
   @IsUUID()
-  sessionId!: string;
+  sessionId!: string
 
   @IsUUID()
-  answerId!: string;
+  answerId!: string
 
   @IsString()
-  comment!: string;
+  comment!: string
 }
 
 export class CreateSessionCommentDTO implements CreateSessionComment {
   @IsString()
-  comment!: string;
+  comment!: string
 }

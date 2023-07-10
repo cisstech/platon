@@ -1,8 +1,8 @@
 :root {
-  --brand-color-primary: #171C8F;
-  --brand-color-primary-rgb: 23,28,143;
+  --brand-color-primary: #171c8f;
+  --brand-color-primary-rgb: 23, 28, 143;
   --brand-color-primary-contrast: #ffffff;
-  --brand-color-primary-contrast-rgb: 255,255,255;
+  --brand-color-primary-contrast-rgb: 255, 255, 255;
   --brand-color-primary-shade: #14197e;
   --brand-color-primary-tint: #2e339a;
 
@@ -29,7 +29,7 @@
   --brand-border-color: #dddddd;
 
   // https://www.smashingmagazine.com/2015/11/using-system-ui-fonts-practical-guide/
-  --brand-font: 'Source Sans Pro', system-ui, -apple-system, BlinkMacSystemFont,
-    'Fira Sans', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell',
-    'Droid Sans', 'Helvetica Neue', sans-serif;
+  --brand-font: 'Source Sans Pro', system-ui, -apple-system, BlinkMacSystemFont, 'Fira Sans',
+    'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
 }

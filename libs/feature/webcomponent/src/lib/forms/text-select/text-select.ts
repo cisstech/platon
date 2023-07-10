@@ -1,20 +1,16 @@
-import { stripIndent } from 'common-tags';
-import {
-  defineWebComponent,
-  IWebComponent,
-  WebComponentTypes,
-} from '../../web-component';
+import { stripIndent } from 'common-tags'
+import { defineWebComponent, IWebComponent, WebComponentTypes } from '../../web-component'
 
 export interface TextSelectSelection {
-  position: number | number[];
-  content?: string;
-  css?: string;
+  position: number | number[]
+  content?: string
+  css?: string
 }
 export interface TextSelectState extends IWebComponent {
-  text: string;
-  mode: string;
-  regex: string;
-  selections: TextSelectSelection[];
+  text: string
+  mode: string
+  regex: string
+  selections: TextSelectSelection[]
 }
 
 export const TextSelectComponentDefinition = defineWebComponent({
@@ -61,8 +57,7 @@ export const TextSelectComponentDefinition = defineWebComponent({
             },
             content: {
               type: 'string',
-              description:
-                'Texte de la sélection (sans les espaces de début et fin).',
+              description: 'Texte de la sélection (sans les espaces de début et fin).',
             },
             position: {
               type: ['number', 'array'],
@@ -86,4 +81,4 @@ export const TextSelectComponentDefinition = defineWebComponent({
         Dignissimos laboriosam, quibusdam voluptates doloremque voluptatem animi. Si
         `,
   },
-});
+})

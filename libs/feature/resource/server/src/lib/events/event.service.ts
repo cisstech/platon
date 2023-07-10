@@ -1,15 +1,15 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { ResourceEventFilters } from '@platon/feature/resource/common';
-import { Repository } from 'typeorm';
-import { ResourceEventEntity } from './event.entity';
+import { Injectable } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { ResourceEventFilters } from '@platon/feature/resource/common'
+import { Repository } from 'typeorm'
+import { ResourceEventEntity } from './event.entity'
 
 @Injectable()
 export class ResourceEventService {
   constructor(
     @InjectRepository(ResourceEventEntity)
     private readonly repository: Repository<ResourceEventEntity>
-  ) { }
+  ) {}
 
   async search(
     resourceId: string,
@@ -28,5 +28,4 @@ export class ResourceEventService {
 
     return query.getManyAndCount()
   }
-
 }

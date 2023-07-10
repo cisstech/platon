@@ -1,19 +1,15 @@
-import {
-  defineWebComponent,
-  IWebComponent,
-  WebComponentTypes,
-} from '../../web-component';
+import { defineWebComponent, IWebComponent, WebComponentTypes } from '../../web-component'
 
 export interface RadioGroupItem {
-  css?: string;
-  content: string;
+  css?: string
+  content: string
 }
 
 export interface RadioGroupState extends IWebComponent {
-  items: RadioGroupItem[];
-  disabled: boolean;
-  selection: string;
-  horizontal: boolean;
+  items: RadioGroupItem[]
+  disabled: boolean
+  selection: string
+  horizontal: boolean
 }
 
 export const RadioGroupComponentDefinition = defineWebComponent({
@@ -52,8 +48,7 @@ export const RadioGroupComponentDefinition = defineWebComponent({
       disabled: {
         type: 'boolean',
         default: false,
-        description:
-          'Désactiver la possibilité de sélectionner les propositions?',
+        description: 'Désactiver la possibilité de sélectionner les propositions?',
       },
       selection: {
         type: 'string',
@@ -70,4 +65,4 @@ export const RadioGroupComponentDefinition = defineWebComponent({
   showcase: {
     items: ['Choix 1', 'Choix 2', 'Choix 3'],
   },
-});
+})

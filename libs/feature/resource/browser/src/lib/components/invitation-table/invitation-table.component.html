@@ -1,7 +1,4 @@
-<nz-table
-  #nzTable
-  nzSize="small"
-  [nzData]="invitations">
+<nz-table #nzTable nzSize="small" [nzData]="invitations">
   <thead>
     <tr>
       <th>Utilisateur</th>
@@ -14,7 +11,7 @@
       <td>
         <user-avatar #avatar [userIdOrName]="data.inviteeId" />
       </td>
-      <td>{{data.createdAt|date}}</td>
+      <td>{{ data.createdAt | date }}</td>
       <td *ngIf="editable">
         <button
           nz-button
@@ -24,8 +21,11 @@
           nz-popconfirm
           nzOkText="Retirer"
           nzOkType="danger"
-          [nzPopconfirmTitle]="'Voulez-vous vraiment retirer l\'invitation envoyée à “'+ avatar.displayName+'”?'"
-          (nzOnConfirm)="deleted.emit(data)">
+          [nzPopconfirmTitle]="
+            'Voulez-vous vraiment retirer l\'invitation envoyée à “' + avatar.displayName + '”?'
+          "
+          (nzOnConfirm)="deleted.emit(data)"
+        >
           <i nz-icon nzType="delete"></i>
         </button>
       </td>

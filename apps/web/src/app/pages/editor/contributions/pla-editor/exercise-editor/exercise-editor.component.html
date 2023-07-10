@@ -1,18 +1,26 @@
-<ng-container *ngIf="exercise.resource|resourceFind|async as resource">
+<ng-container *ngIf="exercise.resource | resourceFind | async as resource">
   <div class="exercise">
-    <resource-item [item]="resource"  [simple]="true" [modalMode]="true" />
+    <resource-item [item]="resource" [simple]="true" [modalMode]="true" />
     <ul nz-list-item-actions>
       <nz-list-item-action>
-        <button *ngIf="!overriding"
+        <button
+          *ngIf="!overriding"
           nz-button
           nzType="text"
           nz-tooltip="Remplacer des variables"
-          (click)="overriding = !overriding">
+          (click)="overriding = !overriding"
+        >
           <span nz-icon nzType="form" nzTheme="outline"></span>
         </button>
       </nz-list-item-action>
       <nz-list-item-action>
-        <button nz-button nzDanger nzType="text" nz-tooltip="Supprimer" (click)="deleteClicked.emit()">
+        <button
+          nz-button
+          nzDanger
+          nzType="text"
+          nz-tooltip="Supprimer"
+          (click)="deleteClicked.emit()"
+        >
           <span nz-icon nzType="delete" nzTheme="outline"></span>
         </button>
       </nz-list-item-action>

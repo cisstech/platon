@@ -1,28 +1,28 @@
 declare type EnvType = 'development' | 'production'
 export interface Configuration {
-  environment: EnvType,
-  secret: string,
+  environment: EnvType
+  secret: string
   database: {
-    url: string,
-    port: number,
-    host: string,
-    username: string,
-    password: string,
-  },
+    url: string
+    port: number
+    host: string
+    username: string
+    password: string
+  }
   redis: {
-    host: string,
-    port: number,
-  },
+    host: string
+    port: number
+  }
   auth: {
-    salt: number,
-    accessLifetime: string,
+    salt: number
+    accessLifetime: string
     refreshLifetime: string
-  },
+  }
   graphql: {
-    playground: boolean,
-  },
+    playground: boolean
+  }
   sandbox: {
-    url: string,
+    url: string
   }
 }
 

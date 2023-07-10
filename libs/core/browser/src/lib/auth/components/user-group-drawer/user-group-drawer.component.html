@@ -1,17 +1,10 @@
-<ui-modal-drawer
-  size="large"
-  [title]="group?.name || ''"
-  (closed)="group = undefined"
-  #modal>
+<ui-modal-drawer size="large" [title]="group?.name || ''" (closed)="group = undefined" #modal>
   <ng-template>
     <h2>Informations</h2>
     <mat-form-field appearance="fill">
       <mat-label>Nom</mat-label>
-      <input
-        [(ngModel)]="groupName"
-        (keyup.enter)="renameGroup()"
-        matInput>
-        <mat-hint>Appuyez sur entrer pour enregistrer</mat-hint>
+      <input [(ngModel)]="groupName" (keyup.enter)="renameGroup()" matInput />
+      <mat-hint>Appuyez sur entrer pour enregistrer</mat-hint>
     </mat-form-field>
     <h2>Membres</h2>
     <nz-button-group>
@@ -19,7 +12,8 @@
         (click)="search.open()"
         nz-button
         nzType="primary"
-        nz-tooltip="Ajouter un membre au groupe">
+        nz-tooltip="Ajouter un membre au groupe"
+      >
         <span nz-icon nzType="plus" nzTheme="outline"></span>
       </button>
       <ng-container *ngIf="selection.length as selectionCount">
@@ -33,8 +27,9 @@
             nzOkType="danger"
             [nzPopconfirmTitle]="removeGuard"
             [nzPopconfirmPlacement]="'bottom'"
-            (nzOnConfirm)="removeMembers()">
-              <div nz-icon nzType="close" nzTheme="outline"></div>
+            (nzOnConfirm)="removeMembers()"
+          >
+            <div nz-icon nzType="close" nzTheme="outline"></div>
           </button>
         </nz-badge>
       </ng-container>
@@ -42,14 +37,11 @@
     <user-search-bar
       [(ngModel)]="members"
       [autoSelect]="true"
-      [filters]="{ limit: 50, groups: [group!.id] }" />
-    <user-table
-      [users]="members"
-      [selectable]="true"
-      [(ngModel)]="selection" />
+      [filters]="{ limit: 50, groups: [group!.id] }"
+    />
+    <user-table [users]="members" [selectable]="true" [(ngModel)]="selection" />
   </ng-template>
-  <ng-template>
-  </ng-template>
+  <ng-template> </ng-template>
 </ui-modal-drawer>
 
 <user-search-modal
@@ -59,8 +51,8 @@
   [filters]="{ roles: ['student'] }"
   [excludes]="excludes"
   (closed)="addMembers($event)"
-   />
+/>
 
 <ng-template #removeGuard>
- Voulez-vous vraiment retirer les membres sélectionnés du groupe?
+  Voulez-vous vraiment retirer les membres sélectionnés du groupe?
 </ng-template>

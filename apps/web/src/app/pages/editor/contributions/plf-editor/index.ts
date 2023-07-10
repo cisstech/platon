@@ -1,2 +1,1 @@
-export * from './plf-editor.contribution';
-
+export * from './plf-editor.contribution'

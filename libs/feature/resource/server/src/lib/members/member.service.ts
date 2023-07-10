@@ -1,22 +1,20 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { NotFoundResponse, OrderingDirections, UserOrderings } from '@platon/core/common';
-import { ResourceMemberFilters } from '@platon/feature/resource/common';
-import { Repository } from 'typeorm';
-import { Optional } from "typescript-optional";
-import { ResourceMemberEntity } from './member.entity';
+import { Injectable } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { NotFoundResponse, OrderingDirections, UserOrderings } from '@platon/core/common'
+import { ResourceMemberFilters } from '@platon/feature/resource/common'
+import { Repository } from 'typeorm'
+import { Optional } from 'typescript-optional'
+import { ResourceMemberEntity } from './member.entity'
 
 @Injectable()
 export class ResourceMemberService {
   constructor(
     @InjectRepository(ResourceMemberEntity)
     private readonly repository: Repository<ResourceMemberEntity>
-  ) { }
+  ) {}
 
   async findByUserId(resourceId: string, userId: string): Promise<Optional<ResourceMemberEntity>> {
-    return Optional.ofNullable(
-      await this.repository.findOne({ where: { resourceId, userId } })
-    );
+    return Optional.ofNullable(await this.repository.findOne({ where: { resourceId, userId } }))
   }
 
   async search(
@@ -28,25 +26,28 @@ export class ResourceMemberService {
     query.where('resource_id = :resourceId', { resourceId })
 
     if (filters.search) {
-      query.andWhere(`(
+      query.andWhere(
+        `(
         user.username ILIKE :search
         OR user.email ILIKE :search
         OR f_unaccent(user.first_name) ILIKE f_unaccent(:search)
         OR f_unaccent(user.last_name) ILIKE f_unaccent(:search)
-      )`, { search: `%${filters.search}%` })
+      )`,
+        { search: `%${filters.search}%` }
+      )
     }
 
     if (filters.order) {
       const fields: Record<UserOrderings, string> = {
-        'NAME': 'user.username',
-        'CREATED_AT': 'member.created_at',
-        'UPDATED_AT': 'member.updated_at',
+        NAME: 'user.username',
+        CREATED_AT: 'member.created_at',
+        UPDATED_AT: 'member.updated_at',
       }
 
       const orderings: Record<UserOrderings, keyof typeof OrderingDirections> = {
-        'NAME': 'ASC',
-        'CREATED_AT': 'DESC',
-        'UPDATED_AT': 'DESC',
+        NAME: 'ASC',
+        CREATED_AT: 'DESC',
+        UPDATED_AT: 'DESC',
       }
 
       query.orderBy(fields[filters.order], filters.direction || orderings[filters.order])
@@ -74,15 +75,15 @@ export class ResourceMemberService {
     if (!resource) {
       throw new NotFoundResponse(`ResourceMember not found: ${userId}`)
     }
-    Object.assign(resource, changes);
-    return this.repository.save(resource);
+    Object.assign(resource, changes)
+    return this.repository.save(resource)
   }
 
   async deleteByUserId(resourceId: string, userId: string) {
     return this.repository.remove(
-      (
-        await this.findByUserId(resourceId, userId)
-      ).orElseThrow(() => new NotFoundResponse(`ResourceMember not found: ${userId}`))
-    );
+      (await this.findByUserId(resourceId, userId)).orElseThrow(
+        () => new NotFoundResponse(`ResourceMember not found: ${userId}`)
+      )
+    )
   }
 }

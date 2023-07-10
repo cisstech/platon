@@ -1,9 +1,9 @@
-import { Routes } from '@angular/router';
-import { ForumPage } from './forum.page';
+import { Routes } from '@angular/router'
+import { ForumPage } from './forum.page'
 
 export default [
   {
     path: '',
-    component: ForumPage
+    component: ForumPage,
   },
-] as Routes;
+] as Routes

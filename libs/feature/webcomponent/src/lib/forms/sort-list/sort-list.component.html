@@ -1,9 +1,5 @@
 <div>
-  <ul
-    [class.disabled]="state.disabled"
-    cdkDropList
-    (cdkDropListDropped)="drop($any($event))"
-  >
+  <ul [class.disabled]="state.disabled" cdkDropList (cdkDropListDropped)="drop($any($event))">
     <li
       cdkDrag
       *ngFor="let item of state.items; trackBy: trackBy"

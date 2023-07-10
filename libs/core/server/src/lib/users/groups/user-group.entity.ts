@@ -1,6 +1,6 @@
-import { Column, Entity, Index, JoinTable, ManyToMany } from 'typeorm';
-import { BaseEntity } from '../../database';
-import { UserEntity } from '../user.entity';
+import { Column, Entity, Index, JoinTable, ManyToMany } from 'typeorm'
+import { BaseEntity } from '../../database'
+import { UserEntity } from '../user.entity'
 
 @Entity('UserGroups')
 export class UserGroupEntity extends BaseEntity {
@@ -13,12 +13,12 @@ export class UserGroupEntity extends BaseEntity {
     name: 'UserGroupsUsers',
     joinColumn: {
       name: 'group_id',
-      referencedColumnName: "id"
+      referencedColumnName: 'id',
     },
     inverseJoinColumn: {
-      name: "user_id",
-      referencedColumnName: "id"
-    }
+      name: 'user_id',
+      referencedColumnName: 'id',
+    },
   })
   users!: UserEntity[]
 }

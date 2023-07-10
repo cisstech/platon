@@ -1,6 +1,6 @@
-import { BaseEntity, UserEntity } from '@platon/core/server';
-import { Column, Entity, JoinColumn, ManyToOne, Unique } from 'typeorm';
-import { LmsEntity } from './lms.entity';
+import { BaseEntity, UserEntity } from '@platon/core/server'
+import { Column, Entity, JoinColumn, ManyToOne, Unique } from 'typeorm'
+import { LmsEntity } from './lms.entity'
 
 @Entity('LmsUsers')
 @Unique('LmsUsers_unique_idx', ['lmsId', 'lmsUserId', 'userId'])

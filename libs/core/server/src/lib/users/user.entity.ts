@@ -1,6 +1,6 @@
-import { UserRoles } from '@platon/core/common';
-import { Column, Entity, Index, VirtualColumn } from 'typeorm';
-import { BaseEntity } from '../database/base-entity';
+import { UserRoles } from '@platon/core/common'
+import { Column, Entity, Index, VirtualColumn } from 'typeorm'
+import { BaseEntity } from '../database/base-entity'
 
 @Entity('Users')
 export class UserEntity extends BaseEntity {

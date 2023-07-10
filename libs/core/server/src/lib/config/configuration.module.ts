@@ -11,4 +11,4 @@ import { configuration } from './configuration'
   ],
   providers: [],
 })
-export class ConfigurationModule { }
+export class ConfigurationModule {}

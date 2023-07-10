@@ -1,6 +1,6 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { JwtService } from '@nestjs/jwt';
+import { BadRequestException, Injectable } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
+import { JwtService } from '@nestjs/jwt'
 import {
   AuthToken,
   ForbiddenResponse,
@@ -9,12 +9,12 @@ import {
   SignInDemoOutput,
   SignInInput,
   SignUpInput,
-} from '@platon/core/common';
-import * as bcrypt from 'bcrypt';
-import { Configuration } from '../config/configuration';
-import { UserService } from '../users/user.service';
-import { UserRoles } from '@platon/core/common';
-import { randomUUID } from 'crypto';
+} from '@platon/core/common'
+import * as bcrypt from 'bcrypt'
+import { Configuration } from '../config/configuration'
+import { UserService } from '../users/user.service'
+import { UserRoles } from '@platon/core/common'
+import { randomUUID } from 'crypto'
 
 @Injectable()
 export class AuthService {
@@ -25,27 +25,24 @@ export class AuthService {
   ) {}
 
   async signIn(input: SignInInput): Promise<AuthToken> {
-    const optionalUser = await this.userService.findByIdOrName(input.username);
+    const optionalUser = await this.userService.findByIdOrName(input.username)
     const user = optionalUser.orElseThrow(
       () => new NotFoundResponse(`User not found: ${input.username}`)
-    );
-    if (
-      !user.password ||
-      !(await bcrypt.compare(input.password, user.password))
-    ) {
-      throw new BadRequestException('Password is incorrect');
+    )
+    if (!user.password || !(await bcrypt.compare(input.password, user.password))) {
+      throw new BadRequestException('Password is incorrect')
     }
-    user.lastLogin = new Date();
+    user.lastLogin = new Date()
     if (!user.firstLogin) {
-      user.firstLogin = new Date();
+      user.firstLogin = new Date()
     }
 
-    await this.userService.update(user.id, user);
-    return this.authenticate(user.id, user.username);
+    await this.userService.update(user.id, user)
+    return this.authenticate(user.id, user.username)
   }
 
   async signUp(input: SignUpInput): Promise<AuthToken> {
-    const optionalUser = await this.userService.findByIdOrName(input.username);
+    const optionalUser = await this.userService.findByIdOrName(input.username)
     if (optionalUser.isPresent()) {
       throw new BadRequestException(`User already found: ${input.username}`);
     }
@@ -53,9 +50,9 @@ export class AuthService {
     const user = await this.userService.create({
       ...input,
       password: await this.hash(input.password),
-    });
+    })
 
-    return this.authenticate(user.id, user.username);
+    return this.authenticate(user.id, user.username)
   }
 
   async signInDemo(): Promise<SignInDemoOutput> {
@@ -84,16 +81,13 @@ export class AuthService {
   }
 
   async resetPassword(input: ResetPasswordInput): Promise<AuthToken> {
-    const user = (await this.userService.findByUsername(input.username)).get();
-    if (
-      user.password &&
-      !(await bcrypt.compare(input.password || '', user.password))
-    ) {
-      throw new ForbiddenResponse('New password is the same as the old one');
+    const user = (await this.userService.findByUsername(input.username)).get()
+    if (user.password && !(await bcrypt.compare(input.password || '', user.password))) {
+      throw new ForbiddenResponse('New password is the same as the old one')
     }
-    user.password = await this.hash(input.newPassword.trim());
-    await this.userService.update(input.username, user);
-    return this.authenticate(user.id, user.username);
+    user.password = await this.hash(input.newPassword.trim())
+    await this.userService.update(input.username, user)
+    return this.authenticate(user.id, user.username)
   }
 
   async authenticate(userId: string, username: string): Promise<AuthToken> {
@@ -105,9 +99,7 @@ export class AuthService {
         },
         {
           secret: this.configService.get('secret', { infer: true }),
-          expiresIn: this.configService.get('auth.accessLifetime', {
-            infer: true,
-          }),
+          expiresIn: this.configService.get('auth.accessLifetime', { infer: true }),
         }
       ),
       this.jwtService.signAsync(
@@ -117,23 +109,18 @@ export class AuthService {
         },
         {
           secret: this.configService.get('secret', { infer: true }),
-          expiresIn: this.configService.get('auth.refreshLifetime', {
-            infer: true,
-          }),
+          expiresIn: this.configService.get('auth.refreshLifetime', { infer: true }),
         }
       ),
-    ]);
+    ])
 
     return {
       accessToken,
       refreshToken,
-    };
+    }
   }
 
   private async hash(data: string): Promise<string> {
-    return bcrypt.hash(
-      data,
-      this.configService.get('auth.salt', { infer: true }) as number
-    );
+    return bcrypt.hash(data, this.configService.get('auth.salt', { infer: true }) as number)
   }
 }

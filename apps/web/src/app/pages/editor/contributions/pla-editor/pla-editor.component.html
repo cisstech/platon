@@ -12,7 +12,9 @@
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
-      <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="introduction">Introduction</nz-form-label>
+      <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="introduction"
+        >Introduction</nz-form-label
+      >
       <nz-form-control>
         <textarea nz-input formControlName="introduction" id="introduction"></textarea>
       </nz-form-control>
@@ -26,10 +28,7 @@
   </ng-container>
   <ng-container *ngIf="step === 1">
     <nz-collapse>
-      <nz-collapse-panel
-        nzHeader="Temps"
-        nzExpandedIcon="clock-circle"
-        nzActive>
+      <nz-collapse-panel nzHeader="Temps" nzExpandedIcon="clock-circle" nzActive>
         <nz-form-item>
           <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="duration">Durée</nz-form-label>
           <nz-form-control>
@@ -38,8 +37,9 @@
               id="duration"
               nzFormat="HH:mm:ss"
               [nzSuffixIcon]="suffix"
-              [nzUse12Hours]="false" />
-              <ng-template #suffix>hh:mm:ss</ng-template>
+              [nzUse12Hours]="false"
+            />
+            <ng-template #suffix>hh:mm:ss</ng-template>
           </nz-form-control>
         </nz-form-item>
       </nz-collapse-panel>
@@ -47,7 +47,8 @@
         formGroupName="navigation"
         nzHeader="Navigation"
         nzExpandedIcon="compass"
-        nzActive>
+        nzActive
+      >
         <nz-form-item>
           <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="navigationMode">Mode</nz-form-label>
           <nz-form-control>
@@ -63,11 +64,17 @@
         formGroupName="actions"
         nzHeader="Actions"
         nzExpandedIcon="play-circle"
-        nzActive>
+        nzActive
+      >
         <nz-form-item>
           <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="retry">Tentatives</nz-form-label>
           <nz-form-control>
-            <nz-input-number formControlName="retry" id="retry" [nzMin]="0" [nzStep]="1"></nz-input-number>
+            <nz-input-number
+              formControlName="retry"
+              id="retry"
+              [nzMin]="0"
+              [nzStep]="1"
+            ></nz-input-number>
           </nz-form-control>
         </nz-form-item>
         <nz-form-item>
@@ -99,9 +106,12 @@
         formGroupName="feedback"
         nzHeader="Feedback"
         nzExpandedIcon="message"
-        nzActive>
+        nzActive
+      >
         <nz-form-item>
-          <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="validation">Validation</nz-form-label>
+          <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="validation"
+            >Validation</nz-form-label
+          >
           <nz-form-control>
             <label nz-checkbox formControlName="validation" id="validation"></label>
           </nz-form-control>
@@ -122,15 +132,22 @@
         <nz-list [nzDataSource]="exerciseGroups" nzBordered>
           <nz-list-item
             *ngFor="let group of exerciseGroups; trackBy: trackByIndex; index as i"
-            (click)="selectGroup(i)">
+            (click)="selectGroup(i)"
+          >
             <span>Groupe {{ i + 1 }}</span>
-          <ul nz-list-item-actions>
-            <nz-list-item-action>
-              <button nz-button nzDanger nzType="text"  nz-tooltip="Supprimer" (click)="deleteGroup(i)">
-                <span nz-icon nzType="delete" nzTheme="outline"></span>
-              </button>
-            </nz-list-item-action>
-          </ul>
+            <ul nz-list-item-actions>
+              <nz-list-item-action>
+                <button
+                  nz-button
+                  nzDanger
+                  nzType="text"
+                  nz-tooltip="Supprimer"
+                  (click)="deleteGroup(i)"
+                >
+                  <span nz-icon nzType="delete" nzTheme="outline"></span>
+                </button>
+              </nz-list-item-action>
+            </ul>
           </nz-list-item>
         </nz-list>
         <button nz-button nzType="primary" (click)="addGroup()">+</button>
@@ -145,16 +162,19 @@
 <ng-template #exerciseList>
   <h3>
     <nz-breadcrumb>
-      <nz-breadcrumb-item>Groupe {{(selectedGroupIndex || 0) + 1}}</nz-breadcrumb-item>
+      <nz-breadcrumb-item>Groupe {{ (selectedGroupIndex || 0) + 1 }}</nz-breadcrumb-item>
       <nz-breadcrumb-item>Exercices</nz-breadcrumb-item>
     </nz-breadcrumb>
   </h3>
   <nz-list [nzDataSource]="selectedGroup" nzBordered>
-    <nz-list-item *ngFor="let exercise of selectedGroup; trackBy: trackByExerciseId; let index=index;">
+    <nz-list-item
+      *ngFor="let exercise of selectedGroup; trackBy: trackByExerciseId; let index = index"
+    >
       <app-pla-exercise-editor
         [exercise]="exercise"
         (exerciseChange)="updateExercise($event)"
-        (deleteClicked)="deleteExercise(index)" />
+        (deleteClicked)="deleteExercise(index)"
+      />
     </nz-list-item>
   </nz-list>
   <h3>Ajouter un exercice</h3>
@@ -164,12 +184,8 @@
       [simpleLayout]="true"
       [(ngModel)]="selectedExercise"
       [filters]="{ types: ['EXERCISE'], watchers: [user.id] }"
-      />
-    <button
-      nz-button
-      nzType="primary"
-      (click)="addExercise()"
-      [disabled]="!selectedExercise">
+    />
+    <button nz-button nzType="primary" (click)="addExercise()" [disabled]="!selectedExercise">
       Ajouter
     </button>
   </div>

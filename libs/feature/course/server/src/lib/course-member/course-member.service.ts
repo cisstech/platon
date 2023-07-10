@@ -1,16 +1,12 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import {
-  OrderingDirections,
-  UserOrderings,
-  UserRoles,
-} from '@platon/core/common';
-import { CourseMemberFilters } from '@platon/feature/course/common';
-import { Repository } from 'typeorm';
-import { Optional } from 'typescript-optional';
-import { CourseNotificationService } from '../course-notification/course-notification.service';
-import { CourseMemberEntity } from './course-member.entity';
-import { CourseMemberView } from './course-member.view';
+import { Injectable } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { OrderingDirections, UserOrderings, UserRoles } from '@platon/core/common'
+import { CourseMemberFilters } from '@platon/feature/course/common'
+import { Repository } from 'typeorm'
+import { Optional } from 'typescript-optional'
+import { CourseNotificationService } from '../course-notification/course-notification.service'
+import { CourseMemberEntity } from './course-member.entity'
+import { CourseMemberView } from './course-member.view'
 
 @Injectable()
 export class CourseMemberService {
@@ -22,34 +18,29 @@ export class CourseMemberService {
     private readonly notificationService: CourseNotificationService
   ) {}
 
-  async findById(
-    courseId: string,
-    id: string
-  ): Promise<Optional<CourseMemberEntity>> {
-    const query = this.repository.createQueryBuilder('member');
-    query.leftJoinAndSelect('member.user', 'user');
-    query.leftJoinAndSelect('member.group', 'group');
-    query.leftJoinAndSelect('group.users', 'groupusers');
+  async findById(courseId: string, id: string): Promise<Optional<CourseMemberEntity>> {
+    const query = this.repository.createQueryBuilder('member')
+    query.leftJoinAndSelect('member.user', 'user')
+    query.leftJoinAndSelect('member.group', 'group')
+    query.leftJoinAndSelect('group.users', 'groupusers')
 
-    query
-      .where('member.course_id = :courseId', { courseId })
-      .andWhere('member.id = :id', { id });
+    query.where('member.course_id = :courseId', { courseId }).andWhere('member.id = :id', { id })
 
-    return Optional.ofNullable(await query.getOne());
+    return Optional.ofNullable(await query.getOne())
   }
 
   async search(
     courseId: string,
     filters?: CourseMemberFilters
   ): Promise<[CourseMemberEntity[], number]> {
-    filters = filters || {};
+    filters = filters || {}
 
-    const query = this.repository.createQueryBuilder('member');
-    query.leftJoinAndSelect('member.user', 'user');
-    query.leftJoinAndSelect('member.group', 'group');
-    query.leftJoinAndSelect('group.users', 'groupusers');
+    const query = this.repository.createQueryBuilder('member')
+    query.leftJoinAndSelect('member.user', 'user')
+    query.leftJoinAndSelect('member.group', 'group')
+    query.leftJoinAndSelect('group.users', 'groupusers')
 
-    query.where('course_id = :courseId', { courseId });
+    query.where('course_id = :courseId', { courseId })
 
     if (filters.roles?.length) {
       if (filters.roles.includes(UserRoles.student)) {
@@ -71,7 +62,7 @@ export class CourseMemberService {
         OR f_unaccent(group.name) ILIKE f_unaccent(:search)
       )`,
         { search: `%${filters.search}%` }
-      );
+      )
     }
 
     if (filters.order) {
@@ -79,61 +70,50 @@ export class CourseMemberService {
         NAME: 'user.username',
         CREATED_AT: 'member.created_at',
         UPDATED_AT: 'member.updated_at',
-      };
+      }
 
-      const orderings: Record<UserOrderings, keyof typeof OrderingDirections> =
-        {
-          NAME: 'ASC',
-          CREATED_AT: 'DESC',
-          UPDATED_AT: 'DESC',
-        };
+      const orderings: Record<UserOrderings, keyof typeof OrderingDirections> = {
+        NAME: 'ASC',
+        CREATED_AT: 'DESC',
+        UPDATED_AT: 'DESC',
+      }
 
-      query.orderBy(
-        fields[filters.order],
-        filters.direction || orderings[filters.order]
-      );
+      query.orderBy(fields[filters.order], filters.direction || orderings[filters.order])
     } else {
-      query.orderBy('user.username', 'ASC').addOrderBy('group.name', 'ASC');
+      query.orderBy('user.username', 'ASC').addOrderBy('group.name', 'ASC')
     }
 
     if (filters.offset) {
-      query.offset(filters.offset);
+      query.offset(filters.offset)
     }
 
     if (filters.limit) {
-      query.limit(filters.limit);
+      query.limit(filters.limit)
     }
 
-    return query.getManyAndCount();
+    return query.getManyAndCount()
   }
 
   async addUser(courseId: string, userId: string): Promise<CourseMemberEntity> {
-    const member = await this.repository.save(
-      this.repository.create({ courseId, userId })
-    );
-    await this.notificationService.sendMemberCreation(member);
-    return member;
+    const member = await this.repository.save(this.repository.create({ courseId, userId }))
+    await this.notificationService.sendMemberCreation(member)
+    return member
   }
 
-  async addGroup(
-    courseId: string,
-    groupId: string
-  ): Promise<CourseMemberEntity> {
-    const member = await this.repository.save(
-      this.repository.create({ courseId, groupId })
-    );
-    await this.notificationService.sendMemberCreation(member);
-    return member;
+  async addGroup(courseId: string, groupId: string): Promise<CourseMemberEntity> {
+    const member = await this.repository.save(this.repository.create({ courseId, groupId }))
+    await this.notificationService.sendMemberCreation(member)
+    return member
   }
 
   async delete(courseId: string, memberId: string): Promise<void> {
-    await this.repository.delete({ courseId, id: memberId });
+    await this.repository.delete({ courseId, id: memberId })
   }
 
   async isMember(courseId: string, userId: string): Promise<boolean> {
     const result = await this.view.findOne({
       where: { courseId, id: userId },
-    });
-    return result != null;
+    })
+    return result != null
   }
 }

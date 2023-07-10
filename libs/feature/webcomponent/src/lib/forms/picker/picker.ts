@@ -1,17 +1,13 @@
-import {
-  defineWebComponent,
-  IWebComponent,
-  WebComponentTypes,
-} from '../../web-component';
+import { defineWebComponent, IWebComponent, WebComponentTypes } from '../../web-component'
 
 export interface PickerState extends IWebComponent {
-  hint: string;
-  items: string[];
-  prefix: string;
-  suffix: string;
-  selection: string;
-  placeholder: string;
-  disabled: boolean;
+  hint: string
+  items: string[]
+  prefix: string
+  suffix: string
+  selection: string
+  placeholder: string
+  disabled: boolean
 }
 
 export const PickerComponentDefinition = defineWebComponent({
@@ -67,4 +63,4 @@ export const PickerComponentDefinition = defineWebComponent({
   showcase: {
     items: ['Choix 1', 'Choix 2', 'Choix 3'],
   },
-});
+})
