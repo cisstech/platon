@@ -41,22 +41,18 @@ nz-checkbox-wrapper {
   border-radius: 4px;
 }
 
-/* button {
-  background-color: #1890ff;
-  border: none;
-  border-radius: 4px;
-  color: #ffffff;
-  cursor: pointer;
-  font-weight: 600;
-  padding: 0.5rem 1rem;
-  text-align: center;
-  transition: background-color 0.3s ease;
+nz-list {
+  margin-bottom: 1rem;
+}
 
-  &:hover {
-    background-color: #40a9ff;
+nz-list-item {
+  padding: 0.5rem;
+  cursor: pointer;
+  &.selected {
+    border-left: 2px solid var(--brand-color-primary);
   }
 }
- */
+
 .exercise-group-container {
   display: flex;
   gap: 1rem;
@@ -75,13 +71,4 @@ nz-checkbox-wrapper {
   flex-direction: column;
   gap: 0.5rem;
   margin-top: 0.5rem;
-}
-
-nz-list {
-  margin-bottom: 1rem;
-}
-
-nz-list-item {
-  padding: 0.5rem;
-  cursor: pointer;
 }

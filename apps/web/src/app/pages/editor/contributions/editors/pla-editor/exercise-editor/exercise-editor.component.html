@@ -1,0 +1,94 @@
+<ng-container *ngIf="resource">
+  <div class="exercise">
+    <resource-item
+      [item]="resource"
+      [simple]="true"
+      [modalMode]="true"
+      [previewOverrides]="exercise.overrides"
+    />
+    <ul nz-list-item-actions>
+      <nz-list-item-action>
+        <button
+          *ngIf="!overriding && inputs"
+          nz-button
+          nzType="text"
+          nz-tooltip="Remplacer des variables"
+          (click)="overriding = !overriding"
+        >
+          <span nz-icon nzType="form" nzTheme="outline"></span>
+        </button>
+        <button
+          *ngIf="overriding"
+          nz-button
+          nzType="text"
+          nz-tooltip="Cacher les variables"
+          (click)="overriding = false"
+        >
+          <span nz-icon nzType="close-circle" nzTheme="outline"></span>
+        </button>
+      </nz-list-item-action>
+      <nz-list-item-action>
+        <button
+          nz-button
+          nzDanger
+          nzType="text"
+          nz-tooltip="Supprimer"
+          (click)="deleteClicked.emit()"
+        >
+          <span nz-icon nzType="delete" nzTheme="outline"></span>
+        </button>
+      </nz-list-item-action>
+    </ul>
+  </div>
+  <ng-container *ngIf="overriding && inputs">
+    <table>
+      <thead>
+        <tr>
+          <th>Variable</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let input of inputs">
+          <tr class="row">
+            <td>{{ input.name }}</td>
+            <td>{{ input.type }}</td>
+            <td>{{ input.description }}</td>
+            <td>
+              <button
+                *ngIf="!selectedInput"
+                nz-button
+                nzType="text"
+                nz-tooltip="Editer"
+                (click)="selectedInput = input"
+              >
+                <span nz-icon nzType="form" nzTheme="outline"></span>
+              </button>
+              <button
+                *ngIf="input.name === selectedInput?.name"
+                nz-button
+                nzType="text"
+                nz-tooltip="Fermer"
+                (click)="selectedInput = undefined"
+              >
+                <span nz-icon nzType="close-circle" nzTheme="outline"></span>
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="input.name === selectedInput?.name">
+            <td colSpan="4">
+              <app-ple-input
+                mode="value"
+                [input]="input"
+                [value]="exercise.overrides?.[input.name]"
+                (valueChange)="onOverrideVariable(input.name, $event)"
+              />
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </ng-container>
+</ng-container>

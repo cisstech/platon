@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import {
   FileSystemError,
   FileSystemProvider,
@@ -33,6 +33,9 @@ class FileImpl implements IFile {
 
 @Injectable()
 export class ResourceFileSystemProvider extends FileSystemProvider {
+  private readonly http = inject(HttpClient)
+  private readonly fileService = inject(ResourceFileService)
+
   private readonly entries = new Map<string, ResourceFile>()
 
   readonly scheme = 'platon'
@@ -45,10 +48,7 @@ export class ResourceFileSystemProvider extends FileSystemProvider {
     FileSystemProviderCapabilities.FileSearch |
     FileSystemProviderCapabilities.FileUpload
 
-  constructor(
-    private readonly http: HttpClient,
-    private readonly fileService: ResourceFileService
-  ) {
+  constructor() {
     super()
   }
 

@@ -131,6 +131,7 @@
         <h3>Groupes</h3>
         <nz-list [nzDataSource]="exerciseGroups" nzBordered>
           <nz-list-item
+            [class.selected]="selectedGroupIndex === i"
             *ngFor="let group of exerciseGroups; trackBy: trackByIndex; index as i"
             (click)="selectGroup(i)"
           >

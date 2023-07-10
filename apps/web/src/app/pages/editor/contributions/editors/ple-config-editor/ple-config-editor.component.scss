@@ -1,0 +1,36 @@
+:host {
+  display: block;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  padding: 1.5rem;
+  > div {
+    display: grid;
+    grid-template-columns: 30% 70%;
+    gap: 2rem;
+    width: 100%;
+  }
+}
+
+nz-list {
+  margin-bottom: 1rem;
+}
+
+nz-list-item {
+  padding: 0.5rem;
+  cursor: pointer;
+  &.selected {
+    border-left: 2px solid var(--brand-color-primary);
+  }
+}
+
+.btn-add-input {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.container-selection {
+  width: 95%;
+}

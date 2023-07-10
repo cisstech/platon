@@ -17,12 +17,8 @@ import { NzStepsModule } from 'ng-zorro-antd/steps'
 import { NzTimePickerModule } from 'ng-zorro-antd/time-picker'
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 
-import { NgeMonacoModule } from '@cisstech/nge/monaco'
-import {
-  ResourceItemComponent,
-  ResourcePipesModule,
-  ResourceSearchBarComponent,
-} from '@platon/feature/resource/browser'
+import { ResourceItemComponent, ResourceSearchBarComponent } from '@platon/feature/resource/browser'
+import { PleInputEditorModule } from '../ple-input-editor/ple-input.module'
 import { PlaExerciseEditorComponent } from './exercise-editor/exercise-editor.component'
 import { PlaEditorComponent } from './pla-editor.component'
 
@@ -48,12 +44,10 @@ import { PlaEditorComponent } from './pla-editor.component'
     NzBreadCrumbModule,
     NzToolTipModule,
 
-    NgeMonacoModule,
-
     ResourceItemComponent,
     ResourceSearchBarComponent,
 
-    ResourcePipesModule,
+    PleInputEditorModule,
   ],
   exports: [PlaEditorComponent],
   declarations: [PlaEditorComponent, PlaExerciseEditorComponent],
