@@ -21,16 +21,7 @@ import { NzTableModule } from 'ng-zorro-antd/table'
   templateUrl: './member-table.component.html',
   styleUrls: ['./member-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    CommonModule,
-
-    NzIconModule,
-    NzTableModule,
-    NzButtonModule,
-    NzPopconfirmModule,
-
-    UserAvatarComponent,
-  ],
+  imports: [CommonModule, NzIconModule, NzTableModule, NzButtonModule, NzPopconfirmModule, UserAvatarComponent],
 })
 export class ResourceMemberTableComponent implements OnChanges {
   @Input() members: ResourceMember[] = []

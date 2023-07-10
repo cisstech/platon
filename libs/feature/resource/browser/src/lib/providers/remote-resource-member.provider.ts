@@ -22,10 +22,7 @@ export class RemoteResourceMemberProvider extends ResourceMemberProvider {
     return this.http.delete<void>(`/api/v1/resources/${resource.id}/members/${userId}`)
   }
 
-  searchMembers(
-    resource: Resource,
-    filters: ResourceMemberFilters
-  ): Observable<ListResponse<ResourceMember>> {
+  searchMembers(resource: Resource, filters: ResourceMemberFilters): Observable<ListResponse<ResourceMember>> {
     let params = new HttpParams()
     if (filters.search) {
       params = params.append('search', filters.search)

@@ -1,10 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { BaseDTO, toNumber } from '@platon/core/server'
-import {
-  CourseSection,
-  CreateCourseSection,
-  UpdateCourseSection,
-} from '@platon/feature/course/common'
+import { CourseSection, CreateCourseSection, UpdateCourseSection } from '@platon/feature/course/common'
 import { Transform } from 'class-transformer'
 import { IsNumber, IsOptional, IsString, IsUUID } from 'class-validator'
 

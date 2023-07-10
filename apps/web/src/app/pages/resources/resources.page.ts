@@ -1,11 +1,5 @@
 import { CommonModule } from '@angular/common'
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  OnDestroy,
-  OnInit,
-} from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router, RouterModule } from '@angular/router'
 import Fuse from 'fuse.js'
 import { firstValueFrom, map, shareReplay, Subscription } from 'rxjs'
@@ -94,11 +88,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
       run: (query) => {
         return this.completion.pipe(
           map((completion) => {
-            const suggestions = new Set<string>([
-              ...completion.names,
-              ...completion.topics,
-              ...completion.levels,
-            ])
+            const suggestions = new Set<string>([...completion.names, ...completion.topics, ...completion.levels])
             return new Fuse(Array.from(suggestions), {
               includeMatches: true,
               findAllMatches: false,
@@ -185,9 +175,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
         this.items = (await firstValueFrom(this.resourceService.search(this.filters))).resources
         this.searching = false
 
-        this.indicators = matchIndicators(this.filters, this.filterMatchers, (data) =>
-          this.search(data, data.search)
-        )
+        this.indicators = matchIndicators(this.filters, this.filterMatchers, (data) => this.search(data, data.search))
 
         this.changeDetectorRef.markForCheck()
       })

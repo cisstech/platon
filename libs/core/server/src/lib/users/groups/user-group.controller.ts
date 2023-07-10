@@ -1,12 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common'
 import { CreatedResponse, ItemResponse, ListResponse, NoContentResponse } from '@platon/core/common'
 import { Mapper } from '../../utils'
-import {
-  CreateUserGroupDTO,
-  UpdateUserGroupDTO,
-  UserGroupDTO,
-  UserGroupFiltersDTO,
-} from './user-group.dto'
+import { CreateUserGroupDTO, UpdateUserGroupDTO, UserGroupDTO, UserGroupFiltersDTO } from './user-group.dto'
 import { UserGroupService } from './user-group.service'
 
 @Controller('user-groups')
@@ -34,14 +29,8 @@ export class UserGroupController {
   }
 
   @Patch('/:id')
-  async update(
-    @Param('id') id: string,
-    @Body() input: UpdateUserGroupDTO
-  ): Promise<ItemResponse<UserGroupDTO>> {
-    const resource = Mapper.map(
-      await this.service.update(id, await this.service.fromInput(input)),
-      UserGroupDTO
-    )
+  async update(@Param('id') id: string, @Body() input: UpdateUserGroupDTO): Promise<ItemResponse<UserGroupDTO>> {
+    const resource = Mapper.map(await this.service.update(id, await this.service.fromInput(input)), UserGroupDTO)
     return new ItemResponse({ resource })
   }
 

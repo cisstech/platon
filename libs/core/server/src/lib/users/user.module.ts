@@ -12,11 +12,7 @@ import { UserResolver } from './user.resolver'
 import { UserService } from './user.service'
 
 @Module({
-  imports: [
-    LevelModule,
-    TopicModule,
-    TypeOrmModule.forFeature([UserEntity, UserPrefsEntity, UserGroupEntity]),
-  ],
+  imports: [LevelModule, TopicModule, TypeOrmModule.forFeature([UserEntity, UserPrefsEntity, UserGroupEntity])],
   controllers: [UserController, UserGroupController, UserPrefsController],
   providers: [UserService, UserPrefsService, UserGroupService, UserResolver],
   exports: [UserService, UserPrefsService, UserGroupService],

@@ -1,11 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common'
-import {
-  CreatedResponse,
-  ItemResponse,
-  ListResponse,
-  NoContentResponse,
-  NotFoundResponse,
-} from '@platon/core/common'
+import { CreatedResponse, ItemResponse, ListResponse, NoContentResponse, NotFoundResponse } from '@platon/core/common'
 import { Mapper } from '@platon/core/server'
 import { CreateLmsDTO, LmsDTO, LmsFiltersDTO, UpdateLmsDTO } from './lti.dto'
 import { LTIService } from './lti.service'
@@ -38,10 +32,7 @@ export class LTIController {
   }
 
   @Patch('/lms/:id')
-  async updateLms(
-    @Param('id') id: string,
-    @Body() input: UpdateLmsDTO
-  ): Promise<ItemResponse<LmsDTO>> {
+  async updateLms(@Param('id') id: string, @Body() input: UpdateLmsDTO): Promise<ItemResponse<LmsDTO>> {
     const resource = Mapper.map(await this.service.updateLms(id, input), LmsDTO)
     return new ItemResponse({ resource })
   }

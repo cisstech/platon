@@ -63,11 +63,9 @@ export class UiLayoutTabsComponent implements AfterContentInit, OnDestroy {
     handleChanges(this.titles.toArray())
 
     this.subscriptions.push(
-      combineLatest([this.titles.changes as Observable<UiLayoutTabsTitleDirective[]>]).subscribe(
-        ([titles]) => {
-          handleChanges(titles)
-        }
-      )
+      combineLatest([this.titles.changes as Observable<UiLayoutTabsTitleDirective[]>]).subscribe(([titles]) => {
+        handleChanges(titles)
+      })
     )
   }
 

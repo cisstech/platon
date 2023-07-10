@@ -1,12 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CommonModule } from '@angular/common'
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  OnDestroy,
-  OnInit,
-} from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router, RouterModule } from '@angular/router'
 import Fuse from 'fuse.js'
 import { firstValueFrom, map, of, shareReplay, Subscription } from 'rxjs'
@@ -135,9 +129,7 @@ export class CoursesPage implements OnInit, OnDestroy {
         this.items = (await firstValueFrom(this.courseService.search(this.filters))).resources
         this.searching = false
 
-        this.indicators = matchIndicators(this.filters, this.filterMatchers, (data) =>
-          this.search(data, data.search)
-        )
+        this.indicators = matchIndicators(this.filters, this.filterMatchers, (data) => this.search(data, data.search))
 
         this.changeDetectorRef.markForCheck()
       })

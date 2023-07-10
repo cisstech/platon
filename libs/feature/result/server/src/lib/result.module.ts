@@ -20,20 +20,7 @@ import { CorrectionController } from './correction/correction.controller'
     TypeOrmModule.forFeature([SessionEntity, AnswerEntity, CorrectionEntity, SessionCommentEntity]),
   ],
   controllers: [ResultController, CorrectionController, SessionCommentController],
-  providers: [
-    ResultService,
-    AnswerService,
-    SessionService,
-    CorrectionService,
-    SessionCommentService,
-  ],
-  exports: [
-    TypeOrmModule,
-    ResultService,
-    AnswerService,
-    SessionService,
-    CorrectionService,
-    SessionCommentService,
-  ],
+  providers: [ResultService, AnswerService, SessionService, CorrectionService, SessionCommentService],
+  exports: [TypeOrmModule, ResultService, AnswerService, SessionService, CorrectionService, SessionCommentService],
 })
 export class FeatureResultServerModule {}

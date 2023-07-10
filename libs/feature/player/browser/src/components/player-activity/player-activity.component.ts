@@ -1,12 +1,5 @@
 import { CommonModule } from '@angular/common'
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  HostBinding,
-  Input,
-  OnInit,
-} from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, Input, OnInit } from '@angular/core'
 import { firstValueFrom } from 'rxjs'
 
 import { MatButtonModule } from '@angular/material/button'
@@ -246,11 +239,7 @@ export class PlayerActivityComponent implements OnInit {
       } else {
         this.triggers.push({
           time: startAt + duration * 0.5,
-          execute: () =>
-            changeColor(
-              'orange',
-              "Attention : vous avez dépassé la moitié du temps de l'activité."
-            ),
+          execute: () => changeColor('orange', "Attention : vous avez dépassé la moitié du temps de l'activité."),
         })
       }
 
@@ -259,8 +248,7 @@ export class PlayerActivityComponent implements OnInit {
       } else {
         this.triggers.push({
           time: startAt + duration * 0.75,
-          execute: () =>
-            changeColor('#f5222d', "Urgent : il ne vous reste que 25% du temps de l'activité."),
+          execute: () => changeColor('#f5222d', "Urgent : il ne vous reste que 25% du temps de l'activité."),
         })
       }
     }

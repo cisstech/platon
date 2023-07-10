@@ -1,9 +1,6 @@
 import { Router } from '@angular/router'
 import { ImgIcon } from '@cisstech/nge/ui/icon'
-import {
-  CourseMemberCreationNotification,
-  COURSE_MEMBER_CREATION_NOTIFICATION,
-} from '@platon/feature/course/common'
+import { CourseMemberCreationNotification, COURSE_MEMBER_CREATION_NOTIFICATION } from '@platon/feature/course/common'
 import { NotificationParser, NotificationRenderer } from '@platon/feature/notification/browser'
 import { Notification } from '@platon/feature/notification/common'
 

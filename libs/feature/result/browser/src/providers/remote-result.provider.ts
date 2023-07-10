@@ -32,8 +32,6 @@ export class RemoteResultProvider extends ResultProvider {
   }
 
   listCorrections(activityId: string): Observable<ListResponse<PendingCorrection>> {
-    return this.http.get<ListResponse<PendingCorrection>>(
-      `/api/v1/results/corrections/${activityId ? activityId : ''}`
-    )
+    return this.http.get<ListResponse<PendingCorrection>>(`/api/v1/results/corrections/${activityId ? activityId : ''}`)
   }
 }

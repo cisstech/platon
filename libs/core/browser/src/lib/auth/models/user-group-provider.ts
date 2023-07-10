@@ -1,10 +1,4 @@
-import {
-  CreateUserGroup,
-  ListResponse,
-  UpdateUserGroup,
-  UserGroup,
-  UserGroupFilters,
-} from '@platon/core/common'
+import { CreateUserGroup, ListResponse, UpdateUserGroup, UserGroup, UserGroupFilters } from '@platon/core/common'
 import { Observable } from 'rxjs'
 
 export abstract class UserGroupProvider {

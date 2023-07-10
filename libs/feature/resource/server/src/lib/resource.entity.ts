@@ -1,9 +1,5 @@
 import { BaseEntity, LevelEntity, TopicEntity, UserEntity } from '@platon/core/server'
-import {
-  ResourceStatus,
-  ResourceTypes,
-  ResourceVisibilities,
-} from '@platon/feature/resource/common'
+import { ResourceStatus, ResourceTypes, ResourceVisibilities } from '@platon/feature/resource/common'
 import { Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne } from 'typeorm'
 
 @Entity('Resources')

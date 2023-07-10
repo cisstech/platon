@@ -10,11 +10,7 @@ import {
   OnDestroy,
   ViewChild,
 } from '@angular/core'
-import {
-  ACTION_GOTO_LINE,
-  ACTION_INDENT_USING_SPACES,
-  ACTION_QUICK_COMMAND,
-} from '@cisstech/nge/monaco'
+import { ACTION_GOTO_LINE, ACTION_INDENT_USING_SPACES, ACTION_QUICK_COMMAND } from '@cisstech/nge/monaco'
 import { WebComponent, WebComponentHooks } from '../../web-component'
 import { WebComponentChangeDetectorService } from '../../web-component-change-detector.service'
 import { CodeEditorComponentDefinition, CodeEditorState } from './code-editor'
@@ -26,9 +22,7 @@ import { CodeEditorComponentDefinition, CodeEditorState } from './code-editor'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 @WebComponent(CodeEditorComponentDefinition)
-export class CodeEditorComponent
-  implements AfterViewChecked, OnDestroy, WebComponentHooks<CodeEditorState>
-{
+export class CodeEditorComponent implements AfterViewChecked, OnDestroy, WebComponentHooks<CodeEditorState> {
   private readonly disposables: monaco.IDisposable[] = []
   private model?: monaco.editor.ITextModel
   private editor?: monaco.editor.IStandaloneCodeEditor
@@ -47,10 +41,7 @@ export class CodeEditorComponent
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   decorations: any[] = []
 
-  constructor(
-    readonly injector: Injector,
-    readonly changeDetector: WebComponentChangeDetectorService
-  ) {}
+  constructor(readonly injector: Injector, readonly changeDetector: WebComponentChangeDetectorService) {}
 
   ngAfterViewChecked() {
     if (!this.editor || !this.footer) return
@@ -74,9 +65,7 @@ export class CodeEditorComponent
     this.editor = editor as monaco.editor.IStandaloneCodeEditor
 
     editor.setModel(
-      (this.model =
-        this.model ||
-        monaco.editor.createModel(this.state.code || '', this.state.language || 'plaintext'))
+      (this.model = this.model || monaco.editor.createModel(this.state.code || '', this.state.language || 'plaintext'))
     )
 
     // OPTIONS

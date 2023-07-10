@@ -35,10 +35,7 @@ const basicContext = setContext((_, { headers }) => {
   }
 })
 
-export function createDefaultApollo(
-  httpLink: HttpLink,
-  tokenService: TokenService
-): ApolloClientOptions<any> {
+export function createDefaultApollo(httpLink: HttpLink, tokenService: TokenService): ApolloClientOptions<any> {
   const cache = new InMemoryCache({})
 
   const http = httpLink.create({

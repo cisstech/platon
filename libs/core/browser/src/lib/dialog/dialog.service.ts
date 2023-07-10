@@ -82,10 +82,7 @@ export class DialogService {
     }
   }
 
-  notification(
-    template: TemplateRef<object>,
-    options: TemplateOptions = { duration: DEFAULT_DIALOG_DURATION }
-  ) {
+  notification(template: TemplateRef<object>, options: TemplateOptions = { duration: DEFAULT_DIALOG_DURATION }) {
     if (options.duration == undefined) options.duration = DEFAULT_DIALOG_DURATION
     const ref = this.nzNotificationService.template(template, {
       nzDuration: options?.duration,

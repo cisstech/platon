@@ -6,11 +6,7 @@ import { ResourceEventController, ResourceEventEntity, ResourceEventService } fr
 import { ResourceEventSubscriber } from './events/event.subscriber'
 import { ResourceFileController } from './files/file.controller'
 import { ResourceFileService } from './files/file.service'
-import {
-  ResourceInvitationController,
-  ResourceInvitationEntity,
-  ResourceInvitationService,
-} from './invitations'
+import { ResourceInvitationController, ResourceInvitationEntity, ResourceInvitationService } from './invitations'
 import {
   ResourceMemberController,
   ResourceMemberEntity,
@@ -24,11 +20,7 @@ import { ResourceSubscriber } from './resource.subscriber'
 import { ResourceStatsSubscriber } from './statistics'
 import { UserResourceController } from './user'
 import { ResourceViewEntity, ResourceViewService } from './views'
-import {
-  ResourceWatcherController,
-  ResourceWatcherEntity,
-  ResourceWatcherService,
-} from './watchers'
+import { ResourceWatcherController, ResourceWatcherEntity, ResourceWatcherService } from './watchers'
 
 @Module({
   controllers: [

@@ -1,11 +1,5 @@
 import { Injectable } from '@angular/core'
-import {
-  ActivatedRouteSnapshot,
-  CanActivate,
-  Route,
-  Router,
-  RouterStateSnapshot,
-} from '@angular/router'
+import { ActivatedRouteSnapshot, CanActivate, Route, Router, RouterStateSnapshot } from '@angular/router'
 import { UserRoles } from '@platon/core/common'
 import { AuthService } from '../api/auth.service'
 
@@ -43,10 +37,7 @@ export class AuthGuard implements CanActivate {
   }
 }
 
-export const withAuthGuard = (
-  route: Route,
-  roles?: (UserRoles | keyof typeof UserRoles)[]
-): Route => ({
+export const withAuthGuard = (route: Route, roles?: (UserRoles | keyof typeof UserRoles)[]): Route => ({
   ...route,
   canActivate: [...(route.canActivate || []), AuthGuard],
   data: { ...(route.data || {}), roles },

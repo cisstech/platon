@@ -12,21 +12,12 @@ export class RemoteSessionCommentProvider extends SessionCommentProvider {
   }
 
   list(sessionId: string, answerId: string): Observable<ListResponse<SessionComment>> {
-    return this.http.get<ListResponse<SessionComment>>(
-      `/api/v1/results/session/${sessionId}/comments/${answerId}`
-    )
+    return this.http.get<ListResponse<SessionComment>>(`/api/v1/results/session/${sessionId}/comments/${answerId}`)
   }
 
-  create(
-    sessionId: string,
-    answerId: string,
-    input: CreateSessionComment
-  ): Observable<SessionComment> {
+  create(sessionId: string, answerId: string, input: CreateSessionComment): Observable<SessionComment> {
     return this.http
-      .post<ItemResponse<SessionComment>>(
-        `/api/v1/results/session/${sessionId}/comments/${answerId}`,
-        input
-      )
+      .post<ItemResponse<SessionComment>>(`/api/v1/results/session/${sessionId}/comments/${answerId}`, input)
       .pipe(map((response) => response.resource))
   }
 

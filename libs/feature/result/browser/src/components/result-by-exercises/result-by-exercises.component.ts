@@ -42,9 +42,7 @@ export class ResultByExercisesComponent {
   @Input() results!: ExerciseResults[]
 
   protected expandSet = new Set<string>()
-  protected answerStates = Object.values(AnswerStates).filter(
-    (state) => state !== AnswerStates.ANSWERED
-  )
+  protected answerStates = Object.values(AnswerStates).filter((state) => state !== AnswerStates.ANSWERED)
 
   protected onExpandChange(id: string, checked: boolean): void {
     if (checked) {

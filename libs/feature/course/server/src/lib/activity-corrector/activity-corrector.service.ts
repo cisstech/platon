@@ -22,9 +22,7 @@ export class ActivityCorrectorService {
     query.leftJoinAndSelect('member.group', 'group')
     query.leftJoinAndSelect('group.users', 'groupusers')
 
-    query
-      .where('acorrector.activity_id = :activityId', { activityId })
-      .andWhere('acorrector.id = :id', { id })
+    query.where('acorrector.activity_id = :activityId', { activityId }).andWhere('acorrector.id = :id', { id })
 
     return Optional.ofNullable(await query.getOne())
   }
@@ -45,10 +43,7 @@ export class ActivityCorrectorService {
     return this.repository.save(this.repository.create(corrector))
   }
 
-  async update(
-    activityId: string,
-    input: Partial<ActivityCorrectorEntity>[]
-  ): Promise<ActivityCorrectorEntity[]> {
+  async update(activityId: string, input: Partial<ActivityCorrectorEntity>[]): Promise<ActivityCorrectorEntity[]> {
     return this.dataSource.transaction(async (manager) => {
       await manager.delete(ActivityCorrectorEntity, { activityId })
       const correctors = input.map((member) => {

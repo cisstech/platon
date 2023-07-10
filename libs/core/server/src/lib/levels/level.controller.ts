@@ -22,10 +22,7 @@ export class LevelController {
   }
 
   @Patch('/:id')
-  async update(
-    @Param('id') id: string,
-    @Body() input: UpdateLevelDTO
-  ): Promise<ItemResponse<LevelDTO>> {
+  async update(@Param('id') id: string, @Body() input: UpdateLevelDTO): Promise<ItemResponse<LevelDTO>> {
     const resource = Mapper.map(await this.service.update(id, input), LevelDTO)
     return new ItemResponse({ resource })
   }

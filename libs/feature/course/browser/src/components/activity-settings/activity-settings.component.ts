@@ -65,8 +65,7 @@ export class CourseActivitySettingsComponent implements OnInit {
   protected updating = false
   protected courseMembers: CourseMember[] = []
 
-  protected disabledDate = (current: Date): boolean =>
-    differenceInCalendarDays(current, new Date()) < 0
+  protected disabledDate = (current: Date): boolean => differenceInCalendarDays(current, new Date()) < 0
 
   constructor(
     private readonly courseService: CourseService,
@@ -89,15 +88,9 @@ export class CourseActivitySettingsComponent implements OnInit {
 
     this.form.patchValue({
       openDates:
-        this.activity.openAt && this.activity.closeAt
-          ? [this.activity.openAt, this.activity.closeAt]
-          : undefined,
-      members: activityMembers.resources.map(
-        (m) => `${m.member.id}${m.user ? ':' + m.user.id : ''}`
-      ),
-      correctors: activityCorrectors.resources.map(
-        (c) => `${c.member.id}${c.user ? ':' + c.user.id : ''}`
-      ),
+        this.activity.openAt && this.activity.closeAt ? [this.activity.openAt, this.activity.closeAt] : undefined,
+      members: activityMembers.resources.map((m) => `${m.member.id}${m.user ? ':' + m.user.id : ''}`),
+      correctors: activityCorrectors.resources.map((c) => `${c.member.id}${c.user ? ':' + c.user.id : ''}`),
     })
 
     this.loading = false

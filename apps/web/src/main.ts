@@ -4,12 +4,7 @@ import { MatDialogModule } from '@angular/material/dialog'
 import { MatSnackBarModule } from '@angular/material/snack-bar'
 import { bootstrapApplication } from '@angular/platform-browser'
 import { provideAnimations } from '@angular/platform-browser/animations'
-import {
-  PreloadAllModules,
-  provideRouter,
-  withEnabledBlockingInitialNavigation,
-  withPreloading,
-} from '@angular/router'
+import { PreloadAllModules, provideRouter, withEnabledBlockingInitialNavigation, withPreloading } from '@angular/router'
 import { CoreBrowserModule, TAG_PROVIDERS } from '@platon/core/browser'
 import { COURSE_PROVIDERS } from '@platon/feature/course/browser'
 import { LTI_PROVIDERS } from '@platon/feature/lti/browser'
@@ -31,11 +26,7 @@ bootstrapApplication(AppPage, {
       MatDialogModule,
       MatSnackBarModule
     ),
-    provideRouter(
-      appRoutes,
-      withEnabledBlockingInitialNavigation(),
-      withPreloading(PreloadAllModules)
-    ),
+    provideRouter(appRoutes, withEnabledBlockingInitialNavigation(), withPreloading(PreloadAllModules)),
     COURSE_PROVIDERS,
     RESOURCE_PROVIDERS,
     PLAYER_PROVIDERS,

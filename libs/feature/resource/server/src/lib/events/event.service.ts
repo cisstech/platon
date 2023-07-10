@@ -11,10 +11,7 @@ export class ResourceEventService {
     private readonly repository: Repository<ResourceEventEntity>
   ) {}
 
-  async search(
-    resourceId: string,
-    filters: ResourceEventFilters = {}
-  ): Promise<[ResourceEventEntity[], number]> {
+  async search(resourceId: string, filters: ResourceEventFilters = {}): Promise<[ResourceEventEntity[], number]> {
     const query = this.repository.createQueryBuilder('watcher')
     query.where('resource_id = :resourceId', { resourceId })
 

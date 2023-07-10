@@ -1,12 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { ItemResponse, ListResponse } from '@platon/core/common'
-import {
-  Course,
-  CourseMember,
-  CourseMemberFilters,
-  CreateCourseMember,
-} from '@platon/feature/course/common'
+import { Course, CourseMember, CourseMemberFilters, CreateCourseMember } from '@platon/feature/course/common'
 import { Observable, map } from 'rxjs'
 import { CourseMemberProvider } from '../models/course-member-provider'
 

@@ -155,9 +155,7 @@ export class OutcomeService {
   async sendReadResult(): Promise<number> {
     const doc = new OutcomeDocument(this.REQUEST_READ, this.sourceDID, this)
     const xml = await this.sendRequest(doc)
-    const score = parseFloat(
-      navigateXml(xml, 'imsx_POXBody.readResultResponse.result.resultScore.textString')
-    )
+    const score = parseFloat(navigateXml(xml, 'imsx_POXBody.readResultResponse.result.resultScore.textString'))
     if (isNaN(score)) {
       throw new OutcomeResponseError('Invalid score response')
     }
@@ -242,15 +240,9 @@ export class OutcomeService {
     try {
       const result = await xml2js.parseStringPromise(body, { trim: true })
       const response = result?.imsx_POXEnvelopeResponse
-      const code = navigateXml(
-        response,
-        'imsx_POXHeader.imsx_POXResponseHeaderInfo.imsx_statusInfo.imsx_codeMajor'
-      )
+      const code = navigateXml(response, 'imsx_POXHeader.imsx_POXResponseHeaderInfo.imsx_statusInfo.imsx_codeMajor')
       if (code !== 'success') {
-        const msg = navigateXml(
-          response,
-          'imsx_POXHeader.imsx_POXResponseHeaderInfo.imsx_statusInfo.imsx_description'
-        )
+        const msg = navigateXml(response, 'imsx_POXHeader.imsx_POXResponseHeaderInfo.imsx_statusInfo.imsx_description')
         throw new OutcomeResponseError(msg)
       } else {
         return response

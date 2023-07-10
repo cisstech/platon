@@ -1,11 +1,7 @@
 import { Injectable, Provider } from '@angular/core'
 import { DialogService } from '@platon/core/browser'
 import { AutomatonEditorService } from '../../automaton-editor.service'
-import {
-  AutomatonEditorAction,
-  AutomatonEditorActionContext,
-  AUTOMATON_EDITOR_ACTIONS,
-} from '../action'
+import { AutomatonEditorAction, AutomatonEditorActionContext, AUTOMATON_EDITOR_ACTIONS } from '../action'
 
 /**
  * Action to rename a transition from an automaton.
@@ -14,10 +10,7 @@ import {
 export class ActionRenameTransition implements AutomatonEditorAction {
   readonly name = 'Changer étiquette'
 
-  constructor(
-    private readonly dialog: DialogService,
-    private readonly editor: AutomatonEditorService
-  ) {}
+  constructor(private readonly dialog: DialogService, private readonly editor: AutomatonEditorService) {}
 
   async run(context: AutomatonEditorActionContext) {
     if (!context.transition) {

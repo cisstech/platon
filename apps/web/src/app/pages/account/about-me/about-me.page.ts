@@ -11,13 +11,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzSelectModule } from 'ng-zorro-antd/select'
 
 import { MatCardModule } from '@angular/material/card'
-import {
-  DialogModule,
-  DialogService,
-  ProtectedComponent,
-  TagService,
-  UserService,
-} from '@platon/core/browser'
+import { DialogModule, DialogService, ProtectedComponent, TagService, UserService } from '@platon/core/browser'
 import { Level, Topic, User, UserPrefs, UserRoles } from '@platon/core/common'
 
 @Component({

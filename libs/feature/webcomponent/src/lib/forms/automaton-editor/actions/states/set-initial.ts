@@ -1,10 +1,6 @@
 import { Injectable, Provider } from '@angular/core'
 import { AutomatonEditorService } from '../../automaton-editor.service'
-import {
-  AutomatonEditorAction,
-  AutomatonEditorActionContext,
-  AUTOMATON_EDITOR_ACTIONS,
-} from '../action'
+import { AutomatonEditorAction, AutomatonEditorActionContext, AUTOMATON_EDITOR_ACTIONS } from '../action'
 
 /**
  * Action to turn a state of an automaton to an initial state.

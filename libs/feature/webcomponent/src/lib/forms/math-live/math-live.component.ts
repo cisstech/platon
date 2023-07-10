@@ -1,12 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  ElementRef,
-  Injector,
-  Input,
-  OnInit,
-  ViewChild,
-} from '@angular/core'
+import { ChangeDetectionStrategy, Component, ElementRef, Injector, Input, OnInit, ViewChild } from '@angular/core'
 import { MathfieldElement } from 'mathlive'
 import { WebComponent, WebComponentHooks } from '../../web-component'
 import { WebComponentChangeDetectorService } from '../../web-component-change-detector.service'
@@ -27,10 +19,7 @@ export class MathLiveComponent implements OnInit, WebComponentHooks<MathLiveStat
   @ViewChild('container', { static: true })
   container!: ElementRef<HTMLElement>
 
-  constructor(
-    readonly injector: Injector,
-    readonly changeDetection: WebComponentChangeDetectorService
-  ) {}
+  constructor(readonly injector: Injector, readonly changeDetection: WebComponentChangeDetectorService) {}
 
   async ngOnInit() {
     this.mathfield = new MathfieldElement()

@@ -1,8 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export const deepMerge = <T extends Record<string, any>>(
-  target: T,
-  source: Partial<T>
-): Record<string, any> => {
+export const deepMerge = <T extends Record<string, any>>(target: T, source: Partial<T>): Record<string, any> => {
   for (const key in source) {
     if (typeof source[key] === 'object' && source[key] !== null) {
       if (!(key in target)) {

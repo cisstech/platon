@@ -48,9 +48,7 @@ export class ResourceService {
     }
 
     const traverse = (node: CircleTree) => {
-      const children = circles
-        .filter((c) => c.parentId === node.id)
-        .sort((a, b) => a.name.localeCompare(b.name))
+      const children = circles.filter((c) => c.parentId === node.id).sort((a, b) => a.name.localeCompare(b.name))
 
       children.forEach((child) => {
         const next: CircleTree = {
@@ -77,9 +75,7 @@ export class ResourceService {
 
   async statistic(id: string): Promise<ResourceStatisic> {
     return (
-      this.dataSource.query('SELECT * FROM "ResourceStats" WHERE id = $1', [id]) as Promise<
-        ResourceStatisic[]
-      >
+      this.dataSource.query('SELECT * FROM "ResourceStats" WHERE id = $1', [id]) as Promise<ResourceStatisic[]>
     ).then((response) => response[0])
   }
 
@@ -93,10 +89,7 @@ export class ResourceService {
     return Optional.ofNullable(await query.where('resource.id = :id', { id }).getOne())
   }
 
-  async findByIdOrCode(
-    idOrCode: string,
-    resolveRelations = true
-  ): Promise<Optional<ResourceEntity>> {
+  async findByIdOrCode(idOrCode: string, resolveRelations = true): Promise<Optional<ResourceEntity>> {
     const query = this.repository.createQueryBuilder('resource')
     if (resolveRelations) {
       query.leftJoinAndSelect('resource.topics', 'topic')
@@ -106,9 +99,7 @@ export class ResourceService {
     if (isUUID4(idOrCode)) {
       return Optional.ofNullable(await query.where('resource.id = :id', { id: idOrCode }).getOne())
     }
-    return Optional.ofNullable(
-      await query.where('resource.code = :code', { code: idOrCode }).getOne()
-    )
+    return Optional.ofNullable(await query.where('resource.code = :code', { code: idOrCode }).getOne())
   }
 
   async findPersonal(ownerId: string): Promise<ResourceEntity> {

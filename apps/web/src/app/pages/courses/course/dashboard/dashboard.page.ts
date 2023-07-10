@@ -1,12 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CommonModule } from '@angular/common'
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  OnDestroy,
-  OnInit,
-} from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core'
 import { RouterModule } from '@angular/router'
 import { Subscription } from 'rxjs'
 
@@ -47,10 +41,7 @@ export class CourseDashboardPage implements OnInit, OnDestroy {
 
   protected sections: SectionWithActivities[] = []
 
-  constructor(
-    private readonly presenter: CoursePresenter,
-    private readonly changeDetectorRef: ChangeDetectorRef
-  ) {}
+  constructor(private readonly presenter: CoursePresenter, private readonly changeDetectorRef: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.subscriptions.push(
@@ -123,10 +114,7 @@ export class CourseDashboardPage implements OnInit, OnDestroy {
   }
 
   private async refresh(): Promise<void> {
-    const [sections, activities] = await Promise.all([
-      this.presenter.listSections(),
-      this.presenter.listActivities(),
-    ])
+    const [sections, activities] = await Promise.all([this.presenter.listSections(), this.presenter.listActivities()])
 
     this.sections = sections.map((section) => ({
       section,

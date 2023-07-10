@@ -23,11 +23,7 @@ import { NzSpinModule } from 'ng-zorro-antd/spin'
 
 import { DialogModule, DialogService, TagService } from '@platon/core/browser'
 import { Level, Topic } from '@platon/core/common'
-import {
-  CircleTreeComponent,
-  ResourcePipesModule,
-  ResourceService,
-} from '@platon/feature/resource/browser'
+import { CircleTreeComponent, ResourcePipesModule, ResourceService } from '@platon/feature/resource/browser'
 import {
   circleFromTree,
   CircleTree,
@@ -100,8 +96,7 @@ export class ResourceCreatePage implements OnInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
-    this.type = (this.activatedRoute.snapshot.queryParamMap.get('type') ||
-      ResourceTypes.CIRCLE) as ResourceTypes
+    this.type = (this.activatedRoute.snapshot.queryParamMap.get('type') || ResourceTypes.CIRCLE) as ResourceTypes
 
     const [tree, topics, levels] = await Promise.all([
       firstValueFrom(this.resourceService.tree()),
@@ -113,9 +108,7 @@ export class ResourceCreatePage implements OnInit {
       const codes = flattenCircleTree(tree)
         .map((c) => c.code)
         .filter((c) => !!c) as string[]
-      this.infos.controls.code.setValidators(
-        Validators.compose([Validators.required, this.codeValidator(codes)])
-      )
+      this.infos.controls.code.setValidators(Validators.compose([Validators.required, this.codeValidator(codes)]))
       this.infos.updateValueAndValidity()
     }
 
@@ -153,9 +146,7 @@ export class ResourceCreatePage implements OnInit {
         replaceUrl: true,
       })
     } catch {
-      this.dialogService.error(
-        'Une erreur est survenue lors de cette action, veuillez réessayer un peu plus tard !'
-      )
+      this.dialogService.error('Une erreur est survenue lors de cette action, veuillez réessayer un peu plus tard !')
     } finally {
       this.creating = false
       this.changeDetectorRef.markForCheck()

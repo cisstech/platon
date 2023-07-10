@@ -1,13 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CommonModule } from '@angular/common'
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-} from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { MatCardModule } from '@angular/material/card'
 import { RouterModule } from '@angular/router'
@@ -15,11 +8,7 @@ import { NgeMarkdownModule } from '@cisstech/nge/markdown'
 import { ClipboardService } from '@cisstech/nge/services'
 import { NgeUiIconModule } from '@cisstech/nge/ui/icon'
 import { ResourceFile } from '@platon/feature/resource/common'
-import {
-  NzContextMenuService,
-  NzDropdownMenuComponent,
-  NzDropDownModule,
-} from 'ng-zorro-antd/dropdown'
+import { NzContextMenuService, NzDropdownMenuComponent, NzDropDownModule } from 'ng-zorro-antd/dropdown'
 import { NzEmptyModule } from 'ng-zorro-antd/empty'
 import { NzMessageService } from 'ng-zorro-antd/message'
 import { NzSpinModule } from 'ng-zorro-antd/spin'

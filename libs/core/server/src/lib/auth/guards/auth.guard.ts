@@ -19,9 +19,7 @@ export class AuthGuard extends PassportGuard(['jwt']) {
     if (context.getType<GqlContextType>() === 'graphql') {
       const gqlContext = GqlExecutionContext.create(context).getContext()
       const { req, connection } = gqlContext
-      return connection && connection.context && connection.context.headers
-        ? connection.context
-        : req
+      return connection && connection.context && connection.context.headers ? connection.context : req
     }
     return context.switchToHttp().getRequest()
   }

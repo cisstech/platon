@@ -12,6 +12,4 @@ export interface AutomatonEditorAction {
   condition: (context: AutomatonEditorActionContext) => boolean
 }
 
-export const AUTOMATON_EDITOR_ACTIONS = new InjectionToken<AutomatonEditorAction[]>(
-  'AUTOMATON_EDITOR_ACTIONS'
-)
+export const AUTOMATON_EDITOR_ACTIONS = new InjectionToken<AutomatonEditorAction[]>('AUTOMATON_EDITOR_ACTIONS')

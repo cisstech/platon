@@ -33,41 +33,25 @@ export class PlayerController {
 
   @Public()
   @Post('/play/activity')
-  playActivity(
-    @Req() req: IRequest,
-    @Body() input: PlayActivityInputDTO
-  ): Promise<PlayActivityOutputDTO> {
+  playActivity(@Req() req: IRequest, @Body() input: PlayActivityInputDTO): Promise<PlayActivityOutputDTO> {
     return this.playerService.playActivity(input.activityId, req.user)
   }
 
   @Public()
   @Post('/play/exercises')
-  playExercises(
-    @Req() req: IRequest,
-    @Body() input: PlayExerciseInputDTO
-  ): Promise<PlayExerciseOuputDTO> {
-    return this.playerService.playExercises(
-      input.activitySessionId,
-      input.exerciseSessionIds,
-      req.user
-    )
+  playExercises(@Req() req: IRequest, @Body() input: PlayExerciseInputDTO): Promise<PlayExerciseOuputDTO> {
+    return this.playerService.playExercises(input.activitySessionId, input.exerciseSessionIds, req.user)
   }
 
   @Public()
   @Post('/terminate/:sessionId')
-  async terminate(
-    @Req() req: IRequest,
-    @Param('sessionId') sessionId: string
-  ): Promise<PlayActivityOutputDTO> {
+  async terminate(@Req() req: IRequest, @Param('sessionId') sessionId: string): Promise<PlayActivityOutputDTO> {
     return this.playerService.terminateSession(sessionId, req.user)
   }
 
   @Public()
   @Post('/evaluate')
-  async evaluate(
-    @Req() req: IRequest,
-    @Body() input: EvalExerciseInput
-  ): Promise<EvalExerciseOutputDTO> {
+  async evaluate(@Req() req: IRequest, @Body() input: EvalExerciseInput): Promise<EvalExerciseOutputDTO> {
     const response = await this.playerService.evaluate(input, req.user)
     return {
       exercise: Array.isArray(response) ? response[0] : response,
