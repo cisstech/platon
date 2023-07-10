@@ -1,0 +1,16 @@
+<nz-form-item>
+  <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="language">Langage</nz-form-label>
+  <nz-form-control>
+    <nz-select
+      id="language"
+      [(ngModel)]="options.language"
+      (ngModelChange)="notifyOptionsChange?.(options)"
+    >
+      <nz-option
+        *ngFor="let language of languages"
+        [nzValue]="language.id"
+        [nzLabel]="language.id"
+      ></nz-option>
+    </nz-select>
+  </nz-form-control>
+</nz-form-item>
