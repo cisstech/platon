@@ -75,12 +75,7 @@ export class PlLanguageContribution implements NgeMonacoContribution {
                   const reference = resolveFileReference(url, { resource, version })
                   const index = lines[lineIndex].indexOf(url)
                   links.push({
-                    range: new monaco.Range(
-                      lineIndex + 1,
-                      index + 1,
-                      lineIndex + 1,
-                      index + url.length + 2
-                    ),
+                    range: new monaco.Range(lineIndex + 1, index + 1, lineIndex + 1, index + url.length + 2),
                     url: monaco.Uri.parse('platon://' + reference.abspath),
                   })
                 }

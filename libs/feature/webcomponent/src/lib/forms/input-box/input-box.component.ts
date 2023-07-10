@@ -73,7 +73,7 @@ export class InputBoxComponent implements OnInit, OnDestroy, WebComponentHooks<I
     }
 
     const convert = (v: string) => {
-      return v
+      return (v + '')
         .trim()
         .normalize('NFD')
         .replace(/[\u0300-\u036f]/g, '')

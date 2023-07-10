@@ -21,16 +21,17 @@ export class EditorjsViewerComponent implements OnInit {
   @ViewChild('container', { static: true })
   protected container!: ElementRef<HTMLElement>
 
-  @ViewChild('transclusion', { static: true })
-  protected transclusion!: ElementRef<HTMLElement>
-
-  constructor(private readonly changeDetectorRef: ChangeDetectorRef) {}
+  constructor(
+    private readonly changeDetectorRef: ChangeDetectorRef,
+    private readonly elementRef: ElementRef<HTMLElement>
+  ) {}
 
   ngOnInit(): void {
-    const contentNode = this.transclusion.nativeElement
+    const id = this.elementRef.nativeElement.getAttribute('id')
+    const scriptNode = document.querySelector(`script[id="${id}"]`) as HTMLScriptElement
     const containerNode = this.container.nativeElement
     try {
-      const content = contentNode.textContent?.trim() || '{}'
+      const content = scriptNode.textContent?.trim() || '{}'
       const data = JSON.parse(content)
       containerNode.innerHTML = this.parser.parse(data)
       this.changeDetectorRef.detectChanges()

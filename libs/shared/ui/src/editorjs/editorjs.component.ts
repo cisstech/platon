@@ -1,12 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-} from '@angular/core'
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
 import EditorJS, { OutputData } from '@editorjs/editorjs'
 import { EditorJsService } from './editorjs.service'
 import { CodeExtension } from './extensions/code.extension'
@@ -49,12 +41,17 @@ export class EditorJsComponent implements OnInit, OnDestroy {
   constructor(private readonly editorJsService: EditorJsService) {}
 
   async ngOnInit(): Promise<void> {
+    let initalChange = true
     this.editor = this.editorJsService.newInstance({
       data: this.data,
       holder: this.id,
       minHeight: this.minHeight,
       readOnly: this.readOnly,
       onChange: async () => {
+        if (initalChange) {
+          initalChange = false
+          return
+        }
         this.dataChange.emit(await this.editor?.save())
       },
     })

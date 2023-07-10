@@ -94,10 +94,7 @@ export class PleInputComponent implements OnInit, OnDestroy {
           instance.setOptions?.(this.input.options)
           instance.onChangeValue((value) => {
             setTimeout(() => {
-              this.input = {
-                ...this.input,
-                value,
-              }
+              this.input.value = value
               this.inputChange.emit(this.input)
             }, 300)
           })
@@ -113,19 +110,27 @@ export class PleInputComponent implements OnInit, OnDestroy {
 
   @Input()
   set input(value: PleInput) {
-    this.configForm.patchValue(value, {
-      emitEvent: false,
-    })
+    const oldSelectedProvider = this.selectedProvider
 
     this.selectedProvider = value.type
       ? this.providers.find((p) => p.type === value.type)
       : this.providers.find((p) => p.canHandle?.(value))
 
-    this.configEditor?.setOptions({
-      ...(value.options || {}),
-    })
+    if (this.selectedProvider) {
+      value.type = this.selectedProvider.type
+    }
 
-    this.valueEditor?.setValue(value.value)
+    if (oldSelectedProvider?.type === this.selectedProvider?.type) {
+      this.configEditor?.setOptions({
+        ...(value.options || {}),
+      })
+
+      this.valueEditor?.setValue(value.value)
+    }
+
+    this.configForm.patchValue(value, {
+      emitEvent: false,
+    })
   }
 
   @Output() inputChange = new EventEmitter<PleInput>()

@@ -1,6 +1,4 @@
-export const PlMonarchLanguage = (
-  sandbox: 'py' | 'js' = 'js'
-): monaco.languages.IMonarchLanguage => ({
+export const PlMonarchLanguage = (sandbox: 'py' | 'js' = 'js'): monaco.languages.IMonarchLanguage => ({
   /**
    * Identifies a string of characters that start with a letter or underscore and followed
    * by any combination of letters, digits, and underscores.
@@ -11,18 +9,7 @@ export const PlMonarchLanguage = (
   /**
    * A list of reserved keywords in the language. Used to highlight them in the editor.
    */
-  keywords: [
-    'title',
-    'form',
-    'hint',
-    'theories',
-    'author',
-    'statement',
-    'grader',
-    'builder',
-    'solution',
-    'sandbox',
-  ],
+  keywords: ['title', 'form', 'hint', 'theories', 'author', 'statement', 'grader', 'builder', 'solution', 'sandbox'],
 
   /**
    * Recognizes boolean literals, i.e. the values true and false, in all possible case variations.
