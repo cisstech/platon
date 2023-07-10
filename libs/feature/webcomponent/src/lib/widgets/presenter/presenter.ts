@@ -1,12 +1,8 @@
-import { stripIndent } from 'common-tags';
-import {
-  defineWebComponent,
-  IWebComponent,
-  WebComponentTypes,
-} from '../../web-component';
+import { stripIndent } from 'common-tags'
+import { defineWebComponent, IWebComponent, WebComponentTypes } from '../../web-component'
 
 export interface PresenterState extends IWebComponent {
-  template: string;
+  template: string
 }
 
 export const PresenterComponentDefinition = defineWebComponent({
@@ -14,7 +10,7 @@ export const PresenterComponentDefinition = defineWebComponent({
   name: 'Presenter',
   icon: 'assets/images/components/widgets/presenter/presenter.svg',
   selector: 'wc-presenter',
-  description: "Permets de créer des presentations.",
+  description: 'Permets de créer des presentations.',
   fullDescriptionUrl: 'assets/docs/components/widgets/presenter/presenter.md',
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
@@ -54,4 +50,4 @@ export const PresenterComponentDefinition = defineWebComponent({
       </section>
     `,
   },
-});
+})

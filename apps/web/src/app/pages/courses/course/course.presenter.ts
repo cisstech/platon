@@ -93,10 +93,7 @@ export class CoursePresenter implements OnDestroy {
     }
   }
 
-  async updateSection(
-    section: CourseSection,
-    input: UpdateCourseSection
-  ): Promise<void> {
+  async updateSection(section: CourseSection, input: UpdateCourseSection): Promise<void> {
     try {
       await firstValueFrom(this.courseService.updateSection(section, input))
     } catch {
@@ -141,40 +138,38 @@ export class CoursePresenter implements OnDestroy {
   }
 
   async createDemo(): Promise<boolean> {
-    const { course } = this.context.value as Required<Context>;
+    const { course } = this.context.value as Required<Context>
     try {
-      const demo = await firstValueFrom(
-        this.courseService.createDemo(course.id)
-      );
+      const demo = await firstValueFrom(this.courseService.createDemo(course.id))
 
       this.context.next({
         ...this.context.value,
         demo: Optional.ofNonNull(demo),
-      });
+      })
 
-      this.dialogService.success('Une démo a bien été créée!');
-      return true;
+      this.dialogService.success('Une démo a bien été créée!')
+      return true
     } catch {
-      this.alertError();
-      return false;
+      this.alertError()
+      return false
     }
   }
 
   async deleteDemo(): Promise<boolean> {
-    const { course } = this.context.value as Required<Context>;
+    const { course } = this.context.value as Required<Context>
     try {
-      await firstValueFrom(this.courseService.deleteDemo(course.id));
+      await firstValueFrom(this.courseService.deleteDemo(course.id))
 
       this.context.next({
         ...this.context.value,
         demo: Optional.empty(),
-      });
+      })
 
-      this.dialogService.success('La démo a bien été supprimée!');
-      return true;
+      this.dialogService.success('La démo a bien été supprimée!')
+      return true
     } catch {
-      this.alertError();
-      return false;
+      this.alertError()
+      return false
     }
   }
 
@@ -184,7 +179,7 @@ export class CoursePresenter implements OnDestroy {
       firstValueFrom(this.courseService.find(id)),
     ])
 
-    const demo = await firstValueFrom(this.courseService.getDemo(course.id));
+    const demo = await firstValueFrom(this.courseService.getDemo(course.id))
 
     this.context.next({
       state: 'READY',
@@ -198,7 +193,7 @@ export class CoursePresenter implements OnDestroy {
     try {
       await this.refresh(id)
     } catch (error) {
-      this.context.next({ state: layoutStateFromError(error) });
+      this.context.next({ state: layoutStateFromError(error) })
     }
   }
 

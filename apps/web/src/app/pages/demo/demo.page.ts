@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from '@platon/core/browser';
-import { CourseService } from '@platon/feature/course/browser';
-import { firstValueFrom } from 'rxjs';
+import { Component, OnInit } from '@angular/core'
+import { ActivatedRoute, Router } from '@angular/router'
+import { AuthService } from '@platon/core/browser'
+import { CourseService } from '@platon/feature/course/browser'
+import { firstValueFrom } from 'rxjs'
 
 @Component({
   standalone: true,
@@ -18,25 +18,23 @@ export class CourseDemoPage implements OnInit {
     private readonly courseService: CourseService,
     private readonly authService: AuthService
   ) {}
-  
+
   async ngOnInit(): Promise<void> {
     this.activatedRoute.paramMap.subscribe((params) => {
-      this.redirectToDemo(params.get('id') as string);
-    });
+      this.redirectToDemo(params.get('id') as string)
+    })
   }
 
   async redirectToDemo(courseId: string) {
-    const demoAnswer = await firstValueFrom(
-      this.courseService.accessDemo(courseId)
-    );
+    const demoAnswer = await firstValueFrom(this.courseService.accessDemo(courseId))
     if (demoAnswer.auth) {
       await this.authService.signInWithToken({
         accessToken: demoAnswer.accessToken || '',
         refreshToken: demoAnswer.refreshToken || '',
-      });
+      })
     }
     this.router.navigate(['/courses', demoAnswer.courseId], {
       replaceUrl: true,
-    });
+    })
   }
 }

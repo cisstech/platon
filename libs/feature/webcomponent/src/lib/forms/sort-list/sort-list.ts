@@ -48,7 +48,7 @@ export const SortListComponentDefinition = defineWebComponent({
         type: 'string',
         default: 'center',
         description: 'Alignement des items du SortList',
-        enum: ['center', 'left']
+        enum: ['center', 'left'],
       },
       disabled: {
         type: 'boolean',
@@ -58,6 +58,6 @@ export const SortListComponentDefinition = defineWebComponent({
     },
   },
   showcase: {
-    items: ['Choix 1', 'Choix 2', 'Choix 3']
+    items: ['Choix 1', 'Choix 2', 'Choix 3'],
   },
 })

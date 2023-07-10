@@ -23,12 +23,15 @@ export class DialogService {
   constructor(
     private readonly nzModalService: NzModalService,
     private readonly nzMessageService: NzMessageService,
-    private readonly nzNotificationService: NzNotificationService,
+    private readonly nzNotificationService: NzNotificationService
   ) {}
 
-  public static readonly DEFAULT_DIALOG_DURATION : number = 4500
+  public static readonly DEFAULT_DIALOG_DURATION: number = 4500
 
-  error(content: string, options: MessageOptions = { duration: DialogService.DEFAULT_DIALOG_DURATION }) {
+  error(
+    content: string,
+    options: MessageOptions = { duration: DialogService.DEFAULT_DIALOG_DURATION }
+  ) {
     if (options.duration == undefined) options.duration = DialogService.DEFAULT_DIALOG_DURATION
     const ref = options?.notification
       ? this.nzNotificationService.error(options.notification.title, content, {

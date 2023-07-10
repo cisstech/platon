@@ -36,13 +36,9 @@ import {
   CourseOrderingFilterMatcher,
   CoursePipesModule,
   CourseService,
-} from '@platon/feature/course/browser';
-import {
-  Course,
-  CourseFilters,
-  CourseOrderings,
-} from '@platon/feature/course/common';
-import { UserRoles } from '@platon/core/common';
+} from '@platon/feature/course/browser'
+import { Course, CourseFilters, CourseOrderings } from '@platon/feature/course/common'
+import { UserRoles } from '@platon/core/common'
 
 @Component({
   standalone: true,
@@ -91,11 +87,11 @@ export class CoursesPage implements OnInit, OnDestroy {
               .search(query)
               .map((e) => e.item)
           })
-        );
+        )
       },
     },
     onSearch: (query) => this.search(this.filters, query),
-  };
+  }
 
   private user?: User
   protected canCreateCourse = false
@@ -105,7 +101,7 @@ export class CoursesPage implements OnInit, OnDestroy {
   protected completion = of([]).pipe(
     // TODO implements server function
     shareReplay(1)
-  );
+  )
 
   protected searching = true
   protected filters: CourseFilters = {}
@@ -122,8 +118,7 @@ export class CoursesPage implements OnInit, OnDestroy {
   async ngOnInit(): Promise<void> {
     this.user = (await this.authService.ready()) as User
     this.canCreateCourse =
-      this.user?.role === UserRoles.teacher ||
-      this.user?.role === UserRoles.admin
+      this.user?.role === UserRoles.teacher || this.user?.role === UserRoles.admin
     this.changeDetectorRef.markForCheck()
 
     this.subscriptions.push(
@@ -131,8 +126,7 @@ export class CoursesPage implements OnInit, OnDestroy {
         this.filters = {
           ...this.filters,
           search: e.q,
-          period:
-            Number.parseInt(e.period + '', 10) || this.filters.period || 0,
+          period: Number.parseInt(e.period + '', 10) || this.filters.period || 0,
           order: e.order,
           direction: e.direction,
         }

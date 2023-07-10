@@ -6,8 +6,8 @@ export interface AuthToken {
 }
 
 export interface SignInDemoOutput {
-  authToken: AuthToken;
-  userId: string;
+  authToken: AuthToken
+  userId: string
 }
 
 export interface SignInInput {

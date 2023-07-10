@@ -37,6 +37,6 @@ export class SortListComponent implements WebComponentHooks<SortListState> {
   }
 
   getHorizontal(item: SortListItem) {
-    return (this.state?.alignment === "left") ? "text-align: left;" : "";
+    return this.state?.alignment === 'left' ? 'text-align: left;' : ''
   }
 }

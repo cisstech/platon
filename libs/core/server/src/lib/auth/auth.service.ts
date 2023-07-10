@@ -44,7 +44,7 @@ export class AuthService {
   async signUp(input: SignUpInput): Promise<AuthToken> {
     const optionalUser = await this.userService.findByIdOrName(input.username)
     if (optionalUser.isPresent()) {
-      throw new BadRequestException(`User already found: ${input.username}`);
+      throw new BadRequestException(`User already found: ${input.username}`)
     }
 
     const user = await this.userService.create({
@@ -62,22 +62,19 @@ export class AuthService {
       lastName: 'ymous',
       active: true,
       role: UserRoles.demo,
-    });
+    })
 
-    anonymousUser.lastLogin = new Date();
+    anonymousUser.lastLogin = new Date()
     if (!anonymousUser.firstLogin) {
-      anonymousUser.firstLogin = new Date();
+      anonymousUser.firstLogin = new Date()
     }
 
-    const token = await this.authenticate(
-      anonymousUser.id,
-      anonymousUser.username
-    );
+    const token = await this.authenticate(anonymousUser.id, anonymousUser.username)
 
     return {
       authToken: token,
       userId: anonymousUser.id,
-    };
+    }
   }
 
   async resetPassword(input: ResetPasswordInput): Promise<AuthToken> {

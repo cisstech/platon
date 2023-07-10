@@ -214,7 +214,7 @@ export class PLCompiler implements PLVisitor {
       description,
       lineno: this.lineno,
       abspath: this.source.abspath,
-    });
+    })
   }
 
   private warning(description: string) {
@@ -222,7 +222,7 @@ export class PLCompiler implements PLVisitor {
       description,
       lineno: this.lineno,
       abspath: this.source.abspath,
-    });
+    })
   }
 
   private withVariable(

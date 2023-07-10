@@ -1,14 +1,6 @@
-import {
-    ChangeDetectionStrategy,
-    Component,
-    Injector,
-    Input,
-} from '@angular/core';
-import { WebComponent, WebComponentHooks } from '../../web-component';
-import {
-  ChartViewerRadarComponentDefinition,
-  ChartViewerRadarState
-} from './chart-viewer-radar';
+import { ChangeDetectionStrategy, Component, Injector, Input } from '@angular/core'
+import { WebComponent, WebComponentHooks } from '../../web-component'
+import { ChartViewerRadarComponentDefinition, ChartViewerRadarState } from './chart-viewer-radar'
 // import * as d3 from 'd3';
 
 @Component({
@@ -18,11 +10,7 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 @WebComponent(ChartViewerRadarComponentDefinition)
-export class ChartViewerRadarComponent
-  implements WebComponentHooks<ChartViewerRadarState>
-{
-  @Input() state!: ChartViewerRadarState;
-  constructor(readonly injector: Injector) {
-  }
-
+export class ChartViewerRadarComponent implements WebComponentHooks<ChartViewerRadarState> {
+  @Input() state!: ChartViewerRadarState
+  constructor(readonly injector: Injector) {}
 }

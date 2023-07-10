@@ -47,7 +47,7 @@ export class AuthGuard extends PassportGuard(['jwt']) {
         return (await firstValueFrom(loggedIn)) || isPublic
       }
 
-      return (await loggedIn) || isPublic;
+      return (await loggedIn) || isPublic
     } catch (error) {
       if (isPublic) {
         return true

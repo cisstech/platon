@@ -11,9 +11,7 @@ export class AuthController {
 
   @Public()
   @Post('signup')
-  async signUp(
-    @Body() input: SignUpInputDTO
-  ): Promise<CreatedResponse<AuthTokenDTO>> {
+  async signUp(@Body() input: SignUpInputDTO): Promise<CreatedResponse<AuthTokenDTO>> {
     return new CreatedResponse({
       resource: await this.authService.signUp(input),
     })
@@ -21,9 +19,7 @@ export class AuthController {
 
   @Public()
   @Post('signin')
-  async signIn(
-    @Body() input: SignInInputDTO
-  ): Promise<ItemResponse<AuthTokenDTO>> {
+  async signIn(@Body() input: SignInInputDTO): Promise<ItemResponse<AuthTokenDTO>> {
     return new ItemResponse({
       resource: await this.authService.signIn(input),
     })
@@ -31,9 +27,7 @@ export class AuthController {
 
   @Public()
   @Post('reset-password')
-  async resetPassword(
-    @Body() input: ResetPasswordInputDTO
-  ): Promise<ItemResponse<AuthTokenDTO>> {
+  async resetPassword(@Body() input: ResetPasswordInputDTO): Promise<ItemResponse<AuthTokenDTO>> {
     return new ItemResponse({
       resource: await this.authService.resetPassword(input),
     })

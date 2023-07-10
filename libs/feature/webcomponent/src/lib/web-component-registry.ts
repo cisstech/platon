@@ -164,9 +164,9 @@ export const WEB_COMPONENTS_BUNDLES: NgeElementDef[] = [
   {
     selector: 'wc-presenter',
     module: () =>
-      import(
-        /* webpackChunkName: "wc-presenter" */ './widgets/presenter/presenter.module'
-      ).then((m) => m.PresenterModule),
+      import(/* webpackChunkName: "wc-presenter" */ './widgets/presenter/presenter.module').then(
+        (m) => m.PresenterModule
+      ),
   },
   {
     selector: 'wc-chart-viewer-bars',
@@ -189,7 +189,7 @@ export const WEB_COMPONENTS_BUNDLES: NgeElementDef[] = [
         /* webpackChunkName: "wc-graph-viewer" */ './widgets/chart-viewer-radar/chart-viewer-radar.module'
       ).then((m) => m.ChartViewerRadarModule),
   },
-];
+]
 
 export const WEB_COMPONENTS_REGISTRY: Provider[] = [
   {
@@ -302,4 +302,4 @@ export const WEB_COMPONENTS_REGISTRY: Provider[] = [
     multi: true,
     useValue: ChartViewerRadarComponentDefinition,
   },
-];
+]
