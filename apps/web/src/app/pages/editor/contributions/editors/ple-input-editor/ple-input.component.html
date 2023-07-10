@@ -1,0 +1,50 @@
+<ng-container *ngIf="mode !== 'value'">
+  <form class="config-editor" [formGroup]="configForm">
+    <h3>Informations</h3>
+    <nz-form-item nzRequired>
+      <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="name">Nom</nz-form-label>
+      <nz-form-control>
+        <input nz-input id="name" formControlName="name" />
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="type">Type</nz-form-label>
+      <nz-form-control>
+        <nz-select id="type" formControlName="type">
+          <nz-option
+            *ngFor="let provider of sortedProviders; trackBy: trackProvider"
+            [nzValue]="provider.type"
+            [nzLabel]="provider.label"
+          ></nz-option>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item *ngIf="mode === 'config'">
+      <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="description">Description</nz-form-label>
+      <nz-form-control>
+        <textarea nz-input formControlName="description" id="description"></textarea>
+      </nz-form-control>
+      <p>
+        Décrivez ce que représente cette variable et énumérez les hypothèses formulées quant à sa
+        valeur.
+      </p>
+    </nz-form-item>
+    <ng-container *ngIf="selectedProvider?.configEditor">
+      <h3>Options</h3>
+      <ng-container
+        *ngComponentOutlet="$any(selectedProvider!.configEditor!); injector: configEditorInjector"
+      />
+    </ng-container>
+  </form>
+</ng-container>
+
+<ng-container *ngIf="mode === 'design'">
+  <h3>Valeur</h3>
+</ng-container>
+<ng-container *ngIf="mode !== 'config'">
+  <ng-container *ngIf="selectedProvider?.valueEditor">
+    <ng-container
+      *ngComponentOutlet="$any(selectedProvider!.valueEditor!); injector: valueEditorInjector"
+    />
+  </ng-container>
+</ng-container>

@@ -21,11 +21,8 @@ export class RemotePlayerService extends PlayerProvider {
     super()
   }
 
-  preview(resource: string, version: string): Observable<PreviewOuput> {
-    return this.http.post<PreviewOuput>('/api/v1/player/preview', {
-      resource,
-      version: version || 'latest',
-    } as PreviewInput)
+  preview(input: PreviewInput): Observable<PreviewOuput> {
+    return this.http.post<PreviewOuput>('/api/v1/player/preview', input)
   }
 
   playAnswers(input: PlayAnswersInput): Observable<PlayAnswersOutput> {

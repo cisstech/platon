@@ -92,7 +92,11 @@ export class PlayerService {
    * @returns A player layout for the resource.
    */
   async preview(input: PreviewInput): Promise<PreviewOuputDTO> {
-    const [source, resource] = await this.resourceFileService.compile(input.resource, input.version)
+    const [source, resource] = await this.resourceFileService.compile({
+      resourceId: input.resource,
+      version: input.version,
+      overrides: input.overrides,
+    })
     const session = await this.createNewSession({ source })
     return {
       exercise: resource.type === 'EXERCISE' ? withExercisePlayer(session) : undefined,

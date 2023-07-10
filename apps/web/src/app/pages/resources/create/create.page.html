@@ -46,9 +46,6 @@
               <mat-label>Description</mat-label>
               <textarea cdkTextareaAutosize matInput formControlName="desc"></textarea>
             </mat-form-field>
-            <mat-checkbox *ngIf="type === 'EXERCISE'" formControlName="isModel">
-              Cet exercice est-il un modèle?
-            </mat-checkbox>
             <mat-checkbox *ngIf="type === 'CIRCLE'" formControlName="opened">
               Autoriser la création de ressource par tout le monde dans ce cercle?
             </mat-checkbox>

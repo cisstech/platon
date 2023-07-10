@@ -52,7 +52,7 @@ export class ResourceFileController {
     @Param('resourceId') resourceId: string,
     @Query('version') version = LATEST
   ) {
-    const [source] = await this.service.compile(resourceId, version, request.user)
+    const [source] = await this.service.compile({ resourceId, version, user: request.user })
     return source
   }
 

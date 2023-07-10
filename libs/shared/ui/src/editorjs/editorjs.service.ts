@@ -7,7 +7,7 @@ import EditorJS, { OutputData } from '@editorjs/editorjs'
 import DragDrop from 'editorjs-drag-drop'
 import Undo from 'editorjs-undo'
 
-import { EditorJsExtension, EDITOR_JS_EXTENSION } from './editorjs'
+import { EDITOR_JS_EXTENSION, EditorJsExtension } from './editorjs'
 
 @Injectable()
 export class EditorJsService {
@@ -21,6 +21,7 @@ export class EditorJsService {
     data?: OutputData
     holder?: string
     readOnly?: boolean
+    minHeight?: number
     onChange?: () => void | Promise<void>
   }): EditorJS {
     const editor = new EditorJS({
@@ -28,7 +29,7 @@ export class EditorJsService {
       autofocus: true,
       holder: options.holder || 'editorjs',
       inlineToolbar: true,
-      minHeight: 400,
+      minHeight: options.minHeight || 400,
       logLevel: 'ERROR' as any,
       readOnly: options.readOnly,
       tools: (this.extensions || [])

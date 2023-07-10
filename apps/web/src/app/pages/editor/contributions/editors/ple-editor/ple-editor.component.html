@@ -1,0 +1,67 @@
+<form *ngIf="ready" [formGroup]="form" nz-form>
+  <nz-collapse>
+    <nz-collapse-panel nzHeader="Titre" nzExpandedIcon="link">
+      <nz-form-item>
+        <nz-form-control>
+          <input nz-input formControlName="title" />
+        </nz-form-control>
+      </nz-form-item>
+    </nz-collapse-panel>
+    <nz-collapse-panel nzHeader="Instruction" nzExpandedIcon="unordered-list">
+      <ui-editorjs
+        [data]="form.value.statement"
+        [minHeight]="100"
+        (dataChange)="
+          form.patchValue({
+            statement: $event
+          })
+        "
+      />
+    </nz-collapse-panel>
+    <nz-collapse-panel nzHeader="Formulaire" nzExpandedIcon="check-square">
+      <ui-editorjs
+        [data]="form.value.form"
+        [minHeight]="100"
+        (dataChange)="
+          form.patchValue({
+            form: $event
+          })
+        "
+      />
+    </nz-collapse-panel>
+    <nz-collapse-panel nzHeader="Variables" nzExpandedIcon="code" nzActive>
+      <div class="container-variables">
+        <div class="container-variables--left-side">
+          <nz-list [nzDataSource]="variables" nzBordered>
+            <nz-list-item
+              [class.selected]="selectedVariableIndex === i"
+              (click)="selectVariable(i)"
+              *ngFor="let variable of variables; trackBy: trackVariable; index as i"
+            >
+              <span>{{ variable.name }}</span>
+              <ul nz-list-item-actions>
+                <nz-list-item-action>
+                  <button
+                    nz-button
+                    nzDanger
+                    nzType="text"
+                    nz-tooltip="Supprimer"
+                    (click)="deleteVariable(i)"
+                  >
+                    <span nz-icon nzType="delete" nzTheme="outline"></span>
+                  </button>
+                </nz-list-item-action>
+              </ul>
+            </nz-list-item>
+          </nz-list>
+          <button class="btn-add-input" nz-button nzType="primary" (click)="addVariable()">
+            +
+          </button>
+        </div>
+        <div class="container-variables--right-side">
+          <app-ple-input *ngIf="selectedVariable" [input]="selectedVariable" mode="design" />
+        </div>
+      </div>
+    </nz-collapse-panel>
+  </nz-collapse>
+</form>
