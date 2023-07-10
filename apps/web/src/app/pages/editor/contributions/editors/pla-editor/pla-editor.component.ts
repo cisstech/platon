@@ -6,6 +6,7 @@ import {
   Input,
   OnDestroy,
   OnInit,
+  inject,
 } from '@angular/core'
 import { FormBuilder, Validators } from '@angular/forms'
 import { Editor, FileService, OpenRequest } from '@cisstech/nge-ide/core'
@@ -13,7 +14,7 @@ import { AuthService } from '@platon/core/browser'
 import { User } from '@platon/core/common'
 import { ActivityExercise, ActivityVariables } from '@platon/feature/compiler'
 import { Resource } from '@platon/feature/resource/common'
-import { debounceTime, skip, Subscription } from 'rxjs'
+import { Subscription, debounceTime, skip } from 'rxjs'
 import { v4 as uuidv4 } from 'uuid'
 
 @Component({
@@ -23,6 +24,11 @@ import { v4 as uuidv4 } from 'uuid'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlaEditorComponent implements OnInit, OnDestroy {
+  private readonly fb = inject(FormBuilder)
+  private readonly fileService = inject(FileService)
+  private readonly authService = inject(AuthService)
+  private readonly changeDetectorRef = inject(ChangeDetectorRef)
+
   private readonly subscriptions: Subscription[] = []
   private request!: OpenRequest
 
@@ -82,13 +88,6 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
 
   protected user!: User
 
-  constructor(
-    private readonly fb: FormBuilder,
-    private readonly fileService: FileService,
-    private readonly authService: AuthService,
-    private readonly changeDetectorRef: ChangeDetectorRef
-  ) {}
-
   async ngOnInit(): Promise<void> {
     this.user = (await this.authService.ready()) as User
 
@@ -110,7 +109,6 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((s) => s.unsubscribe())
   }
 
-  // Add the following methods to handle exercise groups
   protected selectGroup(index: number): void {
     this.selectedGroup = this.exerciseGroups[index]
     this.selectedGroupIndex = index
@@ -118,13 +116,13 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
 
   protected addGroup(): void {
     const newGroup: ActivityExercise[] = []
-    this.exerciseGroups.push(newGroup)
-    this.selectedGroup = newGroup
+    this.exerciseGroups = [...this.exerciseGroups, newGroup]
+    this.selectGroup(this.exerciseGroups.length - 1)
     this.onChangeData()
   }
 
   protected deleteGroup(index: number): void {
-    this.exerciseGroups.splice(index, 1)
+    this.exerciseGroups = this.exerciseGroups.filter((_, i) => i !== index)
     this.selectedGroup = undefined
     this.selectedGroupIndex = undefined
     this.onChangeData()
@@ -132,23 +130,36 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
 
   protected addExercise(): void {
     if (this.selectedGroup && this.selectedExercise) {
-      this.selectedGroup.push({
-        id: uuidv4(),
-        version: 'latest',
-        resource: this.selectedExercise.id,
-      } as ActivityExercise)
+      this.selectedGroup = [
+        ...this.selectedGroup,
+        {
+          id: uuidv4(),
+          version: 'latest',
+          resource: this.selectedExercise.id,
+        } as ActivityExercise,
+      ]
+      this.exerciseGroups = this.exerciseGroups.map((group, index) =>
+        index === this.selectedGroupIndex ? (this.selectedGroup as ActivityExercise[]) : group
+      )
       this.selectedExercise = undefined
     }
     this.onChangeData()
   }
 
   protected deleteExercise(index: number): void {
-    this.selectedGroup?.splice(index, 1)
+    this.selectedGroup = this.selectedGroup?.filter((_, i) => i !== index)
+    this.exerciseGroups = this.exerciseGroups.map((group, i) =>
+      i === this.selectedGroupIndex ? (this.selectedGroup as ActivityExercise[]) : group
+    )
+
     this.onChangeData()
   }
 
   protected updateExercise(exercise: ActivityExercise): void {
     this.selectedGroup = this.selectedGroup?.map((e) => (e.id === exercise.id ? exercise : e))
+    this.exerciseGroups = this.exerciseGroups.map((group, i) =>
+      i === this.selectedGroupIndex ? (this.selectedGroup as ActivityExercise[]) : group
+    )
     this.onChangeData()
   }
 
@@ -197,7 +208,7 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
     return index
   }
 
-  protected trackByExerciseId(index: number, exercise: ActivityExercise) {
+  protected trackByExerciseId(_: number, exercise: ActivityExercise) {
     return exercise.id
   }
 

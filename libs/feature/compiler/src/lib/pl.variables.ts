@@ -106,7 +106,7 @@ export const extractExercisesFromActivityVariables = (variables: ActivityVariabl
   const groups = variables.exerciseGroups || {}
   const exercises: ActivityExercise[] = []
   Object.keys(groups).forEach((group) => {
-    ;(groups[group] || []).forEach((exercise) => {
+    groups[group]?.forEach((exercise) => {
       exercises.push(exercise)
     })
   })

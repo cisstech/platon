@@ -1,0 +1,12 @@
+<nz-form-item nzRequired>
+  <nz-form-control>
+    <input
+      nz-input
+      type="number"
+      [min]="options?.min ?? null"
+      [max]="options?.max ?? null"
+      [(ngModel)]="value"
+      (ngModelChange)="notifyValueChange?.($event)"
+    />
+  </nz-form-control>
+</nz-form-item>

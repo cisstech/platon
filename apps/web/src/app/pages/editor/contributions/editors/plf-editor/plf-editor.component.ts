@@ -6,6 +6,7 @@ import {
   Input,
   OnDestroy,
   OnInit,
+  inject,
 } from '@angular/core'
 import { Editor, FileService, OpenRequest } from '@cisstech/nge-ide/core'
 import { OutputData } from '@editorjs/editorjs'
@@ -18,6 +19,8 @@ import { Subscription } from 'rxjs'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlfEditorComponent implements OnInit, OnDestroy {
+  private readonly fileService = inject(FileService)
+  private readonly changeDetectorRef = inject(ChangeDetectorRef)
   private readonly subscriptions: Subscription[] = []
   private request!: OpenRequest
 
@@ -26,11 +29,6 @@ export class PlfEditorComponent implements OnInit, OnDestroy {
 
   @Input()
   protected editor!: Editor
-
-  constructor(
-    private readonly fileService: FileService,
-    private readonly changeDetectorRef: ChangeDetectorRef
-  ) {}
 
   ngOnInit(): void {
     this.subscriptions.push(

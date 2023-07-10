@@ -1,25 +1,19 @@
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { ItemResponse, ListResponse, User } from '@platon/core/common'
+import { ItemResponse, ListResponse } from '@platon/core/common'
 import {
   CircleTree,
   CreateResource,
-  CreateResourceInvitation,
   Resource,
   ResourceCompletion,
-  ResourceEvent,
-  ResourceEventFilters,
   ResourceFilters,
-  ResourceInvitation,
-  ResourceMember,
-  ResourceMemberFilters,
   ResourceStatisic,
-  ResourceWatcherFilters,
   UpdateResource,
 } from '@platon/feature/resource/common'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { ResourceProvider } from '../models/resource-provider'
+import { PLSourceFile } from '@platon/feature/compiler'
 
 @Injectable()
 export class RemoteResourceProvider extends ResourceProvider {

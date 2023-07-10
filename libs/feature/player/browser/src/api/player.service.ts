@@ -8,6 +8,7 @@ import {
   PlayAnswersOutput,
   PlayExerciseInput,
   PlayExerciseOuput,
+  PreviewInput,
   PreviewOuput,
 } from '@platon/feature/player/common'
 import { Observable } from 'rxjs'
@@ -17,8 +18,8 @@ import { PlayerProvider } from '../models/player-provider'
 export class PlayerService {
   constructor(private readonly provider: PlayerProvider) {}
 
-  preview(resource: string, version: string): Observable<PreviewOuput> {
-    return this.provider.preview(resource, version)
+  preview(input: PreviewInput): Observable<PreviewOuput> {
+    return this.provider.preview(input)
   }
 
   playAnswers(input: PlayAnswersInput): Observable<PlayAnswersOutput> {

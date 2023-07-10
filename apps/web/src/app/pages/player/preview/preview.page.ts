@@ -1,12 +1,22 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  HostListener,
+  OnInit,
+} from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { firstValueFrom } from 'rxjs'
 
 import { PlayerService, PlayerWrapperComponent } from '@platon/feature/player/browser'
 import { Player } from '@platon/feature/player/common'
-import { NzSpinModule } from 'ng-zorro-antd/spin'
 import { UiErrorComponent } from '@platon/shared/ui'
+import { NzSpinModule } from 'ng-zorro-antd/spin'
+
+import { StorageService } from '@platon/core/browser'
+import { Variables } from '@platon/feature/compiler'
+import { getPreviewOverridesStorageKey } from '@platon/feature/resource/browser'
 
 @Component({
   standalone: true,
@@ -24,6 +34,7 @@ export class PlayerPreviewPage implements OnInit {
   constructor(
     private readonly playerService: PlayerService,
     private readonly activatedRoute: ActivatedRoute,
+    private readonly storageService: StorageService,
     private readonly changeDetectorRef: ChangeDetectorRef
   ) {}
 
@@ -31,11 +42,26 @@ export class PlayerPreviewPage implements OnInit {
     try {
       const params = this.activatedRoute.snapshot.paramMap
       const queryParams = this.activatedRoute.snapshot.queryParamMap
-      const resourceId = params.get('id')
-      const resourceVersion = queryParams.get('version')
+
+      const id = params.get('id')
+      const version = queryParams.get('version')
+      const sessionId = queryParams.get('sessionId')
+
+      let overrides: Variables | undefined
+      if (sessionId) {
+        overrides = JSON.parse(
+          (await firstValueFrom(
+            this.storageService.getString(getPreviewOverridesStorageKey(sessionId))
+          )) || '{}'
+        )
+      }
 
       const output = await firstValueFrom(
-        this.playerService.preview(resourceId as string, resourceVersion as string)
+        this.playerService.preview({
+          resource: id as string,
+          version: version as string,
+          overrides,
+        })
       )
       this.player = output.activity || output.exercise
     } catch (error) {
@@ -47,5 +73,14 @@ export class PlayerPreviewPage implements OnInit {
 
     this.loading = false
     this.changeDetectorRef.markForCheck()
+  }
+
+  @HostListener('window:beforeunload')
+  protected async onClose() {
+    const queryParams = this.activatedRoute.snapshot.queryParamMap
+    const sessionId = queryParams.get('sessionId')
+    if (sessionId) {
+      await firstValueFrom(this.storageService.remove(getPreviewOverridesStorageKey(sessionId)))
+    }
   }
 }

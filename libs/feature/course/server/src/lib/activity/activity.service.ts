@@ -127,7 +127,10 @@ export class ActivityService {
       throw new NotFoundResponse(`CourseActivity not found: ${activityId}`)
     }
 
-    const [source] = await this.fileService.compile(activity.source.resource, input.version)
+    const [source] = await this.fileService.compile({
+      resourceId: activity.source.resource,
+      version: input.version,
+    })
     activity.source = source
 
     activity = await this.repository.save(activity)
@@ -145,7 +148,10 @@ export class ActivityService {
     const activity = new ActivityEntity()
 
     if ('resourceId' in input) {
-      const [source] = await this.fileService.compile(input.resourceId, input.resourceVersion)
+      const [source] = await this.fileService.compile({
+        resourceId: input.resourceId,
+        version: input.resourceVersion,
+      })
       activity.source = source
       delete (input as any).resourceId
       delete (input as any).resourceVersion

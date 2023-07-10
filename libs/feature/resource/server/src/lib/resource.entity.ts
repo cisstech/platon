@@ -19,10 +19,6 @@ export class ResourceEntity extends BaseEntity {
   @Column({ nullable: true })
   code?: string
 
-  @Index('Resources_is_model_idx')
-  @Column({ type: 'boolean', name: 'is_model', default: false })
-  isModel!: string
-
   @Index('Resources_model_id_idx')
   @Column({ name: 'model_id', nullable: true })
   model_id?: string

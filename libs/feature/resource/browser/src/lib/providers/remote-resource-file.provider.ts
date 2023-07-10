@@ -14,11 +14,25 @@ import {
   ResourceFile,
 } from '@platon/feature/resource/common'
 import { ResourceFileProvider } from '../models/resource-file-provider'
+import { PLSourceFile } from '@platon/feature/compiler'
 
 @Injectable()
 export class RemoteResourceFileProvider extends ResourceFileProvider {
   constructor(private readonly http: HttpClient) {
     super()
+  }
+
+  compile(resource: string, version?: string): Observable<PLSourceFile> {
+    let params = new HttpParams()
+    if (version) {
+      params = params.append('version', version)
+    }
+
+    return this.http
+      .post<PLSourceFile>(`/api/v1/files/compile/${resource}`, {
+        params,
+      })
+      .pipe(map((response) => response))
   }
 
   release(resource: string | Resource, input: FileRelease): Observable<void> {
