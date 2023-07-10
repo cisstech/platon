@@ -6,9 +6,6 @@ export class PleConfigEditor extends Editor {
   component = () => import('./ple-config-editor.module').then((m) => m.PleConfigEditorModule)
   canHandle(request: OpenRequest): boolean {
     const presenter = request.injector.get(EditorPresenter)
-    return (
-      request.uri.path === '/config.json' &&
-      presenter.currentResource.type === ResourceTypes.EXERCISE
-    )
+    return request.uri.path === '/config.json' && presenter.currentResource.type === ResourceTypes.EXERCISE
   }
 }

@@ -1,13 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CommonModule } from '@angular/common'
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  forwardRef,
-  Input,
-  OnInit,
-} from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, Input, OnInit } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { combineLatest, Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
@@ -36,17 +29,7 @@ type Item = User | UserGroup
     },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    CommonModule,
-
-    NzIconModule,
-    NzButtonModule,
-
-    NgeUiListModule,
-
-    UserAvatarComponent,
-    UiSearchBarComponent,
-  ],
+  imports: [CommonModule, NzIconModule, NzButtonModule, NgeUiListModule, UserAvatarComponent, UiSearchBarComponent],
 })
 export class UserSearchBarComponent implements OnInit, ControlValueAccessor {
   @Input() multi = true
@@ -81,10 +64,7 @@ export class UserSearchBarComponent implements OnInit, ControlValueAccessor {
 
   selection: Item[] = []
 
-  constructor(
-    private readonly userService: UserService,
-    private readonly changeDetectorRef: ChangeDetectorRef
-  ) {}
+  constructor(private readonly userService: UserService, private readonly changeDetectorRef: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     if (this.allowGroup) {

@@ -16,16 +16,7 @@ import { CreateResourceInvitation } from '@platon/feature/resource/common'
   templateUrl: './invitation-form.component.html',
   styleUrls: ['./invitation-form.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-
-    NzGridModule,
-    NzFormModule,
-    NzButtonModule,
-
-    UserSearchBarComponent,
-  ],
+  imports: [CommonModule, ReactiveFormsModule, NzGridModule, NzFormModule, NzButtonModule, UserSearchBarComponent],
 })
 export class ResourceInvitationFormComponent {
   readonly form = new FormGroup({

@@ -22,10 +22,7 @@ export class TopicController {
   }
 
   @Patch('/:id')
-  async update(
-    @Param('id') id: string,
-    @Body() input: UpdateTopicDTO
-  ): Promise<ItemResponse<TopicDTO>> {
+  async update(@Param('id') id: string, @Body() input: UpdateTopicDTO): Promise<ItemResponse<TopicDTO>> {
     const resource = Mapper.map(await this.service.update(id, input), TopicDTO)
     return new ItemResponse({ resource })
   }

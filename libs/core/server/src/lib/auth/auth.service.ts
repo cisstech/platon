@@ -23,9 +23,7 @@ export class AuthService {
 
   async signIn(input: SignInInput): Promise<AuthToken> {
     const optionalUser = await this.userService.findByIdOrName(input.username)
-    const user = optionalUser.orElseThrow(
-      () => new NotFoundResponse(`User not found: ${input.username}`)
-    )
+    const user = optionalUser.orElseThrow(() => new NotFoundResponse(`User not found: ${input.username}`))
     if (!user.password || !(await bcrypt.compare(input.password, user.password))) {
       throw new BadRequestException('Password is incorrect')
     }

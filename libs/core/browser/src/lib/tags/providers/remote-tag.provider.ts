@@ -22,15 +22,11 @@ export class RemoteTagProvider extends TagProvider {
   }
 
   listTopics(): Observable<Topic[]> {
-    return this.http
-      .get<ListResponse<Topic>>('/api/v1/topics')
-      .pipe(map((response) => response.resources))
+    return this.http.get<ListResponse<Topic>>('/api/v1/topics').pipe(map((response) => response.resources))
   }
 
   createTopic(input: CreateTopic): Observable<Topic> {
-    return this.http
-      .post<CreatedResponse<Topic>>(`/api/v1/topics`, input)
-      .pipe(map((response) => response.resource))
+    return this.http.post<CreatedResponse<Topic>>(`/api/v1/topics`, input).pipe(map((response) => response.resource))
   }
 
   updateTopic(id: string, input: UpdateTopic): Observable<Topic> {
@@ -44,15 +40,11 @@ export class RemoteTagProvider extends TagProvider {
   }
 
   listLevels(): Observable<Level[]> {
-    return this.http
-      .get<ListResponse<Level>>('/api/v1/levels/')
-      .pipe(map((response) => response.resources))
+    return this.http.get<ListResponse<Level>>('/api/v1/levels/').pipe(map((response) => response.resources))
   }
 
   createLevel(input: CreateLevel): Observable<Level> {
-    return this.http
-      .post<CreatedResponse<Topic>>(`/api/v1/levels`, input)
-      .pipe(map((response) => response.resource))
+    return this.http.post<CreatedResponse<Topic>>(`/api/v1/levels`, input).pipe(map((response) => response.resource))
   }
 
   updateLevel(id: string, input: UpdateLevel): Observable<Level> {

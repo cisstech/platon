@@ -1,11 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import {
-  NotFoundResponse,
-  OrderingDirections,
-  UserFilters,
-  UserOrderings,
-} from '@platon/core/common'
+import { NotFoundResponse, OrderingDirections, UserFilters, UserOrderings } from '@platon/core/common'
 import { Repository } from 'typeorm'
 import { Optional } from 'typescript-optional'
 import { UserEntity } from './user.entity'
@@ -38,21 +33,15 @@ export class UserService {
     const query = this.repository.createQueryBuilder('user')
 
     if (filters.groups?.length) {
-      query.innerJoin(
-        'UserGroupsUsers',
-        'group',
-        'group.user_id = user.id AND group.group_id IN (:...ids)',
-        { ids: filters.groups }
-      )
+      query.innerJoin('UserGroupsUsers', 'group', 'group.user_id = user.id AND group.group_id IN (:...ids)', {
+        ids: filters.groups,
+      })
     }
 
     if (filters.lmses?.length) {
-      query.innerJoin(
-        'LmsUsers',
-        'lms_user',
-        'lms_user.user_id = user.id AND lms_user.lms_id IN (:...ids)',
-        { ids: filters.lmses }
-      )
+      query.innerJoin('LmsUsers', 'lms_user', 'lms_user.user_id = user.id AND lms_user.lms_id IN (:...ids)', {
+        ids: filters.lmses,
+      })
     }
 
     if (filters.roles?.length) {

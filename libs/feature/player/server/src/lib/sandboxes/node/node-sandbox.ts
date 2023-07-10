@@ -80,9 +80,7 @@ export class NodeSandbox implements Sandbox {
       await fs.promises.mkdir(baseDir)
 
       await Promise.all([
-        ...input.files.map((file) =>
-          fs.promises.writeFile(Path.join(baseDir, file.path), file.content)
-        ),
+        ...input.files.map((file) => fs.promises.writeFile(Path.join(baseDir, file.path), file.content)),
       ])
     }
 

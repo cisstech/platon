@@ -23,12 +23,9 @@ export class CourseService {
     }
 
     if (filters.members) {
-      query.innerJoin(
-        CourseMemberView,
-        'member',
-        'member.course_id = course.id AND member.id IN (:...ids)',
-        { ids: filters.members }
-      )
+      query.innerJoin(CourseMemberView, 'member', 'member.course_id = course.id AND member.id IN (:...ids)', {
+        ids: filters.members,
+      })
     }
 
     if (filters.search) {

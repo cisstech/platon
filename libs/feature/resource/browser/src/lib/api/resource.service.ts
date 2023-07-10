@@ -76,10 +76,7 @@ export class ResourceService {
     return this.resourceMemberProvider.deleteMember(resource, userId)
   }
 
-  searchMembers(
-    resource: Resource,
-    filters: ResourceMemberFilters
-  ): Observable<ListResponse<ResourceMember>> {
+  searchMembers(resource: Resource, filters: ResourceMemberFilters): Observable<ListResponse<ResourceMember>> {
     return this.resourceMemberProvider.searchMembers(resource, filters)
   }
   //#endregion
@@ -97,10 +94,7 @@ export class ResourceService {
     return this.resourceWatcherProvider.deleteWatcher(resource, userId)
   }
 
-  listWatchers(
-    resource: Resource,
-    filters: ResourceWatcherFilters
-  ): Observable<ListResponse<User>> {
+  listWatchers(resource: Resource, filters: ResourceWatcherFilters): Observable<ListResponse<User>> {
     return this.resourceWatcherProvider.searchWatchers(resource, filters)
   }
   //#endregion
@@ -114,10 +108,7 @@ export class ResourceService {
     return this.resourceInvitationProvider.acceptInvitation(invitation)
   }
 
-  createInvitation(
-    resource: Resource,
-    input: CreateResourceInvitation
-  ): Observable<ResourceInvitation> {
+  createInvitation(resource: Resource, input: CreateResourceInvitation): Observable<ResourceInvitation> {
     return this.resourceInvitationProvider.createInvitation(resource, input)
   }
 
@@ -131,10 +122,7 @@ export class ResourceService {
   //#endregion
 
   //#region Events
-  listEvents(
-    resource: Resource,
-    filters?: ResourceEventFilters
-  ): Observable<ListResponse<ResourceEvent>> {
+  listEvents(resource: Resource, filters?: ResourceEventFilters): Observable<ListResponse<ResourceEvent>> {
     return this.resourceEventProvider.listEvents(resource, filters)
   }
   //#endregion

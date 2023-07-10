@@ -52,9 +52,7 @@ export class ActivityService {
   }
 
   async findById(id: string, user: User): Promise<ActivityEntity> {
-    const qb = buildQuery(this.repository.createQueryBuilder('activity'), (qb) =>
-      qb.where('activity.id = :id', { id })
-    )
+    const qb = buildQuery(this.repository.createQueryBuilder('activity'), (qb) => qb.where('activity.id = :id', { id }))
     const activity = await qb.getOne()
     if (!activity) {
       throw new NotFoundResponse(`Activity ${id} not found.`)
@@ -87,11 +85,7 @@ export class ActivityService {
     return this.addVirtualColumns(await this.repository.save(activity))
   }
 
-  async update(
-    courseId: string,
-    activityId: string,
-    changes: Partial<ActivityEntity>
-  ): Promise<ActivityEntity> {
+  async update(courseId: string, activityId: string, changes: Partial<ActivityEntity>): Promise<ActivityEntity> {
     const activity = await this.repository.findOne({
       where: {
         courseId,
@@ -102,20 +96,13 @@ export class ActivityService {
       throw new NotFoundResponse(`CourseActivity not found: ${activityId}`)
     }
 
-    await this.repository.update(
-      { id: activityId },
-      changes as QueryDeepPartialEntity<ActivityEntity>
-    )
+    await this.repository.update({ id: activityId }, changes as QueryDeepPartialEntity<ActivityEntity>)
 
     Object.assign(activity, changes)
     return this.addVirtualColumns(activity)
   }
 
-  async reload(
-    courseId: string,
-    activityId: string,
-    input: ReloadActivity
-  ): Promise<ActivityEntity> {
+  async reload(courseId: string, activityId: string, input: ReloadActivity): Promise<ActivityEntity> {
     let activity = await this.repository.findOne({
       where: {
         courseId,
@@ -185,9 +172,7 @@ export class ActivityService {
       const navigation = rawResult.session_variables?.navigation
       if (navigation?.exercises) {
         const started = navigation.exercises.filter((e: any) => e.state !== 'NOT_STARTED').length
-        const graded = navigation.exercises.filter(
-          (e: any) => !['NOT_STARTED', 'STARTED'].includes(e.state)
-        ).length
+        const graded = navigation.exercises.filter((e: any) => !['NOT_STARTED', 'STARTED'].includes(e.state)).length
         Object.assign(entity, {
           progression: (100 * graded + 10 * (started - graded)) / navigation.exercises.length,
         } as Partial<ActivityEntity>)
@@ -197,14 +182,9 @@ export class ActivityService {
   }
 
   private withMemberJoin(qb: SelectQueryBuilder<ActivityEntity>, user: User) {
-    return qb.leftJoin(
-      ActivityMemberView,
-      'member',
-      'member.activity_id = activity.id AND member.id = :userId',
-      {
-        userId: user.id,
-      }
-    )
+    return qb.leftJoin(ActivityMemberView, 'member', 'member.activity_id = activity.id AND member.id = :userId', {
+      userId: user.id,
+    })
   }
 
   private withSessionJoin(qb: SelectQueryBuilder<ActivityEntity>, user: User) {

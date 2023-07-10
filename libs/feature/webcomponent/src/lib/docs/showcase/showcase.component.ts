@@ -20,15 +20,10 @@ export class ShowcaseComponent implements OnInit {
   showEditor = false
   component?: any
 
-  constructor(
-    private readonly el: ElementRef<HTMLElement>,
-    private readonly resourceLoader: ResourceLoaderService
-  ) {}
+  constructor(private readonly el: ElementRef<HTMLElement>, private readonly resourceLoader: ResourceLoaderService) {}
 
   async ngOnInit() {
-    await firstValueFrom(
-      this.resourceLoader.loadAllAsync([['style', 'assets/vendors/jsoneditor/jsoneditor.min.css']])
-    )
+    await firstValueFrom(this.resourceLoader.loadAllAsync([['style', 'assets/vendors/jsoneditor/jsoneditor.min.css']]))
 
     const host = this.el.nativeElement.firstElementChild
     this.component = document.createElement(this.definition.selector)

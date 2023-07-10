@@ -404,9 +404,7 @@ export class AutomatonEditorService {
    * @returns `true` if the transition is renamed `false` otherwise.
    */
   renameTransition(transition: Transition, symbols: string[]) {
-    const tr = this.transitions.find(
-      (e) => e.fromState === transition.fromState && e.toState === transition.toState
-    )
+    const tr = this.transitions.find((e) => e.fromState === transition.fromState && e.toState === transition.toState)
     if (tr) {
       tr.symbols = [...symbols]
       this.validate()

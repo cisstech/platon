@@ -16,15 +16,7 @@ import { MatrixComponent } from './matrix.component'
 
 @NgModule({
   declarations: [MatrixComponent, MatrixResizerComponent],
-  imports: [
-    BaseModule,
-    CssPipeModule,
-    FormsModule,
-    OverlayModule,
-    MatIconModule,
-    NzToolTipModule,
-    MatButtonModule,
-  ],
+  imports: [BaseModule, CssPipeModule, FormsModule, OverlayModule, MatIconModule, NzToolTipModule, MatButtonModule],
   exports: [MatrixComponent],
 })
 export class MatrixModule implements IDynamicModule {

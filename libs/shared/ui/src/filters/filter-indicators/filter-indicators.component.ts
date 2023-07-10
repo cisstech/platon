@@ -29,11 +29,7 @@ export interface FilterIndicator<T> {
 
 export type FilterMatcher<T> = (filters: T) => FilterIndicator<T> | undefined
 
-export const matchIndicators = <T>(
-  filters: T,
-  matchers: FilterMatcher<T>[],
-  onChange: (filters: T) => void
-) => {
+export const matchIndicators = <T>(filters: T, matchers: FilterMatcher<T>[], onChange: (filters: T) => void) => {
   const indicators: FilterIndicator<T>[] = []
   matchers.forEach((matcher) => {
     const indicator = matcher(filters)

@@ -15,10 +15,7 @@ import { firstValueFrom } from 'rxjs'
 export class CorrectionsPendingsPage implements OnInit {
   protected corrections: PendingCorrection[] = []
 
-  constructor(
-    private readonly resultService: ResultService,
-    private readonly changeDetectorRef: ChangeDetectorRef
-  ) {}
+  constructor(private readonly resultService: ResultService, private readonly changeDetectorRef: ChangeDetectorRef) {}
 
   async ngOnInit(): Promise<void> {
     const response = await firstValueFrom(this.resultService.listCorrections())

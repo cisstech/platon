@@ -1,10 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { BaseDTO, toNumber } from '@platon/core/server'
-import {
-  ResourceEvent,
-  ResourceEventFilters,
-  ResourceEventTypes,
-} from '@platon/feature/resource/common'
+import { ResourceEvent, ResourceEventFilters, ResourceEventTypes } from '@platon/feature/resource/common'
 import { Transform } from 'class-transformer'
 import { IsEnum, IsJSON, IsNumber, IsOptional, IsUUID } from 'class-validator'
 

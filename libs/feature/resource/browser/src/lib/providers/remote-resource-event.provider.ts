@@ -11,10 +11,7 @@ export class RemoteResourceEventProvider extends ResourceEventProvider {
     super()
   }
 
-  listEvents(
-    resource: Resource,
-    filters?: ResourceEventFilters
-  ): Observable<ListResponse<ResourceEvent>> {
+  listEvents(resource: Resource, filters?: ResourceEventFilters): Observable<ListResponse<ResourceEvent>> {
     filters = filters || {}
     let params = new HttpParams()
 

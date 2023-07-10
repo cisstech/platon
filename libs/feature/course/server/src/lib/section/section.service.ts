@@ -1,16 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { NotFoundResponse } from '@platon/core/common'
-import {
-  DataSource,
-  Repository,
-  MoreThanOrEqual,
-  And,
-  MoreThan,
-  LessThanOrEqual,
-  LessThan,
-  Not,
-} from 'typeorm'
+import { DataSource, Repository, MoreThanOrEqual, And, MoreThan, LessThanOrEqual, LessThan, Not } from 'typeorm'
 import { Optional } from 'typescript-optional'
 import { CourseSectionEntity } from './section.entity'
 

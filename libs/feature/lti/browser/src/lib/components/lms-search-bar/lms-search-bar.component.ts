@@ -1,12 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CommonModule } from '@angular/common'
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  forwardRef,
-  Input,
-} from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, Input } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { combineLatest, Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
@@ -65,10 +59,7 @@ export class LmsSearchBarComponent implements ControlValueAccessor {
 
   selection: Lms[] = []
 
-  constructor(
-    private readonly ltiService: LTIService,
-    private readonly changeDetectorRef: ChangeDetectorRef
-  ) {}
+  constructor(private readonly ltiService: LTIService, private readonly changeDetectorRef: ChangeDetectorRef) {}
 
   // ControlValueAccessor methods
 

@@ -11,14 +11,6 @@ import { ResourceMembersPage } from './members/members.page'
   templateUrl: './settings.page.html',
   styleUrls: ['./settings.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    CommonModule,
-    RouterModule,
-
-    NzTabsModule,
-
-    ResourceInformationsPage,
-    ResourceMembersPage,
-  ],
+  imports: [CommonModule, RouterModule, NzTabsModule, ResourceInformationsPage, ResourceMembersPage],
 })
 export class ResourceSettingsPage {}

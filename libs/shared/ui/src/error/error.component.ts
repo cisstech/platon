@@ -12,14 +12,7 @@ import { RouterModule } from '@angular/router'
   standalone: true,
   selector: 'ui-error',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    CommonModule,
-    RouterModule,
-    UiError403Component,
-    UiError404Component,
-    UiError500Component,
-    NzButtonModule,
-  ],
+  imports: [CommonModule, RouterModule, UiError403Component, UiError404Component, UiError500Component, NzButtonModule],
   template: `
     <ng-container [ngSwitch]="code">
       <ng-container *ngSwitchCase="'SERVER_ERROR'">
@@ -68,14 +61,10 @@ export class UiErrorComponent implements OnChanges {
   @Input() showButtons = true
 
   ngOnChanges(): void {
-    const status =
-      (this.error as HttpErrorResponse)?.status || HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR
+    const status = (this.error as HttpErrorResponse)?.status || HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR
     if (status === HTTP_STATUS_CODE.UNAUTHORIZED || status === HTTP_STATUS_CODE.FORBIDDEN) {
       this.code = 'FORBIDDEN'
-    } else if (
-      status >= HTTP_STATUS_CODE.BAD_REQUEST &&
-      status < HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR
-    ) {
+    } else if (status >= HTTP_STATUS_CODE.BAD_REQUEST && status < HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR) {
       this.code = 'NOT_FOUND'
     } else {
       this.code = 'SERVER_ERROR'

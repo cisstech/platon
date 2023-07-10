@@ -10,10 +10,7 @@ export class UserPrefsController {
   constructor(private readonly service: UserPrefsService) {}
 
   @Get()
-  async find(
-    @Req() req: IRequest,
-    @Param('username') username: string
-  ): Promise<ItemResponse<UserPrefsDTO>> {
+  async find(@Req() req: IRequest, @Param('username') username: string): Promise<ItemResponse<UserPrefsDTO>> {
     if (username !== req.user.username) {
       throw new UnauthorizedException("You cannot access other users' prefs")
     }

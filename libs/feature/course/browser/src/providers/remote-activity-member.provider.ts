@@ -16,14 +16,8 @@ export class RemoteActivityMemberProvider extends ActivityMemberProvider {
       .post<ItemResponse<ActivityMember>>(`/api/v1/activities/${activity.id}/members`, input)
       .pipe(map((e) => e.resource))
   }
-  update(
-    activity: Activity,
-    input: CreateActivityMember[]
-  ): Observable<ListResponse<ActivityMember>> {
-    return this.http.put<ListResponse<ActivityMember>>(
-      `/api/v1/activities/${activity.id}/members`,
-      input
-    )
+  update(activity: Activity, input: CreateActivityMember[]): Observable<ListResponse<ActivityMember>> {
+    return this.http.put<ListResponse<ActivityMember>>(`/api/v1/activities/${activity.id}/members`, input)
   }
 
   search(activity: Activity): Observable<ListResponse<ActivityMember>> {

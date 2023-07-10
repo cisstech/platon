@@ -1,11 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  OnInit,
-  ViewChild,
-} from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core'
 import EdjsParser from 'editorjs-parser'
 
 // TODO implements custom editorjs parser https://github.com/miadabdi/editorjs-parser#custom-or-overriding-parser-methods

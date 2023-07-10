@@ -17,10 +17,7 @@ import { User } from '@platon/core/common'
 export class SidebarComponent implements OnInit {
   protected user?: User
 
-  constructor(
-    private readonly authService: AuthService,
-    private readonly changeDetectorRef: ChangeDetectorRef
-  ) {}
+  constructor(private readonly authService: AuthService, private readonly changeDetectorRef: ChangeDetectorRef) {}
 
   async ngOnInit(): Promise<void> {
     this.user = await this.authService.ready()

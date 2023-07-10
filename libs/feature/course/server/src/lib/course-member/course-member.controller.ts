@@ -34,10 +34,7 @@ export class CourseMemberController {
   }
 
   @Delete('/:memberId')
-  async delete(
-    @Param('courseId') courseId: string,
-    @Param('memberId') memberId: string
-  ): Promise<NoContentResponse> {
+  async delete(@Param('courseId') courseId: string, @Param('memberId') memberId: string): Promise<NoContentResponse> {
     await this.service.delete(courseId, memberId)
     return new NoContentResponse()
   }

@@ -201,20 +201,10 @@ export class ResourcePresenter implements OnDestroy {
     ])
 
     const [parent, member, watcher, invitation, statistic, circles] = await Promise.all([
-      resource.parentId
-        ? firstValueFrom(this.resourceService.find(resource.parentId))
-        : Promise.resolve(undefined),
-      firstValueFrom(
-        this.resourceService.findMember(resource, user!.id).pipe(catchError(() => of(undefined)))
-      ),
-      firstValueFrom(
-        this.resourceService.findWatcher(resource, user!.id).pipe(catchError(() => of(undefined)))
-      ),
-      firstValueFrom(
-        this.resourceService
-          .findInvitation(resource, user!.id)
-          .pipe(catchError(() => of(undefined)))
-      ),
+      resource.parentId ? firstValueFrom(this.resourceService.find(resource.parentId)) : Promise.resolve(undefined),
+      firstValueFrom(this.resourceService.findMember(resource, user!.id).pipe(catchError(() => of(undefined)))),
+      firstValueFrom(this.resourceService.findWatcher(resource, user!.id).pipe(catchError(() => of(undefined)))),
+      firstValueFrom(this.resourceService.findInvitation(resource, user!.id).pipe(catchError(() => of(undefined)))),
       firstValueFrom(this.resourceService.statistic(resource)),
       firstValueFrom(this.resourceService.tree()),
     ])
@@ -242,9 +232,7 @@ export class ResourcePresenter implements OnDestroy {
   }
 
   private alertError(): void {
-    this.dialogService.error(
-      'Une erreur est survenue lors de cette action, veuillez réessayer un peu plus tard !'
-    )
+    this.dialogService.error('Une erreur est survenue lors de cette action, veuillez réessayer un peu plus tard !')
   }
 }
 

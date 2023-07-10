@@ -2,13 +2,7 @@ import { Body, Controller, Get, Param, Patch, Post, Query, Req } from '@nestjs/c
 import { CreatedResponse, ItemResponse, ListResponse, NotFoundResponse } from '@platon/core/common'
 import { IRequest, Mapper } from '@platon/core/server'
 import { ResourceCompletionDTO } from './completion'
-import {
-  CircleTreeDTO,
-  CreateResourceDTO,
-  ResourceDTO,
-  ResourceFiltersDTO,
-  UpdateResourceDTO,
-} from './resource.dto'
+import { CircleTreeDTO, CreateResourceDTO, ResourceDTO, ResourceFiltersDTO, UpdateResourceDTO } from './resource.dto'
 import { ResourceService } from './resource.service'
 import { ResourceStatisticDTO } from './statistics'
 import { ResourceViewService } from './views/view.service'
@@ -21,10 +15,7 @@ export class ResourceController {
   ) {}
 
   @Get()
-  async search(
-    @Req() req: IRequest,
-    @Query() filters: ResourceFiltersDTO = {}
-  ): Promise<ListResponse<ResourceDTO>> {
+  async search(@Req() req: IRequest, @Query() filters: ResourceFiltersDTO = {}): Promise<ListResponse<ResourceDTO>> {
     let resources: ResourceDTO[] = []
     let total = 0
     if (filters.views) {
@@ -86,10 +77,7 @@ export class ResourceController {
   }
 
   @Post()
-  async create(
-    @Req() req: IRequest,
-    @Body() input: CreateResourceDTO
-  ): Promise<CreatedResponse<ResourceDTO>> {
+  async create(@Req() req: IRequest, @Body() input: CreateResourceDTO): Promise<CreatedResponse<ResourceDTO>> {
     const resource = Mapper.map(
       await this.resourceService.create({
         ...(await this.resourceService.fromInput(input)),
@@ -101,10 +89,7 @@ export class ResourceController {
   }
 
   @Patch('/:id')
-  async update(
-    @Param('id') id: string,
-    @Body() input: UpdateResourceDTO
-  ): Promise<ItemResponse<ResourceDTO>> {
+  async update(@Param('id') id: string, @Body() input: UpdateResourceDTO): Promise<ItemResponse<ResourceDTO>> {
     const resource = Mapper.map(
       await this.resourceService.update(id, await this.resourceService.fromInput(input)),
       ResourceDTO

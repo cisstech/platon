@@ -122,9 +122,7 @@ export const withActivityFeedbacksGuard = <T extends object = PlayerActivityVari
 
   const disable = () => {
     navigation.exercises.forEach((exercise) => {
-      return (exercise.state = ![AnswerStates.NOT_STARTED, AnswerStates.STARTED].includes(
-        exercise.state
-      )
+      return (exercise.state = ![AnswerStates.NOT_STARTED, AnswerStates.STARTED].includes(exercise.state)
         ? AnswerStates.ANSWERED
         : exercise.state)
     })
@@ -190,13 +188,8 @@ export const withMultiSessionGuard = (exerciseSession: SessionEntity) => {
       return { activitySession, activityNavigation }
     }
 
-    if (
-      typeof activityNavigation.current !== 'object' ||
-      activityNavigation.current.sessionId !== exerciseSession.id
-    ) {
-      throw new ForbiddenResponse(
-        'This exercise is not the most recents opened, please reload your page.'
-      )
+    if (typeof activityNavigation.current !== 'object' || activityNavigation.current.sessionId !== exerciseSession.id) {
+      throw new ForbiddenResponse('This exercise is not the most recents opened, please reload your page.')
     }
   }
   return { activitySession, activityNavigation }

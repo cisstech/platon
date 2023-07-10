@@ -14,9 +14,7 @@ const DeveloperDocs = {
       url: 'https://github.com/cisstech/platon',
     },
   },
-  pages: [
-    { title: 'Présentation', href: 'presentation', renderer: 'assets/docs/developers/index.md' },
-  ],
+  pages: [{ title: 'Présentation', href: 'presentation', renderer: 'assets/docs/developers/index.md' }],
 } as NgeDocSettings
 
 export default [

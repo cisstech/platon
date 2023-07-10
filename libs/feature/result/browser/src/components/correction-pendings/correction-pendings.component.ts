@@ -16,16 +16,7 @@ import { RouterModule } from '@angular/router'
   templateUrl: './correction-pendings.component.html',
   styleUrls: ['./correction-pendings.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    CommonModule,
-    RouterModule,
-
-    NzIconModule,
-    NzEmptyModule,
-    NzTableModule,
-    NzButtonModule,
-    NzToolTipModule,
-  ],
+  imports: [CommonModule, RouterModule, NzIconModule, NzEmptyModule, NzTableModule, NzButtonModule, NzToolTipModule],
 })
 export class CorrectionPendingsComponent {
   @Input() corrections!: PendingCorrection[]

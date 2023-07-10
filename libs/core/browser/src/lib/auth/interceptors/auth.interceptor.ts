@@ -1,12 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  HttpErrorResponse,
-  HttpEvent,
-  HttpHandler,
-  HttpInterceptor,
-  HttpRequest,
-} from '@angular/common/http'
+import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { AuthToken, ErrorResponse, TOKEN_EXPIRED_ERROR_CODE } from '@platon/core/common'
 
@@ -29,18 +23,12 @@ export class AuthInterceptor implements HttpInterceptor {
       switchMap((token) => {
         if (token != null) {
           return next
-            .handle(
-              this.addAuthorization(req, this.isRefreshing ? token.refreshToken : token.accessToken)
-            )
+            .handle(this.addAuthorization(req, this.isRefreshing ? token.refreshToken : token.accessToken))
             .pipe(
               catchError<any, any>((err) => {
                 if (err instanceof HttpErrorResponse) {
                   const error = err.error as ErrorResponse
-                  if (
-                    error &&
-                    error.statusCode === 401 &&
-                    error.message === TOKEN_EXPIRED_ERROR_CODE
-                  ) {
+                  if (error && error.statusCode === 401 && error.message === TOKEN_EXPIRED_ERROR_CODE) {
                     return this.refreshToken(req, next)
                   }
                 }

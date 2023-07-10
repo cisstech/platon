@@ -10,20 +10,11 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core'
-import {
-  Connection as JsPlumbConnection,
-  OnConnectionBindInfo,
-  jsPlumb,
-  jsPlumbInstance,
-} from 'jsplumb'
+import { Connection as JsPlumbConnection, OnConnectionBindInfo, jsPlumb, jsPlumbInstance } from 'jsplumb'
 import { Subscription } from 'rxjs'
 import { WebComponent, WebComponentHooks } from '../../web-component'
 import { WebComponentChangeDetectorService } from '../../web-component-change-detector.service'
-import {
-  AUTOMATON_EDITOR_ACTIONS,
-  AutomatonEditorAction,
-  AutomatonEditorActionContext,
-} from './actions/action'
+import { AUTOMATON_EDITOR_ACTIONS, AutomatonEditorAction, AutomatonEditorActionContext } from './actions/action'
 import { ActionDeleteStateProvider } from './actions/states/delete-state'
 import { ActionRenameStateProvider } from './actions/states/rename-state'
 import { ActionSetAcceptingProvider } from './actions/states/set-accepting'
@@ -66,9 +57,7 @@ export const INITIAL_STATE_CLASS = 'automaton-state--initial'
   ],
 })
 @WebComponent(AutomatonEditorComponentDefinition)
-export class AutomatonEditorComponent
-  implements OnInit, OnDestroy, WebComponentHooks<AutomatonEditorState>
-{
+export class AutomatonEditorComponent implements OnInit, OnDestroy, WebComponentHooks<AutomatonEditorState> {
   private readonly subs: Subscription[] = []
   private readonly context: AutomatonEditorActionContext = {
     state: undefined,
@@ -443,9 +432,7 @@ export class AutomatonEditorComponent
   private findConnection(transition: Transition) {
     return this.jsp
       .getAllConnections()
-      .find(
-        (e) => e.sourceId === transition.fromState && e.targetId === transition.toState
-      ) as Connection
+      .find((e) => e.sourceId === transition.fromState && e.targetId === transition.toState) as Connection
   }
 
   private setZoom(zoom: number, transformOrigin?: [number, number]) {

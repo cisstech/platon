@@ -40,11 +40,7 @@ export class ResultService {
     return this.commentProvider.list(sessionId, answerId)
   }
 
-  createComment(
-    sessionId: string,
-    answerId: string,
-    input: CreateSessionComment
-  ): Observable<SessionComment> {
+  createComment(sessionId: string, answerId: string, input: CreateSessionComment): Observable<SessionComment> {
     return this.commentProvider.create(sessionId, answerId, input)
   }
 

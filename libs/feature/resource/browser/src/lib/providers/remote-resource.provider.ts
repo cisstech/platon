@@ -22,9 +22,7 @@ export class RemoteResourceProvider extends ResourceProvider {
   }
 
   tree(): Observable<CircleTree> {
-    return this.http
-      .get<ItemResponse<CircleTree>>('/api/v1/resources/tree')
-      .pipe(map((response) => response.resource))
+    return this.http.get<ItemResponse<CircleTree>>('/api/v1/resources/tree').pipe(map((response) => response.resource))
   }
 
   circle(username: string): Observable<Resource> {
@@ -124,8 +122,6 @@ export class RemoteResourceProvider extends ResourceProvider {
   }
 
   create(input: CreateResource): Observable<Resource> {
-    return this.http
-      .post<ItemResponse<Resource>>('/api/v1/resources', input)
-      .pipe(map((response) => response.resource))
+    return this.http.post<ItemResponse<Resource>>('/api/v1/resources', input).pipe(map((response) => response.resource))
   }
 }

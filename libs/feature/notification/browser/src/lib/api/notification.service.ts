@@ -57,17 +57,13 @@ export class NotificationService {
       map((result) => result!.data!.onChangeNotifications!),
       map((change) => ({
         unreadCount: change.unreadCount,
-        newNotification: change.newNotification
-          ? decodeFragment(change.newNotification)
-          : undefined,
+        newNotification: change.newNotification ? decodeFragment(change.newNotification) : undefined,
       }))
     )
   }
 
   markAsRead(id: string): Observable<Notification> {
-    return this.markAsReadGQL
-      .mutate({ id })
-      .pipe(map((result) => decodeFragment(result!.data!.markAsRead)))
+    return this.markAsReadGQL.mutate({ id }).pipe(map((result) => decodeFragment(result!.data!.markAsRead)))
   }
 
   markAllAsRead(): Observable<boolean> {
@@ -75,14 +71,10 @@ export class NotificationService {
   }
 
   deleteNotification(id: string): Observable<boolean> {
-    return this.deleteNotificationGQL
-      .mutate({ id })
-      .pipe(map((result) => result!.data!.deleteNotification))
+    return this.deleteNotificationGQL.mutate({ id }).pipe(map((result) => result!.data!.deleteNotification))
   }
 
   deleteAllNotifications(): Observable<boolean> {
-    return this.deleteAllNotificationsGQL
-      .mutate()
-      .pipe(map((result) => result!.data!.deleteAllNotifications))
+    return this.deleteAllNotificationsGQL.mutate().pipe(map((result) => result!.data!.deleteAllNotifications))
   }
 }

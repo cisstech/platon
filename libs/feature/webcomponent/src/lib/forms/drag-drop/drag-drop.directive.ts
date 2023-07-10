@@ -1,12 +1,4 @@
-import {
-  AfterContentInit,
-  Directive,
-  ElementRef,
-  EventEmitter,
-  OnDestroy,
-  Output,
-  Renderer2,
-} from '@angular/core'
+import { AfterContentInit, Directive, ElementRef, EventEmitter, OnDestroy, Output, Renderer2 } from '@angular/core'
 
 export interface DragDropEvent {
   source: string

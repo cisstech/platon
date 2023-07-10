@@ -29,10 +29,7 @@ export class CourseMemberService {
     return Optional.ofNullable(await query.getOne())
   }
 
-  async search(
-    courseId: string,
-    filters?: CourseMemberFilters
-  ): Promise<[CourseMemberEntity[], number]> {
+  async search(courseId: string, filters?: CourseMemberFilters): Promise<[CourseMemberEntity[], number]> {
     filters = filters || {}
 
     const query = this.repository.createQueryBuilder('member')

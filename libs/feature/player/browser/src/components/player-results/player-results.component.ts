@@ -1,12 +1,5 @@
 import { CommonModule } from '@angular/common'
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  Input,
-  OnInit,
-  ViewChild,
-} from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core'
 import { MatIconModule } from '@angular/material/icon'
 import { ActivityPlayer, ExercisePlayer } from '@platon/feature/player/common'
 import { AnswerStatePipesModule, ResultService } from '@platon/feature/result/browser'

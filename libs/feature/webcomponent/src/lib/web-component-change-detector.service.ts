@@ -66,9 +66,7 @@ export class WebComponentChangeDetectorService {
     }
 
     const changes: string[] = []
-    const properties = new Set(
-      Object.keys(component.$__state__$).concat(Object.keys(component.$__stateCopy__$))
-    )
+    const properties = new Set(Object.keys(component.$__state__$).concat(Object.keys(component.$__stateCopy__$)))
     properties.forEach((k) => {
       if (!deepEqual(component.$__state__$[k], component.$__stateCopy__$[k])) {
         changes.push(k)

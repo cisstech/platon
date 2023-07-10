@@ -24,16 +24,7 @@ import { UserSearchBarComponent } from '../user-search-bar/user-search-bar.compo
   templateUrl: './user-search-modal.component.html',
   styleUrls: ['./user-search-modal.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    CommonModule,
-    FormsModule,
-
-    NzModalModule,
-    NzButtonModule,
-    UserSearchBarComponent,
-
-    UiModalTemplateComponent,
-  ],
+  imports: [CommonModule, FormsModule, NzModalModule, NzButtonModule, UserSearchBarComponent, UiModalTemplateComponent],
 })
 export class UserSearchModalComponent {
   @Input() title = ''

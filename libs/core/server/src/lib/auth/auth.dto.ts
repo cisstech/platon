@@ -1,10 +1,4 @@
-import {
-  AuthToken,
-  ResetPasswordInput,
-  SignInInput,
-  SignUpInput,
-  UserRoles,
-} from '@platon/core/common'
+import { AuthToken, ResetPasswordInput, SignInInput, SignUpInput, UserRoles } from '@platon/core/common'
 import { IsEnum, IsOptional, IsString } from 'class-validator'
 
 export class AuthTokenDTO implements AuthToken {

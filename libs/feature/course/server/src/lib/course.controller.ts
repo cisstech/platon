@@ -1,11 +1,5 @@
 import { Body, Controller, Get, Param, Patch, Post, Query, Req } from '@nestjs/common'
-import {
-  CreatedResponse,
-  ForbiddenResponse,
-  ItemResponse,
-  ListResponse,
-  NotFoundResponse,
-} from '@platon/core/common'
+import { CreatedResponse, ForbiddenResponse, ItemResponse, ListResponse, NotFoundResponse } from '@platon/core/common'
 import { IRequest, Mapper } from '@platon/core/server'
 import { CourseMemberService } from './course-member/course-member.service'
 import { CourseDTO, CourseFiltersDTO, CreateCourseDTO, UpdateCourseDTO } from './course.dto'
@@ -19,10 +13,7 @@ export class CourseController {
   ) {}
 
   @Get()
-  async search(
-    @Req() req: IRequest,
-    @Query() filters: CourseFiltersDTO = {}
-  ): Promise<ListResponse<CourseDTO>> {
+  async search(@Req() req: IRequest, @Query() filters: CourseFiltersDTO = {}): Promise<ListResponse<CourseDTO>> {
     filters = {
       ...filters,
       members: Array.from(new Set([req.user.id, ...(filters.members || [])])),
@@ -49,10 +40,7 @@ export class CourseController {
   }
 
   @Post()
-  async create(
-    @Req() req: IRequest,
-    @Body() input: CreateCourseDTO
-  ): Promise<CreatedResponse<CourseDTO>> {
+  async create(@Req() req: IRequest, @Body() input: CreateCourseDTO): Promise<CreatedResponse<CourseDTO>> {
     const resource = Mapper.map(
       await this.courseService.create({
         ...input,
@@ -64,10 +52,7 @@ export class CourseController {
   }
 
   @Patch('/:id')
-  async update(
-    @Param('id') id: string,
-    @Body() input: UpdateCourseDTO
-  ): Promise<ItemResponse<CourseDTO>> {
+  async update(@Param('id') id: string, @Body() input: UpdateCourseDTO): Promise<ItemResponse<CourseDTO>> {
     const resource = Mapper.map(await this.courseService.update(id, input), CourseDTO)
     return new ItemResponse({ resource })
   }

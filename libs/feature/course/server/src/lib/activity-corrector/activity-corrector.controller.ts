@@ -9,9 +9,7 @@ export class ActivityCorrectorController {
   constructor(private readonly service: ActivityCorrectorService) {}
 
   @Get()
-  async search(
-    @Param('activityId') activityId: string
-  ): Promise<ListResponse<ActivityCorrectorDTO>> {
+  async search(@Param('activityId') activityId: string): Promise<ListResponse<ActivityCorrectorDTO>> {
     const [items, total] = await this.service.search(activityId)
     return new ListResponse({
       total,
@@ -26,10 +24,7 @@ export class ActivityCorrectorController {
   ): Promise<ItemResponse<ActivityCorrectorDTO>> {
     const member = await this.service.create(input)
     return new ItemResponse({
-      resource: Mapper.map(
-        await this.service.findById(activityId, member.id),
-        ActivityCorrectorDTO
-      ),
+      resource: Mapper.map(await this.service.findById(activityId, member.id), ActivityCorrectorDTO),
     })
   }
 

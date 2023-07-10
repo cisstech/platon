@@ -1,11 +1,5 @@
 import { toBoolean } from '@platon/core/server'
-import {
-  FileCreate,
-  FileMove,
-  FileRelease,
-  FileRetrieve,
-  FileUpdate,
-} from '@platon/feature/resource/common'
+import { FileCreate, FileMove, FileRelease, FileRetrieve, FileUpdate } from '@platon/feature/resource/common'
 import { Transform } from 'class-transformer'
 import { IsBoolean, IsOptional, IsString } from 'class-validator'
 

@@ -22,9 +22,7 @@ export class ActivityMemberService {
     query.leftJoinAndSelect('member.group', 'group')
     query.leftJoinAndSelect('group.users', 'groupusers')
 
-    query
-      .where('amember.activity_id = :activityId', { activityId })
-      .andWhere('amember.id = :id', { id })
+    query.where('amember.activity_id = :activityId', { activityId }).andWhere('amember.id = :id', { id })
 
     return Optional.ofNullable(await query.getOne())
   }
@@ -45,10 +43,7 @@ export class ActivityMemberService {
     return this.repository.save(this.repository.create(member))
   }
 
-  async update(
-    activityId: string,
-    input: Partial<ActivityMemberEntity>[]
-  ): Promise<ActivityMemberEntity[]> {
+  async update(activityId: string, input: Partial<ActivityMemberEntity>[]): Promise<ActivityMemberEntity[]> {
     return this.dataSource.transaction(async (manager) => {
       await manager.delete(ActivityMemberEntity, { activityId })
       const members = input.map((member) => {

@@ -1,12 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CommonModule } from '@angular/common'
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  forwardRef,
-  Input,
-} from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, Input } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
@@ -33,16 +27,7 @@ import { ResourceItemComponent } from '../resource-item/resource-item.component'
     },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    CommonModule,
-
-    NzIconModule,
-    NzButtonModule,
-
-    NgeUiListModule,
-    UiSearchBarComponent,
-    ResourceItemComponent,
-  ],
+  imports: [CommonModule, NzIconModule, NzButtonModule, NgeUiListModule, UiSearchBarComponent, ResourceItemComponent],
 })
 export class ResourceSearchBarComponent implements ControlValueAccessor {
   @Input() multi = false

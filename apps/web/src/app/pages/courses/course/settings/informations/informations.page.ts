@@ -1,11 +1,5 @@
 import { CommonModule } from '@angular/common'
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  OnDestroy,
-  OnInit,
-} from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core'
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 
 import { MatCheckboxModule } from '@angular/material/checkbox'
@@ -64,10 +58,7 @@ export class CourseInformationsPage implements OnInit, OnDestroy {
     return this.form.valid && this.canEdit
   }
 
-  constructor(
-    private readonly presenter: CoursePresenter,
-    private readonly changeDetectorRef: ChangeDetectorRef
-  ) {}
+  constructor(private readonly presenter: CoursePresenter, private readonly changeDetectorRef: ChangeDetectorRef) {}
 
   async ngOnInit(): Promise<void> {
     this.subscriptions.push(
@@ -76,12 +67,8 @@ export class CourseInformationsPage implements OnInit, OnDestroy {
         const { course } = context
         if (course) {
           this.form = new FormGroup({
-            name: new FormControl({ value: course.name, disabled: !this.canEdit }, [
-              Validators.required,
-            ]),
-            desc: new FormControl({ value: course.desc || '', disabled: !this.canEdit }, [
-              Validators.required,
-            ]),
+            name: new FormControl({ value: course.name, disabled: !this.canEdit }, [Validators.required]),
+            desc: new FormControl({ value: course.desc || '', disabled: !this.canEdit }, [Validators.required]),
           })
         }
 

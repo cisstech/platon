@@ -1,11 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { deepCopy, deepMerge } from '@platon/core/common'
-import {
-  ActivitySettings,
-  ExerciseVariables,
-  Variables,
-  defaultActivitySettings,
-} from '@platon/feature/compiler'
+import { ActivitySettings, ExerciseVariables, Variables, defaultActivitySettings } from '@platon/feature/compiler'
 import { ActivityPlayer, ExercisePlayer } from '@platon/feature/player/common'
 import { AnswerEntity, SessionEntity } from '@platon/feature/result/server'
 import * as nunjucks from 'nunjucks'
@@ -30,11 +25,7 @@ nunjucks.configure({ autoescape: false })
  * @param reviewMode If true, the components will be disabled.
  * @returns A computed version of the object.
  */
-export const withRenderedComponents = (
-  variables: any,
-  scripts: Scripts,
-  reviewMode?: boolean
-): any => {
+export const withRenderedComponents = (variables: any, scripts: Scripts, reviewMode?: boolean): any => {
   if (variables == null) {
     return variables
   }
@@ -101,10 +92,7 @@ const withEditorJsContent = (variables: any, scripts: Scripts): any => {
  * @param reviewMode If true, the components will be disabled.
  * @returns The variables with rendered templates.
  */
-export const withRenderedTemplates = (
-  variables: Variables,
-  reviewMode?: boolean
-): ExerciseVariables => {
+export const withRenderedTemplates = (variables: Variables, reviewMode?: boolean): ExerciseVariables => {
   const scripts: Scripts = {}
 
   const computed = withEditorJsContent(
@@ -172,10 +160,7 @@ export const withActivityPlayer = (session: SessionEntity): ActivityPlayer => {
  * @param session An exercise session.
  * @returns An exercise player.
  */
-export const withExercisePlayer = (
-  session: SessionEntity,
-  answer?: AnswerEntity
-): ExercisePlayer => {
+export const withExercisePlayer = (session: SessionEntity, answer?: AnswerEntity): ExercisePlayer => {
   const variables = withRenderedTemplates(answer?.variables || session.variables, answer != null)
 
   const activitySession = session.parent

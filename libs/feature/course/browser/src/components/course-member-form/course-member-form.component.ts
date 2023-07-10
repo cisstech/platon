@@ -16,16 +16,7 @@ import { CreateCourseMember } from '@platon/feature/course/common'
   templateUrl: './course-member-form.component.html',
   styleUrls: ['./course-member-form.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-
-    NzGridModule,
-    NzFormModule,
-    NzButtonModule,
-
-    UserSearchBarComponent,
-  ],
+  imports: [CommonModule, ReactiveFormsModule, NzGridModule, NzFormModule, NzButtonModule, UserSearchBarComponent],
 })
 export class CourseMemberFormComponent {
   readonly form = new FormGroup({

@@ -1,11 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Req } from '@nestjs/common'
-import {
-  CreatedResponse,
-  ItemResponse,
-  ListResponse,
-  NoContentResponse,
-  NotFoundResponse,
-} from '@platon/core/common'
+import { CreatedResponse, ItemResponse, ListResponse, NoContentResponse, NotFoundResponse } from '@platon/core/common'
 import { IRequest, Mapper } from '@platon/core/server'
 import { ResourceMemberDTO } from '../members/member.dto'
 import { CreateResourceInvitationDTO, ResourceInvitationDTO } from './invitation.dto'
@@ -16,9 +10,7 @@ export class ResourceInvitationController {
   constructor(private readonly service: ResourceInvitationService) {}
 
   @Get()
-  async list(
-    @Param('resourceId') resourceId: string
-  ): Promise<ListResponse<ResourceInvitationDTO>> {
+  async list(@Param('resourceId') resourceId: string): Promise<ListResponse<ResourceInvitationDTO>> {
     const [items, total] = await this.service.findAll(resourceId)
     const resources = Mapper.mapAll(items, ResourceInvitationDTO)
     return new ListResponse({ total, resources })
@@ -31,9 +23,7 @@ export class ResourceInvitationController {
   ): Promise<ItemResponse<ResourceInvitationDTO>> {
     const optional = await this.service.findByInviteeId(resourceId, inviteeId)
     const resource = Mapper.map(
-      optional.orElseThrow(
-        () => new NotFoundResponse(`ResourceInvitation not found: ${inviteeId}`)
-      ),
+      optional.orElseThrow(() => new NotFoundResponse(`ResourceInvitation not found: ${inviteeId}`)),
       ResourceInvitationDTO
     )
     return new ItemResponse({ resource })

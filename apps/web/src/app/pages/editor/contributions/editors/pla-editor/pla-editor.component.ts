@@ -1,13 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  Input,
-  OnDestroy,
-  OnInit,
-  inject,
-} from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, inject } from '@angular/core'
 import { FormBuilder, Validators } from '@angular/forms'
 import { Editor, FileService, OpenRequest } from '@cisstech/nge-ide/core'
 import { AuthService } from '@platon/core/browser'
@@ -99,9 +91,7 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
     )
 
     this.subscriptions.push(
-      this.form.valueChanges
-        .pipe(skip(1), debounceTime(300))
-        .subscribe(this.onChangeData.bind(this))
+      this.form.valueChanges.pipe(skip(1), debounceTime(300)).subscribe(this.onChangeData.bind(this))
     )
   }
 

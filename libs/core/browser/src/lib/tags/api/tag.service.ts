@@ -1,12 +1,5 @@
 import { Injectable } from '@angular/core'
-import {
-  CreateLevel,
-  CreateTopic,
-  Level,
-  Topic,
-  UpdateLevel,
-  UpdateTopic,
-} from '@platon/core/common'
+import { CreateLevel, CreateTopic, Level, Topic, UpdateLevel, UpdateTopic } from '@platon/core/common'
 import { Observable } from 'rxjs'
 import { TagProvider } from '../models/tag-provider'
 

@@ -1,12 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CommonModule } from '@angular/common'
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  forwardRef,
-  Input,
-} from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, Input } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { firstValueFrom, Observable, of } from 'rxjs'
 
@@ -75,10 +69,7 @@ export class CourseSectionSearchBarComponent implements ControlValueAccessor {
 
   selection: CourseSection[] = []
 
-  constructor(
-    private readonly courseService: CourseService,
-    private readonly changeDetectorRef: ChangeDetectorRef
-  ) {}
+  constructor(private readonly courseService: CourseService, private readonly changeDetectorRef: ChangeDetectorRef) {}
 
   // ControlValueAccessor methods
 
@@ -110,10 +101,7 @@ export class CourseSectionSearchBarComponent implements ControlValueAccessor {
     return of(
       this.dataSource
         .filter((section) => {
-          return (
-            this.isSelectable(section) &&
-            section.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
-          )
+          return this.isSelectable(section) && section.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
         })
         .slice(0, 5)
     )
