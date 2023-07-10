@@ -39,15 +39,10 @@ export const AnswerStateColors: Record<AnswerStates, string> = {
 }
 
 export const answerStateFromGrade = (grade?: number): AnswerStates => {
-  if (grade == null)
-    return AnswerStates.NOT_STARTED;
-  if (grade === 100)
-    return AnswerStates.SUCCEEDED;
-  if (grade === 0)
-    return AnswerStates.FAILED;
-  if (grade <= 99 && grade >= 1)
-    return AnswerStates.PART_SUCC;
-  if (grade === -1)
-    return AnswerStates.ERROR;
-  return AnswerStates.NOT_STARTED;
+  if (grade == null) return AnswerStates.NOT_STARTED
+  if (grade === 100) return AnswerStates.SUCCEEDED
+  if (grade === 0) return AnswerStates.FAILED
+  if (grade <= 99 && grade >= 1) return AnswerStates.PART_SUCC
+  if (grade === -1) return AnswerStates.ERROR
+  return AnswerStates.NOT_STARTED
 }

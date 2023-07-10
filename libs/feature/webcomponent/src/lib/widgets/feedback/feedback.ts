@@ -1,14 +1,9 @@
-import {
-  defineWebComponent,
-  IWebComponent,
-  WebComponentTypes
-} from '../../web-component';
+import { defineWebComponent, IWebComponent, WebComponentTypes } from '../../web-component'
 
 export interface FeedbackState extends IWebComponent {
-  type: 'success' | 'info' | 'warning' | 'error';
-  content: string;
+  type: 'success' | 'info' | 'warning' | 'error'
+  content: string
 }
-
 
 export const FeedbackComponentDefinition = defineWebComponent({
   type: WebComponentTypes.widget,
@@ -16,8 +11,7 @@ export const FeedbackComponentDefinition = defineWebComponent({
   icon: 'assets/images/components/widgets/feedback/feedback.svg',
   selector: 'wc-feedback',
   description: "Permets d'afficher un feedback.",
-  fullDescriptionUrl:
-    'assets/docs/components/widgets/feedback/feedback.md',
+  fullDescriptionUrl: 'assets/docs/components/widgets/feedback/feedback.md',
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',
@@ -26,7 +20,7 @@ export const FeedbackComponentDefinition = defineWebComponent({
       type: {
         type: 'string',
         default: 'info',
-        description: "Type de feedback",
+        description: 'Type de feedback',
         enum: ['success', 'info', 'warning', 'error'],
       },
       content: { type: 'string', description: 'Contenu en markdown.' },
@@ -34,6 +28,6 @@ export const FeedbackComponentDefinition = defineWebComponent({
   },
   showcase: {
     type: 'success',
-    content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.'
+    content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
   },
-});
+})

@@ -1,13 +1,12 @@
-import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common'
+import { ChangeDetectionStrategy, Component } from '@angular/core'
+import { RouterModule } from '@angular/router'
 
-import { MatIconModule } from '@angular/material/icon';
+import { MatIconModule } from '@angular/material/icon'
 
-import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
+import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb'
 
-import { UiLayoutTabsComponent, UiLayoutTabsTitleDirective } from '@platon/shared/ui';
-
+import { UiLayoutTabsComponent, UiLayoutTabsTitleDirective } from '@platon/shared/ui'
 
 @Component({
   standalone: true,
@@ -24,6 +23,6 @@ import { UiLayoutTabsComponent, UiLayoutTabsTitleDirective } from '@platon/share
 
     UiLayoutTabsComponent,
     UiLayoutTabsTitleDirective,
-  ]
+  ],
 })
-export class AdminPage { }
+export class AdminPage {}

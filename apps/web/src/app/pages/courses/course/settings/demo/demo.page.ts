@@ -5,22 +5,22 @@ import {
   Inject,
   OnDestroy,
   OnInit,
-} from '@angular/core';
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { Subscription} from 'rxjs';
-import { CoursePresenter } from '../../course.presenter';
-import { UserRoles } from '@platon/core/common';
-import { CommonModule } from '@angular/common';
-import { NzInputModule } from 'ng-zorro-antd/input';
-import { NzIconModule } from 'ng-zorro-antd/icon';
-import { Clipboard } from '@angular/cdk/clipboard';
-import { DOCUMENT } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { MatInputModule } from '@angular/material/input';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { NzSpinModule } from 'ng-zorro-antd/spin';
-import { DialogService } from '@platon/core/browser';
+} from '@angular/core'
+import { NzButtonModule } from 'ng-zorro-antd/button'
+import { Subscription } from 'rxjs'
+import { CoursePresenter } from '../../course.presenter'
+import { UserRoles } from '@platon/core/common'
+import { CommonModule } from '@angular/common'
+import { NzInputModule } from 'ng-zorro-antd/input'
+import { NzIconModule } from 'ng-zorro-antd/icon'
+import { Clipboard } from '@angular/cdk/clipboard'
+import { DOCUMENT } from '@angular/common'
+import { FormsModule } from '@angular/forms'
+import { MatInputModule } from '@angular/material/input'
+import { MatCheckboxModule } from '@angular/material/checkbox'
+import { MatFormFieldModule } from '@angular/material/form-field'
+import { NzSpinModule } from 'ng-zorro-antd/spin'
+import { DialogService } from '@platon/core/browser'
 
 @Component({
   standalone: true,
@@ -41,13 +41,13 @@ import { DialogService } from '@platon/core/browser';
   ],
 })
 export class CourseDemoPage implements OnInit, OnDestroy {
-  private readonly subscriptions: Subscription[] = [];
+  private readonly subscriptions: Subscription[] = []
 
-  protected context = this.presenter.defaultContext();
-  protected courseId = '';
-  protected demoUri = '';
-  protected hasDemo = false;
-  protected saving = false;
+  protected context = this.presenter.defaultContext()
+  protected courseId = ''
+  protected demoUri = ''
+  protected hasDemo = false
+  protected saving = false
 
   constructor(
     private readonly presenter: CoursePresenter,
@@ -58,60 +58,59 @@ export class CourseDemoPage implements OnInit, OnDestroy {
   ) {}
 
   protected get canEdit(): boolean {
-    const { user } = this.context;
-    if (!user) return false;
-    return user.role === UserRoles.teacher || user.role === UserRoles.admin;
+    const { user } = this.context
+    if (!user) return false
+    return user.role === UserRoles.teacher || user.role === UserRoles.admin
   }
 
   async ngOnInit(): Promise<void> {
     this.subscriptions.push(
       this.presenter.contextChange.subscribe(async (context) => {
-        this.context = context;
-        const { course, demo } = context;
+        this.context = context
+        const { course, demo } = context
         if (course) {
-          this.courseId = course.id;
+          this.courseId = course.id
         }
         if (!!demo && demo.isPresent()) {
-          this.hasDemo = true;
-          this.demoUri =
-            this.document.location.hostname + '/demo/' + demo.get().uri;
+          this.hasDemo = true
+          this.demoUri = this.document.location.hostname + '/demo/' + demo.get().uri
         } else {
-          this.hasDemo = false;
-          this.demoUri = '';
+          this.hasDemo = false
+          this.demoUri = ''
         }
 
-        this.changeDetectorRef.markForCheck();
+        this.changeDetectorRef.markForCheck()
       })
-    );
+    )
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach((s) => s.unsubscribe());
+    this.subscriptions.forEach((s) => s.unsubscribe())
   }
 
   async createDemo() {
     try {
-      this.saving = true;
-      await this.presenter.createDemo();
+      this.saving = true
+      await this.presenter.createDemo()
     } finally {
-      this.saving = false;
-      this.changeDetectorRef.markForCheck();
-      this.clipboard.copy(this.demoUri);
+      this.saving = false
+      this.changeDetectorRef.markForCheck()
+      this.clipboard.copy(this.demoUri)
     }
   }
 
   async deleteDemo() {
     try {
-      this.saving = true;
-      await this.presenter.deleteDemo();
+      this.saving = true
+      await this.presenter.deleteDemo()
     } finally {
-      this.saving = false;
-      this.changeDetectorRef.markForCheck();
+      this.saving = false
+      this.changeDetectorRef.markForCheck()
     }
   }
 
   copyUri(): void {
-    this.clipboard.copy(this.demoUri);
-    this.dialogService.info('URL copiée');
+    this.clipboard.copy(this.demoUri)
+    this.dialogService.info('URL copiée')
   }
 }

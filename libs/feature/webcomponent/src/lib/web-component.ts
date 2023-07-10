@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ChangeDetectorRef, InjectionToken, Injector } from '@angular/core';
-import { deepCopy } from '@cisstech/nge/utils';
-import { JSONSchema7 } from 'json-schema';
+import { ChangeDetectorRef, InjectionToken, Injector } from '@angular/core'
+import { deepCopy } from '@cisstech/nge/utils'
+import { JSONSchema7 } from 'json-schema'
 
 export enum WebComponentTypes {
   form = 'form',
@@ -13,24 +13,24 @@ export enum WebComponentTypes {
  */
 export interface WebComponentDefinition {
   /** Icon representing the component */
-  icon: string;
+  icon: string
   /** Name of the component */
-  name: string;
+  name: string
   /** Type of the component */
-  type: WebComponentTypes;
+  type: WebComponentTypes
   /** Html selector of the component. */
-  selector: string;
+  selector: string
   /** Briefs description of the component. */
-  description: string;
+  description: string
   /** Optional url to a markdown file containing the full description of the component. */
-  fullDescriptionUrl?: string;
+  fullDescriptionUrl?: string
   /** JSONSchema describing the properties of the component. */
   schema: Omit<JSONSchema7, 'properties'> & {
     // change properties map value types
-    properties: Record<string, JSONSchema7>;
-  };
+    properties: Record<string, JSONSchema7>
+  }
   /** State to show in showcase section of the documentation page. */
-  showcase?: Record<string, any>;
+  showcase?: Record<string, any>
 }
 
 /**
@@ -38,11 +38,11 @@ export interface WebComponentDefinition {
  */
 export interface IWebComponent {
   /** Unique identifier of the component. */
-  cid: string;
+  cid: string
   /** Show current state of the component. */
-  debug: boolean;
+  debug: boolean
   /** Html selector of the component. */
-  selector: string;
+  selector: string
 }
 
 /**
@@ -55,9 +55,9 @@ export interface WebComponentHooks<T = any> {
    * synchronize the changes and call the methods `onAfterSerialize` (after the getter runs)
    * and `onAfterDeserialize` (after the setter runs).
    */
-  state: T;
+  state: T
 
-  readonly injector: Injector;
+  readonly injector: Injector
 
   /**
    * This method is called immediately after the `state` getter runs with the object that
@@ -67,7 +67,7 @@ export interface WebComponentHooks<T = any> {
    * @param state The state that will be returned by the getter.
    * @returns the state or a computed version of the state.
    */
-  onGetState?(state: T): T;
+  onGetState?(state: T): T
   /**
    * A callback method that is invoked immediately after the `state` setter runs.
    * Define this method to handle any additional validation and initialization tasks.
@@ -76,68 +76,66 @@ export interface WebComponentHooks<T = any> {
    * - `ngOnInit` hook is always called before this one.
    * - change detector is triggered right after the end of this method refresh the view.
    */
-  onChangeState?(): void;
+  onChangeState?(): void
 }
 
 /**
  * Injection token to get the list of defined web components.
  */
-export const WEB_COMPONENT_DEFINITIONS = new InjectionToken<
-  WebComponentDefinition[]
->('WEB_COMPONENT_DEFINITIONS');
+export const WEB_COMPONENT_DEFINITIONS = new InjectionToken<WebComponentDefinition[]>(
+  'WEB_COMPONENT_DEFINITIONS'
+)
 
 /**
  * Defines the properties created by the WebComponent decorator.
  */
 export interface WebComponentInstance extends WebComponentHooks<any> {
   /** A copy of $__state__$ to known which properties has changed during change detection. */
-  $__stateCopy__$?: any;
+  $__stateCopy__$?: any
   /** Backed field for the `state` property of the component. */
-  $__state__$?: any;
+  $__state__$?: any
   /**
    * Since onChangeState hook is called for each property change
    * setting this property to `true` allow to stop watching properties mutation
    * until the value is set to `false`.
    */
-  $__suspendChanges__$?: boolean;
+  $__suspendChanges__$?: boolean
   /**
    * A value indicating whether the ngOnInit hook
    * of the decorated component is already called.
    */
-  $__ngOnInitCalled__$?: boolean;
+  $__ngOnInitCalled__$?: boolean
   /**
    * ChangeDetectorRef instance of the component.
    */
-  $__changeDetector__$?: ChangeDetectorRef;
+  $__changeDetector__$?: ChangeDetectorRef
 }
 
 /**
  * Decorator that marks a class as a web component and provides configuration metadata that determines how the component should be processed, instantiated, and used at runtime.
  * @param definition metadata informations about the component.
  */
-export function WebComponent(
-  definition: WebComponentDefinition
-): ClassDecorator {
+export function WebComponent(definition: WebComponentDefinition): ClassDecorator {
   return function (target: any) {
-    const prototype = target.prototype;
+    const prototype = target.prototype
     Object.defineProperty(prototype, 'state', {
       get: function () {
-        return stateGetter(this, definition);
+        return stateGetter(this, definition)
       },
       set: function (newState: any) {
-        stateSetter(this, definition, newState);
+        stateSetter(this, definition, newState)
       },
-    });
-    const ngOnInit = prototype.ngOnInit;
+    })
+    const ngOnInit = prototype.ngOnInit
     prototype.ngOnInit = async function (this: WebComponentInstance) {
       if (ngOnInit) {
-        await ngOnInit.apply(this);
+        await ngOnInit.apply(this)
       }
-      this.$__ngOnInitCalled__$ = true;
-      stateSetter(this, definition, this.state);
-    };
-    return target;
-  };
+      this.$__ngOnInitCalled__$ = true
+      stateSetter(this, definition, this.state)
+    }
+    return target
+  }
 }
 
 /**
@@ -145,9 +143,7 @@ export function WebComponent(
  * @param definition Definition object to modify.
  *@returns The modified definition object.
  */
-export function defineWebComponent(
-  definition: WebComponentDefinition
-): WebComponentDefinition {
+export function defineWebComponent(definition: WebComponentDefinition): WebComponentDefinition {
   definition.schema.properties = {
     ...definition.schema.properties,
     cid: {
@@ -166,36 +162,29 @@ export function defineWebComponent(
       type: 'string',
       description: 'Nom de la balise HTML associée au composant.',
     },
-  };
-  definition.schema.additionalProperties = false;
-  definition.schema.required = [
-    ...(definition.schema.required || []),
-    'cid',
-    'selector',
-  ];
-  return definition;
+  }
+  definition.schema.additionalProperties = false
+  definition.schema.required = [...(definition.schema.required || []), 'cid', 'selector']
+  return definition
 }
 
-function createState(
-  component: WebComponentInstance,
-  definition: WebComponentDefinition
-) {
-  if (component.$__state__$) return component.$__state__$;
+function createState(component: WebComponentInstance, definition: WebComponentDefinition) {
+  if (component.$__state__$) return component.$__state__$
 
   // create a proxy to handles mutations of the state object.
   const handler: ProxyHandler<any> = {
     get(target: any, key: string) {
       if (typeof target[key] === 'object' && target[key] !== null) {
-        return new Proxy(target[key], handler);
+        return new Proxy(target[key], handler)
       }
-      return target[key];
+      return target[key]
     },
     set(target, key, value) {
-      target[key] = value;
-      detectChanges(component);
-      return true;
+      target[key] = value
+      detectChanges(component)
+      return true
     },
-  };
+  }
 
   return (component.$__state__$ = new Proxy(
     {
@@ -204,27 +193,24 @@ function createState(
       selector: definition.selector,
     },
     handler
-  ));
+  ))
 }
 
-function stateGetter(
-  component: WebComponentInstance,
-  definition: WebComponentDefinition
-) {
-  const suspended = suspendChanges(component);
-  const state = createState(component, definition);
-  const properties = definition.schema.properties;
+function stateGetter(component: WebComponentInstance, definition: WebComponentDefinition) {
+  const suspended = suspendChanges(component)
+  const state = createState(component, definition)
+  const properties = definition.schema.properties
   Object.keys(properties).forEach((propertyName) => {
-    const property = properties[propertyName];
+    const property = properties[propertyName]
     if (state[propertyName] == null && property.default != null) {
-      state[propertyName] = deepCopy(property.default);
+      state[propertyName] = deepCopy(property.default)
     }
-  });
+  })
   if (component.onGetState) {
-    component.onGetState(state);
+    component.onGetState(state)
   }
-  component.$__suspendChanges__$ = suspended;
-  return state;
+  component.$__suspendChanges__$ = suspended
+  return state
 }
 
 function stateSetter(
@@ -233,46 +219,46 @@ function stateSetter(
   newState: any
 ) {
   if (!newState) {
-    throw new Error('[web-component]: A webcomponent state cannot be null');
+    throw new Error('[web-component]: A webcomponent state cannot be null')
   }
 
   if (typeof newState === 'string') {
-    newState = JSON.parse(newState);
+    newState = JSON.parse(newState.startsWith('{') ? newState : window.atob(newState))
   }
 
-  const suspended = suspendChanges(component);
-  const state = component.state;
-  const properties = definition.schema.properties;
+  const suspended = suspendChanges(component)
+  const state = component.state
+  const properties = definition.schema.properties
   Object.keys(properties).forEach((propertyName) => {
     if (propertyName in newState) {
-      state[propertyName] = newState[propertyName];
+      state[propertyName] = newState[propertyName]
     }
-  });
-  component.$__suspendChanges__$ = suspended;
-  detectChanges(component);
+  })
+  component.$__suspendChanges__$ = suspended
+  detectChanges(component)
 }
 
 function detectChanges(component: WebComponentInstance) {
   if (component.$__suspendChanges__$ || !component.$__ngOnInitCalled__$) {
-    return;
+    return
   }
 
-  component.$__suspendChanges__$ = true;
+  component.$__suspendChanges__$ = true
 
   if (component.onChangeState) {
-    component.onChangeState();
+    component.onChangeState()
   }
 
   if (!component.$__changeDetector__$) {
-    component.$__changeDetector__$ = component.injector.get(ChangeDetectorRef);
+    component.$__changeDetector__$ = component.injector.get(ChangeDetectorRef)
   }
-  component.$__changeDetector__$.detectChanges();
+  component.$__changeDetector__$.detectChanges()
 
-  component.$__suspendChanges__$ = false;
+  component.$__suspendChanges__$ = false
 }
 
 function suspendChanges(component: WebComponentInstance) {
-  const suspended = component.$__suspendChanges__$ ?? false;
-  component.$__suspendChanges__$ = true;
-  return suspended;
+  const suspended = component.$__suspendChanges__$ ?? false
+  component.$__suspendChanges__$ = true
+  return suspended
 }

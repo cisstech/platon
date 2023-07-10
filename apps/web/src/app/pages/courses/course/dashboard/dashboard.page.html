@@ -5,14 +5,16 @@
         [nzActive]="true"
         *ngFor="let item of sections; trackBy: trackSection;"
         [nzHeader]="header"
-        [nzExtra]="extra">
+        [nzExtra]="extra"
+      >
         <ng-template #header>
           <span
             nz-typography
             nzEditable
             [nzContent]="item.section.name"
             (nzContentChange)="renameSection(item.section, $event)"
-            (click)="$event.stopPropagation()">
+            (click)="$event.stopPropagation()"
+          >
           </span>
         </ng-template>
         <ng-template #extra>
@@ -22,39 +24,34 @@
             (moveUp)="moveUpSection(item.section)"
             (moveDown)="moveDownSection(item.section)"
             (insertBelow)="addSection(item.section)"
-            (remove)="deleteSection(item.section)" />
+            (remove)="deleteSection(item.section)"
+          />
         </ng-template>
         <course-activity-grid [items]="item.activities">
-          <ng-container *ngTemplateOutlet="noActivities; context: { $implicit: item.section}"></ng-container>
+          <ng-container
+            *ngTemplateOutlet="noActivities; context: { $implicit: item.section}"
+          ></ng-container>
         </course-activity-grid>
       </nz-collapse-panel>
     </nz-collapse>
   </ng-container>
 </ng-container>
 
-
 <ng-template #noSections>
-  <nz-empty
-    [nzNotFoundContent]="noSectionsContent"
-    [nzNotFoundFooter]="noSectionsFooter">
+  <nz-empty [nzNotFoundContent]="noSectionsContent" [nzNotFoundFooter]="noSectionsFooter">
     <ng-template #noSectionsContent>
-      Ce cours ne contient aucune section. Les sections permettent d'organiser le contenu du cours en thématiques.
+      Ce cours ne contient aucune section. Les sections permettent d'organiser le contenu du cours
+      en thématiques.
     </ng-template>
     <ng-template #noSectionsFooter>
-      <button nz-button nzType="primary" (click)="addSection()">
-        Ajouter une section
-      </button>
+      <button nz-button nzType="primary" (click)="addSection()">Ajouter une section</button>
     </ng-template>
   </nz-empty>
 </ng-template>
 
 <ng-template let-section #noActivities>
-  <nz-empty
-    [nzNotFoundContent]="noActivitiesContent"
-    [nzNotFoundFooter]="noActivitiesFooter">
-    <ng-template #noActivitiesContent>
-      Cette section ne contient aucune activité.
-    </ng-template>
+  <nz-empty [nzNotFoundContent]="noActivitiesContent" [nzNotFoundFooter]="noActivitiesFooter">
+    <ng-template #noActivitiesContent> Cette section ne contient aucune activité. </ng-template>
     <ng-template #noActivitiesFooter>
       <button
         nz-button
@@ -63,7 +60,8 @@
         [queryParams]="{
           course: section.courseId,
           section: section.id
-        }">
+        }"
+      >
         Ajouter une activité
       </button>
     </ng-template>

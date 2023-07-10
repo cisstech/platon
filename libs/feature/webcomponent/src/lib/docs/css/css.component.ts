@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { ClipboardService } from '@cisstech/nge/services';
+import { Component } from '@angular/core'
+import { ClipboardService } from '@cisstech/nge/services'
 
 @Component({
   selector: 'wc-editor-css',
@@ -14,7 +14,7 @@ export class CssComponent {
     'success-border',
     'warning-border',
     'error-border',
-  ];
+  ]
 
   readonly animations = [
     'bounce',
@@ -94,21 +94,19 @@ export class CssComponent {
     'slideOutLeft',
     'slideOutRight',
     'slideOutUp',
-  ];
+  ]
 
-  activeAnimation = 'pulse';
+  activeAnimation = 'pulse'
 
-  constructor(
-    private readonly clipboard: ClipboardService
-  ) { }
+  constructor(private readonly clipboard: ClipboardService) {}
 
   copyCss(appearance: string) {
     this.clipboard.copy(
       `${appearance} animate__animated animate__${this.activeAnimation} animate__infinite`
-    );
+    )
   }
 
   trackByIndex(index: number) {
-    return index;
+    return index
   }
 }

@@ -1,39 +1,39 @@
 /** Exercise settings. */
 export interface ActivitySettings {
   /** Duration of the activity (-1 for infinite). */
-  duration?: number;
+  duration?: number
 
   /** Activity authorized action buttons. */
-  actions?: ActivityActionSettings;
+  actions?: ActivityActionSettings
 
   /** Activity navigation options. */
-  navigation?: ActivityNavigationSettings;
+  navigation?: ActivityNavigationSettings
 
   /** Activity feedback options */
-  feedback?: ActivityFeedbackSettings;
+  feedback?: ActivityFeedbackSettings
 }
 
 /** Settings specific to action buttons. */
 export interface ActivityActionSettings {
   /** Number of attempts authorized (-1 for infinite). */
-  retry?: number;
+  retry?: number
   /** Display "hints" button. */
-  hints?: boolean;
+  hints?: boolean
 
   /** Display "reroll" button. */
-  reroll?: boolean;
+  reroll?: boolean
   /** Display "theories" button. */
-  theories?: boolean;
+  theories?: boolean
   /** Display "solution" button. */
-  solution?: boolean;
+  solution?: boolean
 }
 
 /** Settings specific to feedbacks. */
 export interface ActivityFeedbackSettings {
   /** Show feedback at the end of the activity. */
-  review?: boolean;
+  review?: boolean
   /** Show feedback after exercise validation. */
-  validation?: boolean;
+  validation?: boolean
 }
 
 /** Settings specific to navigation. */
@@ -43,8 +43,8 @@ export interface ActivityNavigationSettings {
    * - `manual` => The user can jump between the exercises by using the navigation card.
    * - `composed` => All exercises are shown together.
    * - `dynamic` => Navigation is controlled by a custom script.
-  */
-  mode?: 'manual' | 'composed' | 'dynamic';
+   */
+  mode?: 'manual' | 'composed' | 'dynamic'
 }
 
 /** Default settings for preview mode. */
@@ -62,6 +62,6 @@ export const defaultActivitySettings = (): ActivitySettings => ({
     validation: true,
   },
   navigation: {
-    mode: 'manual'
-  }
-});
+    mode: 'manual',
+  },
+})

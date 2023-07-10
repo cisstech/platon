@@ -1,32 +1,42 @@
-import { Provider } from '@angular/core';
-import { NgeElementDef } from '@cisstech/nge/elements';
+import { Provider } from '@angular/core'
+import { NgeElementDef } from '@cisstech/nge/elements'
 
-import { WEB_COMPONENT_DEFINITIONS } from './web-component';
+import { WEB_COMPONENT_DEFINITIONS } from './web-component'
 
-import { InputBoxComponentDefinition } from './forms/input-box/input-box';
-import { CodeViewerComponentDefinition } from './widgets/code-viewer/code-viewer';
-import { CodeEditorComponentDefinition } from './forms/code-editor/code-editor';
-import { RadioGroupComponentDefinition } from './forms/radio-group/radio-group';
-import { CheckboxGroupComponentDefinition } from './forms/checkbox-group/checkbox-group';
-import { SortListComponentDefinition } from './forms/sort-list/sort-list';
-import { TextSelectComponentDefinition } from './forms/text-select/text-select';
-import { AutomatonEditorComponentDefinition } from './forms/automaton-editor/automaton-editor';
-import { MatchListComponentDefinition } from './forms/match-list/match-list';
-import { MatrixComponentDefinition } from './forms/matrix/matrix';
-import { PickerComponentDefinition } from './forms/picker/picker';
-import { MathLiveComponentDefinition } from './forms/math-live/math-live';
-import { JsxComponentDefinition } from './forms/jsx/jsx';
-import { AutomatonViewerComponentDefinition } from './widgets/automaton-viewer/automaton-viewer';
-import { GraphViewerComponentDefinition } from './widgets/graph-viewer/graph-viewer';
-import { MarkdownComponentDefinition } from './widgets/markdown/markdown';
-import { DragDropComponentDefinition } from './forms/drag-drop/drag-drop';
-import { FeedbackComponentDefinition } from './widgets/feedback/feedback';
-import { PresenterComponentDefinition } from './widgets/presenter/presenter';
-import { ChartViewerBarsComponentDefinition } from './widgets/chart-viewer-bars/chart-viewer-bars';
-import { ChartViewerPiesComponentDefinition } from './widgets/chart-viewer-pies/chart-viewer-pies';
-import { ChartViewerRadarComponentDefinition } from './widgets/chart-viewer-radar/chart-viewer-radar';
+import { InputBoxComponentDefinition } from './forms/input-box/input-box'
+import { CodeViewerComponentDefinition } from './widgets/code-viewer/code-viewer'
+import { CodeEditorComponentDefinition } from './forms/code-editor/code-editor'
+import { RadioGroupComponentDefinition } from './forms/radio-group/radio-group'
+import { CheckboxGroupComponentDefinition } from './forms/checkbox-group/checkbox-group'
+import { SortListComponentDefinition } from './forms/sort-list/sort-list'
+import { TextSelectComponentDefinition } from './forms/text-select/text-select'
+import { AutomatonEditorComponentDefinition } from './forms/automaton-editor/automaton-editor'
+import { MatchListComponentDefinition } from './forms/match-list/match-list'
+import { MatrixComponentDefinition } from './forms/matrix/matrix'
+import { PickerComponentDefinition } from './forms/picker/picker'
+import { MathLiveComponentDefinition } from './forms/math-live/math-live'
+import { JsxComponentDefinition } from './forms/jsx/jsx'
+import { AutomatonViewerComponentDefinition } from './widgets/automaton-viewer/automaton-viewer'
+import { GraphViewerComponentDefinition } from './widgets/graph-viewer/graph-viewer'
+import { MarkdownComponentDefinition } from './widgets/markdown/markdown'
+import { DragDropComponentDefinition } from './forms/drag-drop/drag-drop'
+import { FeedbackComponentDefinition } from './widgets/feedback/feedback'
+import { PresenterComponentDefinition } from './widgets/presenter/presenter'
+import { ChartViewerBarsComponentDefinition } from './widgets/chart-viewer-bars/chart-viewer-bars'
+import { ChartViewerPiesComponentDefinition } from './widgets/chart-viewer-pies/chart-viewer-pies'
+import { ChartViewerRadarComponentDefinition } from './widgets/chart-viewer-radar/chart-viewer-radar'
 
 export const WEB_COMPONENTS_BUNDLES: NgeElementDef[] = [
+  // INTERNALS
+  {
+    selector: 'wc-editorjs-viewer',
+    module: () =>
+      import(
+        /* webpackChunkName: "wc-editorjs-viewer" */ './internals/editorjs-viewer/editorjs-viewer.module'
+      ).then((m) => m.EditorjsViewerModule),
+  },
+
+  // PUBLICS
   {
     selector: 'wc-automaton-editor',
     module: () =>
@@ -72,51 +82,49 @@ export const WEB_COMPONENTS_BUNDLES: NgeElementDef[] = [
   {
     selector: 'wc-input-box',
     module: () =>
-      import(
-        /* webpackChunkName: "wc-input-box" */ './forms/input-box/input-box.module'
-      ).then((m) => m.InputBoxModule),
+      import(/* webpackChunkName: "wc-input-box" */ './forms/input-box/input-box.module').then(
+        (m) => m.InputBoxModule
+      ),
   },
   {
     selector: 'wc-jsx',
     module: () =>
-      import(/* webpackChunkName: "wc-jsx" */ './forms/jsx/jsx.module').then(
-        (m) => m.JsxModule
-      ),
+      import(/* webpackChunkName: "wc-jsx" */ './forms/jsx/jsx.module').then((m) => m.JsxModule),
   },
   {
     selector: 'wc-markdown',
     module: () =>
-      import(
-        /* webpackChunkName: "wc-markdown" */ './widgets/markdown/markdown.module'
-      ).then((m) => m.MarkdownModule),
+      import(/* webpackChunkName: "wc-markdown" */ './widgets/markdown/markdown.module').then(
+        (m) => m.MarkdownModule
+      ),
   },
   {
     selector: 'wc-match-list',
     module: () =>
-      import(
-        /* webpackChunkName: "wc-match-list" */ './forms/match-list/match-list.module'
-      ).then((m) => m.MatchListModule),
+      import(/* webpackChunkName: "wc-match-list" */ './forms/match-list/match-list.module').then(
+        (m) => m.MatchListModule
+      ),
   },
   {
     selector: 'wc-math-live',
     module: () =>
-      import(
-        /* webpackChunkName: "wc-math-live" */ './forms/math-live/math-live.module'
-      ).then((m) => m.MathLiveModule),
+      import(/* webpackChunkName: "wc-math-live" */ './forms/math-live/math-live.module').then(
+        (m) => m.MathLiveModule
+      ),
   },
   {
     selector: 'wc-matrix',
     module: () =>
-      import(
-        /* webpackChunkName: "wc-matrix" */ './forms/matrix/matrix.module'
-      ).then((m) => m.MatrixModule),
+      import(/* webpackChunkName: "wc-matrix" */ './forms/matrix/matrix.module').then(
+        (m) => m.MatrixModule
+      ),
   },
   {
     selector: 'wc-picker',
     module: () =>
-      import(
-        /* webpackChunkName: "wc-picker" */ './forms/picker/picker.module'
-      ).then((m) => m.PickerModule),
+      import(/* webpackChunkName: "wc-picker" */ './forms/picker/picker.module').then(
+        (m) => m.PickerModule
+      ),
   },
   {
     selector: 'wc-radio-group',
@@ -128,9 +136,9 @@ export const WEB_COMPONENTS_BUNDLES: NgeElementDef[] = [
   {
     selector: 'wc-sort-list',
     module: () =>
-      import(
-        /* webpackChunkName: "wc-sort-list" */ './forms/sort-list/sort-list.module'
-      ).then((m) => m.SortListModule),
+      import(/* webpackChunkName: "wc-sort-list" */ './forms/sort-list/sort-list.module').then(
+        (m) => m.SortListModule
+      ),
   },
   {
     selector: 'wc-text-select',
@@ -142,23 +150,23 @@ export const WEB_COMPONENTS_BUNDLES: NgeElementDef[] = [
   {
     selector: 'wc-drag-drop',
     module: () =>
-      import(
-        /* webpackChunkName: "wc-drag-drop" */ './forms/drag-drop/drag-drop.module'
-      ).then((m) => m.DragDropModule),
+      import(/* webpackChunkName: "wc-drag-drop" */ './forms/drag-drop/drag-drop.module').then(
+        (m) => m.DragDropModule
+      ),
   },
   {
     selector: 'wc-feedback',
     module: () =>
-      import(
-        /* webpackChunkName: "wc-feedback" */ './widgets/feedback/feedback.module'
-      ).then((m) => m.FeedbackModule),
+      import(/* webpackChunkName: "wc-feedback" */ './widgets/feedback/feedback.module').then(
+        (m) => m.FeedbackModule
+      ),
   },
   {
     selector: 'wc-presenter',
     module: () =>
-      import(
-        /* webpackChunkName: "wc-presenter" */ './widgets/presenter/presenter.module'
-      ).then((m) => m.PresenterModule),
+      import(/* webpackChunkName: "wc-presenter" */ './widgets/presenter/presenter.module').then(
+        (m) => m.PresenterModule
+      ),
   },
   {
     selector: 'wc-chart-viewer-bars',
@@ -181,7 +189,7 @@ export const WEB_COMPONENTS_BUNDLES: NgeElementDef[] = [
         /* webpackChunkName: "wc-graph-viewer" */ './widgets/chart-viewer-radar/chart-viewer-radar.module'
       ).then((m) => m.ChartViewerRadarModule),
   },
-];
+]
 
 export const WEB_COMPONENTS_REGISTRY: Provider[] = [
   {
@@ -294,4 +302,4 @@ export const WEB_COMPONENTS_REGISTRY: Provider[] = [
     multi: true,
     useValue: ChartViewerRadarComponentDefinition,
   },
-];
+]

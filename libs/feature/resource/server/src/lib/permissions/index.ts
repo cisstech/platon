@@ -1,3 +1,2 @@
-export * from './permissions.dto';
-export * from './permissions.entity';
-
+export * from './permissions.dto'
+export * from './permissions.entity'

@@ -1,10 +1,10 @@
-import Raw from '@editorjs/raw';
-import { EditorJsExtension, EDITOR_JS_EXTENSION } from "../editorjs";
+import Raw from '@editorjs/raw'
+import { EditorJsExtension, EDITOR_JS_EXTENSION } from '../editorjs'
 
 const Extension: EditorJsExtension = {
   tools: {
     raw: {
-      class: Raw
+      class: Raw,
     },
   },
 }
@@ -12,5 +12,5 @@ const Extension: EditorJsExtension = {
 export const RawExtension = {
   provide: EDITOR_JS_EXTENSION,
   multi: true,
-  useValue: Extension
+  useValue: Extension,
 }

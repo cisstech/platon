@@ -1,1 +1,1 @@
-export * from './auth-if.directive';
+export * from './auth-if.directive'

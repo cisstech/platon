@@ -1,29 +1,29 @@
-import { Injectable, Provider } from '@angular/core';
-import { AutomatonEditorService } from '../../automaton-editor.service';
+import { Injectable, Provider } from '@angular/core'
+import { AutomatonEditorService } from '../../automaton-editor.service'
 import {
   AutomatonEditorAction,
   AutomatonEditorActionContext,
   AUTOMATON_EDITOR_ACTIONS,
-} from '../action';
+} from '../action'
 
 /**
  * Action to remove a transition from an automaton.
  */
 @Injectable()
 export class ActionDeleteTransition implements AutomatonEditorAction {
-  readonly name = 'Supprimer transition';
+  readonly name = 'Supprimer transition'
 
   constructor(private readonly editor: AutomatonEditorService) {}
 
   run(context: AutomatonEditorActionContext) {
     if (!context.transition) {
-      return;
+      return
     }
-    this.editor.removeTransition(context.transition);
+    this.editor.removeTransition(context.transition)
   }
 
   condition(context: AutomatonEditorActionContext) {
-    return !!context.transition;
+    return !!context.transition
   }
 }
 
@@ -34,4 +34,4 @@ export const ActionDeleteTransitionProvider: Provider = {
   provide: AUTOMATON_EDITOR_ACTIONS,
   multi: true,
   useClass: ActionDeleteTransition,
-};
+}

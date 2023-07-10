@@ -3,19 +3,41 @@
   <ui-search-bar [searchbar]="searchbar" (filter)="filterDrawer.open()">
     <ng-template let-context> {{ context }}</ng-template>
   </ui-search-bar>
-  <button nz-button nzType="primary" nzShape="round" nzSize="large" nz-popover [nzPopoverContent]="actions">
+  <button
+    nz-button
+    nzType="primary"
+    nzShape="round"
+    nzSize="large"
+    nz-popover
+    [nzPopoverContent]="actions"
+  >
     <span nz-icon nzType="plus" nzTheme="outline"></span>
   </button>
   <ng-template #actions>
-    <button nz-button nzType="link" [routerLink]="['/resources/create']" [queryParams]="{ type: 'CIRCLE' }">
+    <button
+      nz-button
+      nzType="link"
+      [routerLink]="['/resources/create']"
+      [queryParams]="{ type: 'CIRCLE' }"
+    >
       <mat-icon>{{'CIRCLE'|resourceIcon}}</mat-icon>
       <span>Créer un cercle</span>
     </button>
-    <button nz-button nzType="link" [routerLink]="['/resources/create']" [queryParams]="{ type: 'EXERCISE' }">
+    <button
+      nz-button
+      nzType="link"
+      [routerLink]="['/resources/create']"
+      [queryParams]="{ type: 'EXERCISE' }"
+    >
       <mat-icon>{{'EXERCISE'|resourceIcon}}</mat-icon>
       <span>Créer un exercice</span>
     </button>
-    <button nz-button nzType="link"[routerLink]="['/resources/create']" [queryParams]="{ type: 'ACTIVITY' }">
+    <button
+      nz-button
+      nzType="link"
+      [routerLink]="['/resources/create']"
+      [queryParams]="{ type: 'ACTIVITY' }"
+    >
       <mat-icon>{{'ACTIVITY'|resourceIcon}}</mat-icon>
       <span>Créer une activité</span>
     </button>
@@ -28,9 +50,7 @@
       <div class="indicators">
         <ui-filter-indicators [filters]="filters" [indicators]="indicators" />
       </div>
-      <resource-list
-        [items]="items"
-        (didTapTag)="search(filters, $event)">
+      <resource-list [items]="items" (didTapTag)="search(filters, $event)">
         <h2>Aucune ressource ne correspond à votre recherche</h2>
         <ul>
           <li>Vérifiez les termes de votre recherche</li>
@@ -46,9 +66,7 @@
     <section>
       <mat-card>
         <mat-card-header>
-          <mat-card-title>
-            Vu récemment
-          </mat-card-title>
+          <mat-card-title> Vu récemment </mat-card-title>
         </mat-card-header>
         <mat-card-content>
           <resource-list [items]="views" [simple]="true" />
@@ -58,9 +76,7 @@
     <section>
       <mat-card>
         <mat-card-header>
-          <mat-card-title>
-            Mise à jour récemment
-          </mat-card-title>
+          <mat-card-title> Mise à jour récemment </mat-card-title>
         </mat-card-header>
         <mat-card-content>
           <resource-list [items]="recents" [simple]="true" />
@@ -78,4 +94,5 @@
   #filterDrawer
   [filters]="filters"
   [circles]="circles"
-  (triggered)="this.search($event, this.filters.search)" />
+  (triggered)="this.search($event, this.filters.search)"
+/>

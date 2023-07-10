@@ -1,24 +1,24 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { IRequest } from '@platon/core/server';
-import { ResourceEventTypes } from '@platon/feature/resource/common';
-import { CLS_REQ } from 'nestjs-cls';
-import { DataSource, EntitySubscriberInterface, InsertEvent, UpdateEvent } from 'typeorm';
-import { ResourceEventEntity } from './events/event.entity';
-import { ResourceEntity } from './resource.entity';
-import { ResourceWatcherEntity } from './watchers';
+import { Inject, Injectable } from '@nestjs/common'
+import { IRequest } from '@platon/core/server'
+import { ResourceEventTypes } from '@platon/feature/resource/common'
+import { CLS_REQ } from 'nestjs-cls'
+import { DataSource, EntitySubscriberInterface, InsertEvent, UpdateEvent } from 'typeorm'
+import { ResourceEventEntity } from './events/event.entity'
+import { ResourceEntity } from './resource.entity'
+import { ResourceWatcherEntity } from './watchers'
 
 @Injectable()
 export class ResourceSubscriber implements EntitySubscriberInterface<ResourceEntity> {
   constructor(
     private readonly dataSource: DataSource,
     @Inject(CLS_REQ)
-    private readonly request: IRequest,
+    private readonly request: IRequest
   ) {
-    this.dataSource.subscribers.push(this);
+    this.dataSource.subscribers.push(this)
   }
 
   listenTo() {
-    return ResourceEntity;
+    return ResourceEntity
   }
 
   async afterInsert(event: InsertEvent<ResourceEntity>): Promise<void> {
@@ -27,7 +27,7 @@ export class ResourceSubscriber implements EntitySubscriberInterface<ResourceEnt
         resourceId: event.entity.id,
         userId: event.entity.ownerId,
       })
-    );
+    )
 
     if (event.entity.parentId) {
       await event.manager.save(
@@ -39,14 +39,14 @@ export class ResourceSubscriber implements EntitySubscriberInterface<ResourceEnt
             resourceId: event.entity.id,
             resourceType: event.entity.type,
             resourceName: event.entity.name,
-          }
+          },
         })
       )
     }
   }
 
   async afterUpdate(event: UpdateEvent<ResourceEntity>): Promise<void> {
-    if (event.entity && event.updatedColumns.find(col => col.propertyName === 'status')) {
+    if (event.entity && event.updatedColumns.find((col) => col.propertyName === 'status')) {
       await event.manager.save(
         event.manager.create(ResourceEventEntity, {
           actorId: this.request.user.id,
@@ -57,7 +57,7 @@ export class ResourceSubscriber implements EntitySubscriberInterface<ResourceEnt
             resourceType: event.entity.type,
             resourceName: event.entity.name,
             newStatus: event.entity.status,
-          }
+          },
         })
       )
 
@@ -72,7 +72,7 @@ export class ResourceSubscriber implements EntitySubscriberInterface<ResourceEnt
               resourceType: event.entity.type,
               resourceName: event.entity.name,
               newStatus: event.entity.status,
-            }
+            },
           })
         )
       }

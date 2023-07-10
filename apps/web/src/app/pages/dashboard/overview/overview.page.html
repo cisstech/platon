@@ -6,14 +6,17 @@
           <mat-card-title>Activités en cours</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <nz-empty
-            [nzNotFoundContent]="noOngoingSessions"
-            [nzNotFoundFooter]="sessionHistory">
+          <nz-empty [nzNotFoundContent]="noOngoingSessions" [nzNotFoundFooter]="sessionHistory">
             <ng-template #noOngoingSessions>
               Félicitations, vous avez terminé toutes les activités qui vous ont été attribuées !
             </ng-template>
             <ng-template #sessionHistory>
-              <button nz-button nzType="primary" [routerLink]="['/activities']" [queryParams]="{ tab: 'history' }">
+              <button
+                nz-button
+                nzType="primary"
+                [routerLink]="['/activities']"
+                [queryParams]="{ tab: 'history' }"
+              >
                 Afficher l'historique de vos activités
               </button>
             </ng-template>
@@ -32,10 +35,10 @@
     <nz-col nzXs="24" nzSm="24" nzMd="10" nzLg="10" nzXl="10">
       <aside>
         <h2>Événements à venir</h2>
-        <nz-calendar
-          [nzFullscreen]="false">
+        <nz-calendar [nzFullscreen]="false">
           <div *nzDateCell="let date">
-            <ng-container *ngIf="false"> <!-- TODO show modal with events -->
+            <ng-container *ngIf="false">
+              <!-- TODO show modal with events -->
               <nz-badge [nzStatus]="'warning'" />
             </ng-container>
           </div>
@@ -44,4 +47,3 @@
     </nz-col>
   </nz-row>
 </ng-container>
-

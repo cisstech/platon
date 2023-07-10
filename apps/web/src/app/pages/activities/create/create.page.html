@@ -8,7 +8,12 @@
       <ng-template #icon1>
         <mat-icon>local_library</mat-icon>
       </ng-template>
-      <ng-template uiStepperStep stepTitle="Cours" [stepIcon]="icon1" [stepValidator]="!!courseInfo.valid || courseInfo.disabled">
+      <ng-template
+        uiStepperStep
+        stepTitle="Cours"
+        [stepIcon]="icon1"
+        [stepValidator]="!!courseInfo.valid || courseInfo.disabled"
+      >
         <section *ngIf="user">
           <form [formGroup]="courseInfo">
             <h4 id="course">Dans quel cours souhaitez-vous ajouter une activité ?</h4>
@@ -16,12 +21,13 @@
               aria-labelledby="course"
               formControlName="course"
               [filters]="{ members: [user.id] }"
-              />
+            />
             <h4 id="section">Dans quelle section du cours l'activité doit-elle être ajoutée ?</h4>
             <course-section-search-bar
               [course]="courseInfo.value.course"
               aria-labelledby="section"
-              formControlName="section" />
+              formControlName="section"
+            />
           </form>
         </section>
       </ng-template>
@@ -29,17 +35,23 @@
       <ng-template #icon2>
         <mat-icon>widgets</mat-icon>
       </ng-template>
-      <ng-template uiStepperStep stepTitle="Activité" [stepIcon]="icon2" [stepValidator]="!!resourceInfo.valid">
+      <ng-template
+        uiStepperStep
+        stepTitle="Activité"
+        [stepIcon]="icon2"
+        [stepValidator]="!!resourceInfo.valid"
+      >
         <section>
           <form [formGroup]="resourceInfo">
             <h4 id="resource">
-              Sélectionnez l'activité à ajouter à la section “{{courseInfo.value.section?.name}}” du cours “{{courseInfo.value.course?.name}}”.
+              Sélectionnez l'activité à ajouter à la section “{{courseInfo.value.section?.name}}” du
+              cours “{{courseInfo.value.course?.name}}”.
             </h4>
             <resource-search-bar
               aria-labelledby="resource"
               formControlName="resource"
               [filters]="{ types: ['ACTIVITY'], watchers: [user.id] }"
-              />
+            />
           </form>
         </section>
       </ng-template>
@@ -50,24 +62,33 @@
       <ng-template uiStepperStep stepTitle="Configuration" [stepIcon]="icon3">
         <section>
           <form [formGroup]="settingsInfo">
-            <h4 id="openDates">Souhaitez-vous limiter l'accès de cette activité à une date en particulier?</h4>
+            <h4 id="openDates">
+              Souhaitez-vous limiter l'accès de cette activité à une date en particulier?
+            </h4>
             <nz-range-picker
               [nzShowTime]="true"
               [nzDisabledDate]="disabledDate"
               aria-labelledby="openDates"
-              formControlName="openDates" />
-            <h4 id="members">Souhaitez-vous limiter l'accès de cette activité à des utilisateurs en particulier?</h4>
+              formControlName="openDates"
+            />
+            <h4 id="members">
+              Souhaitez-vous limiter l'accès de cette activité à des utilisateurs en particulier?
+            </h4>
             <course-member-select
               [members]="members"
               aria-labelledby="members"
               formControlName="members"
-              placeholder="Laissez la sélection vide pour permettre l'accès à tous, y compris aux nouveaux membres." />
-            <h4 id="members">Souhaitez-vous limiter l'accès de cette activité à des utilisateurs en particulier?</h4>
+              placeholder="Laissez la sélection vide pour permettre l'accès à tous, y compris aux nouveaux membres."
+            />
+            <h4 id="members">
+              Souhaitez-vous limiter l'accès de cette activité à des utilisateurs en particulier?
+            </h4>
             <course-member-select
               [members]="members"
               aria-labelledby="correctors"
               formControlName="correctors"
-              placeholder="Laissez la sélection vide si cette activité est auto-corrigée."/>
+              placeholder="Laissez la sélection vide si cette activité est auto-corrigée."
+            />
           </form>
         </section>
       </ng-template>
@@ -83,14 +104,11 @@
       *ngIf="!stepper.isFirst"
       nz-button
       [disabled]="stepper.isFirst"
-      (click)="stepper.prevStep()">
+      (click)="stepper.prevStep()"
+    >
       Précedent
     </button>
-    <button
-      nz-button
-      nzType="primary"
-      [disabled]="!stepper.isValid"
-      (click)="stepper.nextStep()">
+    <button nz-button nzType="primary" [disabled]="!stepper.isValid" (click)="stepper.nextStep()">
       {{ stepper.isLast ? 'Créer' : 'Suivant'}}
     </button>
   </ng-template>

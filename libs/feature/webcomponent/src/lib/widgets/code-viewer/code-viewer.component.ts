@@ -1,11 +1,6 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Injector,
-  Input,
-} from '@angular/core';
-import { WebComponent, WebComponentHooks } from '../../web-component';
-import { CodeViewerComponentDefinition, CodeViewerState } from './code-viewer';
+import { ChangeDetectionStrategy, Component, Injector, Input } from '@angular/core'
+import { WebComponent, WebComponentHooks } from '../../web-component'
+import { CodeViewerComponentDefinition, CodeViewerState } from './code-viewer'
 
 @Component({
   selector: 'wc-code-viewer',
@@ -15,6 +10,6 @@ import { CodeViewerComponentDefinition, CodeViewerState } from './code-viewer';
 })
 @WebComponent(CodeViewerComponentDefinition)
 export class CodeViewerComponent implements WebComponentHooks<CodeViewerState> {
-  @Input() state!: CodeViewerState;
+  @Input() state!: CodeViewerState
   constructor(readonly injector: Injector) {}
 }

@@ -6,8 +6,7 @@
     transform: scale(1.05);
   }
 }
-
-:host.animate {
+@mixin animate {
   animation-name: animate;
   animation-duration: 0.5s;
   animation-timing-function: ease-out;
@@ -19,10 +18,20 @@
 :host {
   display: block;
   transition: transform 0.5s ease-out;
+  &.animate {
+    @include animate;
+  }
 }
 
 button {
   margin-right: 8px;
+}
+
+section {
+  transition: transform 0.5s ease-out;
+  &.animate {
+    @include animate;
+  }
 }
 
 mat-divider {
@@ -73,7 +82,6 @@ nz-alert {
     }
   }
 }
-
 
 pre {
   overflow-y: auto;

@@ -3,11 +3,11 @@
  * This is only a minimal backend to get started.
  */
 
-import { Logger, LogLevel, ValidationPipe, VersioningType } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { Logger, LogLevel, ValidationPipe, VersioningType } from '@nestjs/common'
+import { NestFactory } from '@nestjs/core'
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 
-import { AppModule } from './app/app.module';
+import { AppModule } from './app/app.module'
 
 const LOG_LEVELS: LogLevel[] =
   process.env.NODE_ENV === 'development'
@@ -18,16 +18,15 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     cors: true,
     logger: LOG_LEVELS,
-  });
+  })
 
-
-  const globalPrefix = 'api';
-  app.setGlobalPrefix(globalPrefix);
+  const globalPrefix = 'api'
+  app.setGlobalPrefix(globalPrefix)
 
   app.enableVersioning({
     type: VersioningType.URI,
     defaultVersion: '1',
-  });
+  })
 
   const config = new DocumentBuilder()
     .setTitle('PLaTon API')
@@ -35,24 +34,23 @@ async function bootstrap() {
     .setVersion('1.0')
     .addTag('platon')
     .addBearerAuth()
-    .build();
+    .build()
 
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/doc', app, document);
-
+  const document = SwaggerModule.createDocument(app, config)
+  SwaggerModule.setup('api/doc', app, document)
 
   app.useLogger(app.get(Logger))
-  app.useGlobalPipes(new ValidationPipe({
-    forbidUnknownValues: false,
-    transform: true,
-  }))
+  app.useGlobalPipes(
+    new ValidationPipe({
+      forbidUnknownValues: false,
+      transform: true,
+    })
+  )
 
-  const port = process.env.PORT || 4201;
-  await app.listen(port);
+  const port = process.env.PORT || 4201
+  await app.listen(port)
 
-  Logger.log(
-    `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`
-  );
+  Logger.log(`🚀 Application is running on: http://localhost:${port}/${globalPrefix}`)
 }
 
-bootstrap();
+bootstrap()

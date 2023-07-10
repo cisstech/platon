@@ -37,7 +37,7 @@
         </td>
         <td>{{ pair.value.description }}</td>
         <td>
-          <ng-container *ngIf="pair.value.enum;else elseBlock">
+          <ng-container *ngIf="pair.value.enum; else elseBlock">
             {{ pair.value.enum.join(' | ') }}
           </ng-container>
           <ng-template #elseBlock>

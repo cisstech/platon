@@ -1,7 +1,7 @@
 <div>
   <ui-search-bar [searchbar]="searchbar" [disabled]="disabled">
     <ng-template let-item>
-      {{item.name}}
+      {{ item.name }}
     </ng-template>
   </ui-search-bar>
   <ng-content></ng-content>
@@ -11,9 +11,16 @@
   <ui-list-template slot="row">
     <ng-template let-item="item">
       <div class="selection-item">
-        {{item.name}}
+        {{ item.name }}
         <div class="spacer"></div>
-        <button [disabled]="disabled" nz-button nzDanger nzType="primary" nzShape="circle" (click)="remove(item)">
+        <button
+          [disabled]="disabled"
+          nz-button
+          nzDanger
+          nzType="primary"
+          nzShape="circle"
+          (click)="remove(item)"
+        >
           <i nz-icon nzType="delete" nzTheme="outline"></i>
         </button>
       </div>

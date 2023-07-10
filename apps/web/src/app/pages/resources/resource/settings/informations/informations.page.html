@@ -1,60 +1,62 @@
-  <form nz-form [nzLayout]="'vertical'" [formGroup]="form" (ngSubmit)="saveChanges()">
-    <mat-form-field appearance="fill">
-      <mat-label>Nom</mat-label>
-      <input formControlName="name" matInput>
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Description</mat-label>
-      <textarea cdkTextareaAutosize formControlName="desc" matInput></textarea>
-    </mat-form-field>
-    <nz-form-item>
-      <nz-form-label nzFor="topics">Topics</nz-form-label>
-      <nz-form-control>
-        <nz-select
-          id="topics"
-          name="topics"
-          nzAllowClear
-          nzShowSearch
-          nzSize="large"
-          nzMode="multiple"
-          nzPlaceHolder="Cliquez pour selectionner"
-          formControlName="topics"
-          [nzDisabled]="!canEdit">
-          <nz-option
-            *ngFor="let item of dataSource?.topics; trackBy: trackByValue"
-            [nzLabel]="item.name"
-            [nzValue]="item.id">
-          </nz-option>
-        </nz-select>
-      </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-      <nz-form-label nzFor="levels">Niveaux</nz-form-label>
-      <nz-form-control>
-        <nz-select
-          id="levels"
-          name="levels"
-          nzAllowClear
-          nzShowSearch
-          nzSize="large"
-          nzMode="multiple"
-          nzPlaceHolder="Cliquez pour selectionner"
-          formControlName="levels"
-          [nzDisabled]="!canEdit">
-          <nz-option
-            *ngFor="let item of dataSource?.levels; trackBy: trackByValue"
-            [nzLabel]="item.name"
-            [nzValue]="item.id">
-          </nz-option>
-        </nz-select>
-      </nz-form-control>
-    </nz-form-item>
-    <ng-container *ngIf="saving; else: actions">
-      <nz-spin></nz-spin>
-    </ng-container>
-    <ng-template #actions>
-      <button nz-button nzType="primary" [disabled]="!canSubmit">
-        Sauvegarder
-      </button>
-    </ng-template>
-  </form>
+<form nz-form [nzLayout]="'vertical'" [formGroup]="form" (ngSubmit)="saveChanges()">
+  <mat-form-field appearance="fill">
+    <mat-label>Nom</mat-label>
+    <input formControlName="name" matInput />
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Description</mat-label>
+    <textarea cdkTextareaAutosize formControlName="desc" matInput></textarea>
+  </mat-form-field>
+  <nz-form-item>
+    <nz-form-label nzFor="topics">Topics</nz-form-label>
+    <nz-form-control>
+      <nz-select
+        id="topics"
+        name="topics"
+        nzAllowClear
+        nzShowSearch
+        nzSize="large"
+        nzMode="multiple"
+        nzPlaceHolder="Cliquez pour selectionner"
+        formControlName="topics"
+        [nzDisabled]="!canEdit"
+      >
+        <nz-option
+          *ngFor="let item of dataSource?.topics; trackBy: trackByValue"
+          [nzLabel]="item.name"
+          [nzValue]="item.id"
+        >
+        </nz-option>
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label nzFor="levels">Niveaux</nz-form-label>
+    <nz-form-control>
+      <nz-select
+        id="levels"
+        name="levels"
+        nzAllowClear
+        nzShowSearch
+        nzSize="large"
+        nzMode="multiple"
+        nzPlaceHolder="Cliquez pour selectionner"
+        formControlName="levels"
+        [nzDisabled]="!canEdit"
+      >
+        <nz-option
+          *ngFor="let item of dataSource?.levels; trackBy: trackByValue"
+          [nzLabel]="item.name"
+          [nzValue]="item.id"
+        >
+        </nz-option>
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+  <ng-container *ngIf="saving; else: actions">
+    <nz-spin></nz-spin>
+  </ng-container>
+  <ng-template #actions>
+    <button nz-button nzType="primary" [disabled]="!canSubmit">Sauvegarder</button>
+  </ng-template>
+</form>

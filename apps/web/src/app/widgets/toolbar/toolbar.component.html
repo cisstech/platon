@@ -6,21 +6,20 @@
   <div class="spacer"></div>
 
   <ng-container *ngIf="user?.role !== 'student'">
-    <button nz-button nzType="primary" nzShape="round" nzSize="large"
-      [matMenuTriggerFor]="actionMenu" >
+    <button
+      nz-button
+      nzType="primary"
+      nzShape="round"
+      nzSize="large"
+      [matMenuTriggerFor]="actionMenu"
+    >
       <span nz-icon nzType="plus" nzTheme="outline"></span>
     </button>
   </ng-container>
 
-  <nz-badge [nzCount]="(notifDrawer.count|async) || 0" [nzOffset]="[-16, 16]">
-    <button
-      nz-button nzType="text"
-      class="spacing"
-      (click)="notifDrawer.open()">
-      <mat-icon
-        matBadgeOverlap="false">
-        notifications
-      </mat-icon>
+  <nz-badge [nzCount]="(notifDrawer.count | async) || 0" [nzOffset]="[-16, 16]">
+    <button nz-button nzType="text" class="spacing" (click)="notifDrawer.open()">
+      <mat-icon matBadgeOverlap="false"> notifications </mat-icon>
     </button>
   </nz-badge>
   <user-avatar
@@ -28,24 +27,24 @@
     [user]="user"
     [avatarSize]="24"
     [attr.aria-label]="user.firstName"
-    [matMenuTriggerFor]="avatarMenu" />
+    [matMenuTriggerFor]="avatarMenu"
+  />
 </header>
 
 <mat-menu #actionMenu="matMenu">
-  <button mat-menu-item  [routerLink]="['/courses/create']">
+  <button mat-menu-item [routerLink]="['/courses/create']">
     <span>Créer un cours</span>
   </button>
-  <button mat-menu-item  [routerLink]="['/resources/create']" [queryParams]="{ type: 'CIRCLE' }">
+  <button mat-menu-item [routerLink]="['/resources/create']" [queryParams]="{ type: 'CIRCLE' }">
     <span>Créer un cercle</span>
   </button>
-  <button mat-menu-item  [routerLink]="['/resources/create']" [queryParams]="{ type: 'EXERCISE' }">
+  <button mat-menu-item [routerLink]="['/resources/create']" [queryParams]="{ type: 'EXERCISE' }">
     <span>Créer un exercice</span>
   </button>
   <button mat-menu-item [routerLink]="['/resources/create']" [queryParams]="{ type: 'ACTIVITY' }">
     <span>Créer une activité</span>
   </button>
 </mat-menu>
-
 
 <mat-menu #avatarMenu="matMenu">
   <button mat-menu-item [routerLink]="'/account'">
@@ -69,4 +68,4 @@
   </button>
 </mat-menu>
 
-<notif-drawer #notifDrawer/>
+<notif-drawer #notifDrawer />

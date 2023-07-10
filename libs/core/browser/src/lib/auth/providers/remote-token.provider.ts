@@ -1,33 +1,27 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { JwtHelperService } from '@auth0/angular-jwt';
-import { AuthToken, ItemResponse } from '@platon/core/common';
-import { firstValueFrom, lastValueFrom } from 'rxjs';
-import { StorageService } from '../../services';
-import { TokenProvider } from '../models/token-provider';
+import { HttpClient } from '@angular/common/http'
+import { Injectable } from '@angular/core'
+import { JwtHelperService } from '@auth0/angular-jwt'
+import { AuthToken, ItemResponse } from '@platon/core/common'
+import { firstValueFrom, lastValueFrom } from 'rxjs'
+import { StorageService } from '../../services'
+import { TokenProvider } from '../models/token-provider'
 
-const KEY = "auth-token";
+const KEY = 'auth-token'
 
 /**
  * Handles JWT token generation/storage/refresh.
  */
 @Injectable()
 export class RemoteTokenProvider extends TokenProvider {
-
-  constructor(
-    private readonly http: HttpClient,
-    private readonly storage: StorageService,
-  ) {
-    super();
+  constructor(private readonly http: HttpClient, private readonly storage: StorageService) {
+    super()
   }
 
   tokenSync(): AuthToken | undefined {
     try {
-      return JSON.parse(
-        localStorage.getItem(KEY) || 'null'
-      ) as AuthToken
+      return JSON.parse(localStorage.getItem(KEY) || 'null') as AuthToken
     } catch {
-      return undefined;
+      return undefined
     }
   }
 
@@ -41,7 +35,7 @@ export class RemoteTokenProvider extends TokenProvider {
 
   /** Deletes the current auth token */
   remove(): Promise<void> {
-    localStorage.removeItem(KEY);
+    localStorage.removeItem(KEY)
     return firstValueFrom(this.storage.remove(KEY))
   }
 
@@ -59,14 +53,14 @@ export class RemoteTokenProvider extends TokenProvider {
     const response = await lastValueFrom(
       this.http.post<ItemResponse<AuthToken>>('/api/v1/auth/signin/', {
         username,
-        password
+        password,
       })
     )
 
     await firstValueFrom(this.storage.set(KEY, response.resource))
-    localStorage.setItem(KEY, JSON.stringify(response.resource));
+    localStorage.setItem(KEY, JSON.stringify(response.resource))
 
-    return response.resource;
+    return response.resource
   }
 
   /**
@@ -74,34 +68,33 @@ export class RemoteTokenProvider extends TokenProvider {
    * @returns A promise that resolves with an auth token.
    */
   async refresh(): Promise<AuthToken> {
-    const token = await this.token();
+    const token = await this.token()
     if (!token) {
-      throw new Error('auth/no-token');
+      throw new Error('auth/no-token')
     }
 
-    const helper = new JwtHelperService();
+    const helper = new JwtHelperService()
     if (helper.isTokenExpired(token.refreshToken)) {
-      await this.remove();
-      throw new Error('auth/refresh-token-expired');
+      await this.remove()
+      throw new Error('auth/refresh-token-expired')
     }
 
     try {
       const response = await lastValueFrom(
         this.http.post<ItemResponse<AuthToken>>('/api/v1/auth/refresh/', {})
-      );
-      token.accessToken = response.resource.accessToken;
+      )
+      token.accessToken = response.resource.accessToken
       await firstValueFrom(this.storage.set(KEY, token))
-      localStorage.setItem(KEY, JSON.stringify(token));
-      return token;
+      localStorage.setItem(KEY, JSON.stringify(token))
+      return token
     } catch (error) {
-      await this.remove();
-      throw error;
+      await this.remove()
+      throw error
     }
   }
 
-
   async save(token: AuthToken) {
     await firstValueFrom(this.storage.set(KEY, token))
-    localStorage.setItem(KEY, JSON.stringify(token));
+    localStorage.setItem(KEY, JSON.stringify(token))
   }
 }

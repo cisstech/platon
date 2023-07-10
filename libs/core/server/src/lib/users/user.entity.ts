@@ -1,51 +1,51 @@
-import { UserRoles } from '@platon/core/common';
-import { Column, Entity, Index, VirtualColumn } from 'typeorm';
-import { BaseEntity } from '../database/base-entity';
+import { UserRoles } from '@platon/core/common'
+import { Column, Entity, Index, VirtualColumn } from 'typeorm'
+import { BaseEntity } from '../database/base-entity'
 
 @Entity('Users')
 export class UserEntity extends BaseEntity {
   @Index('Users_username_idx', { unique: true })
   @Column()
-  username!: string;
+  username!: string
 
   @Index('Users_first_name_idx', { synchronize: false })
   @Column({ name: 'first_name', default: '' })
-  firstName!: string;
+  firstName!: string
 
   @Index('Users_last_name_idx', { synchronize: false })
   @Column({ name: 'last_name', default: '' })
-  lastName!: string;
+  lastName!: string
 
   @Column({ type: 'boolean', default: true })
-  active!: boolean;
+  active!: boolean
 
   @Index('Users_role_idx')
   @Column({ type: 'enum', enum: UserRoles })
-  role!: UserRoles;
+  role!: UserRoles
 
   @Index('Users_email_idx')
   @Column({ nullable: true })
-  email?: string;
+  email?: string
 
   @Column({ nullable: true })
-  password?: string;
+  password?: string
 
   @Column({
     name: 'last_login',
     nullable: true,
     type: 'timestamp with time zone',
   })
-  lastLogin?: Date;
+  lastLogin?: Date
 
   @Column({
     name: 'first_login',
     nullable: true,
     type: 'timestamp with time zone',
   })
-  firstLogin?: Date;
+  firstLogin?: Date
 
   @VirtualColumn({
     query: (alias) => `SELECT ${alias}.password IS NOT NULL`,
   })
-  hasPassword = false;
+  hasPassword = false
 }

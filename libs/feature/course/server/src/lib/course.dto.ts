@@ -1,23 +1,29 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { OrderingDirections } from "@platon/core/common";
-import { BaseDTO, toArray, toNumber } from "@platon/core/server";
-import { Course, CourseFilters, CourseOrderings, CreateCourse, UpdateCourse } from "@platon/feature/course/common";
-import { Transform } from "class-transformer";
-import { IsArray, IsEnum, IsNumber, IsOptional, IsString, IsUUID } from "class-validator";
+import { ApiProperty } from '@nestjs/swagger'
+import { OrderingDirections } from '@platon/core/common'
+import { BaseDTO, toArray, toNumber } from '@platon/core/server'
+import {
+  Course,
+  CourseFilters,
+  CourseOrderings,
+  CreateCourse,
+  UpdateCourse,
+} from '@platon/feature/course/common'
+import { Transform } from 'class-transformer'
+import { IsArray, IsEnum, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator'
 
 export class CourseDTO extends BaseDTO implements Course {
   @IsString()
   @ApiProperty()
-  readonly name!: string;
+  readonly name!: string
 
   @IsOptional()
   @IsString()
   @ApiProperty()
-  readonly desc?: string;
+  readonly desc?: string
 
   @IsUUID()
   @ApiProperty()
-  readonly ownerId!: string;
+  readonly ownerId!: string
 }
 
 export class CreateCourseDTO implements CreateCourse {
@@ -51,34 +57,34 @@ export class UpdateCourseDTO implements UpdateCourse {
 export class CourseFiltersDTO implements CourseFilters {
   @IsString()
   @IsOptional()
-  readonly search?: string;
+  readonly search?: string
 
   @Transform(({ value }) => toNumber(value))
   @IsNumber()
   @IsOptional()
-  readonly period?: number;
+  readonly period?: number
 
   @Transform(({ value }) => toArray(value))
   @IsUUID(undefined, { each: true })
   @IsArray()
   @IsOptional()
-  readonly members?: string[];
+  readonly members?: string[]
 
   @Transform(({ value }) => toNumber(value))
   @IsNumber()
   @IsOptional()
-  readonly offset?: number;
+  readonly offset?: number
 
   @Transform(({ value }) => toNumber(value))
   @IsNumber()
   @IsOptional()
-  readonly limit?: number;
+  readonly limit?: number
 
   @IsEnum(CourseOrderings)
   @IsOptional()
-  readonly order?: CourseOrderings;
+  readonly order?: CourseOrderings
 
   @IsEnum(OrderingDirections)
   @IsOptional()
-  readonly direction?: OrderingDirections;
+  readonly direction?: OrderingDirections
 }

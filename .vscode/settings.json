@@ -1,4 +1,24 @@
 {
-    "jira-plugin.workingProject": "",
-    "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "editor.codeActionsOnSave": {
+    "source.formatDocument": true, // RUN PRETTIER
+    "source.fixAll.eslint": true // RUN ESLINT
+  },
+  "eslint.debug": true,
+  "eslint.format.enable": true,
+  "eslint.workingDirectories": ["./apps", "./libs"],
+  "[javascript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "files.trimFinalNewlines": true,
+  "files.trimTrailingWhitespace": true,
+  "npm.packageManager": "yarn"
 }

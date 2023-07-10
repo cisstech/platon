@@ -1,18 +1,14 @@
-import {
-  defineWebComponent,
-  IWebComponent,
-  WebComponentTypes,
-} from '../../web-component';
+import { defineWebComponent, IWebComponent, WebComponentTypes } from '../../web-component'
 
 export interface SortListItem {
-  css?: string;
-  content: string;
+  css?: string
+  content: string
 }
 
 export interface SortListState extends IWebComponent {
-  items: SortListItem[];
-  alignment?: 'center' | 'left';
-  disabled: boolean;
+  items: SortListItem[]
+  alignment?: 'center' | 'left'
+  disabled: boolean
 }
 
 export const SortListComponentDefinition = defineWebComponent({
@@ -52,7 +48,7 @@ export const SortListComponentDefinition = defineWebComponent({
         type: 'string',
         default: 'center',
         description: 'Alignement des items du SortList',
-        enum: ['center', 'left']
+        enum: ['center', 'left'],
       },
       disabled: {
         type: 'boolean',
@@ -62,6 +58,6 @@ export const SortListComponentDefinition = defineWebComponent({
     },
   },
   showcase: {
-    items: ['Choix 1', 'Choix 2', 'Choix 3']
+    items: ['Choix 1', 'Choix 2', 'Choix 3'],
   },
-});
+})

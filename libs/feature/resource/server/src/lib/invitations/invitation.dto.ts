@@ -1,9 +1,9 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { BaseDTO } from '@platon/core/server';
-import { CreateResourceInvitation, ResourceInvitation } from '@platon/feature/resource/common';
-import { Type } from 'class-transformer';
-import { IsUUID } from 'class-validator';
-import { MemberPermissionsDTO } from '../permissions';
+import { ApiProperty } from '@nestjs/swagger'
+import { BaseDTO } from '@platon/core/server'
+import { CreateResourceInvitation, ResourceInvitation } from '@platon/feature/resource/common'
+import { Type } from 'class-transformer'
+import { IsUUID } from 'class-validator'
+import { MemberPermissionsDTO } from '../permissions'
 
 export class ResourceInvitationDTO extends BaseDTO implements ResourceInvitation {
   @IsUUID()

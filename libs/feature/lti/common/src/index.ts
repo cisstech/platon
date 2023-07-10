@@ -1,1 +1,1 @@
-export * from './lib/lti.model';
+export * from './lib/lti.model'

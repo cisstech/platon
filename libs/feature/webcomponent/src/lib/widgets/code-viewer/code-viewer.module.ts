@@ -1,10 +1,10 @@
-import { NgModule, Type } from '@angular/core';
+import { NgModule, Type } from '@angular/core'
 
-import { IDynamicModule } from '@cisstech/nge/services';
-import { NgeMonacoModule } from '@cisstech/nge/monaco';
+import { IDynamicModule } from '@cisstech/nge/services'
+import { NgeMonacoModule } from '@cisstech/nge/monaco'
 
-import { BaseModule } from '../../shared/components/base/base.module';
-import { CodeViewerComponent } from './code-viewer.component';
+import { BaseModule } from '../../shared/components/base/base.module'
+import { CodeViewerComponent } from './code-viewer.component'
 
 @NgModule({
   declarations: [CodeViewerComponent],
@@ -12,5 +12,5 @@ import { CodeViewerComponent } from './code-viewer.component';
   exports: [CodeViewerComponent],
 })
 export class CodeViewerModule implements IDynamicModule {
-  component: Type<unknown> = CodeViewerComponent;
+  component: Type<unknown> = CodeViewerComponent
 }

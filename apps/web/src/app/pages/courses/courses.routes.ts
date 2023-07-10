@@ -1,5 +1,5 @@
-import { Routes } from '@angular/router';
-import { CoursesPage } from './courses.page';
+import { Routes } from '@angular/router'
+import { CoursesPage } from './courses.page'
 
 export default [
   {
@@ -22,4 +22,4 @@ export default [
         './course/course.routes'
       ),
   },
-] as Routes;
+] as Routes

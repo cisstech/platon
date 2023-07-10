@@ -1,4 +1,6 @@
-export const PlMonarchLanguage = (sandbox: 'py' | 'js' = 'js'): monaco.languages.IMonarchLanguage => ({
+export const PlMonarchLanguage = (
+  sandbox: 'py' | 'js' = 'js'
+): monaco.languages.IMonarchLanguage => ({
   /**
    * Identifies a string of characters that start with a letter or underscore and followed
    * by any combination of letters, digits, and underscores.
@@ -66,10 +68,7 @@ export const PlMonarchLanguage = (sandbox: 'py' | 'js' = 'js'): monaco.languages
     /**
      * The default state of the tokenizer, which is used for the entire code.
      */
-    root: [
-      [/[{}]/, 'delimiter.bracket'],
-      { include: '@common' },
-    ],
+    root: [[/[{}]/, 'delimiter.bracket'], { include: '@common' }],
     /**
      * A common set of rules used by other states.
      */
@@ -87,27 +86,28 @@ export const PlMonarchLanguage = (sandbox: 'py' | 'js' = 'js'): monaco.languages
         /@identifier(?=(\s*==))/,
         {
           cases: {
-            '$1': {
+            $1: {
               cases: {
-                'grader': { token: 'type.identifier', next: `@blockcode.${sandbox}` },
-                'builder': { token: 'type.identifier', next: `@blockcode.${sandbox}` },
-                'form': { token: 'type.identifier', next: '@blockcode.twig' },
-                'title': { token: 'type.identifier', next: '@blockcode.twig' },
-                'statement': { token: 'type.identifier', next: '@blockcode.twig' },
-                'solution': { token: 'type.identifier', next: '@blockcode.twig' },
-                '@default': { token: 'identifier', next: '@blockcode.plaintext' }
-              }
-            }
-          }
-        }
+                grader: { token: 'type.identifier', next: `@blockcode.${sandbox}` },
+                builder: { token: 'type.identifier', next: `@blockcode.${sandbox}` },
+                form: { token: 'type.identifier', next: '@blockcode.twig' },
+                title: { token: 'type.identifier', next: '@blockcode.twig' },
+                statement: { token: 'type.identifier', next: '@blockcode.twig' },
+                solution: { token: 'type.identifier', next: '@blockcode.twig' },
+                '@default': { token: 'identifier', next: '@blockcode.plaintext' },
+              },
+            },
+          },
+        },
       ],
       [
-        /@identifier/, {
+        /@identifier/,
+        {
           cases: {
             '@keywords': 'type.identifier',
             '@default': 'identifier',
-          }
-        }
+          },
+        },
       ],
 
       // numbers
@@ -132,14 +132,14 @@ export const PlMonarchLanguage = (sandbox: 'py' | 'js' = 'js'): monaco.languages
       [/[^\\"]+/, 'string'],
       [/@escapes/, 'string.escape'],
       [/\\./, 'string.escape.invalid'],
-      [/"/, 'string', '@pop']
+      [/"/, 'string', '@pop'],
     ],
     /** A state used to recognize comments. */
     comment: [
       [/[^/*]+/, 'comment'],
       [/\/\*/, 'comment', '@push'], // nested comment
-      ["\\*/", 'comment', '@pop'],
-      [/[/*]/, 'comment']
+      ['\\*/', 'comment', '@pop'],
+      [/[/*]/, 'comment'],
     ],
 
     /** A state used to recognize whitespace and other non-visible characters. */
@@ -157,8 +157,8 @@ export const PlMonarchLanguage = (sandbox: 'py' | 'js' = 'js'): monaco.languages
           token: 'operator',
           next: '@popall',
           nextEmbedded: '@pop',
-        }
-      ]
+        },
+      ],
     ],
 
     /** A state used to recognize code blocks with embedded code in a specific language. */
@@ -167,17 +167,17 @@ export const PlMonarchLanguage = (sandbox: 'py' | 'js' = 'js'): monaco.languages
         /==(?=@language)/,
         {
           token: 'operator',
-          next: '@blockcustom'
-        }
+          next: '@blockcustom',
+        },
       ],
       [
         /==/,
         {
           token: 'operator',
           next: '@block',
-          nextEmbedded: '$S2'
-        }
-      ]
+          nextEmbedded: '$S2',
+        },
+      ],
     ],
     /** A state used to recognize custom code blocks with embedded code in a specific language. */
     blockcustom: [
@@ -187,8 +187,8 @@ export const PlMonarchLanguage = (sandbox: 'py' | 'js' = 'js'): monaco.languages
           token: 'comment',
           next: '@block',
           nextEmbedded: '$1',
-        }
-      ]
+        },
+      ],
     ],
   },
 })

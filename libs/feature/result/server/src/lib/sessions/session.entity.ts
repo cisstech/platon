@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { BaseEntity, UserEntity } from '@platon/core/server';
-import { ActivityEntity } from '@platon/feature/course/server';
-import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
-import { CorrectionEntity } from '../correction/correction.entity';
-
+import { BaseEntity, UserEntity } from '@platon/core/server'
+import { ActivityEntity } from '@platon/feature/course/server'
+import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm'
+import { CorrectionEntity } from '../correction/correction.entity'
+import { PLSourceFile } from '@platon/feature/compiler'
 
 @Entity('Sessions')
 @Index('Sessions_exercise_idx', ['parentId', 'id'])
@@ -44,15 +44,17 @@ export class SessionEntity<TVariables extends object = any> extends BaseEntity {
   variables!: TVariables
 
   @Column({ type: 'float', default: -1 })
-  grade!: number;
+  grade!: number
 
   @Column({ type: 'int', default: 0 })
-  attempts!: number;
+  attempts!: number
 
   @Column({ type: 'timestamp with time zone', name: 'started_at', nullable: true })
-  startedAt?: Date;
+  startedAt?: Date
 
   @Column({ type: 'timestamp with time zone', name: 'last_graded_at', nullable: true })
-  lastGradedAt?: Date;
-}
+  lastGradedAt?: Date
 
+  @Column({ type: 'jsonb', nullable: true })
+  source?: PLSourceFile
+}

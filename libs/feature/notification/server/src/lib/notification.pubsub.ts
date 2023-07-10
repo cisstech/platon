@@ -1,9 +1,9 @@
-import { NotificationEntity } from "./notification.entity";
+import { NotificationEntity } from './notification.entity'
 
-export const ON_CHANGE_NOTIFICATIONS = 'onChangeNotifications';
+export const ON_CHANGE_NOTIFICATIONS = 'onChangeNotifications'
 export interface OnChangeNotificationsPayload {
   onChangeNotifications: {
-    userId: string;
-    newNotification?: NotificationEntity;
-  };
+    userId: string
+    newNotification?: NotificationEntity
+  }
 }

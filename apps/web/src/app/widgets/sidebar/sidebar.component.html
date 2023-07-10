@@ -1,5 +1,10 @@
 <nav *ngIf="user">
-  <img class="logo" src="assets/images/logo/platon.svg" alt="Logo PLaTon" [routerLink]="'/dashboard'" />
+  <img
+    class="logo"
+    src="assets/images/logo/platon.svg"
+    alt="Logo PLaTon"
+    [routerLink]="'/dashboard'"
+  />
   <a class="nav-link" mat-button [routerLink]="'/dashboard'" [routerLinkActive]="'active'">
     <mat-icon>dashboard</mat-icon>
     Tableau de bord
@@ -32,7 +37,7 @@
     </a>
   </ng-container>
   <div class="spacer"></div>
-  <img class="doc" src="assets/images/illustrations/doc.png" alt="Logo PLaTon"/>
+  <img class="doc" src="assets/images/illustrations/doc.png" alt="Logo PLaTon" />
   <a mat-button [routerLink]="'/docs'">
     <mat-icon>local_library</mat-icon>
     Documentation

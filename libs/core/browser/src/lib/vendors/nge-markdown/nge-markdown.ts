@@ -1,19 +1,18 @@
 import {
-  NgeMarkdownTabbedSetProvider,
   NgeMarkdownAdmonitionsProvider,
-  NgeMarkdownLinkAnchorProvider,
-  NgeMarkdownKatexProvider,
-  NgeMarkdownEmojiProvider,
-  NgeMarkdownIconsProvider,
-  NgeMarkdownHighlighterProvider,
-  NgeMarkdownHighlighterMonacoProvider,
-  NgeMarkdownKatexOptionsProvider,
   NgeMarkdownEmojiOptionsProvider,
+  NgeMarkdownEmojiProvider,
+  NgeMarkdownHighlighterMonacoProvider,
+  NgeMarkdownHighlighterProvider,
+  NgeMarkdownIconsProvider,
+  NgeMarkdownKatexOptionsProvider,
+  NgeMarkdownKatexProvider,
+  NgeMarkdownLinkAnchorProvider,
+  NgeMarkdownTabbedSetProvider,
   NgeMarkdownThemeProvider,
-} from '@cisstech/nge/markdown';
+} from '@cisstech/nge/markdown'
 
-import { NgeMonacoColorizerService } from '@cisstech/nge/monaco';
-import { PlfMarkdownParserContribution } from './plf-markdown.parser';
+import { NgeMonacoColorizerService } from '@cisstech/nge/monaco'
 
 export const NgeMarkdownProviders = [
   NgeMarkdownKatexProvider,
@@ -29,11 +28,9 @@ export const NgeMarkdownProviders = [
     styleUrl: 'assets/vendors/nge/markdown/themes/github.css',
   }),
   NgeMarkdownKatexOptionsProvider({
-    baseUrl: 'assets/vendors/katex'
+    baseUrl: 'assets/vendors/katex',
   }),
   NgeMarkdownEmojiOptionsProvider({
-    url: 'assets/vendors/emoji-toolkit/joypixels.min.js'
+    url: 'assets/vendors/emoji-toolkit/joypixels.min.js',
   }),
-
-  PlfMarkdownParserContribution,
-];
+]

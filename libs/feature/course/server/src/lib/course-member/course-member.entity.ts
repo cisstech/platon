@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { BaseEntity, UserEntity, UserGroupEntity } from '@platon/core/server';
-import { Column, Entity, Index, JoinColumn, ManyToOne, Unique } from 'typeorm';
-import { CourseEntity } from '../course.entity';
+import { BaseEntity, UserEntity, UserGroupEntity } from '@platon/core/server'
+import { Column, Entity, Index, JoinColumn, ManyToOne, Unique } from 'typeorm'
+import { CourseEntity } from '../course.entity'
 
 @Entity('CourseMembers')
 @Unique('CourseMembers_unique_user_idx', ['courseId', 'userId'])
@@ -28,6 +28,6 @@ export class CourseMemberEntity extends BaseEntity {
   groupId?: string
 
   @ManyToOne(() => UserGroupEntity, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'group_id', })
+  @JoinColumn({ name: 'group_id' })
   group?: UserGroupEntity
 }

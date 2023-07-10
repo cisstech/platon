@@ -1,2 +1,1 @@
-export * from './pla-editor.contribution';
-
+export * from './pla-editor.contribution'

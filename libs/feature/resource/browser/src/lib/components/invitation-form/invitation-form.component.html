@@ -1,8 +1,4 @@
-<form
-  nz-form
-  nzLayout="vertical"
-  [formGroup]="form"
-  (ngSubmit)="sendInvitation()">
+<form nz-form nzLayout="vertical" [formGroup]="form" (ngSubmit)="sendInvitation()">
   <nz-form-item>
     <nz-form-label nzFor="invitee" nzRequired>Utilisateur</nz-form-label>
     <nz-form-control>
@@ -12,7 +8,8 @@
         formControlName="invitee"
         [multi]="false"
         [filters]="{ roles: ['admin', 'teacher'], limit: 5 }"
-        [excludes]="excludes">
+        [excludes]="excludes"
+      >
         <button nz-button type="submit" nzType="primary" [disabled]="!form.valid">Inviter</button>
       </user-search-bar>
     </nz-form-control>

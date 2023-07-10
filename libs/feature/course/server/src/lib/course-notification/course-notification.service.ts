@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
-import { UserGroupService } from '@platon/core/server';
-import { CourseMemberCreationNotification } from '@platon/feature/course/common';
-import { NotificationService } from '@platon/feature/notification/server';
-import { CourseMemberEntity } from '../course-member/course-member.entity';
-import { CourseService } from '../course.service';
+import { Injectable } from '@nestjs/common'
+import { UserGroupService } from '@platon/core/server'
+import { CourseMemberCreationNotification } from '@platon/feature/course/common'
+import { NotificationService } from '@platon/feature/notification/server'
+import { CourseMemberEntity } from '../course-member/course-member.entity'
+import { CourseService } from '../course.service'
 
 @Injectable()
 export class CourseNotificationService {
@@ -14,25 +14,22 @@ export class CourseNotificationService {
   ) {}
 
   async sendMemberCreation(member: CourseMemberEntity) {
-    const course = (await this.courseService.findById(member.courseId)).get();
+    const course = (await this.courseService.findById(member.courseId)).get()
 
-    const userIds: string[] = [];
+    const userIds: string[] = []
     if (member.groupId) {
-      const users = await this.useGroupService.listMembers(member.groupId);
-      userIds.push(...users.map((user) => user.id));
+      const users = await this.useGroupService.listMembers(member.groupId)
+      userIds.push(...users.map((user) => user.id))
     }
 
     if (member.userId) {
-      userIds.push(member.userId);
+      userIds.push(member.userId)
     }
 
-    return this.notificationService.sendToAllUsers<CourseMemberCreationNotification>(
-      userIds,
-      {
-        type: 'COURSE-MEMBER-CREATION',
-        courseId: course.id,
-        courseName: course.name,
-      }
-    );
+    return this.notificationService.sendToAllUsers<CourseMemberCreationNotification>(userIds, {
+      type: 'COURSE-MEMBER-CREATION',
+      courseId: course.id,
+      courseName: course.name,
+    })
   }
 }

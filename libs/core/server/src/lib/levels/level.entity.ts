@@ -1,5 +1,5 @@
-import { Column, Entity, Index } from 'typeorm';
-import { BaseEntity } from '../database';
+import { Column, Entity, Index } from 'typeorm'
+import { BaseEntity } from '../database'
 
 @Entity('Levels')
 export class LevelEntity extends BaseEntity {

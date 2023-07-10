@@ -4,17 +4,21 @@
   [height]="'70vh'"
   (canceled)="close([])"
   (accepted)="close(selection)"
-  #modal>
+  #modal
+>
   <ng-template>
     <user-search-bar
       [filters]="filters"
       [multi]="multi"
       [excludes]="excludes"
-      [(ngModel)]="selection">
+      [(ngModel)]="selection"
+    >
     </user-search-bar>
   </ng-template>
   <ng-template>
-    <button nz-button nzType="default" (click)="modal.close()">{{noTitle}}</button>
-    <button nz-button nzType="primary" (click)="modal.close(true)" [disabled]="!ready">{{okTitle}}</button>
+    <button nz-button nzType="default" (click)="modal.close()">{{ noTitle }}</button>
+    <button nz-button nzType="primary" (click)="modal.close(true)" [disabled]="!ready">
+      {{ okTitle }}
+    </button>
   </ng-template>
 </ui-modal-template>

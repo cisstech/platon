@@ -1,11 +1,7 @@
-import { Route } from '@angular/router';
-import { withAuthGuard } from '@platon/core/browser';
-import { UserRoles } from '@platon/core/common';
-import {
-  UiError403Component,
-  UiError404Component,
-  UiError500Component,
-} from '@platon/shared/ui';
+import { Route } from '@angular/router'
+import { withAuthGuard } from '@platon/core/browser'
+import { UserRoles } from '@platon/core/common'
+import { UiError403Component, UiError404Component, UiError500Component } from '@platon/shared/ui'
 
 export const appRoutes: Route[] = [
   { path: '403', component: UiError403Component },
@@ -59,4 +55,4 @@ export const appRoutes: Route[] = [
     path: '',
     loadChildren: () => import('./pages/dashboard/dashboard.routes'),
   }),
-];
+]

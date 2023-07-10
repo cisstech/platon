@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core'
 
-import { CourseMembersPage } from '../members/members.page';
+import { CourseMembersPage } from '../members/members.page'
 
 @Component({
   standalone: true,
@@ -8,8 +8,6 @@ import { CourseMembersPage } from '../members/members.page';
   templateUrl: './students.page.html',
   styleUrls: ['./students.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    CourseMembersPage,
-  ]
+  imports: [CourseMembersPage],
 })
-export class CourseStudentsPage { }
+export class CourseStudentsPage {}

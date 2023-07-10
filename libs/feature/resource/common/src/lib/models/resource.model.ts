@@ -1,12 +1,12 @@
-import { Level, OrderingDirections, Topic } from '@platon/core/common';
-import { ResourceStatus } from '../enums/resource-status';
-import { ResourceTypes } from '../enums/resource-types';
-import { ResourceVisibilities } from '../enums/resource-visibility';
+import { Level, OrderingDirections, Topic } from '@platon/core/common'
+import { ResourceStatus } from '../enums/resource-status'
+import { ResourceTypes } from '../enums/resource-types'
+import { ResourceVisibilities } from '../enums/resource-visibility'
 
 export interface Resource {
-  readonly id: string;
-  readonly createdAt: Date;
-  readonly updatedAt?: Date;
+  readonly id: string
+  readonly createdAt: Date
+  readonly updatedAt?: Date
   readonly name: string
   readonly code?: string
   readonly desc?: string
@@ -22,10 +22,10 @@ export interface Resource {
 }
 
 export interface CircleTree {
-  readonly id: string;
-  readonly name: string;
-  readonly code?: string;
-  readonly visibility: ResourceVisibilities;
+  readonly id: string
+  readonly name: string
+  readonly code?: string
+  readonly visibility: ResourceVisibilities
   readonly children?: CircleTree[]
 }
 
@@ -59,71 +59,67 @@ export enum ResourceOrderings {
 }
 
 export interface ResourceFilters {
-  readonly types?: (keyof typeof ResourceTypes)[];
-  readonly status?: (keyof typeof ResourceStatus)[];
-  readonly search?: string;
-  readonly period?: number;
-  readonly members?: string[];
-  readonly watchers?: string[];
-  readonly owners?: string[];
-  readonly views?: boolean;
-  readonly offset?: number;
-  readonly limit?: number;
-  readonly parent?: string;
+  readonly types?: (keyof typeof ResourceTypes)[]
+  readonly status?: (keyof typeof ResourceStatus)[]
+  readonly search?: string
+  readonly period?: number
+  readonly members?: string[]
+  readonly watchers?: string[]
+  readonly owners?: string[]
+  readonly views?: boolean
+  readonly offset?: number
+  readonly limit?: number
+  readonly parent?: string
   readonly order?: ResourceOrderings
-  readonly direction?: OrderingDirections;
+  readonly direction?: OrderingDirections
 }
-
-
 
 export const resourceAncestors = (tree: CircleTree, id: string): CircleTree[] => {
   if (tree.id === id) {
-    return [];
+    return []
   }
 
   if (tree.children) {
     for (const child of tree.children) {
       if (child.id === id) {
-        return [tree];
+        return [tree]
       }
     }
   }
 
   if (tree.children) {
     for (const child of tree.children) {
-      const ancestors = resourceAncestors(child, id);
+      const ancestors = resourceAncestors(child, id)
       if (ancestors.length > 0) {
-        return [...ancestors, tree];
+        return [...ancestors, tree]
       }
     }
   }
 
-  return [];
+  return []
 }
 
 export const circleFromTree = (tree: CircleTree, id: string): CircleTree | undefined => {
-  if (tree.id === id)
-    return tree;
-
+  if (tree.id === id) return tree
 
   if (tree.children) {
     for (const child of tree.children) {
-      const circle = circleFromTree(child, id);
+      const circle = circleFromTree(child, id)
       if (circle) {
-        return circle;
+        return circle
       }
     }
   }
 
-  return undefined;
+  return undefined
 }
 
 export const flattenCircleTree = (tree: CircleTree): CircleTree[] => {
-  const flat: CircleTree[] = [];
+  const flat: CircleTree[] = []
   const flatten = (node: CircleTree) => {
-    flat.push(node);
-    node.children?.forEach(flatten);
+    flat.push(node)
+    node.children?.forEach(flatten)
   }
-  flatten(tree);
-  return flat;
+  flatten(tree)
+  return flat
 }

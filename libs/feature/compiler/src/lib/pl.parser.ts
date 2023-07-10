@@ -3,47 +3,39 @@
  * Returns a Parser implementing JisonParserApi and a Lexer implementing JisonLexerApi.
  */
 
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid'
 
 // VALUES
 
 interface PLValue {
-  readonly value:
-    | string
-    | number
-    | boolean
-    | PLValue[]
-    | { key: string; value: PLValue }[];
-  readonly lineno: number;
-  toJSON(visitor: PLVisitor): any | Promise<any>;
+  readonly value: string | number | boolean | PLValue[] | { key: string; value: PLValue }[]
+  readonly lineno: number
+  toJSON(visitor: PLVisitor): any | Promise<any>
 }
 
 export class PLArray implements PLValue {
   constructor(readonly value: PLValue[], readonly lineno: number) {}
   async toJSON(visitor: PLVisitor) {
-    const result: any[] = [];
+    const result: any[] = []
     // do not use promise.all to allow cache file operations (@copyurl, @copycontent...)
     for (const e of this.value) {
-      result.push(await e.toJSON(visitor));
+      result.push(await e.toJSON(visitor))
     }
-    return result;
+    return result
   }
 }
 
 export class PLObject implements PLValue {
-  constructor(
-    readonly value: { key: string; value: PLValue }[],
-    readonly lineno: number
-  ) {}
+  constructor(readonly value: { key: string; value: PLValue }[], readonly lineno: number) {}
   async toJSON(visitor: PLVisitor) {
     // do not use promise.all to allow cache file operations (@copyurl, @copycontent...)
     for (let i = 0; i < this.value.length; i++) {
-      this.value[i].value = await this.value[i].value.toJSON(visitor);
+      this.value[i].value = await this.value[i].value.toJSON(visitor)
     }
     return this.value.reduce((acc: any, curr: any) => {
-      acc[curr.key] = curr.value;
-      return acc;
-    }, {} as any);
+      acc[curr.key] = curr.value
+      return acc
+    }, {} as any)
   }
 }
 
@@ -51,143 +43,132 @@ export class PLString implements PLValue {
   constructor(readonly value: string, readonly lineno: number) {}
 
   toJSON() {
-    return this.value.trim();
+    return this.value.trim()
   }
 }
 
 export class PLNumber implements PLValue {
   constructor(readonly value: number, readonly lineno: number) {}
   toJSON() {
-    return this.value;
+    return this.value
   }
 }
 
 export class PLBoolean implements PLValue {
   constructor(readonly value: boolean, readonly lineno: number) {}
   toJSON() {
-    return this.value;
+    return this.value
   }
 }
 
 export class PLComponent implements PLValue {
   constructor(readonly value: string, readonly lineno: number) {}
   toJSON() {
-    return { cid: uuidv4(), selector: this.value };
+    return { cid: uuidv4(), selector: this.value }
   }
 }
 
 export class PLDict implements PLValue {
   constructor(readonly value: string, readonly lineno: number) {}
   async toJSON(visitor: PLVisitor) {
-    const source = await visitor.visitExtends(this, false);
-    return source.variables;
+    const source = await visitor.visitExtends(this, false)
+    return source.variables
   }
 }
 
 export class PLFileURL implements PLValue {
   constructor(readonly value: string, readonly lineno: number) {}
   toJSON(visitor: PLVisitor) {
-    return visitor.visitCopyUrl(this);
+    return visitor.visitCopyUrl(this)
   }
 }
 
 export class PLReference implements PLValue {
   constructor(readonly value: string, readonly lineno: number) {}
   toJSON(visitor: PLVisitor) {
-    return visitor.visitReference(this);
+    return visitor.visitReference(this)
   }
 }
 
 export class PLFileContent implements PLValue {
   constructor(readonly value: string, readonly lineno: number) {}
   toJSON(visitor: PLVisitor) {
-    return visitor.visitCopyContent(this);
+    return visitor.visitCopyContent(this)
   }
 }
 
 // NODES
 
 export interface PLNode {
-  accept(visitor: PLVisitor): Promise<void>;
+  accept(visitor: PLVisitor): Promise<void>
 }
 
 export class ExtendsNode implements PLNode {
   constructor(readonly path: string, readonly lineno: number) {}
   async accept(visitor: PLVisitor): Promise<void> {
-    await visitor.visitExtends(this, true);
+    await visitor.visitExtends(this, true)
   }
 }
 
 export class CommentNode implements PLNode {
   constructor(readonly value: string, readonly lineno: number) {}
   accept(visitor: PLVisitor): Promise<void> {
-    return visitor.visitComment(this);
+    return visitor.visitComment(this)
   }
 }
 
 export class IncludeNode implements PLNode {
-  constructor(
-    readonly path: string,
-    readonly alias: string,
-    readonly lineno: number
-  ) {}
+  constructor(readonly path: string, readonly alias: string, readonly lineno: number) {}
   accept(visitor: PLVisitor): Promise<void> {
-    return visitor.visitInclude(this);
+    return visitor.visitInclude(this)
   }
 }
 
 export class AssignmentNode implements PLNode {
-  constructor(
-    readonly key: string,
-    readonly value: PLValue,
-    readonly lineno: number
-  ) {}
+  constructor(readonly key: string, readonly value: PLValue, readonly lineno: number) {}
   accept(visitor: PLVisitor): Promise<void> {
-    return visitor.visitAssignment(this);
+    return visitor.visitAssignment(this)
   }
 }
 
 // AST
 
 export interface PLDependency {
-  alias?: string;
-  lineno: number;
-  content: string;
-  abspath: string;
+  alias?: string
+  lineno: number
+  content: string
+  abspath: string
 }
 
 export interface PLSourceFile {
-  resource: string;
-  version: string;
-  abspath: string;
+  resource: string
+  version: string
+  abspath: string
   errors: {
-    lineno: number;
-    abspath: string;
-    description: string;
-  }[];
+    lineno: number
+    abspath: string
+    description: string
+  }[]
   warnings: {
-    lineno: number;
-    abspath: string;
-    description: string;
-  }[];
-  variables: Record<string, unknown>;
-  dependencies: PLDependency[];
+    lineno: number
+    abspath: string
+    description: string
+  }[]
+  variables: Record<string, unknown>
+  dependencies: PLDependency[]
 }
 
 // VISITOR
 
 export interface PLVisitor {
-  visit(nodes: PLNode[]): Promise<PLSourceFile>;
-  visitExtends(
-    node: ExtendsNode | PLDict,
-    merge: boolean
-  ): Promise<PLSourceFile>;
-  visitInclude(node: IncludeNode): Promise<void>;
-  visitComment(node: CommentNode): Promise<void>;
-  visitAssignment(node: AssignmentNode): Promise<void>;
-  visitCopyUrl(node: PLFileURL): Promise<string>;
-  visitReference(node: PLReference): Promise<any>;
-  visitCopyContent(node: PLFileContent): Promise<string>;
+  visit(nodes: PLNode[]): Promise<PLSourceFile>
+  visitExtends(node: ExtendsNode | PLDict, merge: boolean): Promise<PLSourceFile>
+  visitInclude(node: IncludeNode): Promise<void>
+  visitComment(node: CommentNode): Promise<void>
+  visitAssignment(node: AssignmentNode): Promise<void>
+  visitCopyUrl(node: PLFileURL): Promise<string>
+  visitReference(node: PLReference): Promise<any>
+  visitCopyContent(node: PLFileContent): Promise<string>
 }
 
 import {
@@ -198,7 +179,7 @@ import {
   TerminalsType,
   ProductionsType,
   o,
-} from '@ts-jison/parser';
+} from '@ts-jison/parser'
 const $V0 = [1, 8],
   $V1 = [1, 9],
   $V2 = [1, 11],
@@ -219,13 +200,13 @@ const $V0 = [1, 8],
   $Vh = [5, 8, 12, 19, 26, 29, 32, 34],
   $Vi = [1, 49],
   $Vj = [26, 32],
-  $Vk = [29, 32];
+  $Vk = [29, 32]
 
 export class PLParser extends JisonParser implements JisonParserApi {
-  $?: any;
+  $?: any
 
   constructor(yy = {}, lexer = new PLLexer(yy)) {
-    super(yy, lexer);
+    super(yy, lexer)
   }
 
   symbols_: SymbolsType = {
@@ -265,7 +246,7 @@ export class PLParser extends JisonParser implements JisonParserApi {
     AS: 35,
     $accept: 0,
     $end: 1,
-  };
+  }
   terminals_: TerminalsType = {
     2: 'error',
     5: 'EOF',
@@ -289,7 +270,7 @@ export class PLParser extends JisonParser implements JisonParserApi {
     32: 'COMMA',
     34: 'INCLUDE',
     35: 'AS',
-  };
+  }
   productions_: ProductionsType = [
     0,
     [3, 2],
@@ -496,8 +477,8 @@ export class PLParser extends JisonParser implements JisonParserApi {
     o($Vj, [2, 30]),
     o($Vk, [2, 32]),
     o($Vk, [2, 33]),
-  ];
-  defaultActions: { [key: number]: any } = { 12: [2, 1] };
+  ]
+  defaultActions: { [key: number]: any } = { 12: [2, 1] }
 
   performAction(
     yytext: string,
@@ -509,132 +490,124 @@ export class PLParser extends JisonParser implements JisonParserApi {
     _$: any /* lstack */
   ): any {
     /* this == yyval */
-    var $0 = $$.length - 1;
+    var $0 = $$.length - 1
     switch (yystate) {
       case 1:
-        return $$[$0 - 1];
-        break;
+        return $$[$0 - 1]
+        break
       case 2:
       case 29:
       case 31:
-        this.$ = [$$[$0]];
-        break;
+        this.$ = [$$[$0]]
+        break
       case 3:
-        this.$ = [$$[$0]];
-        break;
+        this.$ = [$$[$0]]
+        break
       case 4:
-        this.$ = $$[$0 - 1].concat($$[$0]);
-        break;
+        this.$ = $$[$0 - 1].concat($$[$0])
+        break
       case 5:
-        this.$ = $$[$0 - 1].concat($$[$0]);
-        break;
+        this.$ = $$[$0 - 1].concat($$[$0])
+        break
       case 6:
-        this.$ = new CommentNode($$[$0], yylineno + 1);
-        break;
+        this.$ = new CommentNode($$[$0], yylineno + 1)
+        break
       case 7:
       case 8:
       case 9:
       case 14:
-        this.$ = $$[$0];
-        break;
+        this.$ = $$[$0]
+        break
       case 10:
-        this.$ = new AssignmentNode(
-          $$[$0 - 3],
-          new PLString('', yylineno + 1),
-          yylineno + 1
-        );
-        break;
+        this.$ = new AssignmentNode($$[$0 - 3], new PLString('', yylineno + 1), yylineno + 1)
+        break
       case 11:
-        this.$ = new AssignmentNode(
-          $$[$0 - 2],
-          new PLString('', yylineno + 1),
-          yylineno + 1
-        );
-        break;
+        this.$ = new AssignmentNode($$[$0 - 2], new PLString('', yylineno + 1), yylineno + 1)
+        break
       case 12:
         this.$ = new AssignmentNode(
           $$[$0 - 3],
           new PLString($$[$0 - 1], yylineno + 1),
           yylineno + 1
-        );
-        break;
+        )
+        break
       case 13:
-        this.$ = new AssignmentNode($$[$0 - 2], $$[$0], yylineno + 1);
-        break;
+        this.$ = new AssignmentNode($$[$0 - 2], $$[$0], yylineno + 1)
+        break
       case 15:
-        this.$ = new PLNumber(Number($$[$0].replace(/_/g, '')), yylineno + 1);
-        break;
+        this.$ = new PLNumber(Number($$[$0].replace(/_/g, '')), yylineno + 1)
+        break
       case 16:
-        this.$ = new PLReference($$[$0], yylineno + 1);
-        break;
+        this.$ = new PLReference($$[$0], yylineno + 1)
+        break
       case 17:
-        this.$ = new PLBoolean($$[$0].toLowerCase() === 'true', yylineno + 1);
-        break;
+        this.$ = new PLBoolean($$[$0].toLowerCase() === 'true', yylineno + 1)
+        break
       case 18:
-        this.$ = new PLString($$[$0].slice(1, -1), yylineno + 1);
-        break;
+        this.$ = new PLString($$[$0].slice(1, -1), yylineno + 1)
+        break
       case 19:
-        this.$ = new PLDict($$[$0], yylineno + 1);
-        break;
+        this.$ = new PLDict($$[$0], yylineno + 1)
+        break
       case 20:
-        this.$ = new PLFileURL($$[$0], yylineno + 1);
-        break;
+        this.$ = new PLFileURL($$[$0], yylineno + 1)
+        break
       case 21:
-        this.$ = new PLFileContent($$[$0], yylineno + 1);
-        break;
+        this.$ = new PLFileContent($$[$0], yylineno + 1)
+        break
       case 22:
-        this.$ = new PLComponent($$[$0], yylineno + 1);
-        break;
+        this.$ = new PLComponent($$[$0], yylineno + 1)
+        break
       case 23:
-        this.$ = new PLArray([], yylineno + 1);
-        break;
+        this.$ = new PLArray([], yylineno + 1)
+        break
       case 24:
-        this.$ = new PLArray($$[$0 - 1], yylineno + 1);
-        break;
+        this.$ = new PLArray($$[$0 - 1], yylineno + 1)
+        break
       case 25:
-        this.$ = new PLObject([], yylineno + 1);
-        break;
+        this.$ = new PLObject([], yylineno + 1)
+        break
       case 26:
-        this.$ = new PLObject($$[$0 - 1], yylineno + 1);
-        break;
+        this.$ = new PLObject($$[$0 - 1], yylineno + 1)
+        break
       case 27:
-        this.$ = $$[$0 - 1] + $$[$0];
+        this.$ = $$[$0 - 1] + $$[$0]
 
-        break;
+        break
       case 28:
         if ($$[$0].trim().startsWith('#!lang=')) {
-          this.$ = '';
+          this.$ = ''
         } else {
-          this.$ = $$[$0];
+          this.$ = $$[$0]
         }
 
-        break;
+        break
       case 30:
       case 32:
-        this.$ = $$[$0 - 2].concat($$[$0]);
-        break;
+        this.$ = $$[$0 - 2].concat($$[$0])
+        break
       case 33:
-        this.$ = { key: $$[$0 - 2], value: $$[$0] };
-        break;
+        this.$ = { key: $$[$0 - 2], value: $$[$0] }
+        break
       case 34:
-        this.$ = new IncludeNode($$[$0], '', yylineno + 1);
-        break;
+        this.$ = new IncludeNode($$[$0], '', yylineno + 1)
+        break
       case 35:
-        this.$ = new IncludeNode($$[$0 - 2], $$[$0], yylineno + 1);
-        break;
+        this.$ = new IncludeNode($$[$0 - 2], $$[$0], yylineno + 1)
+        break
       case 36:
-        this.$ = new ExtendsNode($$[$0], yylineno + 1);
-        break;
+        this.$ = new ExtendsNode($$[$0], yylineno + 1)
+        break
     }
   }
 }
 
 /* generated by ts-jison-lex 0.3.0 */
-import { JisonLexer, JisonLexerApi } from '@ts-jison/lexer';
+import { JisonLexer, JisonLexerApi } from '@ts-jison/lexer'
 export class PLLexer extends JisonLexer implements JisonLexerApi {
-  options: any = { moduleName: 'PL' };
+  options: any = { moduleName: 'PL' }
   constructor(yy = {}) {
-    super(yy);
+    super(yy)
   }
 
   rules: RegExp[] = [
@@ -663,105 +636,97 @@ export class PLLexer extends JisonLexer implements JisonLexerApi {
     /^(?:"([^\\\"]|\\.)*")/,
     /^(?:$)/,
     /^(?:[^\n]*\n)/,
-  ];
+  ]
   conditions: any = {
     MULTI: { rules: [23, 24], inclusive: true },
     INITIAL: {
-      rules: [
-        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
-        20, 21, 22, 23,
-      ],
+      rules: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
       inclusive: true,
     },
-  };
-  performAction(
-    yy: any,
-    yy_: any,
-    $avoiding_name_collisions: any,
-    YY_START: any
-  ): any {
-    var YYSTATE = YY_START;
+  }
+  performAction(yy: any, yy_: any, $avoiding_name_collisions: any, YY_START: any): any {
+    var YYSTATE = YY_START
     switch ($avoiding_name_collisions) {
       case 0 /* ignore whitespace */:
-        break;
+        break
       case 1:
-        return 8;
-        break;
+        return 8
+        break
       case 2:
-        return 8;
-        break;
+        return 8
+        break
       case 3:
-        return 8;
-        break;
+        return 8
+        break
       case 4:
-        this.begin('MULTI');
-        return 13;
-        break;
+        this.begin('MULTI')
+        return 13
+        break
       case 5:
-        return 13;
-        break;
+        return 13
+        break
       case 6:
-        return 22;
-        break;
+        return 22
+        break
       case 7:
-        return 21;
-        break;
+        return 21
+        break
       case 8:
-        return 34;
-        break;
+        return 34
+        break
       case 9:
-        return 19;
-        break;
+        return 19
+        break
       case 10:
-        return 35;
-        break;
+        return 35
+        break
       case 11:
-        return 20; // COMMA AT THE END ALLOW TO INCLUDES PATH INSIDE ARRAY
-        break;
+        return 20 // COMMA AT THE END ALLOW TO INCLUDES PATH INSIDE ARRAY
+        break
       case 12:
-        return 16;
-        break;
+        return 16
+        break
       case 13:
-        return 32;
-        break;
+        return 32
+        break
       case 14:
-        return 23;
-        break;
+        return 23
+        break
       case 15:
-        return 28;
-        break;
+        return 28
+        break
       case 16:
-        return 29;
-        break;
+        return 29
+        break
       case 17:
-        return 25;
-        break;
+        return 25
+        break
       case 18:
-        return 26;
-        break;
+        return 26
+        break
       case 19:
-        return 17;
-        break;
+        return 17
+        break
       case 20:
-        return 24;
-        break;
+        return 24
+        break
       case 21:
-        return 12;
-        break;
+        return 12
+        break
       case 22:
-        return 18;
-        break;
+        return 18
+        break
       case 23:
-        return 5;
-        break;
+        return 5
+        break
       case 24:
         if (yy_.yytext.trim() === '==') {
-          this.popState();
-          return 13;
+          this.popState()
+          return 13
         }
-        return 31;
+        return 31
 
-        break;
+        break
     }
   }
 }

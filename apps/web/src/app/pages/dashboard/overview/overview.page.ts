@@ -1,17 +1,20 @@
-import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core'
+import { RouterModule } from '@angular/router'
 
-import { MatCardModule } from '@angular/material/card';
+import { MatCardModule } from '@angular/material/card'
 
-import { NzGridModule } from 'ng-zorro-antd/grid';
-import { NzBadgeModule } from 'ng-zorro-antd/badge';
-import { NzEmptyModule } from 'ng-zorro-antd/empty';
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzCalendarModule } from 'ng-zorro-antd/calendar';
-import { NotificationListComponent, NotificationService } from '@platon/feature/notification/browser';
-import { Notification } from '@platon/feature/notification/common';
-import { firstValueFrom } from 'rxjs';
+import { NzGridModule } from 'ng-zorro-antd/grid'
+import { NzBadgeModule } from 'ng-zorro-antd/badge'
+import { NzEmptyModule } from 'ng-zorro-antd/empty'
+import { NzButtonModule } from 'ng-zorro-antd/button'
+import { NzCalendarModule } from 'ng-zorro-antd/calendar'
+import {
+  NotificationListComponent,
+  NotificationService,
+} from '@platon/feature/notification/browser'
+import { Notification } from '@platon/feature/notification/common'
+import { firstValueFrom } from 'rxjs'
 
 @Component({
   standalone: true,
@@ -31,24 +34,22 @@ import { firstValueFrom } from 'rxjs';
     NzButtonModule,
     NzCalendarModule,
 
-    NotificationListComponent
-  ]
+    NotificationListComponent,
+  ],
 })
 export class OverviewPage implements OnInit {
-  protected notifications: Notification[] = [];
+  protected notifications: Notification[] = []
 
   constructor(
     private readonly changeDetectorRef: ChangeDetectorRef,
-    private readonly notificationService: NotificationService,
+    private readonly notificationService: NotificationService
   ) {}
 
   async ngOnInit(): Promise<void> {
     const [notifications] = await Promise.all([
-      firstValueFrom(
-        this.notificationService.listUnreads()
-      )
-    ]);
-    this.notifications = notifications;
-    this.changeDetectorRef.markForCheck();
+      firstValueFrom(this.notificationService.listUnreads()),
+    ])
+    this.notifications = notifications
+    this.changeDetectorRef.markForCheck()
   }
 }

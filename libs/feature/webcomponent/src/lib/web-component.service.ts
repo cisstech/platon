@@ -1,9 +1,9 @@
-import { Inject, Injectable, Optional } from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core'
 import {
   WebComponentDefinition,
   WebComponentTypes,
   WEB_COMPONENT_DEFINITIONS,
-} from './web-component';
+} from './web-component'
 
 @Injectable({ providedIn: 'root' })
 export class WebComponentService {
@@ -13,8 +13,8 @@ export class WebComponentService {
     private readonly definitions: WebComponentDefinition[]
   ) {
     this.definitions = (definitions || []).sort((a, b) => {
-      return a.name.localeCompare(b.name);
-    });
+      return a.name.localeCompare(b.name)
+    })
   }
 
   /**
@@ -22,7 +22,7 @@ export class WebComponentService {
    * @param type the type to find.
    */
   ofType(type: WebComponentTypes) {
-    return this.definitions.filter((e) => e.type === type);
+    return this.definitions.filter((e) => e.type === type)
   }
 
   /**
@@ -30,16 +30,16 @@ export class WebComponentService {
    * @param selector the selector to find.
    */
   findBySelector(selector: string): WebComponentDefinition | undefined {
-    return this.definitions.find((e) => e.selector === selector);
+    return this.definitions.find((e) => e.selector === selector)
   }
 
   linkFromSelector(selector: string) {
-    const definition = this.findBySelector(selector);
-    if (!definition) return undefined;
-    return this.linkFromDefinition(definition);
+    const definition = this.findBySelector(selector)
+    if (!definition) return undefined
+    return this.linkFromDefinition(definition)
   }
 
   linkFromDefinition(def: WebComponentDefinition) {
-    return `/docs/components/${def.type}s/${def.selector}`;
+    return `/docs/components/${def.type}s/${def.selector}`
   }
 }

@@ -1,10 +1,10 @@
-import Delimiter from '@editorjs/delimiter';
-import { EditorJsExtension, EDITOR_JS_EXTENSION } from "../editorjs";
+import Delimiter from '@editorjs/delimiter'
+import { EditorJsExtension, EDITOR_JS_EXTENSION } from '../editorjs'
 
 const Extension: EditorJsExtension = {
   tools: {
     delimiter: {
-      class: Delimiter
+      class: Delimiter,
     },
   },
 }
@@ -12,5 +12,5 @@ const Extension: EditorJsExtension = {
 export const DelimiterExtension = {
   provide: EDITOR_JS_EXTENSION,
   multi: true,
-  useValue: Extension
+  useValue: Extension,
 }

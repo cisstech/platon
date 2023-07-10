@@ -1,11 +1,13 @@
 <ng-container
   *authIf="
     authorizations;
-    else: denied;
+    else denied;
     pending: placeholder || spinner;
     authorized: onConnect.bind(this);
     denied: onError.bind(this);
-    let user=user">
+    let user = user
+  "
+>
   <ng-container *ngTemplateOutlet="template; context: { $implicit: user }"></ng-container>
 </ng-container>
 <ng-template #shimmer>

@@ -8,9 +8,9 @@ import {
   OnInit,
   Output,
   ViewChild,
-} from '@angular/core';
-import { WebComponentDefinition } from '../../../web-component';
-import { WebComponentService } from '../../../web-component.service';
+} from '@angular/core'
+import { WebComponentDefinition } from '../../../web-component'
+import { WebComponentService } from '../../../web-component.service'
 
 @Component({
   selector: 'wc-base',
@@ -18,70 +18,86 @@ import { WebComponentService } from '../../../web-component.service';
   styleUrls: ['./base.component.scss'],
 })
 export class BaseComponent implements OnInit, OnDestroy {
-  @ViewChild('container') container!: ElementRef;
+  @ViewChild('container') container!: ElementRef
 
-  @Input() state: any;
-  @Output() stateChange = new EventEmitter<any>();
+  @Input() state: any
+  @Output() stateChange = new EventEmitter<any>()
 
-  private observer?: MutationObserver;
-  private definition?: WebComponentDefinition;
+  private observer?: MutationObserver
+  private definition?: WebComponentDefinition
 
-  constructor(
-    private readonly api: WebComponentService,
-    private readonly elementRef: ElementRef
-  ) {}
+  constructor(private readonly api: WebComponentService, private readonly elementRef: ElementRef) {}
 
   ngOnInit() {
-    const native: HTMLElement = this.elementRef.nativeElement;
-    const selector = native.parentElement?.tagName.toLowerCase();
-    this.definition = this.api.findBySelector(selector || '');
+    const native: HTMLElement = this.elementRef.nativeElement
+    const selector = native.parentElement?.tagName.toLowerCase()
+    this.definition = this.api.findBySelector(selector || '')
+
     this.observer = new MutationObserver((mutations) => {
-      mutations.forEach(this.createStateFromAttributes.bind(this));
-    });
+      mutations.forEach(this.onChangeAttributes.bind(this))
+    })
+
     this.observer.observe(native.parentElement as HTMLElement, {
       attributes: true,
-    });
-    this.createStateFromAttributes();
+    })
   }
 
   ngOnDestroy() {
-    this.observer?.disconnect();
+    this.observer?.disconnect()
   }
 
-  private parseAttributeValue(value: string) {
-    if (value.trim().match(/^(true|false|\d+|\[|\{)/)) {
-      return JSON.parse(value);
+  private parseValue(value: string) {
+    if (value.trim().match(/^(true$|false$|\d+$|\[|\{)/)) {
+      return JSON.parse(value)
     } else {
-      return value;
+      return value
     }
   }
 
-  private createStateFromAttributes() {
-    const native: HTMLElement = this.elementRef.nativeElement;
-    const parent = native.parentElement as HTMLElement;
-    const attributes = Array.from(parent.attributes);
+  private onChangeAttributes() {
+    const native: HTMLElement = this.elementRef.nativeElement
+    const parent = native.parentElement as HTMLElement
+    const attributes = Array.from(parent.attributes)
 
-    const batch = attributes.find(attr => attr.name === 'state');
-    if (batch) {
-      this.stateChange.emit(
-        this.parseAttributeValue(batch.value)
-      );
-      return;
+    // LOAD FROM STATE ATTRIBUTE
+    const stateAttribute = attributes.find((attr) => attr.name === 'state')
+    if (stateAttribute) {
+      const stateValue = stateAttribute.value.startsWith('{')
+        ? stateAttribute.value
+        : window.atob(stateAttribute.value)
+      this.stateChange.emit(this.parseValue(stateValue))
+      return
     }
 
-    const state: Record<string, any> = {};
-    const properties = this.definition?.schema?.properties || {};
+    // LOAD FROM SCRIPT TAG
+    const cidAttribute = attributes.find((attr) => attr.name === 'cid')
+    if (cidAttribute) {
+      const cidValue = cidAttribute.value
+      const script = document.querySelector(`script[id="${cidValue}"]`)
+      if (script) {
+        this.stateChange.emit(this.parseValue(script.textContent || '{}'))
+      }
+      return
+    }
 
-    let changed = false;
+    // LOAD INDIVIDUAL ATTRIBUTES
+    const state: Record<string, any> = {}
+    const properties = this.definition?.schema?.properties || {}
+
+    let changed = false
     for (const attribute of attributes) {
       if (attribute.name in properties) {
-        changed = true;
-        state[attribute.name] = this.parseAttributeValue(attribute.value);
+        changed = true
+        try {
+          state[attribute.name] = this.parseValue(attribute.value)
+        } catch {
+          console.warn(`Invalid value "${attribute.value}" for ${attribute.name} attribute`)
+        }
       }
     }
 
     if (changed) {
-      this.stateChange.emit(state);
+      this.stateChange.emit(state)
     }
   }
 }

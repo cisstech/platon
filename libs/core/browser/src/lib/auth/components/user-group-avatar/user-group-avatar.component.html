@@ -2,9 +2,8 @@
   <nz-avatar nz-tooltip="Groupe" [nzSize]="avatarSize" nzIcon="team"></nz-avatar>
 </nz-badge>
 <div>
-  <span>{{group.name}}</span>
+  <span>{{ group.name }}</span>
   <ng-container *ngIf="canShowMembers">
     <span (click)="showMembers.emit()">Voir les membres</span>
   </ng-container>
 </div>
-
