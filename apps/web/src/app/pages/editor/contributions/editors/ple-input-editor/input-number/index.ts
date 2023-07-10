@@ -3,7 +3,7 @@ import { NgModule, Provider } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { NzFormModule } from 'ng-zorro-antd/form'
 import { NzInputModule } from 'ng-zorro-antd/input'
-import { PLE_INPUT_PROVIDERS } from '../ple-input'
+import { PLE_INPUT_PROVIDERS, PleInputProvider } from '../ple-input'
 import { InputNumberConfigEditorComponent } from './config-editor/config-editor.component'
 import { InputNumberValueEditorComponent } from './value-editor/value-editor.component'
 
@@ -20,7 +20,8 @@ export const InputNumberProvider: Provider = {
   useValue: {
     type: 'number',
     label: 'Nombre',
+    canHandle: (input) => (input.type ? input.type === 'number' : typeof input.value === 'number'),
     valueEditor: InputNumberValueEditorComponent,
     configEditor: InputNumberConfigEditorComponent,
-  },
+  } as PleInputProvider,
 }

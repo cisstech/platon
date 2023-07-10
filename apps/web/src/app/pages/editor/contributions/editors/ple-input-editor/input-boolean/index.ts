@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common'
 import { NgModule, Provider } from '@angular/core'
-import { PLE_INPUT_PROVIDERS } from '../ple-input'
+import { PLE_INPUT_PROVIDERS, PleInputProvider } from '../ple-input'
 import { InputBooleanValueEditorComponent } from './value-editor/value-editor.component'
 import { FormsModule } from '@angular/forms'
 import { NzFormModule } from 'ng-zorro-antd/form'
@@ -19,6 +19,8 @@ export const InputBooleanProvider: Provider = {
   useValue: {
     type: 'boolean',
     label: 'Boolean',
+    canHandle: (input) =>
+      input.type ? input.type === 'boolean' : typeof input.value === 'boolean',
     valueEditor: InputBooleanValueEditorComponent,
-  },
+  } as PleInputProvider,
 }

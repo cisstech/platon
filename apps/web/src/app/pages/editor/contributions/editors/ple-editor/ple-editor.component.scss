@@ -5,12 +5,6 @@
   overflow: auto;
   padding: 1.5rem;
   background-color: #f6f8fa;
-  > div {
-    display: grid;
-    grid-template-columns: 30% 70%;
-    gap: 2rem;
-    width: 100%;
-  }
 }
 
 nz-list {
@@ -26,13 +20,20 @@ nz-list-item {
   }
 }
 
+.container-variables {
+  display: grid;
+  grid-template-columns: 30% 70%;
+  gap: 2rem;
+  width: 100%;
+}
+
+.container-variables--right-side {
+  width: 95%;
+}
+
 .btn-add-input {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   margin-top: 0.5rem;
-}
-
-.container-selection {
-  width: 95%;
 }

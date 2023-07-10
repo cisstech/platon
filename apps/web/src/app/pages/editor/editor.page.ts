@@ -16,6 +16,7 @@ import { ActivatedRoute } from '@angular/router'
 import { EditorService, FileService, IdeService } from '@cisstech/nge-ide/core'
 import { Subscription } from 'rxjs'
 import { PleConfigEditorContributionModule } from './contributions/editors/ple-config-editor'
+import { PleEditorContributionModule } from './contributions/editors/ple-editor'
 import { ResourceFileSystemProvider } from './contributions/file-system'
 import { PlPreviewContributionModule } from './contributions/previews/pl-preview.contribution'
 import { EditorPresenter } from './editor.presenter'
@@ -40,6 +41,7 @@ import { EditorPresenter } from './editor.presenter'
     PlfEditorContributionModule,
     PlaEditorContributionModule,
     PlPreviewContributionModule,
+    PleEditorContributionModule,
     PleConfigEditorContributionModule,
   ],
   providers: [ResourceFileSystemProvider],

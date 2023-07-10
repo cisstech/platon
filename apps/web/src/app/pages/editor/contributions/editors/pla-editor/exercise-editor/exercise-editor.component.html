@@ -82,8 +82,7 @@
               <app-ple-input
                 mode="value"
                 [input]="input"
-                [value]="exercise.overrides?.[input.name]"
-                (valueChange)="onOverrideVariable(input.name, $event)"
+                (inputChange)="onOverrideVariable($event.name, $event.value)"
               />
             </td>
           </tr>

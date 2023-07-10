@@ -46,7 +46,10 @@ export class PlaExerciseEditorComponent {
       ) as unknown as Promise<{ inputs: PleInput[] }>,
     ]).then(([resource, config]) => {
       this.resource = resource
-      this.inputs = config?.inputs
+      this.inputs = config?.inputs?.map((input) => ({
+        ...input,
+        value: value.overrides?.[input.name] || input.value,
+      }))
       this.changeDetectorRef.detectChanges()
     })
   }

@@ -32,30 +32,36 @@ import {
   styleUrls: ['./ple-input.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
-    InputCodeProvider,
-    InputJsonProvider,
-    InputTextProvider,
+    // THE ORDER IS IMPORTANT SINCE THE `canHandle` METHOD IS CALLED IN THE SAME ORDER
     InputNumberProvider,
     InputBooleanProvider,
+    InputJsonProvider,
+    InputCodeProvider, // string is always handled by code editor
+    InputTextProvider,
   ],
 })
 export class PleInputComponent implements OnInit, OnDestroy {
   private readonly fb = inject(FormBuilder)
   private readonly injector = inject(Injector)
   private readonly subscriptions: Subscription[] = []
+
+  private valueEditor?: PleInputValueEditor
   private configEditor?: PleInputConfigEditor
 
   readonly configForm = this.fb.group({
     name: [''],
     type: [''],
     description: [''],
+    value: [{} as unknown],
     options: [{} as unknown],
   })
 
   readonly providers: ReadonlyArray<Readonly<PleInputProvider>> =
     inject(PLE_INPUT_PROVIDERS, {
       optional: true,
-    })?.sort((a, b) => a.label.localeCompare(b.label)) || []
+    }) || []
+
+  readonly sortedProviders = [...this.providers].sort((a, b) => a.label.localeCompare(b.label))
 
   protected selectedProvider?: PleInputProvider
 
@@ -83,12 +89,16 @@ export class PleInputComponent implements OnInit, OnDestroy {
       {
         provide: VALUE_EDITOR_TOKEN,
         useValue: (instance: PleInputValueEditor) => {
-          instance.setValue(this.value)
+          this.valueEditor = instance
+          instance.setValue(this.input.value)
           instance.setOptions?.(this.input.options)
           instance.onChangeValue((value) => {
             setTimeout(() => {
-              this.value = value
-              this.valueChange.emit(value)
+              this.input = {
+                ...this.input,
+                value,
+              }
+              this.inputChange.emit(this.input)
             }, 300)
           })
         },
@@ -107,18 +117,20 @@ export class PleInputComponent implements OnInit, OnDestroy {
       emitEvent: false,
     })
 
-    this.selectedProvider = this.providers.find((p) => p.type === value.type)
+    this.selectedProvider = value.type
+      ? this.providers.find((p) => p.type === value.type)
+      : this.providers.find((p) => p.canHandle?.(value))
+
     this.configEditor?.setOptions({
       ...(value.options || {}),
     })
+
+    this.valueEditor?.setValue(value.value)
   }
 
   @Output() inputChange = new EventEmitter<PleInput>()
 
-  @Input() value?: unknown
-  @Output() valueChange = new EventEmitter<unknown>()
-
-  @Input() mode: 'config' | 'value' = 'config'
+  @Input() mode: 'config' | 'value' | 'design' = 'config'
 
   get label(): string {
     return this.selectedProvider?.label || ''
@@ -141,6 +153,7 @@ export class PleInputComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscriptions.forEach((s) => s.unsubscribe())
   }
+
   protected trackProvider(_: number, provider: PleInputProvider): string {
     return provider.type
   }

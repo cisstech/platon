@@ -1,10 +1,11 @@
 import { ComponentType } from '@angular/cdk/portal'
 import { ChangeDetectorRef, InjectionToken, inject } from '@angular/core'
 
-export interface PleInput<TOptions = unknown> {
+export interface PleInput<TValue = unknown, TOptions = unknown> {
   name: string
   type: string
   description: string
+  value?: TValue
   options?: TOptions
 }
 
@@ -22,6 +23,7 @@ export interface PleInputConfigEditor<TOptions = unknown> {
 export interface PleInputProvider {
   type: string
   label: string
+  canHandle?(input: PleInput): boolean
   valueEditor: ComponentType<PleInputValueEditor>
   configEditor?: ComponentType<PleInputConfigEditor>
 }
@@ -37,6 +39,8 @@ export abstract class BaseValueEditor<TValue = unknown, TOptions = unknown>
   implements PleInputValueEditor<TValue, TOptions>
 {
   protected readonly onInit = inject(VALUE_EDITOR_TOKEN)
+  protected readonly changeDetectorRef = inject(ChangeDetectorRef)
+
   protected value?: TValue
   protected options?: TOptions
   protected notifyValueChange?: (value: TValue) => void
@@ -47,10 +51,12 @@ export abstract class BaseValueEditor<TValue = unknown, TOptions = unknown>
 
   setOptions(options: TOptions): void {
     this.options = options
+    this.changeDetectorRef.markForCheck()
   }
 
   setValue(value: TValue): void {
     this.value = value
+    this.changeDetectorRef.markForCheck()
   }
 
   onChangeValue(consumer: (value: TValue) => void): void {

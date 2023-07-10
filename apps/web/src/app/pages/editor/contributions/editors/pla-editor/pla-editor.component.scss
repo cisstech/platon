@@ -3,6 +3,7 @@
   height: 100%;
   width: 100%;
   overflow: auto;
+  background-color: #f6f8fa;
 }
 nz-steps {
   padding: 1.5rem;
@@ -22,7 +23,7 @@ nz-collapse {
 }
 
 nz-form-label {
-  font-weight: 600;
+  font-weight: 500;
 }
 
 nz-form-control {
@@ -43,6 +44,7 @@ nz-checkbox-wrapper {
 
 nz-list {
   margin-bottom: 1rem;
+  background-color: var(--brand-background-primary);
 }
 
 nz-list-item {

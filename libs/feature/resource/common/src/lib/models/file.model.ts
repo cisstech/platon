@@ -85,3 +85,8 @@ export interface FileVersions {
   all: FileVersion[]
   latest?: FileVersion
 }
+
+export interface FileCompile {
+  resource: string
+  version?: string
+}

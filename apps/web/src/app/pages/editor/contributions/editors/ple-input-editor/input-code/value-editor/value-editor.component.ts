@@ -13,6 +13,9 @@ export class InputCodeValueEditorComponent
   implements OnDestroy
 {
   private readonly disposables: monaco.IDisposable[] = []
+  private model?: monaco.editor.ITextModel
+  private editor?: monaco.editor.IStandaloneCodeEditor
+  protected ignoreNextChange = false
 
   constructor() {
     super()
@@ -20,6 +23,21 @@ export class InputCodeValueEditorComponent
 
   ngOnDestroy() {
     this.disposables.forEach((d) => d.dispose())
+  }
+
+  override setOptions(options: InputCodeOptions): void {
+    if (options.language && this.model) {
+      monaco.editor.setModelLanguage(this.model, options.language)
+    }
+    super.setOptions(options)
+  }
+
+  override setValue(value: string): void {
+    if (this.model) {
+      this.ignoreNextChange = true
+      this.model.setValue(value)
+    }
+    super.setValue(value)
   }
 
   onCreateEditor(editor: monaco.editor.IStandaloneCodeEditor) {
@@ -38,8 +56,15 @@ export class InputCodeValueEditorComponent
     editor.setModel(model)
     this.disposables.push(
       model.onDidChangeContent(() => {
+        if (this.ignoreNextChange) {
+          this.ignoreNextChange = false
+          return
+        }
         this.notifyValueChange?.(model.getValue())
       })
     )
+
+    this.model = model
+    this.editor = editor
   }
 }

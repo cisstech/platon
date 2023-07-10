@@ -3,7 +3,7 @@ import { NgModule, Provider } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { NzFormModule } from 'ng-zorro-antd/form'
 import { NzInputModule } from 'ng-zorro-antd/input'
-import { PLE_INPUT_PROVIDERS } from '../ple-input'
+import { PLE_INPUT_PROVIDERS, PleInputProvider } from '../ple-input'
 import { InputTextValueEditorComponent } from './value-editor/value-editor.component'
 
 @NgModule({
@@ -19,6 +19,7 @@ export const InputTextProvider: Provider = {
   useValue: {
     type: 'text',
     label: 'Texte',
+    canHandle: (input) => (input.type ? input.type === 'text' : typeof input.value === 'string'),
     valueEditor: InputTextValueEditorComponent,
-  },
+  } as PleInputProvider,
 }

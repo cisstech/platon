@@ -15,7 +15,6 @@ export abstract class ResourceProvider {
   abstract circle(username: string): Observable<Resource>
   abstract statistic(resource: Resource): Observable<ResourceStatisic>
   abstract completion(): Observable<ResourceCompletion>
-
   abstract search(filters?: ResourceFilters): Observable<ListResponse<Resource>>
   abstract find(id: string, markAsViewed?: boolean): Observable<Resource>
   abstract update(id: string, input: UpdateResource): Observable<Resource>

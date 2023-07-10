@@ -3,6 +3,7 @@
   <nz-form-control>
     <nz-select
       id="language"
+      nzShowSearch
       [(ngModel)]="options.language"
       (ngModelChange)="notifyOptionsChange?.(options)"
     >

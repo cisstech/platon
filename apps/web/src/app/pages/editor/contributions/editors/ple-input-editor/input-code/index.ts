@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common'
 import { NgModule, Provider } from '@angular/core'
-import { PLE_INPUT_PROVIDERS } from '../ple-input'
+import { PLE_INPUT_PROVIDERS, PleInputProvider } from '../ple-input'
 import { InputCodeConfigEditorComponent } from './config-editor/config-editor.component'
 import { InputCodeValueEditorComponent } from './value-editor/value-editor.component'
 import { NgeMonacoModule } from '@cisstech/nge/monaco'
@@ -21,7 +21,8 @@ export const InputCodeProvider: Provider = {
   useValue: {
     type: 'code',
     label: 'Code',
+    canHandle: (input) => (input.type ? input.type === 'code' : typeof input.value === 'string'),
     valueEditor: InputCodeValueEditorComponent,
     configEditor: InputCodeConfigEditorComponent,
-  },
+  } as PleInputProvider,
 }
