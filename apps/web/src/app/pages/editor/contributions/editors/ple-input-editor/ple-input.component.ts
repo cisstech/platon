@@ -13,6 +13,7 @@ import { FormBuilder } from '@angular/forms'
 import { Subscription, debounceTime, skip, tap } from 'rxjs'
 import { InputBooleanProvider } from './input-boolean'
 import { InputCodeProvider } from './input-code'
+import { InputFileProvider } from './input-file'
 import { InputJsonProvider } from './input-json'
 import { InputNumberProvider } from './input-number'
 import { InputTextProvider } from './input-text'
@@ -36,6 +37,7 @@ import {
     InputNumberProvider,
     InputBooleanProvider,
     InputJsonProvider,
+    InputFileProvider,
     InputCodeProvider, // string is always handled by code editor
     InputTextProvider,
   ],
