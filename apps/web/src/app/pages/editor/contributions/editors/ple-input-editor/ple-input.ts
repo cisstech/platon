@@ -1,5 +1,5 @@
 import { ComponentType } from '@angular/cdk/portal'
-import { InjectionToken, inject } from '@angular/core'
+import { ChangeDetectorRef, InjectionToken, inject } from '@angular/core'
 
 export interface PleInput<TOptions = unknown> {
   name: string
@@ -62,6 +62,7 @@ export abstract class BaseConfigEditor<TOptions = unknown>
   implements PleInputConfigEditor<TOptions>
 {
   protected readonly onInit = inject(CONFIG_EDITOR_TOKEN)
+  protected readonly changeDetectorRef = inject(ChangeDetectorRef)
 
   protected options: TOptions = {} as TOptions
   protected notifyOptionsChange?: (options: TOptions) => void
@@ -72,6 +73,7 @@ export abstract class BaseConfigEditor<TOptions = unknown>
 
   setOptions(options: TOptions): void {
     this.options = (options || {}) as TOptions
+    this.changeDetectorRef.markForCheck()
   }
 
   onChangeOptions(consumer: (value: TOptions) => void): void {

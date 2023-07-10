@@ -43,8 +43,6 @@ export class PleInputComponent implements OnInit, OnDestroy {
   private readonly fb = inject(FormBuilder)
   private readonly injector = inject(Injector)
   private readonly subscriptions: Subscription[] = []
-
-  private valueEditor?: PleInputValueEditor
   private configEditor?: PleInputConfigEditor
 
   readonly configForm = this.fb.group({
@@ -85,7 +83,6 @@ export class PleInputComponent implements OnInit, OnDestroy {
       {
         provide: VALUE_EDITOR_TOKEN,
         useValue: (instance: PleInputValueEditor) => {
-          this.valueEditor = instance
           instance.setValue(this.value)
           instance.setOptions?.(this.input.options)
           instance.onChangeValue((value) => {
@@ -110,10 +107,12 @@ export class PleInputComponent implements OnInit, OnDestroy {
       emitEvent: false,
     })
 
-    if (!this.selectedProvider) {
-      this.selectedProvider = this.providers.find((p) => p.type === value.type)
-    }
+    this.selectedProvider = this.providers.find((p) => p.type === value.type)
+    this.configEditor?.setOptions({
+      ...(value.options || {}),
+    })
   }
+
   @Output() inputChange = new EventEmitter<PleInput>()
 
   @Input() value?: unknown
