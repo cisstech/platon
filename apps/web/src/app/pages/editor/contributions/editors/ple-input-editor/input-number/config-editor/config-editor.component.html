@@ -1,0 +1,25 @@
+<nz-form-item nzRequired>
+  <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="min">Min</nz-form-label>
+  <nz-form-control>
+    <input
+      nz-input
+      type="number"
+      id="min"
+      [(ngModel)]="options.min"
+      (ngModelChange)="notifyOptionsChange?.(options)"
+    />
+  </nz-form-control>
+</nz-form-item>
+
+<nz-form-item nzRequired>
+  <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="max">Max</nz-form-label>
+  <nz-form-control>
+    <input
+      nz-input
+      type="number"
+      id="max"
+      [(ngModel)]="options.max"
+      (ngModelChange)="notifyOptionsChange?.(options)"
+    />
+  </nz-form-control>
+</nz-form-item>
