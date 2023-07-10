@@ -1,4 +1,5 @@
 :host {
+  background-color: var(--brand-background-primary);
   &::ng-deep {
     .ant-ribbon {
       color: white !important;

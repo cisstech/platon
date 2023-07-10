@@ -1,11 +1,17 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { BadRequestResponse, NotFoundResponse, User } from '@platon/core/common'
-import { PLCompiler, PLReferenceResolver, PLSourceFile } from '@platon/feature/compiler'
+import { PLCompiler, PLReferenceResolver, PLSourceFile, Variables } from '@platon/feature/compiler'
 import path from 'path'
 import { ResourceEntity } from '../resource.entity'
 import { ResourceService } from '../resource.service'
 import { LATEST, Repo } from './repo'
 
+interface CompileInput {
+  resourceId: string
+  version?: string
+  overrides?: Variables
+  user?: User
+}
 @Injectable()
 export class ResourceFileService {
   constructor(private readonly resourceService: ResourceService) {}
@@ -36,11 +42,8 @@ export class ResourceFileService {
     ]
   }
 
-  async compile(
-    resourceId: string,
-    version?: string,
-    user?: User
-  ): Promise<[PLSourceFile, ResourceEntity]> {
+  async compile(input: CompileInput): Promise<[PLSourceFile, ResourceEntity]> {
+    const { resourceId, version, user, overrides } = input
     const [repo, resource] = await this.repo(resourceId, user)
     if (resource.type === 'CIRCLE') {
       throw new BadRequestResponse(`Compiler: cannot compile circle`)
@@ -77,10 +80,12 @@ export class ResourceFileService {
       main: file.path,
     })
 
+    const textContent = Buffer.from((await content).buffer).toString()
+
     const source =
       resource.type === 'EXERCISE'
-        ? await compiler.compileExercise(Buffer.from((await content).buffer).toString())
-        : await compiler.compileActivity(Buffer.from((await content).buffer).toString())
+        ? await compiler.compileExercise(textContent, overrides)
+        : await compiler.compileActivity(textContent)
 
     source.variables.author = resource.ownerId
     return [source, resource]

@@ -4,6 +4,7 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
+  Input,
   Output,
 } from '@angular/core'
 import { SafePipeModule } from '@cisstech/nge/pipes'
@@ -20,6 +21,9 @@ import { NzModalModule } from 'ng-zorro-antd/modal'
 export class UiModalIFrameComponent {
   protected visible = false
   protected url?: string
+
+  @Input() width = '90vw'
+  @Input() height = '90vh'
 
   @Output() closed = new EventEmitter()
   @Output() canceled = new EventEmitter()

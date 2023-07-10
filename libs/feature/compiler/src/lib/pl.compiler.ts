@@ -15,7 +15,7 @@ import {
   PLSourceFile,
   PLVisitor,
 } from './pl.parser'
-import { ActivityVariables, ExerciseVariables } from './pl.variables'
+import { ActivityVariables, ExerciseVariables, Variables } from './pl.variables'
 
 /**
  * File reference resolver for the PL compiler.
@@ -155,9 +155,15 @@ export class PLCompiler implements PLVisitor {
     return Promise.resolve()
   }
 
-  async compileExercise(content: string): Promise<PLSourceFile> {
+  async compileExercise(content: string, overrides?: Variables): Promise<PLSourceFile> {
     const nodes = await new PLParser().parse(content)
     const source = await this.visit(nodes)
+    if (overrides) {
+      source.variables = deepMerge(
+        source.variables,
+        await this.withResolvePathInOverrides(overrides)
+      )
+    }
     return source
   }
 
@@ -199,7 +205,7 @@ export class PLCompiler implements PLVisitor {
         if (exercise.overrides) {
           exercise.source.variables = deepMerge(
             exercise.source.variables,
-            await this.withOverrides(exercise)
+            await this.withResolvePathInOverrides(exercise.overrides)
           )
         }
       })
@@ -260,23 +266,6 @@ export class PLCompiler implements PLVisitor {
     return [props[props.length - 1], parent]
   }
 
-  private async withOverrides(exercise: ExerciseVariables): Promise<any> {
-    const keys = Object.keys(exercise.overrides)
-    const promises = keys.map(async (key) => {
-      let value = exercise.overrides[key]
-      if (typeof value === 'string') {
-        value = await this.withResolvePath(value)
-      }
-      return { key, value }
-    })
-
-    const results = await Promise.all(promises)
-    return results.reduce((acc, { key, value }) => {
-      acc[key] = value
-      return acc
-    }, {} as any)
-  }
-
   private withResolvePath(content?: string): Promise<string | undefined> {
     if (!content) return Promise.resolve(content)
 
@@ -313,5 +302,22 @@ export class PLCompiler implements PLVisitor {
     const content = await this.resolver.resolveContent(resource, version, relpath)
     this.contents.set(abspath, content)
     return content
+  }
+
+  private async withResolvePathInOverrides(overrides: Variables): Promise<any> {
+    const keys = Object.keys(overrides)
+    const promises = keys.map(async (key) => {
+      let value = overrides[key]
+      if (typeof value === 'string') {
+        value = await this.withResolvePath(value)
+      }
+      return { key, value }
+    })
+
+    const results = await Promise.all(promises)
+    return results.reduce((acc, { key, value }) => {
+      acc[key] = value
+      return acc
+    }, {} as any)
   }
 }

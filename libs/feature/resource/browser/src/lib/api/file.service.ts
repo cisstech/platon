@@ -13,10 +13,15 @@ import {
   ResourceFile,
 } from '@platon/feature/resource/common'
 import { ResourceFileProvider } from '../models/resource-file-provider'
+import { PLSourceFile } from '@platon/feature/compiler'
 
 @Injectable({ providedIn: 'root' })
 export class ResourceFileService {
   constructor(private readonly provider: ResourceFileProvider) {}
+
+  compile(resource: string, version?: string): Observable<PLSourceFile> {
+    return this.provider.compile(resource, version)
+  }
 
   release(resource: string | Resource, input: FileRelease): Observable<void> {
     return this.provider.release(resource, input)

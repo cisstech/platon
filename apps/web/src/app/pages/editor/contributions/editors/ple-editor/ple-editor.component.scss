@@ -1,0 +1,39 @@
+:host {
+  display: block;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  padding: 1.5rem;
+  background-color: #f6f8fa;
+}
+
+nz-list {
+  margin-bottom: 1rem;
+  background-color: var(--brand-background-primary);
+}
+
+nz-list-item {
+  padding: 0.5rem;
+  cursor: pointer;
+  &.selected {
+    border-left: 2px solid var(--brand-color-primary);
+  }
+}
+
+.container-variables {
+  display: grid;
+  grid-template-columns: 30% 70%;
+  gap: 2rem;
+  width: 100%;
+}
+
+.container-variables--right-side {
+  width: 95%;
+}
+
+.btn-add-input {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
