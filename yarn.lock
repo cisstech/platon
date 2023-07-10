@@ -1793,10 +1793,10 @@
   resolved "https://registry.yarnpkg.com/@braintree/sanitize-url/-/sanitize-url-6.0.2.tgz#6110f918d273fe2af8ea1c4398a88774bb9fc12f"
   integrity sha512-Tbsj02wXCbqGmzdnXNk0SOF19ChhRU70BsroIi4Pm6Ehp56in6vch94mfbdQ17DozxkL3BAVjbZ4Qc1a0HFRAg==
 
-"@cisstech/nge-ide@^15.1.3":
-  version "15.1.3"
-  resolved "https://registry.yarnpkg.com/@cisstech/nge-ide/-/nge-ide-15.1.3.tgz#1bbc7fb3b7787907cb367b8f9e5f486f5a8f45f9"
-  integrity sha512-zCyTQOBf17WZ/MOxSTs79yJQzJQx4b+5er2RMRm0dKWwGZlfnjoLCXTrpLCdonqafp/OAhPR2/i6D3n3COMv8A==
+"@cisstech/nge-ide@^15.2.3":
+  version "15.2.3"
+  resolved "https://registry.yarnpkg.com/@cisstech/nge-ide/-/nge-ide-15.2.3.tgz#50dd91a9ccc006b69ab41f59739864d33a96cb7d"
+  integrity sha512-uL18kf4MEG30RGXav3b6HeplapcuOXs+4hc+ddPGxL143PiwgKWYl3RABDhHRLlDM4IzIyf8MKQm1KtjrJx8ow==
   dependencies:
     tslib "^2.0.0"
 

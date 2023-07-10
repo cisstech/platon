@@ -10,6 +10,7 @@ import { NzSelectModule } from 'ng-zorro-antd/select'
 import { CommonModule } from '@angular/common'
 import { InputBooleanModule } from './input-boolean'
 import { InputCodeModule } from './input-code'
+import { InputFileModule } from './input-file'
 import { InputJsonModule } from './input-json'
 import { InputNumberModule } from './input-number'
 import { InputTextModule } from './input-text'
@@ -30,6 +31,7 @@ import { PleInputComponent } from './ple-input.component'
     InputCodeModule,
     InputJsonModule,
     InputTextModule,
+    InputFileModule,
     InputNumberModule,
     InputBooleanModule,
   ],
