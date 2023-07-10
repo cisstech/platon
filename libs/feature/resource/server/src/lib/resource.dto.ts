@@ -52,10 +52,6 @@ export class ResourceDTO extends BaseDTO implements Resource {
   @ApiProperty()
   readonly topics!: TopicDTO[]
 
-  @IsBoolean()
-  @ApiProperty()
-  readonly isModel!: boolean
-
   @IsUUID()
   @ApiProperty()
   readonly ownerId!: string
@@ -135,11 +131,6 @@ export class CreateResourceDTO implements CreateResource {
   @IsOptional()
   @ApiProperty()
   readonly topics?: string[]
-
-  @IsOptional()
-  @IsBoolean()
-  @ApiProperty()
-  readonly isModel?: boolean
 
   @IsUUID()
   @IsOptional()

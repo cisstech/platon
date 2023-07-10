@@ -83,7 +83,6 @@ export class ResourceCreatePage implements OnInit {
     code: new FormControl(''),
     desc: new FormControl('', [Validators.required]),
     opened: new FormControl(false),
-    isModel: new FormControl(false),
   })
 
   protected tags = new FormGroup({
@@ -146,7 +145,6 @@ export class ResourceCreatePage implements OnInit {
           levels: tags.levels as string[],
           topics: tags.topics as string[],
           status: ResourceStatus.DRAFT,
-          isModel: !!infos.isModel,
           visibility: infos.opened ? ResourceVisibilities.PUBLIC : parent.visibility,
         })
       )
