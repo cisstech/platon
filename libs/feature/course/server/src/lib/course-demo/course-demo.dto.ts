@@ -1,7 +1,10 @@
-import { ApiProperty } from '@nestjs/swagger'
-import { CourseDemo, CourseDemoAccessResponse,
-  CourseDemoGetResponse } from '@platon/feature/course/common'
-import { IsBoolean, IsString, IsUUID, ValidateNested } from 'class-validator'
+import { ApiProperty } from '@nestjs/swagger';
+import {
+  CourseDemo,
+  CourseDemoAccessResponse,
+  CourseDemoGetResponse,
+} from '@platon/feature/course/common';
+import { IsBoolean, IsString, IsUUID, ValidateNested } from 'class-validator';
 
 export class CourseDemoDTO implements CourseDemo {
   @IsUUID()
