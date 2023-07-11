@@ -60,12 +60,7 @@
   </mat-card-content>
   <mat-card-actions>
     <ng-container *ngIf="players.length">
-      <button
-        nz-tooltip="Tentative précédente"
-        *ngIf="index > 0"
-        mat-raised-button
-        (click)="previousAttempt()"
-      >
+      <button nz-tooltip="Tentative précédente" *ngIf="index > 0" mat-raised-button (click)="previousAttempt()">
         <mat-icon>arrow_back</mat-icon>
         Tentative précédente
       </button>
@@ -93,27 +88,27 @@
       <ng-container *ngIf="player.remainingAttempts">({{ player.remainingAttempts }})</ng-container>
     </button>
     <button
-      nz-tooltip="Essayez une autre question du genre"
+      nz-tooltip="Autre question"
       *ngIf="!reviewMode && !!player.settings?.actions?.reroll"
       mat-raised-button
       (click)="reroll()"
     >
       <mat-icon>refresh</mat-icon>
-      Essayez une autre question du genre
+      Autre question
     </button>
     <div class="spacer"></div>
-    <button nz-tooltip="Commentaires" mat-button *ngIf="player.answerId" (click)="drawer.open()">
+    <button nz-tooltip="Commentaires" mat-raised-button *ngIf="player.answerId" (click)="drawer.open()">
       <mat-icon color="primary">reviews</mat-icon>
       Commentaires
     </button>
-    <button *ngIf="player.theories?.length" mat-button [matMenuTriggerFor]="theories">
+    <button *ngIf="player.theories?.length" mat-raised-button [matMenuTriggerFor]="theories">
       <mat-icon color="primary">menu_book</mat-icon>
       Théorie
     </button>
     <button
       nz-tooltip="Solution"
       *ngIf="player.settings?.actions?.solution && !player.solution"
-      mat-button
+      mat-raised-button
       [disabled]="disabled"
       (click)="solution()"
     >
@@ -122,7 +117,7 @@
     </button>
     <button
       nz-tooltip="Aide"
-      mat-button
+      mat-raised-button
       [disabled]="disabled"
       *ngIf="player.settings?.actions?.hints"
       (click)="hint()"
@@ -139,11 +134,7 @@
 </mat-menu>
 <ui-modal-drawer #drawer title="Commentaires">
   <ng-template>
-    <player-comments
-      [canComment]="canComment"
-      [answerId]="player.answerId!"
-      [sessionId]="player.sessionId"
-    />
+    <player-comments [canComment]="canComment" [answerId]="player.answerId!" [sessionId]="player.sessionId" />
   </ng-template>
 </ui-modal-drawer>
 
