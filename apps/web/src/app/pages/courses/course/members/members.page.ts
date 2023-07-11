@@ -1,20 +1,10 @@
 import { CommonModule } from '@angular/common'
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  Input,
-  OnDestroy,
-  OnInit,
-} from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core'
 import { Subscription } from 'rxjs'
 
 import { MatCardModule } from '@angular/material/card'
 
-import {
-  CourseMemberFormComponent,
-  CourseMemberTableComponent,
-} from '@platon/feature/course/browser'
+import { CourseMemberFormComponent, CourseMemberTableComponent } from '@platon/feature/course/browser'
 import { CoursePresenter } from '../course.presenter'
 import { CourseMember, CreateCourseMember } from '@platon/feature/course/common'
 import { UserRoles } from '@platon/core/common'
@@ -47,10 +37,7 @@ export class CourseMembersPage implements OnInit, OnDestroy {
     return this.roles.includes(UserRoles.student)
   }
 
-  constructor(
-    private readonly presenter: CoursePresenter,
-    private readonly changeDetectorRef: ChangeDetectorRef
-  ) {}
+  constructor(private readonly presenter: CoursePresenter, private readonly changeDetectorRef: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.subscriptions.push(

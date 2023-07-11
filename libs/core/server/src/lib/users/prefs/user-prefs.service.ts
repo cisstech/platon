@@ -23,10 +23,7 @@ export class UserPrefsService {
     return prefs
   }
 
-  async updateByUserId(
-    userId: string,
-    changes: Partial<UserPrefsEntity>
-  ): Promise<UserPrefsEntity> {
+  async updateByUserId(userId: string, changes: Partial<UserPrefsEntity>): Promise<UserPrefsEntity> {
     const prefs = await this.findByUserId(userId)
     Object.assign(prefs, changes)
     return this.repository.save(prefs)

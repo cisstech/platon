@@ -29,9 +29,7 @@ declare const RevealMath: any
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 @WebComponent(PresenterComponentDefinition)
-export class PresenterComponent
-  implements AfterViewInit, OnDestroy, WebComponentHooks<PresenterState>
-{
+export class PresenterComponent implements AfterViewInit, OnDestroy, WebComponentHooks<PresenterState> {
   fullscreen = false
   template: SafeHtml = ''
 
@@ -66,15 +64,14 @@ export class PresenterComponent
   }
 
   async ngAfterViewInit(): Promise<void> {
-    this._subscription = combineLatest([
-      this._state.asObservable(),
-      this._load.asObservable(),
-    ]).subscribe(([state, load]) => {
-      this._reveal?.destroy()
-      this.template = this.sanitizer.bypassSecurityTrustHtml(state.template)
-      this.changeDetectorRef.markForCheck()
-      this.initReveal()
-    })
+    this._subscription = combineLatest([this._state.asObservable(), this._load.asObservable()]).subscribe(
+      ([state, load]) => {
+        this._reveal?.destroy()
+        this.template = this.sanitizer.bypassSecurityTrustHtml(state.template)
+        this.changeDetectorRef.markForCheck()
+        this.initReveal()
+      }
+    )
 
     await firstValueFrom(
       this.resourceLoader.loadAllSync([
@@ -135,10 +132,7 @@ export class PresenterComponent
     const element = this.document
 
     const fullscreenExitRequest =
-      element.exitFullscreen ||
-      element.mozCancelFullScreen ||
-      element.webkitExitFullscreen ||
-      element.msExitFullscreen
+      element.exitFullscreen || element.mozCancelFullScreen || element.webkitExitFullscreen || element.msExitFullscreen
 
     fullscreenExitRequest?.apply(element)
     this._reveal?.layout()

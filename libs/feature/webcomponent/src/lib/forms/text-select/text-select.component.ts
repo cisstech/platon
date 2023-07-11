@@ -1,11 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  ElementRef,
-  HostListener,
-  Injector,
-  Input,
-} from '@angular/core'
+import { ChangeDetectionStrategy, Component, ElementRef, HostListener, Injector, Input } from '@angular/core'
 import { CssPipe } from '../../shared/pipes/css.pipe'
 import { WebComponent, WebComponentHooks } from '../../web-component'
 import { TextSelectComponentDefinition, TextSelectState } from './text-select'
@@ -168,11 +161,9 @@ export class TextSelectComponent implements WebComponentHooks<TextSelectState> {
 
   private renderModeRegex() {
     let index = 0
-    this.container.innerHTML = this.state.text
-      .trim()
-      .replace(new RegExp(this.state.regex || '', 'gm'), (match) => {
-        return `<span ${INDEX}="${index++}">${match}</span>`
-      })
+    this.container.innerHTML = this.state.text.trim().replace(new RegExp(this.state.regex || '', 'gm'), (match) => {
+      return `<span ${INDEX}="${index++}">${match}</span>`
+    })
   }
 
   private highlightRange(i: number, j: number, classes?: string) {

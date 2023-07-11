@@ -1,14 +1,7 @@
 import { SelectionModel } from '@angular/cdk/collections'
 import { FlatTreeControl } from '@angular/cdk/tree'
 import { CommonModule } from '@angular/common'
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-} from '@angular/core'
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { RouterModule } from '@angular/router'
 import { CircleTree } from '@platon/feature/resource/common'
 import { NzTreeModule } from 'ng-zorro-antd/tree'

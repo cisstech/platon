@@ -1,13 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { ItemResponse, ListResponse } from '@platon/core/common'
-import {
-  Activity,
-  ActivityFilters,
-  Course,
-  CreateActivity,
-  UpdateActivity,
-} from '@platon/feature/course/common'
+import { Activity, ActivityFilters, Course, CreateActivity, UpdateActivity } from '@platon/feature/course/common'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { ActivityProvider } from '../models/activity-provider'
@@ -45,10 +39,7 @@ export class RemoteActivityProvider extends ActivityProvider {
 
   update(activity: Activity, input: UpdateActivity): Observable<Activity> {
     return this.http
-      .patch<ItemResponse<Activity>>(
-        `/api/v1/courses/${activity.courseId}/activities/${activity.id}`,
-        input
-      )
+      .patch<ItemResponse<Activity>>(`/api/v1/courses/${activity.courseId}/activities/${activity.id}`, input)
       .pipe(map((response) => response.resource))
   }
 

@@ -114,9 +114,7 @@ GROUP BY resource.id, resource.name, resource.updated_at, resource.members, reso
         'resource'
       )
       .leftJoin('Resources', 'child', 'child.parent_id = resource.id')
-      .groupBy(
-        'resource.id, resource.name, resource.updated_at, resource.members, resource.watchers, resource.events'
-      ),
+      .groupBy('resource.id, resource.name, resource.updated_at, resource.members, resource.watchers, resource.events'),
 })
 export class ResourceStatisticEntity {
   @Index()

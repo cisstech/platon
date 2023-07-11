@@ -48,9 +48,7 @@ export class RemoteCourseProvider extends CourseProvider {
   }
 
   find(id: string): Observable<Course> {
-    return this.http
-      .get<ItemResponse<Course>>(`/api/v1/courses/${id}`)
-      .pipe(map((response) => response.resource))
+    return this.http.get<ItemResponse<Course>>(`/api/v1/courses/${id}`).pipe(map((response) => response.resource))
   }
 
   update(id: string, input: UpdateCourse): Observable<Course> {
@@ -60,8 +58,6 @@ export class RemoteCourseProvider extends CourseProvider {
   }
 
   create(input: CreateCourse): Observable<Course> {
-    return this.http
-      .post<ItemResponse<Course>>('/api/v1/courses', input)
-      .pipe(map((response) => response.resource))
+    return this.http.post<ItemResponse<Course>>('/api/v1/courses', input).pipe(map((response) => response.resource))
   }
 }

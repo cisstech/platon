@@ -86,10 +86,7 @@ export class PlayerExerciseComponent implements OnChanges {
 
   protected index = 0
   protected get disabled(): boolean {
-    return (
-      !!this.player.solution ||
-      (this.player.remainingAttempts != null && this.player.remainingAttempts <= 0)
-    )
+    return !!this.player.solution || (this.player.remainingAttempts != null && this.player.remainingAttempts <= 0)
   }
 
   get currentAttemptIndex(): number {
@@ -195,8 +192,7 @@ export class PlayerExerciseComponent implements OnChanges {
       }
     } catch (error) {
       if (error instanceof HttpErrorResponse) {
-        const message =
-          error.error?.message || error.message || 'Une erreur est survenue lors de cette action.'
+        const message = error.error?.message || error.message || 'Une erreur est survenue lors de cette action.'
         this.clearNotification = this.dialogService.notification(this.errorTemplate, {
           duration: 0,
           data: {

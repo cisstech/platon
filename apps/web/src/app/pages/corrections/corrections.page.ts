@@ -13,12 +13,6 @@ import { UiLayoutTabsComponent, UiLayoutTabsTitleDirective } from '@platon/share
   templateUrl: './corrections.page.html',
   styleUrls: ['./corrections.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    CommonModule,
-    MatIconModule,
-    NzBreadCrumbModule,
-    UiLayoutTabsComponent,
-    UiLayoutTabsTitleDirective,
-  ],
+  imports: [CommonModule, MatIconModule, NzBreadCrumbModule, UiLayoutTabsComponent, UiLayoutTabsTitleDirective],
 })
 export class CorrectionsPage {}

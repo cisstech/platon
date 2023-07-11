@@ -120,9 +120,7 @@ export class ActivityPresenter implements OnDestroy {
   }
 
   private alertError(): void {
-    this.dialogService.error(
-      'Une erreur est survenue lors de cette action, veuillez réessayer un peu plus tard !'
-    )
+    this.dialogService.error('Une erreur est survenue lors de cette action, veuillez réessayer un peu plus tard !')
   }
 }
 

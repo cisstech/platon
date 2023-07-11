@@ -1,11 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  Inject,
-  OnDestroy,
-  OnInit,
-} from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from '@angular/core'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { Subscription } from 'rxjs'
 import { CoursePresenter } from '../../course.presenter'

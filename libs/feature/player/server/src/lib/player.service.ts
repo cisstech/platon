@@ -10,11 +10,7 @@ import {
   Variables,
   extractExercisesFromActivityVariables,
 } from '@platon/feature/compiler'
-import {
-  ActivityEntity,
-  ActivityService,
-  ON_RELOAD_ACTIVITY_EVENT,
-} from '@platon/feature/course/server'
+import { ActivityEntity, ActivityService, ON_RELOAD_ACTIVITY_EVENT } from '@platon/feature/course/server'
 import {
   EvalExerciseInput,
   ExercisePlayer,
@@ -28,19 +24,10 @@ import {
 } from '@platon/feature/player/common'
 import { ResourceFileService } from '@platon/feature/resource/server'
 import { AnswerStates, answerStateFromGrade } from '@platon/feature/result/common'
-import {
-  AnswerService,
-  CorrectionEntity,
-  SessionEntity,
-  SessionService,
-} from '@platon/feature/result/server'
+import { AnswerService, CorrectionEntity, SessionEntity, SessionService } from '@platon/feature/result/server'
 import { DataSource, EntityManager, In } from 'typeorm'
 import { withAnswersInSession } from './player-answer'
-import {
-  withActivityFeedbacksGuard,
-  withMultiSessionGuard,
-  withSessionAccessGuard,
-} from './player-guards'
+import { withActivityFeedbacksGuard, withMultiSessionGuard, withSessionAccessGuard } from './player-guards'
 import { updateActivityNavigationState } from './player-navigation'
 import { withActivityPlayer, withExercisePlayer } from './player-renderer'
 import { extractExerciseSourceFromSession } from './player-utils'
@@ -133,10 +120,10 @@ export class PlayerService {
     exerciseSessionIds: string[],
     user?: User
   ): Promise<PlayExerciseOuput> {
-    const activitySession = await this.sessionService.findById<PlayerActivityVariables>(
-      activitySessionId,
-      { parent: false, activity: true }
-    )
+    const activitySession = await this.sessionService.findById<PlayerActivityVariables>(activitySessionId, {
+      parent: false,
+      activity: true,
+    })
     if (!activitySession) {
       throw new NotFoundResponse(`ActivitySession not found: ${activitySessionId}`)
     }
@@ -192,10 +179,7 @@ export class PlayerService {
     }
   }
 
-  async evaluate(
-    input: EvalExerciseInput,
-    user?: User
-  ): Promise<ExercisePlayer | [ExercisePlayer, PlayerNavigation]> {
+  async evaluate(input: EvalExerciseInput, user?: User): Promise<ExercisePlayer | [ExercisePlayer, PlayerNavigation]> {
     return this.actionHandlers[input.action](input, user)
   }
 
@@ -255,10 +239,7 @@ export class PlayerService {
     return withExercisePlayer(exerciseSession)
   }
 
-  async checkAnswer(
-    input: EvalExerciseInput,
-    user?: User
-  ): Promise<[ExercisePlayer, PlayerNavigation]> {
+  async checkAnswer(input: EvalExerciseInput, user?: User): Promise<[ExercisePlayer, PlayerNavigation]> {
     const exerciseSession = withSessionAccessGuard(
       await this.sessionService.findById<ExerciseVariables>(input.sessionId, {
         parent: true,
@@ -317,9 +298,7 @@ export class PlayerService {
     // UPDATE NAVIGATION ACCORDING TO GRADE
 
     if (activitySession && activityNavigation) {
-      const current = activityNavigation.exercises.find(
-        (item) => item.sessionId === exerciseSession.id
-      )
+      const current = activityNavigation.exercises.find((item) => item.sessionId === exerciseSession.id)
       if (current) {
         current.state = answerStateFromGrade(answer.grade)
         activityNavigation.exercises = activityNavigation.exercises.map((item) =>
@@ -330,11 +309,7 @@ export class PlayerService {
       const childs = await this.sessionService.findAllWithParent(activitySession.id)
       activitySession.grade = grade
       childs.forEach((child) => {
-        if (
-          child.id !== exerciseSession.id &&
-          typeof child.grade === 'number' &&
-          child.grade !== -1
-        ) {
+        if (child.id !== exerciseSession.id && typeof child.grade === 'number' && child.grade !== -1) {
           activitySession.grade += child.grade
         }
       })
@@ -361,9 +336,7 @@ export class PlayerService {
 
     return [
       withExercisePlayer(exerciseSession),
-      activitySession
-        ? withActivityFeedbacksGuard<ActivityVariables>(activitySession).variables.navigation
-        : undefined,
+      activitySession ? withActivityFeedbacksGuard<ActivityVariables>(activitySession).variables.navigation : undefined,
     ]
   }
 
@@ -408,10 +381,7 @@ export class PlayerService {
    * @param args Build args.
    * @returns An player instance for the created session.
    */
-  private async createNewSession(
-    args: CreateSessionArgs,
-    entityManager?: EntityManager
-  ): Promise<SessionEntity> {
+  private async createNewSession(args: CreateSessionArgs, entityManager?: EntityManager): Promise<SessionEntity> {
     const create = async (manager: EntityManager): Promise<SessionEntity> => {
       const { user, source, parentId, activity } = args
 
@@ -433,12 +403,7 @@ export class PlayerService {
       )
 
       if (source.abspath.endsWith('.pla')) {
-        session.variables = await this.createNavigation(
-          variables as PlayerActivityVariables,
-          session,
-          user,
-          manager
-        )
+        session.variables = await this.createNavigation(variables as PlayerActivityVariables, session, user, manager)
 
         await this.sessionService.update(
           session.id,

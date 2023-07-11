@@ -3,8 +3,5 @@ import { Resource, ResourceEvent, ResourceEventFilters } from '@platon/feature/r
 import { Observable } from 'rxjs'
 
 export abstract class ResourceEventProvider {
-  abstract listEvents(
-    resource: Resource,
-    filters?: ResourceEventFilters
-  ): Observable<ListResponse<ResourceEvent>>
+  abstract listEvents(resource: Resource, filters?: ResourceEventFilters): Observable<ListResponse<ResourceEvent>>
 }

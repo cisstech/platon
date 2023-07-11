@@ -1,11 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import {
-  ActivitySettings,
-  ActivityVariables,
-  ExerciseFeedback,
-  Variables,
-} from '@platon/feature/compiler'
+import { ActivitySettings, ActivityVariables, ExerciseFeedback, Variables } from '@platon/feature/compiler'
 import { AnswerStates } from '@platon/feature/result/common'
 
 export enum PlayerActions {

@@ -1,11 +1,5 @@
 import { ListResponse } from '@platon/core/common'
-import {
-  Activity,
-  ActivityFilters,
-  Course,
-  CreateActivity,
-  UpdateActivity,
-} from '@platon/feature/course/common'
+import { Activity, ActivityFilters, Course, CreateActivity, UpdateActivity } from '@platon/feature/course/common'
 import { Observable } from 'rxjs'
 
 export abstract class ActivityProvider {

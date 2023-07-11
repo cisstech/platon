@@ -35,9 +35,7 @@ export class AdminTagsPage implements OnInit {
 
   async deleteTag(tag: Topic | Level, type: 'topic' | 'level') {
     try {
-      await firstValueFrom(
-        type === 'level' ? this.tagService.deleteLevel(tag) : this.tagService.deleteTopic(tag)
-      )
+      await firstValueFrom(type === 'level' ? this.tagService.deleteLevel(tag) : this.tagService.deleteTopic(tag))
       if (type === 'level') {
         this.levels = this.levels.filter((item) => item.id !== tag.id)
       } else {
@@ -55,9 +53,7 @@ export class AdminTagsPage implements OnInit {
   async createTag(name: string, type: 'topic' | 'level') {
     try {
       const tag = await firstValueFrom(
-        type === 'level'
-          ? this.tagService.createLevel({ name })
-          : this.tagService.createTopic({ name })
+        type === 'level' ? this.tagService.createLevel({ name }) : this.tagService.createTopic({ name })
       )
       if (type === 'level') {
         this.levels = [...this.levels, tag].sort((a, b) => a.name.localeCompare(b.name))

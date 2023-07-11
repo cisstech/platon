@@ -1,11 +1,5 @@
 import { CommonModule } from '@angular/common'
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  HostListener,
-  OnInit,
-} from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { firstValueFrom } from 'rxjs'
 
@@ -50,9 +44,7 @@ export class PlayerPreviewPage implements OnInit {
       let overrides: Variables | undefined
       if (sessionId) {
         overrides = JSON.parse(
-          (await firstValueFrom(
-            this.storageService.getString(getPreviewOverridesStorageKey(sessionId))
-          )) || '{}'
+          (await firstValueFrom(this.storageService.getString(getPreviewOverridesStorageKey(sessionId)))) || '{}'
         )
       }
 

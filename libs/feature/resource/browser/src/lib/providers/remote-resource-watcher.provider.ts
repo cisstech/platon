@@ -28,10 +28,7 @@ export class RemoteResourceWatcherProvider extends ResourceWatcherProvider {
     return this.http.delete<void>(`/api/v1/resources/${resource.id}/watchers/${userId}`)
   }
 
-  searchWatchers(
-    resource: Resource,
-    filters: ResourceWatcherFilters
-  ): Observable<ListResponse<User>> {
+  searchWatchers(resource: Resource, filters: ResourceWatcherFilters): Observable<ListResponse<User>> {
     let params = new HttpParams()
     if (filters.search) {
       params = params.append('search', filters.search)

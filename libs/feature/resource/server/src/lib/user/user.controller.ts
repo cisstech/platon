@@ -9,10 +9,7 @@ export class UserResourceController {
   constructor(private readonly resourceService: ResourceService) {}
 
   @Get('/circle')
-  async circle(
-    @Req() req: IRequest,
-    @Param('username') username: string
-  ): Promise<ItemResponse<ResourceDTO>> {
+  async circle(@Req() req: IRequest, @Param('username') username: string): Promise<ItemResponse<ResourceDTO>> {
     if (username !== req.user.username) {
       throw new UnauthorizedException("You cannot access other users' personal circles")
     }

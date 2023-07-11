@@ -10,10 +10,7 @@ import { BaseValueEditor } from '../../ple-input'
   styleUrls: ['value-editor.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InputJsonValueEditorComponent
-  extends BaseValueEditor<Record<string, unknown>>
-  implements OnInit
-{
+export class InputJsonValueEditorComponent extends BaseValueEditor<Record<string, unknown>> implements OnInit {
   private readonly resourceLoader = inject(ResourceLoaderService)
   protected readonly editorOptions = new JsonEditorOptions()
 
@@ -27,8 +24,6 @@ export class InputJsonValueEditorComponent
   }
 
   async ngOnInit(): Promise<void> {
-    await firstValueFrom(
-      this.resourceLoader.loadAllAsync([['style', 'assets/vendors/jsoneditor/jsoneditor.min.css']])
-    )
+    await firstValueFrom(this.resourceLoader.loadAllAsync([['style', 'assets/vendors/jsoneditor/jsoneditor.min.css']]))
   }
 }

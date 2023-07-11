@@ -21,13 +21,7 @@ import { FileTypes, ResourceFile } from '@platon/feature/resource/common'
 import { Response } from 'express'
 import { createReadStream } from 'fs'
 import { basename, join } from 'path'
-import {
-  FileCreateDTO,
-  FileMoveDTO,
-  FileReleaseDTO,
-  FileRetrieveDTO,
-  FileUpdateDTO,
-} from './file.dto'
+import { FileCreateDTO, FileMoveDTO, FileReleaseDTO, FileRetrieveDTO, FileUpdateDTO } from './file.dto'
 import { ResourceFileService } from './file.service'
 import { LATEST, LATEST as LATEST_VERSION } from './repo'
 
@@ -36,22 +30,14 @@ export class ResourceFileController {
   constructor(private readonly service: ResourceFileService) {}
 
   @Post('/release/:resourceId')
-  async release(
-    @Req() request: IRequest,
-    @Param('resourceId') resourceId: string,
-    @Body() input: FileReleaseDTO
-  ) {
+  async release(@Req() request: IRequest, @Param('resourceId') resourceId: string, @Body() input: FileReleaseDTO) {
     const [repo] = await this.service.repo(resourceId, request.user)
     await repo.release(input.name, input.message)
     return repo.versions()
   }
 
   @Post('/compile/:resourceId')
-  async compile(
-    @Req() request: IRequest,
-    @Param('resourceId') resourceId: string,
-    @Query('version') version = LATEST
-  ) {
+  async compile(@Req() request: IRequest, @Param('resourceId') resourceId: string, @Query('version') version = LATEST) {
     const [source] = await this.service.compile({ resourceId, version, user: request.user })
     return source
   }
@@ -179,11 +165,7 @@ export class ResourceFileController {
   }
 
   @Delete('/:resourceId/:path(*)')
-  async delete(
-    @Req() request: IRequest,
-    @Param('resourceId') resourceId: string,
-    @Param('path') path: string
-  ) {
+  async delete(@Req() request: IRequest, @Param('resourceId') resourceId: string, @Param('path') path: string) {
     const [repo] = await this.service.repo(resourceId, request.user)
     await repo.remove(path)
     return new SuccessResponse()

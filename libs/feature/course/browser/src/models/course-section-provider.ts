@@ -1,10 +1,5 @@
 import { ListResponse } from '@platon/core/common'
-import {
-  Course,
-  CourseSection,
-  CreateCourseSection,
-  UpdateCourseSection,
-} from '@platon/feature/course/common'
+import { Course, CourseSection, CreateCourseSection, UpdateCourseSection } from '@platon/feature/course/common'
 import { Observable } from 'rxjs'
 
 export abstract class CourseSectionProvider {

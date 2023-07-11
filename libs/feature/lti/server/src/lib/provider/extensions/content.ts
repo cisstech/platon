@@ -36,8 +36,7 @@ export class ContentExtension {
   constructor(params: any) {
     this.returnTypes = params.ext_content_return_types.split(',')
     this.returnUrl = params.ext_content_return_url || params.launch_presentation_return_url
-    this.fileExtensions =
-      (params.ext_content_file_extensions && params.ext_content_file_extensions.split(',')) || []
+    this.fileExtensions = (params.ext_content_file_extensions && params.ext_content_file_extensions.split(',')) || []
   }
 
   hasReturnType(returnType: string) {
@@ -142,9 +141,7 @@ export class ContentExtension {
 
   private validateReturnType(return_type: string) {
     if (!this.hasReturnType(return_type)) {
-      throw new ExtensionError(
-        'Invalid return type, valid options are ' + this.returnTypes.join(', ')
-      )
+      throw new ExtensionError('Invalid return type, valid options are ' + this.returnTypes.join(', '))
     }
   }
 

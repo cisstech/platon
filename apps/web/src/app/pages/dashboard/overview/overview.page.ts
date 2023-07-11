@@ -9,10 +9,7 @@ import { NzBadgeModule } from 'ng-zorro-antd/badge'
 import { NzEmptyModule } from 'ng-zorro-antd/empty'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzCalendarModule } from 'ng-zorro-antd/calendar'
-import {
-  NotificationListComponent,
-  NotificationService,
-} from '@platon/feature/notification/browser'
+import { NotificationListComponent, NotificationService } from '@platon/feature/notification/browser'
 import { Notification } from '@platon/feature/notification/common'
 import { firstValueFrom } from 'rxjs'
 
@@ -46,9 +43,7 @@ export class OverviewPage implements OnInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
-    const [notifications] = await Promise.all([
-      firstValueFrom(this.notificationService.listUnreads()),
-    ])
+    const [notifications] = await Promise.all([firstValueFrom(this.notificationService.listUnreads())])
     this.notifications = notifications
     this.changeDetectorRef.markForCheck()
   }

@@ -1,11 +1,5 @@
 import { StreamableFile } from '@nestjs/common'
-import {
-  FileTypes,
-  FileVersion,
-  FileVersions,
-  ResourceFile,
-  ResourceTypes,
-} from '@platon/feature/resource/common'
+import { FileTypes, FileVersion, FileVersions, ResourceFile, ResourceTypes } from '@platon/feature/resource/common'
 import {
   FileExistsError,
   FileNotFoundError,
@@ -66,14 +60,10 @@ export class Repo {
     if (!exists) {
       await git.init({ fs, dir, defaultBranch: DEFAULT_BRANCH })
       try {
-        await fs.promises.cp(
-          Path.join(BASE, 'templates', options?.type?.toLowerCase() as string),
-          dir,
-          {
-            recursive: true,
-            force: true,
-          }
-        )
+        await fs.promises.cp(Path.join(BASE, 'templates', options?.type?.toLowerCase() as string), dir, {
+          recursive: true,
+          force: true,
+        })
       } catch {
         // can throw error if called twice by the frontend
       }
@@ -225,11 +215,7 @@ export class Repo {
       map: async (filepath, [entry]) => {
         if (match && match.type === 'file') return
 
-        if (
-          filepath !== ROOT &&
-          (!filepath.startsWith(prefix) || Path.basename(filepath).startsWith('.'))
-        )
-          return
+        if (filepath !== ROOT && (!filepath.startsWith(prefix) || Path.basename(filepath).startsWith('.'))) return
 
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const [oid, type] = await Promise.all([entry!.oid(), entry!.type()])
@@ -309,9 +295,7 @@ export class Repo {
       .then((status) =>
         Promise.all(
           status.map(([filepath, , worktreeStatus]) =>
-            worktreeStatus
-              ? git.add({ ...this.repo, filepath })
-              : git.remove({ ...this.repo, filepath })
+            worktreeStatus ? git.add({ ...this.repo, filepath }) : git.remove({ ...this.repo, filepath })
           )
         )
       )
@@ -329,13 +313,7 @@ export class Repo {
   async bundle(version = LATEST) {
     return await withTempFile(
       async (path) => {
-        await simpleGit(this.root).raw(
-          'bundle',
-          'create',
-          path,
-          'HEAD',
-          version === LATEST ? DEFAULT_BRANCH : 'latest'
-        )
+        await simpleGit(this.root).raw('bundle', 'create', path, 'HEAD', version === LATEST ? DEFAULT_BRANCH : 'latest')
         const file = fs.createReadStream(path)
         return new StreamableFile(file)
       },
@@ -354,12 +332,7 @@ export class Repo {
     )
   }
 
-  async search(options: {
-    query: string
-    matchWord?: boolean
-    matchCase?: boolean
-    useRegex?: boolean
-  }) {
+  async search(options: { query: string; matchWord?: boolean; matchCase?: boolean; useRegex?: boolean }) {
     if (!options.query) {
       throw new TypeError('query is required')
     }
@@ -387,8 +360,7 @@ export class Repo {
 
   async versions(): Promise<FileVersions> {
     const tags = await simpleGit(this.repo.dir).tags({
-      '--format':
-        '%(refname:lstrip=2) %(taggername) %(taggeremail) %(creatordate:iso-strict) %(subject)',
+      '--format': '%(refname:lstrip=2) %(taggername) %(taggeremail) %(creatordate:iso-strict) %(subject)',
     })
 
     const parse = (tag: string): FileVersion => {

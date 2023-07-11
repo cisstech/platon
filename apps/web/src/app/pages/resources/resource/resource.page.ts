@@ -1,11 +1,5 @@
 import { CommonModule } from '@angular/common'
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  OnDestroy,
-  OnInit,
-} from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
 import { Subscription } from 'rxjs'
@@ -65,10 +59,7 @@ export class ResourcePage implements OnInit, OnDestroy {
 
   readonly status = Object.values(ResourceStatus)
 
-  constructor(
-    private readonly presenter: ResourcePresenter,
-    private readonly changeDetectorRef: ChangeDetectorRef
-  ) {}
+  constructor(private readonly presenter: ResourcePresenter, private readonly changeDetectorRef: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.subscriptions.push(

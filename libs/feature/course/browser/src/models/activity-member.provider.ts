@@ -4,10 +4,7 @@ import { Observable } from 'rxjs'
 
 export abstract class ActivityMemberProvider {
   abstract create(activity: Activity, input: CreateActivityMember): Observable<ActivityMember>
-  abstract update(
-    activity: Activity,
-    input: CreateActivityMember[]
-  ): Observable<ListResponse<ActivityMember>>
+  abstract update(activity: Activity, input: CreateActivityMember[]): Observable<ListResponse<ActivityMember>>
   abstract search(activity: Activity): Observable<ListResponse<ActivityMember>>
   abstract delete(member: ActivityMember): Observable<void>
 }

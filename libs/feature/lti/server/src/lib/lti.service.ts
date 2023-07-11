@@ -74,9 +74,7 @@ export class LTIService {
   }
 
   async updateLms(id: string, changes: Partial<LmsEntity>): Promise<LmsEntity> {
-    const user = (await this.findLmsById(id)).orElseThrow(
-      () => new NotFoundResponse(`Lms not found: ${id}`)
-    )
+    const user = (await this.findLmsById(id)).orElseThrow(() => new NotFoundResponse(`Lms not found: ${id}`))
     Object.assign(user, changes)
     return this.lmsRepo.save(user)
   }
@@ -106,13 +104,9 @@ export class LTIService {
       return existing
     }
 
-    let name =
-      payload.ext_user_username || payload.custom_lis_user_username || payload.ext_d2l_username
+    let name = payload.ext_user_username || payload.custom_lis_user_username || payload.ext_d2l_username
     if (!name && payload.lis_person_name_family && payload.lis_person_name_given) {
-      name =
-        payload.lis_person_name_given[0].toLowerCase() +
-        '_' +
-        payload.lis_person_name_family.toLowerCase()
+      name = payload.lis_person_name_given[0].toLowerCase() + '_' + payload.lis_person_name_family.toLowerCase()
     }
 
     if (!name) {

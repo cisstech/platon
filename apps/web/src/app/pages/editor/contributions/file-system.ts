@@ -72,9 +72,7 @@ export class ResourceFileSystemProvider extends FileSystemProvider {
     const files: IFile[] = []
 
     const transform = (entry: ResourceFile) => {
-      const fileUri = monaco.Uri.parse(
-        `${uri.scheme}://${uri.authority}/${removeLeadingSlash(entry.path)}`
-      )
+      const fileUri = monaco.Uri.parse(`${uri.scheme}://${uri.authority}/${removeLeadingSlash(entry.path)}`)
       const file = new FileImpl(fileUri, entry)
       files.push(file)
       this.entries.set(file.uri.toString(true), entry)
@@ -106,9 +104,7 @@ export class ResourceFileSystemProvider extends FileSystemProvider {
 
   override async read(uri: monaco.Uri): Promise<string> {
     const file = this.lookup(uri)
-    const content = await firstValueFrom(
-      this.http.get<string>(file.url, { responseType: 'text' as 'json' })
-    )
+    const content = await firstValueFrom(this.http.get<string>(file.url, { responseType: 'text' as 'json' }))
     return content
   }
 
@@ -137,11 +133,7 @@ export class ResourceFileSystemProvider extends FileSystemProvider {
     )
   }
 
-  override async move(
-    source: monaco.Uri,
-    destination: monaco.Uri,
-    options: { copy: boolean }
-  ): Promise<void> {
+  override async move(source: monaco.Uri, destination: monaco.Uri, options: { copy: boolean }): Promise<void> {
     const src = this.lookup(source)
     this.lookupAsDirectory(destination)
 

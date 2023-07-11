@@ -64,9 +64,7 @@ export abstract class BaseValueEditor<TValue = unknown, TOptions = unknown>
   }
 }
 
-export abstract class BaseConfigEditor<TOptions = unknown>
-  implements PleInputConfigEditor<TOptions>
-{
+export abstract class BaseConfigEditor<TOptions = unknown> implements PleInputConfigEditor<TOptions> {
   protected readonly onInit = inject(CONFIG_EDITOR_TOKEN)
   protected readonly changeDetectorRef = inject(ChangeDetectorRef)
 

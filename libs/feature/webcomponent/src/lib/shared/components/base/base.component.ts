@@ -1,14 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewChild,
-} from '@angular/core'
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
 import { WebComponentDefinition } from '../../../web-component'
 import { WebComponentService } from '../../../web-component.service'
 

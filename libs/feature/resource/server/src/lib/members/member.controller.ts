@@ -43,18 +43,12 @@ export class ResourceMemberController {
     @Param('resourceId') resourceId: string,
     @Body() input: UpdateResourceMemberDTO
   ): Promise<ItemResponse<ResourceMemberDTO>> {
-    const resource = Mapper.map(
-      await this.service.updateByUserId(resourceId, userId, input),
-      ResourceMemberDTO
-    )
+    const resource = Mapper.map(await this.service.updateByUserId(resourceId, userId, input), ResourceMemberDTO)
     return new ItemResponse({ resource })
   }
 
   @Delete('/:userId')
-  async delete(
-    @Param('userId') userId: string,
-    @Param('resourceId') resourceId: string
-  ): Promise<NoContentResponse> {
+  async delete(@Param('userId') userId: string, @Param('resourceId') resourceId: string): Promise<NoContentResponse> {
     await this.service.deleteByUserId(resourceId, userId)
     return new NoContentResponse()
   }

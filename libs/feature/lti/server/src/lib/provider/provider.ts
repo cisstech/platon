@@ -90,16 +90,10 @@ export class LTIProvider {
 
     this.body.is_admin = Object.values(AdminRoles).some((role) => this.body.roles.includes(role))
 
-    this.body.is_student = Object.values(StudentRoles).some((role) =>
-      this.body.roles.includes(role)
-    )
+    this.body.is_student = Object.values(StudentRoles).some((role) => this.body.roles.includes(role))
 
-    this.body.is_reviewer = Object.values(ReviewerRoles).some((role) =>
-      this.body.roles.includes(role)
-    )
+    this.body.is_reviewer = Object.values(ReviewerRoles).some((role) => this.body.roles.includes(role))
 
-    this.body.is_instructor = Object.values(InstructorRoles).some((role) =>
-      this.body.roles.includes(role)
-    )
+    this.body.is_instructor = Object.values(InstructorRoles).some((role) => this.body.roles.includes(role))
   }
 }

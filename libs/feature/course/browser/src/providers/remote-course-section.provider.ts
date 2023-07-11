@@ -1,12 +1,7 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { ItemResponse, ListResponse } from '@platon/core/common'
-import {
-  Course,
-  CourseSection,
-  CreateCourseSection,
-  UpdateCourseSection,
-} from '@platon/feature/course/common'
+import { Course, CourseSection, CreateCourseSection, UpdateCourseSection } from '@platon/feature/course/common'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { CourseSectionProvider } from '../models/course-section-provider'
@@ -35,10 +30,7 @@ export class RemoteCourseSectionProvider extends CourseSectionProvider {
 
   update(section: CourseSection, input: UpdateCourseSection): Observable<CourseSection> {
     return this.http
-      .patch<ItemResponse<CourseSection>>(
-        `/api/v1/courses/${section.courseId}/sections/${section.id}`,
-        input
-      )
+      .patch<ItemResponse<CourseSection>>(`/api/v1/courses/${section.courseId}/sections/${section.id}`, input)
       .pipe(map((response) => response.resource))
   }
 

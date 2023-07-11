@@ -1,9 +1,5 @@
 import { Inject, Injectable, Optional } from '@angular/core'
-import {
-  WebComponentDefinition,
-  WebComponentTypes,
-  WEB_COMPONENT_DEFINITIONS,
-} from './web-component'
+import { WebComponentDefinition, WebComponentTypes, WEB_COMPONENT_DEFINITIONS } from './web-component'
 
 @Injectable({ providedIn: 'root' })
 export class WebComponentService {

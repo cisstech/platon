@@ -174,10 +174,7 @@ export class CoursePresenter implements OnDestroy {
   }
 
   private async refresh(id: string): Promise<void> {
-    const [user, course] = await Promise.all([
-      this.authService.ready(),
-      firstValueFrom(this.courseService.find(id)),
-    ])
+    const [user, course] = await Promise.all([this.authService.ready(), firstValueFrom(this.courseService.find(id))])
 
     const demo = await firstValueFrom(this.courseService.getDemo(course.id))
 
@@ -198,9 +195,7 @@ export class CoursePresenter implements OnDestroy {
   }
 
   private alertError(): void {
-    this.dialogService.error(
-      'Une erreur est survenue lors de cette action, veuillez réessayer un peu plus tard !'
-    )
+    this.dialogService.error('Une erreur est survenue lors de cette action, veuillez réessayer un peu plus tard !')
   }
 }
 

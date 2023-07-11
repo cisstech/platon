@@ -25,10 +25,7 @@ import { SandboxService } from './sandboxes/sandbox.service'
   exports: [PlayerService, SandboxService],
 })
 export class FeaturePlayerServerModule implements OnModuleInit {
-  constructor(
-    private readonly discovery: DiscoveryService,
-    private readonly sandboxService: SandboxService
-  ) {}
+  constructor(private readonly discovery: DiscoveryService, private readonly sandboxService: SandboxService) {}
 
   async onModuleInit(): Promise<void> {
     const providers = await this.discovery.providersWithMetaAtKey(SANDBOX)

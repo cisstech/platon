@@ -73,9 +73,7 @@ export class NotificationListComponent implements OnChanges {
   ngOnChanges(): void {
     this.items = this.notifications.map((notification) => {
       return {
-        renderer: this.parsers
-          ?.find((parser) => parser.support(notification))
-          ?.renderer(notification),
+        renderer: this.parsers?.find((parser) => parser.support(notification))?.renderer(notification),
         notification,
         injector: Injector.create({
           parent: this.injector,

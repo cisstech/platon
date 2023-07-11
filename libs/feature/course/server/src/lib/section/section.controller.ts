@@ -1,10 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common'
-import {
-  ItemResponse,
-  ListResponse,
-  NoContentResponse,
-  NotFoundResponse,
-} from '@platon/core/common'
+import { ItemResponse, ListResponse, NoContentResponse, NotFoundResponse } from '@platon/core/common'
 import { Mapper } from '@platon/core/server'
 import { CourseSectionDTO, CreateCourseSectionDTO, UpdateCourseSectionDTO } from './section.dto'
 import { CourseSectionEntity } from './section.entity'
@@ -64,10 +59,7 @@ export class CourseSectionController {
   }
 
   @Delete('/:sectionId')
-  async delete(
-    @Param('courseId') courseId: string,
-    @Param('sectionId') sectionId: string
-  ): Promise<NoContentResponse> {
+  async delete(@Param('courseId') courseId: string, @Param('sectionId') sectionId: string): Promise<NoContentResponse> {
     await this.service.delete(courseId, sectionId)
     return new NoContentResponse()
   }

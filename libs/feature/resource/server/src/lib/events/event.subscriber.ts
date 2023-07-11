@@ -21,10 +21,7 @@ export class ResourceEventSubscriber implements EntitySubscriberInterface<Resour
 
   async afterInsert(event: InsertEvent<ResourceEventEntity>): Promise<void> {
     if (event.entity) {
-      const watchers = await this.resourceService.notificationWatchers(
-        event.entity.resourceId,
-        event.manager
-      )
+      const watchers = await this.resourceService.notificationWatchers(event.entity.resourceId, event.manager)
 
       this.notificationService.sendToAllUsers<ResourceEventNotification>(
         watchers.filter((w) => w !== event.entity.actorId),

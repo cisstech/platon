@@ -54,9 +54,7 @@ export class PlayerCommentsComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.user = (await this.authService.ready()) as User
-    const response = await firstValueFrom(
-      this.resultService.listComments(this.sessionId, this.answerId)
-    )
+    const response = await firstValueFrom(this.resultService.listComments(this.sessionId, this.answerId))
     this.comments = response.resources
     this.changeDetectorRef.markForCheck()
   }
@@ -70,9 +68,7 @@ export class PlayerCommentsComponent implements OnInit {
       this.input = ''
       this.comments = [...this.comments, comment]
     } catch {
-      this.dialogService.error(
-        `Le commentaire n'a pas pu être envoyé. Veuillez réessayer plus tard.`
-      )
+      this.dialogService.error(`Le commentaire n'a pas pu être envoyé. Veuillez réessayer plus tard.`)
     } finally {
       this.submitting = false
       this.changeDetectorRef.markForCheck()

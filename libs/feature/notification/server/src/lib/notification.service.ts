@@ -33,11 +33,7 @@ export class NotificationService {
     return newNotification
   }
 
-  async sendToAllUsers<T extends object>(
-    users: string[],
-    data: T,
-    entityManager?: EntityManager
-  ): Promise<void> {
+  async sendToAllUsers<T extends object>(users: string[], data: T, entityManager?: EntityManager): Promise<void> {
     await Promise.all(
       users.map((userId) => {
         return this.sendToUser(userId, data, entityManager)
@@ -45,10 +41,7 @@ export class NotificationService {
     )
   }
 
-  async ofUser(
-    userId: string,
-    filters: NotificationFilters = {}
-  ): Promise<[NotificationEntity[], number]> {
+  async ofUser(userId: string, filters: NotificationFilters = {}): Promise<[NotificationEntity[], number]> {
     const query = this.repository
       .createQueryBuilder('notification')
       .where('user_id = :userId', { userId })

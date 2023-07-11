@@ -21,16 +21,7 @@ import { NzTableModule } from 'ng-zorro-antd/table'
   templateUrl: './invitation-table.component.html',
   styleUrls: ['./invitation-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    CommonModule,
-
-    NzIconModule,
-    NzTableModule,
-    NzButtonModule,
-    NzPopconfirmModule,
-
-    UserAvatarComponent,
-  ],
+  imports: [CommonModule, NzIconModule, NzTableModule, NzButtonModule, NzPopconfirmModule, UserAvatarComponent],
 })
 export class ResourceInvitationTableComponent implements OnChanges {
   @Input() editable = false

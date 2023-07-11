@@ -2,16 +2,8 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { BadRequestResponse, NotFoundResponse } from '@platon/core/common'
-import {
-  ActivityVariables,
-  ExerciseVariables,
-  extractExercisesFromActivityVariables,
-} from '@platon/feature/compiler'
-import {
-  ActivityCorrectorView,
-  ActivityEntity,
-  ActivityMemberView,
-} from '@platon/feature/course/server'
+import { ActivityVariables, ExerciseVariables, extractExercisesFromActivityVariables } from '@platon/feature/compiler'
+import { ActivityCorrectorView, ActivityEntity, ActivityMemberView } from '@platon/feature/course/server'
 import {
   ActivityResults,
   AnswerStates,
@@ -65,22 +57,13 @@ export class ResultService {
   }
 
   private processData(data: Data, waitForCorrections = false): ActivityResults {
-    const {
-      activityUsers,
-      activitySessions,
-      exerciseSessions,
-      activityVariables,
-      activityCorrectors,
-    } = data
+    const { activityUsers, activitySessions, exerciseSessions, activityVariables, activityCorrectors } = data
 
     const correctionEnabled = waitForCorrections && activityCorrectors.length > 0
 
     const { userResults, userResultsIndex } = this.createUserResults(activityUsers)
 
-    const { exerciseResults, exerciseResultsMapIndex } = this.createExerciseResults(
-      activityVariables,
-      userResults
-    )
+    const { exerciseResults, exerciseResultsMapIndex } = this.createExerciseResults(activityVariables, userResults)
 
     const exerciseIdBySessionId = new Map<string, string>()
     const exerciseSessionCountByExerciseId = new Map<string, number>()
@@ -90,15 +73,11 @@ export class ResultService {
       // TODO use real type instead of any
       navigation.exercises.forEach((navExercise: any) => {
         const userResults = userResultsIndex[activitySession.userId as string]
-        const exerciseSession = exerciseSessions.find(
-          (session) => session.id === navExercise.sessionId
-        )
+        const exerciseSession = exerciseSessions.find((session) => session.id === navExercise.sessionId)
         const correcting = correctionEnabled && !exerciseSession?.correction
         userResults.correcting = correcting ?? userResults.correcting
         if (!correcting) {
-          navExercise.state = answerStateFromGrade(
-            exerciseSession?.correction?.grade || exerciseSession?.grade
-          )
+          navExercise.state = answerStateFromGrade(exerciseSession?.correction?.grade || exerciseSession?.grade)
           const userExercise = userResults.exercises[navExercise.id]
           userExercise.state = navExercise.state
         }
@@ -116,10 +95,7 @@ export class ResultService {
     exerciseSessions.forEach((exerciseSession) => {
       const exerciseId = exerciseIdBySessionId.get(exerciseSession.id)
       if (exerciseId) {
-        exerciseSessionCountByExerciseId.set(
-          exerciseId,
-          (exerciseSessionCountByExerciseId.get(exerciseId) || 0) + 1
-        )
+        exerciseSessionCountByExerciseId.set(exerciseId, (exerciseSessionCountByExerciseId.get(exerciseId) || 0) + 1)
 
         const duration =
           exerciseSession.lastGradedAt && exerciseSession.startedAt
@@ -146,15 +122,9 @@ export class ResultService {
 
     exerciseResults.forEach((activityExercise) => {
       const count = exerciseSessionCountByExerciseId.get(activityExercise.id)
-      activityExercise.grades.avg = count
-        ? activityExercise.grades.sum / count
-        : activityExercise.grades.sum
-      activityExercise.attempts.avg = count
-        ? activityExercise.attempts.sum / count
-        : activityExercise.attempts.sum
-      activityExercise.durations.avg = count
-        ? activityExercise.durations.sum / count
-        : activityExercise.durations.sum
+      activityExercise.grades.avg = count ? activityExercise.grades.sum / count : activityExercise.grades.sum
+      activityExercise.attempts.avg = count ? activityExercise.attempts.sum / count : activityExercise.attempts.sum
+      activityExercise.durations.avg = count ? activityExercise.durations.sum / count : activityExercise.durations.sum
     })
 
     return { users: userResults, exercises: exerciseResults }
@@ -206,37 +176,34 @@ export class ResultService {
   }
 
   private async loadActivityData(activity: ActivityEntity, userId?: string): Promise<Data> {
-    const [activityUsers, activitySessions, exerciseSessions, activityCorrectors] =
-      await Promise.all([
-        this.activityMemberView.find({
-          where: { courseId: activity.courseId, activityId: activity.id },
-        }),
-        this.sessionRepository.find({
-          where: {
-            activityId: activity.id,
-            parentId: IsNull(),
-            ...(userId ? { userId } : {}),
-          },
-          relations: { user: true, correction: true },
-        }),
-        this.sessionRepository.find({
-          where: {
-            activityId: activity.id,
-            parentId: Not(IsNull()),
-            ...(userId ? { userId } : {}),
-          },
-          relations: { correction: true },
-        }),
-        this.activityCorrectorView.find({
-          where: { activityId: activity.id },
-        }),
-      ])
+    const [activityUsers, activitySessions, exerciseSessions, activityCorrectors] = await Promise.all([
+      this.activityMemberView.find({
+        where: { courseId: activity.courseId, activityId: activity.id },
+      }),
+      this.sessionRepository.find({
+        where: {
+          activityId: activity.id,
+          parentId: IsNull(),
+          ...(userId ? { userId } : {}),
+        },
+        relations: { user: true, correction: true },
+      }),
+      this.sessionRepository.find({
+        where: {
+          activityId: activity.id,
+          parentId: Not(IsNull()),
+          ...(userId ? { userId } : {}),
+        },
+        relations: { correction: true },
+      }),
+      this.activityCorrectorView.find({
+        where: { activityId: activity.id },
+      }),
+    ])
 
     const sessionUsers = activitySessions
       .filter((session) => !userId || session.user?.id === userId)
-      .filter(
-        (session) => !activityUsers.some((activityUser) => activityUser.id === session.userId)
-      )
+      .filter((session) => !activityUsers.some((activityUser) => activityUser.id === session.userId))
       .map(
         (session) =>
           ({
@@ -276,25 +243,23 @@ export class ResultService {
   }
 
   private createExerciseResults(activityVariables: ActivityVariables, userResults: UserResults[]) {
-    const exerciseResults = extractExercisesFromActivityVariables(activityVariables).map(
-      (exercise) => {
-        userResults.forEach((user) => {
-          user.exercises[exercise.id] = {
-            id: exercise.id,
-            title: (exercise.source.variables as ExerciseVariables).title,
-            grade: -1,
-            attempts: 0,
-            duration: 0,
-            state: AnswerStates.NOT_STARTED,
-          }
-        })
-        return {
-          ...emptyExerciseResults(),
+    const exerciseResults = extractExercisesFromActivityVariables(activityVariables).map((exercise) => {
+      userResults.forEach((user) => {
+        user.exercises[exercise.id] = {
           id: exercise.id,
           title: (exercise.source.variables as ExerciseVariables).title,
-        } as ExerciseResults
-      }
-    )
+          grade: -1,
+          attempts: 0,
+          duration: 0,
+          state: AnswerStates.NOT_STARTED,
+        }
+      })
+      return {
+        ...emptyExerciseResults(),
+        id: exercise.id,
+        title: (exercise.source.variables as ExerciseVariables).title,
+      } as ExerciseResults
+    })
 
     const exerciseResultsMapIndex = exerciseResults.reduce((record, results) => {
       record[results.id] = results

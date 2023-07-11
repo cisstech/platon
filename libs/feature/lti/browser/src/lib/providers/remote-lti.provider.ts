@@ -40,20 +40,14 @@ export class RemoteLTIProvider extends LTIProvider {
   }
 
   findLms(id: string): Observable<Lms> {
-    return this.http
-      .get<ItemResponse<Lms>>(`/api/v1/lti/lms/${id}`)
-      .pipe(map((response) => response.resource))
+    return this.http.get<ItemResponse<Lms>>(`/api/v1/lti/lms/${id}`).pipe(map((response) => response.resource))
   }
 
   updateLms(id: string, input: UpdateLms): Observable<Lms> {
-    return this.http
-      .patch<ItemResponse<Lms>>(`/api/v1/lti/lms/${id}`, input)
-      .pipe(map((response) => response.resource))
+    return this.http.patch<ItemResponse<Lms>>(`/api/v1/lti/lms/${id}`, input).pipe(map((response) => response.resource))
   }
 
   createLms(input: CreateLms): Observable<Lms> {
-    return this.http
-      .post<CreatedResponse<Lms>>('/api/v1/lti/lms', input)
-      .pipe(map((response) => response.resource))
+    return this.http.post<CreatedResponse<Lms>>('/api/v1/lti/lms', input).pipe(map((response) => response.resource))
   }
 }

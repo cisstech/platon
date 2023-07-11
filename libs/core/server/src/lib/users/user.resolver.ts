@@ -5,10 +5,7 @@ import { UserFiltersInput, UserGraphModel } from './user.graphql'
 
 @Resolver(() => UserGraphModel)
 export class UserResolver {
-  constructor(
-    private readonly userService: UserService,
-    private readonly userPrefsService: UserPrefsService
-  ) {}
+  constructor(private readonly userService: UserService, private readonly userPrefsService: UserPrefsService) {}
 
   @Query(() => [UserGraphModel])
   async users(

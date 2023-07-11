@@ -1,9 +1,6 @@
 import { LegendPosition } from '@swimlane/ngx-charts'
 import { defineWebComponent, IWebComponent, WebComponentTypes } from '../../web-component'
-import {
-  ChartViewerBase,
-  ChartViewerBaseProperties,
-} from '../../shared/components/chart-viewer/base'
+import { ChartViewerBase, ChartViewerBaseProperties } from '../../shared/components/chart-viewer/base'
 
 export interface ChartViewerRadarState extends IWebComponent, ChartViewerBase {
   showXAxis: boolean

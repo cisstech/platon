@@ -57,9 +57,7 @@ export class EditorPage implements OnInit, OnDestroy {
   private subscription?: Subscription
 
   async ngOnInit(): Promise<void> {
-    const { resource, version, ancestors, filesToOpen } = await this.presenter.init(
-      this.activatedRoute
-    )
+    const { resource, version, ancestors, filesToOpen } = await this.presenter.init(this.activatedRoute)
 
     this.subscription = this.ide.onAfterStart(async () => {
       this.fileService.registerProvider(this.resourceFileSystemProvider)
@@ -75,9 +73,7 @@ export class EditorPage implements OnInit, OnDestroy {
       )
 
       filesToOpen.forEach((path) => {
-        this.editorService.open(
-          this.resourceFileSystemProvider.buildUri(resource.id, version, path)
-        )
+        this.editorService.open(this.resourceFileSystemProvider.buildUri(resource.id, version, path))
       })
     })
   }

@@ -1,12 +1,5 @@
 import { CommonModule } from '@angular/common'
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-} from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core'
 import { SafePipeModule } from '@cisstech/nge/pipes'
 import { NzModalModule } from 'ng-zorro-antd/modal'
 

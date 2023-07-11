@@ -1,12 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  OnDestroy,
-  Output,
-  TemplateRef,
-  ViewChild,
-  ViewContainerRef,
-} from '@angular/core'
+import { Component, EventEmitter, OnDestroy, Output, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core'
 import { Overlay, OverlayRef } from '@angular/cdk/overlay'
 import { TemplatePortal } from '@angular/cdk/portal'
 

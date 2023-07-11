@@ -1,12 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CommonModule } from '@angular/common'
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  OnDestroy,
-  OnInit,
-} from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core'
 import { RouterModule } from '@angular/router'
 import { Subscription } from 'rxjs'
 
@@ -27,10 +21,7 @@ export class ResourceEventsPage implements OnInit, OnDestroy {
   protected context = this.presenter.defaultContext()
   protected events: ResourceEvent[] = []
 
-  constructor(
-    private readonly presenter: ResourcePresenter,
-    private readonly changeDetectorRef: ChangeDetectorRef
-  ) {}
+  constructor(private readonly presenter: ResourcePresenter, private readonly changeDetectorRef: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.subscriptions.push(

@@ -7,11 +7,7 @@ import { NzResultModule } from 'ng-zorro-antd/result'
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [NzResultModule],
   template: `
-    <nz-result
-      nzTitle="403"
-      nzStatus="403"
-      nzSubTitle="Désolé, vous n’êtes pas autorisé à accéder à cette page."
-    >
+    <nz-result nzTitle="403" nzStatus="403" nzSubTitle="Désolé, vous n’êtes pas autorisé à accéder à cette page.">
     </nz-result>
   `,
   styles: [
