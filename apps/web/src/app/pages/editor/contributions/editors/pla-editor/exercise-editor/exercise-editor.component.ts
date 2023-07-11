@@ -11,6 +11,7 @@ import { ActivityExercise } from '@platon/feature/compiler'
 import { ResourceFileService, ResourceService } from '@platon/feature/resource/browser'
 import { Resource } from '@platon/feature/resource/common'
 import { catchError, firstValueFrom, of } from 'rxjs'
+import { PLE_CONFIG_FILE_PATH } from '../../ple-config-editor/ple-config-editor'
 import { PleInput } from '../../ple-input-editor/ple-input'
 
 @Component({
@@ -41,7 +42,7 @@ export class PlaExerciseEditorComponent {
       firstValueFrom(this.resourceService.find(value.resource)),
       firstValueFrom(
         this.resourceFileService
-          .read(value.resource, 'config.json', value.version)
+          .read(value.resource, PLE_CONFIG_FILE_PATH, value.version)
           .pipe(catchError(() => of(undefined)))
       ) as unknown as Promise<{ inputs: PleInput[] }>,
     ]).then(([resource, config]) => {

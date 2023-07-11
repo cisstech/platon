@@ -28,6 +28,8 @@ interface User {
 
 type Node = ResourceFile
 
+const removeLeadingSlash = (path: string) => (path.startsWith('/') ? path.slice(1) : path)
+
 export class Repo {
   private ignoreCommits = false
   private readonly resource = this.root.split('/').pop() as string
@@ -201,7 +203,7 @@ export class Repo {
   // Write/Read
 
   async read(path = ROOT, version = LATEST): Promise<[Node, Promise<Uint8Array>?]> {
-    path = path || ROOT
+    path = removeLeadingSlash(path || ROOT)
 
     const ref = version === 'latest' ? 'HEAD' : version
     const prefix = path === ROOT ? '' : path
