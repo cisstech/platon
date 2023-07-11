@@ -1,9 +1,5 @@
 <header>
-  <nz-select
-    [(ngModel)]="version"
-    (ngModelChange)="refresh.emit($event)"
-    [nzCustomTemplate]="versionTpt"
-  >
+  <nz-select [(ngModel)]="version" (ngModelChange)="refresh.emit($event)" [nzCustomTemplate]="versionTpt">
     <ng-template #versionTpt>
       <i nz-icon nzType="branches" nzTheme="outline"></i>
       {{ version }}
@@ -22,13 +18,5 @@
       <i nz-icon nzType="reload" nzTheme="outline"></i>
     </button>
   </nz-button-group>
-  <!--   <nz-button-group>
-    <button nz-button>
-      <i nz-icon nzType="folder-add" nzTheme="outline"></i>
-    </button>
-    <button nz-button>
-      <i nz-icon nzType="file-add" nzTheme="outline"></i>
-    </button>
-  </nz-button-group> -->
   <div class="spacer"></div>
 </header>

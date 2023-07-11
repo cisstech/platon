@@ -50,7 +50,7 @@ export class ResourcePresenter implements OnDestroy {
   }
 
   defaultContext(): Context {
-    return { state: 'LOADING' }
+    return { state: 'LOADING', version: 'latest' }
   }
 
   availableTopics(): Observable<Topic[]> {
@@ -159,7 +159,7 @@ export class ResourcePresenter implements OnDestroy {
   async deleteInvitation(invitation: ResourceInvitation): Promise<boolean> {
     const { resource } = this.context.value as Required<Context>
     try {
-      await this.resourceService.deleteInvitation(invitation).toPromise()
+      await firstValueFrom(this.resourceService.deleteInvitation(invitation))
       await this.refresh(resource.id)
       this.dialogService.success(`Invitation supprimée !`)
       return true
@@ -181,7 +181,7 @@ export class ResourcePresenter implements OnDestroy {
     const { resource } = this.context.value as Required<Context>
     try {
       const changes = await firstValueFrom(this.resourceService.update(resource.id, input))
-      this.context.next({
+      this.updateContext({
         ...this.context.value,
         resource: changes,
       })
@@ -192,6 +192,13 @@ export class ResourcePresenter implements OnDestroy {
       this.alertError()
       return false
     }
+  }
+
+  switchVersion(version: string): void {
+    this.updateContext({
+      ...this.context.value,
+      version,
+    })
   }
 
   private async refresh(id: string): Promise<void> {
@@ -209,7 +216,7 @@ export class ResourcePresenter implements OnDestroy {
       firstValueFrom(this.resourceService.tree()),
     ])
 
-    this.context.next({
+    this.updateContext({
       state: 'READY',
       user,
       parent,
@@ -226,7 +233,7 @@ export class ResourcePresenter implements OnDestroy {
     try {
       await this.refresh(id)
     } catch (error) {
-      this.context.next({ state: layoutStateFromError(error) })
+      this.updateContext({ state: layoutStateFromError(error) })
     }
     this.isInitialLoading = false
   }
@@ -234,13 +241,31 @@ export class ResourcePresenter implements OnDestroy {
   private alertError(): void {
     this.dialogService.error('Une erreur est survenue lors de cette action, veuillez réessayer un peu plus tard !')
   }
+
+  private updateContext(context: Partial<Context>): void {
+    const newContext = {
+      ...this.context.value,
+      ...context,
+    }
+
+    this.context.next({
+      ...newContext,
+      version: newContext?.version || 'latest',
+      editorUrl: `/editor/${newContext.resource?.id}?version=${newContext.version || 'latest'}`,
+      previewUrl: `/player/preview/${newContext.resource?.id}?version=${newContext.version || 'latest'}`,
+    })
+  }
 }
 
 export interface Context {
   state: LayoutState
+  version: string
   user?: User
   parent?: Resource
   resource?: Resource
+
+  editorUrl?: string
+  previewUrl?: string
 
   watcher?: boolean
   circles?: CircleTree

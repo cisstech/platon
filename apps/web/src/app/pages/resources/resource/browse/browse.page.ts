@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { Subscription } from 'rxjs'
 
 import { SafePipeModule } from '@cisstech/nge/pipes'
@@ -35,28 +35,18 @@ import { ResourceBrowseHeaderComponent } from './header/header.component'
 })
 export class ResourceBrowsePage implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription[] = []
-
+  private readonly presenter = inject(ResourcePresenter)
+  private readonly changeDetectorRef = inject(ChangeDetectorRef)
   protected context = this.presenter.defaultContext()
 
   protected tree?: ResourceFile
-  protected version = 'latest'
   protected versions?: FileVersions
-
-  get editorUrl(): string {
-    return `/editor/${this.context.resource?.id}?version=${this.version}`
-  }
-
-  get previewUrl(): string {
-    return `/player/preview/${this.context.resource?.id}?version=${this.version}`
-  }
-
-  constructor(private readonly presenter: ResourcePresenter, private readonly changeDetectorRef: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.subscriptions.push(
       this.presenter.contextChange.subscribe(async (context) => {
         this.context = context
-        this.refresh()
+        this.refreshFiles()
       })
     )
   }
@@ -65,11 +55,14 @@ export class ResourceBrowsePage implements OnInit, OnDestroy {
     this.subscriptions.forEach((s) => s.unsubscribe())
   }
 
-  protected async refresh(version = 'latest') {
-    this.version = version
-    const [tree, versions] = await this.presenter.files(version)
+  protected async refreshFiles() {
+    const [tree, versions] = await this.presenter.files(this.context.version)
     this.tree = tree
     this.versions = versions
     this.changeDetectorRef.markForCheck()
+  }
+
+  protected switchVersion(version: string) {
+    this.presenter.switchVersion(version)
   }
 }

@@ -41,6 +41,11 @@ nz-select {
   flex: 1;
 }
 
+.container-actions {
+  display: flex;
+  align-items: center;
+}
+
 @media (min-width: 720px) {
   p {
     width: 70%;

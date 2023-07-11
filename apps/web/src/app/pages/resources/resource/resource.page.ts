@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
 import { Subscription } from 'rxjs'
@@ -17,7 +17,7 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography'
 import { DialogModule } from '@platon/core/browser'
 import { CircleTreeComponent, ResourcePipesModule } from '@platon/feature/resource/browser'
 import { ResourceStatus } from '@platon/feature/resource/common'
-import { UiLayoutTabsComponent, UiLayoutTabsTitleDirective } from '@platon/shared/ui'
+import { UiLayoutTabsComponent, UiLayoutTabsTitleDirective, UiModalIFrameComponent } from '@platon/shared/ui'
 
 import { ResourcePresenter } from './resource.presenter'
 
@@ -46,6 +46,7 @@ import { ResourcePresenter } from './resource.presenter'
     DialogModule,
 
     UiLayoutTabsComponent,
+    UiModalIFrameComponent,
     UiLayoutTabsTitleDirective,
 
     CircleTreeComponent,
@@ -54,12 +55,12 @@ import { ResourcePresenter } from './resource.presenter'
 })
 export class ResourcePage implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription[] = []
+  private readonly presenter = inject(ResourcePresenter)
+  private readonly changeDetectorRef = inject(ChangeDetectorRef)
 
   protected context = this.presenter.defaultContext()
 
   readonly status = Object.values(ResourceStatus)
-
-  constructor(private readonly presenter: ResourcePresenter, private readonly changeDetectorRef: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.subscriptions.push(
