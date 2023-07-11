@@ -1,9 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
   CourseDemo,
-  CourseDemoAccessAnswer,
+  CourseDemoAccessResponse,
+  CourseDemoGetResponse,
 } from '@platon/feature/course/common';
-import { IsBoolean, IsString, IsUUID } from 'class-validator';
+import { IsBoolean, IsString, IsUUID, ValidateNested } from 'class-validator';
 
 export class CourseDemoDTO implements CourseDemo {
   @IsUUID()
@@ -21,10 +22,19 @@ export class CourseDemoAccessDTO {
   uri!: string;
 }
 
-export class CourseDemoGetDTO {
+export class CourseDemoGetRequestDTO {
   @IsUUID()
   @ApiProperty()
   courseId!: string;
+}
+
+export class CourseDemoGetResponseDTO implements CourseDemoGetResponse {
+  @IsBoolean()
+  @ApiProperty()
+  demoExists!: boolean;
+
+  @ValidateNested()
+  demo?: CourseDemoDTO;
 }
 
 export class CourseDemoCreateDTO {
@@ -39,7 +49,7 @@ export class CourseDemoDeleteDTO {
   courseId!: string;
 }
 
-export class CourseDemoAccessAnswerDTO implements CourseDemoAccessAnswer {
+export class CourseDemoAccessAnswerDTO implements CourseDemoAccessResponse {
   @IsUUID()
   @ApiProperty()
   courseId!: string;

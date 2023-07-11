@@ -4,7 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, map, of, throwError } from 'rxjs';
 import {
   CourseDemo,
-  CourseDemoAccessAnswer,
+  CourseDemoAccessResponse,
+  CourseDemoGetResponse,
 } from '@platon/feature/course/common';
 import { ItemResponse } from '@platon/core/common';
 import { Optional } from 'typescript-optional';
@@ -15,9 +16,9 @@ export class RemoteCourseDemoProvider extends CourseDemoProvider {
     super();
   }
 
-  override access(uri: string): Observable<CourseDemoAccessAnswer> {
+  override access(uri: string): Observable<CourseDemoAccessResponse> {
     return this.http
-      .get<ItemResponse<CourseDemoAccessAnswer>>(
+      .get<ItemResponse<CourseDemoAccessResponse>>(
         '/api/v1/courses/demo/access/' + uri
       )
       .pipe(map((response) => response.resource));
@@ -30,15 +31,15 @@ export class RemoteCourseDemoProvider extends CourseDemoProvider {
 
   override get(courseId: string): Observable<Optional<CourseDemo>> {
     return this.http
-      .get<ItemResponse<CourseDemo>>('/api/v1/courses/demo/' + courseId)
+      .get<ItemResponse<CourseDemoGetResponse>>('/api/v1/courses/demo/' + courseId)
       .pipe(
-        map((response) => Optional.ofNonNull(response.resource)),
-        catchError((err) => {
-          const statusCode = err.status;
-          if (statusCode === 404) {
-            return of(Optional.empty<CourseDemo>());
-          }
-          return throwError(() => err);
+        map((response) => {
+            if (response.resource.demoExists) {
+                const resource = response.resource as Required<CourseDemoGetResponse>;
+                return Optional.ofNonNull(resource.demo);
+            } else {
+                return Optional.empty();
+            }
         })
       );
   }

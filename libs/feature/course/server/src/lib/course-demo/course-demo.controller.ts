@@ -7,7 +7,6 @@ import {
   Param,
   Post,
   Req,
-  Res,
 } from '@nestjs/common';
 import { CourseDemoService } from './course-demo.service';
 import { IRequest, Mapper, Public, Roles } from '@platon/core/server';
@@ -27,9 +26,9 @@ import {
   CourseDemoCreateDTO,
   CourseDemoDTO,
   CourseDemoDeleteDTO,
-  CourseDemoGetDTO,
+  CourseDemoGetRequestDTO,
+  CourseDemoGetResponseDTO,
 } from './course-demo.dto';
-import { Response } from 'express';
 
 @Controller('courses/demo')
 export class CourseDemoController {
@@ -73,14 +72,13 @@ export class CourseDemoController {
   @Get(':courseId')
   async getDemo(
     @Req() req: IRequest,
-    @Param() params: CourseDemoGetDTO
-  ): Promise<ItemResponse<CourseDemoDTO>> {
-    const demo = (
-      await this.courseDemoService.findByCourseId(params.courseId)
-    ).orElseThrow(
-      () =>
-        new NotFoundResponse(`Demo not found for course: ${params.courseId}`)
-    );
+    @Param() params: CourseDemoGetRequestDTO
+  ): Promise<ItemResponse<CourseDemoGetResponseDTO>> {
+    const demo = (await this.courseDemoService.findByCourseId(params.courseId)).orNull();
+    if (!demo) {
+        const resource = { demoExists: false };
+        return new ItemResponse({ resource });
+    }
 
     if (
       !(await this.courseMemberService.isMember(params.courseId, req.user.id))
@@ -89,8 +87,8 @@ export class CourseDemoController {
     }
 
     const resource = Mapper.map(
-      { courseId: demo.course.id, uri: demo.id },
-      CourseDemoDTO
+      { demoExists: true, demo: {courseId: demo.course.id, uri: demo.id} },
+      CourseDemoGetResponseDTO
     );
     return new ItemResponse({ resource });
   }

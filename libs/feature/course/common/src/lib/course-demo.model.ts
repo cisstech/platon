@@ -3,9 +3,14 @@ export interface CourseDemo {
   readonly uri: string;
 }
 
-export interface CourseDemoAccessAnswer {
+export interface CourseDemoAccessResponse {
   readonly courseId: string;
   readonly auth: boolean;
   readonly accessToken?: string;
   readonly refreshToken?: string;
+}
+
+export interface CourseDemoGetResponse {
+    readonly demoExists: boolean;
+    readonly demo?: CourseDemo;
 }
