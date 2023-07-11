@@ -1,15 +1,6 @@
-import {
-  BadRequestException,
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Req,
-} from '@nestjs/common';
-import { CourseDemoService } from './course-demo.service';
-import { IRequest, Mapper, Public, Roles } from '@platon/core/server';
+import { BadRequestException, Body, Controller, Delete, Get, Param, Post, Req } from '@nestjs/common'
+import { CourseDemoService } from './course-demo.service'
+import { IRequest, Mapper, Public, Roles } from '@platon/core/server'
 import {
   CreatedResponse,
   ForbiddenResponse,
@@ -28,7 +19,7 @@ import {
   CourseDemoDeleteDTO,
   CourseDemoGetRequestDTO,
   CourseDemoGetResponseDTO,
-} from './course-demo.dto';
+} from './course-demo.dto'
 
 @Controller('courses/demo')
 export class CourseDemoController {
@@ -66,10 +57,10 @@ export class CourseDemoController {
     @Req() req: IRequest,
     @Param() params: CourseDemoGetRequestDTO
   ): Promise<ItemResponse<CourseDemoGetResponseDTO>> {
-    const demo = (await this.courseDemoService.findByCourseId(params.courseId)).orNull();
+    const demo = (await this.courseDemoService.findByCourseId(params.courseId)).orNull()
     if (!demo) {
-        const resource = { demoExists: false };
-        return new ItemResponse({ resource });
+      const resource = { demoExists: false }
+      return new ItemResponse({ resource })
     }
 
     if (!(await this.courseMemberService.isMember(params.courseId, req.user.id))) {
@@ -77,10 +68,10 @@ export class CourseDemoController {
     }
 
     const resource = Mapper.map(
-      { demoExists: true, demo: {courseId: demo.course.id, uri: demo.id} },
+      { demoExists: true, demo: { courseId: demo.course.id, uri: demo.id } },
       CourseDemoGetResponseDTO
-    );
-    return new ItemResponse({ resource });
+    )
+    return new ItemResponse({ resource })
   }
 
   @Roles(UserRoles.teacher, UserRoles.admin)

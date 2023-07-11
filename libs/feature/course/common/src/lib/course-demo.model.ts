@@ -4,13 +4,13 @@ export interface CourseDemo {
 }
 
 export interface CourseDemoAccessResponse {
-  readonly courseId: string;
-  readonly auth: boolean;
-  readonly accessToken?: string;
-  readonly refreshToken?: string;
+  readonly courseId: string
+  readonly auth: boolean
+  readonly accessToken?: string
+  readonly refreshToken?: string
 }
 
 export interface CourseDemoGetResponse {
-    readonly demoExists: boolean;
-    readonly demo?: CourseDemo;
+  readonly demoExists: boolean
+  readonly demo?: CourseDemo
 }

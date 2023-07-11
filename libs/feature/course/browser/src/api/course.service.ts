@@ -73,7 +73,7 @@ export class CourseService {
   }
 
   accessDemo(uri: string): Observable<CourseDemoAccessResponse> {
-    return this.courseDemoProvider.access(uri);
+    return this.courseDemoProvider.access(uri)
   }
 
   getDemo(courseId: string): Observable<Optional<CourseDemo>> {
