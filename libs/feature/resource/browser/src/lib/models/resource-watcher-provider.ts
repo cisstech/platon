@@ -6,8 +6,5 @@ export abstract class ResourceWatcherProvider {
   abstract findWatcher(resource: Resource, userId: string): Observable<User>
   abstract createWatcher(resource: Resource): Observable<User>
   abstract deleteWatcher(resource: Resource, userId: string): Observable<void>
-  abstract searchWatchers(
-    resource: Resource,
-    filters: ResourceWatcherFilters
-  ): Observable<ListResponse<User>>
+  abstract searchWatchers(resource: Resource, filters: ResourceWatcherFilters): Observable<ListResponse<User>>
 }

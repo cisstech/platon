@@ -14,10 +14,7 @@ import { PendingCorrection } from '@platon/feature/result/common'
 export class CorrectionsAvailablesPage implements OnInit {
   protected corrections: PendingCorrection[] = []
 
-  constructor(
-    private readonly resultService: ResultService,
-    private readonly changeDetectorRef: ChangeDetectorRef
-  ) {}
+  constructor(private readonly resultService: ResultService, private readonly changeDetectorRef: ChangeDetectorRef) {}
 
   async ngOnInit(): Promise<void> {
     this.changeDetectorRef.markForCheck()

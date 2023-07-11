@@ -82,9 +82,7 @@ export interface WebComponentHooks<T = any> {
 /**
  * Injection token to get the list of defined web components.
  */
-export const WEB_COMPONENT_DEFINITIONS = new InjectionToken<WebComponentDefinition[]>(
-  'WEB_COMPONENT_DEFINITIONS'
-)
+export const WEB_COMPONENT_DEFINITIONS = new InjectionToken<WebComponentDefinition[]>('WEB_COMPONENT_DEFINITIONS')
 
 /**
  * Defines the properties created by the WebComponent decorator.
@@ -213,11 +211,7 @@ function stateGetter(component: WebComponentInstance, definition: WebComponentDe
   return state
 }
 
-function stateSetter(
-  component: WebComponentInstance,
-  definition: WebComponentDefinition,
-  newState: any
-) {
+function stateSetter(component: WebComponentInstance, definition: WebComponentDefinition, newState: any) {
   if (!newState) {
     throw new Error('[web-component]: A webcomponent state cannot be null')
   }

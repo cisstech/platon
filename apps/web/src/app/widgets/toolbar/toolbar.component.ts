@@ -1,12 +1,5 @@
 import { CommonModule } from '@angular/common'
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  OnInit,
-  Output,
-} from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from '@angular/core'
 import { RouterModule } from '@angular/router'
 
 import { MatBadgeModule } from '@angular/material/badge'
@@ -51,10 +44,7 @@ export class ToolbarComponent implements OnInit {
 
   protected user?: User | undefined
 
-  constructor(
-    private readonly authService: AuthService,
-    private readonly changeDetectorRef: ChangeDetectorRef
-  ) {}
+  constructor(private readonly authService: AuthService, private readonly changeDetectorRef: ChangeDetectorRef) {}
 
   async ngOnInit(): Promise<void> {
     this.user = await this.authService.ready()

@@ -17,10 +17,7 @@ export class ResourceMemberService {
     return Optional.ofNullable(await this.repository.findOne({ where: { resourceId, userId } }))
   }
 
-  async search(
-    resourceId: string,
-    filters: ResourceMemberFilters = {}
-  ): Promise<[ResourceMemberEntity[], number]> {
+  async search(resourceId: string, filters: ResourceMemberFilters = {}): Promise<[ResourceMemberEntity[], number]> {
     const query = this.repository.createQueryBuilder('member')
     query.leftJoinAndSelect('member.user', 'user', 'user.id = member.user_id')
     query.where('resource_id = :resourceId', { resourceId })

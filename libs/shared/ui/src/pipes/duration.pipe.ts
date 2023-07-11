@@ -8,13 +8,8 @@ import fr from 'date-fns/locale/fr'
   standalone: true,
 })
 export class DurationPipe implements PipeTransform {
-  transform(
-    value: number | [string | Date, string | Date],
-    format: 'seconds' | 'milliseconds' = 'seconds'
-  ): string {
-    const time = Array.isArray(value)
-      ? new Date(value[1]).getTime() - new Date(value[0]).getTime()
-      : value
+  transform(value: number | [string | Date, string | Date], format: 'seconds' | 'milliseconds' = 'seconds'): string {
+    const time = Array.isArray(value) ? new Date(value[1]).getTime() - new Date(value[0]).getTime() : value
 
     format = Array.isArray(value) ? 'milliseconds' : format
 

@@ -18,8 +18,6 @@ const RESOURCE_TYPE_NAME_PRONOUNS: Record<ResourceTypes, string> = {
 })
 export class ResourceTypePipe implements PipeTransform {
   transform(type: ResourceTypes | string, pronoun?: boolean): string {
-    return pronoun
-      ? RESOURCE_TYPE_NAME_PRONOUNS[type as ResourceTypes]
-      : RESOURCE_TYPE_NAMES[type as ResourceTypes]
+    return pronoun ? RESOURCE_TYPE_NAME_PRONOUNS[type as ResourceTypes] : RESOURCE_TYPE_NAMES[type as ResourceTypes]
   }
 }

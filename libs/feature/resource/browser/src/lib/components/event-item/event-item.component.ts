@@ -1,13 +1,6 @@
 import { ComponentType } from '@angular/cdk/portal'
 import { CommonModule } from '@angular/common'
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  InjectionToken,
-  Injector,
-  Input,
-} from '@angular/core'
+import { ChangeDetectionStrategy, Component, inject, InjectionToken, Injector, Input } from '@angular/core'
 import { UserAvatarComponent } from '@platon/core/browser'
 import { NOTIFICATION } from '@platon/feature/notification/browser'
 import { ResourceEvent, ResourceEventNotification } from '@platon/feature/resource/common'
@@ -66,8 +59,7 @@ class NewStatusItemComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [UserAvatarComponent, ResourcePipesModule],
   template: `
-    <user-avatar [userIdOrName]="event.actorId" /> à ajouté “{{ event.data['resourceName'] }}” dans
-    le cercle”
+    <user-avatar [userIdOrName]="event.actorId" /> à ajouté “{{ event.data['resourceName'] }}” dans le cercle”
   `,
 })
 class NewResourceEventComponent {
@@ -80,13 +72,7 @@ class NewResourceEventComponent {
   templateUrl: './event-item.component.html',
   styleUrls: ['./event-item.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    CommonModule,
-    NzEmptyModule,
-    NzTimelineModule,
-    UserAvatarComponent,
-    ResourcePipesModule,
-  ],
+  imports: [CommonModule, NzEmptyModule, NzTimelineModule, UserAvatarComponent, ResourcePipesModule],
 })
 export class ResourceEventItemComponent {
   @Input()
@@ -118,8 +104,7 @@ export class ResourceEventItemComponent {
     const notification = injector.get(NOTIFICATION, null)
     if (notification) {
       this.isNotification = true
-      this.item = (notification.data as unknown as ResourceEventNotification)
-        .eventInfo as ResourceEvent
+      this.item = (notification.data as unknown as ResourceEventNotification).eventInfo as ResourceEvent
     }
   }
 }

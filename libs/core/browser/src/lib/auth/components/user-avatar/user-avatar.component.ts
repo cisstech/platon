@@ -1,12 +1,5 @@
 import { CommonModule } from '@angular/common'
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-} from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core'
 
 import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzBadgeModule } from 'ng-zorro-antd/badge'
@@ -24,14 +17,7 @@ import { UserGroupAvatarComponent } from '../user-group-avatar/user-group-avatar
   templateUrl: './user-avatar.component.html',
   styleUrls: ['./user-avatar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    CommonModule,
-    NzIconModule,
-    NzBadgeModule,
-    NzAvatarModule,
-    NzToolTipModule,
-    UserGroupAvatarComponent,
-  ],
+  imports: [CommonModule, NzIconModule, NzBadgeModule, NzAvatarModule, NzToolTipModule, UserGroupAvatarComponent],
 })
 export class UserAvatarComponent {
   @Input() avatarSize = 32
@@ -53,8 +39,5 @@ export class UserAvatarComponent {
     return this.group?.name || this.user?.username || ''
   }
 
-  constructor(
-    private readonly authUserService: UserService,
-    private readonly changeDetectorRef: ChangeDetectorRef
-  ) {}
+  constructor(private readonly authUserService: UserService, private readonly changeDetectorRef: ChangeDetectorRef) {}
 }

@@ -41,25 +41,22 @@
               <span>{{ variable.name }}</span>
               <ul nz-list-item-actions>
                 <nz-list-item-action>
-                  <button
-                    nz-button
-                    nzDanger
-                    nzType="text"
-                    nz-tooltip="Supprimer"
-                    (click)="deleteVariable(i)"
-                  >
+                  <button nz-button nzDanger nzType="text" nz-tooltip="Supprimer" (click)="deleteVariable(i)">
                     <span nz-icon nzType="delete" nzTheme="outline"></span>
                   </button>
                 </nz-list-item-action>
               </ul>
             </nz-list-item>
           </nz-list>
-          <button class="btn-add-input" nz-button nzType="primary" (click)="addVariable()">
-            +
-          </button>
+          <button class="btn-add-input" nz-button nzType="primary" (click)="addVariable()">+</button>
         </div>
         <div class="container-variables--right-side">
-          <app-ple-input *ngIf="selectedVariable" [input]="selectedVariable" mode="design" />
+          <app-ple-input
+            *ngIf="selectedVariable"
+            [input]="selectedVariable"
+            (inputChange)="updateVariable($event)"
+            mode="design"
+          />
         </div>
       </div>
     </nz-collapse-panel>

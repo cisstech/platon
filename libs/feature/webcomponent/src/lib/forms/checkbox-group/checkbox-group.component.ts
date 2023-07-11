@@ -1,10 +1,6 @@
 import { ChangeDetectionStrategy, Component, Injector, Input } from '@angular/core'
 import { WebComponent, WebComponentHooks } from '../../web-component'
-import {
-  CheckboxGroupComponentDefinition,
-  CheckboxGroupState,
-  CheckboxItem,
-} from './checkbox-group'
+import { CheckboxGroupComponentDefinition, CheckboxGroupState, CheckboxItem } from './checkbox-group'
 
 @Component({
   selector: 'wc-checkbox-group',

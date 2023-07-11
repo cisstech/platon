@@ -1,24 +1,7 @@
 import { Field, InputType, Int } from '@nestjs/graphql'
-import {
-  OrderingDirections,
-  UpdateUser,
-  User,
-  UserFilters,
-  UserOrderings,
-  UserRoles,
-} from '@platon/core/common'
+import { OrderingDirections, UpdateUser, User, UserFilters, UserOrderings, UserRoles } from '@platon/core/common'
 import { Exclude, Expose, Transform } from 'class-transformer'
-import {
-  IsArray,
-  IsBoolean,
-  IsDate,
-  IsEmail,
-  IsEnum,
-  IsNumber,
-  IsOptional,
-  IsString,
-  IsUUID,
-} from 'class-validator'
+import { IsArray, IsBoolean, IsDate, IsEmail, IsEnum, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator'
 import { UUID } from '../graphql'
 import { BaseDTO, toArray, toNumber } from '../utils'
 

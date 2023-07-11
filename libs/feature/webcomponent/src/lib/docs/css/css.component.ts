@@ -101,9 +101,7 @@ export class CssComponent {
   constructor(private readonly clipboard: ClipboardService) {}
 
   copyCss(appearance: string) {
-    this.clipboard.copy(
-      `${appearance} animate__animated animate__${this.activeAnimation} animate__infinite`
-    )
+    this.clipboard.copy(`${appearance} animate__animated animate__${this.activeAnimation} animate__infinite`)
   }
 
   trackByIndex(index: number) {

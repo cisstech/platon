@@ -35,15 +35,7 @@ type Value = string[] | undefined
       multi: true,
     },
   ],
-  imports: [
-    CommonModule,
-
-    NzTagModule,
-    NzTableModule,
-
-    UserAvatarComponent,
-    UserGroupDrawerComponent,
-  ],
+  imports: [CommonModule, NzTagModule, NzTableModule, UserAvatarComponent, UserGroupDrawerComponent],
 })
 export class UserGroupTableComponent implements OnChanges, ControlValueAccessor {
   @Input() groups: UserGroup[] = []

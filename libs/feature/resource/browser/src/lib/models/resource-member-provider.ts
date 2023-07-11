@@ -5,8 +5,5 @@ import { Observable } from 'rxjs'
 export abstract class ResourceMemberProvider {
   abstract findMember(resource: Resource, userId: string): Observable<ResourceMember>
   abstract deleteMember(resource: Resource, userId: string): Observable<void>
-  abstract searchMembers(
-    resource: Resource,
-    filters: ResourceMemberFilters
-  ): Observable<ListResponse<ResourceMember>>
+  abstract searchMembers(resource: Resource, filters: ResourceMemberFilters): Observable<ListResponse<ResourceMember>>
 }

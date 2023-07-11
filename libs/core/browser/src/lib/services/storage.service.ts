@@ -22,9 +22,7 @@ export class StorageService {
   }
 
   get<T>(key: string, defaultValue?: T): Observable<T> {
-    return this.storageMap
-      .get(this.addPrefix(key))
-      .pipe(map((e) => (e == null ? defaultValue : e))) as Observable<T>
+    return this.storageMap.get(this.addPrefix(key)).pipe(map((e) => (e == null ? defaultValue : e))) as Observable<T>
   }
 
   getString(key: string, defaultValue?: string): Observable<string | undefined> {

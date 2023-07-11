@@ -1,11 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { OrderingDirections, UserOrderings, UserRoles } from '@platon/core/common'
 import { BaseDTO, toArray, toBoolean, toNumber, UserDTO, UserGroupDTO } from '@platon/core/server'
-import {
-  CourseMember,
-  CourseMemberFilters,
-  CreateCourseMember,
-} from '@platon/feature/course/common'
+import { CourseMember, CourseMemberFilters, CreateCourseMember } from '@platon/feature/course/common'
 import { Transform, Type } from 'class-transformer'
 import { IsBoolean, IsEnum, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator'
 

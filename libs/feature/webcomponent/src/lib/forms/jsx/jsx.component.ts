@@ -1,12 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Injector,
-  Input,
-  OnDestroy,
-  OnInit,
-} from '@angular/core'
+import { ChangeDetectionStrategy, Component, Injector, Input, OnDestroy, OnInit } from '@angular/core'
 import { ResourceLoaderService } from '@cisstech/nge/services'
 import { firstValueFrom } from 'rxjs'
 import { WebComponent, WebComponentHooks } from '../../web-component'

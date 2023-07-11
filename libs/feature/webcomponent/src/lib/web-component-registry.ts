@@ -31,72 +31,67 @@ export const WEB_COMPONENTS_BUNDLES: NgeElementDef[] = [
   {
     selector: 'wc-editorjs-viewer',
     module: () =>
-      import(
-        /* webpackChunkName: "wc-editorjs-viewer" */ './internals/editorjs-viewer/editorjs-viewer.module'
-      ).then((m) => m.EditorjsViewerModule),
+      import(/* webpackChunkName: "wc-editorjs-viewer" */ './internals/editorjs-viewer/editorjs-viewer.module').then(
+        (m) => m.EditorjsViewerModule
+      ),
   },
 
   // PUBLICS
   {
     selector: 'wc-automaton-editor',
     module: () =>
-      import(
-        /* webpackChunkName: "wc-automaton-editor" */ './forms/automaton-editor/automaton-editor.module'
-      ).then((m) => m.AutomatonEditorModule),
+      import(/* webpackChunkName: "wc-automaton-editor" */ './forms/automaton-editor/automaton-editor.module').then(
+        (m) => m.AutomatonEditorModule
+      ),
   },
   {
     selector: 'wc-automaton-viewer',
     module: () =>
-      import(
-        /* webpackChunkName: "wc-automaton-viewer" */ './widgets/automaton-viewer/automaton-viewer.module'
-      ).then((m) => m.AutomatonViewerModule),
+      import(/* webpackChunkName: "wc-automaton-viewer" */ './widgets/automaton-viewer/automaton-viewer.module').then(
+        (m) => m.AutomatonViewerModule
+      ),
   },
   {
     selector: 'wc-checkbox-group',
     module: () =>
-      import(
-        /* webpackChunkName: "wc-checkbox-group" */ './forms/checkbox-group/checkbox-group.module'
-      ).then((m) => m.CheckboxGroupModule),
+      import(/* webpackChunkName: "wc-checkbox-group" */ './forms/checkbox-group/checkbox-group.module').then(
+        (m) => m.CheckboxGroupModule
+      ),
   },
   {
     selector: 'wc-code-editor',
     module: () =>
-      import(
-        /* webpackChunkName: "wc-code-editor" */ './forms/code-editor/code-editor.module'
-      ).then((m) => m.CodeEditorModule),
+      import(/* webpackChunkName: "wc-code-editor" */ './forms/code-editor/code-editor.module').then(
+        (m) => m.CodeEditorModule
+      ),
   },
   {
     selector: 'wc-code-viewer',
     module: () =>
-      import(
-        /* webpackChunkName: "wc-code-viewer" */ './widgets/code-viewer/code-viewer.module'
-      ).then((m) => m.CodeViewerModule),
+      import(/* webpackChunkName: "wc-code-viewer" */ './widgets/code-viewer/code-viewer.module').then(
+        (m) => m.CodeViewerModule
+      ),
   },
   {
     selector: 'wc-graph-viewer',
     module: () =>
-      import(
-        /* webpackChunkName: "wc-graph-viewer" */ './widgets/graph-viewer/graph-viewer.module'
-      ).then((m) => m.GraphViewerModule),
+      import(/* webpackChunkName: "wc-graph-viewer" */ './widgets/graph-viewer/graph-viewer.module').then(
+        (m) => m.GraphViewerModule
+      ),
   },
   {
     selector: 'wc-input-box',
     module: () =>
-      import(/* webpackChunkName: "wc-input-box" */ './forms/input-box/input-box.module').then(
-        (m) => m.InputBoxModule
-      ),
+      import(/* webpackChunkName: "wc-input-box" */ './forms/input-box/input-box.module').then((m) => m.InputBoxModule),
   },
   {
     selector: 'wc-jsx',
-    module: () =>
-      import(/* webpackChunkName: "wc-jsx" */ './forms/jsx/jsx.module').then((m) => m.JsxModule),
+    module: () => import(/* webpackChunkName: "wc-jsx" */ './forms/jsx/jsx.module').then((m) => m.JsxModule),
   },
   {
     selector: 'wc-markdown',
     module: () =>
-      import(/* webpackChunkName: "wc-markdown" */ './widgets/markdown/markdown.module').then(
-        (m) => m.MarkdownModule
-      ),
+      import(/* webpackChunkName: "wc-markdown" */ './widgets/markdown/markdown.module').then((m) => m.MarkdownModule),
   },
   {
     selector: 'wc-match-list',
@@ -108,58 +103,46 @@ export const WEB_COMPONENTS_BUNDLES: NgeElementDef[] = [
   {
     selector: 'wc-math-live',
     module: () =>
-      import(/* webpackChunkName: "wc-math-live" */ './forms/math-live/math-live.module').then(
-        (m) => m.MathLiveModule
-      ),
+      import(/* webpackChunkName: "wc-math-live" */ './forms/math-live/math-live.module').then((m) => m.MathLiveModule),
   },
   {
     selector: 'wc-matrix',
     module: () =>
-      import(/* webpackChunkName: "wc-matrix" */ './forms/matrix/matrix.module').then(
-        (m) => m.MatrixModule
-      ),
+      import(/* webpackChunkName: "wc-matrix" */ './forms/matrix/matrix.module').then((m) => m.MatrixModule),
   },
   {
     selector: 'wc-picker',
     module: () =>
-      import(/* webpackChunkName: "wc-picker" */ './forms/picker/picker.module').then(
-        (m) => m.PickerModule
-      ),
+      import(/* webpackChunkName: "wc-picker" */ './forms/picker/picker.module').then((m) => m.PickerModule),
   },
   {
     selector: 'wc-radio-group',
     module: () =>
-      import(
-        /* webpackChunkName: "wc-radio-group" */ './forms/radio-group/radio-group.module'
-      ).then((m) => m.RadioGroupModule),
+      import(/* webpackChunkName: "wc-radio-group" */ './forms/radio-group/radio-group.module').then(
+        (m) => m.RadioGroupModule
+      ),
   },
   {
     selector: 'wc-sort-list',
     module: () =>
-      import(/* webpackChunkName: "wc-sort-list" */ './forms/sort-list/sort-list.module').then(
-        (m) => m.SortListModule
-      ),
+      import(/* webpackChunkName: "wc-sort-list" */ './forms/sort-list/sort-list.module').then((m) => m.SortListModule),
   },
   {
     selector: 'wc-text-select',
     module: () =>
-      import(
-        /* webpackChunkName: "wc-text-select" */ './forms/text-select/text-select.module'
-      ).then((m) => m.TextSelectModule),
+      import(/* webpackChunkName: "wc-text-select" */ './forms/text-select/text-select.module').then(
+        (m) => m.TextSelectModule
+      ),
   },
   {
     selector: 'wc-drag-drop',
     module: () =>
-      import(/* webpackChunkName: "wc-drag-drop" */ './forms/drag-drop/drag-drop.module').then(
-        (m) => m.DragDropModule
-      ),
+      import(/* webpackChunkName: "wc-drag-drop" */ './forms/drag-drop/drag-drop.module').then((m) => m.DragDropModule),
   },
   {
     selector: 'wc-feedback',
     module: () =>
-      import(/* webpackChunkName: "wc-feedback" */ './widgets/feedback/feedback.module').then(
-        (m) => m.FeedbackModule
-      ),
+      import(/* webpackChunkName: "wc-feedback" */ './widgets/feedback/feedback.module').then((m) => m.FeedbackModule),
   },
   {
     selector: 'wc-presenter',
@@ -171,23 +154,23 @@ export const WEB_COMPONENTS_BUNDLES: NgeElementDef[] = [
   {
     selector: 'wc-chart-viewer-bars',
     module: () =>
-      import(
-        /* webpackChunkName: "wc-graph-viewer" */ './widgets/chart-viewer-bars/chart-viewer-bars.module'
-      ).then((m) => m.ChartViewerBarsModule),
+      import(/* webpackChunkName: "wc-graph-viewer" */ './widgets/chart-viewer-bars/chart-viewer-bars.module').then(
+        (m) => m.ChartViewerBarsModule
+      ),
   },
   {
     selector: 'wc-chart-viewer-pies',
     module: () =>
-      import(
-        /* webpackChunkName: "wc-graph-viewer" */ './widgets/chart-viewer-pies/chart-viewer-pies.module'
-      ).then((m) => m.ChartViewerPiesModule),
+      import(/* webpackChunkName: "wc-graph-viewer" */ './widgets/chart-viewer-pies/chart-viewer-pies.module').then(
+        (m) => m.ChartViewerPiesModule
+      ),
   },
   {
     selector: 'wc-chart-viewer-radar',
     module: () =>
-      import(
-        /* webpackChunkName: "wc-graph-viewer" */ './widgets/chart-viewer-radar/chart-viewer-radar.module'
-      ).then((m) => m.ChartViewerRadarModule),
+      import(/* webpackChunkName: "wc-graph-viewer" */ './widgets/chart-viewer-radar/chart-viewer-radar.module').then(
+        (m) => m.ChartViewerRadarModule
+      ),
   },
 ]
 

@@ -23,9 +23,9 @@ export class RemoteAuthProvider extends AuthProvider {
       const helper = new JwtHelperService()
       const data = helper.decodeToken(token.accessToken)
       try {
-        return await lastValueFrom(
-          this.http.get<ItemResponse<User>>('/api/v1/users/' + data.username)
-        ).then((response) => response.resource)
+        return await lastValueFrom(this.http.get<ItemResponse<User>>('/api/v1/users/' + data.username)).then(
+          (response) => response.resource
+        )
       } catch {
         this.signOut()
       }

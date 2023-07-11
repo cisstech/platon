@@ -1,11 +1,5 @@
 import { CommonModule } from '@angular/common'
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  OnDestroy,
-  OnInit,
-} from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core'
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { MatButtonModule } from '@angular/material/button'
 
@@ -70,10 +64,7 @@ export class ResourceInformationsPage implements OnInit, OnDestroy {
     return this.form.valid && this.canEdit
   }
 
-  constructor(
-    private readonly presenter: ResourcePresenter,
-    private readonly changeDetectorRef: ChangeDetectorRef
-  ) {}
+  constructor(private readonly presenter: ResourcePresenter, private readonly changeDetectorRef: ChangeDetectorRef) {}
 
   async ngOnInit(): Promise<void> {
     this.subscriptions.push(
@@ -89,12 +80,8 @@ export class ResourceInformationsPage implements OnInit, OnDestroy {
             this.dataSource = { levels, topics }
           }
           this.form = new FormGroup({
-            name: new FormControl({ value: resource.name, disabled: !this.canEdit }, [
-              Validators.required,
-            ]),
-            desc: new FormControl({ value: resource.desc || '', disabled: !this.canEdit }, [
-              Validators.required,
-            ]),
+            name: new FormControl({ value: resource.name, disabled: !this.canEdit }, [Validators.required]),
+            desc: new FormControl({ value: resource.desc || '', disabled: !this.canEdit }, [Validators.required]),
             topics: new FormControl(resource.topics.map((e) => e.id)),
             levels: new FormControl(resource.levels.map((e) => e.id)),
           })

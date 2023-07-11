@@ -17,10 +17,7 @@ export class CorrectionController {
   }
 
   @Get('/:activityId')
-  async find(
-    @Req() req: IRequest,
-    @Param('activityId') activityId: string
-  ): Promise<ListResponse<PendingCorrection>> {
+  async find(@Req() req: IRequest, @Param('activityId') activityId: string): Promise<ListResponse<PendingCorrection>> {
     const items = await this.service.list(req.user.id, activityId)
     const resources = Mapper.mapAll(items, PendingCorrectionDTO)
     return new ListResponse({ total: resources.length, resources })

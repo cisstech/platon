@@ -4,6 +4,6 @@
   "useTabs": false,
   "trailingComma": "es5",
   "semi": false,
-  "printWidth": 100,
+  "printWidth": 120,
   "endOfLine": "lf"
 }

@@ -1,14 +1,4 @@
-import {
-  BadRequestException,
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Req,
-  Res,
-} from '@nestjs/common'
+import { BadRequestException, Body, Controller, Delete, Get, Param, Post, Req, Res } from '@nestjs/common'
 import { CourseDemoService } from './course-demo.service'
 import { IRequest, Mapper, Public, Roles } from '@platon/core/server'
 import {
@@ -53,26 +43,17 @@ export class CourseDemoController {
       if (!(await this.courseMemberService.isMember(demo.course.id, req.user.id))) {
         await this.courseMemberService.addUser(demo.course.id, req.user.id)
       }
-      const resource = Mapper.map(
-        { courseId: demo.course.id, auth: false },
-        CourseDemoAccessAnswerDTO
-      )
+      const resource = Mapper.map({ courseId: demo.course.id, auth: false }, CourseDemoAccessAnswerDTO)
       return new ItemResponse({ resource })
     }
 
     const token = await this.courseDemoService.registerToDemo(demo)
-    const resource = Mapper.map(
-      { courseId: demo.course.id, auth: true, ...token },
-      CourseDemoAccessAnswerDTO
-    )
+    const resource = Mapper.map({ courseId: demo.course.id, auth: true, ...token }, CourseDemoAccessAnswerDTO)
     return new ItemResponse({ resource })
   }
 
   @Get(':courseId')
-  async getDemo(
-    @Req() req: IRequest,
-    @Param() params: CourseDemoGetDTO
-  ): Promise<ItemResponse<CourseDemoDTO>> {
+  async getDemo(@Req() req: IRequest, @Param() params: CourseDemoGetDTO): Promise<ItemResponse<CourseDemoDTO>> {
     const demo = (await this.courseDemoService.findByCourseId(params.courseId)).orElseThrow(
       () => new NotFoundResponse(`Demo not found for course: ${params.courseId}`)
     )
@@ -87,14 +68,9 @@ export class CourseDemoController {
 
   @Roles(UserRoles.teacher, UserRoles.admin)
   @Post()
-  async createDemo(
-    @Req() req: IRequest,
-    @Body() body: CourseDemoCreateDTO
-  ): Promise<CreatedResponse<CourseDemoDTO>> {
+  async createDemo(@Req() req: IRequest, @Body() body: CourseDemoCreateDTO): Promise<CreatedResponse<CourseDemoDTO>> {
     const optional = await this.courseService.findById(body.courseId)
-    const course = optional.orElseThrow(
-      () => new NotFoundResponse(`Course not found: ${body.courseId}`)
-    )
+    const course = optional.orElseThrow(() => new NotFoundResponse(`Course not found: ${body.courseId}`))
 
     if (!(await this.courseMemberService.isMember(body.courseId, req.user.id))) {
       throw new ForbiddenResponse(`You are not a member of this course`)
@@ -112,10 +88,7 @@ export class CourseDemoController {
 
   @Roles(UserRoles.teacher, UserRoles.admin)
   @Delete(':courseId')
-  async deleteDemo(
-    @Req() req: IRequest,
-    @Param() params: CourseDemoDeleteDTO
-  ): Promise<NoContentResponse> {
+  async deleteDemo(@Req() req: IRequest, @Param() params: CourseDemoDeleteDTO): Promise<NoContentResponse> {
     if (!(await this.courseMemberService.isMember(params.courseId, req.user.id))) {
       throw new ForbiddenResponse(`You are not a member of this course`)
     }

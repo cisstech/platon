@@ -22,16 +22,7 @@ import { AuthIfDirective } from '../../directives'
   templateUrl: './protected.component.html',
   styleUrls: ['./protected.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    CommonModule,
-
-    NzSpinModule,
-    NzSkeletonModule,
-    UiError403Component,
-    UiError404Component,
-
-    AuthIfDirective,
-  ],
+  imports: [CommonModule, NzSpinModule, NzSkeletonModule, UiError403Component, UiError404Component, AuthIfDirective],
 })
 export class ProtectedComponent {
   @ContentChild(TemplateRef)

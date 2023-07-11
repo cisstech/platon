@@ -17,16 +17,7 @@ import { Course } from '@platon/feature/course/common'
   templateUrl: './course-item.component.html',
   styleUrls: ['./course-item.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    CommonModule,
-
-    MatIconModule,
-    NzIconModule,
-    NzBadgeModule,
-    NzToolTipModule,
-
-    NgeUiListModule,
-  ],
+  imports: [CommonModule, MatIconModule, NzIconModule, NzBadgeModule, NzToolTipModule, NgeUiListModule],
 })
 export class CourseItemComponent implements OnInit {
   @Input() item!: Course

@@ -1,11 +1,7 @@
 import { Args, Int, Mutation, Query, ResolveField, Resolver, Subscription } from '@nestjs/graphql'
 import { GqlReq, IRequest, PubSubService, UserGraphModel, UUID } from '@platon/core/server'
 import { NotificationFilters } from '@platon/feature/notification/common'
-import {
-  NotificationChangeGraphModel,
-  NotificationFiltersInput,
-  NotificationGraphModel,
-} from './notification.graphql'
+import { NotificationChangeGraphModel, NotificationFiltersInput, NotificationGraphModel } from './notification.graphql'
 import { OnChangeNotificationsPayload, ON_CHANGE_NOTIFICATIONS } from './notification.pubsub'
 import { NotificationService } from './notification.service'
 
@@ -33,20 +29,14 @@ export class NotificationResolver {
 
   @Mutation(() => NotificationGraphModel)
   async markAsRead(@Args('id', { type: () => UUID }) id: string): Promise<NotificationGraphModel> {
-    const notification = new NotificationGraphModel(
-      (await this.notificationService.markAsRead([id]))[0]
-    )
+    const notification = new NotificationGraphModel((await this.notificationService.markAsRead([id]))[0])
     await this.notificationService.notifyUserAboutChanges(notification.userId)
     return notification
   }
 
   @Mutation(() => NotificationGraphModel)
-  async markAsUnread(
-    @Args('id', { type: () => UUID }) id: string
-  ): Promise<NotificationGraphModel> {
-    const notification = new NotificationGraphModel(
-      (await this.notificationService.markAsUnread([id]))[0]
-    )
+  async markAsUnread(@Args('id', { type: () => UUID }) id: string): Promise<NotificationGraphModel> {
+    const notification = new NotificationGraphModel((await this.notificationService.markAsUnread([id]))[0])
     await this.notificationService.notifyUserAboutChanges(notification.userId)
     return notification
   }
@@ -59,10 +49,7 @@ export class NotificationResolver {
   }
 
   @Mutation(() => Boolean)
-  async deleteNotification(
-    @GqlReq() req: IRequest,
-    @Args('id', { type: () => UUID }) id: string
-  ): Promise<boolean> {
+  async deleteNotification(@GqlReq() req: IRequest, @Args('id', { type: () => UUID }) id: string): Promise<boolean> {
     const success = (await this.notificationService.delete([id])) > 0
     if (success) await this.notificationService.notifyUserAboutChanges(req.user.id)
     return success

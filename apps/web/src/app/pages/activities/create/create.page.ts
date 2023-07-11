@@ -1,12 +1,6 @@
 import { CommonModule } from '@angular/common'
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core'
-import {
-  FormControl,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms'
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms'
 import { ActivatedRoute, Router, RouterModule } from '@angular/router'
 import differenceInCalendarDays from 'date-fns/differenceInCalendarDays'
 
@@ -84,8 +78,7 @@ export class ActivityCreatePage implements OnInit {
     correctors: new FormControl<string[] | undefined>(undefined),
   })
 
-  protected disabledDate = (current: Date): boolean =>
-    differenceInCalendarDays(current, new Date()) < 0
+  protected disabledDate = (current: Date): boolean => differenceInCalendarDays(current, new Date()) < 0
 
   constructor(
     private readonly router: Router,
@@ -107,17 +100,13 @@ export class ActivityCreatePage implements OnInit {
     const sectionId = queryParamMap.get('section')
 
     const course = courseId
-      ? await firstValueFrom(
-          this.courseService.find(courseId).pipe(catchError(() => of(undefined)))
-        )
+      ? await firstValueFrom(this.courseService.find(courseId).pipe(catchError(() => of(undefined))))
       : undefined
 
     const section =
       courseId && sectionId
         ? await firstValueFrom(
-            this.courseService
-              .findSection(courseId, sectionId)
-              .pipe(catchError(() => of(undefined)))
+            this.courseService.findSection(courseId, sectionId).pipe(catchError(() => of(undefined)))
           )
         : undefined
 

@@ -6,11 +6,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 
-import {
-  LmsCreateDrawerComponent,
-  LmsSearchBarComponent,
-  LmsTableComponent,
-} from '@platon/feature/lti/browser'
+import { LmsCreateDrawerComponent, LmsSearchBarComponent, LmsTableComponent } from '@platon/feature/lti/browser'
 import { Lms } from '@platon/feature/lti/common'
 
 @Component({

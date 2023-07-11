@@ -18,10 +18,12 @@ export class Contribution implements IContribution {
     editorService.registerCommands(
       new (class implements ICommand {
         readonly id = 'platon.contrib.ple.commands.designer-open'
-        readonly label = 'Mode design'
+        readonly label = 'Designer'
         readonly icon = new CodIcon('screen-normal')
         get enabled(): boolean {
-          const { activeResource } = editorService
+          const { activeResource, activeEditor } = editorService
+          if (activeEditor?.options?.preview) return false
+
           if (!activeResource) return false
 
           const { path, query, authority } = activeResource
@@ -45,10 +47,12 @@ export class Contribution implements IContribution {
     editorService.registerCommands(
       new (class implements ICommand {
         readonly id = 'platon.contrib.ple.commands.designer-close'
-        readonly label = 'Mode code'
+        readonly label = 'Code'
         readonly icon = new CodIcon('code')
         get enabled(): boolean {
-          const { activeResource } = editorService
+          const { activeResource, activeEditor } = editorService
+          if (activeEditor?.options?.preview) return false
+
           if (!activeResource) return false
 
           const { path, query, authority } = activeResource

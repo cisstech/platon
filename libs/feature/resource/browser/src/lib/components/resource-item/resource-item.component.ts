@@ -1,12 +1,5 @@
 import { CommonModule } from '@angular/common'
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-} from '@angular/core'
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 
 import { MatIconModule } from '@angular/material/icon'
 import { NzBadgeModule } from 'ng-zorro-antd/badge'
@@ -66,10 +59,7 @@ export class ResourceItemComponent implements OnInit {
     const sessionId = uuidv4()
     if (this.previewOverrides) {
       firstValueFrom(
-        this.storageService.set(
-          getPreviewOverridesStorageKey(sessionId),
-          JSON.stringify(this.previewOverrides)
-        )
+        this.storageService.set(getPreviewOverridesStorageKey(sessionId), JSON.stringify(this.previewOverrides))
       ).catch()
     }
     return `/player/preview/${this.item.id}?version=latest&sessionId=${sessionId}`

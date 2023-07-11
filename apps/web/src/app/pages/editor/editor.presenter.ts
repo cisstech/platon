@@ -1,13 +1,7 @@
 import { Injectable, inject } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { ResourceService } from '@platon/feature/resource/browser'
-import {
-  CircleTree,
-  Resource,
-  ResourceTypes,
-  circleFromTree,
-  resourceAncestors,
-} from '@platon/feature/resource/common'
+import { CircleTree, Resource, ResourceTypes, circleFromTree, resourceAncestors } from '@platon/feature/resource/common'
 import { firstValueFrom } from 'rxjs'
 
 @Injectable({ providedIn: 'root' })
@@ -15,8 +9,14 @@ export class EditorPresenter {
   private readonly resourceService = inject(ResourceService)
 
   private resource!: Resource
-  get currentResource(): Resource {
+  private ancestors: CircleTree[] = []
+
+  get currentResource(): Readonly<Resource> {
     return this.resource
+  }
+
+  get currentAncestors(): ReadonlyArray<Readonly<CircleTree>> {
+    return this.ancestors
   }
 
   async init(activatedRoute: ActivatedRoute) {
@@ -41,6 +41,7 @@ export class EditorPresenter {
           ]
 
     this.resource = resource
+    this.ancestors = ancestors
 
     return {
       circles,

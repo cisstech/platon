@@ -1,7 +1,4 @@
-export const resolveFileReference = (
-  path: string,
-  relativeTo: { resource: string; version?: string }
-) => {
+export const resolveFileReference = (path: string, relativeTo: { resource: string; version?: string }) => {
   const parts = path.split('/').filter((e) => !!e.trim())
   let [resource, version] = parts[0].split(':')
   path = parts.slice(1).join('/')

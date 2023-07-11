@@ -21,9 +21,7 @@ import { MatchListComponentDefinition, MatchListItem, MatchListState } from './m
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 @WebComponent(MatchListComponentDefinition)
-export class MatchListComponent
-  implements OnInit, AfterViewChecked, OnDestroy, WebComponentHooks<MatchListState>
-{
+export class MatchListComponent implements OnInit, AfterViewChecked, OnDestroy, WebComponentHooks<MatchListState> {
   @Input() state!: MatchListState
 
   @ViewChild('container', { static: true })
@@ -42,10 +40,7 @@ export class MatchListComponent
     return this.state.nodes.filter((e) => e.type === 'target')
   }
 
-  constructor(
-    readonly injector: Injector,
-    readonly changeDetector: WebComponentChangeDetectorService
-  ) {}
+  constructor(readonly injector: Injector, readonly changeDetector: WebComponentChangeDetectorService) {}
 
   async ngOnInit() {
     this.jsPlumb = jsPlumb.getInstance({

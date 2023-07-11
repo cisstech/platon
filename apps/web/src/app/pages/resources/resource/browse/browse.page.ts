@@ -1,11 +1,5 @@
 import { CommonModule } from '@angular/common'
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  OnDestroy,
-  OnInit,
-} from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core'
 import { Subscription } from 'rxjs'
 
 import { SafePipeModule } from '@cisstech/nge/pipes'
@@ -56,10 +50,7 @@ export class ResourceBrowsePage implements OnInit, OnDestroy {
     return `/player/preview/${this.context.resource?.id}?version=${this.version}`
   }
 
-  constructor(
-    private readonly presenter: ResourcePresenter,
-    private readonly changeDetectorRef: ChangeDetectorRef
-  ) {}
+  constructor(private readonly presenter: ResourcePresenter, private readonly changeDetectorRef: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.subscriptions.push(

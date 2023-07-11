@@ -1,12 +1,5 @@
 import { CommonModule } from '@angular/common'
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  Output,
-  ViewChild,
-} from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Output, ViewChild } from '@angular/core'
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms'
 
 import { MatFormFieldModule } from '@angular/material/form-field'
@@ -82,9 +75,7 @@ export class LmsDrawerComponent {
 
   protected async update(): Promise<void> {
     try {
-      const lms = await firstValueFrom(
-        this.ltiService.updateLms(this.lms?.id as string, this.form.value as UpdateLms)
-      )
+      const lms = await firstValueFrom(this.ltiService.updateLms(this.lms?.id as string, this.form.value as UpdateLms))
       Object.assign(this.lms as Lms, lms)
       this.updated.emit(lms)
       this.dialogService.success('Les informations ont bien étés mise à jour!')

@@ -1,11 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Injector,
-  Input,
-  OnDestroy,
-  OnInit,
-} from '@angular/core'
+import { ChangeDetectionStrategy, Component, Injector, Input, OnDestroy, OnInit } from '@angular/core'
 import { FormControl } from '@angular/forms'
 import { Observable, Subscription } from 'rxjs'
 import { debounceTime, map, startWith } from 'rxjs/operators'
@@ -73,7 +66,7 @@ export class InputBoxComponent implements OnInit, OnDestroy, WebComponentHooks<I
     }
 
     const convert = (v: string) => {
-      return v
+      return (v + '')
         .trim()
         .normalize('NFD')
         .replace(/[\u0300-\u036f]/g, '')

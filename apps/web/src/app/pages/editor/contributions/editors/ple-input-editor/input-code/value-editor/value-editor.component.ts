@@ -8,10 +8,7 @@ import { InputCodeOptions } from '../input-code'
   styleUrls: ['value-editor.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InputCodeValueEditorComponent
-  extends BaseValueEditor<string, InputCodeOptions>
-  implements OnDestroy
-{
+export class InputCodeValueEditorComponent extends BaseValueEditor<string, InputCodeOptions> implements OnDestroy {
   private readonly disposables: monaco.IDisposable[] = []
   private model?: monaco.editor.ITextModel
   private editor?: monaco.editor.IStandaloneCodeEditor
@@ -51,7 +48,7 @@ export class InputCodeValueEditorComponent
       tabIndex: 2,
     })
 
-    const model = monaco.editor.createModel(this.value || '', this.options?.language || 'plaintext')
+    const model = monaco.editor.createModel(this.value || '', this.options?.language || 'twig')
 
     editor.setModel(model)
     this.disposables.push(
@@ -60,7 +57,9 @@ export class InputCodeValueEditorComponent
           this.ignoreNextChange = false
           return
         }
-        this.notifyValueChange?.(model.getValue())
+
+        const value = model.getValue()
+        this.notifyValueChange?.(value)
       })
     )
 

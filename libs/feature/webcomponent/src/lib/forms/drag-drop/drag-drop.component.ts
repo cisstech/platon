@@ -1,12 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Injector,
-  Input,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core'
+import { ChangeDetectionStrategy, Component, Injector, Input, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { WebComponent, WebComponentHooks } from '../../web-component'
 import { DragDropComponentDefinition, DragDropState } from './drag-drop'
 import { DragDropDirective, DragDropEvent } from './drag-drop.directive'

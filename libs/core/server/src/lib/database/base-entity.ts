@@ -20,9 +20,7 @@ export abstract class BaseEntity {
   updatedAt!: Date
 }
 
-type JoinFunction<T extends ObjectLiteral> = (
-  queryBuilder: SelectQueryBuilder<T>
-) => SelectQueryBuilder<T>
+type JoinFunction<T extends ObjectLiteral> = (queryBuilder: SelectQueryBuilder<T>) => SelectQueryBuilder<T>
 
 export const buildQuery = <T extends ObjectLiteral>(
   queryBuilder: SelectQueryBuilder<T>,

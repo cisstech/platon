@@ -47,24 +47,15 @@ export class SessionService {
     })
   }
 
-  create<T extends object>(
-    input: Partial<SessionEntity>,
-    entityManager?: EntityManager
-  ): Promise<SessionEntity<T>> {
+  create<T extends object>(input: Partial<SessionEntity>, entityManager?: EntityManager): Promise<SessionEntity<T>> {
     if (entityManager) {
-      return entityManager.save(
-        entityManager.create(this.repository.target, input as SessionEntity)
-      )
+      return entityManager.save(entityManager.create(this.repository.target, input as SessionEntity))
     }
 
     return this.repository.save(this.repository.create(input))
   }
 
-  async update(
-    id: string,
-    changes: QueryDeepPartialEntity<SessionEntity>,
-    entityManager?: EntityManager
-  ) {
+  async update(id: string, changes: QueryDeepPartialEntity<SessionEntity>, entityManager?: EntityManager) {
     if (entityManager) {
       return entityManager.update(this.repository.target, { id }, changes)
     }

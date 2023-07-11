@@ -1,12 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  Input,
-  OnDestroy,
-  OnInit,
-  inject,
-} from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, inject } from '@angular/core'
 import { Editor, FileService, OpenRequest } from '@cisstech/nge-ide/core'
 import { Subscription } from 'rxjs'
 import { PleInput } from '../ple-input-editor/ple-input'

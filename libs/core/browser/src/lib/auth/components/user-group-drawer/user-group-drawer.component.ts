@@ -1,12 +1,5 @@
 import { CommonModule } from '@angular/common'
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  Output,
-  ViewChild,
-} from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Output, ViewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { firstValueFrom } from 'rxjs'
 
@@ -69,10 +62,7 @@ export class UserGroupDrawerComponent {
     return this.members.map((m) => m.username)
   }
 
-  constructor(
-    private readonly userService: UserService,
-    private readonly changeDetectorRef: ChangeDetectorRef
-  ) {}
+  constructor(private readonly userService: UserService, private readonly changeDetectorRef: ChangeDetectorRef) {}
 
   open(group: UserGroup) {
     this.group = group
@@ -111,9 +101,7 @@ export class UserGroupDrawerComponent {
   protected async removeMembers(): Promise<void> {
     this.group = await firstValueFrom(
       this.userService.updateUserGroup(this.group?.id as string, {
-        users: this.members
-          .filter((member) => !this.selection.includes(member.id))
-          .map((member) => member.id),
+        users: this.members.filter((member) => !this.selection.includes(member.id)).map((member) => member.id),
       })
     )
 

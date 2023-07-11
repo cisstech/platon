@@ -48,12 +48,7 @@ export class PLCompiler implements PLVisitor {
   private readonly source: PLSourceFile
   private lineno = 0
 
-  constructor(options: {
-    resource: string
-    version: string
-    main: string
-    resolver: PLReferenceResolver
-  }) {
+  constructor(options: { resource: string; version: string; main: string; resolver: PLReferenceResolver }) {
     this.resolver = options.resolver
     this.source = {
       resource: options.resource,
@@ -76,9 +71,7 @@ export class PLCompiler implements PLVisitor {
 
   async visitExtends(node: ExtendsNode | PLDict, merge: boolean): Promise<PLSourceFile> {
     this.lineno = node.lineno
-    const { resource, version, relpath } = this.resolveReference(
-      'path' in node ? node.path : node.value
-    )
+    const { resource, version, relpath } = this.resolveReference('path' in node ? node.path : node.value)
 
     const content = await this.resolver.resolveContent(resource, version, relpath)
     const compiler = new PLCompiler({
@@ -159,10 +152,7 @@ export class PLCompiler implements PLVisitor {
     const nodes = await new PLParser().parse(content)
     const source = await this.visit(nodes)
     if (overrides) {
-      source.variables = deepMerge(
-        source.variables,
-        await this.withResolvePathInOverrides(overrides)
-      )
+      source.variables = deepMerge(source.variables, await this.withResolvePathInOverrides(overrides))
     }
     return source
   }
@@ -189,11 +179,7 @@ export class PLCompiler implements PLVisitor {
 
     await Promise.all(
       exercises.map(async (exercise: ExerciseVariables) => {
-        const content = await this.resolver.resolveContent(
-          exercise.resource,
-          exercise.version,
-          'main.ple'
-        )
+        const content = await this.resolver.resolveContent(exercise.resource, exercise.version, 'main.ple')
         const compiler = new PLCompiler({
           resource: exercise.resource,
           version: exercise.version,
@@ -231,10 +217,7 @@ export class PLCompiler implements PLVisitor {
     })
   }
 
-  private withVariable(
-    name: string,
-    required = false
-  ): [string | null, Record<string, unknown> | null] {
+  private withVariable(name: string, required = false): [string | null, Record<string, unknown> | null] {
     const props = name.split('.')
     if (props.find((prop) => !prop)) {
       this.error(`SyntaxError: ${name}`)

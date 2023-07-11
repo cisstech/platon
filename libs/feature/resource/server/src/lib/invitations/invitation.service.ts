@@ -16,10 +16,7 @@ export class ResourceInvitationService {
     private readonly memberService: ResourceMemberService
   ) {}
 
-  async findByInviteeId(
-    resourceId: string,
-    inviteeId: string
-  ): Promise<Optional<ResourceInvitationEntity>> {
+  async findByInviteeId(resourceId: string, inviteeId: string): Promise<Optional<ResourceInvitationEntity>> {
     return Optional.ofNullable(await this.repository.findOne({ where: { resourceId, inviteeId } }))
   }
 
@@ -28,10 +25,7 @@ export class ResourceInvitationService {
   }
 
   async create(input: Partial<ResourceInvitationEntity>): Promise<ResourceInvitationEntity> {
-    const member = await this.memberService.findByUserId(
-      input.resourceId as string,
-      input.inviteeId as string
-    )
+    const member = await this.memberService.findByUserId(input.resourceId as string, input.inviteeId as string)
     if (member.isPresent()) {
       throw new BadRequestException('There is already a member entry for the given user')
     }

@@ -15,15 +15,7 @@ import { CourseActivityCardComponent } from '../activity-card/activity-card.comp
   templateUrl: './activity-grid.component.html',
   styleUrls: ['./activity-grid.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    CommonModule,
-    FormsModule,
-
-    NzGridModule,
-    NzTabsModule,
-    NzSegmentedModule,
-    CourseActivityCardComponent,
-  ],
+  imports: [CommonModule, FormsModule, NzGridModule, NzTabsModule, NzSegmentedModule, CourseActivityCardComponent],
 })
 export class CourseActivityGridComponent {
   protected tabs: Tab[] = []

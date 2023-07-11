@@ -1,8 +1,5 @@
 import { defineWebComponent, IWebComponent, WebComponentTypes } from '../../web-component'
-import {
-  ChartViewerBase,
-  ChartViewerBaseProperties,
-} from '../../shared/components/chart-viewer/base'
+import { ChartViewerBase, ChartViewerBaseProperties } from '../../shared/components/chart-viewer/base'
 
 export interface ChartViewerPiesState extends IWebComponent, ChartViewerBase {
   mode: 'simple' | 'advanced' | 'grid'

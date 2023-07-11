@@ -7,7 +7,7 @@ import {
   NotFoundResponse,
   UserRoles,
 } from '@platon/core/common'
-import { IRequest, Mapper, Roles, Public } from '@platon/core/server'
+import { IRequest, Mapper, Roles } from '@platon/core/server'
 import { CourseMemberService } from './course-member/course-member.service'
 import { CourseDTO, CourseFiltersDTO, CreateCourseDTO, UpdateCourseDTO } from './course.dto'
 import { CourseService } from './course.service'
@@ -20,10 +20,7 @@ export class CourseController {
   ) {}
 
   @Get()
-  async search(
-    @Req() req: IRequest,
-    @Query() filters: CourseFiltersDTO = {}
-  ): Promise<ListResponse<CourseDTO>> {
+  async search(@Req() req: IRequest, @Query() filters: CourseFiltersDTO = {}): Promise<ListResponse<CourseDTO>> {
     filters = {
       ...filters,
       members: Array.from(new Set([req.user.id, ...(filters.members || [])])),
@@ -51,10 +48,7 @@ export class CourseController {
 
   @Roles(UserRoles.teacher, UserRoles.admin)
   @Post()
-  async create(
-    @Req() req: IRequest,
-    @Body() input: CreateCourseDTO
-  ): Promise<CreatedResponse<CourseDTO>> {
+  async create(@Req() req: IRequest, @Body() input: CreateCourseDTO): Promise<CreatedResponse<CourseDTO>> {
     const resource = Mapper.map(
       await this.courseService.create({
         ...input,

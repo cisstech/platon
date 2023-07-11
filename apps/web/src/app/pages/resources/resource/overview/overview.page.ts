@@ -87,8 +87,7 @@ export class ResourceOverviewPage implements OnInit, AfterViewChecked, OnDestroy
   }
 
   protected formatStatus(status: string | unknown): string {
-    if (typeof status === 'object')
-      return RESOURCE_STATUS_NAMES[(status as any).data?.name as ResourceStatus] || ''
+    if (typeof status === 'object') return RESOURCE_STATUS_NAMES[(status as any).data?.name as ResourceStatus] || ''
     return RESOURCE_STATUS_NAMES[status as ResourceStatus]
   }
 

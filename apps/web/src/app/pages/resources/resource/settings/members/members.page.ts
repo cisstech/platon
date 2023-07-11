@@ -1,11 +1,5 @@
 import { CommonModule } from '@angular/common'
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  OnDestroy,
-  OnInit,
-} from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core'
 import { Subscription } from 'rxjs'
 
 import { MatCardModule } from '@angular/material/card'
@@ -16,11 +10,7 @@ import {
   ResourceInvitationTableComponent,
   ResourceMemberTableComponent,
 } from '@platon/feature/resource/browser'
-import {
-  CreateResourceInvitation,
-  ResourceInvitation,
-  ResourceMember,
-} from '@platon/feature/resource/common'
+import { CreateResourceInvitation, ResourceInvitation, ResourceMember } from '@platon/feature/resource/common'
 
 import { ResourcePresenter } from '../../resource.presenter'
 
@@ -52,10 +42,7 @@ export class ResourceMembersPage implements OnInit, OnDestroy {
     return user.role === UserRoles.admin
   }
 
-  constructor(
-    private readonly presenter: ResourcePresenter,
-    private readonly changeDetectorRef: ChangeDetectorRef
-  ) {}
+  constructor(private readonly presenter: ResourcePresenter, private readonly changeDetectorRef: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.subscriptions.push(
@@ -63,10 +50,7 @@ export class ResourceMembersPage implements OnInit, OnDestroy {
         this.context = context
         await Promise.all([this.loadMembers(), this.loadInvitations()])
 
-        this.excludes = [
-          ...this.members.map((m) => m.userId),
-          ...this.invitations.map((i) => i.inviteeId),
-        ]
+        this.excludes = [...this.members.map((m) => m.userId), ...this.invitations.map((i) => i.inviteeId)]
 
         this.changeDetectorRef.markForCheck()
       })

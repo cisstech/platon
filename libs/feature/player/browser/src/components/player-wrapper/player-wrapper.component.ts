@@ -13,13 +13,7 @@ import { PlayerExerciseComponent } from '../player-exercise/player-exercise.comp
   templateUrl: './player-wrapper.component.html',
   styleUrls: ['./player-wrapper.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    CommonModule,
-    RouterModule,
-    UiErrorComponent,
-    PlayerExerciseComponent,
-    PlayerActivityComponent,
-  ],
+  imports: [CommonModule, RouterModule, UiErrorComponent, PlayerExerciseComponent, PlayerActivityComponent],
 })
 export class PlayerWrapperComponent {
   @Input() player!: Player

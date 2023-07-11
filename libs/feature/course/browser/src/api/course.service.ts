@@ -90,10 +90,7 @@ export class CourseService {
     return this.courseMemberProvider.create(course, input)
   }
 
-  searchMembers(
-    course: Course,
-    filters?: CourseMemberFilters
-  ): Observable<ListResponse<CourseMember>> {
+  searchMembers(course: Course, filters?: CourseMemberFilters): Observable<ListResponse<CourseMember>> {
     return this.courseMemberProvider.search(course, filters)
   }
 
@@ -146,25 +143,17 @@ export class CourseService {
   }
 
   deleteActivity(activity: Activity): Observable<void> {
-    return this.activityProvider
-      .delete(activity)
-      .pipe(tap(() => this.deleteActivityEvent.next(activity)))
+    return this.activityProvider.delete(activity).pipe(tap(() => this.deleteActivityEvent.next(activity)))
   }
 
   //#endregion
 
   //#region Activity Members
-  createActivityMember(
-    activity: Activity,
-    input: CreateActivityMember
-  ): Observable<ActivityMember> {
+  createActivityMember(activity: Activity, input: CreateActivityMember): Observable<ActivityMember> {
     return this.activityMemberProvider.create(activity, input)
   }
 
-  updateActivityMembers(
-    activity: Activity,
-    input: CreateActivityMember[]
-  ): Observable<ListResponse<ActivityMember>> {
+  updateActivityMembers(activity: Activity, input: CreateActivityMember[]): Observable<ListResponse<ActivityMember>> {
     return this.activityMemberProvider.update(activity, input)
   }
 
@@ -178,10 +167,7 @@ export class CourseService {
   //#endregion
 
   //#region Activity Correctors
-  createActivityCorrector(
-    activity: string | Activity,
-    input: CreateActivityCorrector
-  ): Observable<ActivityCorrector> {
+  createActivityCorrector(activity: string | Activity, input: CreateActivityCorrector): Observable<ActivityCorrector> {
     return this.activityCorrectorProvider.create(activity, input)
   }
 
@@ -192,9 +178,7 @@ export class CourseService {
     return this.activityCorrectorProvider.update(activity, input)
   }
 
-  searchActivityCorrector(
-    activity: string | Activity
-  ): Observable<ListResponse<ActivityCorrector>> {
+  searchActivityCorrector(activity: string | Activity): Observable<ListResponse<ActivityCorrector>> {
     return this.activityCorrectorProvider.search(activity)
   }
 
