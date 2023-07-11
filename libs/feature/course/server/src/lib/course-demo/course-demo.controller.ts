@@ -1,6 +1,15 @@
-import { BadRequestException, Body, Controller, Delete, Get, Param, Post, Req, Res } from '@nestjs/common'
-import { CourseDemoService } from './course-demo.service'
-import { IRequest, Mapper, Public, Roles } from '@platon/core/server'
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Req,
+} from '@nestjs/common';
+import { CourseDemoService } from './course-demo.service';
+import { IRequest, Mapper, Public, Roles } from '@platon/core/server';
 import {
   CreatedResponse,
   ForbiddenResponse,
@@ -17,9 +26,9 @@ import {
   CourseDemoCreateDTO,
   CourseDemoDTO,
   CourseDemoDeleteDTO,
-  CourseDemoGetDTO,
-} from './course-demo.dto'
-import { Response } from 'express'
+  CourseDemoGetRequestDTO,
+  CourseDemoGetResponseDTO,
+} from './course-demo.dto';
 
 @Controller('courses/demo')
 export class CourseDemoController {
@@ -53,17 +62,25 @@ export class CourseDemoController {
   }
 
   @Get(':courseId')
-  async getDemo(@Req() req: IRequest, @Param() params: CourseDemoGetDTO): Promise<ItemResponse<CourseDemoDTO>> {
-    const demo = (await this.courseDemoService.findByCourseId(params.courseId)).orElseThrow(
-      () => new NotFoundResponse(`Demo not found for course: ${params.courseId}`)
-    )
+  async getDemo(
+    @Req() req: IRequest,
+    @Param() params: CourseDemoGetRequestDTO
+  ): Promise<ItemResponse<CourseDemoGetResponseDTO>> {
+    const demo = (await this.courseDemoService.findByCourseId(params.courseId)).orNull();
+    if (!demo) {
+        const resource = { demoExists: false };
+        return new ItemResponse({ resource });
+    }
 
     if (!(await this.courseMemberService.isMember(params.courseId, req.user.id))) {
       throw new ForbiddenResponse(`You are not a member of this course`)
     }
 
-    const resource = Mapper.map({ courseId: demo.course.id, uri: demo.id }, CourseDemoDTO)
-    return new ItemResponse({ resource })
+    const resource = Mapper.map(
+      { demoExists: true, demo: {courseId: demo.course.id, uri: demo.id} },
+      CourseDemoGetResponseDTO
+    );
+    return new ItemResponse({ resource });
   }
 
   @Roles(UserRoles.teacher, UserRoles.admin)

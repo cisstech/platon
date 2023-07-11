@@ -1,12 +1,12 @@
-import { Injectable } from '@nestjs/common'
-import { CourseDemoEntity } from './course-demo.entity'
-import { Repository } from 'typeorm'
-import { InjectRepository } from '@nestjs/typeorm'
-import { CourseEntity } from '../course.entity'
-import { AuthToken, NotFoundResponse } from '@platon/core/common'
-import { AuthService } from '@platon/core/server'
-import { CourseMemberService } from '../course-member/course-member.service'
-import { Optional } from 'typescript-optional'
+import { Injectable } from '@nestjs/common';
+import { CourseDemoEntity } from './course-demo.entity';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { CourseEntity } from '../course.entity';
+import { AuthToken } from '@platon/core/common';
+import { AuthService } from '@platon/core/server';
+import { CourseMemberService } from '../course-member/course-member.service';
+import { Optional } from 'typescript-optional';
 
 @Injectable()
 export class CourseDemoService {

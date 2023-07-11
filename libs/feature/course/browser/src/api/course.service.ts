@@ -7,7 +7,7 @@ import {
   ActivityMember,
   Course,
   CourseDemo,
-  CourseDemoAccessAnswer,
+  CourseDemoAccessResponse,
   CourseFilters,
   CourseMember,
   CourseMemberFilters,
@@ -72,8 +72,8 @@ export class CourseService {
     return this.courseDemoProvider.create(courseId)
   }
 
-  accessDemo(uri: string): Observable<CourseDemoAccessAnswer> {
-    return this.courseDemoProvider.access(uri)
+  accessDemo(uri: string): Observable<CourseDemoAccessResponse> {
+    return this.courseDemoProvider.access(uri);
   }
 
   getDemo(courseId: string): Observable<Optional<CourseDemo>> {
