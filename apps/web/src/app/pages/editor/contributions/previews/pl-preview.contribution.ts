@@ -8,6 +8,7 @@ import {
   PreviewTypes,
 } from '@cisstech/nge-ide/core'
 import { Subscription } from 'rxjs'
+import { EditorPresenter } from '../../editor.presenter'
 
 @Injectable()
 export class Contribution implements IContribution {
@@ -16,10 +17,13 @@ export class Contribution implements IContribution {
 
   activate(injector: Injector) {
     const previewService = injector.get(PreviewService)
+    const presenter = injector.get(EditorPresenter)
     previewService.register(
       new (class implements PreviewHandler {
         private counter = 0 // temporary solution to trigger change detection of the preview editor
         canHandle(uri: monaco.Uri) {
+          const { owner } = presenter.findOwnerResource(uri)
+          if (!owner || owner.type === 'CIRCLE') return false
           return uri.path === '/main.ple' || uri.path === '/main.pla'
         }
 
