@@ -36,18 +36,14 @@ export class InputFileValueEditorComponent extends BaseValueEditor<string> {
     if (data.src) {
       const uri = monaco.Uri.parse(data.src)
 
-      const { currentAncestors, currentResource } = this.editorPresenter
-      const [resource, version] = uri.authority.split(':')
-
-      const code =
-        currentResource.id === resource
-          ? `/relative`
-          : currentAncestors.find((ancestor) => ancestor.code === resource)?.code
-
-      if (!code) {
+      const { owner, opened } = this.editorPresenter.findOwnerResource(uri)
+      if (!owner) {
         this.notificationService.publishError('Impossible de copier le fichier')
         return
       }
+
+      const code = opened ? '/relative' : `/${owner.code}`
+      const version = uri.authority.split(':')[1]
 
       this.changeValue((this.value = `@copycontent ${code}:${version}${uri.path}`))
     }
@@ -67,8 +63,10 @@ export class InputFileValueEditorComponent extends BaseValueEditor<string> {
 
   protected openFile() {
     const reference = this.value?.replace(/@copycontent|@copyurl/g, '') || ''
-    const [location, path] = reference.trim().split('/')
-    const [resource, version] = location.split(':')
+
+    // first element is empty string since the string starts with a slash
+    const [, authority, path] = reference.trim().split('/')
+    const [resource, version] = authority.split(':')
     const uri = this.fileSystemProvider.buildUri(resource, version, path)
     this.editorService.open(uri)
   }

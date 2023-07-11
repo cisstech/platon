@@ -51,4 +51,30 @@ export class EditorPresenter {
       filesToOpen,
     }
   }
+
+  // add tsdoc comment to the following method
+
+  /**
+   *  Get the resource thats owns the given uri
+   * @param uri the uri to get the owner of
+   */
+  findOwnerResource(uri: monaco.Uri) {
+    const { currentAncestors, currentResource } = this
+    const [resource] = uri.authority.split(':')
+
+    const owner =
+      currentResource.id === resource
+        ? currentResource
+        : currentAncestors.find((ancestor) => ancestor.code === resource)
+
+    return {
+      owner: owner
+        ? {
+            ...owner,
+            type: 'type' in owner ? owner.type : 'CIRCLE',
+          }
+        : undefined,
+      opened: currentResource.id === owner?.id,
+    }
+  }
 }

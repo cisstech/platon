@@ -52,7 +52,15 @@ export class ResourceFileSystemProvider extends FileSystemProvider {
     super()
   }
 
+  /**
+   *  Build a uri for the given resource file path
+   * @param resource Resource id of code
+   * @param version Version of the resource
+   * @param path Path of the file
+   * @returns
+   */
   buildUri(resource: string, version = 'latest', path?: string) {
+    resource = removeLeadingSlash(resource)
     path = path ? removeLeadingSlash(path) : ''
     return monaco.Uri.parse(`${this.scheme}://${resource}:${version}/${path}`)
   }
