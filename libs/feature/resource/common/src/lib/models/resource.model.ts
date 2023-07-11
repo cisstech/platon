@@ -16,7 +16,6 @@ export interface Resource {
   readonly levels: Level[]
   readonly topics: Topic[]
   readonly ownerId: string
-  readonly modelId?: string
   readonly parentId?: string
 }
 
@@ -38,7 +37,6 @@ export interface CreateResource {
   readonly levels?: string[]
   readonly topics?: string[]
   readonly parentId?: string
-  readonly modelId?: string
 }
 
 export interface UpdateResource {

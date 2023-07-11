@@ -59,11 +59,6 @@ export class ResourceDTO extends BaseDTO implements Resource {
   @IsUUID()
   @IsOptional()
   @ApiProperty()
-  readonly modelId?: string
-
-  @IsUUID()
-  @IsOptional()
-  @ApiProperty()
   readonly parentId?: string
 }
 
@@ -131,11 +126,6 @@ export class CreateResourceDTO implements CreateResource {
   @IsOptional()
   @ApiProperty()
   readonly topics?: string[]
-
-  @IsUUID()
-  @IsOptional()
-  @ApiProperty()
-  readonly modelId?: string
 
   @IsUUID()
   @IsOptional()
