@@ -13,7 +13,6 @@ import {
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { ResourceProvider } from '../models/resource-provider'
-import { PLSourceFile } from '@platon/feature/compiler'
 
 @Injectable()
 export class RemoteResourceProvider extends ResourceProvider {
