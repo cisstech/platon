@@ -236,7 +236,7 @@ export interface PLVisitor {
 <<EOF>>                                         return 'EOF'
 
 <MULTI>[^\n]*\n          {
-                          if (yytext.trim() === '==') {
+                          if (yytext.trimEnd() === '==') {
                             this.popState();
                             return 'EQUALS';
                           }
