@@ -15,7 +15,6 @@ import { ResourceLoaderService } from '@cisstech/nge/services'
 import { BehaviorSubject, ReplaySubject, Subscription, combineLatest, firstValueFrom } from 'rxjs'
 import { DOCUMENT } from '@angular/common'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
-import { stripIndent } from 'common-tags'
 
 declare const Reveal: any
 declare const RevealMarkdown: any
@@ -43,7 +42,7 @@ export class PresenterComponent implements AfterViewInit, OnDestroy, WebComponen
   @HostListener('document:webkitfullscreenchange', ['$event'])
   @HostListener('document:mozfullscreenchange', ['$event'])
   @HostListener('document:MSFullscreenChange', ['$event'])
-  fullscreenChange(event: any) {
+  fullscreenChange() {
     this.fullscreen = this.document.fullscreenElement ? true : false
     this._reveal?.layout()
   }
@@ -65,7 +64,7 @@ export class PresenterComponent implements AfterViewInit, OnDestroy, WebComponen
 
   async ngAfterViewInit(): Promise<void> {
     this._subscription = combineLatest([this._state.asObservable(), this._load.asObservable()]).subscribe(
-      ([state, load]) => {
+      ([state,]) => {
         this._reveal?.destroy()
         this.template = this.sanitizer.bypassSecurityTrustHtml(state.template)
         this.changeDetectorRef.markForCheck()
