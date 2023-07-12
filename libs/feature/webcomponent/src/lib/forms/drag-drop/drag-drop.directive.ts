@@ -99,6 +99,7 @@ export class DragDropDirective implements OnDestroy, AfterContentInit {
     this.addListener(node, 'drop', drop)
   }
 
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   private addListener(node: any, event: string, handler: any) {
     this.renderer.listen(node, event, handler)
     this.events.push(() => {

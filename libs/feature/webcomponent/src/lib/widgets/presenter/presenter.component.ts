@@ -1,3 +1,5 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+// don't really have a choice for using any here
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -63,14 +65,12 @@ export class PresenterComponent implements AfterViewInit, OnDestroy, WebComponen
   }
 
   async ngAfterViewInit(): Promise<void> {
-    this._subscription = combineLatest([this._state.asObservable(), this._load.asObservable()]).subscribe(
-      ([state,]) => {
-        this._reveal?.destroy()
-        this.template = this.sanitizer.bypassSecurityTrustHtml(state.template)
-        this.changeDetectorRef.markForCheck()
-        this.initReveal()
-      }
-    )
+    this._subscription = combineLatest([this._state.asObservable(), this._load.asObservable()]).subscribe(([state]) => {
+      this._reveal?.destroy()
+      this.template = this.sanitizer.bypassSecurityTrustHtml(state.template)
+      this.changeDetectorRef.markForCheck()
+      this.initReveal()
+    })
 
     await firstValueFrom(
       this.resourceLoader.loadAllSync([
