@@ -8,7 +8,7 @@ import { GraphQLError } from 'graphql'
 export class ErrorsFilter implements ExceptionFilter {
   constructor(private readonly logger: Logger) {}
 
-  catch(exception: any, host: ArgumentsHost) {
+  catch(exception: Error, host: ArgumentsHost) {
     // TODO create util function to get request to handle both rest and graphql
     const ctx = host.switchToHttp()
     const request = ctx.getRequest<Request>()
