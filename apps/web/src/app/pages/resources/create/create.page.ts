@@ -96,6 +96,7 @@ export class ResourceCreatePage implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.type = (this.activatedRoute.snapshot.queryParamMap.get('type') || ResourceTypes.CIRCLE) as ResourceTypes
+    this.parent = this.activatedRoute.snapshot.queryParamMap.get('parent') || undefined
 
     const user = (await this.authService.ready()) as User
     const [tree, circle, topics, levels] = await Promise.all([

@@ -8,7 +8,7 @@ import {
   Output,
   inject,
 } from '@angular/core'
-import { RouterModule } from '@angular/router'
+import { Router, RouterModule } from '@angular/router'
 
 import { MatBadgeModule } from '@angular/material/badge'
 import { MatButtonModule } from '@angular/material/button'
@@ -49,6 +49,7 @@ import { ResourceService } from '@platon/feature/resource/browser'
   ],
 })
 export class ToolbarComponent implements OnInit {
+  private readonly router = inject(Router)
   private readonly authService = inject(AuthService)
   private readonly resourceService = inject(ResourceService)
   private readonly changeDetectorRef = inject(ChangeDetectorRef)
@@ -63,6 +64,15 @@ export class ToolbarComponent implements OnInit {
 
   protected get canCreate(): boolean {
     return this.canCreateCourse || this.canCreateCircle || this.canCreateExercise || this.canCreateActivity
+  }
+
+  protected get createResourceParentParam(): string | undefined {
+    const tree = this.router.parseUrl(this.router.url)
+    const { segments } = tree.root.children.primary
+    if (segments.length > 1 && segments[0].path === 'resources') {
+      return segments[1].path
+    }
+    return undefined
   }
 
   async ngOnInit(): Promise<void> {
