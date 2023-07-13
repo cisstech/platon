@@ -46,12 +46,23 @@ export class ResourceController {
   }
 
   @Get('/tree')
-  async tree(): Promise<ItemResponse<CircleTreeDTO>> {
+  async tree(@Req() req: IRequest): Promise<ItemResponse<CircleTreeDTO>> {
     const [circles] = await this.resourceService.search({
       types: ['CIRCLE'],
     })
+    const permissions = await this.permissionService.userPermissionsOnResources(circles, req.user)
+
+    const tree = Mapper.map(await this.resourceService.tree(circles), CircleTreeDTO)
+
+    const injectPermissions = (tree: CircleTreeDTO) => {
+      Object.assign(tree, { permissions: permissions.find((p) => p.resource.id === tree.id)?.permissions })
+      tree.children?.forEach((child) => injectPermissions(child))
+    }
+
+    injectPermissions(tree)
+
     return new ItemResponse({
-      resource: Mapper.map(await this.resourceService.tree(circles), CircleTreeDTO),
+      resource: tree,
     })
   }
 

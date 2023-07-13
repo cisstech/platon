@@ -86,6 +86,10 @@ export class CircleTreeDTO implements CircleTree {
   @IsOptional()
   @ApiProperty()
   readonly children?: CircleTreeDTO[]
+
+  @Type(() => ResourcePermissionsDTO)
+  @ApiProperty()
+  readonly permissions!: ResourcePermissions
 }
 
 export class CreateResourceDTO implements CreateResource {

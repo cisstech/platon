@@ -36,6 +36,11 @@ export class ResourceService {
       name: root.name,
       code: root.code,
       children: [],
+      permissions: {
+        read: true,
+        write: true,
+        watcher: true,
+      },
     }
 
     const traverse = (node: CircleTree) => {
@@ -46,6 +51,11 @@ export class ResourceService {
           id: child.id,
           name: child.name,
           code: child.code,
+          permissions: {
+            read: true,
+            write: true,
+            watcher: true,
+          },
           children: [],
         }
         node.children?.push(next)

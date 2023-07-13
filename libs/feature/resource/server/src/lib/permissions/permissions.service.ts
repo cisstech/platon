@@ -9,7 +9,9 @@ import { ResourceService } from '../resource.service'
 import { ResourceWatcherEntity, ResourceWatcherService } from '../watchers'
 import { MemberPermissions } from './permissions.entity'
 
-interface UserPermissionsInput<T extends ResourceEntity | ResourceDTO> {
+type Constraint = ResourceEntity | ResourceDTO
+
+interface UserPermissionsInput<T extends Constraint> {
   resource: T
   user: UserEntity
   userWatchings?: ResourceWatcherEntity[]
@@ -61,7 +63,7 @@ export class ResourcePermissionService {
     }
   }
 
-  async userPermissionsOnResources<T extends ResourceEntity | ResourceDTO>(
+  async userPermissionsOnResources<T extends Constraint>(
     resources: T[],
     user: UserEntity
   ): Promise<
@@ -75,7 +77,12 @@ export class ResourcePermissionService {
     return Promise.all(
       resources.map(async (resource) => ({
         resource,
-        permissions: await this.userPermissionsOnResource({ resource, user, userMemberships, userWatchings }),
+        permissions: await this.userPermissionsOnResource({
+          resource,
+          user,
+          userMemberships,
+          userWatchings,
+        }),
       }))
     )
   }

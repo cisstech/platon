@@ -25,6 +25,7 @@ export interface CircleTree {
   readonly name: string
   readonly code?: string
   readonly children?: CircleTree[]
+  readonly permissions: ResourcePermissions
 }
 
 export interface CreateResource {
@@ -124,5 +125,8 @@ export const circleTreeFromResource = (resource: Resource): CircleTree => {
     id: resource.id,
     name: resource.name,
     code: resource.code,
+    permissions: {
+      ...resource.permissions,
+    },
   }
 }
