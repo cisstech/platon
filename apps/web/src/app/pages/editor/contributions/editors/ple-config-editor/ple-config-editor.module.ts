@@ -7,9 +7,10 @@ import { NzListModule } from 'ng-zorro-antd/list'
 
 import { PleInputEditorModule } from '../ple-input-editor/ple-input.module'
 import { PleConfigEditorComponent } from './ple-config-editor.component'
+import { NzIconModule } from 'ng-zorro-antd/icon'
 
 @NgModule({
-  imports: [CommonModule, NzListModule, NzButtonModule, PleInputEditorModule],
+  imports: [CommonModule, NzListModule, NzButtonModule, NzIconModule, PleInputEditorModule],
   exports: [PleConfigEditorComponent],
   declarations: [PleConfigEditorComponent],
 })
