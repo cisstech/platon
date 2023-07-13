@@ -294,8 +294,12 @@ export class ResourceService {
         [resourceId]
       )
     )
-      .map((row: any) => row.user_id as string)
+      .map((row: Row) => row.user_id as string)
       .filter((userId: string) => !!userId)
     return watchers
   }
+}
+
+interface Row {
+  user_id: string
 }

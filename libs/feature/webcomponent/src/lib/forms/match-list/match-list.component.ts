@@ -9,7 +9,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core'
-import { Connection, Endpoint, jsPlumb, jsPlumbInstance } from 'jsplumb'
+import { Connection, Endpoint, EndpointOptions, jsPlumb, jsPlumbInstance } from 'jsplumb'
 import { WebComponent, WebComponentHooks } from '../../web-component'
 import { WebComponentChangeDetectorService } from '../../web-component-change-detector.service'
 import { MatchListComponentDefinition, MatchListItem, MatchListState } from './match-list'
@@ -133,11 +133,11 @@ export class MatchListComponent implements OnInit, AfterViewChecked, OnDestroy, 
       this.onRemoveConnection(info.connection)
     })
     this.jsPlumb.bind('endpointClick', (info) => {
-      const point = (<any>info) as Endpoint
+      const point = (<unknown>info) as Endpoint
       this.selectPoint(point)
       if (this.selectedPoints.length >= 2) {
-        const source = this.selectedPoints.find((e) => (<any>e).isSource)
-        const target = this.selectedPoints.find((e) => (<any>e).isTarget)
+        const source = this.selectedPoints.find((e) => ((<unknown>e) as EndpointOptions).isSource)
+        const target = this.selectedPoints.find((e) => ((<unknown>e) as EndpointOptions).isTarget)
         if (!source || !target) {
           const top = this.selectedPoints[1]
           this.unselectPoints()
@@ -154,6 +154,7 @@ export class MatchListComponent implements OnInit, AfterViewChecked, OnDestroy, 
   }
 
   private selectPoint(point: Endpoint) {
+    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
     const canvas = (<any>point).canvas as HTMLElement
     canvas.classList.remove('selected')
     canvas.classList.add('selected')
@@ -162,6 +163,7 @@ export class MatchListComponent implements OnInit, AfterViewChecked, OnDestroy, 
 
   private unselectPoints() {
     this.selectedPoints.forEach((point) => {
+      // eslint-disable-next-line  @typescript-eslint/no-explicit-any
       const canvas = (<any>point).canvas as HTMLElement
       canvas.classList.remove('selected')
     })

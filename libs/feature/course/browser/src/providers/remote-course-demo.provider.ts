@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { CourseDemoProvider } from '../models/course-demo-provider'
 import { HttpClient } from '@angular/common/http'
-import { Observable, catchError, map, of, throwError } from 'rxjs'
+import { Observable, map } from 'rxjs'
 import { CourseDemo, CourseDemoAccessResponse, CourseDemoGetResponse } from '@platon/feature/course/common'
 import { ItemResponse } from '@platon/core/common'
 import { Optional } from 'typescript-optional'
