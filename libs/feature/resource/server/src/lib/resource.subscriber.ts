@@ -1,6 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { IRequest } from '@platon/core/server'
-import { ResourceEventTypes } from '@platon/feature/resource/common'
+import {
+  ResourceCreateEventData,
+  ResourceEventTypes,
+  ResourceStatusChangeEventData,
+} from '@platon/feature/resource/common'
 import { CLS_REQ } from 'nestjs-cls'
 import { DataSource, EntitySubscriberInterface, InsertEvent, UpdateEvent } from 'typeorm'
 import { ResourceEventEntity } from './events/event.entity'
@@ -39,7 +43,7 @@ export class ResourceSubscriber implements EntitySubscriberInterface<ResourceEnt
             resourceId: event.entity.id,
             resourceType: event.entity.type,
             resourceName: event.entity.name,
-          },
+          } as ResourceCreateEventData,
         })
       )
     }
@@ -53,11 +57,10 @@ export class ResourceSubscriber implements EntitySubscriberInterface<ResourceEnt
           resourceId: event.entity.id,
           type: ResourceEventTypes.RESOURCE_STATUS_CHANGE,
           data: {
-            resourceId: event.entity.id,
             resourceType: event.entity.type,
             resourceName: event.entity.name,
             newStatus: event.entity.status,
-          },
+          } as ResourceStatusChangeEventData,
         })
       )
 
@@ -68,11 +71,10 @@ export class ResourceSubscriber implements EntitySubscriberInterface<ResourceEnt
             resourceId: event.entity.parentId,
             type: ResourceEventTypes.RESOURCE_STATUS_CHANGE,
             data: {
-              resourceId: event.entity.id,
               resourceType: event.entity.type,
               resourceName: event.entity.name,
               newStatus: event.entity.status,
-            },
+            } as ResourceStatusChangeEventData,
           })
         )
       }

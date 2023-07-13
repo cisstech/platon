@@ -3,7 +3,15 @@ import { CommonModule } from '@angular/common'
 import { ChangeDetectionStrategy, Component, inject, InjectionToken, Injector, Input } from '@angular/core'
 import { UserAvatarComponent } from '@platon/core/browser'
 import { NOTIFICATION } from '@platon/feature/notification/browser'
-import { ResourceEvent, ResourceEventNotification } from '@platon/feature/resource/common'
+import { Notification } from '@platon/feature/notification/common'
+import {
+  ResourceCreateEvent,
+  ResourceEvent,
+  ResourceEventNotification,
+  ResourceMemberCreateEvent,
+  ResourceMemberRemoveEvent,
+  ResourceStatusChangeEvent,
+} from '@platon/feature/resource/common'
 import { NzEmptyModule } from 'ng-zorro-antd/empty'
 import { NzTimelineModule } from 'ng-zorro-antd/timeline'
 import { ResourcePipesModule } from '../../pipes'
@@ -17,25 +25,30 @@ const ResourceEventToken = new InjectionToken<ResourceEvent>('ResourceEventToken
   imports: [UserAvatarComponent],
   template: `
     <user-avatar [userIdOrName]="event.actorId" /> a ajouté
-    <user-avatar [userIdOrName]="event.data['userId']" />
+    <user-avatar [userIdOrName]="event.data.userId" />
   `,
 })
 class MemberCreateEventComponent {
-  protected event = inject(ResourceEventToken)
+  protected event = inject(ResourceEventToken) as ResourceMemberCreateEvent
 }
 
 @Component({
   standalone: true,
   selector: 'resource-event-member-remove',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [UserAvatarComponent],
+  imports: [CommonModule, UserAvatarComponent],
   template: `
-    <user-avatar [userIdOrName]="event.actorId" /> a retiré
-    <user-avatar [userIdOrName]="event.data['userId']" />
+    <ng-container *ngIf="notification; else noNotification">
+      Vous n'a plus accès à la ressource “{{ event.data.resourceName }}”
+    </ng-container>
+    <ng-template #noNotification>
+      <user-avatar [userIdOrName]="event.actorId" /> n'a plus accès à la ressource
+    </ng-template>
   `,
 })
 class MemberRemoveEventComponent {
-  protected event = inject(ResourceEventToken)
+  protected event = inject(ResourceEventToken) as ResourceMemberRemoveEvent
+  protected notification = inject(NOTIFICATION, { optional: true })
 }
 
 @Component({
@@ -44,13 +57,13 @@ class MemberRemoveEventComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [UserAvatarComponent, ResourcePipesModule],
   template: `
-    <user-avatar [userIdOrName]="event.actorId" /> a passé “{{ event.data['resourceName'] }}” à “{{
-      event.data['newStatus'] | resourceStatus
+    <user-avatar [userIdOrName]="event.actorId" /> a passé “{{ event.data.resourceName }}” à “{{
+      event.data.newStatus | resourceStatus
     }}”
   `,
 })
 class NewStatusItemComponent {
-  protected event = inject(ResourceEventToken)
+  protected event = inject(ResourceEventToken) as ResourceStatusChangeEvent
 }
 
 @Component({
@@ -58,12 +71,10 @@ class NewStatusItemComponent {
   selector: 'resource-event-new-resource',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [UserAvatarComponent, ResourcePipesModule],
-  template: `
-    <user-avatar [userIdOrName]="event.actorId" /> à ajouté “{{ event.data['resourceName'] }}” dans le cercle”
-  `,
+  template: ` <user-avatar [userIdOrName]="event.actorId" /> à ajouté “{{ event.data.resourceName }}” dans le cercle” `,
 })
 class NewResourceEventComponent {
-  protected event = inject(ResourceEventToken)
+  protected event = inject(ResourceEventToken) as ResourceCreateEvent
 }
 
 @Component({
@@ -86,6 +97,7 @@ export class ResourceEventItemComponent {
             provide: ResourceEventToken,
             useValue: value,
           },
+          ...(this.notification ? [{ provide: NOTIFICATION, useValue: this.notification }] : []),
         ],
       }),
       renderer: {
@@ -98,13 +110,13 @@ export class ResourceEventItemComponent {
   }
 
   protected _item!: Item
-  protected isNotification = false
 
-  constructor(private readonly injector: Injector) {
-    const notification = injector.get(NOTIFICATION, null)
-    if (notification) {
-      this.isNotification = true
-      this.item = (notification.data as unknown as ResourceEventNotification).eventInfo as ResourceEvent
+  protected injector = inject(Injector)
+  protected notification = inject(NOTIFICATION, { optional: true }) as Notification<ResourceEventNotification>
+
+  constructor() {
+    if (this.notification) {
+      this.item = this.notification.data.eventInfo
     }
   }
 }

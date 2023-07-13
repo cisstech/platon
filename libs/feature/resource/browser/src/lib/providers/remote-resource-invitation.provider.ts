@@ -12,9 +12,9 @@ export class RemoteResourceInvitationProvider extends ResourceInvitationProvider
     super()
   }
 
-  createInvitation(resource: Resource, input: CreateResourceInvitation): Observable<ResourceInvitation> {
+  createInvitation(resource: string | Resource, input: CreateResourceInvitation): Observable<ResourceInvitation> {
     return this.http
-      .post<ItemResponse<ResourceInvitation>>(`/api/v1/resources/${resource.id}/invitations`, input)
+      .post<ItemResponse<ResourceInvitation>>(`/api/v1/resources/${this.withId(resource)}/invitations`, input)
       .pipe(map((response) => response.resource))
   }
 
@@ -26,13 +26,17 @@ export class RemoteResourceInvitationProvider extends ResourceInvitationProvider
     return this.http.patch<void>(`/api/v1/resources/${invitation.resourceId}/invitations/${invitation.inviteeId}`, {})
   }
 
-  findInvitation(resource: Resource, inviteeId: string): Observable<ResourceInvitation> {
+  findInvitation(resource: string | Resource, inviteeId: string): Observable<ResourceInvitation> {
     return this.http
-      .get<ItemResponse<ResourceInvitation>>(`/api/v1/resources/${resource.id}/invitations/${inviteeId}`)
+      .get<ItemResponse<ResourceInvitation>>(`/api/v1/resources/${this.withId(resource)}/invitations/${inviteeId}`)
       .pipe(map((response) => response.resource))
   }
 
-  listInvitations(resource: Resource): Observable<ListResponse<ResourceInvitation>> {
-    return this.http.get<ListResponse<ResourceInvitation>>(`/api/v1/resources/${resource.id}/invitations`)
+  listInvitations(resource: string | Resource): Observable<ListResponse<ResourceInvitation>> {
+    return this.http.get<ListResponse<ResourceInvitation>>(`/api/v1/resources/${this.withId(resource)}/invitations`)
+  }
+
+  private withId(resource: string | Resource): string {
+    return typeof resource === 'string' ? resource : resource.id
   }
 }

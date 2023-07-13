@@ -1,8 +1,10 @@
-import { Args, Int, Mutation, Query, ResolveField, Resolver, Subscription } from '@nestjs/graphql'
-import { GqlReq, IRequest, PubSubService, UserGraphModel, UUID } from '@platon/core/server'
+import { Args, Int, Mutation, Parent, Query, ResolveField, Resolver, Subscription } from '@nestjs/graphql'
+import { GqlReq, IRequest, PubSubService, UUID, UserGraphModel } from '@platon/core/server'
 import { NotificationFilters } from '@platon/feature/notification/common'
+import GraphQLJSON from 'graphql-type-json'
+import { NotificationEntity } from './notification.entity'
 import { NotificationChangeGraphModel, NotificationFiltersInput, NotificationGraphModel } from './notification.graphql'
-import { OnChangeNotificationsPayload, ON_CHANGE_NOTIFICATIONS } from './notification.pubsub'
+import { ON_CHANGE_NOTIFICATIONS, OnChangeNotificationsPayload } from './notification.pubsub'
 import { NotificationService } from './notification.service'
 
 @Resolver(() => NotificationGraphModel)
@@ -65,6 +67,14 @@ export class NotificationResolver {
   @ResolveField(() => UserGraphModel)
   async user(@GqlReq() req: IRequest): Promise<UserGraphModel> {
     return new UserGraphModel(req.user)
+  }
+
+  @ResolveField(() => GraphQLJSON)
+  async data(@Parent() parent: NotificationGraphModel): Promise<Record<string, unknown>> {
+    return {
+      ...parent.data,
+      ...((await this.notificationService.withExtaData(parent as NotificationEntity)) || {}),
+    }
   }
 
   @Subscription(() => NotificationChangeGraphModel, {

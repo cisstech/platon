@@ -18,15 +18,18 @@ import { NzEmptyModule } from 'ng-zorro-antd/empty'
 import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzListModule } from 'ng-zorro-antd/list'
 
+import { NgeUiIconModule } from '@cisstech/nge/ui/icon'
+import { DialogModule } from '@platon/core/browser'
 import { Notification } from '@platon/feature/notification/common'
+import { NzPopoverModule } from 'ng-zorro-antd/popover'
 import { NotificationService } from '../../api/notification.service'
 import {
   NOTIFICATION,
+  NOTIFICATION_PARSER,
+  NotificationAction,
   NotificationParser,
   NotificationRenderer,
-  NOTIFICATION_PARSER,
 } from '../../models/notification-parser'
-import { NgeUiIconModule } from '@cisstech/nge/ui/icon'
 import { RendererTypePipe } from '../../pipes/renderer-type.pipe'
 
 interface Item {
@@ -49,8 +52,10 @@ interface Item {
     NzEmptyModule,
     NzAvatarModule,
     NzButtonModule,
-
+    NzPopoverModule,
     NgeUiIconModule,
+
+    DialogModule,
 
     RendererTypePipe,
   ],
@@ -58,6 +63,7 @@ interface Item {
 export class NotificationListComponent implements OnChanges {
   @Input() notifications: Notification[] = []
   @Output() notificationsChange = new EventEmitter()
+  @Output() closed = new EventEmitter()
 
   protected items: Item[] = []
 
@@ -72,18 +78,19 @@ export class NotificationListComponent implements OnChanges {
 
   ngOnChanges(): void {
     this.items = this.notifications.map((notification) => {
+      const injector = Injector.create({
+        parent: this.injector,
+        providers: [
+          {
+            provide: NOTIFICATION,
+            useValue: notification,
+          },
+        ],
+      })
       return {
-        renderer: this.parsers?.find((parser) => parser.support(notification))?.renderer(notification),
+        injector,
+        renderer: this.parsers?.find((parser) => parser.support(notification))?.renderer(notification, injector),
         notification,
-        injector: Injector.create({
-          parent: this.injector,
-          providers: [
-            {
-              provide: NOTIFICATION,
-              useValue: notification,
-            },
-          ],
-        }),
       } as Item
     })
   }
@@ -92,7 +99,7 @@ export class NotificationListComponent implements OnChanges {
     this.notificationSerivce.deleteNotification(notification.id).subscribe(() => {
       this.notifications = this.notifications.filter((item) => item.id !== notification.id)
       this.notificationsChange.emit(this.notifications)
-      this.changeDetectorRef.markForCheck()
+      this.changeDetectorRef.detectChanges()
     })
   }
 
@@ -111,5 +118,21 @@ export class NotificationListComponent implements OnChanges {
 
   protected trackItemById(_: number, item: Item) {
     return item.notification.id
+  }
+
+  protected async callAction(action: NotificationAction): Promise<void> {
+    await action.onClick({
+      onClose: () => this.closed.emit(),
+      onDelete: (notification) => this.delete(notification),
+    })
+  }
+
+  protected async callOnClick(item: Item): Promise<void> {
+    if (item.renderer?.onClick) {
+      await item.renderer.onClick({
+        onClose: () => this.closed.emit(),
+        onDelete: (notification) => this.delete(notification),
+      })
+    }
   }
 }

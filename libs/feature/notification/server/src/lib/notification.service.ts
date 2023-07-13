@@ -1,19 +1,34 @@
-import { Injectable } from '@nestjs/common'
+import { DiscoveryService } from '@golevelup/nestjs-discovery'
+import { Injectable, Logger } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { PubSubService } from '@platon/core/server'
 import { NotificationFilters } from '@platon/feature/notification/common'
-import { EntityManager, In, IsNull, Repository } from 'typeorm'
+import { EntityManager, FindOptionsWhere, In, IsNull, Repository } from 'typeorm'
 import { NotificationEntity } from './notification.entity'
+import { NOTIFICATION_EXTRA_DATA, NotificationExtraDataProvider } from './notification.provider'
 import { ON_CHANGE_NOTIFICATIONS } from './notification.pubsub'
 
 @Injectable()
 export class NotificationService {
+  protected readonly logger: Logger
+  private readonly extraDataProviders: NotificationExtraDataProvider[] = []
+
   constructor(
     @InjectRepository(NotificationEntity)
     private readonly repository: Repository<NotificationEntity>,
-
+    private readonly discovery: DiscoveryService,
     private readonly pubSubService: PubSubService
-  ) {}
+  ) {
+    this.logger = new Logger(NotificationService.name)
+  }
+
+  async init(): Promise<void> {
+    const providers = await this.discovery.providersWithMetaAtKey(NOTIFICATION_EXTRA_DATA)
+    for (const provider of providers) {
+      this.logger.log(`Registering notification extra data provider ${provider.discoveredClass.name}`)
+      this.extraDataProviders.push(provider.discoveredClass.instance as NotificationExtraDataProvider)
+    }
+  }
 
   async sendToUser<T extends object>(
     userId: string,
@@ -97,6 +112,14 @@ export class NotificationService {
     return result.affected || 0
   }
 
+  async deleteWhere(userId: string, where: FindOptionsWhere<NotificationEntity>): Promise<number> {
+    const results = await this.repository.delete({
+      userId,
+      ...where,
+    })
+    return results.affected || 0
+  }
+
   async unreadCount(userId: string): Promise<number> {
     return this.repository.count({
       where: {
@@ -104,6 +127,15 @@ export class NotificationService {
         readAt: IsNull(),
       },
     })
+  }
+
+  async withExtaData(notification: NotificationEntity): Promise<Record<string, unknown> | undefined> {
+    for (const provider of this.extraDataProviders) {
+      if (provider.match(notification.data)) {
+        return provider.provide(notification.data)
+      }
+    }
+    return undefined
   }
 
   notifyUserAboutChanges(userId: string): Promise<void> {

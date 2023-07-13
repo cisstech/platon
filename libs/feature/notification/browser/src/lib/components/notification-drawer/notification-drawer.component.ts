@@ -56,15 +56,20 @@ export class NotificationDrawerComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe())
   }
 
+  close(): void {
+    this.visible = false
+    this.changeDetectorRef.detectChanges()
+  }
+
   open(): void {
     this.visible = true
-    this.changeDetectorRef.markForCheck()
+    this.changeDetectorRef.detectChanges()
   }
 
   protected deleteAll(): void {
     this.notificationSerivce.deleteAllNotifications().subscribe(() => {
       this.notifications = []
-      this.changeDetectorRef.markForCheck()
+      this.changeDetectorRef.detectChanges()
     })
   }
 
@@ -72,7 +77,7 @@ export class NotificationDrawerComponent implements OnInit, OnDestroy {
     try {
       await firstValueFrom(this.notificationSerivce.markAllAsRead())
     } finally {
-      this.changeDetectorRef.markForCheck()
+      this.changeDetectorRef.detectChanges()
     }
   }
 }
