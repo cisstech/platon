@@ -1,7 +1,7 @@
 import { Level, OrderingDirections, Topic } from '@platon/core/common'
 import { ResourceStatus } from '../enums/resource-status'
 import { ResourceTypes } from '../enums/resource-types'
-import { ResourceVisibilities } from '../enums/resource-visibility'
+import { ResourcePermissions } from './permissions.model'
 
 export interface Resource {
   readonly id: string
@@ -11,32 +11,31 @@ export interface Resource {
   readonly code?: string
   readonly desc?: string
   readonly type: ResourceTypes
-  readonly visibility: ResourceVisibilities
+  readonly personal: boolean
   readonly status: ResourceStatus
   readonly levels: Level[]
   readonly topics: Topic[]
   readonly ownerId: string
   readonly parentId?: string
+  readonly permissions: ResourcePermissions
 }
 
 export interface CircleTree {
   readonly id: string
   readonly name: string
   readonly code?: string
-  readonly visibility: ResourceVisibilities
   readonly children?: CircleTree[]
 }
 
 export interface CreateResource {
   readonly name: string
+  readonly parentId: string
   readonly code?: string
   readonly desc?: string
   readonly type: ResourceTypes
   readonly status?: ResourceStatus
-  readonly visibility: ResourceVisibilities
   readonly levels?: string[]
   readonly topics?: string[]
-  readonly parentId?: string
 }
 
 export interface UpdateResource {

@@ -10,10 +10,9 @@ import {
   ResourceStatisic,
   ResourceStatus,
   ResourceTypes,
-  ResourceVisibilities,
 } from '@platon/feature/resource/common'
 import { isUUID4 } from '@platon/shared/server'
-import { DataSource, EntityManager, Not, Repository } from 'typeorm'
+import { DataSource, EntityManager, Repository } from 'typeorm'
 import { Optional } from 'typescript-optional'
 import { ResourceMemberEntity } from './members/member.entity'
 import { CreateResourceDTO, UpdateResourceDTO } from './resource.dto'
@@ -30,20 +29,12 @@ export class ResourceService {
     private readonly topicService: TopicService
   ) {}
 
-  async tree(): Promise<CircleTree> {
-    const circles = await this.repository.find({
-      where: {
-        type: ResourceTypes.CIRCLE,
-        visibility: Not(ResourceVisibilities.PERSONAL),
-      },
-    })
-
+  async tree(circles: ResourceEntity[]): Promise<CircleTree> {
     const root = circles.find((c) => !c.parentId) as ResourceEntity
     const tree: CircleTree = {
       id: root.id,
       name: root.name,
       code: root.code,
-      visibility: root.visibility,
       children: [],
     }
 
@@ -55,7 +46,6 @@ export class ResourceService {
           id: child.id,
           name: child.name,
           code: child.code,
-          visibility: child.visibility,
           children: [],
         }
         node.children?.push(next)
@@ -77,6 +67,10 @@ export class ResourceService {
     return (
       this.dataSource.query('SELECT * FROM "ResourceStats" WHERE id = $1', [id]) as Promise<ResourceStatisic[]>
     ).then((response) => response[0])
+  }
+
+  async getById(id: string): Promise<ResourceEntity> {
+    return (await this.findById(id)).orElseThrow(() => new NotFoundResponse(`Resource not found: ${id}`))
   }
 
   async findById(id: string, resolveRelations = true): Promise<Optional<ResourceEntity>> {
@@ -107,7 +101,7 @@ export class ResourceService {
       where: {
         ownerId,
         type: ResourceTypes.CIRCLE,
-        visibility: ResourceVisibilities.PERSONAL,
+        personal: true,
       },
     })
 
@@ -120,12 +114,40 @@ export class ResourceService {
           Ici, vous pouvez créer des ressources qui ne seront visibles que par vous.
           `,
           type: ResourceTypes.CIRCLE,
-          visibility: ResourceVisibilities.PERSONAL,
+          personal: true,
           status: ResourceStatus.READY,
         })
       )
     }
     return circle
+  }
+
+  async findDescendantCircles(resourceId: string): Promise<ResourceEntity[]> {
+    const circles = await this.repository.find({
+      where: {
+        type: ResourceTypes.CIRCLE,
+      },
+    })
+
+    const root = circles.find((c) => c.id === resourceId)
+    if (!root) {
+      return []
+    }
+
+    const descendants: ResourceEntity[] = []
+
+    const traverse = (node: ResourceEntity) => {
+      const children = circles.filter((c) => c.parentId === node.id)
+
+      children.forEach((child) => {
+        descendants.push(child)
+        traverse(child)
+      })
+    }
+
+    traverse(root)
+
+    return descendants
   }
 
   async search(filters: ResourceFilters = {}): Promise<[ResourceEntity[], number]> {
@@ -160,7 +182,7 @@ export class ResourceService {
       )
     }
 
-    query.where('visibility <> :visibility', { visibility: ResourceVisibilities.PERSONAL })
+    query.where('personal = false')
 
     if (filters.parent) {
       query.andWhere('parent_id = :parent', { parent: filters.parent })
@@ -231,11 +253,20 @@ export class ResourceService {
     return this.repository.save(this.repository.create(input))
   }
 
-  async update(id: string, changes: Partial<ResourceEntity>): Promise<ResourceEntity> {
-    const resource = await this.repository.findOne({ where: { id } })
+  async update(idOrResource: string | ResourceEntity, changes: Partial<ResourceEntity>): Promise<ResourceEntity> {
+    const resource =
+      typeof idOrResource === 'string'
+        ? await this.repository.findOne({
+            where: {
+              id: idOrResource,
+            },
+          })
+        : idOrResource
+
     if (!resource) {
-      throw new NotFoundResponse(`Resource not found: ${id}`)
+      throw new NotFoundResponse(`Resource not found: ${idOrResource}`)
     }
+
     Object.assign(resource, changes)
     return this.repository.save(resource)
   }

@@ -24,6 +24,10 @@ export class ResourceInvitationService {
     return this.repository.findAndCount({ where: { resourceId } })
   }
 
+  async findAllByInviteeId(inviteeId: string): Promise<[ResourceInvitationEntity[], number]> {
+    return this.repository.findAndCount({ where: { inviteeId } })
+  }
+
   async create(input: Partial<ResourceInvitationEntity>): Promise<ResourceInvitationEntity> {
     const member = await this.memberService.findByUserId(input.resourceId as string, input.inviteeId as string)
     if (member.isPresent()) {

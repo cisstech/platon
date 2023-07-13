@@ -1,16 +1,18 @@
 import { Body, Controller, Get, Param, Patch, Post, Query, Req } from '@nestjs/common'
-import { CreatedResponse, ItemResponse, ListResponse, NotFoundResponse } from '@platon/core/common'
+import { CreatedResponse, ForbiddenResponse, ItemResponse, ListResponse, NotFoundResponse } from '@platon/core/common'
 import { IRequest, Mapper } from '@platon/core/server'
 import { ResourceCompletionDTO } from './completion'
 import { CircleTreeDTO, CreateResourceDTO, ResourceDTO, ResourceFiltersDTO, UpdateResourceDTO } from './resource.dto'
 import { ResourceService } from './resource.service'
 import { ResourceStatisticDTO } from './statistics'
 import { ResourceViewService } from './views/view.service'
+import { ResourcePermissionService } from './permissions/permissions.service'
 
 @Controller('resources')
 export class ResourceController {
   constructor(
     private readonly resourceService: ResourceService,
+    private readonly permissionService: ResourcePermissionService,
     private readonly resourceViewService: ResourceViewService
   ) {}
 
@@ -30,13 +32,26 @@ export class ResourceController {
       resources = Mapper.mapAll(response[0], ResourceDTO)
       total = response[1]
     }
-    return new ListResponse({ total, resources })
+
+    const resourceWithPermissions = await this.permissionService.userPermissionsOnResources(resources, req.user)
+    return new ListResponse({
+      total,
+      resources: resourceWithPermissions
+        .filter((e) => e.permissions.read)
+        .map((e) => {
+          Object.assign(e.resource, { permissions: e.permissions })
+          return e.resource
+        }),
+    })
   }
 
   @Get('/tree')
   async tree(): Promise<ItemResponse<CircleTreeDTO>> {
+    const [circles] = await this.resourceService.search({
+      types: ['CIRCLE'],
+    })
     return new ItemResponse({
-      resource: Mapper.map(await this.resourceService.tree(), CircleTreeDTO),
+      resource: Mapper.map(await this.resourceService.tree(circles), CircleTreeDTO),
     })
   }
 
@@ -66,6 +81,15 @@ export class ResourceController {
       })
     }
 
+    const permissions = await this.permissionService.userPermissionsOnResource({
+      resource,
+      user: req.user,
+    })
+    if (!permissions.read) {
+      throw new ForbiddenResponse(`Operation not allowed on resource: ${id}`)
+    }
+
+    Object.assign(resource, { permissions })
     return new ItemResponse({ resource })
   }
 
@@ -78,6 +102,19 @@ export class ResourceController {
 
   @Post()
   async create(@Req() req: IRequest, @Body() input: CreateResourceDTO): Promise<CreatedResponse<ResourceDTO>> {
+    const parent = await this.resourceService.findById(input.parentId)
+    if (!parent.isPresent()) {
+      throw new NotFoundResponse(`Resource not found: ${input.parentId}`)
+    }
+
+    const permissions = await this.permissionService.userPermissionsOnResource({
+      resource: parent.get(),
+      user: req.user,
+    })
+    if (!permissions.write) {
+      throw new ForbiddenResponse(`Operation not allowed on resource: ${input.parentId}`)
+    }
+
     const resource = Mapper.map(
       await this.resourceService.create({
         ...(await this.resourceService.fromInput(input)),
@@ -85,15 +122,38 @@ export class ResourceController {
       }),
       ResourceDTO
     )
+
+    Object.assign(resource, { permissions })
+
     return new CreatedResponse({ resource })
   }
 
   @Patch('/:id')
-  async update(@Param('id') id: string, @Body() input: UpdateResourceDTO): Promise<ItemResponse<ResourceDTO>> {
+  async update(
+    @Req() req: IRequest,
+    @Param('id') id: string,
+    @Body() input: UpdateResourceDTO
+  ): Promise<ItemResponse<ResourceDTO>> {
+    const existing = await this.resourceService.findById(id)
+    if (!existing.isPresent()) {
+      throw new NotFoundResponse(`Resource not found: ${id}`)
+    }
+
+    const permissions = await this.permissionService.userPermissionsOnResource({
+      resource: existing.get(),
+      user: req.user,
+    })
+    if (!permissions.write) {
+      throw new ForbiddenResponse(`Operation not allowed on resource: ${id}`)
+    }
+
     const resource = Mapper.map(
-      await this.resourceService.update(id, await this.resourceService.fromInput(input)),
+      await this.resourceService.update(existing.get(), await this.resourceService.fromInput(input)),
       ResourceDTO
     )
+
+    Object.assign(resource, { permissions })
+
     return new ItemResponse({ resource })
   }
 }
