@@ -1,33 +1,37 @@
 <ui-layout-tabs [state]="context.state">
   <ng-container *ngIf="context.resource">
-    <nz-breadcrumb nzSeparator="">
-      <button
-        *ngIf="context.circles"
-        nz-button
-        nzType="text"
-        nzSize="small"
-        [nz-popover]
-        [nzPopoverContent]="treeTemplate"
-      >
-        <mat-icon>account_tree</mat-icon>
-        <ng-template #treeTemplate>
-          <resource-circle-tree [tree]="context.circles" />
-        </ng-template>
-      </button>
-      <nz-breadcrumb-item *ngIf="context.parent">
-        <a [routerLink]="['/resources', context.parent.id]">{{ context.parent.name }}</a>
-      </nz-breadcrumb-item>
-      <nz-breadcrumb-item>
-        <mat-icon>{{ context.resource.type | resourceIcon }}</mat-icon>
-        <span
-          nz-typography
-          [nzEditable]="context.resource.permissions.write"
-          [nzContent]="context.resource.name"
-          (nzContentChange)="updateName($event)"
-        ></span>
-      </nz-breadcrumb-item>
-      <div class="spacer"></div>
-    </nz-breadcrumb>
+    <nz-page-header [nzSubtitle]="header" nzBackIcon>
+      <ng-template #header>
+        <nz-breadcrumb nzSeparator="" nzRouteLabel="breadcrumb">
+          <button
+            *ngIf="context.circles"
+            nz-button
+            nzType="text"
+            nzSize="small"
+            [nz-popover]
+            [nzPopoverContent]="treeTemplate"
+          >
+            <mat-icon>account_tree</mat-icon>
+            <ng-template #treeTemplate>
+              <resource-circle-tree [tree]="context.circles" />
+            </ng-template>
+          </button>
+          <nz-breadcrumb-item *ngIf="context.parent">
+            <a [routerLink]="['/resources', context.parent.id]">{{ context.parent.name }}</a>
+          </nz-breadcrumb-item>
+          <nz-breadcrumb-item>
+            <mat-icon>{{ context.resource.type | resourceIcon }}</mat-icon>
+            <span
+              nz-typography
+              [nzEditable]="context.resource.permissions.write"
+              [nzContent]="context.resource.name"
+              (nzContentChange)="updateName($event)"
+            ></span>
+          </nz-breadcrumb-item>
+          <div class="spacer"></div>
+        </nz-breadcrumb>
+      </ng-template>
+    </nz-page-header>
     <p
       nz-typography
       [nzEditable]="context.resource.permissions.write"

@@ -8,9 +8,12 @@
 }
 
 header {
-  display: flex;
-  align-items: center;
   margin-bottom: 12px;
+  align-self: flex-start;
+}
+
+nz-page-header {
+  padding-left: 0;
 }
 
 main {

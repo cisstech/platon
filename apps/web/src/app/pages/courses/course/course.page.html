@@ -1,23 +1,25 @@
 <ui-layout-tabs [state]="context.state">
   <ng-container *ngIf="context.course">
-    <nz-breadcrumb nzSeparator="">
-      <nz-breadcrumb-item>
-        <mat-icon>local_library</mat-icon>
-        <span
-          nz-typography
-          nzEditable
-          [nzContent]="context.course.name"
-          (nzContentChange)="updateName($event)"
-        ></span>
-      </nz-breadcrumb-item>
-      <div class="spacer"></div>
-    </nz-breadcrumb>
-    <p
-      nz-typography
-      nzEditable
-      [nzContent]="context.course.desc"
-      (nzContentChange)="updateDesc($event)"
-    ></p>
+    <header>
+      <nz-page-header [nzSubtitle]="header" nzBackIcon>
+        <ng-template #header>
+          <nz-breadcrumb nzSeparator="">
+            <nz-breadcrumb-item>
+              <mat-icon>local_library</mat-icon>
+              <span
+                nz-typography
+                nzEditable
+                [nzContent]="context.course.name"
+                (nzContentChange)="updateName($event)"
+              ></span>
+            </nz-breadcrumb-item>
+            <div class="spacer"></div>
+          </nz-breadcrumb>
+        </ng-template>
+      </nz-page-header>
+    </header>
+
+    <p nz-typography nzEditable [nzContent]="context.course.desc" (nzContentChange)="updateDesc($event)"></p>
   </ng-container>
   <ui-layout-tab [link]="['dashboard']">
     <ng-template>
@@ -37,7 +39,7 @@
       Élèves
     </ng-template>
   </ui-layout-tab>
-  <ui-layout-tab [link]="['settings']" [linkParams]="{ 'tab': 'informations' }">
+  <ui-layout-tab [link]="['settings']" [linkParams]="{ tab: 'informations' }">
     <ng-template>
       <mat-icon>settings</mat-icon>
       Paramètres

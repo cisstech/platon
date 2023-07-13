@@ -16,6 +16,7 @@ import { NzSpinModule } from 'ng-zorro-antd/spin'
 import { DialogModule, DialogService } from '@platon/core/browser'
 import { CourseService } from '@platon/feature/course/browser'
 import { UiStepDirective, UiStepperComponent } from '@platon/shared/ui'
+import { NzPageHeaderModule } from 'ng-zorro-antd/page-header'
 
 @Component({
   standalone: true,
@@ -37,6 +38,7 @@ import { UiStepDirective, UiStepperComponent } from '@platon/shared/ui'
     NzButtonModule,
     NzSelectModule,
     NzSkeletonModule,
+    NzPageHeaderModule,
 
     UiStepDirective,
     UiStepperComponent,

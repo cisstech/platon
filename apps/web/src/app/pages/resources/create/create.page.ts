@@ -33,6 +33,7 @@ import {
 } from '@platon/feature/resource/common'
 import { UiStepDirective, UiStepperComponent } from '@platon/shared/ui'
 import { firstValueFrom } from 'rxjs'
+import { NzPageHeaderModule } from 'ng-zorro-antd/page-header'
 
 @Component({
   standalone: true,
@@ -54,6 +55,7 @@ import { firstValueFrom } from 'rxjs'
     NzButtonModule,
     NzSelectModule,
     NzSkeletonModule,
+    NzPageHeaderModule,
 
     UiStepDirective,
     UiStepperComponent,

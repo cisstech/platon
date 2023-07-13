@@ -13,6 +13,7 @@ import { NzSelectModule } from 'ng-zorro-antd/select'
 import { NzPopoverModule } from 'ng-zorro-antd/popover'
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb'
 import { NzTypographyModule } from 'ng-zorro-antd/typography'
+import { NzPageHeaderModule } from 'ng-zorro-antd/page-header'
 
 import { DialogModule } from '@platon/core/browser'
 import { CircleTreeComponent, ResourcePipesModule } from '@platon/feature/resource/browser'
@@ -42,6 +43,7 @@ import { ResourcePresenter } from './resource.presenter'
     NzSelectModule,
     NzBreadCrumbModule,
     NzTypographyModule,
+    NzPageHeaderModule,
 
     DialogModule,
 

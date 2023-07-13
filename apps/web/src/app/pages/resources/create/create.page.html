@@ -1,5 +1,7 @@
 <header>
-  <h1>Créer {{ type | resourceType : true | lowercase }}</h1>
+  <nz-page-header [nzTitle]="header" nzBackIcon>
+    <ng-template #header> Créer {{ type | resourceType : true | lowercase }} </ng-template>
+  </nz-page-header>
 </header>
 <main>
   <nz-skeleton [nzActive]="loading" [nzLoading]="loading">
