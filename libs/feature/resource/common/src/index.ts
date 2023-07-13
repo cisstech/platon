@@ -1,7 +1,6 @@
 export * from './lib/enums/resource-event-types'
 export * from './lib/enums/resource-status'
 export * from './lib/enums/resource-types'
-export * from './lib/enums/resource-visibility'
 export * from './lib/models/completion.model'
 export * from './lib/models/event.model'
 export * from './lib/models/file.model'
