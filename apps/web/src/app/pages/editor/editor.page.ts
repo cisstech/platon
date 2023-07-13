@@ -58,7 +58,6 @@ export class EditorPage implements OnInit, OnDestroy {
 
   async ngOnInit(): Promise<void> {
     const { resource, version, ancestors, filesToOpen } = await this.presenter.init(this.activatedRoute)
-
     this.subscription = this.ide.onAfterStart(async () => {
       this.fileService.registerProvider(this.resourceFileSystemProvider)
       await this.fileService.registerFolders(
