@@ -4,14 +4,11 @@
     <nz-select
       id="language"
       nzShowSearch
+      [disabled]="disabled"
       [(ngModel)]="options.language"
       (ngModelChange)="notifyOptionsChange?.(options)"
     >
-      <nz-option
-        *ngFor="let language of languages"
-        [nzValue]="language.id"
-        [nzLabel]="language.id"
-      ></nz-option>
+      <nz-option *ngFor="let language of languages" [nzValue]="language.id" [nzLabel]="language.id"></nz-option>
     </nz-select>
   </nz-form-control>
 </nz-form-item>

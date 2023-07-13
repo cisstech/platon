@@ -26,4 +26,9 @@ export class InputJsonValueEditorComponent extends BaseValueEditor<Record<string
   async ngOnInit(): Promise<void> {
     await firstValueFrom(this.resourceLoader.loadAllAsync([['style', 'assets/vendors/jsoneditor/jsoneditor.min.css']]))
   }
+
+  override setDisabled(disabled: boolean): void {
+    this.editorOptions.mode = disabled ? 'view' : 'tree'
+    super.setDisabled(disabled)
+  }
 }

@@ -33,6 +33,10 @@ export class InputFileValueEditorComponent extends BaseValueEditor<string> {
   }
 
   protected onDrop(data: DndData) {
+    if (this.disabled) {
+      return
+    }
+
     if (data.src) {
       const uri = monaco.Uri.parse(data.src)
 

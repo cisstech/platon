@@ -28,7 +28,6 @@ export class PlaExerciseEditorComponent {
   protected _exercise!: ActivityExercise
 
   protected inputs?: PleInput[] = []
-  protected selectedInput?: PleInput
   protected resource?: Resource
 
   get exercise(): ActivityExercise {
@@ -56,10 +55,13 @@ export class PlaExerciseEditorComponent {
   }
 
   @Output() exerciseChange = new EventEmitter<ActivityExercise>()
-
   @Output() deleteClicked = new EventEmitter<void>()
 
+  @Input() disabled?: boolean
+
   protected overriding = false
+  protected expandedInputs: Record<string, boolean> = {}
+
   protected onOverrideVariable(name: string, value: unknown) {
     this.exercise.overrides = this.exercise.overrides || {}
     this.exercise.overrides[name] = value

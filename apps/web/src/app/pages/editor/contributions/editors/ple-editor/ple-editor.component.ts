@@ -187,6 +187,10 @@ export class PleEditorComponent implements OnInit, OnDestroy {
       form: createOutputData(source.variables.form),
     })
 
+    if (this.readOnly) {
+      this.form.disable()
+    }
+
     const sandbox = source.variables.sandbox || 'javascript'
     this.variables = Object.keys(source.variables)
       .map((name) => ({

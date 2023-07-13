@@ -5,6 +5,7 @@
       nz-input
       type="number"
       id="min"
+      [disabled]="disabled"
       [(ngModel)]="options.min"
       (ngModelChange)="notifyOptionsChange?.(options)"
     />
@@ -18,6 +19,7 @@
       nz-input
       type="number"
       id="max"
+      [disabled]="disabled"
       [(ngModel)]="options.max"
       (ngModelChange)="notifyOptionsChange?.(options)"
     />

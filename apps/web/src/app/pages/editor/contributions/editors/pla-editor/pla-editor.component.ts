@@ -237,6 +237,10 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
       },
     })
 
+    if (this.readOnly) {
+      this.form.disable()
+    }
+
     this.exerciseGroups = Object.values(this.activity.exerciseGroups)
 
     this.changeDetectorRef.markForCheck()

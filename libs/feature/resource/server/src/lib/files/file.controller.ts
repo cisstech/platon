@@ -15,7 +15,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
-import { SuccessResponse } from '@platon/core/common'
+import { SuccessResponse, UnauthorizedResponse } from '@platon/core/common'
 import { IRequest, Public } from '@platon/core/server'
 import { FileTypes, ResourceFile } from '@platon/feature/resource/common'
 import { Response } from 'express'
@@ -31,7 +31,11 @@ export class ResourceFileController {
 
   @Post('/release/:resourceId')
   async release(@Req() request: IRequest, @Param('resourceId') resourceId: string, @Body() input: FileReleaseDTO) {
-    const [repo] = await this.service.repo(resourceId, request.user)
+    const { repo, permissions } = await this.service.repo(resourceId, request.user)
+    if (!permissions.write) {
+      throw new UnauthorizedResponse('You are not allowed to release this resource')
+    }
+
     await repo.release(input.name, input.message)
     return repo.versions()
   }
@@ -51,7 +55,7 @@ export class ResourceFileController {
     @Param('path') path?: string,
     @Query() query?: FileRetrieveDTO
   ): Promise<unknown> {
-    const [repo, resource] = await this.service.repo(resourceId, request.user)
+    const { repo, resource, permissions } = await this.service.repo(resourceId, request.user)
     const version = query?.version || LATEST_VERSION
     if (query?.bundle) {
       res.set('Content-Type', 'application/force-download')
@@ -88,9 +92,10 @@ export class ResourceFileController {
     }
 
     const [node, content] = await repo.read(path, version)
-    const defineCodes = (node: ResourceFile) => {
+    const injectExtraFields = (node: ResourceFile) => {
       node.resourceCode = resource.code
-      node.children?.forEach(defineCodes)
+      node.readOnly = !permissions.write || node.version !== LATEST_VERSION
+      node.children?.forEach(injectExtraFields)
     }
 
     if (node.type === FileTypes.file) {
@@ -98,7 +103,7 @@ export class ResourceFileController {
       return Buffer.from((await content)!.buffer).toString()
     }
 
-    defineCodes(node)
+    injectExtraFields(node)
     return node
   }
 
@@ -109,7 +114,11 @@ export class ResourceFileController {
     @Param('path') path: string,
     @Body() input: FileUpdateDTO
   ) {
-    const [repo] = await this.service.repo(resourceId, request.user)
+    const { repo, permissions } = await this.service.repo(resourceId, request.user)
+    if (!permissions.write) {
+      throw new UnauthorizedResponse('You are not allowed to write this resource')
+    }
+
     await repo.write(path, input.content)
     return new SuccessResponse()
   }
@@ -128,7 +137,11 @@ export class ResourceFileController {
     @UploadedFile() file: Express.Multer.File,
     @Param('path') path?: string
   ) {
-    const [repo] = await this.service.repo(resourceId, request.user)
+    const { repo, permissions } = await this.service.repo(resourceId, request.user)
+    if (!permissions.write) {
+      throw new UnauthorizedResponse('You are not allowed to write this resource')
+    }
+
     if (file) {
       await repo.upload(file.path, join(path || '', basename(file.originalname)))
       return new SuccessResponse()
@@ -155,7 +168,11 @@ export class ResourceFileController {
     @Param('path') path: string,
     @Body() input: FileMoveDTO
   ) {
-    const [repo] = await this.service.repo(resourceId, request.user)
+    const { repo, permissions } = await this.service.repo(resourceId, request.user)
+    if (!permissions.write) {
+      throw new UnauthorizedResponse('You are not allowed to write this resource')
+    }
+
     if (input.rename) {
       await repo.rename(path, input.destination)
     } else {
@@ -166,7 +183,11 @@ export class ResourceFileController {
 
   @Delete('/:resourceId/:path(*)')
   async delete(@Req() request: IRequest, @Param('resourceId') resourceId: string, @Param('path') path: string) {
-    const [repo] = await this.service.repo(resourceId, request.user)
+    const { repo, permissions } = await this.service.repo(resourceId, request.user)
+    if (!permissions.write) {
+      throw new UnauthorizedResponse('You are not allowed to write this resource')
+    }
+
     await repo.remove(path)
     return new SuccessResponse()
   }

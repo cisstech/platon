@@ -13,11 +13,13 @@ export interface PleInputValueEditor<TValue = unknown, TOptions = unknown> {
   setOptions?(options: TOptions): void
   setValue(value: TValue): void
   onChangeValue(consumer: (value: TValue) => void): void
+  setDisabled(disabled: boolean): void
 }
 
 export interface PleInputConfigEditor<TOptions = unknown> {
   setOptions(options: TOptions): void
   onChangeOptions(consumer: (options: TOptions) => void): void
+  setDisabled(disabled: boolean): void
 }
 
 export interface PleInputProvider {
@@ -43,6 +45,7 @@ export abstract class BaseValueEditor<TValue = unknown, TOptions = unknown>
 
   protected value?: TValue
   protected options?: TOptions
+  protected disabled = false
   protected notifyValueChange?: (value: TValue) => void
 
   constructor() {
@@ -62,6 +65,11 @@ export abstract class BaseValueEditor<TValue = unknown, TOptions = unknown>
   onChangeValue(consumer: (value: TValue) => void): void {
     this.notifyValueChange = (value) => consumer(value)
   }
+
+  setDisabled(disabled?: boolean): void {
+    this.disabled = !!disabled
+    this.changeDetectorRef.markForCheck()
+  }
 }
 
 export abstract class BaseConfigEditor<TOptions = unknown> implements PleInputConfigEditor<TOptions> {
@@ -69,6 +77,7 @@ export abstract class BaseConfigEditor<TOptions = unknown> implements PleInputCo
   protected readonly changeDetectorRef = inject(ChangeDetectorRef)
 
   protected options: TOptions = {} as TOptions
+  protected disabled = false
   protected notifyOptionsChange?: (options: TOptions) => void
 
   constructor() {
@@ -82,5 +91,9 @@ export abstract class BaseConfigEditor<TOptions = unknown> implements PleInputCo
 
   onChangeOptions(consumer: (value: TOptions) => void): void {
     this.notifyOptionsChange = consumer
+  }
+  setDisabled(disabled?: boolean): void {
+    this.disabled = !!disabled
+    this.changeDetectorRef.markForCheck()
   }
 }

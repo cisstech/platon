@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { UserRoles } from '@platon/core/common'
+import { User, UserRoles } from '@platon/core/common'
 import { UserEntity } from '@platon/core/server'
 import { ResourceMember, ResourcePermissions, ResourceTypes } from '@platon/feature/resource/common'
 import { ResourceMemberService } from '../members'
@@ -13,7 +13,7 @@ type Constraint = ResourceEntity | ResourceDTO
 
 interface UserPermissionsInput<T extends Constraint> {
   resource: T
-  user: UserEntity
+  user?: User
   userWatchings?: ResourceWatcherEntity[]
   userMemberships?: ResourceMember[]
 }
@@ -29,6 +29,14 @@ export class ResourcePermissionService {
   async userPermissionsOnResource<T extends ResourceEntity | ResourceDTO>(
     input: UserPermissionsInput<T>
   ): Promise<ResourcePermissions> {
+    if (!input.user) {
+      return {
+        read: false,
+        write: false,
+        watcher: false,
+      }
+    }
+
     const { resource, user, userWatchings, userMemberships } = input
     const [circle, members, watchings, descendants] = await Promise.all([
       resource.type === ResourceTypes.CIRCLE ? resource : this.resourceService.getById(resource.parentId as string),

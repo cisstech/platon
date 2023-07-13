@@ -25,7 +25,7 @@ class FileImpl implements IFile {
   constructor(uri: monaco.Uri, entry: ResourceFile) {
     this.uri = uri
     this.version = entry.version
-    this.readOnly = entry.version !== 'latest'
+    this.readOnly = !!entry.readOnly
     this.isFolder = entry.type === 'folder'
     this.url = entry.downloadUrl
   }
@@ -35,7 +35,6 @@ class FileImpl implements IFile {
 export class ResourceFileSystemProvider extends FileSystemProvider {
   private readonly http = inject(HttpClient)
   private readonly fileService = inject(ResourceFileService)
-
   private readonly entries = new Map<string, ResourceFile>()
 
   readonly scheme = 'platon'

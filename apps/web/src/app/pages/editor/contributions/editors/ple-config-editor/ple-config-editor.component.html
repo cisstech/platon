@@ -2,8 +2,8 @@
   <div>
     <h3>Variables</h3>
     <p>
-      Définissez ici une liste de variables qui peuvent être spécifiées depuis une activité pour
-      remplacer celles définies dans votre exercice.
+      Définissez ici une liste de variables qui peuvent être spécifiées depuis une activité pour remplacer celles
+      définies dans votre exercice.
     </p>
     <nz-list [nzDataSource]="inputs" nzBordered>
       <nz-list-item
@@ -19,6 +19,7 @@
               nzDanger
               nzType="text"
               nz-tooltip="Supprimer"
+              [disabled]="readOnly"
               (click)="deleteInput(i)"
             >
               <span nz-icon nzType="delete" nzTheme="outline"></span>
@@ -27,9 +28,9 @@
         </ul>
       </nz-list-item>
     </nz-list>
-    <button class="btn-add-input" nz-button nzType="primary" (click)="addInput()">+</button>
+    <button class="btn-add-input" nz-button nzType="primary" [disabled]="readOnly" (click)="addInput()">+</button>
   </div>
   <div class="container-selection" formGroupName="selection" *ngIf="selection">
-    <app-ple-input [input]="selection" (inputChange)="onChangeInput($event)" />
+    <app-ple-input [input]="selection" [disabled]="readOnly" (inputChange)="onChangeInput($event)" />
   </div>
 </div>
