@@ -91,16 +91,8 @@ export class ResourcePage implements OnInit, OnDestroy {
     await this.presenter.update({ status })
   }
 
-  protected async acceptInvitation(): Promise<void> {
-    await this.presenter.acceptInvitation()
-  }
-
-  protected async declineInvitation(): Promise<void> {
-    await this.presenter.declineInvitation()
-  }
-
   protected async changeWatchingState(): Promise<void> {
-    if (this.context.watcher) {
+    if (this.context.resource?.permissions?.watcher) {
       await this.presenter.unwatch()
     } else {
       await this.presenter.watch()

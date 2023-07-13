@@ -24,14 +24,7 @@ import { NzSpinModule } from 'ng-zorro-antd/spin'
 import { DialogModule, DialogService, TagService } from '@platon/core/browser'
 import { Level, Topic } from '@platon/core/common'
 import { CircleTreeComponent, ResourcePipesModule, ResourceService } from '@platon/feature/resource/browser'
-import {
-  circleFromTree,
-  CircleTree,
-  flattenCircleTree,
-  ResourceStatus,
-  ResourceTypes,
-  ResourceVisibilities,
-} from '@platon/feature/resource/common'
+import { CircleTree, ResourceStatus, ResourceTypes, flattenCircleTree } from '@platon/feature/resource/common'
 import { UiStepDirective, UiStepperComponent } from '@platon/shared/ui'
 import { firstValueFrom } from 'rxjs'
 
@@ -78,7 +71,6 @@ export class ResourceCreatePage implements OnInit {
     name: new FormControl('', [Validators.required]),
     code: new FormControl(''),
     desc: new FormControl('', [Validators.required]),
-    opened: new FormControl(false),
   })
 
   protected tags = new FormGroup({
@@ -124,21 +116,19 @@ export class ResourceCreatePage implements OnInit {
     try {
       const infos = this.infos.value
       const tags = this.tags.value
-      const parent = circleFromTree(this.tree, this.parent as string) as CircleTree
 
       this.creating = true
 
       const resource = await firstValueFrom(
         this.resourceService.create({
           type: this.type,
-          parentId: this.parent,
+          parentId: this.parent as string,
           name: infos.name as string,
           desc: infos.desc as string,
           code: infos.code || undefined,
           levels: tags.levels as string[],
           topics: tags.topics as string[],
           status: ResourceStatus.DRAFT,
-          visibility: infos.opened ? ResourceVisibilities.PUBLIC : parent.visibility,
         })
       )
 

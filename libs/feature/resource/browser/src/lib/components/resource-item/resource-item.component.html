@@ -12,6 +12,7 @@
       <mat-icon>{{ item.type | resourceIcon }}</mat-icon>
     </ng-template>
     <ui-list-item-article-action
+      *ngIf="item.permissions.read"
       (click)="modalMode ? openUrl(editorUrl) : iframe.open(editorUrl)"
       class="action"
       actionTitle="Éditer"

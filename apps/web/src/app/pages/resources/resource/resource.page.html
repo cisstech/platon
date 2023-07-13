@@ -21,17 +21,19 @@
         <mat-icon>{{ context.resource.type | resourceIcon }}</mat-icon>
         <span
           nz-typography
-          nzEditable
+          [nzEditable]="context.resource.permissions.write"
           [nzContent]="context.resource.name"
           (nzContentChange)="updateName($event)"
         ></span>
       </nz-breadcrumb-item>
       <div class="spacer"></div>
-      <mat-chip-set>
-        <mat-chip>{{ context.resource.visibility | resourceVisibility }}</mat-chip>
-      </mat-chip-set>
     </nz-breadcrumb>
-    <p nz-typography nzEditable [nzContent]="context.resource.desc" (nzContentChange)="updateDesc($event)"></p>
+    <p
+      nz-typography
+      [nzEditable]="context.resource.permissions.write"
+      [nzContent]="context.resource.desc"
+      (nzContentChange)="updateDesc($event)"
+    ></p>
     <div class="container-actions">
       <nz-button-group>
         <nz-select
@@ -40,7 +42,7 @@
           nzShowSearch
           [ngModel]="context.resource.status"
           (ngModelChange)="updateStatus($event)"
-          [nzDisabled]="false"
+          [nzDisabled]="!context.resource.permissions.write"
         >
           <nz-option
             *ngFor="let item of status; trackBy: trackByValue"
@@ -52,16 +54,12 @@
       <nz-button-group>
         <button nz-button nzType="default" (click)="changeWatchingState()">
           <i nz-icon nzType="eye" nzTheme="outline"></i>
-          {{ context.watcher ? 'Ne plus suivre' : 'Suivre' }}
+          {{ context.resource.permissions.watcher ? 'Ne plus suivre' : 'Suivre' }}
         </button>
-      </nz-button-group>
-      <nz-button-group *ngIf="context.invitation">
-        <button nz-button nzType="primary" (click)="acceptInvitation()">Accepter l'invitation</button>
-        <button nz-button nzDanger (click)="declineInvitation()">Refuser l'invitation</button>
       </nz-button-group>
       <div class="spacer"></div>
       <nz-button-group *ngIf="context.resource.type !== 'CIRCLE'">
-        <button nz-button (click)="iframe.open(context.editorUrl!)">
+        <button nz-button (click)="iframe.open(context.editorUrl!)" *ngIf="context.resource.permissions.write">
           <i nz-icon nzType="edit" nzTheme="outline"></i>
           Éditer
         </button>

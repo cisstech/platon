@@ -108,15 +108,15 @@ export class ResourceService {
     return this.resourceInvitationProvider.acceptInvitation(invitation)
   }
 
-  createInvitation(resource: Resource, input: CreateResourceInvitation): Observable<ResourceInvitation> {
+  createInvitation(resource: string | Resource, input: CreateResourceInvitation): Observable<ResourceInvitation> {
     return this.resourceInvitationProvider.createInvitation(resource, input)
   }
 
-  findInvitation(resource: Resource, inviteeId: string): Observable<ResourceInvitation> {
+  findInvitation(resource: string | Resource, inviteeId: string): Observable<ResourceInvitation> {
     return this.resourceInvitationProvider.findInvitation(resource, inviteeId)
   }
 
-  listInvitations(resource: Resource): Observable<ListResponse<ResourceInvitation>> {
+  listInvitations(resource: string | Resource): Observable<ListResponse<ResourceInvitation>> {
     return this.resourceInvitationProvider.listInvitations(resource)
   }
   //#endregion

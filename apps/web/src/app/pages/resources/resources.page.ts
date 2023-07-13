@@ -141,6 +141,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
           direction: OrderingDirections.DESC,
         })
       ),
+      //firstValueFrom(this.resourceService.listInvitations()),
     ])
 
     this.tree = tree

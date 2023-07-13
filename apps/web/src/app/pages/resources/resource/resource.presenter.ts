@@ -19,7 +19,7 @@ import {
   UpdateResource,
 } from '@platon/feature/resource/common'
 import { LayoutState, layoutStateFromError } from '@platon/shared/ui'
-import { BehaviorSubject, Observable, Subscription, catchError, firstValueFrom, of } from 'rxjs'
+import { BehaviorSubject, Observable, Subscription, firstValueFrom } from 'rxjs'
 
 @Injectable()
 export class ResourcePresenter implements OnDestroy {
@@ -127,22 +127,6 @@ export class ResourcePresenter implements OnDestroy {
     return firstValueFrom(this.resourceService.listInvitations(resource))
   }
 
-  async acceptInvitation(): Promise<void> {
-    const { resource, invitation } = this.context.value as Required<Context>
-    try {
-      await firstValueFrom(this.resourceService.acceptInvitation(invitation))
-      await this.refresh(resource.id)
-      this.dialogService.success(`Invitation acceptée !`)
-    } catch {
-      this.alertError()
-    }
-  }
-
-  async declineInvitation(): Promise<void> {
-    const { invitation } = this.context.value as Required<Context>
-    await this.deleteInvitation(invitation)
-  }
-
   async sendInvitation(input: CreateResourceInvitation): Promise<void> {
     await this.dialogService.loading("Envoi d'une invitation en cours..", async () => {
       const { resource } = this.context.value as Required<Context>
@@ -207,11 +191,8 @@ export class ResourcePresenter implements OnDestroy {
       firstValueFrom(this.resourceService.find(id, this.isInitialLoading)),
     ])
 
-    const [parent, member, watcher, invitation, statistic, circles] = await Promise.all([
+    const [parent, statistic, circles] = await Promise.all([
       resource.parentId ? firstValueFrom(this.resourceService.find(resource.parentId)) : Promise.resolve(undefined),
-      firstValueFrom(this.resourceService.findMember(resource, user!.id).pipe(catchError(() => of(undefined)))),
-      firstValueFrom(this.resourceService.findWatcher(resource, user!.id).pipe(catchError(() => of(undefined)))),
-      firstValueFrom(this.resourceService.findInvitation(resource, user!.id).pipe(catchError(() => of(undefined)))),
       firstValueFrom(this.resourceService.statistic(resource)),
       firstValueFrom(this.resourceService.tree()),
     ])
@@ -221,11 +202,8 @@ export class ResourcePresenter implements OnDestroy {
       user,
       parent,
       resource,
-      member,
       statistic,
-      invitation,
       circles,
-      watcher: !!watcher,
     })
   }
 
@@ -267,9 +245,6 @@ export interface Context {
   editorUrl?: string
   previewUrl?: string
 
-  watcher?: boolean
   circles?: CircleTree
-  member?: ResourceMember
   statistic?: ResourceStatisic
-  invitation?: ResourceInvitation
 }

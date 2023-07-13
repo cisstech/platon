@@ -11,7 +11,7 @@
     <a nz-button nzType="primary" nz-tooltip="Prévisualiser" (click)="preview.emit()">
       <i nz-icon nzType="play-circle" nzTheme="outline"></i>
     </a>
-    <button nz-button target="_blank" nz-tooltip="Éditer en ligne" (click)="edit.emit()">
+    <button *ngIf="editable" nz-button target="_blank" nz-tooltip="Éditer en ligne" (click)="edit.emit()">
       <i nz-icon nzType="edit" nzTheme="outline"></i>
     </button>
     <button nz-button nz-tooltip="Actualiser" (click)="refresh.emit(version)">
