@@ -118,3 +118,11 @@ export const flattenCircleTree = (tree: CircleTree): CircleTree[] => {
   flatten(tree)
   return flat
 }
+
+export const circleTreeFromResource = (resource: Resource): CircleTree => {
+  return {
+    id: resource.id,
+    name: resource.name,
+    code: resource.code,
+  }
+}

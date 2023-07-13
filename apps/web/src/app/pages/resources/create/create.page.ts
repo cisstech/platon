@@ -21,10 +21,16 @@ import { NzSelectModule } from 'ng-zorro-antd/select'
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton'
 import { NzSpinModule } from 'ng-zorro-antd/spin'
 
-import { AuthService, DialogModule, DialogService, TagService, UserService } from '@platon/core/browser'
-import { Level, Topic, User, UserRoles } from '@platon/core/common'
+import { AuthService, DialogModule, DialogService, TagService } from '@platon/core/browser'
+import { Level, Topic, User } from '@platon/core/common'
 import { CircleTreeComponent, ResourcePipesModule, ResourceService } from '@platon/feature/resource/browser'
-import { CircleTree, ResourceStatus, ResourceTypes, flattenCircleTree } from '@platon/feature/resource/common'
+import {
+  CircleTree,
+  ResourceStatus,
+  ResourceTypes,
+  circleTreeFromResource,
+  flattenCircleTree,
+} from '@platon/feature/resource/common'
 import { UiStepDirective, UiStepperComponent } from '@platon/shared/ui'
 import { firstValueFrom } from 'rxjs'
 
@@ -92,8 +98,9 @@ export class ResourceCreatePage implements OnInit {
     this.type = (this.activatedRoute.snapshot.queryParamMap.get('type') || ResourceTypes.CIRCLE) as ResourceTypes
 
     const user = (await this.authService.ready()) as User
-    const [tree, topics, levels] = await Promise.all([
+    const [tree, circle, topics, levels] = await Promise.all([
       firstValueFrom(this.resourceService.tree()),
+      firstValueFrom(this.resourceService.circle(user.username)),
       firstValueFrom(this.tagService.listTopics()),
       firstValueFrom(this.tagService.listLevels()),
     ])
@@ -116,6 +123,11 @@ export class ResourceCreatePage implements OnInit {
     }
 
     this.tree = tree
+
+    if (this.type !== 'CIRCLE') {
+      this.tree.children?.unshift(circleTreeFromResource(circle))
+    }
+
     this.topics = topics
     this.levels = levels
 

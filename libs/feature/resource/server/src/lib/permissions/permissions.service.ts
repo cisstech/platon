@@ -37,6 +37,14 @@ export class ResourcePermissionService {
       ),
     ])
 
+    if (circle.personal && circle.ownerId !== user.id) {
+      return {
+        read: false,
+        write: false,
+        watcher: false,
+      }
+    }
+
     const shareds = members.map((m) => m.resourceId)
 
     return {
