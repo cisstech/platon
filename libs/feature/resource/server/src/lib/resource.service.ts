@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { NotFoundResponse, OrderingDirections } from '@platon/core/common'
-import { LevelService, TopicService } from '@platon/core/server'
+import { LevelService, TopicService, UserEntity } from '@platon/core/server'
 import {
   CircleTree,
   ResourceCompletion,
@@ -96,10 +96,10 @@ export class ResourceService {
     return Optional.ofNullable(await query.where('resource.code = :code', { code: idOrCode }).getOne())
   }
 
-  async findPersonal(ownerId: string): Promise<ResourceEntity> {
+  async findPersonal(owner: UserEntity): Promise<ResourceEntity> {
     let circle = await this.repository.findOne({
       where: {
-        ownerId,
+        ownerId: owner.id,
         type: ResourceTypes.CIRCLE,
         personal: true,
       },
@@ -108,12 +108,13 @@ export class ResourceService {
     if (!circle) {
       circle = await this.repository.save(
         this.repository.create({
-          ownerId,
+          ownerId: owner.id,
           name: 'Votre cercle personnel',
           desc: `Bienvenue dans votre cercle personnel dédié à la création de ressources pour vous entraîner à utiliser la plateforme en autonomie.
           Ici, vous pouvez créer des ressources qui ne seront visibles que par vous.
           `,
           type: ResourceTypes.CIRCLE,
+          code: owner.username,
           personal: true,
           status: ResourceStatus.READY,
         })

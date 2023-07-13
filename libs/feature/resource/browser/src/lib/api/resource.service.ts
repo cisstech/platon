@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { ListResponse, User } from '@platon/core/common'
+import { ListResponse, User, UserRoles } from '@platon/core/common'
 import {
   CircleTree,
   CreateResource,
@@ -13,6 +13,7 @@ import {
   ResourceMember,
   ResourceMemberFilters,
   ResourceStatisic,
+  ResourceTypes,
   ResourceWatcherFilters,
   UpdateResource,
 } from '@platon/feature/resource/common'
@@ -32,6 +33,14 @@ export class ResourceService {
     private readonly resourceWatcherProvider: ResourceWatcherProvider,
     private readonly resourceInvitationProvider: ResourceInvitationProvider
   ) {}
+
+  //#region Utils
+  canUserCreateResource(user: User, type: ResourceTypes | keyof typeof ResourceTypes): boolean {
+    return type === 'CIRCLE'
+      ? user.role === UserRoles.admin
+      : user.role === UserRoles.admin || user.role === UserRoles.teacher
+  }
+  //#endregion
 
   //#region Resources
   tree(): Observable<CircleTree> {

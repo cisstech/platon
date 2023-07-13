@@ -5,14 +5,8 @@
   <span>PLaTon</span>
   <div class="spacer"></div>
 
-  <ng-container *ngIf="user?.role !== 'student'">
-    <button
-      nz-button
-      nzType="primary"
-      nzShape="round"
-      nzSize="large"
-      [matMenuTriggerFor]="actionMenu"
-    >
+  <ng-container *ngIf="canCreate">
+    <button nz-button nzType="primary" nzShape="round" nzSize="large" [matMenuTriggerFor]="actionMenu">
       <span nz-icon nzType="plus" nzTheme="outline"></span>
     </button>
   </ng-container>
@@ -35,13 +29,23 @@
   <button mat-menu-item [routerLink]="['/courses/create']">
     <span>Créer un cours</span>
   </button>
-  <button mat-menu-item [routerLink]="['/resources/create']" [queryParams]="{ type: 'CIRCLE' }">
+  <button *ngIf="canCreateCircle" mat-menu-item [routerLink]="['/resources/create']" [queryParams]="{ type: 'CIRCLE' }">
     <span>Créer un cercle</span>
   </button>
-  <button mat-menu-item [routerLink]="['/resources/create']" [queryParams]="{ type: 'EXERCISE' }">
+  <button
+    *ngIf="canCreateExercise"
+    mat-menu-item
+    [routerLink]="['/resources/create']"
+    [queryParams]="{ type: 'EXERCISE' }"
+  >
     <span>Créer un exercice</span>
   </button>
-  <button mat-menu-item [routerLink]="['/resources/create']" [queryParams]="{ type: 'ACTIVITY' }">
+  <button
+    *ngIf="canCreateActivity"
+    mat-menu-item
+    [routerLink]="['/resources/create']"
+    [queryParams]="{ type: 'ACTIVITY' }"
+  >
     <span>Créer une activité</span>
   </button>
 </mat-menu>

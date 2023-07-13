@@ -68,18 +68,12 @@
           </form>
         </section>
       </ng-template>
-      <!-- TODO -->
-      <!--     <ng-container>
-        <ng-template uiStepperStep stepTitle="Modèle" stepIcon="layout">
-        </ng-template>
-      </ng-container>
- -->
     </ui-stepper>
   </nz-skeleton>
 </main>
 <footer>
   <ng-container *ngIf="creating; else showControls">
-    <nz-spin nzTip="Création du nouveau cercle..."></nz-spin>
+    <nz-spin nzTip="Création en cours..."></nz-spin>
   </ng-container>
   <ng-template #showControls>
     <button *ngIf="!stepper.isFirst" nz-button [disabled]="stepper.isFirst" (click)="stepper.prevStep()">
