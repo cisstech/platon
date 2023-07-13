@@ -1,18 +1,13 @@
 <ng-container *ngIf="resource">
   <div class="exercise">
-    <resource-item
-      [item]="resource"
-      [simple]="true"
-      [modalMode]="true"
-      [previewOverrides]="exercise.overrides"
-    />
+    <resource-item [item]="resource" [simple]="true" [modalMode]="true" [previewOverrides]="exercise.overrides" />
     <ul nz-list-item-actions>
       <nz-list-item-action>
         <button
           *ngIf="!overriding && inputs"
           nz-button
           nzType="text"
-          nz-tooltip="Remplacer des variables"
+          nz-tooltip="Afficher les variables"
           (click)="overriding = !overriding"
         >
           <span nz-icon nzType="form" nzTheme="outline"></span>
@@ -33,6 +28,7 @@
           nzDanger
           nzType="text"
           nz-tooltip="Supprimer"
+          [disabled]="disabled"
           (click)="deleteClicked.emit()"
         >
           <span nz-icon nzType="delete" nzTheme="outline"></span>
@@ -58,29 +54,30 @@
             <td>{{ input.description }}</td>
             <td>
               <button
-                *ngIf="!selectedInput"
+                *ngIf="!expandedInputs[input.name]"
                 nz-button
                 nzType="text"
                 nz-tooltip="Editer"
-                (click)="selectedInput = input"
+                (click)="expandedInputs[input.name] = true"
               >
                 <span nz-icon nzType="form" nzTheme="outline"></span>
               </button>
               <button
-                *ngIf="input.name === selectedInput?.name"
+                *ngIf="expandedInputs[input.name]"
                 nz-button
                 nzType="text"
                 nz-tooltip="Fermer"
-                (click)="selectedInput = undefined"
+                (click)="expandedInputs[input.name] = false"
               >
                 <span nz-icon nzType="close-circle" nzTheme="outline"></span>
               </button>
             </td>
           </tr>
-          <tr *ngIf="input.name === selectedInput?.name">
+          <tr *ngIf="expandedInputs[input.name]">
             <td colSpan="4">
               <app-ple-input
                 mode="value"
+                [disabled]="disabled"
                 [input]="input"
                 (inputChange)="onOverrideVariable($event.name, $event.value)"
               />
