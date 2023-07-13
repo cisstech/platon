@@ -63,7 +63,7 @@
       </nz-button-group>
       <div class="spacer"></div>
       <nz-button-group *ngIf="context.resource.type !== 'CIRCLE'">
-        <button nz-button (click)="iframe.open(context.editorUrl!)" *ngIf="context.resource.permissions.write">
+        <button nz-button (click)="iframe.open(context.editorUrl!)">
           <i nz-icon nzType="edit" nzTheme="outline"></i>
           Éditer
         </button>

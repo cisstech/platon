@@ -188,7 +188,7 @@ export class PleEditorComponent implements OnInit, OnDestroy {
     })
 
     if (this.readOnly) {
-      this.form.disable()
+      this.form.disable({ emitEvent: false })
     }
 
     const sandbox = source.variables.sandbox || 'javascript'

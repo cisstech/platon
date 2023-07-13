@@ -14,8 +14,7 @@
         "main": "apps/web/src/main.ts",
         "polyfills": [
           "zone.js",
-          "./node_modules/@ungap/custom-elements/index.js",
-          "./node_modules/@webcomponents/webcomponentsjs/bundles/webcomponents-sd-ce-pf.js",
+          "./node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js",
           "./node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js"
         ],
         "tsConfig": "apps/web/tsconfig.app.json",
@@ -129,7 +128,32 @@
           "apps/web/src/styles.scss"
         ],
         "scripts": [],
-        "allowedCommonJsDependencies": []
+        "allowedCommonJsDependencies": [
+          "jsplumb",
+          "subscriptions-transport-ws",
+          "rfdc",
+          "jsoneditor",
+
+          "@editorjs/editorjs",
+          "@editorjs/code",
+          "@editorjs/delimiter",
+          "@editorjs/simple-image",
+          "@editorjs/checklist",
+          "@editorjs/nested-list",
+          "@editorjs/raw",
+          "@editorjs/table",
+          "@editorjs/header",
+          "@editorjs/marker",
+          "@editorjs/paragraph",
+          "@editorjs/text-variant-tune",
+          "@editorjs/underline",
+
+          "editorjs-drag-drop",
+          "editorjs-undo",
+          "editorjs-style",
+          "editorjs-text-alignment-blocktune",
+          "editorjs-text-color-plugin"
+        ]
       },
       "configurations": {
         "production": {

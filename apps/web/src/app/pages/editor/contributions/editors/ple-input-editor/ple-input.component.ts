@@ -160,7 +160,7 @@ export class PleInputComponent implements OnInit, OnDestroy {
     )
 
     if (this.disabled) {
-      this.configForm.disable()
+      this.configForm.disable({ emitEvent: false })
     }
   }
 
