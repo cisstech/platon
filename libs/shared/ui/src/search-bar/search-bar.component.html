@@ -27,9 +27,7 @@
         [nzValue]="onComplete(suggestion)"
       >
         <ng-container *ngIf="suggestionTemplate; else defaultTemplate">
-          <ng-container
-            *ngTemplateOutlet="suggestionTemplate; context: { $implicit: suggestion }"
-          ></ng-container>
+          <ng-container *ngTemplateOutlet="suggestionTemplate; context: { $implicit: suggestion }"></ng-container>
         </ng-container>
         <ng-template #defaultTemplate>{{ suggestion }}</ng-template>
       </nz-auto-option>

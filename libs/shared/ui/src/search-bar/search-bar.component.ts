@@ -16,7 +16,7 @@ import {
 } from '@angular/core'
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Subscription } from 'rxjs'
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators'
+import { debounceTime, distinctUntilChanged, skip, switchMap } from 'rxjs/operators'
 import { SearchBar } from './search-bar'
 
 import { MatIconModule } from '@angular/material/icon'
@@ -83,6 +83,7 @@ export class UiSearchBarComponent implements OnInit, OnChanges, OnDestroy {
     this.subscriptions.push(
       this.control.valueChanges
         .pipe(
+          skip(1),
           debounceTime(500), // Wait for the user to stop typing (1/2 second in this case)
           distinctUntilChanged(), // Wait until the search text changes.
           switchMap((query) => {
@@ -174,9 +175,7 @@ export class UiSearchBarComponent implements OnInit, OnChanges, OnDestroy {
   private defineSetterForValueProperty(): void {
     if (this.searchbar && !Object.getOwnPropertyDescriptor(this.searchbar, 'value')?.set) {
       Object.defineProperty(this.searchbar, 'value', {
-        get: () => {
-          return this.control.value
-        },
+        get: () => this.control.value,
         set: (value: string) => {
           this.control.patchValue(value || '')
           this.onTrigger()
