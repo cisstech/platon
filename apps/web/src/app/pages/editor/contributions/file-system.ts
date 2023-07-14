@@ -9,11 +9,10 @@ import {
   SearchForm,
   SearchResult,
 } from '@cisstech/nge-ide/core'
+import { removeLeadingSlash } from '@platon/core/common'
 import { ResourceFileService } from '@platon/feature/resource/browser'
 import { FileTypes, ResourceFile } from '@platon/feature/resource/common'
 import { firstValueFrom } from 'rxjs'
-
-const removeLeadingSlash = (path: string) => path.replace(/^[\\/.]+/g, '')
 
 class FileImpl implements IFile {
   readonly uri: monaco.Uri

@@ -3,6 +3,7 @@ import { DndData, EditorService, NotificationService } from '@cisstech/nge-ide/c
 import { EditorPresenter } from '../../../../../editor.presenter'
 import { BaseValueEditor } from '../../ple-input'
 import { ResourceFileSystemProvider } from '../../../../file-system'
+import { removeLeadingSlash } from '@platon/core/common'
 
 @Component({
   selector: 'app-input-file-value-editor',
@@ -46,10 +47,12 @@ export class InputFileValueEditorComponent extends BaseValueEditor<string> {
         return
       }
 
-      const code = opened ? '/relative' : `/${owner.code}`
-      const version = uri.authority.split(':')[1]
-
-      this.changeValue((this.value = `@copycontent ${code}:${version}${uri.path}`))
+      if (opened) {
+        this.changeValue((this.value = `@copycontent ${removeLeadingSlash(uri.path)}`))
+      } else {
+        const version = uri.authority.split(':')[1]
+        this.changeValue((this.value = `@copycontent /${owner.code}:${version}${uri.path}`))
+      }
     }
   }
 
@@ -66,10 +69,16 @@ export class InputFileValueEditorComponent extends BaseValueEditor<string> {
   }
 
   protected openFile() {
-    const reference = this.value?.replace(/@copycontent|@copyurl/g, '') || ''
+    const reference = (this.value?.replace(/@copycontent|@copyurl/g, '') || '').trim()
+    if (!reference.startsWith('/')) {
+      const [resource, version] = (this.editorService.activeResource as monaco.Uri).authority.split(':')
+      const uri = this.fileSystemProvider.buildUri(resource, version, reference)
+      this.editorService.open(uri)
+      return
+    }
 
     // first element is empty string since the string starts with a slash
-    const [, authority, path] = reference.trim().split('/')
+    const [, authority, path] = reference.split('/')
     const [resource, version] = authority.split(':')
     const uri = this.fileSystemProvider.buildUri(resource, version, path)
     this.editorService.open(uri)
