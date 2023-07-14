@@ -65,4 +65,8 @@ export class ResourceBrowsePage implements OnInit, OnDestroy {
   protected switchVersion(version: string) {
     this.presenter.switchVersion(version)
   }
+
+  protected openTab(url: string): void {
+    window.open(url, '_blank')
+  }
 }

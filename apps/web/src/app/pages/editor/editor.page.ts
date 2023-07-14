@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { CommonModule } from '@angular/common'
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core'
 
@@ -14,6 +13,7 @@ import { PlfEditorContributionModule } from './contributions/editors/plf-editor'
 
 import { ActivatedRoute } from '@angular/router'
 import { EditorService, FileService, IdeService } from '@cisstech/nge-ide/core'
+import { UI_MODAL_IFRAME_CLOSE } from '@platon/shared/ui'
 import { Subscription } from 'rxjs'
 import { PleConfigEditorContributionModule } from './contributions/editors/ple-config-editor'
 import { PleEditorContributionModule } from './contributions/editors/ple-editor'
@@ -75,6 +75,8 @@ export class EditorPage implements OnInit, OnDestroy {
         this.editorService.open(this.resourceFileSystemProvider.buildUri(resource.id, version, path))
       })
     })
+
+    // window.top?.postMessage(UI_MODAL_IFRAME_CLOSE, '*')
   }
 
   ngOnDestroy(): void {

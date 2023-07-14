@@ -1,33 +1,6 @@
 <ui-list-item-article
   [style.--border-color]="'red'"
   [articleTitle]="name"
-  [articleIconTemplate]="image"
   [articleDescription]="desc"
   [articleUrl]="['/courses/', item.id]"
->
-  <ng-template #image>
-    <!--  <mat-icon>{{item.type|resourceIcon}}</mat-icon> -->
-  </ng-template>
-  <!-- <ui-list-item-article-action
-    (click)="iframe.open(editorUrl)"
-    class="action"
-    actionTitle="Éditer"
-    nz-tooltip="Éditer">
-    <i nz-icon nzType="edit" nzTheme="outline"></i>
-  </ui-list-item-article-action>
-  <ng-container *ngIf="item.type !== 'CIRCLE'">
-    <ui-list-item-article-action
-      (click)="iframe.open(previewUrl)"
-      class="action"
-      actionTitle="Prévisualiser"
-      nz-tooltip="Prévisualiser">
-      <i nz-icon nzType="play-circle" nzTheme="outline"></i>
-    </ui-list-item-article-action>
-  </ng-container>
-  <div class="spacer"></div>
-  <ui-list-item-article-action
-    [actionTitle]="$any(item.updatedAt|date:'dd/MM/yyyy')"
-    [nz-tooltip]="'Mise à jour le ' + $any(item.updatedAt|date:'dd/MM/yyyy')">
-    <i nz-icon nzType="reload" nzTheme="outline"></i>
-  </ui-list-item-article-action> -->
-</ui-list-item-article>
+/>

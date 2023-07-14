@@ -104,4 +104,8 @@ export class ResourcePage implements OnInit, OnDestroy {
   protected trackByValue(_: number, item: unknown) {
     return item
   }
+
+  protected openTab(url: string): void {
+    window.open(url, '_blank')
+  }
 }

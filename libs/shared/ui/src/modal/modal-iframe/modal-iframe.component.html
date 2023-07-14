@@ -3,13 +3,16 @@
   [(nzVisible)]="visible"
   [nzBodyStyle]="{
     padding: '0',
-    height
+    margin: '0',
+    height: closeableFromIframe ? '100vh' : height,
+    'max-width': '100vw'
   }"
   nzClassName="ui-modal"
-  [nzWidth]="width"
+  [nzWidth]="closeableFromIframe ? '100vw' : width"
   nzMask="true"
   nzClosable="false"
   nzCentered="true"
+  nzKeyboard="false"
   nzMaskClosable="true"
   (nzOnOk)="close(true)"
   (nzOnCancel)="close()"
@@ -17,7 +20,7 @@
 >
   <ng-container *nzModalContent>
     <ng-container *ngIf="visible && url">
-      <iframe [src]="url | safe : 'resource'" frameborder="0"></iframe>
+      <iframe #iframe [src]="url | safe : 'resource'" frameborder="0"></iframe>
     </ng-container>
   </ng-container>
 </nz-modal>
