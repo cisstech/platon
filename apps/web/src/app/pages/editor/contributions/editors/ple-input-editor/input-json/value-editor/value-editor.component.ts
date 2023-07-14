@@ -17,7 +17,7 @@ export class InputJsonValueEditorComponent extends BaseValueEditor<Record<string
   constructor() {
     super()
     this.editorOptions.modes = ['tree', 'view', 'form', 'code', 'text']
-    this.editorOptions.mode = 'tree'
+    this.editorOptions.mode = this.disabled ? 'view' : 'tree'
     this.editorOptions.language = 'fr-FR'
     this.editorOptions.mainMenuBar = true
     this.editorOptions.sortObjectKeys = true
@@ -28,7 +28,9 @@ export class InputJsonValueEditorComponent extends BaseValueEditor<Record<string
   }
 
   override setDisabled(disabled: boolean): void {
-    this.editorOptions.mode = disabled ? 'view' : 'tree'
+    if (this.editorOptions) {
+      this.editorOptions.mode = disabled ? 'view' : 'tree'
+    }
     super.setDisabled(disabled)
   }
 }
