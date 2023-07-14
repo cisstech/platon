@@ -3,9 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { NotFoundResponse } from '@platon/core/common'
 import { DataSource, Repository } from 'typeorm'
 import { Optional } from 'typescript-optional'
-import { ResourceInvitationEntity } from './invitation.entity'
 import { ResourceMemberEntity } from '../members/member.entity'
 import { ResourceMemberService } from '../members/member.service'
+import { ResourceInvitationEntity } from './invitation.entity'
 
 @Injectable()
 export class ResourceInvitationService {
@@ -16,8 +16,16 @@ export class ResourceInvitationService {
     private readonly memberService: ResourceMemberService
   ) {}
 
-  async findByInviteeId(resourceId: string, inviteeId: string): Promise<Optional<ResourceInvitationEntity>> {
-    return Optional.ofNullable(await this.repository.findOne({ where: { resourceId, inviteeId } }))
+  async findLastOfInviteeInResource(
+    resourceId: string,
+    inviteeId: string
+  ): Promise<Optional<ResourceInvitationEntity>> {
+    return Optional.ofNullable(
+      await this.repository.findOne({
+        where: { resourceId, inviteeId },
+        order: { createdAt: 'DESC' },
+      })
+    )
   }
 
   async findAll(resourceId: string): Promise<[ResourceInvitationEntity[], number]> {
@@ -57,6 +65,10 @@ export class ResourceInvitationService {
   }
 
   async delete(resourceId: string, inviteeId: string) {
-    return this.repository.delete({ resourceId, inviteeId })
+    return this.repository.remove(
+      (await this.findLastOfInviteeInResource(resourceId, inviteeId)).orElseThrow(
+        () => new NotFoundResponse(`ResourceInvitation not found for user: ${inviteeId}`)
+      )
+    )
   }
 }

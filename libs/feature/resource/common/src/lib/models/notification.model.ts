@@ -19,4 +19,7 @@ export interface ResourceInvitationNotification {
   resourceId: string
   resourceName: string
   resourceType: ResourceTypes
+
+  // extra dynamic data defined by ResourceInvitationExtraDataProvider
+  expired?: boolean
 }

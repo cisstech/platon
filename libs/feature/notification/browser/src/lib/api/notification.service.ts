@@ -58,6 +58,7 @@ export class NotificationService {
       map((change) => ({
         unreadCount: change.unreadCount,
         newNotification: change.newNotification ? decodeFragment(change.newNotification) : undefined,
+        notifications: change.notifications?.map((change) => decodeFragment(change)),
       }))
     )
   }

@@ -47,43 +47,51 @@ export const ResourceInvitationNotificationParser: NotificationParser = {
 
     return {
       icon: new ImgIcon(`/assets/images/resources/${data.resourceType.toLowerCase()}.svg`),
-      content: `Vous avez été invité à collaborer sur "${data.resourceName}" par "${data.inviterName}"`,
-      actions: [
-        {
-          label: 'Accepter',
-          type: 'primary',
-          icon: 'check-circle',
-          onClick: async ({ onClose, onDelete }) => {
-            try {
-              const invitation = await firstValueFrom(resourceService.findInvitation(data.resourceId, data.inviteeId))
-              await firstValueFrom(resourceService.acceptInvitation(invitation))
+      content: data.expired
+        ? `Vous aviez été invité à collaborer sur "${data.resourceName}" par "${data.inviterName}"`
+        : `Vous avez été invité à collaborer sur "${data.resourceName}" par "${data.inviterName}"`,
+      actions: !data.expired
+        ? [
+            {
+              label: 'Accepter',
+              type: 'primary',
+              icon: 'check-circle',
+              onClick: async ({ onClose, onDelete }) => {
+                try {
+                  const invitation = await firstValueFrom(
+                    resourceService.findInvitation(data.resourceId, data.inviteeId)
+                  )
+                  await firstValueFrom(resourceService.acceptInvitation(invitation))
 
-              router.navigate([`/resources/${data.resourceId}`])
+                  router.navigate([`/resources/${data.resourceId}`])
 
-              onDelete(notification)
-              onClose()
-            } catch {
-              dialogService.error("Une erreur est survenue lors de l'acceptation de l'invitation.")
-            }
-          },
-        },
-        {
-          label: 'Décliner',
-          type: 'danger',
-          icon: 'close-circle',
-          onClick: async ({ onClose, onDelete }) => {
-            try {
-              const invitation = await firstValueFrom(resourceService.findInvitation(data.resourceId, data.inviteeId))
-              await firstValueFrom(resourceService.deleteInvitation(invitation))
+                  onDelete(notification)
+                  onClose()
+                } catch {
+                  dialogService.error("Une erreur est survenue lors de l'acceptation de l'invitation.")
+                }
+              },
+            },
+            {
+              label: 'Décliner',
+              type: 'danger',
+              icon: 'close-circle',
+              onClick: async ({ onClose, onDelete }) => {
+                try {
+                  const invitation = await firstValueFrom(
+                    resourceService.findInvitation(data.resourceId, data.inviteeId)
+                  )
+                  await firstValueFrom(resourceService.deleteInvitation(invitation))
 
-              onDelete(notification)
-              onClose()
-            } catch {
-              dialogService.error("Une erreur est survenue lors de suppression de l'invitation.")
-            }
-          },
-        },
-      ],
+                  onDelete(notification)
+                  onClose()
+                } catch {
+                  dialogService.error("Une erreur est survenue lors de suppression de l'invitation.")
+                }
+              },
+            },
+          ]
+        : [],
     }
   },
 }

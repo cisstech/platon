@@ -6,6 +6,7 @@ import { ResourceEventSubscriber } from './events/event.subscriber'
 import { ResourceFileController } from './files/file.controller'
 import { ResourceFileService } from './files/file.service'
 import { ResourceInvitationController, ResourceInvitationEntity, ResourceInvitationService } from './invitations'
+import { ResourceInvitationExtraDataProvider } from './invitations/invitation.providers'
 import { ResourceInvitationSubscriber } from './invitations/invitation.subscriber'
 import {
   ResourceMemberController,
@@ -48,6 +49,7 @@ import { ResourceWatcherController, ResourceWatcherEntity, ResourceWatcherServic
     ResourceStatsSubscriber,
     ResourcePermissionService,
     ResourceInvitationSubscriber,
+    ResourceInvitationExtraDataProvider,
   ],
   imports: [
     TypeOrmModule.forFeature([

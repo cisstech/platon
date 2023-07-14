@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { UserEntity } from '@platon/core/server'
 import { NotificationService } from '@platon/feature/notification/server'
-import { ResourceInvitationNotification } from '@platon/feature/resource/common'
+import { RESOURCE_INVITATION_NOTIFICATION, ResourceInvitationNotification } from '@platon/feature/resource/common'
 import { DataSource, EntitySubscriberInterface, InsertEvent, RemoveEvent } from 'typeorm'
 import { ResourceEntity } from '../resource.entity'
 import { ResourceInvitationEntity } from './invitation.entity'
@@ -45,12 +45,13 @@ export class ResourceInvitationSubscriber implements EntitySubscriberInterface<R
 
   async afterRemove(event: RemoveEvent<ResourceInvitationEntity>): Promise<void> {
     if (event.entity) {
-      await this.notificationService.deleteWhere(event.entity.inviteeId, {
-        data: {
-          type: 'RESOURCE-INVITATION',
-          invitationId: event.entity.id,
-        } as Partial<ResourceInvitationNotification>,
-      })
+      const invitation = event.entity
+      await this.notificationService.deleteWhere(
+        invitation.inviteeId,
+        (qb) => qb.andWhere(`data->>'type' = :type`, { type: RESOURCE_INVITATION_NOTIFICATION }),
+        (qb) => qb.andWhere(`data->>'resourceId' = :resourceId`, { resourceId: invitation.resourceId }),
+        (qb) => qb.andWhere(`data->>'inviteeId' = :inviteeId`, { inviteeId: invitation.inviteeId })
+      )
     }
   }
 }

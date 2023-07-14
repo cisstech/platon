@@ -21,7 +21,7 @@ export class ResourceInvitationController {
     @Param('inviteeId') inviteeId: string,
     @Param('resourceId') resourceId: string
   ): Promise<ItemResponse<ResourceInvitationDTO>> {
-    const optional = await this.service.findByInviteeId(resourceId, inviteeId)
+    const optional = await this.service.findLastOfInviteeInResource(resourceId, inviteeId)
     const resource = Mapper.map(
       optional.orElseThrow(() => new NotFoundResponse(`ResourceInvitation not found: ${inviteeId}`)),
       ResourceInvitationDTO
