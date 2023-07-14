@@ -34,6 +34,9 @@ export class NotificationChangeGraphModel {
 
   @Field(() => NotificationGraphModel, { nullable: true })
   newNotification?: NotificationGraphModel
+
+  @Field(() => [NotificationGraphModel], { nullable: true })
+  notifications?: NotificationGraphModel[]
 }
 
 @InputType('NotificationFiltersInput')

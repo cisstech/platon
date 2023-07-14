@@ -1,18 +1,20 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { LevelModule, TopicModule } from '@platon/core/server'
-import { FeatureNotificationServerModule } from '@platon/feature/notification/server'
 import { ResourceEventController, ResourceEventEntity, ResourceEventService } from './events'
 import { ResourceEventSubscriber } from './events/event.subscriber'
 import { ResourceFileController } from './files/file.controller'
 import { ResourceFileService } from './files/file.service'
 import { ResourceInvitationController, ResourceInvitationEntity, ResourceInvitationService } from './invitations'
+import { ResourceInvitationExtraDataProvider } from './invitations/invitation.providers'
+import { ResourceInvitationSubscriber } from './invitations/invitation.subscriber'
 import {
   ResourceMemberController,
   ResourceMemberEntity,
   ResourceMemberService,
   ResourceMemberSubscriber,
 } from './members'
+import { ResourcePermissionService } from './permissions/permissions.service'
 import { ResourceController } from './resource.controller'
 import { ResourceEntity } from './resource.entity'
 import { ResourceService } from './resource.service'
@@ -45,6 +47,9 @@ import { ResourceWatcherController, ResourceWatcherEntity, ResourceWatcherServic
     ResourceEventSubscriber,
     ResourceMemberSubscriber,
     ResourceStatsSubscriber,
+    ResourcePermissionService,
+    ResourceInvitationSubscriber,
+    ResourceInvitationExtraDataProvider,
   ],
   imports: [
     TypeOrmModule.forFeature([
@@ -57,7 +62,6 @@ import { ResourceWatcherController, ResourceWatcherEntity, ResourceWatcherServic
     ]),
     LevelModule,
     TopicModule,
-    FeatureNotificationServerModule,
   ],
   exports: [
     ResourceFileService,

@@ -8,6 +8,10 @@
   }
 }
 
+nz-page-header {
+  padding-left: 0;
+}
+
 nz-breadcrumb {
   font-size: 1.5em;
   display: flex;
@@ -39,6 +43,11 @@ nz-select {
 
 .spacer {
   flex: 1;
+}
+
+.container-actions {
+  display: flex;
+  align-items: center;
 }
 
 @media (min-width: 720px) {

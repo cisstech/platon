@@ -1,10 +1,10 @@
-export interface Notification<T = unknown> {
+export interface Notification<TData = unknown> {
   id: string
   userId: string
   createdAt: Date
   updatedAt?: Date
   readAt?: Date
-  data: T
+  data: TData
 }
 
 export interface NotificationFilters {

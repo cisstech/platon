@@ -81,7 +81,7 @@ export class ResourceItemComponent implements OnInit {
     }
   }
 
-  openUrl(url: string) {
+  protected openTab(url: string): void {
     window.open(url, '_blank')
   }
 }

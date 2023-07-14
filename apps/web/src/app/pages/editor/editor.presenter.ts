@@ -1,13 +1,22 @@
 import { Injectable, inject } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
+import { AuthService } from '@platon/core/browser'
+import { User } from '@platon/core/common'
 import { ResourceService } from '@platon/feature/resource/browser'
-import { CircleTree, Resource, ResourceTypes, circleFromTree, resourceAncestors } from '@platon/feature/resource/common'
+import {
+  CircleTree,
+  Resource,
+  ResourceTypes,
+  circleFromTree,
+  circleTreeFromResource,
+  resourceAncestors,
+} from '@platon/feature/resource/common'
 import { firstValueFrom } from 'rxjs'
 
 @Injectable({ providedIn: 'root' })
 export class EditorPresenter {
+  private readonly authService = inject(AuthService)
   private readonly resourceService = inject(ResourceService)
-
   private resource!: Resource
   private ancestors: CircleTree[] = []
 
@@ -27,13 +36,17 @@ export class EditorPresenter {
     const version = queryParams.get('version') || 'latest'
     const filesToOpen = (queryParams.get('files') || '').split(',').filter(Boolean)
 
-    const [resource, circles] = await Promise.all([
+    const user = (await this.authService.ready()) as User
+    const [resource, circles, personal] = await Promise.all([
       firstValueFrom(this.resourceService.find(id)),
       firstValueFrom(this.resourceService.tree()),
+      firstValueFrom(this.resourceService.circle(user.username)),
     ])
 
     const ancestors =
-      resource.type === ResourceTypes.CIRCLE
+      resource.parentId === personal.id
+        ? [circleTreeFromResource(personal)]
+        : resource.type === ResourceTypes.CIRCLE
         ? resourceAncestors(circles, resource.id)
         : [
             circleFromTree(circles, resource.parentId as string) as CircleTree,
@@ -49,6 +62,32 @@ export class EditorPresenter {
       resource,
       ancestors,
       filesToOpen,
+    }
+  }
+
+  // add tsdoc comment to the following method
+
+  /**
+   *  Get the resource thats owns the given uri
+   * @param uri the uri to get the owner of
+   */
+  findOwnerResource(uri: monaco.Uri) {
+    const { currentAncestors, currentResource } = this
+    const [resource] = uri.authority.split(':')
+
+    const owner =
+      currentResource.id === resource
+        ? currentResource
+        : currentAncestors.find((ancestor) => ancestor.code === resource)
+
+    return {
+      owner: owner
+        ? {
+            ...owner,
+            type: 'type' in owner ? owner.type : 'CIRCLE',
+          }
+        : undefined,
+      opened: currentResource.id === owner?.id,
     }
   }
 }

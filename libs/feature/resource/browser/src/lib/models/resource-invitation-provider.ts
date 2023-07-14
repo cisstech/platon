@@ -5,7 +5,11 @@ import { Observable } from 'rxjs'
 export abstract class ResourceInvitationProvider {
   abstract deleteInvitation(invitation: ResourceInvitation): Observable<void>
   abstract acceptInvitation(invitation: ResourceInvitation): Observable<void>
-  abstract createInvitation(resource: Resource, input: CreateResourceInvitation): Observable<ResourceInvitation>
-  abstract findInvitation(resource: Resource, inviteeId: string): Observable<ResourceInvitation>
-  abstract listInvitations(resource: Resource): Observable<ListResponse<ResourceInvitation>>
+
+  abstract createInvitation(
+    resource: string | Resource,
+    input: CreateResourceInvitation
+  ): Observable<ResourceInvitation>
+  abstract findInvitation(resource: string | Resource, inviteeId: string): Observable<ResourceInvitation>
+  abstract listInvitations(resource: string | Resource): Observable<ListResponse<ResourceInvitation>>
 }

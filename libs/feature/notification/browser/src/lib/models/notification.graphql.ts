@@ -28,6 +28,9 @@ gql`
       newNotification {
         ...Notif
       }
+      notifications {
+        ...Notif
+      }
     }
   }
 

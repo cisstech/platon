@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { ListResponse, User } from '@platon/core/common'
+import { ListResponse, User, UserRoles } from '@platon/core/common'
 import {
   CircleTree,
   CreateResource,
@@ -13,6 +13,7 @@ import {
   ResourceMember,
   ResourceMemberFilters,
   ResourceStatisic,
+  ResourceTypes,
   ResourceWatcherFilters,
   UpdateResource,
 } from '@platon/feature/resource/common'
@@ -32,6 +33,14 @@ export class ResourceService {
     private readonly resourceWatcherProvider: ResourceWatcherProvider,
     private readonly resourceInvitationProvider: ResourceInvitationProvider
   ) {}
+
+  //#region Utils
+  canUserCreateResource(user: User, type: ResourceTypes | keyof typeof ResourceTypes): boolean {
+    return type === 'CIRCLE'
+      ? user.role === UserRoles.admin
+      : user.role === UserRoles.admin || user.role === UserRoles.teacher
+  }
+  //#endregion
 
   //#region Resources
   tree(): Observable<CircleTree> {
@@ -108,15 +117,15 @@ export class ResourceService {
     return this.resourceInvitationProvider.acceptInvitation(invitation)
   }
 
-  createInvitation(resource: Resource, input: CreateResourceInvitation): Observable<ResourceInvitation> {
+  createInvitation(resource: string | Resource, input: CreateResourceInvitation): Observable<ResourceInvitation> {
     return this.resourceInvitationProvider.createInvitation(resource, input)
   }
 
-  findInvitation(resource: Resource, inviteeId: string): Observable<ResourceInvitation> {
+  findInvitation(resource: string | Resource, inviteeId: string): Observable<ResourceInvitation> {
     return this.resourceInvitationProvider.findInvitation(resource, inviteeId)
   }
 
-  listInvitations(resource: Resource): Observable<ListResponse<ResourceInvitation>> {
+  listInvitations(resource: string | Resource): Observable<ListResponse<ResourceInvitation>> {
     return this.resourceInvitationProvider.listInvitations(resource)
   }
   //#endregion

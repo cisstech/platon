@@ -6,9 +6,9 @@
           <mat-card-header>
             <mat-card-title>Suivi de l'État des Ressources</mat-card-title>
             <mat-card-subtitle>
-              Tenir à jour les statuts des ressources aide à s'assurer que les enseignants peuvent
-              rapidement trouver des ressources fiables pour leurs cours. Contribuez à la qualité de
-              la plateforme en mettant à jour le statut de vos ressources.
+              Tenir à jour les statuts des ressources aide à s'assurer que les enseignants peuvent rapidement trouver
+              des ressources fiables pour leurs cours. Contribuez à la qualité de la plateforme en mettant à jour le
+              statut de vos ressources.
             </mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>
@@ -28,8 +28,8 @@
           <mat-card-header>
             <mat-card-title>Tags</mat-card-title>
             <mat-card-subtitle
-              >Les tags (topics et niveaux) permettent une classification et une organisation plus
-              efficace de vos ressources.</mat-card-subtitle
+              >Les tags (topics et niveaux) permettent une classification et une organisation plus efficace de vos
+              ressources.</mat-card-subtitle
             >
           </mat-card-header>
           <mat-card-content>
@@ -39,11 +39,12 @@
               [nzNotFoundFooter]="noTagsFooter"
             >
               <ng-template #noTags>
-                Il est donc important d'ajouter des tags à vos créations pour en faciliter la
-                recherche et la découverte par d'autres enseignants.
+                Il est donc important d'ajouter des tags à vos créations pour en faciliter la recherche et la découverte
+                par d'autres enseignants.
               </ng-template>
               <ng-template #noTagsFooter>
                 <button
+                  *ngIf="context.resource.permissions.write"
                   nz-button
                   nzType="primary"
                   [routerLink]="['../settings']"
@@ -60,7 +61,7 @@
                   [queryParams]="{ q: item.name, parent: context.resource.id }"
                   [queryParamsHandling]="'merge'"
                 >
-                  {{item.name}}
+                  {{ item.name }}
                 </mat-chip>
               </ng-container>
               <ng-container *ngFor="let item of context.resource.topics; trackBy: trackById">
@@ -69,7 +70,7 @@
                   [queryParams]="{ q: item.name, parent: context.resource.id }"
                   [queryParamsHandling]="'merge'"
                 >
-                  {{item.name}}
+                  {{ item.name }}
                 </mat-chip>
               </ng-container>
             </mat-chip-set>
@@ -115,7 +116,7 @@
                 nz-button
                 nzType="primary"
                 [routerLink]="['/resources']"
-                [queryParams]="{ types: 'ACTIVITY', parent: context.resource.id}"
+                [queryParams]="{ types: 'ACTIVITY', parent: context.resource.id }"
                 [queryParamsHandling]="'merge'"
               >
                 Rechercher
@@ -131,7 +132,7 @@
                 nz-button
                 nzType="primary"
                 [routerLink]="['/resources']"
-                [queryParams]="{ types: 'EXERCISE', parent: context.resource.id}"
+                [queryParams]="{ types: 'EXERCISE', parent: context.resource.id }"
                 [queryParamsHandling]="'merge'"
               >
                 Rechercher

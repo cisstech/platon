@@ -25,6 +25,7 @@ import { ResourceSearchBarComponent } from '@platon/feature/resource/browser'
 import { Resource } from '@platon/feature/resource/common'
 import { UiStepDirective, UiStepperComponent } from '@platon/shared/ui'
 import { catchError, firstValueFrom, of } from 'rxjs'
+import { NzPageHeaderModule } from 'ng-zorro-antd/page-header'
 
 @Component({
   standalone: true,
@@ -45,6 +46,7 @@ import { catchError, firstValueFrom, of } from 'rxjs'
     NzSelectModule,
     NzSkeletonModule,
     NzDatePickerModule,
+    NzPageHeaderModule,
 
     DialogModule,
     UiStepDirective,

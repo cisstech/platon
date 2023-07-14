@@ -7,7 +7,6 @@ import { ResourceOrderingPipe } from './resource-ordering.pipe'
 import { ResourceStatusColorPipe } from './resource-status-color.pipe'
 import { ResourceStatusPipe } from './resource-status.pipe'
 import { ResourceTypePipe } from './resource-type.pipe'
-import { ResourceVisibilityPipe } from './resource-visibility.pipe'
 
 @NgModule({
   exports: [
@@ -18,7 +17,6 @@ import { ResourceVisibilityPipe } from './resource-visibility.pipe'
     ResourceStatusColorPipe,
     ResourceStatusPipe,
     ResourceOrderingPipe,
-    ResourceVisibilityPipe,
     ResourceEventTypePipe,
   ],
   declarations: [
@@ -29,7 +27,6 @@ import { ResourceVisibilityPipe } from './resource-visibility.pipe'
     ResourceStatusColorPipe,
     ResourceStatusPipe,
     ResourceOrderingPipe,
-    ResourceVisibilityPipe,
     ResourceEventTypePipe,
   ],
 })

@@ -1,5 +1,5 @@
 import { BaseEntity, LevelEntity, TopicEntity, UserEntity } from '@platon/core/server'
-import { ResourceStatus, ResourceTypes, ResourceVisibilities } from '@platon/feature/resource/common'
+import { ResourceStatus, ResourceTypes } from '@platon/feature/resource/common'
 import { Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne } from 'typeorm'
 
 @Entity('Resources')
@@ -8,6 +8,10 @@ export class ResourceEntity extends BaseEntity {
   @Column()
   name!: string
 
+  @Index('Resources_personal_idx')
+  @Column({ type: 'boolean', name: 'personal', default: false })
+  personal!: boolean
+
   @Column({ nullable: true })
   desc?: string
 
@@ -15,21 +19,9 @@ export class ResourceEntity extends BaseEntity {
   @Column({ nullable: true })
   code?: string
 
-  @Index('Resources_model_id_idx')
-  @Column({ name: 'model_id', nullable: true })
-  model_id?: string
-
-  @ManyToOne(() => ResourceEntity, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'model_id' })
-  model?: ResourceEntity
-
   @Index('Resources_type_idx')
   @Column({ type: 'enum', enum: ResourceTypes })
   type!: ResourceTypes
-
-  @Index('Resources_visibility_idx')
-  @Column({ type: 'enum', enum: ResourceVisibilities })
-  visibility!: ResourceVisibilities
 
   @Index('Resources_status_idx')
   @Column({ type: 'enum', enum: ResourceStatus, default: ResourceStatus.READY })

@@ -5,5 +5,14 @@
   "trailingComma": "es5",
   "semi": false,
   "printWidth": 120,
-  "endOfLine": "lf"
+  "endOfLine": "lf",
+    "overrides": [
+    {
+      "files": "*.html",
+      "options": {
+        "parser": "angular"
+      }
+    }
+  ]
+
 }

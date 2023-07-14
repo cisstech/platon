@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { BaseEntity, UserEntity } from '@platon/core/server'
-import { ResourceEventTypes } from '@platon/feature/resource/common'
+import { ResourceEventData, ResourceEventTypes } from '@platon/feature/resource/common'
 import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm'
 import { ResourceEntity } from '../resource.entity'
 
 @Entity('ResourceEvents')
-export class ResourceEventEntity extends BaseEntity {
+export class ResourceEventEntity<TData = unknown> extends BaseEntity {
   @Column({ type: 'enum', enum: ResourceEventTypes })
   type!: ResourceEventTypes
 
@@ -26,5 +25,5 @@ export class ResourceEventEntity extends BaseEntity {
   resource!: ResourceEntity
 
   @Column({ type: 'jsonb' })
-  data!: Record<string, any>
+  data!: ResourceEventData<TData>
 }

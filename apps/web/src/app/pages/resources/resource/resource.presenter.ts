@@ -19,7 +19,7 @@ import {
   UpdateResource,
 } from '@platon/feature/resource/common'
 import { LayoutState, layoutStateFromError } from '@platon/shared/ui'
-import { BehaviorSubject, Observable, Subscription, catchError, firstValueFrom, of } from 'rxjs'
+import { BehaviorSubject, Observable, Subscription, firstValueFrom } from 'rxjs'
 
 @Injectable()
 export class ResourcePresenter implements OnDestroy {
@@ -50,7 +50,7 @@ export class ResourcePresenter implements OnDestroy {
   }
 
   defaultContext(): Context {
-    return { state: 'LOADING' }
+    return { state: 'LOADING', version: 'latest' }
   }
 
   availableTopics(): Observable<Topic[]> {
@@ -127,22 +127,6 @@ export class ResourcePresenter implements OnDestroy {
     return firstValueFrom(this.resourceService.listInvitations(resource))
   }
 
-  async acceptInvitation(): Promise<void> {
-    const { resource, invitation } = this.context.value as Required<Context>
-    try {
-      await firstValueFrom(this.resourceService.acceptInvitation(invitation))
-      await this.refresh(resource.id)
-      this.dialogService.success(`Invitation acceptée !`)
-    } catch {
-      this.alertError()
-    }
-  }
-
-  async declineInvitation(): Promise<void> {
-    const { invitation } = this.context.value as Required<Context>
-    await this.deleteInvitation(invitation)
-  }
-
   async sendInvitation(input: CreateResourceInvitation): Promise<void> {
     await this.dialogService.loading("Envoi d'une invitation en cours..", async () => {
       const { resource } = this.context.value as Required<Context>
@@ -159,7 +143,7 @@ export class ResourcePresenter implements OnDestroy {
   async deleteInvitation(invitation: ResourceInvitation): Promise<boolean> {
     const { resource } = this.context.value as Required<Context>
     try {
-      await this.resourceService.deleteInvitation(invitation).toPromise()
+      await firstValueFrom(this.resourceService.deleteInvitation(invitation))
       await this.refresh(resource.id)
       this.dialogService.success(`Invitation supprimée !`)
       return true
@@ -181,7 +165,7 @@ export class ResourcePresenter implements OnDestroy {
     const { resource } = this.context.value as Required<Context>
     try {
       const changes = await firstValueFrom(this.resourceService.update(resource.id, input))
-      this.context.next({
+      this.updateContext({
         ...this.context.value,
         resource: changes,
       })
@@ -194,31 +178,32 @@ export class ResourcePresenter implements OnDestroy {
     }
   }
 
+  switchVersion(version: string): void {
+    this.updateContext({
+      ...this.context.value,
+      version,
+    })
+  }
+
   private async refresh(id: string): Promise<void> {
     const [user, resource] = await Promise.all([
       this.authService.ready(),
       firstValueFrom(this.resourceService.find(id, this.isInitialLoading)),
     ])
 
-    const [parent, member, watcher, invitation, statistic, circles] = await Promise.all([
+    const [parent, statistic, circles] = await Promise.all([
       resource.parentId ? firstValueFrom(this.resourceService.find(resource.parentId)) : Promise.resolve(undefined),
-      firstValueFrom(this.resourceService.findMember(resource, user!.id).pipe(catchError(() => of(undefined)))),
-      firstValueFrom(this.resourceService.findWatcher(resource, user!.id).pipe(catchError(() => of(undefined)))),
-      firstValueFrom(this.resourceService.findInvitation(resource, user!.id).pipe(catchError(() => of(undefined)))),
       firstValueFrom(this.resourceService.statistic(resource)),
       firstValueFrom(this.resourceService.tree()),
     ])
 
-    this.context.next({
+    this.updateContext({
       state: 'READY',
       user,
       parent,
       resource,
-      member,
       statistic,
-      invitation,
       circles,
-      watcher: !!watcher,
     })
   }
 
@@ -226,7 +211,7 @@ export class ResourcePresenter implements OnDestroy {
     try {
       await this.refresh(id)
     } catch (error) {
-      this.context.next({ state: layoutStateFromError(error) })
+      this.updateContext({ state: layoutStateFromError(error) })
     }
     this.isInitialLoading = false
   }
@@ -234,17 +219,32 @@ export class ResourcePresenter implements OnDestroy {
   private alertError(): void {
     this.dialogService.error('Une erreur est survenue lors de cette action, veuillez réessayer un peu plus tard !')
   }
+
+  private updateContext(context: Partial<Context>): void {
+    const newContext = {
+      ...this.context.value,
+      ...context,
+    }
+
+    this.context.next({
+      ...newContext,
+      version: newContext?.version || 'latest',
+      editorUrl: `/editor/${newContext.resource?.id}?version=${newContext.version || 'latest'}`,
+      previewUrl: `/player/preview/${newContext.resource?.id}?version=${newContext.version || 'latest'}`,
+    })
+  }
 }
 
 export interface Context {
   state: LayoutState
+  version: string
   user?: User
   parent?: Resource
   resource?: Resource
 
-  watcher?: boolean
+  editorUrl?: string
+  previewUrl?: string
+
   circles?: CircleTree
-  member?: ResourceMember
   statistic?: ResourceStatisic
-  invitation?: ResourceInvitation
 }

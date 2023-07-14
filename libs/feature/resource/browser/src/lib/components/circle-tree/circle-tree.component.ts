@@ -18,11 +18,13 @@ import { NzTreeFlatDataSource, NzTreeFlattener, NzTreeViewModule } from 'ng-zorr
 export class CircleTreeComponent implements OnInit {
   @Input() tree!: CircleTree
   @Input() selection?: string
+
   @Output() selectionChange = new EventEmitter<string>()
 
   protected flatNodeMap = new Map<FlatNode, CircleTree>()
   protected nestedNodeMap = new Map<CircleTree, FlatNode>()
   protected checklistSelection = new SelectionModel<FlatNode>(true)
+  protected disabled = false
 
   protected treeControl = new FlatTreeControl<FlatNode>(
     (node) => node.level,
@@ -47,8 +49,9 @@ export class CircleTreeComponent implements OnInit {
     this.treeControl.expandAll()
     if (this.selection) {
       for (const node of this.flatNodeMap.keys()) {
-        if (node.id === this.selection) {
+        if (node.id === this.selection && !node.disabled) {
           this.selectionToggle(node)
+          this.disabled = true
           return
         }
       }
@@ -69,6 +72,7 @@ export class CircleTreeComponent implements OnInit {
             id: node.id,
             name: node.name,
             level: level,
+            disabled: this.selectable ? !node.permissions.write || !node.permissions.read : !node.permissions.read,
             expandable: !!node.children && node.children.length > 0,
           }
     flatNode.name = node.name
@@ -92,6 +96,7 @@ export class CircleTreeComponent implements OnInit {
 interface FlatNode {
   id: string
   name: string
+  disabled: boolean
   expandable: boolean
   level: number
 }

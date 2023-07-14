@@ -54,9 +54,9 @@ export class InputBoxComponent implements OnInit, OnDestroy, WebComponentHooks<I
       this.form.patchValue(this.state.value)
     }
 
-    this.form.enable()
+    this.form.enable({ emitEvent: false })
     if (this.state.disabled) {
-      this.form.disable()
+      this.form.disable({ emitEvent: false })
     }
   }
 

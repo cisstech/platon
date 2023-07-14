@@ -12,9 +12,7 @@
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
-      <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="introduction"
-        >Introduction</nz-form-label
-      >
+      <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="introduction">Introduction</nz-form-label>
       <nz-form-control>
         <textarea nz-input formControlName="introduction" id="introduction"></textarea>
       </nz-form-control>
@@ -43,12 +41,7 @@
           </nz-form-control>
         </nz-form-item>
       </nz-collapse-panel>
-      <nz-collapse-panel
-        formGroupName="navigation"
-        nzHeader="Navigation"
-        nzExpandedIcon="compass"
-        nzActive
-      >
+      <nz-collapse-panel formGroupName="navigation" nzHeader="Navigation" nzExpandedIcon="compass" nzActive>
         <nz-form-item>
           <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="navigationMode">Mode</nz-form-label>
           <nz-form-control>
@@ -60,21 +53,11 @@
           </nz-form-control>
         </nz-form-item>
       </nz-collapse-panel>
-      <nz-collapse-panel
-        formGroupName="actions"
-        nzHeader="Actions"
-        nzExpandedIcon="play-circle"
-        nzActive
-      >
+      <nz-collapse-panel formGroupName="actions" nzHeader="Actions" nzExpandedIcon="play-circle" nzActive>
         <nz-form-item>
           <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="retry">Tentatives</nz-form-label>
           <nz-form-control>
-            <nz-input-number
-              formControlName="retry"
-              id="retry"
-              [nzMin]="0"
-              [nzStep]="1"
-            ></nz-input-number>
+            <nz-input-number formControlName="retry" id="retry" [nzMin]="0" [nzStep]="1"></nz-input-number>
           </nz-form-control>
         </nz-form-item>
         <nz-form-item>
@@ -102,16 +85,9 @@
           </nz-form-control>
         </nz-form-item>
       </nz-collapse-panel>
-      <nz-collapse-panel
-        formGroupName="feedback"
-        nzHeader="Feedback"
-        nzExpandedIcon="message"
-        nzActive
-      >
+      <nz-collapse-panel formGroupName="feedback" nzHeader="Feedback" nzExpandedIcon="message" nzActive>
         <nz-form-item>
-          <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="validation"
-            >Validation</nz-form-label
-          >
+          <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="validation">Validation</nz-form-label>
           <nz-form-control>
             <label nz-checkbox formControlName="validation" id="validation"></label>
           </nz-form-control>
@@ -143,6 +119,7 @@
                   nzDanger
                   nzType="text"
                   nz-tooltip="Supprimer"
+                  [disabled]="readOnly"
                   (click)="deleteGroup(i)"
                 >
                   <span nz-icon nzType="delete" nzTheme="outline"></span>
@@ -151,7 +128,7 @@
             </ul>
           </nz-list-item>
         </nz-list>
-        <button nz-button nzType="primary" (click)="addGroup()">+</button>
+        <button nz-button nzType="primary" [disabled]="readOnly" (click)="addGroup()">+</button>
       </div>
       <div class="exercise-list" *ngIf="selectedGroup !== undefined">
         <ng-template [ngTemplateOutlet]="exerciseList"></ng-template>
@@ -168,10 +145,9 @@
     </nz-breadcrumb>
   </h3>
   <nz-list [nzDataSource]="selectedGroup" nzBordered>
-    <nz-list-item
-      *ngFor="let exercise of selectedGroup; trackBy: trackByExerciseId; let index = index"
-    >
+    <nz-list-item *ngFor="let exercise of selectedGroup; trackBy: trackByExerciseId; let index = index">
       <app-pla-exercise-editor
+        [disabled]="readOnly"
         [exercise]="exercise"
         (exerciseChange)="updateExercise($event)"
         (deleteClicked)="deleteExercise(index)"
@@ -183,10 +159,11 @@
     <resource-search-bar
       [modalMode]="true"
       [simpleLayout]="true"
+      [disabled]="!!readOnly"
       [(ngModel)]="selectedExercise"
       [filters]="{ types: ['EXERCISE'], watchers: [user.id] }"
     />
-    <button nz-button nzType="primary" (click)="addExercise()" [disabled]="!selectedExercise">
+    <button nz-button nzType="primary" (click)="addExercise()" [disabled]="!selectedExercise || readOnly">
       Ajouter
     </button>
   </div>

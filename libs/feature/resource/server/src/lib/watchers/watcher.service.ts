@@ -19,6 +19,10 @@ export class ResourceWatcherService {
     )
   }
 
+  async findAllByUserId(userId: string): Promise<ResourceWatcherEntity[]> {
+    return this.repository.find({ where: { userId } })
+  }
+
   async search(resourceId: string, filters: ResourceWatcherFilters = {}): Promise<[ResourceWatcherEntity[], number]> {
     const query = this.repository.createQueryBuilder('watcher')
     query.leftJoinAndSelect('watcher.user', 'user', 'user.id = watcher.user_id')

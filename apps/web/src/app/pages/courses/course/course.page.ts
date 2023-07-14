@@ -13,6 +13,7 @@ import { UiLayoutTabsComponent, UiLayoutTabsTitleDirective } from '@platon/share
 
 import { NzTypographyModule } from 'ng-zorro-antd/typography'
 import { CoursePresenter } from './course.presenter'
+import { NzPageHeaderModule } from 'ng-zorro-antd/page-header'
 
 @Component({
   standalone: true,
@@ -30,6 +31,7 @@ import { CoursePresenter } from './course.presenter'
 
     NzBreadCrumbModule,
     NzTypographyModule,
+    NzPageHeaderModule,
 
     DialogModule,
 
