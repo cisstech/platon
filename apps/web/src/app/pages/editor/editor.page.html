@@ -1,1 +1,14 @@
-<ide-root></ide-root>
+<div *ngIf="loading" [@fadeOutDownOnLeave] class="loading-container">
+  <header>
+    <nz-skeleton [nzActive]="true" [nzLoading]="true" [nzParagraph]="{ rows: 1 }" />
+  </header>
+  <main>
+    <nz-skeleton [nzActive]="true" [nzLoading]="true" [nzParagraph]="{ rows: 20 }" />
+    <nz-skeleton [nzActive]="true" [nzLoading]="true" [nzParagraph]="{ rows: 20 }" />
+  </main>
+  <footer>
+    <nz-skeleton [nzActive]="true" [nzLoading]="true" [nzParagraph]="{ rows: 1 }" />
+  </footer>
+</div>
+<nz-spin *ngIf="loading" [@fadeInOnEnter] nzTip="Préparation de l'éditeur..." nzSize="large" nzSpinning />
+<ide-root [class.loading]="loading"></ide-root>
