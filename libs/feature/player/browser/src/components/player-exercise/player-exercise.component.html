@@ -111,11 +111,11 @@
         </ng-container>
       </button>
       <div class="spacer"></div>
-      <button nz-tooltip="Commentaires" mat-raised-button *ngIf="player.answerId" (click)="drawer.open()">
+      <button *ngIf="player.answerId" nz-tooltip="Commentaires" mat-raised-button (click)="drawer.open()">
         <mat-icon color="primary">reviews</mat-icon>
         <span class="hide-on-small">Commentaires</span>
       </button>
-      <button *ngIf="player.theories?.length" mat-raised-button [matMenuTriggerFor]="theories">
+      <button *ngIf="player.theories?.length" nz-tooltip="Théorie" mat-raised-button [matMenuTriggerFor]="theories">
         <mat-icon color="primary">menu_book</mat-icon>
         <span class="hide-on-small">Théorie</span>
       </button>
