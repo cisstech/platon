@@ -149,16 +149,16 @@ export function defineWebComponent(definition: WebComponentDefinition): WebCompo
       type: 'string',
       description: 'Identifiant unique du composant.',
     },
-    debug: {
-      default: false,
-      type: 'boolean',
-      description: 'Afficher les propriétés du composant?',
-    },
     selector: {
       default: definition.selector,
       readOnly: true,
       type: 'string',
       description: 'Nom de la balise HTML associée au composant.',
+    },
+    debug: {
+      default: false,
+      type: 'boolean',
+      description: 'Afficher les propriétés du composant?',
     },
   }
   definition.schema.additionalProperties = false
@@ -187,8 +187,8 @@ function createState(component: WebComponentInstance, definition: WebComponentDe
   return (component.$__state__$ = new Proxy(
     {
       cid: '',
-      debug: false,
       selector: definition.selector,
+      debug: false,
     },
     handler
   ))
