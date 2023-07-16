@@ -11,4 +11,8 @@ export class InputBooleanValueEditorComponent extends BaseValueEditor<boolean> {
   constructor() {
     super()
   }
+
+  override setValue(value: boolean): void {
+    super.setValue(this.convertToBooleanValuee(value))
+  }
 }

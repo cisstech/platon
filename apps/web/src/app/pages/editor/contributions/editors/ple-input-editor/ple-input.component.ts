@@ -10,7 +10,7 @@ import {
   inject,
 } from '@angular/core'
 import { FormBuilder } from '@angular/forms'
-import { Subscription, debounceTime, skip, tap } from 'rxjs'
+import { Subscription, debounceTime, tap } from 'rxjs'
 import { InputBooleanProvider } from './input-boolean'
 import { InputCodeProvider } from './input-code'
 import { InputFileProvider } from './input-file'
@@ -125,10 +125,7 @@ export class PleInputComponent implements OnInit, OnDestroy {
     }
 
     if (oldSelectedProvider?.type === this.selectedProvider?.type) {
-      this.configEditor?.setOptions({
-        ...(value.options || {}),
-      })
-
+      this.configEditor?.setOptions({ ...(value.options || {}) })
       this.valueEditor?.setValue(value.value)
     }
 
@@ -150,7 +147,6 @@ export class PleInputComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.configForm.valueChanges
         .pipe(
-          skip(1),
           debounceTime(500),
           tap((value) => {
             this.selectedProvider = this.providers.find((p) => p.type === value.type)
