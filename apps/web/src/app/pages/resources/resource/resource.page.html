@@ -62,12 +62,17 @@
         </button>
       </nz-button-group>
       <div class="spacer"></div>
-      <nz-button-group *ngIf="context.resource.type !== 'CIRCLE'">
+      <nz-button-group>
         <button nz-button (click)="openTab(context.editorUrl!)">
           <i nz-icon nzType="edit" nzTheme="outline"></i>
           Éditer
         </button>
-        <button nz-button nzType="primary" (click)="iframe.open(context.previewUrl!)">
+        <button
+          *ngIf="context.resource.type !== 'CIRCLE'"
+          nz-button
+          nzType="primary"
+          (click)="iframe.open(context.previewUrl!)"
+        >
           <i nz-icon nzType="play-circle" nzTheme="outline"></i>
           Prévisualiser
         </button>
