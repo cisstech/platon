@@ -116,7 +116,7 @@ export class ActivityService {
       throw new NotFoundResponse(`CourseActivity not found: ${activityId}`)
     }
 
-    const [source] = await this.fileService.compile({
+    const { source } = await this.fileService.compile({
       resourceId: activity.source.resource,
       version: input.version,
     })
@@ -137,7 +137,7 @@ export class ActivityService {
     const activity = new ActivityEntity()
 
     if ('resourceId' in input) {
-      const [source] = await this.fileService.compile({
+      const { source } = await this.fileService.compile({
         resourceId: input.resourceId,
         version: input.resourceVersion,
       })

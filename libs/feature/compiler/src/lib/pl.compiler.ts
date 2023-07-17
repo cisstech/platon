@@ -1,15 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { deepMerge, resolveFileReference } from '@platon/core/common'
 import { v4 as uuidv4 } from 'uuid'
+import { PLGenerator } from './pl.generator'
 import {
   AssignmentNode,
   CommentNode,
   ExtendsNode,
   IncludeNode,
+  PLAst,
   PLDict,
   PLFileContent,
   PLFileURL,
-  PLNode,
   PLParser,
   PLReference,
   PLSourceFile,
@@ -46,7 +47,12 @@ export class PLCompiler implements PLVisitor {
   private readonly contents = new Map<string, string>()
   private readonly resolver: PLReferenceResolver
   private readonly source: PLSourceFile
+  private nodes: PLAst = []
   private lineno = 0
+
+  get ast(): PLAst {
+    return this.nodes.slice()
+  }
 
   constructor(options: { resource: string; version: string; main: string; resolver: PLReferenceResolver }) {
     this.resolver = options.resolver
@@ -61,11 +67,74 @@ export class PLCompiler implements PLVisitor {
     }
   }
 
-  async visit(nodes: PLNode[]): Promise<PLSourceFile> {
+  toExercise(changes: Variables): string {
+    return new PLGenerator({
+      changes,
+      nodes: this.nodes,
+      source: this.source,
+    }).generate()
+  }
+
+  async compileExercise(content: string, overrides?: Variables): Promise<PLSourceFile> {
+    const nodes = await new PLParser().parse(content)
+    const source = await this.visit(nodes)
+    if (overrides) {
+      source.variables = deepMerge(source.variables, await this.withResolvePathInOverrides(overrides))
+    }
+    return source
+  }
+
+  async compileActivity(content: string): Promise<PLSourceFile> {
+    const variables = JSON.parse(content) as ActivityVariables
+
+    const [introduction, conclusion] = await Promise.all([
+      this.withResolvePath(variables.introduction),
+      this.withResolvePath(variables.conclusion),
+    ])
+
+    variables.introduction = introduction || ''
+    variables.conclusion = conclusion || ''
+
+    // TODO validation + typechecking
+    const groups = variables.exerciseGroups
+    const exercises: any[] = []
+    Object.keys(groups).forEach((groupName) => {
+      groups[groupName].forEach((exercise: any) => {
+        exercises.push(exercise)
+      })
+    })
+
+    await Promise.all(
+      exercises.map(async (exercise: ExerciseVariables) => {
+        const content = await this.resolver.resolveContent(exercise.resource, exercise.version, 'main.ple')
+        const compiler = new PLCompiler({
+          resource: exercise.resource,
+          version: exercise.version,
+          main: 'main.ple',
+          resolver: this.resolver,
+        })
+        exercise.id = uuidv4()
+        exercise.source = await compiler.compileExercise(content)
+        if (exercise.overrides) {
+          exercise.source.variables = deepMerge(
+            exercise.source.variables,
+            await this.withResolvePathInOverrides(exercise.overrides)
+          )
+        }
+      })
+    )
+
+    this.source.variables = variables
+    return this.source
+  }
+
+  async visit(ast: PLAst): Promise<PLSourceFile> {
     // should not use Promise.all() since references should be resolved in sync.
-    for (const node of nodes) {
+    for (const node of ast) {
+      node.origin = this.source.abspath
       await node.accept(this)
     }
+    this.nodes = ast
     return this.source
   }
 
@@ -139,66 +208,10 @@ export class PLCompiler implements PLVisitor {
 
   async visitAssignment(node: AssignmentNode): Promise<void> {
     this.lineno = node.lineno
-
     const [id, obj] = this.withVariable(node.key)
     if (!id || !obj) return Promise.resolve()
-
-    obj[id] = await node.value.toJSON(this)
-
+    obj[id] = await node.value.toObject(this)
     return Promise.resolve()
-  }
-
-  async compileExercise(content: string, overrides?: Variables): Promise<PLSourceFile> {
-    const nodes = await new PLParser().parse(content)
-    const source = await this.visit(nodes)
-    if (overrides) {
-      source.variables = deepMerge(source.variables, await this.withResolvePathInOverrides(overrides))
-    }
-    return source
-  }
-
-  async compileActivity(content: string): Promise<PLSourceFile> {
-    const variables = JSON.parse(content) as ActivityVariables
-
-    const [introduction, conclusion] = await Promise.all([
-      this.withResolvePath(variables.introduction),
-      this.withResolvePath(variables.conclusion),
-    ])
-
-    variables.introduction = introduction || ''
-    variables.conclusion = conclusion || ''
-
-    // TODO validation + typechecking
-    const groups = variables.exerciseGroups
-    const exercises: any[] = []
-    Object.keys(groups).forEach((groupName) => {
-      groups[groupName].forEach((exercise: any) => {
-        exercises.push(exercise)
-      })
-    })
-
-    await Promise.all(
-      exercises.map(async (exercise: ExerciseVariables) => {
-        const content = await this.resolver.resolveContent(exercise.resource, exercise.version, 'main.ple')
-        const compiler = new PLCompiler({
-          resource: exercise.resource,
-          version: exercise.version,
-          main: 'main.ple',
-          resolver: this.resolver,
-        })
-        exercise.id = uuidv4()
-        exercise.source = await compiler.compileExercise(content)
-        if (exercise.overrides) {
-          exercise.source.variables = deepMerge(
-            exercise.source.variables,
-            await this.withResolvePathInOverrides(exercise.overrides)
-          )
-        }
-      })
-    )
-
-    this.source.variables = variables
-    return this.source
   }
 
   private error(description: string) {

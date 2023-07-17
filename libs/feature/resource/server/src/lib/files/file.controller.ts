@@ -17,7 +17,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express'
 import { SuccessResponse, UnauthorizedResponse } from '@platon/core/common'
 import { IRequest, Public } from '@platon/core/server'
-import { FileTypes, ResourceFile } from '@platon/feature/resource/common'
+import { ExerciseCompileOuput, ExerciseTransformInput, FileTypes, ResourceFile } from '@platon/feature/resource/common'
 import { Response } from 'express'
 import { createReadStream } from 'fs'
 import { basename, join } from 'path'
@@ -40,10 +40,28 @@ export class ResourceFileController {
     return repo.versions()
   }
 
-  @Post('/compile/:resourceId')
-  async compile(@Req() request: IRequest, @Param('resourceId') resourceId: string, @Query('version') version = LATEST) {
-    const [source] = await this.service.compile({ resourceId, version, user: request.user })
-    return source
+  @Post('/compile/:resourceId/json')
+  async compileExercise(
+    @Req() request: IRequest,
+    @Param('resourceId') resourceId: string,
+    @Query('version') version = LATEST
+  ): Promise<ExerciseCompileOuput> {
+    const { source, compiler } = await this.service.compile({ resourceId, version, user: request.user })
+    return {
+      source,
+      ast: compiler.ast,
+    }
+  }
+
+  @Post('/compile/:resourceId/text')
+  async transformExercise(
+    @Req() request: IRequest,
+    @Param('resourceId') resourceId: string,
+    @Query('version') version = LATEST,
+    @Body() input?: ExerciseTransformInput
+  ) {
+    const { compiler } = await this.service.compile({ resourceId, version, user: request.user })
+    return compiler.toExercise(input?.changes || {})
   }
 
   @Public()

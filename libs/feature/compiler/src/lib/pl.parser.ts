@@ -5,25 +5,26 @@
 
 
 import { v4 as uuidv4 } from 'uuid'
+import { Variables } from './pl.variables'
 
 // VALUES
 
-interface PLValue {
-  readonly value: string | number | boolean | PLValue[] | {key: string, value: PLValue}[];
+export interface PLValue {
+  readonly value: string | number | boolean | PLValue[] | Record<string, PLValue>;
   readonly lineno: number;
-  toJSON(visitor: PLVisitor): any | Promise<any>;
+  toObject(visitor: PLVisitor): any | Promise<any>;
 }
 
 export class PLArray implements PLValue {
   constructor(
     readonly value: PLValue[],
-    readonly lineno: number,
+    readonly lineno: number
   ) {}
-  async toJSON(visitor: PLVisitor) {
+  async toObject(visitor: PLVisitor) {
     const result: any[] = [];
     // do not use promise.all to allow cache file operations (@copyurl, @copycontent...)
     for (const e of this.value) {
-      result.push(await e.toJSON(visitor));
+      result.push(await e.toObject(visitor));
     }
     return result;
   }
@@ -31,60 +32,58 @@ export class PLArray implements PLValue {
 
 export class PLObject implements PLValue {
   constructor(
-    readonly value: {key: string, value: PLValue}[],
-    readonly lineno: number,
+    readonly value: Record<string, PLValue>,
+    readonly lineno: number
   ) {}
-  async toJSON(visitor: PLVisitor) {
+  async toObject(visitor: PLVisitor) {
     // do not use promise.all to allow cache file operations (@copyurl, @copycontent...)
-    for (let i = 0; i < this.value.length; i++) {
-      this.value[i].value = await this.value[i].value.toJSON(visitor);
+    let result: any = {};
+    for (let key in this.value) {
+      result[key] = await this.value[key].toObject(visitor);
     }
-    return this.value.reduce((acc: any, curr: any) => {
-      acc[curr.key] = curr.value;
-      return acc;
-    }, {} as any);
+    return result;
   }
 }
 
 export class PLString implements PLValue {
   constructor(
     readonly value: string,
-    readonly lineno: number,
+    readonly lineno: number
   ) {}
 
-  toJSON() { return this.value.trim(); }
+  toObject() { return this.value.trim(); }
 }
 
 export class PLNumber implements PLValue {
   constructor(
     readonly value: number,
-    readonly lineno: number,
+    readonly lineno: number
   ) {}
-  toJSON() { return this.value; }
+  toObject() { return this.value; }
 }
 
 export class PLBoolean implements PLValue {
   constructor(
     readonly value: boolean,
-    readonly lineno: number,
+    readonly lineno: number
   ) {}
-  toJSON() { return this.value; }
+  toObject() { return this.value; }
 }
 
 export class PLComponent implements PLValue {
   constructor(
     readonly value: string,
-    readonly lineno: number,
+    readonly lineno: number
   ) {}
-  toJSON() { return { 'cid': uuidv4(), selector: this.value }; }
+  toObject() { return { 'cid': uuidv4(), selector: this.value }; }
 }
 
 export class PLDict implements PLValue {
   constructor(
     readonly value: string,
-    readonly lineno: number,
+    readonly lineno: number
   ) {}
-  async toJSON(visitor: PLVisitor) {
+  async toObject(visitor: PLVisitor) {
     const source = await visitor.visitExtends(this, false);
     return source.variables
   }
@@ -93,69 +92,87 @@ export class PLDict implements PLValue {
 export class PLFileURL implements PLValue {
   constructor(
     readonly value: string,
-    readonly lineno: number,
+    readonly lineno: number
   ) {}
-  toJSON(visitor: PLVisitor) { return visitor.visitCopyUrl(this); }
+  toObject(visitor: PLVisitor) { return visitor.visitCopyUrl(this); }
 }
 
 export class PLReference implements PLValue {
   constructor(
     readonly value: string,
-    readonly lineno: number,
+    readonly lineno: number
   ) {}
-  toJSON(visitor: PLVisitor) { return visitor.visitReference(this); }
+  toObject(visitor: PLVisitor) { return visitor.visitReference(this); }
 }
 
 export class PLFileContent implements PLValue {
   constructor(
     readonly value: string,
-    readonly lineno: number,
+    readonly lineno: number
   ) {}
-  toJSON(visitor: PLVisitor) { return visitor.visitCopyContent(this); }
+  toObject(visitor: PLVisitor) { return visitor.visitCopyContent(this); }
 }
 
 // NODES
 
 export interface PLNode {
+  readonly type: string
+  origin: string
   accept(visitor: PLVisitor): Promise<void>;
+  toString(changes: Variables): string;
 }
 
 export class ExtendsNode implements PLNode {
+  readonly type = 'ExtendsNode'
+  origin = ''
+
   constructor(
     readonly path: string,
     readonly lineno: number
   ) {}
+
   async accept(visitor: PLVisitor): Promise<void> {
     await visitor.visitExtends(this, true);
   }
 }
 
 export class CommentNode implements PLNode {
+  readonly type = 'CommentNode'
+  origin = ''
+
   constructor(
     readonly value: string,
     readonly lineno: number
   ) {}
+
   accept(visitor: PLVisitor): Promise<void> {
     return visitor.visitComment(this);
   }
 }
 
 export class IncludeNode implements PLNode {
+  readonly type = 'IncludeNode'
+  origin = ''
   constructor(
     readonly path: string,
-    readonly lineno: number,
-  ) {}
+    readonly lineno: number
+  ) {
+  }
   accept(visitor: PLVisitor): Promise<void> {
     return visitor.visitInclude(this);
   }
 }
 
 export class AssignmentNode implements PLNode {
-  constructor(
+  readonly type = 'AssignmentNode'
+  origin = ''
+
+ constructor(
     readonly key: string,
     readonly value: PLValue,
     readonly lineno: number
   ) {}
+
   accept(visitor: PLVisitor): Promise<void> {
     return visitor.visitAssignment(this);
   }
@@ -164,6 +181,7 @@ export class AssignmentNode implements PLNode {
 
 // AST
 
+export type PLAst = PLNode[]
 
 export interface PLDependency {
   alias?: string;
@@ -193,7 +211,7 @@ export interface PLSourceFile {
 // VISITOR
 
 export interface PLVisitor {
-  visit(nodes: PLNode[]): Promise<PLSourceFile>;
+  visit(ast: PLAst): Promise<PLSourceFile>;
   visitExtends(node: ExtendsNode | PLDict, merge: boolean): Promise<PLSourceFile>;
   visitInclude(node: IncludeNode): Promise<void>;
   visitComment(node: CommentNode): Promise<void>;
@@ -227,7 +245,7 @@ export class PLParser extends JisonParser implements JisonParserApi {
 case 1:
  return $$[$0-1] 
 break;
-case 2: case 29: case 31:
+case 2: case 29:
  this.$ = [$$[$0]]; 
 break;
 case 3:
@@ -242,7 +260,7 @@ break;
 case 6:
  this.$ = new CommentNode($$[$0], yylineno + 1); 
 break;
-case 7: case 8: case 9: case 14:
+case 7: case 8: case 9: case 14: case 31:
  this.$ = $$[$0]; 
 break;
 case 10:
@@ -288,7 +306,7 @@ case 24:
  this.$ = new PLArray($$[$0-1], yylineno + 1); 
 break;
 case 25:
- this.$ = new PLObject([], yylineno + 1); 
+ this.$ = new PLObject({}, yylineno + 1); 
 break;
 case 26:
  this.$ = new PLObject($$[$0-1], yylineno + 1); 
@@ -307,11 +325,18 @@ case 28:
         }
     
 break;
-case 30: case 32:
+case 30:
  this.$ = $$[$0-2].concat($$[$0]); 
 break;
+case 32:
+
+          const keys = Object.keys($$[$0]);
+          $$[$0-2][keys[0]] = $$[$0][keys[0]];
+          this.$ = $$[$0-2];
+        
+break;
 case 33:
- this.$ = { key: $$[$0-2], value: $$[$0] }; 
+ this.$ = { [`${$$[$0-2]}`]: $$[$0] }; 
 break;
 case 34:
  this.$ = new IncludeNode($$[$0].trim(), yylineno + 1); 

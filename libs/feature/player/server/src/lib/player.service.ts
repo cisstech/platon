@@ -79,7 +79,7 @@ export class PlayerService {
    * @returns A player layout for the resource.
    */
   async preview(input: PreviewInput): Promise<PreviewOuputDTO> {
-    const [source, resource] = await this.resourceFileService.compile({
+    const { source, resource } = await this.resourceFileService.compile({
       resourceId: input.resource,
       version: input.version,
       overrides: input.overrides,

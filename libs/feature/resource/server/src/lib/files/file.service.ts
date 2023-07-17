@@ -15,6 +15,12 @@ interface CompileInput {
   user?: User
 }
 
+interface CompileOutput {
+  source: PLSourceFile
+  compiler: PLCompiler
+  resource: ResourceEntity
+}
+
 interface RepoInfo {
   repo: Repo
   resource: ResourceEntity
@@ -56,7 +62,7 @@ export class ResourceFileService {
     }
   }
 
-  async compile(input: CompileInput): Promise<[PLSourceFile, ResourceEntity]> {
+  async compile(input: CompileInput): Promise<CompileOutput> {
     const { resourceId, version, user, overrides } = input
     const { repo, resource } = await this.repo(resourceId, user)
     if (resource.type === 'CIRCLE') {
@@ -102,6 +108,6 @@ export class ResourceFileService {
         : await compiler.compileActivity(textContent)
 
     source.variables.author = resource.ownerId
-    return [source, resource]
+    return { source, resource, compiler }
   }
 }

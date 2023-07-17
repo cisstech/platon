@@ -9,6 +9,7 @@ import { Subscription, debounceTime, firstValueFrom, skip } from 'rxjs'
 import { v4 as uuidv4 } from 'uuid'
 import { InputCodeOptions } from '../ple-input-editor/input-code/input-code'
 import { PleInput } from '../ple-input-editor/ple-input'
+import { Variables } from '@platon/feature/compiler'
 
 const EDITOR_JS_REGEX = /^\s*\{[\s\S]*"blocks"\s*:\s*\[[\s\S]*\][\s\S]*\}\s*$/
 const HIDDEN_VARIABLES = ['author', 'title', 'statement', 'form']
@@ -40,30 +41,6 @@ const createOutputData = (input: unknown) => {
     ],
     version: EditorJsVersion,
   } as OutputData
-}
-
-const replaceVariableInCode = (code: string, variable: string, data: unknown) => {
-  const jsonRegex = `(${variable}\\s*=\\s*(\\{|\\[)(?:.*\\n)*?(?=\\w+(==|=)))`
-  const stringRegex = `(${variable}\\s*==\\n(?:.*\\n)*?==\\n)|(${variable}\\s*=.+)`
-
-  if (typeof data === 'string') {
-    code = code.replace(new RegExp(stringRegex, 'g'), `${variable}==\n${data}\n==\n`)
-  } else if (typeof data === 'object') {
-    const output = data as OutputData
-    if (output?.version === EditorJsVersion && output.blocks) {
-      if (output.blocks.length === 1 && output.blocks[0].type === 'raw') {
-        code = code.replace(new RegExp(stringRegex, 'g'), `${variable}==\n${output.blocks[0].data.html}\n==\n`)
-      } else {
-        code = code.replace(new RegExp(stringRegex, 'g'), `${variable}==\n${JSON.stringify(data, null, 2)}\n==\n`)
-      }
-    } else {
-      code = code.replace(new RegExp(jsonRegex, 'g'), `${variable} = ${JSON.stringify(data, null, 2)}`)
-    }
-  } else {
-    code = code.replace(new RegExp(stringRegex, 'g'), `${variable} = ${data}`)
-  }
-
-  return code
 }
 
 /**
@@ -126,17 +103,26 @@ export class PleEditorComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((s) => s.unsubscribe())
   }
 
-  protected onChangeData(): void {
-    const { value } = this.form
+  protected async onChangeData(): Promise<void> {
+    const [resource, version] = this.request.uri.authority.split(':')
 
-    this.content = replaceVariableInCode(this.content, 'form', value.form)
-    this.content = replaceVariableInCode(this.content, 'title', value.title)
-    this.content = replaceVariableInCode(this.content, 'statement', value.statement)
+    this.content = await firstValueFrom(
+      this.resourceFileService.transformExercise(
+        resource,
+        {
+          changes: this.variables.reduce((acc, curr) => {
+            acc[curr.name] = curr.value
+            return acc
+          }, {} as Variables),
+        },
+        version
+      )
+    )
 
-    this.fileService.update(this.request.uri, this.content)
+    this.fileService.update(this.request.uri, this.content + ' ')
   }
 
-  protected addVariable() {
+  protected addVariable(): void {
     this.variables = [
       ...this.variables,
       {
@@ -148,20 +134,19 @@ export class PleEditorComponent implements OnInit, OnDestroy {
     this.changeDetectorRef.markForCheck()
   }
 
-  protected selectVariable(index: number) {
+  protected selectVariable(index: number): void {
     this.selectedVariableIndex = index
     this.selectedVariable = this.variables[index]
     this.changeDetectorRef.markForCheck()
   }
 
-  protected deleteVariable(index: number) {
+  protected deleteVariable(index: number): void {
     console.log(index)
   }
 
-  protected updateVariable(variable: PleInput) {
+  protected updateVariable(variable: PleInput): void {
     this.variables = this.variables.map((v, i) => (i === this.selectedVariableIndex ? variable : v))
-    this.content = replaceVariableInCode(this.content, variable.name, variable.value)
-    this.fileService.update(this.request.uri, this.content)
+    this.onChangeData()
   }
 
   protected trackVariable(_: number, variable: PleInput): string {
@@ -173,12 +158,11 @@ export class PleEditorComponent implements OnInit, OnDestroy {
     this.readOnly = file?.readOnly
 
     const [resource, version] = this.request.uri.authority.split(':')
-
-    const [source, content] = await Promise.all([
-      firstValueFrom(this.resourceFileService.compile(resource, version)),
+    const [output, content] = await Promise.all([
+      firstValueFrom(this.resourceFileService.compileExercise(resource, version)),
       this.fileService.open(this.request.uri),
     ])
-
+    const { source } = output
     this.content = content.current || ''
 
     this.form.patchValue({
@@ -192,18 +176,16 @@ export class PleEditorComponent implements OnInit, OnDestroy {
     }
 
     const sandbox = source.variables.sandbox || 'javascript'
-    this.variables = Object.keys(source.variables)
-      .map((name) => ({
-        name,
-        type: '',
-        description: '',
-        value: source.variables[name],
-        options: {
-          ...(name === 'grader' ? ({ language: sandbox } as InputCodeOptions) : {}),
-          ...(name === 'builder' ? ({ language: sandbox } as InputCodeOptions) : {}),
-        },
-      }))
-      .filter((variable) => !HIDDEN_VARIABLES.includes(variable.name))
+    this.variables = Object.keys(source.variables).map((name) => ({
+      name,
+      type: '',
+      description: '',
+      value: source.variables[name],
+      options: {
+        ...(name === 'grader' ? ({ language: sandbox } as InputCodeOptions) : {}),
+        ...(name === 'builder' ? ({ language: sandbox } as InputCodeOptions) : {}),
+      },
+    }))
 
     this.ready = true
     this.changeDetectorRef.markForCheck()

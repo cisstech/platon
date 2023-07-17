@@ -2,6 +2,8 @@ import { Observable } from 'rxjs'
 
 import { Injectable } from '@angular/core'
 import {
+  ExerciseCompileOuput,
+  ExerciseTransformInput,
   FileCreate,
   FileMove,
   FileRelease,
@@ -13,14 +15,17 @@ import {
   ResourceFile,
 } from '@platon/feature/resource/common'
 import { ResourceFileProvider } from '../models/resource-file-provider'
-import { PLSourceFile } from '@platon/feature/compiler'
 
 @Injectable({ providedIn: 'root' })
 export class ResourceFileService {
   constructor(private readonly provider: ResourceFileProvider) {}
 
-  compile(resource: string, version?: string): Observable<PLSourceFile> {
-    return this.provider.compile(resource, version)
+  compileExercise(resource: string, version?: string): Observable<ExerciseCompileOuput> {
+    return this.provider.compileExercise(resource, version)
+  }
+
+  transformExercise(resource: string, input: ExerciseTransformInput, version?: string): Observable<string> {
+    return this.provider.transformExercise(resource, input, version)
   }
 
   release(resource: string | Resource, input: FileRelease): Observable<void> {
