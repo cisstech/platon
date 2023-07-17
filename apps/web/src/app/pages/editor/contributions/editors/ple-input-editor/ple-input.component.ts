@@ -74,6 +74,7 @@ export class PleInputComponent implements OnInit, OnDestroy {
         useValue: (instance: PleInputConfigEditor) => {
           this.configEditor = instance
           instance.setOptions(this.input.options)
+          instance.setDisabled(!!this.disabled)
           instance.onChangeOptions((options) => {
             setTimeout(() => {
               this.input.options = options
@@ -93,6 +94,7 @@ export class PleInputComponent implements OnInit, OnDestroy {
         useValue: (instance: PleInputValueEditor) => {
           this.valueEditor = instance
           instance.setValue(this.input.value)
+          instance.setDisabled(!!this.disabled)
           instance.setOptions?.(this.input.options)
           instance.onChangeValue((value) => {
             setTimeout(() => {
@@ -138,6 +140,7 @@ export class PleInputComponent implements OnInit, OnDestroy {
   @Output() inputChange = new EventEmitter<PleInput>()
 
   @Input() mode: 'config' | 'value' | 'design' = 'config'
+  @Input() disabled? = false
 
   get label(): string {
     return this.selectedProvider?.label || ''
@@ -155,6 +158,10 @@ export class PleInputComponent implements OnInit, OnDestroy {
         )
         .subscribe((value) => this.inputChange.emit(value as PleInput))
     )
+
+    if (this.disabled) {
+      this.configForm.disable({ emitEvent: false })
+    }
   }
 
   ngOnDestroy(): void {

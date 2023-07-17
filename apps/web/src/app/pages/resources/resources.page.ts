@@ -118,6 +118,14 @@ export default class ResourcesPage implements OnInit, OnDestroy {
   protected views: Resource[] = []
   protected recents: Resource[] = []
 
+  protected canCreateCircle = false
+  protected canCreateExercise = false
+  protected canCreateActivity = false
+
+  protected get canCreateResource(): boolean {
+    return this.canCreateCircle || this.canCreateExercise || this.canCreateActivity
+  }
+
   constructor(
     private readonly router: Router,
     private readonly authService: AuthService,
@@ -128,6 +136,10 @@ export default class ResourcesPage implements OnInit, OnDestroy {
 
   async ngOnInit(): Promise<void> {
     this.user = (await this.authService.ready()) as User
+
+    this.canCreateCircle = this.resourceService.canUserCreateResource(this.user, ResourceTypes.CIRCLE)
+    this.canCreateExercise = this.resourceService.canUserCreateResource(this.user, ResourceTypes.EXERCISE)
+    this.canCreateActivity = this.resourceService.canUserCreateResource(this.user, ResourceTypes.ACTIVITY)
 
     const [tree, circle, views, recents] = await Promise.all([
       firstValueFrom(this.resourceService.tree()),
@@ -141,6 +153,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
           direction: OrderingDirections.DESC,
         })
       ),
+      //firstValueFrom(this.resourceService.listInvitations()),
     ])
 
     this.tree = tree

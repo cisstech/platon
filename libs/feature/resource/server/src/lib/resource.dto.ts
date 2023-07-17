@@ -9,11 +9,12 @@ import {
   ResourceOrderings,
   ResourceStatus,
   ResourceTypes,
-  ResourceVisibilities,
   UpdateResource,
+  ResourcePermissions,
 } from '@platon/feature/resource/common'
 import { Transform, Type } from 'class-transformer'
 import { IsArray, IsBoolean, IsEnum, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator'
+import { ResourcePermissionsDTO } from './permissions'
 
 export class ResourceDTO extends BaseDTO implements Resource {
   @IsString()
@@ -34,9 +35,9 @@ export class ResourceDTO extends BaseDTO implements Resource {
   @ApiProperty()
   readonly type!: ResourceTypes
 
-  @IsEnum(ResourceVisibilities)
+  @IsBoolean()
   @ApiProperty()
-  readonly visibility!: ResourceVisibilities
+  readonly personal!: boolean
 
   @IsEnum(ResourceStatus)
   @ApiProperty()
@@ -59,12 +60,11 @@ export class ResourceDTO extends BaseDTO implements Resource {
   @IsUUID()
   @IsOptional()
   @ApiProperty()
-  readonly modelId?: string
-
-  @IsUUID()
-  @IsOptional()
-  @ApiProperty()
   readonly parentId?: string
+
+  @Type(() => ResourcePermissionsDTO)
+  @ApiProperty()
+  readonly permissions!: ResourcePermissions
 }
 
 export class CircleTreeDTO implements CircleTree {
@@ -81,21 +81,25 @@ export class CircleTreeDTO implements CircleTree {
   @ApiProperty()
   readonly code?: string
 
-  @IsEnum(ResourceVisibilities)
-  @ApiProperty()
-  readonly visibility!: ResourceVisibilities
-
   @Type(() => CircleTreeDTO)
   @IsArray()
   @IsOptional()
   @ApiProperty()
   readonly children?: CircleTreeDTO[]
+
+  @Type(() => ResourcePermissionsDTO)
+  @ApiProperty()
+  readonly permissions!: ResourcePermissions
 }
 
 export class CreateResourceDTO implements CreateResource {
   @IsString()
   @ApiProperty()
   readonly name!: string
+
+  @IsUUID()
+  @ApiProperty()
+  readonly parentId!: string
 
   @IsString()
   @IsOptional()
@@ -116,10 +120,6 @@ export class CreateResourceDTO implements CreateResource {
   @ApiProperty()
   readonly status?: ResourceStatus
 
-  @IsEnum(ResourceVisibilities)
-  @ApiProperty()
-  readonly visibility!: ResourceVisibilities
-
   @IsUUID(undefined, { each: true })
   @IsArray()
   @IsOptional()
@@ -131,16 +131,6 @@ export class CreateResourceDTO implements CreateResource {
   @IsOptional()
   @ApiProperty()
   readonly topics?: string[]
-
-  @IsUUID()
-  @IsOptional()
-  @ApiProperty()
-  readonly modelId?: string
-
-  @IsUUID()
-  @IsOptional()
-  @ApiProperty()
-  readonly parentId?: string
 }
 
 export class UpdateResourceDTO implements UpdateResource {

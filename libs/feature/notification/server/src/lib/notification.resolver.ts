@@ -1,8 +1,10 @@
-import { Args, Int, Mutation, Query, ResolveField, Resolver, Subscription } from '@nestjs/graphql'
-import { GqlReq, IRequest, PubSubService, UserGraphModel, UUID } from '@platon/core/server'
+import { Args, Int, Mutation, Parent, Query, ResolveField, Resolver, Subscription } from '@nestjs/graphql'
+import { GqlReq, IRequest, PubSubService, UUID, UserGraphModel } from '@platon/core/server'
 import { NotificationFilters } from '@platon/feature/notification/common'
+import GraphQLJSON from 'graphql-type-json'
+import { NotificationEntity } from './notification.entity'
 import { NotificationChangeGraphModel, NotificationFiltersInput, NotificationGraphModel } from './notification.graphql'
-import { OnChangeNotificationsPayload, ON_CHANGE_NOTIFICATIONS } from './notification.pubsub'
+import { ON_CHANGE_NOTIFICATIONS, OnChangeNotificationsPayload } from './notification.pubsub'
 import { NotificationService } from './notification.service'
 
 @Resolver(() => NotificationGraphModel)
@@ -28,43 +30,45 @@ export class NotificationResolver {
   }
 
   @Mutation(() => NotificationGraphModel)
-  async markAsRead(@Args('id', { type: () => UUID }) id: string): Promise<NotificationGraphModel> {
-    const notification = new NotificationGraphModel((await this.notificationService.markAsRead([id]))[0])
-    await this.notificationService.notifyUserAboutChanges(notification.userId)
-    return notification
+  async markAsRead(@GqlReq() req: IRequest, @Args('id', { type: () => UUID }) id: string): Promise<boolean> {
+    await this.notificationService.markAsRead(req.user.id, [id])
+    return true
   }
 
   @Mutation(() => NotificationGraphModel)
-  async markAsUnread(@Args('id', { type: () => UUID }) id: string): Promise<NotificationGraphModel> {
-    const notification = new NotificationGraphModel((await this.notificationService.markAsUnread([id]))[0])
-    await this.notificationService.notifyUserAboutChanges(notification.userId)
-    return notification
+  async markAsUnread(@GqlReq() req: IRequest, @Args('id', { type: () => UUID }) id: string): Promise<boolean> {
+    await this.notificationService.markAsUnread(req.user.id, [id])
+    return true
   }
 
   @Mutation(() => Boolean)
   async markAllAsRead(@GqlReq() req: IRequest): Promise<boolean> {
-    const success = await this.notificationService.markAllAsRead(req.user.id)
-    if (success) await this.notificationService.notifyUserAboutChanges(req.user.id)
-    return success
+    return this.notificationService.markAllAsRead(req.user.id)
   }
 
   @Mutation(() => Boolean)
   async deleteNotification(@GqlReq() req: IRequest, @Args('id', { type: () => UUID }) id: string): Promise<boolean> {
-    const success = (await this.notificationService.delete([id])) > 0
-    if (success) await this.notificationService.notifyUserAboutChanges(req.user.id)
-    return success
+    const affected = await this.notificationService.delete(req.user.id, [id])
+    return affected > 0
   }
 
   @Mutation(() => Boolean)
   async deleteAllNotifications(@GqlReq() req: IRequest): Promise<boolean> {
-    await this.notificationService.deleteAll(req.user.id)
-    await this.notificationService.notifyUserAboutChanges(req.user.id)
-    return true
+    const affected = await this.notificationService.deleteAll(req.user.id)
+    return affected > 0
   }
 
   @ResolveField(() => UserGraphModel)
   async user(@GqlReq() req: IRequest): Promise<UserGraphModel> {
     return new UserGraphModel(req.user)
+  }
+
+  @ResolveField(() => GraphQLJSON)
+  async data(@Parent() parent: NotificationGraphModel): Promise<Record<string, unknown>> {
+    return {
+      ...parent.data,
+      ...((await this.notificationService.withExtaData(parent as NotificationEntity)) || {}),
+    }
   }
 
   @Subscription(() => NotificationChangeGraphModel, {
@@ -77,6 +81,9 @@ export class NotificationResolver {
         newNotification: payload.onChangeNotifications.newNotification
           ? new NotificationGraphModel(payload.onChangeNotifications.newNotification)
           : undefined,
+        notifications: payload.onChangeNotifications.notifications?.map(
+          (notification) => new NotificationGraphModel(notification)
+        ),
       })
     },
   })

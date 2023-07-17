@@ -12,7 +12,8 @@
       <mat-icon>{{ item.type | resourceIcon }}</mat-icon>
     </ng-template>
     <ui-list-item-article-action
-      (click)="modalMode ? openUrl(editorUrl) : iframe.open(editorUrl)"
+      *ngIf="item.permissions.read"
+      (click)="openTab(editorUrl)"
       class="action"
       actionTitle="Éditer"
       nz-tooltip="Éditer"
@@ -21,7 +22,7 @@
     </ui-list-item-article-action>
     <ng-container *ngIf="item.type !== 'CIRCLE'">
       <ui-list-item-article-action
-        (click)="modalMode ? openUrl(previewUrl) : iframe.open(previewUrl)"
+        (click)="modalMode ? openTab(previewUrl) : iframe.open(previewUrl)"
         class="action"
         actionTitle="Prévisualiser"
         nz-tooltip="Prévisualiser"

@@ -32,7 +32,6 @@ export class ResourceBrowseHeaderComponent {
   @Input() version = 'latest'
   @Input() versions: FileVersions = { all: [] }
   @Input() resource!: Resource
-
   @Output() edit = new EventEmitter<void>()
   @Output() preview = new EventEmitter<void>()
   @Output() refresh = new EventEmitter<string>()

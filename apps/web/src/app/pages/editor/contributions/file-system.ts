@@ -9,11 +9,10 @@ import {
   SearchForm,
   SearchResult,
 } from '@cisstech/nge-ide/core'
+import { removeLeadingSlash } from '@platon/core/common'
 import { ResourceFileService } from '@platon/feature/resource/browser'
 import { FileTypes, ResourceFile } from '@platon/feature/resource/common'
 import { firstValueFrom } from 'rxjs'
-
-const removeLeadingSlash = (path: string) => path.replace(/^[\\/.]+/g, '')
 
 class FileImpl implements IFile {
   readonly uri: monaco.Uri
@@ -25,7 +24,7 @@ class FileImpl implements IFile {
   constructor(uri: monaco.Uri, entry: ResourceFile) {
     this.uri = uri
     this.version = entry.version
-    this.readOnly = entry.version !== 'latest'
+    this.readOnly = !!entry.readOnly
     this.isFolder = entry.type === 'folder'
     this.url = entry.downloadUrl
   }
@@ -35,7 +34,6 @@ class FileImpl implements IFile {
 export class ResourceFileSystemProvider extends FileSystemProvider {
   private readonly http = inject(HttpClient)
   private readonly fileService = inject(ResourceFileService)
-
   private readonly entries = new Map<string, ResourceFile>()
 
   readonly scheme = 'platon'
@@ -52,7 +50,15 @@ export class ResourceFileSystemProvider extends FileSystemProvider {
     super()
   }
 
+  /**
+   *  Build a uri for the given resource file path
+   * @param resource Resource id of code
+   * @param version Version of the resource
+   * @param path Path of the file
+   * @returns
+   */
   buildUri(resource: string, version = 'latest', path?: string) {
+    resource = removeLeadingSlash(resource)
     path = path ? removeLeadingSlash(path) : ''
     return monaco.Uri.parse(`${this.scheme}://${resource}:${version}/${path}`)
   }

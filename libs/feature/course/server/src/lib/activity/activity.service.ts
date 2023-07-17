@@ -2,7 +2,7 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { ForbiddenResponse, NotFoundResponse, User, UserRoles } from '@platon/core/common'
-import { EventService, IRequest, buildQuery } from '@platon/core/server'
+import { EventService, IRequest, buildSelectQuery } from '@platon/core/server'
 import {
   ActivityFilters,
   CreateActivity,
@@ -52,7 +52,9 @@ export class ActivityService {
   }
 
   async findById(id: string, user: User): Promise<ActivityEntity> {
-    const qb = buildQuery(this.repository.createQueryBuilder('activity'), (qb) => qb.where('activity.id = :id', { id }))
+    const qb = buildSelectQuery(this.repository.createQueryBuilder('activity'), (qb) =>
+      qb.where('activity.id = :id', { id })
+    )
     const activity = await qb.getOne()
     if (!activity) {
       throw new NotFoundResponse(`Activity ${id} not found.`)
@@ -150,7 +152,7 @@ export class ActivityService {
   }
 
   private createQueryBuilder(courseId: string) {
-    const qb = buildQuery(
+    const qb = buildSelectQuery(
       this.repository.createQueryBuilder('activity'),
       (qb) => this.withSessionJoin(qb, this.request.user),
       (qb) => this.withMemberJoin(qb, this.request.user),

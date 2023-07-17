@@ -140,7 +140,6 @@ export class CommentNode implements PLNode {
 export class IncludeNode implements PLNode {
   constructor(
     readonly path: string,
-    readonly alias: string,
     readonly lineno: number,
   ) {}
   accept(visitor: PLVisitor): Promise<void> {
@@ -204,7 +203,8 @@ export interface PLVisitor {
 %}
 
 %lex
-%s MULTI
+%s PATH_STATE
+%s MULTI_STATE
 
 %%
 
@@ -213,14 +213,12 @@ export interface PLVisitor {
 <INITIAL>\/\/.*                                 return 'COMMENT'
 <INITIAL>\/\*([^*]|\*[^\/])*\*\/                return 'COMMENT'
 
-<INITIAL>'=='                                   { this.begin('MULTI'); return 'EQUALS'; }
+<INITIAL>'=='                                   { this.begin('MULTI_STATE'); return 'EQUALS'; }
 <INITIAL>'='                                    return 'EQUALS'
-<INITIAL>'@copycontent'                         return 'COPYCONTENT'
-<INITIAL>'@copyurl'                             return 'COPYURL'
-<INITIAL>'@include'                             return 'INCLUDE'
-<INITIAL>'@extends'                             return 'EXTENDS'
-<INITIAL>'as'                                   return 'AS'
-<INITIAL>\/[^\s\n\,]+                           return 'PATH' // COMMA AT THE END ALLOW TO INCLUDES PATH INSIDE ARRAY
+<INITIAL>'@copycontent'                         { this.begin('PATH_STATE'); return 'COPYCONTENT'}
+<INITIAL>'@copyurl'                             { this.begin('PATH_STATE'); return 'COPYURL' }
+<INITIAL>'@include'                             { this.begin('PATH_STATE'); return 'INCLUDE' }
+<INITIAL>'@extends'                             { this.begin('PATH_STATE'); return 'EXTENDS' }
 <INITIAL>[+-]?\d+((_|\.)+\d+)*                  return 'NUMBER'
 <INITIAL>[,]                                    return 'COMMA'
 <INITIAL>[:]                                    return 'COLON'
@@ -235,7 +233,7 @@ export interface PLVisitor {
 
 <<EOF>>                                         return 'EOF'
 
-<MULTI>[^\n]*\n          {
+<MULTI_STATE>[^\n]*\n          {
                           if (yytext.trimEnd() === '==') {
                             this.popState();
                             return 'EQUALS';
@@ -244,6 +242,11 @@ export interface PLVisitor {
                          }
 
 
+<PATH_STATE>\s+         /* ignore whitespace */
+<PATH_STATE>(\/?[a-zA-Z0-9_\+\.\\]+(\s+'as'\s+\/?[a-zA-Z0-9_\+\.])?)+   {
+                            this.popState();
+                            return 'PATH';
+                        }
 /lex
 
 /* Parser */
@@ -307,7 +310,7 @@ value
     | EXTENDS PATH
       { $$ = new PLDict($2, yylineno + 1); }
     | COPYURL PATH
-      { $$ = new PLFileURL($2, yylineno + 1); }
+      { $$ = new PLFileURL($2.trim(), yylineno + 1); }
     | COPYCONTENT PATH
       { $$ = new PLFileContent($2, yylineno + 1); }
     | COLON SELECTOR
@@ -357,13 +360,11 @@ pair
 
 include_statement
     : INCLUDE PATH
-      { $$ = new IncludeNode($2, '', yylineno + 1); }
-    | INCLUDE PATH AS PATH
-      { $$ = new IncludeNode($2, $4, yylineno + 1); }
+      { $$ = new IncludeNode($2.trim(), yylineno + 1); }
     ;
 
 extends_statement
     : EXTENDS PATH
-      { $$ = new ExtendsNode($2, yylineno + 1); }
+      { $$ = new ExtendsNode($2.trim(), yylineno + 1); }
     ;
 %%

@@ -9,12 +9,12 @@
   (nzOnClose)="visible = !visible"
 >
   <ng-container *nzDrawerContent>
-    <notif-list [(notifications)]="notifications" />
+    <notif-list [(notifications)]="notifications" (closed)="close()" />
   </ng-container>
   <ng-template #footer>
     <footer>
-      <button nz-button (click)="markAllAsRead()">Tout marquer comme lu</button>
-      <button nz-button (click)="deleteAll()">Tout supprimer</button>
+      <button nz-button nzType="primary" (click)="markAllAsRead()">Tout marquer comme lu</button>
+      <button nz-button nzType="primary" nzDanger (click)="deleteAll()">Tout supprimer</button>
     </footer>
   </ng-template>
 </nz-drawer>

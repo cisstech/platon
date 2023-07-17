@@ -35,5 +35,6 @@ export class ResourceInvitationFormComponent {
         write: true,
       },
     })
+    this.form.patchValue({ invitee: null })
   }
 }

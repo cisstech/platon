@@ -21,19 +21,19 @@ import { NzSelectModule } from 'ng-zorro-antd/select'
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton'
 import { NzSpinModule } from 'ng-zorro-antd/spin'
 
-import { DialogModule, DialogService, TagService } from '@platon/core/browser'
-import { Level, Topic } from '@platon/core/common'
+import { AuthService, DialogModule, DialogService, TagService } from '@platon/core/browser'
+import { Level, Topic, User } from '@platon/core/common'
 import { CircleTreeComponent, ResourcePipesModule, ResourceService } from '@platon/feature/resource/browser'
 import {
-  circleFromTree,
   CircleTree,
-  flattenCircleTree,
   ResourceStatus,
   ResourceTypes,
-  ResourceVisibilities,
+  circleTreeFromResource,
+  flattenCircleTree,
 } from '@platon/feature/resource/common'
 import { UiStepDirective, UiStepperComponent } from '@platon/shared/ui'
 import { firstValueFrom } from 'rxjs'
+import { NzPageHeaderModule } from 'ng-zorro-antd/page-header'
 
 @Component({
   standalone: true,
@@ -55,6 +55,7 @@ import { firstValueFrom } from 'rxjs'
     NzButtonModule,
     NzSelectModule,
     NzSkeletonModule,
+    NzPageHeaderModule,
 
     UiStepDirective,
     UiStepperComponent,
@@ -78,7 +79,6 @@ export class ResourceCreatePage implements OnInit {
     name: new FormControl('', [Validators.required]),
     code: new FormControl(''),
     desc: new FormControl('', [Validators.required]),
-    opened: new FormControl(false),
   })
 
   protected tags = new FormGroup({
@@ -88,6 +88,7 @@ export class ResourceCreatePage implements OnInit {
 
   constructor(
     private readonly router: Router,
+    private readonly authService: AuthService,
     private readonly tagService: TagService,
     private readonly dialogService: DialogService,
     private readonly activatedRoute: ActivatedRoute,
@@ -97,22 +98,39 @@ export class ResourceCreatePage implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.type = (this.activatedRoute.snapshot.queryParamMap.get('type') || ResourceTypes.CIRCLE) as ResourceTypes
+    this.parent = this.activatedRoute.snapshot.queryParamMap.get('parent') || undefined
 
-    const [tree, topics, levels] = await Promise.all([
+    const user = (await this.authService.ready()) as User
+    const [tree, circle, topics, levels] = await Promise.all([
       firstValueFrom(this.resourceService.tree()),
+      firstValueFrom(this.resourceService.circle(user.username)),
       firstValueFrom(this.tagService.listTopics()),
       firstValueFrom(this.tagService.listLevels()),
     ])
 
-    if (this.type === 'CIRCLE' && tree) {
+    if (!this.resourceService.canUserCreateResource(user, this.type)) {
+      this.router.navigateByUrl('/resources', {
+        replaceUrl: true,
+      })
+      this.dialogService.error("Vous n'avez pas les droits pour cette action !")
+      return
+    }
+
+    if (this.type === 'CIRCLE') {
       const codes = flattenCircleTree(tree)
         .map((c) => c.code)
         .filter((c) => !!c) as string[]
+
       this.infos.controls.code.setValidators(Validators.compose([Validators.required, this.codeValidator(codes)]))
       this.infos.updateValueAndValidity()
     }
 
     this.tree = tree
+
+    if (this.type !== 'CIRCLE') {
+      this.tree.children?.unshift(circleTreeFromResource(circle))
+    }
+
     this.topics = topics
     this.levels = levels
 
@@ -124,21 +142,19 @@ export class ResourceCreatePage implements OnInit {
     try {
       const infos = this.infos.value
       const tags = this.tags.value
-      const parent = circleFromTree(this.tree, this.parent as string) as CircleTree
 
       this.creating = true
 
       const resource = await firstValueFrom(
         this.resourceService.create({
           type: this.type,
-          parentId: this.parent,
+          parentId: this.parent as string,
           name: infos.name as string,
           desc: infos.desc as string,
           code: infos.code || undefined,
           levels: tags.levels as string[],
           topics: tags.topics as string[],
           status: ResourceStatus.DRAFT,
-          visibility: infos.opened ? ResourceVisibilities.PUBLIC : parent.visibility,
         })
       )
 

@@ -21,6 +21,15 @@
   &.animate {
     @include animate;
   }
+  &::ng-deep {
+    .mdc-button__label {
+      display: flex;
+      align-items: center;
+      mat-icon {
+        margin: 8px;
+      }
+    }
+  }
 }
 
 button {
@@ -43,6 +52,17 @@ mat-divider {
 
 nz-alert {
   margin-bottom: 0.5rem;
+}
+
+mat-card-content {
+  min-height: 200px;
+}
+
+pre {
+  overflow-y: auto;
+  max-height: 75vh;
+  color: red;
+  margin: 2rem 0;
 }
 
 .exercise-statement {
@@ -70,22 +90,23 @@ nz-alert {
   background-color: #ff4d4f !important;
 }
 
+.skeleton-actions {
+  margin: 0;
+  &.active {
+    margin: 0 16px;
+  }
+}
+
 @media (max-width: 720px) {
-  :host::ng-deep {
+  Œ :host::ng-deep {
     button {
       .mat-icon {
         margin: 0;
       }
-      .mdc-button__label {
-        display: none;
-      }
     }
   }
-}
 
-pre {
-  overflow-y: auto;
-  max-height: 75vh;
-  color: red;
-  margin: 2rem 0;
+  .hide-on-small {
+    display: none;
+  }
 }

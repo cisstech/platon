@@ -52,6 +52,7 @@ scalar JSON
 type NotificationChange {
   unreadCount: Float!
   newNotification: Notification
+  notifications: [Notification!]
 }
 
 scalar Date

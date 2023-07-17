@@ -1,5 +1,5 @@
 <nz-form-item nzRequired>
   <nz-form-control>
-    <nz-switch [(ngModel)]="value" (ngModelChange)="notifyValueChange?.($event)" />
+    <nz-switch [disabled]="disabled" [(ngModel)]="value" (ngModelChange)="notifyValueChange?.($event)" />
   </nz-form-control>
 </nz-form-item>

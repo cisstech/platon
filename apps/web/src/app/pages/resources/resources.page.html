@@ -4,6 +4,7 @@
     <ng-template let-context> {{ context }}</ng-template>
   </ui-search-bar>
   <button
+    *ngIf="canCreateResource"
     nz-button
     nzType="primary"
     nzShape="round"
@@ -15,37 +16,40 @@
   </button>
   <ng-template #actions>
     <button
+      *ngIf="canCreateCircle"
       nz-button
       nzType="link"
       [routerLink]="['/resources/create']"
       [queryParams]="{ type: 'CIRCLE' }"
     >
-      <mat-icon>{{'CIRCLE'|resourceIcon}}</mat-icon>
+      <mat-icon>{{ 'CIRCLE' | resourceIcon }}</mat-icon>
       <span>Créer un cercle</span>
     </button>
     <button
+      *ngIf="canCreateExercise"
       nz-button
       nzType="link"
       [routerLink]="['/resources/create']"
       [queryParams]="{ type: 'EXERCISE' }"
     >
-      <mat-icon>{{'EXERCISE'|resourceIcon}}</mat-icon>
+      <mat-icon>{{ 'EXERCISE' | resourceIcon }}</mat-icon>
       <span>Créer un exercice</span>
     </button>
     <button
+      *ngIf="canCreateActivity"
       nz-button
       nzType="link"
       [routerLink]="['/resources/create']"
-      [queryParams]="{ type: 'ACTIVITY' }"
+      [queryParams]="{ type: 'ACTIVITY', }"
     >
-      <mat-icon>{{'ACTIVITY'|resourceIcon}}</mat-icon>
+      <mat-icon>{{ 'ACTIVITY' | resourceIcon }}</mat-icon>
       <span>Créer une activité</span>
     </button>
   </ng-template>
 </header>
 <div class="content">
   <article>
-    <ng-container *ngIf="!searching; else: spinner">
+    <ng-container *ngIf="!searching; else spinner">
       <h2 *ngIf="items.length">Voici ce qu'on a trouver selon vos critères de recherche...</h2>
       <div class="indicators">
         <ui-filter-indicators [filters]="filters" [indicators]="indicators" />

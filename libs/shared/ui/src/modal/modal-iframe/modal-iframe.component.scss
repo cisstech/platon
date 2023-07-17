@@ -1,6 +1,6 @@
 ::ng-deep {
   .ui-modal {
-    height: 90vh;
+    max-width: 100vw !important;
   }
   .ant-modal-footer {
     display: none;

@@ -103,14 +103,14 @@ export class PLCompiler implements PLVisitor {
   async visitInclude(node: IncludeNode): Promise<void> {
     this.lineno = node.lineno
 
-    const { resource, version, relpath, abspath } = this.resolveReference(node.path)
+    const { resource, version, relpath, abspath, alias } = this.resolveReference(node.path)
     const content = await this.resolver.resolveContent(resource, version, relpath)
 
     this.source.dependencies.push({
+      alias,
       abspath,
       content,
       lineno: this.lineno,
-      alias: node.alias,
     })
 
     return Promise.resolve()

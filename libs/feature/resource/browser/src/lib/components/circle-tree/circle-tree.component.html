@@ -3,6 +3,7 @@
     <nz-tree-node-checkbox
       *ngIf="selectable"
       [nzChecked]="checklistSelection.isSelected(node)"
+      [nzDisabled]="disabled || node.disabled"
       (nzClick)="selectionToggle(node)"
     >
     </nz-tree-node-checkbox>
@@ -17,10 +18,12 @@
     <nz-tree-node-checkbox
       *ngIf="selectable"
       [nzChecked]="checklistSelection.isSelected(node)"
+      [nzDisabled]="disabled || node.disabled"
       (nzClick)="selectionToggle(node)"
     >
     </nz-tree-node-checkbox>
     <nz-tree-node-option
+      [nzDisabled]="node.disabled"
       [routerLink]="selectable ? undefined : ['/resources', node.id, 'overview']"
       >{{ node.name }}</nz-tree-node-option
     >
