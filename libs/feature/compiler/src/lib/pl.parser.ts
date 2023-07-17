@@ -9,17 +9,36 @@ import { Variables } from './pl.variables'
 
 // VALUES
 
+export type PLValueType = 'PLArray'
+  | 'PLObject'
+  | 'PLString'
+  | 'PLNumber'
+  | 'PLBoolean'
+  | 'PLComponent'
+  | 'PLDict'
+  | 'PLFileURL'
+  | 'PLReference'
+  | 'PLFileContent'
+
 export interface PLValue {
+  readonly type: PLValueType
   readonly value: string | number | boolean | PLValue[] | Record<string, PLValue>;
   readonly lineno: number;
+  toRaw(): any;
   toObject(visitor: PLVisitor): any | Promise<any>;
 }
 
 export class PLArray implements PLValue {
+  readonly type = 'PLArray'
   constructor(
     readonly value: PLValue[],
     readonly lineno: number
   ) {}
+
+  toRaw() {
+    return this.value.map(value => value.toRaw())
+  }
+
   async toObject(visitor: PLVisitor) {
     const result: any[] = [];
     // do not use promise.all to allow cache file operations (@copyurl, @copycontent...)
@@ -31,10 +50,20 @@ export class PLArray implements PLValue {
 }
 
 export class PLObject implements PLValue {
+  readonly type = 'PLArray'
   constructor(
     readonly value: Record<string, PLValue>,
     readonly lineno: number
   ) {}
+
+  toRaw() {
+    return Object.keys(this.value)
+      .reduce((acc, curr) => {
+        acc[curr] = this.value[curr].toRaw()
+        return acc
+      }, {} as any)
+  }
+
   async toObject(visitor: PLVisitor) {
     // do not use promise.all to allow cache file operations (@copyurl, @copycontent...)
     let result: any = {};
@@ -46,43 +75,62 @@ export class PLObject implements PLValue {
 }
 
 export class PLString implements PLValue {
+  readonly type = 'PLArray'
   constructor(
     readonly value: string,
     readonly lineno: number
   ) {}
-
+  toRaw() {
+    return this.value
+  }
   toObject() { return this.value.trim(); }
 }
 
 export class PLNumber implements PLValue {
+  readonly type = 'PLNumber'
   constructor(
     readonly value: number,
     readonly lineno: number
   ) {}
+  toRaw() {
+    return this.value
+  }
   toObject() { return this.value; }
 }
 
 export class PLBoolean implements PLValue {
+  readonly type = 'PLBoolean'
   constructor(
     readonly value: boolean,
     readonly lineno: number
   ) {}
+  toRaw() {
+    return this.value
+  }
   toObject() { return this.value; }
 }
 
 export class PLComponent implements PLValue {
+  readonly type = 'PLComponent'
   constructor(
     readonly value: string,
     readonly lineno: number
   ) {}
-  toObject() { return { 'cid': uuidv4(), selector: this.value }; }
+  toRaw() {
+    return { cid: uuidv4(), selector: this.value }
+  }
+  toObject() { return { cid: uuidv4(), selector: this.value }; }
 }
 
 export class PLDict implements PLValue {
+  readonly type = 'PLDict'
   constructor(
     readonly value: string,
     readonly lineno: number
   ) {}
+  toRaw() {
+    return `@extends ${this.value}`
+  }
   async toObject(visitor: PLVisitor) {
     const source = await visitor.visitExtends(this, false);
     return source.variables
@@ -90,36 +138,53 @@ export class PLDict implements PLValue {
 }
 
 export class PLFileURL implements PLValue {
+  readonly type = 'PLFileURL'
   constructor(
     readonly value: string,
     readonly lineno: number
   ) {}
+  toRaw() {
+    return `@copyurl ${this.value}`
+  }
   toObject(visitor: PLVisitor) { return visitor.visitCopyUrl(this); }
 }
 
 export class PLReference implements PLValue {
+  readonly type = 'PLReference'
   constructor(
     readonly value: string,
     readonly lineno: number
   ) {}
+  toRaw() {
+    return this.value
+  }
   toObject(visitor: PLVisitor) { return visitor.visitReference(this); }
 }
 
 export class PLFileContent implements PLValue {
+  readonly type = 'PLFileContent'
   constructor(
     readonly value: string,
     readonly lineno: number
   ) {}
+  toRaw() {
+    return `@copycontent ${this.value}`
+  }
   toObject(visitor: PLVisitor) { return visitor.visitCopyContent(this); }
 }
 
+
 // NODES
 
+export type PLNodeType = 'ExtendsNode'
+  | 'CommentNode'
+  | 'IncludeNode'
+  | 'AssignmentNode'
+
 export interface PLNode {
-  readonly type: string
+  readonly type: PLNodeType
   origin: string
   accept(visitor: PLVisitor): Promise<void>;
-  toString(changes: Variables): string;
 }
 
 export class ExtendsNode implements PLNode {
@@ -194,6 +259,12 @@ export interface PLSourceFile {
   resource: string;
   version: string;
   abspath: string;
+  variables: Record<string, unknown>;
+  dependencies: PLDependency[];
+  ast: {
+    nodes: PLAst
+    variables: Record<string, unknown>;
+  },
   errors: {
     lineno: number,
     abspath: string
@@ -204,8 +275,6 @@ export interface PLSourceFile {
     abspath: string
     description: string
   }[];
-  variables: Record<string, unknown>;
-  dependencies: PLDependency[];
 }
 
 // VISITOR

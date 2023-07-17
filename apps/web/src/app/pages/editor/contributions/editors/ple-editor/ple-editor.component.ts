@@ -3,13 +3,13 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy
 import { FormBuilder } from '@angular/forms'
 import { Editor, FileService, OpenRequest } from '@cisstech/nge-ide/core'
 import { OutputData } from '@editorjs/editorjs'
+import { Variables, flattenAssignmentNodes } from '@platon/feature/compiler'
 import { ResourceFileService } from '@platon/feature/resource/browser'
 import { EditorJsVersion } from '@platon/shared/ui'
 import { Subscription, debounceTime, firstValueFrom, skip } from 'rxjs'
 import { v4 as uuidv4 } from 'uuid'
 import { InputCodeOptions } from '../ple-input-editor/input-code/input-code'
 import { PleInput } from '../ple-input-editor/ple-input'
-import { Variables } from '@platon/feature/compiler'
 
 const EDITOR_JS_REGEX = /^\s*\{[\s\S]*"blocks"\s*:\s*\[[\s\S]*\][\s\S]*\}\s*$/
 const HIDDEN_VARIABLES = ['author', 'title', 'statement', 'form']
@@ -43,16 +43,21 @@ const createOutputData = (input: unknown) => {
   } as OutputData
 }
 
-/**
- *  THIS COMPONENT IS STILL IN DEVELOPMENT
- *
- * TASKS:
- *
- * - [ ] Create custom algorithm to regenerate back ple code from compiled data instead of using regex
- * - [ ] Add support for all input types
- * - [ ] Comments should be kept in the code during the compile back process
- *
- */
+const parseOutputData = (data: unknown) => {
+  if (typeof data === 'string') {
+    return data
+  }
+
+  const output = data as OutputData
+  if (output?.version === EditorJsVersion && output.blocks) {
+    if (output.blocks.length === 1 && output.blocks[0].type === 'raw') {
+      return output.blocks[0].data.html
+    }
+    return JSON.stringify(data, null, 2)
+  }
+
+  return JSON.stringify(data, null, 2)
+}
 
 @Component({
   selector: 'app-ple-editor',
@@ -68,7 +73,6 @@ export class PleEditorComponent implements OnInit, OnDestroy {
 
   private readonly subscriptions: Subscription[] = []
   private request!: OpenRequest
-  private content = ''
 
   @Input()
   protected editor!: Editor
@@ -105,21 +109,27 @@ export class PleEditorComponent implements OnInit, OnDestroy {
 
   protected async onChangeData(): Promise<void> {
     const [resource, version] = this.request.uri.authority.split(':')
+    const { value } = this.form
 
-    this.content = await firstValueFrom(
+    const content = await firstValueFrom(
       this.resourceFileService.transformExercise(
         resource,
         {
-          changes: this.variables.reduce((acc, curr) => {
-            acc[curr.name] = curr.value
-            return acc
-          }, {} as Variables),
+          changes: {
+            ...this.variables.reduce((acc, curr) => {
+              acc[curr.name] = curr.value
+              return acc
+            }, {} as Variables),
+            title: parseOutputData(value.title || ''),
+            statement: parseOutputData(value.statement || ''),
+            form: parseOutputData(value.form || ''),
+          },
         },
         version
       )
     )
 
-    this.fileService.update(this.request.uri, this.content + ' ')
+    this.fileService.update(this.request.uri, content)
   }
 
   protected addVariable(): void {
@@ -131,7 +141,6 @@ export class PleEditorComponent implements OnInit, OnDestroy {
         value: '',
       } as PleInput,
     ]
-    this.changeDetectorRef.markForCheck()
   }
 
   protected selectVariable(index: number): void {
@@ -141,7 +150,10 @@ export class PleEditorComponent implements OnInit, OnDestroy {
   }
 
   protected deleteVariable(index: number): void {
-    console.log(index)
+    this.variables.splice(index, 1)
+    this.selectedVariable = undefined
+    this.selectedVariableIndex = -1
+    this.onChangeData()
   }
 
   protected updateVariable(variable: PleInput): void {
@@ -158,17 +170,16 @@ export class PleEditorComponent implements OnInit, OnDestroy {
     this.readOnly = file?.readOnly
 
     const [resource, version] = this.request.uri.authority.split(':')
-    const [output, content] = await Promise.all([
+    const [source] = await Promise.all([
       firstValueFrom(this.resourceFileService.compileExercise(resource, version)),
       this.fileService.open(this.request.uri),
     ])
-    const { source } = output
-    this.content = content.current || ''
 
+    const { variables } = source.ast
     this.form.patchValue({
-      title: (source.variables.title as string) || '',
-      statement: createOutputData(source.variables.statement),
-      form: createOutputData(source.variables.form),
+      title: (variables.title as string) || '',
+      statement: createOutputData(variables.statement),
+      form: createOutputData(variables.form),
     })
 
     if (this.readOnly) {
@@ -176,16 +187,18 @@ export class PleEditorComponent implements OnInit, OnDestroy {
     }
 
     const sandbox = source.variables.sandbox || 'javascript'
-    this.variables = Object.keys(source.variables).map((name) => ({
-      name,
-      type: '',
-      description: '',
-      value: source.variables[name],
-      options: {
-        ...(name === 'grader' ? ({ language: sandbox } as InputCodeOptions) : {}),
-        ...(name === 'builder' ? ({ language: sandbox } as InputCodeOptions) : {}),
-      },
-    }))
+    this.variables = Object.keys(variables)
+      .filter((variable) => !HIDDEN_VARIABLES.includes(variable))
+      .map((name) => ({
+        name,
+        type: '',
+        description: '',
+        value: variables[name],
+        options: {
+          ...(name === 'grader' ? ({ language: sandbox } as InputCodeOptions) : {}),
+          ...(name === 'builder' ? ({ language: sandbox } as InputCodeOptions) : {}),
+        },
+      }))
 
     this.ready = true
     this.changeDetectorRef.markForCheck()

@@ -3,6 +3,7 @@ import {
   CommentNode,
   ExtendsNode,
   IncludeNode,
+  PLAst,
   PLNode,
   PLObject,
   PLSourceFile,
@@ -10,7 +11,7 @@ import {
 } from './pl.parser'
 import { Variables } from './pl.variables'
 
-const convertObjectToDotNotation = (obj: Record<string, unknown>): Record<string, unknown> => {
+export const convertObjectToDotNotation = (obj: Record<string, unknown>): Record<string, unknown> => {
   const result: Record<string, unknown> = {}
   const transform = (o: Record<string, unknown>, prefix = '') => {
     let component = false
@@ -36,7 +37,7 @@ const convertObjectToDotNotation = (obj: Record<string, unknown>): Record<string
   return result
 }
 
-const convertPLObjectToDotNotation = (node: AssignmentNode, prefix: string) => {
+export const convertPLObjectToDotNotation = (node: AssignmentNode, prefix: string) => {
   const result: AssignmentNode[] = []
   const transform = (record: Record<string, PLValue>, prefix: string) => {
     Object.keys(record).forEach((key) => {
@@ -55,7 +56,7 @@ const convertPLObjectToDotNotation = (node: AssignmentNode, prefix: string) => {
   return result
 }
 
-const findNodeComments = (nodes: PLNode[], node: string | PLNode): CommentNode[] => {
+export const findNodeComments = (nodes: PLNode[], node: string | PLNode): CommentNode[] => {
   let index =
     typeof node === 'string'
       ? nodes.findIndex((n) => n instanceof AssignmentNode && n.key === node)
@@ -77,18 +78,19 @@ const findNodeComments = (nodes: PLNode[], node: string | PLNode): CommentNode[]
   return comments
 }
 
-export const sortAssignments = (nodes: AssignmentNode[]): AssignmentNode[] => {
+export const flattenAssignmentNodes = (nodes: PLAst): AssignmentNode[] => {
+  const assignments = nodes.filter((node) => node.type === 'AssignmentNode') as AssignmentNode[]
   const sortedNodes: AssignmentNode[] = []
   const groupedNodes: { [key: string]: AssignmentNode[] } = {}
 
-  for (const node of nodes) {
+  for (const node of assignments) {
     const segments = node.key.split('.')
     const variableName = segments[0]
 
     if (!groupedNodes[variableName]) {
       groupedNodes[variableName] = []
     }
-    if (node.value instanceof PLObject) {
+    if (typeof node.value.value === 'object' && !Array.isArray(node.value.value)) {
       groupedNodes[variableName].push(...convertPLObjectToDotNotation(node, variableName))
     } else {
       groupedNodes[variableName].push(node)
@@ -165,7 +167,7 @@ export class PLGenerator {
       switch (typeof value) {
         case 'string':
           if (value.includes('\n')) {
-            code += `${key}==\n${value}\n==`
+            code += `${key}==${value.startsWith('\n') ? '' : '\n'}${value}${value.endsWith('\n') ? '' : '\n'}==`
           } else {
             code += `${key} = "${value}"`
           }

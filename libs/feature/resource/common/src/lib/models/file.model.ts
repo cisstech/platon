@@ -1,4 +1,4 @@
-import { PLAst, PLSourceFile, Variables } from '@platon/feature/compiler'
+import { Variables } from '@platon/feature/compiler'
 
 export enum FileMoveActions {
   move = 'move',
@@ -87,11 +87,6 @@ export interface FileVersion {
 export interface FileVersions {
   all: FileVersion[]
   latest?: FileVersion
-}
-
-export interface ExerciseCompileOuput {
-  ast: PLAst
-  source: PLSourceFile
 }
 
 export interface ExerciseTransformInput {

@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs'
 
+import { PLSourceFile } from '@platon/feature/compiler'
 import {
-  ExerciseCompileOuput,
   ExerciseTransformInput,
   FileCreate,
   FileMove,
@@ -15,7 +15,7 @@ import {
 } from '@platon/feature/resource/common'
 
 export abstract class ResourceFileProvider {
-  abstract compileExercise(resource: string, version?: string): Observable<ExerciseCompileOuput>
+  abstract compileExercise(resource: string, version?: string): Observable<PLSourceFile>
   abstract transformExercise(resource: string, input: ExerciseTransformInput, version?: string): Observable<string>
 
   abstract release(resource: string | Resource, input: FileRelease): Observable<void>

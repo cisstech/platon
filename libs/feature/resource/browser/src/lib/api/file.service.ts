@@ -1,8 +1,8 @@
 import { Observable } from 'rxjs'
 
 import { Injectable } from '@angular/core'
+import { PLSourceFile } from '@platon/feature/compiler'
 import {
-  ExerciseCompileOuput,
   ExerciseTransformInput,
   FileCreate,
   FileMove,
@@ -20,7 +20,7 @@ import { ResourceFileProvider } from '../models/resource-file-provider'
 export class ResourceFileService {
   constructor(private readonly provider: ResourceFileProvider) {}
 
-  compileExercise(resource: string, version?: string): Observable<ExerciseCompileOuput> {
+  compileExercise(resource: string, version?: string): Observable<PLSourceFile> {
     return this.provider.compileExercise(resource, version)
   }
 

@@ -2,8 +2,8 @@ import { map, Observable } from 'rxjs'
 
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
+import { PLSourceFile } from '@platon/feature/compiler'
 import {
-  ExerciseCompileOuput,
   ExerciseTransformInput,
   FileCreate,
   FileMove,
@@ -23,13 +23,13 @@ export class RemoteResourceFileProvider extends ResourceFileProvider {
     super()
   }
 
-  compileExercise(resource: string, version?: string): Observable<ExerciseCompileOuput> {
+  compileExercise(resource: string, version?: string): Observable<PLSourceFile> {
     let params = new HttpParams()
     if (version) {
       params = params.append('version', version)
     }
 
-    return this.http.post<ExerciseCompileOuput>(`/api/v1/files/compile/${resource}/json`, {
+    return this.http.post<PLSourceFile>(`/api/v1/files/compile/${resource}/json`, {
       params,
     })
   }

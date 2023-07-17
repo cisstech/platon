@@ -13,6 +13,7 @@ interface CompileInput {
   version?: string
   overrides?: Variables
   user?: User
+  withAst?: boolean
 }
 
 interface CompileOutput {
@@ -98,6 +99,7 @@ export class ResourceFileService {
       resource: resourceId,
       version: file.version,
       main: file.path,
+      withAst: input.withAst,
     })
 
     const textContent = Buffer.from((await content).buffer).toString()

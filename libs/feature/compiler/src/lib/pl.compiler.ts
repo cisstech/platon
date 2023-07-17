@@ -39,6 +39,14 @@ export interface PLReferenceResolver {
   resolveContent(resource: string, version: string, path: string): Promise<string>
 }
 
+interface PLCompilerOptions {
+  resource: string
+  version: string
+  main: string
+  resolver: PLReferenceResolver
+  withAst?: boolean
+}
+
 /**
  * Compiles a PL AST to a PLSourceFile.
  */
@@ -49,13 +57,15 @@ export class PLCompiler implements PLVisitor {
   private readonly source: PLSourceFile
   private nodes: PLAst = []
   private lineno = 0
+  private withAst?: boolean
 
   get ast(): PLAst {
     return this.nodes.slice()
   }
 
-  constructor(options: { resource: string; version: string; main: string; resolver: PLReferenceResolver }) {
+  constructor(options: PLCompilerOptions) {
     this.resolver = options.resolver
+    this.withAst = options.withAst
     this.source = {
       resource: options.resource,
       version: options.version,
@@ -63,6 +73,10 @@ export class PLCompiler implements PLVisitor {
       errors: [],
       warnings: [],
       variables: {},
+      ast: {
+        nodes: [],
+        variables: {},
+      },
       dependencies: [],
     }
   }
@@ -135,6 +149,9 @@ export class PLCompiler implements PLVisitor {
       await node.accept(this)
     }
     this.nodes = ast
+    if (this.withAst) {
+      this.source.ast.nodes = ast.slice()
+    }
     return this.source
   }
 
@@ -197,7 +214,7 @@ export class PLCompiler implements PLVisitor {
   }
 
   async visitReference(node: PLReference): Promise<any> {
-    const [prop, object] = this.withVariable(node.value, true)
+    const [prop, object] = this.withVariable(this.source.variables, node.value, true)
     if (prop && object) return object[prop]
     return undefined
   }
@@ -208,9 +225,17 @@ export class PLCompiler implements PLVisitor {
 
   async visitAssignment(node: AssignmentNode): Promise<void> {
     this.lineno = node.lineno
-    const [id, obj] = this.withVariable(node.key)
-    if (!id || !obj) return Promise.resolve()
-    obj[id] = await node.value.toObject(this)
+    const [prop, parent] = this.withVariable(this.source.variables, node.key)
+    if (!prop || !parent) return Promise.resolve()
+    parent[prop] = await node.value.toObject(this)
+
+    if (this.withAst) {
+      const [rawProp, rawParent] = this.withVariable(this.source.ast.variables, node.key)
+      if (rawProp && rawParent) {
+        rawParent[rawProp] = node.value.toRaw()
+      }
+    }
+
     return Promise.resolve()
   }
 
@@ -230,7 +255,7 @@ export class PLCompiler implements PLVisitor {
     })
   }
 
-  private withVariable(name: string, required = false): [string | null, Record<string, unknown> | null] {
+  private withVariable(variables: Variables, name: string, required = false): [string | null, Variables | null] {
     const props = name.split('.')
     if (props.find((prop) => !prop)) {
       this.error(`SyntaxError: ${name}`)
@@ -239,7 +264,7 @@ export class PLCompiler implements PLVisitor {
 
     const stack: string[] = []
 
-    let parent = this.source.variables
+    let parent = variables
     for (const prop of props.slice(0, -1)) {
       stack.push(prop)
 
@@ -250,7 +275,7 @@ export class PLCompiler implements PLVisitor {
       }
 
       parent[prop] = value ?? {}
-      parent = parent[prop] as unknown as Record<string, unknown>
+      parent = parent[prop] as unknown as Variables
     }
 
     const prop = props[props.length - 1]
