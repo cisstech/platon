@@ -1,26 +1,22 @@
-<nz-tabset nzTabPosition="left" nzLinkRouter>
-  <nz-tab>
-    <a
-      *nzTabLink
-      nz-tab-link
-      [routerLink]="['.']"
-      [queryParams]="{ tab: 'informations' }"
-      queryParamsHandling="merge"
-    >
-      Informations
-    </a>
-    <app-resource-informations />
-  </nz-tab>
-  <nz-tab>
-    <a
-      *nzTabLink
-      nz-tab-link
-      [routerLink]="['.']"
-      [queryParams]="{ tab: 'members' }"
-      queryParamsHandling="merge"
-    >
-      Membres
-    </a>
-    <app-resource-members />
-  </nz-tab>
-</nz-tabset>
+<ng-container *ngIf="contextChange | async as context">
+  <nz-tabset nzTabPosition="left" nzLinkRouter>
+    <nz-tab *ngIf="context.resource">
+      <a
+        *nzTabLink
+        nz-tab-link
+        [routerLink]="['.']"
+        [queryParams]="{ tab: 'informations' }"
+        queryParamsHandling="merge"
+      >
+        Informations
+      </a>
+      <app-resource-informations />
+    </nz-tab>
+    <nz-tab *ngIf="context.resource?.type === 'CIRCLE'">
+      <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'members' }" queryParamsHandling="merge">
+        Membres
+      </a>
+      <app-resource-members />
+    </nz-tab>
+  </nz-tabset>
+</ng-container>

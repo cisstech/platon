@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
 import { Subscription } from 'rxjs'
@@ -13,11 +13,12 @@ import { NzSelectModule } from 'ng-zorro-antd/select'
 import { NzPopoverModule } from 'ng-zorro-antd/popover'
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb'
 import { NzTypographyModule } from 'ng-zorro-antd/typography'
+import { NzPageHeaderModule } from 'ng-zorro-antd/page-header'
 
 import { DialogModule } from '@platon/core/browser'
 import { CircleTreeComponent, ResourcePipesModule } from '@platon/feature/resource/browser'
 import { ResourceStatus } from '@platon/feature/resource/common'
-import { UiLayoutTabsComponent, UiLayoutTabsTitleDirective } from '@platon/shared/ui'
+import { UiLayoutTabsComponent, UiLayoutTabsTitleDirective, UiModalIFrameComponent } from '@platon/shared/ui'
 
 import { ResourcePresenter } from './resource.presenter'
 
@@ -42,10 +43,12 @@ import { ResourcePresenter } from './resource.presenter'
     NzSelectModule,
     NzBreadCrumbModule,
     NzTypographyModule,
+    NzPageHeaderModule,
 
     DialogModule,
 
     UiLayoutTabsComponent,
+    UiModalIFrameComponent,
     UiLayoutTabsTitleDirective,
 
     CircleTreeComponent,
@@ -54,12 +57,12 @@ import { ResourcePresenter } from './resource.presenter'
 })
 export class ResourcePage implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription[] = []
+  private readonly presenter = inject(ResourcePresenter)
+  private readonly changeDetectorRef = inject(ChangeDetectorRef)
 
   protected context = this.presenter.defaultContext()
 
   readonly status = Object.values(ResourceStatus)
-
-  constructor(private readonly presenter: ResourcePresenter, private readonly changeDetectorRef: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.subscriptions.push(
@@ -90,16 +93,8 @@ export class ResourcePage implements OnInit, OnDestroy {
     await this.presenter.update({ status })
   }
 
-  protected async acceptInvitation(): Promise<void> {
-    await this.presenter.acceptInvitation()
-  }
-
-  protected async declineInvitation(): Promise<void> {
-    await this.presenter.declineInvitation()
-  }
-
   protected async changeWatchingState(): Promise<void> {
-    if (this.context.watcher) {
+    if (this.context.resource?.permissions?.watcher) {
       await this.presenter.unwatch()
     } else {
       await this.presenter.watch()
@@ -108,5 +103,9 @@ export class ResourcePage implements OnInit, OnDestroy {
 
   protected trackByValue(_: number, item: unknown) {
     return item
+  }
+
+  protected openTab(url: string): void {
+    window.open(url, '_blank')
   }
 }

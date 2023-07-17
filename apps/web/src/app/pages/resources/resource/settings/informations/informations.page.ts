@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { MatButtonModule } from '@angular/material/button'
 
@@ -7,13 +7,13 @@ import { MatCheckboxModule } from '@angular/material/checkbox'
 import { MatFormFieldModule } from '@angular/material/form-field'
 import { MatInputModule } from '@angular/material/input'
 
-import { NzFormModule } from 'ng-zorro-antd/form'
-import { NzSpinModule } from 'ng-zorro-antd/spin'
 import { NzButtonModule } from 'ng-zorro-antd/button'
+import { NzFormModule } from 'ng-zorro-antd/form'
 import { NzSelectModule } from 'ng-zorro-antd/select'
+import { NzSpinModule } from 'ng-zorro-antd/spin'
 
-import { Level, Topic, UserRoles } from '@platon/core/common'
-import { firstValueFrom, Subscription } from 'rxjs'
+import { Level, Topic } from '@platon/core/common'
+import { Subscription, firstValueFrom } from 'rxjs'
 import { ResourcePresenter } from '../../resource.presenter'
 
 @Component({
@@ -39,6 +39,8 @@ import { ResourcePresenter } from '../../resource.presenter'
 })
 export class ResourceInformationsPage implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription[] = []
+  private readonly presenter = inject(ResourcePresenter)
+  private readonly changeDetectorRef = inject(ChangeDetectorRef)
 
   protected dataSource?: DataSource
 
@@ -53,18 +55,12 @@ export class ResourceInformationsPage implements OnInit, OnDestroy {
   protected context = this.presenter.defaultContext()
 
   protected get canEdit(): boolean {
-    const { user } = this.context
-    if (!user) return false
-    return user.role === UserRoles.admin
+    return !!this.context.resource?.permissions?.write
   }
 
   protected get canSubmit(): boolean {
-    const { user } = this.context
-    if (!user) return false
     return this.form.valid && this.canEdit
   }
-
-  constructor(private readonly presenter: ResourcePresenter, private readonly changeDetectorRef: ChangeDetectorRef) {}
 
   async ngOnInit(): Promise<void> {
     this.subscriptions.push(
@@ -80,10 +76,28 @@ export class ResourceInformationsPage implements OnInit, OnDestroy {
             this.dataSource = { levels, topics }
           }
           this.form = new FormGroup({
-            name: new FormControl({ value: resource.name, disabled: !this.canEdit }, [Validators.required]),
-            desc: new FormControl({ value: resource.desc || '', disabled: !this.canEdit }, [Validators.required]),
-            topics: new FormControl(resource.topics.map((e) => e.id)),
-            levels: new FormControl(resource.levels.map((e) => e.id)),
+            name: new FormControl(
+              {
+                value: resource.name,
+                disabled: !this.canEdit,
+              },
+              [Validators.required]
+            ),
+            desc: new FormControl(
+              {
+                value: resource.desc || '',
+                disabled: !this.canEdit,
+              },
+              [Validators.required]
+            ),
+            topics: new FormControl({
+              value: resource.topics.map((e) => e.id),
+              disabled: !this.canEdit,
+            }),
+            levels: new FormControl({
+              value: resource.levels.map((e) => e.id),
+              disabled: !this.canEdit,
+            }),
           })
         }
 

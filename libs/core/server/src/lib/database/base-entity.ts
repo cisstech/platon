@@ -1,5 +1,6 @@
 import {
   CreateDateColumn,
+  DeleteQueryBuilder,
   Index,
   ObjectLiteral,
   PrimaryGeneratedColumn,
@@ -20,11 +21,24 @@ export abstract class BaseEntity {
   updatedAt!: Date
 }
 
-type JoinFunction<T extends ObjectLiteral> = (queryBuilder: SelectQueryBuilder<T>) => SelectQueryBuilder<T>
+export type SelectWhereExpression<T extends ObjectLiteral> = (
+  queryBuilder: SelectQueryBuilder<T>
+) => SelectQueryBuilder<T>
 
-export const buildQuery = <T extends ObjectLiteral>(
+export type DeleteWhereExpression<T extends ObjectLiteral> = (
+  queryBuilder: DeleteQueryBuilder<T>
+) => DeleteQueryBuilder<T>
+
+export const buildSelectQuery = <T extends ObjectLiteral>(
   queryBuilder: SelectQueryBuilder<T>,
-  ...joinFunctions: JoinFunction<T>[]
+  ...expressions: SelectWhereExpression<T>[]
 ): SelectQueryBuilder<T> => {
-  return joinFunctions.reduce((qb, fn) => fn(qb), queryBuilder)
+  return expressions.reduce((qb, fn) => fn(qb), queryBuilder)
+}
+
+export const buildDeleteQuery = <T extends ObjectLiteral>(
+  queryBuilder: DeleteQueryBuilder<T>,
+  ...expressions: DeleteWhereExpression<T>[]
+): DeleteQueryBuilder<T> => {
+  return expressions.reduce((qb, fn) => fn(qb), queryBuilder)
 }

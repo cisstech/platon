@@ -3,6 +3,7 @@
     <input
       nz-input
       type="number"
+      [disabled]="disabled"
       [min]="options?.min ?? null"
       [max]="options?.max ?? null"
       [(ngModel)]="value"

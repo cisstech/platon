@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { MemberPermissions } from '@platon/feature/resource/common'
+import { MemberPermissions, ResourcePermissions } from '@platon/feature/resource/common'
 import { IsBoolean } from 'class-validator'
 
 export class MemberPermissionsDTO implements MemberPermissions {
@@ -10,4 +10,10 @@ export class MemberPermissionsDTO implements MemberPermissions {
   @IsBoolean()
   @ApiProperty()
   write!: boolean
+}
+
+export class ResourcePermissionsDTO extends MemberPermissionsDTO implements ResourcePermissions {
+  @IsBoolean()
+  @ApiProperty()
+  watcher!: boolean
 }

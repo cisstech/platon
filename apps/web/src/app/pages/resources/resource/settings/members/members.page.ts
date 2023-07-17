@@ -1,10 +1,9 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { Subscription } from 'rxjs'
 
 import { MatCardModule } from '@angular/material/card'
 
-import { UserRoles } from '@platon/core/common'
 import {
   ResourceInvitationFormComponent,
   ResourceInvitationTableComponent,
@@ -30,27 +29,36 @@ import { ResourcePresenter } from '../../resource.presenter'
 })
 export class ResourceMembersPage implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription[] = []
+  private readonly presenter = inject(ResourcePresenter)
+  private readonly changeDetectorRef = inject(ChangeDetectorRef)
 
   protected members: ResourceMember[] = []
   protected invitations: ResourceInvitation[] = []
   protected excludes: string[] = []
   protected context = this.presenter.defaultContext()
 
-  protected get canEdit(): boolean {
-    const { user } = this.context
-    if (!user) return false
-    return user.role === UserRoles.admin
+  protected get excludeFromDelete(): string[] {
+    return [this.context.resource?.ownerId as string, this.context.user?.id as string].filter(Boolean)
   }
 
-  constructor(private readonly presenter: ResourcePresenter, private readonly changeDetectorRef: ChangeDetectorRef) {}
+  protected get canEdit(): boolean {
+    return !!this.context.resource?.permissions?.write
+  }
 
   ngOnInit(): void {
     this.subscriptions.push(
       this.presenter.contextChange.subscribe(async (context) => {
         this.context = context
-        await Promise.all([this.loadMembers(), this.loadInvitations()])
+        if (context.resource) {
+          await Promise.all([this.loadMembers(), this.loadInvitations()])
 
-        this.excludes = [...this.members.map((m) => m.userId), ...this.invitations.map((i) => i.inviteeId)]
+          this.excludes = [
+            ...this.members.map((m) => m.userId),
+            ...this.invitations.map((i) => i.inviteeId),
+            context.resource.ownerId,
+            context.user?.id as string,
+          ]
+        }
 
         this.changeDetectorRef.markForCheck()
       })

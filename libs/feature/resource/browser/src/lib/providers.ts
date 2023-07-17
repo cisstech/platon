@@ -12,7 +12,7 @@ import { RemoteResourceInvitationProvider } from './providers/remote-resource-in
 import { RemoteResourceMemberProvider } from './providers/remote-resource-member.provider'
 import { RemoteResourceWatcherProvider } from './providers/remote-resource-watcher.provider'
 import { RemoteResourceProvider } from './providers/remote-resource.provider'
-import { ResourceEventNotificationParser } from './providers/resource-notification-parser.provider'
+import { ResourceNotificationParsers } from './providers/resource-notification-parser.provider'
 
 export const RESOURCE_PROVIDERS: Provider[] = [
   { provide: ResourceProvider, useClass: RemoteResourceProvider },
@@ -22,7 +22,7 @@ export const RESOURCE_PROVIDERS: Provider[] = [
   { provide: ResourceMemberProvider, useClass: RemoteResourceMemberProvider },
   { provide: ResourceWatcherProvider, useClass: RemoteResourceWatcherProvider },
 
-  ...[ResourceEventNotificationParser].map((provider) => ({
+  ...ResourceNotificationParsers.map((provider) => ({
     provide: NOTIFICATION_PARSER,
     multi: true,
     useValue: provider,

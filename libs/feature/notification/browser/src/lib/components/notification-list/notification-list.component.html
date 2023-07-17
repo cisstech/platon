@@ -3,49 +3,92 @@
     <ng-container *ngFor="let item of items; trackBy: trackItemById">
       <nz-list-item
         [class.unread]="!item.notification.readAt"
-        (click)="markAsRead(item.notification); item.renderer?.onClick?.(item.injector)"
+        (click)="markAsRead(item.notification); callOnClick(item)"
       >
-        <nz-list-item-meta
-          [nzAvatar]="avatar"
-          [nzDescription]="$any(item.notification.createdAt | date : 'dd/MM/yyyy à HH:mm')"
-        >
+        <nz-list-item-meta [nzAvatar]="avatar" [nzDescription]="header">
           <ng-template #avatar>
             <ng-container *ngIf="item.renderer?.icon; else noIcon">
-              <ui-icon [icon]="item.renderer?.icon" />
+              <ui-icon class="notification-item-avatar" [icon]="item.renderer?.icon" />
             </ng-container>
             <ng-template #noIcon>
               <nz-avatar nzIcon="info" [nzShape]="'circle'" nzSize="small"></nz-avatar>
             </ng-template>
           </ng-template>
+          <ng-template #header>
+            <div class="notification-item-header">
+              <div>{{ $any(item.notification.createdAt | date : 'dd/MM/yyyy à HH:mm') }}</div>
+              <div class="spacer"></div>
+              <button
+                nz-button
+                nzType="text"
+                nz-popover
+                nzPopoverTrigger="click"
+                nzPopoverPlacement="bottomRight"
+                [nzPopoverContent]="menu"
+                (click)="$event.stopPropagation()"
+              >
+                <span nz-icon nzType="more" nzTheme="outline"></span>
+              </button>
+              <ng-template #menu>
+                <button
+                  class="notification-item-menu-item"
+                  nz-button
+                  nzBlock
+                  nzType="primary"
+                  nzDanger
+                  (click)="delete(item.notification)"
+                >
+                  Supprimer
+                </button>
+              </ng-template>
+            </div>
+          </ng-template>
           <nz-list-item-meta-title>
             <ng-container *ngIf="item.renderer">
-              <ng-container [ngSwitch]="item.renderer | rendererType">
-                <ng-container *ngSwitchCase="'string'">
-                  {{ item.renderer.content }}
-                </ng-container>
-                <ng-container *ngSwitchCase="'component'">
-                  <ng-container
-                    *ngComponentOutlet="$any(item.renderer.content); injector: item.injector"
-                  >
+              <div class="notification-item-content">
+                <ng-container [ngSwitch]="item.renderer | rendererType">
+                  <ng-container *ngSwitchCase="'string'">
+                    {{ item.renderer.content }}
                   </ng-container>
+                  <ng-container *ngSwitchCase="'component'">
+                    <ng-container *ngComponentOutlet="$any(item.renderer.content); injector: item.injector">
+                    </ng-container>
+                  </ng-container>
+                  <ng-container *ngSwitchDefault></ng-container>
                 </ng-container>
-                <ng-container *ngSwitchDefault></ng-container>
-              </ng-container>
+              </div>
+              <ul *ngIf="item.renderer.actions?.length" class="notification-item-actions" nz-list-item-actions>
+                <ng-container *ngFor="let action of item.renderer.actions">
+                  <nz-list-item-action>
+                    <button
+                      (click)="$event.stopPropagation(); callAction(action)"
+                      nz-button
+                      [nzDanger]="action.type === 'danger'"
+                      [nzType]="
+                        action.type === 'primary'
+                          ? 'primary'
+                          : action.type === 'default'
+                          ? 'text'
+                          : action.type === 'danger'
+                          ? 'primary'
+                          : 'text'
+                      "
+                    >
+                      <span
+                        *ngIf="action.icon"
+                        [nzType]="action.icon"
+                        class="notification-item-action-icon"
+                        nz-icon
+                        nzTheme="outline"
+                      ></span>
+                      {{ action.label }}
+                    </button>
+                  </nz-list-item-action>
+                </ng-container>
+              </ul>
             </ng-container>
           </nz-list-item-meta-title>
         </nz-list-item-meta>
-        <ul nz-list-item-actions>
-          <nz-list-item-action>
-            <button
-              nz-button
-              nzType="text"
-              nzDanger
-              (click)="$event.preventDefault(); $event.stopPropagation(); delete(item.notification)"
-            >
-              <i nz-icon nzType="delete"></i>
-            </button>
-          </nz-list-item-action>
-        </ul>
       </nz-list-item>
     </ng-container>
   </nz-list>

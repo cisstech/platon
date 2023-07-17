@@ -33,6 +33,8 @@ import { WebComponentHooks } from '@platon/feature/webcomponent'
 import { HttpErrorResponse } from '@angular/common/http'
 import { ExerciseTheory } from '@platon/feature/compiler'
 import { UiModalDrawerComponent } from '@platon/shared/ui'
+import { NzSkeletonModule } from 'ng-zorro-antd/skeleton'
+import { NzSpinModule } from 'ng-zorro-antd/spin'
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 import { PlayerService } from '../../api/player.service'
 import { PlayerCommentsComponent } from '../player-comments/player-comments.component'
@@ -46,15 +48,16 @@ import { PlayerCommentsComponent } from '../player-comments/player-comments.comp
   imports: [
     CommonModule,
 
+    NzSpinModule,
+    NzAlertModule,
     MatIconModule,
     MatCardModule,
     MatMenuModule,
     MatButtonModule,
-    MatDividerModule,
-    MatExpansionModule,
-
-    NzAlertModule,
     NzToolTipModule,
+    MatDividerModule,
+    NzSkeletonModule,
+    MatExpansionModule,
 
     DialogModule,
     SafePipeModule,
@@ -85,6 +88,8 @@ export class PlayerExerciseComponent implements OnChanges {
   containerSolution!: ElementRef<HTMLElement>
 
   protected index = 0
+  protected loading = true
+  protected runningAction?: PlayerActions
   protected get disabled(): boolean {
     return !!this.player.solution || (this.player.remainingAttempts != null && this.player.remainingAttempts <= 0)
   }
@@ -169,6 +174,9 @@ export class PlayerExerciseComponent implements OnChanges {
 
   private async evaluate(action: PlayerActions): Promise<void> {
     try {
+      this.runningAction = action
+      this.changeDetectorRef.markForCheck()
+
       this.clearNotification?.()
       this.clearNotification = undefined
 
@@ -201,7 +209,13 @@ export class PlayerExerciseComponent implements OnChanges {
         })
       }
     } finally {
+      this.runningAction = undefined
       this.changeDetectorRef.markForCheck()
     }
+  }
+
+  protected onRender() {
+    this.loading = false
+    this.changeDetectorRef.markForCheck()
   }
 }

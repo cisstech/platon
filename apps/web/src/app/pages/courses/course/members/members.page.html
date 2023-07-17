@@ -1,12 +1,7 @@
 <section>
   <mat-card>
     <mat-card-content>
-      <course-member-form
-        [roles]="roles"
-        [allowGroup]="allowGroup"
-        [excludes]="excludes"
-        (send)="add($event)"
-      />
+      <course-member-form [roles]="roles" [allowGroup]="allowGroup" [excludes]="excludes" (send)="add($event)" />
       <course-member-table
         [members]="members"
         [nonDeletables]="nonDeletables"

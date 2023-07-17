@@ -14,8 +14,7 @@
         "main": "apps/web/src/main.ts",
         "polyfills": [
           "zone.js",
-          "./node_modules/@ungap/custom-elements/index.js",
-          "./node_modules/@webcomponents/webcomponentsjs/bundles/webcomponents-sd-ce-pf.js",
+          "./node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js",
           "./node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js"
         ],
         "tsConfig": "apps/web/tsconfig.app.json",

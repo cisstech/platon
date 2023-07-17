@@ -33,18 +33,13 @@ export class NotificationDrawerComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.subscriptions.push(
-      this.notificationSerivce.listNotifications({ limit: 50 }).subscribe((result) => {
-        this.notifications = result.notifications
-        this.counter.next(result.unreadCount)
-        this.changeDetectorRef.markForCheck()
-      })
-    )
-
+    this.refresh()
     this.subscriptions.push(
       this.notificationSerivce.onChangeNotifications().subscribe((result) => {
         if (result.newNotification) {
           this.notifications = [result.newNotification, ...this.notifications]
+        } else if (result.notifications) {
+          this.notifications = result.notifications
         }
         this.counter.next(result.unreadCount)
         this.changeDetectorRef.markForCheck()
@@ -56,15 +51,20 @@ export class NotificationDrawerComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe())
   }
 
+  close(): void {
+    this.visible = false
+    this.changeDetectorRef.detectChanges()
+  }
+
   open(): void {
     this.visible = true
-    this.changeDetectorRef.markForCheck()
+    this.changeDetectorRef.detectChanges()
   }
 
   protected deleteAll(): void {
     this.notificationSerivce.deleteAllNotifications().subscribe(() => {
       this.notifications = []
-      this.changeDetectorRef.markForCheck()
+      this.changeDetectorRef.detectChanges()
     })
   }
 
@@ -72,7 +72,22 @@ export class NotificationDrawerComponent implements OnInit, OnDestroy {
     try {
       await firstValueFrom(this.notificationSerivce.markAllAsRead())
     } finally {
+      this.changeDetectorRef.detectChanges()
+    }
+  }
+
+  private refresh(): void {
+    const subscription = this.notificationSerivce.listNotifications({ limit: 50 }).subscribe((result) => {
+      this.notifications = result.notifications
+      this.counter.next(result.unreadCount)
       this.changeDetectorRef.markForCheck()
+    })
+
+    if (this.subscriptions.length) {
+      this.subscriptions[0]?.unsubscribe()
+      this.subscriptions[0] = subscription
+    } else {
+      this.subscriptions.push(subscription)
     }
   }
 }

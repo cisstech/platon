@@ -21,6 +21,7 @@ export interface ResourceFile {
   downloadUrl: string
   describeUrl: string
 
+  readOnly?: boolean
   children?: ResourceFile[]
 }
 

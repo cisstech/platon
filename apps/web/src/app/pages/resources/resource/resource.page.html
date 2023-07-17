@@ -1,69 +1,78 @@
 <ui-layout-tabs [state]="context.state">
   <ng-container *ngIf="context.resource">
-    <nz-breadcrumb nzSeparator="">
-      <button
-        *ngIf="context.circles"
-        nz-button
-        nzType="text"
-        nzSize="small"
-        [nz-popover]
-        [nzPopoverContent]="treeTemplate"
-      >
-        <mat-icon>account_tree</mat-icon>
-        <ng-template #treeTemplate>
-          <resource-circle-tree [tree]="context.circles" />
-        </ng-template>
-      </button>
-      <nz-breadcrumb-item *ngIf="context.parent">
-        <a [routerLink]="['/resources', context.parent.id]">{{context.parent.name}}</a>
-      </nz-breadcrumb-item>
-      <nz-breadcrumb-item>
-        <mat-icon>{{ context.resource.type|resourceIcon }}</mat-icon>
-        <span
-          nz-typography
-          nzEditable
-          [nzContent]="context.resource.name"
-          (nzContentChange)="updateName($event)"
-        ></span>
-      </nz-breadcrumb-item>
-      <div class="spacer"></div>
-      <mat-chip-set>
-        <mat-chip>{{context.resource.visibility|resourceVisibility}}</mat-chip>
-      </mat-chip-set>
-    </nz-breadcrumb>
+    <nz-page-header [nzSubtitle]="header" nzBackIcon>
+      <ng-template #header>
+        <nz-breadcrumb nzSeparator="" nzRouteLabel="breadcrumb">
+          <button
+            *ngIf="context.circles"
+            nz-button
+            nzType="text"
+            nzSize="small"
+            [nz-popover]
+            [nzPopoverContent]="treeTemplate"
+          >
+            <mat-icon>account_tree</mat-icon>
+            <ng-template #treeTemplate>
+              <resource-circle-tree [tree]="context.circles" />
+            </ng-template>
+          </button>
+          <nz-breadcrumb-item *ngIf="context.parent">
+            <a [routerLink]="['/resources', context.parent.id]">{{ context.parent.name }}</a>
+          </nz-breadcrumb-item>
+          <nz-breadcrumb-item>
+            <mat-icon>{{ context.resource.type | resourceIcon }}</mat-icon>
+            <span
+              nz-typography
+              [nzEditable]="context.resource.permissions.write"
+              [nzContent]="context.resource.name"
+              (nzContentChange)="updateName($event)"
+            ></span>
+          </nz-breadcrumb-item>
+          <div class="spacer"></div>
+        </nz-breadcrumb>
+      </ng-template>
+    </nz-page-header>
     <p
       nz-typography
-      nzEditable
+      [nzEditable]="context.resource.permissions.write"
       [nzContent]="context.resource.desc"
       (nzContentChange)="updateDesc($event)"
     ></p>
-    <nz-button-group>
-      <nz-select
-        id="status"
-        name="status"
-        nzShowSearch
-        [ngModel]="context.resource.status"
-        (ngModelChange)="updateStatus($event)"
-        [nzDisabled]="false"
-      >
-        <nz-option
-          *ngFor="let item of status; trackBy: trackByValue"
-          [nzLabel]="item|resourceStatus"
-          [nzValue]="item"
+    <div class="container-actions">
+      <nz-button-group>
+        <nz-select
+          id="status"
+          name="status"
+          nzShowSearch
+          [ngModel]="context.resource.status"
+          (ngModelChange)="updateStatus($event)"
+          [nzDisabled]="!context.resource.permissions.write"
         >
-        </nz-option>
-      </nz-select>
-    </nz-button-group>
-    <nz-button-group>
-      <button nz-button nzType="default" (click)="changeWatchingState()">
-        <i nz-icon nzType="eye" nzTheme="outline"></i>
-        {{ context.watcher ? 'Ne plus suivre' : 'Suivre' }}
-      </button>
-    </nz-button-group>
-    <nz-button-group *ngIf="context.invitation">
-      <button nz-button nzType="primary" (click)="acceptInvitation()">Accepter l'invitation</button>
-      <button nz-button nzDanger (click)="declineInvitation()">Refuser l'invitation</button>
-    </nz-button-group>
+          <nz-option
+            *ngFor="let item of status; trackBy: trackByValue"
+            [nzLabel]="item | resourceStatus"
+            [nzValue]="item"
+          />
+        </nz-select>
+      </nz-button-group>
+      <nz-button-group>
+        <button nz-button nzType="default" (click)="changeWatchingState()">
+          <i nz-icon nzType="eye" nzTheme="outline"></i>
+          {{ context.resource.permissions.watcher ? 'Ne plus suivre' : 'Suivre' }}
+        </button>
+      </nz-button-group>
+      <div class="spacer"></div>
+      <nz-button-group *ngIf="context.resource.type !== 'CIRCLE'">
+        <button nz-button (click)="openTab(context.editorUrl!)">
+          <i nz-icon nzType="edit" nzTheme="outline"></i>
+          Éditer
+        </button>
+        <button nz-button nzType="primary" (click)="iframe.open(context.previewUrl!)">
+          <i nz-icon nzType="play-circle" nzTheme="outline"></i>
+          Prévisualiser
+        </button>
+      </nz-button-group>
+    </div>
   </ng-container>
   <ui-layout-tab [link]="['overview']">
     <ng-template>
@@ -83,10 +92,12 @@
       Évènements
     </ng-template>
   </ui-layout-tab>
-  <ui-layout-tab [link]="['settings']" [linkParams]="{ 'tab': 'informations' }">
+  <ui-layout-tab [link]="['settings']" [linkParams]="{ tab: 'informations' }">
     <ng-template>
       <span nz-icon nzType="setting" nzTheme="outline"></span>
       Paramètres
     </ng-template>
   </ui-layout-tab>
 </ui-layout-tabs>
+
+<ui-modal-iframe #iframe />

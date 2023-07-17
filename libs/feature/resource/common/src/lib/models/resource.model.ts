@@ -1,7 +1,7 @@
 import { Level, OrderingDirections, Topic } from '@platon/core/common'
 import { ResourceStatus } from '../enums/resource-status'
 import { ResourceTypes } from '../enums/resource-types'
-import { ResourceVisibilities } from '../enums/resource-visibility'
+import { ResourcePermissions } from './permissions.model'
 
 export interface Resource {
   readonly id: string
@@ -11,34 +11,32 @@ export interface Resource {
   readonly code?: string
   readonly desc?: string
   readonly type: ResourceTypes
-  readonly visibility: ResourceVisibilities
+  readonly personal: boolean
   readonly status: ResourceStatus
   readonly levels: Level[]
   readonly topics: Topic[]
   readonly ownerId: string
-  readonly modelId?: string
   readonly parentId?: string
+  readonly permissions: ResourcePermissions
 }
 
 export interface CircleTree {
   readonly id: string
   readonly name: string
   readonly code?: string
-  readonly visibility: ResourceVisibilities
   readonly children?: CircleTree[]
+  readonly permissions: ResourcePermissions
 }
 
 export interface CreateResource {
   readonly name: string
+  readonly parentId: string
   readonly code?: string
   readonly desc?: string
   readonly type: ResourceTypes
   readonly status?: ResourceStatus
-  readonly visibility: ResourceVisibilities
   readonly levels?: string[]
   readonly topics?: string[]
-  readonly parentId?: string
-  readonly modelId?: string
 }
 
 export interface UpdateResource {
@@ -120,4 +118,15 @@ export const flattenCircleTree = (tree: CircleTree): CircleTree[] => {
   }
   flatten(tree)
   return flat
+}
+
+export const circleTreeFromResource = (resource: Resource): CircleTree => {
+  return {
+    id: resource.id,
+    name: resource.name,
+    code: resource.code,
+    permissions: {
+      ...resource.permissions,
+    },
+  }
 }

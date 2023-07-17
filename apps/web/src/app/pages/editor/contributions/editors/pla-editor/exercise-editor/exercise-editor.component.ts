@@ -11,6 +11,7 @@ import { ActivityExercise } from '@platon/feature/compiler'
 import { ResourceFileService, ResourceService } from '@platon/feature/resource/browser'
 import { Resource } from '@platon/feature/resource/common'
 import { catchError, firstValueFrom, of } from 'rxjs'
+import { PLE_CONFIG_FILE_PATH } from '../../ple-config-editor/ple-config-editor'
 import { PleInput } from '../../ple-input-editor/ple-input'
 
 @Component({
@@ -27,7 +28,6 @@ export class PlaExerciseEditorComponent {
   protected _exercise!: ActivityExercise
 
   protected inputs?: PleInput[] = []
-  protected selectedInput?: PleInput
   protected resource?: Resource
 
   get exercise(): ActivityExercise {
@@ -41,7 +41,7 @@ export class PlaExerciseEditorComponent {
       firstValueFrom(this.resourceService.find(value.resource)),
       firstValueFrom(
         this.resourceFileService
-          .read(value.resource, 'config.json', value.version)
+          .read(value.resource, PLE_CONFIG_FILE_PATH, value.version)
           .pipe(catchError(() => of(undefined)))
       ) as unknown as Promise<{ inputs: PleInput[] }>,
     ]).then(([resource, config]) => {
@@ -55,10 +55,13 @@ export class PlaExerciseEditorComponent {
   }
 
   @Output() exerciseChange = new EventEmitter<ActivityExercise>()
-
   @Output() deleteClicked = new EventEmitter<void>()
 
+  @Input() disabled?: boolean
+
   protected overriding = false
+  protected expandedInputs: Record<string, boolean> = {}
+
   protected onOverrideVariable(name: string, value: unknown) {
     this.exercise.overrides = this.exercise.overrides || {}
     this.exercise.overrides[name] = value
