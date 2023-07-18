@@ -13,7 +13,7 @@ export const withAnswersInSession = (session: SessionEntity, answers: Variables)
   const searchComponentsIn = (variables: Variables) => {
     for (const key in variables) {
       const value = variables[key]
-      if (typeof value === 'object') {
+      if (value != null && typeof value === 'object') {
         if (value.cid && value.selector) {
           components[value.cid] = value
         } else {
