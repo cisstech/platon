@@ -99,6 +99,18 @@ export class ResourcePresenter implements OnDestroy {
     throw new ReferenceError('missing resource')
   }
 
+  async createTag(tag: string, message: string): Promise<boolean> {
+    const { resource } = this.context.value as Required<Context>
+    try {
+      await firstValueFrom(this.fileService.release(resource, { name: tag, message }))
+      await this.refresh(resource.id)
+      return true
+    } catch {
+      this.alertError()
+      return false
+    }
+  }
+
   // Members
 
   async deleteMember(member: ResourceMember): Promise<boolean> {
