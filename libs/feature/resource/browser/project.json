@@ -17,10 +17,7 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": [
-          "libs/feature/resource/browser/**/*.ts",
-          "libs/feature/resource/browser/**/*.html"
-        ]
+        "lintFilePatterns": ["libs/feature/resource/browser/**/*.ts", "libs/feature/resource/browser/**/*.html"]
       }
     }
   },

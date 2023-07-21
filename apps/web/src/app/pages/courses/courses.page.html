@@ -17,7 +17,7 @@
   </button>
 </header>
 <article>
-  <ng-container *ngIf="!searching; else: spinner">
+  <ng-container *ngIf="!searching; else spinner">
     <h2 *ngIf="items.length">Voici ce qu'on a trouver selon vos critères de recherche...</h2>
     <div class="indicators">
       <ui-filter-indicators [filters]="filters" [indicators]="indicators" />
@@ -34,8 +34,4 @@
 <ng-template #spinner>
   <nz-spin nzSimple nzSize="large" />
 </ng-template>
-<course-filters
-  #filterDrawer
-  [filters]="filters"
-  (triggered)="this.search($event, this.filters.search)"
-/>
+<course-filters #filterDrawer [filters]="filters" (triggered)="this.search($event, this.filters.search)" />

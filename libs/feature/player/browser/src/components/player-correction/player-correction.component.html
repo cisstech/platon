@@ -1,12 +1,7 @@
 <mat-drawer-container>
   <mat-drawer mode="side" opened #drawer>
     <nav>
-      <img
-        class="logo"
-        src="assets/images/logo/platon.svg"
-        alt="Logo PLaTon"
-        [routerLink]="'/dashboard'"
-      />
+      <img class="logo" src="assets/images/logo/platon.svg" alt="Logo PLaTon" [routerLink]="'/dashboard'" />
       <h2>Exercices</h2>
       <ng-container *ngFor="let group of exerciseGroups; trackBy: trackByExerciseId">
         <button
@@ -56,26 +51,12 @@
               nzMax="100"
             />
             <h3>Note ajustée ({{ correctedGrade }})</h3>
-            <nz-slider
-              [nzMarks]="{ '-1': '-1', '100': '100' }"
-              [(ngModel)]="correctedGrade"
-              nzMin="-1"
-              nzMax="100"
-            />
+            <nz-slider [nzMarks]="{ '-1': '-1', '100': '100' }" [(ngModel)]="correctedGrade" nzMin="-1" nzMax="100" />
             <mat-toolbar>
-              <button
-                (click)="onSaveGrade()"
-                [disabled]="!correctedGrade"
-                mat-raised-button
-                color="primary"
-              >
+              <button (click)="onSaveGrade()" [disabled]="!correctedGrade" mat-raised-button color="primary">
                 Enregistrer
               </button>
-              <button
-                *ngIf="selectedExerciseIndex > 0"
-                mat-raised-button
-                (click)="onChoosePreviousExercise()"
-              >
+              <button *ngIf="selectedExerciseIndex > 0" mat-raised-button (click)="onChoosePreviousExercise()">
                 <mat-icon>arrow_back</mat-icon>
                 Utilisateur précédent
               </button>

@@ -4,11 +4,6 @@
   </button>
 </nz-button-group>
 
-<user-search-bar
-  [(ngModel)]="groups"
-  [onlyGroups]="true"
-  [autoSelect]="true"
-  [filters]="{ limit: 50 }"
-/>
+<user-search-bar [(ngModel)]="groups" [onlyGroups]="true" [autoSelect]="true" [filters]="{ limit: 50 }" />
 
 <user-group-table [(groups)]="groups" [selectable]="false" />

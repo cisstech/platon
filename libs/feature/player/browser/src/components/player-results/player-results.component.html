@@ -57,12 +57,7 @@
   <p>Nous vous informerons dès que les résultats seront disponibles. Merci d'avoir participé !</p>
 </ng-template>
 
-<ui-modal-template
-  [width]="'70vw'"
-  [height]="'70vh'"
-  (accepted)="answers = []"
-  (canceled)="answers = []"
->
+<ui-modal-template [width]="'70vw'" [height]="'70vh'" (accepted)="answers = []" (canceled)="answers = []">
   <ng-template>
     <player-exercise [players]="answers" [reviewMode]="true" />
   </ng-template>

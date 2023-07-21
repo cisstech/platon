@@ -25,10 +25,7 @@
           }
         ]
       },
-      "extends": [
-        "plugin:@nrwl/nx/angular",
-        "plugin:@angular-eslint/template/process-inline-templates"
-      ]
+      "extends": ["plugin:@nrwl/nx/angular", "plugin:@angular-eslint/template/process-inline-templates"]
     },
     {
       "files": ["*.html"],

@@ -1,9 +1,5 @@
 <ng-container *ngIf="!empty; else emptyState">
-  <nz-segmented
-    #segmented
-    [(ngModel)]="selectedIndex"
-    [nzOptions]="[tabs[0].title, tabs[1].title, tabs[2].title]"
-  />
+  <nz-segmented #segmented [(ngModel)]="selectedIndex" [nzOptions]="[tabs[0].title, tabs[1].title, tabs[2].title]" />
   <ng-container *ngIf="tabs[selectedIndex] as tab">
     <ng-container *ngIf="tab.items.length; else emptyState">
       <nz-row [nzGutter]="[24, 24]" nzAlign="top">

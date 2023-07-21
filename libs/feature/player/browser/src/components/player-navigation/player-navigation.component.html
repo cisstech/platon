@@ -14,11 +14,7 @@
               {{ page.state | answerStateIcon }}
             </mat-icon>
           </ng-template>
-          <div
-            class="timeline-content"
-            [class.current]="isActiveSession(page.sessionId)"
-            (click)="navigate.emit(page)"
-          >
+          <div class="timeline-content" [class.current]="isActiveSession(page.sessionId)" (click)="navigate.emit(page)">
             <div class="timeline-title">{{ page.title }}</div>
             <div class="timeline-status">
               {{ page.state | answerStateLabel }}

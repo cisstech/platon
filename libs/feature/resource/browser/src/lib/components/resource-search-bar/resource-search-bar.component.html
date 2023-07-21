@@ -12,14 +12,7 @@
       <div class="selection-item">
         <resource-item [item]="item" [simple]="simpleLayout" [modalMode]="modalMode" />
         <div class="spacer"></div>
-        <button
-          [disabled]="disabled"
-          nz-button
-          nzDanger
-          nzType="primary"
-          nzShape="circle"
-          (click)="remove(item)"
-        >
+        <button [disabled]="disabled" nz-button nzDanger nzType="primary" nzShape="circle" (click)="remove(item)">
           <i nz-icon nzType="delete" nzTheme="outline"></i>
         </button>
       </div>

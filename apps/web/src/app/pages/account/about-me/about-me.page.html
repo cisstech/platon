@@ -38,18 +38,10 @@
         </mat-card-header>
         <mat-card-content>
           <nz-select nzMode="tags" nzPlaceHolder="Sujets" formControlName="topics">
-            <nz-option
-              *ngFor="let option of topics || []"
-              [nzLabel]="option.name"
-              [nzValue]="option.id"
-            />
+            <nz-option *ngFor="let option of topics || []" [nzLabel]="option.name" [nzValue]="option.id" />
           </nz-select>
           <nz-select nzMode="tags" nzPlaceHolder="Niveaux" formControlName="levels">
-            <nz-option
-              *ngFor="let option of levels || []"
-              [nzLabel]="option.name"
-              [nzValue]="option.id"
-            />
+            <nz-option *ngFor="let option of levels || []" [nzLabel]="option.name" [nzValue]="option.id" />
           </nz-select>
         </mat-card-content>
       </mat-card>

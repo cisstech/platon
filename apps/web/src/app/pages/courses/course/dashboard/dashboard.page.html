@@ -1,9 +1,9 @@
 <ng-container *ngIf="context.course">
-  <ng-container *ngIf="sections.length; else: noSections">
+  <ng-container *ngIf="sections.length; else noSections">
     <nz-collapse nzGhost>
       <nz-collapse-panel
         [nzActive]="true"
-        *ngFor="let item of sections; trackBy: trackSection;"
+        *ngFor="let item of sections; trackBy: trackSection"
         [nzHeader]="header"
         [nzExtra]="extra"
       >
@@ -28,9 +28,7 @@
           />
         </ng-template>
         <course-activity-grid [items]="item.activities">
-          <ng-container
-            *ngTemplateOutlet="noActivities; context: { $implicit: item.section}"
-          ></ng-container>
+          <ng-container *ngTemplateOutlet="noActivities; context: { $implicit: item.section }"></ng-container>
         </course-activity-grid>
       </nz-collapse-panel>
     </nz-collapse>
@@ -40,8 +38,7 @@
 <ng-template #noSections>
   <nz-empty [nzNotFoundContent]="noSectionsContent" [nzNotFoundFooter]="noSectionsFooter">
     <ng-template #noSectionsContent>
-      Ce cours ne contient aucune section. Les sections permettent d'organiser le contenu du cours
-      en thématiques.
+      Ce cours ne contient aucune section. Les sections permettent d'organiser le contenu du cours en thématiques.
     </ng-template>
     <ng-template #noSectionsFooter>
       <button nz-button nzType="primary" (click)="addSection()">Ajouter une section</button>

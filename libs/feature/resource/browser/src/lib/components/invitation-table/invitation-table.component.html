@@ -21,9 +21,7 @@
           nz-popconfirm
           nzOkText="Retirer"
           nzOkType="danger"
-          [nzPopconfirmTitle]="
-            'Voulez-vous vraiment retirer l\'invitation envoyée à “' + avatar.displayName + '”?'
-          "
+          [nzPopconfirmTitle]="'Voulez-vous vraiment retirer l\'invitation envoyée à “' + avatar.displayName + '”?'"
           (nzOnConfirm)="deleted.emit(data)"
         >
           <i nz-icon nzType="delete"></i>

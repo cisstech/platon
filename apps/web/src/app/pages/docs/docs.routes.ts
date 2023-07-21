@@ -15,16 +15,18 @@ const DeveloperDocs = {
     },
   },
   pages: [
-    { title: 'Présentation',
-    href: 'presentation',
-    renderer: 'assets/docs/developers/index.md' ,
-    actions: [
-      {
-        title: 'Éditer sur Github',
-        icon: 'https://icongr.am/octicons/mark-github.svg',
-        run: `https://github.com/PlatonOrg/platon/blob/main/shared/assets/docs/developers/index.md`,
-      }]
-  }
+    {
+      title: 'Présentation',
+      href: 'presentation',
+      renderer: 'assets/docs/developers/index.md',
+      actions: [
+        {
+          title: 'Éditer sur Github',
+          icon: 'https://icongr.am/octicons/mark-github.svg',
+          run: `https://github.com/PlatonOrg/platon/blob/main/shared/assets/docs/developers/index.md`,
+        },
+      ],
+    },
   ],
 } as NgeDocSettings
 
@@ -40,16 +42,18 @@ const TeacherDocs = {
     },
   },
   pages: [
-    { title: 'Présentation',
-    href: 'presentation',
-    renderer: 'assets/docs/teachers/index.md' ,
-    actions: [
-      {
-        title: 'Éditer sur Github',
-        icon: 'https://icongr.am/octicons/mark-github.svg',
-        run: `https://github.com/PlatonOrg/platon/blob/main/shared/assets/docs/developers/teachers.md`,
-      }]
-  }
+    {
+      title: 'Présentation',
+      href: 'presentation',
+      renderer: 'assets/docs/teachers/index.md',
+      actions: [
+        {
+          title: 'Éditer sur Github',
+          icon: 'https://icongr.am/octicons/mark-github.svg',
+          run: `https://github.com/PlatonOrg/platon/blob/main/shared/assets/docs/developers/teachers.md`,
+        },
+      ],
+    },
   ],
 } as NgeDocSettings
 

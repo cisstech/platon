@@ -23,10 +23,7 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": [
-          "libs/feature/notification/browser/**/*.ts",
-          "libs/feature/notification/browser/**/*.html"
-        ]
+        "lintFilePatterns": ["libs/feature/notification/browser/**/*.ts", "libs/feature/notification/browser/**/*.html"]
       }
     }
   },
