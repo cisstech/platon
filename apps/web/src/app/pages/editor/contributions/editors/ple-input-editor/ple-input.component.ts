@@ -1,5 +1,6 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   Injector,
@@ -7,9 +8,10 @@ import {
   OnDestroy,
   OnInit,
   Output,
+  forwardRef,
   inject,
 } from '@angular/core'
-import { FormBuilder } from '@angular/forms'
+import { ControlValueAccessor, FormBuilder, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { Subscription, debounceTime, tap } from 'rxjs'
 import { InputBooleanProvider } from './input-boolean'
 import { InputCodeProvider } from './input-code'
@@ -29,9 +31,10 @@ import {
 
 @Component({
   selector: 'app-ple-input',
-  templateUrl: './ple-input.component.html',
-  styleUrls: ['./ple-input.component.scss'],
+  templateUrl: 'ple-input.component.html',
+  styleUrls: ['ple-input.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+
   providers: [
     // THE ORDER IS IMPORTANT SINCE THE `canHandle` METHOD IS CALLED IN THE SAME ORDER
     InputNumberProvider,
@@ -40,17 +43,27 @@ import {
     InputFileProvider,
     InputCodeProvider, // string is always handled by code editor
     InputTextProvider,
+
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => PleInputComponent),
+      multi: true,
+    },
   ],
 })
-export class PleInputComponent implements OnInit, OnDestroy {
+export class PleInputComponent implements OnInit, OnDestroy, ControlValueAccessor {
   private readonly fb = inject(FormBuilder)
   private readonly injector = inject(Injector)
   private readonly subscriptions: Subscription[] = []
+  private readonly changeDetectorRef = inject(ChangeDetectorRef)
 
   private valueEditor?: PleInputValueEditor
   private configEditor?: PleInputConfigEditor
 
-  readonly configForm = this.fb.group({
+  protected hasNameError?: boolean
+  protected selectedProvider?: PleInputProvider
+
+  protected readonly form = this.fb.group({
     name: [''],
     type: [''],
     description: [''],
@@ -58,14 +71,12 @@ export class PleInputComponent implements OnInit, OnDestroy {
     options: [{} as unknown],
   })
 
-  readonly providers: ReadonlyArray<Readonly<PleInputProvider>> =
+  protected readonly providers: ReadonlyArray<Readonly<PleInputProvider>> =
     inject(PLE_INPUT_PROVIDERS, {
       optional: true,
     }) || []
 
-  readonly sortedProviders = [...this.providers].sort((a, b) => a.label.localeCompare(b.label))
-
-  protected selectedProvider?: PleInputProvider
+  protected readonly sortedProviders = [...this.providers].sort((a, b) => a.label.localeCompare(b.label))
 
   protected readonly configEditorInjector = Injector.create({
     providers: [
@@ -79,6 +90,7 @@ export class PleInputComponent implements OnInit, OnDestroy {
             setTimeout(() => {
               this.input.options = options
               this.inputChange.emit(this.input)
+              this.onChange(this.input)
             }, 300)
           })
         },
@@ -100,6 +112,7 @@ export class PleInputComponent implements OnInit, OnDestroy {
             setTimeout(() => {
               this.input.value = value
               this.inputChange.emit(this.input)
+              this.onChange(this.input)
             }, 300)
           })
         },
@@ -109,7 +122,7 @@ export class PleInputComponent implements OnInit, OnDestroy {
   })
 
   get input(): PleInput {
-    return this.configForm.value as PleInput
+    return this.form.value as PleInput
   }
 
   @Input()
@@ -129,7 +142,7 @@ export class PleInputComponent implements OnInit, OnDestroy {
       this.valueEditor?.setValue(value.value)
     }
 
-    this.configForm.patchValue(value, {
+    this.form.patchValue(value, {
       emitEvent: false,
     })
   }
@@ -138,6 +151,7 @@ export class PleInputComponent implements OnInit, OnDestroy {
 
   @Input() mode: 'config' | 'value' | 'design' = 'config'
   @Input() disabled? = false
+  @Input() reservedNames: string[] = []
 
   get label(): string {
     return this.selectedProvider?.label || ''
@@ -145,23 +159,61 @@ export class PleInputComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscriptions.push(
-      this.configForm.valueChanges
+      this.form.valueChanges
         .pipe(
           debounceTime(500),
           tap((value) => {
             this.selectedProvider = this.providers.find((p) => p.type === value.type)
           })
         )
-        .subscribe((value) => this.inputChange.emit(value as PleInput))
+        .subscribe((value) => {
+          this.hasNameError = false
+          if (value.name && this.reservedNames?.includes(value.name.trim())) {
+            this.hasNameError = true
+            this.form.updateValueAndValidity({
+              emitEvent: false,
+            })
+            this.changeDetectorRef.detectChanges()
+            return
+          }
+          this.inputChange.emit(value as PleInput)
+          this.onChange(value)
+        })
     )
 
     if (this.disabled) {
-      this.configForm.disable({ emitEvent: false })
+      this.form.disable({ emitEvent: false })
     }
   }
 
   ngOnDestroy(): void {
     this.subscriptions.forEach((s) => s.unsubscribe())
+  }
+
+  // ControlValueAccessor methods
+
+  onChange: (value: unknown) => void = () => {
+    //
+  }
+
+  onTouched: () => void = () => {
+    //
+  }
+
+  writeValue(value: PleInput): void {
+    this.input = value
+  }
+
+  registerOnChange(fn: (value: unknown) => void): void {
+    this.onChange = fn
+  }
+
+  registerOnTouched(fn: () => void): void {
+    this.onTouched = fn
+  }
+
+  setDisabledState?(disabled: boolean): void {
+    this.disabled = disabled
   }
 
   protected trackProvider(_: number, provider: PleInputProvider): string {

@@ -59,7 +59,10 @@ export class ResourceFileController {
     @Body() input?: ExerciseTransformInput
   ): Promise<string> {
     const { compiler } = await this.service.compile({ resourceId, version, user: request.user })
-    return compiler.toExercise(input?.changes || {})
+    return compiler.toExercise({
+      variableChanges: input?.changes || {},
+      includeChanges: input?.includes,
+    })
   }
 
   @Public()

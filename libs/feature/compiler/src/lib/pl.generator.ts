@@ -106,18 +106,21 @@ export const flattenAssignmentNodes = (nodes: PLAst): AssignmentNode[] => {
 
 interface PLGeneratorInput {
   readonly nodes: PLNode[]
-  readonly changes: Variables
+  readonly includeChanges?: string[]
+  readonly variableChanges: Variables
   readonly source: PLSourceFile
 }
 
 export class PLGenerator {
   private readonly nodes: PLNode[]
-  private readonly changes: Variables
+  private readonly includeChanges?: string[]
+  private readonly variableChanges: Variables
   private readonly source: PLSourceFile
 
   constructor(input: PLGeneratorInput) {
     this.nodes = input.nodes
-    this.changes = input.changes
+    this.includeChanges = input.includeChanges
+    this.variableChanges = input.variableChanges
     this.source = input.source
   }
 
@@ -145,16 +148,22 @@ export class PLGenerator {
       code += `@extends ${node.path}\n`
     })
 
-    includes.forEach((node) => {
-      code += extractNodeComments(node)
-      code += `@include ${node.path}\n`
-    })
+    if (this.includeChanges) {
+      this.includeChanges.forEach((include) => {
+        code += `${include}\n`
+      })
+    } else {
+      includes.forEach((node) => {
+        code += extractNodeComments(node)
+        code += `@include ${node.path}\n`
+      })
+    }
 
     code += '\n'
 
-    const changes = convertObjectToDotNotation(this.changes)
     let currentVariable = ''
-    Object.keys(changes).forEach((key) => {
+    const variableChanges = convertObjectToDotNotation(this.variableChanges)
+    Object.keys(variableChanges).forEach((key) => {
       currentVariable = currentVariable || key.split('.')[0]
       const newVariable = key.split('.')[0]
       if (currentVariable !== newVariable) {
@@ -163,7 +172,7 @@ export class PLGenerator {
       }
 
       code += extractNodeComments(key)
-      const value = changes[key]
+      const value = variableChanges[key]
       switch (typeof value) {
         case 'string':
           if (value.includes('\n')) {

@@ -91,4 +91,5 @@ export interface FileVersions {
 
 export interface ExerciseTransformInput {
   changes: Variables
+  includes?: string[]
 }

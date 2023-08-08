@@ -5,11 +5,12 @@ import { IDynamicModule } from '@cisstech/nge/services'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzListModule } from 'ng-zorro-antd/list'
 
+import { NzIconModule } from 'ng-zorro-antd/icon'
 import { PleInputEditorModule } from '../ple-input-editor/ple-input.module'
 import { PleConfigEditorComponent } from './ple-config-editor.component'
 
 @NgModule({
-  imports: [CommonModule, NzListModule, NzButtonModule, PleInputEditorModule],
+  imports: [CommonModule, NzListModule, NzButtonModule, NzIconModule, PleInputEditorModule],
   exports: [PleConfigEditorComponent],
   declarations: [PleConfigEditorComponent],
 })

@@ -47,6 +47,11 @@ interface PLCompilerOptions {
   withAst?: boolean
 }
 
+interface ToExerciseOptions {
+  variableChanges: Variables
+  includeChanges?: string[]
+}
+
 /**
  * Compiles a PL AST to a PLSourceFile.
  */
@@ -81,9 +86,10 @@ export class PLCompiler implements PLVisitor {
     }
   }
 
-  toExercise(changes: Variables): string {
+  toExercise(input: ToExerciseOptions): string {
     return new PLGenerator({
-      changes,
+      variableChanges: input.variableChanges,
+      includeChanges: input.includeChanges,
       nodes: this.nodes,
       source: this.source,
     }).generate()
