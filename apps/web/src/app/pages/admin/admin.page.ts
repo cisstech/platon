@@ -6,7 +6,7 @@ import { MatIconModule } from '@angular/material/icon'
 
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb'
 
-import { UiLayoutTabsComponent, UiLayoutTabsTitleDirective } from '@platon/shared/ui'
+import { UiLayoutTabsComponent, UiLayoutTabDirective } from '@platon/shared/ui'
 
 @Component({
   standalone: true,
@@ -14,15 +14,6 @@ import { UiLayoutTabsComponent, UiLayoutTabsTitleDirective } from '@platon/share
   templateUrl: './admin.page.html',
   styleUrls: ['./admin.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    CommonModule,
-    RouterModule,
-
-    MatIconModule,
-    NzBreadCrumbModule,
-
-    UiLayoutTabsComponent,
-    UiLayoutTabsTitleDirective,
-  ],
+  imports: [CommonModule, RouterModule, MatIconModule, NzBreadCrumbModule, UiLayoutTabsComponent, UiLayoutTabDirective],
 })
 export class AdminPage {}

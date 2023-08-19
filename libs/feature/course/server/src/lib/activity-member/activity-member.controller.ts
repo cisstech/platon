@@ -28,6 +28,8 @@ export class ActivityMemberController {
     })
   }
 
+  // TODO: check user membership for write operations
+
   @Put()
   async update(
     @Param('activityId') activityId: string,

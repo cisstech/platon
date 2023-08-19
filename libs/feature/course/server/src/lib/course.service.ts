@@ -1,15 +1,19 @@
-import { Injectable } from '@nestjs/common'
+import { Inject, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { NotFoundResponse, OrderingDirections } from '@platon/core/common'
+import { NotFoundResponse, OrderingDirections, UserRoles } from '@platon/core/common'
 import { CourseFilters, CourseOrderings } from '@platon/feature/course/common'
 import { Repository } from 'typeorm'
 import { Optional } from 'typescript-optional'
 import { CourseMemberView } from './course-member/course-member.view'
 import { CourseEntity } from './course.entity'
+import { CLS_REQ } from 'nestjs-cls'
+import { IRequest } from '@platon/core/server'
 
 @Injectable()
 export class CourseService {
   constructor(
+    @Inject(CLS_REQ)
+    private readonly request: IRequest,
     @InjectRepository(CourseEntity)
     private readonly courseRepository: Repository<CourseEntity>
   ) {}
@@ -70,16 +74,19 @@ export class CourseService {
       query.limit(filters.limit)
     }
 
-    return query.getManyAndCount()
+    const [courses, count] = await query.getManyAndCount()
+    courses.forEach(this.addVirtualColumns.bind(this))
+    return [courses, count]
   }
 
   async findById(id: string): Promise<Optional<CourseEntity>> {
     const query = this.courseRepository.createQueryBuilder('course')
-    return Optional.ofNullable(await query.where('course.id = :id', { id }).getOne())
+    const course = await query.where('course.id = :id', { id }).getOne()
+    return Optional.ofNullable(course ? this.addVirtualColumns(course) : undefined)
   }
 
   async create(input: Partial<CourseEntity>): Promise<CourseEntity> {
-    return this.courseRepository.save(input)
+    return this.addVirtualColumns(await this.courseRepository.save(input))
   }
 
   async update(id: string, changes: Partial<CourseEntity>): Promise<CourseEntity> {
@@ -88,10 +95,20 @@ export class CourseService {
       throw new NotFoundResponse(`Course not found: ${id}`)
     }
     Object.assign(course, changes)
-    return this.courseRepository.save(course)
+
+    return this.addVirtualColumns(await this.courseRepository.save(course))
   }
 
   async delete(id: string) {
     return this.courseRepository.delete(id)
+  }
+
+  private addVirtualColumns(entity: CourseEntity): CourseEntity {
+    Object.assign(entity, {
+      permissions: {
+        update: [UserRoles.admin, UserRoles.teacher].includes(this.request.user.role),
+      },
+    } as Partial<CourseEntity>)
+    return entity
   }
 }

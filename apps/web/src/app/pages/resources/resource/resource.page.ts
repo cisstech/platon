@@ -18,7 +18,7 @@ import { NzPageHeaderModule } from 'ng-zorro-antd/page-header'
 import { DialogModule } from '@platon/core/browser'
 import { CircleTreeComponent, ResourcePipesModule } from '@platon/feature/resource/browser'
 import { ResourceStatus } from '@platon/feature/resource/common'
-import { UiLayoutTabsComponent, UiLayoutTabsTitleDirective, UiModalIFrameComponent } from '@platon/shared/ui'
+import { UiLayoutTabsComponent, UiLayoutTabDirective, UiModalIFrameComponent } from '@platon/shared/ui'
 
 import { ResourcePresenter } from './resource.presenter'
 
@@ -49,7 +49,7 @@ import { ResourcePresenter } from './resource.presenter'
 
     UiLayoutTabsComponent,
     UiModalIFrameComponent,
-    UiLayoutTabsTitleDirective,
+    UiLayoutTabDirective,
 
     CircleTreeComponent,
     ResourcePipesModule,

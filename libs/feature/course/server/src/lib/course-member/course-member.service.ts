@@ -41,7 +41,7 @@ export class CourseMemberService {
 
     if (filters.roles?.length) {
       if (filters.roles.includes(UserRoles.student)) {
-        query.andWhere('group.id IS NOT NULL OR user.role IN (:...roles)', { roles: filters.roles })
+        query.andWhere('(group.id IS NOT NULL OR user.role IN (:...roles))', { roles: filters.roles })
       } else {
         query.andWhere('user.role IN (:...roles)', { roles: filters.roles })
       }

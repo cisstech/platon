@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { BaseEntity, UserEntity } from '@platon/core/server'
-import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm'
+import { CoursePermissions } from '@platon/feature/course/common'
+import { Column, Entity, Index, JoinColumn, ManyToOne, VirtualColumn } from 'typeorm'
 
 @Entity('Courses')
 export class CourseEntity extends BaseEntity {
@@ -18,4 +19,9 @@ export class CourseEntity extends BaseEntity {
   @ManyToOne(() => UserEntity, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'owner_id' })
   owner!: UserEntity
+
+  // VIRTUAL COLUMNS
+
+  @VirtualColumn({ query: () => `SELECT '{}'::jsonb` })
+  readonly permissions!: CoursePermissions
 }

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { RouterModule } from '@angular/router'
 import { Subscription } from 'rxjs'
 
@@ -36,12 +36,13 @@ import { CourseSectionActionsComponent } from './section-actions/section-actions
   ],
 })
 export class CourseDashboardPage implements OnInit, OnDestroy {
+  private readonly presenter = inject(CoursePresenter)
+  private readonly changeDetectorRef = inject(ChangeDetectorRef)
   private readonly subscriptions: Subscription[] = []
+
   protected context = this.presenter.defaultContext()
 
   protected sections: SectionWithActivities[] = []
-
-  constructor(private readonly presenter: CoursePresenter, private readonly changeDetectorRef: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.subscriptions.push(

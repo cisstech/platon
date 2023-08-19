@@ -1,5 +1,5 @@
 <ui-layout-tabs [state]="context.state">
-  <ng-container *ngIf="context.course">
+  <ng-container *ngIf="context.course as course">
     <header>
       <nz-page-header [nzSubtitle]="header" nzBackIcon>
         <ng-template #header>
@@ -8,8 +8,8 @@
               <mat-icon>local_library</mat-icon>
               <span
                 nz-typography
-                nzEditable
-                [nzContent]="context.course.name"
+                [nzEditable]="course.permissions.update"
+                [nzContent]="course.name"
                 (nzContentChange)="updateName($event)"
               ></span>
             </nz-breadcrumb-item>
@@ -18,8 +18,12 @@
         </ng-template>
       </nz-page-header>
     </header>
-
-    <p nz-typography nzEditable [nzContent]="context.course.desc" (nzContentChange)="updateDesc($event)"></p>
+    <p
+      nz-typography
+      [nzEditable]="course.permissions.update"
+      [nzContent]="course.desc"
+      (nzContentChange)="updateDesc($event)"
+    ></p>
   </ng-container>
   <ui-layout-tab [link]="['dashboard']">
     <ng-template>
@@ -39,10 +43,12 @@
       Élèves
     </ng-template>
   </ui-layout-tab>
-  <ui-layout-tab [link]="['settings']" [linkParams]="{ tab: 'informations' }">
-    <ng-template>
-      <mat-icon>settings</mat-icon>
-      Paramètres
-    </ng-template>
-  </ui-layout-tab>
+  <ng-container *ngIf="context.course?.permissions?.update">
+    <ui-layout-tab [link]="['settings']" [linkParams]="{ tab: 'informations' }">
+      <ng-template>
+        <mat-icon>settings</mat-icon>
+        Paramètres
+      </ng-template>
+    </ui-layout-tab>
+  </ng-container>
 </ui-layout-tabs>

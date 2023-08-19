@@ -1,14 +1,19 @@
-<nz-tabset nzTabPosition="left" nzLinkRouter>
-  <nz-tab>
-    <a
-      *nzTabLink
-      nz-tab-link
-      [routerLink]="['.']"
-      [queryParams]="{ tab: 'informations' }"
-      queryParamsHandling="merge"
-    >
-      Informations
-    </a>
-    <app-course-informations />
-  </nz-tab>
-</nz-tabset>
+<ng-container *ngIf="context.course as course">
+  <nz-tabset *ngIf="course.permissions.update; else denied" nzTabPosition="left" nzLinkRouter>
+    <nz-tab>
+      <a
+        *nzTabLink
+        nz-tab-link
+        [routerLink]="['.']"
+        [queryParams]="{ tab: 'informations' }"
+        queryParamsHandling="merge"
+      >
+        Informations
+      </a>
+      <app-course-informations />
+    </nz-tab>
+  </nz-tabset>
+  <ng-template #denied>
+    <ui-error-403 />
+  </ng-template>
+</ng-container>

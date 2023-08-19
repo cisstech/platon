@@ -2,8 +2,9 @@ import { ApiProperty } from '@nestjs/swagger'
 import { OrderingDirections } from '@platon/core/common'
 import { BaseDTO, toArray, toNumber } from '@platon/core/server'
 import { Course, CourseFilters, CourseOrderings, CreateCourse, UpdateCourse } from '@platon/feature/course/common'
-import { Transform } from 'class-transformer'
+import { Transform, Type } from 'class-transformer'
 import { IsArray, IsEnum, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator'
+import { CoursePermissionsDTO } from './permissions/permissions.dto'
 
 export class CourseDTO extends BaseDTO implements Course {
   @IsString()
@@ -18,6 +19,9 @@ export class CourseDTO extends BaseDTO implements Course {
   @IsUUID()
   @ApiProperty()
   readonly ownerId!: string
+
+  @Type(() => CoursePermissionsDTO)
+  readonly permissions!: CoursePermissionsDTO
 }
 
 export class CreateCourseDTO implements CreateCourse {

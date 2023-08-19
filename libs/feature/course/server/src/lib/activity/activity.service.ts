@@ -65,7 +65,7 @@ export class ActivityService {
       throw new ForbiddenResponse(`You are not a member of this activity`)
     }
 
-    return activity
+    return this.addVirtualColumns(activity)
   }
 
   async findByCourseIdAndId(courseId: string, id: string): Promise<Optional<ActivityEntity>> {

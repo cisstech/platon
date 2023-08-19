@@ -1,3 +1,5 @@
+import { ActivityPermissions } from './permissions.model'
+
 export interface Activity {
   readonly id: string
   readonly createdAt: Date
@@ -36,11 +38,6 @@ export interface UpdateActivity {
 
 export interface ReloadActivity {
   readonly version?: string
-}
-
-export interface ActivityPermissions {
-  readonly update: boolean
-  readonly viewStats: boolean
 }
 
 export type ActivityStates = 'opened' | 'closed' | 'planned'

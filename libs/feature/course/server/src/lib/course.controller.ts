@@ -1,6 +1,13 @@
 import { Body, Controller, Get, Param, Patch, Post, Query, Req } from '@nestjs/common'
-import { CreatedResponse, ForbiddenResponse, ItemResponse, ListResponse, NotFoundResponse } from '@platon/core/common'
-import { IRequest, Mapper } from '@platon/core/server'
+import {
+  CreatedResponse,
+  ForbiddenResponse,
+  ItemResponse,
+  ListResponse,
+  NotFoundResponse,
+  UserRoles,
+} from '@platon/core/common'
+import { IRequest, Mapper, Roles } from '@platon/core/server'
 import { CourseMemberService } from './course-member/course-member.service'
 import { CourseDTO, CourseFiltersDTO, CreateCourseDTO, UpdateCourseDTO } from './course.dto'
 import { CourseService } from './course.service'
@@ -39,6 +46,7 @@ export class CourseController {
     return new ItemResponse({ resource })
   }
 
+  @Roles(UserRoles.teacher, UserRoles.admin)
   @Post()
   async create(@Req() req: IRequest, @Body() input: CreateCourseDTO): Promise<CreatedResponse<CourseDTO>> {
     const resource = Mapper.map(
@@ -51,6 +59,7 @@ export class CourseController {
     return new CreatedResponse({ resource })
   }
 
+  @Roles(UserRoles.teacher, UserRoles.admin)
   @Patch('/:id')
   async update(@Param('id') id: string, @Body() input: UpdateCourseDTO): Promise<ItemResponse<CourseDTO>> {
     const resource = Mapper.map(await this.courseService.update(id, input), CourseDTO)
