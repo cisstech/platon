@@ -135,24 +135,15 @@ export default class ResourcesPage implements OnInit, OnDestroy {
     this.canCreateExercise = this.resourceService.canUserCreateResource(this.user, ResourceTypes.EXERCISE)
     this.canCreateActivity = this.resourceService.canUserCreateResource(this.user, ResourceTypes.ACTIVITY)
 
-    const [tree, circle, views, recents] = await Promise.all([
+    const [tree, circle, views] = await Promise.all([
       firstValueFrom(this.resourceService.tree()),
       firstValueFrom(this.resourceService.circle(this.user.username)),
       firstValueFrom(this.resourceService.search({ views: true })),
-      firstValueFrom(
-        this.resourceService.search({
-          period: 7,
-          limit: 5,
-          order: ResourceOrderings.UPDATED_AT,
-          direction: OrderingDirections.DESC,
-        })
-      ),
     ])
 
     this.tree = tree
     this.circle = circle
     this.views = views.resources
-    this.recents = recents.resources
 
     this.circles = []
     if (this.tree) {
@@ -181,6 +172,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
 
         this.searching = true
         this.items = (await firstValueFrom(this.resourceService.search(this.filters))).resources
+        this.items = [...this.items, ...this.items]
         this.searching = false
 
         this.changeDetectorRef.markForCheck()

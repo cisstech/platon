@@ -24,14 +24,26 @@ header {
   }
 }
 
+main {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
 article {
-  width: 100%;
   box-sizing: border-box;
+  flex-basis: 0;
+  flex-grow: 999;
+  min-width: calc(60% - 2rem);
 }
 
 aside {
-  width: calc(100% - 2rem);
   box-sizing: border-box;
+  flex-grow: 1;
+  flex-basis: 40%;
+  align-self: start;
+  position: sticky;
+  top: 2rem;
 }
 
 section {
@@ -60,12 +72,6 @@ nz-spin {
 ui-search-bar {
   width: 70%;
   margin: 0 auto;
-}
-
-.content {
-  display: grid;
-  grid-template-columns: 60% 40%;
-  column-gap: 2rem;
 }
 
 .indicators {

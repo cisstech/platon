@@ -47,7 +47,7 @@
     </button>
   </ng-template>
 </header>
-<div class="content">
+<main class="content">
   <article>
     <ng-container *ngIf="!searching; else spinner">
       <h2 *ngIf="items.length">Voici ce qu'on a trouver selon vos critères de recherche...</h2>
@@ -81,18 +81,8 @@
         </mat-card-content>
       </mat-card>
     </section>
-    <section>
-      <mat-card>
-        <mat-card-header>
-          <mat-card-title> Mise à jour récemment </mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <resource-list [items]="recents" [simple]="true" />
-        </mat-card-content>
-      </mat-card>
-    </section>
   </aside>
-</div>
+</main>
 
 <ng-template #spinner>
   <nz-spin nzSimple nzSize="large" />
