@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { CommonModule } from '@angular/common'
 import {
   ChangeDetectionStrategy,
@@ -21,6 +20,7 @@ import { MatInputModule } from '@angular/material/input'
 import { MatRadioModule } from '@angular/material/radio'
 
 import { NzDrawerModule } from 'ng-zorro-antd/drawer'
+import { NzSelectModule } from 'ng-zorro-antd/select'
 
 import { OrderingDirections } from '@platon/core/common'
 import {
@@ -54,6 +54,7 @@ import { ResourcePipesModule } from '../../pipes'
     MatAutocompleteModule,
 
     NzDrawerModule,
+    NzSelectModule,
 
     ResourcePipesModule,
   ],
@@ -81,15 +82,15 @@ export class ResourceFiltersComponent implements OnDestroy {
       period: this.filters.period,
       order: this.filters.order,
       direction: this.filters.direction,
-      parent: this.filters.parent,
-    })
-
-    this.filters.types?.forEach((type) => {
-      this.form.get('types')?.patchValue({ [type]: true })
-    })
-
-    this.filters.status?.forEach((type) => {
-      this.form.get('status')?.patchValue({ [type]: true })
+      parents: this.filters.parents,
+      types: Object.values(ResourceTypes).reduce((controls, type) => {
+        controls[type] = this.filters.types?.includes(type) || false
+        return controls
+      }, {} as Record<ResourceTypes, boolean>),
+      status: Object.values(ResourceStatus).reduce((controls, status) => {
+        controls[status] = this.filters.status?.includes(status) || false
+        return controls
+      }, {} as Record<ResourceStatus, boolean>),
     })
 
     this.visible = true
@@ -97,14 +98,17 @@ export class ResourceFiltersComponent implements OnDestroy {
 
     this.subscriptions.push(
       this.form.valueChanges.subscribe((value) => {
+        const { types, status } = value
         this.filters = {
           ...this.filters,
-          direction: value.direction as any,
-          order: value.order as any,
-          period: value.period as any,
-          types: Object.keys(value.types).filter((e) => value.types[e]) as any,
-          status: Object.keys(value.status).filter((e) => value.status[e]) as any,
-          parent: value.parent as any,
+          direction: value.direction as OrderingDirections,
+          order: value.order as ResourceOrderings,
+          period: value.period as number,
+          types: types ? (Object.keys(types).filter((e) => types[e as ResourceTypes]) as ResourceTypes[]) : undefined,
+          status: status
+            ? (Object.keys(status).filter((e) => status[e as ResourceStatus]) as ResourceStatus[])
+            : undefined,
+          parents: value.parents as string[],
         }
       })
     )
@@ -124,21 +128,21 @@ export class ResourceFiltersComponent implements OnDestroy {
 
   private createForm() {
     return new FormGroup({
-      parent: new FormControl(''),
+      parents: new FormControl([] as string[]),
       order: new FormControl(ResourceOrderings.NAME),
       direction: new FormControl(OrderingDirections.ASC),
       period: new FormControl(0),
       types: new FormGroup(
-        Object.keys(ResourceTypes).reduce((controls: any, type) => {
+        Object.values(ResourceTypes).reduce((controls, type) => {
           controls[type] = new FormControl(false)
           return controls
-        }, {})
+        }, {} as Record<ResourceTypes, FormControl<boolean | null>>)
       ),
       status: new FormGroup(
-        Object.keys(ResourceStatus).reduce((controls: any, status) => {
+        Object.values(ResourceStatus).reduce((controls, status) => {
           controls[status] = new FormControl(false)
           return controls
-        }, {})
+        }, {} as Record<ResourceStatus, FormControl<boolean | null>>)
       ),
     })
   }

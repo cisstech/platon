@@ -13,7 +13,6 @@ import {
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { ResourceProvider } from '../models/resource-provider'
-import { PLSourceFile } from '@platon/feature/compiler'
 
 @Injectable()
 export class RemoteResourceProvider extends ResourceProvider {
@@ -95,9 +94,9 @@ export class RemoteResourceProvider extends ResourceProvider {
       params = params.append('views', 'true')
     }
 
-    if (filters.parent) {
-      params = params.append('parent', filters.parent)
-    }
+    filters.parents?.forEach((e) => {
+      params = params.append('parents', e)
+    })
 
     return this.http.get<ListResponse<Resource>>(`/api/v1/resources`, { params })
   }

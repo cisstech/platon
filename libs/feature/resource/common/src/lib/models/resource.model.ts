@@ -65,7 +65,7 @@ export interface ResourceFilters {
   readonly views?: boolean
   readonly offset?: number
   readonly limit?: number
-  readonly parent?: string
+  readonly parents?: string[]
   readonly order?: ResourceOrderings
   readonly direction?: OrderingDirections
 }

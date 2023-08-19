@@ -148,7 +148,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
     this.circles = []
     if (this.tree) {
       this.circles = flattenCircleTree(this.tree)
-      this.indicators = [CircleFilterIndicator(this.tree), ...this.indicators]
+      this.indicators = [...this.indicators, ...flattenCircleTree(tree).map((circle) => CircleFilterIndicator(circle))]
     }
 
     this.changeDetectorRef.markForCheck()
@@ -158,7 +158,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
         this.filters = {
           ...this.filters,
           search: e.q,
-          parent: e.parent,
+          parents: e.parents ? (typeof e.parents === 'string' ? [e.parents] : e.parents) : undefined,
           period: Number.parseInt(e.period + '', 10) || 0,
           order: e.order,
           direction: e.direction,
@@ -192,7 +192,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
       direction: filters.direction,
       types: filters.types,
       status: filters.status,
-      parent: filters.parent,
+      parents: filters.parents,
     }
 
     this.router.navigate([], {
@@ -210,5 +210,5 @@ interface QueryParams {
   direction?: OrderingDirections
   types?: keyof typeof ResourceTypes | (keyof typeof ResourceTypes)[]
   status?: keyof typeof ResourceStatus | (keyof typeof ResourceStatus)[]
-  parent?: string
+  parents?: string | string[]
 }

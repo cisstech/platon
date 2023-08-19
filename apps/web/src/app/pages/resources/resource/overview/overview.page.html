@@ -58,7 +58,7 @@
               <ng-container *ngFor="let item of context.resource.levels; trackBy: trackById">
                 <mat-chip
                   [routerLink]="['/resources']"
-                  [queryParams]="{ q: item.name, parent: context.resource.id }"
+                  [queryParams]="{ q: item.name, parents: context.resource.id }"
                   [queryParamsHandling]="'merge'"
                 >
                   {{ item.name }}
@@ -67,7 +67,7 @@
               <ng-container *ngFor="let item of context.resource.topics; trackBy: trackById">
                 <mat-chip
                   [routerLink]="['/resources']"
-                  [queryParams]="{ q: item.name, parent: context.resource.id }"
+                  [queryParams]="{ q: item.name, parents: context.resource.id }"
                   [queryParamsHandling]="'merge'"
                 >
                   {{ item.name }}
@@ -100,7 +100,7 @@
                 nz-button
                 nzType="primary"
                 [routerLink]="['/resources']"
-                [queryParams]="{ types: 'CIRCLE', parent: context.resource.id }"
+                [queryParams]="{ types: 'CIRCLE', parents: context.resource.id }"
                 [queryParamsHandling]="'merge'"
               >
                 Rechercher
@@ -116,7 +116,7 @@
                 nz-button
                 nzType="primary"
                 [routerLink]="['/resources']"
-                [queryParams]="{ types: 'ACTIVITY', parent: context.resource.id }"
+                [queryParams]="{ types: 'ACTIVITY', parents: context.resource.id }"
                 [queryParamsHandling]="'merge'"
               >
                 Rechercher
@@ -132,7 +132,7 @@
                 nz-button
                 nzType="primary"
                 [routerLink]="['/resources']"
-                [queryParams]="{ types: 'EXERCISE', parent: context.resource.id }"
+                [queryParams]="{ types: 'EXERCISE', parents: context.resource.id }"
                 [queryParamsHandling]="'merge'"
               >
                 Rechercher

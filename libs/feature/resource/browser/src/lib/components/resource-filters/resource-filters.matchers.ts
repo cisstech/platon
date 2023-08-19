@@ -4,16 +4,15 @@ import {
   ResourceOrderings,
   ResourceStatus,
   ResourceTypes,
-  circleFromTree,
 } from '@platon/feature/resource/common'
 import { FilterIndicator } from '@platon/shared/ui'
 import { RESOURCE_ORDERING_NAMES, RESOURCE_STATUS_NAMES, RESOURCE_TYPE_NAMES } from '../../pipes'
 
-export const CircleFilterIndicator = (tree: CircleTree): FilterIndicator<ResourceFilters> => {
+export const CircleFilterIndicator = (circle: CircleTree): FilterIndicator<ResourceFilters> => {
   return {
-    match: (filters) => !!filters.parent,
-    remove: (filters) => ({ ...filters, parent: undefined }),
-    describe: (filters) => `Appartient au cercle ${circleFromTree(tree, filters.parent as string)?.name}`,
+    match: (filters) => !!filters.parents?.includes(circle.id),
+    remove: (filters) => ({ ...filters, parents: filters.parents?.filter((e) => e !== circle.id) }),
+    describe: () => `Appartient à "${circle.name}"`,
   }
 }
 

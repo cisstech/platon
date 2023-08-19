@@ -11,7 +11,7 @@
   </ng-container>
   <ng-template #footer>
     <button mat-stroked-button (click)="close()">Annuler</button>&nbsp;
-    <button mat-stroked-button color="primary" (click)="triggered.emit(this.filters); close()">Appliquer</button>
+    <button mat-raised-button color="primary" (click)="triggered.emit(this.filters); close()">Appliquer</button>
   </ng-template>
 </nz-drawer>
 
@@ -41,16 +41,16 @@
     <mat-divider />
     <!-- CIRCLE -->
     <section>
-      <mat-label>Elle appartient à cercle?</mat-label>
-      <mat-form-field appearance="outline">
-        <mat-label id="parent">Choisir un cercle</mat-label>
-        <input type="text" aria-labelledby="parent" matInput formControlName="parent" [matAutocomplete]="auto" />
-        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayCircle.bind(this)">
-          <mat-option *ngFor="let option of circles" [value]="option.id">
-            {{ option.name }}
-          </mat-option>
-        </mat-autocomplete>
-      </mat-form-field>
+      <mat-label id="parents">Elle appartient aux cercles?</mat-label>
+      <nz-select
+        [nzMaxTagCount]="3"
+        nzMode="multiple"
+        nzPlaceHolder="Sélectionnez des cercles"
+        formControlName="parents"
+        aria-labelledby="parents"
+      >
+        <nz-option *ngFor="let option of circles" [nzLabel]="option.name" [nzValue]="option.id" />
+      </nz-select>
     </section>
     <mat-divider />
     <!-- ORDER -->
