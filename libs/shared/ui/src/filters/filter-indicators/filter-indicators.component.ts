@@ -5,6 +5,10 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
 import { MatChipsModule } from '@angular/material/chips'
 import { MatIconModule } from '@angular/material/icon'
 
+import formatDistanceToNow from 'date-fns/formatDistanceToNow'
+import addDays from 'date-fns/addDays'
+import fr from 'date-fns/locale/fr'
+
 @Component({
   standalone: true,
   selector: 'ui-filter-indicators',
@@ -49,7 +53,9 @@ export const matchIndicators = <T>(filters: T, matchers: FilterMatcher<T>[], onC
 export const PeriodFilterMatcher = (filters: any) =>
   filters.period !== 0
     ? ({
-        label: `Modifié il y a au moins ${filters.period}`,
+        label: `Modifié il y a ${formatDistanceToNow(addDays(new Date(), -filters.period), {
+          locale: fr,
+        })}`,
         remove: (filters: any) => ({
           ...filters,
           period: 0,

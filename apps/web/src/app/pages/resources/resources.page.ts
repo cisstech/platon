@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router, RouterModule } from '@angular/router'
 import Fuse from 'fuse.js'
 import { firstValueFrom, map, shareReplay, Subscription } from 'rxjs'
@@ -73,6 +73,12 @@ import {
   ],
 })
 export default class ResourcesPage implements OnInit, OnDestroy {
+  private readonly router = inject(Router)
+  private readonly authService = inject(AuthService)
+  private readonly activatedRoute = inject(ActivatedRoute)
+  private readonly resourceService = inject(ResourceService)
+  private readonly changeDetectorRef = inject(ChangeDetectorRef)
+
   private readonly subscriptions: Subscription[] = []
   private readonly filterMatchers: FilterMatcher<ResourceFilters>[] = [
     ...Object.values(ResourceTypes).map(ResourceTypeFilterMatcher),
@@ -125,14 +131,6 @@ export default class ResourcesPage implements OnInit, OnDestroy {
   protected get canCreateResource(): boolean {
     return this.canCreateCircle || this.canCreateExercise || this.canCreateActivity
   }
-
-  constructor(
-    private readonly router: Router,
-    private readonly authService: AuthService,
-    private readonly activatedRoute: ActivatedRoute,
-    private readonly resourceService: ResourceService,
-    private readonly changeDetectorRef: ChangeDetectorRef
-  ) {}
 
   async ngOnInit(): Promise<void> {
     this.user = (await this.authService.ready()) as User
