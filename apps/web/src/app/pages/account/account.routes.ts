@@ -31,6 +31,7 @@ export default [
             './notification-prefs/notification-prefs.routes'
           ),
       },
+
       { path: '**', pathMatch: 'full', redirectTo: 'about-me' },
     ],
   }),
