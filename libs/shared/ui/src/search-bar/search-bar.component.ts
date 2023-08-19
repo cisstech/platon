@@ -83,7 +83,6 @@ export class UiSearchBarComponent implements OnInit, OnChanges, OnDestroy {
     this.subscriptions.push(
       this.control.valueChanges
         .pipe(
-          skip(1),
           debounceTime(500), // Wait for the user to stop typing (1/2 second in this case)
           distinctUntilChanged(), // Wait until the search text changes.
           switchMap((query) => {
