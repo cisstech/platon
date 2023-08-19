@@ -14,8 +14,6 @@ import { NzSpinModule } from 'ng-zorro-antd/spin'
 
 import {
   FilterIndicator,
-  FilterMatcher,
-  matchIndicators,
   PeriodFilterMatcher,
   SearchBar,
   UiFilterIndicatorComponent,
@@ -25,15 +23,15 @@ import {
 import { AuthService } from '@platon/core/browser'
 import { OrderingDirections, User } from '@platon/core/common'
 import {
-  CircleFilterMatcher,
+  CircleFilterIndicator,
   ResourceFiltersComponent,
   ResourceItemComponent,
   ResourceListComponent,
-  ResourceOrderingFilterMatcher,
+  ResourceOrderingFilterIndicator,
   ResourcePipesModule,
   ResourceService,
-  ResourceStatusFilterMatcher,
-  ResourceTypeFilterMatcher,
+  ResourceStatusFilterIndicator,
+  ResourceTypeFilterIndicator,
 } from '@platon/feature/resource/browser'
 import {
   CircleTree,
@@ -80,13 +78,6 @@ export default class ResourcesPage implements OnInit, OnDestroy {
   private readonly changeDetectorRef = inject(ChangeDetectorRef)
 
   private readonly subscriptions: Subscription[] = []
-  private readonly filterMatchers: FilterMatcher<ResourceFilters>[] = [
-    ...Object.values(ResourceTypes).map(ResourceTypeFilterMatcher),
-    ...Object.values(ResourceStatus).map(ResourceStatusFilterMatcher),
-    ...Object.values(ResourceOrderings).map(ResourceOrderingFilterMatcher),
-    PeriodFilterMatcher,
-    CircleFilterMatcher(() => this.tree),
-  ]
 
   protected readonly searchbar: SearchBar<string> = {
     placeholder: 'Essayez un nom, un topic, un niveau...',
@@ -114,8 +105,13 @@ export default class ResourcesPage implements OnInit, OnDestroy {
   protected tree?: CircleTree
   protected circles: CircleTree[] = []
 
-  protected indicators: FilterIndicator<ResourceFilters>[] = []
   protected completion = this.resourceService.completion().pipe(shareReplay(1))
+  protected indicators: FilterIndicator<ResourceFilters>[] = [
+    ...Object.values(ResourceTypes).map(ResourceTypeFilterIndicator),
+    ...Object.values(ResourceStatus).map(ResourceStatusFilterIndicator),
+    ...Object.values(ResourceOrderings).map(ResourceOrderingFilterIndicator),
+    PeriodFilterMatcher,
+  ]
 
   protected searching = true
   protected filters: ResourceFilters = {}
@@ -151,7 +147,6 @@ export default class ResourcesPage implements OnInit, OnDestroy {
           direction: OrderingDirections.DESC,
         })
       ),
-      //firstValueFrom(this.resourceService.listInvitations()),
     ])
 
     this.tree = tree
@@ -162,7 +157,9 @@ export default class ResourcesPage implements OnInit, OnDestroy {
     this.circles = []
     if (this.tree) {
       this.circles = flattenCircleTree(this.tree)
+      this.indicators = [CircleFilterIndicator(this.tree), ...this.indicators]
     }
+
     this.changeDetectorRef.markForCheck()
 
     this.subscriptions.push(
@@ -171,7 +168,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
           ...this.filters,
           search: e.q,
           parent: e.parent,
-          period: Number.parseInt(e.period + '', 10) || this.filters.period || 0,
+          period: Number.parseInt(e.period + '', 10) || 0,
           order: e.order,
           direction: e.direction,
           types: typeof e.types === 'string' ? [e.types] : e.types,
@@ -185,8 +182,6 @@ export default class ResourcesPage implements OnInit, OnDestroy {
         this.searching = true
         this.items = (await firstValueFrom(this.resourceService.search(this.filters))).resources
         this.searching = false
-
-        this.indicators = matchIndicators(this.filters, this.filterMatchers, (data) => this.search(data, data.search))
 
         this.changeDetectorRef.markForCheck()
       })

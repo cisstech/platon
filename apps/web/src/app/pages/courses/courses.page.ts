@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common'
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router, RouterModule } from '@angular/router'
 import Fuse from 'fuse.js'
-import { firstValueFrom, map, of, shareReplay, Subscription } from 'rxjs'
+import { Subscription, firstValueFrom, map, of, shareReplay } from 'rxjs'
 
 import { MatCardModule } from '@angular/material/card'
 import { MatIconModule } from '@angular/material/icon'
@@ -14,20 +14,17 @@ import { NzSpinModule } from 'ng-zorro-antd/spin'
 
 import {
   FilterIndicator,
-  FilterMatcher,
-  matchIndicators,
   PeriodFilterMatcher,
   SearchBar,
   UiFilterIndicatorComponent,
   UiSearchBarComponent,
 } from '@platon/shared/ui'
 
-import { AuthService } from '@platon/core/browser'
-import { OrderingDirections, User } from '@platon/core/common'
+import { OrderingDirections } from '@platon/core/common'
 import {
   CourseFiltersComponent,
   CourseListComponent,
-  CourseOrderingFilterMatcher,
+  CourseOrderingFilterIndicator,
   CoursePipesModule,
   CourseService,
 } from '@platon/feature/course/browser'
@@ -60,8 +57,8 @@ import { Course, CourseFilters, CourseOrderings } from '@platon/feature/course/c
 })
 export class CoursesPage implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription[] = []
-  private readonly filterMatchers: FilterMatcher<CourseFilters>[] = [
-    ...Object.values(CourseOrderings).map(CourseOrderingFilterMatcher),
+  protected readonly indicators: FilterIndicator<CourseFilters>[] = [
+    ...Object.values(CourseOrderings).map(CourseOrderingFilterIndicator),
     PeriodFilterMatcher,
   ]
 
@@ -86,10 +83,6 @@ export class CoursesPage implements OnInit, OnDestroy {
     onSearch: (query) => this.search(this.filters, query),
   }
 
-  private user?: User
-
-  protected indicators: FilterIndicator<CourseFilters>[] = []
-
   protected completion = of([]).pipe(
     // TODO implements server function
     shareReplay(1)
@@ -101,14 +94,12 @@ export class CoursesPage implements OnInit, OnDestroy {
 
   constructor(
     private readonly router: Router,
-    private readonly authService: AuthService,
     private readonly courseService: CourseService,
     private readonly activatedRoute: ActivatedRoute,
     private readonly changeDetectorRef: ChangeDetectorRef
   ) {}
 
   async ngOnInit(): Promise<void> {
-    this.user = (await this.authService.ready()) as User
     this.changeDetectorRef.markForCheck()
 
     this.subscriptions.push(
@@ -128,8 +119,6 @@ export class CoursesPage implements OnInit, OnDestroy {
         this.searching = true
         this.items = (await firstValueFrom(this.courseService.search(this.filters))).resources
         this.searching = false
-
-        this.indicators = matchIndicators(this.filters, this.filterMatchers, (data) => this.search(data, data.search))
 
         this.changeDetectorRef.markForCheck()
       })
