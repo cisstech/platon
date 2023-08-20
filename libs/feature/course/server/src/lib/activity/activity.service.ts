@@ -98,10 +98,17 @@ export class ActivityService {
       throw new NotFoundResponse(`CourseActivity not found: ${activityId}`)
     }
 
-    await this.repository.update({ id: activityId }, changes as QueryDeepPartialEntity<ActivityEntity>)
+    Object.assign(activity, {
+      ...changes,
 
-    Object.assign(activity, changes)
-    return this.addVirtualColumns(activity)
+      // REMOVE ALL VIRTUAL COLUMNS HERE
+      permissions: undefined,
+      progression: undefined,
+      title: undefined,
+      state: undefined,
+    })
+
+    return this.addVirtualColumns(await this.repository.save(activity))
   }
 
   async reload(courseId: string, activityId: string, input: ReloadActivity): Promise<ActivityEntity> {

@@ -26,7 +26,12 @@ export class CourseMemberService {
 
     query.where('member.course_id = :courseId', { courseId }).andWhere('member.id = :id', { id })
 
-    return Optional.ofNullable(await query.getOne())
+    const member = await query.getOne()
+    if (member && !member.user?.id) {
+      member.user = undefined
+    }
+
+    return Optional.ofNullable(member)
   }
 
   async search(courseId: string, filters?: CourseMemberFilters): Promise<[CourseMemberEntity[], number]> {
@@ -86,7 +91,12 @@ export class CourseMemberService {
       query.limit(filters.limit)
     }
 
-    return query.getManyAndCount()
+    const [members, count] = await query.getManyAndCount()
+    members.forEach((member) => {
+      member.user = member.user?.id ? member.user : undefined
+    })
+
+    return [members, count]
   }
 
   async addUser(courseId: string, userId: string): Promise<CourseMemberEntity> {

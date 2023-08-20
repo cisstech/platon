@@ -24,7 +24,12 @@ export class ActivityMemberService {
 
     query.where('amember.activity_id = :activityId', { activityId }).andWhere('amember.id = :id', { id })
 
-    return Optional.ofNullable(await query.getOne())
+    const member = await query.getOne()
+    if (member && !member.user?.id) {
+      member.user = undefined
+    }
+
+    return Optional.ofNullable(member)
   }
 
   async search(activityId: string): Promise<[ActivityMemberEntity[], number]> {
@@ -36,7 +41,12 @@ export class ActivityMemberService {
 
     query.where('activity_id = :activityId', { activityId })
 
-    return query.getManyAndCount()
+    const [members, count] = await query.getManyAndCount()
+    members.forEach((member) => {
+      member.user = member.user?.id ? member.user : undefined
+    })
+
+    return [members, count]
   }
 
   async create(member: Partial<ActivityMemberEntity>): Promise<ActivityMemberEntity> {

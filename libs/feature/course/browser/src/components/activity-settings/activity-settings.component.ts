@@ -99,7 +99,8 @@ export class CourseActivitySettingsComponent implements OnInit {
 
   protected async update(): Promise<void> {
     this.updating = true
-    this.changeDetectorRef.detectChanges()
+    this.changeDetectorRef.markForCheck()
+
     try {
       const { value } = this.form
       await Promise.all([
@@ -156,7 +157,8 @@ export class CourseActivitySettingsComponent implements OnInit {
 
   protected async reload(): Promise<void> {
     this.updating = true
-    this.changeDetectorRef.detectChanges()
+    this.changeDetectorRef.markForCheck()
+
     try {
       const activity = await firstValueFrom(this.courseService.reloadActivity(this.activity))
 
@@ -175,7 +177,7 @@ export class CourseActivitySettingsComponent implements OnInit {
 
   protected async delete(): Promise<void> {
     this.updating = true
-    this.changeDetectorRef.detectChanges()
+    this.changeDetectorRef.markForCheck()
     try {
       await firstValueFrom(this.courseService.deleteActivity(this.activity))
       this.dialogService.success('Activité supprimée !')

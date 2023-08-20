@@ -94,7 +94,13 @@ export class CourseService {
     if (!course) {
       throw new NotFoundResponse(`Course not found: ${id}`)
     }
-    Object.assign(course, changes)
+
+    Object.assign(course, {
+      ...changes,
+
+      // REMOVE ALL VIRTUAL COLUMNS HERE
+      permissions: undefined,
+    })
 
     return this.addVirtualColumns(await this.courseRepository.save(course))
   }

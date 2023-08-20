@@ -11,6 +11,7 @@ export class ActivityCorrectorController {
   @Get()
   async search(@Param('activityId') activityId: string): Promise<ListResponse<ActivityCorrectorDTO>> {
     const [items, total] = await this.service.search(activityId)
+    console.log(items)
     return new ListResponse({
       total,
       resources: Mapper.mapAll(items, ActivityCorrectorDTO),

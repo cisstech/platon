@@ -16,27 +16,37 @@ export class ActivityCorrectorService {
   ) {}
 
   async findById(activityId: string, id: string): Promise<Optional<ActivityCorrectorEntity>> {
-    const query = this.repository.createQueryBuilder('acorrector')
-    query.leftJoinAndSelect('acorrector.user', 'user')
-    query.leftJoinAndSelect('acorrector.member', 'member')
+    const query = this.repository.createQueryBuilder('corrector')
+    query.leftJoinAndSelect('corrector.user', 'user')
+    query.leftJoinAndSelect('corrector.member', 'member')
     query.leftJoinAndSelect('member.group', 'group')
     query.leftJoinAndSelect('group.users', 'groupusers')
 
-    query.where('acorrector.activity_id = :activityId', { activityId }).andWhere('acorrector.id = :id', { id })
+    query.where('corrector.activity_id = :activityId', { activityId }).andWhere('corrector.id = :id', { id })
 
-    return Optional.ofNullable(await query.getOne())
+    const corrector = await query.getOne()
+    if (corrector && !corrector.user?.id) {
+      corrector.user = undefined
+    }
+
+    return Optional.ofNullable(corrector)
   }
 
   async search(activityId: string): Promise<[ActivityCorrectorEntity[], number]> {
-    const query = this.repository.createQueryBuilder('acorrector')
-    query.leftJoinAndSelect('acorrector.user', 'user')
-    query.leftJoinAndSelect('acorrector.member', 'member')
+    const query = this.repository.createQueryBuilder('corrector')
+    query.leftJoinAndSelect('corrector.user', 'user')
+    query.leftJoinAndSelect('corrector.member', 'member')
     query.leftJoinAndSelect('member.group', 'group')
     query.leftJoinAndSelect('group.users', 'groupusers')
 
     query.where('activity_id = :activityId', { activityId })
 
-    return query.getManyAndCount()
+    const [correctors, count] = await query.getManyAndCount()
+    correctors.forEach((corrector) => {
+      corrector.user = corrector.user?.id ? corrector.user : undefined
+    })
+
+    return [correctors, count]
   }
 
   async create(corrector: Partial<ActivityCorrectorEntity>): Promise<ActivityCorrectorEntity> {
