@@ -91,6 +91,9 @@
         </nz-list-item-meta>
       </nz-list-item>
     </ng-container>
+    <div class="notification-load-more" nz-list-load-more>
+      <button nz-button *ngIf="hasMore" (click)="loadMore.emit()">Charger plus</button>
+    </div>
   </nz-list>
 </ng-container>
 <ng-template #empty>

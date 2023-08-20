@@ -38,12 +38,8 @@ export class NotificationService {
     const newNotification = entityManager
       ? await entityManager.save(entityManager.create(NotificationEntity, { userId, data }))
       : await this.repository.save(this.repository.create({ userId, data }))
-    await this.pubSubService.publish(ON_CHANGE_NOTIFICATIONS, {
-      onChangeNotifications: {
-        userId: newNotification.userId,
-        newNotification,
-      },
-    })
+
+    this.notifyUserAboutChanges(userId, { newNotification })
 
     return newNotification
   }
@@ -78,14 +74,29 @@ export class NotificationService {
   }
 
   async markAsRead(userId: string, ids: string[]): Promise<void> {
-    await this.repository.update(ids, { readAt: new Date() })
+    await this.repository.update(
+      {
+        userId,
+        id: In(ids),
+      },
+      { readAt: new Date() }
+    )
+
+    this.notifyUserAboutChanges(userId)
   }
 
   async markAsUnread(userId: string, ids: string[]): Promise<void> {
-    await this.repository.update(ids, { readAt: null })
+    await this.repository.update(
+      {
+        userId,
+        id: In(ids),
+      },
+      { readAt: null }
+    )
+    this.notifyUserAboutChanges(userId)
   }
 
-  async markAllAsRead(userId: string): Promise<boolean> {
+  async markAllAsRead(userId: string): Promise<void> {
     await this.repository.update(
       {
         userId,
@@ -94,7 +105,6 @@ export class NotificationService {
       { readAt: new Date() }
     )
     this.notifyUserAboutChanges(userId)
-    return true
   }
 
   async delete(userId: string, ids: string[]): Promise<number> {
@@ -145,7 +155,7 @@ export class NotificationService {
     })
   }
 
-  async withExtaData(notification: NotificationEntity): Promise<Record<string, unknown> | undefined> {
+  async withExtraData(notification: NotificationEntity): Promise<Record<string, unknown> | undefined> {
     for (const provider of this.extraDataProviders) {
       if (provider.match(notification.data)) {
         return provider.provide(notification.data)
@@ -154,20 +164,12 @@ export class NotificationService {
     return undefined
   }
 
-  async notifyUserAboutChanges(userId: string): Promise<void> {
-    try {
-      return await this.pubSubService.publish<OnChangeNotificationsPayload>(ON_CHANGE_NOTIFICATIONS, {
-        onChangeNotifications: {
-          userId,
-          notifications: (
-            await this.ofUser(userId, {
-              limit: 50,
-            })
-          )[0],
-        },
+  private notifyUserAboutChanges(userId: string, changes?: Partial<OnChangeNotificationsPayload>): void {
+    this.pubSubService
+      .publish<OnChangeNotificationsPayload>(ON_CHANGE_NOTIFICATIONS, {
+        userId,
+        ...changes,
       })
-    } catch (error) {
-      return this.logger.error(error)
-    }
+      .catch(this.logger.error.bind(this.logger))
   }
 }

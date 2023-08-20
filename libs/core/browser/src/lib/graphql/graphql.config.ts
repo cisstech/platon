@@ -3,7 +3,7 @@ import { ApolloClientOptions, ApolloLink, InMemoryCache, split } from '@apollo/c
 import { setContext } from '@apollo/client/link/context'
 import { onError } from '@apollo/client/link/error'
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
-import { getMainDefinition } from '@apollo/client/utilities'
+import { getMainDefinition, relayStylePagination } from '@apollo/client/utilities'
 import { HttpLink } from 'apollo-angular/http'
 import { createClient } from 'graphql-ws'
 import { TokenService } from '../auth'
@@ -37,7 +37,15 @@ const basicContext = setContext((_, { headers }) => {
 })
 
 export function createDefaultApollo(httpLink: HttpLink, tokenService: TokenService): ApolloClientOptions<any> {
-  const cache = new InMemoryCache({})
+  const cache = new InMemoryCache({
+    typePolicies: {
+      Query: {
+        fields: {
+          notifications: relayStylePagination(),
+        },
+      },
+    },
+  })
 
   const http = httpLink.create({
     uri: '/api/graphql',
