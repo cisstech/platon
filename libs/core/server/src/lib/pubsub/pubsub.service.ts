@@ -1,25 +1,25 @@
-import { Inject, Injectable } from '@nestjs/common'
-import { RedisPubSub } from 'graphql-redis-subscriptions'
-
-export const PUB_SUB = 'PUB_SUB'
+import { Injectable } from '@nestjs/common'
+import { PubSub } from './pubsub'
 
 @Injectable()
 export class PubSubService {
-  constructor(@Inject(PUB_SUB) private readonly pubSub: RedisPubSub) {}
+  constructor(private readonly pubSub: PubSub) {}
 
-  async publish<T>(channel: string, payload: T): Promise<void> {
+  public async publish<T>(channel: string, payload: T): Promise<void> {
     await this.pubSub.publish(channel, payload)
   }
 
-  async subscribe<T>(channel: string, onMessage: (payload: T) => void): Promise<number> {
+  public async subscribe<T>(channel: string, onMessage: (payload: T) => void): Promise<number> {
     return await this.pubSub.subscribe(channel, onMessage)
   }
 
-  unsubscribe(subId: number): void {
+  public unsubscribe(subId: number): void {
     this.pubSub.unsubscribe(subId)
   }
 
-  asyncIterator<T>(channel: string): AsyncIterator<T> {
-    return this.pubSub.asyncIterator(channel)
+  public asyncIterator<T>(channel: string, initialValue?: T): AsyncIterator<T> {
+    return initialValue
+      ? this.pubSub.asyncIteratorWithInitialValue(channel, initialValue)
+      : this.pubSub.asyncIterator(channel)
   }
 }
