@@ -2,9 +2,10 @@
 import { ApolloClientOptions, ApolloLink, InMemoryCache, split } from '@apollo/client/core'
 import { setContext } from '@apollo/client/link/context'
 import { onError } from '@apollo/client/link/error'
-import { HttpLink } from 'apollo-angular/http'
-import { WebSocketLink } from '@apollo/client/link/ws'
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
 import { getMainDefinition } from '@apollo/client/utilities'
+import { HttpLink } from 'apollo-angular/http'
+import { createClient } from 'graphql-ws'
 import { TokenService } from '../auth'
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
@@ -42,15 +43,15 @@ export function createDefaultApollo(httpLink: HttpLink, tokenService: TokenServi
     uri: '/api/graphql',
   })
 
-  const ws = new WebSocketLink({
-    uri: `wss://${location.host}/api/graphql`,
-    options: {
-      reconnect: true,
-      connectionParams: {
+  const ws = new GraphQLWsLink(
+    createClient({
+      url: `wss://${location.host}/api/graphql`,
+      shouldRetry: () => true,
+      connectionParams: () => ({
         Authorization: `Bearer ${tokenService.tokenSync()?.accessToken}`,
-      },
-    },
-  })
+      }),
+    })
+  )
 
   // using the ability to split links, you can send data to each link
   // depending on what kind of operation is being sent
