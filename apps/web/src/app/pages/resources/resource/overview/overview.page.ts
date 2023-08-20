@@ -95,7 +95,7 @@ export class ResourceOverviewPage implements OnInit, AfterViewChecked, OnDestroy
     this.router.navigate(['/resources'], {
       queryParams: {
         status,
-        parent: this.context.resource?.id,
+        parents: this.context.resource?.id,
       },
     })
   }
