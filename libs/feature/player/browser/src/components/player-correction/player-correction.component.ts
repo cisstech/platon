@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, inject } from '@angular/core'
 import { firstValueFrom } from 'rxjs'
 
 import { MatButtonModule } from '@angular/material/button'
@@ -60,6 +60,11 @@ interface ExerciseGroup {
   ],
 })
 export class PlayerCorrectionComponent implements OnInit {
+  private readonly dialogService = inject(DialogService)
+  private readonly resultService = inject(ResultService)
+  private readonly playerService = inject(PlayerService)
+  private readonly changeDetectorRef = inject(ChangeDetectorRef)
+
   @Input() correction!: PendingCorrection
   protected answers: ExercisePlayer[] = []
 
@@ -72,13 +77,6 @@ export class PlayerCorrectionComponent implements OnInit {
   protected selectedTabIndex = 0
   protected selectedExerciseIndex = 0
   protected correctedGrade?: number
-
-  constructor(
-    private readonly dialogService: DialogService,
-    private readonly resultService: ResultService,
-    private readonly playerService: PlayerService,
-    private readonly changeDetectorRef: ChangeDetectorRef
-  ) {}
 
   async ngOnInit(): Promise<void> {
     this.buildGroups()

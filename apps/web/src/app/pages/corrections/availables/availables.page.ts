@@ -1,7 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core'
-import { ResultService } from '@platon/feature/result/browser'
-import { PendingCorrection } from '@platon/feature/result/common'
+import { ChangeDetectionStrategy, Component } from '@angular/core'
 
 @Component({
   standalone: true,
@@ -11,12 +9,4 @@ import { PendingCorrection } from '@platon/feature/result/common'
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule],
 })
-export class CorrectionsAvailablesPage implements OnInit {
-  protected corrections: PendingCorrection[] = []
-
-  constructor(private readonly resultService: ResultService, private readonly changeDetectorRef: ChangeDetectorRef) {}
-
-  async ngOnInit(): Promise<void> {
-    this.changeDetectorRef.markForCheck()
-  }
-}
+export class CorrectionsAvailablesPage {}

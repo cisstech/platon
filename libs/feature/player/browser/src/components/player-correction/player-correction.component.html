@@ -53,7 +53,12 @@
             <h3>Note ajustée ({{ correctedGrade }})</h3>
             <nz-slider [nzMarks]="{ '-1': '-1', '100': '100' }" [(ngModel)]="correctedGrade" nzMin="-1" nzMax="100" />
             <mat-toolbar>
-              <button (click)="onSaveGrade()" [disabled]="!correctedGrade" mat-raised-button color="primary">
+              <button
+                (click)="onSaveGrade()"
+                [disabled]="correctedGrade === null || correctedGrade === undefined"
+                mat-raised-button
+                color="primary"
+              >
                 Enregistrer
               </button>
               <button *ngIf="selectedExerciseIndex > 0" mat-raised-button (click)="onChoosePreviousExercise()">
@@ -82,7 +87,7 @@
       <ng-container [ngTemplateOutlet]="noPendings" />
     </ng-container>
     <ng-container *ngSwitchCase="1">
-      <ng-container [ngTemplateOutlet]="noExercises" />
+      <ng-container [ngTemplateOutlet]="noCorrections" />
     </ng-container>
   </div>
 </ng-template>
