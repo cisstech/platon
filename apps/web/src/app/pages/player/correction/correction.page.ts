@@ -9,7 +9,7 @@ import { NzSpinModule } from 'ng-zorro-antd/spin'
 import { PlayerCorrectionComponent } from '@platon/feature/player/browser'
 import { Player } from '@platon/feature/player/common'
 import { ResultService } from '@platon/feature/result/browser'
-import { PendingCorrection } from '@platon/feature/result/common'
+import { ActivityCorrection } from '@platon/feature/result/common'
 import { UiErrorComponent } from '@platon/shared/ui'
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton'
 import { firstValueFrom } from 'rxjs'
@@ -26,7 +26,7 @@ export class PlayerCorrectionPage implements OnInit {
   protected player?: Player
   protected loading = true
   protected error: unknown
-  protected correction?: PendingCorrection
+  protected correction?: ActivityCorrection
 
   constructor(
     private readonly resultService: ResultService,
@@ -38,8 +38,7 @@ export class PlayerCorrectionPage implements OnInit {
     try {
       const params = this.activatedRoute.snapshot.paramMap
       const activityId = params.get('id') as string
-      const response = await firstValueFrom(this.resultService.listCorrections(activityId))
-      this.correction = response.resources[0]
+      this.correction = await firstValueFrom(this.resultService.findCorrection(activityId))
     } catch (error) {
       this.error = error
     } finally {

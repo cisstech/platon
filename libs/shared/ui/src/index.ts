@@ -1,3 +1,4 @@
+export * from './colors'
 export * from './editorjs'
 export * from './error'
 export * from './filters'

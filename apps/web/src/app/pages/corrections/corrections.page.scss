@@ -1,3 +1,13 @@
 nz-breadcrumb {
   font-size: 1.5em;
 }
+
+p {
+  margin: 1rem 0;
+}
+
+@media (min-width: 720px) {
+  p {
+    width: 70%;
+  }
+}

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core'
 import {
   ActivityResults,
   Correction,
-  PendingCorrection,
+  ActivityCorrection,
   UpsertCorrection,
   UserResults,
 } from '@platon/feature/result/common'
@@ -25,13 +25,24 @@ export class RemoteResultProvider extends ResultProvider {
     return this.http.get<ActivityResults>(`/api/v1/results/activity/${activityId}`)
   }
 
+  findCorrection(activityId: string): Observable<ActivityCorrection> {
+    return this.http.get<ListResponse<ActivityCorrection>>(`/api/v1/results/corrections/${activityId}`).pipe(
+      map((response) => {
+        if (!response.total) {
+          throw new Error(`Correction not found for activity ${activityId}`)
+        }
+        return response.resources[0]
+      })
+    )
+  }
+
+  listCorrections(): Observable<ListResponse<ActivityCorrection>> {
+    return this.http.get<ListResponse<ActivityCorrection>>(`/api/v1/results/corrections`)
+  }
+
   upsertCorrection(sessionId: string, input: UpsertCorrection): Observable<Correction> {
     return this.http
       .post<ItemResponse<Correction>>(`/api/v1/results/corrections/${sessionId}`, input)
       .pipe(map((response) => response.resource))
-  }
-
-  listCorrections(activityId: string): Observable<ListResponse<PendingCorrection>> {
-    return this.http.get<ListResponse<PendingCorrection>>(`/api/v1/results/corrections/${activityId ? activityId : ''}`)
   }
 }
