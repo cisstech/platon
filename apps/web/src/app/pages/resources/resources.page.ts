@@ -172,7 +172,6 @@ export default class ResourcesPage implements OnInit, OnDestroy {
 
         this.searching = true
         this.items = (await firstValueFrom(this.resourceService.search(this.filters))).resources
-        this.items = [...this.items, ...this.items]
         this.searching = false
 
         this.changeDetectorRef.markForCheck()
