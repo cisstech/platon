@@ -3,7 +3,7 @@ import { BaseDTO, toArray, toDate } from '@platon/core/server'
 import {
   Activity,
   ActivityFilters,
-  ActivityStates,
+  ActivityOpenStates,
   CreateActivity,
   ReloadActivity,
   UpdateActivity,
@@ -37,7 +37,7 @@ export class ActivityDTO extends BaseDTO implements Activity {
   readonly title!: string
 
   @IsString()
-  readonly state!: ActivityStates
+  readonly state!: ActivityOpenStates
 
   @Type(() => ActivityPermissionsDTO)
   readonly permissions!: ActivityPermissionsDTO

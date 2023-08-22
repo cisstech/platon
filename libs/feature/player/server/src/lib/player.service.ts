@@ -175,6 +175,10 @@ export class PlayerService {
 
     const activitySession = session.parent || session
     const activityVariables = activitySession.variables as PlayerActivityVariables
+    if (activityVariables.navigation.terminated) {
+      return { activity: withActivityPlayer(activitySession) }
+    }
+
     activityVariables.navigation.terminated = true
     activitySession.variables = activityVariables
     await this.sessionService.update(activitySession.id, {

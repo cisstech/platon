@@ -1,15 +1,15 @@
 import { Pipe, PipeTransform } from '@angular/core'
-import { Activity, ActivityStates } from '@platon/feature/course/common'
+import { Activity, ActivityOpenStates } from '@platon/feature/course/common'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import fr from 'date-fns/locale/fr'
 
 interface State {
   color: string
-  state: ActivityStates
+  state: ActivityOpenStates
   label: string
 }
 
-const LABELS: Record<ActivityStates, string> = {
+const LABELS: Record<ActivityOpenStates, string> = {
   opened: 'Ouvert',
   closed: 'Fermé',
   planned: 'Ouvre dans',

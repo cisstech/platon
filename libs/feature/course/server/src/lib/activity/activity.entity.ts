@@ -1,6 +1,6 @@
 import { BaseEntity, UserEntity } from '@platon/core/server'
 import { PLSourceFile } from '@platon/feature/compiler'
-import { ActivityPermissions, ActivityStates } from '@platon/feature/course/common'
+import { ActivityPermissions, ActivityOpenStates } from '@platon/feature/course/common'
 import { Column, Entity, Index, JoinColumn, ManyToOne, VirtualColumn } from 'typeorm'
 import { CourseEntity } from '../course.entity'
 import { CourseSectionEntity } from '../section/section.entity'
@@ -51,7 +51,7 @@ export class ActivityEntity extends BaseEntity {
   readonly title!: string
 
   @VirtualColumn({ query: () => `SELECT 'opened'` })
-  readonly state!: ActivityStates
+  readonly state!: ActivityOpenStates
 
   @VirtualColumn({ query: () => `SELECT '{}'::jsonb` })
   readonly permissions!: ActivityPermissions

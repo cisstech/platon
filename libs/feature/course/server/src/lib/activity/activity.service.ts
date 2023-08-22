@@ -9,7 +9,7 @@ import {
   CreateActivity,
   ReloadActivity,
   UpdateActivity,
-  calculateActivityState,
+  calculateActivityOpenState,
 } from '@platon/feature/course/common'
 import { ResourceFileService } from '@platon/feature/resource/server'
 import { CLS_REQ } from 'nestjs-cls'
@@ -193,7 +193,7 @@ export class ActivityService {
 
   private addVirtualColumns(entity: ActivityEntity, rawResult?: any): ActivityEntity {
     Object.assign(entity, {
-      state: calculateActivityState(entity),
+      state: calculateActivityOpenState(entity),
       permissions: {
         update: entity.creatorId === this.request.user.id,
         viewStats: [UserRoles.admin, UserRoles.teacher].includes(this.request.user.role),
