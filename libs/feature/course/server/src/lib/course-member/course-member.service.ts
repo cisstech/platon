@@ -101,13 +101,13 @@ export class CourseMemberService {
 
   async addUser(courseId: string, userId: string): Promise<CourseMemberEntity> {
     const member = await this.repository.save(this.repository.create({ courseId, userId }))
-    this.notificationService.notifyMemberBeingCreated(member).catch()
+    this.notificationService.notifyCourseMemberBeingCreated(member).catch()
     return member
   }
 
   async addGroup(courseId: string, groupId: string): Promise<CourseMemberEntity> {
     const member = await this.repository.save(this.repository.create({ courseId, groupId }))
-    this.notificationService.notifyMemberBeingCreated(member).catch()
+    this.notificationService.notifyCourseMemberBeingCreated(member).catch()
     return member
   }
 

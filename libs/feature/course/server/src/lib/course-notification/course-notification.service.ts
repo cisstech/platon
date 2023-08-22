@@ -24,7 +24,7 @@ export class CourseNotificationService {
     private readonly notificationService: NotificationService
   ) {}
 
-  async notifyMemberBeingCreated(member: CourseMemberEntity) {
+  async notifyCourseMemberBeingCreated(member: CourseMemberEntity) {
     try {
       const course = (await this.courseService.findById(member.courseId)).get()
 
@@ -62,10 +62,10 @@ export class CourseNotificationService {
       const correctors = (await this.dataSource.query(
         `
       SELECT
-        activity.id,
-        activity.source->'variables'->>'title' as name,
-        course.id,
-        course.name,
+        activity.id as "activityId",
+        activity.source->'variables'->>'title' as "activityName",
+        course.id as "courseId",
+        course.name as "courseName",
         corrector.id as "correctorId",
         corrector.username as "correctorName"
       FROM "Activities" activity
@@ -105,10 +105,10 @@ export class CourseNotificationService {
       const results = (await this.dataSource.query(
         `
       SELECT
-        activity.id,
-        activity.source->'variables'->>'title' as name,
-        course.id,
-        course.name
+        activity.id as "activityId",
+        activity.source->'variables'->>'title' as "activityName",
+        course.id as "courseId",
+        course.name as "courseName"
       FROM "Activities" activity
       INNER JOIN "Courses" course ON course.id = activity.course_id
       WHERE activity.id = $1

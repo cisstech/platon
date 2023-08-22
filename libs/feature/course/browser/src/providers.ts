@@ -6,7 +6,7 @@ import { ActivityProvider } from './models/activity-provider'
 import { CourseMemberProvider } from './models/course-member-provider'
 import { CourseProvider } from './models/course-provider'
 import { CourseSectionProvider } from './models/course-section-provider'
-import { CourseMemberCreationNotificationParser } from './providers/course-notification-parser.provider'
+import { CourseNotificationParsers } from './providers/course-notification-parser.provider'
 import { RemoteActivityCorrectorProvider } from './providers/remote-activity-corrector.provider'
 import { RemoteActivityMemberProvider } from './providers/remote-activity-member.provider'
 import { RemoteActivityProvider } from './providers/remote-activity.provider'
@@ -23,7 +23,7 @@ export const COURSE_PROVIDERS: Provider[] = [
   { provide: CourseMemberProvider, useClass: RemoteCourseMemberProvider },
   { provide: CourseSectionProvider, useClass: RemoteCourseSectionProvider },
 
-  ...[CourseMemberCreationNotificationParser].map((provider) => ({
+  ...CourseNotificationParsers.map((provider) => ({
     provide: NOTIFICATION_PARSER,
     multi: true,
     useValue: provider,

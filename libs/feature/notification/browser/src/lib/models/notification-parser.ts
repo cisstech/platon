@@ -15,9 +15,9 @@ export interface NotificationAction {
   onClick: (callbacks: NotificationActionCallbacks) => void | Promise<void>
 }
 
-export interface NotificationParser {
-  support(notification: Notification): boolean
-  renderer(notification: Notification, injector: Injector): NotificationRenderer
+export interface NotificationParser<TData = unknown> {
+  support(notification: Notification<TData>): boolean
+  renderer(notification: Notification<TData>, injector: Injector): NotificationRenderer
 }
 
 export interface NotificationRenderer {
