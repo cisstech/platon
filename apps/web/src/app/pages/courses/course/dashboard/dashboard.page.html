@@ -1,39 +1,46 @@
 <ng-container *ngIf="context.course as course">
-  <ng-container *ngIf="sections.length; else noSections">
-    <nz-collapse nzGhost>
-      <nz-collapse-panel
-        [nzActive]="true"
-        *ngFor="let item of sections; trackBy: trackSection"
-        [nzHeader]="header"
-        [nzExtra]="extra"
-      >
-        <ng-template #header>
-          <span
-            nz-typography
-            [nzEditable]="course.permissions.update"
-            [nzContent]="item.section.name"
-            (nzContentChange)="renameSection(item.section, $event)"
-            (click)="$event.stopPropagation()"
+  <nz-row [nzGutter]="[24, 24]" nzAlign="top">
+    <nz-col nzXs="24" nzSm="24" nzMd="16" nzLg="16" nzXl="16">
+      <ng-container *ngIf="sections.length; else noSections">
+        <nz-collapse nzGhost>
+          <nz-collapse-panel
+            [nzActive]="true"
+            *ngFor="let item of sections; trackBy: trackSection"
+            [nzHeader]="header"
+            [nzExtra]="extra"
           >
-          </span>
-        </ng-template>
-        <ng-template #extra>
-          <app-course-section-actions
-            *ngIf="course.permissions.update"
-            [section]="item.section"
-            [sectionCount]="sections.length"
-            (moveUp)="moveUpSection(item.section)"
-            (moveDown)="moveDownSection(item.section)"
-            (insertBelow)="addSection(item.section)"
-            (remove)="deleteSection(item.section)"
-          />
-        </ng-template>
-        <course-activity-grid [items]="item.activities">
-          <ng-container *ngTemplateOutlet="noActivities; context: { $implicit: item.section }"></ng-container>
-        </course-activity-grid>
-      </nz-collapse-panel>
-    </nz-collapse>
-  </ng-container>
+            <ng-template #header>
+              <span
+                nz-typography
+                [nzEditable]="course.permissions.update"
+                [nzContent]="item.section.name"
+                (nzContentChange)="renameSection(item.section, $event)"
+                (click)="$event.stopPropagation()"
+              >
+              </span>
+            </ng-template>
+            <ng-template #extra>
+              <app-course-section-actions
+                *ngIf="course.permissions.update"
+                [section]="item.section"
+                [sectionCount]="sections.length"
+                (moveUp)="moveUpSection(item.section)"
+                (moveDown)="moveDownSection(item.section)"
+                (insertBelow)="addSection(item.section)"
+                (remove)="deleteSection(item.section)"
+              />
+            </ng-template>
+            <course-activity-grid [items]="item.activities">
+              <ng-container *ngTemplateOutlet="noActivities; context: { $implicit: item.section }" />
+            </course-activity-grid>
+          </nz-collapse-panel>
+        </nz-collapse>
+      </ng-container>
+    </nz-col>
+    <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
+      <aside></aside>
+    </nz-col>
+  </nz-row>
 </ng-container>
 
 <ng-template #noSections>

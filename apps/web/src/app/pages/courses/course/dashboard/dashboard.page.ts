@@ -14,6 +14,7 @@ import { CourseActivityGridComponent } from '@platon/feature/course/browser'
 import { Activity, CourseSection } from '@platon/feature/course/common'
 import { CoursePresenter } from '../course.presenter'
 import { CourseSectionActionsComponent } from './section-actions/section-actions.component'
+import { NzGridModule } from 'ng-zorro-antd/grid'
 
 @Component({
   standalone: true,
@@ -26,6 +27,7 @@ import { CourseSectionActionsComponent } from './section-actions/section-actions
     RouterModule,
 
     NzIconModule,
+    NzGridModule,
     NzEmptyModule,
     NzButtonModule,
     NzCollapseModule,
