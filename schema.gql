@@ -9,16 +9,16 @@ type UserPrefs {
 
 type User {
   id: UUID!
-  createdAt: Date!
-  updatedAt: Date
+  createdAt: DateTime!
+  updatedAt: DateTime
   role: UserRoles!
   username: String!
   active: Boolean!
   firstName: String
   lastName: String
   email: String
-  lastLogin: Date
-  firstLogin: Date
+  lastLogin: DateTime
+  firstLogin: DateTime
   hasPassword: Boolean
   prefs: UserPrefs!
 }
@@ -28,6 +28,11 @@ The `UUID` scalar type represents UUID values as specified by [RFC 4122](https:/
 """
 scalar UUID
 
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 enum UserRoles {
   admin
   teacher
@@ -36,9 +41,9 @@ enum UserRoles {
 
 type Notification {
   id: UUID!
-  createdAt: Date!
-  updatedAt: Date
-  readAt: Date
+  createdAt: DateTime!
+  updatedAt: DateTime
+  readAt: DateTime
   data: JSON!
   user: User!
 }
@@ -71,8 +76,6 @@ type NotificationChange {
   newNotification: Notification
   notifications: [Notification!]
 }
-
-scalar Date
 
 type Query {
   users(filters: UserFiltersInput): [User!]!
