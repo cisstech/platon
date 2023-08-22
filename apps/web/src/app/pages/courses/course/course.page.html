@@ -24,6 +24,12 @@
       [nzContent]="course.desc"
       (nzContentChange)="updateDesc($event)"
     ></p>
+    <div class="container-toolbar">
+      <nz-tag>
+        <span nz-icon nzType="calendar" nzTheme="outline"></span>
+        <span>Créé le {{ course.createdAt | date }} </span>
+      </nz-tag>
+    </div>
   </ng-container>
   <ui-layout-tab [link]="['dashboard']">
     <ng-template>

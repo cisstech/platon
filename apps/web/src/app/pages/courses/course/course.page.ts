@@ -7,13 +7,16 @@ import { Subscription } from 'rxjs'
 import { MatIconModule } from '@angular/material/icon'
 
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb'
+import { NzIconModule } from 'ng-zorro-antd/icon'
+import { NzPageHeaderModule } from 'ng-zorro-antd/page-header'
+import { NzStatisticModule } from 'ng-zorro-antd/statistic'
+import { NzTagModule } from 'ng-zorro-antd/tag'
+import { NzTypographyModule } from 'ng-zorro-antd/typography'
 
 import { DialogModule } from '@platon/core/browser'
-import { UiLayoutTabsComponent, UiLayoutTabDirective } from '@platon/shared/ui'
+import { UiLayoutTabDirective, UiLayoutTabsComponent } from '@platon/shared/ui'
 
-import { NzTypographyModule } from 'ng-zorro-antd/typography'
 import { CoursePresenter } from './course.presenter'
-import { NzPageHeaderModule } from 'ng-zorro-antd/page-header'
 
 @Component({
   standalone: true,
@@ -29,6 +32,9 @@ import { NzPageHeaderModule } from 'ng-zorro-antd/page-header'
 
     MatIconModule,
 
+    NzTagModule,
+    NzIconModule,
+    NzStatisticModule,
     NzBreadCrumbModule,
     NzTypographyModule,
     NzPageHeaderModule,
