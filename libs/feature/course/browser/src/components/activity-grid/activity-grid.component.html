@@ -1,14 +1,10 @@
 <ng-container *ngIf="!empty; else emptyState">
-  <nz-segmented
-    #segmented
-    [(ngModel)]="selectedIndex"
-    [nzOptions]="[tabs[0].title, tabs[1].title, tabs[2].title]"
-  />
+  <nz-segmented #segmented [(ngModel)]="selectedIndex" [nzOptions]="tabTitles" />
   <ng-container *ngIf="tabs[selectedIndex] as tab">
     <ng-container *ngIf="tab.items.length; else emptyState">
       <nz-row [nzGutter]="[24, 24]" nzAlign="top">
         <ng-container *ngFor="let item of tab.items; trackBy: trackActivity">
-          <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
+          <nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12" nzXl="12">
             <course-activity-card [item]="item" />
           </nz-col>
         </ng-container>
