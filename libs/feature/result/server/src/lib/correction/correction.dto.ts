@@ -11,7 +11,7 @@ export class CorrectionDTO extends BaseDTO implements Correction {
   grade!: number
 }
 
-export class PendingCorrectionDTO implements ActivityCorrection {
+export class ActivityCorrectionDTO implements ActivityCorrection {
   @IsUUID()
   activityId!: string
 
@@ -25,11 +25,11 @@ export class PendingCorrectionDTO implements ActivityCorrection {
   courseName!: string
 
   @IsArray()
-  @Type(() => PendingCorrectionExerciseDTO)
-  exercises!: PendingCorrectionExerciseDTO[]
+  @Type(() => ExerciseCorrectionDTO)
+  exercises!: ExerciseCorrectionDTO[]
 }
 
-export class PendingCorrectionExerciseDTO implements ExerciseCorrection {
+export class ExerciseCorrectionDTO implements ExerciseCorrection {
   @IsUUID()
   userId!: string
 

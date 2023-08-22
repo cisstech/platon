@@ -6,13 +6,13 @@ import { AnswerService } from './answers/answer.service'
 import { SessionCommentController } from './comments/comment.controller'
 import { SessionCommentEntity } from './comments/comment.entity'
 import { SessionCommentService } from './comments/comment.service'
+import { CorrectionController } from './correction/correction.controller'
 import { CorrectionEntity } from './correction/correction.entity'
 import { CorrectionService } from './correction/correction.service'
 import { ResultController } from './result.controller'
 import { ResultService } from './result.service'
 import { SessionEntity } from './sessions/session.entity'
 import { SessionService } from './sessions/session.service'
-import { CorrectionController } from './correction/correction.controller'
 
 @Module({
   imports: [

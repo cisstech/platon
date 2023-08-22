@@ -2,6 +2,8 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { NotFoundResponse } from '@platon/core/common'
+import { EventService } from '@platon/core/server'
+import { ON_CORRECT_ACTIVITY_EVENT, OnCorrectActivityEventPayload } from '@platon/feature/course/server'
 import { ActivityCorrection, ExerciseCorrection } from '@platon/feature/result/common'
 import { Repository } from 'typeorm'
 import { SessionEntity } from '../sessions/session.entity'
@@ -10,6 +12,8 @@ import { CorrectionEntity } from './correction.entity'
 @Injectable()
 export class CorrectionService {
   constructor(
+    private readonly eventService: EventService,
+
     @InjectRepository(SessionEntity)
     private readonly sessionRepository: Repository<SessionEntity>,
     @InjectRepository(CorrectionEntity)
@@ -106,22 +110,53 @@ export class CorrectionService {
   }
 
   async upsert(sessionId: string, input: Partial<CorrectionEntity>) {
-    const session = await this.sessionRepository.findOne({
+    const exerciseSession = await this.sessionRepository.findOne({
       where: { id: sessionId },
+      relations: { correction: true, parent: true, activity: true },
+    })
+
+    if (!exerciseSession) throw new NotFoundResponse(`Session not found: ${sessionId}`)
+    if (!exerciseSession.parent) throw new NotFoundResponse(`Parent session not found: ${sessionId}`)
+
+    let correction: CorrectionEntity
+    if (exerciseSession.correction) {
+      Object.assign(exerciseSession.correction, input)
+      await this.correctionRepository.save(exerciseSession.correction)
+      correction = exerciseSession.correction
+    } else {
+      correction = await this.correctionRepository.save(input)
+      await this.sessionRepository.update(exerciseSession.id, {
+        correctionId: correction.id,
+      })
+    }
+
+    const activitySession = exerciseSession.parent
+    const activityExerciseSessions = await this.sessionRepository.find({
+      where: { parentId: activitySession.id },
       relations: { correction: true },
     })
 
-    if (!session) throw new NotFoundResponse(`Session not found: ${sessionId}`)
-    if (session.correction) {
-      Object.assign(session.correction, input)
-      await this.correctionRepository.save(session.correction)
-      return session.correction
-    } else {
-      const correction = await this.correctionRepository.save(input)
-      await this.sessionRepository.update(session.id, {
-        correctionId: correction.id,
-      })
-      return correction
+    let terminated = true
+    let grade = 0
+    activityExerciseSessions.forEach((session) => {
+      if (!session.correction) terminated = false
+      else grade += session.correction.grade
+    })
+
+    if (terminated) {
+      if (grade && activityExerciseSessions.length) {
+        activitySession.grade = grade / activityExerciseSessions.length
+        await this.sessionRepository.save(activitySession)
+      }
+
+      if (exerciseSession.activity && exerciseSession.userId) {
+        this.eventService.emit<OnCorrectActivityEventPayload>(ON_CORRECT_ACTIVITY_EVENT, {
+          userId: exerciseSession.userId,
+          activity: exerciseSession.activity,
+        })
+      }
     }
+
+    return correction
   }
 }

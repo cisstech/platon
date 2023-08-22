@@ -10,7 +10,7 @@ import { ON_CHANGE_NOTIFICATIONS, OnChangeNotificationsPayload } from './notific
 
 @Injectable()
 export class NotificationService {
-  protected readonly logger: Logger
+  protected readonly logger = new Logger(NotificationService.name)
   private readonly extraDataProviders: NotificationExtraDataProvider[] = []
 
   constructor(
@@ -18,9 +18,7 @@ export class NotificationService {
     private readonly repository: Repository<NotificationEntity>,
     private readonly discovery: DiscoveryService,
     private readonly pubSubService: PubSubService
-  ) {
-    this.logger = new Logger(NotificationService.name)
-  }
+  ) {}
 
   async init(): Promise<void> {
     const providers = await this.discovery.providersWithMetaAtKey(NOTIFICATION_EXTRA_DATA)
@@ -38,6 +36,8 @@ export class NotificationService {
     const newNotification = entityManager
       ? await entityManager.save(entityManager.create(NotificationEntity, { userId, data }))
       : await this.repository.save(this.repository.create({ userId, data }))
+
+    this.logger.log(`Sending notification to user ${userId}: ${newNotification.data.type}`)
 
     this.notifyUserAboutChanges(userId, { newNotification })
 

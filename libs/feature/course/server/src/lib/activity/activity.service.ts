@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Inject, Injectable } from '@nestjs/common'
+import { OnEvent } from '@nestjs/event-emitter'
 import { InjectRepository } from '@nestjs/typeorm'
 import { ForbiddenResponse, NotFoundResponse, User, UserRoles } from '@platon/core/common'
 import { EventService, IRequest, buildSelectQuery } from '@platon/core/server'
@@ -13,12 +14,19 @@ import {
 import { ResourceFileService } from '@platon/feature/resource/server'
 import { CLS_REQ } from 'nestjs-cls'
 import { Repository, SelectQueryBuilder } from 'typeorm'
-import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity'
 import { Optional } from 'typescript-optional'
 import { ActivityMemberService } from '../activity-member/activity-member.service'
 import { ActivityMemberView } from '../activity-member/activity-member.view'
+import { CourseNotificationService } from '../course-notification/course-notification.service'
 import { ActivityEntity } from './activity.entity'
-import { ON_RELOAD_ACTIVITY_EVENT } from './activity.event'
+import {
+  ON_CORRECT_ACTIVITY_EVENT,
+  ON_RELOAD_ACTIVITY_EVENT,
+  ON_TERMINATE_ACTIVITY_EVENT,
+  OnCorrectActivityEventPayload,
+  OnReloadActivityEventPayload,
+  OnTerminateActivityEventPayload,
+} from './activity.event'
 
 @Injectable()
 export class ActivityService {
@@ -28,6 +36,7 @@ export class ActivityService {
     private readonly fileService: ResourceFileService,
     private readonly eventService: EventService,
     private readonly activityMemberService: ActivityMemberService,
+    private readonly notificationService: CourseNotificationService,
 
     @InjectRepository(ActivityEntity)
     private readonly repository: Repository<ActivityEntity>
@@ -131,7 +140,7 @@ export class ActivityService {
 
     activity = await this.repository.save(activity)
 
-    this.eventService.emit(ON_RELOAD_ACTIVITY_EVENT, activity)
+    this.eventService.emit<OnReloadActivityEventPayload>(ON_RELOAD_ACTIVITY_EVENT, { activity })
 
     return this.addVirtualColumns(activity)
   }
@@ -156,6 +165,19 @@ export class ActivityService {
     Object.assign(activity, input)
 
     return activity
+  }
+
+  @OnEvent(ON_CORRECT_ACTIVITY_EVENT)
+  protected onCorrectActivity(payload: OnCorrectActivityEventPayload) {
+    const { userId, activity } = payload
+    this.notificationService.notifyUserAboutCorrection(activity.id, userId).catch()
+  }
+
+  @OnEvent(ON_TERMINATE_ACTIVITY_EVENT)
+  protected onTerminateActivity(payload: OnTerminateActivityEventPayload) {
+    const { activity } = payload
+
+    this.notificationService.notifyCorrectorsAboutPending(activity.id).catch()
   }
 
   private createQueryBuilder(courseId: string) {
