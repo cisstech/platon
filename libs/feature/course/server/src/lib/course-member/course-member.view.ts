@@ -13,8 +13,12 @@ import { ViewColumn, ViewEntity } from 'typeorm'
       u.first_name,
       u.last_name,
       u.email,
-      course_member.course_id::uuid
+      course_member.course_id,
+      course.name as course_name,
+      course_member.id as member_id
     FROM "CourseMembers" course_member
+    -- INNER JOIN with Courses to get course details
+    INNER JOIN "Courses" course ON course.id = course_member.course_id
     -- LEFT JOIN with UserGroupsUsers to account for group-based memberships
     LEFT JOIN "UserGroupsUsers" gp ON gp.group_id = course_member.group_id
     -- INNER JOIN with Users to get user details
@@ -22,6 +26,9 @@ import { ViewColumn, ViewEntity } from 'typeorm'
   `,
 })
 export class CourseMemberView {
+  /**
+   * Member's user identifier
+   */
   @ViewColumn()
   id!: string
 
@@ -39,4 +46,10 @@ export class CourseMemberView {
 
   @ViewColumn({ name: 'course_id' })
   courseId!: string
+
+  @ViewColumn({ name: 'course_name' })
+  courseName!: string
+
+  @ViewColumn({ name: 'member_id' })
+  memberId!: string
 }

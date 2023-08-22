@@ -11,11 +11,12 @@ import { CourseMemberView } from './course-member.view'
 @Injectable()
 export class CourseMemberService {
   constructor(
+    private readonly notificationService: CourseNotificationService,
+
     @InjectRepository(CourseMemberView)
     private readonly view: Repository<CourseMemberView>,
     @InjectRepository(CourseMemberEntity)
-    private readonly repository: Repository<CourseMemberEntity>,
-    private readonly notificationService: CourseNotificationService
+    private readonly repository: Repository<CourseMemberEntity>
   ) {}
 
   async findById(courseId: string, id: string): Promise<Optional<CourseMemberEntity>> {
@@ -101,13 +102,31 @@ export class CourseMemberService {
 
   async addUser(courseId: string, userId: string): Promise<CourseMemberEntity> {
     const member = await this.repository.save(this.repository.create({ courseId, userId }))
-    this.notificationService.notifyCourseMemberBeingCreated(member).catch()
+    this.notificationService
+      .notifyCourseMemberBeingCreated(
+        await this.view.find({
+          where: {
+            courseId,
+            memberId: member.id,
+          },
+        })
+      )
+      .catch()
     return member
   }
 
   async addGroup(courseId: string, groupId: string): Promise<CourseMemberEntity> {
     const member = await this.repository.save(this.repository.create({ courseId, groupId }))
-    this.notificationService.notifyCourseMemberBeingCreated(member).catch()
+    this.notificationService
+      .notifyCourseMemberBeingCreated(
+        await this.view.find({
+          where: {
+            courseId,
+            memberId: member.id,
+          },
+        })
+      )
+      .catch()
     return member
   }
 

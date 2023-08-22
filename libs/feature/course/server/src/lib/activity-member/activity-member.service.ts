@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { DataSource, Repository } from 'typeorm'
+import { DataSource, IsNull, Not, Repository } from 'typeorm'
 import { Optional } from 'typescript-optional'
+import { CourseNotificationService } from '../course-notification/course-notification.service'
 import { ActivityMemberEntity } from './activity-member.entity'
 import { ActivityMemberView } from './activity-member.view'
 
@@ -9,6 +10,8 @@ import { ActivityMemberView } from './activity-member.view'
 export class ActivityMemberService {
   constructor(
     private readonly dataSource: DataSource,
+    private readonly notificationService: CourseNotificationService,
+
     @InjectRepository(ActivityMemberView)
     private readonly view: Repository<ActivityMemberView>,
     @InjectRepository(ActivityMemberEntity)
@@ -50,11 +53,24 @@ export class ActivityMemberService {
   }
 
   async create(member: Partial<ActivityMemberEntity>): Promise<ActivityMemberEntity> {
-    return this.repository.save(this.repository.create(member))
+    const result = await this.repository.save(this.repository.create(member))
+    this.notificationService
+      .notifyActivityMemberBeingCreated(
+        await this.view.find({
+          where: {
+            memberId: result.id,
+            activityId: member.activityId,
+          },
+        })
+      )
+      .catch()
+    return result
   }
 
   async update(activityId: string, input: Partial<ActivityMemberEntity>[]): Promise<ActivityMemberEntity[]> {
-    return this.dataSource.transaction(async (manager) => {
+    const oldViews = await this.view.find({ where: { activityId, memberId: Not(IsNull()) } })
+
+    const members = await this.dataSource.transaction(async (manager) => {
       await manager.delete(ActivityMemberEntity, { activityId })
       const members = input.map((member) => {
         return manager.create(ActivityMemberEntity, {
@@ -64,6 +80,15 @@ export class ActivityMemberService {
       })
       return manager.save(members)
     })
+
+    const newViews = await this.view.find({ where: { activityId, memberId: Not(IsNull()) } })
+
+    const insertion = newViews.filter((member) => !oldViews.some((old) => old.id === member.id))
+    if (insertion.length) {
+      this.notificationService.notifyActivityMemberBeingCreated(insertion).catch()
+    }
+
+    return members
   }
 
   async delete(activityId: string, activityMemberId: string): Promise<void> {

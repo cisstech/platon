@@ -15,6 +15,7 @@ import { ResourceFileService } from '@platon/feature/resource/server'
 import { CLS_REQ } from 'nestjs-cls'
 import { Repository, SelectQueryBuilder } from 'typeorm'
 import { Optional } from 'typescript-optional'
+import { ActivityCorrectorService } from '../activity-corrector/activity-corrector.service'
 import { ActivityMemberService } from '../activity-member/activity-member.service'
 import { ActivityMemberView } from '../activity-member/activity-member.view'
 import { CourseNotificationService } from '../course-notification/course-notification.service'
@@ -35,8 +36,9 @@ export class ActivityService {
     private readonly request: IRequest,
     private readonly fileService: ResourceFileService,
     private readonly eventService: EventService,
-    private readonly activityMemberService: ActivityMemberService,
     private readonly notificationService: CourseNotificationService,
+    private readonly activityMemberService: ActivityMemberService,
+    private readonly activityCorrectorService: ActivityCorrectorService,
 
     @InjectRepository(ActivityEntity)
     private readonly repository: Repository<ActivityEntity>
@@ -174,10 +176,11 @@ export class ActivityService {
   }
 
   @OnEvent(ON_TERMINATE_ACTIVITY_EVENT)
-  protected onTerminateActivity(payload: OnTerminateActivityEventPayload) {
+  protected async onTerminateActivity(payload: OnTerminateActivityEventPayload): Promise<void> {
     const { activity } = payload
-
-    this.notificationService.notifyCorrectorsAboutPending(activity.id).catch()
+    this.notificationService
+      .notifyCorrectorsAboutPending(await this.activityCorrectorService.findViews(activity.id))
+      .catch()
   }
 
   private createQueryBuilder(courseId: string) {

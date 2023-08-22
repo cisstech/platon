@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { DataSource, In, Repository } from 'typeorm'
+import { DataSource, Repository } from 'typeorm'
 import { Optional } from 'typescript-optional'
+import { CourseNotificationService } from '../course-notification/course-notification.service'
 import { ActivityCorrectorEntity } from './activity-corrector.entity'
 import { ActivityCorrectorView } from './activity-corrector.view'
-import { CourseNotificationService } from '../course-notification/course-notification.service'
 
 @Injectable()
 export class ActivityCorrectorService {
@@ -37,13 +37,8 @@ export class ActivityCorrectorService {
     return Optional.ofNullable(corrector)
   }
 
-  async findUsers(activityId: string, correctorIds: string[]): Promise<ActivityCorrectorView[]> {
-    return this.view.find({
-      where: {
-        activityId,
-        correctorId: In(correctorIds),
-      },
-    })
+  async findViews(activityId: string): Promise<ActivityCorrectorView[]> {
+    return this.view.find({ where: { activityId } })
   }
 
   async search(activityId: string): Promise<[ActivityCorrectorEntity[], number]> {
@@ -79,13 +74,9 @@ export class ActivityCorrectorService {
   }
 
   async update(activityId: string, input: Partial<ActivityCorrectorEntity>[]): Promise<ActivityCorrectorEntity[]> {
-    const oldCorrectors = await this.view.find({
-      where: {
-        activityId,
-      },
-    })
+    const oldViews = await this.view.find({ where: { activityId } })
 
-    const updates = await this.dataSource.transaction(async (manager) => {
+    const correctors = await this.dataSource.transaction(async (manager) => {
       await manager.delete(ActivityCorrectorEntity, { activityId })
       const correctors = input.map((member) => {
         return manager.create(ActivityCorrectorEntity, {
@@ -96,29 +87,21 @@ export class ActivityCorrectorService {
       return manager.save(correctors)
     })
 
-    const newCorrectors = await this.view.find({
-      where: {
-        activityId,
-      },
-    })
+    const newViews = await this.view.find({ where: { activityId } })
 
-    const newCreatedCorrectors = newCorrectors.filter(
-      (corrector) => !oldCorrectors.some((oldCorrector) => oldCorrector.id === corrector.id)
-    )
-
-    if (newCreatedCorrectors.length) {
-      this.notificationService.notifyCorrectorsBeingCreated(newCreatedCorrectors).catch()
+    const insertion = newViews.filter((corrector) => !oldViews.some((oldCorrector) => oldCorrector.id === corrector.id))
+    if (insertion.length) {
+      this.notificationService.notifyCorrectorsBeingCreated(insertion).catch()
     }
 
-    const newRemovedCorrectors = oldCorrectors.filter(
-      (oldCorrector) => !newCorrectors.some((newCorrector) => newCorrector.id === oldCorrector.id)
+    const deletion = oldViews.filter(
+      (oldCorrector) => !newViews.some((newCorrector) => newCorrector.id === oldCorrector.id)
     )
-
-    if (newRemovedCorrectors.length) {
-      this.notificationService.notifyCorrectorsBeingRemoved(newRemovedCorrectors).catch()
+    if (deletion.length) {
+      this.notificationService.notifyCorrectorsBeingRemoved(deletion).catch()
     }
 
-    return updates
+    return correctors
   }
 
   async delete(activityId: string, activityCorrectorId: string): Promise<void> {

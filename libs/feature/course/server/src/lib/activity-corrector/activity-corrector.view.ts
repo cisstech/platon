@@ -26,6 +26,9 @@ import { ViewEntity, ViewColumn } from 'typeorm'
   `,
 })
 export class ActivityCorrectorView {
+  /**
+   * Corrector's user identifier
+   */
   @ViewColumn()
   id!: string
 
