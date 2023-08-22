@@ -44,14 +44,17 @@ export class ActivityEntity extends BaseEntity {
 
   // VIRTUAL COLUMNS
 
-  @VirtualColumn({ query: () => 'SELECT 0' })
-  readonly progression!: number
-
   @VirtualColumn({ query: (alias) => `${alias}.source->'variables'->>'title'` })
   readonly title!: string
 
   @VirtualColumn({ query: () => `SELECT 'opened'` })
   readonly state!: ActivityOpenStates
+
+  @VirtualColumn({ query: () => 'SELECT 0::integer' })
+  readonly timeSpent!: number
+
+  @VirtualColumn({ query: () => 'SELECT 0::integer' })
+  readonly progression!: number
 
   @VirtualColumn({ query: () => `SELECT '{}'::jsonb` })
   readonly permissions!: ActivityPermissions

@@ -13,6 +13,7 @@ export interface Activity {
 
   readonly title: string
   readonly state: ActivityOpenStates
+  readonly timeSpent: number
   readonly progression: number
   readonly permissions: ActivityPermissions
 }

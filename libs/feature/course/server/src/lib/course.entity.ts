@@ -22,6 +22,18 @@ export class CourseEntity extends BaseEntity {
 
   // VIRTUAL COLUMNS
 
+  @VirtualColumn({ query: () => 'SELECT 0::integer' })
+  readonly timeSpent = 0
+
+  @VirtualColumn({ query: () => 'SELECT 0::integer' })
+  readonly progression = 0
+
+  @VirtualColumn({ query: () => 'SELECT 0::integer' })
+  readonly studentCount = 0
+
+  @VirtualColumn({ query: () => 'SELECT 0::integer' })
+  readonly teacherCount = 0
+
   @VirtualColumn({ query: () => `SELECT '{}'::jsonb` })
   readonly permissions!: CoursePermissions
 }

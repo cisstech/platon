@@ -1,11 +1,12 @@
+<div id="CC"></div>
 <ng-container *ngIf="context.course as course">
   <nz-row [nzGutter]="[24, 24]" nzAlign="top">
     <nz-col nzXs="24" nzSm="24" nzMd="16" nzLg="16" nzXl="16">
       <ng-container *ngIf="sections.length; else noSections">
         <nz-collapse nzGhost>
           <nz-collapse-panel
-            [nzActive]="true"
             *ngFor="let item of sections; trackBy: trackSection"
+            [nzActive]="true"
             [nzHeader]="header"
             [nzExtra]="extra"
           >
@@ -38,7 +39,41 @@
       </ng-container>
     </nz-col>
     <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
-      <aside></aside>
+      <aside>
+        <mat-card>
+          <mat-card-content>
+            <nz-statistic
+              nzTitle="Votre avancement dans les activités"
+              [nzValueTemplate]="progressionTemplate"
+              [nzValueStyle]="{ margin: '1rem 0' }"
+            >
+              <ng-template #progressionTemplate>
+                <div class="container-progression">
+                  <nz-progress
+                    [nzPercent]="course.progression"
+                    nzStrokeLinecap="square"
+                    nzType="circle"
+                    nzStrokeWidth="8"
+                  />
+                  <p *ngIf="course.timeSpent">{{ course.timeSpent | duration }}</p>
+                </div>
+              </ng-template>
+            </nz-statistic>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card>
+          <mat-card-content>
+            <nz-statistic [nzValue]="course.teacherCount" nzTitle="Enseignants" />
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card>
+          <mat-card-content>
+            <nz-statistic [nzValue]="course.studentCount" nzTitle="Élèves" />
+          </mat-card-content>
+        </mat-card>
+      </aside>
     </nz-col>
   </nz-row>
 </ng-container>

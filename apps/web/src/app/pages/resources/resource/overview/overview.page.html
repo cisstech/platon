@@ -13,8 +13,8 @@
           </mat-card-header>
           <mat-card-content>
             <ngx-charts-advanced-pie-chart
+              label="Ressources"
               [view]="view"
-              [label]="'Ressources'"
               [tooltipText]="formatStatus.bind(this)"
               (select)="searchByStatus($event.name)"
               [nameFormatting]="formatStatus.bind(this)"
@@ -82,18 +82,18 @@
       <aside>
         <mat-card>
           <mat-card-content>
-            <nz-statistic [nzValue]="context.statistic?.watchers" [nzTitle]="'Observateurs'" />
+            <nz-statistic [nzValue]="context.statistic?.watchers" nzTitle="Observateurs" />
           </mat-card-content>
         </mat-card>
         <mat-card>
           <mat-card-content>
-            <nz-statistic [nzValue]="context.statistic?.members" [nzTitle]="'Collaborateurs'" />
+            <nz-statistic [nzValue]="context.statistic?.members" nzTitle="Collaborateurs" />
           </mat-card-content>
         </mat-card>
         <ng-container *ngIf="context.resource.type === 'CIRCLE'">
           <mat-card>
             <mat-card-content>
-              <nz-statistic [nzValue]="context.statistic?.circles" [nzTitle]="'Cercles'" />
+              <nz-statistic [nzValue]="context.statistic?.circles" nzTitle="Cercles" />
             </mat-card-content>
             <mat-card-actions>
               <a
@@ -109,7 +109,7 @@
           </mat-card>
           <mat-card>
             <mat-card-content>
-              <nz-statistic [nzValue]="context.statistic?.activities" [nzTitle]="'Activités'" />
+              <nz-statistic [nzValue]="context.statistic?.activities" nzTitle="Activités" />
             </mat-card-content>
             <mat-card-actions>
               <a
@@ -125,7 +125,7 @@
           </mat-card>
           <mat-card>
             <mat-card-content>
-              <nz-statistic [nzValue]="context.statistic?.exercises" [nzTitle]="'Exercices'" />
+              <nz-statistic [nzValue]="context.statistic?.exercises" nzTitle="Exercices" />
             </mat-card-content>
             <mat-card-actions>
               <a

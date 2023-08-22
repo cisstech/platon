@@ -1,4 +1,5 @@
-import { ViewEntity, ViewColumn } from 'typeorm'
+import { UserRoles } from '@platon/core/common'
+import { ViewColumn, ViewEntity } from 'typeorm'
 
 /**
  * ActivityMemberView represents a database view that combines activity users
@@ -21,6 +22,7 @@ import { ViewEntity, ViewColumn } from 'typeorm'
       u.first_name,
       u.last_name,
       u.email,
+      u.role,
       course_member.course_id,
       course.name as course_name,
       activity_member.activity_id,
@@ -52,6 +54,7 @@ import { ViewEntity, ViewColumn } from 'typeorm'
       u.first_name,
       u.last_name,
       u.email,
+      u.role,
       course_member.course_id,
       course.name as course_name,
       activity.id,
@@ -102,6 +105,9 @@ export class ActivityMemberView {
 
   @ViewColumn()
   email!: string
+
+  @ViewColumn()
+  role!: UserRoles
 
   @ViewColumn({ name: 'course_id' })
   courseId!: string

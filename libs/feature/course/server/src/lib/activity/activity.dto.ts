@@ -13,10 +13,6 @@ import { IsDate, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator'
 import { ActivityPermissionsDTO } from '../permissions/permissions.dto'
 
 export class ActivityDTO extends BaseDTO implements Activity {
-  @IsNumber()
-  @ApiProperty()
-  readonly progression = 0
-
   @IsUUID()
   @ApiProperty()
   readonly courseId!: string
@@ -38,6 +34,14 @@ export class ActivityDTO extends BaseDTO implements Activity {
 
   @IsString()
   readonly state!: ActivityOpenStates
+
+  @IsNumber()
+  @ApiProperty()
+  readonly timeSpent = 0
+
+  @IsNumber()
+  @ApiProperty()
+  readonly progression = 0
 
   @Type(() => ActivityPermissionsDTO)
   readonly permissions!: ActivityPermissionsDTO

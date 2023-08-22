@@ -1,17 +1,21 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { NotFoundResponse, OrderingDirections, UserRoles } from '@platon/core/common'
+import { DatabaseService, IRequest } from '@platon/core/server'
 import { CourseFilters, CourseOrderings } from '@platon/feature/course/common'
+import { CLS_REQ } from 'nestjs-cls'
 import { Repository } from 'typeorm'
 import { Optional } from 'typescript-optional'
+import { CourseMemberService } from './course-member/course-member.service'
 import { CourseMemberView } from './course-member/course-member.view'
 import { CourseEntity } from './course.entity'
-import { CLS_REQ } from 'nestjs-cls'
-import { IRequest } from '@platon/core/server'
 
 @Injectable()
 export class CourseService {
   constructor(
+    private readonly databaseService: DatabaseService,
+    private readonly courseMemberService: CourseMemberService,
+
     @Inject(CLS_REQ)
     private readonly request: IRequest,
     @InjectRepository(CourseEntity)
@@ -75,18 +79,25 @@ export class CourseService {
     }
 
     const [courses, count] = await query.getManyAndCount()
-    courses.forEach(this.addVirtualColumns.bind(this))
+    await this.addVirtualColumns(...courses)
     return [courses, count]
   }
 
   async findById(id: string): Promise<Optional<CourseEntity>> {
     const query = this.courseRepository.createQueryBuilder('course')
+
     const course = await query.where('course.id = :id', { id }).getOne()
-    return Optional.ofNullable(course ? this.addVirtualColumns(course) : undefined)
+    if (course) {
+      await this.addVirtualColumns(course)
+    }
+
+    return Optional.ofNullable(course)
   }
 
   async create(input: Partial<CourseEntity>): Promise<CourseEntity> {
-    return this.addVirtualColumns(await this.courseRepository.save(input))
+    const result = await this.courseRepository.save(input)
+    await this.addVirtualColumns(result)
+    return result
   }
 
   async update(id: string, changes: Partial<CourseEntity>): Promise<CourseEntity> {
@@ -99,22 +110,37 @@ export class CourseService {
       ...changes,
 
       // REMOVE ALL VIRTUAL COLUMNS HERE
+      timeSpent: undefined,
+      progression: undefined,
+      studentCount: undefined,
+      teacherCount: undefined,
       permissions: undefined,
     })
 
-    return this.addVirtualColumns(await this.courseRepository.save(course))
+    const result = await this.courseRepository.save(course)
+    await this.addVirtualColumns(result)
+    return result
   }
 
   async delete(id: string) {
     return this.courseRepository.delete(id)
   }
 
-  private addVirtualColumns(entity: CourseEntity): CourseEntity {
-    Object.assign(entity, {
+  private async addVirtualColumns(...courses: CourseEntity[]): Promise<void> {
+    Object.assign(courses, {
       permissions: {
         update: [UserRoles.admin, UserRoles.teacher].includes(this.request.user.role),
       },
     } as Partial<CourseEntity>)
-    return entity
+
+    const members = await this.courseMemberService.findViewsByCourseIds(courses.map((course) => course.id))
+    courses.forEach((course) => {
+      Object.assign(course, {
+        studentCount: members.filter((member) => member.courseId === course.id && member.role === 'student').length,
+        teacherCount: members.filter((member) => member.courseId === course.id && member.role !== 'student').length,
+      } as Partial<CourseEntity>)
+    })
+
+    await this.databaseService.resolveVirtualColumns(CourseEntity, courses, this.request.user)
   }
 }

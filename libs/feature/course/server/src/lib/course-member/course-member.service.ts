@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { OrderingDirections, UserOrderings, UserRoles } from '@platon/core/common'
 import { CourseMemberFilters } from '@platon/feature/course/common'
-import { Repository } from 'typeorm'
+import { In, Repository } from 'typeorm'
 import { Optional } from 'typescript-optional'
 import { CourseNotificationService } from '../course-notification/course-notification.service'
 import { CourseMemberEntity } from './course-member.entity'
@@ -33,6 +33,14 @@ export class CourseMemberService {
     }
 
     return Optional.ofNullable(member)
+  }
+
+  async findViewsByCourseId(courseId: string): Promise<CourseMemberView[]> {
+    return this.view.find({ where: { courseId } })
+  }
+
+  async findViewsByCourseIds(courseIds: string[]): Promise<CourseMemberView[]> {
+    return this.view.find({ where: { courseId: In(courseIds) } })
   }
 
   async search(courseId: string, filters?: CourseMemberFilters): Promise<[CourseMemberEntity[], number]> {

@@ -1,3 +1,4 @@
+import { UserRoles } from '@platon/core/common'
 import { ViewColumn, ViewEntity } from 'typeorm'
 
 /**
@@ -8,11 +9,14 @@ import { ViewColumn, ViewEntity } from 'typeorm'
   name: 'CourseMemberView',
   expression: `
     -- Select distinct users from courses, including those in user groups
-    SELECT DISTINCT COALESCE(course_member.user_id, gp.user_id) as id,
+    SELECT
+      DISTINCT ON(u.id)
+      u.id,
       u.username,
       u.first_name,
       u.last_name,
       u.email,
+      u.role,
       course_member.course_id,
       course.name as course_name,
       course_member.id as member_id
@@ -43,6 +47,9 @@ export class CourseMemberView {
 
   @ViewColumn()
   email!: string
+
+  @ViewColumn()
+  role!: UserRoles
 
   @ViewColumn({ name: 'course_id' })
   courseId!: string

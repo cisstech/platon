@@ -9,7 +9,6 @@ import { MatIconModule } from '@angular/material/icon'
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb'
 import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzPageHeaderModule } from 'ng-zorro-antd/page-header'
-import { NzStatisticModule } from 'ng-zorro-antd/statistic'
 import { NzTagModule } from 'ng-zorro-antd/tag'
 import { NzTypographyModule } from 'ng-zorro-antd/typography'
 
@@ -34,7 +33,6 @@ import { CoursePresenter } from './course.presenter'
 
     NzTagModule,
     NzIconModule,
-    NzStatisticModule,
     NzBreadCrumbModule,
     NzTypographyModule,
     NzPageHeaderModule,

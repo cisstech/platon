@@ -20,6 +20,22 @@ export class CourseDTO extends BaseDTO implements Course {
   @ApiProperty()
   readonly ownerId!: string
 
+  @IsNumber()
+  @ApiProperty()
+  readonly timeSpent = 0
+
+  @IsNumber()
+  @ApiProperty()
+  readonly progression = 0
+
+  @IsNumber()
+  @ApiProperty()
+  readonly studentCount = 0
+
+  @IsNumber()
+  @ApiProperty()
+  readonly teacherCount = 0
+
   @Type(() => CoursePermissionsDTO)
   readonly permissions!: CoursePermissionsDTO
 }

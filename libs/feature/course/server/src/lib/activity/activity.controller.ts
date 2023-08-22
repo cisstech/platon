@@ -31,7 +31,7 @@ export class ActivityController {
     @Param('courseId') courseId: string,
     @Param('activityId') activityId: string
   ): Promise<ItemResponse<ActivityDTO>> {
-    const optional = await this.service.findByCourseIdAndId(courseId, activityId)
+    const optional = await this.service.findByCourseId(courseId, activityId)
     const activity = Mapper.map(
       optional.orElseThrow(() => new NotFoundResponse(`CourseActivity not found: ${activityId}`)),
       ActivityDTO

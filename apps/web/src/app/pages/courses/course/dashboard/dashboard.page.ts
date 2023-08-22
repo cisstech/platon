@@ -4,17 +4,24 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnIni
 import { RouterModule } from '@angular/router'
 import { Subscription } from 'rxjs'
 
+import { MatCardModule } from '@angular/material/card'
+
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzCollapseModule } from 'ng-zorro-antd/collapse'
 import { NzEmptyModule } from 'ng-zorro-antd/empty'
+import { NzGridModule } from 'ng-zorro-antd/grid'
 import { NzIconModule } from 'ng-zorro-antd/icon'
+import { NzStatisticModule } from 'ng-zorro-antd/statistic'
 import { NzTypographyModule } from 'ng-zorro-antd/typography'
 
 import { CourseActivityGridComponent } from '@platon/feature/course/browser'
 import { Activity, CourseSection } from '@platon/feature/course/common'
-import { CoursePresenter } from '../course.presenter'
 import { CourseSectionActionsComponent } from './section-actions/section-actions.component'
-import { NzGridModule } from 'ng-zorro-antd/grid'
+
+import { CoursePresenter } from '../course.presenter'
+import { NgxChartsModule } from '@swimlane/ngx-charts'
+import { NzProgressModule } from 'ng-zorro-antd/progress'
+import { DurationPipe } from '@platon/shared/ui'
 
 @Component({
   standalone: true,
@@ -26,15 +33,23 @@ import { NzGridModule } from 'ng-zorro-antd/grid'
     CommonModule,
     RouterModule,
 
+    MatCardModule,
+
     NzIconModule,
     NzGridModule,
     NzEmptyModule,
     NzButtonModule,
+    NzProgressModule,
     NzCollapseModule,
+    NzStatisticModule,
     NzTypographyModule,
+
+    NgxChartsModule,
 
     CourseActivityGridComponent,
     CourseSectionActionsComponent,
+
+    DurationPipe,
   ],
 })
 export class CourseDashboardPage implements OnInit, OnDestroy {

@@ -8,6 +8,11 @@ export interface Course {
   readonly name: string
   readonly desc?: string
   readonly ownerId: string
+
+  readonly timeSpent: number
+  readonly progression: number
+  readonly studentCount: number
+  readonly teacherCount: number
   readonly permissions: CoursePermissions
 }
 
