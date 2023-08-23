@@ -26,6 +26,8 @@ export class CourseResultsVirtualColumnsResolver implements VirtualColumnResolve
   ) {}
 
   async resolve(courses: CourseEntity[], user: UserEntity): Promise<void> {
+    if (!courses.length) return
+
     const sessions = (await this.sessionRepository.find({
       where: {
         parentId: IsNull(),

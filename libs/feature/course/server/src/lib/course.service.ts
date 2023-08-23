@@ -23,26 +23,24 @@ export class CourseService {
   ) {}
 
   async search(filters: CourseFilters = {}): Promise<[CourseEntity[], number]> {
-    const query = this.courseRepository.createQueryBuilder('course')
+    const query = this.courseRepository
+      .createQueryBuilder('course')
+      .leftJoin(CourseMemberView, 'member', 'member.course_id = course.id')
 
     filters = {
       ...filters,
-      order: filters.order || CourseOrderings.NAME,
+      order: filters.order || CourseOrderings.UPDATED_AT,
+      direction: filters.direction || OrderingDirections.DESC,
     }
 
-    if (filters.members) {
-      query.innerJoin(CourseMemberView, 'member', 'member.course_id = course.id AND member.id IN (:...ids)', {
+    if (filters.members?.length) {
+      query.andWhere('(member.id IN (:...ids))', {
         ids: filters.members,
       })
     }
 
     if (filters.search) {
-      query.andWhere(
-        `(
-        f_unaccent(course.name) ILIKE f_unaccent(:search)
-      )`,
-        { search: `%${filters.search}%` }
-      )
+      query.andWhere(`(f_unaccent(course.name) ILIKE f_unaccent(:search))`, { search: `%${filters.search}%` })
     }
 
     if (filters.period) {
@@ -127,15 +125,12 @@ export class CourseService {
   }
 
   private async addVirtualColumns(...courses: CourseEntity[]): Promise<void> {
-    Object.assign(courses, {
-      permissions: {
-        update: [UserRoles.admin, UserRoles.teacher].includes(this.request.user.role),
-      },
-    } as Partial<CourseEntity>)
-
     const members = await this.courseMemberService.findViewsByCourseIds(courses.map((course) => course.id))
     courses.forEach((course) => {
       Object.assign(course, {
+        permissions: {
+          update: [UserRoles.admin, UserRoles.teacher].includes(this.request.user.role),
+        },
         studentCount: members.filter((member) => member.courseId === course.id && member.role === 'student').length,
         teacherCount: members.filter((member) => member.courseId === course.id && member.role !== 'student').length,
       } as Partial<CourseEntity>)

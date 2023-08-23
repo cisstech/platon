@@ -10,6 +10,22 @@ mat-card {
   margin-bottom: 1rem;
 }
 
+header {
+  margin-bottom: 2rem;
+  display: flex;
+  gap: 1rem;
+  flex-direction: row;
+  align-items: center;
+}
+
+ui-search-bar {
+  max-width: 60%;
+}
+
+.spacer {
+  flex: 1;
+}
+
 .container-progression {
   display: flex;
   align-items: center;

@@ -22,6 +22,8 @@ export class ActivityResultsVirtualColumnsResolver implements VirtualColumnResol
   ) {}
 
   async resolve(activities: ActivityEntity[], user: UserEntity): Promise<void> {
+    if (!activities.length) return
+
     const sessions = (await this.sessionRepository.find({
       where: {
         parentId: IsNull(),

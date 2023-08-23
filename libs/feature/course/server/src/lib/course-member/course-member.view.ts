@@ -10,7 +10,7 @@ import { ViewColumn, ViewEntity } from 'typeorm'
   expression: `
     -- Select distinct users from courses, including those in user groups
     SELECT
-      DISTINCT ON(u.id)
+      DISTINCT ON(u.id, course.id)
       u.id,
       u.username,
       u.first_name,
