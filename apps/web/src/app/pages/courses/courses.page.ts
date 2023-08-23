@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common'
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router, RouterModule } from '@angular/router'
 import Fuse from 'fuse.js'
-import { Subscription, firstValueFrom, map, of, shareReplay } from 'rxjs'
+import { Subscription, firstValueFrom, of } from 'rxjs'
 
 import { MatCardModule } from '@angular/material/card'
 import { MatIconModule } from '@angular/material/icon'
@@ -66,27 +66,20 @@ export class CoursesPage implements OnInit, OnDestroy {
     placeholder: 'Essayez un nom...',
     filterer: {
       run: (query) => {
-        return this.completion.pipe(
-          map(() => {
-            const suggestions = new Set<string>([])
-            return new Fuse(Array.from(suggestions), {
-              includeMatches: true,
-              findAllMatches: false,
-              threshold: 0.2,
-            })
-              .search(query)
-              .map((e) => e.item)
+        const suggestions = new Set<string>(this.items.map((e) => e.name))
+        return of(
+          new Fuse(Array.from(suggestions), {
+            includeMatches: true,
+            findAllMatches: false,
+            threshold: 0.2,
           })
+            .search(query)
+            .map((e) => e.item)
         )
       },
     },
     onSearch: (query) => this.search(this.filters, query),
   }
-
-  protected completion = of([]).pipe(
-    // TODO implements server function
-    shareReplay(1)
-  )
 
   protected searching = true
   protected filters: CourseFilters = {}
