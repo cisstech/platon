@@ -3,7 +3,7 @@ export interface Notification<TData = unknown> {
   userId: string
   createdAt: Date
   updatedAt?: Date
-  readAt?: Date
+  readAt?: Date | null
   data: TData
 }
 

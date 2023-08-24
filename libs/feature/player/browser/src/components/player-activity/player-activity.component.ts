@@ -21,7 +21,7 @@ import {
 } from '@platon/feature/player/common'
 
 import { DialogModule, DialogService, UserAvatarComponent } from '@platon/core/browser'
-import { ActivityStates, calculateActivityState } from '@platon/feature/course/common'
+import { ActivityOpenStates, calculateActivityOpenState } from '@platon/feature/course/common'
 
 import { NgeMarkdownModule } from '@cisstech/nge/markdown'
 import { PlayerService } from '../../api/player.service'
@@ -60,7 +60,7 @@ import { PlayerSettingsComponent } from '../player-settings/player-settings.comp
 export class PlayerActivityComponent implements OnInit {
   @Input() player!: ActivityPlayer
 
-  protected state?: ActivityStates
+  protected state?: ActivityOpenStates
   protected countdown?: number | null
   protected triggers: {
     time: number
@@ -101,9 +101,10 @@ export class PlayerActivityComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.state = calculateActivityState(this.player)
+    this.state = calculateActivityOpenState(this.player)
+
     if (this.state === 'opened') {
-      if (isTimeouted(this.player)) {
+      if (isTimeouted(this.player) && !this.player.navigation.terminated) {
         this.terminate()
         return
       }

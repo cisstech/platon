@@ -9,16 +9,16 @@ type UserPrefs {
 
 type User {
   id: UUID!
-  createdAt: Date!
-  updatedAt: Date
+  createdAt: DateTime!
+  updatedAt: DateTime
   role: UserRoles!
   username: String!
   active: Boolean!
   firstName: String
   lastName: String
   email: String
-  lastLogin: Date
-  firstLogin: Date
+  lastLogin: DateTime
+  firstLogin: DateTime
   hasPassword: Boolean
   prefs: UserPrefs!
 }
@@ -27,6 +27,11 @@ type User {
 The `UUID` scalar type represents UUID values as specified by [RFC 4122](https://tools.ietf.org/html/rfc4122).
 """
 scalar UUID
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 enum UserRoles {
   admin
@@ -37,9 +42,9 @@ enum UserRoles {
 
 type Notification {
   id: UUID!
-  createdAt: Date!
-  updatedAt: Date
-  readAt: Date
+  createdAt: DateTime!
+  updatedAt: DateTime
+  readAt: DateTime
   data: JSON!
   user: User!
 }
@@ -49,19 +54,34 @@ The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://
 """
 scalar JSON
 
+type NotificationConnection {
+  edges: [NotificationGraphModelEdge!]!
+  pageInfo: NotificationGraphModelPageInfo!
+  totalCount: Float!
+}
+
+type NotificationGraphModelEdge {
+  cursor: String!
+  node: Notification!
+}
+
+type NotificationGraphModelPageInfo {
+  startCursor: String
+  endCursor: String
+  hasPreviousPage: Boolean!
+  hasNextPage: Boolean!
+}
+
 type NotificationChange {
   unreadCount: Float!
   newNotification: Notification
   notifications: [Notification!]
 }
 
-scalar Date
-
 type Query {
   users(filters: UserFiltersInput): [User!]!
   user(input: String!): User!
-  unreadNotificationsCount: Int!
-  notifications(filters: NotificationFiltersInput): [Notification!]!
+  notifications(filters: NotificationFiltersInput, first: Int, after: String): NotificationConnection!
 }
 
 input UserFiltersInput {
@@ -88,13 +108,11 @@ enum OrderingDirections {
 
 input NotificationFiltersInput {
   unread: Boolean
-  offset: Int
-  limit: Int
 }
 
 type Mutation {
-  markAsRead(id: UUID!): Notification!
-  markAsUnread(id: UUID!): Notification!
+  markAsRead(id: UUID!): Boolean!
+  markAsUnread(id: UUID!): Boolean!
   markAllAsRead: Boolean!
   deleteNotification(id: UUID!): Boolean!
   deleteAllNotifications: Boolean!

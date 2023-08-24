@@ -28,9 +28,9 @@ export class CourseMembersPage implements OnInit, OnDestroy {
   @Input() roles: (keyof typeof UserRoles)[] = []
 
   protected get canEdit(): boolean {
-    const { user } = this.context
-    if (!user) return false
-    return [UserRoles.admin, UserRoles.teacher].includes(user.role)
+    const { course } = this.context
+    if (!course) return false
+    return course.permissions.update
   }
 
   protected get allowGroup(): boolean {

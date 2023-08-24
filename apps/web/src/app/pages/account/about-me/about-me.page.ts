@@ -38,7 +38,6 @@ import { Level, Topic, User, UserPrefs, UserRoles } from '@platon/core/common'
   ],
 })
 export class AccountAboutMePage {
-  private user!: User
   protected readonly form = this.fb.group({
     firstName: this.fb.control({ value: '', disabled: true }),
     lastName: this.fb.control({ value: '', disabled: true }),
@@ -47,6 +46,8 @@ export class AccountAboutMePage {
     topics: this.fb.control<string[]>({ value: [], disabled: false }),
     levels: this.fb.control<string[]>({ value: [], disabled: false }),
   })
+
+  private user!: User
 
   protected prefs: UserPrefs | undefined
   protected topics: Topic[] = []

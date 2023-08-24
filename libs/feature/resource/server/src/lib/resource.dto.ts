@@ -217,9 +217,11 @@ export class ResourceFiltersDTO implements ResourceFilters {
   @IsOptional()
   readonly limit?: number
 
-  @IsUUID()
+  @Transform(({ value }) => toArray(value))
+  @IsUUID(undefined, { each: true })
+  @IsArray()
   @IsOptional()
-  readonly parent?: string
+  readonly parents?: string[]
 
   @IsEnum(ResourceOrderings)
   @IsOptional()

@@ -1,14 +1,20 @@
 <ng-container *ngIf="user">
-  <nz-badge [nzCount]="user && user.role === 'admin' ? nzCount : undefined" [nzOffset]="[0, -6]">
-    <nz-avatar
-      [nzSize]="avatarSize"
-      [nzSrc]="'https://robohash.org/' + user.username + '.png'"
-      nzIcon="user"
-    ></nz-avatar>
+  <nz-badge *ngIf="!noIcon" [nzCount]="user && user.role === 'admin' ? nzCount : undefined" [nzOffset]="[0, -6]">
+    <nz-avatar [nzSize]="size" [nzSrc]="'https://robohash.org/' + user.username + '.png'" nzIcon="user" />
   </nz-badge>
   <div>
-    <span>{{ user.firstName }} {{ user.lastName }}</span>
-    <span>{{ user.username }}</span>
+    <ng-container [ngSwitch]="showUsername">
+      <ng-container *ngSwitchCase="'stacked'">
+        <span>{{ user.firstName }} {{ user.lastName }} </span>
+        <span>{{ user.username }}</span>
+      </ng-container>
+      <ng-container *ngSwitchCase="'inline'">
+        <span>{{ user.firstName }} {{ user.lastName }} ({{ user.username }})</span>
+      </ng-container>
+      <ng-container *ngSwitchDefault>
+        <span>{{ user.firstName }} {{ user.lastName }} </span>
+      </ng-container>
+    </ng-container>
   </div>
   <ng-template #nzCount>
     <i nz-tooltip="Administrateur" nz-icon [nzType]="'safety-certificate'" [nzTheme]="'twotone'"></i>
@@ -16,7 +22,7 @@
 </ng-container>
 <ng-container *ngIf="group">
   <user-group-avatar
-    [avatarSize]="avatarSize"
+    [size]="size"
     [group]="group"
     [canShowMembers]="showGroupMembers.observed"
     (showMembers)="showGroupMembers.emit(group)"

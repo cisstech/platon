@@ -1,9 +1,21 @@
 import { Args, Int, Mutation, Parent, Query, ResolveField, Resolver, Subscription } from '@nestjs/graphql'
-import { GqlReq, IRequest, PubSubService, UUID, UserGraphModel } from '@platon/core/server'
-import { NotificationFilters } from '@platon/feature/notification/common'
+import {
+  GqlReq,
+  IRequest,
+  PubSubService,
+  UUID,
+  UserGraphModel,
+  offsetLimitFromConnectionArgs,
+} from '@platon/core/server'
+import { connectionFromArraySlice } from 'graphql-relay'
 import GraphQLJSON from 'graphql-type-json'
 import { NotificationEntity } from './notification.entity'
-import { NotificationChangeGraphModel, NotificationFiltersInput, NotificationGraphModel } from './notification.graphql'
+import {
+  NotificationChangeGraphModel,
+  NotificationConnectionGraphModel,
+  NotificationFiltersInput,
+  NotificationGraphModel,
+} from './notification.graphql'
 import { ON_CHANGE_NOTIFICATIONS, OnChangeNotificationsPayload } from './notification.pubsub'
 import { NotificationService } from './notification.service'
 
@@ -14,28 +26,44 @@ export class NotificationResolver {
     private readonly notificationService: NotificationService
   ) {}
 
-  @Query(() => Int)
-  async unreadNotificationsCount(@GqlReq() req: IRequest): Promise<number> {
-    return this.notificationService.unreadCount(req.user.id)
-  }
-
-  @Query(() => [NotificationGraphModel])
+  @Query(() => NotificationConnectionGraphModel)
   async notifications(
     @GqlReq() req: IRequest,
-    @Args('filters', { type: () => NotificationFiltersInput, nullable: true })
-    filters?: NotificationFilters
-  ): Promise<NotificationGraphModel[]> {
-    const [items] = await this.notificationService.ofUser(req.user.id, filters)
-    return items.map((item) => new NotificationGraphModel(item))
+    @Args('filters', { nullable: true }) filters?: NotificationFiltersInput,
+    @Args({ name: 'first', type: () => Int, nullable: true }) first?: number,
+    @Args({ name: 'after', nullable: true }) after?: string
+  ): Promise<NotificationConnectionGraphModel> {
+    const args = { first, after }
+    const { offset, limit } = offsetLimitFromConnectionArgs(args)
+
+    const [items, count] = await this.notificationService.ofUser(req.user.id, {
+      ...(filters ?? {}),
+      offset,
+      limit,
+    })
+
+    const connection = connectionFromArraySlice(
+      items.map((item) => new NotificationGraphModel(item)),
+      args,
+      {
+        arrayLength: count,
+        sliceStart: offset || 0,
+      }
+    )
+
+    return {
+      ...connection,
+      totalCount: count,
+    }
   }
 
-  @Mutation(() => NotificationGraphModel)
+  @Mutation(() => Boolean)
   async markAsRead(@GqlReq() req: IRequest, @Args('id', { type: () => UUID }) id: string): Promise<boolean> {
     await this.notificationService.markAsRead(req.user.id, [id])
     return true
   }
 
-  @Mutation(() => NotificationGraphModel)
+  @Mutation(() => Boolean)
   async markAsUnread(@GqlReq() req: IRequest, @Args('id', { type: () => UUID }) id: string): Promise<boolean> {
     await this.notificationService.markAsUnread(req.user.id, [id])
     return true
@@ -43,7 +71,8 @@ export class NotificationResolver {
 
   @Mutation(() => Boolean)
   async markAllAsRead(@GqlReq() req: IRequest): Promise<boolean> {
-    return this.notificationService.markAllAsRead(req.user.id)
+    await this.notificationService.markAllAsRead(req.user.id)
+    return true
   }
 
   @Mutation(() => Boolean)
@@ -67,28 +96,25 @@ export class NotificationResolver {
   async data(@Parent() parent: NotificationGraphModel): Promise<Record<string, unknown>> {
     return {
       ...parent.data,
-      ...((await this.notificationService.withExtaData(parent as NotificationEntity)) || {}),
+      ...((await this.notificationService.withExtraData(parent as NotificationEntity)) || {}),
     }
   }
 
   @Subscription(() => NotificationChangeGraphModel, {
-    filter: (payload: OnChangeNotificationsPayload, variables, context) => {
+    filter: (payload: OnChangeNotificationsPayload, _variables, context) => {
       const req = context.req as IRequest
-      return payload.onChangeNotifications.userId === req.user.id
+      return payload.userId === req.user.id
     },
     resolve: (payload: OnChangeNotificationsPayload) => {
       return new NotificationChangeGraphModel({
-        newNotification: payload.onChangeNotifications.newNotification
-          ? new NotificationGraphModel(payload.onChangeNotifications.newNotification)
-          : undefined,
-        notifications: payload.onChangeNotifications.notifications?.map(
-          (notification) => new NotificationGraphModel(notification)
-        ),
+        newNotification: payload.newNotification ? new NotificationGraphModel(payload.newNotification) : undefined,
       })
     },
   })
-  onChangeNotifications() {
-    return this.pubSubService.asyncIterator(ON_CHANGE_NOTIFICATIONS)
+  onChangeNotifications(@GqlReq() req: IRequest) {
+    return this.pubSubService.asyncIterator<OnChangeNotificationsPayload>(ON_CHANGE_NOTIFICATIONS, {
+      userId: req.user.id,
+    })
   }
 }
 

@@ -31,7 +31,7 @@ export class ActivityController {
     @Param('courseId') courseId: string,
     @Param('activityId') activityId: string
   ): Promise<ItemResponse<ActivityDTO>> {
-    const optional = await this.service.findByCourseIdAndId(courseId, activityId)
+    const optional = await this.service.findByCourseId(courseId, activityId)
     const activity = Mapper.map(
       optional.orElseThrow(() => new NotFoundResponse(`CourseActivity not found: ${activityId}`)),
       ActivityDTO
@@ -39,6 +39,9 @@ export class ActivityController {
     return new ItemResponse({ resource: activity })
   }
 
+  // TODO: check user membership for write operations
+
+  @Roles(UserRoles.teacher, UserRoles.admin)
   @Post()
   async create(
     @Req() req: IRequest,
@@ -55,6 +58,7 @@ export class ActivityController {
     })
   }
 
+  @Roles(UserRoles.teacher, UserRoles.admin)
   @Patch('/:activityId')
   async update(
     @Param('courseId') courseId: string,
@@ -82,6 +86,7 @@ export class ActivityController {
     })
   }
 
+  @Roles(UserRoles.teacher, UserRoles.admin)
   @Delete('/:activityId')
   async delete(
     @Param('courseId') courseId: string,

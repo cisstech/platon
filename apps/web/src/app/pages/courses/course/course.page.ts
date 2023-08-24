@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
 import { Subscription } from 'rxjs'
@@ -7,13 +7,15 @@ import { Subscription } from 'rxjs'
 import { MatIconModule } from '@angular/material/icon'
 
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb'
+import { NzIconModule } from 'ng-zorro-antd/icon'
+import { NzPageHeaderModule } from 'ng-zorro-antd/page-header'
+import { NzTagModule } from 'ng-zorro-antd/tag'
+import { NzTypographyModule } from 'ng-zorro-antd/typography'
 
 import { DialogModule } from '@platon/core/browser'
-import { UiLayoutTabsComponent, UiLayoutTabsTitleDirective } from '@platon/shared/ui'
+import { UiLayoutTabDirective, UiLayoutTabsComponent } from '@platon/shared/ui'
 
-import { NzTypographyModule } from 'ng-zorro-antd/typography'
 import { CoursePresenter } from './course.presenter'
-import { NzPageHeaderModule } from 'ng-zorro-antd/page-header'
 
 @Component({
   standalone: true,
@@ -29,6 +31,8 @@ import { NzPageHeaderModule } from 'ng-zorro-antd/page-header'
 
     MatIconModule,
 
+    NzTagModule,
+    NzIconModule,
     NzBreadCrumbModule,
     NzTypographyModule,
     NzPageHeaderModule,
@@ -36,15 +40,15 @@ import { NzPageHeaderModule } from 'ng-zorro-antd/page-header'
     DialogModule,
 
     UiLayoutTabsComponent,
-    UiLayoutTabsTitleDirective,
+    UiLayoutTabDirective,
   ],
 })
 export class CoursePage implements OnInit, OnDestroy {
+  private readonly presenter = inject(CoursePresenter)
+  private readonly changeDetectorRef = inject(ChangeDetectorRef)
   private readonly subscriptions: Subscription[] = []
 
   protected context = this.presenter.defaultContext()
-
-  constructor(private readonly presenter: CoursePresenter, private readonly changeDetectorRef: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.subscriptions.push(

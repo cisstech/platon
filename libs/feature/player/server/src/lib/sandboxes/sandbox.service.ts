@@ -1,14 +1,20 @@
-import { Injectable } from '@nestjs/common'
+import { DiscoveryService } from '@golevelup/nestjs-discovery'
+import { Injectable, OnModuleInit } from '@nestjs/common'
 import { PLSourceFile } from '@platon/feature/compiler'
 import { basename } from 'path'
-import { Sandbox, SandboxInput, SandboxOutput } from '.'
+import { SANDBOX, Sandbox, SandboxInput, SandboxOutput } from './sandbox'
 
 @Injectable()
-export class SandboxService {
+export class SandboxService implements OnModuleInit {
   private readonly sandboxes: Sandbox[] = []
 
-  register(sandbox: Sandbox) {
-    this.sandboxes.push(sandbox)
+  constructor(private readonly discovery: DiscoveryService) {}
+
+  async onModuleInit(): Promise<void> {
+    const providers = await this.discovery.providersWithMetaAtKey(SANDBOX)
+    providers.forEach((provider) => {
+      this.sandboxes.push(provider.discoveredClass.instance as Sandbox)
+    })
   }
 
   async build(source: PLSourceFile): Promise<SandboxOutput> {

@@ -1,38 +1,106 @@
-<ng-container *ngIf="context.course">
-  <ng-container *ngIf="sections.length; else noSections">
-    <nz-collapse nzGhost>
-      <nz-collapse-panel
-        [nzActive]="true"
-        *ngFor="let item of sections; trackBy: trackSection"
-        [nzHeader]="header"
-        [nzExtra]="extra"
-      >
-        <ng-template #header>
-          <span
-            nz-typography
-            nzEditable
-            [nzContent]="item.section.name"
-            (nzContentChange)="renameSection(item.section, $event)"
-            (click)="$event.stopPropagation()"
-          >
-          </span>
-        </ng-template>
-        <ng-template #extra>
-          <app-course-section-actions
-            [section]="item.section"
-            [sectionCount]="sections.length"
-            (moveUp)="moveUpSection(item.section)"
-            (moveDown)="moveDownSection(item.section)"
-            (insertBelow)="addSection(item.section)"
-            (remove)="deleteSection(item.section)"
-          />
-        </ng-template>
-        <course-activity-grid [items]="item.activities">
-          <ng-container *ngTemplateOutlet="noActivities; context: { $implicit: item.section }"></ng-container>
-        </course-activity-grid>
-      </nz-collapse-panel>
-    </nz-collapse>
-  </ng-container>
+<ng-container *ngIf="context.course as course">
+  <nz-row [nzGutter]="[24, 24]" nzAlign="top">
+    <nz-col nzXs="24" nzSm="24" nzMd="16" nzLg="16" nzXl="16">
+      <header>
+        <ui-search-bar [searchbar]="searchbar">
+          <ng-template let-context> {{ context }}</ng-template>
+        </ui-search-bar>
+        <button
+          nz-button
+          nzType="primary"
+          nzShape="round"
+          [queryParamsHandling]="'merge'"
+          [routerLink]="['/activities/create']"
+          [queryParams]="{
+            course: course.id,
+          }"
+        >
+          Ajouter une activité
+        </button>
+        <div class="spacer"></div>
+        <ui-view-mode #viewMode [modes]="['cards', 'table']" />
+      </header>
+      <ng-container *ngIf="sections.length; else noSections">
+        <ng-container [ngSwitch]="viewMode.mode">
+          <ng-container *ngSwitchCase="'cards'">
+            <nz-collapse nzGhost>
+              <nz-collapse-panel
+                *ngFor="let item of sectionWithActivities; trackBy: trackSection"
+                [nzActive]="true"
+                [nzHeader]="header"
+                [nzExtra]="extra"
+              >
+                <ng-template #header>
+                  <span
+                    nz-typography
+                    [nzEditable]="course.permissions.update"
+                    [nzContent]="item.section.name"
+                    (nzContentChange)="renameSection(item.section, $event)"
+                    (click)="$event.stopPropagation()"
+                  >
+                  </span>
+                </ng-template>
+                <ng-template #extra>
+                  <app-course-section-actions
+                    *ngIf="course.permissions.update"
+                    [section]="item.section"
+                    [sectionCount]="sections.length"
+                    (moveUp)="moveUpSection(item.section)"
+                    (moveDown)="moveDownSection(item.section)"
+                    (insertBelow)="addSection(item.section)"
+                    (remove)="deleteSection(item.section)"
+                  />
+                </ng-template>
+                <course-activity-grid [items]="item.activities">
+                  <ng-container *ngTemplateOutlet="noActivities; context: { $implicit: item.section }" />
+                </course-activity-grid>
+              </nz-collapse-panel>
+            </nz-collapse>
+          </ng-container>
+          <ng-container *ngSwitchCase="'table'">
+            <course-activity-table [activities]="filteredActivities" [sections]="sections" />
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </nz-col>
+    <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
+      <aside>
+        <mat-card>
+          <mat-card-content>
+            <nz-statistic
+              nzTitle="Votre avancement sur les activités"
+              [nzValueTemplate]="progressionTemplate"
+              [nzValueStyle]="{ margin: '1rem 0' }"
+            >
+              <ng-template #progressionTemplate>
+                <div class="container-progression">
+                  <nz-progress
+                    [nzPercent]="course.progression"
+                    nzStrokeLinecap="square"
+                    nzType="circle"
+                    nzStrokeWidth="8"
+                  />
+                  <p *ngIf="course.timeSpent">{{ course.timeSpent | duration }}</p>
+                </div>
+              </ng-template>
+            </nz-statistic>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card>
+          <mat-card-content>
+            <nz-statistic [nzValue]="course.teacherCount" nzTitle="Enseignants" />
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card>
+          <mat-card-content>
+            <nz-statistic [nzValue]="course.studentCount" nzTitle="Élèves" />
+          </mat-card-content>
+        </mat-card>
+      </aside>
+    </nz-col>
+  </nz-row>
 </ng-container>
 
 <ng-template #noSections>
@@ -41,7 +109,9 @@
       Ce cours ne contient aucune section. Les sections permettent d'organiser le contenu du cours en thématiques.
     </ng-template>
     <ng-template #noSectionsFooter>
-      <button nz-button nzType="primary" (click)="addSection()">Ajouter une section</button>
+      <button *ngIf="context.course?.permissions?.update" nz-button nzType="primary" (click)="addSection()">
+        Ajouter une section
+      </button>
     </ng-template>
   </nz-empty>
 </ng-template>
@@ -51,6 +121,7 @@
     <ng-template #noActivitiesContent> Cette section ne contient aucune activité. </ng-template>
     <ng-template #noActivitiesFooter>
       <button
+        *ngIf="context.course?.permissions?.update"
         nz-button
         nzType="primary"
         [routerLink]="['/activities/create']"

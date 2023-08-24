@@ -1,15 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { deepMerge, resolveFileReference } from '@platon/core/common'
 import { v4 as uuidv4 } from 'uuid'
+import { PLGenerator } from './pl.generator'
 import {
   AssignmentNode,
   CommentNode,
   ExtendsNode,
   IncludeNode,
+  PLAst,
   PLDict,
   PLFileContent,
   PLFileURL,
-  PLNode,
   PLParser,
   PLReference,
   PLSourceFile,
@@ -38,6 +39,19 @@ export interface PLReferenceResolver {
   resolveContent(resource: string, version: string, path: string): Promise<string>
 }
 
+interface PLCompilerOptions {
+  resource: string
+  version: string
+  main: string
+  resolver: PLReferenceResolver
+  withAst?: boolean
+}
+
+interface ToExerciseOptions {
+  variableChanges: Variables
+  includeChanges?: string[]
+}
+
 /**
  * Compiles a PL AST to a PLSourceFile.
  */
@@ -46,10 +60,17 @@ export class PLCompiler implements PLVisitor {
   private readonly contents = new Map<string, string>()
   private readonly resolver: PLReferenceResolver
   private readonly source: PLSourceFile
+  private nodes: PLAst = []
   private lineno = 0
+  private withAst?: boolean
 
-  constructor(options: { resource: string; version: string; main: string; resolver: PLReferenceResolver }) {
+  get ast(): PLAst {
+    return this.nodes.slice()
+  }
+
+  constructor(options: PLCompilerOptions) {
     this.resolver = options.resolver
+    this.withAst = options.withAst
     this.source = {
       resource: options.resource,
       version: options.version,
@@ -57,14 +78,85 @@ export class PLCompiler implements PLVisitor {
       errors: [],
       warnings: [],
       variables: {},
+      ast: {
+        nodes: [],
+        variables: {},
+      },
       dependencies: [],
     }
   }
 
-  async visit(nodes: PLNode[]): Promise<PLSourceFile> {
+  toExercise(input: ToExerciseOptions): string {
+    return new PLGenerator({
+      variableChanges: input.variableChanges,
+      includeChanges: input.includeChanges,
+      nodes: this.nodes,
+      source: this.source,
+    }).generate()
+  }
+
+  async compileExercise(content: string, overrides?: Variables): Promise<PLSourceFile> {
+    const nodes = await new PLParser().parse(content)
+    const source = await this.visit(nodes)
+    if (overrides) {
+      source.variables = deepMerge(source.variables, await this.withResolvePathInOverrides(overrides))
+    }
+    return source
+  }
+
+  async compileActivity(content: string): Promise<PLSourceFile> {
+    const variables = JSON.parse(content) as ActivityVariables
+
+    const [introduction, conclusion] = await Promise.all([
+      this.withResolvePath(variables.introduction),
+      this.withResolvePath(variables.conclusion),
+    ])
+
+    variables.introduction = introduction || ''
+    variables.conclusion = conclusion || ''
+
+    // TODO validation + typechecking
+    const groups = variables.exerciseGroups
+    const exercises: any[] = []
+    Object.keys(groups).forEach((groupName) => {
+      groups[groupName].forEach((exercise: any) => {
+        exercises.push(exercise)
+      })
+    })
+
+    await Promise.all(
+      exercises.map(async (exercise: ExerciseVariables) => {
+        const content = await this.resolver.resolveContent(exercise.resource, exercise.version, 'main.ple')
+        const compiler = new PLCompiler({
+          resource: exercise.resource,
+          version: exercise.version,
+          main: 'main.ple',
+          resolver: this.resolver,
+        })
+        exercise.id = uuidv4()
+        exercise.source = await compiler.compileExercise(content)
+        if (exercise.overrides) {
+          exercise.source.variables = deepMerge(
+            exercise.source.variables,
+            await this.withResolvePathInOverrides(exercise.overrides)
+          )
+        }
+      })
+    )
+
+    this.source.variables = variables
+    return this.source
+  }
+
+  async visit(ast: PLAst): Promise<PLSourceFile> {
     // should not use Promise.all() since references should be resolved in sync.
-    for (const node of nodes) {
+    for (const node of ast) {
+      node.origin = this.source.abspath
       await node.accept(this)
+    }
+    this.nodes = ast
+    if (this.withAst) {
+      this.source.ast.nodes = ast.slice()
     }
     return this.source
   }
@@ -128,7 +220,7 @@ export class PLCompiler implements PLVisitor {
   }
 
   async visitReference(node: PLReference): Promise<any> {
-    const [prop, object] = this.withVariable(node.value, true)
+    const [prop, object] = this.withVariable(this.source.variables, node.value, true)
     if (prop && object) return object[prop]
     return undefined
   }
@@ -139,66 +231,18 @@ export class PLCompiler implements PLVisitor {
 
   async visitAssignment(node: AssignmentNode): Promise<void> {
     this.lineno = node.lineno
+    const [prop, parent] = this.withVariable(this.source.variables, node.key)
+    if (!prop || !parent) return Promise.resolve()
+    parent[prop] = await node.value.toObject(this)
 
-    const [id, obj] = this.withVariable(node.key)
-    if (!id || !obj) return Promise.resolve()
-
-    obj[id] = await node.value.toJSON(this)
+    if (this.withAst) {
+      const [rawProp, rawParent] = this.withVariable(this.source.ast.variables, node.key)
+      if (rawProp && rawParent) {
+        rawParent[rawProp] = node.value.toRaw()
+      }
+    }
 
     return Promise.resolve()
-  }
-
-  async compileExercise(content: string, overrides?: Variables): Promise<PLSourceFile> {
-    const nodes = await new PLParser().parse(content)
-    const source = await this.visit(nodes)
-    if (overrides) {
-      source.variables = deepMerge(source.variables, await this.withResolvePathInOverrides(overrides))
-    }
-    return source
-  }
-
-  async compileActivity(content: string): Promise<PLSourceFile> {
-    const variables = JSON.parse(content) as ActivityVariables
-
-    const [introduction, conclusion] = await Promise.all([
-      this.withResolvePath(variables.introduction),
-      this.withResolvePath(variables.conclusion),
-    ])
-
-    variables.introduction = introduction || ''
-    variables.conclusion = conclusion || ''
-
-    // TODO validation + typechecking
-    const groups = variables.exerciseGroups
-    const exercises: any[] = []
-    Object.keys(groups).forEach((groupName) => {
-      groups[groupName].forEach((exercise: any) => {
-        exercises.push(exercise)
-      })
-    })
-
-    await Promise.all(
-      exercises.map(async (exercise: ExerciseVariables) => {
-        const content = await this.resolver.resolveContent(exercise.resource, exercise.version, 'main.ple')
-        const compiler = new PLCompiler({
-          resource: exercise.resource,
-          version: exercise.version,
-          main: 'main.ple',
-          resolver: this.resolver,
-        })
-        exercise.id = uuidv4()
-        exercise.source = await compiler.compileExercise(content)
-        if (exercise.overrides) {
-          exercise.source.variables = deepMerge(
-            exercise.source.variables,
-            await this.withResolvePathInOverrides(exercise.overrides)
-          )
-        }
-      })
-    )
-
-    this.source.variables = variables
-    return this.source
   }
 
   private error(description: string) {
@@ -217,7 +261,7 @@ export class PLCompiler implements PLVisitor {
     })
   }
 
-  private withVariable(name: string, required = false): [string | null, Record<string, unknown> | null] {
+  private withVariable(variables: Variables, name: string, required = false): [string | null, Variables | null] {
     const props = name.split('.')
     if (props.find((prop) => !prop)) {
       this.error(`SyntaxError: ${name}`)
@@ -226,7 +270,7 @@ export class PLCompiler implements PLVisitor {
 
     const stack: string[] = []
 
-    let parent = this.source.variables
+    let parent = variables
     for (const prop of props.slice(0, -1)) {
       stack.push(prop)
 
@@ -237,7 +281,7 @@ export class PLCompiler implements PLVisitor {
       }
 
       parent[prop] = value ?? {}
-      parent = parent[prop] as unknown as Record<string, unknown>
+      parent = parent[prop] as unknown as Variables
     }
 
     const prop = props[props.length - 1]

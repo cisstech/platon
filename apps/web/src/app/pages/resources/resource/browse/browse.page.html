@@ -3,6 +3,7 @@
     [version]="context.version"
     [versions]="versions!"
     [resource]="context.resource!"
+    [canPreview]="context.resource?.type !== 'CIRCLE'"
     (edit)="openTab(context.editorUrl!)"
     (preview)="iframe.open(context.previewUrl!)"
     (refresh)="switchVersion($event)"

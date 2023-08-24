@@ -1,3 +1,5 @@
+import { ActivityPermissions } from './permissions.model'
+
 export interface Activity {
   readonly id: string
   readonly createdAt: Date
@@ -10,7 +12,8 @@ export interface Activity {
   readonly closeAt?: Date
 
   readonly title: string
-  readonly state: ActivityStates
+  readonly state: ActivityOpenStates
+  readonly timeSpent: number
   readonly progression: number
   readonly permissions: ActivityPermissions
 }
@@ -38,17 +41,12 @@ export interface ReloadActivity {
   readonly version?: string
 }
 
-export interface ActivityPermissions {
-  readonly update: boolean
-  readonly viewStats: boolean
-}
+export type ActivityOpenStates = 'opened' | 'closed' | 'planned'
 
-export type ActivityStates = 'opened' | 'closed' | 'planned'
-
-export const calculateActivityState = (value: {
+export const calculateActivityOpenState = (value: {
   openAt?: Date | string | null
   closeAt?: Date | string | null
-}): ActivityStates => {
+}): ActivityOpenStates => {
   const now = new Date()
   const openAt = value.openAt ? new Date(value.openAt) : undefined
   const closeAt = value.closeAt ? new Date(value.closeAt) : undefined

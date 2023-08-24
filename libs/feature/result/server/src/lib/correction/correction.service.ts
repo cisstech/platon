@@ -2,36 +2,50 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { NotFoundResponse } from '@platon/core/common'
-import { PendingCorrection, PendingCorrectionExercise } from '@platon/feature/result/common'
+import { EventService } from '@platon/core/server'
+import { ON_CORRECT_ACTIVITY_EVENT, OnCorrectActivityEventPayload } from '@platon/feature/course/server'
+import { ActivityCorrection, ExerciseCorrection } from '@platon/feature/result/common'
 import { Repository } from 'typeorm'
 import { SessionEntity } from '../sessions/session.entity'
 import { CorrectionEntity } from './correction.entity'
 
-interface PendingProjection {
-  userId: string
-  activityId: string
-  activityName: string
-  activityNavigation: any
-  activitySessionId: string
-  exerciseSessionId: string
-  courseId: string
-  courseName: string
-  correctedBy?: string
-  correctedAt?: Date
-  correctedGrade?: number
-  grade?: number
-}
-
 @Injectable()
 export class CorrectionService {
   constructor(
+    private readonly eventService: EventService,
+
     @InjectRepository(SessionEntity)
     private readonly sessionRepository: Repository<SessionEntity>,
     @InjectRepository(CorrectionEntity)
     private readonly correctionRepository: Repository<CorrectionEntity>
   ) {}
 
-  async list(userId: string, activityId?: string): Promise<PendingCorrection[]> {
+  /**
+   * List all activities that need to be corrected or have been corrected by the user identified by `userId`.
+   *
+   * @remarks
+   * - If `activityId` is provided, only the activity with the given id is returned.
+   * - Only activities that have been terminated are returned.
+   * @param correctorUserId The id of the user who will correct the activities.
+   * @param activityId An optional activity id to filter the results.
+   * @returns A list of activities to correct.
+   */
+  async list(correctorUserId: string, activityId?: string): Promise<ActivityCorrection[]> {
+    type Projection = {
+      userId: string
+      activityId: string
+      activityName: string
+      activityNavigation: any
+      activitySessionId: string
+      exerciseSessionId: string
+      courseId: string
+      courseName: string
+      correctedBy?: string
+      correctedAt?: Date
+      correctedGrade?: number
+      grade?: number
+    }
+
     const projections = (await this.sessionRepository.query(
       `
       SELECT
@@ -54,7 +68,6 @@ export class CorrectionService {
         LEFT JOIN "Corrections" correction ON correction.id=exercise_session.correction_id
         WHERE
         ${activityId ? 'activity.id=$2 AND' : ''}
-        (exercise_session.correction_id IS NULL OR (activity.close_at IS NOT NULL AND activity.close_at > NOW())) AND
         exercise_session.user_id<>$1 AND
         (activity_session.variables->'navigation'->>'terminated')::boolean = TRUE AND
         (
@@ -62,14 +75,14 @@ export class CorrectionService {
           WHERE corrector.activity_id=activity.id AND corrector.id=$1
         ) IS NOT NULL
     `,
-      [userId, ...(activityId ? [activityId] : [])]
-    )) as PendingProjection[]
+      [correctorUserId, activityId].filter(Boolean)
+    )) as Projection[]
 
     return projections.reduce((acc, projection) => {
       const navItem = projection.activityNavigation.exercises.find((item: any) => {
         return item.sessionId === projection.exerciseSessionId
       })
-      const exercise: PendingCorrectionExercise = {
+      const exercise: ExerciseCorrection = {
         userId: projection.userId,
         activitySessionId: projection.activitySessionId,
         exerciseSessionId: projection.exerciseSessionId,
@@ -93,26 +106,57 @@ export class CorrectionService {
         })
       }
       return acc
-    }, [] as PendingCorrection[])
+    }, [] as ActivityCorrection[])
   }
 
   async upsert(sessionId: string, input: Partial<CorrectionEntity>) {
-    const session = await this.sessionRepository.findOne({
+    const exerciseSession = await this.sessionRepository.findOne({
       where: { id: sessionId },
+      relations: { correction: true, parent: true, activity: true },
+    })
+
+    if (!exerciseSession) throw new NotFoundResponse(`Session not found: ${sessionId}`)
+    if (!exerciseSession.parent) throw new NotFoundResponse(`Parent session not found: ${sessionId}`)
+
+    let correction: CorrectionEntity
+    if (exerciseSession.correction) {
+      Object.assign(exerciseSession.correction, input)
+      await this.correctionRepository.save(exerciseSession.correction)
+      correction = exerciseSession.correction
+    } else {
+      correction = await this.correctionRepository.save(input)
+      await this.sessionRepository.update(exerciseSession.id, {
+        correctionId: correction.id,
+      })
+    }
+
+    const activitySession = exerciseSession.parent
+    const activityExerciseSessions = await this.sessionRepository.find({
+      where: { parentId: activitySession.id },
       relations: { correction: true },
     })
 
-    if (!session) throw new NotFoundResponse(`Session not found: ${sessionId}`)
-    if (session.correction) {
-      Object.assign(session.correction, input)
-      await this.correctionRepository.save(session.correction)
-      return session.correction
-    } else {
-      const correction = await this.correctionRepository.save(input)
-      await this.sessionRepository.update(session.id, {
-        correctionId: correction.id,
-      })
-      return correction
+    let terminated = true
+    let grade = 0
+    activityExerciseSessions.forEach((session) => {
+      if (!session.correction) terminated = false
+      else grade += session.correction.grade
+    })
+
+    if (terminated) {
+      if (grade && activityExerciseSessions.length) {
+        activitySession.grade = grade / activityExerciseSessions.length
+        await this.sessionRepository.save(activitySession)
+      }
+
+      if (exerciseSession.activity && exerciseSession.userId) {
+        this.eventService.emit<OnCorrectActivityEventPayload>(ON_CORRECT_ACTIVITY_EVENT, {
+          userId: exerciseSession.userId,
+          activity: exerciseSession.activity,
+        })
+      }
     }
+
+    return correction
   }
 }

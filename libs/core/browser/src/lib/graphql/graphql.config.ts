@@ -2,9 +2,10 @@
 import { ApolloClientOptions, ApolloLink, InMemoryCache, split } from '@apollo/client/core'
 import { setContext } from '@apollo/client/link/context'
 import { onError } from '@apollo/client/link/error'
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
+import { getMainDefinition, relayStylePagination } from '@apollo/client/utilities'
 import { HttpLink } from 'apollo-angular/http'
-import { WebSocketLink } from '@apollo/client/link/ws'
-import { getMainDefinition } from '@apollo/client/utilities'
+import { createClient } from 'graphql-ws'
 import { TokenService } from '../auth'
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
@@ -36,21 +37,29 @@ const basicContext = setContext((_, { headers }) => {
 })
 
 export function createDefaultApollo(httpLink: HttpLink, tokenService: TokenService): ApolloClientOptions<any> {
-  const cache = new InMemoryCache({})
+  const cache = new InMemoryCache({
+    typePolicies: {
+      Query: {
+        fields: {
+          notifications: relayStylePagination(),
+        },
+      },
+    },
+  })
 
   const http = httpLink.create({
     uri: '/api/graphql',
   })
 
-  const ws = new WebSocketLink({
-    uri: `wss://${location.host}/api/graphql`,
-    options: {
-      reconnect: true,
-      connectionParams: {
+  const ws = new GraphQLWsLink(
+    createClient({
+      url: `wss://${location.host}/api/graphql`,
+      shouldRetry: () => true,
+      connectionParams: () => ({
         Authorization: `Bearer ${tokenService.tokenSync()?.accessToken}`,
-      },
-    },
-  })
+      }),
+    })
+  )
 
   // using the ability to split links, you can send data to each link
   // depending on what kind of operation is being sent

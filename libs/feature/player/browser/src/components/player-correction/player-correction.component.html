@@ -21,8 +21,22 @@
   <mat-drawer-content>
     <mat-toolbar>
       <nz-breadcrumb>
-        <nz-breadcrumb-item>Corrections</nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+          <a [routerLink]="['/corrections']">
+            <span nz-icon nzType="link" nzTheme="outline"></span>
+            <span>Corrections</span>
+          </a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+          <a [routerLink]="['/courses', correction.courseId]">
+            <span nz-icon nzType="link" nzTheme="outline"></span>
+            <span> {{ correction.courseName }}</span>
+          </a>
+        </nz-breadcrumb-item>
         <nz-breadcrumb-item>{{ correction.activityName }}</nz-breadcrumb-item>
+        <nz-breadcrumb-item *ngIf="currentGroup?.exerciseName">
+          <b>{{ currentGroup!.exerciseName }}</b>
+        </nz-breadcrumb-item>
       </nz-breadcrumb>
     </mat-toolbar>
     <main>
@@ -30,7 +44,7 @@
         #segmented
         [ngModel]="selectedTabIndex"
         (ngModelChange)="onChooseTab($event)"
-        [nzOptions]="['Corrections en attente', 'Corrections disponibles']"
+        [nzOptions]="['Corrections en attente', 'Corrections terminées']"
       />
       <ng-container *ngIf="exercises.length as exerciseCount; else noExercises">
         <ng-container *ngIf="answers.length as answerCount">
@@ -53,9 +67,7 @@
             <h3>Note ajustée ({{ correctedGrade }})</h3>
             <nz-slider [nzMarks]="{ '-1': '-1', '100': '100' }" [(ngModel)]="correctedGrade" nzMin="-1" nzMax="100" />
             <mat-toolbar>
-              <button (click)="onSaveGrade()" [disabled]="!correctedGrade" mat-raised-button color="primary">
-                Enregistrer
-              </button>
+              <button (click)="onSaveGrade()" mat-raised-button color="primary">Enregistrer</button>
               <button *ngIf="selectedExerciseIndex > 0" mat-raised-button (click)="onChoosePreviousExercise()">
                 <mat-icon>arrow_back</mat-icon>
                 Utilisateur précédent
@@ -82,7 +94,7 @@
       <ng-container [ngTemplateOutlet]="noPendings" />
     </ng-container>
     <ng-container *ngSwitchCase="1">
-      <ng-container [ngTemplateOutlet]="noExercises" />
+      <ng-container [ngTemplateOutlet]="noCorrections" />
     </ng-container>
   </div>
 </ng-template>
@@ -90,7 +102,8 @@
 <ng-template #noPendings>
   <nz-empty [nzNotFoundContent]="content">
     <ng-template #content>
-      Félicitations, vous avez terminé toutes les corrections qui vous ont été attribuées !
+      Félicitations, vous avez terminé toutes les corrections qui vous ont été attribuées sur l'exercice
+      <b> {{ currentGroup?.exerciseName }} </b>!
     </ng-template>
   </nz-empty>
 </ng-template>

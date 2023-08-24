@@ -1,40 +1,46 @@
-import { Injectable } from '@nestjs/common'
+import { Inject, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { NotFoundResponse, OrderingDirections } from '@platon/core/common'
+import { NotFoundResponse, OrderingDirections, UserRoles } from '@platon/core/common'
+import { DatabaseService, IRequest } from '@platon/core/server'
 import { CourseFilters, CourseOrderings } from '@platon/feature/course/common'
+import { CLS_REQ } from 'nestjs-cls'
 import { Repository } from 'typeorm'
 import { Optional } from 'typescript-optional'
+import { CourseMemberService } from './course-member/course-member.service'
 import { CourseMemberView } from './course-member/course-member.view'
 import { CourseEntity } from './course.entity'
 
 @Injectable()
 export class CourseService {
   constructor(
+    private readonly databaseService: DatabaseService,
+    private readonly courseMemberService: CourseMemberService,
+
+    @Inject(CLS_REQ)
+    private readonly request: IRequest,
     @InjectRepository(CourseEntity)
     private readonly courseRepository: Repository<CourseEntity>
   ) {}
 
   async search(filters: CourseFilters = {}): Promise<[CourseEntity[], number]> {
-    const query = this.courseRepository.createQueryBuilder('course')
+    const query = this.courseRepository
+      .createQueryBuilder('course')
+      .leftJoin(CourseMemberView, 'member', 'member.course_id = course.id')
 
     filters = {
       ...filters,
-      order: filters.order || CourseOrderings.NAME,
+      order: filters.order || CourseOrderings.UPDATED_AT,
+      direction: filters.direction || OrderingDirections.DESC,
     }
 
-    if (filters.members) {
-      query.innerJoin(CourseMemberView, 'member', 'member.course_id = course.id AND member.id IN (:...ids)', {
+    if (filters.members?.length) {
+      query.andWhere('(member.id IN (:...ids))', {
         ids: filters.members,
       })
     }
 
     if (filters.search) {
-      query.andWhere(
-        `(
-        f_unaccent(course.name) ILIKE f_unaccent(:search)
-      )`,
-        { search: `%${filters.search}%` }
-      )
+      query.andWhere(`(f_unaccent(course.name) ILIKE f_unaccent(:search))`, { search: `%${filters.search}%` })
     }
 
     if (filters.period) {
@@ -70,16 +76,26 @@ export class CourseService {
       query.limit(filters.limit)
     }
 
-    return query.getManyAndCount()
+    const [courses, count] = await query.getManyAndCount()
+    await this.addVirtualColumns(...courses)
+    return [courses, count]
   }
 
   async findById(id: string): Promise<Optional<CourseEntity>> {
     const query = this.courseRepository.createQueryBuilder('course')
-    return Optional.ofNullable(await query.where('course.id = :id', { id }).getOne())
+
+    const course = await query.where('course.id = :id', { id }).getOne()
+    if (course) {
+      await this.addVirtualColumns(course)
+    }
+
+    return Optional.ofNullable(course)
   }
 
   async create(input: Partial<CourseEntity>): Promise<CourseEntity> {
-    return this.courseRepository.save(input)
+    const result = await this.courseRepository.save(input)
+    await this.addVirtualColumns(result)
+    return result
   }
 
   async update(id: string, changes: Partial<CourseEntity>): Promise<CourseEntity> {
@@ -87,11 +103,39 @@ export class CourseService {
     if (!course) {
       throw new NotFoundResponse(`Course not found: ${id}`)
     }
-    Object.assign(course, changes)
-    return this.courseRepository.save(course)
+
+    Object.assign(course, {
+      ...changes,
+
+      // REMOVE ALL VIRTUAL COLUMNS HERE
+      timeSpent: undefined,
+      progression: undefined,
+      studentCount: undefined,
+      teacherCount: undefined,
+      permissions: undefined,
+    })
+
+    const result = await this.courseRepository.save(course)
+    await this.addVirtualColumns(result)
+    return result
   }
 
   async delete(id: string) {
     return this.courseRepository.delete(id)
+  }
+
+  private async addVirtualColumns(...courses: CourseEntity[]): Promise<void> {
+    const members = await this.courseMemberService.findViewsByCourseIds(courses.map((course) => course.id))
+    courses.forEach((course) => {
+      Object.assign(course, {
+        permissions: {
+          update: [UserRoles.admin, UserRoles.teacher].includes(this.request.user.role),
+        },
+        studentCount: members.filter((member) => member.courseId === course.id && member.role === 'student').length,
+        teacherCount: members.filter((member) => member.courseId === course.id && member.role !== 'student').length,
+      } as Partial<CourseEntity>)
+    })
+
+    await this.databaseService.resolveVirtualColumns(CourseEntity, courses, this.request.user)
   }
 }

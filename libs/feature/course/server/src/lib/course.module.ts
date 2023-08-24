@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { EventModule, AuthModule, UserModule } from '@platon/core/server'
+import { AuthModule, UserModule } from '@platon/core/server'
 import { FeatureResourceServerModule } from '@platon/feature/resource/server'
 import { ActivityCorrectorController } from './activity-corrector/activity-corrector.controller'
 import { ActivityCorrectorEntity } from './activity-corrector/activity-corrector.entity'
@@ -32,7 +32,6 @@ import { CourseDemoEntity } from './course-demo/course-demo.entity'
 @Module({
   imports: [
     UserModule,
-    EventModule,
     FeatureResourceServerModule,
     AuthModule,
     TypeOrmModule.forFeature([
@@ -80,6 +79,8 @@ import { CourseDemoEntity } from './course-demo/course-demo.entity'
     ActivityService,
     ActivityMemberService,
     CourseDemoService,
+    ActivityCorrectorService,
+    CourseNotificationService,
   ],
 })
 export class FeatureCourseServerModule {}

@@ -2,7 +2,9 @@ import { map, Observable } from 'rxjs'
 
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
+import { PLSourceFile } from '@platon/feature/compiler'
 import {
+  ExerciseTransformInput,
   FileCreate,
   FileMove,
   FileRelease,
@@ -14,7 +16,6 @@ import {
   ResourceFile,
 } from '@platon/feature/resource/common'
 import { ResourceFileProvider } from '../models/resource-file-provider'
-import { PLSourceFile } from '@platon/feature/compiler'
 
 @Injectable()
 export class RemoteResourceFileProvider extends ResourceFileProvider {
@@ -22,17 +23,26 @@ export class RemoteResourceFileProvider extends ResourceFileProvider {
     super()
   }
 
-  compile(resource: string, version?: string): Observable<PLSourceFile> {
+  compileExercise(resource: string, version?: string): Observable<PLSourceFile> {
     let params = new HttpParams()
     if (version) {
       params = params.append('version', version)
     }
 
-    return this.http
-      .post<PLSourceFile>(`/api/v1/files/compile/${resource}`, {
-        params,
-      })
-      .pipe(map((response) => response))
+    return this.http.post<PLSourceFile>(`/api/v1/files/compile/${resource}/json`, {
+      params,
+    })
+  }
+
+  transformExercise(resource: string, input: ExerciseTransformInput, version?: string): Observable<string> {
+    let params = new HttpParams()
+    if (version) {
+      params = params.append('version', version)
+    }
+    return this.http.post<string>(`/api/v1/files/compile/${resource}/text`, input, {
+      params,
+      responseType: 'text' as 'json',
+    })
   }
 
   release(resource: string | Resource, input: FileRelease): Observable<void> {

@@ -65,6 +65,9 @@ export class NotificationListComponent implements OnChanges {
   @Output() notificationsChange = new EventEmitter()
   @Output() closed = new EventEmitter()
 
+  @Input() hasMore = false
+  @Output() loadMore = new EventEmitter()
+
   protected items: Item[] = []
 
   constructor(

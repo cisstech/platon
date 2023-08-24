@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core'
+import { Component, ElementRef, Input, OnInit, ViewChild, inject } from '@angular/core'
 import { ResourceLoaderService } from '@cisstech/nge/services'
-import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor'
+import { JsonEditorComponent, JsonEditorOptions, JsonEditorTreeNode } from 'ang-jsoneditor'
 import { firstValueFrom } from 'rxjs'
 import { WebComponentDefinition } from '../../web-component'
 
@@ -11,21 +11,23 @@ import { WebComponentDefinition } from '../../web-component'
   styleUrls: ['./showcase.component.scss'],
 })
 export class ShowcaseComponent implements OnInit {
-  @Input() definition!: WebComponentDefinition
+  private readonly elementRef = inject(ElementRef) as ElementRef<HTMLElement>
+  private readonly resourceLoader = inject(ResourceLoaderService)
+  protected readonly options = new JsonEditorOptions()
+
+  protected component?: any
+  protected showEditor = false
 
   @ViewChild(JsonEditorComponent)
-  readonly editor?: JsonEditorComponent
-  readonly options = new JsonEditorOptions()
+  protected readonly editor?: JsonEditorComponent
 
-  showEditor = false
-  component?: any
-
-  constructor(private readonly el: ElementRef<HTMLElement>, private readonly resourceLoader: ResourceLoaderService) {}
+  @Input()
+  definition!: WebComponentDefinition
 
   async ngOnInit() {
     await firstValueFrom(this.resourceLoader.loadAllAsync([['style', 'assets/vendors/jsoneditor/jsoneditor.min.css']]))
 
-    const host = this.el.nativeElement.firstElementChild
+    const host = this.elementRef.nativeElement.firstElementChild
     this.component = document.createElement(this.definition.selector)
 
     const { showcase, schema } = this.definition
@@ -44,11 +46,26 @@ export class ShowcaseComponent implements OnInit {
     }
     host?.appendChild(this.component)
 
-    this.options.modes = ['tree' /* , 'view', 'form', 'code', 'text' */]
+    this.options.modes = ['tree']
     this.options.language = 'fr-FR'
     this.options.schema = schema
     this.options.mainMenuBar = false
-    this.options.sortObjectKeys = true
+    this.options.sortObjectKeys = false
+
+    this.options.onEditable = (e) => {
+      const node = e as JsonEditorTreeNode
+      if (node.field === 'cid' || node.field === 'selector') return false
+      return true
+    }
+
+    this.options.onBlur = () => {
+      const div = this.editor?.jsonEditorContainer.nativeElement as HTMLDivElement
+      if (!div) return
+      const textNodes = div.querySelectorAll('[class="jsoneditor-value jsoneditor-string"]')
+      textNodes.forEach((node) => {
+        node.innerHTML = node.textContent?.replace(/\\n/g, '<br/>') || ''
+      })
+    }
   }
 
   editorToComponent() {

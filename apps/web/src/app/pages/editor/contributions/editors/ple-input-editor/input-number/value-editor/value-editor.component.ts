@@ -12,4 +12,8 @@ export class InputNumberValueEditorComponent extends BaseValueEditor<number, Inp
   constructor() {
     super()
   }
+
+  override setValue(value: number): void {
+    super.setValue(this.convertToNumericValue(value))
+  }
 }

@@ -1,0 +1,91 @@
+<nz-table #nzTable [nzSize]="'small'" [nzShowSizeChanger]="false" [nzShowPagination]="false" [nzData]="dataSource">
+  <thead>
+    <tr>
+      <th
+        *ngIf="selectable && !disabled"
+        [nzChecked]="checked"
+        [nzIndeterminate]="indeterminate"
+        (nzCheckedChange)="onAllChecked($event)"
+      ></th>
+      <th>Titre</th>
+      <th>Section</th>
+      <th>Date de création</th>
+      <th>Date d'ouverture</th>
+      <th>Date de fermeture</th>
+      <th>Status</th>
+      <th>Avancement</th>
+      <th nzAlign="center"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let model of nzTable.data">
+      <td
+        *ngIf="selectable && !disabled"
+        [nzChecked]="selection.has(model.activity.id)"
+        (nzCheckedChange)="onItemChecked(model.activity.id, $event)"
+      ></td>
+      <td>{{ model.activity.title }}</td>
+      <td>{{ model.section?.name }}</td>
+      <td>
+        <nz-tag>{{ model.activity.createdAt | date }}</nz-tag>
+      </td>
+      <td>
+        <nz-tag>{{ (model.activity.openAt | date) || 'Non définie' }}</nz-tag>
+      </td>
+      <td>
+        <nz-tag>{{ (model.activity.closeAt | date) || 'Non définie' }}</nz-tag>
+      </td>
+      <td>
+        <ng-container *ngIf="model.activity | courseActivityState as state">
+          <nz-tag [nzColor]="state.color"> {{ state.label }}</nz-tag>
+        </ng-container>
+      </td>
+      <td>
+        <nz-tag [nzColor]="model.progressionColor"> {{ model.activity.progression }} %</nz-tag>
+      </td>
+      <td nzAlign="center" *ngIf="!disabled">
+        <a
+          nz-tooltip="Lancer"
+          nz-button
+          nzShape="round"
+          nzType="primary"
+          target="_blank"
+          [routerLink]="['/player/activity', model.activity.id]"
+        >
+          <i nz-icon nzType="play-circle" nzTheme="outline"></i>
+        </a>
+        <a
+          *ngIf="model.activity.permissions.viewStats"
+          nz-tooltip="Statistiques"
+          nz-button
+          nzShape="round"
+          nzType="default"
+          [routerLink]="['/activities', model.activity.courseId, model.activity.id]"
+        >
+          <i nz-icon nzType="bar-chart" nzTheme="outline"></i>
+        </a>
+        <div class="spacer"></div>
+        <a
+          *ngIf="model.activity.permissions.update"
+          nz-tooltip="Paramètres"
+          nz-button
+          nzShape="round"
+          nzType="default"
+          (click)="settingsSelectedActivity = model.activity; modal.open()"
+        >
+          <i nz-icon nzType="setting" nzTheme="outline"></i>
+        </a>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+<ui-modal-drawer
+  size="large"
+  [title]="settingsSelectedActivity?.title || ''"
+  (closed)="settingsSelectedActivity = undefined"
+  #modal
+>
+  <ng-template>
+    <course-activity-settings *ngIf="settingsSelectedActivity" [(activity)]="settingsSelectedActivity" />
+  </ng-template>
+</ui-modal-drawer>

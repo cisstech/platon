@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common'
 import { NgModule, Provider } from '@angular/core'
+import { NgJsonEditorModule } from 'ang-jsoneditor'
 import { PLE_INPUT_PROVIDERS, PleInputProvider } from '../ple-input'
 import { InputJsonValueEditorComponent } from './value-editor/value-editor.component'
-import { NgJsonEditorModule } from 'ang-jsoneditor'
 
 @NgModule({
   imports: [CommonModule, NgJsonEditorModule],

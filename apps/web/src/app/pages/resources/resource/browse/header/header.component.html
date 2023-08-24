@@ -8,7 +8,7 @@
     <nz-option *ngFor="let item of versions.all" [nzLabel]="item.tag" [nzValue]="item.tag" />
   </nz-select>
   <nz-button-group>
-    <a nz-button nzType="primary" nz-tooltip="Prévisualiser" (click)="preview.emit()">
+    <a *ngIf="canPreview" nz-button nzType="primary" nz-tooltip="Prévisualiser" (click)="preview.emit()">
       <i nz-icon nzType="play-circle" nzTheme="outline"></i>
     </a>
     <button nz-button target="_blank" nz-tooltip="Éditer en ligne" (click)="edit.emit()">

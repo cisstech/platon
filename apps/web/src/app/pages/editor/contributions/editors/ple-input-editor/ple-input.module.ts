@@ -11,10 +11,12 @@ import { CommonModule } from '@angular/common'
 import { InputBooleanModule } from './input-boolean'
 import { InputCodeModule } from './input-code'
 import { InputFileModule } from './input-file'
+import { InputGroupComponent } from './input-group/input-group.component'
 import { InputJsonModule } from './input-json'
 import { InputNumberModule } from './input-number'
 import { InputTextModule } from './input-text'
 import { PleInputComponent } from './ple-input.component'
+import { NzIconModule } from 'ng-zorro-antd/icon'
 
 @NgModule({
   imports: [
@@ -22,6 +24,7 @@ import { PleInputComponent } from './ple-input.component'
     FormsModule,
     ReactiveFormsModule,
 
+    NzIconModule,
     NzInputModule,
     NzSelectModule,
     NzFormModule,
@@ -35,7 +38,7 @@ import { PleInputComponent } from './ple-input.component'
     InputNumberModule,
     InputBooleanModule,
   ],
-  declarations: [PleInputComponent],
-  exports: [PleInputComponent],
+  declarations: [PleInputComponent, InputGroupComponent],
+  exports: [PleInputComponent, InputGroupComponent],
 })
 export class PleInputEditorModule {}

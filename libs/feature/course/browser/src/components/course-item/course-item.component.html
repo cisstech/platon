@@ -1,6 +1,36 @@
-<ui-list-item-article
-  [style.--border-color]="'red'"
-  [articleTitle]="name"
-  [articleDescription]="desc"
-  [articleUrl]="['/courses/', item.id]"
-/>
+<nz-ribbon [nzText]="ribbon" [nzColor]="progressColor">
+  <ui-list-item-article
+    [style.--border-color]="'red'"
+    [articleTitle]="name"
+    [articleDescription]="desc"
+    [articleIconTemplate]="image"
+    [articleUrl]="['/courses/', item.id]"
+  >
+    <ui-list-item-article-action [actionTitle]="item.teacherCount + ''" nz-tooltip="Enseignants">
+      <mat-icon>supervised_user_circle</mat-icon>
+    </ui-list-item-article-action>
+    <ui-list-item-article-action [actionTitle]="item.studentCount + ''" nz-tooltip="Élèves">
+      <mat-icon>people</mat-icon>
+    </ui-list-item-article-action>
+    <div class="spacer"></div>
+    <ui-list-item-article-action
+      [actionTitle]="item.updatedAt | date : 'dd/MM/yyyy'"
+      nz-tooltip="Dernière date de mise à jour"
+    >
+      <i nz-icon nzType="reload" nzTheme="outline"></i>
+    </ui-list-item-article-action>
+  </ui-list-item-article>
+</nz-ribbon>
+
+<ng-template #ribbon>
+  <nz-progress
+    nz-tooltip="Votre avancement sur les activités"
+    [nzPercent]="item.progression"
+    [nzSteps]="5"
+    nzSize="small"
+  />
+</ng-template>
+
+<ng-template #image>
+  <mat-icon>local_library</mat-icon>
+</ng-template>

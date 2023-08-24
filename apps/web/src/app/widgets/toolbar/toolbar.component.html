@@ -11,7 +11,7 @@
     </button>
   </ng-container>
 
-  <nz-badge [nzCount]="(notifDrawer.count | async) || 0" [nzOffset]="[-16, 16]">
+  <nz-badge [nzCount]="(notifDrawer.count | async) || 0" [nzOffset]="[-28, 8]">
     <button nz-button nzType="text" class="spacing" (click)="notifDrawer.open()">
       <mat-icon matBadgeOverlap="false"> notifications </mat-icon>
     </button>
@@ -19,7 +19,7 @@
   <user-avatar
     *ngIf="user"
     [user]="user"
-    [avatarSize]="24"
+    [size]="24"
     [attr.aria-label]="user.firstName"
     [matMenuTriggerFor]="avatarMenu"
   />

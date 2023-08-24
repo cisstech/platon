@@ -9,7 +9,7 @@
   (nzOnClose)="visible = !visible"
 >
   <ng-container *nzDrawerContent>
-    <notif-list [(notifications)]="notifications" (closed)="close()" />
+    <notif-list [(notifications)]="notifications" [hasMore]="hasMore" (loadMore)="fetchMore?.()" (closed)="close()" />
   </ng-container>
   <ng-template #footer>
     <footer>

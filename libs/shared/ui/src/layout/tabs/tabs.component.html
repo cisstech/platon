@@ -7,8 +7,8 @@
   <nz-tabset [nzLinkExact]="false" nzSize="default" nzType="line">
     <ng-container *ngFor="let tab of tabs; trackBy: trackByIndex">
       <nz-tab>
-        <a *nzTabLink nz-tab-link [routerLink]="tab.title.link" [queryParams]="tab.title.linkParams">
-          <ng-container *ngTemplateOutlet="tab.title.templateRef"></ng-container>
+        <a *nzTabLink nz-tab-link [routerLink]="tab.link" [queryParams]="tab.linkParams">
+          <ng-container *ngTemplateOutlet="tab.templateRef"></ng-container>
         </a>
       </nz-tab>
     </ng-container>

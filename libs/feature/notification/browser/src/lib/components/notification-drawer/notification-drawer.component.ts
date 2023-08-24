@@ -24,6 +24,8 @@ export class NotificationDrawerComponent implements OnInit, OnDestroy {
   protected notifications: Notification[] = []
 
   protected visible = false
+  protected hasMore = false
+  protected fetchMore?: () => void
 
   readonly count = this.counter.asObservable()
 
@@ -33,15 +35,12 @@ export class NotificationDrawerComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.refresh()
     this.subscriptions.push(
-      this.notificationSerivce.onChangeNotifications().subscribe((result) => {
-        if (result.newNotification) {
-          this.notifications = [result.newNotification, ...this.notifications]
-        } else if (result.notifications) {
-          this.notifications = result.notifications
-        }
-        this.counter.next(result.unreadCount)
+      this.notificationSerivce.paginate().subscribe(({ unreadCount, notifications, hasMore, fetchMore }) => {
+        this.notifications = notifications
+        this.counter.next(unreadCount)
+        this.hasMore = hasMore
+        this.fetchMore = fetchMore
         this.changeDetectorRef.markForCheck()
       })
     )
@@ -73,21 +72,6 @@ export class NotificationDrawerComponent implements OnInit, OnDestroy {
       await firstValueFrom(this.notificationSerivce.markAllAsRead())
     } finally {
       this.changeDetectorRef.detectChanges()
-    }
-  }
-
-  private refresh(): void {
-    const subscription = this.notificationSerivce.listNotifications({ limit: 50 }).subscribe((result) => {
-      this.notifications = result.notifications
-      this.counter.next(result.unreadCount)
-      this.changeDetectorRef.markForCheck()
-    })
-
-    if (this.subscriptions.length) {
-      this.subscriptions[0]?.unsubscribe()
-      this.subscriptions[0] = subscription
-    } else {
-      this.subscriptions.push(subscription)
     }
   }
 }

@@ -5220,6 +5220,13 @@
   dependencies:
     graphql "^15.1.0"
 
+"@types/graphql-relay@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@types/graphql-relay/-/graphql-relay-0.7.0.tgz#e6187e7ba76bbf3dccbef32a21ba5d23affa7160"
+  integrity sha512-LQHsyXFX5ZXFxgrLlRg5skLp17GBVTEzM8IE0iIt9Id5EwxS80qhdj2H01+7GzCPcRxVdQqbIFlTRUU6QFhaFw==
+  dependencies:
+    graphql-relay "*"
+
 "@types/http-proxy@^1.17.8":
   version "1.17.10"
   resolved "https://registry.npmjs.org/@types/http-proxy/-/http-proxy-1.17.10.tgz"
@@ -10328,6 +10335,11 @@ graphql-redis-subscriptions@^2.6.0:
   integrity sha512-hWAPkCNSFKpEOJBMLAcbpGl/gv+s1Yho2JIwP9MK2RlvqlWiqhAYqjA/HVRK86nkYsRkBwGgqvaNxtV1fAexBQ==
   optionalDependencies:
     ioredis "^5.2.4"
+
+graphql-relay@*, graphql-relay@^0.10.0:
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/graphql-relay/-/graphql-relay-0.10.0.tgz#3b661432edf1cb414cd4a132cf595350e524db2b"
+  integrity sha512-44yBuw2/DLNEiMypbNZBt1yMDbBmyVPVesPywnteGGALiBmdyy1JP8jSg8ClLePg8ZZxk0O4BLhd1a6U/1jDOQ==
 
 graphql-request@^6.0.0:
   version "6.0.0"

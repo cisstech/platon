@@ -1,1 +1,1 @@
-<ui-editorjs *ngIf="data" [(data)]="data" [readOnly]="readOnly" (dataChange)="onChangeData($event)" />
+<ui-editorjs *ngIf="data" [disabled]="disabled" [ngModel]="data" (ngModelChange)="onChangeData($event)" />

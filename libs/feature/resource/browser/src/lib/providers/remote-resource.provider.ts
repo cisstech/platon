@@ -94,9 +94,9 @@ export class RemoteResourceProvider extends ResourceProvider {
       params = params.append('views', 'true')
     }
 
-    if (filters.parent) {
-      params = params.append('parent', filters.parent)
-    }
+    filters.parents?.forEach((e) => {
+      params = params.append('parents', e)
+    })
 
     return this.http.get<ListResponse<Resource>>(`/api/v1/resources`, { params })
   }

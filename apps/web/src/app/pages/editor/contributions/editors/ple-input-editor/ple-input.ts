@@ -70,6 +70,22 @@ export abstract class BaseValueEditor<TValue = unknown, TOptions = unknown>
     this.disabled = !!disabled
     this.changeDetectorRef.markForCheck()
   }
+
+  protected convertToTextValue(value: unknown): string {
+    return typeof value === 'string'
+      ? value
+      : typeof value === 'object'
+      ? JSON.stringify(value, null, 2)
+      : `${value || ''}`
+  }
+
+  protected convertToNumericValue(value: unknown): number {
+    return Number(`${value}`) || 0
+  }
+
+  protected convertToBooleanValuee(value: unknown): boolean {
+    return !!value
+  }
 }
 
 export abstract class BaseConfigEditor<TOptions = unknown> implements PleInputConfigEditor<TOptions> {
