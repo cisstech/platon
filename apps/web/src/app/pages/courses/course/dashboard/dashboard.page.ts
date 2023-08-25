@@ -23,7 +23,6 @@ import { Activity, CourseSection } from '@platon/feature/course/common'
 import { CourseSectionActionsComponent } from './section-actions/section-actions.component'
 
 import { DurationPipe, SearchBar, UiSearchBarComponent, UiViewModeComponent } from '@platon/shared/ui'
-import { NgxChartsModule } from '@swimlane/ngx-charts'
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 import { CoursePresenter } from '../course.presenter'
 
@@ -49,8 +48,6 @@ import { CoursePresenter } from '../course.presenter'
     NzSegmentedModule,
     NzStatisticModule,
     NzTypographyModule,
-
-    NgxChartsModule,
 
     CourseActivityGridComponent,
     CourseActivityTableComponent,
