@@ -12,14 +12,14 @@
             </mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>
-            <ngx-charts-advanced-pie-chart
-              label="Ressources"
-              [view]="view"
-              [tooltipText]="formatStatus.bind(this)"
-              (select)="searchByStatus($event.name)"
-              [nameFormatting]="formatStatus.bind(this)"
-              [results]="statuses"
-            />
+            <div
+              *ngIf="statusChart"
+              class="echarts"
+              echarts
+              [autoResize]="false"
+              [options]="statusChart"
+              (chartClick)="onClickedStatus($event)"
+            ></div>
           </mat-card-content>
         </mat-card>
       </section>

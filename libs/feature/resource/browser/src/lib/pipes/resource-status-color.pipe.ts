@@ -9,6 +9,14 @@ export const RESOURCE_STATUS_COLORS: Record<ResourceStatus, string> = {
   DEPRECATED: 'red',
 }
 
+export const RESOURCE_STATUS_COLORS_HEX: Record<ResourceStatus, string> = {
+  DRAFT: '#1890ff',
+  READY: '#52c41a',
+  BUGGED: '#eb2f96',
+  NOT_TESTED: '#faad14',
+  DEPRECATED: '#f5222d',
+}
+
 @Pipe({
   name: 'resourceStatusColor',
 })
