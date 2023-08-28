@@ -142,7 +142,7 @@
     "@apollo/client": "^3.7.11",
     "@apollo/server": "^4.6.0",
     "@auth0/angular-jwt": "^5.1.2",
-    "@cisstech/nge": "^15.2.3",
+    "@cisstech/nge": "^15.2.4",
     "@cisstech/nge-ide": "^15.2.3",
     "@editorjs/attaches": "^1.3.0",
     "@editorjs/checklist": "^1.4.0",

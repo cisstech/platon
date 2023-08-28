@@ -1800,10 +1800,10 @@
   dependencies:
     tslib "^2.0.0"
 
-"@cisstech/nge@^15.2.3":
-  version "15.2.3"
-  resolved "https://registry.npmjs.org/@cisstech/nge/-/nge-15.2.3.tgz"
-  integrity sha512-O2I6stus7rod9YyE4/kQX/smpMtP3nR1fJtyCLgtv+5BuXItaD7HwOF57H1O3Xn1GNsEJcsob+AeAKBcKDnaIg==
+"@cisstech/nge@^15.2.4":
+  version "15.2.4"
+  resolved "https://registry.yarnpkg.com/@cisstech/nge/-/nge-15.2.4.tgz#c257d5329b29fa80be313dd9fdcc974b8edcc382"
+  integrity sha512-wA3EJFZWo0e9JuCPolVDXB6VZgpTIWQrCi1IUgB1bp0Iqfg4yZpNjE9ROvP8TqtghJFDFb3EFwqh8NH0YvMWDQ==
   dependencies:
     tslib "^2.3.0"
 
