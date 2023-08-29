@@ -23,6 +23,7 @@ import { DragDropComponentDefinition } from './forms/drag-drop/drag-drop'
 import { FeedbackComponentDefinition } from './widgets/feedback/feedback'
 import { PresenterComponentDefinition } from './widgets/presenter/presenter'
 import { ChartViewerPiesComponentDefinition } from './widgets/chart-viewer-pies/chart-viewer-pies'
+import { ChartViewerBarsComponentDefinition } from './widgets/chart-viewer-bars/chart-viewer-bars'
 
 export const WEB_COMPONENTS_BUNDLES: NgeElementDef[] = [
   // INTERNALS
@@ -153,6 +154,10 @@ export const WEB_COMPONENTS_BUNDLES: NgeElementDef[] = [
     selector: 'wc-chart-viewer-pies',
     module: () => import('./widgets/chart-viewer-pies/chart-viewer-pies.module').then((m) => m.ChartViewerPiesModule),
   },
+  {
+    selector: 'wc-chart-viewer-bars',
+    module: () => import('./widgets/chart-viewer-bars/chart-viewer-bars.module').then((m) => m.ChartViewerBarsModule),
+  },
 ]
 
 export const WEB_COMPONENTS_REGISTRY: Provider[] = [
@@ -255,5 +260,10 @@ export const WEB_COMPONENTS_REGISTRY: Provider[] = [
     provide: WEB_COMPONENT_DEFINITIONS,
     multi: true,
     useValue: ChartViewerPiesComponentDefinition,
+  },
+  {
+    provide: WEB_COMPONENT_DEFINITIONS,
+    multi: true,
+    useValue: ChartViewerBarsComponentDefinition,
   },
 ]

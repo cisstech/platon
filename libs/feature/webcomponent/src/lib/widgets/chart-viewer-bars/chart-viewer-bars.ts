@@ -1,18 +1,11 @@
-import { LegendPosition } from '@swimlane/ngx-charts'
 import { defineWebComponent, IWebComponent, WebComponentTypes } from '../../web-component'
 import { ChartViewerBase, ChartViewerBaseProperties } from '../../shared/components/chart-viewer/base'
+import { EChartsOption } from 'echarts'
 
 export interface ChartViewerBarsState extends IWebComponent, ChartViewerBase {
   mode: 'horizontal' | 'vertical'
-  showXAxis: boolean
-  showXAxisLabel: boolean
   xAxisLabel: string
-  showYAxis: boolean
-  showYAxisLabel: boolean
   yAxisLabel: string
-  showLegend: boolean
-  legendPosition: LegendPosition
-  legend: string
 }
 
 export const ChartViewerBarsComponentDefinition = defineWebComponent({
@@ -34,51 +27,15 @@ export const ChartViewerBarsComponentDefinition = defineWebComponent({
         description: "Mode d'affichage du graphe : horizontal ou vertical",
         enum: ['horizontal', 'vertical'],
       },
-      showXAxis: {
-        type: 'boolean',
-        default: true,
-        description: "Afficher l'axe horizontal?",
-      },
       xAxisLabel: {
         type: 'string',
         default: 'Axe X',
         description: "Label de l'axe horizontal",
       },
-      showXAxisLabel: {
-        type: 'boolean',
-        default: true,
-        description: "Afficher le label de l'axe horizontal?",
-      },
-      showYAxis: {
-        type: 'boolean',
-        default: true,
-        description: "Afficher l'axe vertical?",
-      },
       yAxisLabel: {
         type: 'string',
         default: 'Axe Y',
         description: "Label de l'axe vertical",
-      },
-      showYAxisLabel: {
-        type: 'boolean',
-        default: true,
-        description: "Afficher le label de l'axe vertical?",
-      },
-      showLegend: {
-        type: 'boolean',
-        default: true,
-        description: 'Afficher la légende décrivant les données affichées?',
-      },
-      legendPosition: {
-        type: 'string',
-        default: 'right',
-        description: "Position de la légende dans l'affichage du graphe",
-        enum: ['below', 'right'],
-      },
-      legend: {
-        type: 'string',
-        default: 'Légende',
-        description: 'Titre de la légende',
       },
       ...ChartViewerBaseProperties,
     },
@@ -86,49 +43,105 @@ export const ChartViewerBarsComponentDefinition = defineWebComponent({
   showcase: {
     data: [
       {
-        name: 'ValueA',
-        series: [
-          {
-            name: 'Set1',
-            value: 7300000,
-          },
-          {
-            name: 'Set2',
-            value: 8940000,
-          },
-        ],
-      },
-
-      {
-        name: 'ValueB',
-        series: [
-          {
-            name: 'Set1',
-            value: 7870000,
-          },
-          {
-            name: 'Set2',
-            value: 8270000,
-          },
-        ],
+        name: 'Germany',
+        value: 8940000,
       },
       {
-        name: 'ValueC',
-        series: [
-          {
-            name: 'Set1',
-            value: 5000002,
-          },
-          {
-            name: 'Set2',
-            value: 5800000,
-          },
-          {
-            name: 'Set3',
-            value: 4269000,
-          },
-        ],
+        name: 'USA',
+        value: 5000000,
+      },
+      {
+        name: 'France',
+        value: 7200000,
+      },
+      {
+        name: 'UK',
+        value: 6200000,
+      },
+      {
+        name: 'Italy',
+        value: 4200000,
+      },
+      {
+        name: 'Japan',
+        value: 1285420,
+      },
+      {
+        name: 'Spain',
+        value: 8200000,
       },
     ],
   },
 })
+
+export const simpleChartViewerBarsState: EChartsOption = {
+  title: {
+    text: 'Waterfall Chart',
+    subtext: 'Living Expenses in Shenzhen',
+    left: 'center',
+  },
+  grid: { containLabel: true },
+  xAxis: {
+    type: 'category',
+    axisLabel: { interval: 0, rotate: 30 },
+  },
+  yAxis: {
+    type: 'value',
+  },
+  tooltip: {
+    trigger: 'axis',
+    axisPointer: {
+      type: 'shadow',
+    },
+  },
+  dataset: {
+    source: [],
+  },
+  series: [
+    {
+      type: 'bar',
+      encode: {
+        // Map the "amount" column to X axis.
+        x: 'key',
+        // Map the "product" column to Y axis
+        y: 'value',
+      },
+    },
+  ],
+}
+
+export const horizontalChartViewerBarsState: EChartsOption = {
+  title: {
+    text: 'Waterfall Chart',
+    subtext: 'Living Expenses in Shenzhen',
+    left: 'center',
+  },
+  grid: { containLabel: true },
+  xAxis: {
+    type: 'category',
+    axisLabel: { interval: 0, rotate: 30 },
+  },
+  yAxis: {
+    type: 'value',
+  },
+  tooltip: {
+    trigger: 'axis',
+    axisPointer: {
+      type: 'shadow',
+    },
+  },
+  dataset: {
+    source: [],
+  },
+  series: [
+    {
+      type: 'bar',
+      encode: {
+        // Map the "amount" column to X axis.
+        x: 'key',
+        // Map the "product" column to Y axis
+        y: 'value',
+      },
+    },
+  ],
+}
