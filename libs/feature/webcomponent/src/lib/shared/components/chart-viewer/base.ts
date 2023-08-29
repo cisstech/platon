@@ -1,46 +1,12 @@
-import { ScaleType } from '@swimlane/ngx-charts'
+import { EChartsOption } from 'echarts'
 import { JSONSchema7 } from 'json-schema'
 
-export const availableColors = [
-  'vivid',
-  'natural',
-  'cool',
-  'fire',
-  'solar',
-  'air',
-  'aqua',
-  'flame',
-  'ocean',
-  'forest',
-  'horizon',
-  'neons',
-  'picnic',
-  'night',
-  'nightLights',
-]
-
-export type availableColorsType =
-  | 'vivid'
-  | 'natural'
-  | 'cool'
-  | 'fire'
-  | 'solar'
-  | 'air'
-  | 'aqua'
-  | 'flame'
-  | 'ocean'
-  | 'forest'
-  | 'horizon'
-  | 'neons'
-  | 'picnic'
-  | 'night'
-  | 'nightLights'
-
 export interface ChartViewerBase {
-  gradient: boolean
-  colorScheme: availableColorsType
-  schemeType: ScaleType
-  data: unknown[]
+  data: { name: string; value: number }[]
+  title: EChartsOption['title']
+  legend: EChartsOption['legend']
+  tooltip: EChartsOption['tooltip']
+  dataTitle: string
 }
 
 export const ChartViewerBaseProperties: Record<string, JSONSchema7> = {
@@ -49,21 +15,33 @@ export const ChartViewerBaseProperties: Record<string, JSONSchema7> = {
     default: [],
     description: 'Jeu de donnée à afficher, le format est décrit plus bas',
   },
-  gradient: {
-    type: 'boolean',
-    default: false,
-    description: 'utiliser un gradian pour les couleurs des données?',
+  title: {
+    type: 'object',
+    default: {
+      text: 'Title',
+      subtext: 'SubTitle',
+      left: 'center',
+    },
+    description: 'Titre du graphique',
   },
-  colorScheme: {
-    type: 'string',
-    default: 'horizon',
-    description: 'Thème de couleur utilisé pour afficher les données',
-    enum: availableColors,
+  legend: {
+    type: 'object',
+    default: {
+      orient: 'vertical',
+      left: 'left',
+    },
+    description: 'Légende du graphique',
   },
-  schemeType: {
+  tooltip: {
+    type: 'object',
+    default: {
+      trigger: 'item',
+    },
+    description: 'Tooltip du graphique',
+  },
+  dataTitle: {
     type: 'string',
-    default: 'ordinal',
-    description: "Type d'affichage du graphe",
-    enum: ['ordinal', 'time', 'linear'],
+    default: 'Valeur de la donnée',
+    description: 'Titre à afficher sur chaque donnée',
   },
 }
