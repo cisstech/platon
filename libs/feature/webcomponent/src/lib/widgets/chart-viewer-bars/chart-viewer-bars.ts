@@ -74,7 +74,7 @@ export const ChartViewerBarsComponentDefinition = defineWebComponent({
   },
 })
 
-export const simpleChartViewerBarsState: EChartsOption = {
+export const verticalChartViewerBarsState: EChartsOption = {
   title: {
     text: 'Waterfall Chart',
     subtext: 'Living Expenses in Shenzhen',
@@ -117,11 +117,11 @@ export const horizontalChartViewerBarsState: EChartsOption = {
     left: 'center',
   },
   grid: { containLabel: true },
-  xAxis: {
+  yAxis: {
     type: 'category',
     axisLabel: { interval: 0, rotate: 30 },
   },
-  yAxis: {
+  xAxis: {
     type: 'value',
   },
   tooltip: {
@@ -138,9 +138,9 @@ export const horizontalChartViewerBarsState: EChartsOption = {
       type: 'bar',
       encode: {
         // Map the "amount" column to X axis.
-        x: 'key',
+        y: 'key',
         // Map the "product" column to Y axis
-        y: 'value',
+        x: 'value',
       },
     },
   ],

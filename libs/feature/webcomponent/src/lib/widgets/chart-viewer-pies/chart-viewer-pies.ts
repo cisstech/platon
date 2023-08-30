@@ -152,7 +152,7 @@ export const halfdonutChartViewerPiesState: EChartsOption = {
         show: true,
         formatter(param) {
           // correct the percentage
-          return param.name + ' (' + param.percent ?? 0 * 2 + '%)'
+          return param.name + ' (' + (param.percent ?? 0 * 2) + '%)'
         },
       },
       data: [],

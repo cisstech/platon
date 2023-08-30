@@ -152,11 +152,17 @@ export const WEB_COMPONENTS_BUNDLES: NgeElementDef[] = [
   },
   {
     selector: 'wc-chart-viewer-pies',
-    module: () => import('./widgets/chart-viewer-pies/chart-viewer-pies.module').then((m) => m.ChartViewerPiesModule),
+    module: () =>
+      import(
+        /* webpackChunkName: "wc-chart-viewer-pies" */ './widgets/chart-viewer-pies/chart-viewer-pies.module'
+      ).then((m) => m.ChartViewerPiesModule),
   },
   {
     selector: 'wc-chart-viewer-bars',
-    module: () => import('./widgets/chart-viewer-bars/chart-viewer-bars.module').then((m) => m.ChartViewerBarsModule),
+    module: () =>
+      import(
+        /* webpackChunkName: "wc-chart-viewer-bars" */ './widgets/chart-viewer-bars/chart-viewer-bars.module'
+      ).then((m) => m.ChartViewerBarsModule),
   },
 ]
 

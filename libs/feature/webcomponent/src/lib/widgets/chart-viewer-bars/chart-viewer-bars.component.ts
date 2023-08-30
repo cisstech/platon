@@ -4,7 +4,8 @@ import { EChartsOption } from 'echarts'
 import {
   ChartViewerBarsComponentDefinition,
   ChartViewerBarsState,
-  simpleChartViewerBarsState,
+  horizontalChartViewerBarsState,
+  verticalChartViewerBarsState,
 } from './chart-viewer-bars'
 
 @Component({
@@ -17,11 +18,22 @@ import {
 export class ChartViewerBarsComponent implements WebComponentHooks<ChartViewerBarsState> {
   @Input() state!: ChartViewerBarsState
 
-  chartOption: EChartsOption = simpleChartViewerBarsState
+  chartOption: EChartsOption = verticalChartViewerBarsState
 
   constructor(readonly injector: Injector) {}
 
+  getChartOption() {
+    switch (this.state.mode) {
+      case 'horizontal': {
+        return horizontalChartViewerBarsState
+      }
+      default:
+        return verticalChartViewerBarsState
+    }
+  }
+
   onChangeState() {
+    this.chartOption = this.getChartOption()
     this.chartOption.title = this.state.title
     this.chartOption.tooltip = this.state.tooltip
     if (this.chartOption.dataset) {
