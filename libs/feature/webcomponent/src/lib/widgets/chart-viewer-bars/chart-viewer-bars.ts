@@ -1,8 +1,8 @@
 import { defineWebComponent, IWebComponent, WebComponentTypes } from '../../web-component'
-import { ChartViewerBase, ChartViewerBaseProperties } from '../../shared/components/chart-viewer/base'
+import { ChartViewerBase1, ChartViewerBaseProperties1 } from '../../shared/components/chart-viewer/base'
 import { EChartsOption } from 'echarts'
 
-export interface ChartViewerBarsState extends IWebComponent, ChartViewerBase {
+export interface ChartViewerBarsState extends IWebComponent, ChartViewerBase1 {
   mode: 'horizontal' | 'vertical'
   xAxisLabel: string
   yAxisLabel: string
@@ -29,15 +29,15 @@ export const ChartViewerBarsComponentDefinition = defineWebComponent({
       },
       xAxisLabel: {
         type: 'string',
-        default: 'Axe X',
-        description: "Label de l'axe horizontal",
+        default: '',
+        description: "Label de l'axe X",
       },
       yAxisLabel: {
         type: 'string',
-        default: 'Axe Y',
-        description: "Label de l'axe vertical",
+        default: '',
+        description: "Label de l'axe Y",
       },
-      ...ChartViewerBaseProperties,
+      ...ChartViewerBaseProperties1,
     },
   },
   showcase: {
@@ -84,6 +84,7 @@ export const verticalChartViewerBarsState: EChartsOption = {
   xAxis: {
     type: 'category',
     axisLabel: { interval: 0, rotate: 30 },
+    data: [],
   },
   yAxis: {
     type: 'value',
@@ -120,6 +121,7 @@ export const horizontalChartViewerBarsState: EChartsOption = {
   yAxis: {
     type: 'category',
     axisLabel: { interval: 0, rotate: 30 },
+    data: [],
   },
   xAxis: {
     type: 'value',

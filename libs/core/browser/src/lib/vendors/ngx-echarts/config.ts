@@ -1,6 +1,6 @@
 // https://echarts.apache.org/handbook/en/basics/import
 
-import { BarChart, LineChart, PieChart } from 'echarts/charts'
+import { BarChart, LineChart, PieChart, RadarChart } from 'echarts/charts'
 import {
   // Dataset
   DatasetComponent,
@@ -21,6 +21,7 @@ import type {
   DatasetComponentOption,
   GridComponentOption,
   LegendComponentOption,
+  RadarComponentOption,
   TitleComponentOption,
   TooltipComponentOption,
 } from 'echarts/components'
@@ -36,6 +37,7 @@ export type EChartsOption = ComposeOption<
   | TitleComponentOption
   | LegendComponentOption
   | TooltipComponentOption
+  | RadarComponentOption
 >
 
 // Register the required components
@@ -52,6 +54,7 @@ echarts.use([
   LabelLayout,
   UniversalTransition,
   CanvasRenderer,
+  RadarChart,
 ])
 
 export { echarts }

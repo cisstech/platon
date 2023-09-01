@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Injector, Input } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Injector, Input, inject } from '@angular/core'
 import { WebComponent, WebComponentHooks } from '../../web-component'
 import { EChartsOption } from 'echarts'
 import {
@@ -7,6 +7,7 @@ import {
   horizontalChartViewerBarsState,
   verticalChartViewerBarsState,
 } from './chart-viewer-bars'
+import { deepCopy } from '@cisstech/nge/utils'
 
 @Component({
   selector: 'wc-chart-viewer-bars, wc-cv-bars',
@@ -16,31 +17,59 @@ import {
 })
 @WebComponent(ChartViewerBarsComponentDefinition)
 export class ChartViewerBarsComponent implements WebComponentHooks<ChartViewerBarsState> {
+  readonly injector = inject(Injector)
+  readonly changeDetectorRef = inject(ChangeDetectorRef)
+
+  protected commonOption = horizontalChartViewerBarsState
+  protected mergedOption: EChartsOption = {}
+
   @Input() state!: ChartViewerBarsState
 
-  chartOption: EChartsOption = verticalChartViewerBarsState
-
-  constructor(readonly injector: Injector) {}
-
-  getChartOption() {
-    switch (this.state.mode) {
-      case 'horizontal': {
-        return horizontalChartViewerBarsState
-      }
-      default:
-        return verticalChartViewerBarsState
-    }
-  }
-
   onChangeState() {
-    this.chartOption = this.getChartOption()
-    this.chartOption.title = this.state.title
-    this.chartOption.tooltip = this.state.tooltip
-    if (this.chartOption.dataset) {
-      const temp = this.state.data.map((element) => [element.name, element.value])
-      this.chartOption.dataset = {
-        ...this.chartOption.dataset,
-        source: [['key', 'value'], ...temp],
+    this.state.mode = this.state.mode ?? 'simple'
+
+    this.mergedOption = {
+      horizontal: deepCopy(horizontalChartViewerBarsState),
+      vertical: deepCopy(verticalChartViewerBarsState),
+    }[this.state.mode]
+
+    if (Array.isArray(this.mergedOption.series)) {
+      this.mergedOption.series[0].data = deepCopy(this.state.data)
+      this.mergedOption.series[0].name = this.state.dataTitle
+    }
+
+    this.mergedOption = {
+      ...this.mergedOption,
+      title: this.state.title,
+      legend: this.state.legend,
+      tooltip: this.state.tooltip,
+    }
+
+    if (this.state.mode === 'horizontal') {
+      this.mergedOption = {
+        ...this.mergedOption,
+        xAxis: {
+          ...this.mergedOption.xAxis,
+          type: 'category',
+          data: this.state.data.map((d) => d.name),
+        },
+        yAxis: {
+          ...this.mergedOption.yAxis,
+          type: 'value',
+        },
+      }
+    } else {
+      this.mergedOption = {
+        ...this.mergedOption,
+        yAxis: {
+          ...this.mergedOption.yAxis,
+          type: 'category',
+          data: this.state.data.map((d) => d.name),
+        },
+        xAxis: {
+          ...this.mergedOption.xAxis,
+          type: 'value',
+        },
       }
     }
   }

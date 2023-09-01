@@ -1,8 +1,8 @@
 import { defineWebComponent, IWebComponent, WebComponentTypes } from '../../web-component'
-import { ChartViewerBase, ChartViewerBaseProperties } from '../../shared/components/chart-viewer/base'
+import { ChartViewerBase1, ChartViewerBaseProperties1 } from '../../shared/components/chart-viewer/base'
 import { EChartsOption } from 'echarts'
 
-export interface ChartViewerPiesState extends IWebComponent, ChartViewerBase {
+export interface ChartViewerPiesState extends IWebComponent, ChartViewerBase1 {
   mode: 'simple' | 'donut' | 'half-donut' | 'nightingale'
 }
 
@@ -25,7 +25,17 @@ export const ChartViewerPiesComponentDefinition = defineWebComponent({
         description: "Mode d'affichage du graphe : simple, donuts ou half-donuts",
         enum: ['simple', 'donut', 'half-donut', 'nightingale'],
       },
-      ...ChartViewerBaseProperties,
+      xAxisLabel: {
+        type: 'string',
+        default: 'Axe X',
+        description: "Label de l'axe horizontal",
+      },
+      yAxisLabel: {
+        type: 'string',
+        default: 'Axe Y',
+        description: "Label de l'axe vertical",
+      },
+      ...ChartViewerBaseProperties1,
     },
   },
   showcase: {
@@ -64,8 +74,8 @@ export const ChartViewerPiesComponentDefinition = defineWebComponent({
 
 export const simpleChartViewerPiesState: EChartsOption = {
   title: {
-    text: 'Referer of a Website',
-    subtext: 'Fake Data',
+    text: 'PLaTon Chart',
+    subtext: 'Graph viewer pies',
     left: 'center',
   },
   tooltip: {
@@ -94,8 +104,8 @@ export const simpleChartViewerPiesState: EChartsOption = {
 
 export const donutChartViewerPiesState: EChartsOption = {
   title: {
-    text: 'Referer of a Website',
-    subtext: 'Fake Data',
+    text: 'PLaTon Chart',
+    subtext: 'Graph viewer pies',
     left: 'center',
   },
   tooltip: {
@@ -131,6 +141,11 @@ export const donutChartViewerPiesState: EChartsOption = {
 }
 
 export const halfdonutChartViewerPiesState: EChartsOption = {
+  title: {
+    text: 'PLaTon Chart',
+    subtext: 'Graph viewer pies',
+    left: 'center',
+  },
   tooltip: {
     trigger: 'item',
   },
@@ -161,6 +176,11 @@ export const halfdonutChartViewerPiesState: EChartsOption = {
 }
 
 export const nightingaleChartViewerPiesState: EChartsOption = {
+  title: {
+    text: 'PLaTon Chart',
+    subtext: 'Graph viewer pies',
+    left: 'center',
+  },
   legend: {
     top: 'bottom',
   },
