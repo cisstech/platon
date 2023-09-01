@@ -1,11 +1,12 @@
 import { defineWebComponent, IWebComponent, WebComponentTypes } from '../../web-component'
-import { ChartViewerBase1, ChartViewerBaseProperties1 } from '../../shared/components/chart-viewer/base'
+import { ChartViewerBase2, ChartViewerBaseProperties1 } from '../../shared/components/chart-viewer/base'
 import { EChartsOption } from 'echarts'
 
-export interface ChartViewerBarsState extends IWebComponent, ChartViewerBase1 {
+export interface ChartViewerBarsState extends IWebComponent, ChartViewerBase2 {
   mode: 'horizontal' | 'vertical'
   xAxisLabel: string
   yAxisLabel: string
+  labels: string[]
 }
 
 export const ChartViewerBarsComponentDefinition = defineWebComponent({
@@ -37,40 +38,29 @@ export const ChartViewerBarsComponentDefinition = defineWebComponent({
         default: '',
         description: "Label de l'axe Y",
       },
+      labels: {
+        type: 'array',
+        default: [],
+        description: 'Liste des labels',
+        items: {
+          type: 'string',
+        },
+      },
       ...ChartViewerBaseProperties1,
     },
   },
   showcase: {
     data: [
       {
-        name: 'Germany',
-        value: 8940000,
+        value: [4200, 3000, 20000, 35000, 50000, 18000],
+        name: 'Allocated Budget',
       },
       {
-        name: 'USA',
-        value: 5000000,
-      },
-      {
-        name: 'France',
-        value: 7200000,
-      },
-      {
-        name: 'UK',
-        value: 6200000,
-      },
-      {
-        name: 'Italy',
-        value: 4200000,
-      },
-      {
-        name: 'Japan',
-        value: 1285420,
-      },
-      {
-        name: 'Spain',
-        value: 8200000,
+        value: [5000, 14000, 28000, 26000, 42000, 21000],
+        name: 'Actual Spending',
       },
     ],
+    labels: ['Sales', 'Administration', 'Information Technology', 'Customer Support', 'Development', 'Marketing'],
   },
 })
 
@@ -80,7 +70,12 @@ export const verticalChartViewerBarsState: EChartsOption = {
     subtext: 'Living Expenses in Shenzhen',
     left: 'center',
   },
-  grid: { containLabel: true },
+  grid: {
+    left: '3%',
+    right: '4%',
+    bottom: '3%',
+    containLabel: true,
+  },
   xAxis: {
     type: 'category',
     axisLabel: { interval: 0, rotate: 30 },
@@ -95,20 +90,7 @@ export const verticalChartViewerBarsState: EChartsOption = {
       type: 'shadow',
     },
   },
-  dataset: {
-    source: [],
-  },
-  series: [
-    {
-      type: 'bar',
-      encode: {
-        // Map the "amount" column to X axis.
-        x: 'key',
-        // Map the "product" column to Y axis
-        y: 'value',
-      },
-    },
-  ],
+  series: [],
 }
 
 export const horizontalChartViewerBarsState: EChartsOption = {
@@ -117,7 +99,12 @@ export const horizontalChartViewerBarsState: EChartsOption = {
     subtext: 'Living Expenses in Shenzhen',
     left: 'center',
   },
-  grid: { containLabel: true },
+  grid: {
+    left: '3%',
+    right: '4%',
+    bottom: '3%',
+    containLabel: true,
+  },
   yAxis: {
     type: 'category',
     axisLabel: { interval: 0, rotate: 30 },
@@ -135,15 +122,5 @@ export const horizontalChartViewerBarsState: EChartsOption = {
   dataset: {
     source: [],
   },
-  series: [
-    {
-      type: 'bar',
-      encode: {
-        // Map the "amount" column to X axis.
-        y: 'key',
-        // Map the "product" column to Y axis
-        x: 'value',
-      },
-    },
-  ],
+  series: [],
 }

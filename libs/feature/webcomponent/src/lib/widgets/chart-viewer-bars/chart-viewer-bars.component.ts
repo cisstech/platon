@@ -33,25 +33,14 @@ export class ChartViewerBarsComponent implements WebComponentHooks<ChartViewerBa
       vertical: deepCopy(verticalChartViewerBarsState),
     }[this.state.mode]
 
-    if (Array.isArray(this.mergedOption.series)) {
-      this.mergedOption.series[0].data = deepCopy(this.state.data)
-      this.mergedOption.series[0].name = this.state.dataTitle
-    }
-
-    this.mergedOption = {
-      ...this.mergedOption,
-      title: this.state.title,
-      legend: this.state.legend,
-      tooltip: this.state.tooltip,
-    }
-
     if (this.state.mode === 'horizontal') {
       this.mergedOption = {
         ...this.mergedOption,
         xAxis: {
           ...this.mergedOption.xAxis,
           type: 'category',
-          data: this.state.data.map((d) => d.name),
+          data: this.state.labels,
+          axisLabel: { interval: 0, rotate: 0 },
         },
         yAxis: {
           ...this.mergedOption.yAxis,
@@ -64,13 +53,31 @@ export class ChartViewerBarsComponent implements WebComponentHooks<ChartViewerBa
         yAxis: {
           ...this.mergedOption.yAxis,
           type: 'category',
-          data: this.state.data.map((d) => d.name),
+          data: this.state.labels,
+          axisLabel: { interval: 0, rotate: 0 },
         },
         xAxis: {
           ...this.mergedOption.xAxis,
           type: 'value',
         },
       }
+    }
+    this.mergedOption.series = []
+    this.state.data.forEach((data) => {
+      if (Array.isArray(this.mergedOption.series)) {
+        this.mergedOption.series.push({
+          type: 'bar',
+          name: data.name,
+          data: data.value,
+        })
+      }
+    })
+
+    this.mergedOption = {
+      ...this.mergedOption,
+      title: this.state.title,
+      legend: this.state.legend,
+      tooltip: this.state.tooltip,
     }
   }
 }
