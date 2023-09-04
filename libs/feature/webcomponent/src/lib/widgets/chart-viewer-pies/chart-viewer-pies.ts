@@ -25,16 +25,6 @@ export const ChartViewerPiesComponentDefinition = defineWebComponent({
         description: "Mode d'affichage du graphe : simple, donuts ou half-donuts",
         enum: ['simple', 'donut', 'half-donut', 'nightingale'],
       },
-      xAxisLabel: {
-        type: 'string',
-        default: 'Axe X',
-        description: "Label de l'axe horizontal",
-      },
-      yAxisLabel: {
-        type: 'string',
-        default: 'Axe Y',
-        description: "Label de l'axe vertical",
-      },
       ...ChartViewerBaseProperties1,
     },
   },
