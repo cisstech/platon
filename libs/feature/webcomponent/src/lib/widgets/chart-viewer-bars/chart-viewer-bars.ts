@@ -1,5 +1,5 @@
 import { defineWebComponent, IWebComponent, WebComponentTypes } from '../../web-component'
-import { ChartViewerBase2, ChartViewerBaseProperties1 } from '../../shared/components/chart-viewer/base'
+import { ChartViewerBase2, ChartViewerBaseProperties2 } from '../../shared/components/chart-viewer/base'
 import { EChartsOption } from 'echarts'
 
 export interface ChartViewerBarsState extends IWebComponent, ChartViewerBase2 {
@@ -46,7 +46,7 @@ export const ChartViewerBarsComponentDefinition = defineWebComponent({
           type: 'string',
         },
       },
-      ...ChartViewerBaseProperties1,
+      ...ChartViewerBaseProperties2,
     },
   },
   showcase: {

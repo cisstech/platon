@@ -25,6 +25,30 @@ export const ChartViewerBaseProperties: Record<string, JSONSchema7> = {
       left: 'center',
     },
     description: 'Titre du graphique',
+    properties: {
+      text: {
+        type: 'string',
+        default: 'Title',
+        description: 'Titre du graphique',
+      },
+      subtext: {
+        type: 'string',
+        default: 'SubTitle',
+        description: 'Sous-titre du graphique',
+      },
+      left: {
+        type: 'string',
+        default: 'center',
+        description: "Position du titre sur l'axe horizontal, ne peut pas être combiné avec top",
+        enum: ['left', 'center', 'right'],
+      },
+      top: {
+        type: 'string',
+        default: 'top',
+        description: "Position du titre sur l'axe vertical, ne peut pas être combiné avec left",
+        enum: ['top', 'center', 'bottom'],
+      },
+    },
   },
   legend: {
     type: 'object',
@@ -33,6 +57,26 @@ export const ChartViewerBaseProperties: Record<string, JSONSchema7> = {
       left: 'left',
     },
     description: 'Légende du graphique',
+    properties: {
+      orient: {
+        type: 'string',
+        default: 'vertical',
+        description: 'Orientation de la légende',
+        enum: ['horizontal', 'vertical'],
+      },
+      left: {
+        type: 'string',
+        default: 'left',
+        description: "Position de la légende sur l'axe horizontal, ne peut pas être combiné avec top",
+        enum: ['left', 'center', 'right'],
+      },
+      top: {
+        type: 'string',
+        default: 'top',
+        description: "Position de la légende sur l'axe vertical, ne peut pas être combiné avec left",
+        enum: ['top', 'center', 'bottom'],
+      },
+    },
   },
   tooltip: {
     type: 'object',
@@ -40,6 +84,14 @@ export const ChartViewerBaseProperties: Record<string, JSONSchema7> = {
       trigger: 'item',
     },
     description: 'Tooltip du graphique',
+    properties: {
+      trigger: {
+        type: 'string',
+        default: 'item',
+        description: 'Type de tooltip',
+        enum: ['item', 'axis'],
+      },
+    },
   },
   dataTitle: {
     type: 'string',
