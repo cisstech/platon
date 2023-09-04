@@ -6,7 +6,7 @@ Le format des éléments du tableau `data` est le suivant:
     "series": [
         {
             "name": string, // Nom de la série
-            "value": number // Valeur de la série
+            "value": number[] // Valeurs de la série
         },
         ... // Prochains objets...
     ]
