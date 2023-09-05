@@ -1,21 +1,2 @@
-<div [ngSwitch]="this.state.mode">
-  <div *ngSwitchCase="'advanced'" style="width: 100%; height: 300px">
-    <ngx-charts-advanced-pie-chart
-      [scheme]="this.state.colorScheme"
-      [results]="this.state.data"
-      [gradient]="this.state.gradient"
-    >
-    </ngx-charts-advanced-pie-chart>
-  </div>
-  <div *ngSwitchDefault>
-    <ngx-charts-pie-chart
-      [scheme]="this.state.colorScheme"
-      [results]="this.state.data"
-      [gradient]="this.state.gradient"
-      [legend]="this.state.showLegend"
-      [labels]="this.state.showLabels"
-      [doughnut]="this.state.isDoughnut"
-    >
-    </ngx-charts-pie-chart>
-  </div>
-</div>
+<div echarts [options]="this.commonOption" [merge]="this.mergedOption" class="demo-chart"></div>
+<wc-base [(state)]="state"></wc-base>
