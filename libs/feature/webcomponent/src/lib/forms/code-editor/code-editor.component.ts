@@ -141,21 +141,21 @@ export class CodeEditorComponent implements AfterViewChecked, OnDestroy, WebComp
     if (!this.editor) return
     const action = this.editor.getAction(ACTION_GOTO_LINE)
     this.editor.focus()
-    action.run()
+    action?.run()
   }
 
   quickCommand() {
     if (!this.editor) return
     const action = this.editor.getAction(ACTION_QUICK_COMMAND)
     this.editor.focus()
-    action.run()
+    action?.run()
   }
 
   changeIndent() {
     if (!this.editor) return
     const action = this.editor.getAction(ACTION_INDENT_USING_SPACES)
     this.editor.focus()
-    action.run()
+    action?.run()
   }
 
   private detectOptionsChange() {

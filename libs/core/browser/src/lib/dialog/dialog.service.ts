@@ -112,7 +112,7 @@ export class DialogService {
     const dialogRef: NzModalRef = this.nzModalService.create({
       nzTitle: input.title,
       nzContent: PromptDialogComponent,
-      nzComponentParams: {
+      nzData: {
         value: input.value,
         label: input.label,
         okTitle: input.okTitle,

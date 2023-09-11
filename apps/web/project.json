@@ -133,7 +133,6 @@
           "subscriptions-transport-ws",
           "rfdc",
           "jsoneditor",
-
           "@editorjs/editorjs",
           "@editorjs/code",
           "@editorjs/delimiter",
@@ -147,7 +146,6 @@
           "@editorjs/paragraph",
           "@editorjs/text-variant-tune",
           "@editorjs/underline",
-
           "editorjs-drag-drop",
           "editorjs-undo",
           "editorjs-style",
@@ -204,14 +202,14 @@
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": ["apps/web/**/*.ts", "apps/web/**/*.html"]
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
+      "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
         "jestConfig": "apps/web/jest.config.ts",
