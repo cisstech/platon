@@ -8,6 +8,7 @@ import {
   LegendComponent,
   TitleComponent,
   TooltipComponent,
+  ToolboxComponent,
   // Built-in transform (filter, sort)
   TransformComponent,
 } from 'echarts/components'
@@ -23,6 +24,7 @@ import type {
   LegendComponentOption,
   TitleComponentOption,
   TooltipComponentOption,
+  ToolboxComponentOption,
 } from 'echarts/components'
 import type { ComposeOption } from 'echarts/core'
 
@@ -35,6 +37,7 @@ export type EChartsOption = ComposeOption<
   | GridComponentOption
   | TitleComponentOption
   | LegendComponentOption
+  | ToolboxComponentOption
   | TooltipComponentOption
 >
 
@@ -45,6 +48,7 @@ echarts.use([
   TitleComponent,
   LegendComponent,
   TooltipComponent,
+  ToolboxComponent,
   TransformComponent,
   BarChart,
   LineChart,
