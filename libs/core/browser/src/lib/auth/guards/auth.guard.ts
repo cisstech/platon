@@ -4,7 +4,7 @@ import { UserRoles } from '@platon/core/common'
 import { AuthService } from '../api/auth.service'
 
 @Injectable({ providedIn: 'root' })
-export class AuthGuard  {
+export class AuthGuard {
   constructor(private readonly router: Router, private readonly authService: AuthService) {}
 
   async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
