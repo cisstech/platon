@@ -116,7 +116,7 @@ v16.14.2
 - **Clone the repository**: Clone the PLaTon repository from GitHub to your local machine using the following command:
 
   ```sh
-  git clone https://github.com/cisstech/platon.git
+  git clone https://github.com/PlatonOrg/platon.git
   ```
 
 - **Install dependencies**: Navigate to the project's root directory and run the following command to install the required dependencies:
@@ -407,7 +407,7 @@ These scripts will analyze the codebase and provide a report of any linting issu
 - **Clone the repository**: Clone the PLaTon repository from GitHub to your machine using the following command:
 
   ```sh
-  git clone https://github.com/cisstech/platon.git
+  git clone https://github.com/PlatonOrg/platon.git
   ```
 
 - **Set up the environment**: After cloning and installing the repository, run the `./bin/install.sh` script to set up the necessary environment variables. This script generates an `.env` and `./tools/database/init.json` files with the default values from the `./templates` directory, which you can customize.
