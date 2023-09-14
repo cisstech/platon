@@ -50,7 +50,7 @@ export class ThemeService {
    * Changes app theme to a dark theme.
    * @param save persists the change on the disk if set to `true`.
    */
-  darkTheme(save: boolean = true): void {
+  darkTheme(save = true): void {
     this.setTheme('dark', save)
   }
 
@@ -58,7 +58,7 @@ export class ThemeService {
    * Changes app theme to a light theme.
    * @param save persists the change on the disk if set to `true`.
    */
-  lightTheme(save: boolean = true): void {
+  lightTheme(save = true): void {
     this.setTheme('light', save)
   }
 
@@ -70,7 +70,7 @@ export class ThemeService {
     this.setTheme(theme === 'dark' ? 'light' : 'dark')
   }
 
-  private async setTheme(theme: Theme, save: boolean = true) {
+  private async setTheme(theme: Theme, save = true) {
     this.theme = theme
 
     const html = document.documentElement

@@ -135,6 +135,9 @@ export class ResourceOverviewPage implements OnInit, AfterViewChecked, OnDestroy
     }, {} as Record<ResourceStatus, Data>)
 
     this.statusChart = {
+      toolbox: {
+        show: true,
+      },
       legend: {
         orient: 'vertical',
         left: '0',
