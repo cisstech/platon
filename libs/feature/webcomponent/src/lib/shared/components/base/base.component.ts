@@ -17,7 +17,10 @@ export class BaseComponent implements OnInit, OnDestroy {
   private observer?: MutationObserver
   private definition?: WebComponentDefinition
 
-  constructor(private readonly api: WebComponentService, private readonly elementRef: ElementRef) {}
+  constructor(
+    private readonly api: WebComponentService,
+    private readonly elementRef: ElementRef
+  ) {}
 
   ngOnInit() {
     const native: HTMLElement = this.elementRef.nativeElement

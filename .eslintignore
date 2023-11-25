@@ -13,3 +13,4 @@ tmp
 CODEOWNERS
 
 pl.parser.ts
+*.generated.ts

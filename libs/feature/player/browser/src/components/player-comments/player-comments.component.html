@@ -1,6 +1,6 @@
 <nz-list [nzDataSource]="comments" [nzRenderItem]="item" [nzItemLayout]="'horizontal'">
   <ng-template #item let-item>
-    <nz-comment [nzAuthor]="author" [nzDatetime]="(item.createdAt | date : 'dd/MM/yyy HH:mm')!">
+    <nz-comment [nzAuthor]="author" [nzDatetime]="(item.createdAt | date: 'dd/MM/yyy HH:mm')!">
       <ng-template #author>
         <user-avatar [userIdOrName]="item.authorId" />
       </ng-template>

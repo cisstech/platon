@@ -183,10 +183,13 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
           validation: value.feedback?.validation || false,
         },
       },
-      exerciseGroups: this.exerciseGroups.reduce((acc, group, index) => {
-        acc[index] = group
-        return acc
-      }, {} as Record<number, ActivityExercise[]>),
+      exerciseGroups: this.exerciseGroups.reduce(
+        (acc, group, index) => {
+          acc[index] = group
+          return acc
+        },
+        {} as Record<number, ActivityExercise[]>
+      ),
     }
 
     this.fileService.update(this.request.uri, JSON.stringify(this.activity, null, 2))

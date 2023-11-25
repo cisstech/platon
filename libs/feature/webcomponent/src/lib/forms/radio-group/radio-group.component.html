@@ -7,8 +7,8 @@
   <ng-container *ngFor="let item of state.items; let i = index; trackBy: trackBy">
     <div
       class="radio-item"
-      [ngClass]="item.css | css : 'class'"
-      [ngStyle]="item.css | css : 'style'"
+      [ngClass]="item.css | css: 'class'"
+      [ngStyle]="item.css | css: 'style'"
       (click)="state.selection = item.content; $event.stopPropagation()"
       [class.selected]="state.selection === item.content"
     >

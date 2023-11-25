@@ -7,7 +7,7 @@
     <mat-label>Description</mat-label>
     <textarea cdkTextareaAutosize formControlName="desc" matInput></textarea>
   </mat-form-field>
-  <ng-container *ngIf="saving; else: actions">
+  <ng-container *ngIf="saving; else actions">
     <nz-spin></nz-spin>
   </ng-container>
   <ng-template #actions>

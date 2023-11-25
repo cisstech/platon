@@ -12,13 +12,16 @@ export class CssPipe implements PipeTransform {
     }
     const styles = (tokens.find((e) => e.includes(':')) || '').trim()
     const matches = styles.match(/([\w-]+)\s*:([^;]+)/gm)
-    return ((matches as string[]) || [])?.reduce((dict, match) => {
-      const tmp = match.split(':')
-      const prop = tmp[0].trim()
-      const value = tmp[1].trim()
-      dict[prop] = value
-      return dict
-    }, {} as Record<string, unknown>)
+    return ((matches as string[]) || [])?.reduce(
+      (dict, match) => {
+        const tmp = match.split(':')
+        const prop = tmp[0].trim()
+        const value = tmp[1].trim()
+        dict[prop] = value
+        return dict
+      },
+      {} as Record<string, unknown>
+    )
   }
 }
 

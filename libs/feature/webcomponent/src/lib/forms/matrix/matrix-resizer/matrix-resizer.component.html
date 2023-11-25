@@ -9,12 +9,7 @@
     </div>
     <div class="matrix-resizer-grid">
       <ng-container *ngFor="let index of cells; trackBy: trackBy">
-        <div
-          class="matrix-resizer-box"
-          [class.on]="isOn(index)"
-          (click)="done(index)"
-          (mouseover)="hover(index)"
-        ></div>
+        <div class="matrix-resizer-box" [class.on]="isOn(index)" (click)="done(index)" (mouseover)="hover(index)"></div>
       </ng-container>
     </div>
   </div>

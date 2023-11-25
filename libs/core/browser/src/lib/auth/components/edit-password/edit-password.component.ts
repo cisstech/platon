@@ -75,7 +75,10 @@ export class AuthEditPasswordComponent implements OnInit, OnDestroy, ControlValu
     return this.valid
   }
 
-  constructor(private readonly formBuilder: FormBuilder, private readonly changeDetectorRef: ChangeDetectorRef) {}
+  constructor(
+    private readonly formBuilder: FormBuilder,
+    private readonly changeDetectorRef: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.subscription = this.form.valueChanges.pipe(debounceTime(300)).subscribe(() => {
