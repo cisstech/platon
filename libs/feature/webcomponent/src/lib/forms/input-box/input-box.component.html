@@ -1,4 +1,4 @@
-<mat-form-field [appearance]="state.appearance">
+<mat-form-field [ngStyle]="containerStyles" [appearance]="state.appearance">
   <mat-label *ngIf="state.placeholder">{{ state.placeholder }}</mat-label>
   <mat-hint *ngIf="state.hint">{{ state.hint }}</mat-hint>
   <ng-container [ngSwitch]="state.type">
