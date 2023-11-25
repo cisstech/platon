@@ -44,7 +44,7 @@ export class PlayerNavigationComponent {
   }
 
   protected isActiveSession(sessionId: string): boolean {
-    if ('composed' === this.player.settings?.navigation?.mode) {
+    if (this.player.settings?.navigation?.mode === 'composed') {
       return false
     }
     return sessionId === this.player.navigation.current?.sessionId

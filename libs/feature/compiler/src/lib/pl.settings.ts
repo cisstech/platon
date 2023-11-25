@@ -42,9 +42,8 @@ export interface ActivityNavigationSettings {
    * Navigation mode.
    * - `manual` => The user can jump between the exercises by using the navigation card.
    * - `composed` => All exercises are shown together.
-   * - `dynamic` => Navigation is controlled by a custom script.
    */
-  mode?: 'manual' | 'composed' | 'dynamic'
+  mode?: 'manual' | 'composed'
 }
 
 /** Default settings for preview mode. */

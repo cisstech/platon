@@ -12,7 +12,7 @@ export const updateActivityNavigationState = (
       exercise.state = AnswerStates.STARTED
     }
   }
-  if ('manual' === settings?.navigation?.mode) {
+  if (settings?.navigation?.mode === 'manual') {
     navigation.current = navigation.exercises.find((item) => {
       if (item.sessionId === currentSessionId) {
         markAsStarted(item)
@@ -20,7 +20,7 @@ export const updateActivityNavigationState = (
       }
       return false
     }) as PlayerExercise
-  } else if ('composed' === settings?.navigation?.mode) {
+  } else if (settings?.navigation?.mode === 'composed') {
     navigation.exercises.forEach(markAsStarted)
   }
 }

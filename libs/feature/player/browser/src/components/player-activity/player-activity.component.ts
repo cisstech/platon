@@ -77,7 +77,7 @@ export class PlayerActivityComponent implements OnInit {
   }
 
   protected get composed(): boolean {
-    return 'composed' === this.player.settings?.navigation?.mode
+    return this.player.settings?.navigation?.mode === 'composed'
   }
 
   protected get navigation(): PlayerNavigation {
