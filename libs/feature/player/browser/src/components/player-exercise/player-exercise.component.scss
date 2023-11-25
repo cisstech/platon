@@ -6,6 +6,7 @@
     transform: scale(1.05);
   }
 }
+
 @mixin animate {
   animation-name: animate;
   animation-duration: 0.5s;
@@ -40,6 +41,15 @@ section {
   transition: transform 0.5s ease-out;
   &.animate {
     @include animate;
+  }
+}
+
+mat-card-header {
+  > div {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
   }
 }
 

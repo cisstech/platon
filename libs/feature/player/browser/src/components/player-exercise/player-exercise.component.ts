@@ -7,9 +7,11 @@ import {
   EventEmitter,
   Input,
   OnChanges,
+  OnInit,
   Output,
   TemplateRef,
   ViewChild,
+  inject,
 } from '@angular/core'
 import { firstValueFrom } from 'rxjs'
 
@@ -31,13 +33,26 @@ import { ExercisePlayer, PlayerActions, PlayerNavigation } from '@platon/feature
 import { WebComponentHooks } from '@platon/feature/webcomponent'
 
 import { HttpErrorResponse } from '@angular/common/http'
+import { ActivatedRoute } from '@angular/router'
 import { ExerciseTheory } from '@platon/feature/compiler'
 import { UiModalDrawerComponent } from '@platon/shared/ui'
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton'
 import { NzSpinModule } from 'ng-zorro-antd/spin'
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 import { PlayerService } from '../../api/player.service'
+import { PLAYER_FULLSCREEN } from '../../models/player.model'
 import { PlayerCommentsComponent } from '../player-comments/player-comments.component'
+
+type FullscreenElement = HTMLElement & {
+  requestFullscreen?: () => Promise<void>
+  webkitRequestFullscreen?: () => Promise<void>
+  mozRequestFullScreen?: () => Promise<void>
+  msRequestFullscreen?: () => Promise<void>
+  exitFullscreen?: () => Promise<void>
+  webkitExitFullscreen?: () => Promise<void>
+  mozCancelFullScreen?: () => Promise<void>
+  msExitFullscreen?: () => Promise<void>
+}
 
 @Component({
   standalone: true,
@@ -67,8 +82,11 @@ import { PlayerCommentsComponent } from '../player-comments/player-comments.comp
     PlayerCommentsComponent,
   ],
 })
-export class PlayerExerciseComponent implements OnChanges {
-  private clearNotification?: () => void
+export class PlayerExerciseComponent implements OnInit, OnChanges {
+  private readonly dialogService = inject(DialogService)
+  private readonly playerService = inject(PlayerService)
+  private readonly activatedRoute = inject(ActivatedRoute)
+  private readonly changeDetectorRef = inject(ChangeDetectorRef)
 
   @Input() player!: ExercisePlayer
   @Input() players: ExercisePlayer[] = []
@@ -77,6 +95,9 @@ export class PlayerExerciseComponent implements OnChanges {
   @Input() canComment = false
 
   @Output() evaluated = new EventEmitter<PlayerNavigation>()
+
+  @ViewChild('container', { read: ElementRef, static: true })
+  container!: ElementRef<FullscreenElement>
 
   @ViewChild('errorTemplate', { read: TemplateRef, static: true })
   errorTemplate!: TemplateRef<object>
@@ -89,7 +110,11 @@ export class PlayerExerciseComponent implements OnChanges {
 
   protected index = 0
   protected loading = true
+  protected fullscreen = false
   protected runningAction?: PlayerActions
+  protected clearNotification?: () => void
+  protected requestFullscreen?: () => void
+
   protected get disabled(): boolean {
     return !!this.player.solution || (this.player.remainingAttempts != null && this.player.remainingAttempts <= 0)
   }
@@ -98,11 +123,17 @@ export class PlayerExerciseComponent implements OnChanges {
     return this.index
   }
 
-  constructor(
-    private readonly dialogService: DialogService,
-    private readonly playerService: PlayerService,
-    private readonly changeDetectorRef: ChangeDetectorRef
-  ) {}
+  get canRequestFullscreen(): boolean {
+    return !!this.requestFullscreen && this.activatedRoute.snapshot.queryParamMap.has(PLAYER_FULLSCREEN)
+  }
+
+  ngOnInit(): void {
+    this.requestFullscreen =
+      this.container.nativeElement.requestFullscreen ||
+      this.container.nativeElement.webkitRequestFullscreen ||
+      this.container.nativeElement.mozRequestFullScreen ||
+      this.container.nativeElement.msRequestFullscreen
+  }
 
   ngOnChanges(): void {
     if (this.players?.length) {
@@ -214,8 +245,26 @@ export class PlayerExerciseComponent implements OnChanges {
     }
   }
 
-  protected onRender() {
+  protected onRender(): void {
     this.loading = false
     this.changeDetectorRef.markForCheck()
+  }
+
+  protected async toggleFullscreen(): Promise<void> {
+    if (this.fullscreen) {
+      this.fullscreen = false
+      const element = document as unknown as FullscreenElement
+      element.exitFullscreen?.() ||
+        element.webkitExitFullscreen?.() ||
+        element.mozCancelFullScreen?.() ||
+        element.msExitFullscreen?.()
+    } else {
+      this.fullscreen = true
+      const element = this.container.nativeElement
+      element.requestFullscreen?.() ||
+        element.webkitRequestFullscreen?.() ||
+        element.mozRequestFullScreen?.() ||
+        element.msRequestFullscreen?.()
+    }
   }
 }

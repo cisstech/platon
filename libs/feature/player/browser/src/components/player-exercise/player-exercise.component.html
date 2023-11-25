@@ -1,7 +1,16 @@
-<mat-card>
+<mat-card #container>
   <mat-card-header>
-    <mat-card-title>{{ player.title }}</mat-card-title>
-    <mat-card-subtitle *ngIf="player.author">{{ player.author }}</mat-card-subtitle>
+    <div>
+      <div>
+        <mat-card-title>{{ player.title }}</mat-card-title>
+        <mat-card-subtitle *ngIf="player.author">{{ player.author }}</mat-card-subtitle>
+      </div>
+      <div>
+        <button *ngIf="canRequestFullscreen" nz-tooltip="Plein écran" (click)="toggleFullscreen()" mat-icon-button>
+          <mat-icon>{{ fullscreen ? 'fullscreen' : 'fullscreen_exit' }}</mat-icon>
+        </button>
+      </div>
+    </div>
   </mat-card-header>
   <mat-card-content>
     <nz-skeleton [nzActive]="loading" [nzLoading]="loading" [nzParagraph]="{ rows: 5 }">
