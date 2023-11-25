@@ -140,7 +140,7 @@ export class ResultService {
             firstName: session.user?.firstName as string,
             lastName: session.user?.lastName as string,
             email: session.user?.email as string,
-          } as ActivityMemberView)
+          }) as ActivityMemberView
       )
 
     activityUsers.push(...(sessionUsers as ActivityMemberView[]))
@@ -232,11 +232,14 @@ export class ResultService {
   }
 
   private createUserResults(users: ActivityMemberView[]) {
-    const userResults = users.map((user) => ({ ...user, exercises: {} } as UserResults))
-    const userResultsIndex = userResults.reduce((record, results) => {
-      record[results.id] = results
-      return record
-    }, {} as Record<string, UserResults>)
+    const userResults = users.map((user) => ({ ...user, exercises: {} }) as UserResults)
+    const userResultsIndex = userResults.reduce(
+      (record, results) => {
+        record[results.id] = results
+        return record
+      },
+      {} as Record<string, UserResults>
+    )
     return {
       userResults,
       userResultsIndex,
@@ -262,10 +265,13 @@ export class ResultService {
       } as ExerciseResults
     })
 
-    const exerciseResultsMapIndex = exerciseResults.reduce((record, results) => {
-      record[results.id] = results
-      return record
-    }, {} as Record<string, ExerciseResults>)
+    const exerciseResultsMapIndex = exerciseResults.reduce(
+      (record, results) => {
+        record[results.id] = results
+        return record
+      },
+      {} as Record<string, ExerciseResults>
+    )
 
     return {
       exerciseResults,

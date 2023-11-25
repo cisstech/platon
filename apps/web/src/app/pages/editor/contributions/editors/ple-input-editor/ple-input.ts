@@ -75,8 +75,8 @@ export abstract class BaseValueEditor<TValue = unknown, TOptions = unknown>
     return typeof value === 'string'
       ? value
       : typeof value === 'object'
-      ? JSON.stringify(value, null, 2)
-      : `${value || ''}`
+        ? JSON.stringify(value, null, 2)
+        : `${value || ''}`
   }
 
   protected convertToNumericValue(value: unknown): number {

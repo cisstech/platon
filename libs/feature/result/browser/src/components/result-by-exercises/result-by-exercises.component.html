@@ -11,10 +11,7 @@
   <tbody>
     <ng-container *ngFor="let item of nzTable.data">
       <tr>
-        <td
-          [nzExpand]="expandSet.has(item.id)"
-          (nzExpandChange)="onExpandChange(item.id, $event)"
-        ></td>
+        <td [nzExpand]="expandSet.has(item.id)" (nzExpandChange)="onExpandChange(item.id, $event)"></td>
         <td>{{ item.title }}</td>
         <ng-container *ngFor="let state of answerStates">
           <td nzAlign="center">{{ item.states[state] }}</td>

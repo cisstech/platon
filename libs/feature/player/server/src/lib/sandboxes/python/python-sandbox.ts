@@ -30,7 +30,10 @@ interface ExecutionResult {
 @Injectable()
 @RegisterSandbox()
 export class PythonSandbox implements Sandbox {
-  constructor(private readonly http: HttpService, private readonly config: ConfigService<Configuration>) {}
+  constructor(
+    private readonly http: HttpService,
+    private readonly config: ConfigService<Configuration>
+  ) {}
 
   supports(input: SandboxInput): boolean {
     const { sandbox } = input.variables

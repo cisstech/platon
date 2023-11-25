@@ -27,7 +27,11 @@ class OutcomeDocument {
   private result?: xmlbuilder.XMLElementOrXMLNode
   private hasPayload = false
 
-  constructor(type: string, sourceDID: string, private outcomeService: OutcomeService) {
+  constructor(
+    type: string,
+    sourceDID: string,
+    private outcomeService: OutcomeService
+  ) {
     // Build and configure the document
     const xmldec = {
       version: '1.0',

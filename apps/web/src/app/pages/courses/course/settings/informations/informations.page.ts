@@ -58,7 +58,10 @@ export class CourseInformationsPage implements OnInit, OnDestroy {
     return this.form.valid && this.canEdit
   }
 
-  constructor(private readonly presenter: CoursePresenter, private readonly changeDetectorRef: ChangeDetectorRef) {}
+  constructor(
+    private readonly presenter: CoursePresenter,
+    private readonly changeDetectorRef: ChangeDetectorRef
+  ) {}
 
   async ngOnInit(): Promise<void> {
     this.subscriptions.push(

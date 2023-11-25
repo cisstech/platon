@@ -6,7 +6,7 @@
   "semi": false,
   "printWidth": 120,
   "endOfLine": "lf",
-    "overrides": [
+  "overrides": [
     {
       "files": "*.html",
       "options": {
@@ -14,5 +14,4 @@
       }
     }
   ]
-
 }

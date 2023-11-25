@@ -31,7 +31,10 @@ import { firstValueFrom } from 'rxjs'
 export class AdminGroupsPage {
   protected groups: UserGroup[] = []
 
-  constructor(private readonly userService: UserService, private readonly changeDetectorRef: ChangeDetectorRef) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly changeDetectorRef: ChangeDetectorRef
+  ) {}
 
   protected async addGroup(): Promise<void> {
     const group = await firstValueFrom(

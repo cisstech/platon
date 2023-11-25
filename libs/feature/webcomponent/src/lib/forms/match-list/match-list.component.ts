@@ -9,10 +9,12 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core'
-import { Connection, Endpoint, jsPlumb, jsPlumbInstance } from 'jsplumb'
+import { Connection, Endpoint, EndpointOptions, jsPlumb, jsPlumbInstance } from 'jsplumb'
 import { WebComponent, WebComponentHooks } from '../../web-component'
 import { WebComponentChangeDetectorService } from '../../web-component-change-detector.service'
 import { MatchListComponentDefinition, MatchListItem, MatchListState } from './match-list'
+
+type EndPointType = Endpoint & EndpointOptions & { canvas: HTMLElement }
 
 @Component({
   selector: 'wc-match-list',
@@ -30,7 +32,7 @@ export class MatchListComponent implements OnInit, AfterViewChecked, OnDestroy, 
   private width = 0
   private height = 0
   private jsPlumb!: jsPlumbInstance
-  private selectedPoints: Endpoint[] = []
+  private selectedPoints: EndPointType[] = []
 
   get sources() {
     return this.state.nodes.filter((e) => e.type === 'source')
@@ -40,7 +42,10 @@ export class MatchListComponent implements OnInit, AfterViewChecked, OnDestroy, 
     return this.state.nodes.filter((e) => e.type === 'target')
   }
 
-  constructor(readonly injector: Injector, readonly changeDetector: WebComponentChangeDetectorService) {}
+  constructor(
+    readonly injector: Injector,
+    readonly changeDetector: WebComponentChangeDetectorService
+  ) {}
 
   async ngOnInit() {
     this.jsPlumb = jsPlumb.getInstance({
@@ -133,11 +138,11 @@ export class MatchListComponent implements OnInit, AfterViewChecked, OnDestroy, 
       this.onRemoveConnection(info.connection)
     })
     this.jsPlumb.bind('endpointClick', (info) => {
-      const point = (<any>info) as Endpoint
+      const point = info as unknown as EndPointType
       this.selectPoint(point)
       if (this.selectedPoints.length >= 2) {
-        const source = this.selectedPoints.find((e) => (<any>e).isSource)
-        const target = this.selectedPoints.find((e) => (<any>e).isTarget)
+        const source = this.selectedPoints.find((e) => e.isSource)
+        const target = this.selectedPoints.find((e) => e.isTarget)
         if (!source || !target) {
           const top = this.selectedPoints[1]
           this.unselectPoints()
@@ -153,8 +158,8 @@ export class MatchListComponent implements OnInit, AfterViewChecked, OnDestroy, 
     })
   }
 
-  private selectPoint(point: Endpoint) {
-    const canvas = (<any>point).canvas as HTMLElement
+  private selectPoint(point: EndPointType) {
+    const canvas = point.canvas
     canvas.classList.remove('selected')
     canvas.classList.add('selected')
     this.selectedPoints.push(point)
@@ -162,7 +167,7 @@ export class MatchListComponent implements OnInit, AfterViewChecked, OnDestroy, 
 
   private unselectPoints() {
     this.selectedPoints.forEach((point) => {
-      const canvas = (<any>point).canvas as HTMLElement
+      const canvas = point.canvas as HTMLElement
       canvas.classList.remove('selected')
     })
     this.selectedPoints = []

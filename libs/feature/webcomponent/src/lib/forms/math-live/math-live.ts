@@ -4,7 +4,7 @@ export interface MathLiveState extends IWebComponent {
   value: string
   prefix: string
   suffix: string
-  config: Record<string, any>
+  config: Record<string, unknown>
   disabled: boolean
 }
 

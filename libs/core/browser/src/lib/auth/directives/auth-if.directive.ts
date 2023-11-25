@@ -91,7 +91,7 @@ export class AuthIfDirective implements OnChanges {
       })
   }
 
-  private async denied(error?: any): Promise<void> {
+  private async denied(error?: unknown): Promise<void> {
     try {
       if (this.authIfDenied) {
         await this.authIfDenied(error)
