@@ -9,9 +9,21 @@ import fr from 'date-fns/locale/fr'
 })
 export class DurationPipe implements PipeTransform {
   transform(value: number | [string | Date, string | Date], format: 'seconds' | 'milliseconds' = 'seconds'): string {
-    const time = Array.isArray(value) ? new Date(value[1]).getTime() - new Date(value[0]).getTime() : value
+    let time = 0
+    let isArray = false
+    if (Array.isArray(value)) {
+      isArray = true
+      const dates = value.map((e) => (e ? new Date(e).getTime() : null))
+      if (!dates[0] || !dates[1]) {
+        return '0'
+      } else {
+        time = dates[1] - dates[0]
+      }
+    } else {
+      time = value
+    }
 
-    format = Array.isArray(value) ? 'milliseconds' : format
+    format = isArray ? 'milliseconds' : format
 
     return !time
       ? '0'

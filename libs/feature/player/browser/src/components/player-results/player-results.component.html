@@ -11,7 +11,7 @@
     </tr>
     <tr>
       <td>Date de dernière réponse</td>
-      <td>{{ player.lastGradedAt | date: 'dd/MM/yyy à HH:mm' }}</td>
+      <td>{{ (player.lastGradedAt | date: 'dd/MM/yyy à HH:mm') ?? 'Aucune réponse' }}</td>
     </tr>
     <tr>
       <td>Durée total</td>
