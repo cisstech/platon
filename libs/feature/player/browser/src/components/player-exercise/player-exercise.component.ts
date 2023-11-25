@@ -171,6 +171,29 @@ export class PlayerExerciseComponent implements OnInit, OnChanges {
     this.changeDetectorRef.markForCheck()
   }
 
+  protected onRender(): void {
+    this.loading = false
+    this.changeDetectorRef.markForCheck()
+  }
+
+  protected async toggleFullscreen(): Promise<void> {
+    if (this.fullscreen) {
+      this.fullscreen = false
+      const element = document as unknown as FullscreenElement
+      element.exitFullscreen?.() ||
+        element.webkitExitFullscreen?.() ||
+        element.mozCancelFullScreen?.() ||
+        element.msExitFullscreen?.()
+    } else {
+      this.fullscreen = true
+      const element = this.container.nativeElement
+      element.requestFullscreen?.() ||
+        element.webkitRequestFullscreen?.() ||
+        element.mozRequestFullScreen?.() ||
+        element.msRequestFullscreen?.()
+    }
+  }
+
   protected trackByUrl(_: number, item: ExerciseTheory): string {
     return item.url
   }
@@ -222,6 +245,17 @@ export class PlayerExerciseComponent implements OnInit, OnChanges {
       )
 
       this.player = output.exercise
+
+      // little hack here to nge-markdown component to detect change in the case where theses
+      // values are not modified during the evaluation on the server side
+      const markdowns = ['form' as const, 'statement' as const, 'solution' as const]
+      markdowns.forEach((key) => {
+        if (this.player[key]) {
+          this.player[key] += '\n'
+        }
+      })
+
+      this.player.form = this.player.form + ''
       if (output.navigation) {
         this.evaluated.emit(output.navigation)
       }
@@ -242,29 +276,6 @@ export class PlayerExerciseComponent implements OnInit, OnChanges {
     } finally {
       this.runningAction = undefined
       this.changeDetectorRef.markForCheck()
-    }
-  }
-
-  protected onRender(): void {
-    this.loading = false
-    this.changeDetectorRef.markForCheck()
-  }
-
-  protected async toggleFullscreen(): Promise<void> {
-    if (this.fullscreen) {
-      this.fullscreen = false
-      const element = document as unknown as FullscreenElement
-      element.exitFullscreen?.() ||
-        element.webkitExitFullscreen?.() ||
-        element.mozCancelFullScreen?.() ||
-        element.msExitFullscreen?.()
-    } else {
-      this.fullscreen = true
-      const element = this.container.nativeElement
-      element.requestFullscreen?.() ||
-        element.webkitRequestFullscreen?.() ||
-        element.mozRequestFullScreen?.() ||
-        element.msRequestFullscreen?.()
     }
   }
 }

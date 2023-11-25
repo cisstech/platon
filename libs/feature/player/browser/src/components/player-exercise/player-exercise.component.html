@@ -45,10 +45,10 @@
           </div>
         </ng-container>
       </section>
-      <section>
+      <section *ngIf="player.form">
         <mat-divider />
         <div class="exercise-form">
-          <nge-markdown [data]="player.form || ''" (render)="onRender()" />
+          <nge-markdown [data]="player.form" (render)="onRender()" />
         </div>
       </section>
       <section #containerSolution>
