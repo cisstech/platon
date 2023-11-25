@@ -67,8 +67,8 @@ export class PlayerActivityComponent implements OnInit {
     execute: () => void
   }[] = []
 
+  protected empty = false
   protected countdownColor = 'black'
-
   protected exercises?: ExercisePlayer[]
 
   @HostBinding('class.play-mode')
@@ -102,7 +102,7 @@ export class PlayerActivityComponent implements OnInit {
 
   ngOnInit(): void {
     this.state = calculateActivityOpenState(this.player)
-
+    this.empty = !this.player.navigation.exercises?.length
     if (this.state === 'opened') {
       if (isTimeouted(this.player) && !this.player.navigation.terminated) {
         this.terminate()

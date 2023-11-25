@@ -12,7 +12,7 @@
         <nge-markdown [data]="player.introduction" />
       </div>
       <player-settings [player]="player" />
-      <button mat-raised-button color="primary" (click)="start()">Commencer</button>
+      <button mat-raised-button color="primary" [disabled]="empty" (click)="start()">Commencer</button>
     </ng-container>
     <ng-container *ngIf="showConclusion">
       <div>
