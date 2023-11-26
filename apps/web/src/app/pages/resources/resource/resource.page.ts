@@ -21,6 +21,7 @@ import { ResourceStatus } from '@platon/feature/resource/common'
 import { UiLayoutTabDirective, UiLayoutTabsComponent, UiModalIFrameComponent } from '@platon/shared/ui'
 
 import { ResourcePresenter } from './resource.presenter'
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 
 @Component({
   standalone: true,
@@ -41,6 +42,7 @@ import { ResourcePresenter } from './resource.presenter'
     NzSelectModule,
     NzButtonModule,
     NzPopoverModule,
+    NzToolTipModule,
     NzBreadCrumbModule,
     NzTypographyModule,
     NzPageHeaderModule,
@@ -63,6 +65,10 @@ export class ResourcePage implements OnInit, OnDestroy {
   protected context = this.presenter.defaultContext()
 
   readonly status = Object.values(ResourceStatus)
+
+  get isOtherPersonal(): boolean {
+    return this.context.resource!.personal && this.context.resource!.ownerId !== this.context.user!.id
+  }
 
   ngOnInit(): void {
     this.subscriptions.push(

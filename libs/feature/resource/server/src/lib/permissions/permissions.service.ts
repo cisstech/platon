@@ -9,9 +9,9 @@ import { ResourceService } from '../resource.service'
 import { ResourceWatcherEntity, ResourceWatcherService } from '../watchers'
 import { MemberPermissions } from './permissions.entity'
 
-type Constraint = ResourceEntity | ResourceDTO
+type Resource = ResourceEntity | ResourceDTO
 
-interface UserPermissionsInput<T extends Constraint> {
+interface UserPermissionsInput<T extends Resource> {
   resource: T
   user?: User
   userWatchings?: ResourceWatcherEntity[]
@@ -47,31 +47,19 @@ export class ResourcePermissionService {
       ),
     ])
 
-    if (circle.personal && circle.ownerId !== user.id) {
-      return {
-        read: false,
-        write: false,
-        watcher: false,
-      }
-    }
-
     const shareds = members.map((m) => m.resourceId)
 
     return {
-      read:
-        user.role === UserRoles.admin || // user is admin
-        !circle.parentId || // circle is a root circle
-        members.some((m) => m.resourceId === circle.id) || // user is member of the circle
-        descendants.some((c) => shareds.includes(c.id)), // user is member of a descendant circle,
+      read: circle.personal ? this.applyRestrictifReadRule(user, circle, members, descendants, shareds) : true,
       write:
-        user.role === UserRoles.admin || // user is admin
+        (user.role === UserRoles.admin && !circle.personal) || // user is admin and circle is not personal
         shareds.includes(circle.id) || // user is member of the circle
         circle.ownerId === user.id, // user is owner of the circle,
       watcher: watchings.some((w) => w.resourceId === resource.id),
     }
   }
 
-  async userPermissionsOnResources<T extends Constraint>(
+  async userPermissionsOnResources<T extends Resource>(
     resources: T[],
     user: UserEntity
   ): Promise<
@@ -92,6 +80,31 @@ export class ResourcePermissionService {
           userWatchings,
         }),
       }))
+    )
+  }
+
+  /**
+   * Applies the restrictive read rule to determine if a user has permission to read a personal circle.
+   *
+   *
+   * @param user - The user for whom the permission is being checked.
+   * @param circle - The circle associated with the resource.
+   * @param members - The list of resource members.
+   * @param descendants - The list of descendant constraints.
+   * @param shareds - The list of shared circle IDs.
+   * @returns A boolean indicating whether the user has permission to read the resource.
+   */
+  applyRestrictifReadRule(
+    user: User,
+    circle: Resource,
+    members: ResourceMember[],
+    descendants: Resource[],
+    shareds: string[]
+  ): boolean {
+    return (
+      user.id === circle.ownerId || // user is owner of the circle,
+      members.some((m) => m.resourceId === circle.id) || // user is member of the circle
+      descendants.some((c) => shareds.includes(c.id)) // user is member of a descendant circle (NOT IMPLEMENTED YET BUT HERE TO HANDLE THE CASE)
     )
   }
 }

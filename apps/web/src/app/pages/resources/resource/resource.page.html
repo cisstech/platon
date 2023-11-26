@@ -23,7 +23,7 @@
             <mat-icon>{{ context.resource.type | resourceIcon }}</mat-icon>
             <span
               nz-typography
-              [nzEditable]="context.resource.permissions.write"
+              [nzEditable]="!context.resource.personal && context.resource.permissions.write"
               [nzContent]="context.resource.name"
               (nzContentChange)="updateName($event)"
             ></span>
@@ -34,7 +34,8 @@
     </nz-page-header>
     <p
       nz-typography
-      [nzEditable]="context.resource.permissions.write"
+      *ngIf="!isOtherPersonal"
+      [nzEditable]="!context.resource.personal && context.resource.permissions.write"
       [nzContent]="context.resource.desc"
       (nzContentChange)="updateDesc($event)"
     ></p>
@@ -56,7 +57,12 @@
         </nz-select>
       </nz-button-group>
       <nz-button-group>
-        <button nz-button nzType="default" (click)="changeWatchingState()">
+        <button
+          nz-tooltip="Suivre une ressource vous permet notamment de l'ajouter plus rapidement dans vos cours"
+          nz-button
+          nzType="default"
+          (click)="changeWatchingState()"
+        >
           <i nz-icon nzType="eye" nzTheme="outline"></i>
           {{ context.resource.permissions.watcher ? 'Ne plus suivre' : 'Suivre' }}
         </button>
@@ -65,7 +71,7 @@
       <nz-button-group>
         <button nz-button (click)="openTab(context.editorUrl!)">
           <i nz-icon nzType="edit" nzTheme="outline"></i>
-          Éditer
+          Ouvrir dans l'éditeur
         </button>
         <button
           *ngIf="context.resource.type !== 'CIRCLE'"
