@@ -7,9 +7,11 @@
       (nzClick)="selectionToggle(node)"
     >
     </nz-tree-node-checkbox>
-    <nz-tree-node-option [routerLink]="selectable ? undefined : ['/resources', node.id]">{{
-      node.name
-    }}</nz-tree-node-option>
+    <nz-tree-node-option
+      [nzDisabled]="node.disabled"
+      [routerLink]="node.disabled || selectable ? undefined : ['/resources', node.id]"
+      >{{ node.name }}</nz-tree-node-option
+    >
   </nz-tree-node>
   <nz-tree-node *nzTreeNodeDef="let node; when: hasChild" nzTreeNodeIndentLine>
     <nz-tree-node-toggle>
@@ -24,8 +26,8 @@
     </nz-tree-node-checkbox>
     <nz-tree-node-option
       [nzDisabled]="node.disabled"
-      [routerLink]="selectable ? undefined : ['/resources', node.id, 'overview']"
-      >{{ node.name }}</nz-tree-node-option
-    >
+      [routerLink]="node.disabled || selectable ? undefined : ['/resources', node.id, 'overview']"
+      >{{ node.name }}
+    </nz-tree-node-option>
   </nz-tree-node>
 </nz-tree-view>
