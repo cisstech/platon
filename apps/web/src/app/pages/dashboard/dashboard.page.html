@@ -1,11 +1,13 @@
 <mat-drawer-container>
-  <mat-drawer mode="side" opened #drawer>
-    <app-sidebar></app-sidebar>
+  <mat-drawer [mode]="toolbar.tabletOrBelow ? 'push' : 'side'" [(opened)]="drawerOpened" #drawer>
+    <app-sidebar />
   </mat-drawer>
   <mat-drawer-content>
     <mat-toolbar>
-      <app-toolbar (toggleMenu)="drawer.toggle()"></app-toolbar>
+      <app-toolbar #toolbar [(drawerOpened)]="drawerOpened" />
     </mat-toolbar>
-    <router-outlet></router-outlet>
+    <div class="router-outlet">
+      <router-outlet />
+    </div>
   </mat-drawer-content>
 </mat-drawer-container>

@@ -1,13 +1,12 @@
 :host {
   display: block;
   width: 100%;
-  padding: 2rem;
 }
 
 h1 {
   width: 100%;
   text-align: center;
-  margin-top: 0;
+  margin-top: 2rem;
 }
 
 h2 {
@@ -76,4 +75,18 @@ ui-search-bar {
 
 .indicators {
   margin-bottom: 1rem;
+}
+
+mat-card-content {
+  margin: 1rem 0;
+}
+
+nz-divider {
+  margin-top: 0;
+}
+
+@media (max-width: 720px) {
+  ui-search-bar {
+    width: 100%;
+  }
 }

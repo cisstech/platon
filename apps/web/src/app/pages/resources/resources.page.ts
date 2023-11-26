@@ -42,6 +42,7 @@ import {
   ResourceStatus,
   ResourceTypes,
 } from '@platon/feature/resource/common'
+import { NzDividerModule } from 'ng-zorro-antd/divider'
 
 @Component({
   standalone: true,
@@ -60,6 +61,7 @@ import {
     NzIconModule,
     NzButtonModule,
     NzPopoverModule,
+    NzDividerModule,
 
     ResourcePipesModule,
     ResourceItemComponent,

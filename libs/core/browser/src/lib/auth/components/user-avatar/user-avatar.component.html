@@ -1,5 +1,10 @@
 <ng-container *ngIf="user">
-  <nz-badge *ngIf="!noIcon" [nzCount]="user && user.role === 'admin' ? nzCount : undefined" [nzOffset]="[0, -6]">
+  <nz-badge
+    [class.no-username]="showUsername === 'none'"
+    *ngIf="!noIcon"
+    [nzCount]="user && user.role === 'admin' ? nzCount : undefined"
+    [nzOffset]="[0, -6]"
+  >
     <nz-avatar [nzSize]="size" [nzSrc]="'https://robohash.org/' + user.username + '.png'" nzIcon="user" />
   </nz-badge>
   <div>
@@ -11,9 +16,7 @@
       <ng-container *ngSwitchCase="'inline'">
         <span>{{ user.firstName }} {{ user.lastName }} ({{ user.username }})</span>
       </ng-container>
-      <ng-container *ngSwitchDefault>
-        <span>{{ user.firstName }} {{ user.lastName }} </span>
-      </ng-container>
+      <ng-container *ngSwitchDefault> </ng-container>
     </ng-container>
   </div>
   <ng-template #nzCount>

@@ -8,6 +8,9 @@
 nz-badge {
   position: relative;
   margin-right: 12px;
+  &.no-username {
+    margin-right: 0;
+  }
 }
 
 nz-avatar {
