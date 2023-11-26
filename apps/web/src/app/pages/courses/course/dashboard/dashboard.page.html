@@ -18,7 +18,7 @@
           Ajouter une activité
         </button>
         <div class="spacer"></div>
-        <ui-view-mode #viewMode [modes]="['cards', 'table']" />
+        <ui-view-mode #viewMode storageKey="course.view-mode" defaultMode="cards" [modes]="['cards', 'table']" />
       </header>
       <ng-container *ngIf="sections.length; else noSections">
         <ng-container [ngSwitch]="viewMode.mode">
