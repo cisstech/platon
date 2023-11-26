@@ -40,6 +40,8 @@ export class ResourceService {
         read: true,
         write: true,
         watcher: true,
+        member: false,
+        waiting: false,
       },
     }
 
@@ -55,6 +57,8 @@ export class ResourceService {
             read: true,
             write: true,
             watcher: true,
+            member: false,
+            waiting: false,
           },
           children: [],
         }
@@ -119,7 +123,7 @@ export class ResourceService {
       circle = await this.repository.save(
         this.repository.create({
           ownerId: owner.id,
-          name: 'Votre cercle personnel',
+          name: owner.username,
           desc: `Bienvenue dans votre cercle personnel dédié à la création de ressources pour vous entraîner à utiliser la plateforme en autonomie.
           Ici, vous pouvez créer des ressources qui ne seront visibles que par vous.
           `,

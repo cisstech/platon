@@ -16,4 +16,12 @@ export class ResourcePermissionsDTO extends MemberPermissionsDTO implements Reso
   @IsBoolean()
   @ApiProperty()
   watcher!: boolean
+
+  @IsBoolean()
+  @ApiProperty()
+  waiting!: boolean
+
+  @IsBoolean()
+  @ApiProperty()
+  member!: boolean
 }

@@ -39,6 +39,9 @@ export interface ResourceMemberCreateEventData {
    * Type of the resource to which the member is added
    */
   resourceType: ResourceTypes
+
+  // extra dynamic data defined by ResourceEventExtraDataProvider
+  expired?: boolean
 }
 
 /**
