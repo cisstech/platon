@@ -106,9 +106,10 @@ export class NotificationResolver {
       return payload.userId === req.user.id
     },
     resolve: (payload: OnChangeNotificationsPayload) => {
-      return new NotificationChangeGraphModel({
+      const data = new NotificationChangeGraphModel({
         newNotification: payload.newNotification ? new NotificationGraphModel(payload.newNotification) : undefined,
       })
+      return data
     },
   })
   onChangeNotifications(@GqlReq() req: IRequest) {

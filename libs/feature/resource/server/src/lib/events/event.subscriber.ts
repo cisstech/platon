@@ -53,6 +53,14 @@ export class ResourceEventSubscriber implements EntitySubscriberInterface<Resour
 
   async afterInsert(event: InsertEvent<ResourceEventEntity>): Promise<void> {
     if (event.entity) {
+      if (event.entity.type === ResourceEventTypes.RESOURCE_STATUS_CHANGE) {
+        // since status change is sent both on parent on target, we choose to sent notification
+        // only for users of target resource
+        if (event.entity.resourceId !== event.entity.data.resourceId) {
+          return
+        }
+      }
+
       this.notificationService.sendToAllUsers<ResourceEventNotification>(
         await this.targetUserProviderMap[event.entity.type](event.entity, event.manager),
         {

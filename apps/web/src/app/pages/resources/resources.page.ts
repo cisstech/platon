@@ -24,6 +24,7 @@ import { AuthService } from '@platon/core/browser'
 import { OrderingDirections, User } from '@platon/core/common'
 import {
   CircleFilterIndicator,
+  CircleTreeComponent,
   ResourceFiltersComponent,
   ResourceItemComponent,
   ResourceListComponent,
@@ -68,6 +69,7 @@ import { NzDividerModule } from 'ng-zorro-antd/divider'
     ResourceListComponent,
     ResourceFiltersComponent,
 
+    CircleTreeComponent,
     UiSearchBarComponent,
     UiFilterIndicatorComponent,
   ],
@@ -122,20 +124,8 @@ export default class ResourcesPage implements OnInit, OnDestroy {
   protected views: Resource[] = []
   protected recents: Resource[] = []
 
-  protected canCreateCircle = false
-  protected canCreateExercise = false
-  protected canCreateActivity = false
-
-  protected get canCreateResource(): boolean {
-    return this.canCreateCircle || this.canCreateExercise || this.canCreateActivity
-  }
-
   async ngOnInit(): Promise<void> {
     this.user = (await this.authService.ready()) as User
-
-    this.canCreateCircle = this.resourceService.canUserCreateResource(this.user, ResourceTypes.CIRCLE)
-    this.canCreateExercise = this.resourceService.canUserCreateResource(this.user, ResourceTypes.EXERCISE)
-    this.canCreateActivity = this.resourceService.canUserCreateResource(this.user, ResourceTypes.ACTIVITY)
 
     const [tree, circle, views] = await Promise.all([
       firstValueFrom(this.resourceService.tree()),

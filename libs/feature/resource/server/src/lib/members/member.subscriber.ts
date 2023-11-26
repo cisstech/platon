@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { ResourceEventTypes, ResourceMemberCreateEventData } from '@platon/feature/resource/common'
+import { ResourceEventData, ResourceEventTypes, ResourceMemberCreateEventData } from '@platon/feature/resource/common'
 import { DataSource, EntitySubscriberInterface, InsertEvent, RemoveEvent, UpdateEvent } from 'typeorm'
 import { ResourceEventEntity } from '../events'
 import { ResourceEntity } from '../resource.entity'
@@ -35,16 +35,19 @@ export class ResourceMemberSubscriber implements EntitySubscriberInterface<Resou
       return
     }
 
+    const data: ResourceMemberCreateEventData = {
+      userId: event.entity.userId,
+      resourceId: resource.id,
+      resourceName: resource.name,
+      resourceType: resource.type,
+    }
+
     await event.manager.save([
       event.manager.create(ResourceEventEntity, {
         actorId: event.entity.inviterId,
         resourceId: event.entity.resourceId,
         type: ResourceEventTypes.MEMBER_CREATE,
-        data: {
-          userId: event.entity.userId,
-          resourceName: resource.name,
-          resourceType: resource.type,
-        } as ResourceMemberCreateEventData,
+        data,
       }),
       ...(!watcher && event.entity.waiting
         ? [
@@ -74,16 +77,19 @@ export class ResourceMemberSubscriber implements EntitySubscriberInterface<Resou
       ])
 
       if (resource) {
+        const data: ResourceMemberCreateEventData = {
+          userId: event.entity.userId,
+          resourceId: resource.id,
+          resourceName: resource.name,
+          resourceType: resource.type,
+        }
+
         await event.manager.save([
           event.manager.create(ResourceEventEntity, {
             actorId: event.entity.inviterId,
             resourceId: event.entity.resourceId,
             type: ResourceEventTypes.MEMBER_CREATE,
-            data: {
-              userId: event.entity.userId,
-              resourceName: resource.name,
-              resourceType: resource.type,
-            } as ResourceMemberCreateEventData,
+            data,
           }),
           ...(!watcher && event.entity.waiting
             ? [
@@ -113,15 +119,18 @@ export class ResourceMemberSubscriber implements EntitySubscriberInterface<Resou
       ])
 
       if (resource) {
+        const data: ResourceEventData = {
+          resourceId: resource.id,
+          resourceName: resource.name,
+          resourceType: resource.type,
+        }
+
         await event.manager.save(
           event.manager.create(ResourceEventEntity, {
             actorId: event.entity.userId,
             resourceId: event.entity.resourceId,
             type: ResourceEventTypes.MEMBER_REMOVE,
-            data: {
-              resourceName: resource.name,
-              resourceType: resource.type,
-            },
+            data,
           })
         )
       }

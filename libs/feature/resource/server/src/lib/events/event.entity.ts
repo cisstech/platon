@@ -4,7 +4,7 @@ import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm'
 import { ResourceEntity } from '../resource.entity'
 
 @Entity('ResourceEvents')
-export class ResourceEventEntity<TData = unknown> extends BaseEntity {
+export class ResourceEventEntity<TData = ResourceEventData> extends BaseEntity {
   @Column({ type: 'enum', enum: ResourceEventTypes })
   type!: ResourceEventTypes
 
@@ -25,5 +25,5 @@ export class ResourceEventEntity<TData = unknown> extends BaseEntity {
   resource!: ResourceEntity
 
   @Column({ type: 'jsonb' })
-  data!: ResourceEventData<TData>
+  data!: TData
 }
