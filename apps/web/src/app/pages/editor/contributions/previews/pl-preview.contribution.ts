@@ -10,7 +10,7 @@ import {
   PreviewTypes,
 } from '@cisstech/nge-ide/core'
 import { CodIcon } from '@cisstech/nge/ui/icon'
-import { PLAYER_FULLSCREEN } from '@platon/feature/player/browser'
+import { PLAYER_EDITOR_PREVIEW } from '@platon/feature/player/browser'
 import { Subscription } from 'rxjs'
 import { EditorPresenter } from '../../editor.presenter'
 
@@ -44,7 +44,7 @@ export class Contribution implements IContribution {
         async handle(_: Injector, uri: monaco.Uri): Promise<Preview> {
           return Promise.resolve({
             type: PreviewTypes.URL,
-            data: buildPreviewUrl(uri, [`counter=${++this.counter}`, PLAYER_FULLSCREEN]),
+            data: buildPreviewUrl(uri, [`counter=${++this.counter}`, PLAYER_EDITOR_PREVIEW]),
           })
         }
       })()

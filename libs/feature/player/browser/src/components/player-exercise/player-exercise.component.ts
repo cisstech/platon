@@ -20,7 +20,7 @@ import { MatCardModule } from '@angular/material/card'
 import { MatDividerModule } from '@angular/material/divider'
 import { MatExpansionModule } from '@angular/material/expansion'
 import { MatIconModule } from '@angular/material/icon'
-import { MatMenuModule } from '@angular/material/menu'
+import { MatMenu, MatMenuModule } from '@angular/material/menu'
 
 import { NgeMarkdownModule } from '@cisstech/nge/markdown'
 
@@ -35,13 +35,30 @@ import { WebComponentHooks } from '@platon/feature/webcomponent'
 import { HttpErrorResponse } from '@angular/common/http'
 import { ActivatedRoute } from '@angular/router'
 import { ExerciseTheory } from '@platon/feature/compiler'
+import { AnswerStatePipesModule } from '@platon/feature/result/browser'
+import { AnswerStates } from '@platon/feature/result/common'
 import { UiModalDrawerComponent } from '@platon/shared/ui'
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton'
 import { NzSpinModule } from 'ng-zorro-antd/spin'
+import { NzStatisticModule } from 'ng-zorro-antd/statistic'
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 import { PlayerService } from '../../api/player.service'
-import { PLAYER_FULLSCREEN } from '../../models/player.model'
+import { PLAYER_EDITOR_PREVIEW } from '../../models/player.model'
 import { PlayerCommentsComponent } from '../player-comments/player-comments.component'
+
+type Action = {
+  icon: string
+  label: string
+  color?: string
+  danger?: boolean
+  tooltip: string
+  visible?: boolean
+  disabled?: boolean
+  showLabel?: boolean
+  playerAction?: PlayerActions
+  menu?: MatMenu
+  run?: () => void
+}
 
 type FullscreenElement = HTMLElement & {
   requestFullscreen?: () => Promise<void>
@@ -72,6 +89,7 @@ type FullscreenElement = HTMLElement & {
     NzToolTipModule,
     MatDividerModule,
     NzSkeletonModule,
+    NzStatisticModule,
     MatExpansionModule,
 
     DialogModule,
@@ -79,6 +97,7 @@ type FullscreenElement = HTMLElement & {
     NgeMarkdownModule,
     UiModalDrawerComponent,
 
+    AnswerStatePipesModule,
     PlayerCommentsComponent,
   ],
 })
@@ -88,30 +107,160 @@ export class PlayerExerciseComponent implements OnInit, OnChanges {
   private readonly activatedRoute = inject(ActivatedRoute)
   private readonly changeDetectorRef = inject(ChangeDetectorRef)
 
+  @Input() state?: AnswerStates
   @Input() player!: ExercisePlayer
   @Input() players: ExercisePlayer[] = []
 
   @Input() reviewMode = false
   @Input() canComment = false
 
+  @Input() hasNext?: boolean
+  @Input() hasPrev?: boolean
+
+  @Input() countdownValue?: number | null
+  @Input() countdownColor?: string | null
+
   @Output() evaluated = new EventEmitter<PlayerNavigation>()
+  @Output() goToPrevPlayer = new EventEmitter<void>()
+  @Output() goToNextPlayer = new EventEmitter<void>()
 
   @ViewChild('container', { read: ElementRef, static: true })
-  container!: ElementRef<FullscreenElement>
+  protected container!: ElementRef<FullscreenElement>
 
   @ViewChild('errorTemplate', { read: TemplateRef, static: true })
-  errorTemplate!: TemplateRef<object>
+  protected errorTemplate!: TemplateRef<object>
+
+  @ViewChild('containerFeedbacks', { read: ElementRef })
+  protected containerFeedbacks!: ElementRef<HTMLElement>
 
   @ViewChild('containerHints', { read: ElementRef })
-  containerHints!: ElementRef<HTMLElement>
+  protected containerHints!: ElementRef<HTMLElement>
 
   @ViewChild('containerSolution', { read: ElementRef })
-  containerSolution!: ElementRef<HTMLElement>
+  protected containerSolution!: ElementRef<HTMLElement>
+
+  @ViewChild('commentDrawer')
+  protected commentDrawer!: UiModalDrawerComponent
+
+  @ViewChild('theories')
+  protected theoriesMenu!: MatMenu
 
   protected index = 0
   protected loading = true
   protected fullscreen = false
+
   protected runningAction?: PlayerActions
+
+  protected get primaryActions(): Action[] {
+    return [
+      {
+        icon: 'check',
+        label: this.player.remainingAttempts ? `(${this.player.remainingAttempts})` : '',
+        tooltip: 'Valider',
+        color: 'primary',
+        danger: this.player.remainingAttempts === 1,
+        visible: !this.reviewMode,
+        disabled: this.disabled || !!this.runningAction,
+        playerAction: PlayerActions.CHECK_ANSWER,
+        showLabel: !!this.player.remainingAttempts,
+        run: async () => {
+          await this.evaluate(PlayerActions.CHECK_ANSWER)
+          this.scrollIntoNode(this.containerFeedbacks?.nativeElement, 'center')
+        },
+      },
+      {
+        icon: 'refresh',
+        label: 'Autre question',
+        tooltip: 'Autre question',
+        disabled: !!this.runningAction,
+        visible: !this.reviewMode && !!this.player.settings?.actions?.reroll,
+        playerAction: PlayerActions.REROLL_EXERCISE,
+        run: () => this.evaluate(PlayerActions.REROLL_EXERCISE),
+      },
+    ]
+  }
+
+  protected get secondaryActions(): Action[] {
+    return [
+      {
+        icon: 'reviews',
+        label: 'Commentaires',
+        tooltip: 'Commentaires',
+        visible: !!this.player.answerId,
+        run: () => this.commentDrawer.open(),
+      },
+      {
+        icon: 'menu_book',
+        label: 'Théorie',
+        tooltip: 'Théorie',
+        menu: this.theoriesMenu,
+        visible: !!this.player.theories?.length,
+      },
+      {
+        icon: 'key',
+        label: 'Solution',
+        tooltip: 'Solution',
+        visible: this.player.settings?.actions?.solution && !this.player.solution,
+        disabled: this.disabled || !!this.runningAction,
+        playerAction: PlayerActions.SHOW_SOLUTION,
+        run: async () => {
+          await this.evaluate(PlayerActions.SHOW_SOLUTION)
+          this.scrollIntoNode(this.containerSolution?.nativeElement, 'start')
+        },
+      },
+      {
+        icon: 'lightbulb',
+        label: 'Aide',
+        tooltip: 'Aide',
+        visible: !!this.player.hints,
+        disabled: this.disabled || !!this.runningAction,
+        playerAction: PlayerActions.NEXT_HINT,
+        run: async () => {
+          await this.evaluate(PlayerActions.NEXT_HINT)
+          this.scrollIntoNode(this.containerHints?.nativeElement, 'center')
+        },
+      },
+    ]
+  }
+
+  protected get navigationActions(): Action[] {
+    return [
+      {
+        icon: 'arrow_back',
+        label: 'Exercise précédent',
+        tooltip: 'Exercise précédent',
+        visible: this.hasPrev,
+        run: () => this.goToPrevPlayer.emit(),
+      },
+      {
+        icon: 'arrow_forward',
+        label: 'Exercise suivant',
+        tooltip: 'Exercise suivant',
+        visible: this.hasNext,
+        run: () => this.goToNextPlayer.emit(),
+      },
+    ]
+  }
+
+  protected get reviewModeActions(): Action[] {
+    return [
+      {
+        icon: 'arrow_back',
+        label: 'Tentative précédente',
+        tooltip: 'Tentative précédente',
+        visible: this.players.length > 1 && this.index > 0,
+        run: () => this.previousAttempt(),
+      },
+      {
+        icon: 'arrow_forward',
+        label: 'Tentative suivante',
+        tooltip: 'Tentative suivante',
+        visible: this.players.length > 1 && this.index < this.players.length - 1,
+        run: () => this.nextAttempt(),
+      },
+    ]
+  }
+
   protected clearNotification?: () => void
   protected requestFullscreen?: () => void
 
@@ -124,7 +273,7 @@ export class PlayerExerciseComponent implements OnInit, OnChanges {
   }
 
   get canRequestFullscreen(): boolean {
-    return !!this.requestFullscreen && this.activatedRoute.snapshot.queryParamMap.has(PLAYER_FULLSCREEN)
+    return !!this.requestFullscreen && this.activatedRoute.snapshot.queryParamMap.has(PLAYER_EDITOR_PREVIEW)
   }
 
   ngOnInit(): void {
@@ -141,24 +290,6 @@ export class PlayerExerciseComponent implements OnInit, OnChanges {
       this.clearNotification?.()
       this.clearNotification = undefined
     }
-  }
-
-  protected async hint(): Promise<void> {
-    await this.evaluate(PlayerActions.NEXT_HINT)
-    this.scrollIntoNode(this.containerHints?.nativeElement, 'center')
-  }
-
-  protected check(): Promise<void> {
-    return this.evaluate(PlayerActions.CHECK_ANSWER)
-  }
-
-  protected reroll(): Promise<void> {
-    return this.evaluate(PlayerActions.REROLL_EXERCISE)
-  }
-
-  protected async solution(): Promise<void> {
-    await this.evaluate(PlayerActions.SHOW_SOLUTION)
-    this.scrollIntoNode(this.containerSolution?.nativeElement, 'start')
   }
 
   protected previousAttempt(): void {
@@ -194,8 +325,12 @@ export class PlayerExerciseComponent implements OnInit, OnChanges {
     }
   }
 
-  protected trackByUrl(_: number, item: ExerciseTheory): string {
+  protected trackTheory(_: number, item: ExerciseTheory): string {
     return item.url
+  }
+
+  protected trackAction(_: number, item: Action): string {
+    return item.tooltip
   }
 
   private answers(): Record<string, unknown> {

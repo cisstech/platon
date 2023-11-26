@@ -53,6 +53,12 @@ mat-card-header {
   }
 }
 
+mat-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 mat-divider {
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
@@ -97,6 +103,20 @@ pre {
   margin-bottom: 1.5rem !important;
 }
 
+.exercice-actions {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0.5rem 0;
+  overflow-x: auto;
+}
+
+.exercice-actions-list {
+  display: flex;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
 .spacer {
   flex: 1;
 }
@@ -106,6 +126,10 @@ pre {
   background-color: #ff4d4f !important;
 }
 
+button.primary {
+  color: white !important;
+}
+
 .skeleton-actions {
   margin: 0;
   &.active {
@@ -113,16 +137,13 @@ pre {
   }
 }
 
-@media (max-width: 720px) {
-  Œ :host::ng-deep {
+// TABLET
+@media (max-width: 768px) {
+  :host::ng-deep {
     button {
       .mat-icon {
         margin: 0;
       }
     }
-  }
-
-  .hide-on-small {
-    display: none;
   }
 }

@@ -59,6 +59,9 @@
 
 <ui-modal-template [width]="'70vw'" [height]="'70vh'" (accepted)="answers = []" (canceled)="answers = []">
   <ng-template>
-    <player-exercise [players]="answers" [reviewMode]="true" />
+    <nz-ribbon [nzText]="ribbon">
+      <ng-template #ribbon> {{ exercice.currentAttemptIndex + 1 }} / {{ answers.length }} </ng-template>
+      <player-exercise #exercice [players]="answers" [reviewMode]="true" />
+    </nz-ribbon>
   </ng-template>
 </ui-modal-template>
