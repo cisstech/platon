@@ -66,6 +66,24 @@
           <i nz-icon nzType="eye" nzTheme="outline"></i>
           {{ context.resource.permissions.watcher ? 'Ne plus suivre' : 'Suivre' }}
         </button>
+        <button
+          *ngIf="
+            context.user?.role !== 'admin' &&
+            !context.resource.permissions.member &&
+            !context.resource.permissions.waiting
+          "
+          nz-button
+          nzType="default"
+          (click)="join()"
+        >
+          <i nz-icon nzType="user-add" nzTheme="outline"></i>
+          Demander à rejoindre
+        </button>
+
+        <button *ngIf="context.resource.permissions.waiting" nz-button nzDanger nzType="default" (click)="unjoin()">
+          <i nz-icon nzType="user-add" nzTheme="outline"></i>
+          Annuler la demande de rejoindre
+        </button>
       </nz-button-group>
       <div class="spacer"></div>
       <nz-button-group>

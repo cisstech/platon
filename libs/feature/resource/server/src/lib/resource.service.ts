@@ -40,6 +40,8 @@ export class ResourceService {
         read: true,
         write: true,
         watcher: true,
+        member: false,
+        waiting: false,
       },
     }
 
@@ -55,6 +57,8 @@ export class ResourceService {
             read: true,
             write: true,
             watcher: true,
+            member: false,
+            waiting: false,
           },
           children: [],
         }

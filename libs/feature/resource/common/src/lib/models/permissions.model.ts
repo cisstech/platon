@@ -4,5 +4,7 @@ export interface MemberPermissions {
 }
 
 export interface ResourcePermissions extends MemberPermissions {
+  readonly member: boolean
   readonly watcher: boolean
+  readonly waiting: boolean
 }

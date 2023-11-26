@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { OrderingDirections, UserOrderings } from '@platon/core/common'
-import { BaseDTO, toNumber } from '@platon/core/server'
+import { BaseDTO, toBoolean, toNumber } from '@platon/core/server'
 import {
   CreateResourceMember,
   ResourceMember,
@@ -8,7 +8,7 @@ import {
   UpdateResourceMember,
 } from '@platon/feature/resource/common'
 import { Transform, Type } from 'class-transformer'
-import { IsEnum, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator'
+import { IsBoolean, IsEnum, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator'
 import { MemberPermissionsDTO } from '../permissions'
 
 export class ResourceMemberDTO extends BaseDTO implements ResourceMember {
@@ -19,6 +19,11 @@ export class ResourceMemberDTO extends BaseDTO implements ResourceMember {
   @IsUUID()
   @ApiProperty()
   resourceId!: string
+
+  @IsBoolean()
+  @IsOptional()
+  @ApiProperty()
+  waiting?: boolean
 
   @Type(() => MemberPermissionsDTO)
   @ApiProperty()
@@ -32,6 +37,11 @@ export class CreateResourceMemberDTO implements CreateResourceMember {
 }
 
 export class UpdateResourceMemberDTO implements UpdateResourceMember {
+  @ApiProperty()
+  @IsBoolean()
+  @IsOptional()
+  waiting?: boolean
+
   @Type(() => MemberPermissionsDTO)
   @ApiProperty()
   permissions?: MemberPermissionsDTO
@@ -46,6 +56,11 @@ export class ResourceMemberFiltersDTO implements ResourceMemberFilters {
   @IsNumber()
   @IsOptional()
   readonly offset?: number
+
+  @Transform(({ value }) => toBoolean(value))
+  @IsBoolean()
+  @IsOptional()
+  readonly waiting?: boolean
 
   @Transform(({ value }) => toNumber(value))
   @IsNumber()

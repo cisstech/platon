@@ -107,6 +107,14 @@ export class ResourcePage implements OnInit, OnDestroy {
     }
   }
 
+  protected async join(): Promise<void> {
+    await this.presenter.join()
+  }
+
+  protected async unjoin(): Promise<void> {
+    await this.presenter.unjoin()
+  }
+
   protected trackByValue(_: number, item: unknown) {
     return item
   }

@@ -8,7 +8,7 @@ import { ResourceInvitationService } from './invitation.service'
 
 @Injectable()
 @RegisterNotificationExtraDataProvider()
-export class ResourceInvitationExtraDataProvider
+export class ResourceInvitationNotificationDataProvider
   implements NotificationExtraDataProvider<ResourceInvitationNotification>
 {
   constructor(private readonly invitationService: ResourceInvitationService) {}

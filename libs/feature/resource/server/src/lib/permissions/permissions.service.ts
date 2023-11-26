@@ -34,6 +34,8 @@ export class ResourcePermissionService {
         read: false,
         write: false,
         watcher: false,
+        waiting: false,
+        member: false,
       }
     }
 
@@ -56,6 +58,8 @@ export class ResourcePermissionService {
         shareds.includes(circle.id) || // user is member of the circle
         circle.ownerId === user.id, // user is owner of the circle,
       watcher: watchings.some((w) => w.resourceId === resource.id),
+      member: members.some((m) => m.resourceId === resource.id),
+      waiting: members.some((m) => m.resourceId === resource.id && m.waiting),
     }
   }
 

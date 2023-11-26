@@ -22,11 +22,22 @@ export const ResourceEventNotificationParser: NotificationParser<ResourceEventNo
     const event = notification.data.eventInfo
     const resourceId = 'resourceId' in event.data ? event.data.resourceId : event.resourceId
     const resourceType = event.data.resourceType?.toLowerCase()
+
     return {
       icon: new ImgIcon(`/assets/images/resources/${resourceType}.svg`),
       content: ResourceEventItemComponent,
-      onClick: ({ onClose }) => {
+      onClick: async ({ onClose }) => {
         if (event.type === 'MEMBER_REMOVE') return
+        if (event.type === 'MEMBER_CREATE') {
+          router.navigate([`/resources/${resourceId}/settings`], {
+            queryParams: {
+              tab: 'members',
+            },
+          })
+          onClose()
+          return
+        }
+
         router.navigate([`/resources/${resourceId}`])
         onClose()
       },

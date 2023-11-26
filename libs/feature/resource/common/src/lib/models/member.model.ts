@@ -5,6 +5,7 @@ export interface ResourceMember {
   readonly id: string
   readonly createdAt: Date
   readonly updatedAt?: Date
+  readonly waiting?: boolean
   readonly userId: string
   readonly resourceId: string
   readonly permissions: MemberPermissions
@@ -15,6 +16,7 @@ export interface CreateResourceMember {
 }
 
 export interface UpdateResourceMember {
+  readonly waiting?: boolean
   readonly permissions?: MemberPermissions
 }
 
@@ -22,6 +24,7 @@ export interface ResourceMemberFilters {
   readonly search?: string
   readonly offset?: number
   readonly limit?: number
+  readonly waiting?: boolean
   readonly order?: UserOrderings
   readonly direction?: OrderingDirections
 }

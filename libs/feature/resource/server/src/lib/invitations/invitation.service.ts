@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { NotFoundResponse } from '@platon/core/common'
+import { ForbiddenResponse, NotFoundResponse } from '@platon/core/common'
 import { DataSource, Repository } from 'typeorm'
 import { Optional } from 'typescript-optional'
 import { ResourceMemberEntity } from '../members/member.entity'
@@ -52,14 +52,20 @@ export class ResourceInvitationService {
       if (!invitation) {
         throw new NotFoundResponse(`ResourceInvitation not found for user: ${inviteeId}`)
       }
+
+      if (invitation.inviteeId !== inviteeId) {
+        throw new ForbiddenResponse('You are not the invitee of this invitation')
+      }
+
       await manager.remove(invitation)
-      return manager.save(
-        manager.create(ResourceMemberEntity, {
+      return this.memberService.create(
+        {
           resourceId: invitation.resourceId,
           userId: invitation.inviteeId,
           inviterId: invitation.inviterId,
           permissions: invitation.permissions,
-        })
+        },
+        manager
       )
     })
   }
