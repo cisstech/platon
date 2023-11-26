@@ -17,8 +17,10 @@ export class InputBoxComponent implements OnInit, OnDestroy, WebComponentHooks<I
 
   private subscription?: Subscription
 
-  readonly form = new FormControl()
-  readonly $autocomplete: Observable<string[]> = this.form.valueChanges.pipe(
+  protected containerStyles: Record<string, string> = {}
+
+  protected readonly form = new FormControl()
+  protected readonly $autocomplete: Observable<string[]> = this.form.valueChanges.pipe(
     startWith(''),
     map((value) => this.getSuggestions(value))
   )
@@ -57,6 +59,11 @@ export class InputBoxComponent implements OnInit, OnDestroy, WebComponentHooks<I
     this.form.enable({ emitEvent: false })
     if (this.state.disabled) {
       this.form.disable({ emitEvent: false })
+    }
+
+    this.containerStyles = {}
+    if (this.state.width) {
+      this.containerStyles['width'] = this.state.width
     }
   }
 

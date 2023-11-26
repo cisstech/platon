@@ -3,7 +3,7 @@
   [nzClosable]="true"
   [nzVisible]="visible"
   [nzTitle]="title"
-  [nzSize]="size"
+  [nzSize]="isMobile ? 'default' : size"
   [nzPlacement]="placement"
   [nzFooter]="templates.length > 1 ? templates.last : noFooter"
   (nzOnClose)="close()"

@@ -173,7 +173,7 @@ export const isTimeouted = (player: Partial<ActivityPlayer>): boolean => {
   // Check if the activity is timeouted
   let isTimeouted = false
 
-  if (duration != null && startedAt != null) {
+  if (duration && startedAt) {
     // Prioritize startedAt + duration
     isTimeouted = currentTime > startedAt + duration
   } else if (closeAt != null) {

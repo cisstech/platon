@@ -1,46 +1,24 @@
 :host {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
   width: 100vw;
   padding: 0 8rem;
   transition: all 0.3s;
-  &::ng-deep {
-    .ant-timeline-item {
-      cursor: pointer;
-      min-height: 48px;
-    }
-  }
 }
 
-:host.play-mode {
-  display: grid;
-  width: 100vw;
-  grid-template-columns: 75% 25%;
-  gap: 2rem;
-  padding: 0 4rem;
-}
-
-.author {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  user-avatar {
-    margin: 0.5rem 0;
-  }
-}
-
-.centered {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+h1 {
+  margin: 0;
   text-align: center;
-  button {
-    margin-top: 1.5rem;
-  }
 }
 
-aside {
-  height: 75vh;
+user-avatar {
+  margin: 1rem 0;
+}
+
+main {
+  width: 100%;
 }
 
 player-exercise {
@@ -54,4 +32,76 @@ player-results {
   align-items: center;
   text-align: center;
   max-width: 70%;
+}
+
+player-navigation {
+  min-width: 30vw;
+  max-height: 75vh;
+}
+
+footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  z-index: 10;
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+}
+
+footer.glass {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(2.6px);
+  -webkit-backdrop-filter: blur(2.6px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+
+  [mat-fab] {
+    margin-top: 1rem;
+  }
+}
+
+.centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  button {
+    margin-top: 1.5rem;
+  }
+}
+
+// TABLET
+@media (max-width: 991px) {
+  :host {
+    padding: 0 4rem;
+  }
+
+  footer {
+    bottom: unset;
+    top: 0;
+    left: 1rem;
+    right: unset;
+    flex-direction: column-reverse;
+  }
+
+  footer.glass {
+    [mat-fab] {
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+  }
+
+  player-navigation {
+    min-width: 60vw;
+  }
+}
+
+// MOBILE
+@media (max-width: 768px) {
+  :host {
+    padding: 0 1rem;
+  }
 }

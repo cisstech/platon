@@ -5,6 +5,7 @@ import { ActivityPlayer, ExercisePlayer } from '@platon/feature/player/common'
 import { AnswerStatePipesModule, ResultService } from '@platon/feature/result/browser'
 import { UserExerciseResults, UserResults } from '@platon/feature/result/common'
 import { DurationPipe, UiModalTemplateComponent } from '@platon/shared/ui'
+import { NzBadgeModule } from 'ng-zorro-antd/badge'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 import { firstValueFrom } from 'rxjs'
@@ -20,6 +21,7 @@ import { PlayerExerciseComponent } from '../player-exercise/player-exercise.comp
   imports: [
     CommonModule,
     MatIconModule,
+    NzBadgeModule,
     NzButtonModule,
     NzToolTipModule,
     DurationPipe,

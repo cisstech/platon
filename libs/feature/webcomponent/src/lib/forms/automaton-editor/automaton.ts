@@ -171,23 +171,19 @@ export function automatonToDotFormat(automaton: Automaton) {
   })
 
   automaton.transitions.forEach((transition) => {
-    const initTransition = false
-    for (const init of automaton.initialStates) {
-      if (init === transition.toState) {
-        trans = [' ']
-        trans.push(transition.toState)
-        trans.push('->')
-        trans.push(transition.fromState)
-        trans.push('[')
-        trans.push('label =')
-        trans.push('"' + transition.symbols.join(',') + '"')
-        trans.push(' dir = back];')
-        result.push(trans.join(' '))
-        break
-      }
-    }
+    const isInitTransition = automaton.initialStates.includes(transition.fromState)
 
-    if (!initTransition) {
+    if (isInitTransition) {
+      trans = [' ']
+      trans.push(transition.toState)
+      trans.push('->')
+      trans.push(transition.fromState)
+      trans.push('[')
+      trans.push('label =')
+      trans.push('"' + transition.symbols.join(',') + '"')
+      trans.push(' dir = back];')
+      result.push(trans.join(' '))
+    } else {
       trans = [' ']
       trans.push(transition.fromState.toString())
       trans.push('->')

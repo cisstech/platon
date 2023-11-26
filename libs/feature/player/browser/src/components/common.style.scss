@@ -18,12 +18,13 @@ th {
 
 td:first-child {
   font-weight: bold;
-  min-width: 300px;
+  // min-width: 300px;
   background-color: #f9f9f9;
 }
 
 td:last-child {
   text-align: center;
-  min-width: 200px;
+
+  min-width: 100px;
   background-color: #fff;
 }
