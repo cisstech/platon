@@ -171,7 +171,7 @@ export function automatonToDotFormat(automaton: Automaton) {
   })
 
   automaton.transitions.forEach((transition) => {
-    const initTransition = false
+    let initTransition = false
     for (const init of automaton.initialStates) {
       if (init === transition.toState) {
         trans = [' ']
@@ -183,6 +183,7 @@ export function automatonToDotFormat(automaton: Automaton) {
         trans.push('"' + transition.symbols.join(',') + '"')
         trans.push(' dir = back];')
         result.push(trans.join(' '))
+        initTransition = true
         break
       }
     }
