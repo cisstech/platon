@@ -34,6 +34,7 @@ export class ResourceMembersPage implements OnInit, OnDestroy {
 
   protected members: ResourceMember[] = []
   protected invitations: ResourceInvitation[] = []
+  protected joinRequests: ResourceMember[] = []
   protected excludes: string[] = []
   protected context = this.presenter.defaultContext()
 
@@ -42,7 +43,7 @@ export class ResourceMembersPage implements OnInit, OnDestroy {
   }
 
   protected get canEdit(): boolean {
-    return !!this.context.resource?.permissions?.write
+    return this.context.user!.role === 'admin'
   }
 
   ngOnInit(): void {
@@ -50,7 +51,7 @@ export class ResourceMembersPage implements OnInit, OnDestroy {
       this.presenter.contextChange.subscribe(async (context) => {
         this.context = context
         if (context.resource) {
-          await Promise.all([this.loadMembers(), this.loadInvitations()])
+          await Promise.all([this.loadMembers(), this.loadJoinRequests(), this.loadInvitations()])
 
           this.excludes = [
             ...this.members.map((m) => m.userId),
@@ -81,8 +82,19 @@ export class ResourceMembersPage implements OnInit, OnDestroy {
   }
 
   protected async loadMembers(): Promise<void> {
-    this.members = (await this.presenter.searchMembers()).resources
-    this.changeDetectorRef.markForCheck()
+    this.members = (
+      await this.presenter.searchMembers({
+        waiting: false,
+      })
+    ).resources
+  }
+
+  protected async loadJoinRequests(): Promise<void> {
+    this.joinRequests = (
+      await this.presenter.searchMembers({
+        waiting: true,
+      })
+    ).resources
   }
 
   protected async deleteInvitation(invitation: ResourceInvitation): Promise<void> {
@@ -94,6 +106,20 @@ export class ResourceMembersPage implements OnInit, OnDestroy {
 
   protected async loadInvitations(): Promise<void> {
     this.invitations = (await this.presenter.searchInvitations()).resources
-    this.changeDetectorRef.markForCheck()
+  }
+
+  protected async acceptJoinRequest(member: ResourceMember): Promise<void> {
+    if (await this.presenter.acceptJoin(member)) {
+      this.joinRequests = this.joinRequests.filter((e) => e.userId !== member.userId)
+      this.members.unshift(member)
+      this.changeDetectorRef.markForCheck()
+    }
+  }
+
+  protected async declineJoinRequest(member: ResourceMember): Promise<void> {
+    if (await this.presenter.declineJoin(member)) {
+      this.joinRequests = this.joinRequests.filter((e) => e.userId !== member.userId)
+      this.changeDetectorRef.markForCheck()
+    }
   }
 }

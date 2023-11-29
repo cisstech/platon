@@ -1,19 +1,25 @@
 import { ResourceEventTypes } from '../enums/resource-event-types'
 import { ResourceTypes } from '../enums/resource-types'
 
-export type ResourceEventData<TData = unknown> = TData & {
+export type ResourceEventData = {
+  resourceId: string
   resourceName: string
   resourceType: ResourceTypes
 }
 
-export interface ResourceEvent<TData = unknown> {
+export interface ResourceEvent<TData extends ResourceEventData = ResourceCreateEventData> {
   readonly id: string
   readonly createdAt: Date
   readonly updatedAt?: Date
   readonly type: ResourceEventTypes
   readonly actorId: string
+
+  /**
+   * Id of the resource on which the event is triggered.
+   */
   readonly resourceId: string
-  readonly data: ResourceEventData<TData>
+
+  readonly data: TData
 }
 
 export interface ResourceEventFilters {
@@ -31,6 +37,11 @@ export interface ResourceMemberCreateEventData {
   userId: string
 
   /**
+   * Id of the resource to which the member is added.
+   */
+  resourceId: string
+
+  /**
    * Name of the resource to which the member is added
    */
   resourceName: string
@@ -39,6 +50,9 @@ export interface ResourceMemberCreateEventData {
    * Type of the resource to which the member is added
    */
   resourceType: ResourceTypes
+
+  // extra dynamic data defined by ResourceEventExtraDataProvider
+  expired?: boolean
 }
 
 /**
@@ -54,6 +68,11 @@ export interface ResourceMemberCreateEvent extends ResourceEvent<ResourceMemberC
  * Data of the {@link ResourceMemberRemoveEvent} event.
  */
 export interface ResourceMemberRemoveEventData {
+  /**
+   * Id of the resource on which the member is removed.
+   */
+  resourceId: string
+
   /**
    * Name of the resource from which the member is removed
    */
@@ -108,14 +127,19 @@ export interface ResourceCreateEvent extends ResourceEvent<ResourceCreateEventDa
  */
 export interface ResourceStatusChangeEventData {
   /**
-   * Type of the changed resource
+   * Id of the changed resource
    */
-  resourceType: ResourceTypes
+  resourceId: string
 
   /**
    * Name of the changed resource
    */
   resourceName: string
+
+  /**
+   * Type of the changed resource
+   */
+  resourceType: ResourceTypes
 
   /**
    * New status of the changed resource

@@ -6,6 +6,7 @@
     transform: scale(1.05);
   }
 }
+
 @mixin animate {
   animation-name: animate;
   animation-duration: 0.5s;
@@ -43,6 +44,21 @@ section {
   }
 }
 
+mat-card-header {
+  > div {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+}
+
+mat-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 mat-divider {
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
@@ -52,6 +68,12 @@ mat-divider {
 
 nz-alert {
   margin-bottom: 0.5rem;
+}
+
+nz-skeleton {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 mat-card-content {
@@ -81,6 +103,20 @@ pre {
   margin-bottom: 1.5rem !important;
 }
 
+.exercice-actions {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0.5rem 0;
+  overflow-x: auto;
+}
+
+.exercice-actions-list {
+  display: flex;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
 .spacer {
   flex: 1;
 }
@@ -90,6 +126,10 @@ pre {
   background-color: #ff4d4f !important;
 }
 
+button.primary {
+  color: white !important;
+}
+
 .skeleton-actions {
   margin: 0;
   &.active {
@@ -97,16 +137,13 @@ pre {
   }
 }
 
-@media (max-width: 720px) {
-  Œ :host::ng-deep {
+// TABLET
+@media (max-width: 768px) {
+  :host::ng-deep {
     button {
       .mat-icon {
         margin: 0;
       }
     }
-  }
-
-  .hide-on-small {
-    display: none;
   }
 }

@@ -17,15 +17,26 @@ export interface EditorJsExtension {
 export const EDITOR_JS_REGEX = /^\s*\{[\s\S]*"blocks"\s*:\s*\[[\s\S]*\][\s\S]*\}\s*$/
 export const EDITOR_JS_EXTENSION = new InjectionToken<EditorJsExtension[]>('EditorJsExtension')
 
-export const editorJsToRawString = (data: unknown) => {
+const isEditorJsData = (data: unknown): data is OutputData => {
+  if (typeof data === 'object') {
+    const output = data as OutputData
+    if (output?.version && output.blocks) {
+      return true
+    }
+  }
+  return false
+}
+
+export const editorJsToRawString = (data: string | object): string => {
   if (typeof data === 'string') {
     return data
   }
 
-  const output = data as OutputData
-  if (output?.version === EditorJsVersion && output.blocks) {
-    if (output.blocks.length === 1 && output.blocks[0].type === 'raw') {
-      return output.blocks[0].data.html
+  if (isEditorJsData(data)) {
+    const isRawHTML = data.blocks.length === 1 && data.blocks[0].type === 'raw'
+    if (isRawHTML) {
+      // we let platon render the raw html instead of render it with editorJs
+      return data.blocks[0].data.html
     }
     return JSON.stringify(data, null, 2)
   }
@@ -33,13 +44,15 @@ export const editorJsToRawString = (data: unknown) => {
   return JSON.stringify(data, null, 2)
 }
 
-export const editorJsFromRawString = (data: unknown) => {
+export const emptyEditorJsData = () => ({
+  time: Date.now(),
+  blocks: [],
+  version: EditorJsVersion,
+})
+
+export const editorJsFromRawString = (data: string): OutputData => {
   if (!data) {
-    return {
-      time: Date.now(),
-      blocks: [],
-      version: EditorJsVersion,
-    } as OutputData
+    return emptyEditorJsData()
   }
 
   const html = data as string

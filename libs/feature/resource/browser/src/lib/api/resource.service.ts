@@ -77,16 +77,31 @@ export class ResourceService {
   //#endregion
 
   //#region Members
-  findMember(resource: Resource, userId: string): Observable<ResourceMember> {
-    return this.resourceMemberProvider.findMember(resource, userId)
+
+  join(resource: Resource | string): Observable<ResourceMember> {
+    return this.resourceMemberProvider.join(resource)
   }
 
-  deleteMember(resource: Resource, userId: string): Observable<void> {
-    return this.resourceMemberProvider.deleteMember(resource, userId)
+  acceptJoin(resource: Resource | string, userId: string): Observable<ResourceMember> {
+    return this.resourceMemberProvider.update(resource, userId, {
+      waiting: false,
+    })
+  }
+
+  declineJoin(resource: Resource | string, userId: string): Observable<void> {
+    return this.resourceMemberProvider.delete(resource, userId)
+  }
+
+  findMember(resource: Resource | string, userId: string): Observable<ResourceMember> {
+    return this.resourceMemberProvider.find(resource, userId)
+  }
+
+  deleteMember(resource: Resource | string, userId: string): Observable<void> {
+    return this.resourceMemberProvider.delete(resource, userId)
   }
 
   searchMembers(resource: Resource, filters: ResourceMemberFilters): Observable<ListResponse<ResourceMember>> {
-    return this.resourceMemberProvider.searchMembers(resource, filters)
+    return this.resourceMemberProvider.search(resource, filters)
   }
   //#endregion
 

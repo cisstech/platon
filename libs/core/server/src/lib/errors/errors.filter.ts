@@ -8,7 +8,7 @@ import { GraphQLError } from 'graphql'
 export class ErrorsFilter implements ExceptionFilter {
   constructor(private readonly logger: Logger) {}
 
-  catch(exception: Error, host: ArgumentsHost) {
+  catch(exception: unknown, host: ArgumentsHost) {
     // TODO create util function to get request to handle both rest and graphql
     const ctx = host.switchToHttp()
     const request = ctx.getRequest<Request>()
@@ -25,11 +25,17 @@ export class ErrorsFilter implements ExceptionFilter {
     } else {
       error = new ErrorResponse({
         status: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: exception.message || 'Internal server error',
+        message:
+          (exception && typeof exception === 'object' && 'message' in exception
+            ? (exception.message as string)
+            : null) || 'Internal server error',
       })
     }
+
     // REST request
-    this.logger.error(exception.stack ?? exception)
+    this.logger.error(
+      (exception && typeof exception === 'object' && 'stack' in exception ? exception.stack : null) ?? exception
+    )
     if (request) {
       response.status(error.statusCode).json(error)
       return

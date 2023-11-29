@@ -7,6 +7,7 @@ import { GraphQLModule as NestGraphQLModule } from '@nestjs/graphql'
 import { Context } from 'graphql-ws'
 import { join } from 'path'
 import { AuthExecutionContext } from '../auth'
+import { DateScalar } from './scalars/date.scalar'
 import { UUID } from './scalars/uuid.scalar'
 
 export function mapKeysToLowerCase(inputObject: Readonly<any>): Record<string, any> {
@@ -83,7 +84,7 @@ export function mapKeysToLowerCase(inputObject: Readonly<any>): Record<string, a
       },
     }),
   ],
-  providers: [ConfigService],
+  providers: [DateScalar, ConfigService],
   exports: [NestGraphQLModule],
 })
 export class GraphQLModule {}

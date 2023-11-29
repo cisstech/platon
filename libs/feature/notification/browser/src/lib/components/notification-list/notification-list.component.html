@@ -17,7 +17,7 @@
 
           <nz-list-item-meta-description>
             <div class="notification-item-header">
-              <div>{{ $any(item.notification.createdAt | date : 'dd/MM/yyyy à HH:mm') }}</div>
+              <div>{{ $any(item.notification.createdAt | date: 'dd/MM/yyyy à HH:mm') }}</div>
               <div class="spacer"></div>
               <button
                 nz-button
@@ -70,10 +70,10 @@
                         action.type === 'primary'
                           ? 'primary'
                           : action.type === 'default'
-                          ? 'text'
-                          : action.type === 'danger'
-                          ? 'primary'
-                          : 'text'
+                            ? 'text'
+                            : action.type === 'danger'
+                              ? 'primary'
+                              : 'text'
                       "
                     >
                       <span

@@ -30,3 +30,17 @@ mat-toolbar {
     width: 100%;
   }
 }
+
+.router-outlet {
+  padding: 0 2rem;
+}
+
+@media (max-width: 720px) {
+  .router-outlet {
+    padding: 0 1rem;
+  }
+
+  mat-toolbar {
+    padding: 0;
+  }
+}

@@ -5,6 +5,7 @@ import { NzTabsModule } from 'ng-zorro-antd/tabs'
 import { ResourceInformationsPage } from './informations/informations.page'
 import { ResourceMembersPage } from './members/members.page'
 import { ResourcePresenter } from '../resource.presenter'
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout'
 
 @Component({
   standalone: true,
@@ -15,6 +16,11 @@ import { ResourcePresenter } from '../resource.presenter'
   imports: [CommonModule, RouterModule, NzTabsModule, ResourceInformationsPage, ResourceMembersPage],
 })
 export class ResourceSettingsPage {
+  private readonly breakpointObserver = inject(BreakpointObserver)
   protected readonly presenter = inject(ResourcePresenter)
   protected readonly contextChange = this.presenter.contextChange
+
+  get isMobile(): boolean {
+    return this.breakpointObserver.isMatched([Breakpoints.XSmall, Breakpoints.Small])
+  }
 }

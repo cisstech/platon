@@ -10,7 +10,10 @@ import { AutomatonEditorAction, AutomatonEditorActionContext, AUTOMATON_EDITOR_A
 export class ActionRenameTransition implements AutomatonEditorAction {
   readonly name = 'Changer étiquette'
 
-  constructor(private readonly dialog: DialogService, private readonly editor: AutomatonEditorService) {}
+  constructor(
+    private readonly dialog: DialogService,
+    private readonly editor: AutomatonEditorService
+  ) {}
 
   async run(context: AutomatonEditorActionContext) {
     if (!context.transition) {

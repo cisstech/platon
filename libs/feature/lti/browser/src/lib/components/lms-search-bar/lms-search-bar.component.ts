@@ -59,7 +59,10 @@ export class LmsSearchBarComponent implements ControlValueAccessor {
 
   selection: Lms[] = []
 
-  constructor(private readonly ltiService: LTIService, private readonly changeDetectorRef: ChangeDetectorRef) {}
+  constructor(
+    private readonly ltiService: LTIService,
+    private readonly changeDetectorRef: ChangeDetectorRef
+  ) {}
 
   // ControlValueAccessor methods
 

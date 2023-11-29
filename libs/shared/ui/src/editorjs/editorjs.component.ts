@@ -77,8 +77,17 @@ export class EditorJsComponent implements AfterViewInit, OnDestroy, ControlValue
   }
 
   async writeValue(value: OutputData): Promise<void> {
+    if (value?.blocks && !value.blocks.length) {
+      value.blocks.push({
+        type: 'paragraph',
+        data: {
+          text: '',
+        },
+      })
+    }
+
     this.data = value
-    if (this.editor) {
+    if (this.editor && this.data) {
       await this.editor.isReady
       this.editor.render(this.data)
     }

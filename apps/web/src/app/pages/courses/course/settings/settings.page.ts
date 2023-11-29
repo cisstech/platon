@@ -7,6 +7,7 @@ import { CourseInformationsPage } from './informations/informations.page'
 import { CourseDemoPage } from './demo/demo.page'
 import { Subscription } from 'rxjs'
 import { CoursePresenter } from '../course.presenter'
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout'
 
 @Component({
   standalone: true,
@@ -17,10 +18,16 @@ import { CoursePresenter } from '../course.presenter'
   imports: [CommonModule, RouterModule, NzTabsModule, CourseInformationsPage, UiError403Component, CourseDemoPage],
 })
 export class CourseSettingsPage implements OnInit, OnDestroy {
-  private readonly presenter = inject(CoursePresenter)
-  private readonly changeDetectorRef = inject(ChangeDetectorRef)
   private readonly subscriptions: Subscription[] = []
+  private readonly presenter = inject(CoursePresenter)
+  private readonly breakpointObserver = inject(BreakpointObserver)
+  private readonly changeDetectorRef = inject(ChangeDetectorRef)
+
   protected context = this.presenter.defaultContext()
+
+  protected get isMobile(): boolean {
+    return this.breakpointObserver.isMatched([Breakpoints.XSmall, Breakpoints.Small])
+  }
 
   ngOnInit(): void {
     this.subscriptions.push(

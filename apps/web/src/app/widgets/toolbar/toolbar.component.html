@@ -1,12 +1,19 @@
 <header>
-  <button nz-button nzType="text" (click)="toggleMenu.emit()">
+  <button nz-button nzType="text" (click)="drawerOpenedChange.emit(!drawerOpened)">
     <mat-icon>menu</mat-icon>
   </button>
-  <span>PLaTon</span>
+  <img
+    *ngIf="!drawerOpened"
+    class="logo"
+    src="assets/images/logo/platon.svg"
+    alt="Logo PLaTon"
+    [routerLink]="'/dashboard'"
+  />
+  <span *ngIf="!mobile">PLaTon</span>
   <div class="spacer"></div>
 
   <ng-container *ngIf="canCreate">
-    <button nz-button nzType="primary" nzShape="round" nzSize="large" [matMenuTriggerFor]="actionMenu">
+    <button nz-button nzType="primary" nzShape="round" nzSize="small" [matMenuTriggerFor]="actionMenu">
       <span nz-icon nzType="plus" nzTheme="outline"></span>
     </button>
   </ng-container>
@@ -19,7 +26,8 @@
   <user-avatar
     *ngIf="user"
     [user]="user"
-    [size]="24"
+    [size]="32"
+    [showUsername]="mobile ? 'none' : 'stacked'"
     [attr.aria-label]="user.firstName"
     [matMenuTriggerFor]="avatarMenu"
   />

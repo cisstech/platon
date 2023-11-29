@@ -62,7 +62,10 @@ export class UserGroupDrawerComponent {
     return this.members.map((m) => m.username)
   }
 
-  constructor(private readonly userService: UserService, private readonly changeDetectorRef: ChangeDetectorRef) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly changeDetectorRef: ChangeDetectorRef
+  ) {}
 
   open(group: UserGroup) {
     this.group = group

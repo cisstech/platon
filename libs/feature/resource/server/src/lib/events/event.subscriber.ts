@@ -1,9 +1,14 @@
 import { Injectable } from '@nestjs/common'
 import { NotificationService } from '@platon/feature/notification/server'
-import { ResourceEventNotification, ResourceEventTypes } from '@platon/feature/resource/common'
+import {
+  ResourceMemberCreateEventData,
+  ResourceEventNotification,
+  ResourceEventTypes,
+} from '@platon/feature/resource/common'
 import { DataSource, EntityManager, EntitySubscriberInterface, InsertEvent } from 'typeorm'
 import { ResourceService } from '../resource.service'
 import { ResourceEventEntity } from './event.entity'
+import { UserService } from '@platon/core/server'
 
 type TargetUserProvider = (event: ResourceEventEntity, manager: EntityManager) => Promise<string[]>
 type TargetUserProviderMap = Record<ResourceEventTypes, TargetUserProvider>
@@ -16,7 +21,16 @@ export class ResourceEventSubscriber implements EntitySubscriberInterface<Resour
   }
 
   private readonly targetUserProviderMap: TargetUserProviderMap = {
-    [ResourceEventTypes.MEMBER_CREATE]: this.defaultUserProvider.bind(this),
+    [ResourceEventTypes.MEMBER_CREATE]: async (event, manager) => {
+      // join request
+      if (event.actorId === (event.data as ResourceMemberCreateEventData).userId) {
+        const [admins] = await this.userService.search({
+          roles: ['admin'],
+        })
+        return admins.map((u) => u.id)
+      }
+      return this.defaultUserProvider(event, manager)
+    },
     [ResourceEventTypes.RESOURCE_CREATE]: this.defaultUserProvider.bind(this),
     [ResourceEventTypes.RESOURCE_STATUS_CHANGE]: this.defaultUserProvider.bind(this),
     [ResourceEventTypes.MEMBER_REMOVE]: async (event) => {
@@ -26,6 +40,7 @@ export class ResourceEventSubscriber implements EntitySubscriberInterface<Resour
 
   constructor(
     private readonly dataSource: DataSource,
+    private readonly userService: UserService,
     private readonly resourceService: ResourceService,
     private readonly notificationService: NotificationService
   ) {
@@ -38,6 +53,14 @@ export class ResourceEventSubscriber implements EntitySubscriberInterface<Resour
 
   async afterInsert(event: InsertEvent<ResourceEventEntity>): Promise<void> {
     if (event.entity) {
+      if (event.entity.type === ResourceEventTypes.RESOURCE_STATUS_CHANGE) {
+        // since status change is sent both on parent on target, we choose to sent notification
+        // only for users of target resource
+        if (event.entity.resourceId !== event.entity.data.resourceId) {
+          return
+        }
+      }
+
       this.notificationService.sendToAllUsers<ResourceEventNotification>(
         await this.targetUserProviderMap[event.entity.type](event.entity, event.manager),
         {

@@ -112,8 +112,8 @@ export class PleEditorComponent implements OnInit, OnDestroy {
 
     this.form.patchValue({
       title: (variables.title as string) || '',
-      statement: editorJsFromRawString(variables.statement),
-      form: editorJsFromRawString(variables.form),
+      statement: editorJsFromRawString(variables.statement as string),
+      form: editorJsFromRawString(variables.form as string),
       builder: {
         name: 'builder',
         type: 'code',

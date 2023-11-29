@@ -16,6 +16,7 @@ input {
   background-color: transparent;
   box-shadow: none;
   border: none;
+  text-overflow: ellipsis;
 }
 
 input:focus {
