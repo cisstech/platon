@@ -15,11 +15,12 @@ import { ResultController } from './result.controller'
 import { ResultService } from './result.service'
 import { SessionEntity } from './sessions/session.entity'
 import { SessionService } from './sessions/session.service'
+import { SessionView } from './sessions/session.view'
 
 @Module({
   imports: [
     FeatureCourseServerModule,
-    TypeOrmModule.forFeature([SessionEntity, AnswerEntity, CorrectionEntity, SessionCommentEntity]),
+    TypeOrmModule.forFeature([SessionView, SessionEntity, AnswerEntity, CorrectionEntity, SessionCommentEntity]),
   ],
   controllers: [ResultController, CorrectionController, SessionCommentController],
   providers: [

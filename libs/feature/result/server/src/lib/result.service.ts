@@ -1,9 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { BadRequestResponse, NotFoundResponse } from '@platon/core/common'
 import { ActivityVariables, ExerciseVariables, extractExercisesFromActivityVariables } from '@platon/feature/compiler'
 import { ActivityCorrectorView, ActivityEntity, ActivityMemberView } from '@platon/feature/course/server'
+import { PlayerNavigation } from '@platon/feature/player/common'
 import {
   ActivityResults,
   AnswerStates,
@@ -22,7 +22,7 @@ interface Data {
   activityUsers: ActivityMemberView[]
   activityCorrectors: ActivityCorrectorView[]
   activitySessions: SessionEntity<ActivityVariables>[]
-  exerciseSessions: SessionEntity<any>[]
+  exerciseSessions: SessionEntity<ExerciseVariables>[]
   activityVariables: ActivityVariables
 }
 
@@ -42,10 +42,20 @@ export class ResultService {
     private readonly activityCorrectorView: Repository<ActivityCorrectorView>
   ) {}
 
+  /**
+   * Calculates results for a specific activity session.
+   *
+   * This is called from an activity conclusion page.
+   */
   async sessionResults(sessionId: string): Promise<ActivityResults> {
     return this.process(await this.loadSessionData(sessionId), true)
   }
 
+  /**
+   * Calculates results for a specific activity inside of a course for all participants.
+   * @param activityId A course activity id.
+   * @returns
+   */
   async activityResults(activityId: string): Promise<ActivityResults> {
     const activity = await this.activityRepository.findOne({
       where: { id: activityId },
@@ -168,11 +178,11 @@ export class ResultService {
 
     const exerciseIdBySessionId = new Map<string, string>()
     const exerciseSessionCountByExerciseId = new Map<string, number>()
+    const exerciseSessionAttemptedCountByExerciseId = new Map<string, number>()
 
     activitySessions.forEach((activitySession) => {
-      const navigation = activitySession.variables.navigation
-      // TODO use real type instead of any
-      navigation.exercises.forEach((navExercise: any) => {
+      const navigation = activitySession.variables.navigation as PlayerNavigation
+      navigation.exercises.forEach((navExercise) => {
         const userResults = userResultsIndex[activitySession.userId as string]
         const exerciseSession = exerciseSessions.find((session) => session.id === navExercise.sessionId)
         const correcting = correctionEnabled && !exerciseSession?.correction
@@ -185,6 +195,7 @@ export class ResultService {
 
         exerciseIdBySessionId.set(navExercise.sessionId, navExercise.id)
         exerciseSessionCountByExerciseId.set(navExercise.id, 0)
+        exerciseSessionAttemptedCountByExerciseId.set(navExercise.id, 0)
         Object.values(AnswerStates).forEach((state) => {
           if (state === navExercise.state) {
             exerciseResultsMapIndex[navExercise.id].states[state]++
@@ -197,6 +208,12 @@ export class ResultService {
       const exerciseId = exerciseIdBySessionId.get(exerciseSession.id)
       if (exerciseId) {
         exerciseSessionCountByExerciseId.set(exerciseId, (exerciseSessionCountByExerciseId.get(exerciseId) || 0) + 1)
+        if (exerciseSession.attempts) {
+          exerciseSessionAttemptedCountByExerciseId.set(
+            exerciseId,
+            (exerciseSessionAttemptedCountByExerciseId.get(exerciseId) || 0) + 1
+          )
+        }
 
         const duration =
           exerciseSession.lastGradedAt && exerciseSession.startedAt
@@ -222,10 +239,20 @@ export class ResultService {
     })
 
     exerciseResults.forEach((activityExercise) => {
-      const count = exerciseSessionCountByExerciseId.get(activityExercise.id)
-      activityExercise.grades.avg = count ? activityExercise.grades.sum / count : activityExercise.grades.sum
-      activityExercise.attempts.avg = count ? activityExercise.attempts.sum / count : activityExercise.attempts.sum
-      activityExercise.durations.avg = count ? activityExercise.durations.sum / count : activityExercise.durations.sum
+      const sessionCount = exerciseSessionCountByExerciseId.get(activityExercise.id)
+      const attemptedSessionCount = exerciseSessionAttemptedCountByExerciseId.get(activityExercise.id)
+
+      activityExercise.grades.avg = sessionCount
+        ? activityExercise.grades.sum / sessionCount
+        : activityExercise.grades.sum
+
+      activityExercise.attempts.avg = attemptedSessionCount
+        ? activityExercise.attempts.sum / attemptedSessionCount
+        : activityExercise.attempts.sum
+
+      activityExercise.durations.avg = sessionCount
+        ? activityExercise.durations.sum / sessionCount
+        : activityExercise.durations.sum
     })
 
     return { users: userResults, exercises: exerciseResults }

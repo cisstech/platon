@@ -28,6 +28,17 @@ export interface ExerciseTheory {
   url: string
 }
 
+/** Variables managed by the player to keep track of some informations about the exercice status.  */
+
+export interface ExerciseMeta {
+  /** Number of attempts made by the user. */
+  attempts?: number
+  /** Sets to true once the `show solution` button is clicked. */
+  showSolution?: boolean
+  /** Number of hints consumed in case of static hints. */
+  consumedHints?: number
+}
+
 /**
  * Representation of an exercise feedback.
  */
@@ -66,14 +77,7 @@ export interface ExerciseVariables {
   feedback?: ExerciseFeedback | ExerciseFeedback[]
 
   /** Variables managed by the player to keep track of some informations about the exercice status.  */
-  ['.meta']?: {
-    /** Number of attempts made by the user. */
-    attempts?: number
-    /** Sets to true once the `show solution` button is clicked. */
-    showSolution?: boolean
-    /** Number of hints consumed in case of static hints. */
-    consumedHints?: number
-  }
+  ['.meta']?: ExerciseMeta
 
   /** Any other variables */
   [k: string]: any

@@ -10,6 +10,9 @@ export interface UserExerciseResults {
   sessionId?: string
 }
 
+/**
+ * Represents the results of a user for a given activity.
+ */
 export interface UserResults {
   id: string
   username: string
