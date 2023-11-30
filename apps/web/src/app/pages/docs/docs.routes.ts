@@ -1,7 +1,16 @@
 import { Routes } from '@angular/router'
-import { NgeDocSettings } from '@cisstech/nge/doc'
+import { NgeDocLinAction, NgeDocSettings } from '@cisstech/nge/doc'
 import { createWebComponentDoc } from '@platon/feature/webcomponent'
 import { DocsPage } from './docs.page'
+
+const editInGithubAction = (url: string) => {
+  const base = 'https://github.com/PlatonOrg/platon/blob/main/shared/assets/docs/'
+  return {
+    title: 'Edit on github',
+    icon: 'https://icongr.am/octicons/mark-github.svg',
+    run: base + url,
+  } as NgeDocLinAction
+}
 
 const DeveloperDocs = {
   meta: {
@@ -19,13 +28,7 @@ const DeveloperDocs = {
       title: 'Présentation',
       href: 'presentation',
       renderer: 'assets/docs/developers/index.md',
-      actions: [
-        {
-          title: 'Éditer sur Github',
-          icon: 'https://icongr.am/octicons/mark-github.svg',
-          run: `https://github.com/PlatonOrg/platon/blob/main/shared/assets/docs/developers/index.md`,
-        },
-      ],
+      actions: [editInGithubAction('developers/index.md')],
     },
   ],
 } as NgeDocSettings
@@ -46,13 +49,13 @@ const TeacherDocs = {
       title: 'Présentation',
       href: 'presentation',
       renderer: 'assets/docs/teachers/index.md',
-      actions: [
-        {
-          title: 'Éditer sur Github',
-          icon: 'https://icongr.am/octicons/mark-github.svg',
-          run: `https://github.com/PlatonOrg/platon/blob/main/shared/assets/docs/developers/teachers.md`,
-        },
-      ],
+      actions: [editInGithubAction('teachers/index.md')],
+    },
+    {
+      title: 'Les cercles',
+      href: 'circles',
+      renderer: 'assets/docs/teachers/circles.md',
+      actions: [editInGithubAction('teachers/circles.md')],
     },
   ],
 } as NgeDocSettings
