@@ -1,5 +1,5 @@
 export type ViewModes = 'cards' | 'table' | 'list'
-export const viewModes = Object.freeze(['cards', 'table', 'list'] as ViewModes[])
+export const viewModes = Object.freeze(['list', 'cards', 'table'] as ViewModes[])
 
 export interface ViewMode {
   icon: string

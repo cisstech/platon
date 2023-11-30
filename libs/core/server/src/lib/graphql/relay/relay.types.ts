@@ -2,6 +2,7 @@ import { Type } from '@nestjs/common'
 import { Field, ObjectType } from '@nestjs/graphql'
 import * as Relay from 'graphql-relay'
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const typeMap: Record<string, any> = {}
 export function RelayConnection<T>(type: Type<T>) {
   const { name } = type

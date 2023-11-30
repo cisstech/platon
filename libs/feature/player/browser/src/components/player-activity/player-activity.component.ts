@@ -1,11 +1,10 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, Input, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input, OnInit } from '@angular/core'
 import { firstValueFrom } from 'rxjs'
 
 import { MatButtonModule } from '@angular/material/button'
 import { MatCardModule } from '@angular/material/card'
 
-import { NzAffixModule } from 'ng-zorro-antd/affix'
 import { NzBadgeModule } from 'ng-zorro-antd/badge'
 import { NzStatisticModule } from 'ng-zorro-antd/statistic'
 
@@ -23,12 +22,17 @@ import {
 import { DialogModule, DialogService, UserAvatarComponent } from '@platon/core/browser'
 import { ActivityOpenStates, calculateActivityOpenState } from '@platon/feature/course/common'
 
+import { MatIconModule } from '@angular/material/icon'
+import { ActivatedRoute, RouterModule } from '@angular/router'
 import { NgeMarkdownModule } from '@cisstech/nge/markdown'
+import { AnswerStates } from '@platon/feature/result/common'
+import { NzPopoverModule } from 'ng-zorro-antd/popover'
 import { PlayerService } from '../../api/player.service'
 import { PlayerExerciseComponent } from '../player-exercise/player-exercise.component'
 import { PlayerNavigationComponent } from '../player-navigation/player-navigation.component'
 import { PlayerResultsComponent } from '../player-results/player-results.component'
 import { PlayerSettingsComponent } from '../player-settings/player-settings.component'
+import { PLAYER_EDITOR_PREVIEW } from '../../models/player.model'
 
 @Component({
   standalone: true,
@@ -38,12 +42,14 @@ import { PlayerSettingsComponent } from '../player-settings/player-settings.comp
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
+    RouterModule,
 
+    MatIconModule,
     MatCardModule,
     MatButtonModule,
 
-    NzAffixModule,
     NzBadgeModule,
+    NzPopoverModule,
     NzStatisticModule,
 
     DialogModule,
@@ -58,26 +64,32 @@ import { PlayerSettingsComponent } from '../player-settings/player-settings.comp
   ],
 })
 export class PlayerActivityComponent implements OnInit {
+  private readonly activatedRoute = inject(ActivatedRoute)
+  private readonly dialogService = inject(DialogService)
+  private readonly playerService = inject(PlayerService)
+  private readonly changeDetectorRef = inject(ChangeDetectorRef)
+
   @Input() player!: ActivityPlayer
 
   protected state?: ActivityOpenStates
+  protected answerStates: Record<string, AnswerStates> = {}
+
   protected countdown?: number | null
-  protected triggers: {
+  protected countdownColor = 'black'
+  protected countdownBreakpoints: {
     time: number
-    execute: () => void
+    action: () => void
   }[] = []
 
-  protected countdownColor = 'black'
-
+  protected empty = false
+  protected hasNext?: boolean
+  protected hasPrev?: boolean
+  protected position = 0
   protected exercises?: ExercisePlayer[]
-
-  @HostBinding('class.play-mode')
-  protected get hostClasses(): boolean {
-    return !!this.exercises && !!this.player.navigation
-  }
+  protected navExerciceCount = 0
 
   protected get composed(): boolean {
-    return 'composed' === this.player.settings?.navigation?.mode
+    return this.player.settings?.navigation?.mode === 'composed'
   }
 
   protected get navigation(): PlayerNavigation {
@@ -89,19 +101,20 @@ export class PlayerActivityComponent implements OnInit {
     return this.state === 'closed' || navigation.terminated
   }
 
+  protected get canGoDashboard(): boolean {
+    return !this.activatedRoute.snapshot.queryParamMap.has(PLAYER_EDITOR_PREVIEW)
+  }
+
   protected get showIntroduction(): boolean {
     const { navigation } = this.player
     return this.state === 'opened' && !navigation.started && !navigation.terminated
   }
 
-  constructor(
-    private readonly dialogService: DialogService,
-    private readonly playerService: PlayerService,
-    private readonly changeDetectorRef: ChangeDetectorRef
-  ) {}
-
   ngOnInit(): void {
+    this.calculateAnswerStates(this.player.navigation)
+
     this.state = calculateActivityOpenState(this.player)
+    this.empty = !this.player.navigation.exercises?.length
 
     if (this.state === 'opened') {
       if (isTimeouted(this.player) && !this.player.navigation.terminated) {
@@ -123,11 +136,12 @@ export class PlayerActivityComponent implements OnInit {
       return
     }
     const { navigation } = this.player
+
     await this.play(navigation.current || navigation.exercises[0])
   }
 
   protected async terminate(): Promise<void> {
-    this.triggers = []
+    this.countdownBreakpoints = []
 
     const output = await firstValueFrom(this.playerService.terminate(this.player.sessionId))
     this.player = output.activity
@@ -156,7 +170,9 @@ export class PlayerActivityComponent implements OnInit {
 
     this.exercises = output.exercises
 
+    this.calculatePositions()
     this.initializeCountdown()
+
     this.changeDetectorRef.markForCheck()
   }
 
@@ -173,6 +189,7 @@ export class PlayerActivityComponent implements OnInit {
       this.player.navigation = output.navigation
     }
 
+    this.calculatePositions()
     this.initializeCountdown()
     this.changeDetectorRef.markForCheck()
   }
@@ -198,9 +215,11 @@ export class PlayerActivityComponent implements OnInit {
 
   protected onChangeNavigation(navigation: PlayerNavigation): void {
     this.player = { ...this.player, navigation }
+    this.calculatePositions()
+    this.calculateAnswerStates(navigation)
   }
 
-  private jumpToExercise(page: PlayerExercise) {
+  private jumpToExercise(page: PlayerExercise): void {
     const node = document.getElementById(page.sessionId)
     if (node) {
       node.scrollIntoView({
@@ -215,7 +234,7 @@ export class PlayerActivityComponent implements OnInit {
   }
 
   private initializeCountdown(): void {
-    this.triggers = []
+    this.countdownBreakpoints = []
     this.countdownColor = 'black'
     this.player.startedAt = this.player.startedAt || new Date()
     this.countdown = getClosingTime(this.player)
@@ -238,20 +257,45 @@ export class PlayerActivityComponent implements OnInit {
       if (currentTime > startAt + duration * 0.5) {
         changeColor('orange', "Attention : vous avez dépassé la moitié du temps de l'activité.")
       } else {
-        this.triggers.push({
+        this.countdownBreakpoints.push({
           time: startAt + duration * 0.5,
-          execute: () => changeColor('orange', "Attention : vous avez dépassé la moitié du temps de l'activité."),
+          action: () => changeColor('orange', "Attention : vous avez dépassé la moitié du temps de l'activité."),
         })
       }
 
       if (currentTime > startAt + duration * 0.75) {
         changeColor('#f5222d', "Urgent : il ne vous reste que 25% du temps de l'activité.")
       } else {
-        this.triggers.push({
+        this.countdownBreakpoints.push({
           time: startAt + duration * 0.75,
-          execute: () => changeColor('#f5222d', "Urgent : il ne vous reste que 25% du temps de l'activité."),
+          action: () => changeColor('#f5222d', "Urgent : il ne vous reste que 25% du temps de l'activité."),
         })
       }
     }
+  }
+
+  private calculatePositions(): void {
+    const { navigation } = this.player
+    const current = navigation.current
+    this.navExerciceCount = navigation.exercises.length
+
+    this.hasNext = undefined
+    this.hasPrev = undefined
+    if (current && this.player.settings?.navigation?.mode === 'manual') {
+      const index = navigation.exercises.findIndex((item) => item.sessionId === current.sessionId)
+      this.hasNext = index < navigation.exercises.length - 1
+      this.hasPrev = index > 0
+      this.position = index
+    }
+  }
+
+  private calculateAnswerStates(navigation: PlayerNavigation): void {
+    this.answerStates = navigation.exercises.reduce(
+      (acc, exercise) => {
+        acc[exercise.sessionId] = exercise.state
+        return acc
+      },
+      {} as Record<string, AnswerStates>
+    )
   }
 }

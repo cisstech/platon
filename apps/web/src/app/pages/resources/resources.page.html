@@ -4,48 +4,19 @@
     <ng-template let-context> {{ context }}</ng-template>
   </ui-search-bar>
   <button
-    *ngIf="canCreateResource"
+    *ngIf="tree"
     nz-button
     nzType="primary"
     nzShape="round"
     nzSize="large"
-    nz-popover
-    [nzPopoverContent]="actions"
+    [nz-popover]
+    [nzPopoverContent]="treeTemplate"
   >
-    <span nz-icon nzType="plus" nzTheme="outline"></span>
+    <mat-icon>account_tree</mat-icon>
+    <ng-template #treeTemplate>
+      <resource-circle-tree [tree]="tree" />
+    </ng-template>
   </button>
-  <ng-template #actions>
-    <button
-      *ngIf="canCreateCircle"
-      nz-button
-      nzType="link"
-      [routerLink]="['/resources/create']"
-      [queryParams]="{ type: 'CIRCLE' }"
-    >
-      <mat-icon>{{ 'CIRCLE' | resourceIcon }}</mat-icon>
-      <span>Créer un cercle</span>
-    </button>
-    <button
-      *ngIf="canCreateExercise"
-      nz-button
-      nzType="link"
-      [routerLink]="['/resources/create']"
-      [queryParams]="{ type: 'EXERCISE' }"
-    >
-      <mat-icon>{{ 'EXERCISE' | resourceIcon }}</mat-icon>
-      <span>Créer un exercice</span>
-    </button>
-    <button
-      *ngIf="canCreateActivity"
-      nz-button
-      nzType="link"
-      [routerLink]="['/resources/create']"
-      [queryParams]="{ type: 'ACTIVITY', }"
-    >
-      <mat-icon>{{ 'ACTIVITY' | resourceIcon }}</mat-icon>
-      <span>Créer une activité</span>
-    </button>
-  </ng-template>
 </header>
 <main class="content">
   <article>
@@ -68,6 +39,7 @@
     </ng-container>
   </article>
   <aside>
+    <nz-divider nzText="..." />
     <section>
       <resource-item *ngIf="circle" [item]="circle" />
     </section>

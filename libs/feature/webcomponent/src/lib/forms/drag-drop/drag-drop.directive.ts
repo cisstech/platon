@@ -1,5 +1,6 @@
 import { AfterContentInit, Directive, ElementRef, EventEmitter, OnDestroy, Output, Renderer2 } from '@angular/core'
 
+type EventHandler = (event: unknown) => boolean | undefined
 export interface DragDropEvent {
   source: string
   destination: string
@@ -63,7 +64,7 @@ export class DragDropDirective implements OnDestroy, AfterContentInit {
       this.renderer.addClass(node, 'dnd-over')
       return false
     }
-    this.addListener(node, 'dragover', dragover)
+    this.addListener(node, 'dragover', dragover as EventHandler)
 
     const dragenter = () => {
       this.renderer.removeClass(node, 'dnd-over')
@@ -96,11 +97,10 @@ export class DragDropDirective implements OnDestroy, AfterContentInit {
       }
       return false
     }
-    this.addListener(node, 'drop', drop)
+    this.addListener(node, 'drop', drop as EventHandler)
   }
 
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  private addListener(node: any, event: string, handler: any) {
+  private addListener(node: HTMLElement, event: string, handler: EventHandler) {
     this.renderer.listen(node, event, handler)
     this.events.push(() => {
       node.removeEventListener(event, handler, false)

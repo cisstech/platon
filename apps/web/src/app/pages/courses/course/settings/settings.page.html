@@ -1,5 +1,5 @@
 <ng-container *ngIf="context.course as course">
-  <nz-tabset *ngIf="course.permissions.update; else denied" nzTabPosition="left" nzLinkRouter>
+  <nz-tabset *ngIf="course.permissions.update; else denied" [nzTabPosition]="isMobile ? 'top' : 'left'" nzLinkRouter>
     <nz-tab>
       <a
         *nzTabLink

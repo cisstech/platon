@@ -16,9 +16,7 @@ export class UpdateResourceColumns1676668377184 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(
-      `ALTER TABLE "Resources" DROP CONSTRAINT "FK_ea3f4c346d69b412a2927c4f52f"`
-    )
+    await queryRunner.query(`ALTER TABLE "Resources" DROP CONSTRAINT "FK_ea3f4c346d69b412a2927c4f52f"`)
     await queryRunner.query(`DROP INDEX "public"."Resources_model_id_idx"`)
     await queryRunner.query(`DROP INDEX "public"."Resources_is_model_idx"`)
     await queryRunner.query(`ALTER TABLE "Resources" DROP COLUMN "model_id"`)

@@ -29,4 +29,6 @@ import { ToolbarComponent } from '../../widgets/toolbar/toolbar.component'
     SidebarComponent,
   ],
 })
-export class DashboardPage {}
+export class DashboardPage {
+  protected drawerOpened = false
+}

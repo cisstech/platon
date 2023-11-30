@@ -39,6 +39,11 @@ export const FINAL_STATE_CLASS = 'automaton-state--final'
 export const TRANSITION_OVERLAY = 'transition'
 export const INITIAL_STATE_CLASS = 'automaton-state--initial'
 
+const BASIC_CONNECTION = {
+  anchor: 'Continuous' as const,
+  connector: 'StateMachine' as const,
+}
+
 @Component({
   selector: 'wc-automaton-editor',
   templateUrl: 'automaton-editor.component.html',
@@ -116,10 +121,7 @@ export class AutomatonEditorComponent implements OnInit, OnDestroy, WebComponent
       Container: this.canvas,
     })
 
-    this.jsp.registerConnectionType('basic', {
-      anchor: 'Continuous',
-      connector: 'StateMachine',
-    })
+    this.jsp.registerConnectionType('basic', BASIC_CONNECTION)
 
     return new Promise<void>((resolve) => {
       this.jsp.ready(() => {
@@ -139,7 +141,7 @@ export class AutomatonEditorComponent implements OnInit, OnDestroy, WebComponent
     this.jsp.getContainer().innerHTML = ''
     this.jsp.batch(() => {
       this.editor.forEachState(this.renderEndpoint.bind(this))
-      this.editor.forEachTransition(this.renderConnection.bind(this))
+      this.rerenderAllConnections()
     })
     this.unfocus()
   }
@@ -346,6 +348,24 @@ export class AutomatonEditorComponent implements OnInit, OnDestroy, WebComponent
     })
   }
 
+  private rerenderAllConnections(): void {
+    const connections = this.jsp.getAllConnections()
+    this.editor.getTransitions().forEach((transition) => {
+      let connection = connections.find((connection) => this.compareConnections(connection, transition))
+      if (!connection) {
+        connection = this.jsp.connect({
+          source: transition.fromState,
+          target: transition.toState,
+          ...BASIC_CONNECTION,
+        })
+      }
+      if (connection) {
+        const overlay: any = connection.getOverlay(TRANSITION_OVERLAY)
+        overlay.setLabel(transition.symbols.join(','))
+      }
+    })
+  }
+
   private focus(e: HTMLElement | Connection) {
     this.unfocus()
     if (!e) {
@@ -432,7 +452,7 @@ export class AutomatonEditorComponent implements OnInit, OnDestroy, WebComponent
   private findConnection(transition: Transition) {
     return this.jsp
       .getAllConnections()
-      .find((e) => e.sourceId === transition.fromState && e.targetId === transition.toState) as Connection
+      .find((connection) => this.compareConnections(connection, transition)) as Connection
   }
 
   private setZoom(zoom: number, transformOrigin?: [number, number]) {
@@ -453,5 +473,9 @@ export class AutomatonEditorComponent implements OnInit, OnDestroy, WebComponent
     el.style['transformOrigin'] = oString
 
     this.jsp.setZoom(zoom)
+  }
+
+  private compareConnections(connection: Connection, transition: Transition): boolean {
+    return connection.sourceId === transition.fromState && connection.targetId === transition.toState
   }
 }

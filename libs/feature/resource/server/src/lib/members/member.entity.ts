@@ -27,6 +27,9 @@ export class ResourceMemberEntity extends BaseEntity {
   @JoinColumn({ name: 'inviter_id' })
   inviter!: UserEntity
 
+  @Column({ type: 'boolean', name: 'waiting', default: false })
+  waiting!: boolean
+
   @Column(() => MemberPermissions)
   permissions!: MemberPermissions
 }

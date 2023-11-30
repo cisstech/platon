@@ -1,9 +1,12 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout'
 import { CommonModule } from '@angular/common'
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   EventEmitter,
+  Input,
+  OnDestroy,
   OnInit,
   Output,
   inject,
@@ -18,11 +21,12 @@ import { MatMenuModule } from '@angular/material/menu'
 import { AuthService, UserAvatarComponent } from '@platon/core/browser'
 import { User, UserRoles } from '@platon/core/common'
 import { NotificationDrawerComponent } from '@platon/feature/notification/browser'
+import { ResourceService } from '@platon/feature/resource/browser'
 import { NzBadgeModule } from 'ng-zorro-antd/badge'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzPopoverModule } from 'ng-zorro-antd/popover'
-import { ResourceService } from '@platon/feature/resource/browser'
+import { Subscription } from 'rxjs'
 
 @Component({
   standalone: true,
@@ -48,12 +52,17 @@ import { ResourceService } from '@platon/feature/resource/browser'
     NotificationDrawerComponent,
   ],
 })
-export class ToolbarComponent implements OnInit {
+export class ToolbarComponent implements OnInit, OnDestroy {
+  @Input() drawerOpened = false
+  @Output() drawerOpenedChange = new EventEmitter<boolean>()
+
   private readonly router = inject(Router)
   private readonly authService = inject(AuthService)
   private readonly resourceService = inject(ResourceService)
   private readonly changeDetectorRef = inject(ChangeDetectorRef)
-  @Output() toggleMenu = new EventEmitter<void>()
+  private readonly breakpointObserver = inject(BreakpointObserver)
+
+  private readonly subscriptions: Subscription[] = []
 
   protected user?: User | undefined
 
@@ -75,7 +84,18 @@ export class ToolbarComponent implements OnInit {
     return undefined
   }
 
+  get mobile(): boolean {
+    return this.breakpointObserver.isMatched([Breakpoints.XSmall])
+  }
+
+  get tabletOrBelow(): boolean {
+    return this.breakpointObserver.isMatched([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Tablet])
+  }
+
   async ngOnInit(): Promise<void> {
+    this.drawerOpened = !this.breakpointObserver.isMatched([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Tablet])
+    this.drawerOpenedChange.emit(this.drawerOpened)
+
     this.user = (await this.authService.ready()) as User
 
     this.canCreateCourse = this.user.role === UserRoles.admin || this.user.role === UserRoles.teacher
@@ -84,7 +104,29 @@ export class ToolbarComponent implements OnInit {
     this.canCreateExercise = this.resourceService.canUserCreateResource(this.user, 'EXERCISE')
     this.canCreateActivity = this.resourceService.canUserCreateResource(this.user, 'ACTIVITY')
 
+    this.subscriptions.push(
+      this.breakpointObserver
+        .observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Tablet])
+        .subscribe((state) => {
+          if (state.matches && this.drawerOpened) {
+            this.drawerOpened = false
+            this.drawerOpenedChange.emit(this.drawerOpened)
+          }
+        }),
+      this.breakpointObserver.observe([Breakpoints.Large, Breakpoints.XLarge]).subscribe((state) => {
+        if (state.matches && !this.drawerOpened) {
+          this.drawerOpened = true
+          this.drawerOpenedChange.emit(this.drawerOpened)
+        }
+        this.changeDetectorRef.markForCheck()
+      })
+    )
+
     this.changeDetectorRef.markForCheck()
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((s) => s.unsubscribe())
   }
 
   signOut(): void {

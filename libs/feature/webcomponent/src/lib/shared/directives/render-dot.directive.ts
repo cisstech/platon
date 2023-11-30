@@ -17,7 +17,10 @@ export class RenderDotDirective implements OnInit, OnChanges {
   @Input('renderDot')
   dot?: string
 
-  constructor(private el: ElementRef, private readonly resourceLoader: ResourceLoaderService) {}
+  constructor(
+    private el: ElementRef,
+    private readonly resourceLoader: ResourceLoaderService
+  ) {}
 
   ngOnInit() {
     this.resourceLoader

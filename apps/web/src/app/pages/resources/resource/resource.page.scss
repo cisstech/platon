@@ -10,6 +10,7 @@
 
 nz-page-header {
   padding-left: 0;
+  padding: 0;
 }
 
 nz-breadcrumb {
@@ -48,6 +49,8 @@ nz-select {
 .container-toolbar {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem 0;
 }
 
 @media (min-width: 720px) {

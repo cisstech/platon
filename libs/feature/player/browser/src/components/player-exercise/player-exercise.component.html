@@ -1,7 +1,24 @@
-<mat-card>
+<mat-card #container>
   <mat-card-header>
-    <mat-card-title>{{ player.title }}</mat-card-title>
-    <mat-card-subtitle *ngIf="player.author">{{ player.author }}</mat-card-subtitle>
+    <div>
+      <div>
+        <mat-card-title>
+          <mat-icon *ngIf="state" [style.color]="state | answerStateColor" [nz-tooltip]="state | answerStateLabel">
+            {{ state | answerStateIcon }}
+          </mat-icon>
+          {{ player.title }}
+        </mat-card-title>
+        <mat-card-subtitle *ngIf="player.author">{{ player.author }}</mat-card-subtitle>
+        <mat-card-subtitle>
+          <nz-countdown *ngIf="countdownValue" [nzValue]="countdownValue" [nzValueStyle]="{ color: countdownColor }" />
+        </mat-card-subtitle>
+      </div>
+      <div>
+        <button *ngIf="canRequestFullscreen" nz-tooltip="Plein écran" (click)="toggleFullscreen()" mat-icon-button>
+          <mat-icon>{{ fullscreen ? 'fullscreen' : 'fullscreen_exit' }}</mat-icon>
+        </button>
+      </div>
+    </div>
   </mat-card-header>
   <mat-card-content>
     <nz-skeleton [nzActive]="loading" [nzLoading]="loading" [nzParagraph]="{ rows: 5 }">
@@ -12,7 +29,7 @@
           </div>
         </ng-container>
       </section>
-      <section>
+      <section #containerFeedbacks>
         <ng-container *ngIf="player.feedbacks">
           <ng-container *ngFor="let feedback of player.feedbacks">
             <nz-alert nzShowIcon [nzType]="feedback.type" [nzMessage]="content">
@@ -36,10 +53,10 @@
           </div>
         </ng-container>
       </section>
-      <section>
+      <section *ngIf="player.form">
         <mat-divider />
         <div class="exercise-form">
-          <nge-markdown [data]="player.form || ''" (render)="onRender()" />
+          <nge-markdown [data]="player.form" (render)="onRender()" />
         </div>
       </section>
       <section #containerSolution>
@@ -66,98 +83,51 @@
     [nzParagraph]="{ rows: 1 }"
   >
     <mat-card-actions>
-      <ng-container *ngIf="players.length">
-        <button nz-tooltip="Tentative précédente" *ngIf="index > 0" mat-raised-button (click)="previousAttempt()">
-          <mat-icon>arrow_back</mat-icon>
-          Tentative précédente
-        </button>
-        <button
-          nz-tooltip="Tentative suivante"
-          *ngIf="index < players.length - 1"
-          mat-raised-button
-          (click)="nextAttempt()"
-        >
-          <mat-icon>arrow_forward</mat-icon>
-          Tentative suivante
-        </button>
-      </ng-container>
-      <button
-        *ngIf="!reviewMode"
-        nz-tooltip="Valider"
-        mat-raised-button
-        color="primary"
-        [class.danger]="player.remainingAttempts === 1"
-        [disabled]="disabled || runningAction"
-        (click)="check()"
-      >
-        <nz-spin *ngIf="runningAction === 'CHECK_ANSWER'" nzSpinning nzSimple nzSize="small" />
-        <ng-container *ngIf="runningAction !== 'CHECK_ANSWER'">
-          <mat-icon>check</mat-icon>
-          <span class="hide-on-small">Valider</span>
-          <ng-container *ngIf="player.remainingAttempts">({{ player.remainingAttempts }})</ng-container>
-        </ng-container>
-      </button>
-      <button
-        *ngIf="!reviewMode && !!player.settings?.actions?.reroll"
-        nz-tooltip="Autre question"
-        mat-raised-button
-        [disabled]="runningAction"
-        (click)="reroll()"
-      >
-        <nz-spin *ngIf="runningAction === 'REROLL_EXERCISE'" nzSpinning nzSimple nzSize="small" />
-        <ng-container *ngIf="runningAction !== 'REROLL_EXERCISE'">
-          <mat-icon>refresh</mat-icon>
-          <span class="hide-on-small">Autre question</span>
-        </ng-container>
-      </button>
-      <div class="spacer"></div>
-      <button *ngIf="player.answerId" nz-tooltip="Commentaires" mat-raised-button (click)="drawer.open()">
-        <mat-icon color="primary">reviews</mat-icon>
-        <span class="hide-on-small">Commentaires</span>
-      </button>
-      <button *ngIf="player.theories?.length" nz-tooltip="Théorie" mat-raised-button [matMenuTriggerFor]="theories">
-        <mat-icon color="primary">menu_book</mat-icon>
-        <span class="hide-on-small">Théorie</span>
-      </button>
-      <button
-        *ngIf="player.settings?.actions?.solution && !player.solution"
-        nz-tooltip="Solution"
-        mat-raised-button
-        [disabled]="disabled || runningAction"
-        (click)="solution()"
-      >
-        <nz-spin *ngIf="runningAction === 'SHOW_SOLUTION'" nzSpinning nzSimple nzSize="small" />
-        <ng-container *ngIf="runningAction !== 'SHOW_SOLUTION'">
-          <mat-icon color="primary">key</mat-icon>
-          <span class="hide-on-small">Solution</span>
-        </ng-container>
-      </button>
-      <button
-        *ngIf="player.settings?.actions?.hints"
-        nz-tooltip="Aide"
-        mat-raised-button
-        [disabled]="disabled || runningAction"
-        (click)="hint()"
-      >
-        <nz-spin *ngIf="runningAction === 'NEXT_HINT'" nzSpinning nzSimple nzSize="small" />
-        <ng-container *ngIf="runningAction !== 'NEXT_HINT'">
-          <mat-icon color="primary">lightbulb</mat-icon>
-          <span class="hide-on-small">Aide</span>
-        </ng-container>
-      </button>
+      <div class="exercice-actions">
+        <div class="exercice-actions-list">
+          <ng-container *ngTemplateOutlet="actionList; context: { $implicit: navigationActions }" />
+        </div>
+        <div class="exercice-actions-list">
+          <ng-container *ngTemplateOutlet="actionList; context: { $implicit: primaryActions }" />
+          <ng-container *ngTemplateOutlet="actionList; context: { $implicit: reviewModeActions }" />
+          <div class="spacer"></div>
+          <ng-container *ngTemplateOutlet="actionList; context: { $implicit: secondaryActions }" />
+        </div>
+      </div>
     </mat-card-actions>
   </nz-skeleton>
 </mat-card>
 <mat-menu #theories="matMenu">
-  <ng-container *ngFor="let item of player.theories; trackBy: trackByUrl">
+  <ng-container *ngFor="let item of player.theories; trackBy: trackTheory">
     <a mat-menu-item [href]="item.url" target="_blank">{{ item.title }}</a>
   </ng-container>
 </mat-menu>
-<ui-modal-drawer #drawer title="Commentaires">
+<ui-modal-drawer #commentDrawer title="Commentaires">
   <ng-template>
     <player-comments [canComment]="canComment" [answerId]="player.answerId!" [sessionId]="player.sessionId" />
   </ng-template>
 </ui-modal-drawer>
 <ng-template #errorTemplate let-data="data">
   <pre>{{ data.message }}</pre>
+</ng-template>
+
+<ng-template #actionList let-actions>
+  <ng-container *ngFor="let action of actions; trackBy: trackAction">
+    <button
+      *ngIf="action.visible"
+      mat-raised-button
+      (click)="action.run?.()"
+      [color]="action.color"
+      [class.danger]="action.danger"
+      [disabled]="action.disabled"
+      [nz-tooltip]="action.tooltip"
+      [matMenuTriggerFor]="action.menu ?? null"
+    >
+      <nz-spin *ngIf="runningAction && runningAction === action.playerAction" nzSpinning nzSimple nzSize="small" />
+      <ng-container *ngIf="!runningAction || runningAction !== action.playerAction">
+        <mat-icon [color]="action.color ? undefined : 'primary'">{{ action.icon }}</mat-icon>
+        <ng-container *ngIf="action.showLabel">{{ action.label }}</ng-container>
+      </ng-container>
+    </button>
+  </ng-container>
 </ng-template>

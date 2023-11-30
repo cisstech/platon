@@ -1,10 +1,10 @@
 import { ResourceTypes } from '../enums/resource-types'
-import { ResourceEvent } from './event.model'
+import { ResourceEvent, ResourceEventData } from './event.model'
 
 export const RESOURCE_EVENT_NOTIFICATION = 'RESOURCE-EVENT' as const
 export interface ResourceEventNotification {
   type: typeof RESOURCE_EVENT_NOTIFICATION
-  eventInfo: ResourceEvent
+  eventInfo: ResourceEvent<ResourceEventData>
 }
 
 export const RESOURCE_INVITATION_NOTIFICATION = 'RESOURCE-INVITATION' as const

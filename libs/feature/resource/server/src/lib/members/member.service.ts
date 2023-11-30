@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { NotFoundResponse, OrderingDirections, UserOrderings } from '@platon/core/common'
+import { BadRequestResponse, NotFoundResponse, OrderingDirections, UserOrderings } from '@platon/core/common'
 import { ResourceMemberFilters } from '@platon/feature/resource/common'
-import { Repository } from 'typeorm'
+import { EntityManager, Repository } from 'typeorm'
 import { Optional } from 'typescript-optional'
 import { ResourceMemberEntity } from './member.entity'
 
@@ -38,6 +38,10 @@ export class ResourceMemberService {
       )
     }
 
+    if (filters.waiting != null) {
+      query.andWhere('member.waiting = :waiting', { waiting: filters.waiting })
+    }
+
     if (filters.order) {
       const fields: Record<UserOrderings, string> = {
         NAME: 'user.username',
@@ -65,6 +69,22 @@ export class ResourceMemberService {
     }
 
     return query.getManyAndCount()
+  }
+
+  async create(input: Partial<ResourceMemberEntity>, manager?: EntityManager): Promise<ResourceMemberEntity> {
+    const member = manager
+      ? await manager.findOne(ResourceMemberEntity, {
+          where: { resourceId: input.resourceId, userId: input.userId },
+        })
+      : await this.repository.findOne({ where: { resourceId: input.resourceId, userId: input.userId } })
+
+    if (member) {
+      throw new BadRequestResponse('There is already a member entry for the given user')
+    }
+
+    return manager
+      ? manager.save(manager.create(ResourceMemberEntity, input as ResourceMemberEntity))
+      : this.repository.save(this.repository.create(input))
   }
 
   async updateByUserId(

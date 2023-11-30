@@ -7,20 +7,21 @@ import { Subscription } from 'rxjs'
 import { MatChipsModule } from '@angular/material/chips'
 import { MatIconModule } from '@angular/material/icon'
 
+import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzIconModule } from 'ng-zorro-antd/icon'
-import { NzSelectModule } from 'ng-zorro-antd/select'
-import { NzPopoverModule } from 'ng-zorro-antd/popover'
-import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb'
-import { NzTypographyModule } from 'ng-zorro-antd/typography'
 import { NzPageHeaderModule } from 'ng-zorro-antd/page-header'
+import { NzPopoverModule } from 'ng-zorro-antd/popover'
+import { NzSelectModule } from 'ng-zorro-antd/select'
+import { NzTypographyModule } from 'ng-zorro-antd/typography'
 
 import { DialogModule } from '@platon/core/browser'
 import { CircleTreeComponent, ResourcePipesModule } from '@platon/feature/resource/browser'
 import { ResourceStatus } from '@platon/feature/resource/common'
-import { UiLayoutTabsComponent, UiLayoutTabDirective, UiModalIFrameComponent } from '@platon/shared/ui'
+import { UiLayoutTabDirective, UiLayoutTabsComponent, UiModalIFrameComponent } from '@platon/shared/ui'
 
 import { ResourcePresenter } from './resource.presenter'
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 
 @Component({
   standalone: true,
@@ -37,10 +38,11 @@ import { ResourcePresenter } from './resource.presenter'
     MatIconModule,
     MatChipsModule,
 
-    NzPopoverModule,
     NzIconModule,
-    NzButtonModule,
     NzSelectModule,
+    NzButtonModule,
+    NzPopoverModule,
+    NzToolTipModule,
     NzBreadCrumbModule,
     NzTypographyModule,
     NzPageHeaderModule,
@@ -63,6 +65,10 @@ export class ResourcePage implements OnInit, OnDestroy {
   protected context = this.presenter.defaultContext()
 
   readonly status = Object.values(ResourceStatus)
+
+  get isOtherPersonal(): boolean {
+    return this.context.resource!.personal && this.context.resource!.ownerId !== this.context.user!.id
+  }
 
   ngOnInit(): void {
     this.subscriptions.push(
@@ -99,6 +105,14 @@ export class ResourcePage implements OnInit, OnDestroy {
     } else {
       await this.presenter.watch()
     }
+  }
+
+  protected async join(): Promise<void> {
+    await this.presenter.join()
+  }
+
+  protected async unjoin(): Promise<void> {
+    await this.presenter.unjoin()
   }
 
   protected trackByValue(_: number, item: unknown) {

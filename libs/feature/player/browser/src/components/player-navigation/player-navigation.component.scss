@@ -1,3 +1,14 @@
+:host {
+  display: block;
+  overflow-y: auto;
+  &::ng-deep {
+    .ant-timeline-item {
+      cursor: pointer;
+      min-height: 48px;
+    }
+  }
+}
+
 nz-timeline {
   display: block;
   margin: 2rem 0;

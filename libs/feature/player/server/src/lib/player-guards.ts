@@ -96,8 +96,8 @@ export const withFeedbacksGuard = (
   const feedbacks = Array.isArray(variables.feedback)
     ? variables.feedback
     : variables.feedback
-    ? [variables.feedback]
-    : []
+      ? [variables.feedback]
+      : []
 
   const hideOnReview = answer && !settings?.feedback?.review
   const hideOnValidation = !answer && !settings?.feedback?.validation
@@ -184,7 +184,7 @@ export const withMultiSessionGuard = (exerciseSession: SessionEntity) => {
     const activityVariables = activitySession.variables as PlayerActivityVariables
     activityNavigation = activityVariables.navigation
 
-    if ('composed' === activityVariables.settings?.navigation?.mode) {
+    if (activityVariables.settings?.navigation?.mode === 'composed') {
       return { activitySession, activityNavigation }
     }
 

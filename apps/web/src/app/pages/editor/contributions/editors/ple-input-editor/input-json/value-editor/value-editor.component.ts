@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core'
+import { ChangeDetectionStrategy, Component, OnInit, ViewChild, inject } from '@angular/core'
 import { ResourceLoaderService } from '@cisstech/nge/services'
 import { JsonEditorComponent, JsonEditorOptions, JsonEditorTreeNode } from 'ang-jsoneditor'
 import { firstValueFrom } from 'rxjs'

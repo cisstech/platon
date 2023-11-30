@@ -55,7 +55,10 @@ export class CourseSearchBarComponent implements ControlValueAccessor {
 
   selection: Course[] = []
 
-  constructor(private readonly courseService: CourseService, private readonly changeDetectorRef: ChangeDetectorRef) {}
+  constructor(
+    private readonly courseService: CourseService,
+    private readonly changeDetectorRef: ChangeDetectorRef
+  ) {}
 
   // ControlValueAccessor methods
 

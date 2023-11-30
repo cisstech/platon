@@ -54,7 +54,7 @@ export class ActivityResultsVirtualColumnsResolver implements VirtualColumnResol
           // the progression is a percentage of graded exercises
           // and started exercises (but not graded)
           // over the total number of exercises
-          progression: (100 * graded + 10 * (started - graded)) / exercises.length,
+          progression: Math.round((100 * graded + 10 * (started - graded)) / exercises.length),
         } as Partial<ActivityEntity>)
       }
     })

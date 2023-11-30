@@ -92,7 +92,6 @@ export class PlLanguageContribution implements NgeMonacoContribution {
         }
       },
       resolveLink: function (link) {
-        console.log(link)
         return link
       },
     })

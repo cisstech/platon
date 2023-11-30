@@ -140,6 +140,10 @@ export class AutomatonEditorService {
     this.validate()
   }
 
+  getTransitions(): Readonly<Transition[]> {
+    return this.transitions
+  }
+
   findPosition(name: string) {
     return this.position[name]
   }

@@ -27,6 +27,7 @@ export class UiModalTemplateComponent {
   @Input() title?: string
   @Input() width = '90vw'
   @Input() height = '90vh'
+  @Input() overflow = 'auto'
 
   @Output() closed = new EventEmitter()
   @Output() canceled = new EventEmitter()

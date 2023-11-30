@@ -34,6 +34,14 @@ const ResourceEventToken = new InjectionToken<ResourceEvent>('ResourceEventToken
   imports: [CommonModule, UserAvatarComponent],
   template: `
     <ng-container *ngIf="isMe">Vous êtes désormais membre de “{{ event.data.resourceName }}”</ng-container>
+    <ng-container *ngIf="!isMe && !isJoinRequest">
+      <user-avatar showUsername="inline" [userIdOrName]="event.data.userId" />
+      est désormais membre de “{{ event.data.resourceName }}”
+    </ng-container>
+    <ng-container *ngIf="isJoinRequest">
+      <user-avatar showUsername="inline" [userIdOrName]="event.data.userId" />
+      souhaite rejoindre le cercle “{{ event.data.resourceName }}”
+    </ng-container>
     <ng-template #avatar>
       <user-avatar showUsername="inline" [userIdOrName]="event.data.userId" />
       est désormais membre de “{{ event.data.resourceName }}”
@@ -45,11 +53,15 @@ class MemberCreateEventComponent implements OnInit {
   private readonly changeDetectorRef = inject(ChangeDetectorRef)
 
   protected isMe = false
+  protected isJoinRequest = false
   protected event = inject(ResourceEventToken) as ResourceMemberCreateEvent
 
   async ngOnInit(): Promise<void> {
     const user = await this.auth.ready()
+
     this.isMe = user?.id === this.event.data.userId
+    this.isJoinRequest = this.event.data.userId === this.event.actorId
+
     this.changeDetectorRef.markForCheck()
   }
 }
@@ -61,7 +73,7 @@ class MemberCreateEventComponent implements OnInit {
   imports: [CommonModule, UserAvatarComponent],
   template: `
     <ng-container *ngIf="notification; else noNotification">
-      Vous n'avez plus accès à “{{ event.data.resourceName }}”
+      Vous n'avez plus membre de “{{ event.data.resourceName }}”
     </ng-container>
     <ng-template #noNotification>
       <user-avatar showUsername="inline" [userIdOrName]="event.actorId" /> n'a plus accès à cette ressource

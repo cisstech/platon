@@ -23,7 +23,10 @@ export class LTIProvider {
     return this._signer
   }
 
-  constructor(readonly consumerKey: string, readonly consumerSecret: string) {
+  constructor(
+    readonly consumerKey: string,
+    readonly consumerSecret: string
+  ) {
     if (!consumerKey) {
       throw new ConsumerError('Must specify consumerKey')
     }
