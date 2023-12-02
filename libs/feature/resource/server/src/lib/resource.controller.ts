@@ -69,9 +69,9 @@ export class ResourceController {
   }
 
   @Get('/completion')
-  async completion(): Promise<ItemResponse<ResourceCompletionDTO>> {
+  async completion(@Req() req: IRequest): Promise<ItemResponse<ResourceCompletionDTO>> {
     return new ItemResponse({
-      resource: Mapper.map(await this.resourceService.completion(), ResourceCompletionDTO),
+      resource: Mapper.map(await this.resourceService.completion(req.user), ResourceCompletionDTO),
     })
   }
 

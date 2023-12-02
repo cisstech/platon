@@ -286,11 +286,14 @@ export class ResourceService {
     return this.repository.save(resource)
   }
 
-  async completion(): Promise<ResourceCompletion> {
+  async completion(user: UserEntity): Promise<ResourceCompletion> {
     const [levels, topics, names] = await Promise.all([
       this.levelService.findAll(),
       this.topicService.findAll(),
-      this.repository.query('SELECT name FROM "Resources"') as Promise<{ name: string }[]>,
+      this.repository.find({
+        where: [{ personal: true, ownerId: user.id }, { personal: false }],
+        select: ['name'],
+      }),
     ])
 
     return {
