@@ -285,13 +285,14 @@ export class PlayerService {
 
     variables = output.variables as ExerciseVariables
 
+    const attemptIncrement = grade > -1 ? 1 : 0
     variables['.meta'] = {
       ...(variables['.meta'] || {}),
-      attempts: (variables['.meta']?.attempts || 0) + 1,
+      attempts: (variables['.meta']?.attempts || 0) + attemptIncrement,
     }
 
     exerciseSession.grade = Math.max(grade, exerciseSession.grade ?? -1)
-    exerciseSession.attempts++
+    exerciseSession.attempts += attemptIncrement
     exerciseSession.variables = variables
 
     // SAVE ANSWER WITH GRADE
@@ -335,7 +336,7 @@ export class PlayerService {
         activitySession.grade /= childs.length
       }
 
-      activitySession.attempts++
+      activitySession.attempts += attemptIncrement
       promises.push(
         this.sessionService.update(activitySession.id, {
           grade: activitySession.grade,
