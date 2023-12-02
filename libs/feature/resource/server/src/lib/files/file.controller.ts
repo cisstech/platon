@@ -15,6 +15,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
+import { ApiTags } from '@nestjs/swagger'
 import { SuccessResponse, UnauthorizedResponse } from '@platon/core/common'
 import { IRequest, Public } from '@platon/core/server'
 import { PLSourceFile } from '@platon/feature/compiler'
@@ -27,6 +28,7 @@ import { ResourceFileService } from './file.service'
 import { LATEST, LATEST as LATEST_VERSION } from './repo'
 
 @Controller('files')
+@ApiTags('Resources')
 export class ResourceFileController {
   constructor(private readonly service: ResourceFileService) {}
 

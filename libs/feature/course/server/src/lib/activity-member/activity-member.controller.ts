@@ -1,10 +1,12 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 import { ItemResponse, ListResponse, NoContentResponse, UserRoles } from '@platon/core/common'
 import { Mapper, Roles } from '@platon/core/server'
 import { ActivityMemberDTO, CreateActivityMemberDTO } from './activity-member.dto'
 import { ActivityMemberService } from './activity-member.service'
 
 @Controller('activities/:activityId/members')
+@ApiTags('Courses')
 export class ActivityMemberController {
   constructor(private readonly service: ActivityMemberService) {}
 

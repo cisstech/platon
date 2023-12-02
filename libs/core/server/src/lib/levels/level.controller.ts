@@ -1,10 +1,12 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 import { CreatedResponse, ItemResponse, ListResponse, NoContentResponse } from '@platon/core/common'
 import { Mapper } from '../utils'
 import { CreateLevelDTO, LevelDTO, UpdateLevelDTO } from './level.dto'
 import { LevelService } from './level.service'
 
 @Controller('levels')
+@ApiTags('Settings')
 export class LevelController {
   constructor(private readonly service: LevelService) {}
 

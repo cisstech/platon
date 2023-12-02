@@ -1,10 +1,12 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 import { CreatedResponse, ItemResponse, ListResponse, NoContentResponse, NotFoundResponse } from '@platon/core/common'
 import { Mapper } from '@platon/core/server'
 import { CreateLmsDTO, LmsDTO, LmsFiltersDTO, UpdateLmsDTO } from './lti.dto'
 import { LTIService } from './lti.service'
 
 @Controller('lti')
+@ApiTags('LTI')
 export class LTIController {
   constructor(private readonly service: LTIService) {}
 

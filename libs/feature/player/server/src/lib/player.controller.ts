@@ -1,4 +1,5 @@
 import { Body, Controller, Param, Post, Req } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 import { IRequest, Public } from '@platon/core/server'
 import { EvalExerciseInput, PlayAnswersInput } from '@platon/feature/player/common'
 import {
@@ -14,6 +15,7 @@ import {
 import { PlayerService } from './player.service'
 
 @Controller('player')
+@ApiTags('Players')
 export class PlayerController {
   constructor(private readonly playerService: PlayerService) {}
 

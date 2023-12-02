@@ -1,14 +1,16 @@
 import { Body, Controller, Get, Param, Patch, Post, Query, Req } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 import { CreatedResponse, ForbiddenResponse, ItemResponse, ListResponse, NotFoundResponse } from '@platon/core/common'
 import { IRequest, Mapper } from '@platon/core/server'
 import { ResourceCompletionDTO } from './completion'
+import { ResourcePermissionService } from './permissions/permissions.service'
 import { CircleTreeDTO, CreateResourceDTO, ResourceDTO, ResourceFiltersDTO, UpdateResourceDTO } from './resource.dto'
 import { ResourceService } from './resource.service'
 import { ResourceStatisticDTO } from './statistics'
 import { ResourceViewService } from './views/view.service'
-import { ResourcePermissionService } from './permissions/permissions.service'
 
 @Controller('resources')
+@ApiTags('Resources')
 export class ResourceController {
   constructor(
     private readonly resourceService: ResourceService,

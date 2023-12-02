@@ -1,4 +1,5 @@
 import { Controller, Get, Param, Req, UnauthorizedException } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 import { ItemResponse, ListResponse } from '@platon/core/common'
 import { IRequest, Mapper } from '@platon/core/server'
 import { ResourceInvitationDTO, ResourceInvitationService } from '../invitations'
@@ -7,6 +8,7 @@ import { ResourceDTO } from '../resource.dto'
 import { ResourceService } from '../resource.service'
 
 @Controller('users/:username')
+@ApiTags('Users')
 export class UserResourceController {
   constructor(
     private readonly resourceService: ResourceService,

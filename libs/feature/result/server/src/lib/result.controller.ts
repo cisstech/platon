@@ -1,10 +1,12 @@
 import { Controller, Get, Param } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
+import { UserRoles } from '@platon/core/common'
+import { Roles } from '@platon/core/server'
 import { ActivityResults, UserResults } from '@platon/feature/result/common'
 import { ResultService } from './result.service'
-import { Roles } from '@platon/core/server'
-import { UserRoles } from '@platon/core/common'
 
 @Controller('results')
+@ApiTags('Results')
 export class ResultController {
   constructor(private readonly service: ResultService) {}
 

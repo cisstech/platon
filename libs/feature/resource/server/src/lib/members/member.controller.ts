@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 import {
   ErrorResponse,
   ForbiddenResponse,
@@ -12,6 +13,7 @@ import { ResourceMemberDTO, ResourceMemberFiltersDTO, UpdateResourceMemberDTO } 
 import { ResourceMemberService } from './member.service'
 
 @Controller('resources/:resourceId/members')
+@ApiTags('Resources')
 export class ResourceMemberController {
   constructor(private readonly service: ResourceMemberService) {}
 
