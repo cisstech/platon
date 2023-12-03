@@ -362,6 +362,7 @@ export class ActivityUserResults implements SessionDataAggregator<UserResults[]>
       userResult.correcting =
         userResult.correcting || (exerciseSession.correctionEnabled && !exerciseSession.correctionId)
 
+      userExercise.sessionId = exerciseSession.id
       userResult.exercises[exercise.id] = userExercise
       this.userResults.set(userId, userResult)
     })

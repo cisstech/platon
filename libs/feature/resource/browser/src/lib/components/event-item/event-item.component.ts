@@ -73,7 +73,7 @@ class MemberCreateEventComponent implements OnInit {
   imports: [CommonModule, UserAvatarComponent],
   template: `
     <ng-container *ngIf="notification; else noNotification">
-      Vous n'avez plus membre de “{{ event.data.resourceName }}”
+      Vous n'êtes plus membre de “{{ event.data.resourceName }}”
     </ng-container>
     <ng-template #noNotification>
       <user-avatar showUsername="inline" [userIdOrName]="event.actorId" /> n'a plus accès à cette ressource

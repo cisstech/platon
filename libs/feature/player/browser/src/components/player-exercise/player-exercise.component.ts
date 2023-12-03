@@ -108,7 +108,7 @@ export class PlayerExerciseComponent implements OnInit, OnChanges {
   private readonly changeDetectorRef = inject(ChangeDetectorRef)
 
   @Input() state?: AnswerStates
-  @Input() player!: ExercisePlayer
+  @Input() player?: ExercisePlayer
   @Input() players: ExercisePlayer[] = []
 
   @Input() reviewMode = false
@@ -152,6 +152,7 @@ export class PlayerExerciseComponent implements OnInit, OnChanges {
   protected runningAction?: PlayerActions
 
   protected get primaryActions(): Action[] {
+    if (!this.player) return []
     return [
       {
         icon: 'check',
@@ -181,6 +182,7 @@ export class PlayerExerciseComponent implements OnInit, OnChanges {
   }
 
   protected get secondaryActions(): Action[] {
+    if (!this.player) return []
     return [
       {
         icon: 'reviews',
@@ -224,6 +226,7 @@ export class PlayerExerciseComponent implements OnInit, OnChanges {
   }
 
   protected get navigationActions(): Action[] {
+    if (!this.player) return []
     return [
       {
         icon: 'arrow_back',
@@ -243,6 +246,7 @@ export class PlayerExerciseComponent implements OnInit, OnChanges {
   }
 
   protected get reviewModeActions(): Action[] {
+    if (!this.player) return []
     return [
       {
         icon: 'arrow_back',
@@ -265,6 +269,7 @@ export class PlayerExerciseComponent implements OnInit, OnChanges {
   protected requestFullscreen?: () => void
 
   protected get disabled(): boolean {
+    if (!this.player) return true
     return !!this.player.solution || (this.player.remainingAttempts != null && this.player.remainingAttempts <= 0)
   }
 
@@ -362,6 +367,8 @@ export class PlayerExerciseComponent implements OnInit, OnChanges {
   }
 
   private async evaluate(action: PlayerActions): Promise<void> {
+    if (!this.player) return
+
     try {
       this.runningAction = action
       this.changeDetectorRef.markForCheck()
@@ -385,7 +392,7 @@ export class PlayerExerciseComponent implements OnInit, OnChanges {
       // values are not modified during the evaluation on the server side
       const markdowns = ['form' as const, 'statement' as const, 'solution' as const]
       markdowns.forEach((key) => {
-        if (this.player[key]) {
+        if (this.player?.[key]) {
           this.player[key] += '\n'
         }
       })
