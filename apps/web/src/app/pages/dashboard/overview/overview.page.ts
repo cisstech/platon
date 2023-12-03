@@ -43,7 +43,7 @@ export class OverviewPage implements OnInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
-    this.notifications = await firstValueFrom(this.notificationService.listUnreads())
+    this.notifications = await firstValueFrom(this.notificationService.listUnreads(10))
     this.changeDetectorRef.markForCheck()
   }
 }

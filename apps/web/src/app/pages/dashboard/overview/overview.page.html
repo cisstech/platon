@@ -2,14 +2,6 @@
   <nz-row [nzGutter]="[24, 24]" nzAlign="top">
     <nz-col nzXs="24" nzSm="24" nzMd="14" nzLg="14" nzXl="14">
       <h2>Événements à venir</h2>
-      <nz-calendar [nzFullscreen]="true">
-        <div *nzDateCell="let date">
-          <ng-container *ngIf="false">
-            <!-- TODO show modal with events -->
-            <nz-badge [nzStatus]="'warning'" />
-          </ng-container>
-        </div>
-      </nz-calendar>
     </nz-col>
     <nz-col nzXs="24" nzSm="24" nzMd="10" nzLg="10" nzXl="10">
       <aside>
