@@ -1,16 +1,24 @@
+import { ActivityVariables, ExerciseVariables, extractExercisesFromActivityVariables } from '@platon/feature/compiler'
+import { ActivityEntity, ActivityMemberView } from '@platon/feature/course/server'
 import {
+  ACTIVITY_EXERCISE_RESULTS,
+  ACTIVITY_USER_RESULTS,
   AnswerStates,
+  EXERCISE_ANSWER_RATE,
   EXERCISE_AVERAGE_ATTEMPTS,
   EXERCISE_AVERAGE_ATTEMPTS_TO_SUCCESS,
-  EXERCISE_AVERAGE_SCORE,
-  EXERCISE_AVERAGE_TIME,
-  EXERCISE_DISTRIBUTION_BY_ANSWER_STATE,
   EXERCISE_DROP_OUT_RATE,
-  EXERCISE_PARTICIPATION_RATE,
-  EXERCISE_SUCCESS_RATE,
   EXERCISE_SUCCESS_RATE_ON_FIRST_ATTEMPT,
   EXERCISE_TOTAL_ATTEMPTS,
+  ExerciseResults,
+  SESSION_AVERAGE_DURATION,
+  SESSION_AVERAGE_SCORE,
+  SESSION_DISTRIBUTION_BY_ANSWER_STATE,
+  SESSION_SUCCESS_RATE,
+  UserResults,
   answerStateFromGrade,
+  emptyExerciseResults,
+  emptyUserResults,
 } from '@platon/feature/result/common'
 import differenceInSeconds from 'date-fns/differenceInSeconds'
 import { SessionView } from '../../sessions/session.view'
@@ -24,7 +32,7 @@ import { SessionDataAggregator } from './aggregators'
  * - The success rate is the percentage of sessions that have been graded with a grade of 100.
  */
 export class SessionSuccessRate implements SessionDataAggregator<number> {
-  readonly id = EXERCISE_SUCCESS_RATE
+  readonly id = SESSION_SUCCESS_RATE
 
   private totalSessions = 0
   private totalSuccess = 0
@@ -46,7 +54,7 @@ export class SessionSuccessRate implements SessionDataAggregator<number> {
  * Calculates the average score for sessions.
  */
 export class SessionAverageScore implements SessionDataAggregator<number> {
-  readonly id = EXERCISE_AVERAGE_SCORE
+  readonly id = SESSION_AVERAGE_SCORE
 
   private totalSessions = 0
   private totalScores = 0
@@ -68,7 +76,7 @@ export class SessionAverageScore implements SessionDataAggregator<number> {
  * Calculates the average time spent on sessions.
  */
 export class SessionAverageDuration implements SessionDataAggregator<number> {
-  readonly id = EXERCISE_AVERAGE_TIME
+  readonly id = SESSION_AVERAGE_DURATION
 
   private totalSessions = 0
   private totalDurations = 0
@@ -88,7 +96,7 @@ export class SessionAverageDuration implements SessionDataAggregator<number> {
  * Calculates the distribution of exercise session count by answer state.
  */
 export class SessionDistributionByAnswerState implements SessionDataAggregator<Record<AnswerStates, number>> {
-  readonly id = EXERCISE_DISTRIBUTION_BY_ANSWER_STATE
+  readonly id = SESSION_DISTRIBUTION_BY_ANSWER_STATE
 
   private readonly distribution = Object.keys(AnswerStates).reduce(
     (record, state) => ({ ...record, [state]: 0 }),
@@ -115,7 +123,7 @@ export class SessionDistributionByAnswerState implements SessionDataAggregator<R
  * - The answer rate is the percentage of sessions that have at least one attempt.
  */
 export class ExerciseAnswerRate implements SessionDataAggregator<number> {
-  readonly id = EXERCISE_PARTICIPATION_RATE
+  readonly id = EXERCISE_ANSWER_RATE
 
   private totalSessions = 0
   private totalParticipations = 0
@@ -252,23 +260,208 @@ export class ExerciseSuccessRateOnFirstAttempt implements SessionDataAggregator<
 
 //#endregion
 
-export const exerciseSessionAggregators = (): SessionDataAggregator[] => [
-  new SessionSuccessRate(),
-  new SessionAverageScore(),
-  new SessionAverageDuration(),
-  new SessionDistributionByAnswerState(),
+//#region Activity
 
-  new ExerciseAnswerRate(),
-  new ExerciseDropOutRate(),
-  new ExerciseTotalAttempts(),
-  new ExerciseAverageAttempts(),
-  new ExerciseSuccessRateOnFirstAttempt(),
-  new ExerciseAverageAttemptsToSuccess(),
-]
+type ActivityUserResultsResultsArgs = {
+  activity?: ActivityEntity | null
+  activityMembers?: ActivityMemberView[] | null
+  exerciseSessions: SessionView[]
+}
 
-export const activitySessionAggregators = (): SessionDataAggregator[] => [
-  new SessionSuccessRate(),
-  new SessionAverageScore(),
-  new SessionAverageDuration(),
-  new SessionDistributionByAnswerState(),
-]
+/**
+ * Calculates the results for each user in an activity.
+ */
+export class ActivityUserResults implements SessionDataAggregator<UserResults[]> {
+  readonly id = ACTIVITY_USER_RESULTS
+  private readonly anonymous = 'anonymous'
+  private readonly userResults = new Map<string, UserResults>()
+  private readonly exerciseSessions = new Map<string, SessionView>()
+
+  constructor(args: ActivityUserResultsResultsArgs) {
+    const { activity, activityMembers, exerciseSessions } = args
+
+    activityMembers
+      ?.sort((a, b) => a.username.localeCompare(b.username))
+      ?.forEach((member) => {
+        this.userResults.set(
+          member.id,
+          emptyUserResults({
+            id: member.id,
+            email: member.email,
+            firstName: member.firstName,
+            lastName: member.lastName,
+            username: member.username,
+          })
+        )
+      })
+
+    exerciseSessions.forEach((exerciseSession) => {
+      this.exerciseSessions.set(exerciseSession.id, exerciseSession)
+      this.userResults.set(
+        exerciseSession.user?.id ?? this.anonymous,
+        emptyUserResults({
+          id: exerciseSession.user?.id ?? this.anonymous,
+          email: exerciseSession.user?.email ?? this.anonymous,
+          firstName: exerciseSession.user?.firstName ?? this.anonymous,
+          lastName: exerciseSession.user?.lastName ?? this.anonymous,
+          username: exerciseSession.user?.username ?? this.anonymous,
+        })
+      )
+    })
+
+    if (activity) {
+      const activityExercises = extractExercisesFromActivityVariables(activity.source.variables as ActivityVariables)
+      activityExercises.forEach((exercise) => {
+        const variables = exercise.source.variables as ExerciseVariables
+        Array.from(this.userResults.values()).forEach((userResult) => {
+          userResult.exercises[exercise.id] = {
+            id: exercise.id,
+            title: exercise.overrides?.title ?? variables.title,
+            grade: -1,
+            attempts: 0,
+            duration: 0,
+            state: AnswerStates.NOT_STARTED,
+          }
+        })
+      })
+    }
+  }
+
+  next(input: SessionView): void {
+    input.activityNavigation?.exercises.forEach((exercise) => {
+      const exerciseSession = this.exerciseSessions.get(exercise.sessionId)
+      if (!exerciseSession) return
+
+      const userId = exerciseSession.userId ?? this.anonymous
+      const userResult =
+        this.userResults.get(userId) ??
+        emptyUserResults({
+          id: input.userId ?? this.anonymous,
+          email: input.user?.email ?? this.anonymous,
+          firstName: input.user?.firstName ?? this.anonymous,
+          lastName: input.user?.lastName ?? this.anonymous,
+          username: input.user?.username ?? this.anonymous,
+        })
+
+      if (!userResult) return
+
+      const userExercise = userResult.exercises[exercise.id] ?? {
+        id: exercise.id,
+        title: exercise.title,
+        sessionId: exercise.sessionId,
+      }
+
+      userExercise.grade = exerciseSession.correctionGrade ?? exerciseSession.grade
+      userExercise.state = answerStateFromGrade(exerciseSession.correctionGrade ?? exerciseSession.grade)
+      userExercise.duration =
+        exerciseSession.lastGradedAt && exerciseSession.startedAt
+          ? differenceInSeconds(exerciseSession.lastGradedAt, exerciseSession.startedAt)
+          : 0
+      userExercise.attempts = exerciseSession.attempts
+
+      userResult.correcting =
+        userResult.correcting || (exerciseSession.correctionEnabled && !exerciseSession.correctionId)
+
+      userResult.exercises[exercise.id] = userExercise
+      this.userResults.set(userId, userResult)
+    })
+  }
+
+  complete(): UserResults[] {
+    const results = Array.from(this.userResults.values())
+    results.forEach((userResult) => {
+      if (userResult.correcting) {
+        Object.keys(userResult.exercises).forEach((exerciseId) => {
+          const exercice = userResult.exercises[exerciseId]
+          exercice.grade = -1
+          exercice.state = AnswerStates.ANSWERED
+        })
+      }
+    })
+    return results
+  }
+}
+
+type ActivityExerciseResultsArgs = {
+  activity?: ActivityEntity | null
+  exerciseSessions: SessionView[]
+}
+
+/**
+ * Calculates the results for each exercise in an activity.
+ */
+export class ActivityExerciseResults implements SessionDataAggregator<ExerciseResults[]> {
+  readonly id = ACTIVITY_EXERCISE_RESULTS
+
+  private readonly exerciseResults = new Map<string, ExerciseResults>()
+  private readonly exerciseSessions = new Map<string, SessionView>()
+
+  constructor(args: ActivityExerciseResultsArgs) {
+    const { activity, exerciseSessions } = args
+    exerciseSessions.forEach((exercise) => {
+      this.exerciseSessions.set(exercise.id, exercise)
+    })
+
+    if (activity) {
+      const activityExercises = extractExercisesFromActivityVariables(activity.source.variables as ActivityVariables)
+      activityExercises.forEach((exercise) => {
+        const variables = exercise.source.variables as ExerciseVariables
+        this.exerciseResults.set(
+          exercise.id,
+          emptyExerciseResults({ id: exercise.id, title: exercise.overrides?.title ?? variables.title })
+        )
+      })
+    }
+  }
+
+  next(input: SessionView): void {
+    input.activityNavigation?.exercises.forEach((exercise) => {
+      const session = this.exerciseSessions.get(exercise.sessionId)
+      if (!session) return
+
+      const grade = session.correctionGrade ?? session.grade
+      const state = answerStateFromGrade(grade)
+      const duration =
+        session.lastGradedAt && session.startedAt ? differenceInSeconds(session.lastGradedAt, session.startedAt) : 0
+
+      const exerciseResults = this.exerciseResults.get(exercise.id) ?? emptyExerciseResults()
+      exerciseResults.id = exerciseResults.id || exercise.id
+      exerciseResults.title = exerciseResults.title || exercise.title
+
+      exerciseResults.states[state]++
+
+      exerciseResults.grades.sum += grade < 0 ? 0 : grade
+      exerciseResults.grades.count += grade < 0 ? 0 : 1
+
+      exerciseResults.attempts.sum += session.attempts
+      exerciseResults.attempts.count += session.attempts ? 1 : 0
+
+      exerciseResults.durations.sum += duration
+      exerciseResults.durations.count++
+
+      this.exerciseResults.set(exerciseResults.id, exerciseResults)
+    })
+  }
+
+  complete(): ExerciseResults[] {
+    const results = Array.from(this.exerciseResults.values())
+
+    results.forEach((exerciseResult) => {
+      exerciseResult.grades.avg = exerciseResult.grades.count
+        ? exerciseResult.grades.sum / exerciseResult.grades.count
+        : exerciseResult.grades.sum
+
+      exerciseResult.attempts.avg = exerciseResult.attempts.count
+        ? exerciseResult.attempts.sum / exerciseResult.attempts.count
+        : exerciseResult.attempts.sum
+
+      exerciseResult.durations.avg = exerciseResult.durations.count
+        ? exerciseResult.durations.sum / exerciseResult.durations.count
+        : exerciseResult.durations.sum
+    })
+
+    return results
+  }
+}
+
+//#endregion

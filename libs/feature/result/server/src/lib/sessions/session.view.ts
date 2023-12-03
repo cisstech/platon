@@ -1,7 +1,8 @@
+import { UserEntity } from '@platon/core/server'
 import { ExerciseMeta } from '@platon/feature/compiler'
 import { PlayerNavigation } from '@platon/feature/player/common'
 import { ResourceTypes } from '@platon/feature/resource/common'
-import { ViewColumn, ViewEntity } from 'typeorm'
+import { JoinColumn, ManyToOne, ViewColumn, ViewEntity } from 'typeorm'
 
 /**
  * - This View is used to fetch session related data from various tables.
@@ -127,6 +128,10 @@ export class SessionView {
    */
   @ViewColumn({ name: 'user_id' })
   userId!: string
+
+  @ManyToOne(() => UserEntity, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'user_id' })
+  user?: UserEntity
 
   /**
    * The id of the parent session associated with the session (if session is an exercise session).

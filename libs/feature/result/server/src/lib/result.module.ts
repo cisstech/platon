@@ -15,7 +15,6 @@ import { DashboardService } from './dashboard/dashboard.service'
 import { ActivityResultsVirtualColumnsResolver } from './resolvers/activity-results-virtual-columns.resolver'
 import { CourseResultsVirtualColumnsResolver } from './resolvers/course-results-virtual-columns.resolver'
 import { ResultController } from './result.controller'
-import { ResultService } from './result.service'
 import { SessionEntity } from './sessions/session.entity'
 import { SessionService } from './sessions/session.service'
 import { SessionView } from './sessions/session.view'
@@ -28,7 +27,6 @@ import { SessionView } from './sessions/session.view'
   ],
   controllers: [ResultController, DashboardController, CorrectionController, SessionCommentController],
   providers: [
-    ResultService,
     AnswerService,
     SessionService,
     DashboardService,
@@ -37,6 +35,6 @@ import { SessionView } from './sessions/session.view'
     CourseResultsVirtualColumnsResolver,
     ActivityResultsVirtualColumnsResolver,
   ],
-  exports: [TypeOrmModule, ResultService, AnswerService, SessionService, CorrectionService, SessionCommentService],
+  exports: [TypeOrmModule, AnswerService, SessionService, CorrectionService, SessionCommentService],
 })
 export class FeatureResultServerModule {}

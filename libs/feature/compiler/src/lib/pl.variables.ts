@@ -106,6 +106,11 @@ export interface ActivityVariables {
   [k: string]: any
 }
 
+/**
+ * Extracts all exercises from all exercise groups of an activity variables.
+ * @param variables Variables of an activity.
+ * @returns List of exercises.
+ */
 export const extractExercisesFromActivityVariables = (variables: ActivityVariables) => {
   const groups = variables.exerciseGroups || {}
   const exercises: ActivityExercise[] = []
