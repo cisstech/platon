@@ -1,4 +1,5 @@
 export * from './api/result.service'
 export * from './components'
+export * from './models/dashboard.model'
 export * from './pipes'
 export * from './providers'

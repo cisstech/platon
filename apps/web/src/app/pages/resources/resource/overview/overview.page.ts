@@ -1,14 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CommonModule } from '@angular/common'
-import {
-  AfterViewChecked,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  OnDestroy,
-  OnInit,
-} from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core'
 import { Router, RouterModule } from '@angular/router'
 import { Subscription } from 'rxjs'
 
@@ -50,9 +42,9 @@ import { ResourcePresenter } from '../resource.presenter'
     NgxEchartsModule,
   ],
 })
-export class ResourceOverviewPage implements OnInit, AfterViewChecked, OnDestroy {
+export class ResourceOverviewPage implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription[] = []
-  protected view: [number, number] = [0, 0]
+
   protected context = this.presenter.defaultContext()
 
   protected statusChart?: EChartsOption
@@ -60,7 +52,6 @@ export class ResourceOverviewPage implements OnInit, AfterViewChecked, OnDestroy
   constructor(
     private readonly router: Router,
     private readonly presenter: ResourcePresenter,
-    private readonly elementRef: ElementRef<HTMLElement>,
     private readonly changeDetectorRef: ChangeDetectorRef
   ) {}
 
@@ -74,11 +65,6 @@ export class ResourceOverviewPage implements OnInit, AfterViewChecked, OnDestroy
         this.changeDetectorRef.markForCheck()
       })
     )
-  }
-
-  ngAfterViewChecked(): void {
-    this.view = [this.elementRef.nativeElement.offsetWidth * 0.65, 400]
-    this.changeDetectorRef.markForCheck()
   }
 
   ngOnDestroy(): void {

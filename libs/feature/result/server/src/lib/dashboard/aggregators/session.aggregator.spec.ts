@@ -83,10 +83,11 @@ describe('SessionAggregators', () => {
     })
 
     describe('next', () => {
-      it('should increment totalSessions when input.startedAt is defined', () => {
+      it('should increment totalSessions when input.attempts is defined', () => {
         const input = {
           startedAt: new Date(),
           lastGradedAt: new Date(),
+          attempts: 1,
         } as SessionView
 
         aggregator.next(input)
@@ -94,10 +95,22 @@ describe('SessionAggregators', () => {
         expect(aggregator['totalSessions']).toBe(1)
       })
 
-      it('should not increment totalSessions when input.startedAt is undefined', () => {
+      it('should not increment totalSessions when input.attempts is undefined', () => {
         const input = {
           startedAt: undefined,
           lastGradedAt: new Date(),
+        } as SessionView
+
+        aggregator.next(input)
+
+        expect(aggregator['totalSessions']).toBe(0)
+      })
+
+      it('should not increment totalSessions when input.attempts is 0', () => {
+        const input = {
+          startedAt: undefined,
+          lastGradedAt: new Date(),
+          attempts: 0,
         } as SessionView
 
         aggregator.next(input)
@@ -109,6 +122,7 @@ describe('SessionAggregators', () => {
         const input = {
           startedAt: new Date(2023, 0, 1, 10, 0, 0),
           lastGradedAt: new Date(2023, 0, 1, 10, 0, 10),
+          attempts: 1,
         } as SessionView
 
         aggregator.next(input)

@@ -1,13 +1,15 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { BadRequestResponse, NotFoundResponse } from '@platon/core/common'
-import { ActivityEntity, ActivityMemberView } from '@platon/feature/course/server'
+import { BadRequestResponse, NotFoundResponse, UserRoles, isTeacherRole } from '@platon/core/common'
+import { UserEntity } from '@platon/core/server'
+import { ActivityEntity, ActivityMemberView, CourseMemberView } from '@platon/feature/course/server'
 import { ResourceTypes } from '@platon/feature/resource/common'
 import { ResourceEntity, ResourceService } from '@platon/feature/resource/server'
-import { DashboardOutput } from '@platon/feature/result/common'
+import { DashboardOutput, USER_ACTIVITY_COUNT, USER_COURSE_COUNT } from '@platon/feature/result/common'
 import { In, IsNull, Not, Repository } from 'typeorm'
 import { SessionView } from '../sessions/session.view'
 import {
+  UserExerciseCount,
   ActivityExerciseResults,
   ActivityUserResults,
   ExerciseAnswerRate,
@@ -18,8 +20,11 @@ import {
   ExerciseTotalAttempts,
   SessionAverageDuration,
   SessionAverageScore,
+  SessionAverageScoreByMonth,
   SessionDistributionByAnswerState,
   SessionSuccessRate,
+  SessionTotalDuration,
+  SessionTotalDurationByMonth,
 } from './aggregators/session.aggregator'
 
 @Injectable()
@@ -29,11 +34,111 @@ export class DashboardService {
 
     @InjectRepository(SessionView)
     private readonly sessionView: Repository<SessionView>,
+    @InjectRepository(CourseMemberView)
+    private readonly courseMemberView: Repository<CourseMemberView>,
     @InjectRepository(ActivityEntity)
     private readonly activityRepository: Repository<ActivityEntity>,
     @InjectRepository(ActivityMemberView)
     private readonly activityMemberView: Repository<ActivityMemberView>
   ) {}
+
+  async ofUser(user: UserEntity): Promise<DashboardOutput> {
+    const output: DashboardOutput = {}
+
+    const [courseMembers, activityMembers] = await Promise.all([
+      this.courseMemberView.find({
+        where: { id: user.id },
+      }),
+      this.activityMemberView.find({
+        where: { id: user.id },
+        select: { activityId: true },
+      }),
+    ])
+
+    const [sessions] = await Promise.all([
+      this.sessionView.find({
+        where: [
+          {
+            userId: user.id,
+            parentId: Not(IsNull()),
+            activityId: Not(IsNull()),
+          },
+          ...(isTeacherRole(user.role) && activityMembers.length
+            ? [
+                {
+                  activityId: In(activityMembers.map((member) => member.activityId)),
+                  parentId: Not(IsNull()),
+                  userId: Not(user.id),
+                },
+              ]
+            : []),
+        ],
+      }),
+    ])
+
+    const userSessions = sessions.filter((session) => session.userId === user.id)
+    const studentSessions = sessions.filter((session) => session.userId !== user.id) // will also include teachers
+
+    const userSessionAggregators = [
+      new SessionTotalDuration(),
+      new SessionSuccessRate(),
+      new SessionAverageScore(),
+      new SessionAverageDuration(),
+      new SessionAverageScoreByMonth(),
+      new SessionTotalDurationByMonth(),
+      new SessionDistributionByAnswerState(),
+
+      new ExerciseAnswerRate(),
+      new ExerciseDropOutRate(),
+      new ExerciseSuccessRateOnFirstAttempt(),
+      new ExerciseAverageAttemptsToSuccess(),
+
+      new UserExerciseCount(),
+    ]
+
+    userSessions.forEach((session) => {
+      userSessionAggregators.forEach((aggregator) => aggregator.next(session))
+    })
+
+    const userOutput: DashboardOutput = {}
+    userSessionAggregators.forEach((aggregator) => {
+      userOutput[aggregator.id] = aggregator.complete()
+    })
+
+    userOutput[USER_COURSE_COUNT] = courseMembers.length
+    userOutput[USER_ACTIVITY_COUNT] = activityMembers.length
+
+    output['user'] = userOutput
+
+    if (isTeacherRole(user.role)) {
+      const studentSessionAggregators = [
+        new SessionTotalDuration(),
+        new SessionSuccessRate(),
+        new SessionAverageScore(),
+        new SessionAverageDuration(),
+        new SessionAverageScoreByMonth(),
+        new SessionTotalDurationByMonth(),
+        new SessionDistributionByAnswerState(),
+
+        new ExerciseAnswerRate(),
+        new ExerciseDropOutRate(),
+        new ExerciseSuccessRateOnFirstAttempt(),
+        new ExerciseAverageAttemptsToSuccess(),
+      ]
+
+      studentSessions.forEach((session) => {
+        studentSessionAggregators.forEach((aggregator) => aggregator.next(session))
+      })
+
+      const studentOutput: DashboardOutput = {}
+      studentSessionAggregators.forEach((aggregator) => {
+        studentOutput[aggregator.id] = aggregator.complete()
+      })
+      output[UserRoles.student] = studentOutput
+    }
+
+    return output
+  }
 
   async ofSession(sessionId: string): Promise<[SessionView, DashboardOutput]> {
     const output: DashboardOutput = {}

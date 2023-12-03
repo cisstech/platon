@@ -1,4 +1,6 @@
+export * from './answer-distribution/answer-distribution.component'
 export * from './correction-table/correction-table.component'
 export * from './result-by-exercises/result-by-exercises.component'
 export * from './result-by-members/result-by-members.component'
 export * from './result-legend/result-legend.component'
+export * from './value-distribution/value-distribution.component'

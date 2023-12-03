@@ -13,8 +13,12 @@ import {
   ExerciseResults,
   SESSION_AVERAGE_DURATION,
   SESSION_AVERAGE_SCORE,
+  SESSION_AVERAGE_SCORE_BY_MONTH,
   SESSION_DISTRIBUTION_BY_ANSWER_STATE,
   SESSION_SUCCESS_RATE,
+  SESSION_TOTAL_DURATION,
+  SESSION_TOTAL_DURATION_BY_MONTH,
+  USER_EXERCISE_COUNT,
   UserResults,
   answerStateFromGrade,
   emptyExerciseResults,
@@ -23,6 +27,7 @@ import {
 import differenceInSeconds from 'date-fns/differenceInSeconds'
 import { SessionView } from '../../sessions/session.view'
 import { SessionDataAggregator } from './aggregators'
+import { getYearMonthWeek } from '../dashboard.utils'
 
 //region COMMON
 
@@ -73,6 +78,88 @@ export class SessionAverageScore implements SessionDataAggregator<number> {
 }
 
 /**
+ * Calculates the average score for sessions for each month.
+ */
+export class SessionAverageScoreByMonth implements SessionDataAggregator<Record<string, number>> {
+  readonly id = SESSION_AVERAGE_SCORE_BY_MONTH
+
+  private readonly scores = new Map<string, { total: number; count: number }>()
+
+  next(input: SessionView): void {
+    if (input.lastGradedAt) {
+      const { year, month, week } = getYearMonthWeek(input.lastGradedAt)
+
+      const id = `${year}:${month}:${week}`
+      if (input.attempts) {
+        const score = this.scores.get(id) ?? { total: 0, count: 0 }
+        score.total += input.correctionGrade ?? input.grade
+        score.count++
+        this.scores.set(id, score)
+      }
+    }
+  }
+
+  complete(): Record<string, number> {
+    return Array.from(this.scores.entries()).reduce(
+      (record, [id, score]) => {
+        record[id] = Math.round(score.total / score.count)
+        return record
+      },
+      {} as Record<string, number>
+    )
+  }
+}
+
+/**
+ * Calculates the total time spent on sessions.
+ */
+export class SessionTotalDuration implements SessionDataAggregator<number> {
+  readonly id = SESSION_TOTAL_DURATION
+
+  private totalDurations = 0
+
+  next(input: SessionView): void {
+    this.totalDurations +=
+      input.lastGradedAt && input.startedAt ? differenceInSeconds(input.lastGradedAt, input.startedAt) : 0
+  }
+
+  complete(): number {
+    return this.totalDurations
+  }
+}
+
+/**
+ * Calculates the total duration for sessions for each month.
+ */
+export class SessionTotalDurationByMonth implements SessionDataAggregator<Record<string, number>> {
+  readonly id = SESSION_TOTAL_DURATION_BY_MONTH
+
+  private readonly durations = new Map<string, number>()
+
+  next(input: SessionView): void {
+    if (input.startedAt && input.lastGradedAt) {
+      const { year, month, week } = getYearMonthWeek(input.lastGradedAt)
+
+      const id = `${year}:${month}:${week}`
+      if (input.attempts) {
+        const duration = this.durations.get(id) ?? 0
+        this.durations.set(id, duration + differenceInSeconds(input.lastGradedAt, input.startedAt))
+      }
+    }
+  }
+
+  complete(): Record<string, number> {
+    return Array.from(this.durations.entries()).reduce(
+      (record, [id, duration]) => {
+        record[id] = duration
+        return record
+      },
+      {} as Record<string, number>
+    )
+  }
+}
+
+/**
  * Calculates the average time spent on sessions.
  */
 export class SessionAverageDuration implements SessionDataAggregator<number> {
@@ -82,9 +169,11 @@ export class SessionAverageDuration implements SessionDataAggregator<number> {
   private totalDurations = 0
 
   next(input: SessionView): void {
-    this.totalSessions += input.startedAt ? 1 : 0
-    this.totalDurations +=
-      input.lastGradedAt && input.startedAt ? differenceInSeconds(input.lastGradedAt, input.startedAt) : 0
+    if (input.attempts) {
+      this.totalSessions += input.startedAt ? 1 : 0
+      this.totalDurations +=
+        input.lastGradedAt && input.startedAt ? differenceInSeconds(input.lastGradedAt, input.startedAt) : 0
+    }
   }
 
   complete(): number {
@@ -176,7 +265,7 @@ export class ExerciseTotalAttempts implements SessionDataAggregator<number> {
   private totalAttempts = 0
 
   next(input: SessionView): void {
-    this.totalAttempts += input.attempts
+    this.totalAttempts += input.attempts ?? 0
   }
 
   complete(): number {
@@ -462,6 +551,22 @@ export class ActivityExerciseResults implements SessionDataAggregator<ExerciseRe
     })
 
     return results
+  }
+}
+
+export class UserExerciseCount implements SessionDataAggregator<number> {
+  readonly id = USER_EXERCISE_COUNT
+
+  private total = 0
+
+  next(input: SessionView): void {
+    if (input.attempts) {
+      this.total++
+    }
+  }
+
+  complete(): number {
+    return this.total
   }
 }
 

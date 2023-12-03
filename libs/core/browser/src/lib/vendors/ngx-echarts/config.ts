@@ -9,6 +9,7 @@ import {
   TitleComponent,
   TooltipComponent,
   ToolboxComponent,
+  DataZoomComponent,
   // Built-in transform (filter, sort)
   TransformComponent,
 } from 'echarts/components'
@@ -25,6 +26,7 @@ import type {
   TitleComponentOption,
   TooltipComponentOption,
   ToolboxComponentOption,
+  DataZoomComponentOption,
 } from 'echarts/components'
 import type { ComposeOption } from 'echarts/core'
 
@@ -39,6 +41,7 @@ export type EChartsOption = ComposeOption<
   | LegendComponentOption
   | ToolboxComponentOption
   | TooltipComponentOption
+  | DataZoomComponentOption
 >
 
 // Register the required components
@@ -50,6 +53,7 @@ echarts.use([
   TooltipComponent,
   ToolboxComponent,
   TransformComponent,
+  DataZoomComponent,
   BarChart,
   LineChart,
   PieChart,

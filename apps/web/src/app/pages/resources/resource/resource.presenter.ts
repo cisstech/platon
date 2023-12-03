@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { Injectable, OnDestroy } from '@angular/core'
+import { Injectable, OnDestroy, inject } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { AuthService, DialogService, TagService } from '@platon/core/browser'
 import { Level, ListResponse, Topic, User } from '@platon/core/common'
@@ -24,20 +24,21 @@ import { BehaviorSubject, Observable, Subscription, firstValueFrom } from 'rxjs'
 @Injectable()
 export class ResourcePresenter implements OnDestroy {
   private readonly subscriptions: Subscription[] = []
+
+  private readonly tagService = inject(TagService)
+  private readonly authService = inject(AuthService)
+  private readonly fileService = inject(ResourceFileService)
+  private readonly dialogService = inject(DialogService)
+  private readonly activatedRoute = inject(ActivatedRoute)
+  private readonly resourceService = inject(ResourceService)
+
   private readonly context = new BehaviorSubject<Context>(this.defaultContext())
 
   private isInitialLoading = true
 
   readonly contextChange = this.context.asObservable()
 
-  constructor(
-    private readonly tagService: TagService,
-    private readonly authService: AuthService,
-    private readonly fileService: ResourceFileService,
-    private readonly dialogService: DialogService,
-    private readonly activatedRoute: ActivatedRoute,
-    private readonly resourceService: ResourceService
-  ) {
+  constructor() {
     this.subscriptions.push(
       this.activatedRoute.paramMap.subscribe((params) => {
         this.onChangeRoute(params.get('id') as string)

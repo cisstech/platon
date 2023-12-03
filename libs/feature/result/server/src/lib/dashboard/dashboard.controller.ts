@@ -10,6 +10,11 @@ import { DashboardService } from './dashboard.service'
 export class DashboardController {
   constructor(private readonly service: DashboardService) {}
 
+  @Get()
+  async ofUser(@Req() req: IRequest): Promise<DashboardOutput> {
+    return this.service.ofUser(req.user)
+  }
+
   @Get('sessions/:id')
   async ofSession(@Req() req: IRequest, @Param('id') id: string): Promise<DashboardOutput> {
     const [session, output] = await this.service.ofSession(id)

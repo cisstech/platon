@@ -1,0 +1,39 @@
+.statistic-card {
+  position: relative;
+  width: 100%;
+  padding: 20px;
+  background-color: var(--brand-background-primary, #fff);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.value {
+  font-size: 1.8em;
+  font-weight: bold;
+  color: var(--brand-text-primary, #000);
+}
+
+.description {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  margin-top: 10px;
+  font-size: 16px;
+  color: var(--brand-text-secondary, #666);
+}
+
+.ribbon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50px;
+  height: 50px;
+  background-color: #3498db;
+  clip-path: polygon(100% 0, 100% 70%, 50% 100%, 0 70%, 0 0);
+  border-top-right-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 20px;
+}
