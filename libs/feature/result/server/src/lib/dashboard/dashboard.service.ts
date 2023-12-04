@@ -5,11 +5,16 @@ import { UserEntity } from '@platon/core/server'
 import { ActivityEntity, ActivityMemberView, CourseMemberView } from '@platon/feature/course/server'
 import { ResourceTypes } from '@platon/feature/resource/common'
 import { ResourceEntity, ResourceService } from '@platon/feature/resource/server'
-import { DashboardOutput, USER_ACTIVITY_COUNT, USER_COURSE_COUNT } from '@platon/feature/result/common'
-import { In, IsNull, Not, Repository } from 'typeorm'
+import {
+  ACTIVITY_COURSE_USED_IN_COUNT,
+  ACTIVITY_COURSE_USED_IN_LIST,
+  DashboardOutput,
+  USER_ACTIVITY_COUNT,
+  USER_COURSE_COUNT,
+} from '@platon/feature/result/common'
+import { In, IsNull, Not, Raw, Repository } from 'typeorm'
 import { SessionView } from '../sessions/session.view'
 import {
-  UserExerciseCount,
   ActivityExerciseResults,
   ActivityUserResults,
   ExerciseAnswerRate,
@@ -25,6 +30,7 @@ import {
   SessionSuccessRate,
   SessionTotalDuration,
   SessionTotalDurationByMonth,
+  UserExerciseCount,
 } from './aggregators/session.aggregator'
 
 @Injectable()
@@ -262,6 +268,8 @@ export class DashboardService {
       new SessionAverageScore(),
       new SessionAverageDuration(),
       new SessionDistributionByAnswerState(),
+      new SessionAverageScoreByMonth(),
+      new SessionTotalDurationByMonth(),
 
       new ExerciseAnswerRate(),
       new ExerciseDropOutRate(),
@@ -285,18 +293,28 @@ export class DashboardService {
       },
     })
 
-    const exerciseSessions = await this.sessionView.find({
-      where: {
-        parentId: In(activitySessions.map((s) => s.id)),
-        userId: Not(IsNull()),
-      },
-    })
+    const [exerciseSessions, usedInActivities] = await Promise.all([
+      this.sessionView.find({
+        where: {
+          parentId: In(activitySessions.map((s) => s.id)),
+          userId: Not(IsNull()),
+        },
+      }),
+      this.activityRepository.find({
+        where: {
+          source: Raw((alias) => `${alias} @> '${JSON.stringify({ resource: resource.id })}'`),
+        },
+        select: { courseId: true },
+      }),
+    ])
 
     const aggregators = [
       new SessionSuccessRate(),
       new SessionAverageScore(),
       new SessionAverageDuration(),
       new SessionDistributionByAnswerState(),
+      new SessionAverageScoreByMonth(),
+      new SessionTotalDurationByMonth(),
 
       new ActivityExerciseResults({
         exerciseSessions,
@@ -307,5 +325,10 @@ export class DashboardService {
     aggregators.forEach((aggregator) => {
       output[aggregator.id] = aggregator.complete()
     })
+
+    const usedInCourses = Array.from(new Set(usedInActivities.map((a) => a.courseId)))
+
+    output[ACTIVITY_COURSE_USED_IN_LIST] = usedInCourses.slice(0, 5)
+    output[ACTIVITY_COURSE_USED_IN_COUNT] = usedInCourses.length
   }
 }

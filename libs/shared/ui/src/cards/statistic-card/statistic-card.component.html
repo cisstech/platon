@@ -1,14 +1,18 @@
 <div class="statistic-card">
-  <div [style.background-color]="ribbonColor" class="ribbon" *ngIf="icon || matIcon">
+  <div [style.background-color]="ribbonColor" class="ribbon" *ngIf="icon || matIcon || nzIcon">
     <span>
       <ng-container *ngIf="icon">
         <ng-container *ngTemplateOutlet="icon" />
       </ng-container>
       <mat-icon *ngIf="matIcon">{{ matIcon }}</mat-icon>
+      <span *ngIf="nzIcon" nz-icon [nzType]="nzIcon" nzTheme="outline"></span>
     </span>
   </div>
   <div class="value" [style.color]="valueColor">{{ value }} {{ valueSuffix }}</div>
   <div class="description">
     {{ description }} <mat-icon *ngIf="tooltip" [nz-tooltip]="tooltip">info_circle</mat-icon>
+  </div>
+  <div>
+    <ng-content></ng-content>
   </div>
 </div>

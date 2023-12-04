@@ -3,6 +3,8 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, inject } 
 import { DurationPipe } from '@platon/shared/ui'
 import format from 'date-fns/format'
 import getWeeksInMonth from 'date-fns/getWeeksInMonth'
+import startOfMonth from 'date-fns/startOfMonth'
+import addWeeks from 'date-fns/addWeeks'
 
 import { EChartsOption } from 'echarts'
 import * as echarts from 'echarts/core'
@@ -52,10 +54,14 @@ export class ResultValueDistributionComponent {
     const year = this.date.getFullYear()
     const month = this.date.getMonth() + 1
 
-    const weeks = getWeeksInMonth(this.date) - 1
+    const weeks = getWeeksInMonth(this.date, {
+      weekStartsOn: 1,
+    })
     const dates = Object.keys(this.currentDistribution).filter((date) => {
       return date.startsWith(`${year}:${month}:`)
     })
+
+    const monthStart = startOfMonth(this.date)
 
     return {
       color: [this.color],
@@ -91,7 +97,10 @@ export class ResultValueDistributionComponent {
         {
           type: 'category',
           boundaryGap: false,
-          data: Array.from({ length: weeks }, (_, i) => `Semaine ${i + 1}`),
+          data: Array.from({ length: weeks }, (_, i) => {
+            const starts = format(addWeeks(monthStart, i), 'dd/MM')
+            return `Semaine du ${starts}`
+          }),
         },
       ],
       yAxis: [

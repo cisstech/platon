@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common'
 import { ChangeDetectionStrategy, Component, Input, OnChanges, TemplateRef } from '@angular/core'
 import { MatIconModule } from '@angular/material/icon'
+import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 
 export const positiveGreenColor = (value: number) => {
@@ -20,12 +21,15 @@ export const positiveRedColor = (value: number) => {
   selector: 'ui-statistic-card',
   templateUrl: 'statistic-card.component.html',
   styleUrls: ['./statistic-card.component.scss'],
-  imports: [CommonModule, MatIconModule, NzToolTipModule],
+  imports: [CommonModule, MatIconModule, NzIconModule, NzToolTipModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiStatisticCardComponent implements OnChanges {
   @Input()
-  icon: TemplateRef<unknown> | undefined
+  icon?: TemplateRef<unknown>
+
+  @Input()
+  nzIcon?: string
 
   @Input()
   matIcon?: string
@@ -33,6 +37,7 @@ export class UiStatisticCardComponent implements OnChanges {
   @Input()
   value!: number | string
 
+  @Input()
   valueSuffix = ''
 
   @Input()

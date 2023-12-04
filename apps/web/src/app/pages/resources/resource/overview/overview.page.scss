@@ -21,3 +21,9 @@ mat-chip-set {
 .echarts {
   height: 400px;
 }
+
+ui-statistic-card {
+  [nz-button] {
+    margin-top: 0.5rem;
+  }
+}

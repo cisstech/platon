@@ -14,9 +14,19 @@ import { NzStatisticModule } from 'ng-zorro-antd/statistic'
 
 import { EChartsOption } from 'echarts'
 
+import { FormsModule } from '@angular/forms'
 import { MatButtonModule } from '@angular/material/button'
 import { RESOURCE_STATUS_COLORS_HEX, RESOURCE_STATUS_NAMES } from '@platon/feature/resource/browser'
 import { ResourceStatisic, ResourceStatus } from '@platon/feature/resource/common'
+import {
+  ResourceDashboardModel,
+  ResultAnswerDistributionComponent,
+  ResultByExercisesComponent,
+  ResultValueDistributionComponent,
+} from '@platon/feature/result/browser'
+import { DurationPipe, UiStatisticCardComponent } from '@platon/shared/ui'
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker'
+import { NzSelectModule } from 'ng-zorro-antd/select'
 import { NgxEchartsModule } from 'ngx-echarts'
 import { ResourcePresenter } from '../resource.presenter'
 
@@ -28,6 +38,7 @@ import { ResourcePresenter } from '../resource.presenter'
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
+    FormsModule,
     RouterModule,
 
     MatCardModule,
@@ -37,17 +48,26 @@ import { ResourcePresenter } from '../resource.presenter'
     NzGridModule,
     NzEmptyModule,
     NzButtonModule,
+    NzSelectModule,
     NzStatisticModule,
+    NzDatePickerModule,
 
+    DurationPipe,
     NgxEchartsModule,
+    UiStatisticCardComponent,
+    ResultByExercisesComponent,
+    ResultValueDistributionComponent,
+    ResultAnswerDistributionComponent,
   ],
 })
 export class ResourceOverviewPage implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription[] = []
 
   protected context = this.presenter.defaultContext()
-
+  protected dashboard?: ResourceDashboardModel
   protected statusChart?: EChartsOption
+  protected learningInsightsDate = new Date()
+  protected learningInsightsOption: 'score' | 'duration' = 'score'
 
   constructor(
     private readonly router: Router,
@@ -62,6 +82,7 @@ export class ResourceOverviewPage implements OnInit, OnDestroy {
         if (context.statistic) {
           this.buildStatusChart(context.statistic)
         }
+        this.dashboard = await this.presenter.dashboard()
         this.changeDetectorRef.markForCheck()
       })
     )
@@ -131,9 +152,7 @@ export class ResourceOverviewPage implements OnInit, OnDestroy {
         show: true,
       },
       legend: {
-        orient: 'vertical',
-        left: '0',
-        top: 'center',
+        top: 'bottom',
         icon: 'roundRect',
         formatter: (name: string) => {
           const status = Object.values(ResourceStatus).find(

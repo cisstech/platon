@@ -22,7 +22,13 @@ import { CourseActivityGridComponent, CourseActivityTableComponent } from '@plat
 import { Activity, CourseSection } from '@platon/feature/course/common'
 import { CourseSectionActionsComponent } from './section-actions/section-actions.component'
 
-import { DurationPipe, SearchBar, UiSearchBarComponent, UiViewModeComponent } from '@platon/shared/ui'
+import {
+  DurationPipe,
+  SearchBar,
+  UiSearchBarComponent,
+  UiStatisticCardComponent,
+  UiViewModeComponent,
+} from '@platon/shared/ui'
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 import { CoursePresenter } from '../course.presenter'
 
@@ -56,6 +62,7 @@ import { CoursePresenter } from '../course.presenter'
     DurationPipe,
     UiViewModeComponent,
     UiSearchBarComponent,
+    UiStatisticCardComponent,
   ],
 })
 export class CourseDashboardPage implements OnInit, OnDestroy {

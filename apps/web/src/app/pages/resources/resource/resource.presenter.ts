@@ -18,6 +18,7 @@ import {
   ResourceStatisic,
   UpdateResource,
 } from '@platon/feature/resource/common'
+import { ResourceDashboardModel, ResultService } from '@platon/feature/result/browser'
 import { LayoutState, layoutStateFromError } from '@platon/shared/ui'
 import { BehaviorSubject, Observable, Subscription, firstValueFrom } from 'rxjs'
 
@@ -28,6 +29,7 @@ export class ResourcePresenter implements OnDestroy {
   private readonly tagService = inject(TagService)
   private readonly authService = inject(AuthService)
   private readonly fileService = inject(ResourceFileService)
+  private readonly resultService = inject(ResultService)
   private readonly dialogService = inject(DialogService)
   private readonly activatedRoute = inject(ActivatedRoute)
   private readonly resourceService = inject(ResourceService)
@@ -228,6 +230,14 @@ export class ResourcePresenter implements OnDestroy {
       this.alertError()
       return false
     }
+  }
+
+  // Dashboard
+
+  async dashboard(): Promise<ResourceDashboardModel | undefined> {
+    const { resource } = this.context.value as Required<Context>
+    if (resource.type === 'CIRCLE') return undefined
+    return firstValueFrom(this.resultService.resourceDashboard(resource.id))
   }
 
   switchVersion(version: string): void {
