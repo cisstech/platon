@@ -16,12 +16,12 @@ import { NzSelectModule } from 'ng-zorro-antd/select'
 import { NzTypographyModule } from 'ng-zorro-antd/typography'
 
 import { DialogModule } from '@platon/core/browser'
-import { CircleTreeComponent, ResourcePipesModule } from '@platon/feature/resource/browser'
+import { CircleTreeComponent, ResourcePipesModule, ResourceSharingComponent } from '@platon/feature/resource/browser'
 import { ResourceStatus } from '@platon/feature/resource/common'
 import { UiLayoutTabDirective, UiLayoutTabsComponent, UiModalIFrameComponent } from '@platon/shared/ui'
 
-import { ResourcePresenter } from './resource.presenter'
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
+import { ResourcePresenter } from './resource.presenter'
 
 @Component({
   standalone: true,
@@ -55,6 +55,7 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 
     CircleTreeComponent,
     ResourcePipesModule,
+    ResourceSharingComponent,
   ],
 })
 export class ResourcePage implements OnInit, OnDestroy {

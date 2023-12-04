@@ -21,8 +21,8 @@ export class PlayerController {
 
   @Public()
   @Post('/preview')
-  preview(@Body() input: PreviewInputDTO): Promise<PreviewOuputDTO> {
-    return this.playerService.preview(input)
+  preview(@Req() req: IRequest, @Body() input: PreviewInputDTO): Promise<PreviewOuputDTO> {
+    return this.playerService.preview(input, req.user)
   }
 
   @Public()

@@ -17,6 +17,7 @@ export interface Resource {
   readonly topics: Topic[]
   readonly ownerId: string
   readonly parentId?: string
+  readonly publicPreview?: boolean
   readonly permissions: ResourcePermissions
 }
 
@@ -42,6 +43,7 @@ export interface CreateResource {
 export interface UpdateResource {
   readonly name?: string
   readonly desc?: string
+  readonly publicPreview?: boolean
   readonly status?: ResourceStatus
   readonly levels?: string[]
   readonly topics?: string[]

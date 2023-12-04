@@ -102,6 +102,21 @@ export class ResourcePresenter implements OnDestroy {
     throw new ReferenceError('missing resource')
   }
 
+  async versions(): Promise<FileVersions> {
+    const { resource } = this.context.value
+    if (resource) {
+      return firstValueFrom(this.fileService.versions(resource))
+    }
+    throw new ReferenceError('missing resource')
+  }
+
+  switchVersion(version: string): void {
+    this.updateContext({
+      ...this.context.value,
+      version,
+    })
+  }
+
   // Members
 
   async join(): Promise<boolean> {
@@ -240,12 +255,7 @@ export class ResourcePresenter implements OnDestroy {
     return firstValueFrom(this.resultService.resourceDashboard(resource.id))
   }
 
-  switchVersion(version: string): void {
-    this.updateContext({
-      ...this.context.value,
-      version,
-    })
-  }
+  // Private
 
   private async refresh(id: string): Promise<void> {
     const [user, resource] = await Promise.all([
@@ -291,8 +301,12 @@ export class ResourcePresenter implements OnDestroy {
     this.context.next({
       ...newContext,
       version: newContext?.version || 'latest',
-      editorUrl: `/editor/${newContext.resource?.id}?version=${newContext.version || 'latest'}`,
-      previewUrl: `/player/preview/${newContext.resource?.id}?version=${newContext.version || 'latest'}`,
+      editorUrl: newContext.resource
+        ? this.resourceService.editorUrl(newContext.resource.id, newContext.version)
+        : undefined,
+      previewUrl: newContext.resource
+        ? this.resourceService.previewUrl(newContext.resource.id, newContext.version)
+        : undefined,
     })
   }
 }

@@ -26,8 +26,20 @@ nz-select {
   gap: 0.5rem 0;
 }
 
-@media (min-width: 720px) {
+@media (min-width: 768px) {
   p {
     width: 70%;
+  }
+}
+
+@media (max-width: 768px) {
+  :host::ng-deep {
+    button span {
+      display: none;
+    }
+  }
+
+  .hide-on-mobile {
+    display: none;
   }
 }

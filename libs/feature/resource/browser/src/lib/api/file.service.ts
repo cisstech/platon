@@ -32,7 +32,7 @@ export class ResourceFileService {
     return this.provider.release(resource, input)
   }
 
-  versions(resource: Resource): Observable<FileVersions> {
+  versions(resource: string | Resource): Observable<FileVersions> {
     return this.provider.versions(resource)
   }
 

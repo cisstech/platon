@@ -1,0 +1,31 @@
+<ng-container *ngIf="versions">
+  <h2>Partager</h2>
+  <div class="row">
+    <nz-select
+      nzSuffixIcon="global"
+      class="visibility-select"
+      [(ngModel)]="visibility"
+      (ngModelChange)="changeVisibility()"
+    >
+      <nz-option nzLabel="Visible en dehors de PLaTon" nzValue="public" />
+      <nz-option nzLabel="Visible uniquement dans PLaTon" nzValue="private" />
+    </nz-select>
+  </div>
+
+  <div class="row">
+    <nz-select class="version-select" [(ngModel)]="resourceVersion" [nzCustomTemplate]="versionTpt">
+      <ng-template #versionTpt>
+        <i nz-icon nzType="branches" nzTheme="outline"></i>
+        {{ resourceVersion }}
+      </ng-template>
+      <nz-option nzLabel="latest" nzValue="latest" />
+      <nz-option *ngFor="let item of versions.all" [nzLabel]="item.tag" [nzValue]="item.tag" />
+    </nz-select>
+    <nz-button-group>
+      <button nz-button nz-tooltip="Copier le lien" (click)="share()">
+        <i nz-icon nzType="link" nzTheme="outline"></i>
+        Copier le lien
+      </button>
+    </nz-button-group>
+  </div>
+</ng-container>

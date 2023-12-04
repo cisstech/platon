@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable, Logger } from '@nestjs/common'
 import { OnEvent } from '@nestjs/event-emitter'
-import { ForbiddenResponse, NotFoundResponse, User } from '@platon/core/common'
-import { EventService } from '@platon/core/server'
+import { ForbiddenResponse, NotFoundResponse, User, isTeacherRole } from '@platon/core/common'
+import { EventService, UserEntity } from '@platon/core/server'
 import {
   ActivityExercise,
   ActivityVariables,
@@ -85,12 +85,16 @@ export class PlayerService {
    * @param input Informations about the resource to preview.
    * @returns A player layout for the resource.
    */
-  async preview(input: PreviewInput): Promise<PreviewOuputDTO> {
+  async preview(input: PreviewInput, user?: UserEntity): Promise<PreviewOuputDTO> {
     const { source, resource } = await this.resourceFileService.compile({
       resourceId: input.resource,
       version: input.version,
       overrides: input.overrides,
     })
+    if (!resource.publicPreview && (!user || !isTeacherRole(user?.role))) {
+      throw new ForbiddenResponse('You are not allowed to preview this resource')
+    }
+
     const session = await this.createNewSession({ source })
     return {
       exercise: resource.type === 'EXERCISE' ? withExercisePlayer(session) : undefined,
