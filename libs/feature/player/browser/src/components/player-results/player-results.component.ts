@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild, inject } from '@angular/core'
 import { MatIconModule } from '@angular/material/icon'
 import { ActivityPlayer, ExercisePlayer } from '@platon/feature/player/common'
 import { AnswerStatePipesModule, ResultService } from '@platon/feature/result/browser'
@@ -11,6 +11,7 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 import { firstValueFrom } from 'rxjs'
 import { PlayerService } from '../../api/player.service'
 import { PlayerExerciseComponent } from '../player-exercise/player-exercise.component'
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout'
 
 @Component({
   standalone: true,
@@ -31,6 +32,11 @@ import { PlayerExerciseComponent } from '../player-exercise/player-exercise.comp
   ],
 })
 export class PlayerResultsComponent implements OnInit {
+  private readonly resultService = inject(ResultService)
+  private readonly playerService = inject(PlayerService)
+  private readonly changeDetectorRef = inject(ChangeDetectorRef)
+  private readonly breakpointObserver = inject(BreakpointObserver)
+
   @Input() player!: ActivityPlayer
 
   @ViewChild(UiModalTemplateComponent)
@@ -39,11 +45,9 @@ export class PlayerResultsComponent implements OnInit {
   protected results?: UserResults
   protected answers: ExercisePlayer[] = []
 
-  constructor(
-    private readonly resultService: ResultService,
-    private readonly playerService: PlayerService,
-    private readonly changeDetectorRef: ChangeDetectorRef
-  ) {}
+  protected get isMobile(): boolean {
+    return this.breakpointObserver.isMatched([Breakpoints.XSmall, Breakpoints.Small])
+  }
 
   async ngOnInit(): Promise<void> {
     this.results = await firstValueFrom(this.resultService.sessionResults(this.player.sessionId))

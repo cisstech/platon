@@ -93,3 +93,5 @@ export interface UserGroupFilters {
 export const userDisplayName = (user: User): string => {
   return user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : user.username
 }
+
+export const isTeacherRole = (role: UserRoles) => [UserRoles.admin, UserRoles.teacher].includes(role)

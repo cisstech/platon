@@ -40,6 +40,15 @@ export class ResourceService {
       ? user.role === UserRoles.admin
       : user.role === UserRoles.admin || user.role === UserRoles.teacher
   }
+
+  editorUrl(resourceId: string, version?: string): string {
+    return `/editor/${resourceId}?version=${version || 'latest'}`
+  }
+
+  previewUrl(resourceId: string, version?: string): string {
+    return `/player/preview/${resourceId}?version=${version || 'latest'}`
+  }
+
   //#endregion
 
   //#region Resources

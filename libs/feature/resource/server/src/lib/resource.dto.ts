@@ -39,6 +39,10 @@ export class ResourceDTO extends BaseDTO implements Resource {
   @ApiProperty()
   readonly personal!: boolean
 
+  @IsBoolean()
+  @ApiProperty()
+  readonly publicPreview!: boolean
+
   @IsEnum(ResourceStatus)
   @ApiProperty()
   readonly status!: ResourceStatus
@@ -148,6 +152,11 @@ export class UpdateResourceDTO implements UpdateResource {
   @IsOptional()
   @ApiProperty()
   status?: ResourceStatus
+
+  @IsBoolean()
+  @IsOptional()
+  @ApiProperty()
+  publicPreview!: boolean
 
   @IsUUID(undefined, { each: true })
   @IsArray()

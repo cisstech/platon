@@ -1,11 +1,13 @@
 import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 import { ItemResponse, ListResponse } from '@platon/core/common'
 import { IRequest, Mapper } from '@platon/core/server'
 import { ActivityCorrection, UpsertCorrection } from '@platon/feature/result/common'
-import { CorrectionDTO, ActivityCorrectionDTO } from './correction.dto'
+import { ActivityCorrectionDTO, CorrectionDTO } from './correction.dto'
 import { CorrectionService } from './correction.service'
 
 @Controller('results/corrections')
+@ApiTags('Results')
 export class CorrectionController {
   constructor(private readonly service: CorrectionService) {}
 

@@ -111,7 +111,11 @@ export class NotificationService {
     })
 
     return query.valueChanges.pipe(
-      map((result) => result.data.notifications.edges.map((edge) => decodeNotificationFragment(edge.node)))
+      map((result) =>
+        result.data.notifications.edges
+          .filter((n) => !n.node.readAt)
+          .map((edge) => decodeNotificationFragment(edge.node))
+      )
     )
   }
 

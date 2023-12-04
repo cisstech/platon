@@ -4,6 +4,10 @@
     <mat-icon>dashboard</mat-icon>
     Tableau de bord
   </a>
+  <a class="nav-link" mat-button [routerLink]="'/agenda'" [routerLinkActive]="'active'">
+    <mat-icon>calendar_month</mat-icon>
+    Agenda
+  </a>
   <a class="nav-link" mat-button [routerLink]="'/courses'" [routerLinkActive]="'active'">
     <mat-icon>local_library</mat-icon>
     Cours
@@ -39,7 +43,6 @@
   </a>
 
   <a mat-button href="https://github.com/cisstech/platon" target="_blank">
-    Powered by
     <img class="cisstech" src="assets/vendors/cisstech/cisstech.gif" alt="Logo cisstech " />
   </a>
 </nav>

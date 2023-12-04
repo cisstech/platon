@@ -1,27 +1,149 @@
-<ng-container>
-  <nz-row [nzGutter]="[24, 24]" nzAlign="top">
-    <nz-col nzXs="24" nzSm="24" nzMd="14" nzLg="14" nzXl="14">
-      <h2>Événements à venir</h2>
-      <nz-calendar [nzFullscreen]="true">
-        <div *nzDateCell="let date">
-          <ng-container *ngIf="false">
-            <!-- TODO show modal with events -->
-            <nz-badge [nzStatus]="'warning'" />
-          </ng-container>
-        </div>
-      </nz-calendar>
-    </nz-col>
-    <nz-col nzXs="24" nzSm="24" nzMd="10" nzLg="10" nzXl="10">
-      <aside>
+<nz-skeleton [nzActive]="context.state === 'LOADING'" [nzLoading]="context.state === 'LOADING'">
+  <section>
+    <ng-container [ngSwitch]="context.state">
+      <ng-container *ngSwitchCase="'READY'">
+        <ng-container *ngTemplateOutlet="content" />
+      </ng-container>
+      <ng-container *ngSwitchCase="'SERVER_ERROR'">
+        <ui-error-500 />
+      </ng-container>
+      <ng-container *ngSwitchCase="'FORBIDDEN'">
+        <ui-error-403 />
+      </ng-container>
+      <ng-container *ngSwitchCase="'NOT_FOUND'">
+        <ui-error-404 />
+      </ng-container>
+    </ng-container>
+  </section>
+</nz-skeleton>
+
+<ng-template #content>
+  <ng-container *ngIf="context.dashboard">
+    <nz-row [nzGutter]="[24, 24]" nzAlign="top">
+      <nz-col nzSpan="24">
+        <h2>Votre tableau de bord</h2>
+      </nz-col>
+      <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
+        <ui-statistic-card
+          matIcon="check_circle"
+          ribbonColor="#8e44ad"
+          valueSuffix="%"
+          description="Taux de réussite"
+          tooltip="Pourcentage des exercices complétés avec une note de 100."
+          [value]="context.dashboard.user.successRate"
+          [shouldBePositive]="true"
+        />
+      </nz-col>
+      <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
+        <ui-statistic-card
+          matIcon="thumb_up"
+          ribbonColor="#f1c40f"
+          valueSuffix="%"
+          description="Taux de réponses"
+          tooltip="Pourcentage des exercices avec au moins une réponse."
+          [value]="context.dashboard.user.answerRate"
+          [shouldBePositive]="true"
+        />
+      </nz-col>
+
+      <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
+        <ui-statistic-card
+          matIcon="thumb_down"
+          ribbonColor="#16a085"
+          valueSuffix="%"
+          description="Taux d'abandon"
+          tooltip="Pourcentage des exercices sans aucune réponse."
+          [value]="context.dashboard.user.dropoutRate"
+          [shouldBeZero]="true"
+        />
+      </nz-col>
+      <!--  -->
+      <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
+        <ui-statistic-card
+          matIcon="local_library"
+          ribbonColor="#34495e"
+          description="Cours suivis"
+          [value]="context.dashboard.user.courseCount"
+        />
+      </nz-col>
+      <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
+        <ui-statistic-card
+          matIcon="widgets"
+          ribbonColor="#c0392b"
+          description="Activités suivies"
+          [value]="context.dashboard.user.activityCount"
+        />
+      </nz-col>
+      <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
+        <ui-statistic-card
+          matIcon="article"
+          ribbonColor="#349d55"
+          description="Exercices réalisés"
+          [value]="context.dashboard.user.exerciseCount"
+        />
+      </nz-col>
+      <!--  -->
+      <nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12" nzXl="12">
+        <ui-statistic-card
+          matIcon="star"
+          ribbonColor="#7f8c8d"
+          description="Score moyen"
+          [value]="context.dashboard.user.averageScore"
+          tooltip="Moyenne du score sur l'ensemble des exercices que vous avez complétés."
+          [shouldBePositive]="true"
+        />
+      </nz-col>
+      <nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12" nzXl="12">
+        <ui-statistic-card
+          matIcon="access_time"
+          ribbonColor="#f39c12"
+          description="Temps d'apprentissage"
+          [value]="context.dashboard.user.totalDuration | duration"
+        />
+      </nz-col>
+      <!--  -->
+      <nz-col nzSpan="24">
+        <h2>Évolution de votre apprentissage</h2>
+      </nz-col>
+      <nz-col nzSpan="24">
         <mat-card>
           <mat-card-header>
-            <mat-card-title>Notifications</mat-card-title>
+            <nz-select [(ngModel)]="learningInsightsOption">
+              <nz-option nzValue="score" nzLabel="Note moyenne" />
+              <nz-option nzValue="duration" nzLabel="Temps d'apprentissage" />
+            </nz-select>
+            <nz-date-picker nzMode="month" [(ngModel)]="learningInsightsDate" />
           </mat-card-header>
           <mat-card-content>
-            <notif-list [(notifications)]="notifications" />
+            <br />
+            <result-value-distribution
+              *ngIf="learningInsightsOption === 'score'"
+              legend="Note moyenne"
+              [date]="learningInsightsDate"
+              [distribution]="context.dashboard.user.durationDistribution"
+            />
+            <result-value-distribution
+              *ngIf="learningInsightsOption === 'duration'"
+              legend="Temps d'apprentissage"
+              [date]="learningInsightsDate"
+              [isTimeValues]="true"
+              [color]="'#FF0087'"
+              [colorGradient]="['rgb(255, 0, 135)', 'rgb(135, 0, 157)']"
+              [distribution]="context.dashboard.user.durationDistribution"
+            />
           </mat-card-content>
         </mat-card>
-      </aside>
-    </nz-col>
-  </nz-row>
-</ng-container>
+      </nz-col>
+      <nz-col nzSpan="24">
+        <h2>Répartition de vos résultats</h2>
+      </nz-col>
+      <nz-col nzSpan="24">
+        <mat-card>
+          <mat-card-content>
+            <result-answer-distribution [distribution]="context.dashboard.user.answerDistribution" />
+          </mat-card-content>
+        </mat-card>
+      </nz-col>
+    </nz-row>
+  </ng-container>
+</ng-template>

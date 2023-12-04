@@ -1,14 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CommonModule } from '@angular/common'
-import {
-  AfterViewChecked,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  OnDestroy,
-  OnInit,
-} from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core'
 import { Router, RouterModule } from '@angular/router'
 import { Subscription } from 'rxjs'
 
@@ -22,9 +14,19 @@ import { NzStatisticModule } from 'ng-zorro-antd/statistic'
 
 import { EChartsOption } from 'echarts'
 
+import { FormsModule } from '@angular/forms'
 import { MatButtonModule } from '@angular/material/button'
 import { RESOURCE_STATUS_COLORS_HEX, RESOURCE_STATUS_NAMES } from '@platon/feature/resource/browser'
 import { ResourceStatisic, ResourceStatus } from '@platon/feature/resource/common'
+import {
+  ResourceDashboardModel,
+  ResultAnswerDistributionComponent,
+  ResultByExercisesComponent,
+  ResultValueDistributionComponent,
+} from '@platon/feature/result/browser'
+import { DurationPipe, UiStatisticCardComponent } from '@platon/shared/ui'
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker'
+import { NzSelectModule } from 'ng-zorro-antd/select'
 import { NgxEchartsModule } from 'ngx-echarts'
 import { ResourcePresenter } from '../resource.presenter'
 
@@ -36,6 +38,7 @@ import { ResourcePresenter } from '../resource.presenter'
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
+    FormsModule,
     RouterModule,
 
     MatCardModule,
@@ -45,22 +48,30 @@ import { ResourcePresenter } from '../resource.presenter'
     NzGridModule,
     NzEmptyModule,
     NzButtonModule,
+    NzSelectModule,
     NzStatisticModule,
+    NzDatePickerModule,
 
+    DurationPipe,
     NgxEchartsModule,
+    UiStatisticCardComponent,
+    ResultByExercisesComponent,
+    ResultValueDistributionComponent,
+    ResultAnswerDistributionComponent,
   ],
 })
-export class ResourceOverviewPage implements OnInit, AfterViewChecked, OnDestroy {
+export class ResourceOverviewPage implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription[] = []
-  protected view: [number, number] = [0, 0]
-  protected context = this.presenter.defaultContext()
 
+  protected context = this.presenter.defaultContext()
+  protected dashboard?: ResourceDashboardModel
   protected statusChart?: EChartsOption
+  protected learningInsightsDate = new Date()
+  protected learningInsightsOption: 'score' | 'duration' = 'score'
 
   constructor(
     private readonly router: Router,
     private readonly presenter: ResourcePresenter,
-    private readonly elementRef: ElementRef<HTMLElement>,
     private readonly changeDetectorRef: ChangeDetectorRef
   ) {}
 
@@ -71,14 +82,10 @@ export class ResourceOverviewPage implements OnInit, AfterViewChecked, OnDestroy
         if (context.statistic) {
           this.buildStatusChart(context.statistic)
         }
+        this.dashboard = await this.presenter.dashboard()
         this.changeDetectorRef.markForCheck()
       })
     )
-  }
-
-  ngAfterViewChecked(): void {
-    this.view = [this.elementRef.nativeElement.offsetWidth * 0.65, 400]
-    this.changeDetectorRef.markForCheck()
   }
 
   ngOnDestroy(): void {
@@ -145,9 +152,7 @@ export class ResourceOverviewPage implements OnInit, AfterViewChecked, OnDestroy
         show: true,
       },
       legend: {
-        orient: 'vertical',
-        left: '0',
-        top: 'center',
+        top: 'bottom',
         icon: 'roundRect',
         formatter: (name: string) => {
           const status = Object.values(ResourceStatus).find(

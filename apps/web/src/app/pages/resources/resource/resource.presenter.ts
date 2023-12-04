@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { Injectable, OnDestroy } from '@angular/core'
+import { Injectable, OnDestroy, inject } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { AuthService, DialogService, TagService } from '@platon/core/browser'
 import { Level, ListResponse, Topic, User } from '@platon/core/common'
@@ -18,26 +18,29 @@ import {
   ResourceStatisic,
   UpdateResource,
 } from '@platon/feature/resource/common'
+import { ResourceDashboardModel, ResultService } from '@platon/feature/result/browser'
 import { LayoutState, layoutStateFromError } from '@platon/shared/ui'
 import { BehaviorSubject, Observable, Subscription, firstValueFrom } from 'rxjs'
 
 @Injectable()
 export class ResourcePresenter implements OnDestroy {
   private readonly subscriptions: Subscription[] = []
+
+  private readonly tagService = inject(TagService)
+  private readonly authService = inject(AuthService)
+  private readonly fileService = inject(ResourceFileService)
+  private readonly resultService = inject(ResultService)
+  private readonly dialogService = inject(DialogService)
+  private readonly activatedRoute = inject(ActivatedRoute)
+  private readonly resourceService = inject(ResourceService)
+
   private readonly context = new BehaviorSubject<Context>(this.defaultContext())
 
   private isInitialLoading = true
 
   readonly contextChange = this.context.asObservable()
 
-  constructor(
-    private readonly tagService: TagService,
-    private readonly authService: AuthService,
-    private readonly fileService: ResourceFileService,
-    private readonly dialogService: DialogService,
-    private readonly activatedRoute: ActivatedRoute,
-    private readonly resourceService: ResourceService
-  ) {
+  constructor() {
     this.subscriptions.push(
       this.activatedRoute.paramMap.subscribe((params) => {
         this.onChangeRoute(params.get('id') as string)
@@ -97,6 +100,21 @@ export class ResourcePresenter implements OnDestroy {
       return [tree, versions]
     }
     throw new ReferenceError('missing resource')
+  }
+
+  async versions(): Promise<FileVersions> {
+    const { resource } = this.context.value
+    if (resource) {
+      return firstValueFrom(this.fileService.versions(resource))
+    }
+    throw new ReferenceError('missing resource')
+  }
+
+  switchVersion(version: string): void {
+    this.updateContext({
+      ...this.context.value,
+      version,
+    })
   }
 
   // Members
@@ -229,12 +247,15 @@ export class ResourcePresenter implements OnDestroy {
     }
   }
 
-  switchVersion(version: string): void {
-    this.updateContext({
-      ...this.context.value,
-      version,
-    })
+  // Dashboard
+
+  async dashboard(): Promise<ResourceDashboardModel | undefined> {
+    const { resource } = this.context.value as Required<Context>
+    if (resource.type === 'CIRCLE') return undefined
+    return firstValueFrom(this.resultService.resourceDashboard(resource.id))
   }
+
+  // Private
 
   private async refresh(id: string): Promise<void> {
     const [user, resource] = await Promise.all([
@@ -280,8 +301,12 @@ export class ResourcePresenter implements OnDestroy {
     this.context.next({
       ...newContext,
       version: newContext?.version || 'latest',
-      editorUrl: `/editor/${newContext.resource?.id}?version=${newContext.version || 'latest'}`,
-      previewUrl: `/player/preview/${newContext.resource?.id}?version=${newContext.version || 'latest'}`,
+      editorUrl: newContext.resource
+        ? this.resourceService.editorUrl(newContext.resource.id, newContext.version)
+        : undefined,
+      previewUrl: newContext.resource
+        ? this.resourceService.previewUrl(newContext.resource.id, newContext.version)
+        : undefined,
     })
   }
 }

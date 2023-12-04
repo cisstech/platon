@@ -71,6 +71,7 @@ import { ResourceWatcherController, ResourceWatcherEntity, ResourceWatcherServic
     UserModule,
   ],
   exports: [
+    TypeOrmModule,
     ResourceFileService,
     ResourceService,
     ResourceViewService,

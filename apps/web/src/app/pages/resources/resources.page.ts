@@ -93,7 +93,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
             return new Fuse(Array.from(suggestions), {
               includeMatches: true,
               findAllMatches: false,
-              threshold: 0.2,
+              threshold: 0.4,
             })
               .search(query)
               .map((e) => e.item)

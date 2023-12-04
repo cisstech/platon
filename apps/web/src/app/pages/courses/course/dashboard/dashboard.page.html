@@ -65,39 +65,42 @@
     </nz-col>
     <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
       <aside>
-        <mat-card>
-          <mat-card-content>
-            <nz-statistic
-              nzTitle="Votre avancement sur les activités"
-              [nzValueTemplate]="progressionTemplate"
-              [nzValueStyle]="{ margin: '1rem 0' }"
-            >
-              <ng-template #progressionTemplate>
-                <div class="container-progression">
-                  <nz-progress
-                    [nzPercent]="course.progression"
-                    nzStrokeLinecap="square"
-                    nzType="circle"
-                    nzStrokeWidth="8"
-                  />
-                  <p *ngIf="course.timeSpent">{{ course.timeSpent | duration }}</p>
-                </div>
-              </ng-template>
-            </nz-statistic>
-          </mat-card-content>
-        </mat-card>
-
-        <mat-card>
-          <mat-card-content>
-            <nz-statistic [nzValue]="course.teacherCount" nzTitle="Enseignants" />
-          </mat-card-content>
-        </mat-card>
-
-        <mat-card>
-          <mat-card-content>
-            <nz-statistic [nzValue]="course.studentCount" nzTitle="Élèves" />
-          </mat-card-content>
-        </mat-card>
+        <nz-row [nzGutter]="[24, 24]">
+          <nz-col nzSpan="24">
+            <mat-card>
+              <mat-card-content>
+                <nz-statistic
+                  nzTitle="Votre avancement sur les activités"
+                  [nzValueTemplate]="progressionTemplate"
+                  [nzValueStyle]="{ margin: '1rem 0' }"
+                >
+                  <ng-template #progressionTemplate>
+                    <div class="container-progression">
+                      <nz-progress
+                        [nzPercent]="course.progression"
+                        nzStrokeLinecap="square"
+                        nzType="circle"
+                        nzStrokeWidth="8"
+                      />
+                      <p *ngIf="course.timeSpent">{{ course.timeSpent | duration }}</p>
+                    </div>
+                  </ng-template>
+                </nz-statistic>
+              </mat-card-content>
+            </mat-card>
+          </nz-col>
+          <nz-col nzSpan="24">
+            <ui-statistic-card
+              nzIcon="team"
+              ribbonColor="#8e44ad"
+              description="Enseignants"
+              [value]="course.teacherCount"
+            />
+          </nz-col>
+          <nz-col nzSpan="24">
+            <ui-statistic-card nzIcon="team" ribbonColor="#7f8c8d" description="Élèves" [value]="course.studentCount" />
+          </nz-col>
+        </nz-row>
       </aside>
     </nz-col>
   </nz-row>

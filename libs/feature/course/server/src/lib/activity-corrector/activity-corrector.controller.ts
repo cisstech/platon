@@ -1,10 +1,12 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 import { ItemResponse, ListResponse, NoContentResponse, UserRoles } from '@platon/core/common'
 import { Mapper, Roles } from '@platon/core/server'
 import { ActivityCorrectorDTO, CreateActivityCorrectorDTO } from './activity-corrector.dto'
 import { ActivityCorrectorService } from './activity-corrector.service'
 
 @Controller('activities/:activityId/correctors')
+@ApiTags('Courses')
 export class ActivityCorrectorController {
   constructor(private readonly service: ActivityCorrectorService) {}
 

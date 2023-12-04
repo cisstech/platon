@@ -1,0 +1,31 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.visibility-select {
+  width: 100%;
+  display: block;
+}
+
+.version-select {
+  min-width: 100px;
+  margin-right: 8px;
+}
+
+i[nzType='branches'] {
+  display: inline-block;
+  margin-right: 8px;
+}
+
+.spacer {
+  flex: 1;
+}

@@ -115,6 +115,9 @@ pre {
   display: flex;
   align-items: center;
   margin-top: 0.5rem;
+  &.align-right {
+    justify-content: flex-end;
+  }
 }
 
 .spacer {
