@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common'
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { RouterModule } from '@angular/router'
 import { CircleTree } from '@platon/feature/resource/common'
+import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzTreeModule } from 'ng-zorro-antd/tree'
 import { NzTreeFlatDataSource, NzTreeFlattener, NzTreeViewModule } from 'ng-zorro-antd/tree-view'
 
@@ -13,7 +14,7 @@ import { NzTreeFlatDataSource, NzTreeFlattener, NzTreeViewModule } from 'ng-zorr
   templateUrl: './circle-tree.component.html',
   styleUrls: ['./circle-tree.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, RouterModule, NzTreeModule, NzTreeViewModule],
+  imports: [CommonModule, RouterModule, NzIconModule, NzTreeModule, NzTreeViewModule],
 })
 export class CircleTreeComponent implements OnInit {
   @Input() tree!: CircleTree
@@ -46,7 +47,14 @@ export class CircleTreeComponent implements OnInit {
 
   ngOnInit(): void {
     this.dataSource.setData([this.tree])
-    this.treeControl.expandAll()
+    if (this.selectable) {
+      this.treeControl.expandAll()
+    } else {
+      const firstNode = this.treeControl.dataNodes[0]
+      if (firstNode) {
+        this.treeControl.expand(firstNode)
+      }
+    }
     if (this.selection) {
       for (const node of this.flatNodeMap.keys()) {
         if (node.id === this.selection && !node.disabled) {
