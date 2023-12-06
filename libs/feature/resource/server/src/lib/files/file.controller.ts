@@ -16,7 +16,7 @@ import {
 } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { ApiTags } from '@nestjs/swagger'
-import { SuccessResponse, UnauthorizedResponse } from '@platon/core/common'
+import { BadRequestResponse, SuccessResponse, UnauthorizedResponse } from '@platon/core/common'
 import { IRequest, Public } from '@platon/core/server'
 import { PLSourceFile } from '@platon/feature/compiler'
 import { ExerciseTransformInput, FileTypes, ResourceFile } from '@platon/feature/resource/common'
@@ -194,11 +194,21 @@ export class ResourceFileController {
       throw new UnauthorizedResponse('You are not allowed to write this resource')
     }
 
-    if (input.rename) {
-      await repo.rename(path, input.destination)
-    } else {
-      await repo.move(path, input.destination, input.copy)
+    if (input.unzip) {
+      await repo.unzip(path)
+      return new SuccessResponse()
     }
+
+    if (input.destination == null) {
+      throw new BadRequestResponse('You must provide a destination')
+    }
+
+    if (input.rename) {
+      await repo.rename(path, input.destination!)
+    } else {
+      await repo.move(path, input.destination!, input.copy)
+    }
+
     return new SuccessResponse()
   }
 

@@ -13,6 +13,7 @@ import {
 import * as fs from 'fs'
 import * as git from 'isomorphic-git'
 import * as Path from 'path'
+import * as unzipper from 'unzipper'
 import { simpleGit } from 'simple-git'
 
 const BASE = Path.join(process.cwd(), 'resources')
@@ -279,6 +280,21 @@ export class Repo {
     }
     await fs.promises.writeFile(abspath, data)
     await this.commit(`update ${path}`)
+  }
+
+  async unzip(path: string) {
+    const abspath = this.abspath(path)
+    const dstpath = Path.dirname(abspath)
+    await fs
+      .createReadStream(abspath)
+      .pipe(unzipper.Extract({ path: dstpath }))
+      .promise()
+
+    // Remove macOS and Windows  metadata folders
+    const specialFolders = ['__MACOSX', '__win32.ini', '__win32'].filter((x) => this.exists(Path.join(dstpath, x)))
+    await Promise.all(specialFolders.map((x) => fs.promises.rm(Path.join(dstpath, x), { recursive: true })))
+
+    await this.commit(`unzip ${path}`)
   }
 
   async upload(src: string, dst: string) {

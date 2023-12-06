@@ -68,10 +68,15 @@ export class FileMoveDTO implements FileMove {
 
   @IsBoolean()
   @IsOptional()
+  unzip?: boolean
+
+  @IsBoolean()
+  @IsOptional()
   rename?: boolean
 
   @IsString()
-  destination!: string
+  @IsOptional()
+  destination?: string
 }
 
 export class FileReleaseDTO implements FileRelease {
