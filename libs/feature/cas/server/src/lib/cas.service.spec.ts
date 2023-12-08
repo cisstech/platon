@@ -1,5 +1,5 @@
 import { Test } from '@nestjs/testing'
-import { FeatureCasServerService } from './feature-cas-server.service'
+import { FeatureCasServerService } from './feature/cas/server.service'
 
 describe('FeatureCasServerService', () => {
   let service: FeatureCasServerService

@@ -20,7 +20,7 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 
 import { DialogService } from '@platon/core/browser'
 import { User } from '@platon/core/common'
-import { Cas, UpdateCas } from '@platon/feature-cas-common'
+import { Cas, UpdateCas } from '@platon/feature/cas/common'
 import { UiModalDrawerComponent } from '@platon/shared/ui'
 import { firstValueFrom } from 'rxjs'
 import { CasService } from '../../api/cas.service'

@@ -9,7 +9,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzIconModule } from 'ng-zorro-antd/icon'
 
 import { NgeUiListModule } from '@cisstech/nge/ui/list'
-import { Cas, CasFilters } from '@platon/feature-cas-common'
+import { Cas, CasFilters } from '@platon/feature/cas/common'
 import { SearchBar, UiSearchBarComponent } from '@platon/shared/ui'
 import { CasService } from '../../api/cas.service'
 
