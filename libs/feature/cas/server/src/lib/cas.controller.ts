@@ -12,7 +12,7 @@ import {
   HttpRedirectResponse,
 } from '@nestjs/common'
 import { CreateCasDTO, UpdateCasDTO } from './cas.dto'
-import { AuthService, Mapper, Public } from '@platon/core/server'
+import { AuthService, Mapper, Public, UserService } from '@platon/core/server'
 import { HttpService } from '@nestjs/axios'
 import { CasService } from './cas.service'
 import { CasDTO, CasFiltersDTO } from './cas.dto'
@@ -30,7 +30,8 @@ export class CasController {
     private readonly service: CasService,
     private readonly http: HttpService,
     private readonly LtiService: LTIService,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
+    private readonly userService: UserService
   ) {}
 
   async checkCasTicket(serviceValidateURL: string, ticket: string, service: string): Promise<Optional<string>> {
@@ -109,7 +110,10 @@ export class CasController {
         )
       ).orElseThrow(() => new Error('User not found'))
 
-      const token = await this.authService.authenticate(lmsUserEntity.user.id, lmsUserEntity.user.username)
+      const token = await this.authService.authenticate(
+        lmsUserEntity.userId,
+        (await this.userService.findById(lmsUserEntity.userId)).orElseThrow(() => new Error('User not found')).username
+      )
       return {
         url: `/login?access-token=${token.accessToken}&refresh-token=${token.refreshToken}&next=${query.next}`,
         statusCode: 302,

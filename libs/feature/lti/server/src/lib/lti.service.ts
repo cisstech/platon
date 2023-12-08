@@ -94,13 +94,15 @@ export class LTIService {
     return this.lmsRepo.delete(id)
   }
 
-  async findLmsUserByUsername(username: string, lmses: LmsEntity[]): Promise<Optional<LmsUserEntity>> {
-    return Optional.ofNullable(await this.lmsUserRepo.findOne({
-      where: {
-        username,
-        lmsId: In(lmses.map(lms => lms.id))
-      }
-    }))
+  async findLmsUserByUsername(username: string, lmses: LmsEntity[] = []): Promise<Optional<LmsUserEntity>> {
+    return Optional.ofNullable(
+      await this.lmsUserRepo.findOne({
+        where: {
+          username,
+          lmsId: In(lmses.map((lms) => lms.id)),
+        },
+      })
+    )
   }
 
   /**
