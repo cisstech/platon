@@ -19,7 +19,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 
 import { DialogModule, DialogService } from '@platon/core/browser'
-import { CreateCas, Cas } from '@platon/feature-cas-common'
+import { CreateCas, Cas } from '@platon/feature/cas/common'
 import { UiModalDrawerComponent } from '@platon/shared/ui'
 import { firstValueFrom } from 'rxjs'
 import { CasService } from '../../api/cas.service'

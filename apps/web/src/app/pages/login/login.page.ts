@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core'
 import {MatDividerModule} from '@angular/material/divider';
 
 import { AuthSignInComponent } from '@platon/core/browser'
-import { CasSignInComponent } from '@platon/feature-cas-browser';
+import { CasSignInComponent } from '@platon/feature/cas/browser';
 
 @Component({
   standalone: true,

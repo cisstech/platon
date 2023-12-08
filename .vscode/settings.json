@@ -20,5 +20,15 @@
   },
   "files.trimFinalNewlines": true,
   "files.trimTrailingWhitespace": true,
-  "npm.packageManager": "yarn"
+  "npm.packageManager": "yarn",
+  "conventionalCommits.scopes": [
+    "project",
+    "cas",
+    "compiler",
+    "course",
+    "lti",
+    "notification",
+    "player",
+    "resource"
+  ]
 }

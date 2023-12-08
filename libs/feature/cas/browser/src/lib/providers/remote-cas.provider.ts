@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { CreatedResponse, ItemResponse, ListResponse } from '@platon/core/common'
-import { CreateCas, Cas, CasFilters, UpdateCas } from '@platon/feature-cas-common'
+import { CreateCas, Cas, CasFilters, UpdateCas } from '@platon/feature/cas/common'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { CasProvider } from '../models/cas-provider'

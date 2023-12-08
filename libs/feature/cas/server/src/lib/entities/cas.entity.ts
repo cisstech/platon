@@ -1,6 +1,6 @@
 import { BaseEntity } from '@platon/core/server'
 import { Column, Entity, JoinTable, ManyToMany } from 'typeorm'
-import { CasVersions } from '@platon/feature-cas-common'
+import { CasVersions } from '@platon/feature/cas/common'
 import { LmsEntity } from '@platon/feature/lti/server'
 
 @Entity('Cas')

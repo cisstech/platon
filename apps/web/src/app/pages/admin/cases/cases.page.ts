@@ -6,8 +6,8 @@ import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 
-import { CasCreateDrawerComponent, CasSearchBarComponent, CasTableComponent } from '@platon/feature-cas-browser'
-import { Cas } from '@platon/feature-cas-common'
+import { CasCreateDrawerComponent, CasSearchBarComponent, CasTableComponent } from '@platon/feature/cas/browser'
+import { Cas } from '@platon/feature/cas/common'
 import { LTIService } from '@platon/feature/lti/browser'
 import { Lms } from '@platon/feature/lti/common'
 

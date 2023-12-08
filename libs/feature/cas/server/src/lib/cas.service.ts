@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { NotFoundResponse, OrderingDirections } from '@platon/core/common'
-import { CasFilters, CasOrdering } from '@platon/feature-cas-common'
+import { CasFilters, CasOrdering } from '@platon/feature/cas/common'
 import { Repository } from 'typeorm'
 import { Optional } from 'typescript-optional'
 import { CasEntity } from './entities/cas.entity'

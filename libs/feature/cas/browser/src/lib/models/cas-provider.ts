@@ -1,5 +1,5 @@
 import { ListResponse } from '@platon/core/common'
-import { CreateCas, Cas, CasFilters, UpdateCas } from '@platon/feature-cas-common'
+import { CreateCas, Cas, CasFilters, UpdateCas } from '@platon/feature/cas/common'
 import { Observable } from 'rxjs'
 
 export abstract class CasProvider {

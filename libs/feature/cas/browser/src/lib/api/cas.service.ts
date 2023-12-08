@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { ListResponse } from '@platon/core/common'
-import { CreateCas, Cas, CasFilters, UpdateCas } from '@platon/feature-cas-common'
+import { CreateCas, Cas, CasFilters, UpdateCas } from '@platon/feature/cas/common'
 import { Observable } from 'rxjs'
 import { CasProvider } from '../models/cas-provider'
 

@@ -10,7 +10,7 @@ import {
   SimpleChanges,
 } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
-import { Cas } from '@platon/feature-cas-common'
+import { Cas } from '@platon/feature/cas/common'
 
 import { NzTableModule } from 'ng-zorro-antd/table'
 import { NzTagModule } from 'ng-zorro-antd/tag'
