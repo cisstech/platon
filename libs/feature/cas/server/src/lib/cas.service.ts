@@ -21,7 +21,13 @@ export class CasService {
   }
 
   async findCasByName(name: string): Promise<Optional<CasEntity>> {
-    return Optional.ofNullable(await this.casRepo.findOne({ where: { name } }))
+    return Optional.ofNullable(
+      await this.casRepo
+        .createQueryBuilder('cas')
+        .where('cas.name = :name', { name })
+        .leftJoinAndSelect('cas.lmses', 'lmses')
+        .getOne()
+    )
   }
 
   async searchCas(filters: CasFilters = {}): Promise<[CasEntity[], number]> {

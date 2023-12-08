@@ -9,10 +9,7 @@ import { AuthProvider } from '../models/auth-provider'
 
 @Injectable()
 export class RemoteAuthProvider extends AuthProvider {
-  constructor(
-    private readonly http: HttpClient,
-    private readonly tokenService: TokenService
-  ) {
+  constructor(private readonly http: HttpClient, private readonly tokenService: TokenService) {
     super()
   }
 
@@ -25,6 +22,7 @@ export class RemoteAuthProvider extends AuthProvider {
     if (token) {
       const helper = new JwtHelperService()
       const data = helper.decodeToken(token.accessToken)
+
       try {
         return await lastValueFrom(this.http.get<ItemResponse<User>>('/api/v1/users/' + data.username)).then(
           (response) => response.resource

@@ -18,7 +18,7 @@ export class LmsUserEntity extends BaseEntity {
   @Column({ name: 'user_id' })
   userId!: string
 
-  @Column({ name: 'username', nullable: true})
+  @Column({ name: 'username', nullable: true })
   username!: string
 
   @ManyToOne(() => UserEntity, { onDelete: 'CASCADE' })
