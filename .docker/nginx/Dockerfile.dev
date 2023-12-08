@@ -10,4 +10,3 @@ COPY .docker/nginx/ssl/certs/localhost.key /etc/nginx/ssl/localhost.key
 # Forward nginx logs to docker
 # https://alexanderallen.medium.com/forwarding-nginx-logs-to-docker-3bb6283a207
 RUN ln -sf /dev/stdout /var/log/nginx/access.log && ln -sf /dev/stderr /var/log/nginx/error.log
-
