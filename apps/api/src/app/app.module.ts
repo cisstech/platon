@@ -1,5 +1,6 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common'
 import { CoreServerModule } from '@platon/core/server'
+import { FeatureCasServerModule } from '@platon/feature-cas-server'
 import { FeatureCourseServerModule } from '@platon/feature/course/server'
 import { FeatureLtiServerModule, LTIMiddleware } from '@platon/feature/lti/server'
 import { FeatureNotificationServerModule } from '@platon/feature/notification/server'
@@ -16,6 +17,7 @@ import { FeatureResultServerModule } from '@platon/feature/result/server'
     FeatureResultServerModule,
     FeatureResourceServerModule,
     FeatureNotificationServerModule,
+    FeatureCasServerModule,
   ],
 })
 export class AppModule implements NestModule {

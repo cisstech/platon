@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { NotFoundResponse, OrderingDirections, UserRoles } from '@platon/core/common'
 import { UserService } from '@platon/core/server'
 import { LmsFilters, LmsOrdering } from '@platon/feature/lti/common'
-import { Repository } from 'typeorm'
+import { In, Repository } from 'typeorm'
 import { Optional } from 'typescript-optional'
 import { LmsUserEntity } from './entities/lms-user.entity'
 import { LmsEntity } from './entities/lms.entity'
@@ -83,6 +83,15 @@ export class LTIService {
     return this.lmsRepo.delete(id)
   }
 
+  async findLmsUserByUsername(username: string, lmses: LmsEntity[]): Promise<Optional<LmsUserEntity>> {
+    return Optional.ofNullable(await this.lmsUserRepo.findOne({
+      where: {
+        username,
+        lmsId: In(lmses.map(lms => lms.id))
+      }
+    }))
+  }
+
   /**
    * Retrieves or generates an user for the LMS user based on the provided LTI payload.
    * It first checks for the available username fields in the payload, and if none are found,
@@ -104,8 +113,9 @@ export class LTIService {
       return existing
     }
 
-    let name = payload.ext_user_username || payload.custom_lis_user_username || payload.ext_d2l_username
-    if (!name && payload.lis_person_name_family && payload.lis_person_name_given) {
+    const lti_name = payload.ext_user_username || payload.custom_lis_user_username || payload.ext_d2l_username
+    let name = ''
+    if (!lti_name && payload.lis_person_name_family && payload.lis_person_name_given) {
       name = payload.lis_person_name_given[0].toLowerCase() + '_' + payload.lis_person_name_family.toLowerCase()
     }
 
@@ -135,6 +145,7 @@ export class LTIService {
         userId: user.id,
         lmsId: lms.id,
         lmsUserId: payload.user_id + '',
+        username: lti_name || undefined,
         user,
       })
     )

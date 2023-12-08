@@ -1,0 +1,41 @@
+<ui-modal-drawer size="large" [title]="cas?.name || ''" (closed)="cas = undefined" #modal>
+  <ng-template>
+    <h2>Informations</h2>
+    <form [formGroup]="form">
+      <mat-form-field appearance="fill">
+        <mat-label>Nom du CAS</mat-label>
+        <input formControlName="name" matInput />
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>URL de connexion</mat-label>
+        <input formControlName="loginURL" type="url" matInput />
+        <mat-hint>L'URL de la page de connexion de votre CAS.</mat-hint>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>URL du service de validation</mat-label>
+        <input formControlName="serviceValidateURL" type="url" matInput />
+        <mat-hint>L'URL du service de validation des tickets reçus.</mat-hint>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Version du CAS</mat-label>
+        <mat-select formControlName="version" matInput>
+          <mat-option value="3.0">3.0</mat-option>
+          <mat-option value="2.0" disabled>2.0</mat-option>
+          <mat-option value="1.0" disabled>1.0</mat-option>
+          <mat-option value="saml1.1" disabled>saml1.1</mat-option>
+        </mat-select>
+        <mat-hint>La version utilisée par le CAS</mat-hint>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>LMS</mat-label>
+        <mat-select formControlName="lms" multiple>
+          <mat-option *ngFor="let lms of lmses" [value]="lms.id">{{ lms.name }}</mat-option>
+        </mat-select>
+        <mat-hint>Le(s) LMS par lequel les utilisateur de ce CAS ont été créés.</mat-hint>
+      </mat-form-field>
+    </form>
+  </ng-template>
+  <ng-template>
+    <button nz-button nzType="primary" (click)="update()" [disabled]="!form.valid">Mettre à jour</button>
+  </ng-template>
+</ui-modal-drawer>
