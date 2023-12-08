@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class AddingCAS1701963338199 implements MigrationInterface {
-    name = 'AddingCAS1701963338199'
+export class AddingCAS1702035237844 implements MigrationInterface {
+    name = 'AddingCAS1702035237844'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TYPE "public"."Cas_version_enum" AS ENUM('1.0', '2.0', '3.0', 'saml1.1')`);
@@ -11,7 +11,7 @@ export class AddingCAS1701963338199 implements MigrationInterface {
         await queryRunner.query(`CREATE TABLE "cas_lmses_lmses" ("casId" uuid NOT NULL, "lmsesId" uuid NOT NULL, CONSTRAINT "PK_dd6fc32410fbd043fac48584a7a" PRIMARY KEY ("casId", "lmsesId"))`);
         await queryRunner.query(`CREATE INDEX "IDX_6a4d078fbdda07b2c998b7d733" ON "cas_lmses_lmses" ("casId") `);
         await queryRunner.query(`CREATE INDEX "IDX_e0f5c84b53f74b7c63ec0b2eff" ON "cas_lmses_lmses" ("lmsesId") `);
-        await queryRunner.query(`ALTER TABLE "LmsUsers" ADD "username" character varying NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "LmsUsers" ADD "username" character varying`);
         await queryRunner.query(`DROP INDEX "public"."IDX_bc64a73db01a49cb9e24baef7a"`);
         await queryRunner.query(`ALTER TABLE "CourseDemos" DROP COLUMN "created_at"`);
         await queryRunner.query(`ALTER TABLE "CourseDemos" ADD "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()`);
