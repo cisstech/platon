@@ -1,4 +1,6 @@
 import { Injectable, inject } from '@angular/core'
+import { AuthService } from '@platon/core/browser'
+import { User } from '@platon/core/common'
 import { ResultService, UserDashboardModel } from '@platon/feature/result/browser'
 import { LayoutState, layoutStateFromError } from '@platon/shared/ui'
 import { BehaviorSubject, firstValueFrom } from 'rxjs'
@@ -7,6 +9,7 @@ import { BehaviorSubject, firstValueFrom } from 'rxjs'
 export class OverviewPresenter {
   private readonly context = new BehaviorSubject<Context>(this.defaultContext())
   private readonly resultService = inject(ResultService)
+  private readonly authService = inject(AuthService)
 
   readonly contextChange = this.context.asObservable()
 
@@ -20,9 +23,14 @@ export class OverviewPresenter {
 
   private async refresh(): Promise<void> {
     try {
-      const dashboard = await firstValueFrom(this.resultService.userDashboard())
+      const [user, dashboard] = await Promise.all([
+        this.authService.ready(),
+        firstValueFrom(this.resultService.userDashboard()),
+      ])
+
       this.updateContext({
         state: 'READY',
+        user,
         dashboard,
       })
     } catch (error) {
@@ -41,5 +49,6 @@ export class OverviewPresenter {
 
 export interface Context {
   state: LayoutState
+  user?: User
   dashboard?: UserDashboardModel
 }

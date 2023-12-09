@@ -3,6 +3,10 @@
   width: 100%;
 }
 
+p {
+  color: var(--brand-text-secondary);
+}
+
 mat-card {
   margin-bottom: 1rem;
 }

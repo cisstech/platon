@@ -21,7 +21,8 @@
   <ng-container *ngIf="context.dashboard">
     <nz-row [nzGutter]="[24, 24]" nzAlign="top">
       <nz-col nzSpan="24">
-        <h2>Votre tableau de bord</h2>
+        <h2>Bonjour, {{ context.user!.firstName }} {{ context.user!.lastName }}</h2>
+        <p>Bienvenue, heureux de vous revoir !</p>
       </nz-col>
       <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
         <ui-statistic-card

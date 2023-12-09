@@ -12,7 +12,6 @@ const zipExtensions = ['.zip', '.jar', '.war', '.ear', '.rar']
 
 @Injectable()
 export class ExplorerCommandUnzip implements IExplorerCommand {
-  private readonly fileService = inject(FileService)
   private readonly explorerService = inject(ExplorerService)
   private readonly resourceFileService = inject(ResourceFileService)
 
@@ -34,6 +33,6 @@ export class ExplorerCommandUnzip implements IExplorerCommand {
         unzip: true,
       })
     )
-    await this.fileService.refresh()
+    this.explorerService.refresh()
   }
 }

@@ -15,6 +15,7 @@ const config: CodegenConfig = {
       plugins: ['typescript', 'typescript-operations', 'typescript-apollo-angular'],
       config: {
         addExplicitOverride: true,
+        avoidOptionals: true,
         scalars,
       },
     },
@@ -24,6 +25,7 @@ const config: CodegenConfig = {
       plugins: ['typescript', 'typescript-operations', 'typescript-apollo-angular'],
       config: {
         addExplicitOverride: true,
+        avoidOptionals: true,
         scalars,
       },
     },

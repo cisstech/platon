@@ -13,3 +13,5 @@
 /resources
 
 /.nx/cache
+
+**/*.graphql.generated.ts
