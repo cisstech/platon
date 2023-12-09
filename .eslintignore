@@ -14,3 +14,4 @@ CODEOWNERS
 
 pl.parser.ts
 *.generated.ts
+.graphql

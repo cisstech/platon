@@ -11,3 +11,5 @@
 /node_modules
 .gql
 /resources
+
+/.nx/cache
