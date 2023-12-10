@@ -1,26 +1,7 @@
-:host {
-  background-color: var(--brand-background-primary);
-  &::ng-deep {
-    .ant-ribbon {
-      color: white !important;
-    }
-    .article-header {
-      color: var(--brand-color-primary);
-      h3 {
-        color: var(--brand-color-primary);
-      }
-    }
-    .list-item-article-action-icon {
-      max-height: 18px;
-      margin-top: 4px;
-    }
-  }
+.spacer {
+  flex: 1;
 }
 
 .action {
   cursor: pointer;
-}
-
-.spacer {
-  flex: 1;
 }

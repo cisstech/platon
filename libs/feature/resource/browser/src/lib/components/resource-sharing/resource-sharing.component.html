@@ -5,6 +5,7 @@
       nzSuffixIcon="global"
       class="visibility-select"
       [(ngModel)]="visibility"
+      [disabled]="!canEditSharing"
       (ngModelChange)="changeVisibility()"
     >
       <nz-option nzLabel="Visible en dehors de PLaTon" nzValue="public" />

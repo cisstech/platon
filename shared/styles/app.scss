@@ -2,32 +2,49 @@
 @import 'fonts';
 @import 'variables';
 @import 'animations';
+@import './material/base';
 
-html {
+body {
   width: 100vw;
   height: 100vh;
   overflow: auto;
   color: var(--brand-text-primary);
-  background-color: var(--brand-background-color);
+  background-color: var(--brand-background-primary);
   font-family: var(--brand-font);
 }
 
 .light-theme {
-  --brand-background-overlay: #fff;
-  --brand-background-primary: #fff;
-  --brand-background-secondary: #fafbfc;
+  --brand-background-components: #{$light-background};
+  --brand-background-primary: #{light-bg-darker-5};
+  --brand-background-hover: #{$dark-bg-alpha-4};
 
-  --brand-text-primary: #24292e;
-  --brand-text-secondary: #586069;
-  --brand-border-color: #dddddd;
+  --brand-text-primary: #{$dark-text};
+  --brand-text-secondary: #{$dark-accent-text};
+  --brand-border-color: #{$dark-dividers};
 }
 
 .dark-theme {
-  --brand-background-overlay: #323941;
-  --brand-background-primary: #22272e;
-  --brand-background-secondary: #22272e;
+  --brand-background-components: #{$dark-bg-lighter-5};
+  --brand-background-primary: #{$dark-background};
+  --brand-background-hover: #{$light-bg-alpha-4};
 
-  --brand-text-primary: #adbac7;
-  --brand-text-secondary: #768390;
-  --brand-border-color: #15202b;
+  --brand-text-primary: #{$light-text};
+  --brand-text-secondary: #{$light-accent-text};
+  --brand-border-color: #{$light-dividers};
+}
+
+// GLOBAL APP COMPONENTS
+
+ui-list-item-article {
+  background-color: var(--brand-background-components);
+}
+
+nge-markdown {
+  background-color: transparent !important;
+  color: var(--brand-text-primary) !important;
+}
+
+.list-item-article-action-icon {
+  max-height: 18px;
+  margin-top: 4px;
 }

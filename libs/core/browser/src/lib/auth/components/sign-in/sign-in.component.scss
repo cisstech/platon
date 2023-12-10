@@ -9,7 +9,7 @@ mat-toolbar {
   position: absolute;
   top: 0;
   left: 0;
-  background-color: white !important;
+  background-color: var(--brand-background-primary) !important;
 }
 
 mat-form-field {

@@ -1,24 +1,45 @@
 @use '@angular/material' as mat;
 @import 'base';
 
+$theme-primary: mat.define-palette($mat-primary, main, lighter, darker);
+$theme-accent: mat.define-palette($mat-accent, main, lighter, darker);
+$theme-warn: mat.define-palette($mat-warn, main, lighter, darker);
+
 $mat-typography: mat.define-typography-config(
   $font-family: var(--brand-font),
 );
 
 @include mat.core();
 
-$mat-light-theme: mat.define-dark-theme(
+$theme: mat.define-dark-theme(
   (
     color: (
       primary: $theme-primary,
       accent: $theme-accent,
       warn: $theme-warn,
-      foreground: $mat-light-theme-foreground,
-      background: $mat-light-theme-background,
     ),
     typography: $mat-typography,
     density: 0,
   )
 );
 
-@include mat.all-component-themes($mat-light-theme);
+// https://stackoverflow.com/a/49434227/20128025
+// https://github.com/angular/components/issues/6244#issuecomment-664059633
+
+$theme-color-config: map_get($theme, 'color');
+$theme-color-config: map_merge(
+  $theme-color-config,
+  (
+    'foreground': $mat-dark-theme-foreground,
+    'background': $mat-dark-theme-background,
+  )
+);
+
+$theme: map_merge(
+  $theme,
+  (
+    'color': $theme-color-config,
+  )
+);
+
+@include mat.all-component-themes($theme);

@@ -43,6 +43,7 @@ export class ResourceSharingComponent implements OnInit {
 
   @Input() resourceId!: string
   @Input() resourceVersion = 'latest'
+  @Input() canEditSharing = false
 
   protected versions?: FileVersions
   protected visibility: 'public' | 'private' = 'public'

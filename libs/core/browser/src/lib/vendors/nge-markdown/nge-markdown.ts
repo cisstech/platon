@@ -1,5 +1,6 @@
 import {
   NgeMarkdownAdmonitionsProvider,
+  NgeMarkdownConfigProvider,
   NgeMarkdownEmojiOptionsProvider,
   NgeMarkdownEmojiProvider,
   NgeMarkdownHighlighterMonacoProvider,
@@ -22,6 +23,9 @@ export const NgeMarkdownProviders = [
   NgeMarkdownLinkAnchorProvider,
   NgeMarkdownAdmonitionsProvider,
   NgeMarkdownHighlighterProvider,
+  NgeMarkdownConfigProvider({
+    darkThemeClassName: 'dark-theme',
+  }),
   NgeMarkdownHighlighterMonacoProvider(NgeMonacoColorizerService),
   NgeMarkdownThemeProvider({
     name: 'github',

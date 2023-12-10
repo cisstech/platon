@@ -11,7 +11,7 @@
   </ng-container>
   <ng-template #footer>
     <button mat-stroked-button (click)="close()">Annuler</button>&nbsp;
-    <button mat-stroked-button color="primary" (click)="triggered.emit(this.filters); close()">Appliquer</button>
+    <button mat-raised-button color="primary" (click)="triggered.emit(this.filters); close()">Appliquer</button>
   </ng-template>
 </nz-drawer>
 <ng-template #content>

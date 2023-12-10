@@ -8,7 +8,7 @@ export default [
     component: DocsPage,
   },
   {
-    path: '**',
+    path: 'components',
     loadChildren: () => import('@cisstech/nge/doc').then((m) => m.NgeDocModule),
     data: [
       createWebComponentDoc({

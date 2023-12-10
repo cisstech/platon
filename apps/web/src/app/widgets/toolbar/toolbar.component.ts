@@ -18,7 +18,7 @@ import { MatButtonModule } from '@angular/material/button'
 import { MatIconModule } from '@angular/material/icon'
 import { MatMenuModule } from '@angular/material/menu'
 
-import { AuthService, UserAvatarComponent } from '@platon/core/browser'
+import { AuthService, ThemeService, UserAvatarComponent } from '@platon/core/browser'
 import { User, UserRoles } from '@platon/core/common'
 import { NotificationDrawerComponent } from '@platon/feature/notification/browser'
 import { ResourceService } from '@platon/feature/resource/browser'
@@ -58,6 +58,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
   private readonly router = inject(Router)
   private readonly authService = inject(AuthService)
+  private readonly themeService = inject(ThemeService)
   private readonly resourceService = inject(ResourceService)
   private readonly changeDetectorRef = inject(ChangeDetectorRef)
   private readonly breakpointObserver = inject(BreakpointObserver)
@@ -82,6 +83,10 @@ export class ToolbarComponent implements OnInit, OnDestroy {
       return segments[1].path
     }
     return undefined
+  }
+
+  get themeIcon(): string {
+    return this.themeService.isDark ? 'dark_mode' : 'light_mode'
   }
 
   get mobile(): boolean {
@@ -131,5 +136,13 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
   signOut(): void {
     this.authService.signOut()
+  }
+
+  darkTheme(): void {
+    this.themeService.darkTheme(true)
+  }
+
+  lightTheme(): void {
+    this.themeService.lightTheme(true)
   }
 }

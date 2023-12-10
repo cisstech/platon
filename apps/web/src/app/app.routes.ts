@@ -1,5 +1,5 @@
 import { Route } from '@angular/router'
-import { withAuthGuard } from '@platon/core/browser'
+import { alwaysLightTheme, withAuthGuard } from '@platon/core/browser'
 import { UserRoles } from '@platon/core/common'
 import { UiError403Component, UiError404Component, UiError500Component } from '@platon/shared/ui'
 
@@ -10,6 +10,10 @@ export const appRoutes: Route[] = [
 
   {
     path: 'login',
+    title: 'PLaTon - Connexion',
+    data: {
+      ...alwaysLightTheme,
+    },
     loadChildren: () =>
       import(
         /* webpackChunkName: "login" */
@@ -18,6 +22,10 @@ export const appRoutes: Route[] = [
   },
   {
     path: 'docs',
+    title: 'PLaTon - Documentation',
+    data: {
+      ...alwaysLightTheme,
+    },
     loadChildren: () =>
       import(
         /* webpackChunkName: "docs" */
@@ -26,6 +34,10 @@ export const appRoutes: Route[] = [
   },
   {
     path: 'player',
+    title: 'PLaTon - Player',
+    data: {
+      ...alwaysLightTheme,
+    },
     loadChildren: () =>
       import(
         /* webpackChunkName: "player" */
@@ -35,6 +47,10 @@ export const appRoutes: Route[] = [
   withAuthGuard(
     {
       path: 'editor',
+      title: 'PLaTon - Éditeur',
+      data: {
+        ...alwaysLightTheme,
+      },
       loadChildren: () =>
         import(
           /* webpackChunkName: "editor" */
