@@ -16,6 +16,7 @@ import { EChartsOption } from 'echarts'
 
 import { FormsModule } from '@angular/forms'
 import { MatButtonModule } from '@angular/material/button'
+import { CoreEchartsDirective } from '@platon/core/browser'
 import { RESOURCE_STATUS_COLORS_HEX, RESOURCE_STATUS_NAMES } from '@platon/feature/resource/browser'
 import { ResourceStatisic, ResourceStatus } from '@platon/feature/resource/common'
 import {
@@ -27,7 +28,6 @@ import {
 import { DurationPipe, UiStatisticCardComponent } from '@platon/shared/ui'
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker'
 import { NzSelectModule } from 'ng-zorro-antd/select'
-import { NgxEchartsModule } from 'ngx-echarts'
 import { ResourcePresenter } from '../resource.presenter'
 
 @Component({
@@ -53,7 +53,7 @@ import { ResourcePresenter } from '../resource.presenter'
     NzDatePickerModule,
 
     DurationPipe,
-    NgxEchartsModule,
+    CoreEchartsDirective,
     UiStatisticCardComponent,
     ResultByExercisesComponent,
     ResultValueDistributionComponent,
@@ -120,32 +120,26 @@ export class ResourceOverviewPage implements OnInit, OnDestroy {
 
     const statuses = Object.values(ResourceStatus)
 
-    const valueByStatus = statuses.reduce(
-      (acc, status) => {
-        const record = statistic as unknown as Record<string, number>
-        acc[status] = record[status.toLowerCase()]
-        return acc
-      },
-      {} as Record<ResourceStatus, number>
-    )
+    const valueByStatus = statuses.reduce((acc, status) => {
+      const record = statistic as unknown as Record<string, number>
+      acc[status] = record[status.toLowerCase()]
+      return acc
+    }, {} as Record<ResourceStatus, number>)
 
     const total = statuses.reduce((acc, status) => {
       acc += valueByStatus[status]
       return acc
     }, 0)
 
-    const dataByStatus = statuses.reduce(
-      (acc, status) => {
-        const data: Data = {
-          label: RESOURCE_STATUS_NAMES[status],
-          value: valueByStatus[status],
-          percent: total ? Math.round((valueByStatus[status] / total) * 100) : 0,
-        }
-        acc[status] = data
-        return acc
-      },
-      {} as Record<ResourceStatus, Data>
-    )
+    const dataByStatus = statuses.reduce((acc, status) => {
+      const data: Data = {
+        label: RESOURCE_STATUS_NAMES[status],
+        value: valueByStatus[status],
+        percent: total ? Math.round((valueByStatus[status] / total) * 100) : 0,
+      }
+      acc[status] = data
+      return acc
+    }, {} as Record<ResourceStatus, Data>)
 
     this.statusChart = {
       toolbox: {

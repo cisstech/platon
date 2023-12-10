@@ -29,6 +29,7 @@ import type {
   DataZoomComponentOption,
 } from 'echarts/components'
 import type { ComposeOption } from 'echarts/core'
+import { darkTheme } from './themes'
 
 // Create an Option type with only the required components and charts via ComposeOption
 export type EChartsOption = ComposeOption<
@@ -61,5 +62,9 @@ echarts.use([
   UniversalTransition,
   CanvasRenderer,
 ])
+
+echarts.registerTheme('dark', darkTheme)
+
+// TODO: register local https://xieziyu.github.io/ngx-echarts/api-doc/#custom-locale
 
 export { echarts }

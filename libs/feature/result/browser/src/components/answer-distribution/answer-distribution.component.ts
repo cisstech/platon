@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common'
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
+import { CoreEchartsDirective } from '@platon/core/browser'
 import { AnswerStateColors, AnswerStateLabels, AnswerStates } from '@platon/feature/result/common'
 import { EChartsOption } from 'echarts'
-import { NgxEchartsModule } from 'ngx-echarts'
 
 @Component({
   standalone: true,
@@ -10,7 +10,7 @@ import { NgxEchartsModule } from 'ngx-echarts'
   templateUrl: 'answer-distribution.component.html',
   styleUrls: ['./answer-distribution.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, NgxEchartsModule],
+  imports: [CommonModule, CoreEchartsDirective],
 })
 export class ResultAnswerDistributionComponent {
   protected chart?: EChartsOption
@@ -34,18 +34,15 @@ export class ResultAnswerDistributionComponent {
       return acc
     }, 0)
 
-    const dataByStatus = statuses.reduce(
-      (acc, status) => {
-        const data: Data = {
-          label: AnswerStateLabels[status],
-          value: distribution[status],
-          percent: total ? Math.round((distribution[status] / total) * 100) : 0,
-        }
-        acc[status] = data
-        return acc
-      },
-      {} as Record<AnswerStates, Data>
-    )
+    const dataByStatus = statuses.reduce((acc, status) => {
+      const data: Data = {
+        label: AnswerStateLabels[status],
+        value: distribution[status],
+        percent: total ? Math.round((distribution[status] / total) * 100) : 0,
+      }
+      acc[status] = data
+      return acc
+    }, {} as Record<AnswerStates, Data>)
 
     return {
       toolbox: {
