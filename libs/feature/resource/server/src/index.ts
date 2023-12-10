@@ -1,4 +1,6 @@
+export * from './lib/dependency'
 export * from './lib/files/file.service'
+export * from './lib/metadata'
 export * from './lib/resource.entity'
 export * from './lib/resource.module'
 export * from './lib/resource.service'

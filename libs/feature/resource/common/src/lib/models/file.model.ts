@@ -1,5 +1,7 @@
 import { Variables } from '@platon/feature/compiler'
 
+export const LATEST = 'latest'
+
 export enum FileMoveActions {
   move = 'move',
   copy = 'copy',

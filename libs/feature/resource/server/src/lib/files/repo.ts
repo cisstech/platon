@@ -1,26 +1,31 @@
 import { StreamableFile } from '@nestjs/common'
-import { FileTypes, FileVersion, FileVersions, ResourceFile, ResourceTypes } from '@platon/feature/resource/common'
+import {
+  FileTypes,
+  FileVersion,
+  FileVersions,
+  LATEST,
+  ResourceFile,
+  ResourceTypes,
+} from '@platon/feature/resource/common'
 import {
   FileExistsError,
   FileNotFoundError,
-  isDirectory,
-  isFile,
   NotADirectoryError,
   PermissionError,
+  isDirectory,
+  isFile,
   uniquifyFileName,
   withTempFile,
 } from '@platon/shared/server'
 import * as fs from 'fs'
 import * as git from 'isomorphic-git'
 import * as Path from 'path'
-import * as unzipper from 'unzipper'
 import { simpleGit } from 'simple-git'
+import * as unzipper from 'unzipper'
 
 const BASE = Path.join(process.cwd(), 'resources')
 const ROOT = '.'
 const DEFAULT_BRANCH = 'main'
-
-export const LATEST = 'latest'
 
 interface User {
   name: string
@@ -39,10 +44,7 @@ export class Repo {
     dir: this.root,
   }
 
-  private constructor(
-    private readonly root: string,
-    private readonly user: User
-  ) {}
+  private constructor(private readonly root: string, private readonly user: User) {}
 
   static async get(
     name: string,

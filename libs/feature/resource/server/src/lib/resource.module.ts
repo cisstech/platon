@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { LevelModule, TopicModule, UserModule } from '@platon/core/server'
+import { ResourceDependencyService } from './dependency'
+import { ResourceDependencyEntity } from './dependency/dependency.entity'
 import {
   ResourceEventController,
   ResourceEventEntity,
@@ -19,6 +21,7 @@ import {
   ResourceMemberService,
   ResourceMemberSubscriber,
 } from './members'
+import { ResourceMetaEntity, ResourceMetadataService } from './metadata'
 import { ResourcePermissionService } from './permissions/permissions.service'
 import { ResourceController } from './resource.controller'
 import { ResourceEntity } from './resource.entity'
@@ -46,6 +49,8 @@ import { ResourceWatcherController, ResourceWatcherEntity, ResourceWatcherServic
     ResourceEventService,
     ResourceMemberService,
     ResourceWatcherService,
+    ResourceMetadataService,
+    ResourceDependencyService,
     ResourceInvitationService,
 
     ResourceSubscriber,
@@ -65,6 +70,8 @@ import { ResourceWatcherController, ResourceWatcherEntity, ResourceWatcherServic
       ResourceEntity,
       ResourceWatcherEntity,
       ResourceViewEntity,
+      ResourceMetaEntity,
+      ResourceDependencyEntity,
     ]),
     LevelModule,
     TopicModule,
@@ -77,7 +84,9 @@ import { ResourceWatcherController, ResourceWatcherEntity, ResourceWatcherServic
     ResourceViewService,
     ResourceEventService,
     ResourceMemberService,
+    ResourceMetadataService,
     ResourceWatcherService,
+    ResourceDependencyService,
     ResourceInvitationService,
   ],
 })
