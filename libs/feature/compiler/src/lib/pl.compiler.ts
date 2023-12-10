@@ -18,6 +18,10 @@ import {
 } from './pl.parser'
 import { ActivityVariables, ExerciseVariables, Variables } from './pl.variables'
 
+export const ACTIVITY_MAIN_FILE = 'main.pla'
+export const EXERCISE_MAIN_FILE = 'main.ple'
+export const EXERCISE_CONFIG_FILE = 'config.json'
+
 /**
  * File reference resolver for the PL compiler.
  * This interface is used to abstract the resolving the files so each plateform (browser, server) can use the PL compiler.
@@ -126,11 +130,11 @@ export class PLCompiler implements PLVisitor {
 
     await Promise.all(
       exercises.map(async (exercise: ExerciseVariables) => {
-        const content = await this.resolver.resolveContent(exercise.resource, exercise.version, 'main.ple')
+        const content = await this.resolver.resolveContent(exercise.resource, exercise.version, EXERCISE_MAIN_FILE)
         const compiler = new PLCompiler({
           resource: exercise.resource,
           version: exercise.version,
-          main: 'main.ple',
+          main: EXERCISE_MAIN_FILE,
           resolver: this.resolver,
         })
         exercise.id = uuidv4()
