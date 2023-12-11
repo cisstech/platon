@@ -25,6 +25,7 @@ import { ResourceMetaEntity, ResourceMetadataService } from './metadata'
 import { ResourcePermissionService } from './permissions/permissions.service'
 import { ResourceController } from './resource.controller'
 import { ResourceEntity } from './resource.entity'
+import { ResourceExpander } from './resource.expander'
 import { ResourceService } from './resource.service'
 import { ResourceSubscriber } from './resource.subscriber'
 import { ResourceStatsSubscriber } from './statistics'
@@ -43,8 +44,8 @@ import { ResourceWatcherController, ResourceWatcherEntity, ResourceWatcherServic
     ResourceWatcherController,
   ],
   providers: [
-    ResourceFileService,
     ResourceService,
+    ResourceFileService,
     ResourceViewService,
     ResourceEventService,
     ResourceMemberService,
@@ -52,6 +53,8 @@ import { ResourceWatcherController, ResourceWatcherEntity, ResourceWatcherServic
     ResourceMetadataService,
     ResourceDependencyService,
     ResourceInvitationService,
+
+    ResourceExpander,
 
     ResourceSubscriber,
     ResourceEventSubscriber,
