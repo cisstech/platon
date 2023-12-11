@@ -113,32 +113,26 @@ export class ResourceOverviewPage implements OnInit, AfterViewChecked, OnDestroy
 
     const statuses = Object.values(ResourceStatus)
 
-    const valueByStatus = statuses.reduce(
-      (acc, status) => {
-        const record = statistic as unknown as Record<string, number>
-        acc[status] = record[status.toLowerCase()]
-        return acc
-      },
-      {} as Record<ResourceStatus, number>
-    )
+    const valueByStatus = statuses.reduce((acc, status) => {
+      const record = statistic as unknown as Record<string, number>
+      acc[status] = record[status.toLowerCase()]
+      return acc
+    }, {} as Record<ResourceStatus, number>)
 
     const total = statuses.reduce((acc, status) => {
       acc += valueByStatus[status]
       return acc
     }, 0)
 
-    const dataByStatus = statuses.reduce(
-      (acc, status) => {
-        const data: Data = {
-          label: RESOURCE_STATUS_NAMES[status],
-          value: valueByStatus[status],
-          percent: total ? Math.round((valueByStatus[status] / total) * 100) : 0,
-        }
-        acc[status] = data
-        return acc
-      },
-      {} as Record<ResourceStatus, Data>
-    )
+    const dataByStatus = statuses.reduce((acc, status) => {
+      const data: Data = {
+        label: RESOURCE_STATUS_NAMES[status],
+        value: valueByStatus[status],
+        percent: total ? Math.round((valueByStatus[status] / total) * 100) : 0,
+      }
+      acc[status] = data
+      return acc
+    }, {} as Record<ResourceStatus, Data>)
 
     this.statusChart = {
       toolbox: {

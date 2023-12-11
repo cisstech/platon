@@ -6,10 +6,7 @@ import { LTIProvider } from './provider'
 
 @Injectable()
 export class LTIMiddleware implements NestMiddleware {
-  constructor(
-    private readonly lti: LTIService,
-    private readonly authService: AuthService
-  ) {}
+  constructor(private readonly lti: LTIService, private readonly authService: AuthService) {}
 
   async use(req: Request, res: Response, next: NextFunction) {
     if (!req.body?.oauth_consumer_key) {

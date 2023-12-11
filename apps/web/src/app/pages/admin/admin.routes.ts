@@ -33,6 +33,14 @@ export default [
             ),
         },
         {
+          path: 'cases',
+          loadChildren: () =>
+            import(
+              /* webpackChunkName: "admin-lmses" */
+              './cases/cases.routes'
+            ),
+        },
+        {
           path: 'tags',
           loadChildren: () =>
             import(

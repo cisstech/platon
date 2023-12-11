@@ -96,8 +96,8 @@ export const withFeedbacksGuard = (
   const feedbacks = Array.isArray(variables.feedback)
     ? variables.feedback
     : variables.feedback
-      ? [variables.feedback]
-      : []
+    ? [variables.feedback]
+    : []
 
   const hideOnReview = answer && !settings?.feedback?.review
   const hideOnValidation = !answer && !settings?.feedback?.validation

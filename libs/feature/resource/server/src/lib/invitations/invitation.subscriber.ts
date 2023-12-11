@@ -8,10 +8,7 @@ import { ResourceInvitationEntity } from './invitation.entity'
 
 @Injectable()
 export class ResourceInvitationSubscriber implements EntitySubscriberInterface<ResourceInvitationEntity> {
-  constructor(
-    private readonly dataSource: DataSource,
-    private readonly notificationService: NotificationService
-  ) {
+  constructor(private readonly dataSource: DataSource, private readonly notificationService: NotificationService) {
     this.dataSource.subscribers.push(this)
   }
 

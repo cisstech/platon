@@ -13,10 +13,7 @@ type JwtPayload = {
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
-  constructor(
-    private readonly userService: UserService,
-    private readonly configService: ConfigService<Configuration>
-  ) {
+  constructor(private readonly userService: UserService, private readonly configService: ConfigService<Configuration>) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: configService.get('secret', { infer: true }),

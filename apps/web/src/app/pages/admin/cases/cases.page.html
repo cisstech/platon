@@ -1,0 +1,11 @@
+<nz-button-group>
+  <button (click)="createDrawer.open()" nz-button nzType="primary" nz-tooltip="Ajouter un CAS">
+    <span nz-icon nzType="plus" nzTheme="outline"></span>
+  </button>
+</nz-button-group>
+
+<cas-search-bar [(ngModel)]="cases" [autoSelect]="true" [filters]="{ limit: 50 }" />
+
+<cas-table [cases]="cases" [lmses]="lmses" [selectable]="false" />
+
+<cas-create-drawer #createDrawer [lmses]="lmses" (created)="insert($event)" />
