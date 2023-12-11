@@ -446,7 +446,7 @@ export class AutomatonEditorComponent implements OnInit, OnDestroy, WebComponent
   }
 
   private findEndpoint(name: string): HTMLElement | null {
-    return this.container.nativeElement.querySelector('#' + name)
+    return this.container.nativeElement.querySelector("[id='" + name + "']")
   }
 
   private findConnection(transition: Transition) {
