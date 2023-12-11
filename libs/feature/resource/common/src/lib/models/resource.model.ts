@@ -1,6 +1,8 @@
 import { Level, OrderingDirections, Topic } from '@platon/core/common'
+import { ActivityNavigationModes } from '@platon/feature/compiler'
 import { ResourceStatus } from '../enums/resource-status'
 import { ResourceTypes } from '../enums/resource-types'
+import { ResourceMeta } from './metadata.model'
 import { ResourcePermissions } from './permissions.model'
 
 export interface Resource {
@@ -19,6 +21,10 @@ export interface Resource {
   readonly parentId?: string
   readonly publicPreview?: boolean
   readonly permissions: ResourcePermissions
+
+  // Expandable fields
+
+  readonly metadata?: ResourceMeta
 }
 
 export interface CircleTree {
@@ -65,6 +71,11 @@ export interface ResourceFilters {
   readonly watchers?: string[]
   readonly owners?: string[]
   readonly views?: boolean
+  readonly publicPreview?: boolean
+  readonly configurable?: boolean
+  readonly navigation?: ActivityNavigationModes
+  readonly topics?: string[]
+  readonly levels?: string[]
   readonly offset?: number
   readonly limit?: number
   readonly parents?: string[]

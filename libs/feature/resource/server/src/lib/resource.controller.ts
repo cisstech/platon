@@ -8,6 +8,7 @@ import { CircleTreeDTO, CreateResourceDTO, ResourceDTO, ResourceFiltersDTO, Upda
 import { ResourceService } from './resource.service'
 import { ResourceStatisticDTO } from './statistics'
 import { ResourceViewService } from './views/view.service'
+import { Expandable } from '@cisstech/nestjs-expand'
 
 @Controller('resources')
 @ApiTags('Resources')
@@ -19,6 +20,9 @@ export class ResourceController {
   ) {}
 
   @Get()
+  @Expandable(ResourceDTO, {
+    rootField: 'resources',
+  })
   async search(@Req() req: IRequest, @Query() filters: ResourceFiltersDTO = {}): Promise<ListResponse<ResourceDTO>> {
     let resources: ResourceDTO[] = []
     let total = 0
@@ -76,6 +80,9 @@ export class ResourceController {
   }
 
   @Get('/:id')
+  @Expandable(ResourceDTO, {
+    rootField: 'resource',
+  })
   async find(
     @Req() req: IRequest,
     @Param('id') id: string,
@@ -114,6 +121,9 @@ export class ResourceController {
   }
 
   @Post()
+  @Expandable(ResourceDTO, {
+    rootField: 'resource',
+  })
   async create(@Req() req: IRequest, @Body() input: CreateResourceDTO): Promise<CreatedResponse<ResourceDTO>> {
     const parent = await this.resourceService.findById(input.parentId)
     if (!parent.isPresent()) {
@@ -142,6 +152,9 @@ export class ResourceController {
   }
 
   @Patch('/:id')
+  @Expandable(ResourceDTO, {
+    rootField: 'resource',
+  })
   async update(
     @Req() req: IRequest,
     @Param('id') id: string,

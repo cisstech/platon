@@ -170,6 +170,10 @@ export class ResourceService {
     query.leftJoinAndSelect('resource.topics', 'topic')
     query.leftJoinAndSelect('resource.levels', 'level')
 
+    if (filters.configurable !== null || filters.navigation != null) {
+      query.leftJoin('ResourceMeta', 'metadata', 'metadata.resource_id = resource.id')
+    }
+
     filters = {
       ...filters,
       order: filters.order || ResourceOrderings.RELEVANCE,
@@ -213,6 +217,28 @@ export class ResourceService {
 
     if (filters.owners?.length) {
       query.andWhere('owner_id IN (:...owners)', { owners: filters.owners })
+    }
+
+    if (filters.levels?.length) {
+      query.andWhere('level_id IN (:...levels)', { levels: filters.levels })
+    }
+
+    if (filters.topics?.length) {
+      query.andWhere('topic_id IN (:...topics)', { topics: filters.topics })
+    }
+
+    if (filters.publicPreview) {
+      query.andWhere('public_preview = true')
+    }
+
+    if (filters.configurable) {
+      query.andWhere(`(type <> 'EXERCISE' OR metadata.meta->'configurable' = 'true')`)
+    }
+
+    if (filters.navigation) {
+      query.andWhere(`(type <> 'ACTIVITY' OR metadata.meta->'settings'->'navigation'->>'mode' = :navigation)`, {
+        navigation: filters.navigation,
+      })
     }
 
     if (filters.search) {

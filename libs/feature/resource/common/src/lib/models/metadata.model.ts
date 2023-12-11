@@ -10,3 +10,5 @@ export interface ExerciseResourceMeta {
   configurable: boolean
   versions: FileVersion[]
 }
+
+export type ResourceMeta = ActivityResourceMeta | ExerciseResourceMeta
