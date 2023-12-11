@@ -210,6 +210,18 @@ export class ResourceFiltersDTO implements ResourceFilters {
   @IsUUID(undefined, { each: true })
   @IsArray()
   @IsOptional()
+  readonly dependOn?: string[]
+
+  @Transform(({ value }) => toArray(value))
+  @IsUUID(undefined, { each: true })
+  @IsArray()
+  @IsOptional()
+  readonly usedBy?: string[]
+
+  @Transform(({ value }) => toArray(value))
+  @IsUUID(undefined, { each: true })
+  @IsArray()
+  @IsOptional()
   readonly owners?: string[]
 
   @Transform(({ value }) => toBoolean(value))

@@ -18,6 +18,7 @@ import { ResourceMemberEntity } from './members/member.entity'
 import { CreateResourceDTO, UpdateResourceDTO } from './resource.dto'
 import { ResourceEntity } from './resource.entity'
 import { ResourceWatcherEntity } from './watchers'
+import { ResourceDependencyEntity } from './dependency'
 
 @Injectable()
 export class ResourceService {
@@ -198,6 +199,25 @@ export class ResourceService {
         'watcher',
         'watcher.resource_id = resource.id AND watcher.user_id IN (:...ids)',
         { ids: filters.watchers }
+      )
+    }
+
+    if (filters.dependOn?.length) {
+      query.innerJoin(
+        ResourceDependencyEntity,
+        'dependency',
+        'dependency.resource_id = resource.id AND dependency.depend_on_id IN (:...ids)',
+        { ids: filters.dependOn }
+      )
+    }
+
+    if (filters.usedBy?.length) {
+      console.log(filters.usedBy)
+      query.innerJoin(
+        ResourceDependencyEntity,
+        'dependency',
+        'dependency.depend_on_id = resource.id AND dependency.resource_id IN (:...ids)',
+        { ids: filters.usedBy }
       )
     }
 

@@ -76,6 +76,8 @@ export interface ResourceFilters {
   readonly navigation?: ActivityNavigationModes
   readonly topics?: string[]
   readonly levels?: string[]
+  readonly usedBy?: string[]
+  readonly dependOn?: string[]
   readonly offset?: number
   readonly limit?: number
   readonly parents?: string[]

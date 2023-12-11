@@ -96,7 +96,7 @@ export class ResourceDependencyService {
       where: { resourceId: args.id, resourceVersion: args.version },
     })
 
-    const newDependencies = Object.entries(args.exerciseGroups).flatMap(([_, exercises]) =>
+    let newDependencies = Object.entries(args.exerciseGroups).flatMap(([_, exercises]) =>
       exercises.map((exercise) => ({
         resourceId: args.id,
         resourceVersion: args.version,
@@ -110,6 +110,7 @@ export class ResourceDependencyService {
     newDependencies.forEach((dependency) => {
       newDependenciesMap.set(`${dependency.resourceId}:${dependency.dependOnId}`, dependency)
     })
+    newDependencies = Array.from(newDependenciesMap.values())
 
     const dependenciesMap = new Map<string, ResourceDependencyEntity>()
     dependencies.forEach((dependency) => {
