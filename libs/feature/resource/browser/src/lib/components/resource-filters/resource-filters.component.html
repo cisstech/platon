@@ -27,6 +27,17 @@
       </div>
     </section>
     <mat-divider />
+
+    <ng-container *ngIf="form.value.types?.EXERCISE">
+      <section>
+        <mat-label id="exercise-specific">Appliquer des filtres aux exercices?</mat-label>
+        <mat-checkbox formControlName="configurable">
+          <mat-chip>Configurable</mat-chip>
+        </mat-checkbox>
+      </section>
+      <mat-divider />
+    </ng-container>
+
     <!-- STATUS -->
     <section formGroupName="status">
       <mat-label id="status-label">Quel est son status?</mat-label>

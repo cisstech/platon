@@ -1,9 +1,11 @@
-import { Level, OrderingDirections, Topic } from '@platon/core/common'
+import { ExpandableModel, Level, OrderingDirections, Topic } from '@platon/core/common'
 import { ActivityNavigationModes } from '@platon/feature/compiler'
 import { ResourceStatus } from '../enums/resource-status'
 import { ResourceTypes } from '../enums/resource-types'
 import { ResourceMeta } from './metadata.model'
 import { ResourcePermissions } from './permissions.model'
+
+export type ResourceExpandableFields = 'metadata'
 
 export interface Resource {
   readonly id: string
@@ -35,7 +37,7 @@ export interface CircleTree {
   readonly permissions: ResourcePermissions
 }
 
-export interface CreateResource {
+export interface CreateResource extends ExpandableModel<ResourceExpandableFields> {
   readonly name: string
   readonly parentId: string
   readonly code?: string
@@ -46,7 +48,7 @@ export interface CreateResource {
   readonly topics?: string[]
 }
 
-export interface UpdateResource {
+export interface UpdateResource extends ExpandableModel<ResourceExpandableFields> {
   readonly name?: string
   readonly desc?: string
   readonly publicPreview?: boolean
@@ -62,7 +64,12 @@ export enum ResourceOrderings {
   RELEVANCE = 'RELEVANCE',
 }
 
-export interface ResourceFilters {
+export interface FindResource extends ExpandableModel<ResourceExpandableFields> {
+  id: string
+  markAsViewed?: boolean
+}
+
+export interface ResourceFilters extends ExpandableModel<ResourceExpandableFields> {
   readonly types?: (keyof typeof ResourceTypes)[]
   readonly status?: (keyof typeof ResourceStatus)[]
   readonly search?: string

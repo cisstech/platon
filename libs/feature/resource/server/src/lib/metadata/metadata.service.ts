@@ -5,7 +5,12 @@ import { ACTIVITY_MAIN_FILE, ActivityVariables, EXERCISE_CONFIG_FILE } from '@pl
 import { ActivityResourceMeta, ExerciseResourceMeta, LATEST, ResourceTypes } from '@platon/feature/resource/common'
 import { EntityManager, Repository } from 'typeorm'
 import { ResourceDependencyService } from '../dependency'
-import { ON_CHANGE_FILE_EVENT, OnChangeFileEventPayload } from '../files'
+import {
+  ON_CHANGE_FILE_EVENT,
+  ON_RELEASE_REPO_EVENT,
+  OnChangeFileEventPayload,
+  OnReleaseRepoEventPayload,
+} from '../files'
 import { ResourceFileService } from '../files/file.service'
 import { Repo } from '../files/repo'
 import { ResourceEntity } from '../resource.entity'
@@ -121,6 +126,21 @@ export class ResourceMetadataService {
     metadata.meta = meta
 
     return entityManager ? await entityManager.save(metadata) : await this.repository.save(metadata)
+  }
+
+  @OnEvent(ON_RELEASE_REPO_EVENT)
+  protected async onReleaseRepo(payload: OnReleaseRepoEventPayload): Promise<void> {
+    try {
+      this.logger.log('Handling ON_RELEASE_REPO_EVENT')
+      const { repo, resource } = payload
+      if (resource.type === ResourceTypes.ACTIVITY) {
+        await this.syncActivity({ repo, resource })
+      } else if (resource.type === ResourceTypes.EXERCISE) {
+        await this.syncExercise({ repo, resource })
+      }
+    } catch (error) {
+      this.logger.error('Error handling ON_RELEASE_REPO_EVENT', error)
+    }
   }
 
   @OnEvent(ON_CHANGE_FILE_EVENT)

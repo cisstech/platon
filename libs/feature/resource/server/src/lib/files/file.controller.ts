@@ -24,7 +24,12 @@ import { Response } from 'express'
 import { createReadStream } from 'fs'
 import { basename, join } from 'path'
 import { FileCreateDTO, FileMoveDTO, FileReleaseDTO, FileRetrieveDTO, FileUpdateDTO } from './file.dto'
-import { ON_CHANGE_FILE_EVENT, OnChangeFileEventPayload } from './file.event'
+import {
+  ON_CHANGE_FILE_EVENT,
+  ON_RELEASE_REPO_EVENT,
+  OnChangeFileEventPayload,
+  OnReleaseRepoEventPayload,
+} from './file.event'
 import { ResourceFileService } from './file.service'
 
 @Controller('files')
@@ -34,12 +39,18 @@ export class ResourceFileController {
 
   @Post('/release/:resourceId')
   async release(@Req() request: IRequest, @Param('resourceId') resourceId: string, @Body() input: FileReleaseDTO) {
-    const { repo, permissions } = await this.fileService.repo(resourceId, request.user)
+    const { repo, resource, permissions } = await this.fileService.repo(resourceId, request.user)
     if (!permissions.write) {
       throw new UnauthorizedResponse('You are not allowed to release this resource')
     }
 
     await repo.release(input.name, input.message)
+
+    this.eventService.emit<OnReleaseRepoEventPayload>(ON_RELEASE_REPO_EVENT, {
+      repo,
+      resource,
+    })
+
     return repo.versions()
   }
 
