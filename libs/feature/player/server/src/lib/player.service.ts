@@ -142,6 +142,16 @@ export class PlayerService {
           await this.sessionService.findExercise(activitySessionId, sessionId),
           user
         )
+
+        if (!exerciseSession.envid) {
+          const { envid, variables } = await this.sandboxService.build(exerciseSession.source as PLSourceFile)
+          exerciseSession.envid = envid
+          exerciseSession.variables = variables
+          await this.sessionService.update(exerciseSession.id, {
+            envid: exerciseSession.envid,
+            variables: exerciseSession.variables,
+          })
+        }
         exerciseSession.parent = activitySession
         exerciseSession.startedAt = exerciseSession.startedAt || new Date()
         await this.sessionService.update(exerciseSession.id, {
@@ -404,13 +414,11 @@ export class PlayerService {
 
       source.variables.seed = (Number.parseInt(source.variables.seed + '') || Date.now()) % 100
 
-      const { envid, variables } = await this.sandboxService.build(source)
-
       const session = await this.sessionService.create(
         {
           activity,
-          variables,
-          envid: envid || (null as any),
+          variables: source.variables as Variables,
+          envid: null as any,
           userId: user?.id || (null as any),
           parentId: parentId || (null as any),
           activityId: activity?.id || (null as any),
@@ -420,7 +428,12 @@ export class PlayerService {
       )
 
       if (source.abspath.endsWith('.pla')) {
-        session.variables = await this.createNavigation(variables as PlayerActivityVariables, session, user, manager)
+        session.variables = await this.createNavigation(
+          source.variables as PlayerActivityVariables,
+          session,
+          user,
+          manager
+        )
 
         await this.sessionService.update(
           session.id,
