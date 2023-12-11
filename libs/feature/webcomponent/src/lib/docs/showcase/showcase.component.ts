@@ -38,13 +38,10 @@ export class ShowcaseComponent implements OnInit {
           .filter((k) => {
             return !(k in showcase)
           })
-          .reduce(
-            (rec, curr) => {
-              if (!(curr in showcase)) rec[curr] = schema.properties[curr].default
-              return rec
-            },
-            {} as Record<string, any>
-          ),
+          .reduce((rec, curr) => {
+            if (!(curr in showcase)) rec[curr] = schema.properties[curr].default
+            return rec
+          }, {} as Record<string, any>),
       }
     }
     host?.appendChild(this.component)

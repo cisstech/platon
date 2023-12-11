@@ -27,10 +27,7 @@ export class MatrixResizerComponent implements OnDestroy {
   @ViewChild('template', { read: TemplateRef })
   template!: TemplateRef<unknown>
 
-  constructor(
-    private readonly overlay: Overlay,
-    private readonly container: ViewContainerRef
-  ) {}
+  constructor(private readonly overlay: Overlay, private readonly container: ViewContainerRef) {}
 
   ngOnDestroy() {
     this.resizer?.dispose()

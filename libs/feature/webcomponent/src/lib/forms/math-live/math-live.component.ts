@@ -19,10 +19,7 @@ export class MathLiveComponent implements OnInit, WebComponentHooks<MathLiveStat
   @ViewChild('container', { static: true })
   container!: ElementRef<HTMLElement>
 
-  constructor(
-    readonly injector: Injector,
-    readonly changeDetection: WebComponentChangeDetectorService
-  ) {}
+  constructor(readonly injector: Injector, readonly changeDetection: WebComponentChangeDetectorService) {}
 
   async ngOnInit() {
     this.mathfield = new MathfieldElement()

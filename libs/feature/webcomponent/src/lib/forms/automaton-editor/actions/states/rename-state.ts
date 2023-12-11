@@ -10,10 +10,7 @@ import { AutomatonEditorAction, AutomatonEditorActionContext, AUTOMATON_EDITOR_A
 export class ActionRenameState implements AutomatonEditorAction {
   readonly name = 'Renommer'
 
-  constructor(
-    private readonly dialog: DialogService,
-    private readonly editor: AutomatonEditorService
-  ) {}
+  constructor(private readonly dialog: DialogService, private readonly editor: AutomatonEditorService) {}
 
   async run(context: AutomatonEditorActionContext) {
     if (!context.state) {

@@ -38,10 +38,7 @@ export class Repo {
     dir: this.root,
   }
 
-  private constructor(
-    private readonly root: string,
-    private readonly user: User
-  ) {}
+  private constructor(private readonly root: string, private readonly user: User) {}
 
   static async get(
     name: string,

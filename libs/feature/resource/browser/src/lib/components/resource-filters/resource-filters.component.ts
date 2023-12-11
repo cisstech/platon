@@ -83,20 +83,14 @@ export class ResourceFiltersComponent implements OnDestroy {
       order: this.filters.order,
       direction: this.filters.direction,
       parents: this.filters.parents,
-      types: Object.values(ResourceTypes).reduce(
-        (controls, type) => {
-          controls[type] = this.filters.types?.includes(type) || false
-          return controls
-        },
-        {} as Record<ResourceTypes, boolean>
-      ),
-      status: Object.values(ResourceStatus).reduce(
-        (controls, status) => {
-          controls[status] = this.filters.status?.includes(status) || false
-          return controls
-        },
-        {} as Record<ResourceStatus, boolean>
-      ),
+      types: Object.values(ResourceTypes).reduce((controls, type) => {
+        controls[type] = this.filters.types?.includes(type) || false
+        return controls
+      }, {} as Record<ResourceTypes, boolean>),
+      status: Object.values(ResourceStatus).reduce((controls, status) => {
+        controls[status] = this.filters.status?.includes(status) || false
+        return controls
+      }, {} as Record<ResourceStatus, boolean>),
     })
 
     this.visible = true
@@ -139,22 +133,16 @@ export class ResourceFiltersComponent implements OnDestroy {
       direction: new FormControl(OrderingDirections.ASC),
       period: new FormControl(0),
       types: new FormGroup(
-        Object.values(ResourceTypes).reduce(
-          (controls, type) => {
-            controls[type] = new FormControl(false)
-            return controls
-          },
-          {} as Record<ResourceTypes, FormControl<boolean | null>>
-        )
+        Object.values(ResourceTypes).reduce((controls, type) => {
+          controls[type] = new FormControl(false)
+          return controls
+        }, {} as Record<ResourceTypes, FormControl<boolean | null>>)
       ),
       status: new FormGroup(
-        Object.values(ResourceStatus).reduce(
-          (controls, status) => {
-            controls[status] = new FormControl(false)
-            return controls
-          },
-          {} as Record<ResourceStatus, FormControl<boolean | null>>
-        )
+        Object.values(ResourceStatus).reduce((controls, status) => {
+          controls[status] = new FormControl(false)
+          return controls
+        }, {} as Record<ResourceStatus, FormControl<boolean | null>>)
       ),
     })
   }

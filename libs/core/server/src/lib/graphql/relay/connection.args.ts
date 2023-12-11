@@ -34,8 +34,8 @@ const checkPagingSanity = (args: ConnectionArguments): PagingMeta => {
   return isForwardPaging
     ? { pagingType: 'forward', after, first }
     : isBackwardPaging
-      ? { pagingType: 'backward', before, last }
-      : { pagingType: 'none' }
+    ? { pagingType: 'backward', before, last }
+    : { pagingType: 'none' }
 }
 
 export const offsetLimitFromConnectionArgs = (args: ConnectionArguments) => {
