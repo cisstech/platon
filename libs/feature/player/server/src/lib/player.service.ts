@@ -77,6 +77,20 @@ export class PlayerService {
   ) {}
 
   /**
+   * Builds the given ExerciseSession
+   */
+  async buildExerciseSession(exerciseSession: SessionEntity): Promise<SessionEntity> {
+    const { envid, variables } = await this.sandboxService.build(exerciseSession.source as PLSourceFile)
+    exerciseSession.envid = envid
+    exerciseSession.variables = variables
+    await this.sessionService.update(exerciseSession.id, {
+      envid: envid,
+      variables: variables,
+    })
+    return exerciseSession
+  }
+
+  /**
    * Creates new player session for the given resource for preview purpose.
    *
    * Note :
@@ -94,8 +108,10 @@ export class PlayerService {
     if (!resource.publicPreview && (!user || !isTeacherRole(user?.role))) {
       throw new ForbiddenResponse('You are not allowed to preview this resource')
     }
-
-    const session = await this.createNewSession({ source })
+    let session = await this.createNewSession({ source })
+    if (resource.type === 'EXERCISE') {
+      session = await this.buildExerciseSession(session)
+    }
     return {
       exercise: resource.type === 'EXERCISE' ? withExercisePlayer(session) : undefined,
       activity: resource.type === 'ACTIVITY' ? withActivityPlayer(session) : undefined,
@@ -142,10 +158,14 @@ export class PlayerService {
     // CREATE PLAYERS
     const exercisePlayers = await Promise.all(
       exerciseSessionIds.map(async (sessionId) => {
-        const exerciseSession = withSessionAccessGuard(
+        let exerciseSession = withSessionAccessGuard(
           await this.sessionService.findExercise(activitySessionId, sessionId),
           user
         )
+
+        if (!exerciseSession.envid) {
+          exerciseSession = await this.buildExerciseSession(exerciseSession)
+        }
         exerciseSession.parent = activitySession
         exerciseSession.startedAt = exerciseSession.startedAt || new Date()
         await this.sessionService.update(exerciseSession.id, {
@@ -289,7 +309,7 @@ export class PlayerService {
 
     variables = output.variables as ExerciseVariables
 
-    const attemptIncrement = grade > -1 ? 1 : 0
+const attemptIncrement = grade > -1 ? 1 : 0
     variables['.meta'] = {
       ...(variables['.meta'] || {}),
       attempts: (variables['.meta']?.attempts || 0) + attemptIncrement,
@@ -409,13 +429,11 @@ export class PlayerService {
 
       source.variables.seed = (Number.parseInt(source.variables.seed + '') || Date.now()) % 100
 
-      const { envid, variables } = await this.sandboxService.build(source)
-
       const session = await this.sessionService.create(
         {
           activity,
-          variables,
-          envid: envid || (null as any),
+          variables: source.variables as Variables,
+          envid: null as any,
           userId: user?.id || (null as any),
           parentId: parentId || (null as any),
           activityId: activity?.id || (null as any),
@@ -425,7 +443,12 @@ export class PlayerService {
       )
 
       if (source.abspath.endsWith('.pla')) {
-        session.variables = await this.createNavigation(variables as PlayerActivityVariables, session, user, manager)
+        session.variables = await this.createNavigation(
+          source.variables as PlayerActivityVariables,
+          session,
+          user,
+          manager
+        )
 
         await this.sessionService.update(
           session.id,
