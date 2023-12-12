@@ -52,7 +52,7 @@ USER node
 
 ### STAGE 2: Production ###
 
-FROM node:16-alpine as production
+FROM node:18-alpine as production
 RUN apk add --no-cache --update \
   bash \
   openssh \
