@@ -91,6 +91,8 @@ export interface ActivityExercise {
   source: PLSourceFile
 }
 
+export type ActivityExerciseGroups = Record<string, ActivityExercise[]>
+
 /**
  * List of special variables of an activity source file.
  */
@@ -98,7 +100,7 @@ export interface ActivityVariables {
   title: string
   introduction: string
   conclusion: string
-  exerciseGroups: Record<string, ActivityExercise[]>
+  exerciseGroups: ActivityExerciseGroups
 
   author?: string
   settings?: ActivitySettings

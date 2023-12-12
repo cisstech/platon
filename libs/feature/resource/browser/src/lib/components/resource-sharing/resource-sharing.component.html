@@ -5,6 +5,7 @@
       nzSuffixIcon="global"
       class="visibility-select"
       [(ngModel)]="visibility"
+      [disabled]="!canEditSharing"
       (ngModelChange)="changeVisibility()"
     >
       <nz-option nzLabel="Visible en dehors de PLaTon" nzValue="public" />
@@ -19,7 +20,7 @@
         {{ resourceVersion }}
       </ng-template>
       <nz-option nzLabel="latest" nzValue="latest" />
-      <nz-option *ngFor="let item of versions.all" [nzLabel]="item.tag" [nzValue]="item.tag" />
+      <nz-option *ngFor="let item of versions" [nzLabel]="item.tag" [nzValue]="item.tag" />
     </nz-select>
     <nz-button-group>
       <button nz-button nz-tooltip="Copier le lien" (click)="share()">

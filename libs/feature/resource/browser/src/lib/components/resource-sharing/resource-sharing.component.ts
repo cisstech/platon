@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, i
 import { FormsModule } from '@angular/forms'
 import { ClipboardService } from '@cisstech/nge/services'
 import { DialogService } from '@platon/core/browser'
-import { FileVersions } from '@platon/feature/resource/common'
+import { FileVersion } from '@platon/feature/resource/common'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown'
 import { NzIconModule } from 'ng-zorro-antd/icon'
@@ -11,7 +11,6 @@ import { NzModalModule } from 'ng-zorro-antd/modal'
 import { NzSelectModule } from 'ng-zorro-antd/select'
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 import { firstValueFrom } from 'rxjs'
-import { ResourceFileService } from '../../api/file.service'
 import { ResourceService } from '../../api/resource.service'
 
 @Component({
@@ -35,7 +34,6 @@ import { ResourceService } from '../../api/resource.service'
   ],
 })
 export class ResourceSharingComponent implements OnInit {
-  private readonly fileService = inject(ResourceFileService)
   private readonly dialogService = inject(DialogService)
   private readonly resourceService = inject(ResourceService)
   private readonly clipboardService = inject(ClipboardService)
@@ -43,17 +41,20 @@ export class ResourceSharingComponent implements OnInit {
 
   @Input() resourceId!: string
   @Input() resourceVersion = 'latest'
+  @Input() canEditSharing = false
 
-  protected versions?: FileVersions
+  protected versions: FileVersion[] = []
   protected visibility: 'public' | 'private' = 'public'
 
   async ngOnInit(): Promise<void> {
-    const [resource, versions] = await Promise.all([
-      firstValueFrom(this.resourceService.find(this.resourceId)),
-      firstValueFrom(this.fileService.versions(this.resourceId)),
-    ])
-
-    this.versions = versions
+    const resource = await firstValueFrom(
+      this.resourceService.find({
+        id: this.resourceId,
+        selects: ['publicPreview', 'metadata.versions'],
+        expands: ['metadata'],
+      })
+    )
+    this.versions = resource.metadata?.versions ?? []
     this.visibility = resource.publicPreview ? 'public' : 'private'
     this.changeDetectorRef.markForCheck()
   }

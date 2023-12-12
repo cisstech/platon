@@ -6,16 +6,12 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnIni
 import { RouterModule } from '@angular/router'
 import { Subscription, of } from 'rxjs'
 
-import { MatCardModule } from '@angular/material/card'
-
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzCollapseModule } from 'ng-zorro-antd/collapse'
 import { NzEmptyModule } from 'ng-zorro-antd/empty'
 import { NzGridModule } from 'ng-zorro-antd/grid'
 import { NzIconModule } from 'ng-zorro-antd/icon'
-import { NzProgressModule } from 'ng-zorro-antd/progress'
 import { NzSegmentedModule } from 'ng-zorro-antd/segmented'
-import { NzStatisticModule } from 'ng-zorro-antd/statistic'
 import { NzTypographyModule } from 'ng-zorro-antd/typography'
 
 import { CourseActivityGridComponent, CourseActivityTableComponent } from '@platon/feature/course/browser'
@@ -42,17 +38,13 @@ import { CoursePresenter } from '../course.presenter'
     CommonModule,
     RouterModule,
 
-    MatCardModule,
-
     NzIconModule,
     NzGridModule,
     NzEmptyModule,
     NzButtonModule,
     NzToolTipModule,
-    NzProgressModule,
     NzCollapseModule,
     NzSegmentedModule,
-    NzStatisticModule,
     NzTypographyModule,
 
     CourseActivityGridComponent,

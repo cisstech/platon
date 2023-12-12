@@ -100,13 +100,10 @@ export class SessionAverageScoreByMonth implements SessionDataAggregator<Record<
   }
 
   complete(): Record<string, number> {
-    return Array.from(this.scores.entries()).reduce(
-      (record, [id, score]) => {
-        record[id] = Math.round(score.total / score.count)
-        return record
-      },
-      {} as Record<string, number>
-    )
+    return Array.from(this.scores.entries()).reduce((record, [id, score]) => {
+      record[id] = Math.round(score.total / score.count)
+      return record
+    }, {} as Record<string, number>)
   }
 }
 
@@ -149,13 +146,10 @@ export class SessionTotalDurationByMonth implements SessionDataAggregator<Record
   }
 
   complete(): Record<string, number> {
-    return Array.from(this.durations.entries()).reduce(
-      (record, [id, duration]) => {
-        record[id] = duration
-        return record
-      },
-      {} as Record<string, number>
-    )
+    return Array.from(this.durations.entries()).reduce((record, [id, duration]) => {
+      record[id] = duration
+      return record
+    }, {} as Record<string, number>)
   }
 }
 

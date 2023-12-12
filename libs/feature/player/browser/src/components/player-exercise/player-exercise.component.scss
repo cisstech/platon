@@ -63,7 +63,6 @@ mat-divider {
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
   border-width: 1px;
-  border-top-color: var(--brand-color-primary);
 }
 
 nz-alert {
@@ -125,12 +124,11 @@ pre {
 }
 
 .danger {
-  color: white !important;
   background-color: #ff4d4f !important;
 }
 
 button.primary {
-  color: white !important;
+  color: var(--brand-text-primary) !important;
 }
 
 .skeleton-actions {

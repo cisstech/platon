@@ -22,6 +22,7 @@ export const ResourceTypeFilterIndicator = (type: ResourceTypes): FilterIndicato
     remove: (filters) => ({
       ...filters,
       types: filters.types?.filter((e) => e !== type),
+      ...(type === ResourceTypes.EXERCISE ? { configurable: undefined } : {}),
     }),
     describe: () => RESOURCE_TYPE_NAMES[type],
   }
@@ -47,4 +48,13 @@ export const ResourceOrderingFilterIndicator = (ordering: ResourceOrderings): Fi
     }),
     describe: () => 'Trier par ' + RESOURCE_ORDERING_NAMES[ordering],
   }
+}
+
+export const ExerciseConfigurableFilterIndicator: FilterIndicator<ResourceFilters> = {
+  match: (filters) => !!filters.configurable,
+  remove: (filters: ResourceFilters) => ({
+    ...filters,
+    configurable: undefined,
+  }),
+  describe: () => 'Exercice configurable',
 }

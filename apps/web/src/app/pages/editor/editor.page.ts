@@ -19,6 +19,7 @@ import { NzSpinModule } from 'ng-zorro-antd/spin'
 import { Subscription } from 'rxjs'
 import { PleConfigEditorContributionModule } from './contributions/editors/ple-config-editor'
 import { PleEditorContributionModule } from './contributions/editors/ple-editor'
+import { PlExplorerContributionModule } from './contributions/explorer/pl-explorer.contribution'
 import { ResourceFileSystemProvider } from './contributions/file-system'
 import { PlPreviewContributionModule } from './contributions/previews/pl-preview.contribution'
 import { EditorPresenter } from './editor.presenter'
@@ -48,6 +49,7 @@ import { EditorPresenter } from './editor.presenter'
     PlaEditorContributionModule,
     PlPreviewContributionModule,
     PleEditorContributionModule,
+    PlExplorerContributionModule,
     PleConfigEditorContributionModule,
   ],
   providers: [ResourceFileSystemProvider],

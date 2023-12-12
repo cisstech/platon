@@ -11,3 +11,7 @@
 /node_modules
 .gql
 /resources
+
+/.nx/cache
+
+**/*.graphql.generated.ts

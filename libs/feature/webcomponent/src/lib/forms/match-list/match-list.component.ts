@@ -42,10 +42,7 @@ export class MatchListComponent implements OnInit, AfterViewChecked, OnDestroy, 
     return this.state.nodes.filter((e) => e.type === 'target')
   }
 
-  constructor(
-    readonly injector: Injector,
-    readonly changeDetector: WebComponentChangeDetectorService
-  ) {}
+  constructor(readonly injector: Injector, readonly changeDetector: WebComponentChangeDetectorService) {}
 
   async ngOnInit() {
     this.jsPlumb = jsPlumb.getInstance({

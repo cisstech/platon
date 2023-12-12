@@ -13,7 +13,7 @@
     z-index: 4;
     opacity: 0.8;
     cursor: move;
-    background-color: white;
+    background-color: var(--brand-background-components);
     font-size: 14px;
     border: 1px solid #2e6f9a;
     border-radius: 50%;
@@ -76,7 +76,7 @@
     border: 1px solid #346789;
     cursor: pointer;
 
-    background-color: white;
+    background-color: var(--brand-background-components);
     -webkit-transition: background-color 0.25s ease-in;
     -moz-transition: background-color 0.25s ease-in;
     transition: background-color 0.25s ease-in;

@@ -21,10 +21,7 @@ export class ResourceEventsPage implements OnInit, OnDestroy {
   protected context = this.presenter.defaultContext()
   protected events: ResourceEvent[] = []
 
-  constructor(
-    private readonly presenter: ResourcePresenter,
-    private readonly changeDetectorRef: ChangeDetectorRef
-  ) {}
+  constructor(private readonly presenter: ResourcePresenter, private readonly changeDetectorRef: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.subscriptions.push(

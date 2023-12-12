@@ -5,10 +5,7 @@ import { AuthService } from '../api/auth.service'
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuard {
-  constructor(
-    private readonly router: Router,
-    private readonly authService: AuthService
-  ) {}
+  constructor(private readonly router: Router, private readonly authService: AuthService) {}
 
   async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     const user = await this.authService.ready()

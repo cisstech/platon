@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { RouterModule } from '@angular/router'
 
 import { MatCardModule } from '@angular/material/card'
@@ -14,11 +14,11 @@ import {
   UiStatisticCardComponent,
 } from '@platon/shared/ui'
 
-import { NzGridModule } from 'ng-zorro-antd/grid'
 import { NzButtonModule } from 'ng-zorro-antd/button'
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker'
+import { NzGridModule } from 'ng-zorro-antd/grid'
 import { NzSelectModule } from 'ng-zorro-antd/select'
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton'
-import { NzDatePickerModule } from 'ng-zorro-antd/date-picker'
 
 import { FormsModule } from '@angular/forms'
 import { Subscription } from 'rxjs'
@@ -58,16 +58,12 @@ import { OverviewPresenter } from './overview.presenter'
 })
 export class OverviewPage implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription[] = []
+  private readonly presenter = inject(OverviewPresenter)
+  private readonly changeDetectorRef = inject(ChangeDetectorRef)
 
   protected context = this.presenter.defaultContext()
-
   protected learningInsightsDate = new Date()
   protected learningInsightsOption: 'score' | 'duration' = 'score'
-
-  constructor(
-    private readonly presenter: OverviewPresenter,
-    private readonly changeDetectorRef: ChangeDetectorRef
-  ) {}
 
   async ngOnInit(): Promise<void> {
     this.subscriptions.push(

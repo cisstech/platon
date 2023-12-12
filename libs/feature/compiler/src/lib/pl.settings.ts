@@ -36,6 +36,12 @@ export interface ActivityFeedbackSettings {
   validation?: boolean
 }
 
+/**
+ * - `manual` => The user can jump between the exercises by using the navigation card.
+ * - `composed` => All exercises are shown together.
+ */
+export type ActivityNavigationModes = 'manual' | 'composed'
+
 /** Settings specific to navigation. */
 export interface ActivityNavigationSettings {
   /**
@@ -43,7 +49,7 @@ export interface ActivityNavigationSettings {
    * - `manual` => The user can jump between the exercises by using the navigation card.
    * - `composed` => All exercises are shown together.
    */
-  mode?: 'manual' | 'composed'
+  mode?: ActivityNavigationModes
 }
 
 /** Default settings for preview mode. */

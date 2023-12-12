@@ -2,7 +2,7 @@
   display: inline-flex;
   align-items: center;
   font-size: 0.9em;
-  --color-username: #586069;
+  --color-username: var(--brand-text-secondary);
 }
 
 nz-badge {

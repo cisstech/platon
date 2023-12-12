@@ -13,10 +13,7 @@ const KEY = 'auth-token'
  */
 @Injectable()
 export class RemoteTokenProvider extends TokenProvider {
-  constructor(
-    private readonly http: HttpClient,
-    private readonly storage: StorageService
-  ) {
+  constructor(private readonly http: HttpClient, private readonly storage: StorageService) {
     super()
   }
 

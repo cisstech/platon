@@ -23,12 +23,6 @@ header {
   }
 }
 
-article {
-  width: 70%;
-  margin: 0 auto;
-  box-sizing: border-box;
-}
-
 li {
   list-style: none;
 }
@@ -58,10 +52,6 @@ ui-search-bar {
 
 @media (max-width: 720px) {
   ui-search-bar {
-    width: 100%;
-  }
-
-  article {
     width: 100%;
   }
 }

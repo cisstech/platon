@@ -56,3 +56,5 @@ envs/*
 .graphql/*
 !.graphql/.gitkeep
 **/*.generated.ts
+
+.nx/cache

@@ -38,7 +38,7 @@ export class EditorPresenter {
 
     const user = (await this.authService.ready()) as User
     const [resource, circles, personal] = await Promise.all([
-      firstValueFrom(this.resourceService.find(id)),
+      firstValueFrom(this.resourceService.find({ id })),
       firstValueFrom(this.resourceService.tree()),
       firstValueFrom(this.resourceService.circle(user.username)),
     ])
@@ -47,11 +47,11 @@ export class EditorPresenter {
       resource.parentId === personal.id
         ? [circleTreeFromResource(personal)]
         : resource.type === ResourceTypes.CIRCLE
-          ? resourceAncestors(circles, resource.id)
-          : [
-              circleFromTree(circles, resource.parentId as string) as CircleTree,
-              ...resourceAncestors(circles, resource.parentId as string),
-            ]
+        ? resourceAncestors(circles, resource.id)
+        : [
+            circleFromTree(circles, resource.parentId as string) as CircleTree,
+            ...resourceAncestors(circles, resource.parentId as string),
+          ]
 
     this.resource = resource
     this.ancestors = ancestors

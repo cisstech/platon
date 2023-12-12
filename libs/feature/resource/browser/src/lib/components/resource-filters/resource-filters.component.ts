@@ -83,20 +83,15 @@ export class ResourceFiltersComponent implements OnDestroy {
       order: this.filters.order,
       direction: this.filters.direction,
       parents: this.filters.parents,
-      types: Object.values(ResourceTypes).reduce(
-        (controls, type) => {
-          controls[type] = this.filters.types?.includes(type) || false
-          return controls
-        },
-        {} as Record<ResourceTypes, boolean>
-      ),
-      status: Object.values(ResourceStatus).reduce(
-        (controls, status) => {
-          controls[status] = this.filters.status?.includes(status) || false
-          return controls
-        },
-        {} as Record<ResourceStatus, boolean>
-      ),
+      configurable: this.filters.configurable,
+      types: Object.values(ResourceTypes).reduce((controls, type) => {
+        controls[type] = this.filters.types?.includes(type) || false
+        return controls
+      }, {} as Record<ResourceTypes, boolean>),
+      status: Object.values(ResourceStatus).reduce((controls, status) => {
+        controls[status] = this.filters.status?.includes(status) || false
+        return controls
+      }, {} as Record<ResourceStatus, boolean>),
     })
 
     this.visible = true
@@ -110,11 +105,18 @@ export class ResourceFiltersComponent implements OnDestroy {
           direction: value.direction as OrderingDirections,
           order: value.order as ResourceOrderings,
           period: value.period as number,
+          configurable: value.configurable as boolean,
           types: types ? (Object.keys(types).filter((e) => types[e as ResourceTypes]) as ResourceTypes[]) : undefined,
           status: status
             ? (Object.keys(status).filter((e) => status[e as ResourceStatus]) as ResourceStatus[])
             : undefined,
           parents: value.parents as string[],
+        }
+
+        if (!value.types?.EXERCISE) {
+          this.form.patchValue({
+            configurable: null,
+          })
         }
       })
     )
@@ -138,23 +140,18 @@ export class ResourceFiltersComponent implements OnDestroy {
       order: new FormControl(ResourceOrderings.NAME),
       direction: new FormControl(OrderingDirections.ASC),
       period: new FormControl(0),
+      configurable: new FormControl(false),
       types: new FormGroup(
-        Object.values(ResourceTypes).reduce(
-          (controls, type) => {
-            controls[type] = new FormControl(false)
-            return controls
-          },
-          {} as Record<ResourceTypes, FormControl<boolean | null>>
-        )
+        Object.values(ResourceTypes).reduce((controls, type) => {
+          controls[type] = new FormControl(false)
+          return controls
+        }, {} as Record<ResourceTypes, FormControl<boolean | null>>)
       ),
       status: new FormGroup(
-        Object.values(ResourceStatus).reduce(
-          (controls, status) => {
-            controls[status] = new FormControl(false)
-            return controls
-          },
-          {} as Record<ResourceStatus, FormControl<boolean | null>>
-        )
+        Object.values(ResourceStatus).reduce((controls, status) => {
+          controls[status] = new FormControl(false)
+          return controls
+        }, {} as Record<ResourceStatus, FormControl<boolean | null>>)
       ),
     })
   }

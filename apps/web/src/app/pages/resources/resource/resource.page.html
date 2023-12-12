@@ -93,10 +93,10 @@
           Ouvrir dans l'éditeur
         </button>
         <button
-          *ngIf="context.resource.permissions.write"
+          *ngIf="context.resource.type !== 'CIRCLE'"
           nz-button
           [nz-popover]
-          nzPopoverPlacement="bottomLeft"
+          nzPopoverPlacement="left"
           [nzPopoverTrigger]="'click'"
           [nzPopoverContent]="sharingPopover"
         >
@@ -143,5 +143,5 @@
 <ui-modal-iframe #iframe />
 
 <ng-template #sharingPopover>
-  <resource-sharing [resourceId]="context.resource!.id" />
+  <resource-sharing [resourceId]="context.resource!.id" [canEditSharing]="context.resource!.permissions!.write" />
 </ng-template>

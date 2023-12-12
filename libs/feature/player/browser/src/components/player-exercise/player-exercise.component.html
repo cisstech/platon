@@ -130,7 +130,7 @@
     >
       <nz-spin *ngIf="runningAction && runningAction === action.playerAction" nzSpinning nzSimple nzSize="small" />
       <ng-container *ngIf="!runningAction || runningAction !== action.playerAction">
-        <mat-icon [color]="action.color ? undefined : 'primary'">{{ action.icon }}</mat-icon>
+        <mat-icon>{{ action.icon }}</mat-icon>
         <ng-container *ngIf="action.showLabel">{{ action.label }}</ng-container>
       </ng-container>
     </button>

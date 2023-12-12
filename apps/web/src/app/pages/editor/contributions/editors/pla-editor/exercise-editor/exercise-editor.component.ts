@@ -38,7 +38,11 @@ export class PlaExerciseEditorComponent {
   set exercise(value: ActivityExercise) {
     this._exercise = value
     Promise.all([
-      firstValueFrom(this.resourceService.find(value.resource)),
+      firstValueFrom(
+        this.resourceService.find({
+          id: value.resource,
+        })
+      ),
       firstValueFrom(
         this.resourceFileService
           .read(value.resource, PLE_CONFIG_FILE_PATH, value.version)

@@ -1,5 +1,6 @@
-import { HttpClient, HttpParams } from '@angular/common/http'
+import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
+import { buildHttpParams } from '@platon/core/browser'
 import { ItemResponse, ListResponse } from '@platon/core/common'
 import { Course, CourseFilters, CreateCourse, UpdateCourse } from '@platon/feature/course/common'
 import { Observable } from 'rxjs'
@@ -14,36 +15,7 @@ export class RemoteCourseProvider extends CourseProvider {
 
   search(filters?: CourseFilters): Observable<ListResponse<Course>> {
     filters = filters || {}
-    let params = new HttpParams()
-
-    if (filters.search) {
-      params = params.append('search', filters.search)
-    }
-
-    filters.members?.forEach((e) => {
-      params = params.append('members', e)
-    })
-
-    if (filters.order) {
-      params = params.append('order', filters.order)
-    }
-
-    if (filters.direction) {
-      params = params.append('direction', filters.direction)
-    }
-
-    if (filters.period) {
-      params = params.append('period', filters.period.toString())
-    }
-
-    if (filters.limit) {
-      params = params.append('limit', filters.limit.toString())
-    }
-
-    if (filters.offset) {
-      params = params.append('offset', filters.offset.toString())
-    }
-
+    const params = buildHttpParams(filters)
     return this.http.get<ListResponse<Course>>(`/api/v1/courses`, { params })
   }
 

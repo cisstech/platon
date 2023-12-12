@@ -1,12 +1,19 @@
 import { StreamableFile } from '@nestjs/common'
-import { FileTypes, FileVersion, FileVersions, ResourceFile, ResourceTypes } from '@platon/feature/resource/common'
+import {
+  FileTypes,
+  FileVersion,
+  FileVersions,
+  LATEST,
+  ResourceFile,
+  ResourceTypes,
+} from '@platon/feature/resource/common'
 import {
   FileExistsError,
   FileNotFoundError,
-  isDirectory,
-  isFile,
   NotADirectoryError,
   PermissionError,
+  isDirectory,
+  isFile,
   uniquifyFileName,
   withTempFile,
 } from '@platon/shared/server'
@@ -14,12 +21,11 @@ import * as fs from 'fs'
 import * as git from 'isomorphic-git'
 import * as Path from 'path'
 import { simpleGit } from 'simple-git'
+import * as unzipper from 'unzipper'
 
 const BASE = Path.join(process.cwd(), 'resources')
 const ROOT = '.'
 const DEFAULT_BRANCH = 'main'
-
-export const LATEST = 'latest'
 
 interface User {
   name: string
@@ -38,10 +44,7 @@ export class Repo {
     dir: this.root,
   }
 
-  private constructor(
-    private readonly root: string,
-    private readonly user: User
-  ) {}
+  private constructor(private readonly root: string, private readonly user: User) {}
 
   static async get(
     name: string,
@@ -279,6 +282,21 @@ export class Repo {
     }
     await fs.promises.writeFile(abspath, data)
     await this.commit(`update ${path}`)
+  }
+
+  async unzip(path: string) {
+    const abspath = this.abspath(path)
+    const dstpath = Path.dirname(abspath)
+    await fs
+      .createReadStream(abspath)
+      .pipe(unzipper.Extract({ path: dstpath }))
+      .promise()
+
+    // Remove macOS and Windows  metadata folders
+    const specialFolders = ['__MACOSX', '__win32.ini', '__win32'].filter((x) => this.exists(Path.join(dstpath, x)))
+    await Promise.all(specialFolders.map((x) => fs.promises.rm(Path.join(dstpath, x), { recursive: true })))
+
+    await this.commit(`unzip ${path}`)
   }
 
   async upload(src: string, dst: string) {

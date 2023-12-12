@@ -290,12 +290,9 @@ export class PlayerActivityComponent implements OnInit {
   }
 
   private calculateAnswerStates(navigation: PlayerNavigation): void {
-    this.answerStates = navigation.exercises.reduce(
-      (acc, exercise) => {
-        acc[exercise.sessionId] = exercise.state
-        return acc
-      },
-      {} as Record<string, AnswerStates>
-    )
+    this.answerStates = navigation.exercises.reduce((acc, exercise) => {
+      acc[exercise.sessionId] = exercise.state
+      return acc
+    }, {} as Record<string, AnswerStates>)
   }
 }

@@ -17,10 +17,7 @@ import { CourseMemberView } from '../course-member/course-member.view'
 export class CourseNotificationService {
   private readonly logger = new Logger(CourseNotificationService.name)
 
-  constructor(
-    private readonly dataSource: DataSource,
-    private readonly notificationService: NotificationService
-  ) {}
+  constructor(private readonly dataSource: DataSource, private readonly notificationService: NotificationService) {}
 
   async notifyCourseMemberBeingCreated(members: CourseMemberView[]) {
     try {

@@ -10,7 +10,7 @@ import { LevelModule } from './levels'
 import { PubSubModule } from './pubsub/pubsub.module'
 import { TopicModule } from './topics'
 import { UserModule } from './users/user.module'
-
+import { NestKitExpandModule } from '@cisstech/nestjs-expand'
 @Module({
   imports: [
     ConfigurationModule,
@@ -26,6 +26,12 @@ import { UserModule } from './users/user.module'
     ClsModule.forRoot({
       global: true,
       middleware: { mount: true },
+    }),
+    NestKitExpandModule.forRoot({
+      enableGlobalSelection: true,
+      enableLogging: true,
+      expandQueryParamName: 'expands',
+      selectQueryParamName: 'selects',
     }),
   ],
   exports: [

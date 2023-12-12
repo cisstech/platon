@@ -4,6 +4,7 @@ import { ItemResponse, ListResponse } from '@platon/core/common'
 import {
   CircleTree,
   CreateResource,
+  FindResource,
   Resource,
   ResourceCompletion,
   ResourceFilters,
@@ -13,6 +14,7 @@ import {
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { ResourceProvider } from '../models/resource-provider'
+import { buildHttpParams } from '@platon/core/browser'
 
 @Injectable()
 export class RemoteResourceProvider extends ResourceProvider {
@@ -44,83 +46,64 @@ export class RemoteResourceProvider extends ResourceProvider {
 
   search(filters?: ResourceFilters): Observable<ListResponse<Resource>> {
     filters = filters || {}
-    let params = new HttpParams()
-
-    if (filters.search) {
-      params = params.append('search', filters.search)
-    }
-
-    filters.types?.forEach((e) => {
-      params = params.append('types', e)
-    })
-
-    filters.status?.forEach((e) => {
-      params = params.append('status', e)
-    })
-
-    filters.members?.forEach((e) => {
-      params = params.append('members', e)
-    })
-
-    filters.owners?.forEach((e) => {
-      params = params.append('owners', e)
-    })
-
-    filters.watchers?.forEach((e) => {
-      params = params.append('watchers', e)
-    })
-
-    if (filters.order) {
-      params = params.append('order', filters.order)
-    }
-
-    if (filters.direction) {
-      params = params.append('direction', filters.direction)
-    }
-
-    if (filters.period) {
-      params = params.append('period', filters.period.toString())
-    }
-
-    if (filters.limit) {
-      params = params.append('limit', filters.limit.toString())
-    }
-
-    if (filters.offset) {
-      params = params.append('offset', filters.offset.toString())
-    }
-
-    if (filters.views) {
-      params = params.append('views', 'true')
-    }
-
-    filters.parents?.forEach((e) => {
-      params = params.append('parents', e)
-    })
-
+    const params = buildHttpParams(filters)
     return this.http.get<ListResponse<Resource>>(`/api/v1/resources`, { params })
   }
 
-  find(id: string, markAsViewed?: boolean): Observable<Resource> {
+  find(input: FindResource): Observable<Resource> {
     let params = new HttpParams()
-    if (markAsViewed) {
+    if (input.markAsViewed) {
       params = params.append('markAsViewed', 'true')
     }
 
+    if (input.expands) {
+      params = params.append('expands', input.expands.join(','))
+    }
+
+    if (input.selects) {
+      params = params.append('selects', input.selects.join(','))
+    }
+
     return this.http
-      .get<ItemResponse<Resource>>(`/api/v1/resources/${id}`, {
+      .get<ItemResponse<Resource>>(`/api/v1/resources/${input.id}`, {
         params,
       })
       .pipe(map((response) => response.resource))
   }
 
   update(id: string, input: UpdateResource): Observable<Resource> {
+    let params = new HttpParams()
+
+    if (input.expands) {
+      params = params.append('expands', input.expands.join(','))
+    }
+
+    if (input.selects) {
+      params = params.append('selects', input.selects.join(','))
+    }
+
     return this.http
-      .patch<ItemResponse<Resource>>(`/api/v1/resources/${id}`, input)
+      .patch<ItemResponse<Resource>>(`/api/v1/resources/${id}`, input, {
+        params,
+      })
       .pipe(map((response) => response.resource))
   }
 
   create(input: CreateResource): Observable<Resource> {
-    return this.http.post<ItemResponse<Resource>>('/api/v1/resources', input).pipe(map((response) => response.resource))
+    let params = new HttpParams()
+
+    if (input.expands) {
+      params = params.append('expands', input.expands.join(','))
+    }
+
+    if (input.selects) {
+      params = params.append('selects', input.selects.join(','))
+    }
+
+    return this.http
+      .post<ItemResponse<Resource>>('/api/v1/resources', input, {
+        params,
+      })
+      .pipe(map((response) => response.resource))
   }
 }

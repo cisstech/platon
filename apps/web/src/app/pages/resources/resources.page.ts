@@ -25,6 +25,7 @@ import { OrderingDirections, User } from '@platon/core/common'
 import {
   CircleFilterIndicator,
   CircleTreeComponent,
+  ExerciseConfigurableFilterIndicator,
   ResourceFiltersComponent,
   ResourceItemComponent,
   ResourceListComponent,
@@ -114,6 +115,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
     ...Object.values(ResourceTypes).map(ResourceTypeFilterIndicator),
     ...Object.values(ResourceStatus).map(ResourceStatusFilterIndicator),
     ...Object.values(ResourceOrderings).map(ResourceOrderingFilterIndicator),
+    ExerciseConfigurableFilterIndicator,
     PeriodFilterMatcher,
   ]
 
@@ -156,6 +158,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
           direction: e.direction,
           types: typeof e.types === 'string' ? [e.types] : e.types,
           status: typeof e.status === 'string' ? [e.status] : e.status,
+          configurable: e.configurable === 'true',
         }
 
         if (this.searchbar.value !== e.q) {
@@ -163,7 +166,13 @@ export default class ResourcesPage implements OnInit, OnDestroy {
         }
 
         this.searching = true
-        this.items = (await firstValueFrom(this.resourceService.search(this.filters))).resources
+        this.items = (
+          await firstValueFrom(
+            this.resourceService.search({
+              ...this.filters,
+            })
+          )
+        ).resources
         this.searching = false
 
         this.changeDetectorRef.markForCheck()
@@ -184,6 +193,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
       types: filters.types,
       status: filters.status,
       parents: filters.parents,
+      configurable: filters.configurable ? true : undefined,
     }
 
     this.router.navigate([], {
@@ -202,4 +212,5 @@ interface QueryParams {
   types?: keyof typeof ResourceTypes | (keyof typeof ResourceTypes)[]
   status?: keyof typeof ResourceStatus | (keyof typeof ResourceStatus)[]
   parents?: string | string[]
+  configurable?: string | boolean
 }
