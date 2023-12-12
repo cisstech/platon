@@ -19,10 +19,7 @@ export class DragDropDirective implements OnDestroy, AfterContentInit {
   @Output()
   dropped = new EventEmitter<DragDropEvent>()
 
-  constructor(
-    private readonly el: ElementRef<HTMLElement>,
-    private readonly renderer: Renderer2
-  ) {
+  constructor(private readonly el: ElementRef<HTMLElement>, private readonly renderer: Renderer2) {
     this.id = 'dnd-' + ++DragDropDirective.NODE_ID
   }
 

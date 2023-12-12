@@ -41,7 +41,7 @@
 <ng-template #nzTreeTemplate let-node let-origin="origin">
   <ng-container>
     <div class="node" *ngIf="!node.isLeaf" (contextmenu)="contextMenu($event, menu, node)">
-      <ui-icon [icon]="node.title | iconFile: { alt: node.title, expanded: node.isExpanded, isDirectory: true }" />
+      <ui-icon [icon]="node.title | iconFile : { alt: node.title, expanded: node.isExpanded, isDirectory: true }" />
       <div class="folder-name">{{ node.title }}</div>
     </div>
     <div
@@ -50,7 +50,7 @@
       (dblclick)="selected.emit($any(index.get(node.key)))"
       (contextmenu)="contextMenu($event, menu, node)"
     >
-      <ui-icon [icon]="node.title | iconFile: { alt: node.title }" />
+      <ui-icon [icon]="node.title | iconFile : { alt: node.title }" />
       <div class="file-name">{{ node.title }}</div>
     </div>
   </ng-container>

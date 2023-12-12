@@ -64,10 +64,7 @@ export class UserSearchBarComponent implements OnInit, ControlValueAccessor {
 
   selection: Item[] = []
 
-  constructor(
-    private readonly userService: UserService,
-    private readonly changeDetectorRef: ChangeDetectorRef
-  ) {}
+  constructor(private readonly userService: UserService, private readonly changeDetectorRef: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     if (this.allowGroup) {

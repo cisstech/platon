@@ -37,10 +37,7 @@ export class CourseMembersPage implements OnInit, OnDestroy {
     return this.roles.includes(UserRoles.student)
   }
 
-  constructor(
-    private readonly presenter: CoursePresenter,
-    private readonly changeDetectorRef: ChangeDetectorRef
-  ) {}
+  constructor(private readonly presenter: CoursePresenter, private readonly changeDetectorRef: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.subscriptions.push(

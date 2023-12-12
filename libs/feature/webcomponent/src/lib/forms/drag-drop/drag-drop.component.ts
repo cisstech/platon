@@ -16,10 +16,7 @@ export class DragDropComponent implements OnInit, OnDestroy, WebComponentHooks<D
   @ViewChild(DragDropDirective, { static: true })
   directive!: DragDropDirective
 
-  constructor(
-    readonly injector: Injector,
-    readonly dragdrop: DragDropService
-  ) {}
+  constructor(readonly injector: Injector, readonly dragdrop: DragDropService) {}
 
   ngOnInit(): void {
     this.dragdrop.register(this.directive.id, this)

@@ -9,10 +9,7 @@ import { AuthProvider } from '../models/auth-provider'
 
 @Injectable()
 export class RemoteAuthProvider extends AuthProvider {
-  constructor(
-    private readonly http: HttpClient,
-    private readonly tokenService: TokenService
-  ) {
+  constructor(private readonly http: HttpClient, private readonly tokenService: TokenService) {
     super()
   }
 

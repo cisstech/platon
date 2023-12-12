@@ -41,10 +41,7 @@ export class CodeEditorComponent implements AfterViewChecked, OnDestroy, WebComp
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   decorations: any[] = []
 
-  constructor(
-    readonly injector: Injector,
-    readonly changeDetector: WebComponentChangeDetectorService
-  ) {}
+  constructor(readonly injector: Injector, readonly changeDetector: WebComponentChangeDetectorService) {}
 
   ngAfterViewChecked() {
     if (!this.editor || !this.footer) return

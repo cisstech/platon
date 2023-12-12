@@ -4,7 +4,6 @@ import { FaIcon } from '@cisstech/nge/ui/icon'
 import { ResourceFileService } from '@platon/feature/resource/browser'
 import { ResourceFileImpl } from '../../file-system'
 import { firstValueFrom } from 'rxjs'
-import { FileService } from '@cisstech/nge-ide/core'
 
 export const EXPLORER_COMMAND_FILE_EXPORT = 'pl.explorer.commands.unzip'
 

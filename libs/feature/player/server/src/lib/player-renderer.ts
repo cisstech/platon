@@ -195,10 +195,10 @@ export const withExercisePlayer = (session: SessionEntity, answer?: AnswerEntity
     hints: !hint
       ? undefined
       : Array.isArray(hint)
-        ? variables['.meta']?.consumedHints
-          ? hint.slice(0, variables['.meta'].consumedHints)
-          : []
-        : hint.data,
+      ? variables['.meta']?.consumedHints
+        ? hint.slice(0, variables['.meta'].consumedHints)
+        : []
+      : hint.data,
     remainingAttempts,
     answerId: answer?.id,
     sessionId: session.id,

@@ -177,7 +177,7 @@ export class ResourceFileSystemProvider extends FileSystemProvider {
             lineno: match.line,
             match: match.preview,
           })),
-        }) as SearchResult<monaco.Uri>
+        } as SearchResult<monaco.Uri>)
     )
 
     return results
