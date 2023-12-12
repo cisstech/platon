@@ -18,7 +18,7 @@ export const buildHttpParams = <T extends object>(object?: T | null) => {
 
     if (Array.isArray(value)) {
       value.forEach((v) => {
-        params = params.set(key, v)
+        params = params.append(key, v)
       })
       return
     }
