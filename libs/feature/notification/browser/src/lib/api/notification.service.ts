@@ -38,7 +38,7 @@ export class NotificationService {
    * @returns An observable of the list of notifications, the unread count and a function to fetch more notifications.
    */
   paginate(limit = 20): Observable<NotificationPagination> {
-    const pagination = this.listNotificationsGQL.watch({ first: limit })
+    const pagination = this.listNotificationsGQL.watch({ filters: null, first: limit, after: null })
 
     const counter = new BehaviorSubject(0)
 
@@ -108,6 +108,7 @@ export class NotificationService {
     const query = this.listNotificationsGQL.watch({
       filters: { unread: true },
       first: limit,
+      after: null,
     })
 
     return query.valueChanges.pipe(
