@@ -29,6 +29,14 @@ import { SessionView } from '../../sessions/session.view'
 import { SessionDataAggregator } from './aggregators'
 import { getYearMonthWeek } from '../dashboard.utils'
 
+const answerStateFromSession = (session: SessionView) => {
+  return session.startedAt
+    ? session.attempts
+      ? answerStateFromGrade(session.correctionGrade ?? session.grade)
+      : AnswerStates.STARTED
+    : AnswerStates.NOT_STARTED
+}
+
 //region COMMON
 
 /**
@@ -187,7 +195,7 @@ export class SessionDistributionByAnswerState implements SessionDataAggregator<R
   )
 
   next(input: SessionView): void {
-    const state = answerStateFromGrade(input.correctionGrade ?? input.grade)
+    const state = answerStateFromSession(input)
     this.distribution[state]++
   }
 
@@ -435,7 +443,7 @@ export class ActivityUserResults implements SessionDataAggregator<UserResults[]>
       }
 
       userExercise.grade = exerciseSession.correctionGrade ?? exerciseSession.grade
-      userExercise.state = answerStateFromGrade(exerciseSession.correctionGrade ?? exerciseSession.grade)
+      userExercise.state = answerStateFromSession(exerciseSession)
       userExercise.duration =
         exerciseSession.lastGradedAt && exerciseSession.startedAt
           ? differenceInSeconds(exerciseSession.lastGradedAt, exerciseSession.startedAt)
@@ -504,7 +512,7 @@ export class ActivityExerciseResults implements SessionDataAggregator<ExerciseRe
       if (!session) return
 
       const grade = session.correctionGrade ?? session.grade
-      const state = answerStateFromGrade(grade)
+      const state = answerStateFromSession(session)
       const duration =
         session.lastGradedAt && session.startedAt ? differenceInSeconds(session.lastGradedAt, session.startedAt) : 0
 
