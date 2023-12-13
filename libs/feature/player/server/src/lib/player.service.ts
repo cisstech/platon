@@ -53,6 +53,7 @@ interface CreateSessionArgs {
   parentId?: string
   overrides?: Variables
   activity?: ActivityEntity
+  isBuilt?: boolean
 }
 
 @Injectable()
@@ -77,6 +78,22 @@ export class PlayerService {
   ) {}
 
   /**
+   * Builds the given ExerciseSession
+   */
+  async buildExerciseSession(exerciseSession: SessionEntity): Promise<SessionEntity> {
+    const { envid, variables } = await this.sandboxService.build(exerciseSession.source as PLSourceFile)
+    exerciseSession.envid = envid
+    exerciseSession.variables = variables
+    exerciseSession.isBuilt = true
+    await this.sessionService.update(exerciseSession.id, {
+      envid: envid || undefined,
+      variables: variables,
+      isBuilt: true,
+    })
+    return exerciseSession
+  }
+
+  /**
    * Creates new player session for the given resource for preview purpose.
    *
    * Note :
@@ -94,8 +111,10 @@ export class PlayerService {
     if (!resource.publicPreview && (!user || !isTeacherRole(user?.role))) {
       throw new ForbiddenResponse('You are not allowed to preview this resource')
     }
-
-    const session = await this.createNewSession({ source })
+    let session = await this.createNewSession({ source })
+    if (resource.type === 'EXERCISE') {
+      session = await this.buildExerciseSession(session)
+    }
     return {
       exercise: resource.type === 'EXERCISE' ? withExercisePlayer(session) : undefined,
       activity: resource.type === 'ACTIVITY' ? withActivityPlayer(session) : undefined,
@@ -121,6 +140,7 @@ export class PlayerService {
         user,
         activity,
         source: activity.source,
+        isBuilt: true,
       })
     }
     return { activity: withActivityPlayer(activitySession) }
@@ -142,10 +162,14 @@ export class PlayerService {
     // CREATE PLAYERS
     const exercisePlayers = await Promise.all(
       exerciseSessionIds.map(async (sessionId) => {
-        const exerciseSession = withSessionAccessGuard(
+        let exerciseSession = withSessionAccessGuard(
           await this.sessionService.findExercise(activitySessionId, sessionId),
           user
         )
+
+        if (!exerciseSession.isBuilt) {
+          exerciseSession = await this.buildExerciseSession(exerciseSession)
+        }
         exerciseSession.parent = activitySession
         exerciseSession.startedAt = exerciseSession.startedAt || new Date()
         await this.sessionService.update(exerciseSession.id, {
@@ -405,27 +429,31 @@ export class PlayerService {
    */
   private async createNewSession(args: CreateSessionArgs, entityManager?: EntityManager): Promise<SessionEntity> {
     const create = async (manager: EntityManager): Promise<SessionEntity> => {
-      const { user, source, parentId, activity } = args
+      const { user, source, parentId, activity, isBuilt } = args
 
       source.variables.seed = (Number.parseInt(source.variables.seed + '') || Date.now()) % 100
-
-      const { envid, variables } = await this.sandboxService.build(source)
 
       const session = await this.sessionService.create(
         {
           activity,
-          variables,
-          envid: envid || (null as any),
+          variables: source.variables as Variables,
+          envid: null as any,
           userId: user?.id || (null as any),
           parentId: parentId || (null as any),
           activityId: activity?.id || (null as any),
           source,
+          isBuilt: isBuilt || false,
         },
         manager
       )
 
       if (source.abspath.endsWith('.pla')) {
-        session.variables = await this.createNavigation(variables as PlayerActivityVariables, session, user, manager)
+        session.variables = await this.createNavigation(
+          source.variables as PlayerActivityVariables,
+          session,
+          user,
+          manager
+        )
 
         await this.sessionService.update(
           session.id,

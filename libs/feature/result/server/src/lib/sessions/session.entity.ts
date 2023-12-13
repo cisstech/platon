@@ -57,4 +57,7 @@ export class SessionEntity<TVariables extends object = any> extends BaseEntity {
 
   @Column({ type: 'jsonb', nullable: true })
   source?: PLSourceFile
+
+  @Column({ name: 'is_built', nullable: true, default: false })
+  isBuilt?: boolean
 }
