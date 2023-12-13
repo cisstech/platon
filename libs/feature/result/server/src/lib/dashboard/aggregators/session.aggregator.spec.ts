@@ -233,14 +233,36 @@ describe('SessionAggregators', () => {
       })
     })
 
+    it('should be not_started if not startedAt not defined', () => {
+      const input = {
+        grade: 100,
+        startedAt: undefined,
+      } as SessionView
+
+      aggregator.next(input)
+
+      expect(aggregator['distribution'].NOT_STARTED).toBe(1)
+    })
+
+    it('should be started if startedAt and attempts is 0', () => {
+      const input = {
+        attempts: 0,
+        startedAt: new Date(),
+      } as SessionView
+
+      aggregator.next(input)
+
+      expect(aggregator['distribution'].STARTED).toBe(1)
+    })
+
     it('should increment count for state based on grade', () => {
-      aggregator.next({ grade: 100 } as SessionView)
+      aggregator.next({ grade: 100, attempts: 1, startedAt: new Date() } as SessionView)
       expect(aggregator['distribution'].SUCCEEDED).toBe(1)
     })
 
     it('should handle multiple sessions', () => {
-      aggregator.next({ grade: 100 } as SessionView)
-      aggregator.next({ grade: 0 } as SessionView)
+      aggregator.next({ grade: 100, attempts: 1, startedAt: new Date() } as SessionView)
+      aggregator.next({ grade: 0, attempts: 1, startedAt: new Date() } as SessionView)
 
       expect(aggregator['distribution'].SUCCEEDED).toBe(1)
       expect(aggregator['distribution'].FAILED).toBe(1)

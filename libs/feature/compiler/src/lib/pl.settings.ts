@@ -1,6 +1,6 @@
 /** Exercise settings. */
 export interface ActivitySettings {
-  /** Duration of the activity (-1 for infinite). */
+  /** Duration of the activity in seconds (-1 for infinite). */
   duration?: number
 
   /** Activity authorized action buttons. */

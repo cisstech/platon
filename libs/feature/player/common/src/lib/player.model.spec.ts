@@ -2,11 +2,12 @@ import { getClosingTime, isTimeouted } from './player.model'
 
 describe('isTimeouted', () => {
   it('should return true when startedAt + duration has passed', () => {
+    const duration = 60 // 60 seconds
     const player = {
-      startedAt: new Date(Date.now() - 10000),
+      startedAt: new Date(Date.now() - duration * 2 * 1000),
       closeAt: undefined,
       settings: {
-        duration: 5000,
+        duration,
       },
     }
 
@@ -15,8 +16,9 @@ describe('isTimeouted', () => {
   })
 
   it('should return false when startedAt + duration has not passed', () => {
+    const duration = 60 // 60 seconds
     const player = {
-      startedAt: new Date(Date.now() - 2000),
+      startedAt: new Date(Date.now() - (duration / 2) * 1000),
       closeAt: undefined,
       settings: {
         duration: 5000,
