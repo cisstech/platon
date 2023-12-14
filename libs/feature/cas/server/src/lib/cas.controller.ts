@@ -13,52 +13,49 @@ import {
 } from '@nestjs/common'
 import { CreateCasDTO, UpdateCasDTO } from './cas.dto'
 import { AuthService, Mapper, Public, UserService } from '@platon/core/server'
-import { HttpService } from '@nestjs/axios'
 import { CasService } from './cas.service'
 import { CasDTO, CasFiltersDTO } from './cas.dto'
 import { CreatedResponse, ItemResponse, ListResponse, NoContentResponse, NotFoundResponse } from '@platon/core/common'
 import { Request } from 'express'
-import { catchError, firstValueFrom, of } from 'rxjs'
+import { of } from 'rxjs'
 import { CasServiceValidateResponse } from './payloads'
 import { AxiosError, AxiosResponse } from 'axios'
 import { Optional } from 'typescript-optional'
 import { LTIService } from '@platon/feature/lti/server'
+import { AxiosService } from './axios.service'
 
 @Controller('cas')
 export class CasController {
   constructor(
     private readonly service: CasService,
-    private readonly http: HttpService,
     private readonly LtiService: LTIService,
     private readonly authService: AuthService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private readonly https: AxiosService
   ) {}
 
   async checkCasTicket(serviceValidateURL: string, ticket: string, service: string): Promise<Optional<string>> {
-    const data = await firstValueFrom(
-      this.http
-        .get<CasServiceValidateResponse>(serviceValidateURL, {
-          params: {
-            ticket: ticket,
-            service: service,
-            format: 'JSON',
+    const data = await this.https
+      .get<CasServiceValidateResponse>(serviceValidateURL, {
+        params: {
+          ticket: ticket,
+          service: service,
+          format: 'JSON',
+        },
+      })
+      .catch((_error: AxiosError) => {
+        return of<CasServiceValidateResponse>({
+          serviceResponse: {
+            authenticationFailure: { code: 'NO_RESPONSE', description: 'Your CAS provider is not accessible' },
           },
         })
-        .pipe(
-          catchError((_error: AxiosError) => {
-            return of<CasServiceValidateResponse>({
-              serviceResponse: {
-                authenticationFailure: { code: 'NO_RESPONSE', description: 'Your CAS provider is not accessible' },
-              },
-            })
-          })
-        )
-    )
+      })
+
     let response: CasServiceValidateResponse
     if (Object.prototype.hasOwnProperty.call(data, 'data')) {
       response = (data as AxiosResponse<CasServiceValidateResponse>).data
     } else {
-      response = data as CasServiceValidateResponse
+      response = data as unknown as CasServiceValidateResponse
     }
 
     if (response.serviceResponse.authenticationFailure) {

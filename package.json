@@ -209,6 +209,7 @@
     "animate.css": "^4.1.1",
     "apollo-angular": "^6.0.0",
     "axios": "^1.6.2",
+    "axios-https-proxy-fix": "^0.17.1",
     "bcrypt": "^5.1.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
