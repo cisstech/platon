@@ -149,16 +149,16 @@ export function defineWebComponent(definition: WebComponentDefinition): WebCompo
       type: 'string',
       description: 'Identifiant unique du composant.',
     },
-    debug: {
-      default: false,
-      type: 'boolean',
-      description: 'Afficher les propriétés du composant?',
-    },
     selector: {
       default: definition.selector,
       readOnly: true,
       type: 'string',
       description: 'Nom de la balise HTML associée au composant.',
+    },
+    debug: {
+      default: false,
+      type: 'boolean',
+      description: 'Afficher les propriétés du composant?',
     },
   }
   definition.schema.additionalProperties = false
@@ -187,8 +187,8 @@ function createState(component: WebComponentInstance, definition: WebComponentDe
   return (component.$__state__$ = new Proxy(
     {
       cid: '',
-      debug: false,
       selector: definition.selector,
+      debug: false,
     },
     handler
   ))
@@ -233,21 +233,19 @@ function stateSetter(component: WebComponentInstance, definition: WebComponentDe
 }
 
 function detectChanges(component: WebComponentInstance) {
+  component.$__changeDetector__$ = component.$__changeDetector__$ ?? component.injector.get(ChangeDetectorRef)
+  component.$__changeDetector__$.detectChanges()
+
   if (component.$__suspendChanges__$ || !component.$__ngOnInitCalled__$) {
     return
   }
 
   component.$__suspendChanges__$ = true
-
   if (component.onChangeState) {
     component.onChangeState()
   }
 
-  if (!component.$__changeDetector__$) {
-    component.$__changeDetector__$ = component.injector.get(ChangeDetectorRef)
-  }
   component.$__changeDetector__$.detectChanges()
-
   component.$__suspendChanges__$ = false
 }
 

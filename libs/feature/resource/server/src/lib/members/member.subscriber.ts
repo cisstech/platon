@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
-import { ResourceEventTypes, ResourceMemberCreateEventData } from '@platon/feature/resource/common'
-import { DataSource, EntitySubscriberInterface, InsertEvent, RemoveEvent } from 'typeorm'
+import { ResourceEventData, ResourceEventTypes, ResourceMemberCreateEventData } from '@platon/feature/resource/common'
+import { DataSource, EntitySubscriberInterface, InsertEvent, RemoveEvent, UpdateEvent } from 'typeorm'
 import { ResourceEventEntity } from '../events'
 import { ResourceEntity } from '../resource.entity'
 import { ResourceWatcherEntity } from '../watchers'
@@ -35,18 +35,21 @@ export class ResourceMemberSubscriber implements EntitySubscriberInterface<Resou
       return
     }
 
+    const data: ResourceMemberCreateEventData = {
+      userId: event.entity.userId,
+      resourceId: resource.id,
+      resourceName: resource.name,
+      resourceType: resource.type,
+    }
+
     await event.manager.save([
       event.manager.create(ResourceEventEntity, {
         actorId: event.entity.inviterId,
         resourceId: event.entity.resourceId,
         type: ResourceEventTypes.MEMBER_CREATE,
-        data: {
-          userId: event.entity.userId,
-          resourceName: resource.name,
-          resourceType: resource.type,
-        } as ResourceMemberCreateEventData,
+        data,
       }),
-      ...(!watcher
+      ...(!watcher && event.entity.waiting
         ? [
             event.manager.create(ResourceWatcherEntity, {
               resourceId: event.entity.resourceId,
@@ -55,6 +58,50 @@ export class ResourceMemberSubscriber implements EntitySubscriberInterface<Resou
           ]
         : []),
     ])
+  }
+
+  async afterUpdate(event: UpdateEvent<ResourceMemberEntity>): Promise<void> {
+    if (event.entity && event.updatedColumns.find((col) => col.propertyName === 'waiting')) {
+      const [resource, watcher] = await Promise.all([
+        event.manager.findOne(ResourceEntity, {
+          where: {
+            id: event.entity.resourceId,
+          },
+        }),
+        event.manager.findOne(ResourceWatcherEntity, {
+          where: {
+            resourceId: event.entity.resourceId,
+            userId: event.entity.userId,
+          },
+        }),
+      ])
+
+      if (resource) {
+        const data: ResourceMemberCreateEventData = {
+          userId: event.entity.userId,
+          resourceId: resource.id,
+          resourceName: resource.name,
+          resourceType: resource.type,
+        }
+
+        await event.manager.save([
+          event.manager.create(ResourceEventEntity, {
+            actorId: event.entity.inviterId,
+            resourceId: event.entity.resourceId,
+            type: ResourceEventTypes.MEMBER_CREATE,
+            data,
+          }),
+          ...(!watcher && event.entity.waiting
+            ? [
+                event.manager.create(ResourceWatcherEntity, {
+                  resourceId: event.entity.resourceId,
+                  userId: event.entity.userId,
+                }),
+              ]
+            : []),
+        ])
+      }
+    }
   }
 
   async afterRemove(event: RemoveEvent<ResourceMemberEntity>): Promise<void> {
@@ -72,15 +119,18 @@ export class ResourceMemberSubscriber implements EntitySubscriberInterface<Resou
       ])
 
       if (resource) {
+        const data: ResourceEventData = {
+          resourceId: resource.id,
+          resourceName: resource.name,
+          resourceType: resource.type,
+        }
+
         await event.manager.save(
           event.manager.create(ResourceEventEntity, {
             actorId: event.entity.userId,
             resourceId: event.entity.resourceId,
             type: ResourceEventTypes.MEMBER_REMOVE,
-            data: {
-              resourceName: resource.name,
-              resourceType: resource.type,
-            },
+            data,
           })
         )
       }

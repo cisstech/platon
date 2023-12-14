@@ -110,12 +110,12 @@ export class PythonSandbox implements Sandbox {
   private async withEnvFiles(script: string, input: SandboxInput, path: string) {
     const pack = tar.pack()
 
-    pack.entry({ name: 'script.py' }, script)
+    pack.entry({ name: 'script.py' }, script || '')
     pack.entry({ name: 'variables.json' }, JSON.stringify(input.variables))
 
     if (!input.envid) {
       pack.entry({ name: 'runner.py' }, pythonRunnerScript)
-      input.files?.forEach((file) => pack.entry({ name: file.path }, file.content))
+      input.files?.forEach((file) => pack.entry({ name: file.path }, file.content || ''))
     }
 
     pack.finalize()

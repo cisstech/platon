@@ -2,6 +2,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, inject } from '@angular/core'
 import { Editor, FileService, OpenRequest } from '@cisstech/nge-ide/core'
 import { OutputData } from '@editorjs/editorjs'
+import { emptyEditorJsData } from '@platon/shared/ui'
 import { Subscription } from 'rxjs'
 
 @Component({
@@ -14,10 +15,11 @@ export class PlfEditorComponent implements OnInit, OnDestroy {
   private readonly fileService = inject(FileService)
   private readonly changeDetectorRef = inject(ChangeDetectorRef)
   private readonly subscriptions: Subscription[] = []
+
   private request!: OpenRequest
 
   protected data?: OutputData
-  protected readOnly?: boolean
+  protected disabled = false
 
   @Input()
   protected editor!: Editor
@@ -41,17 +43,15 @@ export class PlfEditorComponent implements OnInit, OnDestroy {
 
   private async createEditor(): Promise<void> {
     const file = this.fileService.find(this.request.uri)
-    this.readOnly = file?.readOnly
-
+    this.disabled = !!file?.readOnly
     const content = await this.fileService.open(this.request.uri)
     try {
       this.data = JSON.parse(content.current || '{}')
-    } catch {
-      this.data = {
-        blocks: [],
-      }
+    } catch (error) {
+      console.error(error)
+      this.data = emptyEditorJsData()
+    } finally {
+      this.changeDetectorRef.detectChanges()
     }
-
-    this.changeDetectorRef.markForCheck()
   }
 }

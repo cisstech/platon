@@ -36,6 +36,7 @@ export const CheckboxGroupComponentDefinition = defineWebComponent({
             checked: {
               type: 'boolean',
               description: 'La proposition est sélectionnée?',
+              default: false,
             },
             content: { type: 'string', description: 'Contenu en markdown.' },
           },

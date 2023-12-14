@@ -30,7 +30,7 @@ export class InputFileValueEditorComponent extends BaseValueEditor<string> {
   }
 
   override setValue(value: string): void {
-    super.setValue(typeof value === 'string' ? value : '')
+    super.setValue(typeof value === 'string' && value.match(/^@copycontent\s|@copyurl\s/) ? value : '')
   }
 
   protected onDrop(data: DndData) {

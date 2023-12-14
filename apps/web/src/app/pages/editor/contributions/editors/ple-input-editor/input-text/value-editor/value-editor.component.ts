@@ -11,4 +11,8 @@ export class InputTextValueEditorComponent extends BaseValueEditor<string> {
   constructor() {
     super()
   }
+
+  override setValue(value: string): void {
+    super.setValue(this.convertToTextValue(value))
+  }
 }

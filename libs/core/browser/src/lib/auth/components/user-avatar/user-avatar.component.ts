@@ -1,5 +1,13 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  inject,
+} from '@angular/core'
 
 import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzBadgeModule } from 'ng-zorro-antd/badge'
@@ -20,9 +28,15 @@ import { UserGroupAvatarComponent } from '../user-group-avatar/user-group-avatar
   imports: [CommonModule, NzIconModule, NzBadgeModule, NzAvatarModule, NzToolTipModule, UserGroupAvatarComponent],
 })
 export class UserAvatarComponent {
-  @Input() avatarSize = 32
+  private readonly authUserService = inject(UserService)
+  private readonly changeDetectorRef = inject(ChangeDetectorRef)
+
+  @Input() size = 32
   @Input() user?: User
   @Input() group?: UserGroup
+  @Input() noIcon = false
+  @Input() showUsername: 'stacked' | 'inline' | 'none' = 'stacked'
+
   @Output() showGroupMembers = new EventEmitter<UserGroup>()
 
   @Input()
@@ -38,6 +52,4 @@ export class UserAvatarComponent {
   get displayName(): string {
     return this.group?.name || this.user?.username || ''
   }
-
-  constructor(private readonly authUserService: UserService, private readonly changeDetectorRef: ChangeDetectorRef) {}
 }

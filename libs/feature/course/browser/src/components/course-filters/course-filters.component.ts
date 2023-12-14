@@ -66,8 +66,8 @@ export class CourseFiltersComponent implements OnDestroy {
 
     this.form.patchValue({
       period: this.filters.period,
-      order: this.filters.order,
-      direction: this.filters.direction,
+      order: this.filters.order ?? CourseOrderings.UPDATED_AT,
+      direction: this.filters.direction ?? OrderingDirections.DESC,
     })
 
     this.visible = true
@@ -95,8 +95,8 @@ export class CourseFiltersComponent implements OnDestroy {
 
   private createForm() {
     return new FormGroup({
-      order: new FormControl(CourseOrderings.NAME),
-      direction: new FormControl(OrderingDirections.ASC),
+      order: new FormControl(CourseOrderings.UPDATED_AT),
+      direction: new FormControl(OrderingDirections.DESC),
       period: new FormControl(0),
     })
   }

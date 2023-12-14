@@ -30,10 +30,10 @@ export SANDBOX_PORT=7000
 
 if [ "$prod" = true ]
 then
-    docker-compose -f docker-compose.prod.yml build
+    docker compose -f docker-compose.prod.yml build
     ./bin/init-letsencrypt.sh
-    docker-compose -f docker-compose.prod.yml up $detach
+    docker compose -f docker-compose.prod.yml up $detach
 else
-    docker-compose -f docker-compose.dev.yml build
-    docker-compose -f docker-compose.dev.yml up $detach
+    docker compose -f docker-compose.dev.yml build --pull=false
+    docker compose -f docker-compose.dev.yml up $detach
 fi

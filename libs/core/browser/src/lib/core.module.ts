@@ -10,6 +10,7 @@ import { NgeDocProviders } from './vendors/nge-doc/nge-doc'
 import { NgeIconProviders } from './vendors/nge-icon/nge-icon'
 import { NgeMarkdownProviders } from './vendors/nge-markdown/nge-markdown'
 import { NgeMonacoImports, NgeMonacoProviders } from './vendors/nge-monaco/nge-monaco'
+import { NgxEChartsProviders } from './vendors/ngx-echarts/ngx-echarts'
 
 @NgModule({
   imports: [RouterModule, NgeMonacoImports, GraphQLModule],
@@ -21,6 +22,7 @@ import { NgeMonacoImports, NgeMonacoProviders } from './vendors/nge-monaco/nge-m
     NgZorroProviders,
     NgeIconProviders,
     NgeMonacoProviders,
+    NgxEChartsProviders,
     NgeMarkdownProviders,
   ],
 })

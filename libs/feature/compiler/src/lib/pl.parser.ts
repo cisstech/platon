@@ -4,134 +4,256 @@
  */
 
 import { v4 as uuidv4 } from 'uuid'
+import { Variables } from './pl.variables'
 
 // VALUES
 
-interface PLValue {
-  readonly value: string | number | boolean | PLValue[] | { key: string; value: PLValue }[]
+export type PLValueType =
+  | 'PLArray'
+  | 'PLObject'
+  | 'PLString'
+  | 'PLNumber'
+  | 'PLBoolean'
+  | 'PLComponent'
+  | 'PLDict'
+  | 'PLFileURL'
+  | 'PLReference'
+  | 'PLFileContent'
+
+export interface PLValue {
+  readonly type: PLValueType
+  readonly value: string | number | boolean | PLValue[] | Record<string, PLValue>
   readonly lineno: number
-  toJSON(visitor: PLVisitor): any | Promise<any>
+  toRaw(): any
+  toObject(visitor: PLVisitor): any | Promise<any>
 }
 
 export class PLArray implements PLValue {
-  constructor(readonly value: PLValue[], readonly lineno: number) {}
-  async toJSON(visitor: PLVisitor) {
+  readonly type = 'PLArray'
+  constructor(
+    readonly value: PLValue[],
+    readonly lineno: number
+  ) {}
+
+  toRaw() {
+    return this.value.map((value) => value.toRaw())
+  }
+
+  async toObject(visitor: PLVisitor) {
     const result: any[] = []
     // do not use promise.all to allow cache file operations (@copyurl, @copycontent...)
     for (const e of this.value) {
-      result.push(await e.toJSON(visitor))
+      result.push(await e.toObject(visitor))
     }
     return result
   }
 }
 
 export class PLObject implements PLValue {
-  constructor(readonly value: { key: string; value: PLValue }[], readonly lineno: number) {}
-  async toJSON(visitor: PLVisitor) {
-    // do not use promise.all to allow cache file operations (@copyurl, @copycontent...)
-    for (let i = 0; i < this.value.length; i++) {
-      this.value[i].value = await this.value[i].value.toJSON(visitor)
-    }
-    return this.value.reduce((acc: any, curr: any) => {
-      acc[curr.key] = curr.value
+  readonly type = 'PLArray'
+  constructor(
+    readonly value: Record<string, PLValue>,
+    readonly lineno: number
+  ) {}
+
+  toRaw() {
+    return Object.keys(this.value).reduce((acc, curr) => {
+      acc[curr] = this.value[curr].toRaw()
       return acc
     }, {} as any)
+  }
+
+  async toObject(visitor: PLVisitor) {
+    // do not use promise.all to allow cache file operations (@copyurl, @copycontent...)
+    let result: any = {}
+    for (let key in this.value) {
+      result[key] = await this.value[key].toObject(visitor)
+    }
+    return result
   }
 }
 
 export class PLString implements PLValue {
-  constructor(readonly value: string, readonly lineno: number) {}
-
-  toJSON() {
+  readonly type = 'PLArray'
+  constructor(
+    readonly value: string,
+    readonly lineno: number
+  ) {}
+  toRaw() {
+    return this.value
+  }
+  toObject() {
     return this.value.trim()
   }
 }
 
 export class PLNumber implements PLValue {
-  constructor(readonly value: number, readonly lineno: number) {}
-  toJSON() {
+  readonly type = 'PLNumber'
+  constructor(
+    readonly value: number,
+    readonly lineno: number
+  ) {}
+  toRaw() {
+    return this.value
+  }
+  toObject() {
     return this.value
   }
 }
 
 export class PLBoolean implements PLValue {
-  constructor(readonly value: boolean, readonly lineno: number) {}
-  toJSON() {
+  readonly type = 'PLBoolean'
+  constructor(
+    readonly value: boolean,
+    readonly lineno: number
+  ) {}
+  toRaw() {
+    return this.value
+  }
+  toObject() {
     return this.value
   }
 }
 
 export class PLComponent implements PLValue {
-  constructor(readonly value: string, readonly lineno: number) {}
-  toJSON() {
+  readonly type = 'PLComponent'
+  constructor(
+    readonly value: string,
+    readonly lineno: number
+  ) {}
+  toRaw() {
+    return { cid: uuidv4(), selector: this.value }
+  }
+  toObject() {
     return { cid: uuidv4(), selector: this.value }
   }
 }
 
 export class PLDict implements PLValue {
-  constructor(readonly value: string, readonly lineno: number) {}
-  async toJSON(visitor: PLVisitor) {
+  readonly type = 'PLDict'
+  constructor(
+    readonly value: string,
+    readonly lineno: number
+  ) {}
+  toRaw() {
+    return `@extends ${this.value}`
+  }
+  async toObject(visitor: PLVisitor) {
     const source = await visitor.visitExtends(this, false)
     return source.variables
   }
 }
 
 export class PLFileURL implements PLValue {
-  constructor(readonly value: string, readonly lineno: number) {}
-  toJSON(visitor: PLVisitor) {
+  readonly type = 'PLFileURL'
+  constructor(
+    readonly value: string,
+    readonly lineno: number
+  ) {}
+  toRaw() {
+    return `@copyurl ${this.value}`
+  }
+  toObject(visitor: PLVisitor) {
     return visitor.visitCopyUrl(this)
   }
 }
 
 export class PLReference implements PLValue {
-  constructor(readonly value: string, readonly lineno: number) {}
-  toJSON(visitor: PLVisitor) {
+  readonly type = 'PLReference'
+  constructor(
+    readonly value: string,
+    readonly lineno: number
+  ) {}
+  toRaw() {
+    return this.value
+  }
+  toObject(visitor: PLVisitor) {
     return visitor.visitReference(this)
   }
 }
 
 export class PLFileContent implements PLValue {
-  constructor(readonly value: string, readonly lineno: number) {}
-  toJSON(visitor: PLVisitor) {
+  readonly type = 'PLFileContent'
+  constructor(
+    readonly value: string,
+    readonly lineno: number
+  ) {}
+  toRaw() {
+    return `@copycontent ${this.value}`
+  }
+  toObject(visitor: PLVisitor) {
     return visitor.visitCopyContent(this)
   }
 }
 
 // NODES
 
+export type PLNodeType = 'ExtendsNode' | 'CommentNode' | 'IncludeNode' | 'AssignmentNode'
+
 export interface PLNode {
+  readonly type: PLNodeType
+  origin: string
   accept(visitor: PLVisitor): Promise<void>
 }
 
 export class ExtendsNode implements PLNode {
-  constructor(readonly path: string, readonly lineno: number) {}
+  readonly type = 'ExtendsNode'
+  origin = ''
+
+  constructor(
+    readonly path: string,
+    readonly lineno: number
+  ) {}
+
   async accept(visitor: PLVisitor): Promise<void> {
     await visitor.visitExtends(this, true)
   }
 }
 
 export class CommentNode implements PLNode {
-  constructor(readonly value: string, readonly lineno: number) {}
+  readonly type = 'CommentNode'
+  origin = ''
+
+  constructor(
+    readonly value: string,
+    readonly lineno: number
+  ) {}
+
   accept(visitor: PLVisitor): Promise<void> {
     return visitor.visitComment(this)
   }
 }
 
 export class IncludeNode implements PLNode {
-  constructor(readonly path: string, readonly lineno: number) {}
+  readonly type = 'IncludeNode'
+  origin = ''
+  constructor(
+    readonly path: string,
+    readonly lineno: number
+  ) {}
   accept(visitor: PLVisitor): Promise<void> {
     return visitor.visitInclude(this)
   }
 }
 
 export class AssignmentNode implements PLNode {
-  constructor(readonly key: string, readonly value: PLValue, readonly lineno: number) {}
+  readonly type = 'AssignmentNode'
+  origin = ''
+
+  constructor(
+    readonly key: string,
+    readonly value: PLValue,
+    readonly lineno: number
+  ) {}
+
   accept(visitor: PLVisitor): Promise<void> {
     return visitor.visitAssignment(this)
   }
 }
 
 // AST
+
+export type PLAst = PLNode[]
 
 export interface PLDependency {
   alias?: string
@@ -141,27 +263,55 @@ export interface PLDependency {
 }
 
 export interface PLSourceFile {
+  /** Identifier of the compiler resource. */
   resource: string
+
+  /** Version of the compiled resource. */
   version: string
+
+  /**
+   * Absolute path to the source file.
+   */
   abspath: string
+
+  /**
+   * All variables defined in the source file including extended variables.
+   */
+  variables: Record<string, unknown>
+
+  /** List of file added using the `@include` instruction. */
+  dependencies: PLDependency[]
+  ast: {
+    nodes: PLAst
+    /**
+     * Variables explicitly defined in the main source file.
+     */
+    variables: Record<string, unknown>
+  }
+
+  /**
+   * Errors detected while compiling the source file.
+   */
   errors: {
     lineno: number
     abspath: string
     description: string
   }[]
+
+  /**
+   * Warnings detected while compiling the source file.
+   */
   warnings: {
     lineno: number
     abspath: string
     description: string
   }[]
-  variables: Record<string, unknown>
-  dependencies: PLDependency[]
 }
 
 // VISITOR
 
 export interface PLVisitor {
-  visit(nodes: PLNode[]): Promise<PLSourceFile>
+  visit(ast: PLAst): Promise<PLSourceFile>
   visitExtends(node: ExtendsNode | PLDict, merge: boolean): Promise<PLSourceFile>
   visitInclude(node: IncludeNode): Promise<void>
   visitComment(node: CommentNode): Promise<void>
@@ -423,14 +573,13 @@ export class PLParser extends JisonParser implements JisonParserApi {
     _$: any /* lstack */
   ): any {
     /* this == yyval */
-    const $0 = $$.length - 1
+    var $0 = $$.length - 1
     switch (yystate) {
       case 1:
         return $$[$0 - 1]
         break
       case 2:
       case 29:
-      case 31:
         this.$ = [$$[$0]]
         break
       case 3:
@@ -449,6 +598,7 @@ export class PLParser extends JisonParser implements JisonParserApi {
       case 8:
       case 9:
       case 14:
+      case 31:
         this.$ = $$[$0]
         break
       case 10:
@@ -494,7 +644,7 @@ export class PLParser extends JisonParser implements JisonParserApi {
         this.$ = new PLArray($$[$0 - 1], yylineno + 1)
         break
       case 25:
-        this.$ = new PLObject([], yylineno + 1)
+        this.$ = new PLObject({}, yylineno + 1)
         break
       case 26:
         this.$ = new PLObject($$[$0 - 1], yylineno + 1)
@@ -512,11 +662,16 @@ export class PLParser extends JisonParser implements JisonParserApi {
 
         break
       case 30:
-      case 32:
         this.$ = $$[$0 - 2].concat($$[$0])
         break
+      case 32:
+        const keys = Object.keys($$[$0])
+        $$[$0 - 2][keys[0]] = $$[$0][keys[0]]
+        this.$ = $$[$0 - 2]
+
+        break
       case 33:
-        this.$ = { key: $$[$0 - 2], value: $$[$0] }
+        this.$ = { [`${$$[$0 - 2]}`]: $$[$0] }
         break
       case 34:
         this.$ = new IncludeNode($$[$0].trim(), yylineno + 1)
@@ -569,7 +724,7 @@ export class PLLexer extends JisonLexer implements JisonLexerApi {
     INITIAL: { rules: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], inclusive: true },
   }
   performAction(yy: any, yy_: any, $avoiding_name_collisions: any, YY_START: any): any {
-    const YYSTATE = YY_START
+    var YYSTATE = YY_START
     switch ($avoiding_name_collisions) {
       case 0 /* ignore whitespace */:
         break
@@ -642,7 +797,7 @@ export class PLLexer extends JisonLexer implements JisonLexerApi {
         return 5
         break
       case 22:
-        if (yy_.yytext.trimEnd() === '==') {
+        if (yy_.yytext.trim() === '==') {
           this.popState()
           return 13
         }

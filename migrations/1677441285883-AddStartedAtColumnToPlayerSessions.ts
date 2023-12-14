@@ -4,9 +4,7 @@ export class AddStartedAtColumnToPlayerSessions1677441285883 implements Migratio
   name = 'AddStartedAtColumnToPlayerSessions1677441285883'
 
   public async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(
-      `ALTER TABLE "PlayerSessions" ADD "started_at" TIMESTAMP WITH TIME ZONE`
-    )
+    await queryRunner.query(`ALTER TABLE "PlayerSessions" ADD "started_at" TIMESTAMP WITH TIME ZONE`)
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {

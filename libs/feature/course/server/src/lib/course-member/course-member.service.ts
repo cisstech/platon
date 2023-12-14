@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { OrderingDirections, UserOrderings, UserRoles } from '@platon/core/common'
 import { CourseMemberFilters } from '@platon/feature/course/common'
-import { Repository } from 'typeorm'
+import { In, Repository } from 'typeorm'
 import { Optional } from 'typescript-optional'
 import { CourseNotificationService } from '../course-notification/course-notification.service'
 import { CourseMemberEntity } from './course-member.entity'
@@ -11,11 +11,12 @@ import { CourseMemberView } from './course-member.view'
 @Injectable()
 export class CourseMemberService {
   constructor(
+    private readonly notificationService: CourseNotificationService,
+
     @InjectRepository(CourseMemberView)
     private readonly view: Repository<CourseMemberView>,
     @InjectRepository(CourseMemberEntity)
-    private readonly repository: Repository<CourseMemberEntity>,
-    private readonly notificationService: CourseNotificationService
+    private readonly repository: Repository<CourseMemberEntity>
   ) {}
 
   async findById(courseId: string, id: string): Promise<Optional<CourseMemberEntity>> {
@@ -26,7 +27,20 @@ export class CourseMemberService {
 
     query.where('member.course_id = :courseId', { courseId }).andWhere('member.id = :id', { id })
 
-    return Optional.ofNullable(await query.getOne())
+    const member = await query.getOne()
+    if (member && !member.user?.id) {
+      member.user = undefined
+    }
+
+    return Optional.ofNullable(member)
+  }
+
+  async findViewsByCourseId(courseId: string): Promise<CourseMemberView[]> {
+    return this.view.find({ where: { courseId } })
+  }
+
+  async findViewsByCourseIds(courseIds: string[]): Promise<CourseMemberView[]> {
+    return this.view.find({ where: { courseId: In(courseIds) } })
   }
 
   async search(courseId: string, filters?: CourseMemberFilters): Promise<[CourseMemberEntity[], number]> {
@@ -41,9 +55,7 @@ export class CourseMemberService {
 
     if (filters.roles?.length) {
       if (filters.roles.includes(UserRoles.student)) {
-        query.andWhere('(group.id IS NOT NULL OR user.role IN (:...roles))', {
-          roles: filters.roles,
-        })
+        query.andWhere('(group.id IS NOT NULL OR user.role IN (:...roles))', { roles: filters.roles })
       } else {
         query.andWhere('user.role IN (:...roles)', { roles: filters.roles })
       }
@@ -88,18 +100,41 @@ export class CourseMemberService {
       query.limit(filters.limit)
     }
 
-    return query.getManyAndCount()
+    const [members, count] = await query.getManyAndCount()
+    members.forEach((member) => {
+      member.user = member.user?.id ? member.user : undefined
+    })
+
+    return [members, count]
   }
 
   async addUser(courseId: string, userId: string): Promise<CourseMemberEntity> {
     const member = await this.repository.save(this.repository.create({ courseId, userId }))
-    await this.notificationService.sendMemberCreation(member)
+    this.notificationService
+      .notifyCourseMemberBeingCreated(
+        await this.view.find({
+          where: {
+            courseId,
+            memberId: member.id,
+          },
+        })
+      )
+      .catch()
     return member
   }
 
   async addGroup(courseId: string, groupId: string): Promise<CourseMemberEntity> {
     const member = await this.repository.save(this.repository.create({ courseId, groupId }))
-    await this.notificationService.sendMemberCreation(member)
+    this.notificationService
+      .notifyCourseMemberBeingCreated(
+        await this.view.find({
+          where: {
+            courseId,
+            memberId: member.id,
+          },
+        })
+      )
+      .catch()
     return member
   }
 

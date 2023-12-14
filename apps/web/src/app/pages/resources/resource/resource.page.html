@@ -23,7 +23,7 @@
             <mat-icon>{{ context.resource.type | resourceIcon }}</mat-icon>
             <span
               nz-typography
-              [nzEditable]="context.resource.permissions.write"
+              [nzEditable]="!context.resource.personal && context.resource.permissions.write"
               [nzContent]="context.resource.name"
               (nzContentChange)="updateName($event)"
             ></span>
@@ -34,11 +34,12 @@
     </nz-page-header>
     <p
       nz-typography
-      [nzEditable]="context.resource.permissions.write"
+      *ngIf="!isOtherPersonal"
+      [nzEditable]="!context.resource.personal && context.resource.permissions.write"
       [nzContent]="context.resource.desc"
       (nzContentChange)="updateDesc($event)"
     ></p>
-    <div class="container-actions">
+    <div class="container-toolbar">
       <nz-button-group>
         <nz-select
           id="status"
@@ -56,18 +57,46 @@
         </nz-select>
       </nz-button-group>
       <nz-button-group>
-        <button nz-button nzType="default" (click)="changeWatchingState()">
+        <button
+          nz-tooltip="Suivre une ressource vous permet notamment de l'ajouter plus rapidement dans vos cours"
+          nz-button
+          nzType="default"
+          (click)="changeWatchingState()"
+        >
           <i nz-icon nzType="eye" nzTheme="outline"></i>
           {{ context.resource.permissions.watcher ? 'Ne plus suivre' : 'Suivre' }}
         </button>
+        <button
+          *ngIf="
+            context.user?.role !== 'admin' &&
+            !context.resource.permissions.member &&
+            !context.resource.permissions.waiting
+          "
+          nz-button
+          nzType="default"
+          (click)="join()"
+        >
+          <i nz-icon nzType="user-add" nzTheme="outline"></i>
+          Demander à rejoindre
+        </button>
+
+        <button *ngIf="context.resource.permissions.waiting" nz-button nzDanger nzType="default" (click)="unjoin()">
+          <i nz-icon nzType="user-add" nzTheme="outline"></i>
+          Annuler la demande de rejoindre
+        </button>
       </nz-button-group>
       <div class="spacer"></div>
-      <nz-button-group *ngIf="context.resource.type !== 'CIRCLE'">
+      <nz-button-group>
         <button nz-button (click)="openTab(context.editorUrl!)">
           <i nz-icon nzType="edit" nzTheme="outline"></i>
-          Éditer
+          Ouvrir dans l'éditeur
         </button>
-        <button nz-button nzType="primary" (click)="iframe.open(context.previewUrl!)">
+        <button
+          *ngIf="context.resource.type !== 'CIRCLE'"
+          nz-button
+          nzType="primary"
+          (click)="iframe.open(context.previewUrl!)"
+        >
           <i nz-icon nzType="play-circle" nzTheme="outline"></i>
           Prévisualiser
         </button>

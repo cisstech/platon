@@ -3,8 +3,8 @@
   "editor.formatOnSave": true,
   "editor.tabSize": 2,
   "editor.codeActionsOnSave": {
-    "source.formatDocument": true, // RUN PRETTIER
-    "source.fixAll.eslint": true // RUN ESLINT
+    "source.formatDocument": "explicit",
+    "source.fixAll.eslint": "explicit"
   },
   "eslint.debug": true,
   "eslint.format.enable": true,
@@ -22,6 +22,13 @@
   "files.trimTrailingWhitespace": true,
   "npm.packageManager": "yarn",
   "conventionalCommits.scopes": [
-    "project"
+    "project",
+    "cas",
+    "compiler",
+    "course",
+    "lti",
+    "notification",
+    "player",
+    "resource"
   ]
 }

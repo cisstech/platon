@@ -1,12 +1,6 @@
-<nge-monaco-editor [style.--editor-height]="state.height + 'px'" (ready)="onCreateEditor($event)">
-</nge-monaco-editor>
+<nge-monaco-editor [style.--editor-height]="state.height + 'px'" (ready)="onCreateEditor($event)"> </nge-monaco-editor>
 <footer #footer>
-  <span
-    class="footer-item"
-    aria-label="Raccourcies"
-    nz-tooltip="Raccourcies"
-    (click)="quickCommand()"
-  >
+  <span class="footer-item" aria-label="Raccourcies" nz-tooltip="Raccourcies" (click)="quickCommand()">
     <span class="footer-item-icon codicon codicon-light-bulb"></span>
   </span>
   <span

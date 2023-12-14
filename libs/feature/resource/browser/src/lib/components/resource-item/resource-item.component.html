@@ -32,8 +32,8 @@
     </ng-container>
     <div class="spacer"></div>
     <ui-list-item-article-action
-      [actionTitle]="$any(item.updatedAt | date : 'dd/MM/yyyy')"
-      [nz-tooltip]="'Mise à jour le ' + $any(item.updatedAt | date : 'dd/MM/yyyy')"
+      [actionTitle]="item.updatedAt | date: 'dd/MM/yyyy'"
+      nz-tooltip="Dernière date de mise à jour"
     >
       <i nz-icon nzType="reload" nzTheme="outline"></i>
     </ui-list-item-article-action>

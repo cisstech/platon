@@ -18,34 +18,5 @@
 <!-- <h2>Exercices</h2>
 <p>TODO</p>
  -->
-
 <h2>API</h2>
-<table>
-  <thead>
-    <tr>
-      <th>Propriété</th>
-      <th>Description</th>
-      <th>Type</th>
-      <th>Défaut</th>
-    </tr>
-  </thead>
-  <tbody>
-    <ng-container *ngFor="let pair of definition.schema.properties! | keyvalue">
-      <tr>
-        <td>
-          <code>{{ pair.key }}</code>
-        </td>
-        <td>{{ pair.value.description }}</td>
-        <td>
-          <ng-container *ngIf="pair.value.enum; else elseBlock">
-            {{ pair.value.enum.join(' | ') }}
-          </ng-container>
-          <ng-template #elseBlock>
-            {{ pair.value.type }}
-          </ng-template>
-        </td>
-        <td>{{ pair.value.default | json }}</td>
-      </tr>
-    </ng-container>
-  </tbody>
-</table>
+<wc-docs-api-display [properties]="definition.schema.properties"></wc-docs-api-display>

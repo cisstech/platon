@@ -20,15 +20,20 @@ import { CourseActivityCardComponent } from '../activity-card/activity-card.comp
 export class CourseActivityGridComponent {
   protected tabs: Tab[] = []
   protected empty = false
+  protected tabTitles: string[] = []
   protected selectedIndex = 0
 
   @Input()
   set items(value: Activity[]) {
     this.tabs = [
+      { title: 'Tout', items: value },
       { title: 'Ouvert', items: value.filter((item) => item.state === 'opened') },
       { title: 'À venir', items: value.filter((item) => item.state === 'planned') },
       { title: 'Fermé', items: value.filter((item) => item.state === 'closed') },
     ]
+
+    this.tabTitles = this.tabs.map((tab) => tab.title)
+
     this.empty = !value.length
   }
 

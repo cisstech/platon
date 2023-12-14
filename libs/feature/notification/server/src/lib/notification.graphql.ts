@@ -1,10 +1,10 @@
 import GraphQLJSON from 'graphql-type-json'
 
-import { Field, InputType, Int, ObjectType } from '@nestjs/graphql'
-import { BaseGraphModel, toBoolean, toNumber } from '@platon/core/server'
+import { Field, InputType, ObjectType } from '@nestjs/graphql'
+import { BaseGraphModel, RelayConnection, toBoolean } from '@platon/core/server'
 import { Notification, NotificationFilters } from '@platon/feature/notification/common'
 import { Transform } from 'class-transformer'
-import { IsBoolean, IsNumber, IsOptional } from 'class-validator'
+import { IsBoolean, IsOptional } from 'class-validator'
 import { NotificationEntity } from './notification.entity'
 
 @ObjectType('Notification')
@@ -22,6 +22,9 @@ export class NotificationGraphModel extends BaseGraphModel implements Notificati
 
   userId!: string
 }
+
+@ObjectType('NotificationConnection')
+export class NotificationConnectionGraphModel extends RelayConnection(NotificationGraphModel) {}
 
 @ObjectType('NotificationChange')
 export class NotificationChangeGraphModel {
@@ -46,16 +49,4 @@ export class NotificationFiltersInput implements NotificationFilters {
   @IsBoolean()
   @IsOptional()
   readonly unread?: boolean
-
-  @Field(() => Int, { nullable: true })
-  @Transform(({ value }) => toNumber(value))
-  @IsNumber()
-  @IsOptional()
-  readonly offset?: number
-
-  @Field(() => Int, { nullable: true })
-  @Transform(({ value }) => toNumber(value))
-  @IsNumber()
-  @IsOptional()
-  readonly limit?: number
 }

@@ -8,12 +8,7 @@
     </mat-form-field>
     <h2>Membres</h2>
     <nz-button-group>
-      <button
-        (click)="search.open()"
-        nz-button
-        nzType="primary"
-        nz-tooltip="Ajouter un membre au groupe"
-      >
+      <button (click)="search.open()" nz-button nzType="primary" nz-tooltip="Ajouter un membre au groupe">
         <span nz-icon nzType="plus" nzTheme="outline"></span>
       </button>
       <ng-container *ngIf="selection.length as selectionCount">
@@ -34,11 +29,7 @@
         </nz-badge>
       </ng-container>
     </nz-button-group>
-    <user-search-bar
-      [(ngModel)]="members"
-      [autoSelect]="true"
-      [filters]="{ limit: 50, groups: [group!.id] }"
-    />
+    <user-search-bar [(ngModel)]="members" [autoSelect]="true" [filters]="{ limit: 50, groups: [group!.id] }" />
     <user-table [users]="members" [selectable]="true" [(ngModel)]="selection" />
   </ng-template>
   <ng-template> </ng-template>
@@ -53,6 +44,4 @@
   (closed)="addMembers($event)"
 />
 
-<ng-template #removeGuard>
-  Voulez-vous vraiment retirer les membres sélectionnés du groupe?
-</ng-template>
+<ng-template #removeGuard> Voulez-vous vraiment retirer les membres sélectionnés du groupe? </ng-template>

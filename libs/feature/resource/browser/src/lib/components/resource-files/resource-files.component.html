@@ -9,12 +9,7 @@
       </mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <nz-tree
-        *ngIf="nodes.length; else noFiles"
-        nzBlockNode
-        [nzData]="nodes"
-        [nzTreeTemplate]="nzTreeTemplate"
-      >
+      <nz-tree *ngIf="nodes.length; else noFiles" nzBlockNode [nzData]="nodes" [nzTreeTemplate]="nzTreeTemplate">
       </nz-tree>
     </mat-card-content>
   </mat-card>
@@ -22,8 +17,8 @@
     <mat-card-header>
       <mat-card-title>Documentation (readme.md)</mat-card-title>
       <mat-card-subtitle>
-        Nous vous conseillons de documenter vos ressources pour faciliter leur utilisation par les
-        autres enseignants. Vous pouvez facilement le faire en modifiant le fichier
+        Nous vous conseillons de documenter vos ressources pour faciliter leur utilisation par les autres enseignants.
+        Vous pouvez facilement le faire en modifiant le fichier
         <b>README.md</b> dans les fichiers de la ressource.
       </mat-card-subtitle>
     </mat-card-header>
@@ -46,11 +41,7 @@
 <ng-template #nzTreeTemplate let-node let-origin="origin">
   <ng-container>
     <div class="node" *ngIf="!node.isLeaf" (contextmenu)="contextMenu($event, menu, node)">
-      <ui-icon
-        [icon]="
-          node.title | iconFile : { alt: node.title, expanded: node.isExpanded, isDirectory: true }
-        "
-      />
+      <ui-icon [icon]="node.title | iconFile : { alt: node.title, expanded: node.isExpanded, isDirectory: true }" />
       <div class="folder-name">{{ node.title }}</div>
     </div>
     <div

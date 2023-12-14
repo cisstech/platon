@@ -106,20 +106,23 @@ export class AddCourseMemberViews1681047107903 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(
-      `DELETE FROM "typeorm_metadata" WHERE "type" = $1 AND "name" = $2 AND "schema" = $3`,
-      ['VIEW', 'ActivityMemberView', 'public']
-    )
+    await queryRunner.query(`DELETE FROM "typeorm_metadata" WHERE "type" = $1 AND "name" = $2 AND "schema" = $3`, [
+      'VIEW',
+      'ActivityMemberView',
+      'public',
+    ])
     await queryRunner.query(`DROP VIEW "ActivityMemberView"`)
-    await queryRunner.query(
-      `DELETE FROM "typeorm_metadata" WHERE "type" = $1 AND "name" = $2 AND "schema" = $3`,
-      ['VIEW', 'CourseMemberView', 'public']
-    )
+    await queryRunner.query(`DELETE FROM "typeorm_metadata" WHERE "type" = $1 AND "name" = $2 AND "schema" = $3`, [
+      'VIEW',
+      'CourseMemberView',
+      'public',
+    ])
     await queryRunner.query(`DROP VIEW "CourseMemberView"`)
-    await queryRunner.query(
-      `DELETE FROM "typeorm_metadata" WHERE "type" = $1 AND "name" = $2 AND "schema" = $3`,
-      ['VIEW', 'ActivityCorrectorView', 'public']
-    )
+    await queryRunner.query(`DELETE FROM "typeorm_metadata" WHERE "type" = $1 AND "name" = $2 AND "schema" = $3`, [
+      'VIEW',
+      'ActivityCorrectorView',
+      'public',
+    ])
     await queryRunner.query(`DROP VIEW "ActivityCorrectorView"`)
   }
 }

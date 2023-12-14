@@ -1,6 +1,6 @@
 import { Injectable, TemplateRef } from '@angular/core'
 import { NzMessageService } from 'ng-zorro-antd/message'
-import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal'
+import { ModalOptions, NzModalRef, NzModalService } from 'ng-zorro-antd/modal'
 import { NzNotificationService } from 'ng-zorro-antd/notification'
 import { PromptDialogComponent } from './prompt/prompt.component'
 
@@ -84,6 +84,16 @@ export class DialogService {
     }
   }
 
+  confirm(options: Omit<ModalOptions, 'nzOnOk' | 'nzOnCancel'>): Promise<boolean> {
+    return new Promise<boolean>((resolve) => {
+      this.nzModalService.confirm({
+        ...options,
+        nzOnOk: () => resolve(true),
+        nzOnCancel: () => resolve(false),
+      })
+    })
+  }
+
   notification(template: TemplateRef<object>, options: TemplateOptions = { duration: DEFAULT_DIALOG_DURATION }) {
     if (options.duration == undefined) options.duration = DEFAULT_DIALOG_DURATION
     const ref = this.nzNotificationService.template(template, {
@@ -114,7 +124,7 @@ export class DialogService {
     const dialogRef: NzModalRef = this.nzModalService.create({
       nzTitle: input.title,
       nzContent: PromptDialogComponent,
-      nzComponentParams: {
+      nzData: {
         value: input.value,
         label: input.label,
         okTitle: input.okTitle,

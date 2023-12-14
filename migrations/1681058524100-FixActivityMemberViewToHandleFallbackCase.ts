@@ -4,10 +4,11 @@ export class FixActivityMemberViewToHandleFallbackCase1681058524100 implements M
   name = 'FixActivityMemberViewToHandleFallbackCase1681058524100'
 
   public async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(
-      `DELETE FROM "typeorm_metadata" WHERE "type" = $1 AND "name" = $2 AND "schema" = $3`,
-      ['VIEW', 'ActivityMemberView', 'public']
-    )
+    await queryRunner.query(`DELETE FROM "typeorm_metadata" WHERE "type" = $1 AND "name" = $2 AND "schema" = $3`, [
+      'VIEW',
+      'ActivityMemberView',
+      'public',
+    ])
     await queryRunner.query(`DROP VIEW "ActivityMemberView"`)
     await queryRunner.query(`CREATE VIEW "ActivityMemberView" AS
   -- Define a Common Table Expression (CTE) to select activity users
@@ -71,10 +72,11 @@ export class FixActivityMemberViewToHandleFallbackCase1681058524100 implements M
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(
-      `DELETE FROM "typeorm_metadata" WHERE "type" = $1 AND "name" = $2 AND "schema" = $3`,
-      ['VIEW', 'ActivityMemberView', 'public']
-    )
+    await queryRunner.query(`DELETE FROM "typeorm_metadata" WHERE "type" = $1 AND "name" = $2 AND "schema" = $3`, [
+      'VIEW',
+      'ActivityMemberView',
+      'public',
+    ])
     await queryRunner.query(`DROP VIEW "ActivityMemberView"`)
     await queryRunner.query(`CREATE VIEW "ActivityMemberView" AS -- Define a Common Table Expression (CTE) to select activity users
   WITH activity_users AS (

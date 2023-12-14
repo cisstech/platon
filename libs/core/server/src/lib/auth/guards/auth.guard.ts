@@ -8,6 +8,7 @@ import { TOKEN_EXPIRED_ERROR_CODE, UnauthorizedResponse, User } from '@platon/co
 import { TokenExpiredError } from 'jsonwebtoken'
 import { firstValueFrom, Observable } from 'rxjs'
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator'
+import { AuthExecutionContext } from '../auth.types'
 
 @Injectable()
 export class AuthGuard extends PassportGuard(['jwt']) {
@@ -17,7 +18,7 @@ export class AuthGuard extends PassportGuard(['jwt']) {
 
   private getRequest(context: ExecutionContext) {
     if (context.getType<GqlContextType>() === 'graphql') {
-      const gqlContext = GqlExecutionContext.create(context).getContext()
+      const gqlContext = GqlExecutionContext.create(context).getContext<AuthExecutionContext>()
       const { req, connection } = gqlContext
       return connection && connection.context && connection.context.headers ? connection.context : req
     }

@@ -116,7 +116,7 @@ v16.14.2
 - **Clone the repository**: Clone the PLaTon repository from GitHub to your local machine using the following command:
 
   ```sh
-  git clone https://github.com/cisstech/platon.git
+  git clone https://github.com/PlatonOrg/platon.git
   ```
 
 - **Install dependencies**: Navigate to the project's root directory and run the following command to install the required dependencies:
@@ -386,8 +386,8 @@ Linting helps in maintaining a consistent code style and detecting potential iss
 
 To run the linting process, you can use the following commands:
 
-- For the entire workspace: `yarn lint`
-- For affected projects: `yarn affected:lint`
+- For checking without applying linting: `yarn lint`
+- For formatting the entire workspace: `yarn lint:fix`
 
 In addition to linting, formatting your code is also essential for maintaining a clean and consistent codebase. Prettier is a popular code formatting tool that can be integrated into your project's development workflow.
 
@@ -396,7 +396,7 @@ Prettier automatically enforces a consistent code style by parsing your code and
 To run the formatting process, you can use the following commands:
 
 - For checking the code without applying formating: `yarn format:check`
-- For formatting the entire workspace: `yarn format`
+- For formatting the entire workspace: `yarn format:write`
 
 These scripts will analyze the codebase and provide a report of any linting issues found, helping you maintain a clean and consistent code style across the project.
 
@@ -407,7 +407,7 @@ These scripts will analyze the codebase and provide a report of any linting issu
 - **Clone the repository**: Clone the PLaTon repository from GitHub to your machine using the following command:
 
   ```sh
-  git clone https://github.com/cisstech/platon.git
+  git clone https://github.com/PlatonOrg/platon.git
   ```
 
 - **Set up the environment**: After cloning and installing the repository, run the `./bin/install.sh` script to set up the necessary environment variables. This script generates an `.env` and `./tools/database/init.json` files with the default values from the `./templates` directory, which you can customize.

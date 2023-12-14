@@ -1,0 +1,6 @@
+<mat-spinner *ngIf="connecting" [diameter]="32" [mode]="'indeterminate'"> </mat-spinner>
+<div *ngFor="let cas of cases">
+  <a mat-raised-button color="primary" (click)="signInWithCas(cas)">
+    {{ cas }}
+  </a>
+</div>

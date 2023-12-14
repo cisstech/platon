@@ -1,10 +1,5 @@
 import { BaseDTO } from '@platon/core/server'
-import {
-  Correction,
-  PendingCorrection,
-  PendingCorrectionExercise,
-  UpsertCorrection,
-} from '@platon/feature/result/common'
+import { Correction, ActivityCorrection, ExerciseCorrection, UpsertCorrection } from '@platon/feature/result/common'
 import { Type } from 'class-transformer'
 import { IsArray, IsDate, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator'
 
@@ -16,7 +11,7 @@ export class CorrectionDTO extends BaseDTO implements Correction {
   grade!: number
 }
 
-export class PendingCorrectionDTO implements PendingCorrection {
+export class ActivityCorrectionDTO implements ActivityCorrection {
   @IsUUID()
   activityId!: string
 
@@ -30,11 +25,11 @@ export class PendingCorrectionDTO implements PendingCorrection {
   courseName!: string
 
   @IsArray()
-  @Type(() => PendingCorrectionExerciseDTO)
-  exercises!: PendingCorrectionExerciseDTO[]
+  @Type(() => ExerciseCorrectionDTO)
+  exercises!: ExerciseCorrectionDTO[]
 }
 
-export class PendingCorrectionExerciseDTO implements PendingCorrectionExercise {
+export class ExerciseCorrectionDTO implements ExerciseCorrection {
   @IsUUID()
   userId!: string
 

@@ -3,7 +3,6 @@ import { Router } from '@angular/router'
 import { ImgIcon } from '@cisstech/nge/ui/icon'
 import { DialogService } from '@platon/core/browser'
 import { NotificationParser, NotificationRenderer } from '@platon/feature/notification/browser'
-import { Notification } from '@platon/feature/notification/common'
 import {
   RESOURCE_EVENT_NOTIFICATION,
   RESOURCE_INVITATION_NOTIFICATION,
@@ -14,20 +13,31 @@ import { firstValueFrom } from 'rxjs'
 import { ResourceService } from '../api/resource.service'
 import { ResourceEventItemComponent } from '../components/event-item/event-item.component'
 
-export const ResourceEventNotificationParser: NotificationParser = {
-  support(notification: Notification<ResourceEventNotification>): boolean {
+export const ResourceEventNotificationParser: NotificationParser<ResourceEventNotification> = {
+  support(notification): boolean {
     return notification.data.type === RESOURCE_EVENT_NOTIFICATION
   },
-  renderer(notification: Notification<ResourceEventNotification>, injector: Injector): NotificationRenderer {
+  renderer(notification, injector: Injector): NotificationRenderer {
     const router = injector.get(Router)
     const event = notification.data.eventInfo
     const resourceId = 'resourceId' in event.data ? event.data.resourceId : event.resourceId
     const resourceType = event.data.resourceType?.toLowerCase()
+
     return {
       icon: new ImgIcon(`/assets/images/resources/${resourceType}.svg`),
       content: ResourceEventItemComponent,
-      onClick: ({ onClose }) => {
+      onClick: async ({ onClose }) => {
         if (event.type === 'MEMBER_REMOVE') return
+        if (event.type === 'MEMBER_CREATE') {
+          router.navigate([`/resources/${resourceId}/settings`], {
+            queryParams: {
+              tab: 'members',
+            },
+          })
+          onClose()
+          return
+        }
+
         router.navigate([`/resources/${resourceId}`])
         onClose()
       },
@@ -35,11 +45,11 @@ export const ResourceEventNotificationParser: NotificationParser = {
   },
 }
 
-export const ResourceInvitationNotificationParser: NotificationParser = {
-  support(notification: Notification<ResourceInvitationNotification>): boolean {
+export const ResourceInvitationNotificationParser: NotificationParser<ResourceInvitationNotification> = {
+  support(notification): boolean {
     return notification.data.type === RESOURCE_INVITATION_NOTIFICATION
   },
-  renderer(notification: Notification<ResourceInvitationNotification>, injector: Injector): NotificationRenderer {
+  renderer(notification, injector: Injector): NotificationRenderer {
     const router = injector.get(Router)
     const dialogService = injector.get(DialogService)
     const resourceService = injector.get(ResourceService)

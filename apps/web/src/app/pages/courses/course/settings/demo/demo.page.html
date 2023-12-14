@@ -4,18 +4,17 @@
 
 <ng-template #demoInfo>
   <ng-container *ngIf="!hasDemo">
-  <button nz-button nzType="primary" (click)="createDemo()" [disabled]="!canEdit">
-    Créer accès démo
-  </button>
+    <button nz-button nzType="primary" (click)="createDemo()" [disabled]="!canEdit">Créer accès démo</button>
   </ng-container>
   <ng-container *ngIf="hasDemo">
     <mat-form-field appearance="fill">
       <mat-label>URL</mat-label>
-      <input matInput [ngModel]="demoUri" readonly>
-      <span matTextSuffix><button nz-button nzType="primary" (click)="copyUri()"><span nz-icon nzType="copy" nzTheme="outline"></span></button></span>
+      <input matInput [ngModel]="demoUri" readonly />
+      <span matTextSuffix
+        ><button nz-button nzType="primary" (click)="copyUri()">
+          <span nz-icon nzType="copy" nzTheme="outline"></span></button
+      ></span>
     </mat-form-field>
-    <button nz-button nzType="primary" (click)="deleteDemo()" [disabled]="!canEdit">
-      Supprimer l'accès démo
-    </button>
+    <button nz-button nzType="primary" (click)="deleteDemo()" [disabled]="!canEdit">Supprimer l'accès démo</button>
   </ng-container>
 </ng-template>

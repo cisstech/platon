@@ -16,7 +16,7 @@ import { NzBadgeModule } from 'ng-zorro-antd/badge'
   imports: [CommonModule, NzBadgeModule, NzAvatarModule, NzToolTipModule],
 })
 export class UserGroupAvatarComponent {
-  @Input() avatarSize = 32
+  @Input() size = 32
   @Input() group!: UserGroup
   @Input() canShowMembers = false
   @Output() showMembers = new EventEmitter()

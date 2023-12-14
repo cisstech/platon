@@ -1,0 +1,41 @@
+<nz-table
+  #nzTable
+  [nzData]="dataSource"
+  [nzPageSize]="10"
+  nzTableLayout="auto"
+  [nzNoResult]="empty"
+  nzBordered
+  nzShowPagination="false"
+>
+  <thead>
+    <tr>
+      <th>Cours</th>
+      <th>Activité</th>
+      <th>Exercises corrigés</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <ng-container *ngFor="let item of nzTable.data">
+      <tr>
+        <td>
+          <a nz-button nzType="link" [routerLink]="['/courses', item.courseId]">{{ item.courseName }}</a>
+        </td>
+        <td>
+          <a nz-button nzType="link" [routerLink]="['/player/correction', item.activityId]">{{ item.activityName }}</a>
+        </td>
+        <td>
+          <nz-tag [nzColor]="item.correctionStatusColor">{{ item.correctedCount }} / {{ item.exerciseCount }}</nz-tag>
+        </td>
+        <th nzAlign="center">
+          <button nz-tooltip="Corriger" nz-button nzType="link" [routerLink]="['/player/correction', item.activityId]">
+            <i nz-icon nzType="edit"></i>
+          </button>
+        </th>
+      </tr>
+    </ng-container>
+  </tbody>
+</nz-table>
+<ng-template #empty>
+  <ng-content></ng-content>
+</ng-template>

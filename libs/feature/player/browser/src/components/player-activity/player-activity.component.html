@@ -1,75 +1,81 @@
-<mat-card *ngIf="!exercises">
-  <mat-card-content class="centered">
-    <h3>{{ player.title }}</h3>
-    <h5 *ngIf="player.author">
-      <div class="author">
-        <b>Créé par</b>
-        <user-avatar [userIdOrName]="player.author" />
-      </div>
-    </h5>
-    <ng-container *ngIf="showIntroduction">
-      <div>
-        <nge-markdown [data]="player.introduction" />
-      </div>
-      <player-settings [player]="player" />
-      <button mat-raised-button color="primary" (click)="start()">Commencer</button>
-    </ng-container>
-    <ng-container *ngIf="showConclusion">
-      <div>
-        <nge-markdown [data]="player.conclusion" />
-      </div>
-      <player-results [player]="player" />
-    </ng-container>
-    <ng-container *ngIf="state === 'planned'">
-      <ng-container *ngIf="countdown">
+<h1>{{ player.title }}</h1>
+<user-avatar *ngIf="player.author" [userIdOrName]="player.author" />
+<main>
+  <mat-card *ngIf="!exercises; else showExercices">
+    <mat-card-content class="centered">
+      <!-- INTRODUCTION -->
+      <ng-container *ngIf="showIntroduction">
+        <div>
+          <nge-markdown [data]="player.introduction" />
+        </div>
+        <player-settings [player]="player" />
+        <button *ngIf="canGoDashboard" mat-raised-button [routerLink]="'/dashboard'">Retourner sur PLaTon</button>
+        <button mat-raised-button color="primary" [disabled]="empty" (click)="start()">Commencer</button>
+      </ng-container>
+      <!-- CONCLUSION -->
+      <ng-container *ngIf="showConclusion">
+        <div>
+          <nge-markdown [data]="player.conclusion" />
+        </div>
+        <player-results [player]="player" />
+        <button *ngIf="canGoDashboard" mat-raised-button color="primary" [routerLink]="'/dashboard'">
+          Retourner sur PLaTon
+        </button>
+      </ng-container>
+      <!-- PLANNING -->
+      <ng-container *ngIf="state === 'planned'">
         <nz-countdown
+          *ngIf="countdown"
           nzTitle="Temps restant avant ouverture"
           [nzValue]="countdown"
           (nzCountdownFinish)="onFinishCountdown()"
         />
+        <player-settings [player]="player" />
       </ng-container>
-      <player-settings [player]="player" />
-    </ng-container>
-  </mat-card-content>
-</mat-card>
-<ng-container *ngIf="exercises">
-  <main>
-    <ng-container *ngFor="let exercise of exercises; trackBy: trackBySessionId; let i = index">
-      <nz-ribbon [nzText]="ribbon">
-        <ng-template #ribbon> {{ i + 1 }} / {{ exercises.length }} </ng-template>
-        <player-exercise
-          [id]="exercise.sessionId"
-          [player]="exercise"
-          (evaluated)="onChangeNavigation($event)"
-        />
-      </nz-ribbon>
-    </ng-container>
-  </main>
-  <aside #target>
-    <nz-affix [nzTarget]="target" nzOffsetTop="0">
-      <ng-container *ngIf="countdown">
-        <mat-card>
-          <mat-card-content>
-            <nz-countdown
-              nzTitle="Temps restant avant fermeture"
-              [nzValue]="countdown"
-              [nzValueStyle]="{ color: countdownColor }"
-              (nzCountdownFinish)="onFinishCountdown()"
-            />
-          </mat-card-content>
-        </mat-card>
-        <br />
+    </mat-card-content>
+  </mat-card>
+  <ng-template #showExercices>
+    <section>
+      <ng-container *ngFor="let exercise of exercises; trackBy: trackBySessionId; let i = index">
+        <nz-ribbon [nzText]="ribbon">
+          <ng-template #ribbon> {{ i + 1 }} / {{ navExerciceCount }} </ng-template>
+          <player-exercise
+            [id]="exercise.sessionId"
+            [player]="exercise"
+            [state]="answerStates[exercise.sessionId]"
+            (evaluated)="onChangeNavigation($event)"
+            [hasPrev]="hasPrev"
+            [hasNext]="hasNext"
+            (goToPrevPlayer)="play(player.navigation.exercises[position - 1])"
+            (goToNextPlayer)="play(player.navigation.exercises[position + 1])"
+          />
+        </nz-ribbon>
       </ng-container>
-    </nz-affix>
-    <player-navigation [player]="player" (navigate)="play($event)" (terminate)="terminate()" />
-  </aside>
-</ng-container>
-<ng-container *ngFor="let trigger of triggers">
+    </section>
+  </ng-template>
+</main>
+<footer [class.glass]="countdown" *ngIf="exercises">
+  <nz-countdown
+    *ngIf="countdown"
+    nzTitle="Temps restant"
+    [nzValue]="countdown"
+    [nzValueStyle]="{ color: countdownColor }"
+    (nzCountdownFinish)="onFinishCountdown()"
+  />
+  <button mat-fab extended color="primary" [nz-popover]="navigation" nzPopoverPlacement="topRight">
+    <mat-icon>menu</mat-icon>
+    Navigation
+  </button>
+</footer>
+<ng-template #navigation>
+  <player-navigation [player]="player" (navigate)="play($event)" [terminate]="terminate.bind(this)" />
+</ng-template>
+<ng-container *ngFor="let breakpoint of countdownBreakpoints">
   <nz-countdown
     [style.visibility]="'hidden'"
     [style.height]="0"
     [style.width]="0"
-    [nzValue]="trigger.time"
-    (nzCountdownFinish)="trigger.execute()"
+    [nzValue]="breakpoint.time"
+    (nzCountdownFinish)="breakpoint.action()"
   />
 </ng-container>

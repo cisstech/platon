@@ -1,18 +1,11 @@
-import { LegendPosition } from '@swimlane/ngx-charts'
 import { defineWebComponent, IWebComponent, WebComponentTypes } from '../../web-component'
-import { ChartViewerBase, ChartViewerBaseProperties } from '../../shared/components/chart-viewer/base'
+import { ChartViewerBase2, ChartViewerBaseProperties2 } from '../../shared/components/chart-viewer/base'
+import { EChartsOption } from 'echarts'
 
-export interface ChartViewerRadarState extends IWebComponent, ChartViewerBase {
-  showXAxis: boolean
-  showXAxisLabel: boolean
-  xAxisLabel: string
-  showYAxis: boolean
-  showYAxisLabel: boolean
-  yAxisLabel: string
-  showLegend: boolean
-  legendPosition: LegendPosition
-  legend: string
-  //mode: 'linear' | 'basis' | 'cardinal'
+export interface ChartViewerRadarState extends IWebComponent, ChartViewerBase2 {
+  mode: 'simple' | 'filled'
+  shape: 'circle' | 'polygon'
+  indicators: Array<{ name: string; max: number }>
 }
 
 export const ChartViewerRadarComponentDefinition = defineWebComponent({
@@ -26,135 +19,121 @@ export const ChartViewerRadarComponentDefinition = defineWebComponent({
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',
     title: 'ChartViewer-Radar',
-    required: ['data'],
+    required: ['data', 'indicators'],
     properties: {
-      // mode: {
-      //   type: 'string',
-      //   default: 'linear',
-      //   description: 'Décris le modèle de courbe à utiliser pour afficher le graphe',
-      //   enum: ['linear', 'basis', 'cardinal']
-      // },
-      showXAxis: {
-        type: 'boolean',
-        default: true,
-        description: "Afficher l'axe horizontal?",
-      },
-      xAxisLabel: {
+      mode: {
         type: 'string',
-        default: 'Axe X',
-        description: "Label de l'axe horizontal",
+        default: 'simple',
+        description: "Mode d'affichage du graphe : simple, ou filled",
+        enum: ['simple', 'filled'],
       },
-      showXAxisLabel: {
-        type: 'boolean',
-        default: true,
-        description: "Afficher le label de l'axe horizontal?",
-      },
-      showYAxis: {
-        type: 'boolean',
-        default: true,
-        description: "Afficher l'axe vertical?",
-      },
-      yAxisLabel: {
+      shape: {
         type: 'string',
-        default: 'Axe Y',
-        description: "Label de l'axe vertical",
+        default: 'polygon',
+        description: 'Forme du graphe : circle, ou polygon',
+        enum: ['circle', 'polygon'],
       },
-      showYAxisLabel: {
-        type: 'boolean',
-        default: true,
-        description: "Afficher le label de l'axe vertical?",
+      indicators: {
+        type: 'array',
+        default: [],
+        description: 'Liste des indicateurs du radar',
+        items: {
+          type: 'object',
+          properties: {
+            name: {
+              type: 'string',
+              default: '',
+              description: "Nom de l'indicateur",
+            },
+            max: {
+              type: 'number',
+              default: 100,
+              description: "Valeur maximale de l'indicateur",
+            },
+          },
+        },
       },
-      showLegend: {
-        type: 'boolean',
-        default: true,
-        description: 'Afficher la légende décrivant les données affichées?',
-      },
-      legendPosition: {
-        type: 'string',
-        default: 'right',
-        description: "Position de la légende dans l'affichage du graphe",
-        enum: ['below', 'right'],
-      },
-      legend: {
-        type: 'string',
-        default: 'Légende',
-        description: 'Titre de la légende',
-      },
-      ...ChartViewerBaseProperties,
+      ...ChartViewerBaseProperties2,
     },
   },
   showcase: {
     data: [
       {
-        name: 'Germany',
-        series: [
-          {
-            name: '1990',
-            value: 62000000,
-          },
-          {
-            name: '2010',
-            value: 73000000,
-          },
-          {
-            name: '2011',
-            value: 89400000,
-          },
-        ],
-      },
-
-      {
-        name: 'USA',
-        series: [
-          {
-            name: '1990',
-            value: 250000000,
-          },
-          {
-            name: '2010',
-            value: 309000000,
-          },
-          {
-            name: '2011',
-            value: 311000000,
-          },
-        ],
-      },
-
-      {
-        name: 'France',
-        series: [
-          {
-            name: '1990',
-            value: 58000000,
-          },
-          {
-            name: '2010',
-            value: 50000020,
-          },
-          {
-            name: '2011',
-            value: 58000000,
-          },
-        ],
+        value: [4200, 3000, 20000, 35000, 50000, 18000],
+        name: 'Allocated Budget',
       },
       {
-        name: 'UK',
-        series: [
-          {
-            name: '1990',
-            value: 57000000,
-          },
-          {
-            name: '2010',
-            value: 62000000,
-          },
-          {
-            name: '2011',
-            value: 72000000,
-          },
-        ],
+        value: [5000, 14000, 28000, 26000, 42000, 21000],
+        name: 'Actual Spending',
       },
+    ],
+    indicators: [
+      { name: 'Sales', max: 6500 },
+      { name: 'Administration', max: 16000 },
+      { name: 'Information Technology', max: 30000 },
+      { name: 'Customer Support', max: 38000 },
+      { name: 'Development', max: 52000 },
+      { name: 'Marketing', max: 25000 },
     ],
   },
 })
+
+export const simpleChartViewerRadarState: EChartsOption = {
+  title: {
+    text: 'Referer of a Website',
+    subtext: 'Fake Data',
+    left: 'center',
+  },
+  legend: {
+    orient: 'vertical',
+    data: [],
+    left: 'left',
+  },
+  tooltip: {
+    trigger: 'item',
+  },
+  radar: {
+    shape: 'polygon',
+    indicator: [],
+  },
+  series: [
+    {
+      name: 'Budget vs spending',
+      type: 'radar',
+      tooltip: {
+        trigger: 'item',
+      },
+      data: [],
+    },
+  ],
+}
+
+export const filledChartViewerRadarState: EChartsOption = {
+  title: {
+    text: 'Basic Radar Chart',
+    left: 'center',
+  },
+  legend: {
+    orient: 'vertical',
+    data: [],
+    left: 'left',
+  },
+  tooltip: {
+    trigger: 'item',
+  },
+  radar: {
+    shape: 'circle',
+    indicator: [],
+  },
+  series: [
+    {
+      name: 'Budget vs spending',
+      type: 'radar',
+      tooltip: {
+        trigger: 'item',
+      },
+      areaStyle: {},
+      data: [],
+    },
+  ],
+}

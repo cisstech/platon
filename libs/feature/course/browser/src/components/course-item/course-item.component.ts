@@ -5,11 +5,13 @@ import { MatIconModule } from '@angular/material/icon'
 
 import { NzBadgeModule } from 'ng-zorro-antd/badge'
 import { NzIconModule } from 'ng-zorro-antd/icon'
+import { NzProgressModule } from 'ng-zorro-antd/progress'
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 
 import { NgeUiListModule } from '@cisstech/nge/ui/list'
 
 import { Course } from '@platon/feature/course/common'
+import { antTagColorFromPercentage } from '@platon/shared/ui'
 
 @Component({
   standalone: true,
@@ -17,7 +19,16 @@ import { Course } from '@platon/feature/course/common'
   templateUrl: './course-item.component.html',
   styleUrls: ['./course-item.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, MatIconModule, NzIconModule, NzBadgeModule, NzToolTipModule, NgeUiListModule],
+  imports: [
+    CommonModule,
+    MatIconModule,
+    NzIconModule,
+    NzBadgeModule,
+    NzBadgeModule,
+    NzToolTipModule,
+    NzProgressModule,
+    NgeUiListModule,
+  ],
 })
 export class CourseItemComponent implements OnInit {
   @Input() item!: Course
@@ -26,6 +37,7 @@ export class CourseItemComponent implements OnInit {
   protected name = ''
   protected desc = ''
   protected tags: string[] = []
+  protected progressColor = 'primary'
 
   ngOnInit(): void {
     this.name = this.item.name
@@ -33,5 +45,7 @@ export class CourseItemComponent implements OnInit {
     if (this.simple) {
       this.desc = ''
     }
+
+    this.progressColor = antTagColorFromPercentage(this.item.progression)
   }
 }

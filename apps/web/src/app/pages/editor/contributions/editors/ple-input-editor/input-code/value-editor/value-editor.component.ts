@@ -30,6 +30,7 @@ export class InputCodeValueEditorComponent extends BaseValueEditor<string, Input
   }
 
   override setValue(value: string): void {
+    value = this.convertToTextValue(value)
     if (this.model) {
       this.ignoreNextChange = true
       this.model.setValue(value)

@@ -3,8 +3,8 @@
     <input
       type="text"
       tabindex="1"
-      [ngClass]="item.css | css : 'class'"
-      [ngStyle]="item.css | css : 'style'"
+      [ngClass]="item.css | css: 'class'"
+      [ngStyle]="item.css | css: 'style'"
       [disabled]="!!(state.disabled || item.disabled)"
       [(ngModel)]="item.value"
     />

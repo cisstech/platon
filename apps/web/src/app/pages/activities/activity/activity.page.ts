@@ -22,6 +22,7 @@ import {
 } from '@platon/feature/result/browser'
 
 import { ActivityPresenter } from './activity.presenter'
+import { NzPageHeaderModule } from 'ng-zorro-antd/page-header'
 
 @Component({
   standalone: true,
@@ -43,6 +44,7 @@ import { ActivityPresenter } from './activity.presenter'
     NzStatisticModule,
     NzBreadCrumbModule,
     NzTypographyModule,
+    NzPageHeaderModule,
 
     CourseActivityCardComponent,
     ResultByMembersComponent,

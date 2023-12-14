@@ -3,7 +3,7 @@
     <tr>
       <th>Utilisateur</th>
       <th>Date d'ajout</th>
-      <th *ngIf="editable"></th>
+      <th *ngIf="canDelete || canAccept"></th>
     </tr>
   </thead>
   <tbody>
@@ -12,20 +12,29 @@
         <user-avatar #avatar [userIdOrName]="data.userId" />
       </td>
       <td>{{ data.createdAt | date }}</td>
-      <td *ngIf="editable && !excludeFromDelete.includes(data.userId)">
-        <button
-          nz-button
-          nzDanger
-          nzType="primary"
-          nzShape="circle"
-          nz-popconfirm
-          nzOkText="Retirer"
-          nzOkType="danger"
-          [nzPopconfirmTitle]="'Voulez-vous vraiment retirer “' + avatar.displayName + '” des membres du cercle?'"
-          (nzOnConfirm)="deleted.emit(data)"
-        >
-          <i nz-icon nzType="delete"></i>
-        </button>
+      <td nzAlign="center" *ngIf="(canDelete && !excludeFromDelete.includes(data.userId)) || canAccept">
+        <nz-button-group>
+          <button *ngIf="canAccept" nz-button nzType="primary" nzOkText="Accepter" (click)="accept.emit(data)">
+            <i nz-icon nzType="check-circle"></i>
+          </button>
+          <button
+            *ngIf="canDelete"
+            nz-button
+            nzDanger
+            nzType="primary"
+            nz-popconfirm
+            [nzOkText]="!data.waiting ? 'Retirer' : 'Refuser'"
+            nzOkType="danger"
+            [nzPopconfirmTitle]="
+              !data.waiting
+                ? 'Voulez-vous vraiment retirer “' + avatar.displayName + '” des membres du cercle?'
+                : 'Voulez-vous vraiment refuser la requête de ' + avatar.displayName
+            "
+            (nzOnConfirm)="deleted.emit(data)"
+          >
+            <i nz-icon nzType="delete"></i>
+          </button>
+        </nz-button-group>
       </td>
     </tr>
   </tbody>

@@ -1,5 +1,5 @@
 <ng-container *ngIf="contextChange | async as context">
-  <nz-tabset nzTabPosition="left" nzLinkRouter>
+  <nz-tabset [nzTabPosition]="isMobile ? 'top' : 'left'" nzLinkRouter>
     <nz-tab *ngIf="context.resource">
       <a
         *nzTabLink

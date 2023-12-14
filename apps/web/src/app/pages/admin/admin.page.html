@@ -1,6 +1,6 @@
 <ui-layout-tabs>
   <nz-breadcrumb nzSeparator="">
-    <nz-breadcrumb-item> Paramètres </nz-breadcrumb-item>
+    <nz-breadcrumb-item> Administration </nz-breadcrumb-item>
   </nz-breadcrumb>
   <ui-layout-tab [link]="['users']">
     <ng-template>
@@ -18,6 +18,12 @@
     <ng-template>
       <mat-icon>school</mat-icon>
       LMS
+    </ng-template>
+  </ui-layout-tab>
+  <ui-layout-tab [link]="['cases']">
+    <ng-template>
+      <mat-icon>login</mat-icon>
+      CAS
     </ng-template>
   </ui-layout-tab>
   <ui-layout-tab [link]="['tags']">

@@ -1,8 +1,8 @@
 import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common'
 import { ItemResponse, ListResponse } from '@platon/core/common'
 import { IRequest, Mapper } from '@platon/core/server'
-import { PendingCorrection, UpsertCorrection } from '@platon/feature/result/common'
-import { CorrectionDTO, PendingCorrectionDTO } from './correction.dto'
+import { ActivityCorrection, UpsertCorrection } from '@platon/feature/result/common'
+import { CorrectionDTO, ActivityCorrectionDTO } from './correction.dto'
 import { CorrectionService } from './correction.service'
 
 @Controller('results/corrections')
@@ -10,16 +10,16 @@ export class CorrectionController {
   constructor(private readonly service: CorrectionService) {}
 
   @Get()
-  async list(@Req() req: IRequest): Promise<ListResponse<PendingCorrection>> {
+  async list(@Req() req: IRequest): Promise<ListResponse<ActivityCorrection>> {
     const items = await this.service.list(req.user.id)
-    const resources = Mapper.mapAll(items, PendingCorrectionDTO)
+    const resources = Mapper.mapAll(items, ActivityCorrectionDTO)
     return new ListResponse({ total: resources.length, resources })
   }
 
   @Get('/:activityId')
-  async find(@Req() req: IRequest, @Param('activityId') activityId: string): Promise<ListResponse<PendingCorrection>> {
+  async find(@Req() req: IRequest, @Param('activityId') activityId: string): Promise<ListResponse<ActivityCorrection>> {
     const items = await this.service.list(req.user.id, activityId)
-    const resources = Mapper.mapAll(items, PendingCorrectionDTO)
+    const resources = Mapper.mapAll(items, ActivityCorrectionDTO)
     return new ListResponse({ total: resources.length, resources })
   }
 

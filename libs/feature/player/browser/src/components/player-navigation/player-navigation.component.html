@@ -1,10 +1,4 @@
 <mat-card>
-  <mat-card-header>
-    <mat-card-title>{{ player.title }}</mat-card-title>
-    <mat-card-subtitle *ngIf="player.author">
-      <user-avatar [userIdOrName]="player.author" />
-    </mat-card-subtitle>
-  </mat-card-header>
   <mat-card-content>
     <nz-timeline nzMode="alternate">
       <ng-container *ngFor="let page of player.navigation.exercises; trackBy: trackPage">
@@ -14,11 +8,7 @@
               {{ page.state | answerStateIcon }}
             </mat-icon>
           </ng-template>
-          <div
-            class="timeline-content"
-            [class.current]="isActiveSession(page.sessionId)"
-            (click)="navigate.emit(page)"
-          >
+          <div class="timeline-content" [class.current]="isActiveSession(page.sessionId)" (click)="navigate.emit(page)">
             <div class="timeline-title">{{ page.title }}</div>
             <div class="timeline-status">
               {{ page.state | answerStateLabel }}
@@ -29,18 +19,6 @@
     </nz-timeline>
   </mat-card-content>
   <mat-card-actions>
-    <button
-      mat-raised-button
-      nz-popconfirm
-      [nzPopconfirmTitle]="confirm"
-      nzPopconfirmPlacement="top"
-      (nzOnConfirm)="terminate.emit()"
-    >
-      <ng-template #confirm>
-        <p>Êtes-vous sûr de vouloir terminer l'activité?</p>
-        <p>Après avoir terminé l'activité, vous ne pourrez plus modifier vos réponses.</p>
-      </ng-template>
-      Terminer
-    </button>
+    <button mat-raised-button (click)="onWillTerminate()">Terminer</button>
   </mat-card-actions>
 </mat-card>

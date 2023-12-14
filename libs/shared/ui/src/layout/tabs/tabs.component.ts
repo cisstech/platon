@@ -17,7 +17,7 @@ import { RouterModule } from '@angular/router'
 import { combineLatest, Observable, Subscription } from 'rxjs'
 import { UiError403Component, UiError404Component, UiError500Component } from '../../error'
 import { LayoutState } from '../layout'
-import { UiLayoutTabsTitleDirective } from './directives/tab-title.directive'
+import { UiLayoutTabDirective } from './directives/tab-title.directive'
 
 @Component({
   standalone: true,
@@ -42,29 +42,24 @@ export class UiLayoutTabsComponent implements AfterContentInit, OnDestroy {
 
   @Input() state: LayoutState = 'READY'
 
-  @ContentChildren(UiLayoutTabsTitleDirective)
-  titles!: QueryList<UiLayoutTabsTitleDirective>
+  @ContentChildren(UiLayoutTabDirective)
+  query!: QueryList<UiLayoutTabDirective>
 
-  protected tabs: {
-    title: UiLayoutTabsTitleDirective
-  }[] = []
+  protected tabs: UiLayoutTabDirective[] = []
 
   constructor(private readonly changeDetectorRef: ChangeDetectorRef) {}
 
   ngAfterContentInit(): void {
-    const handleChanges = (titles: UiLayoutTabsTitleDirective[]) => {
-      this.tabs = []
-      for (let i = 0; i < titles.length; i++) {
-        this.tabs.push({ title: titles[i] })
-      }
+    const handleChanges = (results: UiLayoutTabDirective[]) => {
+      this.tabs = Array.from(results)
       this.changeDetectorRef.markForCheck()
     }
 
-    handleChanges(this.titles.toArray())
+    handleChanges(this.query.toArray())
 
     this.subscriptions.push(
-      combineLatest([this.titles.changes as Observable<UiLayoutTabsTitleDirective[]>]).subscribe(([titles]) => {
-        handleChanges(titles)
+      combineLatest([this.query.changes as Observable<UiLayoutTabDirective[]>]).subscribe(([results]) => {
+        handleChanges(results)
       })
     )
   }

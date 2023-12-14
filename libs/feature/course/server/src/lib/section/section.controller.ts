@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common'
-import { ItemResponse, ListResponse, NoContentResponse, NotFoundResponse } from '@platon/core/common'
-import { Mapper } from '@platon/core/server'
+import { ItemResponse, ListResponse, NoContentResponse, NotFoundResponse, UserRoles } from '@platon/core/common'
+import { Mapper, Roles } from '@platon/core/server'
 import { CourseSectionDTO, CreateCourseSectionDTO, UpdateCourseSectionDTO } from './section.dto'
 import { CourseSectionEntity } from './section.entity'
 import { CourseSectionService } from './section.service'
@@ -31,6 +31,9 @@ export class CourseSectionController {
     })
   }
 
+  // TODO: check user membership for write operations
+
+  @Roles(UserRoles.teacher, UserRoles.admin)
   @Post()
   async create(
     @Param('courseId') courseId: string,
@@ -47,6 +50,7 @@ export class CourseSectionController {
     })
   }
 
+  @Roles(UserRoles.teacher, UserRoles.admin)
   @Patch('/:sectionId')
   async update(
     @Param('courseId') courseId: string,
@@ -58,6 +62,7 @@ export class CourseSectionController {
     })
   }
 
+  @Roles(UserRoles.teacher, UserRoles.admin)
   @Delete('/:sectionId')
   async delete(@Param('courseId') courseId: string, @Param('sectionId') sectionId: string): Promise<NoContentResponse> {
     await this.service.delete(courseId, sectionId)

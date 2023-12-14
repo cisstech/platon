@@ -34,6 +34,11 @@ p {
   flex: 1;
 }
 
+.container-toolbar {
+  display: flex;
+  align-items: center;
+}
+
 @media (min-width: 720px) {
   p {
     width: 70%;

@@ -12,14 +12,14 @@
             </mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>
-            <ngx-charts-advanced-pie-chart
-              [view]="view"
-              [label]="'Ressources'"
-              [tooltipText]="formatStatus.bind(this)"
-              (select)="searchByStatus($event.name)"
-              [nameFormatting]="formatStatus.bind(this)"
-              [results]="statuses"
-            />
+            <div
+              *ngIf="statusChart"
+              class="echarts"
+              echarts
+              [autoResize]="false"
+              [options]="statusChart"
+              (chartClick)="onClickedStatus($event)"
+            ></div>
           </mat-card-content>
         </mat-card>
       </section>
@@ -58,7 +58,7 @@
               <ng-container *ngFor="let item of context.resource.levels; trackBy: trackById">
                 <mat-chip
                   [routerLink]="['/resources']"
-                  [queryParams]="{ q: item.name, parent: context.resource.id }"
+                  [queryParams]="{ q: item.name, parents: context.resource.id }"
                   [queryParamsHandling]="'merge'"
                 >
                   {{ item.name }}
@@ -67,7 +67,7 @@
               <ng-container *ngFor="let item of context.resource.topics; trackBy: trackById">
                 <mat-chip
                   [routerLink]="['/resources']"
-                  [queryParams]="{ q: item.name, parent: context.resource.id }"
+                  [queryParams]="{ q: item.name, parents: context.resource.id }"
                   [queryParamsHandling]="'merge'"
                 >
                   {{ item.name }}
@@ -82,25 +82,25 @@
       <aside>
         <mat-card>
           <mat-card-content>
-            <nz-statistic [nzValue]="context.statistic?.watchers" [nzTitle]="'Observateurs'" />
+            <nz-statistic [nzValue]="context.statistic?.watchers" nzTitle="Observateurs" />
           </mat-card-content>
         </mat-card>
         <mat-card>
           <mat-card-content>
-            <nz-statistic [nzValue]="context.statistic?.members" [nzTitle]="'Collaborateurs'" />
+            <nz-statistic [nzValue]="context.statistic?.members" nzTitle="Collaborateurs" />
           </mat-card-content>
         </mat-card>
         <ng-container *ngIf="context.resource.type === 'CIRCLE'">
           <mat-card>
             <mat-card-content>
-              <nz-statistic [nzValue]="context.statistic?.circles" [nzTitle]="'Cercles'" />
+              <nz-statistic [nzValue]="context.statistic?.circles" nzTitle="Cercles" />
             </mat-card-content>
             <mat-card-actions>
               <a
                 nz-button
                 nzType="primary"
                 [routerLink]="['/resources']"
-                [queryParams]="{ types: 'CIRCLE', parent: context.resource.id }"
+                [queryParams]="{ types: 'CIRCLE', parents: context.resource.id }"
                 [queryParamsHandling]="'merge'"
               >
                 Rechercher
@@ -109,14 +109,14 @@
           </mat-card>
           <mat-card>
             <mat-card-content>
-              <nz-statistic [nzValue]="context.statistic?.activities" [nzTitle]="'Activités'" />
+              <nz-statistic [nzValue]="context.statistic?.activities" nzTitle="Activités" />
             </mat-card-content>
             <mat-card-actions>
               <a
                 nz-button
                 nzType="primary"
                 [routerLink]="['/resources']"
-                [queryParams]="{ types: 'ACTIVITY', parent: context.resource.id }"
+                [queryParams]="{ types: 'ACTIVITY', parents: context.resource.id }"
                 [queryParamsHandling]="'merge'"
               >
                 Rechercher
@@ -125,14 +125,14 @@
           </mat-card>
           <mat-card>
             <mat-card-content>
-              <nz-statistic [nzValue]="context.statistic?.exercises" [nzTitle]="'Exercices'" />
+              <nz-statistic [nzValue]="context.statistic?.exercises" nzTitle="Exercices" />
             </mat-card-content>
             <mat-card-actions>
               <a
                 nz-button
                 nzType="primary"
                 [routerLink]="['/resources']"
-                [queryParams]="{ types: 'EXERCISE', parent: context.resource.id }"
+                [queryParams]="{ types: 'EXERCISE', parents: context.resource.id }"
                 [queryParamsHandling]="'merge'"
               >
                 Rechercher

@@ -49,19 +49,37 @@ The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://
 """
 scalar JSON
 
+type NotificationConnection {
+  edges: [NotificationGraphModelEdge!]!
+  pageInfo: NotificationGraphModelPageInfo!
+  totalCount: Float!
+}
+
+type NotificationGraphModelEdge {
+  cursor: String!
+  node: Notification!
+}
+
+type NotificationGraphModelPageInfo {
+  startCursor: String
+  endCursor: String
+  hasPreviousPage: Boolean!
+  hasNextPage: Boolean!
+}
+
 type NotificationChange {
   unreadCount: Float!
   newNotification: Notification
   notifications: [Notification!]
 }
 
+"""Date custom scalar type"""
 scalar Date
 
 type Query {
   users(filters: UserFiltersInput): [User!]!
   user(input: String!): User!
-  unreadNotificationsCount: Int!
-  notifications(filters: NotificationFiltersInput): [Notification!]!
+  notifications(filters: NotificationFiltersInput, first: Int, after: String): NotificationConnection!
 }
 
 input UserFiltersInput {
@@ -88,13 +106,11 @@ enum OrderingDirections {
 
 input NotificationFiltersInput {
   unread: Boolean
-  offset: Int
-  limit: Int
 }
 
 type Mutation {
-  markAsRead(id: UUID!): Notification!
-  markAsUnread(id: UUID!): Notification!
+  markAsRead(id: UUID!): Boolean!
+  markAsUnread(id: UUID!): Boolean!
   markAllAsRead: Boolean!
   deleteNotification(id: UUID!): Boolean!
   deleteAllNotifications: Boolean!

@@ -14,7 +14,7 @@
             </mat-card-subtitle>
             <mat-card-subtitle>
               <span>
-                {{ item.openAt | date : 'medium' }}
+                {{ item.openAt | date: 'medium' }}
                 <ng-container *ngIf="!item.openAt">
                   <span nz-icon nzType="stop" nzTheme="outline"></span>
                 </ng-container>
@@ -23,7 +23,7 @@
             </mat-card-subtitle>
             <mat-card-subtitle>
               <span>
-                {{ item.closeAt | date : 'medium' }}
+                {{ item.closeAt | date: 'medium' }}
                 <ng-container *ngIf="!item.closeAt">
                   <span nz-icon nzType="stop" nzTheme="outline"></span>
                 </ng-container>
@@ -32,11 +32,7 @@
             </mat-card-subtitle>
           </nz-col>
           <nz-col nzSpan="12">
-            <nz-progress
-              nz-tooltip="Avancement sur les exercices"
-              [nzPercent]="item.progression"
-              nzType="circle"
-            />
+            <nz-progress nz-tooltip="Avancement sur les exercices" [nzPercent]="item.progression" nzType="circle" />
           </nz-col>
         </nz-row>
       </mat-card-content>

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, inject } from '@angular/core'
 import { firstValueFrom } from 'rxjs'
 
 import { MatButtonModule } from '@angular/material/button'
@@ -18,17 +18,18 @@ import { ResultService } from '@platon/feature/result/browser'
 import { FormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
 import { DialogModule, DialogService } from '@platon/core/browser'
-import { PendingCorrection, PendingCorrectionExercise } from '@platon/feature/result/common'
+import { ActivityCorrection, ExerciseCorrection } from '@platon/feature/result/common'
 import { UiModalTemplateComponent } from '@platon/shared/ui'
 import { NzEmptyModule } from 'ng-zorro-antd/empty'
 import { PlayerService } from '../../api/player.service'
 import { PlayerExerciseComponent } from '../player-exercise/player-exercise.component'
+import { NzIconModule } from 'ng-zorro-antd/icon'
 
 interface ExerciseGroup {
   exerciseId: string
   exerciseName: string
   graded: boolean
-  users: PendingCorrectionExercise[]
+  users: ExerciseCorrection[]
 }
 
 @Component({
@@ -47,6 +48,7 @@ interface ExerciseGroup {
     MatToolbarModule,
     MatSidenavModule,
 
+    NzIconModule,
     NzBadgeModule,
     NzEmptyModule,
     NzSliderModule,
@@ -60,34 +62,34 @@ interface ExerciseGroup {
   ],
 })
 export class PlayerCorrectionComponent implements OnInit {
-  @Input() correction!: PendingCorrection
+  private readonly dialogService = inject(DialogService)
+  private readonly resultService = inject(ResultService)
+  private readonly playerService = inject(PlayerService)
+  private readonly changeDetectorRef = inject(ChangeDetectorRef)
+
   protected answers: ExercisePlayer[] = []
 
   protected currentGroup?: ExerciseGroup | null = null
   protected exerciseGroups: ExerciseGroup[] = []
 
-  protected currentExercise?: PendingCorrectionExercise | null = null
-  protected exercises: PendingCorrectionExercise[] = []
+  protected exercises: ExerciseCorrection[] = []
+  protected currentExercise?: ExerciseCorrection | null = null
+
+  protected correctedGrade?: number
 
   protected selectedTabIndex = 0
   protected selectedExerciseIndex = 0
-  protected correctedGrade?: number
 
-  constructor(
-    private readonly dialogService: DialogService,
-    private readonly resultService: ResultService,
-    private readonly playerService: PlayerService,
-    private readonly changeDetectorRef: ChangeDetectorRef
-  ) {}
+  @Input() correction!: ActivityCorrection
 
   async ngOnInit(): Promise<void> {
     this.buildGroups()
     this.onChooseGroup(this.exerciseGroups[0])
   }
 
-  protected async loadAnswers(exercise: PendingCorrectionExercise): Promise<void> {
+  protected async loadAnswers(exercise: ExerciseCorrection): Promise<void> {
     this.currentExercise = exercise
-    this.correctedGrade = exercise.correctedGrade
+    this.correctedGrade = exercise.correctedGrade ?? exercise.grade
     if (exercise.exerciseSessionId) {
       this.answers = (
         await firstValueFrom(

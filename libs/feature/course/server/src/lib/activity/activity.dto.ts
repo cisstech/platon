@@ -3,29 +3,16 @@ import { BaseDTO, toArray, toDate } from '@platon/core/server'
 import {
   Activity,
   ActivityFilters,
-  ActivityPermissions,
-  ActivityStates,
+  ActivityOpenStates,
   CreateActivity,
   ReloadActivity,
   UpdateActivity,
 } from '@platon/feature/course/common'
 import { Transform, Type } from 'class-transformer'
-import { IsBoolean, IsDate, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator'
-
-export class ActivityPermissionDTO implements ActivityPermissions {
-  @IsBoolean()
-  @ApiProperty()
-  readonly update!: boolean
-  @IsBoolean()
-  @ApiProperty()
-  readonly viewStats!: boolean
-}
+import { IsDate, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator'
+import { ActivityPermissionsDTO } from '../permissions/permissions.dto'
 
 export class ActivityDTO extends BaseDTO implements Activity {
-  @IsNumber()
-  @ApiProperty()
-  readonly progression = 0
-
   @IsUUID()
   @ApiProperty()
   readonly courseId!: string
@@ -46,10 +33,18 @@ export class ActivityDTO extends BaseDTO implements Activity {
   readonly title!: string
 
   @IsString()
-  readonly state!: ActivityStates
+  readonly state!: ActivityOpenStates
 
-  @Type(() => ActivityPermissionDTO)
-  readonly permissions!: ActivityPermissionDTO
+  @IsNumber()
+  @ApiProperty()
+  readonly timeSpent = 0
+
+  @IsNumber()
+  @ApiProperty()
+  readonly progression = 0
+
+  @Type(() => ActivityPermissionsDTO)
+  readonly permissions!: ActivityPermissionsDTO
 }
 
 export class ActivityFiltersDTO implements ActivityFilters {

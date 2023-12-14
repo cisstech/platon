@@ -7,16 +7,16 @@
     <tr *ngIf="player.settings?.duration">
       <td>Durée</td>
       <td>
-        {{ player.settings!.duration! | duration : 'seconds' }}
+        {{ player.settings!.duration! | duration: 'seconds' }}
       </td>
     </tr>
     <tr *ngIf="player.openAt">
       <td>Date d'ouverture</td>
-      <td>{{ player.openAt | date : 'dd/MM/yyyy HH:mm' }}</td>
+      <td>{{ player.openAt | date: 'dd/MM/yyyy HH:mm' }}</td>
     </tr>
     <tr *ngIf="player.closeAt">
       <td>Date de fermeture</td>
-      <td>{{ player.closeAt | date : 'dd/MM/yyyy HH:mm' }}</td>
+      <td>{{ player.closeAt | date: 'dd/MM/yyyy HH:mm' }}</td>
     </tr>
     <tr *ngIf="player.settings?.navigation?.mode">
       <td>Mode de navigation</td>
@@ -24,16 +24,13 @@
         <div [ngSwitch]="player.settings?.navigation?.mode">
           <div *ngSwitchCase="'manual'">Manuelle</div>
           <div *ngSwitchCase="'composed'">Composée</div>
-          <div *ngSwitchCase="'dynamic'">Dynamique</div>
         </div>
       </td>
     </tr>
     <tr>
       <td>Autorisation de changer de question</td>
       <td>
-        <ng-container
-          *ngTemplateOutlet="bool; context: { $implicit: player.settings?.actions?.reroll }"
-        />
+        <ng-container *ngTemplateOutlet="bool; context: { $implicit: player.settings?.actions?.reroll }" />
       </td>
     </tr>
     <tr>
@@ -43,47 +40,35 @@
     <tr>
       <td>Feedback après chaque réponse</td>
       <td>
-        <ng-container
-          *ngTemplateOutlet="bool; context: { $implicit: player.settings?.feedback?.validation }"
-        />
+        <ng-container *ngTemplateOutlet="bool; context: { $implicit: player.settings?.feedback?.validation }" />
       </td>
     </tr>
     <tr>
       <td>Feedback à la fin de l'activité</td>
       <td>
-        <ng-container
-          *ngTemplateOutlet="bool; context: { $implicit: player.settings?.feedback?.review }"
-        />
+        <ng-container *ngTemplateOutlet="bool; context: { $implicit: player.settings?.feedback?.review }" />
       </td>
     </tr>
     <tr>
       <td>Autorisation d'utiliser des aides</td>
       <td>
-        <ng-container
-          *ngTemplateOutlet="bool; context: { $implicit: player.settings?.actions?.hints }"
-        />
+        <ng-container *ngTemplateOutlet="bool; context: { $implicit: player.settings?.actions?.hints }" />
       </td>
     </tr>
     <tr>
       <td>Autorisation d'accéder aux théories</td>
       <td>
-        <ng-container
-          *ngTemplateOutlet="bool; context: { $implicit: player.settings?.actions?.theories }"
-        />
+        <ng-container *ngTemplateOutlet="bool; context: { $implicit: player.settings?.actions?.theories }" />
       </td>
     </tr>
     <tr>
       <td>Autorisation d'accéder à la solution</td>
       <td>
-        <ng-container
-          *ngTemplateOutlet="bool; context: { $implicit: player.settings?.actions?.solution }"
-        />
+        <ng-container *ngTemplateOutlet="bool; context: { $implicit: player.settings?.actions?.solution }" />
       </td>
     </tr>
   </tbody>
 </table>
 <ng-template #bool let-value>
-  <mat-icon [style.color]="value ? '#7CFC00' : '#FF0000'">{{
-    !!value ? 'check_circle' : 'cancel'
-  }}</mat-icon>
+  <mat-icon [style.color]="value ? '#7CFC00' : '#FF0000'">{{ !!value ? 'check_circle' : 'cancel' }}</mat-icon>
 </ng-template>

@@ -25,9 +25,13 @@ import { NzTableModule } from 'ng-zorro-antd/table'
 })
 export class ResourceMemberTableComponent implements OnChanges {
   @Input() members: ResourceMember[] = []
-  @Input() editable = false
+
+  @Input() canAccept = false
+  @Input() canDelete = false
+
   @Input() excludeFromDelete: string[] = []
 
+  @Output() accept = new EventEmitter<ResourceMember>()
   @Output() deleted = new EventEmitter<ResourceMember>()
 
   protected loading = true

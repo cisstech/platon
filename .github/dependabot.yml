@@ -1,0 +1,17 @@
+version: 2
+
+updates:
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly' # default: on monday
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: 'chore(other)'
+      include: 'scope'
+    labels:
+      - 'Dependabot'
+    rebase-strategy: 'disabled'
+    target-branch: 'master'
+    reviewers:
+      - 'mciissee'

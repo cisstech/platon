@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core'
-import { CorrectionPendingsComponent, ResultService } from '@platon/feature/result/browser'
-import { PendingCorrection } from '@platon/feature/result/common'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject } from '@angular/core'
+import { CorrectionTableComponent, ResultService } from '@platon/feature/result/browser'
+import { ActivityCorrection } from '@platon/feature/result/common'
+import { NzEmptyModule } from 'ng-zorro-antd/empty'
 import { firstValueFrom } from 'rxjs'
 
 @Component({
@@ -10,15 +11,16 @@ import { firstValueFrom } from 'rxjs'
   templateUrl: './pendings.page.html',
   styleUrls: ['./pendings.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, CorrectionPendingsComponent],
+  imports: [CommonModule, NzEmptyModule, CorrectionTableComponent],
 })
 export class CorrectionsPendingsPage implements OnInit {
-  protected corrections: PendingCorrection[] = []
+  private readonly resultService = inject(ResultService)
+  private readonly changeDetectorRef = inject(ChangeDetectorRef)
 
-  constructor(private readonly resultService: ResultService, private readonly changeDetectorRef: ChangeDetectorRef) {}
+  protected corrections: ActivityCorrection[] = []
 
   async ngOnInit(): Promise<void> {
-    const response = await firstValueFrom(this.resultService.listCorrections())
+    const response = await firstValueFrom(this.resultService.listPendingCorrections())
     this.corrections = response.resources
     this.changeDetectorRef.markForCheck()
   }

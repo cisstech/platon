@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router, RouterModule } from '@angular/router'
 import Fuse from 'fuse.js'
 import { firstValueFrom, map, shareReplay, Subscription } from 'rxjs'
@@ -14,8 +14,6 @@ import { NzSpinModule } from 'ng-zorro-antd/spin'
 
 import {
   FilterIndicator,
-  FilterMatcher,
-  matchIndicators,
   PeriodFilterMatcher,
   SearchBar,
   UiFilterIndicatorComponent,
@@ -25,15 +23,16 @@ import {
 import { AuthService } from '@platon/core/browser'
 import { OrderingDirections, User } from '@platon/core/common'
 import {
-  CircleFilterMatcher,
+  CircleFilterIndicator,
+  CircleTreeComponent,
   ResourceFiltersComponent,
   ResourceItemComponent,
   ResourceListComponent,
-  ResourceOrderingFilterMatcher,
+  ResourceOrderingFilterIndicator,
   ResourcePipesModule,
   ResourceService,
-  ResourceStatusFilterMatcher,
-  ResourceTypeFilterMatcher,
+  ResourceStatusFilterIndicator,
+  ResourceTypeFilterIndicator,
 } from '@platon/feature/resource/browser'
 import {
   CircleTree,
@@ -44,6 +43,7 @@ import {
   ResourceStatus,
   ResourceTypes,
 } from '@platon/feature/resource/common'
+import { NzDividerModule } from 'ng-zorro-antd/divider'
 
 @Component({
   standalone: true,
@@ -62,25 +62,26 @@ import {
     NzIconModule,
     NzButtonModule,
     NzPopoverModule,
+    NzDividerModule,
 
     ResourcePipesModule,
     ResourceItemComponent,
     ResourceListComponent,
     ResourceFiltersComponent,
 
+    CircleTreeComponent,
     UiSearchBarComponent,
     UiFilterIndicatorComponent,
   ],
 })
 export default class ResourcesPage implements OnInit, OnDestroy {
+  private readonly router = inject(Router)
+  private readonly authService = inject(AuthService)
+  private readonly activatedRoute = inject(ActivatedRoute)
+  private readonly resourceService = inject(ResourceService)
+  private readonly changeDetectorRef = inject(ChangeDetectorRef)
+
   private readonly subscriptions: Subscription[] = []
-  private readonly filterMatchers: FilterMatcher<ResourceFilters>[] = [
-    ...Object.values(ResourceTypes).map(ResourceTypeFilterMatcher),
-    ...Object.values(ResourceStatus).map(ResourceStatusFilterMatcher),
-    ...Object.values(ResourceOrderings).map(ResourceOrderingFilterMatcher),
-    PeriodFilterMatcher,
-    CircleFilterMatcher(() => this.tree),
-  ]
 
   protected readonly searchbar: SearchBar<string> = {
     placeholder: 'Essayez un nom, un topic, un niveau...',
@@ -108,8 +109,13 @@ export default class ResourcesPage implements OnInit, OnDestroy {
   protected tree?: CircleTree
   protected circles: CircleTree[] = []
 
-  protected indicators: FilterIndicator<ResourceFilters>[] = []
   protected completion = this.resourceService.completion().pipe(shareReplay(1))
+  protected indicators: FilterIndicator<ResourceFilters>[] = [
+    ...Object.values(ResourceTypes).map(ResourceTypeFilterIndicator),
+    ...Object.values(ResourceStatus).map(ResourceStatusFilterIndicator),
+    ...Object.values(ResourceOrderings).map(ResourceOrderingFilterIndicator),
+    PeriodFilterMatcher,
+  ]
 
   protected searching = true
   protected filters: ResourceFilters = {}
@@ -118,53 +124,25 @@ export default class ResourcesPage implements OnInit, OnDestroy {
   protected views: Resource[] = []
   protected recents: Resource[] = []
 
-  protected canCreateCircle = false
-  protected canCreateExercise = false
-  protected canCreateActivity = false
-
-  protected get canCreateResource(): boolean {
-    return this.canCreateCircle || this.canCreateExercise || this.canCreateActivity
-  }
-
-  constructor(
-    private readonly router: Router,
-    private readonly authService: AuthService,
-    private readonly activatedRoute: ActivatedRoute,
-    private readonly resourceService: ResourceService,
-    private readonly changeDetectorRef: ChangeDetectorRef
-  ) {}
-
   async ngOnInit(): Promise<void> {
     this.user = (await this.authService.ready()) as User
 
-    this.canCreateCircle = this.resourceService.canUserCreateResource(this.user, ResourceTypes.CIRCLE)
-    this.canCreateExercise = this.resourceService.canUserCreateResource(this.user, ResourceTypes.EXERCISE)
-    this.canCreateActivity = this.resourceService.canUserCreateResource(this.user, ResourceTypes.ACTIVITY)
-
-    const [tree, circle, views, recents] = await Promise.all([
+    const [tree, circle, views] = await Promise.all([
       firstValueFrom(this.resourceService.tree()),
       firstValueFrom(this.resourceService.circle(this.user.username)),
       firstValueFrom(this.resourceService.search({ views: true })),
-      firstValueFrom(
-        this.resourceService.search({
-          period: 7,
-          limit: 5,
-          order: ResourceOrderings.UPDATED_AT,
-          direction: OrderingDirections.DESC,
-        })
-      ),
-      //firstValueFrom(this.resourceService.listInvitations()),
     ])
 
     this.tree = tree
     this.circle = circle
     this.views = views.resources
-    this.recents = recents.resources
 
     this.circles = []
     if (this.tree) {
       this.circles = flattenCircleTree(this.tree)
+      this.indicators = [...this.indicators, ...flattenCircleTree(tree).map((circle) => CircleFilterIndicator(circle))]
     }
+
     this.changeDetectorRef.markForCheck()
 
     this.subscriptions.push(
@@ -172,8 +150,8 @@ export default class ResourcesPage implements OnInit, OnDestroy {
         this.filters = {
           ...this.filters,
           search: e.q,
-          parent: e.parent,
-          period: Number.parseInt(e.period + '', 10) || this.filters.period || 0,
+          parents: e.parents ? (typeof e.parents === 'string' ? [e.parents] : e.parents) : undefined,
+          period: Number.parseInt(e.period + '', 10) || 0,
           order: e.order,
           direction: e.direction,
           types: typeof e.types === 'string' ? [e.types] : e.types,
@@ -187,8 +165,6 @@ export default class ResourcesPage implements OnInit, OnDestroy {
         this.searching = true
         this.items = (await firstValueFrom(this.resourceService.search(this.filters))).resources
         this.searching = false
-
-        this.indicators = matchIndicators(this.filters, this.filterMatchers, (data) => this.search(data, data.search))
 
         this.changeDetectorRef.markForCheck()
       })
@@ -207,7 +183,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
       direction: filters.direction,
       types: filters.types,
       status: filters.status,
-      parent: filters.parent,
+      parents: filters.parents,
     }
 
     this.router.navigate([], {
@@ -225,5 +201,5 @@ interface QueryParams {
   direction?: OrderingDirections
   types?: keyof typeof ResourceTypes | (keyof typeof ResourceTypes)[]
   status?: keyof typeof ResourceStatus | (keyof typeof ResourceStatus)[]
-  parent?: string
+  parents?: string | string[]
 }

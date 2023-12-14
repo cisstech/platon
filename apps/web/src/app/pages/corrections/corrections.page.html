@@ -2,6 +2,13 @@
   <nz-breadcrumb nzSeparator="">
     <nz-breadcrumb-item> Corrections </nz-breadcrumb-item>
   </nz-breadcrumb>
+  <p nz-typography>
+    <nz-alert
+      nzType="info"
+      nzMessage="Vous pouvez consulter ici les corrections qui vous ont été assignées."
+      nzShowIcon
+    />
+  </p>
   <ui-layout-tab [link]="['pendings']">
     <ng-template>
       <mat-icon>schedule</mat-icon>
@@ -11,7 +18,7 @@
   <ui-layout-tab [link]="['availables']">
     <ng-template>
       <mat-icon>assignment_turned_in</mat-icon>
-      Corrections disponibles
+      Corrections terminées
     </ng-template>
   </ui-layout-tab>
 </ui-layout-tabs>

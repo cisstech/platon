@@ -1,10 +1,4 @@
-<nz-table
-  #nzTable
-  [nzSize]="'small'"
-  [nzShowSizeChanger]="false"
-  [nzShowPagination]="false"
-  [nzData]="members"
->
+<nz-table #nzTable [nzSize]="'small'" [nzShowSizeChanger]="false" [nzShowPagination]="false" [nzData]="members">
   <thead>
     <tr>
       <th
@@ -36,11 +30,7 @@
       <td>{{ member.createdAt | date }}</td>
       <td
         nzAlign="center"
-        *ngIf="
-          editable &&
-          !disabled &&
-          !nonDeletables.includes($any(member.user?.id || member.group?.id))
-        "
+        *ngIf="editable && !disabled && !nonDeletables.includes($any(member.user?.id || member.group?.id))"
       >
         <button
           nz-button
@@ -50,9 +40,7 @@
           nz-popconfirm
           nzOkText="Retirer"
           nzOkType="danger"
-          [nzPopconfirmTitle]="
-            'Voulez-vous vraiment retirer “' + avatar.displayName + '” des membres du cours?'
-          "
+          [nzPopconfirmTitle]="'Voulez-vous vraiment retirer “' + avatar.displayName + '” des membres du cours?'"
           (nzOnConfirm)="deleted.emit(member)"
         >
           <i nz-icon nzType="delete"></i>

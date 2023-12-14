@@ -14,9 +14,7 @@
   <ng-template #sectionActions>
     <nz-space nzDirection="vertical">
       <button nz-button (click)="moveUp.emit()" *ngIf="section.order !== 0">Monter</button>
-      <button nz-button (click)="moveDown.emit()" *ngIf="section.order !== sectionCount">
-        Descendre
-      </button>
+      <button nz-button (click)="moveDown.emit()" *ngIf="section.order !== sectionCount">Descendre</button>
       <button
         nz-button
         [routerLink]="['/activities/create']"

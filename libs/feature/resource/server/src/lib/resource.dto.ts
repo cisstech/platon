@@ -153,13 +153,13 @@ export class UpdateResourceDTO implements UpdateResource {
   @IsArray()
   @IsOptional()
   @ApiProperty()
-  levels?: string[] = []
+  levels?: string[]
 
   @IsUUID(undefined, { each: true })
   @IsArray()
   @IsOptional()
   @ApiProperty()
-  topics?: string[] = []
+  topics?: string[]
 }
 
 export class ResourceFiltersDTO implements ResourceFilters {
@@ -217,9 +217,11 @@ export class ResourceFiltersDTO implements ResourceFilters {
   @IsOptional()
   readonly limit?: number
 
-  @IsUUID()
+  @Transform(({ value }) => toArray(value))
+  @IsUUID(undefined, { each: true })
+  @IsArray()
   @IsOptional()
-  readonly parent?: string
+  readonly parents?: string[]
 
   @IsEnum(ResourceOrderings)
   @IsOptional()

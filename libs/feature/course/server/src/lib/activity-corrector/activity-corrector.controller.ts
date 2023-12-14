@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
-import { ItemResponse, ListResponse, NoContentResponse } from '@platon/core/common'
-import { Mapper } from '@platon/core/server'
+import { ItemResponse, ListResponse, NoContentResponse, UserRoles } from '@platon/core/common'
+import { Mapper, Roles } from '@platon/core/server'
 import { ActivityCorrectorDTO, CreateActivityCorrectorDTO } from './activity-corrector.dto'
 import { ActivityCorrectorService } from './activity-corrector.service'
 
@@ -17,6 +17,9 @@ export class ActivityCorrectorController {
     })
   }
 
+  // TODO: check user membership for write operations
+
+  @Roles(UserRoles.teacher, UserRoles.admin)
   @Post()
   async create(
     @Param('activityId') activityId: string,
@@ -28,6 +31,7 @@ export class ActivityCorrectorController {
     })
   }
 
+  @Roles(UserRoles.teacher, UserRoles.admin)
   @Put()
   async update(
     @Param('activityId') activityId: string,
@@ -39,6 +43,7 @@ export class ActivityCorrectorController {
     })
   }
 
+  @Roles(UserRoles.teacher, UserRoles.admin)
   @Delete('/:activityCorrectorId')
   async delete(
     @Param('activityId') activityId: string,

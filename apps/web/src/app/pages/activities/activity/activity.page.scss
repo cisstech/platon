@@ -1,6 +1,5 @@
 :host {
   display: block;
-  padding: 0 2rem;
 }
 
 :host::ng-deep {
@@ -11,6 +10,10 @@
       margin: 0 8px;
     }
   }
+}
+
+nz-page-header {
+  padding-left: 0;
 }
 
 nz-breadcrumb {

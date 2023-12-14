@@ -8,69 +8,19 @@
       </nz-form-item>
     </nz-collapse-panel>
     <nz-collapse-panel nzHeader="Instruction" nzExpandedIcon="unordered-list">
-      <ui-editorjs
-        [data]="form.value.statement"
-        [minHeight]="100"
-        [readOnly]="readOnly"
-        (dataChange)="
-          form.patchValue({
-            statement: $event
-          })
-        "
-      />
+      <ui-editorjs [minHeight]="100" formControlName="statement" />
     </nz-collapse-panel>
-    <nz-collapse-panel nzHeader="Formulaire" nzExpandedIcon="check-square">
-      <ui-editorjs
-        [data]="form.value.form"
-        [minHeight]="100"
-        [readOnly]="readOnly"
-        (dataChange)="
-          form.patchValue({
-            form: $event
-          })
-        "
-      />
+    <nz-collapse-panel nzHeader="Formulaire" nzExpandedIcon="container">
+      <ui-editorjs [minHeight]="100" formControlName="form" />
     </nz-collapse-panel>
     <nz-collapse-panel nzHeader="Variables" nzExpandedIcon="code" nzActive>
-      <div class="container-variables">
-        <div class="container-variables--left-side">
-          <nz-list [nzDataSource]="variables" nzBordered>
-            <nz-list-item
-              [class.selected]="selectedVariableIndex === i"
-              (click)="selectVariable(i)"
-              *ngFor="let variable of variables; trackBy: trackVariable; index as i"
-            >
-              <span>{{ variable.name }}</span>
-              <ul nz-list-item-actions>
-                <nz-list-item-action>
-                  <button
-                    nz-button
-                    nzDanger
-                    nzType="text"
-                    nz-tooltip="Supprimer"
-                    [disabled]="readOnly"
-                    (click)="deleteVariable(i)"
-                  >
-                    <span nz-icon nzType="delete" nzTheme="outline"></span>
-                  </button>
-                </nz-list-item-action>
-              </ul>
-            </nz-list-item>
-          </nz-list>
-          <button class="btn-add-input" nz-button nzType="primary" [disabled]="readOnly" (click)="addVariable()">
-            +
-          </button>
-        </div>
-        <div class="container-variables--right-side">
-          <app-ple-input
-            *ngIf="selectedVariable"
-            [input]="selectedVariable"
-            [disabled]="readOnly"
-            (inputChange)="updateVariable($event)"
-            mode="design"
-          />
-        </div>
-      </div>
+      <app-editor-input-group formControlName="variables" [reservedNames]="reservedNames" />
+    </nz-collapse-panel>
+    <nz-collapse-panel nzHeader="Construction" nzExpandedIcon="build">
+      <app-ple-input mode="value" formControlName="builder" />
+    </nz-collapse-panel>
+    <nz-collapse-panel nzHeader="Évaluation" nzExpandedIcon="check-square">
+      <app-ple-input mode="value" formControlName="grader" />
     </nz-collapse-panel>
   </nz-collapse>
 </form>

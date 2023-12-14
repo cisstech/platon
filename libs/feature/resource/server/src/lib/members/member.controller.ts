@@ -1,7 +1,14 @@
-import { Body, Controller, Delete, Get, Param, Patch, Query } from '@nestjs/common'
-import { ErrorResponse, ItemResponse, ListResponse, NoContentResponse } from '@platon/core/common'
-import { Mapper } from '@platon/core/server'
-import { ResourceMemberDTO, UpdateResourceMemberDTO, ResourceMemberFiltersDTO } from './member.dto'
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req } from '@nestjs/common'
+import {
+  ErrorResponse,
+  ForbiddenResponse,
+  ItemResponse,
+  ListResponse,
+  NoContentResponse,
+  UserRoles,
+} from '@platon/core/common'
+import { IRequest, Mapper, Roles } from '@platon/core/server'
+import { ResourceMemberDTO, ResourceMemberFiltersDTO, UpdateResourceMemberDTO } from './member.dto'
 import { ResourceMemberService } from './member.service'
 
 @Controller('resources/:resourceId/members')
@@ -37,18 +44,52 @@ export class ResourceMemberController {
     return new ItemResponse({ resource })
   }
 
+  @Post()
+  async post(@Req() req: IRequest, @Param('resourceId') resourceId: string): Promise<ItemResponse<ResourceMemberDTO>> {
+    const resource = Mapper.map(
+      await this.service.create({
+        resourceId,
+        userId: req.user.id,
+        waiting: true,
+        inviterId: req.user.id,
+        permissions: {
+          read: true,
+          write: true,
+        },
+      }),
+      ResourceMemberDTO
+    )
+    return new ItemResponse({ resource })
+  }
+
+  @Roles(UserRoles.admin)
   @Patch('/:userId')
   async update(
+    @Req() req: IRequest,
     @Param('userId') userId: string,
     @Param('resourceId') resourceId: string,
     @Body() input: UpdateResourceMemberDTO
   ): Promise<ItemResponse<ResourceMemberDTO>> {
-    const resource = Mapper.map(await this.service.updateByUserId(resourceId, userId, input), ResourceMemberDTO)
+    const resource = Mapper.map(
+      await this.service.updateByUserId(resourceId, userId, {
+        ...input,
+        // do not remove the explicit false check here since it's intentional
+        ...(input.waiting === false ? { inviterId: req.user!.id } : {}),
+      }),
+      ResourceMemberDTO
+    )
     return new ItemResponse({ resource })
   }
 
   @Delete('/:userId')
-  async delete(@Param('userId') userId: string, @Param('resourceId') resourceId: string): Promise<NoContentResponse> {
+  async delete(
+    @Req() req: IRequest,
+    @Param('userId') userId: string,
+    @Param('resourceId') resourceId: string
+  ): Promise<NoContentResponse> {
+    if (req.user.id !== userId && req.user.role !== 'admin') {
+      throw new ForbiddenResponse('You are not allowed to delete this resource member')
+    }
     await this.service.deleteByUserId(resourceId, userId)
     return new NoContentResponse()
   }

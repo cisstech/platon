@@ -1,13 +1,12 @@
 :host {
   display: block;
   width: 100%;
-  padding: 2rem;
 }
 
 h1 {
   width: 100%;
   text-align: center;
-  margin-top: 0;
+  margin-top: 2rem;
 }
 
 h2 {
@@ -24,14 +23,26 @@ header {
   }
 }
 
+main {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
 article {
-  width: 100%;
   box-sizing: border-box;
+  flex-basis: 0;
+  flex-grow: 999;
+  min-width: calc(60% - 2rem);
 }
 
 aside {
-  width: calc(100% - 2rem);
   box-sizing: border-box;
+  flex-grow: 1;
+  flex-basis: 40%;
+  align-self: start;
+  position: sticky;
+  top: 2rem;
 }
 
 section {
@@ -62,12 +73,20 @@ ui-search-bar {
   margin: 0 auto;
 }
 
-.content {
-  display: grid;
-  grid-template-columns: 60% 40%;
-  column-gap: 2rem;
-}
-
 .indicators {
   margin-bottom: 1rem;
+}
+
+mat-card-content {
+  margin: 1rem 0;
+}
+
+nz-divider {
+  margin-top: 0;
+}
+
+@media (max-width: 720px) {
+  ui-search-bar {
+    width: 100%;
+  }
 }

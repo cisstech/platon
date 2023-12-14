@@ -1,9 +1,9 @@
 <ng-container *ngIf="mode !== 'value'">
-  <form class="config-editor" [formGroup]="configForm">
+  <form class="config-editor" [formGroup]="form">
     <h3>Informations</h3>
     <nz-form-item nzRequired>
       <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="name">Nom</nz-form-label>
-      <nz-form-control>
+      <nz-form-control [nzValidateStatus]="hasNameError ? 'error' : 'success'" nzErrorTip="Ce nom est réservé">
         <input nz-input id="name" formControlName="name" />
       </nz-form-control>
     </nz-form-item>
@@ -34,7 +34,6 @@
     </ng-container>
   </form>
 </ng-container>
-
 <ng-container *ngIf="mode === 'design'">
   <h3>Valeur</h3>
 </ng-container>

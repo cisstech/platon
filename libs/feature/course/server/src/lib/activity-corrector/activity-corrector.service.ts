@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { DataSource, Repository } from 'typeorm'
 import { Optional } from 'typescript-optional'
+import { CourseNotificationService } from '../course-notification/course-notification.service'
 import { ActivityCorrectorEntity } from './activity-corrector.entity'
 import { ActivityCorrectorView } from './activity-corrector.view'
 
@@ -9,42 +10,73 @@ import { ActivityCorrectorView } from './activity-corrector.view'
 export class ActivityCorrectorService {
   constructor(
     private readonly dataSource: DataSource,
+    private readonly notificationService: CourseNotificationService,
+
     @InjectRepository(ActivityCorrectorView)
     private readonly view: Repository<ActivityCorrectorView>,
     @InjectRepository(ActivityCorrectorEntity)
     private readonly repository: Repository<ActivityCorrectorEntity>
   ) {}
 
-  async findById(activityId: string, id: string): Promise<Optional<ActivityCorrectorEntity>> {
-    const query = this.repository.createQueryBuilder('acorrector')
-    query.leftJoinAndSelect('acorrector.user', 'user')
-    query.leftJoinAndSelect('acorrector.member', 'member')
+  async findById(activityId: string, correctorId: string): Promise<Optional<ActivityCorrectorEntity>> {
+    const query = this.repository.createQueryBuilder('corrector')
+    query.leftJoinAndSelect('corrector.user', 'user')
+    query.leftJoinAndSelect('corrector.member', 'member')
     query.leftJoinAndSelect('member.group', 'group')
     query.leftJoinAndSelect('group.users', 'groupusers')
 
-    query.where('acorrector.activity_id = :activityId', { activityId }).andWhere('acorrector.id = :id', { id })
+    query
+      .where('corrector.activity_id = :activityId', { activityId })
+      .andWhere('corrector.id = :id', { id: correctorId })
 
-    return Optional.ofNullable(await query.getOne())
+    const corrector = await query.getOne()
+    if (corrector && !corrector.user?.id) {
+      corrector.user = undefined
+    }
+
+    return Optional.ofNullable(corrector)
+  }
+
+  async findViews(activityId: string): Promise<ActivityCorrectorView[]> {
+    return this.view.find({ where: { activityId } })
   }
 
   async search(activityId: string): Promise<[ActivityCorrectorEntity[], number]> {
-    const query = this.repository.createQueryBuilder('acorrector')
-    query.leftJoinAndSelect('acorrector.user', 'user')
-    query.leftJoinAndSelect('acorrector.member', 'member')
+    const query = this.repository.createQueryBuilder('corrector')
+    query.leftJoinAndSelect('corrector.user', 'user')
+    query.leftJoinAndSelect('corrector.member', 'member')
     query.leftJoinAndSelect('member.group', 'group')
     query.leftJoinAndSelect('group.users', 'groupusers')
 
     query.where('activity_id = :activityId', { activityId })
 
-    return query.getManyAndCount()
+    const [correctors, count] = await query.getManyAndCount()
+    correctors.forEach((corrector) => {
+      corrector.user = corrector.user?.id ? corrector.user : undefined
+    })
+
+    return [correctors, count]
   }
 
   async create(corrector: Partial<ActivityCorrectorEntity>): Promise<ActivityCorrectorEntity> {
-    return this.repository.save(this.repository.create(corrector))
+    const result = await this.repository.save(this.repository.create(corrector))
+    this.notificationService
+      .notifyCorrectorsBeingCreated(
+        await this.view.find({
+          where: {
+            correctorId: result.id,
+            activityId: corrector.activityId,
+          },
+        })
+      )
+      .catch()
+    return result
   }
 
   async update(activityId: string, input: Partial<ActivityCorrectorEntity>[]): Promise<ActivityCorrectorEntity[]> {
-    return this.dataSource.transaction(async (manager) => {
+    const oldViews = await this.view.find({ where: { activityId } })
+
+    const correctors = await this.dataSource.transaction(async (manager) => {
       await manager.delete(ActivityCorrectorEntity, { activityId })
       const correctors = input.map((member) => {
         return manager.create(ActivityCorrectorEntity, {
@@ -54,10 +86,37 @@ export class ActivityCorrectorService {
       })
       return manager.save(correctors)
     })
+
+    const newViews = await this.view.find({ where: { activityId } })
+
+    const insertion = newViews.filter((corrector) => !oldViews.some((oldCorrector) => oldCorrector.id === corrector.id))
+    if (insertion.length) {
+      this.notificationService.notifyCorrectorsBeingCreated(insertion).catch()
+    }
+
+    const deletion = oldViews.filter(
+      (oldCorrector) => !newViews.some((newCorrector) => newCorrector.id === oldCorrector.id)
+    )
+    if (deletion.length) {
+      this.notificationService.notifyCorrectorsBeingRemoved(deletion).catch()
+    }
+
+    return correctors
   }
 
   async delete(activityId: string, activityCorrectorId: string): Promise<void> {
-    await this.repository.delete({ activityId, id: activityCorrectorId })
+    const correctors = await this.view.find({
+      where: {
+        activityId,
+        correctorId: activityCorrectorId,
+      },
+    })
+
+    const result = await this.repository.delete({ activityId, id: activityCorrectorId })
+
+    if (result.affected) {
+      this.notificationService.notifyCorrectorsBeingRemoved(correctors).catch()
+    }
   }
 
   async isCorrector(activityId: string, userId: string): Promise<boolean> {

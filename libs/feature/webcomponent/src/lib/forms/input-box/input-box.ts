@@ -4,6 +4,7 @@ export interface InputBoxState extends IWebComponent {
   type: 'number' | 'text' | 'textarea'
   hint: string
   value: string | number
+  width: string
   prefix: string
   suffix: string
   appearance: 'fill' | 'outline'
@@ -39,6 +40,11 @@ export const InputBoxComponentDefinition = defineWebComponent({
         type: ['string', 'number'],
         default: '',
         description: 'La valeur du champ de saisi.',
+      },
+      width: {
+        type: ['string', 'number'],
+        default: '',
+        description: 'Le largeur du champ de saisi en valeur CSS (%, px, em, etc.).',
       },
       prefix: {
         type: 'string',

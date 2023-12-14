@@ -1,6 +1,6 @@
 <header>
   <nz-page-header [nzTitle]="header" nzBackIcon>
-    <ng-template #header> Créer {{ type | resourceType : true | lowercase }} </ng-template>
+    <ng-template #header> Créer {{ type | resourceType: true | lowercase }} </ng-template>
   </nz-page-header>
 </header>
 <main>
@@ -10,7 +10,7 @@
         <section>
           <h4>
             Sélectionnez le cercle dans lequel vous voulez ajouter
-            {{ type | resourceType : true | lowercase }}.
+            {{ type | resourceType: true | lowercase }}.
           </h4>
           <resource-circle-tree *ngIf="tree" [tree]="tree" [(selection)]="parent" />
         </section>

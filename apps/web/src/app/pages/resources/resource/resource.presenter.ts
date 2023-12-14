@@ -99,7 +99,71 @@ export class ResourcePresenter implements OnDestroy {
     throw new ReferenceError('missing resource')
   }
 
+  async createTag(tag: string, message: string): Promise<boolean> {
+    const { resource } = this.context.value as Required<Context>
+    try {
+      await firstValueFrom(this.fileService.release(resource, { name: tag, message }))
+      await this.refresh(resource.id)
+      return true
+    } catch {
+      this.alertError()
+      return false
+    }
+  }
+
   // Members
+
+  async join(): Promise<boolean> {
+    const { resource } = this.context.value as Required<Context>
+    try {
+      await firstValueFrom(this.resourceService.join(resource))
+      await this.refresh(resource.id)
+      this.dialogService.info('Votre demande a bien été envoyée, vous serez notifié dès que vous serez accepté.')
+      return true
+    } catch {
+      this.alertError()
+      return false
+    }
+  }
+
+  async unjoin(): Promise<boolean> {
+    const { resource } = this.context.value as Required<Context>
+    try {
+      await firstValueFrom(this.resourceService.deleteMember(resource, this.context.value.user!.id))
+      await this.refresh(resource.id)
+      this.dialogService.info('Votre demande a bien été supprimée.')
+      return true
+    } catch {
+      this.alertError()
+      return false
+    }
+  }
+
+  async acceptJoin(member: ResourceMember): Promise<boolean> {
+    const { resource } = this.context.value as Required<Context>
+    try {
+      await firstValueFrom(this.resourceService.acceptJoin(resource, member.userId))
+      await this.refresh(resource.id)
+      this.dialogService.success(`La demande a été acceptée et une notification a été envoyée.`)
+      return true
+    } catch {
+      this.alertError()
+      return false
+    }
+  }
+
+  async declineJoin(member: ResourceMember): Promise<boolean> {
+    const { resource } = this.context.value as Required<Context>
+    try {
+      await firstValueFrom(this.resourceService.declineJoin(resource, member.userId))
+      await this.refresh(resource.id)
+      this.dialogService.success(`La demande a été refusée.`)
+      return true
+    } catch {
+      this.alertError()
+      return false
+    }
+  }
 
   async deleteMember(member: ResourceMember): Promise<boolean> {
     const { resource } = this.context.value as Required<Context>
@@ -109,7 +173,6 @@ export class ResourcePresenter implements OnDestroy {
       this.dialogService.success(`Membre supprimé !`)
       return true
     } catch {
-      // TODO show more precise error message
       this.alertError()
       return false
     }

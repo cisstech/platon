@@ -5,7 +5,7 @@
         [class.unread]="!item.notification.readAt"
         (click)="markAsRead(item.notification); callOnClick(item)"
       >
-        <nz-list-item-meta [nzAvatar]="avatar" [nzDescription]="header">
+        <nz-list-item-meta [nzAvatar]="avatar">
           <ng-template #avatar>
             <ng-container *ngIf="item.renderer?.icon; else noIcon">
               <ui-icon class="notification-item-avatar" [icon]="item.renderer?.icon" />
@@ -14,9 +14,10 @@
               <nz-avatar nzIcon="info" [nzShape]="'circle'" nzSize="small"></nz-avatar>
             </ng-template>
           </ng-template>
-          <ng-template #header>
+
+          <nz-list-item-meta-description>
             <div class="notification-item-header">
-              <div>{{ $any(item.notification.createdAt | date : 'dd/MM/yyyy à HH:mm') }}</div>
+              <div>{{ $any(item.notification.createdAt | date: 'dd/MM/yyyy à HH:mm') }}</div>
               <div class="spacer"></div>
               <button
                 nz-button
@@ -42,7 +43,8 @@
                 </button>
               </ng-template>
             </div>
-          </ng-template>
+          </nz-list-item-meta-description>
+
           <nz-list-item-meta-title>
             <ng-container *ngIf="item.renderer">
               <div class="notification-item-content">
@@ -68,10 +70,10 @@
                         action.type === 'primary'
                           ? 'primary'
                           : action.type === 'default'
-                          ? 'text'
-                          : action.type === 'danger'
-                          ? 'primary'
-                          : 'text'
+                            ? 'text'
+                            : action.type === 'danger'
+                              ? 'primary'
+                              : 'text'
                       "
                     >
                       <span
@@ -91,8 +93,13 @@
         </nz-list-item-meta>
       </nz-list-item>
     </ng-container>
+
+    <div class="notification-load-more" nz-list-load-more>
+      <button nz-button *ngIf="hasMore" (click)="loadMore.emit()">Charger plus</button>
+    </div>
   </nz-list>
 </ng-container>
+
 <ng-template #empty>
   <nz-empty [nzNotFoundContent]="noNotifications">
     <ng-template #noNotifications> Aucune nouvelle notification pour le moment. </ng-template>

@@ -14,7 +14,8 @@ nz-list-item.unread {
 
 nz-list-item-meta-title {
   display: block;
-  margin: 0.5rem 0;
+  margin: 0;
+  margin-right: 0.5rem;
 }
 
 .notification-item-header {
@@ -23,7 +24,8 @@ nz-list-item-meta-title {
 }
 
 .notification-item-content {
-  font-size: 13px !important;
+  font-size: 0.8rem !important;
+  font-weight: 400 !important;
 }
 
 .notification-item-actions {
@@ -44,6 +46,12 @@ nz-list-item-meta-title {
   margin-right: 8px;
 }
 
+.notification-load-more {
+  text-align: center;
+  margin-top: 12px;
+  height: 32px;
+  line-height: 32px;
+}
 .spacer {
   flex: 1;
 }

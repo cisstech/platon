@@ -1,3 +1,4 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout'
 import { CommonModule } from '@angular/common'
 import {
   ChangeDetectionStrategy,
@@ -9,6 +10,7 @@ import {
   Output,
   QueryList,
   TemplateRef,
+  inject,
 } from '@angular/core'
 import { SafePipeModule } from '@cisstech/nge/pipes'
 import { NzDrawerModule, NzDrawerPlacement, NzDrawerSize } from 'ng-zorro-antd/drawer'
@@ -23,6 +25,7 @@ import { NzDrawerModule, NzDrawerPlacement, NzDrawerSize } from 'ng-zorro-antd/d
 })
 export class UiModalDrawerComponent {
   protected visible = false
+  private readonly breakpointObserver = inject(BreakpointObserver)
 
   @ContentChildren(TemplateRef)
   protected templates!: QueryList<TemplateRef<void>>
@@ -36,6 +39,10 @@ export class UiModalDrawerComponent {
 
   @Input()
   placement: NzDrawerPlacement = 'right'
+
+  get isMobile(): boolean {
+    return this.breakpointObserver.isMatched([Breakpoints.XSmall, Breakpoints.Small])
+  }
 
   get isVisible(): boolean {
     return this.visible

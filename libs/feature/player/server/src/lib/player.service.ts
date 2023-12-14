@@ -2,6 +2,7 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { OnEvent } from '@nestjs/event-emitter'
 import { ForbiddenResponse, NotFoundResponse, User } from '@platon/core/common'
+import { EventService } from '@platon/core/server'
 import {
   ActivityExercise,
   ActivityVariables,
@@ -10,7 +11,14 @@ import {
   Variables,
   extractExercisesFromActivityVariables,
 } from '@platon/feature/compiler'
-import { ActivityEntity, ActivityService, ON_RELOAD_ACTIVITY_EVENT } from '@platon/feature/course/server'
+import {
+  ActivityEntity,
+  ActivityService,
+  ON_RELOAD_ACTIVITY_EVENT,
+  ON_TERMINATE_ACTIVITY_EVENT,
+  OnReloadActivityEventPayload,
+  OnTerminateActivityEventPayload,
+} from '@platon/feature/course/server'
 import {
   EvalExerciseInput,
   ExercisePlayer,
@@ -49,7 +57,7 @@ interface CreateSessionArgs {
 
 @Injectable()
 export class PlayerService {
-  protected readonly logger: Logger
+  protected readonly logger = new Logger(PlayerService.name)
   private readonly actionHandlers: Record<PlayerActions, ActionHandler> = {
     NEXT_HINT: this.nextHint.bind(this),
     CHECK_ANSWER: this.checkAnswer.bind(this),
@@ -60,14 +68,13 @@ export class PlayerService {
 
   constructor(
     private readonly dataSource: DataSource,
+    private readonly eventService: EventService,
     private readonly sandboxService: SandboxService,
     private readonly answerService: AnswerService,
     private readonly sessionService: SessionService,
     private readonly activityService: ActivityService,
     private readonly resourceFileService: ResourceFileService
-  ) {
-    this.logger = new Logger(this.constructor.name)
-  }
+  ) {}
 
   /**
    * Creates new player session for the given resource for preview purpose.
@@ -79,7 +86,7 @@ export class PlayerService {
    * @returns A player layout for the resource.
    */
   async preview(input: PreviewInput): Promise<PreviewOuputDTO> {
-    const [source, resource] = await this.resourceFileService.compile({
+    const { source, resource } = await this.resourceFileService.compile({
       resourceId: input.resource,
       version: input.version,
       overrides: input.overrides,
@@ -135,6 +142,16 @@ export class PlayerService {
           await this.sessionService.findExercise(activitySessionId, sessionId),
           user
         )
+
+        if (!exerciseSession.envid) {
+          const { envid, variables } = await this.sandboxService.build(exerciseSession.source as PLSourceFile)
+          exerciseSession.envid = envid
+          exerciseSession.variables = variables
+          await this.sessionService.update(exerciseSession.id, {
+            envid: exerciseSession.envid,
+            variables: exerciseSession.variables,
+          })
+        }
         exerciseSession.parent = activitySession
         exerciseSession.startedAt = exerciseSession.startedAt || new Date()
         await this.sessionService.update(exerciseSession.id, {
@@ -168,11 +185,21 @@ export class PlayerService {
 
     const activitySession = session.parent || session
     const activityVariables = activitySession.variables as PlayerActivityVariables
+    if (activityVariables.navigation.terminated) {
+      return { activity: withActivityPlayer(activitySession) }
+    }
+
     activityVariables.navigation.terminated = true
     activitySession.variables = activityVariables
     await this.sessionService.update(activitySession.id, {
       variables: activitySession.variables,
     })
+
+    if (activitySession.activity) {
+      this.eventService.emit<OnTerminateActivityEventPayload>(ON_TERMINATE_ACTIVITY_EVENT, {
+        activity: activitySession.activity,
+      })
+    }
 
     return {
       activity: withActivityPlayer(activitySession),
@@ -270,11 +297,11 @@ export class PlayerService {
 
     variables['.meta'] = {
       ...(variables['.meta'] || {}),
-      attempts: (variables['.meta']?.attempts || 0) + 1,
+      attempts: (variables['.meta']?.attempts || 0) + (grade > -1 ? 1 : 0),
     }
 
     exerciseSession.grade = Math.max(grade, exerciseSession.grade ?? -1)
-    exerciseSession.attempts++
+    if (grade > -1) exerciseSession.attempts++
     exerciseSession.variables = variables
 
     // SAVE ANSWER WITH GRADE
@@ -318,7 +345,7 @@ export class PlayerService {
         activitySession.grade /= childs.length
       }
 
-      activitySession.attempts++
+      if (grade > -1) activitySession.attempts++
       promises.push(
         this.sessionService.update(activitySession.id, {
           grade: activitySession.grade,
@@ -387,13 +414,11 @@ export class PlayerService {
 
       source.variables.seed = (Number.parseInt(source.variables.seed + '') || Date.now()) % 100
 
-      const { envid, variables } = await this.sandboxService.build(source)
-
       const session = await this.sessionService.create(
         {
           activity,
-          variables,
-          envid: envid || (null as any),
+          variables: source.variables as Variables,
+          envid: null as any,
           userId: user?.id || (null as any),
           parentId: parentId || (null as any),
           activityId: activity?.id || (null as any),
@@ -403,7 +428,12 @@ export class PlayerService {
       )
 
       if (source.abspath.endsWith('.pla')) {
-        session.variables = await this.createNavigation(variables as PlayerActivityVariables, session, user, manager)
+        session.variables = await this.createNavigation(
+          source.variables as PlayerActivityVariables,
+          session,
+          user,
+          manager
+        )
 
         await this.sessionService.update(
           session.id,
@@ -470,7 +500,8 @@ export class PlayerService {
   }
 
   @OnEvent(ON_RELOAD_ACTIVITY_EVENT)
-  protected async onReloadActivity(activity: ActivityEntity): Promise<void> {
+  protected async onReloadActivity(payload: OnReloadActivityEventPayload): Promise<void> {
+    const { activity } = payload
     this.dataSource.transaction(async (manager) => {
       this.logger.log(`Reload activity ${activity.id}`)
       const sessions = await manager.find(SessionEntity, {

@@ -1,3 +1,3 @@
-# PLaTon
+# PLaTon développeurs
 
 TODO

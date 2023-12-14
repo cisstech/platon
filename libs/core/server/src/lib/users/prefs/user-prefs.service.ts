@@ -18,7 +18,7 @@ export class UserPrefsService {
   async findByUserId(userId: string): Promise<UserPrefsEntity> {
     let prefs = await this.repository.findOne({ where: { userId } })
     if (!prefs) {
-      prefs = await this.repository.save(this.repository.create({ userId }))
+      prefs = await this.repository.save(this.repository.create({ userId, levels: [], topics: [] }))
     }
     return prefs
   }

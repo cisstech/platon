@@ -16,10 +16,12 @@ import differenceInSeconds from 'date-fns/differenceInSeconds'
 import { IsNull, Not, Repository } from 'typeorm'
 import { SessionEntity } from './sessions/session.entity'
 
+// TODO rework this service to use iterator design pattern with a Agrregator classes
+
 interface Data {
   activityUsers: ActivityMemberView[]
   activityCorrectors: ActivityCorrectorView[]
-  activitySessions: SessionEntity<any>[]
+  activitySessions: SessionEntity<ActivityVariables>[]
   exerciseSessions: SessionEntity<any>[]
   activityVariables: ActivityVariables
 }
@@ -41,7 +43,7 @@ export class ResultService {
   ) {}
 
   async sessionResults(sessionId: string): Promise<ActivityResults> {
-    return this.processData(await this.loadSessionData(sessionId), true)
+    return this.process(await this.loadSessionData(sessionId), true)
   }
 
   async activityResults(activityId: string): Promise<ActivityResults> {
@@ -53,81 +55,7 @@ export class ResultService {
       throw new NotFoundResponse(`CourseActivity: ${activity}`)
     }
 
-    return this.processData(await this.loadActivityData(activity))
-  }
-
-  private processData(data: Data, waitForCorrections = false): ActivityResults {
-    const { activityUsers, activitySessions, exerciseSessions, activityVariables, activityCorrectors } = data
-
-    const correctionEnabled = waitForCorrections && activityCorrectors.length > 0
-
-    const { userResults, userResultsIndex } = this.createUserResults(activityUsers)
-
-    const { exerciseResults, exerciseResultsMapIndex } = this.createExerciseResults(activityVariables, userResults)
-
-    const exerciseIdBySessionId = new Map<string, string>()
-    const exerciseSessionCountByExerciseId = new Map<string, number>()
-
-    activitySessions.forEach((activitySession) => {
-      const navigation = activitySession.variables.navigation
-      // TODO use real type instead of any
-      navigation.exercises.forEach((navExercise: any) => {
-        const userResults = userResultsIndex[activitySession.userId as string]
-        const exerciseSession = exerciseSessions.find((session) => session.id === navExercise.sessionId)
-        const correcting = correctionEnabled && !exerciseSession?.correction
-        userResults.correcting = correcting ?? userResults.correcting
-        if (!correcting) {
-          navExercise.state = answerStateFromGrade(exerciseSession?.correction?.grade || exerciseSession?.grade)
-          const userExercise = userResults.exercises[navExercise.id]
-          userExercise.state = navExercise.state
-        }
-
-        exerciseIdBySessionId.set(navExercise.sessionId, navExercise.id)
-        exerciseSessionCountByExerciseId.set(navExercise.id, 0)
-        Object.values(AnswerStates).forEach((state) => {
-          if (state === navExercise.state) {
-            exerciseResultsMapIndex[navExercise.id].states[state]++
-          }
-        })
-      })
-    })
-
-    exerciseSessions.forEach((exerciseSession) => {
-      const exerciseId = exerciseIdBySessionId.get(exerciseSession.id)
-      if (exerciseId) {
-        exerciseSessionCountByExerciseId.set(exerciseId, (exerciseSessionCountByExerciseId.get(exerciseId) || 0) + 1)
-
-        const duration =
-          exerciseSession.lastGradedAt && exerciseSession.startedAt
-            ? differenceInSeconds(exerciseSession.lastGradedAt, exerciseSession.startedAt)
-            : 0
-
-        const grade = exerciseSession.correction?.grade ?? exerciseSession.grade
-
-        const activityExercise = exerciseResultsMapIndex[exerciseId]
-        activityExercise.grades.sum += grade === -1 ? 0 : grade
-        activityExercise.attempts.sum += exerciseSession.attempts
-        activityExercise.durations.sum += duration
-
-        const userResults = userResultsIndex[exerciseSession.userId as string]
-        if (!userResults.correcting) {
-          const userExercise = userResults.exercises[exerciseId]
-          userExercise.grade = grade
-          userExercise.attempts = exerciseSession.attempts
-          userExercise.duration = duration
-          userExercise.sessionId = exerciseSession.id
-        }
-      }
-    })
-
-    exerciseResults.forEach((activityExercise) => {
-      const count = exerciseSessionCountByExerciseId.get(activityExercise.id)
-      activityExercise.grades.avg = count ? activityExercise.grades.sum / count : activityExercise.grades.sum
-      activityExercise.attempts.avg = count ? activityExercise.attempts.sum / count : activityExercise.attempts.sum
-      activityExercise.durations.avg = count ? activityExercise.durations.sum / count : activityExercise.durations.sum
-    })
-
-    return { users: userResults, exercises: exerciseResults }
+    return this.process(await this.loadActivityData(activity))
   }
 
   private async loadSessionData(sessionId: string): Promise<Data> {
@@ -228,6 +156,79 @@ export class ResultService {
       activityUsers: activityUsers.filter((user) => !userId || user.id === userId),
       activityVariables: activity.source.variables as ActivityVariables,
     }
+  }
+
+  private process(data: Data, waitForCorrections = false): ActivityResults {
+    const { activityUsers, activitySessions, exerciseSessions, activityVariables, activityCorrectors } = data
+
+    const correctionEnabled = waitForCorrections && activityCorrectors.length > 0
+
+    const { userResults, userResultsIndex } = this.createUserResults(activityUsers)
+    const { exerciseResults, exerciseResultsMapIndex } = this.createExerciseResults(activityVariables, userResults)
+
+    const exerciseIdBySessionId = new Map<string, string>()
+    const exerciseSessionCountByExerciseId = new Map<string, number>()
+
+    activitySessions.forEach((activitySession) => {
+      const navigation = activitySession.variables.navigation
+      // TODO use real type instead of any
+      navigation.exercises.forEach((navExercise: any) => {
+        const userResults = userResultsIndex[activitySession.userId as string]
+        const exerciseSession = exerciseSessions.find((session) => session.id === navExercise.sessionId)
+        const correcting = correctionEnabled && !exerciseSession?.correction
+        userResults.correcting = correcting ?? userResults.correcting
+        if (!correcting) {
+          navExercise.state = answerStateFromGrade(exerciseSession?.correction?.grade || exerciseSession?.grade)
+          const userExercise = userResults.exercises[navExercise.id]
+          userExercise.state = navExercise.state
+        }
+
+        exerciseIdBySessionId.set(navExercise.sessionId, navExercise.id)
+        exerciseSessionCountByExerciseId.set(navExercise.id, 0)
+        Object.values(AnswerStates).forEach((state) => {
+          if (state === navExercise.state) {
+            exerciseResultsMapIndex[navExercise.id].states[state]++
+          }
+        })
+      })
+    })
+
+    exerciseSessions.forEach((exerciseSession) => {
+      const exerciseId = exerciseIdBySessionId.get(exerciseSession.id)
+      if (exerciseId) {
+        exerciseSessionCountByExerciseId.set(exerciseId, (exerciseSessionCountByExerciseId.get(exerciseId) || 0) + 1)
+
+        const duration =
+          exerciseSession.lastGradedAt && exerciseSession.startedAt
+            ? differenceInSeconds(exerciseSession.lastGradedAt, exerciseSession.startedAt)
+            : 0
+
+        const grade = exerciseSession.correction?.grade ?? exerciseSession.grade
+
+        const activityExercise = exerciseResultsMapIndex[exerciseId]
+        activityExercise.grades.sum += grade === -1 ? 0 : grade
+        activityExercise.attempts.sum += exerciseSession.attempts
+        activityExercise.durations.sum += duration
+
+        const userResults = userResultsIndex[exerciseSession.userId as string]
+        if (!userResults.correcting) {
+          const userExercise = userResults.exercises[exerciseId]
+          userExercise.grade = grade
+          userExercise.attempts = exerciseSession.attempts
+          userExercise.duration = duration
+          userExercise.sessionId = exerciseSession.id
+        }
+      }
+    })
+
+    exerciseResults.forEach((activityExercise) => {
+      const count = exerciseSessionCountByExerciseId.get(activityExercise.id)
+      activityExercise.grades.avg = count ? activityExercise.grades.sum / count : activityExercise.grades.sum
+      activityExercise.attempts.avg = count ? activityExercise.attempts.sum / count : activityExercise.attempts.sum
+      activityExercise.durations.avg = count ? activityExercise.durations.sum / count : activityExercise.durations.sum
+    })
+
+    return { users: userResults, exercises: exerciseResults }
   }
 
   private createUserResults(users: ActivityMemberView[]) {

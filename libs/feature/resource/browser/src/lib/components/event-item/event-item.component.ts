@@ -1,7 +1,16 @@
 import { ComponentType } from '@angular/cdk/portal'
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, Component, inject, InjectionToken, Injector, Input } from '@angular/core'
-import { UserAvatarComponent } from '@platon/core/browser'
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  inject,
+  InjectionToken,
+  Injector,
+  Input,
+  OnInit,
+} from '@angular/core'
+import { AuthService, UserAvatarComponent } from '@platon/core/browser'
 import { NOTIFICATION } from '@platon/feature/notification/browser'
 import { Notification } from '@platon/feature/notification/common'
 import {
@@ -22,14 +31,39 @@ const ResourceEventToken = new InjectionToken<ResourceEvent>('ResourceEventToken
   standalone: true,
   selector: 'resource-event-member-remove',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [UserAvatarComponent],
+  imports: [CommonModule, UserAvatarComponent],
   template: `
-    <user-avatar [userIdOrName]="event.actorId" /> a ajouté
-    <user-avatar [userIdOrName]="event.data.userId" />
+    <ng-container *ngIf="isMe">Vous êtes désormais membre de “{{ event.data.resourceName }}”</ng-container>
+    <ng-container *ngIf="!isMe && !isJoinRequest">
+      <user-avatar showUsername="inline" [userIdOrName]="event.data.userId" />
+      est désormais membre de “{{ event.data.resourceName }}”
+    </ng-container>
+    <ng-container *ngIf="isJoinRequest">
+      <user-avatar showUsername="inline" [userIdOrName]="event.data.userId" />
+      souhaite rejoindre le cercle “{{ event.data.resourceName }}”
+    </ng-container>
+    <ng-template #avatar>
+      <user-avatar showUsername="inline" [userIdOrName]="event.data.userId" />
+      est désormais membre de “{{ event.data.resourceName }}”
+    </ng-template>
   `,
 })
-class MemberCreateEventComponent {
+class MemberCreateEventComponent implements OnInit {
+  private readonly auth = inject(AuthService)
+  private readonly changeDetectorRef = inject(ChangeDetectorRef)
+
+  protected isMe = false
+  protected isJoinRequest = false
   protected event = inject(ResourceEventToken) as ResourceMemberCreateEvent
+
+  async ngOnInit(): Promise<void> {
+    const user = await this.auth.ready()
+
+    this.isMe = user?.id === this.event.data.userId
+    this.isJoinRequest = this.event.data.userId === this.event.actorId
+
+    this.changeDetectorRef.markForCheck()
+  }
 }
 
 @Component({
@@ -39,10 +73,10 @@ class MemberCreateEventComponent {
   imports: [CommonModule, UserAvatarComponent],
   template: `
     <ng-container *ngIf="notification; else noNotification">
-      Vous n'a plus accès à la ressource “{{ event.data.resourceName }}”
+      Vous n'avez plus membre de “{{ event.data.resourceName }}”
     </ng-container>
     <ng-template #noNotification>
-      <user-avatar [userIdOrName]="event.actorId" /> n'a plus accès à la ressource
+      <user-avatar showUsername="inline" [userIdOrName]="event.actorId" /> n'a plus accès à cette ressource
     </ng-template>
   `,
 })
@@ -57,7 +91,7 @@ class MemberRemoveEventComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [UserAvatarComponent, ResourcePipesModule],
   template: `
-    <user-avatar [userIdOrName]="event.actorId" /> a passé “{{ event.data.resourceName }}” à “{{
+    <user-avatar showUsername="inline" [userIdOrName]="event.actorId" /> a passé “{{ event.data.resourceName }}” à “{{
       event.data.newStatus | resourceStatus
     }}”
   `,
@@ -71,7 +105,10 @@ class NewStatusItemComponent {
   selector: 'resource-event-new-resource',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [UserAvatarComponent, ResourcePipesModule],
-  template: ` <user-avatar [userIdOrName]="event.actorId" /> à ajouté “{{ event.data.resourceName }}” dans le cercle” `,
+  template: `
+    <user-avatar showUsername="inline" [userIdOrName]="event.actorId" /> à ajouté “{{ event.data.resourceName }}” dans
+    le cercle”
+  `,
 })
 class NewResourceEventComponent {
   protected event = inject(ResourceEventToken) as ResourceCreateEvent

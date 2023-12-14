@@ -1,4 +1,5 @@
 import { OrderingDirections } from '@platon/core/common'
+import { CoursePermissions } from './permissions.model'
 
 export interface Course {
   readonly id: string
@@ -7,6 +8,12 @@ export interface Course {
   readonly name: string
   readonly desc?: string
   readonly ownerId: string
+
+  readonly timeSpent: number
+  readonly progression: number
+  readonly studentCount: number
+  readonly teacherCount: number
+  readonly permissions: CoursePermissions
 }
 
 export interface CreateCourse {
