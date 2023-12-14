@@ -3,21 +3,14 @@ import { CasController } from './cas.controller'
 import { CasService } from './cas.service'
 import { AuthModule, UserModule } from '@platon/core/server'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { HttpModule } from '@nestjs/axios'
 import { CasEntity } from './entities/cas.entity'
-import https from 'https'
 import { FeatureLtiServerModule } from '@platon/feature/lti/server'
+import { AxiosService } from './axios.service'
 
 @Module({
-  imports: [
-    UserModule,
-    AuthModule,
-    FeatureLtiServerModule,
-    TypeOrmModule.forFeature([CasEntity]),
-    HttpModule.register({ httpsAgent: new https.Agent({ rejectUnauthorized: false }) }),
-  ],
+  imports: [UserModule, AuthModule, FeatureLtiServerModule, TypeOrmModule.forFeature([CasEntity])],
   controllers: [CasController],
-  providers: [CasService],
+  providers: [CasService, AxiosService],
   exports: [CasService],
 })
 export class FeatureCasServerModule {}
