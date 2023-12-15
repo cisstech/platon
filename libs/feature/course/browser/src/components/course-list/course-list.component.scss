@@ -1,5 +1,28 @@
 :host::ng-deep {
   .ant-ribbon {
-    color: white;
+    color: var(--brand-text-primary);
+  }
+
+  .ui-list-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 920px) {
+  :host::ng-deep {
+    .ui-list-container {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+}
+
+// MOBILE
+@media (max-width: 768px) {
+  :host::ng-deep {
+    .ui-list-container {
+      display: block;
+    }
   }
 }

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable, Logger } from '@nestjs/common'
 import { OnEvent } from '@nestjs/event-emitter'
-import { ForbiddenResponse, NotFoundResponse, User } from '@platon/core/common'
-import { EventService } from '@platon/core/server'
+import { ForbiddenResponse, NotFoundResponse, User, isTeacherRole } from '@platon/core/common'
+import { EventService, UserEntity } from '@platon/core/server'
 import {
   ActivityExercise,
   ActivityVariables,
@@ -53,6 +53,7 @@ interface CreateSessionArgs {
   parentId?: string
   overrides?: Variables
   activity?: ActivityEntity
+  isBuilt?: boolean
 }
 
 @Injectable()
@@ -77,6 +78,22 @@ export class PlayerService {
   ) {}
 
   /**
+   * Builds the given ExerciseSession
+   */
+  async buildExerciseSession(exerciseSession: SessionEntity): Promise<SessionEntity> {
+    const { envid, variables } = await this.sandboxService.build(exerciseSession.source as PLSourceFile)
+    exerciseSession.envid = envid
+    exerciseSession.variables = variables
+    exerciseSession.isBuilt = true
+    await this.sessionService.update(exerciseSession.id, {
+      envid: envid || undefined,
+      variables: variables,
+      isBuilt: true,
+    })
+    return exerciseSession
+  }
+
+  /**
    * Creates new player session for the given resource for preview purpose.
    *
    * Note :
@@ -85,13 +102,19 @@ export class PlayerService {
    * @param input Informations about the resource to preview.
    * @returns A player layout for the resource.
    */
-  async preview(input: PreviewInput): Promise<PreviewOuputDTO> {
+  async preview(input: PreviewInput, user?: UserEntity): Promise<PreviewOuputDTO> {
     const { source, resource } = await this.resourceFileService.compile({
       resourceId: input.resource,
       version: input.version,
       overrides: input.overrides,
     })
-    const session = await this.createNewSession({ source })
+    if (!resource.publicPreview && (!user || !isTeacherRole(user?.role))) {
+      throw new ForbiddenResponse('You are not allowed to preview this resource')
+    }
+    let session = await this.createNewSession({ source })
+    if (resource.type === 'EXERCISE') {
+      session = await this.buildExerciseSession(session)
+    }
     return {
       exercise: resource.type === 'EXERCISE' ? withExercisePlayer(session) : undefined,
       activity: resource.type === 'ACTIVITY' ? withActivityPlayer(session) : undefined,
@@ -117,6 +140,7 @@ export class PlayerService {
         user,
         activity,
         source: activity.source,
+        isBuilt: true,
       })
     }
     return { activity: withActivityPlayer(activitySession) }
@@ -138,19 +162,13 @@ export class PlayerService {
     // CREATE PLAYERS
     const exercisePlayers = await Promise.all(
       exerciseSessionIds.map(async (sessionId) => {
-        const exerciseSession = withSessionAccessGuard(
+        let exerciseSession = withSessionAccessGuard(
           await this.sessionService.findExercise(activitySessionId, sessionId),
           user
         )
 
-        if (!exerciseSession.envid) {
-          const { envid, variables } = await this.sandboxService.build(exerciseSession.source as PLSourceFile)
-          exerciseSession.envid = envid
-          exerciseSession.variables = variables
-          await this.sessionService.update(exerciseSession.id, {
-            envid: exerciseSession.envid,
-            variables: exerciseSession.variables,
-          })
+        if (!exerciseSession.isBuilt) {
+          exerciseSession = await this.buildExerciseSession(exerciseSession)
         }
         exerciseSession.parent = activitySession
         exerciseSession.startedAt = exerciseSession.startedAt || new Date()
@@ -295,13 +313,14 @@ export class PlayerService {
 
     variables = output.variables as ExerciseVariables
 
+    const attemptIncrement = grade > -1 ? 1 : 0
     variables['.meta'] = {
       ...(variables['.meta'] || {}),
-      attempts: (variables['.meta']?.attempts || 0) + (grade > -1 ? 1 : 0),
+      attempts: (variables['.meta']?.attempts || 0) + attemptIncrement,
     }
 
     exerciseSession.grade = Math.max(grade, exerciseSession.grade ?? -1)
-    if (grade > -1) exerciseSession.attempts++
+    exerciseSession.attempts += attemptIncrement
     exerciseSession.variables = variables
 
     // SAVE ANSWER WITH GRADE
@@ -345,7 +364,7 @@ export class PlayerService {
         activitySession.grade /= childs.length
       }
 
-      if (grade > -1) activitySession.attempts++
+      activitySession.attempts += attemptIncrement
       promises.push(
         this.sessionService.update(activitySession.id, {
           grade: activitySession.grade,
@@ -410,7 +429,7 @@ export class PlayerService {
    */
   private async createNewSession(args: CreateSessionArgs, entityManager?: EntityManager): Promise<SessionEntity> {
     const create = async (manager: EntityManager): Promise<SessionEntity> => {
-      const { user, source, parentId, activity } = args
+      const { user, source, parentId, activity, isBuilt } = args
 
       source.variables.seed = (Number.parseInt(source.variables.seed + '') || Date.now()) % 100
 
@@ -423,6 +442,7 @@ export class PlayerService {
           parentId: parentId || (null as any),
           activityId: activity?.id || (null as any),
           source,
+          isBuilt: isBuilt || false,
         },
         manager
       )

@@ -3,8 +3,10 @@ import { ItemResponse, ListResponse, NotFoundResponse } from '@platon/core/commo
 import { Mapper } from '../utils'
 import { UpdateUserDTO, UserDTO, UserFiltersDTO } from './user.dto'
 import { UserService } from './user.service'
+import { ApiTags } from '@nestjs/swagger'
 
 @Controller('users')
+@ApiTags('Users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 

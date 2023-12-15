@@ -1,5 +1,7 @@
 import { Variables } from '@platon/feature/compiler'
 
+export const LATEST = 'latest'
+
 export enum FileMoveActions {
   move = 'move',
   copy = 'copy',
@@ -46,8 +48,9 @@ export interface FileUpdate {
 
 export interface FileMove {
   copy?: boolean
+  unzip?: boolean
   rename?: boolean
-  destination: string
+  destination?: string
 }
 
 export interface FileRelease {

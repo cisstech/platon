@@ -1,8 +1,13 @@
-import { Injectable } from '@angular/core'
-import { BehaviorSubject, Observable } from 'rxjs'
+import { Injectable, OnDestroy, inject } from '@angular/core'
+import { NavigationEnd, Router } from '@angular/router'
+import { BehaviorSubject, Observable, Subscription, firstValueFrom } from 'rxjs'
 import { StorageService } from './storage.service'
 
 export declare type Theme = 'light' | 'dark'
+
+export const alwaysLightTheme = {
+  lightTheme: true,
+}
 
 const VENDORS_THEMES = ['ng-zorro', 'material']
 
@@ -10,9 +15,16 @@ const VENDORS_THEMES = ['ng-zorro', 'material']
  * Controls the colors of the application.
  */
 @Injectable({ providedIn: 'root' })
-export class ThemeService {
-  private loaded?: boolean
+export class ThemeService implements OnDestroy {
+  private readonly router = inject(Router)
+  private readonly storage = inject(StorageService)
+  private readonly subscriptions: Subscription[] = []
+
+  private ready?: boolean
   private theme?: Theme
+  private savedTheme?: Theme
+  private alwaysLightTheme?: boolean
+
   private theme$ = new BehaviorSubject<Theme>('light')
 
   /** Gets a value indicating whether the current theme is dark. */
@@ -29,21 +41,32 @@ export class ThemeService {
     return this.theme$.asObservable()
   }
 
-  constructor(private readonly storage: StorageService) {}
+  constructor() {
+    this.subscriptions.push(
+      this.router.events.subscribe((event) => {
+        if (event instanceof NavigationEnd) {
+          this.setLightThemeIfAlways()
+        }
+      })
+    )
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((s) => s.unsubscribe())
+  }
 
   /**
    * Loads the last saved theme from the local storage if not loaded.
    */
   async loadTheme(): Promise<void> {
-    if (this.loaded) {
+    if (this.ready) {
       return
     }
 
-    this.theme = (await this.storage.get<Theme>('app.theme').toPromise()) || 'light'
+    this.savedTheme = (await firstValueFrom(this.storage.get<Theme>('app.theme'))) || 'light'
+    await this.setTheme(this.savedTheme)
 
-    await this.setTheme(this.theme)
-
-    this.loaded = true
+    this.ready = true
   }
 
   /**
@@ -71,31 +94,35 @@ export class ThemeService {
   }
 
   private async setTheme(theme: Theme, save = true) {
+    if (this.theme === theme || (this.alwaysLightTheme && theme === 'dark')) {
+      return
+    }
     this.theme = theme
 
-    const html = document.documentElement
+    const container = document.body
 
-    if (!html.classList.contains('mat-app-background')) {
-      html.classList.add('mat-app-background')
+    if (!container.classList.contains('mat-app-background')) {
+      container.classList.add('mat-app-background')
     }
 
-    if (!html.classList.contains('mat-typography')) {
-      html.classList.add('mat-typography')
+    if (!container.classList.contains('mat-typography')) {
+      container.classList.add('mat-typography')
     }
 
-    html.classList.remove('mat-app-background')
-    html.classList.remove('mat-typography')
+    container.classList.remove('mat-app-background')
+    container.classList.remove('mat-typography')
 
-    html.classList.add('mat-app-background')
-    html.classList.add('mat-typography')
+    container.classList.add('mat-app-background')
+    container.classList.add('mat-typography')
 
-    html.classList.remove('dark-theme')
-    html.classList.remove('light-theme')
+    container.classList.remove('dark-theme')
+    container.classList.remove('light-theme')
 
-    html.classList.add(theme + '-theme')
+    container.classList.add(theme + '-theme')
 
     if (save) {
-      await this.storage.set('app.theme', theme).toPromise()
+      await firstValueFrom(this.storage.set('app.theme', theme))
+      this.savedTheme = theme
     }
 
     const head = document.head
@@ -114,5 +141,19 @@ export class ThemeService {
     })
 
     this.theme$.next(theme)
+  }
+
+  private setLightThemeIfAlways(): void {
+    this.alwaysLightTheme = false
+    let currentRoute = this.router.routerState.root
+    while (currentRoute.firstChild) {
+      currentRoute = currentRoute.firstChild
+      const { data } = currentRoute.snapshot
+      if (data && !Array.isArray(data) && data.lightTheme) {
+        this.alwaysLightTheme = true
+        break
+      }
+    }
+    this.setTheme(this.alwaysLightTheme ? 'light' : this.savedTheme || 'light', false)
   }
 }

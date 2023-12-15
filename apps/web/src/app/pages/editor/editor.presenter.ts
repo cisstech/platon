@@ -38,7 +38,7 @@ export class EditorPresenter {
 
     const user = (await this.authService.ready()) as User
     const [resource, circles, personal] = await Promise.all([
-      firstValueFrom(this.resourceService.find(id)),
+      firstValueFrom(this.resourceService.find({ id })),
       firstValueFrom(this.resourceService.tree()),
       firstValueFrom(this.resourceService.circle(user.username)),
     ])

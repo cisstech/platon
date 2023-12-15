@@ -9,11 +9,13 @@ const scalars = {
 const config: CodegenConfig = {
   schema: './schema.gql',
   documents: ['./libs/**/!(*.generated).ts', './apps/**/!(*.generated).ts'],
+  ignoreNoDocuments: true,
   generates: {
     './.graphql/types.ts': {
       plugins: ['typescript', 'typescript-operations', 'typescript-apollo-angular'],
       config: {
         addExplicitOverride: true,
+        avoidOptionals: true,
         scalars,
       },
     },
@@ -23,6 +25,7 @@ const config: CodegenConfig = {
       plugins: ['typescript', 'typescript-operations', 'typescript-apollo-angular'],
       config: {
         addExplicitOverride: true,
+        avoidOptionals: true,
         scalars,
       },
     },

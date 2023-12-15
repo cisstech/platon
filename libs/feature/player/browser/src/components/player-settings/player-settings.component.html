@@ -7,16 +7,16 @@
     <tr *ngIf="player.settings?.duration">
       <td>Durée</td>
       <td>
-        {{ player.settings!.duration! | duration: 'seconds' }}
+        {{ player.settings!.duration! | duration : 'seconds' }}
       </td>
     </tr>
     <tr *ngIf="player.openAt">
       <td>Date d'ouverture</td>
-      <td>{{ player.openAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+      <td>{{ player.openAt | date : 'dd/MM/yyyy HH:mm' }}</td>
     </tr>
     <tr *ngIf="player.closeAt">
       <td>Date de fermeture</td>
-      <td>{{ player.closeAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+      <td>{{ player.closeAt | date : 'dd/MM/yyyy HH:mm' }}</td>
     </tr>
     <tr *ngIf="player.settings?.navigation?.mode">
       <td>Mode de navigation</td>

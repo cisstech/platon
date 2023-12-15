@@ -6,23 +6,25 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnIni
 import { RouterModule } from '@angular/router'
 import { Subscription, of } from 'rxjs'
 
-import { MatCardModule } from '@angular/material/card'
-
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzCollapseModule } from 'ng-zorro-antd/collapse'
 import { NzEmptyModule } from 'ng-zorro-antd/empty'
 import { NzGridModule } from 'ng-zorro-antd/grid'
 import { NzIconModule } from 'ng-zorro-antd/icon'
-import { NzProgressModule } from 'ng-zorro-antd/progress'
 import { NzSegmentedModule } from 'ng-zorro-antd/segmented'
-import { NzStatisticModule } from 'ng-zorro-antd/statistic'
 import { NzTypographyModule } from 'ng-zorro-antd/typography'
 
 import { CourseActivityGridComponent, CourseActivityTableComponent } from '@platon/feature/course/browser'
 import { Activity, CourseSection } from '@platon/feature/course/common'
 import { CourseSectionActionsComponent } from './section-actions/section-actions.component'
 
-import { DurationPipe, SearchBar, UiSearchBarComponent, UiViewModeComponent } from '@platon/shared/ui'
+import {
+  DurationPipe,
+  SearchBar,
+  UiSearchBarComponent,
+  UiStatisticCardComponent,
+  UiViewModeComponent,
+} from '@platon/shared/ui'
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 import { CoursePresenter } from '../course.presenter'
 
@@ -36,17 +38,13 @@ import { CoursePresenter } from '../course.presenter'
     CommonModule,
     RouterModule,
 
-    MatCardModule,
-
     NzIconModule,
     NzGridModule,
     NzEmptyModule,
     NzButtonModule,
     NzToolTipModule,
-    NzProgressModule,
     NzCollapseModule,
     NzSegmentedModule,
-    NzStatisticModule,
     NzTypographyModule,
 
     CourseActivityGridComponent,
@@ -56,6 +54,7 @@ import { CoursePresenter } from '../course.presenter'
     DurationPipe,
     UiViewModeComponent,
     UiSearchBarComponent,
+    UiStatisticCardComponent,
   ],
 })
 export class CourseDashboardPage implements OnInit, OnDestroy {
@@ -95,7 +94,7 @@ export class CourseDashboardPage implements OnInit, OnDestroy {
           new Fuse(Array.from(suggestions), {
             includeMatches: true,
             findAllMatches: false,
-            threshold: 0.2,
+            threshold: 0.4,
           })
             .search(query)
             .map((e) => e.item)

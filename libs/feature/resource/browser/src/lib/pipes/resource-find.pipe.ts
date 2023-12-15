@@ -11,7 +11,7 @@ export class ResourceFindPipe implements PipeTransform {
   constructor(private readonly resourceService: ResourceService) {}
   async transform(id: string): Promise<Resource | undefined> {
     try {
-      return await firstValueFrom(this.resourceService.find(id))
+      return await firstValueFrom(this.resourceService.find({ id }))
     } catch {
       return undefined
     }

@@ -4,6 +4,7 @@ import {
   CircleTree,
   CreateResource,
   CreateResourceInvitation,
+  FindResource,
   Resource,
   ResourceCompletion,
   ResourceEvent,
@@ -40,6 +41,15 @@ export class ResourceService {
       ? user.role === UserRoles.admin
       : user.role === UserRoles.admin || user.role === UserRoles.teacher
   }
+
+  editorUrl(resourceId: string, version?: string): string {
+    return `/editor/${resourceId}?version=${version || 'latest'}`
+  }
+
+  previewUrl(resourceId: string, version?: string): string {
+    return `/player/preview/${resourceId}?version=${version || 'latest'}`
+  }
+
   //#endregion
 
   //#region Resources
@@ -63,8 +73,8 @@ export class ResourceService {
     return this.resourceProvider.search(filters)
   }
 
-  find(id: string, markAsViewed?: boolean): Observable<Resource> {
-    return this.resourceProvider.find(id, markAsViewed)
+  find(input: FindResource): Observable<Resource> {
+    return this.resourceProvider.find(input)
   }
 
   update(id: string, input: UpdateResource): Observable<Resource> {

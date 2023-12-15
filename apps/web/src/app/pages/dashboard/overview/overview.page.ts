@@ -1,17 +1,28 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { RouterModule } from '@angular/router'
 
 import { MatCardModule } from '@angular/material/card'
 
-import { NotificationListComponent, NotificationService } from '@platon/feature/notification/browser'
-import { Notification } from '@platon/feature/notification/common'
-import { NzBadgeModule } from 'ng-zorro-antd/badge'
+import { MatIconModule } from '@angular/material/icon'
+import { ResultAnswerDistributionComponent, ResultValueDistributionComponent } from '@platon/feature/result/browser'
+import {
+  DurationPipe,
+  UiError403Component,
+  UiError404Component,
+  UiError500Component,
+  UiStatisticCardComponent,
+} from '@platon/shared/ui'
+
 import { NzButtonModule } from 'ng-zorro-antd/button'
-import { NzCalendarModule } from 'ng-zorro-antd/calendar'
-import { NzEmptyModule } from 'ng-zorro-antd/empty'
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker'
 import { NzGridModule } from 'ng-zorro-antd/grid'
-import { firstValueFrom } from 'rxjs'
+import { NzSelectModule } from 'ng-zorro-antd/select'
+import { NzSkeletonModule } from 'ng-zorro-antd/skeleton'
+
+import { FormsModule } from '@angular/forms'
+import { Subscription } from 'rxjs'
+import { OverviewPresenter } from './overview.presenter'
 
 @Component({
   standalone: true,
@@ -22,28 +33,49 @@ import { firstValueFrom } from 'rxjs'
   imports: [
     CommonModule,
     RouterModule,
+    FormsModule,
 
+    MatIconModule,
     MatCardModule,
 
-    NzEmptyModule,
     NzGridModule,
-    NzBadgeModule,
     NzButtonModule,
-    NzCalendarModule,
+    NzSelectModule,
+    NzSkeletonModule,
+    NzDatePickerModule,
 
-    NotificationListComponent,
+    DurationPipe,
+
+    ResultValueDistributionComponent,
+    ResultAnswerDistributionComponent,
+
+    UiError403Component,
+    UiError404Component,
+    UiError500Component,
+    UiStatisticCardComponent,
   ],
+  providers: [OverviewPresenter],
 })
-export class OverviewPage implements OnInit {
-  protected notifications: Notification[] = []
+export class OverviewPage implements OnInit, OnDestroy {
+  private readonly subscriptions: Subscription[] = []
+  private readonly presenter = inject(OverviewPresenter)
+  private readonly changeDetectorRef = inject(ChangeDetectorRef)
 
-  constructor(
-    private readonly changeDetectorRef: ChangeDetectorRef,
-    private readonly notificationService: NotificationService
-  ) {}
+  protected context = this.presenter.defaultContext()
+  protected learningInsightsDate = new Date()
+  protected learningInsightsOption: 'score' | 'duration' = 'score'
 
   async ngOnInit(): Promise<void> {
-    this.notifications = await firstValueFrom(this.notificationService.listUnreads())
-    this.changeDetectorRef.markForCheck()
+    this.subscriptions.push(
+      this.presenter.contextChange.subscribe(async (context) => {
+        this.context = context
+
+        this.changeDetectorRef.markForCheck()
+      })
+    )
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((s) => s.unsubscribe())
   }
 }

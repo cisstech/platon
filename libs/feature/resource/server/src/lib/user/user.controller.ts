@@ -1,4 +1,6 @@
+import { Expandable } from '@cisstech/nestjs-expand'
 import { Controller, Get, Param, Req, UnauthorizedException } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 import { ItemResponse, ListResponse } from '@platon/core/common'
 import { IRequest, Mapper } from '@platon/core/server'
 import { ResourceInvitationDTO, ResourceInvitationService } from '../invitations'
@@ -7,6 +9,7 @@ import { ResourceDTO } from '../resource.dto'
 import { ResourceService } from '../resource.service'
 
 @Controller('users/:username')
+@ApiTags('Users')
 export class UserResourceController {
   constructor(
     private readonly resourceService: ResourceService,
@@ -14,6 +17,9 @@ export class UserResourceController {
   ) {}
 
   @Get('/circle')
+  @Expandable(ResourceDTO, {
+    rootField: 'resource',
+  })
   async circle(@Req() req: IRequest, @Param('username') username: string): Promise<ItemResponse<ResourceDTO>> {
     if (username !== req.user.username) {
       throw new UnauthorizedException("You cannot access other users' personal circles")

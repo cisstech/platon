@@ -1,13 +1,9 @@
-import { Provider } from '@angular/core'
-import { NGX_ECHARTS_CONFIG } from 'ngx-echarts'
+import { provideEchartsCore } from 'ngx-echarts'
 
-export const NgxEChartsProviders: Provider = {
-  provide: NGX_ECHARTS_CONFIG,
-  useFactory: () => ({
-    echarts: () =>
-      import(
-        /* webpackChunkName: "echarts" */
-        './config'
-      ).then((m) => m.echarts),
-  }),
-}
+export const NgxEChartsProviders = provideEchartsCore({
+  echarts: () =>
+    import(
+      /* webpackChunkName: "echarts" */
+      './config'
+    ).then((m) => m.echarts),
+})

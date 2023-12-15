@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Post, Req } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 import { ItemResponse, ListResponse, NoContentResponse } from '@platon/core/common'
 import { IRequest, Mapper } from '@platon/core/server'
 import { CreateSessionComment } from '@platon/feature/result/common'
@@ -6,6 +7,7 @@ import { SessionCommentDTO } from './comment.dto'
 import { SessionCommentService } from './comment.service'
 
 @Controller('results/session/:sessionId/comments')
+@ApiTags('Results')
 export class SessionCommentController {
   constructor(private readonly service: SessionCommentService) {}
 

@@ -1,14 +1,17 @@
 import { Body, Controller, Get, Param, Patch, Post, Query, Req } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 import { CreatedResponse, ForbiddenResponse, ItemResponse, ListResponse, NotFoundResponse } from '@platon/core/common'
 import { IRequest, Mapper } from '@platon/core/server'
 import { ResourceCompletionDTO } from './completion'
+import { ResourcePermissionService } from './permissions/permissions.service'
 import { CircleTreeDTO, CreateResourceDTO, ResourceDTO, ResourceFiltersDTO, UpdateResourceDTO } from './resource.dto'
 import { ResourceService } from './resource.service'
 import { ResourceStatisticDTO } from './statistics'
 import { ResourceViewService } from './views/view.service'
-import { ResourcePermissionService } from './permissions/permissions.service'
+import { Expandable, Selectable } from '@cisstech/nestjs-expand'
 
 @Controller('resources')
+@ApiTags('Resources')
 export class ResourceController {
   constructor(
     private readonly resourceService: ResourceService,
@@ -17,6 +20,8 @@ export class ResourceController {
   ) {}
 
   @Get()
+  @Expandable(ResourceDTO, { rootField: 'resources' })
+  @Selectable({ rootField: 'resources' })
   async search(@Req() req: IRequest, @Query() filters: ResourceFiltersDTO = {}): Promise<ListResponse<ResourceDTO>> {
     let resources: ResourceDTO[] = []
     let total = 0
@@ -67,13 +72,15 @@ export class ResourceController {
   }
 
   @Get('/completion')
-  async completion(): Promise<ItemResponse<ResourceCompletionDTO>> {
+  async completion(@Req() req: IRequest): Promise<ItemResponse<ResourceCompletionDTO>> {
     return new ItemResponse({
-      resource: Mapper.map(await this.resourceService.completion(), ResourceCompletionDTO),
+      resource: Mapper.map(await this.resourceService.completion(req.user), ResourceCompletionDTO),
     })
   }
 
   @Get('/:id')
+  @Expandable(ResourceDTO, { rootField: 'resource' })
+  @Selectable({ rootField: 'resource' })
   async find(
     @Req() req: IRequest,
     @Param('id') id: string,
@@ -112,6 +119,8 @@ export class ResourceController {
   }
 
   @Post()
+  @Expandable(ResourceDTO, { rootField: 'resource' })
+  @Selectable({ rootField: 'resource' })
   async create(@Req() req: IRequest, @Body() input: CreateResourceDTO): Promise<CreatedResponse<ResourceDTO>> {
     const parent = await this.resourceService.findById(input.parentId)
     if (!parent.isPresent()) {
@@ -140,6 +149,8 @@ export class ResourceController {
   }
 
   @Patch('/:id')
+  @Expandable(ResourceDTO, { rootField: 'resource' })
+  @Selectable({ rootField: 'resource' })
   async update(
     @Req() req: IRequest,
     @Param('id') id: string,

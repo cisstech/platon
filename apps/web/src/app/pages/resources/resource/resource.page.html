@@ -5,18 +5,19 @@
         <nz-breadcrumb nzSeparator="" nzRouteLabel="breadcrumb">
           <button
             *ngIf="context.circles"
+            class="hide-on-mobile"
             nz-button
             nzType="text"
             nzSize="small"
             [nz-popover]
-            [nzPopoverContent]="treeTemplate"
+            [nzPopoverContent]="circleTreePopover"
           >
             <mat-icon>account_tree</mat-icon>
-            <ng-template #treeTemplate>
+            <ng-template #circleTreePopover>
               <resource-circle-tree [tree]="context.circles" />
             </ng-template>
           </button>
-          <nz-breadcrumb-item *ngIf="context.parent">
+          <nz-breadcrumb-item class="hide-on-mobile" *ngIf="context.parent">
             <a [routerLink]="['/resources', context.parent.id]">{{ context.parent.name }}</a>
           </nz-breadcrumb-item>
           <nz-breadcrumb-item>
@@ -94,6 +95,17 @@
         <button
           *ngIf="context.resource.type !== 'CIRCLE'"
           nz-button
+          [nz-popover]
+          nzPopoverPlacement="left"
+          [nzPopoverTrigger]="'click'"
+          [nzPopoverContent]="sharingPopover"
+        >
+          <i nz-icon nzType="link" nzTheme="outline"></i>
+          Partager
+        </button>
+        <button
+          *ngIf="context.resource.type !== 'CIRCLE'"
+          nz-button
           nzType="primary"
           (click)="iframe.open(context.previewUrl!)"
         >
@@ -128,5 +140,8 @@
     </ng-template>
   </ui-layout-tab>
 </ui-layout-tabs>
-
 <ui-modal-iframe #iframe />
+
+<ng-template #sharingPopover>
+  <resource-sharing [resourceId]="context.resource!.id" [canEditSharing]="context.resource!.permissions!.write" />
+</ng-template>

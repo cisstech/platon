@@ -14,12 +14,14 @@ import { ResourceFileService } from '@platon/feature/resource/browser'
 import { FileTypes, ResourceFile } from '@platon/feature/resource/common'
 import { firstValueFrom } from 'rxjs'
 
-class FileImpl implements IFile {
+export class ResourceFileImpl implements IFile {
   readonly uri: monaco.Uri
   readonly version: string
   readonly readOnly: boolean
   readonly isFolder: boolean
   readonly url: string
+
+  readonly resourceFile: ResourceFile
 
   constructor(uri: monaco.Uri, entry: ResourceFile) {
     this.uri = uri
@@ -27,6 +29,8 @@ class FileImpl implements IFile {
     this.readOnly = !!entry.readOnly
     this.isFolder = entry.type === 'folder'
     this.url = entry.downloadUrl
+
+    this.resourceFile = entry
   }
 }
 
@@ -79,7 +83,7 @@ export class ResourceFileSystemProvider extends FileSystemProvider {
 
     const transform = (entry: ResourceFile) => {
       const fileUri = monaco.Uri.parse(`${uri.scheme}://${uri.authority}/${removeLeadingSlash(entry.path)}`)
-      const file = new FileImpl(fileUri, entry)
+      const file = new ResourceFileImpl(fileUri, entry)
       files.push(file)
       this.entries.set(file.uri.toString(true), entry)
       entry.children?.forEach(transform)
@@ -179,7 +183,7 @@ export class ResourceFileSystemProvider extends FileSystemProvider {
     return results
   }
 
-  private lookup(uri: monaco.Uri, silent = false): ResourceFile {
+  lookup(uri: monaco.Uri, silent = false): ResourceFile {
     const entry = this.entries.get(uri.toString(true))
     if (!entry && !silent) {
       throw FileSystemError.FileNotFound(uri)
@@ -187,7 +191,7 @@ export class ResourceFileSystemProvider extends FileSystemProvider {
     return entry as ResourceFile
   }
 
-  private lookupAsDirectory(uri: monaco.Uri, silent = false): ResourceFile {
+  lookupAsDirectory(uri: monaco.Uri, silent = false): ResourceFile {
     const entry = this.lookup(uri, silent)
     if (entry && entry.type == FileTypes.folder) {
       return entry
@@ -195,7 +199,7 @@ export class ResourceFileSystemProvider extends FileSystemProvider {
     throw FileSystemError.FileNotADirectory(uri)
   }
 
-  private lookupAsFile(uri: monaco.Uri): ResourceFile {
+  lookupAsFile(uri: monaco.Uri): ResourceFile {
     const entry = this.lookup(uri, false)
     if (entry && entry.type == FileTypes.file) {
       return entry

@@ -9,6 +9,7 @@ import {
   TitleComponent,
   TooltipComponent,
   ToolboxComponent,
+  DataZoomComponent,
   // Built-in transform (filter, sort)
   TransformComponent,
 } from 'echarts/components'
@@ -26,8 +27,10 @@ import type {
   TitleComponentOption,
   TooltipComponentOption,
   ToolboxComponentOption,
+  DataZoomComponentOption,
 } from 'echarts/components'
 import type { ComposeOption } from 'echarts/core'
+import { darkTheme } from './themes'
 
 // Create an Option type with only the required components and charts via ComposeOption
 export type EChartsOption = ComposeOption<
@@ -41,6 +44,7 @@ export type EChartsOption = ComposeOption<
   | ToolboxComponentOption
   | TooltipComponentOption
   | RadarComponentOption
+  | DataZoomComponentOption
 >
 
 // Register the required components
@@ -52,6 +56,7 @@ echarts.use([
   TooltipComponent,
   ToolboxComponent,
   TransformComponent,
+  DataZoomComponent,
   BarChart,
   LineChart,
   PieChart,
@@ -60,5 +65,9 @@ echarts.use([
   CanvasRenderer,
   RadarChart,
 ])
+
+echarts.registerTheme('dark', darkTheme)
+
+// TODO: register local https://xieziyu.github.io/ngx-echarts/api-doc/#custom-locale
 
 export { echarts }

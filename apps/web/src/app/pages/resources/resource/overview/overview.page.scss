@@ -2,10 +2,6 @@
   display: block;
 }
 
-mat-card {
-  margin-bottom: 1rem;
-}
-
 nz-empty {
   margin: 2rem 0;
 }
@@ -20,4 +16,15 @@ mat-chip-set {
 
 .echarts {
   height: 400px;
+}
+
+ui-statistic-card {
+  [nz-button] {
+    margin-top: 0.5rem;
+  }
+}
+
+result-by-exercises {
+  display: block;
+  max-width: 90vw;
 }

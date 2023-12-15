@@ -1,10 +1,12 @@
 import { Controller, Delete, Get, Param, Post, Query, Req, UnauthorizedException } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 import { ItemResponse, ListResponse, NoContentResponse, NotFoundResponse } from '@platon/core/common'
 import { IRequest, Mapper, UserDTO } from '@platon/core/server'
 import { ResourceWatcherFiltersDTO } from './watcher.dto'
 import { ResourceWatcherService } from './watcher.service'
 
 @Controller('resources/:resourceId/watchers')
+@ApiTags('Resources')
 export class ResourceWatcherController {
   constructor(private readonly service: ResourceWatcherService) {}
 

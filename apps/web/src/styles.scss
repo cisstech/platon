@@ -1,1 +1,31 @@
-/* You can add global styles to this file, and also import other style files */
+mat-drawer-container {
+  width: 100vw;
+  height: 100vh;
+}
+
+drawer-container {
+  width: 100vw;
+  height: 100vh;
+  display: block;
+}
+
+mat-drawer {
+  padding: 0;
+  width: 240px;
+  background-color: #3c2864 !important;
+  color: white !important;
+}
+
+mat-toolbar {
+  background-color: transparent !important;
+  app-toolbar {
+    display: block;
+    width: 100%;
+  }
+}
+
+.dark-theme {
+  mat-drawer {
+    background-color: var(--brand-background-components) !important;
+  }
+}

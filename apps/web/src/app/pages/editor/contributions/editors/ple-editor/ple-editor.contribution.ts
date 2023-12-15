@@ -4,6 +4,7 @@ import { CodIcon } from '@cisstech/nge/ui/icon'
 import { Subscription } from 'rxjs'
 import { EditorPresenter } from '../../../editor.presenter'
 import { PleEditor } from './ple-editor'
+import { EXERCISE_MAIN_FILE } from '@platon/feature/compiler'
 
 @Injectable()
 export class Contribution implements IContribution {
@@ -29,7 +30,7 @@ export class Contribution implements IContribution {
           const { path, query, authority } = activeResource
           if (!authority.startsWith(presenter.currentResource.id)) return false
 
-          return '/main.ple' === path && !query.includes('designer')
+          return `/${EXERCISE_MAIN_FILE}` === path && !query.includes('designer')
         }
         async execute(): Promise<void> {
           const { activeResource } = editorService
@@ -58,7 +59,7 @@ export class Contribution implements IContribution {
           const { path, query, authority } = activeResource
           if (!authority.startsWith(presenter.currentResource.id)) return false
 
-          return '/main.ple' === path && query.includes('designer')
+          return `/${EXERCISE_MAIN_FILE}` === path && query.includes('designer')
         }
         async execute(): Promise<void> {
           const { activeResource } = editorService

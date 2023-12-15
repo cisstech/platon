@@ -24,7 +24,7 @@ export const AnswerStateLabels: Record<AnswerStates, string> = {
   PART_SUCC: 'Partiellement Réussi',
   FAILED: 'Échoué',
   STARTED: 'Commencé',
-  NOT_STARTED: 'Non Commencé',
+  NOT_STARTED: 'À faire',
   ERROR: 'Erreur',
 }
 

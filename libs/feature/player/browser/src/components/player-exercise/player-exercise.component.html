@@ -6,9 +6,9 @@
           <mat-icon *ngIf="state" [style.color]="state | answerStateColor" [nz-tooltip]="state | answerStateLabel">
             {{ state | answerStateIcon }}
           </mat-icon>
-          {{ player.title }}
+          {{ player?.title }}
         </mat-card-title>
-        <mat-card-subtitle *ngIf="player.author">{{ player.author }}</mat-card-subtitle>
+        <mat-card-subtitle *ngIf="player?.author">{{ player?.author }}</mat-card-subtitle>
         <mat-card-subtitle>
           <nz-countdown *ngIf="countdownValue" [nzValue]="countdownValue" [nzValueStyle]="{ color: countdownColor }" />
         </mat-card-subtitle>
@@ -23,15 +23,15 @@
   <mat-card-content>
     <nz-skeleton [nzActive]="loading" [nzLoading]="loading" [nzParagraph]="{ rows: 5 }">
       <section>
-        <ng-container *ngIf="player.statement">
+        <ng-container *ngIf="player?.statement">
           <div class="exercise-statement">
-            <nge-markdown [data]="player.statement" />
+            <nge-markdown [data]="player?.statement" />
           </div>
         </ng-container>
       </section>
       <section #containerFeedbacks>
-        <ng-container *ngIf="player.feedbacks">
-          <ng-container *ngFor="let feedback of player.feedbacks">
+        <ng-container *ngIf="player?.feedbacks">
+          <ng-container *ngFor="let feedback of player?.feedbacks">
             <nz-alert nzShowIcon [nzType]="feedback.type" [nzMessage]="content">
               <ng-template #content>
                 <nge-markdown [data]="feedback.content" />
@@ -41,9 +41,9 @@
         </ng-container>
       </section>
       <section #containerHints>
-        <ng-container *ngIf="player.hints">
+        <ng-container *ngIf="player?.hints">
           <div class="exercise-hints">
-            <ng-container *ngFor="let hint of player.hints">
+            <ng-container *ngFor="let hint of player?.hints">
               <nz-alert nzShowIcon [nzType]="'info'" [nzMessage]="content">
                 <ng-template #content>
                   <nge-markdown [data]="hint" />
@@ -53,21 +53,21 @@
           </div>
         </ng-container>
       </section>
-      <section *ngIf="player.form">
+      <section *ngIf="player?.form">
         <mat-divider />
         <div class="exercise-form">
-          <nge-markdown [data]="player.form" (render)="onRender()" />
+          <nge-markdown [data]="player?.form" (render)="onRender()" />
         </div>
       </section>
       <section #containerSolution>
-        <ng-container *ngIf="player.solution">
+        <ng-container *ngIf="player?.solution">
           <mat-accordion class="exercise-solution">
             <mat-expansion-panel expanded>
               <mat-expansion-panel-header>
                 <mat-panel-title>Solution</mat-panel-title>
               </mat-expansion-panel-header>
               <div class="exercise-form">
-                <nge-markdown [data]="player.solution" />
+                <nge-markdown [data]="player?.solution" />
               </div>
             </mat-expansion-panel>
           </mat-accordion>
@@ -98,13 +98,18 @@
   </nz-skeleton>
 </mat-card>
 <mat-menu #theories="matMenu">
-  <ng-container *ngFor="let item of player.theories; trackBy: trackTheory">
+  <ng-container *ngFor="let item of player?.theories; trackBy: trackTheory">
     <a mat-menu-item [href]="item.url" target="_blank">{{ item.title }}</a>
   </ng-container>
 </mat-menu>
 <ui-modal-drawer #commentDrawer title="Commentaires">
   <ng-template>
-    <player-comments [canComment]="canComment" [answerId]="player.answerId!" [sessionId]="player.sessionId" />
+    <player-comments
+      *ngIf="player"
+      [canComment]="canComment"
+      [answerId]="player.answerId!"
+      [sessionId]="player.sessionId"
+    />
   </ng-template>
 </ui-modal-drawer>
 <ng-template #errorTemplate let-data="data">
@@ -125,7 +130,7 @@
     >
       <nz-spin *ngIf="runningAction && runningAction === action.playerAction" nzSpinning nzSimple nzSize="small" />
       <ng-container *ngIf="!runningAction || runningAction !== action.playerAction">
-        <mat-icon [color]="action.color ? undefined : 'primary'">{{ action.icon }}</mat-icon>
+        <mat-icon>{{ action.icon }}</mat-icon>
         <ng-container *ngIf="action.showLabel">{{ action.label }}</ng-container>
       </ng-container>
     </button>

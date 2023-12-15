@@ -15,6 +15,7 @@ import {
 import { Transform, Type } from 'class-transformer'
 import { IsArray, IsBoolean, IsEnum, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator'
 import { ResourcePermissionsDTO } from './permissions'
+import { ActivityNavigationModes } from '@platon/feature/compiler'
 
 export class ResourceDTO extends BaseDTO implements Resource {
   @IsString()
@@ -38,6 +39,10 @@ export class ResourceDTO extends BaseDTO implements Resource {
   @IsBoolean()
   @ApiProperty()
   readonly personal!: boolean
+
+  @IsBoolean()
+  @ApiProperty()
+  readonly publicPreview!: boolean
 
   @IsEnum(ResourceStatus)
   @ApiProperty()
@@ -149,6 +154,11 @@ export class UpdateResourceDTO implements UpdateResource {
   @ApiProperty()
   status?: ResourceStatus
 
+  @IsBoolean()
+  @IsOptional()
+  @ApiProperty()
+  publicPreview!: boolean
+
   @IsUUID(undefined, { each: true })
   @IsArray()
   @IsOptional()
@@ -200,12 +210,50 @@ export class ResourceFiltersDTO implements ResourceFilters {
   @IsUUID(undefined, { each: true })
   @IsArray()
   @IsOptional()
+  readonly dependOn?: string[]
+
+  @Transform(({ value }) => toArray(value))
+  @IsUUID(undefined, { each: true })
+  @IsArray()
+  @IsOptional()
+  readonly usedBy?: string[]
+
+  @Transform(({ value }) => toArray(value))
+  @IsUUID(undefined, { each: true })
+  @IsArray()
+  @IsOptional()
   readonly owners?: string[]
 
   @Transform(({ value }) => toBoolean(value))
   @IsBoolean()
   @IsOptional()
   readonly views?: boolean
+
+  @Transform(({ value }) => toBoolean(value))
+  @IsBoolean()
+  @IsOptional()
+  readonly publicPreview?: boolean
+
+  @Transform(({ value }) => toBoolean(value))
+  @IsBoolean()
+  @IsOptional()
+  readonly configurable?: boolean
+
+  @IsString()
+  @IsOptional()
+  readonly navigation?: ActivityNavigationModes
+
+  @Transform(({ value }) => toArray(value))
+  @IsUUID(undefined, { each: true })
+  @IsArray()
+  @IsOptional()
+  readonly topics?: string[]
+
+  @Transform(({ value }) => toArray(value))
+  @IsUUID(undefined, { each: true })
+  @IsArray()
+  @IsOptional()
+  readonly levels?: string[]
 
   @Transform(({ value }) => toNumber(value))
   @IsNumber()

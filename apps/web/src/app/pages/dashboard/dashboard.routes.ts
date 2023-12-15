@@ -9,6 +9,14 @@ export default [
     children: [
       { path: 'dashboard', component: OverviewPage },
       {
+        path: 'agenda',
+        loadChildren: () =>
+          import(
+            /* webpackChunkName: "agenda" */
+            '../agenda/agenda.routes'
+          ),
+      },
+      {
         path: 'resources',
         loadChildren: () =>
           import(

@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, Req } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 import { ItemResponse, ListResponse, NoContentResponse, NotFoundResponse, UserRoles } from '@platon/core/common'
 import { IRequest, Mapper, Roles } from '@platon/core/server'
 import {
@@ -11,6 +12,7 @@ import {
 import { ActivityService } from './activity.service'
 
 @Controller('courses/:courseId/activities')
+@ApiTags('Courses')
 export class ActivityController {
   constructor(private readonly service: ActivityService) {}
 

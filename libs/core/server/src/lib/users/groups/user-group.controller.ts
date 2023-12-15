@@ -1,10 +1,12 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 import { CreatedResponse, ItemResponse, ListResponse, NoContentResponse } from '@platon/core/common'
 import { Mapper } from '../../utils'
 import { CreateUserGroupDTO, UpdateUserGroupDTO, UserGroupDTO, UserGroupFiltersDTO } from './user-group.dto'
 import { UserGroupService } from './user-group.service'
 
 @Controller('user-groups')
+@ApiTags('Users')
 export class UserGroupController {
   constructor(private readonly service: UserGroupService) {}
 

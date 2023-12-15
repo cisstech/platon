@@ -1,12 +1,19 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { BadRequestResponse, NotFoundResponse, User } from '@platon/core/common'
-import { PLCompiler, PLReferenceResolver, PLSourceFile, Variables } from '@platon/feature/compiler'
-import { ResourcePermissions } from '@platon/feature/resource/common'
+import {
+  ACTIVITY_MAIN_FILE,
+  EXERCISE_MAIN_FILE,
+  PLCompiler,
+  PLReferenceResolver,
+  PLSourceFile,
+  Variables,
+} from '@platon/feature/compiler'
+import { LATEST, ResourcePermissions } from '@platon/feature/resource/common'
 import path from 'path'
 import { ResourcePermissionService } from '../permissions/permissions.service'
 import { ResourceEntity } from '../resource.entity'
 import { ResourceService } from '../resource.service'
-import { LATEST, Repo } from './repo'
+import { Repo } from './repo'
 
 interface CompileInput {
   resourceId: string
@@ -35,10 +42,19 @@ export class ResourceFileService {
     private readonly permissionService: ResourcePermissionService
   ) {}
 
-  async repo(resourceIdOrCode: string, user?: User): Promise<RepoInfo> {
-    const resource = (await this.resourceService.findByIdOrCode(resourceIdOrCode)).orElseThrow(
-      () => new NotFoundResponse(`Resource not found: ${resourceIdOrCode}`)
-    )
+  /**
+   * Gets resource git repository.
+   * @param identifier Resource entity|id|code
+   * @param user User that manipulates the repository (used for git commits)
+   */
+  async repo(identifier: string | ResourceEntity, user?: User): Promise<RepoInfo> {
+    const resource =
+      typeof identifier === 'string'
+        ? (await this.resourceService.findByIdOrCode(identifier)).orElseThrow(
+            () => new NotFoundResponse(`Resource not found: ${identifier}`)
+          )
+        : identifier
+
     const permissions = await this.permissionService.userPermissionsOnResource({ resource, user })
 
     const directory = {
@@ -71,8 +87,8 @@ export class ResourceFileService {
     }
 
     const main = {
-      EXERCISE: 'main.ple',
-      ACTIVITY: 'main.pla',
+      EXERCISE: EXERCISE_MAIN_FILE,
+      ACTIVITY: ACTIVITY_MAIN_FILE,
     }[resource.type]
 
     const [file, content] = await repo.read(main, version)

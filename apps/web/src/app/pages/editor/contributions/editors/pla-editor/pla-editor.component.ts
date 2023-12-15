@@ -158,6 +158,12 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
 
     const time = value.duration
 
+    /*
+      time.getHours() returns the hour for the specified date, according to local time. Multiplying this by 3600 converts it to seconds.
+      time.getMinutes() returns the minutes in the specified date according to local time. Multiplying this by 60 converts it to seconds.
+      time.getSeconds() returns the seconds in the specified date according to local time.
+      So, the total duration is the sum of hours, minutes, and seconds, all represented in seconds.
+    */
     const duration = time ? time.getHours() * 3600 + time.getMinutes() * 60 + time.getSeconds() : 0
 
     this.activity = {

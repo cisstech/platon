@@ -10,6 +10,7 @@ import {
   PreviewTypes,
 } from '@cisstech/nge-ide/core'
 import { CodIcon } from '@cisstech/nge/ui/icon'
+import { ACTIVITY_MAIN_FILE, EXERCISE_MAIN_FILE } from '@platon/feature/compiler'
 import { PLAYER_EDITOR_PREVIEW } from '@platon/feature/player/browser'
 import { Subscription } from 'rxjs'
 import { EditorPresenter } from '../../editor.presenter'
@@ -27,7 +28,7 @@ export class Contribution implements IContribution {
     const canPreviewUri = (uri: monaco.Uri) => {
       const { owner } = presenter.findOwnerResource(uri)
       if (!owner || owner.type === 'CIRCLE') return false
-      return uri.path === '/main.ple' || uri.path === '/main.pla'
+      return uri.path === `/${EXERCISE_MAIN_FILE}` || uri.path === `/${ACTIVITY_MAIN_FILE}`
     }
 
     const buildPreviewUrl = (uri: monaco.Uri, params?: string[]) => {

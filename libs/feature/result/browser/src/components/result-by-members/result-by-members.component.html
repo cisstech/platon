@@ -1,9 +1,9 @@
 <nz-table #nzTable [nzData]="results" [nzPageSize]="10" nzTableLayout="auto" nzBordered>
   <thead>
     <tr>
-      <th>Utilisateur</th>
+      <th nzWidth="148px">Utilisateur</th>
       <ng-container *ngFor="let pair of results[0].exercises | keyvalue">
-        <td nzAlign="center">{{ pair.value.title }}</td>
+        <th nzWidth="148px" nzAlign="center">{{ pair.value.title }}</th>
       </ng-container>
     </tr>
   </thead>

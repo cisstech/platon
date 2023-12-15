@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core'
+import { Injectable, OnDestroy, inject } from '@angular/core'
 import { MatIconRegistry } from '@angular/material/icon'
 import { ActivatedRoute, Router } from '@angular/router'
 import { NzIconService } from 'ng-zorro-antd/icon'
@@ -8,15 +8,14 @@ import { ThemeService } from './services/theme.service'
 
 @Injectable({ providedIn: 'root' })
 export class CoreService implements OnDestroy {
+  private readonly router = inject(Router)
+  private readonly authService = inject(AuthService)
+  private readonly themeService = inject(ThemeService)
+  private readonly iconRegistry = inject(MatIconRegistry)
+  private readonly nzIconService = inject(NzIconService)
+  private readonly activatedRoute = inject(ActivatedRoute)
+
   private readonly subscriptions: Subscription[] = []
-  constructor(
-    private readonly router: Router,
-    private readonly authService: AuthService,
-    private readonly themeService: ThemeService,
-    private readonly iconRegistry: MatIconRegistry,
-    private readonly nzIconService: NzIconService,
-    private readonly activatedRoute: ActivatedRoute
-  ) {}
 
   init() {
     this.themeService.loadTheme()

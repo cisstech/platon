@@ -1,6 +1,6 @@
 <ng-container *ngIf="context.course as course">
   <nz-row [nzGutter]="[24, 24]" nzAlign="top">
-    <nz-col nzXs="24" nzSm="24" nzMd="16" nzLg="16" nzXl="16">
+    <nz-col nzXs="24" nzSm="24" nzMd="18" nzLg="18" nzXl="18">
       <header>
         <ui-search-bar [searchbar]="searchbar">
           <ng-template let-context> {{ context }}</ng-template>
@@ -63,41 +63,38 @@
         </ng-container>
       </ng-container>
     </nz-col>
-    <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
+    <nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6" nzXl="6">
       <aside>
-        <mat-card>
-          <mat-card-content>
-            <nz-statistic
-              nzTitle="Votre avancement sur les activités"
-              [nzValueTemplate]="progressionTemplate"
-              [nzValueStyle]="{ margin: '1rem 0' }"
-            >
-              <ng-template #progressionTemplate>
-                <div class="container-progression">
-                  <nz-progress
-                    [nzPercent]="course.progression"
-                    nzStrokeLinecap="square"
-                    nzType="circle"
-                    nzStrokeWidth="8"
-                  />
-                  <p *ngIf="course.timeSpent">{{ course.timeSpent | duration }}</p>
-                </div>
-              </ng-template>
-            </nz-statistic>
-          </mat-card-content>
-        </mat-card>
-
-        <mat-card>
-          <mat-card-content>
-            <nz-statistic [nzValue]="course.teacherCount" nzTitle="Enseignants" />
-          </mat-card-content>
-        </mat-card>
-
-        <mat-card>
-          <mat-card-content>
-            <nz-statistic [nzValue]="course.studentCount" nzTitle="Élèves" />
-          </mat-card-content>
-        </mat-card>
+        <nz-row [nzGutter]="[24, 24]">
+          <nz-col nzSpan="24">
+            <ui-statistic-card
+              nzIcon="line-chart"
+              ribbonColor="#f39c12"
+              description="Avancement sur les activités"
+              valueSuffix="%"
+              [value]="course.progression"
+            />
+          </nz-col>
+          <nz-col nzSpan="24">
+            <ui-statistic-card
+              nzIcon="clock-circle"
+              ribbonColor="#349d55"
+              description="Temps passé sur les activités"
+              [value]="course.timeSpent | duration"
+            />
+          </nz-col>
+          <nz-col nzSpan="24">
+            <ui-statistic-card
+              nzIcon="team"
+              ribbonColor="#8e44ad"
+              description="Enseignants"
+              [value]="course.teacherCount"
+            />
+          </nz-col>
+          <nz-col nzSpan="24">
+            <ui-statistic-card nzIcon="team" ribbonColor="#7f8c8d" description="Élèves" [value]="course.studentCount" />
+          </nz-col>
+        </nz-row>
       </aside>
     </nz-col>
   </nz-row>
