@@ -26,7 +26,7 @@
     "build:api": "nx build api --configuration=production",
     "build:home": "nx build home --configuration=production --base-href='https://cisstech.github.io/platon/'",
     "build:docs": "cd apps/docs && yarn build",
-    "publish:home": "angular-cli-ghpages --dir=./dist/apps/home",
+    "publish:home": "angular-cli-ghpages --dir=./dist/apps/home/browser",
     "test": "nx run-many --target=test --all --coverage=true --coverageReporters=lcov --watch=false --browsers=ChromeHeadless && node coverage-merger.js",
     "lint": "nx report && nx run-many --target=lint --all",
     "lint:fix": "nx report && nx run-many --target=lint --all --fix",
