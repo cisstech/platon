@@ -1,0 +1,157 @@
+:host {
+  width: 100vw;
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  box-sizing: border-box;
+  perspective: 1000px;
+}
+
+.logo {
+  width: 128px;
+  height: 128px;
+  margin-right: 12px;
+
+  transition: transform 0.3s ease-in-out;
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+.hero-content,
+.hero-illustration {
+  position: relative;
+  padding: 2rem;
+  width: 100%;
+  height: 100vh;
+}
+
+.hero-content,
+.hero-description,
+.hero-illustration {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.hero-content {
+  position: relative;
+  background: var(--brand-background-waves);
+  color: white;
+}
+
+.hero-illustration img {
+  width: 100%;
+  height: auto;
+}
+
+.cta-button {
+  padding: 10px 20px;
+  background-color: var(--brand-text-landing);
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 1em;
+
+  transition: background-color 0.3s, transform 0.3s;
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  &:active {
+    transform: translateY(1px);
+    box-shadow: none;
+  }
+}
+
+.emphasize {
+  color: var(--brand-text-landing);
+  font-weight: bold;
+}
+
+.cursor {
+  animation: blink 1s infinite;
+}
+
+h1 {
+  position: relative;
+  font-size: 3em;
+  margin-bottom: 0.5em;
+  line-height: 1.2;
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 100%;
+    height: 3px;
+    background: #ff9474;
+    animation: underlineSlide 0.5s ease forwards;
+  }
+}
+
+p {
+  line-height: 1.2;
+  font-size: 1.3rem;
+  margin-bottom: 1em;
+}
+
+a,
+a:hover,
+a:focus,
+a:active,
+a:visited {
+  color: currentColor;
+  text-decoration: none;
+}
+
+// MEDIA QUERIES
+
+@media (max-width: 1201px) {
+  h1 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  :host {
+    display: block;
+  }
+
+  .logo {
+    width: 48px;
+    height: 48px;
+  }
+
+  .hero-content {
+    height: 70vh;
+  }
+
+  .hero-illustration {
+    height: auto;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  nav ul {
+    gap: 0.5rem;
+  }
+}
+
+// ANIMATIONS
+
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  50.1%,
+  100% {
+    opacity: 0;
+  }
+}

@@ -1,0 +1,61 @@
+:host {
+  display: block;
+  background-color: #333;
+  color: #fff;
+  padding: 40px 0;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.footer-section {
+  width: 25%;
+  padding: 0 15px;
+}
+
+.footer-section h4 {
+  margin-bottom: 15px;
+  font-size: 1.2em;
+}
+
+.footer-section p,
+.footer-section ul {
+  font-size: 0.9em;
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-section a {
+  color: white;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-section a:hover {
+  color: var(--brand-text-landing);
+}
+
+h4 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+mat-icon {
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .footer-section {
+    width: 50%;
+    margin-bottom: 20px;
+  }
+}

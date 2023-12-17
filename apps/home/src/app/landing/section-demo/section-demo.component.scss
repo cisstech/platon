@@ -1,0 +1,44 @@
+:host {
+  padding: 4rem 2rem;
+}
+
+.container {
+  padding: 0 8rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.topic {
+  margin-bottom: 20px;
+}
+
+.topic h2 {
+  font-size: 1.5em;
+}
+
+.topic ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.topic ul li {
+  margin-bottom: 10px;
+}
+
+.topic ul li a {
+  text-decoration: none;
+  color: var(--brand-text-landing);
+  font-size: 1.1em;
+}
+
+.topic ul li a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 2rem;
+  }
+}

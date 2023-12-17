@@ -20,7 +20,6 @@
         "tsConfig": "apps/web/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
-          "apps/web/src/favicon.ico",
           "apps/web/src/assets",
           {
             "glob": "**/*",
@@ -133,6 +132,8 @@
           "subscriptions-transport-ws",
           "rfdc",
           "jsoneditor",
+          "@ts-jison/lexer",
+          "@ts-jison/parser",
           "@editorjs/editorjs",
           "@editorjs/code",
           "@editorjs/delimiter",

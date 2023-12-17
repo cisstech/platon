@@ -15,3 +15,4 @@
 /.nx/cache
 
 **/*.graphql.generated.ts
+.angular

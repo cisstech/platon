@@ -13,6 +13,7 @@ import { RESOURCE_PROVIDERS } from '@platon/feature/resource/browser'
 import { PLAYER_PROVIDERS } from '@platon/feature/player/browser'
 import { RESULT_PROVIDERS } from '@platon/feature/result/browser'
 import { LTI_PROVIDERS } from '@platon/feature/lti/browser'
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideAnimations(),

@@ -1,0 +1,26 @@
+<main>
+  <section id="hero">
+    <app-landing-section-hero>
+      <header>
+        <app-landing-section-header />
+      </header>
+    </app-landing-section-hero>
+  </section>
+  <section id="about" class="smooth-reveal">
+    <app-landing-section-about />
+  </section>
+  <section id="operating" class="smooth-reveal">
+    <app-landing-section-operating />
+  </section>
+  <section id="features" class="smooth-reveal">
+    <app-landing-section-features />
+  </section>
+  <ng-container *ngIf="demos | async as items">
+    <section *ngIf="items.length" id="demo" class="smooth-reveal">
+      <app-landing-section-demo [demos]="items" />
+    </section>
+  </ng-container>
+</main>
+<footer>
+  <app-landing-section-footer />
+</footer>

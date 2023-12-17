@@ -1,0 +1,21 @@
+<div class="container">
+  <h2>Démonstration</h2>
+  <p>
+    Voici quelques exercices en mode démonstration (utilisation anonyme sans authentification sans sauvegarde de vos
+    données).
+  </p>
+  <div>
+    @for(group of demos; track group.title) {
+    <article class="topic">
+      <h2>{{ group.title }}</h2>
+      <ul>
+        @for (link of group.links; track link.title) {
+        <li>
+          <a [href]="link.href">{{ link.title }}</a>
+        </li>
+        }
+      </ul>
+    </article>
+    }
+  </div>
+</div>
