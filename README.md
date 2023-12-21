@@ -50,6 +50,8 @@
 
 PLaTon is an open-source online learning and teaching platform designed to facilitate the creation, management, and sharing of educational resources. It provides a comprehensive set of tools for educators, students, and administrators to create, organize, and manage courses and activities in a collaborative environment. PLaTon aims to support the learning process by integrating with popular Learning Management Systems (LMS) and fostering an active community of users and contributors.
 
+Homepage : <https://cisstech.github.io/platon/>
+
 ## Key Features
 
 - Resource Management: Create, edit, and manage resources, such as circles, activities, and exercises, using an intuitive interface.
