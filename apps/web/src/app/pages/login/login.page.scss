@@ -17,27 +17,20 @@ section {
   justify-content: center;
   box-sizing: border-box;
   text-align: center;
-  &:last-child {
-    background-image: linear-gradient(to bottom, #f8f8f8 1%, #f8f8f8 99%);
-  }
-}
-
-header {
-  position: absolute;
-  top: 0;
-  left: 0;
-  padding: 1rem;
 }
 
 .logo {
   width: 64px;
   height: 64px;
-  margin-right: 12px;
+  margin: 2rem 0;
 }
 
-.illustration {
-  width: 100%;
-  object-fit: cover;
+.login-illustration {
+  background-color: white;
+  img {
+    width: 100%;
+    height: auto;
+  }
 }
 
 @media (max-width: 720px) {

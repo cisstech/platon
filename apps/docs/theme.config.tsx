@@ -6,28 +6,17 @@ import Logo from './public/platon.svg'
 
 const config: DocsThemeConfig = {
   logo: (
-    <Link
-      href="/"
-      prefetch={false}
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-      }}
-      legacyBehavior
-    >
-      <div>
-        <Image src={Logo} alt="Logo" width={64} height={64} />
-        PLaTon
+    <Link href="/" prefetch={false} legacyBehavior>
+      <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+        <Image src={Logo} alt="Logo" width={48} height={48} />
+        Documentation PLaTon
       </div>
     </Link>
   ),
   project: {
     link: 'https://github.com/cisstech/platon',
   },
-  chat: {
-    link: 'https://discord.com',
-  },
-  docsRepositoryBase: 'https://github.com/cisstech/platon',
+  docsRepositoryBase: 'https://github.com/cisstech/platon/tree/main/apps/docs/',
   footer: {
     text: 'CISSTECH © 2023',
   },
