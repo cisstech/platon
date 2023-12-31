@@ -65,7 +65,7 @@
           (click)="changeWatchingState()"
         >
           <i nz-icon nzType="eye" nzTheme="outline"></i>
-          {{ context.resource.permissions.watcher ? 'Ne plus suivre' : 'Suivre' }}
+          <span class="hide-on-mobile">{{ context.resource.permissions.watcher ? 'Ne plus suivre' : 'Suivre' }}</span>
         </button>
         <button
           *ngIf="
@@ -78,19 +78,18 @@
           (click)="join()"
         >
           <i nz-icon nzType="user-add" nzTheme="outline"></i>
-          Demander à rejoindre
+          <div class="hide-on-mobile">Demander à rejoindre</div>
         </button>
-
         <button *ngIf="context.resource.permissions.waiting" nz-button nzDanger nzType="default" (click)="unjoin()">
           <i nz-icon nzType="user-add" nzTheme="outline"></i>
-          Annuler la demande de rejoindre
+          <span class="hide-on-mobile">Annuler la demande de rejoindre</span>
         </button>
       </nz-button-group>
       <div class="spacer"></div>
       <nz-button-group>
         <button nz-button (click)="openTab(context.editorUrl!)">
           <i nz-icon nzType="edit" nzTheme="outline"></i>
-          Ouvrir dans l'éditeur
+          <span class="hide-on-mobile">Ouvrir dans l'éditeur</span>
         </button>
         <button
           *ngIf="context.resource.type !== 'CIRCLE'"
@@ -101,7 +100,7 @@
           [nzPopoverContent]="sharingPopover"
         >
           <i nz-icon nzType="link" nzTheme="outline"></i>
-          Partager
+          <span class="hide-on-mobile">Partager</span>
         </button>
         <button
           *ngIf="context.resource.type !== 'CIRCLE'"
@@ -110,7 +109,7 @@
           (click)="iframe.open(context.previewUrl!)"
         >
           <i nz-icon nzType="play-circle" nzTheme="outline"></i>
-          Prévisualiser
+          <span class="hide-on-mobile">Prévisualiser</span>
         </button>
       </nz-button-group>
     </div>

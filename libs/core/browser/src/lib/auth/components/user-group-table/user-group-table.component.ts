@@ -20,11 +20,9 @@ import {
   NzTableSortFn,
   NzTableSortOrder,
 } from 'ng-zorro-antd/table'
-import { NzTagModule } from 'ng-zorro-antd/tag'
 
 import { UserFilters, UserGroup } from '@platon/core/common'
 import { UserAvatarComponent } from '../user-avatar/user-avatar.component'
-import { UserGroupDrawerComponent } from '../user-group-drawer/user-group-drawer.component'
 
 type Value = string[] | undefined
 type Column = {
@@ -49,7 +47,7 @@ type Column = {
       multi: true,
     },
   ],
-  imports: [CommonModule, NzTagModule, NzTableModule, UserAvatarComponent, UserGroupDrawerComponent],
+  imports: [CommonModule, NzTableModule, UserAvatarComponent],
 })
 export class UserGroupTableComponent implements OnChanges, ControlValueAccessor {
   @Input() groups: UserGroup[] = []

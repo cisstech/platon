@@ -1,24 +1,35 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Output, ViewChild } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  OnInit,
+  Output,
+  TemplateRef,
+  ViewChild,
+  inject,
+} from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { firstValueFrom } from 'rxjs'
 
-import { MatInputModule } from '@angular/material/input'
 import { MatFormFieldModule } from '@angular/material/form-field'
+import { MatInputModule } from '@angular/material/input'
 
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzIconModule } from 'ng-zorro-antd/icon'
-import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm'
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 
 import { User, UserFilters, UserGroup } from '@platon/core/common'
 import { UiModalDrawerComponent } from '@platon/shared/ui'
 
+import { NzBadgeModule } from 'ng-zorro-antd/badge'
+import { NzTabsModule } from 'ng-zorro-antd/tabs'
+import { UserService } from '../../api/user.service'
 import { UserSearchBarComponent } from '../user-search-bar/user-search-bar.component'
 import { UserSearchModalComponent } from '../user-search-modal/user-search-modal.component'
 import { UserTableComponent } from '../user-table/user-table.component'
-import { UserService } from '../../api/user.service'
-import { NzBadgeModule } from 'ng-zorro-antd/badge'
 
 @Component({
   standalone: true,
@@ -33,6 +44,7 @@ import { NzBadgeModule } from 'ng-zorro-antd/badge'
     MatInputModule,
     MatFormFieldModule,
 
+    NzTabsModule,
     NzIconModule,
     NzBadgeModule,
     NzButtonModule,
@@ -46,7 +58,10 @@ import { NzBadgeModule } from 'ng-zorro-antd/badge'
     UiModalDrawerComponent,
   ],
 })
-export class UserGroupDrawerComponent {
+export class UserGroupDrawerComponent implements OnInit {
+  private readonly userService = inject(UserService)
+  private readonly changeDetectorRef = inject(ChangeDetectorRef)
+
   protected group?: UserGroup
   protected groupName = ''
 
@@ -54,16 +69,24 @@ export class UserGroupDrawerComponent {
   protected selection: string[] = []
   protected filters: UserFilters = { limit: 10 }
 
+  protected activeTabIndex = 0
+  @Output() changedGroup = new EventEmitter<UserGroup>()
+
   @ViewChild(UiModalDrawerComponent, { static: true })
   protected modal!: UiModalDrawerComponent
+  @ViewChild('infoTabFooter', { static: true })
+  protected infoFooter!: TemplateRef<void>
+  @ViewChild('memberTabFooter', { static: true }) protected membersFooter!: TemplateRef<void>
 
-  @Output() changedGroup = new EventEmitter<UserGroup>()
+  protected footers: TemplateRef<void>[] = []
 
   protected get excludes(): string[] {
     return this.members.map((m) => m.username)
   }
 
-  constructor(private readonly userService: UserService, private readonly changeDetectorRef: ChangeDetectorRef) {}
+  ngOnInit(): void {
+    this.footers = [this.infoFooter, this.membersFooter]
+  }
 
   open(group: UserGroup) {
     this.group = group

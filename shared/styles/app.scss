@@ -52,3 +52,9 @@ nge-markdown {
 .mat-mdc-menu-content {
   padding: 0 !important;
 }
+
+@media (max-width: 768px) {
+  .hide-on-mobile {
+    display: none;
+  }
+}

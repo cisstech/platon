@@ -1,48 +1,3 @@
-<ui-modal-drawer size="large" [title]="group?.name || ''" (closed)="group = undefined" #modal>
-  <ng-template>
-    <h2>Informations</h2>
-    <mat-form-field appearance="fill">
-      <mat-label>Nom</mat-label>
-      <input [(ngModel)]="groupName" (keyup.enter)="renameGroup()" matInput />
-      <mat-hint>Appuyez sur entrer pour enregistrer</mat-hint>
-    </mat-form-field>
-    <h2>Membres</h2>
-    <nz-button-group>
-      <button (click)="search.open()" nz-button nzType="primary" nz-tooltip="Ajouter un membre au groupe">
-        <span nz-icon nzType="plus" nzTheme="outline"></span>
-      </button>
-      <ng-container *ngIf="selection.length as selectionCount">
-        <nz-badge [nzCount]="selectionCount">
-          <button
-            [nz-tooltip]="selectionCount > 1 ? 'Supprimer les membres sélectionnés' : 'Supprimer le membre sélectionné'"
-            nz-button
-            nzDanger
-            nz-popconfirm
-            nzOkText="Supprimer"
-            nzOkType="danger"
-            [nzPopconfirmTitle]="removeGuard"
-            [nzPopconfirmPlacement]="'bottom'"
-            [nzPopconfirmOverlayStyle]="{ 'max-width': '300px' }"
-            (nzOnConfirm)="removeMembers()"
-          >
-            <div nz-icon nzType="close" nzTheme="outline"></div>
-          </button>
-        </nz-badge>
-      </ng-container>
-    </nz-button-group>
-    <user-search-bar #searchbar [(ngModel)]="members" [autoSelect]="true" [filters]="filters" />
-    <user-table
-      [total]="searchbar.total"
-      [users]="members"
-      [loading]="searchbar.searching"
-      [selectable]="true"
-      [(filters)]="filters"
-      [(ngModel)]="selection"
-    />
-  </ng-template>
-  <ng-template> </ng-template>
-</ui-modal-drawer>
-
 <user-search-modal
   #search
   [title]="'Ajouter un membre au groupe ' + group?.name"
@@ -50,6 +5,37 @@
   [excludes]="excludes"
   (closed)="addMembers($event)"
 />
+
+<ui-modal-drawer
+  size="large"
+  [title]="group?.name || ''"
+  (closed)="group = undefined"
+  [footer]="footers[activeTabIndex]"
+  [bodyStyle]="{ padding: '0 1rem' }"
+  #modal
+>
+  <ng-template>
+    <nz-tabset [(nzSelectedIndex)]="activeTabIndex">
+      <nz-tab nzTitle="Informations">
+        <mat-form-field appearance="fill">
+          <mat-label>Nom</mat-label>
+          <input [(ngModel)]="groupName" (keyup.enter)="renameGroup()" matInput />
+        </mat-form-field>
+      </nz-tab>
+      <nz-tab nzTitle="Membres">
+        <user-search-bar #searchbar [(ngModel)]="members" [autoSelect]="true" [filters]="filters" />
+        <user-table
+          [total]="searchbar.total"
+          [users]="members"
+          [loading]="searchbar.searching"
+          [selectable]="true"
+          [(filters)]="filters"
+          [(ngModel)]="selection"
+        />
+      </nz-tab>
+    </nz-tabset>
+  </ng-template>
+</ui-modal-drawer>
 
 <ng-template #removeGuard>
   <strong>
@@ -60,4 +46,35 @@
     Cette action est irréversible. En supprimant un membre du groupe, vous lui retirez également tous les droits
     associés au groupe comme l'accès à des cours et activités.
   </p>
+</ng-template>
+
+<ng-template #infoTabFooter>
+  <nz-button-group>
+    <button nz-button nzType="primary" (click)="renameGroup()" [disabled]="!groupName">Enregistrer</button>
+  </nz-button-group>
+</ng-template>
+
+<ng-template #memberTabFooter>
+  <nz-button-group>
+    <button (click)="search.open()" nz-button nzType="primary" [disabled]="!group">
+      <span>Ajouter</span>
+    </button>
+    <ng-container *ngIf="selection.length as selectionCount">
+      <nz-badge [nzCount]="selectionCount">
+        <button
+          nz-button
+          nzDanger
+          nz-popconfirm
+          nzOkText="Supprimer"
+          nzOkType="danger"
+          [nzPopconfirmTitle]="removeGuard"
+          [nzPopconfirmPlacement]="'bottom'"
+          [nzPopconfirmOverlayStyle]="{ 'max-width': '300px' }"
+          (nzOnConfirm)="removeMembers()"
+        >
+          <span> Supprimer </span>
+        </button>
+      </nz-badge>
+    </ng-container>
+  </nz-button-group>
 </ng-template>
