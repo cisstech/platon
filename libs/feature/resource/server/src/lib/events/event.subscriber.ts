@@ -71,6 +71,7 @@ export class ResourceEventSubscriber implements EntitySubscriberInterface<Resour
             actorId: event.entity.actorId,
             resourceId: event.entity.resourceId,
             createdAt: event.entity.createdAt,
+            updatedAt: event.entity.updatedAt,
             data: event.entity.data,
           },
         }

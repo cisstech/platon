@@ -13,5 +13,5 @@ export class BaseDTO {
   @IsDate()
   @IsOptional()
   @ApiProperty()
-  readonly updatedAt?: Date
+  readonly updatedAt!: Date
 }

@@ -23,7 +23,7 @@ export enum UserGroupOrderings {
 export interface User {
   readonly id: string
   readonly createdAt: Date
-  readonly updatedAt?: Date
+  readonly updatedAt: Date
   readonly role: UserRoles
   readonly username: string
   readonly active: boolean
@@ -60,14 +60,14 @@ export interface UserFilters {
   readonly lmses?: string[]
   readonly offset?: number
   readonly limit?: number
-  readonly order?: UserOrderings
-  readonly direction?: OrderingDirections
+  readonly order?: UserOrderings | keyof typeof UserOrderings
+  readonly direction?: OrderingDirections | keyof typeof OrderingDirections
 }
 
 export interface UserGroup {
   readonly id: string
   readonly createdAt: Date
-  readonly updatedAt?: Date
+  readonly updatedAt: Date
   readonly name: string
   readonly users: User[]
 }

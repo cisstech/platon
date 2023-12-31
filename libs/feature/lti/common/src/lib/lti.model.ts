@@ -9,7 +9,7 @@ export enum LmsOrdering {
 export interface Lms {
   readonly id: string
   readonly createdAt: Date
-  readonly updatedAt?: Date
+  readonly updatedAt: Date
   readonly name: string
   readonly url: string
   readonly outcomeUrl: string
