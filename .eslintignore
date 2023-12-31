@@ -13,5 +13,5 @@ tmp
 CODEOWNERS
 
 pl.parser.ts
-*.generated.ts
+**/*.generated.ts
 .graphql

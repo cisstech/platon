@@ -10,7 +10,7 @@ type UserPrefs {
 type User {
   id: UUID!
   createdAt: Date!
-  updatedAt: Date
+  updatedAt: Date!
   role: UserRoles!
   username: String!
   active: Boolean!
@@ -37,7 +37,7 @@ enum UserRoles {
 type Notification {
   id: UUID!
   createdAt: Date!
-  updatedAt: Date
+  updatedAt: Date!
   readAt: Date
   data: JSON!
   user: User!
