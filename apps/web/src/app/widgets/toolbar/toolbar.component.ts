@@ -138,10 +138,29 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   }
 
   darkTheme(): void {
-    this.themeService.darkTheme(true)
+    document.body.style.opacity = '0'
+    document.body.style.transition = 'opacity 0.2s ease-in-out'
+    document.body.style.transition = 'none'
+    setTimeout(() => {
+      this.themeService.darkTheme(true)
+    }, 200)
+
+    setTimeout(() => {
+      document.body.style.opacity = '1'
+      this.changeDetectorRef.markForCheck()
+    }, 500)
   }
 
   lightTheme(): void {
-    this.themeService.lightTheme(true)
+    document.body.style.opacity = '0'
+    document.body.style.transition = 'opacity 0.2s ease-in-out'
+    setTimeout(() => {
+      this.themeService.lightTheme(true)
+    }, 200)
+    setTimeout(() => {
+      document.body.style.opacity = '1'
+      document.body.style.transition = 'none'
+      this.changeDetectorRef.markForCheck()
+    }, 500)
   }
 }
