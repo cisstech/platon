@@ -10,7 +10,7 @@ import { LmsUserEntity } from './entities/lms-user.entity'
 import { LmsEntity } from './entities/lms.entity'
 import { LTILaunchInterceptor, LTILaunchInterceptorArgs, LTI_LAUNCH_INTERCEPTOR } from './interceptor/lti-interceptor'
 import { LTIPayload } from './provider/payload'
-import { StudentRoles } from './provider/roles'
+import { AdminRoles, InstructorRoles, StudentRoles } from './provider/roles'
 
 @Injectable()
 export class LTIService {
@@ -136,13 +136,25 @@ export class LTIService {
       username = `${username}${count}`
     }
 
+    let role = UserRoles.student
+
+    const isAdmin = Object.values(AdminRoles).find((role) => payload.roles.includes(role))
     const isStudent = Object.values(StudentRoles).find((role) => payload.roles.includes(role))
+    const isTeacher = Object.values(InstructorRoles).find((role) => payload.roles.includes(role))
+
+    if (isAdmin) {
+      role = UserRoles.admin
+    } else if (isStudent) {
+      role = UserRoles.student
+    } else if (isTeacher) {
+      role = UserRoles.teacher
+    }
 
     const user = await this.userService.create({
       email: payload.lis_person_contact_email_primary,
       lastName: payload.lis_person_name_family,
       firstName: payload.lis_person_name_given,
-      role: isStudent ? UserRoles.student : UserRoles.teacher,
+      role,
       username,
     })
 
