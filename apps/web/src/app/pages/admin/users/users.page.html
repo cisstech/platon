@@ -1,9 +1,2 @@
-<user-search-bar
-  [(ngModel)]="users"
-  [autoSelect]="true"
-  [filters]="{
-    limit: 50
-  }"
-/>
-
-<user-table [users]="users" [selectable]="false" />
+<user-search-bar #searchbar [(ngModel)]="users" [autoSelect]="true" [filters]="filters" />
+<user-table [users]="users" [total]="searchbar.total" [(filters)]="filters" />

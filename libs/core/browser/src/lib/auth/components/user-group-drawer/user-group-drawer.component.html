@@ -29,8 +29,14 @@
         </nz-badge>
       </ng-container>
     </nz-button-group>
-    <user-search-bar [(ngModel)]="members" [autoSelect]="true" [filters]="{ limit: 50, groups: [group!.id] }" />
-    <user-table [users]="members" [selectable]="true" [(ngModel)]="selection" />
+    <user-search-bar #searchbar [(ngModel)]="members" [autoSelect]="true" [filters]="filters" />
+    <user-table
+      [users]="members"
+      [selectable]="true"
+      [total]="searchbar.total"
+      [(filters)]="filters"
+      [(ngModel)]="selection"
+    />
   </ng-template>
   <ng-template> </ng-template>
 </ui-modal-drawer>

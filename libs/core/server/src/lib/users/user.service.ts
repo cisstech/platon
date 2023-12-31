@@ -62,9 +62,9 @@ export class UserService {
 
     if (filters.order) {
       const fields: Record<UserOrderings, string> = {
-        NAME: 'username',
-        CREATED_AT: 'created_at',
-        UPDATED_AT: 'updated_at',
+        NAME: 'user.username',
+        CREATED_AT: 'user.created_at',
+        UPDATED_AT: 'user.updated_at',
       }
 
       const orderings: Record<UserOrderings, keyof typeof OrderingDirections> = {

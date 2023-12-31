@@ -11,7 +11,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm'
 
-import { User, UserGroup } from '@platon/core/common'
+import { User, UserFilters, UserGroup } from '@platon/core/common'
 import { UiModalDrawerComponent } from '@platon/shared/ui'
 
 import { UserSearchBarComponent } from '../user-search-bar/user-search-bar.component'
@@ -52,6 +52,7 @@ export class UserGroupDrawerComponent {
 
   protected members: User[] = []
   protected selection: string[] = []
+  protected filters: UserFilters = { limit: 10 }
 
   @ViewChild(UiModalDrawerComponent, { static: true })
   protected modal!: UiModalDrawerComponent
@@ -67,6 +68,7 @@ export class UserGroupDrawerComponent {
   open(group: UserGroup) {
     this.group = group
     this.groupName = group.name
+    this.filters = { limit: 10, groups: [group.id] }
     this.modal.open()
   }
 

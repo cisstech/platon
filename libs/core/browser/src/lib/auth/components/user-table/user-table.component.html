@@ -1,4 +1,14 @@
-<nz-table #nzTable [nzSize]="'small'" [nzShowSizeChanger]="true" [nzShowPagination]="true" [nzData]="users">
+<nz-table
+  #nzTable
+  [nzSize]="'small'"
+  [nzShowSizeChanger]="true"
+  [nzShowPagination]="true"
+  [nzData]="users"
+  [nzTotal]="total"
+  [nzLoading]="loading"
+  [nzFrontPagination]="!canFilterOnServer"
+  (nzQueryParams)="onQueryParamsChange($event)"
+>
   <thead>
     <tr>
       <th
@@ -7,11 +17,17 @@
         [nzIndeterminate]="indeterminate"
         (nzCheckedChange)="onAllChecked($event)"
       ></th>
-      <th>Utilisateur</th>
-      <th>Date d'ajout</th>
-      <th>Email</th>
-      <th>Rôle</th>
-      <th>Status</th>
+      @for (column of columns; track column.key) {
+      <th
+        [nzColumnKey]="column.key"
+        [(nzSortOrder)]="column.sortOrder!"
+        [nzSortFn]="column.sortFn!"
+        [nzFilters]="column.listOfFilter!"
+        [nzFilterFn]="column.filterFn!"
+      >
+        {{ column.name }}
+      </th>
+      }
     </tr>
   </thead>
   <tbody>

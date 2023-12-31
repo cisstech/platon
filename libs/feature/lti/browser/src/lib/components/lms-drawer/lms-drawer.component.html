@@ -34,8 +34,8 @@
       </mat-form-field>
     </form>
     <h2>Membres</h2>
-    <user-search-bar [(ngModel)]="members" [autoSelect]="true" [filters]="{ limit: 50, lmses: [lms!.id] }" />
-    <user-table [users]="members" />
+    <user-search-bar #searchbar [(ngModel)]="members" [autoSelect]="true" [filters]="filters" />
+    <user-table [users]="members" [total]="searchbar.total" [(filters)]="filters" />
   </ng-template>
   <ng-template>
     <button nz-button nzType="primary" (click)="update()" [disabled]="!form.valid">Mettre à jour</button>

@@ -10,7 +10,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 
 import { DialogService, UserSearchBarComponent, UserTableComponent } from '@platon/core/browser'
-import { User } from '@platon/core/common'
+import { User, UserFilters } from '@platon/core/common'
 import { Lms, UpdateLms } from '@platon/feature/lti/common'
 import { UiModalDrawerComponent } from '@platon/shared/ui'
 import { firstValueFrom } from 'rxjs'
@@ -45,6 +45,8 @@ export class LmsDrawerComponent {
   protected lms?: Lms
   protected members: User[] = []
 
+  protected filters: UserFilters = { limit: 10 }
+
   @Output() updated = new EventEmitter<Lms>()
 
   @ViewChild(UiModalDrawerComponent, { static: true })
@@ -59,6 +61,11 @@ export class LmsDrawerComponent {
 
   open(lms: Lms): void {
     this.lms = lms
+    this.filters = {
+      limit: 10,
+      lmses: [lms.id],
+    }
+
     this.form = this.createForm()
     this.modal.open()
   }

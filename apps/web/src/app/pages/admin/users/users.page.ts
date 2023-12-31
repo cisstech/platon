@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common'
 import { ChangeDetectionStrategy, Component } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { UserSearchBarComponent, UserTableComponent } from '@platon/core/browser'
-import { User } from '@platon/core/common'
+import { User, UserFilters } from '@platon/core/common'
 
 @Component({
   standalone: true,
@@ -14,4 +14,5 @@ import { User } from '@platon/core/common'
 })
 export class AdminUsersPage {
   protected users: User[] = []
+  protected filters: UserFilters = { limit: 10 }
 }
