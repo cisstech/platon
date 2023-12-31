@@ -30,7 +30,14 @@ export class LTIMiddleware implements NestMiddleware {
     const lmsUser = await this.lti.withLmsUser(lms, provider.body)
     const token = await this.authService.authenticate(lmsUser.user.id, lmsUser.user.username)
 
-    const nextUrl = '/' // TODO should be the url of a course if specified
+    const nextUrl = req.query.next?.toString() || '/'
+
+    await this.lti.interceptLaunch({
+      lms,
+      lmsUser,
+      payload: provider.body,
+      nextUrl,
+    })
 
     return res.redirect(
       302,

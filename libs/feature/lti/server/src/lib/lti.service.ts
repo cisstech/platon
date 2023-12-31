@@ -1,3 +1,4 @@
+import { DiscoveryService } from '@golevelup/nestjs-discovery'
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { NotFoundResponse, OrderingDirections, UserRoles } from '@platon/core/common'
@@ -7,18 +8,33 @@ import { Repository } from 'typeorm'
 import { Optional } from 'typescript-optional'
 import { LmsUserEntity } from './entities/lms-user.entity'
 import { LmsEntity } from './entities/lms.entity'
+import { LTILaunchInterceptor, LTILaunchInterceptorArgs, LTI_LAUNCH_INTERCEPTOR } from './interceptor/lti-interceptor'
 import { LTIPayload } from './provider/payload'
 import { StudentRoles } from './provider/roles'
 
 @Injectable()
 export class LTIService {
+  private readonly interceptors: LTILaunchInterceptor[] = []
+
   constructor(
     @InjectRepository(LmsEntity)
     private readonly lmsRepo: Repository<LmsEntity>,
     @InjectRepository(LmsUserEntity)
     private readonly lmsUserRepo: Repository<LmsUserEntity>,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private readonly discovery: DiscoveryService
   ) {}
+
+  async onModuleInit(): Promise<void> {
+    const providers = await this.discovery.providersWithMetaAtKey(LTI_LAUNCH_INTERCEPTOR)
+    providers.forEach((provider) => {
+      this.interceptors.push(provider.discoveredClass.instance as LTILaunchInterceptor)
+    })
+  }
+
+  async interceptLaunch(args: LTILaunchInterceptorArgs): Promise<void> {
+    await Promise.all(this.interceptors.map((interceptor) => interceptor.intercept(args)))
+  }
 
   async findLmsById(id: string): Promise<Optional<LmsEntity>> {
     return Optional.ofNullable(await this.lmsRepo.findOne({ where: { id } }))

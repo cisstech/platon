@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { UserModule } from '@platon/core/server'
+import { FeatureLtiServerModule } from '@platon/feature/lti/server'
 import { FeatureResourceServerModule } from '@platon/feature/resource/server'
 import { ActivityCorrectorController } from './activity-corrector/activity-corrector.controller'
 import { ActivityCorrectorEntity } from './activity-corrector/activity-corrector.entity'
@@ -20,6 +21,7 @@ import { CourseMemberView } from './course-member/course-member.view'
 import { CourseNotificationService } from './course-notification/course-notification.service'
 import { CourseController } from './course.controller'
 import { CourseEntity } from './course.entity'
+import { CourseLTIInterceptor } from './course.interceptor'
 import { CourseService } from './course.service'
 import { CourseSubscriber } from './course.subscriber'
 import { CourseSectionController } from './section/section.controller'
@@ -29,6 +31,7 @@ import { CourseSectionService } from './section/section.service'
 @Module({
   imports: [
     UserModule,
+    FeatureLtiServerModule,
     FeatureResourceServerModule,
     TypeOrmModule.forFeature([
       CourseEntity,
@@ -53,13 +56,13 @@ import { CourseSectionService } from './section/section.service'
   providers: [
     CourseService,
     CourseSubscriber,
+    CourseLTIInterceptor,
 
     CourseMemberService,
     CourseSectionService,
     ActivityService,
     ActivityMemberService,
     ActivityCorrectorService,
-
     CourseNotificationService,
   ],
   exports: [
