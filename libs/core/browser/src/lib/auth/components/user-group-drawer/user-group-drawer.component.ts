@@ -4,9 +4,7 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
-  OnInit,
   Output,
-  TemplateRef,
   ViewChild,
   inject,
 } from '@angular/core'
@@ -58,7 +56,7 @@ import { UserTableComponent } from '../user-table/user-table.component'
     UiModalDrawerComponent,
   ],
 })
-export class UserGroupDrawerComponent implements OnInit {
+export class UserGroupDrawerComponent {
   private readonly userService = inject(UserService)
   private readonly changeDetectorRef = inject(ChangeDetectorRef)
 
@@ -66,26 +64,17 @@ export class UserGroupDrawerComponent implements OnInit {
   protected groupName = ''
 
   protected members: User[] = []
-  protected selection: string[] = []
   protected filters: UserFilters = { limit: 10 }
-
+  protected selection: string[] = []
   protected activeTabIndex = 0
-  @Output() changedGroup = new EventEmitter<UserGroup>()
+
+  @Output() updated = new EventEmitter<UserGroup>()
 
   @ViewChild(UiModalDrawerComponent, { static: true })
   protected modal!: UiModalDrawerComponent
-  @ViewChild('infoTabFooter', { static: true })
-  protected infoFooter!: TemplateRef<void>
-  @ViewChild('memberTabFooter', { static: true }) protected membersFooter!: TemplateRef<void>
-
-  protected footers: TemplateRef<void>[] = []
 
   protected get excludes(): string[] {
     return this.members.map((m) => m.username)
-  }
-
-  ngOnInit(): void {
-    this.footers = [this.infoFooter, this.membersFooter]
   }
 
   open(group: UserGroup) {
@@ -106,7 +95,7 @@ export class UserGroupDrawerComponent implements OnInit {
 
     this.members = [...users, ...this.members]
 
-    this.changedGroup.emit(this.group)
+    this.updated.emit(this.group)
     this.changeDetectorRef.detectChanges()
   }
 
@@ -119,7 +108,7 @@ export class UserGroupDrawerComponent implements OnInit {
       })
     )
 
-    this.changedGroup.emit(this.group)
+    this.updated.emit(this.group)
     this.changeDetectorRef.markForCheck()
   }
 
@@ -134,7 +123,7 @@ export class UserGroupDrawerComponent implements OnInit {
 
     this.selection = []
 
-    this.changedGroup.emit(this.group)
+    this.updated.emit(this.group)
     this.changeDetectorRef.markForCheck()
   }
 }

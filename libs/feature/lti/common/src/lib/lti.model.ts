@@ -38,5 +38,5 @@ export interface LmsFilters {
   readonly offset?: number
   readonly limit?: number
   readonly order?: LmsOrdering | keyof typeof LmsOrdering
-  readonly direction?: OrderingDirections
+  readonly direction?: OrderingDirections | keyof typeof OrderingDirections
 }

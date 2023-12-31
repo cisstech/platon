@@ -1,5 +1,13 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Output, ViewChild } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Output,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core'
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms'
 
 import { MatFormFieldModule } from '@angular/material/form-field'
@@ -13,6 +21,7 @@ import { DialogService, UserSearchBarComponent, UserTableComponent } from '@plat
 import { User, UserFilters } from '@platon/core/common'
 import { Lms, UpdateLms } from '@platon/feature/lti/common'
 import { UiModalDrawerComponent } from '@platon/shared/ui'
+import { NzTabsModule } from 'ng-zorro-antd/tabs'
 import { firstValueFrom } from 'rxjs'
 import { LTIService } from '../../api/lti.service'
 
@@ -31,6 +40,7 @@ import { LTIService } from '../../api/lti.service'
     MatFormFieldModule,
 
     NzIconModule,
+    NzTabsModule,
     NzButtonModule,
     NzToolTipModule,
 
@@ -44,8 +54,9 @@ export class LmsDrawerComponent {
   protected form = this.createForm()
   protected lms?: Lms
   protected members: User[] = []
-
+  protected activeTabIndex = 0
   protected filters: UserFilters = { limit: 10 }
+  protected footers: TemplateRef<void>[] = []
 
   @Output() updated = new EventEmitter<Lms>()
 

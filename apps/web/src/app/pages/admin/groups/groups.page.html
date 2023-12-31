@@ -31,10 +31,10 @@
   [(filters)]="filters"
   [(groups)]="groups"
   [(ngModel)]="selection"
-  (openGroupDetails)="drawer.open($event)"
+  (openDetails)="drawer.open($event)"
 />
 
-<user-group-drawer #drawer (changedGroup)="onChangedGroup($event)" />
+<user-group-drawer #drawer (updated)="onUpdateGroup($event)" />
 
 <ng-template #removeGuard>
   <strong>

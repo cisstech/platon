@@ -38,7 +38,7 @@
         (nzCheckedChange)="onItemChecked(group.id, $event)"
       ></td>
       <td>
-        <user-avatar #avatar [group]="group" (openGroupDetails)="openGroupDetails.next($event)" />
+        <user-avatar #avatar [group]="group" (openGroupDetails)="openDetails.next($event)" />
       </td>
       <td>{{ group.createdAt | date }}</td>
     </tr>

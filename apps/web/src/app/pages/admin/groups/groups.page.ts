@@ -67,8 +67,7 @@ export class AdminGroupsPage {
     this.changeDetectorRef.markForCheck()
   }
 
-  protected onChangedGroup(group: UserGroup): void {
+  protected onUpdateGroup(group: UserGroup): void {
     this.groups = this.groups.map((g) => (g.id === group.id ? group : g))
-    this.changeDetectorRef.markForCheck()
   }
 }

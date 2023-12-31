@@ -6,8 +6,13 @@ import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 
-import { LmsCreateDrawerComponent, LmsSearchBarComponent, LmsTableComponent } from '@platon/feature/lti/browser'
-import { Lms } from '@platon/feature/lti/common'
+import {
+  LmsCreateDrawerComponent,
+  LmsDrawerComponent,
+  LmsSearchBarComponent,
+  LmsTableComponent,
+} from '@platon/feature/lti/browser'
+import { Lms, LmsFilters } from '@platon/feature/lti/common'
 
 @Component({
   standalone: true,
@@ -24,14 +29,19 @@ import { Lms } from '@platon/feature/lti/common'
     NzToolTipModule,
 
     LmsTableComponent,
+    LmsDrawerComponent,
     LmsSearchBarComponent,
     LmsCreateDrawerComponent,
   ],
 })
 export class AdminLmsesPage {
   protected lmses: Lms[] = []
-
+  protected filters: LmsFilters = { limit: 10 }
   protected insert(lms: Lms) {
     this.lmses = [lms, ...this.lmses]
+  }
+
+  protected onUpdateLms(lms: Lms): void {
+    this.lmses = this.lmses.map((l) => (l.id === lms.id ? lms : l))
   }
 }

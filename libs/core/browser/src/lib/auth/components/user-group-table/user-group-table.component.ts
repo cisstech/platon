@@ -58,7 +58,7 @@ export class UserGroupTableComponent implements OnChanges, ControlValueAccessor 
   @Input() selectable = false
   @Input() filters: UserFilters = {}
   @Output() filtersChange = new EventEmitter<UserFilters>()
-  @Output() openGroupDetails = new EventEmitter<UserGroup>()
+  @Output() openDetails = new EventEmitter<UserGroup>()
 
   protected checked = false
   protected disabled = false

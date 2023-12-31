@@ -10,7 +10,12 @@
   size="large"
   [title]="group?.name || ''"
   (closed)="group = undefined"
-  [footer]="footers[activeTabIndex]"
+  [footer]="
+    {
+      '0': infoTabFooter,
+      '1': memberTabFooter
+    }[activeTabIndex + '']
+  "
   [bodyStyle]="{ padding: '0 1rem' }"
   #modal
 >
