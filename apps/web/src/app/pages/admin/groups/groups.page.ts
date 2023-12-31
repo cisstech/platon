@@ -7,7 +7,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 
 import { UserGroupTableComponent, UserSearchBarComponent, UserService } from '@platon/core/browser'
-import { UserGroup } from '@platon/core/common'
+import { UserFilters, UserGroup } from '@platon/core/common'
 import { firstValueFrom } from 'rxjs'
 
 @Component({
@@ -30,7 +30,7 @@ import { firstValueFrom } from 'rxjs'
 })
 export class AdminGroupsPage {
   protected groups: UserGroup[] = []
-
+  protected filters: UserFilters = { limit: 10 }
   constructor(private readonly userService: UserService, private readonly changeDetectorRef: ChangeDetectorRef) {}
 
   protected async addGroup(): Promise<void> {

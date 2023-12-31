@@ -9,7 +9,6 @@ import {
   Input,
   OnChanges,
   Output,
-  SimpleChanges,
 } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 
@@ -54,12 +53,11 @@ type Column = {
 export class UserTableComponent implements OnChanges, ControlValueAccessor {
   @Input() users: User[] = []
   @Input() total = 0
+  @Input() loading = false
   @Input() selectable = false
-
   @Input() filters: UserFilters = {}
   @Output() filtersChange = new EventEmitter<UserFilters>()
 
-  protected loading = true
   protected checked = false
   protected disabled = false
   protected indeterminate = false
@@ -137,10 +135,7 @@ export class UserTableComponent implements OnChanges, ControlValueAccessor {
     this.disabled = isDisabled
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['users']) {
-      this.loading = false
-    }
+  ngOnChanges() {
     this.total = this.total || this.users.length
   }
 

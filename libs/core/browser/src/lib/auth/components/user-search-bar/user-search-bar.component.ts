@@ -13,7 +13,7 @@ import {
 } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { combineLatest, firstValueFrom, Observable } from 'rxjs'
-import { map } from 'rxjs/operators'
+import { map, tap } from 'rxjs/operators'
 
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzIconModule } from 'ng-zorro-antd/icon'
@@ -45,6 +45,7 @@ export class UserSearchBarComponent implements OnInit, OnChanges, ControlValueAc
   private readonly userService = inject(UserService)
   private readonly changeDetectorRef = inject(ChangeDetectorRef)
   private totalCount = 0
+  private isSearching = true
 
   protected selection: Item[] = []
   protected readonly searchbar: SearchBar<Item> = {
@@ -112,6 +113,13 @@ export class UserSearchBarComponent implements OnInit, OnChanges, ControlValueAc
     return this.totalCount
   }
 
+  /**
+   * Gets a value indicating whether the search is in progress.
+   */
+  get searching(): boolean {
+    return this.isSearching
+  }
+
   ngOnInit(): void {
     if (this.allowGroup) {
       this.searchbar.placeholder = 'Essayez un nom, un email, un groupe...'
@@ -160,6 +168,8 @@ export class UserSearchBarComponent implements OnInit, OnChanges, ControlValueAc
 
   protected search(query: string): Observable<Item[]> {
     const requests: Observable<Item[]>[] = []
+    this.isSearching = true
+    this.changeDetectorRef.markForCheck()
 
     if (!this.onlyGroups) {
       requests.push(
@@ -207,6 +217,10 @@ export class UserSearchBarComponent implements OnInit, OnChanges, ControlValueAc
           this.onChangeSelection()
         }
         return flat.slice(0, 5)
+      }),
+      tap(() => {
+        this.isSearching = false
+        this.changeDetectorRef.markForCheck()
       })
     )
   }

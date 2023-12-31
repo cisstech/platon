@@ -1,2 +1,2 @@
 <user-search-bar #searchbar [(ngModel)]="users" [autoSelect]="true" [filters]="filters" />
-<user-table [users]="users" [total]="searchbar.total" [(filters)]="filters" />
+<user-table [total]="searchbar.total" [loading]="searchbar.searching" [users]="users" [(filters)]="filters" />

@@ -5,22 +5,36 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
-  forwardRef,
   Input,
   OnChanges,
   Output,
-  SimpleChanges,
+  forwardRef,
 } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 
-import { NzTableModule } from 'ng-zorro-antd/table'
+import {
+  NzTableFilterFn,
+  NzTableFilterList,
+  NzTableModule,
+  NzTableQueryParams,
+  NzTableSortFn,
+  NzTableSortOrder,
+} from 'ng-zorro-antd/table'
 import { NzTagModule } from 'ng-zorro-antd/tag'
 
-import { UserGroup } from '@platon/core/common'
+import { UserFilters, UserGroup } from '@platon/core/common'
 import { UserAvatarComponent } from '../user-avatar/user-avatar.component'
 import { UserGroupDrawerComponent } from '../user-group-drawer/user-group-drawer.component'
 
 type Value = string[] | undefined
+type Column = {
+  key: string
+  name: string
+  sortOrder?: NzTableSortOrder | null
+  sortFn?: NzTableSortFn<UserGroup> | boolean | null
+  listOfFilter?: NzTableFilterList | null
+  filterFn?: NzTableFilterFn<UserGroup> | boolean | null
+}
 
 @Component({
   standalone: true,
@@ -41,13 +55,38 @@ export class UserGroupTableComponent implements OnChanges, ControlValueAccessor 
   @Input() groups: UserGroup[] = []
   @Output() groupsChange = new EventEmitter<UserGroup[]>()
 
+  @Input() total = 0
+  @Input() loading = false
   @Input() selectable = false
+  @Input() filters: UserFilters = {}
+  @Output() filtersChange = new EventEmitter<UserFilters>()
 
-  protected loading = true
   protected checked = false
   protected disabled = false
   protected indeterminate = false
   protected selection = new Set<string>()
+
+  protected columns: Column[] = [
+    {
+      key: 'name',
+      name: 'Nom',
+      sortOrder: null,
+      sortFn: !this.canFilterOnServer ? (a: UserGroup, b: UserGroup) => a.name.localeCompare(b.name) : true,
+    },
+    {
+      key: 'createdAt',
+      name: `Date d'ajout`,
+      sortFn: !this.canFilterOnServer
+        ? (a: UserGroup, b: UserGroup) => {
+            return a.createdAt.valueOf() - b.createdAt.valueOf()
+          }
+        : true,
+    },
+  ]
+
+  protected get canFilterOnServer(): boolean {
+    return this.filtersChange.observed
+  }
 
   constructor(private readonly changeDetectorRef: ChangeDetectorRef) {}
 
@@ -78,10 +117,8 @@ export class UserGroupTableComponent implements OnChanges, ControlValueAccessor 
     this.disabled = isDisabled
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['members']) {
-      this.loading = false
-    }
+  ngOnChanges() {
+    this.total = this.total || this.groups.length
   }
 
   protected updateSelection(id: string, checked: boolean): void {
@@ -116,5 +153,33 @@ export class UserGroupTableComponent implements OnChanges, ControlValueAccessor 
     this.groups = this.groups.map((g) => (g.id === group.id ? group : g))
     this.groupsChange.emit(this.groups)
     this.changeDetectorRef.markForCheck()
+  }
+
+  protected onChangeFilter(filters: UserFilters): void {
+    this.filtersChange.next({ ...this.filters, ...filters })
+  }
+
+  protected onQueryParamsChange(params: NzTableQueryParams): void {
+    if (!this.canFilterOnServer) return
+
+    const { pageSize, pageIndex, sort } = params
+    const currentSort = sort.find((item) => item.value !== null)
+
+    const order = (currentSort && currentSort.key) || 'name'
+    const direction = (currentSort && currentSort.value) || 'ascend'
+
+    this.onChangeFilter({
+      order: {
+        name: 'NAME' as const,
+        createdAt: 'CREATED_AT' as const,
+      }[order],
+      direction: {
+        ascend: 'ASC' as const,
+        descend: 'DESC' as const,
+      }[direction],
+
+      limit: pageSize,
+      offset: pageSize * (pageIndex - 1),
+    })
   }
 }

@@ -31,9 +31,10 @@
     </nz-button-group>
     <user-search-bar #searchbar [(ngModel)]="members" [autoSelect]="true" [filters]="filters" />
     <user-table
-      [users]="members"
-      [selectable]="true"
       [total]="searchbar.total"
+      [users]="members"
+      [loading]="searchbar.searching"
+      [selectable]="true"
       [(filters)]="filters"
       [(ngModel)]="selection"
     />

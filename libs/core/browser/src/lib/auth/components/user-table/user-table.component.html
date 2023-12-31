@@ -1,11 +1,11 @@
 <nz-table
   #nzTable
   [nzSize]="'small'"
-  [nzShowSizeChanger]="true"
-  [nzShowPagination]="true"
   [nzData]="users"
   [nzTotal]="total"
   [nzLoading]="loading"
+  [nzShowSizeChanger]="true"
+  [nzShowPagination]="true"
   [nzFrontPagination]="!canFilterOnServer"
   (nzQueryParams)="onQueryParamsChange($event)"
 >

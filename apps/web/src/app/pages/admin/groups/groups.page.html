@@ -3,7 +3,11 @@
     <span nz-icon nzType="plus" nzTheme="outline"></span>
   </button>
 </nz-button-group>
-
-<user-search-bar [(ngModel)]="groups" [onlyGroups]="true" [autoSelect]="true" [filters]="{ limit: 50 }" />
-
-<user-group-table [(groups)]="groups" [selectable]="false" />
+<user-search-bar #searchbar [(ngModel)]="groups" [onlyGroups]="true" [autoSelect]="true" [filters]="filters" />
+<user-group-table
+  [total]="searchbar.total"
+  [loading]="searchbar.searching"
+  [selectable]="false"
+  [(filters)]="filters"
+  [(groups)]="groups"
+/>
