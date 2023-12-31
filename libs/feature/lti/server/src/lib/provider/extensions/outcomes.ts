@@ -10,7 +10,7 @@ import { ExtensionError, OutcomeResponseError, ParameterError } from '../errors'
 import { LTIProvider } from '../provider'
 import { HmacSha1 } from '../signers/hmac-sha1'
 import { Signer } from '../signers/signer'
-import { encode } from '../utils'
+import { encodeRFC3986 } from '../utils'
 
 const navigateXml = (xmlObject: any, path: string) => {
   const pathParts = path.split('.')
@@ -229,7 +229,7 @@ export class OutcomeService {
 
     return {
       Authorization: `OAuth realm="", ${Object.entries(headers)
-        .map(([key, val]) => `${key}="${encode(val + '')}"`)
+        .map(([key, val]) => `${key}="${encodeRFC3986(val + '')}"`)
         .join(',')}`,
       'Content-Type': 'application/xml',
       'Content-Length': body.length,
