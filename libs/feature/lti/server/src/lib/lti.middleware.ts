@@ -27,7 +27,6 @@ export class LTIMiddleware implements NestMiddleware {
 
     const provider = new LTIProvider(lms.consumerKey, lms.consumerSecret)
     await provider.validate(req)
-
     const lmsUser = await this.lti.withLmsUser(lms, provider.body)
     const token = await this.authService.authenticate(lmsUser.user.id, lmsUser.user.username)
 
@@ -35,7 +34,7 @@ export class LTIMiddleware implements NestMiddleware {
 
     return res.redirect(
       302,
-      `/?lti-launch=true&access-token=${token.accessToken}&refresh-token=${token.refreshToken}&next=${nextUrl}`
+      `/login?access-token=${token.accessToken}&refresh-token=${token.refreshToken}&next=${nextUrl}`
     )
   }
 }
