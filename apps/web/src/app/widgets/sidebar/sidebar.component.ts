@@ -49,6 +49,11 @@ export class SidebarComponent implements OnInit {
         title: 'Agenda',
       },
       {
+        url: '/courses',
+        icon: 'local_library',
+        title: 'Cours',
+      },
+      {
         url: '/corrections',
         icon: 'rate_review',
         title: 'Corrections',
@@ -87,21 +92,15 @@ export class SidebarComponent implements OnInit {
               title: 'Documentation',
               children: [
                 {
+                  url: '/docs/main',
+                  icon: 'badge',
+                  title: 'PLaTon',
+                  external: true,
+                },
+                {
                   url: '/docs/components',
                   icon: 'extension',
                   title: 'Composants',
-                },
-                {
-                  url: '/docs/main/teachers',
-                  icon: 'badge',
-                  title: 'Enseignants',
-                  external: true,
-                },
-                {
-                  url: '/docs/main/developers',
-                  icon: 'code',
-                  title: 'Développeurs',
-                  external: true,
                 },
               ],
             },

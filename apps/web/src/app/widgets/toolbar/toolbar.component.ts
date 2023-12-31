@@ -13,7 +13,6 @@ import {
 } from '@angular/core'
 import { Router, RouterModule } from '@angular/router'
 
-import { MatBadgeModule } from '@angular/material/badge'
 import { MatButtonModule } from '@angular/material/button'
 import { MatIconModule } from '@angular/material/icon'
 import { MatMenuModule } from '@angular/material/menu'
@@ -21,7 +20,7 @@ import { MatMenuModule } from '@angular/material/menu'
 import { AuthService, ThemeService, UserAvatarComponent } from '@platon/core/browser'
 import { User, UserRoles } from '@platon/core/common'
 import { NotificationDrawerComponent } from '@platon/feature/notification/browser'
-import { ResourceService } from '@platon/feature/resource/browser'
+import { ResourcePipesModule, ResourceService } from '@platon/feature/resource/browser'
 import { NzBadgeModule } from 'ng-zorro-antd/badge'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzIconModule } from 'ng-zorro-antd/icon'
@@ -40,7 +39,6 @@ import { Subscription } from 'rxjs'
 
     MatIconModule,
     MatMenuModule,
-    MatBadgeModule,
     MatButtonModule,
 
     NzIconModule,
@@ -48,6 +46,7 @@ import { Subscription } from 'rxjs'
     NzButtonModule,
     NzPopoverModule,
 
+    ResourcePipesModule,
     UserAvatarComponent,
     NotificationDrawerComponent,
   ],

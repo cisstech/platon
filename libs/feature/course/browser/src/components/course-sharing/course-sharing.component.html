@@ -1,0 +1,15 @@
+<h2>Partager</h2>
+<div class="row">
+  <nz-select nzSuffixIcon="global" class="mode-select" [(ngModel)]="mode" (ngModelChange)="mode = $event">
+    <nz-option nzLabel="Lien LTI" nzValue="lti" />
+    <nz-option nzLabel="Lien PLaTon" nzValue="internal" />
+  </nz-select>
+</div>
+<div class="row">
+  <nz-button-group>
+    <button nz-button (click)="share()">
+      <i nz-icon nzType="link" nzTheme="outline"></i>
+      Copier le lien
+    </button>
+  </nz-button-group>
+</div>

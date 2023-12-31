@@ -18,12 +18,12 @@
     </button>
   </ng-container>
 
-  <button nz-button nzType="text" [matMenuTriggerFor]="themeMenu">
+  <button nz-button nzType="text" nzSize="small" [matMenuTriggerFor]="themeMenu">
     <mat-icon> {{ themeIcon }} </mat-icon>
   </button>
-  <button nz-button nzType="text" (click)="notifDrawer.open()">
+  <button nz-button nzType="text" nzSize="small" (click)="notifDrawer.open()">
     <nz-badge [nzCount]="(notifDrawer.count | async) || 0" [nzOffset]="[-28, -4]">
-      <mat-icon matBadgeOverlap="false"> notifications </mat-icon>
+      <mat-icon> notifications </mat-icon>
     </nz-badge>
   </button>
   <user-avatar
@@ -38,6 +38,7 @@
 
 <mat-menu #actionMenu="matMenu">
   <button mat-menu-item [routerLink]="['/courses/create']">
+    <mat-icon>local_library</mat-icon>
     <span>Créer un cours</span>
   </button>
   <button
@@ -46,15 +47,8 @@
     [routerLink]="['/resources/create']"
     [queryParams]="{ type: 'CIRCLE', parent: createResourceParentParam }"
   >
+    <mat-icon>{{ 'CIRCLE' | resourceIcon }}</mat-icon>
     <span>Créer un cercle</span>
-  </button>
-  <button
-    *ngIf="canCreateExercise"
-    mat-menu-item
-    [routerLink]="['/resources/create']"
-    [queryParams]="{ type: 'EXERCISE', parent: createResourceParentParam }"
-  >
-    <span>Créer un exercice</span>
   </button>
   <button
     *ngIf="canCreateActivity"
@@ -62,7 +56,17 @@
     [routerLink]="['/resources/create']"
     [queryParams]="{ type: 'ACTIVITY', parent: createResourceParentParam }"
   >
+    <mat-icon>{{ 'ACTIVITY' | resourceIcon }}</mat-icon>
     <span>Créer une activité</span>
+  </button>
+  <button
+    *ngIf="canCreateExercise"
+    mat-menu-item
+    [routerLink]="['/resources/create']"
+    [queryParams]="{ type: 'EXERCISE', parent: createResourceParentParam }"
+  >
+    <mat-icon>{{ 'EXERCISE' | resourceIcon }}</mat-icon>
+    <span>Créer un exercice</span>
   </button>
 </mat-menu>
 
@@ -95,7 +99,7 @@
   </button>
   <button mat-menu-item (click)="darkTheme()">
     <mat-icon>dark_mode</mat-icon>
-    <span>Thème sombre (Expérimental)</span>
+    <span>Thème sombre</span>
   </button>
 </mat-menu>
 
