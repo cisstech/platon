@@ -60,6 +60,7 @@ export class UserGroupTableComponent implements OnChanges, ControlValueAccessor 
   @Input() selectable = false
   @Input() filters: UserFilters = {}
   @Output() filtersChange = new EventEmitter<UserFilters>()
+  @Output() openGroupDetails = new EventEmitter<UserGroup>()
 
   protected checked = false
   protected disabled = false
@@ -147,12 +148,6 @@ export class UserGroupTableComponent implements OnChanges, ControlValueAccessor 
   protected onAllChecked(checked: boolean): void {
     this.groups.forEach(({ id }) => this.updateSelection(id, checked))
     this.refreshSelection()
-  }
-
-  protected onChangedGroup(group: UserGroup): void {
-    this.groups = this.groups.map((g) => (g.id === group.id ? group : g))
-    this.groupsChange.emit(this.groups)
-    this.changeDetectorRef.markForCheck()
   }
 
   protected onChangeFilter(filters: UserFilters): void {

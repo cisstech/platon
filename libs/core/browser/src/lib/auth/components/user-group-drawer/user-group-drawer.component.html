@@ -14,7 +14,7 @@
       <ng-container *ngIf="selection.length as selectionCount">
         <nz-badge [nzCount]="selectionCount">
           <button
-            nz-tooltip="Supprimer du groupe"
+            [nz-tooltip]="selectionCount > 1 ? 'Supprimer les membres sélectionnés' : 'Supprimer le membre sélectionné'"
             nz-button
             nzDanger
             nz-popconfirm
@@ -22,6 +22,7 @@
             nzOkType="danger"
             [nzPopconfirmTitle]="removeGuard"
             [nzPopconfirmPlacement]="'bottom'"
+            [nzPopconfirmOverlayStyle]="{ 'max-width': '300px' }"
             (nzOnConfirm)="removeMembers()"
           >
             <div nz-icon nzType="close" nzTheme="outline"></div>
@@ -50,4 +51,13 @@
   (closed)="addMembers($event)"
 />
 
-<ng-template #removeGuard> Voulez-vous vraiment retirer les membres sélectionnés du groupe? </ng-template>
+<ng-template #removeGuard>
+  <strong>
+    @if (selection.length > 1) { Voulez-vous vraiment retirer les membres sélectionnés du groupe? } @else { Voulez-vous
+    vraiment retirer le membre sélectionné du groupe? } </strong
+  ><br /><br />
+  <p>
+    Cette action est irréversible. En supprimant un membre du groupe, vous lui retirez également tous les droits
+    associés au groupe comme l'accès à des cours et activités.
+  </p>
+</ng-template>

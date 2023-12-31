@@ -1,13 +1,49 @@
+<user-search-bar #searchbar [(ngModel)]="groups" [onlyGroups]="true" [autoSelect]="true" [filters]="filters" />
+
 <nz-button-group>
   <button (click)="addGroup()" nz-button nzType="primary" nz-tooltip="Ajouter un groupe">
     <span nz-icon nzType="plus" nzTheme="outline"></span>
   </button>
+  <ng-container *ngIf="selection.length as selectionCount">
+    <nz-badge [nzCount]="selectionCount">
+      <button
+        [nz-tooltip]="selectionCount > 1 ? 'Supprimer les groupes sélectionnés' : 'Supprimer le groupe sélectionné'"
+        nz-button
+        nzDanger
+        nz-popconfirm
+        nzOkText="Supprimer"
+        nzOkType="danger"
+        [nzPopconfirmTitle]="removeGuard"
+        [nzPopconfirmPlacement]="'bottom'"
+        [nzPopconfirmOverlayStyle]="{ 'max-width': '300px' }"
+        (nzOnConfirm)="deleteGroups()"
+      >
+        <div nz-icon nzType="close" nzTheme="outline"></div>
+      </button>
+    </nz-badge>
+  </ng-container>
 </nz-button-group>
-<user-search-bar #searchbar [(ngModel)]="groups" [onlyGroups]="true" [autoSelect]="true" [filters]="filters" />
+
 <user-group-table
   [total]="searchbar.total"
   [loading]="searchbar.searching"
-  [selectable]="false"
+  [selectable]="true"
   [(filters)]="filters"
   [(groups)]="groups"
+  [(ngModel)]="selection"
+  (openGroupDetails)="drawer.open($event)"
 />
+
+<user-group-drawer #drawer (changedGroup)="onChangedGroup($event)" />
+
+<ng-template #removeGuard>
+  <strong>
+    @if (selection.length > 1) { Voulez-vous vraiment supprimer les groupes sélectionnés? } @else { Voulez-vous vraiment
+    supprimer le groupe sélectionné? }
+  </strong>
+  <br /><br />
+  <p>
+    Cette action est irréversible. En supprimant un groupe, vous supprimez également tous les droits associés aux
+    membres de ce groupe comme l'accès à des cours et activités.
+  </p>
+</ng-template>
