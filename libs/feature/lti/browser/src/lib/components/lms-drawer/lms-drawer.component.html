@@ -35,7 +35,7 @@
     </form>
     <h2>Membres</h2>
     <user-search-bar #searchbar [(ngModel)]="members" [autoSelect]="true" [filters]="filters" />
-    <user-table [users]="members" [total]="searchbar.total" [(filters)]="filters" />
+    <user-table [total]="searchbar.total" [users]="members" [loading]="searchbar.searching" [(filters)]="filters" />
   </ng-template>
   <ng-template>
     <button nz-button nzType="primary" (click)="update()" [disabled]="!form.valid">Mettre à jour</button>

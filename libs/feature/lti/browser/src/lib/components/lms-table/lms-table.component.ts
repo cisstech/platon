@@ -72,7 +72,7 @@ export class LmsTableComponent implements OnChanges, ControlValueAccessor {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['members']) {
+    if (changes['lmses']) {
       this.loading = false
     }
   }
