@@ -80,8 +80,9 @@ export class ResourceFiltersComponent implements OnDestroy {
 
     this.form.patchValue({
       period: this.filters.period,
-      order: this.filters.order,
-      direction: this.filters.direction,
+      order: `${this.filters.order ?? ResourceOrderings.RELEVANCE}-${
+        this.filters.direction ?? OrderingDirections.DESC
+      }`,
       parents: this.filters.parents,
       configurable: this.filters.configurable,
       types: Object.values(ResourceTypes).reduce((controls, type) => {
@@ -100,10 +101,11 @@ export class ResourceFiltersComponent implements OnDestroy {
     this.subscriptions.push(
       this.form.valueChanges.subscribe((value) => {
         const { types, status } = value
+        const order = value.order?.split('-') as [ResourceOrderings, OrderingDirections]
         this.filters = {
           ...this.filters,
-          direction: value.direction as OrderingDirections,
-          order: value.order as ResourceOrderings,
+          order: order?.[0] as ResourceOrderings,
+          direction: order?.[1] as OrderingDirections,
           period: value.period as number,
           configurable: value.configurable as boolean,
           types: types ? (Object.keys(types).filter((e) => types[e as ResourceTypes]) as ResourceTypes[]) : undefined,
@@ -130,15 +132,10 @@ export class ResourceFiltersComponent implements OnDestroy {
     this.changeDetectorRef.markForCheck()
   }
 
-  protected displayCircle(id: string): string {
-    return this.circles.find((c) => c.id === id)?.name || ''
-  }
-
   private createForm() {
     return new FormGroup({
       parents: new FormControl([] as string[]),
-      order: new FormControl(ResourceOrderings.NAME),
-      direction: new FormControl(OrderingDirections.ASC),
+      order: new FormControl(`${ResourceOrderings.RELEVANCE}-${OrderingDirections.DESC}`),
       period: new FormControl(0),
       configurable: new FormControl(false),
       types: new FormGroup(
