@@ -3,7 +3,7 @@ import { OrderingDirections, UpdateUser, User, UserFilters, UserOrderings, UserR
 import { Exclude, Transform } from 'class-transformer'
 import { IsArray, IsBoolean, IsDate, IsEmail, IsEnum, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator'
 import { UUID } from '../graphql'
-import { BaseDTO, toArray, toNumber } from '../utils'
+import { BaseDTO, toArray, toBoolean, toNumber } from '../utils'
 
 export class UserDTO extends BaseDTO implements User {
   @IsEnum(UserRoles)
@@ -91,6 +91,12 @@ export class UserFiltersDTO implements UserFilters {
   @IsString()
   @IsOptional()
   readonly search?: string
+
+  @Transform(({ value }) => toBoolean(value))
+  @Field({ nullable: true })
+  @IsBoolean()
+  @IsOptional()
+  readonly active?: boolean
 
   @Field(() => Int, { nullable: true })
   @Transform(({ value }) => toNumber(value))

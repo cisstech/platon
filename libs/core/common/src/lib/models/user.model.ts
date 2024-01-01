@@ -36,7 +36,7 @@ export interface User {
 }
 
 export interface UpdateUser {
-  readonly role?: UserRoles
+  readonly role?: UserRoles | keyof typeof UserRoles
   readonly firstName?: string
   readonly lastName?: string
   readonly email?: string
@@ -56,6 +56,7 @@ export class UpdateUserPrefs {
 export interface UserFilters {
   readonly roles?: (UserRoles | keyof typeof UserRoles)[]
   readonly search?: string
+  readonly active?: boolean
   readonly groups?: string[]
   readonly lmses?: string[]
   readonly offset?: number

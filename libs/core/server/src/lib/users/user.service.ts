@@ -48,6 +48,10 @@ export class UserService {
       query.andWhere('role IN (:...roles)', { roles: filters.roles })
     }
 
+    if (filters.active != null) {
+      query.andWhere('active = :active', { active: !!filters.active })
+    }
+
     if (filters.search) {
       query.andWhere(
         `(

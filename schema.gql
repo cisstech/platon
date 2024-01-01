@@ -86,6 +86,7 @@ input UserFiltersInput {
   groups: [UUID!]
   lmses: [UUID!]
   search: String
+  active: Boolean
   offset: Int
   limit: Int
   order: UserOrderings

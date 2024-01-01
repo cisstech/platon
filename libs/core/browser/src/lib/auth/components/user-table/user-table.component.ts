@@ -6,34 +6,26 @@ import {
   Component,
   EventEmitter,
   forwardRef,
+  inject,
   Input,
   OnChanges,
+  OnInit,
   Output,
 } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 
-import {
-  NzTableFilterFn,
-  NzTableFilterList,
-  NzTableModule,
-  NzTableQueryParams,
-  NzTableSortFn,
-  NzTableSortOrder,
-} from 'ng-zorro-antd/table'
-import { NzTagModule } from 'ng-zorro-antd/tag'
+import { NzTableModule, NzTableQueryParams } from 'ng-zorro-antd/table'
 
-import { User, UserFilters, UserRoles } from '@platon/core/common'
+import { UpdateUser, User, UserFilters, UserRoles } from '@platon/core/common'
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown'
+import { NzIconModule } from 'ng-zorro-antd/icon'
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm'
+import { NzTagModule } from 'ng-zorro-antd/tag'
+import { NzTableColumn } from '../../../vendors/ng-zorro'
 import { UserAvatarComponent } from '../user-avatar/user-avatar.component'
+import { AuthService } from '../../api/auth.service'
 
 type Value = string[] | undefined
-type Column = {
-  key: string
-  name: string
-  sortOrder?: NzTableSortOrder | null
-  sortFn?: NzTableSortFn<User> | boolean | null
-  listOfFilter?: NzTableFilterList | null
-  filterFn?: NzTableFilterFn<User> | boolean | null
-}
 
 @Component({
   standalone: true,
@@ -48,25 +40,39 @@ type Column = {
       multi: true,
     },
   ],
-  imports: [CommonModule, NzTagModule, NzTableModule, UserAvatarComponent],
+  imports: [
+    CommonModule,
+    NzTagModule,
+    NzIconModule,
+    NzDropDownModule,
+    NzTableModule,
+    NzPopconfirmModule,
+    UserAvatarComponent,
+  ],
 })
-export class UserTableComponent implements OnChanges, ControlValueAccessor {
+export class UserTableComponent implements OnInit, OnChanges, ControlValueAccessor {
+  private readonly authService = inject(AuthService)
+  private readonly changeDetectorRef = inject(ChangeDetectorRef)
+
   @Input() users: User[] = []
   @Input() total = 0
   @Input() loading = false
+  @Input() editable = false
   @Input() selectable = false
   @Input() filters: UserFilters = {}
   @Output() filtersChange = new EventEmitter<UserFilters>()
+  @Output() update = new EventEmitter<[User, UpdateUser]>()
 
   protected checked = false
   protected disabled = false
   protected indeterminate = false
+  protected currentUserId?: string
   protected selection = new Set<string>()
-  protected columns: Column[] = [
+  protected columns: NzTableColumn<User>[] = [
     {
       key: 'name',
       name: 'Utilisateur',
-      sortOrder: null,
+      sortOrder: 'ascend',
       sortFn: !this.canFilterOnServer ? (a: User, b: User) => a.username.localeCompare(b.username) : true,
     },
     {
@@ -90,6 +96,7 @@ export class UserTableComponent implements OnChanges, ControlValueAccessor {
         { text: 'Enseignant', value: 'teacher' },
         { text: 'Élève', value: 'student' },
       ],
+      filterMultiple: true,
       filterFn: !this.canFilterOnServer
         ? (roles: UserRoles[], item: User) => {
             return roles.includes(item.role)
@@ -99,6 +106,16 @@ export class UserTableComponent implements OnChanges, ControlValueAccessor {
     {
       key: 'status',
       name: 'Status',
+      listOfFilter: [
+        { text: 'Active', value: 'active' },
+        { text: 'Inactive', value: 'inactive' },
+      ],
+      filterMultiple: false,
+      filterFn: !this.canFilterOnServer
+        ? (status: string, item: User) => {
+            return status === 'active' ? item.active : !item.active
+          }
+        : true,
     },
   ]
 
@@ -106,7 +123,19 @@ export class UserTableComponent implements OnChanges, ControlValueAccessor {
     return this.filtersChange.observed
   }
 
-  constructor(private readonly changeDetectorRef: ChangeDetectorRef) {}
+  ngOnInit(): void {
+    this.authService
+      .ready()
+      .catch(console.error)
+      .then((user) => {
+        this.currentUserId = user?.id
+        this.changeDetectorRef.markForCheck()
+      })
+  }
+
+  ngOnChanges() {
+    this.total = this.total || this.users.length
+  }
 
   // ControlValueAccessor methods
 
@@ -133,10 +162,6 @@ export class UserTableComponent implements OnChanges, ControlValueAccessor {
 
   setDisabledState(isDisabled: boolean): void {
     this.disabled = isDisabled
-  }
-
-  ngOnChanges() {
-    this.total = this.total || this.users.length
   }
 
   protected updateSelection(id: string, checked: boolean): void {
@@ -181,6 +206,7 @@ export class UserTableComponent implements OnChanges, ControlValueAccessor {
     const direction = (currentSort && currentSort.value) || 'ascend'
 
     const roles = filter.find((item) => item.key === 'role')?.value
+    const status = filter.find((item) => item.key === 'status')?.value
 
     this.onChangeFilter({
       order: {
@@ -196,6 +222,7 @@ export class UserTableComponent implements OnChanges, ControlValueAccessor {
       offset: pageSize * (pageIndex - 1),
 
       ...(roles ? { roles } : {}),
+      ...(status ? { active: status === 'active' } : { active: undefined }),
     })
   }
 }

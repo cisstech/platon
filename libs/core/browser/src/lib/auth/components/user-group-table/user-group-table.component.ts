@@ -12,27 +12,13 @@ import {
 } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 
-import {
-  NzTableFilterFn,
-  NzTableFilterList,
-  NzTableModule,
-  NzTableQueryParams,
-  NzTableSortFn,
-  NzTableSortOrder,
-} from 'ng-zorro-antd/table'
+import { NzTableModule, NzTableQueryParams } from 'ng-zorro-antd/table'
 
 import { UserFilters, UserGroup } from '@platon/core/common'
+import { NzTableColumn } from '../../../vendors/ng-zorro'
 import { UserAvatarComponent } from '../user-avatar/user-avatar.component'
 
 type Value = string[] | undefined
-type Column = {
-  key: string
-  name: string
-  sortOrder?: NzTableSortOrder | null
-  sortFn?: NzTableSortFn<UserGroup> | boolean | null
-  listOfFilter?: NzTableFilterList | null
-  filterFn?: NzTableFilterFn<UserGroup> | boolean | null
-}
 
 @Component({
   standalone: true,
@@ -65,7 +51,7 @@ export class UserGroupTableComponent implements OnChanges, ControlValueAccessor 
   protected indeterminate = false
   protected selection = new Set<string>()
 
-  protected columns: Column[] = [
+  protected columns: NzTableColumn<UserGroup>[] = [
     {
       key: 'name',
       name: 'Nom',

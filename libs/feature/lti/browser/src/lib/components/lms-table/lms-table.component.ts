@@ -11,26 +11,12 @@ import {
   Output,
 } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
+import { NzTableColumn } from '@platon/core/browser'
 import { Lms, LmsFilters } from '@platon/feature/lti/common'
 
-import {
-  NzTableFilterFn,
-  NzTableFilterList,
-  NzTableModule,
-  NzTableQueryParams,
-  NzTableSortFn,
-  NzTableSortOrder,
-} from 'ng-zorro-antd/table'
+import { NzTableModule, NzTableQueryParams } from 'ng-zorro-antd/table'
 
 type Value = string[] | undefined
-type Column = {
-  key: string
-  name: string
-  sortOrder?: NzTableSortOrder | null
-  sortFn?: NzTableSortFn<Lms> | boolean | null
-  listOfFilter?: NzTableFilterList | null
-  filterFn?: NzTableFilterFn<Lms> | boolean | null
-}
 
 @Component({
   standalone: true,
@@ -61,7 +47,7 @@ export class LmsTableComponent implements OnChanges, ControlValueAccessor {
   protected indeterminate = false
   protected selection = new Set<string>()
 
-  protected columns: Column[] = [
+  protected columns: NzTableColumn<Lms>[] = [
     {
       key: 'name',
       name: 'Nom',

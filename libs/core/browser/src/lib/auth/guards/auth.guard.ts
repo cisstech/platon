@@ -10,6 +10,11 @@ export class AuthGuard {
   async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     const user = await this.authService.ready()
     if (user) {
+      if (!user.active) {
+        this.redirect403('disabled')
+        return false
+      }
+
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const roles: UserRoles[] = (route.data as any).roles || []
       if (!roles.length) {
@@ -30,9 +35,10 @@ export class AuthGuard {
     })
   }
 
-  private redirect403() {
+  private redirect403(reason?: string) {
     this.router.navigate(['/403'], {
       skipLocationChange: true,
+      queryParams: { reason },
     })
   }
 }
