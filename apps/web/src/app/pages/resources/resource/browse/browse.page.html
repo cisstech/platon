@@ -4,6 +4,7 @@
     [versions]="versions!"
     [resource]="context.resource!"
     [canPreview]="context.resource?.type !== 'CIRCLE'"
+    [canCreateVersion]="!!context.resource?.permissions?.write"
     (edit)="openTab(context.editorUrl!)"
     (preview)="iframe.open(context.previewUrl!)"
     (refresh)="switchVersion($event)"
