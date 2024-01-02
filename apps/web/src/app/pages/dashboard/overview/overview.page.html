@@ -80,6 +80,7 @@
           matIcon="article"
           ribbonColor="#349d55"
           description="Exercices réalisés"
+          tooltip="Nombre d'exercices avec au moins une réponse."
           [value]="context.dashboard.user.exerciseCount"
         />
       </nz-col>
@@ -88,7 +89,7 @@
         <ui-statistic-card
           matIcon="star"
           ribbonColor="#7f8c8d"
-          description="Score moyen"
+          description="Note moyenne"
           [value]="context.dashboard.user.averageScore"
           tooltip="Moyenne du score sur l'ensemble des exercices que vous avez complétés."
           [shouldBePositive]="true"
@@ -99,6 +100,7 @@
           matIcon="access_time"
           ribbonColor="#f39c12"
           description="Temps d'apprentissage"
+          tooltip="Temps total passé sur l'ensemble des exercices."
           [value]="context.dashboard.user.totalDuration | duration"
         />
       </nz-col>
