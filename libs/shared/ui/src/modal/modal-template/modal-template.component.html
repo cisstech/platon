@@ -2,19 +2,19 @@
   *ngIf="visible"
   [(nzVisible)]="visible"
   [nzBodyStyle]="{
-    height,
+    height: height ?? 'auto',
     overflow
   }"
-  nzClassName="ui-modal"
-  [nzWidth]="width"
+  nzClassName="ui-modal-template"
+  [nzWidth]="width ?? 'auto'"
   [nzTitle]="title"
-  [nzMask]="true"
-  [nzClosable]="false"
-  [nzCentered]="true"
-  [nzMaskClosable]="true"
+  [nzClosable]="closable"
+  nzMask
+  nzCentered
+  nzMaskClosable
   (nzOnOk)="close(true)"
   (nzOnCancel)="close()"
-  [nzFooter]="templates.length > 1 ? templates.last : noFooter"
+  [nzFooter]="footer ?? (templates.length > 1 ? templates.last : noFooter)"
 >
   <ng-container *nzModalContent>
     <ng-container *ngIf="visible">
