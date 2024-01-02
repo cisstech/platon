@@ -69,6 +69,7 @@
         <button
           *ngIf="
             context.user?.role !== 'admin' &&
+            context.resource.type === 'CIRCLE' &&
             !context.resource.permissions.member &&
             !context.resource.permissions.waiting
           "
@@ -77,7 +78,7 @@
           (click)="join()"
         >
           <i nz-icon nzType="user-add" nzTheme="outline"></i>
-          <div class="hide-on-mobile">Demander à rejoindre</div>
+          <span class="hide-on-mobile">Demander à rejoindre</span>
         </button>
         <button *ngIf="context.resource.permissions.waiting" nz-button nzDanger nzType="default" (click)="unjoin()">
           <i nz-icon nzType="user-add" nzTheme="outline"></i>
