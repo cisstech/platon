@@ -1,4 +1,14 @@
-<nz-table #nzTable [nzSize]="'small'" [nzShowSizeChanger]="true" [nzShowPagination]="true" [nzData]="lmses">
+<nz-table
+  #nzTable
+  [nzSize]="'small'"
+  [nzData]="lmses"
+  [nzTotal]="total"
+  [nzLoading]="loading"
+  [nzShowSizeChanger]="true"
+  [nzShowPagination]="true"
+  [nzFrontPagination]="!canFilterOnServer"
+  (nzQueryParams)="onQueryParamsChange($event)"
+>
   <thead>
     <tr>
       <th
@@ -7,13 +17,22 @@
         [nzIndeterminate]="indeterminate"
         (nzCheckedChange)="onAllChecked($event)"
       ></th>
-      <th>Nom</th>
-      <th>Url</th>
-      <th>Date d'ajout</th>
+      @for (column of columns; track column.key) {
+      <th
+        [nzColumnKey]="column.key"
+        [(nzSortOrder)]="column.sortOrder!"
+        [nzSortFn]="column.sortFn!"
+        [nzFilters]="column.listOfFilter!"
+        [nzFilterFn]="column.filterFn!"
+        [nzFilterMultiple]="column.filterMultiple!"
+      >
+        {{ column.name }}
+      </th>
+      }
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let lms of nzTable.data" (click)="drawer.open(lms)">
+    <tr *ngFor="let lms of nzTable.data" (click)="openDetails.next(lms)">
       <td
         *ngIf="selectable && !disabled"
         [nzChecked]="selection.has(lms.id)"
@@ -25,4 +44,3 @@
     </tr>
   </tbody>
 </nz-table>
-<lms-drawer #drawer />

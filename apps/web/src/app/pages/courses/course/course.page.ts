@@ -15,6 +15,9 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography'
 import { DialogModule } from '@platon/core/browser'
 import { UiLayoutTabDirective, UiLayoutTabsComponent } from '@platon/shared/ui'
 
+import { CourseSharingComponent } from '@platon/feature/course/browser'
+import { NzButtonModule } from 'ng-zorro-antd/button'
+import { NzPopoverModule } from 'ng-zorro-antd/popover'
 import { CoursePresenter } from './course.presenter'
 
 @Component({
@@ -33,11 +36,15 @@ import { CoursePresenter } from './course.presenter'
 
     NzTagModule,
     NzIconModule,
+    NzButtonModule,
+    NzPopoverModule,
     NzBreadCrumbModule,
     NzTypographyModule,
     NzPageHeaderModule,
 
     DialogModule,
+
+    CourseSharingComponent,
 
     UiLayoutTabsComponent,
     UiLayoutTabDirective,

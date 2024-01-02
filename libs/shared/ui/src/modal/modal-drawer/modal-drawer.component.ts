@@ -24,21 +24,19 @@ import { NzDrawerModule, NzDrawerPlacement, NzDrawerSize } from 'ng-zorro-antd/d
   imports: [CommonModule, NzDrawerModule, SafePipeModule],
 })
 export class UiModalDrawerComponent {
-  protected visible = false
   private readonly breakpointObserver = inject(BreakpointObserver)
+  protected visible = false
 
   @ContentChildren(TemplateRef)
   protected templates!: QueryList<TemplateRef<void>>
 
   @Output() closed = new EventEmitter()
 
-  @Input()
-  title = ''
-
+  @Input() title = ''
+  @Input() bodyStyle: Record<string, string> = {}
   @Input() size: NzDrawerSize = 'default'
-
-  @Input()
-  placement: NzDrawerPlacement = 'right'
+  @Input() placement: NzDrawerPlacement = 'right'
+  @Input() footer?: TemplateRef<void> | null
 
   get isMobile(): boolean {
     return this.breakpointObserver.isMatched([Breakpoints.XSmall, Breakpoints.Small])

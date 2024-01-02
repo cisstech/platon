@@ -61,7 +61,9 @@ export class UserGroupService {
       query.limit(filters.limit)
     }
 
-    return query.getManyAndCount()
+    const [groups, count] = await query.getManyAndCount()
+    groups.forEach((group) => this.cleanupGroupUsers(group))
+    return [groups, count]
   }
 
   async create(group: Partial<UserGroupEntity>): Promise<UserGroupEntity> {
@@ -73,12 +75,16 @@ export class UserGroupService {
   async update(groupId: string, changes: Partial<UserGroupEntity>): Promise<UserGroupEntity> {
     const group = await this.repository.findOne({
       where: { id: groupId },
-      relations: ['users'],
+      relations: {
+        users: true,
+      },
     })
 
     if (!group) {
       throw new NotFoundResponse(`UserGroup not found: ${groupId}`)
     }
+
+    this.cleanupGroupUsers(group)
 
     Object.assign(group, changes)
     return this.repository.save(group)
@@ -107,10 +113,20 @@ export class UserGroupService {
   }
 
   async listMembers(groupId: string): Promise<UserEntity[]> {
-    const group = await this.repository.findOne({ where: { id: groupId }, relations: ['users'] })
+    const group = await this.repository.findOne({
+      where: { id: groupId },
+      relations: {
+        users: true,
+      },
+    })
     if (!group) {
       throw new NotFoundResponse(`UserGroup not found: ${groupId}`)
     }
+    this.cleanupGroupUsers(group)
     return group.users
+  }
+
+  private cleanupGroupUsers(group: UserGroupEntity): void {
+    group.users = group.users.filter((user) => user?.id)
   }
 }

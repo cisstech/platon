@@ -23,7 +23,7 @@
       <nz-option *ngFor="let item of versions" [nzLabel]="item.tag" [nzValue]="item.tag" />
     </nz-select>
     <nz-button-group>
-      <button nz-button nz-tooltip="Copier le lien" (click)="share()">
+      <button nz-button (click)="share()">
         <i nz-icon nzType="link" nzTheme="outline"></i>
         Copier le lien
       </button>

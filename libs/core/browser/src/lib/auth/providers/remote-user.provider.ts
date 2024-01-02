@@ -4,16 +4,22 @@ import {
   CreateUserGroup,
   ItemResponse,
   ListResponse,
+  UpdateUser,
   UpdateUserGroup,
   User,
   UserFilters,
   UserGroup,
   UserGroupFilters,
 } from '@platon/core/common'
-import { from, Observable, of } from 'rxjs'
+import { Observable, from, of } from 'rxjs'
 
 import { catchError, map, mergeMap, toArray } from 'rxjs/operators'
+import { buildHttpParams } from '../../http/utils'
 import { UserProvider } from '../models/user-provider'
+
+const getId = (user: User | string): string => {
+  return typeof user === 'string' ? user : user.id
+}
 
 @Injectable()
 export class RemoteUserProvider extends UserProvider {
@@ -21,41 +27,14 @@ export class RemoteUserProvider extends UserProvider {
     super()
   }
 
+  update(user: string | User, input: UpdateUser): Observable<User> {
+    return this.http
+      .patch<ItemResponse<User>>(`/api/v1/users/${getId(user)}`, input)
+      .pipe(map((response) => response.resource))
+  }
+
   search(filters: UserFilters): Observable<ListResponse<User>> {
-    filters = filters || {}
-    let params = new HttpParams()
-    if (filters.search) {
-      params = params.append('search', filters.search)
-    }
-
-    filters.roles?.forEach((role) => {
-      params = params.append('roles', role)
-    })
-
-    filters.groups?.forEach((group) => {
-      params = params.append('groups', group)
-    })
-
-    filters.lmses?.forEach((group) => {
-      params = params.append('lmses', group)
-    })
-
-    if (filters.order) {
-      params = params.append('order', filters.order.toString())
-    }
-
-    if (filters.direction) {
-      params = params.append('direction', filters.direction.toString())
-    }
-
-    if (filters.limit) {
-      params = params.append('limit', filters.limit.toString())
-    }
-
-    if (filters.offset) {
-      params = params.append('offset', filters.offset.toString())
-    }
-
+    const params = buildHttpParams(filters)
     return this.http.get<ListResponse<User>>(`/api/v1/users/`, { params })
   }
 

@@ -24,7 +24,7 @@
           #avatar
           [user]="$any(member.user)"
           [group]="$any(member.group)"
-          (showGroupMembers)="groupDrawer.open($event)"
+          (openGroupDetails)="groupDrawer.open($event)"
         />
       </td>
       <td>{{ member.createdAt | date }}</td>

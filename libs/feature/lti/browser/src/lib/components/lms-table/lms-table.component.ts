@@ -4,17 +4,17 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  EventEmitter,
   forwardRef,
   Input,
   OnChanges,
-  SimpleChanges,
+  Output,
 } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
-import { Lms } from '@platon/feature/lti/common'
+import { NzTableColumn } from '@platon/core/browser'
+import { Lms, LmsFilters } from '@platon/feature/lti/common'
 
-import { NzTableModule } from 'ng-zorro-antd/table'
-import { NzTagModule } from 'ng-zorro-antd/tag'
-import { LmsDrawerComponent } from '../lms-drawer/lms-drawer.component'
+import { NzTableModule, NzTableQueryParams } from 'ng-zorro-antd/table'
 
 type Value = string[] | undefined
 
@@ -31,17 +31,47 @@ type Value = string[] | undefined
       multi: true,
     },
   ],
-  imports: [CommonModule, NzTagModule, NzTableModule, LmsDrawerComponent],
+  imports: [CommonModule, NzTableModule],
 })
 export class LmsTableComponent implements OnChanges, ControlValueAccessor {
+  @Input() total = 0
+  @Input() loading = true
   @Input() lmses: Lms[] = []
   @Input() selectable = false
+  @Input() filters: LmsFilters = {}
+  @Output() filtersChange = new EventEmitter<LmsFilters>()
+  @Output() openDetails = new EventEmitter<Lms>()
 
-  protected loading = true
   protected checked = false
   protected disabled = false
   protected indeterminate = false
   protected selection = new Set<string>()
+
+  protected columns: NzTableColumn<Lms>[] = [
+    {
+      key: 'name',
+      name: 'Nom',
+      sortOrder: null,
+      sortFn: !this.canFilterOnServer ? (a: Lms, b: Lms) => a.name.localeCompare(b.name) : true,
+    },
+    {
+      key: 'url',
+      name: 'URL',
+    },
+    {
+      key: 'createdAt',
+      name: `Date d'ajout`,
+      sortFn: !this.canFilterOnServer
+        ? (a: Lms, b: Lms) => {
+            return a.createdAt.valueOf() - b.createdAt.valueOf()
+          }
+        : true,
+    },
+  ]
+
+  protected get canFilterOnServer(): boolean {
+    return this.filtersChange.observed
+  }
 
   constructor(private readonly changeDetectorRef: ChangeDetectorRef) {}
 
@@ -50,6 +80,7 @@ export class LmsTableComponent implements OnChanges, ControlValueAccessor {
   onTouch: any = () => {
     //
   }
+
   onChange: any = () => {
     //
   }
@@ -71,10 +102,8 @@ export class LmsTableComponent implements OnChanges, ControlValueAccessor {
     this.disabled = isDisabled
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['members']) {
-      this.loading = false
-    }
+  ngOnChanges() {
+    this.total = this.total || this.lmses.length
   }
 
   protected updateSelection(id: string, checked: boolean): void {
@@ -103,5 +132,32 @@ export class LmsTableComponent implements OnChanges, ControlValueAccessor {
   protected onAllChecked(checked: boolean): void {
     this.lmses.forEach(({ id }) => this.updateSelection(id, checked))
     this.refreshSelection()
+  }
+
+  protected onChangeFilter(filters: LmsFilters): void {
+    this.filtersChange.next({ ...this.filters, ...filters })
+  }
+
+  protected onQueryParamsChange(params: NzTableQueryParams): void {
+    if (!this.canFilterOnServer) return
+
+    const { pageSize, pageIndex, sort } = params
+    const currentSort = sort.find((item) => item.value !== null)
+
+    const order = (currentSort && currentSort.key) || 'name'
+    const direction = (currentSort && currentSort.value) || 'ascend'
+
+    this.onChangeFilter({
+      order: {
+        name: 'NAME' as const,
+        createdAt: 'CREATED_AT' as const,
+      }[order],
+      direction: {
+        ascend: 'ASC' as const,
+        descend: 'DESC' as const,
+      }[direction],
+      limit: pageSize,
+      offset: pageSize * (pageIndex - 1),
+    })
   }
 }

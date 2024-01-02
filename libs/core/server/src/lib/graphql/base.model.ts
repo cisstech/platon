@@ -9,6 +9,6 @@ export class BaseGraphModel {
   @Field()
   readonly createdAt!: Date
 
-  @Field({ nullable: true })
-  readonly updatedAt?: Date
+  @Field()
+  readonly updatedAt!: Date
 }

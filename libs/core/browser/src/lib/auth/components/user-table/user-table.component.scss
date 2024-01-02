@@ -1,3 +1,7 @@
 nz-button i {
   color: var(--brand-text-primary);
 }
+
+li.disabled {
+  pointer-events: none;
+}

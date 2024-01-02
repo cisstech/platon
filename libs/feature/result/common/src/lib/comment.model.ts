@@ -1,7 +1,7 @@
 export interface SessionComment {
   id: string
   createdAt: Date
-  updatedAt?: Date
+  updatedAt: Date
   authorId: string
   sessionId: string
   answerId: string

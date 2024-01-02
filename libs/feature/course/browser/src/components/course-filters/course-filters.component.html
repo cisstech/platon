@@ -19,16 +19,14 @@
     <!-- ORDER -->
     <section>
       <mat-label id="order-label">Comment voulez-vous trier les résultats ?</mat-label>
-      <mat-radio-group formControlName="order" aria-labelledby="order-label">
-        <mat-radio-button value="NAME">{{ 'NAME' | courseOrdering }}</mat-radio-button>
-        <mat-radio-button value="CREATED_AT">{{ 'CREATED_AT' | courseOrdering }}</mat-radio-button>
-        <mat-radio-button value="UPDATED_AT">{{ 'UPDATED_AT' | courseOrdering }}</mat-radio-button>
-      </mat-radio-group>
-      <mat-label id="direction-label">Dans quel ordre ?</mat-label>
-      <mat-radio-group formControlName="direction" aria-labelledby="direction-label">
-        <mat-radio-button value="ASC">Croissant</mat-radio-button>
-        <mat-radio-button value="DESC">Décroissant</mat-radio-button>
-      </mat-radio-group>
+      <nz-select nzPlaceHolder="Sélectionnez un mode de tri" formControlName="order" aria-labelledby="order-label">
+        <nz-option nzLabel="Nom de A à Z" nzValue="NAME-ASC" />
+        <nz-option nzLabel="Nom de Z à A" nzValue="NAME-DESC" />
+        <nz-option nzLabel="Création: Récent-Ancient" nzValue="CREATED_AT-DESC" />
+        <nz-option nzLabel="Création: Ancient-Récent" nzValue="CREATED_AT-ASC" />
+        <nz-option nzLabel="MàJ: Récente-Ancienne" nzValue="UPDATED_AT-DESC" />
+        <nz-option nzLabel="MàJ: Ancienne-Récente" nzValue="UPDATED_AT-ASC" />
+      </nz-select>
     </section>
     <mat-divider />
     <!-- PERIOD -->

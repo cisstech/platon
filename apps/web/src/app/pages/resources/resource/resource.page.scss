@@ -31,15 +31,3 @@ nz-select {
     width: 70%;
   }
 }
-
-@media (max-width: 768px) {
-  :host::ng-deep {
-    button span {
-      display: none;
-    }
-  }
-
-  .hide-on-mobile {
-    display: none;
-  }
-}

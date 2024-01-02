@@ -17,6 +17,7 @@ div {
   align-items: baseline;
   :last-child {
     cursor: pointer;
+    padding: 0.2rem 0;
     color: var(--color-username);
   }
 }

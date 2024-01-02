@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import crypto from 'crypto'
 import url from 'url'
-import { encode } from '../utils'
+import { encode, encodeRFC3986 } from '../utils'
 import { Signer } from './signer'
 
 function encodeBody(body: any, query: any) {
   const out: string[] = []
-  const encodeParam = (key: string, val: any) => `${key}=${encode(val)}`
   const cleanParams = (params: any) => {
     if (typeof params !== 'object') {
       return
@@ -15,14 +14,7 @@ function encodeBody(body: any, query: any) {
       if (key === 'oauth_signature') {
         continue
       }
-      const vals = params[key]
-      if (Array.isArray(vals)) {
-        for (const val of vals) {
-          out.push(encodeParam(key, val))
-        }
-      } else {
-        out.push(encodeParam(key, vals))
-      }
+      out.push(`${key}=${encodeRFC3986(params[key])}`)
     }
   }
   cleanParams(body)

@@ -3,7 +3,7 @@ import { ActivityPermissions } from './permissions.model'
 export interface Activity {
   readonly id: string
   readonly createdAt: Date
-  readonly updatedAt?: Date
+  readonly updatedAt: Date
 
   readonly courseId: string
   readonly sectionId: string

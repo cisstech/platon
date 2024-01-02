@@ -124,7 +124,6 @@ export default class ResourcesPage implements OnInit, OnDestroy {
   protected circle!: Resource
   protected items: Resource[] = []
   protected views: Resource[] = []
-  protected recents: Resource[] = []
 
   async ngOnInit(): Promise<void> {
     this.user = (await this.authService.ready()) as User
@@ -132,7 +131,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
     const [tree, circle, views] = await Promise.all([
       firstValueFrom(this.resourceService.tree()),
       firstValueFrom(this.resourceService.circle(this.user.username)),
-      firstValueFrom(this.resourceService.search({ views: true })),
+      firstValueFrom(this.resourceService.search({ views: true, expands: ['metadata'] })),
     ])
 
     this.tree = tree
@@ -170,6 +169,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
           await firstValueFrom(
             this.resourceService.search({
               ...this.filters,
+              expands: ['metadata'],
             })
           )
         ).resources

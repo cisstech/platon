@@ -11,9 +11,11 @@ import { RemoteTokenProvider } from './providers/remote-token.provider'
 import { RemoteUserGroupProvider } from './providers/remote-user-group.provider'
 import { RemoteUserPrefsProvider } from './providers/remote-user-prefs.provider'
 import { RemoteUserProvider } from './providers/remote-user.provider'
+import { DateConversionInterceptor } from './interceptors/date.interceptor'
 
 export const AuthProviders: Provider[] = [
   { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+  { provide: HTTP_INTERCEPTORS, useClass: DateConversionInterceptor, multi: true },
   { provide: AuthProvider, useClass: RemoteAuthProvider },
   { provide: UserProvider, useClass: RemoteUserProvider },
   { provide: UserGroupProvider, useClass: RemoteUserGroupProvider },

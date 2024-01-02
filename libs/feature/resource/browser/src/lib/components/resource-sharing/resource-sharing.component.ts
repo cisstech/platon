@@ -9,7 +9,6 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown'
 import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzModalModule } from 'ng-zorro-antd/modal'
 import { NzSelectModule } from 'ng-zorro-antd/select'
-import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 import { firstValueFrom } from 'rxjs'
 import { ResourceService } from '../../api/resource.service'
 
@@ -28,7 +27,6 @@ import { ResourceService } from '../../api/resource.service'
     NzDropDownModule,
     NzSelectModule,
     NzButtonModule,
-    NzToolTipModule,
 
     NzModalModule,
   ],

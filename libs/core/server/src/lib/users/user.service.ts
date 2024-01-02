@@ -48,6 +48,10 @@ export class UserService {
       query.andWhere('role IN (:...roles)', { roles: filters.roles })
     }
 
+    if (filters.active != null) {
+      query.andWhere('active = :active', { active: !!filters.active })
+    }
+
     if (filters.search) {
       query.andWhere(
         `(
@@ -62,9 +66,9 @@ export class UserService {
 
     if (filters.order) {
       const fields: Record<UserOrderings, string> = {
-        NAME: 'username',
-        CREATED_AT: 'created_at',
-        UPDATED_AT: 'updated_at',
+        NAME: 'user.username',
+        CREATED_AT: 'user.created_at',
+        UPDATED_AT: 'user.updated_at',
       }
 
       const orderings: Record<UserOrderings, keyof typeof OrderingDirections> = {

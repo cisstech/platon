@@ -3,7 +3,7 @@ import { OrderingDirections, User, UserGroup, UserOrderings, UserRoles } from '@
 export interface CourseMember {
   readonly id: string
   readonly createdAt: Date
-  readonly updatedAt?: Date
+  readonly updatedAt: Date
   readonly courseId: string
   readonly user?: User
   readonly group?: UserGroup

@@ -16,7 +16,6 @@
       (click)="openTab(editorUrl)"
       class="action"
       actionTitle="Éditer"
-      nz-tooltip="Éditer"
     >
       <i nz-icon nzType="edit" nzTheme="outline"></i>
     </ui-list-item-article-action>
@@ -25,17 +24,20 @@
         (click)="modalMode ? openTab(previewUrl) : iframe.open(previewUrl)"
         class="action"
         actionTitle="Prévisualiser"
-        nz-tooltip="Prévisualiser"
       >
         <i nz-icon nzType="play-circle" nzTheme="outline"></i>
       </ui-list-item-article-action>
     </ng-container>
     <div class="spacer"></div>
+
     <ui-list-item-article-action
       [actionTitle]="item.updatedAt | date : 'dd/MM/yyyy'"
       nz-tooltip="Dernière date de mise à jour"
     >
       <i nz-icon nzType="reload" nzTheme="outline"></i>
+    </ui-list-item-article-action>
+    <ui-list-item-article-action *ngIf="configurable" actionTitle="Configurable">
+      <i nz-icon nzType="setting" nzTheme="twotone"></i>
     </ui-list-item-article-action>
   </ui-list-item-article>
 </nz-ribbon>

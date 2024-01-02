@@ -48,3 +48,13 @@ nge-markdown {
   max-height: 18px;
   margin-top: 4px;
 }
+
+.mat-mdc-menu-content {
+  padding: 0 !important;
+}
+
+@media (max-width: 768px) {
+  .hide-on-mobile {
+    display: none;
+  }
+}
