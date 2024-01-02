@@ -41,7 +41,8 @@ export class ResourceBrowseHeaderComponent {
   @Output() edit = new EventEmitter<void>()
   @Output() preview = new EventEmitter<void>()
   @Output() refresh = new EventEmitter<string>()
-
+  @Output() upload = new EventEmitter<void>()
+  @Output() download = new EventEmitter<void>()
   protected versionInfo?: FileVersion
 
   protected onChangeVersion(version: string) {

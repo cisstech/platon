@@ -8,7 +8,14 @@
     (edit)="openTab(context.editorUrl!)"
     (preview)="iframe.open(context.previewUrl!)"
     (refresh)="switchVersion($event)"
+    (download)="files.download()"
+    (upload)="files.upload()"
   />
-  <resource-files [tree]="tree!" (selected)="openTab(context.editorUrl + '&files=' + $event.path)" />
+  <resource-files
+    #files
+    [tree]="tree!"
+    (selected)="openTab(context.editorUrl + '&files=' + $event.path)"
+    (afterUpload)="refreshFiles()"
+  />
   <ui-modal-iframe #iframe [closable]="true" (closed)="refreshFiles()" />
 </ng-container>
