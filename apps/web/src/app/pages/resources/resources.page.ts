@@ -20,12 +20,13 @@ import {
   UiSearchBarComponent,
 } from '@platon/shared/ui'
 
-import { AuthService } from '@platon/core/browser'
-import { OrderingDirections, User } from '@platon/core/common'
+import { AuthService, TagService } from '@platon/core/browser'
+import { Level, OrderingDirections, Topic, User } from '@platon/core/common'
 import {
   CircleFilterIndicator,
   CircleTreeComponent,
   ExerciseConfigurableFilterIndicator,
+  LevelFilterIndicator,
   ResourceFiltersComponent,
   ResourceItemComponent,
   ResourceListComponent,
@@ -34,6 +35,7 @@ import {
   ResourceService,
   ResourceStatusFilterIndicator,
   ResourceTypeFilterIndicator,
+  TopicFilterIndicator,
 } from '@platon/feature/resource/browser'
 import {
   CircleTree,
@@ -76,13 +78,14 @@ import { NzDividerModule } from 'ng-zorro-antd/divider'
   ],
 })
 export default class ResourcesPage implements OnInit, OnDestroy {
+  private readonly subscriptions: Subscription[] = []
+
   private readonly router = inject(Router)
+  private readonly tagService = inject(TagService)
   private readonly authService = inject(AuthService)
   private readonly activatedRoute = inject(ActivatedRoute)
   private readonly resourceService = inject(ResourceService)
   private readonly changeDetectorRef = inject(ChangeDetectorRef)
-
-  private readonly subscriptions: Subscription[] = []
 
   protected readonly searchbar: SearchBar<string> = {
     placeholder: 'Essayez un nom, un topic, un niveau...',
@@ -109,6 +112,8 @@ export default class ResourcesPage implements OnInit, OnDestroy {
 
   protected tree?: CircleTree
   protected circles: CircleTree[] = []
+  protected topics: Topic[] = []
+  protected levels: Level[] = []
 
   protected completion = this.resourceService.completion().pipe(shareReplay(1))
   protected indicators: FilterIndicator<ResourceFilters>[] = [
@@ -128,20 +133,27 @@ export default class ResourcesPage implements OnInit, OnDestroy {
   async ngOnInit(): Promise<void> {
     this.user = (await this.authService.ready()) as User
 
-    const [tree, circle, views] = await Promise.all([
+    const [tree, circle, views, topics, levels] = await Promise.all([
       firstValueFrom(this.resourceService.tree()),
       firstValueFrom(this.resourceService.circle(this.user.username)),
       firstValueFrom(this.resourceService.search({ views: true, expands: ['metadata'] })),
+      firstValueFrom(this.tagService.listTopics()),
+      firstValueFrom(this.tagService.listLevels()),
     ])
 
     this.tree = tree
     this.circle = circle
+    this.topics = topics
+    this.levels = levels
     this.views = views.resources
 
     this.circles = []
+
+    this.indicators = [...topics.map(TopicFilterIndicator), ...levels.map(LevelFilterIndicator), ...this.indicators]
+
     if (this.tree) {
       this.circles = flattenCircleTree(this.tree)
-      this.indicators = [...this.indicators, ...flattenCircleTree(tree).map((circle) => CircleFilterIndicator(circle))]
+      this.indicators = [...flattenCircleTree(tree).map((circle) => CircleFilterIndicator(circle)), ...this.indicators]
     }
 
     this.changeDetectorRef.markForCheck()
@@ -152,6 +164,8 @@ export default class ResourcesPage implements OnInit, OnDestroy {
           ...this.filters,
           search: e.q,
           parents: e.parents ? (typeof e.parents === 'string' ? [e.parents] : e.parents) : undefined,
+          topics: e.topics ? (typeof e.topics === 'string' ? [e.topics] : e.topics) : undefined,
+          levels: e.levels ? (typeof e.levels === 'string' ? [e.levels] : e.levels) : undefined,
           period: Number.parseInt(e.period + '', 10) || 0,
           order: e.order,
           direction: e.direction,
@@ -193,6 +207,8 @@ export default class ResourcesPage implements OnInit, OnDestroy {
       types: filters.types,
       status: filters.status,
       parents: filters.parents,
+      topics: filters.topics,
+      levels: filters.levels,
       configurable: filters.configurable ? true : undefined,
     }
 
@@ -212,5 +228,7 @@ interface QueryParams {
   types?: keyof typeof ResourceTypes | (keyof typeof ResourceTypes)[]
   status?: keyof typeof ResourceStatus | (keyof typeof ResourceStatus)[]
   parents?: string | string[]
+  topics?: string | string[]
+  levels?: string | string[]
   configurable?: string | boolean
 }
