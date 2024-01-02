@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  install:
+  build:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
@@ -24,7 +24,9 @@ jobs:
         id: cache-node-modules
         uses: actions/cache@v2
         with:
-          path: '**/node_modules'
+          path: |
+            '**/node_modules'
+            '**/apps/docs/node_modules'
           key: ${{ runner.os }}-build-node-modules-cache-${{ hashFiles('**/yarn.lock') }}
       - name: Use Node ${{ matrix.node-version }}
         uses: actions/setup-node@v1
@@ -36,7 +38,7 @@ jobs:
         run: yarn install --frozen-lockfile; cd apps/docs; yarn install --frozen-lockfile; cd ../..
 
   deploy:
-    needs: install
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -45,7 +47,9 @@ jobs:
       - name: cache node_modules
         uses: actions/cache@v2
         with:
-          path: '**/node_modules'
+          path: |
+            '**/node_modules'
+            '**/apps/docs/node_modules'
           key: ${{ runner.os }}-build-node-modules-cache-${{ hashFiles('**/yarn.lock') }}
 
       - name: Run Build
