@@ -17,6 +17,12 @@
     <button nz-button nz-tooltip="Actualiser" (click)="refresh.emit(version)">
       <i nz-icon nzType="reload" nzTheme="outline"></i>
     </button>
+    <button *ngIf="version === 'latest'" nz-button nz-tooltip="Importer" (click)="upload.next()">
+      <i nz-icon nzType="import" nzTheme="outline"></i>
+    </button>
+    <button nz-button nz-tooltip="Télécharger" (click)="download.emit()">
+      <i nz-icon nzType="download" nzTheme="outline"></i>
+    </button>
     <button *ngIf="canCreateVersion" nz-button nz-tooltip="Nouvelle version" (click)="versioning.open()">
       <i nz-icon nzType="tag" nzTheme="outline"></i>
     </button>
