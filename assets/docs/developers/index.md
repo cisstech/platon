@@ -1,3 +1,0 @@
-# PLaTon
-
-TODO
