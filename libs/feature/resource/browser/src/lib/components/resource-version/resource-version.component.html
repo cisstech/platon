@@ -1,0 +1,23 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Informations de la version</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="field">
+      <span class="field-name">Nom:</span>
+      <p class="field-value">{{ version.tag }}</p>
+    </div>
+    <div class="field">
+      <span class="field-name">Créé par:</span>
+      <p class="field-value">{{ version.tagger.name }} {{ version.tagger.email }}</p>
+    </div>
+    <div class="field">
+      <span class="field-name">Description:</span>
+      <p class="field-value">{{ version.message }}</p>
+    </div>
+    <div class="field">
+      <span class="field-name">Créé le:</span>
+      <p class="field-value">{{ version.createdAt | date }}</p>
+    </div>
+  </mat-card-content>
+</mat-card>

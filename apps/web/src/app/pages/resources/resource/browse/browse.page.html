@@ -4,10 +4,11 @@
     [versions]="versions!"
     [resource]="context.resource!"
     [canPreview]="context.resource?.type !== 'CIRCLE'"
+    [canCreateVersion]="!!context.resource?.permissions?.write"
     (edit)="openTab(context.editorUrl!)"
     (preview)="iframe.open(context.previewUrl!)"
     (refresh)="switchVersion($event)"
   />
   <resource-files [tree]="tree!" (selected)="openTab(context.editorUrl + '&files=' + $event.path)" />
-  <ui-modal-iframe #iframe (closed)="refreshFiles()" />
+  <ui-modal-iframe #iframe [closable]="true" (closed)="refreshFiles()" />
 </ng-container>

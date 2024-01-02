@@ -139,7 +139,8 @@
     </ng-template>
   </ui-layout-tab>
 </ui-layout-tabs>
-<ui-modal-iframe #iframe />
+
+<ui-modal-iframe #iframe [closable]="true" />
 
 <ng-template #sharingPopover>
   <resource-sharing [resourceId]="context.resource!.id" [canEditSharing]="context.resource!.permissions!.write" />

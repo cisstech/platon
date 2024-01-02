@@ -8,6 +8,7 @@ import {
   OnDestroy,
   OnInit,
   Output,
+  TemplateRef,
 } from '@angular/core'
 import { SafePipeModule } from '@cisstech/nge/pipes'
 import { NzModalModule } from 'ng-zorro-antd/modal'
@@ -25,10 +26,12 @@ export const UI_MODAL_IFRAME_CLOSE = 'UI_MODAL_IFRAME_CLOSE'
 export class UiModalIFrameComponent implements OnInit, OnDestroy {
   protected url?: string
   protected visible = false
-  protected closeableFromIframe = false
 
-  @Input() width = '90vw'
-  @Input() height = '90vh'
+  @Input() width?: string | null = '90vw'
+  @Input() height?: string | null = '90vh'
+
+  @Input() closable = false
+  @Input() footer?: TemplateRef<void> | null
 
   @Output() closed = new EventEmitter()
   @Output() canceled = new EventEmitter()
@@ -44,16 +47,14 @@ export class UiModalIFrameComponent implements OnInit, OnDestroy {
     window.removeEventListener('message', this.onMessage.bind(this))
   }
 
-  open(url: string, closeableFromIframe = false): void {
+  open(url: string): void {
     this.url = url
     this.visible = true
-    this.closeableFromIframe = closeableFromIframe
     this.changeDetectorRef.markForCheck()
   }
 
   protected close(accepted = false): void {
     this.visible = false
-    this.closeableFromIframe = false
     accepted ? this.accepted.emit() : this.canceled.emit()
     this.closed.emit()
     this.changeDetectorRef.markForCheck()

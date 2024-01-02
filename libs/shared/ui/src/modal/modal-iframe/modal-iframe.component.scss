@@ -1,9 +1,9 @@
 ::ng-deep {
-  .ui-modal {
+  .ui-modal-iframe {
     max-width: 100vw !important;
-  }
-  .ant-modal-footer {
-    display: none;
+    .ant-modal-footer {
+      display: none;
+    }
   }
 }
 

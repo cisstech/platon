@@ -36,6 +36,7 @@ export class UiModalDrawerComponent {
   @Input() bodyStyle: Record<string, string> = {}
   @Input() size: NzDrawerSize = 'default'
   @Input() placement: NzDrawerPlacement = 'right'
+  @Input() closable = true
   @Input() footer?: TemplateRef<void> | null
 
   get isMobile(): boolean {

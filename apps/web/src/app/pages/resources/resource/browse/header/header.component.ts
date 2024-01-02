@@ -9,7 +9,8 @@ import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzSelectModule } from 'ng-zorro-antd/select'
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 
-import { FileVersions, Resource } from '@platon/feature/resource/common'
+import { ResourceVersionComponent, ResourceVersioningComponent } from '@platon/feature/resource/browser'
+import { FileVersion, FileVersions, Resource } from '@platon/feature/resource/common'
 
 @Component({
   standalone: true,
@@ -26,6 +27,8 @@ import { FileVersions, Resource } from '@platon/feature/resource/common'
     NzSelectModule,
     NzButtonModule,
     NzToolTipModule,
+    ResourceVersionComponent,
+    ResourceVersioningComponent,
   ],
 })
 export class ResourceBrowseHeaderComponent {
@@ -33,7 +36,16 @@ export class ResourceBrowseHeaderComponent {
   @Input() versions: FileVersions = { all: [] }
   @Input() resource!: Resource
   @Input() canPreview = true
+  @Input() canCreateVersion = true
+
   @Output() edit = new EventEmitter<void>()
   @Output() preview = new EventEmitter<void>()
   @Output() refresh = new EventEmitter<string>()
+
+  protected versionInfo?: FileVersion
+
+  protected onChangeVersion(version: string) {
+    this.refresh.emit(version)
+    this.versionInfo = this.versions.all.find((v) => v.tag === version)
+  }
 }

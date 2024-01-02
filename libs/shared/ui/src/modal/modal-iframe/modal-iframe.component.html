@@ -4,24 +4,24 @@
   [nzBodyStyle]="{
     padding: '0',
     margin: '0',
-    height: closeableFromIframe ? '100vh' : height,
+    height: height ?? 'auto',
     'max-width': '100vw'
   }"
-  nzClassName="ui-modal"
-  [nzWidth]="closeableFromIframe ? '100vw' : width"
-  nzMask="true"
-  nzClosable="false"
-  nzCentered="true"
-  nzKeyboard="false"
-  nzMaskClosable="true"
+  nzClassName="ui-modal-iframe"
+  [nzWidth]="width ?? 'auto'"
+  [nzMask]="true"
+  [nzClosable]="closable"
+  [nzKeyboard]="false"
+  nzCentered
+  nzMaskClosable
   (nzOnOk)="close(true)"
   (nzOnCancel)="close()"
-  [nzFooter]="modalFooter"
+  [nzFooter]="footer ?? noFooter"
 >
   <ng-container *nzModalContent>
     <ng-container *ngIf="visible && url">
-      <iframe #iframe [src]="url | safe: 'resource'" frameborder="0"></iframe>
+      <iframe #iframe [src]="url | safe : 'resource'" frameborder="0"></iframe>
     </ng-container>
   </ng-container>
 </nz-modal>
-<ng-template #modalFooter />
+<ng-template #noFooter />
