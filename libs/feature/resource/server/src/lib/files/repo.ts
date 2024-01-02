@@ -387,7 +387,7 @@ export class Repo {
     })
 
     const parse = (tag: string): FileVersion => {
-      const [name, taggerName, taggerEmail, createdAt, message] = tag.split(' ')
+      const [name, taggerName, taggerEmail, createdAt, ...message] = tag.split(' ')
       return {
         tag: name,
         tagger: {
@@ -395,12 +395,12 @@ export class Repo {
           email: taggerEmail,
         },
         createdAt: createdAt,
-        message: message,
+        message: message.join(' '),
       }
     }
 
     return {
-      all: tags.all.map(parse),
+      all: tags.all.map(parse).sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1)),
       latest: tags.latest ? parse(tags.latest) : undefined,
     }
   }
