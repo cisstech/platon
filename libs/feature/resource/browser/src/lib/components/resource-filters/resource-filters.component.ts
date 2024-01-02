@@ -22,7 +22,7 @@ import { MatRadioModule } from '@angular/material/radio'
 import { NzDrawerModule } from 'ng-zorro-antd/drawer'
 import { NzSelectModule } from 'ng-zorro-antd/select'
 
-import { OrderingDirections } from '@platon/core/common'
+import { Level, OrderingDirections, Topic } from '@platon/core/common'
 import {
   CircleTree,
   ResourceFilters,
@@ -65,6 +65,9 @@ export class ResourceFiltersComponent implements OnDestroy {
   protected form = this.createForm()
   protected visible = false
 
+  @Input() topics: Topic[] = []
+  @Input() levels: Level[] = []
+
   @Input() circles: CircleTree[] = []
   @Input() filters: ResourceFilters = {}
   @Output() triggered = new EventEmitter<ResourceFilters>()
@@ -77,7 +80,6 @@ export class ResourceFiltersComponent implements OnDestroy {
 
   open(): void {
     this.form = this.createForm()
-
     this.form.patchValue({
       period: this.filters.period,
       order: `${this.filters.order ?? ResourceOrderings.RELEVANCE}-${
@@ -93,6 +95,8 @@ export class ResourceFiltersComponent implements OnDestroy {
         controls[status] = this.filters.status?.includes(status) || false
         return controls
       }, {} as Record<ResourceStatus, boolean>),
+      topics: this.filters.topics,
+      levels: this.filters.levels,
     })
 
     this.visible = true
@@ -113,6 +117,8 @@ export class ResourceFiltersComponent implements OnDestroy {
             ? (Object.keys(status).filter((e) => status[e as ResourceStatus]) as ResourceStatus[])
             : undefined,
           parents: value.parents as string[],
+          topics: value.topics as string[],
+          levels: value.levels as string[],
         }
 
         if (!value.types?.EXERCISE) {
@@ -144,6 +150,8 @@ export class ResourceFiltersComponent implements OnDestroy {
           return controls
         }, {} as Record<ResourceTypes, FormControl<boolean | null>>)
       ),
+      topics: new FormControl([] as string[]),
+      levels: new FormControl([] as string[]),
       status: new FormGroup(
         Object.values(ResourceStatus).reduce((controls, status) => {
           controls[status] = new FormControl(false)
