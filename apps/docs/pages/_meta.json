@@ -1,10 +1,14 @@
 {
-  "index": "Introduction",
-  "overview": "Prise en main rapide",
-  "users": "Gestion des Utilisateurs",
-  "resources": "Gestion des Ressources",
-  "programing": "Guide de programmation",
-  "courses": "Gestion des cours",
-  "conclusion": "Conclusion",
-  "annexes": "Annexes"
+  "index": {
+    "title": "Introduction",
+    "type": "page"
+  },
+  "doc": {
+    "title": "Documentation",
+    "type": "page"
+  },
+  "showcase": {
+    "title": "Showcase",
+    "type": "page"
+  }
 }

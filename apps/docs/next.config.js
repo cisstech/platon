@@ -9,13 +9,13 @@ const withNextra = require('nextra')({
 const nextConfig =
   process.env.GITHUB_PAGES ? {
       output: 'export',
-      basePath: '/platon/docs',
-      assetPrefix: '/platon/docs/',
+      basePath: '/platon/docs/main',
+      assetPrefix: '/platon/docs/main/',
       poweredByHeader: true,
       images: {
         unoptimized: true,
       },
-      distDir: '../../dist/apps/home/browser/docs',
+      distDir: '../../dist/apps/home/browser/docs/main',
     }
   : process.env.NODE_ENV === 'production'
     ? {

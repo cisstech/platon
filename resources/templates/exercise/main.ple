@@ -1,3 +1,5 @@
+sandbox = "node"
+
 input = :wc-input-box
 input.type = "number"
 input.placeholder = "Entrez votre réponse ici"
@@ -10,9 +12,8 @@ inputSolution.placeholder = "Solution"
 max = 10
 
 theories = [
-  { title: "Cours 1", url: "https://google.com" },
-  { title: "Cours 2", url: "https://google.com" },
-  { title: "Cours 3", url: @copyurl /relative/readme.md }
+  { title: "Lien vers une ressource externe", url: "https://google.com" },
+  { title: "Lien vers une ressource interne", url: @copyurl /relative/readme.md }
 ]
 
 hint = ["Aide 1", "Aide 2"]

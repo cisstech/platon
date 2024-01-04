@@ -39,7 +39,9 @@
 
 .hero-content {
   position: relative;
-  background: var(--brand-background-waves);
+  // /platon prefix is for github pages subdirectory (remove if not needed deployed to github pages)
+  background: url(/platon/assets/images/waves/wave-1.svg) no-repeat bottom,
+    linear-gradient(to bottom, #c55882 1%, #ff9474 99%, hsla(0, 0%, 100%, 1) 99%);
   color: white;
 }
 
