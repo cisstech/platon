@@ -1,22 +1,47 @@
-@for (tag of tags; track $index) {
-<nz-tag [nzMode]="editable ? 'closeable' : 'default'" (nzOnClose)="remove.emit($index)">
-  {{ tag }}
-</nz-tag>
-}
+<div
+  class="ui-tag-list-container"
+  cdkDropList
+  [cdkDropListDisabled]="!editable"
+  (cdkDropListDropped)="handleReorder($any($event))"
+  [class.vertical]="vertical"
+>
+  <ng-container *ngIf="tags">
+    @for (tag of tags; track $index) { @if (editingIndex === $index) {
+    <ui-tag-input
+      [small]="small"
+      [value]="tag"
+      [multiline]="multiline"
+      (edited)="edit.next({ index: $index, value: $event })"
+      (finished)="editingIndex = -1"
+    />
+    } @else {
+    <nz-tag
+      cdkDrag
+      class="ui-tag-list-item"
+      [nzMode]="editable ? 'closeable' : 'default'"
+      (nzOnClose)="remove.emit($index)"
+    >
+      @if (multiline) {
+      <div>{{ tag }}</div>
+      } @else {
+      <span> {{ tag }}</span>
+      }
+      <span *ngIf="editable" nz-icon nzType="edit" nzTheme="outline" (click)="editingIndex = $index"></span> </nz-tag
+    >} }
+  </ng-container>
+</div>
+
 <ng-container *ngIf="editable">
-  <nz-tag *ngIf="!inputVisible" class="editable-tag" nzNoAnimation (click)="showInput()">
+  <nz-tag *ngIf="!creating" class="ui-tag-list-add-btn" nzNoAnimation (click)="creating = true">
     <span nz-icon nzType="plus"></span>
     {{ addLabel }}
   </nz-tag>
-  <input
-    #inputElement
-    nz-input
-    nzSize="small"
-    *ngIf="inputVisible"
-    type="text"
-    [(ngModel)]="inputValue"
-    style="width: 78px"
-    (blur)="handleInputConfirm()"
-    (keydown.enter)="handleInputConfirm()"
+  <ui-tag-input
+    *ngIf="creating"
+    [small]="small"
+    [value]="value"
+    [multiline]="multiline"
+    (edited)="create.next($event)"
+    (finished)="creating = false"
   />
 </ng-container>

@@ -9,7 +9,13 @@
       La documentation de cette fonctionnalité est disponible
       <a href="/docs/main/doc/programing/exercise/config" target="_blank">sur cette page.</a>
     </p>
-    <nz-list cdkDropList (cdkDropListDropped)="onReorder($any($event))" [nzDataSource]="inputs" nzBordered>
+    <nz-list
+      cdkDropList
+      [cdkDropListDisabled]="readOnly"
+      (cdkDropListDropped)="onReorder($any($event))"
+      [nzDataSource]="inputs"
+      nzBordered
+    >
       <nz-list-item
         cdkDrag
         [class.selected]="selectionIndex === i"

@@ -18,6 +18,7 @@ import { InputBooleanProvider } from './input-boolean'
 import { InputCodeProvider } from './input-code'
 import { InputFileProvider } from './input-file'
 import { InputJsonProvider } from './input-json'
+import { InputListProvider } from './input-list'
 import { InputNumberProvider } from './input-number'
 import { InputSelectProvider } from './input-select'
 import { InputTextProvider } from './input-text'
@@ -38,6 +39,7 @@ import {
 
   providers: [
     // THE ORDER IS IMPORTANT SINCE THE `canHandle` METHOD IS CALLED IN THE SAME ORDER
+    InputListProvider,
     InputSelectProvider,
     InputNumberProvider,
     InputBooleanProvider,

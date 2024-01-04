@@ -1,4 +1,4 @@
-<nz-form-item nzRequired>
+<nz-form-item>
   <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="min">Choix multiple</nz-form-label>
   <nz-form-control>
     <label
@@ -11,9 +11,17 @@
 </nz-form-item>
 
 <!-- CHOICES -->
-<nz-form-item nzRequired>
+<nz-form-item>
   <nz-form-label [nzSpan]="24" nzLabelAlign="left" for="choices">Choix possibles</nz-form-label>
   <nz-form-control>
-    <ui-tag-list [tags]="options.choices" (remove)="removeChoice($event)" (create)="addChoice($event)" />
+    <ui-tag-list
+      [small]="false"
+      [vertical]="true"
+      [tags]="options.choices"
+      (edit)="editChoice($event.index, $event.value)"
+      (remove)="removeChoice($event)"
+      (create)="addChoice($event)"
+      (reorder)="reorderChoices($event)"
+    />
   </nz-form-control>
 </nz-form-item>

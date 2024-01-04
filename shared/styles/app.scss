@@ -55,6 +55,13 @@ nge-markdown {
 
 // CDK DRAG DROP PREVIEW STATE
 
+.cdk-drag {
+  cursor: move;
+  &.cdk-drag-disabled {
+    cursor: initial;
+  }
+}
+
 .cdk-drag-preview {
   box-sizing: border-box;
   border-radius: 4px;

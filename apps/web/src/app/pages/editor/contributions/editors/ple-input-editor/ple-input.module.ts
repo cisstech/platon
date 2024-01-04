@@ -14,6 +14,7 @@ import { InputCodeModule } from './input-code'
 import { InputFileModule } from './input-file'
 import { InputGroupComponent } from './input-group/input-group.component'
 import { InputJsonModule } from './input-json'
+import { InputListModule } from './input-list'
 import { InputNumberModule } from './input-number'
 import { InputSelectModule } from './input-select'
 import { InputTextModule } from './input-text'
@@ -39,6 +40,7 @@ import { PleInputComponent } from './ple-input.component'
     InputNumberModule,
     InputBooleanModule,
     InputSelectModule,
+    InputListModule,
   ],
   declarations: [PleInputComponent, InputGroupComponent],
   exports: [PleInputComponent, InputGroupComponent],

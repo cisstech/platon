@@ -106,6 +106,7 @@
         <h3>Groupes</h3>
         <nz-list
           cdkDropList
+          [cdkDropListDisabled]="readOnly"
           (cdkDropListDropped)="onReorderGroups($any($event))"
           [nzDataSource]="exerciseGroups"
           nzBordered
@@ -177,6 +178,7 @@
 
   <nz-list
     cdkDropList
+    [cdkDropListDisabled]="readOnly"
     (cdkDropListDropped)="onReorderExercises($any($event))"
     [nzDataSource]="selectedGroup"
     nzBordered

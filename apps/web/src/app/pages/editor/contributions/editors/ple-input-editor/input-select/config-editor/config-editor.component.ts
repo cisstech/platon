@@ -20,6 +20,11 @@ export class ConfigEditorComponent extends BaseConfigEditor<InputSelectOptions> 
     })
   }
 
+  protected editChoice(index: number, value: string): void {
+    this.options.choices?.splice(index, 1, value)
+    this.notifyOptionsChange?.(this.options)
+  }
+
   protected removeChoice(index: number): void {
     this.options.choices?.splice(index, 1)
     this.notifyOptionsChange?.(this.options)
@@ -27,6 +32,11 @@ export class ConfigEditorComponent extends BaseConfigEditor<InputSelectOptions> 
 
   protected addChoice(value: string): void {
     this.options.choices = [...(this.options.choices || []), value]
+    this.notifyOptionsChange?.(this.options)
+  }
+
+  protected reorderChoices(choices: string[]): void {
+    this.options.choices = choices
     this.notifyOptionsChange?.(this.options)
   }
 }
