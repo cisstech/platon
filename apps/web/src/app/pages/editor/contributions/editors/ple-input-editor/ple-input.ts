@@ -104,6 +104,7 @@ export abstract class BaseConfigEditor<TOptions = any> implements PleInputConfig
   onChangeOptions(consumer: (value: TOptions) => void): void {
     this.notifyOptionsChange = consumer
   }
+
   setDisabled(disabled?: boolean): void {
     this.disabled = !!disabled
     this.changeDetectorRef.markForCheck()

@@ -8,7 +8,7 @@ import { InputCodeOptions } from '../input-code'
   styleUrls: ['config-editor.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InputCodeConfigEditorComponent extends BaseConfigEditor<InputCodeOptions> {
+export class ConfigEditorComponent extends BaseConfigEditor<InputCodeOptions> {
   readonly languages = monaco.languages.getLanguages()
   constructor() {
     super()

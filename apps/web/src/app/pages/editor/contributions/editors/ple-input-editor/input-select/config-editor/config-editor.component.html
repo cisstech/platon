@@ -1,0 +1,19 @@
+<nz-form-item nzRequired>
+  <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="min">Choix multiple</nz-form-label>
+  <nz-form-control>
+    <label
+      nz-checkbox
+      [(ngModel)]="options.multiple"
+      (ngModelChange)="notifyOptionsChange?.(options)"
+      [nzDisabled]="disabled"
+    ></label>
+  </nz-form-control>
+</nz-form-item>
+
+<!-- CHOICES -->
+<nz-form-item nzRequired>
+  <nz-form-label [nzSpan]="24" nzLabelAlign="left" for="choices">Choix possibles</nz-form-label>
+  <nz-form-control>
+    <ui-tag-list [tags]="options.choices" (remove)="removeChoice($event)" (create)="addChoice($event)" />
+  </nz-form-control>
+</nz-form-item>

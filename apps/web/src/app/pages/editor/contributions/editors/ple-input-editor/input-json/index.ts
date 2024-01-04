@@ -2,12 +2,12 @@ import { CommonModule } from '@angular/common'
 import { NgModule, Provider } from '@angular/core'
 import { NgJsonEditorModule } from 'ang-jsoneditor'
 import { PLE_INPUT_PROVIDERS, PleInputProvider } from '../ple-input'
-import { InputJsonValueEditorComponent } from './value-editor/value-editor.component'
+import { ValueEditorComponent } from './value-editor/value-editor.component'
 
 @NgModule({
   imports: [CommonModule, NgJsonEditorModule],
-  exports: [InputJsonValueEditorComponent],
-  declarations: [InputJsonValueEditorComponent],
+  exports: [ValueEditorComponent],
+  declarations: [ValueEditorComponent],
 })
 export class InputJsonModule {}
 
@@ -19,6 +19,6 @@ export const InputJsonProvider: Provider = {
     label: 'JSON',
     defaultValue: () => ({}),
     canHandle: (input) => (input.type ? input.type === 'json' : typeof input.value === 'object'),
-    valueEditor: InputJsonValueEditorComponent,
+    valueEditor: ValueEditorComponent,
   } as PleInputProvider,
 }

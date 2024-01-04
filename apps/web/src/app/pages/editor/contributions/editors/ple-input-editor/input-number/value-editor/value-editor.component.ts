@@ -8,7 +8,7 @@ import { InputNumberOptions } from '../input-number'
   styleUrls: ['value-editor.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InputNumberValueEditorComponent extends BaseValueEditor<number, InputNumberOptions> {
+export class ValueEditorComponent extends BaseValueEditor<number, InputNumberOptions> {
   constructor() {
     super()
   }

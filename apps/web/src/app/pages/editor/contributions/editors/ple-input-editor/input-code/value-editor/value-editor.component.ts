@@ -8,7 +8,7 @@ import { InputCodeOptions } from '../input-code'
   styleUrls: ['value-editor.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InputCodeValueEditorComponent extends BaseValueEditor<string, InputCodeOptions> implements OnDestroy {
+export class ValueEditorComponent extends BaseValueEditor<string, InputCodeOptions> implements OnDestroy {
   private readonly disposables: monaco.IDisposable[] = []
   private model?: monaco.editor.ITextModel
   private editor?: monaco.editor.IStandaloneCodeEditor

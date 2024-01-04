@@ -8,7 +8,7 @@ import { InputNumberOptions } from '../input-number'
   styleUrls: ['config-editor.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InputNumberConfigEditorComponent extends BaseConfigEditor<InputNumberOptions> {
+export class ConfigEditorComponent extends BaseConfigEditor<InputNumberOptions> {
   constructor() {
     super()
   }

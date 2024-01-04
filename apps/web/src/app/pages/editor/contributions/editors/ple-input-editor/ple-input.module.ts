@@ -8,15 +8,16 @@ import { NzListModule } from 'ng-zorro-antd/list'
 import { NzSelectModule } from 'ng-zorro-antd/select'
 
 import { CommonModule } from '@angular/common'
+import { NzIconModule } from 'ng-zorro-antd/icon'
 import { InputBooleanModule } from './input-boolean'
 import { InputCodeModule } from './input-code'
 import { InputFileModule } from './input-file'
 import { InputGroupComponent } from './input-group/input-group.component'
 import { InputJsonModule } from './input-json'
 import { InputNumberModule } from './input-number'
+import { InputSelectModule } from './input-select'
 import { InputTextModule } from './input-text'
 import { PleInputComponent } from './ple-input.component'
-import { NzIconModule } from 'ng-zorro-antd/icon'
 
 @NgModule({
   imports: [
@@ -37,6 +38,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon'
     InputFileModule,
     InputNumberModule,
     InputBooleanModule,
+    InputSelectModule,
   ],
   declarations: [PleInputComponent, InputGroupComponent],
   exports: [PleInputComponent, InputGroupComponent],

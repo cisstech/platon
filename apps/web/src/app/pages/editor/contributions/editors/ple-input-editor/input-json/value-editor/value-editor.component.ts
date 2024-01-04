@@ -10,7 +10,7 @@ import { BaseValueEditor } from '../../ple-input'
   styleUrls: ['value-editor.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InputJsonValueEditorComponent extends BaseValueEditor<Record<string, unknown>> implements OnInit {
+export class ValueEditorComponent extends BaseValueEditor<Record<string, unknown>> implements OnInit {
   private readonly resourceLoader = inject(ResourceLoaderService)
   protected readonly editorOptions = new JsonEditorOptions()
 

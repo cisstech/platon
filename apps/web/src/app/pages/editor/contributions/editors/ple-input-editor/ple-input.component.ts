@@ -19,6 +19,7 @@ import { InputCodeProvider } from './input-code'
 import { InputFileProvider } from './input-file'
 import { InputJsonProvider } from './input-json'
 import { InputNumberProvider } from './input-number'
+import { InputSelectProvider } from './input-select'
 import { InputTextProvider } from './input-text'
 import {
   CONFIG_EDITOR_TOKEN,
@@ -37,6 +38,7 @@ import {
 
   providers: [
     // THE ORDER IS IMPORTANT SINCE THE `canHandle` METHOD IS CALLED IN THE SAME ORDER
+    InputSelectProvider,
     InputNumberProvider,
     InputBooleanProvider,
     InputJsonProvider,

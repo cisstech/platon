@@ -11,7 +11,7 @@ import { removeLeadingSlash } from '@platon/core/common'
   styleUrls: ['value-editor.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InputFileValueEditorComponent extends BaseValueEditor<string> {
+export class ValueEditorComponent extends BaseValueEditor<string> {
   private readonly editorService = inject(EditorService)
   private readonly editorPresenter = inject(EditorPresenter)
   private readonly fileSystemProvider = inject(ResourceFileSystemProvider)
