@@ -212,7 +212,6 @@ export class ResourceService {
     }
 
     if (filters.usedBy?.length) {
-      console.log(filters.usedBy)
       query.innerJoin(
         ResourceDependencyEntity,
         'dependency',

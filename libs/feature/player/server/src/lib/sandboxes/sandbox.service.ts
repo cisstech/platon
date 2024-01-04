@@ -1,6 +1,6 @@
 import { DiscoveryService } from '@golevelup/nestjs-discovery'
 import { Injectable, OnModuleInit } from '@nestjs/common'
-import { PLSourceFile } from '@platon/feature/compiler'
+import { ExerciseVariables, PLSourceFile, withExerciseMeta } from '@platon/feature/compiler'
 import { basename } from 'path'
 import { SANDBOX, Sandbox, SandboxInput, SandboxOutput } from './sandbox'
 
@@ -17,16 +17,18 @@ export class SandboxService implements OnModuleInit {
     })
   }
 
-  async build(source: PLSourceFile): Promise<SandboxOutput> {
+  async build(source: PLSourceFile<ExerciseVariables>): Promise<SandboxOutput> {
     let envid: string | undefined
-    let variables = source.variables
 
+    let variables = withExerciseMeta(source.variables)
     const sandbox = this.sandboxes.find((sandbox) => sandbox.supports(source))
     if (!sandbox) {
       throw new Error(`No sandbox found for the given source file`)
     }
 
     if (variables.builder || source.dependencies.length) {
+      variables.meta = { ...variables['.meta'] }
+
       const response = await sandbox.run(
         {
           files: source.dependencies.map((file) => ({
@@ -38,6 +40,9 @@ export class SandboxService implements OnModuleInit {
         variables.builder as string,
         10_0000
       )
+
+      delete response.variables.meta
+      response.variables['.meta'] = variables['.meta']
 
       envid = response.envid
       variables = response.variables
@@ -54,6 +59,14 @@ export class SandboxService implements OnModuleInit {
     if (!sandbox) {
       throw new Error(`No sandbox found for the given source file`)
     }
-    return sandbox.run(input, script, 10_0000)
+
+    input.variables.meta = { ...input.variables['.meta'] }
+
+    const output = await sandbox.run(input, script, 10_0000)
+
+    delete output.variables.meta
+    output.variables['.meta'] = input.variables['.meta']
+
+    return output
   }
 }

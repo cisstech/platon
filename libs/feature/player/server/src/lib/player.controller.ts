@@ -48,7 +48,7 @@ export class PlayerController {
   @Public()
   @Post('/terminate/:sessionId')
   async terminate(@Req() req: IRequest, @Param('sessionId') sessionId: string): Promise<PlayActivityOutputDTO> {
-    return this.playerService.terminateSession(sessionId, req.user)
+    return this.playerService.terminate(sessionId, req.user)
   }
 
   @Public()

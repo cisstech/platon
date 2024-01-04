@@ -262,7 +262,7 @@ export interface PLDependency {
   abspath: string
 }
 
-export interface PLSourceFile {
+export interface PLSourceFile<TVariables = Record<string, unknown>> {
   /** Identifier of the compiler resource. */
   resource: string
 
@@ -277,7 +277,7 @@ export interface PLSourceFile {
   /**
    * All variables defined in the source file including extended variables.
    */
-  variables: Record<string, unknown>
+  variables: TVariables
 
   /** List of file added using the `@include` instruction. */
   dependencies: PLDependency[]

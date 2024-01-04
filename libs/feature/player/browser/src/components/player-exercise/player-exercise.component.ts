@@ -214,7 +214,7 @@ export class PlayerExerciseComponent implements OnInit, OnChanges {
         icon: 'lightbulb',
         label: 'Aide',
         tooltip: 'Aide',
-        visible: !!this.player.hints,
+        visible: this.player.settings?.actions?.hints && !!this.player.hints,
         disabled: this.disabled || !!this.runningAction,
         playerAction: PlayerActions.NEXT_HINT,
         run: async () => {
