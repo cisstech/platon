@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy
 import { Editor, FileService, OpenRequest } from '@cisstech/nge-ide/core'
 import { Subscription } from 'rxjs'
 import { PleInput } from '../ple-input-editor/ple-input'
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop'
 
 @Component({
   selector: 'app-ple-config-editor',
@@ -61,6 +62,13 @@ export class PleConfigEditorComponent implements OnInit, OnDestroy {
   protected selectInput(index: number): void {
     this.selection = this.inputs[index]
     this.selectionIndex = index
+  }
+
+  protected onReorder(event: CdkDragDrop<PleInput[]>) {
+    if (this.readOnly) return
+    moveItemInArray(this.inputs, event.previousIndex, event.currentIndex)
+    this.selectInput(event.currentIndex)
+    this.onChangeInput()
   }
 
   protected onChangeInput(value?: PleInput): void {

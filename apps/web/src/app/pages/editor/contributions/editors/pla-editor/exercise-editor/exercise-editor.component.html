@@ -34,6 +34,11 @@
           <span nz-icon nzType="delete" nzTheme="outline"></span>
         </button>
       </nz-list-item-action>
+      <nz-list-item-action *ngIf="!disabled">
+        <button nz-button nzType="text" nz-tooltip="Maintenez et déplacez pour changer l'ordre">
+          <mat-icon>swap_vert</mat-icon>
+        </button>
+      </nz-list-item-action>
     </ul>
   </div>
   <ng-container *ngIf="overriding && inputs">

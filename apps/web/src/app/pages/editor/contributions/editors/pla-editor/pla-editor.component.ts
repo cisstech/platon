@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop'
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, inject } from '@angular/core'
 import { FormBuilder, Validators } from '@angular/forms'
 import { Editor, FileService, OpenRequest } from '@cisstech/nge-ide/core'
@@ -153,6 +154,19 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
     this.onChangeData()
   }
 
+  protected onReorderGroups(event: CdkDragDrop<ActivityExercise[][]>) {
+    if (this.readOnly) return
+    moveItemInArray(this.exerciseGroups, event.previousIndex, event.currentIndex)
+    this.selectGroup(event.currentIndex)
+    this.onChangeData()
+  }
+
+  protected onReorderExercises(event: CdkDragDrop<ActivityExercise[]>) {
+    if (this.readOnly) return
+    moveItemInArray(this.selectedGroup as ActivityExercise[], event.previousIndex, event.currentIndex)
+    this.onChangeData()
+  }
+
   protected onChangeData(): void {
     const { value } = this.form
 
@@ -198,6 +212,8 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
     this.fileService.update(this.request.uri, JSON.stringify(this.activity, null, 2))
 
     this.exerciseGroups = Object.values(this.activity.exerciseGroups)
+
+    this.changeDetectorRef.markForCheck()
   }
 
   protected trackByIndex(index: number) {

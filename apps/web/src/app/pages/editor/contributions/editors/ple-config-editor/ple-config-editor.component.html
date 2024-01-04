@@ -5,13 +5,14 @@
       Définissez ici une liste de variables qui peuvent être spécifiées depuis une activité pour remplacer celles
       définies dans votre exercice.
     </p>
-    <nz-list [nzDataSource]="inputs" nzBordered>
+    <nz-list cdkDropList (cdkDropListDropped)="onReorder($any($event))" [nzDataSource]="inputs" nzBordered>
       <nz-list-item
+        cdkDrag
         [class.selected]="selectionIndex === i"
         *ngFor="let input of inputs; trackBy: trackByIndex; index as i"
         (click)="selectInput(i)"
       >
-        <span>{{ input.name }}</span>
+        <b>{{ input.name }}</b>
         <ul nz-list-item-actions>
           <nz-list-item-action>
             <button
@@ -23,6 +24,11 @@
               (click)="deleteInput(i)"
             >
               <span nz-icon nzType="delete" nzTheme="outline"></span>
+            </button>
+          </nz-list-item-action>
+          <nz-list-item-action *ngIf="!readOnly">
+            <button nz-button nzType="text" nz-tooltip="Maintenez et déplacez pour changer l'ordre">
+              <mat-icon>swap_vert</mat-icon>
             </button>
           </nz-list-item-action>
         </ul>

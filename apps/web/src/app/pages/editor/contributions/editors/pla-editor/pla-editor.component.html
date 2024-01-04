@@ -104,13 +104,26 @@
     <div class="exercise-group-container">
       <div class="exercise-group-list">
         <h3>Groupes</h3>
-        <nz-list [nzDataSource]="exerciseGroups" nzBordered>
+        <nz-list
+          cdkDropList
+          (cdkDropListDropped)="onReorderGroups($any($event))"
+          [nzDataSource]="exerciseGroups"
+          nzBordered
+        >
           <nz-list-item
+            cdkDrag
             [class.selected]="selectedGroupIndex === i"
             *ngFor="let group of exerciseGroups; trackBy: trackByIndex; index as i"
             (click)="selectGroup(i)"
           >
-            <span>Groupe {{ i + 1 }}</span>
+            <span>
+              <b> Groupe {{ i + 1 }} </b> : <br />
+              <ng-container [ngPlural]="group.length">
+                <ng-template ngPluralCase="=0">0 exercice</ng-template>
+                <ng-template ngPluralCase="=1">1 exercice</ng-template>
+                <ng-template ngPluralCase="other">{{ group.length }} exercices</ng-template>
+              </ng-container></span
+            >
             <ul nz-list-item-actions>
               <nz-list-item-action>
                 <button
@@ -122,6 +135,11 @@
                   (click)="deleteGroup(i)"
                 >
                   <span nz-icon nzType="delete" nzTheme="outline"></span>
+                </button>
+              </nz-list-item-action>
+              <nz-list-item-action *ngIf="!readOnly">
+                <button nz-button nzType="text" nz-tooltip="Maintenez et déplacez pour changer l'ordre">
+                  <mat-icon>swap_vert</mat-icon>
                 </button>
               </nz-list-item-action>
             </ul>
@@ -143,8 +161,13 @@
       <nz-breadcrumb-item>Exercices</nz-breadcrumb-item>
     </nz-breadcrumb>
   </h3>
-  <nz-list [nzDataSource]="selectedGroup" nzBordered>
-    <nz-list-item *ngFor="let exercise of selectedGroup; trackBy: trackByExerciseId; let index = index">
+  <nz-list
+    cdkDropList
+    (cdkDropListDropped)="onReorderExercises($any($event))"
+    [nzDataSource]="selectedGroup"
+    nzBordered
+  >
+    <nz-list-item cdkDrag *ngFor="let exercise of selectedGroup; trackBy: trackByExerciseId; let index = index">
       <app-pla-exercise-editor
         [disabled]="readOnly"
         [exercise]="exercise"
