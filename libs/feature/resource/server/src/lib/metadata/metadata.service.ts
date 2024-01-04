@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { OnEvent } from '@nestjs/event-emitter'
 import { InjectRepository } from '@nestjs/typeorm'
-import { ACTIVITY_MAIN_FILE, ActivityVariables, EXERCISE_CONFIG_FILE } from '@platon/feature/compiler'
+import { ACTIVITY_MAIN_FILE, ActivityVariables, EXERCISE_CONFIG_FILE, PleConfigJSON } from '@platon/feature/compiler'
 import { ActivityResourceMeta, ExerciseResourceMeta, LATEST, ResourceTypes } from '@platon/feature/resource/common'
 import { EntityManager, Repository } from 'typeorm'
 import { ResourceDependencyService } from '../dependency'
@@ -104,7 +104,7 @@ export class ResourceMetadataService {
    * @param args - The arguments for synchronizing the metadata.
    * @returns A promise that resolves to the updated resource metadata entity.
    */
-  async syncExercise(args: SyncArgs): Promise<ResourceMetaEntity> {
+  async syncExercise(args: SyncArgs, changes?: OnChangeFileEventPayload): Promise<ResourceMetaEntity> {
     const { resource, entityManager } = args
     const meta: ExerciseResourceMeta = {
       configurable: false,
@@ -119,8 +119,30 @@ export class ResourceMetadataService {
 
     const versions = await repo.versions()
 
-    meta.configurable = repo.exists(EXERCISE_CONFIG_FILE)
     meta.versions = versions.all
+    meta.configurable = repo.exists(EXERCISE_CONFIG_FILE)
+
+    if (meta.configurable) {
+      let config: PleConfigJSON = { inputs: [] }
+      try {
+        if (changes) {
+          if (changes.path === EXERCISE_CONFIG_FILE) {
+            config = JSON.parse(changes.newContent ?? JSON.stringify(config)) as PleConfigJSON
+          }
+        } else {
+          const [_, data] = await repo.read(EXERCISE_CONFIG_FILE)
+          const content = Buffer.from((await data!).buffer).toString()
+          config = JSON.parse(content || JSON.stringify(config)) as PleConfigJSON
+        }
+      } catch {
+        this.logger.error(`Error parsing exercise config file for resource ${resource.id}`)
+      } finally {
+        meta.config = config
+      }
+    } else {
+      meta.config = undefined
+      delete meta.config
+    }
 
     const metadata = await this.of(resource.id, entityManager)
     metadata.meta = meta
@@ -154,7 +176,7 @@ export class ResourceMetadataService {
         }
       } else if (payload.resource.type === ResourceTypes.EXERCISE) {
         if (path === EXERCISE_CONFIG_FILE || path === EXERCISE_CONFIG_FILE) {
-          await this.syncExercise({ repo, resource })
+          await this.syncExercise({ repo, resource }, payload)
         }
       }
     } catch (error) {

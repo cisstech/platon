@@ -9,6 +9,16 @@ export interface OnChangeFileEventPayload {
   path: string
   operation: 'create' | 'update' | 'delete'
   resource: ResourceEntity
+
+  /**
+   * Old content of the file in case of an update.
+   */
+  oldContent?: string
+
+  /**
+   * New content of the file in case of an update.
+   */
+  newContent?: string
 }
 
 export interface OnReleaseRepoEventPayload {
