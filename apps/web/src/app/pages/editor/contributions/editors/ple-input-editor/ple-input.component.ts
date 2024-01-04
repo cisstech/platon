@@ -12,7 +12,8 @@ import {
   inject,
 } from '@angular/core'
 import { ControlValueAccessor, FormBuilder, NG_VALUE_ACCESSOR } from '@angular/forms'
-import { Subscription, debounceTime, tap } from 'rxjs'
+import { PleInput } from '@platon/feature/compiler'
+import { Subscription, debounceTime } from 'rxjs'
 import { InputBooleanProvider } from './input-boolean'
 import { InputCodeProvider } from './input-code'
 import { InputFileProvider } from './input-file'
@@ -22,7 +23,6 @@ import { InputTextProvider } from './input-text'
 import {
   CONFIG_EDITOR_TOKEN,
   PLE_INPUT_PROVIDERS,
-  PleInput,
   PleInputConfigEditor,
   PleInputProvider,
   PleInputValueEditor,
@@ -84,14 +84,11 @@ export class PleInputComponent implements OnInit, OnDestroy, ControlValueAccesso
         provide: CONFIG_EDITOR_TOKEN,
         useValue: (instance: PleInputConfigEditor) => {
           this.configEditor = instance
-          instance.setOptions(this.input.options)
+          instance.setOptions(this.input.options || {})
           instance.setDisabled(!!this.disabled)
           instance.onChangeOptions((options) => {
-            setTimeout(() => {
-              this.input.options = options
-              this.inputChange.emit(this.input)
-              this.onChange(this.input)
-            }, 300)
+            this.valueEditor?.setOptions?.(options)
+            this.form.patchValue({ options })
           })
         },
       },
@@ -107,13 +104,9 @@ export class PleInputComponent implements OnInit, OnDestroy, ControlValueAccesso
           this.valueEditor = instance
           instance.setValue(this.input.value)
           instance.setDisabled(!!this.disabled)
-          instance.setOptions?.(this.input.options)
+          instance.setOptions?.(this.input.options || {})
           instance.onChangeValue((value) => {
-            setTimeout(() => {
-              this.input.value = value
-              this.inputChange.emit(this.input)
-              this.onChange(this.input)
-            }, 300)
+            this.form.patchValue({ value })
           })
         },
       },
@@ -127,8 +120,6 @@ export class PleInputComponent implements OnInit, OnDestroy, ControlValueAccesso
 
   @Input()
   set input(value: PleInput) {
-    const oldSelectedProvider = this.selectedProvider
-
     this.selectedProvider = value.type
       ? this.providers.find((p) => p.type === value.type)
       : this.providers.find((p) => p.canHandle?.(value))
@@ -137,14 +128,7 @@ export class PleInputComponent implements OnInit, OnDestroy, ControlValueAccesso
       value.type = this.selectedProvider.type
     }
 
-    if (oldSelectedProvider?.type === this.selectedProvider?.type) {
-      this.configEditor?.setOptions({ ...(value.options || {}) })
-      this.valueEditor?.setValue(value.value)
-    }
-
-    this.form.patchValue(value, {
-      emitEvent: false,
-    })
+    this.form.patchValue(value, { emitEvent: false })
   }
 
   @Output() inputChange = new EventEmitter<PleInput>()
@@ -159,26 +143,29 @@ export class PleInputComponent implements OnInit, OnDestroy, ControlValueAccesso
 
   ngOnInit(): void {
     this.subscriptions.push(
-      this.form.valueChanges
-        .pipe(
-          debounceTime(500),
-          tap((value) => {
-            this.selectedProvider = this.providers.find((p) => p.type === value.type)
+      this.form.valueChanges.pipe(debounceTime(500)).subscribe((value) => {
+        const oldSelectedProvider = this.selectedProvider
+        this.selectedProvider = this.providers.find((p) => p.type === value.type)
+        if (oldSelectedProvider && oldSelectedProvider.type !== this.selectedProvider?.type) {
+          this.form.patchValue({
+            value: this.selectedProvider?.defaultValue(),
+            options: this.selectedProvider?.defaultOptions?.() || {},
           })
-        )
-        .subscribe((value) => {
-          this.hasNameError = false
-          if (value.name && this.reservedNames?.includes(value.name.trim())) {
-            this.hasNameError = true
-            this.form.updateValueAndValidity({
-              emitEvent: false,
-            })
-            this.changeDetectorRef.detectChanges()
-            return
-          }
-          this.inputChange.emit(value as PleInput)
-          this.onChange(value)
-        })
+          this.changeDetectorRef.markForCheck()
+          return
+        }
+
+        this.hasNameError = false
+        if (value.name && this.reservedNames?.includes(value.name.trim())) {
+          this.hasNameError = true
+          this.form.updateValueAndValidity({ emitEvent: false })
+          this.changeDetectorRef.markForCheck()
+          return
+        }
+
+        this.inputChange.emit(value as PleInput)
+        this.onChange(value as PleInput)
+      })
     )
 
     if (this.disabled) {

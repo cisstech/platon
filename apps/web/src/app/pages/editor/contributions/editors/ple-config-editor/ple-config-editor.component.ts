@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, inject } from '@angular/core'
 import { Editor, FileService, OpenRequest } from '@cisstech/nge-ide/core'
 import { Subscription } from 'rxjs'
-import { PleInput } from '../ple-input-editor/ple-input'
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop'
+import { PleInput } from '@platon/feature/compiler'
 
 @Component({
   selector: 'app-ple-config-editor',
@@ -40,14 +40,15 @@ export class PleConfigEditorComponent implements OnInit, OnDestroy {
   }
 
   protected addInput(): void {
-    this.inputs = [
-      ...this.inputs,
-      {
-        name: `variable${this.inputs.length + 1}`,
-        description: '',
-        type: '',
-      },
-    ]
+    const input: PleInput = {
+      name: `variable${this.inputs.length + 1}`,
+      description: '',
+      type: 'text',
+      value: '',
+      options: {},
+    }
+
+    this.inputs = [...this.inputs, input as PleInput]
     this.selectInput(this.inputs.length - 1)
     this.onChangeInput()
   }

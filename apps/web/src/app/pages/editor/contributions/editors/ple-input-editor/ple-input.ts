@@ -1,22 +1,16 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComponentType } from '@angular/cdk/portal'
 import { ChangeDetectorRef, InjectionToken, inject } from '@angular/core'
+import { PleInput } from '@platon/feature/compiler'
 
-export interface PleInput<TValue = unknown, TOptions = unknown> {
-  name: string
-  type: string
-  description: string
-  value?: TValue
-  options?: TOptions
-}
-
-export interface PleInputValueEditor<TValue = unknown, TOptions = unknown> {
+export interface PleInputValueEditor<TValue = unknown, TOptions = any> {
   setOptions?(options: TOptions): void
   setValue(value: TValue): void
   onChangeValue(consumer: (value: TValue) => void): void
   setDisabled(disabled: boolean): void
 }
 
-export interface PleInputConfigEditor<TOptions = unknown> {
+export interface PleInputConfigEditor<TOptions = any> {
   setOptions(options: TOptions): void
   onChangeOptions(consumer: (options: TOptions) => void): void
   setDisabled(disabled: boolean): void
@@ -25,6 +19,8 @@ export interface PleInputConfigEditor<TOptions = unknown> {
 export interface PleInputProvider {
   type: string
   label: string
+  defaultValue: () => unknown
+  defaultOptions?: () => unknown
   canHandle?(input: PleInput): boolean
   valueEditor: ComponentType<PleInputValueEditor>
   configEditor?: ComponentType<PleInputConfigEditor>
@@ -37,7 +33,7 @@ export const PLE_INPUT_PROVIDERS = new InjectionToken<PleInputProvider[]>('PLE_I
 export const VALUE_EDITOR_TOKEN = new InjectionToken<OnInitValueEditor>('VALUE_EDITOR_TOKEN')
 export const CONFIG_EDITOR_TOKEN = new InjectionToken<OnInitConfigEditor>('CONFIG_EDITOR_TOKEN')
 
-export abstract class BaseValueEditor<TValue = unknown, TOptions = unknown>
+export abstract class BaseValueEditor<TValue = unknown, TOptions = any>
   implements PleInputValueEditor<TValue, TOptions>
 {
   protected readonly onInit = inject(VALUE_EDITOR_TOKEN)
@@ -88,7 +84,7 @@ export abstract class BaseValueEditor<TValue = unknown, TOptions = unknown>
   }
 }
 
-export abstract class BaseConfigEditor<TOptions = unknown> implements PleInputConfigEditor<TOptions> {
+export abstract class BaseConfigEditor<TOptions = any> implements PleInputConfigEditor<TOptions> {
   protected readonly onInit = inject(CONFIG_EDITOR_TOKEN)
   protected readonly changeDetectorRef = inject(ChangeDetectorRef)
 

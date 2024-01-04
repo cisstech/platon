@@ -161,6 +161,20 @@
       <nz-breadcrumb-item>Exercices</nz-breadcrumb-item>
     </nz-breadcrumb>
   </h3>
+
+  <div class="add-exercise">
+    <resource-search-bar
+      [modalMode]="true"
+      [simpleLayout]="true"
+      [disabled]="!!readOnly"
+      [(ngModel)]="selectedExercise"
+      [filters]="{ types: ['EXERCISE'], watchers: [user.id] }"
+    />
+    <button nz-button nzType="primary" (click)="addExercise()" [disabled]="!selectedExercise || readOnly">
+      Ajouter
+    </button>
+  </div>
+
   <nz-list
     cdkDropList
     (cdkDropListDropped)="onReorderExercises($any($event))"
@@ -176,17 +190,4 @@
       />
     </nz-list-item>
   </nz-list>
-  <h3>Ajouter un exercice</h3>
-  <div class="add-exercise">
-    <resource-search-bar
-      [modalMode]="true"
-      [simpleLayout]="true"
-      [disabled]="!!readOnly"
-      [(ngModel)]="selectedExercise"
-      [filters]="{ types: ['EXERCISE'], watchers: [user.id] }"
-    />
-    <button nz-button nzType="primary" (click)="addExercise()" [disabled]="!selectedExercise || readOnly">
-      Ajouter
-    </button>
-  </div>
 </ng-template>

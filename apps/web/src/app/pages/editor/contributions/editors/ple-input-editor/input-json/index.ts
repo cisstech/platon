@@ -17,6 +17,7 @@ export const InputJsonProvider: Provider = {
   useValue: {
     type: 'json',
     label: 'JSON',
+    defaultValue: () => ({}),
     canHandle: (input) => (input.type ? input.type === 'json' : typeof input.value === 'object'),
     valueEditor: InputJsonValueEditorComponent,
   } as PleInputProvider,

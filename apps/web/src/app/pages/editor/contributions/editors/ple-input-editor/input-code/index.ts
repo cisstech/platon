@@ -21,6 +21,10 @@ export const InputCodeProvider: Provider = {
   useValue: {
     type: 'code',
     label: 'Code',
+    defaultValue: () => '',
+    defaultOptions: () => ({
+      language: 'python',
+    }),
     canHandle: (input) => (input.type ? input.type === 'code' : typeof input.value === 'string'),
     valueEditor: InputCodeValueEditorComponent,
     configEditor: InputCodeConfigEditorComponent,

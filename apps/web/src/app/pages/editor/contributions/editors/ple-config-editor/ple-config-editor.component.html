@@ -5,6 +5,10 @@
       Définissez ici une liste de variables qui peuvent être spécifiées depuis une activité pour remplacer celles
       définies dans votre exercice.
     </p>
+    <p>
+      La documentation de cette fonctionnalité est disponible
+      <a href="/docs/main/doc/programing/exercise/config" target="_blank">sur cette page.</a>
+    </p>
     <nz-list cdkDropList (cdkDropListDropped)="onReorder($any($event))" [nzDataSource]="inputs" nzBordered>
       <nz-list-item
         cdkDrag
@@ -37,6 +41,6 @@
     <button class="btn-add-input" nz-button nzType="primary" [disabled]="readOnly" (click)="addInput()">+</button>
   </div>
   <div class="container-selection" formGroupName="selection" *ngIf="selection">
-    <app-ple-input [input]="selection" [disabled]="readOnly" (inputChange)="onChangeInput($event)" />
+    <app-ple-input [disabled]="readOnly" [input]="selection" (inputChange)="onChangeInput($event)" />
   </div>
 </div>

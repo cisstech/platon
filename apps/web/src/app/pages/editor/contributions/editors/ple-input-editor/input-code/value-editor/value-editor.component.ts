@@ -48,6 +48,7 @@ export class InputCodeValueEditorComponent extends BaseValueEditor<string, Input
       },
       tabIndex: 2,
       readOnly: this.disabled,
+      theme: 'nord',
     })
 
     const model = monaco.editor.createModel(this.value || '', this.options?.language || 'twig')

@@ -20,6 +20,7 @@ export const InputFileProvider: Provider = {
   useValue: {
     type: 'file',
     label: 'Fichier',
+    defaultValue: () => '',
     canHandle: (input) =>
       input.type
         ? input.type === 'file'

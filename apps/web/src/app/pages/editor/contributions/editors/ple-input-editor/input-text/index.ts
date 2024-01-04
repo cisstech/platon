@@ -19,6 +19,7 @@ export const InputTextProvider: Provider = {
   useValue: {
     type: 'text',
     label: 'Texte',
+    defaultValue: () => '',
     canHandle: (input) => (input.type ? input.type === 'text' : typeof input.value === 'string'),
     valueEditor: InputTextValueEditorComponent,
   } as PleInputProvider,

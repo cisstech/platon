@@ -20,6 +20,7 @@ export const InputNumberProvider: Provider = {
   useValue: {
     type: 'number',
     label: 'Nombre',
+    defaultValue: () => 0,
     canHandle: (input) => (input.type ? input.type === 'number' : typeof input.value === 'number'),
     valueEditor: InputNumberValueEditorComponent,
     configEditor: InputNumberConfigEditorComponent,

@@ -19,6 +19,7 @@ export const InputBooleanProvider: Provider = {
   useValue: {
     type: 'boolean',
     label: 'Boolean',
+    defaultValue: () => false,
     canHandle: (input) => (input.type ? input.type === 'boolean' : typeof input.value === 'boolean'),
     valueEditor: InputBooleanValueEditorComponent,
   } as PleInputProvider,

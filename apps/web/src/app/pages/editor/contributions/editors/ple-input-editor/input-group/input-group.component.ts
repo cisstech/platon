@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input, forwardRef } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
-import { PleInput } from '../ple-input'
+import { PleInput } from '@platon/feature/compiler'
 
 @Component({
   selector: 'app-editor-input-group',
@@ -50,14 +50,15 @@ export class InputGroupComponent implements ControlValueAccessor {
   }
 
   protected add(): void {
-    this.inputs = [
-      ...this.inputs,
-      {
-        name: `var${this.inputs.length - 1}`,
-        type: 'text',
-        value: '',
-      } as PleInput,
-    ]
+    const input: PleInput = {
+      name: `variable${this.inputs.length + 1}`,
+      description: '',
+      type: 'text',
+      value: '',
+      options: {},
+    }
+
+    this.inputs = [...this.inputs, input as PleInput]
   }
 
   protected update(change: PleInput): void {
