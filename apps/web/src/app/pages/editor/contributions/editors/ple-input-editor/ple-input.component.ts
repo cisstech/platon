@@ -14,11 +14,13 @@ import {
 import { ControlValueAccessor, FormBuilder, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { PleInput } from '@platon/feature/compiler'
 import { Subscription, debounceTime } from 'rxjs'
+import { InputAutomatonProvider } from './input-automaton'
 import { InputBooleanProvider } from './input-boolean'
 import { InputCodeProvider } from './input-code'
 import { InputFileProvider } from './input-file'
 import { InputJsonProvider } from './input-json'
 import { InputListProvider } from './input-list'
+import { InputMathExprProvider } from './input-math-expr'
 import { InputNumberProvider } from './input-number'
 import { InputSelectProvider } from './input-select'
 import { InputTextProvider } from './input-text'
@@ -40,6 +42,8 @@ import {
   providers: [
     // THE ORDER IS IMPORTANT SINCE THE `canHandle` METHOD IS CALLED IN THE SAME ORDER
     InputListProvider,
+    InputMathExprProvider,
+    InputAutomatonProvider,
     InputSelectProvider,
     InputNumberProvider,
     InputBooleanProvider,
@@ -60,6 +64,8 @@ export class PleInputComponent implements OnInit, OnDestroy, ControlValueAccesso
   private readonly injector = inject(Injector)
   private readonly subscriptions: Subscription[] = []
   private readonly changeDetectorRef = inject(ChangeDetectorRef)
+
+  private ignoreNextInputChanges = false
 
   private valueEditor?: PleInputValueEditor
   private configEditor?: PleInputConfigEditor
@@ -124,6 +130,11 @@ export class PleInputComponent implements OnInit, OnDestroy, ControlValueAccesso
 
   @Input()
   set input(value: PleInput) {
+    if (this.ignoreNextInputChanges) {
+      this.ignoreNextInputChanges = false
+      return
+    }
+
     this.selectedProvider = value.type
       ? this.providers.find((p) => p.type === value.type)
       : this.providers.find((p) => p.canHandle?.(value))
@@ -132,6 +143,8 @@ export class PleInputComponent implements OnInit, OnDestroy, ControlValueAccesso
       value.type = this.selectedProvider.type
     }
 
+    this.configEditor?.setOptions(value.options ?? this.selectedProvider?.defaultOptions?.() ?? {})
+    this.valueEditor?.setValue(value.value ?? this.selectedProvider?.defaultValue?.())
     this.form.patchValue(value, { emitEvent: false })
   }
 
@@ -167,6 +180,7 @@ export class PleInputComponent implements OnInit, OnDestroy, ControlValueAccesso
           return
         }
 
+        this.ignoreNextInputChanges = true
         this.inputChange.emit(value as PleInput)
         this.onChange(value as PleInput)
       })

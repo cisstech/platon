@@ -9,12 +9,14 @@ import { NzSelectModule } from 'ng-zorro-antd/select'
 
 import { CommonModule } from '@angular/common'
 import { NzIconModule } from 'ng-zorro-antd/icon'
+import { InputAutomatonModule } from './input-automaton'
 import { InputBooleanModule } from './input-boolean'
 import { InputCodeModule } from './input-code'
 import { InputFileModule } from './input-file'
 import { InputGroupComponent } from './input-group/input-group.component'
 import { InputJsonModule } from './input-json'
 import { InputListModule } from './input-list'
+import { InputMathExprModule } from './input-math-expr'
 import { InputNumberModule } from './input-number'
 import { InputSelectModule } from './input-select'
 import { InputTextModule } from './input-text'
@@ -41,6 +43,8 @@ import { PleInputComponent } from './ple-input.component'
     InputBooleanModule,
     InputSelectModule,
     InputListModule,
+    InputMathExprModule,
+    InputAutomatonModule,
   ],
   declarations: [PleInputComponent, InputGroupComponent],
   exports: [PleInputComponent, InputGroupComponent],
