@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, ElementRef, HostListener, Injector, Input } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  Injector,
+  Input,
+  Output,
+} from '@angular/core'
 import { CssPipe } from '../../shared/pipes/css.pipe'
 import { WebComponent, WebComponentHooks } from '../../web-component'
 import { TextSelectComponentDefinition, TextSelectState } from './text-select'
@@ -17,6 +26,7 @@ const HIGHLIGHT = 'highlight-state'
 @WebComponent(TextSelectComponentDefinition)
 export class TextSelectComponent implements WebComponentHooks<TextSelectState> {
   @Input() state!: TextSelectState
+  @Output() stateChange = new EventEmitter<TextSelectState>()
 
   get container() {
     const native = this.el.nativeElement

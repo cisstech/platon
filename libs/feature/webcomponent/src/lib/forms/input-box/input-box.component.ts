@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, Injector, Input, OnDestroy, OnInit } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Injector,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core'
 import { FormControl } from '@angular/forms'
 import { Observable, Subscription } from 'rxjs'
 import { debounceTime, map, startWith } from 'rxjs/operators'
@@ -14,6 +23,7 @@ import { InputBoxComponentDefinition, InputBoxState } from './input-box'
 @WebComponent(InputBoxComponentDefinition)
 export class InputBoxComponent implements OnInit, OnDestroy, WebComponentHooks<InputBoxState> {
   @Input() state!: InputBoxState
+  @Output() stateChange = new EventEmitter<InputBoxState>()
 
   private subscription?: Subscription
 
