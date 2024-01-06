@@ -207,3 +207,5 @@ export const getClosingTime = (player: Partial<ActivityPlayer>): number | null =
 
   return null
 }
+
+export const NO_COPY_PASTER_CLASS_NAME = 'no-copy-paste'

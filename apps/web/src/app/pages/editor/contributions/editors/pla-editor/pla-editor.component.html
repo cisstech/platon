@@ -28,7 +28,13 @@
     <nz-collapse>
       <nz-collapse-panel nzHeader="Temps" nzExpandedIcon="clock-circle" nzActive>
         <nz-form-item>
-          <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="duration">Durée</nz-form-label>
+          <nz-form-label
+            [nzSpan]="3"
+            nzLabelAlign="left"
+            for="duration"
+            nzTooltipTitle="La durée de l'activité. Laissez vide pour ne pas mettre de limite."
+            >Durée</nz-form-label
+          >
           <nz-form-control>
             <nz-time-picker
               formControlName="duration"
@@ -46,39 +52,79 @@
           <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="navigationMode">Mode</nz-form-label>
           <nz-form-control>
             <nz-select formControlName="mode" id="navigationMode">
-              <nz-option nzValue="composed" nzLabel="Composée"></nz-option>
-              <nz-option nzValue="manual" nzLabel="Manuelle"></nz-option>
+              <nz-option nzValue="composed" nzLabel="Composée" nzCustomContent>
+                <span
+                  nz-icon
+                  nzType="question-circle"
+                  nz-tooltip="Tous les exercices sont affichés simultanément."
+                ></span>
+                Composée
+              </nz-option>
+              <nz-option nzValue="manual" nzLabel="Progressive" nzCustomContent>
+                <span nz-icon nzType="question-circle" nz-tooltip="les exercices sont affichés un à un"></span>
+                Progressive
+              </nz-option>
             </nz-select>
           </nz-form-control>
         </nz-form-item>
       </nz-collapse-panel>
       <nz-collapse-panel formGroupName="actions" nzHeader="Actions" nzExpandedIcon="play-circle" nzActive>
         <nz-form-item>
-          <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="retry">Tentatives</nz-form-label>
+          <nz-form-label
+            [nzSpan]="3"
+            nzLabelAlign="left"
+            for="retry"
+            nzTooltipTitle="Indiquez le nombre maximal de validations autorisées avant la désactivation du bouton 'Valider'. Entrez 0 pour un nombre illimité de validations."
+            >Tentatives</nz-form-label
+          >
           <nz-form-control>
             <nz-input-number formControlName="retry" id="retry" [nzMin]="0" [nzStep]="1"></nz-input-number>
           </nz-form-control>
         </nz-form-item>
         <nz-form-item>
-          <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="hints">Aides</nz-form-label>
+          <nz-form-label
+            [nzSpan]="3"
+            nzLabelAlign="left"
+            for="hints"
+            nzTooltipTitle="Afficher le bouton 'Aides' des exercices si disponible."
+            >Aides</nz-form-label
+          >
           <nz-form-control>
             <label nz-checkbox formControlName="hints" id="hints"></label>
           </nz-form-control>
         </nz-form-item>
         <nz-form-item>
-          <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="reroll">Relancer</nz-form-label>
+          <nz-form-label
+            [nzSpan]="3"
+            nzLabelAlign="left"
+            for="reroll"
+            nzTooltipTitle="Afficher le bouton 'Autre question' des exercices si disponible."
+            >Autre question</nz-form-label
+          >
           <nz-form-control>
             <label nz-checkbox formControlName="reroll" id="reroll"></label>
           </nz-form-control>
         </nz-form-item>
         <nz-form-item>
-          <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="theories">Théories</nz-form-label>
+          <nz-form-label
+            [nzSpan]="3"
+            nzLabelAlign="left"
+            for="theories"
+            nzTooltipTitle="Afficher le bouton 'Théories' des exercices si disponible."
+            >Théories</nz-form-label
+          >
           <nz-form-control>
             <label nz-checkbox formControlName="theories" id="theories"></label>
           </nz-form-control>
         </nz-form-item>
         <nz-form-item>
-          <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="solution">Solution</nz-form-label>
+          <nz-form-label
+            [nzSpan]="3"
+            nzLabelAlign="left"
+            for="solution"
+            nzTooltipTitle="Afficher le bouton 'Solution' des exercices si disponible."
+            >Solution</nz-form-label
+          >
           <nz-form-control>
             <label nz-checkbox formControlName="solution" id="solution"></label>
           </nz-form-control>
@@ -86,15 +132,65 @@
       </nz-collapse-panel>
       <nz-collapse-panel formGroupName="feedback" nzHeader="Feedback" nzExpandedIcon="message" nzActive>
         <nz-form-item>
-          <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="validation">Validation</nz-form-label>
+          <nz-form-label
+            [nzSpan]="3"
+            nzLabelAlign="left"
+            for="validation"
+            nzTooltipTitle="Afficher le feedback des exercices après une validation."
+            >Validation</nz-form-label
+          >
           <nz-form-control>
             <label nz-checkbox formControlName="validation" id="validation"></label>
           </nz-form-control>
         </nz-form-item>
         <nz-form-item>
-          <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="review">Correction</nz-form-label>
+          <nz-form-label
+            [nzSpan]="3"
+            nzLabelAlign="left"
+            for="review"
+            nzTooltipTitle="Afficher le feedback des exercices à la fin de l'activité."
+            >Correction</nz-form-label
+          >
           <nz-form-control>
             <label nz-checkbox formControlName="review" id="review"></label>
+          </nz-form-control>
+        </nz-form-item>
+      </nz-collapse-panel>
+      <nz-collapse-panel formGroupName="security" nzHeader="Sécurité" nzExpandedIcon="safety" nzActive>
+        <nz-form-item>
+          <nz-form-label
+            [nzSpan]="5"
+            nzLabelAlign="left"
+            for="noCopyPaste"
+            nzTooltipTitle="Une fois activée, cette option désactivera la fonctionnalité de copier-coller dans l'activité, incluant les raccourcis clavier (Ctrl/Cmd + C, Ctrl/Cmd + V, Ctrl/Cmd + X) et le clic droit."
+            >Blocage du copier coller</nz-form-label
+          >
+          <nz-form-control>
+            <label nz-checkbox formControlName="noCopyPaste" id="noCopyPaste"></label>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label
+            [nzSpan]="5"
+            nzLabelAlign="left"
+            for="terminateOnLoseFocus"
+            nzTooltipTitle="Si activée, cette option entraînera la fin automatique de l'activité en cas de clic en dehors de sa page, que ce soit sur une autre fenêtre ou en dehors du cadre de la page."
+            >Terminer si clique en dehors</nz-form-label
+          >
+          <nz-form-control>
+            <label nz-checkbox formControlName="terminateOnLoseFocus" id="terminateOnLoseFocus"></label>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label
+            [nzSpan]="5"
+            nzLabelAlign="left"
+            for="terminateOnLeavePage"
+            nzTooltipTitle="Si activée, cette option entraînera la fin automatique de l'activité en cas de changement de visibilité de la page, tel qu'un changement d'onglet ou de fenêtre du système d'exploitation."
+            >Terminer si changement de page</nz-form-label
+          >
+          <nz-form-control>
+            <label nz-checkbox formControlName="terminateOnLeavePage" id="terminateOnLeavePage"></label>
           </nz-form-control>
         </nz-form-item>
       </nz-collapse-panel>

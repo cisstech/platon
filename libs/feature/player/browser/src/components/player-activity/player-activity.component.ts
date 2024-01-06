@@ -1,5 +1,14 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input, OnInit } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  inject,
+  Input,
+  OnDestroy,
+  OnInit,
+} from '@angular/core'
 import { firstValueFrom } from 'rxjs'
 
 import { MatButtonModule } from '@angular/material/button'
@@ -14,6 +23,7 @@ import {
   ExercisePlayer,
   getClosingTime,
   isTimeouted,
+  NO_COPY_PASTER_CLASS_NAME,
   Player,
   PlayerExercise,
   PlayerNavigation,
@@ -26,13 +36,14 @@ import { MatIconModule } from '@angular/material/icon'
 import { ActivatedRoute, RouterModule } from '@angular/router'
 import { NgeMarkdownModule } from '@cisstech/nge/markdown'
 import { AnswerStates } from '@platon/feature/result/common'
+import { NzAlertModule } from 'ng-zorro-antd/alert'
 import { NzPopoverModule } from 'ng-zorro-antd/popover'
 import { PlayerService } from '../../api/player.service'
+import { PLAYER_EDITOR_PREVIEW } from '../../models/player.model'
 import { PlayerExerciseComponent } from '../player-exercise/player-exercise.component'
 import { PlayerNavigationComponent } from '../player-navigation/player-navigation.component'
 import { PlayerResultsComponent } from '../player-results/player-results.component'
 import { PlayerSettingsComponent } from '../player-settings/player-settings.component'
-import { PLAYER_EDITOR_PREVIEW } from '../../models/player.model'
 
 @Component({
   standalone: true,
@@ -48,6 +59,7 @@ import { PLAYER_EDITOR_PREVIEW } from '../../models/player.model'
     MatCardModule,
     MatButtonModule,
 
+    NzAlertModule,
     NzBadgeModule,
     NzPopoverModule,
     NzStatisticModule,
@@ -63,13 +75,12 @@ import { PLAYER_EDITOR_PREVIEW } from '../../models/player.model'
     PlayerNavigationComponent,
   ],
 })
-export class PlayerActivityComponent implements OnInit {
+export class PlayerActivityComponent implements OnInit, OnDestroy {
+  private readonly elementRef = inject(ElementRef) as ElementRef<HTMLElement>
   private readonly activatedRoute = inject(ActivatedRoute)
   private readonly dialogService = inject(DialogService)
   private readonly playerService = inject(PlayerService)
   private readonly changeDetectorRef = inject(ChangeDetectorRef)
-
-  @Input() player!: ActivityPlayer
 
   protected state?: ActivityOpenStates
   protected answerStates: Record<string, AnswerStates> = {}
@@ -87,6 +98,10 @@ export class PlayerActivityComponent implements OnInit {
   protected position = 0
   protected exercises?: ExercisePlayer[]
   protected navExerciceCount = 0
+  protected terminatedAfterLoseFocus = false
+  protected terminatedAfterLeavePage = false
+
+  @Input() player!: ActivityPlayer
 
   protected get composed(): boolean {
     return this.player.settings?.navigation?.mode === 'composed'
@@ -130,14 +145,21 @@ export class PlayerActivityComponent implements OnInit {
     }
   }
 
+  ngOnDestroy(): void {
+    this.enableCopyPasteIfNeeded()
+    this.stopWatchingVisibilityChange()
+  }
+
   protected async start(): Promise<void> {
     if (this.composed) {
       await this.playAll()
-      return
+    } else {
+      const { navigation } = this.player
+      await this.play(navigation.current || navigation.exercises[0])
     }
-    const { navigation } = this.player
 
-    await this.play(navigation.current || navigation.exercises[0])
+    this.disableCopyPasteIfNeeded()
+    this.startWatchingVisibilityChange()
   }
 
   protected async terminate(): Promise<void> {
@@ -146,6 +168,10 @@ export class PlayerActivityComponent implements OnInit {
     const output = await firstValueFrom(this.playerService.terminate(this.player.sessionId))
     this.player = output.activity
     this.exercises = undefined
+
+    this.enableCopyPasteIfNeeded()
+    this.stopWatchingVisibilityChange()
+
     this.changeDetectorRef.markForCheck()
   }
 
@@ -294,5 +320,65 @@ export class PlayerActivityComponent implements OnInit {
       acc[exercise.sessionId] = exercise.state
       return acc
     }, {} as Record<string, AnswerStates>)
+  }
+
+  private onKeydown(event: KeyboardEvent) {
+    if ((event.ctrlKey || event.metaKey) && ['c', 'v', 'x'].includes(event.key)) {
+      this.dialogService.warning(`La fonctionnalité de copier/coller/couper est désactivée pour cette activité.`)
+      event.preventDefault()
+      event.stopImmediatePropagation()
+    }
+  }
+
+  private onContextMenu(event: MouseEvent) {
+    this.dialogService.warning(`La fonctionnalité de copier/coller/couper est désactivée pour cette activité.`)
+    event.preventDefault()
+    event.stopPropagation()
+    event.stopImmediatePropagation()
+  }
+
+  private onLoseTabFocus(): void {
+    if (!this.player.settings?.security?.terminateOnLoseFocus) return
+
+    this.terminatedAfterLoseFocus = true
+    this.terminate()
+  }
+
+  private onVisibilityChange(): void {
+    if (!this.player.settings?.security?.terminateOnLeavePage) return
+
+    // passed from hidden to visible
+    if (document.visibilityState === 'hidden') {
+      this.terminatedAfterLeavePage = true
+      this.terminate()
+    }
+  }
+
+  private enableCopyPasteIfNeeded(): void {
+    if (!this.player.settings?.security?.noCopyPaste) return
+
+    const container = this.elementRef.nativeElement
+    container.classList.remove(NO_COPY_PASTER_CLASS_NAME)
+    container.removeEventListener('keydown', this.onKeydown.bind(this))
+    container.removeEventListener('contextmenu', this.onContextMenu.bind(this))
+  }
+
+  private disableCopyPasteIfNeeded(): void {
+    if (!this.player.settings?.security?.noCopyPaste) return
+
+    const container = this.elementRef.nativeElement
+    container.classList.add(NO_COPY_PASTER_CLASS_NAME)
+    container.addEventListener('keydown', this.onKeydown.bind(this))
+    container.addEventListener('contextmenu', this.onContextMenu.bind(this))
+  }
+
+  private startWatchingVisibilityChange(): void {
+    window.addEventListener('blur', this.onLoseTabFocus.bind(this))
+    document.addEventListener('visibilitychange', this.onVisibilityChange.bind(this))
+  }
+
+  private stopWatchingVisibilityChange(): void {
+    window.removeEventListener('blur', this.onLoseTabFocus.bind(this))
+    document.removeEventListener('visibilitychange', this.onVisibilityChange.bind(this))
   }
 }

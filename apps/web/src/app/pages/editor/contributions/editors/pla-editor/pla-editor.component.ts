@@ -42,6 +42,11 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
         review: true,
         validation: true,
       },
+      security: {
+        noCopyPaste: false,
+        terminateOnLeavePage: false,
+        terminateOnLoseFocus: false,
+      },
     },
     exerciseGroups: {},
   }
@@ -71,6 +76,11 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
     feedback: this.fb.group({
       review: [!!this.activity?.settings?.feedback?.review],
       validation: [!!this.activity?.settings?.feedback?.validation],
+    }),
+    security: this.fb.group({
+      noCopyPaste: [!!this.activity?.settings?.security?.noCopyPaste],
+      terminateOnLeavePage: [!!this.activity?.settings?.security?.terminateOnLeavePage],
+      terminateOnLoseFocus: [!!this.activity?.settings?.security?.terminateOnLoseFocus],
     }),
   })
 
@@ -202,6 +212,11 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
           review: value.feedback?.review || false,
           validation: value.feedback?.validation || false,
         },
+        security: {
+          noCopyPaste: value.security?.noCopyPaste || false,
+          terminateOnLeavePage: value.security?.terminateOnLeavePage || false,
+          terminateOnLoseFocus: value.security?.terminateOnLoseFocus || false,
+        },
       },
       exerciseGroups: this.exerciseGroups.reduce((acc, group, index) => {
         acc[index] = group
@@ -256,6 +271,11 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
       feedback: {
         review: this.activity.settings?.feedback?.review,
         validation: this.activity.settings?.feedback?.validation,
+      },
+      security: {
+        noCopyPaste: this.activity.settings?.security?.noCopyPaste,
+        terminateOnLeavePage: this.activity.settings?.security?.terminateOnLeavePage,
+        terminateOnLoseFocus: this.activity.settings?.security?.terminateOnLoseFocus,
       },
     })
 
