@@ -46,7 +46,7 @@
     </nz-list>
     <button class="btn-add-input" nz-button nzType="primary" [disabled]="readOnly" (click)="addInput()">+</button>
   </div>
-  <div class="container-selection" formGroupName="selection" *ngIf="selection">
-    <app-ple-input [disabled]="readOnly" [input]="selection" (inputChange)="onChangeInput($event)" />
+  <div class="container-selection" *ngIf="selection">
+    <app-ple-input [disabled]="readOnly" [(input)]="selection" (inputChange)="onChangeInput($event)" />
   </div>
 </div>

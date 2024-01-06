@@ -24,7 +24,7 @@ export class PleConfigEditorComponent implements OnInit, OnDestroy {
 
   protected inputs: PleInput[] = []
   protected selection: PleInput | undefined
-  protected selectionIndex = 0
+  protected selectionIndex = -1
 
   async ngOnInit(): Promise<void> {
     this.subscriptions.push(

@@ -1,26 +1,27 @@
 import { CommonModule } from '@angular/common'
-import { NgModule, Provider } from '@angular/core'
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule, Provider } from '@angular/core'
 import { FormsModule } from '@angular/forms'
+import { emptyAutomaton } from '@platon/feature/webcomponent'
 import { NzFormModule } from 'ng-zorro-antd/form'
-import { NzInputModule } from 'ng-zorro-antd/input'
 import { PLE_INPUT_PROVIDERS, PleInputProvider } from '../ple-input'
 import { ValueEditorComponent } from './value-editor/value-editor.component'
 
 @NgModule({
-  imports: [CommonModule, FormsModule, NzFormModule, NzInputModule],
+  imports: [CommonModule, FormsModule, NzFormModule],
   exports: [ValueEditorComponent],
   declarations: [ValueEditorComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class InputTextModule {}
+export class InputAutomatonModule {}
 
-export const InputTextProvider: Provider = {
+export const InputAutomatonProvider: Provider = {
   provide: PLE_INPUT_PROVIDERS,
   multi: true,
   useValue: {
-    type: 'text',
-    label: 'Texte',
-    defaultValue: () => '',
-    canHandle: (input) => (input.type ? input.type === 'text' : typeof input.value === 'string'),
+    type: 'automaton',
+    label: 'Automate',
+    defaultValue: () => emptyAutomaton(),
+    canHandle: (input) => input.type === 'automaton',
     valueEditor: ValueEditorComponent,
   } as PleInputProvider,
 }
