@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { AuthService } from '@platon/core/browser'
-import { User } from '@platon/core/common'
+import { User, removeLeadingSlash } from '@platon/core/common'
 import { ResourceService } from '@platon/feature/resource/browser'
 import {
   CircleTree,
@@ -17,6 +17,7 @@ import { firstValueFrom } from 'rxjs'
 export class EditorPresenter {
   private readonly authService = inject(AuthService)
   private readonly resourceService = inject(ResourceService)
+
   private version!: string
   private resource!: Resource
   private ancestors: CircleTree[] = []
@@ -93,5 +94,39 @@ export class EditorPresenter {
         : undefined,
       opened: currentResource.id === owner?.id,
     }
+  }
+
+  resolvePath(uri: monaco.Uri, to: monaco.Uri) {
+    const { owner: srcRes, opened: srcOpened } = this.findOwnerResource(uri)
+    if (!srcRes) {
+      throw new Error(`Unable to resolve resource linked to : ${uri}`)
+    }
+
+    const { owner: dstRes, opened: dstOpened } = this.findOwnerResource(to)
+    if (!dstRes) {
+      throw new Error(`Unable to resolve resource linked to : ${to}`)
+    }
+
+    if (srcOpened && !dstOpened) {
+      throw new Error(`Parent resource cannot access child resource files`)
+    }
+
+    if (srcOpened) {
+      return removeLeadingSlash(uri.path)
+    }
+
+    if (!srcOpened && !dstOpened) {
+      const indexSrc = this.ancestors.findIndex((ancestor) => ancestor.id === srcRes.id)
+      const indexDst = this.ancestors.findIndex((ancestor) => ancestor.id === dstRes.id)
+      if (indexSrc < indexDst) {
+        throw new Error(`Parent resource cannot access child resource files`)
+      }
+      if (indexSrc === indexDst) {
+        return removeLeadingSlash(uri.path)
+      }
+    }
+
+    const version = uri.authority.split(':')[1]
+    return `/${srcRes.code}:${version}${uri.path}`
   }
 }

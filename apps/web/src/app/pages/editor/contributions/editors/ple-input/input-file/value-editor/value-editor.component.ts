@@ -1,9 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core'
 import { DndData, EditorService, NotificationService } from '@cisstech/nge-ide/core'
 import { EditorPresenter } from '../../../../../editor.presenter'
-import { BaseValueEditor } from '../../ple-input'
 import { ResourceFileSystemProvider } from '../../../../file-system'
-import { removeLeadingSlash } from '@platon/core/common'
+import { BaseValueEditor } from '../../ple-input'
 
 @Component({
   selector: 'app-input-file-value-editor',
@@ -38,21 +37,21 @@ export class ValueEditorComponent extends BaseValueEditor<string> {
       return
     }
 
-    if (data.src) {
-      const uri = monaco.Uri.parse(data.src)
+    const { activeResource } = this.editorService
+    if (!activeResource || !data.src) {
+      return
+    }
 
-      const { owner, opened } = this.editorPresenter.findOwnerResource(uri)
-      if (!owner) {
-        this.notificationService.publishError('Impossible de copier le fichier')
-        return
-      }
+    const uri = monaco.Uri.parse(data.src)
 
-      if (opened) {
-        this.changeValue((this.value = `@copycontent ${removeLeadingSlash(uri.path)}`))
-      } else {
-        const version = uri.authority.split(':')[1]
-        this.changeValue((this.value = `@copycontent /${owner.code}:${version}${uri.path}`))
+    let path = ''
+    try {
+      path = this.editorPresenter.resolvePath(uri, activeResource)
+      if (path) {
+        this.changeValue((this.value = `@copycontent ${path}`))
       }
+    } catch (error) {
+      this.notificationService.publishError(error)
     }
   }
 
