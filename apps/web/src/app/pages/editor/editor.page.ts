@@ -22,6 +22,7 @@ import { PleEditorContributionModule } from './contributions/editors/ple-editor'
 import { PlExplorerContributionModule } from './contributions/explorer/pl-explorer.contribution'
 import { ResourceFileSystemProvider } from './contributions/file-system'
 import { PlPreviewContributionModule } from './contributions/previews/pl-preview.contribution'
+import { PlSidebarContributionModule } from './contributions/sidebar/pl-sidebar.contribution'
 import { PlWorkbenchContributionModule } from './contributions/workbench/pl-workbench.contribution'
 import { EditorPresenter } from './editor.presenter'
 
@@ -52,6 +53,7 @@ import { EditorPresenter } from './editor.presenter'
     PleEditorContributionModule,
     PlExplorerContributionModule,
     PlWorkbenchContributionModule,
+    PlSidebarContributionModule,
     PlcEditorContributionModule,
   ],
   providers: [ResourceFileSystemProvider],
@@ -70,7 +72,7 @@ export class EditorPage implements OnInit, OnDestroy {
   protected loading = true
 
   async ngOnInit(): Promise<void> {
-    const { resource, version, ancestors, filesToOpen } = await this.presenter.init(this.activatedRoute)
+    const { resource, version, /* ancestors, */ filesToOpen } = await this.presenter.init(this.activatedRoute)
     this.subscriptions.push(
       this.ide.onAfterStart(async () => {
         this.fileService.registerProvider(this.resourceFileSystemProvider)
@@ -78,11 +80,11 @@ export class EditorPage implements OnInit, OnDestroy {
           {
             name: `${resource.name}#${version}`,
             uri: this.resourceFileSystemProvider.buildUri(resource.id, version),
-          },
-          ...ancestors.map((ancestor) => ({
+          }
+          /*   ...ancestors.map((ancestor) => ({
             name: `@${ancestor.code}#latest`,
             uri: this.resourceFileSystemProvider.buildUri(ancestor.code || ancestor.id),
-          }))
+          })) */
         )
 
         filesToOpen.forEach((path) => {
