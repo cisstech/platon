@@ -17,11 +17,12 @@ import { fadeInOnEnterAnimation, fadeOutDownOnLeaveAnimation } from 'angular-ani
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton'
 import { NzSpinModule } from 'ng-zorro-antd/spin'
 import { Subscription } from 'rxjs'
-import { PleConfigEditorContributionModule } from './contributions/editors/ple-config-editor'
+import { PlcEditorContributionModule } from './contributions/editors/plc-editor'
 import { PleEditorContributionModule } from './contributions/editors/ple-editor'
 import { PlExplorerContributionModule } from './contributions/explorer/pl-explorer.contribution'
 import { ResourceFileSystemProvider } from './contributions/file-system'
 import { PlPreviewContributionModule } from './contributions/previews/pl-preview.contribution'
+import { PlWorkbenchContributionModule } from './contributions/workbench/pl-workbench.contribution'
 import { EditorPresenter } from './editor.presenter'
 
 @Component({
@@ -50,7 +51,8 @@ import { EditorPresenter } from './editor.presenter'
     PlPreviewContributionModule,
     PleEditorContributionModule,
     PlExplorerContributionModule,
-    PleConfigEditorContributionModule,
+    PlWorkbenchContributionModule,
+    PlcEditorContributionModule,
   ],
   providers: [ResourceFileSystemProvider],
 })

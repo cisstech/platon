@@ -88,7 +88,7 @@ export class EditorPresenter {
       owner: owner
         ? {
             ...owner,
-            type: 'type' in owner ? owner.type : 'CIRCLE',
+            type: 'type' in owner ? owner.type : ResourceTypes.CIRCLE,
           }
         : undefined,
       opened: currentResource.id === owner?.id,
