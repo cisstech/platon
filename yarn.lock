@@ -2189,17 +2189,17 @@
     rxjs "^7.8.0"
     tslib "^2.3.0"
 
-"@cisstech/nge-ide@^17.1.0":
-  version "17.1.0"
-  resolved "https://registry.yarnpkg.com/@cisstech/nge-ide/-/nge-ide-17.1.0.tgz#0f8c5626193bf38ae250e48aeec7e5b7ade87a46"
-  integrity sha512-P3b8wxbmYb8ZrZ2RdeRL/dkPSMYFG6BkBVhVw8f3KIut21ksMeXWW+shAXYoWxEE33O/bvoUMTPmuT4pQLrIrA==
+"@cisstech/nge-ide@^17.5.1":
+  version "17.5.1"
+  resolved "https://registry.yarnpkg.com/@cisstech/nge-ide/-/nge-ide-17.5.1.tgz#3b148eec4007e8dbf1a0dcb6becd2cd27cf3a003"
+  integrity sha512-B/cRBxNg+fkE7zoqV0WnVWWfrS4JaivT0wBJf8htSwNNyAdkmX4ia4Rk8A8lNVANUjxTBvnAqLhhwbYF38bD6A==
   dependencies:
     tslib "^2.0.0"
 
-"@cisstech/nge@^17.3.0":
-  version "17.3.0"
-  resolved "https://registry.yarnpkg.com/@cisstech/nge/-/nge-17.3.0.tgz#64c5dca1d603a06afc4f93315e867ed0454d0c95"
-  integrity sha512-w8dED8yxyJUpx22Y1QRKX7PVUw1gNJGYoynSn8FH5hDHGXOmpA/NB8+rgYEO7SCoPGhhDGDJ5TiNXxR4jRK+yA==
+"@cisstech/nge@^17.4.0":
+  version "17.4.0"
+  resolved "https://registry.yarnpkg.com/@cisstech/nge/-/nge-17.4.0.tgz#7535e01d28e8ab42f1bb4ffd6d6b96b1c0841dfa"
+  integrity sha512-ku/0TnYA1/vCHz6E/5P/R9PAYMgxRBq3Lmox89em/LpQpEZdUKNVHUHML4zGGkYH6ozpGoJoQ4f5AmEy+FBJVg==
   dependencies:
     tslib "^2.3.0"
 

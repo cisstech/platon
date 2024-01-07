@@ -30,6 +30,7 @@ export interface ResourceFile {
 }
 
 export interface FileRetrieve extends FileSearch {
+  stat?: boolean
   version?: string
   bundle?: boolean
   versions?: boolean

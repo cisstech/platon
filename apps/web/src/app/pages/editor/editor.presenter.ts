@@ -17,8 +17,13 @@ import { firstValueFrom } from 'rxjs'
 export class EditorPresenter {
   private readonly authService = inject(AuthService)
   private readonly resourceService = inject(ResourceService)
+  private version!: string
   private resource!: Resource
   private ancestors: CircleTree[] = []
+
+  get currentVersion(): string {
+    return this.version
+  }
 
   get currentResource(): Readonly<Resource> {
     return this.resource
@@ -53,6 +58,7 @@ export class EditorPresenter {
             ...resourceAncestors(circles, resource.parentId as string),
           ]
 
+    this.version = version
     this.resource = resource
     this.ancestors = ancestors
 
@@ -64,8 +70,6 @@ export class EditorPresenter {
       filesToOpen,
     }
   }
-
-  // add tsdoc comment to the following method
 
   /**
    *  Get the resource thats owns the given uri

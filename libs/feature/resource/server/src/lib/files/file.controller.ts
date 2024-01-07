@@ -130,7 +130,7 @@ export class ResourceFileController {
       node.children?.forEach(injectExtraFields)
     }
 
-    if (node.type === FileTypes.file) {
+    if (node.type === FileTypes.file && !query?.stat) {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       return Buffer.from((await content)!.buffer).toString()
     }

@@ -102,7 +102,7 @@ export class PleEditorComponent implements OnInit, OnDestroy {
   }
 
   private async createEditor(): Promise<void> {
-    const file = this.fileService.find(this.request.uri)
+    const file = await this.fileService.find(this.request.uri)
 
     const [resource, version] = this.request.uri.authority.split(':')
     const [source] = await Promise.all([

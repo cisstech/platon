@@ -42,7 +42,7 @@ export class PlfEditorComponent implements OnInit, OnDestroy {
   }
 
   private async createEditor(): Promise<void> {
-    const file = this.fileService.find(this.request.uri)
+    const file = await this.fileService.find(this.request.uri)
     this.disabled = !!file?.readOnly
     const content = await this.fileService.open(this.request.uri)
     try {

@@ -34,13 +34,15 @@ export class ResourceFileImpl implements IFile {
   }
 }
 
+export const PLATON_SCHEME = 'platon'
+
 @Injectable()
 export class ResourceFileSystemProvider extends FileSystemProvider {
   private readonly http = inject(HttpClient)
   private readonly fileService = inject(ResourceFileService)
   private readonly entries = new Map<string, ResourceFile>()
 
-  readonly scheme = 'platon'
+  readonly scheme = PLATON_SCHEME
 
   capabilities =
     FileSystemProviderCapabilities.FileRead |
@@ -48,7 +50,8 @@ export class ResourceFileSystemProvider extends FileSystemProvider {
     FileSystemProviderCapabilities.FileMove |
     FileSystemProviderCapabilities.FileDelete |
     FileSystemProviderCapabilities.FileSearch |
-    FileSystemProviderCapabilities.FileUpload
+    FileSystemProviderCapabilities.FileUpload |
+    FileSystemProviderCapabilities.FileStat
 
   constructor() {
     super()
@@ -73,6 +76,18 @@ export class ResourceFileSystemProvider extends FileSystemProvider {
     keys.forEach((k) => this.entries.delete(k))
   }
 
+  override async stat(uri: monaco.Uri): Promise<IFile> {
+    const { resource, version, path } = this.parseUri(uri)
+    const file = await firstValueFrom(this.fileService.read(resource, path, version))
+    if (!file) {
+      throw FileSystemError.FileNotFound(uri)
+    }
+
+    const files: IFile[] = []
+    this.adaptEntry(uri, file, files)
+    return files[0]
+  }
+
   override async readDirectory(uri: monaco.Uri): Promise<IFile[]> {
     this.removeDirectory(uri)
 
@@ -81,15 +96,7 @@ export class ResourceFileSystemProvider extends FileSystemProvider {
     const tree = await firstValueFrom(this.fileService.read(resource, path, version))
     const files: IFile[] = []
 
-    const transform = (entry: ResourceFile) => {
-      const fileUri = monaco.Uri.parse(`${uri.scheme}://${uri.authority}/${removeLeadingSlash(entry.path)}`)
-      const file = new ResourceFileImpl(fileUri, entry)
-      files.push(file)
-      this.entries.set(file.uri.toString(true), entry)
-      entry.children?.forEach(transform)
-    }
-
-    transform(tree)
+    this.adaptEntry(uri, tree, files)
 
     return files
   }
@@ -220,5 +227,13 @@ export class ResourceFileSystemProvider extends FileSystemProvider {
       version,
       path: removeLeadingSlash(path),
     }
+  }
+
+  private adaptEntry(uri: monaco.Uri, entry: ResourceFile, files: IFile[]) {
+    const fileUri = monaco.Uri.parse(`${uri.scheme}://${uri.authority}/${removeLeadingSlash(entry.path)}`)
+    const file = new ResourceFileImpl(fileUri, entry)
+    files.push(file)
+    this.entries.set(file.uri.toString(true), entry)
+    entry.children?.forEach((child) => this.adaptEntry(uri, child, files))
   }
 }
