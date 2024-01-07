@@ -252,26 +252,53 @@ export interface PLDependency {
   abspath: string;
 }
 
-export interface PLSourceFile {
-  resource: string;
-  version: string;
-  abspath: string;
-  variables: Record<string, unknown>;
-  dependencies: PLDependency[];
+export interface PLSourceFile<TVariables = Record<string, unknown>> {
+  /** Identifier of the compiler resource. */
+  resource: string
+
+  /** Version of the compiled resource. */
+  version: string
+
+  /**
+   * Absolute path to the source file.
+   */
+  abspath: string
+
+  /**
+   * All variables defined in the source file including extended variables.
+   */
+  variables: TVariables
+
+  /** List of file added using the `@include` instruction. */
+  dependencies: PLDependency[]
   ast: {
+    /**
+     * AST nodes of the main source file.
+     */
     nodes: PLAst
-    variables: Record<string, unknown>;
-  },
+    /**
+     * Variables explicitly defined in the main source file.
+     */
+    variables: Record<string, unknown>
+  }
+
+  /**
+   * Errors detected while compiling the source file.
+   */
   errors: {
-    lineno: number,
+    lineno: number
     abspath: string
     description: string
-  }[];
+  }[]
+
+  /**
+   * Warnings detected while compiling the source file.
+   */
   warnings: {
-    lineno: number,
+    lineno: number
     abspath: string
     description: string
-  }[];
+  }[]
 }
 
 // VISITOR
@@ -330,7 +357,7 @@ export interface PLVisitor {
 
 
 <PATH_STATE>\s+         /* ignore whitespace */
-<PATH_STATE>(\/?[a-zA-Z0-9_\+\.\\]+(\s+'as'\s+\/?[a-zA-Z0-9_\+\.])?)+   {
+<PATH_STATE>(\/?[a-zA-Z0-9_\+\.\\:]+(\s+'as'\s+\/?[a-zA-Z0-9_\+\.])?)+   {
                             this.popState();
                             return 'PATH';
                         }
