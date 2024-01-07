@@ -1,16 +1,16 @@
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop'
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, inject } from '@angular/core'
 import { Editor, FileService, OpenRequest } from '@cisstech/nge-ide/core'
-import { Subscription } from 'rxjs'
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop'
 import { PleInput } from '@platon/feature/compiler'
+import { Subscription } from 'rxjs'
 
 @Component({
-  selector: 'app-ple-config-editor',
-  templateUrl: './ple-config-editor.component.html',
-  styleUrls: ['./ple-config-editor.component.scss'],
+  selector: 'app-plc-editor',
+  templateUrl: './plc-editor.component.html',
+  styleUrls: ['./plc-editor.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PleConfigEditorComponent implements OnInit, OnDestroy {
+export class PlcEditorComponent implements OnInit, OnDestroy {
   private readonly fileService = inject(FileService)
   private readonly changeDetectorRef = inject(ChangeDetectorRef)
 

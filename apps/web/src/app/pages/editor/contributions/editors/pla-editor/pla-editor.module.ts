@@ -21,7 +21,7 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 
 import { MatIconModule } from '@angular/material/icon'
 import { ResourceItemComponent, ResourceSearchBarComponent } from '@platon/feature/resource/browser'
-import { PleInputEditorModule } from '../ple-input-editor/ple-input.module'
+import { PleInputEditorModule } from '../ple-input/ple-input.module'
 import { PlaExerciseEditorComponent } from './exercise-editor/exercise-editor.component'
 import { PlaEditorComponent } from './pla-editor.component'
 

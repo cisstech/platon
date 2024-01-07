@@ -20,7 +20,7 @@ import { ActivityVariables, ExerciseVariables, Variables } from './pl.variables'
 
 export const ACTIVITY_MAIN_FILE = 'main.pla'
 export const EXERCISE_MAIN_FILE = 'main.ple'
-export const EXERCISE_CONFIG_FILE = 'config.json'
+export const EXERCISE_CONFIG_FILE = 'main.plc'
 
 /**
  * File reference resolver for the PL compiler.

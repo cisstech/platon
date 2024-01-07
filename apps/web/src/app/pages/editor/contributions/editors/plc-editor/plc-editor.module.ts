@@ -9,8 +9,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop'
 import { MatIconModule } from '@angular/material/icon'
 import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
-import { PleInputEditorModule } from '../ple-input-editor/ple-input.module'
-import { PleConfigEditorComponent } from './ple-config-editor.component'
+import { PleInputEditorModule } from '../ple-input/ple-input.module'
+import { PlcEditorComponent } from './plc-editor.component'
 
 @NgModule({
   imports: [
@@ -23,9 +23,9 @@ import { PleConfigEditorComponent } from './ple-config-editor.component'
     NzToolTipModule,
     PleInputEditorModule,
   ],
-  exports: [PleConfigEditorComponent],
-  declarations: [PleConfigEditorComponent],
+  exports: [PlcEditorComponent],
+  declarations: [PlcEditorComponent],
 })
 export class PleConfigEditorModule implements IDynamicModule {
-  component = PleConfigEditorComponent
+  component = PlcEditorComponent
 }

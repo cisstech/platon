@@ -119,6 +119,13 @@ export class ResourceMetadataService {
 
     const versions = await repo.versions()
 
+    // Rename old config file
+    if (repo.exists('config.json')) {
+      await repo.rename('config.json', EXERCISE_CONFIG_FILE).catch((error) => {
+        this.logger.error(`Error renaming config file for resource ${resource.id}`, error)
+      })
+    }
+
     meta.versions = versions.all
     meta.configurable = repo.exists(EXERCISE_CONFIG_FILE)
 
@@ -134,6 +141,7 @@ export class ResourceMetadataService {
           const content = Buffer.from((await data!).buffer).toString()
           config = JSON.parse(content || JSON.stringify(config)) as PleConfigJSON
         }
+        meta.configurable = config.inputs.length > 0
       } catch {
         this.logger.error(`Error parsing exercise config file for resource ${resource.id}`)
       } finally {
@@ -141,6 +149,7 @@ export class ResourceMetadataService {
       }
     } else {
       meta.config = undefined
+      meta.configurable = false
       delete meta.config
     }
 
@@ -175,7 +184,7 @@ export class ResourceMetadataService {
           await this.syncActivity({ repo, resource })
         }
       } else if (payload.resource.type === ResourceTypes.EXERCISE) {
-        if (path === EXERCISE_CONFIG_FILE || path === EXERCISE_CONFIG_FILE) {
+        if (path === EXERCISE_CONFIG_FILE) {
           await this.syncExercise({ repo, resource }, payload)
         }
       }
