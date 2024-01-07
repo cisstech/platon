@@ -6,9 +6,9 @@ import {
   ToolbarButton,
   ToolbarGroups,
   ToolbarSeparator,
-  ToolbarSevice,
+  ToolbarService,
 } from '@cisstech/nge-ide/core'
-import { ExplorerService } from '@cisstech/nge-ide/explorer'
+import { EXPLORER_COMMAND_COPY_PATH, ExplorerService } from '@cisstech/nge-ide/explorer'
 import { ExplorerCommandUnzip } from './commands/explorer-unzip.command'
 
 @Injectable()
@@ -17,7 +17,7 @@ export class PLExplorerContribution implements IContribution {
 
   activate(injector: Injector) {
     const commandService = injector.get(CommandService)
-    const toolbarService = injector.get(ToolbarSevice)
+    const toolbarService = injector.get(ToolbarService)
     const explorerService = injector.get(ExplorerService)
 
     commandService.register(ExplorerCommandUnzip)
@@ -32,6 +32,14 @@ export class PLExplorerContribution implements IContribution {
       }),
       new ToolbarSeparator(ToolbarGroups.FILE, 1)
     )
+
+    explorerService.registerFileNestingPatterns({
+      id: 'ple',
+      parent: /(.*).ple$/,
+      children: ['${capture}\\.plf', '${capture}\\.plc'],
+    })
+
+    explorerService.unregisterCommands(EXPLORER_COMMAND_COPY_PATH)
   }
 }
 
