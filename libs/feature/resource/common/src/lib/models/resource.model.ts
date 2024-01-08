@@ -33,6 +33,7 @@ export interface CircleTree {
   readonly id: string
   readonly name: string
   readonly code?: string
+  readonly versions?: string[]
   readonly children?: CircleTree[]
   readonly permissions: ResourcePermissions
 }
@@ -92,24 +93,15 @@ export interface ResourceFilters extends ExpandableModel<ResourceExpandableField
   readonly direction?: OrderingDirections
 }
 
-export const resourceAncestors = (tree: CircleTree, id: string): CircleTree[] => {
-  if (tree.id === id) {
-    return []
+export const resourceAncestors = (tree: CircleTree, resourceId: string, includeSelf?: boolean): CircleTree[] => {
+  if (tree.id === resourceId) {
+    return includeSelf ? [tree] : []
   }
 
   if (tree.children) {
     for (const child of tree.children) {
-      if (child.id === id) {
-        return [tree]
-      }
-    }
-  }
-
-  if (tree.children) {
-    for (const child of tree.children) {
-      const ancestors = resourceAncestors(child, id)
-      if (ancestors.length > 0) {
-        return [...ancestors, tree]
+      if (child.id === resourceId || resourceAncestors(child, resourceId, false).length > 0) {
+        return [...resourceAncestors(child, resourceId, includeSelf), tree]
       }
     }
   }
@@ -147,6 +139,7 @@ export const circleTreeFromResource = (resource: Resource): CircleTree => {
     id: resource.id,
     name: resource.name,
     code: resource.code,
+    versions: resource.metadata?.versions?.map((v) => v.tag),
     permissions: {
       ...resource.permissions,
     },

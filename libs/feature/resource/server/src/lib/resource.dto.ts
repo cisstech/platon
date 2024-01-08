@@ -1,21 +1,21 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { OrderingDirections } from '@platon/core/common'
 import { BaseDTO, LevelDTO, toArray, toBoolean, toNumber, TopicDTO } from '@platon/core/server'
+import { ActivityNavigationModes } from '@platon/feature/compiler'
 import {
   CircleTree,
   CreateResource,
   Resource,
   ResourceFilters,
   ResourceOrderings,
+  ResourcePermissions,
   ResourceStatus,
   ResourceTypes,
   UpdateResource,
-  ResourcePermissions,
 } from '@platon/feature/resource/common'
 import { Transform, Type } from 'class-transformer'
 import { IsArray, IsBoolean, IsEnum, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator'
 import { ResourcePermissionsDTO } from './permissions'
-import { ActivityNavigationModes } from '@platon/feature/compiler'
 
 export class ResourceDTO extends BaseDTO implements Resource {
   @IsString()
@@ -85,6 +85,12 @@ export class CircleTreeDTO implements CircleTree {
   @IsOptional()
   @ApiProperty()
   readonly code?: string
+
+  @IsString({ each: true })
+  @IsArray()
+  @IsOptional()
+  @ApiProperty()
+  readonly versions?: string[]
 
   @Type(() => CircleTreeDTO)
   @IsArray()
