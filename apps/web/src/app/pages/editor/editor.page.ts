@@ -56,7 +56,6 @@ import { EditorPresenter } from './editor.presenter'
     PlSidebarContributionModule,
     PlcEditorContributionModule,
   ],
-  providers: [ResourceFileSystemProvider],
 })
 export class EditorPage implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = []
@@ -72,38 +71,22 @@ export class EditorPage implements OnInit, OnDestroy {
   protected loading = true
 
   async ngOnInit(): Promise<void> {
-    const { resource, version, /* ancestors, */ filesToOpen } = await this.presenter.init(this.activatedRoute)
+    const { resource, version, rootFolders, filesToOpen } = await this.presenter.init(this.activatedRoute)
     this.subscriptions.push(
       this.ide.onAfterStart(async () => {
         this.fileService.registerProvider(this.resourceFileSystemProvider)
-        await this.fileService.registerFolders(
-          {
-            name: `${resource.name}#${version}`,
-            uri: this.resourceFileSystemProvider.buildUri(resource.id, version),
-          }
-          /*   ...ancestors.map((ancestor) => ({
-            name: `@${ancestor.code}#latest`,
-            uri: this.resourceFileSystemProvider.buildUri(ancestor.code || ancestor.id),
-          })) */
-        )
-
+        await this.fileService.registerFolders(...rootFolders())
         filesToOpen.forEach((path) => {
           this.editorService.open(this.resourceFileSystemProvider.buildUri(resource.id, version, path))
         })
-      })
-    )
-
-    this.subscriptions.push(
-      this.fileService.treeChange.subscribe((files) => {
-        if (files.length) {
-          this.loading = false
-          this.changeDetectorRef.markForCheck()
-        }
+        this.loading = false
+        this.changeDetectorRef.markForCheck()
       })
     )
   }
 
   ngOnDestroy(): void {
+    this.resourceFileSystemProvider.cleanUp()
     this.subscriptions.forEach((s) => s.unsubscribe())
   }
 }

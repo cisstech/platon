@@ -57,6 +57,10 @@ export class ResourceFileSystemProvider extends FileSystemProvider {
     super()
   }
 
+  cleanUp() {
+    this.entries.clear()
+  }
+
   /**
    *  Build a uri for the given resource file path
    * @param resource Resource id of code

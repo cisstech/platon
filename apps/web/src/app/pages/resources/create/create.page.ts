@@ -28,6 +28,7 @@ import {
   CircleTree,
   ResourceStatus,
   ResourceTypes,
+  circleFromTree,
   circleTreeFromResource,
   flattenCircleTree,
 } from '@platon/feature/resource/common'
@@ -67,7 +68,8 @@ import { NzPageHeaderModule } from 'ng-zorro-antd/page-header'
 })
 export class ResourceCreatePage implements OnInit {
   protected type!: ResourceTypes
-  protected parent?: string
+  protected parentId?: string
+  protected parentName?: string
   protected loading = true
   protected creating = false
   protected tree!: CircleTree
@@ -98,7 +100,7 @@ export class ResourceCreatePage implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.type = (this.activatedRoute.snapshot.queryParamMap.get('type') || ResourceTypes.CIRCLE) as ResourceTypes
-    this.parent = this.activatedRoute.snapshot.queryParamMap.get('parent') || undefined
+    this.parentId = this.activatedRoute.snapshot.queryParamMap.get('parent') || undefined
 
     const user = (await this.authService.ready()) as User
     const [tree, circle, topics, levels] = await Promise.all([
@@ -148,7 +150,7 @@ export class ResourceCreatePage implements OnInit {
       const resource = await firstValueFrom(
         this.resourceService.create({
           type: this.type,
-          parentId: this.parent as string,
+          parentId: this.parentId as string,
           name: infos.name as string,
           desc: infos.desc as string,
           code: infos.code || undefined,
@@ -178,5 +180,10 @@ export class ResourceCreatePage implements OnInit {
 
   protected trackById(_: number, value: Topic | Level): string {
     return value.id
+  }
+
+  protected onChangeParentId(id?: string): void {
+    this.parentId = id
+    this.parentName = id ? circleFromTree(this.tree, id)?.name : undefined
   }
 }
