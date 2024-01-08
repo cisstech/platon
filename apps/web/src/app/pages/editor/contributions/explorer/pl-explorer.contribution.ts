@@ -10,8 +10,9 @@ import {
   ViewService,
 } from '@cisstech/nge-ide/core'
 import { EXPLORER_COMMAND_COPY_PATH, EXPLORER_VIEW_ID, ExplorerService } from '@cisstech/nge-ide/explorer'
-import { ExplorerUpdateFolders } from './commands/explorer-update-folders.command'
+import { ExplorerReplaceFolder } from './commands/explorer-replace-folder.command'
 import { ExplorerCommandUnzip } from './commands/explorer-unzip.command'
+import { ExplorerUpdateFolders } from './commands/explorer-update-folders.command'
 
 @Injectable()
 export class PLExplorerContribution implements IContribution {
@@ -23,18 +24,11 @@ export class PLExplorerContribution implements IContribution {
     const toolbarService = injector.get(ToolbarService)
     const explorerService = injector.get(ExplorerService)
 
-    commandService.register(ExplorerCommandUnzip, ExplorerUpdateFolders)
+    commandService.register(ExplorerCommandUnzip, ExplorerUpdateFolders, ExplorerReplaceFolder)
 
-    explorerService.registerCommands(ExplorerCommandUnzip)
+    explorerService.registerCommands(ExplorerCommandUnzip, ExplorerReplaceFolder)
 
-    toolbarService.register(
-      new ToolbarButton({
-        group: ToolbarGroups.FILE,
-        command: commandService.find(ExplorerCommandUnzip),
-        priority: 2,
-      }),
-      new ToolbarSeparator(ToolbarGroups.FILE, 1)
-    )
+    explorerService.unregisterCommands(EXPLORER_COMMAND_COPY_PATH)
 
     explorerService.registerFileNestingPatterns({
       id: 'ple',
@@ -46,7 +40,15 @@ export class PLExplorerContribution implements IContribution {
       viewId: EXPLORER_VIEW_ID,
       command: commandService.find(ExplorerUpdateFolders),
     })
-    explorerService.unregisterCommands(EXPLORER_COMMAND_COPY_PATH)
+
+    toolbarService.register(
+      new ToolbarButton({
+        group: ToolbarGroups.FILE,
+        command: commandService.find(ExplorerCommandUnzip),
+        priority: 2,
+      }),
+      new ToolbarSeparator(ToolbarGroups.FILE, 1)
+    )
   }
 }
 
@@ -54,6 +56,7 @@ export class PLExplorerContribution implements IContribution {
   providers: [
     ExplorerCommandUnzip,
     ExplorerUpdateFolders,
+    ExplorerReplaceFolder,
     ExplorerService,
     { provide: CONTRIBUTION, multi: true, useClass: PLExplorerContribution },
   ],

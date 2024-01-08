@@ -139,7 +139,6 @@ export class AutomatonEditorComponent implements OnInit, OnDestroy, WebComponent
   }
 
   onChangeState() {
-    console.log('onChangeState', this.state)
     this.editor.sync(this.state)
     this.jsp.reset(true)
     this.jsp.getContainer().innerHTML = ''

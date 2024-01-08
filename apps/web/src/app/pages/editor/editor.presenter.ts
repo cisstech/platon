@@ -6,6 +6,7 @@ import { removeLeadingSlash } from '@platon/core/common'
 import { ResourceService } from '@platon/feature/resource/browser'
 import {
   CircleTree,
+  LATEST,
   Resource,
   ResourceTypes,
   circleTreeFromResource,
@@ -14,6 +15,10 @@ import {
 import { NzModalService } from 'ng-zorro-antd/modal'
 import { firstValueFrom } from 'rxjs'
 import {
+  ReplaceFolderModalComponent,
+  ReplaceFolderModalData,
+} from './contributions/explorer/components/replace-folders-modal/replace-folder-modal.component'
+import {
   UpdateFoldersModalComponent,
   UpdateFoldersModalData,
 } from './contributions/explorer/components/update-folders-modal/update-folders-modal.component'
@@ -21,8 +26,10 @@ import { ResourceFileSystemProvider } from './contributions/file-system'
 
 type Ancestor = {
   id: string
-  type: ResourceTypes
   code?: string
+  type: ResourceTypes
+  version: string
+  versions: string[]
 }
 
 const ROOT_FOLDERS_PREFIX = 'pl.explorer.root-folders'
@@ -107,7 +114,9 @@ export class EditorPresenter {
     this.ancestors = ancestors.map((ancestor) => ({
       id: ancestor.id,
       code: ancestor.code,
+      version: LATEST,
       type: ResourceTypes.CIRCLE,
+      versions: ancestor.versions ?? [],
     }))
 
     this.ancestorsLength = this.ancestors.length
@@ -142,6 +151,12 @@ export class EditorPresenter {
       },
       filesToOpen,
     }
+  }
+
+  findAncestor(uri: monaco.Uri): Ancestor | undefined {
+    const [resource] = uri.authority.split(':')
+    if (!resource) return
+    return this.ancestors.find((ancestor) => ancestor.id === resource || ancestor.code === resource)
   }
 
   /**
@@ -261,6 +276,50 @@ export class EditorPresenter {
         await firstValueFrom(
           this.storageService.set(`${ROOT_FOLDERS_PREFIX}.${this.resource.id}`, this.openedAncestorIds)
         )
+
+        task.end()
+      },
+    })
+  }
+
+  replaceFolder(uri: monaco.Uri, fileService: FileService, taskService: TaskService): void {
+    const ancestor = this.findAncestor(uri)
+    if (!ancestor?.versions.length) {
+      throw new Error(`Unable to replace folder ${uri} because it has no versions`)
+    }
+
+    if (!ancestor.code) {
+      throw new Error(`Unable to replace folder ${uri} because it has no code`)
+    }
+
+    const data: ReplaceFolderModalData = {
+      selection: ancestor.version,
+      versions: ancestor.versions,
+      code: ancestor.code,
+    }
+
+    this.modalService.create({
+      nzContent: ReplaceFolderModalComponent,
+      nzViewContainerRef: this.viewContainerRef,
+      nzMask: true,
+      nzClosable: true,
+      nzMaskClosable: true,
+      nzTitle: `Ouvrir une autre version de @${ancestor.code}`,
+      nzOkText: 'Ouvrir',
+      nzData: data,
+      nzOnOk: async () => {
+        if (data.selection === ancestor.version) {
+          return
+        }
+
+        const task = taskService.run(`Ouverture de la version ${data.selection} de ${data.code}...`)
+
+        await fileService.replaceFolder(this.fileSystemProvider.buildUri(ancestor.code!, ancestor.version), {
+          name: `@${data.code}#${data.selection}`,
+          uri: this.fileSystemProvider.buildUri(ancestor.code!, data.selection),
+        })
+
+        ancestor.version = data.selection
 
         task.end()
       },
