@@ -4,7 +4,7 @@ import { MemberPermissions } from './permissions.model'
 export interface ResourceMember {
   readonly id: string
   readonly createdAt: Date
-  readonly updatedAt?: Date
+  readonly updatedAt: Date
   readonly waiting?: boolean
   readonly userId: string
   readonly resourceId: string

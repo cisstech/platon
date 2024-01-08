@@ -22,7 +22,7 @@ import { MatRadioModule } from '@angular/material/radio'
 import { NzDrawerModule } from 'ng-zorro-antd/drawer'
 import { NzSelectModule } from 'ng-zorro-antd/select'
 
-import { OrderingDirections } from '@platon/core/common'
+import { Level, OrderingDirections, Topic } from '@platon/core/common'
 import {
   CircleTree,
   ResourceFilters,
@@ -65,6 +65,9 @@ export class ResourceFiltersComponent implements OnDestroy {
   protected form = this.createForm()
   protected visible = false
 
+  @Input() topics: Topic[] = []
+  @Input() levels: Level[] = []
+
   @Input() circles: CircleTree[] = []
   @Input() filters: ResourceFilters = {}
   @Output() triggered = new EventEmitter<ResourceFilters>()
@@ -77,11 +80,11 @@ export class ResourceFiltersComponent implements OnDestroy {
 
   open(): void {
     this.form = this.createForm()
-
     this.form.patchValue({
       period: this.filters.period,
-      order: this.filters.order,
-      direction: this.filters.direction,
+      order: `${this.filters.order ?? ResourceOrderings.RELEVANCE}-${
+        this.filters.direction ?? OrderingDirections.DESC
+      }`,
       parents: this.filters.parents,
       configurable: this.filters.configurable,
       types: Object.values(ResourceTypes).reduce((controls, type) => {
@@ -92,6 +95,8 @@ export class ResourceFiltersComponent implements OnDestroy {
         controls[status] = this.filters.status?.includes(status) || false
         return controls
       }, {} as Record<ResourceStatus, boolean>),
+      topics: this.filters.topics,
+      levels: this.filters.levels,
     })
 
     this.visible = true
@@ -100,10 +105,11 @@ export class ResourceFiltersComponent implements OnDestroy {
     this.subscriptions.push(
       this.form.valueChanges.subscribe((value) => {
         const { types, status } = value
+        const order = value.order?.split('-') as [ResourceOrderings, OrderingDirections]
         this.filters = {
           ...this.filters,
-          direction: value.direction as OrderingDirections,
-          order: value.order as ResourceOrderings,
+          order: order?.[0] as ResourceOrderings,
+          direction: order?.[1] as OrderingDirections,
           period: value.period as number,
           configurable: value.configurable as boolean,
           types: types ? (Object.keys(types).filter((e) => types[e as ResourceTypes]) as ResourceTypes[]) : undefined,
@@ -111,6 +117,8 @@ export class ResourceFiltersComponent implements OnDestroy {
             ? (Object.keys(status).filter((e) => status[e as ResourceStatus]) as ResourceStatus[])
             : undefined,
           parents: value.parents as string[],
+          topics: value.topics as string[],
+          levels: value.levels as string[],
         }
 
         if (!value.types?.EXERCISE) {
@@ -130,15 +138,10 @@ export class ResourceFiltersComponent implements OnDestroy {
     this.changeDetectorRef.markForCheck()
   }
 
-  protected displayCircle(id: string): string {
-    return this.circles.find((c) => c.id === id)?.name || ''
-  }
-
   private createForm() {
     return new FormGroup({
       parents: new FormControl([] as string[]),
-      order: new FormControl(ResourceOrderings.NAME),
-      direction: new FormControl(OrderingDirections.ASC),
+      order: new FormControl(`${ResourceOrderings.RELEVANCE}-${OrderingDirections.DESC}`),
       period: new FormControl(0),
       configurable: new FormControl(false),
       types: new FormGroup(
@@ -147,6 +150,8 @@ export class ResourceFiltersComponent implements OnDestroy {
           return controls
         }, {} as Record<ResourceTypes, FormControl<boolean | null>>)
       ),
+      topics: new FormControl([] as string[]),
+      levels: new FormControl([] as string[]),
       status: new FormGroup(
         Object.values(ResourceStatus).reduce((controls, status) => {
           controls[status] = new FormControl(false)

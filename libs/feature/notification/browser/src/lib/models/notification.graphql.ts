@@ -5,6 +5,10 @@ import { NotifFragment } from './notification.graphql.generated'
 gql`
   fragment Notif on Notification {
     id
+    readAt
+    createdAt
+    updatedAt
+    data
     user {
       id
       email
@@ -12,9 +16,6 @@ gql`
       firstName
       lastName
     }
-    readAt
-    createdAt
-    data
   }
 
   query ListNotifications($filters: NotificationFiltersInput, $first: Int, $after: String) {
@@ -62,6 +63,7 @@ export const decodeNotificationFragment = (fragment: NotifFragment): Notificatio
   return {
     id: fragment.id,
     createdAt: new Date(fragment.createdAt),
+    updatedAt: new Date(fragment.updatedAt),
     data: fragment.data,
     userId: fragment.user.id,
     readAt: fragment.readAt ? new Date(fragment.readAt) : null,

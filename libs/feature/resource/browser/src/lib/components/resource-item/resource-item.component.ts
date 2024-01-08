@@ -8,7 +8,7 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 import { v4 as uuidv4 } from 'uuid'
 
 import { NgeUiListModule } from '@cisstech/nge/ui/list'
-import { Resource } from '@platon/feature/resource/common'
+import { ExerciseResourceMeta, Resource } from '@platon/feature/resource/common'
 
 import { UiModalIFrameComponent } from '@platon/shared/ui'
 
@@ -49,6 +49,7 @@ export class ResourceItemComponent implements OnInit {
 
   protected name = ''
   protected desc = ''
+  protected configurable = false
   protected tags: string[] = []
 
   get editorUrl(): string {
@@ -75,6 +76,7 @@ export class ResourceItemComponent implements OnInit {
 
     this.name = this.item.name
     this.desc = this.item.desc as string
+    this.configurable = (this.item.metadata as ExerciseResourceMeta)?.configurable ?? false
 
     if (this.simple) {
       this.desc = ''

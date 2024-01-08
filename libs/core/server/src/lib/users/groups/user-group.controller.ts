@@ -4,6 +4,7 @@ import { CreatedResponse, ItemResponse, ListResponse, NoContentResponse } from '
 import { Mapper } from '../../utils'
 import { CreateUserGroupDTO, UpdateUserGroupDTO, UserGroupDTO, UserGroupFiltersDTO } from './user-group.dto'
 import { UserGroupService } from './user-group.service'
+import { Roles } from '../../auth/decorators/roles.decorator'
 
 @Controller('user-groups')
 @ApiTags('Users')
@@ -19,6 +20,7 @@ export class UserGroupController {
     })
   }
 
+  @Roles('admin')
   @Post()
   async create(@Body() input: CreateUserGroupDTO): Promise<CreatedResponse<UserGroupDTO>> {
     const resource = Mapper.map(
@@ -30,12 +32,14 @@ export class UserGroupController {
     return new CreatedResponse({ resource })
   }
 
+  @Roles('admin')
   @Patch('/:id')
   async update(@Param('id') id: string, @Body() input: UpdateUserGroupDTO): Promise<ItemResponse<UserGroupDTO>> {
     const resource = Mapper.map(await this.service.update(id, await this.service.fromInput(input)), UserGroupDTO)
     return new ItemResponse({ resource })
   }
 
+  @Roles('admin')
   @Delete('/:id')
   async delete(@Param('id') id: string): Promise<NoContentResponse> {
     await this.service.delete(id)

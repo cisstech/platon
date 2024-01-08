@@ -1,35 +1,47 @@
-import Link from 'next/link'
-import Image from 'next/image'
 import { DocsThemeConfig } from 'nextra-theme-docs'
 import React from 'react'
-import Logo from './public/platon.svg'
+import { Logo } from './components'
 
 const config: DocsThemeConfig = {
-  logo: (
-    <Link
-      href="/"
-      prefetch={false}
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-      }}
-      legacyBehavior
-    >
-      <div>
-        <Image src={Logo} alt="Logo" width={64} height={64} />
-        PLaTon
-      </div>
-    </Link>
-  ),
+  logo: <Logo />,
+  logoLink: false,
   project: {
     link: 'https://github.com/cisstech/platon',
   },
-  chat: {
-    link: 'https://discord.com',
-  },
-  docsRepositoryBase: 'https://github.com/cisstech/platon',
+  docsRepositoryBase: 'https://github.com/cisstech/platon/tree/main/apps/docs/',
   footer: {
-    text: 'CISSTECH © 2023',
+    text: <>CISSTECH © {new Date().getFullYear()}</>,
+  },
+  search: {
+    placeholder: 'Rechercher...',
+    emptyResult: 'Aucun résultat',
+  },
+  toc: {
+    title: 'Sur cette page',
+  },
+  editLink: {
+    text: 'Modifier cette page sur GitHub',
+  },
+  feedback: {
+    content: 'Une question ? Envoyez-nous un message',
+  },
+  gitTimestamp: ({ timestamp }) => {
+    return <>Dernière date de modification {timestamp.toLocaleString()}</>
+  },
+  useNextSeoProps() {
+    return {
+      titleTemplate: '%s | PLaTon',
+      defaultTitle: 'PLaTon - Platform for Learning and Teaching Online.',
+      description:
+        'PLaTon is an open-source online learning and teaching platform designed to facilitate the creation, management, and sharing of educational resources.',
+      openGraph: {
+        type: 'website',
+        siteName: 'PLaTon | Documentation',
+        images: [
+          { url: 'https://raw.githubusercontent.com/cisstech/platon/main/shared/assets/images/illustrations/hero.png' },
+        ],
+      },
+    }
   },
 }
 

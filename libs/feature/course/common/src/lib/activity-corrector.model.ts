@@ -4,7 +4,7 @@ import { CourseMember } from './course-member.model'
 export interface ActivityCorrector {
   readonly id: string
   readonly createdAt: Date
-  readonly updatedAt?: Date
+  readonly updatedAt: Date
   readonly activityId: string
   readonly user?: User
   readonly member: CourseMember

@@ -55,6 +55,8 @@
 
 PLaTon is an open-source online learning and teaching platform designed to facilitate the creation, management, and sharing of educational resources. It provides a comprehensive set of tools for educators, students, and administrators to create, organize, and manage courses and activities in a collaborative environment. PLaTon aims to support the learning process by integrating with popular Learning Management Systems (LMS) and fostering an active community of users and contributors.
 
+Homepage : <https://cisstech.github.io/platon/>
+
 ## Key Features
 
 - Resource Management: Create, edit, and manage resources, such as circles, activities, and exercises, using an intuitive interface.
@@ -216,6 +218,8 @@ The platform is built using a modern tech stack, ensuring high performance and r
 
 - **Angular**: A widely-used front-end framework for building single-page applications with a focus on performance, maintainability, and testability.
 
+- **NextJS/Nextra**: A modern toolings for building efficient documentation pages
+
 - **PostgreSQL**: A robust and reliable open-source relational database management system that provides powerful features, excellent performance, and scalability.
   Redis: An in-memory data structure store, used as a cache for enhanced performance and scalability.
 
@@ -223,7 +227,7 @@ The platform is built using a modern tech stack, ensuring high performance and r
 
 - **Docker**: A containerization platform used for creating, deploying, and running applications in a consistent and reproducible environment.
 
-The platform is organized into three main components:
+The platform is organized into four main components:
 
 - **Client-side (Front-end)**: The client-side application is built using Angular and provides a responsive and user-friendly interface for interacting with the platform. It consumes the GraphQL and REST APIs provided by the server-side application and handles user authentication, resource management, course and activity management, notifications, and LMS integration.
 
@@ -231,6 +235,8 @@ The platform is organized into three main components:
 
 - **Database and Cache**: PostgreSQL is used as the primary database for storing the platform's data, while Redis is used as a cache to improve performance and scalability.
   Modular Design
+
+- **Documentation**: The platform documentation is build using [Nextra](https://nextra.site)
 
 #### Docker stack
 
@@ -249,7 +255,7 @@ The platform is organized into three main components:
 └─────────────────┴─────────────────┴────────────────-┘
 ```
 
-- In development mode, the architecture uses Docker to run the PostgreSQL, Redis, and PgAdmin services. The Nest.js and Angular applications are run on the host machine. Nginx is set up as a reverse proxy, directing requests to the appropriate services or applications.
+- In development mode, the architecture uses Docker to run the PostgreSQL, Redis, and PgAdmin services. The Nest.js, Angular and NextJS applications are run on the host machine. Nginx is set up as a reverse proxy, directing requests to the appropriate services or applications.
 
 - The Nginx reverse proxy configuration is different for development and production environments. In development, Nginx is configured to proxy requests to the Angular and Nest.js applications running on the host machine. In production, the Angular application is built and placed inside the Nginx container while the Nest.js application run on a different service inside docker, which is then used as a full reverse proxy.
 
@@ -336,6 +342,8 @@ This project is built using a variety of key libraries and frameworks that provi
   In the development mode, the NestJS and Angular applications run on the host machine, while the Postgres, Redis, and other services run inside Docker containers. This hybrid approach allows for easier debugging and faster development, while still leveraging the benefits of containerization for the backend services.
 
 - **[Jison](https://gerhobbelt.github.io/jison/docs/)**: Jison is a JavaScript parser generator inspired by Bison and Yacc. In this project, Jison is used to create custom parsers for specific domain languages or complex expressions, enabling advanced features and providing more flexibility in user interactions.
+
+- **[Nextra](https://nextra.site)**: Modern tooling build ontop of NextJS to create static sites
 
 ### Development Workflow
 
@@ -445,31 +453,36 @@ If you plan to use a custom ssl files instead, update the docker-compose and the
 
 [TODO]
 
-## Functional Documentation
+#### Github Home page
 
-### User Types
+The homepage of the project is hosted at <https://cisstech.github.io/platon/docs>
 
-[TODO]
+- Build
 
-### Resource Management
+```sh
+yarn build:github
+```
 
-[TODO]
+- Deploy
 
-### Course and Activity Management
+```sh
+yarn publish:github
+```
 
-[TODO]
+## Documentation
 
-### Tags and Topics
+Documentation is hosted at :
+<https://cisstech.github.io/platon/docs>
 
-[TODO]
+There is also a self hosted version of the documentation that runs alongside of the application thanks to nginx reverse proxy at `/docs/main`
 
-### User Groups and Notifications
+In development mode the documentation can be served using the following command :
 
-[TODO]
+```sh
+yarn serve:docs
+```
 
-### LMS Integration
-
-[TODO]
+In production mode, nginx serve the documentation as static files inside the docker container
 
 ## Contributing
 
@@ -487,4 +500,4 @@ Linter passes
 
 ## License
 
-[TODO]
+[CeCILL-B](LICENSE)

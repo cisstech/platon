@@ -1,7 +1,7 @@
 export interface Correction {
   id: string
   createdAt: Date
-  updatedAt?: Date
+  updatedAt: Date
   authorId: string
   grade: number
 }

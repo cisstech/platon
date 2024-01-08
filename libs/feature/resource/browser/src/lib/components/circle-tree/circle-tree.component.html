@@ -1,4 +1,4 @@
-<nz-tree-view [nzTreeControl]="treeControl" [nzDataSource]="dataSource" [trackBy]="trackBy">
+<nz-tree-view [nzTreeControl]="$any(treeControl)" [nzDataSource]="dataSource" [trackBy]="trackBy">
   <nz-tree-node *nzTreeNodeDef="let node" nzTreeNodeIndentLine>
     <nz-tree-node-checkbox
       *ngIf="selectable"

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 
 import { MatButtonModule } from '@angular/material/button'
@@ -41,46 +41,32 @@ import { AuthService } from '../../api/auth.service'
   ],
 })
 export class AuthSignInComponent implements OnInit {
+  private readonly router = inject(Router)
+  private readonly authService = inject(AuthService)
+  private readonly dialogService = inject(DialogService)
+  private readonly activatedRoute = inject(ActivatedRoute)
+  private readonly changeDetectorRef = inject(ChangeDetectorRef)
+
+  protected user?: User
   protected username = ''
   protected password = ''
   protected connecting = false
-  protected user?: User
 
-  constructor(
-    private readonly router: Router,
-    private readonly authService: AuthService,
-    private readonly dialogService: DialogService,
-    private readonly activatedRoute: ActivatedRoute
-  ) {}
-
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.authService
       .ready()
       .then((user) => {
         this.user = user
+        if (user) {
+          this.username = user.username
+        }
+        this.changeDetectorRef.markForCheck()
       })
       .catch(console.error)
-    const { next } = this.activatedRoute.snapshot.queryParams
-
-    if (
-      this.activatedRoute.snapshot.queryParams['access-token'] &&
-      this.activatedRoute.snapshot.queryParams['refresh-token']
-    ) {
-      this.authService
-        .signInWithToken({
-          accessToken: this.activatedRoute.snapshot.queryParams['access-token'],
-          refreshToken: this.activatedRoute.snapshot.queryParams['refresh-token'],
-        })
-        .then(() => {
-          this.router.navigateByUrl(next || '/dashboard', { replaceUrl: true })
-        })
-        .catch((error) => {
-          console.log(error)
-        })
-    }
+    await this.signInFromURL()
   }
 
-  signIn(): void {
+  protected signIn(): void {
     const { next } = this.activatedRoute.snapshot.queryParams
 
     if (this.user && this.user.username === this.username) {
@@ -93,12 +79,35 @@ export class AuthSignInComponent implements OnInit {
       .signIn(this.username, this.password)
       .then(() => {
         this.connecting = false
-        this.router.navigateByUrl(next || '/dashboard', { replaceUrl: true })
+        this.router.navigateByUrl(this.withNextUrl(next), { replaceUrl: true })
       })
       .catch((error) => {
         console.log(error)
         this.dialogService.error('Une erreur est survenue lors de la connexion !')
         this.connecting = false
       })
+  }
+
+  protected signOut(): void {
+    this.user = undefined
+    this.authService.signOut()
+  }
+
+  private async signInFromURL(): Promise<void> {
+    const { queryParamMap } = this.activatedRoute.snapshot
+    const accessToken = queryParamMap.get('access-token') as string
+    const refreshToken = queryParamMap.get('refresh-token') as string
+    if (accessToken && refreshToken) {
+      const next = queryParamMap.get('next')
+      await this.authService.signInWithToken({ accessToken, refreshToken })
+      this.router.navigateByUrl(this.withNextUrl(next), { replaceUrl: true })
+    }
+  }
+
+  private withNextUrl(url?: string | null): string {
+    if (url?.startsWith('/login')) {
+      return '/dashboard'
+    }
+    return url || '/dashboard'
   }
 }

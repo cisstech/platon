@@ -1,0 +1,56 @@
+nav {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+ul {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  gap: 1rem;
+}
+
+li {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.5rem;
+  transition: color 0.2s ease;
+
+  mat-icon {
+    color: currentColor;
+  }
+
+  &:hover {
+    color: var(--brand-text-landing);
+  }
+}
+
+a,
+a:hover,
+a:focus,
+a:active,
+a:visited {
+  color: currentColor;
+  text-decoration: none;
+}
+
+@media (max-width: 1096px) {
+  ul {
+    display: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .logo {
+    width: 48px;
+    height: 48px;
+  }
+}

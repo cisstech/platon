@@ -31,7 +31,7 @@
               ribbonColor="#8e44ad"
               valueSuffix="%"
               description="Taux de réussite"
-              tooltip="Pourcentage des sessions complétées avec une note de 100."
+              tooltip="Pourcentage des exercices complétées avec une note de 100."
               [value]="dashboard.session.successRate"
               [shouldBePositive]="true"
             />
@@ -40,7 +40,7 @@
             <ui-statistic-card
               matIcon="star"
               ribbonColor="#7f8c8d"
-              description="Score moyen"
+              description="Note moyenne"
               [value]="dashboard.session.averageScore"
               tooltip="Moyenne du score sur l'ensemble des sessions complétées."
               [shouldBePositive]="true"
@@ -61,7 +61,7 @@
                 ribbonColor="#f1c40f"
                 valueSuffix="%"
                 description="Taux de réponses"
-                tooltip="Pourcentage des sessions avec au moins une réponse."
+                tooltip="Pourcentage des exercices avec au moins une réponse."
                 [value]="dashboard.exercise.answerRate"
                 [shouldBePositive]="true"
               />
@@ -73,7 +73,7 @@
                 ribbonColor="#16a085"
                 valueSuffix="%"
                 description="Taux d'abandon"
-                tooltip="Pourcentage des sessions sans aucune réponse."
+                tooltip="Pourcentage des exercices sans aucune réponse."
                 [value]="dashboard.exercise.dropoutRate"
                 [shouldBeZero]="true"
               />
@@ -90,7 +90,7 @@
           </ng-container>
 
           <nz-col nzSpan="24">
-            <h2>Évolution des notes et sessions</h2>
+            <h2>Évolution des notes et du temps d'apprentissage</h2>
           </nz-col>
           <nz-col nzSpan="24">
             <mat-card>
@@ -196,6 +196,7 @@
               matIcon="visibility"
               ribbonColor="#8e44ad"
               description="Observateurs"
+              tooltip="Nombre de personnes ayant cliqué sur le bouton 'Suivre' de cette ressource."
               [value]="context.statistic?.watchers ?? 0"
             />
           </nz-col>
@@ -203,7 +204,8 @@
             <ui-statistic-card
               matIcon="group"
               ribbonColor="#f1c40f"
-              description="Membres"
+              description="Collaborateurs"
+              tooltip="Nombre de personnes ayant des droits d'édition sur cette ressource."
               [value]="context.statistic?.members ?? 0"
             />
           </nz-col>
@@ -223,7 +225,8 @@
               <ui-statistic-card
                 matIcon="group_work"
                 ribbonColor="#16a085"
-                description="Cercles"
+                description="Cercles enfants"
+                tooltip="Nombre de cercles directement liés à ce cercle."
                 [value]="context.statistic?.circles ?? 0"
               >
                 <a
@@ -232,7 +235,7 @@
                   [queryParams]="{ types: 'CIRCLE', parents: context.resource.id }"
                   [queryParamsHandling]="'merge'"
                 >
-                  Rechercher
+                  Afficher la liste
                 </a>
               </ui-statistic-card>
             </nz-col>
@@ -242,6 +245,7 @@
                 matIcon="widgets"
                 ribbonColor="#34495e"
                 description="Activités"
+                tooltip="Nombre d'activités directement liées à ce cercle."
                 [value]="context.statistic?.activities ?? 0"
               >
                 <a
@@ -250,7 +254,7 @@
                   [queryParams]="{ types: 'ACTIVITY', parents: context.resource.id }"
                   [queryParamsHandling]="'merge'"
                 >
-                  Rechercher
+                  Afficher la liste
                 </a>
               </ui-statistic-card>
             </nz-col>
@@ -260,6 +264,7 @@
                 matIcon="article"
                 ribbonColor="#c0392b"
                 description="Exercices"
+                tooltip="Nombre d'exercices directement liés à ce cercle."
                 [value]="context.statistic?.exercises ?? 0"
               >
                 <a
@@ -268,7 +273,7 @@
                   [queryParams]="{ types: 'EXERCISE', parents: context.resource.id }"
                   [queryParamsHandling]="'merge'"
                 >
-                  Rechercher
+                  Afficher la liste
                 </a>
               </ui-statistic-card>
             </nz-col>

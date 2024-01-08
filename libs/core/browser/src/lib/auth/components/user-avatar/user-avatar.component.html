@@ -27,7 +27,7 @@
   <user-group-avatar
     [size]="size"
     [group]="group"
-    [canShowMembers]="showGroupMembers.observed"
-    (showMembers)="showGroupMembers.emit(group)"
+    [canShowMembers]="openGroupDetails.observed"
+    (showMembers)="openGroupDetails.emit(group)"
   />
 </ng-container>

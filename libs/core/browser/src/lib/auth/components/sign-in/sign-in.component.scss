@@ -1,10 +1,12 @@
 mat-card {
   box-shadow: none !important;
-  button {
-    width: 100%;
-  }
 }
 
+mat-card-actions {
+  flex-direction: column;
+  gap: 0.5rem;
+  min-height: unset;
+}
 mat-toolbar {
   position: absolute;
   top: 0;
@@ -18,4 +20,9 @@ mat-form-field {
 
 mat-spinner {
   margin: 0 auto;
+}
+
+button {
+  width: 100%;
+  height: 32px;
 }

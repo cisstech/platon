@@ -10,7 +10,7 @@ export type ResourceExpandableFields = 'metadata'
 export interface Resource {
   readonly id: string
   readonly createdAt: Date
-  readonly updatedAt?: Date
+  readonly updatedAt: Date
   readonly name: string
   readonly code?: string
   readonly desc?: string

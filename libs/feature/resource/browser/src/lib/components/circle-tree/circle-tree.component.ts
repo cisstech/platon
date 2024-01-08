@@ -43,7 +43,7 @@ export class CircleTreeComponent implements OnInit {
     (node) => node.children
   )
 
-  protected dataSource = new NzTreeFlatDataSource(this.treeControl, this.treeFlattener)
+  protected dataSource = new NzTreeFlatDataSource(this.treeControl as any, this.treeFlattener)
 
   ngOnInit(): void {
     this.dataSource.setData([this.tree])

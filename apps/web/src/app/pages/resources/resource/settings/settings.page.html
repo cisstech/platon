@@ -14,7 +14,7 @@
     </nz-tab>
     <nz-tab *ngIf="context.resource?.type === 'CIRCLE'">
       <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'members' }" queryParamsHandling="merge">
-        Membres
+        Collaborateurs
       </a>
       <app-resource-members />
     </nz-tab>

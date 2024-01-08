@@ -1,5 +1,5 @@
 <header>
-  <nz-select [(ngModel)]="version" (ngModelChange)="refresh.emit($event)" [nzCustomTemplate]="versionTpt">
+  <nz-select [(ngModel)]="version" (ngModelChange)="onChangeVersion($event)" [nzCustomTemplate]="versionTpt">
     <ng-template #versionTpt>
       <i nz-icon nzType="branches" nzTheme="outline"></i>
       {{ version }}
@@ -17,42 +17,18 @@
     <button nz-button nz-tooltip="Actualiser" (click)="refresh.emit(version)">
       <i nz-icon nzType="reload" nzTheme="outline"></i>
     </button>
-    <button nz-button nz-tooltip="Taguer" (click)="isVisible = !isVisible">
+    <button *ngIf="version === 'latest'" nz-button nz-tooltip="Importer" (click)="upload.next()">
+      <i nz-icon nzType="import" nzTheme="outline"></i>
+    </button>
+    <button nz-button nz-tooltip="Télécharger" (click)="download.emit()">
+      <i nz-icon nzType="download" nzTheme="outline"></i>
+    </button>
+    <button *ngIf="canCreateVersion" nz-button nz-tooltip="Nouvelle version" (click)="versioning.open()">
       <i nz-icon nzType="tag" nzTheme="outline"></i>
     </button>
-    <nz-modal
-      [(nzVisible)]="isVisible"
-      [nzTitle]="modalTitle"
-      [nzContent]="modalContent"
-      [nzFooter]="modalFooter"
-      (nzOnCancel)="handleCancel()"
-    >
-      <ng-template #modalTitle>Création d'un tag</ng-template>
-
-      <ng-template #modalContent>
-        <section>
-          <form [formGroup]="tagForm">
-            <mat-form-field appearance="fill" [hideRequiredMarker]="true">
-              <mat-label>Tag</mat-label>
-              <input matInput formControlName="tag" />
-              <mat-error *ngIf="tagForm.controls.tag.invalid">{{ getErrorTag() }}</mat-error>
-            </mat-form-field>
-            <mat-form-field appearance="fill" [hideRequiredMarker]="true">
-              <mat-label>Description</mat-label>
-              <textarea cdkTextareaAutosize matInput formControlName="desc" cdkAutosizeMinRows="2"></textarea>
-              <mat-error *ngIf="tagForm.controls.desc.invalid">{{ getErrorDesc() }}</mat-error>
-            </mat-form-field>
-          </form>
-        </section>
-      </ng-template>
-
-      <ng-template #modalFooter>
-        <button nz-button nzType="default" (click)="handleCancel()">Annuler</button>
-        <button nz-button [disabled]="tagForm.invalid" nzType="primary" (click)="handleOk()" [nzLoading]="isOkLoading">
-          Créer
-        </button>
-      </ng-template>
-    </nz-modal>
   </nz-button-group>
   <div class="spacer"></div>
 </header>
+
+<resource-version *ngIf="versionInfo" [version]="versionInfo" />
+<resource-versioning #versioning [resource]="resource" (versionCreated)="refresh.next('latest')" />

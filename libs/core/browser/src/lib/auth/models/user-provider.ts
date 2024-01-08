@@ -1,10 +1,16 @@
-import { ListResponse, User, UserFilters } from '@platon/core/common'
+import { ListResponse, UpdateUser, User, UserFilters } from '@platon/core/common'
 import { Observable } from 'rxjs'
 
 /**
  * Provides an api to query user objects.
  */
 export abstract class UserProvider {
+  /**
+   * Updates a user by its id or username with the given `input`.
+   * @param user The `identifier|username|instance` representing the user to update.
+   * @param input The new values to update.
+   */
+  abstract update(user: string | User, input: UpdateUser): Observable<User>
   /**
    * Finds the users based on the given `filters`.
    * @param filters Filters to use.

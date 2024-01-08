@@ -1,9 +1,9 @@
-<user-search-bar
-  [(ngModel)]="users"
-  [autoSelect]="true"
-  [filters]="{
-    limit: 50
-  }"
+<user-search-bar #searchbar [(ngModel)]="users" [autoSelect]="true" [filters]="filters" />
+<user-table
+  [total]="searchbar.total"
+  [loading]="searchbar.searching"
+  [editable]="true"
+  [users]="users"
+  [(filters)]="filters"
+  (update)="update($event[0], $event[1])"
 />
-
-<user-table [users]="users" [selectable]="false" />

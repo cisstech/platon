@@ -1,8 +1,14 @@
 export const resolveFileReference = (path: string, relativeTo: { resource: string; version?: string }) => {
   path = path.trim()
   if (!path.startsWith('/')) {
-    path = `/relative/${path}`
+    if (path.startsWith(':')) {
+      const [version, ...rest] = path.split('/')
+      path = `/relative${version}/${rest.join('/')}`
+    } else {
+      path = `/relative/${path}`
+    }
   }
+  console.log(path)
   const tokens = path.split(' as ')
 
   path = tokens[0].trim()
@@ -12,7 +18,7 @@ export const resolveFileReference = (path: string, relativeTo: { resource: strin
   let [resource, version] = parts[0].split(':')
   path = parts.slice(1).join('/')
 
-  version = (resource === 'relative' ? relativeTo.version : version) || 'latest'
+  version = (resource === 'relative' ? version ?? relativeTo.version : version) || 'latest'
   resource = resource === 'relative' ? relativeTo.resource : resource
 
   return {

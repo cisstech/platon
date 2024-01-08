@@ -92,19 +92,20 @@ export class ResourceController {
       ResourceDTO
     )
 
+    const permissions = await this.permissionService.userPermissionsOnResource({
+      resource,
+      user: req.user,
+    })
+
+    if (!permissions.read) {
+      throw new ForbiddenResponse(`Operation not allowed on resource: ${id}`)
+    }
+
     if (markAsViewed) {
       this.resourceViewService.create({
         resourceId: id,
         userId: req.user.id,
       })
-    }
-
-    const permissions = await this.permissionService.userPermissionsOnResource({
-      resource,
-      user: req.user,
-    })
-    if (!permissions.read) {
-      throw new ForbiddenResponse(`Operation not allowed on resource: ${id}`)
     }
 
     Object.assign(resource, { permissions })

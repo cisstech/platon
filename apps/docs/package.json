@@ -17,7 +17,8 @@
   "scripts": {
     "serve": "next -p 4203",
     "build": "next build",
-    "start": "next start -p 4203"
+    "build:github": "GITHUB_PAGES=true next build",
+    "start": "ext start -p 4203"
   },
   "private": true,
   "dependencies": {
