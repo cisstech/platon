@@ -28,7 +28,7 @@ import { NzAlertModule } from 'ng-zorro-antd/alert'
 
 import { SafePipe } from '@cisstech/nge/pipes'
 
-import { DialogModule, DialogService } from '@platon/core/browser'
+import { DialogModule, DialogService, UserAvatarComponent } from '@platon/core/browser'
 import { ExercisePlayer, PlayerActions, PlayerNavigation } from '@platon/feature/player/common'
 import { WebComponentHooks } from '@platon/feature/webcomponent'
 
@@ -37,7 +37,12 @@ import { ActivatedRoute } from '@angular/router'
 import { ExerciseTheory } from '@platon/feature/compiler'
 import { AnswerStatePipesModule } from '@platon/feature/result/browser'
 import { AnswerStates } from '@platon/feature/result/common'
-import { FilePreviewSupportedPipe, UiModalDrawerComponent, UiModalTemplateComponent } from '@platon/shared/ui'
+import {
+  FilePreviewSupportedPipe,
+  IsUUIDPipe,
+  UiModalDrawerComponent,
+  UiModalTemplateComponent,
+} from '@platon/shared/ui'
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton'
 import { NzSpinModule } from 'ng-zorro-antd/spin'
 import { NzStatisticModule } from 'ng-zorro-antd/statistic'
@@ -94,7 +99,9 @@ type FullscreenElement = HTMLElement & {
     MatExpansionModule,
 
     SafePipe,
+    IsUUIDPipe,
     DialogModule,
+    UserAvatarComponent,
     NgeMarkdownModule,
     UiModalDrawerComponent,
     UiModalTemplateComponent,

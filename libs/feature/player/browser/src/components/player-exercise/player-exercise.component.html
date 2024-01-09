@@ -8,7 +8,12 @@
           </mat-icon>
           {{ player?.title }}
         </mat-card-title>
-        <mat-card-subtitle *ngIf="player?.author">{{ player?.author }}</mat-card-subtitle>
+        <mat-card-subtitle *ngIf="player?.author">
+          @if (player!.author!|isUUID) {
+          <user-avatar [userIdOrName]="player!.author!" [size]="24" /> } @else {
+          {{ player?.author }}
+          }
+        </mat-card-subtitle>
         <mat-card-subtitle>
           <nz-countdown *ngIf="countdownValue" [nzValue]="countdownValue" [nzValueStyle]="{ color: countdownColor }" />
         </mat-card-subtitle>
