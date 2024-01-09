@@ -7,7 +7,7 @@ import {
   Output,
   inject,
 } from '@angular/core'
-import { ActivityExercise, PleInput } from '@platon/feature/compiler'
+import { ActivityExercise, PleInput, Variables } from '@platon/feature/compiler'
 import { ResourceService } from '@platon/feature/resource/browser'
 import { ExerciseResourceMeta, Resource } from '@platon/feature/resource/common'
 import { firstValueFrom } from 'rxjs'
@@ -26,6 +26,7 @@ export class PlaExerciseEditorComponent {
 
   protected inputs?: PleInput[] = []
   protected resource?: Resource
+  protected overrides: Variables = {}
 
   get exercise(): ActivityExercise {
     return this._exercise
@@ -42,10 +43,17 @@ export class PlaExerciseEditorComponent {
     ).then((resource) => {
       this.resource = resource
       const metadata = resource.metadata as ExerciseResourceMeta | undefined
-      this.inputs = metadata?.config?.inputs?.map((input) => ({
-        ...input,
-        value: value.overrides?.[input.name] || input.value,
-      }))
+      this.inputs = []
+      this.overrides = {}
+      for (const input of metadata?.config?.inputs || []) {
+        if (value.overrides?.[input.name] != null) {
+          this.overrides[input.name] = value.overrides[input.name]
+        }
+        this.inputs.push({
+          ...input,
+          value: this.overrides[input.name],
+        })
+      }
       this.changeDetectorRef.detectChanges()
     })
   }
@@ -59,8 +67,8 @@ export class PlaExerciseEditorComponent {
   protected expandedInputs: Record<string, boolean> = {}
 
   protected onOverrideVariable(name: string, value: unknown) {
-    this.exercise.overrides = this.exercise.overrides || {}
-    this.exercise.overrides[name] = value
+    this.overrides[name] = value
+    this.exercise.overrides = this.overrides
     this.exerciseChange.emit(this.exercise)
   }
 }

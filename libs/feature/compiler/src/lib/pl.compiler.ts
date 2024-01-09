@@ -16,7 +16,8 @@ import {
   PLSourceFile,
   PLVisitor,
 } from './pl.parser'
-import { ActivityVariables, ExerciseVariables, Variables } from './pl.variables'
+import { ActivityExercise, ActivityVariables, Variables } from './pl.variables'
+import { PleConfigJSON } from './pl.config'
 
 export const ACTIVITY_MAIN_FILE = 'main.pla'
 export const EXERCISE_MAIN_FILE = 'main.ple'
@@ -121,15 +122,17 @@ export class PLCompiler implements PLVisitor {
 
     // TODO validation + typechecking
     const groups = variables.exerciseGroups
-    const exercises: any[] = []
+    const exercises: ActivityExercise[] = []
     Object.keys(groups).forEach((groupName) => {
-      groups[groupName].forEach((exercise: any) => {
+      groups[groupName].forEach((exercise) => {
         exercises.push(exercise)
       })
     })
 
+    const configs: Record<string, PleConfigJSON> = {}
+
     await Promise.all(
-      exercises.map(async (exercise: ExerciseVariables) => {
+      exercises.map(async (exercise) => {
         const content = await this.resolver.resolveContent(exercise.resource, exercise.version, EXERCISE_MAIN_FILE)
         const compiler = new PLCompiler({
           resource: exercise.resource,
@@ -137,18 +140,50 @@ export class PLCompiler implements PLVisitor {
           main: EXERCISE_MAIN_FILE,
           resolver: this.resolver,
         })
+
         exercise.id = uuidv4()
         exercise.source = await compiler.compileExercise(content)
+
         if (exercise.overrides) {
+          let config = configs[exercise.resource]
+          if (!config) {
+            try {
+              config = JSON.parse(
+                await this.resolver.resolveContent(exercise.resource, exercise.version, EXERCISE_CONFIG_FILE)
+              )
+            } catch (error) {
+              config = { inputs: [] }
+              console.error(error)
+              this.warning(`Missing or cannot parse config file for exercise ${exercise.resource}`)
+            } finally {
+              configs[exercise.resource] = config
+            }
+          }
+
+          const overrides: Variables = {}
+
+          // Pick only the inputs that are defined in the config file.
+          // This is to prevent the user from overriding variables that are not defined in the config file.
+          // This case can append after an update of a config file to remove an input.
+          config.inputs.forEach((input) => {
+            const value = exercise.overrides?.[input.name] ?? input.value
+            overrides[input.name] = value
+          })
+
+          // Merge the overrides with the exercise variables.
+          // Making sure that the overrides have the priority.
+          // So object and array types are not merged but replaced by the overrides.
           exercise.source.variables = deepMerge(
             exercise.source.variables,
-            await this.withResolvePathInOverrides(exercise.overrides)
+            await this.withResolvePathInOverrides(overrides),
+            true
           )
         }
       })
     )
 
     this.source.variables = variables
+
     return this.source
   }
 
@@ -335,20 +370,27 @@ export class PLCompiler implements PLVisitor {
     return content
   }
 
-  private async withResolvePathInOverrides(overrides: Variables): Promise<any> {
-    const keys = Object.keys(overrides)
-    const promises = keys.map(async (key) => {
-      let value = overrides[key]
-      if (typeof value === 'string') {
-        value = await this.withResolvePath(value)
-      }
-      return { key, value }
-    })
+  private async withResolvePathInOverrides(obj: any): Promise<any> {
+    if (typeof obj === 'string') {
+      return this.withResolvePath(obj)
+    } else if (Array.isArray(obj)) {
+      return Promise.all(
+        obj.map((v) => {
+          return this.withResolvePathInOverrides(v)
+        })
+      )
+    } else if (typeof obj === 'object') {
+      const keys = Object.keys(obj)
+      const promises = keys.map(async (key) => {
+        return { key, value: await this.withResolvePathInOverrides(obj[key]) }
+      })
 
-    const results = await Promise.all(promises)
-    return results.reduce((acc, { key, value }) => {
-      acc[key] = value
-      return acc
-    }, {} as any)
+      const results = await Promise.all(promises)
+      return results.reduce((acc, { key, value }) => {
+        acc[key] = value
+        return acc
+      }, {} as any)
+    }
+    return obj
   }
 }
