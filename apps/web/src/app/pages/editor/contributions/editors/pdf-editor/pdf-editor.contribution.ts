@@ -1,14 +1,14 @@
 import { Injectable, Injector, NgModule } from '@angular/core'
 import { CONTRIBUTION, EditorService, IContribution } from '@cisstech/nge-ide/core'
-import { PleConfigEditor } from './plc-editor'
+import { PdfEditor } from './pdf-editor'
 
 @Injectable()
 export class Contribution implements IContribution {
-  readonly id = 'platon.contrib.plc-editor'
+  readonly id = 'platon.contrib.pdf'
 
   activate(injector: Injector) {
     const editorService = injector.get(EditorService)
-    editorService.registerEditors(new PleConfigEditor())
+    editorService.registerEditors(new PdfEditor())
   }
 }
 
@@ -21,4 +21,4 @@ export class Contribution implements IContribution {
     },
   ],
 })
-export class PlcEditorContributionModule {}
+export class PdfEditorContributionModule {}

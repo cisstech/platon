@@ -58,6 +58,7 @@ export class UiFilePreviewComponent implements OnChanges {
   protected pdfDocument: any
   protected currentPage = 1
   protected totalPages = 0
+  protected scale = 1.0
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.src) {
@@ -88,6 +89,18 @@ export class UiFilePreviewComponent implements OnChanges {
     }
   }
 
+  protected zoomIn(): void {
+    this.scale *= 1.1
+    this.renderPage(this.currentPage)
+  }
+
+  protected zoomOut(): void {
+    if (this.scale > 0.5) {
+      // Prevent too much zoom out
+      this.scale *= 0.9
+      this.renderPage(this.currentPage)
+    }
+  }
   private updateDisplayType(): void {
     const extension = extractSupportedExtension(this.src)
     if (!extension) {
@@ -116,7 +129,7 @@ export class UiFilePreviewComponent implements OnChanges {
     this.pdfDocument.getPage(pageNumber).then((page: any) => {
       const canvas = this.pdfCanvas?.nativeElement as HTMLCanvasElement
       const context = canvas.getContext('2d')
-      const viewport = page.getViewport({ scale: 1 })
+      const viewport = page.getViewport({ scale: this.scale })
       canvas.height = viewport.height
       canvas.width = viewport.width
 

@@ -1,4 +1,6 @@
 :host {
+  position: relative;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -30,21 +32,33 @@
   }
 
   .pdf-viewer {
+    position: relative;
+    max-width: 100%;
+    overflow: auto;
+    height: 100%;
     canvas {
       width: 100%;
-      height: auto;
       border: 1px solid #ddd;
       border-radius: 4px;
+      display: block; // Removes extra space below the canvas
+      margin: auto; // Centers the canvas when zoomed out
+      max-width: 100%; // Ensures the canvas does not exceed the viewer's width
+      height: auto; // Maintains aspect ratio
     }
-    .pdf-navigation {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-bottom: 10px;
+  }
 
-      nz-input-number {
-        max-width: 64px;
-      }
+  .pdf-navigation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    nz-input-number {
+      max-width: 64px;
     }
   }
 

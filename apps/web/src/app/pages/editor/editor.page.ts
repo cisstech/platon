@@ -17,6 +17,7 @@ import { fadeInOnEnterAnimation, fadeOutDownOnLeaveAnimation } from 'angular-ani
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton'
 import { NzSpinModule } from 'ng-zorro-antd/spin'
 import { Subscription } from 'rxjs'
+import { PdfEditorContributionModule } from './contributions/editors/pdf-editor'
 import { PlcEditorContributionModule } from './contributions/editors/plc-editor'
 import { PleEditorContributionModule } from './contributions/editors/ple-editor'
 import { PlExplorerContributionModule } from './contributions/explorer/pl-explorer.contribution'
@@ -47,6 +48,7 @@ import { EditorPresenter } from './editor.presenter'
     NgeIdeProblemsModule,
     NgeIdeNotificationsModule,
 
+    PdfEditorContributionModule,
     PlfEditorContributionModule,
     PlaEditorContributionModule,
     PlPreviewContributionModule,

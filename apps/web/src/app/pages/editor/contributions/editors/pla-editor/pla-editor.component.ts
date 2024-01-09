@@ -240,7 +240,7 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
   }
 
   private async createEditor(): Promise<void> {
-    const file = await this.fileService.find(this.request.uri)
+    const file = this.request.file!
     this.readOnly = file?.readOnly
 
     const content = await this.fileService.open(this.request.uri)
