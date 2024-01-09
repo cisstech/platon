@@ -17,7 +17,7 @@ import { MatCardModule } from '@angular/material/card'
 import { NzBadgeModule } from 'ng-zorro-antd/badge'
 import { NzStatisticModule } from 'ng-zorro-antd/statistic'
 
-import { SafePipeModule } from '@cisstech/nge/pipes'
+import { SafePipe } from '@cisstech/nge/pipes'
 import {
   ActivityPlayer,
   ExercisePlayer,
@@ -64,8 +64,8 @@ import { PlayerSettingsComponent } from '../player-settings/player-settings.comp
     NzPopoverModule,
     NzStatisticModule,
 
+    SafePipe,
     DialogModule,
-    SafePipeModule,
     UserAvatarComponent,
     NgeMarkdownModule,
 

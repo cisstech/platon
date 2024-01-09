@@ -99,7 +99,13 @@
 </mat-card>
 <mat-menu #theories="matMenu">
   <ng-container *ngFor="let item of player?.theories; trackBy: trackTheory">
-    <a mat-menu-item [href]="item.url" target="_blank">{{ item.title }}</a>
+    @if (item.url|filePreviewSupported) {
+    <button mat-menu-item (click)="selectedTheory = item; modalPlayerTheory.open()">
+      <mat-icon>preview</mat-icon> {{ item.title }}
+    </button>
+    } @else {
+    <a mat-menu-item [href]="item.url" target="_blank"> <mat-icon>download</mat-icon>{{ item.title }}</a>
+    }
   </ng-container>
 </mat-menu>
 <ui-modal-drawer #commentDrawer title="Commentaires">
@@ -136,3 +142,24 @@
     </button>
   </ng-container>
 </ng-template>
+
+<ui-modal-template
+  #modalPlayerTheory
+  closable
+  height="auto"
+  (closed)="selectedTheory = undefined"
+  [title]="selectedTheory?.title || ''"
+>
+  <ng-template>
+    <ng-container *ngIf="selectedTheory">
+      @defer (on viewport) {
+      <player-theory [theory]="selectedTheory" />
+      } @placeholder {
+      <nz-skeleton [nzActive]="true" [nzLoading]="true" [nzParagraph]="{ rows: 5 }"></nz-skeleton>
+      }
+    </ng-container>
+  </ng-template>
+  <ng-template>
+    <a mat-button [href]="selectedTheory?.url" target="_blank"><mat-icon>download</mat-icon> Télécharger</a>
+  </ng-template>
+</ui-modal-template>

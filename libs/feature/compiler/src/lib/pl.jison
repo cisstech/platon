@@ -357,7 +357,7 @@ export interface PLVisitor {
 
 
 <PATH_STATE>\s+         /* ignore whitespace */
-<PATH_STATE>(\/?[a-zA-Z0-9_\+\.\\:]+(\s+'as'\s+\/?[a-zA-Z0-9_\+\.])?)+   {
+<PATH_STATE>(\/?[a-zA-Z0-9-_\+\.\\:]+(\s+'as'\s+\/?[a-zA-Z0-9-_\+\.])?)+   {
                             this.popState();
                             return 'PATH';
                         }

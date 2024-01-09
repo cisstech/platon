@@ -1,0 +1,57 @@
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f2f2f2;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 15px;
+  margin: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  .image-viewer {
+    max-width: 100%;
+    max-height: 500px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .video-player {
+    max-width: 100%;
+    max-height: 500px;
+    border-radius: 4px;
+    background-color: black;
+
+    video {
+      width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+  }
+
+  .pdf-viewer {
+    canvas {
+      width: 100%;
+      height: auto;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    .pdf-navigation {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 10px;
+
+      nz-input-number {
+        max-width: 64px;
+      }
+    }
+  }
+
+  nge-markdown {
+    width: 100%;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 4px;
+  }
+}

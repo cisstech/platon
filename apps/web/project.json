@@ -151,7 +151,8 @@
           "editorjs-undo",
           "editorjs-style",
           "editorjs-text-alignment-blocktune",
-          "editorjs-text-color-plugin"
+          "editorjs-text-color-plugin",
+          "pdfjs-dist/build/pdf.worker.entry"
         ]
       },
       "configurations": {

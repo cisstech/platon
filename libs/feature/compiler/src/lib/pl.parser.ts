@@ -453,7 +453,7 @@ export class PLLexer extends JisonLexer implements JisonLexerApi {
         super(yy);
     }
 
-    rules: RegExp[] = [/^(?:\s+)/,/^(?:#.*)/,/^(?:\/\/.*)/,/^(?:\/\*([^*]|\*[^\/])*\*\/)/,/^(?:==)/,/^(?:=)/,/^(?:@copycontent\b)/,/^(?:@copyurl\b)/,/^(?:@include\b)/,/^(?:@extends\b)/,/^(?:[+-]?\d+((_|\.)+\d+)*)/,/^(?:[,])/,/^(?:[:])/,/^(?:[\{])/,/^(?:[\}])/,/^(?:[\[])/,/^(?:[\]])/,/^(?:true|false|True|False\b)/,/^(?:wc-[a-zA-Z0-9_-]+)/,/^(?:[a-zA-Z_](\.?[a-zA-Z0-9_])*)/,/^(?:"([^\\\"]|\\.)*")/,/^(?:$)/,/^(?:[^\n]*\n)/,/^(?:\s+)/,/^(?:(\/?[a-zA-Z0-9_\+\.\\:]+(\s+as\s+\/?[a-zA-Z0-9_\+\.])?)+)/];
+    rules: RegExp[] = [/^(?:\s+)/,/^(?:#.*)/,/^(?:\/\/.*)/,/^(?:\/\*([^*]|\*[^\/])*\*\/)/,/^(?:==)/,/^(?:=)/,/^(?:@copycontent\b)/,/^(?:@copyurl\b)/,/^(?:@include\b)/,/^(?:@extends\b)/,/^(?:[+-]?\d+((_|\.)+\d+)*)/,/^(?:[,])/,/^(?:[:])/,/^(?:[\{])/,/^(?:[\}])/,/^(?:[\[])/,/^(?:[\]])/,/^(?:true|false|True|False\b)/,/^(?:wc-[a-zA-Z0-9_-]+)/,/^(?:[a-zA-Z_](\.?[a-zA-Z0-9_])*)/,/^(?:"([^\\\"]|\\.)*")/,/^(?:$)/,/^(?:[^\n]*\n)/,/^(?:\s+)/,/^(?:(\/?[a-zA-Z0-9-_\+\.\\:]+(\s+as\s+\/?[a-zA-Z0-9-_\+\.])?)+)/];
     conditions: any = {"MULTI_STATE":{"rules":[21,22],"inclusive":true},"PATH_STATE":{"rules":[21,23,24],"inclusive":true},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21],"inclusive":true}}
     performAction (yy:any,yy_:any,$avoiding_name_collisions:any,YY_START:any): any {
           var YYSTATE=YY_START;

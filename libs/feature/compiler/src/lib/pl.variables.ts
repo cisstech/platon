@@ -24,8 +24,17 @@ export interface ExerciseHint {
 export interface ExerciseTheory {
   /** Title of the theory document. */
   title: string
+
   /** Url to the theory document. */
   url: string
+
+  /**
+   * Determines whether the theory document should be displayed in preview mode.
+   * - Only supported formats are displayed in preview mode.
+   *  - Supported formats are listed in `ui-file-preview` component.
+   * - If the format is not supported, the document is downloaded.
+   */
+  preview?: boolean
 }
 
 /** Variables managed by the player to keep track of some informations about the exercice status.  */
