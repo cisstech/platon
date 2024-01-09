@@ -11,4 +11,7 @@
   </footer>
 </div>
 <nz-spin *ngIf="loading" [@fadeInOnEnter] nzTip="Préparation de l'éditeur..." nzSize="large" nzSpinning />
-<ide-root [class.loading]="loading"></ide-root>
+<ide-root [class.loading]="loading">
+  <h2>Bienvenue dans l'environnement de développement</h2>
+  <p>Voici quelques informations utiles pour démarrer :</p>
+</ide-root>

@@ -12,6 +12,8 @@ import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzPopoverModule } from 'ng-zorro-antd/popover'
 import { NzSpinModule } from 'ng-zorro-antd/spin'
 
+import { ViewportIntersectionDirective } from '@cisstech/nge/directives'
+
 import {
   FilterIndicator,
   PeriodFilterMatcher,
@@ -48,6 +50,8 @@ import {
 } from '@platon/feature/resource/common'
 import { NzDividerModule } from 'ng-zorro-antd/divider'
 
+const PAGINATION_LIMIT = 15
+
 @Component({
   standalone: true,
   selector: 'app-resources',
@@ -66,6 +70,8 @@ import { NzDividerModule } from 'ng-zorro-antd/divider'
     NzButtonModule,
     NzPopoverModule,
     NzDividerModule,
+
+    ViewportIntersectionDirective,
 
     ResourcePipesModule,
     ResourceItemComponent,
@@ -124,7 +130,10 @@ export default class ResourcesPage implements OnInit, OnDestroy {
     PeriodFilterMatcher,
   ]
 
+  protected hasMore = true
   protected searching = true
+  protected paginating = false
+
   protected filters: ResourceFilters = {}
   protected circle!: Resource
   protected items: Resource[] = []
@@ -179,14 +188,21 @@ export default class ResourcesPage implements OnInit, OnDestroy {
         }
 
         this.searching = true
-        this.items = (
-          await firstValueFrom(
-            this.resourceService.search({
-              ...this.filters,
-              expands: ['metadata'],
-            })
-          )
-        ).resources
+
+        this.items = []
+        this.hasMore = true
+        this.paginating = false
+
+        const response = await firstValueFrom(
+          this.resourceService.search({
+            ...this.filters,
+            expands: ['metadata'],
+            limit: PAGINATION_LIMIT,
+          })
+        )
+
+        this.items = response.resources
+        this.hasMore = response.resources.length > 0
         this.searching = false
 
         this.changeDetectorRef.markForCheck()
@@ -217,6 +233,40 @@ export default class ResourcesPage implements OnInit, OnDestroy {
       relativeTo: this.activatedRoute,
       queryParamsHandling: 'merge',
     })
+  }
+
+  protected async loadMore(): Promise<void> {
+    if (this.paginating) {
+      return
+    }
+
+    this.paginating = true
+    const response = await firstValueFrom(
+      this.resourceService.search({
+        ...this.filters,
+        expands: ['metadata'],
+        limit: PAGINATION_LIMIT,
+        offset: this.items.length,
+      })
+    )
+
+    this.items = [...this.items, ...response.resources]
+    this.hasMore = response.resources.length > 0
+    this.paginating = false
+
+    this.changeDetectorRef.markForCheck()
+  }
+
+  protected applyTagFilter(id: string, type: 'topic' | 'level') {
+    this.search(
+      {
+        ...this.filters,
+        ...(type === 'topic'
+          ? { topics: [...(this.filters.topics ?? []), id] }
+          : { levels: [...(this.filters.levels ?? []), id] }),
+      },
+      this.searchbar.value
+    )
   }
 }
 

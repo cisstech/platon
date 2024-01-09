@@ -28,7 +28,7 @@ import { ResourceEntity } from './resource.entity'
 import { ResourceExpander } from './resource.expander'
 import { ResourceService } from './resource.service'
 import { ResourceSubscriber } from './resource.subscriber'
-import { ResourceStatsSubscriber } from './statistics'
+import { ResourceStatisticEntity, ResourceStatsSubscriber } from './statistics'
 import { UserResourceController } from './user'
 import { ResourceViewEntity, ResourceViewService } from './views'
 import { ResourceWatcherController, ResourceWatcherEntity, ResourceWatcherService } from './watchers'
@@ -74,6 +74,7 @@ import { ResourceWatcherController, ResourceWatcherEntity, ResourceWatcherServic
       ResourceWatcherEntity,
       ResourceViewEntity,
       ResourceMetaEntity,
+      ResourceStatisticEntity,
       ResourceDependencyEntity,
     ]),
     LevelModule,

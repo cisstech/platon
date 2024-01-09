@@ -20,6 +20,7 @@ import { ResourceEntity } from './resource.entity'
 import { ResourceWatcherEntity } from './watchers'
 import { ResourceDependencyEntity } from './dependency'
 import { ResourceMetaEntity } from './metadata/metadata.entity'
+import { ResourceStatisticEntity } from './statistics'
 
 @Injectable()
 export class ResourceService {
@@ -200,7 +201,7 @@ export class ResourceService {
     }
 
     if (filters.order === ResourceOrderings.RELEVANCE) {
-      query.leftJoin('ResourceStats', 'stats', 'stats.id = resource.id')
+      query.leftJoinAndSelect(ResourceStatisticEntity, 'stats', 'stats.id = resource.id')
     }
 
     if (filters.members?.length) {
@@ -318,11 +319,11 @@ export class ResourceService {
     }
 
     if (filters.offset) {
-      query.offset(filters.offset)
+      query.skip(filters.offset)
     }
 
     if (filters.limit) {
-      query.limit(filters.limit)
+      query.take(filters.limit)
     }
 
     return query.getManyAndCount()
