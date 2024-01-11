@@ -9,6 +9,7 @@ import {
 } from '@cisstech/nge-ide/core'
 import { CodIcon } from '@cisstech/nge/ui/icon'
 
+export const DOCS_CONTAINER_ID = 'platon.container.docs'
 @Injectable()
 export class Contribution implements IContribution {
   readonly id = 'platon.contrib.sidebar'
@@ -19,7 +20,7 @@ export class Contribution implements IContribution {
 
     viewContainerService.register(
       new (class extends SidebarContainer {
-        readonly id = 'platon.container.docs'
+        readonly id = DOCS_CONTAINER_ID
         readonly title = 'Documentation'
         readonly icon = new CodIcon('book')
         readonly side = 'left'

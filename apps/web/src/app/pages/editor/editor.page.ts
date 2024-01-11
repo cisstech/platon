@@ -13,7 +13,9 @@ import { PlfEditorContributionModule } from './contributions/editors/plf-editor'
 
 import { ActivatedRoute } from '@angular/router'
 import { EditorService, FileService, IdeService } from '@cisstech/nge-ide/core'
+import { IntroService } from '@platon/core/browser'
 import { fadeInOnEnterAnimation, fadeOutDownOnLeaveAnimation } from 'angular-animations'
+import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton'
 import { NzSpinModule } from 'ng-zorro-antd/spin'
 import { Subscription } from 'rxjs'
@@ -26,6 +28,7 @@ import { ResourceFileSystemProvider } from './contributions/file-system'
 import { PlPreviewContributionModule } from './contributions/previews/pl-preview.contribution'
 import { PlSidebarContributionModule } from './contributions/sidebar/pl-sidebar.contribution'
 import { PlWorkbenchContributionModule } from './contributions/workbench/pl-workbench.contribution'
+import { EDITOR_TOUR } from './editor-tour'
 import { EditorPresenter } from './editor.presenter'
 
 @Component({
@@ -39,6 +42,7 @@ import { EditorPresenter } from './editor.presenter'
     CommonModule,
 
     NzSpinModule,
+    NzButtonModule,
     NzSkeletonModule,
 
     NgeIdeModule,
@@ -67,11 +71,11 @@ export class EditorPage implements OnInit, OnDestroy {
   private readonly ide = inject(IdeService)
   private readonly presenter = inject(EditorPresenter)
   private readonly fileService = inject(FileService)
+  private readonly introService = inject(IntroService)
   private readonly editorService = inject(EditorService)
   private readonly activatedRoute = inject(ActivatedRoute)
   private readonly changeDetectorRef = inject(ChangeDetectorRef)
   private readonly resourceFileSystemProvider = inject(ResourceFileSystemProvider)
-
   protected loading = true
 
   async ngOnInit(): Promise<void> {
@@ -92,5 +96,25 @@ export class EditorPage implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.resourceFileSystemProvider.cleanUp()
     this.subscriptions.forEach((s) => s.unsubscribe())
+  }
+
+  protected async introTour(): Promise<void> {
+    const intro = await this.introService.create()
+
+    intro.setOptions({
+      scrollToElement: true,
+      disableInteraction: true,
+      showButtons: true,
+      showBullets: false,
+      showStepNumbers: false,
+      showProgress: true,
+      doneLabel: 'Terminer',
+      nextLabel: 'Suivant',
+      skipLabel: 'X',
+      prevLabel: 'Précedent',
+      steps: EDITOR_TOUR,
+    })
+
+    intro.start()
   }
 }
