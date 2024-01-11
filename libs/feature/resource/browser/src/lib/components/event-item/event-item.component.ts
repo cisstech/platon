@@ -92,7 +92,7 @@ class MemberRemoveEventComponent {
   imports: [UserAvatarComponent, ResourcePipesModule],
   template: `
     <user-avatar showUsername="inline" [userIdOrName]="event.actorId" /> a passé “{{ event.data.resourceName }}” à “{{
-      event.data.newStatus | resourceStatus
+      $any(event.data.newStatus) | resourceStatus
     }}”
   `,
 })

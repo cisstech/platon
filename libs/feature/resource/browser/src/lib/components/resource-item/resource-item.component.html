@@ -1,4 +1,4 @@
-<nz-ribbon [nzText]="item.status | resourceStatus" [nzColor]="item.status | resourceStatusColor">
+<nz-ribbon [nzText]="ribbon" [nzColor]="item.status | resourceStatusColor">
   <ui-list-item-article
     [style.--border-color]="item.type | resourceColor"
     [articleTitle]="title"
@@ -8,11 +8,14 @@
     [articleUrl]="clickable ? ['/resources/', item.id] : undefined"
     (didClickTagItem)="handleTagClick($event)"
   >
+    <ng-template #ribbon>
+      <mat-icon [nz-tooltip]="item.status | resourceStatus">{{ item.status | resourceStatusIcon }}</mat-icon>
+    </ng-template>
     <ng-template #image>
-      <mat-icon>{{ item.type | resourceIcon }}</mat-icon>
+      <mat-icon [nz-tooltip]="item.type | resourceType">{{ item.type | resourceIcon }}</mat-icon>
     </ng-template>
     <ng-template #title>
-      <span>{{ name }}</span>
+      <span class="resource-item-title">{{ name }}</span>
       <i
         class="icon-configurable"
         *ngIf="configurable"
