@@ -104,6 +104,8 @@
           }
         ],
         "styles": [
+          "shared/styles/app.scss",
+          "apps/components/src/styles.scss",
           {
             "input": "shared/styles/material/dark.scss",
             "bundleName": "styles.material.dark",
@@ -123,8 +125,7 @@
             "input": "shared/styles/ng-zorro/light.less",
             "bundleName": "styles.ng-zorro.light",
             "inject": false
-          },
-          "apps/components/src/styles.scss"
+          }
         ],
         "scripts": [],
         "allowedCommonJsDependencies": [
