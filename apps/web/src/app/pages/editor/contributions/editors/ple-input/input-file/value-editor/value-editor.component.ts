@@ -1,8 +1,18 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core'
+import { ChangeDetectionStrategy, Component, Pipe, PipeTransform, inject } from '@angular/core'
 import { DndData, EditorService, NotificationService } from '@cisstech/nge-ide/core'
 import { EditorPresenter } from '../../../../../editor.presenter'
 import { ResourceFileSystemProvider } from '../../../../file-system'
 import { BaseValueEditor } from '../../ple-input'
+
+@Pipe({ name: 'hideResourceId' })
+export class HideResourceIdPipe implements PipeTransform {
+  transform(value?: string | null): string | null | undefined {
+    if (!value) {
+      return value
+    }
+    return value.replace(/\/[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}:[^/]+\//, '')
+  }
+}
 
 @Component({
   selector: 'app-input-file-value-editor',
@@ -46,7 +56,7 @@ export class ValueEditorComponent extends BaseValueEditor<string> {
 
     let path = ''
     try {
-      path = this.editorPresenter.resolvePath(uri, activeResource)
+      path = this.editorPresenter.resolvePath(uri, activeResource, true)
       if (path) {
         this.changeValue((this.value = `@copycontent ${path}`))
       }

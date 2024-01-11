@@ -196,15 +196,16 @@ export class EditorPresenter {
    *  - otherwise the path will be resolved as an absolute path
    * - If the resource does not belong to the current opened resource
    *  - the path will be resolved as an absolute path
-   *
+   * - If `forceAbsolute` is true, the path will be resolved as an absolute path
    * @throws
    *  - If to resource is not a parent of the uri resource of not the same resource
    *
-   * @param uri
-   * @param to
-   * @returns
+   * @param uri The uri to resolve
+   * @param to The resource from which the path will be resolved
+   * @param forceAbsolute If true, the path will be resolved as an absolute path
+   * @returns The resolved path
    */
-  resolvePath(uri: monaco.Uri, to: monaco.Uri): string {
+  resolvePath(uri: monaco.Uri, to: monaco.Uri, forceAbsolute?: boolean): string {
     const { owner: srcRes, opened: srcOpened } = this.findOwnerResource(uri)
     if (!srcRes) {
       throw new Error(`Unable to resolve resource linked to : ${uri}`)
@@ -219,7 +220,7 @@ export class EditorPresenter {
       throw new Error(`Parent resource cannot access child resource files`)
     }
 
-    if (srcOpened && dstOpened) {
+    if (srcOpened && dstOpened && !forceAbsolute) {
       return removeLeadingSlash(uri.path)
     }
 
@@ -229,13 +230,13 @@ export class EditorPresenter {
       if (indexSrc < indexDst) {
         throw new Error(`Parent resource cannot access child resource files`)
       }
-      if (indexSrc === indexDst) {
+      if (indexSrc === indexDst && !forceAbsolute) {
         return removeLeadingSlash(uri.path)
       }
     }
 
     const version = uri.authority.split(':')[1]
-    return `/${srcRes.code}:${version}${uri.path}`
+    return `/${srcRes.code || srcRes.id}:${version}${uri.path}`
   }
 
   updateRootFolders(fileService: FileService, taskService: TaskService): void {

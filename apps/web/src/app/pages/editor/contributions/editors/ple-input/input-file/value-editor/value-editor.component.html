@@ -1,6 +1,6 @@
 <div id="drop-zone" class="drop-zone" dnd (dropped)="onDrop($event)">
   <span>
-    {{ value || "Déposez un fichier ici depuis l'explorateur..." }}
+    {{ (value | hideResourceId) || "Déposez un fichier ici depuis l'explorateur..." }}
   </span>
 </div>
 <ng-container *ngIf="value">

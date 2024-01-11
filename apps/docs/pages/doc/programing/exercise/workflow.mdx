@@ -114,24 +114,24 @@ form ==
 ```
 
 <Callout type="info">
-La récupération de la réponse de l'étudiant se fait à l'aide de variables de types composants dont la documentation est disponible sur la barre de menu haut.
+La récupération de la réponse de l'apprenant se fait à l'aide de variables de types composants dont la documentation est disponible sur la barre de menu haut.
 </Callout>
 
 ## Évaluation: Grader
 
-Le grader est le script qui va évaluer la réponse de l'étudiant. Il est possible de déclarer un script python/node (en fonction de la sandbox) dans une clé `grader`.
+Le grader est le script qui va évaluer la réponse de l'apprenant. Il est possible de déclarer un script python/node (en fonction de la sandbox) dans une clé `grader`.
 
-Ce script à accès à l'ensemble des variables de l'exercice: celles déclarées dans le `ple`, celles créés par le script de construction, celles modifiées par l'étudiant dans le formulaire (les composants).
+Ce script à accès à l'ensemble des variables de l'exercice: celles déclarées dans le `ple`, celles créés par le script de construction, celles modifiées par l'apprenant dans le formulaire (les composants).
 
 En plus de vos variables, 2 variables spéciales sont disponibles :
 
-- `grade` : La note de l'étudiant, entre 0 et 1 (-1 si l'exercice est en erreur)
+- `grade` : La note de l'apprenant, entre 0 et 1 (-1 si l'exercice est en erreur)
 
-- `feedback` : Un objet permettant de renvoyer un feedback à l'étudiant. Les clés de cet objet sont :
-    - `type` : Le type de feedback à renvoyer à l'étudiant. Les valeurs possibles sont `warning`, `error` et `success`
-    - `content` : Le message à afficher à l'étudiant (markdown|html)
+- `feedback` : Un objet permettant de renvoyer un feedback à l'apprenant. Les clés de cet objet sont :
+    - `type` : Le type de feedback à renvoyer à l'apprenant. Les valeurs possibles sont `warning`, `error` et `success`
+    - `content` : Le message à afficher à l'apprenant (markdown|html)
 
-Vous devez modifier la valeur de ces clés pour renvoyer un feedback à l'étudiant et lui attribuer une note en fonction de sa réponse.
+Vous devez modifier la valeur de ces clés pour renvoyer un feedback à l'apprenant et lui attribuer une note en fonction de sa réponse.
 
 Par exemple:
 
@@ -142,7 +142,7 @@ grade = 0
 feedback.type = "error"
 feedback.content = "Mauvaise réponse"
 
-// input.value contient la réponse de l'étudiant
+// input.value contient la réponse de l'apprenant
 
 if (input.value === op1 + op2) {
   grade = 100
@@ -150,7 +150,7 @@ if (input.value === op1 + op2) {
   feedback.content = "Bonne réponse"
 }
 
-// A cet endroit vous pouvez modifer toutes les variables de l'exercice avant de les renvoyer à l'étudiant.
+// A cet endroit vous pouvez modifer toutes les variables de l'exercice avant de les renvoyer à l'apprenant.
 // Par exemple, vous pouvez afficher la bonne réponse dans input.value
 
 ==
@@ -158,13 +158,13 @@ if (input.value === op1 + op2) {
 ```
 
 <Callout type="info">
-Par défaut, le type de feedback est un objet, mais il est possible d'afficher plusieurs feedbacks à l'étudiant en utilisant un tableau d'objets de feedback.
+Par défaut, le type de feedback est un objet, mais il est possible d'afficher plusieurs feedbacks à l'apprenant en utilisant un tableau d'objets de feedback.
 Pour cela, il suffit de déclarer la variable `feedback` comme un tableau au début du grader et d'ajouter des objets de feedback à l'intérieur.
 </Callout>
 
 ## Affichage de la solution : Solution
 
-Il est possible d'afficher la solution d'un exercice à l'aide de la clé `solution`. Cette clé suit la même logique que la clé `form`, sauf qu'elle contient le HTML/Markdown à afficher à l'étudiant lorsqu'il demande la solution.
+Il est possible d'afficher la solution d'un exercice à l'aide de la clé `solution`. Cette clé suit la même logique que la clé `form`, sauf qu'elle contient le HTML/Markdown à afficher à l'apprenant lorsqu'il demande la solution.
 
 Par exemple:
 
