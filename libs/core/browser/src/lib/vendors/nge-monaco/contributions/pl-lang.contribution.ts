@@ -42,7 +42,7 @@ export class PlLanguageContribution implements NgeMonacoContribution {
     monaco.languages.setLanguageConfiguration('pl-js', configuration)
     monaco.languages.setLanguageConfiguration('pl-py', configuration)
 
-    monaco.languages.registerLinkProvider('pl-js', {
+    const referenceLinkProvider: monaco.languages.LinkProvider = {
       provideLinks: (model) => {
         const links: monaco.languages.ILink[] = []
         try {
@@ -94,6 +94,40 @@ export class PlLanguageContribution implements NgeMonacoContribution {
       resolveLink: function (link) {
         return link
       },
-    })
+    }
+
+    const docLinkProvider: monaco.languages.LinkProvider = {
+      provideLinks: (model) => {
+        const text = model.getValue()
+        const linkPattern = /(\/\/.*?#docs\/(main|components)\/.*)/g
+        const links = []
+        let match
+
+        while ((match = linkPattern.exec(text)) !== null) {
+          const startIndex = model.getPositionAt(match.index)
+          const endIndex = model.getPositionAt(match.index + match[0].length)
+          const urlMatch = match[0].match(/#docs\/(main|components)\/.*/)
+          if (urlMatch) {
+            const url = urlMatch[0].slice(1) // remove #
+            console.log(url)
+            links.push({
+              range: new monaco.Range(startIndex.lineNumber, startIndex.column, endIndex.lineNumber, endIndex.column),
+              url: monaco.Uri.parse(`https:///${url}`, true),
+            })
+          }
+        }
+        return {
+          links,
+        }
+      },
+      resolveLink: function (link) {
+        return link
+      },
+    }
+
+    monaco.languages.registerLinkProvider('pl-js', referenceLinkProvider)
+    monaco.languages.registerLinkProvider('pl-py', referenceLinkProvider)
+    monaco.languages.registerLinkProvider('pl-js', docLinkProvider)
+    monaco.languages.registerLinkProvider('pl-py', docLinkProvider)
   }
 }
