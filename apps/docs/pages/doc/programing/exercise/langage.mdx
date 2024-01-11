@@ -104,7 +104,7 @@ Les variables dans PLaTon peuvent être de différents types et sont utilisées 
 - Nombres, chaînes de caractères, booléens.
 - Références, objets, tableaux.
 - URL de fichier, contenu de fichier.
-- Composants (ex : :wc-input pour un champ de saisie).
+- Composants (ex : `:wc-input` pour un champ de saisie).
 
 ### Affectation de Variables :
 - L'affectation se fait avec le symbole `=`.
@@ -135,7 +135,8 @@ myobject = {
   key1: "value1",
   key2: :wc-input,
   key3: @copyurl /path/to/file.txt,
-  key4: @copycontent /path/to/file.txt
+  key4: @copycontent /path/to/file.txt,
+  "key with space": "value with space"
 }
 
 # Objects avec notation pointée
@@ -192,6 +193,10 @@ pour générer notamment des données aléatoires. Un exemple d'utilisation est 
 - Utilisez `@include CHEMIN` pour inclure des fichiers dans l'environnement de l'exercice.
 - Utilisez `@include CHEMIN as NOM` pour inclure des fichiers dans l'environnement de l'exercice et les renommer.
 
+<Callout type='info'>
+Il est possible de glisser déposer des fichiers depuis l'explorateur de fichier de l'IDE vers la zone dans laquelle vous souhaitez inclure le chemin du fichier.
+![Glisser déposer de fichier dans l'éditeur](../../../../public/screens/resources/ide/drop-into-editor.gif)
+</Callout>
 
 ## Héritage
 
@@ -263,7 +268,7 @@ Ainsi, avec une arbre de répertoires comme celui-ci:
 - monexo est la racine de l'exercice
 - informatique est le cercle parent de l'exercice
 - platon est le cercle parent du cercle informatique
-- #latest indique qu'on visulise la dernière version du cercle
+- #latest indique qu'on visualise la dernière version du cercle
 
 <FileTree>
   <FileTree.Folder name="monexo" defaultOpen>
