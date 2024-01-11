@@ -8,6 +8,7 @@ import {
   OnDestroy,
   OnInit,
   Output,
+  booleanAttribute,
   forwardRef,
   inject,
 } from '@angular/core'
@@ -28,6 +29,7 @@ import {
   CONFIG_EDITOR_TOKEN,
   PLE_INPUT_PROVIDERS,
   PleInputConfigEditor,
+  PleInputMode,
   PleInputProvider,
   PleInputValueEditor,
   VALUE_EDITOR_TOKEN,
@@ -150,8 +152,8 @@ export class PleInputComponent implements OnInit, OnDestroy, ControlValueAccesso
 
   @Output() inputChange = new EventEmitter<PleInput>()
 
-  @Input() mode: 'config' | 'value' | 'design' = 'config'
-  @Input() disabled? = false
+  @Input() mode: PleInputMode = 'config'
+  @Input({ transform: booleanAttribute }) disabled? = false
   @Input() reservedNames: string[] = []
 
   get label(): string {

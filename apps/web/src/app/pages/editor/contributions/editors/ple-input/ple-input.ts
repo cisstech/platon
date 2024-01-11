@@ -3,6 +3,8 @@ import { ComponentType } from '@angular/cdk/portal'
 import { ChangeDetectorRef, InjectionToken, inject } from '@angular/core'
 import { PleInput } from '@platon/feature/compiler'
 
+export type PleInputMode = 'config' | 'value' | 'ple' | 'plo'
+
 export interface PleInputValueEditor<TValue = unknown, TOptions = any> {
   setOptions?(options: TOptions): void
   setValue(value: TValue): void

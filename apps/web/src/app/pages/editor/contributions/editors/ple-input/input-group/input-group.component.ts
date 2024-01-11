@@ -1,6 +1,8 @@
-import { ChangeDetectionStrategy, Component, Input, forwardRef } from '@angular/core'
+import { ChangeDetectionStrategy, Component, Input, booleanAttribute, forwardRef } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { PleInput } from '@platon/feature/compiler'
+import { PleInputMode } from '../ple-input'
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop'
 
 @Component({
   selector: 'app-editor-input-group',
@@ -16,9 +18,9 @@ import { PleInput } from '@platon/feature/compiler'
   ],
 })
 export class InputGroupComponent implements ControlValueAccessor {
-  @Input() disabled? = false
+  @Input({ transform: booleanAttribute }) disabled? = false
   @Input() reservedNames: string[] = []
-
+  @Input({ required: true }) mode!: PleInputMode
   protected inputs: PleInput[] = []
   protected selection?: PleInput
   protected selectionIndex = -1
@@ -61,6 +63,13 @@ export class InputGroupComponent implements ControlValueAccessor {
     this.inputs = [...this.inputs, input as PleInput]
   }
 
+  protected reorder(event: CdkDragDrop<PleInput[]>) {
+    if (this.disabled) return
+    moveItemInArray(this.inputs, event.previousIndex, event.currentIndex)
+    this.selectAt(event.currentIndex)
+    this.notifyChange()
+  }
+
   protected update(change: PleInput): void {
     this.inputs = this.inputs.map((v, i) => (i === this.selectionIndex ? change : v))
     this.notifyChange()
@@ -76,10 +85,6 @@ export class InputGroupComponent implements ControlValueAccessor {
     this.selection = undefined
     this.selectionIndex = -1
     this.notifyChange()
-  }
-
-  protected trackFn(index: number, input: PleInput) {
-    return input.name || index
   }
 
   private notifyChange(): void {

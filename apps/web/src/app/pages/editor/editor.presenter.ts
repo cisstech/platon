@@ -127,6 +127,7 @@ export class EditorPresenter {
 
     this.openedAncestorIds = openedAncestors.map((ancestor) => ancestor.id)
 
+    this.fileSystemProvider.setResource(resource)
     return {
       tree,
       version,
@@ -151,6 +152,10 @@ export class EditorPresenter {
       },
       filesToOpen,
     }
+  }
+
+  buildUri(resource: string, version?: string, path?: string): monaco.Uri {
+    return this.fileSystemProvider.buildUri(resource, version, path)
   }
 
   findAncestor(uri: monaco.Uri): Ancestor | undefined {

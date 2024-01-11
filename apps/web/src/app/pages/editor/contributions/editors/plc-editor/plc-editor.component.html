@@ -45,6 +45,17 @@
       </nz-list-item>
     </nz-list>
     <button class="btn-add-input" nz-button nzType="primary" [disabled]="readOnly" (click)="addInput()">+</button>
+    <br />
+    <h3>Debug</h3>
+    <p>
+      Le format de stockage interne de ce fichier est un JSON. Activez cette option pour en visualiser le contenu. Seul
+      les variables modifiées par cet exercice seront affichées.
+    </p>
+    <nz-switch [(ngModel)]="debug"></nz-switch>
+    <br /><br />
+    <div>
+      <pre *ngIf="debug">{{ inputs | json }}</pre>
+    </div>
   </div>
   <div class="container-selection" *ngIf="selection">
     <app-ple-input [disabled]="readOnly" [(input)]="selection" (inputChange)="onChangeInput($event)" />

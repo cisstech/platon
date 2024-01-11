@@ -14,7 +14,7 @@
       <ui-editorjs [minHeight]="100" formControlName="form" />
     </nz-collapse-panel>
     <nz-collapse-panel nzHeader="Variables" nzExpandedIcon="code" nzActive>
-      <app-editor-input-group formControlName="variables" [reservedNames]="reservedNames" />
+      <app-editor-input-group formControlName="variables" mode="ple" [reservedNames]="reservedNames" />
     </nz-collapse-panel>
     <nz-collapse-panel nzHeader="Construction" nzExpandedIcon="build">
       <app-ple-input mode="value" formControlName="builder" />

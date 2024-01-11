@@ -7,8 +7,11 @@ import { NzInputModule } from 'ng-zorro-antd/input'
 import { NzListModule } from 'ng-zorro-antd/list'
 import { NzSelectModule } from 'ng-zorro-antd/select'
 
+import { DragDropModule } from '@angular/cdk/drag-drop'
 import { CommonModule } from '@angular/common'
+import { MatIconModule } from '@angular/material/icon'
 import { NzIconModule } from 'ng-zorro-antd/icon'
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 import { InputAutomatonModule } from './input-automaton'
 import { InputBooleanModule } from './input-boolean'
 import { InputCodeModule } from './input-code'
@@ -21,6 +24,7 @@ import { InputNumberModule } from './input-number'
 import { InputSelectModule } from './input-select'
 import { InputTextModule } from './input-text'
 import { PleInputComponent } from './ple-input.component'
+import { NgeMarkdownModule } from '@cisstech/nge/markdown'
 
 @NgModule({
   imports: [
@@ -28,12 +32,18 @@ import { PleInputComponent } from './ple-input.component'
     FormsModule,
     ReactiveFormsModule,
 
+    MatIconModule,
+    DragDropModule,
+
     NzIconModule,
     NzInputModule,
     NzSelectModule,
     NzFormModule,
     NzListModule,
     NzButtonModule,
+    NzToolTipModule,
+
+    NgeMarkdownModule,
 
     InputCodeModule,
     InputJsonModule,

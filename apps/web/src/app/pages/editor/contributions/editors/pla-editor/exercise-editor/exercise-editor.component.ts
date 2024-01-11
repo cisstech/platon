@@ -35,6 +35,8 @@ export class PlaExerciseEditorComponent {
   @Input()
   set exercise(value: ActivityExercise) {
     this._exercise = value
+    // TODO: read from field instead of using metadata since they contains only metadata
+    // for latest version of the resource
     firstValueFrom(
       this.resourceService.find({
         id: value.resource,
@@ -53,6 +55,9 @@ export class PlaExerciseEditorComponent {
           ...input,
           value: this.overrides[input.name],
         })
+      }
+      if (!this.inputs.length) {
+        this.inputs = undefined
       }
       this.changeDetectorRef.detectChanges()
     })

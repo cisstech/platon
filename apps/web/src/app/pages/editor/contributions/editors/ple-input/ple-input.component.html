@@ -1,4 +1,5 @@
-<ng-container *ngIf="mode !== 'value'">
+<!-- CONFIG -->
+<ng-container *ngIf="mode === 'config' || mode === 'ple'">
   <form class="config-editor" [formGroup]="form">
     <h3>Informations</h3>
     <nz-form-item nzRequired>
@@ -25,7 +26,10 @@
         <nz-form-control>
           <textarea nz-input formControlName="description" id="description"></textarea>
         </nz-form-control>
-        <p>Décrivez ce que représente cette variable et énumérez les hypothèses formulées quant à sa valeur.</p>
+        <p>
+          Décrivez (en markdown) ce que représente cette variable et énumérez les hypothèses formulées quant à sa
+          valeur.
+        </p>
       </nz-form-item>
       <ng-container *ngIf="selectedProvider?.configEditor">
         <h3>Options</h3>
@@ -33,13 +37,16 @@
       </ng-container>
     </ng-container>
   </form>
-  <ng-container>
-    <h3 *ngIf="mode === 'design'">Valeur</h3>
-    <h3 *ngIf="mode === 'config'">Valeur par défaut</h3>
-  </ng-container>
 </ng-container>
+<ng-container *ngIf="mode === 'plo' && form.value.description">
+  <h3>Description</h3>
+  <nge-markdown [data]="form.value.description" />
+</ng-container>
+<!-- VALUE -->
 <ng-container>
-  <ng-container *ngIf="selectedProvider?.valueEditor">
-    <ng-container *ngComponentOutlet="$any(selectedProvider!.valueEditor!); injector: valueEditorInjector" />
-  </ng-container>
+  <h3 *ngIf="mode === 'ple' || mode === 'plo'">Valeur</h3>
+  <h3 *ngIf="mode === 'config'">Valeur par défaut</h3>
+</ng-container>
+<ng-container *ngIf="selectedProvider?.valueEditor">
+  <ng-container *ngComponentOutlet="$any(selectedProvider!.valueEditor!); injector: valueEditorInjector" />
 </ng-container>

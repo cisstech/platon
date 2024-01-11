@@ -1,6 +1,6 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop'
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, inject } from '@angular/core'
-import { Editor, FileService, OpenRequest } from '@cisstech/nge-ide/core'
+import { Editor, FileService, NotificationService, OpenRequest } from '@cisstech/nge-ide/core'
 import { PleInput } from '@platon/feature/compiler'
 import { Subscription } from 'rxjs'
 
@@ -13,9 +13,11 @@ import { Subscription } from 'rxjs'
 export class PlcEditorComponent implements OnInit, OnDestroy {
   private readonly fileService = inject(FileService)
   private readonly changeDetectorRef = inject(ChangeDetectorRef)
+  private readonly notificationService = inject(NotificationService)
 
   private readonly subscriptions: Subscription[] = []
   private request!: OpenRequest
+  protected debug = false
 
   protected readOnly?: boolean
 
@@ -94,12 +96,12 @@ export class PlcEditorComponent implements OnInit, OnDestroy {
     const file = this.request.file!
     this.readOnly = file?.readOnly
 
-    const content = await this.fileService.open(this.request.uri)
     try {
+      const content = await this.fileService.open(this.request.uri)
       const data = JSON.parse(content.current ?? '{ "input": [] }')
       this.inputs = data.inputs
     } catch {
-      this.inputs = []
+      this.notificationService.publishError(`Unable to open and parse the PLC ${file.uri.path}`)
     }
     this.changeDetectorRef.detectChanges()
   }

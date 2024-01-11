@@ -1,5 +1,14 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  booleanAttribute,
+  inject,
+} from '@angular/core'
 
 import { MatIconModule } from '@angular/material/icon'
 import { NzBadgeModule } from 'ng-zorro-antd/badge'
@@ -51,8 +60,10 @@ export class ResourceItemComponent implements OnInit {
   protected tags: ListItemTag[] = []
 
   @Input() item!: Resource
-  @Input() simple = false
-  @Input() modalMode = false
+  @Input({ transform: booleanAttribute }) simple = false
+  @Input({ transform: booleanAttribute }) modalMode = false
+  @Input({ transform: booleanAttribute }) editable = true
+  @Input({ transform: booleanAttribute }) clickable = true
   @Input() previewOverrides?: Variables
   @Output() levelClicked = new EventEmitter<string>()
   @Output() topicClicked = new EventEmitter<string>()
@@ -99,10 +110,6 @@ export class ResourceItemComponent implements OnInit {
     this.name = this.item.name
     this.desc = this.item.desc as string
     this.configurable = (this.item.metadata as ExerciseResourceMeta)?.configurable ?? false
-
-    if (this.simple) {
-      this.desc = ''
-    }
   }
 
   protected openTab(url: string): void {

@@ -5,7 +5,7 @@
     [articleTags]="tags"
     [articleIconTemplate]="image"
     [articleDescription]="desc"
-    [articleUrl]="['/resources/', item.id]"
+    [articleUrl]="clickable ? ['/resources/', item.id] : undefined"
     (didClickTagItem)="handleTagClick($event)"
   >
     <ng-template #image>
@@ -23,7 +23,7 @@
       ></i>
     </ng-template>
     <ui-list-item-article-action
-      *ngIf="item.permissions.read"
+      *ngIf="editable && item.permissions.read"
       (click)="openTab(editorUrl)"
       class="action"
       actionTitle="Éditer"

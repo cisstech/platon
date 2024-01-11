@@ -47,8 +47,7 @@
         <tr>
           <th>Variable</th>
           <th>Type</th>
-          <th>Description</th>
-          <th></th>
+          <th nzAlign="center"></th>
         </tr>
       </thead>
       <tbody>
@@ -56,8 +55,7 @@
           <tr class="row">
             <td>{{ input.name }}</td>
             <td>{{ input.type }}</td>
-            <td>{{ input.description }}</td>
-            <td>
+            <td nzAlign="center">
               <button
                 *ngIf="!expandedInputs[input.name]"
                 nz-button
@@ -79,9 +77,9 @@
             </td>
           </tr>
           <tr *ngIf="expandedInputs[input.name]">
-            <td colSpan="4">
+            <td colSpan="3">
               <app-ple-input
-                mode="value"
+                mode="plo"
                 [disabled]="disabled"
                 [input]="input"
                 (inputChange)="onOverrideVariable($event.name, $event.value)"

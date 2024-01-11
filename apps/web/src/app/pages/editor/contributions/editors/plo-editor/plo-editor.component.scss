@@ -1,3 +1,18 @@
+:host {
+  display: block;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  padding: 1.5rem;
+  background-color: #f6f8fa;
+  > div {
+    display: grid;
+    grid-template-columns: 30% 70%;
+    gap: 2rem;
+    width: 100%;
+  }
+}
+
 nz-list {
   margin-bottom: 1rem;
   background-color: var(--brand-background-primary);
@@ -15,12 +30,6 @@ nz-list-item {
   }
 }
 
-:host {
-  display: grid;
-  grid-template-columns: 30% 70%;
-  gap: 2rem;
-  width: 100%;
-  > :last-child {
-    width: 95%;
-  }
+.container-selection {
+  width: 95%;
 }

@@ -10,12 +10,15 @@ import {
   ViewService,
 } from '@cisstech/nge-ide/core'
 import { EXPLORER_COMMAND_COPY_PATH, EXPLORER_VIEW_ID, ExplorerService } from '@cisstech/nge-ide/explorer'
+import { Subscription } from 'rxjs'
 import { ExplorerReplaceFolder } from './commands/explorer-replace-folder.command'
 import { ExplorerCommandUnzip } from './commands/explorer-unzip.command'
 import { ExplorerUpdateFolders } from './commands/explorer-update-folders.command'
 
 @Injectable()
 export class PLExplorerContribution implements IContribution {
+  private readonly subscriptions: Subscription[] = []
+
   readonly id = 'pl.workbench.contrib.explorer'
 
   activate(injector: Injector) {
@@ -33,7 +36,7 @@ export class PLExplorerContribution implements IContribution {
     explorerService.registerFileNestingPatterns({
       id: 'ple',
       parent: /(.*).ple$/,
-      children: ['${capture}\\.plf', '${capture}\\.plc'],
+      children: ['${capture}\\.plf', '${capture}\\.plc', '${capture}\\.plo'],
     })
 
     viewService.registerCommands({
@@ -49,6 +52,10 @@ export class PLExplorerContribution implements IContribution {
       }),
       new ToolbarSeparator(ToolbarGroups.FILE, 1)
     )
+  }
+
+  deactivate() {
+    this.subscriptions.forEach((s) => s.unsubscribe())
   }
 }
 

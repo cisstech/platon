@@ -5,7 +5,7 @@ import { ResourceTypes } from '../enums/resource-types'
 import { ResourceMeta } from './metadata.model'
 import { ResourcePermissions } from './permissions.model'
 
-export type ResourceExpandableFields = 'metadata'
+export type ResourceExpandableFields = 'metadata' | 'template' | 'parent' | 'template.metadata'
 
 export interface Resource {
   readonly id: string
@@ -21,12 +21,16 @@ export interface Resource {
   readonly topics: Topic[]
   readonly ownerId: string
   readonly parentId?: string
+
+  readonly templateId?: string
   readonly publicPreview?: boolean
   readonly permissions: ResourcePermissions
 
   // Expandable fields
 
   readonly metadata?: ResourceMeta
+  readonly template?: Resource
+  readonly parent?: Resource
 }
 
 export interface CircleTree {
@@ -41,6 +45,7 @@ export interface CircleTree {
 export interface CreateResource extends ExpandableModel<ResourceExpandableFields> {
   readonly name: string
   readonly parentId: string
+  readonly templateId?: string
   readonly code?: string
   readonly desc?: string
   readonly type: ResourceTypes
