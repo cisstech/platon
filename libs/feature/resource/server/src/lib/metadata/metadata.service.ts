@@ -154,14 +154,14 @@ export class ResourceMetadataService {
     const versions = await repo.versions()
 
     // Rename old config file
-    if (repo.exists('config.json')) {
+    if (await repo.exists('config.json')) {
       await repo.rename('config.json', EXERCISE_CONFIG_FILE).catch((error) => {
         this.logger.error(`Error renaming config file for resource ${resource.id}`, error)
       })
     }
 
     meta.versions = versions.all
-    meta.configurable = repo.exists(EXERCISE_CONFIG_FILE)
+    meta.configurable = await repo.exists(EXERCISE_CONFIG_FILE)
 
     if (meta.configurable) {
       let config: PleConfigJSON = { inputs: [] }

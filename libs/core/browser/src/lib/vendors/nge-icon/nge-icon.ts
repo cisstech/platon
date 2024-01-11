@@ -5,7 +5,7 @@ export const NgeIconProviders: Provider = [
   {
     provide: NGE_UI_ICON_CONFIG,
     useValue: {
-      extraFileIcons: [{ name: 'platon', fileExtensions: ['pla', 'ple', 'plf', 'plc'], fileNames: ['config.json'] }],
+      extraFileIcons: [{ name: 'platon', fileExtensions: ['pla', 'ple', 'plf', 'plc', 'plo'] }],
     } as NgeUiIconConfig,
   },
 ]
