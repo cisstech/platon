@@ -474,6 +474,8 @@ pairs
 pair
     : IDENTIFIER COLON value
         { $$ = { [`${$1}`]: $3 }; }
+    | STRING COLON value
+        { $$ = { [`${$1.slice(1, -1)}`]: $3 }; }
     ;
 
 include_statement
