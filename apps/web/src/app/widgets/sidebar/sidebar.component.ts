@@ -88,21 +88,10 @@ export class SidebarComponent implements OnInit {
       ...(this.user.role === UserRoles.admin
         ? [
             {
-              icon: 'local_library',
+              url: '/docs/main',
+              icon: 'help',
               title: 'Documentation',
-              children: [
-                {
-                  url: '/docs/main',
-                  icon: 'badge',
-                  title: 'PLaTon',
-                  external: true,
-                },
-                {
-                  url: '/docs/components',
-                  icon: 'extension',
-                  title: 'Composants',
-                },
-              ],
+              external: true,
             },
           ]
         : [])

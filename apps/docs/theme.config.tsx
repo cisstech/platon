@@ -1,6 +1,6 @@
 import { DocsThemeConfig } from 'nextra-theme-docs'
 import React from 'react'
-import { Logo } from './components'
+import { Copyright, Logo, Navbar } from './components'
 
 const config: DocsThemeConfig = {
   logo: <Logo />,
@@ -10,7 +10,7 @@ const config: DocsThemeConfig = {
   },
   docsRepositoryBase: 'https://github.com/cisstech/platon/tree/main/apps/docs/',
   footer: {
-    text: <>CISSTECH © {new Date().getFullYear()}</>,
+    text: <Copyright />,
   },
   search: {
     placeholder: 'Rechercher...',
@@ -24,6 +24,9 @@ const config: DocsThemeConfig = {
   },
   feedback: {
     content: 'Une question ? Envoyez-nous un message',
+  },
+  navbar: {
+    component: (props) => <Navbar {...props} />,
   },
   gitTimestamp: ({ timestamp }) => {
     return <>Dernière date de modification {timestamp.toLocaleString()}</>

@@ -5,7 +5,7 @@ import { ResourceTypes } from '../enums/resource-types'
 import { ResourceMeta } from './metadata.model'
 import { ResourcePermissions } from './permissions.model'
 
-export type ResourceExpandableFields = 'metadata'
+export type ResourceExpandableFields = 'metadata' | 'template' | 'parent' | 'template.metadata'
 
 export interface Resource {
   readonly id: string
@@ -21,18 +21,23 @@ export interface Resource {
   readonly topics: Topic[]
   readonly ownerId: string
   readonly parentId?: string
+
+  readonly templateId?: string
   readonly publicPreview?: boolean
   readonly permissions: ResourcePermissions
 
   // Expandable fields
 
   readonly metadata?: ResourceMeta
+  readonly template?: Resource
+  readonly parent?: Resource
 }
 
 export interface CircleTree {
   readonly id: string
   readonly name: string
   readonly code?: string
+  readonly versions?: string[]
   readonly children?: CircleTree[]
   readonly permissions: ResourcePermissions
 }
@@ -40,6 +45,7 @@ export interface CircleTree {
 export interface CreateResource extends ExpandableModel<ResourceExpandableFields> {
   readonly name: string
   readonly parentId: string
+  readonly templateId?: string
   readonly code?: string
   readonly desc?: string
   readonly type: ResourceTypes
@@ -92,24 +98,15 @@ export interface ResourceFilters extends ExpandableModel<ResourceExpandableField
   readonly direction?: OrderingDirections
 }
 
-export const resourceAncestors = (tree: CircleTree, id: string): CircleTree[] => {
-  if (tree.id === id) {
-    return []
+export const resourceAncestors = (tree: CircleTree, resourceId: string, includeSelf?: boolean): CircleTree[] => {
+  if (tree.id === resourceId) {
+    return includeSelf ? [tree] : []
   }
 
   if (tree.children) {
     for (const child of tree.children) {
-      if (child.id === id) {
-        return [tree]
-      }
-    }
-  }
-
-  if (tree.children) {
-    for (const child of tree.children) {
-      const ancestors = resourceAncestors(child, id)
-      if (ancestors.length > 0) {
-        return [...ancestors, tree]
+      if (child.id === resourceId || resourceAncestors(child, resourceId, false).length > 0) {
+        return [...resourceAncestors(child, resourceId, includeSelf), tree]
       }
     }
   }
@@ -147,6 +144,7 @@ export const circleTreeFromResource = (resource: Resource): CircleTree => {
     id: resource.id,
     name: resource.name,
     code: resource.code,
+    versions: resource.metadata?.versions?.map((v) => v.tag),
     permissions: {
       ...resource.permissions,
     },

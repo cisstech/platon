@@ -9,8 +9,9 @@ import {
   OnInit,
   Output,
   TemplateRef,
+  booleanAttribute,
 } from '@angular/core'
-import { SafePipeModule } from '@cisstech/nge/pipes'
+import { SafePipe } from '@cisstech/nge/pipes'
 import { NzModalModule } from 'ng-zorro-antd/modal'
 
 export const UI_MODAL_IFRAME_CLOSE = 'UI_MODAL_IFRAME_CLOSE'
@@ -21,7 +22,7 @@ export const UI_MODAL_IFRAME_CLOSE = 'UI_MODAL_IFRAME_CLOSE'
   templateUrl: './modal-iframe.component.html',
   styleUrls: ['./modal-iframe.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, NzModalModule, SafePipeModule],
+  imports: [CommonModule, NzModalModule, SafePipe],
 })
 export class UiModalIFrameComponent implements OnInit, OnDestroy {
   protected url?: string
@@ -30,7 +31,7 @@ export class UiModalIFrameComponent implements OnInit, OnDestroy {
   @Input() width?: string | null = '90vw'
   @Input() height?: string | null = '90vh'
 
-  @Input() closable = false
+  @Input({ transform: booleanAttribute }) closable = false
   @Input() footer?: TemplateRef<void> | null
 
   @Output() closed = new EventEmitter()

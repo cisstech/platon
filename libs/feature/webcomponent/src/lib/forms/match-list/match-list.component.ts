@@ -3,10 +3,12 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  EventEmitter,
   Injector,
   Input,
   OnDestroy,
   OnInit,
+  Output,
   ViewChild,
 } from '@angular/core'
 import { Connection, Endpoint, EndpointOptions, jsPlumb, jsPlumbInstance } from 'jsplumb'
@@ -25,6 +27,7 @@ type EndPointType = Endpoint & EndpointOptions & { canvas: HTMLElement }
 @WebComponent(MatchListComponentDefinition)
 export class MatchListComponent implements OnInit, AfterViewChecked, OnDestroy, WebComponentHooks<MatchListState> {
   @Input() state!: MatchListState
+  @Output() stateChange = new EventEmitter<MatchListState>()
 
   @ViewChild('container', { static: true })
   container!: ElementRef<HTMLElement>

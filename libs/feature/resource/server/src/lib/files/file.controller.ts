@@ -130,7 +130,7 @@ export class ResourceFileController {
       node.children?.forEach(injectExtraFields)
     }
 
-    if (node.type === FileTypes.file) {
+    if (node.type === FileTypes.file && !query?.stat) {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       return Buffer.from((await content)!.buffer).toString()
     }
@@ -151,6 +151,7 @@ export class ResourceFileController {
       throw new UnauthorizedResponse('You are not allowed to write this resource')
     }
 
+    const [_, oldContent] = await repo.read(path)
     await repo.write(path, input.content)
 
     this.eventService.emit<OnChangeFileEventPayload>(ON_CHANGE_FILE_EVENT, {
@@ -158,6 +159,8 @@ export class ResourceFileController {
       resource,
       path,
       operation: 'update',
+      oldContent: Buffer.from((await oldContent!).buffer).toString() ?? '',
+      newContent: input.content,
     })
 
     return new SuccessResponse()

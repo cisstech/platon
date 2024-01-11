@@ -1,0 +1,52 @@
+<!-- CONFIG -->
+<ng-container *ngIf="mode === 'config' || mode === 'ple'">
+  <form class="config-editor" [formGroup]="form">
+    <h3>Informations</h3>
+    <nz-form-item nzRequired>
+      <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="name">Nom</nz-form-label>
+      <nz-form-control [nzValidateStatus]="hasNameError ? 'error' : 'success'" nzErrorTip="Ce nom est réservé">
+        <input nz-input id="name" formControlName="name" />
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="type">Type</nz-form-label>
+      <nz-form-control>
+        <nz-select id="type" formControlName="type">
+          <nz-option
+            *ngFor="let provider of sortedProviders; trackBy: trackProvider"
+            [nzValue]="provider.type"
+            [nzLabel]="provider.label"
+          ></nz-option>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+    <ng-container *ngIf="mode === 'config'">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="description">Description</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input formControlName="description" id="description"></textarea>
+        </nz-form-control>
+        <p>
+          Décrivez (en markdown) ce que représente cette variable et énumérez les hypothèses formulées quant à sa
+          valeur.
+        </p>
+      </nz-form-item>
+      <ng-container *ngIf="selectedProvider?.configEditor">
+        <h3>Options</h3>
+        <ng-container *ngComponentOutlet="$any(selectedProvider!.configEditor!); injector: configEditorInjector" />
+      </ng-container>
+    </ng-container>
+  </form>
+</ng-container>
+<ng-container *ngIf="mode === 'plo' && form.value.description">
+  <h3>Description</h3>
+  <nge-markdown [data]="form.value.description" />
+</ng-container>
+<!-- VALUE -->
+<ng-container>
+  <h3 *ngIf="mode === 'ple' || mode === 'plo'">Valeur</h3>
+  <h3 *ngIf="mode === 'config'">Valeur par défaut</h3>
+</ng-container>
+<ng-container *ngIf="selectedProvider?.valueEditor">
+  <ng-container *ngComponentOutlet="$any(selectedProvider!.valueEditor!); injector: valueEditorInjector" />
+</ng-container>

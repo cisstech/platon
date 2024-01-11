@@ -3,11 +3,13 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  EventEmitter,
   Inject,
   Injector,
   Input,
   OnDestroy,
   OnInit,
+  Output,
   ViewChild,
 } from '@angular/core'
 import { Connection as JsPlumbConnection, OnConnectionBindInfo, jsPlumb, jsPlumbInstance } from 'jsplumb'
@@ -73,6 +75,7 @@ export class AutomatonEditorComponent implements OnInit, OnDestroy, WebComponent
   private jsp!: jsPlumbInstance
 
   @Input() state!: AutomatonEditorState
+  @Output() stateChange = new EventEmitter<AutomatonEditorState>()
 
   @ViewChild('container', { static: true })
   container!: ElementRef<HTMLElement>

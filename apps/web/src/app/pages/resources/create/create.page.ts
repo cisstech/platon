@@ -17,23 +17,42 @@ import { MatFormFieldModule } from '@angular/material/form-field'
 import { MatInputModule } from '@angular/material/input'
 
 import { NzButtonModule } from 'ng-zorro-antd/button'
+import { NzCollapseModule } from 'ng-zorro-antd/collapse'
 import { NzSelectModule } from 'ng-zorro-antd/select'
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton'
 import { NzSpinModule } from 'ng-zorro-antd/spin'
 
+import { SelectionModel } from '@angular/cdk/collections'
 import { AuthService, DialogModule, DialogService, TagService } from '@platon/core/browser'
 import { Level, Topic, User } from '@platon/core/common'
-import { CircleTreeComponent, ResourcePipesModule, ResourceService } from '@platon/feature/resource/browser'
+import {
+  CircleTreeComponent,
+  ResourceItemComponent,
+  ResourcePipesModule,
+  ResourceSearchBarComponent,
+  ResourceService,
+} from '@platon/feature/resource/browser'
 import {
   CircleTree,
+  Resource,
   ResourceStatus,
   ResourceTypes,
+  circleFromTree,
   circleTreeFromResource,
   flattenCircleTree,
+  resourceAncestors,
 } from '@platon/feature/resource/common'
 import { UiStepDirective, UiStepperComponent } from '@platon/shared/ui'
-import { firstValueFrom } from 'rxjs'
+import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzPageHeaderModule } from 'ng-zorro-antd/page-header'
+import { NzTagModule } from 'ng-zorro-antd/tag'
+import { firstValueFrom } from 'rxjs'
+
+type TemplateSource = {
+  circle: CircleTree
+  count: number
+  templates: Resource[]
+}
 
 @Component({
   standalone: true,
@@ -51,9 +70,12 @@ import { NzPageHeaderModule } from 'ng-zorro-antd/page-header'
     MatCheckboxModule,
     MatFormFieldModule,
 
+    NzTagModule,
     NzSpinModule,
+    NzIconModule,
     NzButtonModule,
     NzSelectModule,
+    NzCollapseModule,
     NzSkeletonModule,
     NzPageHeaderModule,
 
@@ -63,24 +85,31 @@ import { NzPageHeaderModule } from 'ng-zorro-antd/page-header'
 
     CircleTreeComponent,
     ResourcePipesModule,
+    ResourceItemComponent,
+    ResourceSearchBarComponent,
   ],
 })
 export class ResourceCreatePage implements OnInit {
   protected type!: ResourceTypes
-  protected parent?: string
+  protected parentId?: string
+  protected parentName?: string
+  protected template?: Resource
+
   protected loading = true
   protected creating = false
-  protected tree!: CircleTree
+  protected editionMode?: 'scratch' | 'template'
+  protected loadingTemplates = false
 
+  protected tree!: CircleTree
   protected topics: Topic[] = []
   protected levels: Level[] = []
-
+  protected templateSources: TemplateSource[] = []
+  protected selectedTemplateSources = new SelectionModel<TemplateSource>(true, [])
   protected infos = new FormGroup({
     name: new FormControl('', [Validators.required]),
     code: new FormControl(''),
     desc: new FormControl('', [Validators.required]),
   })
-
   protected tags = new FormGroup({
     topics: new FormControl<string[]>([]),
     levels: new FormControl<string[]>([]),
@@ -98,7 +127,7 @@ export class ResourceCreatePage implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.type = (this.activatedRoute.snapshot.queryParamMap.get('type') || ResourceTypes.CIRCLE) as ResourceTypes
-    this.parent = this.activatedRoute.snapshot.queryParamMap.get('parent') || undefined
+    this.parentId = this.activatedRoute.snapshot.queryParamMap.get('parent') || undefined
 
     const user = (await this.authService.ready()) as User
     const [tree, circle, topics, levels] = await Promise.all([
@@ -138,6 +167,11 @@ export class ResourceCreatePage implements OnInit {
     this.changeDetectorRef.markForCheck()
   }
 
+  protected onChangeParentId(id?: string): void {
+    this.parentId = id
+    this.parentName = id ? circleFromTree(this.tree, id)?.name : undefined
+  }
+
   protected async create(): Promise<void> {
     try {
       const infos = this.infos.value
@@ -148,7 +182,8 @@ export class ResourceCreatePage implements OnInit {
       const resource = await firstValueFrom(
         this.resourceService.create({
           type: this.type,
-          parentId: this.parent as string,
+          parentId: this.parentId as string,
+          templateId: this.editionMode === 'template' ? this.template?.id : undefined,
           name: infos.name as string,
           desc: infos.desc as string,
           code: infos.code || undefined,
@@ -158,9 +193,7 @@ export class ResourceCreatePage implements OnInit {
         })
       )
 
-      this.router.navigate(['/resources', resource.id, 'overview'], {
-        replaceUrl: true,
-      })
+      this.router.navigate(['/resources', resource.id, 'overview'], { replaceUrl: true })
     } catch {
       this.dialogService.error('Une erreur est survenue lors de cette action, veuillez réessayer un peu plus tard !')
     } finally {
@@ -169,14 +202,51 @@ export class ResourceCreatePage implements OnInit {
     }
   }
 
+  protected async preloadTemplates(): Promise<void> {
+    if (this.loadingTemplates) return
+
+    this.loadingTemplates = true
+    this.template = undefined
+    this.templateSources = []
+    this.selectedTemplateSources.clear()
+
+    this.changeDetectorRef.markForCheck()
+
+    const ancestors = resourceAncestors(this.tree, this.parentId as string, true)
+    const response = await firstValueFrom(
+      this.resourceService.search({
+        types: ['EXERCISE'],
+        configurable: true,
+        parents: [...ancestors.map((a) => a.id)],
+        expands: ['metadata'],
+      })
+    )
+
+    this.templateSources = ancestors
+      .map((circle) => {
+        const templates = response.resources.filter((t) => t.parentId === circle.id)
+        return {
+          circle,
+          count: templates.length,
+          templates,
+        }
+      })
+      .filter((s) => s.count > 0)
+
+    const firstNonEmpty = this.templateSources.find((s) => s.count > 0)
+    if (firstNonEmpty) {
+      this.selectedTemplateSources.select(firstNonEmpty)
+    }
+
+    this.loadingTemplates = false
+
+    this.changeDetectorRef.markForCheck()
+  }
+
   private codeValidator(codes: string[]): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const forbidden = [...codes, 'relative'].includes(control.value)
       return forbidden ? { code: true } : null
     }
-  }
-
-  protected trackById(_: number, value: Topic | Level): string {
-    return value.id
   }
 }

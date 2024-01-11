@@ -1,8 +1,4 @@
 :host::ng-deep {
-  .ant-ribbon {
-    color: var(--brand-text-primary);
-  }
-
   .ui-list-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);

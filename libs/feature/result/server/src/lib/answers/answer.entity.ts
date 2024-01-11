@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { BaseEntity, UserEntity } from '@platon/core/server'
+import { ExerciseVariables } from '@platon/feature/compiler'
 import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm'
 import { SessionEntity } from '../sessions/session.entity'
 
@@ -22,7 +23,7 @@ export class AnswerEntity extends BaseEntity {
   session!: SessionEntity
 
   @Column({ type: 'jsonb' })
-  variables!: Record<string, any>
+  variables!: ExerciseVariables
 
   @Column({ type: 'float', default: -1 })
   grade!: number

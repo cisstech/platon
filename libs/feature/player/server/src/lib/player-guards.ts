@@ -30,8 +30,8 @@ export const withHintGuard = (
   } else if (Array.isArray(hint) && hint.length === variables['.meta']?.consumedHints) {
     // disable hint button if all automatic hints are consumed
     deepMerge(settings, { actions: { hints: false } })
-  } else if (hint && !Array.isArray(hint) && hint.empty) {
-    // disable hint button if hint.empty is set by exercise script
+  } else if (hint && !Array.isArray(hint) && hint.done) {
+    // disable hint button if hint.done is set by exercise script
     deepMerge(settings, { actions: { hints: false } })
   } else if (!settings.actions?.hints) {
     // disable hint if specified in settings

@@ -6,12 +6,14 @@ import {
   Component,
   ContentChildren,
   EventEmitter,
+  OnDestroy,
   Output,
   QueryList,
   TemplateRef,
 } from '@angular/core'
 import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzStepsModule } from 'ng-zorro-antd/steps'
+import { Subscription } from 'rxjs'
 import { UiStepDirective } from './step.directive'
 
 @Component({
@@ -22,19 +24,21 @@ import { UiStepDirective } from './step.directive'
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, NzIconModule, NzStepsModule],
 })
-export class UiStepperComponent implements AfterContentInit {
+export class UiStepperComponent implements AfterContentInit, OnDestroy {
+  private readonly suscriptions: Subscription[] = []
+
   protected items: UiStepDirective[] = []
   protected status: string[] = []
   protected activeStep?: UiStepDirective
   protected activeTemplate?: TemplateRef<unknown>
-
-  step = 0
 
   @ContentChildren(UiStepDirective)
   protected steps!: QueryList<UiStepDirective>
 
   @Output() changed = new EventEmitter<number>()
   @Output() finished = new EventEmitter<void>()
+
+  step = 0
 
   get isFirst(): boolean {
     return this.step === 0
@@ -50,15 +54,25 @@ export class UiStepperComponent implements AfterContentInit {
 
   constructor(private readonly changeDetectorRef: ChangeDetectorRef) {}
 
-  ngAfterContentInit(): void {
+  ngAfterContentInit() {
     this.step = 0
+    this.status = []
+    this.activeStep = undefined
+    this.activeTemplate = undefined
+
     this.items = this.steps.toArray()
-    this.items.forEach(() => this.status.push('wait'))
-    if (this.status.length) {
-      this.status[0] = 'process'
-      this.activeStep = this.items[0]
-      this.activeTemplate = this.items[0].templateRef
-    }
+    this.changeStep()
+
+    this.suscriptions.push(
+      this.steps.changes.subscribe(() => {
+        this.items = this.steps.toArray()
+        this.changeStep()
+      })
+    )
+  }
+
+  ngOnDestroy(): void {
+    this.suscriptions.forEach((s) => s.unsubscribe())
   }
 
   nextStep(): void {
@@ -82,7 +96,10 @@ export class UiStepperComponent implements AfterContentInit {
   }
 
   private changeStep(): void {
-    for (let i = 0; i < this.status.length; i++) {
+    const size = this.items.length
+    if (!size) return
+    this.status = Array(size).fill('wait')
+    for (let i = 0; i < size; i++) {
       this.status[i] = 'wait'
       if (i < this.step) {
         this.status[i] = 'finish'

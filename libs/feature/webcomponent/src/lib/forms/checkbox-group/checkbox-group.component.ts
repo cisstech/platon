@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Injector, Input } from '@angular/core'
+import { ChangeDetectionStrategy, Component, EventEmitter, Injector, Input, Output } from '@angular/core'
 import { WebComponent, WebComponentHooks } from '../../web-component'
 import { CheckboxGroupComponentDefinition, CheckboxGroupState, CheckboxItem } from './checkbox-group'
 
@@ -11,6 +11,7 @@ import { CheckboxGroupComponentDefinition, CheckboxGroupState, CheckboxItem } fr
 @WebComponent(CheckboxGroupComponentDefinition)
 export class CheckboxGroupComponent implements WebComponentHooks<CheckboxGroupState> {
   @Input() state!: CheckboxGroupState
+  @Output() stateChange = new EventEmitter<CheckboxGroupState>()
 
   constructor(readonly injector: Injector) {}
 

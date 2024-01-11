@@ -5,3 +5,26 @@
 .action {
   cursor: pointer;
 }
+
+.icon-configurable {
+  display: inline-block;
+  margin-left: 0.5rem;
+}
+
+:host::ng-deep {
+  .article-title {
+    max-width: 75%;
+  }
+
+  .ant-ribbon {
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    mat-icon {
+      width: 18px;
+      height: 18px;
+      font-size: 18px;
+    }
+  }
+}

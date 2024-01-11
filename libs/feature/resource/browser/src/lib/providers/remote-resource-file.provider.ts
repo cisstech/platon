@@ -68,9 +68,10 @@ export class RemoteResourceFileProvider extends ResourceFileProvider {
 
   read(resource: string | Resource, path: string, version?: string): Observable<ResourceFile> {
     const id = typeof resource === 'string' ? resource : resource.id
-    return this.http.get<ResourceFile>(`/api/v1/files/${id}/${path}`, {
-      params: new HttpParams().set('version', version || 'latest'),
-    })
+    let params = new HttpParams()
+    params = params.set('version', version || 'latest')
+    params = params.set('stat', 'true')
+    return this.http.get<ResourceFile>(`/api/v1/files/${id}/${path}`, { params })
   }
 
   create(resource: string | Resource, input: FileCreate[]): Observable<void> {
@@ -78,7 +79,7 @@ export class RemoteResourceFileProvider extends ResourceFileProvider {
     return this.http.post<void>(`/api/v1/files/${id}/`, input)
   }
 
-  upload(file: ResourceFile, data: File): Observable<void> {
+  upload(file: Pick<ResourceFile, 'url'>, data: File): Observable<void> {
     const formData = new FormData()
     formData.append('file', data, data.name)
     const headers = new HttpHeaders()
@@ -89,19 +90,19 @@ export class RemoteResourceFileProvider extends ResourceFileProvider {
     })
   }
 
-  delete(file: ResourceFile): Observable<void> {
+  delete(file: Pick<ResourceFile, 'url'>): Observable<void> {
     return this.http.delete<void>(file.url)
   }
 
-  move(file: ResourceFile, input: FileMove): Observable<void> {
+  move(file: Pick<ResourceFile, 'url'>, input: FileMove): Observable<void> {
     return this.http.patch<void>(file.url, input)
   }
 
-  update(file: ResourceFile, input: FileUpdate): Observable<void> {
+  update(file: Pick<ResourceFile, 'url'>, input: FileUpdate): Observable<void> {
     return this.http.put<void>(file.url, input)
   }
 
-  search(file: ResourceFile, query: FileSearch): Observable<FileSearchResults> {
+  search(file: Pick<ResourceFile, 'url'>, query: FileSearch): Observable<FileSearchResults> {
     let params = new HttpParams()
     params = params.set('search', query.search)
     Object.keys(query).forEach((key) => {

@@ -1,8 +1,9 @@
-:host {
-  &::ng-deep {
-    .ant-progress-text {
-      color: white !important;
-    }
+:host::ng-deep {
+  .ant-progress-text {
+    color: white !important;
+  }
+  .article-title {
+    max-width: 70%;
   }
 }
 

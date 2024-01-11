@@ -1,11 +1,26 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export const deepMerge = <T extends Record<string, any>>(target: T, source: Partial<T>): Record<string, any> => {
+type Obj = Record<string, any>
+
+/**
+ * Merge two objects recursively
+ * @param target The object to merge into
+ * @param source The object to merge from
+ * @param replace Whether to replace sub-objects instead of merging them if they already exists on target (default: `false`)
+ * @returns The merged object
+ */
+export const deepMerge = <T extends Obj>(target: T, source: any, replace = false): Obj => {
   for (const key in source) {
     if (typeof source[key] === 'object' && source[key] !== null) {
       if (!(key in target)) {
-        Object.assign(target, { [key]: {} })
+        Object.assign(target, { [key]: Array.isArray(source[key]) ? [] : {} })
       }
-      deepMerge(target[key] as any, source[key] as any)
+      if (Array.isArray(source[key])) {
+        ;(<any>target)[key] = source[key]
+      } else if (!replace) {
+        deepMerge(target[key] as any, source[key] as any)
+      } else {
+        Object.assign(target, { [key]: source[key] })
+      }
     } else {
       Object.assign(target, { [key]: source[key] })
     }

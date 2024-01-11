@@ -104,6 +104,7 @@
         ],
         "styles": [
           "shared/styles/app.scss",
+          "apps/web/src/styles.scss",
           {
             "input": "shared/styles/material/dark.scss",
             "bundleName": "styles.material.dark",
@@ -123,8 +124,7 @@
             "input": "shared/styles/ng-zorro/light.less",
             "bundleName": "styles.ng-zorro.light",
             "inject": false
-          },
-          "apps/web/src/styles.scss"
+          }
         ],
         "scripts": [],
         "allowedCommonJsDependencies": [
@@ -151,7 +151,8 @@
           "editorjs-undo",
           "editorjs-style",
           "editorjs-text-alignment-blocktune",
-          "editorjs-text-color-plugin"
+          "editorjs-text-color-plugin",
+          "pdfjs-dist/build/pdf.worker.entry"
         ]
       },
       "configurations": {

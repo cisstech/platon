@@ -4,6 +4,11 @@ import { Transform } from 'class-transformer'
 import { IsBoolean, IsOptional, IsString } from 'class-validator'
 
 export class FileRetrieveDTO implements Partial<FileRetrieve> {
+  @Transform(({ value }) => toBoolean(value))
+  @IsBoolean()
+  @IsOptional()
+  stat?: boolean
+
   @IsString()
   @IsOptional()
   version?: string

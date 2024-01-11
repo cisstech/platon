@@ -449,7 +449,7 @@ If you plan to use a custom ssl files instead, update the docker-compose and the
 
 #### Github Home page
 
-The homepage of the project is hosted at <https://cisstech.github.io/platon/docs>
+The homepage of the project is hosted at <https://cisstech.github.io/platon/docs/main>
 
 - Build
 
@@ -466,7 +466,7 @@ yarn publish:github
 ## Documentation
 
 Documentation is hosted at :
-<https://cisstech.github.io/platon/docs>
+<https://cisstech.github.io/platon/docs/main>
 
 There is also a self hosted version of the documentation that runs alongside of the application thanks to nginx reverse proxy at `/docs/main`
 

@@ -5,6 +5,7 @@ import { ResourceFindPipe } from './resource-find.pipe'
 import { ResourceIconPipe } from './resource-icon.pipe'
 import { ResourceOrderingPipe } from './resource-ordering.pipe'
 import { ResourceStatusColorPipe } from './resource-status-color.pipe'
+import { ResourceStatusIconPipe } from './resource-status-icon.pipe'
 import { ResourceStatusPipe } from './resource-status.pipe'
 import { ResourceTypePipe } from './resource-type.pipe'
 
@@ -18,6 +19,7 @@ import { ResourceTypePipe } from './resource-type.pipe'
     ResourceStatusPipe,
     ResourceOrderingPipe,
     ResourceEventTypePipe,
+    ResourceStatusIconPipe,
   ],
   declarations: [
     ResourceFindPipe,
@@ -28,6 +30,7 @@ import { ResourceTypePipe } from './resource-type.pipe'
     ResourceStatusPipe,
     ResourceOrderingPipe,
     ResourceEventTypePipe,
+    ResourceStatusIconPipe,
   ],
 })
 export class ResourcePipesModule {}

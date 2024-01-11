@@ -1,8 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { deepCopy, deepMerge } from '@platon/core/common'
-import { ActivitySettings, ExerciseVariables, Variables, defaultActivitySettings } from '@platon/feature/compiler'
+import {
+  ActivitySettings,
+  ExerciseVariables,
+  defaultActivitySettings,
+  withExerciseMeta,
+} from '@platon/feature/compiler'
 import { ActivityPlayer, ExercisePlayer } from '@platon/feature/player/common'
-import { AnswerEntity, SessionEntity } from '@platon/feature/result/server'
+import { ActivitySession, AnswerEntity, ExerciseSession } from '@platon/feature/result/server'
 import * as nunjucks from 'nunjucks'
 import { v4 as uuidv4 } from 'uuid'
 import {
@@ -92,7 +97,11 @@ const withEditorJsContent = (variables: any, scripts: Scripts): any => {
  * @param reviewMode If true, the components will be disabled.
  * @returns The variables with rendered templates.
  */
-export const withRenderedTemplates = (variables: Variables, reviewMode?: boolean): ExerciseVariables => {
+export const withRenderedTemplates = (variables: ExerciseVariables, reviewMode?: boolean): ExerciseVariables => {
+  withExerciseMeta(variables)
+
+  variables.meta = variables['.meta']
+
   const scripts: Scripts = {}
 
   const computed = withEditorJsContent(
@@ -102,17 +111,28 @@ export const withRenderedTemplates = (variables: Variables, reviewMode?: boolean
 
   const templates = ['title', 'statement', 'form', 'solution', 'feedback', 'hint']
 
+  const render = (v: any): any => {
+    if (typeof v === 'string') {
+      return nunjucks.renderString(v, computed).trim()
+    }
+    if (Array.isArray(v)) {
+      return v.map(render)
+    }
+    if (typeof v === 'object') {
+      return Object.keys(v).reduce((o, k) => {
+        o[k] = render((v as any)[k])
+        return o
+      }, {} as any)
+    }
+    return v
+  }
+
   for (const k in computed) {
     if (templates.includes(k)) {
-      if (typeof computed[k] === 'string') {
-        computed[k] = nunjucks.renderString(computed[k] as string, computed).trim()
-      } else if (Array.isArray(computed[k])) {
-        computed[k] = computed[k].map((v: string) => {
-          return nunjucks.renderString(v, computed).trim()
-        })
-      }
+      computed[k] = render(computed[k])
     }
   }
+
   Object.keys(scripts).forEach((k) => {
     scripts[k] = nunjucks.renderString(scripts[k], computed)
   })
@@ -123,10 +143,7 @@ export const withRenderedTemplates = (variables: Variables, reviewMode?: boolean
       .map((k) => `<script type='application/json' id='${k}'>${scripts[k]}</script>\n`)
       .join('\n') + computed['form']
 
-  computed['.meta'] = {
-    ...(computed['.meta'] || {}),
-    attempts: computed['.meta']?.attempts || 0,
-  }
+  delete computed.meta
 
   return computed
 }
@@ -136,7 +153,7 @@ export const withRenderedTemplates = (variables: Variables, reviewMode?: boolean
  * @param session An activity session.
  * @returns An activity player.
  */
-export const withActivityPlayer = (session: SessionEntity): ActivityPlayer => {
+export const withActivityPlayer = (session: ActivitySession): ActivityPlayer => {
   const { variables } = withActivityFeedbacksGuard(session)
   return {
     type: 'activity',
@@ -160,7 +177,7 @@ export const withActivityPlayer = (session: SessionEntity): ActivityPlayer => {
  * @param session An exercise session.
  * @returns An exercise player.
  */
-export const withExercisePlayer = (session: SessionEntity, answer?: AnswerEntity): ExercisePlayer => {
+export const withExercisePlayer = (session: ExerciseSession, answer?: AnswerEntity): ExercisePlayer => {
   const variables = withRenderedTemplates(answer?.variables || session.variables, answer != null)
 
   const activitySession = session.parent

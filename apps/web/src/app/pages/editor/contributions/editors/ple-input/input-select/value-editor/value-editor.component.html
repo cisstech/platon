@@ -1,0 +1,10 @@
+<nz-select
+  [nzPlaceHolder]="options?.multiple ? 'Choisissez une valeur ou plusieurs valeurs' : 'Choisissez une valeur'"
+  [nzMode]="options?.multiple ? 'multiple' : 'default'"
+  [nzAllowClear]="true"
+  [nzDisabled]="disabled"
+  [(ngModel)]="value"
+  (ngModelChange)="notifyValueChange?.($event)"
+>
+  <nz-option *ngFor="let option of options?.choices ?? []" [nzLabel]="option" [nzValue]="option" />
+</nz-select>

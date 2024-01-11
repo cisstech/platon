@@ -14,10 +14,30 @@
       </ng-container>
       <!-- CONCLUSION -->
       <ng-container *ngIf="showConclusion">
+        <nz-alert
+          *ngIf="terminatedAfterLoseFocus && !terminatedAfterLeavePage"
+          nzShowIcon
+          nzType="error"
+          nzMessage="Activité auto terminée"
+          nzDescription="Cette activité s'est automatiquement terminée en raison de ses paramètres de sécurité, qui interdisent de
+        cliquer en dehors de la page."
+        />
+
+        <nz-alert
+          *ngIf="terminatedAfterLeavePage"
+          nzShowIcon
+          nzType="error"
+          nzMessage="Activité auto terminée"
+          nzDescription="Cette activité s'est automatiquement terminée en raison de ses paramètres de sécurité, qui interdisent de
+        cliquer changer de page."
+        />
+
         <div>
           <nge-markdown [data]="player.conclusion" />
         </div>
+
         <player-results [player]="player" />
+
         <button *ngIf="canGoDashboard" mat-raised-button color="primary" [routerLink]="'/dashboard'">
           Retourner sur PLaTon
         </button>

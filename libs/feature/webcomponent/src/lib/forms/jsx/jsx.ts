@@ -1,14 +1,14 @@
 import { stripIndent } from 'common-tags'
 import { defineWebComponent, IWebComponent, WebComponentTypes } from '../../web-component'
 
-export interface Point {
+export interface JsxPoint {
   x: number
   y: number
 }
 
 export interface JsxState extends IWebComponent {
   script: string
-  points: Record<string, Point>
+  points: Record<string, JsxPoint>
   disabled: boolean
   attributes: Record<string, unknown>
 }

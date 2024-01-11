@@ -74,7 +74,7 @@ export class CourseResultsVirtualColumnsResolver implements VirtualColumnResolve
 
       Object.assign(course, {
         timeSpent,
-        progression: progressionSum ? progressionSum / courseActivities.length : 0,
+        progression: Math.round(progressionSum ? progressionSum / courseActivities.length : 0),
       } as Partial<CourseEntity>)
     })
   }

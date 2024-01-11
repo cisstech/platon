@@ -52,10 +52,18 @@ export class Repo {
       user?: User
       create?: boolean
       type?: ResourceTypes
+      defaultFiles?: Record<string, string>
     }
   ) {
     const dir = Path.join(BASE, name)
-    const exists = fs.existsSync(dir)
+
+    let exists = false
+    try {
+      exists = await isDirectory(dir)
+    } catch {
+      // ignore
+    }
+
     if (!exists && !options?.create) {
       throw new FileNotFoundError(name)
     }
@@ -68,10 +76,16 @@ export class Repo {
     if (!exists) {
       await git.init({ fs, dir, defaultBranch: DEFAULT_BRANCH })
       try {
-        await fs.promises.cp(Path.join(BASE, 'templates', options?.type?.toLowerCase() as string), dir, {
-          recursive: true,
-          force: true,
-        })
+        if (options?.defaultFiles) {
+          await Promise.all(
+            Object.entries(options.defaultFiles).map(([path, content]) => instance.touch(path, content))
+          )
+        } else {
+          await fs.promises.cp(Path.join(BASE, 'templates', options?.type?.toLowerCase() as string), dir, {
+            recursive: true,
+            force: true,
+          })
+        }
       } catch {
         // can throw error if called twice by the frontend
       }
@@ -83,15 +97,20 @@ export class Repo {
 
   // Creation
 
-  exists(path: string) {
-    return fs.existsSync(this.abspath(path))
+  async exists(path: string): Promise<boolean> {
+    try {
+      await fs.promises.access(this.abspath(path))
+      return true
+    } catch {
+      return false
+    }
   }
 
-  isDir(path: string) {
+  isDir(path: string): Promise<boolean> {
     return isDirectory(this.abspath(path))
   }
 
-  isFile(path: string) {
+  isFile(path: string): Promise<boolean> {
     return isFile(this.abspath(path))
   }
 
@@ -151,7 +170,7 @@ export class Repo {
 
     absDstPath = uniquifyFileName(absDstPath, Path.basename(absSrcPath))
     if (copy) {
-      if (isDirectory(absSrcPath)) {
+      if (await isDirectory(absSrcPath)) {
         await fs.promises.cp(absSrcPath, absDstPath, { recursive: true })
       } else {
         await fs.promises.copyFile(absSrcPath, absDstPath, fs.constants.COPYFILE_EXCL)
@@ -177,9 +196,9 @@ export class Repo {
     const oabspath = this.abspath(oldPath)
     const nabspath = this.abspath(newPath)
 
-    if (!this.exists(oabspath)) throw new FileNotFoundError(oldPath)
+    if (!(await this.exists(oabspath))) throw new FileNotFoundError(oldPath)
 
-    if (this.exists(nabspath)) throw new FileExistsError(oldPath)
+    if (await this.exists(nabspath)) throw new FileExistsError(oldPath)
 
     if (Path.dirname(oabspath) !== Path.dirname(nabspath)) {
       throw new PermissionError('new file name should be inside the same directory')

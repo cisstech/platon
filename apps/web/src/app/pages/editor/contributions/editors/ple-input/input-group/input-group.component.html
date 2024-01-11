@@ -1,0 +1,45 @@
+<div>
+  <nz-list
+    cdkDropList
+    [cdkDropListDisabled]="disabled"
+    (cdkDropListDropped)="reorder($any($event))"
+    [nzDataSource]="inputs"
+    nzBordered
+  >
+    @for(variable of inputs; track $index) {
+    <nz-list-item cdkDrag [class.selected]="selectionIndex === $index" (click)="selectAt($index)">
+      <b>{{ variable.name }}</b>
+      <ul nz-list-item-actions>
+        <nz-list-item-action>
+          <button
+            nz-button
+            nzDanger
+            nzType="text"
+            nz-tooltip="Supprimer"
+            [disabled]="disabled"
+            (click)="deleteAt($index)"
+          >
+            <span nz-icon nzType="delete" nzTheme="outline"></span>
+          </button>
+        </nz-list-item-action>
+        <nz-list-item-action *ngIf="!disabled">
+          <button nz-button nzType="text" nz-tooltip="Maintenez et déplacez pour changer l'ordre">
+            <mat-icon>swap_vert</mat-icon>
+          </button>
+        </nz-list-item-action>
+      </ul>
+    </nz-list-item>
+    }
+  </nz-list>
+  <button nz-button nzType="primary" [disabled]="disabled" (click)="add()">+</button>
+</div>
+<div>
+  <app-ple-input
+    *ngIf="selection"
+    [input]="selection"
+    [disabled]="disabled"
+    [reservedNames]="reservedNames"
+    (inputChange)="update($event)"
+    mode="ple"
+  />
+</div>

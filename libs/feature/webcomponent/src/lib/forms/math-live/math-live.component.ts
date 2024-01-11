@@ -1,4 +1,14 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Injector, Input, OnInit, ViewChild } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Injector,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core'
 import { MathfieldElement } from 'mathlive'
 import { WebComponent, WebComponentHooks } from '../../web-component'
 import { WebComponentChangeDetectorService } from '../../web-component-change-detector.service'
@@ -15,6 +25,7 @@ export class MathLiveComponent implements OnInit, WebComponentHooks<MathLiveStat
   private mathfield!: MathfieldElement
 
   @Input() state!: MathLiveState
+  @Output() stateChange = new EventEmitter<MathLiveState>()
 
   @ViewChild('container', { static: true })
   container!: ElementRef<HTMLElement>

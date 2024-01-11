@@ -7,7 +7,11 @@ import { firstValueFrom } from 'rxjs'
 export class IntroService {
   constructor(private readonly resourceLoader: ResourceLoaderService) {}
 
-  async create(options?: { element?: HTMLElement; querySelector?: string }) {
+  async create(options?: {
+    element?: HTMLElement
+    querySelector?: string
+    onWillShow: Record<number, () => void | Promise<void>>
+  }) {
     await firstValueFrom(this.resourceLoader.loadAllSync([['style', 'assets/vendors/intro.js/introjs.css']]))
     if (options?.element) {
       return introJs(options.element)
@@ -15,6 +19,12 @@ export class IntroService {
     if (options?.querySelector) {
       return introJs(options.querySelector)
     }
-    return introJs()
+    const intro = introJs()
+    let step = 0
+    intro.onbeforechange(async () => {
+      await options?.onWillShow?.[step]?.()
+      step++
+    })
+    return intro
   }
 }

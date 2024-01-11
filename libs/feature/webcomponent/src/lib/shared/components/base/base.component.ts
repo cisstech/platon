@@ -59,6 +59,7 @@ export class BaseComponent implements OnInit, OnDestroy {
       const cidValue = cidAttribute.value
       const script = document.querySelector(`script[id="${cidValue}"]`)
       if (script) {
+        console.log(script.textContent)
         this.stateChange.emit(this.parseValue(script.textContent || '{}'))
       }
       return

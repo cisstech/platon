@@ -14,17 +14,35 @@ export class SyncResourceMetadatasCommand extends CommandRunner {
 
   public async run(): Promise<void> {
     await this.dataSource.transaction(async (entityManager) => {
-      await this.syncExercises(entityManager)
-      await this.syncActivities(entityManager)
+      this.logger.log('Searching for resources to sync...')
+
+      const resources = await this.dataSource.getRepository(ResourceEntity).find()
+
+      await this.syncCircles(entityManager, resources)
+      await this.syncExercises(entityManager, resources)
+      await this.syncActivities(entityManager, resources)
     })
   }
 
-  private async syncActivities(entityManager: EntityManager): Promise<void> {
-    this.logger.log('Searching for activities to sync...')
+  private async syncCircles(entityManager: EntityManager, resources: ResourceEntity[]): Promise<void> {
+    const circles = resources.filter((resource) => resource.type === ResourceTypes.CIRCLE)
 
-    const activities = await this.dataSource
-      .getRepository(ResourceEntity)
-      .find({ where: { type: ResourceTypes.ACTIVITY } })
+    this.logger.log(`Syncing ${circles.length} circles...`)
+
+    await Promise.all(
+      circles.map(async (circle) => {
+        try {
+          await this.metadataService.syncCircle({ resource: circle, entityManager })
+        } catch (error) {
+          this.logger.error(`Unable to sync circle ${circle.id}`, error)
+        }
+      })
+    )
+
+    this.logger.log(`Synced ${circles.length} circles`)
+  }
+  private async syncActivities(entityManager: EntityManager, resources: ResourceEntity[]): Promise<void> {
+    const activities = resources.filter((resource) => resource.type === ResourceTypes.ACTIVITY)
 
     this.logger.log(`Syncing ${activities.length} activities...`)
 
@@ -41,12 +59,8 @@ export class SyncResourceMetadatasCommand extends CommandRunner {
     this.logger.log(`Synced ${activities.length} activities`)
   }
 
-  private async syncExercises(entityManager: EntityManager): Promise<void> {
-    this.logger.log('Searching for exercises to sync...')
-
-    const exercises = await this.dataSource
-      .getRepository(ResourceEntity)
-      .find({ where: { type: ResourceTypes.EXERCISE } })
+  private async syncExercises(entityManager: EntityManager, resources: ResourceEntity[]): Promise<void> {
+    const exercises = resources.filter((resource) => resource.type === ResourceTypes.EXERCISE)
 
     this.logger.log(`Syncing ${exercises.length} exercises...`)
 

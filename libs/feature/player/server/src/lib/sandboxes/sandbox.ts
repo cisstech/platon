@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { SetMetadata } from '@nestjs/common'
-import { Variables } from '@platon/feature/compiler'
+import { ExerciseVariables } from '@platon/feature/compiler'
 
 export interface SandboxInput {
   envid?: string
@@ -8,12 +8,12 @@ export interface SandboxInput {
     path: string
     content: string
   }[]
-  variables: Variables
+  variables: ExerciseVariables
 }
 
 export interface SandboxOutput {
   envid?: string
-  variables: Variables
+  variables: ExerciseVariables
 }
 
 export interface Sandbox {
