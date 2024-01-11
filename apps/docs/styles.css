@@ -2,9 +2,5 @@
 @import url(https://cdn.jsdelivr.net/npm/vscode-codicons@0.0.17/dist/codicon.min.css);
 
 .material-symbols-outlined {
-  font-variation-settings:
-  'FILL' 0,
-  'wght' 400,
-  'GRAD' 0,
-  'opsz' 24
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }

@@ -4,13 +4,12 @@ title: Affichage d'aides
 
 import { Callout } from 'nextra/components'
 
-#  Affichage d'aides
+# Affichage d'aides
 
 Les aides (`hint`) sont un élément crucial dans les exercices PLaTon, offrant un soutien supplémentaire aux apprenants.
 Ces aides peuvent être statiques, fournissant des conseils préétablis, ou dynamiques, s'adaptant en fonction des interactions de l'utilisateur.
 
 Voici comment vous pouvez les intégrer dans vos exercices.
-
 
 ## Aides Statiques
 
@@ -18,6 +17,7 @@ Les aides statiques sont des conseils ou des informations prédéfinies qui sont
 
 - **Structure** : La clé `hint` peut contenir un tableau de chaînes de caractères, chaque chaîne représentant une aide distincte.
 - **Exemple** :
+
   ```
   hint = [
     "Pensez à vérifier vos calculs.",
@@ -33,6 +33,7 @@ Les aides statiques sont des conseils ou des informations prédéfinies qui sont
 Les aides dynamiques offrent un soutien plus personnalisé, basé sur les actions ou les réponses de l'utilisateur.
 
 - **Structure** : La clé hint peut être configurée comme un objet contenant les propriétés next, data, et empty.
+
   - **next** : Script exécuté dans la sandbox pour vérifier s'il reste des aides à afficher.
   - **data** : Liste de conseils générés dynamiquement (au format Markdown ou HTML).
   - **done** : Booléen indiquant si le bouton d'aide doit être affiché (`false`) ou non (`true`).
@@ -60,7 +61,7 @@ if (count <= 5) {
 ```
 
 <Callout type="info">
-Ceci était un exemple simple, mais vous pouvez utiliser des scripts plus complexes pour générer des aides dynamiques.
+  Ceci était un exemple simple, mais vous pouvez utiliser des scripts plus complexes pour générer des aides dynamiques.
 </Callout>
 
 ## Conseils pour la Création d'Aides Efficaces

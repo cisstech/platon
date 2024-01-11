@@ -1,11 +1,12 @@
 ---
 title: Le langage ple
 ---
+
 import { Tabs } from 'nextra/components'
 import { Callout } from 'nextra/components'
 import { FileTree } from 'nextra/components'
 
-#  Le langage ple (PLaTon Exercise)
+# Le langage ple (PLaTon Exercise)
 
 La programmation d'un exercice sur la plateforme PLaTon nécessite une compréhension des fondamentaux de sa syntaxe, de la gestion des variables, des opérateurs, et des divers éléments qui composent un exercice interactif.
 Cette section fournit un guide détaillé pour démarrer avec la création d'exercices sur PLaTon.
@@ -95,18 +96,19 @@ solution==
 
 ![Résultat de l'exercice](../../../../public/screens/programming/addition.png)
 
-
 ## Utilisation des Variables
 
 Les variables dans PLaTon peuvent être de différents types et sont utilisées pour stocker des informations ou des éléments d'exercice.
 
 ### Types de variables
+
 - Nombres, chaînes de caractères, booléens.
 - Références, objets, tableaux.
 - URL de fichier, contenu de fichier.
 - Composants (ex : `:wc-input` pour un champ de saisie).
 
 ### Affectation de Variables :
+
 - L'affectation se fait avec le symbole `=`.
 
 ```py
@@ -145,9 +147,9 @@ myobject_dot_notation.key2 = :wc-input
 myobject_dot_notation.key3 = @copyurl /path/to/file.txt
 ```
 
-<Callout type='info'>
-Les objects et tableaux peuvent être imbriqués à l'infini et contenir des variables de n'importe quel type y compris
-les types nom primitives comme les composants.
+<Callout type="info">
+  Les objects et tableaux peuvent être imbriqués à l'infini et contenir des variables de n'importe quel type y compris
+  les types nom primitives comme les composants.
 </Callout>
 
 ## Opérateurs `==`
@@ -184,7 +186,6 @@ for k in range(5):
 
 PLaTon utilise [monaco-editor](https://microsoft.github.io/monaco-editor/) pour l'édition de code. Il est possible d'activer la coloration syntaxique pour de nombreux langages y compris le language PLaTon avec `#!lang=pl-py` ou `#!lang=pl-js` en fonction du type de sandbox.
 
-
 ## Inclusion de Fichier dans l'environnement de l'exercice
 
 Les exercices sont executés dans un environnement isolé ([sandbox](/doc/programing/exercise/workflow)). Il est possible d'inclure des fichiers dans cet environnement afin de les lire
@@ -193,9 +194,10 @@ pour générer notamment des données aléatoires. Un exemple d'utilisation est 
 - Utilisez `@include CHEMIN` pour inclure des fichiers dans l'environnement de l'exercice.
 - Utilisez `@include CHEMIN as NOM` pour inclure des fichiers dans l'environnement de l'exercice et les renommer.
 
-<Callout type='info'>
-Il est possible de glisser déposer des fichiers depuis l'explorateur de fichier de l'IDE vers la zone dans laquelle vous souhaitez inclure le chemin du fichier.
-![Glisser déposer de fichier dans l'éditeur](../../../../public/screens/resources/ide/drop-into-editor.gif)
+<Callout type="info">
+  Il est possible de glisser déposer des fichiers depuis l'explorateur de fichier de l'IDE vers la zone dans laquelle
+  vous souhaitez inclure le chemin du fichier. ![Glisser déposer de fichier dans
+  l'éditeur](../../../../public/screens/resources/ide/drop-into-editor.gif)
 </Callout>
 
 ## Héritage
@@ -208,46 +210,24 @@ Hériter d'un fichier `.ple` consiste à importer son contenu (clés, fichiers �
 Exemple. L'exercice associé au fichier `main.ple` contiendra une clé `key1` valant `0` et une clé `key2` valant `"toto"`.
 
 <Tabs items={['main.ple', 'parent.ple']}>
-  <Tabs.Tab>
-  ```
-  @extends parent.ple
-  key1 = 0
-  ```
-  </Tabs.Tab>
-  <Tabs.Tab>
-  ```
-  key1 = 5
-  key2 = "toto"
-  ```
-  </Tabs.Tab>
+  <Tabs.Tab>``` @extends parent.ple key1 = 0 ```</Tabs.Tab>
+  <Tabs.Tab>``` key1 = 5 key2 = "toto" ```</Tabs.Tab>
 </Tabs>
 
-<Callout type='info'>
-Il est possible d'hériter en cascade de plusieurs fichiers.
-</Callout>
+<Callout type="info">Il est possible d'hériter en cascade de plusieurs fichiers.</Callout>
 
 ## Composition
 
 La composition est la même chose que l'héritage à la différence que dans le cas d'une composition, on affecte les clés du fichier importé à une variable.
 
 <Tabs items={['main.ple', 'parent.ple']}>
-  <Tabs.Tab>
-  ```
-  mydict = @extends parent.ple
-  mydict.key1 = 0
-  ```
-  </Tabs.Tab>
-  <Tabs.Tab>
-  ```
-  key1 = 5
-  ```
-  </Tabs.Tab>
+  <Tabs.Tab>``` mydict = @extends parent.ple mydict.key1 = 0 ```</Tabs.Tab>
+  <Tabs.Tab>``` key1 = 5 ```</Tabs.Tab>
 </Tabs>
 
-<Callout type='warning'>
-Seuls les clés sont stockées dans la variable, pas les fichiers à charger (`@include`).
+<Callout type="warning">
+  Seuls les clés sont stockées dans la variable, pas les fichiers à charger (`@include`).
 </Callout>
-
 
 ## Les références de fichiers
 
@@ -261,7 +241,6 @@ Il y a quatre manière de référencer un fichier:
   - ex: `/informatique/chemin/vers/fichier.ext`
 - Avec un chemin absolue vers une version particulière d'un fichier du cercle parent de l'exercice, commençant par `/CODE_DU_CERCLE:VERSION`
   - ex: `/informatique:v1/chemin/vers/fichier.ext`
-
 
 Ainsi, avec une arbre de répertoires comme celui-ci:
 
@@ -308,5 +287,6 @@ readme.md
 ```
 
 <Callout>
-Par défaut, si une version n'est pas précisée, la dernière version du fichier est utilisée (ex: `/platon/readme.md` utilise `/platon:latest/readme.md`).
+  Par défaut, si une version n'est pas précisée, la dernière version du fichier est utilisée (ex: `/platon/readme.md`
+  utilise `/platon:latest/readme.md`).
 </Callout>

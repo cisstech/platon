@@ -15,7 +15,8 @@ Cela permet aux utilisateurs, même sans compétences en programmation PLaTon, d
 - **Définition des Variables** : Définissez une liste de variables avec des attributs spécifiques qui correspondent aux éléments paramétrables de l'exercice.
 
 <Callout type="warning">
-Lorsque vous créez des variables dans un PLC avec des valeurs par défaut, ces valeurs écraseront les valeurs par défaut définies dans le fichier main.ple de l'exercice.
+  Lorsque vous créez des variables dans un PLC avec des valeurs par défaut, ces valeurs écraseront les valeurs par
+  défaut définies dans le fichier main.ple de l'exercice.
 </Callout>
 
 ## Processus d'Intégration dans une Activité
@@ -38,11 +39,12 @@ Ces variables peuvent remplacer les valeurs par défaut établies dans le fichie
 
 ## Interface de Configuration
 
-Lorsque vous ouvrez ``main.plc`` dans PLaTon, vous êtes accueilli par un formulaire avec les éléments suivants :
+Lorsque vous ouvrez `main.plc` dans PLaTon, vous êtes accueilli par un formulaire avec les éléments suivants :
 
 - **Liste des Variables** : Un espace à gauche où vous pouvez ajouter, supprimer ou réorganiser les variables configurables de l'exercice.
 - **Options de Debug** : Un bouton pour vous permettre de visualiser le contenu interne d'un fichier PLC.
 - **Informations sur les Variables** :
+
   - **Nom** : Identifie la variable (ex. min, max).
   - **Type** : Spécifie le type de la variable (voir ci-dessous).
   - **Description** : Un champ pour décrire (en markdown) la variable et énoncer les hypothèses sur sa valeur.
@@ -75,7 +77,8 @@ Lorsque vous ouvrez ``main.plc`` dans PLaTon, vous êtes accueilli par un formul
 - **Automate** : Permet à l'utilisateur de dessiner un automate.
 
 <Callout type="info">
-Partout où vous pouvez écrire du texte, vous pouvez utiliser les opérateurs `@copyurl` et `@copycontent` pour insérer des URL ou du contenu de fichier directement.
+  Partout où vous pouvez écrire du texte, vous pouvez utiliser les opérateurs `@copyurl` et `@copycontent` pour insérer
+  des URL ou du contenu de fichier directement.
 </Callout>
 
 ## Exemple d'Utilisation
@@ -164,7 +167,6 @@ Les élèves doivent écrire un script pour résoudre un problème de programmat
 **Application** :
 
 ```json
-
 {
   "skeletonCode": {
     "type": "Code",
@@ -179,7 +181,6 @@ Les élèves doivent écrire un script pour résoudre un problème de programmat
   }
 }
 ```
-
 
 ### Exemple 4: Exercice de Langues
 
@@ -210,7 +211,8 @@ Un exercice de langue où les élèves doivent traduire des phrases d'une langue
 Chaque exemple montre comment `main.plc` peut être utilisé pour créer des modèles d'exercices flexibles qui peuvent être facilement adaptés et réutilisés pour différents besoins pédagogiques, sans nécessiter que les utilisateurs finaux modifient le code de l'exercice lui-même.
 
 <Callout type="info">
-Dans ces exemples, cette documentation affichage le contenu brut des fichiers `main.plc` pour illustrer les possibilités offertes par ce fichier mais dans la pratique, l'édition de ce fichier se fait via un formulaire.
+  Dans ces exemples, cette documentation affichage le contenu brut des fichiers `main.plc` pour illustrer les
+  possibilités offertes par ce fichier mais dans la pratique, l'édition de ce fichier se fait via un formulaire.
 </Callout>
 
 ## Bonnes Pratiques

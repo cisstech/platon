@@ -2,9 +2,9 @@
 title: Construction, Affichage et Évaluation
 ---
 
-import { Callout } from 'nextra/components';
+import { Callout } from 'nextra/components'
 
-#  Construction, Affichage et Évaluation
+# Construction, Affichage et Évaluation
 
 Le déroulement d'un exercice sous PLaTon se compose de 4 parties:
 
@@ -33,7 +33,8 @@ Le choix de la sandbox se fait à l'aide de la clé `sandbox` dans la configurat
   Vous pouvez consulter la liste des librairies disponibles [ici](https://github.com/PremierLangage/sandbox/blob/master/docker/Dockerfile)
 
 <Callout type="warning">
-La sandbox python n'est pas intégrée par défaut à PLaTon. Pour l'utiliser, vous devez contacter l'équipe de PLaTon ou suivre les instructions de la [documentation](https://github.com/PremierLangage/sandbox) de la sandbox python.
+  La sandbox python n'est pas intégrée par défaut à PLaTon. Pour l'utiliser, vous devez contacter l'équipe de PLaTon ou
+  suivre les instructions de la [documentation](https://github.com/PremierLangage/sandbox) de la sandbox python.
 </Callout>
 
 ## Construction: Builder
@@ -114,7 +115,8 @@ form ==
 ```
 
 <Callout type="info">
-La récupération de la réponse de l'apprenant se fait à l'aide de variables de types composants dont la documentation est disponible sur la barre de menu haut.
+  La récupération de la réponse de l'apprenant se fait à l'aide de variables de types composants dont la documentation
+  est disponible sur la barre de menu haut.
 </Callout>
 
 ## Évaluation: Grader
@@ -128,8 +130,8 @@ En plus de vos variables, 2 variables spéciales sont disponibles :
 - `grade` : La note de l'apprenant, entre 0 et 1 (-1 si l'exercice est en erreur)
 
 - `feedback` : Un objet permettant de renvoyer un feedback à l'apprenant. Les clés de cet objet sont :
-    - `type` : Le type de feedback à renvoyer à l'apprenant. Les valeurs possibles sont `warning`, `error` et `success`
-    - `content` : Le message à afficher à l'apprenant (markdown|html)
+  - `type` : Le type de feedback à renvoyer à l'apprenant. Les valeurs possibles sont `warning`, `error` et `success`
+  - `content` : Le message à afficher à l'apprenant (markdown|html)
 
 Vous devez modifier la valeur de ces clés pour renvoyer un feedback à l'apprenant et lui attribuer une note en fonction de sa réponse.
 
@@ -158,8 +160,9 @@ if (input.value === op1 + op2) {
 ```
 
 <Callout type="info">
-Par défaut, le type de feedback est un objet, mais il est possible d'afficher plusieurs feedbacks à l'apprenant en utilisant un tableau d'objets de feedback.
-Pour cela, il suffit de déclarer la variable `feedback` comme un tableau au début du grader et d'ajouter des objets de feedback à l'intérieur.
+  Par défaut, le type de feedback est un objet, mais il est possible d'afficher plusieurs feedbacks à l'apprenant en
+  utilisant un tableau d'objets de feedback. Pour cela, il suffit de déclarer la variable `feedback` comme un tableau au
+  début du grader et d'ajouter des objets de feedback à l'intérieur.
 </Callout>
 
 ## Affichage de la solution : Solution

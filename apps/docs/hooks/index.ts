@@ -1,1 +1,1 @@
-export * from './useBaseUrl';
+export * from './useBaseUrl'
