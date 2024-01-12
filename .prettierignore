@@ -15,4 +15,5 @@
 /.nx/cache
 
 **/*.generated.ts
+**/*.mdx
 .angular
