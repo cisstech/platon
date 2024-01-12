@@ -210,8 +210,18 @@ Hériter d'un fichier `.ple` consiste à importer son contenu (clés, fichiers �
 Exemple. L'exercice associé au fichier `main.ple` contiendra une clé `key1` valant `0` et une clé `key2` valant `"toto"`.
 
 <Tabs items={['main.ple', 'parent.ple']}>
-  <Tabs.Tab>``` @extends parent.ple key1 = 0 ```</Tabs.Tab>
-  <Tabs.Tab>``` key1 = 5 key2 = "toto" ```</Tabs.Tab>
+  <Tabs.Tab>
+  ```
+  @extends parent.ple
+  key1 = 0
+  ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+  ```
+  key1 = 5
+  key2 = "toto"
+  ```
+  </Tabs.Tab>
 </Tabs>
 
 <Callout type="info">Il est possible d'hériter en cascade de plusieurs fichiers.</Callout>
@@ -221,8 +231,17 @@ Exemple. L'exercice associé au fichier `main.ple` contiendra une clé `key1` va
 La composition est la même chose que l'héritage à la différence que dans le cas d'une composition, on affecte les clés du fichier importé à une variable.
 
 <Tabs items={['main.ple', 'parent.ple']}>
-  <Tabs.Tab>``` mydict = @extends parent.ple mydict.key1 = 0 ```</Tabs.Tab>
-  <Tabs.Tab>``` key1 = 5 ```</Tabs.Tab>
+  <Tabs.Tab>
+  ```
+    mydict = @extends parent.ple
+    mydict.key1 = 0
+  ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+  ```
+  key1 = 5
+  ```
+  </Tabs.Tab>
 </Tabs>
 
 <Callout type="warning">
