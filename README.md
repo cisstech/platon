@@ -287,8 +287,8 @@ This document describes the environnement configuration for the application, inc
 | DB_PASSWORD                | api      | Database password for the API service.                      | test                             |
 | DB_HOST                    | api      | Database host for the API service.                          | localhost                        |
 | DB_PORT                    | api      | Database port for the API service.                          | 5432                             |
-| REDIS_HOST                 | api      | Sets django's `REDIS_HOST` value setting                    | localhost                        |
-| REDIS_PORT                 | api      | Sets django's `REDIS_PORT` value setting                    | 6379                             |
+| REDIS_HOST                 | api      | Sets NestJs `REDIS_HOST` value setting                      | localhost                        |
+| REDIS_PORT                 | api      | Sets NestJs `REDIS_PORT` value setting                      | 6379                             |
 | SECRET_KEY                 | api      | Secret key for the API service.                             | secret                           |
 | PASSWORD_SALT              | api      | Secret key for the API service.                             | 10                               |
 | JWT_ACCESS_TOKEN_LIFETIME  | api      | Access token lifetime for JWT authentication.               | 7d                               |
