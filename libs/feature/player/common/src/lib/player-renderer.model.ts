@@ -6,8 +6,7 @@ import {
   defaultActivitySettings,
   withExerciseMeta,
 } from '@platon/feature/compiler'
-import { ActivityPlayer, ExercisePlayer } from '@platon/feature/player/common'
-import { ActivitySession, AnswerEntity, ExerciseSession } from '@platon/feature/result/server'
+import { ActivitySession, Answer, ExerciseSession } from '@platon/feature/result/common'
 import * as nunjucks from 'nunjucks'
 import { v4 as uuidv4 } from 'uuid'
 import {
@@ -16,45 +15,12 @@ import {
   withHintGuard,
   withSolutionGuard,
   withTheoriesGuard,
-} from './player-guards'
+} from './player-guards.model'
+import { ActivityPlayer, ExercisePlayer } from './player.model'
 
 type Scripts = Record<string, string>
 
 nunjucks.configure({ autoescape: false })
-
-/**
- * Transforms recursivly all component objects to HTML code from `object`.
- * A component is an object with both `cid` and `selector` properties.
- * @param variables Object to transform.
- * @param scripts A list of scripts to fill.
- * @param reviewMode If true, the components will be disabled.
- * @returns A computed version of the object.
- */
-export const withRenderedComponents = (variables: any, scripts: Scripts, reviewMode?: boolean): any => {
-  if (variables == null) {
-    return variables
-  }
-  if (Array.isArray(variables)) {
-    return variables.map((v) => withRenderedComponents(v, scripts, reviewMode))
-  }
-
-  if (typeof variables === 'object') {
-    if (variables.cid && variables.selector) {
-      if (reviewMode) {
-        variables.disabled = true
-      }
-      const { cid, selector } = variables
-      scripts[cid] = JSON.stringify(variables)
-      return `<${selector} cid='${cid}'></${selector}>`.trim()
-    }
-    return Object.keys(variables).reduce((o, k) => {
-      o[k] = withRenderedComponents(variables[k], scripts, reviewMode)
-      return o
-    }, {} as any)
-  }
-
-  return variables
-}
 
 /**
  * Transforms recursivly all Editor.js content to HTML code from `object`.
@@ -86,6 +52,40 @@ const withEditorJsContent = (variables: any, scripts: Scripts): any => {
       scripts[id] = variables
       return `<wc-editorjs-viewer id='${id}'></wc-editorjs-viewer>`
     }
+  }
+
+  return variables
+}
+
+/**
+ * Transforms recursivly all component objects to HTML code from `object`.
+ * A component is an object with both `cid` and `selector` properties.
+ * @param variables Object to transform.
+ * @param scripts A list of scripts to fill.
+ * @param reviewMode If true, the components will be disabled.
+ * @returns A computed version of the object.
+ */
+export const withRenderedComponents = (variables: any, scripts: Scripts, reviewMode?: boolean): any => {
+  if (variables == null) {
+    return variables
+  }
+  if (Array.isArray(variables)) {
+    return variables.map((v) => withRenderedComponents(v, scripts, reviewMode))
+  }
+
+  if (typeof variables === 'object') {
+    if (variables.cid && variables.selector) {
+      if (reviewMode) {
+        variables.disabled = true
+      }
+      const { cid, selector } = variables
+      scripts[cid] = JSON.stringify(variables)
+      return `<${selector} cid='${cid}'></${selector}>`.trim()
+    }
+    return Object.keys(variables).reduce((o, k) => {
+      o[k] = withRenderedComponents(variables[k], scripts, reviewMode)
+      return o
+    }, {} as any)
   }
 
   return variables
@@ -177,7 +177,7 @@ export const withActivityPlayer = (session: ActivitySession): ActivityPlayer => 
  * @param session An exercise session.
  * @returns An exercise player.
  */
-export const withExercisePlayer = (session: ExerciseSession, answer?: AnswerEntity): ExercisePlayer => {
+export const withExercisePlayer = (session: ExerciseSession, answer?: Answer): ExercisePlayer => {
   const variables = withRenderedTemplates(answer?.variables || session.variables, answer != null)
 
   const activitySession = session.parent
