@@ -79,8 +79,9 @@ export const withRenderedComponents = (variables: any, scripts: Scripts, reviewM
         variables.disabled = true
       }
       const { cid, selector } = variables
-      scripts[cid] = JSON.stringify(variables)
-      return `<${selector} cid='${cid}'></${selector}>`.trim()
+      const scriptId = uuidv4()
+      scripts[scriptId] = JSON.stringify(variables)
+      return `<${selector} data-script-id='${scriptId}' cid='${cid}'></${selector}>`.trim()
     }
     return Object.keys(variables).reduce((o, k) => {
       o[k] = withRenderedComponents(variables[k], scripts, reviewMode)

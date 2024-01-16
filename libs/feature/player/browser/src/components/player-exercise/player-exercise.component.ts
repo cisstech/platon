@@ -357,7 +357,7 @@ export class PlayerExerciseComponent implements OnInit, OnChanges {
   }
 
   private forEachComponent(consumer: (component: WebComponentHooks) => void): void {
-    document.querySelectorAll('[cid]').forEach((node) => {
+    this.container.nativeElement.querySelectorAll('[cid]').forEach((node) => {
       consumer(node as unknown as WebComponentHooks)
     })
   }
