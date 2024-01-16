@@ -36,13 +36,8 @@
    6. [Deployment](#deployment)
       1. [On-premise](#on-premise)
       2. [Cloud](#cloud)
-5. [Functional Documentation](#functional-documentation)
-   1. [User Types](#user-types)
-   2. [Resource Management](#resource-management)
-   3. [Course and Activity Management](#course-and-activity-management)
-   4. [Tags and Topics](#tags-and-topics)
-   5. [User Groups and Notifications](#user-groups-and-notifications)
-   6. [LMS Integration](#lms-integration)
+      3. [Github](#github-home-page)
+5. [Functional Documentation](#documentation)
 6. [Contributing](#contributing)
 7. [License](#license)
 
@@ -449,7 +444,7 @@ If you plan to use a custom ssl files instead, update the docker-compose and the
 
 #### Github Home page
 
-The homepage of the project is hosted at <https://cisstech.github.io/platon/docs/main>
+The homepage of the project is hosted at <https://cisstech.github.io/platon/>
 
 - Build
 
@@ -477,6 +472,8 @@ yarn serve:docs
 ```
 
 In production mode, nginx serve the documentation as static files inside the docker container
+
+> Before serving the docs, you should run `yarn` command inside `./apps/docs`.
 
 ## Contributing
 
