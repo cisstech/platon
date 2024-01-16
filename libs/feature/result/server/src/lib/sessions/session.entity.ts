@@ -2,7 +2,6 @@
 import { BaseEntity, UserEntity } from '@platon/core/server'
 import { ActivityVariables, ExerciseVariables, PLSourceFile } from '@platon/feature/compiler'
 import { ActivityEntity } from '@platon/feature/course/server'
-import { PlayerActivityVariables } from '@platon/feature/player/common'
 import { Session } from '@platon/feature/result/common'
 import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm'
 import { CorrectionEntity } from '../correction/correction.entity'
@@ -12,35 +11,35 @@ import { CorrectionEntity } from '../correction/correction.entity'
 @Index('Sessions_activity_user_idx', ['parentId', 'activityId', 'userId'])
 export class SessionEntity<TVariables = any> extends BaseEntity implements Session<TVariables> {
   @Column({ name: 'parent_id', nullable: true })
-  parentId?: string
+  parentId?: string | null
 
   @ManyToOne(() => SessionEntity, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'parent_id' })
-  parent?: SessionEntity<PlayerActivityVariables>
+  parent?: SessionEntity<ActivityVariables> | null
 
   @Column({ type: 'uuid', nullable: true })
-  envid?: string
+  envid?: string | null
 
   @Column({ name: 'user_id', nullable: true })
-  userId?: string
+  userId?: string | null
 
   @ManyToOne(() => UserEntity, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
-  user?: UserEntity
+  user?: UserEntity | null
 
   @Column({ name: 'activity_id', nullable: true })
-  activityId?: string
+  activityId?: string | null
 
   @ManyToOne(() => ActivityEntity, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'activity_id' })
-  activity?: ActivityEntity
+  activity?: ActivityEntity | null
 
   @Column({ name: 'correction_id', nullable: true })
-  correctionId?: string
+  correctionId?: string | null
 
   @ManyToOne(() => CorrectionEntity, { onDelete: 'SET NULL' })
   @JoinColumn({ name: 'correction_id' })
-  correction?: CorrectionEntity
+  correction?: CorrectionEntity | null
 
   @Column({ type: 'jsonb', default: {} })
   variables!: TVariables
@@ -52,10 +51,10 @@ export class SessionEntity<TVariables = any> extends BaseEntity implements Sessi
   attempts!: number
 
   @Column({ type: 'timestamp with time zone', name: 'started_at', nullable: true })
-  startedAt?: Date
+  startedAt?: Date | null
 
   @Column({ type: 'timestamp with time zone', name: 'last_graded_at', nullable: true })
-  lastGradedAt?: Date
+  lastGradedAt?: Date | null
 
   @Column({ type: 'jsonb' })
   source!: PLSourceFile<TVariables>

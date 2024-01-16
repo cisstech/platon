@@ -23,6 +23,10 @@ export const ACTIVITY_MAIN_FILE = 'main.pla'
 export const EXERCISE_MAIN_FILE = 'main.ple'
 export const EXERCISE_CONFIG_FILE = 'main.plc'
 export const TEMPLATE_OVERRIDE_FILE = 'main.plo'
+export const ACTIVITY_FILE_EXTENSION = '.pla'
+export const EXERCISE_FILE_EXTENSION = '.ple'
+export const EXERCISE_CONFIG_FILE_EXTENSION = '.plc'
+export const TEMPLATE_OVERRIDE_FILE_EXTENSION = '.plo'
 
 /**
  * File reference resolver for the PL compiler.
@@ -175,7 +179,9 @@ export class PLCompiler implements PLVisitor {
    * @returns A Promise that resolves when the compilation is complete.
    */
   compile(content: string): Promise<void> {
-    return this.source.abspath.endsWith('.pla') ? this.compileActivity(content) : this.compileExercise(content)
+    return this.source.abspath.endsWith(ACTIVITY_FILE_EXTENSION)
+      ? this.compileActivity(content)
+      : this.compileExercise(content)
   }
 
   async visit(ast: PLAst): Promise<PLSourceFile> {

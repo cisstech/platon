@@ -30,3 +30,14 @@ export const resolveFileReference = (path: string, relativeTo: { resource: strin
 }
 
 export const removeLeadingSlash = (path: string) => path.replace(/^[\\/.]+/g, '')
+
+// implements the same logic as the basename function from path
+
+export const basename = (path: string) => {
+  if (!path) {
+    return path
+  }
+
+  const parts = path.split('/').filter((e) => !!e.trim())
+  return parts[parts.length - 1] ?? ''
+}

@@ -8,23 +8,22 @@ export interface Session<TVariables = any> {
   id: string
   createdAt: Date
   updatedAt: Date
-  parentId?: string
 
-  parent?: Session<ActivityVariables>
-  envid?: string
-  userId?: string
-  activity?: Activity
-  activityId?: string
-  correction?: Correction
-  correctionId?: string
+  parentId?: string | null
+  parent?: Session<ActivityVariables> | null
+  envid?: string | null
+  userId?: string | null
+  activity?: Activity | null
+  activityId?: string | null
+  correction?: Correction | null
+  correctionId?: string | null
 
   variables: TVariables
   grade: number
   attempts: number
 
-  startedAt?: Date
-  lastGradedAt?: Date
-
+  startedAt?: Date | null
+  lastGradedAt?: Date | null
   source: PLSourceFile<TVariables>
   isBuilt: boolean
 }

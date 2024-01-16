@@ -1,4 +1,4 @@
-import { resolveFileReference } from './file'
+import { basename, resolveFileReference } from './file'
 
 describe('resolveFileReference', () => {
   const relativeTo = {
@@ -60,5 +60,39 @@ describe('resolveFileReference', () => {
 
     const result = resolveFileReference(path, relativeTo)
     expect(result).toEqual(expectedResult)
+  })
+})
+
+describe('basename', () => {
+  it('should return the base name of a file path', () => {
+    const path = '/absolute/path/file.txt'
+    const expectedBasename = 'file.txt'
+
+    const result = basename(path)
+    expect(result).toEqual(expectedBasename)
+  })
+
+  it('should return the base name of a file path with multiple directories', () => {
+    const path = 'relative/path/to/file.txt'
+    const expectedBasename = 'file.txt'
+
+    const result = basename(path)
+    expect(result).toEqual(expectedBasename)
+  })
+
+  it('should return the base name of a file path with no directories', () => {
+    const path = 'file.txt'
+    const expectedBasename = 'file.txt'
+
+    const result = basename(path)
+    expect(result).toEqual(expectedBasename)
+  })
+
+  it('should return an empty string for an empty path', () => {
+    const path = ''
+    const expectedBasename = ''
+
+    const result = basename(path)
+    expect(result).toEqual(expectedBasename)
   })
 })

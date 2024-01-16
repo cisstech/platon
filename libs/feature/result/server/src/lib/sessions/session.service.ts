@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
+import { PartialDeep } from 'type-fest'
 import { EntityManager, FindOptionsRelations, IsNull, Repository } from 'typeorm'
-import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity'
 import { ExerciseSessionEntity, SessionEntity } from './session.entity'
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity'
 
+import { Session } from '@platon/feature/result/common'
 @Injectable()
 export class SessionService {
   constructor(
@@ -68,10 +70,10 @@ export class SessionService {
     return this.repository.save(this.repository.create(input as SessionEntity<TVariables>))
   }
 
-  async update(id: string, changes: QueryDeepPartialEntity<SessionEntity>, entityManager?: EntityManager) {
+  async update(id: string, changes: PartialDeep<Session>, entityManager?: EntityManager): Promise<void> {
     if (entityManager) {
-      return entityManager.update(this.repository.target, { id }, changes)
+      await entityManager.update(this.repository.target, { id }, changes as QueryDeepPartialEntity<SessionEntity>)
     }
-    return this.repository.update({ id }, changes)
+    await this.repository.update({ id }, changes as QueryDeepPartialEntity<SessionEntity>)
   }
 }
