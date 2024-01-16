@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { EntityManager, FindOptionsRelations, IsNull, Repository } from 'typeorm'
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity'
-import { SessionEntity } from './session.entity'
+import { ExerciseSessionEntity, SessionEntity } from './session.entity'
 
 @Injectable()
 export class SessionService {
@@ -36,11 +36,21 @@ export class SessionService {
     })
   }
 
-  findExercise(
+  findExerciseSessionById(
+    id: string,
+    relations?: FindOptionsRelations<SessionEntity>
+  ): Promise<ExerciseSessionEntity | null> {
+    return this.repository.findOne({
+      where: { id },
+      relations,
+    })
+  }
+
+  findExerciseSessionByActivityId(
     parentId: string,
     sessionId: string,
     relations?: FindOptionsRelations<SessionEntity>
-  ): Promise<SessionEntity | null> {
+  ): Promise<ExerciseSessionEntity | null> {
     return this.repository.findOne({
       where: { parentId, id: sessionId },
       relations,

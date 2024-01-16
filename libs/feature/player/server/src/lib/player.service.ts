@@ -30,27 +30,29 @@ import {
   PlayerExercise,
   PlayerNavigation,
   PreviewInput,
+  updateActivityNavigationState,
+  withActivityFeedbacksGuard,
+  withActivityPlayer,
+  withAnswersInSession,
+  withExercisePlayer,
+  withSessionAccessGuard,
 } from '@platon/feature/player/common'
 import { ResourceFileService } from '@platon/feature/resource/server'
 import { AnswerStates, answerStateFromGrade } from '@platon/feature/result/common'
 import {
   AnswerService,
   CorrectionEntity,
-  ExerciseSession,
+  ExerciseSessionEntity,
   SessionEntity,
   SessionService,
 } from '@platon/feature/result/server'
 import { DataSource, EntityManager, In } from 'typeorm'
-import { withAnswersInSession } from './player-answer'
-import { withActivityFeedbacksGuard, withMultiSessionGuard, withSessionAccessGuard } from './player-guards'
-import { updateActivityNavigationState } from './player-navigation'
-import { withActivityPlayer, withExercisePlayer } from './player-renderer'
-import { extractExerciseSourceFromSession } from './player-utils'
+import { withMultiSessionGuard } from './player-guards'
 import { PreviewOuputDTO } from './player.dto'
 import { SandboxService } from './sandboxes/sandbox.service'
 
 type ActionHandler = (
-  session: ExerciseSession,
+  session: ExerciseSessionEntity,
   user?: User
 ) => Promise<ExercisePlayer | [ExercisePlayer, PlayerNavigation]>
 
@@ -157,7 +159,7 @@ export class PlayerService {
     const exercisePlayers = await Promise.all(
       exerciseSessionIds.map(async (sessionId) => {
         let exerciseSession = withSessionAccessGuard(
-          await this.sessionService.findExercise(activitySessionId, sessionId),
+          await this.sessionService.findExerciseSessionByActivityId(activitySessionId, sessionId),
           user
         )
 
@@ -192,12 +194,12 @@ export class PlayerService {
 
   async terminate(sessionId: string, user?: User): Promise<PlayActivityOuput> {
     const session = withSessionAccessGuard(
-      await this.sessionService.findById(sessionId, { parent: true, activity: true }),
+      await this.sessionService.findById<PlayerActivityVariables>(sessionId, { parent: true, activity: true }),
       user
     )
 
     const activitySession = session.parent || session
-    const activityVariables = activitySession.variables as PlayerActivityVariables
+    const activityVariables = activitySession.variables
     if (activityVariables.navigation.terminated) {
       return { activity: withActivityPlayer(activitySession) }
     }
@@ -220,24 +222,23 @@ export class PlayerService {
   }
 
   async evaluate(input: EvalExerciseInput, user?: User): Promise<ExercisePlayer | [ExercisePlayer, PlayerNavigation]> {
-    const session = withSessionAccessGuard<ExerciseVariables>(
-      await this.sessionService.findById<ExerciseVariables>(input.sessionId, { parent: true, activity: true }),
+    const session = withSessionAccessGuard(
+      await this.sessionService.findExerciseSessionById(input.sessionId, { parent: true, activity: true }),
       user
     )
 
     const grades = await this.answerService.findGradesOfSession(session.id)
 
-    withAnswersInSession(session, input.answers || {})
+    withAnswersInSession(session.variables, input.answers || {})
     patchExerciseMeta(session.variables, () => ({ grades, totalAttempts: session.attempts }))
-
     return this.actionHandlers[input.action](session, user)
   }
 
-  async reroll(exerciseSession: ExerciseSession): Promise<ExercisePlayer> {
+  async reroll(exerciseSession: ExerciseSessionEntity): Promise<ExercisePlayer> {
     const envid = exerciseSession.envid
-    const source = extractExerciseSourceFromSession(exerciseSession)
+    const { source } = exerciseSession
 
-    let variables = (source?.variables as ExerciseVariables) ?? exerciseSession.variables
+    let variables = source.variables ?? exerciseSession.variables
     variables.seed = Date.now() % 100
 
     if (variables.builder?.trim()) {
@@ -253,7 +254,7 @@ export class PlayerService {
     return withExercisePlayer(exerciseSession)
   }
 
-  async nextHint(exerciseSession: ExerciseSession): Promise<ExercisePlayer> {
+  async nextHint(exerciseSession: ExerciseSessionEntity): Promise<ExercisePlayer> {
     const envid = exerciseSession.envid
     let variables = exerciseSession.variables
 
@@ -274,7 +275,7 @@ export class PlayerService {
     return withExercisePlayer(exerciseSession)
   }
 
-  async checkAnswer(exerciseSession: ExerciseSession): Promise<[ExercisePlayer, PlayerNavigation]> {
+  async checkAnswer(exerciseSession: ExerciseSessionEntity): Promise<[ExercisePlayer, PlayerNavigation]> {
     const { activitySession, activityNavigation } = withMultiSessionGuard(exerciseSession)
 
     // EVAL ANSWERS
@@ -360,7 +361,7 @@ export class PlayerService {
     ]
   }
 
-  async nextExercise(exerciseSession: ExerciseSession): Promise<ExercisePlayer> {
+  async nextExercise(exerciseSession: ExerciseSessionEntity): Promise<ExercisePlayer> {
     const activitySession = exerciseSession.parent
     if (!activitySession) {
       throw new ForbiddenResponse(`This action can be called only with dynamic activities.`)
@@ -371,7 +372,7 @@ export class PlayerService {
     return withExercisePlayer(exerciseSession)
   }
 
-  async showSolution(exerciseSession: ExerciseSession): Promise<ExercisePlayer> {
+  async showSolution(exerciseSession: ExerciseSessionEntity): Promise<ExercisePlayer> {
     patchExerciseMeta(exerciseSession.variables, () => ({ showSolution: true }))
     return withExercisePlayer(exerciseSession)
   }
@@ -379,7 +380,7 @@ export class PlayerService {
   /**
    * Builds the given ExerciseSession
    */
-  private async buildExercise(exerciseSession: ExerciseSession): Promise<SessionEntity> {
+  private async buildExercise(exerciseSession: ExerciseSessionEntity): Promise<SessionEntity> {
     const { envid, variables } = await this.sandboxService.build(exerciseSession.source!)
 
     exerciseSession.envid = envid
@@ -401,7 +402,7 @@ export class PlayerService {
    * @returns An player instance for the created session.
    */
   private async createNewSession(args: CreateSessionArgs, entityManager?: EntityManager): Promise<SessionEntity> {
-    const create = async (manager: EntityManager): Promise<SessionEntity> => {
+    const runWithEntityManager = async (manager: EntityManager): Promise<SessionEntity> => {
       const { user, source, parentId, activity, isBuilt } = args
 
       source.variables.seed = (Number.parseInt(source.variables.seed + '') || Date.now()) % 100
@@ -433,7 +434,7 @@ export class PlayerService {
 
       return session
     }
-    return entityManager ? create(entityManager) : this.dataSource.transaction(create)
+    return entityManager ? runWithEntityManager(entityManager) : this.dataSource.transaction(runWithEntityManager)
   }
 
   /**

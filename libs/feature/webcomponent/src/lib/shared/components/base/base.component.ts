@@ -53,13 +53,10 @@ export class BaseComponent implements OnInit, OnDestroy {
     const attributes = Array.from(parent.attributes)
 
     // LOAD FROM SCRIPT TAG
-    const cidAttribute = attributes.find((attr) => attr.name === 'cid')
-
-    if (cidAttribute) {
-      const cidValue = cidAttribute.value
-      const script = document.querySelector(`script[id="${cidValue}"]`)
+    const dataScriptIdAttribute = attributes.find((attr) => attr.name === 'data-script-id')
+    if (dataScriptIdAttribute) {
+      const script = document.querySelector(`script[id="${dataScriptIdAttribute.value}"]`)
       if (script) {
-        console.log(script.textContent)
         this.stateChange.emit(this.parseValue(script.textContent || '{}'))
       }
       return

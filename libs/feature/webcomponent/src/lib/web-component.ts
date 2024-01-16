@@ -244,7 +244,7 @@ function detectChanges(component: WebComponentInstance) {
     component.stateChange?.next(component.state)
   }
 
-  component.$__changeDetector__$.detectChanges()
+  component.$__changeDetector__$.markForCheck()
 
   if (component.$__suspendChanges__$ || !component.$__ngOnInitCalled__$) {
     return
@@ -255,7 +255,7 @@ function detectChanges(component: WebComponentInstance) {
     component.onChangeState()
   }
 
-  component.$__changeDetector__$.detectChanges()
+  component.$__changeDetector__$.markForCheck()
   component.$__suspendChanges__$ = false
 }
 

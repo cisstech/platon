@@ -1,1 +1,5 @@
+export * from './lib/player-answer.model'
+export * from './lib/player-guards.model'
+export * from './lib/player-navigation.model'
+export * from './lib/player-renderer.model'
 export * from './lib/player.model'
