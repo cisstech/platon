@@ -18,38 +18,28 @@
 
 ## Table of Contents
 
-- [PLaTon - Platform for Learning and Teaching Online](#platon---platform-for-learning-and-teaching-online)
-  - [Table of Contents](#table-of-contents)
-  - [Introduction](#introduction)
-  - [Key Features](#key-features)
-  - [Planned features](#planned-features)
-  - [Installation](#installation)
-    - [Prerequisites](#prerequisites)
-    - [Recommendations](#recommendations)
-    - [Setup](#setup)
-  - [Technical Documentation](#technical-documentation)
-    - [Platform Architecture](#platform-architecture)
-      - [Technical Stack](#technical-stack)
-      - [Docker stack](#docker-stack)
-    - [Environment Configuration](#environment-configuration)
-    - [Codebase Structure](#codebase-structure)
-    - [Key Libraries and Frameworks](#key-libraries-and-frameworks)
-    - [Development Workflow](#development-workflow)
-      - [Scripts](#scripts)
-      - [Testing](#testing)
-      - [Linting and Formatting](#linting-and-formatting)
-    - [Deployment](#deployment)
-      - [On-premise](#on-premise)
-      - [Cloud](#cloud)
-  - [Functional Documentation](#functional-documentation)
-    - [User Types](#user-types)
-    - [Resource Management](#resource-management)
-    - [Course and Activity Management](#course-and-activity-management)
-    - [Tags and Topics](#tags-and-topics)
-    - [User Groups and Notifications](#user-groups-and-notifications)
-    - [LMS Integration](#lms-integration)
-  - [Contributing](#contributing)
-  - [License](#license)
+1. [Introduction](#introduction)
+2. [Key Features](#key-features)
+3. [Installation](#installation)
+   1. [Prerequisites](#prerequisites)
+   2. [Recommendations](#recommendations)
+   3. [Setup](#setup)
+4. [Technical Documentation](#technical-documentation)
+   1. [Platform Architecture](#platform-architecture)
+   2. [Environment Configuration](#environment-configuration)
+   3. [Codebase Structure](#codebase-structure)
+   4. [Key Libraries and Frameworks](#key-libraries-and-frameworks)
+   5. [Development Workflow](#development-workflow)
+      1. [Scripts](#scripts)
+      2. [Testing](#testing)
+      3. [Linting and Formatting](#linting-and-formatting)
+   6. [Deployment](#deployment)
+      1. [On-premise](#on-premise)
+      2. [Cloud](#cloud)
+      3. [Github](#github-home-page)
+5. [Functional Documentation](#documentation)
+6. [Contributing](#contributing)
+7. [License](#license)
 
 ## Introduction
 
@@ -293,8 +283,8 @@ This document describes the environnement configuration for the application, inc
 | DB_PASSWORD                | api      | Database password for the API service.                      | test                             |
 | DB_HOST                    | api      | Database host for the API service.                          | localhost                        |
 | DB_PORT                    | api      | Database port for the API service.                          | 5432                             |
-| REDIS_HOST                 | api      | Sets django's `REDIS_HOST` value setting                    | localhost                        |
-| REDIS_PORT                 | api      | Sets django's `REDIS_PORT` value setting                    | 6379                             |
+| REDIS_HOST                 | api      | Sets NestJs `REDIS_HOST` value setting                      | localhost                        |
+| REDIS_PORT                 | api      | Sets NestJs `REDIS_PORT` value setting                      | 6379                             |
 | SECRET_KEY                 | api      | Secret key for the API service.                             | secret                           |
 | PASSWORD_SALT              | api      | Secret key for the API service.                             | 10                               |
 | JWT_ACCESS_TOKEN_LIFETIME  | api      | Access token lifetime for JWT authentication.               | 7d                               |
@@ -455,33 +445,19 @@ If you plan to use a custom ssl files instead, update the docker-compose and the
 
 #### Github Home page
 
-#### Github Home page
+The homepage of the project is hosted at <https://cisstech.github.io/platon/>
 
-The homepage of the project is hosted at <https://cisstech.github.io/platon/docs>
-
-- Build
 - Build
 
 ```sh
 yarn build:github
 ```
 
-```sh
-yarn build:github
-```
-
-- Deploy
 - Deploy
 
 ```sh
 yarn publish:github
 ```
-
-```sh
-yarn publish:github
-```
-
-## Documentation
 
 ## Documentation
 
@@ -489,21 +465,16 @@ Documentation is hosted at :
 <https://cisstech.github.io/platon/docs>
 
 There is also a self hosted version of the documentation that runs alongside of the application thanks to nginx reverse proxy at `/docs/main`
-There is also a self hosted version of the documentation that runs alongside of the application thanks to nginx reverse proxy at `/docs/main`
 
-In development mode the documentation can be served using the following command :
 In development mode the documentation can be served using the following command :
 
 ```sh
 yarn serve:docs
 ```
 
-```sh
-yarn serve:docs
-```
+In production mode, nginx serve the documentation as static files inside the docker container
 
-In production mode, nginx serve the documentation as static files inside the docker container
-In production mode, nginx serve the documentation as static files inside the docker container
+> Before serving the docs, you should run `yarn` command inside `./apps/docs`.
 
 ## Contributing
 
@@ -521,5 +492,4 @@ Linter passes
 
 ## License
 
-[CeCILL-B](LICENSE)
 [CeCILL-B](LICENSE)

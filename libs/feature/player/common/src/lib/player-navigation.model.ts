@@ -1,5 +1,5 @@
-import { PlayerActivityVariables, PlayerExercise } from '@platon/feature/player/common'
 import { AnswerStates } from '@platon/feature/result/common'
+import { PlayerActivityVariables, PlayerExercise } from './player.model'
 
 export const updateActivityNavigationState = (
   activityVariables: PlayerActivityVariables,

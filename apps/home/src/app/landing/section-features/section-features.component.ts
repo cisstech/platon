@@ -45,7 +45,7 @@ export class SectionFeaturesComponent {
     {
       id: 'user-management',
       icon: 'people',
-      title: 'Gestion utilisateurs',
+      title: 'Administration',
       image: 'assets/images/screens/admin.png',
       description: `Outils complets de gestion des utilisateurs, permettant l'administration des comptes, la gestion des rôles, et le suivi des activités des utilisateurs sur la plateforme.`,
     },
