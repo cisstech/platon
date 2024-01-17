@@ -455,15 +455,27 @@ If you plan to use a custom ssl files instead, update the docker-compose and the
 
 #### Github Home page
 
+#### Github Home page
+
 The homepage of the project is hosted at <https://cisstech.github.io/platon/docs>
 
+- Build
 - Build
 
 ```sh
 yarn build:github
 ```
 
+```sh
+yarn build:github
+```
+
 - Deploy
+- Deploy
+
+```sh
+yarn publish:github
+```
 
 ```sh
 yarn publish:github
@@ -471,17 +483,26 @@ yarn publish:github
 
 ## Documentation
 
+## Documentation
+
 Documentation is hosted at :
 <https://cisstech.github.io/platon/docs>
 
 There is also a self hosted version of the documentation that runs alongside of the application thanks to nginx reverse proxy at `/docs/main`
+There is also a self hosted version of the documentation that runs alongside of the application thanks to nginx reverse proxy at `/docs/main`
 
+In development mode the documentation can be served using the following command :
 In development mode the documentation can be served using the following command :
 
 ```sh
 yarn serve:docs
 ```
 
+```sh
+yarn serve:docs
+```
+
+In production mode, nginx serve the documentation as static files inside the docker container
 In production mode, nginx serve the documentation as static files inside the docker container
 
 ## Contributing
@@ -500,4 +521,5 @@ Linter passes
 
 ## License
 
+[CeCILL-B](LICENSE)
 [CeCILL-B](LICENSE)

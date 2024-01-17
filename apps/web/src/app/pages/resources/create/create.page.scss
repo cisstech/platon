@@ -7,7 +7,7 @@
 }
 
 header {
-  margin-bottom: 12px;
+  margin-bottom: 1rem;
   align-self: flex-start;
 }
 
@@ -27,6 +27,7 @@ footer {
   min-height: 10px;
   width: 100%;
   justify-content: center;
+  padding: 1rem 0;
   button {
     margin: 0 12px;
   }
@@ -45,7 +46,7 @@ section {
 }
 
 h1 {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   text-align: center;
 }
 
@@ -54,7 +55,7 @@ h3,
 h4 {
   width: 100%;
   text-align: center;
-  margin-bottom: 12px;
+  margin-bottom: 1rem;
 }
 
 p {
@@ -87,4 +88,104 @@ nz-select {
 
 .spacer {
   flex: 1;
+}
+
+.edition-modes {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+
+  .edition-mode {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid #d9d9d9;
+    padding: 20px;
+    margin: 0 10px;
+    width: 300px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    &.disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    &.selected {
+      border-color: var(--brand-color-primary);
+      box-shadow: 0 4px 12px rgba(var(var(--brand-color-primary)), 0.5);
+
+      .icon-holder {
+        i {
+          color: var(--brand-color-primary);
+        }
+      }
+
+      h5,
+      p {
+        color: var(--brand-color-primary);
+      }
+    }
+
+    .icon-holder {
+      margin-bottom: 1rem;
+      i {
+        font-size: 24px;
+        transition: color 0.3s ease;
+      }
+    }
+
+    h5 {
+      margin-bottom: 10px;
+      transition: color 0.3s ease;
+    }
+
+    p {
+      margin-bottom: 20px;
+      transition: color 0.3s ease;
+    }
+
+    button {
+      width: 100%;
+    }
+  }
+}
+
+.section-template {
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+}
+
+.template-circle-filter {
+  display: flex;
+  overflow-x: auto;
+  width: 100%;
+  margin-bottom: 1rem;
+  justify-content: center;
+  nz-tag {
+    flex: 0 0 auto;
+    margin-right: 10px;
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
+.template-grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+
+  button {
+    margin-top: 0.5rem;
+  }
+}
+
+nz-collapse {
+  width: 100%;
 }

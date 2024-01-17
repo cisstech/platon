@@ -1,0 +1,35 @@
+:host {
+  display: block;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  padding: 1.5rem;
+  background-color: #f6f8fa;
+  > div {
+    display: grid;
+    grid-template-columns: 30% 70%;
+    gap: 2rem;
+    width: 100%;
+  }
+}
+
+nz-list {
+  margin-bottom: 1rem;
+  background-color: var(--brand-background-primary);
+  ul {
+    display: flex;
+    align-items: center;
+  }
+}
+
+nz-list-item {
+  padding: 0.5rem 1rem !important;
+  cursor: pointer;
+  &.selected {
+    border-left: 2px solid var(--brand-color-primary);
+  }
+}
+
+.container-selection {
+  width: 95%;
+}

@@ -17,7 +17,7 @@
   "scripts": {
     "serve": "next -p 4203",
     "build": "next build",
-    "build:github": "GITHUB_PAGES=true next build",
+    "build:ghpage": "GITHUB_PAGES=true next build",
     "start": "ext start -p 4203"
   },
   "private": true,
@@ -26,7 +26,8 @@
     "nextra": "^2.13.2",
     "nextra-theme-docs": "^2.13.2",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "sharp": "^0.33.1"
   },
   "devDependencies": {
     "ts-node": "^10.9.1",

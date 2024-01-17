@@ -1,5 +1,9 @@
-import { ActivitySettings } from '@platon/feature/compiler'
+import { ActivitySettings, PleConfigJSON } from '@platon/feature/compiler'
 import { FileVersion } from './file.model'
+
+export interface CircleResourceMeta {
+  versions: FileVersion[]
+}
 
 export interface ActivityResourceMeta {
   settings: ActivitySettings
@@ -8,7 +12,8 @@ export interface ActivityResourceMeta {
 
 export interface ExerciseResourceMeta {
   configurable: boolean
+  config?: PleConfigJSON
   versions: FileVersion[]
 }
 
-export type ResourceMeta = ActivityResourceMeta | ExerciseResourceMeta
+export type ResourceMeta = CircleResourceMeta | ActivityResourceMeta | ExerciseResourceMeta

@@ -10,9 +10,10 @@ import {
   Output,
   QueryList,
   TemplateRef,
+  booleanAttribute,
   inject,
 } from '@angular/core'
-import { SafePipeModule } from '@cisstech/nge/pipes'
+import { SafePipe } from '@cisstech/nge/pipes'
 import { NzDrawerModule, NzDrawerPlacement, NzDrawerSize } from 'ng-zorro-antd/drawer'
 
 @Component({
@@ -21,7 +22,7 @@ import { NzDrawerModule, NzDrawerPlacement, NzDrawerSize } from 'ng-zorro-antd/d
   templateUrl: './modal-drawer.component.html',
   styleUrls: ['./modal-drawer.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, NzDrawerModule, SafePipeModule],
+  imports: [CommonModule, NzDrawerModule, SafePipe],
 })
 export class UiModalDrawerComponent {
   private readonly breakpointObserver = inject(BreakpointObserver)
@@ -36,7 +37,7 @@ export class UiModalDrawerComponent {
   @Input() bodyStyle: Record<string, string> = {}
   @Input() size: NzDrawerSize = 'default'
   @Input() placement: NzDrawerPlacement = 'right'
-  @Input() closable = true
+  @Input({ transform: booleanAttribute }) closable = true
   @Input() footer?: TemplateRef<void> | null
 
   get isMobile(): boolean {

@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common'
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { Subscription } from 'rxjs'
 
-import { SafePipeModule } from '@cisstech/nge/pipes'
+import { SafePipe } from '@cisstech/nge/pipes'
 import { NzModalModule } from 'ng-zorro-antd/modal'
 
 import { NgeUiIconModule } from '@cisstech/nge/ui/icon'
@@ -26,7 +26,7 @@ import { ResourceBrowseHeaderComponent } from './header/header.component'
     NzModalModule,
     NgeUiIconModule,
 
-    SafePipeModule,
+    SafePipe,
     UiModalIFrameComponent,
 
     ResourceFilesComponent,

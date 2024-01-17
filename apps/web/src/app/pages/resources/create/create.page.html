@@ -1,18 +1,26 @@
 <header>
   <nz-page-header [nzTitle]="header" nzBackIcon>
-    <ng-template #header> Créer {{ type | resourceType: true | lowercase }} </ng-template>
+    <ng-template #header>
+      Créer {{ type | resourceType : true | lowercase }}
+      <ng-container *ngIf="parentName"> dans {{ parentName }} </ng-container>
+    </ng-template>
   </nz-page-header>
 </header>
 <main>
   <nz-skeleton [nzActive]="loading" [nzLoading]="loading">
-    <ui-stepper #stepper (finished)="create()">
-      <ng-template uiStepperStep stepTitle="Choix du cercle" stepIcon="apartment" [stepValidator]="!!this.parent">
+    <ui-stepper #stepper (finished)="create()" (changed)="$event === 2 && preloadTemplates()">
+      <ng-template uiStepperStep stepTitle="Choix du cercle" stepIcon="apartment" [stepValidator]="!!this.parentId">
         <section>
           <h4>
             Sélectionnez le cercle dans lequel vous voulez ajouter
-            {{ type | resourceType: true | lowercase }}.
+            {{ type | resourceType : true | lowercase }}.
           </h4>
-          <resource-circle-tree *ngIf="tree" [tree]="tree" [(selection)]="parent" />
+          <resource-circle-tree
+            *ngIf="tree"
+            [tree]="tree"
+            [selection]="parentId ? [parentId] : []"
+            (selectionChange)="onChangeParentId($event[0])"
+          />
         </section>
       </ng-template>
       <ng-template uiStepperStep stepTitle="Informations" stepIcon="info-circle" [stepValidator]="!!infos.valid">
@@ -55,7 +63,9 @@
               nzPlaceHolder="Selectionnez une liste de topics"
               formControlName="topics"
             >
-              <nz-option *ngFor="let item of topics; trackBy: trackById" [nzLabel]="item.name" [nzValue]="item.id" />
+              @for (item of topics; track item.id) {
+              <nz-option [nzLabel]="item.name" [nzValue]="item.id" />
+              }
             </nz-select>
             <nz-select
               nzAllowClear
@@ -65,9 +75,122 @@
               nzPlaceHolder="Selectionnez une liste de levels"
               formControlName="levels"
             >
-              <nz-option *ngFor="let item of levels; trackBy: trackById" [nzLabel]="item.name" [nzValue]="item.id" />
+              @for (item of levels; track item.id) {
+              <nz-option [nzLabel]="item.name" [nzValue]="item.id" />
+              }
             </nz-select>
           </form>
+        </section>
+      </ng-template>
+      <ng-template
+        *ngIf="type === 'EXERCISE'"
+        uiStepperStep
+        stepTitle="Mode d'édition"
+        stepIcon="edit"
+        [stepValidator]="!!editionMode"
+      >
+        <section>
+          <h4>Choisissez le mode d'édition de votre exercice :</h4>
+          <div class="edition-modes">
+            <div
+              class="edition-mode"
+              [ngClass]="{
+                selected: editionMode === 'template',
+                disabled: !templateSources.length
+              }"
+            >
+              <div class="icon-holder">
+                <i nz-icon nzType="layout" nzTheme="outline"></i>
+              </div>
+              <h5>Partir d'un template</h5>
+              <p>Partez d'un modèle d'exercice complet et personnalisable sans compétence en programmation.</p>
+              <button nz-button (click)="editionMode = 'template'">
+                @if (!templateSources.length ) { Aucun template disponible } @else { Choisir }
+              </button>
+            </div>
+            <div class="edition-mode" [class.selected]="editionMode === 'scratch'">
+              <div class="icon-holder">
+                <i nz-icon nzType="code" nzTheme="outline"></i>
+              </div>
+              <h5>Créer de zéro</h5>
+              <p>
+                Un environnement de développement complet pour programmer votre exercice dans le langage <b>ple</b>.
+              </p>
+              <button nz-button (click)="editionMode = 'scratch'">Choisir</button>
+            </div>
+          </div>
+          <br />
+          <p *ngIf="editionMode === 'template'">
+            En continuant, vous allez sélectionner votre template avant de créer l'exercice. Vous souhaitez créer votre
+            propre template ?
+            <a href="docs/main/doc/programing/exercise/config" target="_blank">Consultez la documentation</a> pour en
+            savoir plus.
+          </p>
+          <p *ngIf="editionMode === 'scratch'">
+            En continuant, vous serez dirigé vers la page de votre nouvel exercice. Vous pouvez consulter la
+            documentation dédiée à la programmation des exercices
+            <a href="docs/main/doc/programing/exercise/langage" target="_blank">sur cette page</a> , ou bien directement
+            depuis l'environnement de développement.
+          </p>
+        </section>
+      </ng-template>
+      <ng-template
+        *ngIf="editionMode === 'template'"
+        uiStepperStep
+        stepTitle="Template"
+        stepIcon="snippets"
+        [stepValidator]="!!template"
+      >
+        <section class="section-template">
+          @if (loadingTemplates) {
+          <nz-spin *ngIf="loadingTemplates" nzTip="Chargement des templates..." />
+          } @else { @if (templateSources.length > 1) {
+          <h4>Sélectionnez un template puis cliquez sur créer.</h4>
+          <div class="template-circle-filter">
+            @for (source of templateSources; track source.circle.id) {
+            <nz-tag
+              *ngIf="source.count > 0"
+              nzMode="checkable"
+              [nzChecked]="selectedTemplateSources.isSelected(source)"
+              (nzCheckedChange)="selectedTemplateSources.toggle(source)"
+            >
+              <ng-container [ngPlural]="source.count">
+                <ng-template ngPluralCase="=1"> {{ source.circle.name }} - (1 template)</ng-template>
+                <ng-template ngPluralCase="other">
+                  {{ source.circle.name }} - ({{ source.count }} templates)</ng-template
+                >
+              </ng-container>
+            </nz-tag>
+            }
+          </div>
+          }
+          <nz-collapse [nzBordered]="false" *ngIf="!loadingTemplates">
+            @for (source of selectedTemplateSources.selected; track source.circle.id) {
+            <nz-collapse-panel [nzHeader]="source.circle.name" [nzActive]="source.count > 0">
+              <div class="template-grid">
+                @for (item of source.templates; track item.id) {
+                <div>
+                  <resource-item [item]="item" editable="false" simple />
+                  <button
+                    [nzType]="item.id === template?.id ? 'primary' : 'default'"
+                    nz-button
+                    (click)="template = item"
+                  >
+                    Choisir
+                  </button>
+                </div>
+                }
+              </div>
+            </nz-collapse-panel>
+            }
+          </nz-collapse>
+          }
+
+          <ng-container *ngIf="template">
+            <br />
+            <h4>Votre nouvel exercice sera créé à partir du template suivant :</h4>
+            <resource-item [item]="template" editable="false" simple />
+          </ng-container>
         </section>
       </ng-template>
     </ui-stepper>
@@ -78,16 +201,18 @@
     <nz-spin nzTip="Création en cours..."></nz-spin>
   </ng-container>
   <ng-template #showControls>
-    <button *ngIf="!stepper.isFirst" nz-button [disabled]="stepper.isFirst" (click)="stepper.prevStep()">
-      Précedent
-    </button>
-    <button
-      nz-button
-      nzType="primary"
-      [disabled]="!stepper.isValid"
-      (click)="infos.markAllAsTouched(); stepper.nextStep()"
-    >
-      {{ stepper.isLast ? 'Créer' : 'Suivant' }}
-    </button>
+    <ng-container *ngIf="!loading">
+      <button *ngIf="!stepper.isFirst" nz-button [disabled]="stepper.isFirst" (click)="stepper.prevStep()">
+        Précedent
+      </button>
+      <button
+        nz-button
+        nzType="primary"
+        [disabled]="!stepper.isValid"
+        (click)="infos.markAllAsTouched(); stepper.nextStep()"
+      >
+        {{ stepper.isLast ? 'Créer' : 'Suivant' }}
+      </button>
+    </ng-container>
   </ng-template>
 </footer>

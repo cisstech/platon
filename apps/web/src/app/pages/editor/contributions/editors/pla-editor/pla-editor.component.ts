@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop'
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, inject } from '@angular/core'
 import { FormBuilder, Validators } from '@angular/forms'
 import { Editor, FileService, OpenRequest } from '@cisstech/nge-ide/core'
@@ -41,6 +42,11 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
         review: true,
         validation: true,
       },
+      security: {
+        noCopyPaste: false,
+        terminateOnLeavePage: false,
+        terminateOnLoseFocus: false,
+      },
     },
     exerciseGroups: {},
   }
@@ -70,6 +76,11 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
     feedback: this.fb.group({
       review: [!!this.activity?.settings?.feedback?.review],
       validation: [!!this.activity?.settings?.feedback?.validation],
+    }),
+    security: this.fb.group({
+      noCopyPaste: [!!this.activity?.settings?.security?.noCopyPaste],
+      terminateOnLeavePage: [!!this.activity?.settings?.security?.terminateOnLeavePage],
+      terminateOnLoseFocus: [!!this.activity?.settings?.security?.terminateOnLoseFocus],
     }),
   })
 
@@ -153,6 +164,19 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
     this.onChangeData()
   }
 
+  protected onReorderGroups(event: CdkDragDrop<ActivityExercise[][]>) {
+    if (this.readOnly) return
+    moveItemInArray(this.exerciseGroups, event.previousIndex, event.currentIndex)
+    this.selectGroup(event.currentIndex)
+    this.onChangeData()
+  }
+
+  protected onReorderExercises(event: CdkDragDrop<ActivityExercise[]>) {
+    if (this.readOnly) return
+    moveItemInArray(this.selectedGroup as ActivityExercise[], event.previousIndex, event.currentIndex)
+    this.onChangeData()
+  }
+
   protected onChangeData(): void {
     const { value } = this.form
 
@@ -188,6 +212,11 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
           review: value.feedback?.review || false,
           validation: value.feedback?.validation || false,
         },
+        security: {
+          noCopyPaste: value.security?.noCopyPaste || false,
+          terminateOnLeavePage: value.security?.terminateOnLeavePage || false,
+          terminateOnLoseFocus: value.security?.terminateOnLoseFocus || false,
+        },
       },
       exerciseGroups: this.exerciseGroups.reduce((acc, group, index) => {
         acc[index] = group
@@ -198,6 +227,8 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
     this.fileService.update(this.request.uri, JSON.stringify(this.activity, null, 2))
 
     this.exerciseGroups = Object.values(this.activity.exerciseGroups)
+
+    this.changeDetectorRef.markForCheck()
   }
 
   protected trackByIndex(index: number) {
@@ -209,7 +240,7 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
   }
 
   private async createEditor(): Promise<void> {
-    const file = this.fileService.find(this.request.uri)
+    const file = this.request.file!
     this.readOnly = file?.readOnly
 
     const content = await this.fileService.open(this.request.uri)
@@ -240,6 +271,11 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
       feedback: {
         review: this.activity.settings?.feedback?.review,
         validation: this.activity.settings?.feedback?.validation,
+      },
+      security: {
+        noCopyPaste: this.activity.settings?.security?.noCopyPaste,
+        terminateOnLeavePage: this.activity.settings?.security?.terminateOnLeavePage,
+        terminateOnLoseFocus: this.activity.settings?.security?.terminateOnLoseFocus,
       },
     })
 

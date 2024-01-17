@@ -10,6 +10,7 @@ import {
   PLSourceFile,
   Variables,
   extractExercisesFromActivityVariables,
+  patchExerciseMeta,
 } from '@platon/feature/compiler'
 import {
   ActivityEntity,
@@ -32,7 +33,13 @@ import {
 } from '@platon/feature/player/common'
 import { ResourceFileService } from '@platon/feature/resource/server'
 import { AnswerStates, answerStateFromGrade } from '@platon/feature/result/common'
-import { AnswerService, CorrectionEntity, SessionEntity, SessionService } from '@platon/feature/result/server'
+import {
+  AnswerService,
+  CorrectionEntity,
+  ExerciseSession,
+  SessionEntity,
+  SessionService,
+} from '@platon/feature/result/server'
 import { DataSource, EntityManager, In } from 'typeorm'
 import { withAnswersInSession } from './player-answer'
 import { withActivityFeedbacksGuard, withMultiSessionGuard, withSessionAccessGuard } from './player-guards'
@@ -43,7 +50,7 @@ import { PreviewOuputDTO } from './player.dto'
 import { SandboxService } from './sandboxes/sandbox.service'
 
 type ActionHandler = (
-  input: EvalExerciseInput,
+  session: ExerciseSession,
   user?: User
 ) => Promise<ExercisePlayer | [ExercisePlayer, PlayerNavigation]>
 
@@ -77,20 +84,15 @@ export class PlayerService {
     private readonly resourceFileService: ResourceFileService
   ) {}
 
-  /**
-   * Builds the given ExerciseSession
-   */
-  async buildExerciseSession(exerciseSession: SessionEntity): Promise<SessionEntity> {
-    const { envid, variables } = await this.sandboxService.build(exerciseSession.source as PLSourceFile)
-    exerciseSession.envid = envid
-    exerciseSession.variables = variables
-    exerciseSession.isBuilt = true
-    await this.sessionService.update(exerciseSession.id, {
-      envid: envid || undefined,
-      variables: variables,
-      isBuilt: true,
+  async answers(sessionId: string): Promise<ExercisePlayer[]> {
+    const session = await this.sessionService.findById<ExerciseVariables>(sessionId, {
+      parent: true,
+      activity: true,
+      correction: true,
     })
-    return exerciseSession
+    if (!session) throw new NotFoundResponse('Session not found')
+    const answers = await this.answerService.findAllOfSession(sessionId)
+    return answers.map((answer) => withExercisePlayer(session, answer))
   }
 
   /**
@@ -104,32 +106,24 @@ export class PlayerService {
    */
   async preview(input: PreviewInput, user?: UserEntity): Promise<PreviewOuputDTO> {
     const { source, resource } = await this.resourceFileService.compile({
-      resourceId: input.resource,
       version: input.version,
+      resourceId: input.resource,
       overrides: input.overrides,
     })
+
     if (!resource.publicPreview && (!user || !isTeacherRole(user?.role))) {
       throw new ForbiddenResponse('You are not allowed to preview this resource')
     }
+
     let session = await this.createNewSession({ source })
     if (resource.type === 'EXERCISE') {
-      session = await this.buildExerciseSession(session)
+      session = await this.buildExercise(session)
     }
+
     return {
       exercise: resource.type === 'EXERCISE' ? withExercisePlayer(session) : undefined,
       activity: resource.type === 'ACTIVITY' ? withActivityPlayer(session) : undefined,
     }
-  }
-
-  async answers(sessionId: string): Promise<ExercisePlayer[]> {
-    const session = await this.sessionService.findById(sessionId, {
-      parent: true,
-      activity: true,
-      correction: true,
-    })
-    if (!session) throw new NotFoundResponse('Session not found')
-    const answers = await this.answerService.findAllOfSession(sessionId)
-    return answers.map((answer) => withExercisePlayer(session, answer))
   }
 
   async playActivity(activityId: string, user: User): Promise<PlayActivityOuput> {
@@ -168,13 +162,14 @@ export class PlayerService {
         )
 
         if (!exerciseSession.isBuilt) {
-          exerciseSession = await this.buildExerciseSession(exerciseSession)
+          exerciseSession = await this.buildExercise(exerciseSession)
         }
+
         exerciseSession.parent = activitySession
         exerciseSession.startedAt = exerciseSession.startedAt || new Date()
-        await this.sessionService.update(exerciseSession.id, {
-          startedAt: exerciseSession.startedAt,
-        })
+
+        await this.sessionService.update(exerciseSession.id, { startedAt: exerciseSession.startedAt })
+
         return withExercisePlayer(exerciseSession)
       })
     )
@@ -195,7 +190,7 @@ export class PlayerService {
     }
   }
 
-  async terminateSession(sessionId: string, user?: User): Promise<PlayActivityOuput> {
+  async terminate(sessionId: string, user?: User): Promise<PlayActivityOuput> {
     const session = withSessionAccessGuard(
       await this.sessionService.findById(sessionId, { parent: true, activity: true }),
       user
@@ -225,111 +220,90 @@ export class PlayerService {
   }
 
   async evaluate(input: EvalExerciseInput, user?: User): Promise<ExercisePlayer | [ExercisePlayer, PlayerNavigation]> {
-    return this.actionHandlers[input.action](input, user)
-  }
-
-  async reroll(input: EvalExerciseInput, user?: User): Promise<ExercisePlayer> {
-    const exerciseSession = withSessionAccessGuard(
-      await this.sessionService.findById<ExerciseVariables>(input.sessionId, {
-        parent: true,
-        activity: true,
-      }),
+    const session = withSessionAccessGuard<ExerciseVariables>(
+      await this.sessionService.findById<ExerciseVariables>(input.sessionId, { parent: true, activity: true }),
       user
     )
 
+    const grades = await this.answerService.findGradesOfSession(session.id)
+
+    withAnswersInSession(session, input.answers || {})
+    patchExerciseMeta(session.variables, () => ({ grades, totalAttempts: session.attempts }))
+
+    return this.actionHandlers[input.action](session, user)
+  }
+
+  async reroll(exerciseSession: ExerciseSession): Promise<ExercisePlayer> {
     const envid = exerciseSession.envid
     const source = extractExerciseSourceFromSession(exerciseSession)
-    const variables = source?.variables ?? exerciseSession.variables
 
-    exerciseSession.variables = variables
-    if (variables.builder) {
-      variables.seed = Date.now() % 100
-      const response = await this.sandboxService.run({ envid, variables }, variables.builder)
-      exerciseSession.variables = response.variables
+    let variables = (source?.variables as ExerciseVariables) ?? exerciseSession.variables
+    variables.seed = Date.now() % 100
+
+    if (variables.builder?.trim()) {
+      patchExerciseMeta(variables, () => ({ isInitialBuild: false }))
+      const output = await this.sandboxService.run({ envid, variables }, variables.builder)
+      variables = output.variables as ExerciseVariables
     }
 
     await this.sessionService.update(exerciseSession.id, {
-      variables: exerciseSession.variables,
+      variables: (exerciseSession.variables = variables),
     })
 
     return withExercisePlayer(exerciseSession)
   }
 
-  async nextHint(input: EvalExerciseInput, user?: User): Promise<ExercisePlayer> {
-    const exerciseSession = withSessionAccessGuard(
-      await this.sessionService.findById<ExerciseVariables>(input.sessionId, {
-        parent: true,
-        activity: true,
-      }),
-      user
-    )
-
+  async nextHint(exerciseSession: ExerciseSession): Promise<ExercisePlayer> {
     const envid = exerciseSession.envid
     let variables = exerciseSession.variables
 
     if (Array.isArray(variables.hint)) {
-      variables['.meta'] = {
-        ...(variables['.meta'] || {}),
-        consumedHints: (variables['.meta']?.consumedHints || 0) + 1,
+      if (variables.hint.length) {
+        patchExerciseMeta(variables, (meta) => ({ consumedHints: meta.consumedHints + 1 }))
       }
-    } else if (variables.hint?.next) {
-      const response = await this.sandboxService.run({ envid, variables }, variables.hint.next)
-      variables = response.variables as ExerciseVariables
+    } else if (variables.hint?.next?.trim()) {
+      const output = await this.sandboxService.run({ envid, variables }, variables.hint.next)
+      patchExerciseMeta(output.variables, (meta) => ({ consumedHints: meta.consumedHints + 1 }))
+      variables = output.variables as ExerciseVariables
     }
 
-    exerciseSession.variables = variables
-
-    await this.sessionService.update(exerciseSession.id, { variables })
+    await this.sessionService.update(exerciseSession.id, {
+      variables: (exerciseSession.variables = variables),
+    })
 
     return withExercisePlayer(exerciseSession)
   }
 
-  async checkAnswer(input: EvalExerciseInput, user?: User): Promise<[ExercisePlayer, PlayerNavigation]> {
-    const exerciseSession = withSessionAccessGuard(
-      await this.sessionService.findById<ExerciseVariables>(input.sessionId, {
-        parent: true,
-        activity: true,
-      }),
-      user
-    )
-
+  async checkAnswer(exerciseSession: ExerciseSession): Promise<[ExercisePlayer, PlayerNavigation]> {
     const { activitySession, activityNavigation } = withMultiSessionGuard(exerciseSession)
 
     // EVAL ANSWERS
 
-    withAnswersInSession(exerciseSession, input.answers || {})
-
     const envid = exerciseSession.envid
     let variables = exerciseSession.variables
+    variables.feedback = { type: 'info', content: '' }
 
-    const output = await this.sandboxService.run(
-      {
-        envid,
-        variables: { ...variables, feedback: {} },
-      },
-      variables.grader
-    )
+    const output = await this.sandboxService.run({ envid, variables }, variables.grader)
     const grade = Number.parseInt(output.variables.grade) ?? -1
+    const increment = grade > -1 ? 1 : 0
 
     variables = output.variables as ExerciseVariables
 
-    const attemptIncrement = grade > -1 ? 1 : 0
-    variables['.meta'] = {
-      ...(variables['.meta'] || {}),
-      attempts: (variables['.meta']?.attempts || 0) + attemptIncrement,
-    }
+    patchExerciseMeta(variables, (meta) => ({
+      attempts: meta.attempts + increment,
+    }))
 
     exerciseSession.grade = Math.max(grade, exerciseSession.grade ?? -1)
-    exerciseSession.attempts += attemptIncrement
+    exerciseSession.attempts += increment
     exerciseSession.variables = variables
 
     // SAVE ANSWER WITH GRADE
 
     const answer = await this.answerService.create({
-      sessionId: exerciseSession.id,
-      userId: exerciseSession.userId,
-      variables: exerciseSession.variables,
       grade,
+      userId: exerciseSession.userId,
+      sessionId: exerciseSession.id,
+      variables: exerciseSession.variables,
     })
 
     const promises: Promise<unknown>[] = [
@@ -364,7 +338,7 @@ export class PlayerService {
         activitySession.grade /= childs.length
       }
 
-      activitySession.attempts += attemptIncrement
+      activitySession.attempts += increment
       promises.push(
         this.sessionService.update(activitySession.id, {
           grade: activitySession.grade,
@@ -386,40 +360,39 @@ export class PlayerService {
     ]
   }
 
-  async nextExercise(input: EvalExerciseInput, user?: User): Promise<ExercisePlayer> {
-    const exerciseSession = withSessionAccessGuard(
-      await this.sessionService.findById(input.sessionId, { parent: true, activity: true }),
-      user
-    )
-
+  async nextExercise(exerciseSession: ExerciseSession): Promise<ExercisePlayer> {
     const activitySession = exerciseSession.parent
     if (!activitySession) {
       throw new ForbiddenResponse(`This action can be called only with dynamic activities.`)
     }
 
     activitySession.activity = activitySession.activity ?? exerciseSession.activity
-    withAnswersInSession(exerciseSession, input.answers || {})
-
-    // TODO define the api for dynamic activities
 
     return withExercisePlayer(exerciseSession)
   }
 
-  async showSolution(input: EvalExerciseInput, user?: User): Promise<ExercisePlayer> {
-    const exerciseSession = withSessionAccessGuard(
-      await this.sessionService.findById(input.sessionId, { parent: true, activity: true }),
-      user
-    )
-
-    withAnswersInSession(exerciseSession, input.answers || {})
-
-    const variables = exerciseSession.variables as ExerciseVariables
-    variables['.meta'] = {
-      ...(variables['.meta'] || {}),
-      showSolution: true,
-    }
-
+  async showSolution(exerciseSession: ExerciseSession): Promise<ExercisePlayer> {
+    patchExerciseMeta(exerciseSession.variables, () => ({ showSolution: true }))
     return withExercisePlayer(exerciseSession)
+  }
+
+  /**
+   * Builds the given ExerciseSession
+   */
+  private async buildExercise(exerciseSession: ExerciseSession): Promise<SessionEntity> {
+    const { envid, variables } = await this.sandboxService.build(exerciseSession.source!)
+
+    exerciseSession.envid = envid
+    exerciseSession.isBuilt = true
+    exerciseSession.variables = variables
+
+    await this.sessionService.update(exerciseSession.id, {
+      envid: envid || undefined,
+      variables,
+      isBuilt: true,
+    })
+
+    return exerciseSession
   }
 
   /**
@@ -455,13 +428,7 @@ export class PlayerService {
           manager
         )
 
-        await this.sessionService.update(
-          session.id,
-          {
-            variables: session.variables,
-          },
-          manager
-        )
+        await this.sessionService.update(session.id, { variables: session.variables as any }, manager)
       }
 
       return session
@@ -529,9 +496,7 @@ export class PlayerService {
       })
       this.logger.log(`Delete ${sessions.length} sessions`)
       await Promise.all([
-        manager.delete(SessionEntity, {
-          activityId: activity.id,
-        }),
+        manager.delete(SessionEntity, { activityId: activity.id }),
         manager.delete(CorrectionEntity, {
           id: In(sessions.map((s) => s.correctionId).filter((id) => !!id) as string[]),
         }),

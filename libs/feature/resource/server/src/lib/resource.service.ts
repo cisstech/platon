@@ -12,19 +12,24 @@ import {
   ResourceTypes,
 } from '@platon/feature/resource/common'
 import { isUUID4 } from '@platon/shared/server'
-import { DataSource, EntityManager, Repository } from 'typeorm'
+import { DataSource, EntityManager, In, Repository } from 'typeorm'
 import { Optional } from 'typescript-optional'
 import { ResourceMemberEntity } from './members/member.entity'
 import { CreateResourceDTO, UpdateResourceDTO } from './resource.dto'
 import { ResourceEntity } from './resource.entity'
 import { ResourceWatcherEntity } from './watchers'
 import { ResourceDependencyEntity } from './dependency'
+import { ResourceMetaEntity } from './metadata/metadata.entity'
+import { ResourceStatisticEntity } from './statistics'
 
 @Injectable()
 export class ResourceService {
   constructor(
     @InjectRepository(ResourceEntity)
     private readonly repository: Repository<ResourceEntity>,
+
+    @InjectRepository(ResourceMetaEntity)
+    private readonly metadataRepo: Repository<ResourceMetaEntity>,
     private readonly dataSource: DataSource,
     private readonly levelService: LevelService,
     private readonly topicService: TopicService
@@ -32,11 +37,25 @@ export class ResourceService {
 
   async tree(circles: ResourceEntity[]): Promise<CircleTree> {
     const root = circles.find((c) => !c.parentId) as ResourceEntity
+    const metas = circles.length
+      ? await this.metadataRepo.find({
+          where: {
+            resourceId: In(circles.map((c) => c.id)),
+          },
+        })
+      : []
+
+    const metasMap = metas.reduce((acc, meta) => {
+      acc[meta.resourceId] = meta
+      return acc
+    }, {} as Record<string, ResourceMetaEntity>)
+
     const tree: CircleTree = {
       id: root.id,
       name: root.name,
       code: root.code,
       children: [],
+      versions: metasMap[root.id]?.meta?.versions?.map((v) => v.tag) || [],
       permissions: {
         read: true,
         write: true,
@@ -54,6 +73,7 @@ export class ResourceService {
           id: child.id,
           name: child.name,
           code: child.code,
+          versions: metasMap[child.id]?.meta?.versions?.map((v) => v.tag) || [],
           permissions: {
             read: true,
             write: true,
@@ -181,7 +201,7 @@ export class ResourceService {
     }
 
     if (filters.order === ResourceOrderings.RELEVANCE) {
-      query.leftJoin('ResourceStats', 'stats', 'stats.id = resource.id')
+      query.leftJoinAndSelect(ResourceStatisticEntity, 'stats', 'stats.id = resource.id')
     }
 
     if (filters.members?.length) {
@@ -212,7 +232,6 @@ export class ResourceService {
     }
 
     if (filters.usedBy?.length) {
-      console.log(filters.usedBy)
       query.innerJoin(
         ResourceDependencyEntity,
         'dependency',
@@ -300,18 +319,24 @@ export class ResourceService {
     }
 
     if (filters.offset) {
-      query.offset(filters.offset)
+      query.skip(filters.offset)
     }
 
     if (filters.limit) {
-      query.limit(filters.limit)
+      query.take(filters.limit)
     }
 
     return query.getManyAndCount()
   }
 
   async create(input: Partial<ResourceEntity>): Promise<ResourceEntity> {
-    return this.repository.save(this.repository.create(input))
+    const parent = (await this.findById(input.parentId!)).get()
+    return this.repository.save(
+      this.repository.create({
+        ...input,
+        personal: parent.personal,
+      })
+    )
   }
 
   async update(idOrResource: string | ResourceEntity, changes: Partial<ResourceEntity>): Promise<ResourceEntity> {

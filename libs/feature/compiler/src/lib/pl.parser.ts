@@ -30,10 +30,7 @@ export interface PLValue {
 
 export class PLArray implements PLValue {
   readonly type = 'PLArray'
-  constructor(
-    readonly value: PLValue[],
-    readonly lineno: number
-  ) {}
+  constructor(readonly value: PLValue[], readonly lineno: number) {}
 
   toRaw() {
     return this.value.map((value) => value.toRaw())
@@ -51,10 +48,7 @@ export class PLArray implements PLValue {
 
 export class PLObject implements PLValue {
   readonly type = 'PLArray'
-  constructor(
-    readonly value: Record<string, PLValue>,
-    readonly lineno: number
-  ) {}
+  constructor(readonly value: Record<string, PLValue>, readonly lineno: number) {}
 
   toRaw() {
     return Object.keys(this.value).reduce((acc, curr) => {
@@ -75,10 +69,7 @@ export class PLObject implements PLValue {
 
 export class PLString implements PLValue {
   readonly type = 'PLArray'
-  constructor(
-    readonly value: string,
-    readonly lineno: number
-  ) {}
+  constructor(readonly value: string, readonly lineno: number) {}
   toRaw() {
     return this.value
   }
@@ -89,10 +80,7 @@ export class PLString implements PLValue {
 
 export class PLNumber implements PLValue {
   readonly type = 'PLNumber'
-  constructor(
-    readonly value: number,
-    readonly lineno: number
-  ) {}
+  constructor(readonly value: number, readonly lineno: number) {}
   toRaw() {
     return this.value
   }
@@ -103,10 +91,7 @@ export class PLNumber implements PLValue {
 
 export class PLBoolean implements PLValue {
   readonly type = 'PLBoolean'
-  constructor(
-    readonly value: boolean,
-    readonly lineno: number
-  ) {}
+  constructor(readonly value: boolean, readonly lineno: number) {}
   toRaw() {
     return this.value
   }
@@ -117,10 +102,7 @@ export class PLBoolean implements PLValue {
 
 export class PLComponent implements PLValue {
   readonly type = 'PLComponent'
-  constructor(
-    readonly value: string,
-    readonly lineno: number
-  ) {}
+  constructor(readonly value: string, readonly lineno: number) {}
   toRaw() {
     return { cid: uuidv4(), selector: this.value }
   }
@@ -131,10 +113,7 @@ export class PLComponent implements PLValue {
 
 export class PLDict implements PLValue {
   readonly type = 'PLDict'
-  constructor(
-    readonly value: string,
-    readonly lineno: number
-  ) {}
+  constructor(readonly value: string, readonly lineno: number) {}
   toRaw() {
     return `@extends ${this.value}`
   }
@@ -146,10 +125,7 @@ export class PLDict implements PLValue {
 
 export class PLFileURL implements PLValue {
   readonly type = 'PLFileURL'
-  constructor(
-    readonly value: string,
-    readonly lineno: number
-  ) {}
+  constructor(readonly value: string, readonly lineno: number) {}
   toRaw() {
     return `@copyurl ${this.value}`
   }
@@ -160,10 +136,7 @@ export class PLFileURL implements PLValue {
 
 export class PLReference implements PLValue {
   readonly type = 'PLReference'
-  constructor(
-    readonly value: string,
-    readonly lineno: number
-  ) {}
+  constructor(readonly value: string, readonly lineno: number) {}
   toRaw() {
     return this.value
   }
@@ -174,10 +147,7 @@ export class PLReference implements PLValue {
 
 export class PLFileContent implements PLValue {
   readonly type = 'PLFileContent'
-  constructor(
-    readonly value: string,
-    readonly lineno: number
-  ) {}
+  constructor(readonly value: string, readonly lineno: number) {}
   toRaw() {
     return `@copycontent ${this.value}`
   }
@@ -200,10 +170,7 @@ export class ExtendsNode implements PLNode {
   readonly type = 'ExtendsNode'
   origin = ''
 
-  constructor(
-    readonly path: string,
-    readonly lineno: number
-  ) {}
+  constructor(readonly path: string, readonly lineno: number) {}
 
   async accept(visitor: PLVisitor): Promise<void> {
     await visitor.visitExtends(this, true)
@@ -214,10 +181,7 @@ export class CommentNode implements PLNode {
   readonly type = 'CommentNode'
   origin = ''
 
-  constructor(
-    readonly value: string,
-    readonly lineno: number
-  ) {}
+  constructor(readonly value: string, readonly lineno: number) {}
 
   accept(visitor: PLVisitor): Promise<void> {
     return visitor.visitComment(this)
@@ -227,10 +191,7 @@ export class CommentNode implements PLNode {
 export class IncludeNode implements PLNode {
   readonly type = 'IncludeNode'
   origin = ''
-  constructor(
-    readonly path: string,
-    readonly lineno: number
-  ) {}
+  constructor(readonly path: string, readonly lineno: number) {}
   accept(visitor: PLVisitor): Promise<void> {
     return visitor.visitInclude(this)
   }
@@ -240,11 +201,7 @@ export class AssignmentNode implements PLNode {
   readonly type = 'AssignmentNode'
   origin = ''
 
-  constructor(
-    readonly key: string,
-    readonly value: PLValue,
-    readonly lineno: number
-  ) {}
+  constructor(readonly key: string, readonly value: PLValue, readonly lineno: number) {}
 
   accept(visitor: PLVisitor): Promise<void> {
     return visitor.visitAssignment(this)
@@ -262,7 +219,7 @@ export interface PLDependency {
   abspath: string
 }
 
-export interface PLSourceFile {
+export interface PLSourceFile<TVariables = Record<string, unknown>> {
   /** Identifier of the compiler resource. */
   resource: string
 
@@ -277,7 +234,7 @@ export interface PLSourceFile {
   /**
    * All variables defined in the source file including extended variables.
    */
-  variables: Record<string, unknown>
+  variables: TVariables
 
   /** List of file added using the `@include` instruction. */
   dependencies: PLDependency[]
@@ -349,8 +306,9 @@ const $V0 = [1, 8],
   $Vg = [13, 31],
   $Vh = [5, 8, 12, 19, 26, 29, 32, 34],
   $Vi = [1, 48],
-  $Vj = [26, 32],
-  $Vk = [29, 32]
+  $Vj = [1, 49],
+  $Vk = [26, 32],
+  $Vl = [29, 32]
 
 export class PLParser extends JisonParser implements JisonParserApi {
   $?: any
@@ -454,6 +412,7 @@ export class PLParser extends JisonParser implements JisonParserApi {
     [30, 1],
     [30, 3],
     [33, 3],
+    [33, 3],
     [10, 2],
     [11, 2],
   ]
@@ -490,8 +449,8 @@ export class PLParser extends JisonParser implements JisonParserApi {
       28: $Ve,
       31: [1, 22],
     },
-    o($V4, [2, 34]),
     o($V4, [2, 35]),
+    o($V4, [2, 36]),
     {
       8: $Vf,
       12: $V5,
@@ -535,7 +494,7 @@ export class PLParser extends JisonParser implements JisonParserApi {
       27: 43,
       28: $Ve,
     },
-    { 12: $Vi, 29: [1, 45], 30: 46, 33: 47 },
+    { 12: $Vi, 18: $Vj, 29: [1, 45], 30: 46, 33: 47 },
     o($V4, [2, 10]),
     o($Vh, [2, 14]),
     { 8: $Vf, 12: $V5, 15: 34, 16: $V6, 17: $V7, 18: $V8, 19: $V9, 21: $Va, 22: $Vb, 23: $Vc, 25: $Vd, 28: $Ve },
@@ -546,20 +505,23 @@ export class PLParser extends JisonParser implements JisonParserApi {
     o($Vh, [2, 21]),
     o($Vh, [2, 22]),
     o($Vh, [2, 23]),
-    { 26: [1, 49], 32: [1, 50] },
-    o($Vj, [2, 29]),
+    { 26: [1, 50], 32: [1, 51] },
+    o($Vk, [2, 29]),
     o($Vh, [2, 25]),
-    { 29: [1, 51], 32: [1, 52] },
-    o($Vk, [2, 31]),
-    { 23: [1, 53] },
+    { 29: [1, 52], 32: [1, 53] },
+    o($Vl, [2, 31]),
+    { 23: [1, 54] },
+    { 23: [1, 55] },
     o($Vh, [2, 24]),
-    { 8: $Vf, 12: $V5, 15: 54, 16: $V6, 17: $V7, 18: $V8, 19: $V9, 21: $Va, 22: $Vb, 23: $Vc, 25: $Vd, 28: $Ve },
-    o($Vh, [2, 26]),
-    { 12: $Vi, 33: 55 },
     { 8: $Vf, 12: $V5, 15: 56, 16: $V6, 17: $V7, 18: $V8, 19: $V9, 21: $Va, 22: $Vb, 23: $Vc, 25: $Vd, 28: $Ve },
-    o($Vj, [2, 30]),
-    o($Vk, [2, 32]),
-    o($Vk, [2, 33]),
+    o($Vh, [2, 26]),
+    { 12: $Vi, 18: $Vj, 33: 57 },
+    { 8: $Vf, 12: $V5, 15: 58, 16: $V6, 17: $V7, 18: $V8, 19: $V9, 21: $Va, 22: $Vb, 23: $Vc, 25: $Vd, 28: $Ve },
+    { 8: $Vf, 12: $V5, 15: 59, 16: $V6, 17: $V7, 18: $V8, 19: $V9, 21: $Va, 22: $Vb, 23: $Vc, 25: $Vd, 28: $Ve },
+    o($Vk, [2, 30]),
+    o($Vl, [2, 32]),
+    o($Vl, [2, 33]),
+    o($Vl, [2, 34]),
   ]
   defaultActions: { [key: number]: any } = { 12: [2, 1] }
 
@@ -674,9 +636,12 @@ export class PLParser extends JisonParser implements JisonParserApi {
         this.$ = { [`${$$[$0 - 2]}`]: $$[$0] }
         break
       case 34:
-        this.$ = new IncludeNode($$[$0].trim(), yylineno + 1)
+        this.$ = { [`${$$[$0 - 2].slice(1, -1)}`]: $$[$0] }
         break
       case 35:
+        this.$ = new IncludeNode($$[$0].trim(), yylineno + 1)
+        break
+      case 36:
         this.$ = new ExtendsNode($$[$0].trim(), yylineno + 1)
         break
     }
@@ -716,7 +681,7 @@ export class PLLexer extends JisonLexer implements JisonLexerApi {
     /^(?:$)/,
     /^(?:[^\n]*\n)/,
     /^(?:\s+)/,
-    /^(?:(\/?[a-zA-Z0-9_\+\.\\]+(\s+as\s+\/?[a-zA-Z0-9_\+\.])?)+)/,
+    /^(?:(\/?[a-zA-Z0-9-_\+\.\\:]+(\s+as\s+\/?[a-zA-Z0-9-_\+\.])?)+)/,
   ]
   conditions: any = {
     MULTI_STATE: { rules: [21, 22], inclusive: true },

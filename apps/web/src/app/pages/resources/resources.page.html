@@ -29,13 +29,19 @@
           [indicators]="indicators"
         />
       </div>
-      <resource-list [items]="items" (didTapTag)="search(filters, $event)">
+      <resource-list
+        [items]="items"
+        (levelClicked)="applyTagFilter($event, 'level')"
+        (topicClicked)="applyTagFilter($event, 'topic')"
+      >
         <h2>Aucune ressource ne correspond à votre recherche</h2>
         <ul>
           <li>Vérifiez les termes de votre recherche</li>
           <li>Essayez d'autres critères de recherche</li>
         </ul>
       </resource-list>
+      <nz-spin class="spinner-pagination" nzSize="large" [nzTip]="'Chargement...'" [nzSpinning]="paginating" />
+      <div style="height: 8px" *ngIf="hasMore" viewportIntersection (intersected)="loadMore()"></div>
     </ng-container>
   </article>
   <aside>
@@ -57,7 +63,7 @@
 </main>
 
 <ng-template #spinner>
-  <nz-spin nzSimple nzSize="large" />
+  <nz-spin class="spinner-main" nzSimple nzSize="large" />
 </ng-template>
 
 <resource-filters

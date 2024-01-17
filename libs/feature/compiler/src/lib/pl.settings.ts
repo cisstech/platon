@@ -11,6 +11,9 @@ export interface ActivitySettings {
 
   /** Activity feedback options */
   feedback?: ActivityFeedbackSettings
+
+  /** Activity security options */
+  security?: ActivitySecuritySettings
 }
 
 /** Settings specific to action buttons. */
@@ -34,6 +37,21 @@ export interface ActivityFeedbackSettings {
   review?: boolean
   /** Show feedback after exercise validation. */
   validation?: boolean
+}
+
+/** Settings specific to security */
+export interface ActivitySecuritySettings {
+  noCopyPaste?: boolean
+
+  /**
+   * Terminate the activity when the user loses focus (switch tab, switch os window, click anywhere outside the activity document page)
+   */
+  terminateOnLoseFocus?: boolean
+
+  /**
+   * Terminate the activity when the user leaves the page (switch tab, switch os window...)
+   */
+  terminateOnLeavePage?: boolean
 }
 
 /**
@@ -68,5 +86,10 @@ export const defaultActivitySettings = (): ActivitySettings => ({
   },
   navigation: {
     mode: 'manual',
+  },
+  security: {
+    noCopyPaste: false,
+    terminateOnLeavePage: false,
+    terminateOnLoseFocus: false,
   },
 })

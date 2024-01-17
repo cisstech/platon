@@ -1,7 +1,12 @@
 <ui-list [items]="items" idField="id">
   <ui-list-template slot="row">
     <ng-template let-item="item">
-      <resource-item [item]="item" [simple]="simple" (didTapTag)="didTapTag.emit($event)" />
+      <resource-item
+        [item]="item"
+        [simple]="simple"
+        (levelClicked)="levelClicked.emit($event)"
+        (topicClicked)="topicClicked.emit($event)"
+      />
     </ng-template>
   </ui-list-template>
   <ui-list-template slot="empty">

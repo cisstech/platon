@@ -26,9 +26,9 @@ import { NgeMarkdownModule } from '@cisstech/nge/markdown'
 
 import { NzAlertModule } from 'ng-zorro-antd/alert'
 
-import { SafePipeModule } from '@cisstech/nge/pipes'
+import { SafePipe } from '@cisstech/nge/pipes'
 
-import { DialogModule, DialogService } from '@platon/core/browser'
+import { DialogModule, DialogService, UserAvatarComponent } from '@platon/core/browser'
 import { ExercisePlayer, PlayerActions, PlayerNavigation } from '@platon/feature/player/common'
 import { WebComponentHooks } from '@platon/feature/webcomponent'
 
@@ -37,7 +37,12 @@ import { ActivatedRoute } from '@angular/router'
 import { ExerciseTheory } from '@platon/feature/compiler'
 import { AnswerStatePipesModule } from '@platon/feature/result/browser'
 import { AnswerStates } from '@platon/feature/result/common'
-import { UiModalDrawerComponent } from '@platon/shared/ui'
+import {
+  FilePreviewSupportedPipe,
+  IsUUIDPipe,
+  UiModalDrawerComponent,
+  UiModalTemplateComponent,
+} from '@platon/shared/ui'
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton'
 import { NzSpinModule } from 'ng-zorro-antd/spin'
 import { NzStatisticModule } from 'ng-zorro-antd/statistic'
@@ -45,6 +50,7 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 import { PlayerService } from '../../api/player.service'
 import { PLAYER_EDITOR_PREVIEW } from '../../models/player.model'
 import { PlayerCommentsComponent } from '../player-comments/player-comments.component'
+import { PlayerTheoryComponent } from '../player-theory/player-theory.component'
 
 type Action = {
   icon: string
@@ -92,11 +98,15 @@ type FullscreenElement = HTMLElement & {
     NzStatisticModule,
     MatExpansionModule,
 
+    SafePipe,
+    IsUUIDPipe,
     DialogModule,
-    SafePipeModule,
+    UserAvatarComponent,
     NgeMarkdownModule,
     UiModalDrawerComponent,
-
+    UiModalTemplateComponent,
+    PlayerTheoryComponent,
+    FilePreviewSupportedPipe,
     AnswerStatePipesModule,
     PlayerCommentsComponent,
   ],
@@ -148,7 +158,7 @@ export class PlayerExerciseComponent implements OnInit, OnChanges {
   protected index = 0
   protected loading = true
   protected fullscreen = false
-
+  protected selectedTheory?: ExerciseTheory
   protected runningAction?: PlayerActions
 
   protected get primaryActions(): Action[] {
@@ -214,7 +224,7 @@ export class PlayerExerciseComponent implements OnInit, OnChanges {
         icon: 'lightbulb',
         label: 'Aide',
         tooltip: 'Aide',
-        visible: !!this.player.hints,
+        visible: this.player.settings?.actions?.hints && !!this.player.hints,
         disabled: this.disabled || !!this.runningAction,
         playerAction: PlayerActions.NEXT_HINT,
         run: async () => {

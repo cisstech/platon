@@ -1,0 +1,11 @@
+<nz-form-item nzRequired>
+  <nz-form-label [nzSpan]="4" nzLabelAlign="left" for="min">Saisie multiligne</nz-form-label>
+  <nz-form-control>
+    <label
+      nz-checkbox
+      [(ngModel)]="options.multiline"
+      (ngModelChange)="notifyOptionsChange?.(options)"
+      [nzDisabled]="disabled"
+    ></label>
+  </nz-form-control>
+</nz-form-item>

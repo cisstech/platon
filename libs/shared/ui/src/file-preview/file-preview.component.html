@@ -1,0 +1,40 @@
+@if (isImage) {
+<img [src]="src" alt="Image Preview" class="image-viewer" />
+} @else if (isVideo) {
+<video controls class="video-player">
+  <source [src]="src" type="video/mp4" />
+  Your browser does not support the video tag.
+</video>
+} @else if (isText) {
+<nge-markdown [file]="src" />
+} @else if (isPdf) {
+<div class="pdf-navigation">
+  <button nz-button (click)="onPrevPage()" [disabled]="currentPage <= 1">
+    <span nz-icon nzType="left" nzTheme="outline"></span>
+  </button>
+  <nz-input-number-group [nzAddOnAfter]="' / ' + totalPages">
+    <nz-input-number
+      [nzMin]="1"
+      [nzMax]="totalPages"
+      [(ngModel)]="currentPage"
+      (ngModelChange)="goToPage($event)"
+      [nzStep]="1"
+    />
+  </nz-input-number-group>
+  <button nz-button (click)="onNextPage()" [disabled]="currentPage >= totalPages">
+    <span nz-icon nzType="right" nzTheme="outline"></span>
+  </button>
+  <button nz-button (click)="zoomIn()">
+    <span nz-icon nzType="zoom-in" nzTheme="outline"></span>
+  </button>
+  <button nz-button (click)="zoomOut()">
+    <span nz-icon nzType="zoom-out" nzTheme="outline"></span>
+  </button>
+</div>
+<div class="pdf-viewer">
+  <canvas #pdfCanvas id="pdfCanvas"></canvas>
+</div>
+
+} @else {
+<div>Unsupported file format</div>
+}

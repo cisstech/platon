@@ -1,0 +1,19 @@
+<nz-form-item nzRequired>
+  <nz-form-control>
+    <nz-form-label [nzSpan]="24" nzLabelAlign="left" for="choices">Entrez une liste de valeurs</nz-form-label>
+    <nz-form-control>
+      <ui-tag-list
+        addLabel="Ajouter"
+        [small]="false"
+        [vertical]="true"
+        [multiline]="!!options?.multiline"
+        [tags]="value"
+        [editable]="!disabled"
+        (edit)="editValue($event.index, $event.value)"
+        (reorder)="notifyValueChange?.($event)"
+        (remove)="removeValue($event)"
+        (create)="addValue($event)"
+      />
+    </nz-form-control>
+  </nz-form-control>
+</nz-form-item>

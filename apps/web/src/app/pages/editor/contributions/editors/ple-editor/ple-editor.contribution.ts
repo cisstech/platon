@@ -1,14 +1,12 @@
 import { Injectable, Injector, NgModule } from '@angular/core'
 import { CONTRIBUTION, EditorService, ICommand, IContribution } from '@cisstech/nge-ide/core'
 import { CodIcon } from '@cisstech/nge/ui/icon'
-import { Subscription } from 'rxjs'
+import { EXERCISE_MAIN_FILE } from '@platon/feature/compiler'
 import { EditorPresenter } from '../../../editor.presenter'
 import { PleEditor } from './ple-editor'
-import { EXERCISE_MAIN_FILE } from '@platon/feature/compiler'
 
 @Injectable()
 export class Contribution implements IContribution {
-  private readonly subscriptions: Subscription[] = []
   readonly id = 'platon.contrib.ple'
 
   activate(injector: Injector) {
@@ -73,10 +71,6 @@ export class Contribution implements IContribution {
         }
       })()
     )
-  }
-
-  deactivate(): void | Promise<void> {
-    this.subscriptions.forEach((s) => s.unsubscribe())
   }
 }
 

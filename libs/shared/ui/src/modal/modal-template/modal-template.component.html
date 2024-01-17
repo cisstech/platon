@@ -1,10 +1,7 @@
 <nz-modal
   *ngIf="visible"
   [(nzVisible)]="visible"
-  [nzBodyStyle]="{
-    height: height ?? 'auto',
-    overflow
-  }"
+  [nzBodyStyle]="bodyStyle"
   nzClassName="ui-modal-template"
   [nzWidth]="width ?? 'auto'"
   [nzTitle]="title"

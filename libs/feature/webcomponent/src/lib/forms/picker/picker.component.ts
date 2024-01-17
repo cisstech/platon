@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Injector, Input } from '@angular/core'
+import { ChangeDetectionStrategy, Component, EventEmitter, Injector, Input, Output } from '@angular/core'
 import { WebComponent, WebComponentHooks } from '../../web-component'
 import { PickerComponentDefinition, PickerState } from './picker'
 
@@ -11,5 +11,7 @@ import { PickerComponentDefinition, PickerState } from './picker'
 @WebComponent(PickerComponentDefinition)
 export class PickerComponent implements WebComponentHooks<PickerState> {
   @Input() state!: PickerState
+  @Output() stateChange = new EventEmitter<PickerState>()
+
   constructor(readonly injector: Injector) {}
 }

@@ -19,5 +19,6 @@ export class ResourceListComponent {
   @Input() items: Resource[] = []
   @Input() simple = false
 
-  @Output() didTapTag = new EventEmitter<string>()
+  @Output() levelClicked = new EventEmitter<string>()
+  @Output() topicClicked = new EventEmitter<string>()
 }

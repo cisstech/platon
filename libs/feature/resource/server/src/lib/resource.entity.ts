@@ -75,6 +75,14 @@ export class ResourceEntity extends BaseEntity {
   @JoinColumn({ name: 'parent_id' })
   parent?: ResourceEntity
 
+  @Index('Resources_parent_idx')
+  @Column({ name: 'template_id', nullable: true })
+  templateId?: string
+
+  @ManyToOne(() => ResourceEntity, { onDelete: 'CASCADE', nullable: true })
+  @JoinColumn({ name: 'template_id' })
+  template?: ResourceEntity
+
   @Index('Resources_public_preview_idx')
   @Column({ type: 'boolean', name: 'public_preview', default: false })
   publicPreview!: boolean
