@@ -7,6 +7,7 @@ import { NodeVM } from 'vm2'
 import { Injectable } from '@nestjs/common'
 import { RegisterSandbox, Sandbox, SandboxError, SandboxInput, SandboxOutput } from '../sandbox'
 import { createNodeSandboxAPI } from './node-sandbox-api'
+import { constants } from 'fs'
 
 /**
  * Directory where environment files are stored.
@@ -72,11 +73,17 @@ export class NodeSandbox implements Sandbox {
    * @returns An object containing the NodeVM and environment details.
    */
   private async withVm(input: SandboxInput, timeout: number) {
-    let envid = ''
-    let baseDir = ''
-    if (!('envid' in input) && input.files?.length) {
-      envid = uuidv4()
-      baseDir = Path.join(ENVS_DIR, envid)
+    async function exists(path: string) {
+      return await fs.promises
+        .access(path, constants.F_OK)
+        .then(() => true)
+        .catch(() => false)
+    }
+
+    const envid = 'envid' in input && input.envid ? input.envid : uuidv4()
+    const baseDir = Path.join(ENVS_DIR, envid)
+
+    if ((!('envid' in input) || !(await exists(baseDir))) && input.files?.length) {
       await fs.promises.mkdir(baseDir)
 
       await Promise.all([

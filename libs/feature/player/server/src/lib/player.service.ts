@@ -50,6 +50,7 @@ import { DataSource, EntityManager, In } from 'typeorm'
 import { withMultiSessionGuard } from './player-guards'
 import { PreviewOuputDTO } from './player.dto'
 import { SandboxService } from './sandboxes/sandbox.service'
+import { basename } from 'path'
 
 type ActionHandler = (
   session: ExerciseSessionEntity,
@@ -243,7 +244,17 @@ export class PlayerService {
 
     if (variables.builder?.trim()) {
       patchExerciseMeta(variables, () => ({ isInitialBuild: false }))
-      const output = await this.sandboxService.run({ envid, variables }, variables.builder)
+      const output = await this.sandboxService.run(
+        {
+          envid,
+          variables,
+          files: source.dependencies.map((file) => ({
+            path: file.alias || basename(file.abspath),
+            content: file.content,
+          })),
+        },
+        variables.builder
+      )
       variables = output.variables as ExerciseVariables
     }
 
@@ -263,7 +274,17 @@ export class PlayerService {
         patchExerciseMeta(variables, (meta) => ({ consumedHints: meta.consumedHints + 1 }))
       }
     } else if (variables.hint?.next?.trim()) {
-      const output = await this.sandboxService.run({ envid, variables }, variables.hint.next)
+      const output = await this.sandboxService.run(
+        {
+          envid,
+          variables,
+          files: exerciseSession.source.dependencies.map((file) => ({
+            path: file.alias || basename(file.abspath),
+            content: file.content,
+          })),
+        },
+        variables.hint.next
+      )
       patchExerciseMeta(output.variables, (meta) => ({ consumedHints: meta.consumedHints + 1 }))
       variables = output.variables as ExerciseVariables
     }
@@ -284,7 +305,17 @@ export class PlayerService {
     let variables = exerciseSession.variables
     variables.feedback = { type: 'info', content: '' }
 
-    const output = await this.sandboxService.run({ envid, variables }, variables.grader)
+    const output = await this.sandboxService.run(
+      {
+        envid,
+        variables,
+        files: exerciseSession.source.dependencies.map((file) => ({
+          path: file.alias || basename(file.abspath),
+          content: file.content,
+        })),
+      },
+      variables.grader
+    )
     const grade = Number.parseInt(output.variables.grade) ?? -1
     const increment = grade > -1 ? 1 : 0
 
