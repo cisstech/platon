@@ -1,15 +1,30 @@
-<nge-markdown ngPreserveWhitespaces>
-  # API CSS Cette page décrit les bonnes pratiques à adopter pour utiliser du CSS dans vos exercices.
-</nge-markdown>
+<h1>API CSS</h1>
+
+<p>
+  Le framework de composants intégre une API complète permettant de personnaliser le CSS de tous les composants. Chaque
+  fois que vous rencontrez une propriété <b>css</b> sur un composant, la valeur de cette propriété doit être une liste
+  de classes CSS séparées par des espaces.<br />
+</p>
+
+<p>
+  <b>Exemple</b> : <br />
+  <code>sortlist.items[0]["css"] = "a b c"</code> ajoutera les classes CSS <b>a</b>, <b>b</b> et <b>c</b> à l'élément
+  d'index 0 de la liste triable (Sort List).
+</p>
+
+<p>
+  Le framework fournit plus de 80 classes CSS que vous pouvez utiliser pour personnaliser les composants. Les classes
+  sont répertoriées dans la section ci-dessous.
+</p>
 
 <h2>Apparences</h2>
 <section>
   <p>Cliquez sur une apparence pour copier la liste des classes css qui lui sont appliquées.</p>
   <div class="appearances">
     <div
-      class="box-appearance {{ css }} animate__animated animate__{{ activeAnimation }} animate__infinite"
+      class="box-appearance {{ css }} animated {{ activeAnimation }} infinite"
       *ngFor="let css of appearances; trackBy: trackByIndex"
-      nz-tooltip="Click to copy"
+      nz-tooltip="Cliquez pour copier"
       (click)="copyCss(css)"
     >
       <div class="text">{{ css }}</div>
@@ -29,9 +44,26 @@
       *ngFor="let animation of animations; trackBy: trackByIndex"
       (click)="activeAnimation = animation"
     >
-      <div class="text animate__animated animate__{{ animation }}">
+      <div class="text animated {{ animation }}">
         {{ animation }}
       </div>
     </div>
   </div>
+</section>
+
+<section>
+  <h2>Options d'animation</h2>
+  <p>Vous pouvez appliquer les options suivantes aux animations :</p>
+  <ul>
+    <li>fast</li>
+    <li>faster</li>
+    <li>slow</li>
+    <li>slower</li>
+    <li>delay-1s</li>
+    <li>delay-2s</li>
+    <li>delay-3s</li>
+    <li>delay-4s</li>
+    <li>delay-5s</li>
+    <li>infinite</li>
+  </ul>
 </section>
