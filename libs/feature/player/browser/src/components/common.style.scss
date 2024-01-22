@@ -6,25 +6,29 @@ table {
 }
 
 td {
-  border: 1px solid #ccc;
+  border: 1px solid var(--brand-border-color);
   padding: 5px;
 }
 
 th {
   background-color: #eee;
-  border: 1px solid #ccc;
+  border: 1px solid var(--brand-border-color);
   padding: 5px;
 }
 
 td:first-child {
   font-weight: bold;
-  // min-width: 300px;
   background-color: #f9f9f9;
 }
 
 td:last-child {
   text-align: center;
+  background-color: var(--brand-background-primary);
+}
 
-  min-width: 100px;
-  background-color: #fff;
+:host-context(.dark-theme) {
+  td:first-child {
+    font-weight: bold;
+    background-color: var(--brand-background-primary);
+  }
 }

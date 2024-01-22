@@ -1,26 +1,30 @@
-:host {
-  background-color: var(--brand-background-primary);
-  &::ng-deep {
-    .ant-ribbon {
-      color: white !important;
-    }
-    .article-header {
-      color: var(--brand-color-primary);
-      h3 {
-        color: var(--brand-color-primary);
-      }
-    }
-    .list-item-article-action-icon {
-      max-height: 18px;
-      margin-top: 4px;
-    }
-  }
+.spacer {
+  flex: 1;
 }
 
 .action {
   cursor: pointer;
 }
 
-.spacer {
-  flex: 1;
+.icon-configurable {
+  display: inline-block;
+  margin-left: 0.5rem;
+}
+
+:host::ng-deep {
+  .article-title {
+    max-width: 75%;
+  }
+
+  .ant-ribbon {
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    mat-icon {
+      width: 18px;
+      height: 18px;
+      font-size: 18px;
+    }
+  }
 }

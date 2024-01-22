@@ -53,6 +53,7 @@ services:
       - .docker/nginx/ssl/dhparam/dhparam.pem:/etc/nginx/dhparam.pem
       - .docker/nginx/ssl/certs/localhost.crt:/etc/nginx/ssl/localhost.crt
       - .docker/nginx/ssl/certs/localhost.key:/etc/nginx/ssl/localhost.key
+      - ./dist/apps/docs:/usr/share/nginx/dist/apps/docs
 
     networks:
       - platon-network

@@ -10,9 +10,10 @@ import {
   Output,
   QueryList,
   TemplateRef,
+  booleanAttribute,
   inject,
 } from '@angular/core'
-import { SafePipeModule } from '@cisstech/nge/pipes'
+import { SafePipe } from '@cisstech/nge/pipes'
 import { NzDrawerModule, NzDrawerPlacement, NzDrawerSize } from 'ng-zorro-antd/drawer'
 
 @Component({
@@ -21,24 +22,23 @@ import { NzDrawerModule, NzDrawerPlacement, NzDrawerSize } from 'ng-zorro-antd/d
   templateUrl: './modal-drawer.component.html',
   styleUrls: ['./modal-drawer.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, NzDrawerModule, SafePipeModule],
+  imports: [CommonModule, NzDrawerModule, SafePipe],
 })
 export class UiModalDrawerComponent {
-  protected visible = false
   private readonly breakpointObserver = inject(BreakpointObserver)
+  protected visible = false
 
   @ContentChildren(TemplateRef)
   protected templates!: QueryList<TemplateRef<void>>
 
   @Output() closed = new EventEmitter()
 
-  @Input()
-  title = ''
-
+  @Input() title = ''
+  @Input() bodyStyle: Record<string, string> = {}
   @Input() size: NzDrawerSize = 'default'
-
-  @Input()
-  placement: NzDrawerPlacement = 'right'
+  @Input() placement: NzDrawerPlacement = 'right'
+  @Input({ transform: booleanAttribute }) closable = true
+  @Input() footer?: TemplateRef<void> | null
 
   get isMobile(): boolean {
     return this.breakpointObserver.isMatched([Breakpoints.XSmall, Breakpoints.Small])

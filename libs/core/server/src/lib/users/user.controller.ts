@@ -1,10 +1,13 @@
 import { Body, Controller, Get, Param, Patch, Query } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 import { ItemResponse, ListResponse, NotFoundResponse } from '@platon/core/common'
+import { RolesIfBodyHasKey } from '../auth/decorators/roles.decorator'
 import { Mapper } from '../utils'
 import { UpdateUserDTO, UserDTO, UserFiltersDTO } from './user.dto'
 import { UserService } from './user.service'
 
 @Controller('users')
+@ApiTags('Users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -26,6 +29,7 @@ export class UserController {
   }
 
   @Patch('/:userIdOrName')
+  @RolesIfBodyHasKey<UpdateUserDTO>(['role'], 'admin')
   async update(
     @Param('userIdOrName') userIdOrName: string,
     @Body() input: UpdateUserDTO

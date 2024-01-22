@@ -2,11 +2,10 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, inject } from '@angular/core'
 import { FormBuilder } from '@angular/forms'
 import { Editor, FileService, OpenRequest } from '@cisstech/nge-ide/core'
-import { Variables } from '@platon/feature/compiler'
+import { PleInput, Variables } from '@platon/feature/compiler'
 import { ResourceFileService } from '@platon/feature/resource/browser'
 import { editorJsFromRawString, editorJsToRawString } from '@platon/shared/ui'
 import { Subscription, debounceTime, firstValueFrom, skip } from 'rxjs'
-import { PleInput } from '../ple-input-editor/ple-input'
 
 const HIDDEN_VARIABLES = ['author', 'title', 'statement', 'form', 'builder', 'grader']
 
@@ -36,6 +35,8 @@ export class PleEditorComponent implements OnInit, OnDestroy {
       {
         name: 'builder',
         type: 'code',
+        description: 'The builder is used to generate the exercise',
+        value: '',
         options: { language: 'python' },
       } as PleInput,
     ],
@@ -43,6 +44,8 @@ export class PleEditorComponent implements OnInit, OnDestroy {
       {
         name: 'builder',
         type: 'code',
+        description: 'The grader is used to grade the exercise',
+        value: '',
         options: { language: 'python' },
       } as PleInput,
     ],
@@ -99,7 +102,7 @@ export class PleEditorComponent implements OnInit, OnDestroy {
   }
 
   private async createEditor(): Promise<void> {
-    const file = this.fileService.find(this.request.uri)
+    const file = this.request.file!
 
     const [resource, version] = this.request.uri.authority.split(':')
     const [source] = await Promise.all([
@@ -117,12 +120,14 @@ export class PleEditorComponent implements OnInit, OnDestroy {
       builder: {
         name: 'builder',
         type: 'code',
+        description: 'The builder is used to generate the exercise',
         options: { language: sandbox },
         value: variables.builder || '',
       } as PleInput,
       grader: {
         name: 'grader',
         type: 'code',
+        description: 'The grader is used to grade the exercise',
         options: { language: sandbox },
         value: variables.grader || '',
       } as PleInput,

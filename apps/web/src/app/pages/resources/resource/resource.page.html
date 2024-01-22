@@ -5,18 +5,19 @@
         <nz-breadcrumb nzSeparator="" nzRouteLabel="breadcrumb">
           <button
             *ngIf="context.circles"
+            class="hide-on-mobile"
             nz-button
             nzType="text"
             nzSize="small"
             [nz-popover]
-            [nzPopoverContent]="treeTemplate"
+            [nzPopoverContent]="circleTreePopover"
           >
             <mat-icon>account_tree</mat-icon>
-            <ng-template #treeTemplate>
+            <ng-template #circleTreePopover>
               <resource-circle-tree [tree]="context.circles" />
             </ng-template>
           </button>
-          <nz-breadcrumb-item *ngIf="context.parent">
+          <nz-breadcrumb-item class="hide-on-mobile" *ngIf="context.parent">
             <a [routerLink]="['/resources', context.parent.id]">{{ context.parent.name }}</a>
           </nz-breadcrumb-item>
           <nz-breadcrumb-item>
@@ -28,7 +29,6 @@
               (nzContentChange)="updateName($event)"
             ></span>
           </nz-breadcrumb-item>
-          <div class="spacer"></div>
         </nz-breadcrumb>
       </ng-template>
     </nz-page-header>
@@ -58,17 +58,18 @@
       </nz-button-group>
       <nz-button-group>
         <button
-          nz-tooltip="Suivre une ressource vous permet notamment de l'ajouter plus rapidement dans vos cours"
+          nz-tooltip="Suivre une ressource vous permet notamment de l'ajouter dans vos cours/activités et de recevoir des notifications lorsqu'elle est mise à jour."
           nz-button
           nzType="default"
           (click)="changeWatchingState()"
         >
           <i nz-icon nzType="eye" nzTheme="outline"></i>
-          {{ context.resource.permissions.watcher ? 'Ne plus suivre' : 'Suivre' }}
+          <span class="hide-on-mobile">{{ context.resource.permissions.watcher ? 'Ne plus suivre' : 'Suivre' }}</span>
         </button>
         <button
           *ngIf="
             context.user?.role !== 'admin' &&
+            context.resource.type === 'CIRCLE' &&
             !context.resource.permissions.member &&
             !context.resource.permissions.waiting
           "
@@ -77,19 +78,29 @@
           (click)="join()"
         >
           <i nz-icon nzType="user-add" nzTheme="outline"></i>
-          Demander à rejoindre
+          <span class="hide-on-mobile">Demander à rejoindre</span>
         </button>
-
         <button *ngIf="context.resource.permissions.waiting" nz-button nzDanger nzType="default" (click)="unjoin()">
           <i nz-icon nzType="user-add" nzTheme="outline"></i>
-          Annuler la demande de rejoindre
+          <span class="hide-on-mobile">Annuler la demande de rejoindre</span>
         </button>
       </nz-button-group>
       <div class="spacer"></div>
       <nz-button-group>
         <button nz-button (click)="openTab(context.editorUrl!)">
           <i nz-icon nzType="edit" nzTheme="outline"></i>
-          Ouvrir dans l'éditeur
+          <span class="hide-on-mobile">Ouvrir dans l'éditeur</span>
+        </button>
+        <button
+          *ngIf="context.resource.type !== 'CIRCLE'"
+          nz-button
+          [nz-popover]
+          nzPopoverPlacement="left"
+          [nzPopoverTrigger]="'click'"
+          [nzPopoverContent]="sharingPopover"
+        >
+          <i nz-icon nzType="link" nzTheme="outline"></i>
+          <span class="hide-on-mobile">Partager</span>
         </button>
         <button
           *ngIf="context.resource.type !== 'CIRCLE'"
@@ -98,7 +109,7 @@
           (click)="iframe.open(context.previewUrl!)"
         >
           <i nz-icon nzType="play-circle" nzTheme="outline"></i>
-          Prévisualiser
+          <span class="hide-on-mobile">Prévisualiser</span>
         </button>
       </nz-button-group>
     </div>
@@ -129,4 +140,8 @@
   </ui-layout-tab>
 </ui-layout-tabs>
 
-<ui-modal-iframe #iframe />
+<ui-modal-iframe #iframe [closable]="true" />
+
+<ng-template #sharingPopover>
+  <resource-sharing [resourceId]="context.resource!.id" [canEditSharing]="context.resource!.permissions!.write" />
+</ng-template>

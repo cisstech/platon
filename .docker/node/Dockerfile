@@ -1,6 +1,6 @@
 ### STAGE 1: Build ###
 
-FROM node:16-alpine as build
+FROM node:18-alpine as build
 
 # Install python3, make, g++, Git, and NodeGit dependencies
 RUN apk add --no-cache --update \
@@ -22,6 +22,9 @@ COPY --chown=node:node package.json yarn.lock ./
 # Install dependencies
 RUN yarn install --frozen-lockfile --non-interactive
 
+COPY --chown=node:node apps/docs/package.json apps/docs/yarn.lock ./apps/docs/
+RUN cd apps/docs && yarn install --frozen-lockfile --non-interactive
+
 # Bundle app source
 COPY --chown=node:node .graphql ./.graphql
 COPY --chown=node:node apps ./apps
@@ -36,9 +39,10 @@ COPY --chown=node:node tsconfig.base.json  ./tsconfig.base.json
 # Generate GraphQL types
 RUN yarn graphql:generate
 
-# Build NestJS API and Angular web app
+# Build NestJS API, Angular web app and docs
 RUN yarn build:api
 RUN yarn build:web
+RUN yarn build:docs
 
 # Rebuild node_modules with only production dependencies
 ENV NODE_ENV production
@@ -48,7 +52,7 @@ USER node
 
 ### STAGE 2: Production ###
 
-FROM node:16-alpine as production
+FROM node:18-alpine as production
 RUN apk add --no-cache --update \
   bash \
   openssh \

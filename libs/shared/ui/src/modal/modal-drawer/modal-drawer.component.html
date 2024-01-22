@@ -1,11 +1,12 @@
 <nz-drawer
   *ngIf="visible"
-  [nzClosable]="true"
+  [nzClosable]="closable"
   [nzVisible]="visible"
   [nzTitle]="title"
   [nzSize]="isMobile ? 'default' : size"
   [nzPlacement]="placement"
-  [nzFooter]="templates.length > 1 ? templates.last : noFooter"
+  [nzBodyStyle]="bodyStyle"
+  [nzFooter]="footer ?? (templates.length > 1 ? templates.last : noFooter)"
   (nzOnClose)="close()"
 >
   <ng-container *nzDrawerContent>

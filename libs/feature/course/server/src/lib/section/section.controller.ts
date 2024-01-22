@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 import { ItemResponse, ListResponse, NoContentResponse, NotFoundResponse, UserRoles } from '@platon/core/common'
 import { Mapper, Roles } from '@platon/core/server'
 import { CourseSectionDTO, CreateCourseSectionDTO, UpdateCourseSectionDTO } from './section.dto'
@@ -6,6 +7,7 @@ import { CourseSectionEntity } from './section.entity'
 import { CourseSectionService } from './section.service'
 
 @Controller('courses/:courseId/sections')
+@ApiTags('Courses')
 export class CourseSectionController {
   constructor(private readonly service: CourseSectionService) {}
 

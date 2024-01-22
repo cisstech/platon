@@ -4,7 +4,7 @@ import { CoursePermissions } from './permissions.model'
 export interface Course {
   readonly id: string
   readonly createdAt: Date
-  readonly updatedAt?: Date
+  readonly updatedAt: Date
   readonly name: string
   readonly desc?: string
   readonly ownerId: string

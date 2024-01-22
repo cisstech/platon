@@ -9,7 +9,7 @@ nz-list-item {
 }
 
 nz-list-item.unread {
-  background-color: #f6f6f6;
+  background-color: var(--brand-background-hover);
 }
 
 nz-list-item-meta-title {

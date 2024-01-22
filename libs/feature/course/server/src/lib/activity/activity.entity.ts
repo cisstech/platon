@@ -1,12 +1,12 @@
 import { BaseEntity, UserEntity } from '@platon/core/server'
 import { PLSourceFile } from '@platon/feature/compiler'
-import { ActivityPermissions, ActivityOpenStates } from '@platon/feature/course/common'
+import { Activity, ActivityOpenStates, ActivityPermissions } from '@platon/feature/course/common'
 import { Column, Entity, Index, JoinColumn, ManyToOne, VirtualColumn } from 'typeorm'
 import { CourseEntity } from '../course.entity'
 import { CourseSectionEntity } from '../section/section.entity'
 
 @Entity('Activities')
-export class ActivityEntity extends BaseEntity {
+export class ActivityEntity extends BaseEntity implements Activity {
   @Index('Activities_creator_id_idx')
   @Column({ name: 'creator_id' })
   creatorId!: string

@@ -24,9 +24,9 @@ export abstract class ResourceFileProvider {
   abstract read(resource: string | Resource, path: string, version?: string): Observable<ResourceFile>
   abstract create(resource: string | Resource, input: FileCreate[]): Observable<void>
 
-  abstract upload(file: ResourceFile, data: File): Observable<void>
-  abstract delete(file: ResourceFile): Observable<void>
-  abstract move(file: ResourceFile, input: FileMove): Observable<void>
-  abstract update(file: ResourceFile, input: FileUpdate): Observable<void>
-  abstract search(file: ResourceFile, query: FileSearch): Observable<FileSearchResults>
+  abstract upload(file: Pick<ResourceFile, 'url'>, data: File): Observable<void>
+  abstract delete(file: Pick<ResourceFile, 'url'>): Observable<void>
+  abstract move(file: Pick<ResourceFile, 'url'>, input: FileMove): Observable<void>
+  abstract update(file: Pick<ResourceFile, 'url'>, input: FileUpdate): Observable<void>
+  abstract search(file: Pick<ResourceFile, 'url'>, query: FileSearch): Observable<FileSearchResults>
 }

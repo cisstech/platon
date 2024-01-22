@@ -1,11 +1,19 @@
+<lms-search-bar #searchbar [(ngModel)]="lmses" [autoSelect]="true" [filters]="filters" />
+
 <nz-button-group>
   <button (click)="createDrawer.open()" nz-button nzType="primary" nz-tooltip="Ajouter un LMS">
     <span nz-icon nzType="plus" nzTheme="outline"></span>
   </button>
 </nz-button-group>
 
-<lms-search-bar [(ngModel)]="lmses" [autoSelect]="true" [filters]="{ limit: 50 }" />
+<lms-table
+  [total]="searchbar.total"
+  [loading]="searchbar.searching"
+  [lmses]="lmses"
+  [selectable]="false"
+  [(filters)]="filters"
+  (openDetails)="detailsDrawer.open($event)"
+/>
 
-<lms-table [lmses]="lmses" [selectable]="false" />
-
+<lms-drawer (updated)="onUpdateLms($event)" #detailsDrawer />
 <lms-create-drawer #createDrawer (created)="insert($event)" />

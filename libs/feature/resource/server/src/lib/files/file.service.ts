@@ -1,12 +1,21 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { BadRequestResponse, NotFoundResponse, User } from '@platon/core/common'
-import { PLCompiler, PLReferenceResolver, PLSourceFile, Variables } from '@platon/feature/compiler'
-import { ResourcePermissions } from '@platon/feature/resource/common'
+import {
+  ACTIVITY_MAIN_FILE,
+  EXERCISE_MAIN_FILE,
+  PLCompiler,
+  PLReferenceResolver,
+  PLSourceFile,
+  TEMPLATE_OVERRIDE_FILE,
+  Variables,
+} from '@platon/feature/compiler'
+import { LATEST, ResourcePermissions } from '@platon/feature/resource/common'
 import path from 'path'
 import { ResourcePermissionService } from '../permissions/permissions.service'
 import { ResourceEntity } from '../resource.entity'
 import { ResourceService } from '../resource.service'
-import { LATEST, Repo } from './repo'
+import { Repo } from './repo'
+import { README_PLE } from './snippets'
 
 interface CompileInput {
   resourceId: string
@@ -35,15 +44,24 @@ export class ResourceFileService {
     private readonly permissionService: ResourcePermissionService
   ) {}
 
-  async repo(resourceIdOrCode: string, user?: User): Promise<RepoInfo> {
-    const resource = (await this.resourceService.findByIdOrCode(resourceIdOrCode)).orElseThrow(
-      () => new NotFoundResponse(`Resource not found: ${resourceIdOrCode}`)
-    )
+  /**
+   * Gets resource git repository.
+   * @param identifier Resource entity|id|code
+   * @param user User that manipulates the repository (used for git commits)
+   */
+  async repo(identifier: string | ResourceEntity, user?: User): Promise<RepoInfo> {
+    const resource =
+      typeof identifier === 'string'
+        ? (await this.resourceService.findByIdOrCode(identifier)).orElseThrow(
+            () => new NotFoundResponse(`Resource not found: ${identifier}`)
+          )
+        : identifier
+
     const permissions = await this.permissionService.userPermissionsOnResource({ resource, user })
 
     const directory = {
-      ACTIVITY: 'activites',
       CIRCLE: 'circles',
+      ACTIVITY: 'activites',
       EXERCISE: 'exercises',
     }[resource.type]
 
@@ -55,6 +73,13 @@ export class ResourceFileService {
           ? {
               name: user.username,
               email: user.email,
+            }
+          : undefined,
+        defaultFiles: resource.templateId
+          ? {
+              [EXERCISE_MAIN_FILE]: `@extends /${resource.templateId}:latest/${EXERCISE_MAIN_FILE}`,
+              [TEMPLATE_OVERRIDE_FILE]: '{}',
+              'readme.md': README_PLE,
             }
           : undefined,
       }),
@@ -71,23 +96,42 @@ export class ResourceFileService {
     }
 
     const main = {
-      EXERCISE: 'main.ple',
-      ACTIVITY: 'main.pla',
+      EXERCISE: EXERCISE_MAIN_FILE,
+      ACTIVITY: ACTIVITY_MAIN_FILE,
     }[resource.type]
 
-    const [file, content] = await repo.read(main, version)
-    if (!content) {
+    const openedRepos: Record<string, Repo> = {}
+    openedRepos[`${resource}-${version}`] = repo
+
+    const [file, buffer] = await repo.read(main, version)
+    if (!buffer) {
       throw new NotFoundException(`Compiler: missing main file in resource: ${resource.id}`)
     }
 
+    const getRepo = async (resourceId: string, version?: string) => {
+      version = version || LATEST
+      const repo = openedRepos[`${resourceId}-${version}`]
+      if (repo) {
+        return repo
+      }
+
+      const { repo: newOpen } = await this.repo(resourceId, user)
+      openedRepos[`${resourceId}-${version}`] = newOpen
+      return newOpen
+    }
+
     const resolver: PLReferenceResolver = {
+      exists: async (resource, version, path) => {
+        const repo = await getRepo(resource, version)
+        return repo.exists(path)
+      },
       resolveUrl: async (resource, version, path) => {
-        const { repo } = await this.repo(resource, user)
+        const repo = await getRepo(resource, version)
         const [file] = await repo.read(path, version || LATEST)
         return file.downloadUrl
       },
       resolveContent: async (resource, version, path) => {
-        const { repo } = await this.repo(resource, user)
+        const repo = await getRepo(resource, version)
         const [, content] = await repo.read(path, version || LATEST)
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         return Buffer.from((await content!).buffer).toString()
@@ -102,13 +146,9 @@ export class ResourceFileService {
       withAst: input.withAst,
     })
 
-    const textContent = Buffer.from((await content).buffer).toString()
+    await compiler.compile(Buffer.from((await buffer).buffer).toString())
 
-    const source =
-      resource.type === 'EXERCISE'
-        ? await compiler.compileExercise(textContent, overrides)
-        : await compiler.compileActivity(textContent)
-
+    const source = await compiler.output(overrides)
     source.variables.author = resource.ownerId
     return { source, resource, compiler }
   }

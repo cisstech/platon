@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Req } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 import {
   CreatedResponse,
   ItemResponse,
@@ -13,6 +14,7 @@ import { CreateResourceInvitationDTO, ResourceInvitationDTO } from './invitation
 import { ResourceInvitationService } from './invitation.service'
 
 @Controller('resources/:resourceId/invitations')
+@ApiTags('Resources')
 export class ResourceInvitationController {
   constructor(private readonly service: ResourceInvitationService) {}
 

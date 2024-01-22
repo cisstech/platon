@@ -1,51 +1,44 @@
 <nav *ngIf="user">
   <img class="logo" src="assets/images/logo/platon.svg" alt="Logo PLaTon" [routerLink]="'/dashboard'" />
-  <a class="nav-link" mat-button [routerLink]="'/dashboard'" [routerLinkActive]="'active'">
-    <mat-icon>dashboard</mat-icon>
-    Tableau de bord
-  </a>
-  <a class="nav-link" mat-button [routerLink]="'/courses'" [routerLinkActive]="'active'">
-    <mat-icon>local_library</mat-icon>
-    Cours
-  </a>
-
-  <a
-    class="nav-link"
-    mat-button
-    [routerLink]="'/corrections'"
-    *ngIf="user.role !== 'demo'"
-    [routerLinkActive]="'active'"
-  >
-    <mat-icon>rate_review</mat-icon>
-    Corrections
-  </a>
-  <!--
-  <a class="nav-link" mat-button [routerLink]="'/forum'" [routerLinkActive]="'active'">
-    <mat-icon>chat</mat-icon>
-    Forum
-  </a>
-  -->
-  <ng-container *ngIf="user.role !== 'student' && user.role !== 'demo'">
-    <a class="nav-link" mat-button [routerLink]="'/resources'" [routerLinkActive]="'active'">
-      <mat-icon>work</mat-icon>
-      Espace de travail
-    </a>
-  </ng-container>
-  <ng-container *ngIf="user.role === 'admin'">
-    <a class="nav-link" mat-button [routerLink]="'/admin'" [routerLinkActive]="'active'">
-      <mat-icon>admin_panel_settings</mat-icon>
-      Administration
-    </a>
-  </ng-container>
+  <ng-container *ngTemplateOutlet="linkList; context: { $implicit: topLinks }"></ng-container>
   <div class="spacer"></div>
-  <img class="doc" src="assets/images/illustrations/doc.png" alt="Logo PLaTon" />
-  <a mat-button [routerLink]="'/docs'">
-    <mat-icon>local_library</mat-icon>
-    Documentation
-  </a>
-
-  <a mat-button href="https://github.com/cisstech/platon" target="_blank">
-    Powered by
-    <img class="cisstech" src="assets/vendors/cisstech/cisstech.gif" alt="Logo cisstech " />
+  <ng-container *ngTemplateOutlet="linkList; context: { $implicit: bottomLinks }"></ng-container>
+  <a class="nav-link nav-link--powered-by" href="https://github.com/cisstech/platon" target="_blank">
+    Propulsé par
+    <img class="cisstech" src="assets/vendors/cisstech/cisstech-light.svg" alt="Logo cisstech " />
   </a>
 </nav>
+<ng-template #linkList let-links>
+  @for (link of links; track link.title) {
+  <ng-container *ngTemplateOutlet="linkItem; context: { $implicit: link }"></ng-container>
+  }
+</ng-template>
+<ng-template #linkItem let-item let-isSubLink="isSubLink">
+  <ng-container *ngIf="asNavLink(item) as link">
+    @if (!link.url && link.children) {
+    <div class="nav-link" role="button" (click)="toggleLink(link)">
+      <mat-icon class="nav-link-icon">{{ link.icon }}</mat-icon>
+      <span>{{ link.title }}</span>
+      <div class="spacer"></div>
+      <mat-icon *ngIf="link.children" class="nav-link-toggle">{{
+        expandedLinks.has(link.title) ? 'expand_less' : 'expand_more'
+      }}</mat-icon>
+    </div>
+    } @else if (link.external) {
+    <a class="nav-link" [class.nav-link--child]="isSubLink" [href]="link.url">
+      <mat-icon class="nav-link-icon">{{ link.icon }}</mat-icon>
+      <span>{{ link.title }}</span>
+    </a>
+    } @else {
+    <a class="nav-link" [class.nav-link--child]="isSubLink" [routerLink]="link.url" [routerLinkActive]="'active'">
+      <mat-icon class="nav-link-icon">{{ link.icon }}</mat-icon>
+      <span>{{ link.title }}</span>
+    </a>
+    }
+    <ng-container *ngIf="link.children && expandedLinks.has(link.title)">
+      @for (sublink of link.children; track sublink.title) {
+      <ng-container *ngTemplateOutlet="linkItem; context: { $implicit: sublink, isSubLink: true }"></ng-container>
+      }
+    </ng-container>
+  </ng-container>
+</ng-template>

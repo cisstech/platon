@@ -17,6 +17,11 @@
     "feedback": {
       "review": true,
       "validation": true
+    },
+    "security": {
+      "noCopyPaste": false,
+      "terminateOnLoseFocus": false,
+      "terminateOnLeavePage": false
     }
   },
   "exerciseGroups": {}

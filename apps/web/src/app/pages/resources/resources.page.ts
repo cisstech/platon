@@ -12,6 +12,8 @@ import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzPopoverModule } from 'ng-zorro-antd/popover'
 import { NzSpinModule } from 'ng-zorro-antd/spin'
 
+import { ViewportIntersectionDirective } from '@cisstech/nge/directives'
+
 import {
   FilterIndicator,
   PeriodFilterMatcher,
@@ -20,11 +22,13 @@ import {
   UiSearchBarComponent,
 } from '@platon/shared/ui'
 
-import { AuthService } from '@platon/core/browser'
-import { OrderingDirections, User } from '@platon/core/common'
+import { AuthService, TagService } from '@platon/core/browser'
+import { Level, OrderingDirections, Topic, User } from '@platon/core/common'
 import {
   CircleFilterIndicator,
   CircleTreeComponent,
+  ExerciseConfigurableFilterIndicator,
+  LevelFilterIndicator,
   ResourceFiltersComponent,
   ResourceItemComponent,
   ResourceListComponent,
@@ -33,6 +37,7 @@ import {
   ResourceService,
   ResourceStatusFilterIndicator,
   ResourceTypeFilterIndicator,
+  TopicFilterIndicator,
 } from '@platon/feature/resource/browser'
 import {
   CircleTree,
@@ -44,6 +49,8 @@ import {
   ResourceTypes,
 } from '@platon/feature/resource/common'
 import { NzDividerModule } from 'ng-zorro-antd/divider'
+
+const PAGINATION_LIMIT = 15
 
 @Component({
   standalone: true,
@@ -64,6 +71,8 @@ import { NzDividerModule } from 'ng-zorro-antd/divider'
     NzPopoverModule,
     NzDividerModule,
 
+    ViewportIntersectionDirective,
+
     ResourcePipesModule,
     ResourceItemComponent,
     ResourceListComponent,
@@ -75,13 +84,14 @@ import { NzDividerModule } from 'ng-zorro-antd/divider'
   ],
 })
 export default class ResourcesPage implements OnInit, OnDestroy {
+  private readonly subscriptions: Subscription[] = []
+
   private readonly router = inject(Router)
+  private readonly tagService = inject(TagService)
   private readonly authService = inject(AuthService)
   private readonly activatedRoute = inject(ActivatedRoute)
   private readonly resourceService = inject(ResourceService)
   private readonly changeDetectorRef = inject(ChangeDetectorRef)
-
-  private readonly subscriptions: Subscription[] = []
 
   protected readonly searchbar: SearchBar<string> = {
     placeholder: 'Essayez un nom, un topic, un niveau...',
@@ -93,7 +103,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
             return new Fuse(Array.from(suggestions), {
               includeMatches: true,
               findAllMatches: false,
-              threshold: 0.2,
+              threshold: 0.4,
             })
               .search(query)
               .map((e) => e.item)
@@ -108,39 +118,51 @@ export default class ResourcesPage implements OnInit, OnDestroy {
 
   protected tree?: CircleTree
   protected circles: CircleTree[] = []
+  protected topics: Topic[] = []
+  protected levels: Level[] = []
 
   protected completion = this.resourceService.completion().pipe(shareReplay(1))
   protected indicators: FilterIndicator<ResourceFilters>[] = [
     ...Object.values(ResourceTypes).map(ResourceTypeFilterIndicator),
     ...Object.values(ResourceStatus).map(ResourceStatusFilterIndicator),
     ...Object.values(ResourceOrderings).map(ResourceOrderingFilterIndicator),
+    ExerciseConfigurableFilterIndicator,
     PeriodFilterMatcher,
   ]
 
+  protected hasMore = true
   protected searching = true
+  protected paginating = false
+
   protected filters: ResourceFilters = {}
   protected circle!: Resource
   protected items: Resource[] = []
   protected views: Resource[] = []
-  protected recents: Resource[] = []
 
   async ngOnInit(): Promise<void> {
     this.user = (await this.authService.ready()) as User
 
-    const [tree, circle, views] = await Promise.all([
+    const [tree, circle, views, topics, levels] = await Promise.all([
       firstValueFrom(this.resourceService.tree()),
       firstValueFrom(this.resourceService.circle(this.user.username)),
-      firstValueFrom(this.resourceService.search({ views: true })),
+      firstValueFrom(this.resourceService.search({ views: true, expands: ['metadata'] })),
+      firstValueFrom(this.tagService.listTopics()),
+      firstValueFrom(this.tagService.listLevels()),
     ])
 
     this.tree = tree
     this.circle = circle
+    this.topics = topics
+    this.levels = levels
     this.views = views.resources
 
     this.circles = []
+
+    this.indicators = [...topics.map(TopicFilterIndicator), ...levels.map(LevelFilterIndicator), ...this.indicators]
+
     if (this.tree) {
       this.circles = flattenCircleTree(this.tree)
-      this.indicators = [...this.indicators, ...flattenCircleTree(tree).map((circle) => CircleFilterIndicator(circle))]
+      this.indicators = [...flattenCircleTree(tree).map((circle) => CircleFilterIndicator(circle)), ...this.indicators]
     }
 
     this.changeDetectorRef.markForCheck()
@@ -151,11 +173,14 @@ export default class ResourcesPage implements OnInit, OnDestroy {
           ...this.filters,
           search: e.q,
           parents: e.parents ? (typeof e.parents === 'string' ? [e.parents] : e.parents) : undefined,
+          topics: e.topics ? (typeof e.topics === 'string' ? [e.topics] : e.topics) : undefined,
+          levels: e.levels ? (typeof e.levels === 'string' ? [e.levels] : e.levels) : undefined,
           period: Number.parseInt(e.period + '', 10) || 0,
           order: e.order,
           direction: e.direction,
           types: typeof e.types === 'string' ? [e.types] : e.types,
           status: typeof e.status === 'string' ? [e.status] : e.status,
+          configurable: e.configurable === 'true',
         }
 
         if (this.searchbar.value !== e.q) {
@@ -163,7 +188,21 @@ export default class ResourcesPage implements OnInit, OnDestroy {
         }
 
         this.searching = true
-        this.items = (await firstValueFrom(this.resourceService.search(this.filters))).resources
+
+        this.items = []
+        this.hasMore = true
+        this.paginating = false
+
+        const response = await firstValueFrom(
+          this.resourceService.search({
+            ...this.filters,
+            expands: ['metadata'],
+            limit: PAGINATION_LIMIT,
+          })
+        )
+
+        this.items = response.resources
+        this.hasMore = response.resources.length > 0
         this.searching = false
 
         this.changeDetectorRef.markForCheck()
@@ -184,6 +223,9 @@ export default class ResourcesPage implements OnInit, OnDestroy {
       types: filters.types,
       status: filters.status,
       parents: filters.parents,
+      topics: filters.topics,
+      levels: filters.levels,
+      configurable: filters.configurable ? true : undefined,
     }
 
     this.router.navigate([], {
@@ -191,6 +233,40 @@ export default class ResourcesPage implements OnInit, OnDestroy {
       relativeTo: this.activatedRoute,
       queryParamsHandling: 'merge',
     })
+  }
+
+  protected async loadMore(): Promise<void> {
+    if (this.paginating) {
+      return
+    }
+
+    this.paginating = true
+    const response = await firstValueFrom(
+      this.resourceService.search({
+        ...this.filters,
+        expands: ['metadata'],
+        limit: PAGINATION_LIMIT,
+        offset: this.items.length,
+      })
+    )
+
+    this.items = [...this.items, ...response.resources]
+    this.hasMore = response.resources.length > 0
+    this.paginating = false
+
+    this.changeDetectorRef.markForCheck()
+  }
+
+  protected applyTagFilter(id: string, type: 'topic' | 'level') {
+    this.search(
+      {
+        ...this.filters,
+        ...(type === 'topic'
+          ? { topics: [...(this.filters.topics ?? []), id] }
+          : { levels: [...(this.filters.levels ?? []), id] }),
+      },
+      this.searchbar.value
+    )
   }
 }
 
@@ -202,4 +278,7 @@ interface QueryParams {
   types?: keyof typeof ResourceTypes | (keyof typeof ResourceTypes)[]
   status?: keyof typeof ResourceStatus | (keyof typeof ResourceStatus)[]
   parents?: string | string[]
+  topics?: string | string[]
+  levels?: string | string[]
+  configurable?: string | boolean
 }

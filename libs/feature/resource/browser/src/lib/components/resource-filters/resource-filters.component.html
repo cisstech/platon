@@ -27,6 +27,17 @@
       </div>
     </section>
     <mat-divider />
+
+    <ng-container *ngIf="form.value.types?.EXERCISE">
+      <section>
+        <mat-label id="exercise-specific">Appliquer des filtres aux exercices?</mat-label>
+        <mat-checkbox formControlName="configurable">
+          <mat-chip>Configurable</mat-chip>
+        </mat-checkbox>
+      </section>
+      <mat-divider />
+    </ng-container>
+
     <!-- STATUS -->
     <section formGroupName="status">
       <mat-label id="status-label">Quel est son status?</mat-label>
@@ -53,20 +64,53 @@
       </nz-select>
     </section>
     <mat-divider />
+    <!-- TOPICS -->
+    <section>
+      <mat-label id="topics">Elle possède des topics?</mat-label>
+      <nz-select
+        [nzMaxTagCount]="3"
+        nzMode="multiple"
+        nzPlaceHolder="Sélectionnez des topics"
+        formControlName="topics"
+        aria-labelledby="topics"
+      >
+        <nz-option *ngFor="let option of topics" [nzLabel]="option.name" [nzValue]="option.id" />
+      </nz-select>
+    </section>
+    <mat-divider />
+    <!-- LEVELS -->
+    <section>
+      <mat-label id="levels">Elle possède des niveaux?</mat-label>
+      <nz-select
+        [nzMaxTagCount]="3"
+        nzMode="multiple"
+        nzPlaceHolder="Sélectionnez des niveaux"
+        formControlName="levels"
+        aria-labelledby="levels"
+      >
+        <nz-option *ngFor="let option of levels" [nzLabel]="option.name" [nzValue]="option.id" />
+      </nz-select>
+    </section>
+    <mat-divider />
     <!-- ORDER -->
     <section>
       <mat-label id="order-label">Comment voulez-vous trier les résultats ?</mat-label>
-      <mat-radio-group formControlName="order" aria-labelledby="order-label">
-        <mat-radio-button value="NAME">{{ 'NAME' | resourceOrdering }}</mat-radio-button>
-        <mat-radio-button value="CREATED_AT">{{ 'CREATED_AT' | resourceOrdering }}</mat-radio-button>
-        <mat-radio-button value="UPDATED_AT">{{ 'UPDATED_AT' | resourceOrdering }}</mat-radio-button>
-        <mat-radio-button value="RELEVANCE">{{ 'RELEVANCE' | resourceOrdering }}</mat-radio-button>
-      </mat-radio-group>
-      <mat-label id="direction-label">Dans quel ordre ?</mat-label>
-      <mat-radio-group formControlName="direction" aria-labelledby="direction-label">
-        <mat-radio-button value="ASC">Croissant</mat-radio-button>
-        <mat-radio-button value="DESC">Décroissant</mat-radio-button>
-      </mat-radio-group>
+      <nz-select nzPlaceHolder="Sélectionnez un mode de tri" formControlName="order" aria-labelledby="order-label">
+        <nz-option nzLabel="Nom de A à Z" nzValue="NAME-ASC" />
+        <nz-option nzLabel="Nom de Z à A" nzValue="NAME-DESC" />
+        <nz-option nzLabel="Création: Récent-Ancient" nzValue="CREATED_AT-DESC" />
+        <nz-option nzLabel="Création: Ancient-Récent" nzValue="CREATED_AT-ASC" />
+        <nz-option nzLabel="MàJ: Récente-Ancienne" nzValue="UPDATED_AT-DESC" />
+        <nz-option nzLabel="MàJ: Ancienne-Récente" nzValue="UPDATED_AT-ASC" />
+        <nz-option nzLabel="Pertinence: Plus-Moins" nzValue="RELEVANCE-DESC" />
+        <nz-option nzLabel="Pertinence: Moins-Plus" nzValue="RELEVANCE-ASC" />
+      </nz-select>
+      <br /><br />
+      <mat-hint>
+        Le tri par pertinence évalue les ressources en fonction de différent critères comme leur utilisation et leur
+        actualité, mettant en avant celles souvent mises à jour et avec une forte interaction utilisateur ainsi qu'un
+        status "prêt à l'emploi".
+      </mat-hint>
     </section>
     <mat-divider />
     <!-- PERIOD -->

@@ -10,7 +10,7 @@ export type ResourceEventData = {
 export interface ResourceEvent<TData extends ResourceEventData = ResourceCreateEventData> {
   readonly id: string
   readonly createdAt: Date
-  readonly updatedAt?: Date
+  readonly updatedAt: Date
   readonly type: ResourceEventTypes
   readonly actorId: string
 

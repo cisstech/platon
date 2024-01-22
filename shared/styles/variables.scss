@@ -20,15 +20,18 @@
   --brand-color-tertiary-shade: #633ce0;
   --brand-color-tertiary-tint: #7e57ff;
 
-  --brand-background-overlay: #fff;
   --brand-background-primary: #fff;
-  --brand-background-secondary: #fafbfc;
+  --brand-background-components: #fff;
 
+  --brand-text-landing: #004d4d;
   --brand-text-primary: #24292e;
-  --brand-text-secondary: #586069;
+  --brand-text-secondary: #090a3999;
   --brand-border-color: #dddddd;
 
   // https://www.smashingmagazine.com/2015/11/using-system-ui-fonts-practical-guide/
   --brand-font: 'Source Sans Pro', system-ui, -apple-system, BlinkMacSystemFont, 'Fira Sans', 'Segoe UI', 'Roboto',
     'Oxygen', 'Ubuntu', 'Cantarell', 'Droid Sans', 'Helvetica Neue', sans-serif;
+
+  --brand-background-waves: url(/assets/images/waves/wave-1.svg) no-repeat bottom,
+    linear-gradient(to bottom, #c55882 1%, #ff9474 99%, hsla(0, 0%, 100%, 1) 99%);
 }

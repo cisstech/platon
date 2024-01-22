@@ -4,6 +4,11 @@ import { Transform } from 'class-transformer'
 import { IsBoolean, IsOptional, IsString } from 'class-validator'
 
 export class FileRetrieveDTO implements Partial<FileRetrieve> {
+  @Transform(({ value }) => toBoolean(value))
+  @IsBoolean()
+  @IsOptional()
+  stat?: boolean
+
   @IsString()
   @IsOptional()
   version?: string
@@ -68,10 +73,15 @@ export class FileMoveDTO implements FileMove {
 
   @IsBoolean()
   @IsOptional()
+  unzip?: boolean
+
+  @IsBoolean()
+  @IsOptional()
   rename?: boolean
 
   @IsString()
-  destination!: string
+  @IsOptional()
+  destination?: string
 }
 
 export class FileReleaseDTO implements FileRelease {

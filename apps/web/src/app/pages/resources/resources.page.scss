@@ -62,10 +62,14 @@ button {
   }
 }
 
-nz-spin {
+.spinner-main {
   display: flex;
   justify-content: center;
   margin: 10rem 0;
+}
+
+.spinner-pagination {
+  margin-bottom: 1rem;
 }
 
 ui-search-bar {

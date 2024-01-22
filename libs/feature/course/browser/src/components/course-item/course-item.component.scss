@@ -1,27 +1,10 @@
-:host {
-  &::ng-deep {
-    .ant-ribbon {
-      color: white !important;
-    }
-    .article-header {
-      color: var(--brand-color-primary);
-      h3 {
-        color: var(--brand-color-primary);
-      }
-    }
-    .list-item-article-action-icon {
-      max-height: 18px;
-      margin-top: 4px;
-    }
-
-    .ant-progress-text {
-      color: white;
-    }
+:host::ng-deep {
+  .ant-progress-text {
+    color: white !important;
   }
-}
-
-.action {
-  cursor: pointer;
+  .article-title {
+    max-width: 70%;
+  }
 }
 
 .spacer {

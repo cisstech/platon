@@ -1,9 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, Input } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  forwardRef,
+  inject,
+  Input,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
-import { combineLatest, Observable } from 'rxjs'
-import { map } from 'rxjs/operators'
+import { combineLatest, firstValueFrom, Observable } from 'rxjs'
+import { map, tap } from 'rxjs/operators'
 
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzIconModule } from 'ng-zorro-antd/icon'
@@ -28,15 +37,17 @@ import { LTIService } from '../../api/lti.service'
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, NzIconModule, NzButtonModule, NgeUiListModule, UiSearchBarComponent],
 })
-export class LmsSearchBarComponent implements ControlValueAccessor {
+export class LmsSearchBarComponent implements OnChanges, ControlValueAccessor {
+  private readonly ltiService = inject(LTIService)
+  private readonly changeDetectorRef = inject(ChangeDetectorRef)
+  private totalCount = 0
+  private isSearching = false
+
   @Input() multi = true
   @Input() excludes: string[] = []
   @Input() disabled = false
   @Input() autoSelect = false
-
-  @Input() filters: LmsFilters = {
-    limit: 5,
-  }
+  @Input() filters: LmsFilters = { limit: 5 }
 
   readonly searchbar: SearchBar<Lms> = {
     placeholder: 'Essayez un nom...',
@@ -59,7 +70,19 @@ export class LmsSearchBarComponent implements ControlValueAccessor {
 
   selection: Lms[] = []
 
-  constructor(private readonly ltiService: LTIService, private readonly changeDetectorRef: ChangeDetectorRef) {}
+  get total(): number {
+    return this.totalCount
+  }
+
+  get searching(): boolean {
+    return this.isSearching
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.filters && !changes.filters.firstChange) {
+      firstValueFrom(this.search(this.searchbar.value || '')).catch(console.error)
+    }
+  }
 
   // ControlValueAccessor methods
 
@@ -89,6 +112,8 @@ export class LmsSearchBarComponent implements ControlValueAccessor {
 
   protected search(query: string): Observable<Lms[]> {
     const requests: Observable<Lms[]>[] = []
+    this.isSearching = true
+    this.changeDetectorRef.markForCheck()
 
     requests.push(
       this.ltiService
@@ -98,6 +123,7 @@ export class LmsSearchBarComponent implements ControlValueAccessor {
         })
         .pipe(
           map((page) => {
+            this.totalCount = page.total
             if (this.autoSelect) {
               return page.resources
             }
@@ -114,6 +140,10 @@ export class LmsSearchBarComponent implements ControlValueAccessor {
           this.onChangeSelection()
         }
         return flat.slice(0, 5)
+      }),
+      tap(() => {
+        this.isSearching = false
+        this.changeDetectorRef.markForCheck()
       })
     )
   }

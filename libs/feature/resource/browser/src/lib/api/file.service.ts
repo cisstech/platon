@@ -32,7 +32,7 @@ export class ResourceFileService {
     return this.provider.release(resource, input)
   }
 
-  versions(resource: Resource): Observable<FileVersions> {
+  versions(resource: string | Resource): Observable<FileVersions> {
     return this.provider.versions(resource)
   }
 
@@ -48,23 +48,23 @@ export class ResourceFileService {
     return this.provider.create(resource, input)
   }
 
-  upload(file: ResourceFile, data: File): Observable<void> {
+  upload(file: Pick<ResourceFile, 'url'>, data: File): Observable<void> {
     return this.provider.upload(file, data)
   }
 
-  delete(file: ResourceFile): Observable<void> {
+  delete(file: Pick<ResourceFile, 'url'>): Observable<void> {
     return this.provider.delete(file)
   }
 
-  move(file: ResourceFile, input: FileMove): Observable<void> {
+  move(file: Pick<ResourceFile, 'url'>, input: FileMove): Observable<void> {
     return this.provider.move(file, input)
   }
 
-  update(file: ResourceFile, input: FileUpdate): Observable<void> {
+  update(file: Pick<ResourceFile, 'url'>, input: FileUpdate): Observable<void> {
     return this.provider.update(file, input)
   }
 
-  search(file: ResourceFile, query: FileSearch): Observable<FileSearchResults> {
+  search(file: Pick<ResourceFile, 'url'>, query: FileSearch): Observable<FileSearchResults> {
     return this.provider.search(file, query)
   }
 }

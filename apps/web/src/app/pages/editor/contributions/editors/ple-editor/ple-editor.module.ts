@@ -9,7 +9,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 
 import { UiEditorJsModule } from '@platon/shared/ui'
-import { PleInputEditorModule } from '../ple-input-editor/ple-input.module'
+import { PleInputEditorModule } from '../ple-input/ple-input.module'
 import { PleEditorComponent } from './ple-editor.component'
 import { NzInputModule } from 'ng-zorro-antd/input'
 import { NzFormModule } from 'ng-zorro-antd/form'

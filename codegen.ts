@@ -8,23 +8,21 @@ const scalars = {
 
 const config: CodegenConfig = {
   schema: './schema.gql',
-  documents: ['./libs/**/!(*.generated).ts', './apps/**/!(*.generated).ts'],
+  ignoreNoDocuments: true,
   generates: {
     './.graphql/types.ts': {
       plugins: ['typescript', 'typescript-operations', 'typescript-apollo-angular'],
       config: {
         addExplicitOverride: true,
+        avoidOptionals: true,
         scalars,
       },
     },
     'src/': {
       preset: 'near-operation-file',
-      presetConfig: { extension: '.generated.ts', baseTypesPath: '~@platon/graphql' },
+      presetConfig: { baseTypesPath: '~@platon/graphql' },
+      documents: ['./libs/**/*.graphql.ts'],
       plugins: ['typescript', 'typescript-operations', 'typescript-apollo-angular'],
-      config: {
-        addExplicitOverride: true,
-        scalars,
-      },
     },
   },
 }

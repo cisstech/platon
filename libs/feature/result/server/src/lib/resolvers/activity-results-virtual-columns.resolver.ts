@@ -46,7 +46,7 @@ export class ActivityResultsVirtualColumnsResolver implements VirtualColumnResol
       }
 
       const { navigation } = session.variables
-      if (navigation?.exercises) {
+      if (navigation?.exercises?.length) {
         const { exercises } = navigation
         const graded = exercises.filter((e: any) => !['NOT_STARTED', 'STARTED'].includes(e.state)).length
         const started = exercises.filter((e: any) => e.state !== 'NOT_STARTED').length

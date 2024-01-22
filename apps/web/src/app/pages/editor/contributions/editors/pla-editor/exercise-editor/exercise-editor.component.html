@@ -34,6 +34,11 @@
           <span nz-icon nzType="delete" nzTheme="outline"></span>
         </button>
       </nz-list-item-action>
+      <nz-list-item-action *ngIf="!disabled">
+        <button nz-button nzType="text" nz-tooltip="Maintenez et déplacez pour changer l'ordre">
+          <mat-icon>swap_vert</mat-icon>
+        </button>
+      </nz-list-item-action>
     </ul>
   </div>
   <ng-container *ngIf="overriding && inputs">
@@ -42,8 +47,7 @@
         <tr>
           <th>Variable</th>
           <th>Type</th>
-          <th>Description</th>
-          <th></th>
+          <th nzAlign="center"></th>
         </tr>
       </thead>
       <tbody>
@@ -51,8 +55,7 @@
           <tr class="row">
             <td>{{ input.name }}</td>
             <td>{{ input.type }}</td>
-            <td>{{ input.description }}</td>
-            <td>
+            <td nzAlign="center">
               <button
                 *ngIf="!expandedInputs[input.name]"
                 nz-button
@@ -74,9 +77,9 @@
             </td>
           </tr>
           <tr *ngIf="expandedInputs[input.name]">
-            <td colSpan="4">
+            <td colSpan="3">
               <app-ple-input
-                mode="value"
+                mode="plo"
                 [disabled]="disabled"
                 [input]="input"
                 (inputChange)="onOverrideVariable($event.name, $event.value)"

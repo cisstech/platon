@@ -1,0 +1,7 @@
+<p>Selectionnez la nouvelle version à ouvrir :</p>
+<nz-select [(ngModel)]="data.selection">
+  <nz-option nzLabel="latest" nzValue="latest" />
+  @for (version of data.versions; track version) {
+  <nz-option [nzLabel]="version" [nzValue]="version" />
+  }
+</nz-select>

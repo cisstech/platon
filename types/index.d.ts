@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 declare module '@editorjs/header'
 declare module '@editorjs/attaches'
 declare module '@editorjs/checklist'
@@ -19,3 +21,6 @@ declare module 'editorjs-text-color-plugin'
 declare module 'editorjs-undo'
 declare module 'editorjs-drag-drop'
 declare module '@editorjs/simple-image'
+
+declare module 'pdfjs-dist/build/pdf.worker.entry'
+declare module 'pdfjs-dist/build/pdf'

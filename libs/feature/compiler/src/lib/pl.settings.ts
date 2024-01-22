@@ -1,6 +1,6 @@
 /** Exercise settings. */
 export interface ActivitySettings {
-  /** Duration of the activity (-1 for infinite). */
+  /** Duration of the activity in seconds (-1 for infinite). */
   duration?: number
 
   /** Activity authorized action buttons. */
@@ -11,6 +11,9 @@ export interface ActivitySettings {
 
   /** Activity feedback options */
   feedback?: ActivityFeedbackSettings
+
+  /** Activity security options */
+  security?: ActivitySecuritySettings
 }
 
 /** Settings specific to action buttons. */
@@ -36,6 +39,27 @@ export interface ActivityFeedbackSettings {
   validation?: boolean
 }
 
+/** Settings specific to security */
+export interface ActivitySecuritySettings {
+  noCopyPaste?: boolean
+
+  /**
+   * Terminate the activity when the user loses focus (switch tab, switch os window, click anywhere outside the activity document page)
+   */
+  terminateOnLoseFocus?: boolean
+
+  /**
+   * Terminate the activity when the user leaves the page (switch tab, switch os window...)
+   */
+  terminateOnLeavePage?: boolean
+}
+
+/**
+ * - `manual` => The user can jump between the exercises by using the navigation card.
+ * - `composed` => All exercises are shown together.
+ */
+export type ActivityNavigationModes = 'manual' | 'composed'
+
 /** Settings specific to navigation. */
 export interface ActivityNavigationSettings {
   /**
@@ -43,7 +67,7 @@ export interface ActivityNavigationSettings {
    * - `manual` => The user can jump between the exercises by using the navigation card.
    * - `composed` => All exercises are shown together.
    */
-  mode?: 'manual' | 'composed'
+  mode?: ActivityNavigationModes
 }
 
 /** Default settings for preview mode. */
@@ -62,5 +86,10 @@ export const defaultActivitySettings = (): ActivitySettings => ({
   },
   navigation: {
     mode: 'manual',
+  },
+  security: {
+    noCopyPaste: false,
+    terminateOnLeavePage: false,
+    terminateOnLoseFocus: false,
   },
 })

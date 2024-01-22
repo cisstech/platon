@@ -13,14 +13,22 @@ import { PlfEditorContributionModule } from './contributions/editors/plf-editor'
 
 import { ActivatedRoute } from '@angular/router'
 import { EditorService, FileService, IdeService } from '@cisstech/nge-ide/core'
+import { IntroService } from '@platon/core/browser'
 import { fadeInOnEnterAnimation, fadeOutDownOnLeaveAnimation } from 'angular-animations'
+import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton'
 import { NzSpinModule } from 'ng-zorro-antd/spin'
 import { Subscription } from 'rxjs'
-import { PleConfigEditorContributionModule } from './contributions/editors/ple-config-editor'
+import { PdfEditorContributionModule } from './contributions/editors/pdf-editor'
+import { PlcEditorContributionModule } from './contributions/editors/plc-editor'
 import { PleEditorContributionModule } from './contributions/editors/ple-editor'
+import { PloEditorContributionModule } from './contributions/editors/plo-editor'
+import { PlExplorerContributionModule } from './contributions/explorer/pl-explorer.contribution'
 import { ResourceFileSystemProvider } from './contributions/file-system'
 import { PlPreviewContributionModule } from './contributions/previews/pl-preview.contribution'
+import { PlSidebarContributionModule } from './contributions/sidebar/pl-sidebar.contribution'
+import { PlWorkbenchContributionModule } from './contributions/workbench/pl-workbench.contribution'
+import { EDITOR_TOUR } from './editor-tour'
 import { EditorPresenter } from './editor.presenter'
 
 @Component({
@@ -34,6 +42,7 @@ import { EditorPresenter } from './editor.presenter'
     CommonModule,
 
     NzSpinModule,
+    NzButtonModule,
     NzSkeletonModule,
 
     NgeIdeModule,
@@ -44,13 +53,17 @@ import { EditorPresenter } from './editor.presenter'
     NgeIdeProblemsModule,
     NgeIdeNotificationsModule,
 
+    PdfEditorContributionModule,
     PlfEditorContributionModule,
     PlaEditorContributionModule,
     PlPreviewContributionModule,
     PleEditorContributionModule,
-    PleConfigEditorContributionModule,
+    PlExplorerContributionModule,
+    PlWorkbenchContributionModule,
+    PlSidebarContributionModule,
+    PlcEditorContributionModule,
+    PloEditorContributionModule,
   ],
-  providers: [ResourceFileSystemProvider],
 })
 export class EditorPage implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = []
@@ -58,46 +71,50 @@ export class EditorPage implements OnInit, OnDestroy {
   private readonly ide = inject(IdeService)
   private readonly presenter = inject(EditorPresenter)
   private readonly fileService = inject(FileService)
+  private readonly introService = inject(IntroService)
   private readonly editorService = inject(EditorService)
   private readonly activatedRoute = inject(ActivatedRoute)
   private readonly changeDetectorRef = inject(ChangeDetectorRef)
   private readonly resourceFileSystemProvider = inject(ResourceFileSystemProvider)
-
   protected loading = true
 
   async ngOnInit(): Promise<void> {
-    const { resource, version, ancestors, filesToOpen } = await this.presenter.init(this.activatedRoute)
+    const { resource, version, rootFolders, filesToOpen } = await this.presenter.init(this.activatedRoute)
     this.subscriptions.push(
       this.ide.onAfterStart(async () => {
         this.fileService.registerProvider(this.resourceFileSystemProvider)
-        await this.fileService.registerFolders(
-          {
-            name: `${resource.name}#${version}`,
-            uri: this.resourceFileSystemProvider.buildUri(resource.id, version),
-          },
-          ...ancestors.map((ancestor) => ({
-            name: `@${ancestor.code}#latest`,
-            uri: this.resourceFileSystemProvider.buildUri(ancestor.code || ancestor.id),
-          }))
-        )
-
+        await this.fileService.registerFolders(...rootFolders())
         filesToOpen.forEach((path) => {
           this.editorService.open(this.resourceFileSystemProvider.buildUri(resource.id, version, path))
         })
-      })
-    )
-
-    this.subscriptions.push(
-      this.fileService.treeChange.subscribe((files) => {
-        if (files.length) {
-          this.loading = false
-          this.changeDetectorRef.markForCheck()
-        }
+        this.loading = false
+        this.changeDetectorRef.markForCheck()
       })
     )
   }
 
   ngOnDestroy(): void {
+    this.resourceFileSystemProvider.cleanUp()
     this.subscriptions.forEach((s) => s.unsubscribe())
+  }
+
+  protected async introTour(): Promise<void> {
+    const intro = await this.introService.create()
+
+    intro.setOptions({
+      scrollToElement: true,
+      disableInteraction: true,
+      showButtons: true,
+      showBullets: false,
+      showStepNumbers: false,
+      showProgress: true,
+      doneLabel: 'Terminer',
+      nextLabel: 'Suivant',
+      skipLabel: 'X',
+      prevLabel: 'Précedent',
+      steps: EDITOR_TOUR,
+    })
+
+    intro.start()
   }
 }

@@ -165,7 +165,7 @@ export interface PlayerActivityVariables extends ActivityVariables {
 export const isTimeouted = (player: Partial<ActivityPlayer>): boolean => {
   const closeAt = player.closeAt ? new Date(player.closeAt).getTime() : null
   const startedAt = player.startedAt ? new Date(player.startedAt).getTime() : null
-  const duration = player.settings?.duration
+  const duration = (player.settings?.duration || 0) * 1000
 
   // Get the current timestamp
   const currentTime = new Date().getTime()
@@ -207,3 +207,5 @@ export const getClosingTime = (player: Partial<ActivityPlayer>): number | null =
 
   return null
 }
+
+export const NO_COPY_PASTER_CLASS_NAME = 'no-copy-paste'

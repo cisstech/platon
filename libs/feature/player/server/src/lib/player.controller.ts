@@ -1,4 +1,5 @@
 import { Body, Controller, Param, Post, Req } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 import { IRequest, Public } from '@platon/core/server'
 import { EvalExerciseInput, PlayAnswersInput } from '@platon/feature/player/common'
 import {
@@ -14,13 +15,14 @@ import {
 import { PlayerService } from './player.service'
 
 @Controller('player')
+@ApiTags('Players')
 export class PlayerController {
   constructor(private readonly playerService: PlayerService) {}
 
   @Public()
   @Post('/preview')
-  preview(@Body() input: PreviewInputDTO): Promise<PreviewOuputDTO> {
-    return this.playerService.preview(input)
+  preview(@Req() req: IRequest, @Body() input: PreviewInputDTO): Promise<PreviewOuputDTO> {
+    return this.playerService.preview(input, req.user)
   }
 
   @Public()
@@ -46,7 +48,7 @@ export class PlayerController {
   @Public()
   @Post('/terminate/:sessionId')
   async terminate(@Req() req: IRequest, @Param('sessionId') sessionId: string): Promise<PlayActivityOutputDTO> {
-    return this.playerService.terminateSession(sessionId, req.user)
+    return this.playerService.terminate(sessionId, req.user)
   }
 
   @Public()

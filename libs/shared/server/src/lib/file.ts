@@ -37,9 +37,9 @@ export class PermissionError extends Error {
   }
 }
 
-export function isFile(path: string): boolean {
+export async function isFile(path: string): Promise<boolean> {
   try {
-    const stat = fs.statSync(path)
+    const stat = await fs.promises.stat(path)
     return stat.isFile()
   } catch (error) {
     // If an error occurs, the path probably does not exist or is not accessible
@@ -47,9 +47,9 @@ export function isFile(path: string): boolean {
   }
 }
 
-export function isDirectory(path: string): boolean {
+export async function isDirectory(path: string): Promise<boolean> {
   try {
-    const stat = fs.statSync(path)
+    const stat = await fs.promises.stat(path)
     return stat.isDirectory()
   } catch (error) {
     // If an error occurs, the path probably does not exist or is not accessible

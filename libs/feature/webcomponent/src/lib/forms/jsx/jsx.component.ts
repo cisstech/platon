@@ -1,5 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ChangeDetectionStrategy, Component, Injector, Input, OnDestroy, OnInit } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Injector,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core'
 import { ResourceLoaderService } from '@cisstech/nge/services'
 import { firstValueFrom } from 'rxjs'
 import { WebComponent, WebComponentHooks } from '../../web-component'
@@ -22,6 +31,7 @@ export class JsxComponent implements OnInit, OnDestroy, WebComponentHooks<JsxSta
   readonly boardId = 'jsx_graph' + ++JsxComponent.NEXT_ID
 
   @Input() state!: JsxState
+  @Output() stateChange = new EventEmitter<JsxState>()
 
   constructor(
     readonly injector: Injector,

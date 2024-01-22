@@ -1,0 +1,14 @@
+{
+  "index": {
+    "title": "Introduction",
+    "type": "page"
+  },
+  "doc": {
+    "title": "Documentation",
+    "type": "page"
+  },
+  "showcase": {
+    "title": "Showcase",
+    "type": "page"
+  }
+}

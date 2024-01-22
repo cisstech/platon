@@ -1,0 +1,11 @@
+<nz-breadcrumb nzSeparator="">
+  <nz-breadcrumb-item> Événements à venir </nz-breadcrumb-item>
+</nz-breadcrumb>
+<nz-calendar [nzFullscreen]="true">
+  <div *nzDateCell="let date">
+    <ng-container *ngIf="false">
+      <!-- TODO show modal with events -->
+      <nz-badge [nzStatus]="'warning'" />
+    </ng-container>
+  </div>
+</nz-calendar>

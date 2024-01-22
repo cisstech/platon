@@ -6,6 +6,7 @@ import {
   ActivityCorrection,
   UpsertCorrection,
   UserResults,
+  DashboardOutput,
 } from '@platon/feature/result/common'
 import { Observable, map } from 'rxjs'
 import { ResultProvider } from '../models/result-provider'
@@ -15,6 +16,18 @@ import { ItemResponse, ListResponse } from '@platon/core/common'
 export class RemoteResultProvider extends ResultProvider {
   constructor(private readonly http: HttpClient) {
     super()
+  }
+
+  userDashboard(): Observable<DashboardOutput> {
+    return this.http.get<DashboardOutput>(`/api/v1/results/dashboard`)
+  }
+
+  resourceDashboard(resourceId: string): Observable<DashboardOutput> {
+    return this.http.get<DashboardOutput>(`/api/v1/results/dashboard/resources/${resourceId}`)
+  }
+
+  activityDashboard(activityId: string): Observable<DashboardOutput> {
+    return this.http.get<DashboardOutput>(`/api/v1/results/dashboard/activities/${activityId}`)
   }
 
   sessionResults(sessionId: string): Observable<UserResults> {

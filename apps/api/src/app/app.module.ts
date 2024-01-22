@@ -7,6 +7,7 @@ import { FeatureNotificationServerModule } from '@platon/feature/notification/se
 import { FeaturePlayerServerModule } from '@platon/feature/player/server'
 import { FeatureResourceServerModule } from '@platon/feature/resource/server'
 import { FeatureResultServerModule } from '@platon/feature/result/server'
+import { CommandsModule } from './commands/commands.module'
 
 @Module({
   imports: [
@@ -18,6 +19,8 @@ import { FeatureResultServerModule } from '@platon/feature/result/server'
     FeatureResourceServerModule,
     FeatureNotificationServerModule,
     FeatureCasServerModule,
+
+    CommandsModule,
   ],
 })
 export class AppModule implements NestModule {

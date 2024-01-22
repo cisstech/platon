@@ -6,7 +6,7 @@
   border-radius: 8px;
   display: flex;
   align-items: center;
-  background-color: var(--brand-background-primary, 'white');
+  background-color: var(--brand-background-components, 'white');
 }
 
 input {
@@ -30,4 +30,14 @@ input:disabled {
 button {
   padding: 0;
   height: 44px !important;
+}
+
+::placeholder {
+  color: var(--brand-text-secondary);
+  opacity: 1; /* Firefox */
+}
+
+::-ms-input-placeholder {
+  /* Edge 12 -18 */
+  color: var(--brand-text-secondary);
 }

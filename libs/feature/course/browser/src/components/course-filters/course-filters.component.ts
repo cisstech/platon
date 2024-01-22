@@ -21,6 +21,7 @@ import { NzDrawerModule } from 'ng-zorro-antd/drawer'
 
 import { OrderingDirections } from '@platon/core/common'
 import { CourseFilters, CourseOrderings } from '@platon/feature/course/common'
+import { NzSelectModule } from 'ng-zorro-antd/select'
 import { Subscription } from 'rxjs'
 import { CoursePipesModule } from '../../pipes'
 
@@ -42,6 +43,7 @@ import { CoursePipesModule } from '../../pipes'
     MatFormFieldModule,
 
     NzDrawerModule,
+    NzSelectModule,
 
     CoursePipesModule,
   ],
@@ -66,8 +68,7 @@ export class CourseFiltersComponent implements OnDestroy {
 
     this.form.patchValue({
       period: this.filters.period,
-      order: this.filters.order ?? CourseOrderings.UPDATED_AT,
-      direction: this.filters.direction ?? OrderingDirections.DESC,
+      order: `${this.filters.order ?? CourseOrderings.UPDATED_AT}-${this.filters.direction ?? OrderingDirections.DESC}`,
     })
 
     this.visible = true
@@ -75,10 +76,11 @@ export class CourseFiltersComponent implements OnDestroy {
 
     this.subscriptions.push(
       this.form.valueChanges.subscribe((value) => {
+        const order = value.order?.split('-') as [CourseOrderings, OrderingDirections]
         this.filters = {
           ...this.filters,
-          direction: value.direction as any,
-          order: value.order as any,
+          order: order?.[0] as CourseOrderings,
+          direction: order?.[1] as OrderingDirections,
           period: value.period as any,
         }
       })
@@ -95,8 +97,7 @@ export class CourseFiltersComponent implements OnDestroy {
 
   private createForm() {
     return new FormGroup({
-      order: new FormControl(CourseOrderings.UPDATED_AT),
-      direction: new FormControl(OrderingDirections.DESC),
+      order: new FormControl(`${CourseOrderings.UPDATED_AT}-${OrderingDirections.DESC}`),
       period: new FormControl(0),
     })
   }

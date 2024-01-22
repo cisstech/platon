@@ -10,16 +10,19 @@ import {
   SearchResult,
 } from '@cisstech/nge-ide/core'
 import { removeLeadingSlash } from '@platon/core/common'
+import { ACTIVITY_MAIN_FILE, EXERCISE_MAIN_FILE } from '@platon/feature/compiler'
 import { ResourceFileService } from '@platon/feature/resource/browser'
-import { FileTypes, ResourceFile } from '@platon/feature/resource/common'
+import { FileTypes, Resource, ResourceFile, ResourceTypes } from '@platon/feature/resource/common'
 import { firstValueFrom } from 'rxjs'
 
-class FileImpl implements IFile {
+export class ResourceFileImpl implements IFile {
   readonly uri: monaco.Uri
   readonly version: string
   readonly readOnly: boolean
   readonly isFolder: boolean
   readonly url: string
+
+  readonly resourceFile: ResourceFile
 
   constructor(uri: monaco.Uri, entry: ResourceFile) {
     this.uri = uri
@@ -27,16 +30,20 @@ class FileImpl implements IFile {
     this.readOnly = !!entry.readOnly
     this.isFolder = entry.type === 'folder'
     this.url = entry.downloadUrl
+
+    this.resourceFile = entry
   }
 }
+
+export const PLATON_SCHEME = 'platon'
 
 @Injectable()
 export class ResourceFileSystemProvider extends FileSystemProvider {
   private readonly http = inject(HttpClient)
   private readonly fileService = inject(ResourceFileService)
   private readonly entries = new Map<string, ResourceFile>()
-
-  readonly scheme = 'platon'
+  private resource?: Resource
+  readonly scheme = PLATON_SCHEME
 
   capabilities =
     FileSystemProviderCapabilities.FileRead |
@@ -44,10 +51,20 @@ export class ResourceFileSystemProvider extends FileSystemProvider {
     FileSystemProviderCapabilities.FileMove |
     FileSystemProviderCapabilities.FileDelete |
     FileSystemProviderCapabilities.FileSearch |
-    FileSystemProviderCapabilities.FileUpload
+    FileSystemProviderCapabilities.FileUpload |
+    FileSystemProviderCapabilities.FileStat
 
   constructor() {
     super()
+  }
+
+  cleanUp() {
+    this.resource = undefined
+    this.entries.clear()
+  }
+
+  setResource(resource: Resource) {
+    this.resource = resource
   }
 
   /**
@@ -69,6 +86,18 @@ export class ResourceFileSystemProvider extends FileSystemProvider {
     keys.forEach((k) => this.entries.delete(k))
   }
 
+  override async stat(uri: monaco.Uri): Promise<IFile> {
+    const { resource, version, path } = this.parseUri(uri)
+    const file = await firstValueFrom(this.fileService.read(resource, path, version))
+    if (!file) {
+      throw FileSystemError.FileNotFound(uri)
+    }
+
+    const files: IFile[] = []
+    this.adaptEntry(uri, file, files)
+    return files[0]
+  }
+
   override async readDirectory(uri: monaco.Uri): Promise<IFile[]> {
     this.removeDirectory(uri)
 
@@ -77,15 +106,7 @@ export class ResourceFileSystemProvider extends FileSystemProvider {
     const tree = await firstValueFrom(this.fileService.read(resource, path, version))
     const files: IFile[] = []
 
-    const transform = (entry: ResourceFile) => {
-      const fileUri = monaco.Uri.parse(`${uri.scheme}://${uri.authority}/${removeLeadingSlash(entry.path)}`)
-      const file = new FileImpl(fileUri, entry)
-      files.push(file)
-      this.entries.set(file.uri.toString(true), entry)
-      entry.children?.forEach(transform)
-    }
-
-    transform(tree)
+    this.adaptEntry(uri, tree, files)
 
     return files
   }
@@ -104,63 +125,120 @@ export class ResourceFileSystemProvider extends FileSystemProvider {
   }
 
   override async upload(file: File, destination: monaco.Uri): Promise<void> {
+    if (this.isPloFile(destination)) {
+      throw FileSystemError.NoPermissions('Only server can create a PLO file')
+    }
+
+    if (this.isPlcFile(destination) && this.isTemplate()) {
+      throw FileSystemError.NoPermissions('Cannot create a PLC file from an exercise based on a template')
+    }
+
     const dest = this.lookupAsDirectory(destination)
     await firstValueFrom(this.fileService.upload(dest, file))
   }
 
   override async read(uri: monaco.Uri): Promise<string> {
-    const file = this.lookup(uri)
-    const content = await firstValueFrom(this.http.get<string>(file.url, { responseType: 'text' as 'json' }))
-    return content
+    return await firstValueFrom(this.http.get<string>(this.buildUrl(uri, true), { responseType: 'text' as 'json' }))
   }
 
   override async write(uri: monaco.Uri, content: string, update: boolean): Promise<void> {
     if (update) {
-      const file = this.lookup(uri)
-      await firstValueFrom(this.fileService.update(file, { content }))
+      await firstValueFrom(
+        this.fileService.update(
+          {
+            url: this.buildUrl(uri),
+          },
+          { content }
+        )
+      )
     } else {
       const { resource, path } = this.parseUri(uri)
+      if (this.isPloFile(uri)) {
+        throw FileSystemError.NoPermissions('Only server can create a PLO file')
+      }
+      if (this.isPlcFile(uri) && this.isTemplate()) {
+        throw FileSystemError.NoPermissions('Cannot create a PLC file from an exercise based on a template')
+      }
+
       await firstValueFrom(this.fileService.create(resource, [{ path, content }]))
     }
   }
 
   override async delete(uri: monaco.Uri): Promise<void> {
-    const file = this.lookup(uri)
-    await firstValueFrom(this.fileService.delete(file))
+    if (this.isMainUri(uri)) {
+      throw FileSystemError.NoPermissions('Cannot delete main file')
+    }
+
+    if (this.isPloFile(uri)) {
+      throw FileSystemError.NoPermissions('Only server can delete a PLO file')
+    }
+
+    await firstValueFrom(
+      this.fileService.delete({
+        url: this.buildUrl(uri),
+      })
+    )
   }
 
   override async rename(uri: monaco.Uri, name: string): Promise<void> {
-    const file = this.lookup(uri)
+    if (this.isPloFile(name)) {
+      throw FileSystemError.NoPermissions('Only server can create a PLO file')
+    }
+
+    if (this.isMainUri(uri)) {
+      throw FileSystemError.NoPermissions('Cannot rename main file')
+    }
+
+    if (this.isPlcFile(name) && this.isTemplate()) {
+      throw FileSystemError.NoPermissions('Cannot create a PLC file from an exercise based on a template')
+    }
+
     await firstValueFrom(
-      this.fileService.move(file, {
-        destination: removeLeadingSlash(Paths.join([Paths.dirname(uri.path), name])),
-        rename: true,
-      })
+      this.fileService.move(
+        {
+          url: this.buildUrl(uri),
+        },
+        {
+          destination: removeLeadingSlash(Paths.join([Paths.dirname(uri.path), name])),
+          rename: true,
+        }
+      )
     )
   }
 
   override async move(source: monaco.Uri, destination: monaco.Uri, options: { copy: boolean }): Promise<void> {
-    const src = this.lookup(source)
+    if (this.isMainUri(source)) {
+      throw FileSystemError.NoPermissions('Cannot move main file')
+    }
+
     this.lookupAsDirectory(destination)
 
     await firstValueFrom(
-      this.fileService.move(src, {
-        destination: removeLeadingSlash(destination.path),
-        copy: options?.copy,
-      })
+      this.fileService.move(
+        {
+          url: this.buildUrl(source),
+        },
+        {
+          destination: removeLeadingSlash(destination.path),
+          copy: options?.copy,
+        }
+      )
     )
   }
 
   override async search(uri: monaco.Uri, form: SearchForm): Promise<SearchResult<monaco.Uri>[]> {
-    const file = this.lookup(uri)
-
     const response = await firstValueFrom(
-      this.fileService.search(file, {
-        search: form.query,
-        match_case: form.matchCase,
-        match_word: form.matchWord,
-        use_regex: form.useRegex,
-      })
+      this.fileService.search(
+        {
+          url: this.buildUrl(uri),
+        },
+        {
+          search: form.query,
+          match_case: form.matchCase,
+          match_word: form.matchWord,
+          use_regex: form.useRegex,
+        }
+      )
     )
 
     const { scheme, authority } = uri
@@ -179,7 +257,7 @@ export class ResourceFileSystemProvider extends FileSystemProvider {
     return results
   }
 
-  private lookup(uri: monaco.Uri, silent = false): ResourceFile {
+  lookup(uri: monaco.Uri, silent = false): ResourceFile {
     const entry = this.entries.get(uri.toString(true))
     if (!entry && !silent) {
       throw FileSystemError.FileNotFound(uri)
@@ -187,7 +265,7 @@ export class ResourceFileSystemProvider extends FileSystemProvider {
     return entry as ResourceFile
   }
 
-  private lookupAsDirectory(uri: monaco.Uri, silent = false): ResourceFile {
+  lookupAsDirectory(uri: monaco.Uri, silent = false): ResourceFile {
     const entry = this.lookup(uri, silent)
     if (entry && entry.type == FileTypes.folder) {
       return entry
@@ -195,7 +273,7 @@ export class ResourceFileSystemProvider extends FileSystemProvider {
     throw FileSystemError.FileNotADirectory(uri)
   }
 
-  private lookupAsFile(uri: monaco.Uri): ResourceFile {
+  lookupAsFile(uri: monaco.Uri): ResourceFile {
     const entry = this.lookup(uri, false)
     if (entry && entry.type == FileTypes.file) {
       return entry
@@ -216,5 +294,54 @@ export class ResourceFileSystemProvider extends FileSystemProvider {
       version,
       path: removeLeadingSlash(path),
     }
+  }
+
+  private buildUrl(uri: monaco.Uri, addVersion = false): string {
+    const { resource, version, path } = this.parseUri(uri)
+    let url = `/api/v1/files/${resource}/${path}`
+    if (addVersion) {
+      url += `?version=${version}`
+    }
+    return url
+  }
+
+  private adaptEntry(uri: monaco.Uri, entry: ResourceFile, files: IFile[]) {
+    const fileUri = monaco.Uri.parse(`${uri.scheme}://${uri.authority}/${removeLeadingSlash(entry.path)}`)
+    if (entry.path === EXERCISE_MAIN_FILE && entry.resourceId === this.resource?.id) {
+      entry.readOnly = entry.readOnly || this.isTemplate()
+    }
+    const file = new ResourceFileImpl(fileUri, entry)
+    files.push(file)
+    this.entries.set(file.uri.toString(true), entry)
+    entry.children?.forEach((child) => this.adaptEntry(uri, child, files))
+  }
+
+  private isExercise(): boolean {
+    return this.resource?.type === ResourceTypes.EXERCISE
+  }
+
+  private isActivity(): boolean {
+    return this.resource?.type === ResourceTypes.ACTIVITY
+  }
+
+  private isMainUri(uri: monaco.Uri): boolean {
+    return (
+      (this.isExercise() && uri.path === `/${EXERCISE_MAIN_FILE}`) ||
+      (this.isActivity() && uri.path === `/${ACTIVITY_MAIN_FILE}`)
+    )
+  }
+
+  private isPlcFile(uri: monaco.Uri | string): boolean {
+    const path = typeof uri === 'string' ? uri : uri.path
+    return path.endsWith('.plc')
+  }
+
+  private isPloFile(uri: monaco.Uri | string): boolean {
+    const path = typeof uri === 'string' ? uri : uri.path
+    return path.endsWith('.plo')
+  }
+
+  private isTemplate(): boolean {
+    return !!this.resource?.templateId
   }
 }

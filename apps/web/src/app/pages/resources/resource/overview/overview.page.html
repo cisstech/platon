@@ -1,6 +1,6 @@
 <ng-container *ngIf="context.resource">
   <nz-row [nzGutter]="[24, 24]" nzAlign="top">
-    <nz-col nzXs="24" nzSm="24" nzMd="18" nzLg="18" nzXl="18">
+    <nz-col nzXs="24" nzSm="24" nzMd="20" nzLg="20" nzXl="20">
       <section *ngIf="context.resource.type === 'CIRCLE'">
         <mat-card>
           <mat-card-header>
@@ -15,13 +15,123 @@
             <div
               *ngIf="statusChart"
               class="echarts"
-              echarts
+              coreEcharts
               [autoResize]="false"
               [options]="statusChart"
               (chartClick)="onClickedStatus($event)"
             ></div>
           </mat-card-content>
         </mat-card>
+      </section>
+      <section *ngIf="dashboard">
+        <nz-row [nzGutter]="[24, 24]" nzAlign="top">
+          <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
+            <ui-statistic-card
+              matIcon="check_circle"
+              ribbonColor="#8e44ad"
+              valueSuffix="%"
+              description="Taux de réussite"
+              tooltip="Pourcentage des exercices complétées avec une note de 100."
+              [value]="dashboard.session.successRate"
+              [shouldBePositive]="true"
+            />
+          </nz-col>
+          <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
+            <ui-statistic-card
+              matIcon="star"
+              ribbonColor="#7f8c8d"
+              description="Note moyenne"
+              [value]="dashboard.session.averageScore"
+              tooltip="Moyenne du score sur l'ensemble des sessions complétées."
+              [shouldBePositive]="true"
+            />
+          </nz-col>
+          <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
+            <ui-statistic-card
+              matIcon="access_time"
+              ribbonColor="#f39c12"
+              description="Durée moyenne"
+              [value]="dashboard.session.averageDuration | duration"
+            />
+          </nz-col>
+          <ng-container *ngIf="dashboard.exercise">
+            <nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12" nzXl="12">
+              <ui-statistic-card
+                matIcon="thumb_up"
+                ribbonColor="#f1c40f"
+                valueSuffix="%"
+                description="Taux de réponses"
+                tooltip="Pourcentage des exercices avec au moins une réponse."
+                [value]="dashboard.exercise.answerRate"
+                [shouldBePositive]="true"
+              />
+            </nz-col>
+
+            <nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12" nzXl="12">
+              <ui-statistic-card
+                matIcon="thumb_down"
+                ribbonColor="#16a085"
+                valueSuffix="%"
+                description="Taux d'abandon"
+                tooltip="Pourcentage des exercices sans aucune réponse."
+                [value]="dashboard.exercise.dropoutRate"
+                [shouldBeZero]="true"
+              />
+            </nz-col>
+          </ng-container>
+
+          <ng-container *ngIf="dashboard.activity">
+            <nz-col>
+              <h2>Résultat par exercices</h2>
+            </nz-col>
+            <nz-col nzSpan="24">
+              <result-by-exercises [results]="dashboard.activity.exerciseResults" />
+            </nz-col>
+          </ng-container>
+
+          <nz-col nzSpan="24">
+            <h2>Évolution des notes et du temps d'apprentissage</h2>
+          </nz-col>
+          <nz-col nzSpan="24">
+            <mat-card>
+              <mat-card-header>
+                <nz-select [(ngModel)]="learningInsightsOption">
+                  <nz-option nzValue="score" nzLabel="Note moyenne" />
+                  <nz-option nzValue="duration" nzLabel="Temps d'apprentissage" />
+                </nz-select>
+                <nz-date-picker nzMode="month" [(ngModel)]="learningInsightsDate" />
+              </mat-card-header>
+              <mat-card-content>
+                <br />
+                <result-value-distribution
+                  *ngIf="learningInsightsOption === 'score'"
+                  legend="Note moyenne"
+                  [date]="learningInsightsDate"
+                  [distribution]="dashboard.session.scoreDistribution"
+                />
+                <result-value-distribution
+                  *ngIf="learningInsightsOption === 'duration'"
+                  legend="Temps d'apprentissage"
+                  [date]="learningInsightsDate"
+                  [isTimeValues]="true"
+                  [color]="'#FF0087'"
+                  [colorGradient]="['rgb(255, 0, 135)', 'rgb(135, 0, 157)']"
+                  [distribution]="dashboard.session.durationDistribution"
+                />
+              </mat-card-content>
+            </mat-card>
+          </nz-col>
+          <nz-col nzSpan="24">
+            <h2>Répartition des résultats</h2>
+          </nz-col>
+          <nz-col nzSpan="24">
+            <mat-card>
+              <mat-card-content>
+                <result-answer-distribution [distribution]="dashboard.session.answerDistribution" />
+              </mat-card-content>
+            </mat-card>
+          </nz-col>
+        </nz-row>
       </section>
       <section>
         <mat-card>
@@ -78,68 +188,97 @@
         </mat-card>
       </section>
     </nz-col>
-    <nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6" nzXl="6">
+    <nz-col nzXs="24" nzSm="24" nzMd="4" nzLg="4" nzXl="4">
       <aside>
-        <mat-card>
-          <mat-card-content>
-            <nz-statistic [nzValue]="context.statistic?.watchers" nzTitle="Observateurs" />
-          </mat-card-content>
-        </mat-card>
-        <mat-card>
-          <mat-card-content>
-            <nz-statistic [nzValue]="context.statistic?.members" nzTitle="Collaborateurs" />
-          </mat-card-content>
-        </mat-card>
-        <ng-container *ngIf="context.resource.type === 'CIRCLE'">
-          <mat-card>
-            <mat-card-content>
-              <nz-statistic [nzValue]="context.statistic?.circles" nzTitle="Cercles" />
-            </mat-card-content>
-            <mat-card-actions>
-              <a
-                nz-button
-                nzType="primary"
-                [routerLink]="['/resources']"
-                [queryParams]="{ types: 'CIRCLE', parents: context.resource.id }"
-                [queryParamsHandling]="'merge'"
+        <nz-row [nzGutter]="[24, 24]">
+          <nz-col nzSpan="24">
+            <ui-statistic-card
+              matIcon="visibility"
+              ribbonColor="#8e44ad"
+              description="Observateurs"
+              tooltip="Nombre de personnes ayant cliqué sur le bouton 'Suivre' de cette ressource."
+              [value]="context.statistic?.watchers ?? 0"
+            />
+          </nz-col>
+          <nz-col nzSpan="24">
+            <ui-statistic-card
+              matIcon="group"
+              ribbonColor="#f1c40f"
+              description="Collaborateurs"
+              tooltip="Nombre de personnes ayant des droits d'édition sur cette ressource."
+              [value]="context.statistic?.members ?? 0"
+            />
+          </nz-col>
+          <ng-container *ngIf="dashboard?.activity">
+            <nz-col nzSpan="24">
+              <ui-statistic-card
+                matIcon="local_library"
+                ribbonColor="#349d55"
+                description="Cours"
+                tooltip="Nombre de cours dans lesquels cette activité est utilisée."
+                [value]="dashboard!.activity!.usedInCoursesCount ?? 0"
+              />
+            </nz-col>
+          </ng-container>
+          <ng-container *ngIf="context.resource.type === 'CIRCLE'">
+            <nz-col nzSpan="24">
+              <ui-statistic-card
+                matIcon="group_work"
+                ribbonColor="#16a085"
+                description="Cercles enfants"
+                tooltip="Nombre de cercles directement liés à ce cercle."
+                [value]="context.statistic?.circles ?? 0"
               >
-                Rechercher
-              </a>
-            </mat-card-actions>
-          </mat-card>
-          <mat-card>
-            <mat-card-content>
-              <nz-statistic [nzValue]="context.statistic?.activities" nzTitle="Activités" />
-            </mat-card-content>
-            <mat-card-actions>
-              <a
-                nz-button
-                nzType="primary"
-                [routerLink]="['/resources']"
-                [queryParams]="{ types: 'ACTIVITY', parents: context.resource.id }"
-                [queryParamsHandling]="'merge'"
+                <a
+                  nz-button
+                  [routerLink]="['/resources']"
+                  [queryParams]="{ types: 'CIRCLE', parents: context.resource.id }"
+                  [queryParamsHandling]="'merge'"
+                >
+                  Afficher la liste
+                </a>
+              </ui-statistic-card>
+            </nz-col>
+
+            <nz-col nzSpan="24">
+              <ui-statistic-card
+                matIcon="widgets"
+                ribbonColor="#34495e"
+                description="Activités"
+                tooltip="Nombre d'activités directement liées à ce cercle."
+                [value]="context.statistic?.activities ?? 0"
               >
-                Rechercher
-              </a>
-            </mat-card-actions>
-          </mat-card>
-          <mat-card>
-            <mat-card-content>
-              <nz-statistic [nzValue]="context.statistic?.exercises" nzTitle="Exercices" />
-            </mat-card-content>
-            <mat-card-actions>
-              <a
-                nz-button
-                nzType="primary"
-                [routerLink]="['/resources']"
-                [queryParams]="{ types: 'EXERCISE', parents: context.resource.id }"
-                [queryParamsHandling]="'merge'"
+                <a
+                  nz-button
+                  [routerLink]="['/resources']"
+                  [queryParams]="{ types: 'ACTIVITY', parents: context.resource.id }"
+                  [queryParamsHandling]="'merge'"
+                >
+                  Afficher la liste
+                </a>
+              </ui-statistic-card>
+            </nz-col>
+
+            <nz-col nzSpan="24">
+              <ui-statistic-card
+                matIcon="article"
+                ribbonColor="#c0392b"
+                description="Exercices"
+                tooltip="Nombre d'exercices directement liés à ce cercle."
+                [value]="context.statistic?.exercises ?? 0"
               >
-                Rechercher
-              </a>
-            </mat-card-actions>
-          </mat-card>
-        </ng-container>
+                <a
+                  nz-button
+                  [routerLink]="['/resources']"
+                  [queryParams]="{ types: 'EXERCISE', parents: context.resource.id }"
+                  [queryParamsHandling]="'merge'"
+                >
+                  Afficher la liste
+                </a>
+              </ui-statistic-card>
+            </nz-col>
+          </ng-container>
+        </nz-row>
       </aside>
     </nz-col>
   </nz-row>

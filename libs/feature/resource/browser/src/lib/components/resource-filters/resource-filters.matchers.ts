@@ -7,6 +7,7 @@ import {
 } from '@platon/feature/resource/common'
 import { FilterIndicator } from '@platon/shared/ui'
 import { RESOURCE_ORDERING_NAMES, RESOURCE_STATUS_NAMES, RESOURCE_TYPE_NAMES } from '../../pipes'
+import { Topic } from '@platon/core/common'
 
 export const CircleFilterIndicator = (circle: CircleTree): FilterIndicator<ResourceFilters> => {
   return {
@@ -22,6 +23,7 @@ export const ResourceTypeFilterIndicator = (type: ResourceTypes): FilterIndicato
     remove: (filters) => ({
       ...filters,
       types: filters.types?.filter((e) => e !== type),
+      ...(type === ResourceTypes.EXERCISE ? { configurable: undefined } : {}),
     }),
     describe: () => RESOURCE_TYPE_NAMES[type],
   }
@@ -46,5 +48,36 @@ export const ResourceOrderingFilterIndicator = (ordering: ResourceOrderings): Fi
       order: undefined,
     }),
     describe: () => 'Trier par ' + RESOURCE_ORDERING_NAMES[ordering],
+  }
+}
+
+export const ExerciseConfigurableFilterIndicator: FilterIndicator<ResourceFilters> = {
+  match: (filters) => !!filters.configurable,
+  remove: (filters: ResourceFilters) => ({
+    ...filters,
+    configurable: undefined,
+  }),
+  describe: () => 'Exercice configurable',
+}
+
+export const TopicFilterIndicator = (topic: Topic): FilterIndicator<ResourceFilters> => {
+  return {
+    match: (filters) => !!filters.topics?.includes(topic.id),
+    remove: (filters: ResourceFilters) => ({
+      ...filters,
+      topics: filters.topics?.filter((e) => e !== topic.id),
+    }),
+    describe: () => `Possède le topic "${topic.name}"`,
+  }
+}
+
+export const LevelFilterIndicator = (level: Topic): FilterIndicator<ResourceFilters> => {
+  return {
+    match: (filters) => !!filters.levels?.includes(level.id),
+    remove: (filters: ResourceFilters) => ({
+      ...filters,
+      levels: filters.levels?.filter((e) => e !== level.id),
+    }),
+    describe: () => `Possède le niveau "${level.name}"`,
   }
 }

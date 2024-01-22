@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ChangeDetectorRef, InjectionToken, Injector } from '@angular/core'
+import { ChangeDetectorRef, EventEmitter, InjectionToken, Injector } from '@angular/core'
 import { deepCopy } from '@cisstech/nge/utils'
 import { JSONSchema7 } from 'json-schema'
 
@@ -57,6 +57,8 @@ export interface WebComponentHooks<T = any> {
    */
   state: T
 
+  stateChange?: EventEmitter<T>
+
   readonly injector: Injector
 
   /**
@@ -90,19 +92,23 @@ export const WEB_COMPONENT_DEFINITIONS = new InjectionToken<WebComponentDefiniti
 export interface WebComponentInstance extends WebComponentHooks<any> {
   /** A copy of $__state__$ to known which properties has changed during change detection. */
   $__stateCopy__$?: any
+
   /** Backed field for the `state` property of the component. */
   $__state__$?: any
+
   /**
    * Since onChangeState hook is called for each property change
    * setting this property to `true` allow to stop watching properties mutation
    * until the value is set to `false`.
    */
   $__suspendChanges__$?: boolean
+
   /**
    * A value indicating whether the ngOnInit hook
    * of the decorated component is already called.
    */
   $__ngOnInitCalled__$?: boolean
+
   /**
    * ChangeDetectorRef instance of the component.
    */
@@ -234,6 +240,11 @@ function stateSetter(component: WebComponentInstance, definition: WebComponentDe
 
 function detectChanges(component: WebComponentInstance) {
   component.$__changeDetector__$ = component.$__changeDetector__$ ?? component.injector.get(ChangeDetectorRef)
+  if (component.$__ngOnInitCalled__$) {
+    component.stateChange?.next(component.state)
+  }
+
+  component.$__changeDetector__$.markForCheck()
   component.$__changeDetector__$.detectChanges()
 
   if (component.$__suspendChanges__$ || !component.$__ngOnInitCalled__$) {
@@ -245,7 +256,9 @@ function detectChanges(component: WebComponentInstance) {
     component.onChangeState()
   }
 
+  component.$__changeDetector__$.markForCheck()
   component.$__changeDetector__$.detectChanges()
+
   component.$__suspendChanges__$ = false
 }
 

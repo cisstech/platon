@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, HostBinding, Injector, Input } from '@angular/core'
+import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Injector, Input, Output } from '@angular/core'
 import { WebComponent, WebComponentHooks } from '../../web-component'
 import { MatrixComponentDefinition, MatrixState } from './matrix'
 
@@ -11,6 +11,7 @@ import { MatrixComponentDefinition, MatrixState } from './matrix'
 @WebComponent(MatrixComponentDefinition)
 export class MatrixComponent implements WebComponentHooks<MatrixState> {
   @Input() state!: MatrixState
+  @Output() stateChange = new EventEmitter<MatrixState>()
 
   @HostBinding('style')
   get styles() {

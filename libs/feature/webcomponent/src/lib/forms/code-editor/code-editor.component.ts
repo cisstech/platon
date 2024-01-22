@@ -5,12 +5,15 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  EventEmitter,
   Injector,
   Input,
   OnDestroy,
+  Output,
   ViewChild,
 } from '@angular/core'
 import { ACTION_GOTO_LINE, ACTION_INDENT_USING_SPACES, ACTION_QUICK_COMMAND } from '@cisstech/nge/monaco'
+import { NO_COPY_PASTER_CLASS_NAME } from '@platon/feature/player/common'
 import { WebComponent, WebComponentHooks } from '../../web-component'
 import { WebComponentChangeDetectorService } from '../../web-component-change-detector.service'
 import { CodeEditorComponentDefinition, CodeEditorState } from './code-editor'
@@ -30,6 +33,8 @@ export class CodeEditorComponent implements AfterViewChecked, OnDestroy, WebComp
   private height = 0
 
   @Input() state!: CodeEditorState
+  @Output() stateChange = new EventEmitter<CodeEditorState>()
+
   @ViewChild('footer', { static: true })
   footer!: ElementRef<HTMLElement>
 
@@ -75,6 +80,7 @@ export class CodeEditorComponent implements AfterViewChecked, OnDestroy, WebComp
       insertSpaces: true,
       trimAutoWhitespace: true,
     })
+
     this.editor.updateOptions({
       autoIndent: 'advanced',
       lineNumbers: 'on',
@@ -82,6 +88,7 @@ export class CodeEditorComponent implements AfterViewChecked, OnDestroy, WebComp
       quickSuggestions: true,
       glyphMargin: false,
       renderControlCharacters: true,
+      contextmenu: document.querySelector(`.${NO_COPY_PASTER_CLASS_NAME}`) == null,
       minimap: {
         enabled: true,
       },
@@ -109,6 +116,13 @@ export class CodeEditorComponent implements AfterViewChecked, OnDestroy, WebComp
       })
     )
 
+    /*    this.disposables.push(
+      this.editor.onDidChangeCursorSelection(() => {
+        console.log('onDidChangeCursorSelection')
+        const { column, lineNumber } = this.editor!.getPosition()!
+        this.editor!.setPosition({ lineNumber, column })
+      })
+    ) */
     // COMMANDS
     this.editor.addCommand(
       monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS,
@@ -117,6 +131,16 @@ export class CodeEditorComponent implements AfterViewChecked, OnDestroy, WebComp
       },
       ''
     )
+    /*
+    this.editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyC, () => {
+      console.log('Ctrl+C')
+      return null
+    })
+
+    this.editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyV, () => {
+      console.log('Ctrl+V')
+      return null
+    }) */
 
     this.initialCode = this.state.code
   }

@@ -7,12 +7,10 @@ import {
   Output,
   inject,
 } from '@angular/core'
-import { ActivityExercise } from '@platon/feature/compiler'
-import { ResourceFileService, ResourceService } from '@platon/feature/resource/browser'
-import { Resource } from '@platon/feature/resource/common'
-import { catchError, firstValueFrom, of } from 'rxjs'
-import { PLE_CONFIG_FILE_PATH } from '../../ple-config-editor/ple-config-editor'
-import { PleInput } from '../../ple-input-editor/ple-input'
+import { ActivityExercise, PleInput, Variables } from '@platon/feature/compiler'
+import { ResourceService } from '@platon/feature/resource/browser'
+import { ExerciseResourceMeta, Resource } from '@platon/feature/resource/common'
+import { firstValueFrom } from 'rxjs'
 
 @Component({
   selector: 'app-pla-exercise-editor',
@@ -23,12 +21,12 @@ import { PleInput } from '../../ple-input-editor/ple-input'
 export class PlaExerciseEditorComponent {
   private readonly resourceService = inject(ResourceService)
   private readonly changeDetectorRef = inject(ChangeDetectorRef)
-  private readonly resourceFileService = inject(ResourceFileService)
 
   protected _exercise!: ActivityExercise
 
   protected inputs?: PleInput[] = []
   protected resource?: Resource
+  protected overrides: Variables = {}
 
   get exercise(): ActivityExercise {
     return this._exercise
@@ -37,19 +35,30 @@ export class PlaExerciseEditorComponent {
   @Input()
   set exercise(value: ActivityExercise) {
     this._exercise = value
-    Promise.all([
-      firstValueFrom(this.resourceService.find(value.resource)),
-      firstValueFrom(
-        this.resourceFileService
-          .read(value.resource, PLE_CONFIG_FILE_PATH, value.version)
-          .pipe(catchError(() => of(undefined)))
-      ) as unknown as Promise<{ inputs: PleInput[] }>,
-    ]).then(([resource, config]) => {
+    // TODO: read from field instead of using metadata since they contains only metadata
+    // for latest version of the resource
+    firstValueFrom(
+      this.resourceService.find({
+        id: value.resource,
+        expands: ['metadata'],
+      })
+    ).then((resource) => {
       this.resource = resource
-      this.inputs = config?.inputs?.map((input) => ({
-        ...input,
-        value: value.overrides?.[input.name] || input.value,
-      }))
+      const metadata = resource.metadata as ExerciseResourceMeta | undefined
+      this.inputs = []
+      this.overrides = {}
+      for (const input of metadata?.config?.inputs || []) {
+        if (value.overrides?.[input.name] != null) {
+          this.overrides[input.name] = value.overrides[input.name]
+        }
+        this.inputs.push({
+          ...input,
+          value: this.overrides[input.name],
+        })
+      }
+      if (!this.inputs.length) {
+        this.inputs = undefined
+      }
       this.changeDetectorRef.detectChanges()
     })
   }
@@ -63,8 +72,8 @@ export class PlaExerciseEditorComponent {
   protected expandedInputs: Record<string, boolean> = {}
 
   protected onOverrideVariable(name: string, value: unknown) {
-    this.exercise.overrides = this.exercise.overrides || {}
-    this.exercise.overrides[name] = value
+    this.overrides[name] = value
+    this.exercise.overrides = this.overrides
     this.exerciseChange.emit(this.exercise)
   }
 }

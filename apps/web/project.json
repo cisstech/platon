@@ -20,7 +20,6 @@
         "tsConfig": "apps/web/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
-          "apps/web/src/favicon.ico",
           "apps/web/src/assets",
           {
             "glob": "**/*",
@@ -115,6 +114,7 @@
         ],
         "styles": [
           "shared/styles/app.scss",
+          "apps/web/src/styles.scss",
           {
             "input": "shared/styles/material/dark.scss",
             "bundleName": "styles.material.dark",
@@ -134,8 +134,7 @@
             "input": "shared/styles/ng-zorro/light.less",
             "bundleName": "styles.ng-zorro.light",
             "inject": false
-          },
-          "apps/web/src/styles.scss"
+          }
         ],
         "scripts": [],
         "allowedCommonJsDependencies": [
@@ -143,6 +142,8 @@
           "subscriptions-transport-ws",
           "rfdc",
           "jsoneditor",
+          "@ts-jison/lexer",
+          "@ts-jison/parser",
           "@editorjs/editorjs",
           "@editorjs/code",
           "@editorjs/delimiter",
@@ -160,7 +161,8 @@
           "editorjs-undo",
           "editorjs-style",
           "editorjs-text-alignment-blocktune",
-          "editorjs-text-color-plugin"
+          "editorjs-text-color-plugin",
+          "pdfjs-dist/build/pdf.worker.entry"
         ]
       },
       "configurations": {
@@ -194,10 +196,10 @@
       "executor": "@angular-devkit/build-angular:dev-server",
       "configurations": {
         "production": {
-          "browserTarget": "web:build:production"
+          "buildTarget": "web:build:production"
         },
         "development": {
-          "browserTarget": "web:build:development"
+          "buildTarget": "web:build:development"
         }
       },
       "defaultConfiguration": "development",
@@ -209,22 +211,18 @@
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {
-        "browserTarget": "web:build"
+        "buildTarget": "web:build"
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": ["apps/web/**/*.ts", "apps/web/**/*.html"]
-      }
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
     },
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "apps/web/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "apps/web/jest.config.ts"
       }
     }
   },

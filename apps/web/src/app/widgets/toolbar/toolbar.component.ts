@@ -13,15 +13,14 @@ import {
 } from '@angular/core'
 import { Router, RouterModule } from '@angular/router'
 
-import { MatBadgeModule } from '@angular/material/badge'
 import { MatButtonModule } from '@angular/material/button'
 import { MatIconModule } from '@angular/material/icon'
 import { MatMenuModule } from '@angular/material/menu'
 
-import { AuthService, UserAvatarComponent } from '@platon/core/browser'
+import { AuthService, ThemeService, UserAvatarComponent } from '@platon/core/browser'
 import { User, UserRoles } from '@platon/core/common'
 import { NotificationDrawerComponent } from '@platon/feature/notification/browser'
-import { ResourceService } from '@platon/feature/resource/browser'
+import { ResourcePipesModule, ResourceService } from '@platon/feature/resource/browser'
 import { NzBadgeModule } from 'ng-zorro-antd/badge'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzIconModule } from 'ng-zorro-antd/icon'
@@ -40,7 +39,6 @@ import { Subscription } from 'rxjs'
 
     MatIconModule,
     MatMenuModule,
-    MatBadgeModule,
     MatButtonModule,
 
     NzIconModule,
@@ -48,6 +46,7 @@ import { Subscription } from 'rxjs'
     NzButtonModule,
     NzPopoverModule,
 
+    ResourcePipesModule,
     UserAvatarComponent,
     NotificationDrawerComponent,
   ],
@@ -58,6 +57,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
   private readonly router = inject(Router)
   private readonly authService = inject(AuthService)
+  private readonly themeService = inject(ThemeService)
   private readonly resourceService = inject(ResourceService)
   private readonly changeDetectorRef = inject(ChangeDetectorRef)
   private readonly breakpointObserver = inject(BreakpointObserver)
@@ -82,6 +82,10 @@ export class ToolbarComponent implements OnInit, OnDestroy {
       return segments[1].path
     }
     return undefined
+  }
+
+  get themeIcon(): string {
+    return this.themeService.isDark ? 'dark_mode' : 'light_mode'
   }
 
   get mobile(): boolean {
@@ -131,5 +135,32 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
   signOut(): void {
     this.authService.signOut()
+  }
+
+  darkTheme(): void {
+    document.body.style.opacity = '0'
+    document.body.style.transition = 'opacity 0.2s ease-in-out'
+    document.body.style.transition = 'none'
+    setTimeout(() => {
+      this.themeService.darkTheme(true)
+    }, 200)
+
+    setTimeout(() => {
+      document.body.style.opacity = '1'
+      this.changeDetectorRef.markForCheck()
+    }, 500)
+  }
+
+  lightTheme(): void {
+    document.body.style.opacity = '0'
+    document.body.style.transition = 'opacity 0.2s ease-in-out'
+    setTimeout(() => {
+      this.themeService.lightTheme(true)
+    }, 200)
+    setTimeout(() => {
+      document.body.style.opacity = '1'
+      document.body.style.transition = 'none'
+      this.changeDetectorRef.markForCheck()
+    }, 500)
   }
 }

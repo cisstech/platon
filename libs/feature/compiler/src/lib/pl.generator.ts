@@ -111,6 +111,9 @@ interface PLGeneratorInput {
   readonly source: PLSourceFile
 }
 
+/**
+ * Producees raw PL code from a compiled AST.
+ */
 export class PLGenerator {
   private readonly nodes: PLNode[]
   private readonly includeChanges?: string[]

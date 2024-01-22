@@ -7,7 +7,7 @@ import { UserModule } from '../users/user.module'
 import { AuthController } from './auth.controller'
 import { AuthService } from './auth.service'
 import { AuthGuard } from './guards/auth.guard'
-import { RolesGuard } from './guards/roles.guard'
+import { RolesGuard, RolesIfBodyHasKeyGuard } from './guards/roles.guard'
 import { JwtStrategy } from './strategies/jwt.strategy'
 
 @Module({
@@ -25,6 +25,7 @@ import { JwtStrategy } from './strategies/jwt.strategy'
     JwtStrategy,
     { provide: APP_GUARD, useClass: AuthGuard },
     { provide: APP_GUARD, useClass: RolesGuard },
+    { provide: APP_GUARD, useClass: RolesIfBodyHasKeyGuard },
   ],
   controllers: [AuthController],
   exports: [JwtModule, AuthService],

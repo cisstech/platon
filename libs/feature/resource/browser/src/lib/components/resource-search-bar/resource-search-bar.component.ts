@@ -95,6 +95,7 @@ export class ResourceSearchBarComponent implements ControlValueAccessor {
       .search({
         ...(this.filters || {}),
         search: query,
+        expands: ['metadata'],
       })
       .pipe(
         map((page) => {

@@ -5,17 +5,13 @@
   padding: 0.5rem;
   margin: 10px 0 10px 0;
   border-radius: 5px;
-  background-color: #fff;
+  background-color: var(--brand-brackground-overlay);
   font-size: large;
   outline: none;
-  box-shadow:
-    0 2px 2px 0 rgba(0, 0, 0, 0.16),
-    0 0 0 1px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
   transition: box-shadow 0.3s ease-in-out;
   &:hover {
-    box-shadow:
-      0 3px 8px 0 rgba(0, 0, 0, 0.2),
-      0 0 0 1px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.08);
   }
   &.disabled {
     pointer-events: none;

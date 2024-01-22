@@ -18,42 +18,34 @@
 
 ## Table of Contents
 
-- [PLaTon - Platform for Learning and Teaching Online](#platon---platform-for-learning-and-teaching-online)
-  - [Table of Contents](#table-of-contents)
-  - [Introduction](#introduction)
-  - [Key Features](#key-features)
-  - [Planned features](#planned-features)
-  - [Installation](#installation)
-    - [Prerequisites](#prerequisites)
-    - [Recommendations](#recommendations)
-    - [Setup](#setup)
-  - [Technical Documentation](#technical-documentation)
-    - [Platform Architecture](#platform-architecture)
-      - [Technical Stack](#technical-stack)
-      - [Docker stack](#docker-stack)
-    - [Environment Configuration](#environment-configuration)
-    - [Codebase Structure](#codebase-structure)
-    - [Key Libraries and Frameworks](#key-libraries-and-frameworks)
-    - [Development Workflow](#development-workflow)
-      - [Scripts](#scripts)
-      - [Testing](#testing)
-      - [Linting and Formatting](#linting-and-formatting)
-    - [Deployment](#deployment)
-      - [On-premise](#on-premise)
-      - [Cloud](#cloud)
-  - [Functional Documentation](#functional-documentation)
-    - [User Types](#user-types)
-    - [Resource Management](#resource-management)
-    - [Course and Activity Management](#course-and-activity-management)
-    - [Tags and Topics](#tags-and-topics)
-    - [User Groups and Notifications](#user-groups-and-notifications)
-    - [LMS Integration](#lms-integration)
-  - [Contributing](#contributing)
-  - [License](#license)
+1. [Introduction](#introduction)
+2. [Key Features](#key-features)
+3. [Installation](#installation)
+   1. [Prerequisites](#prerequisites)
+   2. [Recommendations](#recommendations)
+   3. [Setup](#setup)
+4. [Technical Documentation](#technical-documentation)
+   1. [Platform Architecture](#platform-architecture)
+   2. [Environment Configuration](#environment-configuration)
+   3. [Codebase Structure](#codebase-structure)
+   4. [Key Libraries and Frameworks](#key-libraries-and-frameworks)
+   5. [Development Workflow](#development-workflow)
+      1. [Scripts](#scripts)
+      2. [Testing](#testing)
+      3. [Linting and Formatting](#linting-and-formatting)
+   6. [Deployment](#deployment)
+      1. [On-premise](#on-premise)
+      2. [Cloud](#cloud)
+      3. [Github](#github-home-page)
+5. [Functional Documentation](#documentation)
+6. [Contributing](#contributing)
+7. [License](#license)
 
 ## Introduction
 
 PLaTon is an open-source online learning and teaching platform designed to facilitate the creation, management, and sharing of educational resources. It provides a comprehensive set of tools for educators, students, and administrators to create, organize, and manage courses and activities in a collaborative environment. PLaTon aims to support the learning process by integrating with popular Learning Management Systems (LMS) and fostering an active community of users and contributors.
+
+Homepage : <https://cisstech.github.io/platon/>
 
 ## Key Features
 
@@ -216,6 +208,8 @@ The platform is built using a modern tech stack, ensuring high performance and r
 
 - **Angular**: A widely-used front-end framework for building single-page applications with a focus on performance, maintainability, and testability.
 
+- **NextJS/Nextra**: A modern toolings for building efficient documentation pages
+
 - **PostgreSQL**: A robust and reliable open-source relational database management system that provides powerful features, excellent performance, and scalability.
   Redis: An in-memory data structure store, used as a cache for enhanced performance and scalability.
 
@@ -223,7 +217,7 @@ The platform is built using a modern tech stack, ensuring high performance and r
 
 - **Docker**: A containerization platform used for creating, deploying, and running applications in a consistent and reproducible environment.
 
-The platform is organized into three main components:
+The platform is organized into four main components:
 
 - **Client-side (Front-end)**: The client-side application is built using Angular and provides a responsive and user-friendly interface for interacting with the platform. It consumes the GraphQL and REST APIs provided by the server-side application and handles user authentication, resource management, course and activity management, notifications, and LMS integration.
 
@@ -231,6 +225,8 @@ The platform is organized into three main components:
 
 - **Database and Cache**: PostgreSQL is used as the primary database for storing the platform's data, while Redis is used as a cache to improve performance and scalability.
   Modular Design
+
+- **Documentation**: The platform documentation is build using [Nextra](https://nextra.site)
 
 #### Docker stack
 
@@ -249,7 +245,7 @@ The platform is organized into three main components:
 └─────────────────┴─────────────────┴────────────────-┘
 ```
 
-- In development mode, the architecture uses Docker to run the PostgreSQL, Redis, and PgAdmin services. The Nest.js and Angular applications are run on the host machine. Nginx is set up as a reverse proxy, directing requests to the appropriate services or applications.
+- In development mode, the architecture uses Docker to run the PostgreSQL, Redis, and PgAdmin services. The Nest.js, Angular and NextJS applications are run on the host machine. Nginx is set up as a reverse proxy, directing requests to the appropriate services or applications.
 
 - The Nginx reverse proxy configuration is different for development and production environments. In development, Nginx is configured to proxy requests to the Angular and Nest.js applications running on the host machine. In production, the Angular application is built and placed inside the Nginx container while the Nest.js application run on a different service inside docker, which is then used as a full reverse proxy.
 
@@ -287,8 +283,8 @@ This document describes the environnement configuration for the application, inc
 | DB_PASSWORD                | api      | Database password for the API service.                      | test                             |
 | DB_HOST                    | api      | Database host for the API service.                          | localhost                        |
 | DB_PORT                    | api      | Database port for the API service.                          | 5432                             |
-| REDIS_HOST                 | api      | Sets django's `REDIS_HOST` value setting                    | localhost                        |
-| REDIS_PORT                 | api      | Sets django's `REDIS_PORT` value setting                    | 6379                             |
+| REDIS_HOST                 | api      | Sets NestJs `REDIS_HOST` value setting                      | localhost                        |
+| REDIS_PORT                 | api      | Sets NestJs `REDIS_PORT` value setting                      | 6379                             |
 | SECRET_KEY                 | api      | Secret key for the API service.                             | secret                           |
 | PASSWORD_SALT              | api      | Secret key for the API service.                             | 10                               |
 | JWT_ACCESS_TOKEN_LIFETIME  | api      | Access token lifetime for JWT authentication.               | 7d                               |
@@ -336,6 +332,8 @@ This project is built using a variety of key libraries and frameworks that provi
   In the development mode, the NestJS and Angular applications run on the host machine, while the Postgres, Redis, and other services run inside Docker containers. This hybrid approach allows for easier debugging and faster development, while still leveraging the benefits of containerization for the backend services.
 
 - **[Jison](https://gerhobbelt.github.io/jison/docs/)**: Jison is a JavaScript parser generator inspired by Bison and Yacc. In this project, Jison is used to create custom parsers for specific domain languages or complex expressions, enabling advanced features and providing more flexibility in user interactions.
+
+- **[Nextra](https://nextra.site)**: Modern tooling build ontop of NextJS to create static sites
 
 ### Development Workflow
 
@@ -445,31 +443,38 @@ If you plan to use a custom ssl files instead, update the docker-compose and the
 
 [TODO]
 
-## Functional Documentation
+#### Github Home page
 
-### User Types
+The homepage of the project is hosted at <https://cisstech.github.io/platon/>
 
-[TODO]
+- Build
 
-### Resource Management
+```sh
+yarn build:github
+```
 
-[TODO]
+- Deploy
 
-### Course and Activity Management
+```sh
+yarn publish:github
+```
 
-[TODO]
+## Documentation
 
-### Tags and Topics
+Documentation is hosted at :
+<https://cisstech.github.io/platon/docs>
 
-[TODO]
+There is also a self hosted version of the documentation that runs alongside of the application thanks to nginx reverse proxy at `/docs/main`
 
-### User Groups and Notifications
+In development mode the documentation can be served using the following command :
 
-[TODO]
+```sh
+yarn serve:docs
+```
 
-### LMS Integration
+In production mode, nginx serve the documentation as static files inside the docker container
 
-[TODO]
+> Before serving the docs, you should run `yarn` command inside `./apps/docs`.
 
 ## Contributing
 
@@ -487,4 +492,4 @@ Linter passes
 
 ## License
 
-[TODO]
+[CeCILL-B](LICENSE)

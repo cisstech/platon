@@ -1,16 +1,17 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { OrderingDirections } from '@platon/core/common'
 import { BaseDTO, LevelDTO, toArray, toBoolean, toNumber, TopicDTO } from '@platon/core/server'
+import { ActivityNavigationModes } from '@platon/feature/compiler'
 import {
   CircleTree,
   CreateResource,
   Resource,
   ResourceFilters,
   ResourceOrderings,
+  ResourcePermissions,
   ResourceStatus,
   ResourceTypes,
   UpdateResource,
-  ResourcePermissions,
 } from '@platon/feature/resource/common'
 import { Transform, Type } from 'class-transformer'
 import { IsArray, IsBoolean, IsEnum, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator'
@@ -39,6 +40,10 @@ export class ResourceDTO extends BaseDTO implements Resource {
   @ApiProperty()
   readonly personal!: boolean
 
+  @IsBoolean()
+  @ApiProperty()
+  readonly publicPreview!: boolean
+
   @IsEnum(ResourceStatus)
   @ApiProperty()
   readonly status!: ResourceStatus
@@ -62,6 +67,11 @@ export class ResourceDTO extends BaseDTO implements Resource {
   @ApiProperty()
   readonly parentId?: string
 
+  @IsUUID()
+  @IsOptional()
+  @ApiProperty()
+  readonly templateId?: string
+
   @Type(() => ResourcePermissionsDTO)
   @ApiProperty()
   readonly permissions!: ResourcePermissions
@@ -80,6 +90,12 @@ export class CircleTreeDTO implements CircleTree {
   @IsOptional()
   @ApiProperty()
   readonly code?: string
+
+  @IsString({ each: true })
+  @IsArray()
+  @IsOptional()
+  @ApiProperty()
+  readonly versions?: string[]
 
   @Type(() => CircleTreeDTO)
   @IsArray()
@@ -100,6 +116,10 @@ export class CreateResourceDTO implements CreateResource {
   @IsUUID()
   @ApiProperty()
   readonly parentId!: string
+
+  @IsUUID()
+  @IsOptional()
+  readonly templateId?: string
 
   @IsString()
   @IsOptional()
@@ -148,6 +168,11 @@ export class UpdateResourceDTO implements UpdateResource {
   @IsOptional()
   @ApiProperty()
   status?: ResourceStatus
+
+  @IsBoolean()
+  @IsOptional()
+  @ApiProperty()
+  publicPreview!: boolean
 
   @IsUUID(undefined, { each: true })
   @IsArray()
@@ -200,12 +225,50 @@ export class ResourceFiltersDTO implements ResourceFilters {
   @IsUUID(undefined, { each: true })
   @IsArray()
   @IsOptional()
+  readonly dependOn?: string[]
+
+  @Transform(({ value }) => toArray(value))
+  @IsUUID(undefined, { each: true })
+  @IsArray()
+  @IsOptional()
+  readonly usedBy?: string[]
+
+  @Transform(({ value }) => toArray(value))
+  @IsUUID(undefined, { each: true })
+  @IsArray()
+  @IsOptional()
   readonly owners?: string[]
 
   @Transform(({ value }) => toBoolean(value))
   @IsBoolean()
   @IsOptional()
   readonly views?: boolean
+
+  @Transform(({ value }) => toBoolean(value))
+  @IsBoolean()
+  @IsOptional()
+  readonly publicPreview?: boolean
+
+  @Transform(({ value }) => toBoolean(value))
+  @IsBoolean()
+  @IsOptional()
+  readonly configurable?: boolean
+
+  @IsString()
+  @IsOptional()
+  readonly navigation?: ActivityNavigationModes
+
+  @Transform(({ value }) => toArray(value))
+  @IsUUID(undefined, { each: true })
+  @IsArray()
+  @IsOptional()
+  readonly topics?: string[]
+
+  @Transform(({ value }) => toArray(value))
+  @IsUUID(undefined, { each: true })
+  @IsArray()
+  @IsOptional()
+  readonly levels?: string[]
 
   @Transform(({ value }) => toNumber(value))
   @IsNumber()

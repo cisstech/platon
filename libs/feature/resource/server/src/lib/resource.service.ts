@@ -12,30 +12,50 @@ import {
   ResourceTypes,
 } from '@platon/feature/resource/common'
 import { isUUID4 } from '@platon/shared/server'
-import { DataSource, EntityManager, Repository } from 'typeorm'
+import { DataSource, EntityManager, In, Repository } from 'typeorm'
 import { Optional } from 'typescript-optional'
 import { ResourceMemberEntity } from './members/member.entity'
 import { CreateResourceDTO, UpdateResourceDTO } from './resource.dto'
 import { ResourceEntity } from './resource.entity'
 import { ResourceWatcherEntity } from './watchers'
+import { ResourceDependencyEntity } from './dependency'
+import { ResourceMetaEntity } from './metadata/metadata.entity'
+import { ResourceStatisticEntity } from './statistics'
 
 @Injectable()
 export class ResourceService {
   constructor(
     @InjectRepository(ResourceEntity)
     private readonly repository: Repository<ResourceEntity>,
+
+    @InjectRepository(ResourceMetaEntity)
+    private readonly metadataRepo: Repository<ResourceMetaEntity>,
     private readonly dataSource: DataSource,
     private readonly levelService: LevelService,
     private readonly topicService: TopicService
   ) {}
 
   async tree(circles: ResourceEntity[]): Promise<CircleTree> {
-    const root = circles.find((c) => !c.parentId) as ResourceEntity
+    const root = circles.find((c) => !c.parentId && !c.personal) as ResourceEntity
+    const metas = circles.length
+      ? await this.metadataRepo.find({
+          where: {
+            resourceId: In(circles.map((c) => c.id)),
+          },
+        })
+      : []
+
+    const metasMap = metas.reduce((acc, meta) => {
+      acc[meta.resourceId] = meta
+      return acc
+    }, {} as Record<string, ResourceMetaEntity>)
+
     const tree: CircleTree = {
       id: root.id,
       name: root.name,
       code: root.code,
       children: [],
+      versions: metasMap[root.id]?.meta?.versions?.map((v) => v.tag) || [],
       permissions: {
         read: true,
         write: true,
@@ -53,6 +73,7 @@ export class ResourceService {
           id: child.id,
           name: child.name,
           code: child.code,
+          versions: metasMap[child.id]?.meta?.versions?.map((v) => v.tag) || [],
           permissions: {
             read: true,
             write: true,
@@ -170,13 +191,17 @@ export class ResourceService {
     query.leftJoinAndSelect('resource.topics', 'topic')
     query.leftJoinAndSelect('resource.levels', 'level')
 
+    if (filters.configurable !== null || filters.navigation != null) {
+      query.leftJoin('ResourceMeta', 'metadata', 'metadata.resource_id = resource.id')
+    }
+
     filters = {
       ...filters,
       order: filters.order || ResourceOrderings.RELEVANCE,
     }
 
     if (filters.order === ResourceOrderings.RELEVANCE) {
-      query.leftJoin('ResourceStats', 'stats', 'stats.id = resource.id')
+      query.leftJoinAndSelect(ResourceStatisticEntity, 'stats', 'stats.id = resource.id')
     }
 
     if (filters.members?.length) {
@@ -197,7 +222,25 @@ export class ResourceService {
       )
     }
 
-    query.where('personal = false')
+    if (filters.dependOn?.length) {
+      query.innerJoin(
+        ResourceDependencyEntity,
+        'dependency',
+        'dependency.resource_id = resource.id AND dependency.depend_on_id IN (:...ids)',
+        { ids: filters.dependOn }
+      )
+    }
+
+    if (filters.usedBy?.length) {
+      query.innerJoin(
+        ResourceDependencyEntity,
+        'dependency',
+        'dependency.depend_on_id = resource.id AND dependency.resource_id IN (:...ids)',
+        { ids: filters.usedBy }
+      )
+    }
+
+    // query.where('personal = false')
 
     if (filters.parents?.length) {
       query.andWhere('parent_id IN(:...parents)', { parents: filters.parents })
@@ -213,6 +256,28 @@ export class ResourceService {
 
     if (filters.owners?.length) {
       query.andWhere('owner_id IN (:...owners)', { owners: filters.owners })
+    }
+
+    if (filters.levels?.length) {
+      query.andWhere('level_id IN (:...levels)', { levels: filters.levels })
+    }
+
+    if (filters.topics?.length) {
+      query.andWhere('topic_id IN (:...topics)', { topics: filters.topics })
+    }
+
+    if (filters.publicPreview) {
+      query.andWhere('public_preview = true')
+    }
+
+    if (filters.configurable) {
+      query.andWhere(`(type <> 'EXERCISE' OR metadata.meta->'configurable' = 'true')`)
+    }
+
+    if (filters.navigation) {
+      query.andWhere(`(type <> 'ACTIVITY' OR metadata.meta->'settings'->'navigation'->>'mode' = :navigation)`, {
+        navigation: filters.navigation,
+      })
     }
 
     if (filters.search) {
@@ -254,18 +319,24 @@ export class ResourceService {
     }
 
     if (filters.offset) {
-      query.offset(filters.offset)
+      query.skip(filters.offset)
     }
 
     if (filters.limit) {
-      query.limit(filters.limit)
+      query.take(filters.limit)
     }
 
     return query.getManyAndCount()
   }
 
   async create(input: Partial<ResourceEntity>): Promise<ResourceEntity> {
-    return this.repository.save(this.repository.create(input))
+    const parent = (await this.findById(input.parentId!)).get()
+    return this.repository.save(
+      this.repository.create({
+        ...input,
+        personal: parent.personal,
+      })
+    )
   }
 
   async update(idOrResource: string | ResourceEntity, changes: Partial<ResourceEntity>): Promise<ResourceEntity> {
@@ -286,11 +357,14 @@ export class ResourceService {
     return this.repository.save(resource)
   }
 
-  async completion(): Promise<ResourceCompletion> {
+  async completion(user: UserEntity): Promise<ResourceCompletion> {
     const [levels, topics, names] = await Promise.all([
       this.levelService.findAll(),
       this.topicService.findAll(),
-      this.repository.query('SELECT name FROM "Resources"') as Promise<{ name: string }[]>,
+      this.repository.find({
+        where: [{ personal: true, ownerId: user.id }, { personal: false }],
+        select: ['name'],
+      }),
     ])
 
     return {

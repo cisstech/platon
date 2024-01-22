@@ -14,8 +14,8 @@ export interface ExerciseHint {
   next: string
   /** List of dynamically generated hints. */
   data: string[]
-  /** Determines whether the hint button should be displayed or not. */
-  empty: boolean
+  /** Determines whether there are more hints to show */
+  done: boolean
 }
 
 /**
@@ -24,8 +24,43 @@ export interface ExerciseHint {
 export interface ExerciseTheory {
   /** Title of the theory document. */
   title: string
+
   /** Url to the theory document. */
   url: string
+
+  /**
+   * Determines whether the theory document should be displayed in preview mode.
+   * - Only supported formats are displayed in preview mode.
+   *  - Supported formats are listed in `ui-file-preview` component.
+   * - If the format is not supported, the document is downloaded.
+   */
+  preview?: boolean
+}
+
+/** Variables managed by the player to keep track of some informations about the exercice status.  */
+
+export interface ExerciseMeta {
+  /**
+   * Determines whether the exercise is in initial build state.
+   */
+  isInitialBuild: boolean
+
+  /** List of grades obtained by the user order from least recent to most recent */
+  grades: number[]
+
+  /** Number of attempts made by the user (always set to 0 after reroll). */
+  attempts?: number
+
+  /**
+   * Total number of attemps made by the user.
+   */
+  totalAttempts?: number
+
+  /** Sets to true once the `show solution` button is clicked (always set to false after reroll). */
+  showSolution?: boolean
+
+  /** Number of hints consumed (always set to 0 after reroll) */
+  consumedHints?: number
 }
 
 /**
@@ -65,15 +100,17 @@ export interface ExerciseVariables {
   /** Feedback to be displayed in reaction to answers. (should be defined by the `grader` script.)  */
   feedback?: ExerciseFeedback | ExerciseFeedback[]
 
+  /**
+   * Seed used to generate random values.
+   */
+  seed: number
+
   /** Variables managed by the player to keep track of some informations about the exercice status.  */
-  ['.meta']?: {
-    /** Number of attempts made by the user. */
-    attempts?: number
-    /** Sets to true once the `show solution` button is clicked. */
-    showSolution?: boolean
-    /** Number of hints consumed in case of static hints. */
-    consumedHints?: number
-  }
+  ['.meta']: ExerciseMeta
+  /**
+   * Temporary variable defined during rendering time to allow access .meta object from nunjucks templates.
+   */
+  meta?: ExerciseMeta
 
   /** Any other variables */
   [k: string]: any
@@ -87,6 +124,8 @@ export interface ActivityExercise {
   source: PLSourceFile
 }
 
+export type ActivityExerciseGroups = Record<string, ActivityExercise[]>
+
 /**
  * List of special variables of an activity source file.
  */
@@ -94,7 +133,7 @@ export interface ActivityVariables {
   title: string
   introduction: string
   conclusion: string
-  exerciseGroups: Record<string, ActivityExercise[]>
+  exerciseGroups: ActivityExerciseGroups
 
   author?: string
   settings?: ActivitySettings
@@ -102,6 +141,11 @@ export interface ActivityVariables {
   [k: string]: any
 }
 
+/**
+ * Extracts all exercises from all exercise groups of an activity variables.
+ * @param variables Variables of an activity.
+ * @returns List of exercises.
+ */
 export const extractExercisesFromActivityVariables = (variables: ActivityVariables) => {
   const groups = variables.exerciseGroups || {}
   const exercises: ActivityExercise[] = []
@@ -111,4 +155,35 @@ export const extractExercisesFromActivityVariables = (variables: ActivityVariabl
     })
   })
   return exercises
+}
+
+export const withExerciseMeta = (variables: ExerciseVariables): ExerciseVariables => {
+  const current: ExerciseMeta = {
+    ...variables['.meta'],
+    grades: variables['.meta']?.grades ?? [],
+    isInitialBuild: variables['.meta']?.isInitialBuild ?? true,
+  }
+
+  current.attempts = current.attempts ?? 0
+  current.grades = current.grades ?? []
+  current.isInitialBuild = current.isInitialBuild ?? true
+  current.totalAttempts = current.totalAttempts ?? 0
+  current.consumedHints = current.consumedHints ?? 0
+  current.showSolution = current.showSolution ?? false
+
+  variables['.meta'] = current
+
+  return variables
+}
+
+export const patchExerciseMeta = (
+  variables: ExerciseVariables,
+  patch: (current: Required<ExerciseMeta>) => Partial<ExerciseMeta>
+): ExerciseVariables => {
+  withExerciseMeta(variables)
+  variables['.meta'] = {
+    ...variables['.meta'],
+    ...patch(variables['.meta'] as Required<ExerciseMeta>),
+  }
+  return variables
 }

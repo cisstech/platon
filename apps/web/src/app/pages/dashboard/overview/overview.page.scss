@@ -3,6 +3,15 @@
   width: 100%;
 }
 
+p {
+  color: var(--brand-text-secondary);
+}
+
 mat-card {
   margin-bottom: 1rem;
+}
+
+result-value-distribution {
+  display: block;
+  min-height: 300px;
 }

@@ -1,0 +1,36 @@
+:host::ng-deep {
+  color: #333;
+
+  h2 {
+    font-size: 2.5rem;
+    color: #004d4d;
+    margin-bottom: 2rem;
+  }
+
+  mat-icon {
+    color: #004d4d;
+  }
+  /* Global link styles */
+  a {
+    color: #0066cc; /* Set your desired link color */
+    text-decoration: none; /* Removes the underline from links */
+    transition: color 0.3s ease, text-decoration 0.3s ease; /* Smooth transition for hover effects */
+  }
+
+  /* Link hover state */
+  a:hover,
+  a:focus {
+    color: #004d99; /* Darker shade when hovered or focused for better visibility */
+    text-decoration: underline; /* Underline on hover for a visual cue */
+  }
+
+  /* Link active state */
+  a:active {
+    color: #003366; /* Even darker shade to indicate active state */
+  }
+
+  /* Visited links */
+  a:visited {
+    color: #665a55; /* A different color to indicate the link has been visited */
+  }
+}

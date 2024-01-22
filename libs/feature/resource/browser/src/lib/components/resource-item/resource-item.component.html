@@ -1,22 +1,35 @@
-<nz-ribbon [nzText]="item.status | resourceStatus" [nzColor]="item.status | resourceStatusColor">
+<nz-ribbon [nzText]="ribbon" [nzColor]="item.status | resourceStatusColor">
   <ui-list-item-article
     [style.--border-color]="item.type | resourceColor"
-    [articleTitle]="name"
+    [articleTitle]="title"
     [articleTags]="tags"
     [articleIconTemplate]="image"
     [articleDescription]="desc"
-    [articleUrl]="['/resources/', item.id]"
-    (didClickTag)="didTapTag.emit($event)"
+    [articleUrl]="clickable ? ['/resources/', item.id] : undefined"
+    (didClickTagItem)="handleTagClick($event)"
   >
+    <ng-template #ribbon>
+      <mat-icon [nz-tooltip]="item.status | resourceStatus">{{ item.status | resourceStatusIcon }}</mat-icon>
+    </ng-template>
     <ng-template #image>
-      <mat-icon>{{ item.type | resourceIcon }}</mat-icon>
+      <mat-icon [nz-tooltip]="item.type | resourceType">{{ item.type | resourceIcon }}</mat-icon>
+    </ng-template>
+    <ng-template #title>
+      <span class="resource-item-title">{{ name }}</span>
+      <i
+        class="icon-configurable"
+        *ngIf="configurable"
+        nz-tooltip="Cet exercice est configurable"
+        nz-icon
+        nzType="setting"
+        nzTheme="twotone"
+      ></i>
     </ng-template>
     <ui-list-item-article-action
-      *ngIf="item.permissions.read"
+      *ngIf="editable && item.permissions.read"
       (click)="openTab(editorUrl)"
       class="action"
       actionTitle="Éditer"
-      nz-tooltip="Éditer"
     >
       <i nz-icon nzType="edit" nzTheme="outline"></i>
     </ui-list-item-article-action>
@@ -25,18 +38,17 @@
         (click)="modalMode ? openTab(previewUrl) : iframe.open(previewUrl)"
         class="action"
         actionTitle="Prévisualiser"
-        nz-tooltip="Prévisualiser"
       >
         <i nz-icon nzType="play-circle" nzTheme="outline"></i>
       </ui-list-item-article-action>
     </ng-container>
     <div class="spacer"></div>
     <ui-list-item-article-action
-      [actionTitle]="item.updatedAt | date: 'dd/MM/yyyy'"
+      [actionTitle]="item.updatedAt | date : 'dd/MM/yyyy'"
       nz-tooltip="Dernière date de mise à jour"
     >
       <i nz-icon nzType="reload" nzTheme="outline"></i>
     </ui-list-item-article-action>
   </ui-list-item-article>
 </nz-ribbon>
-<ui-modal-iframe width="98vw" height="94vh" #iframe />
+<ui-modal-iframe [closable]="true" #iframe />

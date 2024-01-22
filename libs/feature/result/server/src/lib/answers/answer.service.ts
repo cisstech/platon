@@ -10,6 +10,19 @@ export class AnswerService {
     private readonly repository: Repository<AnswerEntity>
   ) {}
 
+  async findGradesOfSession(sessionId: string): Promise<number[]> {
+    const answers = await this.repository.find({
+      where: { sessionId },
+      select: {
+        grade: true,
+      },
+      order: {
+        createdAt: 'ASC',
+      },
+    })
+    return answers.map((answer) => answer.grade)
+  }
+
   findAllOfSession(sessionId: string): Promise<AnswerEntity[]> {
     return this.repository.find({ where: { sessionId } })
   }

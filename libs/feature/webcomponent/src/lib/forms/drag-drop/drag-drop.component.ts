@@ -1,4 +1,14 @@
-import { ChangeDetectionStrategy, Component, Injector, Input, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Injector,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core'
 import { WebComponent, WebComponentHooks } from '../../web-component'
 import { DragDropComponentDefinition, DragDropState } from './drag-drop'
 import { DragDropDirective, DragDropEvent } from './drag-drop.directive'
@@ -13,6 +23,8 @@ import { DragDropService } from './drag-drop.service'
 @WebComponent(DragDropComponentDefinition)
 export class DragDropComponent implements OnInit, OnDestroy, WebComponentHooks<DragDropState> {
   @Input() state!: DragDropState
+  @Output() stateChange = new EventEmitter<DragDropState>()
+
   @ViewChild(DragDropDirective, { static: true })
   directive!: DragDropDirective
 

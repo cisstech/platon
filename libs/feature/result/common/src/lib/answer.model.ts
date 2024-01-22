@@ -1,3 +1,5 @@
+import { ExerciseVariables } from '@platon/feature/compiler'
+
 export enum AnswerStates {
   ANSWERED = 'ANSWERED',
   SUCCEEDED = 'SUCCEEDED',
@@ -24,8 +26,18 @@ export const AnswerStateLabels: Record<AnswerStates, string> = {
   PART_SUCC: 'Partiellement Réussi',
   FAILED: 'Échoué',
   STARTED: 'Commencé',
-  NOT_STARTED: 'Non Commencé',
+  NOT_STARTED: 'À faire',
   ERROR: 'Erreur',
+}
+
+export interface Answer {
+  id: string
+  createdAt: Date
+  updatedAt: Date
+  userId?: string
+  grade: number
+  sessionId: string
+  variables: ExerciseVariables
 }
 
 export const AnswerStateColors: Record<AnswerStates, string> = {

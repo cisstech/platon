@@ -26,9 +26,9 @@ import { NgeMarkdownModule } from '@cisstech/nge/markdown'
 
 import { NzAlertModule } from 'ng-zorro-antd/alert'
 
-import { SafePipeModule } from '@cisstech/nge/pipes'
+import { SafePipe } from '@cisstech/nge/pipes'
 
-import { DialogModule, DialogService } from '@platon/core/browser'
+import { DialogModule, DialogService, UserAvatarComponent } from '@platon/core/browser'
 import { ExercisePlayer, PlayerActions, PlayerNavigation } from '@platon/feature/player/common'
 import { WebComponentHooks } from '@platon/feature/webcomponent'
 
@@ -37,7 +37,12 @@ import { ActivatedRoute } from '@angular/router'
 import { ExerciseTheory } from '@platon/feature/compiler'
 import { AnswerStatePipesModule } from '@platon/feature/result/browser'
 import { AnswerStates } from '@platon/feature/result/common'
-import { UiModalDrawerComponent } from '@platon/shared/ui'
+import {
+  FilePreviewSupportedPipe,
+  IsUUIDPipe,
+  UiModalDrawerComponent,
+  UiModalTemplateComponent,
+} from '@platon/shared/ui'
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton'
 import { NzSpinModule } from 'ng-zorro-antd/spin'
 import { NzStatisticModule } from 'ng-zorro-antd/statistic'
@@ -45,6 +50,7 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 import { PlayerService } from '../../api/player.service'
 import { PLAYER_EDITOR_PREVIEW } from '../../models/player.model'
 import { PlayerCommentsComponent } from '../player-comments/player-comments.component'
+import { PlayerTheoryComponent } from '../player-theory/player-theory.component'
 
 type Action = {
   icon: string
@@ -92,11 +98,15 @@ type FullscreenElement = HTMLElement & {
     NzStatisticModule,
     MatExpansionModule,
 
+    SafePipe,
+    IsUUIDPipe,
     DialogModule,
-    SafePipeModule,
+    UserAvatarComponent,
     NgeMarkdownModule,
     UiModalDrawerComponent,
-
+    UiModalTemplateComponent,
+    PlayerTheoryComponent,
+    FilePreviewSupportedPipe,
     AnswerStatePipesModule,
     PlayerCommentsComponent,
   ],
@@ -108,7 +118,7 @@ export class PlayerExerciseComponent implements OnInit, OnChanges {
   private readonly changeDetectorRef = inject(ChangeDetectorRef)
 
   @Input() state?: AnswerStates
-  @Input() player!: ExercisePlayer
+  @Input() player?: ExercisePlayer
   @Input() players: ExercisePlayer[] = []
 
   @Input() reviewMode = false
@@ -148,10 +158,11 @@ export class PlayerExerciseComponent implements OnInit, OnChanges {
   protected index = 0
   protected loading = true
   protected fullscreen = false
-
+  protected selectedTheory?: ExerciseTheory
   protected runningAction?: PlayerActions
 
   protected get primaryActions(): Action[] {
+    if (!this.player) return []
     return [
       {
         icon: 'check',
@@ -181,6 +192,7 @@ export class PlayerExerciseComponent implements OnInit, OnChanges {
   }
 
   protected get secondaryActions(): Action[] {
+    if (!this.player) return []
     return [
       {
         icon: 'reviews',
@@ -212,7 +224,7 @@ export class PlayerExerciseComponent implements OnInit, OnChanges {
         icon: 'lightbulb',
         label: 'Aide',
         tooltip: 'Aide',
-        visible: !!this.player.hints,
+        visible: this.player.settings?.actions?.hints && !!this.player.hints,
         disabled: this.disabled || !!this.runningAction,
         playerAction: PlayerActions.NEXT_HINT,
         run: async () => {
@@ -224,6 +236,7 @@ export class PlayerExerciseComponent implements OnInit, OnChanges {
   }
 
   protected get navigationActions(): Action[] {
+    if (!this.player) return []
     return [
       {
         icon: 'arrow_back',
@@ -243,6 +256,7 @@ export class PlayerExerciseComponent implements OnInit, OnChanges {
   }
 
   protected get reviewModeActions(): Action[] {
+    if (!this.player) return []
     return [
       {
         icon: 'arrow_back',
@@ -265,6 +279,7 @@ export class PlayerExerciseComponent implements OnInit, OnChanges {
   protected requestFullscreen?: () => void
 
   protected get disabled(): boolean {
+    if (!this.player) return true
     return !!this.player.solution || (this.player.remainingAttempts != null && this.player.remainingAttempts <= 0)
   }
 
@@ -342,7 +357,7 @@ export class PlayerExerciseComponent implements OnInit, OnChanges {
   }
 
   private forEachComponent(consumer: (component: WebComponentHooks) => void): void {
-    document.querySelectorAll('[cid]').forEach((node) => {
+    this.container.nativeElement.querySelectorAll('[cid]').forEach((node) => {
       consumer(node as unknown as WebComponentHooks)
     })
   }
@@ -362,6 +377,8 @@ export class PlayerExerciseComponent implements OnInit, OnChanges {
   }
 
   private async evaluate(action: PlayerActions): Promise<void> {
+    if (!this.player) return
+
     try {
       this.runningAction = action
       this.changeDetectorRef.markForCheck()
@@ -385,7 +402,7 @@ export class PlayerExerciseComponent implements OnInit, OnChanges {
       // values are not modified during the evaluation on the server side
       const markdowns = ['form' as const, 'statement' as const, 'solution' as const]
       markdowns.forEach((key) => {
-        if (this.player[key]) {
+        if (this.player?.[key]) {
           this.player[key] += '\n'
         }
       })

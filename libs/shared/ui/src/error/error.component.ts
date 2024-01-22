@@ -49,6 +49,7 @@ import { RouterModule } from '@angular/router'
 
       pre {
         margin-bottom: 1.5rem;
+        white-space: pre-wrap;
       }
     `,
   ],

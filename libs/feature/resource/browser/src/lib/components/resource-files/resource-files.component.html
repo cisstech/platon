@@ -4,7 +4,7 @@
       <mat-card-title>
         Fichiers
         <span>
-          <ng-container *ngIf="code"> @{{ code }}:{{ version }} </ng-container>
+          <ng-container *ngIf="code"> &#64;{{ code }}:{{ version }} </ng-container>
         </span>
       </mat-card-title>
     </mat-card-header>
@@ -30,11 +30,20 @@
 
 <nz-dropdown-menu #menu="nzDropdownMenu">
   <ul nz-menu>
-    <ng-container *ngIf="selection && selection.type === 'file'">
-      <li nz-menu-item (click)="selected.emit(selection)">Ouvrir</li>
+    <ng-container *ngIf="selection">
+      <ng-container *ngIf="selection.type === 'file'">
+        <li nz-menu-item (click)="selected.emit(selection)">Ouvrir</li>
+      </ng-container>
+      <li
+        nz-menu-item
+        *ngIf="selection.version === 'latest' && selection.type === 'folder'"
+        (click)="upload(selection)"
+      >
+        Importer
+      </li>
+      <li nz-menu-item (click)="download()">Télécharger</li>
+      <li nz-menu-item (click)="copyPath()">Copier le code y faire référence dans un PL</li>
     </ng-container>
-    <li nz-menu-item (click)="download()">Télécharger</li>
-    <li nz-menu-item (click)="copyPath()">Copier le chemin</li>
   </ul>
 </nz-dropdown-menu>
 

@@ -1,20 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { BaseEntity, UserEntity } from '@platon/core/server'
+import { ActivityVariables, ExerciseVariables, PLSourceFile } from '@platon/feature/compiler'
 import { ActivityEntity } from '@platon/feature/course/server'
+import { PlayerActivityVariables } from '@platon/feature/player/common'
+import { Session } from '@platon/feature/result/common'
 import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm'
 import { CorrectionEntity } from '../correction/correction.entity'
-import { PLSourceFile } from '@platon/feature/compiler'
 
 @Entity('Sessions')
 @Index('Sessions_exercise_idx', ['parentId', 'id'])
 @Index('Sessions_activity_user_idx', ['parentId', 'activityId', 'userId'])
-export class SessionEntity<TVariables extends object = any> extends BaseEntity {
+export class SessionEntity<TVariables = any> extends BaseEntity implements Session<TVariables> {
   @Column({ name: 'parent_id', nullable: true })
   parentId?: string
 
   @ManyToOne(() => SessionEntity, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'parent_id' })
-  parent?: SessionEntity
+  parent?: SessionEntity<PlayerActivityVariables>
 
   @Column({ type: 'uuid', nullable: true })
   envid?: string
@@ -55,6 +57,12 @@ export class SessionEntity<TVariables extends object = any> extends BaseEntity {
   @Column({ type: 'timestamp with time zone', name: 'last_graded_at', nullable: true })
   lastGradedAt?: Date
 
-  @Column({ type: 'jsonb', nullable: true })
-  source?: PLSourceFile
+  @Column({ type: 'jsonb' })
+  source!: PLSourceFile<TVariables>
+
+  @Column({ name: 'is_built', default: false })
+  isBuilt!: boolean
 }
+
+export type ExerciseSessionEntity = SessionEntity<ExerciseVariables>
+export type ActivitySessionEntity = SessionEntity<ActivityVariables>

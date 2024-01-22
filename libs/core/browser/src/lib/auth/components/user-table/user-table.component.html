@@ -1,4 +1,14 @@
-<nz-table #nzTable [nzSize]="'small'" [nzShowSizeChanger]="true" [nzShowPagination]="true" [nzData]="users">
+<nz-table
+  #nzTable
+  [nzSize]="'small'"
+  [nzData]="users"
+  [nzTotal]="total"
+  [nzLoading]="loading"
+  [nzShowSizeChanger]="true"
+  [nzShowPagination]="true"
+  [nzFrontPagination]="!canFilterOnServer"
+  (nzQueryParams)="onQueryParamsChange($event)"
+>
   <thead>
     <tr>
       <th
@@ -7,11 +17,19 @@
         [nzIndeterminate]="indeterminate"
         (nzCheckedChange)="onAllChecked($event)"
       ></th>
-      <th>Utilisateur</th>
-      <th>Date d'ajout</th>
-      <th>Email</th>
-      <th>Rôle</th>
-      <th>Status</th>
+      @for (column of columns; track column.key) {
+      <th
+        [nzColumnKey]="column.key"
+        [(nzSortOrder)]="column.sortOrder!"
+        [nzSortFn]="column.sortFn!"
+        [nzFilters]="column.listOfFilter!"
+        [nzFilterFn]="column.filterFn!"
+        [nzFilterMultiple]="column.filterMultiple!"
+      >
+        {{ column.name }}
+      </th>
+      }
+      <th *ngIf="editable" nzAlign="center">Actions</th>
     </tr>
   </thead>
   <tbody>
@@ -38,6 +56,48 @@
         <nz-tag *ngIf="user.active" nzColor="green">Active</nz-tag>
         <nz-tag *ngIf="!user.active" nzColor="red">Inactive</nz-tag>
       </td>
+      <td *ngIf="editable" nzAlign="center">
+        <a nz-dropdown [nzDropdownMenu]="menu" nzPlacement="bottomRight">
+          <span nz-icon nzType="more"></span>
+        </a>
+        <nz-dropdown-menu #menu="nzDropdownMenu">
+          <ul nz-menu>
+            <li *ngIf="user.role !== 'admin'" nz-menu-item (click)="update.next([user, { role: 'admin' }])">
+              Assigner le rôle Admin
+            </li>
+            <li *ngIf="user.role !== 'student'" nz-menu-item (click)="update.next([user, { role: 'student' }])">
+              Assigner le rôle Élève
+            </li>
+            <li *ngIf="user.role !== 'teacher'" nz-menu-item (click)="update.next([user, { role: 'teacher' }])">
+              Assigner le rôle Enseignant
+            </li>
+            <li *ngIf="!user.active" nz-menu-item (click)="update.next([user, { active: true }])">Activer</li>
+            <li
+              *ngIf="user.active"
+              nz-menu-item
+              nz-popconfirm
+              nzOkText="Désactiver"
+              nzOkType="danger"
+              [nzDisabled]="user.id === currentUserId"
+              [nzDanger]="user.id !== currentUserId"
+              [class.disabled]="user.id === currentUserId"
+              [nzPopconfirmTitle]="deactivateGuard"
+              [nzPopconfirmPlacement]="'bottom'"
+              [nzPopconfirmOverlayStyle]="{ 'max-width': '300px' }"
+              (nzOnConfirm)="update.next([user, { active: false }])"
+            >
+              Désactiver
+            </li>
+          </ul>
+        </nz-dropdown-menu>
+      </td>
     </tr>
   </tbody>
 </nz-table>
+
+<ng-template #deactivateGuard>
+  <strong> Voulez-vous vraiment désactiver cet utilisateur? </strong>
+  <br /><br />
+  <p>En désactivant un utilisateur, ce dernier ne pourra plus se connecter à l'application.</p>
+  <p>Il vous sera toujours possible de réactiver cet utilisateur en cliquant sur le bouton "Activer" dans le tableau</p>
+</ng-template>

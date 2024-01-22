@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Injector, Input } from '@angular/core'
+import { ChangeDetectionStrategy, Component, EventEmitter, Injector, Input, Output } from '@angular/core'
 import { WebComponent, WebComponentHooks } from '../../web-component'
 import { RadioGroupComponentDefinition, RadioGroupItem, RadioGroupState } from './radio-group'
 
@@ -11,6 +11,7 @@ import { RadioGroupComponentDefinition, RadioGroupItem, RadioGroupState } from '
 @WebComponent(RadioGroupComponentDefinition)
 export class RadioGroupComponent implements WebComponentHooks<RadioGroupState> {
   @Input() state!: RadioGroupState
+  @Output() stateChange = new EventEmitter<RadioGroupState>()
 
   constructor(readonly injector: Injector) {}
 

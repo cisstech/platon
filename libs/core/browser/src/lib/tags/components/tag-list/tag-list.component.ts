@@ -12,6 +12,7 @@ import { NzPopoverModule } from 'ng-zorro-antd/popover'
 
 type Tag = Topic | Level
 
+/*  TODO: use ui-tag-list component internally */
 @Component({
   standalone: true,
   selector: 'tag-list',
@@ -43,7 +44,9 @@ export class TagListComponent {
   }
 
   protected handleInputConfirm(): void {
-    this.create.emit(this.inputValue)
+    if (this.inputValue?.trim()) {
+      this.create.emit(this.inputValue)
+    }
     this.inputValue = ''
     this.inputVisible = false
   }

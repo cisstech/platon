@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core'
 import {
   CreateUserGroup,
   ListResponse,
+  UpdateUser,
   UpdateUserGroup,
   UpdateUserPrefs,
   User,
@@ -10,7 +11,7 @@ import {
   UserGroupFilters,
   UserPrefs,
 } from '@platon/core/common'
-import { combineLatest, Observable, of } from 'rxjs'
+import { Observable, combineLatest, of } from 'rxjs'
 import { map, tap } from 'rxjs/operators'
 import { UserGroupProvider } from '../models/user-group-provider'
 import { UserPrefsProvider } from '../models/user-prefs-provider'
@@ -28,6 +29,14 @@ export class UserService {
     private readonly userGroupProvider: UserGroupProvider,
     private readonly userPrefsProvider: UserPrefsProvider
   ) {}
+
+  update(user: string | User, input: UpdateUser): Observable<User> {
+    return this.userProvider.update(user, input).pipe(
+      tap((user) => {
+        this.users.set(user.username, user)
+      })
+    )
+  }
 
   search(filters: UserFilters): Observable<ListResponse<User>> {
     return this.userProvider.search(filters)

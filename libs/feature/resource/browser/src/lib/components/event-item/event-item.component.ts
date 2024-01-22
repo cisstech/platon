@@ -73,7 +73,7 @@ class MemberCreateEventComponent implements OnInit {
   imports: [CommonModule, UserAvatarComponent],
   template: `
     <ng-container *ngIf="notification; else noNotification">
-      Vous n'avez plus membre de “{{ event.data.resourceName }}”
+      Vous n'êtes plus membre de “{{ event.data.resourceName }}”
     </ng-container>
     <ng-template #noNotification>
       <user-avatar showUsername="inline" [userIdOrName]="event.actorId" /> n'a plus accès à cette ressource
@@ -92,7 +92,7 @@ class MemberRemoveEventComponent {
   imports: [UserAvatarComponent, ResourcePipesModule],
   template: `
     <user-avatar showUsername="inline" [userIdOrName]="event.actorId" /> a passé “{{ event.data.resourceName }}” à “{{
-      event.data.newStatus | resourceStatus
+      $any(event.data.newStatus) | resourceStatus
     }}”
   `,
 })

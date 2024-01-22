@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Param, Patch, Post, Query, Req } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 import {
   CreatedResponse,
   ForbiddenResponse,
@@ -13,6 +14,7 @@ import { CourseDTO, CourseFiltersDTO, CreateCourseDTO, UpdateCourseDTO } from '.
 import { CourseService } from './course.service'
 
 @Controller('courses')
+@ApiTags('Courses')
 export class CourseController {
   constructor(
     private readonly courseService: CourseService,

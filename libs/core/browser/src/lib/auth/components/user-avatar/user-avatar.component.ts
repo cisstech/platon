@@ -37,7 +37,7 @@ export class UserAvatarComponent {
   @Input() noIcon = false
   @Input() showUsername: 'stacked' | 'inline' | 'none' = 'stacked'
 
-  @Output() showGroupMembers = new EventEmitter<UserGroup>()
+  @Output() openGroupDetails = new EventEmitter<UserGroup>()
 
   @Input()
   set userIdOrName(value: string) {

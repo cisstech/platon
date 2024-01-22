@@ -1,0 +1,27 @@
+<div class="container">
+  <h2>Fonctionnalités</h2>
+  <p>
+    PLaTon intègre une multitude de fonctionnalités pour créer des ressources pédagogiques à mettre à la disposition de
+    vos élèves dont les suivantes :
+  </p>
+  <ul class="feature-list">
+    @for (feature of features; track feature.id) {
+    <li [class.active]="feature.id === activeFeature.id" (click)="activeFeature = feature">
+      <mat-icon>{{ feature.icon }}</mat-icon>
+      {{ feature.title }}
+      @if (feature.id === activeFeature.id) {
+      <div class="marker"></div>
+      }
+    </li>
+    }
+  </ul>
+  <div class="feature-content">
+    <img [src]="activeFeature.image" [alt]="activeFeature.title" />
+    <div class="feature-description">
+      <h3>
+        <mat-icon>{{ activeFeature.icon }}</mat-icon> {{ activeFeature.title }}
+      </h3>
+      <p>{{ activeFeature.description }}</p>
+    </div>
+  </div>
+</div>

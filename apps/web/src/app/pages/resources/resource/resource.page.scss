@@ -1,33 +1,6 @@
-:host::ng-deep {
-  .ant-breadcrumb-link {
-    display: inline-flex;
-    align-items: center;
-    mat-icon {
-      margin: 0 8px;
-    }
-  }
-}
-
 nz-page-header {
   padding-left: 0;
   padding: 0;
-}
-
-nz-breadcrumb {
-  font-size: 1.5em;
-  display: flex;
-  align-items: center;
-  button {
-    padding-left: 0;
-    mat-icon {
-      margin: 0;
-    }
-  }
-}
-
-nz-breadcrumb-item {
-  display: inline-flex;
-  align-items: center;
 }
 
 p {
@@ -53,7 +26,7 @@ nz-select {
   gap: 0.5rem 0;
 }
 
-@media (min-width: 720px) {
+@media (min-width: 768px) {
   p {
     width: 70%;
   }

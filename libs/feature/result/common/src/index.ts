@@ -1,4 +1,6 @@
 export * from './lib/answer.model'
 export * from './lib/comment.model'
 export * from './lib/correction.model'
+export * from './lib/dashboard.model'
 export * from './lib/results.model'
+export * from './lib/session.model'

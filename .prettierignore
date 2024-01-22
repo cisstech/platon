@@ -11,3 +11,9 @@
 /node_modules
 .gql
 /resources
+
+/.nx/cache
+
+**/*.generated.ts
+**/*.mdx
+.angular
