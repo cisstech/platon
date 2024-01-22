@@ -5,7 +5,8 @@ import { v4 as uuidv4 } from 'uuid'
 import { NodeVM } from 'vm2'
 
 import { Injectable } from '@nestjs/common'
-import { RegisterSandbox, Sandbox, SandboxError, SandboxInput, SandboxOutput } from '../sandbox'
+import { Sandbox, SandboxError, SandboxInput, SandboxOutput } from '@platon/feature/player/common'
+import { RegisterSandbox } from '../sandbox'
 import { createNodeSandboxAPI } from './node-sandbox-api'
 
 /**

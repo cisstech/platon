@@ -15,5 +15,5 @@ import { PlayerExerciseComponent } from '../player-exercise/player-exercise.comp
   imports: [CommonModule, UiErrorComponent, PlayerExerciseComponent, PlayerActivityComponent],
 })
 export class PlayerWrapperComponent {
-  @Input() player!: Player
+  @Input({ required: true }) player!: Player
 }

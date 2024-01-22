@@ -1,18 +1,18 @@
-import { ActivityEntity } from './activity.entity'
+import { Activity } from '@platon/feature/course/common'
 
 export const ON_RELOAD_ACTIVITY_EVENT = 'activity.reload'
 export const ON_CORRECT_ACTIVITY_EVENT = 'activity.correct'
 export const ON_TERMINATE_ACTIVITY_EVENT = 'activity.terminate'
 
 export interface OnReloadActivityEventPayload {
-  activity: ActivityEntity
+  activity: Activity
 }
 
 export interface OnCorrectActivityEventPayload {
   userId: string
-  activity: ActivityEntity
+  activity: Activity
 }
 
 export interface OnTerminateActivityEventPayload {
-  activity: ActivityEntity
+  activity: Activity
 }

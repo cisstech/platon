@@ -10,7 +10,12 @@ import {
   SearchResult,
 } from '@cisstech/nge-ide/core'
 import { removeLeadingSlash } from '@platon/core/common'
-import { ACTIVITY_MAIN_FILE, EXERCISE_MAIN_FILE } from '@platon/feature/compiler'
+import {
+  ACTIVITY_MAIN_FILE,
+  EXERCISE_CONFIG_FILE_EXTENSION,
+  EXERCISE_MAIN_FILE,
+  TEMPLATE_OVERRIDE_FILE_EXTENSION,
+} from '@platon/feature/compiler'
 import { ResourceFileService } from '@platon/feature/resource/browser'
 import { FileTypes, Resource, ResourceFile, ResourceTypes } from '@platon/feature/resource/common'
 import { firstValueFrom } from 'rxjs'
@@ -333,12 +338,12 @@ export class ResourceFileSystemProvider extends FileSystemProvider {
 
   private isPlcFile(uri: monaco.Uri | string): boolean {
     const path = typeof uri === 'string' ? uri : uri.path
-    return path.endsWith('.plc')
+    return path.endsWith(EXERCISE_CONFIG_FILE_EXTENSION)
   }
 
   private isPloFile(uri: monaco.Uri | string): boolean {
     const path = typeof uri === 'string' ? uri : uri.path
-    return path.endsWith('.plo')
+    return path.endsWith(TEMPLATE_OVERRIDE_FILE_EXTENSION)
   }
 
   private isTemplate(): boolean {

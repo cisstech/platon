@@ -35,7 +35,7 @@ export class PlaExerciseEditorComponent {
   @Input()
   set exercise(value: ActivityExercise) {
     this._exercise = value
-    // TODO: read from field instead of using metadata since they contains only metadata
+    // TODO: read from file system instead of using metadata since they contains only metadata
     // for latest version of the resource
     firstValueFrom(
       this.resourceService.find({

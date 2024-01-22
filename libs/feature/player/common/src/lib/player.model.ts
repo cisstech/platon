@@ -100,45 +100,47 @@ export interface EvalExerciseOutput {
 
 export interface ExercisePlayer {
   type: 'exercise'
-  answerId?: string
+  answerId?: string | null
   sessionId: string
-  startedAt?: Date
-  lastGradedAt?: Date
+  startedAt?: Date | null
+  lastGradedAt?: Date | null
   form: string
   title: string
   statement: string
-  hints?: string[]
-  author?: string
+  hints?: string[] | null
+  author?: string | null
   correction?: {
     grade: number
     authorId?: string
     createdAt: Date
     updatedAt: Date
-  }
-  remainingAttempts?: number
-  solution?: string
-  settings?: ActivitySettings
-  feedbacks?: ExerciseFeedback[]
-  theories?: {
-    url: string
-    title: string
-  }[]
+  } | null
+  remainingAttempts?: number | null
+  solution?: string | null
+  settings?: ActivitySettings | null
+  feedbacks?: ExerciseFeedback[] | null
+  theories?:
+    | {
+        url: string
+        title: string
+      }[]
+    | null
 }
 
 export interface ActivityPlayer {
   type: 'activity'
   sessionId: string
-  activityId?: string
+  activityId?: string | null
   title: string
-  author?: string
+  author?: string | null
   introduction: string
   conclusion: string
-  openAt?: Date
-  closeAt?: Date
-  startedAt?: Date
-  lastGradedAt?: Date
+  openAt?: Date | null
+  closeAt?: Date | null
+  startedAt?: Date | null
+  lastGradedAt?: Date | null
   navigation: PlayerNavigation
-  settings?: ActivitySettings
+  settings?: ActivitySettings | null
 }
 
 /** Representation of an exercise/activity player. */

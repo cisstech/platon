@@ -7,8 +7,8 @@ import {
   ExerciseTheory,
   ExerciseVariables,
 } from '@platon/feature/compiler'
-import { Answer, AnswerStates, Session } from '@platon/feature/result/common'
-import { PlayerActivityVariables } from './player.model'
+import { ActivitySession, Answer, AnswerStates, ExerciseSession, Session } from '@platon/feature/result/common'
+import { PlayerActivityVariables, PlayerNavigation } from './player.model'
 
 /**
  * Ensures that hints are not sent to the user if disabled in `settings` or not already asked by the user.
@@ -158,4 +158,35 @@ export const withSessionAccessGuard = <T extends Session>(session?: T | null, us
   }
 
   return session
+}
+
+/**
+ * Ensures that user cannot have multiple sessions of the same exercise at the same time (in non composed navigation mode).
+ *
+ * Note :
+ * Exercise preview session are not bound to an activity.
+ *
+ * @param exerciseSession An exercise session.
+ * @returns An object containing the activitySession with it's navigation
+ *  or `undefined` if the exercise is not bound to an activity.
+ */
+export const withMultiSessionGuard = (exerciseSession: ExerciseSession) => {
+  let activitySession: ActivitySession | undefined
+  let activityNavigation: PlayerNavigation | undefined
+  if (exerciseSession.parent) {
+    activitySession = exerciseSession.parent
+    activitySession.activity = activitySession.activity ?? exerciseSession.activity
+
+    const activityVariables = activitySession.variables as PlayerActivityVariables
+    activityNavigation = activityVariables.navigation
+
+    if (activityVariables.settings?.navigation?.mode === 'composed') {
+      return { activitySession, activityNavigation }
+    }
+
+    if (typeof activityNavigation.current !== 'object' || activityNavigation.current.sessionId !== exerciseSession.id) {
+      throw new ForbiddenResponse('This exercise is not the most recents opened, please reload your page.')
+    }
+  }
+  return { activitySession, activityNavigation }
 }

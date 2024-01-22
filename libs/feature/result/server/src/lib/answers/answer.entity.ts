@@ -9,11 +9,11 @@ import { SessionEntity } from '../sessions/session.entity'
 @Index('Answers_user_id_session_id_idx', ['userId', 'sessionId'])
 export class AnswerEntity extends BaseEntity implements Answer {
   @Column({ name: 'user_id', nullable: true })
-  userId?: string
+  userId?: string | null
 
   @ManyToOne(() => UserEntity, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
-  user?: UserEntity
+  user?: UserEntity | null
 
   @Index('Answers_session_id_idx')
   @Column({ name: 'session_id' })

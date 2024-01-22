@@ -2196,10 +2196,10 @@
   dependencies:
     tslib "^2.0.0"
 
-"@cisstech/nge@^17.4.0":
-  version "17.4.0"
-  resolved "https://registry.yarnpkg.com/@cisstech/nge/-/nge-17.4.0.tgz#7535e01d28e8ab42f1bb4ffd6d6b96b1c0841dfa"
-  integrity sha512-ku/0TnYA1/vCHz6E/5P/R9PAYMgxRBq3Lmox89em/LpQpEZdUKNVHUHML4zGGkYH6ozpGoJoQ4f5AmEy+FBJVg==
+"@cisstech/nge@^17.5.1":
+  version "17.5.1"
+  resolved "https://registry.yarnpkg.com/@cisstech/nge/-/nge-17.5.1.tgz#6bc74185d93ecfd01811effbd6e61a7e7001c895"
+  integrity sha512-7v4UTfW/VISzzkVTrnGKFGatzYlSYyxyZ1yzSdX0kLpK4aO9imo0tlUDMKG4d/sBloX5qcKh2RWAuR92P4a+XA==
   dependencies:
     tslib "^2.3.0"
 
@@ -18461,6 +18461,11 @@ type-fest@^0.8.1:
   version "0.8.1"
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-0.8.1.tgz#09e249ebde851d3b1e48d27c105444667f17b83d"
   integrity sha512-4dbzIzqvjtgiM5rw1k5rEHtBANKmdudhGyBEajN01fEyhaAIhsoKNy6y7+IN93IfpFtwY9iqi7kD+xwKhQsNJA==
+
+type-fest@^4.9.0:
+  version "4.9.0"
+  resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-4.9.0.tgz#d29c8efe5b1e703feeb29cef23d887b2f479844d"
+  integrity sha512-KS/6lh/ynPGiHD/LnAobrEFq3Ad4pBzOlJ1wAnJx9N4EYoqFhMfLIBjUT2UEx4wg5ZE+cC1ob6DCSpppVo+rtg==
 
 type-is@^1.6.4, type-is@~1.6.18:
   version "1.6.18"
