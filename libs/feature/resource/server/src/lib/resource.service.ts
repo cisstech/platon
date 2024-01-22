@@ -36,7 +36,7 @@ export class ResourceService {
   ) {}
 
   async tree(circles: ResourceEntity[]): Promise<CircleTree> {
-    const root = circles.find((c) => !c.parentId) as ResourceEntity
+    const root = circles.find((c) => !c.parentId && !c.personal) as ResourceEntity
     const metas = circles.length
       ? await this.metadataRepo.find({
           where: {
