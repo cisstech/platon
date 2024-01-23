@@ -127,7 +127,7 @@ export class LTIService {
     }
 
     const lti_name = payload.ext_user_username || payload.custom_lis_user_username || payload.ext_d2l_username
-    let name = ''
+    let name = lti_name
     if (!lti_name && payload.lis_person_name_family && payload.lis_person_name_given) {
       name = payload.lis_person_name_given[0].toLowerCase() + '_' + payload.lis_person_name_family.toLowerCase()
     }
@@ -139,8 +139,8 @@ export class LTIService {
     let count = 1
     let username = name
     while ((await this.userService.findByUsername(username)).isPresent()) {
+      username = `${name}${count}`
       count++
-      username = `${username}${count}`
     }
 
     let role = UserRoles.student
