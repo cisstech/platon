@@ -140,7 +140,7 @@
   </ui-layout-tab>
 </ui-layout-tabs>
 
-<ui-modal-iframe #iframe [closable]="true" />
+<ui-modal-iframe width="100vw" height="100vh" #iframe [closable]="true" />
 
 <ng-template #sharingPopover>
   <resource-sharing [resourceId]="context.resource!.id" [canEditSharing]="context.resource!.permissions!.write" />

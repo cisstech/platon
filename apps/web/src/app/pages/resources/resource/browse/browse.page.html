@@ -17,5 +17,5 @@
     (selected)="openTab(context.editorUrl + '&files=' + $event.path)"
     (afterUpload)="refreshFiles()"
   />
-  <ui-modal-iframe #iframe [closable]="true" (closed)="refreshFiles()" />
+  <ui-modal-iframe width="100vw" height="100vh" #iframe [closable]="true" (closed)="refreshFiles()" />
 </ng-container>
