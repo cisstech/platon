@@ -4,6 +4,6 @@ import { Observable } from 'rxjs'
 
 export abstract class CourseMemberProvider {
   abstract create(course: Course, input: CreateCourseMember): Observable<CourseMember>
-  abstract search(course: Course, filters?: CourseMemberFilters): Observable<ListResponse<CourseMember>>
+  abstract search(course: Course | string, filters?: CourseMemberFilters): Observable<ListResponse<CourseMember>>
   abstract delete(member: CourseMember): Observable<void>
 }

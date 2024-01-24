@@ -33,8 +33,9 @@ export class CourseMemberController {
     const member = input.isGroup
       ? await this.service.addGroup(courseId, input.id)
       : await this.service.addUser(courseId, input.id)
+
     return new ItemResponse({
-      resource: Mapper.map(await this.service.findById(courseId, member.id), CourseMemberDTO),
+      resource: Mapper.map((await this.service.findById(courseId, member.id)).get(), CourseMemberDTO),
     })
   }
 

@@ -31,7 +31,11 @@ import { CourseSectionProvider } from '../models/course-section-provider'
 @Injectable({ providedIn: 'root' })
 export class CourseService {
   private readonly deleteActivityEvent = new Subject<Activity>()
+  private readonly addMemberEvent = new Subject<CourseMember>()
+  private readonly deleteMemberEvent = new Subject<CourseMember>()
 
+  readonly onAddedMember = this.addMemberEvent.asObservable()
+  readonly onDeletedMember = this.deleteMemberEvent.asObservable()
   readonly onDeletedActivity = this.deleteActivityEvent.asObservable()
 
   constructor(
@@ -64,15 +68,15 @@ export class CourseService {
 
   //#region Members
   createMember(course: Course, input: CreateCourseMember): Observable<CourseMember> {
-    return this.courseMemberProvider.create(course, input)
+    return this.courseMemberProvider.create(course, input).pipe(tap((member) => this.addMemberEvent.next(member)))
   }
 
-  searchMembers(course: Course, filters?: CourseMemberFilters): Observable<ListResponse<CourseMember>> {
+  searchMembers(course: Course | string, filters?: CourseMemberFilters): Observable<ListResponse<CourseMember>> {
     return this.courseMemberProvider.search(course, filters)
   }
 
   deleteMember(member: CourseMember): Observable<void> {
-    return this.courseMemberProvider.delete(member)
+    return this.courseMemberProvider.delete(member).pipe(tap(() => this.deleteMemberEvent.next(member)))
   }
   //#endregion
 

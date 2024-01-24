@@ -1,4 +1,14 @@
-<nz-table #nzTable [nzSize]="'small'" [nzShowSizeChanger]="false" [nzShowPagination]="false" [nzData]="members">
+<nz-table
+  #nzTable
+  [nzSize]="'small'"
+  [nzData]="members"
+  [nzTotal]="total"
+  [nzLoading]="loading"
+  [nzShowSizeChanger]="true"
+  [nzShowPagination]="true"
+  [nzFrontPagination]="!canFilterOnServer"
+  (nzQueryParams)="onQueryParamsChange($event)"
+>
   <thead>
     <tr>
       <th
@@ -7,8 +17,18 @@
         [nzIndeterminate]="indeterminate"
         (nzCheckedChange)="onAllChecked($event)"
       ></th>
-      <th>Utilisateur/Groupe</th>
-      <th>Date d'ajout</th>
+      @for (column of columns; track column.key) {
+      <th
+        [nzColumnKey]="column.key"
+        [(nzSortOrder)]="column.sortOrder!"
+        [nzSortFn]="column.sortFn!"
+        [nzFilters]="column.listOfFilter!"
+        [nzFilterFn]="column.filterFn!"
+        [nzFilterMultiple]="column.filterMultiple!"
+      >
+        {{ column.name }}
+      </th>
+      }
       <th *ngIf="editable" nzAlign="center">Actions</th>
     </tr>
   </thead>
