@@ -37,7 +37,7 @@ const answerStateFromSession = (session: SessionView) => {
     : AnswerStates.NOT_STARTED
 }
 
-//region COMMON
+//#region COMMON
 
 /**
  * Calculates the success rate of sessions.
@@ -143,9 +143,12 @@ export class SessionTotalDurationByMonth implements SessionDataAggregator<Record
 
   next(input: SessionView): void {
     if (input.startedAt && input.lastGradedAt) {
-      const { year, month, week } = getYearMonthWeek(input.lastGradedAt)
+      const { year: gradeYear, month: gradeMonth, week: gradeWeek } = getYearMonthWeek(input.lastGradedAt)
+      const { year: startYear, month: startMonth, week: startWeek } = getYearMonthWeek(input.startedAt)
 
-      const id = `${year}:${month}:${week}`
+      if (gradeYear !== startYear || gradeMonth !== startMonth || gradeWeek !== startWeek) return
+
+      const id = `${startYear}:${startMonth}:${startWeek}`
       if (input.attempts) {
         const duration = this.durations.get(id) ?? 0
         this.durations.set(id, duration + differenceInSeconds(input.lastGradedAt, input.startedAt))
