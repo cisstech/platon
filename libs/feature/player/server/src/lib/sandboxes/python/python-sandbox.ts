@@ -9,8 +9,9 @@ import { firstValueFrom } from 'rxjs'
 
 import { ConfigService } from '@nestjs/config'
 import { Configuration } from '@platon/core/server'
+import { Sandbox, SandboxError, SandboxInput, SandboxOutput } from '@platon/feature/player/common'
 import { withTempFile } from '@platon/shared/server'
-import { RegisterSandbox, Sandbox, SandboxError, SandboxInput, SandboxOutput } from '../sandbox'
+import { RegisterSandbox } from '../sandbox'
 import { pythonRunnerScript } from './python-scripts'
 
 interface ExecutionResult {

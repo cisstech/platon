@@ -4,14 +4,14 @@ import { OnEvent } from '@nestjs/event-emitter'
 import { ForbiddenResponse, NotFoundResponse, User, isTeacherRole } from '@platon/core/common'
 import { EventService, UserEntity } from '@platon/core/server'
 import {
+  ACTIVITY_FILE_EXTENSION,
   ActivityExercise,
-  ActivityVariables,
   ExerciseVariables,
   PLSourceFile,
   Variables,
   extractExercisesFromActivityVariables,
-  patchExerciseMeta,
 } from '@platon/feature/compiler'
+import { Activity } from '@platon/feature/course/common'
 import {
   ActivityEntity,
   ActivityService,
@@ -21,24 +21,20 @@ import {
   OnTerminateActivityEventPayload,
 } from '@platon/feature/course/server'
 import {
-  EvalExerciseInput,
   ExercisePlayer,
   PlayActivityOuput,
   PlayExerciseOuput,
-  PlayerActions,
   PlayerActivityVariables,
   PlayerExercise,
-  PlayerNavigation,
+  PlayerManager,
   PreviewInput,
   updateActivityNavigationState,
-  withActivityFeedbacksGuard,
   withActivityPlayer,
-  withAnswersInSession,
   withExercisePlayer,
   withSessionAccessGuard,
 } from '@platon/feature/player/common'
 import { ResourceFileService } from '@platon/feature/resource/server'
-import { AnswerStates, answerStateFromGrade } from '@platon/feature/result/common'
+import { Answer, AnswerStates, ExerciseSession, Session } from '@platon/feature/result/common'
 import {
   AnswerService,
   CorrectionEntity,
@@ -46,36 +42,23 @@ import {
   SessionEntity,
   SessionService,
 } from '@platon/feature/result/server'
+import { PartialDeep } from 'type-fest'
 import { DataSource, EntityManager, In } from 'typeorm'
-import { withMultiSessionGuard } from './player-guards'
 import { PreviewOuputDTO } from './player.dto'
 import { SandboxService } from './sandboxes/sandbox.service'
-import { basename } from 'path'
 
-type ActionHandler = (
-  session: ExerciseSessionEntity,
-  user?: User
-) => Promise<ExercisePlayer | [ExercisePlayer, PlayerNavigation]>
-
-interface CreateSessionArgs {
-  user?: User
+type CreateSessionArgs = {
+  user?: User | null
   source: PLSourceFile
-  parentId?: string
-  overrides?: Variables
-  activity?: ActivityEntity
-  isBuilt?: boolean
+  parentId?: string | null
+  overrides?: Variables | null
+  activity?: ActivityEntity | null
+  isBuilt?: boolean | null
 }
 
 @Injectable()
-export class PlayerService {
+export class PlayerService extends PlayerManager {
   protected readonly logger = new Logger(PlayerService.name)
-  private readonly actionHandlers: Record<PlayerActions, ActionHandler> = {
-    NEXT_HINT: this.nextHint.bind(this),
-    CHECK_ANSWER: this.checkAnswer.bind(this),
-    NEXT_EXERCISE: this.nextExercise.bind(this),
-    SHOW_SOLUTION: this.showSolution.bind(this),
-    REROLL_EXERCISE: this.reroll.bind(this),
-  }
 
   constructor(
     private readonly dataSource: DataSource,
@@ -85,7 +68,9 @@ export class PlayerService {
     private readonly sessionService: SessionService,
     private readonly activityService: ActivityService,
     private readonly resourceFileService: ResourceFileService
-  ) {}
+  ) {
+    super(sandboxService)
+  }
 
   async answers(sessionId: string): Promise<ExercisePlayer[]> {
     const session = await this.sessionService.findById<ExerciseVariables>(sessionId, {
@@ -193,219 +178,52 @@ export class PlayerService {
     }
   }
 
-  async terminate(sessionId: string, user?: User): Promise<PlayActivityOuput> {
-    const session = withSessionAccessGuard(
-      await this.sessionService.findById<PlayerActivityVariables>(sessionId, { parent: true, activity: true }),
-      user
-    )
+  protected createAnswer(answer: Partial<Answer>): Promise<Answer> {
+    return this.answerService.create(answer)
+  }
 
-    const activitySession = session.parent || session
-    const activityVariables = activitySession.variables
-    if (activityVariables.navigation.terminated) {
-      return { activity: withActivityPlayer(activitySession) }
-    }
+  protected updateSession(sessionId: string, changes: PartialDeep<Session>): Promise<void> {
+    return this.sessionService.update(sessionId, changes)
+  }
 
-    activityVariables.navigation.terminated = true
-    activitySession.variables = activityVariables
-    await this.sessionService.update(activitySession.id, {
-      variables: activitySession.variables,
+  protected findGrades(sessionId: string): Promise<number[]> {
+    return this.answerService.findGradesOfSession(sessionId)
+  }
+
+  protected findSessionById(sessionId: string): Promise<Session | null | undefined> {
+    return this.sessionService.findById(sessionId, { parent: true, activity: true })
+  }
+
+  protected findSessionsByParentId(parentId: string): Promise<Session[]> {
+    return this.sessionService.findAllWithParent(parentId)
+  }
+
+  protected findExerciseSessionById(id: string): Promise<ExerciseSession | null | undefined> {
+    return this.sessionService.findExerciseSessionById(id, { parent: true, activity: true })
+  }
+
+  protected override onTerminate(activity: Activity): void {
+    this.eventService.emit<OnTerminateActivityEventPayload>(ON_TERMINATE_ACTIVITY_EVENT, {
+      activity,
     })
+  }
 
-    if (activitySession.activity) {
-      this.eventService.emit<OnTerminateActivityEventPayload>(ON_TERMINATE_ACTIVITY_EVENT, {
-        activity: activitySession.activity,
+  @OnEvent(ON_RELOAD_ACTIVITY_EVENT)
+  protected async onReloadActivity(payload: OnReloadActivityEventPayload): Promise<void> {
+    const { activity } = payload
+    this.dataSource.transaction(async (manager) => {
+      this.logger.log(`Reload activity ${activity.id}`)
+      const sessions = await manager.find(SessionEntity, {
+        where: { activityId: activity.id },
       })
-    }
-
-    return {
-      activity: withActivityPlayer(activitySession),
-    }
-  }
-
-  async evaluate(input: EvalExerciseInput, user?: User): Promise<ExercisePlayer | [ExercisePlayer, PlayerNavigation]> {
-    const session = withSessionAccessGuard(
-      await this.sessionService.findExerciseSessionById(input.sessionId, { parent: true, activity: true }),
-      user
-    )
-
-    const grades = await this.answerService.findGradesOfSession(session.id)
-
-    withAnswersInSession(session.variables, input.answers || {})
-    patchExerciseMeta(session.variables, () => ({ grades, totalAttempts: session.attempts }))
-    return this.actionHandlers[input.action](session, user)
-  }
-
-  async reroll(exerciseSession: ExerciseSessionEntity): Promise<ExercisePlayer> {
-    const envid = exerciseSession.envid
-    const { source } = exerciseSession
-
-    let variables = source.variables ?? exerciseSession.variables
-    variables.seed = Date.now() % 100
-
-    if (variables.builder?.trim()) {
-      patchExerciseMeta(variables, () => ({ isInitialBuild: false }))
-      const output = await this.sandboxService.run(
-        {
-          envid,
-          variables,
-          files: source.dependencies.map((file) => ({
-            path: file.alias || basename(file.abspath),
-            content: file.content,
-          })),
-        },
-        variables.builder
-      )
-      variables = output.variables as ExerciseVariables
-    }
-
-    await this.sessionService.update(exerciseSession.id, {
-      variables: (exerciseSession.variables = variables),
+      this.logger.log(`Delete ${sessions.length} sessions`)
+      await Promise.all([
+        manager.delete(SessionEntity, { activityId: activity.id }),
+        manager.delete(CorrectionEntity, {
+          id: In(sessions.map((s) => s.correctionId).filter((id) => !!id) as string[]),
+        }),
+      ])
     })
-
-    return withExercisePlayer(exerciseSession)
-  }
-
-  async nextHint(exerciseSession: ExerciseSessionEntity): Promise<ExercisePlayer> {
-    const envid = exerciseSession.envid
-    let variables = exerciseSession.variables
-
-    if (Array.isArray(variables.hint)) {
-      if (variables.hint.length) {
-        patchExerciseMeta(variables, (meta) => ({ consumedHints: meta.consumedHints + 1 }))
-      }
-    } else if (variables.hint?.next?.trim()) {
-      const output = await this.sandboxService.run(
-        {
-          envid,
-          variables,
-          files: exerciseSession.source.dependencies.map((file) => ({
-            path: file.alias || basename(file.abspath),
-            content: file.content,
-          })),
-        },
-        variables.hint.next
-      )
-      patchExerciseMeta(output.variables, (meta) => ({ consumedHints: meta.consumedHints + 1 }))
-      variables = output.variables as ExerciseVariables
-    }
-
-    await this.sessionService.update(exerciseSession.id, {
-      variables: (exerciseSession.variables = variables),
-    })
-
-    return withExercisePlayer(exerciseSession)
-  }
-
-  async checkAnswer(exerciseSession: ExerciseSessionEntity): Promise<[ExercisePlayer, PlayerNavigation]> {
-    const { activitySession, activityNavigation } = withMultiSessionGuard(exerciseSession)
-
-    // EVAL ANSWERS
-
-    const envid = exerciseSession.envid
-    let variables = exerciseSession.variables
-    variables.feedback = { type: 'info', content: '' }
-
-    const output = await this.sandboxService.run(
-      {
-        envid,
-        variables,
-        files: exerciseSession.source.dependencies.map((file) => ({
-          path: file.alias || basename(file.abspath),
-          content: file.content,
-        })),
-      },
-      variables.grader
-    )
-    const grade = Number.parseInt(output.variables.grade) ?? -1
-    const increment = grade > -1 ? 1 : 0
-
-    variables = output.variables as ExerciseVariables
-
-    patchExerciseMeta(variables, (meta) => ({
-      attempts: meta.attempts + increment,
-    }))
-
-    exerciseSession.grade = Math.max(grade, exerciseSession.grade ?? -1)
-    exerciseSession.attempts += increment
-    exerciseSession.variables = variables
-
-    // SAVE ANSWER WITH GRADE
-
-    const answer = await this.answerService.create({
-      grade,
-      userId: exerciseSession.userId,
-      sessionId: exerciseSession.id,
-      variables: exerciseSession.variables,
-    })
-
-    const promises: Promise<unknown>[] = [
-      this.sessionService.update(exerciseSession.id, {
-        grade: exerciseSession.grade,
-        attempts: exerciseSession.attempts,
-        variables: exerciseSession.variables,
-        lastGradedAt: new Date(),
-      }),
-    ]
-
-    // UPDATE NAVIGATION ACCORDING TO GRADE
-
-    if (activitySession && activityNavigation) {
-      const current = activityNavigation.exercises.find((item) => item.sessionId === exerciseSession.id)
-      if (current) {
-        current.state = answerStateFromGrade(answer.grade)
-        activityNavigation.exercises = activityNavigation.exercises.map((item) =>
-          item.sessionId === current.sessionId ? current : item
-        )
-      }
-
-      const childs = await this.sessionService.findAllWithParent(activitySession.id)
-      activitySession.grade = grade
-      childs.forEach((child) => {
-        if (child.id !== exerciseSession.id && typeof child.grade === 'number' && child.grade !== -1) {
-          activitySession.grade += child.grade
-        }
-      })
-
-      if (activitySession.grade && activitySession.grade > 0 && childs.length) {
-        activitySession.grade /= childs.length
-      }
-
-      activitySession.attempts += increment
-      promises.push(
-        this.sessionService.update(activitySession.id, {
-          grade: activitySession.grade,
-          attempts: activitySession.attempts,
-          variables: {
-            ...activitySession.variables,
-            navigation: activityNavigation,
-          } as PlayerActivityVariables,
-          lastGradedAt: new Date(),
-        })
-      )
-    }
-
-    await Promise.all(promises)
-
-    return [
-      withExercisePlayer(exerciseSession),
-      activitySession ? withActivityFeedbacksGuard<ActivityVariables>(activitySession).variables.navigation : undefined,
-    ]
-  }
-
-  async nextExercise(exerciseSession: ExerciseSessionEntity): Promise<ExercisePlayer> {
-    const activitySession = exerciseSession.parent
-    if (!activitySession) {
-      throw new ForbiddenResponse(`This action can be called only with dynamic activities.`)
-    }
-
-    activitySession.activity = activitySession.activity ?? exerciseSession.activity
-
-    return withExercisePlayer(exerciseSession)
-  }
-
-  async showSolution(exerciseSession: ExerciseSessionEntity): Promise<ExercisePlayer> {
-    patchExerciseMeta(exerciseSession.variables, () => ({ showSolution: true }))
-    return withExercisePlayer(exerciseSession)
   }
 
   /**
@@ -442,17 +260,17 @@ export class PlayerService {
         {
           activity,
           variables: source.variables as Variables,
-          envid: null as any,
-          userId: user?.id || (null as any),
-          parentId: parentId || (null as any),
-          activityId: activity?.id || (null as any),
+          envid: null,
+          userId: user?.id || null,
+          parentId: parentId || null,
+          activityId: activity?.id || null,
           source,
           isBuilt: isBuilt || false,
         },
         manager
       )
 
-      if (source.abspath.endsWith('.pla')) {
+      if (source.abspath.endsWith(ACTIVITY_FILE_EXTENSION)) {
         session.variables = await this.createNavigation(
           source.variables as PlayerActivityVariables,
           session,
@@ -476,7 +294,7 @@ export class PlayerService {
   private async createNavigation(
     variables: PlayerActivityVariables,
     activitySession: SessionEntity,
-    user?: User,
+    user?: User | null,
     manager?: EntityManager
   ): Promise<PlayerActivityVariables> {
     const navigation = variables.navigation || {}
@@ -516,23 +334,5 @@ export class PlayerService {
       ...variables,
       navigation,
     }
-  }
-
-  @OnEvent(ON_RELOAD_ACTIVITY_EVENT)
-  protected async onReloadActivity(payload: OnReloadActivityEventPayload): Promise<void> {
-    const { activity } = payload
-    this.dataSource.transaction(async (manager) => {
-      this.logger.log(`Reload activity ${activity.id}`)
-      const sessions = await manager.find(SessionEntity, {
-        where: { activityId: activity.id },
-      })
-      this.logger.log(`Delete ${sessions.length} sessions`)
-      await Promise.all([
-        manager.delete(SessionEntity, { activityId: activity.id }),
-        manager.delete(CorrectionEntity, {
-          id: In(sessions.map((s) => s.correctionId).filter((id) => !!id) as string[]),
-        }),
-      ])
-    })
   }
 }

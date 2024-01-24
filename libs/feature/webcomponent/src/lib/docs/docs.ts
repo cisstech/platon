@@ -22,20 +22,16 @@ export function createWebComponentDoc(meta?: Partial<NgeDocMeta>): NgeDocSetting
         href: 'presentation',
         renderer: 'assets/docs/components/docs/presentation.md',
       },
-
-      /*
       {
-        title: 'Utilisation',
-        href: 'usage',
-        renderer: 'assets/docs/components/docs/usage.md',
-      },
-      {
-        title: 'Css',
+        title: 'CSS',
         href: 'css',
         renderer: () => import('./css/css.module').then((m) => m.CssModule),
       },
-      */
-
+      //{
+      //  title: 'Playground',
+      //  href: 'playground',
+      //  renderer: () => import('./playground/playground.module').then((m) => m.PlaygroundModule),
+      //},
       (injector: Injector) => {
         const api = injector.get(WebComponentService)
         return {

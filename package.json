@@ -264,6 +264,7 @@
     "tar": "^6.1.13",
     "tar-stream": "^3.0.0",
     "tslib": "^2.3.0",
+    "type-fest": "^4.9.0",
     "typeorm": "^0.3.11",
     "typescript-optional": "^3.0.0-alpha.3",
     "unzipper": "^0.10.14",

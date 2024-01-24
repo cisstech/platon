@@ -1,19 +1,25 @@
-import { NgModule } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import { DocsComponent } from './docs.component'
-import { ShowcaseComponent } from './showcase/showcase.component'
-import { NgeMarkdownModule } from '@cisstech/nge/markdown'
-import { NgJsonEditorModule } from 'ang-jsoneditor'
+import { NgModule } from '@angular/core'
 import { MatButtonModule } from '@angular/material/button'
+import { NgeMarkdownModule } from '@cisstech/nge/markdown'
 import { IDynamicModule } from '@cisstech/nge/services'
+import { NgJsonEditorModule } from 'ang-jsoneditor'
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
-import { NzPopoverModule } from 'ng-zorro-antd/popover'
-import { SpecialTypeComponent } from './special-type/special-type.component'
-import { ApiDisplayComponent } from './api-display/api-display.component'
+import { DocsComponent } from './docs.component'
+import { JSONSchemaExpandablePipe } from './pipes/json-schema-expandable.pipe'
+import { JSONSchemaTypeNamePipe } from './pipes/json-schema-type-name.pipe'
+import { PropertiesComponent } from './properties/properties.component'
+import { ShowcaseComponent } from './showcase/showcase.component'
 
 @NgModule({
-  imports: [CommonModule, MatButtonModule, NzToolTipModule, NzPopoverModule, NgeMarkdownModule, NgJsonEditorModule],
-  declarations: [DocsComponent, ShowcaseComponent, SpecialTypeComponent, ApiDisplayComponent],
+  imports: [CommonModule, MatButtonModule, NzToolTipModule, NgeMarkdownModule, NgJsonEditorModule],
+  declarations: [
+    DocsComponent,
+    JSONSchemaExpandablePipe,
+    JSONSchemaTypeNamePipe,
+    PropertiesComponent,
+    ShowcaseComponent,
+  ],
 })
 export class DocsModule implements IDynamicModule {
   component = DocsComponent

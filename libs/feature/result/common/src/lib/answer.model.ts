@@ -34,7 +34,7 @@ export interface Answer {
   id: string
   createdAt: Date
   updatedAt: Date
-  userId?: string
+  userId?: string | null
   grade: number
   sessionId: string
   variables: ExerciseVariables

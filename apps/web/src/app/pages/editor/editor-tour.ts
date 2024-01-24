@@ -62,7 +62,7 @@ export const EDITOR_TOUR: Step[] = [
     title: `Espace d'édition`,
     element: `.container-welcome`,
     intro: `
-      <p>Le cœur de l'EDI est l'espace d'édition centrale, où la polyvalence rencontre la puissance :</p>
+      <p>Le cœur de l'IDE est l'espace d'édition centrale, où la polyvalence rencontre la puissance :</p>
       <ul>
         <li>
           Prise en charge de l'édition et de la visualisation d'une large gamme de fichiers, y compris le code, les PDF, les vidéos et les images.
@@ -76,7 +76,7 @@ export const EDITOR_TOUR: Step[] = [
   {
     title: 'Documentation complémentaire',
     intro: `
-      <p>Ce tour d'horizon rapide ne couvre que les bases de l'EDI. Pour en savoir plus, consultez la documentation complète de l'EDI <a href="/docs/main/doc/programing/ide" target="_blank">sur cette page</a>.</p>
+      <p>Ce tour d'horizon rapide ne couvre que les bases de l'IDE. Pour en savoir plus, consultez la documentation complète de l'IDE <a href="/docs/main/doc/programing/ide" target="_blank">sur cette page</a>.</p>
     `,
   },
 ]

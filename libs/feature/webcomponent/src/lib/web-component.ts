@@ -258,7 +258,6 @@ function detectChanges(component: WebComponentInstance) {
 
   component.$__changeDetector__$.markForCheck()
   component.$__changeDetector__$.detectChanges()
-
   component.$__suspendChanges__$ = false
 }
 

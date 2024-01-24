@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { CommonModule } from '@angular/common'
 import {
   ChangeDetectionStrategy,
@@ -30,7 +31,6 @@ import { SafePipe } from '@cisstech/nge/pipes'
 
 import { DialogModule, DialogService, UserAvatarComponent } from '@platon/core/browser'
 import { ExercisePlayer, PlayerActions, PlayerNavigation } from '@platon/feature/player/common'
-import { WebComponentHooks } from '@platon/feature/webcomponent'
 
 import { HttpErrorResponse } from '@angular/common/http'
 import { ActivatedRoute } from '@angular/router'
@@ -356,9 +356,9 @@ export class PlayerExerciseComponent implements OnInit, OnChanges {
     return answers
   }
 
-  private forEachComponent(consumer: (component: WebComponentHooks) => void): void {
+  private forEachComponent(consumer: (component: any) => void): void {
     this.container.nativeElement.querySelectorAll('[cid]').forEach((node) => {
-      consumer(node as unknown as WebComponentHooks)
+      consumer(node as any)
     })
   }
 

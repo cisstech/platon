@@ -15,8 +15,5 @@
 <h2>Exemple interactive</h2>
 <wc-showcase [definition]="definition"></wc-showcase>
 
-<!-- <h2>Exercices</h2>
-<p>TODO</p>
- -->
 <h2>API</h2>
-<wc-docs-api-display [properties]="definition.schema.properties"></wc-docs-api-display>
+<wc-properties [schema]="definition.schema" />

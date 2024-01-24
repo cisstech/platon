@@ -44,7 +44,7 @@ export const MarkdownComponentDefinition = defineWebComponent({
         Content of Tab 2
 
         ===
-        <https://mciissee.github.io/nge-markdown/cheatsheet>
+        <https://cisstech.github.io/nge/docs/nge-markdown/cheatsheet>
         `,
   },
 })
