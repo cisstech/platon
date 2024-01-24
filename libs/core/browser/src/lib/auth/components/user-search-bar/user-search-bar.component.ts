@@ -60,7 +60,6 @@ export class UserSearchBarComponent implements OnInit, OnChanges, ControlValueAc
     onSelect: (item) => {
       if (this.autoSelect) return
 
-      this.searchbar.value = ''
       if (!this.multi) {
         this.selection = []
       }
@@ -127,6 +126,7 @@ export class UserSearchBarComponent implements OnInit, OnChanges, ControlValueAc
     if (this.onlyGroups) {
       this.searchbar.placeholder = 'Essayez un nom...'
     }
+    this.searchbar.clearOnSelect = !this.autoSelect
   }
 
   ngOnChanges(changes: SimpleChanges): void {

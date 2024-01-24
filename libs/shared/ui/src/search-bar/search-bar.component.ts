@@ -5,6 +5,7 @@ import {
   ChangeDetectorRef,
   Component,
   ContentChild,
+  ElementRef,
   EventEmitter,
   HostBinding,
   Input,
@@ -13,6 +14,8 @@ import {
   OnInit,
   Output,
   TemplateRef,
+  ViewChild,
+  booleanAttribute,
 } from '@angular/core'
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Subscription } from 'rxjs'
@@ -26,6 +29,7 @@ import { MatButtonModule } from '@angular/material/button'
 import { NzAutocompleteModule, NzOptionSelectionChange } from 'ng-zorro-antd/auto-complete'
 import { NzSpinModule } from 'ng-zorro-antd/spin'
 
+const DEFAULT_DEBOUNCE_TIME = 500
 @Component({
   standalone: true,
   selector: 'ui-search-bar',
@@ -49,20 +53,17 @@ import { NzSpinModule } from 'ng-zorro-antd/spin'
 export class UiSearchBarComponent implements OnInit, OnChanges, OnDestroy {
   private readonly subscriptions: Subscription[] = []
 
-  @Input()
-  searchbar?: SearchBar<any>
+  @ViewChild('searchRef', { read: ElementRef })
+  searchRef?: ElementRef<HTMLInputElement>
 
-  @Input()
-  disabled = false
+  @Input() searchbar?: SearchBar<any>
+  @Input({ transform: booleanAttribute }) disabled = false
 
   @ContentChild(TemplateRef)
   suggestionTemplate?: TemplateRef<any>
 
-  @Output()
-  search = new EventEmitter<string>()
-
-  @Output()
-  filter = new EventEmitter<void>()
+  @Output() search = new EventEmitter<string>()
+  @Output() filter = new EventEmitter<void>()
 
   protected control = new FormControl()
   protected suggesting = false
@@ -83,7 +84,7 @@ export class UiSearchBarComponent implements OnInit, OnChanges, OnDestroy {
     this.subscriptions.push(
       this.control.valueChanges
         .pipe(
-          debounceTime(500), // Wait for the user to stop typing (1/2 second in this case)
+          debounceTime(DEFAULT_DEBOUNCE_TIME), // Wait for the user to stop typing (1/2 second in this case)
           distinctUntilChanged(), // Wait until the search text changes.
           switchMap((query) => {
             this.startFiltering(query)
@@ -125,8 +126,14 @@ export class UiSearchBarComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   protected onSelect(event: NzOptionSelectionChange, item: any): void {
-    if (event.isUserInput && this.searchbar?.onSelect) {
-      this.searchbar?.onSelect(item)
+    if (event.isUserInput) {
+      this.searchbar?.onSelect?.(item)
+      if (this.searchbar?.clearOnSelect) {
+        setTimeout(() => {
+          this.control.setValue('', { emitEvent: false })
+          this.searchRef?.nativeElement?.blur?.()
+        })
+      }
     }
   }
 
@@ -137,7 +144,7 @@ export class UiSearchBarComponent implements OnInit, OnChanges, OnDestroy {
     return item
   }
 
-  private stopFiltering(): void {
+  protected stopFiltering(): void {
     this.subscriptions.forEach((s, i) => {
       if (i > 0) {
         s.unsubscribe()
@@ -146,7 +153,7 @@ export class UiSearchBarComponent implements OnInit, OnChanges, OnDestroy {
     this.subscriptions.splice(1, this.subscriptions.length)
   }
 
-  private startFiltering(query?: string): void {
+  protected startFiltering(query?: string): void {
     this.suggesting = true
     this.suggestions = []
     this.changeDetector.markForCheck()
@@ -176,8 +183,9 @@ export class UiSearchBarComponent implements OnInit, OnChanges, OnDestroy {
       Object.defineProperty(this.searchbar, 'value', {
         get: () => this.control.value,
         set: (value: string) => {
-          this.control.patchValue(value || '')
+          this.control.setValue(value || '')
           this.onTrigger()
+          this.changeDetector.markForCheck()
         },
       })
     }
