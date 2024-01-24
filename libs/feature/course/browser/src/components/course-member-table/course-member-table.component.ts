@@ -8,6 +8,7 @@ import {
   forwardRef,
   Input,
   OnChanges,
+  OnInit,
   Output,
 } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
@@ -45,7 +46,7 @@ type Value = string[] | undefined
     UserGroupDrawerComponent,
   ],
 })
-export class CourseMemberTableComponent implements OnChanges, ControlValueAccessor {
+export class CourseMemberTableComponent implements OnInit, OnChanges, ControlValueAccessor {
   @Input() members: CourseMember[] = []
   @Input() editable = false
   @Input() selectable = false
@@ -64,33 +65,12 @@ export class CourseMemberTableComponent implements OnChanges, ControlValueAccess
   protected indeterminate = false
   protected selection = new Set<string>()
 
-  protected columns: NzTableColumn<CourseMember>[] = [
-    {
-      key: 'name',
-      name: 'Utilisateur/Groupe',
-      sortOrder: 'ascend',
-      sortFn: !this.canFilterOnServer
-        ? (a: CourseMember, b: CourseMember) => {
-            const aName = a.user?.username || a.group?.name || ''
-            const bName = b.user?.username || b.group?.name || ''
-            return aName.localeCompare(bName)
-          }
-        : true,
-    },
-    {
-      key: 'createdAt',
-      name: `Date d'ajout`,
-      sortFn: !this.canFilterOnServer
-        ? (a: CourseMember, b: CourseMember) => {
-            return a.createdAt.valueOf() - b.createdAt.valueOf()
-          }
-        : true,
-    },
-  ]
+  protected columns: NzTableColumn<CourseMember>[] = []
 
   protected get canFilterOnServer(): boolean {
     return this.filtersChange.observed
   }
+
   constructor(private readonly changeDetectorRef: ChangeDetectorRef) {}
 
   // ControlValueAccessor methods
@@ -117,6 +97,33 @@ export class CourseMemberTableComponent implements OnChanges, ControlValueAccess
 
   setDisabledState(isDisabled: boolean): void {
     this.disabled = isDisabled
+  }
+
+  ngOnInit(): void {
+    this.columns = [
+      {
+        key: 'name',
+        name: 'Utilisateur/Groupe',
+        sortOrder: 'ascend',
+        sortFn: !this.canFilterOnServer
+          ? // TODO: use the same sortFn as in the server (last_name, first_name, username)
+            (a: CourseMember, b: CourseMember) => {
+              const aName = a.user?.username || a.group?.name || ''
+              const bName = b.user?.username || b.group?.name || ''
+              return aName.localeCompare(bName)
+            }
+          : true,
+      },
+      {
+        key: 'createdAt',
+        name: `Date d'ajout`,
+        sortFn: !this.canFilterOnServer
+          ? (a: CourseMember, b: CourseMember) => {
+              return a.createdAt.valueOf() - b.createdAt.valueOf()
+            }
+          : true,
+      },
+    ]
   }
 
   ngOnChanges() {

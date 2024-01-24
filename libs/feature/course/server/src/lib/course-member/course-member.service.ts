@@ -74,22 +74,28 @@ export class CourseMemberService {
       )
     }
 
-    if (filters.order) {
-      const fields: Record<UserOrderings, string> = {
-        NAME: 'user.username',
-        CREATED_AT: 'member.created_at',
-        UPDATED_AT: 'member.updated_at',
-      }
+    const fields: Record<UserOrderings, string> = {
+      NAME: 'user.username',
+      CREATED_AT: 'member.created_at',
+      UPDATED_AT: 'member.updated_at',
+    }
 
-      const orderings: Record<UserOrderings, keyof typeof OrderingDirections> = {
-        NAME: 'ASC',
-        CREATED_AT: 'DESC',
-        UPDATED_AT: 'DESC',
-      }
+    const orderings: Record<UserOrderings, keyof typeof OrderingDirections> = {
+      NAME: 'ASC',
+      CREATED_AT: 'DESC',
+      UPDATED_AT: 'DESC',
+    }
 
-      query.orderBy(fields[filters.order], filters.direction || orderings[filters.order])
+    const order = filters.order || UserOrderings.NAME
+    const direction = filters.direction || orderings[order]
+    if (filters.order === UserOrderings.NAME) {
+      query
+        .orderBy('user.last_name', direction)
+        .addOrderBy('user.first_name', direction)
+        .addOrderBy('user.username', direction)
+        .addOrderBy('group.name', direction)
     } else {
-      query.orderBy('user.username', 'ASC').addOrderBy('group.name', 'ASC')
+      query.orderBy(fields[order], direction)
     }
 
     if (filters.offset) {

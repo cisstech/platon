@@ -1,4 +1,4 @@
-import { Component } from '@angular/core'
+import { Component, Input } from '@angular/core'
 import { WebComponentDefinition } from '../web-component'
 
 @Component({
@@ -7,5 +7,6 @@ import { WebComponentDefinition } from '../web-component'
   styleUrls: ['./docs.component.scss'],
 })
 export class DocsComponent {
+  @Input()
   definition!: WebComponentDefinition
 }
