@@ -1,9 +1,14 @@
-import { HttpClient, HttpParams } from '@angular/common/http'
+import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
+import { buildHttpParams } from '@platon/core/browser'
 import { ItemResponse, ListResponse } from '@platon/core/common'
 import { Course, CourseMember, CourseMemberFilters, CreateCourseMember } from '@platon/feature/course/common'
 import { Observable, map } from 'rxjs'
 import { CourseMemberProvider } from '../models/course-member-provider'
+
+const getId = (course: Course | string): string => {
+  return typeof course === 'string' ? course : course.id
+}
 
 @Injectable()
 export class RemoteCourseMemberProvider extends CourseMemberProvider {
@@ -17,34 +22,9 @@ export class RemoteCourseMemberProvider extends CourseMemberProvider {
       .pipe(map((e) => e.resource))
   }
 
-  search(course: Course, filters?: CourseMemberFilters): Observable<ListResponse<CourseMember>> {
-    let params = new HttpParams()
-
-    if (filters?.search) {
-      params = params.append('search', filters.search)
-    }
-
-    filters?.roles?.forEach((e) => {
-      params = params.append('roles', e)
-    })
-
-    if (filters?.limit) {
-      params = params.append('limit', filters.limit.toString())
-    }
-
-    if (filters?.offset) {
-      params = params.append('offset', filters.offset.toString())
-    }
-
-    if (filters?.order) {
-      params = params.append('order', filters.order.toString())
-    }
-
-    if (filters?.direction) {
-      params = params.append('direction', filters.direction.toString())
-    }
-
-    return this.http.get<ListResponse<CourseMember>>(`/api/v1/courses/${course.id}/members`, {
+  search(course: Course | string, filters?: CourseMemberFilters): Observable<ListResponse<CourseMember>> {
+    const params = buildHttpParams(filters)
+    return this.http.get<ListResponse<CourseMember>>(`/api/v1/courses/${getId(course)}/members`, {
       params,
     })
   }

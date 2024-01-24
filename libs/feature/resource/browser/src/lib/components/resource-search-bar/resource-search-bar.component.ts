@@ -40,18 +40,17 @@ export class ResourceSearchBarComponent implements ControlValueAccessor {
 
   readonly searchbar: SearchBar<Resource> = {
     placeholder: 'Essayez un nom, un topic, un niveau...',
+    clearOnSelect: true,
     filterer: {
       run: this.search.bind(this),
     },
     complete: (item) => item.name,
     onSelect: (item) => {
-      this.searchbar.value = ''
-
       if (!this.multi) {
         this.selection = []
       }
 
-      this.selection.push(item)
+      this.selection = [...this.selection, item]
       this.onChangeSelection()
     },
   }

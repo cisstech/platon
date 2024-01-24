@@ -24,8 +24,8 @@ import { NzModalModule } from 'ng-zorro-antd/modal'
 })
 export class UiModalTemplateComponent {
   @Input() title?: string
-  @Input() width?: string | null = '90vw'
-  @Input() height?: string | null = '75vh'
+  @Input() width?: string | null
+  @Input() height?: string | null
   @Input() overflow = 'auto'
   @Input() footer?: TemplateRef<void> | null
   @Input({ transform: booleanAttribute }) visible = false
@@ -45,9 +45,8 @@ export class UiModalTemplateComponent {
   open(): void {
     this.visibleChange.emit((this.visible = true))
     this.bodyStyle = {
-      width: this.width || '90vw',
-      height: this.height || '75vh',
-      maxHeight: '75vh',
+      ...(this.width && { width: this.width }),
+      ...(this.height && { height: this.height }),
       overflow: this.overflow || 'auto',
     }
     this.changeDetectorRef.markForCheck()

@@ -19,6 +19,6 @@ export interface CourseMemberFilters {
   readonly search?: string
   readonly offset?: number
   readonly limit?: number
-  readonly order?: UserOrderings
-  readonly direction?: OrderingDirections
+  readonly order?: UserOrderings | keyof typeof UserOrderings
+  readonly direction?: OrderingDirections | keyof typeof OrderingDirections
 }

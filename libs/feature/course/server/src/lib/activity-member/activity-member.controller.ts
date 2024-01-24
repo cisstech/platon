@@ -29,7 +29,7 @@ export class ActivityMemberController {
   ): Promise<ItemResponse<ActivityMemberDTO>> {
     const member = await this.service.create(input)
     return new ItemResponse({
-      resource: Mapper.map(await this.service.findById(activityId, member.id), ActivityMemberDTO),
+      resource: Mapper.map((await this.service.findById(activityId, member.id)).get(), ActivityMemberDTO),
     })
   }
 

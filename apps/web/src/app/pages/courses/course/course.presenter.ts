@@ -2,13 +2,12 @@
 import { Injectable, OnDestroy } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { AuthService, DialogService } from '@platon/core/browser'
-import { ListResponse, User } from '@platon/core/common'
+import { User } from '@platon/core/common'
 import { CourseService } from '@platon/feature/course/browser'
 import {
   Activity,
   Course,
   CourseMember,
-  CourseMemberFilters,
   CourseSection,
   CreateCourseMember,
   CreateCourseSection,
@@ -64,11 +63,6 @@ export class CoursePresenter implements OnDestroy {
     } catch {
       this.alertError()
     }
-  }
-
-  async searchMembers(filters: CourseMemberFilters = {}): Promise<ListResponse<CourseMember>> {
-    const { course } = this.context.value as Required<Context>
-    return firstValueFrom(this.courseService.searchMembers(course, filters))
   }
 
   // Sections

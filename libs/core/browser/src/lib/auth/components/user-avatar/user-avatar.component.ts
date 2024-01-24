@@ -6,6 +6,7 @@ import {
   EventEmitter,
   Input,
   Output,
+  booleanAttribute,
   inject,
 } from '@angular/core'
 
@@ -34,7 +35,7 @@ export class UserAvatarComponent {
   @Input() size = 32
   @Input() user?: User
   @Input() group?: UserGroup
-  @Input() noIcon = false
+  @Input({ transform: booleanAttribute }) noIcon = false
   @Input() showUsername: 'stacked' | 'inline' | 'none' = 'stacked'
 
   @Output() openGroupDetails = new EventEmitter<UserGroup>()

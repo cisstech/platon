@@ -7,14 +7,14 @@ import {
   EventEmitter,
   Input,
   OnChanges,
+  OnInit,
   Output,
   forwardRef,
 } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 
-import { NzTableModule, NzTableQueryParams } from 'ng-zorro-antd/table'
-
 import { UserFilters, UserGroup } from '@platon/core/common'
+import { NzTableModule, NzTableQueryParams } from 'ng-zorro-antd/table'
 import { NzTableColumn } from '../../../vendors/ng-zorro'
 import { UserAvatarComponent } from '../user-avatar/user-avatar.component'
 
@@ -35,7 +35,7 @@ type Value = string[] | undefined
   ],
   imports: [CommonModule, NzTableModule, UserAvatarComponent],
 })
-export class UserGroupTableComponent implements OnChanges, ControlValueAccessor {
+export class UserGroupTableComponent implements OnInit, OnChanges, ControlValueAccessor {
   @Input() groups: UserGroup[] = []
   @Output() groupsChange = new EventEmitter<UserGroup[]>()
 
@@ -51,29 +51,37 @@ export class UserGroupTableComponent implements OnChanges, ControlValueAccessor 
   protected indeterminate = false
   protected selection = new Set<string>()
 
-  protected columns: NzTableColumn<UserGroup>[] = [
-    {
-      key: 'name',
-      name: 'Nom',
-      sortOrder: null,
-      sortFn: !this.canFilterOnServer ? (a: UserGroup, b: UserGroup) => a.name.localeCompare(b.name) : true,
-    },
-    {
-      key: 'createdAt',
-      name: `Date d'ajout`,
-      sortFn: !this.canFilterOnServer
-        ? (a: UserGroup, b: UserGroup) => {
-            return a.createdAt.valueOf() - b.createdAt.valueOf()
-          }
-        : true,
-    },
-  ]
+  protected columns: NzTableColumn<UserGroup>[] = []
 
   protected get canFilterOnServer(): boolean {
     return this.filtersChange.observed
   }
 
   constructor(private readonly changeDetectorRef: ChangeDetectorRef) {}
+
+  ngOnInit(): void {
+    this.columns = [
+      {
+        key: 'name',
+        name: 'Nom',
+        sortOrder: null,
+        sortFn: !this.canFilterOnServer ? (a: UserGroup, b: UserGroup) => a.name.localeCompare(b.name) : true,
+      },
+      {
+        key: 'createdAt',
+        name: `Date d'ajout`,
+        sortFn: !this.canFilterOnServer
+          ? (a: UserGroup, b: UserGroup) => {
+              return a.createdAt.valueOf() - b.createdAt.valueOf()
+            }
+          : true,
+      },
+    ]
+  }
+
+  ngOnChanges() {
+    this.total = this.total || this.groups.length
+  }
 
   // ControlValueAccessor methods
 
@@ -100,10 +108,6 @@ export class UserGroupTableComponent implements OnChanges, ControlValueAccessor 
 
   setDisabledState(isDisabled: boolean): void {
     this.disabled = isDisabled
-  }
-
-  ngOnChanges() {
-    this.total = this.total || this.groups.length
   }
 
   protected updateSelection(id: string, checked: boolean): void {

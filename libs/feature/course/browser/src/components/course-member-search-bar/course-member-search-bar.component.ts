@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CommonModule } from '@angular/common'
 import {
+  booleanAttribute,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -8,52 +9,52 @@ import {
   inject,
   Input,
   OnChanges,
+  OnDestroy,
   OnInit,
   SimpleChanges,
 } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
-import { combineLatest, firstValueFrom, Observable } from 'rxjs'
+import { combineLatest, firstValueFrom, Observable, Subscription } from 'rxjs'
 import { map, tap } from 'rxjs/operators'
 
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzIconModule } from 'ng-zorro-antd/icon'
 
 import { NgeUiListModule } from '@cisstech/nge/ui/list'
-import { User, UserFilters, UserGroup } from '@platon/core/common'
+import { UserAvatarComponent } from '@platon/core/browser'
+import { CourseMember, CourseMemberFilters } from '@platon/feature/course/common'
 import { SearchBar, UiSearchBarComponent } from '@platon/shared/ui'
-import { UserService } from '../../api/user.service'
-import { UserAvatarComponent } from '../user-avatar/user-avatar.component'
-
-type Item = User | UserGroup
+import { CourseService } from '../../api/course.service'
 
 @Component({
   standalone: true,
-  selector: 'user-search-bar',
-  templateUrl: './user-search-bar.component.html',
-  styleUrls: ['./user-search-bar.component.scss'],
+  selector: 'course-member-search-bar',
+  templateUrl: './course-member-search-bar.component.html',
+  styleUrls: ['./course-member-search-bar.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => UserSearchBarComponent),
+      useExisting: forwardRef(() => CourseMemberSearchBarComponent),
       multi: true,
     },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, NzIconModule, NzButtonModule, NgeUiListModule, UserAvatarComponent, UiSearchBarComponent],
 })
-export class UserSearchBarComponent implements OnInit, OnChanges, ControlValueAccessor {
-  private readonly userService = inject(UserService)
+export class CourseMemberSearchBarComponent implements OnInit, OnDestroy, OnChanges, ControlValueAccessor {
+  private readonly courseService = inject(CourseService)
+  private readonly subscriptions: Subscription[] = []
   private readonly changeDetectorRef = inject(ChangeDetectorRef)
   private totalCount = 0
   private isSearching = true
 
-  protected selection: Item[] = []
-  protected readonly searchbar: SearchBar<Item> = {
-    placeholder: 'Essayez un nom, un email...',
+  protected selection: CourseMember[] = []
+  protected readonly searchbar: SearchBar<CourseMember> = {
+    placeholder: 'Rechercher un utilisateur ou un groupe par son nom, son email...',
     filterer: {
       run: this.search.bind(this),
     },
-    complete: (item) => ('username' in item ? item.username : item.name),
+    complete: (item) => (item.user ? item.user.username : item.group?.name ?? ''),
     onSearch: (query) => {
       firstValueFrom(this.search(query)).catch(console.error)
     },
@@ -70,43 +71,40 @@ export class UserSearchBarComponent implements OnInit, OnChanges, ControlValueAc
   }
 
   /**
-   * If true, the search bar will allow to select multiple users or groups (default: true)
+   * Placeholder of the search bar.
    */
-  @Input() multi = true
+  @Input() placeholder?: string
 
   /**
-   * List of users or groups to exclude from the search results.
+   * If true, the search bar will allow to select multiple members (default: true)
+   */
+  @Input({ transform: booleanAttribute }) multi = true
+
+  /**
+   * List of user id's or groups id's to exclude from the search results.
    */
   @Input() excludes: string[] = []
 
   /**
    * If true, the search bar will be disabled. (default: false)
    */
-  @Input() disabled = false
-
-  /**
-   * Allow to search for user groups. (default: false)
-   */
-  @Input() allowGroup = false
-
-  /**
-   * If true, only user groups will be searched. (default: false)
-   */
-  @Input() onlyGroups = false
+  @Input({ transform: booleanAttribute }) disabled = false
 
   /**
    * It true, the search result will will be automatically selected and not displayed in a list of results with a remove button.
    * (default: false)
    */
-  @Input() autoSelect = false
+  @Input({ transform: booleanAttribute }) autoSelect = false
 
   /**
    * Custom filters to apply to the search.
    */
-  @Input() filters: UserFilters = { limit: 5 }
+  @Input() filters: CourseMemberFilters = { limit: 5 }
+
+  @Input({ required: true }) courseId!: string
 
   /**
-   * Total number of users or groups matching the current search.
+   * Total number members the current search.
    */
   get total(): number {
     return this.totalCount
@@ -120,19 +118,32 @@ export class UserSearchBarComponent implements OnInit, OnChanges, ControlValueAc
   }
 
   ngOnInit(): void {
-    if (this.allowGroup) {
-      this.searchbar.placeholder = 'Essayez un nom, un email, un groupe...'
-    }
-    if (this.onlyGroups) {
-      this.searchbar.placeholder = 'Essayez un nom...'
-    }
-    this.searchbar.clearOnSelect = !this.autoSelect
+    this.subscriptions.push(
+      this.courseService.onAddedMember.subscribe((member) => {
+        if (member.courseId === this.courseId) {
+          firstValueFrom(this.search(this.searchbar.value || '')).catch(console.error)
+        }
+      }),
+
+      this.courseService.onDeletedMember.subscribe((member) => {
+        if (member.courseId === this.courseId) {
+          this.remove(member)
+        }
+      })
+    )
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((s) => s.unsubscribe())
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.filters && !changes.filters.firstChange) {
       firstValueFrom(this.search(this.searchbar.value || '')).catch(console.error)
     }
+
+    this.searchbar.clearOnSelect = !this.autoSelect
+    this.searchbar.placeholder = this.placeholder ?? 'Rechercher un utilisateur ou un groupe par son nom, son email...'
   }
 
   // ControlValueAccessor methods
@@ -162,52 +173,27 @@ export class UserSearchBarComponent implements OnInit, OnChanges, ControlValueAc
     this.disabled = isDisabled
   }
 
-  protected isUser(item: Item): item is User {
-    return 'username' in item
-  }
-
-  protected search(query: string): Observable<Item[]> {
-    const requests: Observable<Item[]>[] = []
+  protected search(query: string): Observable<CourseMember[]> {
+    const requests: Observable<CourseMember[]>[] = []
     this.isSearching = true
     this.changeDetectorRef.markForCheck()
 
-    if (!this.onlyGroups) {
-      requests.push(
-        this.userService
-          .search({
-            ...this.filters,
-            search: query,
+    requests.push(
+      this.courseService
+        .searchMembers(this.courseId, {
+          ...this.filters,
+          search: query,
+        })
+        .pipe(
+          map((page) => {
+            this.totalCount = page.total
+            if (this.autoSelect) {
+              return page.resources
+            }
+            return page.resources.filter(this.isSelectable.bind(this))
           })
-          .pipe(
-            map((page) => {
-              this.totalCount = page.total
-              if (this.autoSelect) {
-                return page.resources
-              }
-              return page.resources.filter(this.isSelectable.bind(this))
-            })
-          )
-      )
-    }
-
-    if (this.allowGroup || this.onlyGroups) {
-      requests.push(
-        this.userService
-          .searchUserGroups({
-            search: query,
-            limit: this.filters.limit ?? 5,
-          })
-          .pipe(
-            map((page) => {
-              this.totalCount = page.total
-              if (this.autoSelect) {
-                return page.resources
-              }
-              return page.resources.filter(this.isSelectable.bind(this))
-            })
-          )
-      )
-    }
+        )
+    )
 
     return combineLatest(requests).pipe(
       map((res) => {
@@ -225,18 +211,18 @@ export class UserSearchBarComponent implements OnInit, OnChanges, ControlValueAc
     )
   }
 
-  protected remove(item: Item): void {
+  protected remove(item: CourseMember): void {
     this.selection = this.selection.filter((e) => e.id !== item.id)
     this.onChangeSelection()
   }
 
-  private isSelectable(item: Item): boolean {
+  private isSelectable(item: CourseMember): boolean {
     const isSelected = this.selection.find((e) => e.id === item.id)
     const isExclued = this.excludes.find((userOrGroup) => {
-      if ('username' in item) {
-        return userOrGroup === item.username || userOrGroup === item.id
+      if (item.user) {
+        return userOrGroup === item.user.username || userOrGroup === item.user.id
       }
-      return userOrGroup === item.id
+      return userOrGroup === item.group?.id
     })
     return !isSelected && !isExclued
   }
