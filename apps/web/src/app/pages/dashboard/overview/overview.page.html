@@ -123,7 +123,7 @@
               *ngIf="learningInsightsOption === 'score'"
               legend="Note moyenne"
               [date]="learningInsightsDate"
-              [distribution]="context.dashboard.user.durationDistribution"
+              [distribution]="context.dashboard.user.scoreDistribution"
             />
             <result-value-distribution
               *ngIf="learningInsightsOption === 'duration'"
