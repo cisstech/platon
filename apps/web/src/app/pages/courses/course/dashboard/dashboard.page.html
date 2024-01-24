@@ -6,6 +6,7 @@
           <ng-template let-context> {{ context }}</ng-template>
         </ui-search-bar>
         <button
+          *ngIf="course.permissions.update"
           nz-button
           nzType="primary"
           nzShape="round"
