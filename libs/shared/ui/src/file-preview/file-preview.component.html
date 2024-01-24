@@ -27,6 +27,7 @@
   <button nz-button (click)="zoomIn()">
     <span nz-icon nzType="zoom-in" nzTheme="outline"></span>
   </button>
+  <span class="pdf-zoom">{{ scale * 100 | number : '1.0-0' }}%</span>
   <button nz-button (click)="zoomOut()">
     <span nz-icon nzType="zoom-out" nzTheme="outline"></span>
   </button>
