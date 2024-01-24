@@ -27,8 +27,12 @@
     <div class="container-toolbar">
       <nz-tag>
         <span nz-icon nzType="calendar" nzTheme="outline"></span>
-        <span>Créé le {{ course.createdAt | date }} </span>
+        <span
+          >Créé le {{ course.createdAt | date }} par
+          <user-avatar [userIdOrName]="course.ownerId" noIcon showUsername="inline" />
+        </span>
       </nz-tag>
+
       <div class="spacer"></div>
       <button
         *ngIf="course.permissions.update"

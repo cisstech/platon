@@ -68,56 +68,7 @@ export class UserTableComponent implements OnInit, OnChanges, ControlValueAccess
   protected indeterminate = false
   protected currentUserId?: string
   protected selection = new Set<string>()
-  protected columns: NzTableColumn<User>[] = [
-    {
-      key: 'name',
-      name: 'Utilisateur',
-      sortOrder: 'ascend',
-      sortFn: !this.canFilterOnServer ? (a: User, b: User) => a.username.localeCompare(b.username) : true,
-    },
-    {
-      key: 'createdAt',
-      name: `Date d'ajout`,
-      sortFn: !this.canFilterOnServer
-        ? (a: User, b: User) => {
-            return a.createdAt.valueOf() - b.createdAt.valueOf()
-          }
-        : true,
-    },
-    {
-      key: 'email',
-      name: 'Email',
-    },
-    {
-      key: 'role',
-      name: 'Rôle',
-      listOfFilter: [
-        { text: 'Admin', value: 'admin' },
-        { text: 'Enseignant', value: 'teacher' },
-        { text: 'Élève', value: 'student' },
-      ],
-      filterMultiple: true,
-      filterFn: !this.canFilterOnServer
-        ? (roles: UserRoles[], item: User) => {
-            return roles.includes(item.role)
-          }
-        : true,
-    },
-    {
-      key: 'status',
-      name: 'Status',
-      listOfFilter: [
-        { text: 'Active', value: 'active' },
-        { text: 'Inactive', value: 'inactive' },
-      ],
-      filterMultiple: false,
-      filterFn: !this.canFilterOnServer
-        ? (status: string, item: User) => {
-            return status === 'active' ? item.active : !item.active
-          }
-        : true,
-    },
-  ]
+  protected columns: NzTableColumn<User>[] = []
 
   protected get canFilterOnServer(): boolean {
     return this.filtersChange.observed
@@ -131,6 +82,58 @@ export class UserTableComponent implements OnInit, OnChanges, ControlValueAccess
         this.currentUserId = user?.id
         this.changeDetectorRef.markForCheck()
       })
+
+    this.columns = [
+      {
+        key: 'name',
+        name: 'Utilisateur',
+        sortOrder: 'ascend',
+        // TODO: use the same sortFn as in the server (last_name, first_name, username)
+        sortFn: !this.canFilterOnServer ? (a: User, b: User) => a.username.localeCompare(b.username) : true,
+      },
+      {
+        key: 'createdAt',
+        name: `Date d'ajout`,
+        sortFn: !this.canFilterOnServer
+          ? (a: User, b: User) => {
+              return a.createdAt.valueOf() - b.createdAt.valueOf()
+            }
+          : true,
+      },
+      {
+        key: 'email',
+        name: 'Email',
+      },
+      {
+        key: 'role',
+        name: 'Rôle',
+        listOfFilter: [
+          { text: 'Admin', value: 'admin' },
+          { text: 'Enseignant', value: 'teacher' },
+          { text: 'Élève', value: 'student' },
+        ],
+        filterMultiple: true,
+        filterFn: !this.canFilterOnServer
+          ? (roles: UserRoles[], item: User) => {
+              return roles.includes(item.role)
+            }
+          : true,
+      },
+      {
+        key: 'status',
+        name: 'Status',
+        listOfFilter: [
+          { text: 'Active', value: 'active' },
+          { text: 'Inactive', value: 'inactive' },
+        ],
+        filterMultiple: false,
+        filterFn: !this.canFilterOnServer
+          ? (status: string, item: User) => {
+              return status === 'active' ? item.active : !item.active
+            }
+          : true,
+      },
+    ]
   }
 
   ngOnChanges() {

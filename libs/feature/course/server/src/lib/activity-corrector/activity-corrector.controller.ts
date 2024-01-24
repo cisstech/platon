@@ -29,7 +29,7 @@ export class ActivityCorrectorController {
   ): Promise<ItemResponse<ActivityCorrectorDTO>> {
     const member = await this.service.create(input)
     return new ItemResponse({
-      resource: Mapper.map(await this.service.findById(activityId, member.id), ActivityCorrectorDTO),
+      resource: Mapper.map((await this.service.findById(activityId, member.id)).get(), ActivityCorrectorDTO),
     })
   }
 

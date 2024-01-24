@@ -1,8 +1,22 @@
 <section>
-  <mat-card>
+  <button *ngIf="canEdit" (click)="addModal.open()" nz-button nzType="primary" nz-tooltip="Ajouter">
+    <span nz-icon nzType="plus" nzTheme="outline"></span>
+  </button>
+  <mat-card *ngIf="context.course">
+    <course-member-search-bar
+      #searchbar
+      autoSelect
+      [ngModel]="members"
+      placeholder="Pour filtrer, essayez de taper un nom, un email..."
+      (ngModelChange)="onUpdateMembers($event)"
+      [filters]="filters"
+      [courseId]="context.course!.id"
+    />
     <mat-card-content>
-      <course-member-form [roles]="roles" [allowGroup]="allowGroup" [excludes]="excludes" (send)="add($event)" />
       <course-member-table
+        [total]="searchbar.total"
+        [(filters)]="filters"
+        [loading]="searchbar.searching"
         [members]="members"
         [nonDeletables]="nonDeletables"
         [editable]="canEdit"
@@ -11,3 +25,15 @@
     </mat-card-content>
   </mat-card>
 </section>
+<user-search-modal
+  #addModal
+  multi
+  okTitle="Ajouter"
+  [title]="searchModalTitle"
+  [excludes]="excludes"
+  [filters]="{ roles: roles }"
+  [allowGroup]="allowGroup"
+  (closed)="addMembers($event)"
+>
+  <p>Sélectionnez les utilisateurs que vous souhaitez ajouter</p>
+</user-search-modal>

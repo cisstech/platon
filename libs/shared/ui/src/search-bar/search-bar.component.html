@@ -1,16 +1,21 @@
 <button mat-button (click)="onTrigger()">
   <mat-icon>search</mat-icon>
 </button>
+
 <input
+  #searchRef
   type="search"
   [placeholder]="searchbar?.placeholder || ''"
   [formControl]="control"
   (keydown.enter)="onTrigger()"
   [nzAutocomplete]="autocomplete"
+  (focus)="startFiltering(control.value)"
 />
+
 <button *ngIf="showFilterButton" mat-button (click)="onFilter()">
   <mat-icon>filter_list</mat-icon>
 </button>
+
 <nz-autocomplete #autocomplete>
   <ng-container *ngIf="suggesting; else result">
     <nz-auto-option>

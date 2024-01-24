@@ -7,6 +7,7 @@ import {
   EventEmitter,
   forwardRef,
   Input,
+  OnInit,
   OnChanges,
   Output,
 } from '@angular/core'
@@ -33,7 +34,7 @@ type Value = string[] | undefined
   ],
   imports: [CommonModule, NzTableModule],
 })
-export class LmsTableComponent implements OnChanges, ControlValueAccessor {
+export class LmsTableComponent implements OnInit, OnChanges, ControlValueAccessor {
   @Input() total = 0
   @Input() loading = true
   @Input() lmses: Lms[] = []
@@ -47,33 +48,41 @@ export class LmsTableComponent implements OnChanges, ControlValueAccessor {
   protected indeterminate = false
   protected selection = new Set<string>()
 
-  protected columns: NzTableColumn<Lms>[] = [
-    {
-      key: 'name',
-      name: 'Nom',
-      sortOrder: null,
-      sortFn: !this.canFilterOnServer ? (a: Lms, b: Lms) => a.name.localeCompare(b.name) : true,
-    },
-    {
-      key: 'url',
-      name: 'URL',
-    },
-    {
-      key: 'createdAt',
-      name: `Date d'ajout`,
-      sortFn: !this.canFilterOnServer
-        ? (a: Lms, b: Lms) => {
-            return a.createdAt.valueOf() - b.createdAt.valueOf()
-          }
-        : true,
-    },
-  ]
+  protected columns: NzTableColumn<Lms>[] = []
 
   protected get canFilterOnServer(): boolean {
     return this.filtersChange.observed
   }
 
   constructor(private readonly changeDetectorRef: ChangeDetectorRef) {}
+
+  ngOnInit(): void {
+    this.columns = [
+      {
+        key: 'name',
+        name: 'Nom',
+        sortOrder: null,
+        sortFn: !this.canFilterOnServer ? (a: Lms, b: Lms) => a.name.localeCompare(b.name) : true,
+      },
+      {
+        key: 'url',
+        name: 'URL',
+      },
+      {
+        key: 'createdAt',
+        name: `Date d'ajout`,
+        sortFn: !this.canFilterOnServer
+          ? (a: Lms, b: Lms) => {
+              return a.createdAt.valueOf() - b.createdAt.valueOf()
+            }
+          : true,
+      },
+    ]
+  }
+
+  ngOnChanges() {
+    this.total = this.total || this.lmses.length
+  }
 
   // ControlValueAccessor methods
 
@@ -100,10 +109,6 @@ export class LmsTableComponent implements OnChanges, ControlValueAccessor {
 
   setDisabledState(isDisabled: boolean): void {
     this.disabled = isDisabled
-  }
-
-  ngOnChanges() {
-    this.total = this.total || this.lmses.length
   }
 
   protected updateSelection(id: string, checked: boolean): void {

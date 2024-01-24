@@ -109,7 +109,7 @@
       <mat-icon>preview</mat-icon> {{ item.title }}
     </button>
     } @else {
-    <a mat-menu-item [href]="item.url" target="_blank"> <mat-icon>download</mat-icon>{{ item.title }}</a>
+    <a mat-menu-item [href]="item.url" target="_blank"> <mat-icon>open_in_new</mat-icon>{{ item.title }}</a>
     }
   </ng-container>
 </mat-menu>
@@ -151,7 +151,8 @@
 <ui-modal-template
   #modalPlayerTheory
   closable
-  height="auto"
+  height="70vh"
+  width="80vw"
   (closed)="selectedTheory = undefined"
   [title]="selectedTheory?.title || ''"
 >

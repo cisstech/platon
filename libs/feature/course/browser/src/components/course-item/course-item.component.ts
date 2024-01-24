@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, Component, Input, OnChanges } from '@angular/core'
 
 import { MatIconModule } from '@angular/material/icon'
 
@@ -30,16 +30,15 @@ import { antTagColorFromPercentage } from '@platon/shared/ui'
     NgeUiListModule,
   ],
 })
-export class CourseItemComponent implements OnInit {
+export class CourseItemComponent implements OnChanges {
   @Input() item!: Course
   @Input() simple = false
 
   protected name = ''
   protected desc = ''
-  protected tags: string[] = []
   protected progressColor = 'primary'
 
-  ngOnInit(): void {
+  ngOnChanges(): void {
     this.name = this.item.name
     this.desc = this.item.desc as string
     if (this.simple) {

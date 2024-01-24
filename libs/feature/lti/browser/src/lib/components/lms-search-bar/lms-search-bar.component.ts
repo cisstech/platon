@@ -58,7 +58,6 @@ export class LmsSearchBarComponent implements OnChanges, ControlValueAccessor {
     onSelect: (item) => {
       if (this.autoSelect) return
 
-      this.searchbar.value = ''
       if (!this.multi) {
         this.selection = []
       }
@@ -82,6 +81,7 @@ export class LmsSearchBarComponent implements OnChanges, ControlValueAccessor {
     if (changes.filters && !changes.filters.firstChange) {
       firstValueFrom(this.search(this.searchbar.value || '')).catch(console.error)
     }
+    this.searchbar.clearOnSelect = !this.autoSelect
   }
 
   // ControlValueAccessor methods

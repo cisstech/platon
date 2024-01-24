@@ -37,13 +37,12 @@ export class CourseSearchBarComponent implements ControlValueAccessor {
 
   readonly searchbar: SearchBar<Course> = {
     placeholder: 'Essayez un nom de cours...',
+    clearOnSelect: true,
     filterer: {
       run: this.search.bind(this),
     },
     complete: (item) => item.name,
     onSelect: (item) => {
-      this.searchbar.value = ''
-
       if (!this.multi) {
         this.selection = []
       }

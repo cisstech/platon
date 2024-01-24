@@ -12,7 +12,7 @@ import { NzPageHeaderModule } from 'ng-zorro-antd/page-header'
 import { NzTagModule } from 'ng-zorro-antd/tag'
 import { NzTypographyModule } from 'ng-zorro-antd/typography'
 
-import { DialogModule } from '@platon/core/browser'
+import { DialogModule, UserAvatarComponent } from '@platon/core/browser'
 import { UiLayoutTabDirective, UiLayoutTabsComponent } from '@platon/shared/ui'
 
 import { CourseSharingComponent } from '@platon/feature/course/browser'
@@ -44,8 +44,8 @@ import { CoursePresenter } from './course.presenter'
 
     DialogModule,
 
+    UserAvatarComponent,
     CourseSharingComponent,
-
     UiLayoutTabsComponent,
     UiLayoutTabDirective,
   ],

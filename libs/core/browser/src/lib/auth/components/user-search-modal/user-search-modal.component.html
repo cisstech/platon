@@ -1,14 +1,13 @@
-<ui-modal-template
-  [title]="title"
-  [width]="'70vw'"
-  [height]="'70vh'"
-  (canceled)="close([])"
-  (accepted)="close(selection)"
-  #modal
->
+<ui-modal-template [title]="title" (canceled)="close([])" (accepted)="close(selection)" #modal>
   <ng-template>
-    <user-search-bar [filters]="filters" [multi]="multi" [excludes]="excludes" [(ngModel)]="selection">
-    </user-search-bar>
+    <ng-content></ng-content>
+    <user-search-bar
+      [filters]="filters"
+      [multi]="multi"
+      [excludes]="excludes"
+      [allowGroup]="allowGroup"
+      [(ngModel)]="selection"
+    />
   </ng-template>
   <ng-template>
     <button nz-button nzType="default" (click)="modal.close()">{{ noTitle }}</button>

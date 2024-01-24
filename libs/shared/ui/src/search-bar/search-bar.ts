@@ -19,6 +19,11 @@ export interface SearchBar<T> {
   /** Search bar placeholder. */
   placeholder?: string
 
+  /**
+   * If true, the search bar will be cleared when a suggestion is selected.
+   */
+  clearOnSelect?: boolean
+
   /** A callback function to call when the searchbar is created. */
   onReady?: () => void
 
