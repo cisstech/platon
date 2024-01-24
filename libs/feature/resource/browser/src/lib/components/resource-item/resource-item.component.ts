@@ -4,7 +4,7 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnInit,
+  OnChanges,
   Output,
   booleanAttribute,
   inject,
@@ -52,7 +52,7 @@ type Tag = {
     ResourcePipesModule,
   ],
 })
-export class ResourceItemComponent implements OnInit {
+export class ResourceItemComponent implements OnChanges {
   private readonly storageService = inject(StorageService)
   protected name = ''
   protected desc = ''
@@ -82,7 +82,8 @@ export class ResourceItemComponent implements OnInit {
     return `/player/preview/${this.item.id}?version=latest&sessionId=${sessionId}`
   }
 
-  ngOnInit(): void {
+  ngOnChanges(): void {
+    this.tags = []
     if (!this.simple) {
       this.item.levels?.forEach((level) =>
         this.tags.push({
