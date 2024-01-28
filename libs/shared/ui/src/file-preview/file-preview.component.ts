@@ -14,7 +14,7 @@ import {
 import { NgeMarkdownModule } from '@cisstech/nge/markdown'
 
 import * as pdfjsLib from 'pdfjs-dist/build/pdf'
-import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.entry'
+import * as pdfjsWorker from 'pdfjs-dist/build/pdf.worker.entry'
 
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number'
 

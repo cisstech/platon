@@ -1,16 +1,3 @@
-@import '../../../shared/styles/normalize.scss';
-@import '../../../shared/styles/variables.scss';
-@import '../../../shared/styles/fonts.scss';
-
 html {
   scroll-behavior: smooth;
-}
-
-body {
-  width: 100vw;
-  height: 100vh;
-  overflow: auto;
-  color: var(--brand-text-landing);
-  background-color: var(--brand-background-primary);
-  font-family: var(--brand-font);
 }

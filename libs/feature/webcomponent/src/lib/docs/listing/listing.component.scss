@@ -1,9 +1,10 @@
 .grid {
   column-width: 240px;
-  column-gap: 15px;
+  gap: 1rem;
 
   a {
     display: block;
+    margin-bottom: 1rem;
   }
 
   .mat-card {
