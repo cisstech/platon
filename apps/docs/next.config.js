@@ -15,7 +15,7 @@ const nextConfig = process.env.GITHUB_PAGES
       images: {
         unoptimized: true,
       },
-      distDir: '../../dist/apps/home/browser/docs/main',
+      distDir: '../../dist/apps/home/docs/main',
     }
   : process.env.NODE_ENV === 'production'
   ? {

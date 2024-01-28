@@ -2196,10 +2196,10 @@
   dependencies:
     tslib "^2.0.0"
 
-"@cisstech/nge@^17.5.1":
-  version "17.5.1"
-  resolved "https://registry.yarnpkg.com/@cisstech/nge/-/nge-17.5.1.tgz#6bc74185d93ecfd01811effbd6e61a7e7001c895"
-  integrity sha512-7v4UTfW/VISzzkVTrnGKFGatzYlSYyxyZ1yzSdX0kLpK4aO9imo0tlUDMKG4d/sBloX5qcKh2RWAuR92P4a+XA==
+"@cisstech/nge@^17.6.3":
+  version "17.6.3"
+  resolved "https://registry.yarnpkg.com/@cisstech/nge/-/nge-17.6.3.tgz#07e16e821ff9c1b69108c277ac768b6066220788"
+  integrity sha512-6kq5HlnZ0HFCBrmYfCZBS+0VP9uUIDe/b8lduusdnOt4EMM1j3RPwtHohRHciGVha6fuBrSx6P9OV6+sqaJK5g==
   dependencies:
     tslib "^2.3.0"
 
