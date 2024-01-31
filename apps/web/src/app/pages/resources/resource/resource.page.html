@@ -71,7 +71,8 @@
             context.user?.role !== 'admin' &&
             context.resource.type === 'CIRCLE' &&
             !context.resource.permissions.member &&
-            !context.resource.permissions.waiting
+            !context.resource.permissions.waiting &&
+            context.resource.ownerId !== context.user?.id
           "
           nz-button
           nzType="default"
