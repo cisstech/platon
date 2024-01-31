@@ -85,7 +85,7 @@ export class SidebarComponent implements OnInit {
         icon: 'account_circle',
         title: 'Mon compte',
       },
-      ...(this.user.role === UserRoles.admin
+      ...(this.user.role === UserRoles.admin || this.user.role === UserRoles.teacher
         ? [
             {
               url: '/docs/main',
