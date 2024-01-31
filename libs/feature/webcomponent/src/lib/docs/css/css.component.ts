@@ -1,10 +1,16 @@
+import { CommonModule } from '@angular/common'
 import { Component } from '@angular/core'
+import { NgeMarkdownModule } from '@cisstech/nge/markdown'
 import { ClipboardService } from '@cisstech/nge/services'
+import { DialogModule } from '@platon/core/browser'
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 
 @Component({
+  standalone: true,
   selector: 'wc-editor-css',
   templateUrl: './css.component.html',
   styleUrls: ['./css.component.scss'],
+  imports: [CommonModule, NgeMarkdownModule, DialogModule, NzToolTipModule],
 })
 export class CssComponent {
   readonly appearances = [

@@ -416,15 +416,15 @@ export class PlayerExerciseComponent implements OnInit, OnChanges {
         this.dialogService.info('Votre réponse a bien été prise en compte.')
       }
     } catch (error) {
+      let message = 'Une erreur est survenue lors de cette action.'
       if (error instanceof HttpErrorResponse) {
-        const message = error.error?.message || error.message || 'Une erreur est survenue lors de cette action.'
-        this.clearNotification = this.dialogService.notification(this.errorTemplate, {
-          duration: 0,
-          data: {
-            message,
-          },
-        })
+        message = error.error?.message || error.message || message
       }
+
+      this.clearNotification = this.dialogService.notification(this.errorTemplate, {
+        duration: 0,
+        data: { message },
+      })
     } finally {
       this.runningAction = undefined
       this.changeDetectorRef.markForCheck()

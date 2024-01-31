@@ -42,7 +42,7 @@ Le Framework de Composants utilise le motif de conception MVC pour répondre à 
 Le widget suivant est le résultat du composant `MatchList` avec son modèle de données affiché en JSON.
 Ce composant permet d'associer des éléments entre eux en faisant du glisser-déposer, vous pouvez le manipuler pour voir les changements du modèle en temps réél.
 
-<wc-match-list cid="mycid"></wc-match-list>
+<wc-match-list data-script-id="mycid" cid="mycid"></wc-match-list>
 
 <script type="application/json" id="mycid">
 {

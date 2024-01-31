@@ -25,19 +25,19 @@ export function createWebComponentDoc(meta?: Partial<NgeDocMeta>): NgeDocSetting
       {
         title: 'CSS',
         href: 'css',
-        renderer: () => import('./css/css.module').then((m) => m.CssModule),
+        renderer: () => import('./css/css.component').then((m) => m.CssComponent),
       },
       //{
       //  title: 'Playground',
       //  href: 'playground',
-      //  renderer: () => import('./playground/playground.module').then((m) => m.PlaygroundModule),
+      //  renderer: () => import('./playground/playground.component').then((m) => m.PlaygroundComponent),
       //},
       (injector: Injector) => {
         const api = injector.get(WebComponentService)
         return {
           title: 'Forms',
           href: 'forms',
-          renderer: () => import('./listing/listing.module').then((m) => m.ListingModule),
+          renderer: () => import('./listing/listing.component').then((m) => m.ListingComponent),
           inputs: { type: WebComponentTypes.form },
           children: links(api, WebComponentTypes.form),
         }
@@ -47,7 +47,7 @@ export function createWebComponentDoc(meta?: Partial<NgeDocMeta>): NgeDocSetting
         return {
           title: 'Widgets',
           href: 'widgets',
-          renderer: () => import('./listing/listing.module').then((m) => m.ListingModule),
+          renderer: () => import('./listing/listing.component').then((m) => m.ListingComponent),
           inputs: { type: WebComponentTypes.widget },
           children: links(api, WebComponentTypes.widget),
         }
