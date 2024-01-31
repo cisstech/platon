@@ -313,7 +313,16 @@ export class Repo {
 
     // Remove macOS and Windows  metadata folders
     const specialFolders = ['__MACOSX', '__win32.ini', '__win32'].filter((x) => this.exists(Path.join(dstpath, x)))
-    await Promise.all(specialFolders.map((x) => fs.promises.rm(Path.join(dstpath, x), { recursive: true })))
+    await Promise.all(
+      specialFolders.map(async (x) => {
+        try {
+          await fs.promises.access(Path.join(dstpath, x))
+        } catch {
+          return
+        }
+        await fs.promises.rm(Path.join(dstpath, x), { recursive: true })
+      })
+    )
 
     await this.commit(`unzip ${path}`)
   }
