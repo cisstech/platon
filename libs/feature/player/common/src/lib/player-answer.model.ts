@@ -6,7 +6,7 @@ import { Variables } from '@platon/feature/compiler'
  * @param answerVars Answers to merge.
  */
 export const withAnswersInSession = (sessionVars: Variables, answerVars: Variables): void => {
-  const components: Variables = {}
+  const components: Record<string, Variables[]> = {}
 
   const searchComponents = (variables: Variables) => {
     for (const key in variables) {
@@ -14,7 +14,8 @@ export const withAnswersInSession = (sessionVars: Variables, answerVars: Variabl
       if (value == null) continue
       if (typeof value === 'object') {
         if (value.cid && value.selector) {
-          components[value.cid] = value
+          components[value.cid] = components[value.cid] ?? []
+          components[value.cid].push(value)
         } else {
           searchComponents(value)
         }
@@ -28,7 +29,9 @@ export const withAnswersInSession = (sessionVars: Variables, answerVars: Variabl
 
   for (const cid in answerVars) {
     if (cid in components) {
-      Object.assign(components[cid], answerVars[cid])
+      components[cid].forEach((component) => {
+        Object.assign(component, answerVars[cid])
+      })
     }
   }
 }
