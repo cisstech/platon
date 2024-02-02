@@ -32,7 +32,7 @@ export const createNodeSandboxAPI = (baseDir: string) => {
       if (!path.startsWith(baseDir)) {
         throw new Error(`You cannot access this path.`)
       }
-      return fs.readFileSync(path, options)
+      return fs.readFileSync(path, options).toString()
     },
 
     /**
