@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { DataSource, Repository } from 'typeorm'
 import { Optional } from 'typescript-optional'
@@ -8,6 +8,8 @@ import { ActivityCorrectorView } from './activity-corrector.view'
 
 @Injectable()
 export class ActivityCorrectorService {
+  private readonly logger = new Logger(ActivityCorrectorService.name)
+
   constructor(
     private readonly dataSource: DataSource,
     private readonly notificationService: CourseNotificationService,
@@ -69,7 +71,9 @@ export class ActivityCorrectorService {
           },
         })
       )
-      .catch()
+      .catch((error) => {
+        this.logger.error('Failed to send notification', error)
+      })
     return result
   }
 
@@ -91,14 +95,18 @@ export class ActivityCorrectorService {
 
     const insertion = newViews.filter((corrector) => !oldViews.some((oldCorrector) => oldCorrector.id === corrector.id))
     if (insertion.length) {
-      this.notificationService.notifyCorrectorsBeingCreated(insertion).catch()
+      this.notificationService.notifyCorrectorsBeingCreated(insertion).catch((error) => {
+        this.logger.error('Failed to send notification', error)
+      })
     }
 
     const deletion = oldViews.filter(
       (oldCorrector) => !newViews.some((newCorrector) => newCorrector.id === oldCorrector.id)
     )
     if (deletion.length) {
-      this.notificationService.notifyCorrectorsBeingRemoved(deletion).catch()
+      this.notificationService.notifyCorrectorsBeingRemoved(deletion).catch((error) => {
+        this.logger.error('Failed to send notification', error)
+      })
     }
 
     return correctors
@@ -115,7 +123,9 @@ export class ActivityCorrectorService {
     const result = await this.repository.delete({ activityId, id: activityCorrectorId })
 
     if (result.affected) {
-      this.notificationService.notifyCorrectorsBeingRemoved(correctors).catch()
+      this.notificationService.notifyCorrectorsBeingRemoved(correctors).catch((error) => {
+        this.logger.error('Failed to send notification', error)
+      })
     }
   }
 

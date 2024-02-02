@@ -1,13 +1,25 @@
 import { Injectable, OnDestroy, inject } from '@angular/core'
-import { NavigationEnd, Router } from '@angular/router'
+import { Data, NavigationEnd, Router } from '@angular/router'
 import { BehaviorSubject, Observable, Subscription, firstValueFrom } from 'rxjs'
 import { StorageService } from './storage.service'
 
 export declare type Theme = 'light' | 'dark'
 
+/**
+ * Prevents the theme service from loading theme styles into the DOM
+ * if passed in the current route or any of its parents data.
+ */
+export const noTheme = {
+  noTheme: true,
+} as const
+
+/**
+ * Forces the theme service to load the light theme into the DOM
+ * if passed in the current route or any of its parents data.
+ */
 export const alwaysLightTheme = {
   lightTheme: true,
-}
+} as const
 
 const VENDORS_THEMES = ['ng-zorro', 'material']
 
@@ -20,9 +32,9 @@ export class ThemeService implements OnDestroy {
   private readonly storage = inject(StorageService)
   private readonly subscriptions: Subscription[] = []
 
-  private ready?: boolean
   private theme?: Theme
   private savedTheme?: Theme
+  private noTheme?: boolean
   private alwaysLightTheme?: boolean
 
   private theme$ = new BehaviorSubject<Theme>('light')
@@ -45,7 +57,8 @@ export class ThemeService implements OnDestroy {
     this.subscriptions.push(
       this.router.events.subscribe((event) => {
         if (event instanceof NavigationEnd) {
-          this.setLightThemeIfAlways()
+          this.checkNoThemeInRouteData()
+          this.checkAlwaysLightThemeInRouteData()
         }
       })
     )
@@ -59,14 +72,10 @@ export class ThemeService implements OnDestroy {
    * Loads the last saved theme from the local storage if not loaded.
    */
   async loadTheme(): Promise<void> {
-    if (this.ready) {
-      return
-    }
+    if (this.theme) return
 
     this.savedTheme = (await firstValueFrom(this.storage.get<Theme>('app.theme'))) || 'light'
     await this.setTheme(this.savedTheme)
-
-    this.ready = true
   }
 
   /**
@@ -74,7 +83,7 @@ export class ThemeService implements OnDestroy {
    * @param save persists the change on the disk if set to `true`.
    */
   darkTheme(save = true): void {
-    this.setTheme('dark', save)
+    this.setTheme('dark', save).catch(console.error)
   }
 
   /**
@@ -82,7 +91,7 @@ export class ThemeService implements OnDestroy {
    * @param save persists the change on the disk if set to `true`.
    */
   lightTheme(save = true): void {
-    this.setTheme('light', save)
+    this.setTheme('light', save).catch(console.error)
   }
 
   /**
@@ -90,34 +99,21 @@ export class ThemeService implements OnDestroy {
    */
   switchTheme(): void {
     const theme = this.theme
-    this.setTheme(theme === 'dark' ? 'light' : 'dark')
+    this.setTheme(theme === 'dark' ? 'light' : 'dark').catch(console.error)
   }
 
   private async setTheme(theme: Theme, save = true) {
-    if (this.theme === theme || (this.alwaysLightTheme && theme === 'dark')) {
-      return
-    }
+    if (this.noTheme) return
+    if (this.theme === theme) return
+    if (this.alwaysLightTheme && theme === 'dark') return
+
     this.theme = theme
 
+    this.removeTheme()
+
     const container = document.body
-
-    if (!container.classList.contains('mat-app-background')) {
-      container.classList.add('mat-app-background')
-    }
-
-    if (!container.classList.contains('mat-typography')) {
-      container.classList.add('mat-typography')
-    }
-
-    container.classList.remove('mat-app-background')
-    container.classList.remove('mat-typography')
-
     container.classList.add('mat-app-background')
     container.classList.add('mat-typography')
-
-    container.classList.remove('dark-theme')
-    container.classList.remove('light-theme')
-
     container.classList.add(theme + '-theme')
 
     if (save) {
@@ -125,14 +121,7 @@ export class ThemeService implements OnDestroy {
       this.savedTheme = theme
     }
 
-    const head = document.head
-
     VENDORS_THEMES.forEach((vendor) => {
-      const old = head.querySelector(`link[${vendor}="true"]`)
-      if (old) {
-        old.remove()
-      }
-
       const link = document.createElement('link')
       link.href = `styles.${vendor}.${theme}.css`
       link.rel = 'stylesheet'
@@ -143,17 +132,57 @@ export class ThemeService implements OnDestroy {
     this.theme$.next(theme)
   }
 
-  private setLightThemeIfAlways(): void {
-    this.alwaysLightTheme = false
+  private removeTheme(): void {
+    const container = document.body
+    container.classList.remove('mat-app-background')
+    container.classList.remove('mat-typography')
+    container.classList.remove('dark-theme')
+    container.classList.remove('light-theme')
+    VENDORS_THEMES.forEach((vendor) => {
+      const old = document.head.querySelector(`link[${vendor}="true"]`)
+      if (old) {
+        old.remove()
+      }
+    })
+  }
+
+  private checkRouteData(consumer: (data: Data) => boolean): boolean {
     let currentRoute = this.router.routerState.root
     while (currentRoute.firstChild) {
       currentRoute = currentRoute.firstChild
       const { data } = currentRoute.snapshot
-      if (data && !Array.isArray(data) && data.lightTheme) {
-        this.alwaysLightTheme = true
-        break
+      if (data && !Array.isArray(data) && consumer(data)) {
+        return true
       }
     }
-    this.setTheme(this.alwaysLightTheme ? 'light' : this.savedTheme || 'light', false)
+    return false
+  }
+
+  private checkNoThemeInRouteData(): void {
+    const wasNoTheme = this.noTheme
+    this.noTheme = false
+    this.checkRouteData((data) => {
+      if (data.noTheme) {
+        this.noTheme = true
+        return true
+      }
+      return false
+    })
+
+    if (wasNoTheme && !this.noTheme) {
+      this.setTheme(this.savedTheme || 'light', false).catch(console.error)
+    }
+  }
+
+  private checkAlwaysLightThemeInRouteData(): void {
+    this.alwaysLightTheme = false
+    this.checkRouteData((data) => {
+      if (data.lightTheme) {
+        this.alwaysLightTheme = true
+        return true
+      }
+      return false
+    })
+    this.setTheme(this.alwaysLightTheme ? 'light' : this.savedTheme || 'light', false).catch(console.error)
   }
 }

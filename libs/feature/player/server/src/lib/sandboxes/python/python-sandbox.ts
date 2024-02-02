@@ -95,10 +95,10 @@ export class PythonSandbox implements Sandbox {
         throw SandboxError.unknownError(response.execution[0].stderr)
       }
 
-      return Promise.resolve({
+      return {
         envid: response.environment,
         variables: JSON.parse(response.result),
-      })
+      }
     } catch (error) {
       if (error instanceof SandboxError) {
         throw error

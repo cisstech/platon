@@ -60,7 +60,6 @@ export abstract class PlayerManager {
 
   async evaluate(input: EvalExerciseInput, user?: User): Promise<ExercisePlayer | [ExercisePlayer, PlayerNavigation]> {
     const session = withSessionAccessGuard(await this.findExerciseSessionById(input.sessionId), user)
-
     const grades = await this.findGrades(session.id)
 
     withAnswersInSession(session.variables, input.answers || {})

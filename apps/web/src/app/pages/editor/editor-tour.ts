@@ -54,7 +54,7 @@ export const EDITOR_TOUR: Step[] = [
   {
     title: "Barre d'état",
     intro: `
-    La barre d'état, vous donne des informations sur le fichier courant comme le langage, la ligne courant, ou encore l'indentation que vous pouvez modifier.
+    La barre d'état, vous donne des informations sur le fichier courant comme le langage, la ligne courante, ou encore l'indentation que vous pouvez modifier.
     `,
     element: 'ide-statusbar',
   },

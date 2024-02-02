@@ -60,7 +60,7 @@ export class AuthIfDirective implements OnChanges {
       .ready()
       .then((user) => {
         if (!user) {
-          this.denied()
+          this.denied().catch(console.error)
           return
         }
 
@@ -81,13 +81,13 @@ export class AuthIfDirective implements OnChanges {
             return condition === user.role.toLowerCase() || condition === 'connected'
           })
         ) {
-          this.accepted(user as User)
+          this.accepted(user as User).catch(console.error)
         } else {
-          this.denied()
+          this.denied().catch(console.error)
         }
       })
       .catch((error) => {
-        this.denied(error)
+        this.denied(error).catch(console.error)
       })
   }
 
@@ -114,7 +114,7 @@ export class AuthIfDirective implements OnChanges {
       this.viewContainerRef.clear()
       this.viewContainerRef.createEmbeddedView(this.templateRef, { user: user })
     } catch (error) {
-      this.denied(error)
+      this.denied(error).catch(console.error)
     } finally {
       this.changeDetectorRef.detectChanges()
     }

@@ -228,11 +228,13 @@ export default class ResourcesPage implements OnInit, OnDestroy {
       configurable: filters.configurable ? true : undefined,
     }
 
-    this.router.navigate([], {
-      queryParams,
-      relativeTo: this.activatedRoute,
-      queryParamsHandling: 'merge',
-    })
+    this.router
+      .navigate([], {
+        queryParams,
+        relativeTo: this.activatedRoute,
+        queryParamsHandling: 'merge',
+      })
+      .catch(console.error)
   }
 
   protected async loadMore(): Promise<void> {

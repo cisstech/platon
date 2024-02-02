@@ -46,7 +46,7 @@ export class ResourceBrowsePage implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.presenter.contextChange.subscribe(async (context) => {
         this.context = context
-        this.refreshFiles()
+        this.refreshFiles().catch(console.error)
       })
     )
   }

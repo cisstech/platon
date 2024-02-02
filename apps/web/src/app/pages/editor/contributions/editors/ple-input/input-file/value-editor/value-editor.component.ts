@@ -82,7 +82,7 @@ export class ValueEditorComponent extends BaseValueEditor<string> {
     if (!reference.startsWith('/')) {
       const [resource, version] = (this.editorService.activeResource as monaco.Uri).authority.split(':')
       const uri = this.fileSystemProvider.buildUri(resource, version, reference)
-      this.editorService.open(uri)
+      this.editorService.open(uri).catch(console.error)
       return
     }
 
@@ -90,6 +90,6 @@ export class ValueEditorComponent extends BaseValueEditor<string> {
     const [, authority, path] = reference.split('/')
     const [resource, version] = authority.split(':')
     const uri = this.fileSystemProvider.buildUri(resource, version, path)
-    this.editorService.open(uri)
+    this.editorService.open(uri).catch(console.error)
   }
 }

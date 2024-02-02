@@ -14,7 +14,7 @@ export class OverviewPresenter {
   readonly contextChange = this.context.asObservable()
 
   constructor() {
-    this.refresh()
+    this.refresh().catch(console.error)
   }
 
   defaultContext(): Context {

@@ -150,9 +150,11 @@ export class AutomatonEditorComponent implements OnInit, OnDestroy, WebComponent
   }
 
   run(action: AutomatonEditorAction) {
-    this.changeDetector.ignore(this, () => {
-      return action.run(this.context)
-    })
+    this.changeDetector
+      .ignore(this, () => {
+        return action.run(this.context)
+      })
+      .catch(console.error)
   }
 
   zoomIn(e: MouseEvent) {
@@ -288,7 +290,7 @@ export class AutomatonEditorComponent implements OnInit, OnDestroy, WebComponent
     node.style.top = y + 'px'
 
     node.onclick = node.ontouchstart = () => {
-      this.changeDetector.ignore(this, () => this.focus(node))
+      this.changeDetector.ignore(this, () => this.focus(node)).catch(console.error)
     }
 
     if (this.editor.isInitial(name)) {
@@ -303,9 +305,11 @@ export class AutomatonEditorComponent implements OnInit, OnDestroy, WebComponent
 
     this.jsp.draggable(node, {
       drag: (e) => {
-        this.changeDetector.ignore(this, () => {
-          this.editor.moveState(node.id, e.pos[0], e.pos[1])
-        })
+        this.changeDetector
+          .ignore(this, () => {
+            this.editor.moveState(node.id, e.pos[0], e.pos[1])
+          })
+          .catch(console.error)
       },
     })
 
@@ -411,9 +415,9 @@ export class AutomatonEditorComponent implements OnInit, OnDestroy, WebComponent
   private onClickContainer(e: MouseEvent) {
     const node = e.target as HTMLElement
     if (node.classList.contains(STATE_CLASS)) {
-      this.changeDetector.ignore(this, () => this.focus(node))
+      this.changeDetector.ignore(this, () => this.focus(node)).catch(console.error)
     } else if (node.isSameNode(this.container.nativeElement)) {
-      this.changeDetector.ignore(this, () => this.unfocus())
+      this.changeDetector.ignore(this, () => this.unfocus()).catch(console.error)
     }
   }
 
@@ -427,15 +431,19 @@ export class AutomatonEditorComponent implements OnInit, OnDestroy, WebComponent
       return
     }
 
-    this.changeDetector.ignore(this, () => {
-      this.createEndpoint(this.editor.stateName(), e.offsetX, e.offsetY)
-    })
+    this.changeDetector
+      .ignore(this, () => {
+        this.createEndpoint(this.editor.stateName(), e.offsetX, e.offsetY)
+      })
+      .catch(console.error)
   }
 
   private onClickConnection(connection: Connection) {
-    this.changeDetector.ignore(this, () => {
-      this.focus(connection)
-    })
+    this.changeDetector
+      .ignore(this, () => {
+        this.focus(connection)
+      })
+      .catch(console.error)
   }
 
   private onWillCreateConnection(info: OnConnectionBindInfo) {

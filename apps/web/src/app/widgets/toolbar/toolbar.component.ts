@@ -134,7 +134,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   }
 
   signOut(): void {
-    this.authService.signOut()
+    this.authService.signOut().catch(console.error)
   }
 
   darkTheme(): void {

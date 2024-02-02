@@ -39,11 +39,13 @@ export class CourseSectionSearchBarComponent implements ControlValueAccessor {
     this.selection = []
     this.dataSource = []
     if (value) {
-      firstValueFrom(this.courseService.listSections(value)).then((response) => {
-        this.dataSource = response.resources
-        this.onChangeSelection()
-        this.changeDetectorRef.markForCheck()
-      })
+      firstValueFrom(this.courseService.listSections(value))
+        .then((response) => {
+          this.dataSource = response.resources
+          this.onChangeSelection()
+          this.changeDetectorRef.markForCheck()
+        })
+        .catch(console.error)
     } else {
       this.changeDetectorRef.markForCheck()
     }

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { DataSource, IsNull, Not, Repository } from 'typeorm'
 import { Optional } from 'typescript-optional'
@@ -8,6 +8,8 @@ import { ActivityMemberView } from './activity-member.view'
 
 @Injectable()
 export class ActivityMemberService {
+  private readonly logger = new Logger(ActivityMemberService.name)
+
   constructor(
     private readonly dataSource: DataSource,
     private readonly notificationService: CourseNotificationService,
@@ -63,7 +65,9 @@ export class ActivityMemberService {
           },
         })
       )
-      .catch()
+      .catch((error) => {
+        this.logger.error('Failed to send notification', error)
+      })
     return result
   }
 
@@ -85,7 +89,9 @@ export class ActivityMemberService {
 
     const insertion = newViews.filter((member) => !oldViews.some((old) => old.id === member.id))
     if (insertion.length) {
-      this.notificationService.notifyActivityMemberBeingCreated(insertion).catch()
+      this.notificationService.notifyActivityMemberBeingCreated(insertion).catch((error) => {
+        this.logger.error('Failed to send notification', error)
+      })
     }
 
     return members

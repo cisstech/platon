@@ -33,12 +33,14 @@ export class Contribution implements IContribution {
         async execute(): Promise<void> {
           const { activeResource } = editorService
           if (!activeResource) return
-          editorService.close(activeResource)
-          editorService.open(
-            activeResource.with({
-              query: `designer=true`,
-            })
-          )
+          editorService.close(activeResource).catch(console.error)
+          editorService
+            .open(
+              activeResource.with({
+                query: `designer=true`,
+              })
+            )
+            .catch(console.error)
         }
       })()
     )
@@ -62,12 +64,14 @@ export class Contribution implements IContribution {
         async execute(): Promise<void> {
           const { activeResource } = editorService
           if (!activeResource) return
-          editorService.close(activeResource)
-          editorService.open(
-            activeResource.with({
-              query: '',
-            })
-          )
+          editorService.close(activeResource).catch(console.error)
+          editorService
+            .open(
+              activeResource.with({
+                query: '',
+              })
+            )
+            .catch(console.error)
         }
       })()
     )

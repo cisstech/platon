@@ -143,11 +143,13 @@ export class CoursesPage implements OnInit, OnDestroy {
       direction: filters.direction,
     }
 
-    this.router.navigate([], {
-      queryParams,
-      relativeTo: this.activatedRoute,
-      queryParamsHandling: 'merge',
-    })
+    this.router
+      .navigate([], {
+        queryParams,
+        relativeTo: this.activatedRoute,
+        queryParamsHandling: 'merge',
+      })
+      .catch(console.error)
   }
 }
 

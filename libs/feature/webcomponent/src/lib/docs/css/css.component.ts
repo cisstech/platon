@@ -1,12 +1,20 @@
-import { Component } from '@angular/core'
+import { CommonModule } from '@angular/common'
+import { Component, inject } from '@angular/core'
+import { NgeMarkdownModule } from '@cisstech/nge/markdown'
 import { ClipboardService } from '@cisstech/nge/services'
+import { DialogModule, DialogService } from '@platon/core/browser'
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 
 @Component({
+  standalone: true,
   selector: 'wc-editor-css',
   templateUrl: './css.component.html',
   styleUrls: ['./css.component.scss'],
+  imports: [CommonModule, NgeMarkdownModule, DialogModule, NzToolTipModule],
 })
 export class CssComponent {
+  private readonly dialogService = inject(DialogService)
+  private readonly clipboardService = inject(ClipboardService)
   readonly appearances = [
     'success-state',
     'warning-state',
@@ -98,10 +106,16 @@ export class CssComponent {
 
   activeAnimation = 'pulse'
 
-  constructor(private readonly clipboard: ClipboardService) {}
-
   copyCss(appearance: string) {
-    this.clipboard.copy(`${appearance} animate__animated animate__${this.activeAnimation} animate__infinite`)
+    this.clipboardService
+      .copy(`${appearance} animate__animated animate__${this.activeAnimation} animate__infinite`)
+      .then(() => {
+        this.dialogService.success('Copié dans le presse-papier')
+      })
+      .catch((error) => {
+        console.error(error)
+        this.dialogService.error('Impossible de copier dans le presse-papier')
+      })
   }
 
   trackByIndex(index: number) {

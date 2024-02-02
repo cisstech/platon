@@ -93,12 +93,14 @@ export class ResourceOverviewPage implements OnInit, OnDestroy {
   }
 
   protected searchByStatus(status: string) {
-    this.router.navigate(['/resources'], {
-      queryParams: {
-        status,
-        parents: this.context.resource?.id,
-      },
-    })
+    this.router
+      .navigate(['/resources'], {
+        queryParams: {
+          status,
+          parents: this.context.resource?.id,
+        },
+      })
+      .catch(console.error)
   }
 
   protected trackById(index: number, item: any) {

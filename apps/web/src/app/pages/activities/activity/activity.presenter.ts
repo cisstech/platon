@@ -35,7 +35,7 @@ export class ActivityPresenter implements OnDestroy {
   ) {
     this.subscriptions.push(
       this.activatedRoute.paramMap.subscribe((params) => {
-        this.onChangeRoute(params.get('courseId') as string, params.get('activityId') as string)
+        this.onChangeRoute(params.get('courseId') as string, params.get('activityId') as string).catch(console.error)
       })
     )
   }

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Inject, Injectable } from '@nestjs/common'
+import { Inject, Injectable, Logger } from '@nestjs/common'
 import { OnEvent } from '@nestjs/event-emitter'
 import { InjectRepository } from '@nestjs/typeorm'
 import { ForbiddenResponse, NotFoundResponse, User, UserRoles } from '@platon/core/common'
@@ -31,6 +31,8 @@ import {
 
 @Injectable()
 export class ActivityService {
+  private readonly logger = new Logger(ActivityService.name)
+
   constructor(
     @Inject(CLS_REQ)
     private readonly request: IRequest,
@@ -184,7 +186,9 @@ export class ActivityService {
   @OnEvent(ON_CORRECT_ACTIVITY_EVENT)
   protected onCorrectActivity(payload: OnCorrectActivityEventPayload) {
     const { userId, activity } = payload
-    this.notificationService.notifyUserAboutCorrection(activity.id, userId).catch()
+    this.notificationService.notifyUserAboutCorrection(activity.id, userId).catch((error) => {
+      this.logger.error('Failed to send notification', error)
+    })
   }
 
   @OnEvent(ON_TERMINATE_ACTIVITY_EVENT)
@@ -192,7 +196,9 @@ export class ActivityService {
     const { activity } = payload
     this.notificationService
       .notifyCorrectorsAboutPending(await this.activityCorrectorService.findViews(activity.id))
-      .catch()
+      .catch((error) => {
+        this.logger.error('Failed to send notification', error)
+      })
   }
 
   private createQueryBuilder(courseId: string) {

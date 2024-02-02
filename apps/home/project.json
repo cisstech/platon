@@ -7,13 +7,17 @@
   "tags": [],
   "targets": {
     "build": {
-      "executor": "@angular-devkit/build-angular:application",
+      "executor": "@angular-devkit/build-angular:browser",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/home",
         "index": "apps/home/src/index.html",
-        "browser": "apps/home/src/main.ts",
-        "polyfills": ["zone.js"],
+        "main": "apps/home/src/main.ts",
+        "polyfills": [
+          "zone.js",
+          "./node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js",
+          "./node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js"
+        ],
         "tsConfig": "apps/home/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
@@ -22,18 +26,142 @@
             "glob": "**/*",
             "input": "shared/assets",
             "output": "./assets"
+          },
+          {
+            "glob": "**/*",
+            "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
+            "output": "/assets/vendors/@ant-design/assets/"
+          },
+          {
+            "glob": "**/*",
+            "input": "./node_modules/@cisstech/nge/assets/",
+            "output": "./assets/vendors/nge/"
+          },
+          {
+            "glob": "**/*",
+            "input": "./node_modules/monaco-editor/min",
+            "output": "./assets/vendors/nge/monaco/min"
+          },
+          {
+            "glob": "**/*",
+            "input": "./node_modules/monaco-editor/min-maps",
+            "output": "./assets/vendors/nge/monaco/min-maps"
+          },
+          {
+            "glob": "**/*",
+            "input": "./node_modules/katex/dist/",
+            "output": "./assets/vendors/katex/"
+          },
+          {
+            "glob": "**/*.js",
+            "input": "./node_modules/emoji-toolkit/lib/js/",
+            "output": "./assets/vendors/emoji-toolkit/"
+          },
+          {
+            "glob": "**/*",
+            "input": "./node_modules/intro.js/",
+            "output": "./assets/vendors/intro.js/"
+          },
+          {
+            "glob": "**/*.md",
+            "input": "libs/feature/webcomponent/src/lib",
+            "output": "./assets/docs/components"
+          },
+          {
+            "glob": "**/*.svg",
+            "input": "libs/feature/webcomponent/src/lib",
+            "output": "./assets/images/components"
+          },
+          {
+            "glob": "**/*.js",
+            "input": "./node_modules/viz.js/",
+            "output": "./assets/vendors/viz/"
+          },
+          {
+            "glob": "**/*",
+            "input": "./node_modules/jsplumb/dist/",
+            "output": "./assets/vendors/jsplumb/"
+          },
+          {
+            "glob": "**/*",
+            "input": "./node_modules/jsplumb/css/",
+            "output": "./assets/vendors/jsplumb/css/"
+          },
+          {
+            "glob": "**/*.{js,css,map,mjs}",
+            "input": "./node_modules/jsxgraph/distrib/",
+            "output": "./assets/vendors/jsxgraph/"
+          },
+          {
+            "glob": "**/*",
+            "input": "./node_modules/mathlive/dist/",
+            "output": "./assets/vendors/mathlive/"
+          },
+          {
+            "glob": "**/*",
+            "input": "./node_modules/jsoneditor/dist/",
+            "output": "./assets/vendors/jsoneditor/"
           }
         ],
-        "styles": ["apps/home/src/styles.scss"],
-        "scripts": []
+        "styles": [
+          "shared/styles/app.scss",
+          "apps/home/src/styles.scss",
+          {
+            "input": "shared/styles/material/dark.scss",
+            "bundleName": "styles.material.dark",
+            "inject": false
+          },
+          {
+            "input": "shared/styles/material/light.scss",
+            "bundleName": "styles.material.light",
+            "inject": false
+          },
+          {
+            "input": "shared/styles/ng-zorro/dark.less",
+            "bundleName": "styles.ng-zorro.dark",
+            "inject": false
+          },
+          {
+            "input": "shared/styles/ng-zorro/light.less",
+            "bundleName": "styles.ng-zorro.light",
+            "inject": false
+          }
+        ],
+        "scripts": [],
+        "allowedCommonJsDependencies": [
+          "jsplumb",
+          "subscriptions-transport-ws",
+          "rfdc",
+          "jsoneditor",
+          "@ts-jison/lexer",
+          "@ts-jison/parser",
+          "@editorjs/editorjs",
+          "@editorjs/code",
+          "@editorjs/delimiter",
+          "@editorjs/simple-image",
+          "@editorjs/checklist",
+          "@editorjs/nested-list",
+          "@editorjs/raw",
+          "@editorjs/table",
+          "@editorjs/header",
+          "@editorjs/marker",
+          "@editorjs/paragraph",
+          "@editorjs/text-variant-tune",
+          "@editorjs/underline",
+          "editorjs-drag-drop",
+          "editorjs-undo",
+          "editorjs-style",
+          "editorjs-text-alignment-blocktune",
+          "editorjs-text-color-plugin"
+        ]
       },
       "configurations": {
         "production": {
           "budgets": [
-            {
+          {
               "type": "initial",
-              "maximumWarning": "500kb",
-              "maximumError": "1mb"
+              "maximumWarning": "2mb",
+              "maximumError": "5mb"
             },
             {
               "type": "anyComponentStyle",
