@@ -240,7 +240,7 @@ export class ResourceService {
       )
     }
 
-    query.where('personal = false')
+    // query.where('personal = false')
 
     if (filters.parents?.length) {
       query.andWhere('parent_id IN(:...parents)', { parents: filters.parents })
