@@ -8,6 +8,7 @@ import { Injectable } from '@nestjs/common'
 import { Sandbox, SandboxError, SandboxInput, SandboxOutput } from '@platon/feature/player/common'
 import { RegisterSandbox } from '../sandbox'
 import { createNodeSandboxAPI } from './node-sandbox-api'
+import { constants } from 'fs'
 
 /**
  * Directory where environment files are stored.
@@ -73,13 +74,20 @@ export class NodeSandbox implements Sandbox {
    * @returns An object containing the NodeVM and environment details.
    */
   private async withVm(input: SandboxInput, timeout: number) {
-    let envid = ''
-    let baseDir = ''
-    if (!('envid' in input) && input.files?.length) {
-      envid = uuidv4()
-      baseDir = Path.join(ENVS_DIR, envid)
-      await fs.promises.mkdir(baseDir)
+    const exists = async (path: string) => {
+      try {
+        await fs.promises.access(path, constants.F_OK)
+        return true
+      } catch {
+        return false
+      }
+    }
 
+    const envid = input.envid || uuidv4()
+    const baseDir = Path.join(ENVS_DIR, envid)
+
+    if (input.files?.length && !(await exists(baseDir))) {
+      await fs.promises.mkdir(baseDir)
       await Promise.all([
         ...input.files.map((file) => fs.promises.writeFile(Path.join(baseDir, file.path), file.content)),
       ])

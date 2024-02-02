@@ -50,7 +50,12 @@ export class PythonSandbox implements Sandbox {
     try {
       const response = await withTempFile(
         async (path) => {
-          await this.withEnvFiles(script, input, path)
+          const isEnvSaved: boolean = await firstValueFrom(
+            this.http.head(`${this.config.get('sandbox.url', { infer: true })}/environment/${input.envid}`)
+          )
+            .then((response) => (response.status === 200 ? true : false))
+            .catch(() => false)
+          await this.withEnvFiles(script, input, path, isEnvSaved)
 
           const data = new FormData()
 
@@ -60,7 +65,7 @@ export class PythonSandbox implements Sandbox {
               save: true,
               commands: ['python3 runner.py'],
               result_path: 'output.json',
-              ...(input.envid ? { environment: input.envid } : {}),
+              ...(input.envid && isEnvSaved ? { environment: input.envid } : {}),
             })
           )
 
@@ -107,14 +112,15 @@ export class PythonSandbox implements Sandbox {
    * @param script The Python script.
    * @param input The SandboxInput object.
    * @param path The path of the temporary file to create.
+   * @param isEnvSaved A boolean indicating whether the environment is already saved.
    */
-  private async withEnvFiles(script: string, input: SandboxInput, path: string) {
+  private async withEnvFiles(script: string, input: SandboxInput, path: string, isEnvSaved: boolean) {
     const pack = tar.pack()
 
     pack.entry({ name: 'script.py' }, script || '')
     pack.entry({ name: 'variables.json' }, JSON.stringify(input.variables))
 
-    if (!input.envid) {
+    if (!isEnvSaved) {
       pack.entry({ name: 'runner.py' }, pythonRunnerScript)
       input.files?.forEach((file) => pack.entry({ name: file.path }, file.content || ''))
     }

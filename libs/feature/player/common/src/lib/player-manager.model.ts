@@ -16,6 +16,7 @@ import {
   PlayerNavigation,
 } from './player.model'
 import { SandboxManager } from './sandbox-manager.model'
+import { basename } from '@platon/core/common'
 
 type ActionHandler = (
   session: ExerciseSession,
@@ -59,6 +60,7 @@ export abstract class PlayerManager {
 
   async evaluate(input: EvalExerciseInput, user?: User): Promise<ExercisePlayer | [ExercisePlayer, PlayerNavigation]> {
     const session = withSessionAccessGuard(await this.findExerciseSessionById(input.sessionId), user)
+
     const grades = await this.findGrades(session.id)
 
     withAnswersInSession(session.variables, input.answers || {})
@@ -75,7 +77,17 @@ export abstract class PlayerManager {
 
     if (variables.builder?.trim()) {
       patchExerciseMeta(variables, () => ({ isInitialBuild: false }))
-      const output = await this.sandboxManager.run({ envid, variables }, variables.builder)
+      const output = await this.sandboxManager.run(
+        {
+          envid,
+          variables,
+          files: exerciseSession.source.dependencies.map((file) => ({
+            path: file.alias || basename(file.abspath),
+            content: file.content,
+          })),
+        },
+        variables.builder
+      )
       variables = output.variables as ExerciseVariables
     }
 
@@ -95,7 +107,17 @@ export abstract class PlayerManager {
         patchExerciseMeta(variables, (meta) => ({ consumedHints: meta.consumedHints + 1 }))
       }
     } else if (variables.hint?.next?.trim()) {
-      const output = await this.sandboxManager.run({ envid, variables }, variables.hint.next)
+      const output = await this.sandboxManager.run(
+        {
+          envid,
+          variables,
+          files: exerciseSession.source.dependencies.map((file) => ({
+            path: file.alias || basename(file.abspath),
+            content: file.content,
+          })),
+        },
+        variables.hint.next
+      )
       patchExerciseMeta(output.variables, (meta) => ({ consumedHints: meta.consumedHints + 1 }))
       variables = output.variables as ExerciseVariables
     }
@@ -116,7 +138,17 @@ export abstract class PlayerManager {
     let variables = exerciseSession.variables
     variables.feedback = { type: 'info', content: '' }
 
-    const output = await this.sandboxManager.run({ envid, variables }, variables.grader)
+    const output = await this.sandboxManager.run(
+      {
+        envid,
+        variables,
+        files: exerciseSession.source.dependencies.map((file) => ({
+          path: file.alias || basename(file.abspath),
+          content: file.content,
+        })),
+      },
+      variables.grader
+    )
     const grade = Number.parseInt(output.variables.grade) ?? -1
     const increment = grade > -1 ? 1 : 0
 
