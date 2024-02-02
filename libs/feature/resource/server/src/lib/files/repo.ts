@@ -17,11 +17,12 @@ import {
   uniquifyFileName,
   withTempFile,
 } from '@platon/shared/server'
+import AdmZip from 'adm-zip'
 import * as fs from 'fs'
 import * as git from 'isomorphic-git'
 import * as Path from 'path'
 import { simpleGit } from 'simple-git'
-import * as unzipper from 'unzipper'
+import { promisify } from 'util'
 
 const BASE = Path.join(process.cwd(), 'resources')
 const ROOT = '.'
@@ -306,10 +307,11 @@ export class Repo {
   async unzip(path: string) {
     const abspath = this.abspath(path)
     const dstpath = Path.dirname(abspath)
-    await fs
-      .createReadStream(abspath)
-      .pipe(unzipper.Extract({ path: dstpath }))
-      .promise()
+
+    const zip = new AdmZip(abspath)
+
+    const asyncUnzip = promisify(zip.extractAllToAsync.bind(zip))
+    await asyncUnzip(dstpath, true, false)
 
     // Remove macOS and Windows  metadata folders
     const specialFolders = ['__MACOSX', '__win32.ini', '__win32'].filter((x) => this.exists(Path.join(dstpath, x)))
