@@ -12,6 +12,7 @@ export enum SpecialType {
   styleUrls: ['./special-type.component.scss'],
 })
 export class SpecialTypeComponent implements OnInit {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @Input() definition!: any
 
   ngOnInit(): void {

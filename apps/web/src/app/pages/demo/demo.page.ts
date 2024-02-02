@@ -20,8 +20,8 @@ export class CourseDemoPage implements OnInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
-    this.activatedRoute.paramMap.subscribe((params) => {
-      this.redirectToDemo(params.get('id') as string)
+    this.activatedRoute.paramMap.subscribe(async (params) => {
+      await this.redirectToDemo(params.get('id') as string)
     })
   }
 
@@ -33,7 +33,7 @@ export class CourseDemoPage implements OnInit {
         refreshToken: demoAnswer.refreshToken || '',
       })
     }
-    this.router.navigate(['/courses', demoAnswer.courseId], {
+    await this.router.navigate(['/courses', demoAnswer.courseId], {
       replaceUrl: true,
     })
   }
