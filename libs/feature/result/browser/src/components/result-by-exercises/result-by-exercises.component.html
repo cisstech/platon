@@ -18,27 +18,43 @@
         </ng-container>
       </tr>
       <tr [nzExpand]="expandSet.has(item.id)">
-        <div nz-row nzType="flex" nzJustify="space-around" nzAlign="top">
-          <mat-card nz-col>
-            <mat-card-content>
-              <nz-statistic nzTitle="Tentative" [nzValue]="item.attempts.sum" />
-            </mat-card-content>
-          </mat-card>
-          <mat-card nz-col>
-            <mat-card-content>
-              <nz-statistic nzTitle="Moyenne tentative" [nzValue]="item.attempts.avg" />
-            </mat-card-content>
-          </mat-card>
-          <mat-card nz-col>
-            <mat-card-content>
-              <nz-statistic nzTitle="Moyenne note" [nzValue]="item.grades.avg" />
-            </mat-card-content>
-          </mat-card>
-          <mat-card nz-col>
-            <mat-card-content>
-              <nz-statistic nzTitle="Moyenne durée" [nzValue]="item.durations.avg | duration" />
-            </mat-card-content>
-          </mat-card>
+        <div nz-row [nzGutter]="[8, 8]" nzType="flex" nzJustify="space-around" nzAlign="top">
+          <ui-statistic-card
+            nz-col
+            matIcon="check_circle"
+            ribbonColor="#8e44ad"
+            description="Évaluations"
+            tooltip="Nombre de réponses enregistrées (note > -1)."
+            [value]="(item.attempts.avg | number : '1.0-2')!"
+          />
+
+          <ui-statistic-card
+            nz-col
+            matIcon="play_circle_filled"
+            ribbonColor="#f1c40f"
+            description="Essais par apprenant"
+            tooltip="Moyenne du nombre de réponses enregistrées par apprenant."
+            [value]="(item.attempts.avg | number : '1.0-2')!"
+          />
+
+          <ui-statistic-card
+            nz-col
+            matIcon="star"
+            ribbonColor="#7f8c8d"
+            description="Note moyenne"
+            [value]="item.grades.avg"
+            valueSuffix=" / 100"
+            tooltip="Moyenne du score sur l'ensemble des réponses enregistrées."
+            [shouldBePositive]="true"
+          />
+
+          <ui-statistic-card
+            nz-col
+            matIcon="access_time"
+            ribbonColor="#f39c12"
+            description="Durée moyenne"
+            [value]="item.durations.avg | duration"
+          />
         </div>
       </tr>
     </ng-container>

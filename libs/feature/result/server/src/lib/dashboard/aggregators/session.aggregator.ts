@@ -220,19 +220,19 @@ export class ExerciseAnswerRate implements SessionDataAggregator<number> {
   readonly id = EXERCISE_ANSWER_RATE
 
   private totalSessions = 0
-  private totalParticipations = 0
+  private totalAttempts = 0
 
   next(input: SessionView): void {
     if (input.startedAt) {
       this.totalSessions++
       if (input.attempts) {
-        this.totalParticipations++
+        this.totalAttempts++
       }
     }
   }
 
   complete(): number {
-    return this.totalSessions > 0 ? Math.round((this.totalParticipations / this.totalSessions) * 100) : 0
+    return this.totalSessions > 0 ? Math.round((this.totalAttempts / this.totalSessions) * 100) : 0
   }
 }
 

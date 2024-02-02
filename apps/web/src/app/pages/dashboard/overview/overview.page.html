@@ -31,8 +31,8 @@
           valueSuffix="%"
           description="Taux de réussite"
           tooltip="Pourcentage des exercices complétés avec une note de 100."
-          [value]="context.dashboard.user.successRate"
-          [shouldBePositive]="true"
+          [value]="(context.dashboard.user.successRate | number : '1.0-0')!"
+          shouldBePositive
         />
       </nz-col>
       <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
@@ -41,9 +41,9 @@
           ribbonColor="#f1c40f"
           valueSuffix="%"
           description="Taux de réponses"
-          tooltip="Pourcentage des exercices avec au moins une réponse."
-          [value]="context.dashboard.user.answerRate"
-          [shouldBePositive]="true"
+          tooltip="Pourcentage des exercices avec au moins une réponse enregistrée (note > -1)."
+          [value]="(context.dashboard.user.answerRate | number : '1.0-0')!"
+          shouldBePositive
         />
       </nz-col>
 
@@ -53,9 +53,9 @@
           ribbonColor="#16a085"
           valueSuffix="%"
           description="Taux d'abandon"
-          tooltip="Pourcentage des exercices sans aucune réponse."
-          [value]="context.dashboard.user.dropoutRate"
-          [shouldBeZero]="true"
+          tooltip="Pourcentage des exercices sans réponse."
+          [value]="(context.dashboard.user.dropoutRate | number : '1.0-0')!"
+          shouldBeZero
         />
       </nz-col>
       <!--  -->
@@ -91,8 +91,9 @@
           ribbonColor="#7f8c8d"
           description="Note moyenne"
           [value]="context.dashboard.user.averageScore"
-          tooltip="Moyenne du score sur l'ensemble des exercices que vous avez complétés."
-          [shouldBePositive]="true"
+          valueSuffix=" / 100"
+          tooltip="Moyenne de la note de vos réponses enregistrées (note > -1)."
+          shouldBePositive
         />
       </nz-col>
       <nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12" nzXl="12">

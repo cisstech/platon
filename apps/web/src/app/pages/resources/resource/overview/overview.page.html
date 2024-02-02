@@ -31,8 +31,12 @@
               ribbonColor="#8e44ad"
               valueSuffix="%"
               description="Taux de réussite"
-              tooltip="Pourcentage des exercices complétées avec une note de 100."
-              [value]="dashboard.session.successRate"
+              [tooltip]="
+                dashboard.exercise
+                  ? 'Pourcentage des réponses enregistrées avec une note de 100.'
+                  : 'Pourcentage des sessions complétées avec une note de 100.'
+              "
+              [value]="(dashboard.session.successRate | number : '1.0-0')!"
               [shouldBePositive]="true"
             />
           </nz-col>
@@ -42,8 +46,13 @@
               ribbonColor="#7f8c8d"
               description="Note moyenne"
               [value]="dashboard.session.averageScore"
-              tooltip="Moyenne du score sur l'ensemble des sessions complétées."
-              [shouldBePositive]="true"
+              valueSuffix=" / 100"
+              [tooltip]="
+                dashboard.exercise
+                  ? 'Moyenne de la note des réponses enregistrées (note > -1).'
+                  : 'Moyenne de la note des sessions complétées.'
+              "
+              shouldBePositive
             />
           </nz-col>
           <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
@@ -61,9 +70,9 @@
                 ribbonColor="#f1c40f"
                 valueSuffix="%"
                 description="Taux de réponses"
-                tooltip="Pourcentage des exercices avec au moins une réponse."
-                [value]="dashboard.exercise.answerRate"
-                [shouldBePositive]="true"
+                tooltip="Pourcentage des sessions avec au moins une réponse enregistrée (note > -1)."
+                [value]="(dashboard.exercise.answerRate | number : '1.0-0')!"
+                shouldBePositive
               />
             </nz-col>
 
@@ -73,9 +82,9 @@
                 ribbonColor="#16a085"
                 valueSuffix="%"
                 description="Taux d'abandon"
-                tooltip="Pourcentage des exercices sans aucune réponse."
-                [value]="dashboard.exercise.dropoutRate"
-                [shouldBeZero]="true"
+                tooltip="Pourcentage des sessions sans réponse."
+                [value]="(dashboard.exercise.dropoutRate | number : '1.0-0')!"
+                shouldBeZero
               />
             </nz-col>
           </ng-container>
