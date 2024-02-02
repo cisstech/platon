@@ -258,34 +258,24 @@ export class ResourcePresenter implements OnDestroy {
   // Private
 
   private async refresh(id: string): Promise<void> {
-    const [user, resource] = await Promise.all([
+    const [user, resource, circles] = await Promise.all([
       this.authService.ready(),
       firstValueFrom(
         this.resourceService.find({
           id,
           markAsViewed: this.isInitialLoading,
+          expands: ['parent', 'statistic'],
         })
       ),
-    ])
-
-    const [parent, statistic, circles] = await Promise.all([
-      resource.parentId
-        ? firstValueFrom(
-            this.resourceService.find({
-              id: resource.parentId,
-            })
-          )
-        : Promise.resolve(undefined),
-      firstValueFrom(this.resourceService.statistic(resource)),
       firstValueFrom(this.resourceService.tree()),
     ])
 
     this.updateContext({
       state: 'READY',
       user,
-      parent,
+      parent: resource.parent,
       resource,
-      statistic,
+      statistic: resource.statistic,
       circles,
     })
   }

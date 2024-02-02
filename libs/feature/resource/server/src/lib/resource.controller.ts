@@ -1,3 +1,4 @@
+import { Expandable, Selectable } from '@cisstech/nestjs-expand'
 import { Body, Controller, Get, Logger, Param, Patch, Post, Query, Req } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { CreatedResponse, ForbiddenResponse, ItemResponse, ListResponse, NotFoundResponse } from '@platon/core/common'
@@ -8,7 +9,6 @@ import { CircleTreeDTO, CreateResourceDTO, ResourceDTO, ResourceFiltersDTO, Upda
 import { ResourceService } from './resource.service'
 import { ResourceStatisticDTO } from './statistics'
 import { ResourceViewService } from './views/view.service'
-import { Expandable, Selectable } from '@cisstech/nestjs-expand'
 
 @Controller('resources')
 @ApiTags('Resources')
