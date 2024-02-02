@@ -269,29 +269,30 @@ This hybrid approach allows for easy development and testing, while still levera
 
 This document describes the environnement configuration for the application, including the required environment variables and their descriptions. Proper configuration is crucial for the smooth operation of the system. Make sure to set these variables before running the application in development or production mode.
 
-| Name                       | Service  | Description                                                 | Default                          |
-| -------------------------- | -------- | ----------------------------------------------------------- | -------------------------------- |
-| COMPOSE_HTTP_TIMEOUT       | docker   | Increase docker build timeout which is set to 20 by default | 200                              |
-| POSTGRES_USER              | postgres | PostgreSQL database username.                               | platon                           |
-| POSTGRES_PASSWORD          | postgres | PostgreSQL database password.                               | test                             |
-| POSTGRES_DB                | postgres | PostgreSQL database name.                                   | platon                           |
-| PG_DATA                    | postgres | PostgreSQL data directory.                                  | PG_DATA=/var/lib/postgresql/data |
-| PGADMIN_DEFAULT_EMAIL      | pgadmin  | PgAdmin default email for login.                            | test@test.com                    |
-| PGADMIN_DEFAULT_PASSWORD   | pgadmin  | PgAdmin default password for login.                         | test                             |
-| DB_NAME                    | api      | Database name for the API service.                          | platon_db                        |
-| DB_USERNAME                | api      | Database username for the API service.                      | platon                           |
-| DB_PASSWORD                | api      | Database password for the API service.                      | test                             |
-| DB_HOST                    | api      | Database host for the API service.                          | localhost                        |
-| DB_PORT                    | api      | Database port for the API service.                          | 5432                             |
-| REDIS_HOST                 | api      | Sets NestJs `REDIS_HOST` value setting                      | localhost                        |
-| REDIS_PORT                 | api      | Sets NestJs `REDIS_PORT` value setting                      | 6379                             |
-| SECRET_KEY                 | api      | Secret key for the API service.                             | secret                           |
-| PASSWORD_SALT              | api      | Secret key for the API service.                             | 10                               |
-| JWT_ACCESS_TOKEN_LIFETIME  | api      | Access token lifetime for JWT authentication.               | 7d                               |
-| JWT_REFRESH_TOKEN_LIFETIME | api      | Refresh token lifetime for JWT authentication.              | 7d                               |
-| GRAPHQL_PLAYGROUND         | api      | Enable/disable GraphQL Playground.                          | true                             |
-| SANDBOX_URL                | api      | Defines python sandbox url.                                 | <http://localhost:7000>          |
-| SERVER_NAME                | nginx    | Defines nginx server name.                                  | localhost                        |
+| Name                       | Service  | Description                                                                         | Default                          |
+| -------------------------- | -------- | ----------------------------------------------------------------------------------- | -------------------------------- |
+| COMPOSE_HTTP_TIMEOUT       | docker   | Increase docker build timeout which is set to 20 by default                         | 200                              |
+| POSTGRES_USER              | postgres | PostgreSQL database username.                                                       | platon                           |
+| POSTGRES_PASSWORD          | postgres | PostgreSQL database password.                                                       | test                             |
+| POSTGRES_DB                | postgres | PostgreSQL database name.                                                           | platon                           |
+| PG_DATA                    | postgres | PostgreSQL data directory.                                                          | PG_DATA=/var/lib/postgresql/data |
+| PGADMIN_DEFAULT_EMAIL      | pgadmin  | PgAdmin default email for login.                                                    | test@test.com                    |
+| PGADMIN_DEFAULT_PASSWORD   | pgadmin  | PgAdmin default password for login.                                                 | test                             |
+| DB_NAME                    | api      | Database name for the API service.                                                  | platon_db                        |
+| DB_USERNAME                | api      | Database username for the API service.                                              | platon                           |
+| DB_PASSWORD                | api      | Database password for the API service.                                              | test                             |
+| DB_HOST                    | api      | Database host for the API service.                                                  | localhost                        |
+| DB_PORT                    | api      | Database port for the API service.                                                  | 5432                             |
+| REDIS_HOST                 | api      | Sets NestJs `REDIS_HOST` value setting                                              | localhost                        |
+| REDIS_PORT                 | api      | Sets NestJs `REDIS_PORT` value setting                                              | 6379                             |
+| SECRET_KEY                 | api      | Secret key for the API service.                                                     | secret                           |
+| PASSWORD_SALT              | api      | Secret key for the API service.                                                     | 10                               |
+| JWT_ACCESS_TOKEN_LIFETIME  | api      | Access token lifetime for JWT authentication.                                       | 7d                               |
+| JWT_REFRESH_TOKEN_LIFETIME | api      | Refresh token lifetime for JWT authentication.                                      | 7d                               |
+| GRAPHQL_PLAYGROUND         | api      | Enable/disable GraphQL Playground.                                                  | true                             |
+| SANDBOX_URL                | api      | Defines python sandbox url.                                                         | <http://localhost:7000>          |
+| SANDBOX_ENV_LIFESPAN       | api      | Value in seconds that determins for how long node sandbox env files should be kept. | 604800 (7 days)                  |
+| SERVER_NAME                | nginx    | Defines nginx server name.                                                          | localhost                        |
 
 ### Codebase Structure
 

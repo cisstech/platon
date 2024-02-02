@@ -1,4 +1,6 @@
+import { NestKitExpandModule } from '@cisstech/nestjs-expand'
 import { Module } from '@nestjs/common'
+import { ScheduleModule } from '@nestjs/schedule'
 import { ClsModule } from 'nestjs-cls'
 import { AuthModule } from './auth/auth.module'
 import { ConfigurationModule } from './config/configuration.module'
@@ -10,7 +12,7 @@ import { LevelModule } from './levels'
 import { PubSubModule } from './pubsub/pubsub.module'
 import { TopicModule } from './topics'
 import { UserModule } from './users/user.module'
-import { NestKitExpandModule } from '@cisstech/nestjs-expand'
+
 @Module({
   imports: [
     ConfigurationModule,
@@ -23,6 +25,7 @@ import { NestKitExpandModule } from '@cisstech/nestjs-expand'
     LevelModule,
     ErrorsModule,
     EventModule,
+    ScheduleModule.forRoot(),
     ClsModule.forRoot({
       global: true,
       middleware: { mount: true },

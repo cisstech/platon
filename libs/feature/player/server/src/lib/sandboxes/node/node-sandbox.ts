@@ -4,8 +4,12 @@ import * as Path from 'path'
 import { v4 as uuidv4 } from 'uuid'
 import { NodeVM } from 'vm2'
 
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
+import { Cron, CronExpression } from '@nestjs/schedule'
+import { Configuration } from '@platon/core/server'
 import { Sandbox, SandboxError, SandboxInput, SandboxOutput } from '@platon/feature/player/common'
+import { constants } from 'fs'
 import { RegisterSandbox } from '../sandbox'
 import { createNodeSandboxAPI } from './node-sandbox-api'
 import { constants } from 'fs'
@@ -34,7 +38,15 @@ const builtinGlobales = [
 
 @Injectable()
 @RegisterSandbox()
-export class NodeSandbox implements Sandbox {
+export class NodeSandbox implements OnModuleInit, Sandbox {
+  private readonly logger = new Logger(NodeSandbox.name)
+
+  constructor(private readonly config: ConfigService<Configuration>) {}
+
+  async onModuleInit(): Promise<void> {
+    await this.cleanup()
+  }
+
   supports(input: SandboxInput): boolean {
     const { sandbox } = input.variables
     return !sandbox || sandbox === 'node'
@@ -74,19 +86,21 @@ export class NodeSandbox implements Sandbox {
    * @returns An object containing the NodeVM and environment details.
    */
   private async withVm(input: SandboxInput, timeout: number) {
-    async function exists(path: string) {
-      return await fs.promises
-        .access(path, constants.F_OK)
-        .then(() => true)
-        .catch(() => false)
+    const exists = async (path: string) => {
+      try {
+        await fs.promises.access(path, constants.F_OK)
+        return true
+      } catch {
+        this.logger.warn('Does not exist: ' + path)
+        return false
+      }
     }
 
-    const envid = 'envid' in input && input.envid ? input.envid : uuidv4()
+    const envid = input.envid || uuidv4()
     const baseDir = Path.join(ENVS_DIR, envid)
 
-    if ((!('envid' in input) || !(await exists(baseDir))) && input.files?.length) {
+    if (input.files?.length && !(await exists(baseDir))) {
       await fs.promises.mkdir(baseDir)
-
       await Promise.all([
         ...input.files.map((file) => fs.promises.writeFile(Path.join(baseDir, file.path), file.content)),
       ])
@@ -118,5 +132,36 @@ export class NodeSandbox implements Sandbox {
         }
         return acc
       }, {} as any)
+  }
+
+  /**
+   * Cleans up the environment files.
+   * @remarks
+   * - The lifespan of the environment files is determined by the `sandbox.envLifespan` {@link Configuration}.
+   */
+  @Cron(CronExpression.EVERY_WEEK)
+  protected async cleanup() {
+    this.logger.log('Cleaning up environments')
+
+    const now = Date.now()
+    const contents = await fs.promises.readdir(ENVS_DIR, { withFileTypes: true })
+    let lifespan = this.config.get<number>('sandbox.envLifespan', { infer: true })
+    if (!lifespan) return
+
+    lifespan = lifespan * 1000
+    await Promise.all(
+      contents.map(async (content) => {
+        if (!content.isDirectory()) return
+        const path = Path.join(ENVS_DIR, content.name)
+        const stat = await fs.promises.stat(path)
+
+        if (now - stat.mtimeMs > lifespan) {
+          this.logger.log(`Cleaning up environment: ${content.name}`)
+          await fs.promises.rm(path, { recursive: true })
+        }
+      })
+    ).catch((error) => {
+      this.logger.error('Error cleaning up environments:', error)
+    })
   }
 }

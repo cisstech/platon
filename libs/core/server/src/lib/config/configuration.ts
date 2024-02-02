@@ -1,4 +1,5 @@
 declare type EnvType = 'development' | 'production'
+
 export interface Configuration {
   environment: EnvType
   secret: string
@@ -23,6 +24,7 @@ export interface Configuration {
   }
   sandbox: {
     url: string
+    envLifespan: number
   }
 }
 
@@ -50,5 +52,7 @@ export const configuration = (): Configuration => ({
   },
   sandbox: {
     url: process.env['SANDBOX_URL'] as string,
+    // 1 week = 7 * 24 * 60 * 60 = 604800 seconds.
+    envLifespan: Number.parseInt(process.env['SANDBOX_ENV_LIFESPAN'] || '604800'),
   },
 })
