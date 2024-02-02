@@ -211,19 +211,23 @@ export class PlayerService extends PlayerManager {
   @OnEvent(ON_RELOAD_ACTIVITY_EVENT)
   protected async onReloadActivity(payload: OnReloadActivityEventPayload): Promise<void> {
     const { activity } = payload
-    this.dataSource.transaction(async (manager) => {
-      this.logger.log(`Reload activity ${activity.id}`)
-      const sessions = await manager.find(SessionEntity, {
-        where: { activityId: activity.id },
+    this.dataSource
+      .transaction(async (manager) => {
+        this.logger.log(`Reload activity ${activity.id}`)
+        const sessions = await manager.find(SessionEntity, {
+          where: { activityId: activity.id },
+        })
+        this.logger.log(`Delete ${sessions.length} sessions`)
+        await Promise.all([
+          manager.delete(SessionEntity, { activityId: activity.id }),
+          manager.delete(CorrectionEntity, {
+            id: In(sessions.map((s) => s.correctionId).filter((id) => !!id) as string[]),
+          }),
+        ])
       })
-      this.logger.log(`Delete ${sessions.length} sessions`)
-      await Promise.all([
-        manager.delete(SessionEntity, { activityId: activity.id }),
-        manager.delete(CorrectionEntity, {
-          id: In(sessions.map((s) => s.correctionId).filter((id) => !!id) as string[]),
-        }),
-      ])
-    })
+      .catch((error) => {
+        this.logger.error('Error while reloading activity', error)
+      })
   }
 
   /**

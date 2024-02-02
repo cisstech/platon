@@ -30,37 +30,43 @@ export class Contribution implements IContribution {
           {
             label: 'Éditeur',
             action: () => {
-              editorService.open(monaco.Uri.parse('docs://embed'), {
-                preview: {
-                  type: PreviewTypes.URL,
-                  data: 'docs/main/doc/programing/ide',
-                },
-                title: 'Documentation',
-              })
+              editorService
+                .open(monaco.Uri.parse('docs://embed'), {
+                  preview: {
+                    type: PreviewTypes.URL,
+                    data: 'docs/main/doc/programing/ide',
+                  },
+                  title: 'Documentation',
+                })
+                .catch(console.error)
             },
           },
           {
             label: 'Composants',
             action: () => {
-              editorService.open(monaco.Uri.parse('docs://embed'), {
-                preview: {
-                  type: PreviewTypes.URL,
-                  data: 'docs/components',
-                },
-                title: 'Documentation',
-              })
+              editorService
+                .open(monaco.Uri.parse('docs://embed'), {
+                  preview: {
+                    type: PreviewTypes.URL,
+                    data: 'docs/components',
+                  },
+                  title: 'Documentation',
+                })
+                .catch(console.error)
             },
           },
           {
             label: 'Guide de programmation',
             action: () => {
-              editorService.open(monaco.Uri.parse('docs://embed'), {
-                preview: {
-                  type: PreviewTypes.URL,
-                  data: 'docs/main/doc/programing/exercise/langage',
-                },
-                title: 'Documentation',
-              })
+              editorService
+                .open(monaco.Uri.parse('docs://embed'), {
+                  preview: {
+                    type: PreviewTypes.URL,
+                    data: 'docs/main/doc/programing/exercise/langage',
+                  },
+                  title: 'Documentation',
+                })
+                .catch(console.error)
             },
           },
         ]

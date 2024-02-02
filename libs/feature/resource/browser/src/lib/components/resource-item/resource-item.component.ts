@@ -77,7 +77,7 @@ export class ResourceItemComponent implements OnChanges {
     if (this.previewOverrides) {
       firstValueFrom(
         this.storageService.set(getPreviewOverridesStorageKey(sessionId), JSON.stringify(this.previewOverrides))
-      ).catch()
+      ).catch(console.error)
     }
     return `/player/preview/${this.item.id}?version=latest&sessionId=${sessionId}`
   }

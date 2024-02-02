@@ -89,7 +89,7 @@ export class EditorJsComponent implements AfterViewInit, OnDestroy, ControlValue
     this.data = value
     if (this.editor && this.data) {
       await this.editor.isReady
-      this.editor.render(this.data)
+      await this.editor.render(this.data)
     }
   }
 

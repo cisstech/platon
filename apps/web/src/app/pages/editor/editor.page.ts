@@ -85,7 +85,9 @@ export class EditorPage implements OnInit, OnDestroy {
         this.fileService.registerProvider(this.resourceFileSystemProvider)
         await this.fileService.registerFolders(...rootFolders())
         filesToOpen.forEach((path) => {
-          this.editorService.open(this.resourceFileSystemProvider.buildUri(resource.id, version, path))
+          this.editorService
+            .open(this.resourceFileSystemProvider.buildUri(resource.id, version, path))
+            .catch(console.error)
         })
         this.loading = false
         this.changeDetectorRef.markForCheck()

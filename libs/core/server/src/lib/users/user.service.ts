@@ -4,6 +4,7 @@ import { NotFoundResponse, OrderingDirections, UserFilters, UserOrderings } from
 import { Repository } from 'typeorm'
 import { Optional } from 'typescript-optional'
 import { UserEntity } from './user.entity'
+import { isUUID4 } from '@platon/shared/server'
 
 @Injectable()
 export class UserService {
@@ -23,7 +24,7 @@ export class UserService {
   }
 
   async findByIdOrName(userIdOrName: string): Promise<Optional<UserEntity>> {
-    const result = userIdOrName.includes('-')
+    const result = isUUID4(userIdOrName)
       ? await this.repository.findOne({ where: { id: userIdOrName } })
       : await this.repository.findOne({ where: { username: userIdOrName } })
     return Optional.ofNullable(result)

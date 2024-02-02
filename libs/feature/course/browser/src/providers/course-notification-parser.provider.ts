@@ -27,7 +27,7 @@ export const CourseMemberCreationNotificationParser: NotificationParser<CourseMe
       icon: new ImgIcon(`/assets/images/courses/course.svg`),
       content: `Vous êtes désormais membre du cours “${notification.data.courseName}”`,
       onClick: ({ onClose }) => {
-        router.navigate([`/courses/${notification.data.courseId}`])
+        router.navigate([`/courses/${notification.data.courseId}`]).catch(console.error)
         onClose()
       },
     }
@@ -44,7 +44,7 @@ export const ActivityMemberCreationNotificationParser: NotificationParser<Activi
       icon: new ImgIcon(`/assets/images/courses/course.svg`),
       content: `Vous êtes désormais membre de l'activité “${notification.data.activityName}”`,
       onClick: ({ onClose }) => {
-        router.navigate([`/courses/${notification.data.courseId}`])
+        router.navigate([`/courses/${notification.data.courseId}`]).catch(console.error)
         onClose()
       },
     }
@@ -61,7 +61,7 @@ export const CorrectorCreatedNotificationParser: NotificationParser<CorrectorCre
       icon: new ImgIcon(`/assets/images/courses/course.svg`),
       content: `Vous êtes désormais correcteur de l'activité “${notification.data.activityName}”`,
       onClick: ({ onClose }) => {
-        router.navigate([`/courses/${notification.data.courseId}`])
+        router.navigate([`/courses/${notification.data.courseId}`]).catch(console.error)
         onClose()
       },
     }
@@ -78,7 +78,7 @@ export const CorrectorRemovedNotificationParser: NotificationParser<CorrectorRem
       icon: new ImgIcon(`/assets/images/courses/course.svg`),
       content: `Vous n'êtes plus correcteur de l'activité “${notification.data.activityName}”`,
       onClick: ({ onClose }) => {
-        router.navigate([`/courses/${notification.data.courseId}`])
+        router.navigate([`/courses/${notification.data.courseId}`]).catch(console.error)
         onClose()
       },
     }
@@ -95,7 +95,7 @@ export const CorrectionPendingNotificationParser: NotificationParser<CorrectionP
       icon: new ImgIcon(`/assets/images/courses/course.svg`),
       content: `Vous avez de nouvelles corrections en attente sur “${notification.data.activityName}”`,
       onClick: ({ onClose }) => {
-        router.navigate([`/player/correction/${notification.data.activityId}`])
+        router.navigate([`/player/correction/${notification.data.activityId}`]).catch(console.error)
         onClose()
       },
     }
@@ -112,7 +112,7 @@ export const CorrectionAvailableNotificationParser: NotificationParser<Correctio
       icon: new ImgIcon(`/assets/images/courses/course.svg`),
       content: `Vous pouvez désormais accéder à la correction de l'activité “${notification.data.activityName}”`,
       onClick: ({ onClose }) => {
-        router.navigate([`/player/activity/${notification.data.activityId}`])
+        router.navigate([`/player/activity/${notification.data.activityId}`]).catch(console.error)
         onClose()
       },
     }

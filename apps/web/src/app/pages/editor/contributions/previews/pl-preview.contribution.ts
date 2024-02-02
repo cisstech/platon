@@ -88,9 +88,11 @@ class ToolbarPreviewCommand implements ICommand {
       .with({
         query: PLAYER_EDITOR_PREVIEW,
       })
-    this.editorService.open(uri, {
-      preview: buildPreview(uri),
-    })
+    this.editorService
+      .open(uri, {
+        preview: buildPreview(uri),
+      })
+      .catch(console.error)
   }
 }
 

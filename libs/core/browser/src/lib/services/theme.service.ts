@@ -83,7 +83,7 @@ export class ThemeService implements OnDestroy {
    * @param save persists the change on the disk if set to `true`.
    */
   darkTheme(save = true): void {
-    this.setTheme('dark', save)
+    this.setTheme('dark', save).catch(console.error)
   }
 
   /**
@@ -91,7 +91,7 @@ export class ThemeService implements OnDestroy {
    * @param save persists the change on the disk if set to `true`.
    */
   lightTheme(save = true): void {
-    this.setTheme('light', save)
+    this.setTheme('light', save).catch(console.error)
   }
 
   /**
@@ -99,7 +99,7 @@ export class ThemeService implements OnDestroy {
    */
   switchTheme(): void {
     const theme = this.theme
-    this.setTheme(theme === 'dark' ? 'light' : 'dark')
+    this.setTheme(theme === 'dark' ? 'light' : 'dark').catch(console.error)
   }
 
   private async setTheme(theme: Theme, save = true) {
@@ -170,7 +170,7 @@ export class ThemeService implements OnDestroy {
     })
 
     if (wasNoTheme && !this.noTheme) {
-      this.setTheme(this.savedTheme || 'light', false)
+      this.setTheme(this.savedTheme || 'light', false).catch(console.error)
     }
   }
 
@@ -183,6 +183,6 @@ export class ThemeService implements OnDestroy {
       }
       return false
     })
-    this.setTheme(this.alwaysLightTheme ? 'light' : this.savedTheme || 'light', false)
+    this.setTheme(this.alwaysLightTheme ? 'light' : this.savedTheme || 'light', false).catch(console.error)
   }
 }

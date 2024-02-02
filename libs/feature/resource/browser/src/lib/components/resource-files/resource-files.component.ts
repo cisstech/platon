@@ -133,8 +133,15 @@ export class ResourceFilesComponent {
       const resource = resourceCode ?? ''
       const version = this.selection.version === 'latest' ? '' : `:${this.selection.version}`
       const prefix = resource + version
-      this.clipboardService.copy(`${prefix}${prefix ? '/' : ''}${path}`)
-      this.dialogService.success('Le chemin a été copié dans le presse-papiers')
+      this.clipboardService
+        .copy(`${prefix}${prefix ? '/' : ''}${path}`)
+        .then(() => {
+          this.dialogService.success('Le chemin a été copié dans le presse-papiers')
+        })
+        .catch((error) => {
+          console.error(error)
+          this.dialogService.error('Impossible de copier le chemin dans le presse-papiers')
+        })
     }
   }
 

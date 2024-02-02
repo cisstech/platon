@@ -42,25 +42,27 @@ export class PlaExerciseEditorComponent {
         id: value.resource,
         expands: ['metadata'],
       })
-    ).then((resource) => {
-      this.resource = resource
-      const metadata = resource.metadata as ExerciseResourceMeta | undefined
-      this.inputs = []
-      this.overrides = {}
-      for (const input of metadata?.config?.inputs || []) {
-        if (value.overrides?.[input.name] != null) {
-          this.overrides[input.name] = value.overrides[input.name]
+    )
+      .then((resource) => {
+        this.resource = resource
+        const metadata = resource.metadata as ExerciseResourceMeta | undefined
+        this.inputs = []
+        this.overrides = {}
+        for (const input of metadata?.config?.inputs || []) {
+          if (value.overrides?.[input.name] != null) {
+            this.overrides[input.name] = value.overrides[input.name]
+          }
+          this.inputs.push({
+            ...input,
+            value: this.overrides[input.name],
+          })
         }
-        this.inputs.push({
-          ...input,
-          value: this.overrides[input.name],
-        })
-      }
-      if (!this.inputs.length) {
-        this.inputs = undefined
-      }
-      this.changeDetectorRef.detectChanges()
-    })
+        if (!this.inputs.length) {
+          this.inputs = undefined
+        }
+        this.changeDetectorRef.detectChanges()
+      })
+      .catch(console.error)
   }
 
   @Output() exerciseChange = new EventEmitter<ActivityExercise>()

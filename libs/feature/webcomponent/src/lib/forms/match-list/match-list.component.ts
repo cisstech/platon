@@ -187,20 +187,24 @@ export class MatchListComponent implements OnInit, AfterViewChecked, OnDestroy, 
   private onCreateConnection(connection: Connection) {
     const index = this.indexOfConnection(connection)
     if (index !== -1) return
-    this.changeDetector.ignore(this, () => {
-      this.state.links.push({
-        source: connection.sourceId,
-        target: connection.targetId,
+    this.changeDetector
+      .ignore(this, () => {
+        this.state.links.push({
+          source: connection.sourceId,
+          target: connection.targetId,
+        })
       })
-    })
+      .catch(console.error)
   }
 
   private onRemoveConnection(connection: Connection) {
     const index = this.indexOfConnection(connection)
     if (index !== -1) {
-      this.changeDetector.ignore(this, () => {
-        this.state.links.splice(index, 1)
-      })
+      this.changeDetector
+        .ignore(this, () => {
+          this.state.links.splice(index, 1)
+        })
+        .catch(console.error)
     }
   }
 }

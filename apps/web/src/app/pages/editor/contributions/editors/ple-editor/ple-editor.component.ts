@@ -59,7 +59,7 @@ export class PleEditorComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.editor.onChangeRequest.subscribe((request) => {
         this.request = request
-        this.createEditor()
+        this.createEditor().catch(console.error)
       })
     )
 
