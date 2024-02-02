@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 import { NotificationService } from '@platon/feature/notification/server'
 import {
   ResourceMemberCreateEventData,
@@ -15,6 +15,7 @@ type TargetUserProviderMap = Record<ResourceEventTypes, TargetUserProvider>
 
 @Injectable()
 export class ResourceEventSubscriber implements EntitySubscriberInterface<ResourceEventEntity> {
+  private readonly logger = new Logger(ResourceEventSubscriber.name)
   private readonly defaultUserProvider: TargetUserProvider = async (event, manager) => {
     const users = await this.resourceService.notificationWatchers(event.resourceId, manager)
     return users.filter((u) => u !== event.actorId)
@@ -61,21 +62,25 @@ export class ResourceEventSubscriber implements EntitySubscriberInterface<Resour
         }
       }
 
-      this.notificationService.sendToAllUsers<ResourceEventNotification>(
-        await this.targetUserProviderMap[event.entity.type](event.entity, event.manager),
-        {
-          type: 'RESOURCE-EVENT',
-          eventInfo: {
-            id: event.entity.id,
-            type: event.entity.type,
-            actorId: event.entity.actorId,
-            resourceId: event.entity.resourceId,
-            createdAt: event.entity.createdAt,
-            updatedAt: event.entity.updatedAt,
-            data: event.entity.data,
-          },
-        }
-      )
+      this.notificationService
+        .sendToAllUsers<ResourceEventNotification>(
+          await this.targetUserProviderMap[event.entity.type](event.entity, event.manager),
+          {
+            type: 'RESOURCE-EVENT',
+            eventInfo: {
+              id: event.entity.id,
+              type: event.entity.type,
+              actorId: event.entity.actorId,
+              resourceId: event.entity.resourceId,
+              createdAt: event.entity.createdAt,
+              updatedAt: event.entity.updatedAt,
+              data: event.entity.data,
+            },
+          }
+        )
+        .catch((error) => {
+          this.logger.error('Failed to send notification', error)
+        })
     }
   }
 }

@@ -138,9 +138,11 @@ export class ResourceCreatePage implements OnInit {
     ])
 
     if (!this.resourceService.canUserCreateResource(user, this.type)) {
-      this.router.navigateByUrl('/resources', {
-        replaceUrl: true,
-      })
+      this.router
+        .navigateByUrl('/resources', {
+          replaceUrl: true,
+        })
+        .catch(console.error)
       this.dialogService.error("Vous n'avez pas les droits pour cette action !")
       return
     }
@@ -193,7 +195,7 @@ export class ResourceCreatePage implements OnInit {
         })
       )
 
-      this.router.navigate(['/resources', resource.id, 'overview'], { replaceUrl: true })
+      this.router.navigate(['/resources', resource.id, 'overview'], { replaceUrl: true }).catch(console.error)
     } catch {
       this.dialogService.error('Une erreur est survenue lors de cette action, veuillez réessayer un peu plus tard !')
     } finally {

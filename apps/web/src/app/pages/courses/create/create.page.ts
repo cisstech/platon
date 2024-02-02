@@ -73,9 +73,11 @@ export class CourseCreatePage {
         })
       )
 
-      this.router.navigate(['/courses', course.id], {
-        replaceUrl: true,
-      })
+      this.router
+        .navigate(['/courses', course.id], {
+          replaceUrl: true,
+        })
+        .catch(console.error)
     } catch {
       this.dialogService.error(
         'Une erreur est survenue lors de la création du cours, veuillez réessayer un peu plus tard !'

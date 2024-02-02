@@ -110,7 +110,7 @@ export class PlayerCorrectionComponent implements OnInit {
       this.currentGroup?.users?.filter((exercise) => {
         return index === 0 ? exercise.correctedGrade == null : exercise.correctedGrade != null
       }) || []
-    this.onChooseExercise(0)
+    this.onChooseExercise(0).catch(console.error)
   }
 
   protected onChooseGroup(group: ExerciseGroup): void {
@@ -128,11 +128,11 @@ export class PlayerCorrectionComponent implements OnInit {
   }
 
   protected onChoosePreviousExercise(): void {
-    this.onChooseExercise(this.selectedExerciseIndex - 1)
+    this.onChooseExercise(this.selectedExerciseIndex - 1).catch(console.error)
   }
 
   protected onChooseNextExercise(): void {
-    this.onChooseExercise(this.selectedExerciseIndex + 1)
+    this.onChooseExercise(this.selectedExerciseIndex + 1).catch(console.error)
   }
 
   protected async onSaveGrade(): Promise<void> {

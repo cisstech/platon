@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Post, Query, Req } from '@nestjs/common'
+import { Body, Controller, Get, Logger, Param, Patch, Post, Query, Req } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { CreatedResponse, ForbiddenResponse, ItemResponse, ListResponse, NotFoundResponse } from '@platon/core/common'
 import { IRequest, Mapper } from '@platon/core/server'
@@ -13,6 +13,8 @@ import { Expandable, Selectable } from '@cisstech/nestjs-expand'
 @Controller('resources')
 @ApiTags('Resources')
 export class ResourceController {
+  private readonly logger = new Logger(ResourceController.name)
+
   constructor(
     private readonly resourceService: ResourceService,
     private readonly permissionService: ResourcePermissionService,
@@ -102,10 +104,12 @@ export class ResourceController {
     }
 
     if (markAsViewed) {
-      this.resourceViewService.create({
-        resourceId: id,
-        userId: req.user.id,
-      })
+      this.resourceViewService
+        .create({
+          resourceId: id,
+          userId: req.user.id,
+        })
+        .catch((error) => this.logger.error('Error while marking resource as viewed', error))
     }
 
     Object.assign(resource, { permissions })

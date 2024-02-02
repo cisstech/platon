@@ -58,10 +58,15 @@ export class ResourceSharingComponent implements OnInit {
   }
 
   protected share(): void {
-    this.clipboardService.copy(
-      `${location.origin}${this.resourceService.previewUrl(this.resourceId, this.resourceVersion)}`
-    )
-    this.dialogService.success('Lien copié dans le presse-papier')
+    this.clipboardService
+      .copy(`${location.origin}${this.resourceService.previewUrl(this.resourceId, this.resourceVersion)}`)
+      .then(() => {
+        this.dialogService.success('Lien copié dans le presse-papier')
+      })
+      .catch((error) => {
+        console.error(error)
+        this.dialogService.error('Impossible de copier le lien dans le presse-papier')
+      })
   }
 
   protected async changeVisibility(): Promise<void> {

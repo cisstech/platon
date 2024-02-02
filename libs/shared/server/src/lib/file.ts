@@ -82,7 +82,9 @@ export async function withTempDir<T = unknown>(
     return await consumer(dir)
   } finally {
     if (options?.cleanup) {
-      fs.promises.rm(dir, { recursive: true, force: true })
+      fs.promises.rm(dir, { recursive: true, force: true }).catch(() => {
+        console.error(`Failed to remove temporary directory: ${dir}`)
+      })
     }
   }
 }
@@ -117,7 +119,9 @@ export async function withTempFile<T = unknown>(
     return await consumer(path)
   } finally {
     if (options?.cleanup) {
-      fs.promises.rm(path, { recursive: true, force: true })
+      fs.promises.rm(path, { recursive: true, force: true }).catch(() => {
+        console.error(`Failed to remove temporary file: ${path}`)
+      })
     }
   }
 }

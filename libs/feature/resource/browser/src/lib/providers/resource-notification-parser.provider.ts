@@ -29,16 +29,18 @@ export const ResourceEventNotificationParser: NotificationParser<ResourceEventNo
       onClick: async ({ onClose }) => {
         if (event.type === 'MEMBER_REMOVE') return
         if (event.type === 'MEMBER_CREATE') {
-          router.navigate([`/resources/${resourceId}/settings`], {
-            queryParams: {
-              tab: 'members',
-            },
-          })
+          router
+            .navigate([`/resources/${resourceId}/settings`], {
+              queryParams: {
+                tab: 'members',
+              },
+            })
+            .catch(console.error)
           onClose()
           return
         }
 
-        router.navigate([`/resources/${resourceId}`])
+        router.navigate([`/resources/${resourceId}`]).catch(console.error)
         onClose()
       },
     }
@@ -73,7 +75,7 @@ export const ResourceInvitationNotificationParser: NotificationParser<ResourceIn
                   )
                   await firstValueFrom(resourceService.acceptInvitation(invitation))
 
-                  router.navigate([`/resources/${data.resourceId}`])
+                  router.navigate([`/resources/${data.resourceId}`]).catch(console.error)
 
                   onDelete(notification)
                   onClose()

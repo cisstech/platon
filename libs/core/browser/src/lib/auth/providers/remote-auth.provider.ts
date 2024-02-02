@@ -27,7 +27,7 @@ export class RemoteAuthProvider extends AuthProvider {
           (response) => response.resource
         )
       } catch {
-        this.signOut()
+        this.signOut().catch(console.error)
       }
     }
     return undefined

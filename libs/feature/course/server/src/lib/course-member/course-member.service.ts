@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { OrderingDirections, UserOrderings, UserRoles } from '@platon/core/common'
 import { CourseMemberFilters } from '@platon/feature/course/common'
@@ -10,6 +10,8 @@ import { CourseMemberView } from './course-member.view'
 
 @Injectable()
 export class CourseMemberService {
+  private readonly logger = new Logger(CourseMemberService.name)
+
   constructor(
     private readonly notificationService: CourseNotificationService,
 
@@ -125,7 +127,9 @@ export class CourseMemberService {
           },
         })
       )
-      .catch()
+      .catch((error) => {
+        this.logger.error('Failed to send notification', error)
+      })
     return member
   }
 
@@ -140,7 +144,9 @@ export class CourseMemberService {
           },
         })
       )
-      .catch()
+      .catch((error) => {
+        this.logger.error('Failed to send notification', error)
+      })
     return member
   }
 

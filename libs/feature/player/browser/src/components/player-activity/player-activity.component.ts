@@ -133,12 +133,12 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
 
     if (this.state === 'opened') {
       if (isTimeouted(this.player) && !this.player.navigation.terminated) {
-        this.terminate()
+        this.terminate().catch(console.error)
         return
       }
       const { navigation } = this.player
       if (navigation.started && !navigation.terminated) {
-        this.start()
+        this.start().catch(console.error)
       }
     } else if (this.state === 'planned') {
       this.countdown = new Date(this.player.openAt as Date).getTime()
@@ -229,13 +229,13 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
       this.state = 'opened'
       const { navigation } = this.player
       if (navigation.started && !navigation.terminated) {
-        this.start()
+        this.start().catch(console.error)
       }
       this.dialogService.info("L'activité vient de commencer. Vous pouvez maintenant y participer.")
       this.changeDetectorRef.markForCheck()
     } else {
       this.dialogService.info("L'activité est désormais terminée. Merci d'avoir participé.")
-      this.terminate()
+      this.terminate().catch(console.error)
     }
   }
 
@@ -341,7 +341,7 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
     if (!this.player.settings?.security?.terminateOnLoseFocus) return
 
     this.terminatedAfterLoseFocus = true
-    this.terminate()
+    this.terminate().catch(console.error)
   }
 
   private onVisibilityChange(): void {
@@ -350,7 +350,7 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
     // passed from hidden to visible
     if (document.visibilityState === 'hidden') {
       this.terminatedAfterLeavePage = true
-      this.terminate()
+      this.terminate().catch(console.error)
     }
   }
 

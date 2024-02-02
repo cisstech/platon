@@ -77,11 +77,11 @@ export class UserTableComponent implements OnInit, OnChanges, ControlValueAccess
   ngOnInit(): void {
     this.authService
       .ready()
-      .catch(console.error)
       .then((user) => {
         this.currentUserId = user?.id
         this.changeDetectorRef.markForCheck()
       })
+      .catch(console.error)
 
     this.columns = [
       {

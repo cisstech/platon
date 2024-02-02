@@ -44,9 +44,11 @@ export class MathLiveComponent implements OnInit, WebComponentHooks<MathLiveStat
       fontsDirectory: 'assets/vendors/mathlive/fonts',
     })
     this.mathfield.oninput = () => {
-      this.changeDetection.ignore(this, () => {
-        this.state.value = this.mathfield.getValue('latex')
-      })
+      this.changeDetection
+        .ignore(this, () => {
+          this.state.value = this.mathfield.getValue('latex')
+        })
+        .catch(console.error)
     }
     this.container.nativeElement.replaceWith(this.mathfield)
   }

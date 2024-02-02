@@ -10,7 +10,7 @@ export class CoreService {
   private readonly nzIconService = inject(NzIconService)
 
   init() {
-    this.themeService.loadTheme()
+    this.themeService.loadTheme().catch(console.error)
     this.nzIconService.changeAssetsSource('assets/vendors/@ant-design')
     this.iconRegistry.setDefaultFontSetClass('material-icons-outlined')
   }

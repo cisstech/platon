@@ -103,16 +103,20 @@ export class CodeEditorComponent implements AfterViewChecked, OnDestroy, WebComp
     this.disposables.push(this.editor)
     this.disposables.push(
       this.model.onDidChangeContent(() => {
-        this.changeDetector.ignore(this, () => {
-          this.state.code = this.model?.getValue() || ''
-        })
+        this.changeDetector
+          .ignore(this, () => {
+            this.state.code = this.model?.getValue() || ''
+          })
+          .catch(console.error)
       })
     )
     this.disposables.push(
       this.editor.onDidChangeCursorPosition((e) => {
-        this.changeDetector.ignore(this, () => {
-          this.cursor = e.position
-        })
+        this.changeDetector
+          .ignore(this, () => {
+            this.cursor = e.position
+          })
+          .catch(console.error)
       })
     )
 
@@ -165,21 +169,21 @@ export class CodeEditorComponent implements AfterViewChecked, OnDestroy, WebComp
     if (!this.editor) return
     const action = this.editor.getAction(ACTION_GOTO_LINE)
     this.editor.focus()
-    action?.run()
+    action?.run().catch(console.error)
   }
 
   quickCommand() {
     if (!this.editor) return
     const action = this.editor.getAction(ACTION_QUICK_COMMAND)
     this.editor.focus()
-    action?.run()
+    action?.run().catch(console.error)
   }
 
   changeIndent() {
     if (!this.editor) return
     const action = this.editor.getAction(ACTION_INDENT_USING_SPACES)
     this.editor.focus()
-    action?.run()
+    action?.run().catch(console.error)
   }
 
   private detectOptionsChange() {
@@ -194,9 +198,11 @@ export class CodeEditorComponent implements AfterViewChecked, OnDestroy, WebComp
     ) {
       updateOptions.apply(this, [options])
       if (options.tabSize) {
-        that.changeDetector.ignore(that, () => {
-          that.state.tabSize = options.tabSize || that.state.tabSize
-        })
+        that.changeDetector
+          .ignore(that, () => {
+            that.state.tabSize = options.tabSize || that.state.tabSize
+          })
+          .catch(console.error)
       }
     }
   }

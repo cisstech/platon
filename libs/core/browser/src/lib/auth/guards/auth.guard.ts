@@ -36,10 +36,12 @@ export class AuthGuard {
   }
 
   private redirect403(reason?: string) {
-    this.router.navigate(['/403'], {
-      skipLocationChange: true,
-      queryParams: { reason },
-    })
+    this.router
+      .navigate(['/403'], {
+        skipLocationChange: true,
+        queryParams: { reason },
+      })
+      .catch(console.error)
   }
 }
 

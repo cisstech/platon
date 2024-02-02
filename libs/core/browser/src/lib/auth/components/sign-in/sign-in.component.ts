@@ -70,7 +70,7 @@ export class AuthSignInComponent implements OnInit {
     const { next } = this.activatedRoute.snapshot.queryParams
 
     if (this.user && this.user.username === this.username) {
-      this.router.navigateByUrl(next || '/dashboard', { replaceUrl: true })
+      this.router.navigateByUrl(next || '/dashboard', { replaceUrl: true }).catch(console.error)
       return
     }
 
@@ -79,7 +79,7 @@ export class AuthSignInComponent implements OnInit {
       .signIn(this.username, this.password)
       .then(() => {
         this.connecting = false
-        this.router.navigateByUrl(this.withNextUrl(next), { replaceUrl: true })
+        this.router.navigateByUrl(this.withNextUrl(next), { replaceUrl: true }).catch(console.error)
       })
       .catch((error) => {
         console.log(error)
@@ -90,7 +90,7 @@ export class AuthSignInComponent implements OnInit {
 
   protected signOut(): void {
     this.user = undefined
-    this.authService.signOut()
+    this.authService.signOut().catch(console.error)
   }
 
   private async signInFromURL(): Promise<void> {
@@ -100,7 +100,7 @@ export class AuthSignInComponent implements OnInit {
     if (accessToken && refreshToken) {
       const next = queryParamMap.get('next')
       await this.authService.signInWithToken({ accessToken, refreshToken })
-      this.router.navigateByUrl(this.withNextUrl(next), { replaceUrl: true })
+      this.router.navigateByUrl(this.withNextUrl(next), { replaceUrl: true }).catch(console.error)
     }
   }
 

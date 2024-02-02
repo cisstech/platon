@@ -66,5 +66,6 @@ export class PlayerNavigationComponent {
           terminate?.()
         }
       })
+      .catch(console.error)
   }
 }

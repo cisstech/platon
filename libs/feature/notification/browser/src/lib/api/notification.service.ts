@@ -80,18 +80,20 @@ export class NotificationService {
     })
 
     return combineLatest([pagination.valueChanges, counter]).pipe(
-      map(([queryResult, unreadCount]) => {
+      map(([queryResult, unreadCount]): NotificationPagination => {
         const { edges, pageInfo } = queryResult.data.notifications
 
         return {
           hasMore: pageInfo.hasNextPage,
           unreadCount,
           fetchMore: () => {
-            pagination.fetchMore({
-              variables: {
-                after: pageInfo.endCursor,
-              },
-            })
+            pagination
+              .fetchMore({
+                variables: {
+                  after: pageInfo.endCursor,
+                },
+              })
+              .catch(console.error)
           },
           notifications: edges.map((edge) => decodeNotificationFragment(edge.node)),
         }

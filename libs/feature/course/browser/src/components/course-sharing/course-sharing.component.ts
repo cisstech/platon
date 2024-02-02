@@ -40,7 +40,14 @@ export class CourseSharingComponent {
 
   protected share(): void {
     const suffix = this.mode === 'lti' ? `api/v1/lti/launch?next=/courses/${this.courseId}` : `courses/${this.courseId}`
-    this.clipboardService.copy(`${location.origin}/${suffix}`)
-    this.dialogService.success('Lien copié dans le presse-papier')
+    this.clipboardService
+      .copy(`${location.origin}/${suffix}`)
+      .then(() => {
+        this.dialogService.success('Lien copié dans le presse-papier')
+      })
+      .catch((error) => {
+        console.error(error)
+        this.dialogService.error('Impossible de copier le lien dans le presse-papier')
+      })
   }
 }
