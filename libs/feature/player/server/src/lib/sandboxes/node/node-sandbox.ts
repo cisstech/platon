@@ -12,7 +12,6 @@ import { Sandbox, SandboxError, SandboxInput, SandboxOutput } from '@platon/feat
 import { constants } from 'fs'
 import { RegisterSandbox } from '../sandbox'
 import { createNodeSandboxAPI } from './node-sandbox-api'
-import { constants } from 'fs'
 
 /**
  * Directory where environment files are stored.
