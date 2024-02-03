@@ -264,7 +264,7 @@
     "tar-stream": "^3.0.0",
     "tslib": "^2.3.0",
     "type-fest": "^4.9.0",
-    "typeorm": "^0.3.11",
+    "typeorm": "^0.3.20",
     "typescript-optional": "^3.0.0-alpha.3",
     "uuid": "^9.0.0",
     "viz.js": "^2.1.2",

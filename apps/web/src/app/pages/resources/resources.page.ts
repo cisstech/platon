@@ -23,7 +23,7 @@ import {
 } from '@platon/shared/ui'
 
 import { AuthService, TagService } from '@platon/core/browser'
-import { Level, OrderingDirections, Topic, User } from '@platon/core/common'
+import { Level, OrderingDirections, Topic, uniquifyBy, User } from '@platon/core/common'
 import {
   CircleFilterIndicator,
   CircleTreeComponent,
@@ -252,8 +252,9 @@ export default class ResourcesPage implements OnInit, OnDestroy {
       })
     )
 
-    this.items = [...this.items, ...response.resources]
-    this.hasMore = response.resources.length > 0
+    const length = this.items.length
+    this.items = uniquifyBy([...this.items, ...response.resources], 'id')
+    this.hasMore = this.items.length > length
     this.paginating = false
 
     this.changeDetectorRef.markForCheck()

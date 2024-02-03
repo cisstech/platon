@@ -187,11 +187,14 @@ export class ResourceService {
   }
 
   async search(filters: ResourceFilters = {}): Promise<[ResourceEntity[], number]> {
-    const query = this.repository.createQueryBuilder('resource')
-    query.leftJoinAndSelect('resource.topics', 'topic')
-    query.leftJoinAndSelect('resource.levels', 'level')
+    const query = this.repository.createQueryBuilder('resource').setFindOptions({
+      relations: {
+        topics: true,
+        levels: true,
+      },
+    })
 
-    if (filters.configurable !== null || filters.navigation != null) {
+    if (filters.configurable || filters.navigation != null) {
       query.leftJoin('ResourceMeta', 'metadata', 'metadata.resource_id = resource.id')
     }
 
@@ -239,8 +242,6 @@ export class ResourceService {
         { ids: filters.usedBy }
       )
     }
-
-    // query.where('personal = false')
 
     if (filters.parents?.length) {
       query.andWhere('parent_id IN(:...parents)', { parents: filters.parents })
@@ -303,8 +304,8 @@ export class ResourceService {
     if (filters.order) {
       const fields: Record<ResourceOrderings, string> = {
         NAME: 'resource.name',
-        CREATED_AT: 'resource.created_at',
-        UPDATED_AT: 'resource.updated_at',
+        CREATED_AT: 'resource.createdAt',
+        UPDATED_AT: 'resource.updatedAt',
         RELEVANCE: 'stats.score',
       }
 
