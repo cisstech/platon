@@ -3,9 +3,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
 
 import { MatIconModule } from '@angular/material/icon'
 
-import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzGridModule } from 'ng-zorro-antd/grid'
-import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzTableModule } from 'ng-zorro-antd/table'
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 
@@ -25,9 +23,7 @@ import { AnswerStatePipesModule } from '../../pipes'
     MatIconModule,
 
     NzGridModule,
-    NzIconModule,
     NzTableModule,
-    NzButtonModule,
     NzToolTipModule,
 
     DurationPipe,

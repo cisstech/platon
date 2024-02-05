@@ -1,9 +1,13 @@
 import { Injectable } from '@angular/core'
 import { ListResponse } from '@platon/core/common'
 import {
+  ACTIVITY_ANSWER_RATE,
   ACTIVITY_COURSE_USED_IN_COUNT,
   ACTIVITY_COURSE_USED_IN_LIST,
+  ACTIVITY_DROP_OUT_RATE,
   ACTIVITY_EXERCISE_RESULTS,
+  ACTIVITY_TOTAL_ATTEMPTS,
+  ACTIVITY_TOTAL_COMPLETIONS,
   ActivityCorrection,
   ActivityResults,
   AnswerStates,
@@ -11,9 +15,12 @@ import {
   CreateSessionComment,
   DashboardOutput,
   EXERCISE_ANSWER_RATE,
+  EXERCISE_AVERAGE_ATTEMPTS,
   EXERCISE_AVERAGE_ATTEMPTS_TO_SUCCESS,
+  EXERCISE_AVERAGTE_TIME_TO_ATTEMPT,
   EXERCISE_DROP_OUT_RATE,
   EXERCISE_SUCCESS_RATE_ON_FIRST_ATTEMPT,
+  EXERCISE_TOTAL_ATTEMPTS,
   ExerciseResults,
   SESSION_AVERAGE_DURATION,
   SESSION_AVERAGE_SCORE,
@@ -72,6 +79,7 @@ export class ResultService {
           session: {
             successRate: output[SESSION_SUCCESS_RATE] as number,
             averageScore: output[SESSION_AVERAGE_SCORE] as number,
+            totalDuration: output[SESSION_TOTAL_DURATION] as number,
             averageDuration: output[SESSION_AVERAGE_DURATION] as number,
             scoreDistribution: output[SESSION_AVERAGE_SCORE_BY_MONTH] as Record<string, number>,
             answerDistribution: output[SESSION_DISTRIBUTION_BY_ANSWER_STATE] as Record<AnswerStates, number>,
@@ -80,8 +88,11 @@ export class ResultService {
           exercise:
             EXERCISE_ANSWER_RATE in output
               ? {
-                  dropoutRate: output[EXERCISE_DROP_OUT_RATE] as number,
                   answerRate: output[EXERCISE_ANSWER_RATE] as number,
+                  dropoutRate: output[EXERCISE_DROP_OUT_RATE] as number,
+                  totalAttempts: output[EXERCISE_TOTAL_ATTEMPTS] as number,
+                  averageAttempts: output[EXERCISE_AVERAGE_ATTEMPTS] as number,
+                  averageTimeToAttempt: output[EXERCISE_AVERAGTE_TIME_TO_ATTEMPT] as number,
                   averageAttemptsToSuccess: output[EXERCISE_AVERAGE_ATTEMPTS_TO_SUCCESS] as number,
                   successRateOnFirstAttempt: output[EXERCISE_SUCCESS_RATE_ON_FIRST_ATTEMPT] as number,
                 }
@@ -89,9 +100,13 @@ export class ResultService {
           activity:
             ACTIVITY_EXERCISE_RESULTS in output
               ? {
+                  answerRate: output[ACTIVITY_ANSWER_RATE] as number,
+                  dropoutRate: output[ACTIVITY_DROP_OUT_RATE] as number,
+                  totalAttempts: output[ACTIVITY_TOTAL_ATTEMPTS] as number,
+                  usedInCourses: (output[ACTIVITY_COURSE_USED_IN_LIST] || []) as string[],
                   exerciseResults: output[ACTIVITY_EXERCISE_RESULTS] as ExerciseResults[],
-                  usedInCourses: output[ACTIVITY_COURSE_USED_IN_LIST] as string[],
-                  usedInCoursesCount: output[ACTIVITY_COURSE_USED_IN_COUNT] as number,
+                  totalCompletions: output[ACTIVITY_TOTAL_COMPLETIONS] as number,
+                  usedInCoursesCount: (output[ACTIVITY_COURSE_USED_IN_COUNT] || 0) as number,
                 }
               : undefined,
         }

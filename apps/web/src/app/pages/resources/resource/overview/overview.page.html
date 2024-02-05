@@ -25,48 +25,95 @@
       </section>
       <section *ngIf="dashboard">
         <nz-row [nzGutter]="[24, 24]" nzAlign="top">
-          <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
-            <ui-statistic-card
-              matIcon="check_circle"
-              ribbonColor="#8e44ad"
-              valueSuffix="%"
-              description="Taux de réussite"
-              [tooltip]="
-                dashboard.exercise
-                  ? 'Pourcentage des réponses enregistrées avec une note de 100.'
-                  : 'Pourcentage des sessions complétées avec une note de 100.'
-              "
-              [value]="(dashboard.session.successRate | number : '1.0-0')!"
-              [shouldBePositive]="true"
-            />
-          </nz-col>
-          <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
-            <ui-statistic-card
-              matIcon="star"
-              ribbonColor="#7f8c8d"
-              description="Note moyenne"
-              [value]="dashboard.session.averageScore"
-              valueSuffix=" / 100"
-              [tooltip]="
-                dashboard.exercise
-                  ? 'Moyenne de la note des réponses enregistrées (note > -1).'
-                  : 'Moyenne de la note des sessions complétées.'
-              "
-              shouldBePositive
-            />
-          </nz-col>
-          <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
-            <ui-statistic-card
-              matIcon="access_time"
-              ribbonColor="#f39c12"
-              description="Durée moyenne"
-              [value]="dashboard.session.averageDuration | duration"
-            />
-          </nz-col>
           <ng-container *ngIf="dashboard.exercise">
+            <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
+              <ui-statistic-card
+                matIcon="assessment"
+                ribbonColor="#8e44ad"
+                description="Évaluations"
+                tooltip="Nombre de réponses enregistrées (note > -1)."
+                [value]="dashboard.exercise.totalAttempts"
+              />
+            </nz-col>
+
+            <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
+              <ui-statistic-card
+                matIcon="star"
+                ribbonColor="#7f8c8d"
+                description="Note moyenne"
+                [value]="dashboard.session.averageScore"
+                valueSuffix=" / 100"
+                tooltip="Moyenne de la note des réponses enregistrées (note > -1)."
+                shouldBePositive
+              />
+            </nz-col>
+
+            <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
+              <ui-statistic-card
+                matIcon="access_time"
+                ribbonColor="#f39c12"
+                description="Durée moyenne"
+                tooltip="La durée d'une session d'exercice est calculée en additionnant l'intervalle de temps entre chaque réponse. Les intervalles prolongés de plus de 20 minutes sont remplacés par une durée de 2 minutes pour garantir la précision."
+                [value]="dashboard.session.averageDuration | duration"
+              />
+            </nz-col>
+
+            <nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12" nzXl="12">
+              <ui-statistic-card
+                matIcon="assignment"
+                ribbonColor="#ff9800"
+                description="Essais par apprenant"
+                tooltip="Nombre de réponses enregistrées (note > -1)."
+                [value]="(dashboard.exercise.averageAttempts | number : '1.0-2')!"
+              />
+            </nz-col>
+
+            <nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12" nzXl="12">
+              <ui-statistic-card
+                matIcon="watch"
+                ribbonColor="#ff9800"
+                description="Délai moyen avant 1ère réponse"
+                tooltip="Temps moyen entre le début de l'exercice et la première réponse enregistrée. À noter que cette durée peut être influencée par les activités avec une navigation composée."
+                [value]="dashboard.exercise.averageTimeToAttempt | duration"
+              />
+            </nz-col>
+
             <nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12" nzXl="12">
               <ui-statistic-card
                 matIcon="thumb_up"
+                ribbonColor="#f1c40f"
+                valueSuffix="%"
+                description="Taux de réussite à la 1ère tentative"
+                tooltip="Pourcentage des réponses enregistrées avec une note de 100 dès la première tentative"
+                [value]="(dashboard.exercise.successRateOnFirstAttempt | number : '1.0-0')!"
+              />
+            </nz-col>
+
+            <nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12" nzXl="12">
+              <ui-statistic-card
+                matIcon="trending_up"
+                ribbonColor="#f1c40f"
+                description="Moyenne des tentatives avant succès"
+                tooltip="Nombre moyen de tentatives avant d'obtenir une note de 100"
+                [value]="(dashboard.exercise.averageAttemptsToSuccess | number : '1.0-0')!"
+              />
+            </nz-col>
+
+            <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
+              <ui-statistic-card
+                matIcon="check_circle"
+                ribbonColor="#8e44ad"
+                valueSuffix="%"
+                description="Taux de réussite"
+                tooltip="Pourcentage des réponses enregistrées avec une note de 100."
+                [value]="(dashboard.session.successRate | number : '1.0-0')!"
+                shouldBePositive
+              />
+            </nz-col>
+
+            <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
+              <ui-statistic-card
+                matIcon="done"
                 ribbonColor="#f1c40f"
                 valueSuffix="%"
                 description="Taux de réponses"
@@ -76,9 +123,9 @@
               />
             </nz-col>
 
-            <nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12" nzXl="12">
+            <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
               <ui-statistic-card
-                matIcon="thumb_down"
+                matIcon="clear"
                 ribbonColor="#16a085"
                 valueSuffix="%"
                 description="Taux d'abandon"
@@ -90,6 +137,70 @@
           </ng-container>
 
           <ng-container *ngIf="dashboard.activity">
+            <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
+              <ui-statistic-card
+                matIcon="assessment"
+                ribbonColor="#8e44ad"
+                description="Évaluations"
+                tooltip="Nombre de réponses terminée avec au moins un exercice répondu."
+                [value]="dashboard.activity.totalAttempts"
+              />
+            </nz-col>
+            <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
+              <ui-statistic-card
+                matIcon="star"
+                ribbonColor="#7f8c8d"
+                description="Note moyenne"
+                [value]="dashboard.session.averageScore"
+                valueSuffix=" / 100"
+                tooltip="Moyenne de la note des sessions complétées."
+                shouldBePositive
+              />
+            </nz-col>
+            <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
+              <ui-statistic-card
+                matIcon="access_time"
+                ribbonColor="#f39c12"
+                description="Durée moyenne"
+                tooltip="La durée d'une session d'activité est l'intervalle de temps entre le début et la fin de la session incluant les pauses prolongées."
+                [value]="dashboard.session.averageDuration | duration"
+              />
+            </nz-col>
+
+            <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
+              <ui-statistic-card
+                matIcon="check_circle"
+                ribbonColor="#8e44ad"
+                valueSuffix="%"
+                description="Taux de réussite"
+                tooltip="Pourcentage des sessions complétées avec une note de 100."
+                [value]="(dashboard.session.successRate | number : '1.0-0')!"
+                shouldBePositive
+              />
+            </nz-col>
+            <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
+              <ui-statistic-card
+                matIcon="done"
+                ribbonColor="#f1c40f"
+                valueSuffix="%"
+                description="Taux de réponses"
+                tooltip="Pourcentage des sessions complétées avec au moins un exercice répondu."
+                [value]="dashboard.activity.answerRate"
+                shouldBePositive
+              />
+            </nz-col>
+            <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
+              <ui-statistic-card
+                matIcon="clear"
+                ribbonColor="#16a085"
+                valueSuffix="%"
+                description="Taux d'abandon"
+                tooltip="Pourcentage des sessions complétées avec au moins un exercice non répondu"
+                [value]="(dashboard.activity.dropoutRate | number : '1.0-0')!"
+                shouldBeZero
+              />
+            </nz-col>
+
             <nz-col>
               <h2>Résultat par exercices</h2>
             </nz-col>
@@ -106,7 +217,7 @@
               <mat-card-header>
                 <nz-select [(ngModel)]="learningInsightsOption">
                   <nz-option nzValue="score" nzLabel="Note moyenne" />
-                  <nz-option nzValue="duration" nzLabel="Temps d'apprentissage" />
+                  <nz-option nzValue="duration" nzLabel="Temps d'apprentissage estimée" />
                 </nz-select>
                 <nz-date-picker nzMode="month" [(ngModel)]="learningInsightsDate" />
               </mat-card-header>
@@ -120,13 +231,28 @@
                 />
                 <result-value-distribution
                   *ngIf="learningInsightsOption === 'duration'"
-                  legend="Temps d'apprentissage"
+                  legend="Temps d'apprentissage estimée"
                   [date]="learningInsightsDate"
                   [isTimeValues]="true"
                   [color]="'#FF0087'"
                   [colorGradient]="['rgb(255, 0, 135)', 'rgb(135, 0, 157)']"
                   [distribution]="dashboard.session.durationDistribution"
-                />
+                >
+                  @if (dashboard.exercise) {
+                  <p>Estimation du temps total passé par les apprenants sur les exercices durant ce mois.</p>
+                  <p>
+                    La durée d'un exercice est calculée en additionnant l'intervalle de temps entre chaque réponse. Les
+                    intervalles prolongés de plus de 20 minutes sont remplacés par une durée de 2 minutes pour garantir
+                    la précision.
+                  </p>
+                  } @else {
+                  <p>Estimation du temps total passé par les apprenants sur cette activité durant ce mois.</p>
+                  <p>
+                    La durée d'une session d'activité est l'intervalle de temps entre le début et la fin de la session
+                    incluant les pauses prolongées.
+                  </p>
+                  }
+                </result-value-distribution>
               </mat-card-content>
             </mat-card>
           </nz-col>
@@ -225,7 +351,7 @@
                 ribbonColor="#349d55"
                 description="Cours"
                 tooltip="Nombre de cours dans lesquels cette activité est utilisée."
-                [value]="dashboard!.activity!.usedInCoursesCount ?? 0"
+                [value]="dashboard!.activity!.usedInCoursesCount"
               />
             </nz-col>
           </ng-container>

@@ -25,21 +25,37 @@
           </td>
           <ng-template #popover>
             <div nz-row nzType="flex" nzJustify="space-around" nzAlign="top">
-              <mat-card class="spacing" nz-col>
-                <mat-card-content>
-                  <nz-statistic nzTitle="Évaluations" [nzValue]="pair.value.attempts" />
-                </mat-card-content>
-              </mat-card>
-              <mat-card class="spacing" nz-col>
-                <mat-card-content>
-                  <nz-statistic nzTitle="Durée" [nzValue]="pair.value.duration | duration" />
-                </mat-card-content>
-              </mat-card>
-              <mat-card class="spacing" nz-col>
-                <mat-card-content>
-                  <nz-statistic nzTitle="Note" [nzValue]="pair.value.grade" />
-                </mat-card-content>
-              </mat-card>
+              <ui-statistic-card
+                nz-col
+                class="spacing"
+                matIcon="assessment"
+                ribbonColor="#8e44ad"
+                description="Évaluations"
+                tooltip="Nombre de réponses enregistrées (note > -1)."
+                [value]="pair.value.attempts"
+              />
+
+              <ui-statistic-card
+                nz-col
+                class="spacing"
+                matIcon="access_time"
+                ribbonColor="#f39c12"
+                description="Durée"
+                tooltip="La durée est calculée en additionnant l'intervalle de temps entre chaque réponse. Les intervalles prolongés de plus de 20 minutes sont remplacés par une durée de 2 minutes pour garantir la précision."
+                [value]="pair.value.duration | duration"
+              />
+
+              <ui-statistic-card
+                nz-col
+                class="spacing"
+                matIcon="star"
+                ribbonColor="#7f8c8d"
+                description="Note"
+                [value]="pair.value.grade"
+                valueSuffix=" / 100"
+                tooltip="Plus grande note attribuée lors des évaluations. Il est possible que cette dernière soit issue d'une évaluation manuelle si l'activité est corrigeable."
+                shouldBePositive
+              />
             </div>
           </ng-template>
         </ng-container>
