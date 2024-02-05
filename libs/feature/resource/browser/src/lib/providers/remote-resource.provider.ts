@@ -1,5 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
+import { buildHttpParams } from '@platon/core/browser'
 import { ItemResponse, ListResponse } from '@platon/core/common'
 import {
   CircleTree,
@@ -8,14 +9,11 @@ import {
   Resource,
   ResourceCompletion,
   ResourceFilters,
-  ResourceStatisic,
   UpdateResource,
 } from '@platon/feature/resource/common'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { ResourceProvider } from '../models/resource-provider'
-import { buildHttpParams } from '@platon/core/browser'
-
 @Injectable()
 export class RemoteResourceProvider extends ResourceProvider {
   constructor(private readonly http: HttpClient) {
@@ -31,13 +29,6 @@ export class RemoteResourceProvider extends ResourceProvider {
       .get<ItemResponse<Resource>>(`/api/v1/users/${username}/circle`)
       .pipe(map((response) => response.resource))
   }
-
-  statistic(resource: Resource): Observable<ResourceStatisic> {
-    return this.http
-      .get<ItemResponse<ResourceStatisic>>(`/api/v1/resources/${resource.id}/statistic`)
-      .pipe(map((response) => response.resource))
-  }
-
   completion(): Observable<ResourceCompletion> {
     return this.http
       .get<ItemResponse<ResourceCompletion>>('/api/v1/resources/completion')

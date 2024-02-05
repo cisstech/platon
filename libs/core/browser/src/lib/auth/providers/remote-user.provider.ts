@@ -38,8 +38,8 @@ export class RemoteUserProvider extends UserProvider {
     return this.http.get<ListResponse<User>>(`/api/v1/users/`, { params })
   }
 
-  findByUserName(username: string): Observable<User | undefined> {
-    return this.http.get<ItemResponse<User>>(`/api/v1/users/${username}`).pipe(
+  findByIdOrName(idOrUsername: string): Observable<User | undefined> {
+    return this.http.get<ItemResponse<User>>(`/api/v1/users/${idOrUsername}`).pipe(
       map((response) => response.resource),
       catchError(() => of(undefined))
     )
@@ -47,7 +47,7 @@ export class RemoteUserProvider extends UserProvider {
 
   findAllByUserNames(userNames: string[]): Observable<User[]> {
     const merge = from(userNames).pipe(
-      mergeMap((username) => this.findByUserName(username)),
+      mergeMap((username) => this.findByIdOrName(username)),
       toArray()
     )
     return merge as Observable<User[]>

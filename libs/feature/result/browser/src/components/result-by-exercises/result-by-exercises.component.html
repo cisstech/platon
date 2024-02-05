@@ -18,27 +18,155 @@
         </ng-container>
       </tr>
       <tr [nzExpand]="expandSet.has(item.id)">
-        <div nz-row nzType="flex" nzJustify="space-around" nzAlign="top">
-          <mat-card nz-col>
-            <mat-card-content>
-              <nz-statistic nzTitle="Tentative" [nzValue]="item.attempts.sum" />
-            </mat-card-content>
-          </mat-card>
-          <mat-card nz-col>
-            <mat-card-content>
-              <nz-statistic nzTitle="Moyenne tentative" [nzValue]="item.attempts.avg" />
-            </mat-card-content>
-          </mat-card>
-          <mat-card nz-col>
-            <mat-card-content>
-              <nz-statistic nzTitle="Moyenne note" [nzValue]="item.grades.avg" />
-            </mat-card-content>
-          </mat-card>
-          <mat-card nz-col>
-            <mat-card-content>
-              <nz-statistic nzTitle="Moyenne durée" [nzValue]="item.durations.avg | duration" />
-            </mat-card-content>
-          </mat-card>
+        <div nz-row [nzGutter]="[8, 8]" nzType="flex" nzJustify="space-around" nzAlign="top">
+          <ui-statistic-card
+            nz-col
+            nzXs="24"
+            nzSm="24"
+            nzMd="12"
+            nzLg="12"
+            nzXl="12"
+            matIcon="assessment"
+            ribbonColor="#8e44ad"
+            description="Évaluations"
+            tooltip="Nombre de réponses enregistrées (note > -1)."
+            [value]="item.attempts.sum"
+          />
+
+          <ui-statistic-card
+            nz-col
+            nzXs="24"
+            nzSm="24"
+            nzMd="12"
+            nzLg="12"
+            nzXl="12"
+            matIcon="star"
+            ribbonColor="#7f8c8d"
+            description="Note moyenne"
+            [value]="item.grades.avg"
+            valueSuffix=" / 100"
+            tooltip="Moyenne du score sur l'ensemble des réponses enregistrées."
+            [shouldBePositive]="true"
+          />
+
+          <ui-statistic-card
+            nz-col
+            nzXs="24"
+            nzSm="24"
+            nzMd="12"
+            nzLg="12"
+            nzXl="12"
+            matIcon="access_time"
+            ribbonColor="#f39c12"
+            description="Durée moyenne"
+            tooltip="La durée moyenne est calculée en additionnant l'intervalle de temps entre chaque réponse. Les intervalles prolongés de plus de 20 minutes sont remplacés par une durée de 2 minutes pour garantir la précision."
+            [value]="item.durations.avg | duration"
+          />
+
+          <ui-statistic-card
+            nz-col
+            nzXs="24"
+            nzSm="24"
+            nzMd="12"
+            nzLg="12"
+            nzXl="12"
+            matIcon="assignment"
+            ribbonColor="#ff9800"
+            description="Essais par apprenant"
+            tooltip="Moyenne du nombre de réponses enregistrées par apprenant."
+            [value]="(item.attempts.avg | number : '1.0-2')!"
+          />
+
+          <ui-statistic-card
+            nz-col
+            nzXs="24"
+            nzSm="24"
+            nzMd="12"
+            nzLg="12"
+            nzXl="12"
+            matIcon="watch"
+            ribbonColor="#ff9800"
+            description="Délai moyen avant 1ère réponse"
+            tooltip="Temps moyen entre le début de l'exercice et la première réponse enregistrée. À noter que cette durée peut être influencée par les activités avec une navigation composée."
+            [value]="item.averageTimeToAttempt.avg | duration"
+          />
+
+          <ui-statistic-card
+            nz-col
+            nzXs="24"
+            nzSm="24"
+            nzMd="12"
+            nzLg="12"
+            nzXl="12"
+            matIcon="thumb_up"
+            ribbonColor="#f1c40f"
+            valueSuffix="%"
+            description="Taux de réussite à la 1ère tentative"
+            tooltip="Pourcentage des réponses enregistrées avec une note de 100 dès la première tentative"
+            [value]="(item.successRateOnFirstAttempt.avg | number : '1.0-0')!"
+          />
+
+          <ui-statistic-card
+            nz-col
+            nzXs="24"
+            nzSm="24"
+            nzMd="12"
+            nzLg="12"
+            nzXl="12"
+            matIcon="trending_up"
+            ribbonColor="#f1c40f"
+            description="Moyenne des tentatives avant succès"
+            tooltip="Nombre moyen de tentatives avant d'obtenir une note de 100"
+            [value]="(item.averageAttemptsToSuccess.avg | number : '1.0-0')!"
+          />
+
+          <ui-statistic-card
+            nz-col
+            nzXs="24"
+            nzSm="24"
+            nzMd="12"
+            nzLg="12"
+            nzXl="12"
+            matIcon="check_circle"
+            ribbonColor="#8e44ad"
+            valueSuffix="%"
+            description="Taux de réussite"
+            tooltip="Pourcentage des réponses enregistrées avec une note de 100."
+            [value]="(item.successRate.avg | number : '1.0-0')!"
+            shouldBePositive
+          />
+
+          <ui-statistic-card
+            nz-col
+            nzXs="24"
+            nzSm="24"
+            nzMd="12"
+            nzLg="12"
+            nzXl="12"
+            matIcon="done"
+            ribbonColor="#f1c40f"
+            valueSuffix="%"
+            description="Taux de réponses"
+            tooltip="Pourcentage des sessions avec au moins une réponse enregistrée (note > -1)."
+            [value]="(item.answerRate.avg | number : '1.0-0')!"
+            shouldBePositive
+          />
+
+          <ui-statistic-card
+            nz-col
+            nzXs="24"
+            nzSm="24"
+            nzMd="12"
+            nzLg="12"
+            nzXl="12"
+            matIcon="clear"
+            ribbonColor="#16a085"
+            valueSuffix="%"
+            description="Taux d'abandon"
+            tooltip="Pourcentage des sessions sans réponse."
+            [value]="(item.dropoutRate.avg | number : '1.0-0')!"
+            shouldBeZero
+          />
         </div>
       </tr>
     </ng-container>

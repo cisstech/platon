@@ -2,3 +2,12 @@ h3,
 p {
   margin: 1rem 0;
 }
+
+.th-with-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  mat-icon {
+    margin: 0 0.5rem;
+  }
+}

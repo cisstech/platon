@@ -19,7 +19,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { ListItemTag, NgeUiListModule } from '@cisstech/nge/ui/list'
 import { ExerciseResourceMeta, Resource } from '@platon/feature/resource/common'
 
-import { UiModalIFrameComponent } from '@platon/shared/ui'
+import { UiModalIFrameComponent, positiveGreenColor } from '@platon/shared/ui'
 
 import { StorageService } from '@platon/core/browser'
 import { Variables } from '@platon/feature/compiler'
@@ -56,6 +56,10 @@ export class ResourceItemComponent implements OnChanges {
   private readonly storageService = inject(StorageService)
   protected name = ''
   protected desc = ''
+  protected successRate = 0
+  protected attemptCount = 0
+  protected successRateColor = 'var(--brand-text-primary, #000)'
+
   protected configurable = false
   protected tags: ListItemTag[] = []
 
@@ -110,6 +114,9 @@ export class ResourceItemComponent implements OnChanges {
 
     this.name = this.item.name
     this.desc = this.item.desc as string
+    this.successRate = this.item.statistic?.activity?.successRate ?? this.item.statistic?.exercise?.successRate ?? 0
+    this.attemptCount = this.item.statistic?.activity?.attemptCount ?? this.item.statistic?.exercise?.attemptCount ?? 0
+    this.successRateColor = positiveGreenColor(this.successRate)
     this.configurable = (this.item.metadata as ExerciseResourceMeta)?.configurable ?? false
   }
 

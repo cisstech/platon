@@ -12,7 +12,7 @@ import {
   UserPrefs,
 } from '@platon/core/common'
 import { Observable, combineLatest, of } from 'rxjs'
-import { map, tap } from 'rxjs/operators'
+import { map, shareReplay, tap } from 'rxjs/operators'
 import { UserGroupProvider } from '../models/user-group-provider'
 import { UserPrefsProvider } from '../models/user-prefs-provider'
 import { UserProvider } from '../models/user-provider'
@@ -23,6 +23,7 @@ import { UserProvider } from '../models/user-provider'
 @Injectable({ providedIn: 'root' })
 export class UserService {
   private users = new Map<string, User>()
+  private findOneRequests = new Map<string, Observable<User | undefined>>()
 
   constructor(
     private readonly userProvider: UserProvider,
@@ -48,22 +49,30 @@ export class UserService {
    * Note:
    * This method will make an http request only if the user is not cached in the memory.
    *
-   * @param username The name of the user to find.
+   * @param idOrUsername The id or username of the user to find.
    * @returns An observable that will emit the user found or `undefined` once the server will response.
    */
-  findByUserName(username: string): Observable<User | undefined> {
-    const cache = this.users.get(username)
+  findByIdOrName(idOrUsername: string): Observable<User | undefined> {
+    const cache = this.users.get(idOrUsername)
     if (cache != null) {
       return of(cache)
     }
 
-    return this.userProvider.findByUserName(username).pipe(
+    const request = this.findOneRequests.get(idOrUsername)
+    if (request != null) {
+      return request
+    }
+
+    const obs = this.userProvider.findByIdOrName(idOrUsername).pipe(
+      shareReplay(1),
       tap((user) => {
         if (user != null) {
-          this.users.set(username, user)
+          this.users.set(idOrUsername, user)
         }
       })
     )
+    this.findOneRequests.set(idOrUsername, obs)
+    return obs
   }
 
   /**

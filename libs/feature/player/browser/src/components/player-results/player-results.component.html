@@ -26,8 +26,14 @@
     <thead>
       <tr>
         <th>Exercice</th>
-        <th>Tentatives</th>
-        <th>Durée</th>
+        <th>Réponses</th>
+        <th class="th-with-icon">
+          Durée estimée
+          <mat-icon
+            nz-tooltip="La durée estimée est calculée en additionnant l'intervalle de temps entre chaque réponse. Les intervalles prolongés de plus de 20 minutes sont remplacés par une durée de 2 minutes pour garantir la précision."
+            >info_circle</mat-icon
+          >
+        </th>
         <th>État</th>
         <th>Note</th>
       </tr>

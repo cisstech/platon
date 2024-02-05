@@ -50,7 +50,7 @@
         <ng-container *ngIf="answers.length as answerCount">
           <nz-ribbon [nzText]="ribbon">
             <ng-template #ribbon>
-              Exercice : {{ selectedExerciseIndex + 1 }}/{{ exerciseCount }}&nbsp; Tentative :
+              Exercice : {{ selectedExerciseIndex + 1 }}/{{ exerciseCount }}&nbsp; Réponse :
               {{ player.currentAttemptIndex + 1 }}/{{ answerCount }}
             </ng-template>
             <player-exercise #player [players]="answers" [reviewMode]="true" [canComment]="true" />

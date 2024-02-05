@@ -18,7 +18,7 @@ import { FormsModule } from '@angular/forms'
 import { MatButtonModule } from '@angular/material/button'
 import { CoreEchartsDirective } from '@platon/core/browser'
 import { RESOURCE_STATUS_COLORS_HEX, RESOURCE_STATUS_NAMES } from '@platon/feature/resource/browser'
-import { ResourceStatisic, ResourceStatus } from '@platon/feature/resource/common'
+import { ResourceStatistic, ResourceStatus } from '@platon/feature/resource/common'
 import {
   ResourceDashboardModel,
   ResultAnswerDistributionComponent,
@@ -79,7 +79,7 @@ export class ResourceOverviewPage implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.presenter.contextChange.subscribe(async (context) => {
         this.context = context
-        if (context.statistic) {
+        if (context.statistic?.circle) {
           this.buildStatusChart(context.statistic)
         }
         this.dashboard = await this.presenter.dashboard()
@@ -113,7 +113,7 @@ export class ResourceOverviewPage implements OnInit, OnDestroy {
     this.searchByStatus(status)
   }
 
-  private buildStatusChart(statistic: ResourceStatisic): void {
+  private buildStatusChart(statistic: ResourceStatistic): void {
     type Data = {
       label: string
       value: number
@@ -123,7 +123,7 @@ export class ResourceOverviewPage implements OnInit, OnDestroy {
     const statuses = Object.values(ResourceStatus)
 
     const valueByStatus = statuses.reduce((acc, status) => {
-      const record = statistic as unknown as Record<string, number>
+      const record = statistic.circle as unknown as Record<string, number>
       acc[status] = record[status.toLowerCase()]
       return acc
     }, {} as Record<ResourceStatus, number>)

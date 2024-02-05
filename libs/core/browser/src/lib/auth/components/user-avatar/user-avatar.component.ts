@@ -43,7 +43,7 @@ export class UserAvatarComponent {
   @Input()
   set userIdOrName(value: string) {
     if (value) {
-      firstValueFrom(this.authUserService.findByUserName(value))
+      firstValueFrom(this.authUserService.findByIdOrName(value))
         .then((user) => {
           this.user = user
           this.changeDetectorRef.markForCheck()
