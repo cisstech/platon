@@ -15,7 +15,7 @@ import {
   ResourceInvitation,
   ResourceMember,
   ResourceMemberFilters,
-  ResourceStatisic,
+  ResourceStatistic,
   UpdateResource,
 } from '@platon/feature/resource/common'
 import { ResourceDashboardModel, ResultService } from '@platon/feature/result/browser'
@@ -323,5 +323,5 @@ export interface Context {
   previewUrl?: string
 
   circles?: CircleTree
-  statistic?: ResourceStatisic
+  statistic?: ResourceStatistic
 }

@@ -7,7 +7,6 @@ import { ResourceCompletionDTO } from './completion'
 import { ResourcePermissionService } from './permissions/permissions.service'
 import { CircleTreeDTO, CreateResourceDTO, ResourceDTO, ResourceFiltersDTO, UpdateResourceDTO } from './resource.dto'
 import { ResourceService } from './resource.service'
-import { ResourceStatisticDTO } from './statistics'
 import { ResourceViewService } from './views/view.service'
 
 @Controller('resources')
@@ -114,13 +113,6 @@ export class ResourceController {
 
     Object.assign(resource, { permissions })
     return new ItemResponse({ resource })
-  }
-
-  @Get('/:id/statistic')
-  async statistic(@Param('id') id: string): Promise<ItemResponse<ResourceStatisticDTO>> {
-    return new ItemResponse({
-      resource: Mapper.map(await this.resourceService.statistic(id), ResourceStatisticDTO),
-    })
   }
 
   @Post()

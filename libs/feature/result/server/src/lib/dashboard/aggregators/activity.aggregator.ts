@@ -89,6 +89,8 @@ export class ActivityUserResults implements SessionDataAggregator<UserResults[]>
   }
 
   next(input: SessionView): void {
+    if (input.parentId) return
+
     input.activityNavigation?.exercises.forEach((exercise) => {
       const exerciseSession = this.exerciseSessions.get(exercise.sessionId)
       if (!exerciseSession) return
@@ -151,6 +153,7 @@ export class ActivityAnswerRate implements SessionDataAggregator<number> {
   private totalAnswers = 0
 
   next(input: SessionView): void {
+    if (input.parentId) return
     if (!input.activityNavigation?.terminated) return
 
     this.totalSessions++
@@ -192,6 +195,7 @@ export class ActivityExerciseResults implements SessionDataAggregator<ExerciseRe
   }
 
   next(input: SessionView): void {
+    if (input.parentId) return
     input.activityNavigation?.exercises.forEach((exercise) => {
       const session = this.exerciseSessions.get(exercise.sessionId)
       if (!session) return
@@ -276,6 +280,7 @@ export class ActivityDropoutRate implements SessionDataAggregator<number> {
   private totalDropOuts = 0
 
   next(input: SessionView): void {
+    if (input.parentId) return
     if (!input.activityNavigation?.terminated) return
 
     this.totalSessions++
@@ -303,6 +308,7 @@ export class ActivityTotalAttempts implements SessionDataAggregator<number> {
   private total = 0
 
   next(input: SessionView): void {
+    if (input.parentId) return
     if (!input.activityNavigation?.terminated) return
 
     this.total += input.attempts ? 1 : 0
@@ -322,6 +328,7 @@ export class ActivityTotalCompletions implements SessionDataAggregator<number> {
   private total = 0
 
   next(input: SessionView): void {
+    if (input.parentId) return
     if (!input.activityNavigation?.terminated) return
 
     this.total += input.activityNavigation?.exercises?.every((exercise) => exercise.state !== AnswerStates.NOT_STARTED)

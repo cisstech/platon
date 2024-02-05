@@ -355,14 +355,14 @@
               />
             </nz-col>
           </ng-container>
-          <ng-container *ngIf="context.resource.type === 'CIRCLE'">
+          <ng-container *ngIf="context.statistic?.circle">
             <nz-col nzSpan="24">
               <ui-statistic-card
                 matIcon="group_work"
                 ribbonColor="#16a085"
                 description="Cercles enfants"
                 tooltip="Nombre de cercles directement liés à ce cercle."
-                [value]="context.statistic?.circles ?? 0"
+                [value]="context.statistic!.circle!.circles!"
               >
                 <a
                   nz-button
@@ -374,14 +374,13 @@
                 </a>
               </ui-statistic-card>
             </nz-col>
-
             <nz-col nzSpan="24">
               <ui-statistic-card
                 matIcon="widgets"
                 ribbonColor="#34495e"
                 description="Activités"
                 tooltip="Nombre d'activités directement liées à ce cercle."
-                [value]="context.statistic?.activities ?? 0"
+                [value]="context.statistic!.circle!.activities!"
               >
                 <a
                   nz-button
@@ -393,14 +392,13 @@
                 </a>
               </ui-statistic-card>
             </nz-col>
-
             <nz-col nzSpan="24">
               <ui-statistic-card
                 matIcon="article"
                 ribbonColor="#c0392b"
                 description="Exercices"
                 tooltip="Nombre d'exercices directement liés à ce cercle."
-                [value]="context.statistic?.exercises ?? 0"
+                [value]="context.statistic!.circle!.exercises!"
               >
                 <a
                   nz-button

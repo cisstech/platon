@@ -23,6 +23,7 @@ export class ExerciseAnswerRate implements SessionDataAggregator<number> {
   private totalAttempts = 0
 
   next(input: SessionView): void {
+    if (!input.parentId) return
     if (input.startedAt) {
       this.totalSessions++
       if (input.attempts) {
@@ -48,6 +49,7 @@ export class ExerciseDropOutRate implements SessionDataAggregator<number> {
   private totalDropOuts = 0
 
   next(input: SessionView): void {
+    if (!input.parentId) return
     if (input.startedAt) {
       this.totalSessions++
       if (!input.lastGradedAt) {
@@ -70,6 +72,7 @@ export class ExerciseTotalAttempts implements SessionDataAggregator<number> {
   private totalAttempts = 0
 
   next(input: SessionView): void {
+    if (!input.parentId) return
     this.totalAttempts += input.attempts ?? 0
   }
 
@@ -88,6 +91,7 @@ export class ExerciseAverageAttempts implements SessionDataAggregator<number> {
   private totalAttempts = 0
 
   next(input: SessionView): void {
+    if (!input.parentId) return
     if (input.attempts) {
       this.totalSessions++
       this.totalAttempts += input.attempts
@@ -109,6 +113,7 @@ export class ExerciceAverageTimeToAttempt implements SessionDataAggregator<numbe
   private totalFirstAttemptTimes = 0
 
   next(input: SessionView): void {
+    if (!input.parentId) return
     if (input.startedAt && input.answers?.length) {
       this.totalAttempts++
       this.totalFirstAttemptTimes += differenceInSeconds(new Date(input.answers[0].createdAt), input.startedAt)
@@ -133,6 +138,7 @@ export class ExerciseAverageAttemptsToSuccess implements SessionDataAggregator<n
   private totalAttemptsToSuccess = 0
 
   next(input: SessionView): void {
+    if (!input.parentId) return
     if (!input.attempts || !input.answers?.length) return
 
     this.totalSessions++
@@ -157,6 +163,7 @@ export class ExerciseSuccessRateOnFirstAttempt implements SessionDataAggregator<
   private totalSuccessOnFirstAttempt = 0
 
   next(input: SessionView): void {
+    if (!input.parentId) return
     if (!input.attempts || !input.answers?.length) return
 
     const firstGrade = input.correctionGrade ?? input.answers.find((answer) => answer.grade >= 0)?.grade ?? -1

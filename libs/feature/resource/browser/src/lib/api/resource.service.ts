@@ -13,7 +13,6 @@ import {
   ResourceInvitation,
   ResourceMember,
   ResourceMemberFilters,
-  ResourceStatisic,
   ResourceTypes,
   ResourceWatcherFilters,
   UpdateResource,
@@ -59,10 +58,6 @@ export class ResourceService {
 
   circle(username: string): Observable<Resource> {
     return this.resourceProvider.circle(username)
-  }
-
-  statistic(resource: Resource): Observable<ResourceStatisic> {
-    return this.resourceProvider.statistic(resource)
   }
 
   completion(): Observable<ResourceCompletion> {

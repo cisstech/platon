@@ -145,7 +145,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
     const [tree, circle, views, topics, levels] = await Promise.all([
       firstValueFrom(this.resourceService.tree()),
       firstValueFrom(this.resourceService.circle(this.user.username)),
-      firstValueFrom(this.resourceService.search({ views: true, expands: ['metadata'] })),
+      firstValueFrom(this.resourceService.search({ views: true, expands: ['metadata', 'statistic'] })),
       firstValueFrom(this.tagService.listTopics()),
       firstValueFrom(this.tagService.listLevels()),
     ])
@@ -196,7 +196,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
         const response = await firstValueFrom(
           this.resourceService.search({
             ...this.filters,
-            expands: ['metadata'],
+            expands: ['metadata', 'statistic'],
             limit: PAGINATION_LIMIT,
           })
         )

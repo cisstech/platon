@@ -2192,10 +2192,10 @@
   resolved "https://registry.yarnpkg.com/@braintree/sanitize-url/-/sanitize-url-6.0.4.tgz#923ca57e173c6b232bbbb07347b1be982f03e783"
   integrity sha512-s3jaWicZd0pkP0jf5ysyHUI/RE7MHos6qlToFcGWXVp+ykHOy77OUMrfbgJ9it2C5bow7OIQwYYaHjk9XlBQ2A==
 
-"@cisstech/nestjs-expand@^1.0.3":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@cisstech/nestjs-expand/-/nestjs-expand-1.0.3.tgz#9f9579e08449d13d7646db5599ce3f20175eddb4"
-  integrity sha512-CYLwlRLNzMcy880ZgraS0pmkEfU5N/AKeE2mdt36AFSZOz29qhIbQ2WeNTUR0fYjkJHI2CjK1+dHGG4fPLe3EQ==
+"@cisstech/nestjs-expand@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@cisstech/nestjs-expand/-/nestjs-expand-1.1.0.tgz#2f709fd93e1e41c06c486d8c26535882c8a5f9cb"
+  integrity sha512-WYuS25FCaeBkF3Jku58rtWGtHAY8ZN36F0pCy+RqcmU6xK3FaprQvH9AS2Nc4lsHtajVssugx92pm6LxJzRYUg==
   dependencies:
     rxjs "^7.8.0"
     tslib "^2.3.0"

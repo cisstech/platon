@@ -7,7 +7,6 @@ import {
   ResourceCompletion,
   ResourceExpandableFields,
   ResourceFilters,
-  ResourceStatisic,
   UpdateResource,
 } from '@platon/feature/resource/common'
 import { Observable } from 'rxjs'
@@ -20,7 +19,6 @@ export interface ResourceFindOptions {
 export abstract class ResourceProvider {
   abstract tree(): Observable<CircleTree>
   abstract circle(username: string, expands?: ExpandableModel): Observable<Resource>
-  abstract statistic(resource: Resource): Observable<ResourceStatisic>
   abstract completion(): Observable<ResourceCompletion>
   abstract search(filters?: ResourceFilters): Observable<ListResponse<Resource>>
   abstract find(input: FindResource): Observable<Resource>

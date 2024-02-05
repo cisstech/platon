@@ -4,7 +4,7 @@ import { ResourceStatus } from '../enums/resource-status'
 import { ResourceTypes } from '../enums/resource-types'
 import { ResourceMeta } from './metadata.model'
 import { ResourcePermissions } from './permissions.model'
-import { ResourceStatisic } from './statistic.model'
+import { ResourceStatistic } from './statistic.model'
 
 export type ResourceExpandableFields = 'metadata' | 'template' | 'parent' | 'template.metadata' | 'statistic'
 
@@ -32,7 +32,7 @@ export interface Resource {
   readonly metadata?: ResourceMeta
   readonly template?: Resource
   readonly parent?: Resource
-  readonly statistic?: ResourceStatisic
+  readonly statistic?: ResourceStatistic
 }
 
 export interface CircleTree {

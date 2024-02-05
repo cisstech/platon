@@ -1,12 +1,11 @@
 import { ExpandContext, Expandable, Expander } from '@cisstech/nestjs-expand'
 import { Injectable } from '@nestjs/common'
 import { IRequest, Mapper } from '@platon/core/server'
-import { ResourceMeta, ResourceStatisic } from '@platon/feature/resource/common'
+import { ResourceMeta } from '@platon/feature/resource/common'
 import { ResourceMetadataService } from './metadata'
 import { ResourcePermissionService } from './permissions/permissions.service'
 import { ResourceDTO } from './resource.dto'
 import { ResourceService } from './resource.service'
-import { ResourceStatisticDTO } from './statistics'
 
 @Injectable()
 @Expander(ResourceDTO)
@@ -43,12 +42,6 @@ export class ResourceExpander {
       return undefined
     }
     return this.resolveResourceId(request, parent.parentId)
-  }
-
-  async statistic(context: ExpandContext<IRequest, ResourceDTO>): Promise<ResourceStatisic | undefined> {
-    const { parent } = context
-    const statistic = await this.resourceService.statistic(parent.id)
-    return Mapper.map(statistic, ResourceStatisticDTO)
   }
 
   private async resolveResourceId(request: IRequest, resourceId: string): Promise<ResourceDTO | undefined> {

@@ -7,20 +7,19 @@ import {
   ResourceCompletion,
   ResourceFilters,
   ResourceOrderings,
-  ResourceStatisic,
   ResourceStatus,
   ResourceTypes,
 } from '@platon/feature/resource/common'
 import { isUUID4 } from '@platon/shared/server'
 import { DataSource, EntityManager, In, Repository } from 'typeorm'
 import { Optional } from 'typescript-optional'
+import { ResourceDependencyEntity } from './dependency'
 import { ResourceMemberEntity } from './members/member.entity'
+import { ResourceMetaEntity } from './metadata/metadata.entity'
 import { CreateResourceDTO, UpdateResourceDTO } from './resource.dto'
 import { ResourceEntity } from './resource.entity'
-import { ResourceWatcherEntity } from './watchers'
-import { ResourceDependencyEntity } from './dependency'
-import { ResourceMetaEntity } from './metadata/metadata.entity'
 import { ResourceStatisticEntity } from './statistics'
+import { ResourceWatcherEntity } from './watchers'
 
 @Injectable()
 export class ResourceService {
@@ -96,12 +95,6 @@ export class ResourceService {
     traverse(tree)
 
     return tree
-  }
-
-  async statistic(id: string): Promise<ResourceStatisic> {
-    return (
-      this.dataSource.query('SELECT * FROM "ResourceStats" WHERE id = $1', [id]) as Promise<ResourceStatisic[]>
-    ).then((response) => response[0])
   }
 
   async getById(id: string): Promise<ResourceEntity> {
@@ -187,12 +180,9 @@ export class ResourceService {
   }
 
   async search(filters: ResourceFilters = {}): Promise<[ResourceEntity[], number]> {
-    const query = this.repository.createQueryBuilder('resource').setFindOptions({
-      relations: {
-        topics: true,
-        levels: true,
-      },
-    })
+    const query = this.repository.createQueryBuilder('resource')
+    query.leftJoinAndSelect('resource.topics', 'topic')
+    query.leftJoinAndSelect('resource.levels', 'level')
 
     if (filters.configurable || filters.navigation != null) {
       query.leftJoin('ResourceMeta', 'metadata', 'metadata.resource_id = resource.id')
