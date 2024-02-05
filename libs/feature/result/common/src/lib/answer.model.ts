@@ -50,7 +50,7 @@ export const AnswerStateColors: Record<AnswerStates, string> = {
   ERROR: '#FF8C00',
 }
 
-export const answerStateFromGrade = (grade?: number): AnswerStates => {
+export const answerStateFromGrade = (grade?: number | null): AnswerStates => {
   if (grade == null) return AnswerStates.NOT_STARTED
   if (grade === 100) return AnswerStates.SUCCEEDED
   if (grade === 0) return AnswerStates.FAILED

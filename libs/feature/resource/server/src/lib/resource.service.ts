@@ -404,7 +404,7 @@ export class ResourceService {
 
   async notificationWatchers(resourceId: string, entityManager?: EntityManager): Promise<string[]> {
     const watchers = (
-      await (entityManager ?? this.dataSource).query<{ user_id: string }[]>(
+      await (entityManager ?? this.dataSource).query(
         `
       SELECT DISTINCT COALESCE(member.user_id, watcher.user_id, res.owner_id) AS user_id
       FROM "Resources" res
@@ -415,7 +415,7 @@ export class ResourceService {
         [resourceId]
       )
     )
-      .map((row) => row.user_id as string)
+      .map(({ user_id }: { user_id: string }) => user_id as string)
       .filter((userId: string) => !!userId)
     return watchers
   }

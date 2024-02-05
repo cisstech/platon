@@ -1,3 +1,5 @@
+import { AnswerStates, answerStateFromGrade } from '@platon/feature/result/common'
+import differenceInSeconds from 'date-fns/differenceInSeconds'
 import { SessionView } from '../../sessions/session.view'
 
 /**
@@ -32,3 +34,54 @@ export interface DataAggregator<TInput, TOutput = unknown> {
  * @template TOutput The type of the aggregated output.
  */
 export interface SessionDataAggregator<TOutput = unknown> extends DataAggregator<SessionView, TOutput> {}
+
+/**
+ * The maximum duration of a gap between two answers.
+ * This value is used to cap the duration of gaps between answers to avoid outliers.
+ */
+export const MAX_GAP_DURATION = 20 * 60 // 20 minutes in seconds
+
+/**
+ * When a gap between two answers is greater than {@link MAX_GAP_DURATION}, it is replaced by this value.
+ */
+export const DEFAULT_GAP_DURATION = 2 * 60 // 2 minutes in seconds
+
+export const sessionDurationInSeconds = (input: SessionView): number => {
+  const { answers, startedAt, lastGradedAt, parentId } = input
+  if (!startedAt || !lastGradedAt) {
+    return 0
+  }
+
+  if (!parentId) {
+    return differenceInSeconds(lastGradedAt, startedAt) // activity session
+  }
+
+  if (!answers?.length) {
+    return 0
+  }
+
+  const gaps = answers.map((answer, index) => {
+    if (index === 0) {
+      return differenceInSeconds(new Date(answer.createdAt), startedAt)
+    } else {
+      return differenceInSeconds(new Date(answer.createdAt), new Date(answers[index - 1].createdAt))
+    }
+  })
+
+  return gaps.reduce((acc, gap) => {
+    return acc + (gap > MAX_GAP_DURATION ? DEFAULT_GAP_DURATION : gap)
+  }, 0)
+}
+
+/**
+ * Converts a session view into an answer state.
+ * @param session The session view to convert.
+ * @returns The corresponding answer state.
+ */
+export const answerStateFromSession = (session: SessionView) => {
+  return session.startedAt
+    ? session.attempts
+      ? answerStateFromGrade(session.correctionGrade ?? session.grade)
+      : AnswerStates.STARTED
+    : AnswerStates.NOT_STARTED
+}
