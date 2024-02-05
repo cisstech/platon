@@ -175,6 +175,30 @@ export interface ExerciseResults {
  */
 export interface ActivityResults {
   /**
+   * Percentage of sessions that have been graded with a grade of 100.
+   */
+  successRate: number
+
+  /**
+   * The average score across all sessions.
+   */
+  averageScore: number
+
+  /**
+   * The average duration of all sessions in seconds.
+   */
+  averageDuration: number
+
+  /**
+   * Percentage of sessions that have at least one attempt.
+   */
+  answerRate: number
+  /**
+   * Percentage of sessions that have been started but not graded at least once.
+   */
+  dropoutRate: number
+
+  /**
    * Results for all users in the activity.
    */
   users: UserResults[]
