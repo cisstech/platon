@@ -1,6 +1,6 @@
-import { HttpClient, HttpParams } from '@angular/common/http'
+import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { buildHttpParams } from '@platon/core/browser'
+import { buildExpandableHttpParams, buildHttpParams } from '@platon/core/browser'
 import { ItemResponse, ListResponse } from '@platon/core/common'
 import {
   CircleTree,
@@ -42,17 +42,9 @@ export class RemoteResourceProvider extends ResourceProvider {
   }
 
   find(input: FindResource): Observable<Resource> {
-    let params = new HttpParams()
+    let params = buildExpandableHttpParams(input)
     if (input.markAsViewed) {
       params = params.append('markAsViewed', 'true')
-    }
-
-    if (input.expands) {
-      params = params.append('expands', input.expands.join(','))
-    }
-
-    if (input.selects) {
-      params = params.append('selects', input.selects.join(','))
     }
 
     return this.http
@@ -63,15 +55,7 @@ export class RemoteResourceProvider extends ResourceProvider {
   }
 
   update(id: string, input: UpdateResource): Observable<Resource> {
-    let params = new HttpParams()
-
-    if (input.expands) {
-      params = params.append('expands', input.expands.join(','))
-    }
-
-    if (input.selects) {
-      params = params.append('selects', input.selects.join(','))
-    }
+    const params = buildExpandableHttpParams(input)
 
     return this.http
       .patch<ItemResponse<Resource>>(`/api/v1/resources/${id}`, input, {
@@ -81,15 +65,7 @@ export class RemoteResourceProvider extends ResourceProvider {
   }
 
   create(input: CreateResource): Observable<Resource> {
-    let params = new HttpParams()
-
-    if (input.expands) {
-      params = params.append('expands', input.expands.join(','))
-    }
-
-    if (input.selects) {
-      params = params.append('selects', input.selects.join(','))
-    }
+    const params = buildExpandableHttpParams(input)
 
     return this.http
       .post<ItemResponse<Resource>>('/api/v1/resources', input, {

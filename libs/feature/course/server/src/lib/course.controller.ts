@@ -1,3 +1,4 @@
+import { Expandable } from '@cisstech/nestjs-expand'
 import { Body, Controller, Get, Param, Patch, Post, Query, Req } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import {
@@ -22,6 +23,7 @@ export class CourseController {
   ) {}
 
   @Get()
+  @Expandable(CourseDTO, { rootField: 'resources' })
   async search(@Req() req: IRequest, @Query() filters: CourseFiltersDTO = {}): Promise<ListResponse<CourseDTO>> {
     filters = {
       ...filters,
@@ -34,6 +36,7 @@ export class CourseController {
   }
 
   @Get('/:id')
+  @Expandable(CourseDTO, { rootField: 'resource' })
   async find(@Req() req: IRequest, @Param('id') id: string): Promise<ItemResponse<CourseDTO>> {
     const optional = await this.courseService.findById(id)
     const resource = Mapper.map(
@@ -50,6 +53,7 @@ export class CourseController {
 
   @Roles(UserRoles.teacher, UserRoles.admin)
   @Post()
+  @Expandable(CourseDTO, { rootField: 'resource' })
   async create(@Req() req: IRequest, @Body() input: CreateCourseDTO): Promise<CreatedResponse<CourseDTO>> {
     const resource = Mapper.map(
       await this.courseService.create({
@@ -63,6 +67,7 @@ export class CourseController {
 
   @Roles(UserRoles.teacher, UserRoles.admin)
   @Patch('/:id')
+  @Expandable(CourseDTO, { rootField: 'resource' })
   async update(@Param('id') id: string, @Body() input: UpdateCourseDTO): Promise<ItemResponse<CourseDTO>> {
     const resource = Mapper.map(await this.courseService.update(id, input), CourseDTO)
     return new ItemResponse({ resource })

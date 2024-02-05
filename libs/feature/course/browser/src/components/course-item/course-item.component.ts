@@ -45,6 +45,6 @@ export class CourseItemComponent implements OnChanges {
       this.desc = ''
     }
 
-    this.progressColor = antTagColorFromPercentage(this.item.progression)
+    this.progressColor = antTagColorFromPercentage(this.item.statistic?.progression ?? 0)
   }
 }

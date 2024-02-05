@@ -76,7 +76,11 @@ export class CourseActivitySettingsComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.loading = true
 
-    const course = await firstValueFrom(this.courseService.find(this.activity.courseId))
+    const course = await firstValueFrom(
+      this.courseService.find({
+        id: this.activity.courseId,
+      })
+    )
 
     const [courseMembers, activityMembers, activityCorrectors] = await Promise.all([
       firstValueFrom(this.courseService.searchMembers(course)),

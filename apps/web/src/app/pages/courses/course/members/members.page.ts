@@ -54,7 +54,7 @@ export class CourseMembersPage implements OnInit, OnDestroy {
   protected get canEdit(): boolean {
     const { course } = this.context
     if (!course) return false
-    return course.permissions.update
+    return !!course.permissions?.update
   }
 
   protected get allowGroup(): boolean {

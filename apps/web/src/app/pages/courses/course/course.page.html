@@ -8,7 +8,7 @@
               <mat-icon>local_library</mat-icon>
               <span
                 nz-typography
-                [nzEditable]="course.permissions.update"
+                [nzEditable]="course.permissions?.update"
                 [nzContent]="course.name"
                 (nzContentChange)="updateName($event)"
               ></span>
@@ -20,7 +20,7 @@
     </header>
     <p
       nz-typography
-      [nzEditable]="course.permissions.update"
+      [nzEditable]="course.permissions?.update"
       [nzContent]="course.desc"
       (nzContentChange)="updateDesc($event)"
     ></p>
@@ -35,7 +35,7 @@
 
       <div class="spacer"></div>
       <button
-        *ngIf="course.permissions.update"
+        *ngIf="course.permissions?.update"
         nz-button
         [nz-popover]
         nzPopoverPlacement="left"

@@ -12,9 +12,9 @@ import { CorrectionEntity } from './correction/correction.entity'
 import { CorrectionService } from './correction/correction.service'
 import { DashboardController } from './dashboard/dashboard.controller'
 import { DashboardService } from './dashboard/dashboard.service'
+import { CourseExpander } from './expanders/course.expander'
 import { ResourceExpander } from './expanders/resource.expander'
 import { ActivityResultsVirtualColumnsResolver } from './resolvers/activity-results-virtual-columns.resolver'
-import { CourseResultsVirtualColumnsResolver } from './resolvers/course-results-virtual-columns.resolver'
 import { ResultController } from './result.controller'
 import { SessionEntity } from './sessions/session.entity'
 import { SessionService } from './sessions/session.service'
@@ -33,9 +33,9 @@ import { SessionView } from './sessions/session.view'
     DashboardService,
     CorrectionService,
     SessionCommentService,
-    CourseResultsVirtualColumnsResolver,
     ActivityResultsVirtualColumnsResolver,
 
+    CourseExpander,
     ResourceExpander,
   ],
   exports: [TypeOrmModule, AnswerService, SessionService, CorrectionService, SessionCommentService],

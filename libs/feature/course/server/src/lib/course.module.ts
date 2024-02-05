@@ -21,6 +21,7 @@ import { CourseMemberView } from './course-member/course-member.view'
 import { CourseNotificationService } from './course-notification/course-notification.service'
 import { CourseController } from './course.controller'
 import { CourseEntity } from './course.entity'
+import { CourseExpander } from './course.expander'
 import { CourseLTIInterceptor } from './course.interceptor'
 import { CourseService } from './course.service'
 import { CourseSubscriber } from './course.subscriber'
@@ -55,6 +56,7 @@ import { CourseSectionService } from './section/section.service'
   ],
   providers: [
     CourseService,
+    CourseExpander,
     CourseSubscriber,
     CourseLTIInterceptor,
 

@@ -110,7 +110,14 @@ export class CoursesPage implements OnInit, OnDestroy {
         }
 
         this.searching = true
-        this.items = (await firstValueFrom(this.courseService.search(this.filters))).resources
+        this.items = (
+          await firstValueFrom(
+            this.courseService.search({
+              ...this.filters,
+              expands: ['permissions', 'statistic'],
+            })
+          )
+        ).resources
         this.searching = false
 
         this.changeDetectorRef.markForCheck()
