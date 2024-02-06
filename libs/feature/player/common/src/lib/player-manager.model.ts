@@ -203,7 +203,7 @@ export abstract class PlayerManager {
       })
 
       if (activitySession.grade && activitySession.grade > 0 && childs.length) {
-        activitySession.grade /= childs.length
+        activitySession.grade = Number((activitySession.grade / childs.length).toFixed(2))
       }
 
       activitySession.attempts += increment
