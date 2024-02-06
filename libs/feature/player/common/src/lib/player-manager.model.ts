@@ -149,14 +149,17 @@ export abstract class PlayerManager {
       },
       variables.grader
     )
-    const grade = Number.parseInt(output.variables.grade) ?? -1
+
+    let grade = Number.parseInt(output.variables.grade) ?? -1
+    if (Number.isNaN(grade)) {
+      grade = -1
+    }
+
     const increment = grade > -1 ? 1 : 0
 
     variables = output.variables as ExerciseVariables
 
-    patchExerciseMeta(variables, (meta) => ({
-      attempts: meta.attempts + increment,
-    }))
+    patchExerciseMeta(variables, (meta) => ({ attempts: meta.attempts + increment }))
 
     exerciseSession.grade = Math.max(grade, exerciseSession.grade ?? -1)
     exerciseSession.attempts += increment
