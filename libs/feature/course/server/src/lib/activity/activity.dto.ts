@@ -9,7 +9,7 @@ import {
   UpdateActivity,
 } from '@platon/feature/course/common'
 import { Exclude, Transform, Type } from 'class-transformer'
-import { IsDate, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator'
+import { IsBoolean, IsDate, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator'
 import { ActivityPermissionsDTO } from '../permissions/permissions.dto'
 
 export class ActivityDTO extends BaseDTO implements Activity {
@@ -28,6 +28,11 @@ export class ActivityDTO extends BaseDTO implements Activity {
   @IsOptional()
   @IsDate()
   readonly closeAt?: Date
+
+  @IsOptional()
+  @ApiProperty()
+  @IsBoolean()
+  readonly isChallenge!: boolean
 
   @IsString()
   readonly title!: string

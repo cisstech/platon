@@ -10,6 +10,7 @@ export interface Activity {
 
   readonly openAt?: Date
   readonly closeAt?: Date
+  readonly isChallenge: boolean
 
   readonly title: string
   readonly state: ActivityOpenStates
@@ -30,6 +31,7 @@ export interface CreateActivity {
 
   readonly openAt?: Date
   readonly closeAt?: Date
+  readonly isChallenge?: boolean
 }
 
 export interface UpdateActivity {
