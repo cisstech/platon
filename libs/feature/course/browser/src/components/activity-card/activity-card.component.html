@@ -3,7 +3,16 @@
     <mat-card>
       <img src="/assets/images/illustrations/laptop1.svg" alt="Activité" />
       <mat-card-header>
-        <mat-card-title>{{ item.title }}</mat-card-title>
+        <mat-card-title>
+          {{ item.title }}
+          <span
+            *ngIf="item.isChallenge"
+            nz-tooltip="Cette activité est un challenge"
+            nz-icon
+            nzType="trophy"
+            nzTheme="twotone"
+          ></span>
+        </mat-card-title>
       </mat-card-header>
       <mat-card-content>
         <nz-row [nzGutter]="[24, 24]" nzAlign="middle" nzJustify="center">
@@ -14,7 +23,7 @@
             </mat-card-subtitle>
             <mat-card-subtitle>
               <span>
-                {{ item.openAt | date: 'medium' }}
+                {{ item.openAt | date : 'medium' }}
                 <ng-container *ngIf="!item.openAt">
                   <span nz-icon nzType="stop" nzTheme="outline"></span>
                 </ng-container>
@@ -23,7 +32,7 @@
             </mat-card-subtitle>
             <mat-card-subtitle>
               <span>
-                {{ item.closeAt | date: 'medium' }}
+                {{ item.closeAt | date : 'medium' }}
                 <ng-container *ngIf="!item.closeAt">
                   <span nz-icon nzType="stop" nzTheme="outline"></span>
                 </ng-container>

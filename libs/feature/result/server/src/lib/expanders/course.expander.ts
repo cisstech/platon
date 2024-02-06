@@ -39,7 +39,7 @@ export class CourseExpander {
         .leftJoin(ActivityMemberView, 'member', 'member.activity_id = activity.id AND member.id = :userId', {
           userId: user.id,
         })
-        .select(['activity.courseId'])
+        .select(['activity.courseId', 'activity.isChallenge'])
         .where('activity.course_id = :courseId', { courseId: parent.id })
         .andWhere(`(activity.creator_id = :userId OR member.id IS NOT NULL)`, { userId: user.id })
         .getMany(),
@@ -68,6 +68,7 @@ export class CourseExpander {
       teacherCount: members.filter((member) => isTeacherRole(member.role)).length,
       progression: Math.round(progressionSum ? progressionSum / activities.length : 0),
       activityCount: activities.length,
+      challengeCount: activities.filter((activity) => activity.isChallenge).length,
       timeSpent,
     }
   }
