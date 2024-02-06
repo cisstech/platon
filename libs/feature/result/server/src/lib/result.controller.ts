@@ -3,9 +3,14 @@ import { ApiTags } from '@nestjs/swagger'
 import { ForbiddenResponse, UserRoles } from '@platon/core/common'
 import { IRequest, Roles } from '@platon/core/server'
 import {
+  ACTIVITY_ANSWER_RATE,
+  ACTIVITY_DROP_OUT_RATE,
   ACTIVITY_EXERCISE_RESULTS,
   ACTIVITY_USER_RESULTS,
   ActivityResults,
+  SESSION_AVERAGE_DURATION,
+  SESSION_AVERAGE_SCORE,
+  SESSION_SUCCESS_RATE,
   UserResults,
 } from '@platon/feature/result/common'
 import { DashboardService } from './dashboard/dashboard.service'
@@ -20,6 +25,11 @@ export class ResultController {
   async activityResults(@Param('activityId') activityId: string): Promise<ActivityResults> {
     const output = await this.service.ofActivity(activityId)
     return {
+      answerRate: output[ACTIVITY_ANSWER_RATE] as number,
+      dropoutRate: output[ACTIVITY_DROP_OUT_RATE] as number,
+      averageScore: output[SESSION_AVERAGE_SCORE] as number,
+      averageDuration: output[SESSION_AVERAGE_DURATION] as number,
+      successRate: output[SESSION_SUCCESS_RATE] as number,
       users: output[ACTIVITY_USER_RESULTS] as ActivityResults['users'],
       exercises: output[ACTIVITY_EXERCISE_RESULTS] as ActivityResults['exercises'],
     }

@@ -4,8 +4,8 @@
       <ng-container *ngIf="icon">
         <ng-container *ngTemplateOutlet="icon" />
       </ng-container>
-      <mat-icon *ngIf="matIcon">{{ matIcon }}</mat-icon>
-      <span *ngIf="nzIcon" nz-icon [nzType]="nzIcon" nzTheme="outline"></span>
+      <mat-icon class="ribbon-icon" *ngIf="matIcon">{{ matIcon }}</mat-icon>
+      <span class="ribbon-icon" *ngIf="nzIcon" nz-icon [nzType]="nzIcon" nzTheme="outline"></span>
     </span>
   </div>
   <div class="value" [style.color]="valueColor">{{ value }} {{ valueSuffix }}</div>

@@ -15,14 +15,23 @@ import {
 import { In, IsNull, Not, Raw, Repository } from 'typeorm'
 import { SessionView } from '../sessions/session.view'
 import {
+  ActivityAnswerRate,
+  ActivityDropoutRate,
   ActivityExerciseResults,
+  ActivityTotalAttempts,
+  ActivityTotalCompletions,
   ActivityUserResults,
+} from './aggregators/activity.aggregator'
+import {
+  ExerciceAverageTimeToAttempt,
   ExerciseAnswerRate,
   ExerciseAverageAttempts,
   ExerciseAverageAttemptsToSuccess,
   ExerciseDropOutRate,
   ExerciseSuccessRateOnFirstAttempt,
   ExerciseTotalAttempts,
+} from './aggregators/exercise.aggregator'
+import {
   SessionAverageDuration,
   SessionAverageScore,
   SessionAverageScoreByMonth,
@@ -30,8 +39,8 @@ import {
   SessionSuccessRate,
   SessionTotalDuration,
   SessionTotalDurationByMonth,
-  UserExerciseCount,
 } from './aggregators/session.aggregator'
+import { UserExerciseCount } from './aggregators/user.aggregator'
 
 @Injectable()
 export class DashboardService {
@@ -232,8 +241,15 @@ export class DashboardService {
     const aggregators = [
       new SessionSuccessRate(),
       new SessionAverageScore(),
+      new SessionTotalDuration(),
       new SessionAverageDuration(),
+
       new SessionDistributionByAnswerState(),
+
+      new ActivityAnswerRate(),
+      new ActivityDropoutRate(),
+      new ActivityTotalAttempts(),
+      new ActivityTotalCompletions(),
 
       new ActivityUserResults({
         activity,
@@ -267,6 +283,7 @@ export class DashboardService {
       new SessionSuccessRate(),
       new SessionAverageScore(),
       new SessionAverageDuration(),
+      new SessionTotalDuration(),
       new SessionDistributionByAnswerState(),
       new SessionAverageScoreByMonth(),
       new SessionTotalDurationByMonth(),
@@ -275,6 +292,7 @@ export class DashboardService {
       new ExerciseDropOutRate(),
       new ExerciseTotalAttempts(),
       new ExerciseAverageAttempts(),
+      new ExerciceAverageTimeToAttempt(),
       new ExerciseSuccessRateOnFirstAttempt(),
       new ExerciseAverageAttemptsToSuccess(),
     ]
@@ -311,14 +329,20 @@ export class DashboardService {
     const aggregators = [
       new SessionSuccessRate(),
       new SessionAverageScore(),
+      new SessionTotalDuration(),
       new SessionAverageDuration(),
-      new SessionDistributionByAnswerState(),
+
       new SessionAverageScoreByMonth(),
       new SessionTotalDurationByMonth(),
 
-      new ActivityExerciseResults({
-        exerciseSessions,
-      }),
+      new SessionDistributionByAnswerState(),
+
+      new ActivityAnswerRate(),
+      new ActivityDropoutRate(),
+      new ActivityTotalAttempts(),
+      new ActivityTotalCompletions(),
+
+      new ActivityExerciseResults({ exerciseSessions }),
     ]
 
     activitySessions.forEach((session) => aggregators.forEach((aggregator) => aggregator.next(session)))

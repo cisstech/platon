@@ -7,20 +7,19 @@ import {
   ResourceCompletion,
   ResourceFilters,
   ResourceOrderings,
-  ResourceStatisic,
   ResourceStatus,
   ResourceTypes,
 } from '@platon/feature/resource/common'
 import { isUUID4 } from '@platon/shared/server'
 import { DataSource, EntityManager, In, Repository } from 'typeorm'
 import { Optional } from 'typescript-optional'
+import { ResourceDependencyEntity } from './dependency'
 import { ResourceMemberEntity } from './members/member.entity'
+import { ResourceMetaEntity } from './metadata/metadata.entity'
 import { CreateResourceDTO, UpdateResourceDTO } from './resource.dto'
 import { ResourceEntity } from './resource.entity'
-import { ResourceWatcherEntity } from './watchers'
-import { ResourceDependencyEntity } from './dependency'
-import { ResourceMetaEntity } from './metadata/metadata.entity'
 import { ResourceStatisticEntity } from './statistics'
+import { ResourceWatcherEntity } from './watchers'
 
 @Injectable()
 export class ResourceService {
@@ -96,12 +95,6 @@ export class ResourceService {
     traverse(tree)
 
     return tree
-  }
-
-  async statistic(id: string): Promise<ResourceStatisic> {
-    return (
-      this.dataSource.query('SELECT * FROM "ResourceStats" WHERE id = $1', [id]) as Promise<ResourceStatisic[]>
-    ).then((response) => response[0])
   }
 
   async getById(id: string): Promise<ResourceEntity> {
@@ -191,7 +184,7 @@ export class ResourceService {
     query.leftJoinAndSelect('resource.topics', 'topic')
     query.leftJoinAndSelect('resource.levels', 'level')
 
-    if (filters.configurable !== null || filters.navigation != null) {
+    if (filters.configurable || filters.navigation != null) {
       query.leftJoin('ResourceMeta', 'metadata', 'metadata.resource_id = resource.id')
     }
 
@@ -239,8 +232,6 @@ export class ResourceService {
         { ids: filters.usedBy }
       )
     }
-
-    // query.where('personal = false')
 
     if (filters.parents?.length) {
       query.andWhere('parent_id IN(:...parents)', { parents: filters.parents })
@@ -303,8 +294,8 @@ export class ResourceService {
     if (filters.order) {
       const fields: Record<ResourceOrderings, string> = {
         NAME: 'resource.name',
-        CREATED_AT: 'resource.created_at',
-        UPDATED_AT: 'resource.updated_at',
+        CREATED_AT: 'resource.createdAt',
+        UPDATED_AT: 'resource.updatedAt',
         RELEVANCE: 'stats.score',
       }
 
@@ -403,7 +394,7 @@ export class ResourceService {
 
   async notificationWatchers(resourceId: string, entityManager?: EntityManager): Promise<string[]> {
     const watchers = (
-      await (entityManager ?? this.dataSource).query<{ user_id: string }[]>(
+      await (entityManager ?? this.dataSource).query(
         `
       SELECT DISTINCT COALESCE(member.user_id, watcher.user_id, res.owner_id) AS user_id
       FROM "Resources" res
@@ -414,12 +405,8 @@ export class ResourceService {
         [resourceId]
       )
     )
-      .map((row: Row) => row.user_id as string)
+      .map(({ user_id }: { user_id: string }) => user_id as string)
       .filter((userId: string) => !!userId)
     return watchers
   }
-}
-
-interface Row {
-  user_id: string
 }

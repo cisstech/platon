@@ -92,7 +92,12 @@ export class ActivityPresenter implements OnDestroy {
   private async refresh(courseId: string, activityId: string): Promise<void> {
     const [user, course, activity, results] = await Promise.all([
       this.authService.ready(),
-      firstValueFrom(this.courseService.find(courseId)),
+      firstValueFrom(
+        this.courseService.find({
+          id: courseId,
+          expands: ['permissions'],
+        })
+      ),
       firstValueFrom(this.courseService.findActivity(courseId, activityId)),
       firstValueFrom(this.resultService.activityResults(activityId)),
     ])

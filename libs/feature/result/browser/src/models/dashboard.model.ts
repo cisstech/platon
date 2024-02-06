@@ -20,6 +20,7 @@ export type ResourceDashboardModel = {
   session: {
     successRate: number
     averageScore: number
+    totalDuration: number
     averageDuration: number
     scoreDistribution: Record<string, number>
     answerDistribution: Record<AnswerStates, number>
@@ -28,13 +29,20 @@ export type ResourceDashboardModel = {
   exercise?: {
     answerRate: number
     dropoutRate: number
+    totalAttempts: number
+    averageAttempts: number
+    averageTimeToAttempt: number
     successRateOnFirstAttempt: number
     averageAttemptsToSuccess: number
   }
 
   activity?: {
+    usedInCourses: string[]
+    answerRate: number
+    dropoutRate: number
+    totalAttempts: number
     exerciseResults: ExerciseResults[]
-    usedInCourses?: string[]
-    usedInCoursesCount?: number
+    totalCompletions: number
+    usedInCoursesCount: number
   }
 }

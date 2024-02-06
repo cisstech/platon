@@ -6,7 +6,7 @@
           <ng-template let-context> {{ context }}</ng-template>
         </ui-search-bar>
         <button
-          *ngIf="course.permissions.update"
+          *ngIf="course.permissions?.update"
           nz-button
           nzType="primary"
           nzShape="round"
@@ -34,7 +34,7 @@
                 <ng-template #header>
                   <span
                     nz-typography
-                    [nzEditable]="course.permissions.update"
+                    [nzEditable]="course.permissions?.update"
                     [nzContent]="item.section.name"
                     (nzContentChange)="renameSection(item.section, $event)"
                     (click)="$event.stopPropagation()"
@@ -43,7 +43,7 @@
                 </ng-template>
                 <ng-template #extra>
                   <app-course-section-actions
-                    *ngIf="course.permissions.update"
+                    *ngIf="course.permissions?.update"
                     [section]="item.section"
                     [sectionCount]="sections.length"
                     (moveUp)="moveUpSection(item.section)"
@@ -73,7 +73,7 @@
               ribbonColor="#f39c12"
               description="Avancement sur les activités"
               valueSuffix="%"
-              [value]="course.progression"
+              [value]="course.statistic?.progression ?? 0"
             />
           </nz-col>
           <nz-col nzSpan="24">
@@ -81,7 +81,7 @@
               nzIcon="clock-circle"
               ribbonColor="#349d55"
               description="Temps passé sur les activités"
-              [value]="course.timeSpent | duration"
+              [value]="course.statistic?.timeSpent ?? 0 | duration"
             />
           </nz-col>
           <nz-col nzSpan="24">
@@ -89,11 +89,16 @@
               nzIcon="team"
               ribbonColor="#8e44ad"
               description="Enseignants"
-              [value]="course.teacherCount"
+              [value]="course.statistic?.teacherCount ?? 0"
             />
           </nz-col>
           <nz-col nzSpan="24">
-            <ui-statistic-card nzIcon="team" ribbonColor="#7f8c8d" description="Élèves" [value]="course.studentCount" />
+            <ui-statistic-card
+              nzIcon="team"
+              ribbonColor="#7f8c8d"
+              description="Élèves"
+              [value]="course.statistic?.studentCount ?? 0"
+            />
           </nz-col>
         </nz-row>
       </aside>

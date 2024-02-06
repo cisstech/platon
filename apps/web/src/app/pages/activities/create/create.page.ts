@@ -102,7 +102,13 @@ export class ActivityCreatePage implements OnInit {
     const sectionId = queryParamMap.get('section')
 
     const course = courseId
-      ? await firstValueFrom(this.courseService.find(courseId).pipe(catchError(() => of(undefined))))
+      ? await firstValueFrom(
+          this.courseService
+            .find({
+              id: courseId,
+            })
+            .pipe(catchError(() => of(undefined)))
+        )
       : undefined
 
     const section =

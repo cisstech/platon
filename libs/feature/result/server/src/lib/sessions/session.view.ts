@@ -86,6 +86,7 @@ import { JoinColumn, ManyToOne, ViewColumn, ViewEntity } from 'typeorm'
             'grade', answer.grade,
             'createdAt', answer.created_at
           )
+          ORDER BY answer.created_at ASC
         ) AS matches
       FROM "Answers" answer
       GROUP BY answer.session_id
@@ -339,6 +340,6 @@ export class SessionView {
   @ViewColumn({ name: 'answers' })
   answers?: {
     grade: number
-    createdAt: Date
+    createdAt: string
   }[]
 }

@@ -23,7 +23,7 @@ import {
 } from '@platon/shared/ui'
 
 import { AuthService, TagService } from '@platon/core/browser'
-import { Level, OrderingDirections, Topic, User } from '@platon/core/common'
+import { Level, OrderingDirections, Topic, uniquifyBy, User } from '@platon/core/common'
 import {
   CircleFilterIndicator,
   CircleTreeComponent,
@@ -145,7 +145,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
     const [tree, circle, views, topics, levels] = await Promise.all([
       firstValueFrom(this.resourceService.tree()),
       firstValueFrom(this.resourceService.circle(this.user.username)),
-      firstValueFrom(this.resourceService.search({ views: true, expands: ['metadata'] })),
+      firstValueFrom(this.resourceService.search({ views: true, expands: ['metadata', 'statistic'] })),
       firstValueFrom(this.tagService.listTopics()),
       firstValueFrom(this.tagService.listLevels()),
     ])
@@ -196,7 +196,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
         const response = await firstValueFrom(
           this.resourceService.search({
             ...this.filters,
-            expands: ['metadata'],
+            expands: ['metadata', 'statistic'],
             limit: PAGINATION_LIMIT,
           })
         )
@@ -252,8 +252,9 @@ export default class ResourcesPage implements OnInit, OnDestroy {
       })
     )
 
-    this.items = [...this.items, ...response.resources]
-    this.hasMore = response.resources.length > 0
+    const length = this.items.length
+    this.items = uniquifyBy([...this.items, ...response.resources], 'id')
+    this.hasMore = this.items.length > length
     this.paginating = false
 
     this.changeDetectorRef.markForCheck()

@@ -1,4 +1,5 @@
 import { OrderingDirections, User, UserGroup, UserOrderings, UserRoles } from '@platon/core/common'
+import { UserDTO } from '@platon/core/server'
 
 export interface CourseMember {
   readonly id: string
@@ -21,4 +22,18 @@ export interface CourseMemberFilters {
   readonly limit?: number
   readonly order?: UserOrderings | keyof typeof UserOrderings
   readonly direction?: OrderingDirections | keyof typeof OrderingDirections
+}
+
+export interface ActivityMember {
+  readonly id: string
+  readonly createdAt: Date
+  readonly updatedAt: Date
+  readonly activityId: string
+  readonly user?: UserDTO
+  readonly member: CourseMember
+}
+
+export interface CreateActivityMember {
+  readonly userId?: string
+  readonly memberId?: string
 }

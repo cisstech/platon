@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, Component, Input, OnChanges, TemplateRef } from '@angular/core'
+import { ChangeDetectionStrategy, Component, Input, OnChanges, TemplateRef, booleanAttribute } from '@angular/core'
 import { MatIconModule } from '@angular/material/icon'
 import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
@@ -52,10 +52,10 @@ export class UiStatisticCardComponent implements OnChanges {
   @Input()
   ribbonColor = '#3498db'
 
-  @Input()
+  @Input({ transform: booleanAttribute })
   shouldBePositive?: boolean
 
-  @Input()
+  @Input({ transform: booleanAttribute })
   shouldBeZero?: boolean
 
   ngOnChanges() {

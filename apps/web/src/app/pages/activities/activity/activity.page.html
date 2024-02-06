@@ -1,4 +1,4 @@
-<ng-container *ngIf="context.course && context.activity">
+<ng-container *ngIf="context.course && context.results && context.activity">
   <nz-page-header [nzSubtitle]="header" nzBackIcon>
     <ng-template #header>
       <nz-breadcrumb nzSeparator="">
@@ -16,13 +16,71 @@
   </nz-page-header>
   <nz-row [nzGutter]="[24, 24]" nzAlign="top">
     <nz-col nzXs="24" nzSm="24" nzMd="16" nzLg="16" nzXl="16">
+      <h4>Vue d'ensemble</h4>
+      <p>Ces données sont calculées uniquement sur les sessions des participants qui ont ouvert l'activité.</p>
+      <nz-row [nzGutter]="[24, 24]" nzAlign="top">
+        <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
+          <ui-statistic-card
+            matIcon="star"
+            ribbonColor="#7f8c8d"
+            description="Note moyenne"
+            [value]="context.results.averageScore"
+            valueSuffix=" / 100"
+            tooltip="Moyenne de la note des sessions complétées."
+            shouldBePositive
+          />
+        </nz-col>
+        <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
+          <ui-statistic-card
+            matIcon="access_time"
+            ribbonColor="#f39c12"
+            description="Durée moyenne"
+            tooltip="La durée d'une session d'activité est l'intervalle de temps entre le début et la fin de la session incluant les pauses prolongées."
+            [value]="context.results.averageDuration | duration"
+          />
+        </nz-col>
+
+        <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
+          <ui-statistic-card
+            matIcon="check_circle"
+            ribbonColor="#8e44ad"
+            valueSuffix="%"
+            description="Taux de réussite"
+            tooltip="Pourcentage des sessions complétées avec une note de 100."
+            [value]="(context.results.successRate | number : '1.0-0')!"
+            shouldBePositive
+          />
+        </nz-col>
+        <nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12" nzXl="12">
+          <ui-statistic-card
+            matIcon="done"
+            ribbonColor="#f1c40f"
+            valueSuffix="%"
+            description="Taux de réponses"
+            tooltip="Pourcentage des sessions complétées avec au moins un exercice répondu."
+            [value]="context.results.answerRate"
+            shouldBePositive
+          />
+        </nz-col>
+        <nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12" nzXl="12">
+          <ui-statistic-card
+            matIcon="clear"
+            ribbonColor="#16a085"
+            valueSuffix="%"
+            description="Taux d'abandon"
+            tooltip="Pourcentage des sessions complétées avec au moins un exercice non répondu"
+            [value]="(context.results.dropoutRate | number : '1.0-0')!"
+            shouldBeZero
+          />
+        </nz-col>
+      </nz-row>
       <ng-container *ngIf="context.results">
         <section>
           <h4>Résultats par exercices</h4>
           <result-by-exercises [results]="context.results.exercises" />
         </section>
         <section>
-          <h4>Résultats par participants</h4>
+          <h4>Résultats par apprenants</h4>
           <result-by-members [results]="context.results.users" />
         </section>
       </ng-container>

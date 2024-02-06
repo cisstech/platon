@@ -1,18 +1,14 @@
 import { CommonModule } from '@angular/common'
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
 
-import { MatCardModule } from '@angular/material/card'
 import { MatIconModule } from '@angular/material/icon'
 
-import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzGridModule } from 'ng-zorro-antd/grid'
-import { NzIconModule } from 'ng-zorro-antd/icon'
-import { NzStatisticModule } from 'ng-zorro-antd/statistic'
 import { NzTableModule } from 'ng-zorro-antd/table'
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 
 import { AnswerStates, ExerciseResults } from '@platon/feature/result/common'
-import { DurationPipe } from '@platon/shared/ui'
+import { DurationPipe, UiStatisticCardComponent } from '@platon/shared/ui'
 import { AnswerStatePipesModule } from '../../pipes'
 
 @Component({
@@ -24,18 +20,15 @@ import { AnswerStatePipesModule } from '../../pipes'
   imports: [
     CommonModule,
 
-    MatCardModule,
     MatIconModule,
 
     NzGridModule,
-    NzIconModule,
     NzTableModule,
-    NzButtonModule,
     NzToolTipModule,
-    NzStatisticModule,
 
     DurationPipe,
     AnswerStatePipesModule,
+    UiStatisticCardComponent,
   ],
 })
 export class ResultByExercisesComponent {

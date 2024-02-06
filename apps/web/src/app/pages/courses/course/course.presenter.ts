@@ -117,7 +117,12 @@ export class CoursePresenter implements OnDestroy {
   async update(input: UpdateCourse): Promise<boolean> {
     const { course } = this.context.value as Required<Context>
     try {
-      const changes = await firstValueFrom(this.courseService.update(course.id, input))
+      const changes = await firstValueFrom(
+        this.courseService.update(course.id, {
+          ...input,
+          expands: ['permissions', 'statistic'],
+        })
+      )
       this.context.next({
         ...this.context.value,
         course: changes,
@@ -168,7 +173,15 @@ export class CoursePresenter implements OnDestroy {
   }
 
   private async refresh(id: string): Promise<void> {
-    const [user, course] = await Promise.all([this.authService.ready(), firstValueFrom(this.courseService.find(id))])
+    const [user, course] = await Promise.all([
+      this.authService.ready(),
+      firstValueFrom(
+        this.courseService.find({
+          id,
+          expands: ['permissions', 'statistic'],
+        })
+      ),
+    ])
 
     const demo = await firstValueFrom(this.courseService.getDemo(course.id))
 

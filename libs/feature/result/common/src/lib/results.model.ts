@@ -1,6 +1,31 @@
 import { AnswerStates } from './answer.model'
 
 /**
+ * Type that holds values for calculating averages.
+ */
+export type ValueAverage = {
+  /**
+   * The sum of all values.
+   */
+  sum: number
+
+  /**
+   * The average of all values.
+   */
+  avg: number
+
+  /**
+   * The total number of values.
+   */
+  count: number
+
+  /**
+   * If sets to true, the value will be treated as a rate (percentage) and multiplied by 100.
+   */
+  isRate?: boolean
+}
+
+/**
  * Results for a user on a specific exercise.
  */
 export interface UserExerciseResults {
@@ -95,42 +120,84 @@ export interface ExerciseResults {
   title: string
 
   /**
+   * Statistics about the exercise states across all users.
+   */
+  states: Record<AnswerStates, number>
+
+  /**
    * Statistics about the exercise grading across all users.
    */
-  grades: {
-    sum: number
-    avg: number
-    count: number
-  }
+  grades: ValueAverage
 
   /**
    * Statistics about the exercise attempts across all users.
    */
-  attempts: {
-    sum: number
-    avg: number
-    count: number
-  }
+  attempts: ValueAverage
 
   /**
    * Statistics about the exercise durations across all users.
    */
-  durations: {
-    sum: number
-    avg: number
-    count: number
-  }
+  durations: ValueAverage
 
   /**
-   * Statistics about the exercise states across all users.
+   * Percentage of sessions that have at least one attempt.
    */
-  states: Record<AnswerStates, number>
+  answerRate: ValueAverage
+
+  /**
+   * Percentage of sessions that have been graded with a grade of 100.
+   */
+  successRate: ValueAverage
+
+  /**
+   * Percentage of sessions that have been started but not graded at least once.
+   */
+  dropoutRate: ValueAverage
+
+  /**
+   * Average time it takes to attempt an exercise for the first time in seconds.
+   */
+  averageTimeToAttempt: ValueAverage
+
+  /**
+   * Average number of attempts to success (obtain a grade of 100) for exercises in a session.
+   */
+  averageAttemptsToSuccess: ValueAverage
+
+  /**
+   * Percentage of sessions that have been graded with a grade of 100 on the first attempt.
+   */
+  successRateOnFirstAttempt: ValueAverage
 }
 
 /**
  * Results for all exercises and all users in an activity.
  */
 export interface ActivityResults {
+  /**
+   * Percentage of sessions that have been graded with a grade of 100.
+   */
+  successRate: number
+
+  /**
+   * The average score across all sessions.
+   */
+  averageScore: number
+
+  /**
+   * The average duration of all sessions in seconds.
+   */
+  averageDuration: number
+
+  /**
+   * Percentage of sessions that have at least one attempt.
+   */
+  answerRate: number
+  /**
+   * Percentage of sessions that have been started but not graded at least once.
+   */
+  dropoutRate: number
+
   /**
    * Results for all users in the activity.
    */
@@ -142,24 +209,47 @@ export interface ActivityResults {
   exercises: ExerciseResults[]
 }
 
+/**
+ * Returns an empty ValueAverage object.
+ * @param isRate - If sets to true, the value will be treated as a rate (percentage) and multiplied by 100.
+ * @returns {ValueAverage} The empty ValueAverage object.
+ */
+export const emptyValueAverage = (isRate?: boolean): ValueAverage => ({
+  sum: 0,
+  avg: 0,
+  count: 0,
+  isRate: !!isRate,
+})
+
+/**
+ * Calculates the average value based on the given value and precision.
+ * @remarks
+ * - If the count is 0, the average will be 0.
+ * - the value parameter will be computed with the average and the avg property will be updated.
+ * @param value - The value to calculate the average from.
+ * @param precision - The number of decimal places to round the average to (default: 0).
+ * @returns The calculated average value.
+ */
+export const calculateAverage = (value: ValueAverage, precision = 0): number => {
+  if (value.count === 0) {
+    return 0
+  }
+  const average = Number(((value.sum / value.count) * (value.isRate ? 100 : 1)).toFixed(precision))
+  return (value.avg = average)
+}
+
 export const emptyExerciseResults = (defaults?: { id: string; title: string }): ExerciseResults => ({
   id: defaults?.id ?? '',
   title: defaults?.title ?? '',
-  grades: {
-    sum: 0,
-    avg: 0,
-    count: 0,
-  },
-  attempts: {
-    sum: 0,
-    avg: 0,
-    count: 0,
-  },
-  durations: {
-    sum: 0,
-    avg: 0,
-    count: 0,
-  },
+  grades: emptyValueAverage(),
+  attempts: emptyValueAverage(),
+  durations: emptyValueAverage(),
+  answerRate: emptyValueAverage(true),
+  successRate: emptyValueAverage(true),
+  dropoutRate: emptyValueAverage(true),
+  averageTimeToAttempt: emptyValueAverage(),
+  averageAttemptsToSuccess: emptyValueAverage(),
+  successRateOnFirstAttempt: emptyValueAverage(true),
   states: {
     ANSWERED: 0,
     SUCCEEDED: 0,

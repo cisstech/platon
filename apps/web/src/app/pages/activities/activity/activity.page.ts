@@ -4,13 +4,10 @@ import { FormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
 import { Subscription } from 'rxjs'
 
-import { MatCardModule } from '@angular/material/card'
 import { MatIconModule } from '@angular/material/icon'
 
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb'
 import { NzGridModule } from 'ng-zorro-antd/grid'
-import { NzProgressModule } from 'ng-zorro-antd/progress'
-import { NzStatisticModule } from 'ng-zorro-antd/statistic'
 import { NzTypographyModule } from 'ng-zorro-antd/typography'
 
 import { DialogModule } from '@platon/core/browser'
@@ -21,8 +18,9 @@ import {
   ResultLegendComponent,
 } from '@platon/feature/result/browser'
 
-import { ActivityPresenter } from './activity.presenter'
+import { DurationPipe, UiStatisticCardComponent } from '@platon/shared/ui'
 import { NzPageHeaderModule } from 'ng-zorro-antd/page-header'
+import { ActivityPresenter } from './activity.presenter'
 
 @Component({
   standalone: true,
@@ -37,21 +35,20 @@ import { NzPageHeaderModule } from 'ng-zorro-antd/page-header'
     RouterModule,
 
     MatIconModule,
-    MatCardModule,
 
     NzGridModule,
-    NzProgressModule,
-    NzStatisticModule,
     NzBreadCrumbModule,
     NzTypographyModule,
     NzPageHeaderModule,
+
+    DialogModule,
+    DurationPipe,
 
     CourseActivityCardComponent,
     ResultByMembersComponent,
     ResultByExercisesComponent,
     ResultLegendComponent,
-
-    DialogModule,
+    UiStatisticCardComponent,
   ],
 })
 export class CourseActivityPage implements OnInit, OnDestroy {

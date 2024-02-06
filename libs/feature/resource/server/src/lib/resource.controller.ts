@@ -1,3 +1,4 @@
+import { Expandable, Selectable } from '@cisstech/nestjs-expand'
 import { Body, Controller, Get, Logger, Param, Patch, Post, Query, Req } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { CreatedResponse, ForbiddenResponse, ItemResponse, ListResponse, NotFoundResponse } from '@platon/core/common'
@@ -6,9 +7,7 @@ import { ResourceCompletionDTO } from './completion'
 import { ResourcePermissionService } from './permissions/permissions.service'
 import { CircleTreeDTO, CreateResourceDTO, ResourceDTO, ResourceFiltersDTO, UpdateResourceDTO } from './resource.dto'
 import { ResourceService } from './resource.service'
-import { ResourceStatisticDTO } from './statistics'
 import { ResourceViewService } from './views/view.service'
-import { Expandable, Selectable } from '@cisstech/nestjs-expand'
 
 @Controller('resources')
 @ApiTags('Resources')
@@ -114,13 +113,6 @@ export class ResourceController {
 
     Object.assign(resource, { permissions })
     return new ItemResponse({ resource })
-  }
-
-  @Get('/:id/statistic')
-  async statistic(@Param('id') id: string): Promise<ItemResponse<ResourceStatisticDTO>> {
-    return new ItemResponse({
-      resource: Mapper.map(await this.resourceService.statistic(id), ResourceStatisticDTO),
-    })
   }
 
   @Post()

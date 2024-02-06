@@ -4,6 +4,7 @@ import { BaseDTO, toArray, toNumber } from '@platon/core/server'
 import { Course, CourseFilters, CourseOrderings, CreateCourse, UpdateCourse } from '@platon/feature/course/common'
 import { Transform, Type } from 'class-transformer'
 import { IsArray, IsEnum, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator'
+import { CourseStatisticDTO } from './course-statistic/course-statistic.dto'
 import { CoursePermissionsDTO } from './permissions/permissions.dto'
 
 export class CourseDTO extends BaseDTO implements Course {
@@ -20,24 +21,15 @@ export class CourseDTO extends BaseDTO implements Course {
   @ApiProperty()
   readonly ownerId!: string
 
-  @IsNumber()
-  @ApiProperty()
-  readonly timeSpent = 0
+  @IsOptional()
+  @ApiProperty({ type: CourseStatisticDTO })
+  @Type(() => CourseStatisticDTO)
+  readonly statistic?: CourseStatisticDTO
 
-  @IsNumber()
-  @ApiProperty()
-  readonly progression = 0
-
-  @IsNumber()
-  @ApiProperty()
-  readonly studentCount = 0
-
-  @IsNumber()
-  @ApiProperty()
-  readonly teacherCount = 0
-
+  @IsOptional()
+  @ApiProperty({ type: CoursePermissionsDTO })
   @Type(() => CoursePermissionsDTO)
-  readonly permissions!: CoursePermissionsDTO
+  readonly permissions?: CoursePermissionsDTO
 }
 
 export class CreateCourseDTO implements CreateCourse {

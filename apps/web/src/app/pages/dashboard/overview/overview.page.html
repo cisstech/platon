@@ -31,31 +31,31 @@
           valueSuffix="%"
           description="Taux de réussite"
           tooltip="Pourcentage des exercices complétés avec une note de 100."
-          [value]="context.dashboard.user.successRate"
-          [shouldBePositive]="true"
+          [value]="(context.dashboard.user.successRate | number : '1.0-0')!"
+          shouldBePositive
         />
       </nz-col>
       <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
         <ui-statistic-card
-          matIcon="thumb_up"
+          matIcon="done"
           ribbonColor="#f1c40f"
           valueSuffix="%"
           description="Taux de réponses"
-          tooltip="Pourcentage des exercices avec au moins une réponse."
-          [value]="context.dashboard.user.answerRate"
-          [shouldBePositive]="true"
+          tooltip="Pourcentage des exercices avec au moins une réponse enregistrée (note > -1)."
+          [value]="(context.dashboard.user.answerRate | number : '1.0-0')!"
+          shouldBePositive
         />
       </nz-col>
 
       <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
         <ui-statistic-card
-          matIcon="thumb_down"
+          matIcon="clear"
           ribbonColor="#16a085"
           valueSuffix="%"
           description="Taux d'abandon"
-          tooltip="Pourcentage des exercices sans aucune réponse."
-          [value]="context.dashboard.user.dropoutRate"
-          [shouldBeZero]="true"
+          tooltip="Pourcentage des exercices sans réponse."
+          [value]="(context.dashboard.user.dropoutRate | number : '1.0-0')!"
+          shouldBeZero
         />
       </nz-col>
       <!--  -->
@@ -91,16 +91,17 @@
           ribbonColor="#7f8c8d"
           description="Note moyenne"
           [value]="context.dashboard.user.averageScore"
-          tooltip="Moyenne du score sur l'ensemble des exercices que vous avez complétés."
-          [shouldBePositive]="true"
+          valueSuffix=" / 100"
+          tooltip="Moyenne de la note de vos réponses enregistrées (note > -1)."
+          shouldBePositive
         />
       </nz-col>
       <nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12" nzXl="12">
         <ui-statistic-card
           matIcon="access_time"
           ribbonColor="#f39c12"
-          description="Temps d'apprentissage"
-          tooltip="Temps total passé sur l'ensemble des exercices."
+          description="Temps d'apprentissage estimée"
+          tooltip="Estimation du temps total que vous avez passé sur vos exercices. La durée d'un exercice est calculée en additionnant l'intervalle de temps entre chaque réponse. Les intervalles prolongés de plus de 20 minutes sont remplacés par une durée de 2 minutes pour garantir la précision."
           [value]="context.dashboard.user.totalDuration | duration"
         />
       </nz-col>
@@ -113,7 +114,7 @@
           <mat-card-header>
             <nz-select [(ngModel)]="learningInsightsOption">
               <nz-option nzValue="score" nzLabel="Note moyenne" />
-              <nz-option nzValue="duration" nzLabel="Temps d'apprentissage" />
+              <nz-option nzValue="duration" nzLabel="Temps d'apprentissage estimée" />
             </nz-select>
             <nz-date-picker nzMode="month" [(ngModel)]="learningInsightsDate" />
           </mat-card-header>
@@ -127,13 +128,20 @@
             />
             <result-value-distribution
               *ngIf="learningInsightsOption === 'duration'"
-              legend="Temps d'apprentissage"
+              legend="Temps d'apprentissage estimée"
               [date]="learningInsightsDate"
               [isTimeValues]="true"
               [color]="'#FF0087'"
               [colorGradient]="['rgb(255, 0, 135)', 'rgb(135, 0, 157)']"
               [distribution]="context.dashboard.user.durationDistribution"
-            />
+            >
+              <p>Estimation du temps total que vous avez passé sur vos exercices durant ce mois.</p>
+              <p>
+                La durée d'un exercice est calculée en additionnant l'intervalle de temps entre chaque réponse. Les
+                intervalles prolongés de plus de 20 minutes sont remplacés par une durée de 2 minutes pour garantir la
+                précision.
+              </p>
+            </result-value-distribution>
           </mat-card-content>
         </mat-card>
       </nz-col>

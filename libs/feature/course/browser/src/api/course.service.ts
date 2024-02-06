@@ -18,6 +18,7 @@ import {
   CreateCourse,
   CreateCourseMember,
   CreateCourseSection,
+  FindCourse,
   UpdateActivity,
   UpdateCourse,
   UpdateCourseSection,
@@ -58,8 +59,8 @@ export class CourseService {
     return this.courseProvider.search(filters)
   }
 
-  find(id: string): Observable<Course> {
-    return this.courseProvider.find(id)
+  find(input: FindCourse): Observable<Course> {
+    return this.courseProvider.find(input)
   }
 
   update(id: string, input: UpdateCourse): Observable<Course> {

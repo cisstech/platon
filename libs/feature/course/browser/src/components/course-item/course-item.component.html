@@ -1,4 +1,4 @@
-<nz-ribbon [nzText]="ribbon" [nzColor]="progressColor">
+<nz-ribbon [nzText]="item.statistic ? ribbon : null" [nzColor]="progressColor">
   <ui-list-item-article
     [style.--border-color]="'red'"
     [articleTitle]="name"
@@ -6,11 +6,22 @@
     [articleIconTemplate]="image"
     [articleUrl]="['/courses/', item.id]"
   >
-    <ui-list-item-article-action [actionTitle]="item.teacherCount + ''" nz-tooltip="Enseignants">
+    <ui-list-item-article-action
+      *ngIf="item.statistic"
+      [actionTitle]="item.statistic.teacherCount"
+      nz-tooltip="Enseignants"
+    >
       <mat-icon>supervised_user_circle</mat-icon>
     </ui-list-item-article-action>
-    <ui-list-item-article-action [actionTitle]="item.studentCount + ''" nz-tooltip="Élèves">
+    <ui-list-item-article-action *ngIf="item.statistic" [actionTitle]="item.statistic.studentCount" nz-tooltip="Élèves">
       <mat-icon>people</mat-icon>
+    </ui-list-item-article-action>
+    <ui-list-item-article-action
+      *ngIf="item.statistic"
+      [actionTitle]="item.statistic.activityCount"
+      nz-tooltip="Activités"
+    >
+      <mat-icon>widgets</mat-icon>
     </ui-list-item-article-action>
     <div class="spacer"></div>
     <ui-list-item-article-action
@@ -25,7 +36,7 @@
 <ng-template #ribbon>
   <nz-progress
     nz-tooltip="Votre avancement sur les activités"
-    [nzPercent]="item.progression"
+    [nzPercent]="item.statistic?.progression"
     [nzSteps]="5"
     nzSize="small"
   />

@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { buildHttpParams } from '@platon/core/browser'
+import { buildExpandableHttpParams, buildHttpParams } from '@platon/core/browser'
 import { ItemResponse, ListResponse } from '@platon/core/common'
-import { Course, CourseFilters, CreateCourse, UpdateCourse } from '@platon/feature/course/common'
+import { Course, FindCourse, CourseFilters, CreateCourse, UpdateCourse } from '@platon/feature/course/common'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { CourseProvider } from '../models/course-provider'
@@ -19,17 +19,30 @@ export class RemoteCourseProvider extends CourseProvider {
     return this.http.get<ListResponse<Course>>(`/api/v1/courses`, { params })
   }
 
-  find(id: string): Observable<Course> {
-    return this.http.get<ItemResponse<Course>>(`/api/v1/courses/${id}`).pipe(map((response) => response.resource))
+  find(input: FindCourse): Observable<Course> {
+    const params = buildExpandableHttpParams(input)
+
+    return this.http
+      .get<ItemResponse<Course>>(`/api/v1/courses/${input.id}`, {
+        params,
+      })
+      .pipe(map((response) => response.resource))
   }
 
   update(id: string, input: UpdateCourse): Observable<Course> {
+    const params = buildExpandableHttpParams(input)
     return this.http
-      .patch<ItemResponse<Course>>(`/api/v1/courses/${id}`, input)
+      .patch<ItemResponse<Course>>(`/api/v1/courses/${id}`, input, { params })
       .pipe(map((response) => response.resource))
   }
 
   create(input: CreateCourse): Observable<Course> {
-    return this.http.post<ItemResponse<Course>>('/api/v1/courses', input).pipe(map((response) => response.resource))
+    const params = buildExpandableHttpParams(input)
+
+    return this.http
+      .post<ItemResponse<Course>>('/api/v1/courses', input, {
+        params,
+      })
+      .pipe(map((response) => response.resource))
   }
 }

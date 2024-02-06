@@ -8,7 +8,7 @@ import {
   ReloadActivity,
   UpdateActivity,
 } from '@platon/feature/course/common'
-import { Transform, Type } from 'class-transformer'
+import { Exclude, Transform, Type } from 'class-transformer'
 import { IsDate, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator'
 import { ActivityPermissionsDTO } from '../permissions/permissions.dto'
 
@@ -45,6 +45,9 @@ export class ActivityDTO extends BaseDTO implements Activity {
 
   @Type(() => ActivityPermissionsDTO)
   readonly permissions!: ActivityPermissionsDTO
+
+  @Exclude()
+  readonly source?: unknown
 }
 
 export class ActivityFiltersDTO implements ActivityFilters {

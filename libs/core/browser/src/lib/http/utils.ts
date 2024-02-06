@@ -1,4 +1,5 @@
 import { HttpParams } from '@angular/common/http'
+import { ExpandableModel } from '@platon/core/common'
 
 export const buildHttpParams = <T extends object>(object?: T | null) => {
   if (!object) {
@@ -24,6 +25,20 @@ export const buildHttpParams = <T extends object>(object?: T | null) => {
     }
     params = params.set(key, value as string)
   })
+
+  return params
+}
+
+export const buildExpandableHttpParams = <T extends ExpandableModel>(object?: T | null) => {
+  let params = new HttpParams()
+
+  if (object?.expands) {
+    params = params.append('expands', object.expands.join(','))
+  }
+
+  if (object?.selects) {
+    params = params.append('selects', object.selects.join(','))
+  }
 
   return params
 }

@@ -260,15 +260,15 @@ export class PlayerExerciseComponent implements OnInit, OnChanges {
     return [
       {
         icon: 'arrow_back',
-        label: 'Tentative précédente',
-        tooltip: 'Tentative précédente',
+        label: 'Réponse précédente',
+        tooltip: 'Réponse précédente',
         visible: this.players.length > 1 && this.index > 0,
         run: () => this.previousAttempt(),
       },
       {
         icon: 'arrow_forward',
-        label: 'Tentative suivante',
-        tooltip: 'Tentative suivante',
+        label: 'Réponse suivante',
+        tooltip: 'Réponse suivante',
         visible: this.players.length > 1 && this.index < this.players.length - 1,
         run: () => this.nextAttempt(),
       },

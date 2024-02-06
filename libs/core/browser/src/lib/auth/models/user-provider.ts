@@ -19,11 +19,11 @@ export abstract class UserProvider {
   abstract search(filters: UserFilters): Observable<ListResponse<User>>
 
   /**
-   * Finds the user identified by `username`.
-   * @param username The username of the user to find.
+   * Finds the user identified by `idOrUsername`.
+   * @param idOrUsername The id or username of the user to find.
    * @returns An observable that will emit the user found or `undefined` once the server will response.
    */
-  abstract findByUserName(username: string): Observable<User | undefined>
+  abstract findByIdOrName(idOrUsername: string): Observable<User | undefined>
 
   /**
    * Finds All the users listed in the `userNames` array.

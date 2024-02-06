@@ -1,5 +1,5 @@
-import { buildHttpParams } from './utils'
 import { HttpParams } from '@angular/common/http'
+import { buildExpandableHttpParams, buildHttpParams } from './utils'
 
 describe('buildHttpParams', () => {
   it('should return an empty HttpParams object when input object is empty', () => {
@@ -47,5 +47,49 @@ describe('buildHttpParams', () => {
     const result = buildHttpParams(object)
     expect(result instanceof HttpParams).toBe(true)
     expect(result.toString()).toBe('param1=value1&param2=')
+  })
+})
+
+describe('buildExpandableHttpParams', () => {
+  it('should return an empty HttpParams object when input object is null', () => {
+    const object = null
+    const result = buildExpandableHttpParams(object)
+    expect(result instanceof HttpParams).toBe(true)
+    expect(result.toString()).toBe('')
+  })
+
+  it('should return an empty HttpParams object when input object has no expands or selects', () => {
+    const object = {}
+    const result = buildExpandableHttpParams(object)
+    expect(result instanceof HttpParams).toBe(true)
+    expect(result.toString()).toBe('')
+  })
+
+  it('should correctly build HttpParams object with expands', () => {
+    const object = {
+      expands: ['expand1', 'expand2'],
+    }
+    const result = buildExpandableHttpParams(object)
+    expect(result instanceof HttpParams).toBe(true)
+    expect(result.toString()).toBe('expands=expand1,expand2')
+  })
+
+  it('should correctly build HttpParams object with selects', () => {
+    const object = {
+      selects: ['select1', 'select2'],
+    }
+    const result = buildExpandableHttpParams(object)
+    expect(result instanceof HttpParams).toBe(true)
+    expect(result.toString()).toBe('selects=select1,select2')
+  })
+
+  it('should correctly build HttpParams object with both expands and selects', () => {
+    const object = {
+      expands: ['expand1', 'expand2'],
+      selects: ['select1', 'select2'],
+    }
+    const result = buildExpandableHttpParams(object)
+    expect(result instanceof HttpParams).toBe(true)
+    expect(result.toString()).toBe('expands=expand1,expand2&selects=select1,select2')
   })
 })
