@@ -16,6 +16,7 @@ import { CourseExpander } from './expanders/course.expander'
 import { ResourceExpander } from './expanders/resource.expander'
 import { ActivityResultsVirtualColumnsResolver } from './resolvers/activity-results-virtual-columns.resolver'
 import { ResultController } from './result.controller'
+import { SessionRankView } from './sessions/session-rank.view'
 import { SessionEntity } from './sessions/session.entity'
 import { SessionService } from './sessions/session.service'
 import { SessionView } from './sessions/session.view'
@@ -24,7 +25,14 @@ import { SessionView } from './sessions/session.view'
   imports: [
     FeatureCourseServerModule,
     FeatureResourceServerModule,
-    TypeOrmModule.forFeature([SessionView, SessionEntity, AnswerEntity, CorrectionEntity, SessionCommentEntity]),
+    TypeOrmModule.forFeature([
+      SessionView,
+      SessionRankView,
+      SessionEntity,
+      AnswerEntity,
+      CorrectionEntity,
+      SessionCommentEntity,
+    ]),
   ],
   controllers: [ResultController, DashboardController, CorrectionController, SessionCommentController],
   providers: [
