@@ -45,6 +45,7 @@
       </td>
       <td nzAlign="center" *ngIf="!disabled">
         <a
+          *ngIf="model.activity.permissions.answer"
           nz-tooltip="Lancer"
           nz-button
           nzShape="round"

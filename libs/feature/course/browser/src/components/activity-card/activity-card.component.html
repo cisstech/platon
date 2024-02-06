@@ -47,6 +47,7 @@
       </mat-card-content>
       <mat-card-actions>
         <a
+          *ngIf="item.permissions.answer"
           nz-tooltip="Lancer"
           nz-button
           nzShape="round"

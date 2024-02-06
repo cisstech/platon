@@ -4,5 +4,6 @@ export interface CoursePermissions {
 
 export interface ActivityPermissions {
   readonly update: boolean
+  readonly answer: boolean
   readonly viewStats: boolean
 }

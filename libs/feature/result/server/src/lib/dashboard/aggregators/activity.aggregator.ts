@@ -1,4 +1,5 @@
 import { ActivityVariables, ExerciseVariables, extractExercisesFromActivityVariables } from '@platon/feature/compiler'
+import { canUserAnswerActivity } from '@platon/feature/course/common'
 import { ActivityEntity, ActivityMemberView } from '@platon/feature/course/server'
 import {
   ACTIVITY_ANSWER_RATE,
@@ -14,9 +15,9 @@ import {
   emptyExerciseResults,
   emptyUserResults,
 } from '@platon/feature/result/common'
+import differenceInSeconds from 'date-fns/differenceInSeconds'
 import { SessionView } from '../../sessions/session.view'
 import { SessionDataAggregator, answerStateFromSession, sessionDurationInSeconds } from './aggregators'
-import differenceInSeconds from 'date-fns/differenceInSeconds'
 
 type ActivityUserResultsResultsArgs = {
   activity?: ActivityEntity | null
@@ -42,6 +43,9 @@ export class ActivityUserResults implements SessionDataAggregator<UserResults[]>
     const { activity, activityMembers, exerciseSessions } = args
 
     activityMembers
+      ?.filter((member) => {
+        return activity && canUserAnswerActivity(activity, member)
+      })
       ?.sort((a, b) => a.username.localeCompare(b.username))
       ?.forEach((member) => {
         this.userResults.set(

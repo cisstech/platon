@@ -10,6 +10,7 @@ import {
   ReloadActivity,
   UpdateActivity,
   calculateActivityOpenState,
+  canUserAnswerActivity,
 } from '@platon/feature/course/common'
 import { ResourceFileService } from '@platon/feature/resource/server'
 import { CLS_REQ } from 'nestjs-cls'
@@ -71,6 +72,10 @@ export class ActivityService {
     const isCreator = user.id === activity.creatorId
     if (!isCreator && !(await this.activityMemberService.isMember(id, user.id))) {
       throw new ForbiddenResponse(`You are not a member of this activity`)
+    }
+
+    if (!canUserAnswerActivity(activity, user)) {
+      throw new ForbiddenResponse(`You cannot answer this activity`)
     }
 
     await this.addVirtualColumns(activity)
@@ -218,6 +223,7 @@ export class ActivityService {
         state: calculateActivityOpenState(activity),
         permissions: {
           update: activity.creatorId === this.request.user.id,
+          answer: canUserAnswerActivity(activity, this.request.user),
           viewStats: [UserRoles.admin, UserRoles.teacher].includes(this.request.user.role),
         },
       } as Partial<ActivityEntity>)

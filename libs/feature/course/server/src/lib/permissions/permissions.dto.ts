@@ -6,6 +6,11 @@ export class ActivityPermissionsDTO implements ActivityPermissions {
   @IsBoolean()
   @ApiProperty()
   readonly update!: boolean
+
+  @IsBoolean()
+  @ApiProperty()
+  readonly answer!: boolean
+
   @IsBoolean()
   @ApiProperty()
   readonly viewStats!: boolean
