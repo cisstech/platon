@@ -22,7 +22,7 @@ export class LeaderboardService {
     const activities = await this.activityRepository.find({
       where: {
         courseId: id,
-        isChallenge: false,
+        isChallenge: true,
       },
       select: {
         id: true,
