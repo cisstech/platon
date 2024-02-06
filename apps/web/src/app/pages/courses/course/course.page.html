@@ -53,6 +53,12 @@
       Vue d'ensemble
     </ng-template>
   </ui-layout-tab>
+  <ui-layout-tab *ngIf="context.course?.statistic?.challengeCount" [link]="['challenges']">
+    <ng-template>
+      <span nz-icon nzType="trophy" nzTheme="outline"></span>
+      Challenges
+    </ng-template>
+  </ui-layout-tab>
   <ui-layout-tab [link]="['teachers']">
     <ng-template>
       <span nz-icon nzType="team" nzTheme="outline"></span>
