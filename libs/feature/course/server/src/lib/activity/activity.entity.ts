@@ -49,7 +49,7 @@ export class ActivityEntity extends BaseEntity implements Activity {
   // VIRTUAL COLUMNS
   // TODO: use expanders instead of virtual columns
 
-  @VirtualColumn({ query: (alias) => `${alias}.source->'variables'->>'title'` })
+  @VirtualColumn({ query: () => `SELECT ''` })
   readonly title!: string
 
   @VirtualColumn({ query: () => `SELECT 'opened'` })

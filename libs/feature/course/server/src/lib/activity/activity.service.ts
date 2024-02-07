@@ -12,9 +12,9 @@ import {
   calculateActivityOpenState,
   canUserAnswerActivity,
 } from '@platon/feature/course/common'
-import { ResourceFileService } from '@platon/feature/resource/server'
+import { ResourceEntity, ResourceFileService } from '@platon/feature/resource/server'
 import { CLS_REQ } from 'nestjs-cls'
-import { Repository, SelectQueryBuilder } from 'typeorm'
+import { In, Repository, SelectQueryBuilder } from 'typeorm'
 import { Optional } from 'typescript-optional'
 import { ActivityCorrectorService } from '../activity-corrector/activity-corrector.service'
 import { ActivityMemberService } from '../activity-member/activity-member.service'
@@ -43,8 +43,12 @@ export class ActivityService {
     private readonly notificationService: CourseNotificationService,
     private readonly activityMemberService: ActivityMemberService,
     private readonly activityCorrectorService: ActivityCorrectorService,
+
     @InjectRepository(ActivityEntity)
-    private readonly repository: Repository<ActivityEntity>
+    private readonly repository: Repository<ActivityEntity>,
+
+    @InjectRepository(ResourceEntity)
+    private readonly resourceRepository: Repository<ResourceEntity>
   ) {}
 
   async search(courseId: string, filters?: ActivityFilters): Promise<[ActivityEntity[], number]> {
@@ -221,9 +225,26 @@ export class ActivityService {
   }
 
   private async addVirtualColumns(...activities: ActivityEntity[]): Promise<void> {
+    const resourceIdOfUntitleActivities = new Set(
+      activities
+        .filter((activity) => !(activity.source.variables.title as string)?.trim())
+        .map((activity) => activity.source.resource as string)
+    )
+
+    const resources = resourceIdOfUntitleActivities.size
+      ? await this.resourceRepository.find({
+          where: {
+            id: In(Array.from(resourceIdOfUntitleActivities)),
+          },
+        })
+      : []
+
     activities.forEach((activity) => {
       Object.assign(activity, {
         state: calculateActivityOpenState(activity),
+        title:
+          (activity.source.variables.title as string)?.trim() ||
+          resources.find((r) => r.id === activity.source.resource)?.name,
         permissions: {
           update: activity.creatorId === this.request.user.id,
           answer: canUserAnswerActivity(activity, this.request.user),
