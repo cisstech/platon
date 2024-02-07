@@ -54,6 +54,10 @@ export class ActivityService {
       qb.andWhere(`section_id = :sectionId`, { sectionId: filters.sectionId })
     }
 
+    if (filters?.challenge != null) {
+      qb.andWhere(`is_challenge = :isChallenge`, { isChallenge: !!filters.challenge })
+    }
+
     const [entities, count] = await qb.getManyAndCount()
     await this.addVirtualColumns(...entities)
     return [entities, count]
@@ -91,7 +95,6 @@ export class ActivityService {
     if (activity) {
       await this.addVirtualColumns(activity)
     }
-
     return Optional.ofNullable(activity)
   }
 

@@ -72,6 +72,7 @@ export class ActivityCreatePage implements OnInit {
   protected user!: User
   protected loading = false
   protected creating = false
+  protected challenge = false
   protected members: CourseMember[] = []
 
   protected courseInfo = new FormGroup({
@@ -101,6 +102,10 @@ export class ActivityCreatePage implements OnInit {
 
     const courseId = queryParamMap.get('course')
     const sectionId = queryParamMap.get('section')
+    this.challenge = !!queryParamMap.get('challenge')
+    if (this.challenge) {
+      this.settingsInfo.get('isChallenge')?.setValue(true)
+    }
 
     const course = courseId
       ? await firstValueFrom(

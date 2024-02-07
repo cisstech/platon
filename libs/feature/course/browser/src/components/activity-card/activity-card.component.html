@@ -5,13 +5,18 @@
       <mat-card-header>
         <mat-card-title>
           {{ item.title }}
-          <span
+          <a
             *ngIf="item.isChallenge"
-            nz-tooltip="Cette activité est un challenge"
-            nz-icon
-            nzType="trophy"
-            nzTheme="twotone"
-          ></span>
+            nz-button
+            nzType="link"
+            [routerLink]="['/courses', item.courseId, 'challenges']"
+            [queryParams]="{
+              activity: item.id
+            }"
+            queryParamsHandling="merge"
+          >
+            <span nz-tooltip="Afficher les résultats du challenge" nz-icon nzType="trophy" nzTheme="twotone"></span>
+          </a>
         </mat-card-title>
       </mat-card-header>
       <mat-card-content>
@@ -41,7 +46,12 @@
             </mat-card-subtitle>
           </nz-col>
           <nz-col nzSpan="12">
-            <nz-progress nz-tooltip="Avancement sur les exercices" [nzPercent]="item.progression" nzType="circle" />
+            <nz-progress
+              *ngIf="item.permissions.answer"
+              nz-tooltip="Avancement sur les exercices"
+              [nzPercent]="item.progression"
+              nzType="circle"
+            />
           </nz-col>
         </nz-row>
       </mat-card-content>

@@ -6,6 +6,10 @@ import {
   UpsertCorrection,
   UserResults,
   DashboardOutput,
+  ActivityLeaderboardEntry,
+  CourseLeaderboardEntry,
+  FindActivityLeaderboard,
+  FindCourseLeaderboard,
 } from '@platon/feature/result/common'
 import { Observable } from 'rxjs'
 
@@ -16,6 +20,9 @@ export abstract class ResultProvider {
 
   abstract sessionResults(sessionId: string): Observable<UserResults>
   abstract activityResults(activityId: string): Observable<ActivityResults>
+
+  abstract courseLeaderboard(input: FindCourseLeaderboard): Observable<CourseLeaderboardEntry[]>
+  abstract activityLeaderboard(input: FindActivityLeaderboard): Observable<ActivityLeaderboardEntry[]>
 
   abstract findCorrection(activityId: string): Observable<ActivityCorrection>
   abstract listCorrections(): Observable<ListResponse<ActivityCorrection>>

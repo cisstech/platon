@@ -24,26 +24,47 @@
         [nzChecked]="selection.has(model.activity.id)"
         (nzCheckedChange)="onItemChecked(model.activity.id, $event)"
       ></td>
-      <td>{{ model.activity.title }}</td>
-      <td>{{ model.section?.name }}</td>
-      <td>
+      <td nzAlign="center">{{ model.activity.title }}</td>
+      <td nzAlign="center">{{ model.section?.name }}</td>
+      <td nzAlign="center">
         <nz-tag>{{ model.activity.createdAt | date }}</nz-tag>
       </td>
-      <td>
+      <td nzAlign="center">
         <nz-tag>{{ (model.activity.openAt | date) || 'Non définie' }}</nz-tag>
       </td>
-      <td>
+      <td nzAlign="center">
         <nz-tag>{{ (model.activity.closeAt | date) || 'Non définie' }}</nz-tag>
       </td>
-      <td>
+      <td nzAlign="center">
         <ng-container *ngIf="model.activity | courseActivityState as state">
           <nz-tag [nzColor]="state.color"> {{ state.label }}</nz-tag>
         </ng-container>
       </td>
-      <td>
+      <td nzAlign="center">
+        @if (model.activity.permissions.answer) {
         <nz-tag [nzColor]="model.progressionColor"> {{ model.activity.progression }} %</nz-tag>
+        } @else {
+        <span
+          nz-tooltip="Vous ne pouvez pas participer à cette activité"
+          nz-icon
+          nzType="stop"
+          nzTheme="outline"
+        ></span>
+        }
       </td>
       <td nzAlign="center" *ngIf="!disabled">
+        <a
+          *ngIf="model.activity"
+          nz-button
+          nzShape="round"
+          [routerLink]="['/courses', model.activity.courseId, 'challenges']"
+          [queryParams]="{
+            activity: model.activity.id
+          }"
+          queryParamsHandling="merge"
+        >
+          <span nz-tooltip="Afficher les résultats du challenge" nz-icon nzType="trophy" nzTheme="twotone"></span>
+        </a>
         <a
           *ngIf="model.activity.permissions.answer"
           nz-tooltip="Lancer"

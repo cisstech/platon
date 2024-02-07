@@ -21,7 +21,8 @@ export interface Activity {
 }
 
 export interface ActivityFilters {
-  readonly sectionId?: string
+  readonly sectionId?: string | null
+  readonly challenge?: boolean | null
 }
 
 export interface CreateActivity {

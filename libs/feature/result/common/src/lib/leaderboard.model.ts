@@ -14,3 +14,12 @@ export interface ActivityLeaderboardEntry {
   readonly startedAt: Date
   readonly lastGradedAt: Date
 }
+export interface FindCourseLeaderboard {
+  readonly courseId: string
+  readonly limit?: number
+}
+
+export interface FindActivityLeaderboard {
+  readonly activityId: string
+  readonly limit?: number
+}

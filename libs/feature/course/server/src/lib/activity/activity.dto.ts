@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { BaseDTO, toArray, toDate } from '@platon/core/server'
+import { BaseDTO, toArray, toBoolean, toDate } from '@platon/core/server'
 import {
   Activity,
   ActivityFilters,
@@ -59,7 +59,13 @@ export class ActivityFiltersDTO implements ActivityFilters {
   @IsOptional()
   @IsUUID()
   @ApiProperty()
-  readonly sectionId?: string
+  readonly sectionId?: string | null
+
+  @IsOptional()
+  @Transform(({ value }) => toBoolean(value))
+  @ApiProperty()
+  @IsBoolean()
+  challenge?: boolean | null
 }
 
 export class CreateCourseActivityDTO implements CreateActivity {

@@ -1,5 +1,6 @@
-import { HttpClient, HttpParams } from '@angular/common/http'
+import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
+import { buildHttpParams } from '@platon/core/browser'
 import { ItemResponse, ListResponse } from '@platon/core/common'
 import { Activity, ActivityFilters, Course, CreateActivity, UpdateActivity } from '@platon/feature/course/common'
 import { Observable } from 'rxjs'
@@ -20,11 +21,7 @@ export class RemoteActivityProvider extends ActivityProvider {
 
   search(course: Course, filters?: ActivityFilters): Observable<ListResponse<Activity>> {
     filters = filters || {}
-    let params = new HttpParams()
-
-    if (filters.sectionId) {
-      params = params.append('sectionId', filters.sectionId)
-    }
+    const params = buildHttpParams(filters)
 
     return this.http.get<ListResponse<Activity>>(`/api/v1/courses/${course.id}/activities`, {
       params,

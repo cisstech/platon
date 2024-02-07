@@ -1,6 +1,6 @@
 <header>
   <nz-page-header [nzTitle]="header" nzBackIcon>
-    <ng-template #header> Ajouter une activité à votre cours</ng-template>
+    <ng-template #header> Ajouter @if (challenge){ un challenge} @else { une activité } à votre cours</ng-template>
   </nz-page-header>
 </header>
 <main>
@@ -57,13 +57,13 @@
         <section>
           <form [formGroup]="settingsInfo">
             <h4 id="challenge">Cette activité est-elle un challenge?</h4>
-            <nz-radio-group aria-labelledby="challenge" formControlName="isChallenge">
+            <nz-radio-group [nzDisabled]="challenge" aria-labelledby="challenge" formControlName="isChallenge">
               <label nz-radio [nzValue]="true">Oui</label>
               <label nz-radio [nzValue]="false">Non</label>
             </nz-radio-group>
             <p>
-              Les challenges sont des activités réalisables par tous les élèves du cours. Les résultats d'un challenge
-              sont visibles par tous les membres du cours dans le tableau de bord du cours.
+              Les challenges sont des activités réalisables uniquement par les élèves du cours. Les résultats d'un
+              challenge sont visibles par tous dans la page du cours.
             </p>
             <h4 id="openDates">Souhaitez-vous limiter l'accès de cette activité à une date en particulier?</h4>
             <nz-range-picker
