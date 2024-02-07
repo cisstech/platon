@@ -64,7 +64,7 @@ export class ChallengesPage implements OnInit, OnDestroy {
         this.challenges = await this.presenter.listActivities({ challenge: true })
 
         if (!this.courseLeaderboard.length) {
-          //   this.courseLeaderboard = await this.presenter.courseLeaderboard()
+          this.courseLeaderboard = await this.presenter.courseLeaderboard()
         }
 
         const activity = this.challenges.find((a) => a.id === this.activatedRoute.snapshot.queryParams.activity)
@@ -91,7 +91,7 @@ export class ChallengesPage implements OnInit, OnDestroy {
     this.activity = activity
     this.activityLeaderboard = []
     if (activity) {
-      // this.activityLeaderboard = await this.presenter.activityLeaderboard(activity.id)
+      this.activityLeaderboard = await this.presenter.activityLeaderboard(activity.id)
     }
 
     this.checkNoData()
