@@ -245,6 +245,7 @@ export class ActivityService {
       Object.assign(activity, {
         state: calculateActivityOpenState(activity),
         title: title?.trim() || resources.find((r) => r.id === activity.source.resource)?.name,
+        resourceId: activity.source.resource,
         exerciseCount: Object.keys(exerciseGroups).reduce((acc, group) => acc + exerciseGroups[group].length, 0),
         permissions: {
           update: activity.creatorId === this.request.user.id,

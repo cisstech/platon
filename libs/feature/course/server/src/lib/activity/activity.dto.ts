@@ -38,6 +38,9 @@ export class ActivityDTO extends BaseDTO implements Activity {
   readonly title!: string
 
   @IsString()
+  readonly resourceId!: string
+
+  @IsString()
   readonly state!: ActivityOpenStates
 
   @IsNumber()

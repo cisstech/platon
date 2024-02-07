@@ -73,6 +73,16 @@
         >
           <i nz-icon nzType="play-circle" nzTheme="outline"></i>
         </a>
+
+        <a
+          *ngIf="item.permissions.update"
+          nz-tooltip="Ouvrir la ressource associée"
+          nz-button
+          nzShape="round"
+          [routerLink]="['/resources', item.resourceId]"
+        >
+          <span nz-icon nzType="paper-clip" nzTheme="outline"></span>
+        </a>
         <a
           *ngIf="item.permissions.viewStats"
           nz-tooltip="Statistiques"

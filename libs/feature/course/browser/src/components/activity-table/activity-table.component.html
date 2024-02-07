@@ -71,6 +71,15 @@
           <span nz-tooltip="Afficher les résultats du challenge" nz-icon nzType="trophy" nzTheme="twotone"></span>
         </a>
         <a
+          *ngIf="model.activity.permissions.update"
+          nz-tooltip="Ouvrir la ressource associée"
+          nz-button
+          nzShape="round"
+          [routerLink]="['/resources', model.activity.resourceId]"
+        >
+          <span nz-icon nzType="paper-clip" nzTheme="outline"></span>
+        </a>
+        <a
           *ngIf="model.activity.permissions.answer"
           nz-tooltip="Lancer"
           nz-button
