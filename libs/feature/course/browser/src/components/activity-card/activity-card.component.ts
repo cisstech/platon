@@ -11,6 +11,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzProgressModule } from 'ng-zorro-antd/progress'
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 
+import { MatIconModule } from '@angular/material/icon'
 import { Activity } from '@platon/feature/course/common'
 import { UiModalDrawerComponent } from '@platon/shared/ui'
 import { CoursePipesModule } from '../../pipes'
@@ -27,6 +28,7 @@ import { CourseItemComponent } from '../course-item/course-item.component'
     CommonModule,
     RouterModule,
 
+    MatIconModule,
     MatCardModule,
 
     NzGridModule,
@@ -35,6 +37,7 @@ import { CourseItemComponent } from '../course-item/course-item.component'
     NzButtonModule,
     NzToolTipModule,
     NzProgressModule,
+    NzToolTipModule,
 
     CoursePipesModule,
     CourseItemComponent,

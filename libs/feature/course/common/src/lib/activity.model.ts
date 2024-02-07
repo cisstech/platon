@@ -1,3 +1,4 @@
+import { User, isTeacherRole } from '@platon/core/common'
 import { ActivityPermissions } from './permissions.model'
 
 export interface Activity {
@@ -10,8 +11,11 @@ export interface Activity {
 
   readonly openAt?: Date
   readonly closeAt?: Date
+  readonly isChallenge: boolean
 
   readonly title: string
+  readonly resourceId: string
+  readonly exerciseCount: number
   readonly state: ActivityOpenStates
   readonly timeSpent: number
   readonly progression: number
@@ -19,7 +23,8 @@ export interface Activity {
 }
 
 export interface ActivityFilters {
-  readonly sectionId?: string
+  readonly sectionId?: string | null
+  readonly challenge?: boolean | null
 }
 
 export interface CreateActivity {
@@ -30,6 +35,7 @@ export interface CreateActivity {
 
   readonly openAt?: Date
   readonly closeAt?: Date
+  readonly isChallenge?: boolean
 }
 
 export interface UpdateActivity {
@@ -74,4 +80,11 @@ export const calculateActivityOpenState = (value: {
   } else {
     return 'opened'
   }
+}
+
+export const canUserAnswerActivity = (activity: Activity, user: Pick<User, 'role'>): boolean => {
+  if (activity.isChallenge) {
+    return !isTeacherRole(user.role)
+  }
+  return true
 }

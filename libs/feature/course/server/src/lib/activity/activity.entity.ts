@@ -42,10 +42,21 @@ export class ActivityEntity extends BaseEntity implements Activity {
   @Column({ name: 'close_at', nullable: true, type: 'timestamp with time zone' })
   closeAt?: Date
 
-  // VIRTUAL COLUMNS
+  @Index('Activities_is_challenge_idx')
+  @Column({ name: 'is_challenge', default: false })
+  isChallenge!: boolean
 
-  @VirtualColumn({ query: (alias) => `${alias}.source->'variables'->>'title'` })
+  // VIRTUAL COLUMNS
+  // TODO: use expanders instead of virtual columns
+
+  @VirtualColumn({ query: () => `SELECT ''` })
   readonly title!: string
+
+  @VirtualColumn({ query: () => `SELECT ''` })
+  readonly resourceId!: string
+
+  @VirtualColumn({ query: () => `SELECT 0::integer` })
+  readonly exerciseCount!: number
 
   @VirtualColumn({ query: () => `SELECT 'opened'` })
   readonly state!: ActivityOpenStates

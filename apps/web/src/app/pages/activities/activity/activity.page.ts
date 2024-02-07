@@ -1,5 +1,5 @@
 import { CommonModule, Location } from '@angular/common'
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
 import { Subscription } from 'rxjs'
@@ -52,14 +52,13 @@ import { ActivityPresenter } from './activity.presenter'
   ],
 })
 export class CourseActivityPage implements OnInit, OnDestroy {
-  private readonly subscriptions: Subscription[] = []
-  protected context = this.presenter.defaultContext()
+  private readonly location = inject(Location)
+  private readonly presenter = inject(ActivityPresenter)
+  private readonly changeDetectorRef = inject(ChangeDetectorRef)
 
-  constructor(
-    private readonly location: Location,
-    private readonly presenter: ActivityPresenter,
-    private readonly changeDetectorRef: ChangeDetectorRef
-  ) {}
+  private readonly subscriptions: Subscription[] = []
+
+  protected context = this.presenter.defaultContext()
 
   ngOnInit(): void {
     this.subscriptions.push(

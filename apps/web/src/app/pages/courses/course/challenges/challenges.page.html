@@ -1,0 +1,100 @@
+<ng-container *ngIf="context.course as course">
+  <nz-row [nzGutter]="[24, 24]" nzAlign="top">
+    <nz-col nzXs="24" nzSm="24" nzMd="16" nzLg="16" nzXl="16">
+      <h4>Activité</h4>
+      <nz-select
+        nzShowSearch
+        nzAllowClear
+        nzPlaceHolder="Sélectionner une activité pour filtrer"
+        [(ngModel)]="activity"
+        (ngModelChange)="onChooseActivity($event)"
+      >
+        @for (challenge of challenges; track challenge.id) {
+        <nz-option [nzValue]="challenge" [nzLabel]="challenge.title" />
+        }
+      </nz-select>
+
+      <nz-skeleton [nzActive]="loading" [nzLoading]="loading">
+        <nz-empty
+          *ngIf="noData"
+          [nzNotFoundContent]="emptyState"
+          [nzNotFoundFooter]="activity ? undefined : callToAction"
+        >
+          <ng-template #emptyState>
+            @if (activity) {
+            <p>
+              Il semblerait que ce challenge n'ait pas été complété pour le moment. Une fois que les élèves auront
+              participé, vous pourrez retrouver le classement des participants ici.
+            </p>
+            } @else {
+            <p>
+              Il semblerait qu'aucun challenge n'ait été complété pour le moment dans ce cours. Une fois que les élèves
+              auront participé aux challenges, vous pourrez retrouver le classement des participants ici.
+            </p>
+            }
+          </ng-template>
+          <ng-template #callToAction>
+            <a
+              nz-button
+              nzType="primary"
+              [routerLink]="['/activities', 'create']"
+              [queryParams]="{ course: course.id, challenge: true }"
+              queryParamsHandling="merge"
+            >
+              Créer un challenge
+            </a>
+          </ng-template>
+        </nz-empty>
+
+        @if (activity) {
+        <p *ngIf="!noData" nz-typography>
+          Voici le classement général de l'activité <b>{{ activity.title }}</b
+          >. Ce sont les 100 utilisateurs ayant le score total le plus élevé.
+          <br />
+          Être premier ajoute 100 points au score de l'activité, deuxième ajoute 99 points, et ainsi de suite jusqu'à 1
+          point à la 100e place.
+        </p>
+
+        <nz-timeline>
+          @for (entry of activityLeaderboard; track entry.user.id) {
+          <nz-timeline-item>
+            <div class="timeline-item">
+              <div>{{ $index + 1 }}.</div>
+              <user-avatar [user]="entry.user" />
+              <div>({{ [entry.startedAt, entry.lastGradedAt] | duration }})</div>
+              <div>
+                <b>{{ entry.points }} points</b>
+              </div>
+            </div>
+          </nz-timeline-item>
+          }
+        </nz-timeline>
+
+        } @else {
+        <p *ngIf="!noData" nz-typography>
+          Voici le classement général des 100 utilisateurs ayant le score total le plus élevé sur les challenges de ce
+          cours.
+        </p>
+
+        <nz-timeline>
+          @for (entry of courseLeaderboard; track entry.user.id) {
+          <nz-timeline-item>
+            <div class="timeline-item">
+              <div>{{ $index + 1 }}.</div>
+              <user-avatar [user]="entry.user" />
+              <div>
+                <b>{{ entry.points }} points</b>
+              </div>
+            </div>
+          </nz-timeline-item>
+          }
+        </nz-timeline>
+
+        }
+      </nz-skeleton>
+    </nz-col>
+    <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
+      <course-activity-card *ngIf="activity" [item]="activity" />
+    </nz-col>
+  </nz-row>
+</ng-container>

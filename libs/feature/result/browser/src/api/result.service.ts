@@ -9,9 +9,11 @@ import {
   ACTIVITY_TOTAL_ATTEMPTS,
   ACTIVITY_TOTAL_COMPLETIONS,
   ActivityCorrection,
+  ActivityLeaderboardEntry,
   ActivityResults,
   AnswerStates,
   Correction,
+  CourseLeaderboardEntry,
   CreateSessionComment,
   DashboardOutput,
   EXERCISE_ANSWER_RATE,
@@ -22,6 +24,8 @@ import {
   EXERCISE_SUCCESS_RATE_ON_FIRST_ATTEMPT,
   EXERCISE_TOTAL_ATTEMPTS,
   ExerciseResults,
+  FindActivityLeaderboard,
+  FindCourseLeaderboard,
   SESSION_AVERAGE_DURATION,
   SESSION_AVERAGE_SCORE,
   SESSION_AVERAGE_SCORE_BY_MONTH,
@@ -121,6 +125,14 @@ export class ResultService {
 
   activityResults(activityId: string): Observable<ActivityResults> {
     return this.resultProvider.activityResults(activityId)
+  }
+
+  courseLeaderboard(input: FindCourseLeaderboard): Observable<CourseLeaderboardEntry[]> {
+    return this.resultProvider.courseLeaderboard(input)
+  }
+
+  activityLeaderboard(input: FindActivityLeaderboard): Observable<ActivityLeaderboardEntry[]> {
+    return this.resultProvider.activityLeaderboard(input)
   }
 
   findCorrection(activityId: string): Observable<ActivityCorrection> {

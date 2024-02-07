@@ -15,6 +15,14 @@ export default [
           ),
       },
       {
+        path: 'challenges',
+        loadChildren: () =>
+          import(
+            /* webpackChunkName: "course-challenges" */
+            './challenges/challenges.routes'
+          ),
+      },
+      {
         path: 'teachers',
         loadChildren: () =>
           import(

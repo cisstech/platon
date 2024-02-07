@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { isTeacherRole } from '@platon/core/common'
 import { IRequest } from '@platon/core/server'
-import { CourseStatistic } from '@platon/feature/course/common'
+import { CourseStatistic, canUserAnswerActivity } from '@platon/feature/course/common'
 import { ActivityEntity, ActivityMemberView, CourseDTO, CourseMemberService } from '@platon/feature/course/server'
 import { PlayerActivityVariables } from '@platon/feature/player/common'
 import differenceInSeconds from 'date-fns/differenceInSeconds'
@@ -39,7 +39,7 @@ export class CourseExpander {
         .leftJoin(ActivityMemberView, 'member', 'member.activity_id = activity.id AND member.id = :userId', {
           userId: user.id,
         })
-        .select(['activity.courseId'])
+        .select(['activity.courseId', 'activity.isChallenge'])
         .where('activity.course_id = :courseId', { courseId: parent.id })
         .andWhere(`(activity.creator_id = :userId OR member.id IS NOT NULL)`, { userId: user.id })
         .getMany(),
@@ -66,8 +66,11 @@ export class CourseExpander {
     return {
       studentCount: members.filter((member) => !isTeacherRole(member.role)).length,
       teacherCount: members.filter((member) => isTeacherRole(member.role)).length,
-      progression: Math.round(progressionSum ? progressionSum / activities.length : 0),
+      progression: Math.round(
+        progressionSum ? progressionSum / activities.filter((a) => canUserAnswerActivity(a, user)).length : 0
+      ),
       activityCount: activities.length,
+      challengeCount: activities.filter((activity) => activity.isChallenge).length,
       timeSpent,
     }
   }

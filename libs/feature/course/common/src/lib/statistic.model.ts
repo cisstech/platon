@@ -4,4 +4,5 @@ export interface CourseStatistic {
   readonly studentCount: number
   readonly teacherCount: number
   readonly activityCount: number
+  readonly challengeCount: number
 }

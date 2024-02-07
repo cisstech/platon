@@ -37,6 +37,6 @@ import { AnswerStatePipesModule } from '../../pipes'
   ],
 })
 export class ResultByMembersComponent {
-  @Input() results!: UserResults[]
+  @Input({ required: true }) results: UserResults[] = []
   protected answerStates = Object.values(AnswerStates)
 }

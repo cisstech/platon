@@ -3,7 +3,21 @@
     <mat-card>
       <img src="/assets/images/illustrations/laptop1.svg" alt="Activité" />
       <mat-card-header>
-        <mat-card-title>{{ item.title }}</mat-card-title>
+        <mat-card-title>
+          {{ item.title }}
+          <a
+            *ngIf="item.isChallenge"
+            nz-button
+            nzType="link"
+            [routerLink]="['/courses', item.courseId, 'challenges']"
+            [queryParams]="{
+              activity: item.id
+            }"
+            queryParamsHandling="merge"
+          >
+            <span nz-tooltip="Afficher les résultats du challenge" nz-icon nzType="trophy" nzTheme="twotone"></span>
+          </a>
+        </mat-card-title>
       </mat-card-header>
       <mat-card-content>
         <nz-row [nzGutter]="[24, 24]" nzAlign="middle" nzJustify="center">
@@ -14,7 +28,7 @@
             </mat-card-subtitle>
             <mat-card-subtitle>
               <span>
-                {{ item.openAt | date: 'medium' }}
+                {{ item.openAt | date : 'medium' }}
                 <ng-container *ngIf="!item.openAt">
                   <span nz-icon nzType="stop" nzTheme="outline"></span>
                 </ng-container>
@@ -23,21 +37,33 @@
             </mat-card-subtitle>
             <mat-card-subtitle>
               <span>
-                {{ item.closeAt | date: 'medium' }}
+                {{ item.closeAt | date : 'medium' }}
                 <ng-container *ngIf="!item.closeAt">
                   <span nz-icon nzType="stop" nzTheme="outline"></span>
                 </ng-container>
               </span>
               <b>Date de fermeture</b>
             </mat-card-subtitle>
+            <mat-card-subtitle>
+              <span>
+                {{ item.exerciseCount }}
+              </span>
+              <b>Nombre d'exercices</b>
+            </mat-card-subtitle>
           </nz-col>
           <nz-col nzSpan="12">
-            <nz-progress nz-tooltip="Avancement sur les exercices" [nzPercent]="item.progression" nzType="circle" />
+            <nz-progress
+              *ngIf="item.permissions.answer"
+              nz-tooltip="Avancement sur les exercices"
+              [nzPercent]="item.progression"
+              nzType="circle"
+            />
           </nz-col>
         </nz-row>
       </mat-card-content>
       <mat-card-actions>
         <a
+          *ngIf="item.permissions.answer"
           nz-tooltip="Lancer"
           nz-button
           nzShape="round"
@@ -46,6 +72,16 @@
           [routerLink]="['/player/activity', item.id]"
         >
           <i nz-icon nzType="play-circle" nzTheme="outline"></i>
+        </a>
+
+        <a
+          *ngIf="item.permissions.update"
+          nz-tooltip="Ouvrir la ressource associée"
+          nz-button
+          nzShape="round"
+          [routerLink]="['/resources', item.resourceId]"
+        >
+          <span nz-icon nzType="paper-clip" nzTheme="outline"></span>
         </a>
         <a
           *ngIf="item.permissions.viewStats"

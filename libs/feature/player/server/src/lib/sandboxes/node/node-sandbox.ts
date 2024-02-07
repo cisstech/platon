@@ -90,7 +90,6 @@ export class NodeSandbox implements OnModuleInit, Sandbox {
         await fs.promises.access(path, constants.F_OK)
         return true
       } catch {
-        this.logger.warn('Does not exist: ' + path)
         return false
       }
     }
