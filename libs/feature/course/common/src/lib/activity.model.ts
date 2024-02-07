@@ -14,6 +14,7 @@ export interface Activity {
   readonly isChallenge: boolean
 
   readonly title: string
+  readonly exerciseCount: number
   readonly state: ActivityOpenStates
   readonly timeSpent: number
   readonly progression: number

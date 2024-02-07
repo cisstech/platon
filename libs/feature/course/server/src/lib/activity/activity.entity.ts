@@ -52,6 +52,9 @@ export class ActivityEntity extends BaseEntity implements Activity {
   @VirtualColumn({ query: () => `SELECT ''` })
   readonly title!: string
 
+  @VirtualColumn({ query: () => `SELECT 0::integer` })
+  readonly exerciseCount!: number
+
   @VirtualColumn({ query: () => `SELECT 'opened'` })
   readonly state!: ActivityOpenStates
 

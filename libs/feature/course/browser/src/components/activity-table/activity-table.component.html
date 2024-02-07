@@ -9,6 +9,7 @@
       ></th>
       <th>Titre</th>
       <th>Section</th>
+      <th>Nombre d'exercices</th>
       <th>Date de création</th>
       <th>Date d'ouverture</th>
       <th>Date de fermeture</th>
@@ -27,6 +28,9 @@
       <td nzAlign="center">{{ model.activity.title }}</td>
       <td nzAlign="center">{{ model.section?.name }}</td>
       <td nzAlign="center">
+        <nz-tag>{{ model.activity.exerciseCount }}</nz-tag>
+      </td>
+      <td nzAlign="center">
         <nz-tag>{{ model.activity.createdAt | date }}</nz-tag>
       </td>
       <td nzAlign="center">
@@ -35,6 +39,7 @@
       <td nzAlign="center">
         <nz-tag>{{ (model.activity.closeAt | date) || 'Non définie' }}</nz-tag>
       </td>
+
       <td nzAlign="center">
         <ng-container *ngIf="model.activity | courseActivityState as state">
           <nz-tag [nzColor]="state.color"> {{ state.label }}</nz-tag>

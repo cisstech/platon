@@ -48,6 +48,10 @@ export class ActivityDTO extends BaseDTO implements Activity {
   @ApiProperty()
   readonly progression = 0
 
+  @IsNumber()
+  @ApiProperty()
+  readonly exerciseCount = 0
+
   @Type(() => ActivityPermissionsDTO)
   readonly permissions!: ActivityPermissionsDTO
 

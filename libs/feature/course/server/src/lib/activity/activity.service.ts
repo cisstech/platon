@@ -240,11 +240,12 @@ export class ActivityService {
       : []
 
     activities.forEach((activity) => {
+      const title = activity.source.variables.title as string
+      const exerciseGroups = (activity.source.variables.exerciseGroups as Record<string, unknown[]>) || {}
       Object.assign(activity, {
         state: calculateActivityOpenState(activity),
-        title:
-          (activity.source.variables.title as string)?.trim() ||
-          resources.find((r) => r.id === activity.source.resource)?.name,
+        title: title?.trim() || resources.find((r) => r.id === activity.source.resource)?.name,
+        exerciseCount: Object.keys(exerciseGroups).reduce((acc, group) => acc + exerciseGroups[group].length, 0),
         permissions: {
           update: activity.creatorId === this.request.user.id,
           answer: canUserAnswerActivity(activity, this.request.user),
@@ -252,6 +253,7 @@ export class ActivityService {
         },
       } as Partial<ActivityEntity>)
     })
+
     await this.databaseService.resolveVirtualColumns(ActivityEntity, activities, this.request.user)
   }
 
