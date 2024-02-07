@@ -2,7 +2,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common'
 import { OnEvent } from '@nestjs/event-emitter'
 import { InjectRepository } from '@nestjs/typeorm'
-import { ForbiddenResponse, NotFoundResponse, User, UserRoles } from '@platon/core/common'
+import { ForbiddenResponse, NotFoundResponse, User, isTeacherRole } from '@platon/core/common'
 import { DatabaseService, EventService, IRequest, buildSelectQuery } from '@platon/core/server'
 import {
   ActivityFilters,
@@ -67,7 +67,7 @@ export class ActivityService {
     return [entities, count]
   }
 
-  async findById(id: string, user: User): Promise<ActivityEntity> {
+  async findByIdForUser(id: string, user: User): Promise<ActivityEntity> {
     const qb = buildSelectQuery(this.repository.createQueryBuilder('activity'), (qb) =>
       qb.where('activity.id = :id', { id })
     )
@@ -80,10 +80,6 @@ export class ActivityService {
     const isCreator = user.id === activity.creatorId
     if (!isCreator && !(await this.activityMemberService.isMember(id, user.id))) {
       throw new ForbiddenResponse(`You are not a member of this activity`)
-    }
-
-    if (!canUserAnswerActivity(activity, user)) {
-      throw new ForbiddenResponse(`You cannot answer this activity`)
     }
 
     await this.addVirtualColumns(activity)
@@ -177,6 +173,17 @@ export class ActivityService {
     return this.repository.delete({ courseId, id: activityId })
   }
 
+  async withActivity(
+    activityId: string,
+    consumer: (activity?: ActivityEntity | null) => void | Promise<void>
+  ): Promise<void> {
+    const activity = await this.repository.findOne({
+      where: {
+        id: activityId,
+      },
+    })
+    await consumer(activity)
+  }
   async fromInput(input: CreateActivity | UpdateActivity): Promise<ActivityEntity> {
     const activity = new ActivityEntity()
 
@@ -250,7 +257,7 @@ export class ActivityService {
         permissions: {
           update: activity.creatorId === this.request.user.id,
           answer: canUserAnswerActivity(activity, this.request.user),
-          viewStats: [UserRoles.admin, UserRoles.teacher].includes(this.request.user.role),
+          viewStats: isTeacherRole(this.request.user.role),
         },
       } as Partial<ActivityEntity>)
     })

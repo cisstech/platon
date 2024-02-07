@@ -11,7 +11,7 @@ import {
   Variables,
   extractExercisesFromActivityVariables,
 } from '@platon/feature/compiler'
-import { Activity } from '@platon/feature/course/common'
+import { Activity, canUserAnswerActivity } from '@platon/feature/course/common'
 import {
   ActivityEntity,
   ActivityService,
@@ -117,7 +117,11 @@ export class PlayerService extends PlayerManager {
   async playActivity(activityId: string, user: User): Promise<PlayActivityOuput> {
     let activitySession = await this.sessionService.findUserActivity(activityId, user.id)
     if (!activitySession) {
-      const activity = await this.activityService.findById(activityId, user)
+      const activity = await this.activityService.findByIdForUser(activityId, user)
+      if (!canUserAnswerActivity(activity, user)) {
+        throw new ForbiddenResponse(`You cannot answer this activity`)
+      }
+
       activitySession = await this.createNewSession({
         user,
         activity,
