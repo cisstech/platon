@@ -6,4 +6,5 @@ export interface ActivityPermissions {
   readonly update: boolean
   readonly answer: boolean
   readonly viewStats: boolean
+  readonly viewResource: boolean
 }

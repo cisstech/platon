@@ -258,6 +258,7 @@ export class ActivityService {
           update: activity.creatorId === this.request.user.id,
           answer: canUserAnswerActivity(activity, this.request.user),
           viewStats: isTeacherRole(this.request.user.role),
+          viewResource: isTeacherRole(this.request.user.role),
         },
       } as Partial<ActivityEntity>)
     })

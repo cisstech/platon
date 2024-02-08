@@ -14,6 +14,10 @@ export class ActivityPermissionsDTO implements ActivityPermissions {
   @IsBoolean()
   @ApiProperty()
   readonly viewStats!: boolean
+
+  @IsBoolean()
+  @ApiProperty()
+  readonly viewResource!: boolean
 }
 
 export class CoursePermissionsDTO implements CoursePermissions {

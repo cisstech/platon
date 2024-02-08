@@ -7,12 +7,11 @@ import { ResourceDTO } from '../resource.dto'
 import { ResourceEntity } from '../resource.entity'
 import { ResourceService } from '../resource.service'
 import { ResourceWatcherEntity, ResourceWatcherService } from '../watchers'
-import { MemberPermissions } from './permissions.entity'
 
 type Resource = ResourceEntity | ResourceDTO
 
 interface UserPermissionsInput<T extends Resource> {
-  resource: T
+  resource: T | string
   user?: User
   userWatchings?: ResourceWatcherEntity[]
   userMemberships?: ResourceMember[]
@@ -39,7 +38,10 @@ export class ResourcePermissionService {
       }
     }
 
-    const { resource, user, userWatchings, userMemberships } = input
+    const { user, userWatchings, userMemberships } = input
+    const resource =
+      typeof input.resource === 'string' ? await this.resourceService.getById(input.resource) : input.resource
+
     const [circle, members, watchings, descendants] = await Promise.all([
       resource.type === ResourceTypes.CIRCLE ? resource : this.resourceService.getById(resource.parentId as string),
       userMemberships || this.memberService.findAllByUserId(user.id),
@@ -66,24 +68,19 @@ export class ResourcePermissionService {
   async userPermissionsOnResources<T extends Resource>(
     resources: T[],
     user: UserEntity
-  ): Promise<
-    {
-      resource: T
-      permissions: MemberPermissions
-    }[]
-  > {
+  ): Promise<{ resource: T; permissions: ResourcePermissions }[]> {
     const userWatchings = await this.watcherService.findAllByUserId(user.id)
     const userMemberships = await this.memberService.findAllByUserId(user.id)
     return Promise.all(
-      resources.map(async (resource) => ({
-        resource,
-        permissions: await this.userPermissionsOnResource({
+      resources.map(async (resource) => {
+        const permissions = await this.userPermissionsOnResource({
           resource,
           user,
           userMemberships,
           userWatchings,
-        }),
-      }))
+        })
+        return { resource, permissions }
+      })
     )
   }
 
