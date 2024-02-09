@@ -15,10 +15,11 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { ApiTags } from '@nestjs/swagger'
 import { BadRequestResponse, SuccessResponse, UnauthorizedResponse } from '@platon/core/common'
-import { EventService, IRequest, Public } from '@platon/core/server'
+import { Configuration, EventService, IRequest, Public } from '@platon/core/server'
 import { PLSourceFile } from '@platon/feature/compiler'
 import { ExerciseTransformInput, FileTypes, LATEST, ResourceFile } from '@platon/feature/resource/common'
 import { Response } from 'express'
@@ -33,13 +34,67 @@ import {
 } from './file.event'
 import { ResourceFileService } from './file.service'
 import { RESOURCES_DIR } from './repo'
+import mime from 'mime-types'
+
+const CACHEABLE_EXTENSIONS = [
+  // IMAGES
+  'png',
+  'jpg',
+  'jpeg',
+  'gif',
+  'webp',
+  'tiff',
+  'bmp',
+  'ico',
+  'svg',
+
+  // VIDEOS
+  'mp4',
+  'webm',
+  'ogg',
+  'mov',
+  'avi',
+  'wmv',
+  'flv',
+
+  // AUDIO
+  'mp3',
+  'wav',
+  'flac',
+  'aac',
+  'ogg',
+  'm4a',
+
+  // FONTS
+  'ttf',
+  'otf',
+  'woff',
+  'woff2',
+  'eot',
+
+  // DOCUMENTS
+  'pdf',
+  'doc',
+  'docx',
+  'xls',
+  'xlsx',
+  'ppt',
+  'pptx',
+  'odt',
+  'ods',
+  'odp',
+]
 
 @Controller('files')
 @ApiTags('Resources')
 export class ResourceFileController {
   private readonly logger = new Logger(ResourceFileController.name)
 
-  constructor(private readonly fileService: ResourceFileService, private readonly eventService: EventService) {}
+  constructor(
+    private readonly fileService: ResourceFileService,
+    private readonly eventService: EventService,
+    private readonly configService: ConfigService<Configuration>
+  ) {}
 
   @Post('/release/:resourceId')
   async release(@Req() request: IRequest, @Param('resourceId') resourceId: string, @Body() input: FileReleaseDTO) {
@@ -91,8 +146,14 @@ export class ResourceFileController {
     @Param('path') path?: string,
     @Query() query?: FileRetrieveDTO
   ): Promise<unknown> {
+    const cacheLifetime = this.configService.get<number>('cache.filesLifetime', { infer: true })
+
     const { repo, resource, permissions } = await this.fileService.repo(resourceId, request.user)
     const version = query?.version || LATEST
+    if (version !== LATEST) {
+      res.set('Cache-Control', `public, max-age=${cacheLifetime}`)
+    }
+
     if (query?.bundle) {
       res.set('Content-Type', 'application/x-git-bundle')
       res.set('Content-Disposition', `attachment; filename=${resourceId}.git`)
@@ -110,14 +171,24 @@ export class ResourceFileController {
 
     if (query?.download) {
       const [node, content] = await repo.read(path, version)
-      res.set('Content-Type', 'application/zip')
-      res.set('Content-Disposition', `attachment; filename=platon.zip`)
+
       let file: StreamableFile
+      const mimeType = mime.lookup(node.path)
+      res.set('Content-Type', mimeType || 'application/octet-stream')
+
       if (node.type === 'file') {
         res.set('Content-Disposition', `attachment; filename=${basename(node.path)}`)
         const buffer = (await content) as Uint8Array
+
+        const extension = node.path.split('.').pop()
+        if (extension && CACHEABLE_EXTENSIONS.includes(extension)) {
+          res.set('Cache-Control', `public, max-age=${cacheLifetime}`)
+        }
+
         file = new StreamableFile(buffer)
       } else {
+        res.set('Content-Disposition', `attachment; filename=platon.zip`)
+
         const archive = await repo.archive(path, version)
         const stream = fs.createReadStream(archive)
         file = new StreamableFile(stream)
@@ -157,6 +228,11 @@ export class ResourceFileController {
     }
 
     if (node.type === FileTypes.file && !query?.stat) {
+      const extension = node.path.split('.').pop()
+      if (extension && CACHEABLE_EXTENSIONS.includes(extension)) {
+        res.set('Cache-Control', `public, max-age=${cacheLifetime}`)
+      }
+
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       return Buffer.from((await content)!.buffer).toString()
     }
