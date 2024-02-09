@@ -18,7 +18,7 @@ import {
   ResultLegendComponent,
 } from '@platon/feature/result/browser'
 
-import { DurationPipe, UiStatisticCardComponent } from '@platon/shared/ui'
+import { DurationPipe, UiLayoutBlockComponent, UiStatisticCardComponent } from '@platon/shared/ui'
 import { NzPageHeaderModule } from 'ng-zorro-antd/page-header'
 import { ActivityPresenter } from './activity.presenter'
 
@@ -49,6 +49,7 @@ import { ActivityPresenter } from './activity.presenter'
     ResultByExercisesComponent,
     ResultLegendComponent,
     UiStatisticCardComponent,
+    UiLayoutBlockComponent,
   ],
 })
 export class CourseActivityPage implements OnInit, OnDestroy {

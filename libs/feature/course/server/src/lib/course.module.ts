@@ -25,6 +25,7 @@ import { CourseExpander } from './course.expander'
 import { CourseLTIInterceptor } from './course.interceptor'
 import { CourseService } from './course.service'
 import { CourseSubscriber } from './course.subscriber'
+import { CoursePermissionsService } from './permissions/permissions.service'
 import { CourseSectionController } from './section/section.controller'
 import { CourseSectionEntity } from './section/section.entity'
 import { CourseSectionService } from './section/section.service'
@@ -59,6 +60,7 @@ import { CourseSectionService } from './section/section.service'
     CourseExpander,
     CourseSubscriber,
     CourseLTIInterceptor,
+    CoursePermissionsService,
 
     CourseMemberService,
     CourseSectionService,

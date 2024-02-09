@@ -20,6 +20,8 @@ import { DashboardService } from './dashboard/dashboard.service'
 export class ResultController {
   constructor(private readonly service: DashboardService) {}
 
+  // TODO: ensure user is teacher or admin of the activity
+
   @Roles(UserRoles.teacher, UserRoles.admin)
   @Get('/activity/:activityId')
   async activityResults(@Param('activityId') activityId: string): Promise<ActivityResults> {

@@ -30,6 +30,8 @@ import {
   OnTerminateActivityEventPayload,
 } from './activity.event'
 
+type ActivityGuard = (activity: ActivityEntity) => void | Promise<void>
+
 @Injectable()
 export class ActivityService {
   private readonly logger = new Logger(ActivityService.name)
@@ -98,23 +100,18 @@ export class ActivityService {
     return Optional.ofNullable(activity)
   }
 
-  async findAllOfUser(userId: string): Promise<ActivityEntity[]> {
-    const qb = buildSelectQuery(this.repository.createQueryBuilder('activity'), (qb) =>
-      qb.where('activity.creator_id = :userId', { userId })
-    )
-
-    const activities = await qb.getMany()
-    await this.addVirtualColumns(...activities)
-    return activities
-  }
-
   async create(activity: Partial<ActivityEntity>): Promise<ActivityEntity> {
     const result = await this.repository.save(activity)
     await this.addVirtualColumns(result)
     return result
   }
 
-  async update(courseId: string, activityId: string, changes: Partial<ActivityEntity>): Promise<ActivityEntity> {
+  async update(
+    courseId: string,
+    activityId: string,
+    changes: Partial<ActivityEntity>,
+    guard?: ActivityGuard
+  ): Promise<ActivityEntity> {
     const activity = await this.repository.findOne({
       where: {
         courseId,
@@ -126,23 +123,34 @@ export class ActivityService {
       throw new NotFoundResponse(`CourseActivity not found: ${activityId}`)
     }
 
+    if (guard) {
+      await guard(activity)
+    }
+
     Object.assign(activity, {
       ...changes,
 
       // REMOVE ALL VIRTUAL COLUMNS HERE
       title: undefined,
       state: undefined,
-      duration: undefined,
+      timeSpent: undefined,
+      resourceId: undefined,
+      exerciseCount: undefined,
       progression: undefined,
       permissions: undefined,
-    })
+    } as Partial<ActivityEntity>)
 
     const result = await this.repository.save(activity)
     await this.addVirtualColumns(result)
     return result
   }
 
-  async reload(courseId: string, activityId: string, input: ReloadActivity): Promise<ActivityEntity> {
+  async reload(
+    courseId: string,
+    activityId: string,
+    input: ReloadActivity,
+    guard?: ActivityGuard
+  ): Promise<ActivityEntity> {
     let activity = await this.repository.findOne({
       where: {
         courseId,
@@ -152,6 +160,10 @@ export class ActivityService {
 
     if (!activity) {
       throw new NotFoundResponse(`CourseActivity not found: ${activityId}`)
+    }
+
+    if (guard) {
+      await guard(activity)
     }
 
     const { source } = await this.fileService.compile({
@@ -169,8 +181,23 @@ export class ActivityService {
     return activity
   }
 
-  async delete(courseId: string, activityId: string) {
-    return this.repository.delete({ courseId, id: activityId })
+  async delete(courseId: string, activityId: string, guard?: ActivityGuard) {
+    const activity = await this.repository.findOne({
+      where: {
+        courseId,
+        id: activityId,
+      },
+    })
+
+    if (!activity) {
+      throw new NotFoundResponse(`CourseActivity not found: ${activityId}`)
+    }
+
+    if (guard) {
+      await guard(activity)
+    }
+
+    return this.repository.remove(activity)
   }
 
   async withActivity(
