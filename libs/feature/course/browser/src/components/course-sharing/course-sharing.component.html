@@ -5,6 +5,11 @@
     <nz-option nzLabel="Lien PLaTon" nzValue="internal" />
   </nz-select>
 </div>
+<p *ngIf="mode === 'lti'">
+  Le lien LTI vous permet d'accéder à ce cours depuis une plateforme compatible LTI telle que moodle en vous connectant
+  automatiquement. Plus d'informations <a href="/docs/main/doc/users/lti-integration">disponible ici</a>.
+</p>
+<p *ngIf="mode === 'internal'">Le lien PLaTon est accessible uniquement pour les utilisateurs connectés à PLaTon.</p>
 <div class="row">
   <nz-button-group>
     <button nz-button (click)="share()">
