@@ -13,7 +13,7 @@
   [nzClosable]="closable"
   [nzKeyboard]="false"
   nzCentered
-  nzMaskClosable
+  [nzMaskClosable]="maskClosable"
   (nzOnOk)="close(true)"
   (nzOnCancel)="close()"
   [nzFooter]="footer ?? noFooter"

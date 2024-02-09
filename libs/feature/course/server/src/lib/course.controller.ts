@@ -10,15 +10,17 @@ import {
   UserRoles,
 } from '@platon/core/common'
 import { IRequest, Mapper, Roles } from '@platon/core/server'
-import { CourseMemberService } from './course-member/course-member.service'
 import { CourseDTO, CourseFiltersDTO, CreateCourseDTO, UpdateCourseDTO } from './course.dto'
 import { CourseService } from './course.service'
+import { CoursePermissionsService } from './permissions/permissions.service'
+import { CourseMemberService } from './course-member/course-member.service'
 
 @Controller('courses')
 @ApiTags('Courses')
 export class CourseController {
   constructor(
     private readonly courseService: CourseService,
+    private readonly permissionsService: CoursePermissionsService,
     private readonly courseMemberService: CourseMemberService
   ) {}
 
@@ -44,9 +46,7 @@ export class CourseController {
       CourseDTO
     )
 
-    if (!(await this.courseMemberService.isMember(id, req.user.id))) {
-      throw new ForbiddenResponse(`You are not a member of this course`)
-    }
+    await this.permissionsService.ensureCourseReadPermission(id, req)
 
     return new ItemResponse({ resource })
   }
@@ -76,7 +76,12 @@ export class CourseController {
     if (!(await this.courseMemberService.isMember(id, req.user.id))) {
       throw new ForbiddenResponse(`You are not a member of this course`)
     }
-    const resource = Mapper.map(await this.courseService.update(id, input), CourseDTO)
+    const resource = Mapper.map(
+      await this.courseService.update(id, input, (course) =>
+        this.permissionsService.ensureCourseWritePermission(course.id, req)
+      ),
+      CourseDTO
+    )
     return new ItemResponse({ resource })
   }
 }

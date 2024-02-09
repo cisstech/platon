@@ -1,6 +1,6 @@
 <header>
   <nz-page-header [nzTitle]="header" nzBackIcon>
-    <ng-template #header> Ajouter une activité à votre cours</ng-template>
+    <ng-template #header> Ajouter @if (challenge){ un challenge} @else { une activité } à votre cours</ng-template>
   </nz-page-header>
 </header>
 <main>
@@ -56,6 +56,15 @@
       <ng-template uiStepperStep stepTitle="Configuration" [stepIcon]="icon3">
         <section>
           <form [formGroup]="settingsInfo">
+            <h4 id="challenge">Cette activité est-elle un challenge?</h4>
+            <nz-radio-group [nzDisabled]="challenge" aria-labelledby="challenge" formControlName="isChallenge">
+              <label nz-radio [nzValue]="true">Oui</label>
+              <label nz-radio [nzValue]="false">Non</label>
+            </nz-radio-group>
+            <p>
+              Les challenges sont des activités réalisables uniquement par les élèves du cours. Les résultats d'un
+              challenge sont visibles par tous dans la page du cours.
+            </p>
             <h4 id="openDates">Souhaitez-vous limiter l'accès de cette activité à une date en particulier?</h4>
             <nz-range-picker
               [nzShowTime]="true"
@@ -63,20 +72,27 @@
               aria-labelledby="openDates"
               formControlName="openDates"
             />
-            <h4 id="members">Souhaitez-vous limiter l'accès de cette activité à des utilisateurs en particulier?</h4>
-            <course-member-select
-              [members]="members"
-              aria-labelledby="members"
-              formControlName="members"
-              placeholder="Laissez la sélection vide pour permettre l'accès à tous, y compris aux nouveaux membres."
-            />
-            <h4 id="members">Souhaitez-vous limiter l'accès de cette activité à des utilisateurs en particulier?</h4>
-            <course-member-select
-              [members]="members"
-              aria-labelledby="correctors"
-              formControlName="correctors"
-              placeholder="Laissez la sélection vide si cette activité est auto-corrigée."
-            />
+            <ng-container *ngIf="!settingsInfo.value.isChallenge">
+              <h4 id="members">Souhaitez-vous limiter l'accès de cette activité à des utilisateurs en particulier?</h4>
+              <course-member-select
+                [members]="members"
+                aria-labelledby="members"
+                formControlName="members"
+                placeholder="Laissez la sélection vide pour permettre l'accès à tous, y compris aux nouveaux membres."
+              />
+              <h4 id="members">Souhaitez-vous assigner des correcteurs à cette activité?</h4>
+              <course-member-select
+                [members]="members"
+                aria-labelledby="correctors"
+                formControlName="correctors"
+                placeholder="Laissez la sélection vide si cette activité est auto-corrigée."
+              />
+              <p>
+                Les personnes désignées comme correcteurs recevront une notification une fois qu'un participant termine
+                l'activité afin d'ajuster sa note si nécessaire. Si une activité contient des correcteurs, les résultats
+                d'un participant lui sera affiché uniquement après la correction de toutes ses questions.
+              </p>
+            </ng-container>
           </form>
         </section>
       </ng-template>

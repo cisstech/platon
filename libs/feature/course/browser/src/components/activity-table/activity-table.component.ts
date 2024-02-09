@@ -22,6 +22,7 @@ import { NzTagModule } from 'ng-zorro-antd/tag'
 import { Activity, CourseSection } from '@platon/feature/course/common'
 import { antTagColorFromPercentage, UiModalDrawerComponent } from '@platon/shared/ui'
 
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 import { CoursePipesModule } from '../../pipes'
 import { CourseActivitySettingsComponent } from '../activity-settings/activity-settings.component'
 
@@ -53,6 +54,7 @@ type Model = {
     NzTagModule,
     NzTableModule,
     NzButtonModule,
+    NzToolTipModule,
     NzPopconfirmModule,
 
     CoursePipesModule,

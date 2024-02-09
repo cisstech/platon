@@ -1,7 +1,7 @@
 <nz-ribbon [nzText]="item.statistic ? ribbon : null" [nzColor]="progressColor">
   <ui-list-item-article
     [style.--border-color]="'red'"
-    [articleTitle]="name"
+    [articleTitle]="title"
     [articleDescription]="desc"
     [articleIconTemplate]="image"
     [articleUrl]="['/courses/', item.id]"
@@ -44,4 +44,11 @@
 
 <ng-template #image>
   <mat-icon>local_library</mat-icon>
+</ng-template>
+
+<ng-template #title>
+  {{ name }}
+  <a *ngIf="item.statistic?.challengeCount" nz-button nzType="link" [routerLink]="['/courses', item.id, 'challenges']">
+    <span nz-tooltip="Afficher les challenges du cours" nz-icon nzType="trophy" nzTheme="twotone"></span>
+  </a>
 </ng-template>

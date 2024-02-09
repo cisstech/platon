@@ -1,21 +1,21 @@
 import { NgModule, Type } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 
-import { MatInputModule } from '@angular/material/input'
-import { MatFormFieldModule } from '@angular/material/form-field'
 import { MatAutocompleteModule } from '@angular/material/autocomplete'
+import { MatFormFieldModule } from '@angular/material/form-field'
+import { MatInputModule } from '@angular/material/input'
 
 import { IDynamicModule } from '@cisstech/nge/services'
 
-import { InputBoxComponent } from './input-box.component'
-import { IconGrPipeModule } from '@cisstech/nge/pipes'
+import { IconGrPipe } from '@cisstech/nge/pipes'
 import { BaseModule } from '../../shared/components/base/base.module'
+import { InputBoxComponent } from './input-box.component'
 
 @NgModule({
   declarations: [InputBoxComponent],
   imports: [
     BaseModule,
-    IconGrPipeModule,
+    IconGrPipe,
 
     FormsModule,
     ReactiveFormsModule,

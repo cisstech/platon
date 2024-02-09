@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { BaseDTO, toArray, toDate } from '@platon/core/server'
+import { BaseDTO, toArray, toBoolean, toDate } from '@platon/core/server'
 import {
   Activity,
   ActivityFilters,
@@ -9,7 +9,7 @@ import {
   UpdateActivity,
 } from '@platon/feature/course/common'
 import { Exclude, Transform, Type } from 'class-transformer'
-import { IsDate, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator'
+import { IsBoolean, IsDate, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator'
 import { ActivityPermissionsDTO } from '../permissions/permissions.dto'
 
 export class ActivityDTO extends BaseDTO implements Activity {
@@ -29,8 +29,16 @@ export class ActivityDTO extends BaseDTO implements Activity {
   @IsDate()
   readonly closeAt?: Date
 
+  @IsOptional()
+  @ApiProperty()
+  @IsBoolean()
+  readonly isChallenge!: boolean
+
   @IsString()
   readonly title!: string
+
+  @IsString()
+  readonly resourceId!: string
 
   @IsString()
   readonly state!: ActivityOpenStates
@@ -43,6 +51,10 @@ export class ActivityDTO extends BaseDTO implements Activity {
   @ApiProperty()
   readonly progression = 0
 
+  @IsNumber()
+  @ApiProperty()
+  readonly exerciseCount = 0
+
   @Type(() => ActivityPermissionsDTO)
   readonly permissions!: ActivityPermissionsDTO
 
@@ -54,7 +66,13 @@ export class ActivityFiltersDTO implements ActivityFilters {
   @IsOptional()
   @IsUUID()
   @ApiProperty()
-  readonly sectionId?: string
+  readonly sectionId?: string | null
+
+  @IsOptional()
+  @Transform(({ value }) => toBoolean(value))
+  @ApiProperty()
+  @IsBoolean()
+  challenge?: boolean | null
 }
 
 export class CreateCourseActivityDTO implements CreateActivity {

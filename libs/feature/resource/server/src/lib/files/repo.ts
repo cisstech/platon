@@ -1,4 +1,3 @@
-import { StreamableFile } from '@nestjs/common'
 import {
   FileTypes,
   FileVersion,
@@ -24,9 +23,10 @@ import * as Path from 'path'
 import { simpleGit } from 'simple-git'
 import { promisify } from 'util'
 
-const BASE = Path.join(process.cwd(), 'resources')
 const ROOT = '.'
 const DEFAULT_BRANCH = 'main'
+
+export const RESOURCES_DIR = Path.join(process.cwd(), 'resources')
 
 interface User {
   name: string
@@ -56,7 +56,7 @@ export class Repo {
       defaultFiles?: Record<string, string>
     }
   ) {
-    const dir = Path.join(BASE, name)
+    const dir = Path.join(RESOURCES_DIR, name)
 
     let exists = false
     try {
@@ -82,7 +82,7 @@ export class Repo {
             Object.entries(options.defaultFiles).map(([path, content]) => instance.touch(path, content))
           )
         } else {
-          await fs.promises.cp(Path.join(BASE, 'templates', options?.type?.toLowerCase() as string), dir, {
+          await fs.promises.cp(Path.join(RESOURCES_DIR, 'templates', options?.type?.toLowerCase() as string), dir, {
             recursive: true,
             force: true,
           })
@@ -367,11 +367,14 @@ export class Repo {
     return await withTempFile(
       async (path) => {
         await simpleGit(this.root).raw('bundle', 'create', path, 'HEAD', version === LATEST ? DEFAULT_BRANCH : 'latest')
-        const file = fs.createReadStream(path)
-        return new StreamableFile(file)
+        return path
       },
       { prefix: 'bundles', suffix: '.git', cleanup: false }
     )
+  }
+
+  async mergeBundle(name: string) {
+    await simpleGit(this.repo.dir).raw('pull', Path.join(RESOURCES_DIR, 'bundles', `${name}.git`))
   }
 
   async archive(path = ROOT, version = LATEST) {

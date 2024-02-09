@@ -44,7 +44,7 @@ export interface FileCreate {
 }
 
 export interface FileUpdate {
-  content: string
+  content?: string | null
 }
 
 export interface FileMove {

@@ -22,4 +22,8 @@ export class CourseStatisticDTO implements CourseStatistic {
   @IsNumber()
   @ApiProperty()
   readonly activityCount = 0
+
+  @IsNumber()
+  @ApiProperty()
+  readonly challengeCount = 0
 }

@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { Injectable, OnDestroy } from '@angular/core'
+import { Injectable, OnDestroy, inject } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { AuthService, DialogService } from '@platon/core/browser'
 import { User } from '@platon/core/common'
 import { CourseService } from '@platon/feature/course/browser'
 import {
   Activity,
+  ActivityFilters,
   Course,
   CourseDemo,
   CourseMember,
@@ -15,6 +16,8 @@ import {
   UpdateCourse,
   UpdateCourseSection,
 } from '@platon/feature/course/common'
+import { ResultService } from '@platon/feature/result/browser'
+import { ActivityLeaderboardEntry, CourseLeaderboardEntry } from '@platon/feature/result/common'
 import { LayoutState, layoutStateFromError } from '@platon/shared/ui'
 import { BehaviorSubject, Subscription, firstValueFrom } from 'rxjs'
 import { Optional } from 'typescript-optional'
@@ -22,17 +25,18 @@ import { Optional } from 'typescript-optional'
 @Injectable()
 export class CoursePresenter implements OnDestroy {
   private readonly subscriptions: Subscription[] = []
+  private readonly authService = inject(AuthService)
+  private readonly resultService = inject(ResultService)
+  private readonly dialogService = inject(DialogService)
+  private readonly courseService = inject(CourseService)
+  private readonly activatedRoute = inject(ActivatedRoute)
+
   private readonly context = new BehaviorSubject<Context>(this.defaultContext())
 
   readonly contextChange = this.context.asObservable()
   readonly onDeletedActivity = this.courseService.onDeletedActivity
 
-  constructor(
-    private readonly authService: AuthService,
-    private readonly dialogService: DialogService,
-    private readonly courseService: CourseService,
-    private readonly activatedRoute: ActivatedRoute
-  ) {
+  constructor() {
     this.subscriptions.push(
       this.activatedRoute.paramMap.subscribe((params) => {
         this.onChangeRoute(params.get('id') as string).catch(console.error)
@@ -105,13 +109,36 @@ export class CoursePresenter implements OnDestroy {
 
   // Activities
 
-  async listActivities(): Promise<Activity[]> {
+  async listActivities(filters?: ActivityFilters): Promise<Activity[]> {
     const { course } = this.context.value
     if (!course) {
       return []
     }
-    const response = await firstValueFrom(this.courseService.listActivities(course))
+    const response = await firstValueFrom(this.courseService.listActivities(course, filters))
     return response.resources
+  }
+
+  // Leaderboard
+
+  async courseLeaderboard(): Promise<CourseLeaderboardEntry[]> {
+    const { course } = this.context.value as Required<Context>
+    if (!course) {
+      return []
+    }
+
+    return firstValueFrom(
+      this.resultService.courseLeaderboard({
+        courseId: course.id,
+      })
+    )
+  }
+
+  async activityLeaderboard(activityId: string): Promise<ActivityLeaderboardEntry[]> {
+    return firstValueFrom(
+      this.resultService.activityLeaderboard({
+        activityId,
+      })
+    )
   }
 
   async update(input: UpdateCourse): Promise<boolean> {

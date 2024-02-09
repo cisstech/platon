@@ -10,6 +10,9 @@ export interface Configuration {
     username: string
     password: string
   }
+  cache: {
+    filesLifetime: number
+  }
   redis: {
     host: string
     port: number
@@ -37,6 +40,9 @@ export const configuration = (): Configuration => ({
     host: process.env['DB_HOST'] as string,
     username: process.env['DB_USERNAME'] as string,
     password: process.env['DB_PASSWORD'] as string,
+  },
+  cache: {
+    filesLifetime: Number.parseInt(process.env['CACHE_FILES_LIFETIME'] || '31536000'),
   },
   redis: {
     host: process.env['REDIS_HOST'] as string,

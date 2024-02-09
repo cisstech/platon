@@ -1,5 +1,5 @@
 import { CommonModule, Location } from '@angular/common'
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
 import { Subscription } from 'rxjs'
@@ -18,7 +18,7 @@ import {
   ResultLegendComponent,
 } from '@platon/feature/result/browser'
 
-import { DurationPipe, UiStatisticCardComponent } from '@platon/shared/ui'
+import { DurationPipe, UiLayoutBlockComponent, UiStatisticCardComponent } from '@platon/shared/ui'
 import { NzPageHeaderModule } from 'ng-zorro-antd/page-header'
 import { ActivityPresenter } from './activity.presenter'
 
@@ -49,17 +49,17 @@ import { ActivityPresenter } from './activity.presenter'
     ResultByExercisesComponent,
     ResultLegendComponent,
     UiStatisticCardComponent,
+    UiLayoutBlockComponent,
   ],
 })
 export class CourseActivityPage implements OnInit, OnDestroy {
-  private readonly subscriptions: Subscription[] = []
-  protected context = this.presenter.defaultContext()
+  private readonly location = inject(Location)
+  private readonly presenter = inject(ActivityPresenter)
+  private readonly changeDetectorRef = inject(ChangeDetectorRef)
 
-  constructor(
-    private readonly location: Location,
-    private readonly presenter: ActivityPresenter,
-    private readonly changeDetectorRef: ChangeDetectorRef
-  ) {}
+  private readonly subscriptions: Subscription[] = []
+
+  protected context = this.presenter.defaultContext()
 
   ngOnInit(): void {
     this.subscriptions.push(

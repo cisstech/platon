@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { HttpErrorResponse } from '@angular/common/http'
 import { Injectable, OnDestroy } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { AuthService, DialogService } from '@platon/core/browser'
@@ -15,7 +14,7 @@ import {
 } from '@platon/feature/course/common'
 import { ResultService } from '@platon/feature/result/browser'
 import { ActivityResults } from '@platon/feature/result/common'
-import { LayoutState } from '@platon/shared/ui'
+import { LayoutState, layoutStateFromError } from '@platon/shared/ui'
 import { BehaviorSubject, Subscription, firstValueFrom } from 'rxjs'
 
 @Injectable()
@@ -115,12 +114,7 @@ export class ActivityPresenter implements OnDestroy {
     try {
       await this.refresh(courseId, activityId)
     } catch (error) {
-      const status = (error as HttpErrorResponse).status || 500
-      if (status >= 400 && status < 500) {
-        this.context.next({ state: 'NOT_FOUND' })
-      } else {
-        this.context.next({ state: 'SERVER_ERROR' })
-      }
+      this.context.next({ state: layoutStateFromError(error) })
     }
   }
 

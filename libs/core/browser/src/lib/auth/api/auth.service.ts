@@ -93,12 +93,18 @@ export class AuthService {
   /**
    * Sign out the current user.
    *
-   * Note:
-   * This method will notify all the observers that implements `AuthObserver` interface if needed.
+   * @remarks
+   * - backToLogin is meant to be set to false only when the user is already on the login page
+   *   and wants to sign out while keeping url unchanged with query params.
+   * - This method will notify all the observers that implements `AuthObserver` interface if needed.
+   *
+   * @param backToLogin if `true` the user will be redirected to the login page after the sign out.
    *
    **/
-  async signOut(): Promise<void> {
-    await this.router.navigateByUrl('/login', { replaceUrl: true })
+  async signOut(backToLogin = true): Promise<void> {
+    if (backToLogin) {
+      await this.router.navigateByUrl('/login', { replaceUrl: true })
+    }
 
     if (this.user) {
       for (const observer of this.observers) {

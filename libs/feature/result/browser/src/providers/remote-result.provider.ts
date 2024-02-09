@@ -1,16 +1,20 @@
-import { HttpClient } from '@angular/common/http'
+import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
+import { ItemResponse, ListResponse } from '@platon/core/common'
 import {
+  ActivityCorrection,
+  ActivityLeaderboardEntry,
   ActivityResults,
   Correction,
-  ActivityCorrection,
+  CourseLeaderboardEntry,
+  DashboardOutput,
+  FindActivityLeaderboard,
+  FindCourseLeaderboard,
   UpsertCorrection,
   UserResults,
-  DashboardOutput,
 } from '@platon/feature/result/common'
 import { Observable, map } from 'rxjs'
 import { ResultProvider } from '../models/result-provider'
-import { ItemResponse, ListResponse } from '@platon/core/common'
 
 @Injectable()
 export class RemoteResultProvider extends ResultProvider {
@@ -28,6 +32,31 @@ export class RemoteResultProvider extends ResultProvider {
 
   activityDashboard(activityId: string): Observable<DashboardOutput> {
     return this.http.get<DashboardOutput>(`/api/v1/results/dashboard/activities/${activityId}`)
+  }
+
+  courseLeaderboard(input: FindCourseLeaderboard): Observable<CourseLeaderboardEntry[]> {
+    let params = new HttpParams()
+    if (input.limit) {
+      params = params.set('limit', input.limit.toString())
+    }
+    return this.http
+      .get<ListResponse<CourseLeaderboardEntry>>(`/api/v1/results/leaderboard/courses/${input.courseId}`, {
+        params,
+      })
+      .pipe(map((response) => response.resources))
+  }
+
+  activityLeaderboard(input: FindActivityLeaderboard): Observable<ActivityLeaderboardEntry[]> {
+    let params = new HttpParams()
+    if (input.limit) {
+      params = params.set('limit', input.limit.toString())
+    }
+
+    return this.http
+      .get<ListResponse<ActivityLeaderboardEntry>>(`/api/v1/results/leaderboard/activities/${input.activityId}`, {
+        params,
+      })
+      .pipe(map((response) => response.resources))
   }
 
   sessionResults(sessionId: string): Observable<UserResults> {

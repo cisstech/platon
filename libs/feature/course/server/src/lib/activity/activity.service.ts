@@ -2,7 +2,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common'
 import { OnEvent } from '@nestjs/event-emitter'
 import { InjectRepository } from '@nestjs/typeorm'
-import { ForbiddenResponse, NotFoundResponse, User, UserRoles } from '@platon/core/common'
+import { ForbiddenResponse, NotFoundResponse, User, isTeacherRole } from '@platon/core/common'
 import { DatabaseService, EventService, IRequest, buildSelectQuery } from '@platon/core/server'
 import {
   ActivityFilters,
@@ -10,10 +10,11 @@ import {
   ReloadActivity,
   UpdateActivity,
   calculateActivityOpenState,
+  canUserAnswerActivity,
 } from '@platon/feature/course/common'
-import { ResourceFileService } from '@platon/feature/resource/server'
+import { ResourceEntity, ResourceFileService } from '@platon/feature/resource/server'
 import { CLS_REQ } from 'nestjs-cls'
-import { Repository, SelectQueryBuilder } from 'typeorm'
+import { In, Repository, SelectQueryBuilder } from 'typeorm'
 import { Optional } from 'typescript-optional'
 import { ActivityCorrectorService } from '../activity-corrector/activity-corrector.service'
 import { ActivityMemberService } from '../activity-member/activity-member.service'
@@ -29,6 +30,8 @@ import {
   OnTerminateActivityEventPayload,
 } from './activity.event'
 
+type ActivityGuard = (activity: ActivityEntity) => void | Promise<void>
+
 @Injectable()
 export class ActivityService {
   private readonly logger = new Logger(ActivityService.name)
@@ -42,8 +45,12 @@ export class ActivityService {
     private readonly notificationService: CourseNotificationService,
     private readonly activityMemberService: ActivityMemberService,
     private readonly activityCorrectorService: ActivityCorrectorService,
+
     @InjectRepository(ActivityEntity)
-    private readonly repository: Repository<ActivityEntity>
+    private readonly repository: Repository<ActivityEntity>,
+
+    @InjectRepository(ResourceEntity)
+    private readonly resourceRepository: Repository<ResourceEntity>
   ) {}
 
   async search(courseId: string, filters?: ActivityFilters): Promise<[ActivityEntity[], number]> {
@@ -53,12 +60,16 @@ export class ActivityService {
       qb.andWhere(`section_id = :sectionId`, { sectionId: filters.sectionId })
     }
 
+    if (filters?.challenge != null) {
+      qb.andWhere(`is_challenge = :isChallenge`, { isChallenge: !!filters.challenge })
+    }
+
     const [entities, count] = await qb.getManyAndCount()
     await this.addVirtualColumns(...entities)
     return [entities, count]
   }
 
-  async findById(id: string, user: User): Promise<ActivityEntity> {
+  async findByIdForUser(id: string, user: User): Promise<ActivityEntity> {
     const qb = buildSelectQuery(this.repository.createQueryBuilder('activity'), (qb) =>
       qb.where('activity.id = :id', { id })
     )
@@ -86,18 +97,7 @@ export class ActivityService {
     if (activity) {
       await this.addVirtualColumns(activity)
     }
-
     return Optional.ofNullable(activity)
-  }
-
-  async findAllOfUser(userId: string): Promise<ActivityEntity[]> {
-    const qb = buildSelectQuery(this.repository.createQueryBuilder('activity'), (qb) =>
-      qb.where('activity.creator_id = :userId', { userId })
-    )
-
-    const activities = await qb.getMany()
-    await this.addVirtualColumns(...activities)
-    return activities
   }
 
   async create(activity: Partial<ActivityEntity>): Promise<ActivityEntity> {
@@ -106,7 +106,12 @@ export class ActivityService {
     return result
   }
 
-  async update(courseId: string, activityId: string, changes: Partial<ActivityEntity>): Promise<ActivityEntity> {
+  async update(
+    courseId: string,
+    activityId: string,
+    changes: Partial<ActivityEntity>,
+    guard?: ActivityGuard
+  ): Promise<ActivityEntity> {
     const activity = await this.repository.findOne({
       where: {
         courseId,
@@ -118,23 +123,34 @@ export class ActivityService {
       throw new NotFoundResponse(`CourseActivity not found: ${activityId}`)
     }
 
+    if (guard) {
+      await guard(activity)
+    }
+
     Object.assign(activity, {
       ...changes,
 
       // REMOVE ALL VIRTUAL COLUMNS HERE
       title: undefined,
       state: undefined,
-      duration: undefined,
+      timeSpent: undefined,
+      resourceId: undefined,
+      exerciseCount: undefined,
       progression: undefined,
       permissions: undefined,
-    })
+    } as Partial<ActivityEntity>)
 
     const result = await this.repository.save(activity)
     await this.addVirtualColumns(result)
     return result
   }
 
-  async reload(courseId: string, activityId: string, input: ReloadActivity): Promise<ActivityEntity> {
+  async reload(
+    courseId: string,
+    activityId: string,
+    input: ReloadActivity,
+    guard?: ActivityGuard
+  ): Promise<ActivityEntity> {
     let activity = await this.repository.findOne({
       where: {
         courseId,
@@ -144,6 +160,10 @@ export class ActivityService {
 
     if (!activity) {
       throw new NotFoundResponse(`CourseActivity not found: ${activityId}`)
+    }
+
+    if (guard) {
+      await guard(activity)
     }
 
     const { source } = await this.fileService.compile({
@@ -161,10 +181,36 @@ export class ActivityService {
     return activity
   }
 
-  async delete(courseId: string, activityId: string) {
-    return this.repository.delete({ courseId, id: activityId })
+  async delete(courseId: string, activityId: string, guard?: ActivityGuard) {
+    const activity = await this.repository.findOne({
+      where: {
+        courseId,
+        id: activityId,
+      },
+    })
+
+    if (!activity) {
+      throw new NotFoundResponse(`CourseActivity not found: ${activityId}`)
+    }
+
+    if (guard) {
+      await guard(activity)
+    }
+
+    return this.repository.remove(activity)
   }
 
+  async withActivity(
+    activityId: string,
+    consumer: (activity?: ActivityEntity | null) => void | Promise<void>
+  ): Promise<void> {
+    const activity = await this.repository.findOne({
+      where: {
+        id: activityId,
+      },
+    })
+    await consumer(activity)
+  }
   async fromInput(input: CreateActivity | UpdateActivity): Promise<ActivityEntity> {
     const activity = new ActivityEntity()
 
@@ -213,15 +259,37 @@ export class ActivityService {
   }
 
   private async addVirtualColumns(...activities: ActivityEntity[]): Promise<void> {
+    const resourceIdOfUntitleActivities = new Set(
+      activities
+        .filter((activity) => !(activity.source.variables.title as string)?.trim())
+        .map((activity) => activity.source.resource as string)
+    )
+
+    const resources = resourceIdOfUntitleActivities.size
+      ? await this.resourceRepository.find({
+          where: {
+            id: In(Array.from(resourceIdOfUntitleActivities)),
+          },
+        })
+      : []
+
     activities.forEach((activity) => {
+      const title = activity.source.variables.title as string
+      const exerciseGroups = (activity.source.variables.exerciseGroups as Record<string, unknown[]>) || {}
       Object.assign(activity, {
         state: calculateActivityOpenState(activity),
+        title: title?.trim() || resources.find((r) => r.id === activity.source.resource)?.name,
+        resourceId: activity.source.resource,
+        exerciseCount: Object.keys(exerciseGroups).reduce((acc, group) => acc + exerciseGroups[group].length, 0),
         permissions: {
           update: activity.creatorId === this.request.user.id,
-          viewStats: [UserRoles.admin, UserRoles.teacher].includes(this.request.user.role),
+          answer: canUserAnswerActivity(activity, this.request.user),
+          viewStats: isTeacherRole(this.request.user.role),
+          viewResource: isTeacherRole(this.request.user.role),
         },
       } as Partial<ActivityEntity>)
     })
+
     await this.databaseService.resolveVirtualColumns(ActivityEntity, activities, this.request.user)
   }
 

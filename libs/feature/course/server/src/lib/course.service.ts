@@ -7,6 +7,8 @@ import { Optional } from 'typescript-optional'
 import { CourseMemberView } from './course-member/course-member.view'
 import { CourseEntity } from './course.entity'
 
+type CourseGuard = (course: CourseEntity) => void | Promise<void>
+
 @Injectable()
 export class CourseService {
   constructor(
@@ -83,10 +85,14 @@ export class CourseService {
     return this.courseRepository.save(input)
   }
 
-  async update(id: string, changes: Partial<CourseEntity>): Promise<CourseEntity> {
+  async update(id: string, changes: Partial<CourseEntity>, guard?: CourseGuard): Promise<CourseEntity> {
     const course = await this.courseRepository.findOne({ where: { id } })
     if (!course) {
       throw new NotFoundResponse(`Course not found: ${id}`)
+    }
+
+    if (guard) {
+      await guard(course)
     }
 
     Object.assign(course, changes)
@@ -94,7 +100,16 @@ export class CourseService {
     return this.courseRepository.save(course)
   }
 
-  async delete(id: string): Promise<void> {
-    await this.courseRepository.delete(id)
+  async delete(id: string, guard?: CourseGuard): Promise<void> {
+    const course = await this.courseRepository.findOne({ where: { id } })
+    if (!course) {
+      throw new NotFoundResponse(`Course not found: ${id}`)
+    }
+
+    if (guard) {
+      await guard(course)
+    }
+
+    await this.courseRepository.remove(course)
   }
 }

@@ -114,30 +114,34 @@ export class CourseActivitySettingsComponent implements OnInit {
             closeAt: value.openDates?.[1] || null,
           })
         ),
-        firstValueFrom(
-          this.courseService.updateActivityMembers(
-            this.activity,
-            value.members?.map((m) => {
-              const [memberId, userId] = m.split(':')
-              return {
-                userId,
-                memberId,
-              }
-            }) || []
-          )
-        ),
-        firstValueFrom(
-          this.courseService.updateActivityCorrectors(
-            this.activity,
-            value.correctors?.map((m) => {
-              const [memberId, userId] = m.split(':')
-              return {
-                userId,
-                memberId,
-              }
-            }) || []
-          )
-        ),
+        ...(!this.activity.isChallenge
+          ? [
+              firstValueFrom(
+                this.courseService.updateActivityMembers(
+                  this.activity,
+                  value.members?.map((m) => {
+                    const [memberId, userId] = m.split(':')
+                    return {
+                      userId,
+                      memberId,
+                    }
+                  }) || []
+                )
+              ),
+              firstValueFrom(
+                this.courseService.updateActivityCorrectors(
+                  this.activity,
+                  value.correctors?.map((m) => {
+                    const [memberId, userId] = m.split(':')
+                    return {
+                      userId,
+                      memberId,
+                    }
+                  }) || []
+                )
+              ),
+            ]
+          : []),
       ])
 
       this.activityChange.emit(

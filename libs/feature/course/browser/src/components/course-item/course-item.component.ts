@@ -10,8 +10,10 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 
 import { NgeUiListModule } from '@cisstech/nge/ui/list'
 
+import { RouterModule } from '@angular/router'
 import { Course } from '@platon/feature/course/common'
 import { antTagColorFromPercentage } from '@platon/shared/ui'
+import { NzButtonModule } from 'ng-zorro-antd/button'
 
 @Component({
   standalone: true,
@@ -21,8 +23,10 @@ import { antTagColorFromPercentage } from '@platon/shared/ui'
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
+    RouterModule,
     MatIconModule,
     NzIconModule,
+    NzButtonModule,
     NzBadgeModule,
     NzBadgeModule,
     NzToolTipModule,

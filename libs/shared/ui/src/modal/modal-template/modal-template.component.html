@@ -1,14 +1,14 @@
 <nz-modal
   *ngIf="visible"
   [(nzVisible)]="visible"
-  [nzBodyStyle]="bodyStyle"
+  [nzBodyStyle]="customBodyStyle"
   nzClassName="ui-modal-template"
   [nzWidth]="width ?? 520"
   [nzTitle]="title"
   [nzClosable]="closable"
+  [nzMaskClosable]="maskClosable"
   nzMask
   nzCentered
-  nzMaskClosable
   (nzOnOk)="close(true)"
   (nzOnCancel)="close()"
   [nzFooter]="footer ?? (templates.length > 1 ? templates.last : noFooter)"

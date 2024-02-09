@@ -289,6 +289,7 @@ This document describes the environnement configuration for the application, inc
 | PASSWORD_SALT              | api      | Secret key for the API service.                                                     | 10                               |
 | JWT_ACCESS_TOKEN_LIFETIME  | api      | Access token lifetime for JWT authentication.                                       | 7d                               |
 | JWT_REFRESH_TOKEN_LIFETIME | api      | Refresh token lifetime for JWT authentication.                                      | 7d                               |
+| FILES_CACHE_LIFETIME       | api      | Duration of cacheable files in seconds.                                             | 31536000 (1 year)                |
 | GRAPHQL_PLAYGROUND         | api      | Enable/disable GraphQL Playground.                                                  | true                             |
 | SANDBOX_URL                | api      | Defines python sandbox url.                                                         | <http://localhost:7000>          |
 | SANDBOX_ENV_LIFESPAN       | api      | Value in seconds that determins for how long node sandbox env files should be kept. | 604800 (7 days)                  |
