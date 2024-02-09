@@ -58,13 +58,14 @@ return /******/ (function() { // webpackBootstrap
 
 
 var major = 1,
-    minor = 6,
-    patch = 2,
+    minor = 7,
+    patch = 0,
     add = '', //'dev' 'beta'
     version = major + '.' + minor + '.' + patch + (add ? '-' + add : ''),
     constants;
 
-constants = /** @lends JXG */ {
+constants =
+    /** @lends JXG */ {
     /**
      * Constant: the currently used JSXGraph version.
      *
@@ -136,6 +137,8 @@ constants = /** @lends JXG */ {
     OBJECT_TYPE_CURVE3D: 36,
     OBJECT_TYPE_SURFACE3D: 37,
 
+    OBJECT_TYPE_MEASUREMENT: 38,
+
     // IMPORTANT:
     // ----------
     // For being able to differentiate between the (sketchometry specific) SPECIAL_OBJECT_TYPEs and
@@ -150,125 +153,7 @@ constants = /** @lends JXG */ {
     OBJECT_CLASS_AREA: 5,
     OBJECT_CLASS_OTHER: 6,
     OBJECT_CLASS_TEXT: 7,
-    OBJECT_CLASS_3D: 8,
-
-    // SketchReader constants
-    GENTYPE_ABC: 1, // unused
-    GENTYPE_AXIS: 2,
-    GENTYPE_MID: 3,
-
-    /**
-     * @ignore
-     * @deprecated, now use {@link JXG.GENTYPE_REFLECTION_ON_LINE}
-     *
-     */
-    GENTYPE_REFLECTION: 4,
-    /**
-     * @ignore
-     * @deprecated, now use {@link JXG.GENTYPE_REFLECTION_ON_POINT}
-     */
-    GENTYPE_MIRRORELEMENT: 5,
-
-    GENTYPE_REFLECTION_ON_LINE: 4,
-    GENTYPE_REFLECTION_ON_POINT: 5,
-    GENTYPE_TANGENT: 6,
-    GENTYPE_PARALLEL: 7,
-    GENTYPE_BISECTORLINES: 8,
-    GENTYPE_BOARDIMG: 9,
-    GENTYPE_BISECTOR: 10,
-    GENTYPE_NORMAL: 11,
-    GENTYPE_POINT: 12,
-    GENTYPE_GLIDER: 13,
-    GENTYPE_INTERSECTION: 14,
-    GENTYPE_CIRCLE: 15,
-    /**
-     * @ignore @deprecated NOT USED ANY MORE SINCE SKETCHOMETRY 2.0 (only for old constructions needed)
-     */
-    GENTYPE_CIRCLE2POINTS: 16,
-
-    GENTYPE_LINE: 17,
-    GENTYPE_TRIANGLE: 18,
-    GENTYPE_QUADRILATERAL: 19,
-    GENTYPE_TEXT: 20,
-    GENTYPE_POLYGON: 21,
-    GENTYPE_REGULARPOLYGON: 22,
-    GENTYPE_SECTOR: 23,
-    GENTYPE_ANGLE: 24,
-    GENTYPE_PLOT: 25,
-    GENTYPE_SLIDER: 26,
-    GENTYPE_TRUNCATE: 27,
-    GENTYPE_JCODE: 28,
-    GENTYPE_MOVEMENT: 29,
-    GENTYPE_COMBINED: 30,
-    GENTYPE_RULER: 31,
-    GENTYPE_SLOPETRIANGLE: 32,
-    GENTYPE_PERPSEGMENT: 33,
-    GENTYPE_LABELMOVEMENT: 34,
-    GENTYPE_VECTOR: 35,
-    GENTYPE_NONREFLEXANGLE: 36,
-    GENTYPE_REFLEXANGLE: 37,
-    GENTYPE_PATH: 38,
-    GENTYPE_DERIVATIVE: 39,
-    // 40 // unused ...
-    GENTYPE_DELETE: 41,
-    GENTYPE_COPY: 42,
-    GENTYPE_MIRROR: 43,
-    GENTYPE_ROTATE: 44,
-    GENTYPE_ABLATION: 45,
-    GENTYPE_MIGRATE: 46,
-    GENTYPE_VECTORCOPY: 47,
-    GENTYPE_POLYGONCOPY: 48,
-    /**
-     * Constants
-     * @name Constants
-     * @namespace
-     */ //        GENTYPE_TRANSFORM: 48, // unused
-    // 49 ... 50 // unused ...
-
-    // IMPORTANT:
-    // ----------
-    // For being able to differentiate between the (GUI-specific) CTX and
-    // (CORE-specific) non-CTX steps, the non-CTX steps MUST NOT be changed
-    // to values > 50.
-
-    GENTYPE_CTX_TYPE_G: 51,
-    GENTYPE_CTX_TYPE_P: 52,
-    GENTYPE_CTX_TRACE: 53,
-    GENTYPE_CTX_VISIBILITY: 54,
-    GENTYPE_CTX_CCVISIBILITY: 55, // unused
-    GENTYPE_CTX_MPVISIBILITY: 56,
-    GENTYPE_CTX_WITHLABEL: 57,
-    GENTYPE_CTX_LABEL: 58,
-    GENTYPE_CTX_FIXED: 59,
-    GENTYPE_CTX_STROKEWIDTH: 60,
-    GENTYPE_CTX_LABELSIZE: 61,
-    GENTYPE_CTX_SIZE: 62,
-    GENTYPE_CTX_FACE: 63,
-    GENTYPE_CTX_STRAIGHT: 64,
-    GENTYPE_CTX_ARROW: 65,
-    GENTYPE_CTX_COLOR: 66,
-    GENTYPE_CTX_RADIUS: 67,
-    GENTYPE_CTX_COORDS: 68,
-    GENTYPE_CTX_TEXT: 69,
-    GENTYPE_CTX_ANGLERADIUS: 70,
-    GENTYPE_CTX_DOTVISIBILITY: 71,
-    GENTYPE_CTX_FILLOPACITY: 72,
-    GENTYPE_CTX_PLOT: 73,
-    GENTYPE_CTX_SCALE: 74,
-    GENTYPE_CTX_SLIDER_BOUND: 75,
-    GENTYPE_CTX_POINT1: 76,
-    GENTYPE_CTX_POINT2: 77,
-    GENTYPE_CTX_LABELSTICKY: 78,
-    GENTYPE_CTX_TYPE_I: 79,
-    GENTYPE_CTX_HASINNERPOINTS: 80,
-    GENTYPE_CTX_SLIDER_STEP: 81,
-    GENTYPE_CTX_SNAPTOGRID: 82,
-    GENTYPE_CTX_SNAPTOPOINTS: 83,
-    GENTYPE_CTX_STROKEDASH: 84,
-    GENTYPE_CTX_SLIDER_VALUE: 85,
-    GENTYPE_CTX_SECTORBORDERS: 86,
-    GENTYPE_CTX_CURVETAU: 87,
-    GENTYPE_CTX_SLIDER_POS: 88
+    OBJECT_CLASS_3D: 8
 };
 
 _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extendConstants(_jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z, constants);
@@ -277,6 +162,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extendConstants(_jxg__WEBP
 // const COORDS_BY_SCREEN = constants.COORDS_BY_SCREEN;
 // export {constants as default,
 //         COORDS_BY_SCREEN};
+
 
 /***/ }),
 
@@ -341,11 +227,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extendConstants(_jxg__WEBP
  * @param {Number} method The type of coordinates given by the user. Accepted values are <b>COORDS_BY_SCREEN</b> and <b>COORDS_BY_USER</b>.
  * @param {Array} coordinates An array of affine coordinates.
  * @param {JXG.Board} board A reference to a board.
- * @oaram {Boolean} [emitter=true]
- * @borrows JXG.EventEmitter#on as this.on
- * @borrows JXG.EventEmitter#off as this.off
- * @borrows JXG.EventEmitter#triggerEventHandlers as this.triggerEventHandlers
- * @borrows JXG.EventEmitter#eventHandlers as this.eventHandlers
+ * @param {Boolean} [emitter=true]
  * @constructor
  */
 _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Coords = function (method, coordinates, board, emitter) {
@@ -454,21 +336,11 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
                 if (sum > _math_math__WEBPACK_IMPORTED_MODULE_4__/* ["default"] */ .Z.eps * _math_math__WEBPACK_IMPORTED_MODULE_4__/* ["default"] */ .Z.eps) {
                     return Number.POSITIVE_INFINITY;
                 }
-                f = ucr[1] - c[1];
-                sum += f * f;
-                f = ucr[2] - c[2];
-                sum += f * f;
+                return _math_math__WEBPACK_IMPORTED_MODULE_4__/* ["default"] */ .Z.hypot(ucr[1] - c[1], ucr[2] - c[2]);
             } else {
                 c = coordinates.scrCoords;
-                //f = scr[0]-c[0];
-                //sum = f*f;
-                f = scr[1] - c[1];
-                sum += f * f;
-                f = scr[2] - c[2];
-                sum += f * f;
+                return _math_math__WEBPACK_IMPORTED_MODULE_4__/* ["default"] */ .Z.hypot(scr[1] - c[1], scr[2] - c[2]);
             }
-
-            return Math.sqrt(sum);
         },
 
         /**
@@ -737,12 +609,16 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.CoordsElement = function (
         makeIntersection: "makeIntersection",
         X: "X",
         Y: "Y",
+        Coords: "Coords",
         free: "free",
         setPosition: "setGliderPosition",
         setGliderPosition: "setGliderPosition",
         addConstraint: "addConstraint",
         dist: "Dist",
-        onPolygon: "onPolygon"
+        Dist: "Dist",
+        onPolygon: "onPolygon",
+        startAnimation: "startAnimation",
+        stopAnimation: "stopAnimation"
     });
 
     /*
@@ -1430,6 +1306,70 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
         },
 
         /**
+         * Getter method for coordinates x, y and (optional) z.
+         * @param {Number|String} [digits='auto'] Truncating rule for the digits in the infobox.
+         * <ul>
+         * <li>'auto': done automatically by JXG.autoDigits()
+         * <li>'none': no truncation
+         * <li>number: truncate after "number digits" with JXG.toFixed()
+         * </ul>
+         * @param {Boolean} [withZ=false] If set to true the return value will be <tt>(x | y | z)</tt> instead of <tt>(x, y)</tt>.
+         * @returns {String} User coordinates of point.
+         */
+        Coords: function(withZ) {
+            if (withZ) {
+                return this.coords.usrCoords.slice();
+            }
+            return this.coords.usrCoords.slice(1);
+        },
+        // Coords: function (digits, withZ) {
+        //     var arr, sep;
+
+        //     digits = digits || 'auto';
+
+        //     if (withZ) {
+        //         sep = ' | ';
+        //     } else {
+        //         sep = ', ';
+        //     }
+
+        //     if (digits === 'none') {
+        //         arr = [this.X(), sep, this.Y()];
+        //         if (withZ) {
+        //             arr.push(sep, this.Z());
+        //         }
+
+        //     } else if (digits === 'auto') {
+        //         if (this.useLocale()) {
+        //             arr = [this.formatNumberLocale(this.X()), sep, this.formatNumberLocale(this.Y())];
+        //             if (withZ) {
+        //                 arr.push(sep, this.formatNumberLocale(this.Z()));
+        //             }
+        //         } else {
+        //             arr = [Type.autoDigits(this.X()), sep, Type.autoDigits(this.Y())];
+        //             if (withZ) {
+        //                 arr.push(sep, Type.autoDigits(this.Z()));
+        //             }
+        //         }
+
+        //     } else {
+        //         if (this.useLocale()) {
+        //             arr = [this.formatNumberLocale(this.X(), digits), sep, this.formatNumberLocale(this.Y(), digits)];
+        //             if (withZ) {
+        //                 arr.push(sep, this.formatNumberLocale(this.Z(), digits));
+        //             }
+        //         } else {
+        //             arr = [Type.toFixed(this.X(), digits), sep, Type.toFixed(this.Y(), digits)];
+        //             if (withZ) {
+        //                 arr.push(sep, Type.toFixed(this.Z(), digits));
+        //             }
+        //         }
+        //     }
+
+        //     return '(' + arr.join('') + ')';
+        // },
+
+        /**
          * New evaluation of the function term.
          * This is required for CAS-points: Their XTerm() method is
          * overwritten in {@link JXG.CoordsElement#addConstraint}.
@@ -1467,7 +1407,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
 
         /**
          * Getter method for the distance to a second point, this is required for CAS-elements.
-         * Here, function inlining seems to be worthwile  (for plotting).
+         * Here, function inlining seems to be worthwile (for plotting).
          * @param {JXG.Point} point2 The point to which the distance shall be calculated.
          * @returns {Number} Distance in user coordinate to the given point
          */
@@ -1480,7 +1420,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
 
         /**
          * Alias for {@link JXG.Element#handleSnapToGrid}
-         * @param {Boolean} force force snapping independent from what the snaptogrid attribute says
+         * @param {Boolean} force force snapping independent of what the snaptogrid attribute says
          * @returns {JXG.CoordsElement} Reference to this element
          */
         snapToGrid: function (force) {
@@ -1492,7 +1432,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
          * {@link JXG.Point#attractorDistance}.
          * The function uses the coords object of the point as
          * its actual position.
-         * @param {Boolean} force force snapping independent from what the snaptogrid attribute says
+         * @param {Boolean} force force snapping independent of what the snaptogrid attribute says
          * @returns {JXG.Point} Reference to this element
          */
         handleSnapToPoints: function (force) {
@@ -1562,7 +1502,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
         /**
          * Alias for {@link JXG.CoordsElement#handleSnapToPoints}.
          *
-         * @param {Boolean} force force snapping independent from what the snaptogrid attribute says
+         * @param {Boolean} force force snapping independent of what the snaptogrid attribute says
          * @returns {JXG.Point} Reference to this element
          */
         snapToPoints: function (force) {
@@ -1855,8 +1795,8 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
                 // It may not be sufficient to remove the point from
                 // the list of childElement. For complex dependencies
                 // one may have to go to the list of ancestor and descendants.  A.W.
-                // Yes indeed, see #51 on github bugtracker
-                //  delete this.slideObject.childElements[this.id];
+                // Yes indeed, see #51 on github bug tracker
+                //   delete this.slideObject.childElements[this.id];
                 this.slideObject.removeChild(this);
 
                 if (this.slideObjects.length === 0) {
@@ -1945,6 +1885,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
 
             // A free point does not depend on anything. Remove all ancestors.
             this.ancestors = {}; // only remove the reference
+            this.parents = [];
 
             // Completely remove all slideObjects of the element
             this.slideObject = null;
@@ -2208,10 +2149,10 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
 
         /**
          * Animate the point.
-         * @param {Number,Function} direction The direction the glider is animated. Can be +1 or -1.
-         * @param {Number,Function} stepCount The number of steps in which the parent element is divided.
+         * @param {Number|Function} direction The direction the glider is animated. Can be +1 or -1.
+         * @param {Number|Function} stepCount The number of steps in which the parent element is divided.
          * Must be at least 1.
-         * @param {Number,Function} delay Time in msec between two animation steps. Default is 250.
+         * @param {Number|Function} delay Time in msec between two animation steps. Default is 250.
          * @returns {JXG.CoordsElement} Reference to iself.
          *
          * @name Glider#startAnimation
@@ -3147,11 +3088,11 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
         },
 
         /**
-         * Adds the given object to the descendants list of this object and all its child objects.
          * @param {JXG.GeometryElement} obj The element that is to be added to the descendants list.
          * @private
-         * @return
-         */
+         * @return this
+        */
+        // Adds the given object to the descendants list of this object and all its child objects.
         addDescendants: function (obj) {
             var el;
 
@@ -3167,7 +3108,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
         /**
          * Adds ids of elements to the array this.parents. This method needs to be called if some dependencies
          * can not be detected automatically by JSXGraph. For example if a function graph is given by a function
-         * which referes to coordinates of a point, calling addParents() is necessary.
+         * which refers to coordinates of a point, calling addParents() is necessary.
          *
          * @param {Array} parents Array of elements or ids of elements.
          * Alternatively, one can give a list of objects as parameters.
@@ -4249,7 +4190,8 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
          * the renderer, to remove the element completely you should use {@link JXG.Board#removeObject}.
          */
         remove: function () {
-            this.board.renderer.remove(this.board.renderer.getElementById(this.id));
+            // this.board.renderer.remove(this.board.renderer.getElementById(this.id));
+            this.board.renderer.remove(this.rendNode);
 
             if (this.hasLabel) {
                 this.board.renderer.remove(this.board.renderer.getElementById(this.label.id));
@@ -4358,6 +4300,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
 
         /**
          * Highlights the element.
+         * @private
          * @param {Boolean} [force=false] Force the highlighting
          * @returns {JXG.Board}
          */
@@ -4564,6 +4507,8 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
 
         /**
          * Set the highlightStrokeColor of an element
+         * @ignore
+         * @name JXG.GeometryElement#highlightStrokeColorMethod
          * @param {String} sColor String which determines the stroke color of an object when its highlighted.
          * @see JXG.GeometryElement#highlightStrokeColor
          * @deprecated Use {@link JXG.GeometryElement#setAttribute}
@@ -4576,6 +4521,8 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
 
         /**
          * Set the strokeColor of an element
+         * @ignore
+         * @name JXG.GeometryElement#strokeColorMethod
          * @param {String} sColor String which determines the stroke color of an object.
          * @see JXG.GeometryElement#strokeColor
          * @deprecated Use {@link JXG.GeometryElement#setAttribute}
@@ -4588,6 +4535,8 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
 
         /**
          * Set the strokeWidth of an element
+         * @ignore
+         * @name JXG.GeometryElement#strokeWidthMethod
          * @param {Number} width Integer which determines the stroke width of an outline.
          * @see JXG.GeometryElement#strokeWidth
          * @deprecated Use {@link JXG.GeometryElement#setAttribute}
@@ -4600,6 +4549,8 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
 
         /**
          * Set the fillColor of an element
+         * @ignore
+         * @name JXG.GeometryElement#fillColorMethod
          * @param {String} fColor String which determines the fill color of an object.
          * @see JXG.GeometryElement#fillColor
          * @deprecated Use {@link JXG.GeometryElement#setAttribute}
@@ -4612,6 +4563,8 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
 
         /**
          * Set the highlightFillColor of an element
+         * @ignore
+         * @name JXG.GeometryElement#highlightFillColorMethod
          * @param {String} fColor String which determines the fill color of an object when its highlighted.
          * @see JXG.GeometryElement#highlightFillColor
          * @deprecated Use {@link JXG.GeometryElement#setAttribute}
@@ -4624,6 +4577,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
 
         /**
          * Set the labelColor of an element
+         * @ignore
          * @param {String} lColor String which determines the text color of an object's label.
          * @see JXG.GeometryElement#labelColor
          * @deprecated Use {@link JXG.GeometryElement#setAttribute}
@@ -4636,6 +4590,8 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
 
         /**
          * Set the dash type of an element
+         * @ignore
+         * @name JXG.GeometryElement#dashMethod
          * @param {Number} d Integer which determines the way of dashing an element's outline.
          * @see JXG.GeometryElement#dash
          * @deprecated Use {@link JXG.GeometryElement#setAttribute}
@@ -4648,6 +4604,8 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
 
         /**
          * Set the visibility of an element
+         * @ignore
+         * @name JXG.GeometryElement#visibleMethod
          * @param {Boolean} v Boolean which determines whether the element is drawn.
          * @see JXG.GeometryElement#visible
          * @deprecated Use {@link JXG.GeometryElement#setAttribute}
@@ -4660,6 +4618,8 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
 
         /**
          * Set the shadow of an element
+         * @ignore
+         * @name JXG.GeometryElement#shadowMethod
          * @param {Boolean} s Boolean which determines whether the element has a shadow or not.
          * @see JXG.GeometryElement#shadow
          * @deprecated Use {@link JXG.GeometryElement#setAttribute}
@@ -4687,6 +4647,8 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
         },
 
         /**
+         * @ignore
+         * @private
          * Snaps the element to the grid. Only works for points, lines and circles. Points will snap to the grid
          * as defined in their properties {@link JXG.Point#snapSizeX} and {@link JXG.Point#snapSizeY}. Lines and circles
          * will snap their parent points to the grid, if they have {@link JXG.Point#snapToGrid} set to true.
@@ -4701,6 +4663,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
          * as defined in their properties {@link JXG.Point#attractorDistance} and {@link JXG.Point#attractorUnit}.
          * Lines and circles
          * will snap their parent points to points.
+         * @private
          * @returns {JXG.GeometryElement} Reference to the element.
          */
         snapToPoints: function () {
@@ -4969,14 +4932,14 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
 
         /**
          * Format a number according to the locale set in the attribute "intl".
-         * If in the options of the intl-attribute "maximumFractionDigits" is not set, 
+         * If in the options of the intl-attribute "maximumFractionDigits" is not set,
          * the optional parameter digits is used instead.
          * See <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat</a>
          * for more  information about internationalization.
-         * 
+         *
          * @param {Number} value Number to be formatted
          * @param {Number} [digits=undefined] Optional number of digits
-         * @returns {String|Number} string containing the formatted number according to the locale 
+         * @returns {String|Number} string containing the formatted number according to the locale
          * or the number itself of the formatting is not possible.
          */
         formatNumberLocale: function(value, digits) {
@@ -5000,7 +4963,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
                     trailingzerodisplay: 'trailingZeroDisplay',
                     minimumintegerdigits: 'minimumIntegerDigits',
                     minimumsignificantdigits: 'minimumSignificantDigits',
-                    maximumsignificantdigits: 'maximumSignificantDigits',
+                    maximumsignificantdigits: 'maximumSignificantDigits'
                 };
 
             if (_utils_type__WEBPACK_IMPORTED_MODULE_8__/* ["default"] */ .Z.exists(Intl) &&
@@ -5042,9 +5005,9 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
 
         /**
          * Checks if locale is enabled in the attribute. This may be in the attributes of the board,
-         * or in the attributes of the text. The latter has higher priority. The board attribute is taken if 
+         * or in the attributes of the text. The latter has higher priority. The board attribute is taken if
          * attribute "intl.enabled" of the text element is set to 'inherit'.
-         * 
+         *
          * @returns {Boolean} if locale can be used for number formatting.
          */
         useLocale: function() {
@@ -5327,6 +5290,10 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
 
 
 var priv = {
+    /**
+     * @class
+     * @ignore
+     */
     HTMLSliderInputEventHandler: function () {
         this._val = parseFloat(this.rendNodeRange.value);
         this.rendNodeOut.value = this.rendNodeRange.value;
@@ -5398,7 +5365,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Text = function (board, co
     this.elType = "text";
 
     this.methodMap = _utils_type__WEBPACK_IMPORTED_MODULE_5__/* ["default"] */ .Z.deepCopy(this.methodMap, {
-        setText: "setTextJessieCode",
+        setText: "setTextJessieCode"
         // free: 'free',
         // move: "setCoords"
     });
@@ -5412,15 +5379,15 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
     /** @lends JXG.Text.prototype */ {
         /**
          * @private
-         * Test if the screen coordinates (x,y) are in a small stripe
-         * at the left side or at the right side of the text.
-         * Sensitivity is set in this.board.options.precision.hasPoint.
-         * If dragarea is set to 'all' (default), tests if the screen
-         * coordinates (x,y) are in within the text boundary.
          * @param {Number} x
          * @param {Number} y
          * @returns {Boolean}
-         */
+        */
+        // Test if the screen coordinates (x,y) are in a small stripe
+        // at the left side or at the right side of the text.
+        // Sensitivity is set in this.board.options.precision.hasPoint.
+        // If dragarea is set to 'all' (default), tests if the screen
+        // coordinates (x,y) are in within the text boundary.
         hasPoint: function (x, y) {
             var lft, rt, top, bot, ax, ay, type, r;
 
@@ -5687,7 +5654,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
          * JSXGraph needs {@link JXG.Text#size} for applying rotations in IE and
          * for aligning text.
          *
-         * @return {[type]} [description]
+         * @return {this} [description]
          */
         updateSize: function () {
             var tmp,
@@ -5779,22 +5746,21 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
             var j,
                 i = te.indexOf("_{");
 
-            // the regexp in here are not used for filtering but to provide some kind of sugar for label creation,
+            // The regexp in here are not used for filtering but to provide some kind of sugar for label creation,
             // i.e. replacing _{...} with <sub>...</sub>. What is passed would get out anyway.
             /*jslint regexp: true*/
-
             while (i >= 0) {
-                te = te.substr(0, i) + te.substr(i).replace(/_\{/, "<sub>");
-                j = te.substr(i).indexOf("}");
+                te = te.slice(0, i) + te.slice(i).replace(/_\{/, "<sub>");
+                j = te.indexOf("}", i + 4);
                 if (j >= 0) {
-                    te = te.substr(0, j) + te.substr(j).replace(/\}/, "</sub>");
+                    te = te.slice(0, j) + te.slice(j).replace(/\}/, "</sub>");
                 }
                 i = te.indexOf("_{");
             }
 
             i = te.indexOf("_");
             while (i >= 0) {
-                te = te.substr(0, i) + te.substr(i).replace(/_(.?)/, "<sub>$1</sub>");
+                te = te.slice(0, i) + te.slice(i).replace(/_(.?)/, "<sub>$1</sub>");
                 i = te.indexOf("_");
             }
 
@@ -5814,22 +5780,21 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
             var j,
                 i = te.indexOf("^{");
 
-            // the regexp in here are not used for filtering but to provide some kind of sugar for label creation,
+            // The regexp in here are not used for filtering but to provide some kind of sugar for label creation,
             // i.e. replacing ^{...} with <sup>...</sup>. What is passed would get out anyway.
             /*jslint regexp: true*/
-
             while (i >= 0) {
-                te = te.substr(0, i) + te.substr(i).replace(/\^\{/, "<sup>");
-                j = te.substr(i).indexOf("}");
+                te = te.slice(0, i) + te.slice(i).replace(/\^\{/, "<sup>");
+                j = te.indexOf("}", i + 4);
                 if (j >= 0) {
-                    te = te.substr(0, j) + te.substr(j).replace(/\}/, "</sup>");
+                    te = te.slice(0, j) + te.slice(j).replace(/\}/, "</sup>");
                 }
                 i = te.indexOf("^{");
             }
 
             i = te.indexOf("^");
             while (i >= 0) {
-                te = te.substr(0, i) + te.substr(i).replace(/\^(.?)/, "<sup>$1</sup>");
+                te = te.slice(0, i) + te.slice(i).replace(/\^(.?)/, "<sup>$1</sup>");
                 i = te.indexOf("^");
             }
 
@@ -5973,7 +5938,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
          * @param{String} contentStr String to be parsed
          * @param{Boolean} [expand] Optional flag if shortened math syntax is allowed (e.g. 3x instead of 3*x).
          * @param{Boolean} [avoidGeonext2JS] Optional flag if geonext2JS should be called. For backwards compatibility
-         * this has to be set explicitely to true.
+         * this has to be set explicitly to true.
          * @param{Boolean} [outputTeX] Optional flag which has to be true if the resulting term will be sent to MathJax or KaTeX.
          * If true, "_" and "^" are NOT replaced by HTML tags sub and sup. Default: false, i.e. the replacement is done.
          * This flag allows the combination of &lt;value&gt; tag containing calculations with TeX output.
@@ -6281,7 +6246,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
 
                 if (res !== null) {
                     _parser_geonext__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.findDependencies(this, res[1], this.board);
-                    content = content.substr(res.index);
+                    content = content.slice(res.index);
                     content = content.replace(search, "");
                 }
             } while (res !== null);
@@ -6557,7 +6522,6 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
  * If HTML should be displayed in an inbetween layer, conder to use an element of type {@link ForeignObject} (available in svg renderer, only).
  * </ul>
  * @pseudo
- * @description
  * @name Text
  * @augments JXG.Text
  * @constructor
@@ -6657,7 +6621,6 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.registerElement("text", _j
  * Labels are handled internally by JSXGraph, only. There is NO constructor "board.create('label', ...)".
  *
  * @pseudo
- * @description
  * @name Label
  * @augments JXG.Text
  * @constructor
@@ -6814,18 +6777,23 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.registerElement("htmlslide
 
 /**
  * JXG is the top object of JSXGraph and defines the namespace
+ *
+ * @name JXG
  * @exports jxg as JXG
+ * @namespace
  */
 var jxg = {};
 
-// Make sure JXG.extend is not defined
-// If jsxgraph is loaded via loadjsxgraph.js, this is required, but JXG.extend will be undefined
-// If jsxgraph is compiled as an amd module, it is possible that another jsxgraph version is already loaded and we
+// Make sure JXG.extend is not defined.
+// If JSXGraph is compiled as an amd module, it is possible that another JSXGraph version is already loaded and we
 // therefore must not re-use the global JXG variable. But in this case JXG.extend will already be defined.
 // This is the reason for this check.
-if (typeof JXG === "object" && !JXG.extend) {
-    jxg = JXG;
-}
+// The try-statement is necessary, otherwise an error is thrown in certain imports, e.g. in deno.
+try {
+    if (typeof JXG === "object" && !JXG.extend) {
+        jxg = JXG;
+    }
+} catch (e) {}
 
 // We need the following two methods "extend" and "shortcut" to create the JXG object via JXG.extend.
 
@@ -7108,7 +7076,9 @@ jxg.extend(
          */
         debug: function (s) {
             jxg.debugInt.apply(this, arguments);
-        }
+        },
+
+        themes: {}
     }
 );
 
@@ -7194,9 +7164,9 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
 
         /**
          * Calculates the angle defined by the points A, B, C.
-         * @param {JXG.Point,Array} A A point  or [x,y] array.
-         * @param {JXG.Point,Array} B Another point or [x,y] array.
-         * @param {JXG.Point,Array} C A circle - no, of course the third point or [x,y] array.
+         * @param {JXG.Point|Array} A A point  or [x,y] array.
+         * @param {JXG.Point|Array} B Another point or [x,y] array.
+         * @param {JXG.Point|Array} C A circle - no, of course the third point or [x,y] array.
          * @deprecated Use {@link JXG.Math.Geometry.rad} instead.
          * @see #rad
          * @see #trueAngle
@@ -7246,9 +7216,9 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
 
         /**
          * Calculates the angle defined by the three points A, B, C if you're going from A to C around B counterclockwise.
-         * @param {JXG.Point,Array} A Point or [x,y] array
-         * @param {JXG.Point,Array} B Point or [x,y] array
-         * @param {JXG.Point,Array} C Point or [x,y] array
+         * @param {JXG.Point|Array} A Point or [x,y] array
+         * @param {JXG.Point|Array} B Point or [x,y] array
+         * @param {JXG.Point|Array} C Point or [x,y] array
          * @see #rad
          * @returns {Number} The angle in degrees.
          */
@@ -7258,9 +7228,9 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
 
         /**
          * Calculates the internal angle defined by the three points A, B, C if you're going from A to C around B counterclockwise.
-         * @param {JXG.Point,Array} A Point or [x,y] array
-         * @param {JXG.Point,Array} B Point or [x,y] array
-         * @param {JXG.Point,Array} C Point or [x,y] array
+         * @param {JXG.Point|Array} A Point or [x,y] array
+         * @param {JXG.Point|Array} B Point or [x,y] array
+         * @param {JXG.Point|Array} C Point or [x,y] array
          * @see #trueAngle
          * @returns {Number} Angle in radians.
          */
@@ -7727,9 +7697,9 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
             // on the same horizontal line.
             ps.sort(function (a, b) {
                 var rad1 =
-                        a[2] === ll[2] && a[1] === ll[1]
-                            ? -Infinity
-                            : Math.atan2(a[2] - ll[2], a[1] - ll[1]),
+                    a[2] === ll[2] && a[1] === ll[1]
+                        ? -Infinity
+                        : Math.atan2(a[2] - ll[2], a[1] - ll[1]),
                     rad2 =
                         b[2] === ll[2] && b[1] === ll[1]
                             ? -Infinity
@@ -7854,9 +7824,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
                 intersect2,
                 straightFirst,
                 straightLast,
-                c,
-                p1,
-                p2;
+                c, p1, p2;
 
             if (!_utils_type__WEBPACK_IMPORTED_MODULE_5__/* ["default"] */ .Z.exists(margin)) {
                 // Enlarge the drawable region slightly. This hides the small sides
@@ -7890,7 +7858,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
             c[1] = el.stdform[1] / el.board.unitX;
             c[2] = -el.stdform[2] / el.board.unitY;
 
-            // p1=p2
+            // If p1=p2
             if (isNaN(c[0] + c[1] + c[2])) {
                 return;
             }
@@ -8107,8 +8075,8 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
                     if (
                         Math.abs(
                             point1.distance(_base_constants__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z.COORDS_BY_USER, intersect1) +
-                                intersect1.distance(_base_constants__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z.COORDS_BY_USER, point2) -
-                                distP1P2
+                            intersect1.distance(_base_constants__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z.COORDS_BY_USER, point2) -
+                            distP1P2
                         ) > _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.eps
                     ) {
                         return;
@@ -8117,8 +8085,8 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
                     if (
                         Math.abs(
                             point1.distance(_base_constants__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z.COORDS_BY_USER, intersect2) +
-                                intersect2.distance(_base_constants__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z.COORDS_BY_USER, point2) -
-                                distP1P2
+                            intersect2.distance(_base_constants__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z.COORDS_BY_USER, point2) -
+                            distP1P2
                         ) > _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.eps
                     ) {
                         return;
@@ -8493,9 +8461,9 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
                 if (
                     vi.scrCoords[2] > y !== vj.scrCoords[2] > y &&
                     x <
-                        ((vj.scrCoords[1] - vi.scrCoords[1]) * (y - vi.scrCoords[2])) /
-                            (vj.scrCoords[2] - vi.scrCoords[2]) +
-                            vi.scrCoords[1]
+                    ((vj.scrCoords[1] - vi.scrCoords[1]) * (y - vi.scrCoords[2])) /
+                    (vj.scrCoords[2] - vi.scrCoords[2]) +
+                    vi.scrCoords[1]
                 ) {
                     isIn = !isIn;
                 }
@@ -8530,12 +8498,12 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
 
             el1_isArcType =
                 el1.elementClass === _base_constants__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z.OBJECT_CLASS_CURVE &&
-                (el1.type === _base_constants__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z.OBJECT_TYPE_ARC || el1.type === _base_constants__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z.OBJECT_TYPE_SECTOR)
+                    (el1.type === _base_constants__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z.OBJECT_TYPE_ARC || el1.type === _base_constants__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z.OBJECT_TYPE_SECTOR)
                     ? true
                     : false;
             el2_isArcType =
                 el2.elementClass === _base_constants__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z.OBJECT_CLASS_CURVE &&
-                (el2.type === _base_constants__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z.OBJECT_TYPE_ARC || el2.type === _base_constants__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z.OBJECT_TYPE_SECTOR)
+                    (el2.type === _base_constants__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z.OBJECT_TYPE_ARC || el2.type === _base_constants__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z.OBJECT_TYPE_SECTOR)
                     ? true
                     : false;
 
@@ -8665,8 +8633,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
                         has = true,
                         first,
                         last,
-                        r,
-                        dx;
+                        r;
 
                     if (_utils_type__WEBPACK_IMPORTED_MODULE_5__/* ["default"] */ .Z.evaluate(alwaysintersect)) {
                         return res;
@@ -8776,8 +8743,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
             var s = [],
                 intersect1,
                 intersect2,
-                i,
-                j;
+                i, j;
 
             if (!_utils_type__WEBPACK_IMPORTED_MODULE_5__/* ["default"] */ .Z.exists(margin)) {
                 margin = 0;
@@ -8844,9 +8810,10 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
                 }
             }
 
-            intersect1 = new _base_coords__WEBPACK_IMPORTED_MODULE_2__/* ["default"] */ .Z(_base_constants__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z.COORDS_BY_SCREEN, intersect1.slice(1), board);
-            intersect2 = new _base_coords__WEBPACK_IMPORTED_MODULE_2__/* ["default"] */ .Z(_base_constants__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z.COORDS_BY_SCREEN, intersect2.slice(1), board);
-            return [intersect1, intersect2];
+            return [
+                new _base_coords__WEBPACK_IMPORTED_MODULE_2__/* ["default"] */ .Z(_base_constants__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z.COORDS_BY_SCREEN, intersect1.slice(1), board),
+                new _base_coords__WEBPACK_IMPORTED_MODULE_2__/* ["default"] */ .Z(_base_constants__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z.COORDS_BY_SCREEN, intersect2.slice(1), board)
+            ];
         },
 
         /**
@@ -8912,15 +8879,15 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
 
                 return _utils_type__WEBPACK_IMPORTED_MODULE_5__/* ["default"] */ .Z.evaluate(i) === 0
                     ? new _base_coords__WEBPACK_IMPORTED_MODULE_2__/* ["default"] */ .Z(
-                          _base_constants__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z.COORDS_BY_USER,
-                          [-t[0] * -n[1] - d * n[0], -t[0] * n[0] - d * n[1]],
-                          board
-                      )
+                        _base_constants__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z.COORDS_BY_USER,
+                        [-t[0] * -n[1] - d * n[0], -t[0] * n[0] - d * n[1]],
+                        board
+                    )
                     : new _base_coords__WEBPACK_IMPORTED_MODULE_2__/* ["default"] */ .Z(
-                          _base_constants__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z.COORDS_BY_USER,
-                          [-t[1] * -n[1] - d * n[0], -t[1] * n[0] - d * n[1]],
-                          board
-                      );
+                        _base_constants__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z.COORDS_BY_USER,
+                        [-t[1] * -n[1] - d * n[0], -t[1] * n[0] - d * n[1]],
+                        board
+                    );
             }
 
             return new _base_coords__WEBPACK_IMPORTED_MODULE_2__/* ["default"] */ .Z(_base_constants__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z.COORDS_BY_USER, [0, 0, 0], board);
@@ -9016,8 +8983,8 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
          * If higher precision is needed, {@link JXG.Math.Geometry.meetCurveLineContinuous}
          * has to be used.
          *
-         * @param {JXG.Curve,JXG.Line} el1 Curve or Line
-         * @param {JXG.Curve,JXG.Line} el2 Curve or Line
+         * @param {JXG.Curve|JXG.Line} el1 Curve or Line
+         * @param {JXG.Curve|JXG.Line} el2 Curve or Line
          * @param {Number|Function} nr the nr-th intersection point will be returned.
          * @param {JXG.Board} [board=el1.board] Reference to a board object.
          * @param {Boolean} alwaysIntersect If false just the segment between the two defining points are tested for intersection
@@ -9381,7 +9348,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
             if (
                 len > 0 &&
                 this.distance(C[0].coords.usrCoords, C[len - 1].coords.usrCoords, 3) <
-                    _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.eps * _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.eps
+                _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.eps * _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.eps
             ) {
                 C.pop();
             }
@@ -9634,16 +9601,10 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
          * @param {Boolean} testSegment Test if intersection has to be inside of the segment or somewhere on the line defined by the segment
          */
         _bezierLineMeetSubdivision: function (red, blue, level, testSegment) {
-            var bbb,
-                bbr,
-                ar,
-                r0,
-                r1,
+            var bbb, bbr, ar,
+                r0, r1,
                 m,
-                p0,
-                p1,
-                q0,
-                q1,
+                p0, p1, q0, q1,
                 L = [],
                 maxLev = 5; // Maximum recursion level
 
@@ -9732,12 +9693,9 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
          * @returns {Array} The homogeneous coordinates of the nr-th intersection point.
          */
         meetBezierCurveRedBlueSegments: function (red, blue, nr) {
-            var p,
-                i,
-                j,
-                k,
+            var p, i, j, k,
                 n = _utils_type__WEBPACK_IMPORTED_MODULE_5__/* ["default"] */ .Z.evaluate(nr),
-                po,
+                po, tmp,
                 redArr,
                 blueArr,
                 bbr,
@@ -9745,15 +9703,20 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
                 intersections,
                 startRed = 0,
                 startBlue = 0,
-                lenBlue = blue.numberPoints,
-                lenRed = red.numberPoints,
+                lenBlue, lenRed,
                 L = [];
 
-            if (lenBlue < blue.bezierDegree + 1 || lenRed < red.bezierDegree + 1) {
+            if (blue.numberPoints < blue.bezierDegree + 1 || red.numberPoints < red.bezierDegree + 1) {
                 return [0, NaN, NaN];
             }
-            lenBlue -= blue.bezierDegree;
-            lenRed -= red.bezierDegree;
+            if (red.bezierDegree === 1 && blue.bezierDegree === 3) {
+                tmp = red;
+                red = blue;
+                blue = tmp;
+            }
+
+            lenBlue = blue.numberPoints - blue.bezierDegree;
+            lenRed = red.numberPoints - red.bezierDegree;
 
             // For sectors, we ignore the "legs"
             if (red.type === _base_constants__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z.OBJECT_TYPE_SECTOR) {
@@ -9927,8 +9890,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
                 ay = p1[2] - y;
                 bx = p4[1] - x;
                 by = p4[2] - y;
-
-                d = Math.sqrt((ax + bx) * (ax + bx) + (ay + by) * (ay + by));
+                d = _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.hypot(ax + bx, ay + by);
 
                 if (Math.abs(by - ay) > _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.eps) {
                     k = ((((ax + bx) * (r / d - 0.5)) / (by - ay)) * 8) / 3;
@@ -9968,7 +9930,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
          * Calculates the coordinates of the projection of a given point on a given circle. I.o.w. the
          * nearest one of the two intersection points of the line through the given point and the circles
          * center.
-         * @param {JXG.Point,JXG.Coords} point Point to project or coords object to project.
+         * @param {JXG.Point|JXG.Coords} point Point to project or coords object to project.
          * @param {JXG.Circle} circle Circle on that the point is projected.
          * @param {JXG.Board} [board=point.board] Reference to the board
          * @returns {JXG.Coords} The coordinates of the projection of the given point on the given circle.
@@ -10455,6 +10417,51 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
             b *= b;
 
             return Math.abs(nom) / Math.sqrt(a + b);
+        },
+
+        /**
+         * Determine the (Euclidean) distance between a point q and a line segment
+         * defined by two points p1 and p2. In case p1 equals p2, the distance to this
+         * point is returned.
+         *
+         * @param {Array} q Homogeneous coordinates of q
+         * @param {Array} p1 Homogeneous coordinates of p1
+         * @param {Array} p2 Homogeneous coordinates of p2
+         * @returns {Number} Distance of q to line segment [p1, p2]
+         */
+        distPointSegment: function (q, p1, p2) {
+            var x, y, dx, dy,
+                den, lbda,
+                eps = _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.eps * _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.eps,
+                huge = 1000000;
+
+            // Difference q - p1
+            x = q[1] - p1[1];
+            y = q[2] - p1[2];
+            x = (x === Infinity) ? huge : (x === -Infinity) ? -huge : x;
+            y = (y === Infinity) ? huge : (y === -Infinity) ? -huge : y;
+
+            // Difference p2 - p1
+            dx = p2[1] - p1[1];
+            dy = p2[2] - p1[2];
+            dx = (dx === Infinity) ? huge : (dx === -Infinity) ? -huge : dx;
+            dy = (dy === Infinity) ? huge : (dy === -Infinity) ? -huge : dy;
+
+            // If den==0 then p1 and p2 are identical
+            // In this case the distance to p1 is returned
+            den = dx * dx + dy * dy;
+            if (den > eps) {
+                lbda = (x * dx + y * dy) / den;
+                if (lbda < 0.0) {
+                    lbda = 0.0;
+                } else if (lbda > 1.0) {
+                    lbda = 1.0;
+                }
+                x -= lbda * dx;
+                y -= lbda * dy;
+            }
+
+            return _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.hypot(x, y);
         },
 
         /**
@@ -11858,6 +11865,17 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Math.IntervalArithmetic = 
      * @param {JXG.Math.Interval} x
      * @returns JXG.Math.Interval
      */
+    acot: function (x) {
+        if (this.isEmpty(x)) {
+            return this.EMPTY.clone();
+        }
+        return new MatInterval(this.acotLo(x.lo), this.acotHi(x.hi));
+    },
+
+    /**
+     * @param {JXG.Math.Interval} x
+     * @returns JXG.Math.Interval
+     */
     atan: function (x) {
         if (this.isEmpty(x)) {
             return this.EMPTY.clone();
@@ -12127,6 +12145,12 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Math.IntervalArithmetic = 
     acosHi: function (x) {
         return this.next(Math.acos(x));
     },
+    acotLo: function (x) {
+        return this.prev(_math__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z.acot(x));
+    },
+    acotHi: function (x) {
+        return this.next(_math__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z.acot(x));
+    },
     atanLo: function (x) {
         return this.prev(Math.atan(x));
     },
@@ -12360,7 +12384,8 @@ var undef,
     };
 
 /**
- * Math namespace.
+ * Math namespace. Contains mathematics related methods which are
+ * specific to JSXGraph or which extend the JavaScript Math class.
  * @namespace
  */
 _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Math = {
@@ -12758,6 +12783,14 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Math = {
         return Math.sqrt(sum);
     },
 
+    /**
+     * Compute a * x + y for a scalar a and vectors x and y.
+     *
+     * @param {Number} a
+     * @param {Array} x
+     * @param {Array} y
+     * @returns
+     */
     axpy: function (a, x, y) {
         var i,
             le = x.length,
@@ -13029,7 +13062,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Math = {
      *
      * @function
      * @param  {Number} x A Number
-     * @returns {[type]}  This function has 5 kinds of return values,
+     * @returns {Number}  This function has 5 kinds of return values,
      *    1, -1, 0, -0, NaN, which represent "positive number", "negative number", "positive zero", "negative zero"
      *    and NaN respectively.
      */
@@ -13194,6 +13227,36 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Math = {
         return this.ProbFuncs.ndtri(x);
     },
 
+    /**
+     * Returns sqrt(a * a + b * b) for a variable number of arguments.
+     * This is a naive implementation which might be faster than Math.hypot.
+     * The latter is numerically more stable.
+     *
+     * @param {Number} a Variable number of arguments.
+     * @returns Number
+     */
+    hypot: function() {
+        var i, le, a, sum;
+
+        le = arguments.length;
+        for (i = 0, sum = 0.0; i < le; i++) {
+            a = arguments[i];
+            sum += a * a;
+        }
+        return Math.sqrt(sum);
+    },
+
+    /**
+     * Heaviside unit step function. Returns 0 for x &lt;, 1 for x &gt; 0, and 0.5 for x == 0.
+     *
+     * @param {Number} x
+     * @returns Number
+     */
+    hstep: function(x) {
+        return (x > 0.0) ? 1 :
+            ((x < 0.0) ? 0.0 : 0.5);
+    },
+
     /* ********************  Comparisons and logical operators ************** */
 
     /**
@@ -13324,7 +13387,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Math = {
         stdform[7] = -stdform[2] / a2;
 
         if (!isFinite(r)) {
-            n = Math.sqrt(stdform[1] * stdform[1] + stdform[2] * stdform[2]);
+            n = this.hypot(stdform[1], stdform[2]);
 
             stdform[0] /= n;
             stdform[1] /= n;
@@ -13610,27 +13673,24 @@ _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.Numerics = {
     },
 
     /**
+     *  Gauss-Bareiss algorithm to compute the
+     *  determinant of matrix without fractions.
+     *  See Henri Cohen, "A Course in Computational
+     *  Algebraic Number Theory (Graduate texts
+     *  in mathematics; 138)", Springer-Verlag,
+     *  ISBN 3-540-55640-0 / 0-387-55640-0
+     *  Third, Corrected Printing 1996
+     *  "Algorithm 2.2.6", pg. 52-53
+     *
+     * @param {Array} mat Matrix
+     * @returns Number
      * @private
-     * Gauss-Bareiss algorithm to compute the
-     * determinant of matrix without fractions.
-     * See Henri Cohen, "A Course in Computational
-     * Algebraic Number Theory (Graduate texts
-     * in mathematics; 138)", Springer-Verlag,
-     * ISBN 3-540-55640-0 / 0-387-55640-0
-     * Third, Corrected Printing 1996
-     * "Algorithm 2.2.6", pg. 52-53
      * @memberof JXG.Math.Numerics
      */
     gaussBareiss: function (mat) {
-        var k,
-            c,
-            s,
-            i,
-            j,
-            p,
-            n,
-            M,
-            t,
+        var k, c, s,
+            i, j, p,
+            n, M, t,
             eps = _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.eps;
 
         n = mat.length;
@@ -13852,9 +13912,9 @@ _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.Numerics = {
             available_types = { trapez: true, simpson: true, milne: true },
             integration_type =
                 config &&
-                config.integration_type &&
-                available_types.hasOwnProperty(config.integration_type) &&
-                available_types[config.integration_type]
+                    config.integration_type &&
+                    available_types.hasOwnProperty(config.integration_type) &&
+                    available_types[config.integration_type]
                     ? config.integration_type
                     : "milne",
             step_size = (interval[1] - interval[0]) / number_of_nodes;
@@ -14399,13 +14459,13 @@ _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.Numerics = {
                 L. W. Fullerton, Bell Labs, Nov. 1981. */
 
         var xgk =
-                /* abscissae of the 15-point kronrod rule */
-                [
-                    0.991455371120812639206854697526329, 0.949107912342758524526189684047851,
-                    0.864864423359769072789712788640926, 0.741531185599394439863864773280788,
-                    0.58608723546769113029414483825873, 0.405845151377397166906606412076961,
-                    0.207784955007898467600689403773245, 0.0
-                ],
+            /* abscissae of the 15-point kronrod rule */
+            [
+                0.991455371120812639206854697526329, 0.949107912342758524526189684047851,
+                0.864864423359769072789712788640926, 0.741531185599394439863864773280788,
+                0.58608723546769113029414483825873, 0.405845151377397166906606412076961,
+                0.207784955007898467600689403773245, 0.0
+            ],
             /* xgk[1], xgk[3], ... abscissae of the 7-point gauss rule.
                 xgk[0], xgk[2], ... abscissae to optimally extend the 7-point gauss rule */
 
@@ -14444,14 +14504,14 @@ _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.Numerics = {
                 L. W. Fullerton, Bell Labs, Nov. 1981. */
 
         var xgk =
-                /* abscissae of the 21-point kronrod rule */
-                [
-                    0.995657163025808080735527280689003, 0.973906528517171720077964012084452,
-                    0.930157491355708226001207180059508, 0.865063366688984510732096688423493,
-                    0.780817726586416897063717578345042, 0.679409568299024406234327365114874,
-                    0.562757134668604683339000099272694, 0.433395394129247190799265943165784,
-                    0.294392862701460198131126603103866, 0.14887433898163121088482600112972, 0.0
-                ],
+            /* abscissae of the 21-point kronrod rule */
+            [
+                0.995657163025808080735527280689003, 0.973906528517171720077964012084452,
+                0.930157491355708226001207180059508, 0.865063366688984510732096688423493,
+                0.780817726586416897063717578345042, 0.679409568299024406234327365114874,
+                0.562757134668604683339000099272694, 0.433395394129247190799265943165784,
+                0.294392862701460198131126603103866, 0.14887433898163121088482600112972, 0.0
+            ],
             /* xgk[1], xgk[3], ... abscissae of the 10-point gauss rule.
                 xgk[0], xgk[2], ... abscissae to optimally extend the 10-point gauss rule */
             wg =
@@ -14492,17 +14552,17 @@ _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.Numerics = {
                 L. W. Fullerton, Bell Labs, Nov. 1981. */
 
         var xgk =
-                /* abscissae of the 21-point kronrod rule */
-                [
-                    0.998002298693397060285172840152271, 0.987992518020485428489565718586613,
-                    0.967739075679139134257347978784337, 0.937273392400705904307758947710209,
-                    0.897264532344081900882509656454496, 0.848206583410427216200648320774217,
-                    0.790418501442465932967649294817947, 0.724417731360170047416186054613938,
-                    0.650996741297416970533735895313275, 0.570972172608538847537226737253911,
-                    0.485081863640239680693655740232351, 0.394151347077563369897207370981045,
-                    0.299180007153168812166780024266389, 0.201194093997434522300628303394596,
-                    0.101142066918717499027074231447392, 0.0
-                ],
+            /* abscissae of the 21-point kronrod rule */
+            [
+                0.998002298693397060285172840152271, 0.987992518020485428489565718586613,
+                0.967739075679139134257347978784337, 0.937273392400705904307758947710209,
+                0.897264532344081900882509656454496, 0.848206583410427216200648320774217,
+                0.790418501442465932967649294817947, 0.724417731360170047416186054613938,
+                0.650996741297416970533735895313275, 0.570972172608538847537226737253911,
+                0.485081863640239680693655740232351, 0.394151347077563369897207370981045,
+                0.299180007153168812166780024266389, 0.201194093997434522300628303394596,
+                0.101142066918717499027074231447392, 0.0
+            ],
             /* xgk[1], xgk[3], ... abscissae of the 10-point gauss rule.
                 xgk[0], xgk[2], ... abscissae to optimally extend the 10-point gauss rule */
             wg =
@@ -15256,12 +15316,12 @@ _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.Numerics = {
 
     /**
      * Evaluate points on spline.
-     * @param {Number,Array} x0 A single float value or an array of values to evaluate
+     * @param {Number|Array} x0 A single float value or an array of values to evaluate
      * @param {Array} x x values of knots
      * @param {Array} y y values of knots
      * @param {Array} F Second derivatives at knots, calculated by {@link JXG.Math.Numerics.splineDef}
      * @see #splineDef
-     * @returns {Number,Array} A single value or an array, depending on what is given as x0.
+     * @returns {Number|Array} A single value or an array, depending on what is given as x0.
      * @memberof JXG.Math.Numerics
      */
     splineEval: function (x0, x, y, F) {
@@ -15467,7 +15527,7 @@ _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.Numerics = {
          * Get the term of the Lagrange polynomial as string.
          * Calls {@link JXG.Math.Numerics#lagrangePolynomialTerm}.
          *
-         * @name JXG.Math.Numerics#lagrangePolynomial.getTerm
+         * @name JXG.Math.Numerics.lagrangePolynomial#getTerm
          * @param {Number} digits Number of digits of the coefficients
          * @param {String} param Variable name
          * @param {String} dot Dot symbol
@@ -15511,9 +15571,9 @@ _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.Numerics = {
          * coefficient is at position 0.
          * Calls {@link JXG.Math.Numerics#lagrangePolynomialCoefficients}.
          *
-         * @name JXG.Math.Numerics#lagrangePolynomial.getCoefficients
+         * @name JXG.Math.Numerics.lagrangePolynomial#getCoefficients
          * @returns {Array} containing the coefficients of the Lagrange polynomial.
-         * @see JXG.Math.Numerics#lagrangePolynomial.getTerm
+         * @see JXG.Math.Numerics.lagrangePolynomial#getTerm
          * @see JXG.Math.Numerics#lagrangePolynomialTerm
          * @see JXG.Math.Numerics#lagrangePolynomialCoefficients
          * @example
@@ -15689,9 +15749,9 @@ _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.Numerics = {
                 zeroes = [],
                 coeffs = [],
                 coeffs_sum = [],
-                n, i, j, c, p;
+                i, j, c, p;
 
-            n = len - 1; // (Max) degree of the polynomial
+            // n = len - 1; // (Max) degree of the polynomial
             for (j = 0; j < len; j++) {
                 coeffs_sum[j] = 0;
             }
@@ -15801,7 +15861,7 @@ _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.Numerics = {
                         Dist: function (p) {
                             var dx = this.X() - p.X(),
                                 dy = this.Y() - p.Y();
-                            return Math.sqrt(dx * dx + dy * dy);
+                            return _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.hypot(dx, dy);
                         }
                     };
 
@@ -15821,7 +15881,7 @@ _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.Numerics = {
                         Dist: function (p) {
                             var dx = this.X() - p.X(),
                                 dy = this.Y() - p.Y();
-                            return Math.sqrt(dx * dx + dy * dy);
+                            return _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.hypot(dx, dy);
                         }
                     };
 
@@ -15938,7 +15998,7 @@ _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.Numerics = {
     /**
      * Computes the regression polynomial of a given degree through a given set of coordinates.
      * Returns the regression polynomial function.
-     * @param {Number,function,Slider} degree number, function or slider.
+     * @param {Number|function|Slider} degree number, function or slider.
      * Either
      * @param {Array} dataX Array containing either the x-coordinates of the data set or both coordinates in
      * an array of {@link JXG.Point}s or {@link JXG.Coords}.
@@ -15946,6 +16006,7 @@ _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.Numerics = {
      * @param {Array} dataY Array containing the y-coordinates of the data set,
      * @returns {function} A function of one parameter which returns the value of the regression polynomial of the given degree.
      * It possesses the method getTerm() which returns the string containing the function term of the polynomial.
+     * The function returned will throw an exception, if the data set is malformed.
      * @memberof JXG.Math.Numerics
      */
     regressionPolynomial: function (degree, dataX, dataY) {
@@ -15970,8 +16031,8 @@ _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.Numerics = {
         } else {
             throw new Error(
                 "JSXGraph: Can't create regressionPolynomial from degree of type'" +
-                    typeof degree +
-                    "'."
+                typeof degree +
+                "'."
             );
         }
 
@@ -16069,7 +16130,6 @@ _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.Numerics = {
 
             // Horner's scheme to evaluate polynomial
             s = coeffs[d];
-
             for (i = d - 1; i >= 0; i--) {
                 s = s * x + coeffs[i];
             }
@@ -16077,6 +16137,7 @@ _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.Numerics = {
             return s;
         };
 
+        /** @ignore */
         fct.getTerm = function () {
             return term;
         };
@@ -16124,8 +16185,8 @@ _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.Numerics = {
                     return (
                         t1 * t1 * (t1 * points[z][which]() + 3 * t0 * points[z + 1][which]()) +
                         (3 * t1 * points[z + 2][which]() + t0 * points[z + 3][which]()) *
-                            t0 *
-                            t0
+                        t0 *
+                        t0
                     );
                 };
             };
@@ -16389,7 +16450,7 @@ _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.Numerics = {
      * is replaced by a parabola or a secant. IN case of "simpson",
      * the parabola is approximated visually by a polygonal chain of fixed step width.
      *
-     * @param {Function,Array} f Function or array of two functions.
+     * @param {Function|Array} f Function or array of two functions.
      * If f is a function the integral of this function is approximated by the Riemann sum.
      * If f is an array consisting of two functions the area between the two functions is filled
      * by the Riemann sum bars.
@@ -16548,7 +16609,7 @@ _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.Numerics = {
     /**
      * Solve initial value problems numerically using <i>explicit</i> Runge-Kutta methods.
      * See {@link https://en.wikipedia.org/wiki/Runge-Kutta_methods} for more information on the algorithm.
-     * @param {object,String} butcher Butcher tableau describing the Runge-Kutta method to use. This can be either a string describing
+     * @param {object|String} butcher Butcher tableau describing the Runge-Kutta method to use. This can be either a string describing
      * a Runge-Kutta method with a Butcher tableau predefined in JSXGraph like 'euler', 'heun', 'rk4' or an object providing the structure
      * <pre>
      * {
@@ -16624,26 +16685,17 @@ _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.Numerics = {
         }
         s = butcher.s;
 
-        // don't change x0, so copy it
-        // for (e = 0; e < dim; e++) {
-        //     x[e] = x0[e];
-        // }
+        // Don't change x0, so copy it
         x = x0.slice();
 
         for (i = 0; i <= N; i++) {
-            // Optimization doesn't work for ODEs plotted using time
-            //        if((i % quotient == 0) || (i == N-1)) {
-            // result[r] = [];
-            // for (e = 0; e < dim; e++) {
-            //     result[r][e] = x[e];
-            // }
             result[r] = x.slice();
 
-            r += 1;
+            r++;
             k = [];
 
             for (j = 0; j < s; j++) {
-                // init y = 0
+                // Init y = 0
                 for (e = 0; e < dim; e++) {
                     y[e] = 0.0;
                 }
@@ -16655,16 +16707,16 @@ _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.Numerics = {
                     }
                 }
 
-                // add x(t) to y
+                // Add x(t) to y
                 for (e = 0; e < dim; e++) {
                     y[e] += x[e];
                 }
 
-                // calculate new k and add it to the k matrix
+                // Calculate new k and add it to the k matrix
                 k.push(f(t + butcher.c[j] * h, y));
             }
 
-            // init y = 0
+            // Init y = 0
             for (e = 0; e < dim; e++) {
                 y[e] = 0.0;
             }
@@ -16780,7 +16832,7 @@ _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.Numerics = {
      *
      * Find zero of an univariate function f.
      * @param {function} f Function, whose root is to be found
-     * @param {Array,Number} x0  Start value or start interval enclosing the root
+     * @param {Array|Number} x0  Start value or start interval enclosing the root
      * @param {Object} object Parent object in case f is method of it
      * @returns {Number} the approximation of the root
      * Algorithm:
@@ -16799,27 +16851,16 @@ _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.Numerics = {
      * @memberof JXG.Math.Numerics
      */
     fzero: function (f, x0, object) {
-        var a,
-            b,
-            c,
-            d,
-            e,
-            fa,
-            fb,
-            fc,
+        var a, b, c,
+            fa, fb, fc,
             res,
             prev_step,
-            t1,
+            t1, t2,
             cb,
-            t2,
-            // Actual tolerance
-            tol_act,
-            // Interpolation step is calculated in the form p/q; division
-            // operations is delayed until the last moment
-            p,
-            q,
-            // Step at this iteration
-            new_step,
+            tol_act,   // Actual tolerance
+            p,         // Interpolation step is calculated in the form p/q; division
+            q,         // operations is delayed until the last moment
+            new_step,  // Step at this iteration
             eps = _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.eps,
             maxiter = this.maxIterationsRoot,
             niter = 0;
@@ -16955,7 +16996,7 @@ _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.Numerics = {
     /**
      * Find zero of an univariate function f.
      * @param {function} f Function, whose root is to be found
-     * @param {Array,Number} x0  Start value or start interval enclosing the root
+     * @param {Array|Number} x0  Start value or start interval enclosing the root
      * @param {Object} object Parent object in case f is method of it
      * @returns {Number} the approximation of the root
      * Algorithm:
@@ -16974,10 +17015,7 @@ _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.Numerics = {
      * @memberof JXG.Math.Numerics
      */
     chandrupatla: function (f, x0, object) {
-        var a,
-            fa,
-            b,
-            fb,
+        var a, b, fa, fb,
             res,
             niter = 0,
             maxiter = this.maxIterationsRoot,
@@ -16985,14 +17023,8 @@ _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.Numerics = {
             t = 0.5 * rand,
             eps = _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.eps, // 1.e-10,
             dlt = 0.00001,
-            x1,
-            x2,
-            x3,
-            x,
-            f1,
-            f2,
-            f3,
-            y,
+            x1, x2, x3, x,
+            f1, f2, f3, y,
             xm,
             fm,
             tol,
@@ -17001,11 +17033,7 @@ _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.Numerics = {
             ph,
             fl,
             fh,
-            AL,
-            A,
-            B,
-            C,
-            D;
+            AL, A, B, C, D;
 
         if (_utils_type__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z.isArray(x0)) {
             if (x0.length < 2) {
@@ -17119,10 +17147,9 @@ _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.Numerics = {
             fx, fv, fw,
             range, middle_range, tol_act, new_step,
             p, q, t, ft,
-            // Golden section ratio
-            r = (3.0 - Math.sqrt(5.0)) * 0.5,
+            r = (3.0 - Math.sqrt(5.0)) * 0.5,      // Golden section ratio
             tol = _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.eps,
-            sqrteps = _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.eps, //Math.sqrt(Mat.eps),
+            sqrteps = _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.eps, // Math.sqrt(Mat.eps),
             maxiter = this.maxIterationsMinimize,
             niter = 0;
         // nfev = 0;
@@ -17161,7 +17188,7 @@ _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.Numerics = {
             // Obtain the golden section step
             new_step = r * (x < middle_range ? b - x : a - x);
 
-            // Decide if the interpolation can be tried. If x and w are distinct interpolatiom may be tried
+            // Decide if the interpolation can be tried. If x and w are distinct, interpolatiom may be tried
             if (Math.abs(x - w) >= tol_act) {
                 // Interpolation step is calculated as p/q;
                 // division operation is delayed until last moment
@@ -17171,21 +17198,19 @@ _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.Numerics = {
                 q = 2 * (q - t);
 
                 if (q > 0) {
-                    // q was calculated with the op-
-                    p = -p; // posite sign; make q positive
+                    p = -p; // q was calculated with the opposite sign; make q positive
                 } else {
-                    // and assign possible minus to
-                    q = -q; // p
+                    q = -q; // // and assign possible minus to p
                 }
                 if (
                     Math.abs(p) < Math.abs(new_step * q) && // If x+p/q falls in [a,b]
-                    p > q * (a - x + 2 * tol_act) && //  not too close to a and
+                    p > q * (a - x + 2 * tol_act) &&        //  not too close to a and
                     p < q * (b - x - 2 * tol_act)
                 ) {
                     // b, and isn't too large
                     new_step = p / q; // it is accepted
                 }
-                // If p/q is too large then the
+                // If p / q is too large then the
                 // golden section procedure can
                 // reduce [a,b] range to more
                 // extent
@@ -17251,6 +17276,598 @@ _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.Numerics = {
     },
 
     /**
+     *
+     *   Purpose:
+     *
+     *   GLOMIN seeks a global minimum of a function F(X) in an interval [A,B].
+     *
+     * Discussion:
+     *
+     *  This function assumes that F(X) is twice continuously differentiable over [A,B]
+     * and that F''(X) <= M for all X in [A,B].
+     *
+     * Licensing:
+     *   This code is distributed under the GNU LGPL license.
+     *
+     * Modified:
+     *
+     *   17 April 2008
+     *
+     * Author:
+     *
+     *   Original FORTRAN77 version by Richard Brent.
+     *   C version by John Burkardt.
+     *   https://people.math.sc.edu/Burkardt/c_src/brent/brent.c
+     *
+     * Reference:
+     *
+     *   Richard Brent,
+     *  Algorithms for Minimization Without Derivatives,
+     *   Dover, 2002,
+     *  ISBN: 0-486-41998-3,
+     *   LC: QA402.5.B74.
+     *
+     * Parameters:
+     *
+     *   Input, double A, B, the endpoints of the interval.
+     *  It must be the case that A < B.
+     *
+     *   Input, double C, an initial guess for the global
+     *  minimizer.  If no good guess is known, C = A or B is acceptable.
+     *
+     *  Input, double M, the bound on the second derivative.
+     *
+     *   Input, double MACHEP, an estimate for the relative machine
+     *  precision.
+     *
+     *   Input, double E, a positive tolerance, a bound for the
+     *  absolute error in the evaluation of F(X) for any X in [A,B].
+     *
+     *   Input, double T, a positive error tolerance.
+     *
+     *    Input, double F (double x ), a user-supplied
+     *  function whose global minimum is being sought.
+     *
+     *   Output, double *X, the estimated value of the abscissa
+     *  for which F attains its global minimum value in [A,B].
+     *
+     *   Output, double GLOMIN, the value F(X).
+     */
+    glomin: function (f, x0) {
+        var a0, a2, a3, d0, d1, d2, h,
+            k, m2,
+            p, q, qs,
+            r, s, sc,
+            y, y0, y1, y2, y3, yb,
+            z0, z1, z2,
+            a, b, c, x,
+            m = 10000000.0,
+            t = _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.eps, // * Mat.eps,
+            e = _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.eps * _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.eps,
+            machep = _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.eps * _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.eps * _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.eps;
+
+        a = x0[0];
+        b = x0[1];
+        c = (f(a) < f(b)) ? a : b;
+
+        a0 = b;
+        x = a0;
+        a2 = a;
+        y0 = f(b);
+        yb = y0;
+        y2 = f(a);
+        y = y2;
+
+        if (y0 < y) {
+            y = y0;
+        } else {
+            x = a;
+        }
+
+        if (m <= 0.0 || b <= a) {
+            return y;
+        }
+
+        m2 = 0.5 * (1.0 + 16.0 * machep) * m;
+
+        if (c <= a || b <= c) {
+            sc = 0.5 * (a + b);
+        } else {
+            sc = c;
+        }
+
+        y1 = f(sc);
+        k = 3;
+        d0 = a2 - sc;
+        h = 9.0 / 11.0;
+
+        if (y1 < y) {
+            x = sc;
+            y = y1;
+        }
+
+        for (; ;) {
+            d1 = a2 - a0;
+            d2 = sc - a0;
+            z2 = b - a2;
+            z0 = y2 - y1;
+            z1 = y2 - y0;
+            r = d1 * d1 * z0 - d0 * d0 * z1;
+            p = r;
+            qs = 2.0 * (d0 * z1 - d1 * z0);
+            q = qs;
+
+            if (k < 1000000 || y2 <= y) {
+                for (; ;) {
+                    if (q * (r * (yb - y2) + z2 * q * ((y2 - y) + t)) <
+                        z2 * m2 * r * (z2 * q - r)) {
+
+                        a3 = a2 + r / q;
+                        y3 = f(a3);
+
+                        if (y3 < y) {
+                            x = a3;
+                            y = y3;
+                        }
+                    }
+                    k = ((1611 * k) % 1048576);
+                    q = 1.0;
+                    r = (b - a) * 0.00001 * k;
+
+                    if (z2 <= r) {
+                        break;
+                    }
+                }
+            } else {
+                k = ((1611 * k) % 1048576);
+                q = 1.0;
+                r = (b - a) * 0.00001 * k;
+
+                while (r < z2) {
+                    if (q * (r * (yb - y2) + z2 * q * ((y2 - y) + t)) <
+                        z2 * m2 * r * (z2 * q - r)) {
+
+                        a3 = a2 + r / q;
+                        y3 = f(a3);
+
+                        if (y3 < y) {
+                            x = a3;
+                            y = y3;
+                        }
+                    }
+                    k = ((1611 * k) % 1048576);
+                    q = 1.0;
+                    r = (b - a) * 0.00001 * k;
+                }
+            }
+
+            r = m2 * d0 * d1 * d2;
+            s = Math.sqrt(((y2 - y) + t) / m2);
+            h = 0.5 * (1.0 + h);
+            p = h * (p + 2.0 * r * s);
+            q = q + 0.5 * qs;
+            r = - 0.5 * (d0 + (z0 + 2.01 * e) / (d0 * m2));
+
+            if (r < s || d0 < 0.0) {
+                r = a2 + s;
+            } else {
+                r = a2 + r;
+            }
+
+            if (0.0 < p * q) {
+                a3 = a2 + p / q;
+            } else {
+                a3 = r;
+            }
+
+            for (; ;) {
+                a3 = Math.max(a3, r);
+
+                if (b <= a3) {
+                    a3 = b;
+                    y3 = yb;
+                } else {
+                    y3 = f(a3);
+                }
+
+                if (y3 < y) {
+                    x = a3;
+                    y = y3;
+                }
+
+                d0 = a3 - a2;
+
+                if (a3 <= r) {
+                    break;
+                }
+
+                p = 2.0 * (y2 - y3) / (m * d0);
+
+                if ((1.0 + 9.0 * machep) * d0 <= Math.abs(p)) {
+                    break;
+                }
+
+                if (0.5 * m2 * (d0 * d0 + p * p) <= (y2 - y) + (y3 - y) + 2.0 * t) {
+                    break;
+                }
+                a3 = 0.5 * (a2 + a3);
+                h = 0.9 * h;
+            }
+
+            if (b <= a3) {
+                break;
+            }
+
+            a0 = sc;
+            sc = a2;
+            a2 = a3;
+            y0 = y1;
+            y1 = y2;
+            y2 = y3;
+        }
+
+        return [x, y];
+    },
+
+    /**
+     * Determine all roots of a polynomial with real or complex coefficients by using the
+     * iterative method attributed to Weierstrass, Durand, Kerner, Aberth, and Ehrlich. In particular,
+     * the iteration method with cubic convergence is used that is usually attributed to Ehrlich-Aberth.
+     * <p>
+     * The returned roots are sorted with respect to their real values.
+     * <p> This method makes use of the JSXGraph classes {@link JXG.Complex} and {@link JXG.C} to handle
+     * complex numbers.
+     *
+     * @param {Array} a Array of coefficients of the polynomial a[0] + a[1]*x+ a[2]*x**2...
+     * The coefficients are of type Number or JXG.Complex.
+     * @param {Number} [deg] Optional degree of the polynomial. Otherwise all entries are taken, with
+     * leading zeros removed.
+     * @param {Number} [tol=Number.EPSILON] Approximation tolerance
+     * @param {Number} [max_it=30] Maximum number of iterations
+     * @param {Array} [initial_values=null] Array of initial values for the roots. If not given,
+     * starting values are determined by the method of Ozawa.
+     * @returns {Array} Array of complex numbers (of JXG.Complex) approximating the roots of the polynomial.
+     * @memberof JXG.Math.Numerics
+     * @see JXG.Complex
+     * @see JXG.C
+     *
+     * @example
+     * // Polynomial p(z) = -1 + 1z^2
+     * var i, roots,
+     *     p = [-1, 0, 1];
+     *
+     * roots = JXG.Math.Numerics.polzeros(p);
+     * for (i = 0; i < roots.length; i++) {
+     *     console.log(i, roots[i].toString());
+     * }
+     * // Output:
+     *   0 -1 + -3.308722450212111e-24i
+     *   1 1 + 0i
+     *
+     * @example
+     * // Polynomial p(z) = -1 + 3z - 9z^2 + z^3 - 8z^6 + 9z^7 - 9z^8 + z^9
+     * var i, roots,
+     *     p = [-1, 3, -9, 1, 0, 0, -8, 9, -9, 1];
+     *
+     * roots = JXG.Math.Numerics.polzeros(p);
+     * for (i = 0; i < roots.length; i++) {
+     *     console.log(i, roots[i].toString());
+     * }
+     * // Output:
+     * 0 -0.7424155888401961 + 0.4950476539211721i
+     * 1 -0.7424155888401961 + -0.4950476539211721i
+     * 2 0.16674869833354108 + 0.2980502714610669i
+     * 3 0.16674869833354108 + -0.29805027146106694i
+     * 4 0.21429002063640837 + 1.0682775088132996i
+     * 5 0.21429002063640842 + -1.0682775088132999i
+     * 6 0.861375497926218 + -0.6259177003583295i
+     * 7 0.8613754979262181 + 0.6259177003583295i
+     * 8 8.000002743888055 + -1.8367099231598242e-40i
+     *
+     */
+    polzeros: function (coeffs, deg, tol, max_it, initial_values) {
+        var i, le, off, it,
+            debug = false,
+            cc = [],
+            obvious = [],
+            roots = [],
+
+            /**
+             * Horner method to evaluate polynomial or the derivative thereof for complex numbers,
+             * i.e. coefficients and variable are complex.
+             * @function
+             * @param {Array} a Array of complex coefficients of the polynomial a[0] + a[1]*x+ a[2]*x**2...
+             * @param {JXG.Complex} z Value for which the polynomial will be evaluated.
+             * @param {Boolean} [derivative=false] If true the derivative will be evaluated.
+             * @ignore
+             */
+            hornerComplex = function (a, z, derivative) {
+                var i, s,
+                    n = a.length - 1;
+
+                derivative = derivative || false;
+                if (derivative) {
+                    // s = n * a_n
+                    s = _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.C.mult(n, a[n]);
+                    for (i = n - 1; i > 0; i--) {
+                        // s = s * z + i * a_i
+                        s.mult(z);
+                        s.add(_jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.C.mult(a[i], i));
+                    }
+                } else {
+                    // s = a_n
+                    s = _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.C.copy(a[n]);
+                    for (i = n - 1; i >= 0; i--) {
+                        // s = s * z + a_i
+                        s.mult(z);
+                        s.add(a[i]);
+                    }
+                }
+                return s;
+            },
+
+            /**
+             * Horner method to evaluate reciprocal polynomial or the derivative thereof for complex numbers,
+             * i.e. coefficients and variable are complex.
+             * @function
+             * @param {Array} a Array of complex coefficients of the polynomial a[0] + a[1]*x+ a[2]*x**2...
+             * @param {JXG.Complex} z Value for which the reciprocal polynomial will be evaluated.
+             * @param {Boolean} [derivative=false] If true the derivative will be evaluated.
+             * @ignore
+             */
+            hornerRec = function (a, x, derivative) {
+                var i, s,
+                    n = a.length - 1;
+
+                derivative = derivative || false;
+                if (derivative) {
+                    // s = n * a_0
+                    s = _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.C.mult(n, a[0]);
+                    for (i = n - 1; i > 0; i--) {
+                        // s = s * x + i * a_{n-i}
+                        s.mult(x);
+                        s.add(_jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.C.mult(a[n - i], i));
+                    }
+                } else {
+                    // s = a_0
+                    s = _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.C.copy(a[0]);
+                    for (i = n - 1; i >= 0; i--) {
+                        // s = s * x + a_{n-i}
+                        s.mult(x);
+                        s.add(a[n - i]);
+                    }
+                }
+                return s;
+            },
+
+            /**
+             * Horner method to evaluate real polynomial at a real value.
+             * @function
+             * @param {Array} a Array of real coefficients of the polynomial a[0] + a[1]*x+ a[2]*x**2...
+             * @param {Number} z Value for which the polynomial will be evaluated.
+             * @ignore
+             */
+            horner = function (a, x) {
+                var i, s,
+                    n = a.length - 1;
+
+                s = a[n];
+                for (i = n - 1; i >= 0; i--) {
+                    s = s * x + a[i];
+                }
+                return s;
+            },
+
+            /**
+             * Determine start values for the Aberth iteration, see
+             * Ozawa, "An experimental study of the starting values
+             * of the Durand-Kerner-Aberth iteration" (1995).
+             *
+             * @function
+             * @param {Array} a Array of complex coefficients of the polynomial a[0] + a[1]*x+ a[2]*x**2...
+             * @returns {Array} Array Initial values for the roots.
+             * @ignore
+             */
+            initial_guess = function (a) {
+                var i, r,
+                    n = a.length - 1, // degree
+                    alpha1 = Math.PI * 2 / n,
+                    alpha0 = Math.PI / n * 0.5,
+                    b, z,
+                    init = [];
+
+
+                // From Ozawa, "An experimental study of the starting values
+                // of the Durand-Kerner-Aberth iteration" (1995)
+
+                // b is the arithmetic mean of the roots.
+                // With is Vieta's formula <https://en.wikipedia.org/wiki/Vieta%27s_formulas>
+                //   b = -a_{n-1} / (n * a_n)
+                b = _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.C.mult(-1, a[n - 1]);
+                b.div(_jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.C.mult(n, a[n]));
+
+                // r is the geometric mean of the deviations |b - root_i|.
+                // Using
+                //   p(z) = a_n prod(z - root_i)
+                // and therefore
+                //   |p(b)| = |a_n| prod(|b - root_i|)
+                // we arrive at:
+                //   r = |p(b)/a_n|^(1/n)
+                z = _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.C.div(hornerComplex(a, b), a[n]);
+                r = Math.pow(_jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.C.abs(z), 1 / n);
+                if (r === 0) { r = 1; }
+
+                for (i = 0; i < n; i++) {
+                    a = new _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Complex(r * Math.cos(alpha1 * i + alpha0), r * Math.sin(alpha1 * i + alpha0));
+                    init[i] = _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.C.add(b, a);
+                }
+
+                return init;
+            },
+
+            /**
+             * Ehrlich-Aberth iteration. The stopping criterion is from
+             * D.A. Bini, "Numerical computation of polynomial zeros
+             * by means of Aberths's method", Numerical Algorithms (1996).
+             *
+             * @function
+             * @param {Array} a Array of complex coefficients of the polynomial a[0] + a[1]*x+ a[2]*x**2...
+             * @param {Number} mu Machine precision
+             * @param {Number} max_it Maximum number of iterations
+             * @param {Array} z Initial guess for the roots. Will be changed in place.
+             * @returns {Number} Number of iterations
+             * @ignore
+             */
+            aberthIteration = function (cc, mu, max_it, z) {
+                var k, i, j,
+                    done = [],
+                    cr = [],
+                    gamma, x,
+                    done_sum = 0,
+                    num, denom, s, pp,
+                    n = z.length;
+
+                for (i = 0; i < n; i++) {
+                    done.push(false);
+                }
+                for (i = 0; i < cc.length; i++) {
+                    cr.push(_jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.C.abs(cc[i]) * (4 * i + 1));
+                }
+                for (k = 0; k < max_it && done_sum < n; k++) {
+                    for (i = 0; i < n; i++) {
+                        if (done[i]) {
+                            continue;
+                        }
+                        num = hornerComplex(cc, z[i]);
+                        x = _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.C.abs(z[i]);
+
+                        // Stopping criterion by D.A. Bini
+                        // "Numerical computation of polynomial zeros
+                        // by means of Aberths's method", Numerical Algorithms (1996).
+                        //
+                        if (_jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.C.abs(num) < mu * horner(cr, x)) {
+                            done[i] = true;
+                            done_sum++;
+                            if (done_sum === n) {
+                                break;
+                            }
+                            continue;
+                        }
+
+                        // num = P(z_i) / P'(z_i)
+                        if (x > 1) {
+                            gamma = _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.C.div(1, z[i]);
+                            pp = hornerRec(cc, gamma, true);
+                            pp.div(hornerRec(cc, gamma));
+                            pp.mult(gamma);
+                            num = _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.C.sub(n, pp);
+                            num = _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.C.div(z[i], num);
+                        } else {
+                            num.div(hornerComplex(cc, z[i], true));
+                        }
+
+                        // denom = sum_{i\neq j} 1 / (z_i  - z_j)
+                        denom = new _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Complex(0);
+                        for (j = 0; j < n; j++) {
+                            if (j === i) {
+                                continue;
+                            }
+                            s = _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.C.sub(z[i], z[j]);
+                            s = _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.C.div(1, s);
+                            denom.add(s);
+                        }
+
+                        // num = num / 1 - num * sum_{i\neq j} 1 / (z_i - z_j)
+                        denom.mult(num);
+                        denom = _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.C.sub(1, denom);
+                        num.div(denom);
+                        // z_i = z_i - num
+                        z[i].sub(num);
+                    }
+                }
+
+                return k;
+            };
+
+
+        tol = tol || Number.EPSILON;
+        max_it = max_it || 30;
+
+        le = coeffs.length;
+        if (_jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.isNumber(deg) && deg >= 0 && deg < le - 1) {
+            le = deg + 1;
+        }
+
+        // Convert coefficient array to complex numbers
+        for (i = 0; i < le; i++) {
+            cc.push(new _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Complex(coeffs[i]));
+        }
+
+        // Search for (multiple) roots at x=0
+        for (i = 0; i < le; i++) {
+            if (cc[i].real !== 0 || cc[i].imaginary !== 0) {
+                off = i;
+                break;
+            }
+        }
+
+        // Deflate root x=0, store roots at x=0 in obvious
+        for (i = 0; i < off; i++) {
+            obvious.push(new _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Complex(0));
+        }
+        cc = cc.slice(off);
+        le = cc.length;
+
+        // Remove leading zeros from the coefficient array
+        for (i = le - 1; i >= 0; i--) {
+            if (cc[i].real !== 0 || cc[i].imaginary !== 0) {
+                break;
+            }
+            cc.pop();
+        }
+        le = cc.length;
+        if (le === 0) {
+            return [];
+        }
+
+        // From now on we can assume that the
+        // constant coefficient and the leading coefficient
+        // are not zero.
+        if (initial_values) {
+            for (i = 0; i < le - 1; i++) {
+                roots.push(new _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Complex(initial_values[i]));
+            }
+        } else {
+            roots = initial_guess(cc);
+        }
+        it = aberthIteration(cc, tol, max_it, roots);
+
+        // Append the roots at x=0
+        roots = obvious.concat(roots);
+
+        if (debug) {
+            console.log("Iterations:", it);
+            console.log('Roots:');
+            for (i = 0; i < roots.length; i++) {
+                console.log(i, roots[i].toString(), _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.C.abs(hornerComplex(cc, roots[i])));
+            }
+        }
+
+        // Sort roots according to their real part
+        roots.sort(function (a, b) {
+            if (a.real < b.real) {
+                return -1;
+            }
+            if (a.real > b.real) {
+                return 1;
+            }
+            return 0;
+        });
+
+        return roots;
+    },
+
+    /**
      * Implements the Ramer-Douglas-Peucker algorithm.
      * It discards points which are not necessary from the polygonal line defined by the point array
      * pts. The computation is done in screen coordinates.
@@ -17280,6 +17897,7 @@ _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.Numerics = {
                 var d, k, ci, cj, ck,
                     x0, y0, x1, y1,
                     den, lbda,
+                    eps = _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.eps * _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.eps,
                     huge = 10000,
                     dist = 0,
                     f = i;
@@ -17318,7 +17936,7 @@ _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.Numerics = {
                     y1 = y1 === -Infinity ? -huge : y1;
                     den = x1 * x1 + y1 * y1;
 
-                    if (den >= _math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.eps) {
+                    if (den > eps) {
                         lbda = (x0 * x1 + y0 * y1) / den;
 
                         if (lbda < 0.0) {
@@ -18580,7 +19198,8 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
          * Supply the document object. Defaults to window.document
          *
          * @name JXG.Board#document
-         * @type DOM object
+         * @type Object
+         * @description DOM object
          * @default false (meaning window.document)
          */
         document: false,
@@ -19103,7 +19722,8 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
          * board.addEventHandlers();
          *
          * @name JXG.Board#moveTarget
-         * @type HTML node or document
+         * @type Object
+         * @description HTML node or document
          * @default null
          *
          * @example
@@ -19176,10 +19796,24 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
         },
 
         /**
-         * Allow user interaction by registering mouse, pointer, keyboard or touch events.
-         * Decide if JSXGraph listens to these events. Keyboard events can then turned off
-         * separately with the keyboard attribute.
-         *
+         * Allow user interaction by registering pointer events (including mouse and
+         * touch events), fullscreen, keyboard, resize, and zoom events.
+         * The latter events are essentially mouse wheel events.
+         * Decide if JSXGraph listens to these events.
+         * <p>
+         * Using a Boolean value turns on all events (or not), supplying an object of
+         * the form
+         * <pre>
+         *  {
+         *     fullscreen: true / false,
+         *     keyboard: true / false,
+         *     pointer: true / false,
+         *     resize: true / false,
+         *     wheel: true / false
+         *  }
+         * </pre>
+         * activates individual event handlers. If an event is NOT given,
+         * it will be activated.
          * <p>This attribute is immutable. Please use
          * {@link JXG.Board#addEventHandlers()} and
          * {@link JXG.Board#removeEventHandlers()} directly.
@@ -19193,40 +19827,40 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
          */
         registerEvents: true,
 
-        /**
-         * Listen to fullscreen event.
-         *
-         * <p>This attribute is immutable. Please use
-         * {@link JXG.Board#addFullscreenEventHandlers()} and
-         * {@link JXG.Board#removeEventHandlers()} directly.
-         *
-         * @name JXG.Board#registerFullscreenEvent
-         * @see JXG.Board#registerEvents
-         * @see JXG.Board#registerResizeEvent
-         * @type Boolean
-         * @default true
-         */
-        registerFullscreenEvent: true,
+        // /**
+        //  * Listen to fullscreen event.
+        //  *
+        //  * <p>This attribute is immutable. Please use
+        //  * {@link JXG.Board#addFullscreenEventHandlers()} and
+        //  * {@link JXG.Board#removeEventHandlers()} directly.
+        //  *
+        //  * @name JXG.Board#registerFullscreenEvent
+        //  * @see JXG.Board#registerEvents
+        //  * @see JXG.Board#registerResizeEvent
+        //  * @type Boolean
+        //  * @default true
+        //  */
+        // registerFullscreenEvent: true,
 
-        /**
-         * Listen to resize events, i.e. start "resizeObserver" or handle the resize event with
-         * "resizeListener". This is independent from the mouse, touch, pointer events.
-         *
-         * <p>This attribute is immutable. Please use
-         * {@link JXG.Board#addResizeEventHandlers()} and
-         * {@link JXG.Board#removeEventHandlers()} directly.
-         * <p>
-         * This attribute just starts a resizeObserver. If the resizeObserver reacts
-         * to size changed is controled wuth {@link JXG.Board#resize}.
-         *
-         * @name JXG.Board#registerResizeEvent
-         * @see JXG.Board#resize
-         * @see JXG.Board#registerEvents
-         * @see JXG.Board#registerFullscreenEvent
-         * @type Boolean
-         * @default true
-         */
-        registerResizeEvent: true,
+        // /**
+        //  * Listen to resize events, i.e. start "resizeObserver" or handle the resize event with
+        //  * "resizeListener". This is independent from the mouse, touch, pointer events.
+        //  *
+        //  * <p>This attribute is immutable. Please use
+        //  * {@link JXG.Board#addResizeEventHandlers()} and
+        //  * {@link JXG.Board#removeEventHandlers()} directly.
+        //  * <p>
+        //  * This attribute just starts a resizeObserver. If the resizeObserver reacts
+        //  * to size changed is controled wuth {@link JXG.Board#resize}.
+        //  *
+        //  * @name JXG.Board#registerResizeEvent
+        //  * @see JXG.Board#resize
+        //  * @see JXG.Board#registerEvents
+        //  * @see JXG.Board#registerFullscreenEvent
+        //  * @type Boolean
+        //  * @default true
+        //  */
+        // registerResizeEvent: true,
 
         /**
          * Default rendering engine. Possible values are 'svg', 'canvas', 'vml', 'no', or 'auto'.
@@ -19370,6 +20004,10 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
 
         /**
          * Show a button which allows to clear all traces of a board.
+         * This button can be accessed by JavaScript or CSS with
+         * the ID <tt>"{board_id}_navigation_button_cleartraces"</tt> or by the CSS classes
+         * <tt>JXG_navigation_button"</tt> or
+         * <tt>JXG_navigation_button_cleartraces"</tt>.
          *
          * @name JXG.Board#showClearTraces
          * @type Boolean
@@ -19389,6 +20027,10 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
 
         /**
          * Show a button in the navigation bar to start fullscreen mode.
+         * This button can be accessed by JavaScript or CSS with
+         * the ID <tt>"{board_id}_navigation_button_fullscreen"</tt> or by the CSS classes
+         * <tt>JXG_navigation_button"</tt> or
+         * <tt>JXG_navigation_button_fullscreen"</tt>.
          *
          * @name JXG.Board#showFullscreen
          * @type Boolean
@@ -19414,6 +20056,17 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
 
         /**
          * Display of navigation arrows and zoom buttons in the navigation bar.
+         * <p>
+         * The navigation bar has the
+         * the ID <tt>"{board_id}_navigation"</tt> and the CSS class
+         * <tt>JXG_navigation"</tt>.
+         * The individual buttons can be accessed by JavaScript or CSS with
+         * the ID <tt>"{board_id}_navigation_button_{type}"</tt> or by the CSS classes
+         * <tt>JXG_navigation_button"</tt> or
+         * <tt>JXG_navigation_button_{type}"</tt>, where <tt>{type}</tt>
+         * is one of <tt>left</tt>, <tt>right</tt>, or <tt>up</tt>, <tt>down</tt>,
+         * <tt>in</tt>, <tt>100</tt>, or <tt>out</tt>,
+         * <tt>fullscreen</tt>, <tt>screenshot</tt>, <tt>cleartraces</tt>, <tt>reload</tt>.
          *
          * @name JXG.Board#showNavigation
          * @type Boolean
@@ -19425,6 +20078,10 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
         /**
          * Show a button in the navigation bar to force reload of a construction.
          * Works only with the JessieCode tag.
+         * This button can be accessed by JavaScript or CSS with
+         * the ID <tt>"{board_id}_navigation_button_reload"</tt> or by the CSS classes
+         * <tt>JXG_navigation_button"</tt> or
+         * <tt>JXG_navigation_button_reload"</tt>.
          *
          * @name JXG.Board#showReload
          * @type Boolean
@@ -19435,6 +20092,10 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
 
         /**
          * Show a button in the navigation bar to enable screenshots.
+         * This button can be accessed by JavaScript or CSS with
+         * the ID <tt>"{board_id}_navigation_button_screenshot"</tt> or by the CSS classes
+         * <tt>JXG_navigation_button"</tt> or
+         * <tt>JXG_navigation_button_screenshot"</tt>.
          *
          * @name JXG.Board#showScreenshot
          * @type Boolean
@@ -19446,6 +20107,12 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
         /**
          * Display of zoom buttons in the navigation bar. To show zoom buttons, additionally
          * showNavigation has to be set to true.
+         * <p>
+         * The individual buttons can be accessed by JavaScript or CSS with
+         * the ID <tt>"{board_id}_navigation_button_{type}"</tt> or by the CSS classes
+         * <tt>JXG_navigation_button"</tt> or
+         * <tt>JXG_navigation_button_{type}"</tt>, where <tt>{type}</tt>
+         * is <tt>in</tt>, <tt>100</tt>, or <tt>out</tt>.
          *
          * @name JXG.Board#showZoom
          * @type Boolean
@@ -19473,6 +20140,61 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
         takeSizeFromFile: false,
 
         /**
+         * Set a visual theme for a board. At the moment this attribute is immutable.
+         * Available themes are
+         * <ul>
+         * <li> 'default'
+         * <li> 'mono_thin': a black / white theme using thin strokes. Restricted to 2D.
+         * </ul>
+         *
+         * @name JXG.Board#theme
+         * @type String
+         * @default 'default'
+         * @example
+         *  const board = JXG.JSXGraph.initBoard('jxgbox', {
+         *      boundingbox: [-5, 5, 5, -5], axis: true,
+         *      theme: 'mono_thin'
+         *  });
+         *
+         *  var a = board.create('slider', [[1, 4], [3, 4], [-10, 1, 10]]);
+         *  var p1 = board.create('point', [1, 2]);
+         *  var ci1 = board.create('circle', [p1, 0.7]);
+         *  var cu = board.create('functiongraph', ['x^2']);
+         *  var l1 = board.create('line', [2, 3, -1]);
+         *  var l2 = board.create('line', [-5, -3, -1], { dash: 2 });
+         *  var i1 = board.create('intersection', [l1, l2]);
+         *  var pol = board.create('polygon', [[1, 0], [4, 0], [3.5, 1]]);
+         *  var an = board.create('angle', [pol.vertices[1], pol.vertices[0], pol.vertices[2]]);
+         *  var se = board.create('sector', [pol.vertices[1], pol.vertices[2], pol.vertices[0]]);
+         *  var ci1 = board.create('circle', [[-3, -3], 0.7], { center: { visible: true } });
+         *
+         * </pre><div id="JXG1c5f7a2a-176b-4410-ac06-8593f1a09879" class="jxgbox" style="width: 300px; height: 300px;"></div>
+         * <script type="text/javascript">
+         *     (function() {
+         *         var board = JXG.JSXGraph.initBoard('JXG1c5f7a2a-176b-4410-ac06-8593f1a09879',
+         *             {boundingbox: [-5, 5, 5, -5], axis: true, showcopyright: false, shownavigation: false,
+         *              theme: 'mono_thin' });
+         *
+         *    var a = board.create('slider', [[1, 4], [3, 4], [-10, 1, 10]]);
+         *    var p1 = board.create('point', [1, 2]);
+         *    var ci1 = board.create('circle', [p1, 0.7]);
+         *    var cu = board.create('functiongraph', ['x^2']);
+         *    var l1 = board.create('line', [2, 3, -1]);
+         *    var l2 = board.create('line', [-5, -3, -1], { dash: 2 });
+         *    var i1 = board.create('intersection', [l1, l2]);
+         *    var pol = board.create('polygon', [[1, 0], [4, 0], [3.5, 1]]);
+         *    var an = board.create('angle', [pol.vertices[1], pol.vertices[0], pol.vertices[2]]);
+         *    var se = board.create('sector', [pol.vertices[1], pol.vertices[2], pol.vertices[0]]);
+         *    var ci1 = board.create('circle', [[-3, -3], 0.7], { center: { visible: true } });
+         *
+         *     })();
+         *
+         * </script><pre>
+         *
+         */
+        theme: 'default',
+
+        /**
          * Title string for the board.
          * Primarily used in an invisible text element which is adressed by
          * the attribute 'aria-labelledby' from the JSXGraph container.
@@ -19488,30 +20210,50 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
         title: '',
 
         /**
+         *
+         * Set a viewport of the board. viewport is determined by an array of the form '[left, top, right, bottom]'.
+         * whose entries determine an inner margin (i.e. a padding) of the board. The entries of the array have to be given
+         * as numbers or strings. In the latter case the units 'px' or '%' are supported.
+         * The viewport can be individually controlled for each element, too.
+         *
+         * @type {Array|String}
+         * @name JXG.Board#viewport
+         * @default [0, 0, 0, 0]
+         * @see JXG.GeometryElement#viewport
+         */
+        viewport: [0, 0, 0, 0],
+
+        /**
          * Control the possibilities for zoom interaction.
          *
          * Possible sub-attributes with default values are:
          * <pre>
          * zoom: {
+         *   enabled: true,  // turns off zooming completely, if set to false.
          *   factorX: 1.25,  // horizontal zoom factor (multiplied to {@link JXG.Board#zoomX})
          *   factorY: 1.25,  // vertical zoom factor (multiplied to {@link JXG.Board#zoomY})
-         *   wheel: true,     // allow zooming by mouse wheel or
-         *   				   // by pinch-to-toom gesture on touch devices
-         *   needShift: true,   // mouse wheel zooming needs pressing of the shift key
-         *   min: 0.001,        // minimal values of {@link JXG.Board#zoomX} and {@link JXG.Board#zoomY}, limits zoomOut
-         *   max: 1000.0,       // maximal values of {@link JXG.Board#zoomX} and {@link JXG.Board#zoomY}, limits zoomIn
+         *   wheel: true,    // allow zooming by mouse wheel
+         *   needShift: true,  // mouse wheel zooming needs pressing of the shift key
+         *   min: 0.001,       // minimal values of {@link JXG.Board#zoomX} and {@link JXG.Board#zoomY}, limits zoomOut
+         *   max: 1000.0,      // maximal values of {@link JXG.Board#zoomX} and {@link JXG.Board#zoomY}, limits zoomIn
          *
-         *   pinchHorizontal: true, // Allow pinch-to-zoom to zoom only horizontal axis
-         *   pinchVertical: true,   // Allow pinch-to-zoom to zoom only vertical axis
+         *   pinch: true,      // pinch-to-zoom gesture for proportional zoom
+         *   pinchHorizontal: true, // Horizontal pinch-to-zoom zooms horizontal axis. Only available if keepaspectratio:false
+         *   pinchVertical: true,   // Vertical pinch-to-zoom zooms vertical axis only. Only available if keepaspectratio:false
          *   pinchSensitivity: 7    // Sensitivity (in degrees) for recognizing horizontal or vertical pinch-to-zoom gestures.
          * }
          * </pre>
+         *
+         * If the zoom buttons are visible, zooming by clicking the buttons is still possible, regardless of zoom.enabled:true/false.
+         * If this should be prevented, set showZoom:false.
          *
          * Deprecated: zoom.eps which is superseded by zoom.min
          *
          * @name JXG.Board#zoom
          * @type Object
-         * @default
+         * @default See above
+         * @see JXG.Board#showZoom
+         *
          */
         zoom: {
             enabled: true,
@@ -19521,6 +20263,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
             needShift: true,
             min: 0.0001,
             max: 10000.0,
+            pinch: true,
             pinchHorizontal: true,
             pinchVertical: true,
             pinchSensitivity: 7
@@ -19601,35 +20344,87 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
      *  Generic options used by {@link JXG.GeometryElement}
      */
     elements: {
-        // the following tag is a meta tag: http://code.google.com/p/jsdoc-toolkit/wiki/MetaTags
-
         /**#@+
          * @visprop
          */
+        // This is a meta tag: http://code.google.com/p/jsdoc-toolkit/wiki/MetaTags
 
         /**
-         * The stroke color of the given geometry element.
-         * @type String
-         * @name JXG.GeometryElement#strokeColor
-         * @see JXG.GeometryElement#highlightStrokeColor
-         * @see JXG.GeometryElement#strokeWidth
-         * @see JXG.GeometryElement#strokeOpacity
-         * @see JXG.GeometryElement#highlightStrokeOpacity
-         * @default {@link JXG.Options.elements.color#strokeColor}
+         * Determines the elements border-style.
+         * Possible values are:
+         * <ul><li>0 for a solid line</li>
+         * <li>1 for a dotted line</li>
+         * <li>2 for a line with small dashes</li>
+         * <li>3 for a line with medium dashes</li>
+         * <li>4 for a line with big dashes</li>
+         * <li>5 for a line with alternating medium and big dashes and large gaps</li>
+         * <li>6 for a line with alternating medium and big dashes and small gaps</li>
+         * <li>7 for a dotted line. Needs {@link JXG.GeometryElement#linecap} set to "round" for round dots.</li>
+         * </ul>
+         * The dash patterns are defined in {@link JXG.AbstractRenderer#dashArray}.
+         *
+         * @type Number
+         * @name JXG.GeometryElement#dash
+         * @default 0
+         *
+         * @see JXG.GeometryElement#lineCap
+         * @see JXG.AbstractRenderer#dashArray
          */
-        strokeColor: _utils_color__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.palette.blue,
+        dash: 0,
 
         /**
-         * The stroke color of the given geometry element when the user moves the mouse over it.
-         * @type String
-         * @name JXG.GeometryElement#highlightStrokeColor
-         * @see JXG.GeometryElement#strokeColor
-         * @see JXG.GeometryElement#strokeWidth
-         * @see JXG.GeometryElement#strokeOpacity
-         * @see JXG.GeometryElement#highlightStrokeOpacity
-         * @default {@link JXG.Options.elements.color#highlightStrokeColor}
+         * If true, the dash pattern is multiplied by strokeWidth / 2.
+         * @name JXG.GeometryElement#dashScale
+         * @type Boolean
+         * @default false
+         *
+         * @see JXG.GeometryElement#dash
+         * @see JXG.AbstractRenderer#dashArray
          */
-        highlightStrokeColor: '#c3d9ff',
+        dashScale: false,
+
+        /**
+         * If draft.draft: true the element will be drawn in grey scale colors (as default)
+         * to visualize that it's only a draft.
+         *
+         * @name JXG.GeometryElement#draft
+         * @type Object
+         * @default {@link JXG.Options.elements.draft#draft}
+         */
+        draft: {
+            draft: false,
+            strokeColor: '#565656',
+            fillColor: '#565656',
+            strokeOpacity: 0.8,
+            fillOpacity: 0.8,
+            strokeWidth: 1
+        },
+
+        /**
+         * If the element is dragged it will be moved on mousedown or touchstart to the
+         * top of its layer. Works only for SVG renderer and for simple elements
+         * consisting of one SVG node.
+         * @example
+         * var li1 = board.create('line', [1, 1, 1], {strokeWidth: 20, dragToTopOfLayer: true});
+         * var li2 = board.create('line', [1, -1, 1], {strokeWidth: 20, strokeColor: 'red'});
+         *
+         * </pre><div id="JXG38449fee-1ab4-44de-b7d1-43caa1f50f86" class="jxgbox" style="width: 300px; height: 300px;"></div>
+         * <script type="text/javascript">
+         *     (function() {
+         *         var board = JXG.JSXGraph.initBoard('JXG38449fee-1ab4-44de-b7d1-43caa1f50f86',
+         *             {boundingbox: [-8, 8, 8,-8], axis: true, showcopyright: false, shownavigation: false});
+         *     var li1 = board.create('line', [1, 1, 1], {strokeWidth: 20, dragToTopOfLayer: true});
+         *     var li2 = board.create('line', [1, -1, 1], {strokeWidth: 20, strokeColor: 'red'});
+         *
+         *     })();
+         *
+         * </script><pre>
+         *
+         * @type Boolean
+         * @default false
+         * @name JXG.GeometryElement#dragToTopOfLayer
+         */
+        dragToTopOfLayer: false,
 
         /**
          * The fill color of this geometry element.
@@ -19643,41 +20438,6 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
         fillColor: _utils_color__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.palette.red,
 
         /**
-         * The fill color of the given geometry element when the mouse is pointed over it.
-         * @type String
-         * @name JXG.GeometryElement#highlightFillColor
-         * @see JXG.GeometryElement#fillColor
-         * @see JXG.GeometryElement#fillOpacity
-         * @see JXG.GeometryElement#highlightFillOpacity
-         * @default {@link JXG.Options.elements.color#highlightFillColor}
-         */
-        highlightFillColor: 'none',
-
-        /**
-         * Opacity for element's stroke color.
-         * @type Number
-         * @name JXG.GeometryElement#strokeOpacity
-         * @see JXG.GeometryElement#strokeColor
-         * @see JXG.GeometryElement#highlightStrokeColor
-         * @see JXG.GeometryElement#strokeWidth
-         * @see JXG.GeometryElement#highlightStrokeOpacity
-         * @default {@link JXG.Options.elements#strokeOpacity}
-         */
-        strokeOpacity: 1,
-
-        /**
-         * Opacity for stroke color when the object is highlighted.
-         * @type Number
-         * @name JXG.GeometryElement#highlightStrokeOpacity
-         * @see JXG.GeometryElement#strokeColor
-         * @see JXG.GeometryElement#highlightStrokeColor
-         * @see JXG.GeometryElement#strokeWidth
-         * @see JXG.GeometryElement#strokeOpacity
-         * @default {@link JXG.Options.elements#highlightStrokeOpacity}
-         */
-        highlightStrokeOpacity: 1,
-
-        /**
          * Opacity for fill color.
          * @type Number
          * @name JXG.GeometryElement#fillOpacity
@@ -19689,15 +20449,23 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
         fillOpacity: 1,
 
         /**
-         * Opacity for fill color when the object is highlighted.
-         * @type Number
-         * @name JXG.GeometryElement#highlightFillOpacity
-         * @see JXG.GeometryElement#fillColor
-         * @see JXG.GeometryElement#highlightFillColor
-         * @see JXG.GeometryElement#fillOpacity
-         * @default {@link JXG.Options.elements.color#highlightFillOpacity}
+         * If true the element is fixed and can not be dragged around. The element
+         * will be repositioned on zoom and moveOrigin events.
+         * @type Boolean
+         * @default false
+         * @name JXG.GeometryElement#fixed
          */
-        highlightFillOpacity: 1,
+        fixed: false,
+
+        /**
+         * If true the element is fixed and can not be dragged around. The element
+         * will even stay at its position on zoom and moveOrigin events.
+         * Only free elements like points, texts, curves can be frozen.
+         * @type Boolean
+         * @default false
+         * @name JXG.GeometryElement#frozen
+         */
+        frozen: false,
 
         /**
          * Gradient type. Possible values are 'linear'. 'radial' or null.
@@ -19808,52 +20576,6 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
         gradient: null,
 
         /**
-         * Second color for gradient.
-         * @type String
-         * @name JXG.GeometryElement#gradientSecondColor
-         * @see JXG.GeometryElement#gradient
-         * @see JXG.GeometryElement#gradientSecondOpacity
-         * @default '#ffffff'
-         */
-        gradientSecondColor: '#ffffff',
-
-        /**
-         * Opacity of second gradient color. Takes a value between 0 and 1.
-         * @type Number
-         * @name JXG.GeometryElement#gradientSecondOpacity
-         * @see JXG.GeometryElement#gradient
-         * @see JXG.GeometryElement#gradientSecondColor
-         * @default 1
-         */
-        gradientSecondOpacity: 1,
-
-        /**
-         * The gradientStartOffset attribute is a number (ranging from 0 to 1) which indicates where the first gradient stop is placed,
-         * see the SVG specification for more information.
-         * For linear gradients, this attribute represents a location along the gradient vector.
-         * For radial gradients, it represents a percentage distance from (fx,fy) to the edge of the outermost/largest circle.
-         * @type Number
-         * @name JXG.GeometryElement#gradientStartOffset
-         * @see JXG.GeometryElement#gradient
-         * @see JXG.GeometryElement#gradientEndOffset
-         * @default 0.0
-         */
-        gradientStartOffset: 0.0,
-
-        /**
-         * The gradientEndOffset attribute is a number (ranging from 0 to 1) which indicates where the second gradient stop is placed,
-         * see the SVG specification for more information.
-         * For linear gradients, this attribute represents a location along the gradient vector.
-         * For radial gradients, it represents a percentage distance from (fx,fy) to the edge of the outermost/largest circle.
-         * @type Number
-         * @name JXG.GeometryElement#gradientEndOffset
-         * @see JXG.GeometryElement#gradient
-         * @see JXG.GeometryElement#gradientStartOffset
-         * @default 1.0
-         */
-        gradientEndOffset: 1.0,
-
-        /**
          * Angle (in radians) of the gradiant in case the gradient is of type 'linear'.
          * If the angle is 0, the first color is on the left and the second color is on the right.
          * If the angle is &pi;/2 the first color is on top and the second color at the
@@ -19894,18 +20616,17 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
         gradientCY: 0.5,
 
         /**
-         * From the SVG specification: ‘cx’, ‘cy’ and ‘r’ define the largest (i.e., outermost) circle for the radial gradient.
-         * The gradient will be drawn such that the 100% gradient stop is mapped to the perimeter of this largest (i.e., outermost) circle.
-         * For radial gradients in canvas this is the value 'r1'.
-         * Takes a value between 0 and 1.
+         * The gradientEndOffset attribute is a number (ranging from 0 to 1) which indicates where the second gradient stop is placed,
+         * see the SVG specification for more information.
+         * For linear gradients, this attribute represents a location along the gradient vector.
+         * For radial gradients, it represents a percentage distance from (fx,fy) to the edge of the outermost/largest circle.
          * @type Number
-         * @name JXG.GeometryElement#gradientR
+         * @name JXG.GeometryElement#gradientEndOffset
          * @see JXG.GeometryElement#gradient
-         * @see JXG.GeometryElement#gradientCX
-         * @see JXG.GeometryElement#gradientCY
-         * @default 0.5
+         * @see JXG.GeometryElement#gradientStartOffset
+         * @default 1.0
          */
-        gradientR: 0.5,
+        gradientEndOffset: 1.0,
 
         /**
          * ‘fx’ and ‘fy’ define the focal point for the radial gradient.
@@ -19949,74 +20670,104 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
         gradientFR: 0.0,
 
         /**
-         * Transition duration (in milliseconds) for certain cahnges of properties like color and opacity.
-         * The properties can be set in the attribute transitionProperties
-         * Works in SVG renderer, only.
+         * From the SVG specification: ‘cx’, ‘cy’ and ‘r’ define the largest (i.e., outermost) circle for the radial gradient.
+         * The gradient will be drawn such that the 100% gradient stop is mapped to the perimeter of this largest (i.e., outermost) circle.
+         * For radial gradients in canvas this is the value 'r1'.
+         * Takes a value between 0 and 1.
          * @type Number
-         * @name JXG.GeometryElement#transitionDuration
-         * @see JXG.GeometryElement#transitionProperties
-         * @see JXG.GeometryElement#strokeColor
-         * @see JXG.GeometryElement#highlightStrokeColor
-         * @see JXG.GeometryElement#strokeOpacity
-         * @see JXG.GeometryElement#highlightStrokeOpacity
+         * @name JXG.GeometryElement#gradientR
+         * @see JXG.GeometryElement#gradient
+         * @see JXG.GeometryElement#gradientCX
+         * @see JXG.GeometryElement#gradientCY
+         * @default 0.5
+         */
+        gradientR: 0.5,
+
+        /**
+         * Second color for gradient.
+         * @type String
+         * @name JXG.GeometryElement#gradientSecondColor
+         * @see JXG.GeometryElement#gradient
+         * @see JXG.GeometryElement#gradientSecondOpacity
+         * @default '#ffffff'
+         */
+        gradientSecondColor: '#ffffff',
+
+        /**
+         * Opacity of second gradient color. Takes a value between 0 and 1.
+         * @type Number
+         * @name JXG.GeometryElement#gradientSecondOpacity
+         * @see JXG.GeometryElement#gradient
+         * @see JXG.GeometryElement#gradientSecondColor
+         * @default 1
+         */
+        gradientSecondOpacity: 1,
+
+        /**
+         * The gradientStartOffset attribute is a number (ranging from 0 to 1) which indicates where the first gradient stop is placed,
+         * see the SVG specification for more information.
+         * For linear gradients, this attribute represents a location along the gradient vector.
+         * For radial gradients, it represents a percentage distance from (fx,fy) to the edge of the outermost/largest circle.
+         * @type Number
+         * @name JXG.GeometryElement#gradientStartOffset
+         * @see JXG.GeometryElement#gradient
+         * @see JXG.GeometryElement#gradientEndOffset
+         * @default 0.0
+         */
+        gradientStartOffset: 0.0,
+
+        /**
+         * @type Boolean
+         * @default true
+         * @name JXG.GeometryElement#highlight
+         */
+        highlight: true,
+
+        /**
+         * The fill color of the given geometry element when the mouse is pointed over it.
+         * @type String
+         * @name JXG.GeometryElement#highlightFillColor
+         * @see JXG.GeometryElement#fillColor
+         * @see JXG.GeometryElement#fillOpacity
+         * @see JXG.GeometryElement#highlightFillOpacity
+         * @default {@link JXG.Options.elements.color#highlightFillColor}
+         */
+        highlightFillColor: 'none',
+
+        /**
+         * Opacity for fill color when the object is highlighted.
+         * @type Number
+         * @name JXG.GeometryElement#highlightFillOpacity
          * @see JXG.GeometryElement#fillColor
          * @see JXG.GeometryElement#highlightFillColor
          * @see JXG.GeometryElement#fillOpacity
-         * @see JXG.GeometryElement#highlightFillOpacity
-         * @default 100 {@link JXG.Options.elements#transitionDuration}
+         * @default {@link JXG.Options.elements.color#highlightFillOpacity}
          */
-        transitionDuration: 100,
+        highlightFillOpacity: 1,
 
         /**
-         * Properties which change smoothly in the time set in transitionDuration.
-         * Possible values are
-         * ['fill', 'fill-opacity', 'stroke', 'stroke-opacity', 'stroke-width', 'width', 'height', 'rx', 'ry']
-         * (and maybe more) for geometry elements and
-         * ['color', 'opacity', 'all'] for HTML texts.
-         *
-         * @type Array
-         * @name JXG.GeometryElement#transitionProperties
-         * @see JXG.GeometryElement#transitionDuration
-         *
-         *
-         * @example
-         * var p1 = board.create("point", [0, 2], {
-         *     name: "A",
-         *     highlightStrokeWidth: 10,
-         *     transitionDuration: 1000,
-         *     transitionProperties: ['width', 'height', 'stroke-width',
-         *         'fill', 'fill-opacity', 'rx', 'ry', 'stroke', 'stroke-opacity'] });
-         *
-         * </pre><div id="JXGdf5230a1-5870-43db-b6ff-4d5b2f5b786b" class="jxgbox" style="width: 300px; height: 300px;"></div>
-         * <script type="text/javascript">
-         *     (function() {
-         *         var board = JXG.JSXGraph.initBoard('JXGdf5230a1-5870-43db-b6ff-4d5b2f5b786b',
-         *             {boundingbox: [-8, 8, 8,-8], axis: true, showcopyright: false, shownavigation: false});
-         *     var p1 = board.create("point", [0, 2], {
-         *         name: "A",
-         *         highlightStrokeWidth: 20,
-         *         transitionDuration: 1000,
-         *         transitionProperties: ['width', 'height', 'stroke-width',
-         *             'fill', 'fill-opacity', 'rx', 'ry', 'stroke', 'stroke-opacity'] });
-         *
-         *     })();
-         *
-         * </script><pre>
-         *
-         */
-        transitionProperties: ['fill', 'fill-opacity', 'stroke', 'stroke-opacity', 'stroke-width'],
-
-        /**
-         * Width of the element's stroke.
-         * @type Number
-         * @name JXG.GeometryElement#strokeWidth
+         * The stroke color of the given geometry element when the user moves the mouse over it.
+         * @type String
+         * @name JXG.GeometryElement#highlightStrokeColor
          * @see JXG.GeometryElement#strokeColor
-         * @see JXG.GeometryElement#highlightStrokeColor
+         * @see JXG.GeometryElement#strokeWidth
          * @see JXG.GeometryElement#strokeOpacity
          * @see JXG.GeometryElement#highlightStrokeOpacity
-         * @default {@link JXG.Options.elements#strokeWidth}
+         * @default {@link JXG.Options.elements.color#highlightStrokeColor}
          */
-        strokeWidth: 2,
+        highlightStrokeColor: '#c3d9ff',
+
+        /**
+         * Opacity for stroke color when the object is highlighted.
+         * @type Number
+         * @name JXG.GeometryElement#highlightStrokeOpacity
+         * @see JXG.GeometryElement#strokeColor
+         * @see JXG.GeometryElement#highlightStrokeColor
+         * @see JXG.GeometryElement#strokeWidth
+         * @see JXG.GeometryElement#strokeOpacity
+         * @default {@link JXG.Options.elements#highlightStrokeOpacity}
+         */
+        highlightStrokeOpacity: 1,
 
         /**
          * Width of the element's stroke when the mouse is pointed over it.
@@ -20032,50 +20783,12 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
         highlightStrokeWidth: 2,
 
         /**
-         * If true the element is fixed and can not be dragged around. The element
-         * will be repositioned on zoom and moveOrigin events.
-         * @type Boolean
+         * @name JXG.GeometryElement#isLabel
          * @default false
-         * @name JXG.GeometryElement#fixed
-         */
-        fixed: false,
-
-        /**
-         * If true the element is fixed and can not be dragged around. The element
-         * will even stay at its position on zoom and moveOrigin events.
-         * Only free elements like points, texts, curves can be frozen.
-         * @type Boolean
-         * @default false
-         * @name JXG.GeometryElement#frozen
-         */
-        frozen: false,
-
-        /**
-         * If true a label will display the element's name.
-         * @type Boolean
-         * @default false
-         * @name JXG.GeometryElement#withLabel
-         */
-        withLabel: false,
-
-        /**
-         * If false the element won't be visible on the board, otherwise it is shown.
-         * @type Boolean
-         * @name JXG.GeometryElement#visible
-         * @see JXG.GeometryElement#hideElement
-         * @see JXG.GeometryElement#showElement
-         * @default true
-         */
-        visible: true,
-
-        /**
-         * A private element will be inaccessible in certain environments, e.g. a graphical user interface.
-         *
-         * @name JXG.GeometryElement#priv
-         * @type Boolean
-         * @default false
-         */
-        priv: false,
+         * @private
+        */
+        // By default, an element is not a label. Do not change this.
+        isLabel: false,
 
         /**
          * Display layer which will contain the element.
@@ -20102,27 +20815,92 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
         lineCap: 'butt',
 
         /**
-         * Determines the elements border-style.
-         * Possible values are:
-         * <ul><li>0 for a solid line</li>
-         * <li>1 for a dotted line</li>
-         * <li>2 for a line with small dashes</li>
-         * <li>3 for a line with medium dashes</li>
-         * <li>4 for a line with big dashes</li>
-         * <li>5 for a line with alternating medium and big dashes and large gaps</li>
-         * <li>6 for a line with alternating medium and big dashes and small gaps</li>
-         * <li>7 for a dotted line. Needs {@link JXG.GeometryElement#linecap} set to "round" for round dots.</li>
-         * </ul>
-         * The dash patterns are defined in {@link JXG.AbstractRenderer#dashArray}.
-         *
-         * @type Number
-         * @name JXG.GeometryElement#dash
-         * @default 0
-         *
-         * @see JXG.GeometryElement#lineCap
-         * @see JXG.AbstractRenderer#dashArray
+         * If this is set to true, the element is updated in every update
+         * call of the board. If set to false, the element is updated only after
+         * zoom events or more generally, when the bounding box has been changed.
+         * Examples for the latter behavior should be axes.
+         * @type Boolean
+         * @default true
+         * @see JXG.GeometryElement#needsRegularUpdate
+         * @name JXG.GeometryElement#needsRegularUpdate
          */
-        dash: 0,
+        needsRegularUpdate: true,
+
+        /**
+         * Precision options for JSXGraph elements.
+         * This attributes takes either the value 'inherit' or an object of the form:
+         * <pre>
+         * precision: {
+         *      touch: 30,
+         *      mouse: 4,
+         *      pen: 4
+         * }
+         * </pre>
+         *
+         * In the first case, the global, JSXGraph-wide values of JXGraph.Options.precision
+         * are taken.
+         *
+         * @type {String|Object}
+         * @name JXG.GeometryElement#precision
+         * @see JXG.Options#precision
+         * @default 'inherit'
+         */
+        precision: 'inherit',
+
+        /**
+         * A private element will be inaccessible in certain environments, e.g. a graphical user interface.
+         *
+         * @name JXG.GeometryElement#priv
+         * @type Boolean
+         * @default false
+         */
+        priv: false,
+
+        /**
+         * Determines whether two-finger manipulation may rotate this object.
+         * If set to false, the object can only be scaled and translated.
+         * <p>
+         * In case the element is a polygon or line and it has the attribute "rotatable:false",
+         * moving the element with two fingers results in a rotation or translation.
+         * <p>
+         * If an element is set to be neither scalable nor rotatable, it can only be translated.
+         * <p>
+         * In case of a polygon, scaling is only possible if <i>no</i> vertex has snapToGrid or snapToPoints
+         * enabled and no vertex is fixed by some other constraint. Also, the polygon itself has to have
+         * snapToGrid disabled.
+         *
+         * @type Boolean
+         * @default true
+         * @name JXG.GeometryElement#rotatable
+         * @see JXG.GeometryElement#scalable
+         */
+        rotatable: true,
+
+        /**
+         * Determines whether two-finger manipulation of this object may change its size.
+         * If set to false, the object is only rotated and translated.
+         * <p>
+         * In case the element is a horizontal or vertical line having ticks, "scalable:true"
+         * enables zooming of the board by dragging ticks lines. This feature is enabled,
+         * for the ticks element of the line element the attribute "fixed" has to be false
+         * and the line element's scalable attribute has to be true.
+         * <p>
+         * In case the element is a polygon or line and it has the attribute "scalable:false",
+         * moving the element with two fingers results in a rotation or translation.
+         * <p>
+         * If an element is set to be neither scalable nor rotatable, it can only be translated.
+         * <p>
+         * In case of a polygon, scaling is only possible if <i>no</i> vertex has snapToGrid or snapToPoints
+         * enabled and no vertex is fixed by some other constraint. Also, the polygon itself has to have
+         * snapToGrid disabled.
+         *
+         * @type Boolean
+         * @default true
+         * @name JXG.GeometryElement#scalable
+         * @see JXG.Ticks#fixed
+         * @see JXG.GeometryElement#rotatable
+         */
+        scalable: true,
 
         /**
          * If enabled:true the (stroke) element will get a customized shadow.
@@ -20221,6 +20999,69 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
         },
 
         /**
+         * Snaps the element or its parents to the grid. Currently only relevant for points, circles,
+         * and lines. Points are snapped to grid directly, on circles and lines it's only the parent
+         * points that are snapped
+         * @type Boolean
+         * @default false
+         * @name JXG.GeometryElement#snapToGrid
+         */
+        snapToGrid: false,
+
+        /**
+         * The stroke color of the given geometry element.
+         * @type String
+         * @name JXG.GeometryElement#strokeColor
+         * @see JXG.GeometryElement#highlightStrokeColor
+         * @see JXG.GeometryElement#strokeWidth
+         * @see JXG.GeometryElement#strokeOpacity
+         * @see JXG.GeometryElement#highlightStrokeOpacity
+         * @default {@link JXG.Options.elements.color#strokeColor}
+         */
+        strokeColor: _utils_color__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.palette.blue,
+
+        /**
+         * Opacity for element's stroke color.
+         * @type Number
+         * @name JXG.GeometryElement#strokeOpacity
+         * @see JXG.GeometryElement#strokeColor
+         * @see JXG.GeometryElement#highlightStrokeColor
+         * @see JXG.GeometryElement#strokeWidth
+         * @see JXG.GeometryElement#highlightStrokeOpacity
+         * @default {@link JXG.Options.elements#strokeOpacity}
+         */
+        strokeOpacity: 1,
+
+        /**
+         * Width of the element's stroke.
+         * @type Number
+         * @name JXG.GeometryElement#strokeWidth
+         * @see JXG.GeometryElement#strokeColor
+         * @see JXG.GeometryElement#highlightStrokeColor
+         * @see JXG.GeometryElement#strokeOpacity
+         * @see JXG.GeometryElement#highlightStrokeOpacity
+         * @default {@link JXG.Options.elements#strokeWidth}
+         */
+        strokeWidth: 2,
+
+        /**
+         * Controls if an element can get the focus with the tab key.
+         * tabindex corresponds to the HTML attribute of the same name.
+         * See <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/tabindex">description at MDN</a>.
+         * The additional value "null" completely disables focus of an element.
+         * The value will be ignored if keyboard control of the board is not enabled or
+         * the element is fixed or not visible.
+         *
+         * @name JXG.GeometryElement#tabindex
+         * @type Number
+         * @default 0
+         * @see JXG.Board#keyboard
+         * @see JXG.GeometryElement#fixed
+         * @see JXG.GeometryElement#visible
+         */
+        tabindex: 0,
+
+        /**
          * If true the element will be traced, i.e. on every movement the element will be copied
          * to the background. Use {@link JXG.GeometryElement#clearTrace} to delete the trace elements.
          *
@@ -20293,180 +21134,93 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
         traceAttributes: {},
 
         /**
+         * Transition duration (in milliseconds) for certain cahnges of properties like color and opacity.
+         * The properties can be set in the attribute transitionProperties
+         * Works in SVG renderer, only.
+         * @type Number
+         * @name JXG.GeometryElement#transitionDuration
+         * @see JXG.GeometryElement#transitionProperties
+         * @see JXG.GeometryElement#strokeColor
+         * @see JXG.GeometryElement#highlightStrokeColor
+         * @see JXG.GeometryElement#strokeOpacity
+         * @see JXG.GeometryElement#highlightStrokeOpacity
+         * @see JXG.GeometryElement#fillColor
+         * @see JXG.GeometryElement#highlightFillColor
+         * @see JXG.GeometryElement#fillOpacity
+         * @see JXG.GeometryElement#highlightFillOpacity
+         * @default 100 {@link JXG.Options.elements#transitionDuration}
+         */
+        transitionDuration: 100,
+
+        /**
+         * Properties which change smoothly in the time set in transitionDuration.
+         * Possible values are
+         * ['fill', 'fill-opacity', 'stroke', 'stroke-opacity', 'stroke-width', 'width', 'height', 'rx', 'ry']
+         * (and maybe more) for geometry elements and
+         * ['color', 'opacity', 'all'] for HTML texts.
          *
-         * @type Boolean
-         * @default true
-         * @name JXG.GeometryElement#highlight
-         */
-        highlight: true,
-
-        /**
-         * If this is set to true, the element is updated in every update
-         * call of the board. If set to false, the element is updated only after
-         * zoom events or more generally, when the bounding box has been changed.
-         * Examples for the latter behavior should be axes.
-         * @type Boolean
-         * @default true
-         * @see JXG.GeometryElement#needsRegularUpdate
-         * @name JXG.GeometryElement#needsRegularUpdate
-         */
-        needsRegularUpdate: true,
-
-        /**
-         * Snaps the element or its parents to the grid. Currently only relevant for points, circles,
-         * and lines. Points are snapped to grid directly, on circles and lines it's only the parent
-         * points that are snapped
-         * @type Boolean
-         * @default false
-         * @name JXG.GeometryElement#snapToGrid
-         */
-        snapToGrid: false,
-
-        /**
-         * Determines whether two-finger manipulation of this object may change its size.
-         * If set to false, the object is only rotated and translated.
-         * <p>
-         * In case the element is a horizontal or vertical line having ticks, "scalable:true"
-         * enables zooming of the board by dragging ticks lines. This feature is enabled,
-         * for the ticks element of the line element the attribute "fixed" has to be false
-         * and the line element's scalable attribute has to be true.
-         * <p>
-         * In case the element is a polygon or line and it has the attribute "scalable:false",
-         * moving the element with two fingers results in a rotation or translation.
-         * <p>
-         * If an element is set to be neither scalable nor rotatable, it can only be translated.
-         * <p>
-         * In case of a polygon, scaling is only possible if <i>no</i> vertex has snapToGrid or snapToPoints
-         * enabled and no vertex is fixed by some other constraint. Also, the polygon itself has to have
-         * snapToGrid disabled.
+         * @type Array
+         * @name JXG.GeometryElement#transitionProperties
+         * @see JXG.GeometryElement#transitionDuration
          *
-         * @type Boolean
-         * @default true
-         * @name JXG.GeometryElement#scalable
-         * @see JXG.Ticks#fixed
-         * @see JXG.GeometryElement#rotatable
-         */
-        scalable: true,
-
-        /**
-         * Determines whether two-finger manipulation may rotate this object.
-         * If set to false, the object can only be scaled and translated.
-         * <p>
-         * In case the element is a polygon or line and it has the attribute "rotatable:false",
-         * moving the element with two fingers results in a rotation or translation.
-         * <p>
-         * If an element is set to be neither scalable nor rotatable, it can only be translated.
-         * <p>
-         * In case of a polygon, scaling is only possible if <i>no</i> vertex has snapToGrid or snapToPoints
-         * enabled and no vertex is fixed by some other constraint. Also, the polygon itself has to have
-         * snapToGrid disabled.
          *
-         * @type Boolean
-         * @default true
-         * @name JXG.GeometryElement#rotatable
-         * @see JXG.GeometryElement#scalable
-         */
-        rotatable: true,
-
-        /**
-         * If the element is dragged it will be moved on mousedown or touchstart to the
-         * top of its layer. Works only for SVG renderer and for simple elements
-         * consisting of one SVG node.
          * @example
-         * var li1 = board.create('line', [1, 1, 1], {strokeWidth: 20, dragToTopOfLayer: true});
-         * var li2 = board.create('line', [1, -1, 1], {strokeWidth: 20, strokeColor: 'red'});
+         * var p1 = board.create("point", [0, 2], {
+         *     name: "A",
+         *     highlightStrokeWidth: 10,
+         *     transitionDuration: 1000,
+         *     transitionProperties: ['width', 'height', 'stroke-width',
+         *         'fill', 'fill-opacity', 'rx', 'ry', 'stroke', 'stroke-opacity'] });
          *
-         * </pre><div id="JXG38449fee-1ab4-44de-b7d1-43caa1f50f86" class="jxgbox" style="width: 300px; height: 300px;"></div>
+         * </pre><div id="JXGdf5230a1-5870-43db-b6ff-4d5b2f5b786b" class="jxgbox" style="width: 300px; height: 300px;"></div>
          * <script type="text/javascript">
          *     (function() {
-         *         var board = JXG.JSXGraph.initBoard('JXG38449fee-1ab4-44de-b7d1-43caa1f50f86',
+         *         var board = JXG.JSXGraph.initBoard('JXGdf5230a1-5870-43db-b6ff-4d5b2f5b786b',
          *             {boundingbox: [-8, 8, 8,-8], axis: true, showcopyright: false, shownavigation: false});
-         *     var li1 = board.create('line', [1, 1, 1], {strokeWidth: 20, dragToTopOfLayer: true});
-         *     var li2 = board.create('line', [1, -1, 1], {strokeWidth: 20, strokeColor: 'red'});
+         *     var p1 = board.create("point", [0, 2], {
+         *         name: "A",
+         *         highlightStrokeWidth: 20,
+         *         transitionDuration: 1000,
+         *         transitionProperties: ['width', 'height', 'stroke-width',
+         *             'fill', 'fill-opacity', 'rx', 'ry', 'stroke', 'stroke-opacity'] });
          *
          *     })();
          *
          * </script><pre>
          *
-         * @type Boolean
-         * @default false
-         * @name JXG.GeometryElement#dragToTopOfLayer
          */
-        dragToTopOfLayer: false,
+        transitionProperties: ['fill', 'fill-opacity', 'stroke', 'stroke-opacity', 'stroke-width'],
 
         /**
-         * Precision options for JSXGraph elements.
-         * This attributes takes either the value 'inherit' or an object of the form:
-         * <pre>
-         * precision: {
-         *      touch: 30,
-         *      mouse: 4,
-         *      pen: 4
-         * }
-         * </pre>
+         * If false the element won't be visible on the board, otherwise it is shown.
+         * @type Boolean
+         * @name JXG.GeometryElement#visible
+         * @see JXG.GeometryElement#hideElement
+         * @see JXG.GeometryElement#showElement
+         * @default true
+         */
+        visible: true,
+
+        /**
+         * Set individual viewport for an element. If not set to 'inherit', to
+         * use the board-wide viewport, an array of the form '[left, top, right, bottom]' has to be given.
          *
-         * In the first case, the global, JSXGraph-wide values of JXGraph.Options.precision
-         * are taken.
-         *
-         * @type {String|Object}
-         * @name JXG.GeometryElement#precision
-         * @see JXG.Options#precision
+         * @type {Array|String}
+         * @name JXG.GeometryElement#viewport
          * @default 'inherit'
+         * @see JXG.Board#viewport
          */
-        precision: 'inherit',
+        viewport: 'inherit',
 
         /**
-         * If draft.draft: true the element will be drawn in grey scale colors (as default)
-         * to visualize that it's only a draft.
+         * If true a label will display the element's name.
+         * Using this to suppress labels is more efficient than visible:false.
          *
-         * @name JXG.GeometryElement#draft
-         * @type Object
-         * @default {@link JXG.Options.elements.draft#draft}
-         */
-        draft: {
-            draft: false,
-            strokeColor: '#565656',
-            fillColor: '#565656',
-            strokeOpacity: 0.8,
-            fillOpacity: 0.8,
-            strokeWidth: 1
-        },
-
-        /**
-         * @name JXG.GeometryElement#isLabel
-         * @default false
-         * @private
-         * By default, an element is not a label. Do not change this.
-         */
-        isLabel: false,
-
-        /**
-         * Controls if an element can get the focus with the tab key.
-         * tabindex corresponds to the HTML attribute of the same name.
-         * See <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/tabindex">descriptiona at MDN</a>.
-         * The additional value "null" completely disables focus of an element.
-         * The value will be ignored if keyboard control of the board is not enabled or
-         * the element is fixed or not visible.
-         *
-         * @name JXG.GeometryElement#tabindex
-         * @type Number
-         * @default 0
-         * @see JXG.Board#keyboard
-         * @see JXG.GeometryElement#fixed
-         * @see JXG.GeometryElement#visible
-         */
-        tabindex: 0,
-
-        /**
-         * If true, the dash pattern is multiplied by strokeWidth / 2.
-         * @name JXG.GeometryElement#dashScale
+         * @name JXG.GeometryElement#withLabel
          * @type Boolean
          * @default false
-         *
-         * @see JXG.GeometryElement#dash
-         * @see JXG.AbstractRenderer#dashArray
          */
-        dashScale: false
+        withLabel: false
 
         // close the meta tag
         /**#@-*/
@@ -20802,7 +21556,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
          * </script><pre>
          *
          */
-           drawZero: false,
+        drawZero: false,
 
         /**
          * Let JSXGraph determine the distance between ticks automatically.
@@ -21665,7 +22419,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
         arc: {
             visible: false,
             fillColor: 'none'
-        },
+        }
 
         /**#@-*/
     },
@@ -22130,7 +22884,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
          * Attributes for center point.
          *
          * @type Point
-         * @name Circle#center
+         * @name Circle#point2
          */
         point2: {
             fillColor: _utils_color__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.palette.red,
@@ -22323,7 +23077,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
         strokeWidth: 1,
         strokeColor: '#0000ff',
         fillColor: 'none'
-},
+    },
 
     /* special conic options */
     conic: {
@@ -22389,24 +23143,14 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
 
     /* special curve options */
     curve: {
-        strokeWidth: 1,
-        strokeColor: _utils_color__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.palette.blue,
-        fillColor: 'none',
-        fixed: true,
-
-        useQDT: false,
-
         /**#@+
          * @visprop
          */
 
-        /**
-         * The data points of the curve are not connected with straight lines but with bezier curves.
-         * @name Curve#handDrawing
-         * @type Boolean
-         * @default false
-         */
-        handDrawing: false,
+        strokeWidth: 1,
+        strokeColor: _utils_color__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.palette.blue,
+        fillColor: 'none',
+        fixed: true,
 
         /**
          * The curveType is set in {@link JXG.Curve#generateTerm} and used in {@link JXG.Curve#updateCurve}.
@@ -22425,13 +23169,81 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
         curveType: null,
 
         /**
-         * Apply Ramer-Douglas-Peuker smoothing.
+         * If true use a recursive bisection algorithm.
+         * It is slower, but usually the result is better. It tries to detect jumps
+         * and singularities.
          *
+         * @name Curve#doAdvancedPlot
          * @type Boolean
-         * @name Curve#RDPsmoothing
+         * @default true
+         */
+        doAdvancedPlot: true,
+
+        /**
+         * If true use the algorithm by Gillam and Hohenwarter, which was default until version 0.98.
+         *
+         * @name Curve#doAdvancedPlotOld
+         * @see Curve#doAdvancedPlot
+         * @type Boolean
+         * @default false
+         * @deprecated
+         */
+        doAdvancedPlotOld: false,   // v1
+
+        /**
+         * Configure arrow head at the start position for curve.
+         * Recommended arrow head type is 7.
+         *
+         * @name Curve#firstArrow
+         * @type Boolean | Object
+         * @default false
+         * @see Line#firstArrow for options
+         */
+        firstArrow: false,
+
+        /**
+         * The data points of the curve are not connected with straight lines but with bezier curves.
+         * @name Curve#handDrawing
+         * @type Boolean
          * @default false
          */
-        RDPsmoothing: false,     // Apply the Ramer-Douglas-Peuker algorithm
+        handDrawing: false,
+
+        /**
+         * Attributes for curve label.
+         *
+         * @type Label
+         * @name Curve#label
+         */
+        label: {
+            position: 'lft'
+        },
+
+        /**
+         * Configure arrow head at the end position for curve.
+         * Recommended arrow head type is 7.
+         *
+         * @name Curve#lastArrow
+         * @see Line#lastArrow for options
+         * @type Boolean | Object
+         * @default false
+         */
+        lastArrow: false,
+
+        /**
+         * Line endings (linecap) of a curve stroke.
+         * Possible values are:
+         * <ul>
+         * <li> 'butt',
+         * <li> 'round',
+         * <li> 'square'.
+         * </ul>
+         *
+         * @name JXG.Curve#lineCap
+         * @type String
+         * @default 'round'
+         */
+        lineCap: 'round',
 
         /**
          * Number of points used for plotting triggered by up events
@@ -22458,53 +23270,6 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
         numberPointsLow: 400,    // Number of points on curves after mousemove
 
         /**
-         * If true use a recursive bisection algorithm.
-         * It is slower, but usually the result is better. It tries to detect jumps
-         * and singularities.
-         *
-         * @name Curve#doAdvancedPlot
-         * @type Boolean
-         * @default true
-         */
-        doAdvancedPlot: true,
-
-        /**
-         *
-         * Recursion depth used for plotting triggered by up events
-         * (i.e. high quality plotting) in case
-         * {@link Curve#doAdvancedPlot} is true.
-         *
-         * @name Curve#recursionDepthHigh
-         * @see Curve#doAdvancedPlot
-         * @type Number
-         * @default 17
-         */
-        recursionDepthHigh: 17,
-
-        /**
-         * Number of points used for plotting triggered by move events in case
-         * (i.e. lower quality plotting but fast)
-         * {@link Curve#doAdvancedPlot} is true.
-         *
-         * @name Curve#recursionDepthLow
-         * @see Curve#doAdvancedPlot
-         * @type Number
-         * @default 13
-         */
-        recursionDepthLow: 15,
-
-        /**
-         * If true use the algorithm by Gillam and Hohenwarter, which was default until version 0.98.
-         *
-         * @name Curve#doAdvancedPlotOld
-         * @see Curve#doAdvancedPlot
-         * @type Boolean
-         * @default false
-         * @deprecated
-         */
-        doAdvancedPlotOld: false,   // v1
-
-        /**
          * Select the version of the plot algorithm.
          * <ul>
          * <li> Version 1 is very outdated
@@ -22524,36 +23289,27 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
         plotVersion: 2,
 
         /**
-         * Attributes for circle label.
-         *
-         * @type Label
-         * @name Circle#label
-         */
-        label: {
-            position: 'lft'
-        },
-
-        /**
          * Configure arrow head at the start position for curve.
          * Recommended arrow head type is 7.
          *
-         * @name Curve#firstArrow
-         * @type Boolean / Object
-         * @default false
-         * @see Line#firstArrow for options
+         * @name Curve#recursionDepthHigh
+         * @see Curve#doAdvancedPlot
+         * @type Number
+         * @default 17
          */
-        firstArrow: false,
+        recursionDepthHigh: 17,
 
         /**
-         * Configure arrow head at the end position for curve.
-         * Recommended arrow head type is 7.
+         * Number of points used for plotting triggered by move events in case
+         * (i.e. lower quality plotting but fast)
+         * {@link Curve#doAdvancedPlot} is true.
          *
-         * @name Curve#lastArrow
-         * @see Line#lastArrow for options
-         * @type Boolean / Object
-         * @default false
+         * @name Curve#recursionDepthLow
+         * @see Curve#doAdvancedPlot
+         * @type Number
+         * @default 13
          */
-        lastArrow: false
+        recursionDepthLow: 15
 
         /**#@-*/
     },
@@ -22578,6 +23334,16 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
          * @default empty
          */
         attractors: []
+
+        /**#@-*/
+    },
+
+    /* special functiongraph options */
+    functiongraph: {
+        /**#@+
+         * @visprop
+         */
+
 
         /**#@-*/
     },
@@ -22612,6 +23378,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
         /**
          * @name Grid#snapToGrid
          * @type Boolean
+         * @ignore
          * @deprecated
          */
         snapToGrid: false,
@@ -22619,6 +23386,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
         /**
          * @name Grid#snapSizeX
          * @type Boolean
+         * @ignore
          * @deprecated
          */
         snapSizeX: 10,
@@ -22626,6 +23394,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
         /**
          * @name Grid#snapSizeY
          * @type Boolean
+         * @ignore
          * @deprecated
          */
         snapSizeY: 10
@@ -22758,6 +23527,185 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
         /**#@-*/
     },
 
+    /* special implicitcurve options */
+    implicitcurve: {
+        /**#@+
+         * @visprop
+         */
+
+        /**
+         * Defines the margin (in user coordinates) around the JSXGraph board in which the
+         * implicit curve is plotted.
+         *
+         * @name ImplicitCurve#margin
+         * @type {Number|Function}
+         * @default 1
+         */
+        margin: 1,
+
+        /**
+         * Horizontal resolution: distance (in pixel) between vertical lines to search for components of the implicit curve.
+         * A small number increases the running time. For large number components may be missed.
+         * Minimum value is 0.01.
+         *
+         * @name ImplicitCurve#resolution_outer
+         * @type {Number|Function}
+         * @default 5
+         */
+        resolution_outer: 5,
+
+        /**
+         * Vertical resolution (in pixel) to search for components of the implicit curve.
+         * A small number increases the running time. For large number components may be missed.
+         * Minimum value is 0.01.
+         *
+         * @name ImplicitCurve#resolution_inner
+         * @type {Number|Function}
+         * @default 5
+         */
+        resolution_inner: 5,
+
+        /**
+         * Maximum iterations for one component of the implicit curve.
+         *
+         * @name ImplicitCurve#max_steps
+         * @type {Number|Function}
+         * @default 1024
+         */
+        max_steps: 1024,
+
+        /**
+         * Angle &alpha;<sub>0</sub> between two successive tangents: determines the smoothness of
+         * the curve.
+         *
+         * @name ImplicitCurve#alpha_0
+         * @type {Number|Function}
+         * @default 0.05
+         */
+        alpha_0: 0.05,
+
+        /**
+         * Tolerance to find starting points for the tracing phase of a component.
+         *
+         * @name ImplicitCurve#tol_0
+         * @type {Number|Function}
+         * @default JXG.Math.eps
+         */
+        tol_u0: _math_math__WEBPACK_IMPORTED_MODULE_2__/* ["default"] */ .Z.eps,
+
+        /**
+         * Tolerance for the Newton steps.
+         *
+         * @name ImplicitCurve#tol_newton
+         * @type {Number|Function}
+         * @default 1.0e-7
+         */
+        tol_newton: 1.0e-7,
+
+        /**
+         * Tolerance for cusp / bifurcation detection.
+         *
+         * @name ImplicitCurve#tol_cusp
+         * @type {Number|Function}
+         * @default 0.05
+         */
+        tol_cusp: 0.05,
+
+        /**
+         * If two points are closer than this value, we bail out of the tracing phase for that
+         * component.
+         *
+         * @name ImplicitCurve#tol_progress
+         * @type {Number|Function}
+         * @default 0.0001
+         */
+        tol_progress: 0.0001,
+
+        /**
+         * Half of the box size (in user units) to search for existing line segments in the quadtree.
+         *
+         * @name ImplicitCurve#qdt_box
+         * @type {Number|Function}
+         * @default 0.2
+         */
+        qdt_box: 0.2,
+
+        /**
+         * Inverse of desired number of Newton steps.
+         *
+         * @name ImplicitCurve#kappa_0
+         * @type {Number|Function}
+         * @default 0.2
+         */
+        kappa_0: 0.2,
+
+        /**
+         * Allowed distance (in user units) of predictor point to curve.
+         *
+         * @name ImplicitCurve#delta_0
+         * @type {Number|Function}
+         * @default 0.05
+         */
+        delta_0: 0.05,
+
+        /**
+         * Initial step width (in user units).
+         *
+         * @name ImplicitCurve#h_initial
+         * @type {Number|Function}
+         * @default 0.1
+         */
+        h_initial: 0.1,
+
+        /**
+         * If h is below this threshold (in user units), we bail out
+         * of the tracing phase of that component.
+         *
+         * @name ImplicitCurve#h_critical
+         * @type {Number|Function}
+         * @default 0.001
+         */
+        h_critical: 0.001,
+
+        /**
+         * Maximum step width (in user units).
+         *
+         * @name ImplicitCurve#h_max
+         * @type {Number|Function}
+         * @default 1
+         */
+        h_max: 1,
+
+        /**
+         * Allowed distance (in user units multiplied by actual step width) to detect loop.
+         *
+         * @name ImplicitCurve#loop_dist
+         * @type {Number|Function}
+         * @default 0.09
+         */
+        loop_dist: 0.09,
+
+        /**
+         * Minimum acos of angle to detect loop.
+         *
+         * @name ImplicitCurve#loop_dir
+         * @type {Number|Function}
+         * @default 0.99
+         */
+        loop_dir: 0.99,
+
+        /**
+         * Use Gosper's loop detector.
+         *
+         * @name ImplicitCurve#loop_detection
+         * @type {Boolean|Function}
+         * @default true
+         */
+        loop_detection: true
+
+        /**#@-*/
+    },
+
     /* special options for incircle of 3 points */
     incircle: {
         /**#@+
@@ -22868,7 +23816,8 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
         parse: false,
         transitionDuration: 0,
         needsRegularUpdate: false,
-        tabindex: null
+        tabindex: null,
+        viewport: [0, 0, 0, 0]
 
         /**#@-*/
     },
@@ -23206,7 +24155,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
          * Configure the arrow head at the position of its first point or the corresponding
          * intersection with the canvas border
          *
-         * In case firstArrow is an object it has the sub-attributes:
+         * The attribute firstArrow can be a Boolean or an object with the following sub-attributes:
          * <pre>
          * {
          *      type: 1, // possible values are 1, 2, ..., 7. Default value is 1.
@@ -23217,6 +24166,8 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
          * }
          * </pre>
          * type=7 is the default for curves if firstArrow: true
+         * <p>
+         * An arrow head can be turned off with line.setAttribute({firstArrow: false}).
          *
          * @example
          *     board.options.line.lastArrow = false;
@@ -23259,7 +24210,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
          * @name Line#firstArrow
          * @see Line#lastArrow
          * @see Line#touchFirstPoint
-         * @type Boolean / Object
+         * @type Boolean | Object
          * @default false
          */
         firstArrow: false,
@@ -23268,7 +24219,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
          * Configure the arrow head at the position of its second point or the corresponding
          * intersection with the canvas border.
          *
-         * In case lastArrow is an object it has the sub-attributes:
+         * The attribute lastArrow can be a Boolean or an object with the following sub-attributes:
          * <pre>
          * {
          *      type: 1, // possible values are 1, 2, ..., 7. Default value is 1.
@@ -23279,6 +24230,8 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
          * }
          * </pre>
          * type=7 is the default for curves if lastArrow: true
+         * <p>
+         * An arrow head can be turned off with line.setAttribute({lastArrow: false}).
          *
          * @example
          *     var p1 = board.create('point', [-5, 2], {size:1});
@@ -23353,7 +24306,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
          * @name Line#lastArrow
          * @see Line#firstArrow
          * @see Line#touchLastPoint
-         * @type Boolean / Object
+         * @type Boolean | Object
          * @default false
          */
         lastArrow: false,
@@ -23530,7 +24483,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
          * @name Line#touchLastPoint
          * @default false
          */
-        touchLastPoint: false,
+        touchLastPoint: false
 
         /**#@-*/
     },
@@ -23549,7 +24502,25 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
         /**#@-*/
     },
 
-    /* special cardinal spline options */
+    /* special measurement options */
+    measurement: {
+        /**#@+
+         * @visprop
+         */
+
+        baseUnit: '',
+        units: {},
+        dim: null,
+        prefix: '',
+        suffix: '',
+
+        showPrefix: true,
+        showSuffix: true
+
+        /**#@-*/
+    },
+
+    /* special metapost spline options */
     metapostspline: {
         /**#@+
          * @visprop
@@ -23726,6 +24697,14 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
         /**#@-*/
     },
 
+    /* special parallelogram options */
+    parallelogram: {
+        parallelpoint: {
+            withLabel: false,
+            name: ''
+        }
+    },
+
     /* special parallelpoint options */
     parallelpoint: {
     },
@@ -23870,7 +24849,8 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
          *
          * @name Point#showInfobox
          * @see JXG.Board#showInfobox
-         * @type {Boolean|String} true | false | 'inherit'
+         * @type Boolean|String
+         * @description true | false | 'inherit'
          * @default true
          */
         showInfobox: 'inherit',
@@ -23885,7 +24865,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
          *
          * @name Point#infoboxDigits
          *
-         * @type String, Number
+         * @type String| Number
          * @default 'auto'
          * @see JXG#autoDigits
          * @see JXG#toFixed
@@ -24163,6 +25143,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
 
     /* special prescribed angle options
     * Not yet implemented. But angle.setAngle(val) is implemented.
+
     */
     prescribedangle: {
         /**#@+
@@ -24173,7 +25154,8 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
          * Attributes for the helper point of the prescribed angle.
          *
          * @type Point
-         * @name PrescribedAngle#anglePoint
+         * @name Prescribedangle#anglePoint
+         * @ignore
          */
         anglePoint: {
             size: 2,
@@ -24196,8 +25178,8 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
          * Attributes of circle center, i.e. the center of the circle,
          * if a circle is the mirror element and the transformation type is 'Euclidean'
          *
-         * @type Point
-         * @name Mirrorelement#center
+         * @type center
+         * @name Reflection#center
          */
         center: {},
 
@@ -24289,7 +25271,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
          * Attributes for the polygon label.
          *
          * @type Label
-         * @name Polygon#label
+         * @name RegularPolygon#label
          */
         label: {
             offset: [0, 0]
@@ -24345,7 +25327,27 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
          */
         arc: {
             visible: false,
-            fillColor: 'none'
+            fillColor: 'none',
+            withLabel: false,
+            name: '',
+
+            center: {
+                visible: false,
+                withLabel: false,
+                name: ''
+            },
+
+            radiusPoint: {
+                visible: false,
+                withLabel: false,
+                name: ''
+            },
+
+            anglePoint: {
+                visible: false,
+                withLabel: false,
+                name: ''
+            }
         },
 
         /**
@@ -25033,7 +26035,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
          *   <li> 'deg' for angles</li>
          * </ul>
          */
-        measure: 'radius',
+        measure: 'radius'
 
         /**#@-*/
     },
@@ -25072,7 +26074,15 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
          */
         dir: 'row',
 
+        /**
+         * Supply a unit suffix.
+         *
+         * @type String
+         * @name Smartlabel#unit
+         * @default ''
+         */
         unit: ''
+
         /**#@-*/
     },
 
@@ -25154,7 +26164,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
         /**
          * The precision of the tape measure value displayed in the optional text.
          * @memberOf Tapemeasure.prototype
-         * @name precision
+         * @name digits
          * @type Number
          * @default 2
          */
@@ -25998,6 +27008,11 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
          */
         rotate: 0,
 
+        /**
+         * @name Text#visible
+         * @type Boolean
+         * @default true
+         */
         visible: true,
 
         /**
@@ -26043,7 +27058,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
          * @type Array
          * @default empty
          */
-        attractors: [],
+        attractors: []
 
         /**#@-*/
     },
@@ -26315,6 +27330,8 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Options = {
             '-': '-',
             diamond: '<>',
             '<>': '<>',
+            diamond2: '<<>>',
+            '<<>>': '<<>>',
             triangleup: '^',
             A: '^',
             a: '^',
@@ -26549,7 +27566,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.GeonextParser = {
                     // Search for F or p.M before (...)^
                     pre = left.substring(0, pos + 1);
                     p = pos;
-                    while (p >= 0 && pre.substr(p, 1).match(/([\w.]+)/)) {
+                    while (p >= 0 && pre.slice(p, p + 1).match(/([\w.]+)/)) {
                         leftop = RegExp.$1 + leftop;
                         p -= 1;
                     }
@@ -26908,7 +27925,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.GeonextParser = {
         term = term.replace(/&gt;/g, ">");
         term = term.replace(/&amp;/g, "&");
 
-        // Umwandeln der GEONExT-Syntax in JavaScript-Syntax
+        // Convert GEONExT syntax to JavaScript syntax
         newterm = term;
         newterm = this.replaceNameById(newterm, board);
         newterm = this.replaceIf(newterm);
@@ -26990,9 +28007,9 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.GeonextParser = {
      * @returns {String} Given expression translated to JavaScript.
      */
     gxt2jc: function (term, board) {
-        var newterm,
-            from = ["Sqrt"],
-            to = ["sqrt"];
+        var newterm;
+            // from = ["Sqrt"],
+            // to = ["sqrt"];
 
         // Hacks, to enable not well formed XML, @see JXG.GeonextReader#replaceLessThan
         term = term.replace(/&lt;/g, "<");
@@ -27204,6 +28221,12 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.JessieCode = function (cod
     this.board = null;
 
     /**
+     * Force slider names to return value instead of node
+     * @type Boolean
+     */
+    this.forceValueCall = false;
+
+    /**
      * Keep track of which element is created in which line.
      * @type Object
      */
@@ -27256,7 +28279,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(_jxg__WEBPACK_IMPOR
             n.children.push(arguments[i]);
         }
 
-        if (n.type == 'node_const' && _utils_type__WEBPACK_IMPORTED_MODULE_7__/* ["default"] */ .Z.isNumber(n.value)) {
+        if (n.type === 'node_const' && _utils_type__WEBPACK_IMPORTED_MODULE_7__/* ["default"] */ .Z.isNumber(n.value)) {
             n.isMath = true;
         }
 
@@ -27471,7 +28494,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(_jxg__WEBPACK_IMPOR
             return this.builtIn[vname];
         }
 
-        if (!!isFunctionName) {
+        if (isFunctionName) {
             if (this.isBuiltIn(vname)) {
                 return this.builtIn[vname];
             }
@@ -27556,6 +28579,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(_jxg__WEBPACK_IMPOR
                 return r;
             }
 
+            /* eslint-disable no-useless-escape */
             vname = r.split('.').pop();
             if (_utils_type__WEBPACK_IMPORTED_MODULE_7__/* ["default"] */ .Z.exists(this.board.mathLib)) {
                 // Handle builtin case: ln(x) -> Math.log
@@ -27572,6 +28596,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(_jxg__WEBPACK_IMPOR
                 }
                 return r;
             }
+            /* eslint-enable no-useless-escape */
             return r;
 
             // return this.builtIn[vname].src || this.builtIn[vname];
@@ -27799,7 +28824,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(_jxg__WEBPACK_IMPOR
                 o[what] = value;
             } else if (typeof value === 'string') {
                 o.isDraggable = false;
-                o[what] = _utils_type__WEBPACK_IMPORTED_MODULE_7__/* ["default"] */ .Z.createFunction(value, this.board, null, true);
+                o[what] = _utils_type__WEBPACK_IMPORTED_MODULE_7__/* ["default"] */ .Z.createFunction(value, this.board);
                 o[what + 'jc'] = value;
             }
 
@@ -27826,8 +28851,9 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(_jxg__WEBPACK_IMPOR
      * @param  {String} code      JessieCode code to be parsed
      * @param  {String} cmd       Type of manipulation to be done with AST
      * @param {Boolean} [geonext=false] Geonext compatibility mode.
-     * @param {Boolean} dontstore If false, the code string is stored in this.code.
-     * @return {Object}           Returns result of computation as directed in cmd.
+     * @param {Boolean} [dontstore=false] If false, the code string is stored in this.code,
+     *  i.e. in the JessieCode object, e.g. in board.jc.
+     * @return {Object} Returns result of computation as directed in cmd.
      */
     _genericParse: function (code, cmd, geonext, dontstore) {
         var i, setTextBackup, ast, result,
@@ -27896,7 +28922,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(_jxg__WEBPACK_IMPOR
      *
      * @param {String} code             JessieCode code to be parsed
      * @param {Boolean} [geonext=false] Geonext compatibility mode.
-     * @param {Boolean} dontstore       If false, the code string is stored in this.code.
+     * @param {Boolean} [dontstore=false] If false, the code string is stored in this.code.
      * @return {Object}                 Parse JessieCode code and execute it.
      */
     parse: function (code, geonext, dontstore) {
@@ -27906,12 +28932,12 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(_jxg__WEBPACK_IMPOR
     /**
      * Manipulate JessieCode.
      * This consists of generating an AST with parser.parse,
-     * apply simlifying rules from CA
+     * apply simplifying rules from CA
      * and compile the AST back to JessieCode.
      *
      * @param {String} code             JessieCode code to be parsed
      * @param {Boolean} [geonext=false] Geonext compatibility mode.
-     * @param {Boolean} dontstore       If false, the code string is stored in this.code.
+     * @param {Boolean} [dontstore=false] If false, the code string is stored in this.code.
      * @return {String}                 Simplified JessieCode code
      */
     manipulate: function (code, geonext, dontstore) {
@@ -27924,7 +28950,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(_jxg__WEBPACK_IMPOR
      *
      * @param {String} code
      * @param {Boolean} [geonext=false] Geonext compatibility mode.
-     * @param {Boolean} dontstore
+     * @param {Boolean} [dontstore=false] If false, the code string is stored in this.code.
      * @return {Node}  AST
      */
     getAST: function (code, geonext, dontstore) {
@@ -27934,18 +28960,22 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(_jxg__WEBPACK_IMPOR
     /**
      * Parses a JessieCode snippet, e.g. "3+4", and wraps it into a function, if desired.
      * @param {String} code A small snippet of JessieCode. Must not be an assignment.
-     * @param {Boolean} funwrap If true, the code is wrapped in a function.
-     * @param {String} varname Name of the parameter(s)
+     * @param {Boolean} [funwrap=true] If true, the code is wrapped in a function.
+     * @param {String} [varname=''] Name of the parameter(s)
      * @param {Boolean} [geonext=false] Geonext compatibility mode.
+     * @param {Boolean} [forceValueCall=true] Force evaluation of value method of sliders.
      */
-    snippet: function (code, funwrap, varname, geonext) {
+    snippet: function (code, funwrap, varname, geonext, forceValueCall) {
         var c;
 
         funwrap = _utils_type__WEBPACK_IMPORTED_MODULE_7__/* ["default"] */ .Z.def(funwrap, true);
         varname = _utils_type__WEBPACK_IMPORTED_MODULE_7__/* ["default"] */ .Z.def(varname, '');
         geonext = _utils_type__WEBPACK_IMPORTED_MODULE_7__/* ["default"] */ .Z.def(geonext, false);
+        this.forceValueCall = _utils_type__WEBPACK_IMPORTED_MODULE_7__/* ["default"] */ .Z.def(forceValueCall, true);
 
-        c = (funwrap ? ' function (' + varname + ') { return ' : '') + code + (funwrap ? '; }' : '') + ';';
+        c = (funwrap ? ' function (' + varname + ') { return ' : '') +
+                code +
+            (funwrap ? '; }' : '') + ';';
 
         return this.parse(c, geonext, true);
     },
@@ -27997,9 +29027,15 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(_jxg__WEBPACK_IMPOR
      * An identifier is only replaced if it is not found in all scopes above the current scope and if it
      * has not been blacklisted within the codeblock determined by the given subtree.
      * @param {Object} node
+     * @param {Boolean} [callValuePar=false] if true, uses $value() instead of $() in createReplacementNode
      */
-    replaceNames: function (node) {
-        var i, v;
+    replaceNames: function (node, callValuePar) {
+        var i, v,
+            callValue = false;
+
+        if (callValuePar !== undefined) {
+            callValue = callValuePar;
+        }
 
         v = node.value;
 
@@ -28012,21 +29048,46 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(_jxg__WEBPACK_IMPOR
             if (this.isLHS) {
                 this.letvar(v, true);
             } else if (!_utils_type__WEBPACK_IMPORTED_MODULE_7__/* ["default"] */ .Z.exists(this.getvar(v, true)) && _utils_type__WEBPACK_IMPORTED_MODULE_7__/* ["default"] */ .Z.exists(this.board.elementsByName[v])) {
-                node = this.createReplacementNode(node);
+                if (callValue && this.board.elementsByName[v].elType !== 'slider') {
+                    callValue = false;
+                }
+                node = this.createReplacementNode(node, callValue);
             }
         }
 
         if (_utils_type__WEBPACK_IMPORTED_MODULE_7__/* ["default"] */ .Z.isArray(node)) {
             for (i = 0; i < node.length; i++) {
-                node[i] = this.replaceNames(node[i]);
+                node[i] = this.replaceNames(node[i], callValue);
             }
         }
 
         if (node.children) {
+            // Replace slider reference by call of slider.Value()
+            if (this.forceValueCall &&              // It must be enforced, see snippet.
+                (
+                    // 1. case: sin(a), max(a, 0), ...
+                    (node.value === "op_execfun" &&
+                        // Not in cases V(a), $(a)
+                        node.children[0].value !== 'V' && node.children[0].value !== '$' &&
+                        // Function must be a math function. This ensures that a number is required as input.
+                        (_utils_type__WEBPACK_IMPORTED_MODULE_7__/* ["default"] */ .Z.exists(Math[node.children[0].value]) || _utils_type__WEBPACK_IMPORTED_MODULE_7__/* ["default"] */ .Z.exists(_math_math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z[node.children[0].value])) &&
+                        // node.children[1].length === 1 &&
+                        node.children[1][0].type === 'node_var'
+                    ) ||
+                    // 2. case: slider is the whole expression: 'a'
+                    (node.value === "op_return" &&
+                        node.children.length === 1 &&
+                        node.children[0].type === 'node_var'
+                    )
+                )
+            ) {
+                    callValue = true;
+            }
+
             // Assignments are first evaluated on the right hand side
             for (i = node.children.length; i > 0; i--) {
                 if (_utils_type__WEBPACK_IMPORTED_MODULE_7__/* ["default"] */ .Z.exists(node.children[i - 1])) {
-                    node.children[i - 1] = this.replaceNames(node.children[i - 1]);
+                    node.children[i - 1] = this.replaceNames(node.children[i - 1], callValue);
                 }
             }
         }
@@ -28042,14 +29103,17 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(_jxg__WEBPACK_IMPOR
      * Replaces node_var nodes with node_op&gt;op_execfun nodes, calling the internal $() function with the id of the
      * element accessed by the node_var node.
      * @param {Object} node
+     * @param {Boolean} [callValue=undefined] if true, uses $value() instead of $()
      * @returns {Object} op_execfun node
      */
-    createReplacementNode: function (node) {
+    createReplacementNode: function (node, callValue) {
         var v = node.value,
             el = this.board.elementsByName[v];
 
+        // If callValue: get handle to this node_var and call its Value method.
+        // Otherwise return the object.
         node = this.createNode('node_op', 'op_execfun',
-            this.createNode('node_var', '$'),
+            this.createNode('node_var', (callValue === true ? '$value' : '$')),
             [this.createNode('node_str', el.id)]);
 
         node.replaced = true;
@@ -28146,7 +29210,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(_jxg__WEBPACK_IMPOR
 
     /**
      * Type inspection: check if the string vname appears as function name in the
-     * AST node. Used in "op_execfun". This allows the JessieCode exmples below.
+     * AST node. Used in "op_execfun". This allows the JessieCode examples below.
      *
      * @private
      * @param {String} vname
@@ -28454,7 +29518,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(_jxg__WEBPACK_IMPOR
                         delete node.children[0]._isFunctionName;
 
                         // determine the scope the function wants to run in
-                        if (fun && fun.sc) {
+                        if (_utils_type__WEBPACK_IMPORTED_MODULE_7__/* ["default"] */ .Z.exists(fun) && _utils_type__WEBPACK_IMPORTED_MODULE_7__/* ["default"] */ .Z.exists(fun.sc)) {
                             sc = fun.sc;
                         } else {
                             sc = this;
@@ -28536,14 +29600,18 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(_jxg__WEBPACK_IMPOR
                     case 'op_eq':
                         // == is intentional
                         /*jslint eqeq:true*/
+                        /* eslint-disable eqeqeq */
                         ret = this.execute(node.children[0]) == this.execute(node.children[1]);
                         /*jslint eqeq:false*/
+                        /* eslint-enable eqeqeq */
                         break;
                     case 'op_neq':
                         // != is intentional
                         /*jslint eqeq:true*/
+                        /* eslint-disable eqeqeq */
                         ret = this.execute(node.children[0]) != this.execute(node.children[1]);
                         /*jslint eqeq:true*/
+                        /* eslint-enable eqeqeq */
                         break;
                     case 'op_approx':
                         ret = Math.abs(this.execute(node.children[0]) - this.execute(node.children[1])) < _math_math__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z.eps;
@@ -28955,10 +30023,10 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(_jxg__WEBPACK_IMPOR
 
         if (_utils_type__WEBPACK_IMPORTED_MODULE_7__/* ["default"] */ .Z.exists(obj) && _utils_type__WEBPACK_IMPORTED_MODULE_7__/* ["default"] */ .Z.exists(obj.getName)) {
             name = obj.getName();
-            if ((!_utils_type__WEBPACK_IMPORTED_MODULE_7__/* ["default"] */ .Z.exists(name) || name === '') && !!useId) {
+            if ((!_utils_type__WEBPACK_IMPORTED_MODULE_7__/* ["default"] */ .Z.exists(name) || name === '') && useId) {
                 name = obj.id;
             }
-        } else if (!!useId) {
+        } else if (useId) {
             name = obj.id;
         }
 
@@ -29280,7 +30348,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(_jxg__WEBPACK_IMPOR
     },
     geq: function (a, b) {
         if (_math_ia__WEBPACK_IMPORTED_MODULE_4__/* ["default"] */ .Z.isInterval(a) || _math_ia__WEBPACK_IMPORTED_MODULE_4__/* ["default"] */ .Z.isInterval(b)) {
-            return Intervalt.geq(a, b);
+            return _math_ia__WEBPACK_IMPORTED_MODULE_4__/* ["default"] */ .Z.geq(a, b);
         }
         return a >= b;
     },
@@ -29449,10 +30517,11 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(_jxg__WEBPACK_IMPOR
                 'use': that.use,
                 'remove': that.del,
                 '$': that.getElementById,
+                '$value': function(e) {return that.getElementById(e).Value(); },
                 getName: that.getName,
                 name: that.getName,
                 '$board': that.board,
-                '$log': that.log,
+                '$log': that.log
             };
 
         // special scopes for factorial, deg, and rad
@@ -29513,6 +30582,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(_jxg__WEBPACK_IMPOR
         builtIn.IfThen.src = '$jc$.ifthen';
         // usually unused, see node_op > op_execfun
         builtIn.$.src = '(function (n) { return $jc$.board.select(n); })';
+        builtIn.$value.src = '(function (n) { return $jc$.board.select(n).Value(); })';
         builtIn.getName.src = '$jc$.getName';
         builtIn.name.src = '$jc$.getName';
         if (builtIn.$board) {
@@ -29765,203 +30835,215 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(_jxg__WEBPACK_IMPOR
     recoverable: (boolean: TRUE when the parser has a error recovery rule available for this particular error)
   }
 */
+/**
+ * @class
+ * @ignore
+ */
 var parser = (function(){
 var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[2,14],$V1=[1,13],$V2=[1,37],$V3=[1,14],$V4=[1,15],$V5=[1,21],$V6=[1,16],$V7=[1,17],$V8=[1,33],$V9=[1,18],$Va=[1,19],$Vb=[1,12],$Vc=[1,59],$Vd=[1,60],$Ve=[1,58],$Vf=[1,46],$Vg=[1,48],$Vh=[1,49],$Vi=[1,50],$Vj=[1,51],$Vk=[1,52],$Vl=[1,53],$Vm=[1,54],$Vn=[1,45],$Vo=[1,38],$Vp=[1,39],$Vq=[5,7,8,14,15,16,17,19,20,21,23,26,27,50,51,58,65,74,75,76,77,78,79,80,82,91,93],$Vr=[5,7,8,12,14,15,16,17,19,20,21,23,26,27,50,51,58,65,74,75,76,77,78,79,80,82,91,93],$Vs=[8,10,16,32,34,35,37,39,41,42,43,45,46,47,48,50,51,53,54,55,57,64,65,66,83,86],$Vt=[2,48],$Vu=[1,72],$Vv=[10,16,32,34,35,37,39,41,42,43,45,46,47,48,50,51,53,54,55,57,66,83,86],$Vw=[1,78],$Vx=[8,10,16,32,34,35,37,41,42,43,45,46,47,48,50,51,53,54,55,57,64,65,66,83,86],$Vy=[1,82],$Vz=[8,10,16,32,34,35,37,39,45,46,47,48,50,51,53,54,55,57,64,65,66,83,86],$VA=[1,83],$VB=[1,84],$VC=[1,85],$VD=[8,10,16,32,34,35,37,39,41,42,43,50,51,53,54,55,57,64,65,66,83,86],$VE=[1,89],$VF=[1,90],$VG=[1,91],$VH=[1,92],$VI=[1,97],$VJ=[8,10,16,32,34,35,37,39,41,42,43,45,46,47,48,53,54,55,57,64,65,66,83,86],$VK=[1,103],$VL=[1,104],$VM=[8,10,16,32,34,35,37,39,41,42,43,45,46,47,48,50,51,57,64,65,66,83,86],$VN=[1,105],$VO=[1,106],$VP=[1,107],$VQ=[1,126],$VR=[1,139],$VS=[83,86],$VT=[1,150],$VU=[10,66,86],$VV=[8,10,16,20,32,34,35,37,39,41,42,43,45,46,47,48,50,51,53,54,55,57,64,65,66,82,83,86],$VW=[1,167],$VX=[10,86];
+/**
+ * @class
+ * @ignore
+ */
 var parser = {trace: function trace () { },
 yy: {},
 symbols_: {"error":2,"Program":3,"StatementList":4,"EOF":5,"IfStatement":6,"IF":7,"(":8,"Expression":9,")":10,"Statement":11,"ELSE":12,"LoopStatement":13,"WHILE":14,"FOR":15,";":16,"DO":17,"UnaryStatement":18,"USE":19,"IDENTIFIER":20,"DELETE":21,"ReturnStatement":22,"RETURN":23,"EmptyStatement":24,"StatementBlock":25,"{":26,"}":27,"ExpressionStatement":28,"AssignmentExpression":29,"ConditionalExpression":30,"LeftHandSideExpression":31,"=":32,"LogicalORExpression":33,"?":34,":":35,"LogicalANDExpression":36,"||":37,"EqualityExpression":38,"&&":39,"RelationalExpression":40,"==":41,"!=":42,"~=":43,"AdditiveExpression":44,"<":45,">":46,"<=":47,">=":48,"MultiplicativeExpression":49,"+":50,"-":51,"UnaryExpression":52,"*":53,"/":54,"%":55,"ExponentExpression":56,"^":57,"!":58,"MemberExpression":59,"CallExpression":60,"PrimaryExpression":61,"FunctionExpression":62,"MapExpression":63,".":64,"[":65,"]":66,"BasicLiteral":67,"ObjectLiteral":68,"ArrayLiteral":69,"NullLiteral":70,"BooleanLiteral":71,"StringLiteral":72,"NumberLiteral":73,"NULL":74,"TRUE":75,"FALSE":76,"STRING":77,"NUMBER":78,"NAN":79,"INFINITY":80,"ElementList":81,"<<":82,">>":83,"PropertyList":84,"Property":85,",":86,"PropertyName":87,"Arguments":88,"AttributeList":89,"Attribute":90,"FUNCTION":91,"ParameterDefinitionList":92,"MAP":93,"->":94,"$accept":0,"$end":1},
 terminals_: {2:"error",5:"EOF",7:"IF",8:"(",10:")",12:"ELSE",14:"WHILE",15:"FOR",16:";",17:"DO",19:"USE",20:"IDENTIFIER",21:"DELETE",23:"RETURN",26:"{",27:"}",32:"=",34:"?",35:":",37:"||",39:"&&",41:"==",42:"!=",43:"~=",45:"<",46:">",47:"<=",48:">=",50:"+",51:"-",53:"*",54:"/",55:"%",57:"^",58:"!",64:".",65:"[",66:"]",74:"NULL",75:"TRUE",76:"FALSE",77:"STRING",78:"NUMBER",79:"NAN",80:"INFINITY",82:"<<",83:">>",86:",",91:"FUNCTION",93:"MAP",94:"->"},
 productions_: [0,[3,2],[6,5],[6,7],[13,5],[13,9],[13,7],[18,2],[18,2],[22,2],[22,3],[24,1],[25,3],[4,2],[4,0],[11,1],[11,1],[11,1],[11,1],[11,1],[11,1],[11,1],[28,2],[9,1],[29,1],[29,3],[30,1],[30,5],[33,1],[33,3],[36,1],[36,3],[38,1],[38,3],[38,3],[38,3],[40,1],[40,3],[40,3],[40,3],[40,3],[44,1],[44,3],[44,3],[49,1],[49,3],[49,3],[49,3],[56,1],[56,3],[52,1],[52,2],[52,2],[52,2],[31,1],[31,1],[59,1],[59,1],[59,1],[59,3],[59,4],[61,1],[61,1],[61,1],[61,1],[61,3],[67,1],[67,1],[67,1],[67,1],[70,1],[71,1],[71,1],[72,1],[73,1],[73,1],[73,1],[69,2],[69,3],[68,2],[68,3],[84,1],[84,3],[85,3],[87,1],[87,1],[87,1],[60,2],[60,3],[60,2],[60,4],[60,3],[88,2],[88,3],[89,1],[89,3],[90,1],[90,1],[81,1],[81,3],[62,4],[62,5],[63,5],[63,6],[92,1],[92,3]],
+/**
+ * @class
+ * @ignore
+ */
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
- return $$[$0-1]; 
+ return $$[$0-1];
 break;
 case 2:
- this.$ = AST.createNode(lc(_$[$0-4]), 'node_op', 'op_if', $$[$0-2], $$[$0]); 
+ this.$ = AST.createNode(lc(_$[$0-4]), 'node_op', 'op_if', $$[$0-2], $$[$0]);
 break;
 case 3:
- this.$ = AST.createNode(lc(_$[$0-6]), 'node_op', 'op_if_else', $$[$0-4], $$[$0-2], $$[$0]); 
+ this.$ = AST.createNode(lc(_$[$0-6]), 'node_op', 'op_if_else', $$[$0-4], $$[$0-2], $$[$0]);
 break;
 case 4:
- this.$ = AST.createNode(lc(_$[$0-4]), 'node_op', 'op_while', $$[$0-2], $$[$0]); 
+ this.$ = AST.createNode(lc(_$[$0-4]), 'node_op', 'op_while', $$[$0-2], $$[$0]);
 break;
 case 5:
- this.$ = AST.createNode(lc(_$[$0-8]), 'node_op', 'op_for', $$[$0-6], $$[$0-4], $$[$0-2], $$[$0]); 
+ this.$ = AST.createNode(lc(_$[$0-8]), 'node_op', 'op_for', $$[$0-6], $$[$0-4], $$[$0-2], $$[$0]);
 break;
 case 6:
- this.$ = AST.createNode(lc(_$[$0-6]), 'node_op', 'op_do', $$[$0-5], $$[$0-2]); 
+ this.$ = AST.createNode(lc(_$[$0-6]), 'node_op', 'op_do', $$[$0-5], $$[$0-2]);
 break;
 case 7:
- this.$ = AST.createNode(lc(_$[$0-1]), 'node_op', 'op_use', $$[$0]); 
+ this.$ = AST.createNode(lc(_$[$0-1]), 'node_op', 'op_use', $$[$0]);
 break;
 case 8:
- this.$ = AST.createNode(lc(_$[$0-1]), 'node_op', 'op_delete', $$[$0]); 
+ this.$ = AST.createNode(lc(_$[$0-1]), 'node_op', 'op_delete', $$[$0]);
 break;
 case 9:
- this.$ = AST.createNode(lc(_$[$0-1]), 'node_op', 'op_return', undefined); 
+ this.$ = AST.createNode(lc(_$[$0-1]), 'node_op', 'op_return', undefined);
 break;
 case 10:
- this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_return', $$[$0-1]); 
+ this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_return', $$[$0-1]);
 break;
 case 11: case 14:
- this.$ = AST.createNode(lc(_$[$0]), 'node_op', 'op_none'); 
+ this.$ = AST.createNode(lc(_$[$0]), 'node_op', 'op_none');
 break;
 case 12:
- this.$ = $$[$0-1]; this.$.needsBrackets = true; 
+ this.$ = $$[$0-1]; this.$.needsBrackets = true;
 break;
 case 13:
- this.$ = AST.createNode(lc(_$[$0-1]), 'node_op', 'op_none', $$[$0-1], $$[$0]); 
+ this.$ = AST.createNode(lc(_$[$0-1]), 'node_op', 'op_none', $$[$0-1], $$[$0]);
 break;
 case 15: case 16: case 17: case 18: case 19: case 20: case 21: case 23: case 24: case 26: case 28: case 30: case 32: case 36: case 41: case 44: case 48: case 50: case 52: case 54: case 55: case 56: case 58: case 62: case 81: case 84: case 85: case 86:
- this.$ = $$[$0]; 
+ this.$ = $$[$0];
 break;
 case 22: case 65: case 93:
- this.$ = $$[$0-1]; 
+ this.$ = $$[$0-1];
 break;
 case 25:
- this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_assign', $$[$0-2], $$[$0]); this.$.isMath = false; 
+ this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_assign', $$[$0-2], $$[$0]); this.$.isMath = false;
 break;
 case 27:
- this.$ = AST.createNode(lc(_$[$0-4]), 'node_op', 'op_conditional', $$[$0-4], $$[$0-2], $$[$0]); this.$.isMath = false; 
+ this.$ = AST.createNode(lc(_$[$0-4]), 'node_op', 'op_conditional', $$[$0-4], $$[$0-2], $$[$0]); this.$.isMath = false;
 break;
 case 29:
- this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_or', $$[$0-2], $$[$0]); this.$.isMath = false; 
+ this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_or', $$[$0-2], $$[$0]); this.$.isMath = false;
 break;
 case 31:
- this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_and', $$[$0-2], $$[$0]); this.$.isMath = false; 
+ this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_and', $$[$0-2], $$[$0]); this.$.isMath = false;
 break;
 case 33:
- this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_eq', $$[$0-2], $$[$0]); this.$.isMath = false; 
+ this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_eq', $$[$0-2], $$[$0]); this.$.isMath = false;
 break;
 case 34:
- this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_neq', $$[$0-2], $$[$0]); this.$.isMath = false; 
+ this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_neq', $$[$0-2], $$[$0]); this.$.isMath = false;
 break;
 case 35:
- this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_approx', $$[$0-2], $$[$0]); this.$.isMath = false; 
+ this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_approx', $$[$0-2], $$[$0]); this.$.isMath = false;
 break;
 case 37:
- this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_lt', $$[$0-2], $$[$0]); this.$.isMath = false; 
+ this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_lt', $$[$0-2], $$[$0]); this.$.isMath = false;
 break;
 case 38:
- this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_gt', $$[$0-2], $$[$0]); this.$.isMath = false; 
+ this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_gt', $$[$0-2], $$[$0]); this.$.isMath = false;
 break;
 case 39:
- this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_leq', $$[$0-2], $$[$0]); this.$.isMath = false; 
+ this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_leq', $$[$0-2], $$[$0]); this.$.isMath = false;
 break;
 case 40:
- this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_geq', $$[$0-2], $$[$0]); this.$.isMath = false; 
+ this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_geq', $$[$0-2], $$[$0]); this.$.isMath = false;
 break;
 case 42:
- this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_add', $$[$0-2], $$[$0]); this.$.isMath = true; 
+ this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_add', $$[$0-2], $$[$0]); this.$.isMath = true;
 break;
 case 43:
- this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_sub', $$[$0-2], $$[$0]); this.$.isMath = true; 
+ this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_sub', $$[$0-2], $$[$0]); this.$.isMath = true;
 break;
 case 45:
- this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_mul', $$[$0-2], $$[$0]); this.$.isMath = true; 
+ this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_mul', $$[$0-2], $$[$0]); this.$.isMath = true;
 break;
 case 46:
- this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_div', $$[$0-2], $$[$0]); this.$.isMath = true; 
+ this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_div', $$[$0-2], $$[$0]); this.$.isMath = true;
 break;
 case 47:
- this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_mod', $$[$0-2], $$[$0]); this.$.isMath = true; 
+ this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_mod', $$[$0-2], $$[$0]); this.$.isMath = true;
 break;
 case 49:
- this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_exp', $$[$0-2], $$[$0]); this.$.isMath = true; 
+ this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_exp', $$[$0-2], $$[$0]); this.$.isMath = true;
 break;
 case 51:
- this.$ = AST.createNode(lc(_$[$0-1]), 'node_op', 'op_not', $$[$0]); this.$.isMath = false; 
+ this.$ = AST.createNode(lc(_$[$0-1]), 'node_op', 'op_not', $$[$0]); this.$.isMath = false;
 break;
 case 53:
- this.$ = AST.createNode(lc(_$[$0-1]), 'node_op', 'op_neg', $$[$0]); this.$.isMath = true; 
+ this.$ = AST.createNode(lc(_$[$0-1]), 'node_op', 'op_neg', $$[$0]); this.$.isMath = true;
 break;
 case 57: case 63: case 64: case 66: case 67: case 68: case 97:
- this.$ = $$[$0]; this.$.isMath = false; 
+ this.$ = $$[$0]; this.$.isMath = false;
 break;
 case 59: case 91:
- this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_property', $$[$0-2], $$[$0]); this.$.isMath = true; 
+ this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_property', $$[$0-2], $$[$0]); this.$.isMath = true;
 break;
 case 60: case 90:
- this.$ = AST.createNode(lc(_$[$0-3]), 'node_op', 'op_extvalue', $$[$0-3], $$[$0-1]); this.$.isMath = true; 
+ this.$ = AST.createNode(lc(_$[$0-3]), 'node_op', 'op_extvalue', $$[$0-3], $$[$0-1]); this.$.isMath = true;
 break;
 case 61:
- this.$ = AST.createNode(lc(_$[$0]), 'node_var', $$[$0]); 
+ this.$ = AST.createNode(lc(_$[$0]), 'node_var', $$[$0]);
 break;
 case 69:
- this.$ = $$[$0]; this.$.isMath = true; 
+ this.$ = $$[$0]; this.$.isMath = true;
 break;
 case 70:
- this.$ = AST.createNode(lc(_$[$0]), 'node_const', null); 
+ this.$ = AST.createNode(lc(_$[$0]), 'node_const', null);
 break;
 case 71:
- this.$ = AST.createNode(lc(_$[$0]), 'node_const_bool', true); 
+ this.$ = AST.createNode(lc(_$[$0]), 'node_const_bool', true);
 break;
 case 72:
- this.$ = AST.createNode(lc(_$[$0]), 'node_const_bool', false); 
+ this.$ = AST.createNode(lc(_$[$0]), 'node_const_bool', false);
 break;
 case 73:
- this.$ = AST.createNode(lc(_$[$0]), 'node_str', $$[$0].substring(1, $$[$0].length - 1)); 
+ this.$ = AST.createNode(lc(_$[$0]), 'node_str', $$[$0].substring(1, $$[$0].length - 1));
 break;
 case 74:
- this.$ = AST.createNode(lc(_$[$0]), 'node_const', parseFloat($$[$0])); 
+ this.$ = AST.createNode(lc(_$[$0]), 'node_const', parseFloat($$[$0]));
 break;
 case 75:
- this.$ = AST.createNode(lc(_$[$0]), 'node_const', NaN); 
+ this.$ = AST.createNode(lc(_$[$0]), 'node_const', NaN);
 break;
 case 76:
- this.$ = AST.createNode(lc(_$[$0]), 'node_const', Infinity); 
+ this.$ = AST.createNode(lc(_$[$0]), 'node_const', Infinity);
 break;
 case 77:
- this.$ = AST.createNode(lc(_$[$0-1]), 'node_op', 'op_array', []); 
+ this.$ = AST.createNode(lc(_$[$0-1]), 'node_op', 'op_array', []);
 break;
 case 78:
- this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_array', $$[$0-1]); 
+ this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_array', $$[$0-1]);
 break;
 case 79:
- this.$ = AST.createNode(lc(_$[$0-1]), 'node_op', 'op_emptyobject', {}); this.$.needsAngleBrackets = true; 
+ this.$ = AST.createNode(lc(_$[$0-1]), 'node_op', 'op_emptyobject', {}); this.$.needsAngleBrackets = true;
 break;
 case 80:
- this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_proplst_val', $$[$0-1]); this.$.needsAngleBrackets = true; 
+ this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_proplst_val', $$[$0-1]); this.$.needsAngleBrackets = true;
 break;
 case 82:
- this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_proplst', $$[$0-2], $$[$0]); 
+ this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_proplst', $$[$0-2], $$[$0]);
 break;
 case 83:
- this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_prop', $$[$0-2], $$[$0]); 
+ this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_prop', $$[$0-2], $$[$0]);
 break;
 case 87: case 89:
- this.$ = AST.createNode(lc(_$[$0-1]), 'node_op', 'op_execfun', $$[$0-1], $$[$0]); this.$.isMath = true; 
+ this.$ = AST.createNode(lc(_$[$0-1]), 'node_op', 'op_execfun', $$[$0-1], $$[$0]); this.$.isMath = true;
 break;
 case 88:
- this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_execfun', $$[$0-2], $$[$0-1], $$[$0], true); this.$.isMath = false; 
+ this.$ = AST.createNode(lc(_$[$0-2]), 'node_op', 'op_execfun', $$[$0-2], $$[$0-1], $$[$0], true); this.$.isMath = false;
 break;
 case 92:
- this.$ = []; 
+ this.$ = [];
 break;
 case 94: case 98: case 104:
- this.$ = [$$[$0]]; 
+ this.$ = [$$[$0]];
 break;
 case 95: case 99: case 105:
- this.$ = $$[$0-2].concat($$[$0]); 
+ this.$ = $$[$0-2].concat($$[$0]);
 break;
 case 96:
- this.$ = AST.createNode(lc(_$[$0]), 'node_var', $$[$0]); this.$.isMath = true; 
+ this.$ = AST.createNode(lc(_$[$0]), 'node_var', $$[$0]); this.$.isMath = true;
 break;
 case 100:
- this.$ = AST.createNode(lc(_$[$0-3]), 'node_op', 'op_function', [], $$[$0]); this.$.isMath = false; 
+ this.$ = AST.createNode(lc(_$[$0-3]), 'node_op', 'op_function', [], $$[$0]); this.$.isMath = false;
 break;
 case 101:
- this.$ = AST.createNode(lc(_$[$0-4]), 'node_op', 'op_function', $$[$0-2], $$[$0]); this.$.isMath = false; 
+ this.$ = AST.createNode(lc(_$[$0-4]), 'node_op', 'op_function', $$[$0-2], $$[$0]); this.$.isMath = false;
 break;
 case 102:
- this.$ = AST.createNode(lc(_$[$0-4]), 'node_op', 'op_map', [], $$[$0]); 
+ this.$ = AST.createNode(lc(_$[$0-4]), 'node_op', 'op_map', [], $$[$0]);
 break;
 case 103:
- this.$ = AST.createNode(lc(_$[$0-5]), 'node_op', 'op_map', $$[$0-3], $$[$0]); 
+ this.$ = AST.createNode(lc(_$[$0-5]), 'node_op', 'op_map', $$[$0-3], $$[$0]);
 break;
 }
 },
@@ -29976,6 +31058,10 @@ parseError: function parseError (str, hash) {
         throw error;
     }
 },
+/**
+ * @class
+ * @ignore
+ */
 parse: function parse(input) {
     var self = this, stack = [0], tstack = [], vstack = [null], lstack = [], table = this.table, yytext = '', yylineno = 0, yyleng = 0, recovering = 0, TERROR = 2, EOF = 1;
     var args = lstack.slice.call(arguments, 1);
@@ -30470,6 +31556,10 @@ stateStackSize:function stateStackSize() {
         return this.conditionStack.length;
     },
 options: {},
+/**
+ * @class
+ * @ignore
+ */
 performAction: function anonymous(yy,yy_,$avoiding_name_collisions,YY_START) {
 var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
@@ -30479,9 +31569,9 @@ case 1:return 78
 break;
 case 2:return 78
 break;
-case 3: return 77; 
+case 3: return 77;
 break;
-case 4: return 77; 
+case 4: return 77;
 break;
 case 5:/* ignore comment */
 break;
@@ -30551,52 +31641,58 @@ case 37:return 58
 break;
 case 38:return 57
 break;
-case 39:return 53
+case 39:return 57
 break;
-case 40:return 54
+case 40:return 53
 break;
-case 41:return 55
+case 41:return 54
 break;
-case 42:return 50
+case 42:return 55
 break;
-case 43:return 51
+case 43:return 50
 break;
-case 44:return 47
+case 44:return 51
 break;
-case 45:return 45
+case 45:return 47
 break;
-case 46:return 48
+case 46:return 45
 break;
-case 47:return 46
+case 47:return 48
 break;
-case 48:return 41
+case 48:return 46
 break;
-case 49:return 43
+case 49:return 41
 break;
-case 50:return 42
+case 50:return 43
 break;
-case 51:return 39
+case 51:return 42
 break;
-case 52:return 37
+case 52:return 39
 break;
-case 53:return 32
+case 53:return 37
 break;
-case 54:return 86
+case 54:return 32
 break;
-case 55:return 5
+case 55:return 86
 break;
-case 56:return 20
+case 56:return 5
 break;
-case 57:return 'INVALID'
+case 57:return 20
+break;
+case 58:return 'INVALID'
 break;
 }
 },
-rules: [/^(?:\s+)/,/^(?:[0-9]+\.[0-9]*|[0-9]*\.[0-9]+\b)/,/^(?:[0-9]+)/,/^(?:"(\\["]|[^"])*")/,/^(?:'(\\[']|[^'])*')/,/^(?:\/\/.*)/,/^(?:\/\*(.|\n|\r)*?\*\/)/,/^(?:if\b)/,/^(?:else\b)/,/^(?:while\b)/,/^(?:do\b)/,/^(?:for\b)/,/^(?:function\b)/,/^(?:map\b)/,/^(?:use\b)/,/^(?:return\b)/,/^(?:delete\b)/,/^(?:true\b)/,/^(?:false\b)/,/^(?:null\b)/,/^(?:Infinity\b)/,/^(?:->)/,/^(?:=>)/,/^(?:<<)/,/^(?:>>)/,/^(?:\{)/,/^(?:\})/,/^(?:;)/,/^(?:#)/,/^(?:\?)/,/^(?::)/,/^(?:NaN\b)/,/^(?:\.)/,/^(?:\[)/,/^(?:\])/,/^(?:\()/,/^(?:\))/,/^(?:!)/,/^(?:\^)/,/^(?:\*)/,/^(?:\/)/,/^(?:%)/,/^(?:\+)/,/^(?:-)/,/^(?:<=)/,/^(?:<)/,/^(?:>=)/,/^(?:>)/,/^(?:==)/,/^(?:~=)/,/^(?:!=)/,/^(?:&&)/,/^(?:\|\|)/,/^(?:=)/,/^(?:,)/,/^(?:$)/,/^(?:[A-Za-z_\$][A-Za-z0-9_]*)/,/^(?:.)/],
-conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57],"inclusive":true}}
+rules: [/^(?:\s+)/,/^(?:[0-9]+\.[0-9]*|[0-9]*\.[0-9]+\b)/,/^(?:[0-9]+)/,/^(?:"(\\["]|[^"])*")/,/^(?:'(\\[']|[^'])*')/,/^(?:\/\/.*)/,/^(?:\/\*(.|\n|\r)*?\*\/)/,/^(?:if\b)/,/^(?:else\b)/,/^(?:while\b)/,/^(?:do\b)/,/^(?:for\b)/,/^(?:function\b)/,/^(?:map\b)/,/^(?:use\b)/,/^(?:return\b)/,/^(?:delete\b)/,/^(?:true\b)/,/^(?:false\b)/,/^(?:null\b)/,/^(?:Infinity\b)/,/^(?:->)/,/^(?:=>)/,/^(?:<<)/,/^(?:>>)/,/^(?:\{)/,/^(?:\})/,/^(?:;)/,/^(?:#)/,/^(?:\?)/,/^(?::)/,/^(?:NaN\b)/,/^(?:\.)/,/^(?:\[)/,/^(?:\])/,/^(?:\()/,/^(?:\))/,/^(?:!)/,/^(?:\^)/,/^(?:\*\*)/,/^(?:\*)/,/^(?:\/)/,/^(?:%)/,/^(?:\+)/,/^(?:-)/,/^(?:<=)/,/^(?:<)/,/^(?:>=)/,/^(?:>)/,/^(?:==)/,/^(?:~=)/,/^(?:!=)/,/^(?:&&)/,/^(?:\|\|)/,/^(?:=)/,/^(?:,)/,/^(?:$)/,/^(?:[A-Za-z_\$][A-Za-z0-9_]*)/,/^(?:.)/],
+conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58],"inclusive":true}}
 });
 return lexer;
 })();
 parser.lexer = lexer;
+/**
+ * @class
+ * @ignore
+ */
 function Parser () {
   this.yy = {};
 }
@@ -30851,7 +31947,7 @@ var simpleColors = {
  * Converts a valid HTML/CSS color string into a rgb value array. This is the base
  * function for the following wrapper functions which only adjust the output to
  * different flavors like an object, string or hex values.
- * @param {String,Array,Number} color A valid HTML or CSS styled color value, e.g. '#12ab21', '#abc', 'black',
+ * @param {String|Array|Number} color A valid HTML or CSS styled color value, e.g. '#12ab21', '#abc', 'black',
  * or 'rgb(12, 132, 233)'. This can also be an array containing three color values either from 0.0 to 1.0 or
  * from 0 to 255. They will be interpreted as red, green, and blue values. In case this is a number this method
  * expects the parameters ag and ab.
@@ -30910,7 +32006,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.rgbParser = function (colo
     // strip any leading #
     if (color_string.charAt(0) === "#") {
         // remove # if any
-        color_string = color_string.substr(1, 6);
+        color_string = color_string.slice(1, 7);
     }
 
     color_string = color_string.replace(/ /g, "").toLowerCase();
@@ -30947,7 +32043,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.rgbParser = function (colo
 
 /**
  * Converts a valid HTML/CSS color string into a string of the 'rgb(r, g, b)' format.
- * @param {String,Array,Number} color A valid HTML or CSS styled color value, e.g. '#12ab21', '#abc', 'black',
+ * @param {String|Array|Number} color A valid HTML or CSS styled color value, e.g. '#12ab21', '#abc', 'black',
  * or 'rgb(12, 132, 233)'. This can also be an array containing three color values either from 0.0 to 1.0 or
  * from 0 to 255. They will be interpreted as red, green, and blue values. In case this is a number this method
  * expects the parameters ag and ab.
@@ -30965,7 +32061,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.rgb2css = function (color,
 
 /**
  * Converts a valid HTML/CSS color string into a HTML rgb string.
- * @param {String,Array,Number} color A valid HTML or CSS styled color value, e.g. '#12ab21', '#abc', 'black',
+ * @param {String|Array|Number} color A valid HTML or CSS styled color value, e.g. '#12ab21', '#abc', 'black',
  * or 'rgb(12, 132, 233)'. This can also be an array containing three color values either from 0.0 to 1.0 or
  * from 0 to 255. They will be interpreted as red, green, and blue values. In case this is a number this method
  * expects the parameters ag and ab.
@@ -31096,7 +32192,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.hsv2rgb = function (H, S, 
 
 /**
  * Converts a color from the RGB color space into the HSV space. Input can be any valid HTML/CSS color definition.
- * @param {String,Array,Number} color A valid HTML or CSS styled color value, e.g. '#12ab21', '#abc', 'black',
+ * @param {String|Array|Number} color A valid HTML or CSS styled color value, e.g. '#12ab21', '#abc', 'black',
  * or 'rgb(12, 132, 233)'. This can also be an array containing three color values either from 0.0 to 1.0 or
  * from 0 to 255. They will be interpreted as red, green, and blue values. In case this is a number this method
  * expects the parameters ag and ab.
@@ -31155,7 +32251,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.rgb2hsv = function (color,
 
 /**
  * Converts a color from the RGB color space into the LMS space. Input can be any valid HTML/CSS color definition.
- * @param {String,Array,Number} color A valid HTML or CSS styled color value, e.g. '#12ab21', '#abc', 'black',
+ * @param {String|Array|Number} color A valid HTML or CSS styled color value, e.g. '#12ab21', '#abc', 'black',
  * or 'rgb(12, 132, 233)'. This can also be an array containing three color values either from 0.0 to 1.0 or
  * from 0 to 255. They will be interpreted as red, green, and blue values. In case this is a number this method
  * expects the parameters ag and ab.
@@ -31279,8 +32375,8 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.rgba2rgbo = function (rgba
     var opacity;
 
     if (rgba.length === 9 && rgba.charAt(0) === "#") {
-        opacity = parseInt(rgba.substr(7, 2).toUpperCase(), 16) / 255;
-        rgba = rgba.substr(0, 7);
+        opacity = parseInt(rgba.slice(7, 9).toUpperCase(), 16) / 255;
+        rgba = rgba.slice(0, 7);
     } else {
         opacity = 1;
     }
@@ -32451,15 +33547,8 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
          * @returns {Array} 3x3 transformation matrix without translation part. See {@link JXG.Board#updateCSSTransforms}.
          */
         getCSSTransformMatrix: function (obj) {
-            var i,
-                j,
-                str,
-                arrstr,
-                start,
-                len,
-                len2,
-                arr,
-                st,
+            var i, j, str, arrstr, arr,
+                start, len, len2, st,
                 doc = obj.ownerDocument,
                 t = [
                     "transform",
@@ -32494,6 +33583,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
                 }
             }
 
+            // Convert and reorder the matrix for JSXGraph
             if (str !== "") {
                 start = str.indexOf("(");
 
@@ -32586,16 +33676,12 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
          *
          */
         scaleJSXGraphDiv: function (wrap_id, inner_id, doc, scale) {
-            var len = doc.styleSheets.length, style, rule,
-                w, h, b,
+            var w, h, b,
                 wi, hi,
                 wo, ho, inner,
                 scale_l, vshift_l,
                 f = scale,
                 ratio,
-                rule_inner_l,
-                title = 'jsxgraph_fullscreen_css',
-                found_css,
                 pseudo_keys = [
                     ":fullscreen",
                     ":-webkit-full-screen",
@@ -32603,16 +33689,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
                     ":-ms-fullscreen"
                 ],
                 len_pseudo = pseudo_keys.length,
-                i,
-                // A previously installed CSS rule to center the JSXGraph div has to
-                // be searched and removed again.
-                regex = new RegExp(
-                    ".*#" +
-                        wrap_id +
-                        ":.*full.*screen.*#" +
-                        inner_id +
-                        ".*auto;.*transform:.*matrix"
-                );
+                i;
 
             b = doc.getElementById(wrap_id).getBoundingClientRect();
             h = b.height;
@@ -32635,7 +33712,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
 
             wi = wo;
             hi = ho;
-            // Compare this.setBoundingBox() 
+            // Compare the code in this.setBoundingBox()
             if (ratio > 1) {
                 // h > w
                 if (ratio < h / w) {
@@ -32653,60 +33730,23 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
             }
             vshift_l = (h - hi) * 0.5;
 
-            // CSS rules to center the inner div horizontally and vertically.
-            rule_inner_l =
-                "{" +
-                "width:" + wi + "px !important;" +
-                "height:" + hi + "px !important;" +
-                "margin:0 auto;" +
-                "transform:matrix(" + scale_l + ",0,0," + scale_l + ",0," + vshift_l + ");" +
-                "}";
-
-            found_css = false;
-            // Removing of the CSS here should happen only
-            // in emergency cases.
-            for (i = len - 1; i >= 0; i--) {
-                if (doc.styleSheets[i].title === title) {
-                    found_css = true;
-
-                    if (doc.styleSheets[i].title === title &&
-                        doc.styleSheets[i].cssRules.length > 0 &&
-                        regex.test(doc.styleSheets[i].cssRules[0].cssText) &&
-                        doc.styleSheets[i].deleteRule
-                    ) {
-                        doc.styleSheets[i].deleteRule(0);
-                        break;
-                    }
-                }
-            }
-            if (!found_css) {
-                // In case there is not yet a CSS style sheet for fullscreen
-                // defined, do it now.
-                style = document.createElement("style");
-                style.setAttribute('title', title);
-                // WebKit hack :(
-                style.appendChild(document.createTextNode(""));
-                // Add the <style> element to the page head.
-                // It must be document, not the shadowDOM root.
-                // It seems that the head tag does always exist.
-                document.head.appendChild(style);
-            }
-            len = doc.styleSheets.length;
-
-            // Install a CSS rule to center the JSXGraph div at the first position of the list.
+            // Set a CSS properties to center the JSXGraph div horizontally and vertically
+            // at the first position of the fullscreen pseudo classes.
             for (i = 0; i < len_pseudo; i++) {
                 try {
-                    rule = "#" + wrap_id + pseudo_keys[i] + " #" + inner_id + rule_inner_l;
-                    // rule = '@media all and (orientation:landscape) {' + rule + '}';
-                    doc.styleSheets[len - 1].insertRule(rule, 0);
-
+                    inner.style.width = wi + 'px !important';
+                    inner.style.height = hi + 'px !important';
+                    inner.style.margin = '0 auto';
+                    // Add the transform to a possibly already existing transform
+                    inner.style.transform = inner._cssFullscreenStore.transform +
+                        ' matrix(' + scale_l + ',0,0,' + scale_l + ',0,' + vshift_l + ')';
                     break;
-                } catch (err) {}
+                } catch (err) {
+                    _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.debug("JXG.scaleJSXGraphDiv:\n" + err);
+                }
             }
             if (i === len_pseudo) {
-                _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.debug("JXG.scaleJSXGraphDiv: Could not add any CSS rule.\n" +
-                    "One possible reason could be that the id of the JSXGraph container does not start with a letter."
-                );
+                _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.debug("JXG.scaleJSXGraphDiv: Could not set any CSS property.");
             }
         }
 
@@ -32814,10 +33854,10 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.EventEmitter = {
      * Register a new event handler. For a list of possible events see documentation
      * of the elements and objects implementing
      * the {@link EventEmitter} interface.
-     * 
-     * As of version 1.5.0, it is only possible to access the element via "this" if the event listener 
+     *
+     * As of version 1.5.0, it is only possible to access the element via "this" if the event listener
      * is supplied as regular JavaScript function and not as arrow function.
-     * 
+     *
      * @param {String} event
      * @param {Function} handler
      * @param {Object} [context] The context the handler will be called in, default is the element itself.
@@ -32941,7 +33981,12 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.EventEmitter = {
 
 
 
-var Expect = {
+/**
+ * The JXG.Expect namespace provides method to normalize access on coordinates,
+ * i.e. provides utilities for parameter magic by normalizing multi-type parameters.
+ * @namespace
+ */
+_jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Expect = {
     /**
      * Apply an expect method on every element of an array.
      *
@@ -33019,9 +34064,7 @@ var Expect = {
     }
 };
 
-_jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Expect = Expect;
-
-/* harmony default export */ __webpack_exports__.Z = (Expect);
+/* harmony default export */ __webpack_exports__.Z = (_jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.Expect);
 
 
 /***/ }),
@@ -33137,17 +34180,22 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
         /**
          * Checks if the value of a given variable is of type number.
          * @param v A variable of any type.
-         * @param {Boolean} [dontAcceptNaN=false] If set to true, the function returns true for v=NaN.
+         * @param {Boolean} [acceptStringNumber=false] If set to true, the function returns true for e.g. v='3.1415'.
+         * @param {Boolean} [acceptNaN=true] If set to false, the function returns false for v=NaN.
          * @returns {Boolean} True, if v is of type number.
          */
-        isNumber: function (v, dontAcceptNaN) {
+        isNumber: function (v, acceptStringNumber, acceptNaN) {
             var result = (
-                typeof v === "number" || Object.prototype.toString.call(v) === "[Object Number]"
+                typeof v === 'number' || Object.prototype.toString.call(v) === '[Object Number]'
             );
-            dontAcceptNaN = dontAcceptNaN || false;
+            acceptStringNumber = acceptStringNumber || false;
+            acceptNaN = acceptNaN === undefined ? true : acceptNaN;
 
-            if(dontAcceptNaN) {
-                return result && !isNaN(v);
+            if (acceptStringNumber) {
+                result = result || ('' + parseFloat(v)) === v;
+            }
+            if (!acceptNaN) {
+                result = result && !isNaN(v);
             }
             return result;
         },
@@ -33342,7 +34390,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
         /**
          * Convert a String, a number or a function into a function. This method is used in Transformation.js
          * @param {JXG.Board} board Reference to a JSXGraph board. It is required to resolve dependencies given
-         * by a GEONE<sub>X</sub>T string, thus it must be a valid reference only in case one of the param
+         * by a JessieCode string, thus it must be a valid reference only in case one of the param
          * values is of type string.
          * @param {Array} param An array containing strings, numbers, or functions.
          * @param {Number} n Length of <tt>param</tt>.
@@ -33354,7 +34402,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
                 deps = {};
 
             for (i = 0; i < n; i++) {
-                f[i] = _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.createFunction(param[i], board, "", true);
+                f[i] = _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.createFunction(param[i], board);
                 for (e in f[i].deps) {
                     deps[e] = f[i].deps;
                 }
@@ -33372,25 +34420,27 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
          * Convert a String, number or function into a function.
          * @param {String|Number|Function} term A variable of type string, function or number.
          * @param {JXG.Board} board Reference to a JSXGraph board. It is required to resolve dependencies given
-         * by a GEONE<sub>X</sub>T string, thus it must be a valid reference only in case one of the param
+         * by a JessieCode/GEONE<sub>X</sub>T string, thus it must be a valid reference only in case one of the param
          * values is of type string.
          * @param {String} variableName Only required if function is supplied as JessieCode string or evalGeonext is set to true.
-         * Describes the variable name of the variable in a GEONE<sub>X</sub>T string given as term.
-         * @param {Boolean} [evalGeonext=true] Set this true, if term should be treated as a GEONE<sub>X</sub>T string.
-         * @returns {Function} A function evaluation the value given by term or null if term is not of type string,
+         * Describes the variable name of the variable in a JessieCode/GEONE<sub>X</sub>T string given as term.
+         * @param {Boolean} [evalGeonext=false] Obsolete and ignored! Set this true
+         * if term should be treated as a GEONE<sub>X</sub>T string.
+         * @returns {Function} A function evaluating the value given by term or null if term is not of type string,
          * function or number.
          */
         createFunction: function (term, board, variableName, evalGeonext) {
             var f = null;
 
-            if ((!this.exists(evalGeonext) || evalGeonext) && this.isString(term)) {
+            // if ((!this.exists(evalGeonext) || evalGeonext) && this.isString(term)) {
+            if (this.isString(term)) {
                 // Convert GEONExT syntax into  JavaScript syntax
                 //newTerm = JXG.GeonextParser.geonext2JS(term, board);
                 //return new Function(variableName,'return ' + newTerm + ';');
-
                 //term = JXG.GeonextParser.replaceNameById(term, board);
                 //term = JXG.GeonextParser.geonext2JS(term, board);
-                f = board.jc.snippet(term, true, variableName, true);
+
+                f = board.jc.snippet(term, true, variableName, false);
             } else if (this.isFunction(term)) {
                 f = term;
                 f.deps = {};
@@ -33398,11 +34448,11 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
                 /** @ignore */
                 f = function () { return term; };
                 f.deps = {};
-            } else if (this.isString(term)) {
-                // In case of string function like fontsize
-                /** @ignore */
-                f = function () { return term; };
-                f.deps = {};
+            // } else if (this.isString(term)) {
+            //     // In case of string function like fontsize
+            //     /** @ignore */
+            //     f = function () { return term; };
+            //     f.deps = {};
             }
 
             if (f !== null) {
@@ -33460,7 +34510,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
                         attributes,
                         board.options,
                         attrClass,
-                        attrArray[j]
+                        attrArray[j].toLowerCase()
                     );
                 }
                 if (this.isArray(parents[i]) && parents[i].length > 1) {
@@ -34061,6 +35111,13 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
 
                         obj1[i] = this.merge(obj1[i], o);
                     } else {
+                        if (typeof obj1 === 'boolean') {
+                            // This is necessary in the following scenario:
+                            //   lastArrow == false
+                            // and call of
+                            //   setAttribute({lastArrow: {type: 7}})
+                            obj1 = {};
+                        }
                         obj1[i] = o;
                     }
                 }
@@ -34091,14 +35148,15 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
                 c = [];
                 for (i = 0; i < obj.length; i++) {
                     prop = obj[i];
-                    if (typeof prop === "object") {
+                    // Attention: typeof null === 'object'
+                    if (prop !== null && typeof prop === "object") {
                         // We certainly do not want to recurse into a JSXGraph object.
                         // This would for sure result in an infinite recursion.
                         // As alternative we copy the id of the object.
                         if (this.exists(prop.board)) {
                             c[i] = prop.id;
                         } else {
-                            c[i] = this.deepCopy(prop);
+                            c[i] = this.deepCopy(prop, {}, toLower);
                         }
                     } else {
                         c[i] = prop;
@@ -34114,7 +35172,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
                             if (this.exists(prop.board)) {
                                 c[i2] = prop.id;
                             } else {
-                                c[i2] = this.deepCopy(prop);
+                                c[i2] = this.deepCopy(prop, {}, toLower);
                             }
                         } else {
                             c[i2] = prop;
@@ -34127,9 +35185,9 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
                         i2 = toLower ? i.toLowerCase() : i;
 
                         prop = obj2[i];
-                        if (typeof prop === "object") {
+                        if (prop !== null && typeof prop === "object") {
                             if (this.isArray(prop) || !this.exists(c[i2])) {
-                                c[i2] = this.deepCopy(prop);
+                                c[i2] = this.deepCopy(prop, {}, toLower);
                             } else {
                                 c[i2] = this.deepCopy(c[i2], prop, toLower);
                             }
@@ -34319,7 +35377,7 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
             noquote = _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.def(noquote, false);
 
             // check for native JSON support:
-            if (typeof JSON && JSON.stringify && !noquote) {
+            if (JSON !== undefined && JSON.stringify && !noquote) {
                 try {
                     s = JSON.stringify(obj);
                     return s;
@@ -34590,6 +35648,41 @@ _jxg__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z.extend(
             }
 
             return s;
+        },
+
+        /**
+         * Convert a string containing a MAXIMA /STACK expression into a JSXGraph / JessieCode string
+         * or an array of JSXGraph / JessieCode strings.
+         *
+         * @example
+         * console.log( JXG.stack2jsxgraph("%e**x") );
+         * // Output:
+         * //    "EULER**x"
+         *
+         * @example
+         * console.log( JXG.stack2jsxgraph("[%pi*(x**2 - 1), %phi*(x - 1), %gamma*(x+1)]") );
+         * // Output:
+         * //    [ "PI*(x**2 - 1)", "1.618033988749895*(x - 1)", "0.5772156649015329*(x+1)" ]
+         *
+         * @param {String} str
+         * @returns String
+         */
+        stack2jsxgraph: function(str) {
+            var t;
+
+            t = str.
+                replace(/%pi/g, 'PI').
+                replace(/%e/g, 'EULER').
+                replace(/%phi/g, '1.618033988749895').
+                replace(/%gamma/g, '0.5772156649015329').
+                trim();
+
+            // String containing array -> array containing strings
+            if (t[0] === '[' && t[t.length - 1] === ']') {
+                t = t.slice(1, -1).split(/\s*,\s*/);
+            }
+
+            return t;
         }
     }
 );
@@ -34653,7 +35746,7 @@ __webpack_require__.d(__webpack_exports__, {
   "default": function() { return /* binding */ src; }
 });
 
-// UNUSED EXPORTS: Board, COORDS_BY_SCREEN, COORDS_BY_USER, Chart, Circle, Complex, Composition, Coords, CoordsElement, Curve, Dump, GeometryElement, Group, Image, JSXGraph, JessieCode, LMS2rgb, Line, Mat, Options, Point, Polygon, Text, Ticks, Transformation, Turtle, View3D, addEvent, autoDigits, autoHighlight, bind, boards, capitalize, clearVisPropOld, clone, cloneAndCopy, cmpArrays, coordsArrayToMatrix, copyAttributes, createEvalFunction, createFunction, createHTMLSlider, debug, debugInt, debugLine, debugWST, deepCopy, def, deprecated, elements, eliminateDuplicates, escapeHTML, evalSlider, evaluate, filterElements, getBoardByContainerId, getCSSTransform, getCSSTransformMatrix, getDimensions, getOffset, getPosition, getProp, hex2rgb, hsv2rgb, isAndroid, isApple, isArray, isBoard, isInArray, isInObject, isMetroApp, isMozilla, isName, isNode, isNumber, isObject, isPointType, isString, isTouchDevice, isTransformationOrArray, isWebWorker, isWebkitAndroid, isWebkitApple, keys, merge, normalizePointFace, palette, paletteWong, providePoints, registerElement, registerReader, removeAllEvents, removeElementFromArray, removeEvent, rgb2LMS, rgb2bw, rgb2cb, rgb2css, rgb2hex, rgb2hsv, rgb2rgba, rgb2rgbo, rgbParser, sanitizeHTML, shortcut, strBool, supportsCanvas, supportsPointerEvents, supportsSVG, supportsVML, swap, timeChunk, toFixed, toFullscreen, toJSON, trim, trimNumber, truncate, unescapeHTML, uniqueArray, useBlackWhiteOptions, useStandardOptions, warn
+// UNUSED EXPORTS: Board, COORDS_BY_SCREEN, COORDS_BY_USER, Chart, Circle, Complex, Composition, Coords, CoordsElement, Curve, Dump, Expect, GeometryElement, Group, Image, JSXGraph, JessieCode, LMS2rgb, Line, Mat, Options, Point, Polygon, Prefix, Text, Ticks, Transformation, Turtle, View3D, addEvent, autoDigits, autoHighlight, bind, boards, capitalize, clearVisPropOld, clone, cloneAndCopy, cmpArrays, coordsArrayToMatrix, copyAttributes, createEvalFunction, createFunction, createHTMLSlider, debug, debugInt, debugLine, debugWST, deepCopy, def, deprecated, elements, eliminateDuplicates, escapeHTML, evalSlider, evaluate, filterElements, getBoardByContainerId, getCSSTransform, getCSSTransformMatrix, getDimensions, getOffset, getPosition, getProp, hex2rgb, hsv2rgb, isAndroid, isApple, isArray, isBoard, isInArray, isInObject, isMetroApp, isMozilla, isName, isNode, isNumber, isObject, isPointType, isString, isTouchDevice, isTransformationOrArray, isWebWorker, isWebkitAndroid, isWebkitApple, keys, merge, normalizePointFace, palette, paletteWong, providePoints, registerElement, registerReader, removeAllEvents, removeElementFromArray, removeEvent, rgb2LMS, rgb2bw, rgb2cb, rgb2css, rgb2hex, rgb2hsv, rgb2rgba, rgb2rgbo, rgbParser, sanitizeHTML, shortcut, strBool, supportsCanvas, supportsPointerEvents, supportsSVG, supportsVML, swap, timeChunk, toFixed, toFullscreen, toJSON, trim, trimNumber, truncate, unescapeHTML, uniqueArray, useBlackWhiteOptions, useStandardOptions, warn
 
 // EXTERNAL MODULE: ./src/jxg.js
 var jxg = __webpack_require__(765);
@@ -35868,12 +36961,13 @@ var geometry = __webpack_require__(922);
 
 
 /**
- * Instantiate a new quad tree.
+ * Instantiate a new quadtree.
  *
  * @name JXG.Math.Quadtree
  * @exports Mat.Quadtree as JXG.Math.Quadtree
  * @param {Array} bbox Bounding box of the new quad (sub)tree.
  * @param {Object} config Configuration object. Default value: to {capacity: 10}
+ * @param {Object} [parent] Parent object or null if root.
  *
  * @constructor
  */
@@ -35883,10 +36977,17 @@ math/* default */.Z.Quadtree = function (bbox, config, parent) {
         pointType: 'coords'
     };
 
+    /**
+     * Configuration object for quadtree.
+     *
+     * @name JXG.Math.Quadtree.config
+     * @type Object
+     */
     this.config = {};
     /**
-     * The maximum number of points stored in a quad tree node
+     * The maximum number of points stored in a quadtree node
      * before it is subdivided.
+     * @name JXG.Math.Quadtree.config#capacity
      * @type Number
      * @default 10
      */
@@ -35895,6 +36996,7 @@ math/* default */.Z.Quadtree = function (bbox, config, parent) {
     /**
      * Type of a point object. Possible values are:
      * 'coords', 'object'.
+     * @name JXG.Math.Quadtree.config#pointType
      * @type String
      * @default 'coords'
      */
@@ -35906,43 +37008,44 @@ math/* default */.Z.Quadtree = function (bbox, config, parent) {
      * @type Array
      */
     this.points = [];
+
     this.xlb = bbox[0];
     this.xub = bbox[2];
     this.ylb = bbox[3];
     this.yub = bbox[1];
 
     /**
-     * Parent quad tree or null if there is not parent.
+     * Parent quadtree or null if there is not parent.
      *
-     * @name JXG.Math.Quadtree#northWest
+     * @name JXG.Math.Quadtree#parent
      * @type JXG.Math.Quadtree
      *
      */
     this.parent = parent || null;
 
     /**
-     * In a subdivided quad tree this represents the top left subtree.
+     * In a subdivided quadtree this represents the top left subtree.
      * @name JXG.Math.Quadtree#northWest
      * @type JXG.Math.Quadtree
      */
     this.northWest = null;
 
     /**
-     * In a subdivided quad tree this represents the top right subtree.
+     * In a subdivided quadtree this represents the top right subtree.
      * @name JXG.Math.Quadtree#northEast
      * @type JXG.Math.Quadtree
      */
     this.northEast = null;
 
     /**
-     * In a subdivided quad tree this represents the bottom right subtree.
+     * In a subdivided quadtree this represents the bottom right subtree.
      * @name JXG.Math.Quadtree#southEast
      * @type JXG.Math.Quadtree
      */
     this.southEast = null;
 
     /**
-     * In a subdivided quad tree this represents the bottom left subtree.
+     * In a subdivided quadtree this represents the bottom left subtree.
      * @name JXG.Math.Quadtree#southWest
      * @type JXG.Math.Quadtree
      */
@@ -35954,7 +37057,10 @@ utils_type/* default */.Z.extend(
     math/* default */.Z.Quadtree.prototype,
     /** @lends JXG.Math.Quadtree.prototype */ {
         /**
-         * Checks if the given coordinates are inside the quad tree.
+         * Checks if the given coordinates are inside of the boundaries of the quadtree.
+         * The quadtree is open to the left and botton and closed to
+         * right and top.
+         *
          * @param {Number} x
          * @param {Number} y
          * @returns {Boolean}
@@ -35964,11 +37070,11 @@ utils_type/* default */.Z.extend(
         },
 
         /**
-         * Insert a new point into this quad tree. Do this only,
-         * if the point is not yet in the quadtree (test exactly).
+         * Insert a new point into this quadtree if it is inside of
+         * the quadtree's boundaries.
          *
          * @param {JXG.Coords} p
-         * @returns {Boolean}
+         * @returns {Boolean} true if insert succeeded, false otherwise.
          */
         insert: function (p) {
             switch (this.config.pointType) {
@@ -35984,11 +37090,12 @@ utils_type/* default */.Z.extend(
                     break;
             }
 
-            if (this.points.length < this.config.capacity) {
+            if (this.points.length < this.config.capacity && this.northWest === null) {
                 this.points.push(p);
                 return true;
             }
 
+            // At this point the point has to be inserted into a subtree.
             if (this.northWest === null) {
                 this.subdivide();
             }
@@ -36009,26 +37116,24 @@ utils_type/* default */.Z.extend(
         },
 
         /**
-         * Subdivide the quad tree.
+         * Subdivide the quadtree.
          */
         subdivide: function () {
-            var i,
-                le = this.points.length,
-                mx = this.xlb + (this.xub - this.xlb) / 2,
-                my = this.ylb + (this.yub - this.ylb) / 2;
+            var // i, le,
+                cx = this.xlb + (this.xub - this.xlb) * 0.5,
+                cy = this.ylb + (this.yub - this.ylb) * 0.5;
 
-            this.northWest = new math/* default */.Z.Quadtree([this.xlb, this.yub, mx, my], this.config, this);
-            this.northEast = new math/* default */.Z.Quadtree([mx, this.yub, this.xub, my], this.config, this);
-            this.southEast = new math/* default */.Z.Quadtree([this.xlb, my, mx, this.ylb], this.config, this);
-            this.southWest = new math/* default */.Z.Quadtree([mx, my, this.xub, this.ylb], this.config, this);
+            this.northWest = new math/* default */.Z.Quadtree([this.xlb, this.yub, cx, cy], this.config, this);
+            this.northEast = new math/* default */.Z.Quadtree([cx, this.yub, this.xub, cy], this.config, this);
+            this.southEast = new math/* default */.Z.Quadtree([this.xlb, cy, cx, this.ylb], this.config, this);
+            this.southWest = new math/* default */.Z.Quadtree([cx, cy, this.xub, this.ylb], this.config, this);
 
-            for (i = 0; i < le; i += 1) {
-                this.insert(this.points[i]);
-            }
-
-            // We empty this node points
-            this.points.length = 0;
-            this.points = [];
+            // for (i = 0; i < le; i++) {
+            //     if (this.northWest.insert(this.points[i])) { continue; }
+            //     if (this.northEast.insert(this.points[i])) { continue; }
+            //     if (this.southEast.insert(this.points[i])) { continue; }
+            //     this.southWest.insert(this.points[i]);
+            // }
         },
 
         /**
@@ -36036,9 +37141,9 @@ utils_type/* default */.Z.extend(
          * @name JXG.Math.Quadtree#_query
          * @param {Number} x
          * @param {Number} y
-         * @returns {Boolean|JXG.Quadtree} The quad tree if the point is found, false
-         * if none of the quad trees contains the point (i.e. the point is not inside
-         * the root tree's AABB).
+         * @returns {Boolean|JXG.Quadtree} The quadtree if the point is found, false
+         * if none of the quadtrees contains the point (i.e. the point is not inside
+         * the root tree's AABB,i.e. axis-aligned bounding box).
          * @private
          */
         _query: function (x, y) {
@@ -36075,12 +37180,12 @@ utils_type/* default */.Z.extend(
 
         /**
          * Retrieve the smallest quad tree that contains the given coordinate pair.
-         * @name JXG.Math.Quadtree#_query
+         * @name JXG.Math.Quadtree#query
          * @param {JXG.Coords|Number} xp
          * @param {Number} y
-         * @returns {Boolean|JXG.Quadtree} The quad tree if the point is found, false
-         * if none of the quad trees contains the point (i.e. the point is not inside
-         * the root tree's AABB).
+         * @returns {Boolean|JXG.Quadtree} The quadtree if the point is found, false
+         * if none of the quadtrees contains the point (i.e. the point is not inside
+         * the root tree's AABB (Axis-Aligned Bounding Box)).
          */
         query: function (xp, y) {
             var _x, _y;
@@ -36097,13 +37202,14 @@ utils_type/* default */.Z.extend(
         },
 
         /**
-         *
-         * @param {*} x
-         * @param {*} y
-         * @param {*} tol
+         * Check if the quadtree has a point which is inside of a sphere of
+         * radius tol around [x, y].
+         * @param {Number} x
+         * @param {Number} y
+         * @param {Number} tol
          * @returns {Boolean}
          */
-        isIn: function (x, y, tol) {
+        hasPoint: function (x, y, tol) {
             var r, i, le;
 
             if (this.contains(x, y)) {
@@ -36131,22 +37237,22 @@ utils_type/* default */.Z.extend(
                     return false;
                 }
 
-                r = this.northWest.isIn(x, y, tol);
+                r = this.northWest.hasPoint(x, y, tol);
                 if (r) {
                     return r;
                 }
 
-                r = this.northEast.isIn(x, y, tol);
+                r = this.northEast.hasPoint(x, y, tol);
                 if (r) {
                     return r;
                 }
 
-                r = this.southEast.isIn(x, y, tol);
+                r = this.southEast.hasPoint(x, y, tol);
                 if (r) {
                     return r;
                 }
 
-                r = this.southWest.isIn(x, y, tol);
+                r = this.southWest.hasPoint(x, y, tol);
                 if (r) {
                     return r;
                 }
@@ -36171,8 +37277,9 @@ utils_type/* default */.Z.extend(
          * @private
          */
         getAllPointsRecursive(pointsList) {
+            Array.prototype.push.apply(pointsList, this.points.slice());
+
             if (this.northWest === null) {
-                Array.prototype.push.apply(pointsList, this.points.slice());
                 return;
             }
 
@@ -36186,6 +37293,501 @@ utils_type/* default */.Z.extend(
 );
 
 /* harmony default export */ var qdt = (math/* default */.Z.Quadtree);
+
+;// CONCATENATED MODULE: ./src/math/bqdt.js
+/*
+    Copyright 2008-2023
+        Matthias Ehmann,
+        Michael Gerhaeuser,
+        Carsten Miller,
+        Bianca Valentin,
+        Alfred Wassermann,
+        Peter Wilfahrt
+
+    This file is part of JSXGraph.
+
+    JSXGraph is free software dual licensed under the GNU LGPL or MIT License.
+
+    You can redistribute it and/or modify it under the terms of the
+
+      * GNU Lesser General Public License as published by
+        the Free Software Foundation, either version 3 of the License, or
+        (at your option) any later version
+      OR
+      * MIT License: https://github.com/jsxgraph/jsxgraph/blob/master/LICENSE.MIT
+
+    JSXGraph is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License and
+    the MIT License along with JSXGraph. If not, see <https://www.gnu.org/licenses/>
+    and <https://opensource.org/licenses/MIT/>.
+ */
+
+/*global JXG:true, define: true*/
+/*jslint nomen: true, plusplus: true*/
+
+
+
+
+/**
+ * Instantiate a new box quadtree.
+ * A box quadtree stores AABBs, i.e. axis-aligned bounding boxes.
+ * The box quadtree has four sub-quadtress which maybe null if not needed.
+ *
+ * @name JXG.Math.BoxQuadtree
+ * @exports Mat.BoxQuadtree as JXG.Math.BoxQuadtree
+ *
+ * @param {Number} depth Maximum recursion depth.
+ * @param {Number} capacity Maximum number of items stored in this node.
+ * @param {Array} [bbox] Optional bounding box of the box quadtree. If not given, the bounding box is
+ * determined by the items in the insert method. This will only work correctly if the first
+ * call of insert contains the maximum bounding box.
+ *
+ * @constructor
+ */
+math/* default */.Z.BoxQuadtree = function (depth, capacity, bbox) {
+    var l, t, r, b;
+
+    // console.log("---------------------------------------")
+    depth--;
+
+    /**
+     * Maximum depth of the box quadtree node
+     * @name JXG.Math.BoxQuadtree#depth
+     * @type Number
+     * @private
+     */
+    this.depth = depth;
+
+    /**
+     * Capacity of the box quadtree node
+     * @name JXG.Math.BoxQuadtree#capacity
+     * @type Number
+     * @private
+     */
+    this.capacity = capacity;
+
+    /**
+     * Item storage.
+     *
+     * @name JXG.Math.BoxQuadtree#items
+     * @type Array
+     * @private
+     */
+    this.items = [];
+
+    /**
+     * In a subdivided quadtree this represents the top left subtree.
+     * @name JXG.Math.BoxQuadtree#northWest
+     * @type JXG.Math.BoxQuadtree
+     * @private
+     */
+    this.northWest = null;
+
+    /**
+     * In a subdivided quadtree this represents the top right subtree.
+     * @name JXG.Math.BoxQuadtree#northEast
+     * @type JXG.Math.BoxQuadtree
+     * @private
+     */
+    this.northEast = null;
+
+    /**
+     * In a subdivided quadtree this represents the bottom right subtree.
+     * @name JXG.Math.BoxQuadtree#southEast
+     * @type JXG.Math.BoxQuadtree
+     * @private
+     */
+    this.southEast = null;
+
+    /**
+     * In a subdivided quadtree this represents the bottom left subtree.
+     * @name JXG.Math.BoxQuadtree#southWest
+     * @type JXG.Math.BoxQuadtree
+     * @private
+     */
+    this.southWest = null;
+
+    /**
+     * Bounding box [left, top, right, bottom].
+     *
+     * @name JXG.Math.BoxQuadtree#bbox
+     * @type Array
+     * @private
+     */
+    this.bbox = null;
+
+    /**
+     * x-coordinate of bounding box center.
+     *
+     * @name JXG.Math.BoxQuadtree#cx
+     * @type Number
+     * @private
+     */
+    this.cx = null;
+
+    /**
+     * y-coordinate of bounding box center.
+     *
+     * @name JXG.Math.BoxQuadtree#cy
+     * @type Number
+     * @private
+     */
+    this.cy = null;
+
+    if (bbox) {
+        // Take supplied bounding box
+        l = bbox[0];
+        t = bbox[1];
+        r = bbox[2];
+        b = bbox[3];
+        this.cx = (l + r) * 0.5;
+        this.cy = (t + b) * 0.5;
+        this.bbox = [l, t, r, b];
+    }
+};
+
+utils_type/* default */.Z.extend(
+    math/* default */.Z.BoxQuadtree.prototype,
+    /** @lends JXG.Math.BoxQuadtree.prototype */ {
+
+        /**
+         * Insert an array of items into the box quadtree. An item is an object
+         * containing at least the properties
+         * <ul>
+         *  <li> xlb: lower bound on x
+         *  <li> xub: upper bound on x
+         *  <li> ylb: lower bound on y
+         *  <li> yub: upper bound on y
+         * </ul>
+         * which define the axis-aligned bounding box (AABB) of that item. Additionally,
+         * more properties can be given.
+         *
+         * @param {Array} items to be inserted
+         * @returns {Object} reference to the box quadtree
+         */
+        insert: function(items) {
+            var i, le,
+                l, t, r, b,
+                it,
+                nw_it = [],
+                ne_it = [],
+                sw_it = [],
+                se_it = [],
+                in_nw, in_ne, in_sw, in_se;
+
+
+            if (this.bbox === null) {
+                // Use bounding box of the supplied items
+                le  = items.length;
+                l = b = Infinity;
+                r = t = -Infinity;
+                for (i = 0; i < items.length; i++) {
+                    it = items[i];
+                    l = (it.xlb < l) ? it.xlb : l;
+                    t = (it.yub > t) ? it.yub : t;
+                    r = (it.xub > r) ? it.xub : r;
+                    b = (it.ylb < b) ? it.ylb : b;
+                }
+                this.cx = (l + r) * 0.5;
+                this.cy = (t + b) * 0.5;
+                this.bbox = [l, t, r, b];
+            } else {
+                l = this.bbox[0];
+                t = this.bbox[1];
+                r = this.bbox[2];
+                b = this.bbox[3];
+            }
+
+            if (this.depth === 0 || this.items.length + items.length < this.capacity) {
+                // if (items.length + items.length < this.capacity) {
+                //     console.log("Capacity sufficient, D=", this.depth, this.items.length, items.length);
+                // }
+                // if (depth === 0) {console.log("Max depth reached", items.length, this.capacity); }
+
+                this.items = this.items.concat(items);
+                return this;
+            }
+
+            le  = items.length;
+            for (i = 0; i < le; i++) {
+                it = items[i];
+                in_nw = it.xlb <= this.cx && it.yub > this.cy;
+                in_sw = it.xlb <= this.cx && it.ylb <= this.cy;
+                in_ne = it.xub > this.cx && it.yub > this.cy;
+                in_se = it.xub > this.cx && it.ylb <= this.cy;
+
+                // If it overlaps all 4 quadrants then insert it at the current
+                // depth, otherwise append it to a list to be inserted under every
+                // quadrant that it overlaps.
+                if (in_nw && in_ne && in_se && in_sw) {
+                    this.items.push(it);
+                } else {
+                    if (in_nw) { nw_it.push(it); }
+                    if (in_sw) { sw_it.push(it); }
+                    if (in_ne) { ne_it.push(it); }
+                    if (in_se) { se_it.push(it); }
+                }
+            }
+
+            // Create the sub-quadrants, recursively.
+            this.subdivide(nw_it, sw_it, ne_it, se_it, l, t, r, b);
+
+            return this;
+        },
+
+        /**
+         * Insert an item into the box quadtree, where an item is an object
+         * containing at least the properties
+         *
+         * <ul>
+         *  <li> xlb: lower bound on x
+         *  <li> xub: upper bound on x
+         *  <li> ylb: lower bound on y
+         *  <li> yub: upper bound on y
+         * </ul>
+         * which define the axis-aligned bounding box (AABB) of that item. Additionally,
+         * more properties can be given.
+         *
+         * @param {Object} it Item to be inserted
+         * @returns {Object} reference to the box quadtree
+         */
+        insertItem: function(it) {
+            var l, t, r, b,
+                nw_it = [],
+                ne_it = [],
+                sw_it = [],
+                se_it = [],
+                in_nw, in_ne, in_sw, in_se;
+
+
+            if (this.bbox === null) {
+                // Use bounding box of the supplied items
+                l = b = Infinity;
+                r = t = -Infinity;
+
+                l = (it.xlb < l) ? it.xlb : l;
+                t = (it.yub > t) ? it.yub : t;
+                r = (it.xub > r) ? it.xub : r;
+                b = (it.ylb < b) ? it.ylb : b;
+
+                this.cx = (l + r) * 0.5;
+                this.cy = (t + b) * 0.5;
+                this.bbox = [l, t, r, b];
+            } else {
+                l = this.bbox[0];
+                t = this.bbox[1];
+                r = this.bbox[2];
+                b = this.bbox[3];
+            }
+
+            if (this.depth === 0 || this.items.length + 1 < this.capacity) {
+                this.items.push(it);
+                return this;
+            }
+
+            in_nw = it.xlb <= this.cx && it.yub > this.cy;
+            in_sw = it.xlb <= this.cx && it.ylb <= this.cy;
+            in_ne = it.xub > this.cx && it.yub > this.cy;
+            in_se = it.xub > this.cx && it.ylb <= this.cy;
+
+            // If it overlaps all 4 quadrants then insert it at the current
+            // depth, otherwise append it to a list to be inserted under every
+            // quadrant that it overlaps.
+            if (in_nw && in_ne && in_se && in_sw) {
+                this.items.push(it);
+            } else {
+                if (in_nw) { nw_it.push(it); }
+                if (in_sw) { sw_it.push(it); }
+                if (in_ne) { ne_it.push(it); }
+                if (in_se) { se_it.push(it); }
+            }
+
+            // Create the sub-quadrants, recursively.
+            this.subdivide(nw_it, sw_it, ne_it, se_it, l, t, r, b);
+
+            return this;
+        },
+
+        /**
+         * Create the sub-quadrants if necessary, recursively
+         * @param {Array} nw_it list of items for northWest subtree
+         * @param {Array} sw_it list of items for southWest subtree
+         * @param {Array} ne_it list of items for northEast subtree
+         * @param {Array} se_it list of items for southEast subtree
+         * @param {Number} l bounding box left
+         * @param {Number} t bounding box top
+         * @param {Number} r bounding box right
+         * @param {Number} b bounding box bottom
+         * @returns {Object} reference to the box quadtree
+         * @private
+         */
+        subdivide: function(nw_it, sw_it, ne_it, se_it, l, t, r, b) {
+            if (nw_it.length > 0) {
+                if (this.northWest === null) {
+                    this.northWest = new JXG.Math.BoxQuadtree(this.depth, this.capacity, [l, t, this.cx, this.cy]);
+                }
+                this.northWest.insert(nw_it);
+            }
+            if (sw_it.length > 0) {
+                if (this.southWest === null) {
+                    this.southWest = new JXG.Math.BoxQuadtree(this.depth, this.capacity, [l, this.cy, this.cx, b]);
+                }
+                this.southWest.insert(sw_it);
+            }
+            if (ne_it.length > 0) {
+                if (this.northEast === null) {
+                    this.northEast = new JXG.Math.BoxQuadtree(this.depth, this.capacity, [this.cx, t, r, this.cy]);
+                }
+                this.northEast.insert(ne_it);
+            }
+            if (se_it.length > 0) {
+                if (this.southEast === null) {
+                    this.southEast = new JXG.Math.BoxQuadtree(this.depth, this.capacity, [this.cx, this.cy, r, b]);
+                }
+                this.southEast.insert(se_it);
+            }
+
+            return this;
+        },
+
+        /**
+         * Find all entries of the box quadtree which have an overlap
+         * with the given rectangle (AABB). Items may appear multiple times.
+         *
+         * @param {Array} box AABB of the form [l, t, r, b]
+         * @returns {Array} list of items overlapping with box
+         */
+        find: function(box) {
+            var overlaps = function(item) {
+                    return box[2] >= item.xlb && box[0] <= item.xub &&
+                        box[3] <= item.yub && box[1] >= item.ylb;
+                },
+                hits = [],
+                i, le;
+
+            le = this.items.length;
+            for (i = 0; i < le; i++) {
+                if (overlaps(this.items[i])) {
+                    hits.push(this.items[i]);
+                }
+            }
+
+            if (this.northWest !== null && box[0] <= this.cx & box[1] >= this.cy) {
+                hits = hits.concat(this.northWest.find(box));
+            }
+            if (this.southWest !== null && box[0] <= this.cx & box[3] <= this.cy) {
+                hits = hits.concat(this.southWest.find(box));
+            }
+            if (this.northEast !== null && box[2] >= this.cx & box[1] >= this.cy) {
+                hits = hits.concat(this.northEast.find(box));
+            }
+            if (this.southEast !== null && box[2] >= this.cx & box[3] <= this.cy) {
+                hits = hits.concat(this.southEast.find(box));
+            }
+
+            return hits;
+        },
+
+        /**
+         * Analyze the box quadtree.
+         *
+         * @returns {Object} data about the box quadtree
+         */
+        analyzeTree: function() {
+            var stats = {
+                    number_items: this.items.length,
+                    depth: 1
+                }, tmp;
+
+            if (this.northWest !== null) {
+                tmp = this.northWest.analyzeTree();
+                stats.number_items += tmp.number_items;
+                stats.depth = Math.max(stats.depth, 1 + tmp.depth);
+            }
+            if (this.southWest !== null) {
+                tmp = this.southWest.analyzeTree();
+                stats.number_items += tmp.number_items;
+                stats.depth = Math.max(stats.depth, 1 + tmp.depth);
+            }
+            if (this.northEast !== null) {
+                tmp = this.northEast.analyzeTree();
+                stats.number_items += tmp.number_items;
+                stats.depth = Math.max(stats.depth, 1 + tmp.depth);
+            }
+            if (this.southEast !== null) {
+                tmp = this.southEast.analyzeTree();
+                stats.number_items += tmp.number_items;
+                stats.depth = Math.max(stats.depth, 1 + tmp.depth);
+            }
+
+            return stats;
+        },
+
+        /**
+         * Generate data to plot the box quadtree as curve using updateDataArray.
+         *
+         * @returns {Array} containing arrays dataX and dataY
+         *
+         * @example
+         *
+         * // qdt contains a BoxQuadtree
+         *
+         * var qdtcurve = board.create('curve', [[], []], { strokeWidth: 1, strokeColor: '#0000ff', strokeOpacity: 0.3 });
+         * qdtcurve.updateDataArray = function () {
+         *    var ret = qdt.plot();
+         *
+         *    this.dataX = ret[0];
+         *    this.dataY = ret[1];
+         *    console.log(qdt.analyzeTree());
+         * };
+         * board.update();
+         */
+        plot: function () {
+            var dataX = [],
+                dataY = [],
+                ret;
+
+            dataX.push(this.bbox[0]); dataY.push(this.bbox[3]);
+            dataX.push(this.bbox[2]); dataY.push(this.bbox[3]);
+            dataX.push(this.bbox[2]); dataY.push(this.bbox[1]);
+            dataX.push(this.bbox[0]); dataY.push(this.bbox[1]);
+            dataX.push(this.bbox[0]); dataY.push(this.bbox[3]);
+            dataX.push(NaN); dataY.push(NaN);
+
+            if (this.northWest !== null) {
+                ret = this.northWest.plot();
+                dataX = dataX.concat(ret[0]);
+                dataY = dataY.concat(ret[1]);
+            }
+
+            if (this.northEast !== null) {
+                ret = this.northEast.plot();
+                dataX = dataX.concat(ret[0]);
+                dataY = dataY.concat(ret[1]);
+            }
+
+            if (this.southEast !== null) {
+                ret = this.southEast.plot();
+                dataX = dataX.concat(ret[0]);
+                dataY = dataY.concat(ret[1]);
+            }
+
+            if (this.southWest !== null) {
+                ret = this.southWest.plot();
+                dataX = dataX.concat(ret[0]);
+                dataY = dataY.concat(ret[1]);
+            }
+
+            return [dataX, dataY];
+        }
+    }
+);
+
+/* harmony default export */ var bqdt = (math/* default */.Z.BoxQuadtree);
 
 // EXTERNAL MODULE: ./src/math/numerics.js
 var numerics = __webpack_require__(336);
@@ -36269,6 +37871,7 @@ var numerics = __webpack_require__(336);
 
 /*global JXG: true, define: true*/
 /*jslint nomen: true, plusplus: true, continue: true*/
+
 
 
 // import Type from "../utils/type";
@@ -37118,7 +38721,7 @@ jxg/* default */.Z.Math.Nlp = {
                                     this.PART(this.COL(z, k), 1, n),
                                     this.PART(this.COL(a, kk), 1, n)
                                 );
-                                temp = Math.sqrt(sp * sp + zdota[kp] * zdota[kp]);
+                                temp = math/* default */.Z.hypot(sp, zdota[kp]);
                                 alpha = zdota[kp] / temp;
                                 beta = sp / temp;
                                 zdota[kp] = alpha * zdota[k];
@@ -37179,7 +38782,7 @@ jxg/* default */.Z.Math.Nlp = {
                                 tot = sp;
                             } else {
                                 kp = k + 1;
-                                temp = Math.sqrt(sp * sp + tot * tot);
+                                temp = math/* default */.Z.hypot(sp, tot);
                                 alpha = sp / temp;
                                 beta = tot / temp;
                                 tot = temp;
@@ -37258,7 +38861,7 @@ jxg/* default */.Z.Math.Nlp = {
                                         this.PART(this.COL(z, k), 1, n),
                                         this.PART(this.COL(a, kw), 1, n)
                                     );
-                                    temp = Math.sqrt(sp * sp + zdota[kp] * zdota[kp]);
+                                    temp = math/* default */.Z.hypot(sp, zdota[kp]);
                                     alpha = zdota[kp] / temp;
                                     beta = sp / temp;
                                     zdota[kp] = alpha * zdota[k];
@@ -37306,7 +38909,7 @@ jxg/* default */.Z.Math.Nlp = {
                                 this.PART(this.COL(z, k), 1, n),
                                 this.PART(this.COL(a, kk), 1, n)
                             );
-                            temp = Math.sqrt(sp * sp + zdota[nact] * zdota[nact]);
+                            temp = math/* default */.Z.hypot(sp, zdota[nact]);
                             alpha = zdota[nact] / temp;
                             beta = sp / temp;
                             zdota[nact] = alpha * zdota[k];
@@ -37751,14 +39354,8 @@ math/* default */.Z.Plot = {
      * @returns {JXG.Curve} Reference to the curve object.
      */
     updateParametricCurveOld: function (curve, mi, ma) {
-        var i,
-            t,
-            d,
-            x,
-            y,
-            t0,
-            x0,
-            y0,
+        var i, t, d, x, y,
+            x0, y0,// t0,
             top,
             depth,
             MAX_DEPTH,
@@ -37774,7 +39371,6 @@ math/* default */.Z.Plot = {
             j = 0,
             distFromLine = function (p1, p2, p0) {
                 var lbda,
-                    d,
                     x0 = p0[1] - p1[1],
                     y0 = p0[2] - p1[2],
                     x1 = p2[0] - p1[1],
@@ -37794,8 +39390,7 @@ math/* default */.Z.Plot = {
                         }
                     }
                 }
-                d = x0 * x0 + y0 * y0;
-                return Math.sqrt(d);
+                return math/* default */.Z.hypot(x0, y0);
             };
 
         jxg/* default */.Z.deprecated("Curve.updateParametricCurveOld()");
@@ -37833,7 +39428,7 @@ math/* default */.Z.Plot = {
         suspendUpdate = true;
         x0 = po.scrCoords[1];
         y0 = po.scrCoords[2];
-        t0 = t;
+        // t0 = t;
 
         t = ma;
         po.setCoordinates(
@@ -37907,7 +39502,7 @@ math/* default */.Z.Plot = {
 
             x0 = x;
             y0 = y;
-            t0 = t;
+            // t0 = t;
 
             top -= 1;
             x = pointStack[top][0];
@@ -37999,7 +39594,7 @@ math/* default */.Z.Plot = {
      * Investigate a function term at the bounds of intervals where
      * the function is not defined, e.g. log(x) at x = 0.
      *
-     * c is inbetween a and b
+     * c is between a and b
      * @private
      * @param {JXG.Curve} curve JSXGraph curve element
      * @param {Array} a Screen coordinates of the left interval bound
@@ -38012,22 +39607,14 @@ math/* default */.Z.Plot = {
      * @returns {JXG.Boolean} true if the point is inserted and the recursion should stop, false otherwise.
      */
     _borderCase: function (curve, a, b, c, ta, tb, tc, depth) {
-        var t,
-            pnt,
-            p,
+        var t, pnt, p,
             p_good = null,
             j,
             max_it = 30,
             is_undef = false,
-            t_nan,
-            t_real,
-            t_real2,
-            vx,
-            vy,
-            vx2,
-            vy2,
-            dx,
-            dy;
+            t_nan, t_real;// t_real2;
+            // dx, dy,
+            // vx, vy, vx2, vy2;
         // asymptote;
 
         if (depth <= 1) {
@@ -38072,19 +39659,19 @@ math/* default */.Z.Plot = {
                 if (isNaN(a[1] + a[2]) && !isNaN(c[1] + c[2])) {
                     t_nan = ta;
                     t_real = tc;
-                    t_real2 = tb;
+                    // t_real2 = tb;
                 } else if (isNaN(b[1] + b[2]) && !isNaN(c[1] + c[2])) {
                     t_nan = tb;
                     t_real = tc;
-                    t_real2 = ta;
+                    // t_real2 = ta;
                 } else if (isNaN(c[1] + c[2]) && !isNaN(b[1] + b[2])) {
                     t_nan = tc;
                     t_real = tb;
-                    t_real2 = tb + (tb - tc);
+                    // t_real2 = tb + (tb - tc);
                 } else if (isNaN(c[1] + c[2]) && !isNaN(a[1] + a[2])) {
                     t_nan = tc;
                     t_real = ta;
-                    t_real2 = ta - (tc - ta);
+                    // t_real2 = ta - (tc - ta);
                 } else {
                     return false;
                 }
@@ -38100,7 +39687,7 @@ math/* default */.Z.Plot = {
                 if (is_undef) {
                     t_nan = t;
                 } else {
-                    t_real2 = t_real;
+                    // t_real2 = t_real;
                     t_real = t;
                 }
                 ++j;
@@ -38121,12 +39708,12 @@ math/* default */.Z.Plot = {
             // Now we approximate the derivative by computing the slope of the line through these two points
             // and test if it is "infinite", i.e larger than 400 in absolute values.
             //
-            vx = curve.X(t_real, true);
-            vx2 = curve.X(t_real2, true);
-            dx = (vx - vx2) / (t_real - t_real2);
-            vy = curve.Y(t_real, true);
-            vy2 = curve.Y(t_real2, true);
-            dy = (vy - vy2) / (t_real - t_real2);
+            // vx = curve.X(t_real, true);
+            // vx2 = curve.X(t_real2, true);
+            // vy = curve.Y(t_real, true);
+            // vy2 = curve.Y(t_real2, true);
+            // dx = (vx - vx2) / (t_real - t_real2);
+            // dy = (vy - vy2) / (t_real - t_real2);
 
             if (p_good !== null) {
                 this._insertPoint_v2(
@@ -38192,12 +39779,18 @@ math/* default */.Z.Plot = {
         isSmooth = depth < this.smoothLevel && ds[3] < delta;
 
         isJump =
-            depth < this.jumpLevel &&
-            (ds[2] > jump_threshold * ds[0] ||
-                ds[1] > jump_threshold * ds[0] ||
-                ds[0] === Infinity ||
-                ds[1] === Infinity ||
-                ds[2] === Infinity);
+            (
+                depth <= this.jumpLevel && (isNaN(ds[0]) || isNaN(ds[1]) || isNaN(ds[2]))
+            ) || (
+                depth < this.jumpLevel &&
+                (
+                    ds[2] > jump_threshold * ds[0] ||
+                    ds[1] > jump_threshold * ds[0] ||
+                    ds[0] === Infinity ||
+                    ds[1] === Infinity ||
+                    ds[2] === Infinity
+                )
+            );
 
         isCusp = depth < this.smoothLevel + 2 && ds[0] < cusp_threshold * (ds[1] + ds[2]);
 
@@ -38239,19 +39832,16 @@ math/* default */.Z.Plot = {
      * @returns {JXG.Curve} Reference to the curve object.
      */
     updateParametricCurve_v2: function (curve, mi, ma) {
-        var ta,
-            tb,
-            a,
-            b,
+        var ta, tb,
+            a, b,
             suspendUpdate = false,
             pa = new base_coords/* default */.Z(constants/* default */.Z.COORDS_BY_USER, [0, 0], curve.board, false),
             pb = new base_coords/* default */.Z(constants/* default */.Z.COORDS_BY_USER, [0, 0], curve.board, false),
             depth,
             delta,
             w2,
-            h2,
-            bbox,
-            ret_arr;
+            // h2,
+            bbox, ret_arr;
 
         //console.time("plot");
         if (curve.board.updateQuality === curve.board.BOARD_QUALITY_LOW) {
@@ -38274,10 +39864,10 @@ math/* default */.Z.Plot = {
 
         if (this.xterm === "x") {
             // For function graphs we can restrict the plot interval
-            // to the visible area +plus margin
+            // to the visible area + plus margin
             bbox = curve.board.getBoundingBox();
             w2 = (bbox[2] - bbox[0]) * 0.3;
-            h2 = (bbox[1] - bbox[3]) * 0.3;
+            // h2 = (bbox[1] - bbox[3]) * 0.3;
             ta = Math.max(mi, bbox[0] - w2);
             tb = Math.min(ma, bbox[2] + w2);
         } else {
@@ -38700,21 +40290,16 @@ math/* default */.Z.Plot = {
      * @private
      */
     _getBorderPos: function (curve, ta, a, tc, c, tb, b) {
-        var t,
-            pnt,
-            p,
-            j,
+        var t, pnt, p, j,
             max_it = 30,
             is_undef = false,
-            t_real2,
-            t_good,
-            t_bad;
+            t_good, t_bad;
 
         pnt = new base_coords/* default */.Z(constants/* default */.Z.COORDS_BY_USER, [0, 0], curve.board, false);
         j = 0;
         // Bisect a, b and c until the point t_real is inside of the definition interval
         // and as close as possible at the boundary.
-        // t_real2 is the second closest point.
+        // (t_real2 is/was the second closest point).
         // There are four cases:
         //  a  |  c  |  b
         // ---------------
@@ -38726,19 +40311,15 @@ math/* default */.Z.Plot = {
         if (isNaN(a[1] + a[2]) && !isNaN(c[1] + c[2])) {
             t_bad = ta;
             t_good = tc;
-            t_real2 = tb;
         } else if (isNaN(b[1] + b[2]) && !isNaN(c[1] + c[2])) {
             t_bad = tb;
             t_good = tc;
-            t_real2 = ta;
         } else if (isNaN(c[1] + c[2]) && !isNaN(b[1] + b[2])) {
             t_bad = tc;
             t_good = tb;
-            t_real2 = tb + (tb - tc);
         } else if (isNaN(c[1] + c[2]) && !isNaN(a[1] + a[2])) {
             t_bad = tc;
             t_good = ta;
-            t_real2 = ta - (tc - ta);
         } else {
             return false;
         }
@@ -38754,7 +40335,6 @@ math/* default */.Z.Plot = {
             if (is_undef) {
                 t_bad = t;
             } else {
-                t_real2 = t_good;
                 t_good = t;
             }
             ++j;
@@ -38774,8 +40354,8 @@ math/* default */.Z.Plot = {
             max_func = function (t) {
                 var c = [curve.X(t, true), curve.Y(t, true)];
                 return -(
-                    Math.sqrt((a[0] - c[0]) * (a[0] - c[0]) + (a[1] - c[1]) * (a[1] - c[1])) +
-                    Math.sqrt((b[0] - c[0]) * (b[0] - c[0]) + (b[1] - c[1]) * (b[1] - c[1]))
+                    math/* default */.Z.hypot(a[0] - c[0], a[1] - c[1]) +
+                    math/* default */.Z.hypot(b[0] - c[0], b[1] - c[1])
                 );
             };
 
@@ -39194,12 +40774,8 @@ math/* default */.Z.Plot = {
     },
 
     findComponents: function (curve, mi, ma, steps) {
-        var i,
-            t,
-            le,
-            h,
-            x,
-            y,
+        var i, t, h,
+            x, y,
             components = [],
             comp,
             comp_nr = 0,
@@ -39814,7 +41390,7 @@ math/* default */.Z.Plot = {
         dx = (x - x1) * curve.board.unitX;
         dy = (y - y1) * curve.board.unitY;
         // console.log("D1", Math.sqrt(dx * dx + dy * dy))
-        if (Math.sqrt(dx * dx + dy * dy) > tol) {
+        if (math/* default */.Z.hypot(dx, dy) > tol) {
             this._recurse_v4(curve, t1, t, x1, y1, x, y, level - 1);
         } else {
             this._insertPoint_v4(curve, [1, x, y], t);
@@ -39822,7 +41398,7 @@ math/* default */.Z.Plot = {
         dx = (x - x2) * curve.board.unitX;
         dy = (y - y2) * curve.board.unitY;
         // console.log("D2", Math.sqrt(dx * dx + dy * dy), x-x2, y-y2)
-        if (Math.sqrt(dx * dx + dy * dy) > tol) {
+        if (math/* default */.Z.hypot(dx, dy) > tol) {
             this._recurse_v4(curve, t, t2, x, y, x2, y2, level - 1);
         } else {
             this._insertPoint_v4(curve, [1, x, y], t);
@@ -40068,7 +41644,6 @@ math/* default */.Z.Plot = {
                     j = Math.max(0, i - 2);
                     // Add more points in critical intervals
                     if (
-                         true &&
                         //degree_y === -1 && // No polynomial
                         i >= start + 3 &&
                         i < le - 3 && // Do not do this if too close to a critical point
@@ -40197,6 +41772,981 @@ math/* default */.Z.Plot = {
 };
 
 /* harmony default export */ var plot = (math/* default */.Z.Plot);
+
+;// CONCATENATED MODULE: ./src/math/implicitplot.js
+/*
+    Copyright 2008-2023
+        Matthias Ehmann,
+        Carsten Miller,
+        Alfred Wassermann
+
+    This file is part of JSXGraph.
+
+    JSXGraph is free software dual licensed under the GNU LGPL or MIT License.
+
+    You can redistribute it and/or modify it under the terms of the
+
+      * GNU Lesser General Public License as published by
+        the Free Software Foundation, either version 3 of the License, or
+        (at your option) any later version
+      OR
+      * MIT License: https://github.com/jsxgraph/jsxgraph/blob/master/LICENSE.MIT
+
+    JSXGraph is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License and
+    the MIT License along with JSXGraph. If not, see <https://www.gnu.org/licenses/>
+    and <https://opensource.org/licenses/MIT/>.
+ */
+
+
+
+
+
+
+
+
+
+/**
+ * Plotting of curves which are given implicitly as the set of points solving an equation
+ * <i>f(x,y) = 0</i>.
+ * <p>
+ * The main class initializes a new implicit plot instance.
+ * <p>
+ * The algorithm should be able to plot most implicit curves as long as the equations
+ * are not too complex. We are aware of the paper by Oliver Labs,
+ * <a href="https://link.springer.com/chapter/10.1007/978-1-4419-0999-2_6">A List of Challenges for Real Algebraic Plane Curve Visualization Software</a>
+ * which contains many equations where this algorithm may fail.
+ * For example,  at the time being there is no attempt to detect <i>solitary points</i>.
+ * Also, it is always a trade off to find all components of the curve and
+ * keep the construction responsive.
+ *
+ * @name JXG.Math.ImplicitPlot
+ * @exports Mat.ImplicitPlot as JXG.Math.ImplicitPlot
+ * @param {Array} bbox Bounding box of the area in which solutions of the equation
+ * are determined.
+ * @param {Object} config Configuration object. Default:
+ * <pre>
+ *  {
+ *      resolution_out: 5,    // Horizontal resolution: distance between vertical lines to search for components
+ *      resolution_in: 5,     // Vertical resolution to search for components
+ *      max_steps: 1024,      // Max number of points in one call of tracing
+ *      alpha_0: 0.05,        // Angle between two successive tangents: smoothness of curve
+ *
+ *      tol_u0: Mat.eps,      // Tolerance to find starting points for tracing.
+ *      tol_newton: 1.0e-7,   // Tolerance for Newton steps.
+ *      tol_cusp: 0.05,       // Tolerance for cusp / bifurcation detection
+ *      tol_progress: 0.0001, // If two points are closer than this value, we bail out
+ *      qdt_box: 0.2,         // half of box size to search in qdt
+ *      kappa_0: 0.2,         // Inverse of planned number of Newton steps
+ *      delta_0: 0.05,        // Distance of predictor point to curve
+ *
+ *      h_initial: 0.1,       // Initial stepwidth
+ *      h_critical: 0.001,    // If h is below this threshold we bail out
+ *      h_max: 1,             // Maximal value of h (user units)
+ *      loop_dist: 0.09,      // Allowed distance (multiplied by actual stepwidth) to detect loop
+ *      loop_dir: 0.99,       // Should be > 0.95
+ *      loop_detection: true, // Use Gosper's loop detector
+ *      unitX: 10,            // unitX of board
+ *      unitY: 10             // unitX of board
+ *   };
+ * </pre>
+ * @param {function} f function from <b>R</b><sup>2</sup> to <b>R</b>
+ * @param {function} [dfx] Optional partial derivative of <i>f</i> with regard to <i>x</i>
+ * @param {function} [dfy] Optional partial derivative of <i>f</i> with regard to <i>y</i>
+ *
+ * @constructor
+ * @example
+ *     var f = (x, y) => x**3 - 2 * x * y + y**3;
+ *     var c = board.create('curve', [[], []], {
+ *             strokeWidth: 3,
+ *             strokeColor: JXG.palette.red
+ *         });
+ *
+ *     c.updateDataArray = function () {
+ *         var bbox = this.board.getBoundingBox(),
+ *             ip, cfg,
+ *             ret = [],
+ *             mgn = 1;
+ *
+ *         bbox[0] -= mgn;
+ *         bbox[1] += mgn;
+ *         bbox[2] += mgn;
+ *         bbox[3] -= mgn;
+ *
+ *         cfg = {
+ *             resolution_out: 5,
+ *             resolution_in: 5,
+ *             unitX: this.board.unitX,
+ *             unitY: this.board.unitX
+ *         };
+ *
+ *         this.dataX = [];
+ *         this.dataY = [];
+ *         ip = new JXG.Math.ImplicitPlot(bbox, cfg, f, null, null);
+ *         ret = ip.plot();
+ *         this.dataX = ret[0];
+ *         this.dataY = ret[1];
+ *     };
+ *     board.update();
+ * </pre><div id="JXGf3e8cd82-2b67-4efb-900a-471eb92b3b96" class="jxgbox" style="width: 300px; height: 300px;"></div>
+ * <script type="text/javascript">
+ *     (function() {
+ *         var board = JXG.JSXGraph.initBoard('JXGf3e8cd82-2b67-4efb-900a-471eb92b3b96',
+ *             {boundingbox: [-8, 8, 8,-8], axis: true, showcopyright: false, shownavigation: false});
+ *             var f = (x, y) => x**3 - 2 * x * y + y**3;
+ *             var c = board.create('curve', [[], []], {
+ *                     strokeWidth: 3,
+ *                     strokeColor: JXG.palette.red
+ *                 });
+ *
+ *             c.updateDataArray = function () {
+ *                 var bbox = this.board.getBoundingBox(),
+ *                     ip, cfg,
+ *                     ret = [],
+ *                     mgn = 1;
+ *
+ *                 bbox[0] -= mgn;
+ *                 bbox[1] += mgn;
+ *                 bbox[2] += mgn;
+ *                 bbox[3] -= mgn;
+ *
+ *                 cfg = {
+ *                     resolution_out: 5,
+ *                     resolution_in: 5,
+ *                     unitX: this.board.unitX,
+ *                     unitY: this.board.unitX
+ *                 };
+ *
+ *                 this.dataX = [];
+ *                 this.dataY = [];
+ *
+ *                 ip = new JXG.Math.ImplicitPlot(bbox, cfg, f, null, null);
+ *                 ret = ip.plot();
+ *
+ *                 this.dataX = ret[0];
+ *                 this.dataY = ret[1];
+ *             };
+ *             board.update();
+ *
+ *     })();
+ *
+ * </script><pre>
+ *
+ */
+math/* default */.Z.ImplicitPlot = function (bbox, config, f, dfx, dfy) {
+
+    // Default values
+    var cfg_default = {
+        resolution_out: 5,    // Distance between vertical lines to search for components
+        resolution_in: 5,     // Distance between vertical lines to search for components
+        max_steps: 1024,      // Max number of points in one call of tracing
+        alpha_0: 0.05,        // Angle between two successive tangents: smoothness of curve
+
+        tol_u0: math/* default */.Z.eps,      // Tolerance to find starting points for tracing.
+        tol_newton: 1.0e-7,   // Tolerance for Newton steps.
+        tol_cusp: 0.05,       // Tolerance for cusp / bifurcation detection
+        tol_progress: 0.0001, // If two points are closer than this value, we bail out
+        qdt_box: 0.2,         // half of box size to search in qdt
+        kappa_0: 0.2,         // Inverse of planned number of Newton steps
+        delta_0: 0.05,        // Distance of predictor point to curve
+
+        h_initial: 0.1,       // Initial step width
+        h_critical: 0.001,    // If h is below this threshold we bail out
+        h_max: 1,             // Maximum value of h (user units)
+        loop_dist: 0.09,      // Allowed distance (multiplied by actual step width) to detect loop
+        loop_dir: 0.99,       // Should be > 0.95
+        loop_detection: true, // Use Gosper's loop detector
+        unitX: 10,            // unitX of board
+        unitY: 10             // unitX of board
+    };
+
+    this.config = utils_type/* default */.Z.merge(cfg_default, config);
+
+    this.f = f;
+
+    this.dfx = null;
+    this.dfy = null;
+
+    if (utils_type/* default */.Z.isFunction(dfx)) {
+        this.dfx = dfx;
+    } else {
+        this.dfx = function (x, y) {
+            var h = math/* default */.Z.eps * math/* default */.Z.eps;
+            return (this.f(x + h, y) - this.f(x - h, y)) * 0.5 / h;
+        };
+    }
+
+    if (utils_type/* default */.Z.isFunction(dfy)) {
+        this.dfy = dfy;
+    } else {
+        this.dfy = function (x, y) {
+            var h = math/* default */.Z.eps * math/* default */.Z.eps;
+            return (this.f(x, y + h) - this.f(x, y - h)) * 0.5 / h;
+        };
+    }
+
+    this.bbox = bbox;
+    this.qdt = new bqdt(20, 5, bbox);
+
+    this.components = [];
+};
+
+utils_type/* default */.Z.extend(
+    math/* default */.Z.ImplicitPlot.prototype,
+    /** @lends JXG.Math.ImplicitPlot.prototype */ {
+
+        /**
+         * Implicit plotting method.
+         *
+         * @returns {Array} consisting of [dataX, dataY, number_of_components]
+         */
+        plot: function () {
+            var // components = [],
+                doVerticalSearch = true,
+                doHorizontalSearch = true,
+                x, y,
+                mi_x, ma_x, mi_y, ma_y,
+                dataX = [],
+                dataY = [],
+                ret = [],
+                num_components = 0,
+
+                delta,
+                that = this,
+
+                fmi_x = function (t) {
+                    return that.f(x, t);
+                },
+                fma_x = function (t) {
+                    return -that.f(x, t);
+                },
+                fmi_y = function (t) {
+                    return that.f(t, y);
+                },
+                fma_y = function (t) {
+                    return -that.f(t, y);
+                };
+
+            // Vertical lines or circular search:
+            mi_x = Math.min(this.bbox[0], this.bbox[2]) - math/* default */.Z.eps;
+            ma_x = Math.max(this.bbox[0], this.bbox[2]);
+            mi_y = Math.min(this.bbox[1], this.bbox[3]) + math/* default */.Z.eps;
+            ma_y = Math.max(this.bbox[1], this.bbox[3]);
+
+            if (doVerticalSearch) {
+                delta = this.config.resolution_out / this.config.unitX;
+                delta *= (1 + math/* default */.Z.eps);
+                // console.log("Outer delta x", delta)
+
+                for (x = mi_x; x < ma_x; x += delta) {
+                    ret = this.searchLine(
+                        fmi_x, fma_x, x,
+                        [mi_y, ma_y], 'vertical',
+                        num_components, dataX, dataY);
+
+                    if (ret !== false) {
+                        dataX = ret[0];
+                        dataY = ret[1];
+                        num_components = ret[2];
+                    }
+
+                }
+            }
+            if (doHorizontalSearch) {
+                delta = this.config.resolution_out / this.config.unitY;
+                delta *= (1 + math/* default */.Z.eps);
+                // console.log("Outer delta y", delta)
+
+                for (y = mi_y; y < ma_y; y += delta) {
+                    ret = this.searchLine(
+                        fmi_y, fma_y, y,
+                        [mi_x, ma_x], 'horizontal',
+                        num_components, dataX, dataY);
+
+                    if (ret !== false) {
+                        dataX = ret[0];
+                        dataY = ret[1];
+                        num_components = ret[2];
+                    }
+                }
+            }
+
+            return [dataX, dataY, num_components];
+        },
+
+        /**
+         * Recursively search a horizontal or vertical line for points on the
+         * fulfilling the given equation.
+         *
+         * @param {Function} fmi Minimization function
+         * @param {Function} fma Maximization function
+         * @param {Number} fix Value of the fixed variable
+         * @param {Array} interval Search interval of the free variable
+         * @param {String} dir 'vertical' or 'horizontal'
+         * @param {Number} num_components Number of components before search
+         * @param {Array} dataX x-coordinates of points so far
+         * @param {Array} dataY y-coordinates of points so far
+         * @returns {Array} consisting of [dataX, dataY, number_of_components]-
+         * @private
+         */
+        searchLine: function (fmi, fma, fix, interval, dir,
+            num_components, dataX, dataY) {
+            var t_mi, t_ma, t,
+                ft,
+                mi, ma, tmp, m,
+                is_in,
+                u0, i, le,
+                ret,
+                offset,
+                delta,
+                eps = this.config.tol_u0,
+                DEBUG = false,
+                b = interval[0],
+                e = interval[1];
+
+            t_mi = numerics/* default */.Z.fminbr(fmi, [b, e]);
+            mi = fmi(t_mi);
+            t_ma = numerics/* default */.Z.fminbr(fma, [b, e]);
+            ma = fmi(t_ma);
+
+            if (mi < eps && ma > -eps) {
+                tmp = t_mi;
+                t_mi = Math.min(tmp, t_ma);
+                t_ma = Math.max(tmp, t_ma);
+
+                t = numerics/* default */.Z.fzero(fmi, [t_mi, t_ma]);
+                // t = Numerics.chandrupatla(fmi, [t_mi, t_ma]);
+
+                ft = fmi(t);
+                if (Math.abs(ft) > Math.max((ma - mi) * math/* default */.Z.eps, 0.001)) {
+                    //console.log("searchLine:",  dir, fix, t, "no root " + ft);
+                    return false;
+                    // throw new Error("searchLine: no root " + ft);
+                }
+                if (dir === 'vertical') {
+                    u0 = [1, fix, t];
+                    delta = this.config.resolution_in / this.config.unitY;
+                    // console.log("Inner delta x", delta)
+                } else {
+                    u0 = [1, t, fix];
+                    delta = this.config.resolution_in / this.config.unitX;
+                    // console.log("Inner delta y", delta)
+                }
+                delta *= (1 + math/* default */.Z.eps);
+
+                is_in = this.curveContainsPoint(u0, dataX, dataY,
+                    delta * 2,           // Allowed dist from segment
+                    this.config.qdt_box  // 0.5 of box size to search in qdt
+                );
+
+                if (is_in) {
+                    if (DEBUG) {
+                        console.log("Found in quadtree", u0);
+                    }
+                } else {
+                    if (DEBUG) {
+                        console.log("Not in quadtree", u0, dataX.length);
+                    }
+                    ret = this.traceComponent(u0, 1);
+                    if (ret.length > 0) {
+                        // Add jump in curve
+                        if (num_components > 0) {
+                            dataX.push(NaN);
+                            dataY.push(NaN);
+                        }
+
+                        offset = dataX.length;
+                        le = ret[0].length;
+                        for (i = 1; i < le; i++) {
+                            this.qdt.insertItem({
+                                xlb: Math.min(ret[0][i - 1], ret[0][i]),
+                                xub: Math.max(ret[0][i - 1], ret[0][i]),
+                                ylb: Math.min(ret[1][i - 1], ret[1][i]),
+                                yub: Math.max(ret[1][i - 1], ret[1][i]),
+                                idx1: offset + i - 1,
+                                idx2: offset + i,
+                                comp: num_components
+                            });
+                        }
+
+                        num_components++;
+                        dataX = dataX.concat(ret[0]);
+                        dataY = dataY.concat(ret[1]);
+                    }
+                }
+
+                m = t - delta * 0.01;
+                if (m - b > delta) {
+                    ret = this.searchLine(
+                        fmi, fma, fix, [b, m], dir,
+                        num_components, dataX, dataY);
+                    if (ret !== false) {
+                        dataX = ret[0];
+                        dataY = ret[1];
+                        num_components = ret[2];
+                    }
+                }
+                m = t + delta * 0.01;
+                if (e - m > delta) {
+                    ret = this.searchLine(
+                        fmi, fma, fix, [m, e], dir,
+                        num_components, dataX, dataY);
+                    if (ret !== false) {
+                        dataX = ret[0];
+                        dataY = ret[1];
+                        num_components = ret[2];
+                    }
+                }
+
+                return [dataX, dataY, num_components];
+            }
+
+            return false;
+        },
+
+        /**
+         * Test if the data points contain a given coordinate, i.e. if the
+         * given coordinate is close enough to the polygonal chain
+         * through the data points.
+         *
+         * @param {Array} p Homogenous coordinates [1, x, y] of the coordinate point
+         * @param {Array} dataX x-coordinates of points so far
+         * @param {Array} dataY y-coordinates of points so far
+         * @param {Number} tol Maximal distance of p from the polygonal chain through the data points
+         * @param {Number} eps Helper tolerance used for the quadtree
+         * @returns Boolean
+         */
+        curveContainsPoint: function (p, dataX, dataY, tol, eps) {
+            var i, le, hits, d,
+                x = p[1],
+                y = p[2];
+
+            hits = this.qdt.find([x - eps, y + eps, x + eps, y - eps]);
+
+            le = hits.length;
+            for (i = 0; i < le; i++) {
+                d = geometry/* default */.Z.distPointSegment(
+                    p,
+                    [1, dataX[hits[i].idx1], dataY[hits[i].idx1]],
+                    [1, dataX[hits[i].idx2], dataY[hits[i].idx2]]
+                );
+                if (d < tol) {
+                    return true;
+                }
+            }
+            return false;
+        },
+
+        /**
+         * Starting at an initial point the curve is traced with a Euler-Newton method.
+         * After tracing in one direction the algorithm stops if the component is a closed loop.
+         * Otherwise, the curved is traced in the opposite direction, starting from
+         * the same initial point. Finally, the two components are glued together.
+         *
+         * @param {Array} u0 Initial point in homogenous coordinates [1, x, y].
+         * @returns Array [dataX, dataY] containing a new component.
+         * @private
+         */
+        traceComponent: function (u0) {
+            var dataX = [],
+                dataY = [],
+                arr = [];
+
+            // Trace in first direction
+            // console.log("---- Start tracing forward ---------")
+            arr = this.tracing(u0, 1);
+
+            if (arr.length === 0) {
+                // console.log("Could not start tracing due to singularity")
+            } else {
+                // console.log("Trace from", [arr[0][0], arr[1][0]], "to", [arr[0][arr[0].length - 1], arr[1][arr[1].length - 1]],
+                //     "num points:", arr[0].length);
+                dataX = arr[0];
+                dataY = arr[1];
+            }
+
+            // Trace in the other direction
+            if (!arr[2]) {
+                // No loop in the first tracing step,
+                // now explore the other direction.
+
+                // console.log("---- Start tracing backward ---------")
+                arr = this.tracing(u0, -1);
+
+                if (arr.length === 0) {
+                    // console.log("Could not start backward tracing due to singularity")
+                } else {
+                    // console.log("Trace backwards from", [arr[0][0], arr[1][0]], "to",
+                    //     [arr[0][arr[0].length - 1], arr[1][arr[1].length - 1]], "num points:", arr[0].length);
+                    dataX = arr[0].reverse().concat(dataX.slice(1));
+                    dataY = arr[1].reverse().concat(dataY.slice(1));
+                }
+            }
+
+            if (dataX.length < 6) {
+                // Solitary point
+                dataX.push(dataX[dataX.length - 1]);
+                dataY.push(dataY[dataY.length - 1]);
+            }
+
+            return [dataX, dataY];
+        },
+
+        /**
+         * Starting at a point <i>u0</i>, this routine traces the curve <i>f(u)=0</i> until
+         * a loop is detected, a critical point is reached, the curve leaves the bounding box,
+         * or the maximum number of points is reached.
+         * <p>
+         * The method is a predictor / corrector method consisting of Euler and Newton steps
+         * together with step width adaption.
+         * <p>
+         * The algorithm is an adaption of the algorithm in
+         * Eugene L. Allgower, Kurt Georg: <i>Introduction to Numerical Continuation methods.</i>
+         *
+         * @param {Array} u0 Starting point in homogenous coordinates  [1, x, y].
+         * @param {Number} direction 1 or -1
+         * @returns Array [pathX, pathY, loop_closed] or []
+         * @private
+         */
+        tracing: function (u0, direction) {
+            var u = [],
+                v = [],
+                v_start = [],
+                w = [],
+                t_u, t_v, t_u_0,
+                A,
+                grad,
+                nrm,
+                dir,
+                steps = 0,
+                k = 0,
+                loop_closed = false,
+                k0, k1, denom, dist, progress,
+                kappa, delta, alpha,
+                factor,
+                point_added = false,
+
+                quasi = false,
+                cusp_or_bifurc = false,
+                kappa_0 = this.config.kappa_0,  // Inverse of planned number of Newton steps
+                delta_0 = this.config.delta_0,  // Distance of predictor point to curve
+                alpha_0 = this.config.alpha_0,  // Angle between two successive tangents
+                h = this.config.h_initial,
+                max_steps = this.config.max_steps,
+
+                omega = direction,
+                pathX = [],
+                pathY = [],
+
+                T = [],            // Gosper's loop detector table
+                n, m, i, e;
+
+            u = u0.slice(1);
+            pathX.push(u[0]);
+            pathY.push(u[1]);
+
+            t_u = this.tangent(u);
+            if (t_u === false) {
+                // We don't want to start at a singularity.
+                // Get out of here and search for another starting point.
+                return [];
+            }
+            A = [this.dfx(u[0], u[1]), this.dfy(u[0], u[1])];
+
+            do {
+
+                if (quasi) {
+                    t_u = this.tangent_A(A);
+                } else {
+                    t_u = this.tangent(u);
+                }
+                if (t_u === false) {
+                    u = v.slice();
+                    pathX.push(u[0]);
+                    pathY.push(u[1]);
+                    // console.log("-> Bail out: t_u undefined.");
+                    break;
+                }
+
+                if (pathX.length === 1) {
+                    // Store first point
+                    t_u_0 = t_u.slice();
+                } else if (pathX.length === 2) {
+                    T.push(pathX.length - 1);       // Put first point into Gosper table T
+
+                } else if (point_added && pathX.length > 2 && !cusp_or_bifurc) {
+
+                    // Detect if loop has been closed
+                    dist = geometry/* default */.Z.distPointSegment(
+                        [1, u[0], u[1]],
+                        [1, pathX[0], pathY[0]],
+                        [1, pathX[1], pathY[1]]
+                    );
+
+                    if (dist < this.config.loop_dist * h &&
+                        math/* default */.Z.innerProduct(t_u, t_u_0, 2) > this.config.loop_dir
+                    ) {
+
+                        // console.log("Loop detected after", steps, "steps");
+                        // console.log("\t", "v", v, "u0:", u0)
+                        // console.log("\t", "Dist(v, path0)", dist, config.loop_dist * h)
+                        // console.log("\t", "t_u", t_u);
+                        // console.log("\t", "inner:", Mat.innerProduct(t_u, t_u_0, 2));
+                        // console.log("\t", "h", h);
+
+                        u = u0.slice(1);
+                        pathX.push(u[0]);
+                        pathY.push(u[1]);
+
+                        loop_closed = true;
+                        break;
+                    }
+
+                    // Gosper's loop detector
+                    if (this.config.loop_detection) {
+                        n = pathX.length - 1;
+                        // console.log("Check Gosper", n);
+                        m = Math.floor(math/* default */.Z.log2(n));
+
+                        for (i = 0; i <= m; i++) {
+                            dist = geometry/* default */.Z.distPointSegment(
+                                [1, u[0], u[1]],
+                                [1, pathX[T[i] - 1], pathY[T[i] - 1]],
+                                [1, pathX[T[i]], pathY[T[i]]]
+                            );
+
+                            if (dist < this.config.loop_dist * h) {
+                                // console.log("!!!!!!!!!!!!!!! GOSPER LOOP CLOSED !!!!", i, n + 1,
+                                //     this.config.loop_dist * h
+                                // );
+
+                                t_v = this.tangent([pathX[T[i]], pathY[T[i]]]);
+                                if (math/* default */.Z.innerProduct(t_u, t_v, 2) > this.config.loop_dir) {
+                                    // console.log("!!!!!!!!!!!!!!! angle is good enough");
+                                    break;
+                                }
+                            }
+                        }
+                        if (i <= m) {
+                            loop_closed = true;
+                            break;
+                        }
+
+                        m = 1;
+                        e = 0;
+                        for (i = 0; i < 100; i++) {
+                            if ((n + 1) % m !== 0) {
+                                break;
+                            }
+                            m *= 2;
+                            e++;
+                        }
+                        // console.log("Add at e", e);
+                        T[e] = n;
+                    }
+
+                }
+
+                // Predictor step
+                // if (true /*h < 2 * this.config.h_initial*/) {
+                // Euler
+                // console.log("euler")
+                v[0] = u[0] + h * omega * t_u[0];
+                v[1] = u[1] + h * omega * t_u[1];
+                // } else {
+                //     // Heun
+                //     // console.log("heun")
+                //     v[0] = u[0] + h * omega * t_u[0];
+                //     v[1] = u[1] + h * omega * t_u[1];
+
+                //     t_v = this.tangent(v);
+                //     v[0] = 0.5 * u[0] + 0.5 * (v[0] + h * omega * t_v[0]);
+                //     v[1] = 0.5 * u[1] + 0.5 * (v[1] + h * omega * t_v[1]);
+                // }
+                if (quasi) {
+                    A = this.updateA(A, u, v);
+                    v_start = v.slice();
+                }
+
+                // Corrector step: Newton
+                k = 0;
+                do {
+                    if (quasi) {
+                        grad = A;
+                    } else {
+                        grad = [this.dfx(v[0], v[1]), this.dfy(v[0], v[1])];
+                    }
+
+                    // Compute w = v - A(v) * f(v),
+                    // grad: row vector and A(v) is the Moore-Penrose inverse:
+                    // grad^T * (grad * grad^T)^(-1)
+                    denom = grad[0] * grad[0] + grad[1] * grad[1];
+                    nrm = this.f(v[0], v[1]) / denom;
+
+                    w[0] = v[0] - grad[0] * nrm;
+                    w[1] = v[1] - grad[1] * nrm;
+                    if (k === 0) {
+                        k0 = Math.abs(nrm) * Math.sqrt(denom);
+                    } else if (k === 1) {
+                        k1 = Math.abs(nrm) * Math.sqrt(denom);
+                    }
+
+                    v[0] = w[0];
+                    v[1] = w[1];
+                    k++;
+                } while (k < 20 &&
+                    Math.abs(this.f(v[0], v[1])) > this.config.tol_newton
+                );
+
+                delta = k0;
+                if (k > 1) {
+                    kappa = k1 / k0;
+                } else {
+                    kappa = 0.0;
+                }
+
+                if (quasi) {
+                    A = this.updateA(A, v_start, v);
+                    t_v = this.tangent_A(A);
+                } else {
+                    t_v = this.tangent(v);
+                }
+
+                dir = math/* default */.Z.innerProduct(t_u, t_v, 2);
+                dir = Math.max(-1, Math.min(1, dir));
+                alpha = Math.acos(dir);
+
+                // Look for simple bifurcation points and cusps
+                cusp_or_bifurc = false;
+                progress = geometry/* default */.Z.distance(u, v, 2);
+                if (progress < this.config.tol_progress) {
+                    u = v.slice();
+                    pathX.push(u[0]);
+                    pathY.push(u[1]);
+                    // console.log("-> Bail out, no progress", progress, steps);
+                    break;
+
+                } else if (dir < 0.0) {
+                    if (h > this.config.h_critical) {
+                        // console.log("Critical point at [", u[0].toFixed(4), u[1].toFixed(4), "], v: [", v[0].toFixed(4), v[1].toFixed(4), "], but large  h:", h);
+
+                    } else {
+
+                        cusp_or_bifurc = true;
+                        if (this.isBifurcation(u, this.config.tol_cusp)) {
+                            // console.log(steps, "bifurcation point between", u, "and", v, ":", dir, "h", h, "alpha", alpha);
+                            // A = [dfx(v[0], v[1]), dfy(v[0], v[1])];
+                            omega *= (-1);
+                            // If there is a bifurcation point, we
+                            // ignore the angle alpha for subsequent step length
+                            // adaption. Because then we might be able to
+                            // "jump over the critical point"
+                            alpha = 0;
+                        } else {
+                            // Cusp or something more weird
+                            u = v.slice();
+                            pathX.push(u[0]);
+                            pathY.push(u[1]);
+                            // console.log("-> Bail out, cusp")
+                            break;
+                        }
+                    }
+                }
+
+                // Adapt stepwidth
+                if (!cusp_or_bifurc) {
+                    factor = Math.max(
+                        Math.sqrt(kappa / kappa_0),
+                        Math.sqrt(delta / delta_0),
+                        alpha / alpha_0
+                    );
+                    if (isNaN(factor)) {
+                        factor = 1;
+                    }
+                    factor = Math.max(Math.min(factor, 2), 0.5);
+                    h /= factor;
+                    h = Math.min(this.config.h_max, h);
+
+                    if (factor >= 2) {
+                        steps++;
+                        if (steps >= 3 * max_steps) {
+                            break;
+                        }
+
+                        point_added = false;
+                        continue;
+                    }
+                }
+
+                u = v.slice();
+                pathX.push(u[0]);
+                pathY.push(u[1]);
+                point_added = true;
+
+                steps++;
+            } while (
+                steps < max_steps &&
+                u[0] >= this.bbox[0] &&
+                u[1] <= this.bbox[1] &&
+                u[0] <= this.bbox[2] &&
+                u[1] >= this.bbox[3]
+            );
+
+            // if (!loop_closed) {
+            //     console.log("No loop", steps);
+            // } else {
+            //     console.log("Loop", steps);
+            // }
+
+            return [pathX, pathY, loop_closed];
+        },
+
+        /**
+         * If both eigenvalues of the Hessian are different from zero, the critical point at u
+         * is a simple bifurcation point.
+         *
+         * @param {Array} u Critical point [x, y]
+         * @param {Number} tol Tolerance of the eigenvalues to be zero.
+         * @returns Boolean True if the point is a simple bifurcation point.
+         * @private
+         */
+        isBifurcation: function (u, tol) {
+            // Former experiments:
+            // If the Hessian has exactly one zero eigenvalue,
+            // we claim that there is a cusp.
+            // Otherwise, we decide that there is a bifurcation point.
+            // In the latter case, if both eigenvalues are zero
+            // this is a somewhat crude decision.
+            //
+            var h = math/* default */.Z.eps * math/* default */.Z.eps * 100,
+                x, y, a, b, c, d, ad,
+                lbda1, lbda2,
+                dis;
+
+            x = u[0];
+            y = u[1];
+            a = 0.5 * (this.dfx(x + h, y) - this.dfx(x - h, y)) / h;
+            b = 0.5 * (this.dfx(x, y + h) - this.dfx(x, y - h)) / h;
+            c = 0.5 * (this.dfy(x + h, y) - this.dfy(x - h, y)) / h;
+            d = 0.5 * (this.dfy(x, y + h) - this.dfy(x, y - h)) / h;
+
+            // c = b
+            ad = a + d;
+            dis = ad * ad - 4 * (a * d - b * c);
+            lbda1 = 0.5 * (ad + Math.sqrt(dis));
+            lbda2 = 0.5 * (ad - Math.sqrt(dis));
+
+            // console.log(a, b, c, d)
+            // console.log("Eigenvals u:", lbda1, lbda2, tol);
+
+            if (Math.abs(lbda1) > tol && Math.abs(lbda2) > tol) {
+                // if (lbda1 * lbda2 > 0) {
+                //     console.log("Seems to be isolated singularity at", u);
+                // }
+                return true;
+            }
+
+            return false;
+        },
+
+        /**
+         * Search in an arc around a critical point for a further point on the curve.
+         * Unused for the moment.
+         *
+         * @param {Array} u Critical point [x, y]
+         * @param {Array} t_u Tangent at u
+         * @param {Number} r Radius
+         * @param {Number} omega angle
+         * @returns {Array} Coordinates [x, y] of a new point.
+         * @private
+         */
+        handleCriticalPoint: function (u, t_u, r, omega) {
+            var a = Math.atan2(omega * t_u[1], omega * t_u[0]),
+                // s = a - 0.75 * Math.PI,
+                // e = a + 0.75 * Math.PI,
+                f_circ = function (t) {
+                    var x = u[0] + r * Math.cos(t),
+                        y = u[1] + r * Math.sin(t);
+                    return this.f(x, y);
+                },
+                x, y, t0;
+
+            // t0 = Numerics.fzero(f_circ, [s, e]);
+            t0 = numerics/* default */.Z.root(f_circ, a);
+
+            x = u[0] + r * Math.cos(t0);
+            y = u[1] + r * Math.sin(t0);
+            // console.log("\t", "result", x, y, "f", f(x, y));
+
+            return [x, y];
+        },
+
+        /**
+         * Quasi-Newton update of the Moore-Penrose inverse.
+         * See (7.2.3) in Allgower, Georg.
+         *
+         * @param {Array} A
+         * @param {Array} u0
+         * @param {Array} u1
+         * @returns Array
+         * @private
+         */
+        updateA: function (A, u0, u1) {
+            var s = [u1[0] - u0[0], u1[1] - u0[1]],
+                y = this.f(u1[0], u1[1]) - this.f(u0[0], u0[1]),
+                nom, denom;
+
+            denom = s[0] * s[0] + s[1] * s[1];
+            nom = y - (A[0] * s[0] + A[1] * s[1]);
+            nom /= denom;
+            A[0] += nom * s[0];
+            A[1] += nom * s[1];
+
+            return A;
+        },
+
+        /**
+         * Approximate tangent (of norm 1) with Quasi-Newton method
+         * @param {Array} A
+         * @returns Array
+         * @private
+         */
+        tangent_A: function (A) {
+            var t = [-A[1], A[0]],
+                nrm = math/* default */.Z.norm(t, 2);
+
+            if (nrm < math/* default */.Z.eps) {
+                // console.log("Approx. Singularity", t, "is zero", nrm);
+            }
+            return [t[0] / nrm, t[1] / nrm];
+        },
+
+        /**
+         * Tangent of norm 1 at point u.
+         * @param {Array} u Point [x, y]
+         * @returns Array
+         * @private
+         */
+        tangent: function (u) {
+            var t = [-this.dfy(u[0], u[1]), this.dfx(u[0], u[1])],
+                nrm = math/* default */.Z.norm(t, 2);
+
+            if (nrm < math/* default */.Z.eps * math/* default */.Z.eps) {
+                // console.log("Singularity", t, "is zero", "at", u, ":", nrm);
+                return false;
+            }
+            return [t[0] / nrm, t[1] / nrm];
+        }
+    }
+
+);
+
+/* harmony default export */ var implicitplot = (math/* default */.Z.ImplicitPlot);
+
 
 ;// CONCATENATED MODULE: ./src/math/metapost.js
 /*
@@ -40673,7 +43223,7 @@ math/* default */.Z.Metapost = {
      * @private
      */
     mp_pyth_add: function (a, b) {
-        return Math.sqrt(a * a + b * b);
+        return math/* default */.Z.hypot(a, b);
     },
 
     /**
@@ -41060,14 +43610,11 @@ jxg/* default */.Z.Util = jxg/* default */.Z.Util || {};
  */
 jxg/* default */.Z.Util.Unzip = function (barray) {
     var gpflags,
-        crc,
-        SIZE,
+        // SIZE,
         fileout,
         flens,
         fmax,
         outputArr = [],
-        output = "",
-        debug = false,
         files = 0,
         unzipped = [],
         buf32k = new Array(32768),
@@ -41075,16 +43622,19 @@ jxg/* default */.Z.Util.Unzip = function (barray) {
         modeZIP = false,
         barraylen = barray.length,
         bytepos = 0,
-        bitpos = 0,
         bb = 1,
-        bits = 0,
+        // bits = 0,
         literalTree = new Array(288),
         distanceTree = new Array(32),
         treepos = 0,
         Places = null,
-        Places2 = null,
-        impDistanceTree = new Array(64),
-        impLengthTree = new Array(64),
+        // crc,
+        // output = "",
+        // debug = false,
+        // bitpos = 0,
+        // Places2 = null,
+        // impDistanceTree = new Array(64),
+        // impLengthTree = new Array(64),
         len = 0,
         fpos = new Array(17),
         nameBuf = [];
@@ -41092,7 +43642,7 @@ jxg/* default */.Z.Util.Unzip = function (barray) {
     fpos[0] = 0;
 
     function readByte() {
-        bits += 8;
+        // bits += 8;
 
         if (bytepos < barraylen) {
             return barray[bytepos++];
@@ -41110,7 +43660,7 @@ jxg/* default */.Z.Util.Unzip = function (barray) {
 
         // Prevent problems on iOS7 with >>
         try {
-            bits++;
+            // bits++;
             carry = bb & 1;
             bb >>= 1;
 
@@ -41152,7 +43702,7 @@ jxg/* default */.Z.Util.Unzip = function (barray) {
     }
 
     function addBuffer(a) {
-        SIZE++;
+        // SIZE++;
         buf32k[bIdx++] = a;
         outputArr.push(String.fromCharCode(a));
 
@@ -41287,7 +43837,7 @@ jxg/* default */.Z.Util.Unzip = function (barray) {
 
     function deflateLoop() {
         var last, c, type, i, j, l, ll, ll2,
-            len, blockLen, dist, cSum, n, z,
+            len, blockLen, dist, cSum, n,// z,
             literalCodes, distCodes, lenCodes,
             endless = true;
 
@@ -41411,10 +43961,10 @@ jxg/* default */.Z.Util.Unzip = function (barray) {
                 //read in literal and distance code lengths
                 n = literalCodes + distCodes;
                 i = 0;
-                z = -1;
+                // z = -1;
 
                 while (i < n) {
-                    z++;
+                    // z++;
                     j = decodeValue(distanceTree);
 
                     // length of code in bits (0..15)
@@ -41532,6 +44082,7 @@ jxg/* default */.Z.Util.Unzip = function (barray) {
      *
      */
     function nextFile() {
+        /* eslint-disable no-unused-vars */
         var i,
             c,
             extralen,
@@ -41628,7 +44179,7 @@ jxg/* default */.Z.Util.Unzip = function (barray) {
                         i++;
                     }
 
-                    SIZE = 0;
+                    // SIZE = 0;
                     if (method === 8) {
                         deflateLoop();
                         unzipped[files] = new Array(2);
@@ -41650,6 +44201,7 @@ jxg/* default */.Z.Util.Unzip = function (barray) {
             throw e;
         }
         return false;
+        /* eslint-enable no-unused-vars */
     }
 
     /**
@@ -41662,6 +44214,7 @@ jxg/* default */.Z.Util.Unzip = function (barray) {
      * @private
      */
     function skipdir() {
+        /* eslint-disable no-unused-vars */
         var crc, compSize, size, os, i, c,
             tmp = [];
 
@@ -41782,6 +44335,8 @@ jxg/* default */.Z.Util.Unzip = function (barray) {
         // We are here in non-ZIP-files only,
         // In that case the eturn value doesn't matter
         return false;
+        /* eslint-enable no-unused-vars */
+
     }
 
     jxg/* default */.Z.Util.Unzip.prototype.unzipFile = function (name) {
@@ -42356,16 +44911,17 @@ jxg/* default */.Z.Server = {
      * @param {Boolean} sync If the call should be synchronous or not.
      */
     callServer: function (action, callback, data, sync) {
-        var fileurl, passdata, AJAX, params, id, dataJSONStr, k;
+        var fileurl, passdata, AJAX,// params, k,
+            id, dataJSONStr;
 
         sync = sync || false;
 
-        params = "";
-        for (k in data) {
-            if (data.hasOwnProperty(k)) {
-                params += "&" + escape(k) + "=" + escape(data[k]);
-            }
-        }
+        // params = "";
+        // for (k in data) {
+        //     if (data.hasOwnProperty(k)) {
+        //         params += "&" + escape(k) + "=" + escape(data[k]);
+        //     }
+        // }
 
         dataJSONStr = utils_type/* default */.Z.toJSON(data);
 
@@ -43099,7 +45655,7 @@ math/* default */.Z.Clip = {
      * The intersection point is inserted into the doubly linked list of the path.
      *
      * @private
-     * @param  {JXG.Coords} coords JSXGraph Coords object conatining the coordinates of the intersection
+     * @param  {JXG.Coords} coords JSXGraph Coords object containing the coordinates of the intersection
      * @param  {Number} i        Number of the segment of the subject path (first path) containing the intersection.
      * @param  {Number} alpha    The intersection is a p_1 + alpha*(p_2 - p_1), where p_1 and p_2 are the end points
      *      of the i-th segment.
@@ -45550,11 +48106,12 @@ jxg/* default */.Z.extend(
 
 
 /**
- * Creates a new complex number.
- * @class This class is for calculating with complex numbers.
+ * Creates a new complex number. See also {@link JXG.C}.
+ * @class This class is for calculating with complex numbers, see also {@link JXG.C} for more methods.
  * @constructor
  * @param {Number} [x=0] Real part.
  * @param {Number} [y=0] Imaginary part.
+ * @see JXG.C
  */
 jxg/* default */.Z.Complex = function (x, y) {
     /**
@@ -45613,7 +48170,7 @@ jxg/* default */.Z.extend(
 
         /**
          * Add another complex number to this complex number.
-         * @param {JXG.Complex,Number} c A JavaScript number or a JXG.Complex object to be added to the current object.
+         * @param {JXG.Complex|Number} c A JavaScript number or a JXG.Complex object to be added to the current object.
          * @returns {JXG.Complex} Reference to this complex number
          */
         add: function (c) {
@@ -45629,7 +48186,7 @@ jxg/* default */.Z.extend(
 
         /**
          * Subtract another complex number from this complex number.
-         * @param {JXG.Complex,Number} c A JavaScript number or a JXG.Complex object to subtract from the current object.
+         * @param {JXG.Complex|Number} c A JavaScript number or a JXG.Complex object to subtract from the current object.
          * @returns {JXG.Complex} Reference to this complex number
          */
         sub: function (c) {
@@ -45645,7 +48202,7 @@ jxg/* default */.Z.extend(
 
         /**
          * Multiply another complex number to this complex number.
-         * @param {JXG.Complex,Number} c A JavaScript number or a JXG.Complex object to
+         * @param {JXG.Complex|Number} c A JavaScript number or a JXG.Complex object to
          * multiply with the current object.
          * @returns {JXG.Complex} Reference to this complex number
          */
@@ -45669,7 +48226,7 @@ jxg/* default */.Z.extend(
 
         /**
          * Divide this complex number by the given complex number.
-         * @param {JXG.Complex,Number} c A JavaScript number or a JXG.Complex object to
+         * @param {JXG.Complex|Number} c A JavaScript number or a JXG.Complex object to
          * divide the current object by.
          * @returns {JXG.Complex} Reference to this complex number
          */
@@ -45719,6 +48276,7 @@ jxg/* default */.Z.extend(
 );
 
 /**
+ * @namespace Namespace for the complex number arithmetic functions, see also {@link JXG.Complex}.
  * @description
  * JXG.C is the complex number (name)space. It provides functions to calculate with
  * complex numbers (defined in {@link JXG.Complex}). With this namespace you don't have to modify
@@ -45732,14 +48290,14 @@ jxg/* default */.Z.extend(
  *    var z2 = new JXG.Complex(0, 1);
  *    var z = new JXG.Complex(z1);
  *    z.add(z2);</pre>
- * @namespace Namespace for the complex number arithmetic functions.
+ * @see JXG.Complex
  */
 jxg/* default */.Z.C = {};
 
 /**
  * Add two (complex) numbers z1 and z2 and return the result as a (complex) number.
- * @param {JXG.Complex,Number} z1 Summand
- * @param {JXG.Complex,Number} z2 Summand
+ * @param {JXG.Complex|Number} z1 Summand
+ * @param {JXG.Complex|Number} z2 Summand
  * @returns {JXG.Complex} A complex number equal to the sum of the given parameters.
  */
 jxg/* default */.Z.C.add = function (z1, z2) {
@@ -45750,8 +48308,8 @@ jxg/* default */.Z.C.add = function (z1, z2) {
 
 /**
  * Subtract two (complex) numbers z1 and z2 and return the result as a (complex) number.
- * @param {JXG.Complex,Number} z1 Minuend
- * @param {JXG.Complex,Number} z2 Subtrahend
+ * @param {JXG.Complex|Number} z1 Minuend
+ * @param {JXG.Complex|Number} z2 Subtrahend
  * @returns {JXG.Complex} A complex number equal to the difference of the given parameters.
  */
 jxg/* default */.Z.C.sub = function (z1, z2) {
@@ -45762,8 +48320,8 @@ jxg/* default */.Z.C.sub = function (z1, z2) {
 
 /**
  * Multiply two (complex) numbers z1 and z2 and return the result as a (complex) number.
- * @param {JXG.Complex,Number} z1 Factor
- * @param {JXG.Complex,Number} z2 Factor
+ * @param {JXG.Complex|Number} z1 Factor
+ * @param {JXG.Complex|Number} z2 Factor
  * @returns {JXG.Complex} A complex number equal to the product of the given parameters.
  */
 jxg/* default */.Z.C.mult = function (z1, z2) {
@@ -45774,8 +48332,8 @@ jxg/* default */.Z.C.mult = function (z1, z2) {
 
 /**
  * Divide two (complex) numbers z1 and z2 and return the result as a (complex) number.
- * @param {JXG.Complex,Number} z1 Dividend
- * @param {JXG.Complex,Number} z2 Divisor
+ * @param {JXG.Complex|Number} z1 Dividend
+ * @param {JXG.Complex|Number} z2 Divisor
  * @returns {JXG.Complex} A complex number equal to the quotient of the given parameters.
  */
 jxg/* default */.Z.C.div = function (z1, z2) {
@@ -45786,7 +48344,7 @@ jxg/* default */.Z.C.div = function (z1, z2) {
 
 /**
  * Conjugate a complex number and return the result.
- * @param {JXG.Complex,Number} z1 Complex number
+ * @param {JXG.Complex|Number} z1 Complex number
  * @returns {JXG.Complex} A complex number equal to the conjugate of the given parameter.
  */
 jxg/* default */.Z.C.conj = function (z1) {
@@ -45797,7 +48355,7 @@ jxg/* default */.Z.C.conj = function (z1) {
 
 /**
  * Absolute value of a complex number.
- * @param {JXG.Complex,Number} z1 Complex number
+ * @param {JXG.Complex|Number} z1 Complex number
  * @returns {Number} real number equal to the absolute value of the given parameter.
  */
 jxg/* default */.Z.C.abs = function (z1) {
@@ -45809,12 +48367,22 @@ jxg/* default */.Z.C.abs = function (z1) {
     return Math.sqrt(z.real);
 };
 
+/**
+ * Create copy of complex number.
+ *
+ * @param {JXG.Complex|Number} z
+ * @returns {JXG.Complex}
+ */
+jxg/* default */.Z.C.copy = function(z) {
+    return new jxg/* default */.Z.Complex(z);
+};
+
 jxg/* default */.Z.Complex.C = jxg/* default */.Z.C;
 
 /* harmony default export */ var complex = (jxg/* default */.Z.Complex);
 
 // EXTERNAL MODULE: ./src/options.js
-var options = __webpack_require__(766);
+var src_options = __webpack_require__(766);
 ;// CONCATENATED MODULE: ./src/renderer/abstract.js
 /*
     Copyright 2008-2023
@@ -46031,6 +48599,7 @@ jxg/* default */.Z.extend(
             if (enhanced || this.enhancedRendering) {
                 not = not || {};
 
+                this.setObjectViewport(el);
                 this.setObjectTransition(el);
                 if (!utils_type/* default */.Z.evaluate(el.visProp.draft)) {
                     if (!not.stroke) {
@@ -46129,7 +48698,7 @@ jxg/* default */.Z.extend(
             var prim,
                 // sometimes el is not a real point and lacks the methods of a JXG.Point instance,
                 // in these cases to not use el directly.
-                face = options/* default */.Z.normalizePointFace(utils_type/* default */.Z.evaluate(el.visProp.face));
+                face = src_options/* default */.Z.normalizePointFace(utils_type/* default */.Z.evaluate(el.visProp.face));
 
             // determine how the point looks like
             if (face === "o") {
@@ -46168,7 +48737,7 @@ jxg/* default */.Z.extend(
             var size = utils_type/* default */.Z.evaluate(el.visProp.size),
                 // sometimes el is not a real point and lacks the methods of a JXG.Point instance,
                 // in these cases to not use el directly.
-                face = options/* default */.Z.normalizePointFace(utils_type/* default */.Z.evaluate(el.visProp.face)),
+                face = src_options/* default */.Z.normalizePointFace(utils_type/* default */.Z.evaluate(el.visProp.face)),
                 unit = utils_type/* default */.Z.evaluate(el.visProp.sizeunit),
                 zoom = utils_type/* default */.Z.evaluate(el.visProp.zoom),
                 s1;
@@ -46199,7 +48768,7 @@ jxg/* default */.Z.extend(
                         size * 2
                     );
                 } else {
-                    // x, +, <>, ^, v, <, >
+                    // x, +, <>, <<>>, ^, v, <, >
                     this.updatePathPrim(
                         el.rendNode,
                         this.updatePathStringPoint(el, size, face),
@@ -46347,7 +48916,7 @@ jxg/* default */.Z.extend(
             // Get information if there are arrow heads and how large they are.
             arrowData = this.getArrowHeadData(el, w, hl);
 
-            // Create the SVG nodes if neccessary
+            // Create the SVG nodes if necessary
             this.makeArrows(el, arrowData);
 
             // Draw the paths with arrow heads
@@ -46953,9 +49522,9 @@ jxg/* default */.Z.extend(
         updateText: function (el) {
             var content = el.plaintext,
                 v, c,
-                parentNode,
-                scale, vshift,
-                id, wrap_id,
+                parentNode, node,
+                // scale, vshift,
+                // id, wrap_id,
                 ax, ay, angle, co, si,
                 to_h, to_v;
 
@@ -47070,6 +49639,7 @@ jxg/* default */.Z.extend(
                                 if (MathJax.typeset) {
                                     // Version 3
                                     MathJax.typeset([el.rendNode]);
+                                    console.log(el.id, el.rendNode);
                                 } else {
                                     // Version 2
                                     MathJax.Hub.Queue(["Typeset", MathJax.Hub, el.rendNode]);
@@ -47095,12 +49665,30 @@ jxg/* default */.Z.extend(
                             }
                         } else if (utils_type/* default */.Z.evaluate(el.visProp.usekatex)) {
                             try {
-                                /* eslint-disable no-undef */
-                                katex.render(content, el.rendNode, {
-                                    macros: utils_type/* default */.Z.evaluate(el.visProp.katexmacros),
-                                    throwOnError: false
-                                });
-                                /* eslint-enable no-undef */
+                                // Checkboxes et. al. do not possess rendNodeLabel during the first update.
+                                // In this case node will be undefined and not rendered by KaTeX.
+                                if (el.rendNode.innerHTML.indexOf('<span') === 0 &&
+                                    el.rendNode.innerHTML.indexOf('<label') > 0 &&
+                                    (
+                                        el.rendNode.innerHTML.indexOf('<checkbox') > 0 ||
+                                        el.rendNode.innerHTML.indexOf('<input') > 0
+                                    )
+                                 ) {
+                                    node = el.rendNodeLabel;
+                                } else if (el.rendNode.innerHTML.indexOf('<button') === 0) {
+                                    node = el.rendNodeButton;
+                                } else {
+                                    node = el.rendNode;
+                                }
+
+                                if (node) {
+                                    /* eslint-disable no-undef */
+                                    katex.render(content, node, {
+                                        macros: utils_type/* default */.Z.evaluate(el.visProp.katexmacros),
+                                        throwOnError: false
+                                    });
+                                    /* eslint-enable no-undef */
+                                }
                             } catch (e) {
                                 jxg/* default */.Z.debug("KaTeX not loaded (yet)");
                             }
@@ -47269,6 +49857,7 @@ jxg/* default */.Z.extend(
 
             this.setObjectTransition(el);
             if (display === "html" && this.type !== "no") {
+                this.setObjectViewport(el, true);
                 // Set new CSS class
                 if (el.visPropOld.cssclass !== css) {
                     el.rendNode.className = css;
@@ -47399,9 +49988,9 @@ jxg/* default */.Z.extend(
          * Applies transformations on images and text elements. This method has to implemented in
          * all descendant classes where text and image transformations are to be supported.
          * <p>
-         * Only affine transformation are supported, no proper projective transformations. This means, the 
+         * Only affine transformation are supported, no proper projective transformations. This means, the
          * respective entries of the transformation matrix are simply ignored.
-         * 
+         *
          * @param {JXG.Image|JXG.Text} element A {@link JXG.Image} or {@link JXG.Text} object.
          * @param {Array} transformations An array of {@link JXG.Transformation} objects. This is usually the
          * transformations property of the given element <tt>el</tt>.
@@ -47560,7 +50149,7 @@ jxg/* default */.Z.extend(
          * @param {Number} size A positive number describing the size. Usually the half of the width and height of
          * the drawn point.
          * @param {String} type A string describing the point's face. This method only accepts the shortcut version of
-         * each possible face: <tt>x, +, |, -, [], <>, ^, v, >, < </tt>
+         * each possible face: <tt>x, +, |, -, [], <>, <<>>,^, v, >, < </tt>
          */
         updatePathStringPoint: function (element, size, type) {
             /* stub */
@@ -47703,7 +50292,8 @@ jxg/* default */.Z.extend(
             var draftColor = el.board.options.elements.draft.color,
                 draftOpacity = el.board.options.elements.draft.opacity;
 
-            this.setObjectTransition(el);
+                this.setObjectViewport(el);
+                this.setObjectTransition(el);
             if (el.type === constants/* default */.Z.OBJECT_TYPE_POLYGON) {
                 this.setObjectFillColor(el, draftColor, draftOpacity);
             } else {
@@ -47722,6 +50312,7 @@ jxg/* default */.Z.extend(
          * @param {JXG.GeometryElement} el Reference of the object that no longer is in draft mode.
          */
         removeDraft: function (el) {
+            this.setObjectViewport(el);
             this.setObjectTransition(el);
             if (el.type === constants/* default */.Z.OBJECT_TYPE_POLYGON) {
                 this.setObjectFillColor(el, el.visProp.fillcolor, el.visProp.fillopacity);
@@ -47759,6 +50350,15 @@ jxg/* default */.Z.extend(
          *        element.visProp.transitionDuration is taken. This is the default.
          */
         setObjectTransition: function (element, duration) {
+            /* stub */
+        },
+
+        /**
+         *
+         * @param {*} element
+         * @param {*} isHTML
+         */
+        setObjectViewport: function (element, isHTML) {
             /* stub */
         },
 
@@ -47818,6 +50418,7 @@ jxg/* default */.Z.extend(
                 ev = el.visProp,
                 sw;
 
+            this.setObjectViewport(el);
             this.setObjectTransition(el);
             if (!ev.draft) {
                 if (el.type === constants/* default */.Z.OBJECT_TYPE_POLYGON) {
@@ -47892,6 +50493,7 @@ jxg/* default */.Z.extend(
                 ev = el.visProp,
                 sw;
 
+            this.setObjectViewport(el);
             this.setObjectTransition(el);
             if (!utils_type/* default */.Z.evaluate(el.visProp.draft)) {
                 if (el.type === constants/* default */.Z.OBJECT_TYPE_POLYGON) {
@@ -47981,10 +50583,10 @@ jxg/* default */.Z.extend(
                         e.cancelBubble = true;
                     }
                 },
-                createButton = function (label, handler, id) {
+                createButton = function (label, handler, board_id, type) {
                     var button;
 
-                    id = id || "";
+                    board_id = board_id || "";
 
                     button = doc.createElement("span");
                     button.innerHTML = label; // button.appendChild(doc.createTextNode(label));
@@ -47996,10 +50598,11 @@ jxg/* default */.Z.extend(
                     if (button.classList !== undefined) {
                         // classList not available in IE 9
                         button.classList.add("JXG_navigation_button");
+                        button.classList.add("JXG_navigation_button_" + type);
                     }
                     // button.setAttribute('tabindex', 0);
 
-                    button.setAttribute("id", id);
+                    button.setAttribute("id", board_id + '_navigation_' + type);
                     node.appendChild(button);
 
                     env/* default */.Z.addEvent(
@@ -48051,7 +50654,7 @@ jxg/* default */.Z.extend(
                         function () {
                             board.toFullscreen(board.attr.fullscreen.id);
                         },
-                        board.container + "_navigation_fullscreen"
+                        board.container, "fullscreen"
                     );
                 }
 
@@ -48063,7 +50666,7 @@ jxg/* default */.Z.extend(
                                 board.renderer.screenshot(board, "", false);
                             }, 330);
                         },
-                        board.container + "_navigation_screenshot"
+                        board.container, "screenshot"
                     );
                 }
 
@@ -48076,51 +50679,30 @@ jxg/* default */.Z.extend(
                         function () {
                             board.reload();
                         },
-                        board.container + "_navigation_reload"
+                        board.container, "reload"
                     );
                 }
 
                 if (board.attr.showcleartraces) {
                     // clear traces symbol (otimes): \u27F2
-                    createButton(
-                        "\u2297",
+                    createButton("\u2297",
                         function () {
                             board.clearTraces();
                         },
-                        board.container + "_navigation_cleartraces"
+                        board.container, "cleartraces"
                     );
                 }
 
                 if (board.attr.shownavigation) {
                     if (board.attr.showzoom) {
-                        createButton(
-                            "\u2013",
-                            board.zoomOut,
-                            board.container + "_navigation_out"
-                        );
-                        createButton("o", board.zoom100, board.container + "_navigation_100");
-                        createButton("+", board.zoomIn, board.container + "_navigation_in");
+                        createButton("\u2013", board.zoomOut, board.container, "out");
+                        createButton("o", board.zoom100, board.container, "100");
+                        createButton("+", board.zoomIn, board.container, "in");
                     }
-                    createButton(
-                        "\u2190",
-                        board.clickLeftArrow,
-                        board.container + "_navigation_left"
-                    );
-                    createButton(
-                        "\u2193",
-                        board.clickUpArrow,
-                        board.container + "_navigation_down"
-                    ); // Down arrow
-                    createButton(
-                        "\u2191",
-                        board.clickDownArrow,
-                        board.container + "_navigation_up"
-                    ); // Up arrow
-                    createButton(
-                        "\u2192",
-                        board.clickRightArrow,
-                        board.container + "_navigation_right"
-                    );
+                    createButton("\u2190", board.clickLeftArrow, board.container, "left");
+                    createButton("\u2193", board.clickUpArrow, board.container, "down"); // Down arrow
+                    createButton("\u2191", board.clickDownArrow, board.container, "up"); // Up arrow
+                    createButton("\u2192", board.clickRightArrow, board.container, "right");
                 }
             }
         },
@@ -49011,8 +51593,17 @@ jxg/* default */.Z.Board = function (container, renderer, id,
      * Some standard options
      * @type JXG.Options
      */
-    this.options = utils_type/* default */.Z.deepCopy(options/* default */.Z);
+    this.options = utils_type/* default */.Z.deepCopy(src_options/* default */.Z);
+
+    /**
+     * Board attributes
+     * @type Object
+     */
     this.attr = attributes;
+
+    if (this.attr.theme !== 'default' && utils_type/* default */.Z.exists(jxg/* default */.Z.themes[this.attr.theme])) {
+        utils_type/* default */.Z.mergeAttr(this.options, jxg/* default */.Z.themes[this.attr.theme], true);
+    }
 
     /**
      * Dimension of the board.
@@ -49338,6 +51929,13 @@ jxg/* default */.Z.Board = function (container, renderer, id,
     this.hasPointerHandlers = false;
 
     /**
+     * A flag which stores if the board registered zoom events, i.e. mouse wheel scroll events.
+     * @type Boolean
+     * @default false
+     */
+    this.hasWheelHandlers = false;
+
+    /**
      * A flag which tells if the board the JXG.Board#mouseUpListener is currently registered.
      * @type Boolean
      * @default false
@@ -49436,14 +52034,56 @@ jxg/* default */.Z.Board = function (container, renderer, id,
     this.mathLib = Math;        // Math or JXG.Math.IntervalArithmetic
     this.mathLibJXG = jxg/* default */.Z.Math; // JXG.Math or JXG.Math.IntervalArithmetic
 
-    if (this.attr.registerevents) {
-        this.addEventHandlers();
+    // if (this.attr.registerevents) {
+    //     this.addEventHandlers();
+    // }
+    // if (this.attr.registerresizeevent) {
+    //     this.addResizeEventHandlers();
+    // }
+    // if (this.attr.registerfullscreenevent) {
+    //     this.addFullscreenEventHandlers();
+    // }
+    if (this.attr.registerevents === true) {
+        this.attr.registerevents = {
+            fullscreen: true,
+            keyboard: true,
+            pointer: true,
+            resize: true,
+            wheel: true
+        };
+    } else if (typeof this.attr.registerevents === 'object') {
+        if (!utils_type/* default */.Z.exists(this.attr.registerevents.fullscreen)) {
+            this.attr.registerevents.fullscreen = true;
+        }
+        if (!utils_type/* default */.Z.exists(this.attr.registerevents.keyboard)) {
+            this.attr.registerevents.keyboard = true;
+        }
+        if (!utils_type/* default */.Z.exists(this.attr.registerevents.pointer)) {
+            this.attr.registerevents.pointer = true;
+        }
+        if (!utils_type/* default */.Z.exists(this.attr.registerevents.resize)) {
+            this.attr.registerevents.resize = true;
+        }
+        if (!utils_type/* default */.Z.exists(this.attr.registerevents.wheel)) {
+            this.attr.registerevents.wheel = true;
+        }
     }
-    if (this.attr.registerresizeevent) {
-        this.addResizeEventHandlers();
-    }
-    if (this.attr.registerfullscreenevent) {
-        this.addFullscreenEventHandlers();
+    if (this.attr.registerevents !== false) {
+        if (this.attr.registerevents.fullscreen) {
+            this.addFullscreenEventHandlers();
+        }
+        if (this.attr.registerevents.keyboard) {
+            this.addKeyboardEventHandlers();
+        }
+        if (this.attr.registerevents.pointer) {
+            this.addEventHandlers();
+        }
+        if (this.attr.registerevents.resize) {
+            this.addResizeEventHandlers();
+        }
+        if (this.attr.registerevents.wheel) {
+            this.addWheelEventHandlers();
+        }
     }
 
     this.methodMap = {
@@ -49452,8 +52092,9 @@ jxg/* default */.Z.Board = function (container, renderer, id,
         on: 'on',
         off: 'off',
         trigger: 'trigger',
-        setView: 'setBoundingBox',
+        setAttribute: 'setAttribute',
         setBoundingBox: 'setBoundingBox',
+        setView: 'setBoundingBox',
         migratePoint: 'migratePoint',
         colorblind: 'emulateColorblindness',
         suspendUpdate: 'suspendUpdate',
@@ -49804,12 +52445,19 @@ jxg/* default */.Z.extend(
             // Position of cursor using clientX/Y
             absPos = env/* default */.Z.getPosition(e, i, this.document);
 
-            /**
-             * In case there has been no down event before.
-             */
-            if (!utils_type/* default */.Z.exists(this.cssTransMat)) {
-                this.updateCSSTransforms();
-            }
+            // Old:
+            // This seems to be obsolete anyhow:
+            // "In case there has been no down event before."
+            // if (!Type.exists(this.cssTransMat)) {
+            // this.updateCSSTransforms();
+            // }
+            // New:
+            // We have to update the CSS transform matrix all the time,
+            // since libraries like ZIMJS do not notify JSXGraph about a change.
+            // In particular, sending a resize event event to JSXGraph
+            // would be necessary.
+            this.updateCSSTransforms();
+
             // Position relative to the top left corner
             v = [1, absPos[0] - cPos[0], absPos[1] - cPos[1]];
             v = math/* default */.Z.matVecMult(this.cssTransMat, v);
@@ -50080,7 +52728,7 @@ jxg/* default */.Z.extend(
          * @param {Object} finger1 Actual and previous position of finger 1
          * @param {Boolean} scalable Flag if element may be scaled
          * @param {Boolean} rotatable Flag if element may be rotated
-         * @returns
+         * @returns {Array}
          */
         getTwoFingerTransform(finger1, finger2, scalable, rotatable) {
             var crd,
@@ -50113,7 +52761,7 @@ jxg/* default */.Z.extend(
             C = (dxx * dx + dyy * dy) / LL;
             S = (dyy * dx - dxx * dy) / LL;
             if (!scalable) {
-                lbda = Math.sqrt(C * C + S * S);
+                lbda = math/* default */.Z.hypot(C, S);
                 C /= lbda;
                 S /= lbda;
             }
@@ -50172,7 +52820,7 @@ jxg/* default */.Z.extend(
                     for (i = 0; i < len && !snap; ++i) {
                         vp = drag.vertices[i].visProp;
                         snap = snap || utils_type/* default */.Z.evaluate(vp.snaptogrid) || utils_type/* default */.Z.evaluate(vp.snaptopoints);
-                        snap = snap || (!drag.vertices[i].draggable())
+                        snap = snap || (!drag.vertices[i].draggable());
                     }
                     if (!snap) {
                         ar = [];
@@ -50192,7 +52840,7 @@ jxg/* default */.Z.extend(
 
         /*
          * Moves, rotates and scales a circle with two fingers.
-         * @param {Array} tar Array conatining touch event objects: {JXG.Board#touches.targets}.
+         * @param {Array} tar Array containing touch event objects: {JXG.Board#touches.targets}.
          * @param {object} drag The object that is dragged:
          * @param {Number} id pointerId of the event. In case of old touch event this is emulated.
          */
@@ -50466,6 +53114,7 @@ jxg/* default */.Z.extend(
 
             // This one produces errors on IE
             // // Env.addEvent(this.containerObj, 'contextmenu', function (e) { e.preventDefault(); return false;}, this);
+
             // This one works on IE, Firefox and Chromium with default configurations. On some Safari
             // or Opera versions the user must explicitly allow the deactivation of the context menu.
             if (this.containerObj !== null) {
@@ -50477,7 +53126,7 @@ jxg/* default */.Z.extend(
                 };
             }
 
-            this.addKeyboardEventHandlers();
+            // this.addKeyboardEventHandlers();
         },
 
         /**
@@ -50543,8 +53192,8 @@ jxg/* default */.Z.extend(
                     env/* default */.Z.addEvent(moveTarget, 'pointermove', this.pointerMoveListener, this);
                     env/* default */.Z.addEvent(moveTarget, 'pointerleave', this.pointerLeaveListener, this);
                 }
-                env/* default */.Z.addEvent(this.containerObj, 'mousewheel', this.mouseWheelListener, this);
-                env/* default */.Z.addEvent(this.containerObj, 'DOMMouseScroll', this.mouseWheelListener, this);
+                // Env.addEvent(this.containerObj, 'mousewheel', this.mouseWheelListener, this);
+                // Env.addEvent(this.containerObj, 'DOMMouseScroll', this.mouseWheelListener, this);
 
                 if (this.containerObj !== null) {
                     // This is needed for capturing touch events.
@@ -50566,8 +53215,8 @@ jxg/* default */.Z.extend(
                 env/* default */.Z.addEvent(this.containerObj, 'mousedown', this.mouseDownListener, this);
                 env/* default */.Z.addEvent(moveTarget, 'mousemove', this.mouseMoveListener, this);
 
-                env/* default */.Z.addEvent(this.containerObj, 'mousewheel', this.mouseWheelListener, this);
-                env/* default */.Z.addEvent(this.containerObj, 'DOMMouseScroll', this.mouseWheelListener, this);
+                // Env.addEvent(this.containerObj, 'mousewheel', this.mouseWheelListener, this);
+                // Env.addEvent(this.containerObj, 'DOMMouseScroll', this.mouseWheelListener, this);
 
                 this.hasMouseHandlers = true;
             }
@@ -50600,6 +53249,17 @@ jxg/* default */.Z.extend(
         },
 
         /**
+         * Registers pointer event handlers.
+         */
+        addWheelEventHandlers: function () {
+            if (!this.hasWheelHandlers && env/* default */.Z.isBrowser) {
+                env/* default */.Z.addEvent(this.containerObj, 'mousewheel', this.mouseWheelListener, this);
+                env/* default */.Z.addEvent(this.containerObj, 'DOMMouseScroll', this.mouseWheelListener, this);
+                this.hasWheelHandlers = true;
+            }
+        },
+
+        /**
          * Add fullscreen events which update the CSS transformation matrix to correct
          * the mouse/touch/pointer positions in case of CSS transformations.
          */
@@ -50622,6 +53282,9 @@ jxg/* default */.Z.extend(
             }
         },
 
+        /**
+         * Register keyboard event handlers.
+         */
         addKeyboardEventHandlers: function () {
             if (this.attr.keyboard.enabled && !this.hasKeyboardHandlers && env/* default */.Z.isBrowser) {
                 env/* default */.Z.addEvent(this.containerObj, 'keydown', this.keyDownListener, this);
@@ -50682,8 +53345,10 @@ jxg/* default */.Z.extend(
                     env/* default */.Z.removeEvent(moveTarget, 'pointerleave', this.pointerLeaveListener, this);
                 }
 
-                env/* default */.Z.removeEvent(this.containerObj, 'mousewheel', this.mouseWheelListener, this);
-                env/* default */.Z.removeEvent(this.containerObj, 'DOMMouseScroll', this.mouseWheelListener, this);
+                if (this.hasWheelHandlers) {
+                    env/* default */.Z.removeEvent(this.containerObj, 'mousewheel', this.mouseWheelListener, this);
+                    env/* default */.Z.removeEvent(this.containerObj, 'DOMMouseScroll', this.mouseWheelListener, this);
+                }
 
                 if (this.hasPointerUp) {
                     if (window.navigator.msPointerEnabled) {
@@ -50715,13 +53380,15 @@ jxg/* default */.Z.extend(
                     this.hasMouseUp = false;
                 }
 
-                env/* default */.Z.removeEvent(this.containerObj, 'mousewheel', this.mouseWheelListener, this);
-                env/* default */.Z.removeEvent(
-                    this.containerObj,
-                    'DOMMouseScroll',
-                    this.mouseWheelListener,
-                    this
-                );
+                if (this.hasWheelHandlers) {
+                    env/* default */.Z.removeEvent(this.containerObj, 'mousewheel', this.mouseWheelListener, this);
+                    env/* default */.Z.removeEvent(
+                        this.containerObj,
+                        'DOMMouseScroll',
+                        this.mouseWheelListener,
+                        this
+                    );
+                }
 
                 this.hasMouseHandlers = false;
             }
@@ -50811,6 +53478,7 @@ jxg/* default */.Z.extend(
                 zx = this.attr.zoom.factorx,
                 zy = this.attr.zoom.factory,
                 factor, dist, theta, bound,
+                doZoom = false,
                 dx, dy, cx, cy;
 
             if (this.mode !== this.BOARD_MODE_ZOOM) {
@@ -50881,6 +53549,7 @@ jxg/* default */.Z.extend(
                 this.moveOrigin(c.scrCoords[1], c.scrCoords[2], true);
 
             } else if (this.attr.zoom.enabled && Math.abs(factor - 1.0) < 0.5) {
+                doZoom = false;
                 // Pinch detected
                 if (this.attr.zoom.pinchhorizontal || this.attr.zoom.pinchvertical) {
                     dx = Math.abs(evt.touches[0].clientX - evt.touches[1].clientX);
@@ -50889,12 +53558,15 @@ jxg/* default */.Z.extend(
                     bound = (Math.PI * this.attr.zoom.pinchsensitivity) / 90.0;
                 }
 
-                if (this.attr.zoom.pinchhorizontal && theta < bound) {
+                if (!this.keepaspectratio &&
+                    this.attr.zoom.pinchhorizontal &&
+                    theta < bound) {
                     this.attr.zoom.factorx = factor;
                     this.attr.zoom.factory = 1.0;
                     cx = 0;
                     cy = 0;
-                } else if (
+                    doZoom = true;
+                } else if (!this.keepaspectratio &&
                     this.attr.zoom.pinchvertical &&
                     Math.abs(theta - Math.PI * 0.5) < bound
                 ) {
@@ -50902,18 +53574,22 @@ jxg/* default */.Z.extend(
                     this.attr.zoom.factory = factor;
                     cx = 0;
                     cy = 0;
-                } else {
+                    doZoom = true;
+                } else if (this.attr.zoom.pinch) {
                     this.attr.zoom.factorx = factor;
                     this.attr.zoom.factory = factor;
                     cx = c.usrCoords[1];
                     cy = c.usrCoords[2];
+                    doZoom = true;
                 }
 
-                this.zoomIn(cx, cy);
+                if (doZoom) {
+                    this.zoomIn(cx, cy);
 
-                // Restore zoomFactors
-                this.attr.zoom.factorx = zx;
-                this.attr.zoom.factory = zy;
+                    // Restore zoomFactors
+                    this.attr.zoom.factorx = zx;
+                    this.attr.zoom.factory = zy;
+                }
             }
 
             return false;
@@ -51192,7 +53868,7 @@ jxg/* default */.Z.extend(
             //    b. if an object is found, check the number of pointers. If appropriate, add the pointer.
             pos = this.getMousePosition(evt);
 
-            // selection
+            // Handle selection rectangle
             this._testForSelection(evt);
             if (this.selectingMode) {
                 this._startSelecting(pos);
@@ -51669,7 +54345,7 @@ jxg/* default */.Z.extend(
                             '). Removed the target.'
                         );
                         jxg/* default */.Z.debug(
-                            'eps = ' + eps + ', touchMax = ' + options/* default */.Z.precision.touchMax
+                            'eps = ' + eps + ', touchMax = ' + src_options/* default */.Z.precision.touchMax
                         );
                         touchTargets.splice(i, 1);
                     }
@@ -52131,7 +54807,6 @@ jxg/* default */.Z.extend(
                 this.mode = this.BOARD_MODE_NONE;
                 result = true;
             } else {
-                /** @ignore */
                 this.mouse = {
                     obj: null,
                     targets: [
@@ -52268,7 +54943,6 @@ jxg/* default */.Z.extend(
             }
 
             // release dragged mouse object
-            /** @ignore */
             this.mouse = null;
         },
 
@@ -52278,7 +54952,10 @@ jxg/* default */.Z.extend(
          * @returns {Boolean}
          */
         mouseWheelListener: function (evt) {
-            if (!this.attr.zoom.wheel || !this._isRequiredKeyPressed(evt, 'zoom')) {
+            if (!this.attr.zoom.enabled ||
+                !this.attr.zoom.wheel ||
+                !this._isRequiredKeyPressed(evt, 'zoom')) {
+
                 return true;
             }
 
@@ -52396,7 +55073,7 @@ jxg/* default */.Z.extend(
                     done = false;
                 }
             } else {
-                // Adapt dx, dy to snapToGrid and attractToGrid
+                // Adapt dx, dy to snapToGrid and attractToGrid.
                 // snapToGrid has priority.
                 if (utils_type/* default */.Z.exists(el.visProp)) {
                     if (
@@ -52409,8 +55086,10 @@ jxg/* default */.Z.extend(
                         res = el.getSnapSizes();
                         sX = res[0];
                         sY = res[1];
-                        dx = Math.max(sX, dx);
-                        dy = Math.max(sY, dy);
+                        // If snaptogrid is true,
+                        // we can only jump from grid point to grid point.
+                        dx = sX;
+                        dy = sY;
                     } else if (
                         utils_type/* default */.Z.exists(el.visProp.attracttogrid) &&
                         el.visProp.attracttogrid &&
@@ -53165,7 +55844,7 @@ jxg/* default */.Z.extend(
 
         /**
          * Add conditional updates to the elements.
-         * @param {String} str String containing coniditional update in geonext syntax
+         * @param {String} str String containing conditional update in geonext syntax
          */
         addConditions: function (str) {
             var term,
@@ -53244,7 +55923,7 @@ jxg/* default */.Z.extend(
                 m = term.indexOf('=');
                 left = term.slice(0, m);
                 right = term.slice(m + 1);
-                m = left.indexOf('.'); // Dies erzeugt Probleme bei Variablennamen der Form ' Steuern akt.'
+                m = left.indexOf('.');   // Resulting variable names must not contain dots, e.g. ' Steuern akt.'
                 name = left.slice(0, m); //.replace(/\s+$/,''); // do NOT cut out name (with whitespace)
                 el = this.elementsByName[utils_type/* default */.Z.unescapeHTML(name)];
 
@@ -53603,29 +56282,24 @@ jxg/* default */.Z.extend(
         },
 
         /**
-         * Removes object from board and renderer.
-         * <p>
-         * <b>Performance hints:</b> It is recommended to use the object's id.
-         * If many elements are removed, it is best to call <tt>board.suspendUpdate()</tt>
-         * before looping through the elements to be removed and call
-         * <tt>board.unsuspendUpdate()</tt> after the loop. Further, it is advisable to loop
-         * in reverse order, i.e. remove the object in reverse order of their creation time.
+         * Inner, recursive method of removeObject.
          *
          * @param {JXG.GeometryElement|Array} object The object to remove or array of objects to be removed.
          * The element(s) is/are given by name, id or a reference.
-         * @param {Boolean} saveMethod If true, the algorithm runs through all elements
-         * and tests if the element to be deleted is a child element. If yes, it will be
-         * removed from the list of child elements. If false (default), the element
+         * @param {Boolean} [saveMethod=false] If saveMethod=true, the algorithm runs through all elements
+         * and tests if the element to be deleted is a child element. If this is the case, it will be
+         * removed from the list of child elements. If saveMethod=false (default), the element
          * is removed from the lists of child elements of all its ancestors.
-         * This should be much faster.
+         * The latter should be much faster.
          * @returns {JXG.Board} Reference to the board
+         * @private
          */
-        removeObject: function (object, saveMethod) {
+        _removeObj: function (object, saveMethod) {
             var el, i;
 
             if (utils_type/* default */.Z.isArray(object)) {
                 for (i = 0; i < object.length; i++) {
-                    this.removeObject(object[i]);
+                    this._removeObj(object[i], saveMethod);
                 }
 
                 return this;
@@ -53633,7 +56307,7 @@ jxg/* default */.Z.extend(
 
             object = this.select(object);
 
-            // If the object which is about to be removed unknown or a string, do nothing.
+            // If the object which is about to be removed is unknown or a string, do nothing.
             // it is a string if a string was given and could not be resolved to an element.
             if (!utils_type/* default */.Z.exists(object) || utils_type/* default */.Z.isString(object)) {
                 return this;
@@ -53643,14 +56317,14 @@ jxg/* default */.Z.extend(
                 // remove all children.
                 for (el in object.childElements) {
                     if (object.childElements.hasOwnProperty(el)) {
-                        object.childElements[el].board.removeObject(object.childElements[el]);
+                        object.childElements[el].board._removeObj(object.childElements[el]);
                     }
                 }
 
                 // Remove all children in elements like turtle
                 for (el in object.objects) {
                     if (object.objects.hasOwnProperty(el)) {
-                        object.objects[el].board.removeObject(object.objects[el]);
+                        object.objects[el].board._removeObj(object.objects[el]);
                     }
                 }
 
@@ -53714,8 +56388,40 @@ jxg/* default */.Z.extend(
                 jxg/* default */.Z.debug(object.id + ': Could not be removed: ' + e);
             }
 
-            this.update();
+            return this;
+        },
 
+        /**
+         * Removes object from board and renderer.
+         * <p>
+         * <b>Performance hints:</b> It is recommended to use the object's id.
+         * If many elements are removed, it is best to call <tt>board.suspendUpdate()</tt>
+         * before looping through the elements to be removed and call
+         * <tt>board.unsuspendUpdate()</tt> after the loop. Further, it is advisable to loop
+         * in reverse order, i.e. remove the object in reverse order of their creation time.
+         * @param {JXG.GeometryElement|Array} object The object to remove or array of objects to be removed.
+         * The element(s) is/are given by name, id or a reference.
+         * @param {Boolean} saveMethod If true, the algorithm runs through all elements
+         * and tests if the element to be deleted is a child element. If yes, it will be
+         * removed from the list of child elements. If false (default), the element
+         * is removed from the lists of child elements of all its ancestors.
+         * This should be much faster.
+         * @returns {JXG.Board} Reference to the board
+         */
+        removeObject: function (object, saveMethod) {
+            var i;
+
+            this.renderer.suspendRedraw(this);
+            if (utils_type/* default */.Z.isArray(object)) {
+                for (i = 0; i < object.length; i++) {
+                    this._removeObj(object[i], saveMethod);
+                }
+            } else {
+                this._removeObj(object, saveMethod);
+            }
+            this.renderer.unsuspendRedraw();
+
+            this.update();
             return this;
         },
 
@@ -54159,6 +56865,7 @@ jxg/* default */.Z.extend(
             }
 
             this.prepareUpdate().updateElements(drag).updateConditions();
+
             this.renderer.suspendRedraw(this);
             this.updateRenderer();
             this.renderer.unsuspendRedraw();
@@ -54177,7 +56884,7 @@ jxg/* default */.Z.extend(
                 if (utils_type/* default */.Z.exists(b) && b !== this) {
                     b.updateQuality = this.updateQuality;
                     b.prepareUpdate().updateElements().updateConditions();
-                    b.renderer.suspendRedraw();
+                    b.renderer.suspendRedraw(this);
                     b.updateRenderer();
                     b.renderer.unsuspendRedraw();
                     b.triggerEventHandlers(['update'], []);
@@ -54688,8 +57395,6 @@ jxg/* default */.Z.extend(
                         break;
 
                     case 'registerevents':
-                    case 'registerfullscreenevent':
-                    case 'registerresizeevent':
                     case 'renderer':
                         // immutable, i.e. ignored
                         break;
@@ -55382,7 +58087,7 @@ jxg/* default */.Z.extend(
             var selectionattr;
 
             if (!utils_type/* default */.Z.exists(this.selectionPolygon)) {
-                selectionattr = utils_type/* default */.Z.copyAttributes(attr, options/* default */.Z, 'board', 'selection');
+                selectionattr = utils_type/* default */.Z.copyAttributes(attr, src_options/* default */.Z, 'board', 'selection');
                 if (selectionattr.enabled === true) {
                     this.selectionPolygon = this.create(
                         'polygon',
@@ -55797,13 +58502,14 @@ jxg/* default */.Z.extend(
             inner_node = doc.getElementById(id);
             wrap_id = 'fullscreenwrap_' + id;
 
-            // Store the original data.
-            // This is used to establish the ratio h / w in
-            // fullscreen mode
-            dim = this.containerObj.getBoundingClientRect();
-            inner_node._cssFullscreenStore = {
-                w: dim.width,
-                h: dim.height
+            if (!utils_type/* default */.Z.exists(inner_node._cssFullscreenStore)) {
+                // Store the actual, absolute size of the div
+                // This is used in scaleJSXGraphDiv
+                dim = this.containerObj.getBoundingClientRect();
+                inner_node._cssFullscreenStore = {
+                    w: dim.width,
+                    h: dim.height
+                };
             }
 
             // Wrap a div around the JSXGraph div.
@@ -55862,7 +58568,6 @@ jxg/* default */.Z.extend(
             var inner_id,
                 inner_node,
                 fullscreenElement,
-                i,
                 doc = this.document;
 
             inner_id = this._fullscreen_inner_id;
@@ -55888,15 +58593,22 @@ jxg/* default */.Z.extend(
                 // Store the original data.
                 // Further, the CSS margin has to be removed when in fullscreen mode,
                 // and must be restored later.
+                //
                 // Obsolete:
                 // It is used in AbstractRenderer.updateText to restore the scaling matrix
                 // which is removed by MathJax.
                 inner_node._cssFullscreenStore.id = fullscreenElement.id;
                 inner_node._cssFullscreenStore.isFullscreen = true;
                 inner_node._cssFullscreenStore.margin = inner_node.style.margin;
+                inner_node._cssFullscreenStore.width = inner_node.style.width;
+                inner_node._cssFullscreenStore.height = inner_node.style.height;
+                inner_node._cssFullscreenStore.transform = inner_node.style.transform;
+                // Be sure to replace relative width / height units by absolute units
+                inner_node.style.width = inner_node._cssFullscreenStore.w + 'px';
+                inner_node.style.height = inner_node._cssFullscreenStore.h + 'px';
                 inner_node.style.margin = '';
 
-                // Do the shifting and scaling via CSS pseudo rules
+                // Do the shifting and scaling via CSS properties
                 // We do this after fullscreen mode has been established to get the correct size
                 // of the JSXGraph div.
                 env/* default */.Z.scaleJSXGraphDiv(fullscreenElement.id, inner_id, doc,
@@ -55908,16 +58620,12 @@ jxg/* default */.Z.extend(
             } else if (utils_type/* default */.Z.exists(inner_node._cssFullscreenStore)) {
                 // Just left the fullscreen mode
 
-                // Remove the CSS rules added in Env.scaleJSXGraphDiv
-                for (i = doc.styleSheets.length - 1; i >= 0; i--) {
-                    if (doc.styleSheets[i].title === 'jsxgraph_fullscreen_css') {
-                        doc.styleSheets[i].deleteRule(0);
-                        break;
-                    }
-                }
-
                 inner_node._cssFullscreenStore.isFullscreen = false;
                 inner_node.style.margin = inner_node._cssFullscreenStore.margin;
+                inner_node.style.width = inner_node._cssFullscreenStore.width;
+                inner_node.style.height = inner_node._cssFullscreenStore.height;
+                inner_node.style.transform = inner_node._cssFullscreenStore.transform;
+                inner_node._cssFullscreenStore = null;
 
                 // Remove the wrapper div
                 inner_node.parentElement.replaceWith(inner_node);
@@ -55927,7 +58635,7 @@ jxg/* default */.Z.extend(
         },
 
         /**
-         * Start resize observer in to handle
+         * Start resize observer to handle
          * orientation changes in fullscreen mode.
          *
          * @param {Object} node DOM object which is in fullscreen mode. It is the wrapper element
@@ -56175,9 +58883,9 @@ jxg/* default */.Z.extend(
                                 cpyb = numerics/* default */.Z.D(c.Y)(b),
                                 cpxab = numerics/* default */.Z.D(c.X)((a + b) * 0.5),
                                 cpyab = numerics/* default */.Z.D(c.Y)((a + b) * 0.5),
-                                fa = Math.sqrt(cpxa * cpxa + cpya * cpya),
-                                fb = Math.sqrt(cpxb * cpxb + cpyb * cpyb),
-                                fab = Math.sqrt(cpxab * cpxab + cpyab * cpyab);
+                                fa = math/* default */.Z.hypot(cpxa, cpya),
+                                fb = math/* default */.Z.hypot(cpxb, cpyb),
+                                fab = math/* default */.Z.hypot(cpxab, cpyab);
 
                             return ((fa + 4 * fab + fb) * (b - a)) / 6;
                         },
@@ -56462,27 +59170,46 @@ jxg/* default */.Z.SVGRenderer = function (container, dim) {
     };
 
     /**
-     * Combine arguments to an URL string of the form
-     * url(#...)
-     * Masks the container id.
+     * Combine arguments to a string, joined by empty string.
+     * Masks the container id with CSS.escape.
      *
-     * @params {Objects} parts of the string
-     * @returns URL string
+     * @params {String} str variable number of strings
+     * @returns String
+     * @see JXG.SVGRenderer#toURL
      * @private
      * @example
-     * this.toURL('aaa', '_', 'bbb', 'TriangleEnd')
+     * this.toStr('aaa', '_', 'bbb', 'TriangleEnd')
      * // Output:
-     * // url(#xxx_bbbTriangleEnd)
-     *
+     * // xxx_bbbTriangleEnd
      */
-    this.toURL = function () {
+    this.toStr = function() {
         // ES6 would be [...arguments].join()
         var str = Array.prototype.slice.call(arguments).join('');
         // Mask special symbols like '/' and '\' in id
         if (utils_type/* default */.Z.exists(CSS) && utils_type/* default */.Z.exists(CSS.escape)) {
             str = CSS.escape(str);
         }
-        return 'url(#' + str + ')';
+        return str;
+    };
+
+    /**
+     * Combine arguments to an URL string of the form
+     * url(#...)
+     * Masks the container id. Calls {@link JXG.SVGRenderer#toStr}.
+     *
+     * @params {String} str variable number of strings
+     * @returns URL string
+     * @see JXG.SVGRenderer#toStr
+     * @private
+     * @example
+     * this.toURL('aaa', '_', 'bbb', 'TriangleEnd')
+     * // Output:
+     * // url(#xxx_bbbTriangleEnd)
+     */
+    this.toURL = function () {
+        return 'url(#' +
+            this.toStr.apply(this, arguments) + // Pass the arguments to toStr
+            ')';
     };
 
     /* Default shadow filter */
@@ -56495,7 +59222,7 @@ jxg/* default */.Z.SVGRenderer = function (container, dim) {
      * @type Array
      */
     this.layer = [];
-    for (i = 0; i < options/* default */.Z.layer.numlayers; i++) {
+    for (i = 0; i < src_options/* default */.Z.layer.numlayers; i++) {
         this.layer[i] = this.container.ownerDocument.createElementNS(this.svgNamespace, 'g');
         this.svgRoot.appendChild(this.layer[i]);
     }
@@ -56541,6 +59268,9 @@ jxg/* default */.Z.extend(
             if (utils_type/* default */.Z.exists(idAppendix)) {
                 id += idAppendix;
             }
+            if (utils_type/* default */.Z.exists(type)) {
+                id += type;
+            }
             node2 = this.createPrim("marker", id);
 
             node2.setAttributeNS(null, "stroke", utils_type/* default */.Z.evaluate(el.visProp.strokecolor));
@@ -56582,7 +59312,7 @@ jxg/* default */.Z.extend(
             */
             node3 = this.container.ownerDocument.createElementNS(this.svgNamespace, "path");
             h = 5;
-            if (idAppendix === "End") {
+            if (idAppendix === "Start") {
                 // First arrow
                 //type = a.typeFirst;
                 // if (JXG.exists(ev_fa.type)) {
@@ -56845,6 +59575,7 @@ jxg/* default */.Z.extend(
             );
             node.setAttributeNS(null, "stroke-width", utils_type/* default */.Z.evaluate(ticks.visProp.strokewidth));
             this.updatePathPrim(node, tickStr, ticks.board);
+            this.setObjectViewport(ticks);
         },
 
         /* **************************
@@ -56938,12 +59669,12 @@ jxg/* default */.Z.extend(
 
         /**
          * Set color and opacity of internal texts.
-         * SVG needs its own version.
          * @private
          * @see JXG.AbstractRenderer#updateTextStyle
          * @see JXG.AbstractRenderer#updateInternalTextStyle
          */
         updateInternalTextStyle: function (el, strokeColor, strokeOpacity, duration) {
+            this.setObjectViewport(el);
             this.setObjectFillColor(el, strokeColor, strokeOpacity);
         },
 
@@ -57060,8 +59791,8 @@ jxg/* default */.Z.extend(
             if (!utils_type/* default */.Z.exists(level)) {
                 // trace nodes have level not set
                 level = 0;
-            } else if (level >= options/* default */.Z.layer.numlayers) {
-                level = options/* default */.Z.layer.numlayers - 1;
+            } else if (level >= src_options/* default */.Z.layer.numlayers) {
+                level = src_options/* default */.Z.layer.numlayers - 1;
             }
 
             this.layer[level].appendChild(node);
@@ -57093,8 +59824,8 @@ jxg/* default */.Z.extend(
         setLayer: function (el, level) {
             if (!utils_type/* default */.Z.exists(level)) {
                 level = 0;
-            } else if (level >= options/* default */.Z.layer.numlayers) {
-                level = options/* default */.Z.layer.numlayers - 1;
+            } else if (level >= src_options/* default */.Z.layer.numlayers) {
+                level = src_options/* default */.Z.layer.numlayers - 1;
             }
 
             this.layer[level].appendChild(el.rendNode);
@@ -57102,62 +59833,54 @@ jxg/* default */.Z.extend(
 
         // Already documented in JXG.AbstractRenderer
         makeArrows: function (el, a) {
-            var node2,
+            var node2, str,
                 ev_fa = a.evFirst,
                 ev_la = a.evLast;
 
-            // Test if the arrow heads already exist
-            if (el.visPropOld.firstarrow === ev_fa && el.visPropOld.lastarrow === ev_la) {
-                if (this.isIE && el.visPropCalc.visible && (ev_fa || ev_la)) {
-                    el.rendNode.parentNode.insertBefore(el.rendNode, el.rendNode);
-                }
+            if (this.isIE && el.visPropCalc.visible && (ev_fa || ev_la)) {
+                el.rendNode.parentNode.insertBefore(el.rendNode, el.rendNode);
                 return;
             }
 
+            // We can not compare against visPropOld if there is need for a new arrow head,
+            // since here visPropOld and ev_fa / ev_la already have the same value.
+            // This has been set in _updateVisual.
+            //
+            node2 = el.rendNodeTriangleStart;
             if (ev_fa) {
-                node2 = el.rendNodeTriangleStart;
-                if (!utils_type/* default */.Z.exists(node2)) {
-                    node2 = this._createArrowHead(el, "End", a.typeFirst);
-                    this.defs.appendChild(node2);
+                str = this.toStr(this.container.id, '_', el.id, 'TriangleStart', a.typeFirst);
+                if (!utils_type/* default */.Z.exists(node2) || node2.id !== str) {
+                    node2 = this.container.ownerDocument.getElementById(str);
+                    // Check if the marker already exists.
+                    // If not, create a new marker
+                    if (node2 === null) {
+                        node2 = this._createArrowHead(el, "Start", a.typeFirst);
+                        this.defs.appendChild(node2);
+                    }
                     el.rendNodeTriangleStart = node2;
-                    el.rendNode.setAttributeNS(
-                        null,
-                        "marker-start",
-                        // "url(#" + this.container.id + "_" + el.id + "TriangleEnd)"
-                        this.toURL(this.container.id, '_', el.id, 'TriangleEnd')
-                    );
-                } else {
-                    this.defs.appendChild(node2);
+                    el.rendNode.setAttributeNS(null, "marker-start", this.toURL(str));
                 }
-            } else {
-                node2 = el.rendNodeTriangleStart;
-                if (utils_type/* default */.Z.exists(node2)) {
-                    this.remove(node2);
-                }
+            } else if (utils_type/* default */.Z.exists(node2)) {
+                this.remove(node2);
             }
+
+            node2 = el.rendNodeTriangleEnd;
             if (ev_la) {
-                node2 = el.rendNodeTriangleEnd;
-                if (!utils_type/* default */.Z.exists(node2)) {
-                    node2 = this._createArrowHead(el, "Start", a.typeLast);
-                    this.defs.appendChild(node2);
+                str = this.toStr(this.container.id, '_', el.id, 'TriangleEnd', a.typeLast);
+                if (!utils_type/* default */.Z.exists(node2) || node2.id !== str) {
+                    node2 = this.container.ownerDocument.getElementById(str);
+                    // Check if the marker already exists.
+                    // If not, create a new marker
+                    if (node2 === null) {
+                        node2 = this._createArrowHead(el, "End", a.typeLast);
+                        this.defs.appendChild(node2);
+                    }
                     el.rendNodeTriangleEnd = node2;
-                    el.rendNode.setAttributeNS(
-                        null,
-                        "marker-end",
-                        // "url(#" + this.container.id + "_" + el.id + "TriangleStart)"
-                        this.toURL(this.container.id, '_', el.id, 'TriangleStart')
-                    );
-                } else {
-                    this.defs.appendChild(node2);
+                    el.rendNode.setAttributeNS(null, "marker-end", this.toURL(str));
                 }
-            } else {
-                node2 = el.rendNodeTriangleEnd;
-                if (utils_type/* default */.Z.exists(node2)) {
-                    this.remove(node2);
-                }
+            } else if (utils_type/* default */.Z.exists(node2)) {
+                this.remove(node2);
             }
-            el.visPropOld.firstarrow = ev_fa;
-            el.visPropOld.lastarrow = ev_la;
         },
 
         // Already documented in JXG.AbstractRenderer
@@ -57269,7 +59992,10 @@ jxg/* default */.Z.extend(
                     (scr[1] + size) +
                     " " +
                     scr[2];
-            } else if (type === "<>") {
+            } else if (type === "<>" || type === "<<>>") {
+                if (type === "<<>>") {
+                    size *= 1.41;
+                }
                 s =
                     " M " +
                     (scr[1] - size) +
@@ -57288,8 +60014,8 @@ jxg/* default */.Z.extend(
                     " " +
                     (scr[2] - size) +
                     " Z ";
-            } else if (type === "^") {
-                s =
+                } else if (type === "^") {
+                    s =
                     " M " +
                     scr[1] +
                     " " +
@@ -57796,6 +60522,67 @@ jxg/* default */.Z.extend(
             el.visPropOld.transitionproperties = props;
         },
 
+        // documented in JXG.AbstractRenderer
+        setObjectViewport: function(el, isHtml) {
+            var val = utils_type/* default */.Z.evaluate(el.visProp.viewport),
+                vp, i,
+                len = 0,
+                bb, bbc, l, t, r, b,
+                nodes = ['rendNode']; //, "rendNodeTriangleStart", "rendNodeTriangleEnd"];
+
+            // Check viewport attribute of the board
+            if (val === 'inherit') {
+                val = utils_type/* default */.Z.evaluate(el.board.attr.viewport);
+            }
+
+            // Required order: top, right, bottom, left
+            if (isHtml) {
+                bb = el.rendNode.getBoundingClientRect();
+                bbc = this.container.getBoundingClientRect();
+                t = parseFloat(val[1]);
+                r = parseFloat(val[2]);
+                b = parseFloat(val[3]);
+                l = parseFloat(val[0]);
+
+                if (utils_type/* default */.Z.isString(val[1]) && val[1].indexOf('%') > 0) {
+                    t = (bbc.height) * t / 100;
+                }
+                if (utils_type/* default */.Z.isString(val[2]) && val[2].indexOf('%') > 0) {
+                    r = (bbc.width) * r / 100;
+                }
+                if (utils_type/* default */.Z.isString(val[3]) && val[3].indexOf('%') > 0) {
+                    b = (bbc.height) * b / 100;
+                }
+                if (utils_type/* default */.Z.isString(val[0]) && val[0].indexOf('%') > 0) {
+                    l = (bbc.width) * l / 100;
+                }
+
+                t = parseFloat(bbc.top) - parseFloat(bb.top) + t;
+                r = parseFloat(bb.right) - parseFloat(bbc.right) + r;
+                b = parseFloat(bb.bottom) - parseFloat(bbc.bottom) + b;
+                l = parseFloat(bbc.left) - parseFloat(bb.left) + l;
+                val = [l, t, r, b];
+            }
+
+            vp = [
+                (typeof val[1] === 'number') ? val[1] + 'px' : val[1],
+                (typeof val[2] === 'number') ? val[2] + 'px' : val[2],
+                (typeof val[3] === 'number') ? val[3] + 'px' : val[3],
+                (typeof val[0] === 'number') ? val[0] + 'px' : val[0]
+            ].join(' ');
+
+            len = nodes.length;
+            for (i = 0; i < len; ++i) {
+                if (el[nodes[i]]) {
+                    if (isHtml) {
+                        el[nodes[i]].style.clipPath = 'inset(' + vp + ')';
+                    } else {
+                        el[nodes[i]].setAttributeNS(null, "clip-path", 'view-box inset(' + vp + ')');
+                    }
+                }
+            }
+        },
+
         /**
          * Call user-defined function to set visual attributes.
          * If "testAttribute" is the empty string, the function
@@ -58048,7 +60835,7 @@ jxg/* default */.Z.extend(
             if (utils_type/* default */.Z.exists(el.rendNode)) {
                 if (show) {
                     if (use_board_filter) {
-                        el.rendNode.setAttributeNS(null, 'filter', this.toURL(this.container.id + '_' + 'f1'))
+                        el.rendNode.setAttributeNS(null, 'filter', this.toURL(this.container.id + '_' + 'f1'));
                         // 'url(#' + this.container.id + '_' + 'f1)');
                     } else {
                         node = this.container.ownerDocument.getElementById(id);
@@ -58075,13 +60862,13 @@ jxg/* default */.Z.extend(
         // documented in JXG.AbstractRenderer
         suspendRedraw: function () {
             // It seems to be important for the Linux version of firefox
-            //this.suspendHandle = this.svgRoot.suspendRedraw(10000);
+            this.suspendHandle = this.svgRoot.suspendRedraw(10000);
         },
 
         // documented in JXG.AbstractRenderer
         unsuspendRedraw: function () {
-            //this.svgRoot.unsuspendRedraw(this.suspendHandle);
-            //this.svgRoot.unsuspendRedrawAll();
+            this.svgRoot.unsuspendRedraw(this.suspendHandle);
+            // this.svgRoot.unsuspendRedrawAll();
             //this.svgRoot.forceRedraw();
         },
 
@@ -58415,12 +61202,21 @@ jxg/* default */.Z.extend(
             }
 
             // Display the SVG string as data-uri in an HTML img.
+            /**
+             * @type {Image}
+             * @ignore
+             * {ignore}
+             */
             tmpImg = new Image();
             svg = this.dumpToDataURI(ignoreTexts);
             tmpImg.src = svg;
 
             // Finally, draw the HTML img in the canvas.
             if (!("Promise" in window)) {
+                /**
+                 * @function
+                 * @ignore
+                 */
                 tmpImg.onload = function () {
                     // IE needs a pause...
                     // Seems to be broken
@@ -58519,7 +61315,7 @@ jxg/* default */.Z.extend(
                 // Create canvas element and add it to the DOM
                 // It will be removed after the image has been stored.
                 canvas = doc.createElement("canvas");
-                id = Math.random().toString(36).substr(2, 5);
+                id = Math.random().toString(36).slice(2, 7);
                 canvas.setAttribute("id", id);
                 canvas.setAttribute("width", w);
                 canvas.setAttribute("height", h);
@@ -59259,7 +62055,10 @@ jxg/* default */.Z.extend(
                         mround(r * (scr[2] + size))
                     ].join("")
                 );
-            } else if (type === "<>") {
+            } else if (type === "<>" || type === "<<>>") {
+                if (type === "<<>>") {
+                    size *= 1.41;
+                }
                 s.push(
                     [
                         " m ",
@@ -59925,7 +62724,7 @@ jxg/* default */.Z.Util.genUUID = function (prefix) {
 
     prefix = prefix || "";
 
-    if (prefix !== "" && prefix.substr(prefix.length - 1) !== "-") {
+    if (prefix !== "" && prefix.slice(prefix.length - 1) !== "-") {
         prefix = prefix + "-";
     }
 
@@ -60260,12 +63059,12 @@ jxg/* default */.Z.extend(
         // documented in JXG.AbstractRenderer
         updateGradient: function (el) {
             var col,
-                op,
+                // op,
                 ev_g = utils_type/* default */.Z.evaluate(el.visProp.gradient),
                 gradient;
 
-            op = utils_type/* default */.Z.evaluate(el.visProp.fillopacity);
-            op = op > 0 ? op : 0;
+            // op = Type.evaluate(el.visProp.fillopacity);
+            // op = op > 0 ? op : 0;
             col = utils_type/* default */.Z.evaluate(el.visProp.fillcolor);
 
             if (ev_g === "linear") {
@@ -60518,6 +63317,10 @@ jxg/* default */.Z.extend(
                     context.closePath();
                     this._stroke(el);
                     break;
+                /* eslint-disable no-fallthrough */
+                case "diamond2":
+                case "<<>>":
+                    size *= 1.41;
                 case "diamond": // <>
                 case "<>":
                     context.beginPath();
@@ -60529,6 +63332,7 @@ jxg/* default */.Z.extend(
                     this._fill(el);
                     this._stroke(el);
                     break;
+                /* eslint-enable no-fallthrough */
                 case "triangleup":
                 case "A":
                 case "a":
@@ -61553,11 +64357,11 @@ jxg/* default */.Z.extend(
 
         // documented in AbstractRenderer
         setGradient: function (el) {
-            var // col,
-                op;
+            // var // col,
+            //     op;
 
-            op = utils_type/* default */.Z.evaluate(el.visProp.fillopacity);
-            op = op > 0 ? op : 0;
+            // op = Type.evaluate(el.visProp.fillopacity);
+            // op = op > 0 ? op : 0;
 
             // col = Type.evaluate(el.visProp.fillcolor);
         },
@@ -62117,7 +64921,7 @@ jxg/* default */.Z.extend(
          * @param {Number} size A positive number describing the size. Usually the half of the width and height of
          * the drawn point.
          * @param {String} type A string describing the point's face. This method only accepts the shortcut version of
-         * each possible face: <tt>x, +, |, -, [], <>, ^, v, >, <
+         * each possible face: <tt>x, +, |, -, [], <>, <<>>, ^, v, >, <
          */
         updatePathStringPoint: function (element, size, type) {
             /* stub */
@@ -62450,10 +65254,10 @@ jxg/* default */.Z.JSXGraph = {
      * @type String
      */
     rendererType: (function () {
-        options/* default */.Z.board.renderer = "no";
+        src_options/* default */.Z.board.renderer = "no";
 
         if (env/* default */.Z.supportsVML()) {
-            options/* default */.Z.board.renderer = "vml";
+            src_options/* default */.Z.board.renderer = "vml";
             // Ok, this is some real magic going on here. IE/VML always was so
             // terribly slow, except in one place: Examples placed in a moodle course
             // was almost as fast as in other browsers. So i grabbed all the css and
@@ -62480,24 +65284,24 @@ jxg/* default */.Z.JSXGraph = {
         }
 
         if (env/* default */.Z.supportsCanvas()) {
-            options/* default */.Z.board.renderer = "canvas";
+            src_options/* default */.Z.board.renderer = "canvas";
         }
 
         if (env/* default */.Z.supportsSVG()) {
-            options/* default */.Z.board.renderer = "svg";
+            src_options/* default */.Z.board.renderer = "svg";
         }
 
         // we are inside node
         if (env/* default */.Z.isNode() && env/* default */.Z.supportsCanvas()) {
-            options/* default */.Z.board.renderer = "canvas";
+            src_options/* default */.Z.board.renderer = "canvas";
         }
 
-        if (env/* default */.Z.isNode() || options/* default */.Z.renderer === "no") {
-            options/* default */.Z.text.display = "internal";
-            options/* default */.Z.infobox.display = "internal";
+        if (env/* default */.Z.isNode() || src_options/* default */.Z.renderer === "no") {
+            src_options/* default */.Z.text.display = "internal";
+            src_options/* default */.Z.infobox.display = "internal";
         }
 
-        return options/* default */.Z.board.renderer;
+        return src_options/* default */.Z.board.renderer;
     })(),
 
     /**
@@ -62558,9 +65362,9 @@ jxg/* default */.Z.JSXGraph = {
      *
      * @private
      */
-    _setAttributes: function (attributes) {
+    _setAttributes: function (attributes, options) {
         // merge attributes
-        var attr = utils_type/* default */.Z.copyAttributes(attributes, options/* default */.Z, 'board'),
+        var attr = utils_type/* default */.Z.copyAttributes(attributes, options, 'board'),
 
             // These attributes - which are objects - have to be copied separately.
             list = [
@@ -62575,13 +65379,13 @@ jxg/* default */.Z.JSXGraph = {
 
         for (i = 0; i < len; i++) {
             key = list[i];
-            attr[key] = utils_type/* default */.Z.copyAttributes(attr, options/* default */.Z, 'board', key);
+            attr[key] = utils_type/* default */.Z.copyAttributes(attr, options, 'board', key);
         }
 
         // Treat moveTarget separately, because deepCopy will not work here.
         // Reason: moveTarget will be an HTML node and it is prevented that Type.deepCopy will copy it.
         attr.movetarget =
-            attributes.moveTarget || attributes.movetarget || options/* default */.Z.board.moveTarget;
+            attributes.moveTarget || attributes.movetarget || options.board.moveTarget;
 
         return attr;
     },
@@ -62701,10 +65505,17 @@ jxg/* default */.Z.JSXGraph = {
             offX = 0, offY = 0,
             renderer, dimensions, bbox,
             attr, axattr, axattr_x, axattr_y,
+            options,
+            theme = {},
             board;
 
         attributes = attributes || {};
-        attr = this._setAttributes(attributes);
+        // Merge a possible theme
+        if (attributes.theme !== 'default' && utils_type/* default */.Z.exists(jxg/* default */.Z.themes[attributes.theme])) {
+            theme = jxg/* default */.Z.themes[attributes.theme];
+        }
+        options = utils_type/* default */.Z.deepCopy(src_options/* default */.Z, theme, true);
+        attr = this._setAttributes(attributes, options);
 
         dimensions = env/* default */.Z.getDimensions(box, attr.document);
 
@@ -62763,7 +65574,8 @@ jxg/* default */.Z.JSXGraph = {
         renderer = this.initRenderer(box, dimensions, attr.document, attr.renderer);
         this._setARIA(box, attr);
 
-        // create the board
+        // Create the board.
+        // board.options will contain the user supplied board attributes
         board = new base_board(
             box,
             renderer,
@@ -62782,14 +65594,16 @@ jxg/* default */.Z.JSXGraph = {
 
         this._fillBoard(board, attr, dimensions);
 
-        // create elements like axes, grid, navigation, ...
+        // Create elements like axes, grid, navigation, ...
         board.suspendUpdate();
+        attr = board.attr;
         if (attr.axis) {
             axattr = typeof attr.axis === "object" ? attr.axis : {};
 
             // The defaultAxes attributes are overwritten by user supplied axis object.
-            axattr_x = utils_type/* default */.Z.deepCopy(options/* default */.Z.board.defaultAxes.x, axattr);
-            axattr_y = utils_type/* default */.Z.deepCopy(options/* default */.Z.board.defaultAxes.y, axattr);
+            axattr_x = utils_type/* default */.Z.deepCopy(options.board.defaultaxes.x, axattr);
+            axattr_y = utils_type/* default */.Z.deepCopy(options.board.defaultaxes.y, axattr);
+
             // The user supplied defaultAxes attributes are merged in.
             if (attr.defaultaxes.x) {
                 axattr_x = utils_type/* default */.Z.deepCopy(axattr_x, attr.defaultaxes.x);
@@ -62799,22 +65613,8 @@ jxg/* default */.Z.JSXGraph = {
             }
 
             board.defaultAxes = {};
-            board.defaultAxes.x = board.create(
-                "axis",
-                [
-                    [0, 0],
-                    [1, 0]
-                ],
-                axattr_x
-            );
-            board.defaultAxes.y = board.create(
-                "axis",
-                [
-                    [0, 0],
-                    [0, 1]
-                ],
-                axattr_y
-            );
+            board.defaultAxes.x = board.create("axis", [[0, 0], [1, 0]], axattr_x);
+            board.defaultAxes.y = board.create("axis", [[0, 0], [0, 1]], axattr_y);
         }
         if (attr.grid) {
             board.create("grid", [], typeof attr.grid === "object" ? attr.grid : {});
@@ -62939,7 +65739,8 @@ jxg/* default */.Z.JSXGraph = {
 
     /**
      * Delete a board and all its contents.
-     * @param {JXG.Board,String} board id of or reference to the DOM element in which the board is drawn.
+     * @param {JXG.Board|String} board id of or reference to the DOM element in which the board is drawn.
+     *
      */
     freeBoard: function (board) {
         var el;
@@ -63439,7 +66240,7 @@ jxg/* default */.Z.extend(
          */
         normalizeFace: function (s) {
             jxg/* default */.Z.deprecated("Point.normalizeFace()", "JXG.normalizePointFace()");
-            return options/* default */.Z.normalizePointFace(s);
+            return src_options/* default */.Z.normalizePointFace(s);
         },
 
         /**
@@ -63614,7 +66415,6 @@ jxg/* default */.Z.extend(
  * position directly.
  * @see Glider for a non-free point that is attached to another geometric element.
  * @pseudo
- * @description
  * @name Point
  * @augments JXG.Point
  * @constructor
@@ -63831,6 +66631,8 @@ jxg/* default */.Z.createIntersectionPoint = function (board, parents, attribute
      * The intersection point is i-th intersection point.
      * j is unused.
      * @type Array
+     * @name intersectionNumbers
+     * @memberOf Intersection
      * @private
      */
     el.intersectionNumbers = [i, j];
@@ -64172,7 +66974,7 @@ jxg/* default */.Z.registerElement("polepoint", jxg/* default */.Z.createPolePoi
  * type {@link Line}, {@link Arrow}, or {@link Axis} instead.
  * @constructor
  * @augments JXG.GeometryElement
- * @param {String,JXG.Board} board The board the new line is drawn on.
+ * @param {String|JXG.Board} board The board the new line is drawn on.
  * @param {Point} p1 Startpoint of the line.
  * @param {Point} p2 Endpoint of the line.
  * @param {Object} attributes Javascript object containing attributes like name, id and colors.
@@ -64256,7 +67058,8 @@ jxg/* default */.Z.Line = function (board, p1, p2, attributes) {
         getAngle: "getAngle",
         Slope: "Slope",
         L: "L",
-        length: "L"
+        length: "L",
+        setFixedLength: "setFixedLength"
     });
 };
 
@@ -64424,7 +67227,7 @@ jxg/* default */.Z.extend(
          * @private
          */
         updateSegmentFixedLength: function () {
-            var d, dnew, d1, d2, drag1, drag2, x, y;
+            var d, d_new, d1, d2, drag1, drag2, x, y;
 
             if (!this.hasFixedLength) {
                 return this;
@@ -64433,7 +67236,8 @@ jxg/* default */.Z.extend(
             // Compute the actual length of the segment
             d = this.point1.Dist(this.point2);
             // Determine the length the segment ought to have
-            dnew = this.fixedLength();
+            d_new = Math.abs(this.fixedLength());
+
             // Distances between the two points and their respective
             // position before the update
             d1 = this.fixedLengthOldCoords[0].distance(
@@ -64446,7 +67250,7 @@ jxg/* default */.Z.extend(
             );
 
             // If the position of the points or the fixed length function has been changed we have to work.
-            if (d1 > math/* default */.Z.eps || d2 > math/* default */.Z.eps || d !== dnew) {
+            if (d1 > math/* default */.Z.eps || d2 > math/* default */.Z.eps || d !== d_new) {
                 drag1 =
                     this.point1.isDraggable &&
                     this.point1.type !== constants/* default */.Z.OBJECT_TYPE_GLIDER &&
@@ -64463,14 +67267,14 @@ jxg/* default */.Z.extend(
                 if (d > math/* default */.Z.eps) {
                     if ((d1 > d2 && drag2) || (d1 <= d2 && drag2 && !drag1)) {
                         this.point2.setPositionDirectly(constants/* default */.Z.COORDS_BY_USER, [
-                            this.point1.X() + ((this.point2.X() - this.point1.X()) * dnew) / d,
-                            this.point1.Y() + ((this.point2.Y() - this.point1.Y()) * dnew) / d
+                            this.point1.X() + ((this.point2.X() - this.point1.X()) * d_new) / d,
+                            this.point1.Y() + ((this.point2.Y() - this.point1.Y()) * d_new) / d
                         ]);
                         this.point2.fullUpdate();
                     } else if ((d1 <= d2 && drag1) || (d1 > d2 && drag1 && !drag2)) {
                         this.point1.setPositionDirectly(constants/* default */.Z.COORDS_BY_USER, [
-                            this.point2.X() + ((this.point1.X() - this.point2.X()) * dnew) / d,
-                            this.point2.Y() + ((this.point1.Y() - this.point2.Y()) * dnew) / d
+                            this.point2.X() + ((this.point1.X() - this.point2.X()) * d_new) / d,
+                            this.point2.Y() + ((this.point1.Y() - this.point2.Y()) * d_new) / d
                         ]);
                         this.point1.fullUpdate();
                     }
@@ -64479,18 +67283,18 @@ jxg/* default */.Z.extend(
                 } else {
                     x = Math.random() - 0.5;
                     y = Math.random() - 0.5;
-                    d = Math.sqrt(x * x + y * y);
+                    d = math/* default */.Z.hypot(x, y);
 
                     if (drag2) {
                         this.point2.setPositionDirectly(constants/* default */.Z.COORDS_BY_USER, [
-                            this.point1.X() + (x * dnew) / d,
-                            this.point1.Y() + (y * dnew) / d
+                            this.point1.X() + (x * d_new) / d,
+                            this.point1.Y() + (y * d_new) / d
                         ]);
                         this.point2.fullUpdate();
                     } else if (drag1) {
                         this.point1.setPositionDirectly(constants/* default */.Z.COORDS_BY_USER, [
-                            this.point2.X() + (x * dnew) / d,
-                            this.point2.Y() + (y * dnew) / d
+                            this.point2.X() + (x * d_new) / d,
+                            this.point2.Y() + (y * d_new) / d
                         ]);
                         this.point1.fullUpdate();
                     }
@@ -64505,6 +67309,7 @@ jxg/* default */.Z.extend(
                     this.point2.coords.usrCoords
                 );
             }
+
             return this;
         },
 
@@ -64735,11 +67540,11 @@ jxg/* default */.Z.extend(
                 case 'last':
                     x = c2[1];
                     y = c2[2];
-                    break
+                    break;
                 case 'first':
                     x = c1[1];
                     y = c1[2];
-                    break
+                    break;
                 case "lft":
                 case "llft":
                 case "ulft":
@@ -65010,6 +67815,22 @@ jxg/* default */.Z.extend(
         },
 
         /**
+         * Set a new fixed length, then update the board.
+         * @param {String|Number|function} l A string, function or number describing the new length.
+         * @returns {JXG.Line} Reference to this line
+         */
+        setFixedLength: function (l) {
+            if(!this.hasFixedLength) {
+                return this;
+            }
+
+            this.fixedLength = utils_type/* default */.Z.createFunction(l, this.board);
+            this.board.update();
+
+            return this;
+        },
+
+        /**
          * Treat the element  as a parametric curve
          * @private
          */
@@ -65062,6 +67883,7 @@ jxg/* default */.Z.extend(
         //         this.ticks[i].showElement();
         //     }
         // }
+
     }
 );
 
@@ -65069,7 +67891,6 @@ jxg/* default */.Z.extend(
  * @class This element is used to provide a constructor for a general line. A general line is given by two points. By setting additional properties
  * a line can be used as an arrow and/or axis.
  * @pseudo
- * @description
  * @name Line
  * @augments JXG.Line
  * @constructor
@@ -65405,9 +68226,9 @@ jxg/* default */.Z.registerElement("line", jxg/* default */.Z.createLine);
  * @class This element is used to provide a constructor for a segment.
  * It's strictly spoken just a wrapper for element {@link Line} with {@link Line#straightFirst}
  * and {@link Line#straightLast} properties set to false. If there is a third variable then the
- * segment has a fixed length (which may be a function, too).
+ * segment has a fixed length (which may be a function, too) determined by the absolute value of
+ * that number.
  * @pseudo
- * @description
  * @name Segment
  * @augments JXG.Line
  * @constructor
@@ -65416,8 +68237,8 @@ jxg/* default */.Z.registerElement("line", jxg/* default */.Z.createLine);
  * @param {JXG.Point,array_JXG.Point,array} point1,point2 Parent elements can be two elements either of type {@link JXG.Point}
  * or array of numbers describing the
  * coordinates of a point. In the latter case the point will be constructed automatically as a fixed invisible point.
- * @param {number,function} length (optional) The points are adapted - if possible - such that their distance
- * has this value.
+ * @param {number,function} [length] The points are adapted - if possible - such that their distance
+ * is equal to the absolute value of this number.
  * @see Line
  * @example
  * // Create a segment providing two points.
@@ -65436,13 +68257,16 @@ jxg/* default */.Z.registerElement("line", jxg/* default */.Z.createLine);
  * // Create a segment providing two points.
  *   var p1 = board.create('point', [4.0, 1.0]);
  *   var p2 = board.create('point', [1.0, 1.0]);
+ *   // AB
  *   var l1 = board.create('segment', [p1, p2]);
  *   var p3 = board.create('point', [4.0, 2.0]);
  *   var p4 = board.create('point', [1.0, 2.0]);
- *   var l2 = board.create('segment', [p3, p4, 3]);
+ *   // CD
+ *   var l2 = board.create('segment', [p3, p4, 3]); // Fixed length
  *   var p5 = board.create('point', [4.0, 3.0]);
  *   var p6 = board.create('point', [1.0, 4.0]);
- *   var l3 = board.create('segment', [p5, p6, function(){ return l1.L();} ]);
+ *   // EF
+ *   var l3 = board.create('segment', [p5, p6, function(){ return l1.L();} ]); // Fixed, but dependent length
  * </pre><div class="jxgbox" id="JXG617336ba-0705-4b2b-a236-c87c28ef25be" style="width: 300px; height: 300px;"></div>
  * <script type="text/javascript">
  *   var slex2_board = JXG.JSXGraph.initBoard('JXG617336ba-0705-4b2b-a236-c87c28ef25be', {boundingbox: [-1, 7, 7, -1], axis: true, showcopyright: false, shownavigation: false});
@@ -65475,7 +68299,7 @@ jxg/* default */.Z.createSegment = function (board, parents, attributes) {
                 return parents[2];
             };
         } else if (utils_type/* default */.Z.isFunction(parents[2])) {
-            el.fixedLength = parents[2];
+            el.fixedLength = utils_type/* default */.Z.createFunction(parents[2], this.board);
         } else {
             throw new Error(
                 "JSXGraph: Can't create segment with third parent type '" +
@@ -65514,7 +68338,6 @@ jxg/* default */.Z.registerElement("segment", jxg/* default */.Z.createSegment);
  * {@link Line} with {@link Line#straightFirst}
  * and {@link Line#straightLast} properties set to false and {@link Line#lastArrow} set to true.
  * @pseudo
- * @description
  * @name Arrow
  * @augments JXG.Line
  * @constructor
@@ -65558,7 +68381,6 @@ jxg/* default */.Z.registerElement("arrow", jxg/* default */.Z.createArrow);
  * @class This element is used to provide a constructor for an axis. It's strictly spoken just a wrapper for element {@link Line} with {@link Line#straightFirst}
  * and {@link Line#straightLast} properties set to true. Additionally {@link Line#lastArrow} is set to true and default {@link Ticks} will be created.
  * @pseudo
- * @description
  * @name Axis
  * @augments JXG.Line
  * @constructor
@@ -65581,57 +68403,78 @@ jxg/* default */.Z.createAxis = function (board, parents, attributes) {
     var attr, attr_ticks, el, els, dist;
 
     // Arrays or points, that is all we need.
-    if (
-        (utils_type/* default */.Z.isArray(parents[0]) || utils_type/* default */.Z.isPoint(parents[0])) &&
-        (utils_type/* default */.Z.isArray(parents[1]) || utils_type/* default */.Z.isPoint(parents[1]))
-    ) {
-        // Create line
-        attr = utils_type/* default */.Z.copyAttributes(attributes, board.options, "axis");
+    // if (
+    //     (Type.isArray(parents[0]) || Type.isPoint(parents[0])) &&
+    //     (Type.isArray(parents[1]) || Type.isPoint(parents[1]))
+    // ) {
+
+    // Create line
+    attr = utils_type/* default */.Z.copyAttributes(attributes, board.options, "axis");
+    try {
         el = board.create("line", parents, attr);
-        el.type = constants/* default */.Z.OBJECT_TYPE_AXIS;
-        el.isDraggable = false;
-        el.point1.isDraggable = false;
-        el.point2.isDraggable = false;
-
-        for (els in el.ancestors) {
-            if (el.ancestors.hasOwnProperty(els)) {
-                el.ancestors[els].type = constants/* default */.Z.OBJECT_TYPE_AXISPOINT;
-            }
-        }
-
-        // Create ticks
-        attr_ticks = utils_type/* default */.Z.copyAttributes(attributes, board.options, "axis", "ticks");
-        if (utils_type/* default */.Z.exists(attr_ticks.ticksdistance)) {
-            dist = attr_ticks.ticksdistance;
-        } else if (utils_type/* default */.Z.isArray(attr_ticks.ticks)) {
-            dist = attr_ticks.ticks;
-        } else {
-            dist = 1.0;
-        }
-
-        /**
-         * The ticks attached to the axis.
-         * @memberOf Axis.prototype
-         * @name defaultTicks
-         * @type JXG.Ticks
-         */
-        el.defaultTicks = board.create("ticks", [el, dist], attr_ticks);
-        el.defaultTicks.dump = false;
-        el.elType = "axis";
-        el.subs = {
-            ticks: el.defaultTicks
-        };
-        el.inherits.push(el.defaultTicks);
-    } else {
+    } catch (err) {
         throw new Error(
             "JSXGraph: Can't create axis with parent types '" +
-                typeof parents[0] +
-                "' and '" +
-                typeof parents[1] +
-                "'." +
-                "\nPossible parent types: [point,point], [[x1,y1],[x2,y2]]"
+            typeof parents[0] +
+            "' and '" +
+            typeof parents[1] +
+            "'." +
+            "\nPossible parent types: [point,point], [[x1,y1],[x2,y2]]"
         );
     }
+
+    el.type = constants/* default */.Z.OBJECT_TYPE_AXIS;
+    el.isDraggable = false;
+    el.point1.isDraggable = false;
+    el.point2.isDraggable = false;
+
+    for (els in el.ancestors) {
+        if (el.ancestors.hasOwnProperty(els)) {
+            el.ancestors[els].type = constants/* default */.Z.OBJECT_TYPE_AXISPOINT;
+        }
+    }
+
+    // Create ticks
+    attr_ticks = utils_type/* default */.Z.copyAttributes(attributes, board.options, "axis", "ticks");
+    if (utils_type/* default */.Z.exists(attr_ticks.ticksdistance)) {
+        dist = attr_ticks.ticksdistance;
+    } else if (utils_type/* default */.Z.isArray(attr_ticks.ticks)) {
+        dist = attr_ticks.ticks;
+    } else {
+        dist = 1.0;
+    }
+
+    /**
+     * The ticks attached to the axis.
+     * @memberOf Axis.prototype
+     * @name defaultTicks
+     * @type JXG.Ticks
+     */
+    el.defaultTicks = board.create("ticks", [el, dist], attr_ticks);
+    el.defaultTicks.dump = false;
+    el.elType = "axis";
+    el.subs = {
+        ticks: el.defaultTicks
+    };
+    el.inherits.push(el.defaultTicks);
+    // } else {
+    //     throw new Error(
+    //         "JSXGraph: Can't create axis with parent types '" +
+    //             typeof parents[0] +
+    //             "' and '" +
+    //             typeof parents[1] +
+    //             "'." +
+    //             "\nPossible parent types: [point,point], [[x1,y1],[x2,y2]]"
+    //     );
+    // }
+
+    // el.update = function() {
+    //     JXG.Line.prototype.update.call(this);
+
+    //     console.log("Additional axis stuff");
+
+    //     return this;
+    // };
 
     return el;
 };
@@ -65642,7 +68485,6 @@ jxg/* default */.Z.registerElement("axis", jxg/* default */.Z.createAxis);
  * @class With the element tangent the slope of a line, circle, or curve in a certain point can be visualized. A tangent is always constructed
  * by a glider on a line, circle, or curve and describes the tangent in the glider point on that line, circle, or curve.
  * @pseudo
- * @description
  * @name Tangent
  * @augments JXG.Line
  * @constructor
@@ -65663,7 +68505,8 @@ jxg/* default */.Z.registerElement("axis", jxg/* default */.Z.createAxis);
  * </script><pre>
  */
 jxg/* default */.Z.createTangent = function (board, parents, attributes) {
-    var p, c, j, el, tangent, attr;
+    var p, c, j, el, tangent, attr,
+        getCurveTangentDir;
 
     // One argument: glider on line, circle or curve
     if (parents.length === 1) {
@@ -65734,171 +68577,100 @@ jxg/* default */.Z.createTangent = function (board, parents, attributes) {
             tangent.glider = p;
         } else {
             // curveType 'plot'
-            // In case of bezierDegree == 1:
-            // Find two points p1, p2 enclosing the glider.
-            // Then the equation of the line segment is: 0 = y*(x1-x2) + x*(y2-y1) + y1*x2-x1*y2,
-            // which is the cross product of p1 and p2.
-            //
-            // In case of bezieDegree === 3:
-            // The slope dy / dx of the tangent is determined. Then the
-            // tangent is computed as cross product between
-            // the glider p and [1, p.X() + dx, p.Y() + dy]
-            //
+            /**
+             * @ignore
+             *
+             * In case of bezierDegree == 1:
+             * Find two points p1, p2 enclosing the glider.
+             * Then the equation of the line segment is: 0 = y*(x1-x2) + x*(y2-y1) + y1*x2-x1*y2,
+             * which is the cross product of p1 and p2.
+             *
+             * In case of bezierDegree === 3:
+             * The slope dy / dx of the tangent is determined. Then the
+             * tangent is computed as cross product between
+             * the glider p and [1, p.X() + dx, p.Y() + dy]
+             *
+             */
+            getCurveTangentDir = function (position, curve, num) {
+                var i = Math.floor(position),
+                    p1, p2, t, A, B, C, D, dx, dy, d,
+                    points, le;
+
+                if (curve.bezierDegree === 1) {
+                    if (i === curve.numberPoints - 1) {
+                        i--;
+                    }
+                } else if (curve.bezierDegree === 3) {
+                    // i is start of the Bezier segment
+                    // t is the position in the Bezier segment
+                    if (curve.elType === 'sector') {
+                        points = curve.points.slice(3, curve.numberPoints - 3);
+                        le = points.length;
+                    } else {
+                        points = curve.points;
+                        le = points.length;
+                    }
+                    i = Math.floor((position * (le - 1)) / 3) * 3;
+                    t = (position * (le - 1) - i) / 3;
+                    if (i >= le - 1) {
+                        i = le - 4;
+                        t = 1;
+                    }
+                } else {
+                    return 0;
+                }
+
+                if (i < 0) {
+                    return 1;
+                }
+
+                // The curve points are transformed (if there is a transformation)
+                // c.X(i) is not transformed.
+                if (curve.bezierDegree === 1) {
+                    p1 = curve.points[i].usrCoords;
+                    p2 = curve.points[i + 1].usrCoords;
+                } else {
+                    A = points[i].usrCoords;
+                    B = points[i + 1].usrCoords;
+                    C = points[i + 2].usrCoords;
+                    D = points[i + 3].usrCoords;
+                    dx =
+                        (1 - t) * (1 - t) * (B[1] - A[1]) +
+                        2 * (1 - t) * t * (C[1] - B[1]) +
+                        t * t * (D[1] - C[1]);
+                    dy =
+                        (1 - t) * (1 - t) * (B[2] - A[2]) +
+                        2 * (1 - t) * t * (C[2] - B[2]) +
+                        t * t * (D[2] - C[2]);
+                    d = math/* default */.Z.hypot(dx, dy);
+                    dx /= d;
+                    dy /= d;
+                    p1 = p.coords.usrCoords;
+                    p2 = [1, p1[1] + dx, p1[2] + dy];
+                }
+
+                switch (num) {
+                    case 0:
+                        return p1[2] * p2[1] - p1[1] * p2[2];
+                    case 1:
+                        return p2[2] - p1[2];
+                    case 2:
+                        return p1[1] - p2[1];
+                }
+                return 0;
+            };
+
             tangent = board.create(
                 "line",
                 [
-                    function () {
-                        var i = Math.floor(p.position),
-                            p1, p2, t, A, B, C, D, dx, dy, d;
-
-                        if (c.bezierDegree === 1) {
-                            if (i === c.numberPoints - 1) {
-                                i--;
-                            }
-                        } else if (c.bezierDegree === 3) {
-                            // i is start of the Bezier segment
-                            // t is the position in the Bezier segment
-                            i = Math.floor((p.position * (c.numberPoints - 1)) / 3) * 3;
-                            t = (p.position * (c.numberPoints - 1) - i) / 3;
-                            if (i >= c.numberPoints - 1) {
-                                i = c.numberPoints - 4;
-                                t = 1;
-                            }
-                        } else {
-                            return 0;
-                        }
-
-                        if (i < 0) {
-                            return 1;
-                        }
-
-                        // The curve points are transformed (if there is a transformation)
-                        // c.X(i) is not transformed.
-                        if (c.bezierDegree === 1) {
-                            p1 = c.points[i].usrCoords;
-                            p2 = c.points[i + 1].usrCoords;
-                        } else {
-                            A = c.points[i].usrCoords;
-                            B = c.points[i + 1].usrCoords;
-                            C = c.points[i + 2].usrCoords;
-                            D = c.points[i + 3].usrCoords;
-                            dx =
-                                (1 - t) * (1 - t) * (B[1] - A[1]) +
-                                2 * (1 - t) * t * (C[1] - B[1]) +
-                                t * t * (D[1] - C[1]);
-                            dy =
-                                (1 - t) * (1 - t) * (B[2] - A[2]) +
-                                2 * (1 - t) * t * (C[2] - B[2]) +
-                                t * t * (D[2] - C[2]);
-                            d = Math.sqrt(dx * dx + dy * dy);
-                            dx /= d;
-                            dy /= d;
-                            p1 = p.coords.usrCoords;
-                            p2 = [1, p1[1] + dx, p1[2] + dy];
-                        }
-                        return p1[2] * p2[1] - p1[1] * p2[2];
+                    function() {
+                        return getCurveTangentDir(p.position, c, 0);
                     },
-                    function () {
-                        var i = Math.floor(p.position),
-                            p1, p2, t, A, B, C, D, dx, dy, d;
-
-                        if (c.bezierDegree === 1) {
-                            if (i === c.numberPoints - 1) {
-                                i--;
-                            }
-                        } else if (c.bezierDegree === 3) {
-                            // i is start of the Bezier segment
-                            // t is the position in the Bezier segment
-                            i = Math.floor((p.position * (c.numberPoints - 1)) / 3) * 3;
-                            t = (p.position * (c.numberPoints - 1) - i) / 3;
-                            if (i >= c.numberPoints - 1) {
-                                i = c.numberPoints - 4;
-                                t = 1;
-                            }
-                        } else {
-                            return 0;
-                        }
-
-                        if (i < 0) {
-                            return 0;
-                        }
-
-                        // The curve points are transformed (if there is a transformation)
-                        // c.X(i) is not transformed.
-                        if (c.bezierDegree === 1) {
-                            p1 = c.points[i].usrCoords;
-                            p2 = c.points[i + 1].usrCoords;
-                        } else {
-                            A = c.points[i].usrCoords;
-                            B = c.points[i + 1].usrCoords;
-                            C = c.points[i + 2].usrCoords;
-                            D = c.points[i + 3].usrCoords;
-                            dx =
-                                (1 - t) * (1 - t) * (B[1] - A[1]) +
-                                2 * (1 - t) * t * (C[1] - B[1]) +
-                                t * t * (D[1] - C[1]);
-                            dy =
-                                (1 - t) * (1 - t) * (B[2] - A[2]) +
-                                2 * (1 - t) * t * (C[2] - B[2]) +
-                                t * t * (D[2] - C[2]);
-                            d = Math.sqrt(dx * dx + dy * dy);
-                            dx /= d;
-                            dy /= d;
-                            p1 = p.coords.usrCoords;
-                            p2 = [1, p1[1] + dx, p1[2] + dy];
-                        }
-                        return p2[2] - p1[2];
+                    function() {
+                        return getCurveTangentDir(p.position, c, 1);
                     },
-                    function () {
-                        var i = Math.floor(p.position),
-                            p1, p2, t, A, B, C, D, dx, dy, d;
-
-                        if (c.bezierDegree === 1) {
-                            if (i === c.numberPoints - 1) {
-                                i--;
-                            }
-                        } else if (c.bezierDegree === 3) {
-                            // i is start of the Bezier segment
-                            // t is the position in the Bezier segment
-                            i = Math.floor((p.position * (c.numberPoints - 1)) / 3) * 3;
-                            t = (p.position * (c.numberPoints - 1) - i) / 3;
-                            if (i >= c.numberPoints - 1) {
-                                i = c.numberPoints - 4;
-                                t = 1;
-                            }
-                        } else {
-                            return 0;
-                        }
-
-                        if (i < 0) {
-                            return 0.0;
-                        }
-
-                        // The curve points are transformed (if there is a transformation)
-                        // c.X(i) is not transformed.
-                        if (c.bezierDegree === 1) {
-                            p1 = c.points[i].usrCoords;
-                            p2 = c.points[i + 1].usrCoords;
-                        } else {
-                            A = c.points[i].usrCoords;
-                            B = c.points[i + 1].usrCoords;
-                            C = c.points[i + 2].usrCoords;
-                            D = c.points[i + 3].usrCoords;
-                            dx =
-                                (1 - t) * (1 - t) * (B[1] - A[1]) +
-                                2 * (1 - t) * t * (C[1] - B[1]) +
-                                t * t * (D[1] - C[1]);
-                            dy =
-                                (1 - t) * (1 - t) * (B[2] - A[2]) +
-                                2 * (1 - t) * t * (C[2] - B[2]) +
-                                t * t * (D[2] - C[2]);
-                            d = Math.sqrt(dx * dx + dy * dy);
-                            dx /= d;
-                            dy /= d;
-                            p1 = p.coords.usrCoords;
-                            p2 = [1, p1[1] + dx, p1[2] + dy];
-                        }
-                        return p1[1] - p2[1];
+                    function() {
+                        return getCurveTangentDir(p.position, c, 2);
                     }
                 ],
                 attr
@@ -66037,7 +68809,6 @@ jxg/* default */.Z.createTangent = function (board, parents, attributes) {
  * The radical axis passes through the intersection points when the circles intersect.
  * When a circle about the midpoint of circle centers, passing through the circle centers, intersects the circles, the polar lines pass through those intersection points.
  * @pseudo
- * @description
  * @name RadicalAxis
  * @augments JXG.Line
  * @constructor
@@ -66582,9 +69353,9 @@ jxg/* default */.Z.extend(
 
         /**
          * @private
-         * Determine what the dragging of a group element should do:
-         * rotation, translation, scaling or nothing.
-         */
+        */
+        //  Determine what the dragging of a group element should do:
+        //  rotation, translation, scaling or nothing.
         _update_find_drag_type: function () {
             var el,
                 obj,
@@ -66646,9 +69417,9 @@ jxg/* default */.Z.extend(
 
         /**
          * @private
-         * Determine the Euclidean coordinates of the centroid of the group.
          * @returns {Array} array of length two,
-         */
+        */
+        // Determine the Euclidean coordinates of the centroid of the group.
         _update_centroid_center: function () {
             var center, len, el;
 
@@ -66671,8 +69442,8 @@ jxg/* default */.Z.extend(
 
         /**
          * @private
-         * Apply the transformation to all elements of the group
-         */
+        */
+        // Apply the transformation to all elements of the group
         _update_apply_transformation: function (drag, t) {
             var el, obj;
 
@@ -66982,7 +69753,6 @@ jxg/* default */.Z.extend(
  *
  *
  * @pseudo
- * @description
  * @name Group
  * @augments JXG.Group
  * @constructor
@@ -67276,6 +70046,7 @@ jxg/* default */.Z.registerElement("group", jxg/* default */.Z.createGroup);
 
 
 
+
 /**
  * A circle consists of all points with a given distance from one point. This point is called center, the distance is called radius.
  * A circle can be constructed by providing a center and a point on the circle or a center and a radius (given as a number, function,
@@ -67365,8 +70136,8 @@ jxg/* default */.Z.Circle = function (board, method, par1, par2, attributes) {
         this.radius = this.Radius();
     } else if (method === "pointRadius") {
         this.gxtterm = par2;
-        // Converts GEONExT syntax into JavaScript syntax and generally ensures that the radius is a function
-        this.updateRadius = utils_type/* default */.Z.createFunction(par2, this.board, null, true);
+        // Converts JessieCode syntax into JavaScript syntax and generally ensures that the radius is a function
+        this.updateRadius = utils_type/* default */.Z.createFunction(par2, this.board);
         // First evaluation of the radius function
         this.updateRadius();
         this.addParentsFromJCFunctions([this.updateRadius]);
@@ -67419,7 +70190,11 @@ jxg/* default */.Z.Circle = function (board, method, par1, par2, attributes) {
         getRadius: "getRadius",
         Area: "Area",
         area: "Area",
+        Perimeter: "Perimeter",
+        Circumference: "Perimeter",
         radius: "Radius",
+        Radius: "Radius",
+        Diameter: "Diameter",
         center: "center",
         line: "line",
         point2: "point2"
@@ -67455,7 +70230,7 @@ jxg/* default */.Z.extend(
             }
             dx = mp[1] - p.usrCoords[1];
             dy = mp[2] - p.usrCoords[2];
-            dist = Math.sqrt(dx * dx + dy * dy);
+            dist = math/* default */.Z.hypot(dx, dy);
 
             // We have to use usrCoords, since Radius is available in usrCoords only.
             prec += utils_type/* default */.Z.evaluate(this.visProp.strokewidth) * 0.5;
@@ -67593,6 +70368,7 @@ jxg/* default */.Z.extend(
                 } else if (this.method === "pointRadius") {
                     this.radius = this.updateRadius();
                 }
+                this.radius = Math.abs(this.radius);
 
                 this.updateStdform();
                 this.updateQuadraticform();
@@ -67742,7 +70518,7 @@ jxg/* default */.Z.extend(
          * @returns {JXG.Circle} Reference to this circle
          */
         setRadius: function (r) {
-            this.updateRadius = utils_type/* default */.Z.createFunction(r, this.board, null, true);
+            this.updateRadius = utils_type/* default */.Z.createFunction(r, this.board);
             this.addParentsFromJCFunctions([this.updateRadius]);
             this.board.update();
 
@@ -67776,10 +70552,18 @@ jxg/* default */.Z.extend(
             }
 
             if (this.method === "pointRadius") {
-                return this.updateRadius();
+                return Math.abs(this.updateRadius());
             }
 
             return NaN;
+        },
+
+        /**
+         * Calculates the diameter of the circle.
+         * @returns {Number} The Diameter of the circle
+         */
+        Diameter: function () {
+            return 2 * this.Radius();
         },
 
         /**
@@ -68017,15 +70801,20 @@ jxg/* default */.Z.extend(
  * @pseudo
  * @description  A circle consists of all points with a given distance from one point. This point is called center, the distance is called radius.
  * A circle can be constructed by providing a center and a point on the circle or a center and a radius (given as a number, function,
- * line, or circle).
+ * line, or circle). If the radius is a negative value, its absolute values is taken.
  * @name Circle
  * @augments JXG.Circle
  * @constructor
  * @type JXG.Circle
  * @throws {Exception} If the element cannot be constructed with the given parent objects an exception is thrown.
- * @param {JXG.Point_number,JXG.Point,JXG.Line,JXG.Circle} center,radius The center must be given as a {@link JXG.Point}, see {@link JXG.providePoints}, but the radius can be given
- * as a number (which will create a circle with a fixed radius), another {@link JXG.Point}, a {@link JXG.Line} (the distance of start and end point of the
+ * @param {JXG.Point_number,JXG.Point,JXG.Line,JXG.Circle} center,radius The center must be given as a {@link JXG.Point},
+ * see {@link JXG.providePoints}, but the radius can be given
+ * as a number (which will create a circle with a fixed radius),
+ * another {@link JXG.Point}, a {@link JXG.Line} (the distance of start and end point of the
  * line will determine the radius), or another {@link JXG.Circle}.
+ * <p>
+ * If the radius is supplied as number or output of a function, its absolute value is taken.
+ *
  * @example
  * // Create a circle providing two points
  * var p1 = board.create('point', [2.0, 2.0]),
@@ -68143,9 +70932,15 @@ jxg/* default */.Z.createCircle = function (board, parents, attributes) {
     // Circle defined by points
     for (i = 0; i < parents.length; i++) {
         if (utils_type/* default */.Z.isPointType(board, parents[i])) {
-            p = p.concat(
-                utils_type/* default */.Z.providePoints(board, [parents[i]], attributes, "circle", [point_style[i]])
-            );
+            if (parents.length < 3) {
+                p = p.concat(
+                    utils_type/* default */.Z.providePoints(board, [parents[i]], attributes, "circle", [point_style[i]])
+                );
+            } else {
+                p = p.concat(
+                    utils_type/* default */.Z.providePoints(board, [parents[i]], attributes, "point")
+                );
+                }
             if (p[p.length - 1] === false) {
                 throw new Error(
                     "JSXGraph: Can't create circle from this type. Please provide a point type."
@@ -68281,7 +71076,6 @@ jxg/* default */.Z.registerElement("circle", jxg/* default */.Z.createCircle);
  * @class This element is used to provide a constructor for an ellipse. An ellipse is given by two points (the foci) and a third point on the ellipse or
  * the length of the major axis.
  * @pseudo
- * @description
  * @name Ellipse
  * @augments Conic
  * @constructor
@@ -68440,6 +71234,10 @@ jxg/* default */.Z.createEllipse = function (board, parents, attributes) {
         attr_center
     );
 
+    /**
+     * @class
+     * @ignore
+     */
     curve = board.create(
         "curve",
         [
@@ -68524,6 +71322,7 @@ jxg/* default */.Z.createEllipse = function (board, parents, attributes) {
      * @param {Number} y Coordinate in y direction, screen coordinates.
      * @returns {Boolean} True if (x,y) is near the ellipse, False otherwise.
      * @private
+     * @ignore
      */
     curve.hasPoint = function (x, y) {
         var ac, bc, r, p, dist;
@@ -68559,7 +71358,6 @@ jxg/* default */.Z.createEllipse = function (board, parents, attributes) {
  * @class This element is used to provide a constructor for an hyperbola. An hyperbola is given by two points (the foci) and a third point on the hyperbola or
  * the length of the major axis.
  * @pseudo
- * @description
  * @name Hyperbola
  * @augments Conic
  * @constructor
@@ -68686,6 +71484,10 @@ jxg/* default */.Z.createHyperbola = function (board, parents, attributes) {
         attr_center
     );
 
+    /**
+     * @class
+     * @ignore
+     */
     curve = board.create(
         "curve",
         [
@@ -68778,11 +71580,11 @@ jxg/* default */.Z.createHyperbola = function (board, parents, attributes) {
 /**
  * @class This element is used to provide a constructor for a parabola. A parabola is given by one point (the focus) and a line (the directrix).
  * @pseudo
- * @description
  * @name Parabola
  * @augments Conic
  * @constructor
- * @type JXG.Curve
+ * @type Object
+ * @description JXG.Curve
  * @throws {Exception} If the element cannot be constructed with the given parent objects an exception is thrown.
  * @param {JXG.Point,array_JXG.Line} point,line Parent elements are a point and a line or a pair of coordinates.
  * Optional parameters three and four are numbers which define the curve length (e.g. start/end). Default values are -pi and pi.
@@ -68887,7 +71689,10 @@ jxg/* default */.Z.createParabola = function (board, parents, attributes) {
         attr_center
     );
 
-    /** @ignore */
+    /**
+     * @class
+     * @ignore
+     */
     curve = board.create(
         "curve",
         [
@@ -69001,7 +71806,6 @@ jxg/* default */.Z.createParabola = function (board, parents, attributes) {
  *     board.create('conic', [A, C, F, B/2, D/2, E/2]);
  * </pre>
  * @pseudo
- * @description
  * @name Conic
  * @augments JXG.Curve
  * @constructor
@@ -69232,6 +72036,10 @@ jxg/* default */.Z.createConic = function (board, parents, attributes) {
 
     // Here, the defining functions for the curve are just dummy functions.
     // In polarForm there is a reference to curve.quadraticform.
+    /**
+     * @class
+     * @ignore
+     */
     curve = board.create(
         "curve",
         [
@@ -69249,7 +72057,7 @@ jxg/* default */.Z.createConic = function (board, parents, attributes) {
 
     /** @ignore */
     polarForm = function (phi, suspendUpdate) {
-        var i, j, len, v;
+        var i, j, v; // len,;
 
         if (!suspendUpdate) {
             if (givenByPoints) {
@@ -69287,16 +72095,16 @@ jxg/* default */.Z.createConic = function (board, parents, attributes) {
             }
 
             // Normalize the Eigenvectors
-            for (i = 0; i < 3; i++) {
-                len = 0.0;
-                for (j = 0; j < 3; j++) {
-                    len += eigen[1][j][i] * eigen[1][j][i];
-                }
-                len = Math.sqrt(len);
-                /*for (j = 0; j < 3; j++) {
-                        //eigen[1][j][i] /= len;
-                    }*/
-            }
+            // for (i = 0; i < 3; i++) {
+            //     // len = Mat.hypot(eigen[1][0][i], eigen[1][1][i], eigen[1][2][i])
+            //     for (j = 0; j < 3; j++) {
+            //         len += eigen[1][j][i] * eigen[1][j][i];
+            //     }
+            //     len = Math.sqrt(len);
+            //     /*for (j = 0; j < 3; j++) {
+            //             //eigen[1][j][i] /= len;
+            //         }*/
+            // }
             rotationMatrix = eigen[1];
             c = Math.sqrt(Math.abs(eigen[0][0][0]));
             a = Math.sqrt(Math.abs(eigen[0][1][1]));
@@ -70773,7 +73581,7 @@ jxg/* default */.Z.createRegularPolygon = function (board, parents, attributes) 
             p[i] = board.create("point", [p[i - 2], rot], attr);
             p[i].type = constants/* default */.Z.OBJECT_TYPE_CAS;
 
-            // The next two lines of code are needed to make regular polygones draggable
+            // The next two lines of code are needed to make regular polygons draggable
             // The new helper points are set to be draggable.
             p[i].isDraggable = true;
             p[i].visProp.fixed = false;
@@ -70861,9 +73669,89 @@ jxg/* default */.Z.createPolygonalChain = function (board, parents, attributes) 
     return el;
 };
 
+/**
+ * @class Parallelogram element. This is a quadrilateral with parallel opposite sides.
+ * @pseudo
+ * @description Constructs a parallelogram. As input, three points or coordinate arrays are expected.
+ * @constructor
+ * @name Parallelogram
+ * @type Polygon
+ * @augments Polygon
+ * @throws {Exception} If the element cannot be constructed with the given parent objects an exception is thrown.
+ * @param {JXG.Point,Array_JXG.Point,Array_JXG.Point,Array} p1,p2,p3 The parallelogram is a polygon through
+ * the points [p1, p2, pp, p3], where pp is a parallelpoint, available as sub-object parallelogram.parallelPoint.
+ *
+ * @example
+ * var p1 = board.create('point', [-3, -4]);
+ * var p2 = board.create('point', [3, -1]);
+ * var p3 = board.create('point', [-2, 0]);
+ * var par = board.create('parallelogram', [p1, p2, p3], {
+ *     hasInnerPoints: true,
+ *     parallelpoint: {
+ *         size: 6,
+ *         face: '<<>>'
+ *     }
+ * });
+ *
+ * </pre><div id="JXG05ff162f-7cee-4fd2-bd90-3d9ee5b489cc" class="jxgbox" style="width: 300px; height: 300px;"></div>
+ * <script type="text/javascript">
+ *     (function() {
+ *         var board = JXG.JSXGraph.initBoard('JXG05ff162f-7cee-4fd2-bd90-3d9ee5b489cc',
+ *             {boundingbox: [-8, 8, 8,-8], axis: true, showcopyright: false, shownavigation: false});
+ *     var p1 = board.create('point', [-3, -4]);
+ *     var p2 = board.create('point', [3, -1]);
+ *     var p3 = board.create('point', [-2, 0]);
+ *     var par = board.create('parallelogram', [p1, p2, p3], {
+ *         hasInnerPoints: true,
+ *         parallelpoint: {
+ *             size: 6,
+ *             face: '<<>>'
+ *         }
+ *     });
+ *
+ *     })();
+ *
+ * </script><pre>
+ *
+ *
+ */
+jxg/* default */.Z.createParallelogram = function (board, parents, attributes) {
+    var el, pp,
+        points = [],
+        attr,
+        attr_pp;
+
+    points = utils_type/* default */.Z.providePoints(board, parents, attributes, "polygon", ["vertices"]);
+    if (points === false || points.length < 3) {
+        throw new Error(
+            "JSXGraph: Can't create parallelogram with parent types other than 'point' and 'coordinate arrays' or a function returning an array of coordinates."
+        );
+    }
+
+    attr_pp = utils_type/* default */.Z.copyAttributes(attributes, board.options, "parallelogram", ["parallelpoint"]);
+    pp = board.create('parallelpoint', points, attr_pp);
+    attr = utils_type/* default */.Z.copyAttributes(attributes, board.options, "parallelogram");
+    el = board.create('polygon', [points[0], points[1], pp, points[2]], attr);
+
+    /**
+     * Parallel point which makes the quadrilateral a parallelogram. Can also be accessed with
+     * parallelogram.vertices[2].
+     * @name Parallelogram#parallelPoint
+     * @type {JXG.Point}
+     */
+    el.parallelPoint = pp;
+
+    el.isDraggable = true;
+    pp.isDraggable = true;
+    pp.visProp.fixed = false;
+
+    return el;
+};
+
 jxg/* default */.Z.registerElement("polygon", jxg/* default */.Z.createPolygon);
 jxg/* default */.Z.registerElement("regularpolygon", jxg/* default */.Z.createRegularPolygon);
 jxg/* default */.Z.registerElement("polygonalchain", jxg/* default */.Z.createPolygonalChain);
+jxg/* default */.Z.registerElement("parallelogram", jxg/* default */.Z.createParallelogram);
 
 /* harmony default export */ var polygon = (jxg/* default */.Z.Polygon);
 // export default {
@@ -70973,7 +73861,7 @@ jxg/* default */.Z.Curve = function (board, parents, attributes) {
     this.ticks = [];
 
     /**
-     * Stores a quad tree if it is required. The quad tree is generated in the curve
+     * Stores a quadtree if it is required. The quadtree is generated in the curve
      * updates and can be used to speed up the hasPoint method.
      * @type JXG.Math.Quadtree
      */
@@ -71109,28 +73997,18 @@ jxg/* default */.Z.extend(
          * @returns {Boolean} True if (x,y) is near the curve, False otherwise.
          */
         hasPoint: function (x, y, start) {
-            var t,
-                checkPoint,
-                len,
-                invMat,
-                c,
-                i,
-                tX,
-                tY,
-                isIn,
+            var t, c, i, tX, tY,
+                checkPoint, len, invMat, isIn,
                 res = [],
                 points,
                 qdt,
                 steps = utils_type/* default */.Z.evaluate(this.visProp.numberpointslow),
                 d = (this.maxX() - this.minX()) / steps,
-                prec,
-                type,
+                prec, type,
                 dist = Infinity,
-                ux2,
-                uy2,
+                ux2, uy2,
                 ev_ct,
-                mi,
-                ma,
+                mi, ma,
                 suspendUpdate = true;
 
             if (utils_type/* default */.Z.isObject(utils_type/* default */.Z.evaluate(this.visProp.precision))) {
@@ -71876,7 +74754,14 @@ jxg/* default */.Z.extend(
          * Converts the JavaScript/JessieCode/GEONExT syntax of the defining function term into JavaScript.
          * New methods X() and Y() for the Curve object are generated, further
          * new methods for minX() and maxX().
-         * @see JXG.GeonextParser.geonext2JS.
+         * If mi or ma are not supplied, default functions are set.
+         *
+         * @param {String} varname Name of the parameter in xterm and yterm, e.g. 'x' or 't'
+         * @param {String|Number|Function|Array} xterm Term for the x coordinate. Can also be an array consisting of discrete values.
+         * @param {String|Number|Function|Array} yterm Term for the y coordinate. Can also be an array consisting of discrete values.
+         * @param {String|Number|Function} [mi] Lower bound on the parameter
+         * @param {String|Number|Function} [ma] Upper bound on the parameter
+         * @see JXG.GeonextParser.geonext2JS
          */
         generateTerm: function (varname, xterm, yterm, mi, ma) {
             var fx, fy;
@@ -71931,12 +74816,18 @@ jxg/* default */.Z.extend(
                 this.visProp.curvetype = "polar";
             }
 
-            // Set the bounds lower bound
+            // Set the upper and lower bounds for the parameter of the curve.
+            // If not defined, reset the bounds to the default values
+            // given in Curve.prototype.minX, Curve.prototype.maxX
             if (utils_type/* default */.Z.exists(mi)) {
                 this.minX = utils_type/* default */.Z.createFunction(mi, this.board, "");
+            } else {
+                delete this.minX;
             }
             if (utils_type/* default */.Z.exists(ma)) {
                 this.maxX = utils_type/* default */.Z.createFunction(ma, this.board, "");
+            } else {
+                delete this.maxX;
             }
 
             this.addParentsFromJCFunctions([this.X, this.Y, this.minX, this.maxX]);
@@ -72238,7 +75129,7 @@ jxg/* default */.Z.extend(
 );
 
 /**
- * @class This element is used to provide a constructor for curve, which is just a wrapper for element {@link Curve}.
+ * @class  This element is used to provide a constructor for curve, which is just a wrapper for element {@link Curve}.
  * A curve is a mapping from R to R^2. t mapsto (x(t),y(t)). The graph is drawn for t in the interval [a,b].
  * <p>
  * The following types of curves can be plotted:
@@ -72248,13 +75139,13 @@ jxg/* default */.Z.extend(
  *  <li> data plots: plot line segments through a given list of coordinates.
  * </ul>
  * @pseudo
- * @description
  * @name Curve
  * @augments JXG.Curve
  * @constructor
- * @type JXG.Curve
- *
- * @param {function,number_function,number_function,number_function,number} x,y,a_,b_ Parent elements for Parametric Curves.
+ * @type Object
+ * @description JXG.Curve
+
+ * @param {function,number_function,number_function,number_function,number}  x,y,a_,b_ Parent elements for Parametric Curves.
  *                     <p>
  *                     x describes the x-coordinate of the curve. It may be a function term in one variable, e.g. x(t).
  *                     In case of x being of type number, x(t) is set to  a constant function.
@@ -72271,14 +75162,18 @@ jxg/* default */.Z.extend(
  *                     <p>
  *                     Default values are a=-10 and b=10.
  *                     </p>
- * @param {array_array,function,number} x,y Parent elements for Data Plots.
+ *
+ * @param {array_array,function,number}
+ *
+ * @description x,y Parent elements for Data Plots.
  *                     <p>
  *                     x and y are arrays contining the x and y coordinates of the data points which are connected by
  *                     line segments. The individual entries of x and y may also be functions.
  *                     In case of x being an array the curve type is data plot, regardless of the second parameter and
  *                     if additionally the second parameter y is a function term the data plot evaluates.
  *                     </p>
- * @param {function_array,function,number_function,number_function,number} r,offset_,a_,b_ Parent elements for Polar Curves.
+ * @param {function_array,function,number_function,number_function,number}
+ * @description r,offset_,a_,b_ Parent elements for Polar Curves.
  *                     <p>
  *                     The first parameter is a function term r(phi) describing the polar curve.
  *                     </p>
@@ -72427,6 +75322,10 @@ jxg/* default */.Z.createCurve = function (board, parents, attributes) {
         attr = utils_type/* default */.Z.copyAttributes(attr, board.options, "curve");
 
         cu = new jxg/* default */.Z.Curve(board, ["x", [], []], attr);
+        /**
+         * @class
+         * @ignore
+         */
         cu.updateDataArray = function () {
             var i,
                 le = obj.numberPoints;
@@ -72457,7 +75356,6 @@ jxg/* default */.Z.registerElement("curve", jxg/* default */.Z.createCurve);
  * which is just a wrapper for element {@link Curve} with {@link JXG.Curve#X}()
  * set to x. The graph is drawn for x in the interval [a,b].
  * @pseudo
- * @description
  * @name Functiongraph
  * @augments JXG.Curve
  * @constructor
@@ -72499,7 +75397,8 @@ jxg/* default */.Z.createFunctiongraph = function (board, parents, attributes) {
         par = ["x", "x"].concat(parents); // variable name and identity function for x-coordinate
         // par = ["x", function(x) { return x; }].concat(parents);
 
-    attr = utils_type/* default */.Z.copyAttributes(attributes, board.options, "curve");
+    attr = utils_type/* default */.Z.copyAttributes(attributes, board.options, "functiongraph");
+    attr = utils_type/* default */.Z.copyAttributes(attr, board.options, "curve");
     attr.curvetype = "functiongraph";
     return new jxg/* default */.Z.Curve(board, par, attr);
 };
@@ -72511,7 +75410,6 @@ jxg/* default */.Z.registerElement("plot", jxg/* default */.Z.createFunctiongrap
  * @class This element is used to provide a constructor for (natural) cubic spline curves.
  * Create a dynamic spline interpolated curve given by sample points p_1 to p_n.
  * @pseudo
- * @description
  * @name Spline
  * @augments JXG.Curve
  * @constructor
@@ -72661,7 +75559,6 @@ jxg/* default */.Z.registerElement("spline", jxg/* default */.Z.createSpline);
  * @class This element is used to provide a constructor for cardinal spline curves.
  * Create a dynamic cardinal spline interpolated curve given by sample points p_1 to p_n.
  * @pseudo
- * @description
  * @name Cardinalspline
  * @augments JXG.Curve
  * @constructor
@@ -72756,7 +75653,7 @@ jxg/* default */.Z.createCardinalSpline = function (board, parents, attributes) 
     p = parents[0];
     q = [];
 
-    // given as [x[], y[]]
+    // Given as [x[], y[]]
     if (
         !attributes.isarrayofcoordinates &&
         p.length === 2 &&
@@ -72824,7 +75721,8 @@ jxg/* default */.Z.createCardinalSpline = function (board, parents, attributes) 
                 Dist: function (p) {
                     var dx = this.X() - p.X(),
                         dy = this.Y() - p.Y();
-                    return Math.sqrt(dx * dx + dy * dy);
+
+                    return math/* default */.Z.hypot(dx, dy);
                 }
             };
         };
@@ -72872,7 +75770,6 @@ jxg/* default */.Z.registerElement("cardinalspline", jxg/* default */.Z.createCa
  * @class This element is used to provide a constructor for metapost spline curves.
  * Create a dynamic metapost spline interpolated curve given by sample points p_1 to p_n.
  * @pseudo
- * @description
  * @name Metapostspline
  * @augments JXG.Curve
  * @constructor
@@ -73073,6 +75970,10 @@ jxg/* default */.Z.createMetapostSpline = function (board, parents, attributes) 
     controls = parents[1];
 
     el = new jxg/* default */.Z.Curve(board, ["t", [], [], 0, p.length - 1], attributes);
+    /**
+     * @class
+     * @ignore
+     */
     el.updateDataArray = function () {
         var res,
             i,
@@ -73107,16 +76008,15 @@ jxg/* default */.Z.registerElement("metapostspline", jxg/* default */.Z.createMe
  * @class This element is used to provide a constructor for Riemann sums, which is realized as a special curve.
  * The returned element has the method Value() which returns the sum of the areas of the bars.
  * <p>
- * In case of type "simpson" and "trapezoidal", the horizontal line approximating the function value 
- * is replaced by a parabola or a secant. IN case of "simpson", 
- * the parabola is approximated visually by a polygonal chain of fixed step width. 
- * 
+ * In case of type "simpson" and "trapezoidal", the horizontal line approximating the function value
+ * is replaced by a parabola or a secant. IN case of "simpson",
+ * the parabola is approximated visually by a polygonal chain of fixed step width.
+ *
  * @pseudo
- * @description
  * @name Riemannsum
  * @augments JXG.Curve
  * @constructor
- * @type JXG.Curve
+ * @type Curve
  * @param {function,array_number,function_string,function_function,number_function,number} f,n,type_,a_,b_ Parent elements of Riemannsum are a
  *         Either a function term f(x) describing the function graph which is filled by the Riemann bars, or
  *         an array consisting of two functions and the area between is filled by the Riemann bars.
@@ -73198,7 +76098,7 @@ jxg/* default */.Z.createRiemannsum = function (board, parents, attributes) {
         );
     }
 
-    type = utils_type/* default */.Z.createFunction(parents[2], board, "", false);
+    type = utils_type/* default */.Z.createFunction(parents[2], board, "");
     if (!utils_type/* default */.Z.exists(type)) {
         throw new Error(
             "JSXGraph: JXG.createRiemannsum: argument 3 'type' has to be string or function." +
@@ -73214,7 +76114,7 @@ jxg/* default */.Z.createRiemannsum = function (board, parents, attributes) {
     /**
      * Returns the value of the Riemann sum, i.e. the sum of the (signed) areas of the rectangles.
      * @name Value
-     * @memberOf Riemann.prototype
+     * @memberOf Riemannsum.prototype
      * @function
      * @returns {Number} value of Riemann sum.
      */
@@ -73223,6 +76123,7 @@ jxg/* default */.Z.createRiemannsum = function (board, parents, attributes) {
     };
 
     /**
+     * @class
      * @ignore
      */
     c.updateDataArray = function () {
@@ -73244,13 +76145,14 @@ jxg/* default */.Z.registerElement("riemannsum", jxg/* default */.Z.createRieman
 /**
  * @class This element is used to provide a constructor for trace curve (simple locus curve), which is realized as a special curve.
  * @pseudo
- * @description
  * @name Tracecurve
  * @augments JXG.Curve
  * @constructor
- * @type JXG.Curve
- * @param {Point,Point} Parent elements of Tracecurve are a
+ * @type Object
+ * @descript JXG.Curve
+ * @param {Point} Parent elements of Tracecurve are a
  *         glider point and a point whose locus is traced.
+ * @param {point}
  * @see JXG.Curve
  * @example
  * // Create trace curve.
@@ -73301,17 +76203,11 @@ jxg/* default */.Z.createTracecurve = function (board, parents, attributes) {
     c = board.create("curve", [[0], [0]], attr);
 
     /**
+     * @class
      * @ignore
      */
     c.updateDataArray = function () {
-        var i,
-            step,
-            t,
-            el,
-            pEl,
-            x,
-            y,
-            from,
+        var i, step, t, el, pEl, x, y, from,
             savetrace,
             le = attr.numberpoints,
             savePos = glider.position,
@@ -73409,12 +76305,13 @@ jxg/* default */.Z.registerElement("tracecurve", jxg/* default */.Z.createTracec
      *
      * In case the data points should be updated after creation time, they can be accessed by curve.xterm and curve.yterm.
      * @pseudo
-     * @description
      * @name Stepfunction
      * @augments JXG.Curve
      * @constructor
-     * @type JXG.Curve
-     * @param {Array,Array|Function} Parent elements of Stepfunction are two arrays containing the coordinates.
+     * @type Curve
+     * @description JXG.Curve
+     * @param {Array|Function} Parent1 elements of Stepfunction are two arrays containing the coordinates.
+     * @param {Array|Function} Parent2
      * @see JXG.Curve
      * @example
      * // Create step function.
@@ -73438,6 +76335,7 @@ jxg/* default */.Z.createStepfunction = function (board, parents, attributes) {
     attr = utils_type/* default */.Z.copyAttributes(attributes, board.options, "stepfunction");
     c = board.create("curve", parents, attr);
     /**
+     * @class
      * @ignore
      */
     c.updateDataArray = function () {
@@ -73476,7 +76374,6 @@ jxg/* default */.Z.registerElement("stepfunction", jxg/* default */.Z.createStep
  * the (numerical) derivative of a given curve.
  *
  * @pseudo
- * @description
  * @name Derivative
  * @augments JXG.Curve
  * @constructor
@@ -73543,7 +76440,6 @@ jxg/* default */.Z.registerElement("derivative", jxg/* default */.Z.createDeriva
  * If one element is a curve, it has to be closed.
  * The resulting element is of type curve.
  * @pseudo
- * @description
  * @name CurveIntersection
  * @param {JXG.Curve|JXG.Polygon|JXG.Circle} curve1 First element which is intersected
  * @param {JXG.Curve|JXG.Polygon|JXG.Circle} curve2 Second element which is intersected
@@ -73584,6 +76480,7 @@ jxg/* default */.Z.createCurveIntersection = function (board, parents, attribute
 
     c = board.create("curve", [[], []], attributes);
     /**
+     * @class
      * @ignore
      */
     c.updateDataArray = function () {
@@ -73599,7 +76496,6 @@ jxg/* default */.Z.createCurveIntersection = function (board, parents, attribute
  * If one element is a curve, it has to be closed.
  * The resulting element is of type curve.
  * @pseudo
- * @description
  * @name CurveUnion
  * @param {JXG.Curve|JXG.Polygon|JXG.Circle} curve1 First element defining the union
  * @param {JXG.Curve|JXG.Polygon|JXG.Circle} curve2 Second element defining the union
@@ -73640,6 +76536,7 @@ jxg/* default */.Z.createCurveUnion = function (board, parents, attributes) {
 
     c = board.create("curve", [[], []], attributes);
     /**
+     * @class
      * @ignore
      */
     c.updateDataArray = function () {
@@ -73655,7 +76552,6 @@ jxg/* default */.Z.createCurveUnion = function (board, parents, attributes) {
  * If one element is a curve, it has to be closed.
  * The resulting element is of type curve.
  * @pseudo
- * @description
  * @name CurveDifference
  * @param {JXG.Curve|JXG.Polygon|JXG.Circle} curve1 First element from which the second element is "subtracted"
  * @param {JXG.Curve|JXG.Polygon|JXG.Circle} curve2 Second element which is subtracted from the first element
@@ -73696,6 +76592,7 @@ jxg/* default */.Z.createCurveDifference = function (board, parents, attributes)
 
     c = board.create("curve", [[], []], attributes);
     /**
+     * @class
      * @ignore
      */
     c.updateDataArray = function () {
@@ -73714,9 +76611,8 @@ jxg/* default */.Z.registerElement("curveunion", jxg/* default */.Z.createCurveU
  * @class Box plot curve. The direction of the box plot can be either vertical or horizontal which
  * is controlled by the attribute "dir".
  * @pseudo
- * @description
  * @name Boxplot
- * @param {Array} quantiles Array conatining at least five quantiles. The elements can be of type number, function or string.
+ * @param {Array} quantiles Array containing at least five quantiles. The elements can be of type number, function or string.
  * @param {Number|Function} axis Axis position of the box plot
  * @param {Number|Function} width Width of the rectangle part of the box plot. The width of the first and 4th quantile
  * is relative to this width and can be controlled by the attribute "smallWidth".
@@ -73809,7 +76705,7 @@ jxg/* default */.Z.registerElement("curveunion", jxg/* default */.Z.createCurveU
  *
  */
 jxg/* default */.Z.createBoxPlot = function (board, parents, attributes) {
-    var box, i, len, w2,
+    var box, i, len,
         attr = utils_type/* default */.Z.copyAttributes(attributes, board.options, "boxplot");
 
     if (parents.length !== 3) {
@@ -73821,7 +76717,7 @@ jxg/* default */.Z.createBoxPlot = function (board, parents, attributes) {
     if (parents[0].length < 5) {
         throw new Error(
             "JSXGraph: Can't create box plot with given parent[0]'" +
-                "\nparent[0] has to conatin at least 5 quantiles."
+                "\nparent[0] has to contain at least 5 quantiles."
         );
     }
     box = board.create("curve", [[], []], attr);
@@ -73829,11 +76725,15 @@ jxg/* default */.Z.createBoxPlot = function (board, parents, attributes) {
     len = parents[0].length; // Quantiles
     box.Q = [];
     for (i = 0; i < len; i++) {
-        box.Q[i] = utils_type/* default */.Z.createFunction(parents[0][i], board, null, true);
+        box.Q[i] = utils_type/* default */.Z.createFunction(parents[0][i], board);
     }
-    box.x = utils_type/* default */.Z.createFunction(parents[1], board, null, true);
-    box.w = utils_type/* default */.Z.createFunction(parents[2], board, null, true);
+    box.x = utils_type/* default */.Z.createFunction(parents[1], board);
+    box.w = utils_type/* default */.Z.createFunction(parents[2], board);
 
+    /**
+     * @class
+     * @ignore
+     */
     box.updateDataArray = function () {
         var v1, v2, l1, l2, r1, r2, w2, dir, x;
 
@@ -73881,6 +76781,232 @@ jxg/* default */.Z.createBoxPlot = function (board, parents, attributes) {
 };
 
 jxg/* default */.Z.registerElement("boxplot", jxg/* default */.Z.createBoxPlot);
+
+/**
+ *
+ * @class
+ * From <a href="https://en.wikipedia.org/wiki/Implicit_curve">Wikipedia</a>:
+ * "An implicit curve is a plane curve defined by an implicit equation
+ * relating two coordinate variables, commonly <i>x</i> and <i>y</i>.
+ * For example, the unit circle is defined by the implicit equation
+ * x<sup>2</sup> + y<sup>2</sup> = 1.
+ * In general, every implicit curve is defined by an equation of the form
+ * <i>f(x, y) = 0</i>
+ * for some function <i>f</i> of two variables."
+ * <p>
+ * The partial derivatives for <i>f</i> are optional. If not given, numerical
+ * derivatives are used instead. This is good enough for most practical use cases.
+ * But if supplied, both partial derivatives must be supplied.
+ * <p>
+ * The most effective attributes to tinker with if the implicit curve algorithm fails are
+ * {@link ImplicitCurve#resolution_outer},
+ * {@link ImplicitCurve#resolution_inner},
+ * {@link ImplicitCurve#alpha_0},
+ * {@link ImplicitCurve#h_initial},
+ * {@link ImplicitCurve#h_max}, and
+ * {@link ImplicitCurve#qdt_box}.
+ *
+ * @pseudo
+ * @name ImplicitCurve
+ * @param {Function|String} f Function of two variables for the left side of the equation <i>f(x,y)=0</i>.
+ * If f is supplied as string, it has to use the variables 'x' and 'y'.
+ * @param {Function|String} [dfx=null] Optional partial derivative in respect to the first variable
+ * If dfx is supplied as string, it has to use the variables 'x' and 'y'.
+ * @param {Function|String} [dfy=null] Optional partial derivative in respect to the second variable
+ * If dfy is supplied as string, it has to use the variables 'x' and 'y'.
+ * @augments JXG.Curve
+ * @constructor
+ * @type JXG.Curve
+ *
+ * @example
+ *   var f, c;
+ *   f = (x, y) => 1 / 16 * x ** 2 + y ** 2 - 1;
+ *   c = board.create('implicitcurve', [f], {
+ *       strokeWidth: 3,
+ *       strokeColor: JXG.palette.red,
+ *       strokeOpacity: 0.8
+ *   });
+ *
+ * </pre><div id="JXGa6e86701-1a82-48d0-b007-3a3d32075076" class="jxgbox" style="width: 300px; height: 300px;"></div>
+ * <script type="text/javascript">
+ *     (function() {
+ *         var board = JXG.JSXGraph.initBoard('JXGa6e86701-1a82-48d0-b007-3a3d32075076',
+ *             {boundingbox: [-8, 8, 8,-8], axis: true, showcopyright: false, shownavigation: false});
+ *             var f, c;
+ *             f = (x, y) => 1 / 16 * x ** 2 + y ** 2 - 1;
+ *             c = board.create('implicitcurve', [f], {
+ *                 strokeWidth: 3,
+ *                 strokeColor: JXG.palette.red,
+ *                 strokeOpacity: 0.8
+ *             });
+ *
+ *     })();
+ *
+ * </script><pre>
+ *
+ * @example
+ *  var a, c, f;
+ *  a = board.create('slider', [[-3, 6], [3, 6], [-3, 1, 3]], {
+ *      name: 'a', stepWidth: 0.1
+ *  });
+ *  f = (x, y) => x ** 2 - 2 * x * y - 2 * x + (a.Value() + 1) * y ** 2 + (4 * a.Value() + 2) * y + 4 * a.Value() - 3;
+ *  c = board.create('implicitcurve', [f], {
+ *      strokeWidth: 3,
+ *      strokeColor: JXG.palette.red,
+ *      strokeOpacity: 0.8,
+ *      resolution_outer: 20,
+ *      resolution_inner: 20
+ *  });
+ *
+ * </pre><div id="JXG0b133a54-9509-4a65-9722-9c5145e23b40" class="jxgbox" style="width: 300px; height: 300px;"></div>
+ * <script type="text/javascript">
+ *     (function() {
+ *         var board = JXG.JSXGraph.initBoard('JXG0b133a54-9509-4a65-9722-9c5145e23b40',
+ *             {boundingbox: [-8, 8, 8,-8], axis: true, showcopyright: false, shownavigation: false});
+ *             var a, c, f;
+ *             a = board.create('slider', [[-3, 6], [3, 6], [-3, 1, 3]], {
+ *                 name: 'a', stepWidth: 0.1
+ *             });
+ *             f = (x, y) => x ** 2 - 2 * x * y - 2 * x + (a.Value() + 1) * y ** 2 + (4 * a.Value() + 2) * y + 4 * a.Value() - 3;
+ *             c = board.create('implicitcurve', [f], {
+ *                 strokeWidth: 3,
+ *                 strokeColor: JXG.palette.red,
+ *                 strokeOpacity: 0.8,
+ *                 resolution_outer: 20,
+ *                 resolution_inner: 20
+ *             });
+ *
+ *     })();
+ *
+ * </script><pre>
+ *
+ * @example
+ *  var c = board.create('implicitcurve', ['abs(x * y) - 3'], {
+ *      strokeWidth: 3,
+ *      strokeColor: JXG.palette.red,
+ *      strokeOpacity: 0.8
+ *  });
+ *
+ * </pre><div id="JXG02802981-0abb-446b-86ea-ee588f02ed1a" class="jxgbox" style="width: 300px; height: 300px;"></div>
+ * <script type="text/javascript">
+ *     (function() {
+ *         var board = JXG.JSXGraph.initBoard('JXG02802981-0abb-446b-86ea-ee588f02ed1a',
+ *             {boundingbox: [-8, 8, 8,-8], axis: true, showcopyright: false, shownavigation: false});
+ *             var c = board.create('implicitcurve', ['abs(x * y) - 3'], {
+ *                 strokeWidth: 3,
+ *                 strokeColor: JXG.palette.red,
+ *                 strokeOpacity: 0.8
+ *             });
+ *
+ *     })();
+ *
+ * </script><pre>
+ *
+ */
+jxg/* default */.Z.createImplicitCurve = function(board, parents, attributes) {
+    var c, attr;
+    if (parents.length !== 1 && parents.length !== 3) {
+        throw new Error(
+            "JSXGraph: Can't create curve implicitCurve with given parent'" +
+                "\nPossible parent types: [f] or [f, dfx, dfy]" +
+                "\nwith functions f, dfx, dfy"
+        );
+    }
+
+    attr = utils_type/* default */.Z.copyAttributes(attributes, board.options, "implicitcurve");
+    c = board.create("curve", [[], []], attr);
+
+    /**
+     * Function of two variables for the left side of the equation <i>f(x,y)=0</i>.
+     *
+     * @name f
+     * @memberOf ImplicitCurve.prototype
+     * @function
+     * @returns {Number}
+     */
+    c.f = utils_type/* default */.Z.createFunction(parents[0], board, 'x, y');
+
+    /**
+     * Partial derivative in the first variable of
+     * the left side of the equation <i>f(x,y)=0</i>.
+     * If null, then numerical derivative is used.
+     *
+     * @name dfx
+     * @memberOf ImplicitCurve.prototype
+     * @function
+     * @returns {Number}
+     */
+    c.dfx = utils_type/* default */.Z.createFunction(parents[1], board, 'x, y');
+
+    /**
+     * Partial derivative in the second variable of
+     * the left side of the equation <i>f(x,y)=0</i>.
+     * If null, then numerical derivative is used.
+     *
+     * @name dfy
+     * @memberOf ImplicitCurve.prototype
+     * @function
+     * @returns {Number}
+     */
+    c.dfy = utils_type/* default */.Z.createFunction(parents[2], board, 'x, y');
+
+    /**
+     * @class
+     * @ignore
+     */
+    c.updateDataArray = function () {
+        var bbox = this.board.getBoundingBox(),
+            ip, cfg,
+            ret = [],
+            mgn = utils_type/* default */.Z.evaluate(this.visProp.margin);
+
+        bbox[0] -= mgn;
+        bbox[1] += mgn;
+        bbox[2] += mgn;
+        bbox[3] -= mgn;
+
+        cfg = {
+            resolution_out: Math.max(0.01, utils_type/* default */.Z.evaluate(this.visProp.resolution_outer)),
+            resolution_in: Math.max(0.01, utils_type/* default */.Z.evaluate(this.visProp.resolution_inner)),
+            max_steps: utils_type/* default */.Z.evaluate(this.visProp.max_steps),
+            alpha_0: utils_type/* default */.Z.evaluate(this.visProp.alpha_0),
+            tol_u0: utils_type/* default */.Z.evaluate(this.visProp.tol_u0),
+            tol_newton: utils_type/* default */.Z.evaluate(this.visProp.tol_newton),
+            tol_cusp: utils_type/* default */.Z.evaluate(this.visProp.tol_cusp),
+            tol_progress: utils_type/* default */.Z.evaluate(this.visProp.tol_progress),
+            qdt_box: utils_type/* default */.Z.evaluate(this.visProp.qdt_box),
+            kappa_0: utils_type/* default */.Z.evaluate(this.visProp.kappa_0),
+            delta_0: utils_type/* default */.Z.evaluate(this.visProp.delta_0),
+            h_initial: utils_type/* default */.Z.evaluate(this.visProp.h_initial),
+            h_critical: utils_type/* default */.Z.evaluate(this.visProp.h_critical),
+            h_max: utils_type/* default */.Z.evaluate(this.visProp.h_max),
+            loop_dist: utils_type/* default */.Z.evaluate(this.visProp.loop_dist),
+            loop_dir: utils_type/* default */.Z.evaluate(this.visProp.loop_dir),
+            loop_detection: utils_type/* default */.Z.evaluate(this.visProp.loop_detection),
+            unitX: this.board.unitX,
+            unitY: this.board.unitY
+        };
+        this.dataX = [];
+        this.dataY = [];
+
+        // console.time("implicit plot");
+        ip = new jxg/* default */.Z.Math.ImplicitPlot(bbox, cfg, this.f, this.dfx, this.dfy);
+        this.qdt = ip.qdt;
+
+        ret = ip.plot();
+        // console.timeEnd("implicit plot");
+
+        this.dataX = ret[0];
+        this.dataY = ret[1];
+    };
+
+    c.elType = 'implicitcurve';
+
+    return c;
+};
+
+jxg/* default */.Z.registerElement("implicitcurve", jxg/* default */.Z.createImplicitCurve);
+
 
 /* harmony default export */ var curve = (jxg/* default */.Z.Curve);
 
@@ -74007,10 +77133,11 @@ jxg/* default */.Z.registerElement("boxplot", jxg/* default */.Z.createBoxPlot);
 jxg/* default */.Z.createArc = function (board, parents, attributes) {
     var el, attr, points;
 
+    // attributes.radiusPoint = {visible: false};
     points = utils_type/* default */.Z.providePoints(board, parents, attributes, "arc", [
         "center",
-        "radiusPoint",
-        "anglePoint"
+        "radiuspoint",
+        "anglepoint"
     ]);
     if (points === false || points.length < 3) {
         throw new Error(
@@ -74088,6 +77215,10 @@ jxg/* default */.Z.createArc = function (board, parents, attributes) {
     el.useDirection = attr.usedirection;
 
     // documented in JXG.Curve
+    /**
+     * @class
+     * @ignore
+     */
     el.updateDataArray = function () {
         var ar,
             phi,
@@ -74162,14 +77293,53 @@ jxg/* default */.Z.createArc = function (board, parents, attributes) {
     };
 
     /**
-     * Returns the length of the arc.
+     * Returns the length of the arc or the value of the angle spanned by the arc.
      * @memberOf Arc.prototype
      * @name Value
      * @function
-     * @returns {Number} The arc length
+     * @param {String} [unit='length'] Unit of the returned values. Possible units are
+     * <ul>
+     * <li> 'length' (default): length of the arc line
+     * <li> 'radians': angle spanned by the arc in radians
+     * <li> 'degrees': angle spanned by the arc in degrees
+     * <li> 'semicircle': angle spanned by the arc in radians as a multiple of &pi;, e.g. if the angle is 1.5&pi;, 1.5 will be returned.
+     * <li> 'circle': angle spanned by the arc in radians as a multiple of 2&pi;
+     * </ul>
+     * It is sufficient to supply the first three characters of the unit, e.g. 'len'.
+     * @param {Number} [rad=undefined] Value of angle which can be used instead of the generic one.
+     * @returns {Number} The arc length or the angle value in various units.
      */
-    el.Value = function () {
-        return this.Radius() * geometry/* default */.Z.rad(this.radiuspoint, this.center, this.anglepoint);
+    el.Value = function (unit, rad) {
+        var val;
+
+        rad = rad || geometry/* default */.Z.rad(this.radiuspoint, this.center, this.anglepoint);
+
+        unit = unit || 'length';
+        unit = unit.toLocaleLowerCase();
+        if (unit === '' || unit.indexOf('len') === 0) {
+            val = rad * this.Radius();
+        } else if (unit.indexOf('rad') === 0) {
+            val = rad;
+        } else if (unit.indexOf('deg') === 0) {
+            val = rad * 180 / Math.PI;
+        } else if (unit.indexOf('sem') === 0) {
+            val = rad / Math.PI;
+        } else if (unit.indexOf('cir') === 0) {
+            val = rad * 0.5 / Math.PI;
+        }
+
+        return val;
+    };
+
+    /**
+     * Arc length.
+     * @memberOf Arc.prototype
+     * @name L
+     * @returns {Number} Length of the arc.
+     * @see Arc#Value
+     */
+    el.L = function() {
+        return this.Value('length');
     };
 
     // documented in geometry element
@@ -74246,6 +77416,10 @@ jxg/* default */.Z.createArc = function (board, parents, attributes) {
     };
 
     // documented in geometry element
+    /**
+     * @class
+     * @ignore
+     */
     el.getLabelAnchor = function () {
         var coords,
             vec,
@@ -74283,7 +77457,7 @@ jxg/* default */.Z.createArc = function (board, parents, attributes) {
         vecx = coords.usrCoords[1] - pmc[1];
         vecy = coords.usrCoords[2] - pmc[2];
 
-        len = Math.sqrt(vecx * vecx + vecy * vecy);
+        len = math/* default */.Z.hypot(vecx, vecy);
         vecx = (vecx * (len + dx)) / len;
         vecy = (vecy * (len + dy)) / len;
         vec = [pmc[1] + vecx, pmc[2] + vecy];
@@ -74305,7 +77479,12 @@ jxg/* default */.Z.createArc = function (board, parents, attributes) {
         center: "center",
         radiuspoint: "radiuspoint",
         anglepoint: "anglepoint",
-        Value: "Value"
+        // Angle: "Angle",
+        // Rad: "Angle",
+        // Deg: "AngleDeg",
+        // PI: "AnglePI",
+        Value: "Value",
+        L: "L"
     });
 
     el.prepareUpdate().update();
@@ -74536,14 +77715,6 @@ jxg/* default */.Z.createMajorArc = function (board, parents, attributes) {
 
 jxg/* default */.Z.registerElement("majorarc", jxg/* default */.Z.createMajorArc);
 
-// export default {
-//     createArc: JXG.createArc,
-//     createSemicircle: JXG.createSemicircle,
-//     createCircumcircleArc: JXG.createCircumcircleArc,
-//     createMinorArc: JXG.createMinorArc,
-//     createMajorArc: JXG.createMajorArc
-// };
-
 ;// CONCATENATED MODULE: ./src/element/sector.js
 /*
     Copyright 2008-2023
@@ -74596,16 +77767,18 @@ jxg/* default */.Z.registerElement("majorarc", jxg/* default */.Z.createMajorArc
  * @type JXG.Curve
  * @throws {Error} If the element cannot be constructed with the given parent objects an exception is thrown.
  *
- * First possiblity of input parameters are:
+ * First possibility of input parameters are:
  * @param {JXG.Point_JXG.Point_JXG.Point} p1,p2,p3 A sector is defined by three points: The sector's center <tt>p1</tt>,
  * a second point <tt>p2</tt> defining the radius and a third point <tt>p3</tt> defining the angle of the sector. The
- * Sector is always drawn counter clockwise from <tt>p2</tt> to <tt>p3</tt>
+ * Sector is always drawn counter clockwise from <tt>p2</tt> to <tt>p3</tt>.
+ * <p>
+ * In this case, the sector will have an arc as sub-object.
  * <p>
  * Second possibility of input parameters are:
  * @param {JXG.Line_JXG.Line_array,number_array,number_number,function} line, line2, coords1 or direction1, coords2 or direction2, radius The sector is defined by two lines.
  * The two legs which define the sector are given by two coordinates arrays which are project initially two the two lines or by two directions (+/- 1).
  * The last parameter is the radius of the sector.
- *
+ * <p>In this case, the sector will <b>not</b> have an arc as sub-object.
  *
  * @example
  * // Create a sector out of three free points
@@ -74861,6 +78034,10 @@ jxg/* default */.Z.createSector = function (board, parents, attributes) {
             el.direction2 = parents[3] >= 0 ? 1 : -1;
         }
 
+        /**
+         * @class
+         * @ignore
+         */
         el.updateDataArray = function () {
             var r,
                 l1,
@@ -74911,13 +78088,36 @@ jxg/* default */.Z.createSector = function (board, parents, attributes) {
             this.bezierDegree = 3;
         };
 
-        el.methodMap = jxg/* default */.Z.deepCopy(el.methodMap, {
-            radius: "Radius",
-            getRadius: "Radius",
-            setRadius: "setRadius"
-        });
-
-        //    el.prepareUpdate().update();
+        // Arc does not work yet, since point1, point2 and point3 are
+        // virtual points.
+        //
+        // attr = Type.copyAttributes(attributes, board.options, "arc");
+        // attr = Type.copyAttributes(attr, board.options, "sector", "arc");
+        // attr.withLabel = false;
+        // attr.name += "_arc";
+        // // el.arc = board.create("arc", [el.point1, el.point2, el.point3], attr);
+        // // The arc's radius is always the radius of sector.
+        // // This is important for angles.
+        // el.updateDataArray();
+        // el.arc = board.create("arc", [
+        //     function() {
+        //         return el.point1.coords.usrCoords;
+        //     }, // Center
+        //     function() {
+        //         var d = el.point2.coords.distance(Const.COORDS_BY_USER, el.point1.coords);
+        //         if (d === 0) {
+        //             return [el.point1.coords.usrCoords[1], el.point1.coords.usrCoords[2]];
+        //         }
+        //         return [
+        //             el.point1.coords.usrCoords[1] + el.Radius() * (el.point2.coords.usrCoords[1] - el.point1.coords.usrCoords[1]) / d,
+        //             el.point1.coords.usrCoords[2] + el.Radius() * (el.point2.coords.usrCoords[2] - el.point1.coords.usrCoords[2]) / d
+        //         ];
+        //     },
+        //     function() {
+        //         return el.point3.coords.usrCoords;
+        //     }, // Center
+        // ], attr);
+        // el.addChild(el.arc);
 
         // end '2lines'
     } else if (type === "3points") {
@@ -74930,7 +78130,7 @@ jxg/* default */.Z.createSector = function (board, parents, attributes) {
         el.point1 = points[0];
 
         /**
-         * This point together with {@link Sector#point1} defines the radius..
+         * This point together with {@link Sector#point1} defines the radius.
          * @memberOf Sector.prototype
          * @name point2
          * @type JXG.Point
@@ -74974,14 +78174,11 @@ jxg/* default */.Z.createSector = function (board, parents, attributes) {
             arc: "arc",
             center: "center",
             radiuspoint: "radiuspoint",
-            anglepoint: "anglepoint",
-            radius: "Radius",
-            getRadius: "Radius",
-            setRadius: "setRadius"
+            anglepoint: "anglepoint"
         });
 
         /**
-         * documented in JXG.Curve
+         * @class
          * @ignore
          */
         el.updateDataArray = function () {
@@ -75045,17 +78242,56 @@ jxg/* default */.Z.createSector = function (board, parents, attributes) {
         el.Radius = function () {
             return this.point2.Dist(this.point1);
         };
-
-        attr = utils_type/* default */.Z.copyAttributes(attributes, board.options, "sector", "arc");
-        attr.withLabel = false;
-        attr.name += "_arc";
-        el.arc = board.create("arc", [el.point1, el.point2, el.point3], attr);
-        el.addChild(el.arc);
     } // end '3points'
 
     el.center = el.point1;
     el.radiuspoint = el.point2;
     el.anglepoint = el.point3;
+
+    attr = utils_type/* default */.Z.copyAttributes(attributes, board.options, "arc");
+    attr = utils_type/* default */.Z.copyAttributes(attr, board.options, "sector", "arc");
+    attr.withLabel = false;
+    attr.name += "_arc";
+
+    if (type === "2lines") {
+        el.updateDataArray();
+        el.arc = board.create("arc", [
+            function() {
+                return el.point1.coords.usrCoords;
+            }, // Center
+            function() {
+                var d = el.point2.coords.distance(constants/* default */.Z.COORDS_BY_USER, el.point1.coords);
+                if (d === 0) {
+                    return [el.point1.coords.usrCoords[1], el.point1.coords.usrCoords[2]];
+                }
+                return [
+                    el.point1.coords.usrCoords[1] + el.Radius() * (el.point2.coords.usrCoords[1] - el.point1.coords.usrCoords[1]) / d,
+                    el.point1.coords.usrCoords[2] + el.Radius() * (el.point2.coords.usrCoords[2] - el.point1.coords.usrCoords[2]) / d
+                ];
+            },
+            function() {
+                return el.point3.coords.usrCoords;
+            } // Center
+        ], attr);
+    } else {
+        // The arc's radius is always the radius of sector.
+        // This is important for angles.
+        el.arc = board.create("arc", [
+            el.point1, // Center
+            function() {
+                var d = el.point2.Dist(el.point1);
+                if (d === 0) {
+                    return [el.point1.X(), el.point1.Y()];
+                }
+                return [
+                    el.point1.X() + el.Radius() * (el.point2.X() - el.point1.X()) / d,
+                    el.point1.Y() + el.Radius() * (el.point2.Y() - el.point1.Y()) / d
+                ];
+            },
+            el.point3
+        ], attr);
+    }
+    el.addChild(el.arc);
 
     // Default hasPoint method. Documented in geometry element
     el.hasPointCurve = function (x, y) {
@@ -75153,6 +78389,10 @@ jxg/* default */.Z.createSector = function (board, parents, attributes) {
     // this method is very similar to arc.getLabelAnchor()
     // there are some additions in the arc version though, mainly concerning
     // "major" and "minor" arcs. but maybe these methods can be merged.
+    /**
+     * @class
+     * @ignore
+     */
     el.getLabelAnchor = function () {
         var coords,
             vec,
@@ -75190,7 +78430,7 @@ jxg/* default */.Z.createSector = function (board, parents, attributes) {
         vecx = coords.usrCoords[1] - pmc[1];
         vecy = coords.usrCoords[2] - pmc[2];
 
-        len = Math.sqrt(vecx * vecx + vecy * vecy);
+        len = math/* default */.Z.hypot(vecx, vecy);
         vecx = (vecx * (len + dx)) / len;
         vecy = (vecy * (len + dy)) / len;
         vec = [pmc[1] + vecx, pmc[2] + vecy];
@@ -75203,7 +78443,10 @@ jxg/* default */.Z.createSector = function (board, parents, attributes) {
     /**
      * Overwrite the Radius method of the sector.
      * Used in {@link GeometryElement#setAttribute}.
-     * @param {Number, Function} value New radius.
+     * @memberOf Sector.prototype
+     * @name setRadius
+     * @param {Number|Function} value New radius.
+     * @function
      */
     el.setRadius = function (val) {
         var res,
@@ -75244,13 +78487,66 @@ jxg/* default */.Z.createSector = function (board, parents, attributes) {
     };
 
     /**
-     * Moves the sector by the difference of two coordinates.
-     * @param {Number} method The type of coordinates used here. Possible values are {@link JXG.COORDS_BY_USER} and {@link JXG.COORDS_BY_SCREEN}.
-     * @param {Array} coords coordinates in screen/user units
-     * @param {Array} oldcoords previous coordinates in screen/user units
-     * @returns {JXG.Curve} this element
+     * Length of the sector's arc or the angle in various units, see {@link Arc#Value}.
+     * @memberOf Sector.prototype
+     * @name Value
+     * @function
+     * @param {String} unit
+     * @returns {Number} The arc length or the angle value in various units.
+     * @see Arc#Value
      */
+    el.Value = function(unit) {
+        return this.arc.Value(unit);
+    };
+
+    /**
+     * Arc length.
+     * @memberOf Sector.prototype
+     * @name L
+     * @returns {Number} Length of the sector's arc.
+     * @function
+     * @see Arc#L
+     */
+    el.L = function() {
+        return this.arc.L();
+    };
+
+    /**
+     * Area of the sector.
+     * @memberOf Sector.prototype
+     * @name Area
+     * @function
+     * @returns {Number} The area of the sector.
+     */
+    el.Area = function () {
+        var r = this.Radius();
+
+        return 0.5 * r * r * this.Value('radians');
+    };
+
+    /**
+     * Sector perimeter, i.e. arc length plus 2 * radius.
+     * @memberOf Sector.prototype
+     * @name Perimeter
+     * @function
+     * @returns {Number} Perimeter of sector.
+     */
+    el.Perimeter = function () {
+        return this.L() + 2 * this.Radius();
+    };
+
     if (type === "3points") {
+        /**
+         * Moves the sector by the difference of two coordinates.
+         * @memberOf Sector.prototype
+         * @name setPositionDirectly
+         * @function
+         * @param {Number} method The type of coordinates used here. Possible values are {@link JXG.COORDS_BY_USER} and {@link JXG.COORDS_BY_SCREEN}.
+         * @param {Array} coords coordinates in screen/user units
+         * @param {Array} oldcoords previous coordinates in screen/user units
+         * @returns {JXG.Curve} this element
+         * @private
+         */
         el.setPositionDirectly = function (method, coords, oldcoords) {
             var dc, t,
                 c = new base_coords/* default */.Z(method, coords, this.board),
@@ -75268,7 +78564,15 @@ jxg/* default */.Z.createSector = function (board, parents, attributes) {
         };
     }
 
-    el.prepareUpdate().update();
+    el.methodMap = jxg/* default */.Z.deepCopy(el.methodMap, {
+        radius: "Radius",
+        getRadius: "Radius",
+        setRadius: "setRadius",
+        Value: "Value",
+        L: "L",
+        Area: "Area",
+        Perimeter: "Perimeter"
+    });
 
     return el;
 };
@@ -75277,7 +78581,7 @@ jxg/* default */.Z.registerElement("sector", jxg/* default */.Z.createSector);
 
 /**
  * @class A circumcircle sector is different from a {@link Sector} mostly in the way the parent elements are interpreted.
- * At first, the circum centre is determined from the three given points. Then the sector is drawn from <tt>p1</tt> through
+ * At first, the circum center is determined from the three given points. Then the sector is drawn from <tt>p1</tt> through
  * <tt>p2</tt> to <tt>p3</tt>.
  * @pseudo
  * @name CircumcircleSector
@@ -75615,7 +78919,7 @@ jxg/* default */.Z.createAngle = function (board, parents, attributes) {
     } else {
         attr = {
             name: ''
-        }
+        };
         points = utils_type/* default */.Z.providePoints(board, parents, attr, "point");
         if (points === false) {
             throw new Error(
@@ -75644,13 +78948,26 @@ jxg/* default */.Z.createAngle = function (board, parents, attributes) {
         radius = 0;
     }
 
+    board.suspendUpdate(); // Necessary for immediate availability of radius.
     if (type === "2lines") {
         parents.push(radius);
         el = board.create("sector", parents, attr);
+        /**
+         * @class
+         * @ignore
+         */
         el.updateDataArraySector = el.updateDataArray;
 
         // TODO
+        /**
+         * @class
+         * @ignore
+         */
         el.setAngle = function (val) {};
+        /**
+         * @class
+         * @ignore
+         */
         el.free = function (val) {};
     } else {
         el = board.create("sector", [points[1], points[0], points[2]], attr);
@@ -75686,6 +79003,10 @@ jxg/* default */.Z.createAngle = function (board, parents, attributes) {
             return r;
         };
 
+        /**
+         * @class
+         * @ignore
+         */
         el.updateDataArraySector = function () {
             var A = this.point2,
                 B = this.point1,
@@ -75899,6 +79220,10 @@ jxg/* default */.Z.createAngle = function (board, parents, attributes) {
     el.type = constants/* default */.Z.OBJECT_TYPE_ANGLE;
     el.subs = {};
 
+    /**
+     * @class
+     * @ignore
+     */
     el.updateDataArraySquare = function () {
         var A, B, C,
             d1, d2, v, l1, l2,
@@ -75939,12 +79264,20 @@ jxg/* default */.Z.createAngle = function (board, parents, attributes) {
         this.bezierDegree = 1;
     };
 
+    /**
+     * @class
+     * @ignore
+     */
     el.updateDataArrayNone = function () {
         this.dataX = [NaN];
         this.dataY = [NaN];
         this.bezierDegree = 1;
     };
 
+    /**
+     * @class
+     * @ignore
+     */
     el.updateDataArray = function () {
         var type = utils_type/* default */.Z.evaluate(this.visProp.type),
             deg = geometry/* default */.Z.trueAngle(this.point2, this.point1, this.point3),
@@ -76035,8 +79368,67 @@ jxg/* default */.Z.createAngle = function (board, parents, attributes) {
             board.select(points[i]).addChild(el.dot);
         }
     }
+    board.unsuspendUpdate();
+
+    /**
+     * Returns the value of the angle.
+     * @memberOf Angle.prototype
+     * @name Value
+     * @function
+     * @param {String} [unit='length'] Unit of the returned values. Possible units are
+     * <ul>
+     * <li> 'radians' (default): angle value in radians
+     * <li> 'degrees': angle value in degrees
+     * <li> 'semicircle': angle value in radians as a multiple of &pi;, e.g. if the angle is 1.5&pi;, 1.5 will be returned.
+     * <li> 'circle': angle value in radians as a multiple of 2&pi;
+     * <li> 'length': length of the arc line of the angle
+     * </ul>
+     * It is sufficient to supply the first three characters of the unit, e.g. 'len'.
+     * @returns {Number} angle value in various units.
+     * @see Sector#L
+     * @example
+     * var A, B, C, ang,
+     *     r = 0.5;
+     * A = board.create("point", [3, 0]);
+     * B = board.create("point", [0, 0]);
+     * C = board.create("point", [2, 2]);
+     * ang = board.create("angle", [A, B, C], {radius: r});
+     *
+     * console.log(ang.Value());
+     * // Output Math.PI * 0.25
+     *
+     * console.log(ang.Value('radian'));
+     * // Output Math.PI * 0.25
+     *
+     * console.log(ang.Value('degree');
+     * // Output 45
+     *
+     * console.log(ang.Value('semicircle'));
+     * // Output 0.25
+     *
+     * console.log(ang.Value('circle'));
+     * // Output 0.125
+     *
+     * console.log(ang.Value('length'));
+     * // Output r * Math.PI * 0.25
+     *
+     * console.log(ang.L());
+     * // Output r * Math.PI * 0.25
+     *
+     */
+    el.Value = function(unit) {
+        unit = unit || 'radians';
+        if (unit === '') {
+            unit = 'radians';
+        }
+        return el.arc.Value(unit);
+    };
 
     // documented in GeometryElement
+    /**
+     * @class
+     * @ignore
+     */
     el.getLabelAnchor = function () {
         var vec,
             dx = 12,
@@ -76090,20 +79482,9 @@ jxg/* default */.Z.createAngle = function (board, parents, attributes) {
         return new base_coords/* default */.Z(constants/* default */.Z.COORDS_BY_USER, vec, this.board);
     };
 
-    /**
-     * Returns the value of the angle in Radians.
-     * @memberOf Angle.prototype
-     * @name Value
-     * @function
-     * @returns {Number} The angle value in Radians
-     */
-    el.Value = function () {
-        return geometry/* default */.Z.rad(this.point2, this.point1, this.point3);
-    };
-
     el.methodMap = utils_type/* default */.Z.deepCopy(el.methodMap, {
-        Value: "Value",
         setAngle: "setAngle",
+        Value: "Value",
         free: "free"
     });
 
@@ -76153,9 +79534,15 @@ jxg/* default */.Z.createNonreflexAngle = function (board, parents, attributes) 
     el = jxg/* default */.Z.createAngle(board, parents, attributes);
 
     // Documented in createAngle
-    el.Value = function () {
-        var v = geometry/* default */.Z.rad(this.point2, this.point1, this.point3);
-        return v < Math.PI ? v : 2.0 * Math.PI - v;
+    el.Value = function (unit) {
+        var rad = geometry/* default */.Z.rad(this.point2, this.point1, this.point3);
+        unit = unit || 'radians';
+        if (unit === '') {
+            unit = 'radians';
+        }
+        rad = (rad < Math.PI) ? rad : 2.0 * Math.PI - rad;
+
+        return this.arc.Value(unit, rad);
     };
     return el;
 };
@@ -76203,24 +79590,21 @@ jxg/* default */.Z.createReflexAngle = function (board, parents, attributes) {
     el = jxg/* default */.Z.createAngle(board, parents, attributes);
 
     // Documented in createAngle
-    el.Value = function () {
-        var v = geometry/* default */.Z.rad(this.point2, this.point1, this.point3);
-        return v >= Math.PI ? v : 2.0 * Math.PI - v;
+    el.Value = function (unit) {
+        var rad = geometry/* default */.Z.rad(this.point2, this.point1, this.point3);
+        unit = unit || 'radians';
+        if (unit === '') {
+            unit = 'radians';
+        }
+        rad = (rad >= Math.PI) ? rad : 2.0 * Math.PI - rad;
+
+        return this.arc.Value(unit, rad);
     };
+
     return el;
 };
 
 jxg/* default */.Z.registerElement("reflexangle", jxg/* default */.Z.createReflexAngle);
-
-// export default {
-//     createSector: JXG.createSector,
-//     createCircumcircleSector: JXG.createCircumcircleSector,
-//     createMinorSector: JXG.createMinorSector,
-//     createMajorSector: JXG.createMajorSector,
-//     createAngle: JXG.createAngle,
-//     createReflexAngle: JXG.createReflexAngle,
-//     createNonreflexAngle: JXG.createNonreflexAngle
-// };
 
 ;// CONCATENATED MODULE: ./src/element/composition.js
 /*
@@ -76353,6 +79737,10 @@ jxg/* default */.Z.createOrthogonalProjection = function (board, parents, attrib
 
     attr = utils_type/* default */.Z.copyAttributes(attributes, board.options, "orthogonalprojection");
 
+    /**
+     * @type JXG.Element
+     * @ignore
+     */
     t = board.create(
         "point",
         [
@@ -76376,12 +79764,14 @@ jxg/* default */.Z.createOrthogonalProjection = function (board, parents, attrib
 
     t.update();
 
-    // /**
-    //  * Used to generate a polynomial for the orthogonal projection
-    //  * @name Orthogonalprojection#generatePolynomial
-    //  * @returns {Array} An array containing the generated polynomial.
-    //  * @private
-    //  */
+    /**
+     * Used to generate a polynomial for the orthogonal projection
+     * @name Orthogonalprojection#generatePolynomial
+     * @returns {Array} An array containing the generated polynomial.
+     * @private
+     * @function
+     * @ignore
+     */
     t.generatePolynomial = function () {
         /*
          *  Perpendicular takes point P and line L and creates point T and line M:
@@ -76586,6 +79976,10 @@ jxg/* default */.Z.createPerpendicularPoint = function (board, parents, attribut
         );
     }
 
+    /**
+     * @class
+     * @ignore
+     */
     t = board.create(
         "point",
         [
@@ -76609,12 +80003,14 @@ jxg/* default */.Z.createPerpendicularPoint = function (board, parents, attribut
 
     t.update();
 
-    // /**
-    //  * Used to generate a polynomial for the perpendicular point
-    //  * @name PerpendicularPoint#generatePolynomial
-    //  * @returns {Array} An array containing the generated polynomial.
-    //  * @private
-    //  */
+    /**
+     * Used to generate a polynomial for the perpendicular point
+     * @name PerpendicularPoint#generatePolynomial
+     * @returns {Array} An array containing the generated polynomial.
+     * @private
+     * @function
+     * @ignore
+     */
     t.generatePolynomial = function () {
         /*
          *  Perpendicular takes point P and line L and creates point T and line M:
@@ -76830,6 +80226,10 @@ jxg/* default */.Z.createMidpoint = function (board, parents, attributes) {
     }
 
     attr = utils_type/* default */.Z.copyAttributes(attributes, board.options, "midpoint");
+    /**
+     * @type JXG.Element
+     * @ignore
+     */
     t = board.create(
         "point",
         [
@@ -76878,12 +80278,14 @@ jxg/* default */.Z.createMidpoint = function (board, parents, attributes) {
 
     t.prepareUpdate().update();
 
-    // /**
-    //  * Used to generate a polynomial for the midpoint.
-    //  * @name Midpoint#generatePolynomial
-    //  * @returns {Array} An array containing the generated polynomial.
-    //  * @private
-    //  */
+    /**
+     * Used to generate a polynomial for the midpoint.
+     * @name Midpoint#generatePolynomial
+     * @returns {Array} An array containing the generated polynomial.
+     * @private
+     * @function
+     * @ignore
+     */
     t.generatePolynomial = function () {
         /*
          *  Midpoint takes two point A and B or line L (with points P and Q) and creates point T:
@@ -77001,6 +80403,10 @@ jxg/* default */.Z.createParallelPoint = function (board, parents, attributes) {
     }
 
     attr = utils_type/* default */.Z.copyAttributes(attributes, board.options, 'parallelpoint');
+    /**
+     * @type {JXG.Element}
+     * @ignore
+     */
     p = board.create(
         "point",
         [
@@ -77041,6 +80447,10 @@ jxg/* default */.Z.createParallelPoint = function (board, parents, attributes) {
     // can be removed if the above issue is resolved.
     p.prepareUpdate().update();
 
+    /**
+     * @function
+     * @ignore
+     */
     p.generatePolynomial = function () {
         /*
          *  Parallelpoint takes three points A, B and C or line L (with points B and C) and creates point T:
@@ -77488,7 +80898,7 @@ jxg/* default */.Z.createNormal = function (board, parents, attributes) {
                                 (1 - t) * (1 - t) * (B[2] - A[2]) +
                                 2 * (1 - t) * t * (C[2] - B[2]) +
                                 t * t * (D[2] - C[2]);
-                            d = Math.sqrt(dx * dx + dy * dy);
+                            d = math/* default */.Z.hypot(dx, dy);
                             dx /= d;
                             dy /= d;
                             p1 = p.coords.usrCoords;
@@ -77544,7 +80954,7 @@ jxg/* default */.Z.createNormal = function (board, parents, attributes) {
                                 (1 - t) * (1 - t) * (B[2] - A[2]) +
                                 2 * (1 - t) * t * (C[2] - B[2]) +
                                 t * t * (D[2] - C[2]);
-                            d = Math.sqrt(dx * dx + dy * dy);
+                            d = math/* default */.Z.hypot(dx, dy);
                             dx /= d;
                             dy /= d;
                             p1 = p.coords.usrCoords;
@@ -77601,7 +81011,7 @@ jxg/* default */.Z.createNormal = function (board, parents, attributes) {
                                 (1 - t) * (1 - t) * (B[2] - A[2]) +
                                 2 * (1 - t) * t * (C[2] - B[2]) +
                                 t * t * (D[2] - C[2]);
-                            d = Math.sqrt(dx * dx + dy * dy);
+                            d = math/* default */.Z.hypot(dx, dy);
                             dx /= d;
                             dy /= d;
                             p1 = p.coords.usrCoords;
@@ -77893,32 +81303,20 @@ jxg/* default */.Z.createAngularBisectorsOfTwoLines = function (board, parents, 
         "line",
         [
             function () {
-                var d1 = Math.sqrt(
-                        l1.stdform[1] * l1.stdform[1] + l1.stdform[2] * l1.stdform[2]
-                    ),
-                    d2 = Math.sqrt(
-                        l2.stdform[1] * l2.stdform[1] + l2.stdform[2] * l2.stdform[2]
-                    );
+                var d1 = math/* default */.Z.hypot(l1.stdform[1], l1.stdform[2]),
+                    d2 = math/* default */.Z.hypot(l2.stdform[1], l2.stdform[2]);
 
                 return l1.stdform[0] / d1 - l2.stdform[0] / d2;
             },
             function () {
-                var d1 = Math.sqrt(
-                        l1.stdform[1] * l1.stdform[1] + l1.stdform[2] * l1.stdform[2]
-                    ),
-                    d2 = Math.sqrt(
-                        l2.stdform[1] * l2.stdform[1] + l2.stdform[2] * l2.stdform[2]
-                    );
+                var d1 = math/* default */.Z.hypot(l1.stdform[1], l1.stdform[2]),
+                    d2 = math/* default */.Z.hypot(l2.stdform[1], l2.stdform[2]);
 
                 return l1.stdform[1] / d1 - l2.stdform[1] / d2;
             },
             function () {
-                var d1 = Math.sqrt(
-                        l1.stdform[1] * l1.stdform[1] + l1.stdform[2] * l1.stdform[2]
-                    ),
-                    d2 = Math.sqrt(
-                        l2.stdform[1] * l2.stdform[1] + l2.stdform[2] * l2.stdform[2]
-                    );
+                var d1 = math/* default */.Z.hypot(l1.stdform[1], l1.stdform[2]),
+                    d2 = math/* default */.Z.hypot(l2.stdform[1], l2.stdform[2]);
 
                 return l1.stdform[2] / d1 - l2.stdform[2] / d2;
             }
@@ -77934,32 +81332,20 @@ jxg/* default */.Z.createAngularBisectorsOfTwoLines = function (board, parents, 
         "line",
         [
             function () {
-                var d1 = Math.sqrt(
-                        l1.stdform[1] * l1.stdform[1] + l1.stdform[2] * l1.stdform[2]
-                    ),
-                    d2 = Math.sqrt(
-                        l2.stdform[1] * l2.stdform[1] + l2.stdform[2] * l2.stdform[2]
-                    );
+                var d1 = math/* default */.Z.hypot(l1.stdform[1], l1.stdform[2]),
+                    d2 = math/* default */.Z.hypot(l2.stdform[1], l2.stdform[2]);
 
                 return l1.stdform[0] / d1 + l2.stdform[0] / d2;
             },
             function () {
-                var d1 = Math.sqrt(
-                        l1.stdform[1] * l1.stdform[1] + l1.stdform[2] * l1.stdform[2]
-                    ),
-                    d2 = Math.sqrt(
-                        l2.stdform[1] * l2.stdform[1] + l2.stdform[2] * l2.stdform[2]
-                    );
+                var d1 = math/* default */.Z.hypot(l1.stdform[1], l1.stdform[2]),
+                    d2 = math/* default */.Z.hypot(l2.stdform[1], l2.stdform[2]);
 
                 return l1.stdform[1] / d1 + l2.stdform[1] / d2;
             },
             function () {
-                var d1 = Math.sqrt(
-                        l1.stdform[1] * l1.stdform[1] + l1.stdform[2] * l1.stdform[2]
-                    ),
-                    d2 = Math.sqrt(
-                        l2.stdform[1] * l2.stdform[1] + l2.stdform[2] * l2.stdform[2]
-                    );
+                var d1 = math/* default */.Z.hypot(l1.stdform[1], l1.stdform[2]),
+                    d2 = math/* default */.Z.hypot(l2.stdform[1], l2.stdform[2]);
 
                 return l1.stdform[2] / d1 + l2.stdform[2] / d2;
             }
@@ -78222,15 +81608,9 @@ jxg/* default */.Z.createIncenter = function (board, parents, attributes) {
                 function () {
                     var a, b, c;
 
-                    a = Math.sqrt(
-                        (B.X() - C.X()) * (B.X() - C.X()) + (B.Y() - C.Y()) * (B.Y() - C.Y())
-                    );
-                    b = Math.sqrt(
-                        (A.X() - C.X()) * (A.X() - C.X()) + (A.Y() - C.Y()) * (A.Y() - C.Y())
-                    );
-                    c = Math.sqrt(
-                        (B.X() - A.X()) * (B.X() - A.X()) + (B.Y() - A.Y()) * (B.Y() - A.Y())
-                    );
+                    a = math/* default */.Z.hypot(B.X() - C.X(), B.Y() - C.Y());
+                    b = math/* default */.Z.hypot(A.X() - C.X(), A.Y() - C.Y());
+                    c = math/* default */.Z.hypot(B.X() - A.X(), B.Y() - A.Y());
 
                     return new base_coords/* default */.Z(
                         constants/* default */.Z.COORDS_BY_USER,
@@ -78413,24 +81793,9 @@ jxg/* default */.Z.createIncircle = function (board, parents, attributes) {
             [
                 p,
                 function () {
-                    var a = Math.sqrt(
-                            (parents[1].X() - parents[2].X()) *
-                                (parents[1].X() - parents[2].X()) +
-                                (parents[1].Y() - parents[2].Y()) *
-                                    (parents[1].Y() - parents[2].Y())
-                        ),
-                        b = Math.sqrt(
-                            (parents[0].X() - parents[2].X()) *
-                                (parents[0].X() - parents[2].X()) +
-                                (parents[0].Y() - parents[2].Y()) *
-                                    (parents[0].Y() - parents[2].Y())
-                        ),
-                        c = Math.sqrt(
-                            (parents[1].X() - parents[0].X()) *
-                                (parents[1].X() - parents[0].X()) +
-                                (parents[1].Y() - parents[0].Y()) *
-                                    (parents[1].Y() - parents[0].Y())
-                        ),
+                    var a = math/* default */.Z.hypot(parents[1].X() - parents[2].X(), parents[1].Y() - parents[2].Y()),
+                        b = math/* default */.Z.hypot(parents[0].X() - parents[2].X(), parents[0].Y() - parents[2].Y()),
+                        c = math/* default */.Z.hypot(parents[1].X() - parents[0].X(), parents[1].Y() - parents[0].Y()),
                         s = (a + b + c) / 2;
 
                     return Math.sqrt(((s - a) * (s - b) * (s - c)) / s);
@@ -78715,7 +82080,7 @@ jxg/* default */.Z.createReflection = function (board, parents, attributes) {
  * @pseudo
  * @description A mirror element is determined by the reflection of a given point, line, circle, curve, polygon across another given point.
  * @constructor
- * @name Mirrorelement
+ * @name mirrorelement
  * @type JXG.GeometryElement
  * @augments JXG.GeometryElement
  * @throws {Error} If the element cannot be constructed with the given parent objects an exception is thrown.
@@ -79160,6 +82525,7 @@ jxg/* default */.Z.createIntegral = function (board, parents, attributes) {
 
     /**
      * documented in JXG.Curve
+     * @class
      * @ignore
      */
     p.updateDataArray = function () {
@@ -79542,6 +82908,11 @@ jxg/* default */.Z.createInequality = function (board, parents, attributes) {
         a.hasPoint = function () {
             return false;
         };
+
+        /**
+         * @class
+         * @ignore
+         */
         a.updateDataArray = function () {
             var i1,
                 i2,
@@ -79549,27 +82920,19 @@ jxg/* default */.Z.createInequality = function (board, parents, attributes) {
                 // such that the line is not visible anymore, the borders of the area will get visible in some cases.
                 h,
                 bb = board.getBoundingBox(),
-                factor = attr.inverse ? -1 : 1,
+                inverse = utils_type/* default */.Z.evaluate(this.visProp.inverse),
+                factor = inverse ? -1 : 1,
                 expansion = 1.5,
                 w = expansion * Math.max(bb[2] - bb[0], bb[1] - bb[3]),
                 // Fake a point (for Math.Geometry.perpendicular)
                 // contains centroid of the board
                 dp = {
                     coords: {
-                        usrCoords: [1, (bb[0] + bb[2]) / 2, attr.inverse ? bb[1] : bb[3]]
+                        usrCoords: [1, (bb[0] + bb[2]) * 0.5, inverse ? bb[1] : bb[3]]
                     }
                 },
                 slope1 = parents[0].stdform.slice(1),
                 slope2 = slope1;
-
-            // This is wrong. Example:
-            // var line = board.create('line', [0, -1, -1]);
-            // var ineq = board.create('inequality', [line]);
-            //
-            // if (slope1[1] > 0) {
-            //     slope1 = Statistics.multiply(slope1, -1);
-            //     slope2 = slope1;
-            // }
 
             // Calculate the area height as
             //  expansion times the distance of the line to the
@@ -79588,7 +82951,7 @@ jxg/* default */.Z.createInequality = function (board, parents, attributes) {
             // reuse dp
             dp = {
                 coords: {
-                    usrCoords: [1, (bb[0] + bb[2]) / 2, (bb[1] + bb[3]) / 2]
+                    usrCoords: [1, (bb[0] + bb[2]) * 0.5, (bb[1] + bb[3]) * 0.5]
                 }
             };
 
@@ -79617,6 +82980,10 @@ jxg/* default */.Z.createInequality = function (board, parents, attributes) {
         parents[0].visProp.curvetype === "functiongraph"
     ) {
         a = board.create("curve", [[], []], attr);
+        /**
+         * @class
+         * @ignore
+         */
         a.updateDataArray = function () {
             var bbox = this.board.getBoundingBox(),
                 points = [],
@@ -79709,6 +83076,10 @@ jxg/* default */.Z.createInequality = function (board, parents, attributes) {
         };
 
         // Previous code:
+        /**
+         * @class
+         * @ignore
+         */
         a.hasPoint = function () {
             return false;
         };
@@ -80234,9 +83605,9 @@ jxg/* default */.Z.extend(
          * Set the width and height of the image. After setting a new size,
          * board.update() or image.fullUpdate()
          * has to be called to make the change visible.
-         * @param  {number, function, string} width  Number, function or string
+         * @param  {number|function|string} width  Number, function or string
          *                            that determines the new width of the image
-         * @param  {number, function, string} height Number, function or string
+         * @param  {number|function|string} height Number, function or string
          *                            that determines the new height of the image
          * @returns {JXG.GeometryElement} A reference to the element
          *
@@ -80314,7 +83685,6 @@ jxg/* default */.Z.extend(
 /**
  * @class Displays an image.
  * @pseudo
- * @description
  * @name Image
  * @type JXG.Image
  * @augments JXG.Image
@@ -80427,7 +83797,6 @@ jxg/* default */.Z.registerElement("image", jxg/* default */.Z.createImage);
 /**
  * @class A slider can be used to choose values from a given range of numbers.
  * @pseudo
- * @description
  * @name Slider
  * @augments Glider
  * @constructor
@@ -80542,7 +83911,7 @@ jxg/* default */.Z.registerElement("image", jxg/* default */.Z.createImage);
  */
 jxg/* default */.Z.createSlider = function (board, parents, attributes) {
     var pos0, pos1,
-        smin, start, smax, sdiff,
+        smin, start, smax, diff,
         p1, p2, p3, l1, l2,
         ticks, ti, t,
         startx, starty,
@@ -80579,7 +83948,7 @@ jxg/* default */.Z.createSlider = function (board, parents, attributes) {
     smin = parents[2][0];
     start = parents[2][1];
     smax = parents[2][2];
-    sdiff = smax - smin;
+    diff = smax - smin;
 
     sw = utils_type/* default */.Z.evaluate(snapWidth);
     s = sw === -1 ? start : Math.round(start / sw) * sw;
@@ -80607,23 +83976,23 @@ jxg/* default */.Z.createSlider = function (board, parents, attributes) {
      * @returns {Number}
      */
     p3.Value = function () {
-        var sdiff = this._smax - this._smin,
-            ev_sw = utils_type/* default */.Z.evaluate(this.visProp.snapwidth),
-            snapValues, i, v;
+        var d = this._smax - this._smin,
+            ev_sw = utils_type/* default */.Z.evaluate(this.visProp.snapwidth);
+            // snapValues, i, v;
 
-        snapValues = utils_type/* default */.Z.evaluate(this.visProp.snapvalues);
-        if (utils_type/* default */.Z.isArray(snapValues)) {
-            for (i=0; i < snapValues.length; i++) {
-                v = (snapValues[i] - this._smin) / (this._smax - this._smin);
-                if(this.position === v) {
-                    return snapValues[i];
-                }
-            }
-        }
+        // snapValues = Type.evaluate(this.visProp.snapvalues);
+        // if (Type.isArray(snapValues)) {
+        //     for (i = 0; i < snapValues.length; i++) {
+        //         v = (snapValues[i] - this._smin) / (this._smax - this._smin);
+        //         if (this.position === v) {
+        //             return snapValues[i];
+        //         }
+        //     }
+        // }
 
         return ev_sw === -1
-            ? this.position * sdiff + this._smin
-            : Math.round((this.position * sdiff + this._smin) / ev_sw) * ev_sw;
+            ? this.position * d + this._smin
+            : Math.round((this.position * d + this._smin) / ev_sw) * ev_sw;
     };
 
     p3.methodMap = utils_type/* default */.Z.deepCopy(p3.methodMap, {
@@ -80674,10 +84043,10 @@ jxg/* default */.Z.createSlider = function (board, parents, attributes) {
      * @returns {Object} this object
      */
     p3.setValue = function (val) {
-        var sdiff = this._smax - this._smin;
+        var d = this._smax - this._smin;
 
-        if (Math.abs(sdiff) > math/* default */.Z.eps) {
-            this.position = (val - this._smin) / sdiff;
+        if (Math.abs(d) > math/* default */.Z.eps) {
+            this.position = (val - this._smin) / d;
         } else {
             this.position = 0.0; //this._smin;
         }
@@ -80827,7 +84196,7 @@ jxg/* default */.Z.createSlider = function (board, parents, attributes) {
                         return 0;
                     }
 
-                    return (d / dFull) * sdiff + smin;
+                    return (d / dFull) * diff + smin;
                 }
             ],
             attr
@@ -80949,6 +84318,395 @@ jxg/* default */.Z.registerElement("slider", jxg/* default */.Z.createSlider);
 //     createSlider: JXG.createSlider
 // };
 
+;// CONCATENATED MODULE: ./src/parser/prefix.js
+/*
+    Copyright 2008-2023
+        Matthias Ehmann,
+        Carsten Miller,
+        Alfred Wassermann
+
+    This file is part of JSXGraph.
+
+    JSXGraph is free software dual licensed under the GNU LGPL or MIT License.
+
+    You can redistribute it and/or modify it under the terms of the
+
+      * GNU Lesser General Public License as published by
+        the Free Software Foundation, either version 3 of the License, or
+        (at your option) any later version
+      OR
+      * MIT License: https://github.com/jsxgraph/jsxgraph/blob/master/LICENSE.MIT
+
+    JSXGraph is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License and
+    the MIT License along with JSXGraph. If not, see <https://www.gnu.org/licenses/>
+    and <https://opensource.org/licenses/MIT/>.
+ */
+
+/**
+ * @fileoverview Simple prefix parser for measurements and expressions of measurements.
+ * An expression is given as
+ * <ul>
+ * <li> array starting with an operator as first element, followed
+ * by one or more operands,
+ * <li> number.
+ * </ul>
+ * <p>
+ * Possible operands are:
+ * <ul>
+ * <li> '+', '-', '*', '/'
+ * </ul>
+ *
+ * @example
+ *
+ */
+
+
+
+
+
+/**
+ * Prefix expression parser, i.e. a poor man's parser.
+ * This is a simple prefix parser for measurements and expressions of measurements,
+ * see {@link Measurement}.
+ * An expression is given as
+ * <ul>
+ * <li> array starting with an operator as first element, followed
+ * by one or more operands,
+ * <li> number.
+ * </ul>
+ * <p>
+ * Possible operators are:
+ * <ul>
+ * <li> '+', '-', '*', '/': binary operators
+ * <li> 'Area', 'Radius', 'Value', 'V', 'L': arbitrary methods of JSXGraph elements, supplied as strings.
+ * <li> 'exec': call a function
+ * </ul>
+ * <p>
+ * Possible operands are:
+ * <ul>
+ * <li> numbers
+ * <li> strings
+ * <li> JSXGraph elements in case the operator is a method. Example: ['Area', circle] calls
+ * the method circle.Area().
+ * <li> prefix expressions (for binary operators)
+ * <li> 'exec': call functions. Example: ['exec', 'sin', ['V', slider]] computes 'Math.sin(slider.Value())'.
+ * As functions only functions in Math or JXG.Math are allowed.
+ * </ul>
+ * @namespace
+ *
+ * @example
+ *   ['+', 100, 200]
+ * @example
+ * var p1 = board.create('point', [1, 1]);
+ * var p2 = board.create('point', [1, 3]);
+ * var seg = board.create('segment', [[-2,-3], [-2, 3]]);
+ *
+ * // Valid prefix expression: ['L', seg]
+ *
+ * @example
+ * var p1 = board.create('point', [1, 1]);
+ * var p2 = board.create('point', [1, 3]);
+ * var seg = board.create('segment', [[-2,-3], [-2, 3]]);
+ * var ci = board.create('circle', [p1, 7]);
+ *
+ * // Valid prefix expression:  ['+', ['Radius', ci], ['L', seg]]
+ *
+ * @example
+ * var ang = board.create('angle', [[4, 0], [0, 0], [2, 2]]);
+ * // Valid prefix expression:  ['V', ang, 'degrees']);
+ */
+jxg/* default */.Z.PrefixParser = {
+    /**
+     * Parse a prefix expression and apply an action.
+     * @param {array|number} term Expression
+     * @param {String} action Determines what to do. So far, the only
+     * action available is 'execute', which evaluates the expression.
+     * @returns {Number} What ever the action does.
+     */
+    parse: function (term, action) {
+        var method, i, le, res, fun, v;
+
+        if (utils_type/* default */.Z.isNumber(term) || utils_type/* default */.Z.isString(term)) {
+            return term;
+        }
+        if (!utils_type/* default */.Z.isArray(term) || term.length < 2) {
+            throw new Error('prefixParser.parse: term is not an array, number or string');
+        }
+
+        method = term[0];
+        le = term.length;
+
+        if (action === 'execute') {
+            if (utils_type/* default */.Z.isInArray(['+', '-', '*', '/'], method)) {
+
+                res = this.parse(term[1], action);
+                for (i = 2; i < le; i++) {
+                    v = this.parse(term[i], action);
+                    switch (method) {
+                        case '+':
+                            res += v;
+                            break;
+                        case '-':
+                            res -= v;
+                            break;
+                        case '*':
+                            res *= v;
+                            break;
+                        case '/':
+                            res /= v;
+                            break;
+                        default:
+                    }
+                }
+            } else if (method === 'exec') {
+                fun = term[1];
+                v = [];
+                for (i = 2; i < le; i++) {
+                    v.push(this.parse(term[i], action));
+                }
+                if (utils_type/* default */.Z.exists(Math[fun])) {
+                    res = Math[fun].apply(this, v);
+                } else if (utils_type/* default */.Z.exists(math/* default */.Z[fun])) {
+                    res = math/* default */.Z[fun].apply(this, v);
+                } else {
+                    throw new Error("PrefixParser.parse: " + fun + " is not allowed");
+                }
+            } else {
+                // Allow shortcut 'V' for 'Value'
+                fun = term[0];
+                if (fun === 'V') {
+                    fun = 'Value';
+                }
+
+                if (!utils_type/* default */.Z.exists(term[1][fun])) {
+                    throw new Error("PrefixParser.parse: " + fun + " is not a method of " + term[1]);
+                }
+                v = [];
+                for (i = 2; i < le; i++) {
+                    v.push(this.parse(term[i], action));
+                }
+                res = term[1][fun].apply(term[1], v);
+            }
+        }
+
+        return res;
+    },
+
+    /**
+     * Determine the dimension of the resulting value, i.e. ['L', obj] as well as
+     * ['+', ['L', obj1], ['L', obj2]] have dimension 1.
+     * <p>
+     * ['+', ['Area', obj1], ['L', obj2]] will retrun NaN, because the two
+     * operands have conflicting dimensions.
+     * <p>
+     * If an element is a measurement element, then it's dimension can be set as attribute.
+     * This overrules the computed dimension.
+     *
+     * @param {Array|Number} term Prefix expression
+     * @returns Number
+     */
+    dimension: function (term) {
+        var method, i, le, res, fun, d, v, unit;
+
+        if (utils_type/* default */.Z.isNumber(term)) {
+            return 0;
+        }
+        if (!utils_type/* default */.Z.isArray(term) || term.length < 2) {
+            throw new Error('PrefixParser.dimension: term is not an array');
+        }
+
+        method = term[0];
+        le = term.length;
+
+        if (utils_type/* default */.Z.isInArray(['+', '-', '*', '/'], method)) {
+
+            res = this.dimension(term[1]);
+            for (i = 2; i < le; i++) {
+                v = this.dimension(term[i]);
+                switch (method) {
+                    case '+':
+                        if (v !== res) {
+                            res = NaN;
+                        }
+                        break;
+                    case '-':
+                        if (v !== res) {
+                            res = NaN;
+                        }
+                        break;
+                    case '*':
+                        res += v;
+                        break;
+                    case '/':
+                        res -= v;
+                        break;
+                    default:
+                }
+            }
+
+        } else if (method === 'exec') {
+            if (term[2].type === utils_type/* default */.Z.OBJECT_TYPE_MEASUREMENT) {
+                res = term[2].Dimension();
+                // If attribute "dim" is set, this overrules anything else.
+                if (utils_type/* default */.Z.exists(term[2].visProp.dim)) {
+                    d = utils_type/* default */.Z.evaluate(term[2].visProp.dim);
+                    if (d !== null) {
+                        res = d;
+                    }
+                }
+            } else {
+                res = 0;
+            }
+        } else {
+            // Allow shortcut 'V' for 'Value'
+            fun = term[0];
+
+            switch (fun) {
+                case 'L':
+                case 'Length':
+                case 'Perimeter':
+                case 'Radius':
+                case 'R':
+                    res = 1;
+                    break;
+                case 'Area':
+                case 'A':
+                    res = 2;
+                    break;
+                default: // 'V', 'Value'
+                    if (term[1].type === utils_type/* default */.Z.OBJECT_TYPE_MEASUREMENT) {
+                        res = term[1].Dimension();
+                        // If attribute "dim" is set, this overrules anything else.
+                        if (utils_type/* default */.Z.exists(term[1].visProp.dim)) {
+                            d = utils_type/* default */.Z.evaluate(term[1].visProp.dim);
+                            if (d !== null) {
+                                res = d;
+                            }
+                        }
+                    } else {
+                        res = 0;
+
+                        if (fun === 'Value' || fun === 'V') {
+                            // The Value method of sector, angle and arc does not have the same dimension
+                            // for all units.
+                            if ([constants/* default */.Z.OBJECT_TYPE_ARC, constants/* default */.Z.OBJECT_TYPE_SECTOR, constants/* default */.Z.OBJECT_TYPE_ANGLE].indexOf(term[1].type) >= 0) {
+                                unit = '';
+                                if (term.length === 3 && utils_type/* default */.Z.isString(term[2])) {
+                                    unit = term[2].toLowerCase();
+                                }
+                                if (unit === '') {
+                                    // Default values:
+                                    if (term[1].type === constants/* default */.Z.OBJECT_TYPE_ANGLE) {
+                                        // Default for angle.Value() is radians, i.e. dim 0
+                                        res = 0;
+                                    } else {
+                                        // Default for sector|arc.Value() is length, i.e. dim 1
+                                        res = 1;
+                                    }
+                                } else if (unit.indexOf('len') === 0) {
+                                    // Length has dim 1
+                                    res = 1;
+                                } else {
+                                    // Angles in various units has dimension 0
+                                    res = 0;
+                                }
+                            }
+                        }
+                    }
+            }
+        }
+
+        return res;
+    },
+
+    /**
+     * Convert a prefix expression into a new prefix expression in which
+     * JSXGraph elements have been replaced by their ids.
+     *
+     * @param {Array|Number} term
+     * @returns {Array|Number}
+     */
+    toPrefix: function (term) {
+        var method, i, le, res;
+
+        if (utils_type/* default */.Z.isNumber(term)) {
+            return term;
+        }
+        if (!utils_type/* default */.Z.isArray(term) || term.length < 2) {
+            throw new Error('PrefixParser.toPrefix: term is not an array');
+        }
+
+        method = term[0];
+        le = term.length;
+        res = [method];
+
+        for (i = 1; i < le; i++) {
+            if (utils_type/* default */.Z.isInArray(['+', '-', '*', '/'], method)) {
+                res.push(this.toPrefix(term[i]));
+            } else {
+                if (method === 'V' && term[i].type === utils_type/* default */.Z.OBJECT_TYPE_MEASUREMENT) {
+                    res = term[i].toPrefix();
+                } else if (method === 'exec') {
+                    if (i === 1) {
+                        res.push(term[i]);
+                    } else {
+                        res.push(this.toPrefix(term[i]));
+                    }
+                } else {
+                    res = [method, term[i].id];
+                }
+            }
+        }
+
+        return res;
+    },
+
+    /**
+     * Determine parent elements of a prefix expression.
+     * @param {Array|Number} term prefix expression
+     * @returns Array
+     * @private
+     */
+    getParents: function (term) {
+        var method, i, le, res;
+
+        if (utils_type/* default */.Z.isNumber(term)) {
+            return [];
+        }
+        if (!utils_type/* default */.Z.isArray(term) || term.length < 2) {
+            throw new Error('PrefixParser.getParents: term is not an array');
+        }
+
+        method = term[0];
+        le = term.length;
+        res = [];
+
+        for (i = 1; i < le; i++) {
+            if (utils_type/* default */.Z.isInArray(['+', '-', '*', '/'], method)) {
+                res = res.concat(this.getParents(term[i]));
+            } else {
+                if (method === 'V' && term[i].type === utils_type/* default */.Z.OBJECT_TYPE_MEASUREMENT) {
+                    res = res.concat(term[i].getParents());
+                } else if (method === 'exec') {
+                    if (i > 1) {
+                        res = res.concat(this.getParents(term[i]));
+                    }
+                } else {
+                    res.push(term[i]);
+                }
+            }
+        }
+
+        return res;
+    }
+};
+
+/* harmony default export */ var prefix = (jxg/* default */.Z.PrefixParser);
 ;// CONCATENATED MODULE: ./src/element/measure.js
 /*
     Copyright 2008-2023
@@ -80994,10 +84752,10 @@ jxg/* default */.Z.registerElement("slider", jxg/* default */.Z.createSlider);
 
 
 
+
 /**
  * @class A tape measure can be used to measure distances between points.
  * @pseudo
- * @description
  * @name Tapemeasure
  * @augments Segment
  * @constructor
@@ -81141,9 +84899,238 @@ jxg/* default */.Z.createTapemeasure = function (board, parents, attributes) {
 
 jxg/* default */.Z.registerElement("tapemeasure", jxg/* default */.Z.createTapemeasure);
 
-// export default {
-//     createTapemeasure: JXG.createTapemeasure
-// };
+/**
+ * @class Measurement element. Under the hood this is a text element which has a method Value. The text to be displayed
+ * is the result of the evaluation of a prefix expression, see {@link JXG.PrefixParser}.
+ * <p>
+ * The purpose of this element is to display values of measurements of geometric objects, like the radius of a circle,
+ * as well as expressions consisting of measurements.
+ *
+ * @pseudo
+ * @name Measurement
+ * @augments Text
+ * @constructor
+ * @type JXG.Text
+ * @throws {Exception} If the element cannot be constructed with the given parent objects an exception is thrown.
+ * @param {Point|Array_Point|Array_Array} x,y,expression
+ * Here, expression is a prefix expression, see {@link JXG.PrefixParser}.
+ * @example
+ * var p1 = board.create('point', [1, 1]);
+ * var p2 = board.create('point', [1, 3]);
+ * var ci1 = board.create('circle', [p1, p2]);
+ *
+ * var m1 = board.create('measurement', [1, -2, ['Area', ci1]], {
+ *     visible: true,
+ *     prefix: 'area: ',
+ *     baseUnit: 'cm'
+ * });
+ *
+ * var m2 = board.create('measurement', [1, -4, ['Radius', ci1]], {
+ *     prefix: 'radius: ',
+ *     baseUnit: 'cm'
+ * });
+ *
+ * </pre><div id="JXG6359237a-79bc-4689-92fc-38d3ebeb769d" class="jxgbox" style="width: 300px; height: 300px;"></div>
+ * <script type="text/javascript">
+ *     (function() {
+ *         var board = JXG.JSXGraph.initBoard('JXG6359237a-79bc-4689-92fc-38d3ebeb769d',
+ *             {boundingbox: [-5, 5, 5, -5], axis: true, showcopyright: false, shownavigation: false});
+ *     var p1 = board.create('point', [1, 1]);
+ *     var p2 = board.create('point', [1, 3]);
+ *     var ci1 = board.create('circle', [p1, p2]);
+ *
+ *     var m1 = board.create('measurement', [1, -2, ['Area', ci1]], {
+ *         visible: true,
+ *         prefix: 'area: ',
+ *         baseUnit: 'cm'
+ *     });
+ *
+ *     var m2 = board.create('measurement', [1, -4, ['Radius', ci1]], {
+ *         prefix: 'radius: ',
+ *         baseUnit: 'cm'
+ *     });
+ *
+ *     })();
+ *
+ * </script><pre>
+ *
+ * @example
+ * var p1 = board.create('point', [1, 1]);
+ * var p2 = board.create('point', [1, 3]);
+ * var ci1 = board.create('circle', [p1, p2]);
+ * var seg = board.create('segment', [[-2,-3], [-2, 3]], { firstArrow: true, lastArrow: true});
+ * var sli = board.create('slider', [[-4, 4], [-1.5, 4], [-10, 1, 10]], {name:'a'});
+ *
+ * var m1 = board.create('measurement', [-6, -2, ['Radius', ci1]], {
+ *     prefix: 'm1: ',
+ *     baseUnit: 'cm'
+ * });
+ *
+ * var m2 = board.create('measurement', [-6, -4, ['L', seg]], {
+ *     prefix: 'm2: ',
+ *     baseUnit: 'cm'
+ * });
+ *
+ * var m3 = board.create('measurement', [-6, -6, ['V', sli]], {
+ *     prefix: 'm3: ',
+ *     baseUnit: 'cm',
+ *     dim: 1
+ * });
+ *
+ * var m4 = board.create('measurement', [2, -6,
+ *         ['+', ['V', m1], ['V', m2], ['V', m3]]
+ *     ], {
+ *     prefix: 'm4: ',
+ *     baseUnit: 'cm'
+ * });
+ *
+ * </pre><div id="JXG49903663-6450-401e-b0d9-f025a6677d4a" class="jxgbox" style="width: 300px; height: 300px;"></div>
+ * <script type="text/javascript">
+ *     (function() {
+ *         var board = JXG.JSXGraph.initBoard('JXG49903663-6450-401e-b0d9-f025a6677d4a',
+ *             {boundingbox: [-8, 8, 8,-8], axis: true, showcopyright: false, shownavigation: false});
+ *     var p1 = board.create('point', [1, 1]);
+ *     var p2 = board.create('point', [1, 3]);
+ *     var ci1 = board.create('circle', [p1, p2]);
+ *     var seg = board.create('segment', [[-2,-3], [-2, 3]], { firstArrow: true, lastArrow: true});
+ *     var sli = board.create('slider', [[-4, 4], [-1.5, 4], [-10, 1, 10]], {name:'a'});
+ *
+ * var m1 = board.create('measurement', [-6, -2, ['Radius', ci1]], {
+ *     prefix: 'm1: ',
+ *     baseUnit: 'cm'
+ * });
+ *
+ * var m2 = board.create('measurement', [-6, -4, ['L', seg]], {
+ *     prefix: 'm2: ',
+ *     baseUnit: 'cm'
+ * });
+ *
+ * var m3 = board.create('measurement', [-6, -6, ['V', sli]], {
+ *     prefix: 'm3: ',
+ *     baseUnit: 'cm',
+ *     dim: 1
+ * });
+ *
+ * var m4 = board.create('measurement', [2, -6,
+ *         ['+', ['V', m1], ['V', m2], ['V', m3]]
+ *     ], {
+ *     prefix: 'm4: ',
+ *     baseUnit: 'cm'
+ * });
+ *
+ *     })();
+ *
+ * </script><pre>
+ *
+ */
+jxg/* default */.Z.createMeasurement = function (board, parents, attributes) {
+    var el, attr,
+        x, y, term,
+        valueFunc, i,
+        dimFunc;
+
+    attr = utils_type/* default */.Z.copyAttributes(attributes, board.options, "measurement");
+
+    x = parents[0];
+    y = parents[1];
+    term = parents[2];
+
+    el = board.create("text", [x, y, ''], attr);
+    el.type = utils_type/* default */.Z.OBJECT_TYPE_MEASUREMENT;
+    el.elType = 'measurement';
+
+    valueFunc = function () {
+        return prefix.parse(term, 'execute');
+    };
+    dimFunc = function () {
+        var d = utils_type/* default */.Z.evaluate(el.visProp.dim);
+
+        if (d !== null) {
+            return d;
+        }
+        return prefix.dimension(term);
+    };
+
+    el.Value = valueFunc;
+    el.Dimension = dimFunc;
+    el.toInfix = function (type) {
+        return prefix.toInfix(term, type);
+    };
+    el.toPrefix = function () {
+        return prefix.toPrefix(term);
+    };
+    el.getParents = function () {
+        return prefix.getParents(term);
+    };
+    el.addParents(el.getParents());
+    for (i = 0; i < el.parents.length; i++) {
+        board.select(el.parents[i]).addChild(el);
+    }
+
+    /**
+     * @class
+     * @ignore
+     */
+    el.setText(function () {
+        var prefix = '',
+            suffix = '',
+            dim = el.Dimension(),
+            unit = '',
+            units = utils_type/* default */.Z.evaluate(el.visProp.units),
+            val = el.Value();
+
+        if(utils_type/* default */.Z.isNumber(val)) {
+            val = val.toFixed(utils_type/* default */.Z.evaluate(el.visProp.digits));
+        }
+
+        if (utils_type/* default */.Z.evaluate(el.visProp.showprefix)) {
+            prefix = utils_type/* default */.Z.evaluate(el.visProp.prefix);
+        }
+        if (utils_type/* default */.Z.evaluate(el.visProp.showsuffix)) {
+            suffix = utils_type/* default */.Z.evaluate(el.visProp.suffix);
+        }
+
+        if (utils_type/* default */.Z.isString(dim)) {
+            return prefix + val + suffix;
+        }
+
+        if (isNaN(dim)) {
+            return prefix + 'NaN' + suffix;
+        }
+
+        if (utils_type/* default */.Z.isObject(units) && utils_type/* default */.Z.exists(units[dim])) {
+            unit = utils_type/* default */.Z.evaluate(units[dim]);
+        } else if (utils_type/* default */.Z.isObject(units) && utils_type/* default */.Z.exists(units['dim' + dim])) {
+            // In some cases, object keys must not be numbers. This allows key 'dim1' instead of '1'.
+            unit = utils_type/* default */.Z.evaluate(units['dim' + dim]);
+        } else {
+            unit = utils_type/* default */.Z.evaluate(el.visProp.baseunit);
+
+            if (dim === 0) {
+                unit = '';
+            } else if (dim > 1 && unit !== '') {
+                unit = unit + '^{' + dim + '}';
+            }
+        }
+
+        if (unit !== '') {
+            unit = ' ' + unit;
+        }
+
+        return prefix + val + unit + suffix;
+    });
+
+    el.methodMap = utils_type/* default */.Z.deepCopy(el.methodMap, {
+        Value: "Value",
+        Dimension: "Dimension",
+        toPrefix: "toPrefix",
+        getParents: "getParents"
+    });
+
+    return el;
+};
+
+jxg/* default */.Z.registerElement("measurement", jxg/* default */.Z.createMeasurement);
 
 ;// CONCATENATED MODULE: ./src/parser/datasource.js
 /*
@@ -81259,7 +85246,7 @@ jxg/* default */.Z.extend(
         },
 
         loadFromTable: function (table, columnHeader, rowHeader) {
-            var row, i, j, col, cell, name;
+            var row, i, j, col, cell;
 
             if (utils_type/* default */.Z.isArray(columnHeader)) {
                 this.columnHeaders = columnHeader;
@@ -81445,7 +85432,7 @@ jxg/* default */.Z.extend(
  * Use {@link JXG.Board#create} with type {@link Chart} instead.
  * @constructor
  * @augments JXG.GeometryElement
- * @param {String,JXG.Board} board The board the new chart is drawn on.
+ * @param {String|JXG.Board} board The board the new chart is drawn on.
  * @param {Array} parent data arrays for the chart
  * @param {Object} attributes Javascript object containing attributes like name, id and colors.
  *
@@ -81537,7 +85524,7 @@ jxg/* default */.Z.extend(
         /**
          * Create line chart defined by two data arrays.
          *
-         * @param  {String,JXG.Board} board      The board the chart is drawn on
+         * @param  {String|JXG.Board} board      The board the chart is drawn on
          * @param  {Array} x          Array of x-coordinates
          * @param  {Array} y          Array of y-coordinates
          * @param  {Object} attributes  Javascript object containing attributes like colors
@@ -81555,7 +85542,7 @@ jxg/* default */.Z.extend(
          * Create line chart that consists of a natural spline curve
          * defined by two data arrays.
          *
-         * @param  {String,JXG.Board} board      The board the chart is drawn on
+         * @param  {String|JXG.Board} board      The board the chart is drawn on
          * @param  {Array} x          Array of x-coordinates
          * @param  {Array} y          Array of y-coordinates
          * @param  {Object} attributes Javascript object containing attributes like colors
@@ -81574,7 +85561,7 @@ jxg/* default */.Z.extend(
          * defined by two data arrays. The degree of the polynomial is supplied
          * through the attribute "degree" in attributes.
          *
-         * @param  {String,JXG.Board} board      The board the chart is drawn on
+         * @param  {String|JXG.Board} board      The board the chart is drawn on
          * @param  {Array} x          Array of x-coordinates
          * @param  {Array} y          Array of y-coordinates
          * @param  {Object} attributes Javascript object containing attributes like colors
@@ -81606,7 +85593,7 @@ jxg/* default */.Z.extend(
          * <li> labels: array of labels
          * </ul>
          *
-         * @param  {String,JXG.Board} board      The board the chart is drawn on
+         * @param  {String|JXG.Board} board      The board the chart is drawn on
          * @param  {Array} x          Array of x-coordinates
          * @param  {Array} y          Array of y-coordinates
          * @param  {Object} attributes Javascript object containing attributes like colors
@@ -81734,7 +85721,7 @@ jxg/* default */.Z.extend(
          * <li> infoboxArray (Array): Texts for the infobox
          * </ul>
          *
-         * @param  {String,JXG.Board} board      The board the chart is drawn on
+         * @param  {String|JXG.Board} board      The board the chart is drawn on
          * @param  {Array} x          Array of x-coordinates
          * @param  {Array} y          Array of y-coordinates
          * @param  {Object} attributes Javascript object containing attributes like colors
@@ -81770,7 +85757,7 @@ jxg/* default */.Z.extend(
          * <li> highlightOnSector (Boolean)
          * </ul>
          *
-         * @param  {String,JXG.Board} board      The board the chart is drawn on
+         * @param  {String|JXG.Board} board      The board the chart is drawn on
          * @param  {Array} y          Array of x-coordinates
          * @param  {Object} attributes Javascript object containing attributes like colors
          * @returns {Object}  with keys: "{sectors, points, midpoint}"
@@ -81940,7 +85927,7 @@ jxg/* default */.Z.extend(
          * <li> circleStrokeWidth
          * </ul>
          *
-         * @param  {String,JXG.Board} board      The board the chart is drawn on
+         * @param  {String|JXG.Board} board      The board the chart is drawn on
          * @param  {Array} parents    Array of coordinates, e.g. [[x1, y1, z1], [x2, y2, z2], [x3, y3, z3]]
          * @param  {Object} attributes Javascript object containing attributes like colors
          * @returns {Object} with keys "{circles, lines, points, midpoint, polygons}"
@@ -82355,7 +86342,6 @@ jxg/* default */.Z.extend(
 /**
  * @class Constructor for a chart.
  * @pseudo
- * @description
  * @name Chart
  * @augments JXG.Chart
  * @constructor
@@ -82733,7 +86719,7 @@ jxg/* default */.Z.registerElement("chart", jxg/* default */.Z.createChart);
  * access with the property "lines" of the element.
  * @constructor
  * @augments JXG.GeometryElement
- * @param {String,JXG.Board} board The board the new legend is drawn on.
+ * @param {String|JXG.Board} board The board the new legend is drawn on.
  * @param {Array} coords Coordinates of the left top point of the legend.
  * @param  {Object} attributes Attributes of the legend
  */
@@ -82771,7 +86757,7 @@ jxg/* default */.Z.Legend.prototype = new base_element/* default */.Z();
  * Draw a vertical legend.
  *
  * @private
- * @param  {String,JXG.Board} board      The board the legend is drawn on
+ * @param  {String|JXG.Board} board      The board the legend is drawn on
  * @param  {Object} attributes Attributes of the legend
  */
 jxg/* default */.Z.Legend.prototype.drawVerticalLegend = function (board, attributes) {
@@ -82829,7 +86815,6 @@ jxg/* default */.Z.Legend.prototype.drawVerticalLegend = function (board, attrib
  * </ul>
  *
  * @pseudo
- * @description
  * @name Legend
  * @augments JXG.Legend
  * @constructor
@@ -83052,7 +87037,8 @@ jxg/* default */.Z.extend(
          *
          */
         setMatrix: function (board, type, params) {
-            var i, e, obj;
+            var i;
+                // e, obj; // Handle dependencies
 
             this.isNumericMatrix = true;
 
@@ -83247,7 +87233,7 @@ jxg/* default */.Z.extend(
          * Applies a transformation once to a GeometryElement or an array of elements.
          * If it is a free point, then it can be dragged around later
          * and will overwrite the transformed coordinates.
-         * @param {JXG.Point,Array} p
+         * @param {JXG.Point|Array} p
          */
         applyOnce: function (p) {
             var c, len, i;
@@ -83269,7 +87255,7 @@ jxg/* default */.Z.extend(
          * Binds a transformation to a GeometryElement or an array of elements. In every update of the
          * GeometryElement(s), the transformation is executed. That means, in order to immediately
          * apply the transformation, a call of board.update() has to follow.
-         * @param  {Array,JXG.Object} p JXG.Object or array of JXG.Object to
+         * @param  {Array|JXG.Object} p JXG.Object or array of JXG.Object to
          *                            which the transformation is bound to.
          */
         bindTo: function (p) {
@@ -83373,7 +87359,7 @@ jxg/* default */.Z.extend(
  * <p>
  * Internally, a transformation is applied to an element by multiplying the 3x3 matrix from the left to
  * the homogeneous coordinates of the element. JSXGraph represents homogeneous coordinates in the order
- * (z, x, y). The matrix has the form 
+ * (z, x, y). The matrix has the form
  * <pre>
  * ( a  b  c )   ( z )
  * ( d  e  f ) * ( x )
@@ -83383,13 +87369,13 @@ jxg/* default */.Z.extend(
  * In this case, finite points will stay finite. This is not the case for general projective coordinates.
  * <p>
  * Transformations acting on texts and images are considered to be affine, i.e. b and c are ignored.
- * 
+ *
  * @name Transformation
  * @augments JXG.Transformation
  * @constructor
  * @type JXG.Transformation
  * @throws {Exception} If the element cannot be constructed with the given parent objects an exception is thrown.
- * @param {numbers,functions} parameters The parameters depend on the transformation type, supplied as attribute 'type'.
+ * @param {numbers|functions} parameters The parameters depend on the transformation type, supplied as attribute 'type'.
  * Possible transformation types are
  * <ul><li> 'translate'
  * <li> 'scale'
@@ -83654,17 +87640,17 @@ jxg/* default */.Z.extend(
      * var p0 = board.create('point', [0, 0], {name: 'p_0'});
      * var p1 = board.create('point', [3, 0], {name: 'p_1'});
      * var txt = board.create('text',[0.5, 0, 'Hello World'], {display:'html'});
-     * 
+     *
      * // If p_0 is dragged, translate p_1 and text accordingly
      * var tOff = board.create('transform', [() => p0.X(), () => p0.Y()], {type:'translate'});
      * tOff.bindTo(txt);
      * tOff.bindTo(p1);
-     * 
+     *
      * // Rotate text around p_0 by dragging point p_1
      * var tRot = board.create('transform', [
      *     () => Math.atan2(p1.Y() - p0.Y(), p1.X() - p0.X()), p0], {type:'rotate'});
      * tRot.bindTo(txt);
-     * 
+     *
      * // Scale text by dragging point "p_1"
      * // We do this by
      * // - moving text by -p_0 (inverse of transformation tOff),
@@ -83680,7 +87666,7 @@ jxg/* default */.Z.extend(
      *         () => p1.Dist(p0) / 3
      * ], {type:'scale'});
      * tOffInv.bindTo(txt); tScale.bindTo(txt); tOff.bindTo(txt);
-     * 
+     *
      * </pre><div id="JXG50d6d546-3b91-41dd-8c0f-3eaa6cff7e66" class="jxgbox" style="width: 300px; height: 300px;"></div>
      * <script type="text/javascript">
      *     (function() {
@@ -83689,17 +87675,17 @@ jxg/* default */.Z.extend(
      *     var p0 = board.create('point', [0, 0], {name: 'p_0'});
      *     var p1 = board.create('point', [3, 0], {name: 'p_1'});
      *     var txt = board.create('text',[0.5, 0, 'Hello World'], {display:'html'});
-     *     
+     *
      *     // If p_0 is dragged, translate p_1 and text accordingly
      *     var tOff = board.create('transform', [() => p0.X(), () => p0.Y()], {type:'translate'});
      *     tOff.bindTo(txt);
      *     tOff.bindTo(p1);
-     *     
+     *
      *     // Rotate text around p_0 by dragging point p_1
      *     var tRot = board.create('transform', [
      *         () => Math.atan2(p1.Y() - p0.Y(), p1.X() - p0.X()), p0], {type:'rotate'});
      *     tRot.bindTo(txt);
-     *     
+     *
      *     // Scale text by dragging point "p_1"
      *     // We do this by
      *     // - moving text by -p_0 (inverse of transformation tOff),
@@ -83715,11 +87701,11 @@ jxg/* default */.Z.extend(
      *             () => p1.Dist(p0) / 3
      *     ], {type:'scale'});
      *     tOffInv.bindTo(txt); tScale.bindTo(txt); tOff.bindTo(txt);
-     * 
+     *
      *     })();
-     * 
+     *
      * </script><pre>
-     * 
+     *
  */
 jxg/* default */.Z.createTransform = function (board, parents, attributes) {
     return new jxg/* default */.Z.Transformation(board, attributes.type, parents);
@@ -83773,6 +87759,7 @@ jxg/* default */.Z.registerElement('transform', jxg/* default */.Z.createTransfo
  * "turtle graphics".
  * @author A.W.
  */
+
 
 
 
@@ -83957,10 +87944,7 @@ jxg/* default */.Z.extend(
             };
 
             this.arrowLen =
-                20 /
-                Math.sqrt(
-                    this.board.unitX * this.board.unitX + this.board.unitY * this.board.unitY
-                );
+                20 / math/* default */.Z.hypot(this.board.unitX, this.board.unitY);
 
             this.pos = [x, y];
             this.isPenDown = true;
@@ -84230,8 +88214,8 @@ jxg/* default */.Z.extend(
 
         /**
          * Get attribute of the last turtle curve object.
-         * 
-         * @param {String} key 
+         *
+         * @param {String} key
          * @returns attribute value
          * @private
          */
@@ -84890,11 +88874,8 @@ jxg/* default */.Z.extend(
          * @returns {Boolean} True if (x,y) is near the line, False otherwise.
          */
         hasPoint: function (x, y) {
-            var i,
-                t,
-                len = (this.ticks && this.ticks.length) || 0,
-                r,
-                type;
+            var i, t, r, type,
+                len = (this.ticks && this.ticks.length) || 0;
 
             if (utils_type/* default */.Z.isObject(utils_type/* default */.Z.evaluate(this.visProp.precision))) {
                 type = this.board._inputDevice;
@@ -84944,17 +88925,15 @@ jxg/* default */.Z.extend(
                             if (this.line.stdform[1] === 0) {
                                 // Allow dragging near axes only.
                                 if (
-                                    Math.abs(y - (t[1][0] + t[1][1]) * 0.5) < 2 * r &&
-                                    t[0][0] - r < x &&
-                                    x < t[0][1] + r
+                                    Math.abs(y - this.line.point1.coords.scrCoords[2]) < 2 * r &&
+                                    t[0][0] - r < x && x < t[0][1] + r
                                 ) {
                                     return true;
                                 }
                             } else if (this.line.stdform[2] === 0) {
                                 if (
-                                    Math.abs(x - (t[0][0] + t[0][1]) * 0.5) < 2 * r &&
-                                    t[1][0] - r < y &&
-                                    y < t[1][1] + r
+                                    Math.abs(x - this.line.point1.coords.scrCoords[1]) < 2 * r &&
+                                    t[1][0] - r < y && y < t[1][1] + r
                                 ) {
                                     return true;
                                 }
@@ -84975,8 +88954,7 @@ jxg/* default */.Z.extend(
          * @returns {JXG.Ticks} this element
          */
         setPositionDirectly: function (method, coords, oldcoords) {
-            var dx,
-                dy,
+            var dx, dy,
                 c = new base_coords/* default */.Z(method, coords, this.board),
                 oldc = new base_coords/* default */.Z(method, oldcoords, this.board),
                 bb = this.board.getBoundingBox();
@@ -85049,8 +89027,8 @@ jxg/* default */.Z.extend(
             if (utils_type/* default */.Z.evaluate(this.visProp.type) === "polar") {
                 bb = this.board.getBoundingBox();
                 r_max = Math.max(
-                    Math.sqrt(bb[0] * bb[0] + bb[1] * bb[1]),
-                    Math.sqrt(bb[2] * bb[2] + bb[3] * bb[3])
+                    math/* default */.Z.hypot(bb[0], bb[1]),
+                    math/* default */.Z.hypot(bb[2], bb[3])
                 );
                 b.upper = r_max;
             }
@@ -85118,10 +89096,7 @@ jxg/* default */.Z.extend(
             this.dy = this.dyMaj;
 
             // After this, the length of the vector (dxMaj, dyMaj) in screen coordinates is equal to distMaj pixel.
-            d = Math.sqrt(
-                this.dxMaj * this.dxMaj * this.board.unitX * this.board.unitX +
-                this.dyMaj * this.dyMaj * this.board.unitY * this.board.unitY
-            );
+            d = math/* default */.Z.hypot(this.dxMaj * this.board.unitX, this.dyMaj * this.board.unitY);
             this.dxMaj *= (distMaj / d) * this.board.unitX;
             this.dyMaj *= (distMaj / d) * this.board.unitY;
             this.dxMin *= (distMin / d) * this.board.unitX;
@@ -85229,7 +89204,7 @@ jxg/* default */.Z.extend(
                 isPoint1inBoard, isPoint2inBoard,
                 // We use the distance from zero to P1 and P2 to establish lower and higher points
                 dZeroPoint1, dZeroPoint2,
-                arrowData,
+                arrowData, angle,
                 a1, a2, m1, m2,
                 eps = math/* default */.Z.eps * 10,
                 ev_sf = utils_type/* default */.Z.evaluate(this.line.visProp.straightfirst),
@@ -85270,11 +89245,30 @@ jxg/* default */.Z.extend(
                 m2 = this.getDistanceFromZero(coordsZero, point2);
                 geometry/* default */.Z.calcStraight(this.line, point1, point2, utils_type/* default */.Z.evaluate(this.line.visProp.margin));
                 m1 = this.getDistanceFromZero(coordsZero, point1) - m1;
-                m2 = this.getDistanceFromZero(coordsZero, point2) . m2;
+                m2 = this.getDistanceFromZero(coordsZero, point2).m2;
             } else {
                 // This function projects the corners of the board to the line.
                 // This is important for diagonal lines with infinite tick lines.
                 geometry/* default */.Z.calcLineDelimitingPoints(this.line, point1, point2);
+            }
+
+            // If the hosting line points backwards,
+            // the respective coordinates have to be multiplied by -1.
+            // Otherwise the ticks  are created in the wrong direction.
+            angle = Math.atan2(this.line.point2.Y() - this.line.point1.Y(), this.line.point2.X() - this.line.point1.X());
+            angle = (angle + 2 * Math.PI) % (2 * Math.PI);
+
+            if (angle > Math.PI * 0.5 && angle < 3 * Math.PI * 0.5) {
+                point1.usrCoords[1] *= -1;
+                point2.usrCoords[1] *= -1;
+                point1.usr2screen();
+                point2.usr2screen();
+            }
+            if (angle > Math.PI && angle < 2 * Math.PI) {
+                point1.usrCoords[2] *= -1;
+                point2.usrCoords[2] *= -1;
+                point1.usr2screen();
+                point2.usr2screen();
             }
 
             // Shorten ticks bounds such that ticks are not through arrow heads
@@ -85397,9 +89391,9 @@ jxg/* default */.Z.extend(
             var tickPosition,
                 eps = math/* default */.Z.eps,
                 deltas, ticksDelta,
-                ev_mia = utils_type/* default */.Z.evaluate(this.visProp.minorticksinarrow),
-                ev_maa = utils_type/* default */.Z.evaluate(this.visProp.minorticksinarrow),
-                ev_mla = utils_type/* default */.Z.evaluate(this.visProp.minorticksinarrow),
+                // ev_mia = Type.evaluate(this.visProp.minorticksinarrow),
+                // ev_maa = Type.evaluate(this.visProp.minorticksinarrow),
+                // ev_mla = Type.evaluate(this.visProp.minorticksinarrow),
                 ev_mt = utils_type/* default */.Z.evaluate(this.visProp.minorticks);
 
             // Determine a proposed distance between major ticks in user units
@@ -85500,7 +89494,7 @@ jxg/* default */.Z.extend(
                 d = this.getXandYdeltas();
                 d.x *= this.board.unitX;
                 d.y *= this.board.unitY;
-                minDist /= Math.sqrt(d.x * d.x + d.y * d.y);
+                minDist /= math/* default */.Z.hypot(d.x, d.y);
                 minDist *= (ev_minti + 1);
 
                 // Determine minimal delta to fulfill the minTicksDistance constraint
@@ -85841,10 +89835,10 @@ jxg/* default */.Z.extend(
 
                 // usrCoords: Test if 'circle' is inside of the canvas
                 c = coords.usrCoords;
-                r = Math.sqrt(c[1] * c[1] + c[2] * c[2]);
+                r = math/* default */.Z.hypot(c[1], c[2]);
                 r_max = Math.max(
-                    Math.sqrt(bb[0] * bb[0] + bb[1] * bb[1]),
-                    Math.sqrt(bb[2] * bb[2] + bb[3] * bb[3])
+                    math/* default */.Z.hypot(bb[0], bb[1]),
+                    math/* default */.Z.hypot(bb[2], bb[3])
                 );
 
                 if (r < r_max) {
@@ -85890,7 +89884,7 @@ jxg/* default */.Z.extend(
                             math/* default */.Z.innerProduct(
                                 intersection[1].usrCoords.slice(1, 3),
                                 this.line.stdform.slice(1, 3)
-                            ) + this.line.stdform[0],
+                            ) + this.line.stdform[0]
                         ];
 
                         // Reverse intersection array order if first intersection is not the leftmost one.
@@ -86251,7 +90245,7 @@ jxg/* default */.Z.extend(
             for (j = lenData; j < lenLabels; j++) {
                 this.board.renderer.display(this.labels[j], false);
                 // Tick labels have the attribute "visible: 'inherit'"
-                // This must explicitely set to false, otherwise
+                // This must explicitly set to false, otherwise
                 // this labels would be set to visible in the upcoming
                 // update of the labels.
                 this.labels[j].visProp.visible = this.labels[j].visPropCalc.visible = false;
@@ -86328,7 +90322,6 @@ jxg/* default */.Z.extend(
  * The default value is "left".
  *
  * @pseudo
- * @description
  * @name Ticks
  * @augments JXG.Ticks
  * @constructor
@@ -86403,7 +90396,6 @@ jxg/* default */.Z.createTicks = function (board, parents, attributes) {
 /**
  * @class Hatches can be used to mark congruent lines or curves.
  * @pseudo
- * @description
  * @name Hatch
  * @augments JXG.Ticks
  * @constructor
@@ -87224,14 +91216,15 @@ jxg/* default */.Z.extend(
         /**
          * f = map (x) -> x*sin(x);
          * Usages:
-         * h = D(f, x);
-         * h = map (x) -> D(f, x);
-         *
+         *   h = D(f, x);
+         *   h = map (x) -> D(f, x);
+         * or
+         *   D(x^2, x);
          */
         expandDerivatives: function (node, parent, ast) {
             var len, i, j, mapNode, codeNode,
                 ret, node2, newNode, mapName,
-                varname, vArray, order;
+                varname, vArray, order, isMap;
 
             ret = 0;
             if (!node) {
@@ -87265,15 +91258,31 @@ jxg/* default */.Z.extend(
                     switch (node.value) {
                         case "op_execfun":
                             if (node.children[0] && node.children[0].value === "D") {
+                                /*
+                                 * Distinguish the cases:
+                                 *   D(f, x) where f is map -> isMap = true
+                                 * and
+                                 *   D(2*x, x), D(sin(x), x), ...  -> isMap = false
+                                 */
+                                isMap = false;
                                 if (node.children[1][0].type == "node_var") {
+                                    mapName = node.children[1][0].value;
+                                    mapNode = this.findMapNode(mapName, ast);
+                                    if (mapNode !== null) {
+                                        isMap = true;
+                                    }
+                                }
+
+                                if (isMap) {
                                     /*
-                                     * Derive map, that is compute D(f,x)
+                                     * Derivative of map, that is compute D(f,x)
                                      * where e.g. f = map (x) -> x^2
                                      *
                                      * First step: find node where the map is defined
                                      */
-                                    mapName = node.children[1][0].value;
-                                    mapNode = this.findMapNode(mapName, ast);
+                                    // Already done above
+                                    // mapName = node.children[1][0].value;
+                                    // mapNode = this.findMapNode(mapName, ast);
                                     vArray = mapNode.children[0];
 
                                     // Variable name for differentiation
@@ -87285,8 +91294,8 @@ jxg/* default */.Z.extend(
                                     codeNode = mapNode.children[1];
                                 } else {
                                     /*
-                                     * Derive expression, e.g.
-                                     *     D(2*x, x)
+                                     * Derivative of expression, e.g.
+                                     *     D(2*x, x) or D(sin(x), x)
                                      */
                                     codeNode = node.children[1][0];
                                     vArray = ["x"];
@@ -88274,7 +92283,7 @@ jxg/* default */.Z.Dump = {
      * @returns {String} " + s + "
      */
     str: function (s) {
-        if (typeof s === "string" && s.substr(0, 7) !== "function") {
+        if (typeof s === "string" && s.slice(0, 7) !== "function") {
             s = '"' + s + '"';
         }
 
@@ -88805,9 +92814,10 @@ jxg/* default */.Z.createComb = function (board, parents, attributes) {
 
     attr = utils_type/* default */.Z.copyAttributes(attributes, board.options, 'comb');
     // Type.merge(attr, Type.copyAttributes(attributes, board.options, 'comb', 'curve'));
-    c = board.create('curve', [[0], [0]], attr);
+     c = board.create('curve', [[0], [0]], attr);
 
     /**
+     * @class
      * @ignore
      */
     c.updateDataArray = function () {
@@ -89048,7 +93058,7 @@ jxg/* default */.Z.createSlopeTriangle = function (board, parents, attributes) {
     );
 
     attr = utils_type/* default */.Z.copyAttributes(attributes, board.options, "slopetriangle");
-    attr.borders = utils_type/* default */.Z.copyAttributes(attr.borders, board.options, "slopetriangle", "borders");
+    // attr.borders = Type.copyAttributes(attr.borders, board.options, "slopetriangle", "borders");
     el = board.create("polygon", [tglide, glider, toppoint], attr);
 
     /**
@@ -89174,6 +93184,10 @@ jxg/* default */.Z.registerElement("slopetriangle", jxg/* default */.Z.createSlo
 
 
 var checkbox_priv = {
+    /**
+     * @class
+     * @ignore
+     */
     CheckboxChangeEventHandler: function () {
         this._value = this.rendNodeCheckbox.checked;
         this.board.update();
@@ -89188,9 +93202,8 @@ var checkbox_priv = {
  * <p>
  * The underlying HTML checkbox element can be accessed through the sub-object 'rendNodeCheck', e.g. to
  * add event listeners.
- * 
+ *
  * @pseudo
- * @description
  * @name Checkbox
  * @augments Text
  * @constructor
@@ -89274,7 +93287,7 @@ var checkbox_priv = {
  *                 b1.setText('Texts are changed');
  *             }],
  *             {cssStyle: 'width:200px'});
- * 
+ *
  * </pre><div id="JXG31c6d070-354b-4f09-aab9-9aaa796f730c" class="jxgbox" style="width: 300px; height: 300px;"></div>
  * <script type="text/javascript">
  *     (function() {
@@ -89289,11 +93302,11 @@ var checkbox_priv = {
  *                     b1.setText('Texts are changed');
  *                 }],
  *                 {cssStyle: 'width:200px'});
- * 
+ *
  *     })();
- * 
+ *
  * </script><pre>
- * 
+ *
  */
 jxg/* default */.Z.createCheckbox = function (board, parents, attributes) {
     var t,
@@ -89352,6 +93365,10 @@ jxg/* default */.Z.createCheckbox = function (board, parents, attributes) {
         return this._value;
     };
 
+     /**
+     * @class
+     * @ignore
+     */
     t.update = function () {
         if (this.needsUpdate) {
             jxg/* default */.Z.Text.prototype.update.call(this);
@@ -89415,9 +93432,15 @@ jxg/* default */.Z.registerElement("checkbox", jxg/* default */.Z.createCheckbox
 
 
 /**
+ * @class
  * @ignore
  */
 var input_priv = {
+     /**
+     * @class
+     * @ignore
+     */
+
     InputInputEventHandler: function (evt) {
         this._value = this.rendNodeInput.value;
         this.board.update();
@@ -89435,9 +93458,8 @@ var input_priv = {
  * <p>
  * The underlying HTML input field can be accessed through the sub-object 'rendNodeInput', e.g. to
  * add event listeners.
- * 
+ *
  * @pseudo
- * @description
  * @name Input
  * @augments Text
  * @constructor
@@ -89498,19 +93520,19 @@ var input_priv = {
  *      t1_board.update();
  *  }
  * </script><pre>
- * 
+ *
  * @example
  * // Add the `keyup` event to an input field
  * var A = board.create('point', [3, -2]);
  * var i = board.create('input', [-4, -4, "1", "x "]);
- * 
+ *
  * i.rendNodeInput.addEventListener("keyup", ( function () {
  *    var x = parseFloat(this.value);
  *    if (!isNaN(x)) {
  * 	   A.moveTo([x, 3], 100);
  *    }
  * }));
- * 
+ *
  * </pre><div id="JXG81c84fa7-3f36-4874-9e0f-d4b9e93e755b" class="jxgbox" style="width: 300px; height: 300px;"></div>
  * <script type="text/javascript">
  *     (function() {
@@ -89518,28 +93540,28 @@ var input_priv = {
  *             {boundingbox: [-5, 5, 5, -5], axis: true, showcopyright: false, shownavigation: false});
  *     var A = board.create('point', [3, -2]);
  *     var i = board.create('input', [-4, -4, "1", "x "]);
- *     
+ *
  *     i.rendNodeInput.addEventListener("keyup", ( function () {
  *        var x = parseFloat(this.value);
  *        if (!isNaN(x)) {
  *     	    A.moveTo([x, 3], 100);
  *        }
  *     }));
- * 
+ *
  *     })();
- * 
+ *
  * </script><pre>
- * 
+ *
  * @example
  * // Add the `change` event to an input field
  * var A = board.create('point', [3, -2]);
  * var i = board.create('input', [-4, -4, "1", "x "]);
- * 
+ *
  * i.rendNodeInput.addEventListener("change", ( function () {
  *    var x = parseFloat(i.Value());
  *    A.moveTo([x, 2], 100);
  * }));
- * 
+ *
  * </pre><div id="JXG51c4d78b-a7ad-4c34-a983-b3ddae6192d7" class="jxgbox" style="width: 300px; height: 300px;"></div>
  * <script type="text/javascript">
  *     (function() {
@@ -89547,29 +93569,29 @@ var input_priv = {
  *             {boundingbox: [-8, 8, 8,-8], axis: true, showcopyright: false, shownavigation: false});
  *     var A = board.create('point', [3, -2]);
  *     var i = board.create('input', [-4, -4, "1", "x "]);
- *     
+ *
  *     i.rendNodeInput.addEventListener("change", ( function () {
  *        var x = parseFloat(i.Value());
  *        A.moveTo([x, 2], 100);
  *     }));
- * 
+ *
  *     })();
- * 
+ *
  * </script><pre>
- * 
- * 
+ *
+ *
  * @example
  *   Apply CSS classes to label and input tag
  *     &lt;style&gt;
  *         div.JXGtext_inp {
  *             font-weight: bold;
  *         }
- * 
+ *
  *         // Label
  *         div.JXGtext_inp > span > span {
  *             padding: 3px;
  *         }
- * 
+ *
  *         // Input field
  *         div.JXGtext_inp > span > input {
  *             width: 100px;
@@ -89577,21 +93599,21 @@ var input_priv = {
  *             border-radius: 25px;
  *         }
  *     &lt;/style&gt;
- * 
+ *
  * var inp = board.create('input', [-6, 1, 'x', 'y'], {
  *      CssClass: 'JXGtext_inp', HighlightCssClass: 'JXGtext_inp'
  * });
- * 
+ *
  * </pre>
  *         <style>
  *             div.JXGtext_inp {
  *                 font-weight: bold;
  *             }
- *     
+ *
  *             div.JXGtext_inp > span > span {
  *                 padding: 3px;
  *             }
- *     
+ *
  *             div.JXGtext_inp > span > input {
  *                 width: 100px;
  *                 border: solid 4px red;
@@ -89604,10 +93626,10 @@ var input_priv = {
  *         var board = JXG.JSXGraph.initBoard('JXGa3642ebd-a7dc-41ac-beb2-0c9e705ab8b4',
  *             {boundingbox: [-8, 8, 8,-8], axis: true, showcopyright: false, shownavigation: false});
  *         var inp = board.create('input', [-6, 1, 'x', 'y'], {CssClass: 'JXGtext_inp', HighlightCssClass: 'JXGtext_inp'});
- * 
+ *
  *     })();
  * </script><pre>
- * 
+ *
  */
 jxg/* default */.Z.createInput = function (board, parents, attributes) {
     var t,
@@ -89642,6 +93664,11 @@ jxg/* default */.Z.createInput = function (board, parents, attributes) {
     t.setText(parents[3]);
 
     t._value = parents[2];
+
+     /**
+     * @class
+     * @ignore
+     */
     t.update = function () {
         if (this.needsUpdate) {
             jxg/* default */.Z.Text.prototype.update.call(this);
@@ -89701,6 +93728,12 @@ jxg/* default */.Z.createInput = function (board, parents, attributes) {
      * </script><pre>
      *
      */
+
+     /**
+     * @class
+     * @ignore
+     */
+
     t.set = function (val) {
         this._value = val;
         this.rendNodeInput.value = val;
@@ -89814,7 +93847,6 @@ var button_priv = {
  * add event listeners.
  *
  * @pseudo
- * @description
  * @name Button
  * @augments Text
  * @constructor
@@ -90176,7 +94208,7 @@ jxg/* default */.Z.registerElement("button", jxg/* default */.Z.createButton);
  * </script><pre>
  *
  */
-jxg/* default */.Z.createVectorField = function(board, parents, attributes) {
+jxg/* default */.Z.createVectorField = function (board, parents, attributes) {
     var el, attr;
 
     if (!(parents.length >= 3 &&
@@ -90186,19 +94218,24 @@ jxg/* default */.Z.createVectorField = function(board, parents, attributes) {
     )) {
         throw new Error(
             "JSXGraph: Can't create vector field with parent types " +
-                "'" + typeof parents[0] + "', " +
-                "'" + typeof parents[1] + "', " +
-                "'" + typeof parents[2] + "'."
+            "'" + typeof parents[0] + "', " +
+            "'" + typeof parents[1] + "', " +
+            "'" + typeof parents[2] + "'."
         );
     }
 
     attr = utils_type/* default */.Z.copyAttributes(attributes, board.options, 'vectorfield');
+
+    /**
+     * @type {JXG.Curve}
+     * @ignore
+     */
     el = board.create('curve', [[], []], attr);
     el.elType = 'vectorfield';
 
     /**
      * Set the defining functions of vector field.
-     * @memberOf Vectorfield.prototype
+     * @memberOf Vectorfield
      * @name setF
      * @function
      * @param {Array|Function} func Either an array containing two functions f1(x, y) and f2(x, y) or function f(x, y) returning an array of length 2.
@@ -90209,7 +94246,7 @@ jxg/* default */.Z.createVectorField = function(board, parents, attributes) {
      * board.update();
      *
      */
-    el.setF = function(func, varnames) {
+    el.setF = function (func, varnames) {
         var f0, f1;
         if (utils_type/* default */.Z.isArray(func)) {
             f0 = utils_type/* default */.Z.createFunction(func[0], this.board, varnames);
@@ -90217,7 +94254,7 @@ jxg/* default */.Z.createVectorField = function(board, parents, attributes) {
             /**
              * @ignore
              */
-            this.F = function(x, y) { return [f0(x, y), f1(x, y)]; };
+            this.F = function (x, y) { return [f0(x, y), f1(x, y)]; };
         } else {
             this.F = utils_type/* default */.Z.createFunction(func, el.board, varnames);
         }
@@ -90228,7 +94265,7 @@ jxg/* default */.Z.createVectorField = function(board, parents, attributes) {
     el.xData = parents[1];
     el.yData = parents[2];
 
-    el.updateDataArray = function() {
+    el.updateDataArray = function () {
         var x, y, i, j,
             scale = utils_type/* default */.Z.evaluate(this.visProp.scale),
             start_x = utils_type/* default */.Z.evaluate(this.xData[0]),
@@ -90240,7 +94277,7 @@ jxg/* default */.Z.createVectorField = function(board, parents, attributes) {
             steps_y = utils_type/* default */.Z.evaluate(this.yData[1]),
             end_y = utils_type/* default */.Z.evaluate(this.yData[2]),
             delta_y = (end_y - start_y) / steps_y,
-            dx, dy, d, theta, phi,
+            v, theta, phi1, phi2,
 
             showArrow = utils_type/* default */.Z.evaluate(this.visProp.arrowhead.enabled),
             leg, leg_x, leg_y, alpha;
@@ -90248,9 +94285,9 @@ jxg/* default */.Z.createVectorField = function(board, parents, attributes) {
 
         if (showArrow) {
             // Arrow head style
-            leg = utils_type/* default */.Z.evaluate(this.visProp.arrowhead.size),
-            leg_x = leg / board.unitX,
-            leg_y = leg / board.unitY,
+            leg = utils_type/* default */.Z.evaluate(this.visProp.arrowhead.size);
+            leg_x = leg / board.unitX;
+            leg_y = leg / board.unitY;
             alpha = utils_type/* default */.Z.evaluate(this.visProp.arrowhead.angle);
         }
 
@@ -90259,30 +94296,21 @@ jxg/* default */.Z.createVectorField = function(board, parents, attributes) {
 
         for (i = 0, x = start_x; i <= steps_x; x += delta_x, i++) {
             for (j = 0, y = start_y; j <= steps_y; y += delta_y, j++) {
-                d = this.F(x, y);
-                dx = d[0] * scale;
-                dy = d[1] * scale;
+                v = this.F(x, y);
+                v[0] *= scale;
+                v[1] *= scale;
 
-                this.dataX.push(x);
-                this.dataY.push(y);
-                this.dataX.push(x + dx);
-                this.dataY.push(y + dy);
+                this.dataX = this.dataX.concat([x, x + v[0], NaN]);
+                this.dataY = this.dataY.concat([y, y + v[1], NaN]);
 
-                if (showArrow && Math.abs(dx) + Math.abs(dy) > 0.0) {
+                if (showArrow && Math.abs(v[0]) + Math.abs(v[1]) > 0.0) {
                     // Arrow head
-                    theta = Math.atan2(dy, dx);
-                    phi = theta + alpha;
-                    this.dataX.push(x + dx - Math.cos(phi) * leg_x);
-                    this.dataY.push(y + dy - Math.sin(phi) * leg_y);
-                    this.dataX.push(x + dx);
-                    this.dataY.push(y + dy);
-                    phi = theta - alpha;
-                    this.dataX.push(x + dx - Math.cos(phi) * leg_x);
-                    this.dataY.push(y + dy - Math.sin(phi) * leg_y);
+                    theta = Math.atan2(v[1], v[0]);
+                    phi1 = theta + alpha;
+                    phi2 = theta - alpha;
+                    this.dataX = this.dataX.concat([x + v[0] - Math.cos(phi1) * leg_x, x + v[0], x + v[0] - Math.cos(phi2) * leg_x, NaN]);
+                    this.dataY = this.dataY.concat([y + v[1] - Math.sin(phi1) * leg_y, y + v[1], y + v[1] - Math.sin(phi2) * leg_y, NaN]);
                 }
-
-                this.dataX.push(NaN);
-                this.dataY.push(NaN);
             }
         }
     };
@@ -90391,7 +94419,7 @@ jxg/* default */.Z.registerElement("vectorfield", jxg/* default */.Z.createVecto
  * </script><pre>
  *
  */
-jxg/* default */.Z.createSlopeField = function(board, parents, attributes) {
+jxg/* default */.Z.createSlopeField = function (board, parents, attributes) {
     var el, f, attr;
 
     if (!(parents.length >= 3 &&
@@ -90401,26 +94429,29 @@ jxg/* default */.Z.createSlopeField = function(board, parents, attributes) {
     )) {
         throw new Error(
             "JSXGraph: Can't create slope field with parent types " +
-                "'" + typeof parents[0] + "', " +
-                "'" + typeof parents[1] + "', " +
-                "'" + typeof parents[2] + "'."
+            "'" + typeof parents[0] + "', " +
+            "'" + typeof parents[1] + "', " +
+            "'" + typeof parents[2] + "'."
         );
     }
 
     f = utils_type/* default */.Z.createFunction(parents[0], board, 'x, y');
-    parents[0] = function(x, y) {
+    parents[0] = function (x, y) {
         var z = f(x, y),
             nrm = Math.sqrt(1 + z * z);
         return [1 / nrm, z / nrm];
     };
     attr = utils_type/* default */.Z.copyAttributes(attributes, board.options, 'slopefield');
+    /**
+     * @type {JXG.Curve}
+     * @ignore
+     */
     el = board.create('vectorfield', parents, attr);
     el.elType = 'slopefield';
 
     /**
      * Set the defining functions of slope field.
-     * @memberOf Slopefield.prototype
-     * @name setF
+     * @name Slopefield#setF
      * @function
      * @param {Function} func Function f(x, y) returning a number.
      * @returns {Object} Reference to the slope field object.
@@ -90430,17 +94461,17 @@ jxg/* default */.Z.createSlopeField = function(board, parents, attributes) {
      * board.update();
      *
      */
-    el.setF = function(func, varnames) {
+    el.setF = function (func, varnames) {
         var f = utils_type/* default */.Z.createFunction(func, el.board, varnames);
 
         /**
          * @ignore
          */
-        this.F = function(x, y) {
+        this.F = function (x, y) {
             var z = f(x, y),
                 nrm = Math.sqrt(1 + z * z);
             return [1 / nrm, z / nrm];
-        }
+        };
     };
 
     el.methodMap = utils_type/* default */.Z.deepCopy(el.methodMap, {
@@ -90665,23 +94696,43 @@ jxg/* default */.Z.createSmartLabel = function (board, parents, attributes) {
 
     } else if (p.elementClass === constants/* default */.Z.OBJECT_CLASS_LINE) {
         attr = utils_type/* default */.Z.copyAttributes(attributes, board.options, 'smartlabelline');
+        /**
+         * @class
+         * @ignore
+         */
         attr.rotate = function () { return Math.atan(p.getSlope()) * 180 / Math.PI; };
+        /**
+         * @class
+         * @ignore
+         */
         attr.visible = function () { return (p.L() < 1.5) ? false : true; };
 
     } else if (p.elementClass === constants/* default */.Z.OBJECT_CLASS_CIRCLE) {
         attr = utils_type/* default */.Z.copyAttributes(attributes, board.options, 'smartlabelcircle');
+        /**
+         * @class
+         * @ignore
+         */
         attr.visible = function () { return (p.Radius() < 1.5) ? false : true; };
 
     } else if (p.type === constants/* default */.Z.OBJECT_TYPE_POLYGON) {
         attr = utils_type/* default */.Z.copyAttributes(attributes, board.options, 'smartlabelpolygon');
     } else if (p.type === constants/* default */.Z.OBJECT_TYPE_ANGLE) {
         attr = utils_type/* default */.Z.copyAttributes(attributes, board.options, 'smartlabelangle');
+        /**
+         * @class
+         * @ignore
+         */
         attr.rotate = function () {
             var c1 = p.center.coords.usrCoords,
                 c2 = p.getLabelAnchor().usrCoords,
                 v = Math.atan2(c2[2] - c1[2], c2[1] - c1[1]) * 180 / Math.PI;
             return (v > 90 && v < 270) ? v + 180 : v;
         };
+        /**
+         * @class
+         * @ignore
+         */
         attr.anchorX = function () {
             var c1 = p.center.coords.usrCoords,
                 c2 = p.getLabelAnchor().usrCoords,
@@ -91204,9 +95255,9 @@ jxg/* default */.Z.extend(
          * Set the width and height of the foreignObject. After setting a new size,
          * board.update() or foreignobject.fullUpdate()
          * has to be called to make the change visible.
-         * @param  {number, function, string} width  Number, function or string
+         * @param  {numbe|function|string} width  Number, function or string
          *                            that determines the new width of the foreignObject
-         * @param  {number, function, string} height Number, function or string
+         * @param  {number|function|string} height Number, function or string
          *                            that determines the new height of the foreignObject
          * @returns {JXG.ForeignObject} A reference to the element
          *
@@ -91247,7 +95298,6 @@ jxg/* default */.Z.extend(
  * </p>
  *
  * @pseudo
- * @description
  * @name ForeignObject
  * @augments JXG.ForeignObject
  * @constructor
@@ -91395,7 +95445,7 @@ jxg/* default */.Z.registerElement("fo", jxg/* default */.Z.createForeignObject)
 
 
 
-jxg/* default */.Z.extend(options/* default */.Z, {
+jxg/* default */.Z.extend(src_options/* default */.Z, {
     // infobox: {
     //     strokeColor: 'black'
     // },
@@ -91711,11 +95761,50 @@ jxg/* default */.Z.extend(options/* default */.Z, {
         /**#@-*/
     },
 
+    vectorfield3d: {
+        /**#@+
+         * @visprop
+         */
+
+        /**
+         * Scaling factor of the vectors. This in contrast to slope fields, where this attribute sets the vector to the given length.
+         * @name scale
+         * @memberOf Vectorfield3D.prototype
+         * @type {Number|Function}
+         * @see Slopefield.scale
+         * @default 1
+         */
+        scale: 1,
+
+        /**
+         * Customize arrow heads of vectors. Be careful! If enabled this will slow down the performance.
+         * Fields are:
+         * <ul>
+         *  <li> enabled: Boolean
+         *  <li> size: length of the arrow head legs (in pixel)
+         *  <li> angle: angle of the arrow head legs In radians.
+         * </ul>
+         * @name arrowhead
+         * @memberOf Vectorfield3D.prototype
+         * @type {Object}
+         * @default <tt>{enabled: true, size: 5, angle: Math.PI * 0.125}</tt>
+         */
+        arrowhead: {
+            enabled: true,
+            size: 5,
+            angle: Math.PI * 0.125
+        }
+
+        /**#@-*/
+    },
+
     view3d: {
         /**#@+
          * @visprop
          */
         needsRegularUpdate: true,
+
+        projection: 'parallel',
 
         /**
          * Allow vertical dragging of objects, i.e. in direction of the z-axis.
@@ -91824,10 +95913,11 @@ jxg/* default */.Z.View3D = function (board, parents, attributes) {
     this.defaultAxes = null;
 
     /**
-     * 3D-to-2D transformation matrix
-     * @type  {Array} 3 x 4 matrix
+     * @type  {Array}
      * @private
-     */
+    */
+    // 3 x 4 matrix
+    // 3D-to-2D transformation matrix
     this.matrix3D = [
         [1, 0, 0, 0],
         [0, 1, 0, 0],
@@ -91835,10 +95925,10 @@ jxg/* default */.Z.View3D = function (board, parents, attributes) {
     ];
 
     /**
-     * Lower left corner [x, y] of the 3D view if elevation and azimuth are set to 0.
      * @type array
      * @private
-     */
+    */
+    //     Lower left corner [x, y] of the 3D view if elevation and azimuth are set to 0.
     this.llftCorner = parents[0];
 
     /**
@@ -91860,6 +95950,8 @@ jxg/* default */.Z.View3D = function (board, parents, attributes) {
      * @type Number
      */
     this.r = -1;
+
+    this.projectionType = 'parallel';
 
     this.timeoutAzimuth = null;
 
@@ -91980,11 +96072,105 @@ jxg/* default */.Z.extend(
         return s;
     },
 
+    updateParallelProjection: function () {
+        var r, a, e, f,
+            mat = [
+                [1, 0, 0, 0],
+                [0, 1, 0, 0],
+                [0, 0, 1, 0]
+            ];
+
+        // mat projects homogeneous 3D coords in View3D
+        // to homogeneous 2D coordinates in the board
+        e = this.el_slide.Value();
+        r = this.r;
+        a = this.az_slide.Value();
+        f = r * Math.sin(e);
+
+        mat[1][1] = r * Math.cos(a);
+        mat[1][2] = -r * Math.sin(a);
+        mat[2][1] = f * Math.sin(a);
+        mat[2][2] = f * Math.cos(a);
+        mat[2][3] = Math.cos(e);
+
+        return mat;
+    },
+
+    updateCentralProjection: function () {
+        var r, e, a,
+            az, ax, ay, v, nrm,
+            // See https://www.mathematik.uni-marburg.de/~thormae/lectures/graphics1/graphics_6_1_eng_web.html
+            // bbox3D is always at the world origin, i.e. T_obj is the unit matrix.
+            // All vectors contain affine coordinates and have length 3
+            // The matrices are of size 4x4.
+            Tcam1, // The inverse camera transformation
+            eye, d,
+            foc = 1 / Math.tan(0.5 * Math.PI / 2),
+            zf = 20,
+            zn = 8,
+            Pref = [
+                0.5 * (this.bbox3D[0][0] + this.bbox3D[0][1]),
+                0.5 * (this.bbox3D[0][0] + this.bbox3D[0][1]),
+                0.5 * (this.bbox3D[0][0] + this.bbox3D[0][1])
+            ],
+            up = [0, 0, 1],
+            A = [
+                [0, 0, 0, -1],
+                [0, foc, 0, 0],
+                [0, 0, foc, 0],
+                [2 * zf * zn / (zn - zf), 0, 0, (zf + zn) / (zn - zf)]
+            ];
+
+        a = this.az_slide.Value();
+        e = this.el_slide.Value() * 2;
+        // r = this.r;
+
+        // Sphere
+        r = 12;
+        a += 3 * Math.PI * 0.5;
+        eye = [
+            r * Math.cos(a) * Math.cos(e),
+            -r * Math.sin(a) * Math.cos(e),
+            r * Math.sin(e)
+        ];
+
+        // Circle
+        // r = 8;
+        // // up = [0, Math.cos(e), Math.sin(e)];
+        // up = [0, 0, 1];
+        // eye = [
+        //     -r * Math.cos(a),
+        //     -r * Math.sin(a),
+        //     1. * r
+        // ];
+
+        d = [eye[0] - Pref[0], eye[1] - Pref[1], eye[2] - Pref[2]];
+        nrm = math/* default */.Z.norm(d, 3);
+        az = [d[0] / nrm, d[1] / nrm, d[2] / nrm];
+
+        nrm = math/* default */.Z.norm(up, 3);
+        v = [up[0] / nrm, up[1] / nrm, up[2] / nrm];
+
+        ax = math/* default */.Z.crossProduct(v, az);
+        ay = math/* default */.Z.crossProduct(az, ax);
+
+        v = math/* default */.Z.matVecMult([ax, ay, az], eye);
+        Tcam1 = [
+            [1, 0, 0, 0],
+            [-v[0], ax[0], ax[1], ax[2]],
+            [-v[1], ay[0], ay[1], ay[2]],
+            [-v[2], az[0], az[1], az[2]]
+        ];
+        A = math/* default */.Z.matMatMult(A, Tcam1);
+
+        return A;
+    },
+
     update: function () {
         // Update 3D-to-2D transformation matrix with the actual
         // elevation and azimuth angles.
 
-        var e, r, a, f, mat, shift;
+        var mat2D, shift, size;
 
         if (
             !utils_type/* default */.Z.exists(this.el_slide) ||
@@ -91994,52 +96180,53 @@ jxg/* default */.Z.extend(
             return this;
         }
 
-        e = this.el_slide.Value();
-        r = this.r;
-        a = this.az_slide.Value();
-        f = r * Math.sin(e);
-        mat = [
+        mat2D = [
             [1, 0, 0],
             [0, 1, 0],
             [0, 0, 1]
         ];
 
-        // Rotate the scenery around the center of the box,
-        // not around the origin
-        shift = [
-            [1, 0, 0, 0],
-            [-0.5 * (this.bbox3D[0][0] + this.bbox3D[0][1]), 1, 0, 0],
-            [-0.5 * (this.bbox3D[1][0] + this.bbox3D[1][1]), 0, 1, 0],
-            [-0.5 * (this.bbox3D[2][0] + this.bbox3D[2][1]), 0, 0, 1]
-        ];
+        this.projectionType = utils_type/* default */.Z.evaluate(this.visProp.projection);
 
-        // matrix3D projects homogeneous 3D coords in the View3D
-        // to homogeneous 2D coordinates in the board
-        this.matrix3D = [
-            [1, 0, 0, 0],
-            [0, 1, 0, 0],
-            [0, 0, 1, 0]
-        ];
+        if (this.projectionType === 'parallel') {
+            // Parallel projection
+            // Rotate the scenery around the center of the box,
+            // not around the origin
+            shift = [
+                [1, 0, 0, 0],
+                [-0.5 * (this.bbox3D[0][0] + this.bbox3D[0][1]), 1, 0, 0],
+                [-0.5 * (this.bbox3D[1][0] + this.bbox3D[1][1]), 0, 1, 0],
+                [-0.5 * (this.bbox3D[2][0] + this.bbox3D[2][1]), 0, 0, 1]
+            ];
 
-        this.matrix3D[1][1] = r * Math.cos(a);
-        this.matrix3D[1][2] = -r * Math.sin(a);
-        this.matrix3D[2][1] = f * Math.sin(a);
-        this.matrix3D[2][2] = f * Math.cos(a);
-        this.matrix3D[2][3] = Math.cos(e);
+            // Add a second transformation to scale and shift the projection
+            // on the board, usually called viewport.
+            mat2D[1][1] = this.size[0] / (this.bbox3D[0][1] - this.bbox3D[0][0]); // w / d_x
+            mat2D[2][2] = this.size[1] / (this.bbox3D[1][1] - this.bbox3D[1][0]); // h / d_y
+            mat2D[1][0] = this.llftCorner[0] + mat2D[1][1] * 0.5 * (this.bbox3D[0][1] - this.bbox3D[0][0]); // llft_x
+            mat2D[2][0] = this.llftCorner[1] + mat2D[2][2] * 0.5 * (this.bbox3D[1][1] - this.bbox3D[1][0]); // llft_y
 
-        // Add a second transformation to scale and shift the projection
-        // on the board
-        mat[1][1] = this.size[0] / (this.bbox3D[0][1] - this.bbox3D[0][0]); // w / d_x
-        mat[2][2] = this.size[1] / (this.bbox3D[1][1] - this.bbox3D[1][0]); // h / d_y
-        mat[1][0] = this.llftCorner[0] + mat[1][1] * 0.5 * (this.bbox3D[0][1] - this.bbox3D[0][0]); // llft_x
-        mat[2][0] = this.llftCorner[1] + mat[2][2] * 0.5 * (this.bbox3D[1][1] - this.bbox3D[1][0]); // llft_y
+            // this.matrix3D is a 3x4 matrix
+            this.matrix3D = this.updateParallelProjection();
+            // Combine the projections
+            this.matrix3D = math/* default */.Z.matMatMult(mat2D, math/* default */.Z.matMatMult(this.matrix3D, shift));
 
-        // Combine the two projections
-        this.matrix3D = math/* default */.Z.matMatMult(mat,
-            // Mat.matMatMult(shift2,
-                math/* default */.Z.matMatMult(this.matrix3D, shift)
-            //)
-        );
+        } else {
+            // Central projection
+            // this.matrix3D is a 4x4 matrix
+            this.matrix3D = this.updateCentralProjection();
+
+            size = 0.4;
+            mat2D[1][1] = this.size[0] / (2 * size); // w / d_x
+            mat2D[2][2] = this.size[1] / (2 * size); // h / d_y
+            mat2D[1][0] = this.llftCorner[0] + mat2D[1][1] * 0.5 * (2 * size); // llft_x
+            mat2D[2][0] = this.llftCorner[1] + mat2D[2][2] * 0.5 * (2 * size); // llft_y
+
+            // The transformations this.matrix3D and mat2D can not be combined yet, since
+            // the projected vector has to be normalized in between in
+            // project3DTo2D
+            this.viewPortTransform = mat2D;
+        }
 
         return this;
     },
@@ -92049,7 +96236,7 @@ jxg/* default */.Z.extend(
         return this;
     },
 
-    removeObject: function(object, saveMethod) {
+    removeObject: function (object, saveMethod) {
         var i;
 
         // this.board.removeObject(object, saveMethod);
@@ -92069,12 +96256,12 @@ jxg/* default */.Z.extend(
         }
 
         try {
-        //     // remove all children.
-        //     for (el in object.childElements) {
-        //         if (object.childElements.hasOwnProperty(el)) {
-        //             object.childElements[el].board.removeObject(object.childElements[el]);
-        //         }
-        //     }
+            //     // remove all children.
+            //     for (el in object.childElements) {
+            //         if (object.childElements.hasOwnProperty(el)) {
+            //             object.childElements[el].board.removeObject(object.childElements[el]);
+            //         }
+            //     }
 
             delete this.objects[object.id];
         } catch (e) {
@@ -92093,13 +96280,13 @@ jxg/* default */.Z.extend(
      * The 3D coordinates are provides as three numbers x, y, z or one array of length 3.
      *
      * @param  {Number|Array} x
-     * @param  {[Number]} y
-     * @param  {[Number]} z
+     * @param  {Number[]} y
+     * @param  {Number[]} z
      * @returns {Array} Array of length 3 containing the projection on to the board
      * in homogeneous user coordinates.
      */
     project3DTo2D: function (x, y, z) {
-        var vec;
+        var vec, w;
         if (arguments.length === 3) {
             vec = [1, x, y, z];
         } else {
@@ -92110,11 +96297,24 @@ jxg/* default */.Z.extend(
                 vec = x;
             }
         }
-        return math/* default */.Z.matVecMult(this.matrix3D, vec);
+
+        w = math/* default */.Z.matVecMult(this.matrix3D, vec);
+
+        if (this.projectionType === 'parallel') {
+            return w;
+        }
+
+        // Central projection
+        w[1] /= w[0];
+        w[2] /= w[0];
+        w[3] /= w[0];
+        w[0] /= w[0];
+
+        return math/* default */.Z.matVecMult(this.viewPortTransform, w.slice(0, 3));
     },
 
     /**
-     * Project a 2D coordinate to the plane defined by the point foot
+     * Project a 2D coordinate to the plane defined by point "foot"
      * and the normal vector `normal`.
      *
      * @param  {JXG.Point} point2d
@@ -92124,10 +96324,7 @@ jxg/* default */.Z.extend(
      * point in homogeneous coordinates.
      */
     project2DTo3DPlane: function (point2d, normal, foot) {
-        var mat,
-            rhs,
-            d,
-            le,
+        var mat, rhs, d, le,
             n = normal.slice(1),
             sol = [1, 0, 0, 0];
 
@@ -92294,7 +96491,7 @@ jxg/* default */.Z.extend(
     /**
      * Generate mesh for a surface / plane.
      * Returns array [dataX, dataY] for a JSXGraph curve's updateDataArray function.
-     * @param {Array,Function} func
+     * @param {Array|Function} func
      * @param {Array} interval_u
      * @param {Array} interval_v
      * @returns Array
@@ -92578,9 +96775,9 @@ jxg/* default */.Z.createView3D = function (board, parents, attributes) {
             infobox = view.board.infobox;
             if (d === 'auto') {
                 if (infobox.useLocale()) {
-                    arr = [pre, '(', infobox.formatNumberLocale(p.X()), ' | ', infobox.formatNumberLocale(p.Y()), ' | ', infobox.formatNumberLocale(p.Z()), ')']
+                    arr = [pre, '(', infobox.formatNumberLocale(p.X()), ' | ', infobox.formatNumberLocale(p.Y()), ' | ', infobox.formatNumberLocale(p.Z()), ')'];
                 } else {
-                    arr = [pre, '(', utils_type/* default */.Z.autoDigits(p.X()), ' | ', utils_type/* default */.Z.autoDigits(p.Y()), ' | ', utils_type/* default */.Z.autoDigits(p.Z()), ')']
+                    arr = [pre, '(', utils_type/* default */.Z.autoDigits(p.X()), ' | ', utils_type/* default */.Z.autoDigits(p.Y()), ' | ', utils_type/* default */.Z.autoDigits(p.Z()), ')'];
                 }
 
             } else {
@@ -92644,10 +96841,6 @@ jxg/* default */.Z.registerElement("view3d", jxg/* default */.Z.createView3D);
  * @class This is the basic class for 3D geometry elements like Point3D and Line3D.
  * @constructor
  * @param {string} elType
- * @borrows JXG.EventEmitter#on as this.on
- * @borrows JXG.EventEmitter#off as this.off
- * @borrows JXG.EventEmitter#triggerEventHandlers as this.triggerEventHandlers
- * @borrows JXG.EventEmitter#eventHandlers as this.eventHandlers
  */
 jxg/* default */.Z.GeometryElement3D = function (view, elType) {
     this.elType = elType;
@@ -92664,7 +96857,8 @@ jxg/* default */.Z.GeometryElement3D = function (view, elType) {
      * Link to the 2D element(s) used to visualize the 3D element
      * in a view. In case, there are several 2D elements, it is an array.
      *
-     * @type JXG.GeometryElement,Array
+     * @type Array
+     * @description JXG.GeometryElement,Array
      * @private
      *
      * @example
@@ -92789,7 +96983,9 @@ jxg/* default */.Z.extend(jxg/* default */.Z.GeometryElement3D.prototype, {
         }
 
         return attr;
-    }
+    },
+
+    remove: function() {}
 
 });
 
@@ -93146,7 +97342,7 @@ jxg/* default */.Z.registerElement("mesh3d", jxg/* default */.Z.createMesh3D);
  * @augments JXG.GeometryElement3D
  * @augments JXG.GeometryElement
  * @param {JXG.View3D} view The 3D view the point is drawn on.
- * @param {Function,Array} F Array of numbers, array of functions or function returning an array with defines the user coordinates of the point.
+ * @param {Function|Array} F Array of numbers, array of functions or function returning an array with defines the user coordinates of the point.
  * @parame {JXG.GeometryElement3D} slide Object the 3D point should be bound to. If null, the point is a free point.
  * @param {Object} attributes An object containing visual properties like in {@link JXG.Options#point3d} and
  * {@link JXG.Options#elements}, and optional a name and an id.
@@ -93174,8 +97370,7 @@ jxg/* default */.Z.Point3D = function (view, F, slide, attributes) {
     /**
      * Function or array of functions or array of numbers defining the coordinates of the point, used in {@link updateCoords}.
      *
-     * @name F
-     * @memberOf Point3D
+     * @name Point3D#F
      * @function
      * @private
      *
@@ -93603,6 +97798,7 @@ jxg/* default */.Z.registerElement("point3d", jxg/* default */.Z.createPoint3D);
 
 
 
+
 /**
  * Constructor for 3D curves.
  * @class Creates a new 3D curve object. Do not use this constructor to create a 3D curve. Use {@link JXG.View3D#create} with type {@link Curve3D} instead.
@@ -93625,6 +97821,7 @@ jxg/* default */.Z.Curve3D = function (view, F, X, Y, Z, range, attributes) {
     this.board.finalizeAdding(this);
 
     /**
+     * @function
      * @ignore
      */
     this.F = F;
@@ -93650,6 +97847,10 @@ jxg/* default */.Z.Curve3D = function (view, F, X, Y, Z, range, attributes) {
      */
     this.Z = Z;
 
+    this.dataX = null;
+    this.dataY = null;
+    this.dataZ = null;
+
     if (this.F !== null) {
         this.X = function (u) {
             return this.F(u)[0];
@@ -93674,7 +97875,7 @@ utils_type/* default */.Z.copyPrototypeMethods(jxg/* default */.Z.Curve3D, jxg/*
 jxg/* default */.Z.extend(
     jxg/* default */.Z.Curve3D.prototype,
     /** @lends JXG.Curve3D.prototype */ {
-        updateDataArray: function () {
+        updateDataArray2D: function () {
             var steps = utils_type/* default */.Z.evaluate(this.visProp.numberpointshigh),
                 r, s, e, delta, c2d, u, dataX, dataY,
                 i,
@@ -93682,8 +97883,15 @@ jxg/* default */.Z.extend(
 
             dataX = [];
             dataY = [];
-
-            if (utils_type/* default */.Z.isArray(this.X)) {
+            if (utils_type/* default */.Z.exists(this.dataX)) {
+                steps = this.dataX.length;
+                for (u = 0; u < steps; u++) {
+                    p = [this.dataX[u], this.dataY[u], this.dataZ[u]];
+                    c2d = this.view.project3DTo2D(p);
+                    dataX.push(c2d[1]);
+                    dataY.push(c2d[2]);
+                }
+            } else if (utils_type/* default */.Z.isArray(this.X)) {
                 steps = this.X.length;
                 for (u = 0; u < steps; u++) {
                     p = [this.X[u], this.Y[u], this.Z[u]];
@@ -93710,7 +97918,13 @@ jxg/* default */.Z.extend(
             return { X: dataX, Y: dataY };
         },
 
+        updateDataArray: function() {
+        },
+
         update: function () {
+            // if (this.needsUpdate) {
+                this.updateDataArray();
+            // }
             return this;
         },
 
@@ -93764,10 +97978,11 @@ jxg/* default */.Z.createCurve3D = function (board, parents, attributes) {
     attr = el.setAttr2D(attr);
     el.element2D = view.create("curve", [[], []], attr);
     /**
+     * @class
      * @ignore
      */
     el.element2D.updateDataArray = function () {
-        var ret = el.updateDataArray();
+        var ret = el.updateDataArray2D();
         this.dataX = ret.X;
         this.dataY = ret.Y;
     };
@@ -93782,7 +97997,186 @@ jxg/* default */.Z.createCurve3D = function (board, parents, attributes) {
 
     return el;
 };
+
 jxg/* default */.Z.registerElement("curve3d", jxg/* default */.Z.createCurve3D);
+
+/**
+ * @class 3D vector field.
+ * <p>
+ * Plot a vector field either given by three functions
+ * f1(x, y, z), f2(x, y, z), and f3(x, y, z) or by a function f(x, y, z)
+ * returning an array of size 3.
+ *
+ * @pseudo
+ * @name Vectorfield3D
+ * @augments JXG.Curve3D
+ * @constructor
+ * @type JXG.Curve3D
+ * @throws {Error} If the element cannot be constructed with the given parent objects an exception is thrown.
+ * Parameter options:
+ * @param {Array|Function|String} F Either an array containing three functions f1(x, y, z), f2(x, y, z),
+ * and f3(x, y) or function f(x, y, z) returning an array of length 3.
+ * @param {Array} xData Array of length 3 containing start value for x, number of steps,
+ * end value of x. The vector field will contain (number of steps) + 1 vectors in direction of x.
+ * @param {Array} yData Array of length 3 containing start value for y, number of steps,
+ * end value of y. The vector field will contain (number of steps) + 1 vectors in direction of y.
+ * @param {Array} zData Array of length 3 containing start value for z, number of steps,
+ * end value of z. The vector field will contain (number of steps) + 1 vectors in direction of z.
+ */
+jxg/* default */.Z.createVectorfield3D = function (board, parents, attributes) {
+    var view = parents[0],
+        el, attr;
+
+    if (!(parents.length >= 5 &&
+        (utils_type/* default */.Z.isArray(parents[1]) || utils_type/* default */.Z.isFunction(parents[0]) || utils_type/* default */.Z.isString(parents[0])) &&
+        (utils_type/* default */.Z.isArray(parents[2]) && parents[1].length === 3) &&
+        (utils_type/* default */.Z.isArray(parents[3]) && parents[2].length === 3) &&
+        (utils_type/* default */.Z.isArray(parents[4]) && parents[3].length === 3)
+    )) {
+        throw new Error(
+            "JSXGraph: Can't create vector field 3D with parent types " +
+            "'" + typeof parents[0] + "', " +
+            "'" + typeof parents[1] + "', " +
+            "'" + typeof parents[2] + "'."  +
+            "'" + typeof parents[1] + "', "
+        );
+    }
+
+    attr = utils_type/* default */.Z.copyAttributes(attributes, board.options, 'vectorfield3d');
+    el = view.create('curve3d', [[], [], []], attr);
+
+    /**
+     * Set the defining functions of 3D vector field.
+     * @memberOf Vectorfield3D
+     * @name setF
+     * @function
+     * @param {Array|Function} func Either an array containing three functions f1(x, y, z),
+     * f2(x, y, z), and f3(x, y, z) or function f(x, y, z) returning an array of length 3.
+     * @returns {Object} Reference to the 3D vector field object.
+     *
+     * @example
+     * field.setF([(x, y, z) => Math.sin(y), (x, y, z) => Math.cos(x), (x, y, z) => z]);
+     * board.update();
+     *
+     */
+    el.setF = function (func, varnames) {
+        var f0, f1, f2;
+        if (utils_type/* default */.Z.isArray(func)) {
+            f0 = utils_type/* default */.Z.createFunction(func[0], this.board, varnames);
+            f1 = utils_type/* default */.Z.createFunction(func[1], this.board, varnames);
+            f2 = utils_type/* default */.Z.createFunction(func[2], this.board, varnames);
+            /**
+             * @ignore
+             */
+            this.F = function (x, y, z) {
+                return [f0(x, y, z), f1(x, y, z), f2(x, y, z)];
+            };
+        } else {
+            this.F = utils_type/* default */.Z.createFunction(func, el.board, varnames);
+        }
+        return this;
+    };
+
+    el.setF(parents[1], 'x, y, z');
+    el.xData = parents[2];
+    el.yData = parents[3];
+    el.zData = parents[4];
+
+    el.updateDataArray = function () {
+        var k, i, j,
+            v, nrm,
+            x, y, z,
+            scale = utils_type/* default */.Z.evaluate(this.visProp.scale),
+            start = [
+                utils_type/* default */.Z.evaluate(this.xData[0]),
+                utils_type/* default */.Z.evaluate(this.yData[0]),
+                utils_type/* default */.Z.evaluate(this.zData[0])
+            ],
+            steps = [
+                utils_type/* default */.Z.evaluate(this.xData[1]),
+                utils_type/* default */.Z.evaluate(this.yData[1]),
+                utils_type/* default */.Z.evaluate(this.zData[1])
+            ],
+            end = [
+                utils_type/* default */.Z.evaluate(this.xData[2]),
+                utils_type/* default */.Z.evaluate(this.yData[2]),
+                utils_type/* default */.Z.evaluate(this.zData[2])
+            ],
+            delta = [
+                (end[0] - start[0]) / steps[0],
+                (end[1] - start[1]) / steps[1],
+                (end[2] - start[2]) / steps[2]
+            ],
+            phi, theta1, theta2, theta,
+            showArrow = utils_type/* default */.Z.evaluate(this.visProp.arrowhead.enabled),
+            leg, leg_x, leg_y, leg_z, alpha;
+
+        if (showArrow) {
+            // Arrow head style
+            // leg = 8;
+            // alpha = Math.PI * 0.125;
+            leg = utils_type/* default */.Z.evaluate(this.visProp.arrowhead.size);
+            alpha = utils_type/* default */.Z.evaluate(this.visProp.arrowhead.angle);
+            leg_x = leg / board.unitX;
+            leg_y = leg / board.unitY;
+            leg_z = leg / Math.sqrt(board.unitX * board.unitY);
+        }
+
+        this.dataX = [];
+        this.dataY = [];
+        this.dataZ = [];
+        for (i = 0, x = start[0]; i <= steps[0]; x += delta[0], i++) {
+            for (j = 0, y = start[1]; j <= steps[1]; y += delta[1], j++) {
+                for (k = 0, z = start[2]; k <= steps[2]; z += delta[2], k++) {
+                    v = this.F(x, y, z);
+                    nrm = math/* default */.Z.norm(v);
+                    if (nrm < Number.EPSILON) {
+                        continue;
+                    }
+
+                    v[0] *= scale;
+                    v[1] *= scale;
+                    v[2] *= scale;
+                    this.dataX = this.dataX.concat([x, x + v[0], NaN]);
+                    this.dataY = this.dataY.concat([y, y + v[1], NaN]);
+                    this.dataZ = this.dataZ.concat([z, z + v[2], NaN]);
+
+                    if (showArrow) {
+                        // Arrow head
+                        nrm *= scale;
+                        phi = Math.atan2(v[1], v[0]);
+                        theta = Math.asin(v[2] / nrm);
+                        theta1 = theta - alpha;
+                        theta2 = theta + alpha;
+                        this.dataX = this.dataX.concat([
+                            x + v[0] - leg_x * Math.cos(phi) * Math.cos(theta1),
+                            x + v[0],
+                            x + v[0] - leg_x * Math.cos(phi) * Math.cos(theta2),
+                            NaN]);
+                        this.dataY = this.dataY.concat([
+                            y + v[1] - leg_y * Math.sin(phi) * Math.cos(theta1),
+                            y + v[1],
+                            y + v[1] - leg_y * Math.sin(phi) * Math.cos(theta2),
+                            NaN]);
+                        this.dataZ = this.dataZ.concat([
+                            z + v[2] - leg_z * Math.sin(theta2),
+                            z + v[2],
+                            z + v[2] - leg_z * Math.sin(theta1),
+                            NaN]);
+                    }
+                }
+            }
+        }
+    };
+
+    el.methodMap = utils_type/* default */.Z.deepCopy(el.methodMap, {
+        setF: "setF"
+    });
+
+    return el;
+};
+
+jxg/* default */.Z.registerElement("vectorfield3D", jxg/* default */.Z.createVectorfield3D);
 
 ;// CONCATENATED MODULE: ./src/3d/linspace3d.js
 /*
@@ -93860,7 +98254,7 @@ jxg/* default */.Z.Line3D = function (view, point, direction, range, attributes)
      * Direction which - together with a point - defines the line. Array of numbers or functions (of length 3) or function
      * returning array of length 3.
      *
-     * @type Array,Function
+     * @type Array|Function
      * @see JXG.Line3D#point
      */
     this.direction = direction;
@@ -94058,6 +98452,7 @@ jxg/* default */.Z.createLine3D = function (board, parents, attributes) {
 
         // Now set the real points which define the line
         /**
+         * @class
          * @ignore
          */
         points[0].F = function () {
@@ -94067,6 +98462,7 @@ jxg/* default */.Z.createLine3D = function (board, parents, attributes) {
         point1 = points[0];
 
         /**
+         * @class
          * @ignore
          */
         points[1].F = function () {
@@ -94084,10 +98480,28 @@ jxg/* default */.Z.createLine3D = function (board, parents, attributes) {
     el.element2D.setParents(el);
     // el.setParents([point1.id, point2.id]);
 
-    point1.addChild(el);
-    point2.addChild(el);
     el.point1 = point1;
     el.point2 = point2;
+    if (el.point1._is_new) {
+        el.addChild(el.point1);
+        delete el.point1._is_new;
+    } else {
+        el.point1.addChild(el);
+    }
+    if (el.point2._is_new) {
+        el.addChild(el.point2);
+        delete el.point2._is_new;
+    } else {
+        el.point2.addChild(el);
+    }
+    if (utils_type/* default */.Z.exists(point)) {
+        if (point._is_new) {
+            el.addChild(point);
+            delete point._is_new;
+        } else {
+            point.addChild(el);
+        }
+    }
 
     el.update();
     el.element2D.prepareUpdate().update().updateRenderer();
@@ -94106,7 +98520,7 @@ jxg/* default */.Z.registerElement('line3d', jxg/* default */.Z.createLine3D);
  * @augments JXG.GeometryElement3D
  * @augments JXG.GeometryElement
  * @param {View3D} view
- * @param {Point3D,Array} point
+ * @param {Point3D|Array} point
  * @param {Array} direction1
  * @param {Array} range1
  * @param {Array} direction2
@@ -94134,7 +98548,7 @@ jxg/* default */.Z.Plane3D = function (view, point, dir1, range1, dir2, range2, 
      * Two linearly independent vectors - together with a point - define the plane. Each of these direction vectors is an
      * array of numbers or functions (of length 3) or function returning array of length 3.
      *
-     * @type Array,Function
+     * @type Array|Function
      *
      * @see JXG.Plane3D#point
      * @see JXG.Plane3D#direction2
@@ -94145,7 +98559,7 @@ jxg/* default */.Z.Plane3D = function (view, point, dir1, range1, dir2, range2, 
      * Two linearly independent vectors - together with a point - define the plane. Each of these direction vectors is an
      * array of numbers or functions (of length 3) or function returning array of length 3.
      *
-     * @type Array,Function
+     * @type Array|Function
      * @see JXG.Plane3D#point
      * @see JXG.Plane3D#direction1
      */
@@ -94451,6 +98865,7 @@ jxg/* default */.Z.createPlane3D = function (board, parents, attributes) {
     el.element2D = view.create('curve', [[], []], attr);
 
     /**
+     * @class
      * @ignore
      */
     el.element2D.updateDataArray = function () {
@@ -94553,6 +98968,12 @@ jxg/* default */.Z.Surface3D = function (view, F, X, Y, Z, range_u, range_v, att
 
     this.board.finalizeAdding(this);
 
+    /**
+     * Function defining the surface
+     *
+     * @function
+     * @private
+     */
     this.F = F;
 
     /**
@@ -94603,6 +99024,7 @@ jxg/* default */.Z.extend(
     /** @lends JXG.Surface3D.prototype */ {
 
         /**
+         * @class
          * @ignore
          */
         updateDataArray: function () {
@@ -94724,6 +99146,7 @@ jxg/* default */.Z.createParametricSurface3D = function (board, parents, attribu
     el.element2D = view.create("curve", [[], []], attr);
 
     /**
+     * @class
      * @ignore
      */
     el.element2D.updateDataArray = function () {
@@ -94834,10 +99257,404 @@ jxg/* default */.Z.createFunctiongraph3D = function (board, parents, attributes)
 };
 jxg/* default */.Z.registerElement("functiongraph3d", jxg/* default */.Z.createFunctiongraph3D);
 
+;// CONCATENATED MODULE: ./src/themes/mono_thin.js
+/*
+    Copyright 2008-2023
+        Matthias Ehmann,
+        Carsten Miller,
+        Alfred Wassermann
+
+    This file is part of JSXGraph.
+
+    JSXGraph is free software dual licensed under the GNU LGPL or MIT License.
+
+    You can redistribute it and/or modify it under the terms of the
+
+      * GNU Lesser General Public License as published by
+        the Free Software Foundation, either version 3 of the License, or
+        (at your option) any later version
+      OR
+      * MIT License: https://github.com/jsxgraph/jsxgraph/blob/master/LICENSE.MIT
+
+    JSXGraph is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License and
+    the MIT License along with JSXGraph. If not, see <https://www.gnu.org/licenses/>
+    and <https://opensource.org/licenses/MIT/>.
+ */
+
+
+// Constants for this theme:
+let size = 0.75,
+    color = '#000';
+
+jxg/* default */.Z.themes['mono_thin'] = {
+
+        board: {
+            showInfobox: false,
+            showCopyright: true,
+            defaultAxes: {
+                x: {
+                    ticks: {
+                        minorTicks: 0,
+                        majorHeight: 10,
+                        majorTickEndings: [1, 0]
+                    }
+                },
+                y: {
+                    ticks: {
+                        minorTicks: 0,
+                        majorHeight: 10,
+                        majorTickEndings: [0, 1]
+                    }
+                }
+            }
+        },
+
+        navbar: {
+            strokeColor: '#bbb',
+            fillColor: 'none'
+        },
+
+        elements: {
+            strokeColor: color,
+            highlightStrokeColor: color,
+            fillColor: 'none',
+            highlightFillColor: 'none',
+            strokeOpacity: 0.6,
+            highlightStrokeOpacity: 1
+        },
+
+        angle: {
+            strokeColor: color,
+            fillColor: '#aaaaaa55',
+            fillOpacity: 0.3,
+            highlightFillColor: '#aaaaaa33',
+            highlightFillOpacity: 0.3,
+            label: {
+                strokeColor: color
+            }
+        },
+
+        arc: {
+            strokeColor: color,
+            strokeWidth: size,
+            highlightStrokeColor: color,
+            highlightStrokeWidth: size
+        },
+
+        axis: {
+            // ticks: {
+            //     strokeColor: '#bbb'
+            // }
+        },
+
+        boxplot: {
+            strokeWidth: size,
+            strokeColor: color,
+            fillColor: color,
+            fillOpacity: 0.2,
+            highlightStrokeWidth: size,
+            highlightStrokeColor: color,
+            highlightFillColor: color,
+            highlightFillOpacity: 0.1
+        },
+
+        circle: {
+            strokeWidth: size,
+            highlightStrokeWidth: 1.5 * size,
+            strokeColor: color,
+            highlightFillColor: 'none',
+            highlightStrokeColor: color,
+            center: {
+                size: size,
+                fillColor: color,
+                strokeColor: color,
+                highlightStrokeWidth: 4 * size,
+                highlightFillColor: color,
+                highlightStrokeColor: color
+            },
+            point2: {
+                size: size,
+                fillColor: color,
+                strokeColor: color,
+                highlightStrokeWidth: 4 * size,
+                highlightFillColor: color,
+                highlightStrokeColor: color
+            }
+        },
+
+        circumcircle: {
+            strokeWidth: size,
+            highlightStrokeWidth: 1.5 * size,
+            strokeColor: color,
+            highlightFillColor: 'none',
+            highlightStrokeColor: color,
+            center: {
+                size: size,
+                fillColor: color,
+                strokeColor: color,
+                highlightStrokeWidth: 4 * size,
+                highlightFillColor: color,
+                highlightStrokeColor: color
+            }
+        },
+
+        circumcirclearc: {
+            strokeColor: color,
+            strokeWidth: size,
+            highlightStrokeColor: color,
+            highlightStrokeWidth: size
+        },
+
+        circumcirclesector: {
+            strokeColor: color,
+            fillColor: '#aaaaaa55',
+            fillOpacity: 0.3,
+            highlightFillColor: '#aaaaaa33',
+            highlightFillOpacity: 0.3
+        },
+
+        comb: {
+            strokeColor: color,
+            strokeWidth: size
+        },
+
+        conic: {
+            strokeWidth: size,
+            highlightStrokeWidth: 1.5 * size,
+            strokeColor: color,
+            highlightStrokeColor: color,
+            fillColor: 'none',
+            highlightFillColor: 'none'
+        },
+
+        curve: {
+            strokeColor: color,
+            strokeWidth: size,
+            highlightStrokeColor: color,
+            highlightStrokeWidth: size
+        },
+
+        grid: {
+            strokeWidth: size
+        },
+
+        hatch: {
+            strokeColor: color,
+            strokeWidth: size
+        },
+
+        incircle: {
+            strokeWidth: size,
+            highlightStrokeWidth: 1.5 * size,
+            strokeColor: color,
+            highlightFillColor: 'none',
+            highlightStrokeColor: color,
+            center: {
+                size: size,
+                fillColor: color,
+                strokeColor: color,
+                highlightStrokeWidth: 4 * size,
+                highlightFillColor: color,
+                highlightStrokeColor: color
+            }
+        },
+
+        inequality: {
+            fillColor: '#aaaaaa55',
+            fillOpacity: 0.2
+        },
+
+        label: {
+            strokeColor: color
+        },
+
+        line: {
+            strokeColor: color,
+            strokeWidth: size,
+            highlightStrokeColor: color,
+            highlightStrokeWidth: size,
+            point1: {
+                size: size,
+                fillColor: color,
+                strokeColor: color,
+                highlightStrokeWidth: 4 * size,
+                highlightFillColor: color,
+                highlightStrokeColor: color
+            },
+            point2: {
+                size: size,
+                fillColor: color,
+                strokeColor: color,
+                highlightStrokeWidth: 4 * size,
+                highlightFillColor: color,
+                highlightStrokeColor: color
+            }
+        },
+
+        normal: {
+            strokeColor: color
+        },
+
+        parallel: {
+            strokeColor: color
+        },
+
+        perpendicular: {
+            strokeColor: color
+        },
+
+        perpendicularsegment: {
+            strokeColor: color
+        },
+
+        point: {
+            size: size,
+            fillColor: color,
+            strokeColor: color,
+            highlightStrokeWidth: 4 * size,
+            highlightFillColor: color,
+            highlightStrokeColor: color
+        },
+
+        polygon: {
+            fillColor: '#aaaaaa55',
+            highlightFillColor: '#aaaaaa33',
+            fillOpacity: 0.3,
+            highlightFillOpacity: 0.3,
+            vertices: {
+                size: size,
+                fillColor: color,
+                strokeColor: color,
+                highlightStrokeWidth: 4 * size,
+                highlightFillColor: color,
+                highlightStrokeColor: color
+            },
+            borders: {
+                strokeColor: color,
+                strokeWidth: size,
+                highlightStrokeColor: color,
+                highlightStrokeWidth: size
+            }
+        },
+
+        sector: {
+            strokeColor: color,
+            fillColor: '#aaaaaa55',
+            fillOpacity: 0.3,
+            highlightFillColor: '#aaaaaa33',
+            highlightFillOpacity: 0.3
+        },
+
+        semicircle: {
+            center: {
+                size: size,
+                fillColor: color,
+                strokeColor: color,
+                highlightStrokeWidth: 4 * size,
+                highlightFillColor: color,
+                highlightStrokeColor: color
+            }
+        },
+
+        slider: {
+            size: size,
+            fillColor: color,
+            strokeColor: color,
+            highlightStrokeWidth: 4 * size,
+            highlightFillColor: color,
+            highlightStrokeColor: color,
+            baseline: {
+                strokeWidth: size,
+                strokeColor: color,
+                highlightStrokeColor: color
+            },
+            label: {
+                strokeColor: color
+            },
+            highline: {
+                strokeWidth: 3 * size,
+                name: '',
+                strokeColor: color,
+                highlightStrokeColor: color
+            },
+            ticks: {
+                strokeColor: color
+            }
+        },
+
+        slopefield: {
+            strokeWidth: 0.75 * size,
+            highlightStrokeWidth: size,
+            highlightStrokeColor: color,
+            highlightStrokeOpacity: 0.8
+        },
+
+        tapemeasure: {
+            strokeColor: color,
+            strokeWidth: size,
+            highlightStrokeColor: color,
+            highlightStrokeWidth: size,
+            point1: {
+                size: size,
+                fillColor: color,
+                strokeColor: color,
+                highlightStrokeWidth: 4 * size,
+                highlightFillColor: color,
+                highlightStrokeColor: color
+            },
+            point2: {
+                size: size,
+                fillColor: color,
+                strokeColor: color,
+                highlightStrokeWidth: 4 * size,
+                highlightFillColor: color,
+                highlightStrokeColor: color
+            },
+            ticks: {
+                strokeWidth: size
+            }
+        },
+
+        text: {
+            strokeColor: color
+        },
+
+        tracecurve: {
+            strokeColor: color
+        },
+
+        turtle: {
+            strokeWidth: size,
+            strokeColor: color,
+            arrow: {
+                strokeWidth: 2 * size,
+                strokeColor: '#aaaaaa55'
+            }
+        },
+
+        vectorfield: {
+            strokeWidth: 0.75 * size,
+            highlightStrokeWidth: size,
+            highlightStrokeColor: color,
+            highlightStrokeOpacity: 0.8
+        }
+    // });
+};
+
+/* harmony default export */ var mono_thin = ((/* unused pure expression or super */ null && (JXG)));
 ;// CONCATENATED MODULE: ./src/index.js
 /* eslint-disable one-var */
 
  // Needed below
+
+
+
+
 
 
 
@@ -94927,6 +99744,7 @@ jxg/* default */.Z.registerElement("functiongraph3d", jxg/* default */.Z.createF
 const COORDS_BY_SCREEN = jxg/* default */.Z.COORDS_BY_SCREEN;
 const COORDS_BY_USER = jxg/* default */.Z.COORDS_BY_USER;
 const Dump = jxg/* default */.Z.Dump;
+const Expect = jxg/* default */.Z.Expect;
 const JSXGraph = jxg/* default */.Z.JSXGraph;
 const Mat = jxg/* default */.Z.Math;
 const Options = jxg/* default */.Z.Options;
@@ -94948,6 +99766,7 @@ const GeometryElement = jxg/* default */.Z.GeometryElement;
 const Group = jxg/* default */.Z.Group;
 const src_Image = jxg/* default */.Z.Image;
 const JessieCode = jxg/* default */.Z.JessieCode;
+const Prefix = jxg/* default */.Z.PrefixParser;
 const Line = jxg/* default */.Z.Line;
 const Point = jxg/* default */.Z.Point;
 const Polygon = jxg/* default */.Z.Polygon;
@@ -95063,7 +99882,7 @@ if (env/* default */.Z.isBrowser) {
     // Nodejs compatibility is handled by webpack
     // OLD: in case 2) module is undefined, the export is set in src/jsxgraphnode.js using
     // the return value of this factory function
-    // } else if (Env.isNode() && typeof module === "object") {
+    // } else if (Env.isNode() && typeof module === 'object') {
     //     module.exports = JXG;
 } else if (env/* default */.Z.isWebWorker()) {
     self.JXG = jxg/* default */.Z;
