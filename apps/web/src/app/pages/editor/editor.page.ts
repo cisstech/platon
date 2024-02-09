@@ -77,6 +77,7 @@ export class EditorPage implements OnInit, OnDestroy {
   private readonly changeDetectorRef = inject(ChangeDetectorRef)
   private readonly resourceFileSystemProvider = inject(ResourceFileSystemProvider)
   protected loading = true
+  protected isReady = false
 
   async ngOnInit(): Promise<void> {
     const { resource, version, rootFolders, filesToOpen } = await this.presenter.init(this.activatedRoute)
@@ -93,6 +94,8 @@ export class EditorPage implements OnInit, OnDestroy {
         this.changeDetectorRef.markForCheck()
       })
     )
+    this.isReady = true
+    this.changeDetectorRef.markForCheck()
   }
 
   ngOnDestroy(): void {
