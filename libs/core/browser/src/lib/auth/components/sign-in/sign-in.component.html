@@ -31,12 +31,15 @@
     <mat-card-actions>
       <mat-spinner *ngIf="connecting" [diameter]="32" [mode]="'indeterminate'"> </mat-spinner>
       @if (user) {
-      <button mat-raised-button (click)="signOut()">SE DECONNECTER</button>
+      <button mat-raised-button (click)="signOut()">Se deconnecter</button>
+      <button *ngIf="callbackTitle" mat-raised-button (click)="signInToExternalApp()">
+        Continuer sur {{ callbackTitle }} en tant que "{{ user.username | uppercase }}"
+      </button>
       <button mat-raised-button type="submit" color="primary">
-        CONTINUER EN TANT QUE "{{ user.username | uppercase }}"
+        Continuer sur PLaTon en tant que "{{ user.username | uppercase }}"
       </button>
       } @else if (!connecting) {
-      <button mat-raised-button type="submit" color="primary" [disabled]="!form.valid">SE CONNECTER</button>
+      <button mat-raised-button type="submit" color="primary" [disabled]="!form.valid">Se connecter</button>
       }
     </mat-card-actions>
   </mat-card>

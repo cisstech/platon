@@ -51,26 +51,37 @@ export class AuthSignInComponent implements OnInit {
   protected username = ''
   protected password = ''
   protected connecting = false
+  protected callbackTitle = ''
 
   async ngOnInit(): Promise<void> {
+    const success = await this.signInFromURL()
+    if (success) {
+      return
+    }
+
     this.authService
       .ready()
       .then((user) => {
         this.user = user
         if (user) {
           this.username = user.username
+          this.onAfterSignIn().catch(console.error)
         }
         this.changeDetectorRef.markForCheck()
       })
       .catch(console.error)
-    await this.signInFromURL()
+  }
+
+  protected signOut(): void {
+    this.user = undefined
+    this.authService.signOut(false).catch(console.error)
   }
 
   protected signIn(): void {
     const { next } = this.activatedRoute.snapshot.queryParams
 
     if (this.user && this.user.username === this.username) {
-      this.router.navigateByUrl(next || '/dashboard', { replaceUrl: true }).catch(console.error)
+      this.onAfterSignIn(next || '/dashboard', true).catch(console.error)
       return
     }
 
@@ -79,35 +90,58 @@ export class AuthSignInComponent implements OnInit {
       .signIn(this.username, this.password)
       .then(() => {
         this.connecting = false
-        this.router.navigateByUrl(this.withNextUrl(next), { replaceUrl: true }).catch(console.error)
+        this.onAfterSignIn(next || '/dashboard').catch(console.error)
       })
       .catch((error) => {
-        console.log(error)
+        console.error(error)
         this.dialogService.error('Une erreur est survenue lors de la connexion !')
         this.connecting = false
       })
   }
 
-  protected signOut(): void {
-    this.user = undefined
-    this.authService.signOut().catch(console.error)
+  protected async signInToExternalApp(): Promise<void> {
+    const token = await this.authService.token()
+    if (!token) {
+      this.dialogService.error('Une erreur est survenue lors de la connexion !')
+      return
+    }
+
+    const { accessToken, refreshToken } = token
+    const origin = location.origin
+    const { callbackUrl } = this.activatedRoute.snapshot.queryParams
+
+    location.href = `${callbackUrl}?access-token=${accessToken}&refresh-token=${refreshToken}&origin=${origin}`
   }
 
-  private async signInFromURL(): Promise<void> {
-    const { queryParamMap } = this.activatedRoute.snapshot
-    const accessToken = queryParamMap.get('access-token') as string
-    const refreshToken = queryParamMap.get('refresh-token') as string
-    if (accessToken && refreshToken) {
-      const next = queryParamMap.get('next')
-      await this.authService.signInWithToken({ accessToken, refreshToken })
-      this.router.navigateByUrl(this.withNextUrl(next), { replaceUrl: true }).catch(console.error)
+  private async signInFromURL(): Promise<boolean> {
+    try {
+      const { queryParamMap } = this.activatedRoute.snapshot
+      const accessToken = queryParamMap.get('access-token') as string
+      const refreshToken = queryParamMap.get('refresh-token') as string
+      if (accessToken && refreshToken) {
+        const next = queryParamMap.get('next')
+        await this.authService.signInWithToken({ accessToken, refreshToken })
+        await this.onAfterSignIn(next)
+        return true
+      }
+      return false
+    } catch (error) {
+      console.error(error)
+      this.dialogService.error('Une erreur est survenue lors de la connexion automatique !')
+      return false
     }
   }
 
-  private withNextUrl(url?: string | null): string {
-    if (url?.startsWith('/login')) {
-      return '/dashboard'
+  private async onAfterSignIn(nextUrl?: string | null, bypassCallbackUrl?: boolean): Promise<void> {
+    const { callbackUrl, callbackTitle } = this.activatedRoute.snapshot.queryParams
+    this.user = await this.authService.ready()
+    if (!bypassCallbackUrl && this.user && callbackUrl && callbackTitle) {
+      this.callbackTitle = callbackTitle
+      this.changeDetectorRef.markForCheck()
+      return
+    } else if (nextUrl) {
+      nextUrl = nextUrl.startsWith('/login') ? '/dashboard' : nextUrl || '/dashboard'
+      await this.router.navigateByUrl(nextUrl, { replaceUrl: true }).catch(console.error)
     }
-    return url || '/dashboard'
   }
 }
