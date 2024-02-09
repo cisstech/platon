@@ -32,6 +32,7 @@ export class UiModalIFrameComponent implements OnInit, OnDestroy {
   @Input() height?: string | null = '90vh'
 
   @Input({ transform: booleanAttribute }) closable = false
+  @Input({ transform: booleanAttribute }) maskClosable = true
   @Input() footer?: TemplateRef<void> | null
 
   @Output() closed = new EventEmitter()

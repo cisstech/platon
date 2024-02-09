@@ -30,6 +30,8 @@ export class UiModalTemplateComponent {
   @Input() footer?: TemplateRef<void> | null
   @Input({ transform: booleanAttribute }) visible = false
   @Input({ transform: booleanAttribute }) closable = true
+  @Input({ transform: booleanAttribute }) maskClosable = true
+  @Input() bodyStyle?: Record<string, string>
   @Output() closed = new EventEmitter()
   @Output() canceled = new EventEmitter()
   @Output() accepted = new EventEmitter()
@@ -38,15 +40,16 @@ export class UiModalTemplateComponent {
   @ContentChildren(TemplateRef)
   protected templates!: QueryList<TemplateRef<void>>
 
-  protected bodyStyle: Record<string, string> = {}
+  protected customBodyStyle: Record<string, string> = {}
 
   constructor(private readonly changeDetectorRef: ChangeDetectorRef) {}
 
   open(): void {
     this.visibleChange.emit((this.visible = true))
-    this.bodyStyle = {
+    this.customBodyStyle = {
       ...(this.width && { width: this.width }),
       ...(this.height && { height: this.height }),
+      ...this.bodyStyle,
       overflow: this.overflow || 'auto',
     }
     this.changeDetectorRef.markForCheck()
