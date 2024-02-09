@@ -63,7 +63,8 @@ export class FileCreateDTO implements FileCreate {
 
 export class FileUpdateDTO implements FileUpdate {
   @IsString()
-  content!: string
+  @IsOptional()
+  content?: string | null
 }
 
 export class FileMoveDTO implements FileMove {

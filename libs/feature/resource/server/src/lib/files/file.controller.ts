@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Logger,
   Param,
   Patch,
   Post,
@@ -21,7 +22,7 @@ import { EventService, IRequest, Public } from '@platon/core/server'
 import { PLSourceFile } from '@platon/feature/compiler'
 import { ExerciseTransformInput, FileTypes, LATEST, ResourceFile } from '@platon/feature/resource/common'
 import { Response } from 'express'
-import { createReadStream } from 'fs'
+import * as fs from 'fs'
 import { basename, join } from 'path'
 import { FileCreateDTO, FileMoveDTO, FileReleaseDTO, FileRetrieveDTO, FileUpdateDTO } from './file.dto'
 import {
@@ -31,10 +32,13 @@ import {
   OnReleaseRepoEventPayload,
 } from './file.event'
 import { ResourceFileService } from './file.service'
+import { RESOURCES_DIR } from './repo'
 
 @Controller('files')
 @ApiTags('Resources')
 export class ResourceFileController {
+  private readonly logger = new Logger(ResourceFileController.name)
+
   constructor(private readonly fileService: ResourceFileService, private readonly eventService: EventService) {}
 
   @Post('/release/:resourceId')
@@ -90,20 +94,42 @@ export class ResourceFileController {
     const { repo, resource, permissions } = await this.fileService.repo(resourceId, request.user)
     const version = query?.version || LATEST
     if (query?.bundle) {
-      res.set('Content-Type', 'application/force-download')
-      res.set('Content-Disposition', 'attachment; filename=file.txt')
-      return repo.bundle(version)
+      res.set('Content-Type', 'application/x-git-bundle')
+      res.set('Content-Disposition', `attachment; filename=${resourceId}.git`)
+      const bundle = await repo.bundle(version)
+      const stream = fs.createReadStream(bundle)
+
+      stream.on('end', () => {
+        fs.promises.rm(bundle, { force: true }).catch(() => {
+          this.logger.error(`Failed to remove temporary bundle: ${bundle}`)
+        })
+      })
+
+      return new StreamableFile(stream)
     }
 
     if (query?.download) {
       const [node, content] = await repo.read(path, version)
-      res.set('Content-Type', 'application/force-download')
+      res.set('Content-Type', 'application/zip')
       res.set('Content-Disposition', `attachment; filename=platon.zip`)
+      let file: StreamableFile
       if (node.type === 'file') {
         res.set('Content-Disposition', `attachment; filename=${basename(node.path)}`)
-        return new StreamableFile((await content) as Uint8Array)
+        const buffer = (await content) as Uint8Array
+        file = new StreamableFile(buffer)
+      } else {
+        const archive = await repo.archive(path, version)
+        const stream = fs.createReadStream(archive)
+        file = new StreamableFile(stream)
+
+        stream.on('end', () => {
+          fs.promises.rm(archive, { force: true }).catch(() => {
+            this.logger.error(`Failed to remove temporary archive: ${archive}`)
+          })
+        })
       }
-      return new StreamableFile(createReadStream(await repo.archive(path, version)))
+
+      return file
     }
 
     if (query?.describe) {
@@ -140,15 +166,38 @@ export class ResourceFileController {
   }
 
   @Put('/:resourceId/:path(*)')
+  @UseInterceptors(
+    FileInterceptor('bundle', {
+      dest: './resources/bundles',
+      preservePath: true,
+    })
+  )
   async put(
     @Req() request: IRequest,
     @Param('resourceId') resourceId: string,
     @Param('path') path: string,
-    @Body() input: FileUpdateDTO
+    @Body() input: FileUpdateDTO,
+    @UploadedFile() bundle: Express.Multer.File
   ) {
     const { repo, resource, permissions } = await this.fileService.repo(resourceId, request.user)
     if (!permissions.write) {
       throw new UnauthorizedResponse('You are not allowed to write this resource')
+    }
+
+    if (bundle) {
+      try {
+        await fs.promises.rename(bundle.path, bundle.path + '.git')
+        await repo.mergeBundle(bundle.filename)
+      } finally {
+        fs.promises.rm(join(RESOURCES_DIR, 'bundles', `${bundle.filename}.git`), { force: true }).catch(() => {
+          this.logger.error(`Failed to remove temporary bundle: ${bundle.path}.git`)
+        })
+      }
+      return new SuccessResponse()
+    }
+
+    if (input.content == null) {
+      throw new BadRequestResponse('You must provide a content')
     }
 
     const [_, oldContent] = await repo.read(path)
@@ -169,7 +218,7 @@ export class ResourceFileController {
   @Post('/:resourceId/:path(*)')
   @UseInterceptors(
     FileInterceptor('file', {
-      dest: './resources',
+      dest: './resources/uploads',
       preservePath: true,
     })
   )
