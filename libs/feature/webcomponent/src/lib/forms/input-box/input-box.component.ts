@@ -30,6 +30,7 @@ export class InputBoxComponent implements OnInit, OnDestroy, WebComponentHooks<I
   protected containerStyles: Record<string, string> = {}
 
   protected readonly form = new FormControl()
+
   protected readonly $autocomplete: Observable<string[]> = this.form.valueChanges.pipe(
     startWith(''),
     map((value) => this.getSuggestions(value))
@@ -42,14 +43,12 @@ export class InputBoxComponent implements OnInit, OnDestroy, WebComponentHooks<I
       value = value || ''
       if (this.state.type === 'number') {
         value = ('' + value).replace(/,/g, '.')
-        value = Number.parseFloat(value) || 0
+        value = value === '-' ? '-' : Number.parseFloat(value) || 0
       }
 
       if (this.state.value !== value) {
         this.state.value = value
       }
-
-      this.updateFormState()
     })
   }
 
@@ -58,13 +57,9 @@ export class InputBoxComponent implements OnInit, OnDestroy, WebComponentHooks<I
   }
 
   onChangeState() {
-    this.updateFormState()
-  }
-
-  private updateFormState() {
-    if (this.form.value == null || this.form.value !== this.state.value) {
-      this.form.patchValue(this.state.value)
-    }
+    this.form.setValue(this.state.value, {
+      emitEvent: false,
+    })
 
     this.form.enable({ emitEvent: false })
     if (this.state.disabled) {

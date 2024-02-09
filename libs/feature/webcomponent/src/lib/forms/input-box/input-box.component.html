@@ -1,33 +1,69 @@
+@switch (state.type) {
+<!-- NUMERIC -->
+@case ('number') {
 <mat-form-field [ngStyle]="containerStyles" [appearance]="state.appearance">
-  <mat-label *ngIf="state.placeholder">{{ state.placeholder }}</mat-label>
-  <mat-hint *ngIf="state.hint">{{ state.hint }}</mat-hint>
-  <ng-container [ngSwitch]="state.type">
-    <!-- NUMERIC -->
-    <ng-container *ngSwitchCase="'number'">
-      <input matInput type="text" inputmode="decimal" [formControl]="form" />
-    </ng-container>
-    <!-- TEXT -->
-    <ng-container *ngSwitchCase="'text'">
-      <input matInput type="text" [formControl]="form" [matAutocomplete]="auto" />
-      <mat-autocomplete #auto="matAutocomplete">
-        <mat-option *ngFor="let option of $autocomplete | async" [value]="option">
-          {{ option }}
-        </mat-option>
-      </mat-autocomplete>
-    </ng-container>
-    <!-- TEXTAREA -->
-    <ng-container *ngSwitchCase="'textarea'">
-      <textarea matInput matTextareaAutosize type="multiline" [formControl]="form"> </textarea>
-    </ng-container>
-    <ng-container *ngSwitchDefault>
-      <mat-error>"{{ state.type }}" is not a valid input type</mat-error>
-    </ng-container>
-  </ng-container>
-  <div class="prefix" *ngIf="state.prefix" matPrefix>
-    <img [src]="state.prefix | icongr" alt="prefix icon" />
+  <mat-label>{{ state.placeholder }}</mat-label>
+  <mat-hint>{{ state.hint }}</mat-hint>
+  <input matInput type="text" inputmode="decimal" [formControl]="form" />
+  <div class="prefix" [class.no-prefix]="!state.suffix" matPrefix>
+    <img
+      *ngIf="state.prefix"
+      [src]="state.prefix || 'fontawesome address-book color=FF0000' | icongr"
+      alt="prefix icon"
+    />
   </div>
-  <div class="suffix" *ngIf="state.suffix" matSuffix>
-    <img [src]="state.suffix | icongr" alt="suffix icon" />
+  <div class="suffix" [class.no-suffix]="!state.suffix" matSuffix>
+    <img *ngIf="state.suffix" [src]="state.suffix | icongr" alt="suffix icon" />
   </div>
 </mat-form-field>
-<wc-base [(state)]="state"></wc-base>
+}
+
+<!-- TEXT -->
+@case ('text') {
+<mat-form-field [ngStyle]="containerStyles" [appearance]="state.appearance">
+  <mat-label>{{ state.placeholder }}</mat-label>
+  <mat-hint>{{ state.hint }}</mat-hint>
+  <input matInput type="text" [formControl]="form" [matAutocomplete]="auto" />
+  <mat-autocomplete #auto="matAutocomplete">
+    <mat-option *ngFor="let option of $autocomplete | async" [value]="option">
+      {{ option }}
+    </mat-option>
+  </mat-autocomplete>
+  <div class="prefix" [class.no-prefix]="!state.suffix" matPrefix>
+    <img
+      *ngIf="state.prefix"
+      [src]="state.prefix || 'fontawesome address-book color=FF0000' | icongr"
+      alt="prefix icon"
+    />
+  </div>
+  <div class="suffix" [class.no-suffix]="!state.suffix" matSuffix>
+    <img *ngIf="state.suffix" [src]="state.suffix | icongr" alt="suffix icon" />
+  </div>
+</mat-form-field>
+}
+
+<!-- TEXTAREA -->
+@case ('textarea') {
+<mat-form-field [ngStyle]="containerStyles" [appearance]="state.appearance">
+  <mat-label>{{ state.placeholder }}</mat-label>
+  <mat-hint>{{ state.hint }}</mat-hint>
+  <textarea matInput matTextareaAutosize type="multiline" [formControl]="form"> </textarea>
+  <div class="prefix" [class.no-prefix]="!state.suffix" matPrefix>
+    <img
+      *ngIf="state.prefix"
+      [src]="state.prefix || 'fontawesome address-book color=FF0000' | icongr"
+      alt="prefix icon"
+    />
+  </div>
+  <div class="suffix" [class.no-suffix]="!state.suffix" matSuffix>
+    <img *ngIf="state.suffix" [src]="state.suffix | icongr" alt="suffix icon" />
+  </div>
+</mat-form-field>
+}
+
+<!-- FALLBACK -->
+@default {
+<mat-error>"{{ state.type }}" is not a valid input type</mat-error>
+}}
+
+<wc-base [(state)]="state" />

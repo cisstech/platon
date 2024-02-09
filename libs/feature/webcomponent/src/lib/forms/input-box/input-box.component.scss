@@ -12,4 +12,9 @@ mat-form-field {
     height: 18px;
     background-color: transparent !important;
   }
+
+  &.no-prefix,
+  &.no-suffix {
+    margin: 0;
+  }
 }
