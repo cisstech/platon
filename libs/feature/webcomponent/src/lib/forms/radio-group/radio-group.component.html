@@ -9,7 +9,7 @@
       class="radio-item"
       [ngClass]="item.css | css : 'class'"
       [ngStyle]="item.css | css : 'style'"
-      (click)="state.selection = item.content; $event.stopPropagation()"
+      (click)="state.selection = item.content; $event.stopPropagation(); autoValidate()"
       [class.selected]="state.selection === item.content"
     >
       <mat-radio-button color="primary" [name]="item.content" [value]="item.content">

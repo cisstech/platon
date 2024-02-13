@@ -4,7 +4,7 @@
 <mat-form-field [ngStyle]="containerStyles" [appearance]="state.appearance">
   <mat-label>{{ state.placeholder }}</mat-label>
   <mat-hint>{{ state.hint }}</mat-hint>
-  <input matInput type="text" inputmode="decimal" [formControl]="form" />
+  <input matInput type="text" inputmode="decimal" [formControl]="form" (keydown.enter)="autoValidate()" />
   <div class="prefix" [class.no-prefix]="!state.suffix" matPrefix>
     <img
       *ngIf="state.prefix"
@@ -23,7 +23,7 @@
 <mat-form-field [ngStyle]="containerStyles" [appearance]="state.appearance">
   <mat-label>{{ state.placeholder }}</mat-label>
   <mat-hint>{{ state.hint }}</mat-hint>
-  <input matInput type="text" [formControl]="form" [matAutocomplete]="auto" />
+  <input matInput type="text" [formControl]="form" [matAutocomplete]="auto" (keydown.enter)="autoValidate()" />
   <mat-autocomplete #auto="matAutocomplete">
     <mat-option *ngFor="let option of $autocomplete | async" [value]="option">
       {{ option }}
@@ -47,7 +47,8 @@
 <mat-form-field [ngStyle]="containerStyles" [appearance]="state.appearance">
   <mat-label>{{ state.placeholder }}</mat-label>
   <mat-hint>{{ state.hint }}</mat-hint>
-  <textarea matInput matTextareaAutosize type="multiline" [formControl]="form"> </textarea>
+  <textarea matInput matTextareaAutosize type="multiline" [formControl]="form" (keydown.enter)="autoValidate()">
+  </textarea>
   <div class="prefix" [class.no-prefix]="!state.suffix" matPrefix>
     <img
       *ngIf="state.prefix"
