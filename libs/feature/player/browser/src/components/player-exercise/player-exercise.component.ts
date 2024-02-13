@@ -53,6 +53,7 @@ import { PlayerCommentsComponent } from '../player-comments/player-comments.comp
 import { PlayerTheoryComponent } from '../player-theory/player-theory.component'
 
 type Action = {
+  id?: string
   icon: string
   label: string
   color?: string
@@ -165,6 +166,7 @@ export class PlayerExerciseComponent implements OnInit, OnChanges {
     if (!this.player) return []
     return [
       {
+        id: 'check-answer-button',
         icon: 'check',
         label: this.player.remainingAttempts ? `(${this.player.remainingAttempts})` : '',
         tooltip: 'Valider',

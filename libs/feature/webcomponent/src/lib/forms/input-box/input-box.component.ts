@@ -30,6 +30,7 @@ export class InputBoxComponent implements OnInit, OnDestroy, WebComponentHooks<I
   protected containerStyles: Record<string, string> = {}
 
   protected readonly form = new FormControl()
+  private dueTime = 300
 
   protected readonly $autocomplete: Observable<string[]> = this.form.valueChanges.pipe(
     startWith(''),
@@ -39,7 +40,7 @@ export class InputBoxComponent implements OnInit, OnDestroy, WebComponentHooks<I
   constructor(readonly injector: Injector) {}
 
   ngOnInit() {
-    this.subscription = this.form.valueChanges.pipe(debounceTime(300)).subscribe((value) => {
+    this.subscription = this.form.valueChanges.pipe(debounceTime(this.dueTime)).subscribe((value) => {
       value = value || ''
       if (this.state.type === 'number') {
         value = ('' + value).replace(/,/g, '.')
@@ -69,6 +70,13 @@ export class InputBoxComponent implements OnInit, OnDestroy, WebComponentHooks<I
     this.containerStyles = {}
     if (this.state.width) {
       this.containerStyles['width'] = this.state.width
+    }
+  }
+
+  protected async autoValidate() {
+    if (this.state.autoValidation) {
+      await new Promise((resolve) => setTimeout(resolve, this.dueTime)) // wait for the last value change
+      document.getElementById('check-answer-button')?.click()
     }
   }
 
