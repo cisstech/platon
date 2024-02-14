@@ -24,6 +24,7 @@ export enum InstructorRoles {
   Alumni = 'urn:lti:instrole:ims/lis/Alumni',
   Instructor = 'urn:lti:instrole:ims/lis/Instructor',
   Instructor2 = 'urn:lti:role:ims/lis/Instructor',
+  Instructor3 = 'Instructor',
   InstructorPrimaryInstructor = 'urn:lti:role:ims/lis/Instructor/PrimaryInstructor',
   InstructorLecturer = 'urn:lti:role:ims/lis/Instructor/Lecturer',
   InstructorGuestInstructor = 'urn:lti:role:ims/lis/Instructor/GuestInstructor',
