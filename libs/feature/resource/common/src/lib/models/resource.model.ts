@@ -78,25 +78,103 @@ export interface FindResource extends ExpandableModel<ResourceExpandableFields> 
 }
 
 export interface ResourceFilters extends ExpandableModel<ResourceExpandableFields> {
+  /**
+   * Filter resources by their types.
+   */
   readonly types?: (keyof typeof ResourceTypes)[]
+
+  /**
+   * Filter resources by their status.
+   */
   readonly status?: (keyof typeof ResourceStatus)[]
+
+  /**
+   * Free text search on resource, topics and levels names.
+   */
   readonly search?: string
+
+  /**
+   * Filter resources which have been updated in the last period of time.
+   */
   readonly period?: number
+  /**
+   * Filter resources by their members.
+   */
   readonly members?: string[]
+
+  /**
+   * Filter resources by their watchers.
+   */
   readonly watchers?: string[]
+
+  /**
+   * Filter resources by their owners.
+   */
   readonly owners?: string[]
+
+  /**
+   * Filter resources by whether they have been recently viewed by the current user.
+   */
   readonly views?: boolean
+
+  /**
+   * Filter resources by whether they are publicly previewable.
+   */
   readonly publicPreview?: boolean
+
+  /**
+   * Filter exercises by whether they are configurable or not.
+   */
   readonly configurable?: boolean
+
+  /**
+   * Filter activities by their navigation settings
+   */
   readonly navigation?: ActivityNavigationModes
+
+  /**
+   * Search for specific topics on the resources.
+   */
   readonly topics?: string[]
+
+  /**
+   * Search for specific levels on the resources.
+   */
   readonly levels?: string[]
+
+  /**
+   * Search for resources used by the ones specified in the array.
+   */
   readonly usedBy?: string[]
+
+  /**
+   * Search for resources that use the ones specified in the array.
+   */
   readonly dependOn?: string[]
+
+  /**
+   * Pagination ofsset
+   */
   readonly offset?: number
+
+  /**
+   * Pagination limit
+   */
   readonly limit?: number
+
+  /**
+   * Search for resources that are children (direct) of the ones specified in the array.
+   */
   readonly parents?: string[]
+
+  /**
+   * Ordering criteria
+   */
   readonly order?: ResourceOrderings
+
+  /**
+   * Ordering direction
+   */
   readonly direction?: OrderingDirections
 }
 
