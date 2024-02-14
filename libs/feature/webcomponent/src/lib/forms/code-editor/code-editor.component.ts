@@ -163,6 +163,7 @@ export class CodeEditorComponent implements AfterViewChecked, OnDestroy, WebComp
 
   reset() {
     this.state.code = this.initialCode
+    this.onChangeState()
   }
 
   goToLine() {
