@@ -131,6 +131,7 @@
   <ng-container *ngFor="let action of actions; trackBy: trackAction">
     <button
       *ngIf="action.visible"
+      [id]="action.id ?? null"
       mat-raised-button
       (click)="action.run?.()"
       [color]="action.color"

@@ -42,7 +42,7 @@ export const configuration = (): Configuration => ({
     password: process.env['DB_PASSWORD'] as string,
   },
   cache: {
-    filesLifetime: Number.parseInt(process.env['CACHE_FILES_LIFETIME'] || '31536000'),
+    filesLifetime: Number.parseInt(process.env['FILES_CACHE_LIFETIME'] || '604800'),
   },
   redis: {
     host: process.env['REDIS_HOST'] as string,

@@ -31,4 +31,10 @@ export class RadioGroupComponent implements WebComponentHooks<RadioGroupState> {
   trackBy(index: number, item: RadioGroupItem) {
     return item.content || index
   }
+
+  protected autoValidate() {
+    if (this.state.autoValidation && this.state.selection) {
+      document.getElementById('check-answer-button')?.click()
+    }
+  }
 }
