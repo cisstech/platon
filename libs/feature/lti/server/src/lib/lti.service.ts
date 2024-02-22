@@ -1,9 +1,9 @@
 import { DiscoveryService } from '@golevelup/nestjs-discovery'
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { NotFoundResponse, OrderingDirections, UserRoles } from '@platon/core/common'
+import { NotFoundResponse, UserRoles } from '@platon/core/common'
 import { UserService } from '@platon/core/server'
-import { LmsFilters, LmsOrdering } from '@platon/feature/lti/common'
+import { LmsFilters, LmsOrdering, LMS_ORDERING_DIRECTIONS } from '@platon/feature/lti/common'
 import { Repository } from 'typeorm'
 import { Optional } from 'typescript-optional'
 import { LmsUserEntity } from './entities/lms-user.entity'
@@ -63,13 +63,7 @@ export class LTIService {
         UPDATED_AT: 'updated_at',
       }
 
-      const orderings: Record<LmsOrdering, keyof typeof OrderingDirections> = {
-        NAME: 'ASC',
-        CREATED_AT: 'DESC',
-        UPDATED_AT: 'DESC',
-      }
-
-      query.orderBy(fields[filters.order], filters.direction || orderings[filters.order])
+      query.orderBy(fields[filters.order], filters.direction || LMS_ORDERING_DIRECTIONS[filters.order])
     } else {
       query.orderBy('name', 'ASC')
     }

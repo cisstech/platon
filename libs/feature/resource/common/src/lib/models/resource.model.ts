@@ -178,6 +178,13 @@ export interface ResourceFilters extends ExpandableModel<ResourceExpandableField
   readonly direction?: OrderingDirections
 }
 
+export const RESOURCE_ORDERING_DIRECTIONS: Readonly<Record<ResourceOrderings, keyof typeof OrderingDirections>> = {
+  NAME: 'ASC',
+  CREATED_AT: 'DESC',
+  UPDATED_AT: 'DESC',
+  RELEVANCE: 'DESC',
+}
+
 export const resourceAncestors = (tree: CircleTree, resourceId: string, includeSelf?: boolean): CircleTree[] => {
   if (tree.id === resourceId) {
     return includeSelf ? [tree] : []
