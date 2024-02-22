@@ -40,3 +40,9 @@ export interface LmsFilters {
   readonly order?: LmsOrdering | keyof typeof LmsOrdering
   readonly direction?: OrderingDirections | keyof typeof OrderingDirections
 }
+
+export const LMS_ORDERING_DIRECTIONS: Readonly<Record<LmsOrdering, keyof typeof OrderingDirections>> = {
+  NAME: 'ASC',
+  CREATED_AT: 'DESC',
+  UPDATED_AT: 'DESC',
+}

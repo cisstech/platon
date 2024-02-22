@@ -11,9 +11,11 @@ export interface FilterIndicator<T = unknown> {
 
 export const PeriodFilterMatcher: FilterIndicator<any> = {
   match: (filters) => filters.period != null && filters.period !== 0,
-  remove: (filters) => ({ ...filters, period: 0 }),
-  describe: (filters) =>
-    `Modifié il y a ${formatDistanceToNow(addDays(new Date(), -filters.period), {
+  remove: (filters) => ({ ...filters, period: undefined }),
+  describe: (filters) => {
+    const distanceToNow = formatDistanceToNow(addDays(new Date(), -filters.period), {
       locale: fr,
-    })}`,
+    })
+    return `Modifié dans la période : ${distanceToNow}`
+  },
 }

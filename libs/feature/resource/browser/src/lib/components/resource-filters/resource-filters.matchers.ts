@@ -4,6 +4,7 @@ import {
   ResourceOrderings,
   ResourceStatus,
   ResourceTypes,
+  RESOURCE_ORDERING_DIRECTIONS,
 } from '@platon/feature/resource/common'
 import { FilterIndicator } from '@platon/shared/ui'
 import { RESOURCE_ORDERING_NAMES, RESOURCE_STATUS_NAMES, RESOURCE_TYPE_NAMES } from '../../pipes'
@@ -46,8 +47,23 @@ export const ResourceOrderingFilterIndicator = (ordering: ResourceOrderings): Fi
     remove: (filters: ResourceFilters) => ({
       ...filters,
       order: undefined,
+      direction: undefined,
     }),
-    describe: () => 'Trier par ' + RESOURCE_ORDERING_NAMES[ordering],
+    describe: (filters) => {
+      const value = `${ordering}-${filters.direction || RESOURCE_ORDERING_DIRECTIONS[ordering]}`
+      return (
+        {
+          'NAME-ASC': 'Trier par Nom de A à Z',
+          'NAME-DESC': 'Trier par Nom de Z à A',
+          'CREATED_AT-DESC': 'Trier par Création : Récent-Ancient',
+          'CREATED_AT-ASC': 'Trier par Création : Ancient-Récent',
+          'UPDATED_AT-DESC': 'Trier par MàJ : Récente-Ancienne',
+          'UPDATED_AT-ASC': 'Trier par MàJ : Ancienne-Récente',
+          'RELEVANCE-DESC': 'Trier par Pertinence : Plus-Moins',
+          'RELEVANCE-ASC': 'Trier par Pertinence : Moins-Plus',
+        }[value] || `Trier par ${RESOURCE_ORDERING_NAMES}`
+      )
+    },
   }
 }
 

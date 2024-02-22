@@ -100,7 +100,7 @@ export class CoursesPage implements OnInit, OnDestroy {
         this.filters = {
           ...this.filters,
           search: e.q,
-          period: Number.parseInt(e.period + '', 10) || this.filters.period || 0,
+          period: Number.parseInt(e.period + '', 10) || 0,
           order: e.order,
           direction: e.direction,
         }

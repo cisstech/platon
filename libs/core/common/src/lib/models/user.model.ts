@@ -91,6 +91,18 @@ export interface UserGroupFilters {
   readonly direction?: OrderingDirections
 }
 
+export const USER_ORDERING_DIRECTIONS: Readonly<Record<UserOrderings, keyof typeof OrderingDirections>> = {
+  NAME: 'ASC',
+  CREATED_AT: 'DESC',
+  UPDATED_AT: 'DESC',
+}
+
+export const USER_GROUP_ORDERING_DIRECTIONS: Readonly<Record<UserGroupOrderings, keyof typeof OrderingDirections>> = {
+  NAME: 'ASC',
+  CREATED_AT: 'DESC',
+  UPDATED_AT: 'DESC',
+}
+
 export const userDisplayName = (user: User): string => {
   return user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : user.username
 }

@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { NotFoundResponse, OrderingDirections } from '@platon/core/common'
+import { NotFoundResponse } from '@platon/core/common'
 import { LevelService, TopicService, UserEntity } from '@platon/core/server'
 import {
   CircleTree,
+  RESOURCE_ORDERING_DIRECTIONS,
   ResourceCompletion,
   ResourceFilters,
   ResourceOrderings,
@@ -299,14 +300,7 @@ export class ResourceService {
         RELEVANCE: 'stats.score',
       }
 
-      const orderings: Record<ResourceOrderings, keyof typeof OrderingDirections> = {
-        NAME: 'ASC',
-        CREATED_AT: 'DESC',
-        UPDATED_AT: 'DESC',
-        RELEVANCE: 'DESC',
-      }
-
-      query.orderBy(fields[filters.order], filters.direction || orderings[filters.order])
+      query.orderBy(fields[filters.order], filters.direction || RESOURCE_ORDERING_DIRECTIONS[filters.order])
     }
 
     if (filters.offset) {
