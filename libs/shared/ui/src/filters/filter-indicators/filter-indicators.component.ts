@@ -1,5 +1,14 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  inject,
+} from '@angular/core'
 
 import { MatChipsModule } from '@angular/material/chips'
 import { MatIconModule } from '@angular/material/icon'
@@ -19,6 +28,8 @@ interface IndicatorMatch<T> {
   imports: [CommonModule, MatIconModule, MatChipsModule],
 })
 export class UiFilterIndicatorComponent<T> implements OnChanges {
+  private readonly changeDetectorRef = inject(ChangeDetectorRef)
+
   protected empty = false
   protected matches: IndicatorMatch<T>[] = []
 
@@ -27,7 +38,7 @@ export class UiFilterIndicatorComponent<T> implements OnChanges {
 
   @Input() indicators: FilterIndicator<T>[] = []
 
-  ngOnChanges(): void {
+  async ngOnChanges(): Promise<void> {
     const { filters } = this
     this.matches = []
     this.empty = true
@@ -35,18 +46,14 @@ export class UiFilterIndicatorComponent<T> implements OnChanges {
       return
     }
 
-    this.matches = this.indicators
-      .filter((indicator) => indicator.match(filters))
-      .map((indicator) => ({
-        label: indicator.describe(filters),
-        indicator,
-      }))
+    this.matches = await Promise.all(
+      this.indicators
+        .filter((indicator) => indicator.match(filters))
+        .map(async (indicator): Promise<IndicatorMatch<T>> => ({ label: await indicator.describe(filters), indicator }))
+    )
 
     this.empty = !this.matches.length
-  }
-
-  protected trackByFn(index: number): number {
-    return index
+    this.changeDetectorRef.detectChanges()
   }
 
   protected onRemoveIndicator(indicator: FilterIndicator<T>): void {

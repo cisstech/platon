@@ -1,8 +1,8 @@
 <mat-chip-set *ngIf="!empty">
-  <ng-container *ngFor="let match of matches; trackBy: trackByFn">
-    <mat-chip [removable]="true" (removed)="onRemoveIndicator(match.indicator)">
-      {{ match.label }}
-      <mat-icon matChipRemove>cancel</mat-icon>
-    </mat-chip>
-  </ng-container>
+  @for (match of matches; track $index) {
+  <mat-chip [removable]="true" (removed)="onRemoveIndicator(match.indicator)">
+    {{ match.label }}
+    <mat-icon matChipRemove>cancel</mat-icon>
+  </mat-chip>
+  }
 </mat-chip-set>

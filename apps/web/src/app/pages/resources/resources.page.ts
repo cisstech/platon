@@ -29,6 +29,7 @@ import {
   CircleTreeComponent,
   ExerciseConfigurableFilterIndicator,
   LevelFilterIndicator,
+  ResourceDependOnFilterIndicator,
   ResourceFiltersComponent,
   ResourceItemComponent,
   ResourceListComponent,
@@ -140,6 +141,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
     ...Object.values(ResourceTypes).map(ResourceTypeFilterIndicator),
     ...Object.values(ResourceStatus).map(ResourceStatusFilterIndicator),
     ...Object.values(ResourceOrderings).map(ResourceOrderingFilterIndicator),
+    ResourceDependOnFilterIndicator(),
     ExerciseConfigurableFilterIndicator,
     PeriodFilterMatcher,
   ]

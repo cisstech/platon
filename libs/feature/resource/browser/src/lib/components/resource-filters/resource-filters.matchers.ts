@@ -1,14 +1,17 @@
+import { Topic } from '@platon/core/common'
 import {
   CircleTree,
+  RESOURCE_ORDERING_DIRECTIONS,
   ResourceFilters,
   ResourceOrderings,
   ResourceStatus,
   ResourceTypes,
-  RESOURCE_ORDERING_DIRECTIONS,
 } from '@platon/feature/resource/common'
 import { FilterIndicator } from '@platon/shared/ui'
 import { RESOURCE_ORDERING_NAMES, RESOURCE_STATUS_NAMES, RESOURCE_TYPE_NAMES } from '../../pipes'
-import { Topic } from '@platon/core/common'
+import { inject } from '@angular/core'
+import { ResourceService } from '../../api/resource.service'
+import { firstValueFrom } from 'rxjs'
 
 export const CircleFilterIndicator = (circle: CircleTree): FilterIndicator<ResourceFilters> => {
   return {
@@ -95,5 +98,31 @@ export const LevelFilterIndicator = (level: Topic): FilterIndicator<ResourceFilt
       levels: filters.levels?.filter((e) => e !== level.id),
     }),
     describe: () => `Possède le niveau "${level.name}"`,
+  }
+}
+
+export const ResourceDependOnFilterIndicator = (): FilterIndicator<ResourceFilters> => {
+  const resourceService = inject(ResourceService)
+  return {
+    match: (filters) => {
+      return !!filters.dependOn
+    },
+    remove: (filters: ResourceFilters) => ({
+      ...filters,
+      dependOn: undefined,
+    }),
+    describe: async (filters) => {
+      const dependOn = await Promise.all(
+        filters.dependOn!.map(async (id) => {
+          try {
+            const resource = await firstValueFrom(resourceService.find({ id, selects: ['name'] }))
+            return resource.name
+          } catch {
+            return id
+          }
+        })
+      )
+      return 'Dépend de ' + dependOn.map((name) => `“${name}”`).join(', ')
+    },
   }
 }
