@@ -6,7 +6,7 @@ import fr from 'date-fns/locale/fr'
 export interface FilterIndicator<T = unknown> {
   match: (filters: T) => boolean
   remove: (filters: T) => T
-  describe(filters: T): string
+  describe(filters: T): string | Promise<string>
 }
 
 export const PeriodFilterMatcher: FilterIndicator<any> = {

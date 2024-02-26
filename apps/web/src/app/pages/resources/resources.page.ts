@@ -29,6 +29,7 @@ import {
   CircleTreeComponent,
   ExerciseConfigurableFilterIndicator,
   LevelFilterIndicator,
+  ResourceDependOnFilterIndicator,
   ResourceFiltersComponent,
   ResourceItemComponent,
   ResourceListComponent,
@@ -51,6 +52,20 @@ import {
 import { NzDividerModule } from 'ng-zorro-antd/divider'
 
 const PAGINATION_LIMIT = 15
+
+interface QueryParams {
+  q?: string
+  period?: string | number
+  order?: ResourceOrderings
+  direction?: OrderingDirections
+  types?: keyof typeof ResourceTypes | (keyof typeof ResourceTypes)[]
+  status?: keyof typeof ResourceStatus | (keyof typeof ResourceStatus)[]
+  parents?: string | string[]
+  topics?: string | string[]
+  levels?: string | string[]
+  dependOn?: string | string[]
+  configurable?: string | boolean
+}
 
 @Component({
   standalone: true,
@@ -122,10 +137,11 @@ export default class ResourcesPage implements OnInit, OnDestroy {
   protected levels: Level[] = []
 
   protected completion = this.resourceService.completion().pipe(shareReplay(1))
-  protected indicators: FilterIndicator<ResourceFilters>[] = [
+  protected filterIndicators: FilterIndicator<ResourceFilters>[] = [
     ...Object.values(ResourceTypes).map(ResourceTypeFilterIndicator),
     ...Object.values(ResourceStatus).map(ResourceStatusFilterIndicator),
     ...Object.values(ResourceOrderings).map(ResourceOrderingFilterIndicator),
+    ResourceDependOnFilterIndicator(),
     ExerciseConfigurableFilterIndicator,
     PeriodFilterMatcher,
   ]
@@ -158,11 +174,18 @@ export default class ResourcesPage implements OnInit, OnDestroy {
 
     this.circles = []
 
-    this.indicators = [...topics.map(TopicFilterIndicator), ...levels.map(LevelFilterIndicator), ...this.indicators]
+    this.filterIndicators = [
+      ...topics.map(TopicFilterIndicator),
+      ...levels.map(LevelFilterIndicator),
+      ...this.filterIndicators,
+    ]
 
     if (this.tree) {
       this.circles = flattenCircleTree(this.tree)
-      this.indicators = [...flattenCircleTree(tree).map((circle) => CircleFilterIndicator(circle)), ...this.indicators]
+      this.filterIndicators = [
+        ...flattenCircleTree(tree).map((circle) => CircleFilterIndicator(circle)),
+        ...this.filterIndicators,
+      ]
     }
 
     this.changeDetectorRef.markForCheck()
@@ -180,6 +203,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
           direction: e.direction,
           types: typeof e.types === 'string' ? [e.types] : e.types,
           status: typeof e.status === 'string' ? [e.status] : e.status,
+          dependOn: typeof e.dependOn === 'string' ? [e.dependOn] : e.dependOn,
           configurable: e.configurable === 'true',
         }
 
@@ -226,6 +250,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
       topics: filters.topics,
       levels: filters.levels,
       configurable: filters.configurable ? true : undefined,
+      dependOn: filters.dependOn,
     }
 
     this.router
@@ -271,17 +296,4 @@ export default class ResourcesPage implements OnInit, OnDestroy {
       this.searchbar.value
     )
   }
-}
-
-interface QueryParams {
-  q?: string
-  period?: string | number
-  order?: ResourceOrderings
-  direction?: OrderingDirections
-  types?: keyof typeof ResourceTypes | (keyof typeof ResourceTypes)[]
-  status?: keyof typeof ResourceStatus | (keyof typeof ResourceStatus)[]
-  parents?: string | string[]
-  topics?: string | string[]
-  levels?: string | string[]
-  configurable?: string | boolean
 }

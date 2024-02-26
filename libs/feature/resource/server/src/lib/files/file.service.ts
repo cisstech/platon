@@ -65,6 +65,9 @@ export class ResourceFileService {
       EXERCISE: 'exercises',
     }[resource.type]
 
+    const extendsExpr = (resourceId: string, resourceVersion: string) =>
+      `@extends /${resourceId}:${resourceVersion}/${EXERCISE_MAIN_FILE}`
+
     return {
       repo: await Repo.get(path.join(directory, resource.id), {
         create: true,
@@ -77,7 +80,7 @@ export class ResourceFileService {
           : undefined,
         defaultFiles: resource.templateId
           ? {
-              [EXERCISE_MAIN_FILE]: `@extends /${resource.templateId}:latest/${EXERCISE_MAIN_FILE}`,
+              [EXERCISE_MAIN_FILE]: extendsExpr(resource.templateId, resource.templateVersion || LATEST),
               [TEMPLATE_OVERRIDE_FILE]: '{}',
               'readme.md': README_PLE,
             }

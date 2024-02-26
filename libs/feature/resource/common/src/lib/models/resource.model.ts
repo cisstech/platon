@@ -24,6 +24,7 @@ export interface Resource {
   readonly parentId?: string
 
   readonly templateId?: string
+  readonly templateVersion?: string
   readonly publicPreview?: boolean
   readonly permissions: ResourcePermissions
 
@@ -48,6 +49,7 @@ export interface CreateResource extends ExpandableModel<ResourceExpandableFields
   readonly name: string
   readonly parentId: string
   readonly templateId?: string
+  readonly templateVersion?: string
   readonly code?: string
   readonly desc?: string
   readonly type: ResourceTypes

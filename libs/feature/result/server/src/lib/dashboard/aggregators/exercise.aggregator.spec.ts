@@ -6,6 +6,7 @@ import {
   ExerciseDropOutRate,
   ExerciseSuccessRateOnFirstAttempt,
   ExerciseTotalAttempts,
+  ExerciseUniqueAttempts,
 } from './exercise.aggregator'
 
 describe('ExerciseAggregators', () => {
@@ -106,6 +107,48 @@ describe('ExerciseAggregators', () => {
     })
   })
 
+  describe('ExerciceUniqueAttempts', () => {
+    let aggregator: ExerciseUniqueAttempts
+
+    beforeEach(() => {
+      aggregator = new ExerciseUniqueAttempts()
+    })
+
+    it('should initialize with totalUniqueAttempts set to 0', () => {
+      expect(aggregator['totalUniqueAttempts']).toBe(0)
+    })
+
+    it('should increment totalUniqueAttempts when input has attempts', () => {
+      const input = { parentId: '1', attempts: 10 } as SessionView
+
+      aggregator.next(input)
+
+      expect(aggregator['totalUniqueAttempts']).toBe(1)
+    })
+
+    it('should increment totalUniqueAttempts by the number of unique attempts', () => {
+      aggregator.next({ parentId: '1', attempts: 5 } as SessionView)
+      aggregator.next({ parentId: '1', attempts: 10 } as SessionView)
+
+      expect(aggregator['totalUniqueAttempts']).toBe(2)
+    })
+
+    it('should not increment totalUniqueAttempts when input has no attempts', () => {
+      const input = {} as SessionView
+
+      aggregator.next(input)
+
+      expect(aggregator['totalUniqueAttempts']).toBe(0)
+    })
+
+    it('should return the total number of attempts', () => {
+      aggregator['totalUniqueAttempts'] = 150
+
+      const result = aggregator.complete()
+
+      expect(result).toBe(150)
+    })
+  })
   describe('ExerciseAverageAttempts', () => {
     let aggregator: ExerciseAverageAttempts
 
