@@ -6,6 +6,7 @@ import {
   EXERCISE_DROP_OUT_RATE,
   EXERCISE_SUCCESS_RATE_ON_FIRST_ATTEMPT,
   EXERCISE_TOTAL_ATTEMPTS,
+  EXERCISE_UNIQUE_ATTEMPTS,
 } from '@platon/feature/result/common'
 import differenceInSeconds from 'date-fns/differenceInSeconds'
 import { SessionView } from '../../sessions/session.view'
@@ -64,7 +65,7 @@ export class ExerciseDropOutRate implements SessionDataAggregator<number> {
 }
 
 /**
- * Calculates the total number of attempts for an exercise.
+ * Total number of unique attempts for an exercise.
  */
 export class ExerciseTotalAttempts implements SessionDataAggregator<number> {
   readonly id = EXERCISE_TOTAL_ATTEMPTS
@@ -78,6 +79,24 @@ export class ExerciseTotalAttempts implements SessionDataAggregator<number> {
 
   complete(): number {
     return this.totalAttempts
+  }
+}
+
+/**
+ * Total number of unique attempts for an exercise.
+ */
+export class ExerciseUniqueAttempts implements SessionDataAggregator<number> {
+  readonly id = EXERCISE_UNIQUE_ATTEMPTS
+
+  private totalUniqueAttempts = 0
+
+  next(input: SessionView): void {
+    if (!input.parentId) return
+    this.totalUniqueAttempts += input.attempts ? 1 : 0
+  }
+
+  complete(): number {
+    return this.totalUniqueAttempts
   }
 }
 
