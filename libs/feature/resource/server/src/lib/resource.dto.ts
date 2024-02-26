@@ -72,6 +72,11 @@ export class ResourceDTO extends BaseDTO implements Resource {
   @ApiProperty()
   readonly templateId?: string
 
+  @IsString()
+  @IsOptional()
+  @ApiProperty()
+  readonly templateVersion?: string
+
   @Type(() => ResourcePermissionsDTO)
   @ApiProperty()
   readonly permissions!: ResourcePermissions
@@ -119,7 +124,13 @@ export class CreateResourceDTO implements CreateResource {
 
   @IsUUID()
   @IsOptional()
+  @ApiProperty()
   readonly templateId?: string
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty()
+  readonly templateVersion?: string
 
   @IsString()
   @IsOptional()

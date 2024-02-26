@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { NotFoundResponse } from '@platon/core/common'
-import { LevelService, TopicService, UserEntity } from '@platon/core/server'
+import { EventService, LevelService, TopicService, UserEntity } from '@platon/core/server'
 import {
   CircleTree,
   RESOURCE_ORDERING_DIRECTIONS,
@@ -19,6 +19,7 @@ import { ResourceMemberEntity } from './members/member.entity'
 import { ResourceMetaEntity } from './metadata/metadata.entity'
 import { CreateResourceDTO, UpdateResourceDTO } from './resource.dto'
 import { ResourceEntity } from './resource.entity'
+import { ON_CREATE_RESOURCE_EVENT, OnCreateResourceEventPayload } from './resource.event'
 import { ResourceStatisticEntity } from './statistics'
 import { ResourceWatcherEntity } from './watchers'
 
@@ -32,7 +33,8 @@ export class ResourceService {
     private readonly metadataRepo: Repository<ResourceMetaEntity>,
     private readonly dataSource: DataSource,
     private readonly levelService: LevelService,
-    private readonly topicService: TopicService
+    private readonly topicService: TopicService,
+    private readonly eventService: EventService
   ) {}
 
   async tree(circles: ResourceEntity[]): Promise<CircleTree> {
@@ -316,12 +318,18 @@ export class ResourceService {
 
   async create(input: Partial<ResourceEntity>): Promise<ResourceEntity> {
     const parent = (await this.findById(input.parentId!)).get()
-    return this.repository.save(
+    const resource = await this.repository.save(
       this.repository.create({
         ...input,
         personal: parent.personal,
       })
     )
+
+    this.eventService.emit<OnCreateResourceEventPayload>(ON_CREATE_RESOURCE_EVENT, {
+      resource,
+    })
+
+    return resource
   }
 
   async update(idOrResource: string | ResourceEntity, changes: Partial<ResourceEntity>): Promise<ResourceEntity> {
