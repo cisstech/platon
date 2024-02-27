@@ -34,6 +34,7 @@ import {
 } from '@platon/feature/resource/browser'
 import {
   CircleTree,
+  LATEST,
   Resource,
   ResourceStatus,
   ResourceTypes,
@@ -186,6 +187,7 @@ export class ResourceCreatePage implements OnInit {
           type: this.type,
           parentId: this.parentId as string,
           templateId: this.editionMode === 'template' ? this.template?.id : undefined,
+          templateVersion: this.editionMode === 'template' ? LATEST : undefined,
           name: infos.name as string,
           desc: infos.desc as string,
           code: infos.code || undefined,

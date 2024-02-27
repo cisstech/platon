@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { NotFoundResponse, OrderingDirections } from '@platon/core/common'
-import { CourseFilters, CourseOrderings } from '@platon/feature/course/common'
+import { CourseFilters, CourseOrderings, COURSE_ORDERING_DIRECTIONS } from '@platon/feature/course/common'
 import { Repository } from 'typeorm'
 import { Optional } from 'typescript-optional'
 import { CourseMemberView } from './course-member/course-member.view'
@@ -53,13 +53,7 @@ export class CourseService {
         UPDATED_AT: 'course.updated_at',
       }
 
-      const orderings: Record<CourseOrderings, keyof typeof OrderingDirections> = {
-        NAME: 'ASC',
-        CREATED_AT: 'DESC',
-        UPDATED_AT: 'DESC',
-      }
-
-      query.orderBy(fields[filters.order], filters.direction || orderings[filters.order])
+      query.orderBy(fields[filters.order], filters.direction || COURSE_ORDERING_DIRECTIONS[filters.order])
     }
 
     if (filters.offset) {

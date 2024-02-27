@@ -16,6 +16,7 @@
     >
       <i nz-icon nzType="edit" nzTheme="outline"></i>
     </ui-list-item-article-action>
+
     <ng-container *ngIf="item.type !== 'CIRCLE'">
       <ui-list-item-article-action
         (click)="modalMode ? openTab(previewUrl) : iframe.open(previewUrl)"
@@ -26,6 +27,46 @@
       </ui-list-item-article-action>
     </ng-container>
     <div class="spacer"></div>
+
+    <ng-container *ngIf="item.statistic?.exercise?.references as references">
+      <ui-list-item-article-action [actionTitle]="refActionTitleTemplate" [nz-popover] [nzPopoverContent]="refPopover">
+        <span nz-icon nzType="cluster" nzTheme="outline"></span>
+      </ui-list-item-article-action>
+      <ng-template #refPopover>
+        <p>
+          <b>"{{ item.name }}"</b> est actuellement utilisée comme :
+        </p>
+        <p *ngIf="references.activity">
+          Exercice par
+          <b>
+            <ng-container [ngPlural]="references.activity">
+              <ng-template ngPluralCase="=1">1 activité</ng-template>
+              <ng-template ngPluralCase="other">{{ references.activity }} activités</ng-template>
+            </ng-container>
+          </b>
+        </p>
+        <p *ngIf="references.template">
+          Template par
+          <b>
+            <ng-container [ngPlural]="references.template">
+              <ng-template ngPluralCase="=1">1 exercice</ng-template>
+              <ng-template ngPluralCase="other">{{ references.template }} exercices</ng-template>
+            </ng-container>
+          </b>
+        </p>
+        <button
+          nz-button
+          class="btn-show-references"
+          nzType="link"
+          [routerLink]="['/resources']"
+          [queryParams]="{ dependOn: [item.id] }"
+          queryParamsHandling="merge"
+        >
+          Afficher le listing
+        </button>
+      </ng-template>
+    </ng-container>
+
     <ui-list-item-article-action
       [actionTitle]="item.updatedAt | date : 'dd/MM/yyyy'"
       nz-tooltip="Dernière date de mise à jour"
@@ -34,14 +75,25 @@
     </ui-list-item-article-action>
   </ui-list-item-article>
 </nz-ribbon>
+
 <ui-modal-iframe width="100vw" height="100vh" [closable]="true" #iframe />
+
+<ng-template #refActionTitleTemplate>
+  <ng-container [ngPlural]="item.statistic?.exercise?.references?.total || 0">
+    <ng-template ngPluralCase="=0">Aucune référence</ng-template>
+    <ng-template ngPluralCase="=1">1 référence</ng-template>
+    <ng-template ngPluralCase="other">{{ attemptCount }} références</ng-template>
+  </ng-container>
+</ng-template>
 
 <ng-template #ribbonTemplate>
   <mat-icon [nz-tooltip]="item.status | resourceStatus">{{ item.status | resourceStatusIcon }}</mat-icon>
 </ng-template>
+
 <ng-template #imageTemplate>
   <mat-icon [nz-tooltip]="item.type | resourceType">{{ item.type | resourceIcon }}</mat-icon>
 </ng-template>
+
 <ng-template #titleTemplate>
   <div>
     <span class="resource-item-title">{{ name }}</span>
@@ -55,7 +107,12 @@
     ></i>
   </div>
   <div class="resource-item-stats" *ngIf="attemptCount">
-    <span [style.color]="successRateColor">{{ successRate }}%</span> de réussite pour {{ attemptCount }} utilisations
+    <span [style.color]="successRateColor">{{ successRate }}%</span> de réussite pour
+    <ng-container [ngPlural]="attemptCount">
+      <ng-template ngPluralCase="=0">0 utilisation</ng-template>
+      <ng-template ngPluralCase="=1">1 utilisation</ng-template>
+      <ng-template ngPluralCase="other">{{ attemptCount }} utilisations</ng-template>
+    </ng-container>
   </div>
 </ng-template>
 

@@ -83,6 +83,10 @@ export class ResourceEntity extends BaseEntity {
   @JoinColumn({ name: 'template_id' })
   template?: ResourceEntity
 
+  @Index('Resources_version_idx')
+  @Column({ name: 'template_version', nullable: true })
+  templateVersion?: string
+
   @Index('Resources_public_preview_idx')
   @Column({ type: 'boolean', name: 'public_preview', default: false })
   publicPreview!: boolean

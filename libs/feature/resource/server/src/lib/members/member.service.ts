@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { BadRequestResponse, NotFoundResponse, OrderingDirections, UserOrderings } from '@platon/core/common'
+import { BadRequestResponse, NotFoundResponse, UserOrderings, USER_ORDERING_DIRECTIONS } from '@platon/core/common'
 import { ResourceMemberFilters } from '@platon/feature/resource/common'
 import { EntityManager, Repository } from 'typeorm'
 import { Optional } from 'typescript-optional'
@@ -48,14 +48,8 @@ export class ResourceMemberService {
       UPDATED_AT: 'member.updated_at',
     }
 
-    const orderings: Record<UserOrderings, keyof typeof OrderingDirections> = {
-      NAME: 'ASC',
-      CREATED_AT: 'DESC',
-      UPDATED_AT: 'DESC',
-    }
-
     const order = filters.order || UserOrderings.NAME
-    const direction = filters.direction || orderings[order]
+    const direction = filters.direction || USER_ORDERING_DIRECTIONS[order]
     if (filters.order === UserOrderings.NAME) {
       query
         .orderBy('user.last_name', direction)

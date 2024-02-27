@@ -59,7 +59,7 @@
       </td>
       <td nzAlign="center" *ngIf="!disabled">
         <a
-          *ngIf="model.activity"
+          *ngIf="model.activity.isChallenge"
           nz-button
           nzShape="round"
           [routerLink]="['/courses', model.activity.courseId, 'challenges']"
