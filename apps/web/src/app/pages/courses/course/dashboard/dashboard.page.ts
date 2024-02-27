@@ -14,7 +14,11 @@ import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzSegmentedModule } from 'ng-zorro-antd/segmented'
 import { NzTypographyModule } from 'ng-zorro-antd/typography'
 
-import { CourseActivityGridComponent, CourseActivityTableComponent } from '@platon/feature/course/browser'
+import {
+  CourseActivityGridComponent,
+  CourseActivityTableComponent,
+  CsvDownloadButtonComponent,
+} from '@platon/feature/course/browser'
 import { Activity, CourseSection } from '@platon/feature/course/common'
 import { CourseSectionActionsComponent } from './section-actions/section-actions.component'
 
@@ -50,6 +54,7 @@ import { CoursePresenter } from '../course.presenter'
     CourseActivityGridComponent,
     CourseActivityTableComponent,
     CourseSectionActionsComponent,
+    CsvDownloadButtonComponent,
 
     DurationPipe,
     UiViewModeComponent,
