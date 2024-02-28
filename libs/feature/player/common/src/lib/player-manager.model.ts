@@ -196,7 +196,6 @@ export abstract class PlayerManager {
 
       const childs = await this.findSessionsByParentId(activitySession.id)
       activitySession.grade = exerciseSession.grade
-
       childs.forEach((child) => {
         if (child.id === exerciseSession.id) return
         if (typeof child.grade === 'number' && child.grade !== -1) {
@@ -208,7 +207,12 @@ export abstract class PlayerManager {
         activitySession.grade = Number((activitySession.grade / childs.length).toFixed(2))
       }
 
+      if (activitySession.grade === 100 && !activitySession.succeededAt) {
+        activitySession.succeededAt = new Date()
+      }
+
       activitySession.attempts += increment
+
       promises.push(
         this.updateSession(activitySession.id, {
           grade: activitySession.grade,
