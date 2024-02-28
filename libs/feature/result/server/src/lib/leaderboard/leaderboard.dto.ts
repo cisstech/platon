@@ -37,6 +37,10 @@ export class ActivityLeaderboardEntryDTO implements ActivityLeaderboardEntry {
 
   @ApiProperty({ type: Date })
   @Type(() => Date)
+  readonly succeededAt!: Date
+
+  @ApiProperty({ type: Date })
+  @Type(() => Date)
   readonly lastGradedAt!: Date
 }
 

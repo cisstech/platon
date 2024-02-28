@@ -61,7 +61,7 @@
             <div class="timeline-item">
               <div>{{ $index + 1 }}.</div>
               <user-avatar [user]="entry.user" />
-              <div>({{ [entry.startedAt, entry.lastGradedAt] | duration }})</div>
+              <div>({{ entry.succeededAt | date : 'medium' }})</div>
               <div>
                 <b>{{ entry.points }} points</b>
               </div>

@@ -1,5 +1,5 @@
 import { BaseEntity, UserEntity } from '@platon/core/server'
-import { PLSourceFile } from '@platon/feature/compiler'
+import { ActivityVariables, PLSourceFile } from '@platon/feature/compiler'
 import { Activity, ActivityOpenStates, ActivityPermissions } from '@platon/feature/course/common'
 import { Column, Entity, Index, JoinColumn, ManyToOne, VirtualColumn } from 'typeorm'
 import { CourseEntity } from '../course.entity'
@@ -32,7 +32,7 @@ export class ActivityEntity extends BaseEntity implements Activity {
   section!: CourseSectionEntity
 
   @Column({ type: 'jsonb', default: {} })
-  source!: PLSourceFile
+  source!: PLSourceFile<ActivityVariables>
 
   @Index('Activities_open_at_idx')
   @Column({ name: 'open_at', nullable: true, type: 'timestamp with time zone' })

@@ -4,6 +4,7 @@ import { OnEvent } from '@nestjs/event-emitter'
 import { InjectRepository } from '@nestjs/typeorm'
 import { ForbiddenResponse, NotFoundResponse, User, isTeacherRole } from '@platon/core/common'
 import { DatabaseService, EventService, IRequest, buildSelectQuery } from '@platon/core/server'
+import { ActivityVariables, PLSourceFile } from '@platon/feature/compiler'
 import {
   ActivityFilters,
   CreateActivity,
@@ -170,7 +171,7 @@ export class ActivityService {
       resourceId: activity.source.resource,
       version: input.version,
     })
-    activity.source = source
+    activity.source = source as PLSourceFile<ActivityVariables>
 
     activity = await this.repository.save(activity)
 
@@ -219,7 +220,7 @@ export class ActivityService {
         resourceId: input.resourceId,
         version: input.resourceVersion,
       })
-      activity.source = source
+      activity.source = source as PLSourceFile<ActivityVariables>
       delete (input as any).resourceId
       delete (input as any).resourceVersion
     }

@@ -1,4 +1,4 @@
-import { ActivityVariables, ExerciseVariables, extractExercisesFromActivityVariables } from '@platon/feature/compiler'
+import { ExerciseVariables, extractExercisesFromActivityVariables } from '@platon/feature/compiler'
 import { canUserAnswerActivity } from '@platon/feature/course/common'
 import { ActivityEntity, ActivityMemberView } from '@platon/feature/course/server'
 import {
@@ -75,7 +75,7 @@ export class ActivityUserResults implements SessionDataAggregator<UserResults[]>
     })
 
     if (activity) {
-      const activityExercises = extractExercisesFromActivityVariables(activity.source.variables as ActivityVariables)
+      const activityExercises = extractExercisesFromActivityVariables(activity.source.variables)
       activityExercises.forEach((exercise) => {
         const variables = exercise.source.variables as ExerciseVariables
         Array.from(this.userResults.values()).forEach((userResult) => {
@@ -187,7 +187,7 @@ export class ActivityExerciseResults implements SessionDataAggregator<ExerciseRe
     })
 
     if (activity) {
-      const activityExercises = extractExercisesFromActivityVariables(activity.source.variables as ActivityVariables)
+      const activityExercises = extractExercisesFromActivityVariables(activity.source.variables)
       activityExercises.forEach((exercise) => {
         const variables = exercise.source.variables as ExerciseVariables
         this.exerciseResults.set(
