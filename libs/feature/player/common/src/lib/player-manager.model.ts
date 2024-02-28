@@ -195,9 +195,11 @@ export abstract class PlayerManager {
       }
 
       const childs = await this.findSessionsByParentId(activitySession.id)
-      activitySession.grade = grade
+      activitySession.grade = exerciseSession.grade
+
       childs.forEach((child) => {
-        if (child.id !== exerciseSession.id && typeof child.grade === 'number' && child.grade !== -1) {
+        if (child.id === exerciseSession.id) return
+        if (typeof child.grade === 'number' && child.grade !== -1) {
           activitySession.grade += child.grade
         }
       })
