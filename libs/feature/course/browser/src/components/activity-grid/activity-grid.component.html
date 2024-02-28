@@ -4,7 +4,7 @@
     <ng-container *ngIf="tab.items.length; else emptyState">
       <nz-row [nzGutter]="[24, 24]" nzAlign="top">
         <ng-container *ngFor="let item of tab.items; trackBy: trackActivity">
-          <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
+          <nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="12" nzXl="12" nzXXl="8">
             <course-activity-card [item]="item" />
           </nz-col>
         </ng-container>

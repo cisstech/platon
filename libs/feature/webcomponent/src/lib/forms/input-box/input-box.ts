@@ -9,6 +9,7 @@ export interface InputBoxState extends IWebComponent {
   suffix: string
   appearance: 'fill' | 'outline'
   placeholder: string
+  autoValidation: boolean
   disabled: boolean
   completion: string[]
 }
@@ -80,6 +81,11 @@ export const InputBoxComponentDefinition = defineWebComponent({
         },
         description: 'Une liste de suggestions à proposer automatiquement lors de la saisi.',
       },
+      autoValidation: {
+        type: 'boolean',
+        default: false,
+        description: `Activer la validation automatique du champ de saisi lors d'un appuie sur la touche "Entrée"?`,
+      },
     },
   },
   showcase: {
@@ -87,5 +93,6 @@ export const InputBoxComponentDefinition = defineWebComponent({
     placeholder: 'Entrez votre texte...',
     suffix: 'clarity happy-face color=FF0000',
     completion: ['France', 'Espagne', 'Italie'],
+    autoValidation: true,
   },
 })

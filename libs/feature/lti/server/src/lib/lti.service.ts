@@ -136,12 +136,10 @@ export class LTIService {
     const isStudent = Object.values(StudentRoles).find((role) => payload.roles.includes(role))
     const isTeacher = Object.values(InstructorRoles).find((role) => payload.roles.includes(role))
 
-    if (isAdmin) {
-      role = UserRoles.admin
+    if (isTeacher || isAdmin) {
+      role = UserRoles.teacher
     } else if (isStudent) {
       role = UserRoles.student
-    } else if (isTeacher) {
-      role = UserRoles.teacher
     }
 
     const user = await this.userService.create({

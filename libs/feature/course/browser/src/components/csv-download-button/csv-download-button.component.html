@@ -1,0 +1,12 @@
+<a
+  *ngIf="activities[0]?.permissions?.viewStats"
+  nz-tooltip="Télécharger les stats au format CSV"
+  nz-button
+  nzShape="round"
+  nzType="default"
+  (click)="downloadCSV()"
+>
+  @if (type === 'activity') {
+  <i nz-icon nzType="download" nzTheme="outline"></i>
+  } @else { Télécharger les stats au format CSV }
+</a>

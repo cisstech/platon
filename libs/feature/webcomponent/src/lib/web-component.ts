@@ -70,6 +70,7 @@ export interface WebComponentHooks<T = any> {
    * @returns the state or a computed version of the state.
    */
   onGetState?(state: T): T
+
   /**
    * A callback method that is invoked immediately after the `state` setter runs.
    * Define this method to handle any additional validation and initialization tasks.

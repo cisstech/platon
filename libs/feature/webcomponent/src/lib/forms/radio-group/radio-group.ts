@@ -10,6 +10,7 @@ export interface RadioGroupState extends IWebComponent {
   disabled: boolean
   selection: string
   horizontal: boolean
+  autoValidation: boolean
 }
 
 export const RadioGroupComponentDefinition = defineWebComponent({
@@ -59,6 +60,11 @@ export const RadioGroupComponentDefinition = defineWebComponent({
         type: 'boolean',
         default: false,
         description: 'Afficher horizontalement les propositions?',
+      },
+      autoValidation: {
+        type: 'boolean',
+        default: false,
+        description: 'Activer la validation automatique?',
       },
     },
   },

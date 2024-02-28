@@ -23,7 +23,9 @@ export interface Session<TVariables = any> {
   attempts: number
 
   startedAt?: Date | null
+  succeededAt?: Date | null
   lastGradedAt?: Date | null
+
   source: PLSourceFile<TVariables>
   isBuilt: boolean
 }

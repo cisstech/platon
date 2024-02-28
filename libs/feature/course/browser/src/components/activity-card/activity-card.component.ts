@@ -17,6 +17,7 @@ import { UiModalDrawerComponent } from '@platon/shared/ui'
 import { CoursePipesModule } from '../../pipes'
 import { CourseActivitySettingsComponent } from '../activity-settings/activity-settings.component'
 import { CourseItemComponent } from '../course-item/course-item.component'
+import { CsvDownloadButtonComponent } from '../csv-download-button/csv-download-button.component'
 
 @Component({
   standalone: true,
@@ -41,6 +42,7 @@ import { CourseItemComponent } from '../course-item/course-item.component'
 
     CoursePipesModule,
     CourseItemComponent,
+    CsvDownloadButtonComponent,
 
     UiModalDrawerComponent,
     CourseActivitySettingsComponent,

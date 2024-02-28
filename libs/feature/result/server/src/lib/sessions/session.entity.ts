@@ -53,6 +53,9 @@ export class SessionEntity<TVariables = any> extends BaseEntity implements Sessi
   @Column({ type: 'timestamp with time zone', name: 'started_at', nullable: true })
   startedAt?: Date | null
 
+  @Column({ type: 'timestamp with time zone', name: 'succeeded_at', nullable: true })
+  succeededAt?: Date | null
+
   @Column({ type: 'timestamp with time zone', name: 'last_graded_at', nullable: true })
   lastGradedAt?: Date | null
 
