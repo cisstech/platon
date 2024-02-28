@@ -174,12 +174,17 @@ export abstract class PlayerManager {
       variables: exerciseSession.variables,
     })
 
+    if (answer.grade === 100 && !exerciseSession.succeededAt) {
+      exerciseSession.succeededAt = new Date()
+    }
+
     const promises: Promise<unknown>[] = [
       this.updateSession(exerciseSession.id, {
         grade: exerciseSession.grade,
         attempts: exerciseSession.attempts,
         variables: exerciseSession.variables,
         lastGradedAt: new Date(),
+        succeededAt: exerciseSession.succeededAt,
       }),
     ]
 
@@ -217,6 +222,7 @@ export abstract class PlayerManager {
         this.updateSession(activitySession.id, {
           grade: activitySession.grade,
           attempts: activitySession.attempts,
+          succeededAt: activitySession.succeededAt,
           variables: {
             ...activitySession.variables,
             navigation: activityNavigation,
