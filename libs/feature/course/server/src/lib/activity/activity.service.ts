@@ -11,7 +11,6 @@ import {
   ReloadActivity,
   UpdateActivity,
   calculateActivityOpenState,
-  canUserAnswerActivity,
 } from '@platon/feature/course/common'
 import { ResourceEntity, ResourceFileService } from '@platon/feature/resource/server'
 import { CLS_REQ } from 'nestjs-cls'
@@ -283,8 +282,8 @@ export class ActivityService {
         resourceId: activity.source.resource,
         exerciseCount: Object.keys(exerciseGroups).reduce((acc, group) => acc + exerciseGroups[group].length, 0),
         permissions: {
+          answer: true,
           update: activity.creatorId === this.request.user.id,
-          answer: canUserAnswerActivity(activity, this.request.user),
           viewStats: isTeacherRole(this.request.user.role),
           viewResource: isTeacherRole(this.request.user.role),
         },
