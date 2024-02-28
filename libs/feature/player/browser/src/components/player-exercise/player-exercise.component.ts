@@ -8,13 +8,14 @@ import {
   EventEmitter,
   Input,
   OnChanges,
+  OnDestroy,
   OnInit,
   Output,
   TemplateRef,
   ViewChild,
   inject,
 } from '@angular/core'
-import { firstValueFrom } from 'rxjs'
+import { Subscription, firstValueFrom } from 'rxjs'
 
 import { MatButtonModule } from '@angular/material/button'
 import { MatCardModule } from '@angular/material/card'
@@ -37,6 +38,7 @@ import { ActivatedRoute } from '@angular/router'
 import { ExerciseTheory } from '@platon/feature/compiler'
 import { AnswerStatePipesModule } from '@platon/feature/result/browser'
 import { AnswerStates } from '@platon/feature/result/common'
+import { WebComponentService } from '@platon/feature/webcomponent'
 import {
   FilePreviewSupportedPipe,
   IsUUIDPipe,
@@ -112,11 +114,13 @@ type FullscreenElement = HTMLElement & {
     PlayerCommentsComponent,
   ],
 })
-export class PlayerExerciseComponent implements OnInit, OnChanges {
+export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
+  private readonly subscriptions: Subscription[] = []
   private readonly dialogService = inject(DialogService)
   private readonly playerService = inject(PlayerService)
   private readonly activatedRoute = inject(ActivatedRoute)
   private readonly changeDetectorRef = inject(ChangeDetectorRef)
+  private readonly webComponentService = inject(WebComponentService)
 
   @Input() state?: AnswerStates
   @Input() player?: ExercisePlayer
@@ -166,7 +170,6 @@ export class PlayerExerciseComponent implements OnInit, OnChanges {
     if (!this.player) return []
     return [
       {
-        id: 'check-answer-button',
         icon: 'check',
         label: this.player.remainingAttempts ? `(${this.player.remainingAttempts})` : '',
         tooltip: 'Valider',
@@ -299,6 +302,16 @@ export class PlayerExerciseComponent implements OnInit, OnChanges {
       this.container.nativeElement.webkitRequestFullscreen ||
       this.container.nativeElement.mozRequestFullScreen ||
       this.container.nativeElement.msRequestFullscreen
+
+    this.subscriptions.push(
+      this.webComponentService.onSubmit.subscribe(() => {
+        this.evaluate(PlayerActions.CHECK_ANSWER).catch(console.error)
+      })
+    )
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((s) => s.unsubscribe())
   }
 
   ngOnChanges(): void {

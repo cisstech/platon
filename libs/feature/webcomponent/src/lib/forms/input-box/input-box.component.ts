@@ -12,6 +12,7 @@ import { FormControl } from '@angular/forms'
 import { Observable, Subscription } from 'rxjs'
 import { debounceTime, map, startWith } from 'rxjs/operators'
 import { WebComponent, WebComponentHooks } from '../../web-component'
+import { WebComponentService } from '../../web-component.service'
 import { InputBoxComponentDefinition, InputBoxState } from './input-box'
 
 @Component({
@@ -22,6 +23,8 @@ import { InputBoxComponentDefinition, InputBoxState } from './input-box'
 })
 @WebComponent(InputBoxComponentDefinition)
 export class InputBoxComponent implements OnInit, OnDestroy, WebComponentHooks<InputBoxState> {
+  private readonly webComponentService!: WebComponentService
+
   @Input() state!: InputBoxState
   @Output() stateChange = new EventEmitter<InputBoxState>()
 
@@ -37,7 +40,9 @@ export class InputBoxComponent implements OnInit, OnDestroy, WebComponentHooks<I
     map((value) => this.getSuggestions(value))
   )
 
-  constructor(readonly injector: Injector) {}
+  constructor(readonly injector: Injector) {
+    this.webComponentService = injector.get(WebComponentService)!
+  }
 
   ngOnInit() {
     this.subscription = this.form.valueChanges.pipe(debounceTime(this.dueTime)).subscribe((value) => {
@@ -76,7 +81,7 @@ export class InputBoxComponent implements OnInit, OnDestroy, WebComponentHooks<I
   protected async autoValidate() {
     if (this.state.autoValidation) {
       await new Promise((resolve) => setTimeout(resolve, this.dueTime)) // wait for the last value change
-      document.getElementById('check-answer-button')?.click()
+      this.webComponentService.submit()
     }
   }
 
