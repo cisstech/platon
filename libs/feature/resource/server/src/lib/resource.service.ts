@@ -12,7 +12,7 @@ import {
   ResourceTypes,
 } from '@platon/feature/resource/common'
 import { isUUID4 } from '@platon/shared/server'
-import { DataSource, EntityManager, In, Repository } from 'typeorm'
+import { Brackets, DataSource, EntityManager, In, Repository } from 'typeorm'
 import { Optional } from 'typescript-optional'
 import { ResourceDependencyEntity } from './dependency'
 import { ResourceMemberEntity } from './members/member.entity'
@@ -207,7 +207,14 @@ export class ResourceService {
         [userId]
       )
       const resources = [...(await resourcesVisibleByUser)].map((e) => e.resource_id)
-      query.andWhere('resource.id IN (:...resources)', { resources })
+      query.andWhere(
+        new Brackets((qb) => {
+          qb.where('resource.id IN (:...resources)', { resources })
+          qb.orWhere('owner_id = :userId', { userId })
+          qb.orWhere('personal = false')
+          qb.orWhere('parent_id IN (:...resources)', { resources })
+        })
+      )
     }
     if (userId) await userHasPermissions(userId)
 
