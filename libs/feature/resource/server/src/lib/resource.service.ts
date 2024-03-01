@@ -182,8 +182,35 @@ export class ResourceService {
     return descendants
   }
 
-  async search(filters: ResourceFilters = {}): Promise<[ResourceEntity[], number]> {
+  /**
+   * Search resources to display on workspace
+   * @param filters filters to apply to the search
+   * @param userId user id to check permissions on resources - if not provided, no permissions are checked
+   * @returns Promise<[ResourceEntity[], number]> - the list of resources and the total count
+   */
+  async search(filters: ResourceFilters = {}, userId?: string): Promise<[ResourceEntity[], number]> {
     const query = this.repository.createQueryBuilder('resource')
+
+    // Checking is user has permissions to see resources ie. is a member or a watcher
+    const userHasPermissions = async (userId: string) => {
+      const resourcesVisibleByUser = this.dataSource.query(
+        `
+        SELECT DISTINCT resource_id
+        FROM "ResourceMembers" rm
+        WHERE user_id = $1
+        AND "rm"."permissionsRead"
+        UNION
+        SELECT DISTINCT resource_id
+        FROM "ResourceWatchers"
+        WHERE user_id = $1
+      `,
+        [userId]
+      )
+      const resources = [...(await resourcesVisibleByUser)].map((e) => e.resource_id)
+      query.andWhere('resource.id IN (:...resources)', { resources })
+    }
+    if (userId) await userHasPermissions(userId)
+
     query.leftJoinAndSelect('resource.topics', 'topic')
     query.leftJoinAndSelect('resource.levels', 'level')
 
