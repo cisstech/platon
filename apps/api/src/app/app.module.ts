@@ -8,7 +8,7 @@ import { FeaturePlayerServerModule } from '@platon/feature/player/server'
 import { FeatureResourceServerModule } from '@platon/feature/resource/server'
 import { FeatureResultServerModule } from '@platon/feature/result/server'
 import { CommandsModule } from './commands/commands.module'
-import { FeatureDiscordServerModule, FeatureDiscordServerService } from 'feature-discord-server'
+import { FeatureDiscordServerModule, FeatureDiscordServerService } from "@platon/feature/discord/server"
 import { DiscordModule } from '@discord-nestjs/core';
 
 @Module({
