@@ -34,9 +34,16 @@ export class ResourceController {
       )
       total = response[1]
     } else {
-      const response = await this.resourceService.search(filters, req.user.id)
+      const response = await this.resourceService.search(filters, req.user.id) // returns only resources the user has read access to
       resources = Mapper.mapAll(response[0], ResourceDTO)
       total = response[1]
+      return new ListResponse({
+        total,
+        resources: resources.map((e) => {
+          Object.assign(e, { permissions: { read: true, write: false, manage: false } })
+          return e
+        }),
+      })
     }
 
     const resourceWithPermissions = await this.permissionService.userPermissionsOnResources(resources, req.user)

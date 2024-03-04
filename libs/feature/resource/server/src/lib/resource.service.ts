@@ -183,7 +183,7 @@ export class ResourceService {
   }
 
   /**
-   * Search resources to display on workspace
+   * Search resources to display
    * @param filters filters to apply to the search
    * @param userId user id to check permissions on resources - if not provided, no permissions are checked
    * @returns Promise<[ResourceEntity[], number]> - the list of resources and the total count
@@ -193,26 +193,28 @@ export class ResourceService {
 
     // Checking is user has permissions to see resources ie. is a member or a watcher
     const userHasPermissions = async (userId: string) => {
-      const resourcesVisibleByUser = this.dataSource.query(
+      const resourcesVisibleByUser = await this.dataSource.query(
         `
-        SELECT DISTINCT resource_id
-        FROM "ResourceMembers" rm
-        WHERE user_id = $1
-        AND "rm"."permissionsRead"
-        UNION
-        SELECT DISTINCT resource_id
-        FROM "ResourceWatchers"
-        WHERE user_id = $1
-      `,
+          SELECT DISTINCT resource_id
+          FROM "ResourceMembers" rm
+          WHERE user_id = $1
+          AND "rm"."permissionsRead"
+          UNION
+          SELECT DISTINCT resource_id
+          FROM "ResourceWatchers"
+          WHERE user_id = $1
+        `,
         [userId]
       )
-      const resources = [...(await resourcesVisibleByUser)].map((e) => e.resource_id)
+      const resources = [...resourcesVisibleByUser].map((e) => e.resource_id)
       query.andWhere(
         new Brackets((qb) => {
-          qb.where('resource.id IN (:...resources)', { resources })
+          if (resources.length > 0) {
+            qb.where('resource.id IN (:...resources)', { resources })
+            qb.orWhere('parent_id IN (:...resources)', { resources })
+          }
           qb.orWhere('owner_id = :userId', { userId })
           qb.orWhere('personal = false')
-          qb.orWhere('parent_id IN (:...resources)', { resources })
         })
       )
     }
