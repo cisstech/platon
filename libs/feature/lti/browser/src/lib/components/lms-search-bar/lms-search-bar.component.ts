@@ -18,6 +18,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzIconModule } from 'ng-zorro-antd/icon'
 
 import { NgeUiListModule } from '@cisstech/nge/ui/list'
+import { DEFAULT_SEARCH_BAR_LIMIT } from '@platon/core/common'
 import { Lms, LmsFilters } from '@platon/feature/lti/common'
 import { SearchBar, UiSearchBarComponent } from '@platon/shared/ui'
 import { LTIService } from '../../api/lti.service'
@@ -47,7 +48,7 @@ export class LmsSearchBarComponent implements OnChanges, ControlValueAccessor {
   @Input() excludes: string[] = []
   @Input() disabled = false
   @Input() autoSelect = false
-  @Input() filters: LmsFilters = { limit: 5 }
+  @Input() filters: LmsFilters = { limit: DEFAULT_SEARCH_BAR_LIMIT }
 
   readonly searchbar: SearchBar<Lms> = {
     placeholder: 'Essayez un nom...',
@@ -120,6 +121,7 @@ export class LmsSearchBarComponent implements OnChanges, ControlValueAccessor {
         .searchLms({
           ...this.filters,
           search: query,
+          limit: this.filters?.limit ?? DEFAULT_SEARCH_BAR_LIMIT,
         })
         .pipe(
           map((page) => {
@@ -139,7 +141,7 @@ export class LmsSearchBarComponent implements OnChanges, ControlValueAccessor {
           this.selection = flat
           this.onChangeSelection()
         }
-        return flat.slice(0, 5)
+        return flat.slice(0, DEFAULT_SEARCH_BAR_LIMIT)
       }),
       tap(() => {
         this.isSearching = false

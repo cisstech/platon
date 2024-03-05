@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { OrderingDirections } from '@platon/core/common'
+import { MAX_PAGE_SIZE, MIN_PAGE_OFFSET, MIN_PAGE_SIZE, OrderingDirections } from '@platon/core/common'
 import { BaseDTO, toArray, toNumber } from '@platon/core/server'
 import { Course, CourseFilters, CourseOrderings, CreateCourse, UpdateCourse } from '@platon/feature/course/common'
 import { Transform, Type } from 'class-transformer'
-import { IsArray, IsEnum, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator'
+import { IsArray, IsEnum, IsNumber, IsOptional, IsString, IsUUID, Max, Min } from 'class-validator'
 import { CourseStatisticDTO } from './course-statistic/course-statistic.dto'
 import { CoursePermissionsDTO } from './permissions/permissions.dto'
 
@@ -79,11 +79,14 @@ export class CourseFiltersDTO implements CourseFilters {
   @Transform(({ value }) => toNumber(value))
   @IsNumber()
   @IsOptional()
+  @Min(MIN_PAGE_OFFSET)
   readonly offset?: number
 
   @Transform(({ value }) => toNumber(value))
   @IsNumber()
   @IsOptional()
+  @Min(MIN_PAGE_SIZE)
+  @Max(MAX_PAGE_SIZE)
   readonly limit?: number
 
   @IsEnum(CourseOrderings)

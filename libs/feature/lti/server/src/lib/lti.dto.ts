@@ -1,8 +1,8 @@
-import { OrderingDirections } from '@platon/core/common'
+import { MAX_PAGE_SIZE, MIN_PAGE_OFFSET, MIN_PAGE_SIZE, OrderingDirections } from '@platon/core/common'
 import { BaseDTO, toNumber } from '@platon/core/server'
 import { CreateLms, Lms, LmsFilters, LmsOrdering, UpdateLms } from '@platon/feature/lti/common'
 import { Transform } from 'class-transformer'
-import { IsEnum, IsNumber, IsOptional, IsString, IsUrl } from 'class-validator'
+import { IsEnum, IsNumber, IsOptional, IsString, IsUrl, Max, Min } from 'class-validator'
 
 export class LmsDTO extends BaseDTO implements Lms {
   @IsString()
@@ -68,11 +68,14 @@ export class LmsFiltersDTO implements LmsFilters {
   @Transform(({ value }) => toNumber(value))
   @IsNumber()
   @IsOptional()
+  @Min(MIN_PAGE_OFFSET)
   readonly offset?: number
 
   @Transform(({ value }) => toNumber(value))
   @IsNumber()
   @IsOptional()
+  @Min(MIN_PAGE_SIZE)
+  @Max(MAX_PAGE_SIZE)
   readonly limit?: number
 
   @IsEnum(LmsOrdering)
