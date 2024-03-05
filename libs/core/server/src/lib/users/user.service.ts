@@ -53,7 +53,8 @@ export class UserService {
       query.andWhere('active = :active', { active: !!filters.active })
     }
 
-    if (filters.search) {
+    const search = filters.search?.trim()
+    if (search) {
       query.andWhere(
         `(
         username ILIKE :search
@@ -61,7 +62,7 @@ export class UserService {
         OR f_unaccent(first_name) ILIKE f_unaccent(:search)
         OR f_unaccent(last_name) ILIKE f_unaccent(:search)
       )`,
-        { search: `%${filters.search}%` }
+        { search: `%${search}%` }
       )
     }
 

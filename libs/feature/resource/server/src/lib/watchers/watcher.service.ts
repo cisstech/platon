@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { NotFoundResponse, UserOrderings, USER_ORDERING_DIRECTIONS } from '@platon/core/common'
+import { NotFoundResponse, USER_ORDERING_DIRECTIONS, UserOrderings } from '@platon/core/common'
 import { ResourceWatcherFilters } from '@platon/feature/resource/common'
 import { Repository } from 'typeorm'
 import { Optional } from 'typescript-optional'
@@ -28,7 +28,8 @@ export class ResourceWatcherService {
     query.leftJoinAndSelect('watcher.user', 'user', 'user.id = watcher.user_id')
     query.where('watcher.resource_id = :resourceId', { resourceId })
 
-    if (filters.search) {
+    const search = filters.search?.trim()
+    if (search) {
       query.andWhere(
         `(
         user.username ILIKE :search
@@ -36,7 +37,7 @@ export class ResourceWatcherService {
         OR f_unaccent(user.first_name) ILIKE f_unaccent(:search)
         OR f_unaccent(user.last_name) ILIKE f_unaccent(:search)
       )`,
-        { search: `%${filters.search}%` }
+        { search: `%${search}%` }
       )
     }
 
