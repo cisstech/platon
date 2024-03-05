@@ -54,7 +54,7 @@ export class ResourcePermissionService {
     const shareds = members.map((m) => m.resourceId)
 
     return {
-      read: circle.personal ? this.applyRestrictifReadRule(user, circle, members, descendants, shareds) : true,
+      read: circle.personal ? this.applyRestrictifReadRule(user, circle, members, descendants, shareds) : true, // This logic is implemented in ResourceService in method change please report any change
       write:
         (user.role === UserRoles.admin && !circle.personal) || // user is admin and circle is not personal
         shareds.includes(circle.id) || // user is member of the circle
