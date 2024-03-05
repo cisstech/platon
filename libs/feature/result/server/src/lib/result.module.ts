@@ -55,6 +55,6 @@ import { SessionView } from './sessions/session.view'
     CourseExpander,
     ResourceExpander,
   ],
-  exports: [TypeOrmModule, AnswerService, SessionService, CorrectionService, SessionCommentService],
+  exports: [TypeOrmModule, AnswerService, SessionService, CorrectionService, SessionCommentService, LeaderboardService],
 })
 export class FeatureResultServerModule {}

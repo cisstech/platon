@@ -1,47 +1,48 @@
-import { Command, Handler } from '@discord-nestjs/core';
-import { CommandInteraction } from 'discord.js';
+import { Command, Handler, InteractionEvent, Param } from '@discord-nestjs/core';
 import { Injectable } from '@nestjs/common';
+import { Public } from '@platon/core/server'
+import { SlashCommandPipe } from '@discord-nestjs/common';
+import { LeaderboardService } from '@platon/feature/result/server';
+import { ActivityLeaderboardEntry, CourseLeaderboardEntry } from '@platon/feature/result/common';
+
+export class LeaderboardDTO {
+		@Param({ description: 'Provide the challenge id', required: true })
+		id: string = '';
+}
 
 @Command({
   name: 'leaderboard',
   description: 'Get current leaderboard.',
 })
+
+
 @Injectable()
 export class LeaderboardCommand {
-    leaderboard = [{
-        name: 'Valentin',
-        points: 100,
-    }, {
-        name: 'MAthieu',
-        points: 90,
-    }, {
-        name: 'MAmadou',
-        points: 80,
-    }, {
-        name: 'DOminique',
-        points: 70,
-    }, {
-        name: 'NIcolas',
-        points: 60,
-    }, {
-        name: 'Tgomas',
-        points: 50,
-    }, {
-        name: 'Olivier',
-        points: 40,
-    }, {
-        name: 'Koïchiro',
-        points: 30,
-    }, {
-        name: 'Latable',
-        points: 20,
-    }, {
-        name: 'L\'affiche de monsieur borie',
-        points: 10,
-    }];
 
+	constructor(private readonly leaderBoardService : LeaderboardService) {}
+
+  async courseLeaderboard(id : string): Promise<CourseLeaderboardEntry[]> {
+		const leaderboard = await this.leaderBoardService.ofCourse(id);
+		return leaderboard;
+	}
+
+	async activityLeaderboard(id : string): Promise<ActivityLeaderboardEntry[]> {
+		const leaderboard = await this.leaderBoardService.ofActivity(id);
+		return leaderboard;
+	}
+
+  @Public()
   @Handler()
-  onLeaderboard(interaction: CommandInteraction): string {
-    return this.leaderboard.map((user, index) => `${index + 1}. ${user.name} - ${user.points}`).join('\n');
+  async onLeaderboard(@InteractionEvent(SlashCommandPipe) command: LeaderboardDTO): Promise<string> {
+		const leaderboard = await this.courseLeaderboard(command.id);
+		const activityLeaderboard = await this.activityLeaderboard(command.id);
+		console.log(command.id);
+		console.log("course lb : "+leaderboard);
+		console.log("Activity lb : "+activityLeaderboard);
+		let response = '';	
+		leaderboard.forEach((entry, index) => {
+			response += `${index + 1}. ${entry.user} - ${entry.points}\n`;
+		});
+		return response;
   }
 }

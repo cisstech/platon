@@ -1,7 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Once, InjectDiscordClient, On } from '@discord-nestjs/core';
 import { Client, Message } from 'discord.js';
-import { Public } from '@platon/core/server';
 
 @Injectable()
 export class FeatureDiscordServerGateway {
@@ -13,6 +12,5 @@ export class FeatureDiscordServerGateway {
   ) {
     this.logger.log('Client was created!');
   }
-
 
 }
