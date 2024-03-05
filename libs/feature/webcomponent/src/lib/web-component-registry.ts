@@ -25,6 +25,7 @@ import { PresenterComponentDefinition } from './widgets/presenter/presenter'
 import { ChartViewerPiesComponentDefinition } from './widgets/chart-viewer-pies/chart-viewer-pies'
 import { ChartViewerBarsComponentDefinition } from './widgets/chart-viewer-bars/chart-viewer-bars'
 import { ChartViewerRadarComponentDefinition } from './widgets/chart-viewer-radar/chart-viewer-radar'
+import { FoldableFeedbackComponentDefinition } from './widgets/foldable-feedback/foldable-feedback'
 
 export const WEB_COMPONENTS_BUNDLES: NgeElementDef[] = [
   // INTERNALS
@@ -172,6 +173,13 @@ export const WEB_COMPONENTS_BUNDLES: NgeElementDef[] = [
         /* webpackChunkName: "wc-chart-viewer-radar" */ './widgets/chart-viewer-radar/chart-viewer-radar.module'
       ).then((m) => m.ChartViewerRadarModule),
   },
+  {
+    selector: 'wc-foldable-feedback',
+    module: () =>
+      import(
+        /* webpackChunkName: "wc-foldable-feedback" */ './widgets/foldable-feedback/foldable-feedback.module'
+      ).then((m) => m.FoldableFeedbackModule),
+  },
 ]
 
 export const WEB_COMPONENTS_REGISTRY: Provider[] = [
@@ -284,5 +292,10 @@ export const WEB_COMPONENTS_REGISTRY: Provider[] = [
     provide: WEB_COMPONENT_DEFINITIONS,
     multi: true,
     useValue: ChartViewerRadarComponentDefinition,
+  },
+  {
+    provide: WEB_COMPONENT_DEFINITIONS,
+    multi: true,
+    useValue: FoldableFeedbackComponentDefinition,
   },
 ]

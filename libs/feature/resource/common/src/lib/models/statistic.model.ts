@@ -18,6 +18,11 @@ export interface ActivityResourceStatistic {
 export interface ExerciseResourceStatistic {
   readonly attemptCount: number
   readonly successRate: number
+  readonly references?: {
+    readonly total: number
+    readonly activity: number
+    readonly template: number
+  }
 }
 
 export interface ResourceStatistic {

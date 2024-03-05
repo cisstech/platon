@@ -3,12 +3,12 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { IRequest } from '@platon/core/server'
 import { ResourceStatistic, ResourceTypes } from '@platon/feature/resource/common'
-import { ResourceDTO, ResourceStatisticEntity } from '@platon/feature/resource/server'
+import { ResourceDTO, ResourceDependencyEntity, ResourceStatisticEntity } from '@platon/feature/resource/server'
 import { IsNull, Not, Repository } from 'typeorm'
-import { SessionView } from '../sessions/session.view'
-import { SessionSuccessRate } from '../dashboard/aggregators/session.aggregator'
 import { ActivityTotalAttempts } from '../dashboard/aggregators/activity.aggregator'
-import { ExerciseTotalAttempts } from '../dashboard/aggregators/exercise.aggregator'
+import { ExerciseUniqueAttempts } from '../dashboard/aggregators/exercise.aggregator'
+import { SessionSuccessRate } from '../dashboard/aggregators/session.aggregator'
+import { SessionView } from '../sessions/session.view'
 
 @Injectable()
 @Expander(ResourceDTO)
@@ -16,36 +16,58 @@ export class ResourceExpander {
   constructor(
     @InjectRepository(SessionView)
     private readonly sessionView: Repository<SessionView>,
+
     @InjectRepository(ResourceStatisticEntity)
-    private readonly statisticView: Repository<ResourceStatisticEntity>
+    private readonly statisticView: Repository<ResourceStatisticEntity>,
+
+    @InjectRepository(ResourceDependencyEntity)
+    private readonly dependencyRepo: Repository<ResourceDependencyEntity>
   ) {}
 
   async statistic(context: ExpandContext<IRequest, ResourceDTO>): Promise<ResourceStatistic | undefined> {
     const { parent } = context
 
-    const statistic = await this.statisticView.findOne({
-      where: { id: parent.id },
-    })
-
+    const statistic = await this.statisticView.findOne({ where: { id: parent.id } })
     if (!statistic) {
       return undefined
     }
 
-    const sessions = await this.sessionView.find({
-      where: {
-        resourceId: parent.id,
-        userId: Not(IsNull()),
-      },
-    })
+    const [sessions, references] = await Promise.all([
+      this.sessionView.find({
+        where: { resourceId: parent.id, userId: Not(IsNull()) },
+      }),
+      this.dependencyRepo.find({
+        where: {
+          dependOnId: parent.id,
+        },
+        select: {
+          resource: {
+            type: true,
+          },
+        },
+        relations: {
+          resource: true,
+        },
+      }),
+    ])
 
     const successRate = new SessionSuccessRate()
     const activityTotalAttempts = new ActivityTotalAttempts()
-    const exerciseTotalAttempts = new ExerciseTotalAttempts()
+    const exerciseUniqueAttempts = new ExerciseUniqueAttempts()
 
-    const aggregators = [successRate, activityTotalAttempts, exerciseTotalAttempts]
+    const aggregators = [successRate, activityTotalAttempts, exerciseUniqueAttempts]
     sessions.forEach((session) => aggregators.forEach((aggregator) => aggregator.next(session)))
-
     aggregators.forEach((aggregator) => aggregator.complete())
+
+    let refCount = 0
+    let activityRefCount = 0
+    let templateRefCount = 0
+    references.forEach((ref) => {
+      activityRefCount += ref.resource.type === ResourceTypes.ACTIVITY ? 1 : 0
+      templateRefCount += ref.resource.type === ResourceTypes.EXERCISE ? 1 : 0
+    })
+
+    refCount = activityRefCount + templateRefCount
 
     return {
       score: statistic.score,
@@ -65,6 +87,7 @@ export class ResourceExpander {
               draft: statistic.draft,
             }
           : undefined,
+
       activity:
         parent.type === ResourceTypes.ACTIVITY
           ? {
@@ -75,8 +98,15 @@ export class ResourceExpander {
       exercise:
         parent.type === ResourceTypes.EXERCISE
           ? {
-              attemptCount: exerciseTotalAttempts.complete(),
+              attemptCount: exerciseUniqueAttempts.complete(),
               successRate: successRate.complete(),
+              references: refCount
+                ? {
+                    total: refCount,
+                    activity: activityRefCount,
+                    template: templateRefCount,
+                  }
+                : undefined,
             }
           : undefined,
     }

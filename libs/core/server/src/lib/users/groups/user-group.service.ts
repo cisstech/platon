@@ -3,10 +3,10 @@ import { InjectRepository } from '@nestjs/typeorm'
 import {
   CreateUserGroup,
   NotFoundResponse,
-  OrderingDirections,
   UpdateUserGroup,
   UserGroupFilters,
   UserGroupOrderings,
+  USER_GROUP_ORDERING_DIRECTIONS,
 } from '@platon/core/common'
 import { Repository } from 'typeorm'
 import { UserEntity } from '../user.entity'
@@ -42,13 +42,7 @@ export class UserGroupService {
         UPDATED_AT: 'updated_at',
       }
 
-      const orderings: Record<UserGroupOrderings, keyof typeof OrderingDirections> = {
-        NAME: 'ASC',
-        CREATED_AT: 'DESC',
-        UPDATED_AT: 'DESC',
-      }
-
-      query.orderBy(fields[filters.order], filters.direction || orderings[filters.order])
+      query.orderBy(fields[filters.order], filters.direction || USER_GROUP_ORDERING_DIRECTIONS[filters.order])
     } else {
       query.orderBy('name', 'ASC')
     }

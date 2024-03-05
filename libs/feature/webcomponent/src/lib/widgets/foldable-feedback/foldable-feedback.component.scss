@@ -1,0 +1,91 @@
+.code {
+  background-color: black;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: text;
+  pointer-events: visibleFill;
+}
+
+.args {
+  background-color: black;
+  color: white;
+  padding: 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: fit-content;
+  border-radius: 5px;
+  cursor: text;
+}
+
+.success {
+  background-color: #9FFF9F;
+  border: 2px solid #00FF00;
+  border-radius: 10px;
+  padding: 5px;
+  margin: 5px;
+}
+
+.warning {
+  background-color: #FFCF9F;
+  border: 2px solid #FF8000;
+  border-radius: 10px;
+  padding: 5px;
+  margin: 5px;
+}
+
+.error {
+  background-color: #FF9F9F;
+  border: 2px solid #FF0000;
+  border-radius: 10px;
+  padding: 5px;
+  margin: 5px;
+}
+
+.info {
+  background-color: #9F9FFF;
+  border: 2px solid #0000FF;
+  border-radius: 10px;
+  padding: 5px;
+  margin: 5px;
+}
+
+h2 {
+  margin: 0px;
+  margin-left: 10px;
+  margin-right: 10px;
+  font-weight: bold;
+  border: none;
+}
+
+h2:hover {
+  text-decoration: underline;
+}
+
+.foldable-feedback {
+  cursor:pointer;
+}
+
+h3 {
+  margin-top: 0;
+  margin-bottom: 0.5em;
+  font-weight: 500;
+  font-size: 1.17em;
+}
+
+.show {
+  display: block;
+  padding: 10px;
+}
+
+.hide {
+  display: none;
+}
+
+pre {
+  margin-top: 0;
+  margin-bottom: 1em;
+  font-size: 1em;
+  background: none;
+  padding: 0;
+}

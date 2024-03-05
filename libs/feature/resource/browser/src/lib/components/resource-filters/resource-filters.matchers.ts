@@ -1,5 +1,7 @@
+import { Topic } from '@platon/core/common'
 import {
   CircleTree,
+  RESOURCE_ORDERING_DIRECTIONS,
   ResourceFilters,
   ResourceOrderings,
   ResourceStatus,
@@ -7,7 +9,9 @@ import {
 } from '@platon/feature/resource/common'
 import { FilterIndicator } from '@platon/shared/ui'
 import { RESOURCE_ORDERING_NAMES, RESOURCE_STATUS_NAMES, RESOURCE_TYPE_NAMES } from '../../pipes'
-import { Topic } from '@platon/core/common'
+import { inject } from '@angular/core'
+import { ResourceService } from '../../api/resource.service'
+import { firstValueFrom } from 'rxjs'
 
 export const CircleFilterIndicator = (circle: CircleTree): FilterIndicator<ResourceFilters> => {
   return {
@@ -46,8 +50,23 @@ export const ResourceOrderingFilterIndicator = (ordering: ResourceOrderings): Fi
     remove: (filters: ResourceFilters) => ({
       ...filters,
       order: undefined,
+      direction: undefined,
     }),
-    describe: () => 'Trier par ' + RESOURCE_ORDERING_NAMES[ordering],
+    describe: (filters) => {
+      const value = `${ordering}-${filters.direction || RESOURCE_ORDERING_DIRECTIONS[ordering]}`
+      return (
+        {
+          'NAME-ASC': 'Trier par Nom de A à Z',
+          'NAME-DESC': 'Trier par Nom de Z à A',
+          'CREATED_AT-DESC': 'Trier par Création : Récent-Ancient',
+          'CREATED_AT-ASC': 'Trier par Création : Ancient-Récent',
+          'UPDATED_AT-DESC': 'Trier par MàJ : Récente-Ancienne',
+          'UPDATED_AT-ASC': 'Trier par MàJ : Ancienne-Récente',
+          'RELEVANCE-DESC': 'Trier par Pertinence : Plus-Moins',
+          'RELEVANCE-ASC': 'Trier par Pertinence : Moins-Plus',
+        }[value] || `Trier par ${RESOURCE_ORDERING_NAMES}`
+      )
+    },
   }
 }
 
@@ -79,5 +98,31 @@ export const LevelFilterIndicator = (level: Topic): FilterIndicator<ResourceFilt
       levels: filters.levels?.filter((e) => e !== level.id),
     }),
     describe: () => `Possède le niveau "${level.name}"`,
+  }
+}
+
+export const ResourceDependOnFilterIndicator = (): FilterIndicator<ResourceFilters> => {
+  const resourceService = inject(ResourceService)
+  return {
+    match: (filters) => {
+      return !!filters.dependOn
+    },
+    remove: (filters: ResourceFilters) => ({
+      ...filters,
+      dependOn: undefined,
+    }),
+    describe: async (filters) => {
+      const dependOn = await Promise.all(
+        filters.dependOn!.map(async (id) => {
+          try {
+            const resource = await firstValueFrom(resourceService.find({ id, selects: ['name'] }))
+            return resource.name
+          } catch {
+            return id
+          }
+        })
+      )
+      return 'Dépend de ' + dependOn.map((name) => `“${name}”`).join(', ')
+    },
   }
 }

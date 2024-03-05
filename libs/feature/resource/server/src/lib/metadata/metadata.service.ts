@@ -21,6 +21,7 @@ import { ResourceFileService } from '../files/file.service'
 import { Repo } from '../files/repo'
 import { ResourceEntity } from '../resource.entity'
 import { ResourceMetaEntity } from './metadata.entity'
+import { ON_CREATE_RESOURCE_EVENT, OnCreateResourceEventPayload } from '../resource.event'
 
 type SyncArgs = {
   repo?: Repo
@@ -190,6 +191,15 @@ export class ResourceMetadataService {
     const metadata = await this.of(resource.id, entityManager)
     metadata.meta = meta
 
+    if (resource.templateId) {
+      await this.dependencyService.upsert({
+        resourceId: resource.id,
+        resourceVersion: LATEST,
+        dependOnId: resource.templateId,
+        dependOnVersion: resource.templateVersion || LATEST,
+      })
+    }
+
     return entityManager ? await entityManager.save(metadata) : await this.repository.save(metadata)
   }
 
@@ -226,6 +236,24 @@ export class ResourceMetadataService {
       }
     } catch (error) {
       this.logger.error('Error handling ON_CHANGE_FILE_EVENT', error)
+    }
+  }
+
+  @OnEvent(ON_CREATE_RESOURCE_EVENT)
+  protected async onCreateResource(payload: OnCreateResourceEventPayload): Promise<void> {
+    try {
+      this.logger.log('Handling ON_CREATE_RESOURCE_EVENT')
+      const { resource } = payload
+      if (resource.templateId) {
+        await this.dependencyService.upsert({
+          resourceId: resource.id,
+          resourceVersion: LATEST,
+          dependOnId: resource.templateId,
+          dependOnVersion: resource.templateVersion || LATEST,
+        })
+      }
+    } catch (error) {
+      this.logger.error('Error handling ON_CREATE_RESOURCE_EVENT', error)
     }
   }
 }

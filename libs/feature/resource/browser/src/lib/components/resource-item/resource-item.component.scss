@@ -1,16 +1,3 @@
-.spacer {
-  flex: 1;
-}
-
-.action {
-  cursor: pointer;
-}
-
-.icon-configurable {
-  display: inline-block;
-  margin-left: 0.5rem;
-}
-
 :host::ng-deep {
   .article-title {
     max-width: 75%;
@@ -29,7 +16,24 @@
   }
 }
 
+.spacer {
+  flex: 1;
+}
+
+.action {
+  cursor: pointer;
+}
+
+.icon-configurable {
+  display: inline-block;
+  margin-left: 0.5rem;
+}
+
 .resource-item-stats {
   color: var(--brand-text-secondary);
   font-size: 1rem;
+}
+
+.btn-show-references {
+  padding: 0;
 }

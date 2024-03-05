@@ -21,8 +21,11 @@ import { ExerciseResourceMeta, Resource } from '@platon/feature/resource/common'
 
 import { UiModalIFrameComponent, positiveGreenColor } from '@platon/shared/ui'
 
+import { RouterModule } from '@angular/router'
 import { StorageService } from '@platon/core/browser'
 import { Variables } from '@platon/feature/compiler'
+import { NzButtonModule } from 'ng-zorro-antd/button'
+import { NzPopoverModule } from 'ng-zorro-antd/popover'
 import { firstValueFrom } from 'rxjs'
 import { ResourcePipesModule } from '../../pipes'
 
@@ -40,11 +43,15 @@ type Tag = {
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
+    RouterModule,
 
     MatIconModule,
+
     NzIconModule,
     NzBadgeModule,
+    NzButtonModule,
     NzToolTipModule,
+    NzPopoverModule,
 
     NgeUiListModule,
     UiModalIFrameComponent,

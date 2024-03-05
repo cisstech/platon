@@ -49,6 +49,11 @@ export const EXERCISE_DROP_OUT_RATE = 'exercise.drop-out-rate'
 export const EXERCISE_TOTAL_ATTEMPTS = 'exercise.total-attempts'
 
 /**
+ * Total number of unique attempts for an exercise.
+ */
+export const EXERCISE_UNIQUE_ATTEMPTS = 'exercise.unique-attempts'
+
+/**
  * Average number of attempts per exercise session.
  */
 export const EXERCISE_AVERAGE_ATTEMPTS = 'exercise.average-attempts'
