@@ -29,6 +29,9 @@ export interface Configuration {
     url: string
     envLifespan: number
   }
+  discord: {
+    token: string
+  }
 }
 
 export const configuration = (): Configuration => ({
@@ -60,5 +63,8 @@ export const configuration = (): Configuration => ({
     url: process.env['SANDBOX_URL'] as string,
     // 1 week = 7 * 24 * 60 * 60 = 604800 seconds.
     envLifespan: Number.parseInt(process.env['SANDBOX_ENV_LIFESPAN'] || '604800'),
+  },
+  discord: {
+    token: process.env['DISCORD_BOT_TOKEN'] as string,
   },
 })

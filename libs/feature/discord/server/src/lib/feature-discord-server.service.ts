@@ -16,7 +16,7 @@ const agent = new ProxyAgent({ uri: proxy });
 export class FeatureDiscordServerService implements DiscordOptionsFactory {
   createDiscordOptions(): DiscordModuleOption {
     return {
-      token: '',
+      token: process.env['DISCORD_BOT_TOKEN'] as string,
       discordClientOptions: {
         intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent],
         rest: { agent },
