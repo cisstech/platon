@@ -1,16 +1,19 @@
 import { Command, InteractionEvent, Handler, Param, ParamType } from '@discord-nestjs/core';
 import { SlashCommandPipe } from '@discord-nestjs/common';
 import { Injectable } from '@nestjs/common';
+import { Public } from '@platon/core/server';
+
 
 export class rankDTO {
     @Param({ description: 'User name', required: true })
-    name!: string;
+    name: string = '';
 }
 
 @Command({
   name: 'rank',
   description: 'Get someone\'s rank.',
 })
+
 @Injectable()
 export class RankCommand {
     leaderboard = [{
@@ -30,7 +33,7 @@ export class RankCommand {
         points: 60,
     }, {
         name: 'Tgomas',
-        points: 50,
+        points: 70,
     }, {
         name: 'Olivier',
         points: 40,
@@ -50,6 +53,7 @@ export class RankCommand {
     }];
 
 
+  @Public()
   @Handler()
   onRank(@InteractionEvent(SlashCommandPipe) command: rankDTO): string {
     const user = this.leaderboard.find((user) => user.name.toLowerCase() === command.name.toLowerCase());
