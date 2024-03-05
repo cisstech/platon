@@ -3,7 +3,7 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common'
 import { CoreServerModule } from '@platon/core/server'
 import { FeatureCasServerModule } from '@platon/feature/cas/server'
 import { FeatureCourseServerModule } from '@platon/feature/course/server'
-import { FeatureDiscordServerService } from '@platon/feature/discord/server'
+import { FeatureDiscordServerModule, FeatureDiscordServerService } from '@platon/feature/discord/server'
 import { FeatureLtiServerModule, LTIMiddleware } from '@platon/feature/lti/server'
 import { FeatureNotificationServerModule } from '@platon/feature/notification/server'
 import { FeaturePlayerServerModule } from '@platon/feature/player/server'
@@ -25,6 +25,7 @@ import { CommandsModule } from './commands/commands.module'
     DiscordModule.forRootAsync({
       useClass: FeatureDiscordServerService,
     }),
+    FeatureDiscordServerModule,
   ],
 })
 export class AppModule implements NestModule {
