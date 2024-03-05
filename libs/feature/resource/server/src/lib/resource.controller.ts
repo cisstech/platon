@@ -25,6 +25,7 @@ export class ResourceController {
   @Selectable({ rootField: 'resources' })
   async search(@Req() req: IRequest, @Query() filters: ResourceFiltersDTO = {}): Promise<ListResponse<ResourceDTO>> {
     let resources: ResourceDTO[] = []
+
     let total = 0
     if (filters.views) {
       const response = await this.resourceViewService.findAll(req.user.id)
@@ -37,24 +38,15 @@ export class ResourceController {
       const response = await this.resourceService.search(filters, req.user.id) // returns only resources the user has read access to
       resources = Mapper.mapAll(response[0], ResourceDTO)
       total = response[1]
-      return new ListResponse({
-        total,
-        resources: resources.map((e) => {
-          Object.assign(e, { permissions: { read: true, write: false, manage: false } })
-          return e
-        }),
-      })
     }
 
     const resourceWithPermissions = await this.permissionService.userPermissionsOnResources(resources, req.user)
     return new ListResponse({
       total,
-      resources: resourceWithPermissions
-        .filter((e) => e.permissions.read)
-        .map((e) => {
-          Object.assign(e.resource, { permissions: e.permissions })
-          return e.resource
-        }),
+      resources: resourceWithPermissions.map((e) => {
+        Object.assign(e.resource, { permissions: e.permissions })
+        return e.resource
+      }),
     })
   }
 
