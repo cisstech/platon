@@ -82,7 +82,7 @@
   <ng-container [ngPlural]="item.statistic?.exercise?.references?.total || 0">
     <ng-template ngPluralCase="=0">Aucune référence</ng-template>
     <ng-template ngPluralCase="=1">1 référence</ng-template>
-    <ng-template ngPluralCase="other">{{ attemptCount }} références</ng-template>
+    <ng-template ngPluralCase="other">{{ item.statistic?.exercise?.references?.total || 0 }} références</ng-template>
   </ng-container>
 </ng-template>
 
