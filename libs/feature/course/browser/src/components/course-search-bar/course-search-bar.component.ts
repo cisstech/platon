@@ -9,6 +9,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzIconModule } from 'ng-zorro-antd/icon'
 
 import { NgeUiListModule } from '@cisstech/nge/ui/list'
+import { DEFAULT_SEARCH_BAR_LIMIT } from '@platon/core/common'
 import { Course, CourseFilters } from '@platon/feature/course/common'
 import { SearchBar, UiSearchBarComponent } from '@platon/shared/ui'
 import { CourseService } from '../../api/course.service'
@@ -31,7 +32,7 @@ import { CourseItemComponent } from '../course-item/course-item.component'
 })
 export class CourseSearchBarComponent implements ControlValueAccessor {
   @Input() multi = false
-  @Input() filters?: CourseFilters
+  @Input() filters?: CourseFilters = { limit: DEFAULT_SEARCH_BAR_LIMIT }
   @Input() disabled = false
   @Input() excludes: string[] = []
 
@@ -88,10 +89,11 @@ export class CourseSearchBarComponent implements ControlValueAccessor {
       .search({
         ...(this.filters || {}),
         search: query,
+        limit: this.filters?.limit ?? DEFAULT_SEARCH_BAR_LIMIT,
       })
       .pipe(
         map((page) => {
-          return page.resources.filter(this.isSelectable.bind(this)).slice(0, 5)
+          return page.resources.filter(this.isSelectable.bind(this)).slice(0, DEFAULT_SEARCH_BAR_LIMIT)
         })
       )
   }

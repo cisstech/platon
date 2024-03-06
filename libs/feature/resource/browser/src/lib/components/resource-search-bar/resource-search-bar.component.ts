@@ -9,6 +9,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzIconModule } from 'ng-zorro-antd/icon'
 
 import { NgeUiListModule } from '@cisstech/nge/ui/list'
+import { DEFAULT_SEARCH_BAR_LIMIT } from '@platon/core/common'
 import { Resource, ResourceFilters } from '@platon/feature/resource/common'
 import { SearchBar, UiSearchBarComponent } from '@platon/shared/ui'
 import { ResourceService } from '../../api/resource.service'
@@ -31,7 +32,7 @@ import { ResourceItemComponent } from '../resource-item/resource-item.component'
 })
 export class ResourceSearchBarComponent implements ControlValueAccessor {
   @Input() multi = false
-  @Input() filters?: ResourceFilters
+  @Input() filters?: ResourceFilters = { limit: DEFAULT_SEARCH_BAR_LIMIT }
   @Input() disabled = false
   @Input() excludes: string[] = []
 
@@ -95,10 +96,11 @@ export class ResourceSearchBarComponent implements ControlValueAccessor {
         ...(this.filters || {}),
         search: query,
         expands: ['metadata', 'statistic'],
+        limit: this.filters?.limit ?? DEFAULT_SEARCH_BAR_LIMIT,
       })
       .pipe(
         map((page) => {
-          return page.resources.filter(this.isSelectable.bind(this)).slice(0, 5)
+          return page.resources.filter(this.isSelectable.bind(this)).slice(0, DEFAULT_SEARCH_BAR_LIMIT)
         })
       )
   }

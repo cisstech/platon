@@ -19,7 +19,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzIconModule } from 'ng-zorro-antd/icon'
 
 import { NgeUiListModule } from '@cisstech/nge/ui/list'
-import { User, UserFilters, UserGroup } from '@platon/core/common'
+import { DEFAULT_SEARCH_BAR_LIMIT, User, UserFilters, UserGroup } from '@platon/core/common'
 import { SearchBar, UiSearchBarComponent } from '@platon/shared/ui'
 import { UserService } from '../../api/user.service'
 import { UserAvatarComponent } from '../user-avatar/user-avatar.component'
@@ -103,7 +103,7 @@ export class UserSearchBarComponent implements OnInit, OnChanges, ControlValueAc
   /**
    * Custom filters to apply to the search.
    */
-  @Input() filters: UserFilters = { limit: 5 }
+  @Input() filters: UserFilters = { limit: DEFAULT_SEARCH_BAR_LIMIT }
 
   /**
    * Total number of users or groups matching the current search.
@@ -195,7 +195,7 @@ export class UserSearchBarComponent implements OnInit, OnChanges, ControlValueAc
         this.userService
           .searchUserGroups({
             search: query,
-            limit: this.filters.limit ?? 5,
+            limit: this.filters.limit ?? DEFAULT_SEARCH_BAR_LIMIT,
           })
           .pipe(
             map((page) => {
@@ -216,7 +216,7 @@ export class UserSearchBarComponent implements OnInit, OnChanges, ControlValueAc
           this.selection = flat
           this.onChangeSelection()
         }
-        return flat.slice(0, 5)
+        return flat.slice(0, DEFAULT_SEARCH_BAR_LIMIT)
       }),
       tap(() => {
         this.isSearching = false
