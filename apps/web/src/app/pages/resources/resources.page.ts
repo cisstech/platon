@@ -194,11 +194,11 @@ export default class ResourcesPage implements OnInit, OnDestroy {
       this.activatedRoute.queryParams.subscribe(async (e: QueryParams) => {
         this.filters = {
           ...this.filters,
-          search: e.q,
+          search: typeof e.q === 'string' ? (e.q.length > 0 ? e.q : undefined) : undefined,
           parents: e.parents ? (typeof e.parents === 'string' ? [e.parents] : e.parents) : undefined,
           topics: e.topics ? (typeof e.topics === 'string' ? [e.topics] : e.topics) : undefined,
           levels: e.levels ? (typeof e.levels === 'string' ? [e.levels] : e.levels) : undefined,
-          period: Number.parseInt(e.period + '', 10) || 0,
+          period: Number.parseInt(e.period + '', 10) || undefined,
           order: e.order,
           direction: e.direction,
           types: typeof e.types === 'string' ? [e.types] : e.types,
@@ -240,7 +240,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
 
   protected search(filters: ResourceFilters, query?: string) {
     const queryParams: QueryParams = {
-      q: query,
+      q: query?.length || 0 ? query : undefined,
       period: filters.period,
       order: filters.order,
       direction: filters.direction,
