@@ -12,6 +12,7 @@ export interface ActivityLeaderboardEntry {
   readonly grade: number
   readonly points: number
   readonly startedAt: Date
+  readonly succeededAt: Date
   readonly lastGradedAt: Date
 }
 export interface FindCourseLeaderboard {

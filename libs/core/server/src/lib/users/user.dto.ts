@@ -1,7 +1,29 @@
 import { Field, InputType, Int } from '@nestjs/graphql'
-import { OrderingDirections, UpdateUser, User, UserFilters, UserOrderings, UserRoles } from '@platon/core/common'
+import {
+  MAX_PAGE_SIZE,
+  MIN_PAGE_OFFSET,
+  MIN_PAGE_SIZE,
+  OrderingDirections,
+  UpdateUser,
+  User,
+  UserFilters,
+  UserOrderings,
+  UserRoles,
+} from '@platon/core/common'
 import { Exclude, Transform } from 'class-transformer'
-import { IsArray, IsBoolean, IsDate, IsEmail, IsEnum, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator'
+import {
+  IsArray,
+  IsBoolean,
+  IsDate,
+  IsEmail,
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUUID,
+  Max,
+  Min,
+} from 'class-validator'
 import { UUID } from '../graphql'
 import { BaseDTO, toArray, toBoolean, toNumber } from '../utils'
 
@@ -102,12 +124,14 @@ export class UserFiltersDTO implements UserFilters {
   @Transform(({ value }) => toNumber(value))
   @IsNumber()
   @IsOptional()
+  @Min(MIN_PAGE_OFFSET)
   readonly offset?: number
 
-  @Field(() => Int, { nullable: true })
   @Transform(({ value }) => toNumber(value))
   @IsNumber()
   @IsOptional()
+  @Min(MIN_PAGE_SIZE)
+  @Max(MAX_PAGE_SIZE)
   readonly limit?: number
 
   @Field(() => UserOrderings, { nullable: true })

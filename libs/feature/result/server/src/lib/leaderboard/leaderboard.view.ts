@@ -7,7 +7,7 @@ import { JoinColumn, ManyToOne, PrimaryColumn, ViewColumn, ViewEntity } from 'ty
  * Represents a view entity that ranks sessions by grade and duration.
  * @remarks
  * - The ranking is based on the grade and duration of the session.
- * - Only sessions with a positive grade and a last_graded_at date are considered.
+ * - Only sessions with `succeeded_at` date are considered.
  * - Sessions that are not bound to an activity or user are ignored.
  * - To rank a specific activity, resource, or course, use the respective IDs while querying the view with a WHERE clause.
  */
@@ -24,11 +24,13 @@ import { JoinColumn, ManyToOne, PrimaryColumn, ViewColumn, ViewEntity } from 'ty
         session.activity_id,
         COALESCE(correction.grade, session.grade) as grade,
         session.started_at,
+        session.succeeded_at,
         session.last_graded_at,
         session.source->>'resource' as resource_id,
         ROW_NUMBER() OVER (
           ORDER BY
           COALESCE(correction.grade, session.grade) DESC,
+          session.succeeded_at ASC,
           session.last_graded_at - session.started_at ASC
         ) AS rank
       FROM "Sessions" session
@@ -36,9 +38,8 @@ import { JoinColumn, ManyToOne, PrimaryColumn, ViewColumn, ViewEntity } from 'ty
       LEFT JOIN "Corrections" correction ON correction.id = session.correction_id
       WHERE
         session.activity_id IS NOT NULL
-        AND session.last_graded_at IS NOT NULL
         AND session.user_id IS NOT NULL
-        AND (session.grade IS NOT NULL AND session.grade > 0)
+        AND session.succeeded_at IS NOT NULL
     )
 
     -- Main query to order sessions by rank
@@ -51,6 +52,7 @@ import { JoinColumn, ManyToOne, PrimaryColumn, ViewColumn, ViewEntity } from 'ty
       resource_id,
       grade,
       started_at,
+      succeeded_at,
       last_graded_at
     FROM RankedSessions session
     ORDER BY rank
@@ -85,6 +87,9 @@ export class LeaderboardView {
 
   @ViewColumn({ name: 'started_at' })
   startedAt!: Date
+
+  @ViewColumn({ name: 'succeeded_at' })
+  succeededAt!: Date
 
   @ViewColumn({ name: 'last_graded_at' })
   lastGradedAt!: Date

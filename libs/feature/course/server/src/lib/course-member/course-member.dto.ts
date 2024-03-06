@@ -1,9 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { OrderingDirections, UserOrderings, UserRoles } from '@platon/core/common'
-import { BaseDTO, toArray, toBoolean, toNumber, UserDTO, UserGroupDTO } from '@platon/core/server'
+import {
+  MAX_PAGE_SIZE,
+  MIN_PAGE_OFFSET,
+  MIN_PAGE_SIZE,
+  OrderingDirections,
+  UserOrderings,
+  UserRoles,
+} from '@platon/core/common'
+import { BaseDTO, UserDTO, UserGroupDTO, toArray, toBoolean, toNumber } from '@platon/core/server'
 import { CourseMember, CourseMemberFilters, CreateCourseMember } from '@platon/feature/course/common'
 import { Transform, Type } from 'class-transformer'
-import { IsBoolean, IsEnum, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator'
+import { IsBoolean, IsEnum, IsNumber, IsOptional, IsString, IsUUID, Max, Min } from 'class-validator'
 
 export class CourseMemberDTO extends BaseDTO implements CourseMember {
   @IsUUID()
@@ -47,11 +54,14 @@ export class CourseMemberFiltersDTO implements CourseMemberFilters {
   @Transform(({ value }) => toNumber(value))
   @IsNumber()
   @IsOptional()
+  @Min(MIN_PAGE_OFFSET)
   readonly offset?: number
 
   @Transform(({ value }) => toNumber(value))
   @IsNumber()
   @IsOptional()
+  @Min(MIN_PAGE_SIZE)
+  @Max(MAX_PAGE_SIZE)
   readonly limit?: number
 
   @IsEnum(UserOrderings)

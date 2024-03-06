@@ -1,6 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger'
 import {
   CreateUserGroup,
+  MAX_PAGE_SIZE,
+  MIN_PAGE_OFFSET,
+  MIN_PAGE_SIZE,
   OrderingDirections,
   UpdateUserGroup,
   UserGroup,
@@ -8,7 +11,7 @@ import {
   UserGroupOrderings,
 } from '@platon/core/common'
 import { Transform, Type } from 'class-transformer'
-import { IsArray, IsEnum, IsNumber, IsOptional, IsString } from 'class-validator'
+import { IsArray, IsEnum, IsNumber, IsOptional, IsString, Max, Min } from 'class-validator'
 import { BaseDTO, toNumber } from '../../utils'
 import { UserDTO } from '../user.dto'
 
@@ -54,11 +57,14 @@ export class UserGroupFiltersDTO implements UserGroupFilters {
   @Transform(({ value }) => toNumber(value))
   @IsNumber()
   @IsOptional()
+  @Min(MIN_PAGE_OFFSET)
   readonly offset?: number
 
   @Transform(({ value }) => toNumber(value))
   @IsNumber()
   @IsOptional()
+  @Min(MIN_PAGE_SIZE)
+  @Max(MAX_PAGE_SIZE)
   readonly limit?: number
 
   @IsEnum(UserGroupOrderings)

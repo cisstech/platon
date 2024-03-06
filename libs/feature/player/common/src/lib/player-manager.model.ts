@@ -174,12 +174,17 @@ export abstract class PlayerManager {
       variables: exerciseSession.variables,
     })
 
+    if (answer.grade === 100 && !exerciseSession.succeededAt) {
+      exerciseSession.succeededAt = new Date()
+    }
+
     const promises: Promise<unknown>[] = [
       this.updateSession(exerciseSession.id, {
         grade: exerciseSession.grade,
         attempts: exerciseSession.attempts,
         variables: exerciseSession.variables,
         lastGradedAt: new Date(),
+        succeededAt: exerciseSession.succeededAt,
       }),
     ]
 
@@ -195,9 +200,10 @@ export abstract class PlayerManager {
       }
 
       const childs = await this.findSessionsByParentId(activitySession.id)
-      activitySession.grade = grade
+      activitySession.grade = exerciseSession.grade
       childs.forEach((child) => {
-        if (child.id !== exerciseSession.id && typeof child.grade === 'number' && child.grade !== -1) {
+        if (child.id === exerciseSession.id) return
+        if (typeof child.grade === 'number' && child.grade !== -1) {
           activitySession.grade += child.grade
         }
       })
@@ -206,11 +212,17 @@ export abstract class PlayerManager {
         activitySession.grade = Number((activitySession.grade / childs.length).toFixed(2))
       }
 
+      if (activitySession.grade === 100 && !activitySession.succeededAt) {
+        activitySession.succeededAt = new Date()
+      }
+
       activitySession.attempts += increment
+
       promises.push(
         this.updateSession(activitySession.id, {
           grade: activitySession.grade,
           attempts: activitySession.attempts,
+          succeededAt: activitySession.succeededAt,
           variables: {
             ...activitySession.variables,
             navigation: activityNavigation,

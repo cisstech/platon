@@ -22,6 +22,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon'
 
 import { NgeUiListModule } from '@cisstech/nge/ui/list'
 import { UserAvatarComponent } from '@platon/core/browser'
+import { DEFAULT_SEARCH_BAR_LIMIT } from '@platon/core/common'
 import { CourseMember, CourseMemberFilters } from '@platon/feature/course/common'
 import { SearchBar, UiSearchBarComponent } from '@platon/shared/ui'
 import { CourseService } from '../../api/course.service'
@@ -45,6 +46,7 @@ export class CourseMemberSearchBarComponent implements OnInit, OnDestroy, OnChan
   private readonly courseService = inject(CourseService)
   private readonly subscriptions: Subscription[] = []
   private readonly changeDetectorRef = inject(ChangeDetectorRef)
+
   private totalCount = 0
   private isSearching = true
 
@@ -99,7 +101,7 @@ export class CourseMemberSearchBarComponent implements OnInit, OnDestroy, OnChan
   /**
    * Custom filters to apply to the search.
    */
-  @Input() filters: CourseMemberFilters = { limit: 5 }
+  @Input() filters: CourseMemberFilters = { limit: DEFAULT_SEARCH_BAR_LIMIT }
 
   @Input({ required: true }) courseId!: string
 
@@ -183,6 +185,7 @@ export class CourseMemberSearchBarComponent implements OnInit, OnDestroy, OnChan
         .searchMembers(this.courseId, {
           ...this.filters,
           search: query,
+          limit: this.filters.limit ?? DEFAULT_SEARCH_BAR_LIMIT,
         })
         .pipe(
           map((page) => {
@@ -202,7 +205,7 @@ export class CourseMemberSearchBarComponent implements OnInit, OnDestroy, OnChan
           this.selection = flat
           this.onChangeSelection()
         }
-        return flat.slice(0, 5)
+        return flat.slice(0, DEFAULT_SEARCH_BAR_LIMIT)
       }),
       tap(() => {
         this.isSearching = false

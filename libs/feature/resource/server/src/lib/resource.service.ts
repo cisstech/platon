@@ -12,7 +12,7 @@ import {
   ResourceTypes,
 } from '@platon/feature/resource/common'
 import { isUUID4 } from '@platon/shared/server'
-import { DataSource, EntityManager, In, Repository } from 'typeorm'
+import { Brackets, DataSource, EntityManager, In, Repository } from 'typeorm'
 import { Optional } from 'typescript-optional'
 import { ResourceDependencyEntity } from './dependency'
 import { ResourceMemberEntity } from './members/member.entity'
@@ -182,8 +182,44 @@ export class ResourceService {
     return descendants
   }
 
-  async search(filters: ResourceFilters = {}): Promise<[ResourceEntity[], number]> {
+  /**
+   * Search resources to display
+   * @param filters filters to apply to the search
+   * @param userId user id to check permissions on resources - if not provided, no permissions are checked
+   * @returns Promise<[ResourceEntity[], number]> - the list of resources and the total count
+   */
+  async search(filters: ResourceFilters = {}, userId?: string): Promise<[ResourceEntity[], number]> {
     const query = this.repository.createQueryBuilder('resource')
+
+    // Checking is user has permissions to see resources ie. is a member or a watcher
+    const userHasPermissions = async (userId: string) => {
+      const resourcesVisibleByUser = await this.dataSource.query(
+        `
+          SELECT DISTINCT resource_id
+          FROM "ResourceMembers" rm
+          WHERE user_id = $1
+          AND "rm"."permissionsRead"
+          UNION
+          SELECT DISTINCT resource_id
+          FROM "ResourceWatchers"
+          WHERE user_id = $1
+        `,
+        [userId]
+      )
+      const resources = [...resourcesVisibleByUser].map((e) => e.resource_id)
+      query.andWhere(
+        new Brackets((qb) => {
+          if (resources.length > 0) {
+            qb.where('resource.id IN (:...resources)', { resources })
+            qb.orWhere('parent_id IN (:...resources)', { resources })
+          }
+          qb.orWhere('owner_id = :userId', { userId })
+          qb.orWhere('personal = false')
+        })
+      )
+    }
+    if (userId) await userHasPermissions(userId)
+
     query.leftJoinAndSelect('resource.topics', 'topic')
     query.leftJoinAndSelect('resource.levels', 'level')
 
@@ -274,14 +310,15 @@ export class ResourceService {
       })
     }
 
-    if (filters.search) {
+    const search = filters.search?.trim()
+    if (search) {
       query.andWhere(
         `(
         f_unaccent(resource.name) ILIKE f_unaccent(:search)
         OR f_unaccent(topic.name) ILIKE f_unaccent(:search)
         OR f_unaccent(level.name) ILIKE f_unaccent(:search)
       )`,
-        { search: `%${filters.search}%` }
+        { search: `%${search}%` }
       )
     }
 
