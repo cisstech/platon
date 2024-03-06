@@ -26,7 +26,8 @@ export class ResourceMemberService {
     query.leftJoinAndSelect('member.user', 'user', 'user.id = member.user_id')
     query.where('resource_id = :resourceId', { resourceId })
 
-    if (filters.search) {
+    const search = filters.search?.trim()
+    if (search) {
       query.andWhere(
         `(
         user.username ILIKE :search
@@ -34,7 +35,7 @@ export class ResourceMemberService {
         OR f_unaccent(user.first_name) ILIKE f_unaccent(:search)
         OR f_unaccent(user.last_name) ILIKE f_unaccent(:search)
       )`,
-        { search: `%${filters.search}%` }
+        { search: `%${search}%` }
       )
     }
 

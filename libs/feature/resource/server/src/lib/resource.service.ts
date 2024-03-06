@@ -310,14 +310,15 @@ export class ResourceService {
       })
     }
 
-    if (filters.search) {
+    const search = filters.search?.trim()
+    if (search) {
       query.andWhere(
         `(
         f_unaccent(resource.name) ILIKE f_unaccent(:search)
         OR f_unaccent(topic.name) ILIKE f_unaccent(:search)
         OR f_unaccent(level.name) ILIKE f_unaccent(:search)
       )`,
-        { search: `%${filters.search}%` }
+        { search: `%${search}%` }
       )
     }
 

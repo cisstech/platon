@@ -63,7 +63,8 @@ export class CourseMemberService {
       }
     }
 
-    if (filters.search) {
+    const search = filters.search?.trim()
+    if (search) {
       query.andWhere(
         `(
         user.username ILIKE :search
@@ -72,7 +73,7 @@ export class CourseMemberService {
         OR f_unaccent(user.last_name) ILIKE f_unaccent(:search)
         OR f_unaccent(group.name) ILIKE f_unaccent(:search)
       )`,
-        { search: `%${filters.search}%` }
+        { search: `%${search}%` }
       )
     }
 

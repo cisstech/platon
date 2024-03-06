@@ -6,33 +6,130 @@ import { ResourceMeta } from './metadata.model'
 import { ResourcePermissions } from './permissions.model'
 import { ResourceStatistic } from './statistic.model'
 
+/**
+ * List of fields that can be expanded on a {@link Resource} object.
+ */
 export type ResourceExpandableFields = 'metadata' | 'template' | 'parent' | 'template.metadata' | 'statistic'
 
+/**
+ * A container for any educational content.
+ */
 export interface Resource {
+  /**
+   * Unique identifier of the resource.
+   */
   readonly id: string
+
+  /**
+   * Date on which the resource has been created.
+   */
   readonly createdAt: Date
+
+  /**
+   * Last date on which the resource has been updated.
+   * @remarks
+   * - External events may trigger this field update like update of resource files.
+   */
   readonly updatedAt: Date
+
+  /**
+   * Display name of the resource.
+   */
   readonly name: string
+
+  /**
+   * Unique string representing an alias for accessing this resource files.
+   */
   readonly code?: string
+
+  /**
+   * Human readable
+   */
   readonly desc?: string
+
+  /**
+   * Types of the resource.
+   */
   readonly type: ResourceTypes
+
+  /**
+   * Value indicating whether this resource is inside of personal circle (for non circle resources) or is a personal cirlcle.
+   */
   readonly personal: boolean
+
+  /**
+   * Current usability status of the resource used
+   */
   readonly status: ResourceStatus
+
+  /**
+   * List of levels metadata associated to the resource.
+   */
   readonly levels: Level[]
+
+  /**
+   * List of topics metadata associated to the resource.
+   */
   readonly topics: Topic[]
+
+  /**
+   * Identifier of the resource's creator.
+   */
   readonly ownerId: string
+
+  /**
+   * Identifier of the circle the resource belongs to if any.
+   */
   readonly parentId?: string
 
+  /**
+   * Identifier of the exercise from which this resource (assuming that it's an exercise type) is from.
+   */
   readonly templateId?: string
+
+  /**
+   * Version of the exercise from which this resource (assuming that it's an exercise type) is from.
+   */
   readonly templateVersion?: string
+
+  /**
+   * Value indicating whether this resource is publicly previewable.
+   */
   readonly publicPreview?: boolean
+
+  /**
+   * List of permissions the user requesting the resource has on it.
+   */
   readonly permissions: ResourcePermissions
 
   // Expandable fields
 
-  readonly metadata?: ResourceMeta
-  readonly template?: Resource
+  /**
+   * The circle the resource belongs to if any.
+   * @remarks
+   * - `Expandable`
+   */
   readonly parent?: Resource
+
+  /**
+   * Some useful metadata informations about the resource.
+   * @remarks
+   * - `Expandable`
+   */
+  readonly metadata?: ResourceMeta
+
+  /**
+   * The template from which the resource is from if any.
+   * @remarks
+   * - `Expandable`
+   */
+  readonly template?: Resource
+
+  /**
+   * Some statistics about the resource.
+   * @remarks
+   * - `Expandable`
+   */
   readonly statistic?: ResourceStatistic
 }
 

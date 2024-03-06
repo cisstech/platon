@@ -47,12 +47,13 @@ export class LTIService {
   async searchLMS(filters: LmsFilters = {}): Promise<[LmsEntity[], number]> {
     const query = this.lmsRepo.createQueryBuilder('lms')
 
-    if (filters.search) {
+    const search = filters.search?.trim()
+    if (search) {
       query.andWhere(
         `(
         name ILIKE :search
       )`,
-        { search: `%${filters.search}%` }
+        { search: `%${search}%` }
       )
     }
 
