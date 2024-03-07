@@ -29,6 +29,15 @@
           [indicators]="filterIndicators"
         />
       </div>
+      <ng-container [ngPlural]="totalMatches">
+        <ng-template ngPluralCase="=0"></ng-template>
+        <ng-template ngPluralCase="=1">
+          <p>1 résultat</p>
+        </ng-template>
+        <ng-template ngPluralCase="other">
+          <p>{{ totalMatches }} résultats</p>
+        </ng-template>
+      </ng-container>
       <resource-list
         [items]="items"
         (levelClicked)="applyTagFilter($event, 'level')"

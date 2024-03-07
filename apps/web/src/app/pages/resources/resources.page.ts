@@ -135,7 +135,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
   protected circles: CircleTree[] = []
   protected topics: Topic[] = []
   protected levels: Level[] = []
-
+  protected totalMatches = 0
   protected completion = this.resourceService.completion().pipe(shareReplay(1))
   protected filterIndicators: FilterIndicator<ResourceFilters>[] = [
     ...Object.values(ResourceTypes).map(ResourceTypeFilterIndicator),
@@ -227,6 +227,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
 
         this.items = response.resources
         this.hasMore = response.resources.length > 0
+        this.totalMatches = response.total
         this.searching = false
 
         this.changeDetectorRef.markForCheck()
