@@ -52,16 +52,17 @@ export class ResourcePermissionService {
     ])
 
     const shareds = members.map((m) => m.resourceId)
+    const waiting = members.some((m) => m.resourceId === resource.id && m.waiting)
 
     return {
       read: circle.personal ? this.applyRestrictifReadRule(user, circle, members, descendants, shareds) : true, // This logic is implemented in ResourceService in method change please report any change
       write:
         (user.role === UserRoles.admin && !circle.personal) || // user is admin and circle is not personal
-        shareds.includes(circle.id) || // user is member of the circle
-        circle.ownerId === user.id, // user is owner of the circle,
+        (!waiting && shareds.includes(circle.id)) || // user is member of the circle
+        circle.ownerId === user.id, // user is owner of the circle
       watcher: watchings.some((w) => w.resourceId === resource.id),
       member: members.some((m) => m.resourceId === resource.id),
-      waiting: members.some((m) => m.resourceId === resource.id && m.waiting),
+      waiting: waiting,
     }
   }
 

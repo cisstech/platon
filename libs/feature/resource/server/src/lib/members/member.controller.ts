@@ -55,8 +55,8 @@ export class ResourceMemberController {
         waiting: true,
         inviterId: req.user.id,
         permissions: {
-          read: true,
-          write: true,
+          read: false,
+          write: false,
         },
       }),
       ResourceMemberDTO
