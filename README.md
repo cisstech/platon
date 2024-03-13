@@ -345,12 +345,12 @@ The `bin` folder contains a collection of scripts to perform various tasks relat
 
 - `/bin/docker`: These scripts are used to manage the Docker containers for the platform.
 
-  - down.sh: Stops the Docker containers.
-  - up.sh: Starts the Docker containers. Use --prod to launch the containers with the docker-compose.prod.yml configuration and -d to run the containers in the background.
+  - `down.sh`: Stops the Docker containers.
+  - `up.sh`: Starts the Docker containers. Use --prod to launch the containers with the docker-compose.prod.yml configuration and -d to run the containers in the background.
 
 - `/bin/graphql`: These scripts are used to generate GraphQL types based on the platform's schema.
 
-  - build.sh: Generates GraphQL types in the .graphql/types.ts folder from the schema.gql file.
+  - `build.sh`: Generates GraphQL types in the .graphql/types.ts folder from the schema.gql file.
 
 - `/bin/migration`: These scripts are used to manage TypeORM migrations.
 
@@ -367,10 +367,31 @@ The `bin` folder contains a collection of scripts to perform various tasks relat
   - `build.sh`: Generates the Jison parser from the `libs/feature/compiler/src/lib/pl.jison` file.
 
 - `/bin/shell`: These scripts are used to connect to Docker containers from the terminal.
+
   - `api.sh`: Connects to the API container (available only in prod mode).
   - `nginx.sh`: Connects to the NGINX container.
   - `postgres.sh`: Connects to the Postgres container.
   - `redis.sh`: Connects to the Redis container.
+
+- `auth-token.sh` : Generates JWT token for existing user in the database.
+
+  ```sh
+  ./bin/auth-token
+  ```
+
+  > This will output JWT token for defaut `ypicker` user.
+
+  ```sh
+  ./bin/auth-token username password
+  ```
+
+  > This will output JWT token for the given user.
+
+- `restore-db.sh` : Recreates the application database from a `.sql` dump file.
+
+  ```sh
+  ./bin/restore-db.sh path/to/platon.sql
+  ```
 
 #### Testing
 

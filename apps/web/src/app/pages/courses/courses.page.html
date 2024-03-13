@@ -26,6 +26,15 @@
         [indicators]="indicators"
       />
     </div>
+    <ng-container [ngPlural]="totalMatches">
+      <ng-template ngPluralCase="=0"></ng-template>
+      <ng-template ngPluralCase="=1">
+        <p>1 résultat</p>
+      </ng-template>
+      <ng-template ngPluralCase="other">
+        <p>{{ totalMatches }} résultats</p>
+      </ng-template>
+    </ng-container>
     <course-list [items]="items">
       <h2>Aucun cours ne correspond à votre recherche</h2>
       <ul>

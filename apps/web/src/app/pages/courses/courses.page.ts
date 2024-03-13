@@ -94,6 +94,7 @@ export class CoursesPage implements OnInit, OnDestroy {
   protected searching = true
   protected filters: CourseFilters = {}
   protected items: Course[] = []
+  protected totalMatches = 0
 
   constructor(
     private readonly router: Router,
@@ -123,14 +124,14 @@ export class CoursesPage implements OnInit, OnDestroy {
         }
 
         this.searching = true
-        this.items = (
-          await firstValueFrom(
-            this.courseService.search({
-              ...this.filters,
-              expands: ['permissions', 'statistic'],
-            })
-          )
-        ).resources
+        const response = await firstValueFrom(
+          this.courseService.search({
+            ...this.filters,
+            expands: ['permissions', 'statistic'],
+          })
+        )
+        this.items = response.resources
+        this.totalMatches = response.total
         this.searching = false
 
         this.changeDetectorRef.markForCheck()

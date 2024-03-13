@@ -6,6 +6,7 @@
 import { Logger, LogLevel, ValidationPipe, VersioningType } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
+import type { NestExpressApplication } from '@nestjs/platform-express'
 
 import { AppModule } from './app/app.module'
 
@@ -13,10 +14,12 @@ const LOG_LEVELS: LogLevel[] =
   process.env.NODE_ENV === 'development' ? ['debug', 'error', 'log', 'verbose', 'warn'] : ['error', 'warn']
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     cors: true,
     logger: LOG_LEVELS,
   })
+
+  app.useBodyParser('json', { limit: '10mb' })
 
   const globalPrefix = 'api'
   app.setGlobalPrefix(globalPrefix)

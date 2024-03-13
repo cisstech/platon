@@ -43,15 +43,23 @@ Thumbs.db
 # Project
 .env
 .env.prod
+
 .docker/nginx/ssl/certs
 .docker/nginx/ssl/dhparam
+
 tools/database/init.json
+
 resources/*
 !resources/.gitkeep
 !resources/templates
+
 uploads/*
 !uploads/.gitkeep
+
 envs/*
+
+dumps/*
+!dumps/.gitkeep
 
 .graphql/*
 !.graphql/.gitkeep
