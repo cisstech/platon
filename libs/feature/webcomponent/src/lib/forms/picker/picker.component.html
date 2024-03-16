@@ -6,10 +6,10 @@
     </mat-option>
   </mat-select>
   <mat-hint *ngIf="state.hint">{{ state.hint }}</mat-hint>
-  <div class="prefix" *ngIf="state.prefix" matPrefix>
+  <div class="prefix" *ngIf="state.prefix" matIconPrefix>
     <img [src]="state.prefix | icongr" alt="prefix" />
   </div>
-  <div class="suffix" *ngIf="state.suffix" matSuffix>
+  <div class="suffix" *ngIf="state.suffix" matIconSuffix>
     <img [src]="state.suffix | icongr" alt="suffix" />
   </div>
 </mat-form-field>
