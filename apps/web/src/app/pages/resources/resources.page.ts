@@ -204,7 +204,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
           types: typeof e.types === 'string' ? [e.types] : e.types,
           status: typeof e.status === 'string' ? [e.status] : e.status,
           dependOn: typeof e.dependOn === 'string' ? [e.dependOn] : e.dependOn,
-          configurable: e.configurable === 'true',
+          configurable: e.configurable === 'true' || undefined, // do not pass false to prevent ignoring configurable resources by default
         }
 
         if (this.searchbar.value !== e.q) {
