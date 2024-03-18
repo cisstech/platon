@@ -335,12 +335,12 @@
               [value]="context.statistic?.watchers ?? 0"
             />
           </nz-col>
-          <nz-col nzSpan="24">
+          <nz-col nzSpan="24" *ngIf="context.resource.type === 'CIRCLE'">
             <ui-statistic-card
               matIcon="group"
               ribbonColor="#f1c40f"
               description="Collaborateurs"
-              tooltip="Nombre de personnes ayant des droits d'édition sur cette ressource."
+              tooltip="Nombre de personnes ayant étant inscrites comme collaborateurs sur ce cercle."
               [value]="context.statistic?.members ?? 0"
             />
           </nz-col>
