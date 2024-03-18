@@ -14,6 +14,10 @@ import { ActivityMemberView } from './activity-member/activity-member.view'
 import { ActivityController } from './activity/activity.controller'
 import { ActivityEntity } from './activity/activity.entity'
 import { ActivityService } from './activity/activity.service'
+import { CourseGroupMemberEntity } from './course-group-member/course-group-member.entity'
+import { CourseGroupMemberService } from './course-group-member/course-group-member.service'
+import { CourseGroupEntity } from './course-group/course-group.entity'
+import { CourseGroupService } from './course-group/course-group.service'
 import { CourseMemberController } from './course-member/course-member.controller'
 import { CourseMemberEntity } from './course-member/course-member.entity'
 import { CourseMemberService } from './course-member/course-member.service'
@@ -45,6 +49,8 @@ import { CourseSectionService } from './section/section.service'
       ActivityMemberEntity,
       ActivityCorrectorView,
       ActivityCorrectorEntity,
+      CourseGroupEntity,
+      CourseGroupMemberEntity,
     ]),
   ],
   controllers: [
@@ -68,6 +74,8 @@ import { CourseSectionService } from './section/section.service'
     ActivityMemberService,
     ActivityCorrectorService,
     CourseNotificationService,
+    CourseGroupService,
+    CourseGroupMemberService,
   ],
   exports: [
     TypeOrmModule,
