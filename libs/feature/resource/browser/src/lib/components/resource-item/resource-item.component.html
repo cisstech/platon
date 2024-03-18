@@ -8,12 +8,7 @@
     [articleUrl]="clickable ? ['/resources/', item.id] : undefined"
     (didClickTagItem)="handleTagClick($event)"
   >
-    <ui-list-item-article-action
-      *ngIf="editable && item.permissions.read"
-      (click)="openTab(editorUrl)"
-      class="action"
-      actionTitle="Éditer"
-    >
+    <ui-list-item-article-action *ngIf="editable" (click)="openTab(editorUrl)" class="action" actionTitle="Éditer">
       <i nz-icon nzType="edit" nzTheme="outline"></i>
     </ui-list-item-article-action>
 

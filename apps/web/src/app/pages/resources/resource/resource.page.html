@@ -24,7 +24,7 @@
             <mat-icon>{{ context.resource.type | resourceIcon }}</mat-icon>
             <span
               nz-typography
-              [nzEditable]="!context.resource.personal && context.resource.permissions.write"
+              [nzEditable]="!context.resource.personal && context.resource.permissions?.write"
               [nzContent]="context.resource.name"
               (nzContentChange)="updateName($event)"
             ></span>
@@ -35,7 +35,7 @@
     <p
       nz-typography
       *ngIf="!isOtherPersonal"
-      [nzEditable]="!context.resource.personal && context.resource.permissions.write"
+      [nzEditable]="!context.resource.personal && context.resource.permissions?.write"
       [nzContent]="context.resource.desc"
       (nzContentChange)="updateDesc($event)"
     ></p>
@@ -47,7 +47,7 @@
           nzShowSearch
           [ngModel]="context.resource.status"
           (ngModelChange)="updateStatus($event)"
-          [nzDisabled]="!context.resource.permissions.write"
+          [nzDisabled]="!context.resource.permissions?.write"
         >
           <nz-option
             *ngFor="let item of status; trackBy: trackByValue"
@@ -64,14 +64,14 @@
           (click)="changeWatchingState()"
         >
           <i nz-icon nzType="eye" nzTheme="outline"></i>
-          <span class="hide-on-mobile">{{ context.resource.permissions.watcher ? 'Ne plus suivre' : 'Suivre' }}</span>
+          <span class="hide-on-mobile">{{ context.resource.permissions?.watcher ? 'Ne plus suivre' : 'Suivre' }}</span>
         </button>
         <button
           *ngIf="
             context.user?.role !== 'admin' &&
             context.resource.type === 'CIRCLE' &&
-            !context.resource.permissions.member &&
-            !context.resource.permissions.waiting &&
+            !context.resource.permissions?.member &&
+            !context.resource.permissions?.waiting &&
             context.resource.ownerId !== context.user?.id
           "
           nz-button
@@ -81,7 +81,7 @@
           <i nz-icon nzType="user-add" nzTheme="outline"></i>
           <span class="hide-on-mobile">Demander à rejoindre</span>
         </button>
-        <button *ngIf="context.resource.permissions.waiting" nz-button nzDanger nzType="default" (click)="unjoin()">
+        <button *ngIf="context.resource.permissions?.waiting" nz-button nzDanger nzType="default" (click)="unjoin()">
           <i nz-icon nzType="user-add" nzTheme="outline"></i>
           <span class="hide-on-mobile">Annuler la demande de rejoindre</span>
         </button>

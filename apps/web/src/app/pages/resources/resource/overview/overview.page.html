@@ -289,7 +289,7 @@
               </ng-template>
               <ng-template #noTagsFooter>
                 <button
-                  *ngIf="context.resource.permissions.write"
+                  *ngIf="context.resource.permissions?.write"
                   nz-button
                   nzType="primary"
                   [routerLink]="['../settings']"

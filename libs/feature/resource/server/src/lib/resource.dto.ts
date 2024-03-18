@@ -110,7 +110,7 @@ export class CircleTreeDTO implements CircleTree {
 
   @Type(() => ResourcePermissionsDTO)
   @ApiProperty()
-  readonly permissions!: ResourcePermissions
+  readonly permissions?: ResourcePermissions
 }
 
 export class CreateResourceDTO implements CreateResource {
@@ -254,6 +254,11 @@ export class ResourceFiltersDTO implements ResourceFilters {
   @IsBoolean()
   @IsOptional()
   readonly views?: boolean
+
+  @Transform(({ value }) => toBoolean(value))
+  @IsBoolean()
+  @IsOptional()
+  readonly personal?: boolean
 
   @Transform(({ value }) => toBoolean(value))
   @IsBoolean()
