@@ -9,6 +9,8 @@ export class LTIMiddleware implements NestMiddleware {
   constructor(private readonly lti: LTIService, private readonly authService: AuthService) {}
 
   async use(req: Request, res: Response, next: NextFunction) {
+    //console.log(req.body)
+
     if (!req.body?.oauth_consumer_key) {
       return next()
     }

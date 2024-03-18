@@ -32,6 +32,10 @@ import { CourseSectionService } from './section/section.service'
 import { CourseDemoController } from './course-demo/course-demo.controller'
 import { CourseDemoService } from './course-demo/course-demo.service'
 import { CourseDemoEntity } from './course-demo/course-demo.entity'
+import { CourseGroupEntity } from './course-group/course-group.entity'
+import { CourseGroupService } from './course-group/course-group.service'
+import { CourseGroupMemberEntity } from './course-group-member/course-group-member.entity'
+import { CourseGroupMemberService } from './course-group-member/course-group-member.service'
 
 @Module({
   imports: [
@@ -50,6 +54,8 @@ import { CourseDemoEntity } from './course-demo/course-demo.entity'
       ActivityCorrectorView,
       ActivityCorrectorEntity,
       CourseDemoEntity,
+      CourseGroupEntity,
+      CourseGroupMemberEntity,
     ]),
   ],
   controllers: [
@@ -75,6 +81,8 @@ import { CourseDemoEntity } from './course-demo/course-demo.entity'
     ActivityCorrectorService,
     CourseNotificationService,
     CourseDemoService,
+    CourseGroupService,
+    CourseGroupMemberService,
   ],
   exports: [
     TypeOrmModule,
