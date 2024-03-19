@@ -10,6 +10,7 @@ import {
   ResourceOrderings,
   ResourceStatus,
   ResourceTypes,
+  circleTreeFromCircleList,
 } from '@platon/feature/resource/common'
 import { isUUID4 } from '@platon/shared/server'
 import { Brackets, DataSource, EntityManager, In, Repository } from 'typeorm'
@@ -37,86 +38,52 @@ export class ResourceService {
     private readonly eventService: EventService
   ) {}
 
+  /**
+   * Build tree structure from a list of circles representing the hiearchy between them.
+   * @param circles list of circles to build the tree from
+   * @throws
+   *  - NotFoundResponse if there is no root circle in the list
+   * @returns Promise<CircleTree> - the tree structure
+   */
   async tree(circles: ResourceEntity[]): Promise<CircleTree> {
-    const root = circles.find((c) => !c.parentId && !c.personal) as ResourceEntity
     const metas = circles.length
-      ? await this.metadataRepo.find({
-          where: {
-            resourceId: In(circles.map((c) => c.id)),
-          },
-        })
+      ? await this.metadataRepo.find({ where: { resourceId: In(circles.map((c) => c.id)) } })
       : []
 
-    const metasMap = metas.reduce((acc, meta) => {
-      acc[meta.resourceId] = meta
+    const versions: Record<string, string[]> = metas.reduce((acc, curr) => {
+      acc[curr.resourceId] = curr.meta.versions.map((v) => v.tag)
       return acc
-    }, {} as Record<string, ResourceMetaEntity>)
+    }, {} as Record<string, string[]>)
 
-    const tree: CircleTree = {
-      id: root.id,
-      name: root.name,
-      code: root.code,
-      children: [],
-      versions: metasMap[root.id]?.meta?.versions?.map((v) => v.tag) || [],
-      permissions: {
-        read: true,
-        write: true,
-        watcher: true,
-        member: false,
-        waiting: false,
-      },
-    }
-
-    const traverse = (node: CircleTree) => {
-      const children = circles.filter((c) => c.parentId === node.id).sort((a, b) => a.name.localeCompare(b.name))
-
-      children.forEach((child) => {
-        const next: CircleTree = {
-          id: child.id,
-          name: child.name,
-          code: child.code,
-          versions: metasMap[child.id]?.meta?.versions?.map((v) => v.tag) || [],
-          permissions: {
-            read: true,
-            write: true,
-            watcher: true,
-            member: false,
-            waiting: false,
-          },
-          children: [],
-        }
-        node.children?.push(next)
-        traverse(next)
-      })
-
-      if (!node.children?.length) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        delete (node as any).children
-      }
-    }
-
-    traverse(tree)
-
-    return tree
+    return circleTreeFromCircleList(circles, versions)
   }
 
-  async getById(id: string): Promise<ResourceEntity> {
-    return (await this.findById(id)).orElseThrow(() => new NotFoundResponse(`Resource not found: ${id}`))
-  }
-
-  async findById(id: string, resolveRelations = true): Promise<Optional<ResourceEntity>> {
+  /**
+   * Retrieves a resource by its ID.
+   * @param id - The ID of the resource to retrieve.
+   * @param resolveTags - If true, the resource's `topics` and `levels` are loaded.
+   * @returns A Promise that resolves to the retrieved ResourceEntity.
+   * @throws Error if the resource with the specified ID is not found.
+   */
+  async getById(id: string, resolveTags = true): Promise<ResourceEntity> {
     const query = this.repository.createQueryBuilder('resource')
-    if (resolveRelations) {
+    if (resolveTags) {
       query.leftJoinAndSelect('resource.topics', 'topic')
       query.leftJoinAndSelect('resource.levels', 'level')
     }
 
-    return Optional.ofNullable(await query.where('resource.id = :id', { id }).getOne())
+    return query.where('resource.id = :id', { id }).getOneOrFail()
   }
 
-  async findByIdOrCode(idOrCode: string, resolveRelations = true): Promise<Optional<ResourceEntity>> {
+  /**
+   * Finds a resource by its ID or code.
+   * @param idOrCode - The ID or code of the resource.
+   * @param resolveTags - If true, the resource's `topics` and `levels` are loaded.
+   * @returns A Promise that resolves to an Optional containing the found resource entity, or null if not found.
+   */
+  async findByIdOrCode(idOrCode: string, resolveTags = true): Promise<Optional<ResourceEntity>> {
     const query = this.repository.createQueryBuilder('resource')
-    if (resolveRelations) {
+    if (resolveTags) {
       query.leftJoinAndSelect('resource.topics', 'topic')
       query.leftJoinAndSelect('resource.levels', 'level')
     }
@@ -127,7 +94,14 @@ export class ResourceService {
     return Optional.ofNullable(await query.where('resource.code = :code', { code: idOrCode }).getOne())
   }
 
-  async findPersonal(owner: UserEntity): Promise<ResourceEntity> {
+  /**
+   * Finds the personal resource for a given owner.
+   * If the personal resource does not exist, it creates a new one and returns it.
+   *
+   * @param owner - The owner of the personal resource.
+   * @returns A Promise that resolves to the personal resource entity.
+   */
+  async getPersonal(owner: UserEntity): Promise<ResourceEntity> {
     let circle = await this.repository.findOne({
       where: {
         ownerId: owner.id,
@@ -154,14 +128,21 @@ export class ResourceService {
     return circle
   }
 
-  async findDescendantCircles(resourceId: string): Promise<ResourceEntity[]> {
+  /**
+   * Finds all descendant circles of a given circle.
+   * @remarks
+   * - The resource itself is not included in the result.
+   * - Personal circles are always excluded.
+   * - Passing the id of an personal circle will return an empty array.
+   * @param circleId - The ID of the circle to find descendant circles for.
+   * @returns A promise that resolves to an array of descendant circles.
+   */
+  async getDescendants(circleId: string): Promise<ResourceEntity[]> {
     const circles = await this.repository.find({
-      where: {
-        type: ResourceTypes.CIRCLE,
-      },
+      where: { type: ResourceTypes.CIRCLE, personal: false },
     })
 
-    const root = circles.find((c) => c.id === resourceId)
+    const root = circles.find((c) => c.id === circleId)
     if (!root) {
       return []
     }
@@ -223,7 +204,7 @@ export class ResourceService {
     query.leftJoinAndSelect('resource.topics', 'topic')
     query.leftJoinAndSelect('resource.levels', 'level')
 
-    if (filters.configurable || filters.navigation != null) {
+    if (filters.configurable != null || filters.navigation != null) {
       query.leftJoin('ResourceMeta', 'metadata', 'metadata.resource_id = resource.id')
     }
 
@@ -296,18 +277,24 @@ export class ResourceService {
       query.andWhere('topic_id IN (:...topics)', { topics: filters.topics })
     }
 
-    if (filters.publicPreview) {
-      query.andWhere('public_preview = true')
+    if (filters.publicPreview != null) {
+      query.andWhere('public_preview = :publicPreview', { publicPreview: filters.publicPreview })
     }
 
-    if (filters.configurable) {
-      query.andWhere(`(type <> 'EXERCISE' OR metadata.meta->'configurable' = 'true')`)
+    if (filters.configurable != null) {
+      query.andWhere(`(type <> 'EXERCISE' OR metadata.meta->'configurable' = :configurable)`, {
+        configurable: filters.configurable,
+      })
     }
 
     if (filters.navigation) {
       query.andWhere(`(type <> 'ACTIVITY' OR metadata.meta->'settings'->'navigation'->>'mode' = :navigation)`, {
         navigation: filters.navigation,
       })
+    }
+
+    if (filters.personal != null) {
+      query.andWhere('personal = :personal', { personal: filters.personal })
     }
 
     const search = filters.search?.trim()
@@ -353,8 +340,14 @@ export class ResourceService {
     return query.getManyAndCount()
   }
 
+  /**
+   * Creates a new resource entity.
+   *
+   * @param input - The partial resource entity to create.
+   * @returns A promise that resolves to the created resource entity.
+   */
   async create(input: Partial<ResourceEntity>): Promise<ResourceEntity> {
-    const parent = (await this.findById(input.parentId!)).get()
+    const parent = await this.repository.findOneOrFail({ where: { id: input.parentId } })
     const resource = await this.repository.save(
       this.repository.create({
         ...input,
@@ -369,13 +362,23 @@ export class ResourceService {
     return resource
   }
 
+  /**
+   * Updates a resource with the specified changes.
+   * @remarks
+   * - Passing a resource object instead of an id is encouraged if possible to prevent unecessary database call for retrieving it.
+   *
+   * @Throws - `NotFoundResponse` error if the resource is not found.
+   *
+   * @param idOrResource - The ID of the resource or the `ResourceEntity` object.
+   * @param changes - The partial changes to be applied to the resource.
+   * @returns A promise that resolves to the updated `ResourceEntity` object.
+   * @throws `NotFoundResponse` if the resource is not found.
+   */
   async update(idOrResource: string | ResourceEntity, changes: Partial<ResourceEntity>): Promise<ResourceEntity> {
     const resource =
       typeof idOrResource === 'string'
         ? await this.repository.findOne({
-            where: {
-              id: idOrResource,
-            },
+            where: { id: idOrResource },
           })
         : idOrResource
 
@@ -387,6 +390,11 @@ export class ResourceService {
     return this.repository.save(resource)
   }
 
+  /**
+   * Retrieves the resources search completion data for a user.
+   * @param user - The user entity.
+   * @returns A promise that resolves to a `ResourceCompletion` object containing the completion data.
+   */
   async completion(user: UserEntity): Promise<ResourceCompletion> {
     const [levels, topics, names] = await Promise.all([
       this.levelService.findAll(),
@@ -404,6 +412,12 @@ export class ResourceService {
     }
   }
 
+  /**
+   * Converts an input object of type `CreateResourceDTO` or `UpdateResourceDTO` to a `ResourceEntity` object while loading
+   * `levels` and `topics` relations if they are specified.
+   * @param input - The input object to convert.
+   * @returns A promise that resolves to a `ResourceEntity` object.
+   */
   async fromInput(input: CreateResourceDTO | UpdateResourceDTO): Promise<ResourceEntity> {
     const { levels, topics, ...props } = input
 
@@ -431,6 +445,15 @@ export class ResourceService {
     return newRes
   }
 
+  /**
+   * Retrieves the list of user IDs who are intended to receive notifications for a resource.
+   * @remarks
+   * - The list of user IDs is determined by the resource's owner, members, and watchers.
+   *
+   * @param resourceId - The ID of the resource.
+   * @param entityManager - Optional. The entity manager to use for the database query.
+   * @returns A promise that resolves to an array of user IDs.
+   */
   async notificationWatchers(resourceId: string, entityManager?: EntityManager): Promise<string[]> {
     const watchers = (
       await (entityManager ?? this.dataSource).query(

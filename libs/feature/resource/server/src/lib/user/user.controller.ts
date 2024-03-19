@@ -25,7 +25,7 @@ export class UserResourceController {
       throw new UnauthorizedException("You cannot access other users' personal circles")
     }
 
-    const resource = Mapper.map(await this.resourceService.findPersonal(req.user), ResourceDTO)
+    const resource = Mapper.map(await this.resourceService.getPersonal(req.user), ResourceDTO)
     const permissions = new MemberPermissions()
 
     permissions.read = true
