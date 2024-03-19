@@ -18,7 +18,7 @@ export interface ActivitySettings {
 
 /** Settings specific to action buttons. */
 export interface ActivityActionSettings {
-  /** Number of attempts authorized (-1 for infinite). */
+  /** Number of attempts authorized (<= 0 for infinite). */
   retry?: number
   /** Display "hints" button. */
   hints?: boolean
@@ -73,7 +73,7 @@ export interface ActivityNavigationSettings {
 /** Default settings for preview mode. */
 export const defaultActivitySettings = (): ActivitySettings => ({
   actions: {
-    retry: 1,
+    retry: 0,
     hints: true,
     reroll: true,
     theories: true,
