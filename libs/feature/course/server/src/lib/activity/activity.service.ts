@@ -89,6 +89,31 @@ export class ActivityService {
     return activity
   }
 
+  async findByActivityId(activityId: string): Promise<Optional<ActivityEntity>> {
+    const qb = this.repository.createQueryBuilder('activity')
+    qb.andWhere(`activity.id = :id`, { id: activityId })
+
+    const activity = await qb.getOne()
+    if (activity) {
+      await this.addVirtualColumns(activity)
+    }
+    return Optional.ofNullable(activity)
+  }
+
+  async findActivitiesByCourseId(courseId: string): Promise<Optional<ActivityEntity[]>> {
+    //without using createQueryBuilder because we need to use the member view and it's not implemented on discord yet.
+    const activities = await this.repository.find({
+      where: {
+        courseId,
+      },
+    })
+    if (activities.length === 0) {
+      return Optional.empty()
+    }
+    return Optional.of(activities)
+  }
+
+
   async findByCourseId(courseId: string, activityId: string): Promise<Optional<ActivityEntity>> {
     const qb = this.createQueryBuilder(courseId)
     qb.andWhere(`activity.id = :id`, { id: activityId })
