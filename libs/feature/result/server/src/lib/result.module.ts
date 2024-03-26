@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { FeatureCourseServerModule } from '@platon/feature/course/server'
+import { ActivityService, FeatureCourseServerModule } from '@platon/feature/course/server'
 import { FeatureResourceServerModule } from '@platon/feature/resource/server'
 import { AnswerEntity } from './answers/answer.entity'
 import { AnswerService } from './answers/answer.service'
@@ -22,6 +22,8 @@ import { ResultController } from './result.controller'
 import { SessionEntity } from './sessions/session.entity'
 import { SessionService } from './sessions/session.service'
 import { SessionView } from './sessions/session.view'
+import { WatchedChallengesEntity } from 'libs/feature/discord/server/src/lib/watchedChallenges.entity'
+import { WatchedChallengesService } from 'libs/feature/discord/server/src/lib/watchedChallenges.service'
 
 @Module({
   imports: [
@@ -34,6 +36,7 @@ import { SessionView } from './sessions/session.view'
       AnswerEntity,
       CorrectionEntity,
       SessionCommentEntity,
+      WatchedChallengesEntity
     ]),
   ],
   controllers: [
@@ -51,10 +54,11 @@ import { SessionView } from './sessions/session.view'
     LeaderboardService,
     SessionCommentService,
     ActivityResultsVirtualColumnsResolver,
-
     CourseExpander,
     ResourceExpander,
+    WatchedChallengesService,
+    ActivityService
   ],
-  exports: [TypeOrmModule, AnswerService, SessionService, CorrectionService, SessionCommentService, LeaderboardService],
+  exports: [TypeOrmModule, AnswerService, SessionService, CorrectionService, SessionCommentService, LeaderboardService, WatchedChallengesService, ActivityService],
 })
 export class FeatureResultServerModule {}

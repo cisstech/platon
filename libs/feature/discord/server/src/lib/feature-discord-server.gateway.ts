@@ -13,4 +13,5 @@ export class FeatureDiscordServerGateway {
     this.logger.log('Client was created!');
   }
 
+
 }
