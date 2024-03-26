@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
-import { BadRequestResponse, NotFoundResponse, User } from '@platon/core/common'
+import { BadRequestResponse, NotFoundResponse } from '@platon/core/common'
+import { IRequest } from '@platon/core/server'
 import {
   ACTIVITY_MAIN_FILE,
   EXERCISE_MAIN_FILE,
@@ -21,7 +22,7 @@ interface CompileInput {
   resourceId: string
   version?: string
   overrides?: Variables
-  user?: User
+  req?: IRequest
   withAst?: boolean
 }
 
@@ -47,9 +48,9 @@ export class ResourceFileService {
   /**
    * Gets resource git repository.
    * @param identifier Resource entity|id|code
-   * @param user User that manipulates the repository (used for git commits)
+   * @param req Ongoing request for identifying user during git operations (optional)
    */
-  async repo(identifier: string | ResourceEntity, user?: User): Promise<RepoInfo> {
+  async repo(identifier: string | ResourceEntity, req?: IRequest): Promise<RepoInfo> {
     const resource =
       typeof identifier === 'string'
         ? (await this.resourceService.findByIdOrCode(identifier)).orElseThrow(
@@ -57,7 +58,8 @@ export class ResourceFileService {
           )
         : identifier
 
-    const permissions = await this.permissionService.userPermissionsOnResource({ resource, user })
+    const user = req?.user
+    const permissions = await this.permissionService.userPermissionsOnResource({ resource, req })
 
     const directory = {
       CIRCLE: 'circles',
@@ -92,8 +94,8 @@ export class ResourceFileService {
   }
 
   async compile(input: CompileInput): Promise<CompileOutput> {
-    const { resourceId, version, user, overrides } = input
-    const { repo, resource } = await this.repo(resourceId, user)
+    const { resourceId, version, req, overrides } = input
+    const { repo, resource } = await this.repo(resourceId, req)
     if (resource.type === 'CIRCLE') {
       throw new BadRequestResponse(`Compiler: cannot compile circle`)
     }
@@ -118,7 +120,7 @@ export class ResourceFileService {
         return repo
       }
 
-      const { repo: newOpen } = await this.repo(resourceId, user)
+      const { repo: newOpen } = await this.repo(resourceId, req)
       openedRepos[`${resourceId}-${version}`] = newOpen
       return newOpen
     }

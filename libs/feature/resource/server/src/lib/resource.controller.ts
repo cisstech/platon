@@ -25,6 +25,7 @@ export class ResourceController {
   @Selectable({ rootField: 'resources' })
   async search(@Req() req: IRequest, @Query() filters: ResourceFiltersDTO = {}): Promise<ListResponse<ResourceDTO>> {
     let resources: ResourceDTO[] = []
+
     let total = 0
     if (filters.views) {
       const response = await this.resourceViewService.findAll(req.user.id)
@@ -37,46 +38,31 @@ export class ResourceController {
       const response = await this.resourceService.search(filters, req.user.id) // returns only resources the user has read access to
       resources = Mapper.mapAll(response[0], ResourceDTO)
       total = response[1]
-      return new ListResponse({
-        total,
-        resources: resources.map((e) => {
-          Object.assign(e, { permissions: { read: true, write: false, manage: false } })
-          return e
-        }),
-      })
     }
-
-    const resourceWithPermissions = await this.permissionService.userPermissionsOnResources(resources, req.user)
-    return new ListResponse({
-      total,
-      resources: resourceWithPermissions
-        .filter((e) => e.permissions.read)
-        .map((e) => {
-          Object.assign(e.resource, { permissions: e.permissions })
-          return e.resource
-        }),
-    })
+    return new ListResponse({ total, resources })
   }
 
   @Get('/tree')
   async tree(@Req() req: IRequest): Promise<ItemResponse<CircleTreeDTO>> {
     const [circles] = await this.resourceService.search({
       types: ['CIRCLE'],
+      personal: false,
     })
-    const permissions = await this.permissionService.userPermissionsOnResources(circles, req.user)
 
     const tree = Mapper.map(await this.resourceService.tree(circles), CircleTreeDTO)
+    const permissions = await this.permissionService.userPermissionsOnResources(circles, req)
 
     const injectPermissions = (tree: CircleTreeDTO) => {
-      Object.assign(tree, { permissions: permissions.find((p) => p.resource.id === tree.id)?.permissions })
+      const perms = permissions.find((p) => p.resource.id === tree.id)?.permissions
+      if (perms) {
+        Object.assign<CircleTreeDTO, Partial<CircleTreeDTO>>(tree, { permissions: perms })
+      }
       tree.children?.forEach((child) => injectPermissions(child))
     }
 
     injectPermissions(tree)
 
-    return new ItemResponse({
-      resource: tree,
-    })
+    return new ItemResponse({ resource: tree })
   }
 
   @Get('/completion')
@@ -94,27 +80,20 @@ export class ResourceController {
     @Param('id') id: string,
     @Query('markAsViewed') markAsViewed?: string
   ): Promise<ItemResponse<ResourceDTO>> {
-    const optional = await this.resourceService.findById(id)
+    const optional = await this.resourceService.findByIdOrCode(id)
     const resource = Mapper.map(
       optional.orElseThrow(() => new NotFoundResponse(`Resource not found: ${id}`)),
       ResourceDTO
     )
 
-    const permissions = await this.permissionService.userPermissionsOnResource({
-      resource,
-      user: req.user,
-    })
-
+    const permissions = await this.permissionService.userPermissionsOnResource({ req, resource })
     if (!permissions.read) {
       throw new ForbiddenResponse(`Operation not allowed on resource: ${id}`)
     }
 
     if (markAsViewed) {
       this.resourceViewService
-        .create({
-          resourceId: id,
-          userId: req.user.id,
-        })
+        .create({ resourceId: id, userId: req.user.id })
         .catch((error) => this.logger.error('Error while marking resource as viewed', error))
     }
 
@@ -126,15 +105,12 @@ export class ResourceController {
   @Expandable(ResourceDTO, { rootField: 'resource' })
   @Selectable({ rootField: 'resource' })
   async create(@Req() req: IRequest, @Body() input: CreateResourceDTO): Promise<CreatedResponse<ResourceDTO>> {
-    const parent = await this.resourceService.findById(input.parentId)
+    const parent = await this.resourceService.findByIdOrCode(input.parentId)
     if (!parent.isPresent()) {
       throw new NotFoundResponse(`Resource not found: ${input.parentId}`)
     }
 
-    const permissions = await this.permissionService.userPermissionsOnResource({
-      resource: parent.get(),
-      user: req.user,
-    })
+    const permissions = await this.permissionService.userPermissionsOnResource({ req, resource: parent.get() })
     if (!permissions.write) {
       throw new ForbiddenResponse(`Operation not allowed on resource: ${input.parentId}`)
     }
@@ -160,15 +136,12 @@ export class ResourceController {
     @Param('id') id: string,
     @Body() input: UpdateResourceDTO
   ): Promise<ItemResponse<ResourceDTO>> {
-    const existing = await this.resourceService.findById(id)
+    const existing = await this.resourceService.findByIdOrCode(id)
     if (!existing.isPresent()) {
       throw new NotFoundResponse(`Resource not found: ${id}`)
     }
 
-    const permissions = await this.permissionService.userPermissionsOnResource({
-      resource: existing.get(),
-      user: req.user,
-    })
+    const permissions = await this.permissionService.userPermissionsOnResource({ req, resource: existing.get() })
     if (!permissions.write) {
       throw new ForbiddenResponse(`Operation not allowed on resource: ${id}`)
     }

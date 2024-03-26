@@ -24,6 +24,7 @@ import { PLSourceFile } from '@platon/feature/compiler'
 import { ExerciseTransformInput, FileTypes, LATEST, ResourceFile } from '@platon/feature/resource/common'
 import { Response } from 'express'
 import * as fs from 'fs'
+import mime from 'mime-types'
 import { basename, join } from 'path'
 import { FileCreateDTO, FileMoveDTO, FileReleaseDTO, FileRetrieveDTO, FileUpdateDTO } from './file.dto'
 import {
@@ -34,7 +35,6 @@ import {
 } from './file.event'
 import { ResourceFileService } from './file.service'
 import { RESOURCES_DIR } from './repo'
-import mime from 'mime-types'
 
 const CACHEABLE_EXTENSIONS = [
   // IMAGES
@@ -98,7 +98,7 @@ export class ResourceFileController {
 
   @Post('/release/:resourceId')
   async release(@Req() request: IRequest, @Param('resourceId') resourceId: string, @Body() input: FileReleaseDTO) {
-    const { repo, resource, permissions } = await this.fileService.repo(resourceId, request.user)
+    const { repo, resource, permissions } = await this.fileService.repo(resourceId, request)
     if (!permissions.write) {
       throw new UnauthorizedResponse('You are not allowed to release this resource')
     }
@@ -119,7 +119,7 @@ export class ResourceFileController {
     @Param('resourceId') resourceId: string,
     @Query('version') version = LATEST
   ): Promise<PLSourceFile> {
-    const { source } = await this.fileService.compile({ resourceId, version, user: request.user, withAst: true })
+    const { source } = await this.fileService.compile({ resourceId, version, req: request, withAst: true })
     return source
   }
 
@@ -130,7 +130,7 @@ export class ResourceFileController {
     @Query('version') version = LATEST,
     @Body() input?: ExerciseTransformInput
   ): Promise<string> {
-    const { compiler } = await this.fileService.compile({ resourceId, version, user: request.user })
+    const { compiler } = await this.fileService.compile({ resourceId, version, req: request })
     return compiler.toExercise({
       variableChanges: input?.changes || {},
       includeChanges: input?.includes,
@@ -148,7 +148,7 @@ export class ResourceFileController {
   ): Promise<unknown> {
     const cacheLifetime = this.configService.get<number>('cache.filesLifetime', { infer: true })
 
-    const { repo, resource, permissions } = await this.fileService.repo(resourceId, request.user)
+    const { repo, resource, permissions } = await this.fileService.repo(resourceId, request)
     const version = query?.version || LATEST
     if (version !== LATEST) {
       res.set('Cache-Control', `public, max-age=${cacheLifetime}`)
@@ -255,7 +255,7 @@ export class ResourceFileController {
     @Body() input: FileUpdateDTO,
     @UploadedFile() bundle: Express.Multer.File
   ) {
-    const { repo, resource, permissions } = await this.fileService.repo(resourceId, request.user)
+    const { repo, resource, permissions } = await this.fileService.repo(resourceId, request)
     if (!permissions.write) {
       throw new UnauthorizedResponse('You are not allowed to write this resource')
     }
@@ -305,7 +305,7 @@ export class ResourceFileController {
     @UploadedFile() file: Express.Multer.File,
     @Param('path') path?: string
   ) {
-    const { repo, resource, permissions } = await this.fileService.repo(resourceId, request.user)
+    const { repo, resource, permissions } = await this.fileService.repo(resourceId, request)
     if (!permissions.write) {
       throw new UnauthorizedResponse('You are not allowed to write this resource')
     }
@@ -352,7 +352,7 @@ export class ResourceFileController {
     @Param('path') path: string,
     @Body() input: FileMoveDTO
   ) {
-    const { repo, resource, permissions } = await this.fileService.repo(resourceId, request.user)
+    const { repo, resource, permissions } = await this.fileService.repo(resourceId, request)
     if (!permissions.write) {
       throw new UnauthorizedResponse('You are not allowed to write this resource')
     }
@@ -389,7 +389,7 @@ export class ResourceFileController {
 
   @Delete('/:resourceId/:path(*)')
   async delete(@Req() request: IRequest, @Param('resourceId') resourceId: string, @Param('path') path: string) {
-    const { repo, resource, permissions } = await this.fileService.repo(resourceId, request.user)
+    const { repo, resource, permissions } = await this.fileService.repo(resourceId, request)
     if (!permissions.write) {
       throw new UnauthorizedResponse('You are not allowed to write this resource')
     }
