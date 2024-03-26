@@ -220,7 +220,7 @@ export class ResourceCreatePage implements OnInit {
         types: ['EXERCISE'],
         configurable: true,
         parents: [...ancestors.map((a) => a.id)],
-        expands: ['metadata', 'statistic'],
+        expands: ['metadata' /* , 'statistic' */],
       })
     )
 
