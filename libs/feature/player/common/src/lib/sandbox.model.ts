@@ -17,7 +17,13 @@ export interface SandboxOutput {
   variables: ExerciseVariables
 }
 
+export interface SandboxEnvironment {
+  envid: string // Environment ID
+  content: string // Content of the environment (gzip tarball)
+}
+
 export interface Sandbox {
+  downloadEnvironment(envid: string): Promise<SandboxEnvironment>
   supports(input: SandboxInput): boolean
   run(input: SandboxInput, script: string, timeout: number): Promise<SandboxOutput>
 }

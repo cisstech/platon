@@ -28,6 +28,7 @@ import {
   PlayerExercise,
   PlayerManager,
   PreviewInput,
+  SandboxEnvironment,
   updateActivityNavigationState,
   withActivityPlayer,
   withExercisePlayer,
@@ -112,6 +113,14 @@ export class PlayerService extends PlayerManager {
       exercise: resource.type === 'EXERCISE' ? withExercisePlayer(session) : undefined,
       activity: resource.type === 'ACTIVITY' ? withActivityPlayer(session) : undefined,
     }
+  }
+
+  async downloadEnvironment(sessionId: string, _user: User): Promise<SandboxEnvironment> {
+    const session = await this.sessionService.findById(sessionId, { parent: true, activity: true })
+    if (!session) throw new NotFoundResponse('Session not found')
+    if (!session.envid) throw new NotFoundResponse(`Environment not found for session ${sessionId}`)
+
+    return this.sandboxService.downloadEnvironment(session.source as PLSourceFile<ExerciseVariables>, session.envid)
   }
 
   async playActivity(activityId: string, user: User): Promise<PlayActivityOuput> {

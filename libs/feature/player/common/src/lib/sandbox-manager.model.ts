@@ -1,6 +1,6 @@
 import { basename } from '@platon/core/common'
 import { ExerciseVariables, PLSourceFile, withExerciseMeta } from '@platon/feature/compiler'
-import { Sandbox, SandboxInput, SandboxOutput } from './sandbox.model'
+import { Sandbox, SandboxEnvironment, SandboxInput, SandboxOutput } from './sandbox.model'
 
 export class SandboxManager {
   private readonly sandboxes: Sandbox[] = []
@@ -60,5 +60,14 @@ export class SandboxManager {
     output.variables['.meta'] = input.variables['.meta']
 
     return output
+  }
+
+  async downloadEnvironment(input: PLSourceFile<ExerciseVariables>, envid: string): Promise<SandboxEnvironment> {
+    const sandbox = this.sandboxes.find((sandbox) => sandbox.supports(input))
+    if (!sandbox) {
+      throw new Error(`No sandbox found for the given source file`)
+    }
+
+    return sandbox.downloadEnvironment(envid)
   }
 }
