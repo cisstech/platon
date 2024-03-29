@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as fs from 'fs'
+import * as tar from 'tar-stream'
 import * as Path from 'path'
+import * as zlib from 'zlib'
 import { v4 as uuidv4 } from 'uuid'
 import { NodeVM } from 'vm2'
 
@@ -8,11 +10,11 @@ import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { Cron, CronExpression } from '@nestjs/schedule'
 import { Configuration } from '@platon/core/server'
-import { Sandbox, SandboxError, SandboxInput, SandboxOutput } from '@platon/feature/player/common'
+import { Sandbox, SandboxEnvironment, SandboxError, SandboxInput, SandboxOutput } from '@platon/feature/player/common'
 import { constants } from 'fs'
 import { RegisterSandbox } from '../sandbox'
 import { createNodeSandboxAPI } from './node-sandbox-api'
-
+import { NotFoundResponse } from '@platon/core/common'
 /**
  * Directory where environment files are stored.
  */
@@ -76,6 +78,55 @@ export class NodeSandbox implements OnModuleInit, Sandbox {
         ...this.jsonify(vm.getGlobal('global')),
       },
     }
+  }
+
+  /**
+   * Creates a zipfile containing the environment files.
+   * @param envid - The environment ID.
+   */
+  async downloadEnvironment(envid: string): Promise<SandboxEnvironment> {
+    const path = Path.join(ENVS_DIR, envid)
+    const exists = await fs.promises
+      .access(path, constants.F_OK)
+      .then(() => true)
+      .catch(() => false)
+
+    if (!exists) {
+      throw new NotFoundResponse(`Environment ${envid} not found`)
+    }
+    const pack: tar.Pack = tar.pack()
+    const gzip: zlib.Gzip = zlib.createGzip()
+
+    await fs.promises
+      .readdir(path)
+      .then(async (files) => {
+        files.forEach((file: string) => {
+          console.log('file', file)
+          const fileStat: fs.Stats = fs.statSync(Path.join(path, file))
+          const stream: fs.ReadStream = fs.createReadStream(Path.join(path, file))
+          stream.pipe(pack.entry({ name: file, size: fileStat.size }))
+        })
+      })
+      .catch((error) => {
+        throw new Error(`Error reading environment files: ${error}`)
+      })
+
+    pack.finalize()
+    const tgz = pack.pipe(gzip)
+
+    const buffer = await new Promise<Buffer>((resolve, reject) => {
+      const chunks: Buffer[] = []
+      tgz.on('data', (chunk: Buffer) => {
+        chunks.push(chunk)
+      })
+      tgz.on('end', () => {
+        resolve(Buffer.concat(chunks))
+      })
+      tgz.on('error', (error) => {
+        reject(error)
+      })
+    })
+    return { envid: envid, content: buffer.toString('binary') }
   }
 
   /**

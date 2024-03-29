@@ -193,7 +193,18 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
         playerAction: PlayerActions.REROLL_EXERCISE,
         run: () => this.evaluate(PlayerActions.REROLL_EXERCISE),
       },
+      {
+        icon: 'download',
+        label: "Télécharger l'environnement",
+        tooltip: "Télécharger l'environnement",
+        visible: this.activatedRoute.snapshot.queryParamMap.has(PLAYER_EDITOR_PREVIEW),
+        run: () => this.downloadEnvironment(),
+      },
     ]
+  }
+
+  private async downloadEnvironment(): Promise<void> {
+    window.open(`/api/v1/player/environment/${this.player?.sessionId}`, '_blank')
   }
 
   protected get secondaryActions(): Action[] {
