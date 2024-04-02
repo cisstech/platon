@@ -56,7 +56,7 @@ export class LeaderboardCommand  {
 	}
 
 	constructor(private readonly leaderBoardService : LeaderboardService, private readonly watchedChallengeService : WatchedChallengesService,
-		@InjectDiscordClient() private readonly client: Client, private readonly eventService: EventService, private readonly activityService: ActivityService) {
+		@InjectDiscordClient() private readonly client: Client,  private readonly activityService: ActivityService) {
 			this.watchedChallengeService.findAll().then((watchedChallenges) => {
 				watchedChallenges.forEach((watchedChallenge) =>
 					this.updateChallengeToChannelMap(watchedChallenge)
@@ -114,7 +114,10 @@ export class LeaderboardCommand  {
 	@OnEvent('activity.terminate')
   async onTerminate(event: OnTerminateActivityEventPayload ): Promise<void> {
 		const channelsWithMessage = this.challengeToChannelMap.get(event.activity.courseId)
-		const leaderboard = await this.courseLeaderboard(event.activity.courseId);
+
+		const leaderboard = (await this.courseLeaderboard(event.activity.courseId)).slice(0, 60); // J'en prends que 60 pour le moment.
+
+		console.log(leaderboard)
 
 		const messageArray = leaderboard.map((entry, index) => {
 			let symbol = '';
@@ -134,7 +137,7 @@ export class LeaderboardCommand  {
 									break;
 					}
 			}
-			return index < 3 ? `### ${symbol} ${entry.user.firstName} : ${entry.points}` : `${entry.rank}. **${entry.user.firstName}**     *(${entry.points})*`;
+			return index < 3 ? `### ${symbol} ${entry.user.firstName} ${entry.user.lastName?.toLocaleUpperCase()}: ${entry.points}` : `${entry.rank}. **${entry.user.firstName}** **${entry.user.lastName?.toLocaleUpperCase()}**    *(${entry.points})*`;
 	});
 
 	const messageContent = "# 🏆  Leaderboard  🏆\n" + messageArray.join('\n');
@@ -158,16 +161,3 @@ export class LeaderboardCommand  {
     });
 	}
 }
-
-
-/* TODO
-
-Enregistrer le channel, l'id du challenge dans une BDD
-
-Au démarrage de l'appli, récupérer ce qu'on a dans la bdd
-
-Qd update sur un challenge, on renvoit le resultat sur son channel associé
-
-datarace ? jsp
-
-*/
