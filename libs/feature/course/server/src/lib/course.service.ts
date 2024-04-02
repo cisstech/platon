@@ -33,8 +33,9 @@ export class CourseService {
       })
     }
 
-    if (filters.search) {
-      query.andWhere(`(f_unaccent(course.name) ILIKE f_unaccent(:search))`, { search: `%${filters.search}%` })
+    const search = filters.search?.trim()
+    if (search) {
+      query.andWhere(`(f_unaccent(course.name) ILIKE f_unaccent(:search))`, { search: `%${search}%` })
     }
 
     if (filters.period) {

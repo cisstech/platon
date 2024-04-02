@@ -26,12 +26,13 @@ export class UserGroupService {
     const query = this.repository.createQueryBuilder('group')
     query.leftJoinAndSelect('group.users', 'users')
 
-    if (filters.search) {
+    const search = filters.search?.trim()
+    if (search) {
       query.andWhere(
         `(
         name ILIKE :search
       )`,
-        { search: `%${filters.search}%` }
+        { search: `%${search}%` }
       )
     }
 

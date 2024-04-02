@@ -90,6 +90,10 @@ export class ResourceService {
   acceptJoin(resource: Resource | string, userId: string): Observable<ResourceMember> {
     return this.resourceMemberProvider.update(resource, userId, {
       waiting: false,
+      permissions: {
+        read: true,
+        write: true,
+      },
     })
   }
 

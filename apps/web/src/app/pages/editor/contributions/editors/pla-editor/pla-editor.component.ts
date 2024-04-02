@@ -33,6 +33,7 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
       duration: 0,
       navigation: { mode: 'composed' },
       actions: {
+        retry: 1,
         hints: true,
         reroll: true,
         theories: true,
@@ -67,7 +68,7 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
       mode: [this.activity.settings?.navigation?.mode || 'composed', [Validators.required]],
     }),
     actions: this.fb.group({
-      retry: [1, [Validators.required, Validators.min(0)]],
+      retry: [this.activity?.settings?.actions?.retry, [Validators.required, Validators.min(0)]],
       hints: [!!this.activity?.settings?.actions?.hints],
       reroll: [!!this.activity?.settings?.actions?.reroll],
       theories: [!!this.activity?.settings?.actions?.theories],

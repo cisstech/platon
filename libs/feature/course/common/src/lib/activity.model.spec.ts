@@ -1,43 +1,4 @@
-import { User, UserRoles } from '@platon/core/common'
-import { Activity, calculateActivityOpenState, canUserAnswerActivity } from './activity.model'
-
-describe('canUserAnswerActivity', () => {
-  it('should return true for non-challenge activities', () => {
-    const activity = { isChallenge: false } as Activity
-    const user = { role: UserRoles.student } as User
-
-    const result = canUserAnswerActivity(activity, user)
-
-    expect(result).toBe(true)
-  })
-
-  it('should return false for challenge activities if user is an admin', () => {
-    const activity = { isChallenge: true } as Activity
-    const user = { role: UserRoles.admin } as User
-
-    const result = canUserAnswerActivity(activity, user)
-
-    expect(result).toBe(false)
-  })
-
-  it('should return false for challenge activities if user is a teacher', () => {
-    const activity = { isChallenge: true } as Activity
-    const user = { role: UserRoles.teacher } as User
-
-    const result = canUserAnswerActivity(activity, user)
-
-    expect(result).toBe(false)
-  })
-
-  it('should return true for challenge activities if user is not a teacher', () => {
-    const activity = { isChallenge: true } as Activity
-    const user = { role: UserRoles.student } as User
-
-    const result = canUserAnswerActivity(activity, user)
-
-    expect(result).toBe(true)
-  })
-})
+import { calculateActivityOpenState } from './activity.model'
 
 describe('calculateActivityOpenState', () => {
   it('should return "planned" when openAt is in the future and closeAt is defined', () => {

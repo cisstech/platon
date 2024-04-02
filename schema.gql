@@ -89,7 +89,6 @@ input UserFiltersInput {
   search: String
   active: Boolean
   offset: Int
-  limit: Int
   order: UserOrderings
   direction: OrderingDirections
 }

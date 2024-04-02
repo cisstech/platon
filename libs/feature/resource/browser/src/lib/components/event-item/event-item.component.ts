@@ -106,7 +106,7 @@ class NewStatusItemComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [UserAvatarComponent, ResourcePipesModule],
   template: `
-    <user-avatar showUsername="inline" [userIdOrName]="event.actorId" /> à ajouté “{{ event.data.resourceName }}” dans
+    <user-avatar showUsername="inline" [userIdOrName]="event.actorId" /> a ajouté “{{ event.data.resourceName }}” dans
     le cercle”
   `,
 })

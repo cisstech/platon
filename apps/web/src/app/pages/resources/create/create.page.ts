@@ -36,12 +36,11 @@ import {
   CircleTree,
   LATEST,
   Resource,
-  ResourceStatus,
   ResourceTypes,
-  circleFromTree,
-  circleTreeFromResource,
+  branchFromCircleTree,
+  circleAncestors,
+  circleTreeFromCircle,
   flattenCircleTree,
-  resourceAncestors,
 } from '@platon/feature/resource/common'
 import { UiStepDirective, UiStepperComponent } from '@platon/shared/ui'
 import { NzIconModule } from 'ng-zorro-antd/icon'
@@ -160,7 +159,7 @@ export class ResourceCreatePage implements OnInit {
     this.tree = tree
 
     if (this.type !== 'CIRCLE') {
-      this.tree.children?.unshift(circleTreeFromResource(circle))
+      this.tree.children?.unshift(circleTreeFromCircle(circle))
     }
 
     this.topics = topics
@@ -172,7 +171,7 @@ export class ResourceCreatePage implements OnInit {
 
   protected onChangeParentId(id?: string): void {
     this.parentId = id
-    this.parentName = id ? circleFromTree(this.tree, id)?.name : undefined
+    this.parentName = id ? branchFromCircleTree(this.tree, id)?.name : undefined
   }
 
   protected async create(): Promise<void> {
@@ -193,7 +192,6 @@ export class ResourceCreatePage implements OnInit {
           code: infos.code || undefined,
           levels: tags.levels as string[],
           topics: tags.topics as string[],
-          status: ResourceStatus.DRAFT,
         })
       )
 
@@ -216,7 +214,7 @@ export class ResourceCreatePage implements OnInit {
 
     this.changeDetectorRef.markForCheck()
 
-    const ancestors = resourceAncestors(this.tree, this.parentId as string, true)
+    const ancestors = circleAncestors(this.tree, this.parentId as string, true)
     const response = await firstValueFrom(
       this.resourceService.search({
         types: ['EXERCISE'],

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { OrderingDirections, UserOrderings } from '@platon/core/common'
+import { MAX_PAGE_SIZE, MIN_PAGE_OFFSET, MIN_PAGE_SIZE, OrderingDirections, UserOrderings } from '@platon/core/common'
 import { BaseDTO, toBoolean, toNumber } from '@platon/core/server'
 import {
   CreateResourceMember,
@@ -8,7 +8,7 @@ import {
   UpdateResourceMember,
 } from '@platon/feature/resource/common'
 import { Transform, Type } from 'class-transformer'
-import { IsBoolean, IsEnum, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator'
+import { IsBoolean, IsEnum, IsNumber, IsOptional, IsString, IsUUID, Max, Min } from 'class-validator'
 import { MemberPermissionsDTO } from '../permissions'
 
 export class ResourceMemberDTO extends BaseDTO implements ResourceMember {
@@ -52,11 +52,6 @@ export class ResourceMemberFiltersDTO implements ResourceMemberFilters {
   @IsOptional()
   readonly search?: string
 
-  @Transform(({ value }) => toNumber(value))
-  @IsNumber()
-  @IsOptional()
-  readonly offset?: number
-
   @Transform(({ value }) => toBoolean(value))
   @IsBoolean()
   @IsOptional()
@@ -65,6 +60,14 @@ export class ResourceMemberFiltersDTO implements ResourceMemberFilters {
   @Transform(({ value }) => toNumber(value))
   @IsNumber()
   @IsOptional()
+  @Min(MIN_PAGE_OFFSET)
+  readonly offset?: number
+
+  @Transform(({ value }) => toNumber(value))
+  @IsNumber()
+  @IsOptional()
+  @Min(MIN_PAGE_SIZE)
+  @Max(MAX_PAGE_SIZE)
   readonly limit?: number
 
   @IsEnum(UserOrderings)

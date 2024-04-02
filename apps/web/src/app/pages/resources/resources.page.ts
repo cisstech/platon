@@ -135,7 +135,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
   protected circles: CircleTree[] = []
   protected topics: Topic[] = []
   protected levels: Level[] = []
-
+  protected totalMatches = 0
   protected completion = this.resourceService.completion().pipe(shareReplay(1))
   protected filterIndicators: FilterIndicator<ResourceFilters>[] = [
     ...Object.values(ResourceTypes).map(ResourceTypeFilterIndicator),
@@ -194,17 +194,17 @@ export default class ResourcesPage implements OnInit, OnDestroy {
       this.activatedRoute.queryParams.subscribe(async (e: QueryParams) => {
         this.filters = {
           ...this.filters,
-          search: e.q,
+          search: typeof e.q === 'string' ? (e.q.length > 0 ? e.q : undefined) : undefined,
           parents: e.parents ? (typeof e.parents === 'string' ? [e.parents] : e.parents) : undefined,
           topics: e.topics ? (typeof e.topics === 'string' ? [e.topics] : e.topics) : undefined,
           levels: e.levels ? (typeof e.levels === 'string' ? [e.levels] : e.levels) : undefined,
-          period: Number.parseInt(e.period + '', 10) || 0,
+          period: Number.parseInt(e.period + '', 10) || undefined,
           order: e.order,
           direction: e.direction,
           types: typeof e.types === 'string' ? [e.types] : e.types,
           status: typeof e.status === 'string' ? [e.status] : e.status,
           dependOn: typeof e.dependOn === 'string' ? [e.dependOn] : e.dependOn,
-          configurable: e.configurable === 'true',
+          configurable: e.configurable === 'true' || undefined, // do not pass false to prevent ignoring configurable resources by default
         }
 
         if (this.searchbar.value !== e.q) {
@@ -227,6 +227,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
 
         this.items = response.resources
         this.hasMore = response.resources.length > 0
+        this.totalMatches = response.total
         this.searching = false
 
         this.changeDetectorRef.markForCheck()
@@ -240,7 +241,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
 
   protected search(filters: ResourceFilters, query?: string) {
     const queryParams: QueryParams = {
-      q: query,
+      q: query?.length || 0 ? query : undefined,
       period: filters.period,
       order: filters.order,
       direction: filters.direction,

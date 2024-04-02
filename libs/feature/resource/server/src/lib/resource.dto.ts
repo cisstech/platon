@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { OrderingDirections } from '@platon/core/common'
-import { BaseDTO, LevelDTO, toArray, toBoolean, toNumber, TopicDTO } from '@platon/core/server'
+import { MAX_PAGE_SIZE, MIN_PAGE_OFFSET, MIN_PAGE_SIZE, OrderingDirections } from '@platon/core/common'
+import { BaseDTO, LevelDTO, TopicDTO, toArray, toBoolean, toNumber } from '@platon/core/server'
 import { ActivityNavigationModes } from '@platon/feature/compiler'
 import {
   CircleTree,
@@ -14,7 +14,7 @@ import {
   UpdateResource,
 } from '@platon/feature/resource/common'
 import { Transform, Type } from 'class-transformer'
-import { IsArray, IsBoolean, IsEnum, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator'
+import { IsArray, IsBoolean, IsEnum, IsNumber, IsOptional, IsString, IsUUID, Max, Min } from 'class-validator'
 import { ResourcePermissionsDTO } from './permissions'
 
 export class ResourceDTO extends BaseDTO implements Resource {
@@ -110,7 +110,7 @@ export class CircleTreeDTO implements CircleTree {
 
   @Type(() => ResourcePermissionsDTO)
   @ApiProperty()
-  readonly permissions!: ResourcePermissions
+  readonly permissions?: ResourcePermissions
 }
 
 export class CreateResourceDTO implements CreateResource {
@@ -258,6 +258,11 @@ export class ResourceFiltersDTO implements ResourceFilters {
   @Transform(({ value }) => toBoolean(value))
   @IsBoolean()
   @IsOptional()
+  readonly personal?: boolean
+
+  @Transform(({ value }) => toBoolean(value))
+  @IsBoolean()
+  @IsOptional()
   readonly publicPreview?: boolean
 
   @Transform(({ value }) => toBoolean(value))
@@ -284,11 +289,14 @@ export class ResourceFiltersDTO implements ResourceFilters {
   @Transform(({ value }) => toNumber(value))
   @IsNumber()
   @IsOptional()
+  @Min(MIN_PAGE_OFFSET)
   readonly offset?: number
 
   @Transform(({ value }) => toNumber(value))
   @IsNumber()
   @IsOptional()
+  @Min(MIN_PAGE_SIZE)
+  @Max(MAX_PAGE_SIZE)
   readonly limit?: number
 
   @Transform(({ value }) => toArray(value))

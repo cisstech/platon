@@ -11,7 +11,7 @@ import {
   Variables,
   extractExercisesFromActivityVariables,
 } from '@platon/feature/compiler'
-import { Activity, canUserAnswerActivity } from '@platon/feature/course/common'
+import { Activity } from '@platon/feature/course/common'
 import {
   ActivityEntity,
   ActivityService,
@@ -28,6 +28,7 @@ import {
   PlayerExercise,
   PlayerManager,
   PreviewInput,
+  SandboxEnvironment,
   updateActivityNavigationState,
   withActivityPlayer,
   withExercisePlayer,
@@ -114,13 +115,18 @@ export class PlayerService extends PlayerManager {
     }
   }
 
+  async downloadEnvironment(sessionId: string, _user: User): Promise<SandboxEnvironment> {
+    const session = await this.sessionService.findById(sessionId, { parent: true, activity: true })
+    if (!session) throw new NotFoundResponse('Session not found')
+    if (!session.envid) throw new NotFoundResponse(`Environment not found for session ${sessionId}`)
+
+    return this.sandboxService.downloadEnvironment(session.source as PLSourceFile<ExerciseVariables>, session.envid)
+  }
+
   async playActivity(activityId: string, user: User): Promise<PlayActivityOuput> {
     let activitySession = await this.sessionService.findUserActivity(activityId, user.id)
     if (!activitySession) {
       const activity = await this.activityService.findByIdForUser(activityId, user)
-      if (!canUserAnswerActivity(activity, user)) {
-        throw new ForbiddenResponse(`You cannot answer this activity`)
-      }
 
       activitySession = await this.createNewSession({
         user,

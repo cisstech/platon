@@ -9,10 +9,12 @@ import { firstValueFrom } from 'rxjs'
 
 import { ConfigService } from '@nestjs/config'
 import { Configuration } from '@platon/core/server'
-import { Sandbox, SandboxError, SandboxInput, SandboxOutput } from '@platon/feature/player/common'
+import { Sandbox, SandboxEnvironment, SandboxError, SandboxInput, SandboxOutput } from '@platon/feature/player/common'
 import { withTempFile } from '@platon/shared/server'
 import { RegisterSandbox } from '../sandbox'
 import { pythonRunnerScript } from './python-scripts'
+import { AxiosError } from 'axios'
+import { NotFoundResponse } from '@platon/core/common'
 
 interface ExecutionResult {
   status: number
@@ -51,7 +53,7 @@ export class PythonSandbox implements Sandbox {
       const response = await withTempFile(
         async (path) => {
           const isEnvSaved: boolean = await firstValueFrom(
-            this.http.head(`${this.config.get('sandbox.url', { infer: true })}/environment/${input.envid}`)
+            this.http.head(`${this.config.get('sandbox.url', { infer: true })}/environments/${input.envid}/`)
           )
             .then((response) => (response.status === 200 ? true : false))
             .catch(() => false)
@@ -105,6 +107,25 @@ export class PythonSandbox implements Sandbox {
       }
       throw SandboxError.unknownError(error)
     }
+  }
+
+  /**
+   * Downloads the environment files from the Python sandbox.
+   * @param envid The environment ID.
+   * @returns A Promise that resolves to a string containing the environment files.
+   */
+  async downloadEnvironment(envid: string): Promise<SandboxEnvironment> {
+    const response = await firstValueFrom(
+      this.http.get(`${this.config.get('sandbox.url', { infer: true })}/environments/${envid}/`, {
+        responseType: 'arraybuffer',
+      })
+    ).catch((_error: AxiosError) => {
+      throw new NotFoundResponse(`Environment ${envid} not found `)
+    })
+    //      .then((response) => {if (response.status == 404) throw new NotFoundException(`Environment ${envid} not found `) } )
+    if (response.status == 404) throw new NotFoundResponse(`Environment ${envid} not found `)
+
+    return { envid: envid, content: response.data }
   }
 
   /**

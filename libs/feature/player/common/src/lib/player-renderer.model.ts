@@ -200,7 +200,7 @@ export const withExercisePlayer = (session: ExerciseSession, answer?: Answer): E
   // ATTEMPTS
   let remainingAttempts: number | undefined
   const { actions } = activitySettings
-  if (actions?.retry && actions.retry !== -1) {
+  if (actions?.retry && actions.retry > 0) {
     remainingAttempts = actions.retry - (variables['.meta']?.attempts || 0)
   }
 

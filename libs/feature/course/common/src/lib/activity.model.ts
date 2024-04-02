@@ -1,4 +1,3 @@
-import { User, isTeacherRole } from '@platon/core/common'
 import { ActivityPermissions } from './permissions.model'
 
 export interface Activity {
@@ -80,11 +79,4 @@ export const calculateActivityOpenState = (value: {
   } else {
     return 'opened'
   }
-}
-
-export const canUserAnswerActivity = (activity: Activity, user: Pick<User, 'role'>): boolean => {
-  if (activity.isChallenge) {
-    return !isTeacherRole(user.role)
-  }
-  return true
 }

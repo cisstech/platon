@@ -3,70 +3,23 @@ import { ActivityNavigationModes } from '@platon/feature/compiler'
 import { ResourceStatus } from '../enums/resource-status'
 import { ResourceTypes } from '../enums/resource-types'
 import { ResourceMeta } from './metadata.model'
-import { ResourcePermissions } from './permissions.model'
+import { ResourcePermissions, emptyResourcePermissions } from './permissions.model'
 import { ResourceStatistic } from './statistic.model'
 
-export type ResourceExpandableFields = 'metadata' | 'template' | 'parent' | 'template.metadata' | 'statistic'
+/**
+ * List of fields that can be expanded on a {@link Resource} object.
+ */
+export type ResourceExpandableFields =
+  | 'metadata'
+  | 'template'
+  | 'parent'
+  | 'template.metadata'
+  | 'statistic'
+  | 'permissions'
 
-export interface Resource {
-  readonly id: string
-  readonly createdAt: Date
-  readonly updatedAt: Date
-  readonly name: string
-  readonly code?: string
-  readonly desc?: string
-  readonly type: ResourceTypes
-  readonly personal: boolean
-  readonly status: ResourceStatus
-  readonly levels: Level[]
-  readonly topics: Topic[]
-  readonly ownerId: string
-  readonly parentId?: string
-
-  readonly templateId?: string
-  readonly templateVersion?: string
-  readonly publicPreview?: boolean
-  readonly permissions: ResourcePermissions
-
-  // Expandable fields
-
-  readonly metadata?: ResourceMeta
-  readonly template?: Resource
-  readonly parent?: Resource
-  readonly statistic?: ResourceStatistic
-}
-
-export interface CircleTree {
-  readonly id: string
-  readonly name: string
-  readonly code?: string
-  readonly versions?: string[]
-  readonly children?: CircleTree[]
-  readonly permissions: ResourcePermissions
-}
-
-export interface CreateResource extends ExpandableModel<ResourceExpandableFields> {
-  readonly name: string
-  readonly parentId: string
-  readonly templateId?: string
-  readonly templateVersion?: string
-  readonly code?: string
-  readonly desc?: string
-  readonly type: ResourceTypes
-  readonly status?: ResourceStatus
-  readonly levels?: string[]
-  readonly topics?: string[]
-}
-
-export interface UpdateResource extends ExpandableModel<ResourceExpandableFields> {
-  readonly name?: string
-  readonly desc?: string
-  readonly publicPreview?: boolean
-  readonly status?: ResourceStatus
-  readonly levels?: string[]
-  readonly topics?: string[]
-}
-
+/**
+ * Enum representing the possible orderings criteria for resources.
+ */
 export enum ResourceOrderings {
   NAME = 'NAME',
   CREATED_AT = 'CREATED_AT',
@@ -74,11 +27,272 @@ export enum ResourceOrderings {
   RELEVANCE = 'RELEVANCE',
 }
 
+/**
+ * A container for any educational content.
+ */
+export interface Resource {
+  /**
+   * Unique identifier of the resource.
+   */
+  readonly id: string
+
+  /**
+   * Date on which the resource has been created.
+   */
+  readonly createdAt: Date
+
+  /**
+   * Last date on which the resource has been updated.
+   * @remarks
+   * - External events may trigger this field update like update of resource files.
+   */
+  readonly updatedAt: Date
+
+  /**
+   * Display name of the resource.
+   */
+  readonly name: string
+
+  /**
+   * Unique string representing an alias for accessing this resource files.
+   */
+  readonly code?: string
+
+  /**
+   * Human readable
+   */
+  readonly desc?: string
+
+  /**
+   * Types of the resource.
+   */
+  readonly type: ResourceTypes
+
+  /**
+   * Value indicating whether this resource is inside of personal circle (for non circle resources) or is a personal cirlcle.
+   */
+  readonly personal: boolean
+
+  /**
+   * Current usability status of the resource used
+   */
+  readonly status: ResourceStatus
+
+  /**
+   * List of levels metadata associated to the resource.
+   */
+  readonly levels: Level[]
+
+  /**
+   * List of topics metadata associated to the resource.
+   */
+  readonly topics: Topic[]
+
+  /**
+   * Identifier of the resource's creator.
+   */
+  readonly ownerId: string
+
+  /**
+   * Identifier of the circle the resource belongs to if any.
+   */
+  readonly parentId?: string
+
+  /**
+   * Identifier of the exercise from which this resource (assuming that it's an exercise type) is from.
+   */
+  readonly templateId?: string
+
+  /**
+   * Version of the exercise from which this resource (assuming that it's an exercise type) is from.
+   */
+  readonly templateVersion?: string
+
+  /**
+   * Value indicating whether this resource is publicly previewable.
+   */
+  readonly publicPreview?: boolean
+
+  // Expandable fields
+
+  /**
+   * List of permissions the user requesting the resource has on it.
+   * @remarks
+   * - `Expandable` (default in POST, PATCH AND SINGLE GET queries)
+   */
+  readonly permissions?: ResourcePermissions
+
+  /**
+   * The circle the resource belongs to if any.
+   * @remarks
+   * - `Expandable`
+   */
+  readonly parent?: Resource
+
+  /**
+   * Some useful metadata informations about the resource.
+   * @remarks
+   * - `Expandable`
+   */
+  readonly metadata?: ResourceMeta
+
+  /**
+   * The template from which the resource is from if any.
+   * @remarks
+   * - `Expandable`
+   */
+  readonly template?: Resource
+
+  /**
+   * Some statistics about the resource.
+   * @remarks
+   * - `Expandable`
+   */
+  readonly statistic?: ResourceStatistic
+}
+
+/**
+ * Represents a branch in a hierarchical structure of circles.
+ */
+export interface CircleTree {
+  /**
+   * Unique identifier of the circle.
+   */
+  readonly id: string
+
+  /**
+   * Display name of the circle.
+   */
+  readonly name: string
+
+  /**
+   * Unique string representing an alias for accessing this circle files.
+   */
+  readonly code?: string
+
+  /**
+   * List of versions of the circle.
+   */
+  readonly versions?: string[]
+
+  /**
+   * List of children branches.
+   */
+  readonly children?: CircleTree[]
+
+  /**
+   * Permissions of the user requesting the circles.
+   */
+  readonly permissions?: ResourcePermissions
+}
+
+/**
+ * Represents a payload for creating a resource.
+ */
+export interface CreateResource extends ExpandableModel<ResourceExpandableFields> {
+  /**
+   * Display name of the resource.
+   */
+  readonly name: string
+
+  /**
+   * Unique identifier of the circle the resource belongs to.
+   */
+  readonly parentId: string
+
+  /**
+   * Unique identifier of the exercise from which this resource (assuming that it's an exercise type) is from.
+   */
+  readonly templateId?: string
+
+  /**
+   * Version of the exercise from which this resource (assuming that it's an exercise type) is from.
+   */
+  readonly templateVersion?: string
+
+  /**
+   * Unique string representing an alias for accessing this resource files.
+   */
+  readonly code?: string
+
+  /**
+   * Resource's description.
+   */
+  readonly desc?: string
+
+  /**
+   * Resource's type.
+   */
+  readonly type: ResourceTypes
+
+  /**
+   * Resource's status (default is `ResourceStatus.READY`).
+   */
+  readonly status?: ResourceStatus
+
+  /**
+   * List of levels (identifiers) associated to the resource.
+   */
+  readonly levels?: string[]
+
+  /**
+   * List of topics (identifiers) associated to the resource.
+   */
+  readonly topics?: string[]
+}
+
+/**
+ * Represents a payload for updating a resource.
+ */
+export interface UpdateResource extends ExpandableModel<ResourceExpandableFields> {
+  /**
+   * Replace the resource's name.
+   */
+  readonly name?: string
+
+  /**
+   * Replace the resource's description.
+   */
+  readonly desc?: string
+
+  /**
+   * Mark the resource as publicly previewable or not.
+   */
+  readonly publicPreview?: boolean
+
+  /**
+   * Replace the status of the resource with the one specified.
+   */
+  readonly status?: ResourceStatus
+
+  /**
+   * Replace the levels associated to the resource with the ones specified in the array thanks to their identifiers.
+   * @remarks
+   * - If not specified, the levels associated to the resource will not be modified.
+   * - If an empty array is specified, the levels associated to the resource will be removed.
+   */
+  readonly levels?: string[]
+
+  /**
+   * Replace the topics associated to the resource with the ones specified in the array thanks to their identifiers.
+   * @remarks
+   * - If not specified, the topics associated to the resource will not be modified.
+   * - If an empty array is specified, the topics associated to the resource will be removed.
+   */
+  readonly topics?: string[]
+}
+
+/**
+ * Represents a set of parameters for querying a specific resource.
+ */
 export interface FindResource extends ExpandableModel<ResourceExpandableFields> {
   id: string
   markAsViewed?: boolean
 }
 
+/**
+ * Represents a set of filters for querying resources.
+ */
 export interface ResourceFilters extends ExpandableModel<ResourceExpandableFields> {
   /**
    * Filter resources by their types.
@@ -91,7 +305,7 @@ export interface ResourceFilters extends ExpandableModel<ResourceExpandableField
   readonly status?: (keyof typeof ResourceStatus)[]
 
   /**
-   * Free text search on resource, topics and levels names.
+   * Free text search on resource, topics, and levels names.
    */
   readonly search?: string
 
@@ -99,6 +313,7 @@ export interface ResourceFilters extends ExpandableModel<ResourceExpandableField
    * Filter resources which have been updated in the last period of time.
    */
   readonly period?: number
+
   /**
    * Filter resources by their members.
    */
@@ -120,6 +335,11 @@ export interface ResourceFilters extends ExpandableModel<ResourceExpandableField
   readonly views?: boolean
 
   /**
+   * Filter resources by whether they are personal or not.
+   */
+  readonly personal?: boolean
+
+  /**
    * Filter resources by whether they are publicly previewable.
    */
   readonly publicPreview?: boolean
@@ -130,7 +350,7 @@ export interface ResourceFilters extends ExpandableModel<ResourceExpandableField
   readonly configurable?: boolean
 
   /**
-   * Filter activities by their navigation settings
+   * Filter activities by their navigation settings.
    */
   readonly navigation?: ActivityNavigationModes
 
@@ -155,12 +375,12 @@ export interface ResourceFilters extends ExpandableModel<ResourceExpandableField
   readonly dependOn?: string[]
 
   /**
-   * Pagination ofsset
+   * Pagination offset.
    */
   readonly offset?: number
 
   /**
-   * Pagination limit
+   * Pagination limit.
    */
   readonly limit?: number
 
@@ -170,16 +390,19 @@ export interface ResourceFilters extends ExpandableModel<ResourceExpandableField
   readonly parents?: string[]
 
   /**
-   * Ordering criteria
+   * Ordering criteria.
    */
   readonly order?: ResourceOrderings
 
   /**
-   * Ordering direction
+   * Ordering direction.
    */
   readonly direction?: OrderingDirections
 }
 
+/**
+ * Defines the default ordering directions for resource orderings criteria.
+ */
 export const RESOURCE_ORDERING_DIRECTIONS: Readonly<Record<ResourceOrderings, keyof typeof OrderingDirections>> = {
   NAME: 'ASC',
   CREATED_AT: 'DESC',
@@ -187,15 +410,23 @@ export const RESOURCE_ORDERING_DIRECTIONS: Readonly<Record<ResourceOrderings, ke
   RELEVANCE: 'DESC',
 }
 
-export const resourceAncestors = (tree: CircleTree, resourceId: string, includeSelf?: boolean): CircleTree[] => {
-  if (tree.id === resourceId) {
+/**
+ * Retrieves the ancestors of a circle in a tree structure.
+ *
+ * @param tree - The root of the tree structure.
+ * @param circleId - The ID of the circle whose ancestors are to be retrieved.
+ * @param includeSelf - Optional. Specifies whether to include the circle itself in the result. Default is false.
+ * @returns An array of CircleTree objects representing the ancestors of the specified circle.
+ */
+export const circleAncestors = (tree: CircleTree, circleId: string, includeSelf?: boolean): CircleTree[] => {
+  if (tree.id === circleId) {
     return includeSelf ? [tree] : []
   }
 
   if (tree.children) {
     for (const child of tree.children) {
-      if (child.id === resourceId || resourceAncestors(child, resourceId, false).length > 0) {
-        return [...resourceAncestors(child, resourceId, includeSelf), tree]
+      if (child.id === circleId || circleAncestors(child, circleId, false).length > 0) {
+        return [...circleAncestors(child, circleId, includeSelf), tree]
       }
     }
   }
@@ -203,21 +434,33 @@ export const resourceAncestors = (tree: CircleTree, resourceId: string, includeS
   return []
 }
 
-export const circleFromTree = (tree: CircleTree, id: string): CircleTree | undefined => {
-  if (tree.id === id) return tree
-
-  if (tree.children) {
-    for (const child of tree.children) {
-      const circle = circleFromTree(child, id)
-      if (circle) {
-        return circle
-      }
-    }
-  }
-
-  return undefined
-}
-
+/**
+ * Flattens a CircleTree by converting it into an array of CircleTree nodes.
+ * The flattening is done in a depth-first manner.
+ * @example
+ * ```ts
+ * const tree = {
+ *  id: '1',
+ *  name: 'root',
+ *  children: [
+ *    {
+ *      id: '2',
+ *      name: 'child1',
+ *      children: [
+ *        {
+ *          id: '3',
+ *          name: 'child2',
+ *        },
+ *      ],
+ *    },
+ *  ],
+ * }
+ * const flat = flattenCircleTree(tree)
+ * // flat = [tree, child1, child2]
+ * ```
+ * @param tree - The CircleTree to flatten.
+ * @returns An array of CircleTree nodes representing the flattened tree.
+ */
 export const flattenCircleTree = (tree: CircleTree): CircleTree[] => {
   const flat: CircleTree[] = []
   const flatten = (node: CircleTree) => {
@@ -228,14 +471,135 @@ export const flattenCircleTree = (tree: CircleTree): CircleTree[] => {
   return flat
 }
 
-export const circleTreeFromResource = (resource: Resource): CircleTree => {
-  return {
-    id: resource.id,
-    name: resource.name,
-    code: resource.code,
-    versions: resource.metadata?.versions?.map((v) => v.tag),
-    permissions: {
-      ...resource.permissions,
-    },
+/**
+ * Extracts a branch from a CircleTree by its identifier.
+ * @param tree - The CircleTree to extract the branch from.
+ * @param id - The identifier of the branch to extract.
+ * @returns The branch of the CircleTree with the specified identifier if found, otherwise `undefined`.
+ */
+export const branchFromCircleTree = (tree: CircleTree, id: string): CircleTree | undefined => {
+  if (tree.id === id) return tree
+
+  if (tree.children) {
+    for (const child of tree.children) {
+      const circle = branchFromCircleTree(child, id)
+      if (circle) {
+        return circle
+      }
+    }
   }
+
+  return undefined
+}
+
+/**
+ * Converts a circle resource to a CircleTree object.
+ * @param circle - The circle resource to convert.
+ * @returns The converted CircleTree object.
+ */
+export const circleTreeFromCircle = (circle: Resource): CircleTree => {
+  return {
+    id: circle.id,
+    name: circle.name,
+    code: circle.code,
+    versions: circle.metadata?.versions?.map((v) => v.tag),
+    permissions: circle.permissions ? { ...circle.permissions } : undefined,
+  }
+}
+
+/**
+ * Converts a list of circles into a circle tree structure.
+ * @example
+ * ```ts
+ * const circles = [
+ *  { id: '1', name: 'Circle 1' },
+ *  { id: '2', name: 'Circle 2', parentId: '1' },
+ *  { id: '3', name: 'Circle 3', parentId: '2' },
+ *  { id: '4', name: 'Circle 4', parentId: '2' },
+ *  { id: '5', name: 'Circle 5', parentId: '1' },
+ * ]
+ *
+ * const versions = {
+ *  '1': ['v1', 'v2'],
+ *  '2': ['v3'],
+ *  '3': [],
+ *  '4': ['v4'],
+ *  '5': [],
+ * }
+ *
+ * const tree = circleTreeFromCircleList(circles, versions)
+ * // tree = {
+ * //   id: '1',
+ * //   name: 'Circle 1',
+ * //   versions: ['v1', 'v2'],
+ * //   children: [
+ * //     {
+ * //       id: '2',
+ * //       name: 'Circle 2',
+ * //       versions: ['v3'],
+ * //       children: [
+ * //         {
+ * //           id: '3',
+ * //           name: 'Circle 3',
+ * //           versions: [],
+ * //         },
+ * //         {
+ * //           id: '4',
+ * //           name: 'Circle 4',
+ * //           versions: ['v4'],
+ * //         },
+ * //       ],
+ * //     },
+ * //     {
+ * //       id: '5',
+ * //       name: 'Circle 5',
+ * //       versions: [],
+ * //     },
+ * //   ],
+ * // }
+ * ```
+ * @param circles - The list of circles.
+ * @param versions - The list of versions for each circle.
+ * @returns The circle tree structure.
+ * @throws Error if the root circle is not found.
+ */
+export const circleTreeFromCircleList = (circles: Resource[], versions: Record<string, string[]>): CircleTree => {
+  const root = circles.find((c) => !c.parentId && !c.personal)
+  if (!root) {
+    throw new Error('Root circle not found')
+  }
+
+  const tree: CircleTree = {
+    id: root.id,
+    name: root.name,
+    code: root.code,
+    versions: versions[root.id] || [],
+    permissions: emptyResourcePermissions(),
+  }
+
+  const traverse = (node: CircleTree) => {
+    const children = circles.filter((c) => c.parentId === node.id).sort((a, b) => a.name.localeCompare(b.name))
+
+    children.forEach((child) => {
+      const next: CircleTree = {
+        id: child.id,
+        name: child.name,
+        code: child.code,
+        versions: versions[child.id] || [],
+        permissions: emptyResourcePermissions(),
+      }
+
+      if (!node.children) {
+        Object.assign(node, { children: [] })
+      }
+
+      node.children?.push(next)
+
+      traverse(next)
+    })
+  }
+
+  traverse(tree)
+
+  return tree
 }

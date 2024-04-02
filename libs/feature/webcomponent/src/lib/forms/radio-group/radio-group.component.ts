@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Injector, Input, Output } from '@angular/core'
 import { WebComponent, WebComponentHooks } from '../../web-component'
+import { WebComponentService } from '../../web-component.service'
 import { RadioGroupComponentDefinition, RadioGroupItem, RadioGroupState } from './radio-group'
 
 @Component({
@@ -10,15 +11,20 @@ import { RadioGroupComponentDefinition, RadioGroupItem, RadioGroupState } from '
 })
 @WebComponent(RadioGroupComponentDefinition)
 export class RadioGroupComponent implements WebComponentHooks<RadioGroupState> {
+  private readonly webComponentService!: WebComponentService
+
   @Input() state!: RadioGroupState
   @Output() stateChange = new EventEmitter<RadioGroupState>()
 
-  constructor(readonly injector: Injector) {}
+  constructor(readonly injector: Injector) {
+    this.webComponentService = injector.get(WebComponentService)!
+  }
 
   onChangeState() {
     if (!Array.isArray(this.state.items)) {
       this.state.items = []
     }
+
     this.state.items.forEach((item, index) => {
       if (typeof item === 'string') {
         this.state.items[index] = {
@@ -34,7 +40,7 @@ export class RadioGroupComponent implements WebComponentHooks<RadioGroupState> {
 
   protected autoValidate() {
     if (this.state.autoValidation && this.state.selection) {
-      document.getElementById('check-answer-button')?.click()
+      this.webComponentService.submit()
     }
   }
 }

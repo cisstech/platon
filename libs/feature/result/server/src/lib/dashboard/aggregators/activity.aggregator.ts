@@ -1,5 +1,4 @@
-import { ActivityVariables, ExerciseVariables, extractExercisesFromActivityVariables } from '@platon/feature/compiler'
-import { canUserAnswerActivity } from '@platon/feature/course/common'
+import { ExerciseVariables, extractExercisesFromActivityVariables } from '@platon/feature/compiler'
 import { ActivityEntity, ActivityMemberView } from '@platon/feature/course/server'
 import {
   ACTIVITY_ANSWER_RATE,
@@ -43,9 +42,6 @@ export class ActivityUserResults implements SessionDataAggregator<UserResults[]>
     const { activity, activityMembers, exerciseSessions } = args
 
     activityMembers
-      ?.filter((member) => {
-        return activity && canUserAnswerActivity(activity, member)
-      })
       ?.sort((a, b) => a.username.localeCompare(b.username))
       ?.forEach((member) => {
         this.userResults.set(
@@ -75,7 +71,7 @@ export class ActivityUserResults implements SessionDataAggregator<UserResults[]>
     })
 
     if (activity) {
-      const activityExercises = extractExercisesFromActivityVariables(activity.source.variables as ActivityVariables)
+      const activityExercises = extractExercisesFromActivityVariables(activity.source.variables)
       activityExercises.forEach((exercise) => {
         const variables = exercise.source.variables as ExerciseVariables
         Array.from(this.userResults.values()).forEach((userResult) => {
@@ -187,7 +183,7 @@ export class ActivityExerciseResults implements SessionDataAggregator<ExerciseRe
     })
 
     if (activity) {
-      const activityExercises = extractExercisesFromActivityVariables(activity.source.variables as ActivityVariables)
+      const activityExercises = extractExercisesFromActivityVariables(activity.source.variables)
       activityExercises.forEach((exercise) => {
         const variables = exercise.source.variables as ExerciseVariables
         this.exerciseResults.set(

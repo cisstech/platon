@@ -1,8 +1,16 @@
 import { Inject, Injectable, Optional } from '@angular/core'
 import { WebComponentDefinition, WebComponentTypes, WEB_COMPONENT_DEFINITIONS } from './web-component'
+import { Subject } from 'rxjs'
 
 @Injectable({ providedIn: 'root' })
 export class WebComponentService {
+  private readonly submitEvent = new Subject<void>()
+
+  /**
+   * Emits when a component is auto-submitted.
+   */
+  readonly onSubmit = this.submitEvent.asObservable()
+
   constructor(
     @Optional()
     @Inject(WEB_COMPONENT_DEFINITIONS)
@@ -37,5 +45,12 @@ export class WebComponentService {
 
   linkFromDefinition(def: WebComponentDefinition) {
     return `/docs/components/${def.type}s/${def.selector}`
+  }
+
+  /**
+   * Called from auto-submittable components to trigger the submit event.
+   */
+  submit() {
+    this.submitEvent.next()
   }
 }

@@ -100,11 +100,19 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
   protected navExerciceCount = 0
   protected terminatedAfterLoseFocus = false
   protected terminatedAfterLeavePage = false
+  protected onLoseTabFocusFn = this.onLoseTabFocus.bind(this)
+  protected onVisibilityChangeFn = this.onVisibilityChange.bind(this)
+  protected onKeydownFn = this.onKeydown.bind(this)
+  protected onContextMenuFn = this.onContextMenu.bind(this)
 
   @Input() player!: ActivityPlayer
 
   protected get composed(): boolean {
     return this.player.settings?.navigation?.mode === 'composed'
+  }
+
+  protected get isPlaying(): boolean {
+    return !!this.exercises
   }
 
   protected get navigation(): PlayerNavigation {
@@ -338,14 +346,14 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
   }
 
   private onLoseTabFocus(): void {
-    if (!this.player.settings?.security?.terminateOnLoseFocus) return
+    if (!this.isPlaying || !this.player.settings?.security?.terminateOnLoseFocus) return
 
     this.terminatedAfterLoseFocus = true
     this.terminate().catch(console.error)
   }
 
   private onVisibilityChange(): void {
-    if (!this.player.settings?.security?.terminateOnLeavePage) return
+    if (!this.isPlaying || !this.player.settings?.security?.terminateOnLeavePage) return
 
     // passed from hidden to visible
     if (document.visibilityState === 'hidden') {
@@ -359,8 +367,8 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
 
     const container = this.elementRef.nativeElement
     container.classList.remove(NO_COPY_PASTER_CLASS_NAME)
-    container.removeEventListener('keydown', this.onKeydown.bind(this))
-    container.removeEventListener('contextmenu', this.onContextMenu.bind(this))
+    container.removeEventListener('keydown', this.onKeydownFn)
+    container.removeEventListener('contextmenu', this.onContextMenuFn)
   }
 
   private disableCopyPasteIfNeeded(): void {
@@ -368,17 +376,17 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
 
     const container = this.elementRef.nativeElement
     container.classList.add(NO_COPY_PASTER_CLASS_NAME)
-    container.addEventListener('keydown', this.onKeydown.bind(this))
-    container.addEventListener('contextmenu', this.onContextMenu.bind(this))
+    container.addEventListener('keydown', this.onKeydownFn)
+    container.addEventListener('contextmenu', this.onContextMenuFn)
   }
 
   private startWatchingVisibilityChange(): void {
-    window.addEventListener('blur', this.onLoseTabFocus.bind(this))
-    document.addEventListener('visibilitychange', this.onVisibilityChange.bind(this))
+    window.addEventListener('blur', this.onLoseTabFocusFn)
+    document.addEventListener('visibilitychange', this.onVisibilityChangeFn)
   }
 
   private stopWatchingVisibilityChange(): void {
-    window.removeEventListener('blur', this.onLoseTabFocus.bind(this))
-    document.removeEventListener('visibilitychange', this.onVisibilityChange.bind(this))
+    window.removeEventListener('blur', this.onLoseTabFocusFn)
+    document.removeEventListener('visibilitychange', this.onVisibilityChangeFn)
   }
 }

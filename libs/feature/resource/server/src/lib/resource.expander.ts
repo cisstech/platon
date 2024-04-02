@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common'
 import { IRequest, Mapper } from '@platon/core/server'
 import { ResourceMeta } from '@platon/feature/resource/common'
 import { ResourceMetadataService } from './metadata'
+import { ResourcePermissionsDTO } from './permissions'
 import { ResourcePermissionService } from './permissions/permissions.service'
 import { ResourceDTO } from './resource.dto'
 import { ResourceService } from './resource.service'
@@ -44,13 +45,16 @@ export class ResourceExpander {
     return this.resolveResourceId(request, parent.parentId)
   }
 
-  private async resolveResourceId(request: IRequest, resourceId: string): Promise<ResourceDTO | undefined> {
-    const resource = (await this.resourceService.findById(resourceId)).get()
+  async permissions(context: ExpandContext<IRequest, ResourceDTO>): Promise<ResourcePermissionsDTO> {
+    const { parent, request } = context
+    const permissions = await this.permissionService.userPermissionsOnResource({ req: request, resource: parent })
+    return Mapper.map(permissions, ResourcePermissionsDTO)
+  }
+
+  private async resolveResourceId(req: IRequest, resourceId: string): Promise<ResourceDTO | undefined> {
+    const resource = (await this.resourceService.findByIdOrCode(resourceId)).get()
     if (resource) {
-      const permissions = await this.permissionService.userPermissionsOnResource({
-        resource,
-        user: request.user,
-      })
+      const permissions = await this.permissionService.userPermissionsOnResource({ req, resource })
       Object.assign(resource, { permissions })
       return Mapper.map(resource, ResourceDTO)
     }

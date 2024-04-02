@@ -4,13 +4,13 @@ import { OnEvent } from '@nestjs/event-emitter'
 import { InjectRepository } from '@nestjs/typeorm'
 import { ForbiddenResponse, NotFoundResponse, User, isTeacherRole } from '@platon/core/common'
 import { DatabaseService, EventService, IRequest, buildSelectQuery } from '@platon/core/server'
+import { ActivityVariables, PLSourceFile } from '@platon/feature/compiler'
 import {
   ActivityFilters,
   CreateActivity,
   ReloadActivity,
   UpdateActivity,
   calculateActivityOpenState,
-  canUserAnswerActivity,
 } from '@platon/feature/course/common'
 import { ResourceEntity, ResourceFileService } from '@platon/feature/resource/server'
 import { CLS_REQ } from 'nestjs-cls'
@@ -195,7 +195,7 @@ export class ActivityService {
       resourceId: activity.source.resource,
       version: input.version,
     })
-    activity.source = source
+    activity.source = source as PLSourceFile<ActivityVariables>
 
     activity = await this.repository.save(activity)
 
@@ -244,7 +244,7 @@ export class ActivityService {
         resourceId: input.resourceId,
         version: input.resourceVersion,
       })
-      activity.source = source
+      activity.source = source as PLSourceFile<ActivityVariables>
       delete (input as any).resourceId
       delete (input as any).resourceVersion
     }
@@ -307,8 +307,8 @@ export class ActivityService {
         resourceId: activity.source.resource,
         exerciseCount: Object.keys(exerciseGroups).reduce((acc, group) => acc + exerciseGroups[group].length, 0),
         permissions: {
+          answer: true,
           update: activity.creatorId === this.request.user.id,
-          answer: canUserAnswerActivity(activity, this.request.user),
           viewStats: isTeacherRole(this.request.user.role),
           viewResource: isTeacherRole(this.request.user.role),
         },
