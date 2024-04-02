@@ -1,0 +1,47 @@
+<section>
+  <mat-card>
+    <mat-card-content>
+      <nz-collapse>
+        @for (group of context.courseGroups; track group) {
+        <nz-collapse-panel
+          [(nzActive)]="activesGroups[group.courseGroup.groupId]"
+          [nzHeader]="collapseHeader"
+          [nzExtra]="extraTpl"
+        >
+          <ng-template #collapseHeader>
+            <span
+              (click)="$event.stopPropagation()"
+              nz-typography
+              [nzEditable]="context.course?.permissions?.update"
+              [nzContent]="group.courseGroup.name"
+              (nzContentChange)="updateGroupName($event, group.courseGroup.groupId)"
+            ></span>
+          </ng-template>
+          <ng-template #extraTpl>
+            <button (click)="$event.stopPropagation(); addModal.open()" nz-button nzType="primary" nz-tooltip="Ajouter">
+              <span nz-icon nzType="plus" nzTheme="outline"></span>
+            </button>
+          </ng-template>
+          <course-member-table
+            [members]="group.members"
+            [editable]="context.course?.permissions?.update || false"
+            [type]="'groupe'"
+            (deleted)="removeGroupMember(group.courseGroup.groupId, $event)"
+          />
+        </nz-collapse-panel>
+        <course-member-search-modal
+          #addModal
+          multi
+          [excludes]="getGroupMembersIds(group)"
+          [courseId]="context.course!.id"
+          okTitle="Ajouter"
+          title="Ajouter des membres au groupe"
+          (closed)="addGroupMember(group.courseGroup.groupId, $event)"
+        >
+          <p>Sélectionnez les utilisateurs que vous souhaitez ajouter</p>
+        </course-member-search-modal>
+        }
+      </nz-collapse>
+    </mat-card-content>
+  </mat-card>
+</section>

@@ -20,6 +20,7 @@ import {
   UpdateActivity,
   UpdateCourse,
   UpdateCourseSection,
+  CourseGroup,
 } from '@platon/feature/course/common'
 import { Observable, Subject, tap } from 'rxjs'
 import { ActivityCorrectorProvider } from '../models/activity-corrector.provider'
@@ -28,6 +29,7 @@ import { ActivityProvider } from '../models/activity-provider'
 import { CourseMemberProvider } from '../models/course-member-provider'
 import { CourseProvider } from '../models/course-provider'
 import { CourseSectionProvider } from '../models/course-section-provider'
+import { CourseGroupProvider } from '../models/course-group-provider'
 
 @Injectable({ providedIn: 'root' })
 export class CourseService {
@@ -43,6 +45,7 @@ export class CourseService {
     private readonly courseProvider: CourseProvider,
     private readonly courseMemberProvider: CourseMemberProvider,
     private readonly courseSectionProvider: CourseSectionProvider,
+    private readonly courseGroupProvider: CourseGroupProvider,
 
     private readonly activityProvider: ActivityProvider,
     private readonly activityMemberProvider: ActivityMemberProvider,
@@ -167,5 +170,28 @@ export class CourseService {
   deleteActivityCorrector(corrector: ActivityCorrector): Observable<void> {
     return this.activityCorrectorProvider.delete(corrector)
   }
+  //#endregion
+
+  //#region Groups
+  listGroups(courseId: string): Observable<ListResponse<CourseGroup>> {
+    return this.courseGroupProvider.list(courseId)
+  }
+
+  updateGroupName(courseId: string, groupId: string, name: string): Observable<CourseGroup> {
+    return this.courseGroupProvider.updateName(courseId, groupId, name)
+  }
+
+  listGroupMembers(courseId: string, groupId: string): Observable<ListResponse<CourseMember>> {
+    return this.courseGroupProvider.listMembers(courseId, groupId)
+  }
+
+  deleteGroupMember(courseId: string, groupId: string, userId: string): Observable<void> {
+    return this.courseGroupProvider.deleteMember(courseId, groupId, userId)
+  }
+
+  addGroupMember(courseId: string, groupId: string, userId: string): Observable<void> {
+    return this.courseGroupProvider.addMember(courseId, groupId, userId)
+  }
+
   //#endregion
 }

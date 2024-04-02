@@ -71,6 +71,12 @@
       Élèves
     </ng-template>
   </ui-layout-tab>
+  <ui-layout-tab [link]="['groups']">
+    <ng-template>
+      <span nz-icon nzType="team" nzTheme="outline"></span>
+      Groupes
+    </ng-template>
+  </ui-layout-tab>
   <ng-container *ngIf="context.course?.permissions?.update">
     <ui-layout-tab [link]="['settings']" [linkParams]="{ tab: 'informations' }">
       <ng-template>

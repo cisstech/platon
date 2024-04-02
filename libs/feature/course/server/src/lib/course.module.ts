@@ -14,8 +14,10 @@ import { ActivityMemberView } from './activity-member/activity-member.view'
 import { ActivityController } from './activity/activity.controller'
 import { ActivityEntity } from './activity/activity.entity'
 import { ActivityService } from './activity/activity.service'
+import { CourseGroupMemberController } from './course-group-member/course-group-member.controller'
 import { CourseGroupMemberEntity } from './course-group-member/course-group-member.entity'
 import { CourseGroupMemberService } from './course-group-member/course-group-member.service'
+import { CourseGroupController } from './course-group/course-group.controller'
 import { CourseGroupEntity } from './course-group/course-group.entity'
 import { CourseGroupService } from './course-group/course-group.service'
 import { CourseMemberController } from './course-member/course-member.controller'
@@ -60,6 +62,8 @@ import { CourseSectionService } from './section/section.service'
     ActivityController,
     ActivityMemberController,
     ActivityCorrectorController,
+    CourseGroupController,
+    CourseGroupMemberController,
   ],
   providers: [
     CourseService,
