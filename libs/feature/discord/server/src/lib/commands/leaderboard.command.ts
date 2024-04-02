@@ -137,7 +137,7 @@ export class LeaderboardCommand  {
 									break;
 					}
 			}
-			return index < 3 ? `### ${symbol} ${entry.user.firstName} ${entry.user.lastName?.toLocaleUpperCase()}: ${entry.points}` : `${entry.rank}. **${entry.user.firstName}** **${entry.user.lastName?.toLocaleUpperCase()}**    *(${entry.points})*`;
+			return index < 3 ? `### ${symbol} ${entry.user.firstName} ${entry.user.lastName?.toLocaleUpperCase()} : ${entry.points}` : `${entry.rank}. **${entry.user.firstName}** **${entry.user.lastName?.toLocaleUpperCase()}**    *(${entry.points})*`;
 	});
 
 	const messageContent = "# 🏆  Leaderboard  🏆\n" + messageArray.join('\n');
