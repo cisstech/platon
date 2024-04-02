@@ -9,8 +9,13 @@ import {ProxyAgent} from 'undici';
 
 
 const proxy = process.env['PROXY_URL'] as string;
-const httpsproxyagent = new HttpsProxyAgent(proxy);
-const agent = new ProxyAgent({ uri: proxy });
+let agent: ProxyAgent | null = null;
+let httpsproxyagent : HttpsProxyAgent | null = null;
+if (proxy) {
+  httpsproxyagent = new HttpsProxyAgent(proxy);
+  agent = new ProxyAgent({ uri: proxy });
+}
+
 
 @Injectable()
 export class FeatureDiscordServerService implements DiscordOptionsFactory {
