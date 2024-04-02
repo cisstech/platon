@@ -8,7 +8,7 @@ import { HttpsProxyAgent } from 'https-proxy-agent';
 import {ProxyAgent} from 'undici';
 
 
-const proxy = 'http://proxy.univ-eiffel.fr:3128'; // Replace THE_PROXY_URL with your actual proxy URL
+const proxy = process.env['PROXY_URL'] as string;
 const httpsproxyagent = new HttpsProxyAgent(proxy);
 const agent = new ProxyAgent({ uri: proxy });
 
