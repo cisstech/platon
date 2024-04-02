@@ -10,8 +10,8 @@ export class CourseGroupMemberService {
     private readonly repository: Repository<CourseGroupMemberEntity>
   ) {}
 
-  async listCourseGroupMembers(): Promise<CourseGroupMemberEntity[]> {
-    return this.repository.find()
+  async listCourseGroupMembers(groupId: string): Promise<CourseGroupMemberEntity[]> {
+    return this.repository.find({ where: { groupId } })
   }
 
   /**
@@ -30,5 +30,13 @@ export class CourseGroupMemberService {
 
   async deleteAllCourseGroups(): Promise<void> {
     await this.repository.delete({})
+  }
+
+  async deleteMember(groupId: string, userId: string): Promise<void> {
+    await this.repository.delete({ groupId, userId })
+  }
+
+  async isMember(groupId: string, userId: string): Promise<boolean> {
+    return !!(await this.repository.findOne({ where: { groupId, userId } }))
   }
 }

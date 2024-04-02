@@ -10,8 +10,8 @@ export class CourseGroupService {
     private readonly repository: Repository<CourseGroupEntity>
   ) {}
 
-  async listCourseGroups(): Promise<CourseGroupEntity[]> {
-    return this.repository.find()
+  async listCourseGroups(courseId: string): Promise<CourseGroupEntity[]> {
+    return this.repository.find({ where: { courseId }, order: { name: 'ASC' } })
   }
 
   /**
@@ -37,5 +37,14 @@ export class CourseGroupService {
 
   async countCourseGroups(courseId: string): Promise<number> {
     return this.repository.count({ where: { courseId } })
+  }
+
+  async update(groupId: string, changes: Partial<CourseGroupEntity>): Promise<CourseGroupEntity> {
+    const group = await this.repository.findOne({ where: { groupId } })
+    if (!group) {
+      throw new Error(`Group with id ${groupId} not found`)
+    }
+    Object.assign(group, changes)
+    return this.repository.save(group)
   }
 }

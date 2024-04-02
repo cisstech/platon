@@ -36,6 +36,8 @@ import { CourseGroupEntity } from './course-group/course-group.entity'
 import { CourseGroupService } from './course-group/course-group.service'
 import { CourseGroupMemberEntity } from './course-group-member/course-group-member.entity'
 import { CourseGroupMemberService } from './course-group-member/course-group-member.service'
+import { CourseGroupController } from './course-group/course-group.controller'
+import { CourseGroupMemberController } from './course-group-member/course-group-member.controller'
 
 @Module({
   imports: [
@@ -66,6 +68,8 @@ import { CourseGroupMemberService } from './course-group-member/course-group-mem
     ActivityMemberController,
     ActivityCorrectorController,
     CourseDemoController,
+    CourseGroupController,
+    CourseGroupMemberController,
   ],
   providers: [
     CourseService,
