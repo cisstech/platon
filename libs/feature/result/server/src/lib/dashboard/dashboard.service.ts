@@ -198,7 +198,7 @@ export class DashboardService {
   }
 
   async ofResource(id: string): Promise<DashboardOutput> {
-    const resource = (await this.resourceService.findById(id)).orElseThrow(
+    const resource = (await this.resourceService.findByIdOrCode(id)).orElseThrow(
       () => new NotFoundResponse('Resource not found')
     )
 

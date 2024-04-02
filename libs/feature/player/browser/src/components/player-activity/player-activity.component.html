@@ -58,7 +58,7 @@
     <section>
       <ng-container *ngFor="let exercise of exercises; trackBy: trackBySessionId; let i = index">
         <nz-ribbon [nzText]="ribbon">
-          <ng-template #ribbon> {{ i + 1 }} / {{ navExerciceCount }} </ng-template>
+          <ng-template #ribbon> {{ composed ? i + 1 : position + 1 }} / {{ navExerciceCount }} </ng-template>
           <player-exercise
             [id]="exercise.sessionId"
             [player]="exercise"

@@ -5,14 +5,14 @@
   <mat-label>{{ state.placeholder }}</mat-label>
   <mat-hint>{{ state.hint }}</mat-hint>
   <input matInput type="text" inputmode="decimal" [formControl]="form" (keydown.enter)="autoValidate()" />
-  <div class="prefix" [class.no-prefix]="!state.suffix" matPrefix>
+  <div class="prefix" [class.no-prefix]="!state.suffix" matIconPrefix>
     <img
       *ngIf="state.prefix"
       [src]="state.prefix || 'fontawesome address-book color=FF0000' | icongr"
       alt="prefix icon"
     />
   </div>
-  <div class="suffix" [class.no-suffix]="!state.suffix" matSuffix>
+  <div class="suffix" [class.no-suffix]="!state.suffix" matIconSuffix>
     <img *ngIf="state.suffix" [src]="state.suffix | icongr" alt="suffix icon" />
   </div>
 </mat-form-field>
@@ -29,14 +29,14 @@
       {{ option }}
     </mat-option>
   </mat-autocomplete>
-  <div class="prefix" [class.no-prefix]="!state.suffix" matPrefix>
+  <div class="prefix" [class.no-prefix]="!state.suffix" matIconPrefix>
     <img
       *ngIf="state.prefix"
       [src]="state.prefix || 'fontawesome address-book color=FF0000' | icongr"
       alt="prefix icon"
     />
   </div>
-  <div class="suffix" [class.no-suffix]="!state.suffix" matSuffix>
+  <div class="suffix" [class.no-suffix]="!state.suffix" matIconSuffix>
     <img *ngIf="state.suffix" [src]="state.suffix | icongr" alt="suffix icon" />
   </div>
 </mat-form-field>
@@ -49,14 +49,14 @@
   <mat-hint>{{ state.hint }}</mat-hint>
   <textarea matInput matTextareaAutosize type="multiline" [formControl]="form" (keydown.enter)="autoValidate()">
   </textarea>
-  <div class="prefix" [class.no-prefix]="!state.suffix" matPrefix>
+  <div class="prefix" [class.no-prefix]="!state.suffix" matIconPrefix>
     <img
       *ngIf="state.prefix"
       [src]="state.prefix || 'fontawesome address-book color=FF0000' | icongr"
       alt="prefix icon"
     />
   </div>
-  <div class="suffix" [class.no-suffix]="!state.suffix" matSuffix>
+  <div class="suffix" [class.no-suffix]="!state.suffix" matIconSuffix>
     <img *ngIf="state.suffix" [src]="state.suffix | icongr" alt="suffix icon" />
   </div>
 </mat-form-field>

@@ -115,7 +115,7 @@ export class CircleTreeComponent implements OnInit {
             version: 'latest',
             level: level,
             disabled:
-              this.disableFromPermissions && (!node.permissions.read || (this.selectable && !node.permissions.write)),
+              this.disableFromPermissions && (!node.permissions?.read || (this.selectable && !node.permissions?.write)),
             expandable: !!node.children && node.children.length > 0,
           }
     flatNode.name = node.name

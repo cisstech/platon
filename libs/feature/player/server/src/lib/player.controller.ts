@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post, Req } from '@nestjs/common'
+import { Body, Controller, Get, Param, Post, Req, Res } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { IRequest, Public } from '@platon/core/server'
 import { EvalExerciseInput, PlayAnswersInput } from '@platon/feature/player/common'
@@ -13,6 +13,7 @@ import {
   PreviewOuputDTO,
 } from './player.dto'
 import { PlayerService } from './player.service'
+import { Response } from 'express'
 
 @Controller('player')
 @ApiTags('Players')
@@ -49,6 +50,16 @@ export class PlayerController {
   @Post('/terminate/:sessionId')
   async terminate(@Req() req: IRequest, @Param('sessionId') sessionId: string): Promise<PlayActivityOutputDTO> {
     return this.playerService.terminate(sessionId, req.user)
+  }
+
+  @Public()
+  @Get('/environment/:sessionId')
+  async downloadEnvironment(@Req() req: IRequest, @Param('sessionId') sessionId: string, @Res() res: Response) {
+    const { envid, content } = await this.playerService.downloadEnvironment(sessionId, req.user)
+    res.setHeader('Content-Type', 'application/gzip')
+    res.setHeader('Content-Disposition', `attachment; filename=${envid}.tgz`)
+    const buffer = Buffer.from(content, 'binary')
+    res.send(buffer)
   }
 
   @Public()

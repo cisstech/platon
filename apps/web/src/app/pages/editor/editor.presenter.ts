@@ -9,8 +9,8 @@ import {
   LATEST,
   Resource,
   ResourceTypes,
-  circleTreeFromResource,
-  resourceAncestors,
+  circleTreeFromCircle,
+  circleAncestors,
 } from '@platon/feature/resource/common'
 import { NzModalService } from 'ng-zorro-antd/modal'
 import { firstValueFrom } from 'rxjs'
@@ -96,17 +96,17 @@ export class EditorPresenter {
     const resourceIsPersonalExerciseOrActivity = personalCircle && personalCircle.id !== resource.id
     const ancestors = personalCircle
       ? [
-          ...(resourceIsPersonalExerciseOrActivity ? [circleTreeFromResource(personalCircle)] : []),
+          ...(resourceIsPersonalExerciseOrActivity ? [circleTreeFromCircle(personalCircle)] : []),
           // root circle
           tree,
         ]
       : resource.type === ResourceTypes.CIRCLE
-      ? resourceAncestors(tree, resource.id)
-      : resourceAncestors(tree, resource.parentId!, true)
+      ? circleAncestors(tree, resource.id)
+      : circleAncestors(tree, resource.parentId!, true)
 
     this.tree = tree
     if (resourceIsPersonalExerciseOrActivity) {
-      this.tree.children?.push(circleTreeFromResource(personalCircle))
+      this.tree.children?.push(circleTreeFromCircle(personalCircle))
     }
 
     this.version = version

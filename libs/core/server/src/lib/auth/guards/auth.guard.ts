@@ -4,11 +4,11 @@ import { Reflector } from '@nestjs/core'
 import { ExecutionContextHost } from '@nestjs/core/helpers/execution-context-host'
 import { GqlContextType, GqlExecutionContext } from '@nestjs/graphql'
 import { AuthGuard as PassportGuard } from '@nestjs/passport'
-import { TOKEN_EXPIRED_ERROR_CODE, UnauthorizedResponse, User } from '@platon/core/common'
+import { MemoizedPromise, TOKEN_EXPIRED_ERROR_CODE, UnauthorizedResponse, User } from '@platon/core/common'
 import { TokenExpiredError } from 'jsonwebtoken'
 import { firstValueFrom, Observable } from 'rxjs'
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator'
-import { AuthExecutionContext } from '../auth.types'
+import { AuthExecutionContext, IRequest } from '../auth.types'
 
 @Injectable()
 export class AuthGuard extends PassportGuard(['jwt']) {
@@ -32,7 +32,15 @@ export class AuthGuard extends PassportGuard(['jwt']) {
     ])
 
     try {
-      const request = this.getRequest(context)
+      const request = this.getRequest(context) as IRequest
+      request.memoize = async <TResult>(key: string, fn: () => Promise<TResult>) => {
+        const memoized = (request[key] as MemoizedPromise<TResult>) ?? new MemoizedPromise(fn)
+        if (!request[key]) {
+          request[key] = memoized
+        }
+        return memoized.execute()
+      }
+
       const loggedIn = super.canActivate(new ExecutionContextHost([request]))
 
       if (typeof loggedIn === 'boolean') {
