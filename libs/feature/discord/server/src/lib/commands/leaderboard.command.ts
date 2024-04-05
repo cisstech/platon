@@ -4,10 +4,9 @@ import { Public } from '@platon/core/server'
 import { SlashCommandPipe } from '@discord-nestjs/common';
 import { LeaderboardService } from '@platon/feature/result/server';
 import { CourseLeaderboardEntry } from '@platon/feature/result/common';
-import { Channel, ChatInputCommandInteraction, Client, InteractionResponse, Message, TextChannel } from 'discord.js';
+import { ChatInputCommandInteraction, Client, InteractionResponse, Message, TextChannel } from 'discord.js';
 import { WatchedChallengesService } from '../watchedChallenges.service';
 import { ActivityEntity, ActivityService, OnTerminateActivityEventPayload } from '@platon/feature/course/server';
-import { EventService } from '@platon/core/server';
 import { OnEvent } from '@nestjs/event-emitter';
 import { WatchedChallengesEntity } from '../watchedChallenges.entity';
 import { isUUID4 } from '@platon/shared/server';
@@ -24,14 +23,12 @@ export class LeaderboardDTO {
   description: 'Get current leaderboard.',
 	defaultMemberPermissions: '8'
 })
-
-
 @Injectable()
 export class LeaderboardCommand  {
 	private challengeToChannelMap: Map<string, [string, Message | InteractionResponse | undefined][]> = new Map();
 
 
-	updateChallengeToChannelMap(watchedChallenge: WatchedChallengesEntity) {
+	private updateChallengeToChannelMap(watchedChallenge: WatchedChallengesEntity) {
 		if (this.challengeToChannelMap.has(watchedChallenge.challengeId)) {
 			const channelsWithMessage = this.challengeToChannelMap.get(watchedChallenge.challengeId);
 			if (channelsWithMessage && channelsWithMessage?.flatMap((channel) => channel[0]).indexOf(watchedChallenge.channelId) === -1) {
@@ -65,7 +62,7 @@ export class LeaderboardCommand  {
 		}
 
 
-  async courseLeaderboard(id : string): Promise<CourseLeaderboardEntry[]> {
+	private async courseLeaderboard(id : string): Promise<CourseLeaderboardEntry[]> {
 		return this.leaderBoardService.ofCourse(id);
 	}
 
@@ -75,8 +72,6 @@ export class LeaderboardCommand  {
   async onLeaderboard(@InteractionEvent(SlashCommandPipe) command: LeaderboardDTO, @InteractionEvent() info: ChatInputCommandInteraction): Promise<void> {
 		const channelId = info.channelId; // Récupérer l'ID du canal, il y a sûrement mieux à faire. FIXME
 		const challengeId = command.id; // Récupérer le contenu du message
-
-		const channel = this.client.channels.cache.get(channelId) as TextChannel; // Récuperer le channel
 
 		//Check si le challenge existe bien
 		if (isUUID4(challengeId) === false) {
@@ -104,7 +99,6 @@ export class LeaderboardCommand  {
 					channelWithMessage[1] = message;
 				}
 			});
-			console.log(this.challengeToChannelMap);
  		});
 
 }
@@ -116,8 +110,6 @@ export class LeaderboardCommand  {
 		const channelsWithMessage = this.challengeToChannelMap.get(event.activity.courseId)
 
 		const leaderboard = (await this.courseLeaderboard(event.activity.courseId)).slice(0, 60); // J'en prends que 60 pour le moment.
-
-		console.log(leaderboard)
 
 		const messageArray = leaderboard.map((entry, index) => {
 			let symbol = '';
@@ -145,7 +137,6 @@ export class LeaderboardCommand  {
 		if (!channelsWithMessage) {
 			return ;
 		}
-		console.log(this.challengeToChannelMap);
 		channelsWithMessage?.forEach((channelsWithMessage) => {
       const channel = this.client.channels.cache.get(channelsWithMessage[0]) as TextChannel;
 			if (channelsWithMessage[1]) {

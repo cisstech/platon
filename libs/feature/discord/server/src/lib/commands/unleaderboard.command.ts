@@ -1,15 +1,9 @@
-import { Command, Handler, InjectDiscordClient, InteractionEvent, Param } from '@discord-nestjs/core';
+import { Command, Handler, InteractionEvent } from '@discord-nestjs/core';
 import { Injectable } from '@nestjs/common';
 import { Public } from '@platon/core/server'
 import { SlashCommandPipe } from '@discord-nestjs/common';
-import { LeaderboardService } from '@platon/feature/result/server';
-import { CourseLeaderboardEntry } from '@platon/feature/result/common';
-import { Channel, ChatInputCommandInteraction, Client, InteractionResponse, Message, TextChannel } from 'discord.js';
+import { ChatInputCommandInteraction } from 'discord.js';
 import { WatchedChallengesService } from '../watchedChallenges.service';
-import { ActivityEntity, ActivityService, OnTerminateActivityEventPayload } from '@platon/feature/course/server';
-import { EventService } from '@platon/core/server';
-import { OnEvent } from '@nestjs/event-emitter';
-import { WatchedChallengesEntity } from '../watchedChallenges.entity';
 import { isUUID4 } from '@platon/shared/server';
 import { LeaderboardCommand, LeaderboardDTO } from './leaderboard.command';
 
@@ -37,7 +31,6 @@ export class UnLeaderboardCommand  {
       }
       this.watchedChallengeService.findById(command.id).then((watchedChallenge) => {
         const wc = watchedChallenge.orUndefined();
-        console.log(wc);
         if (!wc) {
           info.reply('No leaderboard found for this challenge');
           return reject();
