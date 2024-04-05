@@ -2528,7 +2528,7 @@
   dependencies:
     class-transformer "0.5.1"
 
-"@discordjs/builders@./node_modules/@discordjs/builders":
+"@discordjs/builders@./shared/external_libs/@discordjs/builders":
   version "1.7.0"
   dependencies:
     "@discordjs/formatters" "^0.3.3"
@@ -2539,15 +2539,15 @@
     ts-mixer "^6.0.3"
     tslib "^2.6.2"
 
-"@discordjs/collection@./node_modules/@discordjs/collection", "@discordjs/collection@^2.0.0":
+"@discordjs/collection@./shared/external_libs/@discordjs/collection", "@discordjs/collection@^2.0.0":
   version "2.0.0"
 
-"@discordjs/formatters@./node_modules/@discordjs/formatters", "@discordjs/formatters@^0.3.3":
+"@discordjs/formatters@./shared/external_libs/@discordjs/formatters", "@discordjs/formatters@^0.3.3":
   version "0.3.3"
   dependencies:
     discord-api-types "0.37.61"
 
-"@discordjs/rest@./node_modules/@discordjs/rest", "@discordjs/rest@^2.1.0":
+"@discordjs/rest@./shared/external_libs/@discordjs/rest", "@discordjs/rest@^2.1.0":
   version "2.2.0"
   dependencies:
     "@discordjs/collection" "^2.0.0"
@@ -2560,10 +2560,10 @@
     tslib "^2.6.2"
     undici "5.27.2"
 
-"@discordjs/util@./node_modules/@discordjs/util", "@discordjs/util@^1.0.2":
+"@discordjs/util@./shared/external_libs/@discordjs/util", "@discordjs/util@^1.0.2":
   version "1.0.2"
 
-"@discordjs/ws@./node_modules/@discordjs/ws":
+"@discordjs/ws@./shared/external_libs/@discordjs/ws":
   version "1.0.2"
   dependencies:
     "@discordjs/collection" "^2.0.0"
@@ -10214,15 +10214,15 @@ discord-interactions@^3.4.0:
   dependencies:
     tweetnacl "^1.0.3"
 
-discord.js@./node_modules/discord.js:
+discord.js@./shared/external_libs/discord.js:
   version "14.14.1"
   dependencies:
-    "@discordjs/builders" "./node_modules/@discordjs/builders"
-    "@discordjs/collection" "./node_modules/@discordjs/collection"
-    "@discordjs/formatters" "./node_modules/@discordjs/formatters"
-    "@discordjs/rest" "./node_modules/@discordjs/rest"
-    "@discordjs/util" "./node_modules/@discordjs/util"
-    "@discordjs/ws" "./node_modules/@discordjs/ws"
+    "@discordjs/builders" "./shared/external_libs/@discordjs/builders"
+    "@discordjs/collection" "./shared/external_libs/@discordjs/collection"
+    "@discordjs/formatters" "./shared/external_libs/@discordjs/formatters"
+    "@discordjs/rest" "./shared/external_libs/@discordjs/rest"
+    "@discordjs/util" "./shared/external_libs/@discordjs/util"
+    "@discordjs/ws" "./shared/external_libs/@discordjs/ws"
     "@sapphire/snowflake" "3.5.1"
     "@types/ws" "8.5.9"
     discord-api-types "0.37.61"
