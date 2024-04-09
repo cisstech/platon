@@ -4,7 +4,7 @@ import { Public } from '@platon/core/server'
 import { SlashCommandPipe } from '@discord-nestjs/common';
 import { LeaderboardService } from '@platon/feature/result/server';
 import { CourseLeaderboardEntry } from '@platon/feature/result/common';
-import { ChatInputCommandInteraction, Client, InteractionResponse, Message, TextChannel } from 'discord.js';
+import { ChatInputCommandInteraction, Client, Message, TextChannel } from 'discord.js';
 import { WatchedChallengesService } from '../watchedChallenges.service';
 import { ActivityEntity, ActivityService, OnTerminateActivityEventPayload } from '@platon/feature/course/server';
 import { OnEvent } from '@nestjs/event-emitter';
@@ -25,18 +25,18 @@ export class LeaderboardDTO {
 })
 @Injectable()
 export class LeaderboardCommand  {
-	private challengeToChannelMap: Map<string, [string, Message | InteractionResponse | undefined][]> = new Map();
+	private challengeToChannelMap: Map<string, [string, Message | undefined][]> = new Map();
 
 
-	private updateChallengeToChannelMap(watchedChallenge: WatchedChallengesEntity) {
+	private updateChallengeToChannelMap(watchedChallenge: WatchedChallengesEntity, message?: Message<boolean>) {
 		if (this.challengeToChannelMap.has(watchedChallenge.challengeId)) {
 			const channelsWithMessage = this.challengeToChannelMap.get(watchedChallenge.challengeId);
 			if (channelsWithMessage && channelsWithMessage?.flatMap((channel) => channel[0]).indexOf(watchedChallenge.channelId) === -1) {
-				channelsWithMessage.push([watchedChallenge.channelId, undefined]);
+				channelsWithMessage.push([watchedChallenge.channelId, message]);
 			}
 		}
 		else {
-			this.challengeToChannelMap.set(watchedChallenge.challengeId, [[watchedChallenge.channelId, undefined]]);
+			this.challengeToChannelMap.set(watchedChallenge.challengeId, [[watchedChallenge.channelId, message]]);
 		}
 	}
 
@@ -89,18 +89,10 @@ export class LeaderboardCommand  {
 		}
 		// Enregistrer le courseId et le channelId dans la BDD
 		const watchedChallenge = await this.watchedChallengeService.create({challengeId, channelId});
-		this.updateChallengeToChannelMap(watchedChallenge);
 
 		// Récuperer l'id du message en dessous
-		await info.reply("Je posterais le leaderboard du cours-challenge d'id : `" + challengeId + "` ici").then((message) => {
-
-			this.challengeToChannelMap.get(challengeId)?.forEach((channelWithMessage) => {
-				if (channelWithMessage[0] === channelId) {
-					channelWithMessage[1] = message;
-				}
-			});
- 		});
-
+		let message = await (await info.reply("Je posterais le leaderboard du cours-challenge d'id : `" + challengeId + "` ici")).fetch()
+		this.updateChallengeToChannelMap(watchedChallenge, message);
 }
 
 
