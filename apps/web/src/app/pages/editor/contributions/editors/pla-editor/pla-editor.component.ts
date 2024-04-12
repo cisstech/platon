@@ -43,6 +43,7 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
         review: true,
         validation: true,
       },
+      seedPerExercise: false,
       security: {
         noCopyPaste: false,
         terminateOnLeavePage: false,
@@ -64,6 +65,7 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
     introduction: [this.activity.introduction, [Validators.required]],
     conclusion: [this.activity.conclusion, [Validators.required]],
     duration: [new Date()],
+    seedPerExercise: [!!this.activity.settings?.seedPerExercise],
     navigation: this.fb.group({
       mode: [this.activity.settings?.navigation?.mode || 'composed', [Validators.required]],
     }),
@@ -199,6 +201,7 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
       settings: {
         ...this.activity.settings,
         duration,
+        seedPerExercise: value.seedPerExercise || false,
         navigation: {
           mode: value.navigation?.mode || 'composed',
         },
@@ -259,6 +262,7 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
       introduction: this.activity.introduction,
       conclusion: this.activity.conclusion,
       duration: durationDate,
+      seedPerExercise: this.activity.settings?.seedPerExercise,
       navigation: {
         mode: this.activity.settings?.navigation?.mode,
       },
