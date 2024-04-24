@@ -47,8 +47,8 @@
         [nzOptions]="['Corrections en attente', 'Corrections terminées']"
       />
       <ng-container *ngIf="exercises.length as exerciseCount; else noExercises">
-        <ng-container *ngIf="answers.length as answerCount">
-          <nz-ribbon [nzText]="ribbon">
+        <ng-container>
+          <nz-ribbon *ngIf="answers.length as answerCount; else noAnswers" [nzText]="ribbon">
             <ng-template #ribbon>
               Exercice : {{ selectedExerciseIndex + 1 }}/{{ exerciseCount }}&nbsp; Réponse :
               {{ player.currentAttemptIndex + 1 }}/{{ answerCount }}
@@ -83,6 +83,14 @@
             </mat-toolbar>
           </footer>
         </ng-container>
+        <ng-template #noAnswers>
+          <nz-ribbon [nzText]="ribbon">
+            <ng-template #ribbon> Exercice : {{ selectedExerciseIndex + 1 }}/{{ exerciseCount }} </ng-template>
+            <nz-empty [nzNotFoundContent]="content">
+              <ng-template #content> L'élève n'a pas répondu à cet exercice </ng-template>
+            </nz-empty>
+          </nz-ribbon>
+        </ng-template>
       </ng-container>
     </main>
   </mat-drawer-content>
