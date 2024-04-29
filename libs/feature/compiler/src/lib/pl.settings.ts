@@ -12,6 +12,9 @@ export interface ActivitySettings {
   /** Activity feedback options */
   feedback?: ActivityFeedbackSettings
 
+  /** Should the activity get different seeds for each exercise */
+  seedPerExercise?: boolean
+
   /** Activity security options */
   security?: ActivitySecuritySettings
 }

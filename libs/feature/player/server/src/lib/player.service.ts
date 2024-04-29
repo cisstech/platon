@@ -47,6 +47,7 @@ import { PartialDeep } from 'type-fest'
 import { DataSource, EntityManager, In } from 'typeorm'
 import { PreviewOuputDTO } from './player.dto'
 import { SandboxService } from './sandboxes/sandbox.service'
+import { randomInt } from 'crypto'
 
 type CreateSessionArgs = {
   user?: User | null
@@ -268,7 +269,7 @@ export class PlayerService extends PlayerManager {
     const runWithEntityManager = async (manager: EntityManager): Promise<SessionEntity> => {
       const { user, source, parentId, activity, isBuilt } = args
 
-      source.variables.seed = (Number.parseInt(source.variables.seed + '') || Date.now()) % 100
+      source.variables.seed = (Number.parseInt(source.variables.seed + '') || randomInt(100)) % 100
 
       const session = await this.sessionService.create(
         {
@@ -324,6 +325,9 @@ export class PlayerService extends PlayerManager {
     navigation.exercises = await Promise.all(
       exercises.map(async (item) => {
         if (!('sessionId' in item)) {
+          if (!item.source.variables.seed) {
+            item.source.variables.seed = variables?.settings?.seedPerExercise ? randomInt(100) : variables.seed
+          }
           const session = await this.createNewSession(
             {
               activity: activitySession.activity,

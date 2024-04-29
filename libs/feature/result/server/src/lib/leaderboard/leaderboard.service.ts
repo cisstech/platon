@@ -37,9 +37,12 @@ export class LeaderboardService {
       return acc
     }, {} as Record<string, { user: User; points: number }>)
 
-    return Object.values(userRanks)
+    // console.log('After reduce', userRanks)
+
+    const res = Object.values(userRanks)
       .sort((a, b) => b.points - a.points)
       .map<CourseLeaderboardEntry>((user, index) => ({ rank: index + 1, user: user.user, points: user.points }))
+    return res
   }
 
   async ofActivity(activityOrId: string | ActivityEntity, limit?: number): Promise<ActivityLeaderboardEntry[]> {
@@ -59,10 +62,11 @@ export class LeaderboardService {
       .leftJoinAndSelect('view.user', 'user', 'user.id = view.user_id')
       .where('view.activity_id = :id', { id: activity.id })
       .andWhere('view.parent_id IS NULL')
+      .orderBy('view.succeeded_at', 'ASC')
       .limit(limit || DEFAULT_LEADERBOARD_LIMIT)
       .getMany()
 
-    return views.map<ActivityLeaderboardEntry>((view, index) => ({
+    const ranks = views.map<ActivityLeaderboardEntry>((view, index) => ({
       rank: index + 1,
       user: view.user,
       grade: view.grade,
@@ -71,5 +75,6 @@ export class LeaderboardService {
       succeededAt: view.succeededAt,
       lastGradedAt: view.lastGradedAt,
     }))
+    return ranks
   }
 }
