@@ -14,7 +14,13 @@ export class FoldableFeedbackComponent implements WebComponentHooks<FoldableFeed
 
   constructor(readonly injector: Injector) {}
 
-  onClick(index: number) {
-    this.state.content[index].display = !this.state.content[index].display
+  onClick(index: string) {
+    const indexArray = index.split('-')
+    const content = this.state.content
+    let currentContent = content[parseInt(indexArray[0])]
+    for (let i = 1; i < indexArray.length; i++) {
+      currentContent = currentContent.feedbacks![parseInt(indexArray[i])]
+    }
+    currentContent.display = !currentContent.display
   }
 }

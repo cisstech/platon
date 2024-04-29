@@ -1,15 +1,18 @@
 import { defineWebComponent, IWebComponent, WebComponentTypes } from '../../web-component'
 
+export interface FoldableFeedbackContent {
+  name: string
+  description: string
+  expected: string
+  obtained: string
+  arguments: string
+  type: 'success' | 'info' | 'warning' | 'error'
+  display: boolean
+  feedbacks: FoldableFeedbackContent[] | undefined
+}
+
 export interface FoldableFeedbackState extends IWebComponent {
-  content: {
-    name: string
-    description: string
-    expected: string
-    obtained: string
-    arguments: string
-    type: 'success' | 'info' | 'warning' | 'error'
-    display: boolean
-  }[]
+  content: FoldableFeedbackContent[]
 }
 
 export const FoldableFeedbackComponentDefinition = defineWebComponent({
@@ -29,13 +32,13 @@ export const FoldableFeedbackComponentDefinition = defineWebComponent({
         description: 'Contenu du feedback',
         items: {
           type: 'object',
-          required: ['name', 'expected', 'obtained'],
+          required: ['name'],
           properties: {
             name: { type: 'string', description: 'Nom du test effectué', default: '' },
             description: { type: 'string', description: 'Description du test effectué', default: '' },
             expected: { type: 'string', description: 'Valeur attendue par le professeur', default: '' },
             obtained: { type: 'string', description: "Valeur obtenue par l'étudiant", default: '' },
-            arguments: { type: 'string', description: "Arguments passés à l'execution (optionel)", default: '' },
+            arguments: { type: 'string', description: "Arguments passés à l'execution", default: '' },
             type: {
               type: 'string',
               description: 'Type de feedback',
@@ -43,6 +46,14 @@ export const FoldableFeedbackComponentDefinition = defineWebComponent({
               default: 'info',
             },
             display: { type: 'boolean', description: 'Affichage (le feedback est-il déplié ?)', default: false },
+            feedbacks: {
+              type: 'array',
+              description:
+                'Feedbacks enfants. Même structure que content. Si défini, ce feedback est une catégorie donc ne pas définir expected, obtained et arguments',
+              items: {
+                type: 'object',
+              },
+            },
           },
         },
       },
@@ -73,6 +84,29 @@ export const FoldableFeedbackComponentDefinition = defineWebComponent({
         obtained: 'Presque',
         type: 'info',
         display: false,
+      },
+      {
+        name: 'Catégorie de feedbacks',
+        description: 'Ceci est une catégorie de feedbacks.\nElle contient des feedbacks enfants.',
+        type: 'warning',
+        display: false,
+        feedbacks: [
+          { name: 'Feedback 1', expected: 'Bonne réponse', obtained: 'Bonne réponse', type: 'success', display: false },
+          {
+            name: 'Sous-Catégorie',
+            type: 'error',
+            display: false,
+            feedbacks: [
+              {
+                name: 'Feedback 2',
+                expected: 'Faux',
+                obtained: 'rien...',
+                type: 'error',
+                display: false,
+              },
+            ],
+          },
+        ],
       },
     ],
   },

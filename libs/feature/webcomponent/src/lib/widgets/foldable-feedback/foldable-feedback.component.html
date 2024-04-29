@@ -1,21 +1,37 @@
-<div>
-  <div class="foldable-feedback" *ngFor="let item of state.content; let index = index">
-    <div [class]="item.type ? item.type : 'info'" (click)="onClick(index)">
-      <h2>{{ item.name }}</h2>
-      <div [class]="item.display ? 'show' : 'hide'">
-        <div *ngIf="item.description">
-          <pre>{{ item.description }}</pre>
-        </div>
-        <div *ngIf="item.arguments">
-          <h3>Arguments :</h3>
-          <pre class="args" (mousedown)="$event.stopPropagation()">{{ item.arguments }}</pre>
-        </div>
+<div class="foldable-feedback" *ngFor="let item of state.content; let index = index">
+  <ng-container *ngTemplateOutlet="feedback; context: { item: item, indexes: '' + index }"> </ng-container>
+</div>
+<wc-base [(state)]="state"></wc-base>
+
+<ng-template #feedback let-item="item" let-indexes="indexes">
+  <div [class]="item.type ? item.type : 'info'" (click)="onClick(indexes)">
+    <h2>{{ item.name }}</h2>
+    <div [class]="item.display ? 'show' : 'hide'">
+      @if (item.feedbacks && item.feedbacks.length > 0){
+      <div *ngIf="item.description">
+        <pre>{{ item.description }}</pre>
+      </div>
+      <div *ngFor="let child of item.feedbacks; let index = index">
+        <ng-container *ngTemplateOutlet="feedback; context: { item: child, indexes: indexes + '-' + index }">
+        </ng-container>
+      </div>
+      } @else {
+      <div *ngIf="item.description">
+        <pre>{{ item.description }}</pre>
+      </div>
+      <div *ngIf="item.arguments">
+        <h3>Arguments :</h3>
+        <pre class="args" (mousedown)="$event.stopPropagation()">{{ item.arguments }}</pre>
+      </div>
+      <div *ngIf="item.expected">
         <h3>Attendu :</h3>
         <pre class="code" (mousedown)="$event.stopPropagation()">{{ item.expected }}</pre>
+      </div>
+      <div *ngIf="item.obtained">
         <h3>Obtenu :</h3>
         <pre class="code" (mousedown)="$event.stopPropagation()">{{ item.obtained }}</pre>
       </div>
+      }
     </div>
   </div>
-</div>
-<wc-base [(state)]="state"></wc-base>
+</ng-template>
