@@ -1,7 +1,13 @@
 <ui-modal-template [title]="title" (canceled)="close([])" (accepted)="close(selection)" #modal>
   <ng-template>
     <ng-content></ng-content>
-    <course-member-search-bar [courseId]="courseId" [multi]="multi" [excludes]="excludes" [(ngModel)]="selection" />
+    <course-member-search-bar
+      [courseId]="courseId"
+      [multi]="multi"
+      [excludes]="excludes"
+      [allowGroup]="allowGroup"
+      [(ngModel)]="selection"
+    />
   </ng-template>
   <ng-template>
     <button nz-button nzType="default" (click)="modal.close()">{{ noTitle }}</button>

@@ -60,6 +60,7 @@
           multi
           [excludes]="getGroupMembersIds(group)"
           [courseId]="context.course!.id"
+          [allowGroup]="false"
           okTitle="Ajouter"
           title="Ajouter des membres au groupe"
           (closed)="addGroupMember(group.courseGroup.groupId, $event)"
