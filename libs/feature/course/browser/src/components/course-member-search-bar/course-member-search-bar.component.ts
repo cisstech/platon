@@ -105,6 +105,8 @@ export class CourseMemberSearchBarComponent implements OnInit, OnDestroy, OnChan
 
   @Input({ required: true }) courseId!: string
 
+  @Input() allowGroup = true
+
   /**
    * Total number members the current search.
    */
@@ -145,7 +147,12 @@ export class CourseMemberSearchBarComponent implements OnInit, OnDestroy, OnChan
     }
 
     this.searchbar.clearOnSelect = !this.autoSelect
-    this.searchbar.placeholder = this.placeholder ?? 'Rechercher un utilisateur ou un groupe par son nom, son email...'
+    if (this.allowGroup) {
+      this.searchbar.placeholder =
+        this.placeholder ?? 'Rechercher un utilisateur ou un groupe par son nom, son email...'
+    } else {
+      this.searchbar.placeholder = this.placeholder ?? 'Rechercher un utilisateur par son nom, son email...'
+    }
   }
 
   // ControlValueAccessor methods
@@ -190,10 +197,12 @@ export class CourseMemberSearchBarComponent implements OnInit, OnDestroy, OnChan
         .pipe(
           map((page) => {
             this.totalCount = page.total
-            if (this.autoSelect) {
+            if (this.allowGroup && this.autoSelect) {
               return page.resources
             }
-            return page.resources.filter(this.isSelectable.bind(this))
+            return page.resources.filter(
+              (member) => (this.allowGroup || member.group === null) && this.isSelectable(member)
+            )
           })
         )
     )
