@@ -21,7 +21,7 @@
 >
   <ng-template>
     <nz-tabset [(nzSelectedIndex)]="activeTabIndex">
-      <nz-tab nzTitle="Informations">
+      <nz-tab *ngIf="canEdit" nzTitle="Informations">
         <mat-form-field appearance="fill">
           <mat-label>Nom</mat-label>
           <input [(ngModel)]="groupName" (keyup.enter)="renameGroup()" matInput />
@@ -33,7 +33,7 @@
           [total]="searchbar.total"
           [users]="members"
           [loading]="searchbar.searching"
-          [selectable]="true"
+          [selectable]="canEdit"
           [(filters)]="filters"
           [(ngModel)]="selection"
         />
@@ -54,13 +54,13 @@
 </ng-template>
 
 <ng-template #infoTabFooter>
-  <nz-button-group>
+  <nz-button-group *ngIf="canEdit">
     <button nz-button nzType="primary" (click)="renameGroup()" [disabled]="!groupName">Enregistrer</button>
   </nz-button-group>
 </ng-template>
 
 <ng-template #memberTabFooter>
-  <nz-button-group>
+  <nz-button-group *ngIf="canEdit">
     <button (click)="search.open()" nz-button nzType="primary" [disabled]="!group">
       <span>Ajouter</span>
     </button>
