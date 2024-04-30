@@ -4,6 +4,7 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
+  OnInit,
   Output,
   ViewChild,
   inject,
@@ -28,6 +29,7 @@ import { UserService } from '../../api/user.service'
 import { UserSearchBarComponent } from '../user-search-bar/user-search-bar.component'
 import { UserSearchModalComponent } from '../user-search-modal/user-search-modal.component'
 import { UserTableComponent } from '../user-table/user-table.component'
+import { AuthService } from '../../api/auth.service'
 
 @Component({
   standalone: true,
@@ -56,13 +58,15 @@ import { UserTableComponent } from '../user-table/user-table.component'
     UiModalDrawerComponent,
   ],
 })
-export class UserGroupDrawerComponent {
+export class UserGroupDrawerComponent implements OnInit {
   private readonly userService = inject(UserService)
   private readonly changeDetectorRef = inject(ChangeDetectorRef)
+  private readonly authService = inject(AuthService)
 
   protected group?: UserGroup
   protected groupName = ''
 
+  protected canEdit = false
   protected members: User[] = []
   protected filters: UserFilters = { limit: 10 }
   protected selection: string[] = []
@@ -75,6 +79,11 @@ export class UserGroupDrawerComponent {
 
   protected get excludes(): string[] {
     return this.members.map((m) => m.username)
+  }
+
+  async ngOnInit(): Promise<void> {
+    const user = (await this.authService.ready()) as User
+    this.canEdit = user.role === 'admin'
   }
 
   open(group: UserGroup) {
