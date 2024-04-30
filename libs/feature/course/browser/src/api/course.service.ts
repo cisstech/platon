@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { ListResponse } from '@platon/core/common'
+import { ListResponse, ItemResponse } from '@platon/core/common'
 import {
   Activity,
   ActivityCorrector,
@@ -214,6 +214,14 @@ export class CourseService {
 
   addGroupMember(courseId: string, groupId: string, userId: string): Observable<void> {
     return this.courseGroupProvider.addMember(courseId, groupId, userId)
+  }
+
+  addCourseGroup(courseId: string): Observable<ItemResponse<CourseGroup>> {
+    return this.courseGroupProvider.addCourseGroup(courseId)
+  }
+
+  deleteGroup(courseId: string, groupId: string): Observable<void> {
+    return this.courseGroupProvider.deleteGroup(courseId, groupId)
   }
 
   //#endregion

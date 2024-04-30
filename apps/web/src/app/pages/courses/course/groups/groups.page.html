@@ -1,4 +1,7 @@
 <section>
+  <button *ngIf="canEdit" (click)="addGroup()" nz-button nzType="primary" nz-tooltip="Ajouter un groupe">
+    <span nz-icon nzType="plus" nzTheme="outline"></span>
+  </button>
   <mat-card>
     <mat-card-content>
       <nz-collapse>
@@ -18,7 +21,30 @@
             ></span>
           </ng-template>
           <ng-template #extraTpl>
-            <button (click)="$event.stopPropagation(); addModal.open()" nz-button nzType="primary" nz-tooltip="Ajouter">
+            <button
+              *ngIf="canEdit"
+              class="has-margin"
+              nz-button
+              nzDanger
+              nzType="primary"
+              nzShape="circle"
+              nz-popconfirm
+              nzOkText="Retirer"
+              nzOkType="danger"
+              (click)="$event.stopPropagation()"
+              [nzPopconfirmTitle]="'Voulez-vous vraiment supprimer le groupe \'' + group.courseGroup.name + '\' ?'"
+              (nzOnConfirm)="deleteGroup(group.courseGroup.groupId)"
+            >
+              <i nz-icon nzType="delete"></i>
+            </button>
+            <button
+              *ngIf="canEdit"
+              class="has-margin"
+              (click)="$event.stopPropagation(); addModal.open()"
+              nz-button
+              nzType="primary"
+              nz-tooltip="Ajouter un étudiant au groupe"
+            >
               <span nz-icon nzType="plus" nzTheme="outline"></span>
             </button>
           </ng-template>

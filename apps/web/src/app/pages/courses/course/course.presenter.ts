@@ -219,18 +219,20 @@ export class CoursePresenter implements OnDestroy {
       await firstValueFrom(this.courseService.updateGroupName(course.id, groupId, newName))
       this.context.next({
         ...this.context.value,
-        courseGroups: this.context.value.courseGroups?.map((group) => {
-          if (group.courseGroup.groupId === groupId) {
-            return {
-              ...group,
-              courseGroup: {
-                ...group.courseGroup,
-                name: newName,
-              },
+        courseGroups: this.context.value.courseGroups
+          ?.map((group) => {
+            if (group.courseGroup.groupId === groupId) {
+              return {
+                ...group,
+                courseGroup: {
+                  ...group.courseGroup,
+                  name: newName,
+                },
+              }
             }
-          }
-          return group
-        }),
+            return group
+          })
+          .sort((a, b) => a.courseGroup.name.localeCompare(b.courseGroup.name)),
       })
     } catch {
       this.alertError()
@@ -304,6 +306,41 @@ export class CoursePresenter implements OnDestroy {
           }
           return group
         }),
+      })
+    } catch {
+      this.alertError()
+    }
+  }
+
+  async addGroup(): Promise<void> {
+    const { course } = this.context.value
+    if (!course) {
+      return
+    }
+    try {
+      const group = await firstValueFrom(this.courseService.addCourseGroup(course.id))
+      this.context.next({
+        ...this.context.value,
+        courseGroups: this.context.value.courseGroups?.concat({
+          courseGroup: group.resource,
+          members: [],
+        }),
+      })
+    } catch {
+      this.alertError()
+    }
+  }
+
+  async deleteGroup(groupId: string): Promise<void> {
+    const { course } = this.context.value
+    if (!course) {
+      return
+    }
+    try {
+      await firstValueFrom(this.courseService.deleteGroup(course.id, groupId))
+      this.context.next({
+        ...this.context.value,
+        courseGroups: this.context.value.courseGroups?.filter((group) => group.courseGroup.groupId !== groupId),
       })
     } catch {
       this.alertError()

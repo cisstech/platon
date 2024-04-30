@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core'
 import { CourseGroupProvider } from '../models/course-group-provider'
 import { CourseGroup, CourseMember } from '@platon/feature/course/common'
 import { Observable } from 'rxjs'
-import { ListResponse } from '@platon/core/common'
+import { ItemResponse, ListResponse } from '@platon/core/common'
 
 @Injectable()
 export class RemoteCourseGroupProvider extends CourseGroupProvider {
@@ -29,5 +29,13 @@ export class RemoteCourseGroupProvider extends CourseGroupProvider {
 
   addMember(courseId: string, groupId: string, userId: string): Observable<void> {
     return this.http.post<void>(`/api/v1/courseGroupMembers/${courseId}/${groupId}/${userId}`, {})
+  }
+
+  addCourseGroup(courseId: string): Observable<ItemResponse<CourseGroup>> {
+    return this.http.post<ItemResponse<CourseGroup>>(`/api/v1/courseGroups/${courseId}`, {})
+  }
+
+  deleteGroup(courseId: string, groupId: string): Observable<void> {
+    return this.http.delete<void>(`/api/v1/courseGroups/${courseId}/${groupId}`)
   }
 }

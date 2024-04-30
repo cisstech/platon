@@ -36,6 +36,10 @@ export class CourseGroupMemberService {
     await this.repository.delete({ groupId, userId })
   }
 
+  async deleteAllMembersFromGroup(groupId: string): Promise<void> {
+    await this.repository.delete({ groupId })
+  }
+
   async isMember(groupId: string, userId: string): Promise<boolean> {
     return !!(await this.repository.findOne({ where: { groupId, userId } }))
   }

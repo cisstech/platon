@@ -9,6 +9,9 @@ import { Subscription } from 'rxjs'
 import { NzTypographyModule } from 'ng-zorro-antd/typography'
 import { CourseGroupDetail, CourseMember } from '@platon/feature/course/common'
 import { CourseMemberSearchModalComponent } from '@platon/feature/course/browser'
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
+import { CommonModule } from '@angular/common'
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm'
 
 @Component({
   standalone: true,
@@ -17,13 +20,16 @@ import { CourseMemberSearchModalComponent } from '@platon/feature/course/browser
   styleUrls: ['./groups.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
+    CommonModule,
     MatCardModule,
     NzIconModule,
     NzCollapseModule,
     NzButtonModule,
+    NzToolTipModule,
     CourseMemberSearchModalComponent,
     CourseMemberTableComponent,
     NzTypographyModule,
+    NzPopconfirmModule,
   ],
 })
 export class CourseGroupsPage implements OnInit {
@@ -69,5 +75,21 @@ export class CourseGroupsPage implements OnInit {
 
   protected getGroupMembersIds(group: CourseGroupDetail): string[] {
     return group.members.map((m) => m.user?.id ?? '') ?? []
+  }
+
+  protected async addGroup() {
+    await this.presenter.addGroup()
+    this.changeDetectorRef.markForCheck()
+  }
+
+  protected async deleteGroup(groupId: string) {
+    await this.presenter.deleteGroup(groupId)
+    this.changeDetectorRef.markForCheck()
+  }
+
+  protected get canEdit(): boolean {
+    const { course } = this.context
+    if (!course) return false
+    return !!course.permissions?.update
   }
 }

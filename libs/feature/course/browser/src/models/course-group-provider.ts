@@ -1,4 +1,4 @@
-import { ListResponse } from '@platon/core/common'
+import { ItemResponse, ListResponse } from '@platon/core/common'
 import { CourseGroup, CourseMember } from '@platon/feature/course/common'
 import { Observable } from 'rxjs'
 
@@ -12,4 +12,8 @@ export abstract class CourseGroupProvider {
   abstract deleteMember(courseId: string, groupId: string, userId: string): Observable<void>
 
   abstract addMember(courseId: string, groupId: string, userId: string): Observable<void>
+
+  abstract addCourseGroup(courseId: string): Observable<ItemResponse<CourseGroup>>
+
+  abstract deleteGroup(courseId: string, groupId: string): Observable<void>
 }
