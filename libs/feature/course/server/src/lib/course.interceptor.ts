@@ -30,7 +30,7 @@ export class CourseLTIInterceptor implements LTILaunchInterceptor {
 
     if (courseId && args.payload.custom_groups && args.payload.custom_groups.length > 0) {
       for (const group of args.payload.custom_groups.split(',')) {
-        await this.courseGroupService.addCourseGroup(group, courseId)
+        await this.courseGroupService.addCourseGroup(courseId, group)
         await this.courseGroupMemberService.addCourseGroupMember(group, user.id)
       }
     }

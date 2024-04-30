@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { CourseGroupEntity } from './course-group.entity'
 import { Repository } from 'typeorm'
+import { v4 as uuidv4 } from 'uuid'
 
 @Injectable()
 export class CourseGroupService {
@@ -20,7 +21,10 @@ export class CourseGroupService {
    * @param courseId course id
    * @returns the course group
    */
-  async addCourseGroup(groupId: string, courseId: string, name?: string): Promise<CourseGroupEntity> {
+  async addCourseGroup(courseId: string, groupId?: string, name?: string): Promise<CourseGroupEntity> {
+    if (!groupId) {
+      groupId = uuidv4()
+    }
     const existing = await this.repository.findOne({ where: { groupId, courseId } })
     if (existing) {
       return existing
@@ -46,5 +50,9 @@ export class CourseGroupService {
     }
     Object.assign(group, changes)
     return this.repository.save(group)
+  }
+
+  async delete(groupId: string): Promise<void> {
+    await this.repository.delete({ groupId })
   }
 }
