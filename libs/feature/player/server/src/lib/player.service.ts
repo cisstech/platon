@@ -151,6 +151,12 @@ export class PlayerService extends PlayerManager {
     if (!activitySession) {
       throw new NotFoundResponse(`ActivitySession not found: ${activitySessionId}`)
     }
+    if (activitySession.activity?.openAt && activitySession.activity.openAt > new Date()) {
+      throw new ForbiddenResponse("L'activité n'est pas encore ouverte.")
+    }
+    if (activitySession.activity?.closeAt && activitySession.activity.closeAt < new Date()) {
+      throw new ForbiddenResponse("L'activité est fermée.")
+    }
 
     // CREATE PLAYERS
     const exercisePlayers = await Promise.all(
