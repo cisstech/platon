@@ -136,7 +136,7 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.calculateAnswerStates(this.player.navigation)
 
-    this.state = calculateActivityOpenState(this.player)
+    this.state = this.player.state
     this.empty = !this.player.navigation.exercises?.length
 
     if (this.state === 'opened') {
@@ -149,7 +149,8 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
         this.start().catch(console.error)
       }
     } else if (this.state === 'planned') {
-      this.countdown = new Date(this.player.openAt as Date).getTime()
+      const delta = new Date(this.player.openAt as Date).getTime() - new Date(this.player.serverTime).getTime()
+      this.countdown = Date.now() + delta
     }
   }
 

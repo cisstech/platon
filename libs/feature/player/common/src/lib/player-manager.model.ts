@@ -27,7 +27,6 @@ export abstract class PlayerManager {
   private readonly actionHandlers: Record<PlayerActions, ActionHandler> = {
     NEXT_HINT: this.nextHint.bind(this),
     CHECK_ANSWER: this.checkAnswer.bind(this),
-    NEXT_EXERCISE: this.nextExercise.bind(this),
     SHOW_SOLUTION: this.showSolution.bind(this),
     REROLL_EXERCISE: this.reroll.bind(this),
   }
@@ -60,6 +59,9 @@ export abstract class PlayerManager {
 
   async evaluate(input: EvalExerciseInput, user?: User): Promise<ExercisePlayer | [ExercisePlayer, PlayerNavigation]> {
     const session = withSessionAccessGuard(await this.findExerciseSessionById(input.sessionId), user)
+    if (this.isExpired(session)) {
+      throw new ForbiddenResponse(`This session is expired.`)
+    }
 
     const grades = await this.findGrades(session.id)
 
@@ -240,7 +242,7 @@ export abstract class PlayerManager {
     ]
   }
 
-  async nextExercise(exerciseSession: ExerciseSession): Promise<ExercisePlayer> {
+  async nextExercise(exerciseSession: ExerciseSession): Promise<[ExercisePlayer, PlayerNavigation]> {
     const activitySession = exerciseSession.parent
     if (!activitySession) {
       throw new ForbiddenResponse(`This action can be called only with dynamic activities.`)
@@ -248,12 +250,24 @@ export abstract class PlayerManager {
 
     activitySession.activity = activitySession.activity ?? exerciseSession.activity
 
-    return withExercisePlayer(exerciseSession)
+    return [withExercisePlayer(exerciseSession), activitySession.variables.navigation]
   }
 
   async showSolution(exerciseSession: ExerciseSession): Promise<ExercisePlayer> {
     patchExerciseMeta(exerciseSession.variables, () => ({ showSolution: true }))
     return withExercisePlayer(exerciseSession)
+  }
+
+  private isExpired(session: Session): boolean {
+    let expiresAt: Date | undefined
+    if (session.startedAt && session.startedAt != null && session.parent?.variables.settings?.duration) {
+      expiresAt = session.startedAt
+      expiresAt?.setSeconds(expiresAt.getSeconds() + session.parent?.variables.settings?.duration + 30) // 30 seconds of margin
+    }
+    if (session.activity?.closeAt) {
+      expiresAt = new Date(session.activity.closeAt)
+    }
+    return !!expiresAt && new Date() > expiresAt
   }
 
   protected abstract createAnswer(answer: Partial<Answer>): Promise<Answer>
