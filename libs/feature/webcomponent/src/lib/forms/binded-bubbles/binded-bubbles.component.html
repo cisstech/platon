@@ -1,0 +1,45 @@
+<div class="bubbles-items" *ngIf="this.state.mode === 'shuffle'">
+  <ng-container *ngFor=" let item of shuffledList">
+    <div class="bubbles-item">
+      <button mat-fab extended (click)="updateClickedList(item)" [class.button-animation]="item.state"
+        [class.checked]="item.state === 'checked'" [class.unchecked]="item.state === 'unchecked'"
+        [class.error]="item.state === 'error'" (animationend)="onAnimationEnd(item)">
+        <span>{{ item.content }}</span>
+      </button>
+    </div>
+  </ng-container>
+</div>
+
+<!-- template.html -->
+<div class="bubbles-items" *ngIf="state.mode === 'ordered'">
+  <div class="bubbles-container">
+    <div class="column">
+      <ng-container *ngFor="let item of list1;">
+        <div class="bubbles-item">
+          <button mat-fab extended (click)="updateClickedList(item)" [class.checked]="item.state === 'checked'"
+            [class.unchecked]="item.state === 'unchecked'" [class.error]="item.state === 'error'"
+            [class.disabled]="item.state === 'disabled'" (animationend)="onAnimationEnd(item)"
+            [disabled]="item.state === 'disabled'">
+            <span>{{ item.content }}</span>
+          </button>
+        </div>
+      </ng-container>
+    </div>
+    <div class="column">
+      <ng-container *ngFor="let item of list2;">
+        <div class="bubbles-item">
+          <button mat-fab extended (click)="updateClickedList(item)" [class.checked]="item.state === 'checked'"
+            [class.unchecked]="item.state === 'unchecked'" [class.error]="item.state === 'error'"
+            [class.disabled]="item.state === 'disabled'" (animationend)="onAnimationEnd(item)"
+            [disabled]="item.state === 'disabled'">
+            <span>{{ item.content }}</span>
+          </button>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>
+
+
+
+<wc-base [(state)]="state"></wc-base>

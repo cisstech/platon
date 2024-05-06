@@ -1,0 +1,89 @@
+button {
+  width: 90%;
+}
+
+.bubbles-container {
+  display: flex;
+  justify-content: center;
+}
+
+.bubbles-item {
+  box-sizing: border-box;
+  min-width: 30%;
+}
+
+.column {
+  width: 30%;
+}
+
+
+.bubbles-items button,
+.bubbles-items a {
+  margin-right: 8px;
+  margin-bottom: 8px;
+  background-color: var(--brand-background-components);
+  color: var(--brand-color-primary);
+  font-weight: bolder;
+  border: 2px solid var(--brand-color-primary);
+  font-size: medium;
+}
+
+
+
+.bubbles-items button.checked,
+.bubbles-items a.checked {
+  animation: changeColorChecked 1s forwards;
+}
+
+.bubbles-items button.unchecked,
+.bubbles-items a.unchecked {
+  background-color: var(--brand-background-components);
+}
+
+.bubbles-items button.error,
+.bubbles-items a.error {
+  animation: changeColorError 0.5s forwards;
+}
+
+.bubbles-items button.disabled,
+.bubbles-items a.disabled {
+  background-color: var(--brand-background-components);
+  /* Couleur de fond initiale */
+  color: rgb(140, 140, 140);
+  border: 2px solid rgb(140, 140, 140);
+  /* Couleur de fond initiale */
+}
+
+
+@keyframes changeColorChecked {
+  0% {
+    background-color: var(--brand-background-components);
+    /* Couleur de fond initiale */
+  }
+
+  100% {
+    background-color: #00ff00;
+    /* Couleur de fond verte */
+  }
+}
+
+
+
+@keyframes changeColorError {
+  0% {
+    background-color: var(--brand-background-components);
+    /* Couleur de fond initiale */
+    translate: -3px;
+  }
+
+  50% {
+    background-color: #ff0000;
+    translate: 3px;
+
+  }
+
+  100% {
+    background-color: var(--brand-background-components);
+    translate: 0px;
+  }
+}

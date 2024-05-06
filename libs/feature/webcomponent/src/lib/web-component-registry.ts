@@ -16,6 +16,7 @@ import { MatrixComponentDefinition } from './forms/matrix/matrix'
 import { PickerComponentDefinition } from './forms/picker/picker'
 import { MathLiveComponentDefinition } from './forms/math-live/math-live'
 import { JsxComponentDefinition } from './forms/jsx/jsx'
+import { BindedBubblesComponentDefinition } from './forms/binded-bubbles/binded-bubbles'
 import { AutomatonViewerComponentDefinition } from './widgets/automaton-viewer/automaton-viewer'
 import { GraphViewerComponentDefinition } from './widgets/graph-viewer/graph-viewer'
 import { MarkdownComponentDefinition } from './widgets/markdown/markdown'
@@ -83,6 +84,13 @@ export const WEB_COMPONENTS_BUNDLES: NgeElementDef[] = [
   {
     selector: 'wc-jsx',
     module: () => import(/* webpackChunkName: "wc-jsx" */ './forms/jsx/jsx.module').then((m) => m.JsxModule),
+  },
+  {
+    selector: 'wc-binded-bubbles',
+    module: () =>
+      import(/* webpackChunkName: "wc-binded-bubbles" */ './forms/binded-bubbles/binded-bubbles.module').then(
+        (m) => m.BindedBubblesModule
+      ),
   },
   {
     selector: 'wc-markdown',
@@ -182,6 +190,11 @@ export const WEB_COMPONENTS_REGISTRY: Provider[] = [
     provide: WEB_COMPONENT_DEFINITIONS,
     multi: true,
     useValue: JsxComponentDefinition,
+  },
+  {
+    provide: WEB_COMPONENT_DEFINITIONS,
+    multi: true,
+    useValue: BindedBubblesComponentDefinition,
   },
   {
     provide: WEB_COMPONENT_DEFINITIONS,
