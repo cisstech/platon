@@ -17,6 +17,7 @@ import {
   withTheoriesGuard,
 } from './player-guards.model'
 import { ActivityPlayer, ExercisePlayer } from './player.model'
+import { calculateActivityOpenState } from '@platon/feature/course/common'
 
 type Scripts = Record<string, string>
 
@@ -156,6 +157,8 @@ export const withRenderedTemplates = (variables: ExerciseVariables, reviewMode?:
  */
 export const withActivityPlayer = (session: ActivitySession): ActivityPlayer => {
   const { variables } = withActivityFeedbacksGuard(session)
+  const openState = calculateActivityOpenState({openAt : session.activity?.openAt, closeAt : session.activity?.closeAt})
+
   return {
     type: 'activity',
     sessionId: session.id,
@@ -165,6 +168,8 @@ export const withActivityPlayer = (session: ActivitySession): ActivityPlayer => 
     startedAt: session.startedAt,
     openAt: session.activity?.openAt,
     closeAt: session.activity?.closeAt,
+    state: openState,
+    serverTime: new Date(),
     lastGradedAt: session.lastGradedAt,
     introduction: variables.introduction,
     conclusion: variables.conclusion,
