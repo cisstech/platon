@@ -23,4 +23,18 @@ export class FoldableFeedbackComponent implements WebComponentHooks<FoldableFeed
     }
     currentContent.display = !currentContent.display
   }
+
+  typeToColor(type: string): string {
+    return '000000'
+    switch (type) {
+      case 'success':
+        return '00cc00'
+      case 'warning':
+        return 'ff8000'
+      case 'error':
+        return 'ff0000'
+      default:
+        return '0000ff'
+    }
+  }
 }

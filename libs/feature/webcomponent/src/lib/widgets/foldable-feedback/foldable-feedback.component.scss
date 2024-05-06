@@ -14,41 +14,58 @@
   padding-left: 10px;
   padding-right: 10px;
   width: fit-content;
+  max-width: 100%;
   border-radius: 5px;
   cursor: text;
+  overflow-x: auto;
+}
+
+.success, .warning, .error, .info {
+  border-radius: 5px;
+  padding: 5px;
+  margin: 5px;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
 }
 
 .success {
-  background-color: #9FFF9F;
+  //background-color: #9FFF9F;
+  background-color: #DFF9DF;
   border: 2px solid #00CC00;
-  border-radius: 10px;
-  padding: 5px;
-  margin: 5px;
 }
+
+// .success > h2 {
+//   color: #00CC00;
+// }
 
 .warning {
-  background-color: #FFCF9F;
+  //background-color: #FFCF9F;
+  background-color: #FFEFDF;
   border: 2px solid #FF8000;
-  border-radius: 10px;
-  padding: 5px;
-  margin: 5px;
 }
+
+// .warning > h2 {
+//   color: #FF8000;
+// }
 
 .error {
-  background-color: #FF9F9F;
+  //background-color: #FF9F9F;
+  background-color: #FFDFDF;
   border: 2px solid #FF0000;
-  border-radius: 10px;
-  padding: 5px;
-  margin: 5px;
 }
 
+// .error > h2 {
+//   color: #FF0000;
+// }
+
 .info {
-  background-color: #9F9FFF;
+  //background-color: #9F9FFF;
+  background-color: #DFDFFF;
   border: 2px solid #0000FF;
-  border-radius: 10px;
-  padding: 5px;
-  margin: 5px;
 }
+
+// .info > h2 {
+//   color: #0000FF;
+// }
 
 h2 {
   margin: 0px;
@@ -88,4 +105,11 @@ pre {
   font-size: 1em;
   background: none;
   padding: 0;
+}
+
+.chevron-icon {
+  width: 20px;
+  height: 20px;
+  background-size: cover;
+  display: inline-block;
 }

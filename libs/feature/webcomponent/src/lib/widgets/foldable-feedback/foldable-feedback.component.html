@@ -5,7 +5,22 @@
 
 <ng-template #feedback let-item="item" let-indexes="indexes">
   <div [class]="item.type ? item.type : 'info'" (click)="onClick(indexes)">
-    <h2>{{ item.name }}</h2>
+    <h2>
+      <div
+        *ngIf="item.feedbacks && item.feedbacks.length > 0"
+        [style.background-image]="
+          'url(' +
+          'https://icongr.am/entypo/chevron-' +
+          (item.display ? 'down' : 'right') +
+          '.svg?size=20&color=' +
+          typeToColor(item.type) +
+          ')'
+        "
+        class="chevron-icon"
+        alt="down arrow icon"
+      ></div>
+      {{ item.name }}
+    </h2>
     <div [class]="item.display ? 'show' : 'hide'">
       @if (item.feedbacks && item.feedbacks.length > 0){
       <div *ngIf="item.description">
