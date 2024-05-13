@@ -22,8 +22,6 @@ import { ResultController } from './result.controller'
 import { SessionEntity } from './sessions/session.entity'
 import { SessionService } from './sessions/session.service'
 import { SessionView } from './sessions/session.view'
-import { WatchedChallengesEntity } from 'libs/feature/discord/server/src/lib/watchedChallenges.entity'
-import { WatchedChallengesService } from 'libs/feature/discord/server/src/lib/watchedChallenges.service'
 
 @Module({
   imports: [
@@ -36,7 +34,6 @@ import { WatchedChallengesService } from 'libs/feature/discord/server/src/lib/wa
       AnswerEntity,
       CorrectionEntity,
       SessionCommentEntity,
-      WatchedChallengesEntity
     ]),
   ],
   controllers: [
@@ -56,9 +53,16 @@ import { WatchedChallengesService } from 'libs/feature/discord/server/src/lib/wa
     ActivityResultsVirtualColumnsResolver,
     CourseExpander,
     ResourceExpander,
-    WatchedChallengesService,
-    ActivityService
+    ActivityService,
   ],
-  exports: [TypeOrmModule, AnswerService, SessionService, CorrectionService, SessionCommentService, LeaderboardService, WatchedChallengesService, ActivityService],
+  exports: [
+    TypeOrmModule,
+    AnswerService,
+    SessionService,
+    CorrectionService,
+    SessionCommentService,
+    LeaderboardService,
+    ActivityService,
+  ],
 })
 export class FeatureResultServerModule {}
