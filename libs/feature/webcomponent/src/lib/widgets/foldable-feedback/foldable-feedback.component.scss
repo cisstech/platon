@@ -28,44 +28,24 @@
 }
 
 .success {
-  //background-color: #9FFF9F;
   background-color: #DFF9DF;
-  border: 2px solid #00CC00;
+  border: 1px solid #00CC00;
 }
-
-// .success > h2 {
-//   color: #00CC00;
-// }
 
 .warning {
-  //background-color: #FFCF9F;
   background-color: #FFEFDF;
-  border: 2px solid #FF8000;
+  border: 1px solid #FF8000;
 }
-
-// .warning > h2 {
-//   color: #FF8000;
-// }
 
 .error {
-  //background-color: #FF9F9F;
   background-color: #FFDFDF;
-  border: 2px solid #FF0000;
+  border: 1px solid #FF0000;
 }
-
-// .error > h2 {
-//   color: #FF0000;
-// }
 
 .info {
-  //background-color: #9F9FFF;
   background-color: #DFDFFF;
-  border: 2px solid #0000FF;
+  border: 1px solid #0000FF;
 }
-
-// .info > h2 {
-//   color: #0000FF;
-// }
 
 h2 {
   margin: 0px;
@@ -81,6 +61,10 @@ h2:hover {
 
 .foldable-feedback {
   cursor:pointer;
+}
+
+.feedback:hover {
+  margin-left: 10px;
 }
 
 h3 {

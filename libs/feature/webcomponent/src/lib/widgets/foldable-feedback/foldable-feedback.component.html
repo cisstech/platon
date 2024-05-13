@@ -4,17 +4,12 @@
 <wc-base [(state)]="state"></wc-base>
 
 <ng-template #feedback let-item="item" let-indexes="indexes">
-  <div [class]="item.type ? item.type : 'info'" (click)="onClick(indexes)">
+  <div class="feedback" [class]="item.type ? item.type : 'info'" (click)="onClick(indexes)">
     <h2>
       <div
         *ngIf="item.feedbacks && item.feedbacks.length > 0"
         [style.background-image]="
-          'url(' +
-          'https://icongr.am/entypo/chevron-' +
-          (item.display ? 'down' : 'right') +
-          '.svg?size=20&color=' +
-          typeToColor(item.type) +
-          ')'
+          'url(' + 'https://icongr.am/entypo/chevron-' + (item.display ? 'down' : 'right') + '.svg?size=20&color=0000)'
         "
         class="chevron-icon"
         alt="down arrow icon"
