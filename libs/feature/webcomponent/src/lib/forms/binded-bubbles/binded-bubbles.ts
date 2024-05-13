@@ -6,19 +6,18 @@ export interface BubbleItem {
   content?: string
   audio?: string
   image?: string
-  state: 'checked' | 'unchecked' | 'error' | 'disabled';
+  state: 'checked' | 'unchecked' | 'error' | 'disabled'
 }
 
 export interface PairBubbleItem {
   item1: BubbleItem
   item2: BubbleItem
-
 }
 
 export interface BindedBubblesState extends IWebComponent {
   items: PairBubbleItem[]
   numberPairToShow: number
-  mode : 'shuffle' | 'ordered'
+  mode: 'shuffle' | 'ordered'
 }
 
 export const BindedBubblesComponentDefinition = defineWebComponent({
@@ -38,13 +37,18 @@ export const BindedBubblesComponentDefinition = defineWebComponent({
         default: [],
         description: 'La liste des propositions.',
         items: {
-          type: 'array',
-          required: ['id'],
-          additionalProperties: false,
+          type: 'object',
           properties: {
-            id: { type: 'string', description: 'Identifiant de la proposition.' },
-            state : { type: 'string', enum: ['checked', 'unchecked', 'error', 'disabled'], description: 'Etat de la proposition.', default: 'unchecked'},
-            content: { type: 'string', description: 'Contenu en markdown.' },
+            item1: {
+              type: 'object',
+              description: 'Contenu du premier item',
+              properties: { content: { type: 'string' } },
+            },
+            item2: {
+              type: 'object',
+              description: 'Contenu du deuxième item',
+              properties: { content: { type: 'string' } },
+            },
           },
         },
       },
@@ -67,85 +71,58 @@ export const BindedBubblesComponentDefinition = defineWebComponent({
       // PairBubbleItem
       {
         item1: {
-          id: '1',
           content: 'Bonjour',
-
         },
         item2: {
-          id: '2',
           content: 'Hello',
-
         },
       },
       {
         item1: {
-          id: '3',
           content: 'Bienvenue',
-
         },
         item2: {
-          id: '4',
           content: 'Welcome',
-
         },
       },
 
       {
         item1: {
-          id: '5',
           content: 'Merci',
-
         },
         item2: {
-          id: '6',
           content: 'Thank you',
-
         },
       },
 
       {
         item1: {
-          id: '7',
           content: 'Pas de problème',
-
         },
 
         item2: {
-          id: '8',
           content: 'No problem',
-
         },
       },
       {
         item1: {
-          id: '9',
           content: 'Au revoir',
           audio: null,
-
         },
         item2: {
-          id: '10',
           content: 'Goodbye',
-          audio: null,
-
         },
       },
       {
         item1: {
-          id: '11',
           content: 'De rien',
-          audio: null,
-
-
         },
         item2: {
-          id: '12',
           content: 'You are welcome',
-          audio: null,
         },
-      }
+      },
     ],
+
     numberPairToShow: 3,
   },
-
 })

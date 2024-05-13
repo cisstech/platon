@@ -54,6 +54,12 @@ button {
   /* Couleur de fond initiale */
 }
 
+.bubbles-item button:hover,
+.bubbles-item a:hover {
+  transform: translateY(-0.10em);
+  border-width: 3px;
+}
+
 
 @keyframes changeColorChecked {
   0% {
