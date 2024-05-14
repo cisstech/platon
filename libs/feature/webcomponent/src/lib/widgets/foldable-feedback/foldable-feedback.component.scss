@@ -20,6 +20,10 @@
   overflow-x: auto;
 }
 
+.description {
+  user-select: none;
+}
+
 .success, .warning, .error, .info {
   border-radius: 5px;
   padding: 5px;
@@ -53,6 +57,7 @@ h2 {
   margin-right: 10px;
   font-weight: bold;
   border: none;
+  user-select: none;
 }
 
 h2:hover {
@@ -63,8 +68,12 @@ h2:hover {
   cursor:pointer;
 }
 
-.feedback:hover {
-  margin-left: 10px;
+.feedback.closed {
+  transition: transform 0.15s ease-in-out;
+}
+
+.feedback.closed:hover {
+  transform: translateX(10px);
 }
 
 h3 {
@@ -72,6 +81,7 @@ h3 {
   margin-bottom: 0.5em;
   font-weight: 500;
   font-size: 1.17em;
+  user-select: none;
 }
 
 .show {
@@ -96,4 +106,27 @@ pre {
   height: 20px;
   background-size: cover;
   display: inline-block;
+}
+
+.success-icon, .info-icon, .warning-icon, .error-icon {
+  width: 32px;
+  height: 32px;
+  background-size: cover;
+  float: right;
+}
+
+.success-icon {
+  background-image: url('https://icongr.am/material/check-circle-outline.svg?size=32&color=00cc00');
+}
+
+.info-icon {
+  background-image: url('https://icongr.am/material/information-outline.svg?size=32&color=0000ff');
+}
+
+.warning-icon {
+  background-image: url('https://icongr.am/material/alert-circle-outline.svg?size=32&color=ff8000');
+}
+
+.error-icon {
+  background-image: url('https://icongr.am/material/close-circle-outline.svg?size=32&color=ff0000');
 }
