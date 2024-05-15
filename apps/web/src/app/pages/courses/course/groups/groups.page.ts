@@ -12,6 +12,7 @@ import { CourseMemberSearchModalComponent } from '@platon/feature/course/browser
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 import { CommonModule } from '@angular/common'
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm'
+import { NzEmptyComponent } from 'ng-zorro-antd/empty'
 
 @Component({
   standalone: true,
@@ -26,6 +27,7 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm'
     NzCollapseModule,
     NzButtonModule,
     NzToolTipModule,
+    NzEmptyComponent,
     CourseMemberSearchModalComponent,
     CourseMemberTableComponent,
     NzTypographyModule,
