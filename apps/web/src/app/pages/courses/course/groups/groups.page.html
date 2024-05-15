@@ -1,8 +1,8 @@
 <section>
   <button *ngIf="canEdit" (click)="addGroup()" nz-button nzType="primary" nz-tooltip="Ajouter un groupe">
-    <span nz-icon nzType="plus" nzTheme="outline"></span>
+    <span nz-icon nzType="plus" nzTheme="outline"></span><span>Ajouter un groupe</span>
   </button>
-  <mat-card>
+  <mat-card *ngIf="context.courseGroups && context.courseGroups.length > 0; else noGroup">
     <mat-card-content>
       <nz-collapse>
         @for (group of context.courseGroups; track group) {
@@ -71,4 +71,9 @@
       </nz-collapse>
     </mat-card-content>
   </mat-card>
+  <ng-template #noGroup>
+    <nz-empty [nzNotFoundContent]="noGroupContent">
+      <ng-template #noGroupContent> Ce cours ne contient aucun groupe. </ng-template>
+    </nz-empty>
+  </ng-template>
 </section>
