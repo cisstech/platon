@@ -4,7 +4,11 @@
 <wc-base [(state)]="state"></wc-base>
 
 <ng-template #feedback let-item="item" let-indexes="indexes">
-  <div class="feedback" [class]="item.type ? item.type : 'info'" (click)="onClick(indexes)">
+  <div
+    class="feedback"
+    [class]="(item.type ? item.type : 'info') + ' ' + (item.display ? 'opened' : 'closed')"
+    (click)="onClick(indexes)"
+  >
     <h2>
       <div
         *ngIf="item.feedbacks && item.feedbacks.length > 0"
@@ -15,10 +19,11 @@
         alt="down arrow icon"
       ></div>
       {{ item.name }}
+      <div [class]="(item.type ? item.type : 'info') + '-icon'"></div>
     </h2>
     <div [class]="item.display ? 'show' : 'hide'">
       @if (item.feedbacks && item.feedbacks.length > 0){
-      <div *ngIf="item.description">
+      <div *ngIf="item.description" class="description">
         <pre>{{ item.description }}</pre>
       </div>
       <div *ngFor="let child of item.feedbacks; let index = index">
