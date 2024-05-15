@@ -31,6 +31,8 @@
             [class.unchecked]="item.state === 'unchecked'"
             [class.error]="item.state === 'error'"
             [class.disabled]="item.state === 'disabled'"
+            [class.achieved]="item.state === 'achieved'"
+            [style.animation-duration]="item.state === 'achieved' ? state.timeout + 'ms' : ''"
             (animationend)="onAnimationEnd(item)"
             [disabled]="item.state === 'disabled'"
           >
@@ -50,6 +52,8 @@
             [class.unchecked]="item.state === 'unchecked'"
             [class.error]="item.state === 'error'"
             [class.disabled]="item.state === 'disabled'"
+            [class.achieved]="item.state === 'achieved'"
+            [style.animation-duration]="item.state === 'achieved' ? state.timeout + 'ms' : ''"
             (animationend)="onAnimationEnd(item)"
             [disabled]="item.state === 'disabled'"
           >

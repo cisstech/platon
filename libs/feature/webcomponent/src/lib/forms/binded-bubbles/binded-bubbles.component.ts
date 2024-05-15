@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Injector, Input } from '@angular/core'
+import { ChangeDetectionStrategy, Component, Injector, Input, OnInit } from '@angular/core'
 import { WebComponent, WebComponentHooks } from '../../web-component'
 import { BindedBubblesComponentDefinition, BindedBubblesState, BubbleItem, PairBubbleItem } from './binded-bubbles'
 
@@ -6,10 +6,10 @@ import { BindedBubblesComponentDefinition, BindedBubblesState, BubbleItem, PairB
   selector: 'wc-binded-bubbles',
   templateUrl: 'binded-bubbles.component.html',
   styleUrls: ['binded-bubbles.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.Default,
 })
 @WebComponent(BindedBubblesComponentDefinition)
-export class BindedBubblesComponent implements WebComponentHooks<BindedBubblesState> {
+export class BindedBubblesComponent implements WebComponentHooks<BindedBubblesState>, OnInit {
   @Input() state!: BindedBubblesState
   shuffledList: BubbleItem[] = []
   list1: BubbleItem[] = []
@@ -23,7 +23,7 @@ export class BindedBubblesComponent implements WebComponentHooks<BindedBubblesSt
 
   ngOnInit() {
     let cmp = 0
-    this.state.items.map((element) => {
+    this.state.items.forEach((element) => {
       element.item1.id = cmp++ + ''
       element.item1.state = 'unchecked'
       element.item2.id = cmp++ + ''
@@ -61,11 +61,14 @@ export class BindedBubblesComponent implements WebComponentHooks<BindedBubblesSt
       )
 
       if (foundPair) {
-        this.handleAchievedPair(foundPair)
         this.clearClickedList(false)
+        this.handleAchievedPair(foundPair)
       } else {
         this.clearClickedList(true)
       }
+      //mettre à jour les deux list
+      this.list1 = this.list1.slice()
+      this.list2 = this.list2.slice()
     }
   }
 
@@ -78,9 +81,12 @@ export class BindedBubblesComponent implements WebComponentHooks<BindedBubblesSt
 
   private handleAchievedPair(pair: PairBubbleItem) {
     this.achieveList.push(pair)
-    this.state.items = this.state.items.filter(
-      (item) => item.item1.id !== pair.item1.id && item.item2.id !== pair.item2.id
-    )
+    this.state.items.forEach((item) => {
+      if (item.item1.id === pair.item1.id && item.item2.id === pair.item2.id) {
+        item.item1.state = 'achieved'
+        item.item2.state = 'achieved'
+      }
+    })
 
     switch (this.state.mode) {
       case 'shuffle':
@@ -94,29 +100,43 @@ export class BindedBubblesComponent implements WebComponentHooks<BindedBubblesSt
   private handleOrderedAchievedPair(pair: PairBubbleItem) {
     const index1 = this.list1.findIndex((item) => item.id === pair.item1.id)
     const index2 = this.list2.findIndex((item) => item.id === pair.item2.id)
+    this.list1[index1].state = 'achieved'
+    this.list2[index2].state = 'achieved'
     const concatList = this.list1.concat(this.list2)
+    let randomItem: PairBubbleItem | undefined
+    do {
+      randomItem = this.getRandomPairThatIsNotInTheList(concatList)
+      //while randomItem is in waitingChoice
+    } while (this.waitingChoice.find((elem) => elem.pair.item1.id === randomItem?.item1.id) !== undefined)
 
-    const randomItem = this.getRandomPairThatIsNotInTheList(concatList)
     if (randomItem == undefined) {
       this.list1[index1].state = 'disabled'
       this.list2[index2].state = 'disabled'
       return
     }
+
     this.waitingChoice.push({ index1: index1, index2: index2, pair: randomItem })
 
-    if (this.shuffleChoice.length >= 2) {
+    if (this.waitingChoice.length >= 2) {
       clearTimeout(this.timeoutID)
       this.fillOrdered()
+      this.timeoutID = undefined
     } else {
       this.timeoutID = setTimeout(() => {
-        this.fillOrdered()
         this.timeoutID = undefined
-      }, 1000) // If you reach this timeout, place a good pair at the same index
+        this.fillOrdered()
+      }, this.state.timeout) // If you reach this timeout, place a good pair at the same index
     }
   }
 
   getRandomPairThatIsNotInTheList(list: BubbleItem[]): PairBubbleItem | undefined {
-    if (this.state.items.length < this.state.numberPairToShow) {
+    let count = 0
+    this.state.items.forEach((element) => {
+      if (element.item1.state !== 'achieved' && element.item2.state !== 'achieved') {
+        count++
+      }
+    })
+    if (count < this.state.numberPairToShow) {
       return undefined
     }
     let randomIndex = Math.floor(Math.random() * this.state.items.length)
@@ -165,6 +185,7 @@ export class BindedBubblesComponent implements WebComponentHooks<BindedBubblesSt
   }
 
   foundPair(tab: BubbleItem[], pair: PairBubbleItem): BubbleItem | undefined {
+    if (pair.item1.state === 'achieved' || pair.item2.state === 'achieved') return pair.item1
     return tab.find((element) => element.id === pair.item1.id || element.id === pair.item2.id)
   }
 
@@ -176,20 +197,28 @@ export class BindedBubblesComponent implements WebComponentHooks<BindedBubblesSt
 
   clearClickedList(gotWrong: boolean) {
     if (gotWrong) this.clickedList.forEach((element) => (element.state = 'error'))
+    else this.clickedList.forEach((element) => (element.state = 'achieved'))
     this.clickedList = []
   }
 
   shuffleChoice() {
-    let listOfItem2 = this.waitingChoice.map((elem) => elem.pair.item2)
+    const copiedWaitingChoice = JSON.parse(JSON.stringify(this.waitingChoice)) as {
+      index1: number
+      index2: number
+      pair: PairBubbleItem
+    }[]
+    let listOfItem2 = copiedWaitingChoice.map((elem) => elem.pair.item2)
     listOfItem2 = this.shuffle(listOfItem2)
-    this.waitingChoice.forEach((elem, index) => {
+    copiedWaitingChoice.forEach((elem, index) => {
       elem.pair.item2 = listOfItem2[index]
     })
+    this.waitingChoice = copiedWaitingChoice
   }
 
-  private fillOrdered(): void {
+  fillOrdered(): void {
     this.shuffleChoice()
-    for (let i = 0; i < this.waitingChoice.length; i++) {
+    const length = this.waitingChoice.length
+    for (let i = 0; i < length; i++) {
       const pairToAdd = this.waitingChoice.pop()!
       this.list1[pairToAdd.index1] = pairToAdd.pair.item1
       this.list2[pairToAdd.index2] = pairToAdd.pair.item2
