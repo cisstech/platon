@@ -157,7 +157,7 @@ export const withRenderedTemplates = (variables: ExerciseVariables, reviewMode?:
  */
 export const withActivityPlayer = (session: ActivitySession): ActivityPlayer => {
   const { variables } = withActivityFeedbacksGuard(session)
-  const openState = calculateActivityOpenState({openAt : session.activity?.openAt, closeAt : session.activity?.closeAt})
+  const openState = calculateActivityOpenState({ openAt: session.activity?.openAt, closeAt: session.activity?.closeAt })
 
   return {
     type: 'activity',
