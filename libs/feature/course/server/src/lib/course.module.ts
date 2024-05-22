@@ -38,7 +38,9 @@ import { CourseGroupMemberEntity } from './course-group-member/course-group-memb
 import { CourseGroupMemberService } from './course-group-member/course-group-member.service'
 import { CourseGroupController } from './course-group/course-group.controller'
 import { CourseGroupMemberController } from './course-group-member/course-group-member.controller'
-
+import { ActivityGroupEntity } from './activity-group/activity-group.entity'
+import { ActivityGroupController } from './activity-group/activity-group.controller'
+import { ActivityGroupService } from './activity-group/activity-group.service'
 
 @Module({
   imports: [
@@ -59,6 +61,7 @@ import { CourseGroupMemberController } from './course-group-member/course-group-
       CourseDemoEntity,
       CourseGroupEntity,
       CourseGroupMemberEntity,
+      ActivityGroupEntity,
     ]),
   ],
   controllers: [
@@ -71,6 +74,7 @@ import { CourseGroupMemberController } from './course-group-member/course-group-
     CourseDemoController,
     CourseGroupController,
     CourseGroupMemberController,
+    ActivityGroupController,
   ],
   providers: [
     CourseService,
@@ -88,6 +92,7 @@ import { CourseGroupMemberController } from './course-group-member/course-group-
     CourseDemoService,
     CourseGroupService,
     CourseGroupMemberService,
+    ActivityGroupService,
   ],
   exports: [
     TypeOrmModule,
@@ -101,6 +106,7 @@ import { CourseGroupMemberController } from './course-group-member/course-group-
     CourseDemoService,
     ActivityCorrectorService,
     CourseNotificationService,
+    ActivityGroupService,
   ],
 })
 export class FeatureCourseServerModule {}

@@ -17,6 +17,8 @@ import { CourseDemoProvider } from './models/course-demo-provider'
 import { RemoteCourseDemoProvider } from './providers/remote-course-demo.provider'
 import { CourseGroupProvider } from './models/course-group-provider'
 import { RemoteCourseGroupProvider } from './providers/remote-course-group.provider'
+import { ActivityGroupProvider } from './models/activity-group.provider'
+import { RemoteActivityGroupProvider } from './providers/remote-activity-group.provider'
 
 export const COURSE_PROVIDERS: Provider[] = [
   { provide: ActivityProvider, useClass: RemoteActivityProvider },
@@ -31,6 +33,7 @@ export const COURSE_PROVIDERS: Provider[] = [
   { provide: CourseSectionProvider, useClass: RemoteCourseSectionProvider },
   { provide: CourseDemoProvider, useClass: RemoteCourseDemoProvider },
   { provide: CourseGroupProvider, useClass: RemoteCourseGroupProvider },
+  { provide: ActivityGroupProvider, useClass: RemoteActivityGroupProvider },
 
   ...CourseNotificationParsers.map((provider) => ({
     provide: NOTIFICATION_PARSER,

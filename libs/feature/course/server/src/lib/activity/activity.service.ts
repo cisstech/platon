@@ -14,7 +14,7 @@ import {
 } from '@platon/feature/course/common'
 import { ResourceEntity, ResourceFileService } from '@platon/feature/resource/server'
 import { CLS_REQ } from 'nestjs-cls'
-import { In, Repository, SelectQueryBuilder } from 'typeorm'
+import { Brackets, In, Repository, SelectQueryBuilder } from 'typeorm'
 import { Optional } from 'typescript-optional'
 import { ActivityCorrectorService } from '../activity-corrector/activity-corrector.service'
 import { ActivityMemberService } from '../activity-member/activity-member.service'
@@ -29,6 +29,10 @@ import {
   OnReloadActivityEventPayload,
   OnTerminateActivityEventPayload,
 } from './activity.event'
+import { CourseGroupMemberEntity } from '../course-group-member/course-group-member.entity'
+import { CourseGroupEntity } from '../course-group/course-group.entity'
+import { ActivityGroupEntity } from '../activity-group/activity-group.entity'
+import { ActivityGroupService } from '../activity-group/activity-group.service'
 
 type ActivityGuard = (activity: ActivityEntity) => void | Promise<void>
 
@@ -50,7 +54,12 @@ export class ActivityService {
     private readonly repository: Repository<ActivityEntity>,
 
     @InjectRepository(ResourceEntity)
-    private readonly resourceRepository: Repository<ResourceEntity>
+    private readonly resourceRepository: Repository<ResourceEntity>,
+
+    @InjectRepository(CourseGroupMemberEntity)
+    private readonly courseGroupMemberRepository: Repository<CourseGroupMemberEntity>,
+
+    private readonly activityGroupService: ActivityGroupService
   ) {}
 
   async search(courseId: string, filters?: ActivityFilters): Promise<[ActivityEntity[], number]> {
@@ -66,6 +75,7 @@ export class ActivityService {
 
     const [entities, count] = await qb.getManyAndCount()
     await this.addVirtualColumns(...entities)
+
     return [entities, count]
   }
 
@@ -80,7 +90,12 @@ export class ActivityService {
     }
 
     const isCreator = user.id === activity.creatorId
-    if (!isCreator && !(await this.activityMemberService.isMember(id, user.id))) {
+    const isPrivateMember = await this.activityMemberService.isPrivateMember(id, user.id)
+    const isInGroup = await this.activityGroupService.isUserInActivityGroup(user.id, id)
+    const isMember =
+      (await this.activityMemberService.isMember(id, user.id)) &&
+      (await this.activityGroupService.numberOfGroups(id)) === 0
+    if (!isCreator && !isPrivateMember && !isInGroup && !isMember) {
       throw new ForbiddenResponse(`You are not a member of this activity`)
     }
 
@@ -112,7 +127,6 @@ export class ActivityService {
     }
     return Optional.of(activities)
   }
-
 
   async findByCourseId(courseId: string, activityId: string): Promise<Optional<ActivityEntity>> {
     const qb = this.createQueryBuilder(courseId)
@@ -280,6 +294,7 @@ export class ActivityService {
       (qb) => qb.where(`activity.course_id = :courseId`, { courseId }),
       (qb) => this.withMemberClause(qb, this.request.user)
     )
+
     return qb
   }
 
@@ -327,8 +342,26 @@ export class ActivityService {
 
   private withMemberClause(qb: SelectQueryBuilder<ActivityEntity>, user: User | string) {
     const userId = typeof user === 'string' ? user : user.id
-    return qb.andWhere(`(activity.creator_id = :userId OR member.id IS NOT NULL)`, {
-      userId,
-    })
+    const userGroupsSubQuery = this.createUserGroupSubQuery()
+    return qb.andWhere(
+      new Brackets((qb) => {
+        qb.where('activity.creator_id = :userId', { userId })
+          .orWhere('member.member_id IS NOT NULL')
+          .orWhere(':userId IN (' + userGroupsSubQuery.getQuery() + ')', {
+            userId,
+          })
+          .orWhere('member.id IS NOT NULL AND NOT EXISTS (' + userGroupsSubQuery.getQuery() + ')')
+      })
+    )
+  }
+
+  private createUserGroupSubQuery(): SelectQueryBuilder<CourseGroupMemberEntity> {
+    return this.courseGroupMemberRepository
+      .createQueryBuilder('groupMembers')
+      .select('groupMembers.user_id')
+      .leftJoin(CourseGroupEntity, 'group', 'groupMembers.group_id = group.group_id')
+      .leftJoin(ActivityGroupEntity, 'activityGroup', 'group.id = activityGroup.group_id')
+      .where('activityGroup.id IS NOT NULL')
+      .andWhere('activityGroup.activity_id = activity.id')
   }
 }

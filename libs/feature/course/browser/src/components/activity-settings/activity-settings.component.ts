@@ -20,11 +20,12 @@ import { NzSkeletonModule } from 'ng-zorro-antd/skeleton'
 import { NzSpinModule } from 'ng-zorro-antd/spin'
 
 import { DialogModule, DialogService } from '@platon/core/browser'
-import { Activity, CourseMember } from '@platon/feature/course/common'
+import { Activity, CourseGroup, CourseMember } from '@platon/feature/course/common'
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm'
 import { firstValueFrom } from 'rxjs'
 import { CourseService } from '../../api/course.service'
 import { CourseMemberSelectComponent } from '../course-member-select/course-member-select.component'
+import { CourseGroupSelectComponent } from '../course-group-select/course-group-select.component'
 
 @Component({
   standalone: true,
@@ -49,6 +50,7 @@ import { CourseMemberSelectComponent } from '../course-member-select/course-memb
     DialogModule,
 
     CourseMemberSelectComponent,
+    CourseGroupSelectComponent,
   ],
 })
 export class CourseActivitySettingsComponent implements OnInit {
@@ -59,11 +61,13 @@ export class CourseActivitySettingsComponent implements OnInit {
     openDates: new FormControl<Date[] | undefined>(undefined),
     members: new FormControl<string[] | undefined>(undefined),
     correctors: new FormControl<string[] | undefined>(undefined),
+    groups: new FormControl<string[] | undefined>(undefined),
   })
 
   protected loading = false
   protected updating = false
   protected courseMembers: CourseMember[] = []
+  protected courseGroups: CourseGroup[] = []
 
   protected disabledDate = (current: Date): boolean => differenceInCalendarDays(current, new Date()) < 0
 
@@ -82,19 +86,23 @@ export class CourseActivitySettingsComponent implements OnInit {
       })
     )
 
-    const [courseMembers, activityMembers, activityCorrectors] = await Promise.all([
+    const [courseMembers, activityMembers, activityCorrectors, courseGroups, activityGroups] = await Promise.all([
       firstValueFrom(this.courseService.searchMembers(course)),
       firstValueFrom(this.courseService.searchActivityMembers(this.activity)),
       firstValueFrom(this.courseService.searchActivityCorrector(this.activity)),
+      firstValueFrom(this.courseService.listGroups(course.id)),
+      firstValueFrom(this.courseService.searchActivityGroups(this.activity.id)),
     ])
 
     this.courseMembers = courseMembers.resources
+    this.courseGroups = courseGroups.resources
 
     this.form.patchValue({
       openDates:
         this.activity.openAt && this.activity.closeAt ? [this.activity.openAt, this.activity.closeAt] : undefined,
       members: activityMembers.resources.map((m) => `${m.member.id}${m.user ? ':' + m.user.id : ''}`),
       correctors: activityCorrectors.resources.map((c) => `${c.member.id}${c.user ? ':' + c.user.id : ''}`),
+      groups: activityGroups.resources.map((g) => g.groupId),
     })
 
     this.loading = false
@@ -140,6 +148,7 @@ export class CourseActivitySettingsComponent implements OnInit {
                   }) || []
                 )
               ),
+              firstValueFrom(this.courseService.updateActivityGroups(this.activity.id, value.groups || [])),
             ]
           : []),
       ])

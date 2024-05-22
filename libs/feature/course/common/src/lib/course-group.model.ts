@@ -22,3 +22,11 @@ export interface CourseGroupDetail {
   readonly courseGroup: CourseGroup
   readonly members: CourseMember[]
 }
+
+export interface ActivityGroup {
+  readonly id: string
+  readonly createdAt: Date
+  readonly updatedAt: Date
+  readonly activityId: string
+  readonly groupId: string
+}

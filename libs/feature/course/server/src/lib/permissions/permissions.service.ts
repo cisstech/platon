@@ -4,12 +4,14 @@ import { IRequest } from '@platon/core/server'
 import { ActivityMemberService } from '../activity-member/activity-member.service'
 import { ActivityEntity } from '../activity/activity.entity'
 import { CourseMemberService } from '../course-member/course-member.service'
+import { ActivityGroupService } from '../activity-group/activity-group.service'
 
 @Injectable()
 export class CoursePermissionsService {
   constructor(
     private readonly courseMemberService: CourseMemberService,
-    private readonly activityMemberService: ActivityMemberService
+    private readonly activityMemberService: ActivityMemberService,
+    private readonly activityGroupService: ActivityGroupService
   ) {}
 
   async ensureCourseReadPermission(courseId: string, req: IRequest): Promise<void> {
@@ -32,7 +34,12 @@ export class CoursePermissionsService {
     if (!activity) {
       throw new NotFoundResponse(`Activity not found.`)
     }
-    if (!(await this.activityMemberService.isMember(activity.id, req.user.id))) {
+    const isPrivateMember = await this.activityMemberService.isPrivateMember(activity.id, req.user.id)
+    const isInGroup = await this.activityGroupService.isUserInActivityGroup(req.user.id, activity.id)
+    const isMember =
+      (await this.activityMemberService.isMember(activity.id, req.user.id)) &&
+      (await this.activityGroupService.numberOfGroups(activity.id)) === 0
+    if (!isPrivateMember && !isInGroup && !isMember) {
       throw new ForbiddenResponse('You are not a member of this activity')
     }
   }
