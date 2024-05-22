@@ -107,4 +107,14 @@ export class ActivityMemberService {
     })
     return result != null
   }
+
+  async isPrivateMember(activityId: string, userId: string): Promise<boolean> {
+    const result = await this.view.findOne({
+      where: { activityId, id: userId },
+    })
+    if (result == null) {
+      return false
+    }
+    return result.memberId != null
+  }
 }
