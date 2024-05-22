@@ -22,7 +22,7 @@
     <mat-icon> {{ themeIcon }} </mat-icon>
   </button>
   <button nz-button nzType="text" nzSize="small" (click)="notifDrawer.open()">
-    <nz-badge [nzCount]="(notifDrawer.count | async) || 0" [nzOffset]="[-28, -4]">
+    <nz-badge [nzCount]="(notifDrawer.count | async) || 0" [nzOffset]="[0, -4]">
       <mat-icon> notifications </mat-icon>
     </nz-badge>
   </button>

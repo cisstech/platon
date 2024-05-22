@@ -54,6 +54,12 @@ button {
   /* Couleur de fond initiale */
 }
 
+.bubbles-items button.achieved,
+.bubbles-items a.achieved {
+  animation-name: changeColorAchieved;
+  animation-fill-mode: forwards;
+}
+
 .bubbles-item button:hover,
 .bubbles-item a:hover {
   transform: translateY(-0.10em);
@@ -92,4 +98,17 @@ button {
     background-color: var(--brand-background-components);
     translate: 0px;
   }
+}
+
+@keyframes changeColorAchieved {
+  0% {
+    opacity: 1;
+    background-color: #00ff00;
+  }
+
+
+  100% {
+    opacity: 0;
+  }
+
 }

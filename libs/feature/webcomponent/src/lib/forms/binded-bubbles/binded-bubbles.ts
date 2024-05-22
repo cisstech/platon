@@ -6,7 +6,7 @@ export interface BubbleItem {
   content?: string
   audio?: string
   image?: string
-  state: 'checked' | 'unchecked' | 'error' | 'disabled'
+  state: 'checked' | 'unchecked' | 'error' | 'disabled' | 'achieved'
 }
 
 export interface PairBubbleItem {
@@ -18,6 +18,7 @@ export interface BindedBubblesState extends IWebComponent {
   items: PairBubbleItem[]
   numberPairToShow: number
   mode: 'shuffle' | 'ordered'
+  timeout: number
 }
 
 export const BindedBubblesComponentDefinition = defineWebComponent({
@@ -63,6 +64,11 @@ export const BindedBubblesComponentDefinition = defineWebComponent({
         enum: ['ordered'],
         default: 'ordered',
       },
+      timeout: {
+        type: 'number',
+        description: "Temps d'attente avant d'afficher la prochaine bonne proposition. (en millisecondes)",
+        default: 1000,
+      },
     },
     required: ['items'],
   },
@@ -104,15 +110,16 @@ export const BindedBubblesComponentDefinition = defineWebComponent({
           content: 'No problem',
         },
       },
+
       {
         item1: {
           content: 'Au revoir',
-          audio: null,
         },
         item2: {
           content: 'Goodbye',
         },
       },
+
       {
         item1: {
           content: 'De rien',
@@ -121,8 +128,25 @@ export const BindedBubblesComponentDefinition = defineWebComponent({
           content: 'You are welcome',
         },
       },
-    ],
 
+      {
+        item1: {
+          content: 'Oui',
+        },
+        item2: {
+          content: 'Yes',
+        },
+      },
+
+      {
+        item1: {
+          content: 'Non',
+        },
+        item2: {
+          content: 'No',
+        },
+      },
+    ],
     numberPairToShow: 3,
   },
 })
