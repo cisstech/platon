@@ -1,6 +1,7 @@
 import { Provider } from '@angular/core'
 import { NOTIFICATION_PARSER } from '@platon/feature/notification/browser'
 import { ActivityCorrectorProvider } from './models/activity-corrector.provider'
+import { ActivityGroupProvider } from './models/activity-group.provider'
 import { ActivityMemberProvider } from './models/activity-member.provider'
 import { ActivityProvider } from './models/activity-provider'
 import { CourseGroupProvider } from './models/course-group-provider'
@@ -9,6 +10,7 @@ import { CourseProvider } from './models/course-provider'
 import { CourseSectionProvider } from './models/course-section-provider'
 import { CourseNotificationParsers } from './providers/course-notification-parser.provider'
 import { RemoteActivityCorrectorProvider } from './providers/remote-activity-corrector.provider'
+import { RemoteActivityGroupProvider } from './providers/remote-activity-group.provider'
 import { RemoteActivityMemberProvider } from './providers/remote-activity-member.provider'
 import { RemoteActivityProvider } from './providers/remote-activity.provider'
 import { RemoteCourseGroupProvider } from './providers/remote-course-group.provider'
@@ -25,6 +27,7 @@ export const COURSE_PROVIDERS: Provider[] = [
   { provide: CourseMemberProvider, useClass: RemoteCourseMemberProvider },
   { provide: CourseSectionProvider, useClass: RemoteCourseSectionProvider },
   { provide: CourseGroupProvider, useClass: RemoteCourseGroupProvider },
+  { provide: ActivityGroupProvider, useClass: RemoteActivityGroupProvider },
 
   ...CourseNotificationParsers.map((provider) => ({
     provide: NOTIFICATION_PARSER,

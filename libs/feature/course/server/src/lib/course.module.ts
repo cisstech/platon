@@ -36,6 +36,10 @@ import { CourseSectionController } from './section/section.controller'
 import { CourseSectionEntity } from './section/section.entity'
 import { CourseSectionService } from './section/section.service'
 
+import { ActivityGroupController } from './activity-group/activity-group.controller'
+import { ActivityGroupEntity } from './activity-group/activity-group.entity'
+import { ActivityGroupService } from './activity-group/activity-group.service'
+
 @Module({
   imports: [
     UserModule,
@@ -53,6 +57,7 @@ import { CourseSectionService } from './section/section.service'
       ActivityCorrectorEntity,
       CourseGroupEntity,
       CourseGroupMemberEntity,
+      ActivityGroupEntity,
     ]),
   ],
   controllers: [
@@ -64,6 +69,7 @@ import { CourseSectionService } from './section/section.service'
     ActivityCorrectorController,
     CourseGroupController,
     CourseGroupMemberController,
+    ActivityGroupController,
   ],
   providers: [
     CourseService,
@@ -80,6 +86,7 @@ import { CourseSectionService } from './section/section.service'
     CourseNotificationService,
     CourseGroupService,
     CourseGroupMemberService,
+    ActivityGroupService,
   ],
   exports: [
     TypeOrmModule,
@@ -92,6 +99,7 @@ import { CourseSectionService } from './section/section.service'
     ActivityMemberService,
     ActivityCorrectorService,
     CourseNotificationService,
+    ActivityGroupService,
   ],
 })
 export class FeatureCourseServerModule {}

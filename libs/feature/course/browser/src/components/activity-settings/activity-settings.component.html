@@ -14,6 +14,12 @@
         formControlName="members"
         placeholder="Laissez la sélection vide pour permettre l'accès à tous, y compris aux nouveaux membres."
       />
+      <h4 id="members">Souhaitez-vous limiter l'accès de cette activité à des groupes en particulier?</h4>
+      <course-group-select
+        [groups]="courseGroups"
+        formControlName="groups"
+        placeholder="Laissez la sélection vide pour permettre l'accès à tous, y compris aux nouveaux membres."
+      />
       <h4 id="correctors">Souhaitez-vous ajouter des correcteurs à cette activité?</h4>
       <course-member-select
         [members]="courseMembers"

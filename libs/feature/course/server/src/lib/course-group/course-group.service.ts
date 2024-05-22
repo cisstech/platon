@@ -3,12 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { CourseGroupEntity } from './course-group.entity'
 import { Repository } from 'typeorm'
 import { v4 as uuidv4 } from 'uuid'
+import { CourseGroupMemberService } from '../course-group-member/course-group-member.service'
 
 @Injectable()
 export class CourseGroupService {
   constructor(
     @InjectRepository(CourseGroupEntity)
-    private readonly repository: Repository<CourseGroupEntity>
+    private readonly repository: Repository<CourseGroupEntity>,
+    private readonly courseGroupMemberService: CourseGroupMemberService
   ) {}
 
   async listCourseGroups(courseId: string): Promise<CourseGroupEntity[]> {
@@ -54,5 +56,17 @@ export class CourseGroupService {
 
   async delete(groupId: string): Promise<void> {
     await this.repository.delete({ groupId })
+  }
+
+  async findById(groupId: string): Promise<CourseGroupEntity | null> {
+    return this.repository.findOne({ where: { groupId } })
+  }
+
+  async isMember(id: string, userId: string): Promise<boolean> {
+    const group = await this.repository.findOne({ where: { id } })
+    if (!group) {
+      throw new Error(`Group with id ${id} not found`)
+    }
+    return this.courseGroupMemberService.isMember(group.groupId, userId)
   }
 }

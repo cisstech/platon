@@ -20,8 +20,9 @@ import {
   CourseSearchBarComponent,
   CourseSectionSearchBarComponent,
   CourseService,
+  CourseGroupSelectComponent,
 } from '@platon/feature/course/browser'
-import { Course, CourseMember, CourseSection } from '@platon/feature/course/common'
+import { Course, CourseGroup, CourseMember, CourseSection } from '@platon/feature/course/common'
 import { ResourceSearchBarComponent } from '@platon/feature/resource/browser'
 import { Resource } from '@platon/feature/resource/common'
 import { UiStepDirective, UiStepperComponent } from '@platon/shared/ui'
@@ -59,6 +60,8 @@ import { catchError, firstValueFrom, of } from 'rxjs'
     CourseSectionSearchBarComponent,
 
     ResourceSearchBarComponent,
+
+    CourseGroupSelectComponent,
   ],
 })
 export class ActivityCreatePage implements OnInit {
@@ -74,6 +77,7 @@ export class ActivityCreatePage implements OnInit {
   protected creating = false
   protected challenge = false
   protected members: CourseMember[] = []
+  protected courseGroups: CourseGroup[] = []
 
   protected courseInfo = new FormGroup({
     course: new FormControl<Course | undefined>(undefined, [Validators.required]),
@@ -88,6 +92,7 @@ export class ActivityCreatePage implements OnInit {
     members: new FormControl<string[] | undefined>(undefined),
     openDates: new FormControl<Date[] | undefined>(undefined),
     correctors: new FormControl<string[] | undefined>(undefined),
+    groups: new FormControl<string[] | undefined>(undefined),
     isChallenge: new FormControl<boolean>(false),
   })
 
@@ -139,7 +144,7 @@ export class ActivityCreatePage implements OnInit {
       this.creating = true
       const { course, section } = this.courseInfo.value
       const { resource } = this.resourceInfo.value
-      const { openDates, members, correctors, isChallenge } = this.settingsInfo.value
+      const { openDates, members, correctors, groups, isChallenge } = this.settingsInfo.value
 
       const activity = await firstValueFrom(
         this.courseService.createActivity(course as Course, {
@@ -178,6 +183,7 @@ export class ActivityCreatePage implements OnInit {
               }) || []
             )
           ),
+          firstValueFrom(this.courseService.updateActivityGroups(activity.id, groups || [])),
         ])
       }
 
@@ -195,8 +201,10 @@ export class ActivityCreatePage implements OnInit {
   protected async loadMembers(): Promise<void> {
     const { course } = this.courseInfo.value
     if (course) {
-      const response = await firstValueFrom(this.courseService.searchMembers(course))
-      this.members = response.resources
+      const membersResponse = await firstValueFrom(this.courseService.searchMembers(course))
+      this.members = membersResponse.resources
+      const groupsResponse = await firstValueFrom(this.courseService.listGroups(course.id))
+      this.courseGroups = groupsResponse.resources
       this.changeDetectorRef.markForCheck()
     }
   }
