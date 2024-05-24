@@ -128,8 +128,11 @@
     <div *ngIf="readme">
       <nge-markdown [file]="readme.url" />
     </div>
-    <div>
-      <p>Variable à fournir :</p>
+    <div style="margin-top: 1rem">
+      <ng-container [ngPlural]="((item.metadata! | exerciseResourceMeta)?.config?.inputs)!.length">
+        <ng-template ngPluralCase="=1">Variable à remplir</ng-template>
+        <ng-template ngPluralCase="other">Variables à remplir :</ng-template>
+      </ng-container>
       <div *ngFor="let meta of (item.metadata! | exerciseResourceMeta)?.config?.inputs" style="margin-left: 1rem">
         <span
           >• <span class="customise-font">{{ meta.name }}</span> - {{ meta.description }}
