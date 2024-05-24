@@ -9,6 +9,8 @@ export abstract class CourseGroupProvider {
 
   abstract listMembers(courseId: string, groupId: string): Observable<ListResponse<CourseMember>>
 
+  abstract listGroupsMembers(courseId: string, groupsIds: string[]): Observable<ListResponse<CourseMember>>
+
   abstract deleteMember(courseId: string, groupId: string, userId: string): Observable<void>
 
   abstract addMember(courseId: string, groupId: string, userId: string): Observable<void>

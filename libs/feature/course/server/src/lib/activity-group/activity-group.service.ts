@@ -30,14 +30,12 @@ export class ActivityGroupService {
   }
 
   async isUserInActivityGroup(activityId: string, userId: string): Promise<boolean> {
-    const activityGroups = await this.repository.find({ where: { activityId } })
-
+    const activityGroups = await this.search(activityId)
     for (const group of activityGroups) {
       if (await this.courseGroupService.isMember(group.groupId, userId)) {
         return true
       }
     }
-
     return false
   }
 

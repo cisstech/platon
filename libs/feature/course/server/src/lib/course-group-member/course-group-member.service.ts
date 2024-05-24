@@ -14,6 +14,14 @@ export class CourseGroupMemberService {
     return this.repository.find({ where: { groupId } })
   }
 
+  async listGroupsMembers(groupsIds: string[]): Promise<CourseGroupMemberEntity[]> {
+    let items: CourseGroupMemberEntity[] = []
+    for (const groupId of groupsIds) {
+      items = items.concat(await this.listCourseGroupMembers(groupId))
+    }
+    return items
+  }
+
   /**
    * Add a user to a course group if not already present
    * @param groupId group id

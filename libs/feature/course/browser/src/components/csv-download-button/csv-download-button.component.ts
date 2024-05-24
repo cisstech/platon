@@ -1,15 +1,20 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
+import { FormsModule } from '@angular/forms'
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core'
+
+import { firstValueFrom } from 'rxjs'
 
 import { NzButtonModule } from 'ng-zorro-antd/button'
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown'
 import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
+import { NzMenuModule } from 'ng-zorro-antd/menu'
+import { NzCheckboxModule } from 'ng-zorro-antd/checkbox'
 
-import { Activity } from '@platon/feature/course/common'
-
+import { Activity, ActivityMember } from '@platon/feature/course/common'
 import { ResultService } from '@platon/feature/result/browser'
-import { firstValueFrom } from 'rxjs'
 import { UserResults } from '@platon/feature/result/common'
+import { CourseService } from '../../api/course.service'
 
 @Component({
   standalone: true,
@@ -17,16 +22,112 @@ import { UserResults } from '@platon/feature/result/common'
   templateUrl: './csv-download-button.component.html',
   styleUrls: ['./csv-download-button.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, NzIconModule, NzButtonModule, NzToolTipModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    NzButtonModule,
+    NzIconModule,
+    NzToolTipModule,
+    NzDropDownModule,
+    NzMenuModule,
+    NzCheckboxModule,
+  ],
 })
-export class CsvDownloadButtonComponent {
+export class CsvDownloadButtonComponent implements OnInit {
+  @Input() courseId!: string
   @Input() activities!: Activity[]
   @Input() type!: 'activity' | 'course'
   @Input() name!: string
 
-  constructor(private readonly resultService: ResultService) {}
+  groups: { id: string; name: string; groupId: string; courseId: string; checked: boolean }[] = []
+  activityMembers: ActivityMember[] = []
+  hasToCheckGroups = false
+
+  constructor(private readonly resultService: ResultService, private readonly courseService: CourseService) {}
+
+  async ngOnInit(): Promise<void> {
+    let groups = (await firstValueFrom(this.courseService.listGroups(this.courseId))).resources
+
+    const nbCourseGroups = groups.length
+    if (nbCourseGroups > 0) {
+      this.hasToCheckGroups = true
+    }
+
+    if (this.activities.length === 1) {
+      this.activityMembers = (
+        await firstValueFrom(this.courseService.searchActivityMembers(this.activities[0]))
+      ).resources
+
+      const activityGroups = (await firstValueFrom(this.courseService.searchActivityGroups(this.activities[0].id)))
+        .resources
+
+      let hasToDisplayAllGroups = true
+      if (activityGroups.length > 0) {
+        hasToDisplayAllGroups = false
+        groups = groups.filter((group) => activityGroups.some((activityGroup) => activityGroup.groupId === group.id))
+      }
+
+      if (this.activityMembers.length > 0 && hasToDisplayAllGroups) {
+        groups = []
+      }
+
+      if (this.activityMembers.length > 0) {
+        groups.push({
+          id: 'all',
+          name: 'Autres étudiants',
+          groupId: '',
+          courseId: '',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        })
+      }
+    }
+
+    if (groups.length === nbCourseGroups) {
+      groups.push({
+        id: 'all',
+        name: 'Autres Étudiants',
+        groupId: '',
+        courseId: '',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      })
+    }
+
+    this.groups = groups.map((group) => ({ ...group, checked: true }))
+  }
+
+  toggleAllCheckboxes() {
+    const allChecked = this.groups.every((group) => group.checked)
+    this.groups.forEach((group) => (group.checked = !allChecked))
+  }
+
+  isAllChecked() {
+    return this.groups.every((group) => group.checked)
+  }
 
   async downloadCSV() {
+    let isGroupAllChecked, checkedMembers, uncheckedMembers
+    if (this.hasToCheckGroups) {
+      isGroupAllChecked = this.groups.some((group) => group.checked && group.id === 'all')
+      checkedMembers = (
+        await firstValueFrom(
+          this.courseService.listGroupsMembers(
+            this.courseId,
+            this.groups.filter((group) => group.checked && group.id !== 'all').map((group) => group.groupId)
+          )
+        )
+      ).resources
+      uncheckedMembers = (
+        await firstValueFrom(
+          this.courseService.listGroupsMembers(
+            this.courseId,
+            this.groups.filter((group) => !group.checked && group.id !== 'all').map((group) => group.groupId)
+          )
+        )
+      ).resources
+    }
+
     let csvHeader = 'username;firstname;lastname;email'
     const csvContent: { [key: string]: string } = {}
 
@@ -49,6 +150,11 @@ export class CsvDownloadButtonComponent {
       // Generate the CSV content
 
       for (const student of results) {
+        if (this.hasToCheckGroups && !checkedMembers!.some((member) => member.user?.id === student.id)) {
+          if (!isGroupAllChecked || uncheckedMembers!.some((member) => member.user?.id === student.id)) {
+            continue
+          }
+        }
         if (!csvContent[student.username]) {
           csvContent[student.username] = `${student.username};${student.firstName};${student.lastName};${student.email}`
         }
