@@ -34,12 +34,13 @@ export class CoursePermissionsService {
     if (!activity) {
       throw new NotFoundResponse(`Activity not found.`)
     }
+    const isTeacher = isTeacherRole(req.user.role)
     const isPrivateMember = await this.activityMemberService.isPrivateMember(activity.id, req.user.id)
-    const isInGroup = await this.activityGroupService.isUserInActivityGroup(req.user.id, activity.id)
+    const isInGroup = await this.activityGroupService.isUserInActivityGroup(activity.id, req.user.id)
     const isMember =
       (await this.activityMemberService.isMember(activity.id, req.user.id)) &&
       (await this.activityGroupService.numberOfGroups(activity.id)) === 0
-    if (!isPrivateMember && !isInGroup && !isMember) {
+    if (!isTeacher && !isPrivateMember && !isInGroup && !isMember) {
       throw new ForbiddenResponse('You are not a member of this activity')
     }
   }

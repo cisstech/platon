@@ -211,6 +211,10 @@ export class CourseService {
     return this.courseGroupProvider.listMembers(courseId, groupId)
   }
 
+  listGroupsMembers(courseId: string, groupsIds: string[]): Observable<ListResponse<CourseMember>> {
+    return this.courseGroupProvider.listGroupsMembers(courseId, groupsIds)
+  }
+
   deleteGroupMember(courseId: string, groupId: string, userId: string): Observable<void> {
     return this.courseGroupProvider.deleteMember(courseId, groupId, userId)
   }

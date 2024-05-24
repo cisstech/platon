@@ -23,6 +23,10 @@ export class RemoteCourseGroupProvider extends CourseGroupProvider {
     return this.http.get<ListResponse<CourseMember>>(`/api/v1/courseGroupMembers/${courseId}/${groupId}`)
   }
 
+  listGroupsMembers(courseId: string, groupsIds: string[]): Observable<ListResponse<CourseMember>> {
+    return this.http.post<ListResponse<CourseMember>>(`/api/v1/courseGroupMembers/${courseId}`, { groupsIds })
+  }
+
   deleteMember(courseId: string, groupId: string, userId: string): Observable<void> {
     return this.http.delete<void>(`/api/v1/courseGroupMembers/${courseId}/${groupId}/${userId}`)
   }

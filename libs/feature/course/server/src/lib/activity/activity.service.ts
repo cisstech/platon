@@ -91,7 +91,7 @@ export class ActivityService {
 
     const isCreator = user.id === activity.creatorId
     const isPrivateMember = await this.activityMemberService.isPrivateMember(id, user.id)
-    const isInGroup = await this.activityGroupService.isUserInActivityGroup(user.id, id)
+    const isInGroup = await this.activityGroupService.isUserInActivityGroup(id, user.id)
     const isMember =
       (await this.activityMemberService.isMember(id, user.id)) &&
       (await this.activityGroupService.numberOfGroups(id)) === 0
