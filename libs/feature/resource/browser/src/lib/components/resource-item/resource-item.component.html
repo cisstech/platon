@@ -89,7 +89,13 @@
 </ng-template>
 
 <ng-template #titleTemplate>
-  <div>
+  <div
+    nz-popover
+    nzPopoverPlacement="topLeft"
+    [nzPopoverContent]="metadataResume"
+    [nzPopoverTrigger]="configurable ? 'hover' : undefined"
+    (mouseenter)="getReadmeContent()"
+  >
     <span class="resource-item-title">{{ name }}</span>
     <i
       class="icon-configurable"
@@ -112,4 +118,23 @@
 
 <ng-template #descriptionTemplate>
   <p>{{ desc }}</p>
+</ng-template>
+
+<ng-template #metadataResume>
+  <div class="custom-popover">
+    <div *ngIf="!readme">
+      <nz-spin nzSimple nzSize="small" />
+    </div>
+    <div *ngIf="readme">
+      <nge-markdown [file]="readme.url" />
+    </div>
+    <div>
+      <p>Variable à fournir :</p>
+      <div *ngFor="let meta of (item.metadata! | exerciseResourceMeta)?.config?.inputs" style="margin-left: 1rem">
+        <span
+          >• <span class="customise-font">{{ meta.name }}</span> - {{ meta.description }}
+        </span>
+      </div>
+    </div>
+  </div>
 </ng-template>

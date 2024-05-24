@@ -17,7 +17,7 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 import { v4 as uuidv4 } from 'uuid'
 
 import { ListItemTag, NgeUiListModule } from '@cisstech/nge/ui/list'
-import { ExerciseResourceMeta, Resource } from '@platon/feature/resource/common'
+import { ExerciseResourceMeta, Resource, ResourceFile } from '@platon/feature/resource/common'
 
 import { UiModalIFrameComponent, positiveGreenColor } from '@platon/shared/ui'
 
@@ -28,6 +28,9 @@ import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzPopoverModule } from 'ng-zorro-antd/popover'
 import { firstValueFrom } from 'rxjs'
 import { ResourcePipesModule } from '../../pipes'
+import { ResourceFileService } from '../../api/file.service'
+import { NgeMarkdownModule } from '@cisstech/nge/markdown'
+import { NzSpinModule } from 'ng-zorro-antd/spin'
 
 export const getPreviewOverridesStorageKey = (sessionId: string) => `preview.overrides.${sessionId}`
 type Tag = {
@@ -52,8 +55,10 @@ type Tag = {
     NzButtonModule,
     NzToolTipModule,
     NzPopoverModule,
+    NzSpinModule,
 
     NgeUiListModule,
+    NgeMarkdownModule,
     UiModalIFrameComponent,
 
     ResourcePipesModule,
@@ -61,6 +66,7 @@ type Tag = {
 })
 export class ResourceItemComponent implements OnChanges {
   private readonly storageService = inject(StorageService)
+  private readonly fileService = inject(ResourceFileService)
   protected name = ''
   protected desc = ''
   protected successRate = 0
@@ -69,6 +75,7 @@ export class ResourceItemComponent implements OnChanges {
 
   protected configurable = false
   protected tags: ListItemTag[] = []
+  protected readme?: ResourceFile
 
   @Input() item!: Resource
   @Input({ transform: booleanAttribute }) simple = false
@@ -137,5 +144,11 @@ export class ResourceItemComponent implements OnChanges {
     } else if (tag.data!.type === 'topic') {
       this.topicClicked.emit(tag.data!.id)
     }
+  }
+
+  protected getReadmeContent(): void {
+    this.fileService.read(`${this.item.id}`, 'readme.md').subscribe((file) => {
+      this.readme = file
+    })
   }
 }
