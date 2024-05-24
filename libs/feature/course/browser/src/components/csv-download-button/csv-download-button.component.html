@@ -1,3 +1,41 @@
+@if (hasToCheckGroups) {
+<a
+  *ngIf="activities[0]?.permissions?.viewStats"
+  nz-tooltip="Télécharger les stats au format CSV"
+  nz-button
+  nzShape="round"
+  nzType="default"
+  nz-dropdown
+  nzTrigger="click"
+  [nzDropdownMenu]="menu"
+  [nzClickHide]="false"
+>
+  @if (type === 'activity') {
+  <i nz-icon nzType="download" nzTheme="outline"></i>
+  } @else { Télécharger les stats au format CSV }
+</a>
+
+<nz-dropdown-menu #menu="nzDropdownMenu">
+  <div nz-menu>
+    <div nz-menu-item>
+      <button nz-button nzType="default" nzBlock (click)="toggleAllCheckboxes()">
+        @if (isAllChecked()) { Tout décocher } @else { Tout cocher }
+      </button>
+    </div>
+    <div nz-menu-item *ngFor="let group of groups">
+      <label nz-checkbox [(ngModel)]="group.checked">
+        {{ group.name }}
+      </label>
+    </div>
+    <div nz-menu-item>
+      <button nz-button nzType="primary" (click)="downloadCSV()">
+        <span nz-icon nzType="download" nzTheme="outline"></span>
+        Télécharger
+      </button>
+    </div>
+  </div>
+</nz-dropdown-menu>
+} @else {
 <a
   *ngIf="activities[0]?.permissions?.viewStats"
   nz-tooltip="Télécharger les stats au format CSV"
@@ -10,3 +48,4 @@
   <i nz-icon nzType="download" nzTheme="outline"></i>
   } @else { Télécharger les stats au format CSV }
 </a>
+}

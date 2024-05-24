@@ -18,7 +18,12 @@
         >
           Ajouter une activité
         </button>
-        <course-csv-download-button [activities]="activities" [name]="course.name" type="course" />
+        <course-csv-download-button
+          [activities]="activities"
+          [name]="course.name"
+          type="course"
+          [courseId]="course.id"
+        />
         <div class="spacer"></div>
         <ui-view-mode #viewMode storageKey="course.view-mode" defaultMode="cards" [modes]="['cards', 'table']" />
       </header>
