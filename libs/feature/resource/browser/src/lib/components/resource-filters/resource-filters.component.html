@@ -40,7 +40,7 @@
 
     <!-- STATUS -->
     <section formGroupName="status">
-      <mat-label id="status-label">Quel est son status?</mat-label>
+      <mat-label id="status-label">Quel est son statut?</mat-label>
       <div class="checkbox-group">
         <ng-container *ngFor="let item of form.get('status')!.value | keyvalue">
           <mat-checkbox [formControlName]="item.key">
