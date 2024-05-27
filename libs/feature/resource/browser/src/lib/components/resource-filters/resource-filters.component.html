@@ -44,7 +44,14 @@
       <div class="checkbox-group">
         <ng-container *ngFor="let item of form.get('status')!.value | keyvalue">
           <mat-checkbox [formControlName]="item.key">
-            <mat-chip>{{ $any(item.key) | resourceStatus }}</mat-chip>
+            <mat-chip>
+              <div class="status">
+                {{ $any(item.key) | resourceStatus }}
+                <div class="status-icons" [class]="$any(item.key) | resourceStatusColor">
+                  <mat-icon>{{ $any(item.key) | resourceStatusIcon }}</mat-icon>
+                </div>
+              </div>
+            </mat-chip>
           </mat-checkbox>
         </ng-container>
       </div>
