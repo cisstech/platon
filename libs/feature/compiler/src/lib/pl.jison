@@ -347,12 +347,21 @@ export interface PLVisitor {
 
 <<EOF>>                                         return 'EOF'
 
+<INITIAL><<EOF>>                                return 'EOF'
 <MULTI_STATE>[^\n]*\n          {
                           if (yytext.trim() === '==') {
                             this.popState();
                             return 'EQUALS';
                           }
                           return 'ANY'
+                         }
+
+<MULTI_STATE>[^\n]*<<EOF>>          {
+                          if (yytext.trimEnd() === '==') {
+                            this.popState();
+                            return 'EQUALS';
+                          }
+                          return 'EOF'
                          }
 
 
@@ -372,6 +381,8 @@ export interface PLVisitor {
 program
     : statements EOF
         { return $1 }
+      | EOF
+        { throw new Error("Fichier vide")}
     ;
 
 statements
