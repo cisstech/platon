@@ -194,7 +194,9 @@ export class ResourceCreatePage implements OnInit {
           topics: tags.topics as string[],
         })
       )
-
+      if (resource.type === 'EXERCISE' || resource.type === 'ACTIVITY') {
+        window.open(`/editor/${resource.id}?version=latest`, '_blank')
+      }
       this.router.navigate(['/resources', resource.id, 'overview'], { replaceUrl: true }).catch(console.error)
     } catch {
       this.dialogService.error('Une erreur est survenue lors de cette action, veuillez réessayer un peu plus tard !')
