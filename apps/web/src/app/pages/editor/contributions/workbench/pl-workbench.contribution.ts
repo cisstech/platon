@@ -33,6 +33,8 @@ export class Contribution implements IContribution {
       return [
         { label: 'Insérer un @copyurl', value: `@copyurl ${path}` },
         { label: 'Insérer un @copycontent', value: `@copycontent ${path}` },
+        { label: 'Insérer un @extends', value: `@extends ${path}` },
+        { label: 'Insérer un @include', value: `@include ${path}` },
         { label: 'Insérer un chemin de fichier', value: path },
         ...(file?.url ? [{ label: 'Insérer un lien de téléchargement', value: origin + file.url }] : []),
       ]
