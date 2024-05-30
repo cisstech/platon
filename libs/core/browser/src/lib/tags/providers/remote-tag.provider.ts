@@ -36,7 +36,7 @@ export class RemoteTagProvider extends TagProvider {
   }
 
   deleteTopic(topic: Topic): Observable<void> {
-    return this.http.delete<void>(`/api/v1/levels/${topic.id}`)
+    return this.http.delete<void>(`/api/v1/topics/${topic.id}`)
   }
 
   listLevels(): Observable<Level[]> {
