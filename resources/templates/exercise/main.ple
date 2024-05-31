@@ -2,7 +2,7 @@
 
 
 // Choix de l'environnement d'exécution node ou python
-sandbox = "node"
+sandbox = "python"
 
 // Définition des champs de réponse : #docs/components/
 
@@ -31,20 +31,21 @@ hint = ["Aide 1", "Aide 2"]
 max = 10
 
 builder==
-a = Math.round(Math.random() * max)
-b = Math.round(Math.random() * max)
-inputSolution.value = a + b
+from random import randint
+
+a = randint(1, max)
+b = randint(1, max)
+inputSolution["value"] = a + b
 ==
 
 grader==
 grade = 0
-feedback.type = "error"
-feedback.content = "Mauvaise réponse"
-if (input.value === inputSolution.value) {
+feedback["type"] = "error"
+feedback["content"] = "Mauvaise réponse"
+if input["value"] == inputSolution["value"]:
   grade = 100
-  feedback.type = "success"
-  feedback.content = "Bonne réponse"
-}
+  feedback["type"] = "success"
+  feedback["content"] = "Bonne réponse"
 ==
 
 title==

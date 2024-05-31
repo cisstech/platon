@@ -87,6 +87,8 @@ export class ResourceFileService {
               'readme.md': README_PLE,
             }
           : undefined,
+        parentCircle: resource.parentId,
+        userCircle: user ? (await this.resourceService.getPersonal(user)).id : undefined,
       }),
       resource,
       permissions,
