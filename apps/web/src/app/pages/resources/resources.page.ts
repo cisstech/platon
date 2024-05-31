@@ -272,7 +272,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
     const response = await firstValueFrom(
       this.resourceService.search({
         ...this.filters,
-        expands: ['metadata'],
+        expands: ['metadata', 'statistic'],
         limit: PAGINATION_LIMIT,
         offset: this.items.length,
       })
