@@ -2,14 +2,15 @@ import { UserEntity } from '@platon/core/server'
 import { ExerciseMeta } from '@platon/feature/compiler'
 import { PlayerNavigation } from '@platon/feature/player/common'
 import { ResourceTypes } from '@platon/feature/resource/common'
-import { JoinColumn, ManyToOne, ViewColumn, ViewEntity } from 'typeorm'
+import { Index, JoinColumn, ManyToOne, ViewColumn, ViewEntity } from 'typeorm'
 
 /**
  * - This View is used to fetch session related data from various tables.
  * - The result is a comprehensive view of session data, including related resources, activities, courses, and more.
  */
 @ViewEntity({
-  name: 'SessionView',
+  name: 'MaterializedSessionView',
+  materialized: true,
   expression: `
   -- This query is used to fetch session related data from various tables.
   -- The result is a comprehensive view of session data, including related resources, activities, courses, and more.
@@ -121,6 +122,7 @@ export class SessionView {
   /**
    * The id of the session.
    */
+  @Index()
   @ViewColumn({ name: 'id' })
   id!: string
 
