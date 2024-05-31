@@ -39,6 +39,7 @@ export class TextSelectComponent implements WebComponentHooks<TextSelectState> {
     if (this.state.mode === 'free') {
       container.className = 'cursor-text'
     }
+    container.className += this.state.disabled ? ' disabled' : ''
     return container
   }
 
