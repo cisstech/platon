@@ -25,4 +25,13 @@
   .error-state {
     text-decoration: line-through;
   }
+
+  .disabled, .disabled * {
+    color: rgb(128, 128, 128);
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    pointer-events: none;
+  }
 }
