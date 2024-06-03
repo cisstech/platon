@@ -23,6 +23,7 @@ import { PdfEditorContributionModule } from './contributions/editors/pdf-editor'
 import { PlcEditorContributionModule } from './contributions/editors/plc-editor'
 import { PleEditorContributionModule } from './contributions/editors/ple-editor'
 import { PloEditorContributionModule } from './contributions/editors/plo-editor'
+import { ZipEditorContributionModule } from './contributions/editors/zip-editor'
 import { PlExplorerContributionModule } from './contributions/explorer/pl-explorer.contribution'
 import { ResourceFileSystemProvider } from './contributions/file-system'
 import { PlPreviewContributionModule } from './contributions/previews/pl-preview.contribution'
@@ -63,6 +64,7 @@ import { EditorPresenter } from './editor.presenter'
     PlSidebarContributionModule,
     PlcEditorContributionModule,
     PloEditorContributionModule,
+    ZipEditorContributionModule,
   ],
 })
 export class EditorPage implements OnInit, OnDestroy {
