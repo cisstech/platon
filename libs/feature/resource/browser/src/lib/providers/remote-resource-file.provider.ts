@@ -113,4 +113,12 @@ export class RemoteResourceFileProvider extends ResourceFileProvider {
       params,
     })
   }
+
+  listZipFiles(file: Pick<ResourceFile, 'url'>): Observable<string[]> {
+    let params = new HttpParams()
+    params = params.set('zipList', 'true')
+    return this.http.get<string[]>(file.url, {
+      params,
+    })
+  }
 }

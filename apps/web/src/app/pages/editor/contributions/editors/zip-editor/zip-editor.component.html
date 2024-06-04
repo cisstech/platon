@@ -1,4 +1,18 @@
 <div class="message">
-  <h2>Ce fichier n'est pas fait pour être lu par un humain.</h2>
-  <p>Décompressez-le pour voir son contenu.</p>
+  <h2>Voici les éléments contenus dans {{ fileName }} :</h2>
+  <div class="tree-container">
+    <nz-tree nzBlockNode [nzData]="nodes" (nzClick)="openFolder($event)" [nzTreeTemplate]="nzTreeTemplate"></nz-tree>
+    <ng-template #nzTreeTemplate let-node let-origin="origin">
+      <span class="custom-node">
+        <span *ngIf="!node.isLeaf">
+          <span nz-icon [nzType]="node.isExpanded ? 'folder-open' : 'folder'"></span>
+          <span class="folder-name">{{ node.title }}</span>
+        </span>
+        <span *ngIf="node.isLeaf">
+          <span nz-icon nzType="file"></span>
+          <span class="file-name">{{ node.title }}</span>
+        </span>
+      </span>
+    </ng-template>
+  </div>
 </div>

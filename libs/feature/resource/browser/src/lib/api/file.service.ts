@@ -64,6 +64,10 @@ export class ResourceFileService {
     return this.provider.update(file, input)
   }
 
+  listZipFiles(file: ResourceFile): Observable<string[]> {
+    return this.provider.listZipFiles(file)
+  }
+
   search(file: Pick<ResourceFile, 'url'>, query: FileSearch): Observable<FileSearchResults> {
     return this.provider.search(file, query)
   }

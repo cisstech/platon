@@ -51,6 +51,11 @@ export class FileRetrieveDTO implements Partial<FileRetrieve> {
   @IsBoolean()
   @IsOptional()
   match_case?: boolean
+
+  @Transform(({ value }) => toBoolean(value))
+  @IsBoolean()
+  @IsOptional()
+  zipList?: boolean
 }
 
 export class FileCreateDTO implements FileCreate {
