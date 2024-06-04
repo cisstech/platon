@@ -9,8 +9,7 @@ import { Index, JoinColumn, ManyToOne, ViewColumn, ViewEntity } from 'typeorm'
  * - The result is a comprehensive view of session data, including related resources, activities, courses, and more.
  */
 @ViewEntity({
-  name: 'MaterializedSessionView',
-  materialized: true,
+  name: 'SessionView',
   expression: `
   -- This query is used to fetch session related data from various tables.
   -- The result is a comprehensive view of session data, including related resources, activities, courses, and more.
