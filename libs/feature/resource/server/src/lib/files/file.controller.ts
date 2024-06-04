@@ -149,6 +149,11 @@ export class ResourceFileController {
     const cacheLifetime = this.configService.get<number>('cache.filesLifetime', { infer: true })
 
     const { repo, resource, permissions } = await this.fileService.repo(resourceId, request)
+
+    if (query?.zipList) {
+      return await repo.listZipFiles(path!)
+    }
+
     const version = query?.version || LATEST
     if (version !== LATEST) {
       res.set('Cache-Control', `public, max-age=${cacheLifetime}`)
