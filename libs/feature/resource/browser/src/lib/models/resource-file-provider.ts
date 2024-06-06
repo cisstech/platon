@@ -30,4 +30,5 @@ export abstract class ResourceFileProvider {
   abstract update(file: Pick<ResourceFile, 'url'>, input: FileUpdate): Observable<void>
   abstract search(file: Pick<ResourceFile, 'url'>, query: FileSearch): Observable<FileSearchResults>
   abstract listZipFiles(file: ResourceFile): Observable<string[]>
+  abstract unzipFile(file: ResourceFile, path: string): Observable<void>
 }

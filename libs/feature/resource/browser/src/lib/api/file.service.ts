@@ -68,6 +68,10 @@ export class ResourceFileService {
     return this.provider.listZipFiles(file)
   }
 
+  unzipFile(file: ResourceFile, path: string): Observable<void> {
+    return this.provider.unzipFile(file, path)
+  }
+
   search(file: Pick<ResourceFile, 'url'>, query: FileSearch): Observable<FileSearchResults> {
     return this.provider.search(file, query)
   }
