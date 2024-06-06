@@ -363,7 +363,11 @@ export class ResourceFileController {
     }
 
     if (input.unzip) {
-      await repo.unzip(path)
+      if (input.unzipFile) {
+        await repo.unzipFile(path, input.unzipFile)
+      } else {
+        await repo.unzip(path)
+      }
       return new SuccessResponse()
     }
 

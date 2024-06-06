@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, inject } from '@angular/core'
-import { Editor, FileService, OpenRequest } from '@cisstech/nge-ide/core'
+import { Editor, OpenRequest } from '@cisstech/nge-ide/core'
 import { Subscription, firstValueFrom } from 'rxjs'
 import { ResourceFileService } from '@platon/feature/resource/browser'
 import { ResourceFileImpl } from '../../file-system'
 import { NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd/tree'
+import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown'
+import { ExplorerService } from '@cisstech/nge-ide/explorer'
 
 @Component({
   selector: 'app-zip-editor',
@@ -13,17 +15,20 @@ import { NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd/tree'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZipEditorComponent implements OnInit, OnDestroy {
-  private readonly fileService = inject(FileService)
   private readonly resourceFileService = inject(ResourceFileService)
   private readonly subscriptions: Subscription[] = []
   private readonly changeDetectorRef = inject(ChangeDetectorRef)
+  private readonly explorerService = inject(ExplorerService)
 
   protected nodes: NzTreeNodeOptions[] = []
   protected fileName = ''
+  protected resourceFile: ResourceFileImpl | null = null
 
   @Input()
   protected editor!: Editor
   protected request!: OpenRequest
+
+  constructor(private nzContextMenuService: NzContextMenuService) {}
 
   async ngOnInit(): Promise<void> {
     this.subscriptions.push(
@@ -53,6 +58,7 @@ export class ZipEditorComponent implements OnInit, OnDestroy {
           title: part,
           key: fullPath,
           children: [],
+          selectable: false,
         }
 
         node.push(childNode)
@@ -77,7 +83,8 @@ export class ZipEditorComponent implements OnInit, OnDestroy {
   createEditor = async (): Promise<void> => {
     const file = this.request.file! as ResourceFileImpl
     this.fileName = file.resourceFile.path
-    const files = await firstValueFrom(this.resourceFileService.listZipFiles(file.resourceFile))
+    this.resourceFile = file
+    const files = await firstValueFrom(this.resourceFileService.listZipFiles(this.resourceFile.resourceFile))
     this.nodes = this.buildNzTree(files)
     this.changeDetectorRef.markForCheck()
   }
@@ -87,5 +94,14 @@ export class ZipEditorComponent implements OnInit, OnDestroy {
     if (node) {
       node.isExpanded = !node.isExpanded
     }
+  }
+
+  contextMenu($event: Event, menu: NzDropdownMenuComponent): void {
+    this.nzContextMenuService.create($event as MouseEvent, menu)
+  }
+
+  async extractFile(node: NzTreeNodeOptions): Promise<void> {
+    await firstValueFrom(this.resourceFileService.unzipFile(this.resourceFile!.resourceFile, node.key))
+    this.explorerService.refresh()
   }
 }

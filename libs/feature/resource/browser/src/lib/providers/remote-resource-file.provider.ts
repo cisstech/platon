@@ -121,4 +121,8 @@ export class RemoteResourceFileProvider extends ResourceFileProvider {
       params,
     })
   }
+
+  unzipFile(zipFile: Pick<ResourceFile, 'url'>, file: string): Observable<void> {
+    return this.http.patch<void>(zipFile.url, { unzip: true, unzipFile: file })
+  }
 }

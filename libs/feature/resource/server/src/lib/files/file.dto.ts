@@ -81,6 +81,10 @@ export class FileMoveDTO implements FileMove {
   @IsOptional()
   unzip?: boolean
 
+  @IsString()
+  @IsOptional()
+  unzipFile?: string
+
   @IsBoolean()
   @IsOptional()
   rename?: boolean
