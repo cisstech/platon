@@ -13,7 +13,7 @@ import {
   USER_COURSE_COUNT,
 } from '@platon/feature/result/common'
 import { In, IsNull, Not, Raw, Repository } from 'typeorm'
-import { SessionView } from '../sessions/session.view'
+import { SessionDataEntity } from '../sessions/session-data.entity'
 import {
   ActivityAnswerRate,
   ActivityDropoutRate,
@@ -47,8 +47,8 @@ export class DashboardService {
   constructor(
     private readonly resourceService: ResourceService,
 
-    @InjectRepository(SessionView)
-    private readonly sessionView: Repository<SessionView>,
+    @InjectRepository(SessionDataEntity)
+    private readonly sessionData: Repository<SessionDataEntity>,
     @InjectRepository(CourseMemberView)
     private readonly courseMemberView: Repository<CourseMemberView>,
     @InjectRepository(ActivityEntity)
@@ -71,7 +71,7 @@ export class DashboardService {
     ])
 
     const [sessions] = await Promise.all([
-      this.sessionView.find({
+      this.sessionData.find({
         where: [
           {
             userId: user.id,
@@ -155,10 +155,10 @@ export class DashboardService {
     return output
   }
 
-  async ofSession(sessionId: string): Promise<[SessionView, DashboardOutput]> {
+  async ofSession(sessionId: string): Promise<[SessionDataEntity, DashboardOutput]> {
     const output: DashboardOutput = {}
 
-    const activitySession = await this.sessionView.findOne({
+    const activitySession = await this.sessionData.findOne({
       where: { id: sessionId },
     })
 
@@ -176,7 +176,7 @@ export class DashboardService {
             where: { id: activitySession.activityId },
           })
         : undefined,
-      this.sessionView.find({
+      this.sessionData.find({
         where: { parentId: sessionId },
         relations: { user: true },
       }),
@@ -226,7 +226,7 @@ export class DashboardService {
     }
 
     const [sessions, activityMembers] = await Promise.all([
-      this.sessionView.find({
+      this.sessionData.find({
         where: { activityId, userId: Not(IsNull()) },
         relations: { user: true },
       }),
@@ -272,7 +272,7 @@ export class DashboardService {
   }
 
   private async ofExerciseResource(resource: ResourceEntity, output: DashboardOutput): Promise<void> {
-    const sessions = await this.sessionView.find({
+    const sessions = await this.sessionData.find({
       where: {
         resourceId: resource.id,
         userId: Not(IsNull()),
@@ -304,7 +304,7 @@ export class DashboardService {
   }
 
   private async ofActivityResource(resource: ResourceEntity, output: DashboardOutput): Promise<void> {
-    const activitySessions = await this.sessionView.find({
+    const activitySessions = await this.sessionData.find({
       where: {
         resourceId: resource.id,
         userId: Not(IsNull()),
@@ -312,7 +312,7 @@ export class DashboardService {
     })
 
     const [exerciseSessions, usedInActivities] = await Promise.all([
-      this.sessionView.find({
+      this.sessionData.find({
         where: {
           parentId: In(activitySessions.map((s) => s.id)),
           userId: Not(IsNull()),

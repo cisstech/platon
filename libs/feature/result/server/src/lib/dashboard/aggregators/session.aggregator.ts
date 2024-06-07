@@ -8,7 +8,7 @@ import {
   SESSION_TOTAL_DURATION,
   SESSION_TOTAL_DURATION_BY_MONTH,
 } from '@platon/feature/result/common'
-import { SessionView } from '../../sessions/session.view'
+import { SessionDataEntity } from '../../sessions/session-data.entity'
 import { getYearMonthWeek } from '../dashboard.utils'
 import { SessionDataAggregator, answerStateFromSession, sessionDurationInSeconds } from './aggregators'
 
@@ -23,7 +23,7 @@ export class SessionSuccessRate implements SessionDataAggregator<number> {
   private totalSessions = 0
   private totalSuccess = 0
 
-  next(input: SessionView): void {
+  next(input: SessionDataEntity): void {
     const grade = input.correctionGrade ?? input.grade
     if (input.attempts) {
       this.totalSessions++
@@ -45,7 +45,7 @@ export class SessionAverageScore implements SessionDataAggregator<number> {
   private totalSessions = 0
   private totalScores = 0
 
-  next(input: SessionView): void {
+  next(input: SessionDataEntity): void {
     const grade = input.correctionGrade ?? input.grade
     if (input.attempts) {
       this.totalSessions++
@@ -66,7 +66,7 @@ export class SessionAverageScoreByMonth implements SessionDataAggregator<Record<
 
   private readonly scores = new Map<string, { total: number; count: number }>()
 
-  next(input: SessionView): void {
+  next(input: SessionDataEntity): void {
     if (input.lastGradedAt) {
       const { year, month, week } = getYearMonthWeek(input.lastGradedAt)
 
@@ -96,7 +96,7 @@ export class SessionTotalDuration implements SessionDataAggregator<number> {
 
   private totalDurations = 0
 
-  next(input: SessionView): void {
+  next(input: SessionDataEntity): void {
     this.totalDurations += sessionDurationInSeconds(input)
   }
 
@@ -114,7 +114,7 @@ export class SessionAverageDuration implements SessionDataAggregator<number> {
   private totalSessions = 0
   private totalDurations = 0
 
-  next(input: SessionView): void {
+  next(input: SessionDataEntity): void {
     if (input.attempts) {
       this.totalSessions += 1
       this.totalDurations += sessionDurationInSeconds(input)
@@ -134,7 +134,7 @@ export class SessionTotalDurationByMonth implements SessionDataAggregator<Record
 
   private readonly durations = new Map<string, number>()
 
-  next(input: SessionView): void {
+  next(input: SessionDataEntity): void {
     if (input.startedAt && input.lastGradedAt) {
       const { year: gradeYear, month: gradeMonth, week: gradeWeek } = getYearMonthWeek(input.lastGradedAt)
       const { year: startYear, month: startMonth, week: startWeek } = getYearMonthWeek(input.startedAt)
@@ -168,7 +168,7 @@ export class SessionDistributionByAnswerState implements SessionDataAggregator<R
     {} as Record<AnswerStates, number>
   )
 
-  next(input: SessionView): void {
+  next(input: SessionDataEntity): void {
     const state = answerStateFromSession(input)
     this.distribution[state]++
   }
