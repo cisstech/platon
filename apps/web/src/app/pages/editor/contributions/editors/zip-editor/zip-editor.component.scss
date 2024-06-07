@@ -7,3 +7,27 @@
   height: 100%;
   text-align: center;
 }
+
+nz-tree {
+  overflow: hidden;
+  margin: 0 -24px;
+  padding: 0 24px;
+  text-align: left;
+}
+
+.custom-node {
+  cursor: pointer;
+  line-height: 24px;
+  margin-left: 4px;
+  display: inline-block;
+}
+
+.file-name,
+.folder-name {
+  margin-left: 4px;
+}
+
+.tree-container {
+  height: 50%;
+  overflow: auto;
+}

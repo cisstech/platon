@@ -347,6 +347,28 @@ export class Repo {
     await this.commit(`unzip ${path}`)
   }
 
+  async unzipFile(path: string, file: string) {
+    const abspath = this.abspath(path)
+    const dstpath = Path.dirname(abspath)
+
+    const zip = new AdmZip(abspath)
+
+    const entry = zip.getEntry(file)
+    if (!entry) {
+      throw new FileNotFoundError(file)
+    }
+
+    zip.extractEntryTo(entry, dstpath, true, true)
+
+    await this.commit(`unzip ${path}`)
+  }
+
+  async listZipFiles(path: string): Promise<string[]> {
+    const abspath = this.abspath(path)
+    const zip = new AdmZip(abspath)
+    return zip.getEntries().map((entry) => entry.entryName)
+  }
+
   async upload(src: string, dst: string) {
     const abspath = this.abspath(dst)
     const dirname = Path.dirname(abspath)
