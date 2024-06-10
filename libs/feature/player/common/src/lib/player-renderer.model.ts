@@ -111,7 +111,7 @@ export const withRenderedTemplates = (variables: ExerciseVariables, reviewMode?:
     scripts
   ) as ExerciseVariables
 
-  const templates = ['title', 'statement', 'form', 'solution', 'feedback', 'hint']
+  const templates = ['statement', 'form', 'solution', 'feedback', 'hint']
 
   const render = (v: any): any => {
     if (typeof v === 'string') {
