@@ -23,7 +23,6 @@ export class SessionSubscriber implements EntitySubscriberInterface<SessionEntit
       return
     }
     await manager.insert(SessionDataEntity, result)
-    console.error('inserted session data')
   }
 
   static async retrieveSessionData(sessionId: string, entityManager: EntityManager): Promise<SessionDataEntity[]> {
@@ -111,7 +110,6 @@ export class SessionSubscriber implements EntitySubscriberInterface<SessionEntit
     if (!result || result.length === 0) {
       return []
     }
-    console.error('sessionDataList', JSON.stringify(result, null, 2))
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const sessionDataList: SessionDataEntity[] = result.map((data: any) => {
@@ -152,8 +150,6 @@ export class SessionSubscriber implements EntitySubscriberInterface<SessionEntit
       sessionData.answers = data.answers
       return sessionData
     })
-    console.error('sessionId', sessionId)
-    console.error('sessionDataList', JSON.stringify(sessionDataList, null, 2))
     return sessionDataList
   }
 }
