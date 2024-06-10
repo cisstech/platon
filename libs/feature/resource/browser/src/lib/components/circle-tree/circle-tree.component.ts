@@ -96,7 +96,9 @@ export class CircleTreeComponent implements OnInit {
       }
     }
 
-    this.checklistSelection.select(...this.treeControl.dataNodes.filter((node) => this.selection.includes(node.id)))
+    this.checklistSelection.select(
+      ...this.treeControl.dataNodes.filter((node) => this.selection.includes(node.id) && !node.disabled)
+    )
     this.selectionChange.emit(this.checklistSelection.selected.map((n) => n.id))
   }
 
