@@ -133,6 +133,9 @@ export class UiSearchBarComponent implements OnInit, OnChanges, OnDestroy {
           this.control.setValue('', { emitEvent: false })
           this.searchRef?.nativeElement?.blur?.()
         })
+      } else {
+        this.control.setValue(this.onComplete(item), { emitEvent: false })
+        this.onTrigger()
       }
     }
   }
