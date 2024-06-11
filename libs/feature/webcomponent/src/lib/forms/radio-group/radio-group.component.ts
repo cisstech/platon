@@ -40,7 +40,7 @@ export class RadioGroupComponent implements WebComponentHooks<RadioGroupState> {
 
   protected autoValidate() {
     if (this.state.autoValidation && this.state.selection) {
-      this.webComponentService.submit()
+      this.webComponentService.submit(this)
     }
   }
 }
