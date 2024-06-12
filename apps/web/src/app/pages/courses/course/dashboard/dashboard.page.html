@@ -56,6 +56,7 @@
                     (moveDown)="moveDownSection(item.section)"
                     (insertBelow)="addSection(item.section)"
                     (remove)="deleteSection(item.section)"
+                    [nbActivities]="numberOfActivities(item.section)"
                   />
                 </ng-template>
                 <course-activity-grid [items]="item.activities">
