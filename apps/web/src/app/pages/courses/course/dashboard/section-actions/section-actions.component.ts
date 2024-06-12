@@ -29,6 +29,7 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm'
 export class CourseSectionActionsComponent {
   @Input() section!: CourseSection
   @Input() sectionCount = 0
+  @Input() nbActivities = 0
 
   @Output() moveUp = new EventEmitter()
   @Output() moveDown = new EventEmitter()
