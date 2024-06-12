@@ -1,5 +1,5 @@
 import { Command, Handler, InjectDiscordClient, InteractionEvent, Param } from '@discord-nestjs/core'
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 import { Public } from '@platon/core/server'
 import { SlashCommandPipe } from '@discord-nestjs/common'
 import { LeaderboardService } from '@platon/feature/result/server'
@@ -23,7 +23,24 @@ export class LeaderboardDTO {
 })
 @Injectable()
 export class LeaderboardCommand {
+  private readonly logger = new Logger(LeaderboardCommand.name)
   private challengeToChannelMap: Map<string, [string, Message | undefined][]> = new Map()
+
+  constructor(
+    private readonly leaderBoardService: LeaderboardService,
+    private readonly watchedChallengeService: WatchedChallengesService,
+    @InjectDiscordClient() private readonly client: Client,
+    private readonly activityService: ActivityService
+  ) {
+    this.watchedChallengeService
+      .findAll()
+      .then((watchedChallenges) => {
+        watchedChallenges.forEach((watchedChallenge) => this.updateChallengeToChannelMap(watchedChallenge))
+      })
+      .catch((error) => {
+        this.logger.error('Error while fetching watched challenges : ' + error)
+      })
+  }
 
   private updateChallengeToChannelMap(watchedChallenge: WatchedChallengesEntity, message?: Message<boolean>) {
     if (this.challengeToChannelMap.has(watchedChallenge.challengeId)) {
@@ -52,17 +69,6 @@ export class LeaderboardCommand {
     }
   }
 
-  constructor(
-    private readonly leaderBoardService: LeaderboardService,
-    private readonly watchedChallengeService: WatchedChallengesService,
-    @InjectDiscordClient() private readonly client: Client,
-    private readonly activityService: ActivityService
-  ) {
-    this.watchedChallengeService.findAll().then((watchedChallenges) => {
-      watchedChallenges.forEach((watchedChallenge) => this.updateChallengeToChannelMap(watchedChallenge))
-    })
-  }
-
   private async courseLeaderboard(id: string): Promise<CourseLeaderboardEntry[]> {
     return this.leaderBoardService.ofCourse(id)
   }
@@ -78,23 +84,31 @@ export class LeaderboardCommand {
 
     //Check si le challenge existe bien
     if (isUUID4(challengeId) === false) {
-      info.reply("Mauvais format d'id... abandon")
+      info.reply("Mauvais format d'id... abandon").catch((error) => {
+        this.logger.error('Error while replying : ' + error)
+      })
       return
     }
     const activities = (await this.activityService.findActivitiesByCourseId(challengeId)).orUndefined()
     if (!activities) {
-      info.reply("Le cours-challenge d'id : `" + challengeId + "` n'existe pas ou ne possède pas d'activités")
+      info
+        .reply("Le cours-challenge d'id : `" + challengeId + "` n'existe pas ou ne possède pas d'activités")
+        .catch((error) => {
+          this.logger.error('Error while replying : ' + error)
+        })
       return
     }
     if (!activities.find((activity: ActivityEntity) => activity.isChallenge)) {
-      info.reply("Le cours-challenge d'id : `" + challengeId + "` n'est pas un challenge")
+      info.reply("Le cours-challenge d'id : `" + challengeId + "` n'est pas un challenge").catch((error) => {
+        this.logger.error('Error while replying : ' + error)
+      })
       return
     }
     // Enregistrer le courseId et le channelId dans la BDD
     const watchedChallenge = await this.watchedChallengeService.create({ challengeId, channelId })
 
     // Récuperer l'id du message en dessous
-    let message = await (
+    const message = await (
       await info.reply("Je posterais le leaderboard du cours-challenge d'id : `" + challengeId + '` ici')
     ).fetch()
     this.updateChallengeToChannelMap(watchedChallenge, message)
@@ -140,12 +154,17 @@ export class LeaderboardCommand {
       const channel = this.client.channels.cache.get(channelsWithMessage[0]) as TextChannel
       if (channelsWithMessage[1]) {
         channelsWithMessage[1]?.edit(messageContent).catch((error) => {
-          console.error('Error while editing message : ' + error)
+          this.logger.error('Error while editing message : ' + error)
         })
       } else {
-        channel.send(messageContent).then((message) => {
-          channelsWithMessage[1] = message
-        })
+        channel
+          .send(messageContent)
+          .then((message) => {
+            channelsWithMessage[1] = message
+          })
+          .catch((error) => {
+            this.logger.error('Error while sending message : ' + error)
+          })
       }
     })
   }
