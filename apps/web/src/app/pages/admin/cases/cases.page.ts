@@ -38,8 +38,7 @@ export class AdminCasesPage implements OnInit {
     this.cases = [cas, ...this.cases]
   }
 
-  constructor(private readonly ltiService: LTIService, private readonly changeDectectorRef: ChangeDetectorRef) {
-  }
+  constructor(private readonly ltiService: LTIService, private readonly changeDectectorRef: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.ltiService.searchLms().subscribe((lmses) => {

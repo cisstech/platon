@@ -17,3 +17,7 @@
 **/*.generated.ts
 **/*.mdx
 .angular
+shared/external_libs
+migrations
+dumps
+apps/docs/.next

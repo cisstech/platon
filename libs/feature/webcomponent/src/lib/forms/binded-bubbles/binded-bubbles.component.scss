@@ -16,7 +16,6 @@ button {
   width: 30%;
 }
 
-
 .bubbles-items button,
 .bubbles-items a {
   margin-right: 8px;
@@ -27,8 +26,6 @@ button {
   border: 2px solid var(--brand-color-primary);
   font-size: medium;
 }
-
-
 
 .bubbles-items button.checked,
 .bubbles-items a.checked {
@@ -62,10 +59,9 @@ button {
 
 .bubbles-item button:hover,
 .bubbles-item a:hover {
-  transform: translateY(-0.10em);
+  transform: translateY(-0.1em);
   border-width: 3px;
 }
-
 
 @keyframes changeColorChecked {
   0% {
@@ -79,8 +75,6 @@ button {
   }
 }
 
-
-
 @keyframes changeColorError {
   0% {
     background-color: var(--brand-background-components);
@@ -91,7 +85,6 @@ button {
   50% {
     background-color: #ff0000;
     translate: 3px;
-
   }
 
   100% {
@@ -106,9 +99,7 @@ button {
     background-color: #00ff00;
   }
 
-
   100% {
     opacity: 0;
   }
-
 }

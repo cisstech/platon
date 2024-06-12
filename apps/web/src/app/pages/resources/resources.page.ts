@@ -53,7 +53,7 @@ import {
 import { NzDividerModule } from 'ng-zorro-antd/divider'
 
 const PAGINATION_LIMIT = 15
-const EXPANDS: ResourceExpandableFields[] = ['metadata', 'statistic']
+const EXPANDS: ResourceExpandableFields[] = ['metadata' /* 'statistic' */]
 
 interface QueryParams {
   q?: string
