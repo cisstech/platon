@@ -81,7 +81,7 @@ export class InputBoxComponent implements OnInit, OnDestroy, WebComponentHooks<I
   protected async autoValidate() {
     if (this.state.autoValidation) {
       await new Promise((resolve) => setTimeout(resolve, this.dueTime)) // wait for the last value change
-      this.webComponentService.submit()
+      this.webComponentService.submit(this)
     }
   }
 

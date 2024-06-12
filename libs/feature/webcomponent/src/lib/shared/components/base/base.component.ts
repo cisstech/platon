@@ -2,6 +2,7 @@
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
 import { WebComponentDefinition } from '../../../web-component'
 import { WebComponentService } from '../../../web-component.service'
+import { v4 as uuidv4 } from 'uuid'
 
 @Component({
   selector: 'wc-base',
@@ -21,6 +22,7 @@ export class BaseComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const native: HTMLElement = this.elementRef.nativeElement
+    native.parentElement?.setAttribute('id', uuidv4())
     const selector = native.parentElement?.tagName.toLowerCase()
     this.definition = this.api.findBySelector(selector || '')
 

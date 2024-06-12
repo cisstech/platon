@@ -1,10 +1,15 @@
-import { Inject, Injectable, Optional } from '@angular/core'
-import { WebComponentDefinition, WebComponentTypes, WEB_COMPONENT_DEFINITIONS } from './web-component'
+import { ElementRef, Inject, Injectable, Optional } from '@angular/core'
+import {
+  WebComponentDefinition,
+  WebComponentTypes,
+  WEB_COMPONENT_DEFINITIONS,
+  WebComponentHooks,
+} from './web-component'
 import { Subject } from 'rxjs'
 
 @Injectable({ providedIn: 'root' })
 export class WebComponentService {
-  private readonly submitEvent = new Subject<void>()
+  private readonly submitEvent = new Subject<string>()
 
   /**
    * Emits when a component is auto-submitted.
@@ -50,7 +55,8 @@ export class WebComponentService {
   /**
    * Called from auto-submittable components to trigger the submit event.
    */
-  submit() {
-    this.submitEvent.next()
+  submit(component: WebComponentHooks) {
+    const elementRef = component.injector.get<ElementRef<HTMLElement>>(ElementRef)
+    this.submitEvent.next(elementRef.nativeElement.id)
   }
 }
