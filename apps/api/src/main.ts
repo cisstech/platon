@@ -18,6 +18,8 @@ async function bootstrap() {
     cors: true,
     logger: LOG_LEVELS,
   })
+  const logger = app.get(Logger)
+  app.useLogger(logger)
 
   app.useBodyParser('json', { limit: '10mb' })
 
@@ -49,6 +51,14 @@ async function bootstrap() {
   )
 
   const port = process.env.PORT || 4201
+  process.on('uncaughtException', function (err) {
+    logger.error(err, 'Uncaught exception')
+  })
+
+  process.on('unhandledRejection', (reason, promise) => {
+    logger.error({ promise, reason }, 'Unhandled Rejection at: Promise')
+  })
+
   await app.listen(port)
 
   Logger.log(`🚀 Application is running on: http://localhost:${port}/${globalPrefix}`)
