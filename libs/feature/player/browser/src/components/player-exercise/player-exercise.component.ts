@@ -316,8 +316,11 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
       this.container.nativeElement.msRequestFullscreen
 
     this.subscriptions.push(
-      this.webComponentService.onSubmit.subscribe(() => {
-        this.evaluate(PlayerActions.CHECK_ANSWER).catch(console.error)
+      this.webComponentService.onSubmit.subscribe((id: string) => {
+        const component = this.container.nativeElement.querySelector(`[id="${id}"]`)
+        if (component) {
+          this.evaluate(PlayerActions.CHECK_ANSWER).catch(console.error)
+        }
       })
     )
   }
