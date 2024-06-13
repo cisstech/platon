@@ -1,3 +1,4 @@
+import { EXERCISE_MAIN_FILE } from '@platon/feature/compiler'
 import {
   FileTypes,
   FileVersion,
@@ -54,6 +55,8 @@ export class Repo {
       create?: boolean
       type?: ResourceTypes
       defaultFiles?: Record<string, string>
+      parentCircle?: string
+      userCircle?: string
     }
   ) {
     const dir = Path.join(RESOURCES_DIR, name)
@@ -82,10 +85,25 @@ export class Repo {
             Object.entries(options.defaultFiles).map(([path, content]) => instance.touch(path, content))
           )
         } else {
+          let src = undefined
+          const parentCircleDefault = options?.parentCircle
+            ? Path.join(RESOURCES_DIR, 'circles', options?.parentCircle, 'default.ple')
+            : undefined
+          if (parentCircleDefault && fs.existsSync(parentCircleDefault)) {
+            src = parentCircleDefault
+          } else {
+            const userCircleDefault = options?.userCircle
+              ? Path.join(RESOURCES_DIR, 'circles', options?.userCircle, 'default.ple')
+              : undefined
+            src = userCircleDefault && fs.existsSync(userCircleDefault) ? userCircleDefault : undefined
+          }
           await fs.promises.cp(Path.join(RESOURCES_DIR, 'templates', options?.type?.toLowerCase() as string), dir, {
             recursive: true,
             force: true,
           })
+          if (src && options?.type === 'EXERCISE') {
+            await fs.promises.cp(src, Path.join(dir, EXERCISE_MAIN_FILE), { force: true })
+          }
         }
       } catch {
         // can throw error if called twice by the frontend
@@ -327,6 +345,28 @@ export class Repo {
     )
 
     await this.commit(`unzip ${path}`)
+  }
+
+  async unzipFile(path: string, file: string) {
+    const abspath = this.abspath(path)
+    const dstpath = Path.dirname(abspath)
+
+    const zip = new AdmZip(abspath)
+
+    const entry = zip.getEntry(file)
+    if (!entry) {
+      throw new FileNotFoundError(file)
+    }
+
+    zip.extractEntryTo(entry, dstpath, true, true)
+
+    await this.commit(`unzip ${path}`)
+  }
+
+  async listZipFiles(path: string): Promise<string[]> {
+    const abspath = this.abspath(path)
+    const zip = new AdmZip(abspath)
+    return zip.getEntries().map((entry) => entry.entryName)
   }
 
   async upload(src: string, dst: string) {

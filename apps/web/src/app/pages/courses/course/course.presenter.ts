@@ -8,6 +8,8 @@ import {
   Activity,
   ActivityFilters,
   Course,
+  CourseGroup,
+  CourseGroupDetail,
   CourseMember,
   CourseSection,
   CreateCourseMember,
@@ -161,6 +163,152 @@ export class CoursePresenter implements OnDestroy {
     }
   }
 
+  async listCourseGroups(): Promise<CourseGroup[]> {
+    const { course } = this.context.value
+    if (!course) {
+      return []
+    }
+    const response = await firstValueFrom(this.courseService.listGroups(course.id))
+    return response.resources
+  }
+
+  async updateGroupName(groupId: string, newName: string): Promise<void> {
+    const { course } = this.context.value
+    if (!course) {
+      return
+    }
+    try {
+      await firstValueFrom(this.courseService.updateGroupName(course.id, groupId, newName))
+      this.context.next({
+        ...this.context.value,
+        courseGroups: this.context.value.courseGroups
+          ?.map((group) => {
+            if (group.courseGroup.groupId === groupId) {
+              return {
+                ...group,
+                courseGroup: {
+                  ...group.courseGroup,
+                  name: newName,
+                },
+              }
+            }
+            return group
+          })
+          .sort((a, b) => a.courseGroup.name.localeCompare(b.courseGroup.name)),
+      })
+    } catch {
+      this.alertError()
+    }
+  }
+
+  async listCourseGroupMembers(groupId: string): Promise<CourseMember[]> {
+    const { course } = this.context.value
+    if (!course) {
+      return []
+    }
+    const response = await firstValueFrom(this.courseService.listGroupMembers(course.id, groupId))
+    this.context.next({
+      ...this.context.value,
+      courseGroups: this.context.value.courseGroups?.map((group) => {
+        if (group.courseGroup.groupId === groupId) {
+          return {
+            ...group,
+            members: response.resources,
+          }
+        }
+        return group
+      }),
+    })
+    return response.resources
+  }
+
+  async removeGroupMember(groupId: string, member: CourseMember): Promise<void> {
+    const { course } = this.context.value
+    if (!course) {
+      return
+    }
+    try {
+      await firstValueFrom(this.courseService.deleteGroupMember(course.id, groupId, member.user!.id))
+      this.context.next({
+        ...this.context.value,
+        courseGroups: this.context.value.courseGroups?.map((group) => {
+          if (group.courseGroup.groupId === groupId) {
+            return {
+              ...group,
+              members: group.members.filter((m) => m.user!.id !== member.user!.id),
+            }
+          }
+          return group
+        }),
+      })
+    } catch {
+      this.alertError()
+    }
+  }
+
+  async addGroupMember(groupId: string, members: CourseMember[]): Promise<void> {
+    const { course } = this.context.value
+    if (!course) {
+      return
+    }
+    try {
+      await Promise.all(
+        members.map(async (member) => {
+          await firstValueFrom(this.courseService.addGroupMember(course.id, groupId, member.user!.id))
+        })
+      )
+      this.context.next({
+        ...this.context.value,
+        courseGroups: this.context.value.courseGroups?.map((group) => {
+          if (group.courseGroup.groupId === groupId) {
+            return {
+              ...group,
+              members: group.members.concat(members.map((m) => ({ ...m, createdAt: new Date() }))),
+            }
+          }
+          return group
+        }),
+      })
+    } catch {
+      this.alertError()
+    }
+  }
+
+  async addGroup(): Promise<void> {
+    const { course } = this.context.value
+    if (!course) {
+      return
+    }
+    try {
+      const group = await firstValueFrom(this.courseService.addCourseGroup(course.id))
+      this.context.next({
+        ...this.context.value,
+        courseGroups: this.context.value.courseGroups?.concat({
+          courseGroup: group.resource,
+          members: [],
+        }),
+      })
+    } catch {
+      this.alertError()
+    }
+  }
+
+  async deleteGroup(groupId: string): Promise<void> {
+    const { course } = this.context.value
+    if (!course) {
+      return
+    }
+    try {
+      await firstValueFrom(this.courseService.deleteGroup(course.id, groupId))
+      this.context.next({
+        ...this.context.value,
+        courseGroups: this.context.value.courseGroups?.filter((group) => group.courseGroup.groupId !== groupId),
+      })
+    } catch {
+      this.alertError()
+    }
+  }
+
   private async refresh(id: string): Promise<void> {
     const [user, course] = await Promise.all([
       this.authService.ready(),
@@ -196,4 +344,5 @@ export interface Context {
   state: LayoutState
   user?: User
   course?: Course
+  courseGroups?: CourseGroupDetail[]
 }

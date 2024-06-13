@@ -26,6 +26,7 @@
         Ajouter une activité
       </button>
       <button nz-button (click)="insertBelow.emit(section)">Insérer une section après</button>
+      @if (nbActivities > 0) {
       <button
         nz-button
         nzDanger
@@ -37,6 +38,11 @@
       >
         Supprimer la section
       </button>
+      } @else {
+      <button nz-button nzDanger nzOkText="Supprimer" nzOkType="danger" (click)="remove.emit()">
+        Supprimer la section
+      </button>
+      }
     </nz-space>
   </ng-template>
 </nz-space>

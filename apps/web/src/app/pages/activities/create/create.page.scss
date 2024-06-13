@@ -72,12 +72,14 @@ mat-form-field {
 }
 
 nz-range-picker,
-course-member-select {
+course-member-select,
+course-group-select {
   width: 100%;
   margin: 12px 0;
 }
 
-course-member-select {
+course-member-select,
+course-group-select {
   display: block;
 }
 

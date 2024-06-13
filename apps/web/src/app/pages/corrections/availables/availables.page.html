@@ -1,3 +1,7 @@
+@if (loading) {
+<nz-spin nzSimple nzTip="Chargement..." />
+} @else {
 <correction-table [corrections]="corrections">
   <nz-empty nzNotFoundContent="Vous n'avez aucune correction terminée pour l'instant." />
 </correction-table>
+}

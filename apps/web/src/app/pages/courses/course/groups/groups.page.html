@@ -1,0 +1,79 @@
+<section>
+  <button *ngIf="canEdit" (click)="addGroup()" nz-button nzType="primary" nz-tooltip="Ajouter un groupe">
+    <span nz-icon nzType="plus" nzTheme="outline"></span><span>Ajouter un groupe</span>
+  </button>
+  <mat-card *ngIf="context.courseGroups && context.courseGroups.length > 0; else noGroup">
+    <mat-card-content>
+      <nz-collapse>
+        @for (group of context.courseGroups; track group) {
+        <nz-collapse-panel
+          [(nzActive)]="activesGroups[group.courseGroup.groupId]"
+          [nzHeader]="collapseHeader"
+          [nzExtra]="extraTpl"
+        >
+          <ng-template #collapseHeader>
+            <span
+              (click)="$event.stopPropagation()"
+              nz-typography
+              [nzEditable]="context.course?.permissions?.update"
+              [nzContent]="group.courseGroup.name"
+              (nzContentChange)="updateGroupName($event, group.courseGroup.groupId)"
+            ></span>
+          </ng-template>
+          <ng-template #extraTpl>
+            <button
+              *ngIf="canEdit"
+              class="has-margin"
+              nz-button
+              nzDanger
+              nzType="primary"
+              nzShape="circle"
+              nz-popconfirm
+              nzOkText="Retirer"
+              nzOkType="danger"
+              (click)="$event.stopPropagation()"
+              [nzPopconfirmTitle]="'Voulez-vous vraiment supprimer le groupe \'' + group.courseGroup.name + '\' ?'"
+              (nzOnConfirm)="deleteGroup(group.courseGroup.groupId)"
+            >
+              <i nz-icon nzType="delete"></i>
+            </button>
+            <button
+              *ngIf="canEdit"
+              class="has-margin"
+              (click)="$event.stopPropagation(); addModal.open()"
+              nz-button
+              nzType="primary"
+              nz-tooltip="Ajouter un étudiant au groupe"
+            >
+              <span nz-icon nzType="plus" nzTheme="outline"></span>
+            </button>
+          </ng-template>
+          <course-member-table
+            [members]="group.members"
+            [editable]="context.course?.permissions?.update || false"
+            [type]="'groupe'"
+            (deleted)="removeGroupMember(group.courseGroup.groupId, $event)"
+          />
+        </nz-collapse-panel>
+        <course-member-search-modal
+          #addModal
+          multi
+          [excludes]="getGroupMembersIds(group)"
+          [courseId]="context.course!.id"
+          [allowGroup]="false"
+          okTitle="Ajouter"
+          title="Ajouter des membres au groupe"
+          (closed)="addGroupMember(group.courseGroup.groupId, $event)"
+        >
+          <p>Sélectionnez les utilisateurs que vous souhaitez ajouter</p>
+        </course-member-search-modal>
+        }
+      </nz-collapse>
+    </mat-card-content>
+  </mat-card>
+  <ng-template #noGroup>
+    <nz-empty [nzNotFoundContent]="noGroupContent">
+      <ng-template #noGroupContent> Ce cours ne contient aucun groupe. </ng-template>
+    </nz-empty>
+  </ng-template>
+</section>

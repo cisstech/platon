@@ -28,6 +28,7 @@ import {
   PlayerExercise,
   PlayerManager,
   PreviewInput,
+  SandboxEnvironment,
   updateActivityNavigationState,
   withActivityPlayer,
   withExercisePlayer,
@@ -46,6 +47,7 @@ import { PartialDeep } from 'type-fest'
 import { DataSource, EntityManager, In } from 'typeorm'
 import { PreviewOuputDTO } from './player.dto'
 import { SandboxService } from './sandboxes/sandbox.service'
+import { randomInt } from 'crypto'
 
 type CreateSessionArgs = {
   user?: User | null
@@ -114,6 +116,14 @@ export class PlayerService extends PlayerManager {
     }
   }
 
+  async downloadEnvironment(sessionId: string, _user: User): Promise<SandboxEnvironment> {
+    const session = await this.sessionService.findById(sessionId, { parent: true, activity: true })
+    if (!session) throw new NotFoundResponse('Session not found')
+    if (!session.envid) throw new NotFoundResponse(`Environment not found for session ${sessionId}`)
+
+    return this.sandboxService.downloadEnvironment(session.source as PLSourceFile<ExerciseVariables>, session.envid)
+  }
+
   async playActivity(activityId: string, user: User): Promise<PlayActivityOuput> {
     let activitySession = await this.sessionService.findUserActivity(activityId, user.id)
     if (!activitySession) {
@@ -140,6 +150,12 @@ export class PlayerService extends PlayerManager {
     })
     if (!activitySession) {
       throw new NotFoundResponse(`ActivitySession not found: ${activitySessionId}`)
+    }
+    if (activitySession.activity?.openAt && activitySession.activity.openAt > new Date()) {
+      throw new ForbiddenResponse("L'activité n'est pas encore ouverte.")
+    }
+    if (activitySession.activity?.closeAt && activitySession.activity.closeAt < new Date()) {
+      throw new ForbiddenResponse("L'activité est fermée.")
     }
 
     // CREATE PLAYERS
@@ -259,7 +275,7 @@ export class PlayerService extends PlayerManager {
     const runWithEntityManager = async (manager: EntityManager): Promise<SessionEntity> => {
       const { user, source, parentId, activity, isBuilt } = args
 
-      source.variables.seed = (Number.parseInt(source.variables.seed + '') || Date.now()) % 100
+      source.variables.seed = (Number.parseInt(source.variables.seed + '') || randomInt(100)) % 100
 
       const session = await this.sessionService.create(
         {
@@ -315,6 +331,9 @@ export class PlayerService extends PlayerManager {
     navigation.exercises = await Promise.all(
       exercises.map(async (item) => {
         if (!('sessionId' in item)) {
+          if (!item.source.variables.seed) {
+            item.source.variables.seed = variables?.settings?.seedPerExercise ? randomInt(100) : variables.seed
+          }
           const session = await this.createNewSession(
             {
               activity: activitySession.activity,

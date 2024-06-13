@@ -290,26 +290,26 @@ import {
   ProductionsType,
   o,
 } from '@ts-jison/parser'
-const $V0 = [1, 8],
-  $V1 = [1, 9],
-  $V2 = [1, 11],
-  $V3 = [1, 10],
+const $V0 = [1, 9],
+  $V1 = [1, 10],
+  $V2 = [1, 12],
+  $V3 = [1, 11],
   $V4 = [5, 8, 12, 19, 34],
-  $V5 = [1, 24],
-  $V6 = [1, 23],
-  $V7 = [1, 25],
-  $V8 = [1, 26],
-  $V9 = [1, 27],
-  $Va = [1, 28],
-  $Vb = [1, 29],
-  $Vc = [1, 30],
-  $Vd = [1, 31],
-  $Ve = [1, 32],
-  $Vf = [1, 35],
+  $V5 = [1, 25],
+  $V6 = [1, 24],
+  $V7 = [1, 26],
+  $V8 = [1, 27],
+  $V9 = [1, 28],
+  $Va = [1, 29],
+  $Vb = [1, 30],
+  $Vc = [1, 31],
+  $Vd = [1, 32],
+  $Ve = [1, 33],
+  $Vf = [1, 36],
   $Vg = [13, 31],
   $Vh = [5, 8, 12, 19, 26, 29, 32, 34],
-  $Vi = [1, 48],
-  $Vj = [1, 49],
+  $Vi = [1, 49],
+  $Vj = [1, 50],
   $Vk = [26, 32],
   $Vl = [29, 32]
 
@@ -383,6 +383,7 @@ export class PLParser extends JisonParser implements JisonParserApi {
   productions_: ProductionsType = [
     0,
     [3, 2],
+    [3, 1],
     [4, 1],
     [4, 1],
     [4, 2],
@@ -420,27 +421,28 @@ export class PLParser extends JisonParser implements JisonParserApi {
     [11, 2],
   ]
   table: Array<StateType> = [
-    { 3: 1, 4: 2, 6: 3, 7: 4, 8: $V0, 9: 5, 10: 6, 11: 7, 12: $V1, 19: $V2, 34: $V3 },
+    { 3: 1, 4: 2, 5: [1, 3], 6: 4, 7: 5, 8: $V0, 9: 6, 10: 7, 11: 8, 12: $V1, 19: $V2, 34: $V3 },
     { 1: [3] },
-    { 5: [1, 12], 6: 14, 7: 13, 8: $V0, 9: 5, 10: 6, 11: 7, 12: $V1, 19: $V2, 34: $V3 },
-    o($V4, [2, 2]),
+    { 5: [1, 13], 6: 15, 7: 14, 8: $V0, 9: 6, 10: 7, 11: 8, 12: $V1, 19: $V2, 34: $V3 },
+    { 1: [2, 2] },
     o($V4, [2, 3]),
-    o($V4, [2, 7]),
+    o($V4, [2, 4]),
     o($V4, [2, 8]),
     o($V4, [2, 9]),
-    o($V4, [2, 6]),
-    { 13: [1, 15] },
-    { 20: [1, 16] },
+    o($V4, [2, 10]),
+    o($V4, [2, 7]),
+    { 13: [1, 16] },
     { 20: [1, 17] },
+    { 20: [1, 18] },
     { 1: [2, 1] },
-    o($V4, [2, 4]),
     o($V4, [2, 5]),
+    o($V4, [2, 6]),
     {
-      8: [1, 18],
+      8: [1, 19],
       12: $V5,
-      13: [1, 19],
-      14: 20,
-      15: 21,
+      13: [1, 20],
+      14: 21,
+      15: 22,
       16: $V6,
       17: $V7,
       18: $V8,
@@ -450,15 +452,15 @@ export class PLParser extends JisonParser implements JisonParserApi {
       23: $Vc,
       25: $Vd,
       28: $Ve,
-      31: [1, 22],
+      31: [1, 23],
     },
-    o($V4, [2, 35]),
     o($V4, [2, 36]),
+    o($V4, [2, 37]),
     {
       8: $Vf,
       12: $V5,
-      13: [1, 33],
-      15: 34,
+      13: [1, 34],
+      15: 35,
       16: $V6,
       17: $V7,
       18: $V8,
@@ -469,22 +471,22 @@ export class PLParser extends JisonParser implements JisonParserApi {
       25: $Vd,
       28: $Ve,
     },
-    o($V4, [2, 11]),
-    { 13: [1, 36], 31: [1, 37] },
-    o($V4, [2, 13]),
-    o($Vg, [2, 28]),
-    o($Vh, [2, 15]),
+    o($V4, [2, 12]),
+    { 13: [1, 37], 31: [1, 38] },
+    o($V4, [2, 14]),
+    o($Vg, [2, 29]),
     o($Vh, [2, 16]),
     o($Vh, [2, 17]),
     o($Vh, [2, 18]),
-    { 20: [1, 38] },
+    o($Vh, [2, 19]),
     { 20: [1, 39] },
     { 20: [1, 40] },
-    { 24: [1, 41] },
+    { 20: [1, 41] },
+    { 24: [1, 42] },
     {
       8: $Vf,
       12: $V5,
-      15: 44,
+      15: 45,
       16: $V6,
       17: $V7,
       18: $V8,
@@ -493,40 +495,40 @@ export class PLParser extends JisonParser implements JisonParserApi {
       22: $Vb,
       23: $Vc,
       25: $Vd,
-      26: [1, 42],
-      27: 43,
+      26: [1, 43],
+      27: 44,
       28: $Ve,
     },
-    { 12: $Vi, 18: $Vj, 29: [1, 45], 30: 46, 33: 47 },
-    o($V4, [2, 10]),
-    o($Vh, [2, 14]),
-    { 8: $Vf, 12: $V5, 15: 34, 16: $V6, 17: $V7, 18: $V8, 19: $V9, 21: $Va, 22: $Vb, 23: $Vc, 25: $Vd, 28: $Ve },
-    o($V4, [2, 12]),
-    o($Vg, [2, 27]),
-    o($Vh, [2, 19]),
+    { 12: $Vi, 18: $Vj, 29: [1, 46], 30: 47, 33: 48 },
+    o($V4, [2, 11]),
+    o($Vh, [2, 15]),
+    { 8: $Vf, 12: $V5, 15: 35, 16: $V6, 17: $V7, 18: $V8, 19: $V9, 21: $Va, 22: $Vb, 23: $Vc, 25: $Vd, 28: $Ve },
+    o($V4, [2, 13]),
+    o($Vg, [2, 28]),
     o($Vh, [2, 20]),
     o($Vh, [2, 21]),
     o($Vh, [2, 22]),
     o($Vh, [2, 23]),
-    { 26: [1, 50], 32: [1, 51] },
-    o($Vk, [2, 29]),
-    o($Vh, [2, 25]),
-    { 29: [1, 52], 32: [1, 53] },
-    o($Vl, [2, 31]),
-    { 23: [1, 54] },
-    { 23: [1, 55] },
     o($Vh, [2, 24]),
-    { 8: $Vf, 12: $V5, 15: 56, 16: $V6, 17: $V7, 18: $V8, 19: $V9, 21: $Va, 22: $Vb, 23: $Vc, 25: $Vd, 28: $Ve },
-    o($Vh, [2, 26]),
-    { 12: $Vi, 18: $Vj, 33: 57 },
-    { 8: $Vf, 12: $V5, 15: 58, 16: $V6, 17: $V7, 18: $V8, 19: $V9, 21: $Va, 22: $Vb, 23: $Vc, 25: $Vd, 28: $Ve },
-    { 8: $Vf, 12: $V5, 15: 59, 16: $V6, 17: $V7, 18: $V8, 19: $V9, 21: $Va, 22: $Vb, 23: $Vc, 25: $Vd, 28: $Ve },
+    { 26: [1, 51], 32: [1, 52] },
     o($Vk, [2, 30]),
+    o($Vh, [2, 26]),
+    { 29: [1, 53], 32: [1, 54] },
     o($Vl, [2, 32]),
+    { 23: [1, 55] },
+    { 23: [1, 56] },
+    o($Vh, [2, 25]),
+    { 8: $Vf, 12: $V5, 15: 57, 16: $V6, 17: $V7, 18: $V8, 19: $V9, 21: $Va, 22: $Vb, 23: $Vc, 25: $Vd, 28: $Ve },
+    o($Vh, [2, 27]),
+    { 12: $Vi, 18: $Vj, 33: 58 },
+    { 8: $Vf, 12: $V5, 15: 59, 16: $V6, 17: $V7, 18: $V8, 19: $V9, 21: $Va, 22: $Vb, 23: $Vc, 25: $Vd, 28: $Ve },
+    { 8: $Vf, 12: $V5, 15: 60, 16: $V6, 17: $V7, 18: $V8, 19: $V9, 21: $Va, 22: $Vb, 23: $Vc, 25: $Vd, 28: $Ve },
+    o($Vk, [2, 31]),
     o($Vl, [2, 33]),
     o($Vl, [2, 34]),
+    o($Vl, [2, 35]),
   ]
-  defaultActions: { [key: number]: any } = { 12: [2, 1] }
+  defaultActions: { [key: number]: any } = { 3: [2, 2], 13: [2, 1] }
 
   performAction(
     yytext: string,
@@ -544,81 +546,84 @@ export class PLParser extends JisonParser implements JisonParserApi {
         return $$[$0 - 1]
         break
       case 2:
-      case 29:
-        this.$ = [$$[$0]]
+        throw new Error('Fichier vide')
         break
       case 3:
+      case 30:
         this.$ = [$$[$0]]
         break
       case 4:
-        this.$ = $$[$0 - 1].concat($$[$0])
+        this.$ = [$$[$0]]
         break
       case 5:
         this.$ = $$[$0 - 1].concat($$[$0])
         break
       case 6:
-        this.$ = new CommentNode($$[$0], yylineno + 1)
+        this.$ = $$[$0 - 1].concat($$[$0])
         break
       case 7:
+        this.$ = new CommentNode($$[$0], yylineno + 1)
+        break
       case 8:
       case 9:
-      case 14:
-      case 31:
+      case 10:
+      case 15:
+      case 32:
         this.$ = $$[$0]
         break
-      case 10:
+      case 11:
         this.$ = new AssignmentNode($$[$0 - 3], new PLString('', yylineno + 1), yylineno + 1)
         break
-      case 11:
+      case 12:
         this.$ = new AssignmentNode($$[$0 - 2], new PLString('', yylineno + 1), yylineno + 1)
         break
-      case 12:
+      case 13:
         this.$ = new AssignmentNode($$[$0 - 3], new PLString($$[$0 - 1], yylineno + 1), yylineno + 1)
         break
-      case 13:
+      case 14:
         this.$ = new AssignmentNode($$[$0 - 2], $$[$0], yylineno + 1)
         break
-      case 15:
+      case 16:
         this.$ = new PLNumber(Number($$[$0].replace(/_/g, '')), yylineno + 1)
         break
-      case 16:
+      case 17:
         this.$ = new PLReference($$[$0], yylineno + 1)
         break
-      case 17:
+      case 18:
         this.$ = new PLBoolean($$[$0].toLowerCase() === 'true', yylineno + 1)
         break
-      case 18:
+      case 19:
         this.$ = new PLString($$[$0].slice(1, -1), yylineno + 1)
         break
-      case 19:
+      case 20:
         this.$ = new PLDict($$[$0], yylineno + 1)
         break
-      case 20:
+      case 21:
         this.$ = new PLFileURL($$[$0].trim(), yylineno + 1)
         break
-      case 21:
+      case 22:
         this.$ = new PLFileContent($$[$0], yylineno + 1)
         break
-      case 22:
+      case 23:
         this.$ = new PLComponent($$[$0], yylineno + 1)
         break
-      case 23:
+      case 24:
         this.$ = new PLArray([], yylineno + 1)
         break
-      case 24:
+      case 25:
         this.$ = new PLArray($$[$0 - 1], yylineno + 1)
         break
-      case 25:
+      case 26:
         this.$ = new PLObject({}, yylineno + 1)
         break
-      case 26:
+      case 27:
         this.$ = new PLObject($$[$0 - 1], yylineno + 1)
         break
-      case 27:
+      case 28:
         this.$ = $$[$0 - 1] + $$[$0]
 
         break
-      case 28:
+      case 29:
         if ($$[$0].trim().startsWith('#!lang=')) {
           this.$ = ''
         } else {
@@ -626,25 +631,25 @@ export class PLParser extends JisonParser implements JisonParserApi {
         }
 
         break
-      case 30:
+      case 31:
         this.$ = $$[$0 - 2].concat($$[$0])
         break
-      case 32:
+      case 33:
         const keys = Object.keys($$[$0])
         $$[$0 - 2][keys[0]] = $$[$0][keys[0]]
         this.$ = $$[$0 - 2]
 
         break
-      case 33:
+      case 34:
         this.$ = { [`${$$[$0 - 2]}`]: $$[$0] }
         break
-      case 34:
+      case 35:
         this.$ = { [`${$$[$0 - 2].slice(1, -1)}`]: $$[$0] }
         break
-      case 35:
+      case 36:
         this.$ = new IncludeNode($$[$0].trim(), yylineno + 1)
         break
-      case 36:
+      case 37:
         this.$ = new ExtendsNode($$[$0].trim(), yylineno + 1)
         break
     }
@@ -682,14 +687,19 @@ export class PLLexer extends JisonLexer implements JisonLexerApi {
     /^(?:[a-zA-Z_](\.?[a-zA-Z0-9_])*)/,
     /^(?:"([^\\\"]|\\.)*")/,
     /^(?:$)/,
+    /^(?:$)/,
     /^(?:[^\n]*\n)/,
+    /^(?:[^\n]*$)/,
     /^(?:\s+)/,
     /^(?:(\/?[a-zA-Z0-9-_\+\.\\:]+(\s+as\s+\/?[a-zA-Z0-9-_\+\.])?)+)/,
   ]
   conditions: any = {
-    MULTI_STATE: { rules: [21, 22], inclusive: true },
-    PATH_STATE: { rules: [21, 23, 24], inclusive: true },
-    INITIAL: { rules: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], inclusive: true },
+    MULTI_STATE: { rules: [21, 23, 24], inclusive: true },
+    PATH_STATE: { rules: [21, 25, 26], inclusive: true },
+    INITIAL: {
+      rules: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
+      inclusive: true,
+    },
   }
   performAction(yy: any, yy_: any, $avoiding_name_collisions: any, YY_START: any): any {
     var YYSTATE = YY_START
@@ -765,16 +775,27 @@ export class PLLexer extends JisonLexer implements JisonLexerApi {
         return 5
         break
       case 22:
-        if (yy_.yytext.trim() === '==') {
+        return 5
+        break
+      case 23:
+        if (yy_.yytext.trimEnd() === '==') {
           this.popState()
           return 13
         }
         return 31
 
         break
-      case 23 /* ignore whitespace */:
-        break
       case 24:
+        if (yy_.yytext.trimEnd() === '==') {
+          this.popState()
+          return 13
+        }
+        return 5
+
+        break
+      case 25 /* ignore whitespace */:
+        break
+      case 26:
         this.popState()
         return 20
 

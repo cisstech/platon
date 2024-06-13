@@ -115,4 +115,9 @@ export class UiTagListComponent {
     moveItemInArray(this.tags, event.previousIndex, event.currentIndex)
     this.reorder.emit(this.tags)
   }
+
+  protected onClose(e: Event, index: number): void {
+    e.preventDefault()
+    this.remove.emit(index)
+  }
 }

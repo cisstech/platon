@@ -8,6 +8,7 @@ import { ResourceStatusColorPipe } from './resource-status-color.pipe'
 import { ResourceStatusIconPipe } from './resource-status-icon.pipe'
 import { ResourceStatusPipe } from './resource-status.pipe'
 import { ResourceTypePipe } from './resource-type.pipe'
+import { ExerciseResourceMetaPipe } from './resource-exercise.pipe'
 
 @NgModule({
   exports: [
@@ -20,6 +21,7 @@ import { ResourceTypePipe } from './resource-type.pipe'
     ResourceOrderingPipe,
     ResourceEventTypePipe,
     ResourceStatusIconPipe,
+    ExerciseResourceMetaPipe,
   ],
   declarations: [
     ResourceFindPipe,
@@ -31,6 +33,7 @@ import { ResourceTypePipe } from './resource-type.pipe'
     ResourceOrderingPipe,
     ResourceEventTypePipe,
     ResourceStatusIconPipe,
+    ExerciseResourceMetaPipe,
   ],
 })
 export class ResourcePipesModule {}

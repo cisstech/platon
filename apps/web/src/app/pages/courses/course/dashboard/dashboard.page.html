@@ -18,7 +18,12 @@
         >
           Ajouter une activité
         </button>
-        <course-csv-download-button [activities]="activities" [name]="course.name" type="course" />
+        <course-csv-download-button
+          [activities]="activities"
+          [name]="course.name"
+          type="course"
+          [courseId]="course.id"
+        />
         <div class="spacer"></div>
         <ui-view-mode #viewMode storageKey="course.view-mode" defaultMode="cards" [modes]="['cards', 'table']" />
       </header>
@@ -51,6 +56,7 @@
                     (moveDown)="moveDownSection(item.section)"
                     (insertBelow)="addSection(item.section)"
                     (remove)="deleteSection(item.section)"
+                    [nbActivities]="numberOfActivities(item.section)"
                   />
                 </ng-template>
                 <course-activity-grid [items]="item.activities">

@@ -19,7 +19,7 @@
       cdkDrag
       class="ui-tag-list-item"
       [nzMode]="editable ? 'closeable' : 'default'"
-      (nzOnClose)="remove.emit($index)"
+      (nzOnClose)="onClose($event, $index)"
     >
       @if (multiline) {
       <div>{{ tag }}</div>

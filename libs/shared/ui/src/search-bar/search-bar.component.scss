@@ -41,3 +41,14 @@ button {
   /* Edge 12 -18 */
   color: var(--brand-text-secondary);
 }
+
+.mat-mdc-button > .mat-icon {
+  margin-left: 0;
+  margin-right: 0px;
+  display: inline-block;
+  position: relative;
+  vertical-align: top;
+  font-size: 1.125rem;
+  height: 1.125rem;
+  width: 1.125rem;
+}

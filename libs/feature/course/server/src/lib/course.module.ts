@@ -14,6 +14,12 @@ import { ActivityMemberView } from './activity-member/activity-member.view'
 import { ActivityController } from './activity/activity.controller'
 import { ActivityEntity } from './activity/activity.entity'
 import { ActivityService } from './activity/activity.service'
+import { CourseGroupMemberController } from './course-group-member/course-group-member.controller'
+import { CourseGroupMemberEntity } from './course-group-member/course-group-member.entity'
+import { CourseGroupMemberService } from './course-group-member/course-group-member.service'
+import { CourseGroupController } from './course-group/course-group.controller'
+import { CourseGroupEntity } from './course-group/course-group.entity'
+import { CourseGroupService } from './course-group/course-group.service'
 import { CourseMemberController } from './course-member/course-member.controller'
 import { CourseMemberEntity } from './course-member/course-member.entity'
 import { CourseMemberService } from './course-member/course-member.service'
@@ -30,6 +36,10 @@ import { CourseSectionController } from './section/section.controller'
 import { CourseSectionEntity } from './section/section.entity'
 import { CourseSectionService } from './section/section.service'
 
+import { ActivityGroupController } from './activity-group/activity-group.controller'
+import { ActivityGroupEntity } from './activity-group/activity-group.entity'
+import { ActivityGroupService } from './activity-group/activity-group.service'
+
 @Module({
   imports: [
     UserModule,
@@ -45,6 +55,9 @@ import { CourseSectionService } from './section/section.service'
       ActivityMemberEntity,
       ActivityCorrectorView,
       ActivityCorrectorEntity,
+      CourseGroupEntity,
+      CourseGroupMemberEntity,
+      ActivityGroupEntity,
     ]),
   ],
   controllers: [
@@ -54,6 +67,9 @@ import { CourseSectionService } from './section/section.service'
     ActivityController,
     ActivityMemberController,
     ActivityCorrectorController,
+    CourseGroupController,
+    CourseGroupMemberController,
+    ActivityGroupController,
   ],
   providers: [
     CourseService,
@@ -68,6 +84,9 @@ import { CourseSectionService } from './section/section.service'
     ActivityMemberService,
     ActivityCorrectorService,
     CourseNotificationService,
+    CourseGroupService,
+    CourseGroupMemberService,
+    ActivityGroupService,
   ],
   exports: [
     TypeOrmModule,
@@ -80,6 +99,7 @@ import { CourseSectionService } from './section/section.service'
     ActivityMemberService,
     ActivityCorrectorService,
     CourseNotificationService,
+    ActivityGroupService,
   ],
 })
 export class FeatureCourseServerModule {}

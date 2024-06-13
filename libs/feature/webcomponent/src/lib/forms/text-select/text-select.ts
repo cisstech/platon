@@ -11,6 +11,7 @@ export interface TextSelectState extends IWebComponent {
   mode: string
   regex: string
   selections: TextSelectSelection[]
+  disabled: boolean
 }
 
 export const TextSelectComponentDefinition = defineWebComponent({
@@ -71,6 +72,11 @@ export const TextSelectComponentDefinition = defineWebComponent({
           },
           additionalProperties: false,
         },
+      },
+      disabled: {
+        type: 'boolean',
+        default: false,
+        description: 'Désactive le composant.',
       },
     },
   },

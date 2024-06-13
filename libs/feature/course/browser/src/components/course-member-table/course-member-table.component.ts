@@ -52,6 +52,8 @@ export class CourseMemberTableComponent implements OnInit, OnChanges, ControlVal
   @Input() selectable = false
   @Input() nonDeletables: string[] = []
 
+  @Input() type: 'cours' | 'groupe' = 'cours'
+
   @Output() deleted = new EventEmitter<CourseMember>()
 
   @Input() total = 0

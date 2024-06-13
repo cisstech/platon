@@ -32,6 +32,7 @@ import {
 } from '@platon/feature/resource/common'
 import { Subscription } from 'rxjs'
 import { ResourcePipesModule } from '../../pipes'
+import { MatIconModule } from '@angular/material/icon'
 
 @Component({
   standalone: true,
@@ -43,6 +44,8 @@ import { ResourcePipesModule } from '../../pipes'
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+
+    MatIconModule,
 
     MatChipsModule,
     MatInputModule,

@@ -1,0 +1,15 @@
+<nz-tree-select
+  [(ngModel)]="selection"
+  [nzNodes]="nodes"
+  (ngModelChange)="onChangeSelection($event)"
+  [nzShowSearch]="true"
+  [nzCheckable]="true"
+  [nzDisabled]="disabled"
+  [nzPlaceHolder]="placeholder || ''"
+  [nzTreeTemplate]="template"
+  [nzVirtualHeight]="nodes.length <= 15 ? '' : '300px'"
+/>
+
+<ng-template #template let-node>
+  <span>{{ node.origin.title }}</span>
+</ng-template>

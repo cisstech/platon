@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { FeatureCourseServerModule } from '@platon/feature/course/server'
+import { ActivityService, FeatureCourseServerModule } from '@platon/feature/course/server'
 import { FeatureResourceServerModule } from '@platon/feature/resource/server'
 import { AnswerEntity } from './answers/answer.entity'
 import { AnswerService } from './answers/answer.service'
@@ -51,10 +51,18 @@ import { SessionView } from './sessions/session.view'
     LeaderboardService,
     SessionCommentService,
     ActivityResultsVirtualColumnsResolver,
-
     CourseExpander,
     ResourceExpander,
+    ActivityService,
   ],
-  exports: [TypeOrmModule, AnswerService, SessionService, CorrectionService, SessionCommentService],
+  exports: [
+    TypeOrmModule,
+    AnswerService,
+    SessionService,
+    CorrectionService,
+    SessionCommentService,
+    LeaderboardService,
+    ActivityService,
+  ],
 })
 export class FeatureResultServerModule {}

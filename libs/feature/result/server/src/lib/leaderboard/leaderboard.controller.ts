@@ -1,8 +1,8 @@
 import { Controller, Get, Param, Query, Req } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
-import { ForbiddenResponse, ListResponse } from '@platon/core/common'
+import { ForbiddenResponse, ListResponse, isTeacherRole } from '@platon/core/common'
 import { IRequest, Mapper, toNumber } from '@platon/core/server'
-import { ActivityMemberService, CourseMemberService } from '@platon/feature/course/server'
+import { ActivityMemberService, CourseMemberService, ActivityGroupService } from '@platon/feature/course/server'
 import { ActivityLeaderboardEntryDTO, CourseLeaderboardEntryDTO } from './leaderboard.dto'
 import { LeaderboardService } from './leaderboard.service'
 
@@ -12,7 +12,8 @@ export class LeaderboardController {
   constructor(
     private readonly service: LeaderboardService,
     private readonly courseMemberService: CourseMemberService,
-    private readonly activityMemberService: ActivityMemberService
+    private readonly activityMemberService: ActivityMemberService,
+    private readonly activityGroupService: ActivityGroupService
   ) {}
 
   @Get('courses/:id')
@@ -41,9 +42,14 @@ export class LeaderboardController {
     @Query('limit', { transform: (value: string) => toNumber(value) })
     limit?: number
   ): Promise<ListResponse<ActivityLeaderboardEntryDTO>> {
-    const isMember = await this.activityMemberService.isMember(id, req.user.id)
-    if (!isMember) {
-      throw new ForbiddenResponse('You are not a member of this activity')
+    const isTeacher = isTeacherRole(req.user.role)
+    const isPrivateMember = await this.activityMemberService.isPrivateMember(id, req.user.id)
+    const isInGroup = await this.activityGroupService.isUserInActivityGroup(id, req.user.id)
+    const isMember =
+      (await this.activityMemberService.isMember(id, req.user.id)) &&
+      (await this.activityGroupService.numberOfGroups(id)) === 0
+    if (!isTeacher && !isPrivateMember && !isInGroup && !isMember) {
+      throw new ForbiddenResponse('You are not a member of this activity c')
     }
 
     const entries = await this.service.ofActivity(id, limit)

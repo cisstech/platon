@@ -12,7 +12,7 @@ cd "$DIR/../.."
 #docker container stop platon_nginx
 #docker container stop platon_certbot
 
-docker-compose -f docker-compose.prod.yml down
+docker compose -f docker-compose.prod.yml down
 
 docker volume rm platon_dist
 #docker network rm platon_platon-network

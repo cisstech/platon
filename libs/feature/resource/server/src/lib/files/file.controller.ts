@@ -149,6 +149,11 @@ export class ResourceFileController {
     const cacheLifetime = this.configService.get<number>('cache.filesLifetime', { infer: true })
 
     const { repo, resource, permissions } = await this.fileService.repo(resourceId, request)
+
+    if (query?.zipList) {
+      return await repo.listZipFiles(path!)
+    }
+
     const version = query?.version || LATEST
     if (version !== LATEST) {
       res.set('Cache-Control', `public, max-age=${cacheLifetime}`)
@@ -187,7 +192,7 @@ export class ResourceFileController {
 
         file = new StreamableFile(buffer)
       } else {
-        res.set('Content-Disposition', `attachment; filename=platon.zip`)
+        res.set('Content-Disposition', `attachment; filename=platon-${resource.name.trim().replace(/\s/g, '-')}.zip`)
 
         const archive = await repo.archive(path, version)
         const stream = fs.createReadStream(archive)
@@ -358,7 +363,11 @@ export class ResourceFileController {
     }
 
     if (input.unzip) {
-      await repo.unzip(path)
+      if (input.unzipFile) {
+        await repo.unzipFile(path, input.unzipFile)
+      } else {
+        await repo.unzip(path)
+      }
       return new SuccessResponse()
     }
 

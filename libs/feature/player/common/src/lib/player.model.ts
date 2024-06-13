@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { ActivitySettings, ActivityVariables, ExerciseFeedback, Variables } from '@platon/feature/compiler'
+import { ActivityOpenStates } from '@platon/feature/course/common'
 import { AnswerStates } from '@platon/feature/result/common'
 
 export enum PlayerActions {
   NEXT_HINT = 'NEXT_HINT',
   CHECK_ANSWER = 'CHECK_ANSWER',
-  NEXT_EXERCISE = 'NEXT_EXERCISE',
   SHOW_SOLUTION = 'SHOW_SOLUTION',
   REROLL_EXERCISE = 'REROLL_EXERCISE',
 }
@@ -135,6 +135,8 @@ export interface ActivityPlayer {
   author?: string | null
   introduction: string
   conclusion: string
+  state: ActivityOpenStates
+  serverTime: Date
   openAt?: Date | null
   closeAt?: Date | null
   startedAt?: Date | null
@@ -200,14 +202,16 @@ export const getClosingTime = (player: Partial<ActivityPlayer>): number | null =
   const startedAt = player.startedAt ? new Date(player.startedAt).getTime() : null
   const closeAt = player.closeAt ? new Date(player.closeAt).getTime() : null
   const duration = (player.settings?.duration || 0) * 1000
+  let closingTime: number | null = null
 
   if (duration != null && startedAt != null) {
-    return startedAt + duration
-  } else if (closeAt != null) {
-    return closeAt
+    closingTime = startedAt + duration
+  }
+  if (closeAt != null && (closingTime == null || closeAt < closingTime)) {
+    closingTime = closeAt
   }
 
-  return null
+  return closingTime
 }
 
 export const NO_COPY_PASTER_CLASS_NAME = 'no-copy-paste'

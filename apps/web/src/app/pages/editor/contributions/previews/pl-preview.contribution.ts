@@ -31,9 +31,9 @@ const buildPreviewUrl = (uri: monaco.Uri, params?: string[]) => {
   return `/player/preview/${resource}?version=${version}${queryParams}`
 }
 
-const buildPreview = (uri: monaco.Uri, counter: number = 0): Preview => ({
+const buildPreview = (uri: monaco.Uri): Preview => ({
   type: PreviewTypes.URL,
-  data: buildPreviewUrl(uri, [`counter=${counter}`, PLAYER_EDITOR_PREVIEW]),
+  data: buildPreviewUrl(uri, [`timestamp=${Date.now()}`, PLAYER_EDITOR_PREVIEW]), // Add timestamp to avoid cache, might be changed later
 })
 
 class PreviewInNewTabCommand implements ICommand {
@@ -111,8 +111,6 @@ export class Contribution implements IContribution {
 
     previewService.register(
       new (class implements PreviewHandler {
-        private counter = 0 // temporary solution to trigger change detection of the preview editor
-
         canHandle(uri: monaco.Uri): boolean {
           const { currentResource } = presenter
           if (!currentResource) return false
@@ -122,7 +120,7 @@ export class Contribution implements IContribution {
         }
 
         async handle(_: Injector, uri: monaco.Uri): Promise<Preview> {
-          return Promise.resolve(buildPreview(uri, this.counter++))
+          return Promise.resolve(buildPreview(uri))
         }
       })()
     )

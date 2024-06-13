@@ -12,7 +12,6 @@ export class ValueEditorComponent extends BaseValueEditor<string[], InputListOpt
   constructor() {
     super()
   }
-
   override setValue(value: string[]): void {
     super.setValue(value && Array.isArray(value) ? value : [])
   }

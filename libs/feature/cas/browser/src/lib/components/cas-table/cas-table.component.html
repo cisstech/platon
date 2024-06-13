@@ -1,0 +1,30 @@
+<nz-table #nzTable [nzSize]="'small'" [nzShowSizeChanger]="true" [nzShowPagination]="true" [nzData]="cases">
+  <thead>
+    <tr>
+      <th
+        *ngIf="selectable && !disabled"
+        [nzChecked]="checked"
+        [nzIndeterminate]="indeterminate"
+        (nzCheckedChange)="onAllChecked($event)"
+      ></th>
+      <th>Nom</th>
+      <th>URL connexion</th>
+      <th>URL validation</th>
+      <th>Date d'ajout</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let cas of nzTable.data" (click)="drawer.open(cas)">
+      <td
+        *ngIf="selectable && !disabled"
+        [nzChecked]="selection.has(cas.id)"
+        (nzCheckedChange)="onItemChecked(cas.id, $event)"
+      ></td>
+      <td>{{ cas.name }}</td>
+      <td>{{ cas.loginURL }}</td>
+      <td>{{ cas.serviceValidateURL }}</td>
+      <td>{{ cas.createdAt | date }}</td>
+    </tr>
+  </tbody>
+</nz-table>
+<cas-drawer #drawer [lmses]="lmses" />

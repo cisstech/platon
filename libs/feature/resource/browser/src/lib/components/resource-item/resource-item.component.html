@@ -65,7 +65,7 @@
       [actionTitle]="item.updatedAt | date : 'dd/MM/yyyy'"
       nz-tooltip="Dernière date de mise à jour"
     >
-      <i nz-icon nzType="reload" nzTheme="outline"></i>
+      <i nz-icon nzType="history" nzTheme="outline"></i>
     </ui-list-item-article-action>
   </ui-list-item-article>
 </nz-ribbon>
@@ -89,7 +89,13 @@
 </ng-template>
 
 <ng-template #titleTemplate>
-  <div>
+  <div
+    nz-popover
+    nzPopoverPlacement="topLeft"
+    [nzPopoverContent]="metadataResume"
+    [nzPopoverTrigger]="configurable ? 'hover' : undefined"
+    (mouseenter)="getReadmeContent()"
+  >
     <span class="resource-item-title">{{ name }}</span>
     <i
       class="icon-configurable"
@@ -112,4 +118,26 @@
 
 <ng-template #descriptionTemplate>
   <p>{{ desc }}</p>
+</ng-template>
+
+<ng-template #metadataResume>
+  <div class="custom-popover">
+    <div *ngIf="!readme">
+      <nz-spin nzSimple nzSize="small" />
+    </div>
+    <div *ngIf="readme">
+      <nge-markdown [file]="readme.url" />
+    </div>
+    <div style="margin-top: 1rem">
+      <ng-container [ngPlural]="((item.metadata! | exerciseResourceMeta)?.config?.inputs)!.length">
+        <ng-template ngPluralCase="=1">Variable à remplir</ng-template>
+        <ng-template ngPluralCase="other">Variables à remplir :</ng-template>
+      </ng-container>
+      <div *ngFor="let meta of (item.metadata! | exerciseResourceMeta)?.config?.inputs" style="margin-left: 1rem">
+        <span
+          >• <span class="customise-font">{{ meta.name }}</span> - {{ meta.description }}
+        </span>
+      </div>
+    </div>
+  </div>
 </ng-template>

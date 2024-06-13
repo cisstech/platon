@@ -93,7 +93,12 @@
         >
           <i nz-icon nzType="bar-chart" nzTheme="outline"></i>
         </a>
-        <course-csv-download-button [activities]="[item]" [name]="item.title" type="activity" />
+        <course-csv-download-button
+          [activities]="[item]"
+          [name]="item.title"
+          type="activity"
+          [courseId]="item.courseId"
+        />
         <div class="spacer"></div>
         <a
           *ngIf="item.permissions.update"

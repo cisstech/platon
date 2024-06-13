@@ -7,8 +7,9 @@ export default [
     path: '',
     component: DashboardPage,
     children: [
-      { path: 'dashboard', component: OverviewPage },
+      { title: 'PLaTon - Tableau de bord', path: 'dashboard', component: OverviewPage },
       {
+        title: 'PLaTon - Agenda',
         path: 'agenda',
         loadChildren: () =>
           import(
@@ -17,6 +18,7 @@ export default [
           ),
       },
       {
+        title: 'PLaTon - Espace de travail',
         path: 'resources',
         loadChildren: () =>
           import(
@@ -25,6 +27,7 @@ export default [
           ),
       },
       {
+        title: 'PLaTon - Mon compte',
         path: 'account',
         loadChildren: () =>
           import(
@@ -33,6 +36,7 @@ export default [
           ),
       },
       {
+        title: 'PLaTon - Activités',
         path: 'activities',
         loadChildren: () =>
           import(
@@ -41,6 +45,7 @@ export default [
           ),
       },
       {
+        title: 'PLaTon - Cours',
         path: 'courses',
         loadChildren: () =>
           import(
@@ -57,6 +62,7 @@ export default [
           ),
       },
       {
+        title: 'PLaTon - Corrections',
         path: 'corrections',
         loadChildren: () =>
           import(
@@ -65,6 +71,7 @@ export default [
           ),
       },
       {
+        title: 'PLaTon - Administration',
         path: 'admin',
         loadChildren: () =>
           import(
