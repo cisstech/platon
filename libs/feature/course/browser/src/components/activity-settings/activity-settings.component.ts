@@ -58,7 +58,8 @@ export class CourseActivitySettingsComponent implements OnInit {
   @Output() activityChange = new EventEmitter<Activity>()
 
   protected form = new FormGroup({
-    openDates: new FormControl<Date[] | undefined>(undefined),
+    openAt: new FormControl<Date | undefined>(undefined),
+    closeAt: new FormControl<Date | undefined>(undefined),
     members: new FormControl<string[] | undefined>(undefined),
     correctors: new FormControl<string[] | undefined>(undefined),
     groups: new FormControl<string[] | undefined>(undefined),
@@ -98,8 +99,8 @@ export class CourseActivitySettingsComponent implements OnInit {
     this.courseGroups = courseGroups.resources
 
     this.form.patchValue({
-      openDates:
-        this.activity.openAt && this.activity.closeAt ? [this.activity.openAt, this.activity.closeAt] : undefined,
+      openAt: this.activity.openAt,
+      closeAt: this.activity.closeAt,
       members: activityMembers.resources.map((m) => `${m.member.id}${m.user ? ':' + m.user.id : ''}`),
       correctors: activityCorrectors.resources.map((c) => `${c.member.id}${c.user ? ':' + c.user.id : ''}`),
       groups: activityGroups.resources.map((g) => g.groupId),
@@ -118,8 +119,8 @@ export class CourseActivitySettingsComponent implements OnInit {
       await Promise.all([
         firstValueFrom(
           this.courseService.updateActivity(this.activity, {
-            openAt: value.openDates?.[0] || null,
-            closeAt: value.openDates?.[1] || null,
+            openAt: value.openAt,
+            closeAt: value.closeAt,
           })
         ),
         ...(!this.activity.isChallenge
@@ -156,8 +157,8 @@ export class CourseActivitySettingsComponent implements OnInit {
       this.activityChange.emit(
         (this.activity = {
           ...this.activity,
-          openAt: value.openDates?.[0],
-          closeAt: value.openDates?.[1],
+          openAt: value.openAt || undefined,
+          closeAt: value.closeAt || undefined,
         })
       )
 

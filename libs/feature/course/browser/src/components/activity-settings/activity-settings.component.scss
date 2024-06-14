@@ -1,4 +1,4 @@
-nz-range-picker,
+.date-picker,
 course-member-select,
 course-group-select {
   width: 100%;
@@ -28,4 +28,8 @@ button {
 
 .spacer {
   flex: 1;
+}
+
+nz-date-picker {
+  margin-right: 10px;
 }
