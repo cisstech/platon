@@ -157,6 +157,10 @@ export class CourseService {
     return this.activityProvider.delete(activity).pipe(tap(() => this.deleteActivityEvent.next(activity)))
   }
 
+  closeActivity(activity: Activity): Observable<Activity> {
+    return this.activityProvider.close(activity)
+  }
+
   //#endregion
 
   //#region Activity Members

@@ -52,4 +52,10 @@ export class RemoteActivityProvider extends ActivityProvider {
   delete(activity: Activity): Observable<void> {
     return this.http.delete<void>(`/api/v1/courses/${activity.courseId}/activities/${activity.id}`)
   }
+
+  close(activity: Activity): Observable<Activity> {
+    return this.http
+      .post<ItemResponse<Activity>>(`/api/v1/courses/${activity.courseId}/activities/${activity.id}/close`, {})
+      .pipe(map((response) => response.resource))
+  }
 }

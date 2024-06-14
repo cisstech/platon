@@ -220,6 +220,10 @@ export class ActivityService {
     return activity
   }
 
+  async close(courseId: string, activityId: string, guard?: ActivityGuard): Promise<ActivityEntity> {
+    return this.update(courseId, activityId, { closeAt: new Date() }, guard)
+  }
+
   async delete(courseId: string, activityId: string, guard?: ActivityGuard) {
     const activity = await this.repository.findOne({
       where: {

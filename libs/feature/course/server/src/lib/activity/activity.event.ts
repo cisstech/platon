@@ -16,3 +16,7 @@ export interface OnCorrectActivityEventPayload {
 export interface OnTerminateActivityEventPayload {
   activity: Activity
 }
+
+export interface OnDeleteActivityEventPayload {
+  activity: Activity
+}

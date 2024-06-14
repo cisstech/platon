@@ -116,7 +116,7 @@ export class CourseActivitySettingsComponent implements OnInit {
 
     try {
       const { value } = this.form
-      await Promise.all([
+      const res = await Promise.all([
         firstValueFrom(
           this.courseService.updateActivity(this.activity, {
             openAt: value.openAt,
@@ -159,6 +159,7 @@ export class CourseActivitySettingsComponent implements OnInit {
           ...this.activity,
           openAt: value.openAt || undefined,
           closeAt: value.closeAt || undefined,
+          state: res[0].state,
         })
       )
 
@@ -207,5 +208,23 @@ export class CourseActivitySettingsComponent implements OnInit {
       this.updating = false
       this.changeDetectorRef.markForCheck()
     }
+  }
+
+  protected async close(): Promise<void> {
+    this.updating = true
+    this.changeDetectorRef.markForCheck()
+    const activity = await firstValueFrom(this.courseService.closeActivity(this.activity))
+    this.activityChange.emit(
+      (this.activity = {
+        ...this.activity,
+        closeAt: activity.closeAt,
+        state: activity.state,
+      })
+    )
+    this.form.patchValue({
+      closeAt: this.activity.closeAt,
+    })
+    this.updating = false
+    this.changeDetectorRef.markForCheck()
   }
 }

@@ -73,6 +73,7 @@
                 aria-labelledby="openAt"
                 formControlName="openAt"
                 nzPlaceHolder="Date d'ouverture"
+                nzFormat="dd MMMM yyyy, HH:mm:ss"
               />
               <nz-date-picker
                 [nzShowTime]="true"
@@ -80,6 +81,7 @@
                 aria-labelledby="closeAt"
                 formControlName="closeAt"
                 nzPlaceHolder="Date de fermeture"
+                nzFormat="dd MMMM yyyy, HH:mm:ss"
               />
             </div>
             <ng-container *ngIf="!settingsInfo.value.isChallenge">
