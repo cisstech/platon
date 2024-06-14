@@ -66,12 +66,22 @@
               challenge sont visibles par tous dans la page du cours.
             </p>
             <h4 id="openDates">Souhaitez-vous limiter l'accès de cette activité à une date en particulier?</h4>
-            <nz-range-picker
-              [nzShowTime]="true"
-              [nzDisabledDate]="disabledDate"
-              aria-labelledby="openDates"
-              formControlName="openDates"
-            />
+            <div class="date-picker">
+              <nz-date-picker
+                [nzShowTime]="true"
+                [nzDisabledDate]="disabledDate"
+                aria-labelledby="openAt"
+                formControlName="openAt"
+                nzPlaceHolder="Date d'ouverture"
+              />
+              <nz-date-picker
+                [nzShowTime]="true"
+                [nzDisabledDate]="disabledDate"
+                aria-labelledby="closeAt"
+                formControlName="closeAt"
+                nzPlaceHolder="Date de fermeture"
+              />
+            </div>
             <ng-container *ngIf="!settingsInfo.value.isChallenge">
               <h4 id="members">Souhaitez-vous limiter l'accès de cette activité à des utilisateurs en particulier?</h4>
               <course-member-select

@@ -30,6 +30,11 @@ button {
   flex: 1;
 }
 
+.date-picker {
+  display: flex;
+  justify-content: space-between;
+}
+
 nz-date-picker {
-  margin-right: 10px;
+  width: 48%;
 }
