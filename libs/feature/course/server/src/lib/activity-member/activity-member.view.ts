@@ -16,7 +16,7 @@ import { ViewColumn, ViewEntity } from 'typeorm'
   -- Define a Common Table Expression (CTE) to select activity users
   WITH activity_users AS (
     SELECT
-      DISTINCT ON (u.id)
+      DISTINCT
       u.id,
       u.username,
       u.first_name,
