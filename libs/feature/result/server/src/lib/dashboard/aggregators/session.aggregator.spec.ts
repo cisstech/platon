@@ -1,5 +1,5 @@
 import { AnswerStates } from '@platon/feature/result/common'
-import { SessionView } from '../../sessions/session.view'
+import { SessionDataEntity } from '../../sessions/session-data.entity'
 import {
   SessionAverageDuration,
   SessionAverageScore,
@@ -23,7 +23,7 @@ describe('SessionAggregators', () => {
     it('should increment totalSessions when input has attempts', () => {
       const input = {
         attempts: 10,
-      } as SessionView
+      } as SessionDataEntity
 
       aggregator.next(input)
 
@@ -34,7 +34,7 @@ describe('SessionAggregators', () => {
       const input = {
         attempts: 10,
         grade: 100,
-      } as SessionView
+      } as SessionDataEntity
 
       aggregator.next(input)
 
@@ -45,7 +45,7 @@ describe('SessionAggregators', () => {
       const input = {
         attempts: 10,
         grade: 80,
-      } as SessionView
+      } as SessionDataEntity
 
       aggregator.next(input)
 
@@ -82,7 +82,7 @@ describe('SessionAggregators', () => {
           startedAt: new Date(),
           lastGradedAt: new Date(),
           attempts: 1,
-        } as SessionView
+        } as SessionDataEntity
 
         aggregator.next(input)
 
@@ -93,7 +93,7 @@ describe('SessionAggregators', () => {
         const input = {
           startedAt: undefined,
           lastGradedAt: new Date(),
-        } as SessionView
+        } as SessionDataEntity
 
         aggregator.next(input)
 
@@ -105,7 +105,7 @@ describe('SessionAggregators', () => {
           startedAt: undefined,
           lastGradedAt: new Date(),
           attempts: 0,
-        } as SessionView
+        } as SessionDataEntity
 
         aggregator.next(input)
 
@@ -117,7 +117,7 @@ describe('SessionAggregators', () => {
           startedAt: new Date(2023, 0, 1, 10, 0, 0),
           lastGradedAt: new Date(2023, 0, 1, 10, 0, 10),
           attempts: 1,
-        } as SessionView
+        } as SessionDataEntity
 
         aggregator.next(input)
 
@@ -128,7 +128,7 @@ describe('SessionAggregators', () => {
         const input = {
           startedAt: new Date(),
           lastGradedAt: undefined,
-        } as SessionView
+        } as SessionDataEntity
 
         aggregator.next(input)
 
@@ -169,7 +169,7 @@ describe('SessionAggregators', () => {
     it('should increment totalSessions when input has attempts', () => {
       const input = {
         attempts: 10,
-      } as SessionView
+      } as SessionDataEntity
 
       aggregator.next(input)
 
@@ -180,7 +180,7 @@ describe('SessionAggregators', () => {
       const input = {
         attempts: 10,
         grade: 80,
-      } as SessionView
+      } as SessionDataEntity
 
       aggregator.next(input)
 
@@ -191,7 +191,7 @@ describe('SessionAggregators', () => {
       const input = {
         attempts: 10,
         grade: -1,
-      } as SessionView
+      } as SessionDataEntity
 
       aggregator.next(input)
 
@@ -231,7 +231,7 @@ describe('SessionAggregators', () => {
       const input = {
         grade: 100,
         startedAt: undefined,
-      } as SessionView
+      } as SessionDataEntity
 
       aggregator.next(input)
 
@@ -242,7 +242,7 @@ describe('SessionAggregators', () => {
       const input = {
         attempts: 0,
         startedAt: new Date(),
-      } as SessionView
+      } as SessionDataEntity
 
       aggregator.next(input)
 
@@ -250,22 +250,22 @@ describe('SessionAggregators', () => {
     })
 
     it('should increment count for state based on grade', () => {
-      aggregator.next({ grade: 100, attempts: 1, startedAt: new Date() } as SessionView)
+      aggregator.next({ grade: 100, attempts: 1, startedAt: new Date() } as SessionDataEntity)
       expect(aggregator['distribution'].SUCCEEDED).toBe(1)
     })
 
     it('should handle multiple sessions', () => {
-      aggregator.next({ grade: 100, attempts: 1, startedAt: new Date() } as SessionView)
-      aggregator.next({ grade: 0, attempts: 1, startedAt: new Date() } as SessionView)
+      aggregator.next({ grade: 100, attempts: 1, startedAt: new Date() } as SessionDataEntity)
+      aggregator.next({ grade: 0, attempts: 1, startedAt: new Date() } as SessionDataEntity)
 
       expect(aggregator['distribution'].SUCCEEDED).toBe(1)
       expect(aggregator['distribution'].FAILED).toBe(1)
     })
 
     it('should return distribution on complete()', () => {
-      aggregator.next({ grade: 100 } as SessionView)
-      aggregator.next({ grade: 100 } as SessionView)
-      aggregator.next({ grade: 0 } as SessionView)
+      aggregator.next({ grade: 100 } as SessionDataEntity)
+      aggregator.next({ grade: 100 } as SessionDataEntity)
+      aggregator.next({ grade: 0 } as SessionDataEntity)
 
       const expected = {} as Record<AnswerStates, number>
       Object.keys(AnswerStates).forEach((state) => {

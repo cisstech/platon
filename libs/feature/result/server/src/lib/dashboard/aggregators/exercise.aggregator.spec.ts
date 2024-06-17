@@ -1,4 +1,4 @@
-import { SessionView } from '../../sessions/session.view'
+import { SessionDataEntity } from '../../sessions/session-data.entity'
 import {
   ExerciseAnswerRate,
   ExerciseAverageAttempts,
@@ -26,7 +26,7 @@ describe('ExerciseAggregators', () => {
       const input = {
         parentId: '1',
         startedAt: new Date(),
-      } as SessionView
+      } as SessionDataEntity
 
       aggregator.next(input)
 
@@ -34,7 +34,7 @@ describe('ExerciseAggregators', () => {
     })
 
     it('should increment totalDropOuts when no lastGradedAt', () => {
-      const input = { parentId: '1', startedAt: new Date() } as SessionView
+      const input = { parentId: '1', startedAt: new Date() } as SessionDataEntity
 
       aggregator.next(input)
 
@@ -42,7 +42,7 @@ describe('ExerciseAggregators', () => {
     })
 
     it('should not increment totalDropOuts when lastGradedAt exists', () => {
-      const input = { parentId: '1', startedAt: new Date(), lastGradedAt: new Date() } as SessionView
+      const input = { parentId: '1', startedAt: new Date(), lastGradedAt: new Date() } as SessionDataEntity
 
       aggregator.next(input)
 
@@ -55,9 +55,13 @@ describe('ExerciseAggregators', () => {
       })
 
       it('should calculate correct drop-out rate', () => {
-        aggregator.next({ parentId: '1', startedAt: new Date() } as unknown as SessionView) // started
-        aggregator.next({ parentId: '1', startedAt: new Date(), lastGradedAt: new Date() } as unknown as SessionView) // completed
-        aggregator.next({ parentId: '1', startedAt: new Date() } as unknown as SessionView) // started but not completed
+        aggregator.next({ parentId: '1', startedAt: new Date() } as unknown as SessionDataEntity) // started
+        aggregator.next({
+          parentId: '1',
+          startedAt: new Date(),
+          lastGradedAt: new Date(),
+        } as unknown as SessionDataEntity) // completed
+        aggregator.next({ parentId: '1', startedAt: new Date() } as unknown as SessionDataEntity) // started but not completed
 
         expect(aggregator.complete()).toBe(67) // 2 ungraded + 3 started
       })
@@ -76,7 +80,7 @@ describe('ExerciseAggregators', () => {
     })
 
     it('should increment totalAttempts when input has attempts', () => {
-      const input = { parentId: '1', attempts: 10 } as SessionView
+      const input = { parentId: '1', attempts: 10 } as SessionDataEntity
 
       aggregator.next(input)
 
@@ -84,14 +88,14 @@ describe('ExerciseAggregators', () => {
     })
 
     it('should increment totalAttempts by the number of attempts', () => {
-      aggregator.next({ parentId: '1', attempts: 5 } as SessionView)
-      aggregator.next({ parentId: '1', attempts: 10 } as SessionView)
+      aggregator.next({ parentId: '1', attempts: 5 } as SessionDataEntity)
+      aggregator.next({ parentId: '1', attempts: 10 } as SessionDataEntity)
 
       expect(aggregator['totalAttempts']).toBe(15)
     })
 
     it('should not increment totalAttempts when input has no attempts', () => {
-      const input = {} as SessionView
+      const input = {} as SessionDataEntity
 
       aggregator.next(input)
 
@@ -119,7 +123,7 @@ describe('ExerciseAggregators', () => {
     })
 
     it('should increment totalUniqueAttempts when input has attempts', () => {
-      const input = { parentId: '1', attempts: 10 } as SessionView
+      const input = { parentId: '1', attempts: 10 } as SessionDataEntity
 
       aggregator.next(input)
 
@@ -127,14 +131,14 @@ describe('ExerciseAggregators', () => {
     })
 
     it('should increment totalUniqueAttempts by the number of unique attempts', () => {
-      aggregator.next({ parentId: '1', attempts: 5 } as SessionView)
-      aggregator.next({ parentId: '1', attempts: 10 } as SessionView)
+      aggregator.next({ parentId: '1', attempts: 5 } as SessionDataEntity)
+      aggregator.next({ parentId: '1', attempts: 10 } as SessionDataEntity)
 
       expect(aggregator['totalUniqueAttempts']).toBe(2)
     })
 
     it('should not increment totalUniqueAttempts when input has no attempts', () => {
-      const input = {} as SessionView
+      const input = {} as SessionDataEntity
 
       aggregator.next(input)
 
@@ -162,7 +166,7 @@ describe('ExerciseAggregators', () => {
     })
 
     it('should increment totalSessions when input has attempts', () => {
-      const input = { parentId: '1', attempts: 10 } as SessionView
+      const input = { parentId: '1', attempts: 10 } as SessionDataEntity
 
       aggregator.next(input)
 
@@ -170,7 +174,7 @@ describe('ExerciseAggregators', () => {
     })
 
     it('should add attempts to totalAttempts', () => {
-      const input = { parentId: '1', attempts: 10 } as SessionView
+      const input = { parentId: '1', attempts: 10 } as SessionDataEntity
 
       aggregator.next(input)
 
@@ -178,7 +182,7 @@ describe('ExerciseAggregators', () => {
     })
 
     it('should not increment totals when no attempts', () => {
-      const input = { parentId: '1' } as SessionView
+      const input = { parentId: '1' } as SessionDataEntity
 
       aggregator.next(input)
 
@@ -211,7 +215,7 @@ describe('ExerciseAggregators', () => {
     })
 
     it('should increment totalSessions when input has startedAt', () => {
-      const input = { parentId: '1', startedAt: new Date() } as SessionView
+      const input = { parentId: '1', startedAt: new Date() } as SessionDataEntity
 
       aggregator.next(input)
 
@@ -219,7 +223,7 @@ describe('ExerciseAggregators', () => {
     })
 
     it('should increment totalAttempts when input has attempts', () => {
-      const input = { parentId: '1', startedAt: new Date(), attempts: 10 } as SessionView
+      const input = { parentId: '1', startedAt: new Date(), attempts: 10 } as SessionDataEntity
 
       aggregator.next(input)
 
@@ -227,7 +231,7 @@ describe('ExerciseAggregators', () => {
     })
 
     it('should not increment totalAttempts when no attempts', () => {
-      const input = { parentId: '1', startedAt: new Date() } as SessionView
+      const input = { parentId: '1', startedAt: new Date() } as SessionDataEntity
 
       aggregator.next(input)
 
@@ -236,8 +240,8 @@ describe('ExerciseAggregators', () => {
 
     it('should calculate participation rate', () => {
       // Add some sample data
-      aggregator.next({ parentId: '1', startedAt: new Date(), attempts: 1 } as unknown as SessionView)
-      aggregator.next({ parentId: '1', startedAt: new Date() } as unknown as SessionView)
+      aggregator.next({ parentId: '1', startedAt: new Date(), attempts: 1 } as unknown as SessionDataEntity)
+      aggregator.next({ parentId: '1', startedAt: new Date() } as unknown as SessionDataEntity)
 
       // Assert expected result
       expect(aggregator.complete()).toBe(50)
@@ -261,7 +265,7 @@ describe('ExerciseAggregators', () => {
         parentId: '1',
         attempts: 1,
         answers: [{ grade: 100 }],
-      } as unknown as SessionView
+      } as unknown as SessionDataEntity
 
       aggregator.next(input)
 
@@ -274,7 +278,7 @@ describe('ExerciseAggregators', () => {
         correctionGrade: 100,
         attempts: 2,
         answers: [{ grade: 0 }, { grade: 0 }],
-      } as SessionView
+      } as SessionDataEntity
 
       aggregator.next(input)
 
@@ -286,7 +290,7 @@ describe('ExerciseAggregators', () => {
         parentId: '1',
         attempts: 3,
         answers: [{ grade: 80 }, { grade: 90 }, { grade: 100 }],
-      } as SessionView
+      } as SessionDataEntity
 
       aggregator.next(input)
 
@@ -304,13 +308,13 @@ describe('ExerciseAggregators', () => {
           attempts: 3,
           answers: [{ grade: 0 }, { grade: 50 }, { grade: 100 }],
           correctionGrade: 100,
-        } as unknown as SessionView)
+        } as unknown as SessionDataEntity)
 
         aggregator.next({
           parentId: '1',
           attempts: 3,
           answers: [{ grade: 0 }, { grade: 0 }, { grade: 100 }],
-        } as unknown as SessionView)
+        } as unknown as SessionDataEntity)
 
         expect(aggregator.complete()).toBe(2)
       })
@@ -322,13 +326,13 @@ describe('ExerciseAggregators', () => {
           attempts: 2,
           answers: [{ grade: 0 }, { grade: 100 }],
           correctionGrade: 100,
-        } as unknown as SessionView)
+        } as unknown as SessionDataEntity)
 
         aggregator.next({
           parentId: '1',
           attempts: 3,
           answers: [{ grade: 0 }, { grade: 0 }, { grade: 0 }, { grade: 100 }],
-        } as unknown as SessionView)
+        } as unknown as SessionDataEntity)
 
         expect(aggregator.complete()).toBe(3) // Rounded from 2.5
       })
@@ -352,7 +356,7 @@ describe('ExerciseAggregators', () => {
         parentId: '1',
         attempts: 1,
         answers: [{ grade: 100 }],
-      } as SessionView
+      } as SessionDataEntity
 
       aggregator.next(input)
 
@@ -365,7 +369,7 @@ describe('ExerciseAggregators', () => {
         attempts: 1,
         grade: 100,
         answers: [{ grade: 100 }],
-      } as SessionView
+      } as SessionDataEntity
 
       aggregator.next(input)
 
@@ -378,7 +382,7 @@ describe('ExerciseAggregators', () => {
         attempts: 1,
         grade: 80,
         answers: [{ grade: 80 }],
-      } as SessionView
+      } as SessionDataEntity
 
       aggregator.next(input)
 
@@ -391,14 +395,14 @@ describe('ExerciseAggregators', () => {
         attempts: 1,
         grade: 100,
         answers: [{ grade: 100 }],
-      } as SessionView)
+      } as SessionDataEntity)
 
       aggregator.next({
         parentId: '1',
         attempts: 2,
         grade: 100,
         answers: [{ grade: 0 }, { grade: 100 }],
-      } as SessionView)
+      } as SessionDataEntity)
 
       expect(aggregator.complete()).toBe(50)
     })

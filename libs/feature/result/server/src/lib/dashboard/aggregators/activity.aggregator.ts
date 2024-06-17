@@ -15,18 +15,18 @@ import {
   emptyUserResults,
 } from '@platon/feature/result/common'
 import differenceInSeconds from 'date-fns/differenceInSeconds'
-import { SessionView } from '../../sessions/session.view'
+import { SessionDataEntity } from '../../sessions/session-data.entity'
 import { SessionDataAggregator, answerStateFromSession, sessionDurationInSeconds } from './aggregators'
 
 type ActivityUserResultsResultsArgs = {
   activity?: ActivityEntity | null
   activityMembers?: ActivityMemberView[] | null
-  exerciseSessions: SessionView[]
+  exerciseSessions: SessionDataEntity[]
 }
 
 type ActivityExerciseResultsArgs = {
   activity?: ActivityEntity | null
-  exerciseSessions: SessionView[]
+  exerciseSessions: SessionDataEntity[]
 }
 
 /**
@@ -36,7 +36,7 @@ export class ActivityUserResults implements SessionDataAggregator<UserResults[]>
   readonly id = ACTIVITY_USER_RESULTS
   private readonly anonymous = 'anonymous'
   private readonly userResults = new Map<string, UserResults>()
-  private readonly exerciseSessions = new Map<string, SessionView>()
+  private readonly exerciseSessions = new Map<string, SessionDataEntity>()
 
   constructor(args: ActivityUserResultsResultsArgs) {
     const { activity, activityMembers, exerciseSessions } = args
@@ -88,7 +88,7 @@ export class ActivityUserResults implements SessionDataAggregator<UserResults[]>
     }
   }
 
-  next(input: SessionView): void {
+  next(input: SessionDataEntity): void {
     if (input.parentId) return
 
     input.activityNavigation?.exercises.forEach((exercise) => {
@@ -152,7 +152,7 @@ export class ActivityAnswerRate implements SessionDataAggregator<number> {
   private totalSessions = 0
   private totalAnswers = 0
 
-  next(input: SessionView): void {
+  next(input: SessionDataEntity): void {
     if (input.parentId) return
     if (!input.activityNavigation?.terminated) return
 
@@ -174,7 +174,7 @@ export class ActivityExerciseResults implements SessionDataAggregator<ExerciseRe
   readonly id = ACTIVITY_EXERCISE_RESULTS
 
   private readonly exerciseResults = new Map<string, ExerciseResults>()
-  private readonly exerciseSessions = new Map<string, SessionView>()
+  private readonly exerciseSessions = new Map<string, SessionDataEntity>()
 
   constructor(args: ActivityExerciseResultsArgs) {
     const { activity, exerciseSessions } = args
@@ -194,7 +194,7 @@ export class ActivityExerciseResults implements SessionDataAggregator<ExerciseRe
     }
   }
 
-  next(input: SessionView): void {
+  next(input: SessionDataEntity): void {
     if (input.parentId) return
     input.activityNavigation?.exercises.forEach((exercise) => {
       const session = this.exerciseSessions.get(exercise.sessionId)
@@ -279,7 +279,7 @@ export class ActivityDropoutRate implements SessionDataAggregator<number> {
   private totalSessions = 0
   private totalDropOuts = 0
 
-  next(input: SessionView): void {
+  next(input: SessionDataEntity): void {
     if (input.parentId) return
     if (!input.activityNavigation?.terminated) return
 
@@ -307,7 +307,7 @@ export class ActivityTotalAttempts implements SessionDataAggregator<number> {
 
   private total = 0
 
-  next(input: SessionView): void {
+  next(input: SessionDataEntity): void {
     if (input.parentId) return
     if (!input.activityNavigation?.terminated) return
 
@@ -327,7 +327,7 @@ export class ActivityTotalCompletions implements SessionDataAggregator<number> {
 
   private total = 0
 
-  next(input: SessionView): void {
+  next(input: SessionDataEntity): void {
     if (input.parentId) return
     if (!input.activityNavigation?.terminated) return
 

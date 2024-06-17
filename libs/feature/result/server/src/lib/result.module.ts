@@ -21,19 +21,20 @@ import { ActivityResultsVirtualColumnsResolver } from './resolvers/activity-resu
 import { ResultController } from './result.controller'
 import { SessionEntity } from './sessions/session.entity'
 import { SessionService } from './sessions/session.service'
-import { SessionView } from './sessions/session.view'
-
+import { SessionDataEntity } from './sessions/session-data.entity'
+import { SessionSubscriber } from './sessions/session.subscriber'
 @Module({
   imports: [
     FeatureCourseServerModule,
     FeatureResourceServerModule,
     TypeOrmModule.forFeature([
-      SessionView,
       LeaderboardView,
       SessionEntity,
       AnswerEntity,
       CorrectionEntity,
       SessionCommentEntity,
+      SessionDataEntity,
+      SessionSubscriber,
     ]),
   ],
   controllers: [
@@ -46,6 +47,7 @@ import { SessionView } from './sessions/session.view'
   providers: [
     AnswerService,
     SessionService,
+    SessionSubscriber,
     DashboardService,
     CorrectionService,
     LeaderboardService,
@@ -59,6 +61,7 @@ import { SessionView } from './sessions/session.view'
     TypeOrmModule,
     AnswerService,
     SessionService,
+    SessionSubscriber,
     CorrectionService,
     SessionCommentService,
     LeaderboardService,

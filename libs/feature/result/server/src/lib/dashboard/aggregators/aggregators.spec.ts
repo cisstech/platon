@@ -1,5 +1,5 @@
 import { AnswerStates, answerStateFromGrade } from '@platon/feature/result/common'
-import { SessionView } from '../../sessions/session.view'
+import { SessionDataEntity } from '../../sessions/session-data.entity'
 import { DEFAULT_GAP_DURATION, answerStateFromSession, sessionDurationInSeconds } from './aggregators'
 
 describe('aggregators', () => {
@@ -9,7 +9,7 @@ describe('aggregators', () => {
         answers: [],
         startedAt: new Date(),
         lastGradedAt: new Date(),
-      } as unknown as SessionView
+      } as unknown as SessionDataEntity
 
       const result = sessionDurationInSeconds(input)
 
@@ -21,7 +21,7 @@ describe('aggregators', () => {
         answers: [{ createdAt: new Date() }],
         startedAt: undefined,
         lastGradedAt: new Date(),
-      } as unknown as SessionView
+      } as unknown as SessionDataEntity
 
       const result = sessionDurationInSeconds(input)
 
@@ -33,7 +33,7 @@ describe('aggregators', () => {
         answers: [{ createdAt: new Date() }],
         startedAt: new Date(),
         lastGradedAt: undefined,
-      } as unknown as SessionView
+      } as unknown as SessionDataEntity
 
       const result = sessionDurationInSeconds(input)
 
@@ -48,7 +48,7 @@ describe('aggregators', () => {
         answers: [{ createdAt: new Date(2023, 0, 1, 10, 0, 5) }],
         startedAt,
         lastGradedAt,
-      } as unknown as SessionView
+      } as unknown as SessionDataEntity
 
       const result = sessionDurationInSeconds(input)
 
@@ -67,7 +67,7 @@ describe('aggregators', () => {
         ],
         startedAt,
         lastGradedAt,
-      } as unknown as SessionView
+      } as unknown as SessionDataEntity
 
       const result = sessionDurationInSeconds(input)
 
@@ -80,7 +80,7 @@ describe('aggregators', () => {
       const input = {
         startedAt,
         lastGradedAt,
-      } as unknown as SessionView
+      } as unknown as SessionDataEntity
 
       const result = sessionDurationInSeconds(input)
 
@@ -99,7 +99,7 @@ describe('aggregators', () => {
         ],
         startedAt,
         lastGradedAt,
-      } as unknown as SessionView
+      } as unknown as SessionDataEntity
 
       const result = sessionDurationInSeconds(input)
 
@@ -112,7 +112,7 @@ describe('aggregators', () => {
       const session = {
         startedAt: new Date(),
         attempts: 0,
-      } as unknown as SessionView
+      } as unknown as SessionDataEntity
 
       const result = answerStateFromSession(session)
 
@@ -122,7 +122,7 @@ describe('aggregators', () => {
     it('should return AnswerStates.NOT_STARTED if session does not have startedAt', () => {
       const session = {
         attempts: 0,
-      } as unknown as SessionView
+      } as unknown as SessionDataEntity
 
       const result = answerStateFromSession(session)
 
@@ -135,7 +135,7 @@ describe('aggregators', () => {
         attempts: 1,
         grade: 50,
         correctionGrade: 100,
-      } as unknown as SessionView
+      } as unknown as SessionDataEntity
 
       const result = answerStateFromSession(session)
 
@@ -147,7 +147,7 @@ describe('aggregators', () => {
         startedAt: new Date(),
         attempts: 1,
         grade: 50,
-      } as unknown as SessionView
+      } as unknown as SessionDataEntity
 
       const result = answerStateFromSession(session)
       expect(result).toBe(answerStateFromGrade(50))
