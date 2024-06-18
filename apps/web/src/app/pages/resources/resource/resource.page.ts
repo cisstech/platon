@@ -67,6 +67,8 @@ export class ResourcePage implements OnInit, OnDestroy {
 
   readonly status = Object.values(ResourceStatus)
 
+  protected isChangingWatchingState = false
+
   get isOtherPersonal(): boolean {
     return this.context.resource!.personal && this.context.resource!.ownerId !== this.context.user!.id
   }
@@ -101,10 +103,16 @@ export class ResourcePage implements OnInit, OnDestroy {
   }
 
   protected async changeWatchingState(): Promise<void> {
-    if (this.context.resource?.permissions?.watcher) {
-      await this.presenter.unwatch()
-    } else {
-      await this.presenter.watch()
+    this.isChangingWatchingState = true
+    this.changeDetectorRef.markForCheck()
+    try {
+      if (this.context.resource?.permissions?.watcher) {
+        await this.presenter.unwatch()
+      } else {
+        await this.presenter.watch()
+      }
+    } finally {
+      this.isChangingWatchingState = false
     }
   }
 

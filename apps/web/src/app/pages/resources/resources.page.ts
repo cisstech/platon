@@ -44,6 +44,7 @@ import {
   CircleTree,
   flattenCircleTree,
   Resource,
+  ResourceExpandableFields,
   ResourceFilters,
   ResourceOrderings,
   ResourceStatus,
@@ -52,6 +53,7 @@ import {
 import { NzDividerModule } from 'ng-zorro-antd/divider'
 
 const PAGINATION_LIMIT = 15
+const EXPANDS: ResourceExpandableFields[] = ['metadata' /* 'statistic' */]
 
 interface QueryParams {
   q?: string
@@ -161,7 +163,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
     const [tree, circle, views, topics, levels] = await Promise.all([
       firstValueFrom(this.resourceService.tree()),
       firstValueFrom(this.resourceService.circle(this.user.username)),
-      firstValueFrom(this.resourceService.search({ views: true, expands: ['metadata', 'statistic'] })),
+      firstValueFrom(this.resourceService.search({ views: true, expands: EXPANDS })),
       firstValueFrom(this.tagService.listTopics()),
       firstValueFrom(this.tagService.listLevels()),
     ])
@@ -220,7 +222,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
         const response = await firstValueFrom(
           this.resourceService.search({
             ...this.filters,
-            expands: ['metadata', 'statistic'],
+            expands: EXPANDS,
             limit: PAGINATION_LIMIT,
           })
         )
@@ -272,7 +274,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
     const response = await firstValueFrom(
       this.resourceService.search({
         ...this.filters,
-        expands: ['metadata', 'statistic'],
+        expands: EXPANDS,
         limit: PAGINATION_LIMIT,
         offset: this.items.length,
       })

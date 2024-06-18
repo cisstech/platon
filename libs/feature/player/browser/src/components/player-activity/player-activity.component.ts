@@ -30,7 +30,7 @@ import {
 } from '@platon/feature/player/common'
 
 import { DialogModule, DialogService, UserAvatarComponent } from '@platon/core/browser'
-import { ActivityOpenStates, calculateActivityOpenState } from '@platon/feature/course/common'
+import { ActivityOpenStates } from '@platon/feature/course/common'
 
 import { MatIconModule } from '@angular/material/icon'
 import { ActivatedRoute, RouterModule } from '@angular/router'

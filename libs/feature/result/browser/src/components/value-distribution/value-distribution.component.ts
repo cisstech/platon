@@ -141,7 +141,7 @@ export class ResultValueDistributionComponent {
           },
           tooltip: {
             valueFormatter: (value) => {
-              return this.isTimeValues ? this.durationPipe.transform(Number(value), 'seconds') : value.toString()
+              return this.isTimeValues ? this.durationPipe.transform(Number(value), 'seconds') : value?.toString() || ''
             },
           },
           data: Array.from({ length: weeks }, (_, i) => {

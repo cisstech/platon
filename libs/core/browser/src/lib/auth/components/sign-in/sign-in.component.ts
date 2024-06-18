@@ -70,6 +70,24 @@ export class AuthSignInComponent implements OnInit {
         this.changeDetectorRef.markForCheck()
       })
       .catch(console.error)
+    const { next } = this.activatedRoute.snapshot.queryParams
+
+    if (
+      this.activatedRoute.snapshot.queryParams['access-token'] &&
+      this.activatedRoute.snapshot.queryParams['refresh-token']
+    ) {
+      this.authService
+        .signInWithToken({
+          accessToken: this.activatedRoute.snapshot.queryParams['access-token'],
+          refreshToken: this.activatedRoute.snapshot.queryParams['refresh-token'],
+        })
+        .then(() => {
+          this.router.navigateByUrl(next || '/dashboard', { replaceUrl: true }).catch(console.error)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    }
   }
 
   protected signOut(): void {

@@ -1,5 +1,5 @@
 import { BaseEntity } from '@platon/core/server'
-import { Column, Entity, Index} from 'typeorm'
+import { Column, Entity, Index } from 'typeorm'
 
 @Entity('WatchedChallenges')
 export class WatchedChallengesEntity extends BaseEntity {
