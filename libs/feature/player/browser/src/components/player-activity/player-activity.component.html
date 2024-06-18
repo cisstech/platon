@@ -5,7 +5,7 @@
     <mat-card-content class="centered">
       <!-- INTRODUCTION -->
       <ng-container *ngIf="showIntroduction">
-        <div>
+        <div class="markdown-container">
           <nge-markdown [data]="player.introduction" />
         </div>
         <player-settings [player]="player" />
@@ -32,7 +32,7 @@
         cliquer changer de page."
         />
 
-        <div>
+        <div class="markdown-container">
           <nge-markdown [data]="player.conclusion" />
         </div>
 

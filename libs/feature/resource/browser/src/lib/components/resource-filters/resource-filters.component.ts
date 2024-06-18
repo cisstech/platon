@@ -30,7 +30,7 @@ import {
   ResourceStatus,
   ResourceTypes,
 } from '@platon/feature/resource/common'
-import { Subscription } from 'rxjs'
+import { Subscription, distinctUntilChanged } from 'rxjs'
 import { ResourcePipesModule } from '../../pipes'
 import { MatIconModule } from '@angular/material/icon'
 
@@ -106,7 +106,7 @@ export class ResourceFiltersComponent implements OnDestroy {
     this.changeDetectorRef.markForCheck()
 
     this.subscriptions.push(
-      this.form.valueChanges.subscribe((value) => {
+      this.form.valueChanges.pipe(distinctUntilChanged()).subscribe((value) => {
         const { types, status } = value
         const order = value.order?.split('-') as [ResourceOrderings, OrderingDirections]
         this.filters = {
@@ -125,9 +125,12 @@ export class ResourceFiltersComponent implements OnDestroy {
         }
 
         if (!value.types?.EXERCISE) {
-          this.form.patchValue({
-            configurable: null,
-          })
+          this.form.patchValue(
+            {
+              configurable: null,
+            },
+            { emitEvent: false }
+          )
         }
       })
     )

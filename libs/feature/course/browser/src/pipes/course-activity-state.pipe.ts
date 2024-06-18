@@ -27,7 +27,10 @@ export class CourseActivityStatePipe implements PipeTransform {
         color: 'blue',
         state: 'planned',
         label:
-          LABELS['planned'] + ((new Date(value.openAt as unknown as string) > new Date(Date.now())) ? ` ${formatDistanceToNow(new Date(value.openAt as unknown as string), { locale: fr })}` : ' un certain temps'),
+          LABELS['planned'] +
+          (new Date(value.openAt as unknown as string) > new Date(Date.now())
+            ? ` ${formatDistanceToNow(new Date(value.openAt as unknown as string), { locale: fr })}`
+            : ' un certain temps'),
       }),
     }[value.state]() as State
   }

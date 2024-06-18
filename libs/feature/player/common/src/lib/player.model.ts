@@ -202,7 +202,7 @@ export const getClosingTime = (player: Partial<ActivityPlayer>): number | null =
   const startedAt = player.startedAt ? new Date(player.startedAt).getTime() : null
   const closeAt = player.closeAt ? new Date(player.closeAt).getTime() : null
   const duration = (player.settings?.duration || 0) * 1000
-  let closingTime : number | null = null
+  let closingTime: number | null = null
 
   if (duration != null && startedAt != null) {
     closingTime = startedAt + duration

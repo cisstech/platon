@@ -117,49 +117,121 @@ GROUP BY resource.id, resource.name, resource.updated_at, resource.members, reso
       .groupBy('resource.id, resource.name, resource.updated_at, resource.members, resource.watchers, resource.events'),
 })
 export class ResourceStatisticEntity {
+  // Common
+
+  /**
+   * Unique identifier of the resource.
+   */
   @Index()
   @ViewColumn()
   id!: string
 
+  /**
+   * Name of the resource.
+   */
   @ViewColumn()
   name!: string
 
+  /**
+   * Number of members of a resource.
+   */
   @ViewColumn()
   members!: number
 
+  /**
+   * Number of watchers of the resource.
+   */
   @ViewColumn()
   watchers!: number
 
+  /**
+   * Number of events in the resource.
+   */
   @ViewColumn()
   events!: number
 
-  @ViewColumn()
-  children!: number
+  // Circle Specific
 
+  /**
+   * Number of direct subcircles of the circle resource.
+   * @remarks
+   * - Specific to Circle resources.
+   */
   @ViewColumn()
   circles!: number
+
+  /**
+   * Number of activities in a the circle resource.
+   * @remarks
+   * - Specific to Circle resources.
+   */
 
   @ViewColumn()
   activities!: number
 
+  /**
+   * Number of exercises in the circle resource.
+   * @remarks
+   * - Specific to Circle resources.
+   */
+
   @ViewColumn()
   exercises!: number
 
+  /**
+   * Number of direct children of the circle resource.
+   * @remarks
+   * - Specific to Circle resources.
+   */
+  @ViewColumn()
+  children!: number
+
+  /**
+   * Number of child resources with status 'READY'.
+   * @remarks
+   * - Specific to Circle resources.
+   */
   @ViewColumn()
   ready!: number
 
+  /**
+   * Number of child resources with status 'DEPRECATED'.
+   * @remarks
+   * - Specific to Circle resources.
+   */
   @ViewColumn()
   deprecated!: number
 
+  /**
+   * Number of child resources with status 'BUGGED'.
+   * @remarks
+   * - Specific to Circle resources.
+   */
   @ViewColumn()
   bugged!: number
 
+  /**
+   * Number of child resources with status 'NOT_TESTED'.
+   * @remarks
+   * - Specific to Circle resources.
+   */
   @ViewColumn()
   not_tested!: number
 
+  /**
+   * Number of child resources with status 'DRAFT'.
+   * @remarks
+   * - Specific to Circle resources.
+   */
   @ViewColumn()
   draft!: number
 
+  /**
+   * Global score attributed to the resource.
+   * @remarks
+   * - The more the resource is relevant, the higher its score will be.
+   * - This is calculated based on the ponderation of multiple factors such as the frequency of updates, the number of members, watchers...
+   */
   @ViewColumn()
   score!: number
 }

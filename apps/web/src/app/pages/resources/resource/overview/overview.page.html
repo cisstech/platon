@@ -362,7 +362,7 @@
                 ribbonColor="#16a085"
                 description="Cercles enfants"
                 tooltip="Nombre de cercles directement liés à ce cercle."
-                [value]="context.statistic!.circle!.circles!"
+                [value]="context.statistic?.circle?.circles ?? 'Non précisé'"
               >
                 <a
                   nz-button
@@ -380,7 +380,7 @@
                 ribbonColor="#34495e"
                 description="Activités"
                 tooltip="Nombre d'activités directement liées à ce cercle."
-                [value]="context.statistic!.circle!.activities!"
+                [value]="context.statistic?.circle?.activities ?? 'Non précisé'"
               >
                 <a
                   nz-button
@@ -398,7 +398,7 @@
                 ribbonColor="#c0392b"
                 description="Exercices"
                 tooltip="Nombre d'exercices directement liés à ce cercle."
-                [value]="context.statistic!.circle!.exercises!"
+                [value]="context.statistic?.circle?.exercises ?? 'Non précisé'"
               >
                 <a
                   nz-button
