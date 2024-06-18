@@ -55,7 +55,6 @@ export const appRoutes: Route[] = [
   withAuthGuard(
     {
       path: 'editor',
-      title: 'PLaTon - Éditeur',
       data: {
         ...alwaysLightTheme,
       },

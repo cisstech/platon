@@ -9,6 +9,7 @@ export default [
   {
     path: ':id',
     component: EditorPage,
+    title: 'PLaTon - Éditeur',
     providers: [EditorPresenter, ResourceFileSystemProvider, importProvidersFrom(NzModalModule)],
   },
 ] as Routes
