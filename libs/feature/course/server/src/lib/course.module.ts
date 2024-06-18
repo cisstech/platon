@@ -38,18 +38,8 @@ import { CourseSectionService } from './section/section.service'
 import { CourseDemoController } from './course-demo/course-demo.controller'
 import { CourseDemoService } from './course-demo/course-demo.service'
 import { CourseDemoEntity } from './course-demo/course-demo.entity'
-import { CourseGroupEntity } from './course-group/course-group.entity'
-import { CourseGroupService } from './course-group/course-group.service'
-import { CourseGroupMemberEntity } from './course-group-member/course-group-member.entity'
-import { CourseGroupMemberService } from './course-group-member/course-group-member.service'
-import { CourseGroupController } from './course-group/course-group.controller'
-import { CourseGroupMemberController } from './course-group-member/course-group-member.controller'
 import { ActivityGroupEntity } from './activity-group/activity-group.entity'
 import { ActivityGroupController } from './activity-group/activity-group.controller'
-import { ActivityGroupService } from './activity-group/activity-group.service'
-
-import { ActivityGroupController } from './activity-group/activity-group.controller'
-import { ActivityGroupEntity } from './activity-group/activity-group.entity'
 import { ActivityGroupService } from './activity-group/activity-group.service'
 
 @Module({

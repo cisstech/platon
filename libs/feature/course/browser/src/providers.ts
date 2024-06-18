@@ -19,10 +19,6 @@ import { RemoteCourseSectionProvider } from './providers/remote-course-section.p
 import { RemoteCourseProvider } from './providers/remote-course.provider'
 import { CourseDemoProvider } from './models/course-demo-provider'
 import { RemoteCourseDemoProvider } from './providers/remote-course-demo.provider'
-import { CourseGroupProvider } from './models/course-group-provider'
-import { RemoteCourseGroupProvider } from './providers/remote-course-group.provider'
-import { ActivityGroupProvider } from './models/activity-group.provider'
-import { RemoteActivityGroupProvider } from './providers/remote-activity-group.provider'
 
 export const COURSE_PROVIDERS: Provider[] = [
   { provide: ActivityProvider, useClass: RemoteActivityProvider },
