@@ -12,7 +12,7 @@ import { PlaEditorContributionModule } from './contributions/editors/pla-editor'
 import { PlfEditorContributionModule } from './contributions/editors/plf-editor'
 
 import { ActivatedRoute } from '@angular/router'
-import { EditorService, FileService, IdeService } from '@cisstech/nge-ide/core'
+import { EditorService, FileService, IdeService, SettingsService } from '@cisstech/nge-ide/core'
 import { IntroService } from '@platon/core/browser'
 import { fadeInOnEnterAnimation, fadeOutDownOnLeaveAnimation } from 'angular-animations'
 import { NzButtonModule } from 'ng-zorro-antd/button'
@@ -31,6 +31,8 @@ import { PlSidebarContributionModule } from './contributions/sidebar/pl-sidebar.
 import { PlWorkbenchContributionModule } from './contributions/workbench/pl-workbench.contribution'
 import { EDITOR_TOUR } from './editor-tour'
 import { EditorPresenter } from './editor.presenter'
+import { ACTIVITY_MAIN_FILE } from '@platon/feature/compiler'
+import { Title } from '@angular/platform-browser'
 
 @Component({
   standalone: true,
@@ -78,13 +80,22 @@ export class EditorPage implements OnInit, OnDestroy {
   private readonly activatedRoute = inject(ActivatedRoute)
   private readonly changeDetectorRef = inject(ChangeDetectorRef)
   private readonly resourceFileSystemProvider = inject(ResourceFileSystemProvider)
+  private readonly settingsService = inject(SettingsService)
+  private readonly title = inject(Title)
   protected loading = true
   protected isReady = false
 
   async ngOnInit(): Promise<void> {
     const { resource, version, rootFolders, filesToOpen } = await this.presenter.init(this.activatedRoute)
+    this.title.setTitle(resource.name)
     this.subscriptions.push(
       this.ide.onAfterStart(async () => {
+        if (filesToOpen.length === 0 && resource.type === 'ACTIVITY') {
+          this.settingsService.set('ide.layout', 'toggleSideBar', 'closed')
+          filesToOpen.push(ACTIVITY_MAIN_FILE)
+        } else {
+          this.settingsService.set('ide.layout', 'toggleSideBar', 'opened')
+        }
         this.fileService.registerProvider(this.resourceFileSystemProvider)
         await this.fileService.registerFolders(...rootFolders())
         filesToOpen.forEach((path) => {

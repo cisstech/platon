@@ -80,6 +80,10 @@ footer.glass {
   }
 }
 
+.markdown-container {
+  max-width: 100%;
+}
+
 // TABLET
 @media (max-width: 991px) {
   :host {
