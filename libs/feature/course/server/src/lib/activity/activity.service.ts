@@ -221,6 +221,9 @@ export class ActivityService {
   }
 
   async close(courseId: string, activityId: string, guard?: ActivityGuard): Promise<ActivityEntity> {
+    this.notificationService.notifyActivityBeingClosed(activityId).catch((error) => {
+      this.logger.error('Failed to send notification', error)
+    })
     return this.update(courseId, activityId, { closeAt: new Date() }, guard)
   }
 
