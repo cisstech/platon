@@ -262,11 +262,12 @@ export abstract class PlayerManager {
     let expiresAt: Date | undefined
     if (session.startedAt && session.startedAt != null && session.parent?.variables.settings?.duration) {
       expiresAt = session.startedAt
-      expiresAt?.setSeconds(expiresAt.getSeconds() + session.parent?.variables.settings?.duration + 30) // 30 seconds of margin
+      expiresAt?.setSeconds(expiresAt.getSeconds() + session.parent?.variables.settings?.duration)
     }
     if (session.activity?.closeAt) {
       expiresAt = new Date(session.activity.closeAt)
     }
+    expiresAt?.setSeconds(expiresAt.getSeconds() + 30) // 30 seconds of margin
     return !!expiresAt && new Date() > expiresAt
   }
 

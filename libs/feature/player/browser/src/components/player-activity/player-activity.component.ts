@@ -8,8 +8,10 @@ import {
   Input,
   OnDestroy,
   OnInit,
+  QueryList,
+  ViewChildren,
 } from '@angular/core'
-import { firstValueFrom } from 'rxjs'
+import { firstValueFrom, Subscription } from 'rxjs'
 
 import { MatButtonModule } from '@angular/material/button'
 import { MatCardModule } from '@angular/material/card'
@@ -30,7 +32,7 @@ import {
 } from '@platon/feature/player/common'
 
 import { DialogModule, DialogService, UserAvatarComponent } from '@platon/core/browser'
-import { ActivityOpenStates } from '@platon/feature/course/common'
+import { ActivityClosedNotification, ActivityOpenStates } from '@platon/feature/course/common'
 
 import { MatIconModule } from '@angular/material/icon'
 import { ActivatedRoute, RouterModule } from '@angular/router'
@@ -44,6 +46,7 @@ import { PlayerExerciseComponent } from '../player-exercise/player-exercise.comp
 import { PlayerNavigationComponent } from '../player-navigation/player-navigation.component'
 import { PlayerResultsComponent } from '../player-results/player-results.component'
 import { PlayerSettingsComponent } from '../player-settings/player-settings.component'
+import { NotificationService } from '@platon/feature/notification/browser'
 
 @Component({
   standalone: true,
@@ -133,6 +136,13 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
     return this.state === 'opened' && !navigation.started && !navigation.terminated
   }
 
+  private readonly subscriptions: Subscription[] = []
+  private notificationsCount = -1
+
+  constructor(private readonly notificationSerivce: NotificationService) {}
+
+  @ViewChildren('playerExercise') playerExerciseComponents!: QueryList<PlayerExerciseComponent>
+
   ngOnInit(): void {
     this.calculateAnswerStates(this.player.navigation)
 
@@ -152,6 +162,31 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
       const delta = new Date(this.player.openAt as Date).getTime() - new Date(this.player.serverTime).getTime()
       this.countdown = Date.now() + delta
     }
+
+    this.subscriptions.push(
+      this.notificationSerivce.paginate().subscribe(async ({ notifications }) => {
+        if (this.notificationsCount === -1) {
+          this.notificationsCount = notifications.length
+        } else if (notifications.length !== this.notificationsCount) {
+          this.notificationsCount = notifications.length
+          if (
+            notifications.length > 0 &&
+            (notifications[0].data as ActivityClosedNotification).type === 'ACTIVITY-CLOSED' &&
+            (notifications[0].data as ActivityClosedNotification).activityId === this.player.activityId
+          ) {
+            this.state = 'closed'
+            this.dialogService.info("L'activité a été fermée par l'enseignant. Merci d'avoir participé.")
+            await this.evaluateAll()
+            this.terminate().catch(console.error)
+          }
+        }
+        this.changeDetectorRef.markForCheck()
+      })
+    )
+  }
+
+  private async evaluateAll(): Promise<void> {
+    await Promise.all(this.playerExerciseComponents.map((component) => component.evaluateFromActivity()))
   }
 
   ngOnDestroy(): void {

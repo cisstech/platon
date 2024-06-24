@@ -60,6 +60,7 @@
         <nz-ribbon [nzText]="ribbon">
           <ng-template #ribbon> {{ composed ? i + 1 : position + 1 }} / {{ navExerciceCount }} </ng-template>
           <player-exercise
+            #playerExercise
             [id]="exercise.sessionId"
             [player]="exercise"
             [state]="answerStates[exercise.sessionId]"

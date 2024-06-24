@@ -406,6 +406,12 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
     })
   }
 
+  public async evaluateFromActivity(): Promise<void> {
+    if (!this.disabled) {
+      await this.evaluate(PlayerActions.CHECK_ANSWER)
+    }
+  }
+
   private async evaluate(action: PlayerActions): Promise<void> {
     if (!this.player) return
 
