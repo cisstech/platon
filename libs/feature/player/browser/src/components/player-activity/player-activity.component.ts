@@ -144,6 +144,8 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription[] = []
   private notificationsCount = -1
 
+  private showSucceededPopup = true
+
   private modal: NzModalRef | undefined
 
   protected isModalLoading = false
@@ -329,6 +331,23 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
   }
 
   protected onChangeNavigation(navigation: PlayerNavigation): void {
+    if (this.showSucceededPopup && navigation.exercises.every((exercise) => exercise.state === 'SUCCEEDED')) {
+      this.showSucceededPopup = false
+      this.dialogService
+        .confirm({
+          nzTitle: `Vous avez complété tous les exercices avec succès.`,
+          nzContent: `Voulez-vous terminer l'activité ? \nAprès avoir terminé l'activité, vous ne pourrez plus modifier vos réponses.`,
+          nzOkText: 'Terminer',
+          nzOkDanger: true,
+          nzCancelText: 'Annuler',
+        })
+        .then((confirmed) => {
+          if (confirmed) {
+            this.terminate().catch(console.error)
+          }
+        })
+        .catch(console.error)
+    }
     this.player = { ...this.player, navigation }
     this.calculatePositions()
     this.calculateAnswerStates(navigation)
