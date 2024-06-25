@@ -9,6 +9,8 @@ import {
   OnDestroy,
   OnInit,
   QueryList,
+  TemplateRef,
+  ViewChild,
   ViewChildren,
 } from '@angular/core'
 import { firstValueFrom, Subscription } from 'rxjs'
@@ -47,6 +49,8 @@ import { PlayerNavigationComponent } from '../player-navigation/player-navigatio
 import { PlayerResultsComponent } from '../player-results/player-results.component'
 import { PlayerSettingsComponent } from '../player-settings/player-settings.component'
 import { NotificationService } from '@platon/feature/notification/browser'
+import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal'
+import { NzButtonModule } from 'ng-zorro-antd/button'
 
 @Component({
   standalone: true,
@@ -66,6 +70,7 @@ import { NotificationService } from '@platon/feature/notification/browser'
     NzBadgeModule,
     NzPopoverModule,
     NzStatisticModule,
+    NzButtonModule,
 
     SafePipe,
     DialogModule,
@@ -139,9 +144,18 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription[] = []
   private notificationsCount = -1
 
-  constructor(private readonly notificationSerivce: NotificationService) {}
+  private modal: NzModalRef | undefined
+
+  protected isModalLoading = false
+
+  @ViewChild('modalFooter', { static: true }) modalFooter!: TemplateRef<object>
 
   @ViewChildren('playerExercise') playerExerciseComponents!: QueryList<PlayerExerciseComponent>
+
+  constructor(
+    private readonly notificationSerivce: NotificationService,
+    private readonly nzModalService: NzModalService
+  ) {}
 
   ngOnInit(): void {
     this.calculateAnswerStates(this.player.navigation)
@@ -175,9 +189,7 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
             (notifications[0].data as ActivityClosedNotification).activityId === this.player.activityId
           ) {
             this.state = 'closed'
-            this.dialogService.info("L'activité a été fermée par l'enseignant. Merci d'avoir participé.")
-            await this.evaluateAll()
-            this.terminate().catch(console.error)
+            await this.terminateModal(false, "L'activité a été fermée par l'enseignant.")
           }
         }
         this.changeDetectorRef.markForCheck()
@@ -204,6 +216,39 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
 
     this.disableCopyPasteIfNeeded()
     this.startWatchingVisibilityChange()
+  }
+
+  protected async terminateModal(isClosable: boolean, title: string): Promise<void> {
+    if (!this.navigation.started || this.navigation.terminated) {
+      this.terminate().catch(console.error)
+      return
+    }
+    this.modal = this.nzModalService.create({
+      nzTitle: title,
+      nzContent: 'Après avoir quitté cette activité, vous ne pourrez plus modifier vos réponses.',
+      nzClosable: isClosable,
+      nzMaskClosable: isClosable,
+      nzOnCancel: () => {
+        if (!isClosable) {
+          this.terminate().catch(console.error)
+        }
+        this.modal?.destroy()
+      },
+      nzKeyboard: false,
+      nzFooter: this.modalFooter,
+    })
+  }
+
+  protected async modalConfirm(): Promise<void> {
+    this.isModalLoading = true
+    await this.evaluateAll()
+    this.terminate().catch(console.error)
+    this.modal?.destroy()
+  }
+
+  protected async modalCancel(): Promise<void> {
+    this.terminate().catch(console.error)
+    this.modal?.destroy()
   }
 
   protected async terminate(): Promise<void> {
@@ -268,7 +313,7 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
     return item.sessionId
   }
 
-  protected onFinishCountdown(): void {
+  protected async onFinishCountdown(): Promise<void> {
     if (this.state === 'planned') {
       this.state = 'opened'
       const { navigation } = this.player
@@ -279,7 +324,7 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
       this.changeDetectorRef.markForCheck()
     } else {
       this.dialogService.info("L'activité est désormais terminée. Merci d'avoir participé.")
-      this.terminate().catch(console.error)
+      await this.terminateModal(false, "L'activité est terminée.")
     }
   }
 

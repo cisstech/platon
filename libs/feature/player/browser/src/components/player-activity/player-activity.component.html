@@ -87,6 +87,16 @@
     <mat-icon>menu</mat-icon>
     Navigation
   </button>
+  <button
+    class="terminate-button"
+    mat-fab
+    extended
+    color="primary"
+    (click)="terminateModal(true, 'Êtes-vous sûr de vouloir quitter cette activité ?')"
+  >
+    <mat-icon>check</mat-icon>
+    Terminer
+  </button>
 </footer>
 <ng-template #navigation>
   <player-navigation [player]="player" (navigate)="play($event)" [terminate]="terminate.bind(this)" />
@@ -100,3 +110,13 @@
     (nzCountdownFinish)="breakpoint.action()"
   />
 </ng-container>
+<ng-template #modalFooter>
+  <div class="modalButtons">
+    <button nz-button nzType="primary" (click)="modalConfirm()" [nzLoading]="isModalLoading">
+      Valider tous les exercices et terminer l’activité
+    </button>
+    <button nz-button nzType="primary" nzDanger (click)="modalCancel()">
+      Terminer l’activité sans valider les exercices
+    </button>
+  </div>
+</ng-template>
