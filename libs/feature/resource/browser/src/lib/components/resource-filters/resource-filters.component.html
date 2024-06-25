@@ -30,7 +30,7 @@
 
     <ng-container *ngIf="form.value.types?.EXERCISE">
       <section>
-        <mat-label id="exercise-specific">Appliquer des filtres aux exercices?</mat-label>
+        <mat-label id="exercise-specific">Appliquer des filtres aux exercices ?</mat-label>
         <mat-checkbox formControlName="configurable">
           <mat-chip>Configurable</mat-chip>
         </mat-checkbox>
@@ -40,7 +40,7 @@
 
     <!-- STATUS -->
     <section formGroupName="status">
-      <mat-label id="status-label">Quel est son statut?</mat-label>
+      <mat-label id="status-label">Quel est son statut ?</mat-label>
       <div class="checkbox-group">
         <ng-container *ngFor="let item of form.get('status')!.value | keyvalue">
           <mat-checkbox [formControlName]="item.key">
@@ -59,7 +59,7 @@
     <mat-divider />
     <!-- CIRCLE -->
     <section>
-      <mat-label id="parents">Elle appartient aux cercles?</mat-label>
+      <mat-label id="parents">Elle appartient aux cercles ?</mat-label>
       <nz-select
         [nzMaxTagCount]="3"
         nzMode="multiple"
@@ -73,7 +73,7 @@
     <mat-divider />
     <!-- TOPICS -->
     <section>
-      <mat-label id="topics">Elle possède des topics?</mat-label>
+      <mat-label id="topics">Elle possède des topics ?</mat-label>
       <nz-select
         [nzMaxTagCount]="3"
         nzMode="multiple"
@@ -87,7 +87,7 @@
     <mat-divider />
     <!-- LEVELS -->
     <section>
-      <mat-label id="levels">Elle possède des niveaux?</mat-label>
+      <mat-label id="levels">Elle possède des niveaux ?</mat-label>
       <nz-select
         [nzMaxTagCount]="3"
         nzMode="multiple"
@@ -122,7 +122,7 @@
     <mat-divider />
     <!-- PERIOD -->
     <section>
-      <mat-label id="period-label">Limiter à une certaine période de mise à jour?</mat-label>
+      <mat-label id="period-label">Limiter à une certaine période de mise à jour ?</mat-label>
       <mat-radio-group formControlName="period" aria-labelledby="period-label">
         <mat-radio-button [value]="0">Tout</mat-radio-button>
         <mat-radio-button [value]="1">1 jour</mat-radio-button>
