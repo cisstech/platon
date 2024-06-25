@@ -284,6 +284,12 @@ export class ResourceFiltersDTO implements ResourceFilters {
   @IsUUID(undefined, { each: true })
   @IsArray()
   @IsOptional()
+  readonly antiTopics?: string[]
+
+  @Transform(({ value }) => toArray(value))
+  @IsUUID(undefined, { each: true })
+  @IsArray()
+  @IsOptional()
   readonly levels?: string[]
 
   @Transform(({ value }) => toNumber(value))

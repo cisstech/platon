@@ -360,6 +360,11 @@ export interface ResourceFilters extends ExpandableModel<ResourceExpandableField
   readonly topics?: string[]
 
   /**
+   * Search for resources that do not have the specified topics.
+   */
+  readonly antiTopics?: string[]
+
+  /**
    * Search for specific levels on the resources.
    */
   readonly levels?: string[]

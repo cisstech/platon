@@ -85,6 +85,19 @@
       </nz-select>
     </section>
     <mat-divider />
+    <section>
+      <mat-label id="topics">Elle ne possède pas des topics ?</mat-label>
+      <nz-select
+        [nzMaxTagCount]="3"
+        nzMode="multiple"
+        nzPlaceHolder="Sélectionnez des topics"
+        formControlName="antiTopics"
+        aria-labelledby="antiTopics"
+      >
+        <nz-option *ngFor="let option of topics" [nzLabel]="option.name" [nzValue]="option.id" />
+      </nz-select>
+    </section>
+    <mat-divider />
     <!-- LEVELS -->
     <section>
       <mat-label id="levels">Elle possède des niveaux ?</mat-label>

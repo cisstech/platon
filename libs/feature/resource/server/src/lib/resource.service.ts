@@ -273,6 +273,18 @@ export class ResourceService {
       query.andWhere('level_id IN (:...levels)', { levels: filters.levels })
     }
 
+    if (filters.antiTopics?.length) {
+      query.andWhere(
+        `resource.id NOT IN (
+        SELECT r.id FROM "Resources" r
+        INNER JOIN "ResourceTopics" rt ON r.id = rt.resource_id
+        WHERE rt.topic_id IN (:...antiTopics)
+    )`,
+        { antiTopics: filters.antiTopics }
+      )
+    }
+
+    // Need to be done after antiTopics filtering
     if (filters.topics?.length) {
       query.andWhere('topic_id IN (:...topics)', { topics: filters.topics })
     }
