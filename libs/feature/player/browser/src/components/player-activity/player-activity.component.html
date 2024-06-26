@@ -117,6 +117,15 @@
     </button>
     <button nz-button nzType="primary" nzDanger (click)="modalCancel()">
       Terminer l’activité sans valider les exercices
+      <nz-progress
+        *ngIf="isModalForceChoice"
+        [nzPercent]="modalForceChoiceProgress"
+        nzType="circle"
+        [nzShowInfo]="false"
+        [nzWidth]="20"
+        [nzStrokeWidth]="25"
+        nzStrokeColor="#171c8f"
+      ></nz-progress>
     </button>
   </div>
 </ng-template>

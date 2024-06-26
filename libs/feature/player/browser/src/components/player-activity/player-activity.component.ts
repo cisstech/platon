@@ -51,6 +51,7 @@ import { PlayerSettingsComponent } from '../player-settings/player-settings.comp
 import { NotificationService } from '@platon/feature/notification/browser'
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal'
 import { NzButtonModule } from 'ng-zorro-antd/button'
+import { NzProgressModule } from 'ng-zorro-antd/progress'
 
 @Component({
   standalone: true,
@@ -71,6 +72,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button'
     NzPopoverModule,
     NzStatisticModule,
     NzButtonModule,
+    NzProgressModule,
 
     SafePipe,
     DialogModule,
@@ -150,6 +152,11 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
 
   protected isModalLoading = false
 
+  protected isModalForceChoice = false
+  protected modalForceChoiceProgress = 0
+  private countdownInterval: NodeJS.Timer | undefined
+  private autoChoiceTimeout: NodeJS.Timeout | undefined
+
   @ViewChild('modalFooter', { static: true }) modalFooter!: TemplateRef<object>
 
   @ViewChildren('playerExercise') playerExerciseComponents!: QueryList<PlayerExerciseComponent>
@@ -204,6 +211,7 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.stopCountdown()
     this.enableCopyPasteIfNeeded()
     this.stopWatchingVisibilityChange()
   }
@@ -225,6 +233,9 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
       this.terminate().catch(console.error)
       return
     }
+    if (this.modal) {
+      this.modal.destroy()
+    }
     this.modal = this.nzModalService.create({
       nzTitle: title,
       nzContent: 'Après avoir quitté cette activité, vous ne pourrez plus modifier vos réponses.',
@@ -239,16 +250,42 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
       nzKeyboard: false,
       nzFooter: this.modalFooter,
     })
+    if (!isClosable) {
+      this.isModalForceChoice = true
+      this.startCountdown()
+    }
+  }
+
+  private startCountdown(): void {
+    this.autoChoiceTimeout = setTimeout(() => {
+      this.modalCancel().catch(console.error)
+    }, 10000)
+    this.countdownInterval = setInterval(() => {
+      if (this.modalForceChoiceProgress < 100) {
+        this.modalForceChoiceProgress++
+      }
+    }, 100)
+  }
+
+  private stopCountdown(): void {
+    if (this.autoChoiceTimeout) {
+      clearTimeout(this.autoChoiceTimeout)
+    }
+    if (this.countdownInterval) {
+      clearInterval(this.countdownInterval)
+    }
   }
 
   protected async modalConfirm(): Promise<void> {
     this.isModalLoading = true
+    this.stopCountdown()
     await this.evaluateAll()
     this.terminate().catch(console.error)
     this.modal?.destroy()
   }
 
   protected async modalCancel(): Promise<void> {
+    this.stopCountdown()
     this.terminate().catch(console.error)
     this.modal?.destroy()
   }
