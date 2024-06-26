@@ -497,6 +497,31 @@ export const branchFromCircleTree = (tree: CircleTree, id: string): CircleTree |
   return undefined
 }
 
+export const removeNodeFromCircleTree = (tree: CircleTree, id: string): CircleTree | undefined => {
+  if (tree.id === id) {
+    return undefined
+  }
+
+  const removeNodeRecursive = (node: CircleTree): boolean => {
+    if (node.children) {
+      for (let i = 0; i < node.children.length; i++) {
+        if (node.children[i].id === id) {
+          node.children.splice(i, 1)
+          return true
+        } else {
+          if (removeNodeRecursive(node.children[i])) {
+            return true
+          }
+        }
+      }
+    }
+    return false
+  }
+
+  removeNodeRecursive(tree)
+  return tree
+}
+
 /**
  * Converts a circle resource to a CircleTree object.
  * @param circle - The circle resource to convert.

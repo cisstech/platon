@@ -89,6 +89,15 @@
       </nz-button-group>
       <div class="spacer"></div>
       <nz-button-group>
+        <button
+          *ngIf="context.resource.type === 'EXERCISE' && canMove()"
+          nz-button
+          [routerLink]="['/resources/move']"
+          [queryParams]="{ type: 'EXERCISE', id: context.resource.id, parent: context.resource.parentId }"
+        >
+          <i nz-icon nzType="copy" nzTheme="outline"></i>
+          <span class="hide-on-mobile">Déplacer</span>
+        </button>
         <button nz-button (click)="openTab(context.editorUrl!)">
           <i nz-icon nzType="edit" nzTheme="outline"></i>
           <span class="hide-on-mobile">Ouvrir dans l'éditeur</span>

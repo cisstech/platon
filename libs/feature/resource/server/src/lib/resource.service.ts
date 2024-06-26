@@ -402,6 +402,14 @@ export class ResourceService {
     return this.repository.save(resource)
   }
 
+  async move(id: string, parentId: string): Promise<ResourceEntity> {
+    const resource = await this.repository.findOneOrFail({ where: { id } })
+    const parent = await this.repository.findOneOrFail({ where: { id: parentId } })
+
+    resource.parentId = parent.id
+    return this.repository.save(resource)
+  }
+
   /**
    * Retrieves the resources search completion data for a user.
    * @param user - The user entity.

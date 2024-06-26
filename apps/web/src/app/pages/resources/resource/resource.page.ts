@@ -131,4 +131,8 @@ export class ResourcePage implements OnInit, OnDestroy {
   protected openTab(url: string): void {
     window.open(url, '_blank')
   }
+
+  protected canMove(): boolean {
+    return this.context.parent?.personal || this.context.user?.role === 'admin'
+  }
 }

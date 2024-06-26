@@ -24,4 +24,5 @@ export abstract class ResourceProvider {
   abstract find(input: FindResource): Observable<Resource>
   abstract update(id: string, input: UpdateResource): Observable<Resource>
   abstract create(input: CreateResource): Observable<Resource>
+  abstract move(id: string, parentId: string): Observable<Resource>
 }

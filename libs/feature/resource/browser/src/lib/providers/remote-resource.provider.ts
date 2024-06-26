@@ -73,4 +73,10 @@ export class RemoteResourceProvider extends ResourceProvider {
       })
       .pipe(map((response) => response.resource))
   }
+
+  move(id: string, parentId: string): Observable<Resource> {
+    return this.http
+      .patch<ItemResponse<Resource>>(`/api/v1/resources/${id}/move`, { parentId })
+      .pipe(map((response) => response.resource))
+  }
 }

@@ -1,0 +1,33 @@
+<header>
+  <nz-page-header [nzTitle]="header" nzBackIcon>
+    <ng-template #header>
+      Déplacer {{ type | resourceType : true | lowercase }}
+      <ng-container> depuis {{ sourceParentName }} </ng-container>
+      <ng-container *ngIf="parentName"> vers {{ parentName }} </ng-container>
+    </ng-template>
+  </nz-page-header>
+</header>
+<main>
+  <section>
+    <h4>
+      Sélectionnez le cercle dans lequel vous voulez ajouter
+      {{ type | resourceType : true | lowercase }}.
+    </h4>
+    <resource-circle-tree
+      *ngIf="tree"
+      [tree]="tree"
+      [selection]="parentId ? [parentId] : []"
+      (selectionChange)="onChangeParentId($event[0])"
+    />
+  </section>
+</main>
+<footer>
+  <ng-container *ngIf="moving; else showControls">
+    <nz-spin nzTip="Déplacement en cours..."></nz-spin>
+  </ng-container>
+  <ng-template #showControls>
+    <ng-container *ngIf="!loading">
+      <button nz-button nzType="primary" (click)="move()">Déplacer</button>
+    </ng-container>
+  </ng-template>
+</footer>

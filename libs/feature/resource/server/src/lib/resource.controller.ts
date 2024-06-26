@@ -155,4 +155,33 @@ export class ResourceController {
 
     return new ItemResponse({ resource })
   }
+
+  @Patch('/:id/move')
+  @Expandable(ResourceDTO, { rootField: 'resource' })
+  @Selectable({ rootField: 'resource' })
+  async move(
+    @Req() req: IRequest,
+    @Param('id') id: string,
+    @Body('parentId') parentId: string
+  ): Promise<ItemResponse<ResourceDTO>> {
+    const existing = await this.resourceService.findByIdOrCode(id)
+    if (!existing.isPresent()) {
+      throw new NotFoundResponse(`Resource not found: ${id}`)
+    }
+
+    const parentCircle = await this.resourceService.findByIdOrCode(existing.get().parentId!)
+
+    if (req.user.role !== 'admin' && !parentCircle.get().personal) {
+      throw new ForbiddenResponse(`Operation not allowed on resource: ${id}`)
+    }
+
+    const permissions = await this.permissionService.userPermissionsOnResource({ req, resource: existing.get() })
+    if (!permissions.write) {
+      throw new ForbiddenResponse(`Operation not allowed on resource (permissions): ${id}`)
+    }
+
+    const resource = Mapper.map(await this.resourceService.move(id, parentId), ResourceDTO)
+
+    return new ItemResponse({ resource })
+  }
 }
