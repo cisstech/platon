@@ -105,6 +105,11 @@ footer.glass {
   }
 }
 
+nz-progress {
+  display: inline-block;
+  margin-left: 1rem;
+}
+
 // TABLET
 @media (max-width: 991px) {
   :host {
