@@ -15,6 +15,7 @@ import {
   CorrectorCreatedNotification,
   CorrectorRemovedNotification,
   CourseMemberCreationNotification,
+  ResourceMovedByAdminNotification,
 } from '@platon/feature/course/common'
 import { NotificationParser, NotificationRenderer } from '@platon/feature/notification/browser'
 
@@ -137,6 +138,23 @@ export const ActivityClosedNotificationParser: NotificationParser<ActivityClosed
   },
 }
 
+export const ResourceMovedByAdminNotificationParser: NotificationParser<ResourceMovedByAdminNotification> = {
+  support(notification): boolean {
+    return notification.data.type === 'RESOURCE-MOVED-BY-ADMIN'
+  },
+  renderer(notification, injector: Injector): NotificationRenderer {
+    const router = injector.get(Router)
+    return {
+      icon: new ImgIcon(`/assets/images/courses/course.svg`),
+      content: `Votre ressource “${notification.data.resourceName}” du cercle “${notification.data.circleName}” a été déplacée dans votre cercle personnel par un administrateur`,
+      onClick: ({ onClose }) => {
+        router.navigate([`/resources/${notification.data.resourceId}/overview`]).catch(console.error)
+        onClose()
+      },
+    }
+  },
+}
+
 export const CourseNotificationParsers = [
   CourseMemberCreationNotificationParser,
   ActivityMemberCreationNotificationParser,
@@ -145,4 +163,5 @@ export const CourseNotificationParsers = [
   CorrectionPendingNotificationParser,
   CorrectionAvailableNotificationParser,
   ActivityClosedNotificationParser,
+  ResourceMovedByAdminNotificationParser,
 ]

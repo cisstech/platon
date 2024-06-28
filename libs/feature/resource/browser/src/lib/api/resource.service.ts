@@ -83,6 +83,10 @@ export class ResourceService {
   move(id: string, parentId: string): Observable<Resource> {
     return this.resourceProvider.move(id, parentId)
   }
+
+  moveToOwnerCircle(resource: Resource): Observable<Resource> {
+    return this.resourceProvider.moveToOwnerCircle(resource)
+  }
   //#endregion
 
   //#region Members

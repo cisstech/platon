@@ -267,6 +267,20 @@ export class ResourcePresenter implements OnDestroy {
     return firstValueFrom(this.resultService.resourceDashboard(resource.id))
   }
 
+  // Moving
+
+  async moveToOwnerCircle(): Promise<boolean> {
+    const { resource } = this.context.value as Required<Context>
+    try {
+      await firstValueFrom(this.resourceService.moveToOwnerCircle(resource))
+      this.dialogService.success('La ressource a bien été déplacée.')
+      return true
+    } catch {
+      this.alertError()
+      return false
+    }
+  }
+
   // Private
 
   private async refresh(id: string): Promise<void> {

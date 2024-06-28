@@ -79,4 +79,11 @@ export class RemoteResourceProvider extends ResourceProvider {
       .patch<ItemResponse<Resource>>(`/api/v1/resources/${id}/move`, { parentId })
       .pipe(map((response) => response.resource))
   }
+
+  moveToOwnerCircle(resource: Resource): Observable<Resource> {
+    const ownerId = resource.ownerId
+    return this.http
+      .patch<ItemResponse<Resource>>(`/api/v1/resources/${resource.id}/movetoowner`, { ownerId })
+      .pipe(map((response) => response.resource))
+  }
 }

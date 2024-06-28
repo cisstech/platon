@@ -58,3 +58,13 @@ export interface ActivityClosedNotification {
   activityId: string
   activityName: string
 }
+
+export const RESOURCE_MOVED_BY_ADMIN_NOTIFICATION = 'RESOURCE-MOVED-BY-ADMIN' as const
+
+export interface ResourceMovedByAdminNotification {
+  type: typeof RESOURCE_MOVED_BY_ADMIN_NOTIFICATION
+  resourceId: string
+  resourceName: string
+  circleId: string
+  circleName: string
+}
