@@ -1,0 +1,41 @@
+/* Styles pour le conteneur de la liste */
+:host::ng-deep {
+  .exercise-list {
+    width: 100%;
+    overflow: hidden;
+
+    ul.ui-list-container {
+      box-sizing: border-box;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+      background-color: white;
+      padding: 1.5rem;
+
+      li.ui-list-item-content {
+        height: 100%;
+
+        .ant-ribbon-wrapper {
+          height: 100%;
+        }
+      }
+      .ui-list-item {
+        margin-bottom: 0;
+      }
+
+    }
+    .article-description {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}
+
+.exercise-list app-exercise-card {
+  display: block  ;
+  width: 100%;
+  height: 100%;
+}

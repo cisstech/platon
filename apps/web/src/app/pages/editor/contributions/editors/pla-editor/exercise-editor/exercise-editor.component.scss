@@ -3,11 +3,30 @@
   width: 100%;
 }
 
+:host::ng-deep {
+
+  .margin-bottom-5 {
+    margin-bottom: 5px;
+  }
+
+  .ant-list-item-action {
+    position: relative;
+    display: flex;
+    justify-content:flex-end;
+    gap:5px;
+    height: 0;
+    top: -5vh;
+    & > li {
+      position:unset;
+      display: contents;
+    }
+  }
+}
+
 .exercise {
   width: 100%;
   display: flex;
   align-items: center;
-  margin-bottom: 1rem;
 }
 
 resource-item {

@@ -1,0 +1,103 @@
+:host::ng-deep {
+  .article-title {
+    max-width: 75%;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  article.bordered {
+    height: 100%;
+    div.article-content-wrapper {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      footer.article-footer {
+        margin-top: auto;
+      }
+    }
+  }
+
+  .article-description {
+    width: 80%;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .ant-ribbon {
+    color: white;
+    display: flex;
+    float:left;
+    mat-icon {
+      width: 18px;
+      height: 18px;
+      font-size: 18px;
+    }
+  }
+
+}
+
+.spacer {
+  flex: 1;
+}
+
+.action {
+  cursor: pointer;
+}
+
+.icon-configurable {
+  display: inline-block;
+  margin-left: 0.5rem;
+}
+
+.resource-item-stats {
+  color: var(--brand-text-secondary);
+  font-size: 1rem;
+}
+
+.btn-show-references {
+  padding: 0;
+}
+
+.customise-font {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.custom-popover {
+  max-height: 20rem;
+  overflow-y: auto;
+  max-width: 40rem;
+  padding-right: 1.2rem;
+  margin-right: -0.8rem;
+}
+
+ui-list-item-article {
+  width: 100%;
+  height: 100%;
+  text-overflow: ellipsis;
+  border-radius: 0.5rem;
+  border: 1px solid #DDDDDD;
+  background-color: #f6f8fa;
+  // add an other specific background color for the selected item
+  &.is-configurable {
+    border: 1px solid #DDDDFF;
+    background-color: #f6f8ff;
+  }
+
+}
+
+
+.right-button {
+  margin-left: auto;
+  margin-bottom: auto;
+}
+
+.margin-bottom-10 {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}

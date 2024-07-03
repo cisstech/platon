@@ -20,10 +20,24 @@ import { NzTimePickerModule } from 'ng-zorro-antd/time-picker'
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 
 import { MatIconModule } from '@angular/material/icon'
-import { ResourceItemComponent, ResourceSearchBarComponent } from '@platon/feature/resource/browser'
+import {
+  CircleTreeComponent,
+  ResourceFiltersComponent,
+  ResourceItemComponent,
+  ResourceListComponent,
+  ResourcePipesModule,
+  ResourceSearchBarComponent,
+} from '@platon/feature/resource/browser'
 import { PleInputEditorModule } from '../ple-input/ple-input.module'
 import { PlaExerciseEditorComponent } from './exercise-editor/exercise-editor.component'
 import { PlaEditorComponent } from './pla-editor.component'
+import { UiFilterIndicatorComponent, UiSearchBarComponent } from '@platon/shared/ui'
+import { ViewportIntersectionDirective } from '@cisstech/nge/directives'
+import { NzSpinModule } from 'ng-zorro-antd/spin'
+import { MatExpansionModule } from '@angular/material/expansion'
+import { ExerciseCardComponent } from './exercise-card/exercise-card.component'
+import { ExerciseListComponent } from './exercise-list/exercise-list.component'
+import { NzModalModule } from 'ng-zorro-antd/modal'
 
 @NgModule({
   imports: [
@@ -33,6 +47,7 @@ import { PlaEditorComponent } from './pla-editor.component'
 
     MatIconModule,
     DragDropModule,
+    MatExpansionModule,
 
     NzStepsModule,
     NzCollapseModule,
@@ -49,11 +64,26 @@ import { PlaEditorComponent } from './pla-editor.component'
     NzIconModule,
     NzToolTipModule,
     NzBreadCrumbModule,
+    NzSpinModule,
+
+    ViewportIntersectionDirective,
 
     ResourceItemComponent,
     ResourceSearchBarComponent,
+    ResourcePipesModule,
+    ResourceListComponent,
+    ResourceFiltersComponent,
+
+    CircleTreeComponent,
+    UiSearchBarComponent,
+    UiFilterIndicatorComponent,
+
+    ExerciseCardComponent,
+    ExerciseListComponent,
 
     PleInputEditorModule,
+
+    NzModalModule,
   ],
   exports: [PlaEditorComponent],
   declarations: [PlaEditorComponent, PlaExerciseEditorComponent],

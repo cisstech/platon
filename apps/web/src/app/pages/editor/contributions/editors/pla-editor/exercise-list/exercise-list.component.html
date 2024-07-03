@@ -1,0 +1,16 @@
+<ui-list class="exercise-list" [items]="items" idField="id">
+  <ui-list-template slot="row">
+    <ng-template let-item="item">
+      <app-exercise-card cdkDrag [item]="item" [simple]="simple" (exerciseClicked)="exerciseClicked.emit($event)" />
+    </ng-template>
+  </ui-list-template>
+  <ui-list-template slot="empty">
+    <ng-template>
+      <nz-empty nzNotFoundImage="simple" [nzNotFoundContent]="content">
+        <ng-template #content>
+          <p><ng-content></ng-content></p>
+        </ng-template>
+      </nz-empty>
+    </ng-template>
+  </ui-list-template>
+</ui-list>

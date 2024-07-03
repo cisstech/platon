@@ -1,93 +1,89 @@
 <ng-container *ngIf="resource">
-  <div class="exercise">
-    <resource-item [item]="resource" [simple]="true" [modalMode]="true" [previewOverrides]="exercise.overrides" />
-    <ul nz-list-item-actions>
-      <nz-list-item-action>
-        <button
-          *ngIf="!overriding && inputs"
-          nz-button
-          nzType="text"
-          nz-tooltip="Afficher les variables"
-          (click)="overriding = !overriding"
-        >
-          <span nz-icon nzType="form" nzTheme="outline"></span>
-        </button>
-        <button
-          *ngIf="overriding"
-          nz-button
-          nzType="text"
-          nz-tooltip="Cacher les variables"
-          (click)="overriding = false"
-        >
-          <span nz-icon nzType="close-circle" nzTheme="outline"></span>
-        </button>
-      </nz-list-item-action>
-      <nz-list-item-action>
-        <button
-          nz-button
-          nzDanger
-          nzType="text"
-          nz-tooltip="Supprimer"
-          [disabled]="disabled"
-          (click)="deleteClicked.emit()"
-        >
-          <span nz-icon nzType="delete" nzTheme="outline"></span>
-        </button>
-      </nz-list-item-action>
-      <nz-list-item-action *ngIf="!disabled">
-        <button nz-button nzType="text" nz-tooltip="Maintenez et déplacez pour changer l'ordre">
-          <mat-icon>swap_vert</mat-icon>
-        </button>
-      </nz-list-item-action>
-    </ul>
-  </div>
-  <ng-container *ngIf="overriding && inputs">
-    <table>
-      <thead>
-        <tr>
-          <th>Variable</th>
-          <th>Type</th>
-          <th nzAlign="center"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <ng-container *ngFor="let input of inputs">
-          <tr class="row">
-            <td>{{ input.name }}</td>
-            <td>{{ input.type }}</td>
-            <td nzAlign="center">
-              <button
-                *ngIf="!expandedInputs[input.name]"
-                nz-button
-                nzType="text"
-                nz-tooltip="Editer"
-                (click)="expandedInputs[input.name] = true"
-              >
-                <span nz-icon nzType="form" nzTheme="outline"></span>
-              </button>
-              <button
-                *ngIf="expandedInputs[input.name]"
-                nz-button
-                nzType="text"
-                nz-tooltip="Fermer"
-                (click)="expandedInputs[input.name] = false"
-              >
-                <span nz-icon nzType="close-circle" nzTheme="outline"></span>
-              </button>
-            </td>
+  <app-exercise-card
+    [item]="resource"
+    [simple]="true"
+    [showButton]="false"
+    [modalMode]="true"
+    [previewOverrides]="exercise.overrides"
+  />
+  <ul nz-list-item-actions>
+    <nz-list-item-action>
+      <button
+        *ngIf="!overriding && inputs"
+        nz-button
+        nzType="text"
+        nz-tooltip="Afficher les variables"
+        (click)="showModal(modalContent); overriding = !overriding"
+      >
+        <span nz-icon nzType="form" nzTheme="outline"></span>
+      </button>
+      <button *ngIf="overriding" nz-button nzType="text" nz-tooltip="Cacher les variables" (click)="overriding = false">
+        <span nz-icon nzType="close-circle" nzTheme="outline"></span>
+      </button>
+    </nz-list-item-action>
+    <nz-list-item-action>
+      <button
+        nz-button
+        nzDanger
+        nzType="text"
+        nz-tooltip="Supprimer"
+        [disabled]="disabled"
+        (click)="deleteClicked.emit()"
+      >
+        <span nz-icon nzType="delete" nzTheme="outline"></span>
+      </button>
+    </nz-list-item-action>
+  </ul>
+
+  <ng-template #modalContent let-modal>
+    <ng-container *ngIf="overriding && inputs">
+      <table>
+        <thead>
+          <tr>
+            <th>Variable</th>
+            <th>Type</th>
+            <th nzAlign="center"></th>
           </tr>
-          <tr *ngIf="expandedInputs[input.name]">
-            <td colSpan="3">
-              <app-ple-input
-                mode="plo"
-                [disabled]="disabled"
-                [input]="input"
-                (inputChange)="onOverrideVariable($event.name, $event.value)"
-              />
-            </td>
-          </tr>
-        </ng-container>
-      </tbody>
-    </table>
-  </ng-container>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let input of inputs">
+            <tr class="row">
+              <td>{{ input.name }}</td>
+              <td>{{ input.type }}</td>
+              <td nzAlign="center">
+                <button
+                  *ngIf="!expandedInputs[input.name]"
+                  nz-button
+                  nzType="text"
+                  nz-tooltip="Editer"
+                  (click)="expandedInputs[input.name] = true"
+                >
+                  <span nz-icon nzType="form" nzTheme="outline"></span>
+                </button>
+                <button
+                  *ngIf="expandedInputs[input.name]"
+                  nz-button
+                  nzType="text"
+                  nz-tooltip="Fermer"
+                  (click)="expandedInputs[input.name] = false"
+                >
+                  <span nz-icon nzType="close-circle" nzTheme="outline"></span>
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="expandedInputs[input.name]">
+              <td colSpan="3">
+                <app-ple-input
+                  mode="plo"
+                  [disabled]="disabled"
+                  [input]="input"
+                  (inputChange)="onOverrideVariable($event.name, $event.value)"
+                />
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </ng-container>
+  </ng-template>
 </ng-container>
