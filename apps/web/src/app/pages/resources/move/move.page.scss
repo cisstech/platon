@@ -1,0 +1,65 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: calc(100% - 64px);
+}
+
+header {
+  margin-bottom: 1rem;
+  align-self: flex-start;
+}
+
+nz-page-header {
+  padding-left: 0;
+}
+
+main {
+  flex: 1;
+  display: block;
+  width: 100%;
+}
+
+footer {
+  display: flex;
+  align-items: center;
+  min-height: 10px;
+  width: 100%;
+  justify-content: center;
+  padding: 1rem 0;
+  button {
+    margin: 0 12px;
+  }
+}
+
+section {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100%;
+  max-width: 720px;
+  min-width: min(720px, 90vw);
+  margin: 0 auto;
+  padding: 4rem 0;
+}
+
+h1 {
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+h2,
+h3,
+h4 {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+nz-spin {
+  display: block;
+  width: 100%;
+  padding: 4rem;
+}

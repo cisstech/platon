@@ -2,12 +2,14 @@ import { Expandable, Selectable } from '@cisstech/nestjs-expand'
 import { Body, Controller, Get, Logger, Param, Patch, Post, Query, Req } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { CreatedResponse, ForbiddenResponse, ItemResponse, ListResponse, NotFoundResponse } from '@platon/core/common'
-import { IRequest, Mapper } from '@platon/core/server'
+import { IRequest, Mapper, UserService } from '@platon/core/server'
 import { ResourceCompletionDTO } from './completion'
 import { ResourcePermissionService } from './permissions/permissions.service'
 import { CircleTreeDTO, CreateResourceDTO, ResourceDTO, ResourceFiltersDTO, UpdateResourceDTO } from './resource.dto'
 import { ResourceService } from './resource.service'
 import { ResourceViewService } from './views/view.service'
+import { NotificationService } from '@platon/feature/notification/server'
+import { ResourceMovedByAdminNotification } from '@platon/feature/course/common'
 
 @Controller('resources')
 @ApiTags('Resources')
@@ -17,7 +19,9 @@ export class ResourceController {
   constructor(
     private readonly resourceService: ResourceService,
     private readonly permissionService: ResourcePermissionService,
-    private readonly resourceViewService: ResourceViewService
+    private readonly resourceViewService: ResourceViewService,
+    private readonly userService: UserService,
+    private readonly notificationService: NotificationService
   ) {}
 
   @Get()
@@ -152,6 +156,89 @@ export class ResourceController {
     )
 
     Object.assign(resource, { permissions })
+
+    return new ItemResponse({ resource })
+  }
+
+  @Patch('/:id/move')
+  @Expandable(ResourceDTO, { rootField: 'resource' })
+  @Selectable({ rootField: 'resource' })
+  async move(
+    @Req() req: IRequest,
+    @Param('id') id: string,
+    @Body('parentId') parentId: string
+  ): Promise<ItemResponse<ResourceDTO>> {
+    const existing = await this.resourceService.findByIdOrCode(id)
+    if (!existing.isPresent()) {
+      throw new NotFoundResponse(`Resource not found: ${id}`)
+    }
+
+    const parentCircle = await this.resourceService.findByIdOrCode(existing.get().parentId!)
+
+    if (req.user.role !== 'admin' && !parentCircle.get().personal) {
+      throw new ForbiddenResponse(`Operation not allowed on resource: ${id}`)
+    }
+
+    const permissions = await this.permissionService.userPermissionsOnResource({ req, resource: existing.get() })
+    if (!permissions.write) {
+      throw new ForbiddenResponse(`Operation not allowed on resource (permissions): ${id}`)
+    }
+
+    const circlePermissions = await this.permissionService.userPermissionsOnResource({
+      req,
+      resource: parentCircle.get(),
+    })
+    if (!circlePermissions.write) {
+      throw new ForbiddenResponse(`Operation not allowed on resource (circle permissions): ${id}`)
+    }
+
+    const resource = Mapper.map(await this.resourceService.move(id, parentId), ResourceDTO)
+
+    return new ItemResponse({ resource })
+  }
+
+  @Patch('/:id/movetoowner')
+  @Expandable(ResourceDTO, { rootField: 'resource' })
+  @Selectable({ rootField: 'resource' })
+  async moveToOwnerCircle(
+    @Req() req: IRequest,
+    @Param('id') id: string,
+    @Body('ownerId') ownerId: string
+  ): Promise<ItemResponse<ResourceDTO>> {
+    const existing = await this.resourceService.findByIdOrCode(id)
+    if (!existing.isPresent()) {
+      throw new NotFoundResponse(`Resource not found: ${id}`)
+    }
+
+    if (existing.get().type === 'CIRCLE') {
+      throw new ForbiddenResponse(`Operation not allowed on circles`)
+    }
+
+    if (req.user.role !== 'admin') {
+      throw new ForbiddenResponse(`Operation not allowed on resource: ${id}`)
+    }
+
+    const user = await this.userService.findById(ownerId)
+    if (!user.isPresent()) {
+      throw new NotFoundResponse(`User not found: ${ownerId}`)
+    }
+    const circle = await this.resourceService.getPersonal(user.get())
+
+    const resource = Mapper.map(await this.resourceService.move(id, circle.id), ResourceDTO)
+
+    const originalCircle = await this.resourceService.findByIdOrCode(existing.get().parentId!)
+
+    this.notificationService
+      .sendToUser<ResourceMovedByAdminNotification>(ownerId, {
+        type: 'RESOURCE-MOVED-BY-ADMIN',
+        resourceId: id,
+        resourceName: resource.name,
+        circleId: originalCircle.get().id,
+        circleName: originalCircle.get().name,
+      })
+      .catch((error) => {
+        this.logger.error('Failed to send notification', error)
+      })
 
     return new ItemResponse({ resource })
   }

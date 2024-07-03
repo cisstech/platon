@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common'
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { FormsModule } from '@angular/forms'
-import { RouterModule } from '@angular/router'
+import { Router, RouterModule } from '@angular/router'
 import { Subscription } from 'rxjs'
 
 import { MatChipsModule } from '@angular/material/chips'
@@ -22,6 +22,7 @@ import { UiLayoutTabDirective, UiLayoutTabsComponent, UiModalIFrameComponent } f
 
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 import { ResourcePresenter } from './resource.presenter'
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm'
 
 @Component({
   standalone: true,
@@ -46,6 +47,7 @@ import { ResourcePresenter } from './resource.presenter'
     NzBreadCrumbModule,
     NzTypographyModule,
     NzPageHeaderModule,
+    NzPopconfirmModule,
 
     DialogModule,
 
@@ -62,6 +64,7 @@ export class ResourcePage implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription[] = []
   private readonly presenter = inject(ResourcePresenter)
   private readonly changeDetectorRef = inject(ChangeDetectorRef)
+  private readonly router = inject(Router)
 
   protected context = this.presenter.defaultContext()
 
@@ -130,5 +133,18 @@ export class ResourcePage implements OnInit, OnDestroy {
 
   protected openTab(url: string): void {
     window.open(url, '_blank')
+  }
+
+  protected isAdmin(): boolean {
+    return this.context.user?.role === 'admin'
+  }
+
+  protected canMove(): boolean {
+    return this.context.parent?.personal || this.isAdmin()
+  }
+
+  protected async moveToOwnerCircle(): Promise<void> {
+    await this.presenter.moveToOwnerCircle()
+    await this.router.navigate(['/resources'])
   }
 }

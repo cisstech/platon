@@ -90,6 +90,17 @@ export const TopicFilterIndicator = (topic: Topic): FilterIndicator<ResourceFilt
   }
 }
 
+export const AntiTopicFilterIndicator = (topic: Topic): FilterIndicator<ResourceFilters> => {
+  return {
+    match: (filters) => !!filters.antiTopics?.includes(topic.id),
+    remove: (filters: ResourceFilters) => ({
+      ...filters,
+      antiTopics: filters.antiTopics?.filter((e) => e !== topic.id),
+    }),
+    describe: () => `Ne possède pas le topic "${topic.name}"`,
+  }
+}
+
 export const LevelFilterIndicator = (level: Topic): FilterIndicator<ResourceFilters> => {
   return {
     match: (filters) => !!filters.levels?.includes(level.id),

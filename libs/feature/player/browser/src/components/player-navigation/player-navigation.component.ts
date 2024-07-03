@@ -50,22 +50,4 @@ export class PlayerNavigationComponent {
     }
     return sessionId === this.player.navigation.current?.sessionId
   }
-
-  protected onWillTerminate(): void {
-    const terminate = this.terminate
-    this.dialogService
-      .confirm({
-        nzTitle: `Êtes-vous sûr de vouloir terminer l'activité?`,
-        nzContent: `Après avoir terminé l'activité, vous ne pourrez plus modifier vos réponses.`,
-        nzOkText: 'Terminer',
-        nzOkDanger: true,
-        nzCancelText: 'Annuler',
-      })
-      .then((confirmed) => {
-        if (confirmed) {
-          terminate?.()
-        }
-      })
-      .catch(console.error)
-  }
 }

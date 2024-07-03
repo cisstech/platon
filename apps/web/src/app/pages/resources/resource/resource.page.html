@@ -89,6 +89,30 @@
       </nz-button-group>
       <div class="spacer"></div>
       <nz-button-group>
+        <button
+          *ngIf="isAdmin() && context.resource.type !== 'CIRCLE' && !context.resource.parent!.personal!"
+          nz-button
+          nzType="primary"
+          nzDanger
+          nz-tooltip
+          nzTooltipTitle="Renvoyer dans le cercle du créateur"
+          nz-popconfirm
+          nzOkText="Retirer"
+          nzOkType="danger"
+          nzPopconfirmTitle="Êtes-vous sûr de vouloir renvoyer cette ressource dans le cercle personnel de son créateur ?"
+          (nzOnConfirm)="moveToOwnerCircle()"
+        >
+          <i nz-icon nzType="logout" nzTheme="outline"></i>
+        </button>
+        <button
+          *ngIf="context.resource.type === 'EXERCISE' && canMove()"
+          nz-button
+          [routerLink]="['/resources/move']"
+          [queryParams]="{ type: 'EXERCISE', id: context.resource.id, parent: context.resource.parentId }"
+        >
+          <i nz-icon nzType="copy" nzTheme="outline"></i>
+          <span class="hide-on-mobile">Déplacer</span>
+        </button>
         <button nz-button (click)="openTab(context.editorUrl!)">
           <i nz-icon nzType="edit" nzTheme="outline"></i>
           <span class="hide-on-mobile">Ouvrir dans l'éditeur</span>

@@ -99,6 +99,7 @@ export class ResourceFiltersComponent implements OnDestroy {
         return controls
       }, {} as Record<ResourceStatus, boolean>),
       topics: this.filters.topics,
+      antiTopics: this.filters.antiTopics,
       levels: this.filters.levels,
     })
 
@@ -121,6 +122,7 @@ export class ResourceFiltersComponent implements OnDestroy {
             : undefined,
           parents: value.parents as string[],
           topics: value.topics as string[],
+          antiTopics: value.antiTopics as string[],
           levels: value.levels as string[],
         }
 
@@ -157,6 +159,7 @@ export class ResourceFiltersComponent implements OnDestroy {
         }, {} as Record<ResourceTypes, FormControl<boolean | null>>)
       ),
       topics: new FormControl([] as string[]),
+      antiTopics: new FormControl([] as string[]),
       levels: new FormControl([] as string[]),
       status: new FormGroup(
         Object.values(ResourceStatus).reduce((controls, status) => {

@@ -3,7 +3,7 @@ import { Data, NavigationEnd, Router } from '@angular/router'
 import { BehaviorSubject, Observable, Subscription, firstValueFrom } from 'rxjs'
 import { StorageService } from './storage.service'
 
-export declare type Theme = 'light' | 'dark'
+export declare type Theme = 'light' | 'dark' | 'system'
 
 /**
  * Prevents the theme service from loading theme styles into the DOM
@@ -36,6 +36,7 @@ export class ThemeService implements OnDestroy {
   private savedTheme?: Theme
   private noTheme?: boolean
   private alwaysLightTheme?: boolean
+  private isSystemTheme?: boolean
 
   private theme$ = new BehaviorSubject<Theme>('light')
 
@@ -53,6 +54,11 @@ export class ThemeService implements OnDestroy {
     return this.theme$.asObservable()
   }
 
+  get themeIcon() {
+    if (this.isSystemTheme) return 'auto_awesome'
+    return this.isDark ? 'dark_mode' : 'light_mode'
+  }
+
   constructor() {
     this.subscriptions.push(
       this.router.events.subscribe((event) => {
@@ -62,6 +68,17 @@ export class ThemeService implements OnDestroy {
         }
       })
     )
+    this.refreshSystemTheme()
+    const darkModePreference = window.matchMedia('(prefers-color-scheme: dark)')
+    darkModePreference.addEventListener('change', () => {
+      this.refreshSystemTheme()
+    })
+  }
+
+  private refreshSystemTheme(): void {
+    if (this.isSystemTheme) {
+      this.setTheme('system', true).catch(console.error)
+    }
   }
 
   ngOnDestroy(): void {
@@ -94,6 +111,10 @@ export class ThemeService implements OnDestroy {
     this.setTheme('light', save).catch(console.error)
   }
 
+  systemTheme(save = true): void {
+    this.setTheme('system', save).catch(console.error)
+  }
+
   /**
    * Alternates the current theme (`light` to `dark` or `dark` to `light`).
    */
@@ -103,9 +124,15 @@ export class ThemeService implements OnDestroy {
   }
 
   private async setTheme(theme: Theme, save = true) {
+    this.isSystemTheme = theme === 'system'
+
     if (this.noTheme) return
     if (this.theme === theme) return
     if (this.alwaysLightTheme && theme === 'dark') return
+
+    if (this.isSystemTheme) {
+      theme = this.detectSystemTheme()
+    }
 
     this.theme = theme
 
@@ -117,7 +144,7 @@ export class ThemeService implements OnDestroy {
     container.classList.add(theme + '-theme')
 
     if (save) {
-      await firstValueFrom(this.storage.set('app.theme', theme))
+      await firstValueFrom(this.storage.set('app.theme', this.isSystemTheme ? 'system' : theme))
       this.savedTheme = theme
     }
 
@@ -184,5 +211,10 @@ export class ThemeService implements OnDestroy {
       return false
     })
     this.setTheme(this.alwaysLightTheme ? 'light' : this.savedTheme || 'light', false).catch(console.error)
+  }
+
+  private detectSystemTheme(): Theme {
+    const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+    return isDarkMode ? 'dark' : 'light'
   }
 }

@@ -28,7 +28,7 @@ export class SessionDataEntity {
   @Column({ name: 'parent_id', type: 'uuid', nullable: true })
   parentId?: string
 
-  @Column({ name: 'grade', type: 'int' })
+  @Column({ name: 'grade', type: 'double precision' })
   grade!: number
 
   @Column({ name: 'attempts', type: 'int' })
@@ -76,7 +76,7 @@ export class SessionDataEntity {
   @Column({ name: 'correction_id', type: 'uuid', nullable: true })
   correctionId?: string
 
-  @Column({ name: 'correction_grade', type: 'int', nullable: true })
+  @Column({ name: 'correction_grade', type: 'double precision', nullable: true })
   correctionGrade?: number
 
   @Column({ name: 'correction_author', type: 'uuid', nullable: true })

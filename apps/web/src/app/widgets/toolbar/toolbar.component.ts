@@ -85,7 +85,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   }
 
   get themeIcon(): string {
-    return this.themeService.isDark ? 'dark_mode' : 'light_mode'
+    return this.themeService.themeIcon
   }
 
   get mobile(): boolean {
@@ -156,6 +156,19 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     document.body.style.transition = 'opacity 0.2s ease-in-out'
     setTimeout(() => {
       this.themeService.lightTheme(true)
+    }, 200)
+    setTimeout(() => {
+      document.body.style.opacity = '1'
+      document.body.style.transition = 'none'
+      this.changeDetectorRef.markForCheck()
+    }, 500)
+  }
+
+  systemTheme(): void {
+    document.body.style.opacity = '0'
+    document.body.style.transition = 'opacity 0.2s ease-in-out'
+    setTimeout(() => {
+      this.themeService.systemTheme(true)
     }, 200)
     setTimeout(() => {
       document.body.style.opacity = '1'
