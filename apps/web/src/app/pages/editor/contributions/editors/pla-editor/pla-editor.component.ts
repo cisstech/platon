@@ -158,7 +158,7 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
   protected selectedExercise: ActivityExercise | Resource | undefined
   protected user!: User
 
-  protected tree?: CircleTree
+  protected tree!: CircleTree
   protected circles: CircleTree[] = []
   protected topics: Topic[] = []
   protected levels: Level[] = []
@@ -177,42 +177,18 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
   protected searching = true
   protected paginating = false
 
-  protected filters: ResourceFilters = { types: ['EXERCISE'] }
+  protected filters: ResourceFilters = {}
   protected circle!: Resource
   protected items: Resource[] = []
-  protected views: Resource[] = []
   protected allConnectedTo: string[] = []
   protected connectedTo: string[][] = [[]]
-
-  /*
-    This function update an array of ids that are used to connect the lists for drag&drop shenanigagns
-  */
-  updateConnectedTo(): void {
-    this.allConnectedTo = this.exerciseGroups
-      .map(() => {
-        return [...this.exerciseGroups.map((_, i) => `array${i}`), ...this.exerciseGroups.map((_, j) => `panel${j}`)]
-      })
-      .flat()
-
-    this.connectedTo = this.exerciseGroups.map((_, index) => {
-      return [
-        ...this.exerciseGroups.map((_, i) => `array${i}`),
-        ...this.exerciseGroups.map((_, j) => (index === j ? '' : `panel${j}`)).filter((e) => e.length > 0),
-      ]
-    })
-  }
-
-  private isActivityExercise(resource: any): boolean {
-    return resource.resource === undefined
-  }
 
   async ngOnInit(): Promise<void> {
     this.user = (await this.authService.ready()) as User
 
-    const [tree, circle, views, topics, levels] = await Promise.all([
+    const [tree, circle, topics, levels] = await Promise.all([
       firstValueFrom(this.resourceService.tree()),
       firstValueFrom(this.resourceService.circle(this.user.username)),
-      firstValueFrom(this.resourceService.search({ views: true, expands: EXPANDS })),
       firstValueFrom(this.tagService.listTopics()),
       firstValueFrom(this.tagService.listLevels()),
     ])
@@ -232,7 +208,6 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
     this.circle = circle
     this.topics = topics
     this.levels = levels
-    this.views = views.resources
 
     this.circles = []
 
@@ -263,7 +238,7 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
           period: Number.parseInt(e.period + '', 10) || undefined,
           order: e.order,
           direction: e.direction,
-          types: typeof e.types === 'string' ? [e.types] : e.types,
+          types: [ResourceTypes.EXERCISE],
           status: typeof e.status === 'string' ? [e.status] : e.status,
           dependOn: typeof e.dependOn === 'string' ? [e.dependOn] : e.dependOn,
           configurable: e.configurable === 'true' || undefined, // do not pass false to prevent ignoring configurable resources by default
@@ -296,6 +271,17 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
         this.changeDetectorRef.markForCheck()
       })
     )
+
+    this.activatedRoute.params.subscribe(async (params) => {
+      const resource = await firstValueFrom(this.resourceService.find({ id: params.id }))
+      const parent = resource.parentId
+      this.filters = {
+        ...this.filters,
+        parents: parent ? [parent] : undefined,
+        order: ResourceOrderings.RELEVANCE,
+      }
+      this.changeDetectorRef.markForCheck()
+    })
   }
 
   ngOnDestroy(): void {
@@ -308,6 +294,28 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
       this.exerciseGroups.length === 0 ? this.addGroup() : this.selectGroup(0)
       this.updateConnectedTo()
     }
+  }
+
+  /*
+    This function update an array of ids that are used to connect the lists for drag&drop shenanigagns
+  */
+  updateConnectedTo(): void {
+    this.allConnectedTo = this.exerciseGroups
+      .map(() => {
+        return [...this.exerciseGroups.map((_, i) => `array${i}`), ...this.exerciseGroups.map((_, j) => `panel${j}`)]
+      })
+      .flat()
+
+    this.connectedTo = this.exerciseGroups.map((_, index) => {
+      return [
+        ...this.exerciseGroups.map((_, i) => `array${i}`),
+        ...this.exerciseGroups.map((_, j) => (index === j ? '' : `panel${j}`)).filter((e) => e.length > 0),
+      ]
+    })
+  }
+
+  private isActivityExercise(resource: any): boolean {
+    return resource.resource !== undefined
   }
 
   protected handleExerciseClicked(exercise: Resource): void {
@@ -350,7 +358,7 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
         ...this.filters,
         expands: EXPANDS,
         limit: PAGINATION_LIMIT,
-        offset: this.items.length + 3,
+        offset: this.items.length + 2,
       })
     )
 
@@ -401,8 +409,8 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
             id: uuidv4(),
             version: 'latest',
             resource: this.isActivityExercise(this.selectedExercise)
-              ? this.selectedExercise.id
-              : (this.selectedExercise as ActivityExercise).resource,
+              ? (this.selectedExercise as ActivityExercise).resource
+              : this.selectedExercise.id,
           } as ActivityExercise,
           ...this.selectedGroup.slice(index),
         ]

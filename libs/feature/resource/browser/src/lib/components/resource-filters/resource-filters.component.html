@@ -18,7 +18,7 @@
 <ng-template #content>
   <form [formGroup]="form">
     <!-- TYPE -->
-    <section formGroupName="types">
+    <section *ngIf="!disableTypesField" formGroupName="types">
       <mat-label id="type-label">Qu'est-ce que vous recherchez ?</mat-label>
       <div class="checkbox-group">
         <ng-container *ngFor="let item of form.get('types')!.value | keyvalue">
@@ -26,9 +26,9 @@
         </ng-container>
       </div>
     </section>
-    <mat-divider />
+    <mat-divider *ngIf="!disableTypesField" />
 
-    <ng-container *ngIf="form.value.types?.EXERCISE">
+    <ng-container *ngIf="form.get('types')!.value.EXERCISE">
       <section>
         <mat-label id="exercise-specific">Appliquer des filtres aux exercices ?</mat-label>
         <mat-checkbox formControlName="configurable">

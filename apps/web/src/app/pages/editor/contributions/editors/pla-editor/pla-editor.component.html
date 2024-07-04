@@ -379,11 +379,19 @@
       [(ngModel)]="selectedExercise"
       [filters]="{ types: ['EXERCISE'], watchers: [user.id] }"
     /> -->
-    <ui-search-bar [searchbar]="searchbar">
+    <ui-search-bar [searchbar]="searchbar" (filter)="filterDrawer.open()">
       <ng-template let-context> {{ context }}</ng-template>
     </ui-search-bar>
+
     <span>Liste des exercices disponibles</span>
     <!-- ajouter dans le cercle... machin-->
+    <div class="indicators">
+      <ui-filter-indicators
+        [filters]="filters"
+        (filtersChange)="search($event, $event.search)"
+        [indicators]="filterIndicators"
+      />
+    </div>
   </div>
 
   <app-exercise-list
@@ -404,3 +412,17 @@
   <nz-spin class="spinner-pagination" nzSize="large" [nzTip]="'Chargement...'" [nzSpinning]="paginating" />
   <div style="height: 8px" *ngIf="hasMore" viewportIntersection (intersected)="loadMore()"></div>
 </ng-template>
+
+<ng-template #treeTemplate>
+  <resource-circle-tree [tree]="tree" />
+</ng-template>
+
+<resource-filters
+  #filterDrawer
+  [filters]="filters"
+  [levels]="levels"
+  [topics]="topics"
+  [circles]="circles"
+  [disableTypesField]="true"
+  (triggered)="this.search($event, this.filters.search)"
+/>
