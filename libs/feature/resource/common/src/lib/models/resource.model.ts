@@ -604,8 +604,20 @@ export const circleTreeFromCircleList = (circles: Resource[], versions: Record<s
     name: root.name,
     code: root.code,
     versions: versions[root.id] || [],
+    children: [],
     permissions: emptyResourcePermissions(),
   }
+
+  const personnalCircles = circles.filter((c) => c.personal)
+  personnalCircles.forEach((c) => {
+    tree.children?.push({
+      id: c.id,
+      name: c.name,
+      code: c.code,
+      versions: versions[c.id] || [],
+      permissions: emptyResourcePermissions(),
+    })
+  })
 
   const traverse = (node: CircleTree) => {
     const children = circles.filter((c) => c.parentId === node.id).sort((a, b) => a.name.localeCompare(b.name))

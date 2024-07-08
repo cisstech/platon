@@ -39,7 +39,6 @@ import {
   ResourceTypes,
   branchFromCircleTree,
   circleAncestors,
-  circleTreeFromCircle,
   flattenCircleTree,
 } from '@platon/feature/resource/common'
 import { UiStepDirective, UiStepperComponent } from '@platon/shared/ui'
@@ -130,9 +129,8 @@ export class ResourceCreatePage implements OnInit {
     this.parentId = this.activatedRoute.snapshot.queryParamMap.get('parent') || undefined
 
     const user = (await this.authService.ready()) as User
-    const [tree, circle, topics, levels] = await Promise.all([
+    const [tree, topics, levels] = await Promise.all([
       firstValueFrom(this.resourceService.tree()),
-      firstValueFrom(this.resourceService.circle(user.username)),
       firstValueFrom(this.tagService.listTopics()),
       firstValueFrom(this.tagService.listLevels()),
     ])
@@ -157,10 +155,6 @@ export class ResourceCreatePage implements OnInit {
     }
 
     this.tree = tree
-
-    if (this.type !== 'CIRCLE') {
-      this.tree.children?.unshift(circleTreeFromCircle(circle))
-    }
 
     this.topics = topics
     this.levels = levels

@@ -105,10 +105,6 @@ export class EditorPresenter {
       : circleAncestors(tree, resource.parentId!, true)
 
     this.tree = tree
-    if (resourceIsPersonalExerciseOrActivity) {
-      this.tree.children?.push(circleTreeFromCircle(personalCircle))
-    }
-
     this.version = version
     this.resource = resource
     this.ancestors = ancestors.map((ancestor) => ({
