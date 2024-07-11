@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { Editor, FileService, OpenRequest } from '@cisstech/nge-ide/core'
 import { AuthService, TagService } from '@platon/core/browser'
 import { Level, OrderingDirections, Topic, User, uniquifyBy } from '@platon/core/common'
-import { ActivityExercise, ActivityVariables } from '@platon/feature/compiler'
+import { ActivityExercise, ActivityExerciseGroup, ActivityVariables } from '@platon/feature/compiler'
 import {
   CircleFilterIndicator,
   ExerciseConfigurableFilterIndicator,
@@ -72,7 +72,12 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
       run: (query) => {
         return this.completion.pipe(
           map((completion) => {
-            const suggestions = new Set<string>([...completion.names, ...completion.topics, ...completion.levels])
+            const suggestions = new Set<string>([
+              query,
+              ...completion.names,
+              ...completion.topics,
+              ...completion.levels,
+            ])
             return new Fuse(Array.from(suggestions), {
               includeMatches: true,
               findAllMatches: false,
@@ -152,8 +157,8 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
     }),
   })
 
-  protected exerciseGroups: ActivityExercise[][] = []
-  protected selectedGroup: ActivityExercise[] | undefined
+  protected exerciseGroups: ActivityExerciseGroup[] = []
+  protected selectedGroup: ActivityExerciseGroup | undefined
   protected selectedGroupIndex: number | undefined
   protected selectedExercise: ActivityExercise | Resource | undefined
   protected user!: User
@@ -186,9 +191,8 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
   async ngOnInit(): Promise<void> {
     this.user = (await this.authService.ready()) as User
 
-    const [tree, circle, topics, levels] = await Promise.all([
+    const [tree, topics, levels] = await Promise.all([
       firstValueFrom(this.resourceService.tree()),
-      firstValueFrom(this.resourceService.circle(this.user.username)),
       firstValueFrom(this.tagService.listTopics()),
       firstValueFrom(this.tagService.listLevels()),
     ])
@@ -205,7 +209,6 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
     )
 
     this.tree = tree
-    this.circle = circle
     this.topics = topics
     this.levels = levels
 
@@ -376,7 +379,10 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
   }
 
   protected addGroup(): void {
-    const newGroup: ActivityExercise[] = []
+    const newGroup: ActivityExerciseGroup = {
+      name: 'Groupe ' + (this.exerciseGroups.length + 1),
+      exercises: [],
+    }
     this.exerciseGroups = [...this.exerciseGroups, newGroup]
     this.selectGroup(this.exerciseGroups.length - 1)
     this.updateConnectedTo()
@@ -394,8 +400,8 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
   protected addExercise(index?: number): void {
     if (this.selectedGroup && this.selectedExercise) {
       if (index === undefined) {
-        this.selectedGroup = [
-          ...this.selectedGroup,
+        this.selectedGroup.exercises = [
+          ...this.selectedGroup.exercises,
           {
             id: uuidv4(),
             version: 'latest',
@@ -403,8 +409,8 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
           } as ActivityExercise,
         ]
       } else {
-        this.selectedGroup = [
-          ...this.selectedGroup.slice(0, index),
+        this.selectedGroup.exercises = [
+          ...this.selectedGroup.exercises.slice(0, index),
           {
             id: uuidv4(),
             version: 'latest',
@@ -412,11 +418,13 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
               ? (this.selectedExercise as ActivityExercise).resource
               : this.selectedExercise.id,
           } as ActivityExercise,
-          ...this.selectedGroup.slice(index),
+          ...this.selectedGroup.exercises.slice(index),
         ]
       }
       this.exerciseGroups = this.exerciseGroups.map((group, index) =>
-        index === this.selectedGroupIndex ? (this.selectedGroup as ActivityExercise[]) : group
+        index === this.selectedGroupIndex
+          ? { ...group, exercises: this.selectedGroup?.exercises as ActivityExercise[] }
+          : group
       )
       this.selectedExercise = undefined
     }
@@ -424,19 +432,30 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
   }
 
   protected deleteExercise(index: number): void {
-    this.selectedGroup = this.selectedGroup?.filter((_, i) => i !== index)
+    this.selectedGroup = {
+      name: this.selectedGroup?.name || '',
+      exercises: this.selectedGroup!.exercises.filter((_, i) => i !== index),
+    }
     this.exerciseGroups = this.exerciseGroups.map((group, i) =>
-      i === this.selectedGroupIndex ? (this.selectedGroup as ActivityExercise[]) : group
+      i === this.selectedGroupIndex
+        ? { ...group, exercises: this.selectedGroup?.exercises as ActivityExercise[] }
+        : group
     )
 
     this.onChangeData()
   }
 
   protected updateExercise(exercise: ActivityExercise): void {
-    this.selectedGroup = this.selectedGroup?.map((e) => (e.id === exercise.id ? exercise : e))
+    this.selectedGroup = {
+      name: this.selectedGroup?.name || '',
+      exercises: this.selectedGroup!.exercises.map((e) => (e.id === exercise.id ? exercise : e)),
+    }
     this.exerciseGroups = this.exerciseGroups.map((group, i) =>
-      i === this.selectedGroupIndex ? (this.selectedGroup as ActivityExercise[]) : group
+      i === this.selectedGroupIndex
+        ? { ...group, exercises: this.selectedGroup?.exercises as ActivityExercise[] }
+        : group
     )
+
     this.onChangeData()
   }
 
@@ -450,7 +469,7 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
   protected onReorderExercises(event: CdkDragDrop<ActivityExercise[]>) {
     if (this.readOnly || event.previousContainer.id === 'itemList') return
     this.selectGroup(parseInt(event.container.id.substring(5)))
-    moveItemInArray(this.selectedGroup as ActivityExercise[], event.previousIndex, event.currentIndex)
+    moveItemInArray(this.selectedGroup?.exercises as ActivityExercise[], event.previousIndex, event.currentIndex)
     this.onChangeData()
   }
 
@@ -499,7 +518,7 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
       exerciseGroups: this.exerciseGroups.reduce((acc, group, index) => {
         acc[index] = group
         return acc
-      }, {} as Record<number, ActivityExercise[]>),
+      }, {} as Record<number, ActivityExerciseGroup>),
     }
 
     this.fileService.update(this.request.uri, JSON.stringify(this.activity, null, 2))
@@ -563,7 +582,6 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
     }
 
     this.exerciseGroups = Object.values(this.activity.exerciseGroups)
-
     this.changeDetectorRef.markForCheck()
   }
 
@@ -573,5 +591,11 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
       this.selectedExercise = event.previousContainer.data[event.previousIndex] as Resource
       this.addExercise(event.currentIndex)
     }
+  }
+
+  onGroupeRename(event: string, index: number) {
+    this.selectGroup(index)
+    this.selectedGroup!.name = event.substring(0, 30)
+    this.onChangeData()
   }
 }

@@ -106,7 +106,7 @@
             </nz-form-control>
           </nz-form-item>
         </nz-collapse-panel>
-        <nz-collapse-panel nzHeader="Aléatoire" [nzExpandedIcon]="CustomDiceIson" nzActive>
+        <nz-collapse-panel nzHeader="Aléatoire" nzExpandedIcon="question-circle" nzActive>
           <nz-form-item>
             <nz-form-label
               [nzSpan]="3"
@@ -299,12 +299,19 @@
               <mat-expansion-panel-header>
                 <mat-icon class="drag-icon">drag_indicator</mat-icon>
                 <div class="group-header">
-                  <div class="group-number">Groupe {{ i + 1 }}</div>
+                  <div
+                    nz-typography
+                    [nzEditable]="!readOnly"
+                    [nzContent]="group.name"
+                    (nzContentChange)="onGroupeRename($event, i)"
+                    class="group-number"
+                    (keydown.Space)="$event.stopImmediatePropagation()"
+                  ></div>
                   <div class="exercise-number">
-                    <ng-container [ngPlural]="group.length">
+                    <ng-container [ngPlural]="group.exercises.length">
                       <ng-template ngPluralCase="=0">0 exercice</ng-template>
                       <ng-template ngPluralCase="=1">1 exercice</ng-template>
-                      <ng-template ngPluralCase="other">{{ group.length }} exercices</ng-template>
+                      <ng-template ngPluralCase="other">{{ group.exercises.length }} exercices</ng-template>
                     </ng-container>
                   </div>
                 </div>
@@ -328,16 +335,15 @@
                   [cdkDropListDisabled]="readOnly"
                   (cdkDropListDropped)="drop($any($event))"
                   [cdkDropListConnectedTo]="connectedTo[i]"
-                  [cdkDropListData]="group"
+                  [cdkDropListData]="group.exercises"
                   (cdkDropListDropped)="onReorderExercises($any($event))"
-                  [nzDataSource]="group"
+                  [nzDataSource]="group.exercises"
                   nzBordered
                   class="draggable-container"
                   id="array{{ i }}"
                 >
-                  <!-- NE PAS METTRE SON PROPRE PANEL -->
                   <div
-                    *ngFor="let exercise of group; trackBy: trackByExerciseId; index as i"
+                    *ngFor="let exercise of group.exercises; trackBy: trackByExerciseId; index as i"
                     class="draggable-item exercise-in-group"
                     cdkDrag
                   >
@@ -352,7 +358,7 @@
               </div>
             </mat-expansion-panel>
           </mat-accordion>
-          <button nz-button nzType="primary" [disabled]="readOnly" (click)="addGroup()">
+          <button *ngIf="!readOnly" nz-button nzType="primary" (click)="addGroup()">
             <span nz-icon nzType="plus" nzTheme="outline"></span><span>Ajouter un groupe</span>
           </button>
         </div>
@@ -371,20 +377,12 @@
     </nz-breadcrumb>
   </h3>
 
-  <div class="add-exercise">
-    <!-- <resource-search-bar
-      [modalMode]="true"
-      [simpleLayout]="true"
-      [disabled]="!!readOnly"
-      [(ngModel)]="selectedExercise"
-      [filters]="{ types: ['EXERCISE'], watchers: [user.id] }"
-    /> -->
+  <div *ngIf="!readOnly" class="add-exercise">
     <ui-search-bar [searchbar]="searchbar" (filter)="filterDrawer.open()">
       <ng-template let-context> {{ context }}</ng-template>
     </ui-search-bar>
 
     <span>Liste des exercices disponibles</span>
-    <!-- ajouter dans le cercle... machin-->
     <div class="indicators">
       <ui-filter-indicators
         [filters]="filters"
@@ -394,9 +392,17 @@
     </div>
   </div>
 
+  <div *ngIf="readOnly" class="add-exercise">
+    <span class="no-permission"
+      >Vous n'avez pas les droits pour éditer cet exercice, vous pouvez cependant consulter les exercices utilisés par
+      cette activité en cliquant sur les groupes.</span
+    >
+  </div>
   <app-exercise-list
+    *ngIf="!readOnly"
     cdkDropList
     id="itemList"
+    cdkDropListSortingDisabled
     [cdkDropListDisabled]="readOnly"
     [cdkDropListConnectedTo]="allConnectedTo"
     [cdkDropListData]="items"

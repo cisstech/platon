@@ -159,11 +159,17 @@ mat-expansion-panel-header {
   padding-right: 35px;
   align-items: center;
   position: relative;
+  .group-header {
+    width:100%;
+  }
   .group-number {
     font-weight: bold;
+    height: 50%;
+    width: 100%;
   }
   .exercise-number {
     font-size: 12px;
+    height: 50%
   }
 }
 
@@ -231,6 +237,21 @@ mat-expansion-panel-header {
   margin-bottom: 5px;
 }
 
+div.ant-typography {
+  margin-bottom: 0rem;
+}
+
+.ant-form-item-label {
+  display:inline-table;
+}
+
+.no-permission {
+  margin-top: 5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
 // #F5222D
 
 // #BDBFF4

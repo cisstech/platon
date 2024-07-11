@@ -38,6 +38,7 @@ import { MatExpansionModule } from '@angular/material/expansion'
 import { ExerciseCardComponent } from './exercise-card/exercise-card.component'
 import { ExerciseListComponent } from './exercise-list/exercise-list.component'
 import { NzModalModule } from 'ng-zorro-antd/modal'
+import { NzTypographyModule } from 'ng-zorro-antd/typography'
 
 @NgModule({
   imports: [
@@ -49,7 +50,6 @@ import { NzModalModule } from 'ng-zorro-antd/modal'
     DragDropModule,
     MatExpansionModule,
 
-    NzStepsModule,
     NzCollapseModule,
     NzInputModule,
     NzInputNumberModule,
@@ -65,6 +65,7 @@ import { NzModalModule } from 'ng-zorro-antd/modal'
     NzToolTipModule,
     NzBreadCrumbModule,
     NzSpinModule,
+    NzTypographyModule,
 
     ViewportIntersectionDirective,
 
