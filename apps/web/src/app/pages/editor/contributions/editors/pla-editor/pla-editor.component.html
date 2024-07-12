@@ -417,6 +417,10 @@
   </app-exercise-list>
   <nz-spin class="spinner-pagination" nzSize="large" [nzTip]="'Chargement...'" [nzSpinning]="paginating" />
   <div style="height: 8px" *ngIf="hasMore" viewportIntersection (intersected)="loadMore()"></div>
+  <div *ngIf="!hasMore && nbFilters > 1" class="no-result">
+    <span>Plus aucun résultat ne correspond à votre recherche. Essayez d'enlever des filtres...</span>
+    <span>({{ nbFilters }} filtres actifs)</span>
+  </div>
 </ng-template>
 
 <ng-template #treeTemplate>

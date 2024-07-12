@@ -105,6 +105,13 @@ resource-list {
   margin: 2rem 2rem;
 }
 
+.no-result {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .button-group {
   margin-bottom: 1.7rem;
   button {

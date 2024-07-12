@@ -598,4 +598,10 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
     this.selectedGroup!.name = event.substring(0, 30)
     this.onChangeData()
   }
+
+  get nbFilters(): number {
+    return Object.values(this.filters)
+      .filter((e) => e !== undefined)
+      .filter((e) => e.length !== 0).length
+  }
 }
