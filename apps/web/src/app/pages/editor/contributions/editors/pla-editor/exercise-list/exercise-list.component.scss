@@ -9,33 +9,36 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 16px;
+      align-items: stretch;
+      justify-items: stretch;
       background-color: white;
       padding: 1.5rem;
 
-      li.ui-list-item-content {
-        height: 100%;
-
-        .ant-ribbon-wrapper {
-          height: 100%;
-        }
-      }
       .ui-list-item {
         margin-bottom: 0;
+        height: 100%;
       }
-
     }
-    .article-description {
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 1;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-  }
-}
+}}
 
 .exercise-list app-exercise-card {
-  display: block  ;
+  display: block;
   width: 100%;
-  height: 100%;
+  //height: 100%;
+}
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 0.5rem;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+              0 8px 10px 1px rgba(0, 0, 0, 0.14),
+              0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-dragging {
+  box-sizing: border-box;
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
 }

@@ -1,33 +1,49 @@
 :host::ng-deep {
+  .article-header {
+    display: flex;
+    align-items: flex-start;
+  }
   .article-title {
     max-width: 75%;
+    height: 100%;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
   article.bordered {
-    height: 100%;
+    height: 142px;
     div.article-content-wrapper {
       display: flex;
       flex-direction: column;
       height: 100%;
-      footer.article-footer {
-        margin-top: auto;
-      }
     }
   }
 
   .article-description {
-    width: 80%;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    display: flex;
+    height: 100%;
+    align-items: center;
+    p {
+      margin:0px;
+      width: 85%;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
   }
+
+  .article-footer {
+    display: flex;
+    align-items: flex-end;
+    align-content: flex-end;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
   .ant-ribbon {
     color: white;
     display: flex;
