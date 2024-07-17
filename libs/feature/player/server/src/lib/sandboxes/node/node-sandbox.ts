@@ -101,7 +101,6 @@ export class NodeSandbox implements OnModuleInit, Sandbox {
       .readdir(path)
       .then(async (files) => {
         files.forEach((file: string) => {
-          console.log('file', file)
           const fileStat: fs.Stats = fs.statSync(Path.join(path, file))
           const stream: fs.ReadStream = fs.createReadStream(Path.join(path, file))
           stream.pipe(pack.entry({ name: file, size: fileStat.size }))
@@ -151,7 +150,18 @@ export class NodeSandbox implements OnModuleInit, Sandbox {
     if (input.files?.length && !(await exists(baseDir))) {
       await fs.promises.mkdir(baseDir)
       await Promise.all([
-        ...input.files.map((file) => fs.promises.writeFile(Path.join(baseDir, file.path), file.content)),
+        ...input.files.map(async (file) => {
+          if (!file.hash) {
+            return fs.promises.writeFile(Path.join(baseDir, file.path), file.content)
+          } else {
+            const filePath = Path.join('resources/media', file.hash[0], file.hash)
+            try {
+              return fs.promises.link(filePath, Path.join(baseDir, file.path))
+            } catch (error) {
+              console.error(`Error while linking file ${filePath}:`, error)
+            }
+          }
+        }),
       ])
     }
 

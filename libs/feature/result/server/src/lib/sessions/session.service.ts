@@ -6,6 +6,8 @@ import { ExerciseSessionEntity, SessionEntity } from './session.entity'
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity'
 import { Session } from '@platon/feature/result/common'
 import { SessionDataEntity } from './session-data.entity'
+import * as path from 'path'
+import { promises as fs } from 'fs'
 
 @Injectable()
 export class SessionService {
@@ -62,10 +64,26 @@ export class SessionService {
     })
   }
 
-  create<TVariables>(
+  async create<TVariables>(
     input: Partial<SessionEntity<TVariables>>,
     entityManager?: EntityManager
   ): Promise<SessionEntity<TVariables>> {
+    input.source?.dependencies?.forEach(async (dependency) => {
+      const hash = dependency.hash
+      const abspath = path.join('resources/exercises', dependency.abspath).replace(/:latest/, '')
+
+      const newPath = path.join('resources/media', dependency.hash[0], hash)
+
+      try {
+        await fs.mkdir(path.dirname(newPath), { recursive: true })
+        await fs.link(abspath, newPath)
+      } catch (error: unknown) {
+        if (!(error instanceof Error && (error as NodeJS.ErrnoException).code === 'EEXIST')) {
+          console.error('Link creation error: ', error)
+        }
+      }
+    })
+
     if (entityManager) {
       return entityManager.save(entityManager.create(this.repository.target, input as SessionEntity<TVariables>))
     }

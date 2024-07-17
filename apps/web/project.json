@@ -162,7 +162,8 @@
           "editorjs-style",
           "editorjs-text-alignment-blocktune",
           "editorjs-text-color-plugin",
-          "pdfjs-dist/build/pdf.worker.entry"
+          "pdfjs-dist/build/pdf.worker.entry",
+          "crypto-js"
         ]
       },
       "configurations": {
