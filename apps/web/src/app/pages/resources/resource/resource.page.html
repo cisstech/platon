@@ -90,7 +90,7 @@
       <div class="spacer"></div>
       <nz-button-group>
         <button
-          *ngIf="isAdmin() && context.resource.type !== 'CIRCLE' && !context.resource.parent!.personal!"
+          *ngIf="isAdmin() && context.resource.type !== 'CIRCLE' && !context.resource.parent?.personal!"
           nz-button
           nzType="primary"
           nzDanger
