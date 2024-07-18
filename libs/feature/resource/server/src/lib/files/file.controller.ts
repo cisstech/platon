@@ -328,6 +328,7 @@ export class ResourceFileController {
     }
 
     if (input?.length) {
+      const commitmsgs: string[] = []
       await repo.withNoCommit(async () => {
         for (const file of input) {
           if (file.content != null) {
@@ -335,6 +336,7 @@ export class ResourceFileController {
           } else {
             await repo.mkdir(file.path)
           }
+          commitmsgs.push(`create ${file.path}`)
           this.eventService.emit<OnChangeFileEventPayload>(ON_CHANGE_FILE_EVENT, {
             repo,
             resource,
@@ -344,7 +346,7 @@ export class ResourceFileController {
         }
       })
 
-      await repo.commit('create new files')
+      await repo.commit(commitmsgs.join('\n'))
     }
 
     return new SuccessResponse()
