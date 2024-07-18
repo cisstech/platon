@@ -25,7 +25,7 @@ import { NzBadgeModule } from 'ng-zorro-antd/badge'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzPopoverModule } from 'ng-zorro-antd/popover'
-import { Subscription } from 'rxjs'
+import { firstValueFrom, Subscription } from 'rxjs'
 
 @Component({
   standalone: true,
@@ -65,6 +65,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription[] = []
 
   protected user?: User | undefined
+  protected personalCircleId?: string | undefined
 
   protected canCreateCourse = false
   protected canCreateCircle = false
@@ -101,6 +102,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     this.drawerOpenedChange.emit(this.drawerOpened)
 
     this.user = (await this.authService.ready()) as User
+    this.personalCircleId = (await firstValueFrom(this.resourceService.circle(this.user.username))).id
 
     this.canCreateCourse = this.user.role === UserRoles.admin || this.user.role === UserRoles.teacher
 
