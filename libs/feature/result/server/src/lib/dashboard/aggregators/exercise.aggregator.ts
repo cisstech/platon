@@ -118,7 +118,7 @@ export class ExerciseAverageAttempts implements SessionDataAggregator<number> {
   }
 
   complete(): number {
-    return this.totalSessions > 0 ? Math.round(this.totalAttempts / this.totalSessions) : 0
+    return this.totalSessions > 0 ? this.totalAttempts / this.totalSessions : 0
   }
 }
 
@@ -166,7 +166,7 @@ export class ExerciseAverageAttemptsToSuccess implements SessionDataAggregator<n
   }
 
   complete(): number {
-    return this.totalSessions > 0 ? Math.round(this.totalAttemptsToSuccess / this.totalSessions) : 0
+    return this.totalSessions > 0 ? this.totalAttemptsToSuccess / this.totalSessions : 0
   }
 }
 
