@@ -1,0 +1,32 @@
+<div cdkDropListGroup>
+  <div class="example-container">
+    <div
+      cdkDropList
+      [cdkDropListData]="construireWords"
+      class="example-list"
+      cdkDropListOrientation="horizontal"
+      (cdkDropListDropped)="drop($event)"
+    >
+      @for (word of construireWords; track $index) {
+      <div class="example-box" cdkDrag (click)="removeWord(word)">
+        {{ word }}
+      </div>
+      }
+    </div>
+  </div>
+  <div class="example-container">
+    <div
+      cdkDropList
+      [cdkDropListData]="suffleWords"
+      class="example-list"
+      cdkDropListOrientation="horizontal"
+      (cdkDropListDropped)="drop($event)"
+    >
+      @for (word of suffleWords; track $index) {
+      <div class="example-box" cdkDrag (click)="addWord(word)">
+        {{ word }}
+      </div>
+      }
+    </div>
+  </div>
+</div>
