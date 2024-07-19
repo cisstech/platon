@@ -20,6 +20,7 @@ import {
 } from '@platon/feature/resource/common'
 import { ResourceDashboardModel, ResultService } from '@platon/feature/result/browser'
 import { LayoutState, layoutStateFromError } from '@platon/shared/ui'
+import { ReadCommitResult } from 'isomorphic-git'
 import { BehaviorSubject, Observable, Subscription, firstValueFrom } from 'rxjs'
 
 @Injectable()
@@ -335,6 +336,13 @@ export class ResourcePresenter implements OnDestroy {
         ? this.resourceService.previewUrl(newContext.resource.id, newContext.version)
         : undefined,
     })
+  }
+
+  // Log
+
+  async log(): Promise<ReadCommitResult[]> {
+    const { resource } = this.context.value as Required<Context>
+    return firstValueFrom(this.fileService.log(resource))
   }
 }
 

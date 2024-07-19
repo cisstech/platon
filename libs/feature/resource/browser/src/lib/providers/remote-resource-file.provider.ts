@@ -16,6 +16,7 @@ import {
   ResourceFile,
 } from '@platon/feature/resource/common'
 import { ResourceFileProvider } from '../models/resource-file-provider'
+import { ReadCommitResult } from 'isomorphic-git'
 
 @Injectable()
 export class RemoteResourceFileProvider extends ResourceFileProvider {
@@ -124,5 +125,10 @@ export class RemoteResourceFileProvider extends ResourceFileProvider {
 
   unzipFile(zipFile: Pick<ResourceFile, 'url'>, file: string): Observable<void> {
     return this.http.patch<void>(zipFile.url, { unzip: true, unzipFile: file })
+  }
+
+  log(resource: string | Resource): Observable<ReadCommitResult[]> {
+    const id = typeof resource === 'string' ? resource : resource.id
+    return this.http.get<ReadCommitResult[]>(`/api/v1/files/log/${id}`)
   }
 }

@@ -1,11 +1,9 @@
 <ng-container *ngIf="items.length; else noevent">
-  <nz-timeline>
+  <div class="timeline">
     <ng-container *ngFor="let item of items; trackBy: trackById">
-      <nz-timeline-item>
-        <resource-event-item [item]="item" />
-      </nz-timeline-item>
+      <resource-event-item [item]="item" />
     </ng-container>
-  </nz-timeline>
+  </div>
 </ng-container>
 <ng-template #noevent>
   <nz-empty [nzNotFoundContent]="content">

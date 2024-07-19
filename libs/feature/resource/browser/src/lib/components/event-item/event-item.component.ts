@@ -14,6 +14,7 @@ import { AuthService, UserAvatarComponent } from '@platon/core/browser'
 import { NOTIFICATION } from '@platon/feature/notification/browser'
 import { Notification } from '@platon/feature/notification/common'
 import {
+  FileChangeEvent,
   ResourceCreateEvent,
   ResourceEvent,
   ResourceEventNotification,
@@ -70,15 +71,18 @@ class MemberCreateEventComponent implements OnInit {
   standalone: true,
   selector: 'resource-event-member-remove',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, UserAvatarComponent],
+  imports: [CommonModule, UserAvatarComponent, CommonModule],
   template: `
-    <ng-container *ngIf="notification; else noNotification">
-      Vous n'êtes plus membre de “{{ event.data.resourceName }}”
-    </ng-container>
-    <ng-template #noNotification>
-      <user-avatar showUsername="inline" [userIdOrName]="event.actorId" /> n'a plus accès à cette ressource
-    </ng-template>
+    <div class="timeline-item">
+      <user-avatar showUsername="inline" [userIdOrName]="event.actorId" />
+      <span> - {{ event.createdAt | date : 'dd/MM/yyyy à HH:mm' }}</span>
+      <div>
+        <span class="hidden-date">{{ event.createdAt | date : 'HH:mm' }}</span>
+        <span class="message">N'a plus accès à cette ressource</span>
+      </div>
+    </div>
   `,
+  styleUrls: ['./event-item.component.scss'],
 })
 class MemberRemoveEventComponent {
   protected event = inject(ResourceEventToken) as ResourceMemberRemoveEvent
@@ -89,12 +93,20 @@ class MemberRemoveEventComponent {
   standalone: true,
   selector: 'resource-event-new-status',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [UserAvatarComponent, ResourcePipesModule],
+  imports: [UserAvatarComponent, ResourcePipesModule, CommonModule],
   template: `
-    <user-avatar showUsername="inline" [userIdOrName]="event.actorId" /> a passé “{{ event.data.resourceName }}” à “{{
-      $any(event.data.newStatus) | resourceStatus
-    }}”
+    <div class="timeline-item">
+      <user-avatar showUsername="inline" [userIdOrName]="event.actorId" />
+      <span> - {{ event.createdAt | date : 'dd/MM/yyyy à HH:mm' }}</span>
+      <div>
+        <span class="hidden-date">{{ event.createdAt | date : 'HH:mm' }}</span>
+        <span class="message">
+          Statut de “{{ event.data.resourceName }}” changé à “{{ $any(event.data.newStatus) | resourceStatus }}”
+        </span>
+      </div>
+    </div>
   `,
+  styleUrls: ['./event-item.component.scss'],
 })
 class NewStatusItemComponent {
   protected event = inject(ResourceEventToken) as ResourceStatusChangeEvent
@@ -104,14 +116,49 @@ class NewStatusItemComponent {
   standalone: true,
   selector: 'resource-event-new-resource',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [UserAvatarComponent, ResourcePipesModule],
+  imports: [UserAvatarComponent, ResourcePipesModule, CommonModule],
   template: `
-    <user-avatar showUsername="inline" [userIdOrName]="event.actorId" /> a ajouté “{{ event.data.resourceName }}” dans
-    le cercle”
+    <div class="timeline-item">
+      <user-avatar showUsername="inline" [userIdOrName]="event.actorId" />
+      <span> - {{ event.createdAt | date : 'dd/MM/yyyy à HH:mm' }}</span>
+      <div>
+        <span class="hidden-date">{{ event.createdAt | date : 'HH:mm' }}</span>
+        <span class="message">A ajouté “{{ event.data.resourceName }}” dans le cercle”</span>
+      </div>
+    </div>
   `,
+  styleUrls: ['./event-item.component.scss'],
 })
 class NewResourceEventComponent {
   protected event = inject(ResourceEventToken) as ResourceCreateEvent
+}
+
+@Component({
+  standalone: true,
+  selector: 'resource-event-file-change',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [UserAvatarComponent, ResourcePipesModule, CommonModule],
+  template: `
+    @if (event.data.isMore) {
+    <div class="more">{{ event.data.commitMessage }}</div>
+    } @else {
+    <div class="timeline-item">
+      @if (event.data.displayAuthor) {
+      <user-avatar showUsername="inline" [userIdOrName]="event.actorId" />
+      <span> - {{ event.createdAt | date : 'dd/MM/yyyy à HH:mm' }}</span>
+      <!--<div>Modifications sur les fichiers de “{{ event.data.resourceName }}” :</div>-->
+      }
+      <div class="commit-message">
+        <span class="hidden-date">{{ event.createdAt | date : 'HH:mm' }}</span>
+        <span class="message">{{ event.data.commitMessage }}</span>
+      </div>
+    </div>
+    }
+  `,
+  styleUrls: ['./event-item.component.scss'],
+})
+class FileChangeEventComponent {
+  protected event = inject(ResourceEventToken) as FileChangeEvent
 }
 
 @Component({
@@ -142,6 +189,7 @@ export class ResourceEventItemComponent {
         MEMBER_REMOVE: MemberRemoveEventComponent,
         RESOURCE_CREATE: NewResourceEventComponent,
         RESOURCE_STATUS_CHANGE: NewStatusItemComponent,
+        RESOURCE_FILE_CHANGE: FileChangeEventComponent,
       }[value.type],
     }
   }

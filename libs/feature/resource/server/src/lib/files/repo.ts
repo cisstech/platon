@@ -522,4 +522,10 @@ export class Repo {
     }
     return abspath
   }
+
+  async log() {
+    return git.log({
+      ...this.repo,
+    })
+  }
 }

@@ -96,6 +96,15 @@ export class ResourceFileController {
     private readonly configService: ConfigService<Configuration>
   ) {}
 
+  @Get('/log/:resourceId')
+  async log(@Req() request: IRequest, @Param('resourceId') resourceId: string) {
+    const { repo, permissions } = await this.fileService.repo(resourceId, request)
+    if (!permissions.write) {
+      throw new UnauthorizedResponse('You are not allowed')
+    }
+    return repo.log()
+  }
+
   @Post('/release/:resourceId')
   async release(@Req() request: IRequest, @Param('resourceId') resourceId: string, @Body() input: FileReleaseDTO) {
     const { repo, resource, permissions } = await this.fileService.repo(resourceId, request)
