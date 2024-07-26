@@ -156,7 +156,7 @@ export class NodeSandbox implements OnModuleInit, Sandbox {
           } else {
             const filePath = Path.join('resources/media', file.hash[0], file.hash)
             try {
-              return fs.promises.link(filePath, Path.join(baseDir, file.path))
+              return fs.promises.copyFile(filePath, Path.join(baseDir, file.path))
             } catch (error) {
               console.error(`Error while linking file ${filePath}:`, error)
             }
