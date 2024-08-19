@@ -8,6 +8,8 @@ import { Session } from '@platon/feature/result/common'
 import { SessionDataEntity } from './session-data.entity'
 import * as path from 'path'
 import { promises as fs } from 'fs'
+import { resolveFileReference } from '@platon/core/common'
+import { ResourceFileService } from '@platon/feature/resource/server'
 
 @Injectable()
 export class SessionService {
@@ -15,7 +17,8 @@ export class SessionService {
     @InjectRepository(SessionEntity)
     private readonly repository: Repository<SessionEntity>,
     @InjectRepository(SessionDataEntity)
-    private readonly repositoryData: Repository<SessionDataEntity>
+    private readonly repositoryData: Repository<SessionDataEntity>,
+    private readonly ressourceFileService: ResourceFileService,
   ) {}
 
   findById<T extends object>(
@@ -70,13 +73,12 @@ export class SessionService {
   ): Promise<SessionEntity<TVariables>> {
     input.source?.dependencies?.forEach(async (dependency) => {
       const hash = dependency.hash
-      const abspath = path.join('resources/exercises', dependency.abspath).replace(/:latest/, '')
-
+      const {resource, relpath, version} = resolveFileReference('/'+ dependency.abspath, {resource : input.source?.resource || ''})
       const newPath = path.join('resources/media', dependency.hash[0], hash)
 
       try {
         await fs.mkdir(path.dirname(newPath), { recursive: true })
-        await fs.link(abspath, newPath)
+        await fs.writeFile(newPath, await this.ressourceFileService.getFileContent(resource, relpath, version))
       } catch (error: unknown) {
         if (!(error instanceof Error && (error as NodeJS.ErrnoException).code === 'EEXIST')) {
           console.error('Link creation error: ', error)
