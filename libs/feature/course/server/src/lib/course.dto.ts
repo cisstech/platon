@@ -3,7 +3,7 @@ import { MAX_PAGE_SIZE, MIN_PAGE_OFFSET, MIN_PAGE_SIZE, OrderingDirections } fro
 import { BaseDTO, toArray, toNumber } from '@platon/core/server'
 import { Course, CourseFilters, CourseOrderings, CreateCourse, UpdateCourse } from '@platon/feature/course/common'
 import { Transform, Type } from 'class-transformer'
-import { IsArray, IsEnum, IsNumber, IsOptional, IsString, IsUUID, Max, Min } from 'class-validator'
+import { IsArray, IsBoolean, IsEnum, IsNumber, IsOptional, IsString, IsUUID, Max, Min } from 'class-validator'
 import { CourseStatisticDTO } from './course-statistic/course-statistic.dto'
 import { CoursePermissionsDTO } from './permissions/permissions.dto'
 
@@ -96,4 +96,9 @@ export class CourseFiltersDTO implements CourseFilters {
   @IsEnum(OrderingDirections)
   @IsOptional()
   readonly direction?: OrderingDirections
+
+  @Transform(({ value }) => value === 'true')
+  @IsBoolean()
+  @IsOptional()
+  readonly showAll?: boolean
 }

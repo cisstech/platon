@@ -30,6 +30,7 @@ export class CourseController {
     filters = {
       ...filters,
       members: Array.from(new Set([req.user.id, ...(filters.members || [])])),
+      showAll: filters.showAll == true && req.user.role == UserRoles.admin,
     }
 
     const [items, total] = await this.courseService.search(filters)
