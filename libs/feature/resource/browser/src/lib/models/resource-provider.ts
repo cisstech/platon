@@ -26,4 +26,5 @@ export abstract class ResourceProvider {
   abstract create(input: CreateResource): Observable<Resource>
   abstract move(id: string, parentId: string): Observable<Resource>
   abstract moveToOwnerCircle(resource: Resource): Observable<Resource>
+  abstract delete(resource: Resource): Observable<void>
 }

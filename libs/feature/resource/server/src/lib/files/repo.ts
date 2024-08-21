@@ -244,6 +244,13 @@ export class Repo {
     await this.commit(`delete ${path}`)
   }
 
+  /**
+   * Delete the repository.
+   */
+  async removeRepo() {
+    await fs.promises.rm(this.root, { recursive: true })
+  }
+
   // Write/Read
 
   async read(path = ROOT, version = LATEST): Promise<[Node, Promise<Uint8Array>?]> {

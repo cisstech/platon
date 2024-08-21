@@ -105,6 +105,21 @@
           <i nz-icon nzType="logout" nzTheme="outline"></i>
         </button>
         <button
+          *ngIf="context.resource.type !== 'CIRCLE' && context.resource.parent?.personal!"
+          nz-button
+          nzType="primary"
+          nzDanger
+          nz-tooltip
+          nz-popconfirm
+          nzOkText="Supprimer"
+          nzOkType="danger"
+          [nzPopconfirmTitle]="resourceDeleteConfirmMessage"
+          (nzOnConfirm)="delete()"
+        >
+          <i nz-icon nzType="delete" nzTheme="outline"></i>
+          <span class="hide-on-mobile">Supprimer</span>
+        </button>
+        <button
           *ngIf="context.resource.type === 'EXERCISE' && canMove()"
           nz-button
           [routerLink]="['/resources/move']"
@@ -170,4 +185,9 @@
 
 <ng-template #sharingPopover>
   <resource-sharing [resourceId]="context.resource!.id" [canEditSharing]="context.resource!.permissions!.write" />
+</ng-template>
+
+<ng-template #resourceDeleteConfirmMessage>
+  Êtes-vous sûr de vouloir supprimer cette ressource ?<br />
+  Les cours, activités et exercices qui l'utilisent seront impactés.
 </ng-template>

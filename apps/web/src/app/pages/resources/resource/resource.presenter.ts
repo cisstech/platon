@@ -282,6 +282,20 @@ export class ResourcePresenter implements OnDestroy {
     }
   }
 
+  // Deleting
+
+  async delete(): Promise<boolean> {
+    const { resource } = this.context.value as Required<Context>
+    try {
+      await firstValueFrom(this.resourceService.delete(resource))
+      this.dialogService.success('La ressource a bien été supprimée.')
+      return true
+    } catch {
+      this.alertError()
+      return false
+    }
+  }
+
   // Private
 
   private async refresh(id: string): Promise<void> {

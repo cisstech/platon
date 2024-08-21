@@ -147,4 +147,9 @@ export class ResourcePage implements OnInit, OnDestroy {
     await this.presenter.moveToOwnerCircle()
     await this.router.navigate(['/resources'])
   }
+
+  protected async delete(): Promise<void> {
+    await this.presenter.delete()
+    await this.router.navigate(['/resources'])
+  }
 }
