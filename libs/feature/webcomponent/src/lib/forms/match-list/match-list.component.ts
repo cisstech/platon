@@ -141,9 +141,15 @@ export class MatchListComponent implements OnInit, AfterViewChecked, OnDestroy, 
       const point = info as unknown as EndPointType
       this.selectPoint(point)
       if (this.selectedPoints.length >= 2) {
-        const source = this.selectedPoints.find((e) => e.isSource)
-        const target = this.selectedPoints.find((e) => e.isTarget)
-        if (!source || !target) {
+        const source = this.selectedPoints.find((e) => this.sources.find((s) => s.id === e.getElement().id))
+        const target = this.selectedPoints.find((e) => this.targets.find((t) => t.id === e.getElement().id))
+        if (
+          !source ||
+          !target ||
+          this.state.links.find(
+            (link) => link.source === source.getElement().id && link.target === target.getElement().id
+          )
+        ) {
           const top = this.selectedPoints[1]
           this.unselectPoints()
           this.selectPoint(top)
@@ -153,6 +159,7 @@ export class MatchListComponent implements OnInit, AfterViewChecked, OnDestroy, 
             source: source.getElement().id,
             target: target.getElement().id,
           })
+          this.renderConnections()
         }
       }
     })
