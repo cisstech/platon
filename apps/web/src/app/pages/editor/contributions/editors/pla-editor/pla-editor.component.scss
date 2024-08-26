@@ -116,7 +116,7 @@ resource-list {
   margin-bottom: 1.7rem;
   button {
     height: 2.5rem;
-    border: none;
+    border: 1px solid transparent;
     background-color: var(--brand-background-primary);
     font-weight: bold;
     margin-right: 0.5rem;
