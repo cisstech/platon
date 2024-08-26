@@ -152,4 +152,8 @@ export class ResourcePage implements OnInit, OnDestroy {
     await this.presenter.delete()
     await this.router.navigate(['/resources'])
   }
+
+  protected referencesNumber(): number {
+    return this.context.resource?.statistic?.exercise?.references?.total || 0
+  }
 }

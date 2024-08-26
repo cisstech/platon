@@ -109,12 +109,12 @@
           nz-button
           nzType="primary"
           nzDanger
-          nz-tooltip
           nz-popconfirm
           nzOkText="Supprimer"
           nzOkType="danger"
           [nzPopconfirmTitle]="resourceDeleteConfirmMessage"
           (nzOnConfirm)="delete()"
+          [nzOkDisabled]="referencesNumber() !== 0"
         >
           <i nz-icon nzType="delete" nzTheme="outline"></i>
           <span class="hide-on-mobile">Supprimer</span>
@@ -188,6 +188,20 @@
 </ng-template>
 
 <ng-template #resourceDeleteConfirmMessage>
-  Êtes-vous sûr de vouloir supprimer cette ressource ?<br />
-  Les cours, activités et exercices qui l'utilisent seront impactés.
+  <div class="resource-delete-message">
+    @if (referencesNumber() === 0) {
+    <p>Êtes-vous sûr de vouloir supprimer cette ressource ?</p>
+    } @else {
+    <p>Vous ne pouvez pas supprimer cette ressource car {{ referencesNumber() }} ressources en dépendent.</p>
+    <button
+      nz-button
+      class="btn-show-references"
+      nzType="link"
+      [routerLink]="['/resources']"
+      [queryParams]="{ dependOn: [context.resource!.id] }"
+    >
+      Afficher les dépendances
+    </button>
+    }
+  </div>
 </ng-template>
