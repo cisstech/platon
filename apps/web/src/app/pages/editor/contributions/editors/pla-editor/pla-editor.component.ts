@@ -4,7 +4,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy
 import { FormBuilder, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Editor, FileService, OpenRequest } from '@cisstech/nge-ide/core'
-import { AuthService, TagService } from '@platon/core/browser'
+import { AuthService, DialogService, TagService } from '@platon/core/browser'
 import { Level, OrderingDirections, Topic, User, uniquifyBy } from '@platon/core/common'
 import { ActivityExercise, ActivityExerciseGroup, ActivityVariables } from '@platon/feature/compiler'
 import {
@@ -65,6 +65,7 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
   private readonly resourceService = inject(ResourceService)
   private readonly tagService = inject(TagService)
   private readonly changeDetectorRef = inject(ChangeDetectorRef)
+  private readonly dialogService = inject(DialogService)
 
   protected readonly searchbar: SearchBar<string> = {
     placeholder: 'Essayez un nom, un topic, un niveau...',
@@ -299,8 +300,10 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
     }
   }
 
-  /*
-    This function update an array of ids that are used to connect the lists for drag&drop shenanigagns
+  /**
+    @name updateConnectedTo
+    @description
+    This function update an array of ids that are used to connect the lists for drag&drop shenanigans
   */
   updateConnectedTo(): void {
     this.allConnectedTo = this.exerciseGroups
@@ -596,6 +599,14 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
   onGroupeRename(event: string, index: number) {
     this.selectGroup(index)
     this.selectedGroup!.name = event.substring(0, 30)
+    this.onChangeData()
+  }
+
+  onExerciseLoadFailed(failedExercise: ActivityExercise) {
+    for (const group of this.exerciseGroups) {
+      group.exercises = group.exercises.filter((exercise) => exercise.id !== failedExercise.id)
+    }
+    this.dialogService.error("Attention, un exercice n'a pas pu être chargé. Il a été retiré de l'activité.")
     this.onChangeData()
   }
 

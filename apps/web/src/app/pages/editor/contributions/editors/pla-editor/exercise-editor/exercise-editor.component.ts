@@ -65,11 +65,15 @@ export class PlaExerciseEditorComponent {
         }
         this.changeDetectorRef.detectChanges()
       })
-      .catch(console.error)
+      .catch((error) => {
+        console.error('Unable to load resource metadata', error)
+        this.exerciseLoadFailed.emit(value)
+      })
   }
 
   @Output() exerciseChange = new EventEmitter<ActivityExercise>()
   @Output() deleteClicked = new EventEmitter<void>()
+  @Output() exerciseLoadFailed = new EventEmitter<ActivityExercise>()
 
   @Input() disabled?: boolean
 

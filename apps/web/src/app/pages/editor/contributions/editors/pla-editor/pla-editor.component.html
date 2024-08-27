@@ -351,6 +351,7 @@
                       [disabled]="readOnly"
                       [exercise]="exercise"
                       (exerciseChange)="updateExercise($event)"
+                      (exerciseLoadFailed)="onExerciseLoadFailed($event)"
                       (deleteClicked)="deleteExercise(i)"
                     />
                   </div>
@@ -372,7 +373,7 @@
 <ng-template #exerciseList>
   <h3>
     <nz-breadcrumb>
-      <nz-breadcrumb-item>Groupe {{ selectedGroupIndex! + 1 }}</nz-breadcrumb-item>
+      <nz-breadcrumb-item>{{ selectedGroup!.name }}</nz-breadcrumb-item>
       <nz-breadcrumb-item>Exercices</nz-breadcrumb-item>
     </nz-breadcrumb>
   </h3>
