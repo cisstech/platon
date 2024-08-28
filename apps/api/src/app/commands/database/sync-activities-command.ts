@@ -1,19 +1,23 @@
-import { Logger } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 import { Command, CommandRunner } from 'nest-commander'
 import * as fs from 'fs'
 import { ACTIVITY_MAIN_FILE, ActivityExercise, ActivityExerciseGroup } from '@platon/feature/compiler'
 import { ResourceFileService } from '@platon/feature/resource/server'
 import { FileNotFoundError, PermissionError } from '@platon/shared/server'
 import { NotFoundResponse } from '@platon/core/common'
+import { DataSource, EntityManager } from 'typeorm'
+import { ActivityEntity } from '@platon/feature/course/server'
 
 @Command({
   name: 'sync-activities',
-  description: 'Synchronize old activities with the new format (the formats differ)',
+  description: 'Synchronize old activities with the new format (add default fields)',
 })
+@Injectable()
 export class SyncActivities extends CommandRunner {
   private readonly logger = new Logger(SyncActivities.name)
   private errorCount = 0
-  constructor(private readonly fileService: ResourceFileService) {
+  private errorCount2 = 0
+  constructor(private readonly fileService: ResourceFileService, private readonly dataSource: DataSource) {
     super()
   }
 
@@ -27,7 +31,27 @@ export class SyncActivities extends CommandRunner {
           await this.addDefaultFieldsToGroup(`${path}/${dir}`)
         })
       )
-      this.logger.log('Error count: ' + this.errorCount)
+      this.logger.log('Error count to addDefaultFieldsToGroup in commit: ' + this.errorCount)
+    } catch (e) {
+      this.logger.error(e)
+      this.errorCount++
+    }
+    try {
+      await this.dataSource.transaction(async (entityManager) => {
+        this.logger.log('Searching for resources to sync...')
+        const resources = await entityManager.getRepository(ActivityEntity).find()
+        await Promise.all(
+          resources.map(async (activity) => {
+            try {
+              this.handleSourceChanges(activity, entityManager)
+            } catch (error) {
+              this.errorCount2++
+              this.logger.error(`Unable to handle activity ${activity.id}`, error)
+            }
+          })
+        )
+      })
+      this.logger.log('Error count to DB changes: ' + this.errorCount2)
     } catch (e) {
       this.logger.error(e)
       this.errorCount++
@@ -93,5 +117,39 @@ export class SyncActivities extends CommandRunner {
 
   private isActivityExercise(item: unknown): item is ActivityExercise {
     return typeof item === 'object' && item !== null && 'id' in item && 'version' in item && 'resource' in item
+  }
+
+  private handleSourceChanges(activity: ActivityEntity, entityManager: EntityManager): void {
+    const plSource = activity.source
+
+    if (!plSource) {
+      this.logger.warn(`Activity ${activity.id} has no source, end of transformation`)
+      this.errorCount2++
+      return
+    }
+
+    const exerciseGroups = plSource.variables.exerciseGroups
+    if (!exerciseGroups) {
+      this.logger.warn(`Activity ${activity.id} has no exerciseGroups, end of transformation`)
+      this.errorCount2++
+      return
+    }
+
+    //construct a new exerciseGroups object
+    const newExerciseGroups = this.transform({ exerciseGroups })
+
+    entityManager
+      .createQueryBuilder()
+      .update(ActivityEntity)
+      .set({ source: { ...plSource, variables: { ...plSource.variables, exerciseGroups: newExerciseGroups } } })
+      .where('id = :id', { id: activity.id })
+      .execute()
+      .catch((error) => {
+        this.logger.error(`Unable to update activity ${activity.id}`, error)
+        this.errorCount2++
+      })
+      .finally(() => {
+        this.logger.log(`Activity ${activity.id} correctly updated`)
+      })
   }
 }
