@@ -6,6 +6,7 @@ import {
   LATEST,
   ResourceFile,
   ResourceTypes,
+  GitLogResult,
 } from '@platon/feature/resource/common'
 import {
   FileExistsError,
@@ -531,8 +532,23 @@ export class Repo {
   }
 
   async log() {
-    return git.log({
+    const tags = await git.listTags({ ...this.repo })
+    const commitsTags = await Promise.all(
+      tags.map(async (tag) => {
+        const tagOid = await git.resolveRef({ ...this.repo, ref: tag })
+        const tagCommit = await git.readTag({ ...this.repo, oid: tagOid })
+        return { tag, commit: tagCommit.tag.object }
+      })
+    )
+    const commits: GitLogResult[] = await git.log({
       ...this.repo,
     })
+    commits.map((commit) => {
+      const tag = commitsTags.find((tag) => tag.commit === commit.oid)
+      if (tag) {
+        commit.tag = tag.tag
+      }
+    })
+    return commits
   }
 }

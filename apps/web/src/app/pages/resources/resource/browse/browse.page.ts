@@ -8,12 +8,11 @@ import { NzModalModule } from 'ng-zorro-antd/modal'
 import { NgeUiIconModule } from '@cisstech/nge/ui/icon'
 
 import { ResourceFilesComponent } from '@platon/feature/resource/browser'
-import { FileVersions, ResourceFile } from '@platon/feature/resource/common'
+import { FileVersions, GitLogResult, ResourceFile } from '@platon/feature/resource/common'
 import { UiModalIFrameComponent } from '@platon/shared/ui'
 
 import { ResourcePresenter } from '../resource.presenter'
 import { ResourceBrowseHeaderComponent } from './header/header.component'
-import { ReadCommitResult } from 'isomorphic-git'
 
 @Component({
   standalone: true,
@@ -39,7 +38,7 @@ export class ResourceBrowsePage implements OnInit, OnDestroy {
   private readonly presenter = inject(ResourcePresenter)
   private readonly changeDetectorRef = inject(ChangeDetectorRef)
   protected context = this.presenter.defaultContext()
-  protected gitLog: ReadCommitResult[] = []
+  protected gitLog: GitLogResult[] = []
 
   protected tree?: ResourceFile
   protected versions?: FileVersions

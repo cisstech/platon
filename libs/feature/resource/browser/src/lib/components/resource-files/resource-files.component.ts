@@ -17,14 +17,13 @@ import { NgeMarkdownModule } from '@cisstech/nge/markdown'
 import { ClipboardService, PickerBrowserService } from '@cisstech/nge/services'
 import { NgeUiIconModule } from '@cisstech/nge/ui/icon'
 import { DialogModule, DialogService, UserAvatarComponent } from '@platon/core/browser'
-import { ResourceFile } from '@platon/feature/resource/common'
+import { GitLogResult, ResourceFile } from '@platon/feature/resource/common'
 import { NzContextMenuService, NzDropDownModule, NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown'
 import { NzEmptyModule } from 'ng-zorro-antd/empty'
 import { NzSpinModule } from 'ng-zorro-antd/spin'
 import { NzTreeModule, NzTreeNode } from 'ng-zorro-antd/tree'
 import { firstValueFrom } from 'rxjs'
 import { ResourceFileService } from '../../api/file.service'
-import { ReadCommitResult } from 'isomorphic-git'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 
 @Component({
@@ -73,7 +72,7 @@ export class ResourceFilesComponent implements OnInit {
 
   protected commits: CommitInfos[] = []
 
-  @Input() gitLog: ReadCommitResult[] = []
+  @Input() gitLog: GitLogResult[] = []
 
   @Input()
   set tree(value: ResourceFile) {
@@ -195,6 +194,7 @@ export class ResourceFilesComponent implements OnInit {
         message: c.message,
         displayAuthor: displayAuthor,
         isMore: false,
+        tag: commit.tag,
       })
     }
     if (limit50) {
@@ -239,4 +239,5 @@ interface CommitInfos {
   message: string
   displayAuthor: boolean
   isMore?: boolean
+  tag?: string
 }

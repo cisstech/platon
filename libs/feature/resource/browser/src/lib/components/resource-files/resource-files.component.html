@@ -33,7 +33,10 @@
             }
             <div class="commit-message">
               <span class="hidden-date">{{ commit.date | date : 'HH:mm' }}</span>
-              <span class="message">{{ commit.message }}</span>
+              <span class="message">
+                {{ commit.message }}
+                <ng-container *ngIf="commit.tag">(tag : {{ commit.tag }}) </ng-container>
+              </span>
             </div>
           </div>
           }
