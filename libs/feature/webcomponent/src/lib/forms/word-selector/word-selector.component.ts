@@ -18,8 +18,8 @@ export class WordSelectorComponent implements WebComponentHooks<WordSelectorStat
   @Input() state!: WordSelectorState
   stateChange?: EventEmitter<WordSelectorState> | undefined
 
-  //words: string[] = ["C'", 'est', 'mon', 'ami', 'il', 'vient', "d'", 'Australie', '.']
-  words: string[] = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine']
+  words: string[] = ["C'", 'est', 'mon', 'ami', 'il', 'vient', "d'", 'Australie']
+  // words: string[] = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine']
 
   construireWords: string[] = []
 
@@ -31,7 +31,7 @@ export class WordSelectorComponent implements WebComponentHooks<WordSelectorStat
 
   ngOnInit() {
     this.suffleWords = [...this.words]
-    //this.shuffleArray()
+    this.shuffleArray()
   }
 
   getRows() {
