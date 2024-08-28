@@ -17,8 +17,7 @@
     height: 0;
     top: -5vh;
     & > li {
-      position:unset;
-      display: contents;
+      padding: 0;
     }
   }
 }

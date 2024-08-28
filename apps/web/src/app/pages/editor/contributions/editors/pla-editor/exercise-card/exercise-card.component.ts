@@ -19,7 +19,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 import { v4 as uuidv4 } from 'uuid'
 
-import { ListItemTag, NgeUiListModule } from '@cisstech/nge/ui/list'
+import { NgeUiListModule } from '@cisstech/nge/ui/list'
 import { ExerciseResourceMeta, Resource, ResourceFile } from '@platon/feature/resource/common'
 
 import { UiModalIFrameComponent, positiveGreenColor } from '@platon/shared/ui'
@@ -36,10 +36,6 @@ import { NgeMarkdownModule } from '@cisstech/nge/markdown'
 import { NzSpinModule } from 'ng-zorro-antd/spin'
 
 export const getPreviewOverridesStorageKey = (sessionId: string) => `preview.overrides.${sessionId}`
-type Tag = {
-  type: 'level' | 'topic'
-  id: string
-}
 
 @Component({
   standalone: true,
@@ -77,18 +73,14 @@ export class ExerciseCardComponent implements OnChanges, AfterViewInit {
   protected successRateColor = 'var(--brand-text-primary, #000)'
 
   protected configurable = false
-  protected tags: ListItemTag[] = []
   protected readme?: ResourceFile
 
   @Input() item!: Resource
-  @Input({ transform: booleanAttribute }) simple = false
   @Input({ transform: booleanAttribute }) modalMode = false
   @Input({ transform: booleanAttribute }) editable = true
   @Input({ transform: booleanAttribute }) clickable = true
   @Input({ transform: booleanAttribute }) showButton = true
   @Input() previewOverrides?: Variables
-  // @Output() levelClicked = new EventEmitter<string>()
-  // @Output() topicClicked = new EventEmitter<string>()
   @Output() exerciseClicked = new EventEmitter<Resource>()
 
   @ViewChild('articleComponent', { read: ElementRef }) articleComponentRef!: ElementRef
@@ -119,31 +111,6 @@ export class ExerciseCardComponent implements OnChanges, AfterViewInit {
   }
 
   ngOnChanges(): void {
-    this.tags = []
-    if (!this.simple) {
-      this.item.levels?.forEach((level) =>
-        this.tags.push({
-          text: level.name,
-          color: '#008080',
-          data: {
-            type: 'level',
-            id: level.id,
-          } as Tag,
-        })
-      )
-
-      this.item.topics?.forEach((topic) =>
-        this.tags.push({
-          text: topic.name,
-          color: '#FF7F50',
-          data: {
-            type: 'topic',
-            id: topic.id,
-          } as Tag,
-        })
-      )
-    }
-
     this.name = this.item.name
     this.desc = this.item.desc as string
     this.successRate = this.item.statistic?.activity?.successRate ?? this.item.statistic?.exercise?.successRate ?? 0

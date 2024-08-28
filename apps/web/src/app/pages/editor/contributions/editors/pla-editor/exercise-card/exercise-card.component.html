@@ -1,4 +1,8 @@
-<nz-ribbon [nzText]="ribbonTemplate" [nzColor]="item.status | resourceStatusColor">
+<nz-ribbon
+  [nzText]="ribbonTemplate"
+  [nzColor]="item.status | resourceStatusColor"
+  [ngClass]="{ 'reduced-height': !showButton }"
+>
   <ui-list-item-article
     #articleComponent
     [style.--border-color]="'transparent'"

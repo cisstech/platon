@@ -15,7 +15,7 @@
   }
 
   article.bordered {
-    height: 142px;
+    height: inherit;
     div.article-content-wrapper {
       display: flex;
       flex-direction: column;
@@ -27,6 +27,7 @@
     display: flex;
     height: 100%;
     align-items: center;
+    padding-right: 5px;
     p {
       margin:0px;
       width: 85%;
@@ -116,4 +117,12 @@ ui-list-item-article {
   display: inline-flex;
   justify-content: center;
   align-items: center;
+}
+
+.reduced-height {
+  height: 120px;
+}
+
+nz-ribbon {
+  height: 140px;
 }
