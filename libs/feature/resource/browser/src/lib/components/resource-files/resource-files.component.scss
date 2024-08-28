@@ -40,3 +40,61 @@ nz-spin {
 .spacer {
   flex: 1;
 }
+
+.files {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  flex-direction: row;
+  height: 70vh;
+  margin: 1rem 0;
+  mat-card {
+    flex: 1;
+    height: 95%;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+  }
+  mat-card:first-child {
+    margin-right: 1rem;
+  }
+  mat-card:last-child {
+    margin-left: 1rem;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .files {
+    display: block;
+    height: auto;
+    mat-card:first-child {
+      margin-right: 0;
+    }
+    mat-card:last-child {
+      margin-left: 0;
+    }
+  }
+}
+
+user-avatar {
+  margin: 30px 0 10px 0;
+}
+
+.hidden-date {
+  visibility: hidden;
+  font-size: 0.8em;
+  color: grey;
+  margin-right: 1em;
+}
+
+.timeline-item div:hover .hidden-date {
+  visibility: visible;
+}
+
+.timeline-item div .message {
+  border-left: 3px solid var(--brand-color-primary);
+  padding: 0.8em;
+}
+
+.more {
+  margin-top: 30px;
+}

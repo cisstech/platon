@@ -1,18 +1,46 @@
 <ng-container *ngIf="!loading; else spinner">
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>
-        Fichiers
-        <span>
-          <ng-container *ngIf="code"> &#64;{{ code }}:{{ version }} </ng-container>
-        </span>
-      </mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <nz-tree *ngIf="nodes.length; else noFiles" nzBlockNode [nzData]="nodes" [nzTreeTemplate]="nzTreeTemplate">
-      </nz-tree>
-    </mat-card-content>
-  </mat-card>
+  <div class="files">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>
+          Fichiers
+          <span>
+            <ng-container *ngIf="code"> &#64;{{ code }}:{{ version }} </ng-container>
+          </span>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <nz-tree *ngIf="nodes.length; else noFiles" nzBlockNode [nzData]="nodes" [nzTreeTemplate]="nzTreeTemplate">
+        </nz-tree>
+      </mat-card-content>
+    </mat-card>
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Historique des fichiers</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div *ngFor="let commit of commits">
+          @if (commit.isMore) {
+          <div class="more">
+            {{ commit.message }}
+            <button nz-button nzType="link" nzSize="small" (click)="refreshGitLog(false)">(Voir plus)</button>
+          </div>
+          } @else {
+          <div class="timeline-item">
+            @if (commit.displayAuthor) {
+            <user-avatar showUsername="inline" [userIdOrName]="commit.author" />
+            <span> - {{ commit.date | date : 'dd/MM/yyyy à HH:mm' }}</span>
+            }
+            <div class="commit-message">
+              <span class="hidden-date">{{ commit.date | date : 'HH:mm' }}</span>
+              <span class="message">{{ commit.message }}</span>
+            </div>
+          </div>
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
   <mat-card>
     <mat-card-header>
       <mat-card-title>Documentation (readme.md)</mat-card-title>

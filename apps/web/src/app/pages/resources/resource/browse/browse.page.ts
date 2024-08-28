@@ -13,6 +13,7 @@ import { UiModalIFrameComponent } from '@platon/shared/ui'
 
 import { ResourcePresenter } from '../resource.presenter'
 import { ResourceBrowseHeaderComponent } from './header/header.component'
+import { ReadCommitResult } from 'isomorphic-git'
 
 @Component({
   standalone: true,
@@ -38,6 +39,7 @@ export class ResourceBrowsePage implements OnInit, OnDestroy {
   private readonly presenter = inject(ResourcePresenter)
   private readonly changeDetectorRef = inject(ChangeDetectorRef)
   protected context = this.presenter.defaultContext()
+  protected gitLog: ReadCommitResult[] = []
 
   protected tree?: ResourceFile
   protected versions?: FileVersions
@@ -46,6 +48,7 @@ export class ResourceBrowsePage implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.presenter.contextChange.subscribe(async (context) => {
         this.context = context
+        this.gitLog = await this.presenter.log()
         this.refreshFiles().catch(console.error)
       })
     )

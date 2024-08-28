@@ -6,7 +6,6 @@ export const RESOURCE_EVENT_TYPE_NAMES: Record<ResourceEventTypes, string> = {
   MEMBER_REMOVE: 'Membre supprimé',
   RESOURCE_CREATE: 'Nouvelle ressource',
   RESOURCE_STATUS_CHANGE: 'Nouveau status',
-  RESOURCE_FILE_CHANGE: 'Fichiers modifiés',
 }
 
 @Pipe({
