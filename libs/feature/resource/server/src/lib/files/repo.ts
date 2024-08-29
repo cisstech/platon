@@ -540,15 +540,18 @@ export class Repo {
         return { tag, commit: tagCommit.tag.object }
       })
     )
-    const commits: GitLogResult[] = await git.log({
-      ...this.repo,
-    })
-    commits.map((commit) => {
-      const tag = commitsTags.find((tag) => tag.commit === commit.oid)
-      if (tag) {
-        commit.tag = tag.tag
+    const commits: GitLogResult[] = (
+      await git.log({
+        ...this.repo,
+      })
+    ).map((commit) => ({ ...commit, tags: [] }))
+    commitsTags.forEach((commitTag) => {
+      const commit = commits.find((c) => c.oid === commitTag.commit)
+      if (commit) {
+        commit.tags.push(commitTag.tag)
       }
     })
+    commits[0].tags.push('latest')
     return commits
   }
 }

@@ -194,7 +194,7 @@ export class ResourceFilesComponent implements OnInit {
         message: c.message,
         displayAuthor: displayAuthor,
         isMore: false,
-        tag: commit.tag,
+        tags: commit.tags,
       })
     }
     if (limit50) {
@@ -206,6 +206,7 @@ export class ResourceFilesComponent implements OnInit {
           message: `+ ${nbOver50} changements non affichés`,
           displayAuthor: false,
           isMore: true,
+          tags: [],
         })
       }
       if (nbOver50 >= 0) {
@@ -217,6 +218,7 @@ export class ResourceFilesComponent implements OnInit {
           message: c.message,
           displayAuthor: true,
           isMore: false,
+          tags: initCommit!.tags,
         })
       }
     }
@@ -239,5 +241,5 @@ interface CommitInfos {
   message: string
   displayAuthor: boolean
   isMore?: boolean
-  tag?: string
+  tags: string[]
 }

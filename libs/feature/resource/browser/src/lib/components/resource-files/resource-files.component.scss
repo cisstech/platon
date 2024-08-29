@@ -52,6 +52,7 @@ nz-spin {
     flex: 1;
     height: 95%;
     overflow-y: auto;
+    overflow-x: hidden;
     margin-bottom: 1rem;
   }
   mat-card:first-child {
@@ -84,6 +85,7 @@ user-avatar {
   font-size: 0.8em;
   color: grey;
   margin-right: 1em;
+  margin-top: 4px;
 }
 
 .timeline-item div:hover .hidden-date {
@@ -91,10 +93,32 @@ user-avatar {
 }
 
 .timeline-item div .message {
-  border-left: 3px solid var(--brand-color-primary);
-  padding: 0.8em;
+  display: inline;
+  border-left: 3px solid var(--brand-color-theme);
+  padding: 0.1em 0.8em;
+  margin: 0;
 }
 
 .more {
   margin-top: 30px;
+}
+
+.commit-message {
+  display: flex;
+}
+
+.message-content {
+  display: inline-block;
+  margin-right: 1rem;
+}
+
+.tag {
+  display: inline-block;
+  border: 1px solid var(--brand-color-theme);
+  border-radius: 10px;
+  padding: 0 0.7em;
+  margin: 0 0.5rem 0.1rem 0;
+  font-weight: 600;
+  color: var(--brand-color-theme);
+  cursor:default;
 }
