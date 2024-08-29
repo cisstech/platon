@@ -2,6 +2,7 @@ header {
   width: 100%;
   display: flex;
   align-items: center;
+  color: var(--brand-text-primary);
 }
 
 .logo {
@@ -9,6 +10,10 @@ header {
   height: 32px;
   margin-right: 0.5rem;
   cursor: pointer;
+}
+
+.mat-icon {
+  color: var(--brand-text-primary);
 }
 
 .spacer {
