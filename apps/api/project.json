@@ -16,6 +16,7 @@
         "tsConfig": "apps/api/tsconfig.app.json",
         "assets": ["apps/api/src/assets"],
         "webpackConfig": "apps/api/webpack.config.js",
+
         "tsPlugins": [
           {
             "name": "@nestjs/swagger/plugin",

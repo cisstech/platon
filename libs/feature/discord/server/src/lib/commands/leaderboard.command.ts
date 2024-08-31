@@ -1,4 +1,4 @@
-import { Command, Handler, InjectDiscordClient, InteractionEvent, Param } from '@discord-nestjs/core'
+import { Command, Handler, InjectDiscordClient, InteractionEvent, Param, ParamType } from '@discord-nestjs/core'
 import { Injectable, Logger } from '@nestjs/common'
 import { Public } from '@platon/core/server'
 import { SlashCommandPipe } from '@discord-nestjs/common'
@@ -12,7 +12,7 @@ import { WatchedChallengesEntity } from '../watchedChallenges.entity'
 import { isUUID4 } from '@platon/shared/server'
 
 export class LeaderboardDTO {
-  @Param({ description: 'Provide the challenge id', required: true })
+  @Param({ description: 'Provide the challenge id', required: true, type: ParamType.STRING })
   id = ''
 }
 
