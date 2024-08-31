@@ -1,6 +1,9 @@
 {
   "name": "platon",
   "version": "0.0.0",
+  "engines": {
+    "node": "22"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/cisstech/platon"
