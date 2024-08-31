@@ -103,7 +103,7 @@ export class NodeSandbox implements OnModuleInit, Sandbox {
         files.forEach((file: string) => {
           const fileStat: fs.Stats = fs.statSync(Path.join(path, file))
           const stream: fs.ReadStream = fs.createReadStream(Path.join(path, file))
-          stream.pipe(pack.entry({ name: file, size: fileStat.size }))
+          stream.pipe(pack.entry({ name: file, size: fileStat.size }) as any)
         })
       })
       .catch((error) => {
@@ -111,7 +111,7 @@ export class NodeSandbox implements OnModuleInit, Sandbox {
       })
 
     pack.finalize()
-    const tgz = pack.pipe(gzip)
+    const tgz = pack.pipe(gzip as any)
 
     const buffer = await new Promise<Buffer>((resolve, reject) => {
       const chunks: Buffer[] = []
@@ -121,7 +121,7 @@ export class NodeSandbox implements OnModuleInit, Sandbox {
       tgz.on('end', () => {
         resolve(Buffer.concat(chunks))
       })
-      tgz.on('error', (error) => {
+      tgz.on('error', (error: any) => {
         reject(error)
       })
     })
