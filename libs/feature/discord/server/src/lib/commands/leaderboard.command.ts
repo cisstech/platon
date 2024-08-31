@@ -13,7 +13,7 @@ import { isUUID4 } from '@platon/shared/server'
 
 export class LeaderboardDTO {
   @Param({ description: 'Provide the challenge id', required: true })
-  id: string = ''
+  id = ''
 }
 
 @Command({

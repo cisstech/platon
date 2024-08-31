@@ -1,5 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpParameterCodec, HttpParams, HttpRequest, HttpUrlEncodingCodec } from '@angular/common/http'
+import {
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpParameterCodec,
+  HttpParams,
+  HttpRequest,
+  HttpUrlEncodingCodec,
+} from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs'
 
