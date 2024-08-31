@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { UserModule } from '@platon/core/server'
+import { AuthModule, UserModule } from '@platon/core/server'
 import { FeatureLtiServerModule } from '@platon/feature/lti/server'
 import { FeatureResourceServerModule } from '@platon/feature/resource/server'
 import { ActivityCorrectorController } from './activity-corrector/activity-corrector.controller'
@@ -35,9 +35,11 @@ import { CoursePermissionsService } from './permissions/permissions.service'
 import { CourseSectionController } from './section/section.controller'
 import { CourseSectionEntity } from './section/section.entity'
 import { CourseSectionService } from './section/section.service'
-
-import { ActivityGroupController } from './activity-group/activity-group.controller'
+import { CourseDemoController } from './course-demo/course-demo.controller'
+import { CourseDemoService } from './course-demo/course-demo.service'
+import { CourseDemoEntity } from './course-demo/course-demo.entity'
 import { ActivityGroupEntity } from './activity-group/activity-group.entity'
+import { ActivityGroupController } from './activity-group/activity-group.controller'
 import { ActivityGroupService } from './activity-group/activity-group.service'
 
 @Module({
@@ -45,6 +47,7 @@ import { ActivityGroupService } from './activity-group/activity-group.service'
     UserModule,
     FeatureLtiServerModule,
     FeatureResourceServerModule,
+    AuthModule,
     TypeOrmModule.forFeature([
       CourseEntity,
       CourseMemberView,
@@ -55,6 +58,7 @@ import { ActivityGroupService } from './activity-group/activity-group.service'
       ActivityMemberEntity,
       ActivityCorrectorView,
       ActivityCorrectorEntity,
+      CourseDemoEntity,
       CourseGroupEntity,
       CourseGroupMemberEntity,
       ActivityGroupEntity,
@@ -67,6 +71,7 @@ import { ActivityGroupService } from './activity-group/activity-group.service'
     ActivityController,
     ActivityMemberController,
     ActivityCorrectorController,
+    CourseDemoController,
     CourseGroupController,
     CourseGroupMemberController,
     ActivityGroupController,
@@ -84,6 +89,7 @@ import { ActivityGroupService } from './activity-group/activity-group.service'
     ActivityMemberService,
     ActivityCorrectorService,
     CourseNotificationService,
+    CourseDemoService,
     CourseGroupService,
     CourseGroupMemberService,
     ActivityGroupService,
@@ -97,6 +103,7 @@ import { ActivityGroupService } from './activity-group/activity-group.service'
     CourseSectionService,
     ActivityService,
     ActivityMemberService,
+    CourseDemoService,
     ActivityCorrectorService,
     CourseNotificationService,
     ActivityGroupService,

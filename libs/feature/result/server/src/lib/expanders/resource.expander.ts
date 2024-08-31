@@ -8,14 +8,14 @@ import { IsNull, Not, Repository } from 'typeorm'
 import { ActivityTotalAttempts } from '../dashboard/aggregators/activity.aggregator'
 import { ExerciseUniqueAttempts } from '../dashboard/aggregators/exercise.aggregator'
 import { SessionSuccessRate } from '../dashboard/aggregators/session.aggregator'
-import { SessionView } from '../sessions/session.view'
+import { SessionDataEntity } from '../sessions/session-data.entity'
 
 @Injectable()
 @Expander(ResourceDTO)
 export class ResourceExpander {
   constructor(
-    @InjectRepository(SessionView)
-    private readonly sessionView: Repository<SessionView>,
+    @InjectRepository(SessionDataEntity)
+    private readonly sessionData: Repository<SessionDataEntity>,
 
     @InjectRepository(ResourceStatisticEntity)
     private readonly statisticView: Repository<ResourceStatisticEntity>,
@@ -33,7 +33,7 @@ export class ResourceExpander {
     }
 
     const [sessions, references] = await Promise.all([
-      this.sessionView.find({
+      this.sessionData.find({
         where: { resourceId: parent.id, userId: Not(IsNull()) },
       }),
       this.dependencyRepo.find({

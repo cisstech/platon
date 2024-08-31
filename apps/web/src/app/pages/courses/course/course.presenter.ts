@@ -8,6 +8,7 @@ import {
   Activity,
   ActivityFilters,
   Course,
+  CourseDemo,
   CourseGroup,
   CourseGroupDetail,
   CourseMember,
@@ -21,6 +22,7 @@ import { ResultService } from '@platon/feature/result/browser'
 import { ActivityLeaderboardEntry, CourseLeaderboardEntry } from '@platon/feature/result/common'
 import { LayoutState, layoutStateFromError } from '@platon/shared/ui'
 import { BehaviorSubject, Subscription, firstValueFrom } from 'rxjs'
+import { Optional } from 'typescript-optional'
 
 @Injectable()
 export class CoursePresenter implements OnDestroy {
@@ -156,6 +158,54 @@ export class CoursePresenter implements OnDestroy {
       })
 
       this.dialogService.success('Les informations du cours ont bien été modifiées !')
+      return true
+    } catch {
+      this.alertError()
+      return false
+    }
+  }
+
+  async delete(): Promise<boolean> {
+    const { course } = this.context.value as Required<Context>
+    try {
+      await firstValueFrom(this.courseService.delete(course))
+      this.dialogService.success('Le cours a bien été supprimé !')
+      return true
+    } catch {
+      this.alertError()
+      return false
+    }
+  }
+
+  async createDemo(): Promise<boolean> {
+    const { course } = this.context.value as Required<Context>
+    try {
+      const demo = await firstValueFrom(this.courseService.createDemo(course.id))
+
+      this.context.next({
+        ...this.context.value,
+        demo: Optional.ofNonNull(demo),
+      })
+
+      this.dialogService.success('Une démo a bien été créée!')
+      return true
+    } catch {
+      this.alertError()
+      return false
+    }
+  }
+
+  async deleteDemo(): Promise<boolean> {
+    const { course } = this.context.value as Required<Context>
+    try {
+      await firstValueFrom(this.courseService.deleteDemo(course.id))
+
+      this.context.next({
+        ...this.context.value,
+        demo: Optional.empty(),
+      })
+
+      this.dialogService.success('La démo a bien été supprimée!')
       return true
     } catch {
       this.alertError()
@@ -320,10 +370,13 @@ export class CoursePresenter implements OnDestroy {
       ),
     ])
 
+    const demo = await firstValueFrom(this.courseService.getDemo(course.id))
+
     this.context.next({
       state: 'READY',
       user,
       course,
+      demo,
     })
   }
 
@@ -345,4 +398,5 @@ export interface Context {
   user?: User
   course?: Course
   courseGroups?: CourseGroupDetail[]
+  demo?: Optional<CourseDemo>
 }

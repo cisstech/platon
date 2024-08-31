@@ -1,9 +1,7 @@
 import { CommonModule } from '@angular/common'
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
-
 import { NzSpinModule } from 'ng-zorro-antd/spin'
-
 import { PlayerCorrectionComponent } from '@platon/feature/player/browser'
 import { Player } from '@platon/feature/player/common'
 import { ResultService } from '@platon/feature/result/browser'

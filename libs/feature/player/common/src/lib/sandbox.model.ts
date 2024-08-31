@@ -7,6 +7,7 @@ export interface SandboxInput {
     | {
         path: string
         content: string
+        hash: string
       }[]
     | null
   variables: ExerciseVariables

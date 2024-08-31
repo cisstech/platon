@@ -6,6 +6,8 @@ import {
   ActivityFilters,
   ActivityMember,
   Course,
+  CourseDemo,
+  CourseDemoAccessResponse,
   CourseFilters,
   CourseMember,
   CourseMemberFilters,
@@ -30,6 +32,8 @@ import { ActivityProvider } from '../models/activity-provider'
 import { CourseMemberProvider } from '../models/course-member-provider'
 import { CourseProvider } from '../models/course-provider'
 import { CourseSectionProvider } from '../models/course-section-provider'
+import { CourseDemoProvider } from '../models/course-demo-provider'
+import { Optional } from 'typescript-optional'
 import { CourseGroupProvider } from '../models/course-group-provider'
 import { ActivityGroupProvider } from '../models/activity-group.provider'
 
@@ -47,6 +51,7 @@ export class CourseService {
     private readonly courseProvider: CourseProvider,
     private readonly courseMemberProvider: CourseMemberProvider,
     private readonly courseSectionProvider: CourseSectionProvider,
+    private readonly courseDemoProvider: CourseDemoProvider,
     private readonly courseGroupProvider: CourseGroupProvider,
 
     private readonly activityProvider: ActivityProvider,
@@ -68,8 +73,30 @@ export class CourseService {
     return this.courseProvider.update(id, input)
   }
 
+  delete(course: Course): Observable<void> {
+    return this.courseProvider.delete(course)
+  }
+
   create(input: CreateCourse): Observable<Course> {
     return this.courseProvider.create(input)
+  }
+  //#endregion
+
+  //#region Courses Demo
+  createDemo(courseId: string): Observable<CourseDemo> {
+    return this.courseDemoProvider.create(courseId)
+  }
+
+  accessDemo(uri: string): Observable<CourseDemoAccessResponse> {
+    return this.courseDemoProvider.access(uri)
+  }
+
+  getDemo(courseId: string): Observable<Optional<CourseDemo>> {
+    return this.courseDemoProvider.get(courseId)
+  }
+
+  deleteDemo(courseId: string): Observable<void> {
+    return this.courseDemoProvider.delete(courseId)
   }
   //#endregion
 
@@ -132,6 +159,10 @@ export class CourseService {
 
   deleteActivity(activity: Activity): Observable<void> {
     return this.activityProvider.delete(activity).pipe(tap(() => this.deleteActivityEvent.next(activity)))
+  }
+
+  closeActivity(activity: Activity): Observable<Activity> {
+    return this.activityProvider.close(activity)
   }
 
   //#endregion

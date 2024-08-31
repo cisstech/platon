@@ -1,12 +1,24 @@
 <nz-skeleton [nzActive]="loading" [nzLoading]="loading">
   <form [formGroup]="form">
     <h4 id="openDates">Souhaitez-vous limiter l'accès de cette activité à une date en particulier?</h4>
-    <nz-range-picker
-      [nzShowTime]="true"
-      [nzDisabledDate]="disabledDate"
-      aria-labelledby="openDates"
-      formControlName="openDates"
-    />
+    <div class="date-picker">
+      <nz-date-picker
+        [nzShowTime]="true"
+        [nzDisabledDate]="disabledDate"
+        aria-labelledby="openAt"
+        formControlName="openAt"
+        nzPlaceHolder="Date d'ouverture"
+        nzFormat="dd MMMM yyyy, HH:mm:ss"
+      />
+      <nz-date-picker
+        [nzShowTime]="true"
+        [nzDisabledDate]="disabledDate"
+        aria-labelledby="closeAt"
+        formControlName="closeAt"
+        nzPlaceHolder="Date de fermeture"
+        nzFormat="dd MMMM yyyy, HH:mm:ss"
+      />
+    </div>
     <ng-container *ngIf="!activity.isChallenge">
       <h4 id="members">Souhaitez-vous limiter l'accès de cette activité à des utilisateurs en particulier?</h4>
       <course-member-select
@@ -29,7 +41,9 @@
     </ng-container>
     <nz-spin *ngIf="updating" nzTip="Modification de l'activité..."></nz-spin>
     <div class="actions">
-      <button nz-button [disabled]="!form.valid" nzType="primary" (click)="update()">Modifier</button>
+      <button nz-button [disabled]="!form.valid" nzType="primary" (click)="update()">
+        Appliquer les modifications
+      </button>
       <div class="spacer"></div>
       <button
         nz-button
@@ -53,11 +67,22 @@
         Supprimer
       </button>
     </div>
+    <button
+      nz-button
+      nzDanger
+      nzType="primary"
+      nz-popconfirm
+      [nzPopconfirmTitle]="confirmClose"
+      nzPopconfirmPlacement="right"
+      (nzOnConfirm)="close()"
+    >
+      Fermer l'activité
+    </button>
   </form>
 </nz-skeleton>
 
 <ng-template #confirmReload>
-  <p>Êtes-vous sûr de vouloir recharger cette activité?</p>
+  <p>Êtes-vous sûr de vouloir recharger cette activité ?</p>
   <ul>
     <li>L'activité sera remplacée par sa dernière version publiée.</li>
     <li>Après avoir supprimé l'activité, toutes ses réponses seront effacées.</li>
@@ -65,6 +90,10 @@
 </ng-template>
 
 <ng-template #confirmDelete>
-  <p>Êtes-vous sûr de vouloir supprimer cette activité?</p>
+  <p>Êtes-vous sûr de vouloir supprimer cette activité ?</p>
   <p>Après avoir supprimé l'activité, toutes ses réponses seront effacées.</p>
+</ng-template>
+
+<ng-template #confirmClose>
+  <p>Êtes-vous sûr de vouloir fermer cette activité ?</p>
 </ng-template>

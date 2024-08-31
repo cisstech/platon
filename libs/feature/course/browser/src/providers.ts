@@ -17,15 +17,21 @@ import { RemoteCourseGroupProvider } from './providers/remote-course-group.provi
 import { RemoteCourseMemberProvider } from './providers/remote-course-member.provider'
 import { RemoteCourseSectionProvider } from './providers/remote-course-section.provider'
 import { RemoteCourseProvider } from './providers/remote-course.provider'
+import { CourseDemoProvider } from './models/course-demo-provider'
+import { RemoteCourseDemoProvider } from './providers/remote-course-demo.provider'
 
 export const COURSE_PROVIDERS: Provider[] = [
   { provide: ActivityProvider, useClass: RemoteActivityProvider },
   { provide: ActivityMemberProvider, useClass: RemoteActivityMemberProvider },
-  { provide: ActivityCorrectorProvider, useClass: RemoteActivityCorrectorProvider },
+  {
+    provide: ActivityCorrectorProvider,
+    useClass: RemoteActivityCorrectorProvider,
+  },
 
   { provide: CourseProvider, useClass: RemoteCourseProvider },
   { provide: CourseMemberProvider, useClass: RemoteCourseMemberProvider },
   { provide: CourseSectionProvider, useClass: RemoteCourseSectionProvider },
+  { provide: CourseDemoProvider, useClass: RemoteCourseDemoProvider },
   { provide: CourseGroupProvider, useClass: RemoteCourseGroupProvider },
   { provide: ActivityGroupProvider, useClass: RemoteActivityGroupProvider },
 

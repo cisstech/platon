@@ -26,8 +26,10 @@ export class DialogService {
     private readonly nzNotificationService: NzNotificationService
   ) {}
 
-  error(content: string, options: MessageOptions = { duration: DEFAULT_DIALOG_DURATION }) {
-    if (options.duration == undefined) options.duration = DEFAULT_DIALOG_DURATION
+  public static readonly DEFAULT_DIALOG_DURATION: number = 4500
+
+  error(content: string, options: MessageOptions = { duration: DialogService.DEFAULT_DIALOG_DURATION }) {
+    if (options.duration == undefined) options.duration = DialogService.DEFAULT_DIALOG_DURATION
     const ref = options?.notification
       ? this.nzNotificationService.error(options.notification.title, content, {
           nzDuration: options?.duration,

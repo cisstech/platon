@@ -220,6 +220,13 @@ export class ActivityService {
     return activity
   }
 
+  async close(courseId: string, activityId: string, guard?: ActivityGuard): Promise<ActivityEntity> {
+    this.notificationService.notifyActivityBeingClosed(activityId).catch((error) => {
+      this.logger.error('Failed to send notification', error)
+    })
+    return this.update(courseId, activityId, { closeAt: new Date() }, guard)
+  }
+
   async delete(courseId: string, activityId: string, guard?: ActivityGuard) {
     const activity = await this.repository.findOne({
       where: {
@@ -288,6 +295,9 @@ export class ActivityService {
 
   private createQueryBuilder(courseId: string) {
     // TODO select only the fields we need here
+    if (this.request.user.role === 'admin') {
+      return this.repository.createQueryBuilder('activity').where(`activity.course_id = :courseId`, { courseId })
+    }
     const qb = buildSelectQuery(
       this.repository.createQueryBuilder('activity'),
       (qb) => this.withMemberJoin(qb, this.request.user),

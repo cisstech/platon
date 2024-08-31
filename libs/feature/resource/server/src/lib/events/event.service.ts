@@ -14,6 +14,7 @@ export class ResourceEventService {
   async search(resourceId: string, filters: ResourceEventFilters = {}): Promise<[ResourceEventEntity[], number]> {
     const query = this.repository.createQueryBuilder('watcher')
     query.where('resource_id = :resourceId', { resourceId })
+    query.orderBy('created_at', 'DESC')
 
     if (filters.offset) {
       query.offset(filters.offset)

@@ -49,7 +49,7 @@ export class DragDropDirective implements OnDestroy, AfterContentInit {
       return false
     }
     node.addEventListener('dragstart', dragstart, false)
-    const dragend = (_: DragEvent) => {
+    const dragend = () => {
       this.renderer.removeClass(node, 'dnd-drag')
       return false
     }

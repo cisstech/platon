@@ -6,12 +6,15 @@ import {
   ForbiddenResponse,
   NotFoundResponse,
   ResetPasswordInput,
+  SignInDemoOutput,
   SignInInput,
   SignUpInput,
 } from '@platon/core/common'
 import * as bcrypt from 'bcrypt'
 import { Configuration } from '../config/configuration'
 import { UserService } from '../users/user.service'
+import { UserRoles } from '@platon/core/common'
+import { randomUUID } from 'crypto'
 
 @Injectable()
 export class AuthService {
@@ -48,6 +51,28 @@ export class AuthService {
     })
 
     return this.authenticate(user.id, user.username)
+  }
+
+  async signInDemo(): Promise<SignInDemoOutput> {
+    const anonymousUser = await this.userService.create({
+      username: 'demo.' + randomUUID().split('-').join('_'),
+      firstName: 'anon',
+      lastName: 'ymous',
+      active: true,
+      role: UserRoles.demo,
+    })
+
+    anonymousUser.lastLogin = new Date()
+    if (!anonymousUser.firstLogin) {
+      anonymousUser.firstLogin = new Date()
+    }
+
+    const token = await this.authenticate(anonymousUser.id, anonymousUser.username)
+
+    return {
+      authToken: token,
+      userId: anonymousUser.id,
+    }
   }
 
   async resetPassword(input: ResetPasswordInput): Promise<AuthToken> {

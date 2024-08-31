@@ -23,6 +23,14 @@
 }
 
 .ui-tag-list-add-btn {
-  background: var(--brand-background-primary);
-  border-style: dashed;
+  border-style: solid;
+  font-size: 1.2em;
+  padding: 0.5rem 0.7rem;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+.ui-tag-list-add-btn:hover {
+  border-color: var(--brand-border-primary);
+  cursor: pointer;
 }

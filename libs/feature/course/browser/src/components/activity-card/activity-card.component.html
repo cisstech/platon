@@ -23,32 +23,32 @@
         <nz-row [nzGutter]="[24, 24]" nzAlign="middle" nzJustify="center">
           <nz-col nzSpan="12">
             <mat-card-subtitle>
-              <span> {{ item.createdAt | date }}</span>
               <b>Date de création</b>
+              <span> {{ item.createdAt | date }}</span>
             </mat-card-subtitle>
             <mat-card-subtitle>
+              <b>Date d'ouverture</b>
               <span>
                 {{ item.openAt | date : 'medium' }}
                 <ng-container *ngIf="!item.openAt">
                   <span nz-icon nzType="stop" nzTheme="outline"></span>
                 </ng-container>
               </span>
-              <b>Date d'ouverture</b>
             </mat-card-subtitle>
             <mat-card-subtitle>
+              <b>Date de fermeture</b>
               <span>
                 {{ item.closeAt | date : 'medium' }}
                 <ng-container *ngIf="!item.closeAt">
                   <span nz-icon nzType="stop" nzTheme="outline"></span>
                 </ng-container>
               </span>
-              <b>Date de fermeture</b>
             </mat-card-subtitle>
             <mat-card-subtitle>
+              <b>Nombre d'exercices</b>
               <span>
                 {{ item.exerciseCount }}
               </span>
-              <b>Nombre d'exercices</b>
             </mat-card-subtitle>
           </nz-col>
           <nz-col nzSpan="12">

@@ -3,6 +3,7 @@ import { Router } from '@angular/router'
 import { ImgIcon } from '@cisstech/nge/ui/icon'
 import {
   ACTIVITY_MEMBER_CREATION_NOTIFICATION,
+  ActivityClosedNotification,
   ActivityMemberCreationNotification,
   CORRECTION_AVAILABLE_NOTIFICATION,
   CORRECTION_PENDING_NOTIFICATION,
@@ -14,6 +15,7 @@ import {
   CorrectorCreatedNotification,
   CorrectorRemovedNotification,
   CourseMemberCreationNotification,
+  ResourceMovedByAdminNotification,
 } from '@platon/feature/course/common'
 import { NotificationParser, NotificationRenderer } from '@platon/feature/notification/browser'
 
@@ -119,6 +121,40 @@ export const CorrectionAvailableNotificationParser: NotificationParser<Correctio
   },
 }
 
+export const ActivityClosedNotificationParser: NotificationParser<ActivityClosedNotification> = {
+  support(notification): boolean {
+    return notification.data.type === 'ACTIVITY-CLOSED'
+  },
+  renderer(notification, injector: Injector): NotificationRenderer {
+    const router = injector.get(Router)
+    return {
+      icon: new ImgIcon(`/assets/images/courses/course.svg`),
+      content: `L'activité “${notification.data.activityName}” du cours “${notification.data.courseName}” est désormais fermée`,
+      onClick: ({ onClose }) => {
+        router.navigate([`/courses/${notification.data.courseId}`]).catch(console.error)
+        onClose()
+      },
+    }
+  },
+}
+
+export const ResourceMovedByAdminNotificationParser: NotificationParser<ResourceMovedByAdminNotification> = {
+  support(notification): boolean {
+    return notification.data.type === 'RESOURCE-MOVED-BY-ADMIN'
+  },
+  renderer(notification, injector: Injector): NotificationRenderer {
+    const router = injector.get(Router)
+    return {
+      icon: new ImgIcon(`/assets/images/courses/course.svg`),
+      content: `Votre ressource “${notification.data.resourceName}” du cercle “${notification.data.circleName}” a été déplacée dans votre cercle personnel par un administrateur`,
+      onClick: ({ onClose }) => {
+        router.navigate([`/resources/${notification.data.resourceId}/overview`]).catch(console.error)
+        onClose()
+      },
+    }
+  },
+}
+
 export const CourseNotificationParsers = [
   CourseMemberCreationNotificationParser,
   ActivityMemberCreationNotificationParser,
@@ -126,4 +162,6 @@ export const CourseNotificationParsers = [
   CorrectorRemovedNotificationParser,
   CorrectionPendingNotificationParser,
   CorrectionAvailableNotificationParser,
+  ActivityClosedNotificationParser,
+  ResourceMovedByAdminNotificationParser,
 ]

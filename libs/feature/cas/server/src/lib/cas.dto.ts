@@ -2,9 +2,9 @@ import { ApiProperty } from '@nestjs/swagger'
 import { OrderingDirections } from '@platon/core/common'
 import { BaseDTO, toNumber } from '@platon/core/server'
 import { Cas, CasFilters, CasOrdering, CasVersions, CreateCas, UpdateCas } from '@platon/feature/cas/common'
-import { LmsDTO } from '@platon/feature/lti/server'
 import { Transform, Type } from 'class-transformer'
 import { IsArray, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, IsUrl } from 'class-validator'
+import { LmsDTO } from '@platon/feature/lti/server'
 
 export class CasLoginDTO {
   @IsString()

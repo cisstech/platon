@@ -8,8 +8,12 @@ import {
   Input,
   OnDestroy,
   OnInit,
+  QueryList,
+  TemplateRef,
+  ViewChild,
+  ViewChildren,
 } from '@angular/core'
-import { firstValueFrom } from 'rxjs'
+import { firstValueFrom, Subscription } from 'rxjs'
 
 import { MatButtonModule } from '@angular/material/button'
 import { MatCardModule } from '@angular/material/card'
@@ -30,7 +34,7 @@ import {
 } from '@platon/feature/player/common'
 
 import { DialogModule, DialogService, UserAvatarComponent } from '@platon/core/browser'
-import { ActivityOpenStates } from '@platon/feature/course/common'
+import { ActivityClosedNotification, ActivityOpenStates } from '@platon/feature/course/common'
 
 import { MatIconModule } from '@angular/material/icon'
 import { ActivatedRoute, RouterModule } from '@angular/router'
@@ -44,6 +48,10 @@ import { PlayerExerciseComponent } from '../player-exercise/player-exercise.comp
 import { PlayerNavigationComponent } from '../player-navigation/player-navigation.component'
 import { PlayerResultsComponent } from '../player-results/player-results.component'
 import { PlayerSettingsComponent } from '../player-settings/player-settings.component'
+import { NotificationService } from '@platon/feature/notification/browser'
+import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal'
+import { NzButtonModule } from 'ng-zorro-antd/button'
+import { NzProgressModule } from 'ng-zorro-antd/progress'
 
 @Component({
   standalone: true,
@@ -63,6 +71,8 @@ import { PlayerSettingsComponent } from '../player-settings/player-settings.comp
     NzBadgeModule,
     NzPopoverModule,
     NzStatisticModule,
+    NzButtonModule,
+    NzProgressModule,
 
     SafePipe,
     DialogModule,
@@ -133,6 +143,29 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
     return this.state === 'opened' && !navigation.started && !navigation.terminated
   }
 
+  private readonly subscriptions: Subscription[] = []
+  private notificationsCount = -1
+
+  private showSucceededPopup = true
+
+  private modal: NzModalRef | undefined
+
+  protected isModalLoading = false
+
+  protected isModalForceChoice = false
+  protected modalForceChoiceProgress = 0
+  private countdownInterval: NodeJS.Timeout | undefined
+  private autoChoiceTimeout: NodeJS.Timeout | undefined
+
+  @ViewChild('modalFooter', { static: true }) modalFooter!: TemplateRef<object>
+
+  @ViewChildren('playerExercise') playerExerciseComponents!: QueryList<PlayerExerciseComponent>
+
+  constructor(
+    private readonly notificationSerivce: NotificationService,
+    private readonly nzModalService: NzModalService
+  ) {}
+
   ngOnInit(): void {
     this.calculateAnswerStates(this.player.navigation)
 
@@ -152,9 +185,33 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
       const delta = new Date(this.player.openAt as Date).getTime() - new Date(this.player.serverTime).getTime()
       this.countdown = Date.now() + delta
     }
+
+    this.subscriptions.push(
+      this.notificationSerivce.paginate().subscribe(async ({ notifications }) => {
+        if (this.notificationsCount === -1) {
+          this.notificationsCount = notifications.length
+        } else if (notifications.length !== this.notificationsCount) {
+          this.notificationsCount = notifications.length
+          if (
+            notifications.length > 0 &&
+            (notifications[0].data as ActivityClosedNotification).type === 'ACTIVITY-CLOSED' &&
+            (notifications[0].data as ActivityClosedNotification).activityId === this.player.activityId
+          ) {
+            this.state = 'closed'
+            await this.terminateModal(false, "L'activité a été fermée par l'enseignant.")
+          }
+        }
+        this.changeDetectorRef.markForCheck()
+      })
+    )
+  }
+
+  private async evaluateAll(): Promise<void> {
+    await Promise.all(this.playerExerciseComponents.map((component) => component.evaluateFromActivity()))
   }
 
   ngOnDestroy(): void {
+    this.stopCountdown()
     this.enableCopyPasteIfNeeded()
     this.stopWatchingVisibilityChange()
   }
@@ -169,6 +226,68 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
 
     this.disableCopyPasteIfNeeded()
     this.startWatchingVisibilityChange()
+  }
+
+  protected async terminateModal(isClosable: boolean, title: string): Promise<void> {
+    if (!this.navigation.started || this.navigation.terminated) {
+      this.terminate().catch(console.error)
+      return
+    }
+    if (this.modal) {
+      this.modal.destroy()
+    }
+    this.modal = this.nzModalService.create({
+      nzTitle: title,
+      nzContent: 'Après avoir quitté cette activité, vous ne pourrez plus modifier vos réponses.',
+      nzClosable: isClosable,
+      nzMaskClosable: isClosable,
+      nzOnCancel: () => {
+        if (!isClosable) {
+          this.terminate().catch(console.error)
+        }
+        this.modal?.destroy()
+      },
+      nzKeyboard: false,
+      nzFooter: this.modalFooter,
+    })
+    if (!isClosable) {
+      this.isModalForceChoice = true
+      this.startCountdown()
+    }
+  }
+
+  private startCountdown(): void {
+    this.autoChoiceTimeout = setTimeout(() => {
+      this.modalCancel().catch(console.error)
+    }, 10000)
+    this.countdownInterval = setInterval(() => {
+      if (this.modalForceChoiceProgress < 100) {
+        this.modalForceChoiceProgress++
+      }
+    }, 100)
+  }
+
+  private stopCountdown(): void {
+    if (this.autoChoiceTimeout) {
+      clearTimeout(this.autoChoiceTimeout)
+    }
+    if (this.countdownInterval) {
+      clearInterval(this.countdownInterval)
+    }
+  }
+
+  protected async modalConfirm(): Promise<void> {
+    this.isModalLoading = true
+    this.stopCountdown()
+    await this.evaluateAll()
+    this.terminate().catch(console.error)
+    this.modal?.destroy()
+  }
+
+  protected async modalCancel(): Promise<void> {
+    this.stopCountdown()
+    this.terminate().catch(console.error)
+    this.modal?.destroy()
   }
 
   protected async terminate(): Promise<void> {
@@ -233,7 +352,7 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
     return item.sessionId
   }
 
-  protected onFinishCountdown(): void {
+  protected async onFinishCountdown(): Promise<void> {
     if (this.state === 'planned') {
       this.state = 'opened'
       const { navigation } = this.player
@@ -244,11 +363,28 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
       this.changeDetectorRef.markForCheck()
     } else {
       this.dialogService.info("L'activité est désormais terminée. Merci d'avoir participé.")
-      this.terminate().catch(console.error)
+      await this.terminateModal(false, "L'activité est terminée.")
     }
   }
 
   protected onChangeNavigation(navigation: PlayerNavigation): void {
+    if (this.showSucceededPopup && navigation.exercises.every((exercise) => exercise.state === 'SUCCEEDED')) {
+      this.showSucceededPopup = false
+      this.dialogService
+        .confirm({
+          nzTitle: `Vous avez complété tous les exercices avec succès.`,
+          nzContent: `Voulez-vous terminer l'activité ? \nAprès avoir terminé l'activité, vous ne pourrez plus modifier vos réponses.`,
+          nzOkText: 'Terminer',
+          nzOkDanger: true,
+          nzCancelText: 'Annuler',
+        })
+        .then((confirmed) => {
+          if (confirmed) {
+            this.terminate().catch(console.error)
+          }
+        })
+        .catch(console.error)
+    }
     this.player = { ...this.player, navigation }
     this.calculatePositions()
     this.calculateAnswerStates(navigation)

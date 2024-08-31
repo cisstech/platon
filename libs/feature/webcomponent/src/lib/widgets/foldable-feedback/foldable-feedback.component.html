@@ -1,0 +1,52 @@
+<div class="foldable-feedback" *ngFor="let item of state.content; let index = index">
+  <ng-container *ngTemplateOutlet="feedback; context: { item: item, indexes: '' + index }"> </ng-container>
+</div>
+<wc-base [(state)]="state"></wc-base>
+
+<ng-template #feedback let-item="item" let-indexes="indexes">
+  <div
+    class="feedback"
+    [class]="(item.type ? item.type : 'info') + ' ' + (item.display ? 'opened' : 'closed')"
+    (click)="onClick(indexes)"
+  >
+    <h2>
+      <div
+        *ngIf="item.feedbacks && item.feedbacks.length > 0"
+        [style.background-image]="
+          'url(' + 'https://icongr.am/entypo/chevron-' + (item.display ? 'down' : 'right') + '.svg?size=20&color=0000)'
+        "
+        class="chevron-icon"
+        alt="down arrow icon"
+      ></div>
+      {{ item.name }}
+      <div [class]="(item.type ? item.type : 'info') + '-icon'"></div>
+    </h2>
+    <div [class]="item.display ? 'show' : 'hide'">
+      @if (item.feedbacks && item.feedbacks.length > 0){
+      <div *ngIf="item.description" class="description">
+        <pre>{{ item.description }}</pre>
+      </div>
+      <div *ngFor="let child of item.feedbacks; let index = index">
+        <ng-container *ngTemplateOutlet="feedback; context: { item: child, indexes: indexes + '-' + index }">
+        </ng-container>
+      </div>
+      } @else {
+      <div *ngIf="item.description">
+        <pre>{{ item.description }}</pre>
+      </div>
+      <div *ngIf="item.arguments">
+        <h3>Arguments :</h3>
+        <pre class="args" (mousedown)="$event.stopPropagation()">{{ item.arguments }}</pre>
+      </div>
+      <div *ngIf="item.expected">
+        <h3>Attendu :</h3>
+        <pre class="code" (mousedown)="$event.stopPropagation()">{{ item.expected }}</pre>
+      </div>
+      <div *ngIf="item.obtained">
+        <h3>Obtenu :</h3>
+        <pre class="code" (mousedown)="$event.stopPropagation()">{{ item.obtained }}</pre>
+      </div>
+      }
+    </div>
+  </div>
+</ng-template>

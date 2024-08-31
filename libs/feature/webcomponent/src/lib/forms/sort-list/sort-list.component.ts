@@ -36,4 +36,8 @@ export class SortListComponent implements WebComponentHooks<SortListState> {
   trackBy(index: number, item: SortListItem) {
     return item.content || index
   }
+
+  getHorizontal() {
+    return this.state?.alignment === 'left' ? 'text-align: left;' : ''
+  }
 }

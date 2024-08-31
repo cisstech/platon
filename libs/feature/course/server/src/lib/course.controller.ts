@@ -1,18 +1,27 @@
 import { Expandable } from '@cisstech/nestjs-expand'
-import { Body, Controller, Get, Param, Patch, Post, Query, Req } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
-import { CreatedResponse, ItemResponse, ListResponse, NotFoundResponse, UserRoles } from '@platon/core/common'
+import {
+  CreatedResponse,
+  ForbiddenResponse,
+  ItemResponse,
+  ListResponse,
+  NotFoundResponse,
+  UserRoles,
+} from '@platon/core/common'
 import { IRequest, Mapper, Roles } from '@platon/core/server'
 import { CourseDTO, CourseFiltersDTO, CreateCourseDTO, UpdateCourseDTO } from './course.dto'
 import { CourseService } from './course.service'
 import { CoursePermissionsService } from './permissions/permissions.service'
+import { CourseMemberService } from './course-member/course-member.service'
 
 @Controller('courses')
 @ApiTags('Courses')
 export class CourseController {
   constructor(
     private readonly courseService: CourseService,
-    private readonly permissionsService: CoursePermissionsService
+    private readonly permissionsService: CoursePermissionsService,
+    private readonly courseMemberService: CourseMemberService
   ) {}
 
   @Get()
@@ -21,6 +30,7 @@ export class CourseController {
     filters = {
       ...filters,
       members: Array.from(new Set([req.user.id, ...(filters.members || [])])),
+      showAll: filters.showAll == true && req.user.role == UserRoles.admin,
     }
 
     const [items, total] = await this.courseService.search(filters)
@@ -64,6 +74,9 @@ export class CourseController {
     @Param('id') id: string,
     @Body() input: UpdateCourseDTO
   ): Promise<ItemResponse<CourseDTO>> {
+    if (!(await this.courseMemberService.isMember(id, req.user.id))) {
+      throw new ForbiddenResponse(`You are not a member of this course`)
+    }
     const resource = Mapper.map(
       await this.courseService.update(id, input, (course) =>
         this.permissionsService.ensureCourseWritePermission(course.id, req)
@@ -71,5 +84,12 @@ export class CourseController {
       CourseDTO
     )
     return new ItemResponse({ resource })
+  }
+
+  @Roles(UserRoles.teacher, UserRoles.admin)
+  @Delete('/:id')
+  async delete(@Req() req: IRequest, @Param('id') id: string): Promise<void> {
+    await this.permissionsService.ensureCourseWritePermission(id, req)
+    await this.courseService.delete(id)
   }
 }

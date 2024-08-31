@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common'
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router, RouterModule } from '@angular/router'
 import Fuse from 'fuse.js'
-import { Subscription, firstValueFrom, of } from 'rxjs'
+import { Subscription, firstValueFrom, of, shareReplay } from 'rxjs'
 
 import { MatCardModule } from '@angular/material/card'
 import { MatIconModule } from '@angular/material/icon'
@@ -20,7 +20,8 @@ import {
   UiSearchBarComponent,
 } from '@platon/shared/ui'
 
-import { OrderingDirections } from '@platon/core/common'
+import { AuthService } from '@platon/core/browser'
+import { OrderingDirections, User } from '@platon/core/common'
 import {
   CourseFiltersComponent,
   CourseListComponent,
@@ -29,6 +30,7 @@ import {
   CourseService,
 } from '@platon/feature/course/browser'
 import { Course, CourseFilters, CourseOrderings } from '@platon/feature/course/common'
+import { UserRoles } from '@platon/core/common'
 
 @Component({
   standalone: true,
@@ -81,19 +83,32 @@ export class CoursesPage implements OnInit, OnDestroy {
     onSearch: (query) => this.search(this.filters, query),
   }
 
+  private user?: User
+  protected canCreateCourse = false
+
+  protected completion = of([]).pipe(
+    // TODO implements server function
+    shareReplay(1)
+  )
+
   protected searching = true
   protected filters: CourseFilters = {}
   protected items: Course[] = []
   protected totalMatches = 0
+  protected displayShowAllButton = false
 
   constructor(
     private readonly router: Router,
+    private readonly authService: AuthService,
     private readonly courseService: CourseService,
     private readonly activatedRoute: ActivatedRoute,
     private readonly changeDetectorRef: ChangeDetectorRef
   ) {}
 
   async ngOnInit(): Promise<void> {
+    this.user = (await this.authService.ready()) as User
+    this.displayShowAllButton = this.user?.role === UserRoles.admin
+    this.canCreateCourse = this.user?.role === UserRoles.teacher || this.user?.role === UserRoles.admin
     this.changeDetectorRef.markForCheck()
 
     this.subscriptions.push(
@@ -124,6 +139,27 @@ export class CoursesPage implements OnInit, OnDestroy {
         this.changeDetectorRef.markForCheck()
       })
     )
+  }
+
+  async searchAll() {
+    this.filters = {
+      ...this.filters,
+      showAll: true,
+    }
+
+    this.searching = true
+    const response = await firstValueFrom(
+      this.courseService.search({
+        ...this.filters,
+        expands: ['permissions', 'statistic'],
+      })
+    )
+    this.items = response.resources
+    this.totalMatches = response.total
+    this.searching = false
+    this.displayShowAllButton = false
+
+    this.changeDetectorRef.markForCheck()
   }
 
   ngOnDestroy(): void {

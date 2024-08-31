@@ -44,10 +44,17 @@ export const appRoutes: Route[] = [
         './pages/player/player.routes'
       ),
   },
+  {
+    path: 'demo',
+    loadChildren: () =>
+      import(
+        /* webpackChunkName: "course-demo" */
+        './pages/demo/demo.routes'
+      ),
+  },
   withAuthGuard(
     {
       path: 'editor',
-      title: 'PLaTon - Éditeur',
       data: {
         ...alwaysLightTheme,
       },

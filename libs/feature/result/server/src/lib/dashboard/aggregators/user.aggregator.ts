@@ -1,5 +1,5 @@
 import { USER_EXERCISE_COUNT } from '@platon/feature/result/common'
-import { SessionView } from '../../sessions/session.view'
+import { SessionDataEntity } from '../../sessions/session-data.entity'
 import { SessionDataAggregator } from './aggregators'
 
 export class UserExerciseCount implements SessionDataAggregator<number> {
@@ -7,7 +7,7 @@ export class UserExerciseCount implements SessionDataAggregator<number> {
 
   private total = 0
 
-  next(input: SessionView): void {
+  next(input: SessionDataEntity): void {
     if (input.attempts) {
       this.total++
     }

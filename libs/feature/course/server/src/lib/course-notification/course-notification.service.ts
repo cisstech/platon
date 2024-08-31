@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common'
 import {
+  ActivityClosedNotification,
   ActivityMemberCreationNotification,
   CorrectionAvailableNotification,
   CorrectionPendingNotification,
@@ -139,6 +140,56 @@ export class CourseNotificationService {
             activityName: corrector.activityName,
             courseId: corrector.courseId,
             courseName: corrector.courseName,
+          })
+        )
+      )
+    } catch (error) {
+      this.logger.error(error)
+    }
+  }
+
+  async notifyActivityBeingClosed(activityId: string): Promise<void> {
+    try {
+      const members = (await this.dataSource.query(
+        `
+      SELECT DISTINCT user_id
+      FROM "Sessions"
+      WHERE activity_id = $1
+        `,
+        [activityId]
+      )) as { user_id: string }[]
+
+      type Projection = {
+        activityId: string
+        activityName: string
+        courseId: string
+        courseName: string
+      }
+
+      const results = (await this.dataSource.query(
+        `
+      SELECT
+        activity.id as "activityId",
+        resource.name as "activityName",
+        course.id as "courseId",
+        course.name as "courseName"
+      FROM "Activities" activity
+      INNER JOIN "Courses" course ON course.id = activity.course_id
+      JOIN "Resources" resource ON resource.id = (activity.source->>'resource')::uuid
+      WHERE activity.id = $1
+      ;
+    `,
+        [activityId]
+      )) as Projection[]
+
+      await Promise.all(
+        members.map((member) =>
+          this.notificationService.sendToUser<ActivityClosedNotification>(member.user_id, {
+            type: 'ACTIVITY-CLOSED',
+            activityId: results[0].activityId,
+            activityName: results[0].activityName,
+            courseId: results[0].courseId,
+            courseName: results[0].courseName,
           })
         )
       )

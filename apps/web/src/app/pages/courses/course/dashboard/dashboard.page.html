@@ -6,17 +6,13 @@
           <ng-template let-context> {{ context }}</ng-template>
         </ui-search-bar>
         <button
-          *ngIf="course.permissions?.update"
+          *ngIf="course.permissions?.update && sections.length"
           nz-button
           nzType="primary"
           nzShape="round"
-          [queryParamsHandling]="'merge'"
-          [routerLink]="['/activities/create']"
-          [queryParams]="{
-            course: course.id
-          }"
+          (click)="addSection(sections[sections.length - 1])"
         >
-          Ajouter une activité
+          Ajouter une section
         </button>
         <course-csv-download-button
           [activities]="activities"
@@ -48,6 +44,21 @@
                   </span>
                 </ng-template>
                 <ng-template #extra>
+                  <button
+                    *ngIf="context.course?.permissions?.update"
+                    class="add-activity"
+                    nz-button
+                    nzType="primary"
+                    nzShape="round"
+                    nzSize="small"
+                    [routerLink]="['/activities/create']"
+                    [queryParams]="{
+                      course: item.section.courseId,
+                      section: item.section.id
+                    }"
+                  >
+                    Ajouter une activité
+                  </button>
                   <app-course-section-actions
                     *ngIf="course.permissions?.update"
                     [section]="item.section"
@@ -127,21 +138,7 @@
 </ng-template>
 
 <ng-template let-section #noActivities>
-  <nz-empty [nzNotFoundContent]="noActivitiesContent" [nzNotFoundFooter]="noActivitiesFooter">
+  <nz-empty [nzNotFoundContent]="noActivitiesContent">
     <ng-template #noActivitiesContent> Cette section ne contient aucune activité. </ng-template>
-    <ng-template #noActivitiesFooter>
-      <button
-        *ngIf="context.course?.permissions?.update"
-        nz-button
-        nzType="primary"
-        [routerLink]="['/activities/create']"
-        [queryParams]="{
-          course: section.courseId,
-          section: section.id
-        }"
-      >
-        Ajouter une activité
-      </button>
-    </ng-template>
   </nz-empty>
 </ng-template>

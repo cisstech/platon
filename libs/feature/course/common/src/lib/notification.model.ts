@@ -49,3 +49,22 @@ export interface CorrectionAvailableNotification {
   activityId: string
   activityName: string
 }
+
+export const ACTIVITY_CLOSED_NOTIFICATION = 'ACTIVITY-CLOSED' as const
+export interface ActivityClosedNotification {
+  type: typeof ACTIVITY_CLOSED_NOTIFICATION
+  courseId: string
+  courseName: string
+  activityId: string
+  activityName: string
+}
+
+export const RESOURCE_MOVED_BY_ADMIN_NOTIFICATION = 'RESOURCE-MOVED-BY-ADMIN' as const
+
+export interface ResourceMovedByAdminNotification {
+  type: typeof RESOURCE_MOVED_BY_ADMIN_NOTIFICATION
+  resourceId: string
+  resourceName: string
+  circleId: string
+  circleName: string
+}

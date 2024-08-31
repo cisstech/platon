@@ -6,6 +6,7 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnInit,
   Output,
   inject,
 } from '@angular/core'
@@ -15,14 +16,15 @@ import { RouterModule } from '@angular/router'
 import { NgeMarkdownModule } from '@cisstech/nge/markdown'
 import { ClipboardService, PickerBrowserService } from '@cisstech/nge/services'
 import { NgeUiIconModule } from '@cisstech/nge/ui/icon'
-import { DialogModule, DialogService } from '@platon/core/browser'
-import { ResourceFile } from '@platon/feature/resource/common'
+import { DialogModule, DialogService, UserAvatarComponent } from '@platon/core/browser'
+import { GitLogResult, ResourceFile } from '@platon/feature/resource/common'
 import { NzContextMenuService, NzDropDownModule, NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown'
 import { NzEmptyModule } from 'ng-zorro-antd/empty'
 import { NzSpinModule } from 'ng-zorro-antd/spin'
 import { NzTreeModule, NzTreeNode } from 'ng-zorro-antd/tree'
 import { firstValueFrom } from 'rxjs'
 import { ResourceFileService } from '../../api/file.service'
+import { NzButtonModule } from 'ng-zorro-antd/button'
 
 @Component({
   standalone: true,
@@ -41,13 +43,16 @@ import { ResourceFileService } from '../../api/file.service'
     NzEmptyModule,
     NzSpinModule,
     NzDropDownModule,
+    NzButtonModule,
 
     DialogModule,
     NgeUiIconModule,
     NgeMarkdownModule,
+
+    UserAvatarComponent,
   ],
 })
-export class ResourceFilesComponent {
+export class ResourceFilesComponent implements OnInit {
   private readonly fileService = inject(ResourceFileService)
   private readonly pickerService = inject(PickerBrowserService)
   private readonly dialogService = inject(DialogService)
@@ -64,6 +69,10 @@ export class ResourceFilesComponent {
   protected nodes: Node[] = []
   protected readme?: ResourceFile
   protected root?: ResourceFile
+
+  protected commits: CommitInfos[] = []
+
+  @Input() gitLog: GitLogResult[] = []
 
   @Input()
   set tree(value: ResourceFile) {
@@ -91,6 +100,10 @@ export class ResourceFilesComponent {
 
   @Output() selected = new EventEmitter<ResourceFile>()
   @Output() afterUpload = new EventEmitter<void>()
+
+  ngOnInit(): void {
+    this.refreshGitLog()
+  }
 
   download(target?: ResourceFile): void {
     const file = target ?? this.root
@@ -151,6 +164,67 @@ export class ResourceFilesComponent {
     }
     return a.isLeaf ? 1 : -1
   }
+
+  protected refreshGitLog(limit50 = true): void {
+    const commits: CommitInfos[] = []
+    let gitLog = this.gitLog
+    let nbOver50 = -1
+    let initCommit
+    if (limit50 && gitLog.length > 50) {
+      nbOver50 = gitLog.length - 51
+      initCommit = gitLog[gitLog.length - 1]
+      gitLog = gitLog.slice(0, 50)
+    }
+    for (const commit of gitLog) {
+      const c = commit.commit
+      if (c.author.name === 'noname') {
+        c.author.name = 'ypicker'
+      }
+      let displayAuthor = true
+      if (commits.length !== 0) {
+        const lastEventTimestamp = commits[commits.length - 1].date.getTime() / 1000
+        if (c.author.name === commits[commits.length - 1]?.author && lastEventTimestamp - c.author.timestamp < 3600) {
+          displayAuthor = false
+        }
+      }
+      commits.push({
+        id: c.tree,
+        date: new Date(c.author.timestamp * 1000),
+        author: c.author.name,
+        message: c.message,
+        displayAuthor: displayAuthor,
+        isMore: false,
+        tags: commit.tags,
+      })
+    }
+    if (limit50) {
+      if (nbOver50 > 0) {
+        commits.push({
+          id: '0',
+          date: new Date(),
+          author: '',
+          message: `+ ${nbOver50} changements non affichés`,
+          displayAuthor: false,
+          isMore: true,
+          tags: [],
+        })
+      }
+      if (nbOver50 >= 0) {
+        const c = initCommit!.commit
+        commits.push({
+          id: c.tree,
+          date: new Date(c.author.timestamp * 1000),
+          author: c.author.name,
+          message: c.message,
+          displayAuthor: true,
+          isMore: false,
+          tags: initCommit!.tags,
+        })
+      }
+    }
+    this.commits = commits
+    this.changeDetectionRef.markForCheck()
+  }
 }
 
 interface Node {
@@ -158,4 +232,14 @@ interface Node {
   title: string
   isLeaf?: boolean
   children?: Node[]
+}
+
+interface CommitInfos {
+  id: string
+  date: Date
+  author: string
+  message: string
+  displayAuthor: boolean
+  isMore?: boolean
+  tags: string[]
 }

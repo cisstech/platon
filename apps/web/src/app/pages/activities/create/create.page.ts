@@ -90,7 +90,8 @@ export class ActivityCreatePage implements OnInit {
 
   protected settingsInfo = new FormGroup({
     members: new FormControl<string[] | undefined>(undefined),
-    openDates: new FormControl<Date[] | undefined>(undefined),
+    openAt: new FormControl<Date | undefined>(undefined),
+    closeAt: new FormControl<Date | undefined>(undefined),
     correctors: new FormControl<string[] | undefined>(undefined),
     groups: new FormControl<string[] | undefined>(undefined),
     isChallenge: new FormControl<boolean>(false),
@@ -144,15 +145,15 @@ export class ActivityCreatePage implements OnInit {
       this.creating = true
       const { course, section } = this.courseInfo.value
       const { resource } = this.resourceInfo.value
-      const { openDates, members, correctors, groups, isChallenge } = this.settingsInfo.value
+      const { openAt, closeAt, members, correctors, groups, isChallenge } = this.settingsInfo.value
 
       const activity = await firstValueFrom(
         this.courseService.createActivity(course as Course, {
           sectionId: section?.id as string,
           resourceId: resource?.id as string,
           resourceVersion: 'latest',
-          openAt: (openDates?.[0] || null) as Date,
-          closeAt: (openDates?.[1] || null) as Date,
+          openAt: (openAt || null) as Date,
+          closeAt: (closeAt || null) as Date,
           isChallenge: !!isChallenge,
         })
       )

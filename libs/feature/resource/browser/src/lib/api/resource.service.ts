@@ -79,6 +79,18 @@ export class ResourceService {
   create(input: CreateResource): Observable<Resource> {
     return this.resourceProvider.create(input)
   }
+
+  move(id: string, parentId: string): Observable<Resource> {
+    return this.resourceProvider.move(id, parentId)
+  }
+
+  moveToOwnerCircle(resource: Resource): Observable<Resource> {
+    return this.resourceProvider.moveToOwnerCircle(resource)
+  }
+
+  delete(resource: Resource): Observable<void> {
+    return this.resourceProvider.delete(resource)
+  }
   //#endregion
 
   //#region Members

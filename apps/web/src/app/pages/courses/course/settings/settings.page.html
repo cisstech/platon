@@ -1,18 +1,78 @@
 <ng-container *ngIf="context.course as course">
-  <nz-tabset *ngIf="course.permissions?.update; else denied" [nzTabPosition]="isMobile ? 'top' : 'left'" nzLinkRouter>
-    <nz-tab>
-      <a
-        *nzTabLink
-        nz-tab-link
-        [routerLink]="['.']"
-        [queryParams]="{ tab: 'informations' }"
-        queryParamsHandling="merge"
-      >
-        Informations
-      </a>
-      <app-course-informations />
-    </nz-tab>
-  </nz-tabset>
+  <ng-container *ngIf="course.permissions?.update; else denied">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Informations</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <form nz-form [nzLayout]="'vertical'" [formGroup]="form" (ngSubmit)="saveChanges()">
+          <mat-form-field appearance="fill">
+            <mat-label>Nom</mat-label>
+            <input formControlName="name" matInput />
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Description</mat-label>
+            <textarea cdkTextareaAutosize formControlName="desc" matInput></textarea>
+          </mat-form-field>
+          <ng-container *ngIf="saving; else actions">
+            <nz-spin></nz-spin>
+          </ng-container>
+          <ng-template #actions>
+            <button nz-button nzType="primary" type="submit" [disabled]="!canSubmit">Sauvegarder</button>
+          </ng-template>
+        </form>
+      </mat-card-content>
+    </mat-card>
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Demo</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <ng-container *ngIf="saving; else demoInfo">
+          <nz-spin></nz-spin>
+        </ng-container>
+        <ng-template #demoInfo>
+          <ng-container *ngIf="!hasDemo">
+            <button nz-button nzType="primary" (click)="createDemo()" [disabled]="!canEdit">Créer accès démo</button>
+          </ng-container>
+          <ng-container *ngIf="hasDemo">
+            <mat-form-field appearance="fill">
+              <mat-label>URL</mat-label>
+              <input matInput [ngModel]="demoUri" readonly />
+              <span matTextSuffix
+                ><button nz-button nzType="primary" (click)="copyUri()">
+                  <span nz-icon nzType="copy" nzTheme="outline"></span></button
+              ></span>
+            </mat-form-field>
+            <button nz-button nzType="primary" (click)="deleteDemo()" [disabled]="!canEdit">
+              Supprimer l'accès démo
+            </button>
+          </ng-container>
+        </ng-template>
+      </mat-card-content>
+    </mat-card>
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Zone de danger</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <button
+          nz-button
+          nzType="primary"
+          nzDanger
+          [disabled]="!canEdit"
+          nzDanger
+          nz-popconfirm
+          nzOkText="Supprimer"
+          nzOkType="danger"
+          nzPopconfirmTitle="Êtes-vous sûr de vouloir supprimer ce cours ?"
+          (nzOnConfirm)="deleteCourse()"
+        >
+          Supprimer le cours
+        </button>
+      </mat-card-content>
+    </mat-card>
+  </ng-container>
   <ng-template #denied>
     <ui-error-403 />
   </ng-template>

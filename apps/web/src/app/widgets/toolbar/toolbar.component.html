@@ -75,6 +75,10 @@
     <mat-icon>account_circle</mat-icon>
     <span>Mon compte</span>
   </button>
+  <button mat-menu-item [routerLink]="'/resources/' + personalCircleId">
+    <mat-icon>group_work</mat-icon>
+    <span>Mon cercle</span>
+  </button>
   <button mat-menu-item (click)="signOut()">
     <mat-icon>logout</mat-icon>
     <span>Déconnexion</span>
@@ -100,6 +104,10 @@
   <button mat-menu-item (click)="darkTheme()">
     <mat-icon>dark_mode</mat-icon>
     <span>Thème sombre</span>
+  </button>
+  <button mat-menu-item (click)="systemTheme()">
+    <mat-icon>auto_awesome</mat-icon>
+    <span>Thème système</span>
   </button>
 </mat-menu>
 

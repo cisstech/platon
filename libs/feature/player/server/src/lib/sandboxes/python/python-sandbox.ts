@@ -1,7 +1,8 @@
 import FormData from 'form-data'
 import * as fs from 'fs'
 import * as tar from 'tar-stream'
-import * as zlib from 'zlib'
+import * as zlib from 'node:zlib'
+import * as path from 'path'
 
 import { HttpService } from '@nestjs/axios'
 import { Injectable } from '@nestjs/common'
@@ -132,10 +133,10 @@ export class PythonSandbox implements Sandbox {
    * Packs the environment files into a tarball with gzip compression.
    * @param script The Python script.
    * @param input The SandboxInput object.
-   * @param path The path of the temporary file to create.
+   * @param tempFilePath The path of the temporary file to create.
    * @param isEnvSaved A boolean indicating whether the environment is already saved.
    */
-  private async withEnvFiles(script: string, input: SandboxInput, path: string, isEnvSaved: boolean) {
+  private async withEnvFiles(script: string, input: SandboxInput, tempFilePath: string, isEnvSaved: boolean) {
     const pack = tar.pack()
 
     pack.entry({ name: 'script.py' }, script || '')
@@ -143,14 +144,30 @@ export class PythonSandbox implements Sandbox {
 
     if (!isEnvSaved) {
       pack.entry({ name: 'runner.py' }, pythonRunnerScript)
-      input.files?.forEach((file) => pack.entry({ name: file.path }, file.content || ''))
+
+      if (input.files) {
+        for (const file of input.files) {
+          if (!file.hash) {
+            pack.entry({ name: file.path }, file.content || '')
+          } else {
+            const filePath = path.join('resources/media', file.hash[0], file.hash)
+            try {
+              const fileContent = await fs.promises.readFile(filePath)
+              pack.entry({ name: file.path }, fileContent)
+            } catch (error) {
+              console.error(`Error reading file ${filePath}:`, error)
+            }
+          }
+        }
+      }
     }
 
     pack.finalize()
 
     const gzip = zlib.createGzip()
-    const stream = fs.createWriteStream(path)
-    pack.pipe(gzip).pipe(stream)
+
+    const stream = fs.createWriteStream(tempFilePath)
+    pack.pipe(gzip as any).pipe(stream)
 
     await new Promise<void>((resolve, reject) => {
       stream.on('error', reject)

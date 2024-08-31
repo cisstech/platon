@@ -1,6 +1,6 @@
 import { AnswerStates, answerStateFromGrade } from '@platon/feature/result/common'
 import differenceInSeconds from 'date-fns/differenceInSeconds'
-import { SessionView } from '../../sessions/session.view'
+import { SessionDataEntity } from '../../sessions/session-data.entity'
 
 /**
  * Represents a data aggregator that takes an input of type TInput and produces an output of type TOutput.
@@ -33,7 +33,7 @@ export interface DataAggregator<TInput, TOutput = unknown> {
  * Represents an interface for aggregating session data.
  * @template TOutput The type of the aggregated output.
  */
-export interface SessionDataAggregator<TOutput = unknown> extends DataAggregator<SessionView, TOutput> {}
+export type SessionDataAggregator<TOutput = unknown> = DataAggregator<SessionDataEntity, TOutput>
 
 /**
  * The maximum duration of a gap between two answers.
@@ -46,7 +46,7 @@ export const MAX_GAP_DURATION = 20 * 60 // 20 minutes in seconds
  */
 export const DEFAULT_GAP_DURATION = 2 * 60 // 2 minutes in seconds
 
-export const sessionDurationInSeconds = (input: SessionView): number => {
+export const sessionDurationInSeconds = (input: SessionDataEntity): number => {
   const { answers, startedAt, lastGradedAt, parentId } = input
   if (!startedAt || !lastGradedAt) {
     return 0
@@ -78,7 +78,7 @@ export const sessionDurationInSeconds = (input: SessionView): number => {
  * @param session The session view to convert.
  * @returns The corresponding answer state.
  */
-export const answerStateFromSession = (session: SessionView) => {
+export const answerStateFromSession = (session: SessionDataEntity) => {
   return session.startedAt
     ? session.attempts
       ? answerStateFromGrade(session.correctionGrade ?? session.grade)

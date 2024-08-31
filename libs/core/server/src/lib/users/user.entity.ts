@@ -30,10 +30,18 @@ export class UserEntity extends BaseEntity {
   @Column({ nullable: true })
   password?: string
 
-  @Column({ name: 'last_login', nullable: true, type: 'timestamp with time zone' })
+  @Column({
+    name: 'last_login',
+    nullable: true,
+    type: 'timestamp with time zone',
+  })
   lastLogin?: Date
 
-  @Column({ name: 'first_login', nullable: true, type: 'timestamp with time zone' })
+  @Column({
+    name: 'first_login',
+    nullable: true,
+    type: 'timestamp with time zone',
+  })
   firstLogin?: Date
 
   @VirtualColumn({

@@ -4,6 +4,7 @@
     <ng-template let-context> {{ context }}</ng-template>
   </ui-search-bar>
   <button
+    *ngIf="canCreateCourse"
     nz-button
     nzType="primary"
     nzShape="round"
@@ -25,15 +26,28 @@
         [indicators]="indicators"
       />
     </div>
-    <ng-container [ngPlural]="totalMatches">
-      <ng-template ngPluralCase="=0"></ng-template>
-      <ng-template ngPluralCase="=1">
-        <p>1 résultat</p>
-      </ng-template>
-      <ng-template ngPluralCase="other">
-        <p>{{ totalMatches }} résultats</p>
-      </ng-template>
-    </ng-container>
+    <div class="total-matches">
+      <ng-container [ngPlural]="totalMatches">
+        <ng-template ngPluralCase="=0"></ng-template>
+        <ng-template ngPluralCase="=1">
+          <p>1 résultat</p>
+        </ng-template>
+        <ng-template ngPluralCase="other">
+          <p>{{ totalMatches }} résultats</p>
+        </ng-template>
+      </ng-container>
+    </div>
+    <button
+      class="show-all-button"
+      *ngIf="displayShowAllButton"
+      nz-button
+      nzType="default"
+      nzShape="round"
+      nzSize="small"
+      (click)="searchAll()"
+    >
+      Afficher tous les cours
+    </button>
     <course-list [items]="items">
       <h2>Aucun cours ne correspond à votre recherche</h2>
       <ul>

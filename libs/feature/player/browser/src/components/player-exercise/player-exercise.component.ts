@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-floating-promises */
+
 import { CommonModule } from '@angular/common'
 import {
   ChangeDetectionStrategy,
@@ -170,6 +172,7 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
     if (!this.player) return []
     return [
       {
+        id: 'check-answer-button',
         icon: 'check',
         label: this.player.remainingAttempts ? `(${this.player.remainingAttempts})` : '',
         tooltip: 'Valider',
@@ -403,6 +406,12 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
         node.classList.remove('animate')
       }, 500)
     })
+  }
+
+  public async evaluateFromActivity(): Promise<void> {
+    if (!this.disabled) {
+      await this.evaluate(PlayerActions.CHECK_ANSWER)
+    }
   }
 
   private async evaluate(action: PlayerActions): Promise<void> {

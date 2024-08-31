@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs'
 import { ResourceEventListComponent } from '@platon/feature/resource/browser'
 import { ResourceEvent } from '@platon/feature/resource/common'
 import { ResourcePresenter } from '../resource.presenter'
+import { ResourcePipesModule } from '@platon/feature/resource/browser'
 
 @Component({
   standalone: true,
@@ -14,7 +15,7 @@ import { ResourcePresenter } from '../resource.presenter'
   templateUrl: './events.page.html',
   styleUrls: ['./events.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, RouterModule, ResourceEventListComponent],
+  imports: [CommonModule, RouterModule, ResourceEventListComponent, ResourcePipesModule],
 })
 export class ResourceEventsPage implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription[] = []

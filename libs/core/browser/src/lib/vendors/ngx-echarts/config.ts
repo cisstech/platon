@@ -1,6 +1,6 @@
 // https://echarts.apache.org/handbook/en/basics/import
 
-import { BarChart, LineChart, PieChart } from 'echarts/charts'
+import { BarChart, LineChart, PieChart, RadarChart } from 'echarts/charts'
 import {
   // Dataset
   DatasetComponent,
@@ -23,6 +23,7 @@ import type {
   DatasetComponentOption,
   GridComponentOption,
   LegendComponentOption,
+  RadarComponentOption,
   TitleComponentOption,
   TooltipComponentOption,
   ToolboxComponentOption,
@@ -42,6 +43,7 @@ export type EChartsOption = ComposeOption<
   | LegendComponentOption
   | ToolboxComponentOption
   | TooltipComponentOption
+  | RadarComponentOption
   | DataZoomComponentOption
 >
 
@@ -61,6 +63,7 @@ echarts.use([
   LabelLayout,
   UniversalTransition,
   CanvasRenderer,
+  RadarChart,
 ])
 
 echarts.registerTheme('dark', darkTheme)

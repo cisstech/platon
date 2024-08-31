@@ -96,6 +96,15 @@ export class ResourceFileController {
     private readonly configService: ConfigService<Configuration>
   ) {}
 
+  @Get('/log/:resourceId')
+  async log(@Req() request: IRequest, @Param('resourceId') resourceId: string) {
+    const { repo, permissions } = await this.fileService.repo(resourceId, request)
+    if (!permissions.write) {
+      throw new UnauthorizedResponse('You are not allowed')
+    }
+    return repo.log()
+  }
+
   @Post('/release/:resourceId')
   async release(@Req() request: IRequest, @Param('resourceId') resourceId: string, @Body() input: FileReleaseDTO) {
     const { repo, resource, permissions } = await this.fileService.repo(resourceId, request)
@@ -328,6 +337,7 @@ export class ResourceFileController {
     }
 
     if (input?.length) {
+      const commitmsgs: string[] = []
       await repo.withNoCommit(async () => {
         for (const file of input) {
           if (file.content != null) {
@@ -335,6 +345,7 @@ export class ResourceFileController {
           } else {
             await repo.mkdir(file.path)
           }
+          commitmsgs.push(`create ${file.path}`)
           this.eventService.emit<OnChangeFileEventPayload>(ON_CHANGE_FILE_EVENT, {
             repo,
             resource,
@@ -344,7 +355,7 @@ export class ResourceFileController {
         }
       })
 
-      await repo.commit('create new files')
+      await repo.commit(commitmsgs.join('\n'))
     }
 
     return new SuccessResponse()

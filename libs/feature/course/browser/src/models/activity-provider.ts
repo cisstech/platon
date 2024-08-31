@@ -9,4 +9,5 @@ export abstract class ActivityProvider {
   abstract update(activity: Activity, input: UpdateActivity): Observable<Activity>
   abstract reload(activity: Activity, version?: string): Observable<Activity>
   abstract delete(activity: Activity, version?: string): Observable<void>
+  abstract close(activity: Activity): Observable<Activity>
 }

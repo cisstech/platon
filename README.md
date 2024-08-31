@@ -81,13 +81,14 @@ In order to run PLaTon you'll need the following tools installed
 Docker version 20.10.22, build 3a2c30b
 
 > node --version
-v16.14.2
+v22.0.0
 
 > yarn --version
 1.22.19
 
 > nvm --version
 0.37.2
+
 ```
 
 ### Recommendations
@@ -484,7 +485,7 @@ yarn publish:github
 ## Documentation
 
 Documentation is hosted at :
-<https://cisstech.github.io/platon/docs/main>
+<https://cisstech.github.io/platon/docs>
 
 There is also a self hosted version of the documentation that runs alongside of the application thanks to nginx reverse proxy at `/docs/main`
 

@@ -6,6 +6,7 @@ import {
   LATEST,
   ResourceFile,
   ResourceTypes,
+  GitLogResult,
 } from '@platon/feature/resource/common'
 import {
   FileExistsError,
@@ -242,6 +243,13 @@ export class Repo {
     }
     await fs.promises.rm(abspath, { recursive: true })
     await this.commit(`delete ${path}`)
+  }
+
+  /**
+   * Delete the repository.
+   */
+  async removeRepo() {
+    await fs.promises.rm(this.root, { recursive: true })
   }
 
   // Write/Read
@@ -521,5 +529,29 @@ export class Repo {
       throw new PermissionError(`${path}: points to an invalid file`)
     }
     return abspath
+  }
+
+  async log() {
+    const tags = await git.listTags({ ...this.repo })
+    const commitsTags = await Promise.all(
+      tags.map(async (tag) => {
+        const tagOid = await git.resolveRef({ ...this.repo, ref: tag })
+        const tagCommit = await git.readTag({ ...this.repo, oid: tagOid })
+        return { tag, commit: tagCommit.tag.object }
+      })
+    )
+    const commits: GitLogResult[] = (
+      await git.log({
+        ...this.repo,
+      })
+    ).map((commit) => ({ ...commit, tags: [] }))
+    commitsTags.forEach((commitTag) => {
+      const commit = commits.find((c) => c.oid === commitTag.commit)
+      if (commit) {
+        commit.tags.push(commitTag.tag)
+      }
+    })
+    commits[0].tags.push('latest')
+    return commits
   }
 }

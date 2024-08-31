@@ -5,6 +5,11 @@ export interface AuthToken {
   refreshToken: string
 }
 
+export interface SignInDemoOutput {
+  authToken: AuthToken
+  userId: string
+}
+
 export interface SignInInput {
   username: string
   password: string

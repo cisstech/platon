@@ -9,7 +9,7 @@ import {
   EXERCISE_UNIQUE_ATTEMPTS,
 } from '@platon/feature/result/common'
 import differenceInSeconds from 'date-fns/differenceInSeconds'
-import { SessionView } from '../../sessions/session.view'
+import { SessionDataEntity } from '../../sessions/session-data.entity'
 import { SessionDataAggregator } from './aggregators'
 
 /**
@@ -23,7 +23,7 @@ export class ExerciseAnswerRate implements SessionDataAggregator<number> {
   private totalSessions = 0
   private totalAttempts = 0
 
-  next(input: SessionView): void {
+  next(input: SessionDataEntity): void {
     if (!input.parentId) return
     if (input.startedAt) {
       this.totalSessions++
@@ -49,7 +49,7 @@ export class ExerciseDropOutRate implements SessionDataAggregator<number> {
   private totalSessions = 0
   private totalDropOuts = 0
 
-  next(input: SessionView): void {
+  next(input: SessionDataEntity): void {
     if (!input.parentId) return
     if (input.startedAt) {
       this.totalSessions++
@@ -72,7 +72,7 @@ export class ExerciseTotalAttempts implements SessionDataAggregator<number> {
 
   private totalAttempts = 0
 
-  next(input: SessionView): void {
+  next(input: SessionDataEntity): void {
     if (!input.parentId) return
     this.totalAttempts += input.attempts ?? 0
   }
@@ -90,7 +90,7 @@ export class ExerciseUniqueAttempts implements SessionDataAggregator<number> {
 
   private totalUniqueAttempts = 0
 
-  next(input: SessionView): void {
+  next(input: SessionDataEntity): void {
     if (!input.parentId) return
     this.totalUniqueAttempts += input.attempts ? 1 : 0
   }
@@ -109,7 +109,7 @@ export class ExerciseAverageAttempts implements SessionDataAggregator<number> {
   private totalSessions = 0
   private totalAttempts = 0
 
-  next(input: SessionView): void {
+  next(input: SessionDataEntity): void {
     if (!input.parentId) return
     if (input.attempts) {
       this.totalSessions++
@@ -118,7 +118,7 @@ export class ExerciseAverageAttempts implements SessionDataAggregator<number> {
   }
 
   complete(): number {
-    return this.totalSessions > 0 ? Math.round(this.totalAttempts / this.totalSessions) : 0
+    return this.totalSessions > 0 ? this.totalAttempts / this.totalSessions : 0
   }
 }
 
@@ -131,7 +131,7 @@ export class ExerciceAverageTimeToAttempt implements SessionDataAggregator<numbe
   private totalAttempts = 0
   private totalFirstAttemptTimes = 0
 
-  next(input: SessionView): void {
+  next(input: SessionDataEntity): void {
     if (!input.parentId) return
     if (input.startedAt && input.answers?.length) {
       this.totalAttempts++
@@ -156,7 +156,7 @@ export class ExerciseAverageAttemptsToSuccess implements SessionDataAggregator<n
   private totalSessions = 0
   private totalAttemptsToSuccess = 0
 
-  next(input: SessionView): void {
+  next(input: SessionDataEntity): void {
     if (!input.parentId) return
     if (!input.attempts || !input.answers?.length) return
 
@@ -166,7 +166,7 @@ export class ExerciseAverageAttemptsToSuccess implements SessionDataAggregator<n
   }
 
   complete(): number {
-    return this.totalSessions > 0 ? Math.round(this.totalAttemptsToSuccess / this.totalSessions) : 0
+    return this.totalSessions > 0 ? this.totalAttemptsToSuccess / this.totalSessions : 0
   }
 }
 
@@ -181,7 +181,7 @@ export class ExerciseSuccessRateOnFirstAttempt implements SessionDataAggregator<
   private totalSessions = 0
   private totalSuccessOnFirstAttempt = 0
 
-  next(input: SessionView): void {
+  next(input: SessionDataEntity): void {
     if (!input.parentId) return
     if (!input.attempts || !input.answers?.length) return
 

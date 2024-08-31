@@ -273,6 +273,18 @@ export class ResourceService {
       query.andWhere('level_id IN (:...levels)', { levels: filters.levels })
     }
 
+    if (filters.antiTopics?.length) {
+      query.andWhere(
+        `resource.id NOT IN (
+        SELECT r.id FROM "Resources" r
+        INNER JOIN "ResourceTopics" rt ON r.id = rt.resource_id
+        WHERE rt.topic_id IN (:...antiTopics)
+    )`,
+        { antiTopics: filters.antiTopics }
+      )
+    }
+
+    // Need to be done after antiTopics filtering
     if (filters.topics?.length) {
       query.andWhere('topic_id IN (:...topics)', { topics: filters.topics })
     }
@@ -362,6 +374,10 @@ export class ResourceService {
     return resource
   }
 
+  async delete(resource: ResourceEntity): Promise<void> {
+    await this.repository.remove(resource)
+  }
+
   /**
    * Updates a resource with the specified changes.
    * @remarks
@@ -387,6 +403,14 @@ export class ResourceService {
     }
 
     Object.assign(resource, changes)
+    return this.repository.save(resource)
+  }
+
+  async move(id: string, parentId: string): Promise<ResourceEntity> {
+    const resource = await this.repository.findOneOrFail({ where: { id } })
+    const parent = await this.repository.findOneOrFail({ where: { id: parentId } })
+
+    resource.parentId = parent.id
     return this.repository.save(resource)
   }
 

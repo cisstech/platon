@@ -23,6 +23,17 @@ export default [
   ),
   withAuthGuard(
     {
+      path: 'move',
+      loadChildren: () =>
+        import(
+          /* webpackChunkName: "resource-move" */
+          './move/move.routes'
+        ),
+    },
+    ['admin', 'teacher']
+  ),
+  withAuthGuard(
+    {
       path: ':id',
       loadChildren: () =>
         import(

@@ -86,6 +86,7 @@ export abstract class PlayerManager {
           files: exerciseSession.source.dependencies.map((file) => ({
             path: file.alias || basename(file.abspath),
             content: file.content,
+            hash: file.hash,
           })),
         },
         variables.builder
@@ -116,6 +117,7 @@ export abstract class PlayerManager {
           files: exerciseSession.source.dependencies.map((file) => ({
             path: file.alias || basename(file.abspath),
             content: file.content,
+            hash: file.hash,
           })),
         },
         variables.hint.next
@@ -147,6 +149,7 @@ export abstract class PlayerManager {
         files: exerciseSession.source.dependencies.map((file) => ({
           path: file.alias || basename(file.abspath),
           content: file.content,
+          hash: file.hash,
         })),
       },
       variables.grader
@@ -262,11 +265,12 @@ export abstract class PlayerManager {
     let expiresAt: Date | undefined
     if (session.startedAt && session.startedAt != null && session.parent?.variables.settings?.duration) {
       expiresAt = session.startedAt
-      expiresAt?.setSeconds(expiresAt.getSeconds() + session.parent?.variables.settings?.duration + 30) // 30 seconds of margin
+      expiresAt?.setSeconds(expiresAt.getSeconds() + session.parent?.variables.settings?.duration)
     }
     if (session.activity?.closeAt) {
       expiresAt = new Date(session.activity.closeAt)
     }
+    expiresAt?.setSeconds(expiresAt.getSeconds() + 30) // 30 seconds of margin
     return !!expiresAt && new Date() > expiresAt
   }
 

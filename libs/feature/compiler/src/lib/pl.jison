@@ -349,7 +349,7 @@ export interface PLVisitor {
 
 <INITIAL><<EOF>>                                return 'EOF'
 <MULTI_STATE>[^\n]*\n          {
-                          if (yytext.trim() === '==') {
+                          if (yytext.trimEnd() === '==') {
                             this.popState();
                             return 'EQUALS';
                           }
@@ -429,9 +429,9 @@ value
     | IDENTIFIER
       { $$ = new PLReference($1, yylineno + 1); }
     | BOOLEAN
-      { $$ = new PLBoolean($1.toLowerCase() === 'true', yylineno + 1); }
+      { $$ = new PLBoolean($1.toLowerCase() === "true", yylineno + 1); }
     | STRING
-      { $$ = new PLString($1.slice(1, -1), yylineno + 1); }
+      { $$ = new PLString($1.slice(1, -1), yylineno + 1);}
     | EXTENDS PATH
       { $$ = new PLDict($2, yylineno + 1); }
     | COPYURL PATH

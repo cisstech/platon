@@ -110,4 +110,19 @@ export class ActivityController {
     )
     return new NoContentResponse()
   }
+
+  @Roles(UserRoles.teacher, UserRoles.admin)
+  @Post('/:activityId/close')
+  async close(
+    @Req() req: IRequest,
+    @Param('courseId') courseId: string,
+    @Param('activityId') activityId: string
+  ): Promise<ItemResponse<ActivityDTO>> {
+    const activity = await this.activityService.close(courseId, activityId, (activity) =>
+      this.permissionsService.ensureActivityWritePermission(activity, req)
+    )
+    return new ItemResponse({
+      resource: Mapper.map(activity, ActivityDTO),
+    })
+  }
 }

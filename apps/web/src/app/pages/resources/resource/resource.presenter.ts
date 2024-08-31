@@ -8,6 +8,7 @@ import {
   CircleTree,
   CreateResourceInvitation,
   FileVersions,
+  GitLogResult,
   Resource,
   ResourceEvent,
   ResourceEventFilters,
@@ -100,6 +101,18 @@ export class ResourcePresenter implements OnDestroy {
       return [tree, versions]
     }
     throw new ReferenceError('missing resource')
+  }
+
+  async createTag(tag: string, message: string): Promise<boolean> {
+    const { resource } = this.context.value as Required<Context>
+    try {
+      await firstValueFrom(this.fileService.release(resource, { name: tag, message }))
+      await this.refresh(resource.id)
+      return true
+    } catch {
+      this.alertError()
+      return false
+    }
   }
 
   async versions(): Promise<FileVersions> {
@@ -255,6 +268,34 @@ export class ResourcePresenter implements OnDestroy {
     return firstValueFrom(this.resultService.resourceDashboard(resource.id))
   }
 
+  // Moving
+
+  async moveToOwnerCircle(): Promise<boolean> {
+    const { resource } = this.context.value as Required<Context>
+    try {
+      await firstValueFrom(this.resourceService.moveToOwnerCircle(resource))
+      this.dialogService.success('La ressource a bien été déplacée.')
+      return true
+    } catch {
+      this.alertError()
+      return false
+    }
+  }
+
+  // Deleting
+
+  async delete(): Promise<boolean> {
+    const { resource } = this.context.value as Required<Context>
+    try {
+      await firstValueFrom(this.resourceService.delete(resource))
+      this.dialogService.success('La ressource a bien été supprimée.')
+      return true
+    } catch {
+      this.alertError()
+      return false
+    }
+  }
+
   // Private
 
   private async refresh(id: string): Promise<void> {
@@ -309,6 +350,13 @@ export class ResourcePresenter implements OnDestroy {
         ? this.resourceService.previewUrl(newContext.resource.id, newContext.version)
         : undefined,
     })
+  }
+
+  // Log
+
+  async log(): Promise<GitLogResult[]> {
+    const { resource } = this.context.value as Required<Context>
+    return firstValueFrom(this.fileService.log(resource))
   }
 }
 

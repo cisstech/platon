@@ -5,7 +5,7 @@
     <mat-card-content class="centered">
       <!-- INTRODUCTION -->
       <ng-container *ngIf="showIntroduction">
-        <div>
+        <div class="markdown-container">
           <nge-markdown [data]="player.introduction" />
         </div>
         <player-settings [player]="player" />
@@ -32,7 +32,7 @@
         cliquer changer de page."
         />
 
-        <div>
+        <div class="markdown-container">
           <nge-markdown [data]="player.conclusion" />
         </div>
 
@@ -60,6 +60,7 @@
         <nz-ribbon [nzText]="ribbon">
           <ng-template #ribbon> {{ composed ? i + 1 : position + 1 }} / {{ navExerciceCount }} </ng-template>
           <player-exercise
+            #playerExercise
             [id]="exercise.sessionId"
             [player]="exercise"
             [state]="answerStates[exercise.sessionId]"
@@ -86,6 +87,16 @@
     <mat-icon>menu</mat-icon>
     Navigation
   </button>
+  <button
+    class="terminate-button"
+    mat-fab
+    extended
+    color="primary"
+    (click)="terminateModal(true, 'Êtes-vous sûr de vouloir quitter cette activité ?')"
+  >
+    <mat-icon>check</mat-icon>
+    Terminer
+  </button>
 </footer>
 <ng-template #navigation>
   <player-navigation [player]="player" (navigate)="play($event)" [terminate]="terminate.bind(this)" />
@@ -99,3 +110,22 @@
     (nzCountdownFinish)="breakpoint.action()"
   />
 </ng-container>
+<ng-template #modalFooter>
+  <div class="modalButtons">
+    <button nz-button nzType="primary" (click)="modalConfirm()" [nzLoading]="isModalLoading">
+      Valider tous les exercices et terminer l’activité
+    </button>
+    <button nz-button nzType="primary" nzDanger (click)="modalCancel()">
+      Terminer l’activité sans valider les exercices
+      <nz-progress
+        *ngIf="isModalForceChoice"
+        [nzPercent]="modalForceChoiceProgress"
+        nzType="circle"
+        [nzShowInfo]="false"
+        [nzWidth]="20"
+        [nzStrokeWidth]="25"
+        nzStrokeColor="#171c8f"
+      ></nz-progress>
+    </button>
+  </div>
+</ng-template>

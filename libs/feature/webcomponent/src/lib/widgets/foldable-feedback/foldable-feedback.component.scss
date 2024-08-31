@@ -1,0 +1,138 @@
+.code {
+  background-color: black;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: text;
+  pointer-events: visibleFill;
+}
+
+.args {
+  background-color: black;
+  color: white;
+  padding: 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: fit-content;
+  max-width: 100%;
+  border-radius: 5px;
+  cursor: text;
+  overflow-x: auto;
+}
+
+.description {
+  user-select: none;
+}
+
+.success,
+.warning,
+.error,
+.info {
+  border-radius: 5px;
+  padding: 5px;
+  margin: 5px;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+}
+
+.success {
+  background-color: #dff9df;
+  border: 1px solid #00cc00;
+}
+
+.warning {
+  background-color: #ffefdf;
+  border: 1px solid #ff8000;
+}
+
+.error {
+  background-color: #ffdfdf;
+  border: 1px solid #ff0000;
+}
+
+.info {
+  background-color: #dfdfff;
+  border: 1px solid #0000ff;
+}
+
+h2 {
+  margin: 0px;
+  margin-left: 10px;
+  margin-right: 10px;
+  font-weight: bold;
+  border: none;
+  user-select: none;
+}
+
+h2:hover {
+  text-decoration: underline;
+}
+
+.foldable-feedback {
+  cursor: pointer;
+}
+
+.feedback.closed {
+  transition: transform 0.15s ease-in-out;
+}
+
+.feedback.closed:hover {
+  transform: translateX(10px);
+}
+
+h3 {
+  margin-top: 0;
+  margin-bottom: 0.5em;
+  font-weight: 500;
+  font-size: 1.17em;
+  user-select: none;
+}
+
+.show {
+  display: block;
+  padding: 10px;
+}
+
+.hide {
+  display: none;
+}
+
+pre {
+  margin-top: 0;
+  margin-bottom: 1em;
+  font-size: 1em;
+  background: none;
+  padding: 0;
+}
+
+.chevron-icon {
+  width: 20px;
+  height: 20px;
+  background-size: cover;
+  display: inline-block;
+}
+
+.success-icon,
+.info-icon,
+.warning-icon,
+.error-icon {
+  width: 32px;
+  height: 32px;
+  background-size: cover;
+  float: right;
+}
+
+.success-icon {
+  background-image: url('https://icongr.am/material/check-circle-outline.svg?size=32&color=00cc00');
+}
+
+.info-icon {
+  background-image: url('https://icongr.am/material/information-outline.svg?size=32&color=0000ff');
+}
+
+.warning-icon {
+  background-image: url('https://icongr.am/material/alert-circle-outline.svg?size=32&color=ff8000');
+}
+
+.error-icon {
+  background-image: url('https://icongr.am/material/close-circle-outline.svg?size=32&color=ff0000');
+}

@@ -21,3 +21,22 @@ header {
 .spacer {
   flex: 1;
 }
+
+section {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100%;
+  margin: 0 auto;
+}
+
+form {
+  width: 100%;
+}
+
+mat-form-field {
+  display: block;
+  width: 100%;
+  margin: 12px 0;
+}

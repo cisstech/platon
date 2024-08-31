@@ -39,6 +39,7 @@ import {
   ResourceStatusFilterIndicator,
   ResourceTypeFilterIndicator,
   TopicFilterIndicator,
+  AntiTopicFilterIndicator,
 } from '@platon/feature/resource/browser'
 import {
   CircleTree,
@@ -53,7 +54,7 @@ import {
 import { NzDividerModule } from 'ng-zorro-antd/divider'
 
 const PAGINATION_LIMIT = 15
-const EXPANDS: ResourceExpandableFields[] = ['metadata' /* 'statistic' */]
+const EXPANDS: ResourceExpandableFields[] = ['metadata', 'statistic']
 
 interface QueryParams {
   q?: string
@@ -64,6 +65,7 @@ interface QueryParams {
   status?: keyof typeof ResourceStatus | (keyof typeof ResourceStatus)[]
   parents?: string | string[]
   topics?: string | string[]
+  antiTopics?: string | string[]
   levels?: string | string[]
   dependOn?: string | string[]
   configurable?: string | boolean
@@ -178,6 +180,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
 
     this.filterIndicators = [
       ...topics.map(TopicFilterIndicator),
+      ...topics.map(AntiTopicFilterIndicator),
       ...levels.map(LevelFilterIndicator),
       ...this.filterIndicators,
     ]
@@ -199,6 +202,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
           search: typeof e.q === 'string' ? (e.q.length > 0 ? e.q : undefined) : undefined,
           parents: e.parents ? (typeof e.parents === 'string' ? [e.parents] : e.parents) : undefined,
           topics: e.topics ? (typeof e.topics === 'string' ? [e.topics] : e.topics) : undefined,
+          antiTopics: e.antiTopics ? (typeof e.antiTopics === 'string' ? [e.antiTopics] : e.antiTopics) : undefined,
           levels: e.levels ? (typeof e.levels === 'string' ? [e.levels] : e.levels) : undefined,
           period: Number.parseInt(e.period + '', 10) || undefined,
           order: e.order,
@@ -251,6 +255,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
       status: filters.status,
       parents: filters.parents,
       topics: filters.topics,
+      antiTopics: filters.antiTopics,
       levels: filters.levels,
       configurable: filters.configurable ? true : undefined,
       dependOn: filters.dependOn,

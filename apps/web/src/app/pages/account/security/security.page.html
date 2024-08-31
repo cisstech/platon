@@ -3,7 +3,11 @@
     <form [formGroup]="form" (ngSubmit)="update()">
       <mat-card>
         <mat-card-header>
-          <mat-card-title>Mettre à jour votre mot de passe</mat-card-title>
+          @if (user.hasPassword) {
+          <mat-card-title>Modifier votre mot de passe</mat-card-title>
+          } @else {
+          <mat-card-title>Créer un mot de passe</mat-card-title>
+          }
         </mat-card-header>
         <mat-card-content>
           <auth-edit-password
