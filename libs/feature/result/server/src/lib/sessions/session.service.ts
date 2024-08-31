@@ -18,7 +18,7 @@ export class SessionService {
     private readonly repository: Repository<SessionEntity>,
     @InjectRepository(SessionDataEntity)
     private readonly repositoryData: Repository<SessionDataEntity>,
-    private readonly ressourceFileService: ResourceFileService,
+    private readonly ressourceFileService: ResourceFileService
   ) {}
 
   findById<T extends object>(
@@ -73,7 +73,9 @@ export class SessionService {
   ): Promise<SessionEntity<TVariables>> {
     input.source?.dependencies?.forEach(async (dependency) => {
       const hash = dependency.hash
-      const {resource, relpath, version} = resolveFileReference('/'+ dependency.abspath, {resource : input.source?.resource || ''})
+      const { resource, relpath, version } = resolveFileReference('/' + dependency.abspath, {
+        resource: input.source?.resource || '',
+      })
       const newPath = path.join('resources/media', dependency.hash[0], hash)
 
       try {

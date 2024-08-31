@@ -57,8 +57,7 @@
       "@platon/shared/server": ["libs/shared/server/src/index.ts"],
       "@platon/shared/ui": ["libs/shared/ui/src/index.ts"],
       "@platon/feature/discord/server": ["libs/feature/discord/server/src/index.ts"],
-      "@platon/feature/discord/common": ["libs/feature/discord/common/src/index.ts"],
-
+      "@platon/feature/discord/common": ["libs/feature/discord/common/src/index.ts"]
     }
   },
   "include": ["./graphql/*.ts"],
