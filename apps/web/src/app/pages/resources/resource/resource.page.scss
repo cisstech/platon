@@ -39,6 +39,19 @@ nz-select {
   }
 }
 
+.move-to-owner-circle-message {
+  display: flex;
+  flex-direction: column;
+  width: 350px;
+  p {
+    margin: 0;
+    width: 100%;
+  }
+  button {
+    padding: 0;
+  }
+}
+
 @media (min-width: 768px) {
   p {
     width: 70%;

@@ -99,7 +99,7 @@
           nz-popconfirm
           nzOkText="Retirer"
           nzOkType="danger"
-          nzPopconfirmTitle="Êtes-vous sûr de vouloir renvoyer cette ressource dans le cercle personnel de son créateur ?"
+          [nzPopconfirmTitle]="moveToOwnerCircleMessage"
           (nzOnConfirm)="moveToOwnerCircle()"
         >
           <i nz-icon nzType="logout" nzTheme="outline"></i>
@@ -185,6 +185,23 @@
 
 <ng-template #sharingPopover>
   <resource-sharing [resourceId]="context.resource!.id" [canEditSharing]="context.resource!.permissions!.write" />
+</ng-template>
+
+<ng-template #moveToOwnerCircleMessage>
+  <div class="move-to-owner-circle-message">
+    <p>Êtes-vous sûr de vouloir renvoyer cette ressource dans le cercle personnel de son créateur ?</p>
+    @if (referencesNumber() !== 0) {
+    <button
+      nz-button
+      class="btn-show-references"
+      nzType="link"
+      [routerLink]="['/resources']"
+      [queryParams]="{ dependOn: [context.resource!.id] }"
+    >
+      Afficher les dépendances
+    </button>
+    }
+  </div>
 </ng-template>
 
 <ng-template #resourceDeleteConfirmMessage>
