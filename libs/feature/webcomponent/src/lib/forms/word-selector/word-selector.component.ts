@@ -12,45 +12,65 @@ import { CdkDragDrop, moveItemInArray, CdkDrag, CdkDropList, DropListOrientation
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 @WebComponent(WordSelectorComponentDefinition)
+/**
+ * Represents a component for selecting words.
+ */
 export class WordSelectorComponent implements WebComponentHooks<WordSelectorState>, OnInit {
+  /**
+   * The web component service.
+   */
   private readonly webComponentService!: WebComponentService
 
+  /**
+   * The state of the word selector component.
+   */
   @Input() state!: WordSelectorState
+
+  /**
+   * Event emitter for state changes.
+   */
   stateChange?: EventEmitter<WordSelectorState> | undefined
 
+  /**
+   * The list of words.
+   */
   words: string[] = ["C'", 'est', 'mon', 'ami', 'il', 'vient', "d'", 'Australie', 'et', 'il', 'est', 'très', 'sympa']
-  // words: string[] = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine']
 
+  /**
+   * The constructed words.
+   */
   construireWords: string[] = []
 
-  suffleWords: string[] = [] // On melange la liste affichée
+  /**
+   * The shuffled words.
+   */
+  suffleWords: string[] = []
 
+  /**
+   * Constructs a new instance of WordSelectorComponent.
+   * @param injector - The injector for dependency injection.
+   */
   constructor(readonly injector: Injector) {
     this.webComponentService = injector.get(WebComponentService)!
   }
 
+  /**
+   * Initializes the component.
+   */
   ngOnInit() {
     this.suffleWords = [...this.words]
     this.shuffleArray()
   }
 
-  getRows() {
-    const rows = []
-    for (let i = 0; i < this.suffleWords.length; i += 4) {
-      rows.push(this.suffleWords.slice(i, i + 4))
-    }
-    return rows
-  }
-
+  /**
+   * Handles the drop event for the word-selector component.
+   * @param event - The CdkDragDrop event containing information about the drop.
+   */
   drop(event: CdkDragDrop<string[]>) {
     const currentList = event.container.data
     const previousList = event.previousContainer.data
 
     if (currentList === previousList) {
-      // Déplacement à l'intérieur de la même sous-liste
-      console.log('first: ' + event.previousIndex + ' ' + previousList[event.previousIndex])
-      console.log('second: ' + event.currentIndex + ' ' + currentList[event.currentIndex])
-
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex)
     } else {
       const item = event.previousContainer.data[event.previousIndex]
@@ -60,56 +80,21 @@ export class WordSelectorComponent implements WebComponentHooks<WordSelectorStat
     console.log('List:', event.container.data)
   }
 
-  // drop(event: CdkDragDrop<string[]>) {
-  //   const currentList = event.container.data
-  //   const previousList = event.previousContainer.data
-
-  //   if (currentList === previousList) {
-  //     // Moving within the same list
-  //     const itemIndex = event.previousIndex
-  //     const targetIndex = event.currentIndex
-  //     const item = currentList.splice(itemIndex, 1)[0]
-  //     currentList.splice(targetIndex, 0, item)
-
-  //     // Update the other list
-  //     const otherList = currentList === this.suffleWords ? this.construireWords : this.suffleWords
-  //     otherList.splice(otherList.indexOf(item), 1)
-  //   } else {
-  //     const item = event.previousContainer.data[event.previousIndex]
-  //     event.previousContainer.data.splice(event.previousIndex, 1)
-  //     event.container.data.push(item)
-  //   }
-
-  //   // Ensure lists are synchronized
-  //   this.suffleWords.sort((a, b) => this.construireWords.indexOf(a) - this.construireWords.indexOf(b))
-  // }
-
-  // drop(event: CdkDragDrop<string[]>) {
-  //   const currentList = event.container.data
-  //   const previousIndex = event.previousIndex
-  //   const currentIndex = event.currentIndex
-
-  //   if (currentList === event.previousContainer.data) {
-  //     // Swap elements within the same list
-  //     const [removed] = currentList.splice(previousIndex, 1)
-  //     currentList.splice(currentIndex, 0, removed)
-  //   } else {
-  //     // Move element between lists (handled by moveItemInArray)
-  //     moveItemInArray(currentList, previousIndex, currentIndex)
-  //   }
-  // }
-
+  /**
+   * Validates the constructed sentence.
+   * @returns The constructed words if the sentence is valid, otherwise an empty array.
+   */
   validateSentence() {
     if (this.listIdentique()) {
-      console.log('Phrase validée :', this.construireWords.join(' '))
-      return this.construireWords
-    } else {
-      this.construireWords
-      console.log('Phrase invalide')
       return this.construireWords
     }
+    return this.construireWords
   }
 
+  /**
+   * Checks if the constructed words are identical to the original words.
+   * @returns True if the words are identical, false otherwise.
+   */
   listIdentique(): boolean {
     if (this.construireWords.length !== this.words.length) {
       return false
@@ -122,7 +107,11 @@ export class WordSelectorComponent implements WebComponentHooks<WordSelectorStat
     return true
   }
 
-  // ------------------------------------------------------- //
+  /**
+   * Removes a letter from the given phrase.
+   * @param phrase - The phrase to remove the letter from.
+   * @param word - The word to remove.
+   */
   suppremerUneLettre(phrase: string[], word: string) {
     const index = phrase.indexOf(word)
     if (index > -1) {
@@ -130,16 +119,27 @@ export class WordSelectorComponent implements WebComponentHooks<WordSelectorStat
     }
   }
 
+  /**
+   * Adds a word to the constructed words.
+   * @param word - The word to add.
+   */
   addWord(word: string) {
     this.construireWords.push(word)
     this.suppremerUneLettre(this.suffleWords, word)
   }
 
+  /**
+   * Removes a word from the constructed words.
+   * @param word - The word to remove.
+   */
   removeWord(word: string) {
     this.suffleWords.push(word)
     this.suppremerUneLettre(this.construireWords, word)
   }
 
+  /**
+   * Shuffles the array of words.
+   */
   shuffleArray(): void {
     for (let i = this.suffleWords.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1))
