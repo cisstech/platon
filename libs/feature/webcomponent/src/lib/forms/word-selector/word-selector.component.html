@@ -4,7 +4,7 @@
     [cdkDropListData]="construireWords"
     class="example-list"
     (cdkDropListDropped)="drop($event)"
-    cdkDropListOrientation="horizontal"
+    cdkDropListOrientation="mixed"
   >
     @for (word of construireWords; track $index) {
     <div class="example-box" cdkDrag (click)="removeWord(word)">
@@ -20,7 +20,7 @@
     [cdkDropListData]="suffleWords"
     class="example-list"
     (cdkDropListDropped)="drop($event)"
-    cdkDropListOrientation="horizontal"
+    cdkDropListOrientation="mixed"
   >
     @for (word of suffleWords; track $index) {
     <div class="example-box" cdkDrag (click)="addWord(word)">

@@ -18,7 +18,7 @@ export class WordSelectorComponent implements WebComponentHooks<WordSelectorStat
   @Input() state!: WordSelectorState
   stateChange?: EventEmitter<WordSelectorState> | undefined
 
-  words: string[] = ["C'", 'est', 'mon', 'ami', 'il', 'vient', "d'", 'Australie']
+  words: string[] = ["C'", 'est', 'mon', 'ami', 'il', 'vient', "d'", 'Australie', 'et', 'il', 'est', 'très', 'sympa']
   // words: string[] = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine']
 
   construireWords: string[] = []
