@@ -18,6 +18,10 @@ export class AutomatonViewerComponent implements WebComponentHooks<AutomatonView
   constructor(readonly injector: Injector) {}
 
   onChangeState() {
+    if (!this.state.automaton) {
+      console.warn('No automaton to display')
+      return
+    }
     this.dot = automatonToDotFormat(parseAutomaton(this.state.automaton))
   }
 }

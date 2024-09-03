@@ -1,12 +1,14 @@
 <div #container class="automaton-editor-container" [style.height]="state.height + 'px'">
   <div class="automaton-editor-actions-top">
     <ng-container *ngFor="let action of actions">
-      <button nz-button (click)="run(action)">
+      <button nz-button (click)="$event.stopPropagation(); run(action)">
         {{ action.name }}
       </button>
     </ng-container>
   </div>
-  <div class="automaton-editor-canvas"></div>
+  <div id="canvas-view">
+    <div class="automaton-editor-canvas"></div>
+  </div>
   <div class="automaton-editor-actions-bottom">
     <button nz-button nzShape="circle" (click)="zoomIn($event)">
       <span nz-icon nzType="zoom-in" nzTheme="outline"></span>

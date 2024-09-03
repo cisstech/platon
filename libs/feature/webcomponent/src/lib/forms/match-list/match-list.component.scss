@@ -9,12 +9,15 @@
     cursor: not-allowed;
     border: dashed 1px #ccc;
   }
+  &.disabled nge-markdown {
+    cursor: not-allowed;
+  }
   &::ng-deep {
     svg.jtk-connector {
       cursor: pointer;
     }
-    .jtk-endpoint svg {
-      cursor: pointer;
+    svg.jtk-endpoint {
+      cursor: grab;
     }
 
     .jtk-endpoint.selected circle {
@@ -44,11 +47,11 @@
   }
 }
 
-.match-list-sources {
+#match-list-sources {
   text-align: end;
 }
 
-.match-list-targets {
+#match-list-targets {
   text-align: start;
 }
 
@@ -56,6 +59,7 @@ nge-markdown {
   display: block;
   padding: 1rem;
   border-bottom: 1px solid #f5f5f5;
+  cursor: pointer;
   &::ng-deep img {
     width: 128px;
     object-fit: cover;

@@ -15,11 +15,11 @@ export class ActionSetNonAccepting implements AutomatonEditorAction {
     if (!context.state) {
       return
     }
-    this.editor.removeAccepting(context.state)
+    this.editor.removeAccepting(context.state.name)
   }
 
   condition(context: AutomatonEditorActionContext) {
-    return !!context.state && this.editor.isAccepting(context.state)
+    return !!context.state && this.editor.isAccepting(context.state.name)
   }
 }
 
