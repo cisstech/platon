@@ -4,6 +4,7 @@
   "projectType": "library",
   "sourceRoot": "libs/feature/lti/browser/src",
   "prefix": "lms",
+  "tags": [],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
@@ -13,9 +14,7 @@
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"]
+      "executor": "@nx/eslint:lint"
     }
-  },
-  "tags": []
+  }
 }

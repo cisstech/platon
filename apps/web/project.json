@@ -4,6 +4,7 @@
   "projectType": "application",
   "sourceRoot": "apps/web/src",
   "prefix": "app",
+  "tags": [],
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
@@ -33,8 +34,18 @@
           },
           {
             "glob": "**/*",
-            "input": "./node_modules/@cisstech/nge/assets/",
-            "output": "./assets/vendors/nge/"
+            "input": "./node_modules/@cisstech/nge/assets/monaco",
+            "output": "./assets/vendors/nge/monaco/"
+          },
+          {
+            "glob": "**/*",
+            "input": "./node_modules/@cisstech/nge/assets/markdown/",
+            "output": "./assets/vendors/nge/markdown/"
+          },
+          {
+            "glob": "**/*",
+            "input": "./node_modules/@cisstech/nge/assets/ui/icon/assets/icons/files",
+            "output": "./assets/vendors/nge/ui/icon/icons/files/"
           },
           {
             "glob": "**/*",
@@ -216,8 +227,7 @@
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"]
+      "executor": "@nx/eslint:lint"
     },
     "test": {
       "executor": "@nx/jest:jest",
@@ -226,6 +236,5 @@
         "jestConfig": "apps/web/jest.config.ts"
       }
     }
-  },
-  "tags": []
+  }
 }
