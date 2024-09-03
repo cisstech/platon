@@ -36,7 +36,8 @@
    6. [Deployment](#deployment)
       1. [On-premise](#on-premise)
       2. [Cloud](#cloud)
-      3. [Github](#github-home-page)
+      3. [CI Pipelile](#ci-pipeline)
+      4. [Github](#github-home-page)
 5. [Functional Documentation](#documentation)
 6. [Contributing](#contributing)
 7. [License](#license)
@@ -81,7 +82,7 @@ In order to run PLaTon you'll need the following tools installed
 Docker version 20.10.22, build 3a2c30b
 
 > node --version
-v16.14.2
+v22.0.0
 
 > yarn --version
 1.22.19
@@ -108,7 +109,7 @@ v16.14.2
 - **Clone the repository**: Clone the PLaTon repository from GitHub to your local machine using the following command:
 
   ```sh
-  git clone https://github.com/PlatonOrg/platon.git
+  git clone https://github.com/cisstech/platon.git
   ```
 
 - **Install dependencies**: Navigate to the project's root directory and run the following command to install the required dependencies:
@@ -230,6 +231,8 @@ The platform is organized into four main components:
 
 #### Docker stack
 
+- Overall
+
 ```sh
 ┌─────────────────────────────────────────────────────┐
 │                      Docker                         │
@@ -245,9 +248,74 @@ The platform is organized into four main components:
 └─────────────────┴─────────────────┴────────────────-┘
 ```
 
-- In development mode, the architecture uses Docker to run the PostgreSQL, Redis, and PgAdmin services. The Nest.js, Angular and NextJS applications are run on the host machine. Nginx is set up as a reverse proxy, directing requests to the appropriate services or applications.
+- Development mode
 
-- The Nginx reverse proxy configuration is different for development and production environments. In development, Nginx is configured to proxy requests to the Angular and Nest.js applications running on the host machine. In production, the Angular application is built and placed inside the Nginx container while the Nest.js application run on a different service inside docker, which is then used as a full reverse proxy.
+```mermaid
+graph TD
+    A[Client Browser] --> B[Nginx Reverse Proxy]
+    B --> C[Angular Frontend :4200]
+    B --> D[NestJS Backend API :4201]
+    B --> E[Documentation :4203]
+    D --> F[PostgreSQL Database]
+    D --> G[Redis Cache]
+    H[Docker] --> B
+    H --> F
+    H --> G
+    H --> I[PgAdmin]
+
+    subgraph Host Machine
+    C["Angular Frontend :4200<br/><small>yarn start:web</small>"]
+    D["NestJS Backend API :4201<br/><small>yarn start:api</small>"]
+    E["Documentation :4203<br/><small>yarn serve:docs</small>"]
+    end
+
+    subgraph Docker Containers
+    B["Nginx Reverse Proxy<br/><small>./bin/docker/up.sh</small>"]
+    F[PostgreSQL Database]
+    G[Redis Cache]
+    I[PgAdmin]
+    end
+
+    subgraph Commands
+    J["Start all services:<br/><small>./bin/docker/up.sh && yarn serve:service-1 ... yarn serve:service-n</small>"]
+    end
+```
+
+- Production mode
+
+```mermaid
+graph TD
+    A[Client Browser] --> B[Nginx Reverse Proxy]
+    B --> C[Angular Frontend]
+    B --> D[NestJS Backend API]
+    B --> E[Static Documentation]
+    D --> F[PostgreSQL Database]
+    D --> G[Redis Cache]
+    H[Docker] --> B
+    H --> C
+    H --> D
+    H --> E
+    H --> F
+    H --> G
+    H --> I[PgAdmin]
+    H --> J[Certbot]
+
+    subgraph Docker Containers
+    B["Nginx Reverse Proxy<br/><small>./bin/docker/up.sh --prod</small>"]
+    C[Angular Frontend]
+    D["NestJS Backend API<br/><small>node dist/apps/api/main.js</small>"]
+    E[Static Documentation]
+    F[PostgreSQL Database]
+    G[Redis Cache]
+    I[PgAdmin]
+    J["Certbot<br/><small>Automatic SSL renewal</small>"]
+    end
+
+    subgraph Commands
+    K["Start all services:<br/><small>./bin/docker/up.sh --prod</small>"]
+    L["Build for production:<br/><small>yarn build:web<br/>yarn build:api<br/>yarn build:docs</small>"]
+    end
+```
 
 Here's a high-level overview of how the different parts interact:
 
@@ -264,6 +332,22 @@ Here's a high-level overview of how the different parts interact:
 - The Nest.js application returns the response to the Nginx reverse proxy, which then forwards it to the user's browser.
 
 This hybrid approach allows for easy development and testing, while still leveraging the benefits of containerization for production deployments.
+
+## Technical Overview
+
+PLaTon is built on a modern, scalable architecture using the following key technologies:
+
+- Nx: A powerful monorepo tool for managing multiple applications and libraries
+- NestJS: A progressive Node.js framework for building efficient server-side applications
+- Angular: A platform for building web applications
+- PostgreSQL: A robust, open-source relational database
+- Redis: An in-memory data structure store used for caching
+- Docker: For containerization and easy deployment
+- Nginx: As a reverse proxy and load balancer
+
+- In development mode, the architecture uses Docker to run the PostgreSQL, Redis, and PgAdmin services. The Nest.js, Angular and NextJS applications are run on the host machine. Nginx is set up as a reverse proxy, directing requests to the appropriate services or applications.
+
+- The Nginx reverse proxy configuration is different for development and production environments. In development, Nginx is configured to proxy requests to the Angular and Nest.js applications running on the host machine. In production, the Angular application is built and placed inside the Nginx container while the Nest.js application run on a different service inside docker, which is then used as a full reverse proxy.
 
 ### Environment Configuration
 
@@ -428,7 +512,7 @@ These scripts will analyze the codebase and provide a report of any linting issu
 - **Clone the repository**: Clone the PLaTon repository from GitHub to your machine using the following command:
 
   ```sh
-  git clone https://github.com/PlatonOrg/platon.git
+  git clone https://github.com/cisstech/platon.git
   ```
 
 - **Set up the environment**: After cloning and installing the repository, run the `./bin/install.sh` script to set up the necessary environment variables. This script generates an `.env` and `./tools/database/init.json` files with the default values from the `./templates` directory, which you can customize.
@@ -465,6 +549,62 @@ If you plan to use a custom ssl files instead, update the docker-compose and the
 #### Cloud
 
 [TODO]
+
+#### CI Pipeline
+
+```mermaid
+graph TD
+    A[Pull Request to main branch] --> B{CI Workflow}
+    B --> C[Prepare Job]
+    B --> D[Build Job]
+    B --> E[Lint Job]
+    B --> F[Test Job]
+
+    C --> C1[Checkout Code]
+    C --> C2[Setup Yarn]
+
+    D --> D1[Checkout Code]
+    D --> D2[Setup Yarn]
+    D --> D3[Set NX SHAs]
+    D --> D4[Generate GraphQL Types]
+    D --> D5[Run affected:build]
+
+    E --> E1[Checkout Code]
+    E --> E2[Setup Yarn]
+    E --> E3[Set NX SHAs]
+    E --> E4[Run affected:lint]
+
+    F --> F1[Checkout Code]
+    F --> F2[Setup Yarn]
+    F --> F3[Set NX SHAs]
+    F --> F4[Run affected:test]
+    F --> F5[Upload coverage to Codecov]
+
+    C --> D
+    C --> E
+    C --> F
+
+    subgraph "Environment"
+    G[Node.js v22]
+    end
+
+    subgraph "Triggered by"
+    H[Pull Request to main]
+    I[Manual workflow dispatch]
+    end
+```
+
+This diagram provides a clear visual representation of the CI process as defined in your ci.yml file.
+
+1. The workflow is triggered by pull requests to the main branch or manual workflow dispatch.
+
+2. It uses Node.js version 22 as specified in the environment variables.
+3. There are four main jobs: Prepare, Build, Lint, and Test.
+4. The Prepare job is a prerequisite for the other three jobs.
+5. Each job includes steps for checking out the code and setting up Yarn.
+6. The Build, Lint, and Test jobs use NX to determine affected projects and run their respective commands.
+7. The Build job includes an additional step to generate GraphQL types.
+8. The Test job includes a final step to upload coverage to Codecov.
 
 #### Github Home page
 

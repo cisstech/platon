@@ -154,7 +154,7 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
 
   protected isModalForceChoice = false
   protected modalForceChoiceProgress = 0
-  private countdownInterval: NodeJS.Timer | undefined
+  private countdownInterval: NodeJS.Timeout | undefined
   private autoChoiceTimeout: NodeJS.Timeout | undefined
 
   @ViewChild('modalFooter', { static: true }) modalFooter!: TemplateRef<object>

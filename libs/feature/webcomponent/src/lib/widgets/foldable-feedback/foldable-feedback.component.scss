@@ -24,7 +24,10 @@
   user-select: none;
 }
 
-.success, .warning, .error, .info {
+.success,
+.warning,
+.error,
+.info {
   border-radius: 5px;
   padding: 5px;
   margin: 5px;
@@ -32,23 +35,23 @@
 }
 
 .success {
-  background-color: #DFF9DF;
-  border: 1px solid #00CC00;
+  background-color: #dff9df;
+  border: 1px solid #00cc00;
 }
 
 .warning {
-  background-color: #FFEFDF;
-  border: 1px solid #FF8000;
+  background-color: #ffefdf;
+  border: 1px solid #ff8000;
 }
 
 .error {
-  background-color: #FFDFDF;
-  border: 1px solid #FF0000;
+  background-color: #ffdfdf;
+  border: 1px solid #ff0000;
 }
 
 .info {
-  background-color: #DFDFFF;
-  border: 1px solid #0000FF;
+  background-color: #dfdfff;
+  border: 1px solid #0000ff;
 }
 
 h2 {
@@ -65,7 +68,7 @@ h2:hover {
 }
 
 .foldable-feedback {
-  cursor:pointer;
+  cursor: pointer;
 }
 
 .feedback.closed {
@@ -108,7 +111,10 @@ pre {
   display: inline-block;
 }
 
-.success-icon, .info-icon, .warning-icon, .error-icon {
+.success-icon,
+.info-icon,
+.warning-icon,
+.error-icon {
   width: 32px;
   height: 32px;
   background-size: cover;
