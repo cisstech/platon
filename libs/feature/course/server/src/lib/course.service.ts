@@ -27,7 +27,7 @@ export class CourseService {
       direction: filters.direction || OrderingDirections.DESC,
     }
 
-    if (filters.members?.length) {
+    if (!filters.showAll && filters.members?.length) {
       query.andWhere('(member.id IN (:...ids))', {
         ids: filters.members,
       })

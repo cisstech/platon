@@ -11,11 +11,11 @@ import {
   FileSearchResults,
   FileUpdate,
   FileVersions,
+  GitLogResult,
   Resource,
   ResourceFile,
 } from '@platon/feature/resource/common'
 import { ResourceFileProvider } from '../models/resource-file-provider'
-import { ReadCommitResult } from 'isomorphic-git'
 
 @Injectable({ providedIn: 'root' })
 export class ResourceFileService {
@@ -77,7 +77,7 @@ export class ResourceFileService {
     return this.provider.search(file, query)
   }
 
-  log(resource: string | Resource): Observable<ReadCommitResult[]> {
+  log(resource: string | Resource): Observable<GitLogResult[]> {
     return this.provider.log(resource)
   }
 }

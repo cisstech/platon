@@ -45,6 +45,7 @@ export interface CourseFilters extends ExpandableModel<CourseExpandableFields> {
   readonly limit?: number
   readonly order?: CourseOrderings
   readonly direction?: OrderingDirections
+  readonly showAll?: boolean
 }
 
 export const COURSE_ORDERING_DIRECTIONS: Readonly<Record<CourseOrderings, keyof typeof OrderingDirections>> = {

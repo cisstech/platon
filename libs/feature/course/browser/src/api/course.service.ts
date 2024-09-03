@@ -73,6 +73,10 @@ export class CourseService {
     return this.courseProvider.update(id, input)
   }
 
+  delete(course: Course): Observable<void> {
+    return this.courseProvider.delete(course)
+  }
+
   create(input: CreateCourse): Observable<Course> {
     return this.courseProvider.create(input)
   }

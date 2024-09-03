@@ -6,7 +6,11 @@
           <mat-icon *ngIf="state" [style.color]="state | answerStateColor" [nz-tooltip]="state | answerStateLabel">
             {{ state | answerStateIcon }}
           </mat-icon>
-          {{ player?.title }}
+          <ng-container *ngIf="player?.title">
+            <div class="exercise-title">
+              <nge-markdown [data]="player!.title" />
+            </div>
+          </ng-container>
         </mat-card-title>
         <mat-card-subtitle *ngIf="player?.author">
           @if (player!.author!|isUUID) {

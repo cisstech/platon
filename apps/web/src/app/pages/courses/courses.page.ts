@@ -95,6 +95,7 @@ export class CoursesPage implements OnInit, OnDestroy {
   protected filters: CourseFilters = {}
   protected items: Course[] = []
   protected totalMatches = 0
+  protected displayShowAllButton = false
 
   constructor(
     private readonly router: Router,
@@ -106,6 +107,7 @@ export class CoursesPage implements OnInit, OnDestroy {
 
   async ngOnInit(): Promise<void> {
     this.user = (await this.authService.ready()) as User
+    this.displayShowAllButton = this.user?.role === UserRoles.admin
     this.canCreateCourse = this.user?.role === UserRoles.teacher || this.user?.role === UserRoles.admin
     this.changeDetectorRef.markForCheck()
 
@@ -137,6 +139,27 @@ export class CoursesPage implements OnInit, OnDestroy {
         this.changeDetectorRef.markForCheck()
       })
     )
+  }
+
+  async searchAll() {
+    this.filters = {
+      ...this.filters,
+      showAll: true,
+    }
+
+    this.searching = true
+    const response = await firstValueFrom(
+      this.courseService.search({
+        ...this.filters,
+        expands: ['permissions', 'statistic'],
+      })
+    )
+    this.items = response.resources
+    this.totalMatches = response.total
+    this.searching = false
+    this.displayShowAllButton = false
+
+    this.changeDetectorRef.markForCheck()
   }
 
   ngOnDestroy(): void {

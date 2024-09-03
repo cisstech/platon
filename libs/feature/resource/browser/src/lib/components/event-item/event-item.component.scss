@@ -3,27 +3,3 @@
     color: var(--brand-text-primary);
   }
 }
-
-user-avatar {
-  margin: 30px 0 10px 0;
-}
-
-.hidden-date {
-  visibility: hidden;
-  font-size: 0.8em;
-  color: grey;
-  margin-right: 1em;
-}
-
-.timeline-item div:hover .hidden-date {
-  visibility: visible;
-}
-
-.timeline-item div .message {
-  border-left: 3px solid var(--brand-color-primary);
-  padding: 0.8em;
-}
-
-.more {
-  margin-top: 30px;
-}

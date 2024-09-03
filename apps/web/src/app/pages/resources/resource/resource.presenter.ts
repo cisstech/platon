@@ -8,6 +8,7 @@ import {
   CircleTree,
   CreateResourceInvitation,
   FileVersions,
+  GitLogResult,
   Resource,
   ResourceEvent,
   ResourceEventFilters,
@@ -20,7 +21,6 @@ import {
 } from '@platon/feature/resource/common'
 import { ResourceDashboardModel, ResultService } from '@platon/feature/result/browser'
 import { LayoutState, layoutStateFromError } from '@platon/shared/ui'
-import { ReadCommitResult } from 'isomorphic-git'
 import { BehaviorSubject, Observable, Subscription, firstValueFrom } from 'rxjs'
 
 @Injectable()
@@ -282,6 +282,20 @@ export class ResourcePresenter implements OnDestroy {
     }
   }
 
+  // Deleting
+
+  async delete(): Promise<boolean> {
+    const { resource } = this.context.value as Required<Context>
+    try {
+      await firstValueFrom(this.resourceService.delete(resource))
+      this.dialogService.success('La ressource a bien été supprimée.')
+      return true
+    } catch {
+      this.alertError()
+      return false
+    }
+  }
+
   // Private
 
   private async refresh(id: string): Promise<void> {
@@ -340,7 +354,7 @@ export class ResourcePresenter implements OnDestroy {
 
   // Log
 
-  async log(): Promise<ReadCommitResult[]> {
+  async log(): Promise<GitLogResult[]> {
     const { resource } = this.context.value as Required<Context>
     return firstValueFrom(this.fileService.log(resource))
   }

@@ -34,7 +34,6 @@ export class ResourceEventSubscriber implements EntitySubscriberInterface<Resour
     },
     [ResourceEventTypes.RESOURCE_CREATE]: this.defaultUserProvider.bind(this),
     [ResourceEventTypes.RESOURCE_STATUS_CHANGE]: this.defaultUserProvider.bind(this),
-    [ResourceEventTypes.RESOURCE_FILE_CHANGE]: this.defaultUserProvider.bind(this),
     [ResourceEventTypes.MEMBER_REMOVE]: async (event) => {
       return [event.actorId]
     },

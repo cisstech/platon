@@ -3,6 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/api/src",
   "projectType": "application",
+  "tags": [],
   "targets": {
     "build": {
       "executor": "@nx/webpack:webpack",
@@ -15,6 +16,7 @@
         "tsConfig": "apps/api/tsconfig.app.json",
         "assets": ["apps/api/src/assets"],
         "webpackConfig": "apps/api/webpack.config.js",
+
         "tsPlugins": [
           {
             "name": "@nestjs/swagger/plugin",
@@ -45,8 +47,7 @@
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"]
+      "executor": "@nx/eslint:lint"
     },
     "test": {
       "executor": "@nx/jest:jest",
@@ -55,6 +56,5 @@
         "jestConfig": "apps/api/jest.config.ts"
       }
     }
-  },
-  "tags": []
+  }
 }

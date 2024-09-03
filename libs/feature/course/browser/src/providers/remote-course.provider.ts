@@ -36,6 +36,10 @@ export class RemoteCourseProvider extends CourseProvider {
       .pipe(map((response) => response.resource))
   }
 
+  delete(course: Course): Observable<void> {
+    return this.http.delete<void>(`/api/v1/courses/${course.id}`)
+  }
+
   create(input: CreateCourse): Observable<Course> {
     const params = buildExpandableHttpParams(input)
 

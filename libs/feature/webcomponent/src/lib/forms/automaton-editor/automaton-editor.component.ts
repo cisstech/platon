@@ -476,8 +476,8 @@ export class AutomatonEditorComponent implements OnInit, OnDestroy, WebComponent
     const oString = transformOrigin[0] * 100 + '% ' + transformOrigin[1] * 100 + '%'
 
     for (let i = 0; i < prefix.length; i++) {
-      ;(<any>el.style)[prefix[i] + 'Transform'] = scale
-      ;(<any>el.style)[prefix[i] + 'TransformOrigin'] = oString
+      el.style[(prefix[i] + 'Transform') as any] = scale
+      el.style[(prefix[i] + 'TransformOrigin') as any] = oString
     }
 
     el.style['transform'] = scale

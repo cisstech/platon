@@ -46,6 +46,15 @@ ui-search-bar {
   margin: 0 auto;
 }
 
+.total-matches {
+  display: inline-block;
+}
+
+.show-all-button {
+  margin-left: 1rem;
+  margin-bottom: 1rem;
+}
+
 .indicators {
   margin-bottom: 1rem;
 }

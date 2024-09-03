@@ -10,10 +10,10 @@ import {
   FileSearchResults,
   FileUpdate,
   FileVersions,
+  GitLogResult,
   Resource,
   ResourceFile,
 } from '@platon/feature/resource/common'
-import { ReadCommitResult } from 'isomorphic-git'
 
 export abstract class ResourceFileProvider {
   abstract compileExercise(resource: string, version?: string): Observable<PLSourceFile>
@@ -32,5 +32,5 @@ export abstract class ResourceFileProvider {
   abstract search(file: Pick<ResourceFile, 'url'>, query: FileSearch): Observable<FileSearchResults>
   abstract listZipFiles(file: ResourceFile): Observable<string[]>
   abstract unzipFile(file: ResourceFile, path: string): Observable<void>
-  abstract log(resource: string | Resource): Observable<ReadCommitResult[]>
+  abstract log(resource: string | Resource): Observable<GitLogResult[]>
 }

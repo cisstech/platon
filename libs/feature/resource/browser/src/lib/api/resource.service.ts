@@ -87,6 +87,10 @@ export class ResourceService {
   moveToOwnerCircle(resource: Resource): Observable<Resource> {
     return this.resourceProvider.moveToOwnerCircle(resource)
   }
+
+  delete(resource: Resource): Observable<void> {
+    return this.resourceProvider.delete(resource)
+  }
   //#endregion
 
   //#region Members

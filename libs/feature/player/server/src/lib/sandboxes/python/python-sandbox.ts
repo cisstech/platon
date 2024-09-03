@@ -1,7 +1,7 @@
 import FormData from 'form-data'
 import * as fs from 'fs'
 import * as tar from 'tar-stream'
-import * as zlib from 'zlib'
+import * as zlib from 'node:zlib'
 import * as path from 'path'
 
 import { HttpService } from '@nestjs/axios'
@@ -165,8 +165,9 @@ export class PythonSandbox implements Sandbox {
     pack.finalize()
 
     const gzip = zlib.createGzip()
+
     const stream = fs.createWriteStream(tempFilePath)
-    pack.pipe(gzip).pipe(stream)
+    pack.pipe(gzip as any).pipe(stream)
 
     await new Promise<void>((resolve, reject) => {
       stream.on('error', reject)
