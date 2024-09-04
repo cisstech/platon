@@ -1,12 +1,12 @@
 <div class="example-container">
   <div
     cdkDropList
-    [cdkDropListData]="construireWords"
+    [cdkDropListData]="this.state.selectedWords"
     class="example-list"
     (cdkDropListDropped)="drop($event)"
     cdkDropListOrientation="mixed"
   >
-    @for (word of construireWords; track $index) {
+    @for (word of this.state.selectedWords; track $index) {
     <div class="example-box" cdkDrag (click)="removeWord(word)">
       {{ word }}
     </div>
@@ -17,44 +17,15 @@
 <div class="example-container">
   <div
     cdkDropList
-    [cdkDropListData]="suffleWords"
+    [cdkDropListData]="this.state.words"
     class="example-list"
     (cdkDropListDropped)="drop($event)"
     cdkDropListOrientation="mixed"
   >
-    @for (word of suffleWords; track $index) {
+    @for (word of this.state.words; track $index) {
     <div class="example-box" cdkDrag (click)="addWord(word)">
       {{ word }}
     </div>
     }
   </div>
 </div>
-
-<!--
-
-
-
-[cdkDropListData]="construireWords"
-
-[cdkDropListData]="suffleWords"
-
-<div cdkDropList cdkDropListOrientation="mixed" class="example-list" (cdkDropListDropped)="drop($event)">
-  @for (item of items; track item) {
-    <div class="example-box" cdkDrag>{{item}}</div>
-  }
-</div>
-
--->
-<!-- <div *ngFor="let row of getRows()">
-  <div
-    cdkDropList
-    cdkDropListOrientation="horizontal"
-    class="example-list-horiz"
-    [cdkDropListData]="row"
-    (cdkDropListDropped)="drop($event)"
-  >
-    <div *ngFor="let item of row" class="example-box" cdkDrag (click)="addWord(item)">
-      {{ item }}
-    </div>
-  </div>
-</div> -->
