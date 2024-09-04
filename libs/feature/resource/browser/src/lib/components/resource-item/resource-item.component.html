@@ -5,7 +5,7 @@
     [articleTags]="tags"
     [articleIconTemplate]="imageTemplate"
     [articleDescription]="descriptionTemplate"
-    [articleUrl]="clickable ? ['/resources/', item.id] : undefined"
+    (didClickTitle)="handleTitleClick($event)"
     (didClickTagItem)="handleTagClick($event)"
   >
     <ui-list-item-article-action *ngIf="editable" (click)="openTab(editorUrl)" class="action" actionTitle="Éditer">
@@ -14,7 +14,7 @@
 
     <ng-container *ngIf="item.type !== 'CIRCLE'">
       <ui-list-item-article-action
-        (click)="modalMode ? openTab(previewUrl) : iframe.open(previewUrl)"
+        (click)="$event.stopPropagation(); modalMode ? openTab(previewUrl) : iframe.open(previewUrl)"
         class="action"
         actionTitle="Prévisualiser"
       >
@@ -49,13 +49,7 @@
             </ng-container>
           </b>
         </p>
-        <button
-          nz-button
-          class="btn-show-references"
-          nzType="link"
-          [routerLink]="['/resources']"
-          [queryParams]="{ dependOn: [item.id] }"
-        >
+        <button nz-button class="btn-show-references" nzType="link" (click)="openTab(referencesUrl)">
           Afficher le listing
         </button>
       </ng-template>

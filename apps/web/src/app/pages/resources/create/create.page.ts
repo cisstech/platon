@@ -99,6 +99,7 @@ export class ResourceCreatePage implements OnInit {
   protected creating = false
   protected editionMode?: 'scratch' | 'template'
   protected loadingTemplates = false
+  protected isFinished = false
 
   protected tree!: CircleTree
   protected topics: Topic[] = []
@@ -252,5 +253,25 @@ export class ResourceCreatePage implements OnInit {
       const forbidden = [...codes, 'relative'].includes(control.value)
       return forbidden ? { code: true } : null
     }
+  }
+
+  protected openTemplateResource(templateId: string): void {
+    window.open(`/resources/${templateId}`, '_blank')
+  }
+
+  protected selectEditionMode(mode: 'scratch' | 'template', stepper: UiStepperComponent): void {
+    if (mode === 'template' && !this.templateSources.length) {
+      return
+    }
+    this.editionMode = mode
+    this.infos.markAllAsTouched()
+    stepper.nextStep()
+  }
+
+  protected endStep(stepper: UiStepperComponent): void {
+    if (this.isFinished) return
+    this.infos.markAllAsTouched()
+    stepper.nextStep()
+    this.isFinished = true
   }
 }
