@@ -12,9 +12,7 @@ import { CdkDragDrop, moveItemInArray, CdkDrag, CdkDropList, DropListOrientation
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 @WebComponent(WordSelectorComponentDefinition)
-/**
- * Represents a component for selecting words.
- */
+
 export class WordSelectorComponent implements WebComponentHooks<WordSelectorState>, OnInit {
   /**
    * The web component service.
@@ -31,25 +29,8 @@ export class WordSelectorComponent implements WebComponentHooks<WordSelectorStat
    */
   stateChange?: EventEmitter<WordSelectorState> | undefined
 
-  /**
-   * The list of words.
-   */
-  words: string[] = ["C'", 'est', 'mon', 'ami', 'il', 'vient', "d'", 'Australie', 'et', 'il', 'est', 'très', 'sympa']
 
-  /**
-   * The constructed words.
-   */
-  construireWords: string[] = []
 
-  /**
-   * The shuffled words.
-   */
-  suffleWords: string[] = []
-
-  /**
-   * Constructs a new instance of WordSelectorComponent.
-   * @param injector - The injector for dependency injection.
-   */
   constructor(readonly injector: Injector) {
     this.webComponentService = injector.get(WebComponentService)!
   }
@@ -58,14 +39,12 @@ export class WordSelectorComponent implements WebComponentHooks<WordSelectorStat
    * Initializes the component.
    */
   ngOnInit() {
-    this.suffleWords = [...this.words]
+    this.state.words = ["C'", 'est', 'mon', 'ami', 'il', 'vient', "d'", 'Australie', 'et', 'il', 'est', 'très', 'sympa']
+    this.state.words = [...this.state.words]
     this.shuffleArray()
   }
 
-  /**
-   * Handles the drop event for the word-selector component.
-   * @param event - The CdkDragDrop event containing information about the drop.
-   */
+
   drop(event: CdkDragDrop<string[]>) {
     const currentList = event.container.data
     const previousList = event.previousContainer.data
@@ -77,41 +56,13 @@ export class WordSelectorComponent implements WebComponentHooks<WordSelectorStat
       event.previousContainer.data.splice(event.previousIndex, 1)
       event.container.data.push(item)
     }
-    console.log('List:', event.container.data)
+
+    this.stateChange?.emit(this.state)
   }
 
-  /**
-   * Validates the constructed sentence.
-   * @returns The constructed words if the sentence is valid, otherwise an empty array.
-   */
-  validateSentence() {
-    if (this.listIdentique()) {
-      return this.construireWords
-    }
-    return this.construireWords
+
   }
 
-  /**
-   * Checks if the constructed words are identical to the original words.
-   * @returns True if the words are identical, false otherwise.
-   */
-  listIdentique(): boolean {
-    if (this.construireWords.length !== this.words.length) {
-      return false
-    }
-    for (let i = 0; i < this.construireWords.length; i++) {
-      if (this.construireWords[i] !== this.words[i]) {
-        return false
-      }
-    }
-    return true
-  }
-
-  /**
-   * Removes a letter from the given phrase.
-   * @param phrase - The phrase to remove the letter from.
-   * @param word - The word to remove.
-   */
   suppremerUneLettre(phrase: string[], word: string) {
     const index = phrase.indexOf(word)
     if (index > -1) {
@@ -119,31 +70,26 @@ export class WordSelectorComponent implements WebComponentHooks<WordSelectorStat
     }
   }
 
-  /**
-   * Adds a word to the constructed words.
-   * @param word - The word to add.
-   */
+
   addWord(word: string) {
-    this.construireWords.push(word)
-    this.suppremerUneLettre(this.suffleWords, word)
+    this.state.selectedWords.push(word)
+    this.suppremerUneLettre(this.state.words, word)
+    this.stateChange?.emit(this.state)
   }
 
-  /**
-   * Removes a word from the constructed words.
-   * @param word - The word to remove.
-   */
+  
   removeWord(word: string) {
-    this.suffleWords.push(word)
-    this.suppremerUneLettre(this.construireWords, word)
+    this.state.words.push(word)
+    this.suppremerUneLettre(this.state.selectedWords, word)
+    this.stateChange?.emit(this.state)
   }
 
-  /**
-   * Shuffles the array of words.
-   */
+
   shuffleArray(): void {
-    for (let i = this.suffleWords.length - 1; i > 0; i--) {
+    for (let i = this.state.words.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1))
-      ;[this.suffleWords[i], this.suffleWords[j]] = [this.suffleWords[j], this.suffleWords[i]]
+      ;[this.state.words[i], this.state.words[j]] = [this.state.words[j], this.state.words[i]]
     }
+    this.stateChange?.emit(this.state)
   }
 }

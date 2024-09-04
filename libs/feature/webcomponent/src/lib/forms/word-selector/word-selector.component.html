@@ -1,12 +1,12 @@
 <div class="example-container">
   <div
     cdkDropList
-    [cdkDropListData]="construireWords"
+    [cdkDropListData]="this.state.selectedWords"
     class="example-list"
     (cdkDropListDropped)="drop($event)"
     cdkDropListOrientation="mixed"
   >
-    @for (word of construireWords; track $index) {
+    @for (word of this.state.selectedWords; track $index) {
     <div class="example-box" cdkDrag (click)="removeWord(word)">
       {{ word }}
     </div>
@@ -17,12 +17,12 @@
 <div class="example-container">
   <div
     cdkDropList
-    [cdkDropListData]="suffleWords"
+    [cdkDropListData]="this.state.words"
     class="example-list"
     (cdkDropListDropped)="drop($event)"
     cdkDropListOrientation="mixed"
   >
-    @for (word of suffleWords; track $index) {
+    @for (word of this.state.words; track $index) {
     <div class="example-box" cdkDrag (click)="addWord(word)">
       {{ word }}
     </div>
