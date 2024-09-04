@@ -1,8 +1,8 @@
 import { InjectionToken } from '@angular/core'
-import { Transition } from '../automaton'
+import { State, Transition } from '../automaton'
 
 export interface AutomatonEditorActionContext {
-  state?: string
+  state?: State
   transition?: Transition
 }
 

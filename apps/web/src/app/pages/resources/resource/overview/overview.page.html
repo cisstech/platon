@@ -326,6 +326,60 @@
     <nz-col nzXs="24" nzSm="24" nzMd="4" nzLg="4" nzXl="4">
       <aside>
         <nz-row [nzGutter]="[24, 24]">
+          <nz-col nzSpan="24" *ngIf="context.resource.type === 'CIRCLE'">
+            <ui-statistic-card
+              matIcon="settings"
+              ribbonColor="#1990ff"
+              description="Templates"
+              tooltip="Nombre de templates directement liés à ce cercle."
+              [value]="templatesCount"
+            >
+              <a
+                nz-button
+                [routerLink]="['/resources']"
+                [queryParams]="{ types: 'EXERCISE', parents: context.resource.id, configurable: true }"
+                [queryParamsHandling]="'merge'"
+              >
+                Afficher la liste
+              </a>
+            </ui-statistic-card>
+          </nz-col>
+          <nz-col nzSpan="24" *ngIf="context.statistic?.circle">
+            <ui-statistic-card
+              matIcon="article"
+              ribbonColor="#c0392b"
+              description="Exercices"
+              tooltip="Nombre d'exercices directement liés à ce cercle."
+              [value]="context.statistic?.circle?.exercises ?? 'Non précisé'"
+            >
+              <a
+                nz-button
+                [routerLink]="['/resources']"
+                [queryParams]="{ types: 'EXERCISE', parents: context.resource.id }"
+                [queryParamsHandling]="'merge'"
+              >
+                Afficher la liste
+              </a>
+            </ui-statistic-card>
+          </nz-col>
+          <nz-col nzSpan="24" *ngIf="context.statistic?.circle">
+            <ui-statistic-card
+              matIcon="widgets"
+              ribbonColor="#34495e"
+              description="Activités"
+              tooltip="Nombre d'activités directement liées à ce cercle."
+              [value]="context.statistic?.circle?.activities ?? 'Non précisé'"
+            >
+              <a
+                nz-button
+                [routerLink]="['/resources']"
+                [queryParams]="{ types: 'ACTIVITY', parents: context.resource.id }"
+                [queryParamsHandling]="'merge'"
+              >
+                Afficher la liste
+              </a>
+            </ui-statistic-card>
+          </nz-col>
           <nz-col nzSpan="24">
             <ui-statistic-card
               matIcon="visibility"
@@ -355,62 +409,24 @@
               />
             </nz-col>
           </ng-container>
-          <ng-container *ngIf="context.statistic?.circle">
-            <nz-col nzSpan="24">
-              <ui-statistic-card
-                matIcon="group_work"
-                ribbonColor="#16a085"
-                description="Cercles enfants"
-                tooltip="Nombre de cercles directement liés à ce cercle."
-                [value]="context.statistic?.circle?.circles ?? 'Non précisé'"
+          <nz-col nzSpan="24" *ngIf="context.statistic?.circle">
+            <ui-statistic-card
+              matIcon="group_work"
+              ribbonColor="#16a085"
+              description="Cercles enfants"
+              tooltip="Nombre de cercles directement liés à ce cercle."
+              [value]="context.statistic?.circle?.circles ?? 'Non précisé'"
+            >
+              <a
+                nz-button
+                [routerLink]="['/resources']"
+                [queryParams]="{ types: 'CIRCLE', parents: context.resource.id }"
+                [queryParamsHandling]="'merge'"
               >
-                <a
-                  nz-button
-                  [routerLink]="['/resources']"
-                  [queryParams]="{ types: 'CIRCLE', parents: context.resource.id }"
-                  [queryParamsHandling]="'merge'"
-                >
-                  Afficher la liste
-                </a>
-              </ui-statistic-card>
-            </nz-col>
-            <nz-col nzSpan="24">
-              <ui-statistic-card
-                matIcon="widgets"
-                ribbonColor="#34495e"
-                description="Activités"
-                tooltip="Nombre d'activités directement liées à ce cercle."
-                [value]="context.statistic?.circle?.activities ?? 'Non précisé'"
-              >
-                <a
-                  nz-button
-                  [routerLink]="['/resources']"
-                  [queryParams]="{ types: 'ACTIVITY', parents: context.resource.id }"
-                  [queryParamsHandling]="'merge'"
-                >
-                  Afficher la liste
-                </a>
-              </ui-statistic-card>
-            </nz-col>
-            <nz-col nzSpan="24">
-              <ui-statistic-card
-                matIcon="article"
-                ribbonColor="#c0392b"
-                description="Exercices"
-                tooltip="Nombre d'exercices directement liés à ce cercle."
-                [value]="context.statistic?.circle?.exercises ?? 'Non précisé'"
-              >
-                <a
-                  nz-button
-                  [routerLink]="['/resources']"
-                  [queryParams]="{ types: 'EXERCISE', parents: context.resource.id }"
-                  [queryParamsHandling]="'merge'"
-                >
-                  Afficher la liste
-                </a>
-              </ui-statistic-card>
-            </nz-col>
-          </ng-container>
+                Afficher la liste
+              </a>
+            </ui-statistic-card>
+          </nz-col>
         </nz-row>
       </aside>
     </nz-col>

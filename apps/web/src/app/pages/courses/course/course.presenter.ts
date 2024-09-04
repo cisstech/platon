@@ -213,6 +213,10 @@ export class CoursePresenter implements OnDestroy {
     }
   }
 
+  async copyDemoUri(): Promise<void> {
+    this.dialogService.info('URL copiée')
+  }
+
   async listCourseGroups(): Promise<CourseGroup[]> {
     const { course } = this.context.value
     if (!course) {

@@ -15,7 +15,6 @@ import { NzSelectModule } from 'ng-zorro-antd/select'
 import { UserRoles } from '@platon/core/common'
 import { NzInputModule } from 'ng-zorro-antd/input'
 import { NzIconModule } from 'ng-zorro-antd/icon'
-import { DialogService } from '@platon/core/browser'
 import { Clipboard } from '@angular/cdk/clipboard'
 import { MatCardModule } from '@angular/material/card'
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm'
@@ -84,7 +83,6 @@ export class CourseSettingsPage implements OnInit, OnDestroy {
     private readonly presenter: CoursePresenter,
     private readonly changeDetectorRef: ChangeDetectorRef,
     private readonly clipboard: Clipboard,
-    private readonly dialogService: DialogService,
     @Inject(DOCUMENT) private document: Document
   ) {}
 
@@ -155,9 +153,9 @@ export class CourseSettingsPage implements OnInit, OnDestroy {
     }
   }
 
-  copyUri(): void {
+  async copyUri() {
     this.clipboard.copy(this.demoUri)
-    this.dialogService.info('URL copiée')
+    await this.presenter.copyDemoUri()
   }
 
   async deleteCourse() {

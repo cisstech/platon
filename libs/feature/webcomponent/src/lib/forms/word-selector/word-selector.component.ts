@@ -12,24 +12,38 @@ import { CdkDragDrop, moveItemInArray, CdkDrag, CdkDropList, DropListOrientation
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 @WebComponent(WordSelectorComponentDefinition)
-/**
- * Represents a component for selecting and arranging words.
- */
+
 export class WordSelectorComponent implements WebComponentHooks<WordSelectorState>, OnInit {
+  /**
+   * The web component service.
+   */
   private readonly webComponentService!: WebComponentService
 
+  /**
+   * The state of the word selector component.
+   */
   @Input() state!: WordSelectorState
+
+  /**
+   * Event emitter for state changes.
+   */
   stateChange?: EventEmitter<WordSelectorState> | undefined
+
+
 
   constructor(readonly injector: Injector) {
     this.webComponentService = injector.get(WebComponentService)!
   }
 
+  /**
+   * Initializes the component.
+   */
   ngOnInit() {
     this.state.words = ["C'", 'est', 'mon', 'ami', 'il', 'vient', "d'", 'Australie', 'et', 'il', 'est', 'très', 'sympa']
     this.state.words = [...this.state.words]
     this.shuffleArray()
   }
+
 
   drop(event: CdkDragDrop<string[]>) {
     const currentList = event.container.data
@@ -42,7 +56,11 @@ export class WordSelectorComponent implements WebComponentHooks<WordSelectorStat
       event.previousContainer.data.splice(event.previousIndex, 1)
       event.container.data.push(item)
     }
+
     this.stateChange?.emit(this.state)
+  }
+
+
   }
 
   suppremerUneLettre(phrase: string[], word: string) {
@@ -52,17 +70,20 @@ export class WordSelectorComponent implements WebComponentHooks<WordSelectorStat
     }
   }
 
+
   addWord(word: string) {
     this.state.selectedWords.push(word)
     this.suppremerUneLettre(this.state.words, word)
     this.stateChange?.emit(this.state)
   }
 
+  
   removeWord(word: string) {
     this.state.words.push(word)
     this.suppremerUneLettre(this.state.selectedWords, word)
     this.stateChange?.emit(this.state)
   }
+
 
   shuffleArray(): void {
     for (let i = this.state.words.length - 1; i > 0; i--) {
