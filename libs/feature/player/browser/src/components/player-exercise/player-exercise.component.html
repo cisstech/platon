@@ -41,7 +41,12 @@
       <section #containerFeedbacks>
         <ng-container *ngIf="player?.feedbacks">
           <ng-container *ngFor="let feedback of player?.feedbacks">
-            <nz-alert nzShowIcon [nzType]="feedback.type" [nzMessage]="content">
+            <nz-alert
+              *ngIf="feedback.content && feedback.type !== 'none'"
+              nzShowIcon
+              [nzType]="feedback.type"
+              [nzMessage]="content"
+            >
               <ng-template #content>
                 <nge-markdown [data]="feedback.content" />
               </ng-template>
