@@ -48,4 +48,7 @@ export class UserEntity extends BaseEntity {
     query: (alias) => `SELECT ${alias}.password IS NOT NULL`,
   })
   hasPassword = false
+
+  @Column({ name: 'discord_id', nullable: true, unique: true })
+  discordId?: string
 }

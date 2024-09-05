@@ -43,3 +43,13 @@ user-avatar {
 .ant-btn-primary {
   margin: 0 8px;
 }
+
+.modal-wrapper{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.icon-color {
+  color: var(--brand-text-primary);
+}

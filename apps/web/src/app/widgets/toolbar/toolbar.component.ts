@@ -9,6 +9,7 @@ import {
   OnDestroy,
   OnInit,
   Output,
+  ViewChild,
   inject,
 } from '@angular/core'
 import { Router, RouterModule } from '@angular/router'
@@ -26,6 +27,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzPopoverModule } from 'ng-zorro-antd/popover'
 import { firstValueFrom, Subscription } from 'rxjs'
+import { UiModalTemplateComponent } from '@platon/shared/ui'
 
 @Component({
   standalone: true,
@@ -49,6 +51,8 @@ import { firstValueFrom, Subscription } from 'rxjs'
     ResourcePipesModule,
     UserAvatarComponent,
     NotificationDrawerComponent,
+
+    UiModalTemplateComponent,
   ],
 })
 export class ToolbarComponent implements OnInit, OnDestroy {
@@ -71,6 +75,10 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   protected canCreateCircle = false
   protected canCreateExercise = false
   protected canCreateActivity = false
+  protected h = true
+
+  @ViewChild(UiModalTemplateComponent, { static: true })
+  protected modal!: UiModalTemplateComponent
 
   protected get canCreate(): boolean {
     return this.canCreateCourse || this.canCreateCircle || this.canCreateExercise || this.canCreateActivity
@@ -177,5 +185,10 @@ export class ToolbarComponent implements OnInit, OnDestroy {
       document.body.style.transition = 'none'
       this.changeDetectorRef.markForCheck()
     }, 500)
+  }
+
+  openDiscordModal(): void {
+    console.error('Not implemented')
+    this.modal.open()
   }
 }
