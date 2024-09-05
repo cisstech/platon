@@ -3,10 +3,10 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/core/server/src",
   "projectType": "library",
+  "tags": ["type:lib", "scope:core", "target:server"],
   "targets": {
     "lint": {
-      "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"]
+      "executor": "@nx/eslint:lint"
     },
     "test": {
       "executor": "@nx/jest:jest",
@@ -15,6 +15,5 @@
         "jestConfig": "libs/core/server/jest.config.ts"
       }
     }
-  },
-  "tags": ["type:lib", "scope:core", "target:server"]
+  }
 }

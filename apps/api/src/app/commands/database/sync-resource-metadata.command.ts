@@ -8,10 +8,7 @@ import { DataSource, EntityManager } from 'typeorm'
 export class SyncResourceMetadatasCommand extends CommandRunner {
   private readonly logger = new Logger(SyncResourceMetadatasCommand.name)
 
-  constructor(
-    private readonly dataSource: DataSource,
-    private readonly metadataService: ResourceMetadataService
-  ) {
+  constructor(private readonly dataSource: DataSource, private readonly metadataService: ResourceMetadataService) {
     super()
   }
 

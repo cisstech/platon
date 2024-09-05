@@ -12,7 +12,7 @@ export function createWebComponentDoc(meta?: Partial<NgeDocMeta>): NgeDocSetting
       backUrl: '/docs',
       repo: {
         name: 'platon',
-        url: 'https://github.com/PlatonOrg/platon',
+        url: 'https://github.com/cisstech/platon',
       },
       ...(meta || {}),
     },
@@ -68,7 +68,7 @@ function links(api: WebComponentService, type: WebComponentTypes): NgeDocLink[] 
         {
           title: 'Éditer sur Github',
           icon: 'https://icongr.am/octicons/mark-github.svg',
-          run: `https://github.com/PlatonOrg/platon/tree/main/libs/feature/webcomponent/src/lib/${type}s/${name}`,
+          run: `https://github.com/cisstech/platon/tree/main/libs/feature/webcomponent/src/lib/${type}s/${name}`,
         },
       ],
       inputs: {

@@ -15,11 +15,11 @@ export class ActionSetAccepting implements AutomatonEditorAction {
     if (!context.state) {
       return
     }
-    this.editor.addAccepting(context.state)
+    this.editor.addAccepting(context.state.name)
   }
 
   condition(context: AutomatonEditorActionContext) {
-    return !!context.state && !this.editor.isAccepting(context.state)
+    return !!context.state && !this.editor.isAccepting(context.state.name)
   }
 }
 

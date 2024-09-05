@@ -1,5 +1,6 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "defaultBase": "origin/main",
   "cli": {
     "packageManager": "yarn"
   },
@@ -29,6 +30,10 @@
           "codeCoverage": true
         }
       }
+    },
+    "@nx/eslint:lint": {
+      "inputs": ["default", "{workspaceRoot}/.eslintrc.json"],
+      "cache": true
     }
   },
   "namedInputs": {
@@ -60,5 +65,6 @@
     "@nx/angular:component": {
       "style": "scss"
     }
-  }
+  },
+  "useInferencePlugins": false
 }

@@ -13,11 +13,11 @@ export class ActionSetInitial implements AutomatonEditorAction {
 
   run(context: AutomatonEditorActionContext) {
     if (!context.state) return
-    this.editor.addInitial(context.state)
+    this.editor.addInitial(context.state.name)
   }
 
   condition(context: AutomatonEditorActionContext) {
-    return !!context.state && !this.editor.isInitial(context.state)
+    return !!context.state && !this.editor.isInitial(context.state.name)
   }
 }
 

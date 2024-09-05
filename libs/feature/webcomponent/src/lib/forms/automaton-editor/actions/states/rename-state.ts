@@ -17,7 +17,7 @@ export class ActionRenameState implements AutomatonEditorAction {
       return
     }
 
-    const oldName = context.state
+    const oldName = context.state.name
 
     let newName = await this.prompt(`Renommer l'état “${oldName}”`, oldName)
 

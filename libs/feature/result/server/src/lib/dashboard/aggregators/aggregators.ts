@@ -33,7 +33,7 @@ export interface DataAggregator<TInput, TOutput = unknown> {
  * Represents an interface for aggregating session data.
  * @template TOutput The type of the aggregated output.
  */
-export interface SessionDataAggregator<TOutput = unknown> extends DataAggregator<SessionDataEntity, TOutput> {}
+export type SessionDataAggregator<TOutput = unknown> = DataAggregator<SessionDataEntity, TOutput>
 
 /**
  * The maximum duration of a gap between two answers.

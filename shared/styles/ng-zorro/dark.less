@@ -1,6 +1,8 @@
 // https://github.com/NG-ZORRO/ng-zorro-antd/blob/master/components/style/themes/dark.less
-@import '../../../node_modules/ng-zorro-antd/ng-zorro-antd.less';
+
+@import (multiple) '../../../node_modules/ng-zorro-antd/style/color/colorPalette.less';
 @import (multiple) '../../../node_modules/ng-zorro-antd/style/themes/dark.less';
+@import '../../../node_modules/ng-zorro-antd/ng-zorro-antd.less';
 @import 'base';
 
 @body-background: #071a2b;
@@ -16,8 +18,8 @@
 @text-color-secondary: #d3e3fdb3;
 
 @link-color: #d3e3fd;
-@link-hover-color: color(~`colorPalette('@{link-color}', 5) `);
-@link-active-color: color(~`colorPalette('@{link-color}', 7) `);
+//@link-hover-color: color(~`colorPalette('@{link-color}', 5) `);
+//@link-active-color: color(~`colorPalette('@{link-color}', 7) `);
 
 @table-header-bg: #0d2136;
 @table-row-hover-bg: #7cacf814;

@@ -100,6 +100,10 @@ export class ResourceItemComponent implements OnChanges {
     return `/player/preview/${this.item.id}?version=latest&sessionId=${sessionId}`
   }
 
+  get referencesUrl(): string {
+    return `/resources?dependOn=${this.item.id}`
+  }
+
   ngOnChanges(): void {
     this.tags = []
     if (!this.simple) {
@@ -143,6 +147,12 @@ export class ResourceItemComponent implements OnChanges {
       this.levelClicked.emit(tag.data!.id)
     } else if (tag.data!.type === 'topic') {
       this.topicClicked.emit(tag.data!.id)
+    }
+  }
+
+  protected handleTitleClick(event: Event): void {
+    if (this.clickable) {
+      this.openTab(`/resources/${this.item.id}`)
     }
   }
 

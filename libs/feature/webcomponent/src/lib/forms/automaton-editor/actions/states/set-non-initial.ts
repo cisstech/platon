@@ -15,11 +15,11 @@ export class ActionSetNonInitial implements AutomatonEditorAction {
     if (!context.state) {
       return
     }
-    this.editor.removeInitial(context.state)
+    this.editor.removeInitial(context.state.name)
   }
 
   condition(context: AutomatonEditorActionContext) {
-    return !!context.state && this.editor.isInitial(context.state)
+    return !!context.state && this.editor.isInitial(context.state.name)
   }
 }
 
