@@ -8,7 +8,6 @@ export const resolveFileReference = (path: string, relativeTo: { resource: strin
       path = `/relative/${path}`
     }
   }
-  console.log(path)
   const tokens = path.split(' as ')
 
   path = tokens[0].trim()

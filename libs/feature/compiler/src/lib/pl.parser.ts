@@ -216,6 +216,7 @@ export interface PLDependency {
   alias?: string
   lineno: number
   content: string
+  hash: string
   abspath: string
 }
 

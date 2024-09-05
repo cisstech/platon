@@ -75,6 +75,7 @@
     border-radius: 0.5em;
     border: 1px solid #346789;
     cursor: pointer;
+    z-index: 1;
 
     background-color: var(--brand-background-components);
     -webkit-transition: background-color 0.25s ease-in;
@@ -106,9 +107,18 @@
 }
 
 .automaton-editor-canvas {
+  height: 200%;
+  width: 200%;
   flex: 1;
-  position: relative;
+  position: absolute;
+  overflow: scroll;
+}
+
+#canvas-view {
   overflow: auto;
+  height: 100%;
+  width: 100%;
+  position: relative;
 }
 
 .automaton-editor-actions-top {

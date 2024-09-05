@@ -21,3 +21,5 @@ shared/external_libs
 migrations
 dumps
 apps/docs/.next
+
+/.nx/workspace-data

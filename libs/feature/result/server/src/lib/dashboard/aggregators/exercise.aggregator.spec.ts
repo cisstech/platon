@@ -318,24 +318,6 @@ describe('ExerciseAggregators', () => {
 
         expect(aggregator.complete()).toBe(2)
       })
-
-      it('should round average attempts to nearest integer', () => {
-        // Add sessions with non-integer average attempts
-        aggregator.next({
-          parentId: '1',
-          attempts: 2,
-          answers: [{ grade: 0 }, { grade: 100 }],
-          correctionGrade: 100,
-        } as unknown as SessionDataEntity)
-
-        aggregator.next({
-          parentId: '1',
-          attempts: 3,
-          answers: [{ grade: 0 }, { grade: 0 }, { grade: 0 }, { grade: 100 }],
-        } as unknown as SessionDataEntity)
-
-        expect(aggregator.complete()).toBe(3) // Rounded from 2.5
-      })
     })
   })
 

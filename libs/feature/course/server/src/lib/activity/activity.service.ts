@@ -295,6 +295,9 @@ export class ActivityService {
 
   private createQueryBuilder(courseId: string) {
     // TODO select only the fields we need here
+    if (this.request.user.role === 'admin') {
+      return this.repository.createQueryBuilder('activity').where(`activity.course_id = :courseId`, { courseId })
+    }
     const qb = buildSelectQuery(
       this.repository.createQueryBuilder('activity'),
       (qb) => this.withMemberJoin(qb, this.request.user),

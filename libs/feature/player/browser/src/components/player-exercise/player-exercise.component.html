@@ -6,7 +6,11 @@
           <mat-icon *ngIf="state" [style.color]="state | answerStateColor" [nz-tooltip]="state | answerStateLabel">
             {{ state | answerStateIcon }}
           </mat-icon>
-          {{ player?.title }}
+          <ng-container *ngIf="player?.title">
+            <div class="exercise-title">
+              <nge-markdown [data]="player!.title" />
+            </div>
+          </ng-container>
         </mat-card-title>
         <mat-card-subtitle *ngIf="player?.author">
           @if (player!.author!|isUUID) {
@@ -37,7 +41,12 @@
       <section #containerFeedbacks>
         <ng-container *ngIf="player?.feedbacks">
           <ng-container *ngFor="let feedback of player?.feedbacks">
-            <nz-alert nzShowIcon [nzType]="feedback.type" [nzMessage]="content">
+            <nz-alert
+              *ngIf="feedback.content && feedback.type !== 'none'"
+              nzShowIcon
+              [nzType]="feedback.type"
+              [nzMessage]="content"
+            >
               <ng-template #content>
                 <nge-markdown [data]="feedback.content" />
               </ng-template>

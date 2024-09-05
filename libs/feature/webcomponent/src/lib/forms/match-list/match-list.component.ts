@@ -11,12 +11,19 @@ import {
   Output,
   ViewChild,
 } from '@angular/core'
-import { Connection, Endpoint, EndpointOptions, jsPlumb, jsPlumbInstance } from 'jsplumb'
+import {
+  BrowserJsPlumbInstance,
+  Connection,
+  Endpoint,
+  EVENT_CONNECTION,
+  EVENT_CONNECTION_CLICK,
+  EVENT_CONNECTION_DETACHED,
+  newInstance,
+  ready,
+} from '@jsplumb/browser-ui'
 import { WebComponent, WebComponentHooks } from '../../web-component'
 import { WebComponentChangeDetectorService } from '../../web-component-change-detector.service'
 import { MatchListComponentDefinition, MatchListItem, MatchListState } from './match-list'
-
-type EndPointType = Endpoint & EndpointOptions & { canvas: HTMLElement }
 
 @Component({
   selector: 'wc-match-list',
@@ -34,8 +41,8 @@ export class MatchListComponent implements OnInit, AfterViewChecked, OnDestroy, 
 
   private width = 0
   private height = 0
-  private jsPlumb!: jsPlumbInstance
-  private selectedPoints: EndPointType[] = []
+  private jsPlumb!: BrowserJsPlumbInstance
+  private selectedPoints: string[] = []
 
   get sources() {
     return this.state.nodes.filter((e) => e.type === 'source')
@@ -48,27 +55,37 @@ export class MatchListComponent implements OnInit, AfterViewChecked, OnDestroy, 
   constructor(readonly injector: Injector, readonly changeDetector: WebComponentChangeDetectorService) {}
 
   async ngOnInit() {
-    this.jsPlumb = jsPlumb.getInstance({
-      Container: this.container.nativeElement,
-      ConnectionsDetachable: false,
-      Endpoint: ['Dot', { radius: 6 }],
-      Connector: 'StateMachine',
-      PaintStyle: {
+    this.jsPlumb = newInstance({
+      container: this.container.nativeElement,
+      connectionsDetachable: false,
+      endpoint: {
+        type: 'Dot',
+        options: {
+          radius: 6,
+        },
+      },
+      connector: 'StateMachine',
+      paintStyle: {
         strokeWidth: 4,
         stroke: '#456',
       },
-      HoverPaintStyle: {
+      hoverPaintStyle: {
         stroke: '#FF4500',
       },
-      EndpointHoverStyle: {
+      endpointHoverStyle: {
         stroke: '#FF4500',
         fill: '#FF4500',
       },
-      ConnectionOverlays: [['Arrow', { width: 16, length: 16, location: 0.98, id: 'arrow' }]],
-      DragOptions: { cursor: 'pointer', zIndex: 2000 },
+      connectionOverlays: [
+        {
+          type: 'Arrow',
+          options: { width: 16, length: 16, location: 0.98, id: 'arrow' },
+        },
+      ],
+      dragOptions: { cursor: 'pointer', zIndex: 2000 },
     })
     await new Promise<void>((resolve) => {
-      this.jsPlumb.ready(() => {
+      ready(() => {
         this.addListeners()
         resolve()
       })
@@ -92,10 +109,49 @@ export class MatchListComponent implements OnInit, AfterViewChecked, OnDestroy, 
 
   onChangeState() {
     this.jsPlumb.batch(() => {
-      this.jsPlumb.reset(true)
-      this.jsPlumb.setSuspendEvents(this.state.disabled)
+      const changes = this.changeDetector.changes(this)
+      if (changes.includes('nodes')) {
+        this.jsPlumb.selectEndpoints().each((endpoint) => {
+          // If endpoint is not in the list of nodes, delete it
+          if (!this.state.nodes.find((node) => node.id === endpoint.uuid)) {
+            this.jsPlumb.deleteEndpoint(endpoint)
+          }
+        })
+      }
+
+      // Create new endpoints
       this.renderEndPoints()
+
+      if (changes.includes('links')) {
+        this.jsPlumb.connections.forEach((connection) => {
+          if (
+            // If connection is not in the list of links, delete it
+            !this.state.links.find((link) => link.source === connection.sourceId && link.target === connection.targetId)
+          ) {
+            this.jsPlumb.deleteConnection(connection)
+          }
+        })
+      }
+
+      // Create new connections
       this.renderConnections()
+
+      if (changes.includes('disabled')) {
+        if (this.state.disabled) {
+          this.jsPlumb.setSuspendEvents(true)
+          this.jsPlumb.selectEndpoints().each((endpoint) => {
+            endpoint.maxConnections = endpoint.connections.length
+          })
+        } else {
+          this.jsPlumb.setSuspendEvents(false)
+          this.jsPlumb.selectEndpoints().each((endpoint) => {
+            endpoint.maxConnections = -1
+          })
+        }
+      }
+
+      this.selectedPoints = []
+      this.unselectPoints()
     })
   }
 
@@ -104,71 +160,90 @@ export class MatchListComponent implements OnInit, AfterViewChecked, OnDestroy, 
   }
 
   private renderEndPoints() {
-    this.state.nodes.forEach((node) => {
-      this.jsPlumb?.addEndpoint(node.id, {
-        id: node.id,
-        isSource: node.type === 'source',
-        isTarget: node.type === 'target',
-        anchor: node.type === 'source' ? 'Right' : 'Left',
-        maxConnections: this.state.disabled ? 0 : -1,
+    this.state.nodes
+      .filter((node) => !this.jsPlumb.getEndpoint(node.id))
+      .forEach((node) => {
+        const element = document.getElementById(node.id)
+        if (!element) return
+
+        const endpoint = this.jsPlumb.addEndpoint(element, {
+          uuid: node.id,
+          source: node.type === 'source',
+          target: node.type === 'target',
+          anchor: node.type === 'source' ? 'Right' : 'Left',
+          maxConnections: -1,
+        })
+        element.addEventListener('click', () => {
+          if (!this.state.disabled) this.selectPoint(endpoint, node.id)
+        })
       })
-    })
   }
 
   private renderConnections() {
-    this.state.links.forEach((link) => {
-      if (!link.source || !link.target) return
-      this.jsPlumb?.connect({
-        source: link.source,
-        target: link.target,
-        anchors: ['RightMiddle', 'LeftMiddle'],
-        cssClass: link.css,
+    this.state.links
+      .filter(
+        (link) => !this.jsPlumb.connections.find((conn) => conn.sourceId == link.source && conn.targetId == link.target)
+      )
+      .forEach((link) => {
+        const source = this.jsPlumb.getEndpoint(link.source)
+        const target = this.jsPlumb.getEndpoint(link.target)
+        if (!source || !target) return
+        this.jsPlumb?.connect({
+          source,
+          target,
+          anchors: ['Right', 'Left'],
+          cssClass: link.css,
+        })
       })
-    })
   }
 
   private addListeners() {
-    this.jsPlumb.bind('click', (connection) => {
+    this.jsPlumb.bind(EVENT_CONNECTION_CLICK, (connection) => {
       this.jsPlumb?.deleteConnection(connection)
     })
-    this.jsPlumb.bind('connection', (info) => {
+    this.jsPlumb.bind(EVENT_CONNECTION, (info) => {
       this.onCreateConnection(info.connection)
     })
-    this.jsPlumb.bind('connectionDetached', (info) => {
+    this.jsPlumb.bind(EVENT_CONNECTION_DETACHED, (info) => {
       this.onRemoveConnection(info.connection)
-    })
-    this.jsPlumb.bind('endpointClick', (info) => {
-      const point = info as unknown as EndPointType
-      this.selectPoint(point)
-      if (this.selectedPoints.length >= 2) {
-        const source = this.selectedPoints.find((e) => e.isSource)
-        const target = this.selectedPoints.find((e) => e.isTarget)
-        if (!source || !target) {
-          const top = this.selectedPoints[1]
-          this.unselectPoints()
-          this.selectPoint(top)
-        } else {
-          this.unselectPoints()
-          this.state.links.push({
-            source: source.getElement().id,
-            target: target.getElement().id,
-          })
-        }
-      }
     })
   }
 
-  private selectPoint(point: EndPointType) {
-    const canvas = point.canvas
-    canvas.classList.remove('selected')
-    canvas.classList.add('selected')
-    this.selectedPoints.push(point)
+  private selectPoint(endpoint: Endpoint, id: string) {
+    if (this.selectedPoints.includes(id)) {
+      endpoint.removeClass('selected')
+      this.selectedPoints.splice(this.selectedPoints.indexOf(id), 1)
+      return
+    }
+    endpoint.addClass('selected')
+    this.selectedPoints.push(id)
+    if (this.selectedPoints.length >= 2) {
+      const source = this.selectedPoints.find((e) => this.sources.find((s) => s.id === e))
+      const target = this.selectedPoints.find((e) => this.targets.find((t) => t.id === e))
+      if (!source || !target) {
+        const top = this.selectedPoints[1]
+        this.unselectPoints()
+        this.selectPoint(this.jsPlumb.getEndpoint(top), top)
+      } else {
+        if (this.state.links.find((e) => e.source === source && e.target === target)) {
+          this.unselectPoints()
+          return
+        }
+        this.unselectPoints()
+        const sourceEndpoint = this.jsPlumb.getEndpoint(source)
+        const targetEndpoint = this.jsPlumb.getEndpoint(target)
+        this.jsPlumb.connect({
+          source: sourceEndpoint,
+          target: targetEndpoint,
+        })
+      }
+    }
   }
 
   private unselectPoints() {
-    this.selectedPoints.forEach((point) => {
-      const canvas = point.canvas as HTMLElement
-      canvas.classList.remove('selected')
+    this.selectedPoints.forEach((id) => {
+      const endpoint = this.jsPlumb.getEndpoint(id)
+      endpoint.removeClass('selected')
     })
     this.selectedPoints = []
   }

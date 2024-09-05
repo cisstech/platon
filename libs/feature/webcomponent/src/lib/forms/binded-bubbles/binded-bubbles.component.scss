@@ -27,8 +27,6 @@ button {
   font-size: medium;
 }
 
-
-
 .bubbles-items button.checked,
 .bubbles-items a.checked {
   animation: changeColorChecked 1s forwards;
@@ -61,10 +59,9 @@ button {
 
 .bubbles-item button:hover,
 .bubbles-item a:hover {
-  transform: translateY(-0.10em);
+  transform: translateY(-0.1em);
   border-width: 3px;
 }
-
 
 @keyframes changeColorChecked {
   0% {
@@ -77,8 +74,6 @@ button {
     /* Couleur de fond verte */
   }
 }
-
-
 
 @keyframes changeColorError {
   0% {
@@ -104,9 +99,7 @@ button {
     background-color: #00ff00;
   }
 
-
   100% {
     opacity: 0;
   }
-
 }

@@ -104,6 +104,7 @@ nz-select {
     margin: 0 10px;
     width: 300px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
 
     &:hover {
       transform: translateY(-5px);
@@ -188,4 +189,16 @@ nz-select {
 
 nz-collapse {
   width: 100%;
+}
+
+.template-item {
+  cursor: pointer;
+}
+
+.final-step {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: center;
+  height: 50vh;
 }

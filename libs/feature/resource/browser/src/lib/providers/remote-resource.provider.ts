@@ -86,4 +86,8 @@ export class RemoteResourceProvider extends ResourceProvider {
       .patch<ItemResponse<Resource>>(`/api/v1/resources/${resource.id}/movetoowner`, { ownerId })
       .pipe(map((response) => response.resource))
   }
+
+  delete(resource: Resource): Observable<void> {
+    return this.http.delete<void>(`/api/v1/resources/${resource.id}`)
+  }
 }

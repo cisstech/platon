@@ -95,6 +95,12 @@ export class ResourceFileService {
     }
   }
 
+  async getFileContent(resourceId: string, path: string, version?: string, req?: IRequest): Promise<Uint8Array> {
+    const { repo } = await this.repo(resourceId, req)
+    const [, content] = await repo.read(path, version || LATEST)
+    return content!
+  }
+
   async compile(input: CompileInput): Promise<CompileOutput> {
     const { resourceId, version, req, overrides } = input
     const { repo, resource } = await this.repo(resourceId, req)

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { Router, RouterModule } from '@angular/router'
-import { Subscription } from 'rxjs'
+import { firstValueFrom, Subscription } from 'rxjs'
 
 import { MatCardModule } from '@angular/material/card'
 import { MatChipsModule } from '@angular/material/chips'
@@ -17,7 +17,7 @@ import { EChartsOption } from 'echarts'
 import { FormsModule } from '@angular/forms'
 import { MatButtonModule } from '@angular/material/button'
 import { CoreEchartsDirective } from '@platon/core/browser'
-import { RESOURCE_STATUS_COLORS_HEX, RESOURCE_STATUS_NAMES } from '@platon/feature/resource/browser'
+import { RESOURCE_STATUS_COLORS_HEX, RESOURCE_STATUS_NAMES, ResourceService } from '@platon/feature/resource/browser'
 import { ResourceStatistic, ResourceStatus } from '@platon/feature/resource/common'
 import {
   ResourceDashboardModel,
@@ -68,6 +68,8 @@ export class ResourceOverviewPage implements OnInit, OnDestroy {
   protected statusChart?: EChartsOption
   protected learningInsightsDate = new Date()
   protected learningInsightsOption: 'score' | 'duration' = 'score'
+  protected templatesCount = 0
+  private readonly resourceService = inject(ResourceService)
 
   constructor(
     private readonly router: Router,
@@ -83,6 +85,7 @@ export class ResourceOverviewPage implements OnInit, OnDestroy {
           this.buildStatusChart(context.statistic)
         }
         this.dashboard = await this.presenter.dashboard()
+        this.templatesCount = await this.getTemplatesCount()
         this.changeDetectorRef.markForCheck()
       })
     )
@@ -101,6 +104,19 @@ export class ResourceOverviewPage implements OnInit, OnDestroy {
         },
       })
       .catch(console.error)
+  }
+
+  private async getTemplatesCount(): Promise<number> {
+    if (!this.context.resource?.id) {
+      return 0
+    }
+    return firstValueFrom(
+      this.resourceService.search({
+        parents: [this.context.resource?.id],
+        types: ['EXERCISE'],
+        configurable: true,
+      })
+    ).then((response) => response.total)
   }
 
   protected trackById(index: number, item: any) {

@@ -101,10 +101,9 @@ export class NodeSandbox implements OnModuleInit, Sandbox {
       .readdir(path)
       .then(async (files) => {
         files.forEach((file: string) => {
-          console.log('file', file)
           const fileStat: fs.Stats = fs.statSync(Path.join(path, file))
           const stream: fs.ReadStream = fs.createReadStream(Path.join(path, file))
-          stream.pipe(pack.entry({ name: file, size: fileStat.size }))
+          stream.pipe(pack.entry({ name: file, size: fileStat.size }) as any)
         })
       })
       .catch((error) => {
@@ -112,7 +111,7 @@ export class NodeSandbox implements OnModuleInit, Sandbox {
       })
 
     pack.finalize()
-    const tgz = pack.pipe(gzip)
+    const tgz = pack.pipe(gzip as any)
 
     const buffer = await new Promise<Buffer>((resolve, reject) => {
       const chunks: Buffer[] = []
@@ -122,7 +121,7 @@ export class NodeSandbox implements OnModuleInit, Sandbox {
       tgz.on('end', () => {
         resolve(Buffer.concat(chunks))
       })
-      tgz.on('error', (error) => {
+      tgz.on('error', (error: any) => {
         reject(error)
       })
     })
@@ -151,7 +150,18 @@ export class NodeSandbox implements OnModuleInit, Sandbox {
     if (input.files?.length && !(await exists(baseDir))) {
       await fs.promises.mkdir(baseDir)
       await Promise.all([
-        ...input.files.map((file) => fs.promises.writeFile(Path.join(baseDir, file.path), file.content)),
+        ...input.files.map(async (file) => {
+          if (!file.hash) {
+            return fs.promises.writeFile(Path.join(baseDir, file.path), file.content)
+          } else {
+            const filePath = Path.join('resources/media', file.hash[0], file.hash)
+            try {
+              return fs.promises.copyFile(filePath, Path.join(baseDir, file.path))
+            } catch (error) {
+              console.error(`Error while linking file ${filePath}:`, error)
+            }
+          }
+        }),
       ])
     }
 

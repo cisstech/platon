@@ -15,7 +15,7 @@ export class CoursePermissionsService {
   ) {}
 
   async ensureCourseReadPermission(courseId: string, req: IRequest): Promise<void> {
-    if (!(await this.courseMemberService.isMember(courseId, req.user.id))) {
+    if (req.user.role != 'admin' && !(await this.courseMemberService.isMember(courseId, req.user.id))) {
       throw new ForbiddenResponse('You are not a member of this course')
     }
   }

@@ -26,6 +26,7 @@ export class SandboxManager {
           files: source.dependencies.map((file) => ({
             path: file.alias || basename(file.abspath),
             content: file.content,
+            hash: file.hash,
           })),
           variables,
         },

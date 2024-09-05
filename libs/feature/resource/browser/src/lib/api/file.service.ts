@@ -11,6 +11,7 @@ import {
   FileSearchResults,
   FileUpdate,
   FileVersions,
+  GitLogResult,
   Resource,
   ResourceFile,
 } from '@platon/feature/resource/common'
@@ -74,5 +75,9 @@ export class ResourceFileService {
 
   search(file: Pick<ResourceFile, 'url'>, query: FileSearch): Observable<FileSearchResults> {
     return this.provider.search(file, query)
+  }
+
+  log(resource: string | Resource): Observable<GitLogResult[]> {
+    return this.provider.log(resource)
   }
 }

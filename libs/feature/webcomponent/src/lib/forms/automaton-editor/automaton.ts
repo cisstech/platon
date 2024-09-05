@@ -16,6 +16,11 @@ export interface Transition {
   fromState: string
 }
 
+export interface State {
+  uuid: string
+  name: string
+}
+
 export function emptyAutomaton(): Automaton {
   return {
     alphabet: [],

@@ -6,5 +6,6 @@ export abstract class CourseProvider {
   abstract search(filters?: CourseFilters): Observable<ListResponse<Course>>
   abstract find(input: FindCourse): Observable<Course>
   abstract update(id: string, input: UpdateCourse): Observable<Course>
+  abstract delete(course: Course): Observable<void>
   abstract create(input: CreateCourse): Observable<Course>
 }

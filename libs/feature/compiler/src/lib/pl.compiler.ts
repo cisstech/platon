@@ -18,6 +18,7 @@ import {
   PLVisitor,
 } from './pl.parser'
 import { ActivityExercise, ActivityVariables, Variables } from './pl.variables'
+import * as crypto from 'crypto-js'
 
 export const ACTIVITY_MAIN_FILE = 'main.pla'
 export const EXERCISE_MAIN_FILE = 'main.ple'
@@ -234,11 +235,13 @@ export class PLCompiler implements PLVisitor {
 
     const { resource, version, relpath, abspath, alias } = this.resolveReference(node.path)
     const content = await this.resolver.resolveContent(resource, version, relpath)
+    const hash = crypto.SHA1(content).toString()
 
     this.source.dependencies.push({
       alias,
       abspath,
-      content,
+      content: '', // TODO: remove content from dependencies
+      hash,
       lineno: this.lineno,
     })
 

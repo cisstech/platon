@@ -67,7 +67,7 @@ export interface ExerciseMeta {
  * Representation of an exercise feedback.
  */
 export interface ExerciseFeedback {
-  type: 'success' | 'info' | 'warning' | 'error'
+  type: 'success' | 'info' | 'warning' | 'error' | 'none'
   content: string
 }
 

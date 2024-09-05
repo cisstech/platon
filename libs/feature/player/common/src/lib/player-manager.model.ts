@@ -86,6 +86,7 @@ export abstract class PlayerManager {
           files: exerciseSession.source.dependencies.map((file) => ({
             path: file.alias || basename(file.abspath),
             content: file.content,
+            hash: file.hash,
           })),
         },
         variables.builder
@@ -116,6 +117,7 @@ export abstract class PlayerManager {
           files: exerciseSession.source.dependencies.map((file) => ({
             path: file.alias || basename(file.abspath),
             content: file.content,
+            hash: file.hash,
           })),
         },
         variables.hint.next
@@ -147,6 +149,7 @@ export abstract class PlayerManager {
         files: exerciseSession.source.dependencies.map((file) => ({
           path: file.alias || basename(file.abspath),
           content: file.content,
+          hash: file.hash,
         })),
       },
       variables.grader

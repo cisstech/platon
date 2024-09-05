@@ -1,6 +1,6 @@
 ### STAGE 1: Build ###
 
-FROM node:18-alpine as build
+FROM node:22-alpine as build
 
 # Install python3, make, g++, Git, and NodeGit dependencies
 RUN apk add --no-cache --update \
@@ -52,7 +52,7 @@ USER node
 
 ### STAGE 2: Production ###
 
-FROM node:18-alpine as production
+FROM node:22-alpine as production
 RUN apk add --no-cache --update \
   bash \
   openssh \

@@ -154,7 +154,7 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
 
   protected isModalForceChoice = false
   protected modalForceChoiceProgress = 0
-  private countdownInterval: NodeJS.Timer | undefined
+  private countdownInterval: NodeJS.Timeout | undefined
   private autoChoiceTimeout: NodeJS.Timeout | undefined
 
   @ViewChild('modalFooter', { static: true }) modalFooter!: TemplateRef<object>
@@ -311,18 +311,24 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
 
     this.exercises = undefined
 
-    const output = await firstValueFrom(
-      this.playerService.playExercises({
-        activitySessionId: this.player.sessionId,
-        exerciseSessionIds: [exercise.sessionId],
-      })
-    )
+    try {
+      const output = await firstValueFrom(
+        this.playerService.playExercises({
+          activitySessionId: this.player.sessionId,
+          exerciseSessionIds: [exercise.sessionId],
+        })
+      )
 
-    if (output.navigation) {
-      this.player.navigation = output.navigation
+      if (output.navigation) {
+        this.player.navigation = output.navigation
+      }
+
+      this.exercises = output.exercises
+    } catch (error) {
+      this.dialogService.error(
+        "Une erreur est survenue lors du chargement de l'exercice. Merci de prévenir votre professeur"
+      )
     }
-
-    this.exercises = output.exercises
 
     this.calculatePositions()
     this.initializeCountdown()
@@ -331,16 +337,22 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
   }
 
   protected async playAll(): Promise<void> {
-    const output = await firstValueFrom(
-      this.playerService.playExercises({
-        activitySessionId: this.player.sessionId,
-        exerciseSessionIds: this.player.navigation.exercises.map((item) => item.sessionId),
-      })
-    )
+    try {
+      const output = await firstValueFrom(
+        this.playerService.playExercises({
+          activitySessionId: this.player.sessionId,
+          exerciseSessionIds: this.player.navigation.exercises.map((item) => item.sessionId),
+        })
+      )
 
-    this.exercises = output.exercises
-    if (output.navigation) {
-      this.player.navigation = output.navigation
+      this.exercises = output.exercises
+      if (output.navigation) {
+        this.player.navigation = output.navigation
+      }
+    } catch (error) {
+      this.dialogService.error(
+        "Une erreur est survenue lors du chargement de l'exercice. Merci de prévenir votre professeur"
+      )
     }
 
     this.calculatePositions()
