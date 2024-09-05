@@ -54,6 +54,7 @@ export class ResourceController {
       types: ['CIRCLE'],
       personal: false,
     })
+    await this.resourceService.getPersonal(req.user).then((personal) => circles.push(personal))
 
     const tree = Mapper.map(await this.resourceService.tree(circles), CircleTreeDTO)
     const permissions = await this.permissionService.userPermissionsOnResources(circles, req)

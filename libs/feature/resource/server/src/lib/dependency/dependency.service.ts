@@ -97,7 +97,7 @@ export class ResourceDependencyService {
     })
 
     let newDependencies = Object.entries(args.exerciseGroups).flatMap(([_, exercises]) =>
-      exercises.map((exercise) => ({
+      exercises.exercises.map((exercise) => ({
         resourceId: args.id,
         resourceVersion: args.version,
         dependOnId: exercise.resource,

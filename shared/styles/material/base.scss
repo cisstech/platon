@@ -52,6 +52,8 @@ $mat-light-theme-foreground: (
 // BACKGROUND LIGHT
 
 $light-background: #ffffff;
+$light-bg-darker-1: darken($light-background, 1%);
+$light-bg-darker-2: darken($light-background, 2%);
 $light-bg-darker-5: darken($light-background, 5%);
 $light-bg-darker-10: darken($light-background, 10%);
 $light-bg-darker-20: darken($light-background, 20%);
@@ -80,7 +82,7 @@ $mat-light-theme-background: (
 
 // FOREGROUND DARK
 
-$light-text: #adbac7;
+$light-text: #f2f2f2;
 $light-primary-text: $light-text;
 $light-accent-text: rgba($light-primary-text, 0.7);
 $light-disabled-text: rgba($light-primary-text, 0.5);

@@ -70,6 +70,7 @@ export class ResourceFiltersComponent implements OnDestroy {
 
   @Input() topics: Topic[] = []
   @Input() levels: Level[] = []
+  @Input() disableTypesField?: boolean = false
 
   @Input() circles: CircleTree[] = []
   @Input() filters: ResourceFilters = {}
@@ -125,7 +126,6 @@ export class ResourceFiltersComponent implements OnDestroy {
           antiTopics: value.antiTopics as string[],
           levels: value.levels as string[],
         }
-
         if (!value.types?.EXERCISE) {
           this.form.patchValue(
             {

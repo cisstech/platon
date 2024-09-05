@@ -4,7 +4,7 @@ import { OnEvent } from '@nestjs/event-emitter'
 import { InjectRepository } from '@nestjs/typeorm'
 import { ForbiddenResponse, NotFoundResponse, User, isTeacherRole } from '@platon/core/common'
 import { DatabaseService, EventService, IRequest, buildSelectQuery } from '@platon/core/server'
-import { ActivityVariables, PLSourceFile } from '@platon/feature/compiler'
+import { ActivityExerciseGroup, ActivityVariables, PLSourceFile } from '@platon/feature/compiler'
 import {
   ActivityFilters,
   CreateActivity,
@@ -325,12 +325,15 @@ export class ActivityService {
 
     activities.forEach((activity) => {
       const title = activity.source.variables.title as string
-      const exerciseGroups = (activity.source.variables.exerciseGroups as Record<string, unknown[]>) || {}
+      const exerciseGroups = (activity.source.variables.exerciseGroups as Record<string, ActivityExerciseGroup>) || {}
       Object.assign(activity, {
         state: calculateActivityOpenState(activity),
         title: title?.trim() || resources.find((r) => r.id === activity.source.resource)?.name,
         resourceId: activity.source.resource,
-        exerciseCount: Object.keys(exerciseGroups).reduce((acc, group) => acc + exerciseGroups[group].length, 0),
+        exerciseCount: Object.keys(exerciseGroups).reduce(
+          (acc, group) => acc + exerciseGroups[group].exercises.length,
+          0
+        ),
         permissions: {
           answer: true,
           update: activity.creatorId === this.request.user.id,

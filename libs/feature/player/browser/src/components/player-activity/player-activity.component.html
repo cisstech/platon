@@ -1,5 +1,4 @@
 <h1>{{ player.title }}</h1>
-<user-avatar *ngIf="player.author" [userIdOrName]="player.author" />
 <main>
   <mat-card *ngIf="!exercises; else showExercices">
     <mat-card-content class="centered">

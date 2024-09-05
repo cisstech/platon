@@ -118,7 +118,12 @@ export default class ResourcesPage implements OnInit, OnDestroy {
       run: (query) => {
         return this.completion.pipe(
           map((completion) => {
-            const suggestions = new Set<string>([...completion.names, ...completion.topics, ...completion.levels])
+            const suggestions = new Set<string>([
+              query,
+              ...completion.names,
+              ...completion.topics,
+              ...completion.levels,
+            ])
             return new Fuse(Array.from(suggestions), {
               includeMatches: true,
               findAllMatches: false,
