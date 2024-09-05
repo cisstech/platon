@@ -12,7 +12,6 @@ import { CdkDragDrop, moveItemInArray, CdkDrag, CdkDropList, DropListOrientation
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 @WebComponent(WordSelectorComponentDefinition)
-
 export class WordSelectorComponent implements WebComponentHooks<WordSelectorState>, OnInit {
   /**
    * The web component service.
@@ -29,8 +28,6 @@ export class WordSelectorComponent implements WebComponentHooks<WordSelectorStat
    */
   stateChange?: EventEmitter<WordSelectorState> | undefined
 
-
-
   constructor(readonly injector: Injector) {
     this.webComponentService = injector.get(WebComponentService)!
   }
@@ -43,7 +40,6 @@ export class WordSelectorComponent implements WebComponentHooks<WordSelectorStat
     this.state.words = [...this.state.words]
     this.shuffleArray()
   }
-
 
   drop(event: CdkDragDrop<string[]>) {
     const currentList = event.container.data
@@ -60,9 +56,6 @@ export class WordSelectorComponent implements WebComponentHooks<WordSelectorStat
     this.stateChange?.emit(this.state)
   }
 
-
-  }
-
   suppremerUneLettre(phrase: string[], word: string) {
     const index = phrase.indexOf(word)
     if (index > -1) {
@@ -70,20 +63,17 @@ export class WordSelectorComponent implements WebComponentHooks<WordSelectorStat
     }
   }
 
-
   addWord(word: string) {
     this.state.selectedWords.push(word)
     this.suppremerUneLettre(this.state.words, word)
     this.stateChange?.emit(this.state)
   }
 
-  
   removeWord(word: string) {
     this.state.words.push(word)
     this.suppremerUneLettre(this.state.selectedWords, word)
     this.stateChange?.emit(this.state)
   }
-
 
   shuffleArray(): void {
     for (let i = this.state.words.length - 1; i > 0; i--) {
