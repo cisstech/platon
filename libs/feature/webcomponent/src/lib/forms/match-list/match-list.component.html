@@ -1,8 +1,10 @@
 <div #container class="match-list-container" [class.disabled]="state.disabled">
   <div id="match-list-sources">
     <ng-container *ngFor="let node of sources; trackBy: trackBy">
-      <ng-container class="endpoint source"
-        *ngTemplateOutlet="nodeTemplate; context: { $implicit: node }"></ng-container>
+      <ng-container
+        class="endpoint source"
+        *ngTemplateOutlet="nodeTemplate; context: { $implicit: node }"
+      ></ng-container>
     </ng-container>
   </div>
   <div id="match-list-targets">
