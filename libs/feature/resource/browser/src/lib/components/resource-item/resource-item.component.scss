@@ -14,6 +14,15 @@
       font-size: 18px;
     }
   }
+
+  @media (max-width: 768px) {
+    .action {
+      margin-right: 12px;
+      .list-item-article-action-title {
+        display: none;
+      }
+    }
+  }
 }
 
 .spacer {
