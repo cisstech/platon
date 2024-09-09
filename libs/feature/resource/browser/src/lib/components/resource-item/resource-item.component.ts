@@ -150,12 +150,6 @@ export class ResourceItemComponent implements OnChanges {
     }
   }
 
-  protected handleTitleClick(event: Event): void {
-    if (this.clickable) {
-      this.openTab(`/resources/${this.item.id}`)
-    }
-  }
-
   protected getReadmeContent(): void {
     this.fileService.read(`${this.item.id}`, 'readme.md').subscribe((file) => {
       this.readme = file
