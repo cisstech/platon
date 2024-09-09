@@ -51,7 +51,11 @@ export class UiLayoutTabsComponent implements AfterContentInit, OnDestroy {
   constructor(private readonly changeDetectorRef: ChangeDetectorRef, private route: ActivatedRoute) {}
 
   async ngAfterContentInit(): Promise<void> {
-    this.query = await firstValueFrom(this.query.changes)
+    this.query.changes.subscribe(async (changes) => {
+      this.query = changes
+      handleChanges(this.query.toArray())
+      await this.refreshSelectedTabIndex()
+    })
 
     const handleChanges = (results: UiLayoutTabDirective[]) => {
       this.tabs = Array.from(results)
