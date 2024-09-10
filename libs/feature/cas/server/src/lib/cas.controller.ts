@@ -100,6 +100,12 @@ export class CasController {
       )
 
       const username = await this.checkCasTicket(casEntity.serviceValidateURL, query.ticket, service)
+      if (username.isEmpty()) {
+        return {
+          url: `/no-account`,
+          statusCode: 302,
+        }
+      }
       const lmsUserEntity = await (
         await this.LtiService.findLmsUserByUsername(
           username.orElseThrow(() => new Error('User not found')),

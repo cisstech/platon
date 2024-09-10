@@ -4,7 +4,7 @@
   </section>
 </nz-skeleton>
 <section *ngIf="state === 'READY'">
-  <nz-tabset [nzLinkExact]="false" nzSize="default" nzType="line">
+  <nz-tabset [nzLinkExact]="false" nzSize="default" nzType="line" [nzSelectedIndex]="selectedTabIndex">
     <ng-container *ngFor="let tab of tabs; trackBy: trackByIndex">
       <nz-tab>
         <a *nzTabLink nz-tab-link [routerLink]="tab.link" [queryParams]="tab.linkParams">
