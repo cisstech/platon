@@ -123,7 +123,8 @@ export class MatchListComponent implements OnInit, AfterViewChecked, OnDestroy, 
       this.renderEndPoints()
 
       if (changes.includes('links')) {
-        this.jsPlumb.connections.forEach((connection) => {
+        const connections = [...this.jsPlumb.connections]
+        connections.forEach((connection) => {
           if (
             // If connection is not in the list of links, delete it
             !this.state.links.find((link) => link.source === connection.sourceId && link.target === connection.targetId)
