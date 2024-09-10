@@ -593,12 +593,17 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
       this.selectGroup(parseInt(event.container.id.substring(5)))
       this.selectedExercise = event.previousContainer.data[event.previousIndex] as Resource
       this.addExercise(event.currentIndex)
+      if (event.previousContainer.id.startsWith('array')) {
+        event.previousContainer.data.splice(event.previousIndex, 1)
+      }
     }
   }
 
   onGroupeRename(event: string, index: number) {
     this.selectGroup(index)
-    this.selectedGroup!.name = event.substring(0, 30)
+    if (this.selectedGroup) {
+      this.selectedGroup.name = event.substring(0, 30)
+    }
     this.onChangeData()
   }
 
