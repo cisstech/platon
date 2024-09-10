@@ -109,46 +109,39 @@ export class MatchListComponent implements OnInit, AfterViewChecked, OnDestroy, 
 
   onChangeState() {
     this.jsPlumb.batch(() => {
-      const changes = this.changeDetector.changes(this)
-      if (changes.includes('nodes')) {
-        this.jsPlumb.selectEndpoints().each((endpoint) => {
-          // If endpoint is not in the list of nodes, delete it
-          if (!this.state.nodes.find((node) => node.id === endpoint.uuid)) {
-            this.jsPlumb.deleteEndpoint(endpoint)
-          }
-        })
-      }
+      this.jsPlumb.selectEndpoints().each((endpoint) => {
+        // If endpoint is not in the list of nodes, delete it
+        if (!this.state.nodes.find((node) => node.id === endpoint.uuid)) {
+          this.jsPlumb.deleteEndpoint(endpoint)
+        }
+      })
 
       // Create new endpoints
       this.renderEndPoints()
 
-      if (changes.includes('links')) {
-        const connections = [...this.jsPlumb.connections]
-        connections.forEach((connection) => {
-          if (
-            // If connection is not in the list of links, delete it
-            !this.state.links.find((link) => link.source === connection.sourceId && link.target === connection.targetId)
-          ) {
-            this.jsPlumb.deleteConnection(connection)
-          }
-        })
-      }
+      const connections = [...this.jsPlumb.connections]
+      connections.forEach((connection) => {
+        if (
+          // If connection is not in the list of links, delete it
+          !this.state.links.find((link) => link.source === connection.sourceId && link.target === connection.targetId)
+        ) {
+          this.jsPlumb.deleteConnection(connection)
+        }
+      })
 
       // Create new connections
       this.renderConnections()
 
-      if (changes.includes('disabled')) {
-        if (this.state.disabled) {
-          this.jsPlumb.setSuspendEvents(true)
-          this.jsPlumb.selectEndpoints().each((endpoint) => {
-            endpoint.maxConnections = endpoint.connections.length
-          })
-        } else {
-          this.jsPlumb.setSuspendEvents(false)
-          this.jsPlumb.selectEndpoints().each((endpoint) => {
-            endpoint.maxConnections = -1
-          })
-        }
+      if (this.state.disabled) {
+        this.jsPlumb.setSuspendEvents(true)
+        this.jsPlumb.selectEndpoints().each((endpoint) => {
+          endpoint.maxConnections = endpoint.connections.length
+        })
+      } else {
+        this.jsPlumb.setSuspendEvents(false)
+        this.jsPlumb.selectEndpoints().each((endpoint) => {
+          endpoint.maxConnections = -1
+        })
       }
 
       this.selectedPoints = []
