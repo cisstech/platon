@@ -29,7 +29,7 @@ import { MatButtonModule } from '@angular/material/button'
 import { NzAutocompleteModule, NzOptionSelectionChange } from 'ng-zorro-antd/auto-complete'
 import { NzSpinModule } from 'ng-zorro-antd/spin'
 
-const DEFAULT_DEBOUNCE_TIME = 500
+const DEFAULT_DEBOUNCE_TIME = 200
 @Component({
   standalone: true,
   selector: 'ui-search-bar',
@@ -84,7 +84,7 @@ export class UiSearchBarComponent implements OnInit, OnChanges, OnDestroy {
     this.subscriptions.push(
       this.control.valueChanges
         .pipe(
-          debounceTime(DEFAULT_DEBOUNCE_TIME), // Wait for the user to stop typing (1/2 second in this case)
+          debounceTime(DEFAULT_DEBOUNCE_TIME), // Wait for the user to stop typing (200 milliseconds in this case)
           distinctUntilChanged(), // Wait until the search text changes.
           switchMap((query) => {
             this.startFiltering(query)

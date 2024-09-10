@@ -66,4 +66,5 @@ dumps/*
 **/*.generated.ts
 
 .nx/cache
+.nx/workspace-data
 !shared/external_libs/**/dist

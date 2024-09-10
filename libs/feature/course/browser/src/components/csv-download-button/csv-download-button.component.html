@@ -1,7 +1,7 @@
 @if (hasToCheckGroups) {
 <a
   *ngIf="activities[0]?.permissions?.viewStats"
-  nz-tooltip="Télécharger les stats au format CSV"
+  nz-tooltip="Télécharger les notes au format CSV"
   nz-button
   nzShape="round"
   nzType="default"
@@ -12,7 +12,7 @@
 >
   @if (type === 'activity') {
   <i nz-icon nzType="download" nzTheme="outline"></i>
-  } @else { Télécharger les stats au format CSV }
+  } @else { Télécharger les notes au format CSV }
 </a>
 
 <nz-dropdown-menu #menu="nzDropdownMenu">
@@ -38,7 +38,7 @@
 } @else {
 <a
   *ngIf="activities[0]?.permissions?.viewStats"
-  nz-tooltip="Télécharger les stats au format CSV"
+  nz-tooltip="Télécharger les notes au format CSV"
   nz-button
   nzShape="round"
   nzType="default"
@@ -46,6 +46,6 @@
 >
   @if (type === 'activity') {
   <i nz-icon nzType="download" nzTheme="outline"></i>
-  } @else { Télécharger les stats au format CSV }
+  } @else { Télécharger les notes au format CSV }
 </a>
 }

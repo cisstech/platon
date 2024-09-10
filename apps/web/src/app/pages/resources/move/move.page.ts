@@ -114,7 +114,6 @@ export class ResourceMovePage implements OnInit {
       firstValueFrom(this.resourceService.circle(user.username)),
     ])
 
-    // TODO : change if to check if user can move resource
     if (user.role !== 'admin' && circle.id !== this.parentId) {
       this.router
         .navigateByUrl('/resources', {
@@ -127,15 +126,9 @@ export class ResourceMovePage implements OnInit {
 
     this.tree = tree
 
-    if (this.type !== 'CIRCLE') {
-      this.tree.children?.unshift(circleTreeFromCircle(circle))
-    }
-
     this.sourceParentId = this.parentId
     this.parentId = undefined
     this.sourceParentName = branchFromCircleTree(this.tree, this.sourceParentId!)?.name
-
-    removeNodeFromCircleTree(this.tree, this.sourceParentId!)
 
     this.loading = false
     this.changeDetectorRef.markForCheck()

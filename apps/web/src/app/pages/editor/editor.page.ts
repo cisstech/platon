@@ -13,7 +13,7 @@ import { PlfEditorContributionModule } from './contributions/editors/plf-editor'
 
 import { ActivatedRoute } from '@angular/router'
 import { EditorService, FileService, IdeService, SettingsService } from '@cisstech/nge-ide/core'
-import { IntroService } from '@platon/core/browser'
+import { DialogModule, IntroService } from '@platon/core/browser'
 import { fadeInOnEnterAnimation, fadeOutDownOnLeaveAnimation } from 'angular-animations'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton'
@@ -31,8 +31,9 @@ import { PlSidebarContributionModule } from './contributions/sidebar/pl-sidebar.
 import { PlWorkbenchContributionModule } from './contributions/workbench/pl-workbench.contribution'
 import { EDITOR_TOUR } from './editor-tour'
 import { EditorPresenter } from './editor.presenter'
-import { ACTIVITY_MAIN_FILE } from '@platon/feature/compiler'
+import { ACTIVITY_MAIN_FILE, TEMPLATE_OVERRIDE_FILE } from '@platon/feature/compiler'
 import { Title } from '@angular/platform-browser'
+import { Resource } from '@platon/feature/resource/common'
 
 @Component({
   standalone: true,
@@ -67,6 +68,8 @@ import { Title } from '@angular/platform-browser'
     PlcEditorContributionModule,
     PloEditorContributionModule,
     ZipEditorContributionModule,
+
+    DialogModule,
   ],
 })
 export class EditorPage implements OnInit, OnDestroy {
@@ -90,12 +93,7 @@ export class EditorPage implements OnInit, OnDestroy {
     this.title.setTitle(resource.name)
     this.subscriptions.push(
       this.ide.onAfterStart(async () => {
-        if (filesToOpen.length === 0 && resource.type === 'ACTIVITY') {
-          this.settingsService.set('ide.layout', 'toggleSideBar', 'closed')
-          filesToOpen.push(ACTIVITY_MAIN_FILE)
-        } else {
-          this.settingsService.set('ide.layout', 'toggleSideBar', 'opened')
-        }
+        this.updateFileToOpen(filesToOpen, resource)
         this.fileService.registerProvider(this.resourceFileSystemProvider)
         await this.fileService.registerFolders(...rootFolders())
         filesToOpen.forEach((path) => {
@@ -114,6 +112,22 @@ export class EditorPage implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.resourceFileSystemProvider.cleanUp()
     this.subscriptions.forEach((s) => s.unsubscribe())
+  }
+
+  private updateFileToOpen(filesToOpen: string[], resource: Resource): void {
+    if (filesToOpen.length === 0) {
+      if (resource.type === 'ACTIVITY') {
+        this.settingsService.set('ide.layout', 'toggleSideBar', 'closed')
+        filesToOpen.push(ACTIVITY_MAIN_FILE)
+        return
+      }
+      if (resource.type === 'EXERCISE' && resource.templateId) {
+        this.settingsService.set('ide.layout', 'toggleSideBar', 'closed')
+        filesToOpen.push(TEMPLATE_OVERRIDE_FILE)
+        return
+      }
+    }
+    this.settingsService.set('ide.layout', 'toggleSideBar', 'opened')
   }
 
   protected async introTour(): Promise<void> {

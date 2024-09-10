@@ -1,5 +1,5 @@
 import { Expandable } from '@cisstech/nestjs-expand'
-import { Body, Controller, Get, Param, Patch, Post, Query, Req } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import {
   CreatedResponse,
@@ -30,6 +30,7 @@ export class CourseController {
     filters = {
       ...filters,
       members: Array.from(new Set([req.user.id, ...(filters.members || [])])),
+      showAll: filters.showAll == true && req.user.role == UserRoles.admin,
     }
 
     const [items, total] = await this.courseService.search(filters)
@@ -83,5 +84,12 @@ export class CourseController {
       CourseDTO
     )
     return new ItemResponse({ resource })
+  }
+
+  @Roles(UserRoles.teacher, UserRoles.admin)
+  @Delete('/:id')
+  async delete(@Req() req: IRequest, @Param('id') id: string): Promise<void> {
+    await this.permissionsService.ensureCourseWritePermission(id, req)
+    await this.courseService.delete(id)
   }
 }

@@ -374,6 +374,10 @@ export class ResourceService {
     return resource
   }
 
+  async delete(resource: ResourceEntity): Promise<void> {
+    await this.repository.remove(resource)
+  }
+
   /**
    * Updates a resource with the specified changes.
    * @remarks

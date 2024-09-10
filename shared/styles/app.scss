@@ -16,12 +16,14 @@ body {
 
 .light-theme {
   --brand-background-components: #{$light-background};
-  --brand-background-primary: #{light-bg-darker-5};
+  --brand-background-primary: #{$light-bg-darker-1};
   --brand-background-hover: #{$dark-bg-alpha-4};
 
   --brand-text-primary: #{$dark-text};
   --brand-text-secondary: #{$dark-accent-text};
   --brand-border-color: #{$dark-dividers};
+
+  --brand-color-theme: #{$brand-color-primary};
 }
 
 .dark-theme {
@@ -32,6 +34,8 @@ body {
   --brand-text-primary: #{$light-text};
   --brand-text-secondary: #{$light-accent-text};
   --brand-border-color: #{$light-dividers};
+
+  --brand-color-theme: #{$light-text};
 }
 
 // GLOBAL APP COMPONENTS

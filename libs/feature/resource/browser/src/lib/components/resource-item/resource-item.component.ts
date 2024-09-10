@@ -100,6 +100,10 @@ export class ResourceItemComponent implements OnChanges {
     return `/player/preview/${this.item.id}?version=latest&sessionId=${sessionId}`
   }
 
+  get referencesUrl(): string {
+    return `/resources?dependOn=${this.item.id}`
+  }
+
   ngOnChanges(): void {
     this.tags = []
     if (!this.simple) {

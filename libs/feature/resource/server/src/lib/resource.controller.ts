@@ -1,5 +1,5 @@
 import { Expandable, Selectable } from '@cisstech/nestjs-expand'
-import { Body, Controller, Get, Logger, Param, Patch, Post, Query, Req } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Logger, Param, Patch, Post, Query, Req } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { CreatedResponse, ForbiddenResponse, ItemResponse, ListResponse, NotFoundResponse } from '@platon/core/common'
 import { IRequest, Mapper, UserService } from '@platon/core/server'
@@ -10,6 +10,7 @@ import { ResourceService } from './resource.service'
 import { ResourceViewService } from './views/view.service'
 import { NotificationService } from '@platon/feature/notification/server'
 import { ResourceMovedByAdminNotification } from '@platon/feature/course/common'
+import { ResourceFileService } from './files'
 
 @Controller('resources')
 @ApiTags('Resources')
@@ -21,7 +22,8 @@ export class ResourceController {
     private readonly permissionService: ResourcePermissionService,
     private readonly resourceViewService: ResourceViewService,
     private readonly userService: UserService,
-    private readonly notificationService: NotificationService
+    private readonly notificationService: NotificationService,
+    private readonly fileService: ResourceFileService
   ) {}
 
   @Get()
@@ -52,6 +54,7 @@ export class ResourceController {
       types: ['CIRCLE'],
       personal: false,
     })
+    await this.resourceService.getPersonal(req.user).then((personal) => circles.push(personal))
 
     const tree = Mapper.map(await this.resourceService.tree(circles), CircleTreeDTO)
     const permissions = await this.permissionService.userPermissionsOnResources(circles, req)
@@ -241,5 +244,28 @@ export class ResourceController {
       })
 
     return new ItemResponse({ resource })
+  }
+
+  @Delete('/:id')
+  async delete(@Req() req: IRequest, @Param('id') id: string): Promise<void> {
+    const existing = await this.resourceService.findByIdOrCode(id)
+    if (!existing.isPresent()) {
+      throw new NotFoundResponse(`Resource not found: ${id}`)
+    }
+
+    const parentCircle = await this.resourceService.findByIdOrCode(existing.get().parentId!)
+
+    if (!parentCircle.get().personal) {
+      throw new ForbiddenResponse(`Operation not allowed on resource: ${id}`)
+    }
+
+    const permissions = await this.permissionService.userPermissionsOnResource({ req, resource: existing.get() })
+    if (!permissions.write) {
+      throw new ForbiddenResponse(`Operation not allowed on resource: ${id}`)
+    }
+
+    await this.fileService.repo(existing.get().id).then((repo) => repo.repo.removeRepo())
+
+    await this.resourceService.delete(existing.get())
   }
 }

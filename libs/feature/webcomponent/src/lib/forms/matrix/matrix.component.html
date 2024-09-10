@@ -10,7 +10,7 @@
     />
   </ng-container>
 </div>
-<button mat-icon-button nz-tooltip="Redimensionner" (click)="resizer.open($event)">
+<button *ngIf="state.resizable" mat-icon-button nz-tooltip="Redimensionner" (click)="resizer.open($event)">
   <mat-icon>aspect_ratio</mat-icon>
 </button>
 <wc-matrix-resizer #resizer (resized)="resize($event)"></wc-matrix-resizer>

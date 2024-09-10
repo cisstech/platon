@@ -1,0 +1,44 @@
+/* Styles pour le conteneur de la liste */
+:host::ng-deep {
+  .exercise-list {
+    width: 100%;
+    overflow: hidden;
+
+    ul.ui-list-container {
+      box-sizing: border-box;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+      align-items: stretch;
+      justify-items: stretch;
+      background-color: white;
+      padding: 1.5rem;
+
+      .ui-list-item {
+        margin-bottom: 0;
+        height: 100%;
+      }
+    }
+}}
+
+.exercise-list app-exercise-card {
+  display: block;
+  width: 100%;
+  //height: 100%;
+}
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 0.5rem;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+              0 8px 10px 1px rgba(0, 0, 0, 0.14),
+              0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-dragging {
+  box-sizing: border-box;
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}

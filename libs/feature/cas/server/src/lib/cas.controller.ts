@@ -100,17 +100,27 @@ export class CasController {
       )
 
       const username = await this.checkCasTicket(casEntity.serviceValidateURL, query.ticket, service)
-      const lmsUserEntity = await (
-        await this.LtiService.findLmsUserByUsername(
-          username.orElseThrow(() => new Error('User not found')),
-          casEntity.lmses
-        )
-      ).orElseThrow(() => new Error('User not found'))
-
-      const token = await this.authService.authenticate(
-        lmsUserEntity.userId,
-        (await this.userService.findById(lmsUserEntity.userId)).orElseThrow(() => new Error('User not found')).username
-      )
+      if (username.isEmpty()) {
+        return {
+          url: `/login/no-account`,
+          statusCode: 302,
+        }
+      }
+      const lmsUserEntity = await this.LtiService.findLmsUserByUsername(username.get(), casEntity.lmses)
+      if (lmsUserEntity.isEmpty()) {
+        return {
+          url: `/login/no-account`,
+          statusCode: 302,
+        }
+      }
+      const user = await this.userService.findById(lmsUserEntity.get().userId)
+      if (user.isEmpty()) {
+        return {
+          url: `/login/no-account`,
+          statusCode: 302,
+        }
+      }
+      const token = await this.authService.authenticate(lmsUserEntity.get().userId, user.get().username)
       return {
         url: `/login?access-token=${token.accessToken}&refresh-token=${token.refreshToken}&next=${query.next}`,
         statusCode: 302,

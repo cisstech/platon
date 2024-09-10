@@ -165,6 +165,18 @@ export class CoursePresenter implements OnDestroy {
     }
   }
 
+  async delete(): Promise<boolean> {
+    const { course } = this.context.value as Required<Context>
+    try {
+      await firstValueFrom(this.courseService.delete(course))
+      this.dialogService.success('Le cours a bien été supprimé !')
+      return true
+    } catch {
+      this.alertError()
+      return false
+    }
+  }
+
   async createDemo(): Promise<boolean> {
     const { course } = this.context.value as Required<Context>
     try {
@@ -199,6 +211,10 @@ export class CoursePresenter implements OnDestroy {
       this.alertError()
       return false
     }
+  }
+
+  async copyDemoUri(): Promise<void> {
+    this.dialogService.info('URL copiée')
   }
 
   async listCourseGroups(): Promise<CourseGroup[]> {

@@ -46,7 +46,7 @@ a {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  color: rgba(255, 255, 255, 0.8);
+  color: white;
   cursor: pointer;
 
   &:hover {
@@ -78,6 +78,7 @@ a {
     margin: 0 1rem;
   }
 }
+
 
 .spacer {
   flex: 1;
