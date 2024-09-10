@@ -102,21 +102,21 @@ export class CasController {
       const username = await this.checkCasTicket(casEntity.serviceValidateURL, query.ticket, service)
       if (username.isEmpty()) {
         return {
-          url: `/no-account`,
+          url: `/login/no-account`,
           statusCode: 302,
         }
       }
       const lmsUserEntity = await this.LtiService.findLmsUserByUsername(username.get(), casEntity.lmses)
       if (lmsUserEntity.isEmpty()) {
         return {
-          url: `/no-account`,
+          url: `/login/no-account`,
           statusCode: 302,
         }
       }
       const user = await this.userService.findById(lmsUserEntity.get().userId)
       if (user.isEmpty()) {
         return {
-          url: `/no-account`,
+          url: `/login/no-account`,
           statusCode: 302,
         }
       }
