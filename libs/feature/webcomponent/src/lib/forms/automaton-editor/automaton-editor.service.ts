@@ -9,7 +9,7 @@ import { AutomatonEditorState } from './automaton-editor'
 @Injectable()
 export class AutomatonEditorService {
   private state!: AutomatonEditorState
-  private stateId: number = 0
+  private stateId = 0
   private uuidToName: Record<string, string> = {}
 
   private readonly createStateEvent = new Subject<string>()
