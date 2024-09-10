@@ -12,13 +12,20 @@ if (proxy) {
   agent = new ProxyAgent({ uri: proxy })
 }
 
+export const DISCORD_SERVER_ID = '1280501346503495767'
+
 @Injectable()
 export class FeatureDiscordServerService implements DiscordOptionsFactory {
   createDiscordOptions(): DiscordModuleOption {
     return {
       token: process.env['DISCORD_BOT_TOKEN'] as string,
       discordClientOptions: {
-        intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent],
+        intents: [
+          GatewayIntentBits.Guilds,
+          GatewayIntentBits.GuildMembers,
+          GatewayIntentBits.GuildMessages,
+          GatewayIntentBits.MessageContent,
+        ],
         rest: { agent },
         ws: { proxyAgentOptions: httpsproxyagent },
       },

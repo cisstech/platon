@@ -21,6 +21,7 @@ import { MatMenuModule } from '@angular/material/menu'
 import { AuthService, ThemeService, UserAvatarComponent } from '@platon/core/browser'
 import { User, UserRoles } from '@platon/core/common'
 import { NotificationDrawerComponent } from '@platon/feature/notification/browser'
+import { DiscordInvitationComponent, DiscordButtonComponent } from '@platon/feature/discord/browser'
 import { ResourcePipesModule, ResourceService } from '@platon/feature/resource/browser'
 import { NzBadgeModule } from 'ng-zorro-antd/badge'
 import { NzButtonModule } from 'ng-zorro-antd/button'
@@ -51,6 +52,8 @@ import { UiModalTemplateComponent } from '@platon/shared/ui'
     ResourcePipesModule,
     UserAvatarComponent,
     NotificationDrawerComponent,
+    DiscordInvitationComponent,
+    DiscordButtonComponent,
 
     UiModalTemplateComponent,
   ],
@@ -75,7 +78,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   protected canCreateCircle = false
   protected canCreateExercise = false
   protected canCreateActivity = false
-  protected h = true
+  protected loggedToDiscord = false
 
   @ViewChild(UiModalTemplateComponent, { static: true })
   protected modal!: UiModalTemplateComponent
@@ -110,6 +113,8 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     this.drawerOpenedChange.emit(this.drawerOpened)
 
     this.user = (await this.authService.ready()) as User
+    this.loggedToDiscord = this.user.discordId !== null
+    console.error(this.user.discordId)
     this.personalCircleId = (await firstValueFrom(this.resourceService.circle(this.user.username))).id
 
     this.canCreateCourse = this.user.role === UserRoles.admin || this.user.role === UserRoles.teacher
@@ -188,7 +193,6 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   }
 
   openDiscordModal(): void {
-    console.error('Not implemented')
     this.modal.open()
   }
 }
