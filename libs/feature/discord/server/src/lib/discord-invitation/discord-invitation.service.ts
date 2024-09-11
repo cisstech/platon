@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { DiscordInvitationEntity } from './discord-invitation.entity'
 import { Repository } from 'typeorm'
