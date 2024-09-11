@@ -114,7 +114,6 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
     this.user = (await this.authService.ready()) as User
     this.loggedToDiscord = this.user.discordId !== null
-    console.error(this.user.discordId)
     this.personalCircleId = (await firstValueFrom(this.resourceService.circle(this.user.username))).id
 
     this.canCreateCourse = this.user.role === UserRoles.admin || this.user.role === UserRoles.teacher

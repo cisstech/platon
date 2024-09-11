@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 import { DiscordProvider } from '../models/discord-provider'
-import { Observable } from 'rxjs'
+import { map, Observable } from 'rxjs'
+import { ItemResponse } from '@platon/core/common'
 
 @Injectable()
 export class RemoteDiscordService extends DiscordProvider {
@@ -10,6 +11,6 @@ export class RemoteDiscordService extends DiscordProvider {
   }
 
   getInvitationLink(): Observable<string> {
-    return this.http.get('api/v1/discord/invitation', { responseType: 'text' })
+    return this.http.get<ItemResponse<string>>('api/v1/discord/invitation').pipe(map((response) => response.resource))
   }
 }

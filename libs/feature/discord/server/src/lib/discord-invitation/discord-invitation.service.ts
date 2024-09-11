@@ -6,6 +6,7 @@ import { ChannelType, Client, Guild, Invite } from 'discord.js'
 import { DISCORD_SERVER_ID } from '../feature-discord-server.service'
 import { InjectDiscordClient, On } from '@discord-nestjs/core'
 import { Public, UserService } from '@platon/core/server'
+import { ErrorResponse, ItemResponse } from '@platon/core/common'
 
 const MAX_INVITATION_AGE = 24 * 60 * 60
 const MAX_INVITATION_USES = 2
@@ -31,18 +32,19 @@ export class DiscordInvitationService {
     this.logger.log('Discord invitation service ready')
   }
 
-  getInvitationLink = async (userId: string): Promise<string> => {
+  getInvitationLink = async (userId: string): Promise<ItemResponse<string>> => {
     try {
       // Si l'utilisateur à un discordId, on lui renvoie le lien d'invitation
       const user = (await this.userService.findById(userId)).get()
       if (user.discordId) {
-        return 'You are already in the server'
+        throw new ErrorResponse({ status: 500, message: 'User is already linked to Discord' })
       }
 
-      return (await this.getExistingInvitation(userId)) || (await this.createInvitationLink(userId))
+      return new ItemResponse({
+        resource: (await this.getExistingInvitation(userId)) || (await this.createInvitationLink(userId)),
+      })
     } catch (error) {
-      this.logger.error('Error while creating invitation link: ' + error)
-      return 'Error while creating invitation link'
+      throw new ErrorResponse({ status: 500, message: 'Error while creating invitation link' })
     }
   }
 

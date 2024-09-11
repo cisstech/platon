@@ -1,7 +1,10 @@
 <div class="wrapper">
-  <h3>Rejoignez le serveur Discord de PLaTon</h3>
-  <img id="DiscordGif" src="assets/images/gif/discordv1.gif" alt="Discord" width="300px" height="300px" />
-  <div class="link-wrapper">
-    <a class="link" href="{{ url }}" target="_blank"> {{ url }} </a>
-  </div>
+  <ng-container *ngIf="!error">
+    <h3>Rejoignez le serveur Discord de PLaTon</h3>
+    <img id="DiscordGif" src="assets/images/gif/discordv1.gif" alt="Discord" width="300px" height="300px" />
+    <button nz-button class="link-wrapper" (click)="openUrl()">Cliquez ici pour rejoindre</button>
+  </ng-container>
+  <ng-container *ngIf="error">
+    <ui-error-500 />
+  </ng-container>
 </div>
