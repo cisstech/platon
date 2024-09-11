@@ -1,6 +1,6 @@
 <section>
   <button *ngIf="canEdit" (click)="addModal.open()" nz-button nzType="primary" nz-tooltip="Ajouter">
-    <span nz-icon nzType="plus" nzTheme="outline"></span>
+    <span nz-icon nzType="plus" nzTheme="outline"></span><span>Ajouter un membre</span>
   </button>
   <mat-card *ngIf="context.course">
     <course-member-search-bar

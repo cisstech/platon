@@ -63,7 +63,10 @@ export class CourseDemoController {
       return new ItemResponse({ resource })
     }
 
-    if (!(await this.courseMemberService.isMember(params.courseId, req.user.id))) {
+    if (
+      !(await this.courseMemberService.isMember(params.courseId, req.user.id)) &&
+      !(req.user.role === UserRoles.admin)
+    ) {
       throw new ForbiddenResponse(`You are not a member of this course`)
     }
 

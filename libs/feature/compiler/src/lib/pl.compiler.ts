@@ -377,7 +377,7 @@ export class PLCompiler implements PLVisitor {
     variables.conclusion = conclusion || ''
 
     Object.keys(groups).forEach((groupName) => {
-      groups[groupName].forEach((exercise) => {
+      groups[groupName].exercises.forEach((exercise) => {
         exercises.push(exercise)
       })
     })

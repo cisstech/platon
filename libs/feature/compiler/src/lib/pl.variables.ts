@@ -67,7 +67,7 @@ export interface ExerciseMeta {
  * Representation of an exercise feedback.
  */
 export interface ExerciseFeedback {
-  type: 'success' | 'info' | 'warning' | 'error'
+  type: 'success' | 'info' | 'warning' | 'error' | 'none'
   content: string
 }
 
@@ -124,7 +124,12 @@ export interface ActivityExercise {
   source: PLSourceFile
 }
 
-export type ActivityExerciseGroups = Record<string, ActivityExercise[]>
+export type ActivityExerciseGroups = Record<string, ActivityExerciseGroup>
+
+export interface ActivityExerciseGroup {
+  name: string
+  exercises: ActivityExercise[]
+}
 
 /**
  * List of special variables of an activity source file.
@@ -150,7 +155,7 @@ export const extractExercisesFromActivityVariables = (variables: ActivityVariabl
   const groups = variables.exerciseGroups || {}
   const exercises: ActivityExercise[] = []
   Object.keys(groups).forEach((group) => {
-    groups[group]?.forEach((exercise) => {
+    groups[group]?.exercises.forEach((exercise) => {
       exercises.push(exercise)
     })
   })

@@ -3,7 +3,7 @@ import { WebComponent, WebComponentHooks } from '../../web-component'
 import { WebComponentService } from '../../web-component.service'
 import { WordSelectorComponentDefinition, WordSelectorState } from './word-selector'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { CdkDragDrop, moveItemInArray, CdkDrag, CdkDropList, DropListOrientation } from '@angular/cdk/drag-drop'
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop'
 
 @Component({
   selector: 'wc-word-selector',
@@ -29,7 +29,7 @@ export class WordSelectorComponent implements WebComponentHooks<WordSelectorStat
   stateChange?: EventEmitter<WordSelectorState> | undefined
 
   constructor(readonly injector: Injector) {
-    this.webComponentService = injector.get(WebComponentService)!
+    this.webComponentService = injector.get(WebComponentService)
   }
 
   /**

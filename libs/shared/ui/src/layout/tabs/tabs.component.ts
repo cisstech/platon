@@ -13,8 +13,8 @@ import {
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton'
 import { NzTabsModule } from 'ng-zorro-antd/tabs'
 
-import { RouterModule } from '@angular/router'
-import { combineLatest, Observable, Subscription } from 'rxjs'
+import { ActivatedRoute, RouterModule } from '@angular/router'
+import { combineLatest, firstValueFrom, Observable, Subscription } from 'rxjs'
 import { UiError403Component, UiError404Component, UiError500Component } from '../../error'
 import { LayoutState } from '../layout'
 import { UiLayoutTabDirective } from './directives/tab-title.directive'
@@ -46,10 +46,17 @@ export class UiLayoutTabsComponent implements AfterContentInit, OnDestroy {
   query!: QueryList<UiLayoutTabDirective>
 
   protected tabs: UiLayoutTabDirective[] = []
+  protected selectedTabIndex = 0
 
-  constructor(private readonly changeDetectorRef: ChangeDetectorRef) {}
+  constructor(private readonly changeDetectorRef: ChangeDetectorRef, private route: ActivatedRoute) {}
 
-  ngAfterContentInit(): void {
+  async ngAfterContentInit(): Promise<void> {
+    this.query.changes.subscribe(async (changes) => {
+      this.query = changes
+      handleChanges(this.query.toArray())
+      await this.refreshSelectedTabIndex()
+    })
+
     const handleChanges = (results: UiLayoutTabDirective[]) => {
       this.tabs = Array.from(results)
       this.changeDetectorRef.markForCheck()
@@ -62,6 +69,8 @@ export class UiLayoutTabsComponent implements AfterContentInit, OnDestroy {
         handleChanges(results)
       })
     )
+
+    await this.refreshSelectedTabIndex()
   }
 
   ngOnDestroy(): void {
@@ -70,5 +79,11 @@ export class UiLayoutTabsComponent implements AfterContentInit, OnDestroy {
 
   protected trackByIndex(index: number): number {
     return index
+  }
+
+  private async refreshSelectedTabIndex(): Promise<void> {
+    const path = this.route.snapshot.firstChild?.routeConfig?.path?.split('?')[0]
+    this.selectedTabIndex = this.tabs.findIndex((tab) => tab.link[0] === path)
+    this.changeDetectorRef.markForCheck()
   }
 }

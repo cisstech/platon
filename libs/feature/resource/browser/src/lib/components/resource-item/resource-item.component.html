@@ -5,7 +5,7 @@
     [articleTags]="tags"
     [articleIconTemplate]="imageTemplate"
     [articleDescription]="descriptionTemplate"
-    (didClickTitle)="handleTitleClick($event)"
+    [articleUrl]="clickable ? ['/resources/', item.id] : undefined"
     (didClickTagItem)="handleTagClick($event)"
   >
     <ui-list-item-article-action *ngIf="editable" (click)="openTab(editorUrl)" class="action" actionTitle="Éditer">
@@ -68,9 +68,12 @@
 
 <ng-template #refActionTitleTemplate>
   <ng-container [ngPlural]="item.statistic?.exercise?.references?.total || 0">
-    <ng-template ngPluralCase="=0">Aucune référence</ng-template>
-    <ng-template ngPluralCase="=1">1 référence</ng-template>
-    <ng-template ngPluralCase="other">{{ item.statistic?.exercise?.references?.total || 0 }} références</ng-template>
+    <ng-template ngPluralCase="=0">Aucune réf<span class="hide-on-mobile">érence</span></ng-template>
+    <ng-template ngPluralCase="=1">1 réf<span class="hide-on-mobile">érence</span></ng-template>
+    <ng-template ngPluralCase="other"
+      >{{ item.statistic?.exercise?.references?.total || 0 }} réf<span class="hide-on-mobile">érence</span
+      >s</ng-template
+    >
   </ng-container>
 </ng-template>
 

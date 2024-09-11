@@ -16,7 +16,7 @@ body {
 
 .light-theme {
   --brand-background-components: #{$light-background};
-  --brand-background-primary: #{light-bg-darker-5};
+  --brand-background-primary: #{$light-bg-darker-1};
   --brand-background-hover: #{$dark-bg-alpha-4};
 
   --brand-text-primary: #{$dark-text};

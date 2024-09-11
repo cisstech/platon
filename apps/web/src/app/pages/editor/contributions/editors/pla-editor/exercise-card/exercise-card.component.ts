@@ -1,11 +1,14 @@
 import { CommonModule } from '@angular/common'
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
   EventEmitter,
   Input,
   OnChanges,
   Output,
+  ViewChild,
   booleanAttribute,
   inject,
 } from '@angular/core'
@@ -16,7 +19,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 import { v4 as uuidv4 } from 'uuid'
 
-import { ListItemTag, NgeUiListModule } from '@cisstech/nge/ui/list'
+import { NgeUiListModule } from '@cisstech/nge/ui/list'
 import { ExerciseResourceMeta, Resource, ResourceFile } from '@platon/feature/resource/common'
 
 import { UiModalIFrameComponent, positiveGreenColor } from '@platon/shared/ui'
@@ -27,22 +30,18 @@ import { Variables } from '@platon/feature/compiler'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzPopoverModule } from 'ng-zorro-antd/popover'
 import { firstValueFrom } from 'rxjs'
-import { ResourcePipesModule } from '../../pipes'
-import { ResourceFileService } from '../../api/file.service'
+import { ResourcePipesModule } from '@platon/feature/resource/browser'
+import { ResourceFileService } from '@platon/feature/resource/browser'
 import { NgeMarkdownModule } from '@cisstech/nge/markdown'
 import { NzSpinModule } from 'ng-zorro-antd/spin'
 
 export const getPreviewOverridesStorageKey = (sessionId: string) => `preview.overrides.${sessionId}`
-type Tag = {
-  type: 'level' | 'topic'
-  id: string
-}
 
 @Component({
   standalone: true,
-  selector: 'resource-item',
-  templateUrl: './resource-item.component.html',
-  styleUrls: ['./resource-item.component.scss'],
+  selector: 'app-exercise-card',
+  templateUrl: './exercise-card.component.html',
+  styleUrls: ['./exercise-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
@@ -64,7 +63,7 @@ type Tag = {
     ResourcePipesModule,
   ],
 })
-export class ResourceItemComponent implements OnChanges {
+export class ExerciseCardComponent implements OnChanges, AfterViewInit {
   private readonly storageService = inject(StorageService)
   private readonly fileService = inject(ResourceFileService)
   protected name = ''
@@ -74,18 +73,29 @@ export class ResourceItemComponent implements OnChanges {
   protected successRateColor = 'var(--brand-text-primary, #000)'
 
   protected configurable = false
-  protected tags: ListItemTag[] = []
   protected readme?: ResourceFile
 
   @Input() item!: Resource
-  @Input({ transform: booleanAttribute }) simple = false
   @Input({ transform: booleanAttribute }) modalMode = false
   @Input({ transform: booleanAttribute }) editable = true
   @Input({ transform: booleanAttribute }) clickable = true
+  @Input({ transform: booleanAttribute }) showButton = true
   @Input() previewOverrides?: Variables
-  @Output() levelClicked = new EventEmitter<string>()
-  @Output() topicClicked = new EventEmitter<string>()
+  @Output() exerciseClicked = new EventEmitter<Resource>()
 
+  @ViewChild('articleComponent', { read: ElementRef }) articleComponentRef!: ElementRef
+
+  ngAfterViewInit(): void {
+    this.removeMatElevationClass()
+  }
+
+  private removeMatElevationClass(): void {
+    const articleElement: HTMLElement = this.articleComponentRef.nativeElement
+    const elementsWithMatElevation = articleElement.getElementsByClassName('mat-elevation-z1')
+    Array.from(elementsWithMatElevation).forEach((element) => {
+      element.classList.remove('mat-elevation-z1')
+    })
+  }
   get editorUrl(): string {
     return `/editor/${this.item.id}?version=latest`
   }
@@ -100,36 +110,7 @@ export class ResourceItemComponent implements OnChanges {
     return `/player/preview/${this.item.id}?version=latest&sessionId=${sessionId}`
   }
 
-  get referencesUrl(): string {
-    return `/resources?dependOn=${this.item.id}`
-  }
-
   ngOnChanges(): void {
-    this.tags = []
-    if (!this.simple) {
-      this.item.levels?.forEach((level) =>
-        this.tags.push({
-          text: level.name,
-          color: '#008080',
-          data: {
-            type: 'level',
-            id: level.id,
-          } as Tag,
-        })
-      )
-
-      this.item.topics?.forEach((topic) =>
-        this.tags.push({
-          text: topic.name,
-          color: '#FF7F50',
-          data: {
-            type: 'topic',
-            id: topic.id,
-          } as Tag,
-        })
-      )
-    }
-
     this.name = this.item.name
     this.desc = this.item.desc as string
     this.successRate = this.item.statistic?.activity?.successRate ?? this.item.statistic?.exercise?.successRate ?? 0
@@ -142,12 +123,16 @@ export class ResourceItemComponent implements OnChanges {
     window.open(url, '_blank')
   }
 
-  protected handleTagClick(tag: ListItemTag<Tag>): void {
-    if (tag.data!.type === 'level') {
-      this.levelClicked.emit(tag.data!.id)
-    } else if (tag.data!.type === 'topic') {
-      this.topicClicked.emit(tag.data!.id)
-    }
+  // protected handleTagClick(tag: ListItemTag<Tag>): void {
+  //   if (tag.data!.type === 'level') {
+  //     this.levelClicked.emit(tag.data!.id)
+  //   } else if (tag.data!.type === 'topic') {
+  //     this.topicClicked.emit(tag.data!.id)
+  //   }
+  // }
+
+  protected handleAddExercise(): void {
+    this.exerciseClicked.emit(this.item)
   }
 
   protected getReadmeContent(): void {

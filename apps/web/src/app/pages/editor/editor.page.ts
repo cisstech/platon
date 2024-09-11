@@ -13,7 +13,7 @@ import { PlfEditorContributionModule } from './contributions/editors/plf-editor'
 
 import { ActivatedRoute } from '@angular/router'
 import { EditorService, FileService, IdeService, SettingsService } from '@cisstech/nge-ide/core'
-import { IntroService } from '@platon/core/browser'
+import { DialogModule, IntroService } from '@platon/core/browser'
 import { fadeInOnEnterAnimation, fadeOutDownOnLeaveAnimation } from 'angular-animations'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton'
@@ -68,6 +68,8 @@ import { Resource } from '@platon/feature/resource/common'
     PlcEditorContributionModule,
     PloEditorContributionModule,
     ZipEditorContributionModule,
+
+    DialogModule,
   ],
 })
 export class EditorPage implements OnInit, OnDestroy {
