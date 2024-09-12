@@ -215,6 +215,8 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
 
     this.circles = []
 
+    console.log(tree, topics, levels)
+
     this.filterIndicators = [
       ...topics.map(TopicFilterIndicator),
       ...levels.map(LevelFilterIndicator),
@@ -284,6 +286,7 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
         parents: parent ? [parent] : undefined,
         order: ResourceOrderings.RELEVANCE,
       }
+      this.search(this.filters)
       this.changeDetectorRef.markForCheck()
     })
   }
