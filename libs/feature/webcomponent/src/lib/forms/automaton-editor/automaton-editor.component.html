@@ -9,13 +9,5 @@
   <div id="canvas-view">
     <div class="automaton-editor-canvas"></div>
   </div>
-  <div class="automaton-editor-actions-bottom">
-    <button nz-button nzShape="circle" (click)="zoomIn($event)">
-      <span nz-icon nzType="zoom-in" nzTheme="outline"></span>
-    </button>
-    <button nz-button nzShape="circle" (click)="zoomOut($event)">
-      <span nz-icon nzType="zoom-out" nzTheme="outline"></span>
-    </button>
-  </div>
 </div>
 <wc-base [(state)]="state"></wc-base>

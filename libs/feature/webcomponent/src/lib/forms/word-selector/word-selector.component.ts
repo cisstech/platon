@@ -36,9 +36,8 @@ export class WordSelectorComponent implements WebComponentHooks<WordSelectorStat
    * Initializes the component.
    */
   ngOnInit() {
-    this.state.words = ["C'", 'est', 'mon', 'ami', 'il', 'vient', "d'", 'Australie', 'et', 'il', 'est', 'très', 'sympa']
-    this.state.words = [...this.state.words]
     this.shuffleArray()
+    this.stateChange?.emit(this.state)
   }
 
   drop(event: CdkDragDrop<string[]>) {

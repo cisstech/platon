@@ -1,17 +1,10 @@
-<nz-table
-  #nzTable
-  [nzData]="dataSource"
-  [nzPageSize]="10"
-  nzTableLayout="auto"
-  [nzNoResult]="empty"
-  nzBordered
-  nzShowPagination="false"
->
+<nz-table #nzTable [nzData]="dataSource" [nzPageSize]="10" nzTableLayout="auto" [nzNoResult]="empty" nzBordered
+  nzShowPagination="false">
   <thead>
     <tr>
       <th>Cours</th>
       <th>Activité</th>
-      <th>Exercises corrigés</th>
+      <th>Exercices corrigés</th>
       <th></th>
     </tr>
   </thead>
