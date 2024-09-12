@@ -94,8 +94,10 @@ export class AccountAboutMePage {
             topics: this.form.value.topics || [],
           })
         ),
+        await firstValueFrom(
+          this.userService.update(this.user.id, { discordId: this.form.get('discordId')?.value ?? undefined })
+        ),
       ])
-      // await this.userService.update(this.user.username, this.form.value)
       this.dialogService.success('Vos informations ont été mises à jour !')
     } catch {
       this.dialogService.error('Une erreur est survenue, veuillez réessayer un peu plus tard !')
