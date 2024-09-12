@@ -16,6 +16,14 @@ nz-select {
   margin: 1rem 0;
 }
 
+.locker {
+  cursor: pointer;
+}
+
+.hint {
+  color: var(--brand-text-error);
+}
+
 @media (min-width: 720px) {
   form {
     width: 70%;

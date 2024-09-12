@@ -43,6 +43,7 @@ export interface UpdateUser {
   readonly lastName?: string
   readonly email?: string
   readonly active?: boolean
+  readonly discordId?: string
 }
 
 export interface UserPrefs {
