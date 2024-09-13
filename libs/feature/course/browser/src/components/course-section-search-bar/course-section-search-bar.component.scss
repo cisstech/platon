@@ -1,21 +1,10 @@
-nz-form-item {
-  margin-bottom: 12px;
-}
-
-div {
+.section-list {
   display: flex;
-  align-items: center;
-}
-
-ui-list {
-  margin: 12px 0;
-}
-
-.selection-item {
-  display: flex;
-  align-items: center;
-}
-
-.spacer {
-  flex: 1;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 30px;
+  max-width: 100%;
+  button {
+    margin: 0 10px 10px 0;
+  }
 }

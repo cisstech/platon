@@ -13,14 +13,12 @@
         </ng-template>
         <ng-template
           uiStepperStep
-          stepTitle="Cours"
+          stepTitle="Section"
           [stepIcon]="icon1"
           [stepValidator]="!!courseInfo.valid || courseInfo.disabled"
         >
           <section *ngIf="user">
             <form [formGroup]="courseInfo">
-              <h4 id="course">Dans quel cours souhaitez-vous ajouter une activité ?</h4>
-              <course-search-bar aria-labelledby="course" formControlName="course" [filters]="{ members: [user.id] }" />
               <h4 id="section">Dans quelle section du cours l'activité doit-elle être ajoutée ?</h4>
               <course-section-search-bar
                 [course]="courseInfo.value.course"
