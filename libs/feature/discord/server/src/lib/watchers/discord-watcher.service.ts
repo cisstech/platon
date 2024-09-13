@@ -56,7 +56,6 @@ export class DiscordWatcherService {
 
   private async addRole(user: UserEntity, guildMember: GuildMember): Promise<void> {
     try {
-      console.error('user', JSON.stringify(user, null, 2))
       const role = this.resolveRole(user.role)
       if (role) {
         await guildMember.roles.add(role)

@@ -67,7 +67,6 @@ export class AccountAboutMePage {
 
   protected async onConnect(user: User): Promise<void> {
     this.user = user
-    console.error('user', JSON.stringify(user, null, 2))
     const [prefs, topics, levels] = await Promise.all([
       firstValueFrom(this.userService.findUserPrefs(user.username)),
       firstValueFrom(this.tagService.listTopics()),
