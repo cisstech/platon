@@ -336,7 +336,7 @@ export class ActivityService {
         ),
         permissions: {
           answer: true,
-          update: activity.creatorId === this.request.user.id,
+          update: isTeacherRole(this.request.user.role),
           viewStats: isTeacherRole(this.request.user.role),
           viewResource: isTeacherRole(this.request.user.role),
         },
