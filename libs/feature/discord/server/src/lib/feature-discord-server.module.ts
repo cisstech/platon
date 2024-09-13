@@ -12,6 +12,9 @@ import { DiscordInvitationEntity } from './discord-invitation/discord-invitation
 import { DiscordInvitationService } from './discord-invitation/discord-invitation.service'
 import { DiscordWatcherService } from './watchers/discord-watcher.service'
 import { UserModule } from '@platon/core/server'
+import { ClearCommand } from './commands/clear.command'
+
+export const DISCORD_SERVER_ID = '1280501346503495767'
 
 @Module({
   controllers: [FeatureDiscordServerController],
@@ -25,6 +28,7 @@ import { UserModule } from '@platon/core/server'
     LeaderboardCommand,
     UnLeaderboardCommand,
     InvitationCommand,
+    ClearCommand,
     WatchedChallengesService,
     DiscordInvitationService,
     DiscordWatcherService,

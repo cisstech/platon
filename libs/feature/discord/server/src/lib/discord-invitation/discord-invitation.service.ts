@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { DiscordInvitationEntity } from './discord-invitation.entity'
 import { Repository } from 'typeorm'
 import { ChannelType, Client, Guild, Invite } from 'discord.js'
-import { DISCORD_SERVER_ID } from '../feature-discord-server.service'
+import { DISCORD_SERVER_ID } from '../feature-discord-server.module'
 import { InjectDiscordClient, On } from '@discord-nestjs/core'
 import { Public, UserService } from '@platon/core/server'
 import { ErrorResponse, ItemResponse } from '@platon/core/common'
@@ -103,7 +103,11 @@ export class DiscordInvitationService {
   }
 
   async useInvitation(usedInvite: Invite, invitation: string): Promise<void> {
-    await usedInvite.delete()
-    await this.discordInvitationRepository.delete(invitation)
+    try {
+      await usedInvite.delete()
+      await this.discordInvitationRepository.delete(invitation)
+    } catch (error) {
+      this.logger.error('Failed to use the invitation', error)
+    }
   }
 }

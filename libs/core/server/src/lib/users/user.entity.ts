@@ -49,6 +49,6 @@ export class UserEntity extends BaseEntity {
   })
   hasPassword = false
 
-  @Column({ name: 'discord_id', nullable: true, unique: true })
+  @Column({ name: 'discord_id', nullable: true })
   discordId?: string
 }

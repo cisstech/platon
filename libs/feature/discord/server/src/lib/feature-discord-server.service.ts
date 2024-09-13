@@ -12,8 +12,6 @@ if (proxy) {
   agent = new ProxyAgent({ uri: proxy })
 }
 
-export const DISCORD_SERVER_ID = '1280501346503495767'
-
 @Injectable()
 export class FeatureDiscordServerService implements DiscordOptionsFactory {
   createDiscordOptions(): DiscordModuleOption {

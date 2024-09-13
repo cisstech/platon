@@ -113,7 +113,8 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     this.drawerOpenedChange.emit(this.drawerOpened)
 
     this.user = (await this.authService.ready()) as User
-    this.loggedToDiscord = this.user.discordId !== null
+    this.loggedToDiscord =
+      this.user.discordId !== null && this.user.discordId !== undefined && this.user.discordId !== ''
     this.personalCircleId = (await firstValueFrom(this.resourceService.circle(this.user.username))).id
 
     this.canCreateCourse = this.user.role === UserRoles.admin || this.user.role === UserRoles.teacher
