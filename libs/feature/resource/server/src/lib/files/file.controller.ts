@@ -99,7 +99,7 @@ export class ResourceFileController {
   @Get('/log/:resourceId')
   async log(@Req() request: IRequest, @Param('resourceId') resourceId: string) {
     const { repo, permissions } = await this.fileService.repo(resourceId, request)
-    if (!permissions.write) {
+    if (!permissions.read) {
       throw new UnauthorizedResponse('You are not allowed')
     }
     return repo.log()
