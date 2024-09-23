@@ -17,6 +17,7 @@ export interface PairBubbleItem {
 export interface BindedBubblesState extends IWebComponent {
   items: PairBubbleItem[]
   numberPairToShow: number
+  nbError: number
   mode: 'shuffle' | 'ordered'
   timeout: number
 }
@@ -68,6 +69,11 @@ export const BindedBubblesComponentDefinition = defineWebComponent({
         type: 'number',
         description: "Temps d'attente avant d'afficher la prochaine bonne proposition. (en millisecondes)",
         default: 1000,
+      },
+      nbError: {
+        type: 'number',
+        description: "Nombre d'erreurs",
+        default: 0,
       },
     },
     required: ['items'],

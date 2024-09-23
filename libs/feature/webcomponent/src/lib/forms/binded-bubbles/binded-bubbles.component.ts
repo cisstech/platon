@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Injector, Input, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, Component, EventEmitter, Injector, Input, OnInit, Output } from '@angular/core'
 import { WebComponent, WebComponentHooks } from '../../web-component'
 import { BindedBubblesComponentDefinition, BindedBubblesState, BubbleItem, PairBubbleItem } from './binded-bubbles'
 
@@ -11,6 +11,9 @@ import { BindedBubblesComponentDefinition, BindedBubblesState, BubbleItem, PairB
 @WebComponent(BindedBubblesComponentDefinition)
 export class BindedBubblesComponent implements WebComponentHooks<BindedBubblesState>, OnInit {
   @Input() state!: BindedBubblesState
+  @Output() stateChange = new EventEmitter<BindedBubblesState>()
+
+  numberPairToShow = 3
   shuffledList: BubbleItem[] = []
   list1: BubbleItem[] = []
   list2: BubbleItem[] = []
@@ -23,6 +26,7 @@ export class BindedBubblesComponent implements WebComponentHooks<BindedBubblesSt
 
   ngOnInit() {
     let cmp = 0
+    this.numberPairToShow = this.state.numberPairToShow
     this.state.items.forEach((element) => {
       element.item1.id = cmp++ + ''
       element.item1.state = 'unchecked'
@@ -30,6 +34,21 @@ export class BindedBubblesComponent implements WebComponentHooks<BindedBubblesSt
       element.item2.state = 'unchecked'
     })
     this.constructShuffleList()
+  }
+
+  onChangeState(): void {
+    if (!Array.isArray(this.state.items)) {
+      this.state.items = []
+    }
+    if (this.state.numberPairToShow != this.numberPairToShow) {
+      this.numberPairToShow = this.state.numberPairToShow
+      this.shuffledList = []
+      this.list1 = []
+      this.list2 = []
+      this.waitingChoice = []
+      this.clickedList = []
+      this.constructShuffleList()
+    }
   }
 
   updateClickedList(item: BubbleItem) {
@@ -64,6 +83,7 @@ export class BindedBubblesComponent implements WebComponentHooks<BindedBubblesSt
         this.clearClickedList(false)
         this.handleAchievedPair(foundPair)
       } else {
+        this.state.nbError++
         this.clearClickedList(true)
       }
       //mettre à jour les deux list
@@ -136,7 +156,7 @@ export class BindedBubblesComponent implements WebComponentHooks<BindedBubblesSt
         count++
       }
     })
-    if (count < this.state.numberPairToShow) {
+    if (count < this.numberPairToShow) {
       return undefined
     }
     let randomIndex = Math.floor(Math.random() * this.state.items.length)
@@ -149,7 +169,7 @@ export class BindedBubblesComponent implements WebComponentHooks<BindedBubblesSt
   }
 
   constructShuffleList() {
-    const cuttedList = this.state.items.slice(0, this.state.numberPairToShow)
+    const cuttedList = this.state.items.slice(0, this.numberPairToShow)
     cuttedList.forEach((element) => {
       this.shuffledList.push(element.item1)
       this.shuffledList.push(element.item2)
