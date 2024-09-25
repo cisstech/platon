@@ -51,4 +51,7 @@ export class UserEntity extends BaseEntity {
 
   @Column({ name: 'discord_id', nullable: true, unique: true })
   discordId?: string
+
+  @Column({ name: 'last_activity', type: 'timestamp with time zone', default: () => 'CURRENT_TIMESTAMP' })
+  lastActivity!: Date
 }

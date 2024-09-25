@@ -8,10 +8,11 @@ import { CourseSectionEntity } from '../section/section.entity'
 @Entity('Activities')
 export class ActivityEntity extends BaseEntity implements Activity {
   @Index('Activities_creator_id_idx')
-  @Column({ name: 'creator_id' })
+  @Column({ name: 'creator_id', default: '00000000-0000-0000-0000-000000000000' })
   creatorId!: string
 
-  @ManyToOne(() => UserEntity, { onDelete: 'CASCADE' })
+  // @ts-expect-error: SET DEFAULT does not exist in OnDeleteType
+  @ManyToOne(() => UserEntity, { onDelete: 'SET DEFAULT' })
   @JoinColumn({ name: 'creator_id' })
   creator!: UserEntity
 

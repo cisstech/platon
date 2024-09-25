@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { NotFoundResponse } from '@platon/core/common'
 import { EventService, LevelService, TopicService, UserEntity } from '@platon/core/server'
@@ -23,9 +23,12 @@ import { ResourceEntity } from './resource.entity'
 import { ON_CREATE_RESOURCE_EVENT, OnCreateResourceEventPayload } from './resource.event'
 import { ResourceStatisticEntity } from './statistics'
 import { ResourceWatcherEntity } from './watchers'
+import { OnEvent } from '@nestjs/event-emitter'
 
 @Injectable()
 export class ResourceService {
+  private readonly logger = new Logger(ResourceService.name)
+
   constructor(
     @InjectRepository(ResourceEntity)
     private readonly repository: Repository<ResourceEntity>,
@@ -494,5 +497,20 @@ export class ResourceService {
       .map(({ user_id }: { user_id: string }) => user_id as string)
       .filter((userId: string) => !!userId)
     return watchers
+  }
+
+  @OnEvent('deleteOrphanCircles')
+  async handleDeleteOrphanCircles() {
+    const personalCircles = await this.repository.find({
+      where: {
+        ownerId: '00000000-0000-0000-0000-000000000000',
+        type: ResourceTypes.CIRCLE,
+        personal: true,
+      },
+    })
+    personalCircles.forEach(async (circle) => {
+      this.logger.log(`Deleting personal circle: ${circle.name} (id: ${circle.id})`)
+      await this.delete(circle)
+    })
   }
 }
