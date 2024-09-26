@@ -33,4 +33,5 @@ export abstract class ResourceFileProvider {
   abstract listZipFiles(file: ResourceFile): Observable<string[]>
   abstract unzipFile(file: ResourceFile, path: string): Observable<void>
   abstract log(resource: string | Resource): Observable<GitLogResult[]>
+  abstract content(resource: string): Observable<string>
 }
