@@ -55,6 +55,12 @@
   </mat-card>
   <ng-template #showExercices>
     <section>
+      <player-exercise
+        *ngIf="peerComparison && answers.length > 0"
+        [peerComparison]="true"
+        [reviewMode]="true"
+        [players]="answers"
+      />
       <ng-container *ngFor="let exercise of exercises; trackBy: trackBySessionId; let i = index">
         <nz-ribbon [nzText]="ribbon">
           <ng-template #ribbon> {{ composed ? i + 1 : position + 1 }} / {{ navExerciceCount }} </ng-template>
@@ -66,6 +72,7 @@
             (evaluated)="onChangeNavigation($event)"
             [hasPrev]="hasPrev"
             [hasNext]="hasNext"
+            [reviewMode]="exercise.reviewMode ?? false"
             (goToPrevPlayer)="play(player.navigation.exercises[position - 1])"
             (goToNextPlayer)="play(player.navigation.exercises[position + 1])"
           />
@@ -82,7 +89,14 @@
     [nzValueStyle]="{ color: countdownColor }"
     (nzCountdownFinish)="onFinishCountdown()"
   />
-  <button mat-fab extended color="primary" [nz-popover]="navigation" nzPopoverPlacement="topRight">
+  <button
+    mat-fab
+    extended
+    color="primary"
+    [nz-popover]="navigation"
+    nzPopoverPlacement="topRight"
+    *ngIf="!peerComparison"
+  >
     <mat-icon>menu</mat-icon>
     Navigation
   </button>

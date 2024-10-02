@@ -20,6 +20,11 @@ import { Response } from 'express'
 export class PlayerController {
   constructor(private readonly playerService: PlayerService) {}
 
+  @Get('/:sessionId')
+  async getSession(@Req() req: IRequest, @Param('sessionId') sessionId: string) {
+    return this.playerService.getSession(sessionId, req.user)
+  }
+
   @Public()
   @Post('/preview')
   preview(@Req() req: IRequest, @Body() input: PreviewInputDTO): Promise<PreviewOuputDTO> {

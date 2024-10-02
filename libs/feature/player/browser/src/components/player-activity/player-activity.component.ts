@@ -107,6 +107,7 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
   protected hasPrev?: boolean
   protected position = 0
   protected exercises?: ExercisePlayer[]
+  protected answers: ExercisePlayer[] = []
   protected navExerciceCount = 0
   protected terminatedAfterLoseFocus = false
   protected terminatedAfterLeavePage = false
@@ -119,6 +120,10 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
 
   protected get composed(): boolean {
     return this.player.settings?.navigation?.mode === 'composed'
+  }
+
+  protected get peerComparison(): boolean {
+    return this.player.settings?.navigation?.mode === 'peer'
   }
 
   protected get isPlaying(): boolean {
@@ -223,7 +228,8 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
       const { navigation } = this.player
       await this.play(navigation.current || navigation.exercises[0])
     }
-
+    this.playIfNeed(this.navigation).catch(console.error)
+    this.extractAnswers()
     this.disableCopyPasteIfNeeded()
     this.startWatchingVisibilityChange()
   }
@@ -360,6 +366,15 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
     this.changeDetectorRef.markForCheck()
   }
 
+  private extractAnswers(): void {
+    const peerNav = this.player.navigation.exercises.filter((item) => item.peerComparison).map((item) => item.sessionId)
+    this.answers =
+      this.exercises?.filter(
+        (item) => item.reviewMode || (item as any).peerComparison || peerNav.includes(item.sessionId)
+      ) ?? []
+    this.exercises = this.exercises?.filter((item) => !item.reviewMode && !peerNav.includes(item.sessionId))
+  }
+
   protected trackBySessionId(_: number, item: Player): string {
     return item.sessionId
   }
@@ -398,8 +413,37 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
         .catch(console.error)
     }
     this.player = { ...this.player, navigation }
+    this.playIfNeed(navigation).catch(console.error)
     this.calculatePositions()
     this.calculateAnswerStates(navigation)
+  }
+
+  private async playIfNeed(navigation: PlayerNavigation): Promise<void> {
+    if (!this.peerComparison) {
+      console.log('playifneeded: nothing to play')
+      return
+    }
+    this.answers = this.answers.filter((item) =>
+      navigation.exercises.find((exercise) => exercise.sessionId === item.sessionId)
+    )
+
+    for (const exercise of navigation.exercises) {
+      if (
+        !(this.exercises?.map((item) => item.sessionId) ?? []).includes(exercise.sessionId) &&
+        exercise.peerComparison
+      ) {
+        const output = this.playerService.get(exercise.sessionId)
+        const { exercises } = await firstValueFrom(output)
+
+        this.answers = this.answers.concat(exercises)
+        // this.exercises = this.exercises?.concat(exercises)
+      }
+    }
+    this.changeDetectorRef.markForCheck()
+
+    if (navigation.current) {
+      await this.play(navigation.current)
+    }
   }
 
   private jumpToExercise(page: PlayerExercise): void {

@@ -130,6 +130,7 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input() reviewMode = false
   @Input() canComment = false
+  @Input() peerComparison = false
 
   @Input() hasNext?: boolean
   @Input() hasPrev?: boolean

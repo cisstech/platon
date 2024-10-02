@@ -138,9 +138,23 @@
                   <span nz-icon nzType="question-circle" nz-tooltip="les exercices sont affichés un à un"></span>
                   Progressive
                 </nz-option>
+                <nz-option nzValue="peer" nzLabel="Comparaison par les pairs" nzCustomContent>
+                  <span
+                    nz-icon
+                    nzType="question-circle"
+                    nz-tooltip="Mode composé que l'on utilise pour afficher deux exercices et les comparer."
+                  ></span>
+                  Comparaison par les pairs
+                </nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
+          <nz-alert
+            *ngIf="activity?.settings?.navigation?.mode === 'peer'"
+            nzType="warning"
+            nzMessage="Attention la fonctionnalité de comparaison par les pairs est en cours de développement."
+            nzShowIcon
+          ></nz-alert>
         </nz-collapse-panel>
         <nz-collapse-panel formGroupName="actions" nzHeader="Actions" nzExpandedIcon="play-circle" nzActive>
           <nz-form-item>

@@ -13,6 +13,7 @@ import {
 import { Observable } from 'rxjs'
 
 export abstract class PlayerProvider {
+  abstract get(sessionId: string): Observable<PlayExerciseOuput>
   abstract preview(input: PreviewInput): Observable<PreviewOuput>
   abstract playAnswers(input: PlayAnswersInput): Observable<PlayAnswersOutput>
   abstract playActivity(input: PlayActivityInput): Observable<PlayActivityOuput>

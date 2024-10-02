@@ -45,6 +45,8 @@
       "@platon/feature/notification/browser": ["libs/feature/notification/browser/src/index.ts"],
       "@platon/feature/notification/common": ["libs/feature/notification/common/src/index.ts"],
       "@platon/feature/notification/server": ["libs/feature/notification/server/src/index.ts"],
+      "@platon/feature/peer/common": ["libs/feature/peer/common/src/index.ts"],
+      "@platon/feature/peer/server": ["libs/feature/peer/server/src/index.ts"],
       "@platon/feature/player/browser": ["libs/feature/player/browser/src/index.ts"],
       "@platon/feature/player/common": ["libs/feature/player/common/src/index.ts"],
       "@platon/feature/player/server": ["libs/feature/player/server/src/index.ts"],

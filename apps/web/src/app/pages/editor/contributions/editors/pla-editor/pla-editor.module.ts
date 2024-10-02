@@ -18,6 +18,7 @@ import { NzSelectModule } from 'ng-zorro-antd/select'
 import { NzStepsModule } from 'ng-zorro-antd/steps'
 import { NzTimePickerModule } from 'ng-zorro-antd/time-picker'
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
+import { NzAlertModule } from 'ng-zorro-antd/alert'
 
 import { MatIconModule } from '@angular/material/icon'
 import {
@@ -68,6 +69,7 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography'
     NzTypographyModule,
 
     ViewportIntersectionDirective,
+    NzAlertModule,
 
     ResourceItemComponent,
     ResourceSearchBarComponent,

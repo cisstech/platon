@@ -18,6 +18,10 @@ import { PlayerProvider } from '../models/player-provider'
 export class PlayerService {
   constructor(private readonly provider: PlayerProvider) {}
 
+  get(sessionId: string): Observable<PlayExerciseOuput> {
+    return this.provider.get(sessionId)
+  }
+
   preview(input: PreviewInput): Observable<PreviewOuput> {
     return this.provider.preview(input)
   }

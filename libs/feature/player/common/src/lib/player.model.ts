@@ -16,6 +16,7 @@ export interface PlayerExercise {
   sessionId: string
   state: AnswerStates
   title: string
+  peerComparison?: boolean
 }
 
 export interface PlayerNavigation {
@@ -125,6 +126,7 @@ export interface ExercisePlayer {
         title: string
       }[]
     | null
+  reviewMode?: boolean | null
 }
 
 export interface ActivityPlayer {

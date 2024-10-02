@@ -21,6 +21,10 @@ export class RemotePlayerService extends PlayerProvider {
     super()
   }
 
+  get(sessionId: string): Observable<PlayExerciseOuput> {
+    return this.http.get<PlayExerciseOuput>('/api/v1/player/' + sessionId)
+  }
+
   preview(input: PreviewInput): Observable<PreviewOuput> {
     return this.http.post<PreviewOuput>('/api/v1/player/preview', input)
   }

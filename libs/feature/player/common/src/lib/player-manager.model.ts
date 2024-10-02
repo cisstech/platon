@@ -194,7 +194,7 @@ export abstract class PlayerManager {
     ]
 
     // UPDATE NAVIGATION ACCORDING TO GRADE
-
+    let exoPlayer: ExercisePlayer | undefined
     if (activitySession && activityNavigation) {
       const current = activityNavigation.exercises.find((item) => item.sessionId === exerciseSession.id)
       if (current) {
@@ -223,6 +223,12 @@ export abstract class PlayerManager {
 
       activitySession.attempts += increment
 
+      let peerActivityNavigation: PlayerNavigation | undefined
+      if (activitySession?.variables.settings?.navigation?.mode === 'peer') {
+        // eslint-disable-next-line @typescript-eslint/no-extra-semi
+        ;[exoPlayer, peerActivityNavigation] = await this.nextPeerExercise(exerciseSession, activityNavigation, answer)
+      }
+
       promises.push(
         this.updateSession(activitySession.id, {
           grade: activitySession.grade,
@@ -230,7 +236,10 @@ export abstract class PlayerManager {
           succeededAt: activitySession.succeededAt,
           variables: {
             ...activitySession.variables,
-            navigation: activityNavigation,
+            navigation: {
+              ...(peerActivityNavigation ?? activityNavigation),
+              current: exoPlayer,
+            },
           } as PlayerActivityVariables,
           lastGradedAt: new Date(),
         })
@@ -240,7 +249,7 @@ export abstract class PlayerManager {
     await Promise.all(promises)
 
     return [
-      withExercisePlayer(exerciseSession),
+      exoPlayer ?? withExercisePlayer(exerciseSession),
       activitySession ? withActivityFeedbacksGuard<ActivityVariables>(activitySession).variables.navigation : undefined,
     ]
   }
@@ -281,6 +290,11 @@ export abstract class PlayerManager {
   protected abstract findSessionById(sessionId: string): Promise<Session | null | undefined>
   protected abstract findSessionsByParentId(parentId: string): Promise<Session[]>
   protected abstract findExerciseSessionById(id: string): Promise<ExerciseSession | null | undefined>
+  protected abstract nextPeerExercise(
+    exerciseSession: ExerciseSession,
+    navigation: PlayerNavigation | undefined,
+    answer: Answer
+  ): Promise<[ExercisePlayer, PlayerNavigation]> // Probably not handled if not on server side
 
   protected onTerminate(_activity: Activity): void {
     // Do nothing
