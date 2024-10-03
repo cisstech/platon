@@ -395,23 +395,23 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
   }
 
   protected onChangeNavigation(navigation: PlayerNavigation): void {
-    if (this.showSucceededPopup && navigation.exercises.every((exercise) => exercise.state === 'SUCCEEDED')) {
-      this.showSucceededPopup = false
-      this.dialogService
-        .confirm({
-          nzTitle: `Vous avez complété tous les exercices avec succès.`,
-          nzContent: `Voulez-vous terminer l'activité ? \nAprès avoir terminé l'activité, vous ne pourrez plus modifier vos réponses.`,
-          nzOkText: 'Terminer',
-          nzOkDanger: true,
-          nzCancelText: 'Annuler',
-        })
-        .then((confirmed) => {
-          if (confirmed) {
-            this.terminate().catch(console.error)
-          }
-        })
-        .catch(console.error)
-    }
+    // if (this.showSucceededPopup && navigation.exercises.every((exercise) => exercise.state === 'SUCCEEDED')) {
+    //   this.showSucceededPopup = false
+    //   this.dialogService
+    //     .confirm({
+    //       nzTitle: `Vous avez complété tous les exercices avec succès.`,
+    //       nzContent: `Voulez-vous terminer l'activité ? \nAprès avoir terminé l'activité, vous ne pourrez plus modifier vos réponses.`,
+    //       nzOkText: 'Terminer',
+    //       nzOkDanger: true,
+    //       nzCancelText: 'Annuler',
+    //     })
+    //     .then((confirmed) => {
+    //       if (confirmed) {
+    //         this.terminate().catch(console.error)
+    //       }
+    //     })
+    //     .catch(console.error)
+    // }
     this.player = { ...this.player, navigation }
     this.playIfNeed(navigation).catch(console.error)
     this.calculatePositions()
@@ -476,7 +476,7 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
       const startAt = new Date(this.player.startedAt as Date).getTime()
       const duration = endAt - startAt
       const currentTime = new Date().getTime()
-      if (currentTime >= startAt + duration) {
+      if (currentTime >= startAt + duration || startAt + duration > currentTime + 1000 * 60 * 60 * 4) {
         this.countdown = null
         return
       }
