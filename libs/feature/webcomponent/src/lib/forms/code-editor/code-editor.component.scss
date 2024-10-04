@@ -7,6 +7,9 @@ footer {
   height: 22px;
   border: 1px solid rgba(59, 66, 82, 0);
   box-sizing: border-box;
+  position:sticky ;
+  bottom: 0;
+  z-index: 11;
   display: flex;
   align-items: center;
   background-color: rgb(59, 66, 82); // #724cf9;
@@ -24,6 +27,18 @@ footer {
   .footer-item-icon {
     vertical-align: text-bottom !important;
   }
+}
+
+#resizable {
+  appearance: textarea;
+  -moz-appearance: textfield-multiline;
+  -webkit-appearance: textarea;
+  font: medium -moz-fixed;
+  font: -webkit-small-control;
+  min-height: 200px;
+  overflow: auto;
+  resize: vertical;
+  width: 100%;
 }
 
 .spacer {
