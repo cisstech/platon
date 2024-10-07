@@ -282,14 +282,16 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
         icon: 'arrow_back',
         label: 'Réponse précédente',
         tooltip: 'Réponse précédente',
-        visible: this.players.length > 1 && this.index > 0,
+        visible: this.players.length > 1,
+        disabled: this.players.length > 1 && this.index == 0,
         run: () => this.previousAttempt(),
       },
       {
         icon: 'arrow_forward',
         label: 'Réponse suivante',
         tooltip: 'Réponse suivante',
-        visible: this.players.length > 1 && this.index < this.players.length - 1,
+        visible: this.players.length > 1,
+        disabled: this.players.length > 1 && this.index == this.players.length - 1,
         run: () => this.nextAttempt(),
       },
     ]
