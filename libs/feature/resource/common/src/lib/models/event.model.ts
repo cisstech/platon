@@ -5,6 +5,7 @@ export type ResourceEventData = {
   resourceId: string
   resourceName: string
   resourceType: ResourceTypes
+  parentName: string
 }
 
 export interface ResourceEvent<TData extends ResourceEventData = ResourceCreateEventData> {
@@ -51,6 +52,11 @@ export interface ResourceMemberCreateEventData {
    */
   resourceType: ResourceTypes
 
+  /**
+   * Name of the parent resource
+   */
+  parentName: string
+
   // extra dynamic data defined by ResourceEventExtraDataProvider
   expired?: boolean
 }
@@ -82,6 +88,11 @@ export interface ResourceMemberRemoveEventData {
    * Type of the resource from which the member is removed
    */
   resourceType: ResourceTypes
+
+  /**
+   * Name of the parent resource
+   */
+  parentName: string
 }
 
 /**
@@ -110,6 +121,11 @@ export interface ResourceCreateEventData {
    * Name of the created resource
    */
   resourceName: string
+
+  /**
+   * Name of the parent resource
+   */
+  parentName: string
 }
 
 /**
@@ -140,6 +156,11 @@ export interface ResourceStatusChangeEventData {
    * Type of the changed resource
    */
   resourceType: ResourceTypes
+
+  /**
+   * Name of the parent resource
+   */
+  parentName: string
 
   /**
    * New status of the changed resource
