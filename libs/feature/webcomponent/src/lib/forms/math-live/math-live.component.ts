@@ -29,20 +29,19 @@ export class MathLiveComponent implements OnInit, WebComponentHooks<MathLiveStat
 
   @ViewChild('container', { static: true })
   container!: ElementRef<HTMLElement>
+  @ViewChild('box', { static: true })
+  box!: ElementRef<HTMLElement>
+
+  displayMenu = true
 
   constructor(readonly injector: Injector, readonly changeDetection: WebComponentChangeDetectorService) {}
 
   async ngOnInit() {
     this.mathfield = new MathfieldElement()
-    this.mathfield.setOptions({
-      locale: 'fr',
-      smartFence: false,
-      smartSuperscript: true,
-      virtualKeyboards: 'all',
-      virtualKeyboardMode: 'manual',
-      virtualKeyboardTheme: 'material',
-      fontsDirectory: 'assets/vendors/mathlive/fonts',
-    })
+    this.mathfield.value = this.state.value
+    this.mathfield.smartFence = false
+    this.mathfield.smartSuperscript = true
+    MathfieldElement.fontsDirectory = 'assets/vendors/mathlive/fonts'
     this.mathfield.oninput = () => {
       this.changeDetection
         .ignore(this, () => {
@@ -55,9 +54,21 @@ export class MathLiveComponent implements OnInit, WebComponentHooks<MathLiveStat
 
   onChangeState() {
     this.mathfield.disabled = this.state.disabled
-    this.mathfield.setValue(this.state.value, {
-      format: 'latex',
-    })
-    this.mathfield.setOptions(this.state.config || {})
+    if (this.state.config) {
+      Object.keys(this.state.config).forEach((key) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any, prettier/prettier
+        (this.mathfield as any)[key] = this.state.config[key]
+      })
+    }
+    if (this.mathfield.menuItems?.length == 0) {
+      this.box.nativeElement.classList.add('no-menu')
+    } else {
+      this.box.nativeElement.classList.remove('no-menu')
+    }
+    if (!this.state.layouts) {
+      this.state.layouts = 'default'
+    }
+    this.mathfield.value = this.state.value
+    window.mathVirtualKeyboard.layouts = this.state.layouts
   }
 }

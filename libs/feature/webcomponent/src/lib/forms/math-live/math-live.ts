@@ -1,9 +1,15 @@
+import { VirtualKeyboardLayout, VirtualKeyboardName } from 'mathlive'
 import { defineWebComponent, IWebComponent, WebComponentTypes } from '../../web-component'
 
 export interface MathLiveState extends IWebComponent {
   value: string
   prefix: string
   suffix: string
+  layouts:
+    | VirtualKeyboardName
+    | VirtualKeyboardLayout
+    | (VirtualKeyboardName | VirtualKeyboardLayout)[]
+    | Readonly<(VirtualKeyboardName | VirtualKeyboardLayout)[]>
   config: Record<string, unknown>
   disabled: boolean
 }
@@ -34,6 +40,11 @@ export const MathLiveComponentDefinition = defineWebComponent({
         default: {},
         description: "La configuration de l'instance de la lib MathLive.",
       },
+      layouts: {
+        type: ['string', 'array', 'object'],
+        default: 'default',
+        description: 'Les différentes configurations possible du clavier virtuel.',
+      },
       prefix: {
         type: 'string',
         default: '',
@@ -47,7 +58,7 @@ export const MathLiveComponentDefinition = defineWebComponent({
     },
   },
   showcase: {
-    value: '\\frac{\\sin(x)}{\\cos(x)}',
+    value: 'x=\\frac{-b\\pm \\sqrt{b^2-4ac}}{2a}',
     suffix: 'clarity happy-face color=FF0000',
   },
 })
