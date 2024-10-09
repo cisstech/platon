@@ -229,21 +229,36 @@ export abstract class PlayerManager {
         ;[exoPlayer, peerActivityNavigation] = await this.nextPeerExercise(exerciseSession, activityNavigation, answer)
       }
 
-      promises.push(
-        this.updateSession(activitySession.id, {
-          grade: activitySession.grade,
-          attempts: activitySession.attempts,
-          succeededAt: activitySession.succeededAt,
-          variables: {
-            ...activitySession.variables,
-            navigation: {
-              ...(peerActivityNavigation ?? activityNavigation),
-              current: exoPlayer,
-            },
-          } as PlayerActivityVariables,
-          lastGradedAt: new Date(),
-        })
-      )
+      if (activitySession?.variables.settings?.navigation?.mode === 'peer') {
+        promises.push(
+          this.updateSession(activitySession.id, {
+            grade: activitySession.grade,
+            attempts: activitySession.attempts,
+            succeededAt: activitySession.succeededAt,
+            variables: {
+              ...activitySession.variables,
+              navigation: {
+                ...(peerActivityNavigation ?? activityNavigation),
+                current: exoPlayer,
+              },
+            } as PlayerActivityVariables,
+            lastGradedAt: new Date(),
+          })
+        )
+      } else {
+        promises.push(
+          this.updateSession(activitySession.id, {
+            grade: activitySession.grade,
+            attempts: activitySession.attempts,
+            succeededAt: activitySession.succeededAt,
+            variables: {
+              ...activitySession.variables,
+              navigation: activityNavigation,
+            } as PlayerActivityVariables,
+            lastGradedAt: new Date(),
+          })
+        )
+      }
     }
 
     await Promise.all(promises)
