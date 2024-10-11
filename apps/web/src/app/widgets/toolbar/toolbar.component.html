@@ -18,14 +18,8 @@
     </button>
   </ng-container>
 
-  <button
-    *ngIf="!loggedToDiscord"
-    nz-button
-    nzType="text"
-    nzSize="small"
-    (click)="openDiscordModal()"
-    class="discord-button"
-  >
+  <!-- *ngIf="!loggedToDiscord" -->
+  <button *ngIf="false" nz-button nzType="text" nzSize="small" (click)="openDiscordModal()" class="discord-button">
     <discord-button class="discord-button" />
   </button>
 
