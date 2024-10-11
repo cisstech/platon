@@ -1,14 +1,13 @@
-<nz-table #nzTable [nzData]="results" [nzPageSize]="10" nzTableLayout="auto" nzBordered>
-  <thead>
-    <tr>
-      <th nzWidth="148px">Utilisateur</th>
-      @if (results.length) {
-      <ng-container *ngFor="let pair of results[0].exercises | keyvalue">
-        <th nzWidth="148px" nzAlign="center">{{ pair.value.title }}</th>
-      </ng-container>
-      }
-    </tr>
-  </thead>
+<nz-table
+  #nzTable
+  nzSize="small"
+  [nzData]="results"
+  [nzFrontPagination]="false"
+  nzTableLayout="auto"
+  [nzShowPagination]="false"
+  nzBordered
+>
+  <thead></thead>
   <tbody>
     <ng-container *ngFor="let item of nzTable.data">
       <tr>
