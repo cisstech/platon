@@ -561,7 +561,6 @@ export class PlayerService extends PlayerManager {
     if (!exercises.length) {
       exercises.push(...extractExercisesFromActivityVariables(variables))
     }
-
     navigation.exercises = await Promise.all(
       exercises.map(async (item) => {
         if (!('sessionId' in item)) {
@@ -577,9 +576,10 @@ export class PlayerService extends PlayerManager {
             },
             manager
           )
+
           return {
             id: item.id,
-            title: item.source.variables.title as string,
+            title: await this.resourceFileService.getTitle(item.resource),
             state: AnswerStates.NOT_STARTED,
             sessionId: session.id,
           }

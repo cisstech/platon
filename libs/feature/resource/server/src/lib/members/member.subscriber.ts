@@ -40,6 +40,7 @@ export class ResourceMemberSubscriber implements EntitySubscriberInterface<Resou
       resourceId: resource.id,
       resourceName: resource.name,
       resourceType: resource.type,
+      parentName: resource.parent?.name || 'Inconnu',
     }
 
     await event.manager.save([
@@ -82,6 +83,7 @@ export class ResourceMemberSubscriber implements EntitySubscriberInterface<Resou
           resourceId: resource.id,
           resourceName: resource.name,
           resourceType: resource.type,
+          parentName: resource.parent?.name || 'Inconnu',
         }
 
         await event.manager.save([
@@ -123,6 +125,7 @@ export class ResourceMemberSubscriber implements EntitySubscriberInterface<Resou
           resourceId: resource.id,
           resourceName: resource.name,
           resourceType: resource.type,
+          parentName: resource.parentId || 'Inconnu',
         }
 
         await event.manager.save(

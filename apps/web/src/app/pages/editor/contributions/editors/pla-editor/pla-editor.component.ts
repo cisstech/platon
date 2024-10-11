@@ -600,6 +600,7 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
         event.previousContainer.data.splice(event.previousIndex, 1)
       }
     }
+    event.event.stopPropagation()
   }
 
   onGroupeRename(event: string, index: number) {

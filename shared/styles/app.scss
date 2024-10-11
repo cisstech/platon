@@ -21,6 +21,7 @@ body {
 
   --brand-text-primary: #{$dark-text};
   --brand-text-secondary: #{$dark-accent-text};
+  --brand-text-error: #{$dark-error-text};
   --brand-border-color: #{$dark-dividers};
 
   --brand-color-theme: #{$brand-color-primary};
@@ -33,7 +34,9 @@ body {
 
   --brand-text-primary: #{$light-text};
   --brand-text-secondary: #{$light-accent-text};
+  --brand-text-error: #{$light-error-text};
   --brand-border-color: #{$light-dividers};
+
 
   --brand-color-theme: #{$light-text};
 }

@@ -34,6 +34,7 @@ export interface User {
   readonly lastLogin?: Date
   readonly firstLogin?: Date
   readonly hasPassword?: boolean
+  readonly discordId?: string
 }
 
 export interface UpdateUser {
@@ -42,6 +43,7 @@ export interface UpdateUser {
   readonly lastName?: string
   readonly email?: string
   readonly active?: boolean
+  readonly discordId?: string
 }
 
 export interface UserPrefs {

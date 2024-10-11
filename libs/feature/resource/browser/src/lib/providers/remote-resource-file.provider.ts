@@ -131,4 +131,8 @@ export class RemoteResourceFileProvider extends ResourceFileProvider {
     const id = typeof resource === 'string' ? resource : resource.id
     return this.http.get<GitLogResult[]>(`/api/v1/files/log/${id}`)
   }
+
+  content(resource: string): Observable<string> {
+    return this.http.get<string>(`/api/v1/files/${resource}`, { responseType: 'text' as 'json' })
+  }
 }

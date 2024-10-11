@@ -49,7 +49,7 @@ export class UserEntity extends BaseEntity {
   })
   hasPassword = false
 
-  @Column({ name: 'discord_id', nullable: true, unique: true })
+  @Column({ name: 'discord_id', nullable: true })
   discordId?: string
 
   @Column({ name: 'last_activity', type: 'timestamp with time zone', default: () => 'CURRENT_TIMESTAMP' })

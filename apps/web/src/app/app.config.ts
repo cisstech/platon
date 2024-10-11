@@ -10,6 +10,7 @@ import { PLAYER_PROVIDERS } from '@platon/feature/player/browser'
 import { RESOURCE_PROVIDERS } from '@platon/feature/resource/browser'
 import { RESULT_PROVIDERS } from '@platon/feature/result/browser'
 import { FeatureWebComponentModule } from '@platon/feature/webcomponent'
+import { DISCORD_PROVIDERS } from '@platon/feature/discord/browser'
 import { appRoutes } from './app.routes'
 
 export const appConfig: ApplicationConfig = {
@@ -25,5 +26,6 @@ export const appConfig: ApplicationConfig = {
     LTI_PROVIDERS,
     CAS_PROVIDERS,
     TAG_PROVIDERS,
+    DISCORD_PROVIDERS,
   ],
 }
