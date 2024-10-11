@@ -125,7 +125,7 @@ export abstract class PlayerManager {
         },
         variables.hint.next
       )
-      patchExerciseMeta(output.variables, (meta) => ({ consumedHints: meta.consumedHints + 1 }))
+      patchExerciseMeta(output.variables as ExerciseVariables, (meta) => ({ consumedHints: meta.consumedHints + 1 }))
       variables = output.variables as ExerciseVariables
     }
 

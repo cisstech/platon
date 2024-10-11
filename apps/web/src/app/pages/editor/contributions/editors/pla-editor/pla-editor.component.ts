@@ -121,6 +121,11 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
         terminateOnLoseFocus: false,
       },
     },
+    nextExerciseId: '',
+    next: '',
+    nextSettings: {
+      sandbox: 'python',
+    },
     exerciseGroups: {},
   }
 
@@ -155,6 +160,9 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
       noCopyPaste: [!!this.activity?.settings?.security?.noCopyPaste],
       terminateOnLeavePage: [!!this.activity?.settings?.security?.terminateOnLeavePage],
       terminateOnLoseFocus: [!!this.activity?.settings?.security?.terminateOnLoseFocus],
+    }),
+    nextSettings: this.fb.group({
+      sandbox: [this.activity.nextSettings?.sandbox || 'python'],
     }),
   })
 
@@ -214,8 +222,6 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
     this.levels = levels
 
     this.circles = []
-
-    console.log(tree, topics, levels)
 
     this.filterIndicators = [
       ...topics.map(TopicFilterIndicator),
@@ -521,6 +527,9 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
           terminateOnLoseFocus: value.security?.terminateOnLoseFocus || false,
         },
       },
+      nextSettings: {
+        sandbox: value.nextSettings?.sandbox || 'python',
+      },
       exerciseGroups: this.exerciseGroups.reduce((acc, group, index) => {
         acc[index] = group
         return acc
@@ -580,6 +589,9 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
         noCopyPaste: this.activity.settings?.security?.noCopyPaste,
         terminateOnLeavePage: this.activity.settings?.security?.terminateOnLeavePage,
         terminateOnLoseFocus: this.activity.settings?.security?.terminateOnLoseFocus,
+      },
+      nextSettings: {
+        sandbox: this.activity.nextSettings?.sandbox,
       },
     })
 

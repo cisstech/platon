@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core'
 import {
   EvalExerciseInput,
   EvalExerciseOutput,
+  NextOutput,
   PlayActivityInput,
   PlayActivityOuput,
   PlayAnswersInput,
@@ -36,6 +37,11 @@ export class PlayerService {
 
   playExercises(input: PlayExerciseInput): Observable<PlayExerciseOuput> {
     return this.provider.playExercises(input)
+  }
+
+  next(input: PlayExerciseInput): Observable<NextOutput> {
+    const a = this.provider.next(input)
+    return a
   }
 
   evaluate(input: EvalExerciseInput): Observable<EvalExerciseOutput> {

@@ -19,6 +19,10 @@ export interface ActivitySettings {
   security?: ActivitySecuritySettings
 }
 
+export interface NextSettings {
+  sandbox: 'python' | 'node'
+}
+
 /** Settings specific to action buttons. */
 export interface ActivityActionSettings {
   /** Number of attempts authorized (<= 0 for infinite). */
@@ -62,7 +66,7 @@ export interface ActivitySecuritySettings {
  * - `composed` => All exercises are shown together.
  * - `peer` => The user either has to finish the exercise or has to review the exercise of the peer.
  */
-export type ActivityNavigationModes = 'manual' | 'composed' | 'peer'
+export type ActivityNavigationModes = 'manual' | 'composed' | 'next' | 'peer'
 
 /** Settings specific to navigation. */
 export interface ActivityNavigationSettings {

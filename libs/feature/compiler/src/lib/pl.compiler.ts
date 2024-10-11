@@ -28,6 +28,8 @@ export const ACTIVITY_FILE_EXTENSION = '.pla'
 export const EXERCISE_FILE_EXTENSION = '.ple'
 export const EXERCISE_CONFIG_FILE_EXTENSION = '.plc'
 export const TEMPLATE_OVERRIDE_FILE_EXTENSION = '.plo'
+export const ACTIVITY_NEXT_FILE_PYTHON = 'next.py'
+export const ACTIVITY_NEXT_FILE_NODE = 'next.js'
 
 /**
  * File reference resolver for the PL compiler.
@@ -406,6 +408,12 @@ export class PLCompiler implements PLVisitor {
         exercise.source = await compilers[`${exercise.resource}:${exercise.version}`].output(exercise.overrides)
       })
     )
+
+    if (variables.settings?.navigation?.mode === 'next') {
+      const file = variables.nextSettings?.sandbox === 'python' ? ACTIVITY_NEXT_FILE_PYTHON : ACTIVITY_NEXT_FILE_NODE
+      const next = await this.resolveContent(file)
+      variables.next = next
+    }
 
     this.source.variables = variables
   }

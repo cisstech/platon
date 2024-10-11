@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { PLSourceFile } from './pl.parser'
-import { ActivitySettings } from './pl.settings'
+import { ActivitySettings, NextSettings } from './pl.settings'
 
 export declare type Variables = {
   [k: string]: any
@@ -142,6 +142,10 @@ export interface ActivityVariables {
 
   author?: string
   settings?: ActivitySettings
+
+  nextExerciseId?: string
+  next?: string
+  nextSettings?: NextSettings
 
   [k: string]: any
 }

@@ -94,6 +94,10 @@ export interface PlayActivityOuput {
   activity: ActivityPlayer
 }
 
+export interface NextOutput {
+  nextExerciseId: string
+}
+
 export interface EvalExerciseOutput {
   exercise: ExercisePlayer
   navigation?: PlayerNavigation

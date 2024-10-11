@@ -126,6 +126,10 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
     return this.player.settings?.navigation?.mode === 'peer'
   }
 
+  protected get nextNavigation(): boolean {
+    return this.player.settings?.navigation?.mode === 'next'
+  }
+
   protected get isPlaying(): boolean {
     return !!this.exercises
   }
@@ -313,6 +317,17 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
     if (this.composed) {
       this.jumpToExercise(exercise)
       return
+    }
+
+    if (this.nextNavigation) {
+      const nextExercise = await firstValueFrom(
+        this.playerService.next({
+          activitySessionId: this.player.sessionId,
+          exerciseSessionIds: [],
+        })
+      )
+      const nextExerciseId = nextExercise.nextExerciseId
+      exercise = this.navigation.exercises.find((item) => item.id === nextExerciseId) as PlayerExercise
     }
 
     this.exercises = undefined
@@ -512,6 +527,11 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
       const index = navigation.exercises.findIndex((item) => item.sessionId === current.sessionId)
       this.hasNext = index < navigation.exercises.length - 1
       this.hasPrev = index > 0
+      this.position = index
+    } else if (current && this.player.settings?.navigation?.mode === 'next') {
+      const index = navigation.exercises.findIndex((item) => item.sessionId === current.sessionId)
+      this.hasNext = true
+      this.hasPrev = false
       this.position = index
     }
   }
