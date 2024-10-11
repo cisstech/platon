@@ -78,7 +78,10 @@ export abstract class PlayerManager {
     variables.seed = Date.now() % 100
 
     if (variables.builder?.trim()) {
-      patchExerciseMeta(variables, () => ({ isInitialBuild: false }))
+      const grades = await this.findGrades(exerciseSession.id)
+
+      patchExerciseMeta(variables, () => ({ grades, isInitialBuild: false }))
+      variables['.meta']['totalAttempts'] = exerciseSession.variables['.meta']['totalAttempts']
       const output = await this.sandboxManager.run(
         {
           envid,
