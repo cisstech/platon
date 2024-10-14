@@ -1,10 +1,13 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { NotFoundResponse, UpdateUserPrefs } from '@platon/core/common'
 import { Repository } from 'typeorm'
 import { LevelService } from '../../levels'
 import { TopicService } from '../../topics'
 import { UserPrefsEntity } from './user-prefs.entity'
+import { OnEvent } from '@nestjs/event-emitter'
+import { ON_LEVEL_FUSION_EVENT, OnLevelFusionEventPayload } from '../../levels/level.event'
+import { ON_TOPIC_FUSION_EVENT, OnTopicFusionEventPayload } from '../../topics/topic.event'
 
 @Injectable()
 export class UserPrefsService {
@@ -14,6 +17,33 @@ export class UserPrefsService {
     private readonly levelService: LevelService,
     private readonly topicService: TopicService
   ) {}
+
+  @OnEvent(ON_LEVEL_FUSION_EVENT)
+  async onLevelFusion(payload: OnLevelFusionEventPayload) {
+    const { oldLevel, newLevel } = payload
+    const prefs = await this.repository.createQueryBuilder('prefs').leftJoinAndSelect('prefs.levels', 'level').getMany()
+    console.log('prefs', JSON.stringify(prefs, null, 2))
+    await Promise.all(
+      prefs.map((pref) => {
+        pref.levels = pref.levels.map((l) => (l.id === oldLevel.id ? newLevel : l))
+        return this.repository.save(pref)
+      })
+    )
+  }
+
+  @OnEvent(ON_TOPIC_FUSION_EVENT)
+  async onTopicFusion(payload: OnTopicFusionEventPayload) {
+    const { oldTopic, newTopic } = payload
+    const prefs = await this.repository.createQueryBuilder('prefs').leftJoinAndSelect('prefs.topics', 'topic').getMany()
+    console.log('prefs', JSON.stringify(prefs, null, 2))
+    await Promise.all(
+      prefs.map((pref) => {
+        pref.topics = pref.topics.map((t) => (t.id === oldTopic.id ? newTopic : t))
+        return this.repository.save(pref)
+      })
+    )
+    Logger.log(`Merging topics ${oldTopic.name} into ${newTopic.name}`, 'UserPrefsService')
+  }
 
   async findByUserId(userId: string): Promise<UserPrefsEntity> {
     let prefs = await this.repository.findOne({ where: { userId } })

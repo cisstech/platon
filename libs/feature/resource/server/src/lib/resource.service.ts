@@ -24,6 +24,8 @@ import { ON_CREATE_RESOURCE_EVENT, OnCreateResourceEventPayload } from './resour
 import { ResourceStatisticEntity } from './statistics'
 import { ResourceWatcherEntity } from './watchers'
 import { OnEvent } from '@nestjs/event-emitter'
+import { ON_TOPIC_FUSION_EVENT, OnTopicFusionEventPayload } from 'libs/core/server/src/lib/topics/topic.event'
+import { ON_LEVEL_FUSION_EVENT, OnLevelFusionEventPayload } from 'libs/core/server/src/lib/levels/level.event'
 
 @Injectable()
 export class ResourceService {
@@ -512,5 +514,37 @@ export class ResourceService {
       this.logger.log(`Deleting personal circle: ${circle.name} (id: ${circle.id})`)
       await this.delete(circle)
     })
+  }
+
+  @OnEvent(ON_TOPIC_FUSION_EVENT)
+  async onTopicFusion(payload: OnTopicFusionEventPayload) {
+    const { oldTopic, newTopic } = payload
+    const resources = await this.repository
+      .createQueryBuilder('resource')
+      .leftJoinAndSelect('resource.topics', 'topic')
+      .getMany()
+    await Promise.all(
+      resources.map((resource) => {
+        resource.topics = resource.topics.map((t) => (t.id === oldTopic.id ? newTopic : t))
+        return this.repository.save(resource)
+      })
+    )
+    Logger.log(`Merging topics ${oldTopic.name} into ${newTopic.name}`, 'ResourceService')
+  }
+
+  @OnEvent(ON_LEVEL_FUSION_EVENT)
+  async onLevelFusion(payload: OnLevelFusionEventPayload) {
+    const { oldLevel, newLevel } = payload
+    const resources = await this.repository
+      .createQueryBuilder('resource')
+      .leftJoinAndSelect('resource.levels', 'level')
+      .getMany()
+    await Promise.all(
+      resources.map((resource) => {
+        resource.levels = resource.levels.map((l) => (l.id === oldLevel.id ? newLevel : l))
+        return this.repository.save(resource)
+      })
+    )
+    Logger.log(`Merging levels ${oldLevel.name} into ${newLevel.name}`, 'ResourceService')
   }
 }

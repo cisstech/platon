@@ -4,6 +4,7 @@ import { CreatedResponse, ItemResponse, ListResponse, NoContentResponse } from '
 import { Mapper } from '../utils'
 import { CreateLevelDTO, LevelDTO, UpdateLevelDTO } from './level.dto'
 import { LevelService } from './level.service'
+import { Roles } from '../auth/decorators/roles.decorator'
 
 @Controller('levels')
 @ApiTags('Settings')
@@ -18,18 +19,21 @@ export class LevelController {
   }
 
   @Post()
+  @Roles('admin', 'teacher')
   async create(@Body() input: CreateLevelDTO): Promise<CreatedResponse<LevelDTO>> {
     const resource = Mapper.map(await this.service.create(input), LevelDTO)
     return new CreatedResponse({ resource })
   }
 
   @Patch('/:id')
+  @Roles('admin')
   async update(@Param('id') id: string, @Body() input: UpdateLevelDTO): Promise<ItemResponse<LevelDTO>> {
     const resource = Mapper.map(await this.service.update(id, input), LevelDTO)
     return new ItemResponse({ resource })
   }
 
   @Delete('/:id')
+  @Roles('admin')
   async delete(@Param('id') id: string): Promise<NoContentResponse> {
     await this.service.delete(id)
     return new NoContentResponse()
