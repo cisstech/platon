@@ -37,8 +37,6 @@ export class LeaderboardService {
       return acc
     }, {} as Record<string, { user: User; points: number }>)
 
-    // console.log('After reduce', userRanks)
-
     const res = Object.values(userRanks)
       .sort((a, b) => b.points - a.points)
       .map<CourseLeaderboardEntry>((user, index) => ({ rank: index + 1, user: user.user, points: user.points }))

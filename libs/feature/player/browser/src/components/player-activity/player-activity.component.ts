@@ -420,7 +420,6 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
 
   private async playIfNeed(navigation: PlayerNavigation): Promise<void> {
     if (!this.peerComparison) {
-      console.log('playifneeded: nothing to play')
       return
     }
     this.answers = this.answers.filter((item) =>

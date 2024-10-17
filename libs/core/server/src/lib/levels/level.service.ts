@@ -36,7 +36,6 @@ export class LevelService {
     if (changes.name) {
       const levelWithSameName = await this.repository.findOne({ where: { name: changes.name } })
       if (levelWithSameName && levelWithSameName.id !== id) {
-        console.log('LevelService.update', level, levelWithSameName)
         this.eventService.emit<OnLevelFusionEventPayload>(ON_LEVEL_FUSION_EVENT, {
           oldLevel: level,
           newLevel: levelWithSameName,

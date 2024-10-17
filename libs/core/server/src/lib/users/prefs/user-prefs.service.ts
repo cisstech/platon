@@ -22,7 +22,6 @@ export class UserPrefsService {
   async onLevelFusion(payload: OnLevelFusionEventPayload) {
     const { oldLevel, newLevel } = payload
     const prefs = await this.repository.createQueryBuilder('prefs').leftJoinAndSelect('prefs.levels', 'level').getMany()
-    console.log('prefs', JSON.stringify(prefs, null, 2))
     await Promise.all(
       prefs.map((pref) => {
         pref.levels = pref.levels.map((l) => (l.id === oldLevel.id ? newLevel : l))
@@ -35,7 +34,6 @@ export class UserPrefsService {
   async onTopicFusion(payload: OnTopicFusionEventPayload) {
     const { oldTopic, newTopic } = payload
     const prefs = await this.repository.createQueryBuilder('prefs').leftJoinAndSelect('prefs.topics', 'topic').getMany()
-    console.log('prefs', JSON.stringify(prefs, null, 2))
     await Promise.all(
       prefs.map((pref) => {
         pref.topics = pref.topics.map((t) => (t.id === oldTopic.id ? newTopic : t))
