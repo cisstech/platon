@@ -24,9 +24,11 @@ import { ActivityEntity } from './activity.entity'
 import {
   ON_CORRECT_ACTIVITY_EVENT,
   ON_RELOAD_ACTIVITY_EVENT,
+  ON_REOPEN_ACTIVITY_EVENT,
   ON_TERMINATE_ACTIVITY_EVENT,
   OnCorrectActivityEventPayload,
   OnReloadActivityEventPayload,
+  OnReopenActivityEventPayload,
   OnTerminateActivityEventPayload,
 } from './activity.event'
 import { CourseGroupMemberEntity } from '../course-group-member/course-group-member.entity'
@@ -225,6 +227,18 @@ export class ActivityService {
       this.logger.error('Failed to send notification', error)
     })
     return this.update(courseId, activityId, { closeAt: new Date() }, guard)
+  }
+
+  async reopen(courseId: string, activityId: string, guard?: ActivityGuard): Promise<ActivityEntity> {
+    const activity = await this.repository.findOne({ where: { courseId, id: activityId } })
+    if (!activity) {
+      throw new NotFoundResponse(`CourseActivity not found: ${activityId}`)
+    }
+    if (guard) {
+      await guard(activity)
+    }
+    this.eventService.emit<OnReopenActivityEventPayload>(ON_REOPEN_ACTIVITY_EVENT, { activityId })
+    return this.update(courseId, activityId, { closeAt: null })
   }
 
   async delete(courseId: string, activityId: string, guard?: ActivityGuard) {

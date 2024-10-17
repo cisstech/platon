@@ -165,6 +165,10 @@ export class CourseService {
     return this.activityProvider.close(activity)
   }
 
+  reopenActivity(activity: Activity): Observable<Activity> {
+    return this.activityProvider.reopen(activity)
+  }
+
   //#endregion
 
   //#region Activity Members

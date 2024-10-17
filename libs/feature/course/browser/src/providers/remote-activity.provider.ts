@@ -58,4 +58,10 @@ export class RemoteActivityProvider extends ActivityProvider {
       .post<ItemResponse<Activity>>(`/api/v1/courses/${activity.courseId}/activities/${activity.id}/close`, {})
       .pipe(map((response) => response.resource))
   }
+
+  reopen(activity: Activity): Observable<Activity> {
+    return this.http
+      .post<ItemResponse<Activity>>(`/api/v1/courses/${activity.courseId}/activities/${activity.id}/reopen`, {})
+      .pipe(map((response) => response.resource))
+  }
 }

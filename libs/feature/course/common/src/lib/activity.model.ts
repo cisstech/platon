@@ -8,8 +8,8 @@ export interface Activity {
   readonly courseId: string
   readonly sectionId: string
 
-  readonly openAt?: Date
-  readonly closeAt?: Date
+  readonly openAt?: Date | null
+  readonly closeAt?: Date | null
   readonly isChallenge: boolean
 
   readonly title: string

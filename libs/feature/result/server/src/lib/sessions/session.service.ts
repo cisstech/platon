@@ -10,6 +10,8 @@ import * as path from 'path'
 import { promises as fs } from 'fs'
 import { resolveFileReference } from '@platon/core/common'
 import { ResourceFileService } from '@platon/feature/resource/server'
+import { OnEvent } from '@nestjs/event-emitter'
+import { ON_REOPEN_ACTIVITY_EVENT, OnReopenActivityEventPayload } from '@platon/feature/course/server'
 
 @Injectable()
 export class SessionService {
@@ -277,5 +279,17 @@ WHERE session.id = $1;
       return sessionData
     })
     return sessionDataList
+  }
+
+  @OnEvent(ON_REOPEN_ACTIVITY_EVENT)
+  async onReopenActivity({ activityId }: OnReopenActivityEventPayload): Promise<void> {
+    await this.repository
+      .createQueryBuilder()
+      .update(SessionEntity)
+      .set({
+        variables: () => `jsonb_set(variables, '{navigation,terminated}', 'false', false)`,
+      })
+      .where('activity_id = :activityId and parent_id is null', { activityId })
+      .execute()
   }
 }
