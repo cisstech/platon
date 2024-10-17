@@ -368,7 +368,7 @@ export class PlayerService extends PlayerManager {
         // Register the answer in the peer table
         const peerlike = {
           activityId: activitySession.activityId,
-          level: -1,
+          level: 0,
           correctorId: activitySession.userId,
           player1Id: activitySession.userId,
           player1SessionId: answer.sessionId,
