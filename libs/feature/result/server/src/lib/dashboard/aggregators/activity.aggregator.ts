@@ -253,7 +253,6 @@ export class ActivityExerciseResults implements SessionDataAggregator<ExerciseRe
 
   complete(): ExerciseResults[] {
     const results = Array.from(this.exerciseResults.values())
-
     results.forEach((exerciseResult) => {
       calculateAverage(exerciseResult.grades)
       calculateAverage(exerciseResult.attempts)
@@ -265,7 +264,6 @@ export class ActivityExerciseResults implements SessionDataAggregator<ExerciseRe
       calculateAverage(exerciseResult.averageAttemptsToSuccess)
       calculateAverage(exerciseResult.successRateOnFirstAttempt)
     })
-
     return results
   }
 }
@@ -309,7 +307,7 @@ export class ActivityTotalAttempts implements SessionDataAggregator<number> {
 
   next(input: SessionDataEntity): void {
     if (input.parentId) return
-    if (!input.activityNavigation?.terminated) return
+    // if (!input.activityNavigation?.terminated) return
 
     this.total += input.attempts ? 1 : 0
   }
