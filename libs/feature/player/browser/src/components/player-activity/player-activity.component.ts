@@ -212,7 +212,9 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
   }
 
   private async evaluateAll(): Promise<void> {
-    await Promise.all(this.playerExerciseComponents.map((component) => component.evaluateFromActivity()))
+    for (const component of this.playerExerciseComponents) {
+      await component.evaluateFromActivity()
+    }
   }
 
   ngOnDestroy(): void {
