@@ -15,12 +15,12 @@ export class PeerService {
 
   async createMatch(input: Partial<PeerMatchEntity>): Promise<PeerMatchEntity> {
     //check if player already answered
-    if (input.level === -1 && input.activityId && input.activityId) {
+    if (input.level === 0 && input.activityId && input.activityId) {
       const match = await this.matchRepository.findOne({
         where: {
           activityId: input.activityId,
           player1Id: input.player1Id,
-          level: -1,
+          level: 0,
         },
       })
       if (match) {
@@ -50,25 +50,31 @@ export class PeerService {
     game.winnerId = winnerId
     game.winner = winnerId === match.player1Id ? match.player1 : match.player2
     if (match.games) {
-      const player1Wins = match.games.filter((game) => game.winnerId === match.player1Id).length
-      const player2Wins = match.games.filter((game) => game.winnerId === match.player2Id).length
+      const player1Wins =
+        match.games.filter((game) => game.winnerId === match.player1Id).length + (winnerId === match.player1Id ? 1 : 0)
+      const player2Wins =
+        match.games.filter((game) => game.winnerId === match.player2Id).length + (winnerId === match.player2Id ? 1 : 0)
+
       if (player1Wins > match.level) {
         match.winnerId = match.player1Id
+        match.winnerSessionId = match.player1SessionId
         match.winner = match.player1
-        match.status = MatchStatus.Done
+        match.status = MatchStatus.Next
       } else if (player2Wins > match.level) {
         match.winnerId = match.player2Id
+        match.winnerSessionId = match.player2SessionId
         match.winner = match.player2
-        match.status = MatchStatus.Done
+        match.status = MatchStatus.Next
       }
     }
     await this.gameRepository.update(game.id, {
       winnerId: game.winnerId,
       winner: game.winner,
     })
-    if (match.status === MatchStatus.Done) {
+    if (match.status === MatchStatus.Next) {
       await this.matchRepository.update(match.id, {
         winnerId: match.winnerId,
+        winnerSessionId: match.winnerSessionId,
         winner: match.winner,
         status: match.status,
       })

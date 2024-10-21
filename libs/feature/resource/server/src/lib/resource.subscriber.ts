@@ -10,10 +10,12 @@ import { DataSource, EntitySubscriberInterface, InsertEvent, UpdateEvent } from 
 import { ResourceEventEntity } from './events/event.entity'
 import { ResourceEntity } from './resource.entity'
 import { ResourceWatcherEntity } from './watchers'
+import { ResourceService } from './resource.service'
 
 @Injectable()
 export class ResourceSubscriber implements EntitySubscriberInterface<ResourceEntity> {
   constructor(
+    private readonly resourceService: ResourceService,
     private readonly dataSource: DataSource,
     @Inject(CLS_REQ)
     private readonly request: IRequest
@@ -38,6 +40,7 @@ export class ResourceSubscriber implements EntitySubscriberInterface<ResourceEnt
         resourceId: event.entity.id,
         resourceType: event.entity.type,
         resourceName: event.entity.name,
+        parentName: (await this.resourceService.getById(event.entity.parentId)).name || 'Inconnu',
       }
       await event.manager.save(
         event.manager.create(ResourceEventEntity, {
@@ -56,6 +59,7 @@ export class ResourceSubscriber implements EntitySubscriberInterface<ResourceEnt
         resourceId: event.entity.id,
         resourceType: event.entity.type,
         resourceName: event.entity.name,
+        parentName: (await this.resourceService.getById(event.entity.parentId)).name || 'Inconnu',
         newStatus: event.entity.status,
       }
       await event.manager.save(
@@ -72,6 +76,7 @@ export class ResourceSubscriber implements EntitySubscriberInterface<ResourceEnt
           resourceId: event.entity.id,
           resourceType: event.entity.type,
           resourceName: event.entity.name,
+          parentName: event.entity.parentName,
           newStatus: event.entity.status,
         }
         await event.manager.save(

@@ -2,6 +2,7 @@ form {
   margin: 1rem 0;
 }
 
+
 mat-card {
   margin-bottom: 1rem;
 }
@@ -13,6 +14,14 @@ mat-form-field {
 nz-select {
   width: 100%;
   margin: 1rem 0;
+}
+
+.locker {
+  cursor: pointer;
+}
+
+.hint {
+  color: var(--brand-text-error);
 }
 
 @media (min-width: 720px) {

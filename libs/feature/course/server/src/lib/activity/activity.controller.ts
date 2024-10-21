@@ -125,4 +125,19 @@ export class ActivityController {
       resource: Mapper.map(activity, ActivityDTO),
     })
   }
+
+  @Roles(UserRoles.teacher, UserRoles.admin)
+  @Post('/:activityId/reopen')
+  async reopen(
+    @Req() req: IRequest,
+    @Param('courseId') courseId: string,
+    @Param('activityId') activityId: string
+  ): Promise<ItemResponse<ActivityDTO>> {
+    const activity = await this.activityService.reopen(courseId, activityId, (activity) =>
+      this.permissionsService.ensureActivityWritePermission(activity, req)
+    )
+    return new ItemResponse({
+      resource: Mapper.map(activity, ActivityDTO),
+    })
+  }
 }

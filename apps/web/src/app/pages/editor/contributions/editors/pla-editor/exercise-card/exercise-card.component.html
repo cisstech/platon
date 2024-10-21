@@ -9,8 +9,8 @@
     [articleTitle]="titleTemplate"
     [articleIconTemplate]="imageTemplate"
     [articleDescription]="descriptionTemplate"
-    [articleUrl]="clickable && showButton ? ['/resources/', item.id] : undefined"
     [ngClass]="{ 'is-configurable': !showButton && configurable }"
+    (didClickTitle)="openTab('/resources/' + item.id)"
   >
     @if (showButton) {
     <ui-list-item-article-action *ngIf="editable" (click)="openTab(editorUrl)" class="action" nz-tooltip="Éditer">

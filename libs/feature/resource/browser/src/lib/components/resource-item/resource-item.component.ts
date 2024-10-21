@@ -75,7 +75,7 @@ export class ResourceItemComponent implements OnChanges {
 
   protected configurable = false
   protected tags: ListItemTag[] = []
-  protected readme?: ResourceFile
+  protected readme?: string
 
   @Input() item!: Resource
   @Input({ transform: booleanAttribute }) simple = false
@@ -150,9 +150,9 @@ export class ResourceItemComponent implements OnChanges {
     }
   }
 
-  protected getReadmeContent(): void {
-    this.fileService.read(`${this.item.id}`, 'readme.md').subscribe((file) => {
-      this.readme = file
-    })
+  protected async getReadmeContent(): Promise<void> {
+    if (!this.readme) {
+      this.readme = await firstValueFrom(this.fileService.content(`${this.item.id}/readme.md`))
+    }
   }
 }

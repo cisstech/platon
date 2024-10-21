@@ -68,4 +68,35 @@ export class AdminTagsPage implements OnInit {
       this.changeDetectorRef.markForCheck()
     }
   }
+
+  async updateTag(tag: Topic | Level, type: 'topic' | 'level') {
+    try {
+      const updatedTag = await firstValueFrom(
+        type === 'level'
+          ? this.tagService.updateLevel(tag.id, { name: tag.name })
+          : this.tagService.updateTopic(tag.id, { name: tag.name })
+      )
+      if (type === 'level') {
+        if (updatedTag.id !== tag.id) {
+          this.levels = [...this.levels.filter((item) => item.id !== tag.id)]
+        } else {
+          this.levels[this.levels.findIndex((item) => item.id === updatedTag.id)] = updatedTag
+          this.levels = [...this.levels.sort((a, b) => a.name.localeCompare(b.name))] // Using the spread operator to create a new array -> refresh the view
+        }
+      } else {
+        if (updatedTag.id !== tag.id) {
+          this.topics = [...this.topics.filter((item) => item.id !== tag.id)]
+        } else {
+          this.topics[this.topics.findIndex((item) => item.id === updatedTag.id)] = updatedTag
+          this.topics = [...this.topics.sort((a, b) => a.name.localeCompare(b.name))] // Using the spread operator to create a new array -> refresh the view
+        }
+      }
+    } catch {
+      this.dialogService.error(
+        'Une erreur est survenue lors de la modification du tag, veuillez réessayer un peu plus tard !'
+      )
+    } finally {
+      this.changeDetectorRef.markForCheck()
+    }
+  }
 }

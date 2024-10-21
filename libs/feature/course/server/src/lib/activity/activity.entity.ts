@@ -37,11 +37,11 @@ export class ActivityEntity extends BaseEntity implements Activity {
 
   @Index('Activities_open_at_idx')
   @Column({ name: 'open_at', nullable: true, type: 'timestamp with time zone' })
-  openAt?: Date
+  openAt?: Date | null
 
   @Index('Activities_close_at_idx')
   @Column({ name: 'close_at', nullable: true, type: 'timestamp with time zone' })
-  closeAt?: Date
+  closeAt?: Date | null
 
   @Index('Activities_is_challenge_idx')
   @Column({ name: 'is_challenge', default: false })

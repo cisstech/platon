@@ -1,2 +1,5 @@
 export * from './lib/feature-discord-server.service'
 export * from './lib/feature-discord-server.module'
+export * from './lib/feature-discord-server.controller'
+export * from './lib/discord-invitation/discord-invitation.service'
+export * from './lib/watchers/discord-watcher.service'

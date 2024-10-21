@@ -75,14 +75,12 @@
             />
           </nz-col>
         </nz-row>
+
         <ng-container *ngIf="context.results">
+          <div class="spacer"></div>
           <section>
             <h4>Résultats par exercices</h4>
             <result-by-exercises [results]="context.results.exercises" />
-          </section>
-          <section>
-            <h4>Résultats par apprenants</h4>
-            <result-by-members [results]="context.results.users" />
           </section>
         </ng-container>
       </nz-col>
@@ -93,5 +91,9 @@
         </aside>
       </nz-col>
     </nz-row>
+    <section>
+      <h4>Résultats par apprenants</h4>
+      <result-by-members [results]="context.results.users" />
+    </section>
   </ng-container>
 </ui-layout-block>

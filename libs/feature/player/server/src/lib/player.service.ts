@@ -390,7 +390,7 @@ export class PlayerService extends PlayerManager {
         // Register the answer in the peer table
         const peerlike = {
           activityId: activitySession.activityId,
-          level: -1,
+          level: 0,
           correctorId: activitySession.userId,
           player1Id: activitySession.userId,
           player1SessionId: answer.sessionId,
@@ -597,7 +597,6 @@ export class PlayerService extends PlayerManager {
     if (!exercises.length) {
       exercises.push(...extractExercisesFromActivityVariables(variables))
     }
-
     navigation.exercises = await Promise.all(
       exercises.map(async (item) => {
         if (!('sessionId' in item)) {
@@ -613,9 +612,10 @@ export class PlayerService extends PlayerManager {
             },
             manager
           )
+
           return {
             id: item.id,
-            title: item.source.variables.title as string,
+            title: await this.resourceFileService.getTitle(item.resource),
             state: AnswerStates.NOT_STARTED,
             sessionId: session.id,
           }

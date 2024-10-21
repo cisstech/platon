@@ -166,4 +166,8 @@ export class ResourceFileService {
     source.variables.author = resource.ownerId
     return { source, resource, compiler }
   }
+
+  async getTitle(resourceId: string): Promise<string> {
+    return this.resourceService.findByIdOrCode(resourceId).then((resource) => resource.orUndefined()?.name || 'À faire')
+  }
 }
