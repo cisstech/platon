@@ -120,12 +120,14 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
         terminateOnLeavePage: false,
         terminateOnLoseFocus: false,
       },
+      nextSettings: {
+        sandbox: 'python',
+        autoNext: false,
+        autoNextGrade: 100,
+      },
     },
     nextExerciseId: '',
     next: '',
-    nextSettings: {
-      sandbox: 'python',
-    },
     exerciseGroups: {},
   }
 
@@ -162,7 +164,9 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
       terminateOnLoseFocus: [!!this.activity?.settings?.security?.terminateOnLoseFocus],
     }),
     nextSettings: this.fb.group({
-      sandbox: [this.activity.nextSettings?.sandbox || 'python'],
+      sandbox: [this.activity.settings?.nextSettings?.sandbox || 'python'],
+      autoNext: [this.activity.settings?.nextSettings?.autoNext || false],
+      autoNextGrade: [this.activity.settings?.nextSettings?.autoNextGrade || 100],
     }),
   })
 
@@ -526,9 +530,11 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
           terminateOnLeavePage: value.security?.terminateOnLeavePage || false,
           terminateOnLoseFocus: value.security?.terminateOnLoseFocus || false,
         },
-      },
-      nextSettings: {
-        sandbox: value.nextSettings?.sandbox || 'python',
+        nextSettings: {
+          sandbox: value.nextSettings?.sandbox || 'python',
+          autoNext: value.nextSettings?.autoNext || false,
+          autoNextGrade: value.nextSettings?.autoNextGrade || 100,
+        },
       },
       exerciseGroups: this.exerciseGroups.reduce((acc, group, index) => {
         acc[index] = group
@@ -591,7 +597,9 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
         terminateOnLoseFocus: this.activity.settings?.security?.terminateOnLoseFocus,
       },
       nextSettings: {
-        sandbox: this.activity.nextSettings?.sandbox,
+        sandbox: this.activity.settings?.nextSettings?.sandbox,
+        autoNext: this.activity.settings?.nextSettings?.autoNext,
+        autoNextGrade: this.activity.settings?.nextSettings?.autoNextGrade,
       },
     })
 

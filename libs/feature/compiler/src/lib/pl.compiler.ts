@@ -410,7 +410,8 @@ export class PLCompiler implements PLVisitor {
     )
 
     if (variables.settings?.navigation?.mode === 'next') {
-      const file = variables.nextSettings?.sandbox === 'python' ? ACTIVITY_NEXT_FILE_PYTHON : ACTIVITY_NEXT_FILE_NODE
+      const file =
+        variables.settings.nextSettings?.sandbox === 'python' ? ACTIVITY_NEXT_FILE_PYTHON : ACTIVITY_NEXT_FILE_NODE
       const next = await this.resolveContent(file)
       variables.next = next
     }

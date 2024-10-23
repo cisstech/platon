@@ -17,10 +17,15 @@ export interface ActivitySettings {
 
   /** Activity security options */
   security?: ActivitySecuritySettings
+
+  /** Settings specific to the next exercise. */
+  nextSettings?: NextSettings
 }
 
 export interface NextSettings {
   sandbox: 'python' | 'node'
+  autoNext: boolean
+  autoNextGrade: number
 }
 
 /** Settings specific to action buttons. */
@@ -100,5 +105,10 @@ export const defaultActivitySettings = (): ActivitySettings => ({
     noCopyPaste: false,
     terminateOnLeavePage: false,
     terminateOnLoseFocus: false,
+  },
+  nextSettings: {
+    sandbox: 'python',
+    autoNext: false,
+    autoNextGrade: 0,
   },
 })

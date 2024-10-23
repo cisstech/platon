@@ -412,12 +412,46 @@
       <nz-collapse>
         <nz-collapse-panel formGroupName="nextSettings" nzHeader="Paramètres du next" nzExpandedIcon="setting" nzActive>
           <nz-form-item>
-            <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="navigationMode">Sandbox</nz-form-label>
+            <nz-form-label
+              nzLabelAlign="left"
+              for="sandbox"
+              nzTooltipTitle="Langage à utiliser pour programmer le next."
+              >Sandbox</nz-form-label
+            >
             <nz-form-control>
               <nz-select formControlName="sandbox" id="sandbox">
                 <nz-option nzValue="python" nzLabel="Python" nzCustomContent> Python (next.py) </nz-option>
                 <nz-option nzValue="node" nzLabel="Node" nzCustomContent> Node (next.js) </nz-option>
               </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label
+              nzLabelAlign="left"
+              for="autoNext"
+              nzTooltipTitle="Passer automatiquement à l'exercice suivant après une soumission."
+            >
+              Passer automatiquement
+            </nz-form-label>
+            <nz-form-control>
+              <label nz-checkbox formControlName="autoNext" id="autoNext"></label>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item *ngIf="activity.settings?.nextSettings?.autoNext">
+            <nz-form-label
+              nzLabelAlign="left"
+              for="autoNextGrade"
+              nzTooltipTitle="Note nécessaire pour passer automatiquement à l'exercice suivant."
+            >
+              Note minimum pour passer automatiquement
+            </nz-form-label>
+            <nz-form-control>
+              <nz-input-number
+                formControlName="autoNextGrade"
+                id="autoNextGrade"
+                [nzMin]="0"
+                [nzMax]="100"
+              ></nz-input-number>
             </nz-form-control>
           </nz-form-item>
         </nz-collapse-panel>

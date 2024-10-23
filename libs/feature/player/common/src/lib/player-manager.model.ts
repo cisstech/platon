@@ -186,6 +186,9 @@ export abstract class PlayerManager {
       exerciseSession.succeededAt = new Date()
     }
 
+    const grades = [...variables['.meta']['grades'], grade]
+    patchExerciseMeta(variables, () => ({ grades, isInitialBuild: false }))
+
     const promises: Promise<unknown>[] = [
       this.updateSession(exerciseSession.id, {
         grade: exerciseSession.grade,
@@ -202,9 +205,11 @@ export abstract class PlayerManager {
       const current = activityNavigation.exercises.find((item) => item.sessionId === exerciseSession.id)
       if (current) {
         current.state = answerStateFromGrade(answer.grade)
+        current.grade = answer.grade
         activityNavigation.exercises = activityNavigation.exercises.map((item) =>
           item.sessionId === current.sessionId ? current : item
         )
+        activityNavigation.current = current
       }
 
       const childs = await this.findSessionsByParentId(activitySession.id)

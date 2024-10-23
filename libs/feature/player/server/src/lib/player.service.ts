@@ -232,7 +232,7 @@ export class PlayerService extends PlayerManager {
 
     const session = await this.buildNext(activitySession)
 
-    return { nextExerciseId: session.variables.nextExerciseId }
+    return { nextExerciseId: session.variables.nextExerciseId, terminated: session.variables.navigation.terminated }
   }
 
   async compareTrainOrWait(
@@ -523,10 +523,34 @@ export class PlayerService extends PlayerManager {
   }
 
   private async buildNext(activitySession: ActivitySessionEntity): Promise<SessionEntity> {
-    const { envid, variables } = await this.sandboxService.buildNext(activitySession.source!)
+    const sources = activitySession.source
+    const sessions = await this.sessionService.findAllWithParent(activitySession.id)
+    sources.variables.exercisesMeta = {}
+    for (const exercise of activitySession.variables.navigation.exercises) {
+      const meta = sessions.find((s) => s.id === exercise.sessionId)?.variables['.meta']
+      if (meta) {
+        sources.variables.exercisesMeta[exercise.id] = meta
+      } else {
+        sources.variables.exercisesMeta[exercise.id] = {
+          isInitialBuild: true,
+          grades: [],
+          attempts: 0,
+          totalAttempts: 0,
+          consumedHints: 0,
+        }
+      }
+    }
+    sources.variables.navigation = activitySession.variables.navigation
+    const { envid, variables } = await this.sandboxService.buildNext(sources)
 
     activitySession.envid = envid
-    activitySession.variables = { ...activitySession.variables, nextExerciseId: variables.nextExerciseId }
+    activitySession.variables = {
+      ...activitySession.variables,
+      nextExerciseId: variables.nextExerciseId,
+      navigation: variables.navigation,
+    }
+
+    console.log('souivant :', activitySession.variables.nextExerciseId)
 
     await this.sessionService.update(activitySession.id, {
       envid: envid || undefined,

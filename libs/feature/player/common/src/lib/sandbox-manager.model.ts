@@ -76,12 +76,14 @@ export class SandboxManager {
     let envid: string | undefined
     let variables = source.variables
 
-    variables.sandbox = variables.nextSettings?.sandbox
+    variables.sandbox = variables.settings?.nextSettings?.sandbox
 
     const sandbox = this.sandboxes.find((sandbox) => sandbox.supports(source))
     if (!sandbox) {
       throw new Error(`No sandbox found for the given source file`)
     }
+
+    console.log('variables', variables)
 
     if (variables.next || source.dependencies.length) {
       const response = await sandbox.run(

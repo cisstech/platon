@@ -95,7 +95,7 @@
     color="primary"
     [nz-popover]="navigation"
     nzPopoverPlacement="topRight"
-    *ngIf="!peerComparison"
+    *ngIf="!peerComparison && !nextNavigation"
   >
     <mat-icon>menu</mat-icon>
     Navigation
@@ -141,4 +141,7 @@
       ></nz-progress>
     </button>
   </div>
+</ng-template>
+<ng-template #errorTemplate let-data="data">
+  <pre>{{ data.message }}</pre>
 </ng-template>

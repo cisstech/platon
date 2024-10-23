@@ -40,8 +40,7 @@ export class PlayerService {
   }
 
   next(input: PlayExerciseInput): Observable<NextOutput> {
-    const a = this.provider.next(input)
-    return a
+    return this.provider.next(input)
   }
 
   evaluate(input: EvalExerciseInput): Observable<EvalExerciseOutput> {

@@ -145,7 +145,8 @@ export interface ActivityVariables {
 
   nextExerciseId?: string
   next?: string
-  nextSettings?: NextSettings
+  exercisesMeta?: Record<string, ExerciseMeta>
+  currentExerciseId?: string
 
   [k: string]: any
 }
