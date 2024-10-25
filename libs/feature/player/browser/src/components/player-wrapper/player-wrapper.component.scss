@@ -11,17 +11,6 @@ player-exercise {
   margin: 0 8rem;
 }
 
-header {
-  display: flex;
-  padding: 1rem 0;
-}
-
-img {
-  width: 64px;
-  height: 64px;
-  margin: 0 auto;
-}
-
 @media (max-width: 920px) {
   player-exercise {
     margin: 0 1rem !important;
