@@ -3,10 +3,16 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop'
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, inject } from '@angular/core'
 import { FormBuilder, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
-import { Editor, FileService, OpenRequest } from '@cisstech/nge-ide/core'
+import { Editor, EditorService, FileService, OpenRequest } from '@cisstech/nge-ide/core'
 import { AuthService, DialogService, TagService } from '@platon/core/browser'
 import { Level, OrderingDirections, Topic, User, uniquifyBy } from '@platon/core/common'
-import { ActivityExercise, ActivityExerciseGroup, ActivityVariables } from '@platon/feature/compiler'
+import {
+  ACTIVITY_NEXT_FILE_NODE,
+  ACTIVITY_NEXT_FILE_PYTHON,
+  ActivityExercise,
+  ActivityExerciseGroup,
+  ActivityVariables,
+} from '@platon/feature/compiler'
 import {
   CircleFilterIndicator,
   ExerciseConfigurableFilterIndicator,
@@ -32,6 +38,7 @@ import { FilterIndicator, PeriodFilterMatcher, SearchBar } from '@platon/shared/
 import Fuse from 'fuse.js'
 import { Subscription, debounceTime, firstValueFrom, map, shareReplay, skip } from 'rxjs'
 import { v4 as uuidv4 } from 'uuid'
+import { ResourceFileImpl, ResourceFileSystemProvider } from '../../file-system'
 
 const PAGINATION_LIMIT = 15
 const EXPANDS: ResourceExpandableFields[] = ['metadata', 'statistic']
@@ -66,6 +73,8 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
   private readonly tagService = inject(TagService)
   private readonly changeDetectorRef = inject(ChangeDetectorRef)
   private readonly dialogService = inject(DialogService)
+  private readonly editorService = inject(EditorService)
+  private readonly resourceFileSystemProvider = inject(ResourceFileSystemProvider)
 
   protected readonly searchbar: SearchBar<string> = {
     placeholder: 'Essayez un nom, un topic, un niveau...',
@@ -643,5 +652,25 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
     return Object.values(this.filters)
       .filter((e) => e !== undefined)
       .filter((e) => e.length !== 0).length
+  }
+
+  protected async openNextFile(): Promise<void> {
+    const nextUri = this.resourceFileSystemProvider.buildUri(
+      (this.request.file as ResourceFileImpl).resourceFile.resourceId,
+      'latest',
+      this.activity.settings?.nextSettings?.sandbox == 'python' ? ACTIVITY_NEXT_FILE_PYTHON : ACTIVITY_NEXT_FILE_NODE
+    )
+
+    if (!this.resourceFileSystemProvider.exists(nextUri)) {
+      await this.resourceFileSystemProvider.write(
+        nextUri,
+        this.activity.settings?.nextSettings?.sandbox == 'python'
+          ? '# TODO : from YankLib import *\n\n'
+          : '// TODO : import YankLib\n\n',
+        false
+      )
+    }
+
+    this.editorService.open(nextUri).catch(console.log)
   }
 }

@@ -262,6 +262,10 @@ export class ResourceFileSystemProvider extends FileSystemProvider {
     return results
   }
 
+  exists(uri: monaco.Uri): boolean {
+    return this.entries.has(uri.toString(true))
+  }
+
   lookup(uri: monaco.Uri, silent = false): ResourceFile {
     const entry = this.entries.get(uri.toString(true))
     if (!entry && !silent) {

@@ -410,6 +410,10 @@
     </ng-container>
     <ng-container *ngIf="step === 3">
       <nz-collapse>
+        <button nz-button nzType="primary" class="openNextButton" (click)="openNextFile()">
+          <span nz-icon nzType="file" nzTheme="outline"></span>
+          <span>Ouvrir le fichier next.{{ activity.settings?.nextSettings?.sandbox === 'python' ? 'py' : 'js' }}</span>
+        </button>
         <nz-collapse-panel formGroupName="nextSettings" nzHeader="Paramètres du next" nzExpandedIcon="setting" nzActive>
           <nz-form-item>
             <nz-form-label
