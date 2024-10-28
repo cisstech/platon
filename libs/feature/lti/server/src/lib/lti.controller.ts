@@ -1,7 +1,7 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Patch, Post, Query } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { CreatedResponse, ItemResponse, ListResponse, NoContentResponse, NotFoundResponse } from '@platon/core/common'
-import { Mapper } from '@platon/core/server'
+import { Mapper, UUIDParam } from '@platon/core/server'
 import { CreateLmsDTO, LmsDTO, LmsFiltersDTO, UpdateLmsDTO } from './lti.dto'
 import { LTIService } from './lti.service'
 
@@ -18,7 +18,7 @@ export class LTIController {
   }
 
   @Get('/lms/:id')
-  async findLms(@Param('id') id: string): Promise<ItemResponse<LmsDTO>> {
+  async findLms(@UUIDParam('id') id: string): Promise<ItemResponse<LmsDTO>> {
     const optional = await this.service.findLmsById(id)
     const resource = Mapper.map(
       optional.orElseThrow(() => new NotFoundResponse(`Lms not found: ${id}`)),
@@ -34,13 +34,13 @@ export class LTIController {
   }
 
   @Patch('/lms/:id')
-  async updateLms(@Param('id') id: string, @Body() input: UpdateLmsDTO): Promise<ItemResponse<LmsDTO>> {
+  async updateLms(@UUIDParam('id') id: string, @Body() input: UpdateLmsDTO): Promise<ItemResponse<LmsDTO>> {
     const resource = Mapper.map(await this.service.updateLms(id, input), LmsDTO)
     return new ItemResponse({ resource })
   }
 
   @Delete('/lms/:id')
-  async deleteLms(@Param('id') id: string): Promise<NoContentResponse> {
+  async deleteLms(@UUIDParam('id') id: string): Promise<NoContentResponse> {
     await this.service.deleteLms(id)
     return new NoContentResponse()
   }

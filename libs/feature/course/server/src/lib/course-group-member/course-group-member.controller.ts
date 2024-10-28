@@ -4,7 +4,7 @@ import { CourseGroupMemberService } from './course-group-member.service'
 import { ForbiddenResponse, ListResponse, NoContentResponse, UserRoles } from '@platon/core/common'
 import { CourseMemberDTO } from '../course-member/course-member.dto'
 import { CourseMemberService } from '../course-member/course-member.service'
-import { IRequest, Roles } from '@platon/core/server'
+import { IRequest, Roles, UUIDParam } from '@platon/core/server'
 
 @Controller('courseGroupMembers/:courseId/')
 @ApiTags('CourseGroupMembers')
@@ -16,8 +16,8 @@ export class CourseGroupMemberController {
 
   @Get(':groupId')
   async list(
-    @Param('courseId') courseId: string,
-    @Param('groupId') groupId: string
+    @UUIDParam('courseId') courseId: string,
+    @UUIDParam('groupId') groupId: string
   ): Promise<ListResponse<CourseMemberDTO>> {
     const items = await this.courseGroupMemberService.listCourseGroupMembers(groupId)
     const members = (await this.courseMemberService.search(courseId))[0]
@@ -39,7 +39,7 @@ export class CourseGroupMemberController {
 
   @Post()
   async listGroupsMembers(
-    @Param('courseId') courseId: string,
+    @UUIDParam('courseId') courseId: string,
     @Body('groupsIds') groupsIds: string[]
   ): Promise<ListResponse<CourseMemberDTO>> {
     const items = await this.courseGroupMemberService.listGroupsMembers(groupsIds)
@@ -64,9 +64,9 @@ export class CourseGroupMemberController {
   @Delete(':groupId/:userId')
   async delete(
     @Req() req: IRequest,
-    @Param('courseId') courseId: string,
-    @Param('groupId') groupId: string,
-    @Param('userId') userId: string
+    @UUIDParam('courseId') courseId: string,
+    @UUIDParam('groupId') groupId: string,
+    @UUIDParam('userId') userId: string
   ): Promise<NoContentResponse> {
     if (!(await this.courseGroupMemberService.isMember(groupId, userId))) {
       throw new ForbiddenResponse('You are not a member of this group')
@@ -80,8 +80,8 @@ export class CourseGroupMemberController {
   @Post(':groupId/:userId')
   async create(
     @Req() req: IRequest,
-    @Param('groupId') groupId: string,
-    @Param('userId') userId: string
+    @UUIDParam('groupId') groupId: string,
+    @UUIDParam('userId') userId: string
   ): Promise<NoContentResponse> {
     if (await this.courseGroupMemberService.isMember(groupId, userId)) {
       throw new ForbiddenResponse('User is already a member of this group')

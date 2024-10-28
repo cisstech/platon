@@ -8,7 +8,7 @@ import {
   NotFoundResponse,
   UserRoles,
 } from '@platon/core/common'
-import { IRequest, Mapper, Roles } from '@platon/core/server'
+import { IRequest, Mapper, Roles, UUIDParam } from '@platon/core/server'
 import { ActivityService } from '../activity/activity.service'
 import { ActivityMemberDTO, CreateActivityMemberDTO } from './activity-member.dto'
 import { ActivityMemberService } from './activity-member.service'
@@ -22,7 +22,7 @@ export class ActivityMemberController {
   ) {}
 
   @Get()
-  async search(@Param('activityId') activityId: string): Promise<ListResponse<ActivityMemberDTO>> {
+  async search(@UUIDParam('activityId') activityId: string): Promise<ListResponse<ActivityMemberDTO>> {
     const [items, total] = await this.activityMemberService.search(activityId)
     return new ListResponse({
       total,
@@ -34,7 +34,7 @@ export class ActivityMemberController {
   @Post()
   async create(
     @Req() req: IRequest,
-    @Param('activityId') activityId: string,
+    @UUIDParam('activityId') activityId: string,
     @Body() input: CreateActivityMemberDTO
   ): Promise<ItemResponse<ActivityMemberDTO>> {
     await this.activityService.withActivity(activityId, (activity) => {
@@ -61,7 +61,7 @@ export class ActivityMemberController {
   @Put()
   async update(
     @Req() req: IRequest,
-    @Param('activityId') activityId: string,
+    @UUIDParam('activityId') activityId: string,
     @Body() input: CreateActivityMemberDTO[]
   ): Promise<ItemResponse<ActivityMemberDTO>> {
     await this.activityService.withActivity(activityId, (activity) => {
@@ -88,8 +88,8 @@ export class ActivityMemberController {
   @Delete('/:activityMemberId')
   async delete(
     @Req() req: IRequest,
-    @Param('activityId') activityId: string,
-    @Param('activityMemberId') activityMemberId: string
+    @UUIDParam('activityId') activityId: string,
+    @UUIDParam('activityMemberId') activityMemberId: string
   ): Promise<NoContentResponse> {
     await this.activityService.withActivity(activityId, (activity) => {
       if (!activity) {

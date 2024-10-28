@@ -8,7 +8,7 @@ import {
   NotFoundResponse,
   UserRoles,
 } from '@platon/core/common'
-import { IRequest, Mapper, Roles } from '@platon/core/server'
+import { IRequest, Mapper, Roles, UUIDParam } from '@platon/core/server'
 import { ActivityCorrectorDTO, CreateActivityCorrectorDTO } from './activity-corrector.dto'
 import { ActivityCorrectorService } from './activity-corrector.service'
 import { ActivityService } from '../activity/activity.service'
@@ -22,7 +22,7 @@ export class ActivityCorrectorController {
   ) {}
 
   @Get()
-  async search(@Param('activityId') activityId: string): Promise<ListResponse<ActivityCorrectorDTO>> {
+  async search(@UUIDParam('activityId') activityId: string): Promise<ListResponse<ActivityCorrectorDTO>> {
     const [items, total] = await this.activityCorrectorService.search(activityId)
     return new ListResponse({
       total,
@@ -34,7 +34,7 @@ export class ActivityCorrectorController {
   @Post()
   async create(
     @Req() req: IRequest,
-    @Param('activityId') activityId: string,
+    @UUIDParam('activityId') activityId: string,
     @Body() input: CreateActivityCorrectorDTO
   ): Promise<ItemResponse<ActivityCorrectorDTO>> {
     await this.activityService.withActivity(activityId, (activity) => {
@@ -64,7 +64,7 @@ export class ActivityCorrectorController {
   @Put()
   async update(
     @Req() req: IRequest,
-    @Param('activityId') activityId: string,
+    @UUIDParam('activityId') activityId: string,
     @Body() input: CreateActivityCorrectorDTO[]
   ): Promise<ItemResponse<ActivityCorrectorDTO>> {
     await this.activityService.withActivity(activityId, (activity) => {
@@ -91,8 +91,8 @@ export class ActivityCorrectorController {
   @Delete('/:activityCorrectorId')
   async delete(
     @Req() req: IRequest,
-    @Param('activityId') activityId: string,
-    @Param('activityCorrectorId') activityCorrectorId: string
+    @UUIDParam('activityId') activityId: string,
+    @UUIDParam('activityCorrectorId') activityCorrectorId: string
   ): Promise<NoContentResponse> {
     await this.activityService.withActivity(activityId, (activity) => {
       if (!activity) {

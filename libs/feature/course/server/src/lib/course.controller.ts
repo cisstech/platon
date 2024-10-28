@@ -1,5 +1,5 @@
 import { Expandable } from '@cisstech/nestjs-expand'
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Patch, Post, Query, Req } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import {
   CreatedResponse,
@@ -9,7 +9,7 @@ import {
   NotFoundResponse,
   UserRoles,
 } from '@platon/core/common'
-import { IRequest, Mapper, Roles } from '@platon/core/server'
+import { IRequest, Mapper, Roles, UUIDParam } from '@platon/core/server'
 import { CourseDTO, CourseFiltersDTO, CreateCourseDTO, UpdateCourseDTO } from './course.dto'
 import { CourseService } from './course.service'
 import { CoursePermissionsService } from './permissions/permissions.service'
@@ -40,7 +40,7 @@ export class CourseController {
 
   @Get('/:id')
   @Expandable(CourseDTO, { rootField: 'resource' })
-  async find(@Req() req: IRequest, @Param('id') id: string): Promise<ItemResponse<CourseDTO>> {
+  async find(@Req() req: IRequest, @UUIDParam('id') id: string): Promise<ItemResponse<CourseDTO>> {
     const optional = await this.courseService.findById(id)
     const resource = Mapper.map(
       optional.orElseThrow(() => new NotFoundResponse(`Course not found: ${id}`)),
@@ -71,7 +71,7 @@ export class CourseController {
   @Expandable(CourseDTO, { rootField: 'resource' })
   async update(
     @Req() req: IRequest,
-    @Param('id') id: string,
+    @UUIDParam('id') id: string,
     @Body() input: UpdateCourseDTO
   ): Promise<ItemResponse<CourseDTO>> {
     if (!(await this.courseMemberService.isMember(id, req.user.id))) {
@@ -88,7 +88,7 @@ export class CourseController {
 
   @Roles(UserRoles.teacher, UserRoles.admin)
   @Delete('/:id')
-  async delete(@Req() req: IRequest, @Param('id') id: string): Promise<void> {
+  async delete(@Req() req: IRequest, @UUIDParam('id') id: string): Promise<void> {
     await this.permissionsService.ensureCourseWritePermission(id, req)
     await this.courseService.delete(id)
   }

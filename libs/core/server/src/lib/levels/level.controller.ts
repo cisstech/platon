@@ -1,7 +1,7 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Patch, Post } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { CreatedResponse, ItemResponse, ListResponse, NoContentResponse } from '@platon/core/common'
-import { Mapper } from '../utils'
+import { Mapper, UUIDParam } from '../utils'
 import { CreateLevelDTO, LevelDTO, UpdateLevelDTO } from './level.dto'
 import { LevelService } from './level.service'
 import { Roles } from '../auth/decorators/roles.decorator'
@@ -27,14 +27,14 @@ export class LevelController {
 
   @Patch('/:id')
   @Roles('admin')
-  async update(@Param('id') id: string, @Body() input: UpdateLevelDTO): Promise<ItemResponse<LevelDTO>> {
+  async update(@UUIDParam('id') id: string, @Body() input: UpdateLevelDTO): Promise<ItemResponse<LevelDTO>> {
     const resource = Mapper.map(await this.service.update(id, input), LevelDTO)
     return new ItemResponse({ resource })
   }
 
   @Delete('/:id')
   @Roles('admin')
-  async delete(@Param('id') id: string): Promise<NoContentResponse> {
+  async delete(@UUIDParam('id') id: string): Promise<NoContentResponse> {
     await this.service.delete(id)
     return new NoContentResponse()
   }
