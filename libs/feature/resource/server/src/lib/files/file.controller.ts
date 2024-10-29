@@ -191,7 +191,8 @@ export class ResourceFileController {
       res.set('Content-Type', mimeType || 'application/octet-stream')
 
       if (node.type === 'file') {
-        res.set('Content-Disposition', `attachment; filename=${basename(node.path)}`)
+        const encodedFilename = encodeURIComponent(basename(node.path))
+        res.set('Content-Disposition', `attachment; filename=${encodedFilename}`)
         const buffer = (await content) as Uint8Array
 
         const extension = node.path.split('.').pop()
