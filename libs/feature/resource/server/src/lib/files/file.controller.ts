@@ -201,7 +201,8 @@ export class ResourceFileController {
 
         file = new StreamableFile(buffer)
       } else {
-        res.set('Content-Disposition', `attachment; filename=platon-${resource.name.trim().replace(/\s/g, '-')}.zip`)
+        const encodedFilename = encodeURIComponent(`platon-${resource.name.trim().replace(/\s/g, '-')}.zip`)
+        res.set('Content-Disposition', `attachment; filename=${encodedFilename}`)
 
         const archive = await repo.archive(path, version)
         const stream = fs.createReadStream(archive)
