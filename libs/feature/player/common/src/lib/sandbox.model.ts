@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ExerciseVariables } from '@platon/feature/compiler'
+import { ActivityVariables, ExerciseVariables } from '@platon/feature/compiler'
 
 export interface SandboxInput {
   envid?: string | null
@@ -10,12 +10,12 @@ export interface SandboxInput {
         hash: string
       }[]
     | null
-  variables: ExerciseVariables
+  variables: ExerciseVariables | ActivityVariables
 }
 
 export interface SandboxOutput {
   envid?: string
-  variables: ExerciseVariables
+  variables: ExerciseVariables | ActivityVariables
 }
 
 export interface SandboxEnvironment {
@@ -27,6 +27,7 @@ export interface Sandbox {
   downloadEnvironment(envid: string): Promise<SandboxEnvironment>
   supports(input: SandboxInput): boolean
   run(input: SandboxInput, script: string, timeout: number): Promise<SandboxOutput>
+  runNext(input: SandboxInput, timeout: number): Promise<SandboxOutput>
 }
 
 export class SandboxError extends Error {

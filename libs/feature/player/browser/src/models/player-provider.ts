@@ -1,6 +1,7 @@
 import {
   EvalExerciseInput,
   EvalExerciseOutput,
+  NextOutput,
   PlayActivityInput,
   PlayActivityOuput,
   PlayAnswersInput,
@@ -18,6 +19,7 @@ export abstract class PlayerProvider {
   abstract playAnswers(input: PlayAnswersInput): Observable<PlayAnswersOutput>
   abstract playActivity(input: PlayActivityInput): Observable<PlayActivityOuput>
   abstract playExercises(input: PlayExerciseInput): Observable<PlayExerciseOuput>
+  abstract next(input: PlayExerciseInput): Observable<NextOutput>
   abstract evaluate(input: EvalExerciseInput): Observable<EvalExerciseOutput>
   abstract terminate(sessionId: string): Observable<PlayActivityOuput>
 }

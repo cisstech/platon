@@ -13,7 +13,7 @@ import { Configuration } from '@platon/core/server'
 import { Sandbox, SandboxEnvironment, SandboxError, SandboxInput, SandboxOutput } from '@platon/feature/player/common'
 import { withTempFile } from '@platon/shared/server'
 import { RegisterSandbox } from '../sandbox'
-import { pythonRunnerScript } from './python-scripts'
+import { pythonNextScript, pythonRunnerScript } from './python-scripts'
 import { AxiosError } from 'axios'
 import { NotFoundResponse } from '@platon/core/common'
 
@@ -108,6 +108,16 @@ export class PythonSandbox implements Sandbox {
       }
       throw SandboxError.unknownError(error)
     }
+  }
+
+  /**
+   * Executes the next script in the Python sandbox.
+   * @param input The SandboxInput object.
+   * @param timeout The execution timeout in milliseconds.
+   * @returns A Promise that resolves to the SandboxOutput object.
+   */
+  async runNext(input: SandboxInput, timeout: number): Promise<SandboxOutput> {
+    return this.run(input, pythonNextScript, timeout)
   }
 
   /**

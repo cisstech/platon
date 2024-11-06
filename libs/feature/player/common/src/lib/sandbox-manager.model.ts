@@ -1,5 +1,5 @@
 import { basename } from '@platon/core/common'
-import { ExerciseVariables, PLSourceFile, withExerciseMeta } from '@platon/feature/compiler'
+import { ActivityVariables, ExerciseVariables, PLSourceFile, withExerciseMeta } from '@platon/feature/compiler'
 import { Sandbox, SandboxEnvironment, SandboxInput, SandboxOutput } from './sandbox.model'
 
 export class SandboxManager {
@@ -38,7 +38,7 @@ export class SandboxManager {
       response.variables['.meta'] = variables['.meta']
 
       envid = response.envid
-      variables = response.variables
+      variables = response.variables as ExerciseVariables
     }
 
     return {
@@ -70,5 +70,39 @@ export class SandboxManager {
     }
 
     return sandbox.downloadEnvironment(envid)
+  }
+
+  async buildNext(source: PLSourceFile<ActivityVariables>): Promise<SandboxOutput> {
+    let envid: string | undefined
+    let variables = source.variables
+
+    variables.sandbox = variables.settings?.nextSettings?.sandbox
+
+    const sandbox = this.sandboxes.find((sandbox) => sandbox.supports(source))
+    if (!sandbox) {
+      throw new Error(`No sandbox found for the given source file`)
+    }
+
+    if (variables.next || source.dependencies.length) {
+      const response = await sandbox.runNext(
+        {
+          files: source.dependencies.map((file) => ({
+            path: file.alias || basename(file.abspath),
+            content: file.content,
+            hash: file.hash,
+          })),
+          variables,
+        },
+        10_0000
+      )
+
+      envid = response.envid
+      variables = response.variables as ActivityVariables
+    }
+
+    return {
+      envid,
+      variables,
+    }
   }
 }

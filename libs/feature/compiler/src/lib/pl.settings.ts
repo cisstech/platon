@@ -17,6 +17,15 @@ export interface ActivitySettings {
 
   /** Activity security options */
   security?: ActivitySecuritySettings
+
+  /** Settings specific to the next exercise. */
+  nextSettings?: NextSettings
+}
+
+export interface NextSettings {
+  sandbox: 'python' | 'node'
+  autoNext: boolean
+  autoNextGrade: number
 }
 
 /** Settings specific to action buttons. */
@@ -62,7 +71,7 @@ export interface ActivitySecuritySettings {
  * - `composed` => All exercises are shown together.
  * - `peer` => The user either has to finish the exercise or has to review the exercise of the peer.
  */
-export type ActivityNavigationModes = 'manual' | 'composed' | 'peer'
+export type ActivityNavigationModes = 'manual' | 'composed' | 'next' | 'peer'
 
 /** Settings specific to navigation. */
 export interface ActivityNavigationSettings {
@@ -96,5 +105,10 @@ export const defaultActivitySettings = (): ActivitySettings => ({
     noCopyPaste: false,
     terminateOnLeavePage: false,
     terminateOnLoseFocus: false,
+  },
+  nextSettings: {
+    sandbox: 'python',
+    autoNext: false,
+    autoNextGrade: 0,
   },
 })

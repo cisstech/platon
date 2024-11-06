@@ -23,6 +23,7 @@ import {
 } from '@platon/feature/course/server'
 import {
   ExercisePlayer,
+  NextOutput,
   PlayActivityOuput,
   PlayExerciseOuput,
   PlayerActivityVariables,
@@ -41,6 +42,7 @@ import {
 import { ResourceFileService } from '@platon/feature/resource/server'
 import { Answer, AnswerStates, ExerciseSession, Session } from '@platon/feature/result/common'
 import {
+  ActivitySessionEntity,
   AnswerService,
   CorrectionEntity,
   ExerciseSessionEntity,
@@ -211,6 +213,26 @@ export class PlayerService extends PlayerManager {
       exercises: exercisePlayers,
       navigation: activityVariables.navigation,
     }
+  }
+
+  async playNext(activitySessionId: string, _user: User): Promise<NextOutput> {
+    const activitySession = await this.sessionService.findById<PlayerActivityVariables>(activitySessionId, {
+      parent: false,
+      activity: true,
+    })
+    if (!activitySession) {
+      throw new NotFoundResponse(`ActivitySession not found: ${activitySessionId}`)
+    }
+    if (activitySession.activity?.openAt && activitySession.activity.openAt > new Date()) {
+      throw new ForbiddenResponse("L'activité n'est pas encore ouverte.")
+    }
+    if (activitySession.activity?.closeAt && activitySession.activity.closeAt < new Date()) {
+      throw new ForbiddenResponse("L'activité est fermée.")
+    }
+
+    const session = await this.buildNext(activitySession)
+
+    return { nextExerciseId: session.variables.nextExerciseId, terminated: session.variables.navigation.terminated }
   }
 
   async compareTrainOrWait(
@@ -489,7 +511,7 @@ export class PlayerService extends PlayerManager {
 
     exerciseSession.envid = envid
     exerciseSession.isBuilt = true
-    exerciseSession.variables = variables
+    exerciseSession.variables = variables as ExerciseVariables
 
     await this.sessionService.update(exerciseSession.id, {
       envid: envid || undefined,
@@ -498,6 +520,44 @@ export class PlayerService extends PlayerManager {
     })
 
     return exerciseSession
+  }
+
+  private async buildNext(activitySession: ActivitySessionEntity): Promise<SessionEntity> {
+    const sources = activitySession.source
+    const sessions = await this.sessionService.findAllWithParent(activitySession.id)
+    sources.variables.exercisesMeta = {}
+    for (const exercise of activitySession.variables.navigation.exercises) {
+      const meta = sessions.find((s) => s.id === exercise.sessionId)?.variables['.meta']
+      if (meta) {
+        sources.variables.exercisesMeta[exercise.id] = meta
+      } else {
+        sources.variables.exercisesMeta[exercise.id] = {
+          isInitialBuild: true,
+          grades: [],
+          attempts: 0,
+          totalAttempts: 0,
+          consumedHints: 0,
+        }
+      }
+    }
+    sources.variables.navigation = activitySession.variables.navigation
+    const { envid, variables } = await this.sandboxService.buildNext(sources)
+
+    activitySession.envid = envid
+    activitySession.variables = {
+      ...activitySession.variables,
+      nextExerciseId: variables.nextExerciseId,
+      navigation: variables.navigation,
+      activityGrade: variables.activityGrade,
+    }
+
+    await this.sessionService.update(activitySession.id, {
+      envid: envid || undefined,
+      variables: activitySession.variables,
+      grade: variables.activityGrade,
+    })
+
+    return activitySession
   }
 
   /**

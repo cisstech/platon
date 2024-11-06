@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, Req, Res } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { IRequest, Public, UUIDParam } from '@platon/core/server'
-import { EvalExerciseInput, PlayAnswersInput } from '@platon/feature/player/common'
+import { EvalExerciseInput, NextOutput, PlayAnswersInput } from '@platon/feature/player/common'
 import {
   EvalExerciseOutputDTO,
   PlayActivityInputDTO,
@@ -49,6 +49,12 @@ export class PlayerController {
   @Post('/play/exercises')
   playExercises(@Req() req: IRequest, @Body() input: PlayExerciseInputDTO): Promise<PlayExerciseOuputDTO> {
     return this.playerService.playExercises(input.activitySessionId, input.exerciseSessionIds, req.user)
+  }
+
+  @Public()
+  @Post('/next/')
+  next(@Req() req: IRequest, @Body() input: PlayExerciseInputDTO): Promise<NextOutput> {
+    return this.playerService.playNext(input.activitySessionId, req.user)
   }
 
   @Public()

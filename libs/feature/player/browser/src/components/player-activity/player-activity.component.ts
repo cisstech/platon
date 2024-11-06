@@ -52,6 +52,7 @@ import { NotificationService } from '@platon/feature/notification/browser'
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzProgressModule } from 'ng-zorro-antd/progress'
+import { HttpErrorResponse } from '@angular/common/http'
 
 @Component({
   standalone: true,
@@ -115,6 +116,10 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
   protected onVisibilityChangeFn = this.onVisibilityChange.bind(this)
   protected onKeydownFn = this.onKeydown.bind(this)
   protected onContextMenuFn = this.onContextMenu.bind(this)
+  protected loadingNext = false
+
+  @ViewChild('errorTemplate', { read: TemplateRef, static: true })
+  protected errorTemplate!: TemplateRef<object>
 
   @Input() player!: ActivityPlayer
 
@@ -124,6 +129,10 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
 
   protected get peerComparison(): boolean {
     return this.player.settings?.navigation?.mode === 'peer'
+  }
+
+  protected get nextNavigation(): boolean {
+    return this.player.settings?.navigation?.mode === 'next'
   }
 
   protected get isPlaying(): boolean {
@@ -317,6 +326,38 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
       return
     }
 
+    if (this.nextNavigation) {
+      if (this.loadingNext) {
+        return
+      }
+      try {
+        const nextExercise = await firstValueFrom(
+          this.playerService.next({
+            activitySessionId: this.player.sessionId,
+            exerciseSessionIds: [],
+          })
+        )
+        const nextExerciseId = nextExercise.nextExerciseId
+        const terminated = nextExercise.terminated
+        if (terminated) {
+          this.terminate().catch(console.error)
+          return
+        }
+        exercise = this.navigation.exercises.find((item) => item.id === nextExerciseId) as PlayerExercise
+        if (!exercise) {
+          this.dialogService.error("L'exercice suivant n'a pas été trouvé.")
+          return
+        }
+      } catch (error) {
+        let message = 'Une erreur est survenue lors de cette action.'
+        if (error instanceof HttpErrorResponse) {
+          message = error.error?.message || error.message || message
+        }
+        this.dialogService.notification(this.errorTemplate, { duration: 0, data: { message } })
+        return
+      }
+    }
+
     this.exercises = undefined
 
     try {
@@ -414,6 +455,27 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
     //     })
     //     .catch(console.error)
     // }
+    if (
+      this.player.settings?.navigation?.mode === 'next' &&
+      this.player.settings?.nextSettings?.autoNext &&
+      !this.loadingNext &&
+      navigation.current?.grade &&
+      navigation.current?.grade >= this.player.settings?.nextSettings?.autoNextGrade
+    ) {
+      this.loadingNext = true
+      const nextExerciseButton = document.getElementById('next-exercise-button')
+      setTimeout(() => {
+        if (navigation.current) {
+          this.loadingNext = false
+          this.play(navigation.current).catch(console.error)
+        }
+      }, 2000)
+      nextExerciseButton?.classList.add('fill')
+      setTimeout(() => {
+        nextExerciseButton?.classList.remove('fill')
+      }, 2500)
+      return
+    }
     this.player = { ...this.player, navigation }
     this.playIfNeed(navigation).catch(console.error)
     this.calculatePositions()
@@ -513,6 +575,11 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
       const index = navigation.exercises.findIndex((item) => item.sessionId === current.sessionId)
       this.hasNext = index < navigation.exercises.length - 1
       this.hasPrev = index > 0
+      this.position = index
+    } else if (current && this.player.settings?.navigation?.mode === 'next') {
+      const index = navigation.exercises.findIndex((item) => item.sessionId === current.sessionId)
+      this.hasNext = true
+      this.hasPrev = false
       this.position = index
     }
   }

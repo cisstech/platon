@@ -17,6 +17,7 @@ export interface PlayerExercise {
   state: AnswerStates
   title: string
   peerComparison?: boolean
+  grade?: number
 }
 
 export interface PlayerNavigation {
@@ -92,6 +93,11 @@ export interface PlayExerciseOuput {
 
 export interface PlayActivityOuput {
   activity: ActivityPlayer
+}
+
+export interface NextOutput {
+  nextExerciseId: string
+  terminated: boolean
 }
 
 export interface EvalExerciseOutput {

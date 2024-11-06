@@ -263,6 +263,7 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
         label: 'Exercise précédent',
         tooltip: 'Exercise précédent',
         visible: this.hasPrev,
+        id: 'prev-exercise-button',
         run: () => this.goToPrevPlayer.emit(),
       },
       {
@@ -270,6 +271,7 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
         label: 'Exercise suivant',
         tooltip: 'Exercise suivant',
         visible: this.hasNext,
+        id: 'next-exercise-button',
         run: () => this.goToNextPlayer.emit(),
       },
     ]
