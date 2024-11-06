@@ -154,3 +154,11 @@ if __name__ == "__main__":
 
     sys.exit(0)
 `
+
+export const pythonNextScript = `
+#!/usr/bin/env python3
+# coding: utf-8
+
+with open('/utils/libs/platon/NextLib.py', 'r') as src:
+    exec(src.read() + '\\n' + next)
+`

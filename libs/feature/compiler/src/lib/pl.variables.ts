@@ -143,6 +143,8 @@ export interface ActivityVariables {
   author?: string
   settings?: ActivitySettings
 
+  activityGrade?: number
+
   nextExerciseId?: string
   next?: string
   exercisesMeta?: Record<string, ExerciseMeta>

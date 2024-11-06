@@ -135,6 +135,7 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
         autoNextGrade: 100,
       },
     },
+    activityGrade: 0,
     nextExerciseId: '',
     next: '',
     exerciseGroups: {},
@@ -664,9 +665,10 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
     if (!this.resourceFileSystemProvider.exists(nextUri)) {
       await this.resourceFileSystemProvider.write(
         nextUri,
-        this.activity.settings?.nextSettings?.sandbox == 'python'
-          ? '# TODO : from YankLib import *\n\n'
-          : '// TODO : import YankLib\n\n',
+        // this.activity.settings?.nextSettings?.sandbox == 'python'
+        //   ? 'from /utils/libs/platon/NextLib import *\n\n'
+        //   : '// TODO : import NextLib\n\n'
+        '',
         false
       )
     }

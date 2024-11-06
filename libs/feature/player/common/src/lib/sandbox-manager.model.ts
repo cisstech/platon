@@ -83,10 +83,8 @@ export class SandboxManager {
       throw new Error(`No sandbox found for the given source file`)
     }
 
-    console.log('variables', variables)
-
     if (variables.next || source.dependencies.length) {
-      const response = await sandbox.run(
+      const response = await sandbox.runNext(
         {
           files: source.dependencies.map((file) => ({
             path: file.alias || basename(file.abspath),
@@ -95,7 +93,6 @@ export class SandboxManager {
           })),
           variables,
         },
-        variables.next as string,
         10_0000
       )
 

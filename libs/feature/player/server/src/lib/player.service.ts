@@ -548,13 +548,13 @@ export class PlayerService extends PlayerManager {
       ...activitySession.variables,
       nextExerciseId: variables.nextExerciseId,
       navigation: variables.navigation,
+      activityGrade: variables.activityGrade,
     }
-
-    console.log('souivant :', activitySession.variables.nextExerciseId)
 
     await this.sessionService.update(activitySession.id, {
       envid: envid || undefined,
       variables: activitySession.variables,
+      grade: variables.activityGrade,
     })
 
     return activitySession

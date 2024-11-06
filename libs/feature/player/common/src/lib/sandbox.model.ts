@@ -27,6 +27,7 @@ export interface Sandbox {
   downloadEnvironment(envid: string): Promise<SandboxEnvironment>
   supports(input: SandboxInput): boolean
   run(input: SandboxInput, script: string, timeout: number): Promise<SandboxOutput>
+  runNext(input: SandboxInput, timeout: number): Promise<SandboxOutput>
 }
 
 export class SandboxError extends Error {
