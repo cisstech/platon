@@ -163,7 +163,7 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
   @ViewChild('theories')
   protected theoriesMenu!: MatMenu
 
-  protected index = 0
+  protected index = this.reviewMode ? this.players.length - 1 : 0
   protected loading = true
   protected fullscreen = false
   protected selectedTheory?: ExerciseTheory
@@ -338,7 +338,7 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnChanges(): void {
     if (this.players?.length) {
-      this.player = this.players[0]
+      this.player = this.players[this.index]
       this.clearNotification?.()
       this.clearNotification = undefined
     }
