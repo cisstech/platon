@@ -10,6 +10,7 @@ import {
   CourseLeaderboardEntry,
   FindActivityLeaderboard,
   FindCourseLeaderboard,
+  UserActivityResultsDistribution,
 } from '@platon/feature/result/common'
 import { Observable } from 'rxjs'
 
@@ -20,6 +21,11 @@ export abstract class ResultProvider {
 
   abstract sessionResults(sessionId: string): Observable<UserResults>
   abstract activityResults(activityId: string): Observable<ActivityResults>
+  abstract activityResultsForDate(
+    activityId: string,
+    startDate: number,
+    endDate: number
+  ): Observable<UserActivityResultsDistribution[]>
 
   abstract courseLeaderboard(input: FindCourseLeaderboard): Observable<CourseLeaderboardEntry[]>
   abstract activityLeaderboard(input: FindActivityLeaderboard): Observable<ActivityLeaderboardEntry[]>
