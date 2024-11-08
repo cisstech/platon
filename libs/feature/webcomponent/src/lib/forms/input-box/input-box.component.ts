@@ -35,6 +35,10 @@ export class InputBoxComponent implements OnInit, OnDestroy, WebComponentHooks<I
   protected readonly form = new FormControl()
   private dueTime = 300
 
+  protected specialCharactersGrid: string[][][] = []
+  private hasToUpdateCharacters = true
+  protected charactersPage = 0
+
   protected readonly $autocomplete: Observable<string[]> = this.form.valueChanges.pipe(
     startWith(''),
     map((value) => this.getSuggestions(value))
@@ -53,9 +57,40 @@ export class InputBoxComponent implements OnInit, OnDestroy, WebComponentHooks<I
       }
 
       if (this.state.value !== value) {
+        this.hasToUpdateCharacters = false
         this.state.value = value
       }
     })
+  }
+
+  private initSpecialCharactersGrid() {
+    let format = 0
+    for (const i in this.state.specialCharacters) {
+      if (this.state.specialCharacters[i] instanceof Array) {
+        if (format === 1) {
+          throw new Error('Special characters format is not correct (1)')
+        }
+        for (const j in this.state.specialCharacters[i]) {
+          if (this.state.specialCharacters[i][j] instanceof Array) {
+            if (format === 2) {
+              throw new Error('Special characters format is not correct (2)')
+            }
+            format = 3
+          } else {
+            format = 2
+          }
+        }
+      } else {
+        format = 1
+      }
+    }
+    if (format === 1) {
+      this.specialCharactersGrid = [[this.state.specialCharacters as string[]]]
+    } else if (format === 2) {
+      this.specialCharactersGrid = [this.state.specialCharacters as string[][]]
+    } else if (format === 3) {
+      this.specialCharactersGrid = this.state.specialCharacters as string[][][]
+    }
   }
 
   ngOnDestroy() {
@@ -75,6 +110,14 @@ export class InputBoxComponent implements OnInit, OnDestroy, WebComponentHooks<I
     this.containerStyles = {}
     if (this.state.width) {
       this.containerStyles['width'] = this.state.width
+    }
+
+    if (this.state.specialCharacters && this.hasToUpdateCharacters) {
+      this.initSpecialCharactersGrid()
+    }
+
+    if (!this.hasToUpdateCharacters) {
+      this.hasToUpdateCharacters = true
     }
   }
 
@@ -103,5 +146,27 @@ export class InputBoxComponent implements OnInit, OnDestroy, WebComponentHooks<I
     return this.state.completion.filter((option) => {
       return convert(option).includes(value)
     })
+  }
+
+  protected insertSpecialCharacter(char: string) {
+    this.form.setValue(this.form.value + char)
+  }
+
+  protected hasSpecialCharacters(): boolean {
+    for (const row of this.state.specialCharacters) {
+      if (row.length) {
+        return true
+      }
+    }
+    return false
+  }
+
+  protected navigateSpecialCharacters(pageChange: number): void {
+    this.charactersPage += pageChange
+    if (this.charactersPage < 0) {
+      this.charactersPage = this.specialCharactersGrid.length - 1
+    } else if (this.charactersPage >= this.specialCharactersGrid.length) {
+      this.charactersPage = 0
+    }
   }
 }

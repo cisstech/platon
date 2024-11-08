@@ -10,6 +10,8 @@ import { IDynamicModule } from '@cisstech/nge/services'
 import { IconGrPipe } from '@cisstech/nge/pipes'
 import { BaseModule } from '../../shared/components/base/base.module'
 import { InputBoxComponent } from './input-box.component'
+import { MatIconModule } from '@angular/material/icon'
+import { NzPopoverModule } from 'ng-zorro-antd/popover'
 
 @NgModule({
   declarations: [InputBoxComponent],
@@ -23,6 +25,9 @@ import { InputBoxComponent } from './input-box.component'
     MatInputModule,
     MatFormFieldModule,
     MatAutocompleteModule,
+    MatIconModule,
+
+    NzPopoverModule,
   ],
   exports: [InputBoxComponent],
 })
