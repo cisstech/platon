@@ -9,7 +9,7 @@ import {
   NotFoundResponse,
   UserRoles,
 } from '@platon/core/common'
-import { CourseService } from '../course.service'
+import { CourseService } from '../services/course.service'
 import { CourseMemberService } from '../course-member/course-member.service'
 import {
   CourseDemoAccessAnswerDTO,
@@ -20,6 +20,7 @@ import {
   CourseDemoGetRequestDTO,
   CourseDemoGetResponseDTO,
 } from './course-demo.dto'
+import { CourseMemberRoles } from '@platon/feature/course/common'
 
 @Controller('courses/demo')
 export class CourseDemoController {
@@ -41,7 +42,7 @@ export class CourseDemoController {
 
     if (req.user) {
       if (!(await this.courseMemberService.isMember(demo.course.id, req.user.id))) {
-        await this.courseMemberService.addUser(demo.course.id, req.user.id)
+        await this.courseMemberService.addUser(demo.course.id, req.user.id, CourseMemberRoles.student)
       }
       const resource = Mapper.map({ courseId: demo.course.id, auth: false }, CourseDemoAccessAnswerDTO)
       return new ItemResponse({ resource })
@@ -83,8 +84,8 @@ export class CourseDemoController {
     const optional = await this.courseService.findById(body.courseId)
     const course = optional.orElseThrow(() => new NotFoundResponse(`Course not found: ${body.courseId}`))
 
-    if (!(await this.courseMemberService.isMember(body.courseId, req.user.id))) {
-      throw new ForbiddenResponse(`You are not a member of this course`)
+    if (!(await this.courseMemberService.hasWritePermission(body.courseId, req.user))) {
+      throw new ForbiddenResponse(`You are not allowed to create a demo for this course`)
     }
 
     if ((await this.courseDemoService.findByCourseId(course.id)).isPresent()) {
@@ -100,8 +101,8 @@ export class CourseDemoController {
   @Roles(UserRoles.teacher, UserRoles.admin)
   @Delete(':courseId')
   async deleteDemo(@Req() req: IRequest, @Param() params: CourseDemoDeleteDTO): Promise<NoContentResponse> {
-    if (!(await this.courseMemberService.isMember(params.courseId, req.user.id))) {
-      throw new ForbiddenResponse(`You are not a member of this course`)
+    if (!(await this.courseMemberService.hasWritePermission(params.courseId, req.user))) {
+      throw new ForbiddenResponse(`You are not allowed to delete a demo for this course`)
     }
 
     if ((await this.courseDemoService.findByCourseId(params.courseId)).isEmpty()) {

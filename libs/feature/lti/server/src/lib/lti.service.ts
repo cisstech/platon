@@ -1,7 +1,7 @@
 import { DiscoveryService } from '@golevelup/nestjs-discovery'
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { NotFoundResponse, UserRoles } from '@platon/core/common'
+import { isTeacherRole, NotFoundResponse, UserRoles } from '@platon/core/common'
 import { UserService } from '@platon/core/server'
 import { LmsFilters, LmsOrdering, LMS_ORDERING_DIRECTIONS } from '@platon/feature/lti/common'
 import { Repository, In } from 'typeorm'
@@ -105,6 +105,20 @@ export class LTIService {
     )
   }
 
+  private retieveRole(payload: LTIPayload): UserRoles {
+    const isAdmin = Object.values(AdminRoles).find((role) => payload.roles.includes(role))
+    const isStudent = Object.values(StudentRoles).find((role) => payload.roles.includes(role))
+    const isTeacher = Object.values(InstructorRoles).find((role) => payload.roles.includes(role))
+
+    if (isTeacher || isAdmin) {
+      return UserRoles.teacher
+    } else if (isStudent) {
+      return UserRoles.student
+    }
+
+    return UserRoles.student
+  }
+
   /**
    * Retrieves or generates an user for the LMS user based on the provided LTI payload.
    * It first checks for the available username fields in the payload, and if none are found,
@@ -122,7 +136,12 @@ export class LTIService {
       },
       relations: ['user'],
     })
+    const role: UserRoles = this.retieveRole(payload)
     if (existing) {
+      if (!isTeacherRole(existing.user.role) && isTeacherRole(role)) {
+        existing.user.role = role
+        await this.userService.update(existing.user.id, { role })
+      }
       return existing
     }
 
@@ -141,18 +160,6 @@ export class LTIService {
     while ((await this.userService.findByUsername(username)).isPresent()) {
       username = `${name}${count}`
       count++
-    }
-
-    let role = UserRoles.student
-
-    const isAdmin = Object.values(AdminRoles).find((role) => payload.roles.includes(role))
-    const isStudent = Object.values(StudentRoles).find((role) => payload.roles.includes(role))
-    const isTeacher = Object.values(InstructorRoles).find((role) => payload.roles.includes(role))
-
-    if (isTeacher || isAdmin) {
-      role = UserRoles.teacher
-    } else if (isStudent) {
-      role = UserRoles.student
     }
 
     const user = await this.userService.create({

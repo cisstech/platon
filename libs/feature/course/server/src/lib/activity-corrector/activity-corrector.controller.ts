@@ -12,13 +12,15 @@ import { IRequest, Mapper, Roles, UUIDParam } from '@platon/core/server'
 import { ActivityCorrectorDTO, CreateActivityCorrectorDTO } from './activity-corrector.dto'
 import { ActivityCorrectorService } from './activity-corrector.service'
 import { ActivityService } from '../activity/activity.service'
+import { CourseMemberService } from '../course-member/course-member.service'
 
 @Controller('activities/:activityId/correctors')
 @ApiTags('Courses')
 export class ActivityCorrectorController {
   constructor(
     private readonly activityService: ActivityService,
-    private readonly activityCorrectorService: ActivityCorrectorService
+    private readonly activityCorrectorService: ActivityCorrectorService,
+    private readonly courseMemberService: CourseMemberService
   ) {}
 
   @Get()
@@ -37,7 +39,7 @@ export class ActivityCorrectorController {
     @UUIDParam('activityId') activityId: string,
     @Body() input: CreateActivityCorrectorDTO
   ): Promise<ItemResponse<ActivityCorrectorDTO>> {
-    await this.activityService.withActivity(activityId, (activity) => {
+    await this.activityService.withActivity(activityId, async (activity) => {
       if (!activity) {
         throw new NotFoundResponse(`Activity ${activityId} not found.`)
       }
@@ -46,8 +48,8 @@ export class ActivityCorrectorController {
         throw new ForbiddenResponse('Cannot update correctors of a challenge')
       }
 
-      if (activity.creatorId !== req.user.id) {
-        throw new ForbiddenResponse('You are not the creator of this activity')
+      if (!(await this.courseMemberService.hasWritePermission(activity.courseId, req.user))) {
+        throw new ForbiddenResponse('You cannot add correctors to this activity')
       }
     })
 
@@ -67,7 +69,7 @@ export class ActivityCorrectorController {
     @UUIDParam('activityId') activityId: string,
     @Body() input: CreateActivityCorrectorDTO[]
   ): Promise<ItemResponse<ActivityCorrectorDTO>> {
-    await this.activityService.withActivity(activityId, (activity) => {
+    await this.activityService.withActivity(activityId, async (activity) => {
       if (!activity) {
         throw new NotFoundResponse(`Activity ${activityId} not found.`)
       }
@@ -76,8 +78,8 @@ export class ActivityCorrectorController {
         throw new ForbiddenResponse('Cannot update correctors of a challenge')
       }
 
-      if (activity.creatorId !== req.user.id) {
-        throw new ForbiddenResponse('You are not the creator of this activity')
+      if (!(await this.courseMemberService.hasWritePermission(activity.courseId, req.user))) {
+        throw new ForbiddenResponse('You cannot update correctors of this activity')
       }
     })
 
@@ -94,7 +96,7 @@ export class ActivityCorrectorController {
     @UUIDParam('activityId') activityId: string,
     @UUIDParam('activityCorrectorId') activityCorrectorId: string
   ): Promise<NoContentResponse> {
-    await this.activityService.withActivity(activityId, (activity) => {
+    await this.activityService.withActivity(activityId, async (activity) => {
       if (!activity) {
         throw new NotFoundResponse(`Activity ${activityId} not found.`)
       }
@@ -103,8 +105,8 @@ export class ActivityCorrectorController {
         throw new ForbiddenResponse('Cannot update correctors of a challenge')
       }
 
-      if (activity.creatorId !== req.user.id) {
-        throw new ForbiddenResponse('You are not the creator of this activity')
+      if (!(await this.courseMemberService.hasWritePermission(activity.courseId, req.user))) {
+        throw new ForbiddenResponse('You cannot delete remove of this activity')
       }
     })
 

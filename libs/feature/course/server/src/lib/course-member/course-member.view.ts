@@ -1,5 +1,6 @@
-import { UserRoles } from '@platon/core/common'
 import { ViewColumn, ViewEntity } from 'typeorm'
+import { CourseMemberRoles } from '@platon/feature/course/common'
+import { UserRoles } from '@platon/core/common'
 
 /**
  * CourseMemberView represents a database view that selects distinct users from
@@ -16,7 +17,8 @@ import { ViewColumn, ViewEntity } from 'typeorm'
       u.first_name,
       u.last_name,
       u.email,
-      u.role,
+      u.role as user_role,
+      course_member.role,
       course_member.course_id,
       course.name as course_name,
       course_member.id as member_id
@@ -49,7 +51,10 @@ export class CourseMemberView {
   email!: string
 
   @ViewColumn()
-  role!: UserRoles
+  role!: CourseMemberRoles
+
+  @ViewColumn({ name: 'user_role' })
+  userRole!: UserRoles
 
   @ViewColumn({ name: 'course_id' })
   courseId!: string

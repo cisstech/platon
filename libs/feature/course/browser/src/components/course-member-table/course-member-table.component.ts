@@ -11,15 +11,23 @@ import {
   OnInit,
   Output,
 } from '@angular/core'
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
+import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { NzTableColumn, UserAvatarComponent, UserGroupDrawerComponent } from '@platon/core/browser'
-import { CourseMember, CourseMemberFilters } from '@platon/feature/course/common'
+import { CourseMember, CourseMemberFilters, CourseMemberRoles } from '@platon/feature/course/common'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm'
 import { NzTableModule, NzTableQueryParams } from 'ng-zorro-antd/table'
+import { CoursePipesModule } from '../../pipes/course-pipes.module'
+import { NzSelectModule } from 'ng-zorro-antd/select'
 
 type Value = string[] | undefined
+
+export interface ChangeRoleEvent {
+  member: CourseMember
+  newRole: CourseMemberRoles
+  previousRole: CourseMemberRoles
+}
 
 @Component({
   standalone: true,
@@ -41,9 +49,12 @@ type Value = string[] | undefined
     NzTableModule,
     NzButtonModule,
     NzPopconfirmModule,
+    NzSelectModule,
+    FormsModule,
 
     UserAvatarComponent,
     UserGroupDrawerComponent,
+    CoursePipesModule,
   ],
 })
 export class CourseMemberTableComponent implements OnInit, OnChanges, ControlValueAccessor {
@@ -61,11 +72,13 @@ export class CourseMemberTableComponent implements OnInit, OnChanges, ControlVal
 
   @Input() filters: CourseMemberFilters = {}
   @Output() filtersChange = new EventEmitter<CourseMemberFilters>()
+  @Output() changeRole = new EventEmitter<ChangeRoleEvent>()
 
   protected checked = false
   protected disabled = false
   protected indeterminate = false
   protected selection = new Set<string>()
+  protected role = 'student'
 
   protected columns: NzTableColumn<CourseMember>[] = []
 
@@ -125,6 +138,10 @@ export class CourseMemberTableComponent implements OnInit, OnChanges, ControlVal
             }
           : true,
       },
+      {
+        key: 'role',
+        name: 'Rôle',
+      },
     ]
   }
 
@@ -162,6 +179,11 @@ export class CourseMemberTableComponent implements OnInit, OnChanges, ControlVal
 
   protected onChangeFilter(filters: CourseMemberFilters): void {
     this.filtersChange.next({ ...this.filters, ...filters })
+  }
+
+  protected onChangeRole(member: CourseMember, newRole: CourseMemberRoles): void {
+    const previousRole = member.role || CourseMemberRoles.student
+    this.changeRole.next({ member, newRole, previousRole })
   }
 
   protected onQueryParamsChange(params: NzTableQueryParams): void {

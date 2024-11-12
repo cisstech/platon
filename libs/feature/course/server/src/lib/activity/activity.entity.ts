@@ -2,7 +2,7 @@ import { BaseEntity, UserEntity } from '@platon/core/server'
 import { ActivityVariables, PLSourceFile } from '@platon/feature/compiler'
 import { Activity, ActivityOpenStates, ActivityPermissions } from '@platon/feature/course/common'
 import { Column, Entity, Index, JoinColumn, ManyToOne, VirtualColumn } from 'typeorm'
-import { CourseEntity } from '../course.entity'
+import { CourseEntity } from '../entites/course.entity'
 import { CourseSectionEntity } from '../section/section.entity'
 
 @Entity('Activities')

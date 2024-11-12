@@ -12,13 +12,15 @@ import { IRequest, Mapper, Roles, UUIDParam } from '@platon/core/server'
 import { ActivityService } from '../activity/activity.service'
 import { ActivityMemberDTO, CreateActivityMemberDTO } from './activity-member.dto'
 import { ActivityMemberService } from './activity-member.service'
+import { CourseMemberService } from '../course-member/course-member.service'
 
 @Controller('activities/:activityId/members')
 @ApiTags('Courses')
 export class ActivityMemberController {
   constructor(
     private readonly activityService: ActivityService,
-    private readonly activityMemberService: ActivityMemberService
+    private readonly activityMemberService: ActivityMemberService,
+    private readonly courseMemberService: CourseMemberService
   ) {}
 
   @Get()
@@ -37,7 +39,7 @@ export class ActivityMemberController {
     @UUIDParam('activityId') activityId: string,
     @Body() input: CreateActivityMemberDTO
   ): Promise<ItemResponse<ActivityMemberDTO>> {
-    await this.activityService.withActivity(activityId, (activity) => {
+    await this.activityService.withActivity(activityId, async (activity) => {
       if (!activity) {
         throw new NotFoundResponse(`Activity ${activityId} not found.`)
       }
@@ -46,8 +48,8 @@ export class ActivityMemberController {
         throw new ForbiddenResponse('Cannot update members of a challenge')
       }
 
-      if (activity.creatorId !== req.user.id) {
-        throw new ForbiddenResponse('You are not the creator of this activity')
+      if (!(await this.courseMemberService.hasWritePermission(activity.courseId, req.user))) {
+        throw new ForbiddenResponse('You cannot add members to this activity')
       }
     })
 
@@ -64,7 +66,7 @@ export class ActivityMemberController {
     @UUIDParam('activityId') activityId: string,
     @Body() input: CreateActivityMemberDTO[]
   ): Promise<ItemResponse<ActivityMemberDTO>> {
-    await this.activityService.withActivity(activityId, (activity) => {
+    await this.activityService.withActivity(activityId, async (activity) => {
       if (!activity) {
         throw new NotFoundResponse(`Activity ${activityId} not found.`)
       }
@@ -73,8 +75,8 @@ export class ActivityMemberController {
         throw new ForbiddenResponse('Cannot update members of a challenge')
       }
 
-      if (activity.creatorId !== req.user.id) {
-        throw new ForbiddenResponse('You are not the creator of this activity')
+      if (!(await this.courseMemberService.hasWritePermission(activity.courseId, req.user))) {
+        throw new ForbiddenResponse('You cannot update members of this activity')
       }
     })
 
@@ -91,7 +93,7 @@ export class ActivityMemberController {
     @UUIDParam('activityId') activityId: string,
     @UUIDParam('activityMemberId') activityMemberId: string
   ): Promise<NoContentResponse> {
-    await this.activityService.withActivity(activityId, (activity) => {
+    await this.activityService.withActivity(activityId, async (activity) => {
       if (!activity) {
         throw new NotFoundResponse(`Activity ${activityId} not found.`)
       }
@@ -100,8 +102,8 @@ export class ActivityMemberController {
         throw new ForbiddenResponse('Cannot update members of a challenge')
       }
 
-      if (activity.creatorId !== req.user.id) {
-        throw new ForbiddenResponse('You are not the creator of this activity')
+      if (!(await this.courseMemberService.hasWritePermission(activity.courseId, req.user))) {
+        throw new ForbiddenResponse('You cannot delete members of this activity')
       }
     })
 

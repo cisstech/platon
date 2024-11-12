@@ -39,6 +39,14 @@ export default [
           ),
       },
       {
+        path: 'members',
+        loadChildren: () =>
+          import(
+            /* webpackChunkName: "course-members" */
+            './members/members.routes'
+          ),
+      },
+      {
         path: 'groups',
         loadChildren: () =>
           import(

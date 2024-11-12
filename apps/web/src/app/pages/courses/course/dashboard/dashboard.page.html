@@ -26,6 +26,7 @@
           Ajouter une activité
         </button>
         <course-csv-download-button
+          *ngIf="context.course?.permissions?.update"
           [activities]="activities"
           [name]="course.name"
           type="course"

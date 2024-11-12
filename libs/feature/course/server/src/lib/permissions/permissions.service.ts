@@ -21,12 +21,8 @@ export class CoursePermissionsService {
   }
 
   async ensureCourseWritePermission(courseId: string, req: IRequest): Promise<void> {
-    if (!(await this.courseMemberService.isMember(courseId, req.user.id))) {
-      throw new ForbiddenResponse('You are not a member of this course')
-    }
-
-    if (!isTeacherRole(req.user.role)) {
-      throw new ForbiddenResponse('You are not a teacher of this course')
+    if (!(await this.courseMemberService.hasWritePermission(courseId, req.user))) {
+      throw new ForbiddenResponse('You cannot modify this course')
     }
   }
 
@@ -45,12 +41,11 @@ export class CoursePermissionsService {
     }
   }
 
-  ensureActivityWritePermission(activity: ActivityEntity | null, req: IRequest): void {
+  async ensureActivityWritePermission(activity: ActivityEntity | null, req: IRequest): Promise<void> {
     if (!activity) {
       throw new NotFoundResponse(`Activity not found.`)
     }
-    if (activity.creatorId !== req.user.id) {
-      throw new ForbiddenResponse('You are not the creator of this activity')
-    }
+    if (activity.creatorId == req.user.id) return
+    await this.ensureCourseWritePermission(activity.courseId, req)
   }
 }

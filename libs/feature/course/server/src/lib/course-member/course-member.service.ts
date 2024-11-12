@@ -1,11 +1,20 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { UserOrderings, UserRoles, USER_ORDERING_DIRECTIONS } from '@platon/core/common'
+import {
+  UserOrderings,
+  USER_ORDERING_DIRECTIONS,
+  isTeacherRole,
+  NotFoundResponse,
+  ForbiddenResponse,
+  User,
+  UserRoles,
+} from '@platon/core/common'
 import { CourseMemberFilters } from '@platon/feature/course/common'
 import { In, Repository } from 'typeorm'
 import { Optional } from 'typescript-optional'
 import { CourseNotificationService } from '../course-notification/course-notification.service'
 import { CourseMemberEntity } from './course-member.entity'
+import { CourseMemberRoles } from '@platon/feature/course/common'
 import { CourseMemberView } from './course-member.view'
 
 @Injectable()
@@ -20,6 +29,10 @@ export class CourseMemberService {
     @InjectRepository(CourseMemberEntity)
     private readonly repository: Repository<CourseMemberEntity>
   ) {}
+
+  async getByUserIdAndCourseId(userId: string, courseId: string): Promise<Optional<CourseMemberEntity>> {
+    return Optional.ofNullable(await this.repository.findOne({ where: { userId, courseId } }))
+  }
 
   async findById(courseId: string, id: string): Promise<Optional<CourseMemberEntity>> {
     const query = this.repository.createQueryBuilder('member')
@@ -56,10 +69,10 @@ export class CourseMemberService {
     query.where('course_id = :courseId', { courseId })
 
     if (filters.roles?.length) {
-      if (filters.roles.includes(UserRoles.student)) {
-        query.andWhere('(group.id IS NOT NULL OR user.role IN (:...roles))', { roles: filters.roles })
+      if (filters.roles.includes(CourseMemberRoles.student)) {
+        query.andWhere('(group.id IS NOT NULL OR member.role IN (:...roles))', { roles: filters.roles })
       } else {
-        query.andWhere('user.role IN (:...roles)', { roles: filters.roles })
+        query.andWhere('member.role IN (:...roles)', { roles: filters.roles })
       }
     }
 
@@ -111,8 +124,8 @@ export class CourseMemberService {
     return [members, count]
   }
 
-  async addUser(courseId: string, userId: string): Promise<CourseMemberEntity> {
-    const member = await this.repository.save(this.repository.create({ courseId, userId }))
+  async addUser(courseId: string, userId: string, role: CourseMemberRoles): Promise<CourseMemberEntity> {
+    const member = await this.repository.save(this.repository.create({ courseId, userId, role }))
     this.notificationService
       .notifyCourseMemberBeingCreated(
         await this.view.find({
@@ -149,9 +162,30 @@ export class CourseMemberService {
     await this.repository.delete({ courseId, id: memberId })
   }
 
+  async updateRole(courseId: string, memberId: string, role: CourseMemberRoles): Promise<void> {
+    const memberView = await this.view.findOne({ where: { courseId, memberId } })
+    if (!memberView) {
+      throw new NotFoundResponse('Member not found')
+    }
+    if (role === CourseMemberRoles.teacher && !isTeacherRole(memberView.userRole)) {
+      throw new ForbiddenResponse('Only teachers can be assigned the role of teacher')
+    }
+    await this.repository.update({ courseId, id: memberId }, { role })
+  }
+
   async isMember(courseId: string, userId: string): Promise<boolean> {
     const result = await this.view.findOne({
       where: { courseId, id: userId },
+    })
+    return result != null
+  }
+
+  async hasWritePermission(courseId: string, user: User): Promise<boolean> {
+    if (user.role === UserRoles.admin) {
+      return true
+    }
+    const result = await this.view.findOne({
+      where: { courseId, id: user.id, role: CourseMemberRoles.teacher },
     })
     return result != null
   }

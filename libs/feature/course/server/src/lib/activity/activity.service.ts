@@ -35,6 +35,7 @@ import { CourseGroupMemberEntity } from '../course-group-member/course-group-mem
 import { CourseGroupEntity } from '../course-group/course-group.entity'
 import { ActivityGroupEntity } from '../activity-group/activity-group.entity'
 import { ActivityGroupService } from '../activity-group/activity-group.service'
+import { CourseMemberService } from '../course-member/course-member.service'
 
 type ActivityGuard = (activity: ActivityEntity) => void | Promise<void>
 
@@ -51,6 +52,7 @@ export class ActivityService {
     private readonly notificationService: CourseNotificationService,
     private readonly activityMemberService: ActivityMemberService,
     private readonly activityCorrectorService: ActivityCorrectorService,
+    private readonly courseMemberService: CourseMemberService,
 
     @InjectRepository(ActivityEntity)
     private readonly repository: Repository<ActivityEntity>,
@@ -337,25 +339,31 @@ export class ActivityService {
         })
       : []
 
-    activities.forEach((activity) => {
-      const title = activity.source.variables.title as string
-      const exerciseGroups = (activity.source.variables.exerciseGroups as Record<string, ActivityExerciseGroup>) || {}
-      Object.assign(activity, {
-        state: calculateActivityOpenState(activity),
-        title: title?.trim() || resources.find((r) => r.id === activity.source.resource)?.name,
-        resourceId: activity.source.resource,
-        exerciseCount: Object.keys(exerciseGroups).reduce(
-          (acc, group) => acc + exerciseGroups[group].exercises.length,
-          0
-        ),
-        permissions: {
-          answer: true,
-          update: isTeacherRole(this.request.user.role),
-          viewStats: isTeacherRole(this.request.user.role),
-          viewResource: isTeacherRole(this.request.user.role),
-        },
-      } as Partial<ActivityEntity>)
-    })
+    await Promise.all(
+      activities.map(async (activity) => {
+        const title = activity.source.variables.title as string
+        const exerciseGroups = (activity.source.variables.exerciseGroups as Record<string, ActivityExerciseGroup>) || {}
+        const hasWritePermission = await this.courseMemberService.hasWritePermission(
+          activity.courseId,
+          this.request.user
+        )
+        Object.assign(activity, {
+          state: calculateActivityOpenState(activity),
+          title: title?.trim() || resources.find((r) => r.id === activity.source.resource)?.name,
+          resourceId: activity.source.resource,
+          exerciseCount: Object.keys(exerciseGroups).reduce(
+            (acc, group) => acc + exerciseGroups[group].exercises.length,
+            0
+          ),
+          permissions: {
+            answer: true,
+            update: hasWritePermission,
+            viewStats: hasWritePermission,
+            viewResource: hasWritePermission,
+          },
+        } as Partial<ActivityEntity>)
+      })
+    )
 
     await this.databaseService.resolveVirtualColumns(ActivityEntity, activities, this.request.user)
   }

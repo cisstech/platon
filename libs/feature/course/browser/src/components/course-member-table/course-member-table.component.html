@@ -48,6 +48,19 @@
         />
       </td>
       <td>{{ member.createdAt | date }}</td>
+      <td>
+        @if (editable) {
+        <nz-select
+          [nzDisabled]="nonDeletables.includes($any(member.user?.id || member.group?.id))"
+          [ngModel]="member.role"
+          (ngModelChange)="onChangeRole(member, $event)"
+        >
+          <nz-option nzValue="student" nzLabel="Étudiant"></nz-option>
+          <nz-option nzValue="teacher" nzLabel="Enseignant"></nz-option> </nz-select
+        >} @else {
+        {{ member.role | displayCourseMemberRole }}
+        }
+      </td>
       <td
         nzAlign="center"
         *ngIf="editable && !disabled && !nonDeletables.includes($any(member.user?.id || member.group?.id))"

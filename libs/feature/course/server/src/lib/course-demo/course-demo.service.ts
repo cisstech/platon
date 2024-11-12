@@ -2,11 +2,12 @@ import { Injectable } from '@nestjs/common'
 import { CourseDemoEntity } from './course-demo.entity'
 import { Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
-import { CourseEntity } from '../course.entity'
+import { CourseEntity } from '../entites/course.entity'
 import { AuthToken } from '@platon/core/common'
 import { AuthService } from '@platon/core/server'
 import { CourseMemberService } from '../course-member/course-member.service'
 import { Optional } from 'typescript-optional'
+import { CourseMemberRoles } from '@platon/feature/course/common'
 
 @Injectable()
 export class CourseDemoService {
@@ -45,7 +46,7 @@ export class CourseDemoService {
 
   async registerToDemo(demo: CourseDemoEntity): Promise<AuthToken> {
     const { authToken, userId } = await this.authService.signInDemo()
-    await this.courseMemberService.addUser(demo.course.id, userId)
+    await this.courseMemberService.addUser(demo.course.id, userId, CourseMemberRoles.student)
     return authToken
   }
 

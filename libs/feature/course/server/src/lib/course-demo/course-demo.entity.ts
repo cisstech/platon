@@ -1,6 +1,6 @@
 import { BaseEntity } from '@platon/core/server'
 import { Entity, JoinColumn, OneToOne } from 'typeorm'
-import { CourseEntity } from '../course.entity'
+import { CourseEntity } from '../entites/course.entity'
 
 @Entity('CourseDemos')
 export class CourseDemoEntity extends BaseEntity {
