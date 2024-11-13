@@ -86,6 +86,10 @@ export class CourseMemberTableComponent implements OnInit, OnChanges, ControlVal
     return this.filtersChange.observed
   }
 
+  protected get canChangeRole(): boolean {
+    return this.editable && this.type === 'cours' && this.changeRole.observed
+  }
+
   constructor(private readonly changeDetectorRef: ChangeDetectorRef) {}
 
   // ControlValueAccessor methods

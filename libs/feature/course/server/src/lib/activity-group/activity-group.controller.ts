@@ -35,7 +35,7 @@ export class ActivityGroupController {
 
   @Roles(UserRoles.teacher, UserRoles.admin)
   @Delete(':groupId')
-  async delete(@UUIDParam('activityId') activityId: string, @UUIDParam('groupId') groupId: string): Promise<void> {
+  async delete(@UUIDParam('activityId') activityId: string, @Param('groupId') groupId: string): Promise<void> {
     await this.activityGroupService.delete(activityId, groupId)
   }
 

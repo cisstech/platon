@@ -17,7 +17,7 @@ export class CourseGroupMemberController {
   @Get(':groupId')
   async list(
     @UUIDParam('courseId') courseId: string,
-    @UUIDParam('groupId') groupId: string
+    @Param('groupId') groupId: string
   ): Promise<ListResponse<CourseMemberDTO>> {
     const items = await this.courseGroupMemberService.listCourseGroupMembers(groupId)
     const members = (await this.courseMemberService.search(courseId))[0]
@@ -65,7 +65,7 @@ export class CourseGroupMemberController {
   async delete(
     @Req() req: IRequest,
     @UUIDParam('courseId') courseId: string,
-    @UUIDParam('groupId') groupId: string,
+    @Param('groupId') groupId: string,
     @UUIDParam('userId') userId: string
   ): Promise<NoContentResponse> {
     if (!(await this.courseGroupMemberService.isMember(groupId, userId))) {
@@ -80,7 +80,7 @@ export class CourseGroupMemberController {
   @Post(':groupId/:userId')
   async create(
     @Req() req: IRequest,
-    @UUIDParam('groupId') groupId: string,
+    @Param('groupId') groupId: string,
     @UUIDParam('userId') userId: string
   ): Promise<NoContentResponse> {
     if (await this.courseGroupMemberService.isMember(groupId, userId)) {

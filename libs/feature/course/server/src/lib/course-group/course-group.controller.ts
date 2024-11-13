@@ -27,7 +27,7 @@ export class CourseGroupController {
   @Patch('/:groupId/')
   async update(
     @Req() req: IRequest,
-    @UUIDParam('groupId') groupId: string,
+    @Param('groupId') groupId: string,
     @Body() input: UpdateGroupDTO
   ): Promise<ItemResponse<CourseGroupDTO>> {
     const resource = Mapper.map(await this.courseGroupService.update(groupId, input), CourseGroupDTO)
@@ -43,7 +43,7 @@ export class CourseGroupController {
 
   @Roles(UserRoles.teacher, UserRoles.admin)
   @Delete('/:groupId/')
-  async delete(@Req() req: IRequest, @UUIDParam('groupId') groupId: string): Promise<void> {
+  async delete(@Req() req: IRequest, @Param('groupId') groupId: string): Promise<void> {
     await this.courseGroupMemberService.deleteAllMembersFromGroup(groupId)
     await this.courseGroupService.delete(groupId)
   }

@@ -49,7 +49,7 @@
       </td>
       <td>{{ member.createdAt | date }}</td>
       <td>
-        @if (editable) {
+        @if (canChangeRole) {
         <nz-select
           [nzDisabled]="nonDeletables.includes($any(member.user?.id || member.group?.id))"
           [ngModel]="member.role"

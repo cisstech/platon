@@ -33,7 +33,7 @@ export class CourseLTIInterceptor implements LTILaunchInterceptor {
 
   async intercept(args: LTILaunchInterceptorArgs): Promise<void> {
     const courseMatch = args.nextUrl.match(/\/courses\/(?<courseId>[^\\/]+)/)
-    const courseId = courseMatch?.groups?.['courseId']
+    let courseId = courseMatch?.groups?.['courseId']
     const { user } = args.lmsUser
     if (courseId) {
       const courseMemberOptional = await this.courseMemberService.getByUserIdAndCourseId(user.id, courseId)
@@ -41,10 +41,12 @@ export class CourseLTIInterceptor implements LTILaunchInterceptor {
         (member) =>
           member.role === this.getRoleFromPayload(args.payload)
             ? member
-            : this.courseMemberService.updateRole(courseId, member.id, this.getRoleFromPayload(args.payload)),
+            : // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              this.courseMemberService.updateRole(courseId!, member.id, this.getRoleFromPayload(args.payload)),
         () => {
           this.logger.log(`LTI: Adding ${user.username} to course ${courseId}`)
-          return this.courseMemberService.addUser(courseId, user.id, this.getRoleFromPayload(args.payload))
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          return this.courseMemberService.addUser(courseId!, user.id, this.getRoleFromPayload(args.payload))
         }
       )
     } else {
@@ -57,15 +59,17 @@ export class CourseLTIInterceptor implements LTILaunchInterceptor {
           desc: `Cours PLaTOn rattaché à : ${args.payload['context_title']}`,
           ownerId: user.id,
         })
+        courseId = course.id
         await this.lmsCourseService.create({
           lmsId: args.lms.id,
           lmsCourseId: args.payload['context_id'],
-          courseId: course.id,
+          courseId,
         })
         args.nextUrl = `/courses/${course.id}`
       } else if (!lmsCourse.isPresent() && this.getRoleFromPayload(args.payload) !== CourseMemberRoles.teacher) {
         args.nextUrl = '/courses/not-found'
       } else {
+        courseId = lmsCourse.get().courseId
         args.nextUrl = `/courses/${lmsCourse.get().courseId}`
       }
     }
