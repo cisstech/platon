@@ -43,6 +43,7 @@ import { ActivityGroupController } from './activity-group/activity-group.control
 import { ActivityGroupService } from './activity-group/activity-group.service'
 import { LmsCourseEntity } from './entites/lms-course.entity'
 import { LmsCourseService } from './services/lms-course.service'
+import { ActivityListeners } from './activity/activity.listeners'
 
 @Module({
   imports: [
@@ -90,6 +91,7 @@ import { LmsCourseService } from './services/lms-course.service'
     CourseMemberService,
     CourseSectionService,
     ActivityService,
+    ActivityListeners,
     ActivityMemberService,
     ActivityCorrectorService,
     CourseNotificationService,

@@ -1,7 +1,16 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { NotFoundResponse } from '@platon/core/common'
-import { EventService, LevelService, TopicService, UserEntity } from '@platon/core/server'
+import {
+  EventService,
+  LevelService,
+  TopicService,
+  UserEntity,
+  ON_TOPIC_FUSION_EVENT,
+  ON_LEVEL_FUSION_EVENT,
+  OnLevelFusionEventPayload,
+  OnTopicFusionEventPayload,
+} from '@platon/core/server'
 import {
   CircleTree,
   RESOURCE_ORDERING_DIRECTIONS,
@@ -24,8 +33,6 @@ import { ON_CREATE_RESOURCE_EVENT, OnCreateResourceEventPayload } from './resour
 import { ResourceStatisticEntity } from './statistics'
 import { ResourceWatcherEntity } from './watchers'
 import { OnEvent } from '@nestjs/event-emitter'
-import { ON_TOPIC_FUSION_EVENT, OnTopicFusionEventPayload } from 'libs/core/server/src/lib/topics/topic.event'
-import { ON_LEVEL_FUSION_EVENT, OnLevelFusionEventPayload } from 'libs/core/server/src/lib/levels/level.event'
 
 @Injectable()
 export class ResourceService {

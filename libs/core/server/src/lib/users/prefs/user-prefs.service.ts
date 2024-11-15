@@ -28,6 +28,7 @@ export class UserPrefsService {
         return this.repository.save(pref)
       })
     )
+    Logger.log(`Merging levels ${oldLevel.name} into ${newLevel.name}`, 'UserPrefsService')
   }
 
   @OnEvent(ON_TOPIC_FUSION_EVENT)
