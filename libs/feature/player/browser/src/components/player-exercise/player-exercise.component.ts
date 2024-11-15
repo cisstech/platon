@@ -317,7 +317,9 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnInit(): void {
     this.index = this.reviewMode && !this.peerComparison ? this.players.length - 1 : 0
-    this.player = this.players[this.index]
+    if (!this.player) {
+      this.player = this.players[this.index]
+    }
     this.requestFullscreen =
       this.container.nativeElement.requestFullscreen ||
       this.container.nativeElement.webkitRequestFullscreen ||
