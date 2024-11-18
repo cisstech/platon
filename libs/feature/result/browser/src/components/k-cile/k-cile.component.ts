@@ -10,10 +10,10 @@ import {
   ViewChild,
 } from '@angular/core'
 import * as echarts from 'echarts/core'
-import { GridComponent } from 'echarts/components'
+import { GridComponent, TitleComponent, TooltipComponent } from 'echarts/components'
 import { BarChart } from 'echarts/charts'
 import { CanvasRenderer } from 'echarts/renderers'
-import { EChartsOption, SeriesOption } from 'echarts'
+import { EChartsOption, SeriesOption, TitleComponentOption, TooltipComponentOption } from 'echarts'
 import { UserActivityResultsDistribution } from '@platon/feature/result/common'
 
 @Component({
@@ -73,7 +73,7 @@ export class KCileComponent implements AfterViewInit {
   }
 
   constructor() {
-    echarts.use([GridComponent, BarChart, CanvasRenderer])
+    echarts.use([GridComponent, BarChart, CanvasRenderer, TitleComponent, TooltipComponent])
   }
 
   ngAfterViewInit(): void {
@@ -170,9 +170,9 @@ export class KCileComponent implements AfterViewInit {
         additionalData.push({ date: '', value: 0 })
       }
       additionalData.sort((a, b) => a.value - b.value)
-
-      additionalBars = this.constructBar(Math.min(this.selectedBucket, additionalData.length), additionalData)
-      bars = this.constructBar(Math.min(this.selectedBucket, additionalData.length), lastDatas)
+      const maxBar = Math.min(this.selectedBucket, additionalData.length)
+      additionalBars = this.constructBar(maxBar, additionalData)
+      bars = this.constructBar(maxBar, lastDatas)
 
       bars.forEach((_, i) => {
         bars[i] = bars[i] - additionalBars[i]
@@ -184,7 +184,26 @@ export class KCileComponent implements AfterViewInit {
       bars = this.constructBar(this.selectedBucket, lastDatas)
     }
 
+    const style = getComputedStyle(document.body)
+    const primCol = style.getPropertyValue('--brand-text-primary')
+    console.error(primCol)
     const option: EChartsOption = {
+      title: {
+        text: "Histogramme des k-ciles d'avancement de l'activité",
+        left: 'center',
+        top: 'top',
+        textStyle: {
+          color: primCol,
+          fontSize: 16,
+          fontWeight: 'bold',
+        },
+      } as TitleComponentOption,
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'shadow',
+        },
+      } as TooltipComponentOption,
       xAxis: {
         type: 'category',
         data: bars.map((_, i) => i),
@@ -199,7 +218,17 @@ export class KCileComponent implements AfterViewInit {
           stack: 'total',
           name: 'Additional Data',
           itemStyle: {
-            color: '#a8d3da',
+            color: '#faa43a',
+          },
+          label: {
+            show: true,
+            position: 'inside',
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            formatter: (params: any) => {
+              const value = params.value.toFixed(1)
+              return `+${value}`
+            },
+            color: '#ffffff',
           },
         } as SeriesOption,
         {
@@ -208,7 +237,17 @@ export class KCileComponent implements AfterViewInit {
           type: 'bar',
           name: 'final Data',
           itemStyle: {
-            color: '#f4a261',
+            color: '#f15854',
+          },
+          label: {
+            show: true,
+            position: 'top',
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            formatter: (params: any) => {
+              const value = params.value.toFixed(1)
+              return `+${value}`
+            },
+            color: primCol, // Couleur du texte du label
           },
         } as SeriesOption,
       ],
