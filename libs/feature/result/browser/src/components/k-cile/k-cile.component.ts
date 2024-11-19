@@ -186,7 +186,6 @@ export class KCileComponent implements AfterViewInit {
 
     const style = getComputedStyle(document.body)
     const primCol = style.getPropertyValue('--brand-text-primary')
-    console.error(primCol)
     const option: EChartsOption = {
       title: {
         text: "Histogramme des k-ciles d'avancement de l'activité",
@@ -207,16 +206,32 @@ export class KCileComponent implements AfterViewInit {
       xAxis: {
         type: 'category',
         data: bars.map((_, i) => i),
+        axisLabel: {
+          formatter: (value: any) => {
+            return `${value * this.selectedBucket} - ${(parseInt(value) + 1) * this.selectedBucket}`
+          },
+          color: primCol,
+        },
+        name: bars.length + ' groupes de ' + this.selectedBucket + ' élèves',
+        nameLocation: 'middle',
+        nameTextStyle: {
+          height: 29,
+          padding: [20, 20, 20, 20],
+        },
       },
       yAxis: {
         type: 'value',
+        axisLabel: {
+          color: primCol,
+        },
+        name: "Nombre d'exercices réussis",
       },
       series: [
         {
           data: additionalBars,
           type: 'bar',
           stack: 'total',
-          name: 'Additional Data',
+          name: 'Moyenne du début de la période à la date de séparation',
           itemStyle: {
             color: '#faa43a',
           },
@@ -235,7 +250,7 @@ export class KCileComponent implements AfterViewInit {
           data: bars,
           stack: 'total',
           type: 'bar',
-          name: 'final Data',
+          name: 'Moyenne à la fin de la période',
           itemStyle: {
             color: '#f15854',
           },
