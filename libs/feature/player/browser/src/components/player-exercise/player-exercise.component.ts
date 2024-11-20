@@ -389,6 +389,10 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
     return item.tooltip
   }
 
+  public getAnswers(): Record<string, unknown> {
+    return this.answers()
+  }
+
   private answers(): Record<string, unknown> {
     const answers: Record<string, unknown> = {}
     this.forEachComponent((component) => {

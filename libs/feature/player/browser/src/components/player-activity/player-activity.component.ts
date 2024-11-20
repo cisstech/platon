@@ -127,6 +127,10 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
     return this.player.settings?.navigation?.mode === 'composed'
   }
 
+  protected get manual(): boolean {
+    return this.player.settings?.navigation?.mode === 'manual'
+  }
+
   protected get peerComparison(): boolean {
     return this.player.settings?.navigation?.mode === 'peer'
   }
@@ -320,10 +324,23 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
     this.changeDetectorRef.markForCheck()
   }
 
+  private saveAnswersToSessionStorage(): void {
+    this.playerExerciseComponents.forEach((component) => {
+      const componentAnswers = component.getAnswers()
+      for (const key in componentAnswers) {
+        sessionStorage.setItem('component-' + key, JSON.stringify(componentAnswers[key]))
+      }
+    })
+  }
+
   protected async play(exercise: PlayerExercise) {
     if (this.composed) {
       this.jumpToExercise(exercise)
       return
+    }
+
+    if (this.manual && this.player.navigation.current && this.player.navigation.current.sessionId) {
+      this.saveAnswersToSessionStorage()
     }
 
     if (this.nextNavigation) {
