@@ -19,6 +19,7 @@ import { InputBoxComponentDefinition, InputBoxState } from './input-box'
   selector: 'wc-input-box',
   templateUrl: 'input-box.component.html',
   styleUrls: ['input-box.component.scss'],
+  styles: [':host { display: inline-flex; }'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 @WebComponent(InputBoxComponentDefinition)
@@ -33,7 +34,7 @@ export class InputBoxComponent implements OnInit, OnDestroy, WebComponentHooks<I
   protected containerStyles: Record<string, string> = {}
 
   protected readonly form = new FormControl()
-  private dueTime = 300
+  private dueTime = 50
 
   protected specialCharactersGrid: string[][][] = []
   private hasToUpdateCharacters = true
@@ -101,15 +102,20 @@ export class InputBoxComponent implements OnInit, OnDestroy, WebComponentHooks<I
     this.form.setValue(this.state.value, {
       emitEvent: false,
     })
-
     this.form.enable({ emitEvent: false })
     if (this.state.disabled) {
       this.form.disable({ emitEvent: false })
     }
 
-    this.containerStyles = {}
-    if (this.state.width) {
+    if (this.state.width && this.state.width !== 'auto') {
       this.containerStyles['width'] = this.state.width
+    }
+
+    if (this.state.width && this.state.width === 'auto') {
+      setTimeout(() => {
+        this.containerStyles['width'] =
+          Math.max((this.state.value as string).length + 13, this.state.placeholder.length) + 1 + 'ch' // magic number for mat-input
+      }, 0)
     }
 
     if (this.state.specialCharacters && this.hasToUpdateCharacters) {
