@@ -119,11 +119,7 @@ export class InputBoxComponent implements OnInit, OnDestroy, WebComponentHooks<I
     }
 
     if (this.state.width && this.state.width === 'auto') {
-      const minWidth = this.hasSpecialCharacters() ? 128 : 64
-      const width = this.hasSpecialCharacters()
-        ? this.invTextER?.nativeElement.offsetWidth + minWidth
-        : Math.max(this.invTextER?.nativeElement.offsetWidth + 16, minWidth)
-      setTimeout(() => (this.containerStyles['width'] = width + 'px'), 0)
+      this.runAutoStyle()
     }
 
     if (this.state.specialCharacters && this.hasToUpdateCharacters) {
@@ -181,6 +177,23 @@ export class InputBoxComponent implements OnInit, OnDestroy, WebComponentHooks<I
       this.charactersPage = this.specialCharactersGrid.length - 1
     } else if (this.charactersPage >= this.specialCharactersGrid.length) {
       this.charactersPage = 0
+    }
+  }
+
+  private runAutoStyle(): void {
+    if ((this.state.value as string).length === 0) {
+      this.containerStyles['width'] = this.state.width
+    } else {
+      let minWidth = this.hasSpecialCharacters() ? 128 : 64
+      if (this.state.completion) {
+        //get the max length of completion tabs
+        const maxLength = this.state.completion.reduce((max, s) => Math.max(max, s.length), 0)
+        minWidth = Math.max(minWidth, maxLength * 16)
+      }
+      const width = this.hasSpecialCharacters()
+        ? this.invTextER?.nativeElement.offsetWidth + minWidth
+        : Math.max(this.invTextER?.nativeElement.offsetWidth + 16, minWidth)
+      setTimeout(() => (this.containerStyles['width'] = width + 'px'), 0)
     }
   }
 }
