@@ -14,6 +14,7 @@ mat-form-field {
 
   &.no-prefix {
     margin: 0;
+    display: none;
   }
 }
 
@@ -37,7 +38,7 @@ mat-form-field {
   }
   &.no-suffix {
     margin: 0;
-    visibility: hidden;
+    display: none;
   }
 }
 
@@ -99,4 +100,19 @@ mat-form-field {
     transition: all 0.3s ease;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
+}
+
+#invisibleTextID {
+  white-space: pre;
+  visibility: hidden;
+  max-width: 30%;
+
+  position: absolute;
+  height: 0;
+  overflow: hidden;
+
+}
+
+::ng-deep mat-label {
+  padding-left: 8px;
 }
