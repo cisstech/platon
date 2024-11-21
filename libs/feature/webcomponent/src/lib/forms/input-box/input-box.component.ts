@@ -1,12 +1,14 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
   EventEmitter,
   Injector,
   Input,
   OnDestroy,
   OnInit,
   Output,
+  ViewChild,
 } from '@angular/core'
 import { FormControl } from '@angular/forms'
 import { Observable, Subscription } from 'rxjs'
@@ -19,7 +21,10 @@ import { InputBoxComponentDefinition, InputBoxState } from './input-box'
   selector: 'wc-input-box',
   templateUrl: 'input-box.component.html',
   styleUrls: ['input-box.component.scss'],
-  styles: [':host { display: inline-flex; }'],
+  host: {
+    '[style.display]': `state.width === 'auto' ? 'inline-flex' : ''`,
+    '[style.width]': `state.width !== 'auto' ? '100%' : ''`,
+  },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 @WebComponent(InputBoxComponentDefinition)
@@ -98,6 +103,8 @@ export class InputBoxComponent implements OnInit, OnDestroy, WebComponentHooks<I
     this.subscription?.unsubscribe()
   }
 
+  @ViewChild('invisibleText') invTextER: ElementRef | undefined
+
   onChangeState() {
     this.form.setValue(this.state.value, {
       emitEvent: false,
@@ -112,10 +119,11 @@ export class InputBoxComponent implements OnInit, OnDestroy, WebComponentHooks<I
     }
 
     if (this.state.width && this.state.width === 'auto') {
-      setTimeout(() => {
-        this.containerStyles['width'] =
-          Math.max((this.state.value as string).length + 13, this.state.placeholder.length) + 1 + 'ch' // magic number for mat-input
-      }, 0)
+      const minWidth = this.hasSpecialCharacters() ? 128 : 64
+      const width = this.hasSpecialCharacters()
+        ? this.invTextER?.nativeElement.offsetWidth + minWidth
+        : Math.max(this.invTextER?.nativeElement.offsetWidth + 16, minWidth)
+      setTimeout(() => (this.containerStyles['width'] = width + 'px'), 0)
     }
 
     if (this.state.specialCharacters && this.hasToUpdateCharacters) {

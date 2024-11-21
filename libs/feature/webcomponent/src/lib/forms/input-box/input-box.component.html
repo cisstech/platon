@@ -31,11 +31,18 @@
 
 <!-- TEXT -->
 @case ('text') {
-<div class="input-box">
+<div>
   <mat-form-field [ngStyle]="containerStyles" [appearance]="state.appearance">
     <mat-label>{{ state.placeholder }}</mat-label>
     <mat-hint>{{ state.hint }}</mat-hint>
-    <input matInput type="text" [formControl]="form" [matAutocomplete]="auto" (keydown.enter)="autoValidate()" />
+    <input
+      matInput
+      type="text"
+      [formControl]="form"
+      [matAutocomplete]="auto"
+      (keydown.enter)="autoValidate()"
+      [ngStyle]="{ 'justify-items': state.width === 'auto' ? 'center' : 'start' }"
+    />
     <mat-autocomplete #auto="matAutocomplete">
       <mat-option *ngFor="let option of $autocomplete | async" [value]="option">
         {{ option }}
@@ -64,6 +71,9 @@
     </div>
   </mat-form-field>
 </div>
+<span *ngIf="state.width === 'auto'" #invisibleText id="invisibleTextID">
+  {{ state.value }}
+</span>
 }
 
 <!-- TEXTAREA -->
