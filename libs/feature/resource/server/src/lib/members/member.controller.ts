@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Patch, Post, Query, Req } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import {
   ErrorResponse,
@@ -8,7 +8,7 @@ import {
   NoContentResponse,
   UserRoles,
 } from '@platon/core/common'
-import { IRequest, Mapper, Roles } from '@platon/core/server'
+import { IRequest, Mapper, Roles, UUIDParam } from '@platon/core/server'
 import { ResourceMemberDTO, ResourceMemberFiltersDTO, UpdateResourceMemberDTO } from './member.dto'
 import { ResourceMemberService } from './member.service'
 
@@ -19,7 +19,7 @@ export class ResourceMemberController {
 
   @Get()
   async search(
-    @Param('resourceId') resourceId: string,
+    @UUIDParam('resourceId') resourceId: string,
     @Query() filters: ResourceMemberFiltersDTO = {}
   ): Promise<ListResponse<ResourceMemberDTO>> {
     const [items, total] = await this.service.search(resourceId, filters)
@@ -29,8 +29,8 @@ export class ResourceMemberController {
 
   @Get('/:userId')
   async find(
-    @Param('userId') userId: string,
-    @Param('resourceId') resourceId: string
+    @UUIDParam('userId') userId: string,
+    @UUIDParam('resourceId') resourceId: string
   ): Promise<ItemResponse<ResourceMemberDTO>> {
     const optional = await this.service.findByUserId(resourceId, userId)
     const resource = Mapper.map(
@@ -47,7 +47,10 @@ export class ResourceMemberController {
   }
 
   @Post()
-  async post(@Req() req: IRequest, @Param('resourceId') resourceId: string): Promise<ItemResponse<ResourceMemberDTO>> {
+  async post(
+    @Req() req: IRequest,
+    @UUIDParam('resourceId') resourceId: string
+  ): Promise<ItemResponse<ResourceMemberDTO>> {
     const resource = Mapper.map(
       await this.service.create({
         resourceId,
@@ -68,8 +71,8 @@ export class ResourceMemberController {
   @Patch('/:userId')
   async update(
     @Req() req: IRequest,
-    @Param('userId') userId: string,
-    @Param('resourceId') resourceId: string,
+    @UUIDParam('userId') userId: string,
+    @UUIDParam('resourceId') resourceId: string,
     @Body() input: UpdateResourceMemberDTO
   ): Promise<ItemResponse<ResourceMemberDTO>> {
     const resource = Mapper.map(
@@ -86,8 +89,8 @@ export class ResourceMemberController {
   @Delete('/:userId')
   async delete(
     @Req() req: IRequest,
-    @Param('userId') userId: string,
-    @Param('resourceId') resourceId: string
+    @UUIDParam('userId') userId: string,
+    @UUIDParam('resourceId') resourceId: string
   ): Promise<NoContentResponse> {
     if (req.user.id !== userId && req.user.role !== 'admin') {
       throw new ForbiddenResponse('You are not allowed to delete this resource member')

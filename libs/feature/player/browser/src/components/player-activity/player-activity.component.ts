@@ -52,6 +52,7 @@ import { NotificationService } from '@platon/feature/notification/browser'
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzProgressModule } from 'ng-zorro-antd/progress'
+import { HttpErrorResponse } from '@angular/common/http'
 
 @Component({
   standalone: true,
@@ -107,6 +108,7 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
   protected hasPrev?: boolean
   protected position = 0
   protected exercises?: ExercisePlayer[]
+  protected answers: ExercisePlayer[] = []
   protected navExerciceCount = 0
   protected terminatedAfterLoseFocus = false
   protected terminatedAfterLeavePage = false
@@ -114,11 +116,27 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
   protected onVisibilityChangeFn = this.onVisibilityChange.bind(this)
   protected onKeydownFn = this.onKeydown.bind(this)
   protected onContextMenuFn = this.onContextMenu.bind(this)
+  protected loadingNext = false
+
+  @ViewChild('errorTemplate', { read: TemplateRef, static: true })
+  protected errorTemplate!: TemplateRef<object>
 
   @Input() player!: ActivityPlayer
 
   protected get composed(): boolean {
     return this.player.settings?.navigation?.mode === 'composed'
+  }
+
+  protected get manual(): boolean {
+    return this.player.settings?.navigation?.mode === 'manual'
+  }
+
+  protected get peerComparison(): boolean {
+    return this.player.settings?.navigation?.mode === 'peer'
+  }
+
+  protected get nextNavigation(): boolean {
+    return this.player.settings?.navigation?.mode === 'next'
   }
 
   protected get isPlaying(): boolean {
@@ -207,7 +225,9 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
   }
 
   private async evaluateAll(): Promise<void> {
-    await Promise.all(this.playerExerciseComponents.map((component) => component.evaluateFromActivity()))
+    for (const component of this.playerExerciseComponents) {
+      await component.evaluateFromActivity()
+    }
   }
 
   ngOnDestroy(): void {
@@ -223,7 +243,8 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
       const { navigation } = this.player
       await this.play(navigation.current || navigation.exercises[0])
     }
-
+    this.playIfNeed(this.navigation).catch(console.error)
+    this.extractAnswers()
     this.disableCopyPasteIfNeeded()
     this.startWatchingVisibilityChange()
   }
@@ -303,10 +324,55 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
     this.changeDetectorRef.markForCheck()
   }
 
+  private saveAnswersToSessionStorage(): void {
+    this.playerExerciseComponents.forEach((component) => {
+      const componentAnswers = component.getAnswers()
+      for (const key in componentAnswers) {
+        sessionStorage.setItem('component-' + key, JSON.stringify(componentAnswers[key]))
+      }
+    })
+  }
+
   protected async play(exercise: PlayerExercise) {
     if (this.composed) {
       this.jumpToExercise(exercise)
       return
+    }
+
+    if (this.manual && this.player.navigation.current && this.player.navigation.current.sessionId) {
+      this.saveAnswersToSessionStorage()
+    }
+
+    if (this.nextNavigation) {
+      if (this.loadingNext) {
+        return
+      }
+      try {
+        const nextExercise = await firstValueFrom(
+          this.playerService.next({
+            activitySessionId: this.player.sessionId,
+            exerciseSessionIds: [],
+          })
+        )
+        const nextExerciseId = nextExercise.nextExerciseId
+        const terminated = nextExercise.terminated
+        if (terminated) {
+          this.terminate().catch(console.error)
+          return
+        }
+        exercise = this.navigation.exercises.find((item) => item.id === nextExerciseId) as PlayerExercise
+        if (!exercise) {
+          this.dialogService.error("L'exercice suivant n'a pas été trouvé.")
+          return
+        }
+      } catch (error) {
+        let message = 'Une erreur est survenue lors de cette action.'
+        if (error instanceof HttpErrorResponse) {
+          message = error.error?.message || error.message || message
+        }
+        this.dialogService.notification(this.errorTemplate, { duration: 0, data: { message } })
+        return
+      }
     }
 
     this.exercises = undefined
@@ -360,6 +426,15 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
     this.changeDetectorRef.markForCheck()
   }
 
+  private extractAnswers(): void {
+    const peerNav = this.player.navigation.exercises.filter((item) => item.peerComparison).map((item) => item.sessionId)
+    this.answers =
+      this.exercises?.filter(
+        (item) => item.reviewMode || (item as any).peerComparison || peerNav.includes(item.sessionId)
+      ) ?? []
+    this.exercises = this.exercises?.filter((item) => !item.reviewMode && !peerNav.includes(item.sessionId))
+  }
+
   protected trackBySessionId(_: number, item: Player): string {
     return item.sessionId
   }
@@ -380,26 +455,75 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
   }
 
   protected onChangeNavigation(navigation: PlayerNavigation): void {
-    if (this.showSucceededPopup && navigation.exercises.every((exercise) => exercise.state === 'SUCCEEDED')) {
-      this.showSucceededPopup = false
-      this.dialogService
-        .confirm({
-          nzTitle: `Vous avez complété tous les exercices avec succès.`,
-          nzContent: `Voulez-vous terminer l'activité ? \nAprès avoir terminé l'activité, vous ne pourrez plus modifier vos réponses.`,
-          nzOkText: 'Terminer',
-          nzOkDanger: true,
-          nzCancelText: 'Annuler',
-        })
-        .then((confirmed) => {
-          if (confirmed) {
-            this.terminate().catch(console.error)
-          }
-        })
-        .catch(console.error)
+    // if (this.showSucceededPopup && navigation.exercises.every((exercise) => exercise.state === 'SUCCEEDED')) {
+    //   this.showSucceededPopup = false
+    //   this.dialogService
+    //     .confirm({
+    //       nzTitle: `Vous avez complété tous les exercices avec succès.`,
+    //       nzContent: `Voulez-vous terminer l'activité ? \nAprès avoir terminé l'activité, vous ne pourrez plus modifier vos réponses.`,
+    //       nzOkText: 'Terminer',
+    //       nzOkDanger: true,
+    //       nzCancelText: 'Annuler',
+    //     })
+    //     .then((confirmed) => {
+    //       if (confirmed) {
+    //         this.terminate().catch(console.error)
+    //       }
+    //     })
+    //     .catch(console.error)
+    // }
+    if (
+      this.player.settings?.navigation?.mode === 'next' &&
+      this.player.settings?.nextSettings?.autoNext &&
+      !this.loadingNext &&
+      navigation.current?.grade &&
+      navigation.current?.grade >= this.player.settings?.nextSettings?.autoNextGrade
+    ) {
+      this.loadingNext = true
+      const nextExerciseButton = document.getElementById('next-exercise-button')
+      setTimeout(() => {
+        if (navigation.current) {
+          this.loadingNext = false
+          this.play(navigation.current).catch(console.error)
+        }
+      }, 2000)
+      nextExerciseButton?.classList.add('fill')
+      setTimeout(() => {
+        nextExerciseButton?.classList.remove('fill')
+      }, 2500)
+      return
     }
     this.player = { ...this.player, navigation }
+    this.playIfNeed(navigation).catch(console.error)
     this.calculatePositions()
     this.calculateAnswerStates(navigation)
+  }
+
+  private async playIfNeed(navigation: PlayerNavigation): Promise<void> {
+    if (!this.peerComparison) {
+      return
+    }
+    this.answers = this.answers.filter((item) =>
+      navigation.exercises.find((exercise) => exercise.sessionId === item.sessionId)
+    )
+
+    for (const exercise of navigation.exercises) {
+      if (
+        !(this.exercises?.map((item) => item.sessionId) ?? []).includes(exercise.sessionId) &&
+        exercise.peerComparison
+      ) {
+        const output = this.playerService.get(exercise.sessionId)
+        const { exercises } = await firstValueFrom(output)
+
+        this.answers = this.answers.concat(exercises)
+        // this.exercises = this.exercises?.concat(exercises)
+      }
+    }
+    this.changeDetectorRef.markForCheck()
+
+    if (navigation.current) {
+      await this.play(navigation.current)
+    }
   }
 
   private jumpToExercise(page: PlayerExercise): void {
@@ -432,7 +556,7 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
       const startAt = new Date(this.player.startedAt as Date).getTime()
       const duration = endAt - startAt
       const currentTime = new Date().getTime()
-      if (currentTime >= startAt + duration) {
+      if (currentTime >= startAt + duration || startAt + duration > currentTime + 1000 * 60 * 60 * 4) {
         this.countdown = null
         return
       }
@@ -468,6 +592,11 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
       const index = navigation.exercises.findIndex((item) => item.sessionId === current.sessionId)
       this.hasNext = index < navigation.exercises.length - 1
       this.hasPrev = index > 0
+      this.position = index
+    } else if (current && this.player.settings?.navigation?.mode === 'next') {
+      const index = navigation.exercises.findIndex((item) => item.sessionId === current.sessionId)
+      this.hasNext = true
+      this.hasPrev = false
       this.position = index
     }
   }

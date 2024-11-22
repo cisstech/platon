@@ -8,10 +8,11 @@ import { SessionEntity } from '../sessions/session.entity'
 @Entity('SessionComments')
 @Index('SessionComments_session_id_answer_id_idx', ['sessionId', 'answerId'])
 export class SessionCommentEntity extends BaseEntity implements SessionComment {
-  @Column({ name: 'author_id' })
+  @Column({ name: 'author_id', default: '00000000-0000-0000-0000-000000000000' })
   authorId!: string
 
-  @ManyToOne(() => UserEntity, { onDelete: 'CASCADE' })
+  // @ts-expect-error: SET DEFAULT does not exist in OnDeleteType
+  @ManyToOne(() => UserEntity, { onDelete: 'SET DEFAULT' })
   @JoinColumn({ name: 'author_id' })
   author!: UserEntity
 

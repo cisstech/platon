@@ -33,3 +33,7 @@ mat-card {
 mat-card-header {
   margin-bottom: 1rem;
 }
+
+.danger-zone {
+  border: 1px solid var(--brand-text-error);
+}

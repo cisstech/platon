@@ -107,7 +107,7 @@ class NewStatusItemComponent {
   imports: [UserAvatarComponent, ResourcePipesModule],
   template: `
     <user-avatar showUsername="inline" [userIdOrName]="event.actorId" /> a ajouté “{{ event.data.resourceName }}” dans
-    le cercle”
+    le cercle ”{{ event.data.parentName }}”
   `,
 })
 class NewResourceEventComponent {

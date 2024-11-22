@@ -1,21 +1,5 @@
-<div>
-  <ui-search-bar [searchbar]="searchbar" [disabled]="disabled">
-    <ng-template let-item>
-      <span>{{ item.name }}</span>
-    </ng-template>
-  </ui-search-bar>
-  <ng-content></ng-content>
+<div class="section-list">
+  <ng-container *ngFor="let section of dataSource">
+    <button nz-button (click)="selectSection(section)">{{ section.name }}</button>
+  </ng-container>
 </div>
-<ui-list [items]="selection" [idField]="'id'">
-  <ui-list-template slot="row">
-    <ng-template let-item="item">
-      <div class="selection-item">
-        <h3>{{ item.name }}</h3>
-        <div class="spacer"></div>
-        <button [disabled]="disabled" nz-button nzDanger nzType="primary" nzShape="circle" (click)="remove(item)">
-          <i nz-icon nzType="delete" nzTheme="outline"></i>
-        </button>
-      </div>
-    </ng-template>
-  </ui-list-template>
-</ui-list>

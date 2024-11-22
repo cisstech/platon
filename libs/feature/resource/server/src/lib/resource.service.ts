@@ -1,7 +1,16 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { NotFoundResponse } from '@platon/core/common'
-import { EventService, LevelService, TopicService, UserEntity } from '@platon/core/server'
+import {
+  EventService,
+  LevelService,
+  TopicService,
+  UserEntity,
+  ON_TOPIC_FUSION_EVENT,
+  ON_LEVEL_FUSION_EVENT,
+  OnLevelFusionEventPayload,
+  OnTopicFusionEventPayload,
+} from '@platon/core/server'
 import {
   CircleTree,
   RESOURCE_ORDERING_DIRECTIONS,
@@ -23,9 +32,12 @@ import { ResourceEntity } from './resource.entity'
 import { ON_CREATE_RESOURCE_EVENT, OnCreateResourceEventPayload } from './resource.event'
 import { ResourceStatisticEntity } from './statistics'
 import { ResourceWatcherEntity } from './watchers'
+import { OnEvent } from '@nestjs/event-emitter'
 
 @Injectable()
 export class ResourceService {
+  private readonly logger = new Logger(ResourceService.name)
+
   constructor(
     @InjectRepository(ResourceEntity)
     private readonly repository: Repository<ResourceEntity>,
@@ -494,5 +506,52 @@ export class ResourceService {
       .map(({ user_id }: { user_id: string }) => user_id as string)
       .filter((userId: string) => !!userId)
     return watchers
+  }
+
+  @OnEvent('deleteOrphanCircles')
+  async handleDeleteOrphanCircles() {
+    const personalCircles = await this.repository.find({
+      where: {
+        ownerId: '00000000-0000-0000-0000-000000000000',
+        type: ResourceTypes.CIRCLE,
+        personal: true,
+      },
+    })
+    personalCircles.forEach(async (circle) => {
+      this.logger.log(`Deleting personal circle: ${circle.name} (id: ${circle.id})`)
+      await this.delete(circle)
+    })
+  }
+
+  @OnEvent(ON_TOPIC_FUSION_EVENT)
+  async onTopicFusion(payload: OnTopicFusionEventPayload) {
+    const { oldTopic, newTopic } = payload
+    const resources = await this.repository
+      .createQueryBuilder('resource')
+      .leftJoinAndSelect('resource.topics', 'topic')
+      .getMany()
+    await Promise.all(
+      resources.map((resource) => {
+        resource.topics = resource.topics.map((t) => (t.id === oldTopic.id ? newTopic : t))
+        return this.repository.save(resource)
+      })
+    )
+    Logger.log(`Merging topics ${oldTopic.name} into ${newTopic.name}`, 'ResourceService')
+  }
+
+  @OnEvent(ON_LEVEL_FUSION_EVENT)
+  async onLevelFusion(payload: OnLevelFusionEventPayload) {
+    const { oldLevel, newLevel } = payload
+    const resources = await this.repository
+      .createQueryBuilder('resource')
+      .leftJoinAndSelect('resource.levels', 'level')
+      .getMany()
+    await Promise.all(
+      resources.map((resource) => {
+        resource.levels = resource.levels.map((l) => (l.id === oldLevel.id ? newLevel : l))
+        return this.repository.save(resource)
+      })
+    )
+    Logger.log(`Merging levels ${oldLevel.name} into ${newLevel.name}`, 'ResourceService')
   }
 }

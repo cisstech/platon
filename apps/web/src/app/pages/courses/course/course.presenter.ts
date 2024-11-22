@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { HttpErrorResponse } from '@angular/common/http'
 import { Injectable, OnDestroy, inject } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { AuthService, DialogService } from '@platon/core/browser'
@@ -12,6 +13,7 @@ import {
   CourseGroup,
   CourseGroupDetail,
   CourseMember,
+  CourseMemberRoles,
   CourseSection,
   CreateCourseMember,
   CreateCourseSection,
@@ -70,6 +72,21 @@ export class CoursePresenter implements OnDestroy {
       await firstValueFrom(this.courseService.deleteMember(member))
     } catch {
       this.alertError()
+    }
+  }
+
+  async updateMemberRole(member: CourseMember, role: CourseMemberRoles): Promise<void> {
+    try {
+      await firstValueFrom(this.courseService.updateMemberRole(member, role))
+    } catch (e: unknown) {
+      if (e instanceof HttpErrorResponse) {
+        if (e.status === 403) {
+          this.dialogService.error('Le rôle enseignant ne peut pas être donné à un compte étudiant.')
+          throw e
+        }
+      } else {
+        this.alertError()
+      }
     }
   }
 

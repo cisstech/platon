@@ -153,3 +153,36 @@ button.primary {
     }
   }
 }
+
+@keyframes fillButton {
+  from {
+    background-position: 100% 0%;
+  }
+  to {
+    background-position: 0% 0%;
+  }
+}
+
+#next-exercise-button {
+  background: linear-gradient(to right, #171c8f 50%, transparent 50%);
+  background-size: 200% 100%;
+  background-position: 100% 0%;
+  transition: background-position 0s;
+  mat-icon {
+    background: linear-gradient(to right, white 50%, black 50%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    background-size: 200% 100%;
+    background-position: 100% 0%;
+  }
+}
+
+#next-exercise-button.fill {
+  background-position: 0% 0%;
+  transition: background-position 2s linear;
+  mat-icon {
+    background-position: 0% 0%;
+    transition: background-position calc(2s / 3) linear calc(2s / 3);
+  }
+}

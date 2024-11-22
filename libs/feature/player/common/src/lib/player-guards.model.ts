@@ -180,7 +180,10 @@ export const withMultiSessionGuard = (exerciseSession: ExerciseSession) => {
     const activityVariables = activitySession.variables as PlayerActivityVariables
     activityNavigation = activityVariables.navigation
 
-    if (activityVariables.settings?.navigation?.mode === 'composed') {
+    if (
+      activityVariables.settings?.navigation?.mode === 'composed' ||
+      activityVariables.settings?.navigation?.mode === 'peer'
+    ) {
       return { activitySession, activityNavigation }
     }
 

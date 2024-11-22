@@ -20,3 +20,11 @@ p {
     width: 70%;
   }
 }
+
+.title {
+  max-width: 70vw;
+  word-wrap: normal;
+  word-break: normal;
+  white-space: normal;
+  overflow-wrap: break-word;
+}

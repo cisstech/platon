@@ -1,8 +1,9 @@
 import { Logger } from '@nestjs/common'
 import { Injectable } from '@nestjs/common'
 import { DataSource, EntitySubscriberInterface, InsertEvent } from 'typeorm'
-import { CourseEntity } from './course.entity'
+import { CourseEntity } from './entites/course.entity'
 import { CourseMemberEntity } from './course-member/course-member.entity'
+import { CourseMemberRoles } from '@platon/feature/course/common'
 
 @Injectable()
 export class CourseSubscriber implements EntitySubscriberInterface<CourseEntity> {
@@ -24,6 +25,7 @@ export class CourseSubscriber implements EntitySubscriberInterface<CourseEntity>
       event.manager.create(CourseMemberEntity, {
         userId: event.entity.ownerId,
         courseId: event.entity.id,
+        role: CourseMemberRoles.teacher,
       })
     )
   }

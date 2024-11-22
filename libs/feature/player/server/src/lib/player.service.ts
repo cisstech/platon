@@ -6,6 +6,7 @@ import { EventService, UserEntity } from '@platon/core/server'
 import {
   ACTIVITY_FILE_EXTENSION,
   ActivityExercise,
+  ActivityVariables,
   ExerciseVariables,
   PLSourceFile,
   Variables,
@@ -22,21 +23,26 @@ import {
 } from '@platon/feature/course/server'
 import {
   ExercisePlayer,
+  NextOutput,
   PlayActivityOuput,
   PlayExerciseOuput,
   PlayerActivityVariables,
   PlayerExercise,
   PlayerManager,
+  PlayerNavigation,
   PreviewInput,
   SandboxEnvironment,
   updateActivityNavigationState,
+  withActivityFeedbacksGuard,
   withActivityPlayer,
   withExercisePlayer,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   withSessionAccessGuard,
 } from '@platon/feature/player/common'
 import { ResourceFileService } from '@platon/feature/resource/server'
 import { Answer, AnswerStates, ExerciseSession, Session } from '@platon/feature/result/common'
 import {
+  ActivitySessionEntity,
   AnswerService,
   CorrectionEntity,
   ExerciseSessionEntity,
@@ -48,6 +54,8 @@ import { DataSource, EntityManager, In } from 'typeorm'
 import { PreviewOuputDTO } from './player.dto'
 import { SandboxService } from './sandboxes/sandbox.service'
 import { randomInt } from 'crypto'
+import { PeerService } from '@platon/feature/peer/server'
+import { MatchStatus, PeerContest } from '@platon/feature/peer/common'
 
 type CreateSessionArgs = {
   user?: User | null
@@ -69,7 +77,8 @@ export class PlayerService extends PlayerManager {
     private readonly answerService: AnswerService,
     private readonly sessionService: SessionService,
     private readonly activityService: ActivityService,
-    private readonly resourceFileService: ResourceFileService
+    private readonly resourceFileService: ResourceFileService,
+    private readonly peerService: PeerService
   ) {
     super(sandboxService)
   }
@@ -139,10 +148,21 @@ export class PlayerService extends PlayerManager {
     return { activity: withActivityPlayer(activitySession) }
   }
 
+  async getSession(sessionId: string, _user: User): Promise<PlayExerciseOuput> {
+    // TODO: deal with user access
+    const exerciseSession = (await this.sessionService.findById(sessionId, {
+      parent: true,
+      activity: true,
+    })) as ExerciseSessionEntity
+    if (!exerciseSession) throw new NotFoundResponse('Session not found')
+
+    return { exercises: [withExercisePlayer(exerciseSession)] }
+  }
+
   async playExercises(
     activitySessionId: string,
     exerciseSessionIds: string[],
-    user?: User
+    _user?: User
   ): Promise<PlayExerciseOuput> {
     const activitySession = await this.sessionService.findById<PlayerActivityVariables>(activitySessionId, {
       parent: false,
@@ -161,10 +181,10 @@ export class PlayerService extends PlayerManager {
     // CREATE PLAYERS
     const exercisePlayers = await Promise.all(
       exerciseSessionIds.map(async (sessionId) => {
-        let exerciseSession = withSessionAccessGuard(
-          await this.sessionService.findExerciseSessionByActivityId(activitySessionId, sessionId),
-          user
-        )
+        let exerciseSession = await this.sessionService.findById<ExerciseVariables>(sessionId, {}) // TODO: deal with user access
+        if (!exerciseSession) {
+          throw new NotFoundResponse(`ExerciseSession not found: ${sessionId}`)
+        }
 
         if (!exerciseSession.isBuilt) {
           exerciseSession = await this.buildExercise(exerciseSession)
@@ -193,6 +213,242 @@ export class PlayerService extends PlayerManager {
       exercises: exercisePlayers,
       navigation: activityVariables.navigation,
     }
+  }
+
+  async playNext(activitySessionId: string, _user: User): Promise<NextOutput> {
+    const activitySession = await this.sessionService.findById<PlayerActivityVariables>(activitySessionId, {
+      parent: false,
+      activity: true,
+    })
+    if (!activitySession) {
+      throw new NotFoundResponse(`ActivitySession not found: ${activitySessionId}`)
+    }
+    if (activitySession.activity?.openAt && activitySession.activity.openAt > new Date()) {
+      throw new ForbiddenResponse("L'activité n'est pas encore ouverte.")
+    }
+    if (activitySession.activity?.closeAt && activitySession.activity.closeAt < new Date()) {
+      throw new ForbiddenResponse("L'activité est fermée.")
+    }
+
+    const session = await this.buildNext(activitySession)
+
+    return { nextExerciseId: session.variables.nextExerciseId, terminated: session.variables.navigation.terminated }
+  }
+
+  async compareTrainOrWait(
+    activitySession: Session<ActivityVariables>,
+    navigation: PlayerNavigation | undefined,
+    comparisonSessionId: string | undefined,
+    waitingExerciseSessionId: string | undefined,
+    trainingExercisesSessionId: (string | undefined)[]
+  ): Promise<[ExercisePlayer, PlayerNavigation]> {
+    if (!activitySession.userId || !activitySession.activityId) {
+      throw new ForbiddenResponse(`Peer activities doesn't work in preview mode.`)
+    }
+    // If we find answers to compare in the peer table, we return the next exercise
+    const nextCopy: PeerContest | null = await this.peerService.getNextCopy(
+      activitySession.userId,
+      activitySession.activityId
+    )
+    if (nextCopy) {
+      const nav = withActivityFeedbacksGuard<ActivityVariables>(activitySession).variables
+        .navigation as PlayerNavigation
+      if (nav.exercises) {
+        // add the next copy to the navigation
+        nav.exercises = [
+          ...nav.exercises.filter((e) => !e.peerComparison), // remove the previous comparison
+          {
+            id: nextCopy.peerId,
+            title: 'Exercice A',
+            state: AnswerStates.NOT_STARTED,
+            sessionId: nextCopy.answerP1,
+            peerComparison: true,
+          },
+          {
+            id: nextCopy.peerId,
+            title: 'Exercice B',
+            state: AnswerStates.NOT_STARTED,
+            sessionId: nextCopy.answerP2,
+            peerComparison: true,
+          },
+        ]
+      }
+
+      const nextExerciseSession = await this.sessionService.findById<ExerciseVariables>(comparisonSessionId ?? '', {})
+      if (!nextExerciseSession) {
+        throw new NotFoundResponse(`Next exercise not found: ${comparisonSessionId}`)
+      }
+      nav.current = {
+        id: nextCopy.peerId,
+        title: nextExerciseSession.source.variables.title as string,
+        state: AnswerStates.NOT_STARTED,
+        sessionId: nextExerciseSession.id,
+      }
+
+      return [
+        { reviewMode: true, ...withExercisePlayer(nextExerciseSession) },
+        nav ?? activitySession.variables.navigation,
+      ]
+    } else {
+      // if there's no answers to compare we return a training exerise, if there's no training exercise we return a waiting exercise
+
+      if (trainingExercisesSessionId.length > 0) {
+        const nextExerciseSession = await this.sessionService.findById<ExerciseVariables>(
+          trainingExercisesSessionId.pop() ?? '',
+          {}
+        )
+        if (!nextExerciseSession) {
+          throw new NotFoundResponse(`Next exercise not found: ${trainingExercisesSessionId}`)
+        }
+        if (navigation) {
+          navigation.exercises = navigation?.exercises.filter((e) => !e.peerComparison)
+          navigation.current = {
+            id: nextExerciseSession.id,
+            title: nextExerciseSession.source.variables.title as string,
+            state: AnswerStates.NOT_STARTED,
+            sessionId: nextExerciseSession.id,
+          }
+        }
+        return [withExercisePlayer(nextExerciseSession), navigation ?? activitySession.variables.navigation]
+      }
+      const nextExerciseSession = await this.sessionService.findById<ExerciseVariables>(
+        waitingExerciseSessionId ?? '',
+        {}
+      )
+      if (!nextExerciseSession) {
+        throw new NotFoundResponse(`Next exercise not found: ${waitingExerciseSessionId}`)
+      }
+
+      if (navigation) {
+        navigation.exercises = navigation?.exercises.filter((e) => !e.peerComparison)
+        navigation.current = {
+          id: nextExerciseSession.id,
+          title: nextExerciseSession.source.variables.title as string,
+          state: AnswerStates.NOT_STARTED,
+          sessionId: nextExerciseSession.id,
+        }
+      }
+      return [withExercisePlayer(nextExerciseSession), navigation ?? activitySession.variables.navigation]
+    }
+  }
+
+  async nextPeerExercise(
+    exerciseSession: ExerciseSession,
+    navigation: PlayerNavigation | undefined,
+    answer: Answer
+  ): Promise<[ExercisePlayer, PlayerNavigation]> {
+    const activitySession = exerciseSession.parent
+    if (!activitySession) {
+      throw new ForbiddenResponse(`This action can be called only with peer activities.`)
+    }
+    if (!activitySession.userId || !activitySession.activityId) {
+      throw new ForbiddenResponse(`Peer activities doesn't work in preview mode.`)
+    }
+
+    if (answer.grade !== 100) {
+      // If the answer is not correct we return the same exercise
+      return [
+        withExercisePlayer(exerciseSession),
+        navigation ||
+          (withActivityFeedbacksGuard<ActivityVariables>(activitySession).variables.navigation as PlayerNavigation),
+      ]
+    }
+
+    let exercice = ''
+    let comparison = ''
+    let trainingExercises: string[] = []
+    let waitingExercise = ''
+
+    for (const group of Object.keys(activitySession.variables.exerciseGroups)) {
+      const groupName = activitySession.variables.exerciseGroups[group].name
+      if (groupName === 'exercice' && activitySession.variables.exerciseGroups[group].exercises.length > 0) {
+        exercice = activitySession.variables.exerciseGroups[group].exercises.at(0)!.id
+      }
+      if (groupName === 'comparaison' && activitySession.variables.exerciseGroups[group].exercises.length > 0) {
+        comparison = activitySession.variables.exerciseGroups[group].exercises.at(0)!.id
+      }
+      if (groupName === 'attente' && activitySession.variables.exerciseGroups[group].exercises.length > 0) {
+        waitingExercise = activitySession.variables.exerciseGroups[group].exercises.at(0)!.id
+      }
+      if (groupName === 'entrainement' && activitySession.variables.exerciseGroups[group].exercises.length > 0) {
+        trainingExercises = activitySession.variables.exerciseGroups[group].exercises.map((e) => e.id)
+      }
+    }
+
+    const exerciceSessionId = navigation?.exercises.filter((e) => e.id === exercice).pop()?.sessionId
+    const comparisonSessionId = navigation?.exercises.filter((e) => e.id === comparison).pop()?.sessionId
+    const waitingExerciseSessionId = navigation?.exercises.filter((e) => e.id === waitingExercise).pop()?.sessionId
+    const trainingExercisesSessionId = trainingExercises
+      .map((e) => navigation?.exercises.find((ex) => ex.id === e)?.sessionId)
+      .filter((e) => e)
+    const remainingTrainingExercisesSessionId = trainingExercises
+      .map((e) => navigation?.exercises.find((ex) => ex.id === e && ex.state !== 'SUCCEEDED')?.sessionId)
+      .filter((e) => e)
+
+    switch (exerciseSession.id) {
+      case exerciceSessionId: {
+        // Register the answer in the peer table
+        const peerlike = {
+          activityId: activitySession.activityId,
+          level: 0,
+          correctorId: activitySession.userId,
+          player1Id: activitySession.userId,
+          player1SessionId: answer.sessionId,
+          player2Id: activitySession.userId,
+          player2SessionId: answer.sessionId,
+          winnerId: activitySession.userId,
+          winnerSessionId: answer.sessionId,
+          status: MatchStatus.Next,
+        }
+        const _peer = await this.peerService.createMatch(peerlike)
+        return this.compareTrainOrWait(
+          activitySession,
+          navigation,
+          comparisonSessionId,
+          waitingExerciseSessionId,
+          remainingTrainingExercisesSessionId
+        )
+      }
+      case waitingExerciseSessionId: {
+        return this.compareTrainOrWait(
+          activitySession,
+          navigation,
+          comparisonSessionId,
+          waitingExerciseSessionId,
+          remainingTrainingExercisesSessionId
+        )
+      }
+      case comparisonSessionId: {
+        const winner = (exerciseSession.variables as any)?.peer_winner_
+        const peerId = navigation?.exercises.filter((e) => e.peerComparison).at(0)?.id
+        if (!winner || winner < 0) {
+          throw new ForbiddenResponse('The winner is not defined in the exercise')
+        }
+        if (!peerId) {
+          throw new ForbiddenResponse('The current exercise did not compare any answer')
+        }
+        await this.peerService.resolveGame(peerId, winner) // Save the answer in the peer table
+        return this.compareTrainOrWait(
+          activitySession,
+          navigation,
+          comparisonSessionId,
+          waitingExerciseSessionId,
+          remainingTrainingExercisesSessionId
+        )
+      }
+      default:
+        if (trainingExercisesSessionId.includes(exerciseSession.id)) {
+          return this.compareTrainOrWait(
+            activitySession,
+            navigation,
+            comparisonSessionId,
+            waitingExerciseSessionId,
+            remainingTrainingExercisesSessionId
+          )
+        }
+        break
+    }
+    return [withExercisePlayer(exerciseSession), activitySession.variables.navigation]
   }
 
   protected createAnswer(answer: Partial<Answer>): Promise<Answer> {
@@ -255,7 +511,7 @@ export class PlayerService extends PlayerManager {
 
     exerciseSession.envid = envid
     exerciseSession.isBuilt = true
-    exerciseSession.variables = variables
+    exerciseSession.variables = variables as ExerciseVariables
 
     await this.sessionService.update(exerciseSession.id, {
       envid: envid || undefined,
@@ -264,6 +520,44 @@ export class PlayerService extends PlayerManager {
     })
 
     return exerciseSession
+  }
+
+  private async buildNext(activitySession: ActivitySessionEntity): Promise<SessionEntity> {
+    const sources = activitySession.source
+    const sessions = await this.sessionService.findAllWithParent(activitySession.id)
+    sources.variables.exercisesMeta = {}
+    for (const exercise of activitySession.variables.navigation.exercises) {
+      const meta = sessions.find((s) => s.id === exercise.sessionId)?.variables['.meta']
+      if (meta) {
+        sources.variables.exercisesMeta[exercise.id] = meta
+      } else {
+        sources.variables.exercisesMeta[exercise.id] = {
+          isInitialBuild: true,
+          grades: [],
+          attempts: 0,
+          totalAttempts: 0,
+          consumedHints: 0,
+        }
+      }
+    }
+    sources.variables.navigation = activitySession.variables.navigation
+    const { envid, variables } = await this.sandboxService.buildNext(sources)
+
+    activitySession.envid = envid
+    activitySession.variables = {
+      ...activitySession.variables,
+      nextExerciseId: variables.nextExerciseId,
+      navigation: variables.navigation,
+      activityGrade: variables.activityGrade,
+    }
+
+    await this.sessionService.update(activitySession.id, {
+      envid: envid || undefined,
+      variables: activitySession.variables,
+      grade: variables.activityGrade,
+    })
+
+    return activitySession
   }
 
   /**
@@ -327,7 +621,6 @@ export class PlayerService extends PlayerManager {
     if (!exercises.length) {
       exercises.push(...extractExercisesFromActivityVariables(variables))
     }
-
     navigation.exercises = await Promise.all(
       exercises.map(async (item) => {
         if (!('sessionId' in item)) {
@@ -343,9 +636,10 @@ export class PlayerService extends PlayerManager {
             },
             manager
           )
+
           return {
             id: item.id,
-            title: item.source.variables.title as string,
+            title: await this.resourceFileService.getTitle(item.resource),
             state: AnswerStates.NOT_STARTED,
             sessionId: session.id,
           }

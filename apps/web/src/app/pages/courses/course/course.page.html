@@ -11,6 +11,7 @@
                 [nzEditable]="course.permissions?.update"
                 [nzContent]="course.name"
                 (nzContentChange)="updateName($event)"
+                class="title"
               ></span>
             </nz-breadcrumb-item>
             <div class="spacer"></div>
@@ -59,16 +60,10 @@
       Challenges
     </ng-template>
   </ui-layout-tab>
-  <ui-layout-tab [link]="['teachers']">
+  <ui-layout-tab [link]="['members']">
     <ng-template>
       <span nz-icon nzType="team" nzTheme="outline"></span>
-      Enseignants
-    </ng-template>
-  </ui-layout-tab>
-  <ui-layout-tab [link]="['students']">
-    <ng-template>
-      <span nz-icon nzType="team" nzTheme="outline"></span>
-      Élèves
+      Membres
     </ng-template>
   </ui-layout-tab>
   <ui-layout-tab [link]="['groups']">

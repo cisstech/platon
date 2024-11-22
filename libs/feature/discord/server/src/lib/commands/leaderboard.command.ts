@@ -6,7 +6,12 @@ import { LeaderboardService } from '@platon/feature/result/server'
 import { CourseLeaderboardEntry } from '@platon/feature/result/common'
 import { ChatInputCommandInteraction, Client, Message, TextChannel } from 'discord.js'
 import { WatchedChallengesService } from '../watchedChallenges.service'
-import { ActivityEntity, ActivityService, OnTerminateActivityEventPayload } from '@platon/feature/course/server'
+import {
+  ActivityEntity,
+  ActivityService,
+  ON_TERMINATE_ACTIVITY_EVENT,
+  OnTerminateActivityEventPayload,
+} from '@platon/feature/course/server'
 import { OnEvent } from '@nestjs/event-emitter'
 import { WatchedChallengesEntity } from '../watchedChallenges.entity'
 import { isUUID4 } from '@platon/shared/server'
@@ -114,8 +119,11 @@ export class LeaderboardCommand {
     this.updateChallengeToChannelMap(watchedChallenge, message)
   }
 
-  @OnEvent('activity.terminate')
+  @OnEvent(ON_TERMINATE_ACTIVITY_EVENT)
   async onTerminate(event: OnTerminateActivityEventPayload): Promise<void> {
+    if (!event.activity.isChallenge) {
+      return
+    }
     const channelsWithMessage = this.challengeToChannelMap.get(event.activity.courseId)
 
     const leaderboard = (await this.courseLeaderboard(event.activity.courseId)).slice(0, 60) // J'en prends que 60 pour le moment.

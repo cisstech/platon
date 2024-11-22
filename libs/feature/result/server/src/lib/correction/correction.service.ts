@@ -46,42 +46,46 @@ export class CorrectionService {
       grade?: number
     }
 
-    const projections = (await this.sessionRepository.query(
-      `
-      SELECT
-          activity.id as "activityId",
-          activity.source->'variables'->>'title' as "activityName",
-          (activity_session.variables->>'navigation')::jsonb as "activityNavigation",
-          activity_session.id as "activitySessionId",
-	        exercise_session.user_id as "userId",
-          exercise_session.id as "exerciseSessionId",
-          course.id as "courseId",
-          course.name as "courseName",
-          correction.author_id as "correctedBy",
-          COALESCE(correction.updated_at, correction.created_at) as "correctedAt",
-          correction.grade as "correctedGrade",
-          exercise_session.grade as "grade"
-        FROM "Sessions" exercise_session
-        INNER JOIN "Sessions" activity_session ON activity_session.id=exercise_session.parent_id
-        INNER JOIN "Activities" activity ON activity.id=exercise_session.activity_id
-        INNER JOIN "Courses" course ON course.id=activity.course_id
-        LEFT JOIN "Corrections" correction ON correction.id=exercise_session.correction_id
-        WHERE
-        ${activityId ? 'activity.id=$2 AND' : ''}
-        exercise_session.user_id<>$1 AND
-        (activity_session.variables->'navigation'->>'terminated')::boolean = TRUE AND
-        (
-          SELECT id FROM "ActivityCorrectorView" corrector
-          WHERE corrector.activity_id=activity.id AND corrector.id=$1
-        ) IS NOT NULL
-    `,
-      [correctorUserId, activityId].filter(Boolean)
-    )) as Projection[]
+    // Construct SQL query and parameters
+    const queryText = `
+    SELECT
+      activity.id as "activityId",
+      activity.source->'variables'->>'title' as "activityName",
+      (activity_session.variables->>'navigation')::jsonb as "activityNavigation",
+      activity_session.id as "activitySessionId",
+      exercise_session.user_id as "userId",
+      exercise_session.id as "exerciseSessionId",
+      course.id as "courseId",
+      course.name as "courseName",
+      correction.author_id as "correctedBy",
+      COALESCE(correction.updated_at, correction.created_at) as "correctedAt",
+      correction.grade as "correctedGrade",
+      exercise_session.grade as "grade"
+    FROM "Sessions" exercise_session
+    INNER JOIN "Sessions" activity_session ON activity_session.id=exercise_session.parent_id
+    INNER JOIN "Activities" activity ON activity.id=exercise_session.activity_id
+    INNER JOIN "Courses" course ON course.id=activity.course_id
+    LEFT JOIN "Corrections" correction ON correction.id=exercise_session.correction_id
+    WHERE
+      ${activityId ? 'activity.id=$2 AND' : ''}
+      exercise_session.user_id<>$1 AND
+      (activity_session.variables->'navigation'->>'terminated')::boolean = TRUE AND
+      EXISTS (
+        SELECT 1 FROM "ActivityCorrectorView" corrector
+        WHERE corrector.activity_id=activity.id AND corrector.id=$1
+      )
+  `
+    const queryParams = activityId ? [correctorUserId, activityId] : [correctorUserId]
 
-    return projections.reduce((acc, projection) => {
-      const navItem = projection.activityNavigation.exercises.find((item: any) => {
-        return item.sessionId === projection.exerciseSessionId
-      })
+    const projections = (await this.sessionRepository.query(queryText, queryParams)) as Projection[]
+
+    const activityMap = new Map<string, ActivityCorrection>()
+
+    projections.forEach((projection) => {
+      const navItem = projection.activityNavigation.exercises.find(
+        (item: any) => item.sessionId === projection.exerciseSessionId
+      )
+
       const exercise: ExerciseCorrection = {
         userId: projection.userId,
         activitySessionId: projection.activitySessionId,
@@ -93,20 +97,21 @@ export class CorrectionService {
         exerciseId: navItem.id,
         exerciseName: navItem.title,
       }
-      const activity = acc.find((item) => item.activityId === projection.activityId)
-      if (activity) {
-        activity.exercises.push(exercise)
-      } else {
-        acc.push({
+
+      if (!activityMap.has(projection.activityId)) {
+        activityMap.set(projection.activityId, {
           activityId: projection.activityId,
           activityName: projection.activityName,
           courseId: projection.courseId,
           courseName: projection.courseName,
           exercises: [exercise],
         })
+      } else {
+        activityMap.get(projection.activityId)?.exercises.push(exercise)
       }
-      return acc
-    }, [] as ActivityCorrection[])
+    })
+
+    return Array.from(activityMap.values())
   }
 
   async upsert(sessionId: string, input: Partial<CorrectionEntity>) {

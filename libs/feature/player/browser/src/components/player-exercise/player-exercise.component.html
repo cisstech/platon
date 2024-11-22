@@ -6,11 +6,7 @@
           <mat-icon *ngIf="state" [style.color]="state | answerStateColor" [nz-tooltip]="state | answerStateLabel">
             {{ state | answerStateIcon }}
           </mat-icon>
-          <ng-container *ngIf="player?.title">
-            <div class="exercise-title">
-              <nge-markdown [data]="player!.title" />
-            </div>
-          </ng-container>
+          {{ player?.title }} @if (players.length && peerComparison) { ({{ index + 1 }}) }
         </mat-card-title>
         <mat-card-subtitle *ngIf="player?.author">
           @if (player!.author!|isUUID) {
@@ -67,7 +63,7 @@
           </div>
         </ng-container>
       </section>
-      <section *ngIf="player?.form">
+      <section>
         <mat-divider />
         <div class="exercise-form">
           <nge-markdown [data]="player?.form" (render)="onRender()" />

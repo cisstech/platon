@@ -21,6 +21,7 @@
         [nonDeletables]="nonDeletables"
         [editable]="canEdit"
         (deleted)="remove($event)"
+        (changeRole)="updateRole($any($event))"
       />
     </mat-card-content>
   </mat-card>
@@ -35,5 +36,15 @@
   [allowGroup]="allowGroup"
   (closed)="addMembers($event)"
 >
-  <p>Sélectionnez les utilisateurs que vous souhaitez ajouter</p>
+  <p>
+    Sélectionnez les
+    <nz-select [(ngModel)]="role" nzAllowClear nzPlaceHolder="Rôle" nzShowSearch>
+      <nz-option
+        *ngFor="let role of roles"
+        [nzLabel]="(role | displayCourseMemberRole) + 's'"
+        [nzValue]="role"
+      ></nz-option>
+    </nz-select>
+    que vous souhaitez ajouter
+  </p>
 </user-search-modal>

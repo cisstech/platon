@@ -64,8 +64,8 @@ export class CourseExpander {
     })
 
     return {
-      studentCount: members.filter((member) => !isTeacherRole(member.role)).length,
-      teacherCount: members.filter((member) => isTeacherRole(member.role)).length,
+      studentCount: members.filter((member) => member.role === 'student').length,
+      teacherCount: members.filter((member) => member.role === 'teacher').length,
       progression: Math.round(progressionSum ? progressionSum / activities.length : 0),
       activityCount: activities.length,
       challengeCount: activities.filter((activity) => activity.isChallenge).length,

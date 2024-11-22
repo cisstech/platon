@@ -127,7 +127,7 @@ export class CourseDashboardPage implements OnInit, OnDestroy {
 
   protected async addSection(after?: CourseSection): Promise<void> {
     await this.presenter.addSection({
-      name: 'Modifiez le titre de votre section',
+      name: 'Section ' + (this.sections.length + 1),
       order: after ? after.order + 1 : 0,
     })
     await this.refresh()

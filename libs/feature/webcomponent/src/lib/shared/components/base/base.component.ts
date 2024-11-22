@@ -54,6 +54,16 @@ export class BaseComponent implements OnInit, OnDestroy {
     const parent = native.parentElement as HTMLElement
     const attributes = Array.from(parent.attributes)
 
+    // LOAD STATE FROM LOCAL STORAGE
+    const cidAttribute = attributes.find((attr) => attr.name === 'cid')
+    if (cidAttribute) {
+      const savedState = sessionStorage.getItem('component-' + cidAttribute.value)
+      if (savedState) {
+        this.stateChange.emit(this.parseValue(savedState))
+        return
+      }
+    }
+
     // LOAD FROM SCRIPT TAG
     const dataScriptIdAttribute = attributes.find((attr) => attr.name === 'data-script-id')
     if (dataScriptIdAttribute) {

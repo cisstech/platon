@@ -78,6 +78,17 @@
     >
       Fermer l'activité
     </button>
+    <button
+      nz-button
+      nzDanger
+      nzType="primary"
+      nz-popconfirm
+      [nzPopconfirmTitle]="confirmReopen"
+      nzPopconfirmPlacement="right"
+      (nzOnConfirm)="reopenForAll()"
+    >
+      Rouvrir l'activité pour tous
+    </button>
   </form>
 </nz-skeleton>
 
@@ -96,4 +107,14 @@
 
 <ng-template #confirmClose>
   <p>Êtes-vous sûr de vouloir fermer cette activité ?</p>
+</ng-template>
+
+<ng-template #confirmReopen>
+  <div>
+    <p>Êtes-vous sûr de vouloir rouvrir cette activité pour tous?</p>
+    <p>
+      La date de fin de l'activité sera automatiquement supprimée, si vous souhaiter la remettre en place, vous devrez
+      le faire manuellement.
+    </p>
+  </div>
 </ng-template>

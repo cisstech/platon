@@ -6,12 +6,12 @@ export interface InputBoxState extends IWebComponent {
   value: string | number
   width: string
   prefix: string
-  suffix: string
   appearance: 'fill' | 'outline'
   placeholder: string
   autoValidation: boolean
   disabled: boolean
   completion: string[]
+  specialCharacters: string[][][] | string[][] | string[]
 }
 
 export const InputBoxComponentDefinition = defineWebComponent({
@@ -52,11 +52,6 @@ export const InputBoxComponentDefinition = defineWebComponent({
         default: '',
         description: 'Une icône à afficher à gauche du champ de saisi.',
       },
-      suffix: {
-        type: 'string',
-        default: '',
-        description: 'Une icône à afficher à droite du champ de saisi.',
-      },
       appearance: {
         type: 'string',
         default: 'outline',
@@ -86,13 +81,51 @@ export const InputBoxComponentDefinition = defineWebComponent({
         default: false,
         description: `Activer la validation automatique du champ de saisi lors d'un appuie sur la touche "Entrée"?`,
       },
+      specialCharacters: {
+        type: 'array',
+        default: [],
+        items: {
+          type: 'array',
+          items: {
+            type: 'array',
+            items: {
+              type: 'string',
+            },
+          },
+        },
+        description:
+          'Une liste de caractères spéciaux à proposer dans un clavier virtuel. Chaque sous-tableau représente une ligne de caractères.',
+      },
     },
   },
   showcase: {
     appearance: 'fill',
     placeholder: 'Entrez votre texte...',
-    suffix: 'clarity happy-face color=FF0000',
     completion: ['France', 'Espagne', 'Italie'],
+    prefix: 'clarity happy-face color=FF0000',
     autoValidation: true,
+    specialCharacters: [
+      [
+        ['あ', 'か', 'さ', 'た', 'な', 'は', 'ま', 'や', 'ら', 'わ', 'ん'],
+        ['い', 'き', 'し', 'ち', 'に', 'ひ', 'み', '', 'り'],
+        ['う', 'く', 'す', 'つ', 'ぬ', 'ふ', 'む', 'ゆ', 'る'],
+        ['え', 'け', 'せ', 'て', 'ね', 'へ', 'め', '', 'れ'],
+        ['お', 'こ', 'そ', 'と', 'の', 'ほ', 'も', 'よ', 'ろ', 'を'],
+      ],
+      [
+        ['ア', 'カ', 'サ', 'タ', 'ナ', 'ハ', 'マ', 'ヤ', 'ラ', 'ワ', 'ン'],
+        ['イ', 'キ', 'シ', 'チ', 'ニ', 'ヒ', 'ミ', '', 'リ'],
+        ['ウ', 'ク', 'ス', 'ツ', 'ヌ', 'フ', 'ム', 'ユ', 'ル'],
+        ['エ', 'ケ', 'セ', 'テ', 'ネ', 'ヘ', 'メ', '', 'レ'],
+        ['オ', 'コ', 'ソ', 'ト', 'ノ', 'ホ', 'モ', 'ヨ', 'ロ', 'ヲ'],
+      ],
+      [
+        ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
+        ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')'],
+        ['-', '+', '=', '/', '?', ',', '.', ';', ':'],
+        ['_', '<', '>', '[', ']', '{', '}', '|', '\\'],
+        ['~', '`', "'", '"', '§', '°', '²', '³', '£', '¤'],
+      ],
+    ],
   },
 })

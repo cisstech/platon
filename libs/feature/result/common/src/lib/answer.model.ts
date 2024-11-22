@@ -16,7 +16,7 @@ export const AnswerStateIcons: Record<AnswerStates, string> = {
   PART_SUCC: 'check_circle',
   FAILED: 'cancel',
   STARTED: 'schedule',
-  NOT_STARTED: 'error_outline',
+  NOT_STARTED: 'help_outline',
   ERROR: 'error_outline',
 }
 
@@ -42,12 +42,12 @@ export interface Answer {
 
 export const AnswerStateColors: Record<AnswerStates, string> = {
   ANSWERED: '#00BFFF',
-  SUCCEEDED: '#7CFC00',
+  SUCCEEDED: '#32CD32',
   PART_SUCC: 'orange',
   FAILED: '#FF0000',
   STARTED: '#87CEFA',
   NOT_STARTED: '#D3D3D3',
-  ERROR: '#FF8C00',
+  ERROR: '#A020F0',
 }
 
 export const answerStateFromGrade = (grade?: number | null): AnswerStates => {

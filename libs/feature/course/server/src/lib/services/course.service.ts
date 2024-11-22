@@ -4,8 +4,8 @@ import { NotFoundResponse, OrderingDirections } from '@platon/core/common'
 import { CourseFilters, CourseOrderings, COURSE_ORDERING_DIRECTIONS } from '@platon/feature/course/common'
 import { Repository } from 'typeorm'
 import { Optional } from 'typescript-optional'
-import { CourseMemberView } from './course-member/course-member.view'
-import { CourseEntity } from './course.entity'
+import { CourseMemberView } from '../course-member/course-member.view'
+import { CourseEntity } from '../entites/course.entity'
 
 type CourseGuard = (course: CourseEntity) => void | Promise<void>
 

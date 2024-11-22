@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core'
 import {
   EvalExerciseInput,
   EvalExerciseOutput,
+  NextOutput,
   PlayActivityInput,
   PlayActivityOuput,
   PlayAnswersInput,
@@ -21,6 +22,10 @@ export class RemotePlayerService extends PlayerProvider {
     super()
   }
 
+  get(sessionId: string): Observable<PlayExerciseOuput> {
+    return this.http.get<PlayExerciseOuput>('/api/v1/player/' + sessionId)
+  }
+
   preview(input: PreviewInput): Observable<PreviewOuput> {
     return this.http.post<PreviewOuput>('/api/v1/player/preview', input)
   }
@@ -34,6 +39,10 @@ export class RemotePlayerService extends PlayerProvider {
 
   playExercises(input: PlayExerciseInput): Observable<PlayExerciseOuput> {
     return this.http.post<PlayExerciseOuput>('/api/v1/player/play/exercises', input)
+  }
+
+  next(input: PlayExerciseInput): Observable<NextOutput> {
+    return this.http.post<NextOutput>('/api/v1/player/next', input)
   }
 
   evaluate(input: EvalExerciseInput): Observable<EvalExerciseOutput> {

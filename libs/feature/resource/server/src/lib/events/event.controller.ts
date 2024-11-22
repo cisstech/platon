@@ -1,7 +1,7 @@
-import { Controller, Get, Param, Query } from '@nestjs/common'
+import { Controller, Get, Query } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { ListResponse } from '@platon/core/common'
-import { Mapper } from '@platon/core/server'
+import { Mapper, UUIDParam } from '@platon/core/server'
 import { ResourceEventDTO, ResourceEventFiltersDTO } from './event.dto'
 import { ResourceEventService } from './event.service'
 
@@ -12,7 +12,7 @@ export class ResourceEventController {
 
   @Get()
   async search(
-    @Param('resourceId') resourceId: string,
+    @UUIDParam('resourceId') resourceId: string,
     @Query() filters: ResourceEventFiltersDTO = {}
   ): Promise<ListResponse<ResourceEventDTO>> {
     const [items, total] = await this.service.search(resourceId, filters)

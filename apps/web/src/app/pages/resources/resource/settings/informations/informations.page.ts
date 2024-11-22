@@ -15,6 +15,8 @@ import { NzSpinModule } from 'ng-zorro-antd/spin'
 import { Level, Topic } from '@platon/core/common'
 import { Subscription, firstValueFrom } from 'rxjs'
 import { ResourcePresenter } from '../../resource.presenter'
+import { TagService } from '@platon/core/browser'
+import { on } from 'events'
 
 @Component({
   standalone: true,
@@ -41,8 +43,10 @@ export class ResourceInformationsPage implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription[] = []
   private readonly presenter = inject(ResourcePresenter)
   private readonly changeDetectorRef = inject(ChangeDetectorRef)
+  private readonly tagService = inject(TagService)
 
   protected dataSource?: DataSource
+  protected listOfTagOptions: string[] = []
 
   protected form = new FormGroup({
     name: new FormControl('', [Validators.required]),
@@ -60,6 +64,30 @@ export class ResourceInformationsPage implements OnInit, OnDestroy {
 
   protected get canSubmit(): boolean {
     return this.form.valid && this.canEdit
+  }
+
+  isUUID4 = (input: string) => {
+    return /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(input)
+  }
+
+  protected async onNewLevels(levels: string[]): Promise<void> {
+    for (const l of levels) {
+      if (!this.isUUID4(l)) {
+        const level = await firstValueFrom(this.tagService.createLevel({ name: l }))
+        levels[levels.indexOf(l)] = level.id
+        this.dataSource?.levels.push(level)
+      }
+    }
+  }
+
+  protected async onNewTopics(topics: string[]): Promise<void> {
+    for (const t of topics) {
+      if (!this.isUUID4(t)) {
+        const topic = await firstValueFrom(this.tagService.createTopic({ name: t }))
+        topics[topics.indexOf(t)] = topic.id
+        this.dataSource?.topics.push(topic)
+      }
+    }
   }
 
   async ngOnInit(): Promise<void> {
@@ -111,6 +139,8 @@ export class ResourceInformationsPage implements OnInit, OnDestroy {
   }
 
   protected async saveChanges(): Promise<void> {
+    await this.onNewLevels(this.form.value.levels || [])
+    await this.onNewTopics(this.form.value.topics || [])
     try {
       this.saving = true
       const { value } = this.form

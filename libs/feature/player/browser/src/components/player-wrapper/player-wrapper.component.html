@@ -1,7 +1,4 @@
-<header>
-  <img src="assets/images/logo/platon.svg" alt="Logo PLaTon" />
-</header>
-
+<div class="spacer" *ngIf="player.type === 'exercise'"></div>
 <ng-container *ngIf="player.type === 'exercise'; else activity">
   <player-exercise [player]="$any(player)" />
 </ng-container>

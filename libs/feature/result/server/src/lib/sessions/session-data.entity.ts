@@ -2,7 +2,8 @@ import { UserEntity } from '@platon/core/server'
 import { ExerciseMeta } from '@platon/feature/compiler'
 import { PlayerNavigation } from '@platon/feature/player/common'
 import { ResourceTypes } from '@platon/feature/resource/common'
-import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, Entity, Index, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm'
+import { SessionEntity } from './session.entity'
 
 /**
  * - This Table is used to fetch session related data from various tables.
@@ -17,6 +18,10 @@ export class SessionDataEntity {
 
   @Column({ name: 'id', type: 'uuid' })
   id!: string
+
+  @OneToOne(() => SessionEntity, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'id' })
+  session!: SessionEntity
 
   @Column({ name: 'user_id', type: 'uuid', nullable: true })
   userId?: string

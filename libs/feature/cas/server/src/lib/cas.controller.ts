@@ -12,7 +12,7 @@ import {
   HttpRedirectResponse,
 } from '@nestjs/common'
 import { CreateCasDTO, UpdateCasDTO } from './cas.dto'
-import { AuthService, Mapper, Public, UserService } from '@platon/core/server'
+import { AuthService, Mapper, Public, UserService, UUIDParam } from '@platon/core/server'
 import { CasService } from './cas.service'
 import { CasDTO, CasFiltersDTO } from './cas.dto'
 import { CreatedResponse, ItemResponse, ListResponse, NoContentResponse, NotFoundResponse } from '@platon/core/common'
@@ -136,7 +136,7 @@ export class CasController {
   }
 
   @Get('/:id')
-  async findCas(@Param('id') id: string): Promise<ItemResponse<CasDTO>> {
+  async findCas(@UUIDParam('id') id: string): Promise<ItemResponse<CasDTO>> {
     const optional = await this.service.findCasById(id)
     const resource = Mapper.map(
       optional.orElseThrow(() => new NotFoundResponse(`Cas not found: ${id}`)),
@@ -153,14 +153,14 @@ export class CasController {
   }
 
   @Patch('/:id')
-  async updateCas(@Param('id') id: string, @Body() input: UpdateCasDTO): Promise<ItemResponse<CasDTO>> {
+  async updateCas(@UUIDParam('id') id: string, @Body() input: UpdateCasDTO): Promise<ItemResponse<CasDTO>> {
     const res = await this.service.updateCas(id, { ...(await this.service.fromInput(input)) })
     const resource = Mapper.map(res, CasDTO)
     return new ItemResponse({ resource })
   }
 
   @Delete('/:id')
-  async deleteCas(@Param('id') id: string): Promise<NoContentResponse> {
+  async deleteCas(@UUIDParam('id') id: string): Promise<NoContentResponse> {
     await this.service.deleteCas(id)
     return new NoContentResponse()
   }

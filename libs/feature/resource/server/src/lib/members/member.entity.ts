@@ -20,10 +20,11 @@ export class ResourceMemberEntity extends BaseEntity {
   @JoinColumn({ name: 'resource_id' })
   resource!: ResourceEntity
 
-  @Column({ name: 'inviter_id' })
+  @Column({ name: 'inviter_id', default: '00000000-0000-0000-0000-000000000000' })
   inviterId!: string
 
-  @ManyToOne(() => UserEntity, { onDelete: 'CASCADE' })
+  // @ts-expect-error: SET DEFAULT does not exist in OnDeleteType
+  @ManyToOne(() => UserEntity, { onDelete: 'SET DEFAULT' })
   @JoinColumn({ name: 'inviter_id' })
   inviter!: UserEntity
 

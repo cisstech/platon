@@ -3,7 +3,7 @@ import { ApiTags } from '@nestjs/swagger'
 import { ActivityGroupService } from './activity-group.service'
 import { ActivityService } from '../activity/activity.service'
 import { CourseGroupService } from '../course-group/course-group.service'
-import { Roles } from '@platon/core/server'
+import { Roles, UUIDParam } from '@platon/core/server'
 import { ListResponse, NotFoundResponse, UserRoles } from '@platon/core/common'
 import { ActivityGroupEntity } from './activity-group.entity'
 
@@ -18,7 +18,7 @@ export class ActivityGroupController {
 
   @Roles(UserRoles.teacher, UserRoles.admin)
   @Post()
-  async create(@Param('activityId') activityId: string, @Body() groupId: string): Promise<void> {
+  async create(@UUIDParam('activityId') activityId: string, @Body() groupId: string): Promise<void> {
     await this.activityService.withActivity(activityId, async (activity) => {
       if (!activity) {
         throw new NotFoundResponse(`Activity ${activityId} not found.`)
@@ -35,19 +35,22 @@ export class ActivityGroupController {
 
   @Roles(UserRoles.teacher, UserRoles.admin)
   @Delete(':groupId')
-  async delete(@Param('activityId') activityId: string, @Param('groupId') groupId: string): Promise<void> {
+  async delete(@UUIDParam('activityId') activityId: string, @Param('groupId') groupId: string): Promise<void> {
     await this.activityGroupService.delete(activityId, groupId)
   }
 
   @Get()
-  async search(@Param('activityId') activityId: string): Promise<ListResponse<ActivityGroupEntity>> {
+  async search(@UUIDParam('activityId') activityId: string): Promise<ListResponse<ActivityGroupEntity>> {
     const items = await this.activityGroupService.search(activityId)
     return new ListResponse({ resources: items, total: items.length })
   }
 
   @Roles(UserRoles.teacher, UserRoles.admin)
   @Put()
-  async update(@Param('activityId') activityId: string, @Body() groupsIds: string[]): Promise<ActivityGroupEntity[]> {
+  async update(
+    @UUIDParam('activityId') activityId: string,
+    @Body() groupsIds: string[]
+  ): Promise<ActivityGroupEntity[]> {
     return this.activityGroupService.update(activityId, groupsIds)
   }
 }

@@ -130,6 +130,7 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input() reviewMode = false
   @Input() canComment = false
+  @Input() peerComparison = false
 
   @Input() hasNext?: boolean
   @Input() hasPrev?: boolean
@@ -262,6 +263,7 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
         label: 'Exercise précédent',
         tooltip: 'Exercise précédent',
         visible: this.hasPrev,
+        id: 'prev-exercise-button',
         run: () => this.goToPrevPlayer.emit(),
       },
       {
@@ -269,6 +271,7 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
         label: 'Exercise suivant',
         tooltip: 'Exercise suivant',
         visible: this.hasNext,
+        id: 'next-exercise-button',
         run: () => this.goToNextPlayer.emit(),
       },
     ]
@@ -281,14 +284,16 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
         icon: 'arrow_back',
         label: 'Réponse précédente',
         tooltip: 'Réponse précédente',
-        visible: this.players.length > 1 && this.index > 0,
+        visible: this.players.length > 1,
+        disabled: this.players.length > 1 && this.index == 0,
         run: () => this.previousAttempt(),
       },
       {
         icon: 'arrow_forward',
         label: 'Réponse suivante',
         tooltip: 'Réponse suivante',
-        visible: this.players.length > 1 && this.index < this.players.length - 1,
+        visible: this.players.length > 1,
+        disabled: this.players.length > 1 && this.index == this.players.length - 1,
         run: () => this.nextAttempt(),
       },
     ]
@@ -311,6 +316,10 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnInit(): void {
+    this.index = this.reviewMode && !this.peerComparison ? this.players.length - 1 : 0
+    if (!this.player) {
+      this.player = this.players[this.index]
+    }
     this.requestFullscreen =
       this.container.nativeElement.requestFullscreen ||
       this.container.nativeElement.webkitRequestFullscreen ||
@@ -333,7 +342,7 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnChanges(): void {
     if (this.players?.length) {
-      this.player = this.players[0]
+      this.player = this.players[this.index]
       this.clearNotification?.()
       this.clearNotification = undefined
     }
@@ -378,6 +387,10 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
 
   protected trackAction(_: number, item: Action): string {
     return item.tooltip
+  }
+
+  public getAnswers(): Record<string, unknown> {
+    return this.answers()
   }
 
   private answers(): Record<string, unknown> {

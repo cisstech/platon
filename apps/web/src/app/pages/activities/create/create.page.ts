@@ -78,6 +78,7 @@ export class ActivityCreatePage implements OnInit {
   protected challenge = false
   protected members: CourseMember[] = []
   protected courseGroups: CourseGroup[] = []
+  protected hasFirstStep = true
 
   protected courseInfo = new FormGroup({
     course: new FormControl<Course | undefined>(undefined, [Validators.required]),
@@ -108,6 +109,9 @@ export class ActivityCreatePage implements OnInit {
 
     const courseId = queryParamMap.get('course')
     const sectionId = queryParamMap.get('section')
+    if (sectionId) {
+      this.hasFirstStep = false
+    }
     this.challenge = !!queryParamMap.get('challenge')
     if (this.challenge) {
       this.settingsInfo.get('isChallenge')?.setValue(true)

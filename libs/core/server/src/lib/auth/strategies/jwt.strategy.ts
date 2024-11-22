@@ -24,6 +24,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     const user = (await this.userService.findByIdOrName(payload.sub)).orElseThrow(
       () => new UnauthorizedException(`Failed to authentificate user: ${payload}`)
     )
+    await this.userService.updateLastActivity(user)
     return user
   }
 }

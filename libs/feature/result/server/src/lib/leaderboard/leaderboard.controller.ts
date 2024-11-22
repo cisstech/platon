@@ -1,7 +1,7 @@
-import { Controller, Get, Param, Query, Req } from '@nestjs/common'
+import { Controller, Get, Query, Req } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { ForbiddenResponse, ListResponse, isTeacherRole } from '@platon/core/common'
-import { IRequest, Mapper, toNumber } from '@platon/core/server'
+import { IRequest, Mapper, toNumber, UUIDParam } from '@platon/core/server'
 import { ActivityMemberService, CourseMemberService, ActivityGroupService } from '@platon/feature/course/server'
 import { ActivityLeaderboardEntryDTO, CourseLeaderboardEntryDTO } from './leaderboard.dto'
 import { LeaderboardService } from './leaderboard.service'
@@ -19,7 +19,7 @@ export class LeaderboardController {
   @Get('courses/:id')
   async ofCourse(
     @Req() req: IRequest,
-    @Param('id') id: string,
+    @UUIDParam('id') id: string,
     @Query('limit', { transform: (value: string) => toNumber(value) }) limit?: number
   ): Promise<ListResponse<CourseLeaderboardEntryDTO>> {
     const isMember = this.courseMemberService.isMember(id, req.user.id)
@@ -38,7 +38,7 @@ export class LeaderboardController {
   @Get('activities/:id')
   async ofActivity(
     @Req() req: IRequest,
-    @Param('id') id: string,
+    @UUIDParam('id') id: string,
     @Query('limit', { transform: (value: string) => toNumber(value) })
     limit?: number
   ): Promise<ListResponse<ActivityLeaderboardEntryDTO>> {

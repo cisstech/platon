@@ -1,8 +1,8 @@
 import { Expandable, Selectable } from '@cisstech/nestjs-expand'
-import { Body, Controller, Delete, Get, Logger, Param, Patch, Post, Query, Req } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Logger, Patch, Post, Query, Req } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { CreatedResponse, ForbiddenResponse, ItemResponse, ListResponse, NotFoundResponse } from '@platon/core/common'
-import { IRequest, Mapper, UserService } from '@platon/core/server'
+import { IRequest, Mapper, UserService, UUIDParam } from '@platon/core/server'
 import { ResourceCompletionDTO } from './completion'
 import { ResourcePermissionService } from './permissions/permissions.service'
 import { CircleTreeDTO, CreateResourceDTO, ResourceDTO, ResourceFiltersDTO, UpdateResourceDTO } from './resource.dto'
@@ -84,7 +84,7 @@ export class ResourceController {
   @Selectable({ rootField: 'resource' })
   async find(
     @Req() req: IRequest,
-    @Param('id') id: string,
+    @UUIDParam('id') id: string,
     @Query('markAsViewed') markAsViewed?: string
   ): Promise<ItemResponse<ResourceDTO>> {
     const optional = await this.resourceService.findByIdOrCode(id)
@@ -140,7 +140,7 @@ export class ResourceController {
   @Selectable({ rootField: 'resource' })
   async update(
     @Req() req: IRequest,
-    @Param('id') id: string,
+    @UUIDParam('id') id: string,
     @Body() input: UpdateResourceDTO
   ): Promise<ItemResponse<ResourceDTO>> {
     const existing = await this.resourceService.findByIdOrCode(id)
@@ -168,7 +168,7 @@ export class ResourceController {
   @Selectable({ rootField: 'resource' })
   async move(
     @Req() req: IRequest,
-    @Param('id') id: string,
+    @UUIDParam('id') id: string,
     @Body('parentId') parentId: string
   ): Promise<ItemResponse<ResourceDTO>> {
     const existing = await this.resourceService.findByIdOrCode(id)
@@ -205,7 +205,7 @@ export class ResourceController {
   @Selectable({ rootField: 'resource' })
   async moveToOwnerCircle(
     @Req() req: IRequest,
-    @Param('id') id: string,
+    @UUIDParam('id') id: string,
     @Body('ownerId') ownerId: string
   ): Promise<ItemResponse<ResourceDTO>> {
     const existing = await this.resourceService.findByIdOrCode(id)
@@ -247,7 +247,7 @@ export class ResourceController {
   }
 
   @Delete('/:id')
-  async delete(@Req() req: IRequest, @Param('id') id: string): Promise<void> {
+  async delete(@Req() req: IRequest, @UUIDParam('id') id: string): Promise<void> {
     const existing = await this.resourceService.findByIdOrCode(id)
     if (!existing.isPresent()) {
       throw new NotFoundResponse(`Resource not found: ${id}`)

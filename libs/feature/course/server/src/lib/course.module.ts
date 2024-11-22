@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common'
+import { forwardRef, Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { AuthModule, UserModule } from '@platon/core/server'
 import { FeatureLtiServerModule } from '@platon/feature/lti/server'
@@ -26,10 +26,10 @@ import { CourseMemberService } from './course-member/course-member.service'
 import { CourseMemberView } from './course-member/course-member.view'
 import { CourseNotificationService } from './course-notification/course-notification.service'
 import { CourseController } from './course.controller'
-import { CourseEntity } from './course.entity'
+import { CourseEntity } from './entites/course.entity'
 import { CourseExpander } from './course.expander'
 import { CourseLTIInterceptor } from './course.interceptor'
-import { CourseService } from './course.service'
+import { CourseService } from './services/course.service'
 import { CourseSubscriber } from './course.subscriber'
 import { CoursePermissionsService } from './permissions/permissions.service'
 import { CourseSectionController } from './section/section.controller'
@@ -41,6 +41,9 @@ import { CourseDemoEntity } from './course-demo/course-demo.entity'
 import { ActivityGroupEntity } from './activity-group/activity-group.entity'
 import { ActivityGroupController } from './activity-group/activity-group.controller'
 import { ActivityGroupService } from './activity-group/activity-group.service'
+import { LmsCourseEntity } from './entites/lms-course.entity'
+import { LmsCourseService } from './services/lms-course.service'
+import { ActivityListeners } from './activity/activity.listeners'
 
 @Module({
   imports: [
@@ -50,6 +53,7 @@ import { ActivityGroupService } from './activity-group/activity-group.service'
     AuthModule,
     TypeOrmModule.forFeature([
       CourseEntity,
+      LmsCourseEntity,
       CourseMemberView,
       CourseMemberEntity,
       CourseSectionEntity,
@@ -78,6 +82,7 @@ import { ActivityGroupService } from './activity-group/activity-group.service'
   ],
   providers: [
     CourseService,
+    LmsCourseService,
     CourseExpander,
     CourseSubscriber,
     CourseLTIInterceptor,
@@ -86,6 +91,7 @@ import { ActivityGroupService } from './activity-group/activity-group.service'
     CourseMemberService,
     CourseSectionService,
     ActivityService,
+    ActivityListeners,
     ActivityMemberService,
     ActivityCorrectorService,
     CourseNotificationService,

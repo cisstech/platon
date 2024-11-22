@@ -24,6 +24,7 @@ import {
   UpdateCourseSection,
   CourseGroup,
   ActivityGroup,
+  CourseMemberRoles,
 } from '@platon/feature/course/common'
 import { Observable, Subject, tap } from 'rxjs'
 import { ActivityCorrectorProvider } from '../models/activity-corrector.provider'
@@ -105,6 +106,10 @@ export class CourseService {
     return this.courseMemberProvider.create(course, input).pipe(tap((member) => this.addMemberEvent.next(member)))
   }
 
+  updateMemberRole(member: CourseMember, role: CourseMemberRoles): Observable<CourseMember> {
+    return this.courseMemberProvider.updateRole(member, role)
+  }
+
   searchMembers(course: Course | string, filters?: CourseMemberFilters): Observable<ListResponse<CourseMember>> {
     return this.courseMemberProvider.search(course, filters)
   }
@@ -163,6 +168,10 @@ export class CourseService {
 
   closeActivity(activity: Activity): Observable<Activity> {
     return this.activityProvider.close(activity)
+  }
+
+  reopenActivity(activity: Activity): Observable<Activity> {
+    return this.activityProvider.reopen(activity)
   }
 
   //#endregion

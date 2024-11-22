@@ -6,6 +6,29 @@
 <main>
   <nz-skeleton [nzActive]="loading" [nzLoading]="loading">
     <ui-stepper #stepper (finished)="create()" (changed)="$event > 1 && loadMembers()">
+      <ng-container *ngIf="hasFirstStep">
+        <!-- STEP 1 -->
+        <ng-template #icon1>
+          <mat-icon>local_library</mat-icon>
+        </ng-template>
+        <ng-template
+          uiStepperStep
+          stepTitle="Section"
+          [stepIcon]="icon1"
+          [stepValidator]="!!courseInfo.valid || courseInfo.disabled"
+        >
+          <section *ngIf="user">
+            <form [formGroup]="courseInfo">
+              <h4 id="section">Dans quelle section du cours l'activité doit-elle être ajoutée ?</h4>
+              <course-section-search-bar
+                [course]="courseInfo.value.course"
+                aria-labelledby="section"
+                formControlName="section"
+              />
+            </form>
+          </section>
+        </ng-template>
+      </ng-container>
       <!-- STEP 2 -->
       <ng-template #icon2>
         <mat-icon>widgets</mat-icon>

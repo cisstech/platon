@@ -10,4 +10,5 @@ export abstract class ActivityProvider {
   abstract reload(activity: Activity, version?: string): Observable<Activity>
   abstract delete(activity: Activity, version?: string): Observable<void>
   abstract close(activity: Activity): Observable<Activity>
+  abstract reopen(activity: Activity): Observable<Activity>
 }

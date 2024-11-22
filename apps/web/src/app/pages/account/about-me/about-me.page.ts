@@ -13,6 +13,7 @@ import { NzSelectModule } from 'ng-zorro-antd/select'
 import { MatCardModule } from '@angular/material/card'
 import { DialogModule, DialogService, ProtectedComponent, TagService, UserService } from '@platon/core/browser'
 import { Level, Topic, User, UserPrefs, UserRoles } from '@platon/core/common'
+import { MatIconModule } from '@angular/material/icon'
 
 @Component({
   standalone: true,
@@ -29,6 +30,7 @@ import { Level, Topic, User, UserPrefs, UserRoles } from '@platon/core/common'
     MatInputModule,
     MatSelectModule,
     MatFormFieldModule,
+    MatIconModule,
 
     NzSelectModule,
     NzButtonModule,
@@ -43,6 +45,7 @@ export class AccountAboutMePage {
     lastName: this.fb.control({ value: '', disabled: true }),
     email: this.fb.control({ value: '', disabled: true }),
     role: this.fb.control({ value: UserRoles.teacher, disabled: true }),
+    discordId: this.fb.control({ value: '', disabled: true }),
     topics: this.fb.control<string[]>({ value: [], disabled: false }),
     levels: this.fb.control<string[]>({ value: [], disabled: false }),
   })
@@ -52,6 +55,7 @@ export class AccountAboutMePage {
   protected prefs: UserPrefs | undefined
   protected topics: Topic[] = []
   protected levels: Level[] = []
+  protected icon = 'lock'
 
   constructor(
     private readonly fb: FormBuilder,
@@ -89,12 +93,35 @@ export class AccountAboutMePage {
             topics: this.form.value.topics || [],
           })
         ),
+        await firstValueFrom(
+          this.userService.update(this.user.id, { discordId: this.form.get('discordId')?.value ?? undefined })
+        ),
       ])
       this.dialogService.success('Vos informations ont été mises à jour !')
     } catch {
       this.dialogService.error('Une erreur est survenue, veuillez réessayer un peu plus tard !')
     } finally {
       this.changeDetectorRef.markForCheck()
+    }
+  }
+
+  protected async editDiscordId() {
+    if (this.form.get('discordId')?.enabled) {
+      this.icon = 'lock'
+      this.form.get('discordId')?.disable()
+      if (this.form.get('discordId')?.value !== this.user.discordId) {
+        try {
+          await firstValueFrom(
+            this.userService.update(this.user.id, { discordId: this.form.get('discordId')?.value ?? undefined })
+          )
+        } catch {
+          this.dialogService.error('Une erreur est survenue, veuillez réessayer un peu plus tard !')
+        }
+        this.dialogService.success('Votre identifiant Discord a été mis à jour !')
+      }
+    } else {
+      this.icon = 'lock_open'
+      this.form.get('discordId')?.enable()
     }
   }
 }

@@ -5,41 +5,75 @@
   <mat-label>{{ state.placeholder }}</mat-label>
   <mat-hint>{{ state.hint }}</mat-hint>
   <input matInput type="text" inputmode="decimal" [formControl]="form" (keydown.enter)="autoValidate()" />
-  <div class="prefix" [class.no-prefix]="!state.suffix" matIconPrefix>
+  <div class="prefix" [class.no-prefix]="!state.prefix" matIconPrefix>
     <img
       *ngIf="state.prefix"
       [src]="state.prefix || 'fontawesome address-book color=FF0000' | icongr"
       alt="prefix icon"
     />
   </div>
-  <div class="suffix" [class.no-suffix]="!state.suffix" matIconSuffix>
-    <img *ngIf="state.suffix" [src]="state.suffix | icongr" alt="suffix icon" />
+  <div class="suffix" [class.no-suffix]="!hasSpecialCharacters()" matIconSuffix>
+    <button
+      class="special-characters-button"
+      mat-icon-button
+      nz-button
+      nz-popover
+      [nzPopoverContent]="specialCharacters"
+      nzPopoverTrigger="click"
+      nzPopoverPlacement="bottomRight"
+      (click)="$event.stopPropagation()"
+    >
+      <mat-icon>keyboard</mat-icon>
+    </button>
   </div>
 </mat-form-field>
 }
 
 <!-- TEXT -->
 @case ('text') {
-<mat-form-field [ngStyle]="containerStyles" [appearance]="state.appearance">
-  <mat-label>{{ state.placeholder }}</mat-label>
-  <mat-hint>{{ state.hint }}</mat-hint>
-  <input matInput type="text" [formControl]="form" [matAutocomplete]="auto" (keydown.enter)="autoValidate()" />
-  <mat-autocomplete #auto="matAutocomplete">
-    <mat-option *ngFor="let option of $autocomplete | async" [value]="option">
-      {{ option }}
-    </mat-option>
-  </mat-autocomplete>
-  <div class="prefix" [class.no-prefix]="!state.suffix" matIconPrefix>
-    <img
-      *ngIf="state.prefix"
-      [src]="state.prefix || 'fontawesome address-book color=FF0000' | icongr"
-      alt="prefix icon"
+<div>
+  <mat-form-field [ngStyle]="containerStyles" [appearance]="state.appearance">
+    <mat-label>{{ state.placeholder }}</mat-label>
+    <mat-hint>{{ state.hint }}</mat-hint>
+    <input
+      matInput
+      type="text"
+      [formControl]="form"
+      [matAutocomplete]="auto"
+      (keydown.enter)="autoValidate()"
+      [ngStyle]="{ 'justify-items': state.width === 'auto' ? 'center' : 'start' }"
     />
-  </div>
-  <div class="suffix" [class.no-suffix]="!state.suffix" matIconSuffix>
-    <img *ngIf="state.suffix" [src]="state.suffix | icongr" alt="suffix icon" />
-  </div>
-</mat-form-field>
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let option of $autocomplete | async" [value]="option">
+        {{ option }}
+      </mat-option>
+    </mat-autocomplete>
+    <div class="prefix" [class.no-prefix]="!state.prefix" matIconPrefix>
+      <img
+        *ngIf="state.prefix"
+        [src]="state.prefix || 'fontawesome address-book color=FF0000' | icongr"
+        alt="prefix icon"
+      />
+    </div>
+    <div class="suffix" [class.no-suffix]="!hasSpecialCharacters()" matIconSuffix>
+      <button
+        class="special-characters-button"
+        mat-icon-button
+        nz-button
+        nz-popover
+        [nzPopoverContent]="specialCharacters"
+        nzPopoverTrigger="click"
+        nzPopoverPlacement="bottomRight"
+        (click)="$event.stopPropagation()"
+      >
+        <mat-icon>keyboard</mat-icon>
+      </button>
+    </div>
+  </mat-form-field>
+</div>
+<span *ngIf="state.width === 'auto'" #invisibleText id="invisibleTextID">
+  {{ state.value }}
+</span>
 }
 
 <!-- TEXTAREA -->
@@ -49,15 +83,26 @@
   <mat-hint>{{ state.hint }}</mat-hint>
   <textarea matInput matTextareaAutosize type="multiline" [formControl]="form" (keydown.enter)="autoValidate()">
   </textarea>
-  <div class="prefix" [class.no-prefix]="!state.suffix" matIconPrefix>
+  <div class="prefix" [class.no-prefix]="!state.prefix" matIconPrefix>
     <img
       *ngIf="state.prefix"
       [src]="state.prefix || 'fontawesome address-book color=FF0000' | icongr"
       alt="prefix icon"
     />
   </div>
-  <div class="suffix" [class.no-suffix]="!state.suffix" matIconSuffix>
-    <img *ngIf="state.suffix" [src]="state.suffix | icongr" alt="suffix icon" />
+  <div class="suffix" [class.no-suffix]="!hasSpecialCharacters()" matIconSuffix>
+    <button
+      class="special-characters-button"
+      mat-icon-button
+      nz-button
+      nz-popover
+      [nzPopoverContent]="specialCharacters"
+      nzPopoverTrigger="click"
+      nzPopoverPlacement="bottomRight"
+      (click)="$event.stopPropagation()"
+    >
+      <mat-icon>keyboard</mat-icon>
+    </button>
   </div>
 </mat-form-field>
 }
@@ -66,5 +111,27 @@
 @default {
 <mat-error>"{{ state.type }}" is not a valid input type</mat-error>
 }}
+
+<ng-template #specialCharacters>
+  <div class="special-characters" id="special-characters">
+    <div class="characters-line" *ngFor="let line of specialCharactersGrid[charactersPage]">
+      <div
+        [class]="'character' + (c === '' ? ' hide-char' : '')"
+        *ngFor="let c of line"
+        (click)="insertSpecialCharacter(c)"
+      >
+        {{ c }}
+      </div>
+    </div>
+  </div>
+  <div class="characters-navigation" *ngIf="specialCharactersGrid.length > 1">
+    <button (click)="navigateSpecialCharacters(-1)">
+      <mat-icon>keyboard_arrow_left</mat-icon>
+    </button>
+    <button (click)="navigateSpecialCharacters(1)">
+      <mat-icon>keyboard_arrow_right</mat-icon>
+    </button>
+  </div>
+</ng-template>
 
 <wc-base [(state)]="state" />

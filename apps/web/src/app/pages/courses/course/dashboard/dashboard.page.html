@@ -14,7 +14,19 @@
         >
           Ajouter une section
         </button>
+        <button
+          *ngIf="context.course?.permissions?.update && viewMode.mode === 'table'"
+          nz-button
+          nzType="primary"
+          nzShape="round"
+          [queryParamsHandling]="'merge'"
+          [routerLink]="['/activities/create']"
+          [queryParams]="{ course: course.id }"
+        >
+          Ajouter une activité
+        </button>
         <course-csv-download-button
+          *ngIf="context.course?.permissions?.update"
           [activities]="activities"
           [name]="course.name"
           type="course"

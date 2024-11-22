@@ -1,6 +1,6 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne, Unique } from 'typeorm'
 import { BaseEntity } from '@platon/core/server'
-import { CourseEntity } from '../course.entity'
+import { CourseEntity } from '../entites/course.entity'
 
 @Entity('CourseGroups')
 @Unique('Unique_CourseGroup', ['groupId', 'courseId'])

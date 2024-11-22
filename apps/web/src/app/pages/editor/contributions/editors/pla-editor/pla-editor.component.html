@@ -59,6 +59,18 @@
         Exercices
       </div>
     </button>
+    <button
+      *ngIf="activity?.settings?.navigation?.mode === 'next'"
+      nz-button
+      nzType="default"
+      (click)="getToStep(3)"
+      [ngClass]="{ active: step === 3 }"
+    >
+      <div class="vertical-align">
+        <span nz-icon nzType="fast-forward"></span>
+        Next
+      </div>
+    </button>
   </div>
 
   <hr />
@@ -138,9 +150,37 @@
                   <span nz-icon nzType="question-circle" nz-tooltip="les exercices sont affichés un à un"></span>
                   Progressive
                 </nz-option>
+                <nz-option nzValue="next" nzLabel="Intelligente" nzCustomContent>
+                  <span
+                    nz-icon
+                    nzType="question-circle"
+                    nz-tooltip="Les exercices s'enchaineront en fonction du comportement défini dans next.py."
+                  ></span>
+                  Intelligente
+                </nz-option>
+                <nz-option nzValue="peer" nzLabel="Comparaison par les pairs" nzCustomContent>
+                  <span
+                    nz-icon
+                    nzType="question-circle"
+                    nz-tooltip="Mode composé que l'on utilise pour afficher deux exercices et les comparer."
+                  ></span>
+                  Comparaison par les pairs
+                </nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
+          <nz-alert
+            *ngIf="activity?.settings?.navigation?.mode === 'peer'"
+            nzType="warning"
+            nzMessage="Attention la fonctionnalité de comparaison par les pairs est en cours de développement."
+            nzShowIcon
+          ></nz-alert>
+          <nz-alert
+            *ngIf="activity?.settings?.navigation?.mode === 'next'"
+            nzType="warning"
+            nzMessage="Attention la fonctionnalité de navigation intelligente est en cours de développement."
+            nzShowIcon
+          ></nz-alert>
         </nz-collapse-panel>
         <nz-collapse-panel formGroupName="actions" nzHeader="Actions" nzExpandedIcon="play-circle" nzActive>
           <nz-form-item>
@@ -366,6 +406,132 @@
         <div class="exercise-list" *ngIf="selectedGroup !== undefined">
           <ng-template [ngTemplateOutlet]="exerciseList"></ng-template>
         </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="step === 3">
+      <nz-collapse>
+        <button nz-button nzType="primary" class="openNextButton" (click)="openNextFile()">
+          <span nz-icon nzType="file" nzTheme="outline"></span>
+          <span>Ouvrir le fichier next.{{ activity.settings?.nextSettings?.sandbox === 'python' ? 'py' : 'js' }}</span>
+        </button>
+        <nz-collapse-panel formGroupName="nextSettings" nzHeader="Paramètres du next" nzExpandedIcon="setting" nzActive>
+          <nz-form-item>
+            <nz-form-label
+              nzLabelAlign="left"
+              for="sandbox"
+              nzTooltipTitle="Langage à utiliser pour programmer le next."
+              >Sandbox</nz-form-label
+            >
+            <nz-form-control>
+              <nz-select formControlName="sandbox" id="sandbox">
+                <nz-option nzValue="python" nzLabel="Python" nzCustomContent> Python (next.py) </nz-option>
+                <nz-option nzValue="node" nzLabel="Node" nzCustomContent> Node (next.js) </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label
+              nzLabelAlign="left"
+              for="autoNext"
+              nzTooltipTitle="Passer automatiquement à l'exercice suivant après une soumission."
+            >
+              Passer automatiquement
+            </nz-form-label>
+            <nz-form-control>
+              <label nz-checkbox formControlName="autoNext" id="autoNext"></label>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item *ngIf="activity.settings?.nextSettings?.autoNext">
+            <nz-form-label
+              nzLabelAlign="left"
+              for="autoNextGrade"
+              nzTooltipTitle="Note nécessaire pour passer automatiquement à l'exercice suivant."
+            >
+              Note minimum pour passer automatiquement
+            </nz-form-label>
+            <nz-form-control>
+              <nz-input-number
+                formControlName="autoNextGrade"
+                id="autoNextGrade"
+                [nzMin]="0"
+                [nzMax]="100"
+              ></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+        </nz-collapse-panel>
+      </nz-collapse>
+      <div *ngIf="false" class="next">
+        <div class="exercise-group-list">
+          <h3>Groupes d'exercices</h3>
+          <mat-accordion
+            cdkDropListGroup
+            cdkDropList
+            [cdkDropListDisabled]="readOnly"
+            (cdkDropListDropped)="onReorderGroups($any($event))"
+            class="draggable-container"
+            multi
+          >
+            <mat-expansion-panel
+              cdkDrag
+              cdkDropList
+              [cdkDropListDisabled]="readOnly"
+              [cdkDropListData]="group"
+              (cdkDropListDropped)="drop($any($event))"
+              [cdkDropListConnectedTo]="['itemList']"
+              id="panel{{ i }}"
+              [class.selected]="selectedGroupIndex === i"
+              (click)="selectGroup(i)"
+              *ngFor="let group of exerciseGroups; trackBy: trackByIndex; index as i"
+              class="expansion-panel draggable-item"
+              #panel
+            >
+              <mat-expansion-panel-header>
+                <mat-icon class="drag-icon">drag_indicator</mat-icon>
+                <div class="group-header">
+                  <div class="group-number">
+                    {{ group.name }}
+                  </div>
+                  <div class="exercise-number">
+                    <ng-container [ngPlural]="group.exercises.length">
+                      <ng-template ngPluralCase="=0">0 exercice</ng-template>
+                      <ng-template ngPluralCase="=1">1 exercice</ng-template>
+                      <ng-template ngPluralCase="other">{{ group.exercises.length }} exercices</ng-template>
+                    </ng-container>
+                  </div>
+                </div>
+              </mat-expansion-panel-header>
+              <div class="mat-expansion-panel-content draggable-container">
+                <nz-list
+                  cdkDropList
+                  [cdkDropListDisabled]="readOnly"
+                  (cdkDropListDropped)="drop($any($event))"
+                  [cdkDropListConnectedTo]="connectedTo[i]"
+                  [cdkDropListData]="group.exercises"
+                  (cdkDropListDropped)="onReorderExercises($any($event))"
+                  [nzDataSource]="group.exercises"
+                  nzBordered
+                  class="draggable-container"
+                  id="array{{ i }}"
+                >
+                  <div
+                    *ngFor="let exercise of group.exercises; trackBy: trackByExerciseId; index as i"
+                    class="draggable-item exercise-in-group"
+                    cdkDrag
+                  >
+                    <app-pla-exercise-editor
+                      [disabled]="readOnly"
+                      [exercise]="exercise"
+                      (exerciseChange)="updateExercise($event)"
+                      (exerciseLoadFailed)="onExerciseLoadFailed($event)"
+                      (deleteClicked)="deleteExercise(i)"
+                    />
+                  </div>
+                </nz-list>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+        <div class="graph-container"></div>
       </div>
     </ng-container>
   </form>

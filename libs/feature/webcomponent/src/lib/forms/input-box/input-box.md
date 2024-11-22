@@ -17,9 +17,9 @@ Le comportement de ce composant dépend de la valeur de sa propriété `type`.
 
 - `textarea`: Le même comportement que pour le type `text` sauf que la chaine peut être saisi sur plusieurs lignes.
 
-### Les propriétés `prefix` et `suffix`
+### La propriété `prefix`
 
-Les propriétés `prefix` et `suffix` vous permettent d'afficher une icône à gauche et/ou à droite
+La propriété `prefix` vous permet d'afficher une icône à gauche
 du champ de saisi en utilisant la syntaxe suivante:
 
 `type nom`
@@ -41,3 +41,44 @@ Exemple:
 @fontawesome address-book color=FF0000@
 
 La liste complète des types et noms supportés sont spécifiés sur le site [https://icongr.am](https://icongr.am).
+
+### La propriété `specialCharacters`
+
+La propriété `specialCharacters` vous permet de définir un clavier virtuel avec des caractères spéciaux.
+
+Vous pouvez utiliser `string[][][]` afin de séparer les caractères par pages, lignes et colonnes.
+
+Exemple :
+
+```py
+specialCharacters = [
+  # Page 1 :
+  [
+    ['a', 'b', 'c', 'd', ...],   # Ligne 1
+    ['q', 'r', 's', 't', ...]    # Ligne 2
+  ],
+  # Page 2 :
+  [
+    ['à', 'ñ', 'œ', ...],   # Ligne 1
+    ['1', '2', '', '', '3', '4', ...],   # Le '' permet de laisser des colonnes vides dans la ligne
+    ...
+  ]
+]
+```
+
+Sinon, vous pouvez utiliser `string[][]` si vous ne voulez utiliser qu'une seule page.
+
+Exemple :
+
+```py
+specialCharacters = [
+  ['α', 'β', 'γ', 'δ', ...],   # Ligne 1
+  ['φ', 'χ', 'ψ', 'ω', ...]    # Ligne 2
+]
+```
+
+Enfin, vous pouvez utiliser `string[]` si vous n'avez besoin que d'une seule ligne.
+
+```py
+specialCharacters = ['😁', '​😅', '​🤣', '​😂', '​🙂​', ...]
+```

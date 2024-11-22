@@ -136,6 +136,13 @@ nz-progress {
   }
 }
 
+pre {
+  overflow-y: auto;
+  max-height: 75vh;
+  color: red;
+  margin: 2rem 0;
+}
+
 // MOBILE
 @media (max-width: 768px) {
   :host {

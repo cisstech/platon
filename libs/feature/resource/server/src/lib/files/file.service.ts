@@ -162,7 +162,12 @@ export class ResourceFileService {
     await compiler.compile(Buffer.from((await buffer).buffer).toString())
 
     const source = await compiler.output(overrides)
+
     source.variables.author = resource.ownerId
     return { source, resource, compiler }
+  }
+
+  async getTitle(resourceId: string): Promise<string> {
+    return this.resourceService.findByIdOrCode(resourceId).then((resource) => resource.orUndefined()?.name || 'À faire')
   }
 }

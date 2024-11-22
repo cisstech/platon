@@ -227,4 +227,22 @@ export class CourseActivitySettingsComponent implements OnInit {
     this.updating = false
     this.changeDetectorRef.markForCheck()
   }
+
+  protected async reopenForAll(): Promise<void> {
+    this.updating = true
+    this.changeDetectorRef.markForCheck()
+    const activity = await firstValueFrom(this.courseService.reopenActivity(this.activity))
+    this.activityChange.emit(
+      (this.activity = {
+        ...this.activity,
+        closeAt: undefined,
+        state: activity.state,
+      })
+    )
+    this.form.patchValue({
+      closeAt: this.activity.closeAt,
+    })
+    this.updating = false
+    this.changeDetectorRef.markForCheck()
+  }
 }

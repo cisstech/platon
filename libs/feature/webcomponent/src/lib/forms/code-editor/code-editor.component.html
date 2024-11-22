@@ -1,37 +1,38 @@
-<nge-monaco-editor [style.--editor-height]="state.height + 'px'" (ready)="onCreateEditor($event)"> </nge-monaco-editor>
-<footer #footer>
-  <span class="footer-item" aria-label="Raccourcies" nz-tooltip="Raccourcies" (click)="quickCommand()">
-    <span class="footer-item-icon codicon codicon-light-bulb"></span>
-  </span>
-  <span
-    *ngIf="initialCode"
-    class="footer-item"
-    aria-label="Remettre le code initial"
-    nz-tooltip="Remettre le code initial"
-    (click)="reset()"
-  >
-    <span class="footer-item-icon codicon codicon-sync"></span>
-  </span>
-
-  <span class="spacer"></span>
-  <span
-    class="footer-item"
-    [attr.aria-label]="'Ln ' + cursor.lineNumber + ',' + 'Col  ' + cursor.column"
-    nz-tooltip="Aller à la ligne/colonne"
-    (click)="goToLine()"
-  >
-    Ln {{ cursor.lineNumber }}, Col {{ cursor.column }}
-  </span>
-  <span
-    class="footer-item"
-    [attr.aria-label]="'Espaces:' + state.tabSize"
-    nz-tooltip="Modifier l'indentation"
-    (click)="changeIndent()"
-  >
-    Espaces: {{ state.tabSize }}
-  </span>
-  <span class="footer-item" [attr.aria-label]="state.language" nz-tooltip="Langage">
-    {{ state.language }}
-  </span>
-</footer>
+<div id="resizable" [style.height]="state.height + 'px'">
+  <nge-monaco-editor (ready)="onCreateEditor($event)"> </nge-monaco-editor>
+  <footer #footer>
+    <span class="footer-item" aria-label="Raccourcies" nz-tooltip="Raccourcies" (click)="quickCommand()">
+      <span class="footer-item-icon codicon codicon-light-bulb"></span>
+    </span>
+    <span
+      *ngIf="initialCode"
+      class="footer-item"
+      aria-label="Remettre le code initial"
+      nz-tooltip="Remettre le code initial"
+      (click)="reset()"
+    >
+      <span class="footer-item-icon codicon codicon-sync"></span>
+    </span>
+    <span class="spacer"></span>
+    <span
+      class="footer-item"
+      [attr.aria-label]="'Ln ' + cursor.lineNumber + ',' + 'Col  ' + cursor.column"
+      nz-tooltip="Aller à la ligne/colonne"
+      (click)="goToLine()"
+    >
+      Ln {{ cursor.lineNumber }}, Col {{ cursor.column }}
+    </span>
+    <span
+      class="footer-item"
+      [attr.aria-label]="'Espaces:' + state.tabSize"
+      nz-tooltip="Modifier l'indentation"
+      (click)="changeIndent()"
+    >
+      Espaces: {{ state.tabSize }}
+    </span>
+    <span class="footer-item" [attr.aria-label]="state.language" nz-tooltip="Langage">
+      {{ state.language }}
+    </span>
+  </footer>
+</div>
 <wc-base [(state)]="state"></wc-base>

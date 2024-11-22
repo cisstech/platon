@@ -90,8 +90,8 @@
     nz-popover
     nzPopoverPlacement="topLeft"
     [nzPopoverContent]="metadataResume"
-    [nzPopoverTrigger]="configurable ? 'hover' : undefined"
-    (mouseenter)="getReadmeContent()"
+    [nzPopoverTrigger]="configurable ? 'hover' : null"
+    (mouseenter)="configurable ? getReadmeContent() : null"
   >
     <span class="resource-item-title">{{ name }}</span>
     <i
@@ -123,7 +123,7 @@
       <nz-spin nzSimple nzSize="small" />
     </div>
     <div *ngIf="readme">
-      <nge-markdown [file]="readme.url" />
+      <nge-markdown [data]="readme" />
     </div>
     <div style="margin-top: 1rem">
       <ng-container [ngPlural]="((item.metadata! | exerciseResourceMeta)?.config?.inputs)!.length">

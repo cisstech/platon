@@ -1,8 +1,8 @@
-<div class="math-field-box" [class.disabled]="state.disabled">
+<div class="math-field-box" #box [class.disabled]="state.disabled">
   <div class="prefix" *ngIf="state.prefix">
     <img [src]="state.prefix | icongr" alt="prefix icon" />
   </div>
-  <div #container class="math-field"></div>
+  <div #container></div>
   <div class="suffix" *ngIf="state.suffix">
     <img [src]="state.suffix | icongr" alt="suffix icon" />
   </div>

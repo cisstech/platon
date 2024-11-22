@@ -1,5 +1,15 @@
 <h2>Topics</h2>
-<tag-list [tags]="topics" (remove)="deleteTag($event, 'topic')" (create)="createTag($event, 'topic')" />
+<tag-list
+  [tags]="topics"
+  (remove)="deleteTag($event, 'topic')"
+  (create)="createTag($event, 'topic')"
+  (update)="updateTag($event, 'topic')"
+/>
 
 <h2>Niveaux</h2>
-<tag-list [tags]="levels" (remove)="deleteTag($event, 'level')" (create)="createTag($event, 'level')" />
+<tag-list
+  [tags]="levels"
+  (remove)="deleteTag($event, 'level')"
+  (create)="createTag($event, 'level')"
+  (update)="updateTag($event, 'level')"
+/>
