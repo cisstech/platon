@@ -41,6 +41,7 @@ export class MathLiveComponent implements OnInit, WebComponentHooks<MathLiveStat
     this.mathfield.value = this.state.value
     this.mathfield.smartFence = false
     this.mathfield.smartSuperscript = true
+    this.mathfield.mathVirtualKeyboardPolicy = 'sandboxed'
     MathfieldElement.fontsDirectory = 'assets/vendors/mathlive/fonts'
     this.mathfield.oninput = () => {
       this.changeDetection
@@ -50,6 +51,18 @@ export class MathLiveComponent implements OnInit, WebComponentHooks<MathLiveStat
         .catch(console.error)
     }
     this.container.nativeElement.replaceWith(this.mathfield)
+
+    window.addEventListener('click', () => {
+      // hide the virtual keyboard when clicking outside the mathfield
+      if (
+        window.mathVirtualKeyboard &&
+        window.mathVirtualKeyboard.visible &&
+        !this.mathfield.contains(document.activeElement) &&
+        !this.box.nativeElement.contains(document.activeElement)
+      ) {
+        window.mathVirtualKeyboard.hide()
+      }
+    })
   }
 
   onChangeState() {
