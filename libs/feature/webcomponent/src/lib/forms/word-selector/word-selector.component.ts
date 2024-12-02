@@ -2,8 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Injector, Input, OnIn
 import { WebComponent, WebComponentHooks } from '../../web-component'
 import { WebComponentService } from '../../web-component.service'
 import { WordSelectorComponentDefinition, WordSelectorState } from './word-selector'
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop'
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop'
 
 @Component({
   selector: 'wc-word-selector',
@@ -41,15 +40,10 @@ export class WordSelectorComponent implements WebComponentHooks<WordSelectorStat
   }
 
   drop(event: CdkDragDrop<string[]>) {
-    const currentList = event.container.data
-    const previousList = event.previousContainer.data
-
-    if (currentList === previousList) {
+    if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex)
     } else {
-      const item = event.previousContainer.data[event.previousIndex]
-      event.previousContainer.data.splice(event.previousIndex, 1)
-      event.container.data.push(item)
+      transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex)
     }
 
     this.stateChange?.emit(this.state)

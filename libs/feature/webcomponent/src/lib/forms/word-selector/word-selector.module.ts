@@ -12,6 +12,12 @@ import { BaseModule } from '../../shared/components/base/base.module'
 import { WordSelectorComponent } from './word-selector.component'
 import { DragDropModule } from '@angular/cdk/drag-drop'
 
+import { CommonModule } from '@angular/common'
+
+import { NzCardModule } from 'ng-zorro-antd/card'
+import { NzTagModule } from 'ng-zorro-antd/tag'
+import { NzGridModule } from 'ng-zorro-antd/grid'
+
 @NgModule({
   declarations: [WordSelectorComponent],
   imports: [
@@ -26,6 +32,12 @@ import { DragDropModule } from '@angular/cdk/drag-drop'
     MatAutocompleteModule,
 
     DragDropModule,
+    CommonModule,
+    NzCardModule,
+    CommonModule,
+
+    NzTagModule,
+    NzGridModule,
   ],
   exports: [WordSelectorComponent],
 })
