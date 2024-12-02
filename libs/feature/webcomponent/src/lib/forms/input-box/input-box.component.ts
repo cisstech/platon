@@ -1,12 +1,14 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
   EventEmitter,
   Injector,
   Input,
   OnDestroy,
   OnInit,
   Output,
+  ViewChild,
 } from '@angular/core'
 import { FormControl } from '@angular/forms'
 import { Observable, Subscription } from 'rxjs'
@@ -19,6 +21,10 @@ import { InputBoxComponentDefinition, InputBoxState } from './input-box'
   selector: 'wc-input-box',
   templateUrl: 'input-box.component.html',
   styleUrls: ['input-box.component.scss'],
+  host: {
+    '[style.display]': `state.width === 'auto' ? 'inline-flex' : ''`,
+    '[style.width]': `state.width !== 'auto' ? '100%' : ''`,
+  },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 @WebComponent(InputBoxComponentDefinition)
@@ -33,7 +39,7 @@ export class InputBoxComponent implements OnInit, OnDestroy, WebComponentHooks<I
   protected containerStyles: Record<string, string> = {}
 
   protected readonly form = new FormControl()
-  private dueTime = 300
+  private dueTime = 50
 
   protected specialCharactersGrid: string[][][] = []
   private hasToUpdateCharacters = true
@@ -97,19 +103,23 @@ export class InputBoxComponent implements OnInit, OnDestroy, WebComponentHooks<I
     this.subscription?.unsubscribe()
   }
 
+  @ViewChild('invisibleText') invTextER: ElementRef | undefined
+
   onChangeState() {
     this.form.setValue(this.state.value, {
       emitEvent: false,
     })
-
     this.form.enable({ emitEvent: false })
     if (this.state.disabled) {
       this.form.disable({ emitEvent: false })
     }
 
-    this.containerStyles = {}
-    if (this.state.width) {
+    if (this.state.width && this.state.width !== 'auto') {
       this.containerStyles['width'] = this.state.width
+    }
+
+    if (this.state.width && this.state.width === 'auto') {
+      this.runAutoStyle()
     }
 
     if (this.state.specialCharacters && this.hasToUpdateCharacters) {
@@ -167,6 +177,23 @@ export class InputBoxComponent implements OnInit, OnDestroy, WebComponentHooks<I
       this.charactersPage = this.specialCharactersGrid.length - 1
     } else if (this.charactersPage >= this.specialCharactersGrid.length) {
       this.charactersPage = 0
+    }
+  }
+
+  private runAutoStyle(): void {
+    if ((this.state.value as string).length === 0) {
+      this.containerStyles['width'] = this.state.width
+    } else {
+      let minWidth = this.hasSpecialCharacters() ? 128 : 64
+      if (this.state.completion) {
+        //get the max length of completion tabs
+        const maxLength = this.state.completion.reduce((max, s) => Math.max(max, s.length), 0)
+        minWidth = Math.max(minWidth, maxLength * 16)
+      }
+      const width = this.hasSpecialCharacters()
+        ? this.invTextER?.nativeElement.offsetWidth + minWidth
+        : Math.max(this.invTextER?.nativeElement.offsetWidth + 16, minWidth)
+      setTimeout(() => (this.containerStyles['width'] = width + 'px'), 0)
     }
   }
 }

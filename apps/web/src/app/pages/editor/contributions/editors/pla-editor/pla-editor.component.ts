@@ -180,6 +180,21 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
     }),
   })
 
+  protected navigationModes = [
+    { value: 'composed', label: 'Composée', tooltip: 'Tous les exercices sont affichés simultanément.' },
+    { value: 'manual', label: 'Progressive', tooltip: 'Les exercices sont affichés un à un.' },
+    {
+      value: 'next',
+      label: 'Intelligente',
+      tooltip: "Les exercices s'enchaineront en fonction du comportement défini dans next.py.",
+    },
+    {
+      value: 'peer',
+      label: 'Comparaison par les pairs',
+      tooltip: "Mode composé que l'on utilise pour afficher deux exercices et les comparer.",
+    },
+  ]
+
   protected exerciseGroups: ActivityExerciseGroup[] = []
   protected selectedGroup: ActivityExerciseGroup | undefined
   protected selectedGroupIndex: number | undefined
@@ -313,6 +328,16 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.forEach((s) => s.unsubscribe())
+  }
+
+  protected getNavigationTooltip(mode: string): string {
+    const modeObj = this.navigationModes.find((m) => m.value === mode)
+    return modeObj ? modeObj.tooltip : ''
+  }
+
+  protected getNavigationLabel(mode: string): string {
+    const modeObj = this.navigationModes.find((m) => m.value === mode)
+    return modeObj ? modeObj.label : ''
   }
 
   protected getToStep(step: number): void {

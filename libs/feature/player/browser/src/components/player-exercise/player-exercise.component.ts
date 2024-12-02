@@ -184,6 +184,7 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
         playerAction: PlayerActions.CHECK_ANSWER,
         showLabel: !!this.player.remainingAttempts,
         run: async () => {
+          this.removeAnswerFromLocalStorage()
           await this.evaluate(PlayerActions.CHECK_ANSWER)
           this.scrollIntoNode(this.containerFeedbacks?.nativeElement, 'center')
         },
@@ -387,6 +388,16 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
 
   protected trackAction(_: number, item: Action): string {
     return item.tooltip
+  }
+
+  public getAnswers(): Record<string, unknown> {
+    return this.answers()
+  }
+
+  private removeAnswerFromLocalStorage(): void {
+    this.forEachComponent((component) => {
+      sessionStorage.removeItem('component-' + component.getAttribute('cid'))
+    })
   }
 
   private answers(): Record<string, unknown> {

@@ -406,6 +406,7 @@ export class PLCompiler implements PLVisitor {
       exercises.map(async (exercise) => {
         exercise.id = uuidv4()
         exercise.source = await compilers[`${exercise.resource}:${exercise.version}`].output(exercise.overrides)
+        this.replaceComponentsCids(exercise.source.variables)
       })
     )
 
@@ -417,6 +418,24 @@ export class PLCompiler implements PLVisitor {
     }
 
     this.source.variables = variables
+  }
+
+  private replaceComponentsCids(obj: object): void {
+    const replaceCidRecursively = (obj: any): void => {
+      if (obj && typeof obj === 'object') {
+        for (const key in obj) {
+          if (key == 'cid' && Object.prototype.hasOwnProperty.call(obj, 'selector')) {
+            obj[key] = uuidv4()
+          }
+          const value = obj[key]
+          if (value && typeof value === 'object') {
+            replaceCidRecursively(value)
+          }
+        }
+      }
+    }
+
+    replaceCidRecursively(obj)
   }
 
   /**
