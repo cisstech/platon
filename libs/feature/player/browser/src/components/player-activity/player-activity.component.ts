@@ -325,6 +325,9 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
   }
 
   private saveAnswersToSessionStorage(): void {
+    if (!this.playerExerciseComponents) {
+      return
+    }
     this.playerExerciseComponents.forEach((component) => {
       const componentAnswers = component.getAnswers()
       for (const key in componentAnswers) {
