@@ -12,7 +12,7 @@ import { PlaEditorContributionModule } from './contributions/editors/pla-editor'
 import { PlfEditorContributionModule } from './contributions/editors/plf-editor'
 
 import { ActivatedRoute } from '@angular/router'
-import { EditorService, FileService, IdeService, SettingsService } from '@cisstech/nge-ide/core'
+import { EditorService, FileService, IdeService, SettingsService, MonacoService } from '@cisstech/nge-ide/core'
 import { DialogModule, IntroService } from '@platon/core/browser'
 import { fadeInOnEnterAnimation, fadeOutDownOnLeaveAnimation } from 'angular-animations'
 import { NzButtonModule } from 'ng-zorro-antd/button'
@@ -84,25 +84,40 @@ export class EditorPage implements OnInit, OnDestroy {
   private readonly changeDetectorRef = inject(ChangeDetectorRef)
   private readonly resourceFileSystemProvider = inject(ResourceFileSystemProvider)
   private readonly settingsService = inject(SettingsService)
+  private readonly monacoService = inject(MonacoService)
   private readonly title = inject(Title)
   protected loading = true
   protected isReady = false
 
+  private registeredFolders: { id: string }[] = [] // this list is used to check whether a folder is already opened, not intended to be used for anything else
+
   async ngOnInit(): Promise<void> {
     const { resource, version, rootFolders, filesToOpen } = await this.presenter.init(this.activatedRoute)
     this.title.setTitle(resource.name)
+
     this.subscriptions.push(
       this.ide.onAfterStart(async () => {
         this.updateFileToOpen(filesToOpen, resource)
         this.fileService.registerProvider(this.resourceFileSystemProvider)
         await this.fileService.registerFolders(...rootFolders())
+        this.registeredFolders.push({ id: resource.id })
         filesToOpen.forEach((path) => {
           this.editorService
             .open(this.resourceFileSystemProvider.buildUri(resource.id, version, path))
             .catch(console.error)
         })
+
         this.loading = false
         this.changeDetectorRef.markForCheck()
+
+        this.monacoService.onDidFollowLink.subscribe(async (clickedLink) => {
+          const [id, version] = clickedLink.uri.authority.split(':')
+          if (this.registeredFolders.some((f) => f.id === id)) {
+            return
+          }
+          await this.fileService.registerFolders(await this.presenter.getNewResourceFolder(id, version))
+          this.registeredFolders.push({ id })
+        })
       })
     )
     this.isReady = true
