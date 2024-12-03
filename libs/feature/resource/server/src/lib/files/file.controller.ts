@@ -151,7 +151,7 @@ export class ResourceFileController {
   async get(
     @Req() request: IRequest,
     @Res({ passthrough: true }) res: Response,
-    @UUIDParam('resourceId') resourceId: string,
+    @Param('resourceId') resourceId: string,
     @Param('path') path?: string,
     @Query() query?: FileRetrieveDTO
   ): Promise<unknown> {
