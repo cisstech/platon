@@ -104,6 +104,24 @@ class ToolbarPreviewCommand implements ICommand {
   }
 }
 
+export class ResourceCommand implements ICommand {
+  readonly id = 'platon.contrib.toolbar.commands.resource'
+  readonly label = 'Ressource'
+  readonly icon = new CodIcon('link-external')
+
+  constructor(private readonly presenter: EditorPresenter) {}
+
+  get enabled(): boolean {
+    const { currentResource } = this.presenter
+    if (!currentResource) return false
+    return true
+  }
+
+  async execute(): Promise<void> {
+    window.open('resources/' + this.presenter.currentResource.id, '_blank')
+  }
+}
+
 @Injectable()
 export class Contribution implements IContribution {
   private readonly subscriptions: Subscription[] = []
@@ -136,10 +154,19 @@ export class Contribution implements IContribution {
     editorService.registerCommands(new PreviewInNewTabCommand(presenter, editorService))
 
     const previewFromToolbar = new ToolbarPreviewCommand(presenter, fileService, editorService)
+    const resourceCommand = new ResourceCommand(presenter)
 
     commandService.register(previewFromToolbar)
     toolbarService.registerButton({
       command: previewFromToolbar,
+      colors: {
+        foreground: 'white',
+        background: 'var(--brand-color-primary)',
+      },
+    })
+
+    toolbarService.registerButton({
+      command: resourceCommand,
       colors: {
         foreground: 'white',
         background: 'var(--brand-color-primary)',
