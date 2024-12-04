@@ -6,6 +6,9 @@ import {
   FileService,
   ICommand,
   IContribution,
+  KeyCodes,
+  KeyModifiers,
+  Keybinding,
   Preview,
   PreviewHandler,
   PreviewService,
@@ -63,6 +66,11 @@ class ToolbarPreviewCommand implements ICommand {
   readonly id = 'platon.contrib.toolbar.commands.preview'
   readonly label = 'Prévisualiser'
   readonly icon = new CodIcon('play-circle')
+  readonly keybinding = new Keybinding({
+    key: KeyCodes.ENTER,
+    label: '⌘ ENTER',
+    modifiers: [KeyModifiers.CTRL_CMD],
+  })
 
   constructor(
     private readonly presenter: EditorPresenter,
