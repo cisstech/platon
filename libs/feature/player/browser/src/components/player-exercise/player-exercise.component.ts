@@ -409,9 +409,12 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private forEachComponent(consumer: (component: any) => void): void {
-    this.container.nativeElement.querySelectorAll('[cid]').forEach((node) => {
-      consumer(node as any)
-    })
+    const form = this.container.nativeElement.querySelector('#form')
+    if (form) {
+      form.querySelectorAll('[cid]').forEach((node) => {
+        consumer(node as any)
+      })
+    }
   }
 
   private scrollIntoNode(node?: HTMLElement, position: ScrollLogicalPosition = 'start'): void {
