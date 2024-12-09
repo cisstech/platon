@@ -111,7 +111,7 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
     conclusion: '',
     settings: {
       duration: 0,
-      navigation: { mode: 'composed' },
+      navigation: { mode: 'manual' },
       actions: {
         retry: 1,
         hints: true,
@@ -155,7 +155,7 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
     duration: [new Date()],
     seedPerExercise: [!!this.activity.settings?.seedPerExercise],
     navigation: this.fb.group({
-      mode: [this.activity.settings?.navigation?.mode || 'composed', [Validators.required]],
+      mode: [this.activity.settings?.navigation?.mode || 'manual', [Validators.required]],
     }),
     actions: this.fb.group({
       retry: [this.activity?.settings?.actions?.retry, [Validators.required, Validators.min(0)]],
@@ -181,8 +181,8 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
   })
 
   protected navigationModes = [
-    { value: 'composed', label: 'Composée', tooltip: 'Tous les exercices sont affichés simultanément.' },
     { value: 'manual', label: 'Progressive', tooltip: 'Les exercices sont affichés un à un.' },
+    { value: 'composed', label: 'Composée', tooltip: 'Tous les exercices sont affichés simultanément.' },
     {
       value: 'next',
       label: 'Intelligente',
