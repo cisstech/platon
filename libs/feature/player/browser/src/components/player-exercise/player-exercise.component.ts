@@ -343,6 +343,7 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnChanges(): void {
     if (this.players?.length) {
+      this.index = this.reviewMode && !this.peerComparison ? this.players.length - 1 : 0
       this.player = this.players[this.index]
       this.clearNotification?.()
       this.clearNotification = undefined
