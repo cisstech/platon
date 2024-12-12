@@ -16,8 +16,10 @@ import { Activity } from '@platon/feature/course/common'
 import {
   ActivityEntity,
   ActivityService,
+  ON_CHALLENGE_SUCCEEDED_EVENT,
   ON_RELOAD_ACTIVITY_EVENT,
   ON_TERMINATE_ACTIVITY_EVENT,
+  OnChallengeSuccededEventPayload,
   OnReloadActivityEventPayload,
   OnTerminateActivityEventPayload,
 } from '@platon/feature/course/server'
@@ -473,6 +475,12 @@ export class PlayerService extends PlayerManager {
 
   protected findExerciseSessionById(id: string): Promise<ExerciseSession | null | undefined> {
     return this.sessionService.findExerciseSessionById(id, { parent: true, activity: true })
+  }
+
+  protected override onChallengeSucceeded(_activity: Activity): void {
+    this.eventService.emit<OnChallengeSuccededEventPayload>(ON_CHALLENGE_SUCCEEDED_EVENT, {
+      activity: _activity,
+    })
   }
 
   protected override onTerminate(activity: Activity): void {

@@ -13,39 +13,40 @@ import { JoinColumn, ManyToOne, PrimaryColumn, ViewColumn, ViewEntity } from 'ty
  */
 @ViewEntity({
   name: 'LeaderboardView',
+  materialized: true,
   expression: `
-    WITH RankedSessions AS (
-      SELECT
-        session.id,
-        session.user_id,
-        session.activity_id,
-        COALESCE(correction.grade, session.grade) as grade,
-        session.started_at,
-        session.succeeded_at,
-        session.last_graded_at,
-        ROW_NUMBER() OVER (
-          ORDER BY
-            COALESCE(correction.grade, session.grade) DESC,
-            session.succeeded_at ASC,
-            session.last_graded_at - session.started_at ASC
-        ) AS session_rank
-      FROM "Sessions" session
-      LEFT JOIN "Corrections" correction ON correction.id = session.correction_id
-      WHERE
-        session.activity_id IS NOT NULL
-        AND session.user_id IS NOT NULL
-        AND session.parent_id IS NULL
-        AND session.succeeded_at IS NOT NULL
-    )
+  WITH RankedSessions AS (
     SELECT
-      id,
-      user_id,
-      activity_id,
-      grade,
-      started_at,
-      succeeded_at,
-      last_graded_at
-    FROM RankedSessions
+      session.id,
+      session.user_id,
+      session.activity_id,
+      COALESCE(correction.grade, session.grade) as grade,
+      session.started_at,
+      session.succeeded_at,
+      session.last_graded_at,
+      ROW_NUMBER() OVER (
+        ORDER BY
+          COALESCE(correction.grade, session.grade) DESC,
+          session.succeeded_at ASC,
+          session.last_graded_at - session.started_at ASC
+      ) AS session_rank
+    FROM "Sessions" session
+    LEFT JOIN "Corrections" correction ON correction.id = session.correction_id
+    WHERE
+      session.activity_id IS NOT NULL
+      AND session.user_id IS NOT NULL
+      AND session.parent_id IS NULL
+      AND session.succeeded_at IS NOT NULL
+  )
+  SELECT
+    id,
+    user_id,
+    activity_id,
+    grade,
+    started_at,
+    succeeded_at,
+    last_graded_at
+  FROM RankedSessions
   `,
 })
 export class LeaderboardView {

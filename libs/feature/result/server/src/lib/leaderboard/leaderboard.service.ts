@@ -1,16 +1,18 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { User } from '@platon/core/common'
 import { extractExercisesFromActivityVariables } from '@platon/feature/compiler'
-import { ActivityEntity } from '@platon/feature/course/server'
+import { ActivityEntity, ON_CHALLENGE_SUCCEEDED_EVENT } from '@platon/feature/course/server'
 import { ActivityLeaderboardEntry, CourseLeaderboardEntry } from '@platon/feature/result/common'
 import { Repository } from 'typeorm'
 import { LeaderboardView } from './leaderboard.view'
+import { OnEvent } from '@nestjs/event-emitter'
 
 const DEFAULT_LEADERBOARD_LIMIT = 100
 
 @Injectable()
 export class LeaderboardService {
+  private readonly logger = new Logger(LeaderboardService.name)
   constructor(
     @InjectRepository(LeaderboardView)
     private readonly leaderboardView: Repository<LeaderboardView>,
@@ -18,6 +20,12 @@ export class LeaderboardService {
     @InjectRepository(ActivityEntity)
     private readonly activityRepository: Repository<ActivityEntity>
   ) {}
+
+  @OnEvent(ON_CHALLENGE_SUCCEEDED_EVENT)
+  async onChallengeSucceeded() {
+    this.logger.log('Refreshing leaderboard view')
+    await this.leaderboardView.query(`REFRESH MATERIALIZED VIEW "LeaderboardView"`)
+  }
 
   async ofCourse(id: string, limit: number = DEFAULT_LEADERBOARD_LIMIT): Promise<CourseLeaderboardEntry[]> {
     const activities = await this.activityRepository.find({

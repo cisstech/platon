@@ -138,7 +138,7 @@ export abstract class PlayerManager {
 
   async checkAnswer(exerciseSession: ExerciseSession): Promise<[ExercisePlayer, PlayerNavigation]> {
     const { activitySession, activityNavigation } = withMultiSessionGuard(exerciseSession)
-
+    let challengeSucceded = false
     // EVAL ANSWERS
 
     const envid = exerciseSession.envid
@@ -227,6 +227,9 @@ export abstract class PlayerManager {
 
       if (activitySession.grade === 100 && !activitySession.succeededAt) {
         activitySession.succeededAt = new Date()
+        if (activitySession.activity) {
+          challengeSucceded = true
+        }
       }
 
       activitySession.attempts += increment
@@ -270,7 +273,9 @@ export abstract class PlayerManager {
     }
 
     await Promise.all(promises)
-
+    if (challengeSucceded && activitySession?.activity) {
+      this.onChallengeSucceeded(activitySession.activity)
+    }
     return [
       exoPlayer ?? withExercisePlayer(exerciseSession),
       activitySession ? withActivityFeedbacksGuard<ActivityVariables>(activitySession).variables.navigation : undefined,
@@ -318,7 +323,9 @@ export abstract class PlayerManager {
     navigation: PlayerNavigation | undefined,
     answer: Answer
   ): Promise<[ExercisePlayer, PlayerNavigation]> // Probably not handled if not on server side
-
+  protected onChallengeSucceeded(_activity: Activity): void {
+    // Do nothing
+  }
   protected onTerminate(_activity: Activity): void {
     // Do nothing
   }
