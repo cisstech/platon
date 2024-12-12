@@ -19,60 +19,57 @@ export class LeaderboardService {
     private readonly activityRepository: Repository<ActivityEntity>
   ) {}
 
-  async ofCourse(id: string, limit?: number): Promise<CourseLeaderboardEntry[]> {
+  async ofCourse(id: string, limit: number = DEFAULT_LEADERBOARD_LIMIT): Promise<CourseLeaderboardEntry[]> {
     const activities = await this.activityRepository.find({
       where: { courseId: id, isChallenge: true },
-      select: ['id', 'source'],
+      select: ['id'],
     })
 
-    const activityRanks = await Promise.all(activities.map((activity) => this.ofActivity(activity, limit)))
-    const userRanks = activityRanks.reduce((acc, ranks) => {
-      ranks.forEach((rank) => {
-        if (acc[rank.user.id]) {
-          acc[rank.user.id].points += rank.points
-        } else {
-          acc[rank.user.id] = { user: rank.user, points: rank.points }
-        }
-      })
-      return acc
-    }, {} as Record<string, { user: User; points: number }>)
+    const userPoints = new Map<string, { user: User; points: number }>()
 
-    const res = Object.values(userRanks)
+    for (const activity of activities) {
+      const ranks = await this.ofActivity(activity.id, limit)
+      ranks.forEach((rank) => {
+        if (!userPoints.has(rank.user.id)) {
+          userPoints.set(rank.user.id, { user: rank.user, points: 0 })
+        }
+        userPoints.get(rank.user.id)!.points += rank.points
+      })
+    }
+
+    return Array.from(userPoints.values())
       .sort((a, b) => b.points - a.points)
-      .map<CourseLeaderboardEntry>((user, index) => ({ rank: index + 1, user: user.user, points: user.points }))
-    return res
+      .map((entry, index) => ({
+        rank: index + 1,
+        user: entry.user,
+        points: entry.points,
+      }))
   }
 
-  async ofActivity(activityOrId: string | ActivityEntity, limit?: number): Promise<ActivityLeaderboardEntry[]> {
-    const activity =
-      typeof activityOrId === 'string'
-        ? await this.activityRepository.findOneOrFail({
-            where: { id: activityOrId },
-            select: ['id', 'source'],
-          })
-        : activityOrId
+  async ofActivity(activityId: string, limit: number = DEFAULT_LEADERBOARD_LIMIT): Promise<ActivityLeaderboardEntry[]> {
+    const activity = await this.activityRepository.findOneOrFail({
+      where: { id: activityId },
+      select: ['source'],
+    })
 
     const exerciseCount = extractExercisesFromActivityVariables(activity.source.variables).length || 1
 
-    limit = limit || DEFAULT_LEADERBOARD_LIMIT
-    const views = await this.leaderboardView
+    const entries = await this.leaderboardView
       .createQueryBuilder('view')
-      .leftJoinAndSelect('view.user', 'user', 'user.id = view.user_id')
-      .where('view.activity_id = :id', { id: activity.id })
-      .andWhere('view.parent_id IS NULL')
+      .leftJoinAndSelect('view.user', 'user')
+      .where('view.activityId = :activityId', { activityId })
       .orderBy('view.succeeded_at', 'ASC')
-      .limit(limit || DEFAULT_LEADERBOARD_LIMIT)
+      .limit(limit)
       .getMany()
 
-    const ranks = views.map<ActivityLeaderboardEntry>((view, index) => ({
+    return entries.map<ActivityLeaderboardEntry>((entry, index) => ({
       rank: index + 1,
-      user: view.user,
-      grade: view.grade,
-      points: Math.round(100 * exerciseCount + limit! - index),
-      startedAt: view.startedAt,
-      succeededAt: view.succeededAt,
-      lastGradedAt: view.lastGradedAt,
+      user: entry.user,
+      grade: entry.grade,
+      points: Math.round(100 * exerciseCount + limit - index),
+      startedAt: entry.startedAt,
+      succeededAt: entry.succeededAt,
+      lastGradedAt: entry.lastGradedAt,
     }))
-    return ranks
   }
 }

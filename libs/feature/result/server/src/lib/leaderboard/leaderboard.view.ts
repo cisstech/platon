@@ -14,48 +14,38 @@ import { JoinColumn, ManyToOne, PrimaryColumn, ViewColumn, ViewEntity } from 'ty
 @ViewEntity({
   name: 'LeaderboardView',
   expression: `
-    -- Subquery to rank sessions by grade and and duration
     WITH RankedSessions AS (
       SELECT
         session.id,
-        activity.course_id,
         session.user_id,
-        session.parent_id,
         session.activity_id,
         COALESCE(correction.grade, session.grade) as grade,
         session.started_at,
         session.succeeded_at,
         session.last_graded_at,
-        session.source->>'resource' as resource_id,
         ROW_NUMBER() OVER (
           ORDER BY
-          COALESCE(correction.grade, session.grade) DESC,
-          session.succeeded_at ASC,
-          session.last_graded_at - session.started_at ASC
-        ) AS rank
+            COALESCE(correction.grade, session.grade) DESC,
+            session.succeeded_at ASC,
+            session.last_graded_at - session.started_at ASC
+        ) AS session_rank
       FROM "Sessions" session
-      INNER JOIN "Activities" activity ON activity.id = session.activity_id
       LEFT JOIN "Corrections" correction ON correction.id = session.correction_id
       WHERE
         session.activity_id IS NOT NULL
         AND session.user_id IS NOT NULL
+        AND session.parent_id IS NULL
         AND session.succeeded_at IS NOT NULL
     )
-
-    -- Main query to order sessions by rank
     SELECT
       id,
       user_id,
-      course_id,
-      parent_id,
       activity_id,
-      resource_id,
       grade,
       started_at,
       succeeded_at,
       last_graded_at
-    FROM RankedSessions session
-    ORDER BY rank
+    FROM RankedSessions
   `,
 })
 export class LeaderboardView {
@@ -70,17 +60,8 @@ export class LeaderboardView {
   @JoinColumn({ name: 'user_id' })
   user!: UserEntity
 
-  @ViewColumn({ name: 'course_id' })
-  courseId!: string
-
   @ViewColumn({ name: 'activity_id' })
   activityId!: string
-
-  @ViewColumn({ name: 'resource_id' })
-  resourceId!: string
-
-  @ViewColumn({ name: 'parent_id' })
-  parentId?: string | null
 
   @ViewColumn()
   grade!: number
