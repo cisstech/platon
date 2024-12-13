@@ -12,6 +12,7 @@ import { BaseModule } from '../../shared/components/base/base.module'
 import { InputBoxComponent } from './input-box.component'
 import { MatIconModule } from '@angular/material/icon'
 import { NzPopoverModule } from 'ng-zorro-antd/popover'
+import { CssPipeModule } from '../../shared/pipes/css.pipe'
 
 @NgModule({
   declarations: [InputBoxComponent],
@@ -26,6 +27,8 @@ import { NzPopoverModule } from 'ng-zorro-antd/popover'
     MatFormFieldModule,
     MatAutocompleteModule,
     MatIconModule,
+
+    CssPipeModule,
 
     NzPopoverModule,
   ],

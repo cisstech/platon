@@ -22,8 +22,8 @@ import { InputBoxComponentDefinition, InputBoxState } from './input-box'
   templateUrl: 'input-box.component.html',
   styleUrls: ['input-box.component.scss'],
   host: {
-    '[style.display]': `state.width === 'auto' ? 'inline-flex' : ''`,
-    '[style.width]': `state.width !== 'auto' ? '100%' : ''`,
+    '[style.display]': `state.width === 'auto' || state.appearance === 'inline' ? 'inline-flex' : ''`,
+    '[style.width]': `state.width !== 'auto' ? (state.width ? state.width : '100%') : ''`,
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
