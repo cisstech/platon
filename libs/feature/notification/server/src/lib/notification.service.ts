@@ -37,7 +37,7 @@ export class NotificationService {
       ? await entityManager.save(entityManager.create(NotificationEntity, { userId, data }))
       : await this.repository.save(this.repository.create({ userId, data }))
 
-    this.logger.log(`Sending notification to user ${userId}: ${newNotification.data.type}`)
+    this.logger.log(`Sending notification to user ${userId}: ${newNotification.data['type']}`)
 
     this.notifyUserAboutChanges(userId, { newNotification })
 
