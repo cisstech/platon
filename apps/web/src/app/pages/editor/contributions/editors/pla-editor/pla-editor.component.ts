@@ -228,6 +228,11 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
 
   async ngOnInit(): Promise<void> {
     this.user = (await this.authService.ready()) as User
+    const direction = localStorage.getItem('order-direction') as OrderingDirections
+    const order = localStorage.getItem('order') as ResourceOrderings
+    if (direction && order) {
+      this.filters = { ...this.filters, direction, order }
+    }
 
     const [tree, topics, levels] = await Promise.all([
       firstValueFrom(this.resourceService.tree()),
@@ -270,6 +275,10 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this.activatedRoute.queryParams.subscribe(async (e: QueryParams) => {
+        if (e.order && e.direction) {
+          localStorage.setItem('order', e.order)
+          localStorage.setItem('order-direction', e.direction)
+        }
         this.filters = {
           ...this.filters,
           search: typeof e.q === 'string' ? (e.q.length > 0 ? e.q : undefined) : undefined,
@@ -319,7 +328,6 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
       this.filters = {
         ...this.filters,
         parents: parent ? [parent] : undefined,
-        order: ResourceOrderings.RELEVANCE,
       }
       this.search(this.filters)
       this.changeDetectorRef.markForCheck()

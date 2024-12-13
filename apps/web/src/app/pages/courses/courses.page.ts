@@ -110,9 +110,23 @@ export class CoursesPage implements OnInit, OnDestroy {
     this.displayShowAllButton = this.user?.role === UserRoles.admin
     this.canCreateCourse = this.user?.role === UserRoles.teacher || this.user?.role === UserRoles.admin
     this.changeDetectorRef.markForCheck()
+    const order = localStorage.getItem('course-order') as CourseOrderings
+    const direction = localStorage.getItem('course-direction') as OrderingDirections
+    if (order && direction) {
+      this.filters = {
+        ...this.filters,
+        order,
+        direction,
+      }
+      await this.router.navigate([], { queryParams: { order, direction }, relativeTo: this.activatedRoute })
+    }
 
     this.subscriptions.push(
       this.activatedRoute.queryParams.subscribe(async (e: QueryParams) => {
+        if (e.order && e.direction) {
+          localStorage.setItem('course-order', e.order)
+          localStorage.setItem('course-direction', e.direction)
+        }
         this.filters = {
           ...this.filters,
           search: e.q,

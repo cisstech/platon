@@ -166,6 +166,12 @@ export default class ResourcesPage implements OnInit, OnDestroy {
 
   async ngOnInit(): Promise<void> {
     this.user = (await this.authService.ready()) as User
+    const direction = localStorage.getItem('order-direction') as OrderingDirections
+    const order = localStorage.getItem('order') as ResourceOrderings
+    if (direction && order) {
+      this.filters = { ...this.filters, direction, order }
+      await this.router.navigate([], { queryParams: { direction, order }, relativeTo: this.activatedRoute })
+    }
 
     const [tree, circle, views, topics, levels] = await Promise.all([
       firstValueFrom(this.resourceService.tree()),
@@ -202,6 +208,10 @@ export default class ResourcesPage implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this.activatedRoute.queryParams.subscribe(async (e: QueryParams) => {
+        if (e.direction && e.order) {
+          localStorage.setItem('order', e.order)
+          localStorage.setItem('order-direction', e.direction)
+        }
         this.filters = {
           ...this.filters,
           search: typeof e.q === 'string' ? (e.q.length > 0 ? e.q : undefined) : undefined,
