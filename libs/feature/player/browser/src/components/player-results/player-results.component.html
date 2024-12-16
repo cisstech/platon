@@ -39,7 +39,8 @@
       </tr>
     </thead>
     <tbody>
-      <ng-container *ngFor="let pair of results.exercises | keyvalue">
+      <ng-container *ngFor="let pair of results.exercises | keyvalue : keepOriginalOrder">
+        @if (pair.value.state !== 'NOT_STARTED' || displayAll) {
         <tr>
           <td>{{ pair.value.title }}</td>
           <td>{{ pair.value.attempts }}</td>
@@ -59,9 +60,11 @@
             </button>
           </td>
         </tr>
+        }
       </ng-container>
     </tbody>
   </table>
+  <a (click)="displayAll = !displayAll">@if (displayAll) { Cacher } @else { Afficher }les exercices non commencés </a>
 </ng-container>
 
 <ng-template #correcting>

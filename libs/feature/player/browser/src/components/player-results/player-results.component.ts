@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common'
+import { CommonModule, KeyValue } from '@angular/common'
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild, inject } from '@angular/core'
 import { MatIconModule } from '@angular/material/icon'
 import { ActivityPlayer, ExercisePlayer } from '@platon/feature/player/common'
@@ -44,6 +44,7 @@ export class PlayerResultsComponent implements OnInit {
 
   protected results?: UserResults
   protected answers: ExercisePlayer[] = []
+  protected displayAll = false
 
   protected get isMobile(): boolean {
     return this.breakpointObserver.isMatched([Breakpoints.XSmall, Breakpoints.Small])
@@ -51,7 +52,12 @@ export class PlayerResultsComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.results = await firstValueFrom(this.resultService.sessionResults(this.player.sessionId))
+    console.log(JSON.stringify(this.results, null, 2))
     this.changeDetectorRef.markForCheck()
+  }
+
+  protected keepOriginalOrder = (_a: KeyValue<any, any>, _b: KeyValue<any, any>): number => {
+    return 0
   }
 
   protected async playAnswers(result: UserExerciseResults): Promise<void> {
