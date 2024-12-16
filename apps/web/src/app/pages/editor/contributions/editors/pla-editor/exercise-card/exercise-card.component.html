@@ -38,7 +38,7 @@
 
     <ui-list-item-article-action
       *ngIf="attemptCount"
-      nz-tooltip="{{ averageScore }}% de réussite pour {{ attemptCount }} utilisations"
+      nz-tooltip="Note moyenne de {{ averageScore }}% pour {{ attemptCount }} utilisations"
     >
       <i [style.color]="averageScoreColor" class="margin-bottom-10">{{ averageScore }}%</i>
     </ui-list-item-article-action>
