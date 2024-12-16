@@ -69,9 +69,9 @@ export class ResourceItemComponent implements OnChanges {
   private readonly fileService = inject(ResourceFileService)
   protected name = ''
   protected desc = ''
-  protected successRate = 0
+  protected averageScore = 0
   protected attemptCount = 0
-  protected successRateColor = 'var(--brand-text-primary, #000)'
+  protected averageScoreColor = 'var(--brand-text-primary, #000)'
 
   protected configurable = false
   protected tags: ListItemTag[] = []
@@ -132,9 +132,9 @@ export class ResourceItemComponent implements OnChanges {
 
     this.name = this.item.name
     this.desc = this.item.desc as string
-    this.successRate = this.item.statistic?.activity?.successRate ?? this.item.statistic?.exercise?.successRate ?? 0
+    this.averageScore = this.item.statistic?.activity?.averageScore ?? this.item.statistic?.exercise?.averageScore ?? 0
     this.attemptCount = this.item.statistic?.activity?.attemptCount ?? this.item.statistic?.exercise?.attemptCount ?? 0
-    this.successRateColor = positiveGreenColor(this.successRate)
+    this.averageScoreColor = positiveGreenColor(this.averageScore)
     this.configurable = (this.item.metadata as ExerciseResourceMeta)?.configurable ?? false
   }
 

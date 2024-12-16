@@ -170,7 +170,11 @@ export default class ResourcesPage implements OnInit, OnDestroy {
     const order = localStorage.getItem('order') as ResourceOrderings
     if (direction && order) {
       this.filters = { ...this.filters, direction, order }
-      await this.router.navigate([], { queryParams: { direction, order }, relativeTo: this.activatedRoute })
+      await this.router.navigate([], {
+        queryParams: { direction, order },
+        relativeTo: this.activatedRoute,
+        queryParamsHandling: 'merge',
+      })
     }
 
     const [tree, circle, views, topics, levels] = await Promise.all([
