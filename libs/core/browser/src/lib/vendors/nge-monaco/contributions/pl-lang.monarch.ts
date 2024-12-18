@@ -1,4 +1,4 @@
-export const PlMonarchLanguage = (sandbox: 'py' | 'js' = 'js'): monaco.languages.IMonarchLanguage => ({
+export const PlMonarchLanguage = (sandbox: 'py' | 'js' = 'py'): monaco.languages.IMonarchLanguage => ({
   /**
    * Identifies a string of characters that start with a letter or underscore and followed
    * by any combination of letters, digits, and underscores.

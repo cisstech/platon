@@ -9,17 +9,16 @@ const REFERENCE_PATTERN = /(@(?:extends|copyurl|copycontent|include)\s+)([^\s]+)
 export class PlLanguageContribution implements NgeMonacoContribution {
   activate(): void | Promise<void> {
     monaco.languages.register({
+      id: 'pl-py',
+      extensions: ['.ple'],
+    })
+    monaco.languages.register({
       id: 'pl-js',
       extensions: ['.ple'],
     })
 
-    monaco.languages.register({
-      id: 'pl-py',
-      extensions: ['.ple'],
-    })
-
-    monaco.languages.setMonarchTokensProvider('pl-js', PlMonarchLanguage('js'))
     monaco.languages.setMonarchTokensProvider('pl-py', PlMonarchLanguage('py'))
+    monaco.languages.setMonarchTokensProvider('pl-js', PlMonarchLanguage('js'))
 
     const configuration: monaco.languages.LanguageConfiguration = {
       comments: {
@@ -34,13 +33,13 @@ export class PlLanguageContribution implements NgeMonacoContribution {
       },
 
       autoClosingPairs: [
-        { open: 'grader==', close: '#!lang=js\n==' },
-        { open: 'builder==', close: '#!lang=js\n==' },
+        { open: 'grader==', close: '#!lang=py\n==' },
+        { open: 'builder==', close: '#!lang=py\n==' },
       ],
     }
 
-    monaco.languages.setLanguageConfiguration('pl-js', configuration)
     monaco.languages.setLanguageConfiguration('pl-py', configuration)
+    monaco.languages.setLanguageConfiguration('pl-js', configuration)
 
     const referenceLinkProvider: monaco.languages.LinkProvider = {
       provideLinks: (model) => {
@@ -125,9 +124,9 @@ export class PlLanguageContribution implements NgeMonacoContribution {
       },
     }
 
-    monaco.languages.registerLinkProvider('pl-js', referenceLinkProvider)
     monaco.languages.registerLinkProvider('pl-py', referenceLinkProvider)
-    monaco.languages.registerLinkProvider('pl-js', docLinkProvider)
+    monaco.languages.registerLinkProvider('pl-js', referenceLinkProvider)
     monaco.languages.registerLinkProvider('pl-py', docLinkProvider)
+    monaco.languages.registerLinkProvider('pl-js', docLinkProvider)
   }
 }
