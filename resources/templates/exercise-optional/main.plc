@@ -1,0 +1,18 @@
+{
+  "inputs": [
+    {
+      "name": "title",
+      "type": "text",
+      "description": "Écrivez ici le titre de l'exercice, celui-ci remplacera le titre par défaut.",
+      "value": "Titre par défaut.",
+      "options": {}
+    },
+    {
+      "name": "statement",
+      "type": "text",
+      "description": "Écrivez ici l'énoncé de votre exercice, celui-ci remplacera l'énoncé par défaut.",
+      "value": "Énoncé par défaut.",
+      "options": {}
+    }
+  ]
+}
