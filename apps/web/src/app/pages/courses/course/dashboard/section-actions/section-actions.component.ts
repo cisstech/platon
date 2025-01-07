@@ -31,8 +31,22 @@ export class CourseSectionActionsComponent {
   @Input() sectionCount = 0
   @Input() nbActivities = 0
 
+  protected editMode = false
+
   @Output() moveUp = new EventEmitter()
   @Output() moveDown = new EventEmitter()
   @Output() insertBelow = new EventEmitter()
+  @Output() edit = new EventEmitter()
+  @Output() save = new EventEmitter()
   @Output() remove = new EventEmitter()
+
+  onEdit() {
+    this.editMode = true
+    this.edit.emit()
+  }
+
+  onSave() {
+    this.editMode = false
+    this.save.emit()
+  }
 }

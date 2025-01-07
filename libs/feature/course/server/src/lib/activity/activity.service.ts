@@ -144,6 +144,11 @@ export class ActivityService {
     return result
   }
 
+  async updateActivitesOrder(ids: string[]): Promise<void> {
+    const activitiesWithOrder = ids.map((activity, index) => ({ id: activity, order: index }))
+    await this.repository.save(activitiesWithOrder)
+  }
+
   async update(
     courseId: string,
     activityId: string,

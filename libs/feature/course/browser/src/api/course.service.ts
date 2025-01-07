@@ -158,6 +158,10 @@ export class CourseService {
     return this.activityProvider.update(activity, input)
   }
 
+  updateActivityOrder(course: Course, sortedActivityIds: string[]): Observable<void> {
+    return this.activityProvider.updateOrder(course, sortedActivityIds)
+  }
+
   reloadActivity(activity: Activity, version?: string): Observable<Activity> {
     return this.activityProvider.reload(activity, version)
   }

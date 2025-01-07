@@ -78,11 +78,13 @@
                     (moveUp)="moveUpSection(item.section)"
                     (moveDown)="moveDownSection(item.section)"
                     (insertBelow)="addSection(item.section)"
+                    (edit)="editModeOn(item)"
+                    (save)="saveSection(item)"
                     (remove)="deleteSection(item.section)"
                     [nbActivities]="numberOfActivities(item.section)"
                   />
                 </ng-template>
-                <course-activity-grid [items]="item.activities">
+                <course-activity-grid [items]="item.activities" [editmode]="item.editMode">
                   <ng-container *ngTemplateOutlet="noActivities; context: { $implicit: item.section }" />
                 </course-activity-grid>
               </nz-collapse-panel>

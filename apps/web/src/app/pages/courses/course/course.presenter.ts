@@ -137,6 +137,15 @@ export class CoursePresenter implements OnDestroy {
     return response.resources
   }
 
+  async updateActivityOrder(ids: string[]): Promise<void> {
+    const { course } = this.context.value as Required<Context>
+    try {
+      await firstValueFrom(this.courseService.updateActivityOrder(course, ids))
+    } catch {
+      this.alertError()
+    }
+  }
+
   // Leaderboard
 
   async courseLeaderboard(): Promise<CourseLeaderboardEntry[]> {

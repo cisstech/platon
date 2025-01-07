@@ -11,6 +11,7 @@ export interface Activity {
   readonly openAt?: Date | null
   readonly closeAt?: Date | null
   readonly isChallenge: boolean
+  readonly order?: number
 
   readonly title: string
   readonly resourceId: string
