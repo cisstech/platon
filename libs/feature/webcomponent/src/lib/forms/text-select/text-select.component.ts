@@ -101,7 +101,7 @@ export class TextSelectComponent implements WebComponentHooks<TextSelectState> {
         }
       }
     }
-
+    this.state.isFilled = true
     this.state.selections.push({
       position: [startIndex, endIndex],
     })
@@ -136,6 +136,7 @@ export class TextSelectComponent implements WebComponentHooks<TextSelectState> {
         }
         i++
       }
+      this.state.isFilled = true
       this.state.selections.push({
         position: index,
       })

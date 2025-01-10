@@ -209,6 +209,7 @@ export class AutomatonEditorService {
         this.addInitial(name)
       }
       this.createStateEvent.next(name)
+      this.state.isFilled = true
       return true
     }
     return false
@@ -222,6 +223,7 @@ export class AutomatonEditorService {
    */
   moveState(name: string, x: number, y: number) {
     this.position[name] = { x, y }
+    this.state.isFilled = true
   }
 
   /**
@@ -234,6 +236,7 @@ export class AutomatonEditorService {
     if (!this.isInitial(name)) {
       this.initialStates.push(name)
       this.createInitialStateEvent.next(name)
+      this.state.isFilled = true
       return true
     }
     return false
@@ -251,6 +254,7 @@ export class AutomatonEditorService {
     if (!this.isAccepting(name)) {
       this.acceptingStates.push(name)
       this.createAcceptingStateEvent.next(name)
+      this.state.isFilled = true
       return true
     }
     return false
@@ -276,6 +280,7 @@ export class AutomatonEditorService {
       this.transitions = this.transitions.filter((t) => t.fromState !== state.name && t.toState !== state.name)
       this.validate()
       this.removeStateEvent.next(state)
+      this.state.isFilled = true
       return true
     }
     return false
@@ -290,6 +295,7 @@ export class AutomatonEditorService {
   removeInitial(name: string) {
     if (this.remove(this.initialStates, (e) => e === name)) {
       this.removeInitialStateEvent.next(name)
+      this.state.isFilled = true
       return true
     }
     return false
@@ -304,6 +310,7 @@ export class AutomatonEditorService {
   removeAccepting(name: string) {
     if (this.remove(this.acceptingStates, (e) => e === name)) {
       this.removeAcceptingStateEvent.next(name)
+      this.state.isFilled = true
       return true
     }
     return false
@@ -363,6 +370,7 @@ export class AutomatonEditorService {
 
     this.validate()
     this.renameStateEvent.next({ oldName, newName })
+    this.state.isFilled = true
     return true
   }
 
@@ -387,6 +395,7 @@ export class AutomatonEditorService {
       this.transitions.push(transition)
       this.validate()
       this.createTransitionEvent.next(transition)
+      this.state.isFilled = true
       return true
     }
     return false
@@ -406,6 +415,7 @@ export class AutomatonEditorService {
     ) {
       this.validate()
       this.removeTransitionEvent.next(transition)
+      this.state.isFilled = true
       return true
     }
     return false
@@ -422,6 +432,7 @@ export class AutomatonEditorService {
       tr.symbols = [...symbols]
       this.validate()
       this.renameTransitionEvent.next(tr)
+      this.state.isFilled = true
       return true
     }
     return false

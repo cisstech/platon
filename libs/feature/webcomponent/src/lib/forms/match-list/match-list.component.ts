@@ -258,6 +258,7 @@ export class MatchListComponent implements OnInit, AfterViewChecked, OnDestroy, 
     if (index !== -1) return
     this.changeDetector
       .ignore(this, () => {
+        this.state.isFilled = true
         this.state.links.push({
           source: connection.sourceId,
           target: connection.targetId,
@@ -272,6 +273,7 @@ export class MatchListComponent implements OnInit, AfterViewChecked, OnDestroy, 
       this.changeDetector
         .ignore(this, () => {
           this.state.links.splice(index, 1)
+          this.state.isFilled = true
         })
         .catch(console.error)
     }

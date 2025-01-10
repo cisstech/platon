@@ -65,6 +65,7 @@ export class InputBoxComponent implements OnInit, OnDestroy, WebComponentHooks<I
       if (this.state.value !== value) {
         this.hasToUpdateCharacters = false
         this.state.value = value
+        this.state.isFilled = true
       }
     })
   }
@@ -160,6 +161,7 @@ export class InputBoxComponent implements OnInit, OnDestroy, WebComponentHooks<I
 
   protected insertSpecialCharacter(char: string) {
     this.form.setValue(this.form.value + char)
+    this.state.isFilled = true
   }
 
   protected hasSpecialCharacters(): boolean {

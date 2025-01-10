@@ -43,6 +43,8 @@ export interface IWebComponent {
   debug: boolean
   /** Html selector of the component. */
   selector: string
+  /** Indicates if the form is filled */
+  isFilled: boolean
 }
 
 /**
@@ -167,6 +169,12 @@ export function defineWebComponent(definition: WebComponentDefinition): WebCompo
       type: 'boolean',
       description: 'Afficher les propriétés du composant?',
     },
+    isFilled: {
+      default: false,
+      readOnly: true,
+      type: 'boolean',
+      description: 'Indique si le formulaire à été rempli.',
+    },
   }
   definition.schema.additionalProperties = false
   definition.schema.required = [...(definition.schema.required || []), 'cid', 'selector']
@@ -196,6 +204,7 @@ function createState(component: WebComponentInstance, definition: WebComponentDe
       cid: '',
       selector: definition.selector,
       debug: false,
+      isFilled: false,
     },
     handler
   ))
@@ -262,7 +271,12 @@ function detectChanges(component: WebComponentInstance) {
   component.$__suspendChanges__$ = false
 }
 
-function suspendChanges(component: WebComponentInstance) {
+/**
+ * Suspend the changes detection of the component.
+ * @param component The component to suspend the changes detection.
+ * @returns `true` if the changes detection was already suspended, `false` otherwise.
+ */
+function suspendChanges(component: WebComponentInstance): boolean {
   const suspended = component.$__suspendChanges__$ ?? false
   component.$__suspendChanges__$ = true
   return suspended

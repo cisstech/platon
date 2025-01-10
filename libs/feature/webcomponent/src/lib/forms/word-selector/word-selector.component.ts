@@ -40,6 +40,9 @@ export class WordSelectorComponent implements WebComponentHooks<WordSelectorStat
   }
 
   drop(event: CdkDragDrop<string[]>) {
+    if (event.previousContainer !== event.container || event.previousIndex !== event.currentIndex) {
+      this.state.isFilled = true
+    }
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex)
     } else {

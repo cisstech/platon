@@ -106,6 +106,7 @@ export class CodeEditorComponent implements AfterViewChecked, OnDestroy, WebComp
         this.changeDetector
           .ignore(this, () => {
             this.state.code = this.model?.getValue() || ''
+            this.state.isFilled = this.state.code !== this.initialCode
           })
           .catch(console.error)
       })

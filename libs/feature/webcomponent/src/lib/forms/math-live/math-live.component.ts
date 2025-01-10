@@ -47,6 +47,7 @@ export class MathLiveComponent implements OnInit, WebComponentHooks<MathLiveStat
       this.changeDetection
         .ignore(this, () => {
           this.state.value = this.mathfield.getValue('latex')
+          this.state.isFilled = true
         })
         .catch(console.error)
     }

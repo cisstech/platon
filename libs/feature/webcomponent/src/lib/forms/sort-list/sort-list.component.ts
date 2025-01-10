@@ -30,6 +30,9 @@ export class SortListComponent implements WebComponentHooks<SortListState> {
   }
 
   drop(event: CdkDragDrop<SortListItem[]>) {
+    if (event.previousIndex !== event.currentIndex) {
+      this.state.isFilled = true
+    }
     moveItemInArray(this.state.items, event.previousIndex, event.currentIndex)
   }
 

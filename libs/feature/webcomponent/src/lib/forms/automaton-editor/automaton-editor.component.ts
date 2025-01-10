@@ -181,6 +181,7 @@ export class AutomatonEditorComponent implements OnInit, OnDestroy, WebComponent
       this.editor.forEachTransition(this.createConnection.bind(this))
     })
     this.unfocus()
+    this.state.isFilled = false
   }
 
   run(action: AutomatonEditorAction) {
