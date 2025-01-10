@@ -175,7 +175,7 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
       {
         id: 'check-answer-button',
         icon: 'check',
-        label: this.player.remainingAttempts ? `(${this.player.remainingAttempts})` : '',
+        label: this.player.remainingAttempts ? `Évaluer (${this.player.remainingAttempts})` : 'Évaluer',
         tooltip: 'Valider',
         color: 'primary',
         danger: this.player.remainingAttempts === 1,
@@ -265,7 +265,7 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
         tooltip: 'Exercise précédent',
         visible: this.hasPrev,
         id: 'prev-exercise-button',
-        run: () => this.goToPrevPlayer.emit(),
+        run: () => this.showConfirmModalIfAnswered(this.goToPrevPlayer),
       },
       {
         icon: 'arrow_forward',
@@ -273,7 +273,7 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
         tooltip: 'Exercise suivant',
         visible: this.hasNext,
         id: 'next-exercise-button',
-        run: () => this.goToNextPlayer.emit(),
+        run: () => this.showConfirmModalIfAnswered(this.goToNextPlayer),
       },
     ]
   }
@@ -314,6 +314,35 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
 
   get canRequestFullscreen(): boolean {
     return !!this.requestFullscreen && this.activatedRoute.snapshot.queryParamMap.has(PLAYER_EDITOR_PREVIEW)
+  }
+
+  // Function called before the user goes to next/previous exercise
+  private async showConfirmModalIfAnswered(callback: EventEmitter<void>): Promise<void> {
+    let hasAnswered = false
+    this.forEachComponent((component) => {
+      if (component.state?.isFilled) {
+        hasAnswered = true
+      }
+    })
+    if (!hasAnswered) {
+      console.log('prout')
+      callback.emit()
+      return
+    }
+
+    const confirmed = await this.dialogService.confirm({
+      nzTitle: 'Attention',
+      nzContent: `
+      Vous avez commencé à répondre à cet exercice, êtes-vous sûr de vouloir changer d'exercice ?
+      <br/>
+      <i>Si vous continuez, votre travail sera sauvegardé sur votre appareil mais vos réponses ne seront pas envoyées à PLaTon.</i>
+      `,
+      nzOkText: 'Oui',
+      nzCancelText: 'Non',
+    })
+    if (confirmed) {
+      callback.emit()
+    }
   }
 
   ngOnInit(): void {
