@@ -6,7 +6,7 @@
           <mat-icon *ngIf="state" [style.color]="state | answerStateColor" [nz-tooltip]="state | answerStateLabel">
             {{ state | answerStateIcon }}
           </mat-icon>
-          {{ player?.title }} @if (players.length && peerComparison) { ({{ index + 1 }}) }
+          {{ player?.title }}
         </mat-card-title>
         <mat-card-subtitle *ngIf="player?.author">
           @if (player!.author!|isUUID) {

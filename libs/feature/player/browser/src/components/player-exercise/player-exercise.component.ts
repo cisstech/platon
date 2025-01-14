@@ -130,7 +130,6 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input() reviewMode = false
   @Input() canComment = false
-  @Input() peerComparison = false
 
   @Input() hasNext?: boolean
   @Input() hasPrev?: boolean
@@ -346,7 +345,7 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnInit(): void {
-    this.index = this.reviewMode && !this.peerComparison ? this.players.length - 1 : 0
+    this.index = this.reviewMode ? this.players.length - 1 : 0
     if (!this.player) {
       this.player = this.players[this.index]
     }
@@ -372,7 +371,7 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnChanges(): void {
     if (this.players?.length) {
-      this.index = this.reviewMode && !this.peerComparison ? this.players.length - 1 : 0
+      this.index = this.reviewMode ? this.players.length - 1 : 0
       this.player = this.players[this.index]
       this.clearNotification?.()
       this.clearNotification = undefined

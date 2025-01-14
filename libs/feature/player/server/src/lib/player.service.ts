@@ -150,21 +150,10 @@ export class PlayerService extends PlayerManager {
     return { activity: withActivityPlayer(activitySession) }
   }
 
-  async getSession(sessionId: string, _user: User): Promise<PlayExerciseOuput> {
-    // TODO: deal with user access
-    const exerciseSession = (await this.sessionService.findById(sessionId, {
-      parent: true,
-      activity: true,
-    })) as ExerciseSessionEntity
-    if (!exerciseSession) throw new NotFoundResponse('Session not found')
-
-    return { exercises: [withExercisePlayer(exerciseSession)] }
-  }
-
   async playExercises(
     activitySessionId: string,
     exerciseSessionIds: string[],
-    _user?: User
+    user?: User
   ): Promise<PlayExerciseOuput> {
     const activitySession = await this.sessionService.findById<PlayerActivityVariables>(activitySessionId, {
       parent: false,
@@ -183,10 +172,10 @@ export class PlayerService extends PlayerManager {
     // CREATE PLAYERS
     const exercisePlayers = await Promise.all(
       exerciseSessionIds.map(async (sessionId) => {
-        let exerciseSession = await this.sessionService.findById<ExerciseVariables>(sessionId, {}) // TODO: deal with user access
-        if (!exerciseSession) {
-          throw new NotFoundResponse(`ExerciseSession not found: ${sessionId}`)
-        }
+        let exerciseSession = withSessionAccessGuard(
+          await this.sessionService.findExerciseSessionByActivityId(activitySessionId, sessionId),
+          user
+        )
 
         if (!exerciseSession.isBuilt) {
           exerciseSession = await this.buildExercise(exerciseSession)
@@ -255,31 +244,27 @@ export class PlayerService extends PlayerManager {
     if (nextCopy) {
       const nav = withActivityFeedbacksGuard<ActivityVariables>(activitySession).variables
         .navigation as PlayerNavigation
-      if (nav.exercises) {
-        // add the next copy to the navigation
-        nav.exercises = [
-          ...nav.exercises.filter((e) => !e.peerComparison), // remove the previous comparison
-          {
-            id: nextCopy.peerId,
-            title: 'Exercice A',
-            state: AnswerStates.NOT_STARTED,
-            sessionId: nextCopy.answerP1,
-            peerComparison: true,
-          },
-          {
-            id: nextCopy.peerId,
-            title: 'Exercice B',
-            state: AnswerStates.NOT_STARTED,
-            sessionId: nextCopy.answerP2,
-            peerComparison: true,
-          },
-        ]
-      }
 
-      const nextExerciseSession = await this.sessionService.findById<ExerciseVariables>(comparisonSessionId ?? '', {})
+      const [nextExerciseSession, copy1, copy2]: (SessionEntity<ExerciseVariables> | null)[] = await Promise.all(
+        [comparisonSessionId, nextCopy.answerP1, nextCopy.answerP2].map((sessionId) =>
+          this.sessionService.findById<ExerciseVariables>(sessionId ?? '', {})
+        )
+      )
       if (!nextExerciseSession) {
         throw new NotFoundResponse(`Next exercise not found: ${comparisonSessionId}`)
       }
+      if (!copy1) {
+        throw new NotFoundResponse(`Copy 1 not found: ${nextCopy.answerP1}`)
+      }
+      if (!copy2) {
+        throw new NotFoundResponse(`Copy 2 not found: ${nextCopy.answerP2}`)
+      }
+
+      nextExerciseSession.source.variables.__peer_copy_1 = withExercisePlayer(copy1).form
+      nextExerciseSession.source.variables.__peer_copy_2 = withExercisePlayer(copy2).form
+      nextExerciseSession.source.variables._$PLATON$_peer_id = nextCopy.peerId
+      await nextExerciseSession.save()
+
       nav.current = {
         id: nextCopy.peerId,
         title: nextExerciseSession.source.variables.title as string,
@@ -422,7 +407,7 @@ export class PlayerService extends PlayerManager {
       }
       case comparisonSessionId: {
         const winner = (exerciseSession.variables as any)?.peer_winner_
-        const peerId = navigation?.exercises.filter((e) => e.peerComparison).at(0)?.id
+        const peerId = (exerciseSession.variables as any)?._$PLATON$_peer_id
         if (!winner || winner < 0) {
           throw new ForbiddenResponse('The winner is not defined in the exercise')
         }

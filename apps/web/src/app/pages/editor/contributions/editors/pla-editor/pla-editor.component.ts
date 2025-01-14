@@ -226,6 +226,8 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
   protected allConnectedTo: string[] = []
   protected connectedTo: string[][] = [[]]
 
+  protected peer_activity_groups = ['exercice', 'comparaison', 'entrainement', 'attente']
+
   async ngOnInit(): Promise<void> {
     this.user = (await this.authService.ready()) as User
     const direction = localStorage.getItem('order-direction') as OrderingDirections
@@ -250,6 +252,13 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.form.valueChanges.pipe(skip(1), debounceTime(300)).subscribe(this.onChangeData.bind(this))
     )
+    this.form.valueChanges.pipe(skip(1)).subscribe((partial) => {
+      if (partial.navigation?.mode === 'peer') {
+        this.peer_activity_groups.forEach((group) => {
+          this.addGroup(group)
+        })
+      }
+    })
 
     this.tree = tree
     this.topics = topics
@@ -437,12 +446,25 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
     this.selectedGroupIndex = index
   }
 
-  protected addGroup(): void {
-    const newGroup: ActivityExerciseGroup = {
-      name: 'Groupe ' + (this.exerciseGroups.length + 1),
-      exercises: [],
+  protected addGroup(name?: string): void {
+    if (name) {
+      if (this.exerciseGroups.find((group) => group.name === name)) {
+        return // prevent adding a group with the same name
+      }
+      this.exerciseGroups = [
+        ...this.exerciseGroups,
+        {
+          name,
+          exercises: [],
+        },
+      ]
+    } else {
+      const newGroup: ActivityExerciseGroup = {
+        name: 'Groupe ' + (this.exerciseGroups.length + 1),
+        exercises: [],
+      }
+      this.exerciseGroups = [...this.exerciseGroups, newGroup]
     }
-    this.exerciseGroups = [...this.exerciseGroups, newGroup]
     this.selectGroup(this.exerciseGroups.length - 1)
     this.updateConnectedTo()
     this.onChangeData()
