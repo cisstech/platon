@@ -55,6 +55,7 @@ export class MatchListComponent implements OnInit, AfterViewChecked, OnDestroy, 
   constructor(readonly injector: Injector, readonly changeDetector: WebComponentChangeDetectorService) {}
 
   async ngOnInit() {
+    this.state.isFilled = false
     this.jsPlumb = newInstance({
       container: this.container.nativeElement,
       connectionsDetachable: false,

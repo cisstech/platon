@@ -55,6 +55,7 @@ export class InputBoxComponent implements OnInit, OnDestroy, WebComponentHooks<I
   }
 
   ngOnInit() {
+    this.state.isFilled = false
     this.subscription = this.form.valueChanges.pipe(debounceTime(this.dueTime)).subscribe((value) => {
       value = value || ''
       if (this.state.type === 'number') {

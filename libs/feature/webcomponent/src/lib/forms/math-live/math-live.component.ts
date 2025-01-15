@@ -37,6 +37,7 @@ export class MathLiveComponent implements OnInit, WebComponentHooks<MathLiveStat
   constructor(readonly injector: Injector, readonly changeDetection: WebComponentChangeDetectorService) {}
 
   async ngOnInit() {
+    this.state.isFilled = false
     this.mathfield = new MathfieldElement()
     this.mathfield.value = this.state.value
     this.mathfield.smartFence = false

@@ -38,6 +38,7 @@ export class BindedBubblesComponent implements WebComponentHooks<BindedBubblesSt
       element.item2.id = cmp++ + ''
       element.item2.state = 'unchecked'
     })
+    this.state.isFilled = false
     this.constructShuffleList()
   }
 

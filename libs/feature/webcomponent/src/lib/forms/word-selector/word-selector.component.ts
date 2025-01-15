@@ -37,6 +37,7 @@ export class WordSelectorComponent implements WebComponentHooks<WordSelectorStat
   ngOnInit() {
     this.shuffleArray()
     this.stateChange?.emit(this.state)
+    this.state.isFilled = false
   }
 
   drop(event: CdkDragDrop<string[]>) {

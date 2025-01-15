@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Injector, Input, Output } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  HostBinding,
+  Injector,
+  Input,
+  Output,
+  OnInit,
+} from '@angular/core'
 import { WebComponent, WebComponentHooks } from '../../web-component'
 import { MatrixComponentDefinition, MatrixState } from './matrix'
 import { WebComponentChangeDetectorService } from '../../web-component-change-detector.service'
@@ -10,7 +19,7 @@ import { WebComponentChangeDetectorService } from '../../web-component-change-de
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 @WebComponent(MatrixComponentDefinition)
-export class MatrixComponent implements WebComponentHooks<MatrixState> {
+export class MatrixComponent implements WebComponentHooks<MatrixState>, OnInit {
   @Input() state!: MatrixState
   @Output() stateChange = new EventEmitter<MatrixState>()
 
@@ -23,6 +32,10 @@ export class MatrixComponent implements WebComponentHooks<MatrixState> {
   }
 
   constructor(readonly injector: Injector, readonly changeDetector: WebComponentChangeDetectorService) {}
+
+  ngOnInit() {
+    this.state.isFilled = false
+  }
 
   onChangeState() {
     const { cols, rows } = this.state

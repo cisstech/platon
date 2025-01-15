@@ -1,5 +1,5 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop'
-import { ChangeDetectionStrategy, Component, EventEmitter, Injector, Input, Output } from '@angular/core'
+import { ChangeDetectionStrategy, Component, EventEmitter, Injector, Input, Output, OnInit } from '@angular/core'
 import { WebComponent, WebComponentHooks } from '../../web-component'
 import { SortListComponentDefinition, SortListItem, SortListState } from './sort-list'
 
@@ -10,11 +10,15 @@ import { SortListComponentDefinition, SortListItem, SortListState } from './sort
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 @WebComponent(SortListComponentDefinition)
-export class SortListComponent implements WebComponentHooks<SortListState> {
+export class SortListComponent implements WebComponentHooks<SortListState>, OnInit {
   @Input() state!: SortListState
   @Output() stateChange = new EventEmitter<SortListState>()
 
   constructor(readonly injector: Injector) {}
+
+  ngOnInit() {
+    this.state.isFilled = false
+  }
 
   onChangeState() {
     if (!Array.isArray(this.state.items)) {

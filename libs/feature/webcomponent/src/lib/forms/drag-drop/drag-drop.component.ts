@@ -32,6 +32,7 @@ export class DragDropComponent implements OnInit, OnDestroy, WebComponentHooks<D
 
   ngOnInit(): void {
     this.dragdrop.register(this.directive.id, this)
+    this.state.isFilled = false
   }
 
   ngOnDestroy(): void {
