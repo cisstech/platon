@@ -177,7 +177,7 @@ export class PlayerService extends PlayerManager {
           user
         )
 
-        if (!exerciseSession.isBuilt) {
+        if (!exerciseSession.isBuilt || activitySession?.variables.settings?.navigation?.mode === 'peer') {
           exerciseSession = await this.buildExercise(exerciseSession)
         }
 
