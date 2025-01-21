@@ -20,7 +20,6 @@ import { UserActivityResultsDistribution } from '@platon/feature/result/common'
   standalone: true,
   selector: 'result-k-cile',
   templateUrl: './k-cile.component.html',
-  template: `<div #chartContainer style="width: 100%; height: 100%"></div>`,
   styleUrls: ['./k-cile.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -126,17 +125,19 @@ export class KCileComponent implements AfterViewInit {
     const bars = []
 
     if (data.length > 0) {
-      const totalGroups = Math.floor(data.length / bucketSize)
+      const totalGroups = bucketSize
 
       for (let i = 0; i < totalGroups; i++) {
-        const group = data.slice(i * bucketSize, (i + 1) * bucketSize)
+        const group = data.filter((d) => {
+          const index = Math.floor((i * data.length) / totalGroups)
+          return index <= data.indexOf(d) && data.indexOf(d) < Math.floor(((i + 1) * data.length) / totalGroups)
+        })
         const sum = group.reduce((acc, d) => acc + d.value, 0)
         const avg = sum / group.length
         bars.push(avg)
       }
     }
-
-    return bars
+    return bars.reverse()
   }
 
   private readonly buildChart = (): EChartsOption => {
@@ -160,7 +161,7 @@ export class KCileComponent implements AfterViewInit {
       })
       .filter((d) => d !== undefined)
 
-    lastDatas.sort((a, b) => a.value - b.value)
+    lastDatas.sort((a, b) => b.value - a.value)
 
     let bars: number[] = []
     let additionalBars: number[] = []
@@ -169,7 +170,7 @@ export class KCileComponent implements AfterViewInit {
       while (additionalData.length < lastDatas.length) {
         additionalData.push({ date: '', value: 0 })
       }
-      additionalData.sort((a, b) => a.value - b.value)
+      additionalData.sort((a, b) => b.value - a.value)
       const maxBar = Math.min(this.selectedBucket, additionalData.length)
       additionalBars = this.constructBar(maxBar, additionalData)
       bars = this.constructBar(maxBar, lastDatas)
@@ -207,12 +208,13 @@ export class KCileComponent implements AfterViewInit {
         type: 'category',
         data: bars.map((_, i) => i),
         axisLabel: {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           formatter: (value: any) => {
             return `${value * this.selectedBucket} - ${(parseInt(value) + 1) * this.selectedBucket}`
           },
           color: primCol,
         },
-        name: bars.length + ' groupes de ' + this.selectedBucket + ' élèves',
+        name: bars.length + ' groupes de ' + (bars.length !== 0 ? data.length / bars.length : 0) + ' élèves',
         nameLocation: 'middle',
         nameTextStyle: {
           height: 29,
@@ -271,7 +273,7 @@ export class KCileComponent implements AfterViewInit {
   }
 
   @HostListener('window:resize')
-  onResize() {
+  onResize(): void {
     if (this.chartInstance) {
       this.chartInstance.resize()
     }
