@@ -119,6 +119,11 @@ export const ACTIVITY_COURSE_USED_IN_COUNT = 'activity.course-used-in-count'
 export const ACTIVITY_DISTRIBUTION = 'activity.distribution'
 
 /**
+ * Result for each exercise in an activity.
+ */
+export const ACTIVITY_DETAILS = 'activity.details'
+
+/**
  * Total number of exercises for a user.
  */
 export const USER_COURSE_COUNT = 'user.course-count'
