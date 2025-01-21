@@ -13,30 +13,17 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
 @WebComponent(WordSelectorComponentDefinition)
 export class WordSelectorComponent implements WebComponentHooks<WordSelectorState>, OnInit {
   /**
-   * The web component service.
-   */
-  private readonly webComponentService!: WebComponentService
-
-  /**
    * The state of the word selector component.
    */
   @Input() state!: WordSelectorState
 
-  /**
-   * Event emitter for state changes.
-   */
-  stateChange?: EventEmitter<WordSelectorState> | undefined
-
-  constructor(readonly injector: Injector) {
-    this.webComponentService = injector.get(WebComponentService)
-  }
+  constructor(readonly injector: Injector) {}
 
   /**
    * Initializes the component.
    */
   ngOnInit() {
     this.shuffleArray()
-    this.stateChange?.emit(this.state)
     this.state.isFilled = false
   }
 
@@ -49,8 +36,6 @@ export class WordSelectorComponent implements WebComponentHooks<WordSelectorStat
     } else {
       transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex)
     }
-
-    this.stateChange?.emit(this.state)
   }
 
   suppremerUneLettre(phrase: string[], word: string) {
@@ -63,13 +48,11 @@ export class WordSelectorComponent implements WebComponentHooks<WordSelectorStat
   addWord(word: string) {
     this.state.selectedWords.push(word)
     this.suppremerUneLettre(this.state.words, word)
-    this.stateChange?.emit(this.state)
   }
 
   removeWord(word: string) {
     this.state.words.push(word)
     this.suppremerUneLettre(this.state.selectedWords, word)
-    this.stateChange?.emit(this.state)
   }
 
   shuffleArray(): void {
@@ -77,6 +60,5 @@ export class WordSelectorComponent implements WebComponentHooks<WordSelectorStat
       const j = Math.floor(Math.random() * (i + 1))
       ;[this.state.words[i], this.state.words[j]] = [this.state.words[j], this.state.words[i]]
     }
-    this.stateChange?.emit(this.state)
   }
 }
