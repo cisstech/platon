@@ -18,6 +18,7 @@ import {
   ResultByMembersComponent,
   ResultLegendComponent,
   ResultService,
+  ResultBoxPlotComponent,
 } from '@platon/feature/result/browser'
 
 import { DurationPipe, UiLayoutBlockComponent, UiStatisticCardComponent } from '@platon/shared/ui'
@@ -62,6 +63,7 @@ import { NzInputNumberModule } from 'ng-zorro-antd/input-number'
     ResultByExercisesComponent,
     ResultLegendComponent,
     KCileComponent,
+    ResultBoxPlotComponent,
 
     UiStatisticCardComponent,
     UiLayoutBlockComponent,
@@ -82,6 +84,8 @@ export class CourseActivityPage implements OnInit, OnDestroy {
       { label: '2', value: 2 },
       { label: '5', value: 5 },
       { label: '10', value: 10 },
+      { label: '15', value: 15 },
+      { label: '20', value: 20 },
     ],
   }
   protected dates: Date[] = []
@@ -94,6 +98,14 @@ export class CourseActivityPage implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.presenter.contextChange.subscribe(async (context) => {
         this.context = context
+        const nbperson = this.context.results?.users.length ?? 0
+        this.KCileInsightsOption.possibleBucket.map((bucket) => {
+          bucket.disabled = bucket.value > nbperson
+        })
+        this.KCileInsightsOption.selectedBucket = this.KCileInsightsOption.possibleBucket.reduce(
+          (acc, curr) => (curr.disabled ? acc : curr.value),
+          0
+        )
         this.onDateChange([
           this.context.activity?.createdAt ?? this.today,
           this.context.activity?.closeAt ?? this.today,
