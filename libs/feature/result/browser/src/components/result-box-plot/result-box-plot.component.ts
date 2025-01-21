@@ -120,6 +120,7 @@ export class ResultBoxPlotComponent implements AfterViewInit {
           data: preparedData,
           colorBy: 'data',
           tooltip: {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             formatter: (params: any) =>
               `Min: ${params.data[1]}<br>Q1: ${params.data[2]}<br>Median: ${params.data[3]}<br>Q3: ${params.data[4]}<br>Max: ${params.data[5]}`,
           },
