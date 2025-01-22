@@ -83,7 +83,7 @@
             <result-by-exercises [results]="context.results.exercises" />
           </section>
           <section>
-            <mat-card>
+            <mat-card *ngIf="KCileInsightsOption.selectedBucket >= 2">
               <mat-card-header>
                 <nz-select
                   nzPlaceHolder="Sceaux"
