@@ -12,12 +12,12 @@ export interface CircleResourceStatistic {
 
 export interface ActivityResourceStatistic {
   readonly attemptCount: number
-  readonly successRate: number
+  readonly averageScore: number
 }
 
 export interface ExerciseResourceStatistic {
   readonly attemptCount: number
-  readonly successRate: number
+  readonly averageScore: number
   readonly references?: {
     readonly total: number
     readonly activity: number

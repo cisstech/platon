@@ -137,35 +137,17 @@
           <nz-form-item>
             <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="navigationMode">Mode</nz-form-label>
             <nz-form-control>
-              <nz-select formControlName="mode" id="navigationMode">
-                <nz-option nzValue="composed" nzLabel="Composée" nzCustomContent>
-                  <span
-                    nz-icon
-                    nzType="question-circle"
-                    nz-tooltip="Tous les exercices sont affichés simultanément."
-                  ></span>
-                  Composée
+              <ng-template #selectedOptionTemplate let-selected>
+                <span nz-icon nzType="question-circle" [nz-tooltip]="getNavigationTooltip(selected.nzValue)"></span>
+                {{ getNavigationLabel(selected.nzValue) }}
+              </ng-template>
+              <nz-select formControlName="mode" id="navigationMode" [nzCustomTemplate]="selectedOptionTemplate">
+                @for(mode of navigationModes; track mode.value) {
+                <nz-option nzValue="{{ mode.value }}" nzLabel="{{ mode.label }}" nzCustomContent>
+                  <span nz-icon nzType="question-circle" nz-tooltip="{{ mode.tooltip }}"></span>
+                  {{ mode.label }}
                 </nz-option>
-                <nz-option nzValue="manual" nzLabel="Progressive" nzCustomContent>
-                  <span nz-icon nzType="question-circle" nz-tooltip="les exercices sont affichés un à un"></span>
-                  Progressive
-                </nz-option>
-                <nz-option nzValue="next" nzLabel="Intelligente" nzCustomContent>
-                  <span
-                    nz-icon
-                    nzType="question-circle"
-                    nz-tooltip="Les exercices s'enchaineront en fonction du comportement défini dans next.py."
-                  ></span>
-                  Intelligente
-                </nz-option>
-                <nz-option nzValue="peer" nzLabel="Comparaison par les pairs" nzCustomContent>
-                  <span
-                    nz-icon
-                    nzType="question-circle"
-                    nz-tooltip="Mode composé que l'on utilise pour afficher deux exercices et les comparer."
-                  ></span>
-                  Comparaison par les pairs
-                </nz-option>
+                }
               </nz-select>
             </nz-form-control>
           </nz-form-item>
@@ -460,7 +442,7 @@
           </nz-form-item>
         </nz-collapse-panel>
       </nz-collapse>
-      <div *ngIf="false" class="next">
+      <!-- <div *ngIf="false" class="next">
         <div class="exercise-group-list">
           <h3>Groupes d'exercices</h3>
           <mat-accordion
@@ -532,7 +514,7 @@
           </mat-accordion>
         </div>
         <div class="graph-container"></div>
-      </div>
+      </div> -->
     </ng-container>
   </form>
 </div>

@@ -27,8 +27,9 @@ export class RemoteAuthProvider extends AuthProvider {
         return await lastValueFrom(this.http.get<ItemResponse<User>>('/api/v1/users/' + data.username)).then(
           (response) => response.resource
         )
-      } catch {
-        this.signOut().catch(console.error)
+      } catch (error) {
+        console.error('Unable to fetch user data, you are probably off line.')
+        // this.signOut().catch(console.error)
       }
     }
     return undefined

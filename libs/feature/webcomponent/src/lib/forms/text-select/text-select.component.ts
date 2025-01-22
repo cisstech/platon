@@ -7,6 +7,7 @@ import {
   Injector,
   Input,
   Output,
+  OnInit,
 } from '@angular/core'
 import { CssPipe } from '../../shared/pipes/css.pipe'
 import { WebComponent, WebComponentHooks } from '../../web-component'
@@ -24,7 +25,7 @@ const HIGHLIGHT = 'highlight-state'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 @WebComponent(TextSelectComponentDefinition)
-export class TextSelectComponent implements WebComponentHooks<TextSelectState> {
+export class TextSelectComponent implements WebComponentHooks<TextSelectState>, OnInit {
   @Input() state!: TextSelectState
   @Output() stateChange = new EventEmitter<TextSelectState>()
 
@@ -48,6 +49,10 @@ export class TextSelectComponent implements WebComponentHooks<TextSelectState> {
     private readonly el: ElementRef<HTMLElement>,
     private readonly cssPipe: CssPipe
   ) {}
+
+  ngOnInit() {
+    this.state.isFilled = false
+  }
 
   onChangeState() {
     switch (this.state.mode) {
@@ -101,7 +106,7 @@ export class TextSelectComponent implements WebComponentHooks<TextSelectState> {
         }
       }
     }
-
+    this.state.isFilled = true
     this.state.selections.push({
       position: [startIndex, endIndex],
     })
@@ -136,6 +141,7 @@ export class TextSelectComponent implements WebComponentHooks<TextSelectState> {
         }
         i++
       }
+      this.state.isFilled = true
       this.state.selections.push({
         position: index,
       })

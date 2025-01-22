@@ -47,6 +47,9 @@ export class ActivityEntity extends BaseEntity implements Activity {
   @Column({ name: 'is_challenge', default: false })
   isChallenge!: boolean
 
+  @Column({ default: 0 })
+  order!: number
+
   // VIRTUAL COLUMNS
   // TODO: use expanders instead of virtual columns
 

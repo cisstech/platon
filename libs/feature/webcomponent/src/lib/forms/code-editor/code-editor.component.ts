@@ -11,6 +11,7 @@ import {
   OnDestroy,
   Output,
   ViewChild,
+  OnInit,
 } from '@angular/core'
 import { ACTION_GOTO_LINE, ACTION_INDENT_USING_SPACES, ACTION_QUICK_COMMAND } from '@cisstech/nge/monaco'
 import { NO_COPY_PASTER_CLASS_NAME } from '@platon/feature/player/common'
@@ -25,7 +26,7 @@ import { CodeEditorComponentDefinition, CodeEditorState } from './code-editor'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 @WebComponent(CodeEditorComponentDefinition)
-export class CodeEditorComponent implements AfterViewChecked, OnDestroy, WebComponentHooks<CodeEditorState> {
+export class CodeEditorComponent implements AfterViewChecked, OnDestroy, WebComponentHooks<CodeEditorState>, OnInit {
   private readonly disposables: monaco.IDisposable[] = []
   private model?: monaco.editor.ITextModel
   private editor?: monaco.editor.IStandaloneCodeEditor
@@ -60,6 +61,10 @@ export class CodeEditorComponent implements AfterViewChecked, OnDestroy, WebComp
       this.width = width
       this.height = height
     }
+  }
+
+  ngOnInit() {
+    this.state.isFilled = false
   }
 
   ngOnDestroy() {
@@ -106,6 +111,7 @@ export class CodeEditorComponent implements AfterViewChecked, OnDestroy, WebComp
         this.changeDetector
           .ignore(this, () => {
             this.state.code = this.model?.getValue() || ''
+            this.state.isFilled = this.state.code !== this.initialCode
           })
           .catch(console.error)
       })

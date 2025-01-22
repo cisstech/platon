@@ -40,6 +40,7 @@ export class JsxComponent implements OnInit, OnDestroy, WebComponentHooks<JsxSta
   ) {}
 
   async ngOnInit() {
+    this.state.isFilled = false
     await firstValueFrom(
       this.resourceLoader.loadAllSync([
         ['script', 'assets/vendors/jsxgraph/jsxgraphcore.js'],
@@ -93,6 +94,7 @@ export class JsxComponent implements OnInit, OnDestroy, WebComponentHooks<JsxSta
 
     this.board.on('update', () => {
       this.changeDetector.batch(this, () => {
+        this.state.isFilled = true
         this.readPoints()
       })
     })

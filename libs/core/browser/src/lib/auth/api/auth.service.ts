@@ -121,7 +121,7 @@ export class AuthService {
 
   private async connect(): Promise<User> {
     const user = await this.authProvider.current()
-    if (user == null) {
+    if (!user) {
       throw new Error('auth/not-connected')
     }
 

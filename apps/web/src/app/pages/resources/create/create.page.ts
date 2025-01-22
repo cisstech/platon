@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit, ViewChild } from '@angular/core'
 import {
   AbstractControl,
   FormControl,
@@ -114,6 +114,16 @@ export class ResourceCreatePage implements OnInit {
     topics: new FormControl<string[]>([]),
     levels: new FormControl<string[]>([]),
   })
+
+  @ViewChild(UiStepperComponent)
+  protected stepper!: UiStepperComponent
+
+  @HostListener('window:keydown.meta.enter')
+  protected async handleKeyDown(): Promise<void> {
+    if (this.stepper.isValid) {
+      this.stepper.isLast ? await this.create() : this.stepper.nextStep()
+    }
+  }
 
   constructor(
     private readonly router: Router,

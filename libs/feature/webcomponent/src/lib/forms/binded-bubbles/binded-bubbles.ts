@@ -18,6 +18,7 @@ export interface BindedBubblesState extends IWebComponent {
   items: PairBubbleItem[]
   numberPairToShow: number
   nbError: number
+  errors: PairBubbleItem[]
   mode: 'shuffle' | 'ordered'
   timeout: number
 }
@@ -62,7 +63,7 @@ export const BindedBubblesComponentDefinition = defineWebComponent({
       mode: {
         type: 'string',
         description: 'Mode de jeu',
-        enum: ['ordered'],
+        enum: ['ordered', 'shuffle'],
         default: 'ordered',
       },
       timeout: {
@@ -74,6 +75,26 @@ export const BindedBubblesComponentDefinition = defineWebComponent({
         type: 'number',
         description: "Nombre d'erreurs",
         default: 0,
+      },
+      errors: {
+        type: 'array',
+        description: 'Liste des erreurs',
+        default: [],
+        items: {
+          type: 'object',
+          properties: {
+            item1: {
+              type: 'object',
+              description: 'Contenu du premier item',
+              properties: { content: { type: 'string' } },
+            },
+            item2: {
+              type: 'object',
+              description: 'Contenu du deuxième item',
+              properties: { content: { type: 'string' } },
+            },
+          },
+        },
       },
     },
     required: ['items'],

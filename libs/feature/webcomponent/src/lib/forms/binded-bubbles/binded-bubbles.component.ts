@@ -38,6 +38,7 @@ export class BindedBubblesComponent implements WebComponentHooks<BindedBubblesSt
       element.item2.id = cmp++ + ''
       element.item2.state = 'unchecked'
     })
+    this.state.isFilled = false
     this.constructShuffleList()
   }
 
@@ -78,19 +79,37 @@ export class BindedBubblesComponent implements WebComponentHooks<BindedBubblesSt
       const pair = this.generatePair(this.clickedList[0], this.clickedList[1])
       const reversedPair = this.generatePair(this.clickedList[1], this.clickedList[0])
 
-      const foundPair = this.state.items.find(
-        (item) =>
+      let foundPair: PairBubbleItem | undefined = undefined
+      let sameSide = true
+      for (const item of this.state.items) {
+        if (item.item1.id === pair.item1.id || reversedPair.item1.id === item.item1.id) {
+          sameSide = !sameSide
+          console.log(item.item1.content, 'change side', sameSide)
+        }
+        if (
           (item.item1.id === pair.item1.id && item.item2.id === pair.item2.id) ||
           (item.item1.id === reversedPair.item1.id && item.item2.id === reversedPair.item2.id)
-      )
+        ) {
+          foundPair = item
+          break
+        }
+      }
 
       if (foundPair) {
         this.clearClickedList(false)
         this.handleAchievedPair(foundPair)
         this.autoValidate()
       } else {
-        this.state.nbError++
-        this.clearClickedList(true)
+        if (!sameSide) {
+          this.state.nbError++
+          this.state.errors.push(pair)
+          this.clearClickedList(true)
+        } else {
+          const item = this.clickedList.shift()
+          if (item !== undefined) {
+            item.state = 'unchecked'
+          }
+        }
       }
       //mettre à jour les deux list
       this.list1 = this.list1.slice()

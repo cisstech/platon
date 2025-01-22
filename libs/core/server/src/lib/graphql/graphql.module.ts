@@ -28,7 +28,7 @@ export function mapKeysToLowerCase(inputObject: Readonly<any>): Record<string, a
     // https://wanago.io/2021/02/15/api-nestjs-real-time-graphql-subscriptions/
     NestGraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      playground: Boolean(process.env.GRAPHQL_PLAYGROUND),
+      playground: Boolean(process.env['GRAPHQL_PLAYGROUND']),
       autoSchemaFile: join(process.cwd(), 'schema.gql'),
       resolvers: {
         UUID,

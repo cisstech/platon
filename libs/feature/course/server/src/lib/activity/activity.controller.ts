@@ -64,6 +64,18 @@ export class ActivityController {
   }
 
   @Roles(UserRoles.teacher, UserRoles.admin)
+  @Patch('/change-order')
+  async changeOrder(
+    @Req() req: IRequest,
+    @UUIDParam('courseId') courseId: string,
+    @Body() input: string[]
+  ): Promise<NoContentResponse> {
+    await this.permissionsService.ensureCourseWritePermission(courseId, req)
+    await this.activityService.updateActivitesOrder(input)
+    return new NoContentResponse()
+  }
+
+  @Roles(UserRoles.teacher, UserRoles.admin)
   @Patch('/:activityId')
   async update(
     @Req() req: IRequest,

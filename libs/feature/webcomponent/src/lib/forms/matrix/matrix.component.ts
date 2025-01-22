@@ -1,6 +1,16 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Injector, Input, Output } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  HostBinding,
+  Injector,
+  Input,
+  Output,
+  OnInit,
+} from '@angular/core'
 import { WebComponent, WebComponentHooks } from '../../web-component'
 import { MatrixComponentDefinition, MatrixState } from './matrix'
+import { WebComponentChangeDetectorService } from '../../web-component-change-detector.service'
 
 @Component({
   selector: 'wc-matrix',
@@ -9,7 +19,7 @@ import { MatrixComponentDefinition, MatrixState } from './matrix'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 @WebComponent(MatrixComponentDefinition)
-export class MatrixComponent implements WebComponentHooks<MatrixState> {
+export class MatrixComponent implements WebComponentHooks<MatrixState>, OnInit {
   @Input() state!: MatrixState
   @Output() stateChange = new EventEmitter<MatrixState>()
 
@@ -21,7 +31,11 @@ export class MatrixComponent implements WebComponentHooks<MatrixState> {
     }
   }
 
-  constructor(readonly injector: Injector) {}
+  constructor(readonly injector: Injector, readonly changeDetector: WebComponentChangeDetectorService) {}
+
+  ngOnInit() {
+    this.state.isFilled = false
+  }
 
   onChangeState() {
     const { cols, rows } = this.state
@@ -42,6 +56,19 @@ export class MatrixComponent implements WebComponentHooks<MatrixState> {
   resize(dimension: { cols: number; rows: number }) {
     this.state.cols = dimension.cols
     this.state.rows = dimension.rows
+    this.changeDetector
+      .ignore(this, () => {
+        this.state.isFilled = true
+      })
+      .catch(console.error)
+  }
+
+  valueChange() {
+    this.changeDetector
+      .ignore(this, () => {
+        this.state.isFilled = true
+      })
+      .catch(console.error)
   }
 
   trackBy(index: number) {

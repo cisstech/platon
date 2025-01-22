@@ -6,7 +6,8 @@ export interface InputBoxState extends IWebComponent {
   value: string | number
   width: string
   prefix: string
-  appearance: 'fill' | 'outline'
+  appearance: 'fill' | 'outline' | 'inline'
+  css?: string
   placeholder: string
   autoValidation: boolean
   disabled: boolean
@@ -56,7 +57,7 @@ export const InputBoxComponentDefinition = defineWebComponent({
         type: 'string',
         default: 'outline',
         description: "L'apparence du champ de saisi.",
-        enum: ['fill', 'outline'],
+        enum: ['fill', 'outline', 'inline'],
       },
       placeholder: {
         type: 'string',
@@ -95,6 +96,11 @@ export const InputBoxComponentDefinition = defineWebComponent({
         },
         description:
           'Une liste de caractères spéciaux à proposer dans un clavier virtuel. Chaque sous-tableau représente une ligne de caractères.',
+      },
+      css: {
+        type: 'string',
+        default: '',
+        description: 'Les classes CSS à appliquer au composant.',
       },
     },
   },

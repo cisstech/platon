@@ -104,7 +104,7 @@
     ></i>
   </div>
   <div class="resource-item-stats" *ngIf="attemptCount">
-    <span [style.color]="successRateColor">{{ successRate }}%</span> de réussite pour
+    Note moyenne de <span [style.color]="averageScoreColor">{{ averageScore }}%</span> pour
     <ng-container [ngPlural]="attemptCount">
       <ng-template ngPluralCase="=0">0 utilisation</ng-template>
       <ng-template ngPluralCase="=1">1 utilisation</ng-template>

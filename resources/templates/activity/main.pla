@@ -5,7 +5,7 @@
   "settings": {
     "duration": 0,
     "navigation": {
-      "mode": "composed"
+      "mode": "manual"
     },
     "actions": {
       "retry": 1,

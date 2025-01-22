@@ -26,7 +26,11 @@
         Ajouter une activité
       </button>
       <button nz-button (click)="insertBelow.emit(section)">Insérer une section après</button>
-      @if (nbActivities > 0) {
+      @if (!editMode) {
+      <button nz-button (click)="onEdit()">Modifier l'ordre des activités</button>
+      } @else {
+      <button nz-button (click)="onSave()">Valider l'ordre des activités</button>
+      } @if (nbActivities > 0) {
       <button
         nz-button
         nzDanger

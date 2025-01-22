@@ -1,6 +1,6 @@
 <mat-form-field appearance="fill">
   <mat-label>{{ state.placeholder }}</mat-label>
-  <mat-select [(ngModel)]="state.selection" [disabled]="state.disabled">
+  <mat-select [(ngModel)]="state.selection" (ngModelChange)="state.isFilled = true" [disabled]="state.disabled">
     <mat-option *ngFor="let item of state.items" [value]="item">
       {{ item }}
     </mat-option>

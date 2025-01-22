@@ -22,8 +22,8 @@ import { InputBoxComponentDefinition, InputBoxState } from './input-box'
   templateUrl: 'input-box.component.html',
   styleUrls: ['input-box.component.scss'],
   host: {
-    '[style.display]': `state.width === 'auto' ? 'inline-flex' : ''`,
-    '[style.width]': `state.width !== 'auto' ? '100%' : ''`,
+    '[style.display]': `state.width === 'auto' || state.appearance === 'inline' ? 'inline-flex' : ''`,
+    '[style.width]': `state.width !== 'auto' ? (state.width ? state.width : '100%') : ''`,
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -55,6 +55,7 @@ export class InputBoxComponent implements OnInit, OnDestroy, WebComponentHooks<I
   }
 
   ngOnInit() {
+    this.state.isFilled = false
     this.subscription = this.form.valueChanges.pipe(debounceTime(this.dueTime)).subscribe((value) => {
       value = value || ''
       if (this.state.type === 'number') {
@@ -65,6 +66,7 @@ export class InputBoxComponent implements OnInit, OnDestroy, WebComponentHooks<I
       if (this.state.value !== value) {
         this.hasToUpdateCharacters = false
         this.state.value = value
+        this.state.isFilled = true
       }
     })
   }
@@ -160,6 +162,7 @@ export class InputBoxComponent implements OnInit, OnDestroy, WebComponentHooks<I
 
   protected insertSpecialCharacter(char: string) {
     this.form.setValue(this.form.value + char)
+    this.state.isFilled = true
   }
 
   protected hasSpecialCharacters(): boolean {

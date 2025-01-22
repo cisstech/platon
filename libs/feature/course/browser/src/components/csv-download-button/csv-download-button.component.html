@@ -16,7 +16,13 @@
 </a>
 
 <nz-dropdown-menu #menu="nzDropdownMenu">
-  <div nz-menu>
+  <div nz-menu class="scrollable-menu">
+    <div nz-menu-item>
+      <button nz-button nzType="primary" (click)="downloadCSV()">
+        <span nz-icon nzType="download" nzTheme="outline"></span>
+        Télécharger
+      </button>
+    </div>
     <div nz-menu-item>
       <button nz-button nzType="default" nzBlock (click)="toggleAllCheckboxes()">
         @if (isAllChecked()) { Tout décocher } @else { Tout cocher }
@@ -26,12 +32,6 @@
       <label nz-checkbox [(ngModel)]="group.checked">
         {{ group.name }}
       </label>
-    </div>
-    <div nz-menu-item>
-      <button nz-button nzType="primary" (click)="downloadCSV()">
-        <span nz-icon nzType="download" nzTheme="outline"></span>
-        Télécharger
-      </button>
     </div>
   </div>
 </nz-dropdown-menu>

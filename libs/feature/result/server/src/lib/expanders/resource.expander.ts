@@ -7,7 +7,7 @@ import { ResourceDTO, ResourceDependencyEntity, ResourceStatisticEntity } from '
 import { IsNull, Not, Repository } from 'typeorm'
 import { ActivityTotalAttempts } from '../dashboard/aggregators/activity.aggregator'
 import { ExerciseUniqueAttempts } from '../dashboard/aggregators/exercise.aggregator'
-import { SessionSuccessRate } from '../dashboard/aggregators/session.aggregator'
+import { SessionAverageScore } from '../dashboard/aggregators/session.aggregator'
 import { SessionDataEntity } from '../sessions/session-data.entity'
 
 @Injectable()
@@ -51,11 +51,11 @@ export class ResourceExpander {
       }),
     ])
 
-    const successRate = new SessionSuccessRate()
+    const averageScore = new SessionAverageScore()
     const activityTotalAttempts = new ActivityTotalAttempts()
     const exerciseUniqueAttempts = new ExerciseUniqueAttempts()
 
-    const aggregators = [successRate, activityTotalAttempts, exerciseUniqueAttempts]
+    const aggregators = [averageScore, activityTotalAttempts, exerciseUniqueAttempts]
     sessions.forEach((session) => aggregators.forEach((aggregator) => aggregator.next(session)))
     aggregators.forEach((aggregator) => aggregator.complete())
 
@@ -92,14 +92,14 @@ export class ResourceExpander {
         parent.type === ResourceTypes.ACTIVITY
           ? {
               attemptCount: activityTotalAttempts.complete(),
-              successRate: successRate.complete(),
+              averageScore: averageScore.complete(),
             }
           : undefined,
       exercise:
         parent.type === ResourceTypes.EXERCISE
           ? {
               attemptCount: exerciseUniqueAttempts.complete(),
-              successRate: successRate.complete(),
+              averageScore: averageScore.complete(),
               references: refCount
                 ? {
                     total: refCount,

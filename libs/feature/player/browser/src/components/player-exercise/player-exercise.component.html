@@ -6,7 +6,7 @@
           <mat-icon *ngIf="state" [style.color]="state | answerStateColor" [nz-tooltip]="state | answerStateLabel">
             {{ state | answerStateIcon }}
           </mat-icon>
-          {{ player?.title }} @if (players.length && peerComparison) { ({{ index + 1 }}) }
+          {{ player?.title }}
         </mat-card-title>
         <mat-card-subtitle *ngIf="player?.author">
           @if (player!.author!|isUUID) {
@@ -65,7 +65,7 @@
       </section>
       <section>
         <mat-divider />
-        <div class="exercise-form">
+        <div id="form" class="exercise-form">
           <nge-markdown [data]="player?.form" (render)="onRender()" />
         </div>
       </section>

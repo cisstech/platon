@@ -83,7 +83,7 @@
             <result-by-exercises [results]="context.results.exercises" />
           </section>
           <section>
-            <mat-card>
+            <mat-card *ngIf="KCileInsightsOption.selectedBucket >= 2">
               <mat-card-header>
                 <nz-select
                   nzPlaceHolder="Sceaux"
@@ -137,6 +137,16 @@
         </aside>
       </nz-col>
     </nz-row>
+    <section>
+      <mat-card>
+        <mat-card-header>
+          <h4>Boîte à moustaches</h4>
+        </mat-card-header>
+        <mat-card-content style="height: 25rem; padding-bottom: 0">
+          <result-box-plot [data]="context.results.exercises"></result-box-plot>
+        </mat-card-content>
+      </mat-card>
+    </section>
     <section>
       <h4>Résultats par apprenants</h4>
       <result-by-members [results]="context.results.users" />

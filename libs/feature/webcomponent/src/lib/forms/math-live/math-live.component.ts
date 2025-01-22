@@ -37,19 +37,34 @@ export class MathLiveComponent implements OnInit, WebComponentHooks<MathLiveStat
   constructor(readonly injector: Injector, readonly changeDetection: WebComponentChangeDetectorService) {}
 
   async ngOnInit() {
+    this.state.isFilled = false
     this.mathfield = new MathfieldElement()
     this.mathfield.value = this.state.value
     this.mathfield.smartFence = false
     this.mathfield.smartSuperscript = true
+    this.mathfield.mathVirtualKeyboardPolicy = 'sandboxed'
     MathfieldElement.fontsDirectory = 'assets/vendors/mathlive/fonts'
     this.mathfield.oninput = () => {
       this.changeDetection
         .ignore(this, () => {
           this.state.value = this.mathfield.getValue('latex')
+          this.state.isFilled = true
         })
         .catch(console.error)
     }
     this.container.nativeElement.replaceWith(this.mathfield)
+
+    window.addEventListener('click', () => {
+      // hide the virtual keyboard when clicking outside the mathfield
+      if (
+        window.mathVirtualKeyboard &&
+        window.mathVirtualKeyboard.visible &&
+        !this.mathfield.contains(document.activeElement) &&
+        !this.box.nativeElement.contains(document.activeElement)
+      ) {
+        window.mathVirtualKeyboard.hide()
+      }
+    })
   }
 
   onChangeState() {

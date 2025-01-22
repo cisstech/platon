@@ -231,6 +231,8 @@ export class ActivityExerciseResults implements SessionDataAggregator<ExerciseRe
       exerciseResults.dropoutRate.sum += !session.lastGradedAt ? 1 : 0
       exerciseResults.dropoutRate.count += session.startedAt ? 1 : 0
 
+      exerciseResults.details.push(grade < 0 ? 0 : grade)
+
       if (session.startedAt && session.attempts && session.answers?.length) {
         exerciseResults.averageTimeToAttempt.count++
         exerciseResults.averageTimeToAttempt.sum += differenceInSeconds(

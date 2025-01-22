@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { buildHttpParams } from '@platon/core/browser'
-import { ItemResponse, ListResponse } from '@platon/core/common'
+import { ItemResponse, ListResponse, NoContentResponse } from '@platon/core/common'
 import { Activity, ActivityFilters, Course, CreateActivity, UpdateActivity } from '@platon/feature/course/common'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
@@ -38,6 +38,12 @@ export class RemoteActivityProvider extends ActivityProvider {
     return this.http
       .patch<ItemResponse<Activity>>(`/api/v1/courses/${activity.courseId}/activities/${activity.id}`, input)
       .pipe(map((response) => response.resource))
+  }
+
+  updateOrder(course: Course, sortedActivityIds: string[]): Observable<void> {
+    return this.http
+      .patch<NoContentResponse>(`/api/v1/courses/${course.id}/activities/change-order`, sortedActivityIds)
+      .pipe(map(() => undefined))
   }
 
   reload(activity: Activity, version?: string): Observable<Activity> {

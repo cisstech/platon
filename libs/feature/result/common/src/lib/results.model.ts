@@ -219,6 +219,11 @@ export interface ExerciseResults {
    * Percentage of sessions that have been graded with a grade of 100 on the first attempt.
    */
   successRateOnFirstAttempt: ValueAverage
+
+  /**
+   * All notes for the exercise.
+   */
+  details: number[]
 }
 
 /**
@@ -322,6 +327,7 @@ export const emptyExerciseResults = (defaults?: { id: string; title: string }): 
     NOT_STARTED: 0,
     ERROR: 0,
   },
+  details: [],
 })
 
 export const emptyUserResults = (defaults?: Partial<UserResults>): UserResults => ({

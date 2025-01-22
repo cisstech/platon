@@ -159,6 +159,7 @@ export class AutomatonEditorComponent implements OnInit, OnDestroy, WebComponent
     })
 
     this.jsp.registerConnectionType('basic', BASIC_CONNECTION)
+    this.state.isFilled = false
 
     return new Promise<void>((resolve) => {
       ready(() => {
@@ -181,6 +182,7 @@ export class AutomatonEditorComponent implements OnInit, OnDestroy, WebComponent
       this.editor.forEachTransition(this.createConnection.bind(this))
     })
     this.unfocus()
+    this.state.isFilled = false
   }
 
   run(action: AutomatonEditorAction) {

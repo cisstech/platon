@@ -9,8 +9,8 @@ import { WatchedChallengesService } from '../watchedChallenges.service'
 import {
   ActivityEntity,
   ActivityService,
-  ON_TERMINATE_ACTIVITY_EVENT,
-  OnTerminateActivityEventPayload,
+  ON_CHALLENGE_SUCCEEDED_EVENT,
+  OnChallengeSuccededEventPayload,
 } from '@platon/feature/course/server'
 import { OnEvent } from '@nestjs/event-emitter'
 import { WatchedChallengesEntity } from '../watchedChallenges.entity'
@@ -119,8 +119,8 @@ export class LeaderboardCommand {
     this.updateChallengeToChannelMap(watchedChallenge, message)
   }
 
-  @OnEvent(ON_TERMINATE_ACTIVITY_EVENT)
-  async onTerminate(event: OnTerminateActivityEventPayload): Promise<void> {
+  @OnEvent(ON_CHALLENGE_SUCCEEDED_EVENT)
+  async onTerminate(event: OnChallengeSuccededEventPayload): Promise<void> {
     if (!event.activity.isChallenge) {
       return
     }

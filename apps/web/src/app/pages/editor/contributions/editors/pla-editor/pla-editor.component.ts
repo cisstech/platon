@@ -111,7 +111,7 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
     conclusion: '',
     settings: {
       duration: 0,
-      navigation: { mode: 'composed' },
+      navigation: { mode: 'manual' },
       actions: {
         retry: 1,
         hints: true,
@@ -155,7 +155,7 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
     duration: [new Date()],
     seedPerExercise: [!!this.activity.settings?.seedPerExercise],
     navigation: this.fb.group({
-      mode: [this.activity.settings?.navigation?.mode || 'composed', [Validators.required]],
+      mode: [this.activity.settings?.navigation?.mode || 'manual', [Validators.required]],
     }),
     actions: this.fb.group({
       retry: [this.activity?.settings?.actions?.retry, [Validators.required, Validators.min(0)]],
@@ -179,6 +179,21 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
       autoNextGrade: [this.activity.settings?.nextSettings?.autoNextGrade || 100],
     }),
   })
+
+  protected navigationModes = [
+    { value: 'manual', label: 'Progressive', tooltip: 'Les exercices sont affichés un à un.' },
+    { value: 'composed', label: 'Composée', tooltip: 'Tous les exercices sont affichés simultanément.' },
+    {
+      value: 'next',
+      label: 'Intelligente',
+      tooltip: "Les exercices s'enchaineront en fonction du comportement défini dans next.py.",
+    },
+    {
+      value: 'peer',
+      label: 'Comparaison par les pairs',
+      tooltip: "Mode composé que l'on utilise pour afficher deux exercices et les comparer.",
+    },
+  ]
 
   protected exerciseGroups: ActivityExerciseGroup[] = []
   protected selectedGroup: ActivityExerciseGroup | undefined
@@ -211,8 +226,15 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
   protected allConnectedTo: string[] = []
   protected connectedTo: string[][] = [[]]
 
+  protected peer_activity_groups = ['exercice', 'comparaison', 'entrainement', 'attente']
+
   async ngOnInit(): Promise<void> {
     this.user = (await this.authService.ready()) as User
+    const direction = localStorage.getItem('order-direction') as OrderingDirections
+    const order = localStorage.getItem('order') as ResourceOrderings
+    if (direction && order) {
+      this.filters = { ...this.filters, direction, order }
+    }
 
     const [tree, topics, levels] = await Promise.all([
       firstValueFrom(this.resourceService.tree()),
@@ -230,6 +252,13 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.form.valueChanges.pipe(skip(1), debounceTime(300)).subscribe(this.onChangeData.bind(this))
     )
+    this.form.valueChanges.pipe(skip(1)).subscribe((partial) => {
+      if (partial.navigation?.mode === 'peer') {
+        this.peer_activity_groups.forEach((group) => {
+          this.addGroup(group)
+        })
+      }
+    })
 
     this.tree = tree
     this.topics = topics
@@ -255,6 +284,10 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this.activatedRoute.queryParams.subscribe(async (e: QueryParams) => {
+        if (e.order && e.direction) {
+          localStorage.setItem('order', e.order)
+          localStorage.setItem('order-direction', e.direction)
+        }
         this.filters = {
           ...this.filters,
           search: typeof e.q === 'string' ? (e.q.length > 0 ? e.q : undefined) : undefined,
@@ -304,7 +337,6 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
       this.filters = {
         ...this.filters,
         parents: parent ? [parent] : undefined,
-        order: ResourceOrderings.RELEVANCE,
       }
       this.search(this.filters)
       this.changeDetectorRef.markForCheck()
@@ -313,6 +345,16 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.forEach((s) => s.unsubscribe())
+  }
+
+  protected getNavigationTooltip(mode: string): string {
+    const modeObj = this.navigationModes.find((m) => m.value === mode)
+    return modeObj ? modeObj.tooltip : ''
+  }
+
+  protected getNavigationLabel(mode: string): string {
+    const modeObj = this.navigationModes.find((m) => m.value === mode)
+    return modeObj ? modeObj.label : ''
   }
 
   protected getToStep(step: number): void {
@@ -404,12 +446,25 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
     this.selectedGroupIndex = index
   }
 
-  protected addGroup(): void {
-    const newGroup: ActivityExerciseGroup = {
-      name: 'Groupe ' + (this.exerciseGroups.length + 1),
-      exercises: [],
+  protected addGroup(name?: string): void {
+    if (name) {
+      if (this.exerciseGroups.find((group) => group.name === name)) {
+        return // prevent adding a group with the same name
+      }
+      this.exerciseGroups = [
+        ...this.exerciseGroups,
+        {
+          name,
+          exercises: [],
+        },
+      ]
+    } else {
+      const newGroup: ActivityExerciseGroup = {
+        name: 'Groupe ' + (this.exerciseGroups.length + 1),
+        exercises: [],
+      }
+      this.exerciseGroups = [...this.exerciseGroups, newGroup]
     }
-    this.exerciseGroups = [...this.exerciseGroups, newGroup]
     this.selectGroup(this.exerciseGroups.length - 1)
     this.updateConnectedTo()
     this.onChangeData()

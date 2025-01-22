@@ -1,7 +1,22 @@
 @switch (state.type) {
 <!-- NUMERIC -->
-@case ('number') {
-<mat-form-field [ngStyle]="containerStyles" [appearance]="state.appearance">
+@case ('number') { @if (state.appearance === 'inline') {
+<input
+  class="ghost-input"
+  type="number"
+  [formControl]="form"
+  (keydown.enter)="autoValidate()"
+  [ngStyle]="containerStyles"
+  [ngClass]="state.css | css : 'class'"
+  [ngStyle]="state.css | css : 'style'"
+/>
+} @else {
+<mat-form-field
+  [ngStyle]="containerStyles"
+  [appearance]="state.appearance"
+  [ngClass]="state.css | css : 'class'"
+  [ngStyle]="state.css | css : 'style'"
+>
   <mat-label>{{ state.placeholder }}</mat-label>
   <mat-hint>{{ state.hint }}</mat-hint>
   <input matInput type="text" inputmode="decimal" [formControl]="form" (keydown.enter)="autoValidate()" />
@@ -27,12 +42,28 @@
     </button>
   </div>
 </mat-form-field>
-}
+} }
 
 <!-- TEXT -->
-@case ('text') {
+@case ('text') { @if (state.appearance === 'inline') {
+<input
+  class="ghost-input"
+  type="text"
+  [formControl]="form"
+  (keydown.enter)="autoValidate()"
+  [ngClass]="state.css | css : 'class'"
+  [ngStyle]="state.css | css : 'style'"
+  [ngStyle]="{ 'justify-items': state.width === 'auto' ? 'center' : 'start' }"
+/>
+} @else {
+
 <div>
-  <mat-form-field [ngStyle]="containerStyles" [appearance]="state.appearance">
+  <mat-form-field
+    [ngStyle]="containerStyles"
+    [appearance]="state.appearance"
+    [ngClass]="state.css | css : 'class'"
+    [ngStyle]="state.css | css : 'style'"
+  >
     <mat-label>{{ state.placeholder }}</mat-label>
     <mat-hint>{{ state.hint }}</mat-hint>
     <input
@@ -71,14 +102,22 @@
     </div>
   </mat-form-field>
 </div>
+}
 <span *ngIf="state.width === 'auto'" #invisibleText id="invisibleTextID">
   {{ state.value }}
 </span>
 }
 
 <!-- TEXTAREA -->
-@case ('textarea') {
-<mat-form-field [ngStyle]="containerStyles" [appearance]="state.appearance">
+@case ('textarea') { @if (state.appearance === 'inline') {
+<div>Cannot use inline with textarea</div>
+} @else {
+<mat-form-field
+  [ngStyle]="containerStyles"
+  [appearance]="state.appearance"
+  [ngClass]="state.css | css : 'class'"
+  [ngStyle]="state.css | css : 'style'"
+>
   <mat-label>{{ state.placeholder }}</mat-label>
   <mat-hint>{{ state.hint }}</mat-hint>
   <textarea matInput matTextareaAutosize type="multiline" [formControl]="form" (keydown.enter)="autoValidate()">
@@ -105,7 +144,7 @@
     </button>
   </div>
 </mat-form-field>
-}
+} }
 
 <!-- FALLBACK -->
 @default {
