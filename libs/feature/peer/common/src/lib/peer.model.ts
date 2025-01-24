@@ -7,6 +7,27 @@ export interface PeerOutput {
   answer2: Answer
 }
 
+export interface PeerComparisonTree {
+  id: string
+  name: string
+  level: number
+  value: string
+  status: MatchStatus
+  player1: string
+  player2: string
+  nbWinsPlayer1: number
+  nbWinsPlayer2: number
+  winnerId: string
+  children: PeerComparisonTree[]
+}
+
+export interface PeerComparisonTreeOutput {
+  name: string
+  trees: PeerComparisonTree[]
+  maxLevel: number
+  nbLeaves: number
+}
+
 export interface PeerMatch {
   id: string
   createdAt: Date

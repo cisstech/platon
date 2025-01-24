@@ -30,6 +30,7 @@ import { NzSelectModule, NzSelectOptionInterface } from 'ng-zorro-antd/select'
 import { UserActivityResultsDistribution } from '@platon/feature/result/common'
 import { NzSliderModule } from 'ng-zorro-antd/slider'
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number'
+import { PeerTreeComponent } from '@platon/feature/peer/browser'
 
 @Component({
   standalone: true,
@@ -64,6 +65,7 @@ import { NzInputNumberModule } from 'ng-zorro-antd/input-number'
     ResultLegendComponent,
     KCileComponent,
     ResultBoxPlotComponent,
+    PeerTreeComponent,
 
     UiStatisticCardComponent,
     UiLayoutBlockComponent,

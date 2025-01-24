@@ -73,4 +73,9 @@ export class ActivityEntity extends BaseEntity implements Activity {
 
   @VirtualColumn({ query: () => `SELECT '{}'::jsonb` })
   readonly permissions!: ActivityPermissions
+
+  @VirtualColumn({
+    query: (alias) => `SELECT (${alias}.source->'variables'->'settings'->'navigation'->>'mode' = 'peer')::boolean`,
+  })
+  readonly isPeerComparison!: boolean
 }

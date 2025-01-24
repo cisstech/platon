@@ -75,7 +75,6 @@
             />
           </nz-col>
         </nz-row>
-
         <ng-container *ngIf="context.results">
           <div class="spacer"></div>
           <section>
@@ -129,6 +128,9 @@
             </mat-card>
           </section>
         </ng-container>
+        <ng-container *ngIf="context.activity.isPeerComparison"
+          ><peer-tree [activityId]="context.activity.id"></peer-tree
+        ></ng-container>
       </nz-col>
       <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
         <aside>
