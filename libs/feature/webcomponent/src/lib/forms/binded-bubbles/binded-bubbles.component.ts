@@ -84,7 +84,6 @@ export class BindedBubblesComponent implements WebComponentHooks<BindedBubblesSt
       for (const item of this.state.items) {
         if (item.item1.id === pair.item1.id || reversedPair.item1.id === item.item1.id) {
           sameSide = !sameSide
-          console.log(item.item1.content, 'change side', sameSide)
         }
         if (
           (item.item1.id === pair.item1.id && item.item2.id === pair.item2.id) ||

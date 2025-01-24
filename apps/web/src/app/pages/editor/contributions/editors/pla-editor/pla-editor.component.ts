@@ -515,7 +515,7 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
   protected deleteExercise(index: number): void {
     this.selectedGroup = {
       name: this.selectedGroup?.name || '',
-      exercises: this.selectedGroup!.exercises.filter((_, i) => i !== index),
+      exercises: this.selectedGroup?.exercises.filter((_, i) => i !== index) ?? [],
     }
     this.exerciseGroups = this.exerciseGroups.map((group, i) =>
       i === this.selectedGroupIndex
@@ -529,7 +529,7 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
   protected updateExercise(exercise: ActivityExercise): void {
     this.selectedGroup = {
       name: this.selectedGroup?.name || '',
-      exercises: this.selectedGroup!.exercises.map((e) => (e.id === exercise.id ? exercise : e)),
+      exercises: this.selectedGroup?.exercises.map((e) => (e.id === exercise.id ? exercise : e)) ?? [],
     }
     this.exerciseGroups = this.exerciseGroups.map((group, i) =>
       i === this.selectedGroupIndex

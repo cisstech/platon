@@ -53,7 +53,6 @@ export class CourseLTIInterceptor implements LTILaunchInterceptor {
       const lmsCourse = await this.lmsCourseService.findLmsCourseFromLTI(args.payload['context_id'], args.lms.id)
       // Create course if course not found and user is teacher
       if (this.getRoleFromPayload(args.payload) === CourseMemberRoles.teacher && !lmsCourse.isPresent()) {
-        console.log('create course :eyes:')
         const course = await this.CourseService.create({
           name: args.payload['context_title'],
           desc: `Cours PLaTOn rattaché à : ${args.payload['context_title']}`,
