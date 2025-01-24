@@ -171,4 +171,10 @@ export class ResourceService {
     return this.resourceEventProvider.listEvents(resource, filters)
   }
   //#endregion
+
+  //#region Owners
+  listOwners(): Observable<User[]> {
+    return this.resourceProvider.listOwners()
+  }
+  //#endregion
 }

@@ -1,4 +1,4 @@
-import { ExpandableModel, ListResponse } from '@platon/core/common'
+import { ExpandableModel, ListResponse, User } from '@platon/core/common'
 import {
   CircleTree,
   CreateResource,
@@ -27,4 +27,5 @@ export abstract class ResourceProvider {
   abstract move(id: string, parentId: string): Observable<Resource>
   abstract moveToOwnerCircle(resource: Resource): Observable<Resource>
   abstract delete(resource: Resource): Observable<void>
+  abstract listOwners(): Observable<User[]>
 }

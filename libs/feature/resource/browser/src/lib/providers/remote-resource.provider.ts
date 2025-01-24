@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { buildExpandableHttpParams, buildHttpParams } from '@platon/core/browser'
-import { ItemResponse, ListResponse } from '@platon/core/common'
+import { ItemResponse, ListResponse, User } from '@platon/core/common'
 import {
   CircleTree,
   CreateResource,
@@ -89,5 +89,9 @@ export class RemoteResourceProvider extends ResourceProvider {
 
   delete(resource: Resource): Observable<void> {
     return this.http.delete<void>(`/api/v1/resources/${resource.id}`)
+  }
+
+  listOwners(): Observable<User[]> {
+    return this.http.get<ListResponse<User>>(`/api/v1/resources/owners`).pipe(map((response) => response.resources))
   }
 }

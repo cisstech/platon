@@ -22,7 +22,7 @@ import { MatRadioModule } from '@angular/material/radio'
 import { NzDrawerModule } from 'ng-zorro-antd/drawer'
 import { NzSelectModule } from 'ng-zorro-antd/select'
 
-import { Level, OrderingDirections, Topic } from '@platon/core/common'
+import { Level, OrderingDirections, Topic, User } from '@platon/core/common'
 import {
   CircleTree,
   ResourceFilters,
@@ -33,6 +33,7 @@ import {
 import { Subscription, distinctUntilChanged } from 'rxjs'
 import { ResourcePipesModule } from '../../pipes'
 import { MatIconModule } from '@angular/material/icon'
+import { UserAvatarComponent } from '@platon/core/browser'
 
 @Component({
   standalone: true,
@@ -60,6 +61,7 @@ import { MatIconModule } from '@angular/material/icon'
     NzSelectModule,
 
     ResourcePipesModule,
+    UserAvatarComponent,
   ],
 })
 export class ResourceFiltersComponent implements OnDestroy {
@@ -71,6 +73,7 @@ export class ResourceFiltersComponent implements OnDestroy {
   @Input() topics: Topic[] = []
   @Input() levels: Level[] = []
   @Input() disableTypesField?: boolean = false
+  @Input() owners: User[] = []
 
   @Input() circles: CircleTree[] = []
   @Input() filters: ResourceFilters = {}
@@ -99,6 +102,7 @@ export class ResourceFiltersComponent implements OnDestroy {
         controls[status] = this.filters.status?.includes(status) || false
         return controls
       }, {} as Record<ResourceStatus, boolean>),
+      owners: this.filters.owners,
       topics: this.filters.topics,
       antiTopics: this.filters.antiTopics,
       levels: this.filters.levels,
@@ -122,6 +126,7 @@ export class ResourceFiltersComponent implements OnDestroy {
             ? (Object.keys(status).filter((e) => status[e as ResourceStatus]) as ResourceStatus[])
             : undefined,
           parents: value.parents as string[],
+          owners: value.owners as string[],
           topics: value.topics as string[],
           antiTopics: value.antiTopics as string[],
           levels: value.levels as string[],
@@ -158,6 +163,7 @@ export class ResourceFiltersComponent implements OnDestroy {
           return controls
         }, {} as Record<ResourceTypes, FormControl<boolean | null>>)
       ),
+      owners: new FormControl([] as string[]),
       topics: new FormControl([] as string[]),
       antiTopics: new FormControl([] as string[]),
       levels: new FormControl([] as string[]),

@@ -69,6 +69,7 @@ interface QueryParams {
   levels?: string | string[]
   dependOn?: string | string[]
   configurable?: string | boolean
+  owners?: string | string[]
 }
 
 @Component({
@@ -163,6 +164,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
   protected circle!: Resource
   protected items: Resource[] = []
   protected views: Resource[] = []
+  protected owners: User[] = []
 
   async ngOnInit(): Promise<void> {
     this.user = (await this.authService.ready()) as User
@@ -177,12 +179,13 @@ export default class ResourcesPage implements OnInit, OnDestroy {
       })
     }
 
-    const [tree, circle, views, topics, levels] = await Promise.all([
+    const [tree, circle, views, topics, levels, owners] = await Promise.all([
       firstValueFrom(this.resourceService.tree()),
       firstValueFrom(this.resourceService.circle(this.user.username)),
       firstValueFrom(this.resourceService.search({ views: true, expands: EXPANDS })),
       firstValueFrom(this.tagService.listTopics()),
       firstValueFrom(this.tagService.listLevels()),
+      firstValueFrom(this.resourceService.listOwners()),
     ])
 
     this.tree = tree
@@ -190,6 +193,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
     this.topics = topics
     this.levels = levels
     this.views = views.resources
+    this.owners = owners
 
     this.circles = []
 
@@ -230,6 +234,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
           status: typeof e.status === 'string' ? [e.status] : e.status,
           dependOn: typeof e.dependOn === 'string' ? [e.dependOn] : e.dependOn,
           configurable: e.configurable === 'true' || undefined, // do not pass false to prevent ignoring configurable resources by default
+          owners: e.owners ? (typeof e.owners === 'string' ? [e.owners] : e.owners) : undefined,
         }
 
         if (this.searchbar.value !== e.q) {
@@ -278,7 +283,10 @@ export default class ResourcesPage implements OnInit, OnDestroy {
       levels: filters.levels,
       configurable: filters.configurable ? true : undefined,
       dependOn: filters.dependOn,
+      owners: filters.owners,
     }
+
+    console.error(JSON.stringify(this.search, null, 2))
 
     this.router
       .navigate([], {
