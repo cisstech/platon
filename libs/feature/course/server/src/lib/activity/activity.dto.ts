@@ -58,6 +58,10 @@ export class ActivityDTO extends BaseDTO implements Activity {
   @Type(() => ActivityPermissionsDTO)
   readonly permissions!: ActivityPermissionsDTO
 
+  @IsBoolean()
+  @ApiProperty()
+  readonly isPeerComparison = false
+
   @Exclude()
   readonly source?: unknown
 }

@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-floating-promises */
 
 import { CommonModule } from '@angular/common'
 import {
@@ -324,7 +323,6 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
       }
     })
     if (!hasAnswered) {
-      console.log('prout')
       callback.emit()
       return
     }
@@ -397,17 +395,21 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
     if (this.fullscreen) {
       this.fullscreen = false
       const element = document as unknown as FullscreenElement
-      element.exitFullscreen?.() ||
+      void (
+        element.exitFullscreen?.() ||
         element.webkitExitFullscreen?.() ||
         element.mozCancelFullScreen?.() ||
         element.msExitFullscreen?.()
+      )
     } else {
       this.fullscreen = true
       const element = this.container.nativeElement
-      element.requestFullscreen?.() ||
+      void (
+        element.requestFullscreen?.() ||
         element.webkitRequestFullscreen?.() ||
         element.mozRequestFullScreen?.() ||
         element.msRequestFullscreen?.()
+      )
     }
   }
 

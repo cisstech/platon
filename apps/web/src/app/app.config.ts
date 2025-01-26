@@ -9,6 +9,7 @@ import { LTI_PROVIDERS } from '@platon/feature/lti/browser'
 import { PLAYER_PROVIDERS } from '@platon/feature/player/browser'
 import { RESOURCE_PROVIDERS } from '@platon/feature/resource/browser'
 import { RESULT_PROVIDERS } from '@platon/feature/result/browser'
+import { PEER_PROVIDERS } from '@platon/feature/peer/browser'
 import { FeatureWebComponentModule } from '@platon/feature/webcomponent'
 import { DISCORD_PROVIDERS } from '@platon/feature/discord/browser'
 import { appRoutes } from './app.routes'
@@ -23,6 +24,7 @@ export const appConfig: ApplicationConfig = {
     RESOURCE_PROVIDERS,
     PLAYER_PROVIDERS,
     RESULT_PROVIDERS,
+    PEER_PROVIDERS,
     LTI_PROVIDERS,
     CAS_PROVIDERS,
     TAG_PROVIDERS,

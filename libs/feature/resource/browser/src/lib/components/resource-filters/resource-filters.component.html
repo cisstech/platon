@@ -112,6 +112,27 @@
       </nz-select>
     </section>
     <mat-divider />
+    <!-- OWNER -->
+    <section *ngIf="owners.length > 0">
+      <mat-label id="owner-label">Elle appartient à un utilisateur ?</mat-label>
+      <nz-select
+        [nzMaxTagCount]="3"
+        nzMode="multiple"
+        nzPlaceHolder="Sélectionnez un utilisateur"
+        formControlName="owners"
+        [nzCustomTemplate]="userSelectionTemplate"
+      >
+        <nz-option *ngFor="let option of owners" nzCustomContent [nzValue]="option.id">
+          <user-avatar [user]="option" />
+        </nz-option>
+      </nz-select>
+
+      <ng-template #userSelectionTemplate let-selectedUser>
+        <user-avatar [userIdOrName]="selectedUser.nzValue" />
+      </ng-template>
+    </section>
+
+    <mat-divider />
     <!-- ORDER -->
     <section>
       <mat-label id="order-label">Comment voulez-vous trier les résultats ?</mat-label>

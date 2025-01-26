@@ -52,11 +52,10 @@ export class PlayerResultsComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.results = await firstValueFrom(this.resultService.sessionResults(this.player.sessionId))
-    console.log(JSON.stringify(this.results, null, 2))
     this.changeDetectorRef.markForCheck()
   }
 
-  protected keepOriginalOrder = (_a: KeyValue<any, any>, _b: KeyValue<any, any>): number => {
+  protected keepOriginalOrder = (_a: KeyValue<unknown, unknown>, _b: KeyValue<unknown, unknown>): number => {
     return 0
   }
 

@@ -22,14 +22,7 @@ import {
   ResourceSearchBarComponent,
   ResourceService,
 } from '@platon/feature/resource/browser'
-import {
-  CircleTree,
-  Resource,
-  ResourceTypes,
-  branchFromCircleTree,
-  circleTreeFromCircle,
-  removeNodeFromCircleTree,
-} from '@platon/feature/resource/common'
+import { CircleTree, Resource, ResourceTypes, branchFromCircleTree } from '@platon/feature/resource/common'
 import { UiStepDirective, UiStepperComponent } from '@platon/shared/ui'
 import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzPageHeaderModule } from 'ng-zorro-antd/page-header'

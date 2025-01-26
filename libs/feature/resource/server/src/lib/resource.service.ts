@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { NotFoundResponse } from '@platon/core/common'
+import { NotFoundResponse, User } from '@platon/core/common'
 import {
   EventService,
   LevelService,
@@ -506,6 +506,19 @@ export class ResourceService {
       .map(({ user_id }: { user_id: string }) => user_id as string)
       .filter((userId: string) => !!userId)
     return watchers
+  }
+
+  async getAllOwners(): Promise<User[]> {
+    const owners: User[] = await this.dataSource
+      .getRepository(UserEntity)
+      .createQueryBuilder('u')
+      .innerJoin('Resources', 'rt', 'rt.owner_id = u.id')
+      .where('u.role = :role', { role: 'teacher' })
+      .andWhere('u.username NOT LIKE :prefix', { prefix: 'Didapro%' })
+      .distinct(true)
+      .select('u')
+      .getMany()
+    return owners
   }
 
   @OnEvent('deleteOrphanCircles')

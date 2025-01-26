@@ -16,7 +16,6 @@ import { Level, Topic } from '@platon/core/common'
 import { Subscription, firstValueFrom } from 'rxjs'
 import { ResourcePresenter } from '../../resource.presenter'
 import { TagService } from '@platon/core/browser'
-import { on } from 'events'
 
 @Component({
   standalone: true,

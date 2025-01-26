@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, Component, Input, AfterViewInit, ViewChild, ElementRef } from '@angular/core'
+import { ChangeDetectionStrategy, Component, Input, ViewChild, ElementRef } from '@angular/core'
 
 import { NzGridModule } from 'ng-zorro-antd/grid'
 import { NzSegmentedModule } from 'ng-zorro-antd/segmented'
@@ -53,16 +53,13 @@ export class CourseActivityGridComponent {
     this.empty = !value.length
   }
 
-  drop(event: CdkDragDrop<any[]>) {
-    console.log('Dropped')
+  drop(event: CdkDragDrop<Activity[]>): void {
     if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex)
+      moveItemInArray<Activity>(event.container.data, event.previousIndex, event.currentIndex)
     }
   }
 
-  dragStarted(event: CdkDragStart) {
-    console.log('Drag started')
-    console.log(event)
+  dragStarted(event: CdkDragStart): void {
     event.source.element.nativeElement.style.backgroundColor = 'red'
     event.source.element.nativeElement.style.width = '20px'
     event.source.element.nativeElement.style.maxWidth = '40px'
@@ -70,31 +67,16 @@ export class CourseActivityGridComponent {
     event.source.previewContainer
   }
 
-  setStyle(event: MouseEvent) {
+  setStyle(event: MouseEvent): void {
     if (event.target instanceof HTMLElement) {
       event.target.style.backgroundColor = 'red'
       event.target.style.width = '20px'
     }
   }
 
-  addWord(word: string) {
-    console.log('Added word:', word)
-  }
-
-  log(a: any) {
-    console.log(a)
-  }
-
-  date(): Date {
-    return new Date()
-  }
-
-  onDragMove(event: CdkDragMove<any>): void {
-    console.log('Drag move', event)
-
+  onDragMove(event: CdkDragMove<unknown>): void {
     const previewelem = document.querySelector('.cdk-drag.cdk-drag-preview') as HTMLElement
     if (!previewelem) {
-      console.log('No preview element')
       return
     }
     const nodeMovePreview = new ElementRef<HTMLElement>(previewelem)

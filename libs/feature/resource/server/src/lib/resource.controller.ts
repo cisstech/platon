@@ -1,7 +1,14 @@
 import { Expandable, Selectable } from '@cisstech/nestjs-expand'
 import { Body, Controller, Delete, Get, Logger, Patch, Post, Query, Req } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
-import { CreatedResponse, ForbiddenResponse, ItemResponse, ListResponse, NotFoundResponse } from '@platon/core/common'
+import {
+  CreatedResponse,
+  ForbiddenResponse,
+  ItemResponse,
+  ListResponse,
+  NotFoundResponse,
+  User,
+} from '@platon/core/common'
 import { IRequest, Mapper, UserService, UUIDParam } from '@platon/core/server'
 import { ResourceCompletionDTO } from './completion'
 import { ResourcePermissionService } from './permissions/permissions.service'
@@ -31,7 +38,6 @@ export class ResourceController {
   @Selectable({ rootField: 'resources' })
   async search(@Req() req: IRequest, @Query() filters: ResourceFiltersDTO = {}): Promise<ListResponse<ResourceDTO>> {
     let resources: ResourceDTO[] = []
-
     let total = 0
     if (filters.views) {
       const response = await this.resourceViewService.findAll(req.user.id)
@@ -77,6 +83,12 @@ export class ResourceController {
     return new ItemResponse({
       resource: Mapper.map(await this.resourceService.completion(req.user), ResourceCompletionDTO),
     })
+  }
+
+  @Get('/owners')
+  async listOwners(): Promise<ListResponse<User>> {
+    const owners = await this.resourceService.getAllOwners()
+    return new ListResponse({ resources: owners, total: owners.length })
   }
 
   @Get('/:id')

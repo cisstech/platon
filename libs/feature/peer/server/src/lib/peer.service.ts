@@ -4,7 +4,7 @@ import { Not, Repository } from 'typeorm'
 import { Optional } from 'typescript-optional'
 import { PeerMatchEntity } from './entities/peerMatch.entity'
 import { PeerGameEntity } from './entities/peerGame.entity'
-import { MatchStatus, PeerContest } from '@platon/feature/peer/common'
+import { PeerComparisonTreeOutput, MatchStatus, PeerContest, PeerComparisonTree } from '@platon/feature/peer/common'
 
 @Injectable()
 export class PeerService {
@@ -79,6 +79,82 @@ export class PeerService {
         status: match.status,
       })
     }
+  }
+
+  private extractAndRemove<T>(array: Array<T>, predicate: (value: T) => boolean): Array<T> {
+    const extracted = []
+
+    for (let i = array.length - 1; i >= 0; i--) {
+      // Iterate backward to avoid index shifting
+      if (predicate(array[i])) {
+        extracted.push(array[i])
+        array.splice(i, 1) // Remove element from the original array
+      }
+    }
+
+    return extracted
+  }
+
+  async getTournamentTree(activityId: string): Promise<PeerComparisonTreeOutput> {
+    const matches = await this.matchRepository.find({
+      where: { activityId },
+      relations: ['games', 'player1', 'player2'],
+    })
+    const result: PeerComparisonTreeOutput = {
+      name: 'Tournament',
+      maxLevel: 0,
+      nbLeaves: 0,
+      trees: [],
+    }
+    const matchesByLevel: { [key: number]: PeerMatchEntity[] } = {}
+    matches.forEach((match) => {
+      if (!matchesByLevel[match.level]) {
+        matchesByLevel[match.level] = []
+      }
+      matchesByLevel[match.level].push(match)
+    })
+    const levels = Object.keys(matchesByLevel).map((level) => parseInt(level, 10))
+    levels.sort((a, b) => b - a)
+    result.nbLeaves = matchesByLevel[0]?.length ?? 0
+    result.maxLevel = levels[0]
+    levels.forEach((level) => {
+      matchesByLevel[level].forEach((match) => {
+        result.trees.push(this.buildTree(match, matchesByLevel))
+      })
+    })
+    return result
+  }
+
+  buildTree(match: PeerMatchEntity, matchesByLevel: { [key: number]: PeerMatchEntity[] }): PeerComparisonTree {
+    const nbWinsPlayer1 = match.games.filter((game) => game.winnerId === match.player1Id).length
+    const nbWinsPlayer2 = match.games.filter((game) => game.winnerId === match.player2Id).length
+    const player1Name = `${match.player1?.firstName} ${match.player1?.lastName.at(0) ?? ''}.`
+    const player2Name = `${match.player2?.firstName} ${match.player2?.lastName.at(0) ?? ''}.`
+
+    const matchNode: PeerComparisonTree = {
+      name: match.winnerId ? (match.player1.id === match.winnerId ? player1Name : player2Name) : `EN COURS`,
+      id: match.id,
+      level: match.level,
+      status: match.status,
+      player1: player1Name,
+      player2: player2Name,
+      nbWinsPlayer1,
+      nbWinsPlayer2,
+      winnerId: match.winnerId,
+      value: match.id,
+      children: [],
+    }
+    if (match.level === 0) {
+      return matchNode
+    }
+    const children = this.extractAndRemove(
+      matchesByLevel[match.level - 1],
+      (m) => m.winnerId === match.player1Id || m.winnerId === match.player2Id
+    )
+    children.forEach((child) => {
+      matchNode.children.push(this.buildTree(child, matchesByLevel))
+    })
+    return matchNode
   }
 
   async createGame(input: Partial<PeerGameEntity>): Promise<PeerGameEntity> {

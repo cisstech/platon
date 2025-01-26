@@ -126,7 +126,7 @@ export class LeaderboardCommand {
     }
     const channelsWithMessage = this.challengeToChannelMap.get(event.activity.courseId)
 
-    const leaderboard = (await this.courseLeaderboard(event.activity.courseId)).slice(0, 60) // J'en prends que 60 pour le moment.
+    const leaderboard = (await this.courseLeaderboard(event.activity.courseId)).slice(0, 50)
 
     const messageArray = leaderboard.map((entry, index) => {
       let symbol = ''
@@ -148,12 +148,16 @@ export class LeaderboardCommand {
       }
       return index < 3
         ? `### ${symbol} ${entry.user.firstName} ${entry.user.lastName?.toLocaleUpperCase()} : ${entry.points}`
-        : `${entry.rank}. **${entry.user.firstName}** **${entry.user.lastName?.toLocaleUpperCase()}**    *(${
+        : `${entry.rank}. **${entry.user.firstName} ${entry.user.lastName?.toLocaleUpperCase()}**    *(${
             entry.points
           })*`
     })
 
     const messageContent = '# 🏆  Leaderboard  🏆\n' + messageArray.join('\n')
+    if (messageContent.length > 2000) {
+      this.logger.warn('Message too long')
+      messageContent.slice(0, 1995).concat('...')
+    }
 
     if (!channelsWithMessage) {
       return
