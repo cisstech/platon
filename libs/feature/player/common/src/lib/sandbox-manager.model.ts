@@ -31,7 +31,7 @@ export class SandboxManager {
           variables,
         },
         variables.builder as string,
-        10_0000
+        4000
       )
 
       delete response.variables.meta
@@ -55,7 +55,7 @@ export class SandboxManager {
 
     input.variables.meta = { ...input.variables['.meta'] }
 
-    const output = await sandbox.run(input, script, 10_0000)
+    const output = await sandbox.run(input, script, 4000)
 
     delete output.variables.meta
     output.variables['.meta'] = input.variables['.meta']
@@ -93,13 +93,12 @@ export class SandboxManager {
           })),
           variables,
         },
-        10_0000
+        4000
       )
 
       envid = response.envid
       variables = response.variables as ActivityVariables
     }
-
     return {
       envid,
       variables,
