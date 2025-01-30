@@ -1,44 +1,46 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-// don't really have a choice for using any here
 import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
-  HostListener,
-  Inject,
-  Injector,
-  Input,
+  AfterViewInit,
+  ElementRef,
   OnDestroy,
+  Inject,
+  HostListener,
+  Input,
+  Injector,
+  ViewChild,
 } from '@angular/core'
-import { WebComponent, WebComponentHooks } from '../../web-component'
-import { PresenterComponentDefinition, PresenterState } from './presenter'
-import { ResourceLoaderService } from '@cisstech/nge/services'
-import { BehaviorSubject, ReplaySubject, Subscription, combineLatest, firstValueFrom } from 'rxjs'
-import { DOCUMENT } from '@angular/common'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
-
-declare const Reveal: any
-declare const RevealMarkdown: any
-declare const RevealHighlight: any
-declare const RevealMath: any
+import Reveal from 'reveal.js'
+import RevealMarkdown from 'reveal.js/plugin/markdown/markdown.esm.js'
+import RevealMath from 'reveal.js/plugin/math/math.esm.js'
+import RevealHighlight from 'reveal.js/plugin/highlight/highlight.esm.js'
+import { firstValueFrom } from 'rxjs'
+import { ResourceLoaderService } from '@cisstech/nge/services'
+import { DOCUMENT } from '@angular/common'
+import { PresenterComponentDefinition, PresenterState } from './presenter'
+import { WebComponent, WebComponentHooks } from '../../web-component'
 
 @Component({
   selector: 'wc-presenter',
   templateUrl: 'presenter.component.html',
   styleUrls: ['presenter.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 @WebComponent(PresenterComponentDefinition)
 export class PresenterComponent implements AfterViewInit, OnDestroy, WebComponentHooks<PresenterState> {
   fullscreen = false
-  template: SafeHtml = ''
-
-  private _subscription?: Subscription
-  private _load = new ReplaySubject<boolean>()
-  private _reveal?: any
-
+  content: SafeHtml = ''
+  private _reveal: Reveal.Api | undefined
   @Input() state!: PresenterState
+  @ViewChild('presenterContainer') presenterContainer!: ElementRef<HTMLElement>
+  @ViewChild('revealContainer') revealContainer!: ElementRef<HTMLElement>
+
+  constructor(
+    private el: ElementRef,
+    private readonly sanitizer: DomSanitizer,
+    private readonly resourceLoader: ResourceLoaderService,
+    @Inject(DOCUMENT) private document: Document,
+    readonly injector: Injector
+  ) {}
 
   @HostListener('document:fullscreenchange', ['$event'])
   @HostListener('document:webkitfullscreenchange', ['$event'])
@@ -49,91 +51,48 @@ export class PresenterComponent implements AfterViewInit, OnDestroy, WebComponen
     this._reveal?.layout()
   }
 
-  // eslint-disable-next-line @typescript-eslint/member-ordering
-  private _state = new BehaviorSubject<PresenterState>(this.state)
-
-  constructor(
-    readonly injector: Injector,
-    readonly resourceLoader: ResourceLoaderService,
-    @Inject(DOCUMENT) private document: any,
-    private readonly sanitizer: DomSanitizer,
-    private readonly changeDetectorRef: ChangeDetectorRef
-  ) {}
-
-  async onChangeState() {
-    this._state.next(this.state)
-  }
-
   async ngAfterViewInit(): Promise<void> {
-    this._subscription = combineLatest([this._state.asObservable(), this._load.asObservable()]).subscribe(([state]) => {
-      this._reveal?.destroy()
-      this.template = this.sanitizer.bypassSecurityTrustHtml(state.template)
-      this.changeDetectorRef.markForCheck()
-      this.initReveal()
-    })
-
     await firstValueFrom(
       this.resourceLoader.loadAllSync([
         ['style', 'assets/vendors/revealjs/reveal.css'],
         ['style', 'assets/vendors/revealjs/theme/white.css'],
         ['style', 'assets/vendors/revealjs/plugin/highlight/monokai.css'],
-        ['script', 'assets/vendors/revealjs/reveal.js'],
-        ['script', 'assets/vendors/revealjs/plugin/markdown/markdown.js'],
-        ['script', 'assets/vendors/revealjs/plugin/highlight/highlight.js'],
-        ['script', 'assets/vendors/revealjs/plugin/math/math.js'],
       ])
     )
-
-    this._load.next(true)
   }
 
-  ngOnDestroy(): void {
+  onChangeState() {
     this._reveal?.destroy()
-    this._subscription?.unsubscribe()
-    return
-  }
+    this.content = this.sanitizer.bypassSecurityTrustHtml(this.state.template)
 
-  private initReveal() {
+    const revealOptions: Reveal.Options = {
+      plugins: [RevealMarkdown, RevealMath.KaTeX, RevealHighlight],
+    }
     setTimeout(() => {
-      this._reveal = new Reveal(document.querySelector('.r-container'), {
-        keyboard: {
-          70: null, // Disable fullscreen shortcut
-        },
-        plugins: [RevealMarkdown, RevealHighlight, RevealMath.KaTeX],
-      })
-      this._reveal.initialize()
-    }, 300)
+      this._reveal = new Reveal(this.revealContainer.nativeElement, revealOptions)
+      this._reveal.initialize().catch(console.error)
+    }, 500)
   }
 
   toggleFullscreen() {
     if (this.fullscreen) {
-      this.closeFullscreen()
+      this.closeFullscreen().catch(console.error)
     } else {
-      this.openFullscreen()
+      this.openFullscreen().catch(console.error)
     }
   }
 
-  openFullscreen() {
-    const element = this.document.documentElement
-
-    const fullscreenRequest =
-      element.requestFullscreen ||
-      element.webkitRequestFullscreen ||
-      element.webkitRequestFullScreen ||
-      element.mozRequestFullScreen ||
-      element.msRequestFullscreen
-
-    fullscreenRequest?.apply(element)
+  async openFullscreen() {
+    await this.presenterContainer.nativeElement.requestFullscreen()
     this._reveal?.layout()
   }
 
-  closeFullscreen() {
-    const element = this.document
-
-    const fullscreenExitRequest =
-      element.exitFullscreen || element.mozCancelFullScreen || element.webkitExitFullscreen || element.msExitFullscreen
-
-    fullscreenExitRequest?.apply(element)
+  async closeFullscreen() {
+    await this.document.exitFullscreen()
     this._reveal?.layout()
+  }
+
+  ngOnDestroy(): void {
+    this._reveal?.destroy()
   }
 }
