@@ -172,7 +172,7 @@
     "@auth0/angular-jwt": "^5.2.0",
     "@cisstech/nestjs-expand": "^1.5.0",
     "@cisstech/nge": "^18.0.4",
-    "@cisstech/nge-ide": "^18.0.0",
+    "@cisstech/nge-ide": "^18.0.1",
     "@discord-nestjs/common": "^5.2.12",
     "@discord-nestjs/core": "^5.3.14",
     "@editorjs/attaches": "^1.3.0",

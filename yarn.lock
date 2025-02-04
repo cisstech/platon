@@ -2208,10 +2208,10 @@
     rxjs "^7.8.0"
     tslib "^2.3.0"
 
-"@cisstech/nge-ide@^18.0.0":
-  version "18.0.0"
-  resolved "https://registry.yarnpkg.com/@cisstech/nge-ide/-/nge-ide-18.0.0.tgz#20f1cb36d42c07388ae9c40aa460b052fd140095"
-  integrity sha512-5MvdRTeuf6dpJdP7ZNt+R8sAsPQ7fHw1Uv6bLtVc88mfhdpd2rETiKPuRFXRxZrOrtDZTaGv/qCo/GkUHiqOrA==
+"@cisstech/nge-ide@^18.0.1":
+  version "18.0.1"
+  resolved "https://registry.yarnpkg.com/@cisstech/nge-ide/-/nge-ide-18.0.1.tgz#d776de3e27d3b9930a12229ead882468fbf2e74e"
+  integrity sha512-Fx5rYf7LMXslk2r1vNIbolRXngbPVqZiVv7R1K0q88D3DYtzq6RIBHYRIf+pr/ImPMGsXloBPp2SBluu1JUrlg==
   dependencies:
     tslib "^2.0.0"
 
