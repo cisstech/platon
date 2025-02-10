@@ -72,6 +72,8 @@ export class ActivityService {
       qb.andWhere(`is_challenge = :isChallenge`, { isChallenge: !!filters.challenge })
     }
 
+    qb.orderBy('activity.createdAt')
+
     const [entities, count] = await qb.getManyAndCount()
     await this.addVirtualColumns(...entities)
 
