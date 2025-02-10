@@ -141,7 +141,10 @@ export class ActivityService {
   }
 
   async create(activity: Partial<ActivityEntity>): Promise<ActivityEntity> {
-    const result = await this.repository.save(activity)
+    const order =
+      ((await this.repository.maximum('order', { courseId: activity.courseId, sectionId: activity.sectionId })) ?? 0) +
+      1
+    const result = await this.repository.save({ ...activity, order })
     await this.addVirtualColumns(result)
     return result
   }
