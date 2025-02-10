@@ -244,6 +244,10 @@ export class CourseDashboardPage implements OnInit, OnDestroy {
   protected numberOfActivities(section: CourseSection): number {
     return this.sectionWithActivities.find((item) => item.section.id === section.id)?.activities.length ?? 0
   }
+
+  protected get flattenedActivities(): Activity[] {
+    return this.sectionWithActivities.flatMap((item) => item.activities)
+  }
 }
 
 interface SectionWithActivities {

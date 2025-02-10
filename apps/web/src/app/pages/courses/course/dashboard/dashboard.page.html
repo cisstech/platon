@@ -91,7 +91,7 @@
             </nz-collapse>
           </ng-container>
           <ng-container *ngSwitchCase="'table'">
-            <course-activity-table [activities]="filteredActivities" [sections]="sections" />
+            <course-activity-table [activities]="flattenedActivities" [sections]="sections" />
           </ng-container>
         </ng-container>
       </ng-container>
