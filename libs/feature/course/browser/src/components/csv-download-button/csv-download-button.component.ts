@@ -106,6 +106,15 @@ export class CsvDownloadButtonComponent implements OnInit {
     return this.groups.every((group) => group.checked)
   }
 
+  getExcelColumnLetter(colIndex: number): string {
+    let column = ''
+    while (colIndex >= 0) {
+      column = String.fromCharCode((colIndex % 26) + 65) + column
+      colIndex = Math.floor(colIndex / 26) - 1
+    }
+    return column
+  }
+
   async downloadCSV() {
     let isGroupAllChecked, checkedMembers, uncheckedMembers
     if (this.hasToCheckGroups) {
@@ -130,6 +139,7 @@ export class CsvDownloadButtonComponent implements OnInit {
 
     let csvHeader = 'username;firstname;lastname;email'
     const csvContent: { [key: string]: string } = {}
+    const sum_begin = csvHeader.split(';').length
 
     for (const item of this.activities) {
       // Get data
@@ -150,8 +160,8 @@ export class CsvDownloadButtonComponent implements OnInit {
       // Generate the CSV content
 
       for (const student of results) {
-        if (this.hasToCheckGroups && !checkedMembers!.some((member) => member.user?.id === student.id)) {
-          if (!isGroupAllChecked || uncheckedMembers!.some((member) => member.user?.id === student.id)) {
+        if (this.hasToCheckGroups && !checkedMembers?.some((member) => member.user?.id === student.id)) {
+          if (!isGroupAllChecked || uncheckedMembers?.some((member) => member.user?.id === student.id)) {
             continue
           }
         }
@@ -168,7 +178,15 @@ export class CsvDownloadButtonComponent implements OnInit {
       }
     }
 
-    Object.values(csvContent).forEach((line) => (csvHeader += `\n${line}`))
+    const sum_end = csvHeader.split(';').length - 1
+    csvHeader += ';TOTAL'
+
+    Object.values(csvContent).forEach(
+      (line, index) =>
+        (csvHeader += `\n${line};\
+          =SUM(${this.getExcelColumnLetter(sum_begin)}${index + 2}:\
+          ${this.getExcelColumnLetter(sum_end)}${index + 2})`)
+    )
 
     // Download the file
 
