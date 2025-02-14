@@ -415,7 +415,7 @@ export class ResourceFileController {
     if (!permissions.write) {
       throw new UnauthorizedResponse('You are not allowed to write this resource')
     }
-    if (resource.type === ResourceTypes.CIRCLE && request.user.role !== 'admin') {
+    if (!resource.personal && resource.type === ResourceTypes.CIRCLE && request.user.role !== 'admin') {
       throw new UnauthorizedResponse('You are not allowed to delete this resource')
     }
 
