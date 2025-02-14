@@ -539,7 +539,7 @@ export class Repo {
     const tags = await git.listTags({ ...this.repo })
     const commitsTags = await Promise.all(
       tags.map(async (tag) => {
-        const tagOid = await git.resolveRef({ ...this.repo, ref: tag })
+        const tagOid = await git.resolveRef({ ...this.repo, ref: 'tags/' + tag })
         const tagCommit = await git.readTag({ ...this.repo, oid: tagOid })
         return { tag, commit: tagCommit.tag.object }
       })
