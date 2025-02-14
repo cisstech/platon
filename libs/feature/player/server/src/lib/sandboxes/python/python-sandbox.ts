@@ -6,11 +6,11 @@ import * as path from 'path'
 
 import { HttpService } from '@nestjs/axios'
 import { HttpException, Injectable } from '@nestjs/common'
-import { firstValueFrom } from 'rxjs'
+import { firstValueFrom, TimeoutError } from 'rxjs'
 
 import { ConfigService } from '@nestjs/config'
 import { Configuration } from '@platon/core/server'
-import { Sandbox, SandboxEnvironment, SandboxInput, SandboxOutput } from '@platon/feature/player/common'
+import { Sandbox, SandboxEnvironment, SandboxError, SandboxInput, SandboxOutput } from '@platon/feature/player/common'
 import { withTempFile } from '@platon/shared/server'
 import { RegisterSandbox } from '../sandbox'
 import { pythonNextScript, pythonRunnerScript } from './python-scripts'
@@ -57,7 +57,7 @@ export class PythonSandbox implements Sandbox {
           const isEnvSaved: boolean = await firstValueFrom(
             this.http
               .head(`${this.config.get('sandbox.url', { infer: true })}/environments/${input.envid}/`)
-              .pipe(rxjsTimeout(timeout)) // 10s timeout
+              .pipe(rxjsTimeout(timeout))
           )
             .then((response) => (response.status === 200 ? true : false))
             .catch(() => false)
@@ -87,7 +87,7 @@ export class PythonSandbox implements Sandbox {
                 headers: { 'Content-Type': 'multipart/form-data' },
                 timeout,
               })
-              .pipe(rxjsTimeout(timeout)) // 10s timeout
+              .pipe(rxjsTimeout(timeout))
           )
           return result.data
         },
@@ -99,10 +99,7 @@ export class PythonSandbox implements Sandbox {
       }
 
       if (response.status !== 0) {
-        throw new HttpException(
-          `The sandbox is currently unavailable. Please try again later.\n\n${response.execution[0].stderr}`,
-          512
-        )
+        throw SandboxError.unknownError(response.execution[0].stderr)
       }
 
       return {
@@ -110,8 +107,17 @@ export class PythonSandbox implements Sandbox {
         variables: JSON.parse(response.result),
       }
     } catch (error) {
+      if (error instanceof SandboxError) {
+        throw error
+      }
+      if (error instanceof HttpException) {
+        throw error
+      }
+      if (error instanceof TimeoutError) {
+        throw new HttpException('A timeout occurred while executing the script.', 504)
+      }
       throw new HttpException(
-        `The sandbox is currently unavailable. Please try again later.\n\n${(error as any)?.message}`,
+        `The sandbox is currently unavailable. Please try again later.\n\n${(error as AxiosError)?.message}`,
         512
       )
     }
