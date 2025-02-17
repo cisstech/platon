@@ -524,4 +524,15 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
       this.changeDetectorRef.markForCheck()
     }
   }
+
+  protected async copyToClipboard(text: string | undefined): Promise<void> {
+    if (!text) return
+
+    try {
+      await navigator.clipboard.writeText(text)
+      this.dialogService.success('Contenu copié dans le presse-papier')
+    } catch (err) {
+      this.dialogService.error('Impossible de copier le contenu')
+    }
+  }
 }

@@ -231,6 +231,7 @@ export const withExercisePlayer = (session: ExerciseSession, answer?: Answer): E
     statement: variables.statement,
     startedAt: session.startedAt,
     lastGradedAt: session.lastGradedAt,
+    platon_logs: variables.platon_logs, // Special logs for Platon
     correction: session?.correction
       ? {
           grade: session.correction.grade,

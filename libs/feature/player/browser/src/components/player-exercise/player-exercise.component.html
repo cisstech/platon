@@ -70,6 +70,28 @@
           <nge-markdown [data]="player?.form" (render)="onRender()" />
         </div>
       </section>
+      <!-- L'AJOUT DU TERMINAL LOGS -->
+      <section>
+        <ng-container *ngIf="player?.platon_logs?.length">
+          <div class="terminal-container">
+            <div class="terminal-header">
+              <span>Terminal PlaTon</span>
+              <button
+                mat-icon-button
+                class="copy-button"
+                (click)="copyToClipboard(player?.platon_logs?.join('\n'))"
+                nz-tooltip="Copier le contenu"
+              >
+                <mat-icon>content_copy</mat-icon>
+              </button>
+            </div>
+            <div class="terminal-body" #terminalBody>
+              <pre><code>{{player?.platon_logs?.join('\n')}}</code></pre>
+            </div>
+          </div>
+        </ng-container>
+      </section>
+
       <section #containerSolution>
         <ng-container *ngIf="player?.solution">
           <mat-accordion class="exercise-solution">

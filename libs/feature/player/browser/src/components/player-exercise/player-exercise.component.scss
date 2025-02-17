@@ -186,3 +186,65 @@ button.primary {
     transition: background-position calc(2s / 3) linear calc(2s / 3);
   }
 }
+
+
+.terminal-container {
+  margin-top: 1rem;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #1e1e1e;
+  font-family: monospace;
+  border: 1px solid #323233;
+}
+
+.terminal-header {
+  background: #323233;
+  padding: 8px 12px;
+  color: #fff;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .copy-button {
+    color: #fff;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+.terminal-body {
+  padding: 12px;
+  color: #fff;
+  max-height: 300px;
+  overflow-y: auto;
+
+  // La barre de défilement est là
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #ffffff;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #ffffff;
+    border-radius: 4px;
+  }
+
+  pre {
+    margin: 0;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  code {
+    font-family: 'Consolas', 'Monaco', monospace;
+    color: #ffffff;
+  }
+}
