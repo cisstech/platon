@@ -2,6 +2,7 @@
 
 import { CommonModule } from '@angular/common'
 import {
+  CUSTOM_ELEMENTS_SCHEMA,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -114,6 +115,7 @@ type FullscreenElement = HTMLElement & {
     AnswerStatePipesModule,
     PlayerCommentsComponent,
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
   private readonly subscriptions: Subscription[] = []
