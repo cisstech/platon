@@ -37,17 +37,16 @@
       <section #containerFeedbacks>
         <ng-container *ngIf="player?.feedbacks">
           <ng-container *ngFor="let feedback of player?.feedbacks">
-            <wc-feedback [state]="{ type: feedback.type, content: feedback.content }"></wc-feedback>
-            <!-- <nz-alert
-              *ngIf="feedback.content && feedback.type !== 'none'"
-              nzShowIcon
-              [nzType]="feedback.type"
-              [nzMessage]="content"
-            >
-              <ng-template #content>
-                <nge-markdown [data]="feedback.content" />
-              </ng-template>
-            </nz-alert> -->
+            @if (!feedback.content) {
+            <!-- noting -->
+            } @else if (isFeedbackContentAnObject(feedback)) {
+            <wc-foldable-feedback [state]="{ content: feedback.content }"></wc-foldable-feedback>
+            } @else {
+            <wc-feedback
+              *ngIf="feedback.type !== 'none'"
+              [state]="{ type: feedback.type, content: feedback.content }"
+            ></wc-feedback>
+            }
           </ng-container>
         </ng-container>
       </section>

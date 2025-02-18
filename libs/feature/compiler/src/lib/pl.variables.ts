@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { PLSourceFile } from './pl.parser'
-import { ActivitySettings, NextSettings } from './pl.settings'
+import { ActivitySettings } from './pl.settings'
 
 export declare type Variables = {
   [k: string]: any
@@ -63,12 +63,23 @@ export interface ExerciseMeta {
   consumedHints?: number
 }
 
+export interface ExerciseFoldableFeedbackContent {
+  name: string
+  description: string
+  expected: string
+  obtained: string
+  arguments: string
+  type: 'success' | 'info' | 'warning' | 'error'
+  display: boolean
+  feedbacks: ExerciseFoldableFeedbackContent[] | undefined
+}
+
 /**
  * Representation of an exercise feedback.
  */
 export interface ExerciseFeedback {
   type: 'success' | 'info' | 'warning' | 'error' | 'none'
-  content: string
+  content: string | ExerciseFoldableFeedbackContent[]
 }
 
 /**
