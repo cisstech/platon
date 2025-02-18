@@ -1,0 +1,34 @@
+---
+title: Débogage d'exercice
+---
+
+# Débogage d'exercice : logger
+
+
+### La Fonction `platon_log`
+La fonction platon_log permet d'afficher des informations dans un terminal
+dédié pendant la prévisualisation d'un exercice. Elle peut être utilisée dans le builder et le grader.
+
+#### Syntaxe de base
+```py
+platon_log(message)
+```
+
+Par exemple:
+
+```py
+builder==#!lang=python
+import random
+a = random.randint(1, 10)
+b = random.randint(1, 10)
+platon_log(f"Valeurs générées : a={a}, b={b}")
+resultat = a + b
+platon_log(f"""État des variables :
+- a = {a}
+- b = {b}
+- résultat = {resultat}""")
+==
+```
+
+
+![Résultat de l'exercice](../../../../public/screens/programming/platon_log.png)
