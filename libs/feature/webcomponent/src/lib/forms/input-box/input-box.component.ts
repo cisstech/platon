@@ -16,6 +16,7 @@ import { debounceTime, map, startWith } from 'rxjs/operators'
 import { WebComponent, WebComponentHooks } from '../../web-component'
 import { WebComponentService } from '../../web-component.service'
 import { InputBoxComponentDefinition, InputBoxState } from './input-box'
+import { WebComponentChangeDetectorService } from '../../web-component-change-detector.service'
 
 @Component({
   selector: 'wc-input-box',
@@ -50,13 +51,14 @@ export class InputBoxComponent implements OnInit, OnDestroy, WebComponentHooks<I
     map((value) => this.getSuggestions(value))
   )
 
-  constructor(readonly injector: Injector) {
+  constructor(readonly injector: Injector, readonly changeDetector: WebComponentChangeDetectorService) {
     this.webComponentService = injector.get(WebComponentService)!
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.state.isFilled = false
-    this.subscription = this.form.valueChanges.pipe(debounceTime(this.dueTime)).subscribe((value) => {
+
+    this.subscription = this.form.valueChanges.pipe(debounceTime(this.dueTime)).subscribe(async (value) => {
       value = value || ''
       if (this.state.type === 'number') {
         value = ('' + value).replace(/,/g, '.')
@@ -65,8 +67,11 @@ export class InputBoxComponent implements OnInit, OnDestroy, WebComponentHooks<I
 
       if (this.state.value !== value) {
         this.hasToUpdateCharacters = false
-        this.state.value = value
-        this.state.isFilled = true
+
+        await this.changeDetector.ignore(this, () => {
+          this.state.isFilled = true
+          this.state.value = value
+        })
       }
     })
   }
@@ -108,6 +113,7 @@ export class InputBoxComponent implements OnInit, OnDestroy, WebComponentHooks<I
   @ViewChild('invisibleText') invTextER: ElementRef | undefined
 
   onChangeState() {
+    this.state.isFilled = false
     this.form.setValue(this.state.value, {
       emitEvent: false,
     })
@@ -160,9 +166,11 @@ export class InputBoxComponent implements OnInit, OnDestroy, WebComponentHooks<I
     })
   }
 
-  protected insertSpecialCharacter(char: string) {
-    this.form.setValue(this.form.value + char)
-    this.state.isFilled = true
+  protected async insertSpecialCharacter(char: string) {
+    await this.changeDetector.ignore(this, () => {
+      this.form.setValue(this.form.value + char)
+      this.state.isFilled = true
+    })
   }
 
   protected hasSpecialCharacters(): boolean {
