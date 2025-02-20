@@ -82,7 +82,9 @@ export const withRenderedComponents = (variables: any, scripts: Scripts, reviewM
       const { cid, selector } = variables
       const scriptId = uuidv4()
       scripts[scriptId] = JSON.stringify(variables)
-      return `<${selector} data-script-id='${scriptId}' cid='${cid}'></${selector}>`.trim()
+      return `<${selector} data-script-id='${scriptId}' cid='${cid}'></${selector}><script type='application/json' id='${scriptId}'>${JSON.stringify(
+        variables
+      )}</script>`.trim()
     }
     return Object.keys(variables).reduce((o, k) => {
       o[k] = withRenderedComponents(variables[k], scripts, reviewMode)
@@ -138,12 +140,6 @@ export const withRenderedTemplates = (variables: ExerciseVariables, reviewMode?:
   Object.keys(scripts).forEach((k) => {
     scripts[k] = nunjucks.renderString(scripts[k], computed)
   })
-
-  computed['form'] = computed['form'] || ''
-  computed['form'] =
-    Object.keys(scripts)
-      .map((k) => `<script type='application/json' id='${k}'>${scripts[k]}</script>\n`)
-      .join('\n') + computed['form']
 
   delete computed.meta
 
