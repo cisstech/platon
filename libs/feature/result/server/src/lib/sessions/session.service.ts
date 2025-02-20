@@ -11,7 +11,11 @@ import { promises as fs } from 'fs'
 import { resolveFileReference } from '@platon/core/common'
 import { ResourceFileService } from '@platon/feature/resource/server'
 import { OnEvent } from '@nestjs/event-emitter'
-import { ON_REOPEN_ACTIVITY_EVENT, OnReopenActivityEventPayload } from '@platon/feature/course/server'
+import {
+  ON_CLOSE_ACTIVITY_EVENT,
+  ON_REOPEN_ACTIVITY_EVENT,
+  OnReopenActivityEventPayload,
+} from '@platon/feature/course/server'
 
 @Injectable()
 export class SessionService {
@@ -288,6 +292,18 @@ WHERE session.id = $1;
       .update(SessionEntity)
       .set({
         variables: () => `jsonb_set(variables, '{navigation,terminated}', 'false', false)`,
+      })
+      .where('activity_id = :activityId and parent_id is null', { activityId })
+      .execute()
+  }
+
+  @OnEvent(ON_CLOSE_ACTIVITY_EVENT)
+  async onCloseActivity({ activityId }: OnReopenActivityEventPayload): Promise<void> {
+    await this.repository
+      .createQueryBuilder()
+      .update(SessionEntity)
+      .set({
+        variables: () => `jsonb_set(variables, '{navigation,terminated}', 'true', false)`,
       })
       .where('activity_id = :activityId and parent_id is null', { activityId })
       .execute()

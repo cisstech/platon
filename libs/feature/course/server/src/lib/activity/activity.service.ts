@@ -21,8 +21,10 @@ import { ActivityMemberView } from '../activity-member/activity-member.view'
 import { CourseNotificationService } from '../course-notification/course-notification.service'
 import { ActivityEntity } from './activity.entity'
 import {
+  ON_CLOSE_ACTIVITY_EVENT,
   ON_RELOAD_ACTIVITY_EVENT,
   ON_REOPEN_ACTIVITY_EVENT,
+  OnCloseActivityEventPayload,
   OnReloadActivityEventPayload,
   OnReopenActivityEventPayload,
 } from './activity.event'
@@ -233,6 +235,7 @@ export class ActivityService {
     this.notificationService.notifyActivityBeingClosed(activityId).catch((error) => {
       this.logger.error('Failed to send notification', error)
     })
+    this.eventService.emit<OnCloseActivityEventPayload>(ON_CLOSE_ACTIVITY_EVENT, { activityId })
     return this.update(courseId, activityId, { closeAt: new Date() }, guard)
   }
 
