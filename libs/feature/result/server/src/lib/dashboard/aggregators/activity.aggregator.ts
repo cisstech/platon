@@ -157,7 +157,6 @@ export class ActivityAnswerRate implements SessionDataAggregator<number> {
 
   next(input: SessionDataEntity): void {
     if (input.parentId) return
-    if (!input.activityNavigation?.terminated) return
 
     this.totalSessions++
     if (input.activityNavigation?.exercises?.some((exercise) => exercise.state !== AnswerStates.NOT_STARTED)) {
@@ -284,7 +283,6 @@ export class ActivityDropoutRate implements SessionDataAggregator<number> {
 
   next(input: SessionDataEntity): void {
     if (input.parentId) return
-    if (!input.activityNavigation?.terminated) return
 
     this.totalSessions++
 
@@ -332,7 +330,6 @@ export class ActivityTotalCompletions implements SessionDataAggregator<number> {
 
   next(input: SessionDataEntity): void {
     if (input.parentId) return
-    if (!input.activityNavigation?.terminated) return
 
     this.total += input.activityNavigation?.exercises?.every((exercise) => exercise.state !== AnswerStates.NOT_STARTED)
       ? 1
