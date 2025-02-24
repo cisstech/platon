@@ -21,7 +21,9 @@ export class LevelController {
   @Post()
   @Roles('admin', 'teacher')
   async create(@Body() input: CreateLevelDTO): Promise<CreatedResponse<LevelDTO>> {
-    const resource = Mapper.map(await this.service.create(input), LevelDTO)
+    const force = input.force || false
+    const result = await this.service.create(input, force)
+    const resource = { ...Mapper.map(result.level, LevelDTO), existing: result.existing }
     return new CreatedResponse({ resource })
   }
 
