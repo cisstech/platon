@@ -19,7 +19,12 @@ export class TopicController {
 
   @Post()
   async create(@Body() input: CreateTopicDTO): Promise<CreatedResponse<TopicDTO>> {
-    const resource = Mapper.map(await this.service.create(input), TopicDTO)
+    const force = input.force || false
+    const result = await this.service.create(input, force)
+    const resource = {
+      ...Mapper.map(result.topic, TopicDTO),
+      existing: result.existing,
+    }
     return new CreatedResponse({ resource })
   }
 
