@@ -10,10 +10,7 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
-    "lib": [
-      "es2020",
-      "dom"
-    ],
+    "lib": ["es2020", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "resolveJsonModule": true,
@@ -30,120 +27,48 @@
     "allowJs": true,
     "baseUrl": "./",
     "paths": {
-      "@platon/core/browser": [
-        "libs/core/browser/src/index.ts"
-      ],
-      "@platon/core/common": [
-        "libs/core/common/src/index.ts"
-      ],
-      "@platon/core/server": [
-        "libs/core/server/src/index.ts"
-      ],
-      "@platon/feature/cas/browser": [
-        "libs/feature/cas/browser/src/index.ts"
-      ],
-      "@platon/feature/cas/common": [
-        "libs/feature/cas/common/src/index.ts"
-      ],
-      "@platon/feature/cas/server": [
-        "libs/feature/cas/server/src/index.ts"
-      ],
-      "@platon/feature/compiler": [
-        "libs/feature/compiler/src/index.ts"
-      ],
-      "@platon/feature/course/browser": [
-        "libs/feature/course/browser/src/index.ts"
-      ],
-      "@platon/feature/course/common": [
-        "libs/feature/course/common/src/index.ts"
-      ],
-      "@platon/feature/course/server": [
-        "libs/feature/course/server/src/index.ts"
-      ],
-      "@platon/feature/discord/browser": [
-        "libs/feature/discord/browser/src/index.ts"
-      ],
-      "@platon/feature/discord/common": [
-        "libs/feature/discord/common/src/index.ts"
-      ],
-      "@platon/feature/discord/server": [
-        "libs/feature/discord/server/src/index.ts"
-      ],
-      "@platon/feature/lti/browser": [
-        "libs/feature/lti/browser/src/index.ts"
-      ],
-      "@platon/feature/lti/common": [
-        "libs/feature/lti/common/src/index.ts"
-      ],
-      "@platon/feature/lti/server": [
-        "libs/feature/lti/server/src/index.ts"
-      ],
-      "@platon/feature/notification/browser": [
-        "libs/feature/notification/browser/src/index.ts"
-      ],
-      "@platon/feature/notification/common": [
-        "libs/feature/notification/common/src/index.ts"
-      ],
-      "@platon/feature/notification/server": [
-        "libs/feature/notification/server/src/index.ts"
-      ],
-      "@platon/feature/peer/common": [
-        "libs/feature/peer/common/src/index.ts"
-      ],
-      "@platon/feature/peer/server": [
-        "libs/feature/peer/server/src/index.ts"
-      ],
-      "@platon/feature/player/browser": [
-        "libs/feature/player/browser/src/index.ts"
-      ],
-      "@platon/feature/player/common": [
-        "libs/feature/player/common/src/index.ts"
-      ],
-      "@platon/feature/player/server": [
-        "libs/feature/player/server/src/index.ts"
-      ],
-      "@platon/feature/resource/browser": [
-        "libs/feature/resource/browser/src/index.ts"
-      ],
-      "@platon/feature/resource/common": [
-        "libs/feature/resource/common/src/index.ts"
-      ],
-      "@platon/feature/resource/server": [
-        "libs/feature/resource/server/src/index.ts"
-      ],
-      "@platon/feature/result/browser": [
-        "libs/feature/result/browser/src/index.ts"
-      ],
-      "@platon/feature/result/common": [
-        "libs/feature/result/common/src/index.ts"
-      ],
-      "@platon/feature/result/server": [
-        "libs/feature/result/server/src/index.ts"
-      ],
-      "@platon/feature/webcomponent": [
-        "libs/feature/webcomponent/src/index.ts"
-      ],
-      "@platon/graphql": [
-        ".graphql/types.ts"
-      ],
-      "@platon/shared/server": [
-        "libs/shared/server/src/index.ts"
-      ],
-      "@platon/shared/ui": [
-        "libs/shared/ui/src/index.ts"
-      ],
-      "@platon/feature/peer/browser": [
-        "libs/feature/peer/browser/src/index.ts"
-      ]
+      "@platon/core/browser": ["libs/core/browser/src/index.ts"],
+      "@platon/core/common": ["libs/core/common/src/index.ts"],
+      "@platon/core/server": ["libs/core/server/src/index.ts"],
+      "@platon/feature/ai/browser": ["libs/feature/ai/browser/src/index.ts"],
+      "@platon/feature/ai/common": ["libs/feature/ai/common/src/index.ts"],
+      "@platon/feature/ai/server": ["libs/feature/ai/server/src/index.ts"],
+      "@platon/feature/cas/browser": ["libs/feature/cas/browser/src/index.ts"],
+      "@platon/feature/cas/common": ["libs/feature/cas/common/src/index.ts"],
+      "@platon/feature/cas/server": ["libs/feature/cas/server/src/index.ts"],
+      "@platon/feature/compiler": ["libs/feature/compiler/src/index.ts"],
+      "@platon/feature/course/browser": ["libs/feature/course/browser/src/index.ts"],
+      "@platon/feature/course/common": ["libs/feature/course/common/src/index.ts"],
+      "@platon/feature/course/server": ["libs/feature/course/server/src/index.ts"],
+      "@platon/feature/discord/browser": ["libs/feature/discord/browser/src/index.ts"],
+      "@platon/feature/discord/common": ["libs/feature/discord/common/src/index.ts"],
+      "@platon/feature/discord/server": ["libs/feature/discord/server/src/index.ts"],
+      "@platon/feature/lti/browser": ["libs/feature/lti/browser/src/index.ts"],
+      "@platon/feature/lti/common": ["libs/feature/lti/common/src/index.ts"],
+      "@platon/feature/lti/server": ["libs/feature/lti/server/src/index.ts"],
+      "@platon/feature/notification/browser": ["libs/feature/notification/browser/src/index.ts"],
+      "@platon/feature/notification/common": ["libs/feature/notification/common/src/index.ts"],
+      "@platon/feature/notification/server": ["libs/feature/notification/server/src/index.ts"],
+      "@platon/feature/peer/common": ["libs/feature/peer/common/src/index.ts"],
+      "@platon/feature/peer/server": ["libs/feature/peer/server/src/index.ts"],
+      "@platon/feature/player/browser": ["libs/feature/player/browser/src/index.ts"],
+      "@platon/feature/player/common": ["libs/feature/player/common/src/index.ts"],
+      "@platon/feature/player/server": ["libs/feature/player/server/src/index.ts"],
+      "@platon/feature/resource/browser": ["libs/feature/resource/browser/src/index.ts"],
+      "@platon/feature/resource/common": ["libs/feature/resource/common/src/index.ts"],
+      "@platon/feature/resource/server": ["libs/feature/resource/server/src/index.ts"],
+      "@platon/feature/result/browser": ["libs/feature/result/browser/src/index.ts"],
+      "@platon/feature/result/common": ["libs/feature/result/common/src/index.ts"],
+      "@platon/feature/result/server": ["libs/feature/result/server/src/index.ts"],
+      "@platon/feature/webcomponent": ["libs/feature/webcomponent/src/index.ts"],
+      "@platon/graphql": [".graphql/types.ts"],
+      "@platon/shared/server": ["libs/shared/server/src/index.ts"],
+      "@platon/shared/ui": ["libs/shared/ui/src/index.ts"],
+      "@platon/feature/peer/browser": ["libs/feature/peer/browser/src/index.ts"]
     }
   },
-  "include": [
-    "./graphql/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "tmp"
-  ],
+  "include": ["./graphql/*.ts"],
+  "exclude": ["node_modules", "tmp"],
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
