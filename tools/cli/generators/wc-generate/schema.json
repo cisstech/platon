@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "cli": "nx",
+  "$id": "WcGenerate",
+  "title": "Webcomponent Generator",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Web component name in snake-case",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      }
+    },
+    "type": {
+      "type": "string",
+      "enum": ["form", "widget"],
+      "description": "The type of the web component."
+    }
+  },
+  "required": ["name", "type"]
+}

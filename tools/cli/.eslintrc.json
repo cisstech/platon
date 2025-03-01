@@ -22,6 +22,10 @@
       }
     },
     {
+      "files": ["*.template"],
+      "parser": ""
+    },
+    {
       "files": ["./package.json", "./generators.json"],
       "parser": "jsonc-eslint-parser",
       "rules": {

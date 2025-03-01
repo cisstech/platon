@@ -5,7 +5,7 @@ import {
 } from '@nx/devkit';
 import * as fs from 'fs';
 import * as path from 'path';
-import { WcBuildDocsGeneratorSchema } from './schema';
+import { WcDocsGeneratorSchema } from './schema';
 import { ComponentDefinitionParser } from './utils/component-definition-parser';
 
 interface WebComponentInfo {
@@ -54,7 +54,7 @@ function findWebComponents(sourceDir: string): WebComponentInfo[] {
   return results;
 }
 
-export default async function(tree: Tree, options: WcBuildDocsGeneratorSchema) {
+export default async function(tree: Tree, options: WcDocsGeneratorSchema) {
   const sourceDir = options.sourceDir;
   const outputDir = options.outputDir;
 

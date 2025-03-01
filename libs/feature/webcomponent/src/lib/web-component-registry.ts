@@ -30,16 +30,6 @@ import { FoldableFeedbackComponentDefinition } from './widgets/foldable-feedback
 import { WordSelectorComponentDefinition } from './forms/word-selector/word-selector'
 
 export const WEB_COMPONENTS_BUNDLES: NgeElementDef[] = [
-  // INTERNALS
-  {
-    selector: 'wc-editorjs-viewer',
-    module: () =>
-      import(/* webpackChunkName: "wc-editorjs-viewer" */ './internals/editorjs-viewer/editorjs-viewer.module').then(
-        (m) => m.EditorjsViewerModule
-      ),
-  },
-
-  // PUBLICS
   {
     selector: 'wc-automaton-editor',
     module: () =>
@@ -195,6 +185,15 @@ export const WEB_COMPONENTS_BUNDLES: NgeElementDef[] = [
       import(
         /* webpackChunkName: "wc-foldable-feedback" */ './widgets/foldable-feedback/foldable-feedback.module'
       ).then((m) => m.FoldableFeedbackModule),
+  },
+
+  // INTERNALS
+  {
+    selector: 'wc-editorjs-viewer',
+    module: () =>
+      import(/* webpackChunkName: "wc-editorjs-viewer" */ './internals/editorjs-viewer/editorjs-viewer.module').then(
+        (m) => m.EditorjsViewerModule
+      ),
   },
 ]
 

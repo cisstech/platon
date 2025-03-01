@@ -1,9 +1,14 @@
 {
   "generators": {
-    "wc-build-docs": {
-      "factory": "./generators/wc-build-docs/generator",
-      "schema": "./generators/wc-build-docs/schema.json",
+    "wc-docs": {
+      "factory": "./generators/wc-docs/generator",
+      "schema": "./generators/wc-docs/schema.json",
       "description": "This generator scans the webcomponent library folders for doc files and copies them to the documentation output directory."
+    },
+    "wc-generate": {
+      "factory": "./generators/wc-generate/generator",
+      "schema": "./generators/wc-generate/schema.json",
+      "description": "This generator generates a webcomponent boilerplate."
     }
   }
 }

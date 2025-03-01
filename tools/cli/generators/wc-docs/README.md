@@ -5,7 +5,7 @@ This generator scans the webcomponent library folders for documentation and comp
 ## Usage
 
 ```bash
-yarn nx workspace-generator wc-build-docs
+yarn nx g @platon/cli:wc-docs
 ```
 
 ### Options
@@ -21,7 +21,7 @@ The generator searches for component folders within the forms and widgets direct
 2. Reads the markdown documentation file
 3. Generates an MDX file with the following structure:
    - Frontmatter with the component title and description
-   - Component name as a heading with styled selector
+   - Component name as a heading
    - Component description
    - Original markdown documentation
    - Interactive property display using React components
