@@ -1,0 +1,309 @@
+---
+title: InputBox
+description: Permets de saisir du texte dans un champ de saisi.
+---
+
+import { Tabs, Tab } from 'nextra/components'
+import { ComponentProperties } from '../../../components'
+import { useAbsoluteUrl } from '../../../hooks'
+
+# InputBox
+
+`wc-input-box`
+
+Permets de saisir du texte dans un champ de saisi.
+
+## Documentation
+
+### Comportement
+
+Le comportement de ce composant dépend de la valeur de sa propriété `type`.
+
+- `number`:
+  Dans ce mode, le composant garanti que la valeur saisie est du type numérique,
+  toute autre valeur est converti en 0 y compris la chaine vide.
+  Dans un grader le type de `value` est donc soit un `int` soit un `float` (pas besoin de faire un cast).
+
+  **Important**:
+  Si la valeur saisie est `0.0` alors elle sera convertie en entier `0` ([comportement du JavaScript](https://stackoverflow.com/a/41304142)).
+
+- `text`:
+  Dans ce mode, le logique de la validation de saisie est déléguer au grader de l'exercice.
+  Le grader reçoit donc la chaine de caractère saisi en entier (chaine vide par défaut).
+  Vous devez donc gérer vous-même le cas de la chaine vide et faire un cast si besoin.
+
+- `textarea`: Le même comportement que pour le type `text` sauf que la chaine peut être saisi sur plusieurs lignes.
+
+### La propriété `prefix`
+
+La propriété `prefix` vous permet d'afficher une icône à gauche
+du champ de saisi en utilisant la syntaxe suivante:
+
+`type nom`
+
+Dans cette syntaxe, `type` fait référence à une librairie d'icône (ex: fontawesome) et `name` au nom d'une icône dans cette librairie.
+
+Exemple:
+
+`fontawesome address-book`.
+
+@fontawesome address-book@
+
+Vous pouvez spécifier une couleur pour votre icône en ajoutant `color=C` où `C` est une couleur en héxadécimal sans le `#`.
+
+Exemple:
+
+`fontawesome address-book color=FF0000`.
+
+@fontawesome address-book color=FF0000@
+
+La liste complète des types et noms supportés sont spécifiés sur le site [https://icongr.am](https://icongr.am).
+
+### La propriété `specialCharacters`
+
+La propriété `specialCharacters` vous permet de définir un clavier virtuel avec des caractères spéciaux.
+
+Vous pouvez utiliser `string[][][]` afin de séparer les caractères par pages, lignes et colonnes.
+
+Exemple :
+
+```py
+specialCharacters = [
+  # Page 1 :
+  [
+    ['a', 'b', 'c', 'd', ...],   # Ligne 1
+    ['q', 'r', 's', 't', ...]    # Ligne 2
+  ],
+  # Page 2 :
+  [
+    ['à', 'ñ', 'œ', ...],   # Ligne 1
+    ['1', '2', '', '', '3', '4', ...],   # Le '' permet de laisser des colonnes vides dans la ligne
+    ...
+  ]
+]
+```
+
+Sinon, vous pouvez utiliser `string[][]` si vous ne voulez utiliser qu'une seule page.
+
+Exemple :
+
+```py
+specialCharacters = [
+  ['α', 'β', 'γ', 'δ', ...],   # Ligne 1
+  ['φ', 'χ', 'ψ', 'ω', ...]    # Ligne 2
+]
+```
+
+Enfin, vous pouvez utiliser `string[]` si vous n'avez besoin que d'une seule ligne.
+
+```py
+specialCharacters = ['😁', '​😅', '​🤣', '​😂', '​🙂​', ...]
+```
+
+## Exemple interactif
+
+<iframe
+  src={useAbsoluteUrl('playground/components/wc-input-box')}
+  style={{ width: '100%', height: '700px', border: 'none' }}
+></iframe>
+
+## API
+
+<Tabs items={['Graphique', 'JSON']}>
+  <Tab>
+    <ComponentProperties schema={{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "InputBox",
+  "properties": {
+    "hint": {
+      "type": "string",
+      "default": "",
+      "description": "Une indication à afficher en bas du champ de saisi."
+    },
+    "type": {
+      "type": "string",
+      "default": "text",
+      "enum": [
+        "text",
+        "number",
+        "textarea"
+      ],
+      "description": "Le type du champ de saisi."
+    },
+    "value": {
+      "type": [
+        "string",
+        "number"
+      ],
+      "default": "",
+      "description": "La valeur du champ de saisi."
+    },
+    "width": {
+      "type": [
+        "string",
+        "number"
+      ],
+      "default": "",
+      "description": "Le largeur du champ de saisi en valeur CSS (%, px, em, etc.)."
+    },
+    "prefix": {
+      "type": "string",
+      "default": "",
+      "description": "Une icône à afficher à gauche du champ de saisi."
+    },
+    "appearance": {
+      "type": "string",
+      "default": "outline",
+      "description": "L'apparence du champ de saisi.",
+      "enum": [
+        "fill",
+        "outline",
+        "inline"
+      ]
+    },
+    "placeholder": {
+      "type": "string",
+      "default": "",
+      "description": "Le texte indicatif du champ de saisi."
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Désactiver le champ de saisi?"
+    },
+    "completion": {
+      "type": "array",
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "description": "Une liste de suggestions à proposer automatiquement lors de la saisi."
+    },
+    "autoValidation": {
+      "type": "boolean",
+      "default": false,
+      "description": "Activer la validation automatique du champ de saisi lors d'un appuie sur la touche \"Entrée\"?"
+    },
+    "specialCharacters": {
+      "type": "array",
+      "default": [],
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Une liste de caractères spéciaux à proposer dans un clavier virtuel. Chaque sous-tableau représente une ligne de caractères."
+    },
+    "css": {
+      "type": "string",
+      "default": "",
+      "description": "Les classes CSS à appliquer au composant."
+    }
+  }
+}} />
+  </Tab>
+  <Tab>
+    ```json
+    {
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "InputBox",
+  "properties": {
+    "hint": {
+      "type": "string",
+      "default": "",
+      "description": "Une indication à afficher en bas du champ de saisi."
+    },
+    "type": {
+      "type": "string",
+      "default": "text",
+      "enum": [
+        "text",
+        "number",
+        "textarea"
+      ],
+      "description": "Le type du champ de saisi."
+    },
+    "value": {
+      "type": [
+        "string",
+        "number"
+      ],
+      "default": "",
+      "description": "La valeur du champ de saisi."
+    },
+    "width": {
+      "type": [
+        "string",
+        "number"
+      ],
+      "default": "",
+      "description": "Le largeur du champ de saisi en valeur CSS (%, px, em, etc.)."
+    },
+    "prefix": {
+      "type": "string",
+      "default": "",
+      "description": "Une icône à afficher à gauche du champ de saisi."
+    },
+    "appearance": {
+      "type": "string",
+      "default": "outline",
+      "description": "L'apparence du champ de saisi.",
+      "enum": [
+        "fill",
+        "outline",
+        "inline"
+      ]
+    },
+    "placeholder": {
+      "type": "string",
+      "default": "",
+      "description": "Le texte indicatif du champ de saisi."
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Désactiver le champ de saisi?"
+    },
+    "completion": {
+      "type": "array",
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "description": "Une liste de suggestions à proposer automatiquement lors de la saisi."
+    },
+    "autoValidation": {
+      "type": "boolean",
+      "default": false,
+      "description": "Activer la validation automatique du champ de saisi lors d'un appuie sur la touche \"Entrée\"?"
+    },
+    "specialCharacters": {
+      "type": "array",
+      "default": [],
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Une liste de caractères spéciaux à proposer dans un clavier virtuel. Chaque sous-tableau représente une ligne de caractères."
+    },
+    "css": {
+      "type": "string",
+      "default": "",
+      "description": "Les classes CSS à appliquer au composant."
+    }
+  }
+}
+    ```
+  </Tab>
+</Tabs>

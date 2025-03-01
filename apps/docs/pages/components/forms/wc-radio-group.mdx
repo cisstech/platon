@@ -1,0 +1,157 @@
+---
+title: RadioGroup
+description: Permets de choisir une proposition parmi une liste.
+---
+
+import { Tabs, Tab } from 'nextra/components'
+import { ComponentProperties } from '../../../components'
+import { useAbsoluteUrl } from '../../../hooks'
+
+# RadioGroup
+
+`wc-radio-group`
+
+Permets de choisir une proposition parmi une liste.
+
+## Documentation
+
+Le format des éléments du tableau `items` est le suivant:
+
+```typescript
+{
+    "css"?: string, // Voir API CSS.
+    "content": string, // Contenu en markdown.
+}
+```
+
+> Si vous voulez définir uniquement la propriété `content` d'un des éléments du tableau,
+> vous pouvez utiliser une chaine de caractère au lieu d'un objet, dans ce cas la propriété
+> `css` prendra sa valeur par défaut.
+
+## Exemple interactif
+
+<iframe
+  src={useAbsoluteUrl('playground/components/wc-radio-group')}
+  style={{ width: '100%', height: '700px', border: 'none' }}
+></iframe>
+
+## API
+
+<Tabs items={['Graphique', 'JSON']}>
+  <Tab>
+    <ComponentProperties schema={{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "RadioGroup",
+  "required": [
+    "items"
+  ],
+  "properties": {
+    "items": {
+      "type": "array",
+      "default": [],
+      "description": "La liste des propositions.",
+      "items": {
+        "type": [
+          "string",
+          "object"
+        ],
+        "required": [
+          "content"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "css": {
+            "type": "string",
+            "description": "Voir api css."
+          },
+          "content": {
+            "type": "string",
+            "description": "Contenu en markdown."
+          }
+        }
+      }
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Désactiver la possibilité de sélectionner les propositions?"
+    },
+    "selection": {
+      "type": "string",
+      "default": "",
+      "description": "Identifiant de la proposition sélectionnée"
+    },
+    "horizontal": {
+      "type": "boolean",
+      "default": false,
+      "description": "Afficher horizontalement les propositions?"
+    },
+    "autoValidation": {
+      "type": "boolean",
+      "default": false,
+      "description": "Activer la validation automatique?"
+    }
+  }
+}} />
+  </Tab>
+  <Tab>
+    ```json
+    {
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "RadioGroup",
+  "required": [
+    "items"
+  ],
+  "properties": {
+    "items": {
+      "type": "array",
+      "default": [],
+      "description": "La liste des propositions.",
+      "items": {
+        "type": [
+          "string",
+          "object"
+        ],
+        "required": [
+          "content"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "css": {
+            "type": "string",
+            "description": "Voir api css."
+          },
+          "content": {
+            "type": "string",
+            "description": "Contenu en markdown."
+          }
+        }
+      }
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Désactiver la possibilité de sélectionner les propositions?"
+    },
+    "selection": {
+      "type": "string",
+      "default": "",
+      "description": "Identifiant de la proposition sélectionnée"
+    },
+    "horizontal": {
+      "type": "boolean",
+      "default": false,
+      "description": "Afficher horizontalement les propositions?"
+    },
+    "autoValidation": {
+      "type": "boolean",
+      "default": false,
+      "description": "Activer la validation automatique?"
+    }
+  }
+}
+    ```
+  </Tab>
+</Tabs>

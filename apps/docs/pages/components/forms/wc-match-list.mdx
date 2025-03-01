@@ -1,0 +1,198 @@
+---
+title: MatchList
+description: Permets de relier une liste de questions à une liste de réponses.
+---
+
+import { Tabs, Tab } from 'nextra/components'
+import { ComponentProperties } from '../../../components'
+import { useAbsoluteUrl } from '../../../hooks'
+
+# MatchList
+
+`wc-match-list`
+
+Permets de relier une liste de questions à une liste de réponses.
+
+## Documentation
+
+Le format des éléments du tableau `nodes` est le suivant:
+
+```typescript
+{
+    "id": string, // Identifiant du noeud.
+    "type": "source" | "target", // Type du noeud.
+    "content": string, // Contenu en markdown.
+}
+```
+
+Le format des éléments du tableau `links` est le suivant:
+
+```typescript
+{
+    "source": string, // Identifiant du noeud source.
+    "target": string, // identifiand du noeud cible.
+    "css"?: string, // Voir API CSS.
+}
+```
+
+## Exemple interactif
+
+<iframe
+  src={useAbsoluteUrl('playground/components/wc-match-list')}
+  style={{ width: '100%', height: '700px', border: 'none' }}
+></iframe>
+
+## API
+
+<Tabs items={['Graphique', 'JSON']}>
+  <Tab>
+    <ComponentProperties schema={{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "MatchList",
+  "properties": {
+    "disabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Désactiver l'interaction avec le composant?"
+    },
+    "links": {
+      "type": "array",
+      "default": [],
+      "description": "La liste des associations.",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "target"
+      ],
+      "items": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string",
+            "description": "Identifiant du noeud source."
+          },
+          "target": {
+            "type": "string",
+            "description": "Identifiant du noeud cible."
+          },
+          "css": {
+            "type": "string",
+            "description": "Voir la page API CSS."
+          }
+        }
+      }
+    },
+    "nodes": {
+      "type": "array",
+      "default": [],
+      "description": "La liste des noeuds.",
+      "minItems": 2,
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "content",
+        "type"
+      ],
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Identifiant unique du noeud."
+          },
+          "content": {
+            "type": "string",
+            "description": "Contenu du noeud en markdown."
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "source",
+              "target"
+            ],
+            "description": "Type du noeud."
+          }
+        }
+      }
+    }
+  }
+}} />
+  </Tab>
+  <Tab>
+    ```json
+    {
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "MatchList",
+  "properties": {
+    "disabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Désactiver l'interaction avec le composant?"
+    },
+    "links": {
+      "type": "array",
+      "default": [],
+      "description": "La liste des associations.",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "target"
+      ],
+      "items": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string",
+            "description": "Identifiant du noeud source."
+          },
+          "target": {
+            "type": "string",
+            "description": "Identifiant du noeud cible."
+          },
+          "css": {
+            "type": "string",
+            "description": "Voir la page API CSS."
+          }
+        }
+      }
+    },
+    "nodes": {
+      "type": "array",
+      "default": [],
+      "description": "La liste des noeuds.",
+      "minItems": 2,
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "content",
+        "type"
+      ],
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Identifiant unique du noeud."
+          },
+          "content": {
+            "type": "string",
+            "description": "Contenu du noeud en markdown."
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "source",
+              "target"
+            ],
+            "description": "Type du noeud."
+          }
+        }
+      }
+    }
+  }
+}
+    ```
+  </Tab>
+</Tabs>

@@ -1,0 +1,60 @@
+---
+title: Presenter
+description: Permets de créer des presentations.
+---
+
+import { Tabs, Tab } from 'nextra/components'
+import { ComponentProperties } from '../../../components'
+import { useAbsoluteUrl } from '../../../hooks'
+
+# Presenter
+
+`wc-presenter`
+
+Permets de créer des presentations.
+
+## Documentation
+
+Ce composant presenter est basée sur la librairie [reveal.js](https://revealjs.com/)
+
+## Exemple interactif
+
+<iframe
+  src={useAbsoluteUrl('playground/components/wc-presenter')}
+  style={{ width: '100%', height: '700px', border: 'none' }}
+></iframe>
+
+## API
+
+<Tabs items={['Graphique', 'JSON']}>
+  <Tab>
+    <ComponentProperties schema={{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "required": [],
+  "properties": {
+    "template": {
+      "type": "string",
+      "default": "",
+      "description": "Presenter content"
+    }
+  }
+}} />
+  </Tab>
+  <Tab>
+    ```json
+    {
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "required": [],
+  "properties": {
+    "template": {
+      "type": "string",
+      "default": "",
+      "description": "Presenter content"
+    }
+  }
+}
+    ```
+  </Tab>
+</Tabs>

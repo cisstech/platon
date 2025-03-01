@@ -1,0 +1,96 @@
+---
+title: CodeViewer
+description: Permets d'afficher un code source avec de la coloration syntaxique.
+---
+
+import { Tabs, Tab } from 'nextra/components'
+import { ComponentProperties } from '../../../components'
+import { useAbsoluteUrl } from '../../../hooks'
+
+# CodeViewer
+
+`wc-code-viewer`
+
+Permets d'afficher un code source avec de la coloration syntaxique.
+
+## Documentation
+
+## Exemple interactif
+
+<iframe
+  src={useAbsoluteUrl('playground/components/wc-code-viewer')}
+  style={{ width: '100%', height: '700px', border: 'none' }}
+></iframe>
+
+## API
+
+<Tabs items={['Graphique', 'JSON']}>
+  <Tab>
+    <ComponentProperties schema={{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "CodeViewer",
+  "required": [
+    "code",
+    "language"
+  ],
+  "properties": {
+    "code": {
+      "type": "string",
+      "default": "",
+      "description": "Code à afficher."
+    },
+    "lines": {
+      "type": "string",
+      "default": "",
+      "description": "Numéros de ligne à afficher."
+    },
+    "language": {
+      "type": "string",
+      "default": "plaintext",
+      "description": "Langage du code."
+    },
+    "highlights": {
+      "type": "string",
+      "default": "",
+      "description": "Lignes à surligner."
+    }
+  }
+}} />
+  </Tab>
+  <Tab>
+    ```json
+    {
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "CodeViewer",
+  "required": [
+    "code",
+    "language"
+  ],
+  "properties": {
+    "code": {
+      "type": "string",
+      "default": "",
+      "description": "Code à afficher."
+    },
+    "lines": {
+      "type": "string",
+      "default": "",
+      "description": "Numéros de ligne à afficher."
+    },
+    "language": {
+      "type": "string",
+      "default": "plaintext",
+      "description": "Langage du code."
+    },
+    "highlights": {
+      "type": "string",
+      "default": "",
+      "description": "Lignes à surligner."
+    }
+  }
+}
+    ```
+  </Tab>
+</Tabs>

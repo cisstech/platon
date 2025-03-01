@@ -1,0 +1,178 @@
+---
+title: Matrix
+description: Permets de saisir une matrice.
+---
+
+import { Tabs, Tab } from 'nextra/components'
+import { ComponentProperties } from '../../../components'
+import { useAbsoluteUrl } from '../../../hooks'
+
+# Matrix
+
+`wc-matrix`
+
+Permets de saisir une matrice.
+
+## Documentation
+
+Ce composant représente une matrice par un tableau `cells`.
+Ce tableau contient les cellules de la matrice dont le format est le suivant:
+
+```typescript
+{
+    "css"?: string, // Voir API CSS.
+    "value": string, // La valeur d'une cellule de la matrice.
+    "disabled"?: boolean, // Une valeur indiquant si la cellule est désactivée.
+}
+```
+
+> Si vous voulez définir uniquement la propriété `value` d'un des éléments du tableau,
+> vous pouvez utiliser une chaine de caractère au lieu d'un objet et les autres propriétés
+> prendront leur valeur par défaut.
+
+Les dimensions de la matrice sont représentées par les propriétés `cols` et `rows`.
+Si la propriété `cells` n'est pas définie ou ne contient pas `cols` \* `rows` cellules,
+alors le composant ajoutera automatiquement les cellules manquantes avec `0` comme valeur
+par défaut.
+
+## Exemple interactif
+
+<iframe
+  src={useAbsoluteUrl('playground/components/wc-matrix')}
+  style={{ width: '100%', height: '700px', border: 'none' }}
+></iframe>
+
+## API
+
+<Tabs items={['Graphique', 'JSON']}>
+  <Tab>
+    <ComponentProperties schema={{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "required": [
+    "rows",
+    "cols",
+    "cells"
+  ],
+  "properties": {
+    "rows": {
+      "type": "number",
+      "default": 0,
+      "description": "Le nombre de lignes de la matrice."
+    },
+    "cols": {
+      "type": "number",
+      "default": 0,
+      "description": "Le nombre de colonnes de la matrice."
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Désactiver les cellules de la matrice?"
+    },
+    "resizable": {
+      "type": "boolean",
+      "default": false,
+      "description": "La taille de la matrice est elle modifiable?"
+    },
+    "cells": {
+      "type": "array",
+      "items": {
+        "type": [
+          "object",
+          "string"
+        ],
+        "default": [],
+        "required": [
+          "value"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "css": {
+            "type": "string",
+            "default": "",
+            "description": "Voir la page API CSS."
+          },
+          "value": {
+            "type": "string",
+            "default": "",
+            "description": "La valeur de la cellule."
+          },
+          "disabled": {
+            "type": "boolean",
+            "default": false,
+            "description": "Désactiver la cellule?"
+          }
+        }
+      }
+    }
+  }
+}} />
+  </Tab>
+  <Tab>
+    ```json
+    {
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "required": [
+    "rows",
+    "cols",
+    "cells"
+  ],
+  "properties": {
+    "rows": {
+      "type": "number",
+      "default": 0,
+      "description": "Le nombre de lignes de la matrice."
+    },
+    "cols": {
+      "type": "number",
+      "default": 0,
+      "description": "Le nombre de colonnes de la matrice."
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Désactiver les cellules de la matrice?"
+    },
+    "resizable": {
+      "type": "boolean",
+      "default": false,
+      "description": "La taille de la matrice est elle modifiable?"
+    },
+    "cells": {
+      "type": "array",
+      "items": {
+        "type": [
+          "object",
+          "string"
+        ],
+        "default": [],
+        "required": [
+          "value"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "css": {
+            "type": "string",
+            "default": "",
+            "description": "Voir la page API CSS."
+          },
+          "value": {
+            "type": "string",
+            "default": "",
+            "description": "La valeur de la cellule."
+          },
+          "disabled": {
+            "type": "boolean",
+            "default": false,
+            "description": "Désactiver la cellule?"
+          }
+        }
+      }
+    }
+  }
+}
+    ```
+  </Tab>
+</Tabs>

@@ -1,0 +1,90 @@
+.propertiesList {
+  width: 100%;
+  margin: 2em 0;
+  font-size: 13px;
+}
+
+.propertyItem {
+  border-bottom: 1px solid #f0f0f0;
+  padding: 16px 0;
+  transition: background 0.3s;
+}
+
+.propertyItem:hover {
+  background: rgba(60, 90, 100, 0.04);
+}
+
+.propertyKey {
+  color: #595959;
+  font-weight: 600;
+}
+
+.propertyKey code {
+  background: rgba(0, 0, 0, 0.02);
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+.propertyDetails {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.propertyDescription {
+  flex: 1 1 100%;
+  padding: 8px 0;
+}
+
+.propertyType {
+  flex: 1 1 100%;
+  color: #c41d7f;
+  font-size: 13px;
+  word-break: break-all;
+  padding: 8px 0;
+}
+
+.toggle {
+  cursor: pointer;
+  user-select: none;
+}
+
+.toggle:hover {
+  text-decoration: underline;
+}
+
+.toggle.expanded::before {
+  content: '▼ ';
+}
+
+.toggle.collapsed::before {
+  content: '▶ ';
+}
+
+.propertyDefault {
+  flex: 1 1 100%;
+  font-size: 13px;
+  padding: 8px 0;
+}
+
+.propertyDefault code {
+  background: rgba(0, 0, 0, 0.02);
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+.nestedProperties {
+  margin-top: 8px;
+  padding-left: 20px;
+  border-left: 2px solid #c41d7f;
+}
+
+.nestedProperty {
+  border-bottom: none;
+}
+
+.noProperties {
+  padding: 16px;
+  text-align: center;
+  color: #595959;
+  font-style: italic;
+}

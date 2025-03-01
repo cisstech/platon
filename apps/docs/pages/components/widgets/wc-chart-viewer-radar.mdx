@@ -1,0 +1,149 @@
+---
+title: ChartViewer-Radar
+description: Permets d'afficher une charte de type radar en fournissant des données
+---
+
+import { Tabs, Tab } from 'nextra/components'
+import { ComponentProperties } from '../../../components'
+import { useAbsoluteUrl } from '../../../hooks'
+
+# ChartViewer-Radar
+
+`wc-chart-viewer-radar`
+
+Permets d'afficher une charte de type radar en fournissant des données
+
+## Documentation
+
+Le format des éléments du tableau `data` est le suivant:
+
+```typescript
+{
+    "name"?: string, // Nom de la colonne
+    "series": [
+        {
+            "name": string, // Nom de la série
+            "value": number // Valeur de la série
+        },
+        ... // Prochains objets...
+    ]
+}
+```
+
+> Les noms devraient être uniques et permettant facilement de représenter les données sur la charte
+
+## Exemple interactif
+
+<iframe
+  src={useAbsoluteUrl('playground/components/wc-chart-viewer-radar')}
+  style={{ width: '100%', height: '700px', border: 'none' }}
+></iframe>
+
+## API
+
+<Tabs items={['Graphique', 'JSON']}>
+  <Tab>
+    <ComponentProperties schema={{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "ChartViewer-Radar",
+  "required": [
+    "data",
+    "indicators"
+  ],
+  "properties": {
+    "mode": {
+      "type": "string",
+      "default": "simple",
+      "description": "Mode d'affichage du graphe : simple, ou filled",
+      "enum": [
+        "simple",
+        "filled"
+      ]
+    },
+    "shape": {
+      "type": "string",
+      "default": "polygon",
+      "description": "Forme du graphe : circle, ou polygon",
+      "enum": [
+        "circle",
+        "polygon"
+      ]
+    },
+    "indicators": {
+      "type": "array",
+      "default": [],
+      "description": "Liste des indicateurs du radar",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "default": "",
+            "description": "Nom de l'indicateur"
+          },
+          "max": {
+            "type": "number",
+            "default": 100,
+            "description": "Valeur maximale de l'indicateur"
+          }
+        }
+      }
+    }
+  }
+}} />
+  </Tab>
+  <Tab>
+    ```json
+    {
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "ChartViewer-Radar",
+  "required": [
+    "data",
+    "indicators"
+  ],
+  "properties": {
+    "mode": {
+      "type": "string",
+      "default": "simple",
+      "description": "Mode d'affichage du graphe : simple, ou filled",
+      "enum": [
+        "simple",
+        "filled"
+      ]
+    },
+    "shape": {
+      "type": "string",
+      "default": "polygon",
+      "description": "Forme du graphe : circle, ou polygon",
+      "enum": [
+        "circle",
+        "polygon"
+      ]
+    },
+    "indicators": {
+      "type": "array",
+      "default": [],
+      "description": "Liste des indicateurs du radar",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "default": "",
+            "description": "Nom de l'indicateur"
+          },
+          "max": {
+            "type": "number",
+            "default": 100,
+            "description": "Valeur maximale de l'indicateur"
+          }
+        }
+      }
+    }
+  }
+}
+    ```
+  </Tab>
+</Tabs>

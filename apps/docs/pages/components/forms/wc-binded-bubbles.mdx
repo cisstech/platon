@@ -1,0 +1,224 @@
+---
+title: BindedBubbles
+description: Permets de choisir 2 propositions parmi une liste.
+---
+
+import { Tabs, Tab } from 'nextra/components'
+import { ComponentProperties } from '../../../components'
+import { useAbsoluteUrl } from '../../../hooks'
+
+# BindedBubbles
+
+`wc-binded-bubbles`
+
+Permets de choisir 2 propositions parmi une liste.
+
+## Documentation
+
+Le format des éléments du tableau `items` est le suivant:
+
+```typescript
+{
+    "content"?: string, // Contenu en markdown.
+}
+```
+
+> Vous pouvez définir uniquement la propriété `content` d'un des éléments du tableau.
+
+## Exemple interactif
+
+<iframe
+  src={useAbsoluteUrl('playground/components/wc-binded-bubbles')}
+  style={{ width: '100%', height: '700px', border: 'none' }}
+></iframe>
+
+## API
+
+<Tabs items={['Graphique', 'JSON']}>
+  <Tab>
+    <ComponentProperties schema={{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "BindedBubbles",
+  "properties": {
+    "items": {
+      "type": "array",
+      "default": [],
+      "description": "La liste des propositions.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "item1": {
+            "type": "object",
+            "description": "Contenu du premier item",
+            "properties": {
+              "content": {
+                "type": "string"
+              }
+            }
+          },
+          "item2": {
+            "type": "object",
+            "description": "Contenu du deuxième item",
+            "properties": {
+              "content": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "numberPairToShow": {
+      "type": "number",
+      "description": "Nombre de propositions à afficher.",
+      "default": 3
+    },
+    "mode": {
+      "type": "string",
+      "description": "Mode de jeu",
+      "enum": [
+        "ordered",
+        "shuffle"
+      ],
+      "default": "ordered"
+    },
+    "timeout": {
+      "type": "number",
+      "description": "Temps d'attente avant d'afficher la prochaine bonne proposition. (en millisecondes)",
+      "default": 1000
+    },
+    "nbError": {
+      "type": "number",
+      "description": "Nombre d'erreurs",
+      "default": 0
+    },
+    "errors": {
+      "type": "array",
+      "description": "Liste des erreurs",
+      "default": [],
+      "items": {
+        "type": "object",
+        "properties": {
+          "item1": {
+            "type": "object",
+            "description": "Contenu du premier item",
+            "properties": {
+              "content": {
+                "type": "string"
+              }
+            }
+          },
+          "item2": {
+            "type": "object",
+            "description": "Contenu du deuxième item",
+            "properties": {
+              "content": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "items"
+  ]
+}} />
+  </Tab>
+  <Tab>
+    ```json
+    {
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "BindedBubbles",
+  "properties": {
+    "items": {
+      "type": "array",
+      "default": [],
+      "description": "La liste des propositions.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "item1": {
+            "type": "object",
+            "description": "Contenu du premier item",
+            "properties": {
+              "content": {
+                "type": "string"
+              }
+            }
+          },
+          "item2": {
+            "type": "object",
+            "description": "Contenu du deuxième item",
+            "properties": {
+              "content": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "numberPairToShow": {
+      "type": "number",
+      "description": "Nombre de propositions à afficher.",
+      "default": 3
+    },
+    "mode": {
+      "type": "string",
+      "description": "Mode de jeu",
+      "enum": [
+        "ordered",
+        "shuffle"
+      ],
+      "default": "ordered"
+    },
+    "timeout": {
+      "type": "number",
+      "description": "Temps d'attente avant d'afficher la prochaine bonne proposition. (en millisecondes)",
+      "default": 1000
+    },
+    "nbError": {
+      "type": "number",
+      "description": "Nombre d'erreurs",
+      "default": 0
+    },
+    "errors": {
+      "type": "array",
+      "description": "Liste des erreurs",
+      "default": [],
+      "items": {
+        "type": "object",
+        "properties": {
+          "item1": {
+            "type": "object",
+            "description": "Contenu du premier item",
+            "properties": {
+              "content": {
+                "type": "string"
+              }
+            }
+          },
+          "item2": {
+            "type": "object",
+            "description": "Contenu du deuxième item",
+            "properties": {
+              "content": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "items"
+  ]
+}
+    ```
+  </Tab>
+</Tabs>

@@ -1,0 +1,145 @@
+---
+title: SortList
+description: Permets de créer une liste à ordonner.
+---
+
+import { Tabs, Tab } from 'nextra/components'
+import { ComponentProperties } from '../../../components'
+import { useAbsoluteUrl } from '../../../hooks'
+
+# SortList
+
+`wc-sort-list`
+
+Permets de créer une liste à ordonner.
+
+## Documentation
+
+Le format des éléments du tableau `items` est le suivant:
+
+```typescript
+{
+    "css"?: string, // Voir API CSS.
+    "content": string, // Contenu en markdown.
+}
+```
+
+> Si vous voulez définir uniquement la propriété `content` d'un des éléments du tableau,
+> vous pouvez utiliser une chaine de caractère au lieu d'un objet, dans ce cas la propriété
+> `css` prendra sa valeur par défaut.
+
+## Exemple interactif
+
+<iframe
+  src={useAbsoluteUrl('playground/components/wc-sort-list')}
+  style={{ width: '100%', height: '700px', border: 'none' }}
+></iframe>
+
+## API
+
+<Tabs items={['Graphique', 'JSON']}>
+  <Tab>
+    <ComponentProperties schema={{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "SortList",
+  "required": [
+    "items"
+  ],
+  "properties": {
+    "items": {
+      "type": "array",
+      "default": [],
+      "description": "La liste des éléments à ordonner.",
+      "items": {
+        "type": [
+          "string",
+          "object"
+        ],
+        "required": [
+          "content"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "css": {
+            "type": "string",
+            "description": "Voir API CSS"
+          },
+          "content": {
+            "type": "string",
+            "description": "Contenu en markdown."
+          }
+        }
+      }
+    },
+    "alignment": {
+      "type": "string",
+      "default": "center",
+      "description": "Alignement des items du SortList",
+      "enum": [
+        "center",
+        "left"
+      ]
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Désactiver le composant?"
+    }
+  }
+}} />
+  </Tab>
+  <Tab>
+    ```json
+    {
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "SortList",
+  "required": [
+    "items"
+  ],
+  "properties": {
+    "items": {
+      "type": "array",
+      "default": [],
+      "description": "La liste des éléments à ordonner.",
+      "items": {
+        "type": [
+          "string",
+          "object"
+        ],
+        "required": [
+          "content"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "css": {
+            "type": "string",
+            "description": "Voir API CSS"
+          },
+          "content": {
+            "type": "string",
+            "description": "Contenu en markdown."
+          }
+        }
+      }
+    },
+    "alignment": {
+      "type": "string",
+      "default": "center",
+      "description": "Alignement des items du SortList",
+      "enum": [
+        "center",
+        "left"
+      ]
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Désactiver le composant?"
+    }
+  }
+}
+    ```
+  </Tab>
+</Tabs>

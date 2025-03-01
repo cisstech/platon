@@ -1,0 +1,155 @@
+---
+title: Picker
+description: Permets de choisir une proposition dans une liste.
+---
+
+import { Tabs, Tab } from 'nextra/components'
+import { ComponentProperties } from '../../../components'
+import { useAbsoluteUrl } from '../../../hooks'
+
+# Picker
+
+`wc-picker`
+
+Permets de choisir une proposition dans une liste.
+
+## Documentation
+
+La sélection du picker est définie par la propriété `selection`.
+
+### Les propriétés `prefix` et `suffix`
+
+Les propriétés `prefix` et `suffix` vous permettent d'afficher une icône à gauche et/ou à droite
+du picker en utilisant la syntaxe suivante:
+
+`type nom`
+
+Dans cette syntaxe, `type` fait référence à une librairie d'icône (ex: fontawesome) et `name` au nom d'une icône dans cette librairie.
+
+Exemple:
+
+`fontawesome address-book`.
+
+@fontawesome address-book@
+
+Vous pouvez spécifier une couleur pour votre icône en ajoutant `color=C` où `C` est une couleur en héxadécimal sans le `#`.
+
+Exemple:
+
+`fontawesome address-book color=FF0000`.
+
+@fontawesome address-book color=FF0000@
+
+La liste complète des types et noms supportés sont spécifiés sur le site [https://icongr.am](https://icongr.am).
+
+## Exemple interactif
+
+<iframe
+  src={useAbsoluteUrl('playground/components/wc-picker')}
+  style={{ width: '100%', height: '700px', border: 'none' }}
+></iframe>
+
+## API
+
+<Tabs items={['Graphique', 'JSON']}>
+  <Tab>
+    <ComponentProperties schema={{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "required": [
+    "items"
+  ],
+  "properties": {
+    "items": {
+      "type": "array",
+      "default": [],
+      "description": "La liste des choix.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "prefix": {
+      "type": "string",
+      "default": "",
+      "description": "Une icône à afficher à gauche du picker."
+    },
+    "suffix": {
+      "type": "string",
+      "default": "",
+      "description": "Une icône à afficher à droite du picker."
+    },
+    "hint": {
+      "type": "string",
+      "default": "",
+      "description": "Une indication à afficher en bas du picker."
+    },
+    "selection": {
+      "type": "string",
+      "default": "",
+      "description": "L'élément sélectionné dans la liste items."
+    },
+    "placeholder": {
+      "type": "string",
+      "default": "",
+      "description": "Le texte indicatif du picker."
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Désactiver la sélection?"
+    }
+  }
+}} />
+  </Tab>
+  <Tab>
+    ```json
+    {
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "required": [
+    "items"
+  ],
+  "properties": {
+    "items": {
+      "type": "array",
+      "default": [],
+      "description": "La liste des choix.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "prefix": {
+      "type": "string",
+      "default": "",
+      "description": "Une icône à afficher à gauche du picker."
+    },
+    "suffix": {
+      "type": "string",
+      "default": "",
+      "description": "Une icône à afficher à droite du picker."
+    },
+    "hint": {
+      "type": "string",
+      "default": "",
+      "description": "Une indication à afficher en bas du picker."
+    },
+    "selection": {
+      "type": "string",
+      "default": "",
+      "description": "L'élément sélectionné dans la liste items."
+    },
+    "placeholder": {
+      "type": "string",
+      "default": "",
+      "description": "Le texte indicatif du picker."
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Désactiver la sélection?"
+    }
+  }
+}
+    ```
+  </Tab>
+</Tabs>

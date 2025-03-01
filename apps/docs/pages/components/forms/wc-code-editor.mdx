@@ -1,0 +1,98 @@
+---
+title: CodeEditor
+description: Un éditeur de code proposant de la coloration syntaxique.
+---
+
+import { Tabs, Tab } from 'nextra/components'
+import { ComponentProperties } from '../../../components'
+import { useAbsoluteUrl } from '../../../hooks'
+
+# CodeEditor
+
+`wc-code-editor`
+
+Un éditeur de code proposant de la coloration syntaxique.
+
+## Documentation
+
+## Exemple interactif
+
+<iframe
+  src={useAbsoluteUrl('playground/components/wc-code-editor')}
+  style={{ width: '100%', height: '700px', border: 'none' }}
+></iframe>
+
+## API
+
+<Tabs items={['Graphique', 'JSON']}>
+  <Tab>
+    <ComponentProperties schema={{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "CodeEditor",
+  "properties": {
+    "code": {
+      "type": "string",
+      "default": "",
+      "description": "Le contenu de l'éditeur."
+    },
+    "height": {
+      "type": "number",
+      "default": 400,
+      "description": "Le hauteur de l'éditeur en px."
+    },
+    "tabSize": {
+      "type": "number",
+      "default": 4,
+      "description": "Le nombre d'espaces correspondant à une tabulation."
+    },
+    "language": {
+      "type": "string",
+      "default": "plaintext",
+      "description": "Le langage pour la coloration syntaxique."
+    },
+    "quickSuggestions": {
+      "type": "boolean",
+      "default": true,
+      "description": "Activer l'auto-complétion des mots?"
+    }
+  }
+}} />
+  </Tab>
+  <Tab>
+    ```json
+    {
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "CodeEditor",
+  "properties": {
+    "code": {
+      "type": "string",
+      "default": "",
+      "description": "Le contenu de l'éditeur."
+    },
+    "height": {
+      "type": "number",
+      "default": 400,
+      "description": "Le hauteur de l'éditeur en px."
+    },
+    "tabSize": {
+      "type": "number",
+      "default": 4,
+      "description": "Le nombre d'espaces correspondant à une tabulation."
+    },
+    "language": {
+      "type": "string",
+      "default": "plaintext",
+      "description": "Le langage pour la coloration syntaxique."
+    },
+    "quickSuggestions": {
+      "type": "boolean",
+      "default": true,
+      "description": "Activer l'auto-complétion des mots?"
+    }
+  }
+}
+    ```
+  </Tab>
+</Tabs>

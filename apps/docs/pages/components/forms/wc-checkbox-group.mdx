@@ -1,0 +1,148 @@
+---
+title: CheckboxGroup
+description: Permets de choisir plusieurs propositions parmi une liste.
+---
+
+import { Tabs, Tab } from 'nextra/components'
+import { ComponentProperties } from '../../../components'
+import { useAbsoluteUrl } from '../../../hooks'
+
+# CheckboxGroup
+
+`wc-checkbox-group`
+
+Permets de choisir plusieurs propositions parmi une liste.
+
+## Documentation
+
+Le format des éléments du tableau `items` est le suivant:
+
+```typescript
+{
+    "css"?: string, // Voir API CSS.
+    "content": string, // Contenu en markdown.
+    "checked"?: boolean, // La proposition est sélectionnée?
+}
+```
+
+> Si vous voulez définir uniquement la propriété `content` d'un des éléments du tableau,
+> vous pouvez utiliser une chaine de caractère au lieu d'un objet et les propriétés
+> `css` et `checked` prendront leur valeur par défaut.
+
+## Exemple interactif
+
+<iframe
+  src={useAbsoluteUrl('playground/components/wc-checkbox-group')}
+  style={{ width: '100%', height: '700px', border: 'none' }}
+></iframe>
+
+## API
+
+<Tabs items={['Graphique', 'JSON']}>
+  <Tab>
+    <ComponentProperties schema={{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "CheckboxGroup",
+  "properties": {
+    "items": {
+      "type": "array",
+      "default": [],
+      "description": "La liste des propositions.",
+      "items": {
+        "type": [
+          "string",
+          "object"
+        ],
+        "required": [
+          "content"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "css": {
+            "type": "string",
+            "description": "Voir API CSS"
+          },
+          "checked": {
+            "type": "boolean",
+            "description": "La proposition est sélectionnée?",
+            "default": false
+          },
+          "content": {
+            "type": "string",
+            "description": "Contenu en markdown."
+          }
+        }
+      }
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Désactiver la possibilité de sélectionner les propositions?"
+    },
+    "horizontal": {
+      "type": "boolean",
+      "default": false,
+      "description": "Afficher horizontalement les propositions?"
+    }
+  },
+  "required": [
+    "items"
+  ]
+}} />
+  </Tab>
+  <Tab>
+    ```json
+    {
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "CheckboxGroup",
+  "properties": {
+    "items": {
+      "type": "array",
+      "default": [],
+      "description": "La liste des propositions.",
+      "items": {
+        "type": [
+          "string",
+          "object"
+        ],
+        "required": [
+          "content"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "css": {
+            "type": "string",
+            "description": "Voir API CSS"
+          },
+          "checked": {
+            "type": "boolean",
+            "description": "La proposition est sélectionnée?",
+            "default": false
+          },
+          "content": {
+            "type": "string",
+            "description": "Contenu en markdown."
+          }
+        }
+      }
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Désactiver la possibilité de sélectionner les propositions?"
+    },
+    "horizontal": {
+      "type": "boolean",
+      "default": false,
+      "description": "Afficher horizontalement les propositions?"
+    }
+  },
+  "required": [
+    "items"
+  ]
+}
+    ```
+  </Tab>
+</Tabs>

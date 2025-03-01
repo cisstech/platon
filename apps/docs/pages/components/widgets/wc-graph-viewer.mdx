@@ -1,0 +1,64 @@
+---
+title: GraphViewer
+description: Permets d'afficher un graph.
+---
+
+import { Tabs, Tab } from 'nextra/components'
+import { ComponentProperties } from '../../../components'
+import { useAbsoluteUrl } from '../../../hooks'
+
+# GraphViewer
+
+`wc-graph-viewer`
+
+Permets d'afficher un graph.
+
+## Documentation
+
+<https://cyberzoide.developpez.com/graphviz/>
+
+## Exemple interactif
+
+<iframe
+  src={useAbsoluteUrl('playground/components/wc-graph-viewer')}
+  style={{ width: '100%', height: '700px', border: 'none' }}
+></iframe>
+
+## API
+
+<Tabs items={['Graphique', 'JSON']}>
+  <Tab>
+    <ComponentProperties schema={{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "required": [
+    "graph"
+  ],
+  "properties": {
+    "graph": {
+      "type": "string",
+      "default": "",
+      "description": "Le graph à dessiner au format dot."
+    }
+  }
+}} />
+  </Tab>
+  <Tab>
+    ```json
+    {
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "required": [
+    "graph"
+  ],
+  "properties": {
+    "graph": {
+      "type": "string",
+      "default": "",
+      "description": "Le graph à dessiner au format dot."
+    }
+  }
+}
+    ```
+  </Tab>
+</Tabs>

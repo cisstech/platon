@@ -1,0 +1,82 @@
+---
+title: Feedback
+description: Permets d'afficher un feedback.
+---
+
+import { Tabs, Tab } from 'nextra/components'
+import { ComponentProperties } from '../../../components'
+import { useAbsoluteUrl } from '../../../hooks'
+
+# Feedback
+
+`wc-feedback`
+
+Permets d'afficher un feedback.
+
+## Documentation
+
+## Exemple interactif
+
+<iframe
+  src={useAbsoluteUrl('playground/components/wc-feedback')}
+  style={{ width: '100%', height: '700px', border: 'none' }}
+></iframe>
+
+## API
+
+<Tabs items={['Graphique', 'JSON']}>
+  <Tab>
+    <ComponentProperties schema={{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "required": [
+    "content"
+  ],
+  "properties": {
+    "type": {
+      "type": "string",
+      "default": "info",
+      "description": "Type de feedback",
+      "enum": [
+        "success",
+        "info",
+        "warning",
+        "error"
+      ]
+    },
+    "content": {
+      "type": "string",
+      "description": "Contenu en markdown."
+    }
+  }
+}} />
+  </Tab>
+  <Tab>
+    ```json
+    {
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "required": [
+    "content"
+  ],
+  "properties": {
+    "type": {
+      "type": "string",
+      "default": "info",
+      "description": "Type de feedback",
+      "enum": [
+        "success",
+        "info",
+        "warning",
+        "error"
+      ]
+    },
+    "content": {
+      "type": "string",
+      "description": "Contenu en markdown."
+    }
+  }
+}
+    ```
+  </Tab>
+</Tabs>

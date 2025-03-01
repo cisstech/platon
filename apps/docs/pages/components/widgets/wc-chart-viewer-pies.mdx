@@ -1,0 +1,87 @@
+---
+title: ChartViewer-Pies
+description: Permets d'afficher une charte de type camembert en fournissant des données
+---
+
+import { Tabs, Tab } from 'nextra/components'
+import { ComponentProperties } from '../../../components'
+import { useAbsoluteUrl } from '../../../hooks'
+
+# ChartViewer-Pies
+
+`wc-chart-viewer-pies`
+
+Permets d'afficher une charte de type camembert en fournissant des données
+
+## Documentation
+
+Le format des éléments du tableau `data` est le suivant:
+
+```typescript
+{
+    "name": string, // Nom de la donnée
+    "value": number // Valeur de la donnée
+}
+```
+
+> Les noms devraient être uniques et permettant facilement de représenter les données sur la charte
+
+## Exemple interactif
+
+<iframe
+  src={useAbsoluteUrl('playground/components/wc-chart-viewer-pies')}
+  style={{ width: '100%', height: '700px', border: 'none' }}
+></iframe>
+
+## API
+
+<Tabs items={['Graphique', 'JSON']}>
+  <Tab>
+    <ComponentProperties schema={{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "ChartViewer-Pies",
+  "required": [
+    "data"
+  ],
+  "properties": {
+    "mode": {
+      "type": "string",
+      "default": "simple",
+      "description": "Mode d'affichage du graphe : simple, donuts ou half-donuts",
+      "enum": [
+        "simple",
+        "donut",
+        "half-donut",
+        "nightingale"
+      ]
+    }
+  }
+}} />
+  </Tab>
+  <Tab>
+    ```json
+    {
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "ChartViewer-Pies",
+  "required": [
+    "data"
+  ],
+  "properties": {
+    "mode": {
+      "type": "string",
+      "default": "simple",
+      "description": "Mode d'affichage du graphe : simple, donuts ou half-donuts",
+      "enum": [
+        "simple",
+        "donut",
+        "half-donut",
+        "nightingale"
+      ]
+    }
+  }
+}
+    ```
+  </Tab>
+</Tabs>

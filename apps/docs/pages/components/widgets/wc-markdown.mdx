@@ -1,0 +1,70 @@
+---
+title: Markdown
+description: Permets d'afficher du markdown.
+---
+
+import { Tabs, Tab } from 'nextra/components'
+import { ComponentProperties } from '../../../components'
+import { useAbsoluteUrl } from '../../../hooks'
+
+# Markdown
+
+`wc-markdown`
+
+Permets d'afficher du markdown.
+
+## Documentation
+
+Ce composant markdown est basée sur la librarie [nge-markdown](https://cisstech.github.io/nge/docs/nge-markdown/cheatsheet)
+
+## Exemple interactif
+
+<iframe
+  src={useAbsoluteUrl('playground/components/wc-markdown')}
+  style={{ width: '100%', height: '700px', border: 'none' }}
+></iframe>
+
+## API
+
+<Tabs items={['Graphique', 'JSON']}>
+  <Tab>
+    <ComponentProperties schema={{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "required": [],
+  "properties": {
+    "data": {
+      "type": "string",
+      "default": "",
+      "description": "Texte en markdown"
+    },
+    "file": {
+      "type": "string",
+      "default": "",
+      "description": "Url vers un fichier markdown à afficher"
+    }
+  }
+}} />
+  </Tab>
+  <Tab>
+    ```json
+    {
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "required": [],
+  "properties": {
+    "data": {
+      "type": "string",
+      "default": "",
+      "description": "Texte en markdown"
+    },
+    "file": {
+      "type": "string",
+      "default": "",
+      "description": "Url vers un fichier markdown à afficher"
+    }
+  }
+}
+    ```
+  </Tab>
+</Tabs>

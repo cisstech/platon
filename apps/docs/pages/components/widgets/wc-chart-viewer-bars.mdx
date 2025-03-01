@@ -1,0 +1,125 @@
+---
+title: ChartViewer-Bars
+description: Permets d'afficher une charte de type histogramme en fournissant des données
+---
+
+import { Tabs, Tab } from 'nextra/components'
+import { ComponentProperties } from '../../../components'
+import { useAbsoluteUrl } from '../../../hooks'
+
+# ChartViewer-Bars
+
+`wc-chart-viewer-bars`
+
+Permets d'afficher une charte de type histogramme en fournissant des données
+
+## Documentation
+
+Le format des éléments du tableau `data` est le suivant:
+
+```typescript
+{
+    "name"?: string, // Nom de la colonne
+    "series": [
+        {
+            "name": string, // Nom de la série
+            "value": number[] // Valeurs de la série
+        },
+        ... // Prochains objets...
+    ]
+}
+```
+
+> Les noms devraient être uniques et permettant facilement de représenter les données sur la charte
+
+## Exemple interactif
+
+<iframe
+  src={useAbsoluteUrl('playground/components/wc-chart-viewer-bars')}
+  style={{ width: '100%', height: '700px', border: 'none' }}
+></iframe>
+
+## API
+
+<Tabs items={['Graphique', 'JSON']}>
+  <Tab>
+    <ComponentProperties schema={{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "ChartViewer-Bars",
+  "required": [
+    "data"
+  ],
+  "properties": {
+    "mode": {
+      "type": "string",
+      "default": "horizontal",
+      "description": "Mode d'affichage du graphe : horizontal ou vertical",
+      "enum": [
+        "horizontal",
+        "vertical"
+      ]
+    },
+    "xAxisLabel": {
+      "type": "string",
+      "default": "",
+      "description": "Label de l'axe X"
+    },
+    "yAxisLabel": {
+      "type": "string",
+      "default": "",
+      "description": "Label de l'axe Y"
+    },
+    "labels": {
+      "type": "array",
+      "default": [],
+      "description": "Liste des labels",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}} />
+  </Tab>
+  <Tab>
+    ```json
+    {
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "ChartViewer-Bars",
+  "required": [
+    "data"
+  ],
+  "properties": {
+    "mode": {
+      "type": "string",
+      "default": "horizontal",
+      "description": "Mode d'affichage du graphe : horizontal ou vertical",
+      "enum": [
+        "horizontal",
+        "vertical"
+      ]
+    },
+    "xAxisLabel": {
+      "type": "string",
+      "default": "",
+      "description": "Label de l'axe X"
+    },
+    "yAxisLabel": {
+      "type": "string",
+      "default": "",
+      "description": "Label de l'axe Y"
+    },
+    "labels": {
+      "type": "array",
+      "default": [],
+      "description": "Liste des labels",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}
+    ```
+  </Tab>
+</Tabs>

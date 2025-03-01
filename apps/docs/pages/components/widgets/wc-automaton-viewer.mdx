@@ -1,0 +1,105 @@
+---
+title: AutomatonViewer
+description: Permets d'afficher un automate.
+---
+
+import { Tabs, Tab } from 'nextra/components'
+import { ComponentProperties } from '../../../components'
+import { useAbsoluteUrl } from '../../../hooks'
+
+# AutomatonViewer
+
+`wc-automaton-viewer`
+
+Permets d'afficher un automate.
+
+## Documentation
+
+La propriété `automaton` accepte 2 formats:
+
+### Format objet
+
+```typescript
+{
+    "alphabet": string[],
+    "initialStates": string[],
+    "acceptingStates": string[],
+    "states": string[],
+    "transitions": { fromState: string, toState: string, symbols: string[] }[]
+}
+```
+
+### Format chaîne
+
+```plaintext
+#states
+s0
+s1
+s2
+...
+#initials
+s0
+s1
+...
+#accepting
+s2
+#alphabet
+a
+b
+c
+...
+#transitions
+s0:a>s1
+s1:a,c>s1
+s1:b>s2
+```
+
+:::+ warning Grader
+Le format envoyé au grader est toujours le format objet.
+:::
+
+## Exemple interactif
+
+<iframe
+  src={useAbsoluteUrl('playground/components/wc-automaton-viewer')}
+  style={{ width: '100%', height: '700px', border: 'none' }}
+></iframe>
+
+## API
+
+<Tabs items={['Graphique', 'JSON']}>
+  <Tab>
+    <ComponentProperties schema={{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "required": [
+    "automaton"
+  ],
+  "properties": {
+    "automaton": {
+      "type": "string",
+      "default": "",
+      "description": "Automate à afficher."
+    }
+  }
+}} />
+  </Tab>
+  <Tab>
+    ```json
+    {
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "required": [
+    "automaton"
+  ],
+  "properties": {
+    "automaton": {
+      "type": "string",
+      "default": "",
+      "description": "Automate à afficher."
+    }
+  }
+}
+    ```
+  </Tab>
+</Tabs>

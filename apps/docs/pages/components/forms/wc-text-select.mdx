@@ -1,0 +1,207 @@
+---
+title: TextSelect
+description: Permets de sélectionner des parties d'un texte.
+---
+
+import { Tabs, Tab } from 'nextra/components'
+import { ComponentProperties } from '../../../components'
+import { useAbsoluteUrl } from '../../../hooks'
+
+# TextSelect
+
+`wc-text-select`
+
+Permets de sélectionner des parties d'un texte.
+
+## Documentation
+
+- **Fonctionnement du mode `free`.**
+  Chaque caractère de `text` est transformée en unité sélectionnable.
+  On sélectionne les unités en faisant glisser le curseur de sélection comme dans une sélection de texte usuelle.
+  Les selections ajouté au tableau `selections` ont la forme suivante.
+
+  ```typescript
+  {
+    "css"?: string, // Voir API CSS.
+    "content": string, // Le texte de la partie sélectionnée,
+    "position": [number, number] // [position du premier caracère, position du dernier caractère]
+  }
+  ```
+
+- **Fonctionnement du mode `units`.**
+  Les parties de `text` entre accolades sont transformées en unités sélectionnables. Les autres parties ne sont pas sélectionnables.
+  Quand on clique sur une unité sélectionnable, celle-ci est sélectionnée dans sa totalité et un objet
+
+- **Fonctionnement du mode `regex`.**
+  Seul les parties de `text` qui correspondent avec l'expression régulière `regex` sont transformée en unités sélectionnables.
+  Quand on clique sur une unité sélectionnable, celle-ci est sélectionnée dans sa totalité.
+
+Dans les modes `units` et `regex` chaque sélection est représentée par un objet de la forme suivante:
+
+```typescript
+{
+  "css"?: string, // Voir API CSS.
+  "content": string, // Le texte de la partie sélectionnée
+  "position": number // position de la selection par rapport aux autres
+}
+```
+
+> Dans les modes `units` et `free` vous pouvez inclure des balises HTML pour formatter votre texte.
+
+## Exemple interactif
+
+<iframe
+  src={useAbsoluteUrl('playground/components/wc-text-select')}
+  style={{ width: '100%', height: '700px', border: 'none' }}
+></iframe>
+
+## API
+
+<Tabs items={['Graphique', 'JSON']}>
+  <Tab>
+    <ComponentProperties schema={{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "TextSelect",
+  "required": [
+    "text",
+    "mode"
+  ],
+  "properties": {
+    "text": {
+      "type": "string",
+      "default": "",
+      "description": "Le texte à afficher."
+    },
+    "mode": {
+      "type": "string",
+      "enum": [
+        "free",
+        "units",
+        "regex"
+      ],
+      "default": "free",
+      "description": "Le mode de découpage."
+    },
+    "regex": {
+      "type": "string",
+      "description": "Une expression régulière (JavaScript) pour indiquer les parties selectionnables (si mode = regex).",
+      "default": ""
+    },
+    "selections": {
+      "type": "array",
+      "default": [],
+      "description": "La liste des éléments sélectionnés.",
+      "items": {
+        "type": "object",
+        "required": [
+          "position"
+        ],
+        "properties": {
+          "css": {
+            "type": "string",
+            "description": "Voir API CSS"
+          },
+          "content": {
+            "type": "string",
+            "description": "Texte de la sélection (sans les espaces de début et fin)."
+          },
+          "position": {
+            "type": [
+              "number",
+              "array"
+            ],
+            "description": "La position de la sélection",
+            "items": {
+              "type": "number",
+              "minItems": 2,
+              "maxItems": 2
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Désactive le composant."
+    }
+  }
+}} />
+  </Tab>
+  <Tab>
+    ```json
+    {
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "TextSelect",
+  "required": [
+    "text",
+    "mode"
+  ],
+  "properties": {
+    "text": {
+      "type": "string",
+      "default": "",
+      "description": "Le texte à afficher."
+    },
+    "mode": {
+      "type": "string",
+      "enum": [
+        "free",
+        "units",
+        "regex"
+      ],
+      "default": "free",
+      "description": "Le mode de découpage."
+    },
+    "regex": {
+      "type": "string",
+      "description": "Une expression régulière (JavaScript) pour indiquer les parties selectionnables (si mode = regex).",
+      "default": ""
+    },
+    "selections": {
+      "type": "array",
+      "default": [],
+      "description": "La liste des éléments sélectionnés.",
+      "items": {
+        "type": "object",
+        "required": [
+          "position"
+        ],
+        "properties": {
+          "css": {
+            "type": "string",
+            "description": "Voir API CSS"
+          },
+          "content": {
+            "type": "string",
+            "description": "Texte de la sélection (sans les espaces de début et fin)."
+          },
+          "position": {
+            "type": [
+              "number",
+              "array"
+            ],
+            "description": "La position de la sélection",
+            "items": {
+              "type": "number",
+              "minItems": 2,
+              "maxItems": 2
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Désactive le composant."
+    }
+  }
+}
+    ```
+  </Tab>
+</Tabs>
