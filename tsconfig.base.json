@@ -27,6 +27,7 @@
     "allowJs": true,
     "baseUrl": "./",
     "paths": {
+      "@platon/cli": ["tools/cli/src/index.ts"],
       "@platon/core/browser": ["libs/core/browser/src/index.ts"],
       "@platon/core/common": ["libs/core/common/src/index.ts"],
       "@platon/core/server": ["libs/core/server/src/index.ts"],
@@ -49,6 +50,7 @@
       "@platon/feature/notification/browser": ["libs/feature/notification/browser/src/index.ts"],
       "@platon/feature/notification/common": ["libs/feature/notification/common/src/index.ts"],
       "@platon/feature/notification/server": ["libs/feature/notification/server/src/index.ts"],
+      "@platon/feature/peer/browser": ["libs/feature/peer/browser/src/index.ts"],
       "@platon/feature/peer/common": ["libs/feature/peer/common/src/index.ts"],
       "@platon/feature/peer/server": ["libs/feature/peer/server/src/index.ts"],
       "@platon/feature/player/browser": ["libs/feature/player/browser/src/index.ts"],
@@ -63,8 +65,7 @@
       "@platon/feature/webcomponent": ["libs/feature/webcomponent/src/index.ts"],
       "@platon/graphql": [".graphql/types.ts"],
       "@platon/shared/server": ["libs/shared/server/src/index.ts"],
-      "@platon/shared/ui": ["libs/shared/ui/src/index.ts"],
-      "@platon/feature/peer/browser": ["libs/feature/peer/browser/src/index.ts"]
+      "@platon/shared/ui": ["libs/shared/ui/src/index.ts"]
     }
   },
   "include": ["./graphql/*.ts"],
