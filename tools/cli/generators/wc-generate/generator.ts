@@ -114,10 +114,31 @@ function createRegistryEntry(classify: string): string {
 }
 
 function addImportToSourceFile(sourceText: string, sourceFile: ts.SourceFile, importStatement: string): string {
+  // Extract the component name from import statement
+  const componentNameMatch = importStatement.match(/import \{ ([^}]+) \}/);
+  const componentName = componentNameMatch ? componentNameMatch[1] : null;
+
+  // Check if import already exists
+  let importExists = false;
+  if (componentName) {
+    ts.forEachChild(sourceFile, node => {
+      if (
+        ts.isImportDeclaration(node) &&
+        node.importClause &&
+        node.importClause.getText().includes(componentName)
+      ) {
+        importExists = true;
+      }
+    });
+  }
+
+  // If import already exists, return the original source text
+  if (importExists) {
+    return sourceText;
+  }
+
   // Find the position after the last import
   let lastImportEnd = 0;
-
-  // Loop through all top level nodes to find the last import declaration
   ts.forEachChild(sourceFile, node => {
     if (ts.isImportDeclaration(node)) {
       const end = node.getEnd();
@@ -140,7 +161,14 @@ function addEntryToArray(sourceText: string, arrayName: string, entry: string): 
     true
   );
 
+  // Extract component name from the entry
+  const bundleMatch = entry.match(/selector:([^,]+)/);
+  const bundleValue = bundleMatch ? bundleMatch[1].trim() : null;
+  const registryMatch = entry.match(/useValue:\s*([A-Za-z0-9_]+)ComponentDefinition/);
+  const registryValue = registryMatch ? registryMatch[1] : null;
+
   let arrayDecl: ts.ArrayLiteralExpression | null = null;
+  let entryAlreadyExists = false;
 
   // Find the array literal expression
   const findArray = (node: ts.Node): void => {
@@ -152,6 +180,22 @@ function addEntryToArray(sourceText: string, arrayName: string, entry: string): 
       ts.isArrayLiteralExpression(node.initializer)
     ) {
       arrayDecl = node.initializer;
+
+      // Check if entry already exists
+      if (registryValue && arrayDecl) {
+        const arrayText = arrayDecl.getText();
+        if (arrayText.includes(`${registryValue}ComponentDefinition`)) {
+          entryAlreadyExists = true;
+          console.log(`Entry for '${registryValue}ComponentDefinition' already exists in the registry, skipping...`);
+
+        }
+      } else if (bundleValue && arrayDecl) {
+        const arrayText = arrayDecl.getText();
+        if (arrayText.includes(bundleValue)) {
+          entryAlreadyExists = true;
+          console.log(`Entry for ${bundleValue} already exists in the registry, skipping...`);
+        }
+      }
       return;
     }
     ts.forEachChild(node, findArray);
@@ -159,8 +203,9 @@ function addEntryToArray(sourceText: string, arrayName: string, entry: string): 
 
   ts.forEachChild(sourceFile, findArray);
 
-  if (!arrayDecl) {
-    throw new Error(`Could not find ${arrayName} array in the registry file`);
+  // If array doesn't exist or entry already exists, return original source
+  if (!arrayDecl || entryAlreadyExists) {
+    return sourceText;
   }
 
   const array = arrayDecl as ts.ArrayLiteralExpression;

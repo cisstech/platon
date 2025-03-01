@@ -47,6 +47,8 @@ function findWebComponents(sourceDir: string): WebComponentInfo[] {
         });
       } else if (!fs.existsSync(definitionPath)) {
         console.warn(`Definition file not found for component ${componentDir}`);
+      } else if (!fs.existsSync(markdownPath)) {
+        console.warn(`Markdown file not found for component ${componentDir}, skipping...`);
       }
     });
   });
