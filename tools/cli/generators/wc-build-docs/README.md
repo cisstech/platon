@@ -20,35 +20,33 @@ The generator searches for component folders within the forms and widgets direct
 1. Extracts the component definition from the TypeScript file
 2. Reads the markdown documentation file
 3. Generates an MDX file with the following structure:
-   - Frontmatter with the component title
-   - Component name as a heading
-   - Component selector
+   - Frontmatter with the component title and description
+   - Component name as a heading with styled selector
    - Component description
    - Original markdown documentation
-   - Component schema as JSON
+   - Interactive property display using React components
+   - Raw JSON schema in a separate tab
 
-It also generates other files like index.mdx found from the [documentation](./templates//docs/) folder.
+## MDX Format & Features
 
-## MDX Format
+Each generated MDX file includes:
 
-Each generated MDX file has the following structure:
+- Frontmatter with title and description
+- Clear component name and selector display
+- Original documentation from .md files
+- Interactive property explorer with expandable nested properties
+- Tab-based view switching between interactive and raw schema views
 
-```mdx
----
-title: component name
----
+The interactive property display allows users to:
 
-# component name
+- See property descriptions, types, and default values
+- Expand nested object and array properties
+- Toggle between a user-friendly view and raw JSON
 
----
+## Integrating with Nextra
 
-component selector
+The generated documentation is designed to work with Nextra, using:
 
-component description
-
-content from original markdown documentation
-
-json schema from component definition
-```
-
-This format provides consistent documentation that includes both the original markdown content and technical details extracted from the component definition.
+- Nextra's Tab component for switching views
+- React components for interactive displays
+- Proper metadata for navigation and search

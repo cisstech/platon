@@ -7,8 +7,6 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { WcBuildDocsGeneratorSchema } from './schema';
 import { ComponentDefinitionParser } from './utils/component-definition-parser';
-import { MdxTemplateGenerator } from './utils/mdx-template-generator';
-import { getTemplateFiles } from './templates/files';
 
 interface WebComponentInfo {
   name: string;
@@ -60,11 +58,6 @@ export default async function(tree: Tree, options: WcBuildDocsGeneratorSchema) {
   const sourceDir = options.sourceDir;
   const outputDir = options.outputDir;
 
-  // Ensure output directory exists
-  if (!tree.exists(outputDir)) {
-    tree.write(`${outputDir}/.gitkeep`, '');
-  }
-
   // Find all webcomponent documentation files
   const webComponents = findWebComponents(sourceDir);
   console.log(`Found ${webComponents.length} webcomponent documentation files.`);
@@ -90,11 +83,6 @@ export default async function(tree: Tree, options: WcBuildDocsGeneratorSchema) {
       const typeOutputDir = path.join(outputDir, component.type);
       const templatesDir = path.join(__dirname, 'templates/component');
 
-      // Ensure the type directory exists
-      if (!tree.exists(typeOutputDir)) {
-        tree.write(`${typeOutputDir}/.gitkeep`, '');
-      }
-
       // Generate files using the NX generateFiles function
       generateFiles(
         tree,
@@ -105,44 +93,10 @@ export default async function(tree: Tree, options: WcBuildDocsGeneratorSchema) {
           documentation,
         }
       );
-
-      console.log(`Generated MDX documentation for ${component.name} at ${typeOutputDir}/${component.name}.mdx`);
     } catch (error) {
       console.error(`Error generating MDX for ${component.name}:`, error);
     }
   });
 
-
-  generateFiles(
-    tree,
-    path.join(__dirname, 'templates/docs'),
-    path.join(outputDir),
-    {}
-  );
-
   await formatFiles(tree);
-}
-
-function generateIndexContent(components: WebComponentInfo[]): string {
-  let content = `---
-title: Componants
----
-
-# Componants\n\n`;
-
-  // Group components by type
-  const formComponents = components.filter(c => c.type === 'forms');
-  const widgetComponents = components.filter(c => c.type === 'widgets');
-
-  content += '## Forms\n\n';
-  formComponents.forEach(component => {
-    content += `- [${component.name}](./components/forms/wc-${component.name}.mdx)\n`;
-  });
-
-  content += '\n## Widgets\n\n';
-  widgetComponents.forEach(component => {
-    content += `- [${component.name}](./components/widgets/wc-${component.name}.mdx)\n`;
-  });
-
-  return content;
 }

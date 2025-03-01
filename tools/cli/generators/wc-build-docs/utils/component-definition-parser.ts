@@ -69,16 +69,15 @@ function extractDefinitionFromObjectLiteral(objLiteral: ts.ObjectLiteralExpressi
     const propName = prop.name.getText();
     switch (propName) {
       case 'name':
-        result.name = prop.initializer?.text || '';
+        result.name =  extractObjectLiteralValue(prop.initializer);
         break;
       case 'selector':
-        result.selector = prop.initializer?.text || '';
+        result.selector = extractObjectLiteralValue(prop.initializer);
         break;
       case 'description':
-        result.description = prop.initializer?.text || '';
+        result.description = extractObjectLiteralValue(prop.initializer);
         break;
       case 'schema':
-        // For schema, we store the string representation to be parsed later
         result.schema = extractObjectLiteralValue(prop.initializer);
         break;
     }
@@ -97,7 +96,7 @@ function extractObjectLiteralValue(node: ts.Node): any {
     const obj: Record<string, any> = {};
     node.properties.forEach(prop => {
       if (ts.isPropertyAssignment(prop)) {
-        const propName = prop.name.getText().replace(/['"]/g, '');
+        const propName = prop.name.getText().replace(/['"`]/g, '');
         obj[propName] = extractObjectLiteralValue(prop.initializer);
       }
     });
@@ -105,13 +104,13 @@ function extractObjectLiteralValue(node: ts.Node): any {
   } else if (ts.isArrayLiteralExpression(node)) {
     return node.elements.map(element => extractObjectLiteralValue(element));
   } else if (ts.isStringLiteral(node)) {
-    return node.text;
+    return node.text.replace(/[\`]/g, '');
   } else if (ts.isNumericLiteral(node)) {
     return Number(node.text);
-  } else if (ts.isBooleanLiteral(node)) {
+  } else if (node.kind === ts.SyntaxKind.TrueKeyword || node.kind === ts.SyntaxKind.FalseKeyword) {
     return node.kind === ts.SyntaxKind.TrueKeyword;
   } else {
     // For other types, return the text representation
-    return node.getText();
+    return node.getText().replace(/[\`]/g, '');
   }
 }

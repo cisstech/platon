@@ -1,15 +1,35 @@
 ---
 title: <%- name %>
+description: <%- description %>
 ---
+
+import { Tabs, Tab } from 'nextra/components'
+import { ComponentProperties } from '../../../components'
+import { useAbsoluteUrl } from '../../../hooks'
 
 # <%- name %>
 
 `<%- selector %>`
 
-<%= description %>
+<%- description %>
+
+## Documentation
 
 <%- documentation %>
 
-```json
-<%- JSON.stringify(schema, null, 2) %>
-```
+## Exemple interactif
+
+<iframe src={useAbsoluteUrl("playground/components/<%- selector %>")} style={{ width: '100%', height: '700px', border: 'none' }}></iframe>
+
+## API
+
+<Tabs items={['Graphique', 'JSON']}>
+  <Tab>
+    <ComponentProperties schema={<%- JSON.stringify(schema, null, 2) %>} />
+  </Tab>
+  <Tab>
+    ```json
+    <%- JSON.stringify(schema, null, 2) %>
+    ```
+  </Tab>
+</Tabs>
