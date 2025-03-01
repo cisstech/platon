@@ -1,0 +1,15 @@
+---
+title: <%- name %>
+---
+
+# <%- name %>
+
+`<%- selector %>`
+
+<%= description %>
+
+<%- documentation %>
+
+```json
+<%- JSON.stringify(schema, null, 2) %>
+```
