@@ -627,7 +627,7 @@ yarn publish:github
 Documentation is hosted at :
 <https://cisstech.github.io/platon/docs>
 
-There is also a self hosted version of the documentation that runs alongside of the application thanks to nginx reverse proxy at `/docs/main`
+There is also a self hosted version of the documentation that runs alongside of the application thanks to nginx reverse proxy at `/docs`
 
 In development mode the documentation can be served using the following command :
 

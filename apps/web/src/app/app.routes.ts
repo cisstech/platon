@@ -29,7 +29,6 @@ export const appRoutes: Route[] = [
         './pages/playground/playground.routes'
       ),
   },
-
   {
     path: 'player',
     title: 'PLaTon - Player',
