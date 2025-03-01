@@ -1,0 +1,9 @@
+{
+  "generators": {
+    "wc-build-docs": {
+      "factory": "./generators/wc-build-docs/generator",
+      "schema": "./generators/wc-build-docs/schema.json",
+      "description": "This generator scans the webcomponent library folders for doc files and copies them to the documentation output directory."
+    }
+  }
+}
