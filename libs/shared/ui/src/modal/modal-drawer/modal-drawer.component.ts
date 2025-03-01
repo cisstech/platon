@@ -13,7 +13,6 @@ import {
   booleanAttribute,
   inject,
 } from '@angular/core'
-import { SafePipe } from '@cisstech/nge/pipes'
 import { NzDrawerModule, NzDrawerPlacement, NzDrawerSize } from 'ng-zorro-antd/drawer'
 
 @Component({
@@ -22,7 +21,7 @@ import { NzDrawerModule, NzDrawerPlacement, NzDrawerSize } from 'ng-zorro-antd/d
   templateUrl: './modal-drawer.component.html',
   styleUrls: ['./modal-drawer.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, NzDrawerModule, SafePipe],
+  imports: [CommonModule, NzDrawerModule],
 })
 export class UiModalDrawerComponent {
   private readonly breakpointObserver = inject(BreakpointObserver)
