@@ -13,10 +13,8 @@ export interface PickerState extends IWebComponent {
 export const PickerComponentDefinition = defineWebComponent({
   type: WebComponentTypes.form,
   name: 'Picker',
-  icon: 'assets/images/components/forms/picker/picker.svg',
   selector: 'wc-picker',
   description: 'Permets de choisir une proposition dans une liste.',
-  fullDescriptionUrl: 'assets/docs/components/forms/picker/picker.md',
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',

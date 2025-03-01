@@ -11,10 +11,8 @@ export interface DragDropState extends IWebComponent {
 export const DragDropComponentDefinition = defineWebComponent({
   type: WebComponentTypes.form,
   name: 'DragDrop',
-  icon: 'assets/images/components/forms/drag-drop/drag-drop.svg',
   selector: 'wc-drag-drop',
   description: 'Permets de glisser déposer un élément.',
-  fullDescriptionUrl: 'assets/docs/components/forms/drag-drop/drag-drop.md',
   // https://json-schema.org/understanding-json-schema/
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',

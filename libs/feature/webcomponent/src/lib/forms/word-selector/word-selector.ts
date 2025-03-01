@@ -9,10 +9,8 @@ export interface WordSelectorState extends IWebComponent {
 export const WordSelectorComponentDefinition = defineWebComponent({
   type: WebComponentTypes.form,
   name: 'WordSelector',
-  icon: 'assets/images/components/forms/word-selector/word-selector.svg',
   selector: 'wc-word-selector',
   description: 'Permet de sélectionner et organiser des mots pour former une phrase.',
-  fullDescriptionUrl: 'assets/docs/components/forms/word-selector/word-selector.md',
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',

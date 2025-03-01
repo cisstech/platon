@@ -18,10 +18,8 @@ export interface InputBoxState extends IWebComponent {
 export const InputBoxComponentDefinition = defineWebComponent({
   type: WebComponentTypes.form,
   name: 'InputBox',
-  icon: 'assets/images/components/forms/input-box/input-box.svg',
   selector: 'wc-input-box',
   description: 'Permets de saisir du texte dans un champ de saisi.',
-  fullDescriptionUrl: 'assets/docs/components/forms/input-box/input-box.md',
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',

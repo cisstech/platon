@@ -2,6 +2,8 @@
 title:  Introduction aux composants
 ---
 
+import { Callout } from 'nextra/components'
+import { FileTree } from 'nextra/components'
 import { useAbsoluteUrl } from '../../hooks'
 
 # Introduction aux composants
@@ -79,9 +81,9 @@ Vous pouvez explorer la liste des composants en utilisant la barre de navigation
 
 Si vous avez des compétences en développement web et que vous souhaitez contribuer au projet en créant de nouveaux composants ou en améliorant ceux qui existent déjà, votre aide est la bienvenue ! Voici les étapes à suivre :
 
-1.  **Créez une Copie du Projet (Fork) sur GitHub :**  Allez sur notre [dépôt GitHub](https://github.com/PlatonOrg/platon) et cliquez sur le bouton "Fork" pour créer votre propre copie du projet sur votre compte GitHub.
+1.  **Créez une copie du projet (Fork) sur GitHub :**  Allez sur notre dépôt GitHub et cliquez sur le bouton "Fork" pour créer votre propre copie du projet sur votre compte GitHub.
 
-2.  **Récupérez votre Copie sur Votre Ordinateur (Clone) :**  Ouvrez votre terminal (ou invite de commande) et utilisez la commande suivante pour télécharger votre copie du projet sur votre ordinateur :
+2.  **Récupérez votre copie sur votre ordinateur (Clone) :**  Ouvrez votre terminal (ou invite de commande) et utilisez la commande suivante pour télécharger votre copie du projet sur votre ordinateur :
 
     ```bash
     git clone https://github.com/[votre-utilisateur]/platon.git
@@ -96,41 +98,45 @@ Si vous avez des compétences en développement web et que vous souhaitez contri
     ```
     *(Remplacez `[ma-nouvelle-fonctionnalite]` par un nom clair pour ce que vous allez développer, par exemple `ajout-composant-image`)*
 
-4.  **Développez Votre Composant :**  Inspirez-vous des [composants existants](https://github.com/PlatonOrg/platon/tree/main/libs/feature/webcomponent/src/lib) pour créer le vôtre.  Respectez la structure et les conventions du projet.  Voici les étapes clés pour créer un nouveau composant (de manière simplifiée) :
+4.  **Développez votre Composant :**  Inspirez-vous des composants existants pour créer le vôtre.  Respectez la structure et les conventions du projet.  Voici les étapes clés pour créer un nouveau composant (de manière simplifiée) :
 
-    *   **Définissez les Données du Composant (Interface) :**  Créez un fichier de code (TypeScript) pour définir quelles données (propriétés) votre composant va utiliser.
+    *   **Définissez les données du composant (Interface) :**  Créez un fichier de code (`my-component.ts`) pour définir quelles données (propriétés) votre composant va utiliser.
 
         ```typescript
-        export interface MonComposantState extends IWebComponent {
+        export interface MyComponentState extends IWebComponent {
           // Définissez ici les propriétés de votre composant
         }
         ```
 
-    *   **Décrivez le Composant (Définition) :**  Utilisez une fonction spéciale (`defineWebComponent`) pour donner un nom et un type à votre composant (formulaire ou widget).
+        <Callout type="info">
+        Le fichier doit porter le même nom que le dossier du composant, car il sera utilisé pour générer la documentation.
+        </Callout>
+
+    *   **Décrivez le composant (Définition) :**  Utilisez la fonction (`defineWebComponent`) pour donner un nom et un type à votre composant (formulaire ou widget).
 
         ```typescript
         export const MonComposantDefinition = defineWebComponent({
           type: WebComponentTypes.form, // ou WebComponentTypes.widget
-          name: 'MonComposant',
+          name: 'MyComponent',
           // Autres détails de définition
         })
         ```
 
-    *   **Créez le Composant Visuel (Composant Angular) :**  Créez les fichiers nécessaires pour l'interface utilisateur de votre composant avec Angular (fichiers `.ts`, `.html` et `.scss`).
+    *   **Créez le composant visuel (Composant Angular) :**  Créez les fichiers nécessaires pour l'interface utilisateur de votre composant avec Angular (fichiers `.ts`, `.html` et `.scss`).
 
-        Votre composant doit respecter certaines règles techniques (implémenter une interface, utiliser un décorateur).  Vous pouvez aussi utiliser un service (`WebComponentService`) pour simplifier certaines interactions.
+        votre composant doit respecter certaines règles techniques (implémenter une interface, utiliser un décorateur).  Vous pouvez aussi utiliser un service (`WebComponentService`) pour simplifier certaines interactions.
 
         ```typescript
         @Component({
-          selector: 'wc-mon-composant', // Le nom pour utiliser votre composant (ex: <wc-mon-composant>)
-          templateUrl: 'mon-composant.component.html', // Le fichier HTML
-          styleUrls: ['mon-composant.component.scss'], // Le fichier CSS
+          selector: 'wc-my-component', // Le nom pour utiliser votre composant (ex: <wc-my-component>)
+          templateUrl: 'my-component.component.html', // Le fichier HTML
+          styleUrls: ['my-component.component.scss'], // Le fichier CSS
           changeDetection: ChangeDetectionStrategy.OnPush,
         })
         @WebComponent(MonComposantDefinition)
-        export class MonComposant implements WebComponentHooks<MonComposantState> {
-          @Input() state!: MonComposantState
-          @Output() stateChange = new EventEmitter<MonComposantState>()
+        export class MyComponent implements WebComponentHooks<MyComponentState> {
+          @Input() state!: MyComponentState
+          @Output() stateChange = new EventEmitter<MyComponentState>()
 
           // Ajoutez ici le code de votre composant
         }
@@ -140,27 +146,27 @@ Si vous avez des compétences en développement web et que vous souhaitez contri
 
         ```typescript
         @NgModule({
-          declarations: [MonComposant],
+          declarations: [MyComponent],
           imports: [CommonModule, FormsModule, MatRadioModule], // Modules nécessaires
-          exports: [MonComposant],
+          exports: [MyComponent],
         })
         export class MonComposantModule implements IDynamicModule {
-          component: Type<unknown> = MonComposant
+          component: Type<unknown> = MyComponent
         }
         ```
 
-    *   **Enregistrez Votre Composant :**  Ajoutez une ligne dans un fichier de configuration (`web-component-registry.ts`) pour que le système reconnaisse votre nouveau composant.
+    *   **Enregistrez votre component :**  Ajoutez une ligne dans un fichier de configuration (`web-component-registry.ts`) pour que le système reconnaisse votre nouveau composant.
 
         ```typescript
         // ... imports ...
-        import { MonComposantDefinition } from './[forms|widget]/mon-composant/mon-composant'
+        import { MonComposantDefinition } from './[forms|widget]/my-component/my-component'
 
         export const WEB_COMPONENTS_BUNDLES: NgeElementDef[] = [
           // ... autres composants ...
           {
-            selector: 'wc-mon-composant',
+            selector: 'wc-my-component',
             module: () =>
-              import(/* webpackChunkName: "wc-mon-composant" */ './[forms|widget]/mon-composant/mon-composant.module').then(
+              import(/* webpackChunkName: "wc-my-component" */ './[forms|widget]/my-component/my-component.module').then(
                 (m) => m.MonComposantModule
               ),
           },
@@ -176,25 +182,38 @@ Si vous avez des compétences en développement web et que vous souhaitez contri
         ]
         ```
 
-    *   **Rédigez la Documentation :**  Créez un fichier au format Markdown pour expliquer comment utiliser votre composant.
+    *   **Rédigez la documentation :**  Créez un fichier au format Markdown pour expliquer comment utiliser votre composant.
 
-5.  **Testez Votre Composant :**  Vérifiez que votre composant fonctionne correctement et ajoutez des tests si nécessaire pour garantir sa qualité.
+5. L'arborecence de votre composant doit ressembler à ceci :
 
-6.  **Enregistrez Vos Modifications (Commit) :**  Enregistrez vos changements avec un message clair expliquant ce que vous avez fait :
+  <FileTree>
+    <FileTree.Folder name="my-component" defaultOpen>
+      <FileTree.File name="my-component.component.html" />
+      <FileTree.File name="my-component.component.scss" />
+      <FileTree.File name="my-component.component.ts" />
+      <FileTree.File name="my-component.md" />
+      <FileTree.File name="my-component.module.ts" />
+      <FileTree.File name="my-component.ts" />
+    </FileTree.Folder>
+  </FileTree>
+
+6.  **Testez votre composant :**  Vérifiez que votre composant fonctionne correctement et ajoutez des tests si nécessaire pour garantir sa qualité.
+
+7.  **Enregistrez vos modifications (Commit) :**  Enregistrez vos changements avec un message clair expliquant ce que vous avez fait :
 
     ```bash
     git add .
-    git commit -m "feat(webcomponent): ajout du composant MonComposant"
+    git commit -m "feat(webcomponent): ajout du composant MyComponent"
     ```
 
-7.  **Envoyez Votre Branche (Push) :**  Envoyez votre branche avec vos modifications sur votre copie du projet (votre fork) sur GitHub :
+8.  **Envoyez votre branche (Push) :**  Envoyez votre branche avec vos modifications sur votre copie du projet (votre fork) sur GitHub :
 
     ```bash
     git push origin [ma-nouvelle-fonctionnalite]
     ```
 
-8.  **Proposez Vos Changements (Pull Request) :**  Allez sur le dépôt original du projet PLaTon sur GitHub et créez une "Pull Request" depuis votre branche.  Décrivez clairement les changements que vous avez apportés et pourquoi ils sont utiles.
+9.  **Proposez vos changements (Pull Request) :**  Allez sur le dépôt original du projet PLaTon sur GitHub et créez une "Pull Request" depuis votre branche.  Décrivez clairement les changements que vous avez apportés et pourquoi ils sont utiles.
 
-9.  **Besoin d'Aide ?**  Si vous avez des questions ou besoin d'aide, n'hésitez pas à ouvrir une "issue" (une demande d'aide) sur notre [dépôt GitHub](https://github.com/PlatonOrg/platon/issues) ou contactez-nous sur [Discord](https://discord.gg/GzgzRAAeP6).
+10.  **Besoin d'aide ?**  Si vous avez des questions ou besoin d'aide, n'hésitez pas à ouvrir une "issue" (une demande d'aide) sur notre [dépôt GitHub](https://github.com/PlatonOrg/platon/issues) ou contactez-nous sur [Discord](https://discord.gg/GzgzRAAeP6).
 
-Nous sommes ravis de recevoir vos contributions et de rendre les composants PLaTon encore meilleur ensemble !
+Nous sommes ravis de recevoir vos contributions et de rendre les composants PLaTon encore meilleur !

@@ -8,10 +8,8 @@ export interface GraphViewerState extends IWebComponent {
 export const GraphViewerComponentDefinition = defineWebComponent({
   type: WebComponentTypes.widget,
   name: 'GraphViewer',
-  icon: 'assets/images/components/widgets/graph-viewer/graph-viewer.svg',
   selector: 'wc-graph-viewer',
   description: "Permets d'afficher un graph.",
-  fullDescriptionUrl: 'assets/docs/components/widgets/graph-viewer/graph-viewer.md',
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',

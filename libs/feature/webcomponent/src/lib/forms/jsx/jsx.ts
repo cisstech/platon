@@ -16,10 +16,8 @@ export interface JsxState extends IWebComponent {
 export const JsxComponentDefinition = defineWebComponent({
   type: WebComponentTypes.form,
   name: 'Jsx',
-  icon: 'assets/images/components/forms/jsx/jsx.svg',
   selector: 'wc-jsx',
   description: 'Permets de dessiner, visualiser et interagir avec des figures géométriques.',
-  fullDescriptionUrl: 'assets/docs/components/forms/jsx/jsx.md',
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',

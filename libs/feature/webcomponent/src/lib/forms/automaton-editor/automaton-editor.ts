@@ -9,10 +9,8 @@ export interface AutomatonEditorState extends IWebComponent {
 export const AutomatonEditorComponentDefinition = defineWebComponent({
   type: WebComponentTypes.form,
   name: 'AutomatonEditor',
-  icon: 'assets/images/components/forms/automaton-editor/automaton-editor.svg',
   selector: 'wc-automaton-editor',
   description: "Permets de saisir un automate à l'aide d'un éditeur graphique.",
-  fullDescriptionUrl: 'assets/docs/components/forms/automaton-editor/automaton-editor.md',
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',

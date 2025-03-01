@@ -11,10 +11,8 @@ export interface ChartViewerRadarState extends IWebComponent, ChartViewerBase2 {
 export const ChartViewerRadarComponentDefinition = defineWebComponent({
   type: WebComponentTypes.widget,
   name: 'ChartViewer-Radar',
-  icon: 'assets/images/components/forms/code-editor/code-editor.svg',
   selector: 'wc-chart-viewer-radar',
   description: "Permets d'afficher une charte de type `radar` en fournissant des données",
-  fullDescriptionUrl: 'assets/docs/components/widgets/chart-viewer-radar/chart-viewer-radar.md',
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',

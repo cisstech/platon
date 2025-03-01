@@ -17,10 +17,8 @@ export interface TextSelectState extends IWebComponent {
 export const TextSelectComponentDefinition = defineWebComponent({
   type: WebComponentTypes.form,
   name: 'TextSelect',
-  icon: 'assets/images/components/forms/text-select/text-select.svg',
   selector: 'wc-text-select',
   description: "Permets de sélectionner des parties d'un texte.",
-  fullDescriptionUrl: 'assets/docs/components/forms/text-select/text-select.md',
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',

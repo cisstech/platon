@@ -16,10 +16,8 @@ export interface RadioGroupState extends IWebComponent {
 export const RadioGroupComponentDefinition = defineWebComponent({
   type: WebComponentTypes.form,
   name: 'RadioGroup',
-  icon: 'assets/images/components/forms/radio-group/radio-group.svg',
   selector: 'wc-radio-group',
   description: 'Permets de choisir une proposition parmi une liste.',
-  fullDescriptionUrl: 'assets/docs/components/forms/radio-group/radio-group.md',
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',

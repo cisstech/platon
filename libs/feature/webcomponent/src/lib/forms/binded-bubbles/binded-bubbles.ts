@@ -26,10 +26,8 @@ export interface BindedBubblesState extends IWebComponent {
 export const BindedBubblesComponentDefinition = defineWebComponent({
   type: WebComponentTypes.form,
   name: 'BindedBubbles',
-  icon: 'assets/images/components/forms/binded-bubbles/binded-bubbles.svg', //FIXME
   selector: 'wc-binded-bubbles',
   description: 'Permets de choisir 2 propositions parmi une liste.',
-  fullDescriptionUrl: 'assets/docs/components/forms/binded-bubbles/binded-bubbles.md',
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',

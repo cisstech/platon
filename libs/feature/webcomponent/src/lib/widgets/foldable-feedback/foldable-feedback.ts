@@ -18,10 +18,8 @@ export interface FoldableFeedbackState extends IWebComponent {
 export const FoldableFeedbackComponentDefinition = defineWebComponent({
   type: WebComponentTypes.widget,
   name: 'FoldableFeedback',
-  icon: 'assets/images/components/widgets/foldable-feedback/foldable-feedback.svg',
   selector: 'wc-foldable-feedback',
   description: "Permets d'afficher un feedback pliable.",
-  fullDescriptionUrl: 'assets/docs/components/widgets/foldable-feedback/foldable-feedback.md',
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',

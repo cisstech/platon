@@ -8,10 +8,8 @@ export interface PresenterState extends IWebComponent {
 export const PresenterComponentDefinition = defineWebComponent({
   type: WebComponentTypes.widget,
   name: 'Presenter',
-  icon: 'assets/images/components/widgets/presenter/presenter.svg',
   selector: 'wc-presenter',
   description: 'Permets de créer des presentations.',
-  fullDescriptionUrl: 'assets/docs/components/widgets/presenter/presenter.md',
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',

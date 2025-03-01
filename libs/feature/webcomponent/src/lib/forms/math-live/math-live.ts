@@ -17,10 +17,8 @@ export interface MathLiveState extends IWebComponent {
 export const MathLiveComponentDefinition = defineWebComponent({
   type: WebComponentTypes.form,
   name: 'MathLive',
-  icon: 'assets/images/components/forms/math-live/math-live.svg',
   selector: 'wc-math-live',
   description: 'Permets de saisir des expressions mathématiques en latex.',
-  fullDescriptionUrl: 'assets/docs/components/forms/math-live/math-live.md',
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',

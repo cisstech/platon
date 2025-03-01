@@ -20,10 +20,8 @@ export interface MatchListState extends IWebComponent {
 export const MatchListComponentDefinition = defineWebComponent({
   type: WebComponentTypes.form,
   name: 'MatchList',
-  icon: 'assets/images/components/forms/match-list/match-list.svg',
   selector: 'wc-match-list',
   description: `Permets de relier une liste de questions à une liste de réponses.`,
-  fullDescriptionUrl: 'assets/docs/components/forms/match-list/match-list.md',
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',

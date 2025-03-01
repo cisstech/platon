@@ -8,10 +8,8 @@ export interface AutomatonViewerState extends IWebComponent {
 export const AutomatonViewerComponentDefinition = defineWebComponent({
   type: WebComponentTypes.widget,
   name: 'AutomatonViewer',
-  icon: 'assets/images/components/widgets/automaton-viewer/automaton-viewer.svg',
   selector: 'wc-automaton-viewer',
   description: "Permets d'afficher un automate.",
-  fullDescriptionUrl: 'assets/docs/components/widgets/automaton-viewer/automaton-viewer.md',
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',

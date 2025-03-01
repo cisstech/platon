@@ -12,18 +12,18 @@ export enum WebComponentTypes {
  * Configuration metadata that determines how a component should be processed, instantiated, and used at runtime.
  */
 export interface WebComponentDefinition {
-  /** Icon representing the component */
-  icon: string
   /** Name of the component */
   name: string
+
   /** Type of the component */
   type: WebComponentTypes
+
   /** Html selector of the component. */
   selector: string
+
   /** Briefs description of the component. */
   description: string
-  /** Optional url to a markdown file containing the full description of the component. */
-  fullDescriptionUrl?: string
+
   /** JSONSchema describing the properties of the component. */
   schema: Omit<JSONSchema7, 'properties'> & {
     // change properties map value types
@@ -31,6 +31,8 @@ export interface WebComponentDefinition {
   }
   /** State to show in showcase section of the documentation page. */
   showcase?: Record<string, any>
+
+  [key: string]: unknown // allow deprecated properties to be kept for compatibility reasons with forked projects
 }
 
 /**

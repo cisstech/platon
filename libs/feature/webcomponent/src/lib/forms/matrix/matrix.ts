@@ -17,10 +17,8 @@ export interface MatrixState extends IWebComponent {
 export const MatrixComponentDefinition = defineWebComponent({
   type: WebComponentTypes.form,
   name: 'Matrix',
-  icon: 'assets/images/components/forms/matrix/matrix.svg',
   selector: 'wc-matrix',
   description: 'Permets de saisir une matrice.',
-  fullDescriptionUrl: 'assets/docs/components/forms/matrix/matrix.md',
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',

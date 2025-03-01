@@ -9,10 +9,8 @@ export interface ChartViewerPiesState extends IWebComponent, ChartViewerBase1 {
 export const ChartViewerPiesComponentDefinition = defineWebComponent({
   type: WebComponentTypes.widget,
   name: 'ChartViewer-Pies',
-  icon: 'assets/images/components/forms/code-editor/code-editor.svg',
   selector: 'wc-chart-viewer-pies',
   description: "Permets d'afficher une charte de type `camembert` en fournissant des données",
-  fullDescriptionUrl: 'assets/docs/components/widgets/chart-viewer-pies/chart-viewer-pies.md',
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',

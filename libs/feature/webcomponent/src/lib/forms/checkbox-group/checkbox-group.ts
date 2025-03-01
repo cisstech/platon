@@ -14,10 +14,8 @@ export interface CheckboxGroupState extends IWebComponent {
 export const CheckboxGroupComponentDefinition = defineWebComponent({
   type: WebComponentTypes.form,
   name: 'CheckboxGroup',
-  icon: 'assets/images/components/forms/checkbox-group/checkbox-group.svg',
   selector: 'wc-checkbox-group',
   description: 'Permets de choisir plusieurs propositions parmi une liste.',
-  fullDescriptionUrl: 'assets/docs/components/forms/checkbox-group/checkbox-group.md',
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',

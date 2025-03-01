@@ -14,10 +14,8 @@ export interface SortListState extends IWebComponent {
 export const SortListComponentDefinition = defineWebComponent({
   type: WebComponentTypes.form,
   name: 'SortList',
-  icon: 'assets/images/components/forms/sort-list/sort-list.svg',
   selector: 'wc-sort-list',
   description: 'Permets de créer une liste à ordonner.',
-  fullDescriptionUrl: 'assets/docs/components/forms/sort-list/sort-list.md',
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',

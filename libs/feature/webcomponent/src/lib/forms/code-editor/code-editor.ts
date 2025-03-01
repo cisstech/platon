@@ -12,7 +12,6 @@ export interface CodeEditorState extends IWebComponent {
 export const CodeEditorComponentDefinition = defineWebComponent({
   type: WebComponentTypes.form,
   name: 'CodeEditor',
-  icon: 'assets/images/components/forms/code-editor/code-editor.svg',
   selector: 'wc-code-editor',
   description: 'Un éditeur de code proposant de la coloration syntaxique.',
   schema: {
