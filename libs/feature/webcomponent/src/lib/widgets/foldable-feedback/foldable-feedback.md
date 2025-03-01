@@ -3,7 +3,7 @@ Pour créer des feedbacks pliables, vous devez remplir le tableau `content` avec
 
 _Les deux types d'éléments peuvent coexister dans le même tableau_
 
-<br>
+<br />
 
 - Pour créer des **feedbacks**, le format des éléments du tableau `content` est le suivant :
 
@@ -27,7 +27,7 @@ content = [
 _Si les champs `description`, `expected`, `obtained` ou `arguments` ne sont pas définis (ou égaux à `''`),
 ils ne s'afficheront pas dans le feedback_
 
-<br>
+<br />
 
 - Pour créer des **catégories** de feedbacks, le format des éléments du tableau `content` est le suivant :
 
@@ -50,4 +50,4 @@ content = [
 
 _Si le champs `description` n'est pas défini (ou égal à `''`), il ne s'affichera pas dans le feedback_
 
-<br>
+<br />
