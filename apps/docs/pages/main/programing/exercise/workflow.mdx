@@ -65,6 +65,13 @@ import random
 random.seed(seed)
 ```
 
+<Callout type="info">
+Le contenu de la clé `builder`, ainsi que les autres clés exécutées sur la sandbox comme (`grader`, `hint.next`), doit être syntaxiquement correct dans le langage choisi.
+En particulier, les syntaxes d'affectation de variables PLe comme `myvar = :wc-input-box` ou `myurl = @copyurl /path/to/file.txt` ne sont pas disponibles.
+Pour créer un composant depuis la sandbox, vous pouvez appeler la fonction globale `component(selector: string)` pré-définie dans la sandbox. Par exemple, `myinput = :wc-input-box` devient `myinput = component(':wc-input-box')`.
+Ensuite, vous pourrez initialiser les propriétés du composant en utilisant la syntaxe python ou javascript classique.
+</Callout>
+
 ## Affichage: Title, Statement et Form
 
 Pour afficher un exercice, il est nécessaire de déclarer 3 clés dans la configuration de l'exercice. La valeur de ces clés peut être du HTML et/ou du [Markdown](https://fr.wikipedia.org/wiki/Markdown).
