@@ -10,7 +10,8 @@ export const AutomatonEditorComponentDefinition = defineWebComponent({
   type: WebComponentTypes.form,
   name: 'AutomatonEditor',
   selector: 'wc-automaton-editor',
-  description: "Permets de saisir un automate à l'aide d'un éditeur graphique.",
+  description:
+    "Éditeur graphique interactif pour créer et manipuler des automates finis. Essentiel pour les exercices de théorie des langages formels, conception d'expressions régulières, modélisation de machines à états, vérification de propriétés de langages, ou pour l'apprentissage des concepts fondamentaux d'informatique théorique.",
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',

@@ -15,7 +15,8 @@ export const SortListComponentDefinition = defineWebComponent({
   type: WebComponentTypes.form,
   name: 'SortList',
   selector: 'wc-sort-list',
-  description: 'Permets de créer une liste à ordonner.',
+  description:
+    "Liste interactive d'éléments réorganisables par glisser-déposer. Parfait pour les exercices de séquençage, de tri logique, d'ordonnancement d'instructions ou d'événements, de classement chronologique, d'algorithmes de tri, ou toute activité pédagogique où l'ordre des éléments est significatif.",
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',

@@ -27,7 +27,8 @@ export const BindedBubblesComponentDefinition = defineWebComponent({
   type: WebComponentTypes.form,
   name: 'BindedBubbles',
   selector: 'wc-binded-bubbles',
-  description: 'Permets de choisir 2 propositions parmi une liste.',
+  description:
+    "Jeu interactif de correspondance entre paires d'éléments, présentés sous forme de bulles à sélectionner. Parfait pour les exercices ludiques d'apprentissage de vocabulaire, de correspondances entre termes et définitions, de relations entre concepts, ou pour des activités de mémorisation comme les jeux de cartes mémoire.",
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',

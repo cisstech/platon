@@ -9,7 +9,8 @@ export const AutomatonViewerComponentDefinition = defineWebComponent({
   type: WebComponentTypes.widget,
   name: 'AutomatonViewer',
   selector: 'wc-automaton-viewer',
-  description: "Permets d'afficher un automate.",
+  description:
+    "Visualiseur d'automates finis permettant d'afficher des machines à états avec leurs transitions. Essentiel pour les exercices d'informatique théorique, théorie des langages, expressions régulières, compilation, et pour illustrer des concepts comme les langages formels, les grammaires, ou les systèmes de transitions d'états.",
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',

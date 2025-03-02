@@ -9,7 +9,8 @@ export const PresenterComponentDefinition = defineWebComponent({
   type: WebComponentTypes.widget,
   name: 'Presenter',
   selector: 'wc-presenter',
-  description: 'Permets de créer des presentations.',
+  description:
+    'Outil de présentation avancé basé sur Reveal.js permettant de créer des diaporamas interactifs avec support pour Markdown, code avec coloration syntaxique, et formules mathématiques. Idéal pour les exercices nécessitant des explications visuelles progressives, des tutoriels étape par étape, ou des présentations de concepts théoriques complexes.',
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',

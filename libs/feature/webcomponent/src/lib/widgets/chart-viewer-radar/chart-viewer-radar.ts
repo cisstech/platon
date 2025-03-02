@@ -12,7 +12,8 @@ export const ChartViewerRadarComponentDefinition = defineWebComponent({
   type: WebComponentTypes.widget,
   name: 'ChartViewer-Radar',
   selector: 'wc-chart-viewer-radar',
-  description: "Permets d'afficher une charte de type `radar` en fournissant des données",
+  description:
+    "Graphique en forme de radar (ou toile d'araignée) permettant de visualiser des données multidimensionnelles. Parfait pour les exercices de comparaison de caractéristiques multiples, l'évaluation de compétences, l'analyse de performances selon différents critères, ou l'illustration de concepts statistiques avec représentation visuelle de données complexes.",
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',

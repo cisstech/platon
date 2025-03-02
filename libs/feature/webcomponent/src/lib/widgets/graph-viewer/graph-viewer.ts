@@ -9,7 +9,8 @@ export const GraphViewerComponentDefinition = defineWebComponent({
   type: WebComponentTypes.widget,
   name: 'GraphViewer',
   selector: 'wc-graph-viewer',
-  description: "Permets d'afficher un graph.",
+  description:
+    "Visualiseur de graphes utilisant le format DOT pour représenter des structures de données complexes. Particulièrement utile pour les exercices d'algorithmique, de théorie des graphes, de structures de données, ou tout contexte nécessitant la visualisation de relations entre objets comme des arbres généalogiques ou des réseaux.",
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',

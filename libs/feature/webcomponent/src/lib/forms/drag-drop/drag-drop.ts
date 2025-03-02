@@ -12,7 +12,8 @@ export const DragDropComponentDefinition = defineWebComponent({
   type: WebComponentTypes.form,
   name: 'DragDrop',
   selector: 'wc-drag-drop',
-  description: 'Permets de glisser déposer un élément.',
+  description:
+    "Composant permettant de créer des éléments déplaçables par glisser-déposer. Parfait pour les exercices de tri et classement, reconstitution de séquences, placement d'éléments sur une carte ou un schéma, ordonner des phrases, ou organiser des concepts dans un diagramme.",
   // https://json-schema.org/understanding-json-schema/
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',

@@ -17,7 +17,8 @@ export const RadioGroupComponentDefinition = defineWebComponent({
   type: WebComponentTypes.form,
   name: 'RadioGroup',
   selector: 'wc-radio-group',
-  description: 'Permets de choisir une proposition parmi une liste.',
+  description:
+    "Ensemble de boutons radio pour sélection unique parmi une liste d'options. Essentiel pour les questionnaires à choix unique, les QCM, les sondages, les tests de connaissance, ou tout exercice nécessitant une sélection exclusive parmi plusieurs possibilités avec capacité d'afficher du contenu riche (images, formules) dans les options.",
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',

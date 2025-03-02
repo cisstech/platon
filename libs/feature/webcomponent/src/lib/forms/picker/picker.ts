@@ -14,7 +14,8 @@ export const PickerComponentDefinition = defineWebComponent({
   type: WebComponentTypes.form,
   name: 'Picker',
   selector: 'wc-picker',
-  description: 'Permets de choisir une proposition dans une liste.',
+  description:
+    "Menu déroulant permettant de sélectionner une valeur parmi une liste prédéfinie. Idéal pour les exercices à choix limité, les sélections de paramètres, de catégories, ou de valeurs spécifiques dans un ensemble fermé, offrant une interface compacte pour les questions où l'espace est limité.",
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',

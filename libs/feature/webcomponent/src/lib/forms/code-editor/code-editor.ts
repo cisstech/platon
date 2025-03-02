@@ -13,7 +13,8 @@ export const CodeEditorComponentDefinition = defineWebComponent({
   type: WebComponentTypes.form,
   name: 'CodeEditor',
   selector: 'wc-code-editor',
-  description: 'Un éditeur de code proposant de la coloration syntaxique.',
+  description:
+    "Éditeur de code complet avec coloration syntaxique pour multiples langages de programmation, indentation automatique et suggestions. Adapté aux exercices d'informatique comme la programmation, le débogage, la complétion de code, les algorithmes, ou l'analyse de code avec une interface professionnelle similaire aux IDE modernes.",
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',

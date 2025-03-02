@@ -19,7 +19,8 @@ export const InputBoxComponentDefinition = defineWebComponent({
   type: WebComponentTypes.form,
   name: 'InputBox',
   selector: 'wc-input-box',
-  description: 'Permets de saisir du texte dans un champ de saisi.',
+  description:
+    "Champ de saisie polyvalent supportant texte, nombres et zones de texte avec fonctionnalités avancées comme l'autocomplétion et les caractères spéciaux. Utilisable pour de nombreux types d'exercices comme les réponses courtes, calculs numériques, entrée de mots ou phrases, saisie de code, réponses à format spécifique (dates, formules simples).",
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',

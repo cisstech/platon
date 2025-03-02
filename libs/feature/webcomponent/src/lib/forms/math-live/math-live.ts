@@ -18,7 +18,8 @@ export const MathLiveComponentDefinition = defineWebComponent({
   type: WebComponentTypes.form,
   name: 'MathLive',
   selector: 'wc-math-live',
-  description: 'Permets de saisir des expressions mathématiques en latex.',
+  description:
+    'Composant avancé pour saisir des expressions mathématiques en notation LaTeX avec rendu visuel en temps réel. Particulièrement adapté aux exercices de calcul différentiel et intégral, algèbre, équations, fractions, racines et expressions complexes où la précision de la notation est essentielle.',
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',

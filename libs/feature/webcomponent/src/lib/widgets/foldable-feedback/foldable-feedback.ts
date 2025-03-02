@@ -19,7 +19,8 @@ export const FoldableFeedbackComponentDefinition = defineWebComponent({
   type: WebComponentTypes.widget,
   name: 'FoldableFeedback',
   selector: 'wc-foldable-feedback',
-  description: "Permets d'afficher un feedback pliable.",
+  description:
+    "Système avancé d'affichage de retours détaillés et hiérarchisés avec des sections pliables/dépliables. Particulièrement adapté aux exercices de programmation pour montrer les résultats de tests unitaires, aux analyses multicritères, ou toute évaluation nécessitant plusieurs niveaux de détail avec comparaison entre valeurs attendues et obtenues.",
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',

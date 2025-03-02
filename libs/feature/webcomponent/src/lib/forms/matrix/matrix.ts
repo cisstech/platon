@@ -18,7 +18,8 @@ export const MatrixComponentDefinition = defineWebComponent({
   type: WebComponentTypes.form,
   name: 'Matrix',
   selector: 'wc-matrix',
-  description: 'Permets de saisir une matrice.',
+  description:
+    "Composant permettant de saisir ou afficher une matrice de valeurs. Idéal pour les exercices de calcul matriciel, résolution de systèmes d'équations linéaires, transformations géométriques ou tout problème nécessitant l'entrée ou l'affichage de données tabulaires.",
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',

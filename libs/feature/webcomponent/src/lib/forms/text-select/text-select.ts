@@ -18,7 +18,8 @@ export const TextSelectComponentDefinition = defineWebComponent({
   type: WebComponentTypes.form,
   name: 'TextSelect',
   selector: 'wc-text-select',
-  description: "Permets de sélectionner des parties d'un texte.",
+  description:
+    "Outil d'analyse textuelle permettant la sélection de segments spécifiques dans un texte. Parfaitement adapté aux exercices d'analyse grammaticale, d'identification de structures syntaxiques, de repérage d'éléments littéraires, de correction de textes, ou pour tout type d'exercice nécessitant une interaction précise avec des parties d'un texte.",
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',
