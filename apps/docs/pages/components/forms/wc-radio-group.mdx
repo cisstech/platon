@@ -15,18 +15,50 @@ Ensemble de boutons radio pour sélection unique parmi une liste d'options. Esse
 
 ## Documentation
 
-Le format des éléments du tableau `items` est le suivant:
+Le composant RadioGroup permet de créer des questions à choix unique où l'apprenant doit sélectionner une seule option parmi plusieurs propositions. C'est l'équivalent numérique des questionnaires à choix multiples traditionnels avec boutons radio.
 
-```typescript
-{
-    "css"?: string, // Voir API CSS.
-    "content": string, // Contenu en markdown.
-}
-```
+### Structure des données
 
-> Si vous voulez définir uniquement la propriété `content` d'un des éléments du tableau,
-> vous pouvez utiliser une chaine de caractère au lieu d'un objet, dans ce cas la propriété
-> `css` prendra sa valeur par défaut.
+Les options de votre groupe de boutons radio sont définies dans le tableau `items`. Chaque élément peut être spécifié de deux manières:
+
+1. **Format simplifié**: Une simple chaîne de caractères représentant le contenu de l'option
+
+   ```js
+   'Réponse possible'
+   ```
+
+2. **Format détaillé**: Un objet avec des propriétés configurables
+   ```js
+   {
+     "content": "Réponse possible avec **mise en forme** ou $formules$",  // Supporte le markdown
+     "css": "highlight bold"                                            // Classes CSS optionnelles
+   }
+   ```
+
+### Gestion de la sélection
+
+La propriété `selection` détermine quelle option est sélectionnée. Sa valeur correspond à la position (index) de l'élément dans le tableau `items`, commençant à 0. Par exemple, pour présélectionner la deuxième option, utilisez `selection: "1"`.
+
+> Remarque: Même si l'index est un nombre, la valeur de `selection` doit être une chaîne de caractères.
+
+### Disposition des options
+
+Par défaut, les options sont disposées verticalement, les unes sous les autres. Pour une présentation horizontale (utile pour les options courtes ou quand l'espace est limité), activez la propriété `horizontal: true`.
+
+### Validation automatique
+
+Activez la validation automatique avec `autoValidation: true` pour que l'exercice soit automatiquement soumis dès qu'une option est sélectionnée. Cette fonctionnalité est particulièrement utile pour:
+
+- Les exercices rapides d'auto-évaluation
+- Les sondages instantanés
+- Les questions simples ne nécessitant pas de réflexion prolongée
+
+### Conseils d'utilisation
+
+- Limitez le nombre d'options à 5-7 maximum pour une meilleure lisibilité
+- Pour les options longues ou contenant des médias, privilégiez l'affichage vertical
+- Utilisez le markdown pour enrichir vos options avec des images, des formules ou du texte formaté
+- Si vous avez besoin de sélections multiples, utilisez plutôt le composant CheckboxGroup
 
 ## Exemple interactif
 

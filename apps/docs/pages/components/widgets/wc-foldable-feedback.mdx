@@ -15,59 +15,78 @@ Système avancé d'affichage de retours détaillés et hiérarchisés avec des s
 
 ## Documentation
 
-Pour créer des feedbacks pliables, vous devez remplir le tableau `content` avec des
-**feedbacks** et des **catégories** de feedbacks :
+Le composant FoldableFeedback permet d'afficher des retours structurés et hiérarchiques que les apprenants peuvent explorer en dépliant ou repliant les sections. Particulièrement adapté aux exercices complexes nécessitant des retours détaillés sur plusieurs niveaux.
 
-_Les deux types d'éléments peuvent coexister dans le même tableau_
+### Structure des données
 
-<br />
+Le composant organise les retours selon deux types d'éléments : les **feedbacks individuels** et les **catégories** (qui peuvent contenir d'autres feedbacks).
 
-- Pour créer des **feedbacks**, le format des éléments du tableau `content` est le suivant :
+#### Feedbacks individuels
+
+Pour afficher un retour simple sur un test ou une évaluation :
 
 ```typescript
-content = [
-  {
-    name: string,        // Nom du test effectué
-    description: string, // Description du test effectué, default: ''
-    expected: string,    // Valeur attendue par le professeur, default: ''
-    obtained: string,    // Valeur obtenue par l'étudiant, default: ''
-    arguments: string,   // Arguments passés à l'execution, default: ''
-    display: boolean,    // Affichage (le feedback est-il déplié ?), default: false
-    type: 'success' | 'info' | 'warning' | 'error', // Type de feedback, default: info
-  },
-
-  ...
-
-]
+{
+  name: "Vérification de la syntaxe",     // Titre du feedback (obligatoire)
+  description: "Analyse du code source",  // Description détaillée (optionnel)
+  expected: "function main() { ... }",    // Résultat attendu (optionnel)
+  obtained: "fonction main() { ... }",    // Résultat obtenu (optionnel)
+  arguments: "--strict --warnings",       // Arguments éventuels (optionnel)
+  type: "error",                          // Type visuel : success, info, warning, error
+  display: false                          // État initial : replié (false) ou déplié (true)
+}
 ```
 
-_Si les champs `description`, `expected`, `obtained` ou `arguments` ne sont pas définis (ou égaux à `''`),
-ils ne s'afficheront pas dans le feedback_
+#### Catégories de feedbacks
 
-<br />
+Pour regrouper plusieurs retours dans une section pliable :
 
-- Pour créer des **catégories** de feedbacks, le format des éléments du tableau `content` est le suivant :
+```typescript
+{
+  name: "Tests unitaires",                // Titre de la catégorie (obligatoire)
+  description: "Résultats détaillés",     // Description de la catégorie (optionnel)
+  type: "warning",                        // Type visuel de la catégorie
+  display: false,                         // État initial : replié ou déplié
+  feedbacks: [                            // Liste des feedbacks enfants
+    // Feedbacks individuels ou sous-catégories
+  ]
+}
+```
+
+### Composition du contenu
+
+La propriété `content` attend un tableau qui peut contenir un mélange de feedbacks individuels et de catégories :
 
 ```typescript
 content = [
+  // Feedback simple
   {
-    name: string,        // Nom de la catégorie
-    description: string, // Description de la catégorie, default: ''
-    display: boolean,    // Affichage (la catégorie est-elle dépliée ?), default: false
-    type: 'success' | 'info' | 'warning' | 'error', // Type de catégorie, default: info
+    name: 'Test 1',
+    expected: 'Hello World',
+    obtained: 'Hello World!',
+    type: 'warning',
+  },
+
+  // Catégorie avec sous-feedbacks
+  {
+    name: 'Tests de performance',
+    type: 'info',
     feedbacks: [
-      // Feedbacks enfants de la catégorie. Tableau d'objets du même format que ceux de content
-    ]
+      { name: "Temps d'exécution", expected: '<100ms', obtained: '95ms', type: 'success' },
+      { name: 'Utilisation mémoire', expected: '<5MB', obtained: '7MB', type: 'warning' },
+    ],
   },
-
-  ...
-
 ]
 ```
 
-_Si le champs `description` n'est pas défini (ou égal à `''`), il ne s'affichera pas dans le feedback_
+### Comportement visuel
 
-<br />
+- Les éléments s'affichent avec un code couleur intuitif (succès en vert, erreur en rouge, etc.)
+- Les parties repliées peuvent être dépliées par un simple clic
+- Les champs vides (description, expected, etc.) ne sont pas affichés
+- Les catégories peuvent être imbriquées sans limitation de profondeur
+
+Ce composant est particulièrement utile pour les exercices de programmation, les évaluations multicritères ou toute situation nécessitant une analyse détaillée avec plusieurs niveaux d'information.
 
 ## Exemple interactif
 

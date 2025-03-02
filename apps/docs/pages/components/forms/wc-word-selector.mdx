@@ -15,60 +15,63 @@ Interface interactive pour sélectionner et organiser des mots afin de construir
 
 ## Documentation
 
-Le composant WordSelector permet de sélectionner des mots depuis une liste initiale et de les organiser
-dans un ordre précis pour former une phrase. Les mots sélectionnés sont mis à jour dans la propriété
-`selectedWords`, tandis que la liste des mots restants est conservée dans `words`.
+Le composant WordSelector est un outil interactif permettant aux apprenants de sélectionner et d'organiser des mots pour construire des phrases ou expressions. Idéal pour les exercices linguistiques comme l'apprentissage de langues étrangères, la syntaxe ou les exercices de logique séquentielle.
 
-- **words** :
-  La liste initiale de mots disponibles pour la sélection.
+### Propriétés principales
 
-- **selectedWords** :
-  Une liste de mots que l'utilisateur a sélectionnés. Les mots sont ajoutés dans l'ordre de sélection.
+- **words**: Tableau contenant les mots disponibles pour la sélection. Ces mots sont affichés dans la zone inférieure du composant et peuvent être cliqués pour être ajoutés à la phrase en construction.
 
-## Exemple d'utilisation
+- **selectedWords**: Tableau contenant les mots déjà sélectionnés par l'utilisateur, dans leur ordre de sélection. Ces mots apparaissent dans la zone supérieure du composant.
 
-Voici un exemple d'utilisation du composant :
+### Fonctionnement
 
-### Propriété `words`
+Lorsqu'un apprenant utilise ce composant:
 
-La propriété `words` représente la liste initiale des mots disponibles que l'utilisateur peut sélectionner.
-Vous pouvez définir n'importe quel tableau de mots sous forme de chaînes de caractères.
+1. Il visualise deux zones distinctes:
 
-### Propriété `selectedWords`
+   - En haut: les mots déjà sélectionnés formant la phrase en construction
+   - En bas: les mots encore disponibles pour la sélection
 
-La propriété `selectedWords` contient les mots que l'utilisateur a sélectionnés pour former une phrase.
-Ces mots sont mis à jour dynamiquement lorsque l'utilisateur interagit avec le composant.
+2. En cliquant sur un mot de la zone inférieure, celui-ci:
 
-## Comment ça marche ?
+   - Est retiré de la liste des mots disponibles
+   - Est ajouté à la fin de la liste des mots sélectionnés
+
+3. En cliquant sur un mot de la zone supérieure, celui-ci:
+   - Est retiré de la liste des mots sélectionnés
+   - Est replacé dans la liste des mots disponibles
 
 ```text
-┌─────────── Zone des mots choisis ──────────┐
+┌─────────── Phrase en construction ─────────┐
 │                                            │
 │    [Le] [chat] [dort] [tranquillement]     │
 │                                            │
 ├─────────── Mots disponibles  ──────────────┤
 │                                            │
-│       [sur] [tapis] [doucement]            │
+│       [sur] [le] [tapis] [doucement]       │
 │                                            │
 └────────────────────────────────────────────┘
 ```
 
-## Exemple rapide
+### Exemple d'utilisation
+
+Voici comment évolue l'état du composant lors d'une interaction typique:
 
 ```typescript
 // État initial
 {
-  words: ["chat", "dort", "Le", "tapis", "sur", "tranquillement", "doucement"], // Mots disponibles
-  selectedWords: [],                       // Mots choisis
+  words: ["chat", "dort", "Le", "tapis", "sur", "tranquillement", "doucement"],
+  selectedWords: []
 }
 
-// Après avoir joué
+// Après sélection de quelques mots
 {
-  words: ["tapis", "sur", "doucement"],                       // Il reste "tapis"
-  selectedWords: ["le", "chat", "dort", "tranquillement"],  // La phrase en construction
-  isFilled: true                          // Oui, on a fait une sélection !
+  words: ["tapis", "sur", "doucement"],
+  selectedWords: ["Le", "chat", "dort", "tranquillement"]
 }
 ```
+
+Ce composant permet de créer des exercices variés comme la construction de phrases grammaticalement correctes, la mise en ordre de séquences logiques, ou l'apprentissage du vocabulaire dans un contexte syntaxique.
 
 ## Exemple interactif
 

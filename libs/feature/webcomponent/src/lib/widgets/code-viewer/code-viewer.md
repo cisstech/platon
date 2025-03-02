@@ -1,0 +1,72 @@
+Le composant CodeViewer permet d'afficher du code source avec une mise en forme professionnelle incluant la coloration syntaxique, la numérotation des lignes et le surlignage des portions importantes. Idéal pour présenter des exemples, analyser des algorithmes ou expliquer des concepts de programmation.
+
+### Propriétés principales
+
+- **code**: Le code source à afficher.
+
+- **language**: Le langage de programmation pour la coloration syntaxique (ex: "python", "java", "javascript", "c", "cpp", etc.). Utiliser "plaintext" pour du texte sans coloration.
+
+- **lines**: Option pour contrôler l'affichage des numéros de ligne. Valeurs possibles :
+
+  - Vide : pas de numérotation
+  - "1" : numérotation commençant à 1
+  - "5" : numérotation commençant à 5
+  - etc.
+
+- **highlights**: Lignes à mettre en évidence. Format de spécification :
+  - Lignes individuelles : "1 3 5"
+  - Plages de lignes : "1-3 5-7"
+  - Combinaisons : "1 3-5 8"
+
+### Exemples d'utilisation
+
+#### Exemple Python avec surlignage
+
+```typescript
+{
+  language: "python",
+  lines: "1",
+  highlights: "2 4-5",
+  code: `
+def calcul_moyenne(notes):
+    somme = 0
+    for note in notes:
+        somme += note
+    return somme / len(notes)
+
+# Exemple d'utilisation
+resultats = [12, 15, 9, 14]
+moyenne = calcul_moyenne(resultats)
+print(f"La moyenne est de {moyenne}")
+  `
+}
+```
+
+Dans cet exemple, la ligne 2 (déclaration de variable) et les lignes 4-5 (calcul et retour) seront surlignées.
+
+#### Exemple HTML sans numérotation
+
+```typescript
+{
+  language: "html",
+  code: `
+<div class="container">
+  <h1>Mon titre</h1>
+  <p>Un paragraphe avec du <strong>texte important</strong>.</p>
+</div>
+  `
+}
+```
+
+### Applications pédagogiques
+
+Le CodeViewer est particulièrement utile pour :
+
+- Présenter des extraits de code à analyser
+- Illustrer des patrons de conception
+- Mettre en évidence les parties importantes d'un algorithme
+- Comparer différentes implémentations
+- Montrer des exemples de bonnes pratiques
+- Identifier des erreurs dans un exercice de débogage
+
+La coloration syntaxique et le surlignage permettent de focaliser l'attention de l'apprenant sur les concepts ou instructions clés, facilitant ainsi la compréhension et la mémorisation.

@@ -15,51 +15,72 @@ Champ de saisie polyvalent supportant texte, nombres et zones de texte avec fonc
 
 ## Documentation
 
-### Comportement
+Le composant InputBox est un outil de saisie polyvalent qui s'adapte à différents besoins pédagogiques, depuis la simple réponse textuelle jusqu'à la saisie de données numériques ou multiformes.
 
-Le comportement de ce composant dépend de la valeur de sa propriété `type`.
+### Modes de saisie
 
-- `number`:
-  Dans ce mode, le composant garanti que la valeur saisie est du type numérique,
-  toute autre valeur est converti en 0 y compris la chaine vide.
-  Dans un grader le type de `value` est donc soit un `int` soit un `float` (pas besoin de faire un cast).
+Le composant propose trois modes distincts, définis par la propriété `type`:
 
-  **Important**:
-  Si la valeur saisie est `0.0` alors elle sera convertie en entier `0` ([comportement du JavaScript](https://stackoverflow.com/a/41304142)).
+#### Mode texte (`type: "text"`)
 
-- `text`:
-  Dans ce mode, le logique de la validation de saisie est déléguer au grader de l'exercice.
-  Le grader reçoit donc la chaine de caractère saisi en entier (chaine vide par défaut).
-  Vous devez donc gérer vous-même le cas de la chaine vide et faire un cast si besoin.
+Mode standard pour la saisie de chaînes de caractères sur une seule ligne. Dans ce mode:
 
-- `textarea`: Le même comportement que pour le type `text` sauf que la chaine peut être saisi sur plusieurs lignes.
+- La valeur saisie est transmise telle quelle au script d'évaluation
+- Aucune validation particulière n'est effectuée par le composant
+- La gestion des cas particuliers (chaîne vide, format spécifique) doit être implémentée dans votre grader
 
-### La propriété `prefix`
+#### Mode numérique (`type: "number"`)
 
-La propriété `prefix` vous permet d'afficher une icône à gauche
-du champ de saisi en utilisant la syntaxe suivante:
+Spécialisé pour la saisie de valeurs numériques. Dans ce mode:
 
-`type nom`
+- Seuls les caractères numériques sont acceptés
+- Une chaîne vide ou invalide est automatiquement convertie en `0`
+- La valeur est transmise au grader sous forme de nombre (entier ou décimal)
 
-Dans cette syntaxe, `type` fait référence à une librairie d'icône (ex: fontawesome) et `name` au nom d'une icône dans cette librairie.
+> **Remarque importante**: Si l'apprenant saisit un nombre décimal sans partie fractionnaire (ex: `5.0`), celui-ci sera automatiquement converti en entier (`5`) conformément au comportement standard de JavaScript.
 
-Exemple:
+#### Mode texte multiligne (`type: "textarea"`)
 
-`fontawesome address-book`.
+Idéal pour les réponses plus longues ou structurées sur plusieurs lignes. Ce mode se comporte comme le mode texte mais permet les retours à la ligne.
 
-@fontawesome address-book@
+### Fonctionnalités avancées
 
-Vous pouvez spécifier une couleur pour votre icône en ajoutant `color=C` où `C` est une couleur en héxadécimal sans le `#`.
+#### Icônes interactives
 
-Exemple:
+Pour enrichir l'expérience utilisateur, vous pouvez ajouter une icône à gauche du champ de saisie grâce à la propriété `prefix`. La syntaxe est la suivante:
 
-`fontawesome address-book color=FF0000`.
+`type nom [color=CODE_COULEUR]`
 
-@fontawesome address-book color=FF0000@
+Où:
 
-La liste complète des types et noms supportés sont spécifiés sur le site [https://icongr.am](https://icongr.am).
+- `type` correspond à une bibliothèque d'icônes (ex: fontawesome, clarity, material)
+- `nom` est l'identifiant de l'icône dans cette bibliothèque
+- `color=CODE_COULEUR` est un paramètre optionnel pour définir la couleur (format hexadécimal sans #)
 
-### La propriété `specialCharacters`
+**Exemples**:
+
+- `fontawesome address-book` affiche une icône d'annuaire
+- `clarity happy-face color=FF0000` affiche un visage souriant en rouge
+
+La plateforme [icongr.am](https://icongr.am) référence toutes les bibliothèques et icônes disponibles.
+
+#### Saisie assistée
+
+Pour aider l'apprenant, plusieurs fonctionnalités peuvent être activées:
+
+1. **Autocomplétion** - Proposez des suggestions pendant la saisie:
+
+   ```js
+   completion: ['France', 'Espagne', 'Italie', 'Allemagne']
+   ```
+
+2. **Validation automatique** - Déclenchez automatiquement la validation quand l'apprenant appuie sur Entrée:
+
+```typescript
+autoValidation: true
+```
+
+#### La propriété `specialCharacters`
 
 La propriété `specialCharacters` vous permet de définir un clavier virtuel avec des caractères spéciaux.
 
@@ -99,6 +120,15 @@ Enfin, vous pouvez utiliser `string[]` si vous n'avez besoin que d'une seule lig
 ```py
 specialCharacters = ['😁', '​😅', '​🤣', '​😂', '​🙂​', ...]
 ```
+
+#### Apparence personnalisable
+
+Adaptez le style visuel du champ à vos besoins:
+
+- `appearance`: Choisissez entre outline (bordure), fill (fond coloré) ou inline (intégré)
+- `width`: Définissez la largeur exacte en utilisant les unités CSS (%, px, em...)
+- `placeholder`: Ajoutez un texte indicatif qui s'affiche quand le champ est vide
+- `hint`: Fournissez une indication supplémentaire sous le champ
 
 ## Exemple interactif
 

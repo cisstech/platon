@@ -15,32 +15,43 @@ Menu déroulant permettant de sélectionner une valeur parmi une liste prédéfi
 
 ## Documentation
 
-La sélection du picker est définie par la propriété `selection`.
+Le composant Picker vous offre un menu déroulant élégant et facile à utiliser pour les situations où l'apprenant doit sélectionner une option parmi une liste prédéfinie. C'est la solution idéale quand l'espace est limité ou quand vous souhaitez restreindre les choix à un ensemble précis de valeurs.
 
-### Les propriétés `prefix` et `suffix`
+### Fonctionnement de base
 
-Les propriétés `prefix` et `suffix` vous permettent d'afficher une icône à gauche et/ou à droite
-du picker en utilisant la syntaxe suivante:
+La valeur actuellement sélectionnée est définie par la propriété `selection`, qui doit correspondre à l'une des valeurs présentes dans le tableau `items`. Si aucune sélection n'est spécifiée, le menu affichera par défaut le texte indicatif défini dans `placeholder`.
 
-`type nom`
+### Amélioration de l'expérience utilisateur
 
-Dans cette syntaxe, `type` fait référence à une librairie d'icône (ex: fontawesome) et `name` au nom d'une icône dans cette librairie.
+#### Ajouter des icônes indicatives
 
-Exemple:
+Pour améliorer la compréhension ou guider visuellement l'apprenant, vous pouvez ajouter des icônes à votre composant:
 
-`fontawesome address-book`.
+- **Icône de début** (`prefix`): apparaît à gauche du sélecteur
+- **Icône de fin** (`suffix`): apparaît à droite du sélecteur
 
-@fontawesome address-book@
+Ces icônes sont définies avec la syntaxe: `bibliothèque nom-icône [color=CODE_COULEUR]`
 
-Vous pouvez spécifier une couleur pour votre icône en ajoutant `color=C` où `C` est une couleur en héxadécimal sans le `#`.
+Par exemple:
 
-Exemple:
+- `fontawesome check` affiche une icône de validation
+- `clarity filter color=3366FF` affiche une icône de filtre en bleu
 
-`fontawesome address-book color=FF0000`.
+Vous trouverez la bibliothèque complète des icônes disponibles sur [icongr.am](https://icongr.am).
 
-@fontawesome address-book color=FF0000@
+#### Contexte supplémentaire
 
-La liste complète des types et noms supportés sont spécifiés sur le site [https://icongr.am](https://icongr.am).
+Utilisez la propriété `hint` pour fournir une indication complémentaire qui apparaîtra sous le sélecteur. Cette indication peut être utile pour clarifier ce que l'apprenant doit sélectionner ou pour donner un indice sur la réponse attendue.
+
+### Applications pédagogiques
+
+Le Picker est particulièrement utile pour:
+
+- Sélection de catégories ou classifications
+- Choix d'unités de mesure
+- Sélection d'éléments dans une nomenclature
+- Navigation entre différentes parties d'un exercice
+- Exercices où l'ordre des options présentées est important
 
 ## Exemple interactif
 

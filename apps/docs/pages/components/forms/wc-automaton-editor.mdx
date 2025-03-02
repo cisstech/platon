@@ -15,9 +15,15 @@ import { useAbsoluteUrl } from '../../../hooks'
 
 ## Documentation
 
-La propriété `automaton` accepte 2 formats:
+L'éditeur d'automates est un outil spécialisé qui permet aux apprenants de créer, manipuler et explorer des automates finis directement dans PLaTon. Il fournit une interface graphique intuitive où les états et transitions peuvent être ajoutés, déplacés et configurés visuellement.
 
-### Format objet
+### Formats de données acceptés
+
+L'éditeur peut travailler avec deux formats de données différents:
+
+#### 1. Format objet (structuré)
+
+Ce format est particulièrement adapté lorsque vous manipulez programmatiquement l'automate:
 
 ```typescript
 {
@@ -29,7 +35,9 @@ La propriété `automaton` accepte 2 formats:
 }
 ```
 
-### Format chaîne
+#### 2. Format chaîne (texte brut)
+
+Ce format est plus lisible et peut être utilisé pour des spécifications manuelles:
 
 ```plaintext
 #states
@@ -54,9 +62,7 @@ s1:a,c>s1
 s1:b>s2
 ```
 
-:::+ warning Grader
-Le format envoyé au grader est toujours le format objet.
-:::
+> Le format envoyé au grader est toujours le format objet.
 
 ## Exemple interactif
 
