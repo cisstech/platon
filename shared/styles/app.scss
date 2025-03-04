@@ -37,7 +37,6 @@ body {
   --brand-text-error: #{$light-error-text};
   --brand-border-color: #{$light-dividers};
 
-
   --brand-color-theme: #{$light-text};
 }
 
@@ -91,5 +90,11 @@ nge-markdown {
 @media (max-width: 768px) {
   .hide-on-mobile {
     display: none;
+  }
+}
+
+pre.monaco-editor {
+  code {
+    overflow: auto !important;
   }
 }
