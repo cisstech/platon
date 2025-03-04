@@ -50,7 +50,11 @@ export class ResourceFileService {
    * @param identifier Resource entity|id|code
    * @param req Ongoing request for identifying user during git operations (optional)
    */
-  async repo(identifier: string | ResourceEntity, req?: IRequest): Promise<RepoInfo> {
+  async repo(
+    identifier: string | ResourceEntity,
+    req?: IRequest,
+    defaultFiles?: Record<string, string>
+  ): Promise<RepoInfo> {
     const resource =
       typeof identifier === 'string'
         ? (await this.resourceService.findByIdOrCode(identifier)).orElseThrow(
@@ -86,7 +90,7 @@ export class ResourceFileService {
               [TEMPLATE_OVERRIDE_FILE]: '{}',
               'readme.md': README_PLE,
             }
-          : undefined,
+          : defaultFiles,
         parentCircle: resource.parentId,
         userCircle: user ? (await this.resourceService.getPersonal(user)).id : undefined,
       }),

@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { NotFoundResponse, User } from '@platon/core/common'
+import { DEFAULT_USER_ID, NotFoundResponse, User } from '@platon/core/common'
 import {
   EventService,
   LevelService,
@@ -525,7 +525,7 @@ export class ResourceService {
   async handleDeleteOrphanCircles() {
     const personalCircles = await this.repository.find({
       where: {
-        ownerId: '00000000-0000-0000-0000-000000000000',
+        ownerId: DEFAULT_USER_ID,
         type: ResourceTypes.CIRCLE,
         personal: true,
       },

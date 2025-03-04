@@ -4,6 +4,7 @@ import { BaseDTO, LevelDTO, TopicDTO, toArray, toBoolean, toNumber } from '@plat
 import { ActivityNavigationModes } from '@platon/feature/compiler'
 import {
   CircleTree,
+  CreatePreviewResource,
   CreateResource,
   Resource,
   ResourceFilters,
@@ -15,6 +16,7 @@ import {
 } from '@platon/feature/resource/common'
 import { Transform, Type } from 'class-transformer'
 import { IsArray, IsBoolean, IsEnum, IsNumber, IsOptional, IsString, IsUUID, Max, Min } from 'class-validator'
+import { FileCreateDTO } from './files'
 import { ResourcePermissionsDTO } from './permissions'
 
 export class ResourceDTO extends BaseDTO implements Resource {
@@ -162,6 +164,19 @@ export class CreateResourceDTO implements CreateResource {
   @IsOptional()
   @ApiProperty()
   readonly topics?: string[]
+
+  @IsOptional()
+  @Type(() => FileCreateDTO)
+  @IsArray()
+  @ApiProperty({ required: false })
+  files?: FileCreateDTO[]
+}
+
+export class CreatePreviewResourceDTO implements CreatePreviewResource {
+  @Type(() => FileCreateDTO)
+  @IsArray()
+  @ApiProperty()
+  files!: FileCreateDTO[]
 }
 
 export class UpdateResourceDTO implements UpdateResource {

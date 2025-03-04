@@ -44,7 +44,7 @@
           },
           {
             "glob": "**/*",
-            "input": "./node_modules/@cisstech/nge/assets/ui/icon/assets/icons/files",
+            "input": "./node_modules/@cisstech/nge/assets/ui/icon/icons/files",
             "output": "./assets/vendors/nge/ui/icon/icons/files/"
           },
           {

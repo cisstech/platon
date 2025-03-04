@@ -1,6 +1,7 @@
 import { ExpandableModel, ListResponse, User } from '@platon/core/common'
 import {
   CircleTree,
+  CreatePreviewResource,
   CreateResource,
   FindResource,
   Resource,
@@ -24,6 +25,7 @@ export abstract class ResourceProvider {
   abstract find(input: FindResource): Observable<Resource>
   abstract update(id: string, input: UpdateResource): Observable<Resource>
   abstract create(input: CreateResource): Observable<Resource>
+  abstract createPreview(input: CreatePreviewResource): Observable<Resource>
   abstract move(id: string, parentId: string): Observable<Resource>
   abstract moveToOwnerCircle(resource: Resource): Observable<Resource>
   abstract delete(resource: Resource): Observable<void>

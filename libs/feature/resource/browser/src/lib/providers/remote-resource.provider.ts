@@ -4,6 +4,7 @@ import { buildExpandableHttpParams, buildHttpParams } from '@platon/core/browser
 import { ItemResponse, ListResponse, User } from '@platon/core/common'
 import {
   CircleTree,
+  CreatePreviewResource,
   CreateResource,
   FindResource,
   Resource,
@@ -69,6 +70,16 @@ export class RemoteResourceProvider extends ResourceProvider {
 
     return this.http
       .post<ItemResponse<Resource>>('/api/v1/resources', input, {
+        params,
+      })
+      .pipe(map((response) => response.resource))
+  }
+
+  createPreview(input: CreatePreviewResource): Observable<Resource> {
+    const params = buildExpandableHttpParams(input)
+
+    return this.http
+      .post<ItemResponse<Resource>>('/api/v1/resources/preview', input, {
         params,
       })
       .pipe(map((response) => response.resource))

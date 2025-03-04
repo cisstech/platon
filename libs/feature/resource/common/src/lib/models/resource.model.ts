@@ -2,6 +2,7 @@ import { ExpandableModel, Level, OrderingDirections, Topic } from '@platon/core/
 import { ActivityNavigationModes } from '@platon/feature/compiler'
 import { ResourceStatus } from '../enums/resource-status'
 import { ResourceTypes } from '../enums/resource-types'
+import { FileCreate } from './file.model'
 import { ResourceMeta } from './metadata.model'
 import { ResourcePermissions, emptyResourcePermissions } from './permissions.model'
 import { ResourceStatistic } from './statistic.model'
@@ -239,6 +240,15 @@ export interface CreateResource extends ExpandableModel<ResourceExpandableFields
    * List of topics (identifiers) associated to the resource.
    */
   readonly topics?: string[]
+
+  /**
+   * Optional list of files to create with the resource.
+   */
+  readonly files?: FileCreate[]
+}
+
+export interface CreatePreviewResource extends ExpandableModel<ResourceExpandableFields> {
+  readonly files: FileCreate[]
 }
 
 /**
