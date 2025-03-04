@@ -33,10 +33,10 @@
       <td nzAlign="center">
         <nz-tag>{{ model.activity.createdAt | date }}</nz-tag>
       </td>
-      <td nzAlign="center">
+      <td nzAlign="center" class="clickable" (click)="settingsSelectedActivity = model.activity; modal.open()">
         <nz-tag>{{ (model.activity.openAt | date) || 'Non définie' }}</nz-tag>
       </td>
-      <td nzAlign="center">
+      <td nzAlign="center" class="clickable" (click)="settingsSelectedActivity = model.activity; modal.open()">
         <nz-tag>{{ (model.activity.closeAt | date) || 'Non définie' }}</nz-tag>
       </td>
 
@@ -122,6 +122,6 @@
   #modal
 >
   <ng-template>
-    <course-activity-settings *ngIf="settingsSelectedActivity" [(activity)]="settingsSelectedActivity" />
+    <course-activity-settings [(activity)]="settingsSelectedActivity!" />
   </ng-template>
 </ui-modal-drawer>

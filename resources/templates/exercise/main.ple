@@ -1,4 +1,4 @@
-// Documentation disponible ici : #docs/main/doc/programing/exercise/langage
+// Documentation disponible ici : #docs/main/programing/exercise/langage
 
 
 // Choix de l'environnement d'exécution node ou python
@@ -15,18 +15,18 @@ inputSolution.type = "number"
 inputSolution.disabled = true
 inputSolution.placeholder = "Solution"
 
-// Affichage de documents théoriques : #docs/main/doc/programing/exercise/theories
+// Affichage de documents théoriques : #docs/main/programing/exercise/theories
 
 theories = [
   { title: "Lien vers une ressource externe", url: "https://google.com" },
   { title: "Lien vers une ressource interne", url: @copyurl readme.md }
 ]
 
-// Affichage d'aides : #docs/main/doc/programing/exercise/hints
+// Affichage d'aides : #docs/main/programing/exercise/hints
 
 hint = ["Aide 1", "Aide 2"]
 
-// Construction, Affichage et Évaluation : #docs/main/doc/programing/exercise/workflow
+// Construction, Affichage et Évaluation : #docs/main/programing/exercise/workflow
 
 max = 10
 

@@ -16,6 +16,8 @@ export interface PlayerExercise {
   sessionId: string
   state: AnswerStates
   title: string
+  peerComparison?: boolean
+  grade?: number
 }
 
 export interface PlayerNavigation {
@@ -93,6 +95,11 @@ export interface PlayActivityOuput {
   activity: ActivityPlayer
 }
 
+export interface NextOutput {
+  nextExerciseId: string
+  terminated: boolean
+}
+
 export interface EvalExerciseOutput {
   exercise: ExercisePlayer
   navigation?: PlayerNavigation
@@ -125,6 +132,8 @@ export interface ExercisePlayer {
         title: string
       }[]
     | null
+  reviewMode?: boolean | null
+  platon_logs?: string[] | null
 }
 
 export interface ActivityPlayer {
@@ -204,7 +213,7 @@ export const getClosingTime = (player: Partial<ActivityPlayer>): number | null =
   const duration = (player.settings?.duration || 0) * 1000
   let closingTime: number | null = null
 
-  if (duration != null && startedAt != null) {
+  if (duration != 0 && startedAt != null) {
     closingTime = startedAt + duration
   }
   if (closeAt != null && (closingTime == null || closeAt < closingTime)) {

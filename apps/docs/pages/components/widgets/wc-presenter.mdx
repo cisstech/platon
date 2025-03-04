@@ -1,0 +1,146 @@
+---
+title: Presenter
+description: Outil de présentation avancé basé sur Reveal.js permettant de créer des diaporamas interactifs avec support pour Markdown, code avec coloration syntaxique, et formules mathématiques. Idéal pour les exercices nécessitant des explications visuelles progressives, des tutoriels étape par étape, ou des présentations de concepts théoriques complexes.
+---
+
+import { Tabs, Tab } from 'nextra/components'
+import { ComponentProperties } from '../../../components'
+import { useAbsoluteUrl } from '../../../hooks'
+
+# Presenter
+
+`wc-presenter`
+
+Outil de présentation avancé basé sur Reveal.js permettant de créer des diaporamas interactifs avec support pour Markdown, code avec coloration syntaxique, et formules mathématiques. Idéal pour les exercices nécessitant des explications visuelles progressives, des tutoriels étape par étape, ou des présentations de concepts théoriques complexes.
+
+## Documentation
+
+Le composant Presenter permet de créer des diaporamas interactifs et riches directement dans vos exercices. Basé sur la puissante bibliothèque Reveal.js, il offre des fonctionnalités avancées de présentation qui facilitent l'explication de concepts complexes à travers une progression visuelle structurée.
+
+### Propriété principale
+
+- **template**: Le contenu de la présentation au format HTML/Markdown compatible avec Reveal.js
+
+### Fonctionnalités principales
+
+#### Structure des diapositives
+
+Les diapositives sont organisées horizontalement (sections principales) et verticalement (sous-sections):
+
+```html
+<section data-markdown>
+  <textarea data-template>
+    ## Première diapositive
+    Contenu principal
+
+    ---
+    ## Seconde diapositive
+    Nouveau contenu après transition horizontale
+
+    --
+    ## Sous-diapositive
+    Contenu accessible par transition verticale
+  </textarea>
+</section>
+```
+
+#### Markdown enrichi
+
+Le contenu peut être écrit en Markdown pour plus de simplicité:
+
+```markdown
+## Titre de la diapositive
+
+- Point 1
+- Point 2
+
+> Citation importante
+```
+
+#### Code avec surlignage syntaxique
+
+Présentez du code avec coloration syntaxique et mise en évidence progressive:
+
+````markdown
+```javascript [1-2|3|4]
+function exemple() {
+  const a = 1
+  const b = a + 1
+  return b * 2
+}
+```
+````
+
+````
+
+La syntaxe `[1-2|3|4]` permet de révéler progressivement les lignes de code lors de la présentation.
+
+### Formules mathématiques
+
+Intégrez des formules mathématiques avec la syntaxe LaTeX:
+
+```markdown
+$$
+f(x) = \int_{-\infty}^{\infty} \hat{f}(\xi) e^{2 \pi i \xi x} d\xi
+$$
+````
+
+### Exemples d'utilisation pédagogique
+
+- Présentation progressive d'un algorithme
+- Explication étape par étape d'une démonstration mathématique
+- Tutoriel visuel avec code et exemples
+- Comparaison de différentes approches méthodologiques
+
+### Ressources complémentaires
+
+Pour explorer toutes les fonctionnalités disponibles:
+
+- [Documentation officielle de Reveal.js](https://revealjs.com/)
+- [Guide Markdown pour Reveal.js](https://revealjs.com/markdown/)
+- [Documentation sur le code](https://revealjs.com/code/)
+- [Formules mathématiques](https://revealjs.com/math/)
+
+Ce composant est particulièrement adapté aux explications qui nécessitent une progression logique et visuelle, permettant aux apprenants de suivre un raisonnement étape par étape.
+
+## Exemple interactif
+
+<iframe
+  src={useAbsoluteUrl('playground/components/wc-presenter')}
+  style={{ width: '100%', height: '700px', border: 'none' }}
+></iframe>
+
+## API
+
+<Tabs items={['Graphique', 'JSON']}>
+  <Tab>
+    <ComponentProperties schema={{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "required": [],
+  "properties": {
+    "template": {
+      "type": "string",
+      "default": "",
+      "description": "Presenter content"
+    }
+  }
+}} />
+  </Tab>
+  <Tab>
+    ```json
+    {
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "required": [],
+  "properties": {
+    "template": {
+      "type": "string",
+      "default": "",
+      "description": "Presenter content"
+    }
+  }
+}
+    ```
+  </Tab>
+</Tabs>

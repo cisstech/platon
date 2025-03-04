@@ -1,0 +1,198 @@
+---
+title: Matrix
+description: Composant permettant de saisir ou afficher une matrice de valeurs. Idéal pour les exercices de calcul matriciel, résolution de systèmes d'équations linéaires, transformations géométriques ou tout problème nécessitant l'entrée ou l'affichage de données tabulaires.
+---
+
+import { Tabs, Tab } from 'nextra/components'
+import { ComponentProperties } from '../../../components'
+import { useAbsoluteUrl } from '../../../hooks'
+
+# Matrix
+
+`wc-matrix`
+
+Composant permettant de saisir ou afficher une matrice de valeurs. Idéal pour les exercices de calcul matriciel, résolution de systèmes d'équations linéaires, transformations géométriques ou tout problème nécessitant l'entrée ou l'affichage de données tabulaires.
+
+## Documentation
+
+Le composant Matrix vous permet d'afficher et de manipuler des tableaux de données sous forme matricielle. Idéal pour les exercices de mathématiques, d'algèbre linéaire ou tout autre contexte nécessitant une disposition tabulaire interactive.
+
+### Structure des données
+
+Une matrice est représentée par un tableau unidimensionnel `cells` qui stocke toutes les cellules ligne par ligne. Pour une matrice de dimensions `rows × cols`, la cellule à la position (i, j) se trouve à l'index `i * cols + j` dans ce tableau.
+
+Chaque cellule peut être définie de deux façons:
+
+1. **Format simple**: une chaîne représentant directement la valeur
+
+   ```js
+   '42' // Une cellule contenant la valeur 42
+   ```
+
+2. **Format complet**: un objet avec des propriétés configurables
+   ```js
+   {
+     "value": "42",         // Valeur affichée dans la cellule (obligatoire)
+     "css": "highlight",    // Classes CSS pour le style (optionnel)
+     "disabled": true       // Pour rendre la cellule non-éditable (optionnel)
+   }
+   ```
+
+### Adaptation automatique
+
+Si votre tableau `cells` ne contient pas suffisamment d'éléments pour remplir toute la matrice (moins que `rows × cols`), le composant complétera automatiquement les cellules manquantes avec la valeur `"0"`.
+
+### Redimensionnement
+
+La propriété `resizable` permet aux utilisateurs de modifier les dimensions de la matrice en ajoutant ou supprimant des lignes et des colonnes. Cette fonctionnalité est particulièrement utile pour les exercices où la taille de la solution n'est pas fixe à l'avance.
+
+### Applications pédagogiques
+
+Ce composant est parfaitement adapté pour:
+
+- Des calculs matriciels (addition, multiplication, déterminant)
+- La résolution de systèmes d'équations
+- L'implémentation d'algorithmes sur des tableaux 2D
+- La saisie de données dans des tableaux structurés
+
+## Exemple interactif
+
+<iframe
+  src={useAbsoluteUrl('playground/components/wc-matrix')}
+  style={{ width: '100%', height: '700px', border: 'none' }}
+></iframe>
+
+## API
+
+<Tabs items={['Graphique', 'JSON']}>
+  <Tab>
+    <ComponentProperties schema={{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "required": [
+    "rows",
+    "cols",
+    "cells"
+  ],
+  "properties": {
+    "rows": {
+      "type": "number",
+      "default": 0,
+      "description": "Le nombre de lignes de la matrice."
+    },
+    "cols": {
+      "type": "number",
+      "default": 0,
+      "description": "Le nombre de colonnes de la matrice."
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Désactiver les cellules de la matrice?"
+    },
+    "resizable": {
+      "type": "boolean",
+      "default": false,
+      "description": "La taille de la matrice est elle modifiable?"
+    },
+    "cells": {
+      "type": "array",
+      "items": {
+        "type": [
+          "object",
+          "string"
+        ],
+        "default": [],
+        "required": [
+          "value"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "css": {
+            "type": "string",
+            "default": "",
+            "description": "Voir la page API CSS."
+          },
+          "value": {
+            "type": "string",
+            "default": "",
+            "description": "La valeur de la cellule."
+          },
+          "disabled": {
+            "type": "boolean",
+            "default": false,
+            "description": "Désactiver la cellule?"
+          }
+        }
+      }
+    }
+  }
+}} />
+  </Tab>
+  <Tab>
+    ```json
+    {
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "required": [
+    "rows",
+    "cols",
+    "cells"
+  ],
+  "properties": {
+    "rows": {
+      "type": "number",
+      "default": 0,
+      "description": "Le nombre de lignes de la matrice."
+    },
+    "cols": {
+      "type": "number",
+      "default": 0,
+      "description": "Le nombre de colonnes de la matrice."
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Désactiver les cellules de la matrice?"
+    },
+    "resizable": {
+      "type": "boolean",
+      "default": false,
+      "description": "La taille de la matrice est elle modifiable?"
+    },
+    "cells": {
+      "type": "array",
+      "items": {
+        "type": [
+          "object",
+          "string"
+        ],
+        "default": [],
+        "required": [
+          "value"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "css": {
+            "type": "string",
+            "default": "",
+            "description": "Voir la page API CSS."
+          },
+          "value": {
+            "type": "string",
+            "default": "",
+            "description": "La valeur de la cellule."
+          },
+          "disabled": {
+            "type": "boolean",
+            "default": false,
+            "description": "Désactiver la cellule?"
+          }
+        }
+      }
+    }
+  }
+}
+    ```
+  </Tab>
+</Tabs>

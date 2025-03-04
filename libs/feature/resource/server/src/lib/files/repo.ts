@@ -1,4 +1,4 @@
-import { EXERCISE_MAIN_FILE } from '@platon/feature/compiler'
+import { EXERCISE_CONFIG_FILE, EXERCISE_MAIN_FILE } from '@platon/feature/compiler'
 import {
   FileTypes,
   FileVersion,
@@ -162,7 +162,11 @@ export class Repo {
    */
   async touch(path: string, content?: string): Promise<void> {
     const abspath = this.abspath(path)
-    await fs.promises.writeFile(abspath, content || '')
+    if (path === EXERCISE_CONFIG_FILE && !content) {
+      await fs.promises.cp(Path.join(RESOURCES_DIR, 'templates', 'exercise-optional', EXERCISE_CONFIG_FILE), abspath)
+    } else {
+      await fs.promises.writeFile(abspath, content || '')
+    }
     await this.commit(`create ${path}`)
   }
 
@@ -535,7 +539,7 @@ export class Repo {
     const tags = await git.listTags({ ...this.repo })
     const commitsTags = await Promise.all(
       tags.map(async (tag) => {
-        const tagOid = await git.resolveRef({ ...this.repo, ref: tag })
+        const tagOid = await git.resolveRef({ ...this.repo, ref: 'tags/' + tag })
         const tagCommit = await git.readTag({ ...this.repo, oid: tagOid })
         return { tag, commit: tagCommit.tag.object }
       })

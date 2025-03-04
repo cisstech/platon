@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Req } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Patch, Post, Req } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import {
   CreatedResponse,
@@ -8,7 +8,7 @@ import {
   NotFoundResponse,
   UserRoles,
 } from '@platon/core/common'
-import { IRequest, Mapper, Roles } from '@platon/core/server'
+import { IRequest, Mapper, Roles, UUIDParam } from '@platon/core/server'
 import { ResourceMemberDTO } from '../members/member.dto'
 import { CreateResourceInvitationDTO, ResourceInvitationDTO } from './invitation.dto'
 import { ResourceInvitationService } from './invitation.service'
@@ -19,7 +19,7 @@ export class ResourceInvitationController {
   constructor(private readonly service: ResourceInvitationService) {}
 
   @Get()
-  async list(@Param('resourceId') resourceId: string): Promise<ListResponse<ResourceInvitationDTO>> {
+  async list(@UUIDParam('resourceId') resourceId: string): Promise<ListResponse<ResourceInvitationDTO>> {
     const [items, total] = await this.service.findAll(resourceId)
     const resources = Mapper.mapAll(items, ResourceInvitationDTO)
     return new ListResponse({ total, resources })
@@ -27,8 +27,8 @@ export class ResourceInvitationController {
 
   @Get('/:inviteeId')
   async find(
-    @Param('inviteeId') inviteeId: string,
-    @Param('resourceId') resourceId: string
+    @UUIDParam('inviteeId') inviteeId: string,
+    @UUIDParam('resourceId') resourceId: string
   ): Promise<ItemResponse<ResourceInvitationDTO>> {
     const optional = await this.service.findLastOfInviteeInResource(resourceId, inviteeId)
     const resource = Mapper.map(
@@ -42,7 +42,7 @@ export class ResourceInvitationController {
   @Post()
   async invite(
     @Req() req: IRequest,
-    @Param('resourceId') resourceId: string,
+    @UUIDParam('resourceId') resourceId: string,
     @Body() input: CreateResourceInvitationDTO
   ): Promise<ItemResponse<ResourceInvitationDTO>> {
     const resource = Mapper.map(
@@ -58,8 +58,8 @@ export class ResourceInvitationController {
 
   @Patch('/:inviteeId')
   async accept(
-    @Param('inviteeId') inviteeId: string,
-    @Param('resourceId') resourceId: string
+    @UUIDParam('inviteeId') inviteeId: string,
+    @UUIDParam('resourceId') resourceId: string
   ): Promise<CreatedResponse<ResourceMemberDTO>> {
     const resource = Mapper.map(await this.service.accept(resourceId, inviteeId), ResourceMemberDTO)
     return new CreatedResponse({ resource })
@@ -69,8 +69,8 @@ export class ResourceInvitationController {
   @Delete('/:inviteeId')
   async decline(
     @Req() req: IRequest,
-    @Param('inviteeId') inviteeId: string,
-    @Param('resourceId') resourceId: string
+    @UUIDParam('inviteeId') inviteeId: string,
+    @UUIDParam('resourceId') resourceId: string
   ): Promise<NoContentResponse> {
     await this.service.delete(resourceId, inviteeId)
     return new NoContentResponse()

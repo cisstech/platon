@@ -12,10 +12,9 @@ export interface ChartViewerBarsState extends IWebComponent, ChartViewerBase2 {
 export const ChartViewerBarsComponentDefinition = defineWebComponent({
   type: WebComponentTypes.widget,
   name: 'ChartViewer-Bars',
-  icon: 'assets/images/components/forms/code-editor/code-editor.svg',
   selector: 'wc-chart-viewer-bars',
-  description: "Permets d'afficher une charte de type `histogramme` en fournissant des données",
-  fullDescriptionUrl: 'assets/docs/components/widgets/chart-viewer-bars/chart-viewer-bars.md',
+  description:
+    "Graphique à barres horizontales ou verticales pour la visualisation comparative de données. Particulièrement utile pour les exercices d'économie, de statistiques, d'analyse de données séquentielles, de comparaison de performances sur différentes périodes, ou pour illustrer des distributions et tendances dans diverses disciplines scientifiques.",
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',

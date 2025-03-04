@@ -78,7 +78,10 @@ export abstract class PlayerManager {
     variables.seed = Date.now() % 100
 
     if (variables.builder?.trim()) {
-      patchExerciseMeta(variables, () => ({ isInitialBuild: false }))
+      const grades = await this.findGrades(exerciseSession.id)
+
+      patchExerciseMeta(variables, () => ({ grades, isInitialBuild: false }))
+      variables['.meta']['totalAttempts'] = exerciseSession.variables['.meta']['totalAttempts']
       const output = await this.sandboxManager.run(
         {
           envid,
@@ -122,7 +125,7 @@ export abstract class PlayerManager {
         },
         variables.hint.next
       )
-      patchExerciseMeta(output.variables, (meta) => ({ consumedHints: meta.consumedHints + 1 }))
+      patchExerciseMeta(output.variables as ExerciseVariables, (meta) => ({ consumedHints: meta.consumedHints + 1 }))
       variables = output.variables as ExerciseVariables
     }
 
@@ -135,7 +138,7 @@ export abstract class PlayerManager {
 
   async checkAnswer(exerciseSession: ExerciseSession): Promise<[ExercisePlayer, PlayerNavigation]> {
     const { activitySession, activityNavigation } = withMultiSessionGuard(exerciseSession)
-
+    let challengeSucceded = false
     // EVAL ANSWERS
 
     const envid = exerciseSession.envid
@@ -183,6 +186,9 @@ export abstract class PlayerManager {
       exerciseSession.succeededAt = new Date()
     }
 
+    const grades = [...variables['.meta']['grades'], grade]
+    patchExerciseMeta(variables, () => ({ grades, isInitialBuild: false }))
+
     const promises: Promise<unknown>[] = [
       this.updateSession(exerciseSession.id, {
         grade: exerciseSession.grade,
@@ -194,14 +200,16 @@ export abstract class PlayerManager {
     ]
 
     // UPDATE NAVIGATION ACCORDING TO GRADE
-
+    let exoPlayer: ExercisePlayer | undefined
     if (activitySession && activityNavigation) {
       const current = activityNavigation.exercises.find((item) => item.sessionId === exerciseSession.id)
       if (current) {
         current.state = answerStateFromGrade(answer.grade)
+        current.grade = answer.grade
         activityNavigation.exercises = activityNavigation.exercises.map((item) =>
           item.sessionId === current.sessionId ? current : item
         )
+        activityNavigation.current = current
       }
 
       const childs = await this.findSessionsByParentId(activitySession.id)
@@ -219,28 +227,57 @@ export abstract class PlayerManager {
 
       if (activitySession.grade === 100 && !activitySession.succeededAt) {
         activitySession.succeededAt = new Date()
+        if (activitySession.activity) {
+          challengeSucceded = true
+        }
       }
 
       activitySession.attempts += increment
 
-      promises.push(
-        this.updateSession(activitySession.id, {
-          grade: activitySession.grade,
-          attempts: activitySession.attempts,
-          succeededAt: activitySession.succeededAt,
-          variables: {
-            ...activitySession.variables,
-            navigation: activityNavigation,
-          } as PlayerActivityVariables,
-          lastGradedAt: new Date(),
-        })
-      )
+      let peerActivityNavigation: PlayerNavigation | undefined
+      if (activitySession?.variables.settings?.navigation?.mode === 'peer') {
+        // eslint-disable-next-line @typescript-eslint/no-extra-semi
+        ;[exoPlayer, peerActivityNavigation] = await this.nextPeerExercise(exerciseSession, activityNavigation, answer)
+      }
+
+      if (activitySession?.variables.settings?.navigation?.mode === 'peer') {
+        promises.push(
+          this.updateSession(activitySession.id, {
+            grade: activitySession.grade,
+            attempts: activitySession.attempts,
+            succeededAt: activitySession.succeededAt,
+            variables: {
+              ...activitySession.variables,
+              navigation: {
+                ...(peerActivityNavigation ?? activityNavigation),
+                current: exoPlayer,
+              },
+            } as PlayerActivityVariables,
+            lastGradedAt: new Date(),
+          })
+        )
+      } else {
+        promises.push(
+          this.updateSession(activitySession.id, {
+            grade: activitySession.grade,
+            attempts: activitySession.attempts,
+            succeededAt: activitySession.succeededAt,
+            variables: {
+              ...activitySession.variables,
+              navigation: activityNavigation,
+            } as PlayerActivityVariables,
+            lastGradedAt: new Date(),
+          })
+        )
+      }
     }
 
     await Promise.all(promises)
-
+    if (challengeSucceded && activitySession?.activity) {
+      this.onChallengeSucceeded(activitySession.activity)
+    }
     return [
-      withExercisePlayer(exerciseSession),
+      exoPlayer ?? withExercisePlayer(exerciseSession),
       activitySession ? withActivityFeedbacksGuard<ActivityVariables>(activitySession).variables.navigation : undefined,
     ]
   }
@@ -281,7 +318,14 @@ export abstract class PlayerManager {
   protected abstract findSessionById(sessionId: string): Promise<Session | null | undefined>
   protected abstract findSessionsByParentId(parentId: string): Promise<Session[]>
   protected abstract findExerciseSessionById(id: string): Promise<ExerciseSession | null | undefined>
-
+  protected abstract nextPeerExercise(
+    exerciseSession: ExerciseSession,
+    navigation: PlayerNavigation | undefined,
+    answer: Answer
+  ): Promise<[ExercisePlayer, PlayerNavigation]> // Probably not handled if not on server side
+  protected onChallengeSucceeded(_activity: Activity): void {
+    // Do nothing
+  }
   protected onTerminate(_activity: Activity): void {
     // Do nothing
   }

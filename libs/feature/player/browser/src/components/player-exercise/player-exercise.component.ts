@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-floating-promises */
 
 import { CommonModule } from '@angular/common'
 import {
+  CUSTOM_ELEMENTS_SCHEMA,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -37,7 +37,7 @@ import { ExercisePlayer, PlayerActions, PlayerNavigation } from '@platon/feature
 
 import { HttpErrorResponse } from '@angular/common/http'
 import { ActivatedRoute } from '@angular/router'
-import { ExerciseTheory } from '@platon/feature/compiler'
+import { ExerciseFeedback, ExerciseTheory } from '@platon/feature/compiler'
 import { AnswerStatePipesModule } from '@platon/feature/result/browser'
 import { AnswerStates } from '@platon/feature/result/common'
 import { WebComponentService } from '@platon/feature/webcomponent'
@@ -115,6 +115,7 @@ type FullscreenElement = HTMLElement & {
     AnswerStatePipesModule,
     PlayerCommentsComponent,
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
   private readonly subscriptions: Subscription[] = []
@@ -174,7 +175,7 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
       {
         id: 'check-answer-button',
         icon: 'check',
-        label: this.player.remainingAttempts ? `(${this.player.remainingAttempts})` : '',
+        label: this.player.remainingAttempts ? `Évaluer (${this.player.remainingAttempts})` : 'Évaluer',
         tooltip: 'Valider',
         color: 'primary',
         danger: this.player.remainingAttempts === 1,
@@ -183,6 +184,7 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
         playerAction: PlayerActions.CHECK_ANSWER,
         showLabel: !!this.player.remainingAttempts,
         run: async () => {
+          this.removeAnswerFromLocalStorage()
           await this.evaluate(PlayerActions.CHECK_ANSWER)
           this.scrollIntoNode(this.containerFeedbacks?.nativeElement, 'center')
         },
@@ -262,14 +264,16 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
         label: 'Exercise précédent',
         tooltip: 'Exercise précédent',
         visible: this.hasPrev,
-        run: () => this.goToPrevPlayer.emit(),
+        id: 'prev-exercise-button',
+        run: () => this.showConfirmModalIfAnswered(this.goToPrevPlayer),
       },
       {
         icon: 'arrow_forward',
         label: 'Exercise suivant',
         tooltip: 'Exercise suivant',
         visible: this.hasNext,
-        run: () => this.goToNextPlayer.emit(),
+        id: 'next-exercise-button',
+        run: () => this.showConfirmModalIfAnswered(this.goToNextPlayer),
       },
     ]
   }
@@ -281,14 +285,16 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
         icon: 'arrow_back',
         label: 'Réponse précédente',
         tooltip: 'Réponse précédente',
-        visible: this.players.length > 1 && this.index > 0,
+        visible: this.players.length > 1,
+        disabled: this.players.length > 1 && this.index == 0,
         run: () => this.previousAttempt(),
       },
       {
         icon: 'arrow_forward',
         label: 'Réponse suivante',
         tooltip: 'Réponse suivante',
-        visible: this.players.length > 1 && this.index < this.players.length - 1,
+        visible: this.players.length > 1,
+        disabled: this.players.length > 1 && this.index == this.players.length - 1,
         run: () => this.nextAttempt(),
       },
     ]
@@ -310,7 +316,43 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
     return !!this.requestFullscreen && this.activatedRoute.snapshot.queryParamMap.has(PLAYER_EDITOR_PREVIEW)
   }
 
+  protected isFeedbackContentAnObject(feedback: ExerciseFeedback): boolean {
+    return typeof feedback.content !== 'string'
+  }
+
+  // Function called before the user goes to next/previous exercise
+  private async showConfirmModalIfAnswered(callback: EventEmitter<void>): Promise<void> {
+    let hasAnswered = false
+    this.forEachComponent((component) => {
+      if (component.state?.isFilled) {
+        hasAnswered = true
+      }
+    })
+    if (!hasAnswered) {
+      callback.emit()
+      return
+    }
+
+    const confirmed = await this.dialogService.confirm({
+      nzTitle: 'Attention',
+      nzContent: `
+      Vous avez commencé à répondre à cet exercice, êtes-vous sûr de vouloir changer d'exercice ?
+      <br/>
+      <i>Si vous continuez, votre travail sera sauvegardé sur votre appareil mais vos réponses ne seront pas envoyées à PLaTon.</i>
+      `,
+      nzOkText: 'Oui',
+      nzCancelText: 'Non',
+    })
+    if (confirmed) {
+      callback.emit()
+    }
+  }
+
   ngOnInit(): void {
+    this.index = this.reviewMode ? this.players.length - 1 : 0
+    if (!this.player) {
+      this.player = this.players[this.index]
+    }
     this.requestFullscreen =
       this.container.nativeElement.requestFullscreen ||
       this.container.nativeElement.webkitRequestFullscreen ||
@@ -333,7 +375,8 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnChanges(): void {
     if (this.players?.length) {
-      this.player = this.players[0]
+      this.index = this.reviewMode ? this.players.length - 1 : 0
+      this.player = this.players[this.index]
       this.clearNotification?.()
       this.clearNotification = undefined
     }
@@ -358,17 +401,21 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
     if (this.fullscreen) {
       this.fullscreen = false
       const element = document as unknown as FullscreenElement
-      element.exitFullscreen?.() ||
+      void (
+        element.exitFullscreen?.() ||
         element.webkitExitFullscreen?.() ||
         element.mozCancelFullScreen?.() ||
         element.msExitFullscreen?.()
+      )
     } else {
       this.fullscreen = true
       const element = this.container.nativeElement
-      element.requestFullscreen?.() ||
+      void (
+        element.requestFullscreen?.() ||
         element.webkitRequestFullscreen?.() ||
         element.mozRequestFullScreen?.() ||
         element.msRequestFullscreen?.()
+      )
     }
   }
 
@@ -380,6 +427,16 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
     return item.tooltip
   }
 
+  public getAnswers(): Record<string, unknown> {
+    return this.answers()
+  }
+
+  private removeAnswerFromLocalStorage(): void {
+    this.forEachComponent((component) => {
+      sessionStorage.removeItem('component-' + component.getAttribute('cid'))
+    })
+  }
+
   private answers(): Record<string, unknown> {
     const answers: Record<string, unknown> = {}
     this.forEachComponent((component) => {
@@ -389,9 +446,12 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private forEachComponent(consumer: (component: any) => void): void {
-    this.container.nativeElement.querySelectorAll('[cid]').forEach((node) => {
-      consumer(node as any)
-    })
+    const form = this.container.nativeElement.querySelector('#form')
+    if (form) {
+      form.querySelectorAll('[cid]').forEach((node) => {
+        consumer(node as any)
+      })
+    }
   }
 
   private scrollIntoNode(node?: HTMLElement, position: ScrollLogicalPosition = 'start'): void {
@@ -466,6 +526,17 @@ export class PlayerExerciseComponent implements OnInit, OnDestroy, OnChanges {
     } finally {
       this.runningAction = undefined
       this.changeDetectorRef.markForCheck()
+    }
+  }
+
+  protected async copyToClipboard(text: string | undefined): Promise<void> {
+    if (!text) return
+
+    try {
+      await navigator.clipboard.writeText(text)
+      this.dialogService.success('Contenu copié dans le presse-papier')
+    } catch (err) {
+      this.dialogService.error('Impossible de copier le contenu')
     }
   }
 }

@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { BaseEntity, UserEntity, UserGroupEntity } from '@platon/core/server'
 import { Column, Entity, Index, JoinColumn, ManyToOne, Unique } from 'typeorm'
-import { CourseEntity } from '../course.entity'
+import { CourseEntity } from '../entites/course.entity'
+import { CourseMemberRoles } from '@platon/feature/course/common'
 
 @Entity('CourseMembers')
 @Unique('CourseMembers_unique_user_idx', ['courseId', 'userId'])
@@ -30,4 +31,7 @@ export class CourseMemberEntity extends BaseEntity {
   @ManyToOne(() => UserGroupEntity, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'group_id' })
   group?: UserGroupEntity
+
+  @Column({ name: 'role', type: 'enum', enum: ['student', 'teacher'], default: 'student' })
+  role!: CourseMemberRoles
 }

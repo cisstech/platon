@@ -3,7 +3,7 @@ import { ApiTags } from '@nestjs/swagger'
 import { CourseGroupService } from './course-group.service'
 import { ItemResponse, ListResponse, UserRoles } from '@platon/core/common'
 import { CourseGroupDTO, UpdateGroupDTO } from './course-group.dto'
-import { IRequest, Mapper, Roles } from '@platon/core/server'
+import { IRequest, Mapper, Roles, UUIDParam } from '@platon/core/server'
 import { CourseGroupMemberService } from '../course-group-member/course-group-member.service'
 
 @Controller('courseGroups/:courseId/')
@@ -15,7 +15,7 @@ export class CourseGroupController {
   ) {}
 
   @Get()
-  async list(@Param('courseId') courseId: string): Promise<ListResponse<CourseGroupDTO>> {
+  async list(@UUIDParam('courseId') courseId: string): Promise<ListResponse<CourseGroupDTO>> {
     const items = await this.courseGroupService.listCourseGroups(courseId)
     return new ListResponse({
       total: items.length,
@@ -36,7 +36,7 @@ export class CourseGroupController {
 
   @Roles(UserRoles.teacher, UserRoles.admin)
   @Post()
-  async create(@Req() req: IRequest, @Param('courseId') courseId: string): Promise<ItemResponse<CourseGroupDTO>> {
+  async create(@Req() req: IRequest, @UUIDParam('courseId') courseId: string): Promise<ItemResponse<CourseGroupDTO>> {
     const resource = Mapper.map(await this.courseGroupService.addCourseGroup(courseId), CourseGroupDTO)
     return new ItemResponse({ resource })
   }

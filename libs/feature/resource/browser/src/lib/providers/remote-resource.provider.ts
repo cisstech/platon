@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { buildExpandableHttpParams, buildHttpParams } from '@platon/core/browser'
-import { ItemResponse, ListResponse } from '@platon/core/common'
+import { ItemResponse, ListResponse, User } from '@platon/core/common'
 import {
   CircleTree,
+  CreatePreviewResource,
   CreateResource,
   FindResource,
   Resource,
@@ -74,6 +75,16 @@ export class RemoteResourceProvider extends ResourceProvider {
       .pipe(map((response) => response.resource))
   }
 
+  createPreview(input: CreatePreviewResource): Observable<Resource> {
+    const params = buildExpandableHttpParams(input)
+
+    return this.http
+      .post<ItemResponse<Resource>>('/api/v1/resources/preview', input, {
+        params,
+      })
+      .pipe(map((response) => response.resource))
+  }
+
   move(id: string, parentId: string): Observable<Resource> {
     return this.http
       .patch<ItemResponse<Resource>>(`/api/v1/resources/${id}/move`, { parentId })
@@ -89,5 +100,9 @@ export class RemoteResourceProvider extends ResourceProvider {
 
   delete(resource: Resource): Observable<void> {
     return this.http.delete<void>(`/api/v1/resources/${resource.id}`)
+  }
+
+  listOwners(): Observable<User[]> {
+    return this.http.get<ListResponse<User>>(`/api/v1/resources/owners`).pipe(map((response) => response.resources))
   }
 }

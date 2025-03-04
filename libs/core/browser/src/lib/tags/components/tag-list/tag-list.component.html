@@ -2,6 +2,7 @@
   *ngFor="let tag of tags; trackBy: trackById"
   [nzMode]="editable ? 'closeable' : 'default'"
   (nzOnClose)="remove.emit(tag)"
+  (dblclick)="ondoubleclick($event, tag)"
 >
   {{ tag.name }}
 </nz-tag>

@@ -1,0 +1,221 @@
+---
+title: Introduction aux composants
+description: Présentation du framework de composants PLaTon, expliquant les types disponibles (formulaire et widget), leur fonctionnement basé sur l'architecture MVC, et comment les utiliser et contribuer au développement de nouveaux composants.
+
+---
+
+import { Callout } from 'nextra/components'
+import { FileTree } from 'nextra/components'
+import { useAbsoluteUrl } from '../../hooks'
+
+# Introduction aux composants
+
+Pour bien comprendre ce qui suit, il est utile d'avoir des bases en [HTML et CSS](https://www.w3schools.com/).
+Si vous connaissez déjà la documentation de PLaTon, c'est encore mieux ! Avoir quelques notions de JavaScript et Python peut aussi être un plus, mais ce n'est pas obligatoire pour commencer à utiliser les composants.
+
+## Qu'est-ce que le framework de composants PLaTon ?
+
+Imaginez un ensemble d'outils prêts à l'emploi pour construire des exercices performants, interactifs et visuellement attrayants. C'est exactement ce que propose le Framework de Composants PLaTon.
+
+**En résumé, c'est une collection de "briques de construction" réutilisables, appelées "composants", qui vous permettent d'ajouter facilement des fonctionnalités complexes à vos exercices.**  Chaque composant gère une tâche spécifique et peut être utilisé plusieurs fois dans différents exercices.
+
+## Types de composants disponibles
+
+Les composants sont divisés en deux grandes catégories pour vous aider à trouver ce dont vous avez besoin :
+
+*   **Composants de Formulaire :**  Ces composants sont conçus pour l'interaction avec l'utilisateur et la collecte d'informations.  Pensez aux champs de texte pour saisir du texte, aux menus déroulants pour faire des choix, aux éditeurs de texte enrichi, et à d'autres éléments interactifs classiques des formulaires web.
+
+*   **Composants Widget :** Ces composants servent à afficher des informations de manière visuelle et à créer des interfaces utilisateur plus élaborées.  On y trouve des affichages de feedback pour les étudiants, des visualisations de données (comme des graphiques), et d'autres éléments d'affichage plus complexes.
+
+## Pourquoi utiliser les composants PLaTon ?
+
+Le Framework de Composants a été conçu avec plusieurs objectifs en tête pour vous faciliter la vie :
+
+*   **Basé sur les Standards du Web :** Les composants sont construits en utilisant les technologies web les plus récentes et reconnues.  Cela signifie qu'ils fonctionnent parfaitement avec tous les navigateurs web modernes, sans souci de compatibilité.
+
+*   **Encapsulation :**  Chaque composant est comme une boîte fermée.  Tout ce qui concerne son apparence (style CSS), sa structure (HTML) et son comportement (JavaScript) est isolé du reste de la page.  **C'est très pratique car cela évite les conflits et rend vos exercices plus robustes.**  Vous n'avez pas à vous soucier que le style d'un composant perturbe un autre élément de votre exercice.
+
+*   **Simplicité d'Utilisation :**  L'objectif est de rendre la création d'exercices accessible à tous, même avec des connaissances limitées en programmation.  Les composants sont conçus pour être simples à utiliser.  Certains proposent même des fonctionnalités d'auto-correction, ce qui peut vous faire gagner beaucoup de temps !
+
+*   **Réutilisabilité Maximale :**  Une fois qu'un composant existe, vous pouvez le réutiliser autant de fois que vous le souhaitez dans différents exercices.  **Vous n'avez pas besoin de le recréer à chaque fois.**  Il suffit de lui fournir les données spécifiques à chaque exercice, et il s'affichera correctement.
+
+*   **Extensibilité et Personnalisation :**  Le framework est conçu pour être flexible. Si vous avez besoin d'adapter un composant à vos besoins spécifiques, vous pouvez personnaliser son apparence (styles), ses animations ou encore ses propriétés.
+
+## Comment ça marche concrètement ?
+
+Lorsque vous créez un exercice, vous vous posez probablement ces questions :
+
+*   Quelles informations dois-je montrer à l'étudiant ? (Le contenu de l'exercice)
+*   Comment cet exercice va-t-il apparaître visuellement ? (L'interface utilisateur)
+*   Comment créer une interface utilisateur complexe si nécessaire ? (Les éléments interactifs)
+*   Comment évaluer la réponse de l'étudiant en fonction de ses actions ? (La correction)
+
+Le Framework de Composants s'appuie sur une méthode d'organisation appelée **MVC (Modèle-Vue-Contrôleur)** pour répondre à ces questions de manière claire et structurée :
+
+*   **Modèle (Données) :**  Le "modèle" d'un composant représente les **données** qu'il utilise.  Ces données sont fournies sous forme de texte structuré en format JSON.  Par exemple, pour un composant qui affiche une liste à trier (appelé `SortList`), le modèle sera simplement la liste des éléments à trier, écrite au format JSON.
+
+*   **Vue (Affichage) :** La "vue" est la partie visible du composant, ce que l'étudiant voit à l'écran.  Pour utiliser un composant dans votre exercice, vous utilisez un **sélecteur HTML**.  C'est une sorte de "nom" spécial qui commence toujours par `wc-`.  Par exemple, pour afficher le composant `SortList`, vous utiliserez le sélecteur `<wc-sort-list></wc-sort-list>` dans le code HTML de votre exercice.
+
+*   **Contrôleur (Gestion) :** Le "contrôleur", c'est en fait le Framework de Composants lui-même.  Il s'occupe de tout le travail "en coulisses".  Pendant que l'étudiant interagit avec l'exercice, le framework surveille les changements que vous avez apportés au composant (les données, par exemple) et les actions de l'étudiant (clics, saisies, etc.).  Il gère l'interaction entre le modèle et la vue.
+
+## Exemple concret : Le composant `MatchList`
+
+Voici un exemple de composant en action : `MatchList`.  Ce composant permet de faire glisser-déposer des éléments pour les associer entre eux.  Vous pouvez interagir avec l'exemple ci-dessous pour voir comment il fonctionne et comment les données (le "modèle" en JSON) changent en temps réel lorsque vous faites des actions.
+
+<iframe
+  src={useAbsoluteUrl('playground/components/wc-match-list')}
+  style={{ width: '100%', height: '700px', border: 'none' }}
+></iframe>
+
+
+## Comment en savoir plus sur les composants ?
+
+Pour chaque composant disponible, vous trouverez une documentation détaillée qui explique :
+
+1.  **À quoi sert le composant :** Une description de son objectif et de son utilisation.
+2.  **Les propriétés et options de configuration :**  Comment personnaliser le comportement et l'apparence du composant.
+3.  **Des exemples d'utilisation :**  Des cas concrets pour vous montrer comment intégrer le composant dans vos exercices.
+4.  **Un explorateur de propriétés interactif :**  Un outil pour tester et manipuler les propriétés du composant en direct.
+
+Vous pouvez explorer la liste des composants en utilisant la barre de navigation (le menu latéral) ou en recherchant un composant spécifique par son nom.
+
+## Envie de contribuer et d'améliorer les composants ?
+
+Si vous avez des compétences en développement web et que vous souhaitez contribuer au projet en créant de nouveaux composants ou en améliorant ceux qui existent déjà, votre aide est la bienvenue ! Voici les étapes à suivre :
+
+1.  **Créez une copie du projet (Fork) sur GitHub :**  Allez sur notre dépôt GitHub et cliquez sur le bouton "Fork" pour créer votre propre copie du projet sur votre compte GitHub.
+
+2.  **Récupérez votre copie sur votre ordinateur (Clone) :**  Ouvrez votre terminal (ou invite de commande) et utilisez la commande suivante pour télécharger votre copie du projet sur votre ordinateur :
+
+    ```bash
+    git clone https://github.com/[votre-utilisateur]/platon.git
+    cd platon
+    ```
+    *(Remplacez `[votre-utilisateur]` par votre nom d'utilisateur GitHub)*
+
+3.  **Créez une Nouvelle Branche (Branch) :**  Pour travailler sur votre contribution sans risquer de modifier le projet principal, créez une nouvelle branche :
+
+    ```bash
+    git checkout -b [ma-nouvelle-fonctionnalite]
+    ```
+    *(Remplacez `[ma-nouvelle-fonctionnalite]` par un nom clair pour ce que vous allez développer, par exemple `ajout-composant-image`)*
+
+4.  **Développez votre Composant :**  Inspirez-vous des composants existants pour créer le vôtre.  Respectez la structure et les conventions du projet.  Voici les étapes clés pour créer un nouveau composant (de manière simplifiée) :
+
+    *   **Définissez les données du composant (Interface) :**  Créez un fichier de code (`my-component.ts`) pour définir quelles données (propriétés) votre composant va utiliser.
+
+        ```typescript
+        export interface MyComponentState extends IWebComponent {
+          // Définissez ici les propriétés de votre composant
+        }
+        ```
+
+        <Callout type="info">
+        Le fichier doit porter le même nom que le dossier du composant, car il sera utilisé pour générer la documentation.
+        </Callout>
+
+    *   **Décrivez le composant (Définition) :**  Utilisez la fonction (`defineWebComponent`) pour donner un nom et un type à votre composant (formulaire ou widget).
+
+        ```typescript
+        export const MonComposantDefinition = defineWebComponent({
+          type: WebComponentTypes.form, // ou WebComponentTypes.widget
+          name: 'MyComponent',
+          // Autres détails de définition
+        })
+        ```
+
+    *   **Créez le composant visuel (Composant Angular) :**  Créez les fichiers nécessaires pour l'interface utilisateur de votre composant avec Angular (fichiers `.ts`, `.html` et `.scss`).
+
+        votre composant doit respecter certaines règles techniques (implémenter une interface, utiliser un décorateur).  Vous pouvez aussi utiliser un service (`WebComponentService`) pour simplifier certaines interactions.
+
+        ```typescript
+        @Component({
+          selector: 'wc-my-component', // Le nom pour utiliser votre composant (ex: <wc-my-component>)
+          templateUrl: 'my-component.component.html', // Le fichier HTML
+          styleUrls: ['my-component.component.scss'], // Le fichier CSS
+          changeDetection: ChangeDetectionStrategy.OnPush,
+        })
+        @WebComponent(MonComposantDefinition)
+        export class MyComponent implements WebComponentHooks<MyComponentState> {
+          @Input() state!: MyComponentState
+          @Output() stateChange = new EventEmitter<MyComponentState>()
+
+          // Ajoutez ici le code de votre composant
+        }
+        ```
+
+    *   **Créez un Module Angular :**  Créez un module Angular pour organiser votre composant.
+
+        ```typescript
+        @NgModule({
+          declarations: [MyComponent],
+          imports: [CommonModule, FormsModule, MatRadioModule], // Modules nécessaires
+          exports: [MyComponent],
+        })
+        export class MonComposantModule implements IDynamicModule {
+          component: Type<unknown> = MyComponent
+        }
+        ```
+
+    *   **Enregistrez votre component :**  Ajoutez une ligne dans un fichier de configuration (`web-component-registry.ts`) pour que le système reconnaisse votre nouveau composant.
+
+        ```typescript
+        // ... imports ...
+        import { MonComposantDefinition } from './[forms|widget]/my-component/my-component'
+
+        export const WEB_COMPONENTS_BUNDLES: NgeElementDef[] = [
+          // ... autres composants ...
+          {
+            selector: 'wc-my-component',
+            module: () =>
+              import(/* webpackChunkName: "wc-my-component" */ './[forms|widget]/my-component/my-component.module').then(
+                (m) => m.MonComposantModule
+              ),
+          },
+        ]
+
+        export const WEB_COMPONENTS_REGISTRY: Provider[] = [
+          // ... autres composants ...
+          {
+            provide: WEB_COMPONENT_DEFINITIONS,
+            multi: true,
+            useValue: MonComposantDefinition,
+          },
+        ]
+        ```
+
+    *   **Rédigez la documentation :**  Créez un fichier au format Markdown pour expliquer comment utiliser votre composant.
+
+5. L'arborecence de votre composant doit ressembler à ceci :
+
+  <FileTree>
+    <FileTree.Folder name="my-component" defaultOpen>
+      <FileTree.File name="my-component.component.html" />
+      <FileTree.File name="my-component.component.scss" />
+      <FileTree.File name="my-component.component.ts" />
+      <FileTree.File name="my-component.md" />
+      <FileTree.File name="my-component.module.ts" />
+      <FileTree.File name="my-component.ts" />
+    </FileTree.Folder>
+  </FileTree>
+
+6.  **Testez votre composant :**  Vérifiez que votre composant fonctionne correctement et ajoutez des tests si nécessaire pour garantir sa qualité.
+
+7.  **Enregistrez vos modifications (Commit) :**  Enregistrez vos changements avec un message clair expliquant ce que vous avez fait :
+
+    ```bash
+    git add .
+    git commit -m "feat(webcomponent): ajout du composant MyComponent"
+    ```
+
+8.  **Envoyez votre branche (Push) :**  Envoyez votre branche avec vos modifications sur votre copie du projet (votre fork) sur GitHub :
+
+    ```bash
+    git push origin [ma-nouvelle-fonctionnalite]
+    ```
+
+9.  **Proposez vos changements (Pull Request) :**  Allez sur le dépôt original du projet PLaTon sur GitHub et créez une "Pull Request" depuis votre branche.  Décrivez clairement les changements que vous avez apportés et pourquoi ils sont utiles.
+
+10.  **Besoin d'aide ?**  Si vous avez des questions ou besoin d'aide, n'hésitez pas à ouvrir une "issue" (une demande d'aide) sur notre [dépôt GitHub](https://github.com/PlatonOrg/platon/issues) ou contactez-nous sur [Discord](https://discord.gg/GzgzRAAeP6).
+
+Nous sommes ravis de recevoir vos contributions et de rendre les composants PLaTon encore meilleur !

@@ -7,6 +7,7 @@
       [ngStyle]="item.css | css : 'style'"
       [disabled]="!!(state.disabled || item.disabled)"
       [(ngModel)]="item.value"
+      (ngModelChange)="valueChange()"
     />
   </ng-container>
 </div>

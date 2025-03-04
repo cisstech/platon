@@ -1,9 +1,10 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Patch, Post } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { CreatedResponse, ItemResponse, ListResponse, NoContentResponse } from '@platon/core/common'
-import { Mapper } from '../utils'
+import { Mapper, UUIDParam } from '../utils'
 import { CreateLevelDTO, LevelDTO, UpdateLevelDTO } from './level.dto'
 import { LevelService } from './level.service'
+import { Roles } from '../auth/decorators/roles.decorator'
 
 @Controller('levels')
 @ApiTags('Settings')
@@ -18,19 +19,24 @@ export class LevelController {
   }
 
   @Post()
+  @Roles('admin', 'teacher')
   async create(@Body() input: CreateLevelDTO): Promise<CreatedResponse<LevelDTO>> {
-    const resource = Mapper.map(await this.service.create(input), LevelDTO)
+    const force = input.force || false
+    const result = await this.service.create(input, force)
+    const resource = { ...Mapper.map(result.level, LevelDTO), existing: result.existing }
     return new CreatedResponse({ resource })
   }
 
   @Patch('/:id')
-  async update(@Param('id') id: string, @Body() input: UpdateLevelDTO): Promise<ItemResponse<LevelDTO>> {
+  @Roles('admin')
+  async update(@UUIDParam('id') id: string, @Body() input: UpdateLevelDTO): Promise<ItemResponse<LevelDTO>> {
     const resource = Mapper.map(await this.service.update(id, input), LevelDTO)
     return new ItemResponse({ resource })
   }
 
   @Delete('/:id')
-  async delete(@Param('id') id: string): Promise<NoContentResponse> {
+  @Roles('admin')
+  async delete(@UUIDParam('id') id: string): Promise<NoContentResponse> {
     await this.service.delete(id)
     return new NoContentResponse()
   }

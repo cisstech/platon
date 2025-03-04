@@ -88,7 +88,7 @@ export class SidebarComponent implements OnInit {
       ...(isTeacherRole(this.user.role)
         ? [
             {
-              url: '/docs/main',
+              url: '/docs',
               icon: 'help',
               title: 'Documentation',
               external: true,

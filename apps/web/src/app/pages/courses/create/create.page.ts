@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, ViewChild } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms'
 import { Router, RouterModule } from '@angular/router'
 import { firstValueFrom } from 'rxjs'
@@ -53,6 +53,16 @@ export class CourseCreatePage {
     name: new FormControl('', [Validators.required]),
     desc: new FormControl('', [Validators.required]),
   })
+
+  @ViewChild(UiStepperComponent)
+  protected stepper!: UiStepperComponent
+
+  @HostListener('window:keydown.meta.enter')
+  protected async handleKeyDown(): Promise<void> {
+    if (this.stepper.isValid) {
+      this.stepper.isLast ? await this.create() : this.stepper.nextStep()
+    }
+  }
 
   constructor(
     private readonly router: Router,

@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { HttpErrorResponse } from '@angular/common/http'
 import { Injectable, OnDestroy, inject } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { AuthService, DialogService } from '@platon/core/browser'
@@ -12,6 +13,7 @@ import {
   CourseGroup,
   CourseGroupDetail,
   CourseMember,
+  CourseMemberRoles,
   CourseSection,
   CreateCourseMember,
   CreateCourseSection,
@@ -73,6 +75,21 @@ export class CoursePresenter implements OnDestroy {
     }
   }
 
+  async updateMemberRole(member: CourseMember, role: CourseMemberRoles): Promise<void> {
+    try {
+      await firstValueFrom(this.courseService.updateMemberRole(member, role))
+    } catch (e: unknown) {
+      if (e instanceof HttpErrorResponse) {
+        if (e.status === 403) {
+          this.dialogService.error('Le rôle enseignant ne peut pas être donné à un compte étudiant.')
+          throw e
+        }
+      } else {
+        this.alertError()
+      }
+    }
+  }
+
   // Sections
 
   async listSections(): Promise<CourseSection[]> {
@@ -118,6 +135,15 @@ export class CoursePresenter implements OnDestroy {
     }
     const response = await firstValueFrom(this.courseService.listActivities(course, filters))
     return response.resources
+  }
+
+  async updateActivityOrder(ids: string[]): Promise<void> {
+    const { course } = this.context.value as Required<Context>
+    try {
+      await firstValueFrom(this.courseService.updateActivityOrder(course, ids))
+    } catch {
+      this.alertError()
+    }
   }
 
   // Leaderboard
@@ -211,6 +237,10 @@ export class CoursePresenter implements OnDestroy {
       this.alertError()
       return false
     }
+  }
+
+  async copyDemoUri(): Promise<void> {
+    this.dialogService.info('URL copiée')
   }
 
   async listCourseGroups(): Promise<CourseGroup[]> {

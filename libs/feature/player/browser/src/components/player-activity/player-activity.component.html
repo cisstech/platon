@@ -1,57 +1,60 @@
 <h1>{{ player.title }}</h1>
-<user-avatar *ngIf="player.author" [userIdOrName]="player.author" />
 <main>
   <mat-card *ngIf="!exercises; else showExercices">
-    <mat-card-content class="centered">
+    <mat-card-content>
       <!-- INTRODUCTION -->
       <ng-container *ngIf="showIntroduction">
         <div class="markdown-container">
           <nge-markdown [data]="player.introduction" />
         </div>
-        <player-settings [player]="player" />
-        <button *ngIf="canGoDashboard" mat-raised-button [routerLink]="'/dashboard'">Retourner sur PLaTon</button>
-        <button mat-raised-button color="primary" [disabled]="empty" (click)="start()">Commencer</button>
+        <div class="centered">
+          <player-settings [player]="player" />
+          <button *ngIf="canGoDashboard" mat-raised-button [routerLink]="'/dashboard'">Retourner sur PLaTon</button>
+          <button mat-raised-button color="primary" [disabled]="empty" (click)="start()">Commencer</button>
+        </div>
       </ng-container>
       <!-- CONCLUSION -->
-      <ng-container *ngIf="showConclusion">
-        <nz-alert
-          *ngIf="terminatedAfterLoseFocus && !terminatedAfterLeavePage"
-          nzShowIcon
-          nzType="error"
-          nzMessage="Activité auto terminée"
-          nzDescription="Cette activité s'est automatiquement terminée en raison de ses paramètres de sécurité, qui interdisent de
+      <div class="centered">
+        <ng-container *ngIf="showConclusion">
+          <nz-alert
+            *ngIf="terminatedAfterLoseFocus && !terminatedAfterLeavePage"
+            nzShowIcon
+            nzType="error"
+            nzMessage="Activité auto terminée"
+            nzDescription="Cette activité s'est automatiquement terminée en raison de ses paramètres de sécurité, qui interdisent de
         cliquer en dehors de la page."
-        />
+          />
 
-        <nz-alert
-          *ngIf="terminatedAfterLeavePage"
-          nzShowIcon
-          nzType="error"
-          nzMessage="Activité auto terminée"
-          nzDescription="Cette activité s'est automatiquement terminée en raison de ses paramètres de sécurité, qui interdisent de
+          <nz-alert
+            *ngIf="terminatedAfterLeavePage"
+            nzShowIcon
+            nzType="error"
+            nzMessage="Activité auto terminée"
+            nzDescription="Cette activité s'est automatiquement terminée en raison de ses paramètres de sécurité, qui interdisent de
         cliquer changer de page."
-        />
+          />
 
-        <div class="markdown-container">
-          <nge-markdown [data]="player.conclusion" />
-        </div>
+          <div class="markdown-container">
+            <nge-markdown [data]="player.conclusion" />
+          </div>
 
-        <player-results [player]="player" />
+          <player-results [player]="player" />
 
-        <button *ngIf="canGoDashboard" mat-raised-button color="primary" [routerLink]="'/dashboard'">
-          Retourner sur PLaTon
-        </button>
-      </ng-container>
-      <!-- PLANNING -->
-      <ng-container *ngIf="state === 'planned'">
-        <nz-countdown
-          *ngIf="countdown"
-          nzTitle="Temps restant avant ouverture"
-          [nzValue]="countdown"
-          (nzCountdownFinish)="onFinishCountdown()"
-        />
-        <player-settings [player]="player" />
-      </ng-container>
+          <button *ngIf="canGoDashboard" mat-raised-button color="primary" [routerLink]="'/dashboard'">
+            Retourner sur PLaTon
+          </button>
+        </ng-container>
+        <!-- PLANNING -->
+        <ng-container *ngIf="state === 'planned'">
+          <nz-countdown
+            *ngIf="countdown"
+            nzTitle="Temps restant avant ouverture"
+            [nzValue]="countdown"
+            (nzCountdownFinish)="onFinishCountdown()"
+          />
+          <player-settings [player]="player" />
+        </ng-container>
+      </div>
     </mat-card-content>
   </mat-card>
   <ng-template #showExercices>
@@ -83,11 +86,18 @@
     [nzValueStyle]="{ color: countdownColor }"
     (nzCountdownFinish)="onFinishCountdown()"
   />
-  <button mat-fab extended color="primary" [nz-popover]="navigation" nzPopoverPlacement="topRight">
+  <button
+    mat-fab
+    extended
+    color="primary"
+    [nz-popover]="navigation"
+    nzPopoverPlacement="topRight"
+    *ngIf="!peerComparison && !nextNavigation"
+  >
     <mat-icon>menu</mat-icon>
     Navigation
   </button>
-  <button
+  <!-- <button
     class="terminate-button"
     mat-fab
     extended
@@ -96,7 +106,7 @@
   >
     <mat-icon>check</mat-icon>
     Terminer
-  </button>
+  </button> -->
 </footer>
 <ng-template #navigation>
   <player-navigation [player]="player" (navigate)="play($event)" [terminate]="terminate.bind(this)" />
@@ -128,4 +138,7 @@
       ></nz-progress>
     </button>
   </div>
+</ng-template>
+<ng-template #errorTemplate let-data="data">
+  <pre>{{ data.message }}</pre>
 </ng-template>

@@ -1,0 +1,245 @@
+---
+title: FoldableFeedback
+description: Système avancé d'affichage de retours détaillés et hiérarchisés avec des sections pliables/dépliables. Particulièrement adapté aux exercices de programmation pour montrer les résultats de tests unitaires, aux analyses multicritères, ou toute évaluation nécessitant plusieurs niveaux de détail avec comparaison entre valeurs attendues et obtenues.
+---
+
+import { Tabs, Tab } from 'nextra/components'
+import { ComponentProperties } from '../../../components'
+import { useAbsoluteUrl } from '../../../hooks'
+
+# FoldableFeedback
+
+`wc-foldable-feedback`
+
+Système avancé d'affichage de retours détaillés et hiérarchisés avec des sections pliables/dépliables. Particulièrement adapté aux exercices de programmation pour montrer les résultats de tests unitaires, aux analyses multicritères, ou toute évaluation nécessitant plusieurs niveaux de détail avec comparaison entre valeurs attendues et obtenues.
+
+## Documentation
+
+Le composant FoldableFeedback permet d'afficher des retours structurés et hiérarchiques que les apprenants peuvent explorer en dépliant ou repliant les sections. Particulièrement adapté aux exercices complexes nécessitant des retours détaillés sur plusieurs niveaux.
+
+### Structure des données
+
+Le composant organise les retours selon deux types d'éléments : les **feedbacks individuels** et les **catégories** (qui peuvent contenir d'autres feedbacks).
+
+#### Feedbacks individuels
+
+Pour afficher un retour simple sur un test ou une évaluation :
+
+```typescript
+{
+  name: "Vérification de la syntaxe",     // Titre du feedback (obligatoire)
+  description: "Analyse du code source",  // Description détaillée (optionnel)
+  expected: "function main() { ... }",    // Résultat attendu (optionnel)
+  obtained: "fonction main() { ... }",    // Résultat obtenu (optionnel)
+  arguments: "--strict --warnings",       // Arguments éventuels (optionnel)
+  type: "error",                          // Type visuel : success, info, warning, error
+  display: false                          // État initial : replié (false) ou déplié (true)
+}
+```
+
+#### Catégories de feedbacks
+
+Pour regrouper plusieurs retours dans une section pliable :
+
+```typescript
+{
+  name: "Tests unitaires",                // Titre de la catégorie (obligatoire)
+  description: "Résultats détaillés",     // Description de la catégorie (optionnel)
+  type: "warning",                        // Type visuel de la catégorie
+  display: false,                         // État initial : replié ou déplié
+  feedbacks: [                            // Liste des feedbacks enfants
+    // Feedbacks individuels ou sous-catégories
+  ]
+}
+```
+
+### Composition du contenu
+
+La propriété `content` attend un tableau qui peut contenir un mélange de feedbacks individuels et de catégories :
+
+```typescript
+content = [
+  // Feedback simple
+  {
+    name: 'Test 1',
+    expected: 'Hello World',
+    obtained: 'Hello World!',
+    type: 'warning',
+  },
+
+  // Catégorie avec sous-feedbacks
+  {
+    name: 'Tests de performance',
+    type: 'info',
+    feedbacks: [
+      { name: "Temps d'exécution", expected: '<100ms', obtained: '95ms', type: 'success' },
+      { name: 'Utilisation mémoire', expected: '<5MB', obtained: '7MB', type: 'warning' },
+    ],
+  },
+]
+```
+
+### Comportement visuel
+
+- Les éléments s'affichent avec un code couleur intuitif (succès en vert, erreur en rouge, etc.)
+- Les parties repliées peuvent être dépliées par un simple clic
+- Les champs vides (description, expected, etc.) ne sont pas affichés
+- Les catégories peuvent être imbriquées sans limitation de profondeur
+
+Ce composant est particulièrement utile pour les exercices de programmation, les évaluations multicritères ou toute situation nécessitant une analyse détaillée avec plusieurs niveaux d'information.
+
+## Exemple interactif
+
+<iframe
+  src={useAbsoluteUrl('playground/components/wc-foldable-feedback')}
+  style={{ width: '100%', height: '700px', border: 'none' }}
+></iframe>
+
+## API
+
+<Tabs items={['Graphique', 'JSON']}>
+  <Tab>
+    <ComponentProperties schema={{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "required": [
+    "content"
+  ],
+  "properties": {
+    "content": {
+      "type": "array",
+      "description": "Contenu du feedback",
+      "items": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Nom du test effectué",
+            "default": ""
+          },
+          "description": {
+            "type": "string",
+            "description": "Description du test effectué",
+            "default": ""
+          },
+          "expected": {
+            "type": "string",
+            "description": "Valeur attendue par le professeur",
+            "default": ""
+          },
+          "obtained": {
+            "type": "string",
+            "description": "Valeur obtenue par l'étudiant",
+            "default": ""
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Arguments passés à l'execution",
+            "default": ""
+          },
+          "type": {
+            "type": "string",
+            "description": "Type de feedback",
+            "enum": [
+              "success",
+              "info",
+              "warning",
+              "error"
+            ],
+            "default": "info"
+          },
+          "display": {
+            "type": "boolean",
+            "description": "Affichage (le feedback est-il déplié ?)",
+            "default": false
+          },
+          "feedbacks": {
+            "type": "array",
+            "description": "Feedbacks enfants. Même structure que content. Si défini, ce feedback est une catégorie donc ne pas définir expected, obtained et arguments",
+            "items": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  }
+}} />
+  </Tab>
+  <Tab>
+    ```json
+    {
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "required": [
+    "content"
+  ],
+  "properties": {
+    "content": {
+      "type": "array",
+      "description": "Contenu du feedback",
+      "items": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Nom du test effectué",
+            "default": ""
+          },
+          "description": {
+            "type": "string",
+            "description": "Description du test effectué",
+            "default": ""
+          },
+          "expected": {
+            "type": "string",
+            "description": "Valeur attendue par le professeur",
+            "default": ""
+          },
+          "obtained": {
+            "type": "string",
+            "description": "Valeur obtenue par l'étudiant",
+            "default": ""
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Arguments passés à l'execution",
+            "default": ""
+          },
+          "type": {
+            "type": "string",
+            "description": "Type de feedback",
+            "enum": [
+              "success",
+              "info",
+              "warning",
+              "error"
+            ],
+            "default": "info"
+          },
+          "display": {
+            "type": "boolean",
+            "description": "Affichage (le feedback est-il déplié ?)",
+            "default": false
+          },
+          "feedbacks": {
+            "type": "array",
+            "description": "Feedbacks enfants. Même structure que content. Si défini, ce feedback est une catégorie donc ne pas définir expected, obtained et arguments",
+            "items": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+    ```
+  </Tab>
+</Tabs>

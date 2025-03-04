@@ -6,11 +6,7 @@
           <mat-icon *ngIf="state" [style.color]="state | answerStateColor" [nz-tooltip]="state | answerStateLabel">
             {{ state | answerStateIcon }}
           </mat-icon>
-          <ng-container *ngIf="player?.title">
-            <div class="exercise-title">
-              <nge-markdown [data]="player!.title" />
-            </div>
-          </ng-container>
+          {{ player?.title }}
         </mat-card-title>
         <mat-card-subtitle *ngIf="player?.author">
           @if (player!.author!|isUUID) {
@@ -41,11 +37,16 @@
       <section #containerFeedbacks>
         <ng-container *ngIf="player?.feedbacks">
           <ng-container *ngFor="let feedback of player?.feedbacks">
-            <nz-alert nzShowIcon [nzType]="feedback.type" [nzMessage]="content">
-              <ng-template #content>
-                <nge-markdown [data]="feedback.content" />
-              </ng-template>
-            </nz-alert>
+            @if (!feedback.content) {
+            <!-- noting -->
+            } @else if (isFeedbackContentAnObject(feedback)) {
+            <wc-foldable-feedback [state]="{ content: feedback.content }"></wc-foldable-feedback>
+            } @else {
+            <wc-feedback
+              *ngIf="feedback.type !== 'none'"
+              [state]="{ type: feedback.type, content: feedback.content }"
+            ></wc-feedback>
+            }
           </ng-container>
         </ng-container>
       </section>
@@ -62,12 +63,34 @@
           </div>
         </ng-container>
       </section>
-      <section *ngIf="player?.form">
+      <section>
         <mat-divider />
-        <div class="exercise-form">
+        <div id="form" class="exercise-form">
           <nge-markdown [data]="player?.form" (render)="onRender()" />
         </div>
       </section>
+      <!-- L'AJOUT DU TERMINAL LOGS -->
+      <section>
+        <ng-container *ngIf="player?.platon_logs?.length">
+          <div class="terminal-container">
+            <div class="terminal-header">
+              <span>Terminal PlaTon</span>
+              <button
+                mat-icon-button
+                class="copy-button"
+                (click)="copyToClipboard(player?.platon_logs?.join('\n'))"
+                nz-tooltip="Copier le contenu"
+              >
+                <mat-icon>content_copy</mat-icon>
+              </button>
+            </div>
+            <div class="terminal-body" #terminalBody>
+              <pre><code>{{player?.platon_logs?.join('\n')}}</code></pre>
+            </div>
+          </div>
+        </ng-container>
+      </section>
+
       <section #containerSolution>
         <ng-container *ngIf="player?.solution">
           <mat-accordion class="exercise-solution">

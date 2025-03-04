@@ -34,7 +34,7 @@ export class Contribution implements IContribution {
                 .open(monaco.Uri.parse('docs://embed'), {
                   preview: {
                     type: PreviewTypes.URL,
-                    data: 'docs/main/doc/programing/ide',
+                    data: 'docs/main/programing/ide',
                   },
                   title: 'Documentation',
                 })
@@ -62,7 +62,7 @@ export class Contribution implements IContribution {
                 .open(monaco.Uri.parse('docs://embed'), {
                   preview: {
                     type: PreviewTypes.URL,
-                    data: 'docs/main/doc/programing/exercise/langage',
+                    data: 'docs/main/programing/exercise/langage',
                   },
                   title: 'Documentation',
                 })

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit, ViewChild } from '@angular/core'
 import {
   AbstractControl,
   FormControl,
@@ -39,7 +39,6 @@ import {
   ResourceTypes,
   branchFromCircleTree,
   circleAncestors,
-  circleTreeFromCircle,
   flattenCircleTree,
 } from '@platon/feature/resource/common'
 import { UiStepDirective, UiStepperComponent } from '@platon/shared/ui'
@@ -99,6 +98,7 @@ export class ResourceCreatePage implements OnInit {
   protected creating = false
   protected editionMode?: 'scratch' | 'template'
   protected loadingTemplates = false
+  protected isFinished = false
 
   protected tree!: CircleTree
   protected topics: Topic[] = []
@@ -115,6 +115,16 @@ export class ResourceCreatePage implements OnInit {
     levels: new FormControl<string[]>([]),
   })
 
+  @ViewChild(UiStepperComponent)
+  protected stepper!: UiStepperComponent
+
+  @HostListener('window:keydown.meta.enter')
+  protected async handleKeyDown(): Promise<void> {
+    if (this.stepper.isValid) {
+      this.stepper.isLast ? await this.create() : this.stepper.nextStep()
+    }
+  }
+
   constructor(
     private readonly router: Router,
     private readonly authService: AuthService,
@@ -130,9 +140,8 @@ export class ResourceCreatePage implements OnInit {
     this.parentId = this.activatedRoute.snapshot.queryParamMap.get('parent') || undefined
 
     const user = (await this.authService.ready()) as User
-    const [tree, circle, topics, levels] = await Promise.all([
+    const [tree, topics, levels] = await Promise.all([
       firstValueFrom(this.resourceService.tree()),
-      firstValueFrom(this.resourceService.circle(user.username)),
       firstValueFrom(this.tagService.listTopics()),
       firstValueFrom(this.tagService.listLevels()),
     ])
@@ -157,10 +166,6 @@ export class ResourceCreatePage implements OnInit {
     }
 
     this.tree = tree
-
-    if (this.type !== 'CIRCLE') {
-      this.tree.children?.unshift(circleTreeFromCircle(circle))
-    }
 
     this.topics = topics
     this.levels = levels
@@ -252,5 +257,25 @@ export class ResourceCreatePage implements OnInit {
       const forbidden = [...codes, 'relative'].includes(control.value)
       return forbidden ? { code: true } : null
     }
+  }
+
+  protected openTemplateResource(templateId: string): void {
+    window.open(`/resources/${templateId}`, '_blank')
+  }
+
+  protected selectEditionMode(mode: 'scratch' | 'template', stepper: UiStepperComponent): void {
+    if (mode === 'template' && !this.templateSources.length) {
+      return
+    }
+    this.editionMode = mode
+    this.infos.markAllAsTouched()
+    stepper.nextStep()
+  }
+
+  protected endStep(stepper: UiStepperComponent): void {
+    if (this.isFinished) return
+    this.infos.markAllAsTouched()
+    stepper.nextStep()
+    this.isFinished = true
   }
 }

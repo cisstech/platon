@@ -16,10 +16,9 @@ export interface JsxState extends IWebComponent {
 export const JsxComponentDefinition = defineWebComponent({
   type: WebComponentTypes.form,
   name: 'Jsx',
-  icon: 'assets/images/components/forms/jsx/jsx.svg',
   selector: 'wc-jsx',
-  description: 'Permets de dessiner, visualiser et interagir avec des figures géométriques.',
-  fullDescriptionUrl: 'assets/docs/components/forms/jsx/jsx.md',
+  description:
+    'Interface graphique interactive basée sur JSXGraph permettant de créer, manipuler et explorer des constructions géométriques dynamiques. Idéal pour les exercices de géométrie euclidienne, trigonométrie, fonctions mathématiques, lieux géométriques, ou pour illustrer des concepts physiques avec des simulations visuelles.',
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',

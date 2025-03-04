@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Injector, Input, Output } from '@angular/core'
+import { ChangeDetectionStrategy, Component, EventEmitter, Injector, Input, Output, OnInit } from '@angular/core'
 import { WebComponent, WebComponentHooks } from '../../web-component'
 import { CheckboxGroupComponentDefinition, CheckboxGroupState, CheckboxItem } from './checkbox-group'
 
@@ -9,11 +9,15 @@ import { CheckboxGroupComponentDefinition, CheckboxGroupState, CheckboxItem } fr
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 @WebComponent(CheckboxGroupComponentDefinition)
-export class CheckboxGroupComponent implements WebComponentHooks<CheckboxGroupState> {
+export class CheckboxGroupComponent implements WebComponentHooks<CheckboxGroupState>, OnInit {
   @Input() state!: CheckboxGroupState
   @Output() stateChange = new EventEmitter<CheckboxGroupState>()
 
   constructor(readonly injector: Injector) {}
+
+  ngOnInit() {
+    this.state.isFilled = false
+  }
 
   onChangeState() {
     if (!Array.isArray(this.state.items)) {

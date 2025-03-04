@@ -1,5 +1,13 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  HostListener,
+  OnInit,
+  ViewChild,
+  inject,
+} from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms'
 import { ActivatedRoute, Router, RouterModule } from '@angular/router'
 import differenceInCalendarDays from 'date-fns/differenceInCalendarDays'
@@ -78,6 +86,17 @@ export class ActivityCreatePage implements OnInit {
   protected challenge = false
   protected members: CourseMember[] = []
   protected courseGroups: CourseGroup[] = []
+  protected hasFirstStep = true
+
+  @ViewChild(UiStepperComponent)
+  protected stepper!: UiStepperComponent
+
+  @HostListener('window:keydown.meta.enter')
+  protected async handleKeyDown() {
+    if (this.stepper.isValid) {
+      this.stepper.isLast ? await this.create() : this.stepper.nextStep()
+    }
+  }
 
   protected courseInfo = new FormGroup({
     course: new FormControl<Course | undefined>(undefined, [Validators.required]),
@@ -108,6 +127,9 @@ export class ActivityCreatePage implements OnInit {
 
     const courseId = queryParamMap.get('course')
     const sectionId = queryParamMap.get('section')
+    if (sectionId) {
+      this.hasFirstStep = false
+    }
     this.challenge = !!queryParamMap.get('challenge')
     if (this.challenge) {
       this.settingsInfo.get('isChallenge')?.setValue(true)

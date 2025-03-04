@@ -324,4 +324,10 @@ export const enum HTTP_STATUS_CODE {
    * Was defined in a previous version of the HTTP specification to indicate that a requested response must be accessed by a proxy. It has been deprecated due to security concerns regarding in-band configuration of a proxy.
    */
   USE_PROXY = 305,
+
+  /**
+   * Custom status code for sandbox error
+   * This is not official status code
+   */
+  SANDBOX_ERROR = 512,
 }

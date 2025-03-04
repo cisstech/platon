@@ -1,9 +1,15 @@
+import { VirtualKeyboardLayout, VirtualKeyboardName } from 'mathlive'
 import { defineWebComponent, IWebComponent, WebComponentTypes } from '../../web-component'
 
 export interface MathLiveState extends IWebComponent {
   value: string
   prefix: string
   suffix: string
+  layouts:
+    | VirtualKeyboardName
+    | VirtualKeyboardLayout
+    | (VirtualKeyboardName | VirtualKeyboardLayout)[]
+    | Readonly<(VirtualKeyboardName | VirtualKeyboardLayout)[]>
   config: Record<string, unknown>
   disabled: boolean
 }
@@ -11,10 +17,9 @@ export interface MathLiveState extends IWebComponent {
 export const MathLiveComponentDefinition = defineWebComponent({
   type: WebComponentTypes.form,
   name: 'MathLive',
-  icon: 'assets/images/components/forms/math-live/math-live.svg',
   selector: 'wc-math-live',
-  description: 'Permets de saisir des expressions mathématiques en latex.',
-  fullDescriptionUrl: 'assets/docs/components/forms/math-live/math-live.md',
+  description:
+    'Composant avancé pour saisir des expressions mathématiques en notation LaTeX avec rendu visuel en temps réel. Particulièrement adapté aux exercices de calcul différentiel et intégral, algèbre, équations, fractions, racines et expressions complexes où la précision de la notation est essentielle.',
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',
@@ -34,6 +39,11 @@ export const MathLiveComponentDefinition = defineWebComponent({
         default: {},
         description: "La configuration de l'instance de la lib MathLive.",
       },
+      layouts: {
+        type: ['string', 'array', 'object'],
+        default: 'default',
+        description: 'Les différentes configurations possible du clavier virtuel.',
+      },
       prefix: {
         type: 'string',
         default: '',
@@ -47,7 +57,7 @@ export const MathLiveComponentDefinition = defineWebComponent({
     },
   },
   showcase: {
-    value: '\\frac{\\sin(x)}{\\cos(x)}',
+    value: 'x=\\frac{-b\\pm \\sqrt{b^2-4ac}}{2a}',
     suffix: 'clarity happy-face color=FF0000',
   },
 })

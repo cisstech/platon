@@ -1,0 +1,40 @@
+<nz-card cdkDropListGroup style="width: 100%" [nzBordered]="true">
+  <div nz-row nzJustify="center">
+    <div nz-col [nzSpan]="24" [nzXs]="24" [nzSm]="12">
+      <div
+        cdkDropList
+        [cdkDropListData]="state.selectedWords"
+        class="example-list"
+        (cdkDropListDropped)="drop($event)"
+        cdkDropListOrientation="mixed"
+      >
+        @for (word of state.selectedWords; track word){
+        <div class="example-box" cdkDrag (click)="removeWord(word)">
+          {{ word }}
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div style="height: 20px"></div>
+
+  <div nz-row nzJustify="center">
+    <div nz-col [nzSpan]="24" [nzXs]="24" [nzSm]="12">
+      <div
+        cdkDropList
+        [cdkDropListData]="state.words"
+        class="example-list"
+        (cdkDropListDropped)="drop($event)"
+        cdkDropListOrientation="mixed"
+      >
+        @for (word of state.words; track word){
+        <div class="example-box" cdkDrag (click)="addWord(word)">
+          {{ word }}
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+</nz-card>
+<wc-base [(state)]="state"></wc-base>

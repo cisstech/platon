@@ -1,0 +1,7 @@
+<span><%= name %> works</span>
+
+<!--
+  THE FOLLOWING CODE HANDLE THE LOGIC SHARED BY ALL THE COMPONENTS
+  YOU SHOULD NOT MODIFY/REMOVE IT OR PLACE IT INSIDE ANY OTHER ELEMENT
+-->
+<wc-base [(state)]="state"></wc-base>

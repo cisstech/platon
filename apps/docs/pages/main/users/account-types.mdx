@@ -1,0 +1,61 @@
+---
+title: Types de Comptes
+description: Présentation des différents types de comptes dans PLaTon (Administrateur, Enseignant, Étudiant, Invité) et leurs permissions respectives. Explique la hiérarchie cumulative des droits entre les différents rôles.
+---
+
+## Types de Comptes
+
+Dans PLaTon, différents types de comptes sont disponibles, chacun offrant des niveaux d'accès et des fonctionnalités spécifiques. Ces types de comptes déterminent les actions que les utilisateurs peuvent effectuer sur la plateforme. Voici une description détaillée de chaque type de compte et de leurs capacités respectives.
+
+## Compte Administrateur Système
+
+Les administrateurs système ont le niveau d'accès le plus élevé sur PLaTon. Ils sont responsables de la gestion globale de la plateforme au sein de leur établissement.
+
+Actions Possibles :
+
+- Gestion des Utilisateurs : Création, modification et désactivation des comptes utilisateurs.
+- Configuration de la Plateforme : Réglage des paramètres globaux de PLaTon, comme les options de sécurité, les intégrations LTI et la maintenance.
+- Surveillance et Rapports : Accès à des outils analytiques pour surveiller l'utilisation de la plateforme et générer des rapports détaillés.
+- Gestion des Ressources : Capacité de visualiser, éditer ou supprimer toutes les ressources créées par les utilisateurs.
+
+## Compte Enseignant
+
+Les comptes enseignants sont conçus pour ceux qui développent et gèrent le contenu éducatif et les cours sur PLaTon.
+
+Actions Possibles :
+
+- Création de Cours et d'Activités : Développement et organisation de cours, de leçons et d'exercices interactifs.
+- Gestion des Inscriptions : Inscription des étudiants dans leurs cours et attribution des correcteurs.
+- Suivi des Performances : Accès à des outils pour suivre et évaluer les progrès des étudiants.
+- Partage de Ressources : Partage de matériel pédagogique avec d'autres enseignants ou étudiants.
+
+## Compte Étudiant
+
+Les comptes étudiants sont destinés aux apprenants utilisant PLaTon pour leur formation.
+
+Actions Possibles :
+
+- Accès aux Cours : Participation aux cours et activités proposés sur la plateforme.
+- Soumission de Travaux : Envoi de devoirs et participation à des exercices interactifs.
+- Consultation des Résultats : Visualisation des retours sur leurs travaux et suivi de leur progression.
+- Interaction et Collaboration : Utilisation des forums de discussion et des outils de collaboration pour interagir avec les enseignants et les autres étudiants.
+
+## Compte Invité
+
+Le "compte invité" dans PLaTon n'est pas un compte à proprement parler, dans le sens traditionnel des systèmes de gestion d'utilisateurs. Au lieu de cela, il s'agit d'une désignation spécifique pour les utilisateurs qui accèdent à des ressources partagées publiquement en dehors de la plateforme PLaTon, comme des exercices de démonstration ou du contenu éducatif ouvert.
+
+Caractéristiques Principales :
+
+- Accès Sans Enregistrement : Les utilisateurs désignés comme "invités" peuvent accéder à certaines ressources sans nécessiter de compte ou d'enregistrement sur PLaTon.
+- Utilisation Limitée : Leur interaction avec la plateforme est limitée à la visualisation ou à la participation à des activités spécifiquement partagées pour un usage public.
+- Aucune Sauvegarde en Base : Contrairement aux autres types de comptes, les informations des utilisateurs invités ne sont pas sauvegardées dans la base de données de PLaTon. Leur accès est temporaire et spécifique aux ressources auxquelles ils ont accès.
+- Idéal pour la Démonstration : Ce type d'accès est particulièrement utile pour présenter des fonctionnalités de PLaTon à des non-utilisateurs, comme lors de démonstrations ou de présentations publiques.
+
+## Note Importante sur la Cumulativité des Actions par Rôle
+
+Il est essentiel de noter que dans PLaTon, les actions permises par les différents rôles sont cumulatives. Cela signifie que chaque rôle supérieur intègre les capacités et les permissions des rôles situés en dessous de lui dans la hiérarchie. Par exemple :
+
+- Enseignants : En plus de leurs propres fonctions spécifiques, comme la création de cours et la gestion des inscriptions, les enseignants peuvent effectuer toutes les actions qu'un étudiant peut réaliser. Cela inclut l'accès aux cours, la participation aux activités, et la soumission des travaux.
+- Administrateurs : Les administrateurs, ayant le niveau d'accès le plus élevé, peuvent réaliser non seulement leurs tâches administratives, mais aussi toutes les actions accessibles aux enseignants et aux étudiants. Cela comprend la création de contenu, la gestion des cours, et la participation aux activités éducatives.
+
+Cette structure de permissions assure que les utilisateurs peuvent effectuer toutes les tâches pertinentes à leur rôle, tout en conservant un accès aux fonctionnalités essentielles des rôles inférieurs, garantissant ainsi une flexibilité et une efficacité optimales dans l'utilisation de la plateforme PLaTon.

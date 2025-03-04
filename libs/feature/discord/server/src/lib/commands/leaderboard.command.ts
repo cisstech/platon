@@ -6,7 +6,12 @@ import { LeaderboardService } from '@platon/feature/result/server'
 import { CourseLeaderboardEntry } from '@platon/feature/result/common'
 import { ChatInputCommandInteraction, Client, Message, TextChannel } from 'discord.js'
 import { WatchedChallengesService } from '../watchedChallenges.service'
-import { ActivityEntity, ActivityService, OnTerminateActivityEventPayload } from '@platon/feature/course/server'
+import {
+  ActivityEntity,
+  ActivityService,
+  ON_CHALLENGE_SUCCEEDED_EVENT,
+  OnChallengeSuccededEventPayload,
+} from '@platon/feature/course/server'
 import { OnEvent } from '@nestjs/event-emitter'
 import { WatchedChallengesEntity } from '../watchedChallenges.entity'
 import { isUUID4 } from '@platon/shared/server'
@@ -114,11 +119,14 @@ export class LeaderboardCommand {
     this.updateChallengeToChannelMap(watchedChallenge, message)
   }
 
-  @OnEvent('activity.terminate')
-  async onTerminate(event: OnTerminateActivityEventPayload): Promise<void> {
+  @OnEvent(ON_CHALLENGE_SUCCEEDED_EVENT)
+  async onTerminate(event: OnChallengeSuccededEventPayload): Promise<void> {
+    if (!event.activity.isChallenge) {
+      return
+    }
     const channelsWithMessage = this.challengeToChannelMap.get(event.activity.courseId)
 
-    const leaderboard = (await this.courseLeaderboard(event.activity.courseId)).slice(0, 60) // J'en prends que 60 pour le moment.
+    const leaderboard = (await this.courseLeaderboard(event.activity.courseId)).slice(0, 50)
 
     const messageArray = leaderboard.map((entry, index) => {
       let symbol = ''
@@ -140,12 +148,16 @@ export class LeaderboardCommand {
       }
       return index < 3
         ? `### ${symbol} ${entry.user.firstName} ${entry.user.lastName?.toLocaleUpperCase()} : ${entry.points}`
-        : `${entry.rank}. **${entry.user.firstName}** **${entry.user.lastName?.toLocaleUpperCase()}**    *(${
+        : `${entry.rank}. **${entry.user.firstName} ${entry.user.lastName?.toLocaleUpperCase()}**    *(${
             entry.points
           })*`
     })
 
     const messageContent = '# 🏆  Leaderboard  🏆\n' + messageArray.join('\n')
+    if (messageContent.length > 2000) {
+      this.logger.warn('Message too long')
+      messageContent.slice(0, 1995).concat('...')
+    }
 
     if (!channelsWithMessage) {
       return

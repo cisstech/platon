@@ -1,0 +1,45 @@
+---
+title: Édition graphique d'un exercice
+description: Guide d'utilisation de l'éditeur visuel pour créer et modifier des exercices PLaTon sans code. Présente l'interface WYSIWYG, ses sections (titre, instruction, formulaire), et l'intégration de formulaires externes.
+---
+
+import { Callout } from 'nextra/components'
+
+# Édition graphique d'un exercice
+
+![Bouton designer](../../../../public/screens/resources/ide/open-designer.png)
+
+Chaque fichier `.ple` sur PLaTon peut être modifié de manière visuelle grâce à l'outil d'édition graphique intégré à l'IDE.
+Pour accéder à cette fonctionnalité, ouvrez le fichier .ple concerné et cliquez sur l'icône <span class="codicon codicon-screen-normal"></span> située dans le coin supérieur droit de l'interface de l'éditeur de texte.
+
+## Aperçu de l'éditeur graphique
+
+![Aperçu de l'éditeur graphique](../../../../public/screens/resources/ide/designer.png)
+
+L'éditeur graphique est composé de plusieurs sections pliables :
+
+- **Titre** : Éditez le titre de votre exercice via un champ de texte simple.
+- **Instruction** : Utilisez un éditeur [WYSIWYG](https://fr.wikipedia.org/wiki/What_you_see_is_what_you_get) pour créer des énoncés enrichis, y compris avec des tableaux.
+- **Formulaire** : Concevez le formulaire de réponse de l'exercice en utilisant également un éditeur WYSIWYG.
+- **Variables** : Gérez les variables de l'exercice — ajoutez, modifiez ou supprimez-les selon vos besoins.
+- **Construction** : Modifiez le script de construction (`builder`) de l'exercice.
+- **Évaluation** : Ajustez le script d'évaluation (`grader`) de l'exercice.
+
+## Astuces et Conseils d'Édition
+
+Vous pouvez insérer des variables dans les champs `Titre`, `Instruction` et `Formulaire` en utilisant la syntaxe de template Nunjucks définie dans la documentation de la syntaxe de PLaTon. Par exemple, `{{ macle }}` affichera la valeur de la variable `macle` dans le titre.
+Sauvegardez votre travail avec `Ctrl + S` (ou `Cmd + S` sur Mac), et pour revenir à l'éditeur de code, sélectionnez <span style={{ fontSize: 24 }} class="codicon codicon-code"></span> en haut à droite dans l'éditeur graphique.
+L'IDE reformatera automatiquement le fichier .ple tout en préservant les commentaires et les directives spéciales telles que `@extends` ou `@include`.
+
+## Intégration de Formulaires Externes
+
+Vous avez également la possibilité d'intégrer des formulaires externes en référençant un fichier `.plf` (PLaTon form) dans une clé du fichier `.ple` (par exemple `form = @copycontent main.plf` en supposant que votre PLF s'appel `main.plf`).
+L'éditeur graphique prendra en charge l'édition de ces formulaires externes de la même manière que ceux intégrés directement dans le mode designer avec la possiblité d'accéder aux variables de l'exercice
+avec la syntaxe `{{ macle }}`.
+
+<Callout type="info">
+  Vous pouvez créer autant de formulaires externes que vous le souhaitez et les associer à n'importe quelle clé du
+  fichier `.ple`.
+</Callout>
+
+Ces outils d'édition graphique facilitent la création et la personnalisation d'exercices sur PLaTon, permettant une conception visuelle intuitive même pour les configurations les plus complexes.

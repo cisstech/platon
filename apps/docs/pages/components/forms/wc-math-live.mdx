@@ -1,0 +1,153 @@
+---
+title: MathLive
+description: Composant avancé pour saisir des expressions mathématiques en notation LaTeX avec rendu visuel en temps réel. Particulièrement adapté aux exercices de calcul différentiel et intégral, algèbre, équations, fractions, racines et expressions complexes où la précision de la notation est essentielle.
+---
+
+import { Tabs, Tab } from 'nextra/components'
+import { ComponentProperties } from '../../../components'
+import { useAbsoluteUrl } from '../../../hooks'
+
+# MathLive
+
+`wc-math-live`
+
+Composant avancé pour saisir des expressions mathématiques en notation LaTeX avec rendu visuel en temps réel. Particulièrement adapté aux exercices de calcul différentiel et intégral, algèbre, équations, fractions, racines et expressions complexes où la précision de la notation est essentielle.
+
+## Documentation
+
+Le composant MathLive intègre un éditeur d'expressions mathématiques avancé qui permet aux apprenants de saisir des formules mathématiques complexes avec un rendu LaTeX en temps réel. Il est basé sur la bibliothèque [mathlive](https://cortexjs.io/mathfield), reconnue pour sa puissance et sa simplicité d'utilisation.
+
+### Configuration avancée
+
+La propriété `config` vous permet d'accéder à toutes les options de personnalisation offertes par la bibliothèque mathlive. Consultez la [documentation officielle](https://cortexjs.io/mathfield)) pour découvrir l'ensemble des paramètres disponibles.
+
+### Personnalisation visuelle
+
+#### Icônes interactives
+
+Pour enrichir l'expérience utilisateur, vous pouvez ajouter des icônes à gauche et/ou à droite du champ de saisie grâce aux propriétés `prefix` et `suffix`. La syntaxe est la suivante:
+
+`type nom [color=CODE_COULEUR]`
+
+Où:
+
+- `type` correspond à une bibliothèque d'icônes (ex: fontawesome, clarity, material)
+- `nom` est l'identifiant de l'icône dans cette bibliothèque
+- `color=CODE_COULEUR` est un paramètre optionnel pour définir la couleur (format hexadécimal sans #)
+
+**Exemples**:
+
+- `fontawesome address-book` affiche une icône d'annuaire
+- `clarity happy-face color=FF0000` affiche un visage souriant en rouge
+
+La plateforme [icongr.am](https://icongr.am) référence toutes les bibliothèques et icônes disponibles.
+
+### Clavier mathématique virtuel
+
+Le composant intègre un clavier virtuel spécialisé pour la saisie d'expressions mathématiques. Vous pouvez personnaliser ce clavier via la propriété `layouts` pour l'adapter aux besoins spécifiques de votre exercice (symboles de calcul, caractères grecs, opérateurs logiques, etc.).
+
+### Conseils d'utilisation
+
+Pour une expérience optimale, pensez à:
+
+- Fournir une valeur par défaut dans les cas où vous attendez une réponse dans un format spécifique
+- Utiliser les icônes pour donner des indices visuels sur le type d'expression attendue
+- Adapter la configuration du clavier virtuel au niveau de complexité approprié pour votre exercice
+
+## Exemple interactif
+
+<iframe
+  src={useAbsoluteUrl('playground/components/wc-math-live')}
+  style={{ width: '100%', height: '700px', border: 'none' }}
+></iframe>
+
+## API
+
+<Tabs items={['Graphique', 'JSON']}>
+  <Tab>
+    <ComponentProperties schema={{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "properties": {
+    "disabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Désactiver le champ de saisi?"
+    },
+    "value": {
+      "type": "string",
+      "default": "",
+      "description": "La valeur du champ de saisi en Latex."
+    },
+    "config": {
+      "type": "object",
+      "default": {},
+      "description": "La configuration de l'instance de la lib MathLive."
+    },
+    "layouts": {
+      "type": [
+        "string",
+        "array",
+        "object"
+      ],
+      "default": "default",
+      "description": "Les différentes configurations possible du clavier virtuel."
+    },
+    "prefix": {
+      "type": "string",
+      "default": "",
+      "description": "Une icône à afficher à gauche du champ de saisi."
+    },
+    "suffix": {
+      "type": "string",
+      "default": "",
+      "description": "Une icône à afficher à droite du champ de saisi."
+    }
+  }
+}} />
+  </Tab>
+  <Tab>
+    ```json
+    {
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "properties": {
+    "disabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Désactiver le champ de saisi?"
+    },
+    "value": {
+      "type": "string",
+      "default": "",
+      "description": "La valeur du champ de saisi en Latex."
+    },
+    "config": {
+      "type": "object",
+      "default": {},
+      "description": "La configuration de l'instance de la lib MathLive."
+    },
+    "layouts": {
+      "type": [
+        "string",
+        "array",
+        "object"
+      ],
+      "default": "default",
+      "description": "Les différentes configurations possible du clavier virtuel."
+    },
+    "prefix": {
+      "type": "string",
+      "default": "",
+      "description": "Une icône à afficher à gauche du champ de saisi."
+    },
+    "suffix": {
+      "type": "string",
+      "default": "",
+      "description": "Une icône à afficher à droite du champ de saisi."
+    }
+  }
+}
+    ```
+  </Tab>
+</Tabs>

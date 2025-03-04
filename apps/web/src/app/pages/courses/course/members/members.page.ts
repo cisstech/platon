@@ -9,12 +9,19 @@ import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 
 import { UserSearchModalComponent } from '@platon/core/browser'
-import { User, UserGroup, UserRoles } from '@platon/core/common'
-import { CourseMemberSearchBarComponent, CourseMemberTableComponent } from '@platon/feature/course/browser'
+import { User, UserGroup } from '@platon/core/common'
+import {
+  ChangeRoleEvent,
+  CourseMemberSearchBarComponent,
+  CourseMemberTableComponent,
+  CoursePipesModule,
+} from '@platon/feature/course/browser'
 import { CourseMember, CourseMemberFilters } from '@platon/feature/course/common'
+import { CourseMemberRoles } from '@platon/feature/course/common'
 
 import { FormsModule } from '@angular/forms'
 import { CoursePresenter } from '../course.presenter'
+import { NzSelectModule } from 'ng-zorro-antd/select'
 
 @Component({
   standalone: true,
@@ -31,7 +38,9 @@ import { CoursePresenter } from '../course.presenter'
     NzIconModule,
     NzButtonModule,
     NzToolTipModule,
+    NzSelectModule,
 
+    CoursePipesModule,
     UserSearchModalComponent,
     CourseMemberTableComponent,
     CourseMemberSearchBarComponent,
@@ -46,10 +55,11 @@ export class CourseMembersPage implements OnInit, OnDestroy {
   protected members: CourseMember[] = []
   protected excludes: string[] = []
   protected nonDeletables: string[] = []
-  protected searchModalTitle = ''
+  protected searchModalTitle = 'Ajouter un membre'
   protected loading = true
   protected filters: CourseMemberFilters = {}
-  @Input() roles: (keyof typeof UserRoles)[] = []
+  @Input() roles: (keyof typeof CourseMemberRoles)[] = []
+  protected role: CourseMemberRoles = CourseMemberRoles.student
 
   protected get canEdit(): boolean {
     const { course } = this.context
@@ -58,7 +68,7 @@ export class CourseMembersPage implements OnInit, OnDestroy {
   }
 
   protected get allowGroup(): boolean {
-    return this.roles.includes(UserRoles.student)
+    return this.roles.includes(CourseMemberRoles.student)
   }
 
   ngOnInit(): void {
@@ -70,11 +80,23 @@ export class CourseMembersPage implements OnInit, OnDestroy {
     )
 
     this.filters = {
-      roles: this.roles as UserRoles[],
+      roles: this.roles as CourseMemberRoles[],
       limit: 5,
     }
 
-    this.searchModalTitle = this.roles.includes(UserRoles.student) ? 'Ajouter des élèves' : 'Ajouter des enseignants'
+    this.roles = this.roles.length ? this.roles : [CourseMemberRoles.student, CourseMemberRoles.teacher]
+
+    if (this.roles.length > 1) {
+      this.searchModalTitle = 'Ajouter des membres'
+    } else {
+      if (this.roles.includes(CourseMemberRoles.student)) {
+        this.searchModalTitle = 'Ajouter des élèves'
+      } else {
+        if (this.roles.includes(CourseMemberRoles.teacher)) {
+          this.searchModalTitle = 'Ajouter des enseignants'
+        }
+      }
+    }
   }
 
   ngOnDestroy(): void {
@@ -87,6 +109,7 @@ export class CourseMembersPage implements OnInit, OnDestroy {
         return this.presenter.addMember({
           id: userOrGroup.id,
           isGroup: !('username' in userOrGroup),
+          role: this.role,
         })
       })
     )
@@ -94,6 +117,17 @@ export class CourseMembersPage implements OnInit, OnDestroy {
 
   protected async remove(member: CourseMember) {
     await this.presenter.deleteMember(member)
+  }
+
+  protected async updateRole(event: ChangeRoleEvent) {
+    const { member, newRole, previousRole } = event
+    try {
+      await this.presenter.updateMemberRole(member, newRole)
+    } catch (error) {
+      const updatedMember = { ...member, role: previousRole }
+      this.members = this.members.map((m) => (m.id === member.id ? updatedMember : m))
+      this.changeDetectorRef.markForCheck()
+    }
   }
 
   protected async onUpdateMembers(members: CourseMember[]): Promise<void> {

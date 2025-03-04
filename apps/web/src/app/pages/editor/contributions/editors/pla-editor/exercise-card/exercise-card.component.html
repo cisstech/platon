@@ -1,0 +1,108 @@
+<nz-ribbon
+  [nzText]="ribbonTemplate"
+  [nzColor]="item.status | resourceStatusColor"
+  [ngClass]="{ 'reduced-height': !showButton }"
+>
+  <ui-list-item-article
+    #articleComponent
+    [style.--border-color]="'transparent'"
+    [articleTitle]="titleTemplate"
+    [articleIconTemplate]="imageTemplate"
+    [articleDescription]="descriptionTemplate"
+    [ngClass]="{ 'is-configurable': !showButton && configurable }"
+    (didClickTitle)="openTab('/resources/' + item.id)"
+  >
+    @if (showButton) {
+    <ui-list-item-article-action *ngIf="editable" (click)="openTab(editorUrl)" class="action" nz-tooltip="Éditer">
+      <i nz-icon nzType="edit" nzTheme="outline"></i>
+    </ui-list-item-article-action>
+
+    <ng-container *ngIf="item.type !== 'CIRCLE'">
+      <ui-list-item-article-action
+        (click)="modalMode ? openTab(previewUrl) : iframe.open(previewUrl)"
+        class="action"
+        nz-tooltip="Prévisualiser"
+      >
+        <i nz-icon nzType="play-circle" nzTheme="outline"></i>
+      </ui-list-item-article-action>
+
+      <ui-list-item-article-action
+        class="action"
+        (click)="handleAddExercise()"
+        nz-tooltip="Ajouter l'exercice au groupe"
+      >
+        <i nz-icon nzType="plus-circle" nzTheme="outline"></i>
+      </ui-list-item-article-action>
+    </ng-container>
+    <div class="spacer"></div>
+
+    <ui-list-item-article-action
+      *ngIf="attemptCount"
+      nz-tooltip="Note moyenne de {{ averageScore }}% pour {{ attemptCount }} utilisations"
+    >
+      <i [style.color]="averageScoreColor" class="margin-bottom-10">{{ averageScore }}%</i>
+    </ui-list-item-article-action>
+
+    <ui-list-item-article-action
+      nz-tooltip="Dernière date de mise à jour :
+      {{ item.updatedAt | date : 'dd/MM/yyyy à HH:mm' }}"
+    >
+      <i nz-icon nzType="history" nzTheme="outline"></i>
+    </ui-list-item-article-action>
+    }
+  </ui-list-item-article>
+</nz-ribbon>
+
+<ui-modal-iframe width="100vw" height="100vh" [closable]="true" #iframe />
+
+<ng-template #ribbonTemplate>
+  <mat-icon [nz-tooltip]="item.status | resourceStatus">{{ item.status | resourceStatusIcon }}</mat-icon>
+</ng-template>
+
+<ng-template #imageTemplate>
+  <mat-icon [nz-tooltip]="item.type | resourceType">{{ item.type | resourceIcon }}</mat-icon>
+</ng-template>
+
+<ng-template #titleTemplate>
+  <div>
+    <span class="resource-item-title">{{ name }}</span>
+    <i
+      class="icon-configurable"
+      *ngIf="configurable"
+      nz-popover
+      nzPopoverPlacement="topLeft"
+      [nzPopoverContent]="metadataResume"
+      [nzPopoverTrigger]="configurable ? 'hover' : undefined"
+      (mouseenter)="getReadmeContent()"
+      nz-icon
+      nzType="setting"
+      nzTheme="twotone"
+    ></i>
+  </div>
+</ng-template>
+
+<ng-template #descriptionTemplate>
+  <p>{{ desc }}</p>
+</ng-template>
+
+<ng-template #metadataResume>
+  <div class="custom-popover">
+    <div *ngIf="!readme">
+      <nz-spin nzSimple nzSize="small" />
+    </div>
+    <div *ngIf="readme">
+      <nge-markdown [file]="readme.url" />
+    </div>
+    <div style="margin-top: 1rem">
+      <ng-container [ngPlural]="((item.metadata! | exerciseResourceMeta)?.config?.inputs)!.length">
+        <ng-template ngPluralCase="=1">Variable à remplir</ng-template>
+        <ng-template ngPluralCase="other">Variables à remplir :</ng-template>
+      </ng-container>
+      <div *ngFor="let meta of (item.metadata! | exerciseResourceMeta)?.config?.inputs" style="margin-left: 1rem">
+        <span
+          >• <span class="customise-font">{{ meta.name }}</span> - {{ meta.description }}
+        </span>
+      </div>
+    </div>
+  </div>
+</ng-template>

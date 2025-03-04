@@ -80,6 +80,10 @@ export class AuthService {
     if (user.password && !(await bcrypt.compare(input.password || '', user.password))) {
       throw new ForbiddenResponse('New password is the same as the old one')
     }
+    const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?([^\w\s]|_)).{12,}$/
+    if (!passwordRegex.test(input.newPassword.trim())) {
+      throw new BadRequestException('Invalid password format')
+    }
     user.password = await this.hash(input.newPassword.trim())
     await this.userService.update(input.username, user)
     return this.authenticate(user.id, user.username)

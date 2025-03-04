@@ -9,19 +9,19 @@ const withNextra = require('nextra')({
 const nextConfig = process.env.GITHUB_PAGES
   ? {
       output: 'export',
-      basePath: '/platon/docs/main',
-      assetPrefix: '/platon/docs/main/',
+      basePath: '/platon/docs',
+      assetPrefix: '/platon/docs/',
       poweredByHeader: true,
       images: {
         unoptimized: true,
       },
-      distDir: '../../dist/apps/home/docs/main',
+      distDir: '../../dist/apps/home/docs',
     }
   : process.env.NODE_ENV === 'production'
   ? {
       output: 'export',
-      basePath: '/docs/main',
-      assetPrefix: '/docs/main/',
+      basePath: '/docs',
+      assetPrefix: '/docs/',
       poweredByHeader: true,
       images: {
         unoptimized: true,
@@ -29,8 +29,8 @@ const nextConfig = process.env.GITHUB_PAGES
       distDir: '../../dist/apps/docs',
     }
   : {
-      basePath: '/docs/main',
-      assetPrefix: '/docs/main/',
+      basePath: '/docs',
+      assetPrefix: '/docs/',
       poweredByHeader: true,
       images: {
         unoptimized: true,

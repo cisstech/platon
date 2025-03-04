@@ -91,7 +91,7 @@
       >
         <section>
           <h4>Choisissez le mode d'édition de votre exercice :</h4>
-          <div class="edition-modes">
+          <div class="edition-modes" (click)="selectEditionMode('template', stepper)">
             <div
               class="edition-mode"
               [ngClass]="{
@@ -104,11 +104,15 @@
               </div>
               <h5>Partir d'un template</h5>
               <p>Partez d'un modèle d'exercice complet et personnalisable sans compétence en programmation.</p>
-              <button nz-button (click)="editionMode = 'template'">
-                @if (!templateSources.length ) { Aucun template disponible } @else { Choisir }
-              </button>
+              @if (!templateSources.length ) {
+              <p>Aucun template disponible</p>
+              }
             </div>
-            <div class="edition-mode" [class.selected]="editionMode === 'scratch'">
+            <div
+              class="edition-mode"
+              [class.selected]="editionMode === 'scratch'"
+              (click)="selectEditionMode('scratch', stepper)"
+            >
               <div class="icon-holder">
                 <i nz-icon nzType="code" nzTheme="outline"></i>
               </div>
@@ -116,22 +120,8 @@
               <p>
                 Un environnement de développement complet pour programmer votre exercice dans le langage <b>ple</b>.
               </p>
-              <button nz-button (click)="editionMode = 'scratch'">Choisir</button>
             </div>
           </div>
-          <br />
-          <p *ngIf="editionMode === 'template'">
-            En continuant, vous allez sélectionner votre template avant de créer l'exercice. Vous souhaitez créer votre
-            propre template ?
-            <a href="docs/main/doc/programing/exercise/config" target="_blank">Consultez la documentation</a> pour en
-            savoir plus.
-          </p>
-          <p *ngIf="editionMode === 'scratch'">
-            En continuant, vous serez dirigé vers la page de votre nouvel exercice. Vous pouvez consulter la
-            documentation dédiée à la programmation des exercices
-            <a href="docs/main/doc/programing/exercise/langage" target="_blank">sur cette page</a> , ou bien directement
-            depuis l'environnement de développement.
-          </p>
         </section>
       </ng-template>
       <ng-template
@@ -170,13 +160,15 @@
               <div class="template-grid">
                 @for (item of source.templates; track item.id) {
                 <div>
-                  <resource-item [item]="item" editable="false" simple />
+                  <div class="template-item" (click)="template = item; infos.markAllAsTouched(); stepper.nextStep()">
+                    <resource-item [item]="item" editable="false" clickable="false" simple />
+                  </div>
                   <button
                     [nzType]="item.id === template?.id ? 'primary' : 'default'"
                     nz-button
-                    (click)="template = item"
+                    (click)="openTemplateResource(item.id)"
                   >
-                    Choisir
+                    Ouvrir la ressource
                   </button>
                 </div>
                 }
@@ -185,13 +177,20 @@
             }
           </nz-collapse>
           }
-
+          <div>
+            <span> Vous ne trouvez pas un template ? </span>
+            <span> Pensez à <b>suivre</b> les cercles qui vous intéresse ! </span>
+          </div>
           <ng-container *ngIf="template">
             <br />
             <h4>Votre nouvel exercice sera créé à partir du template suivant :</h4>
             <resource-item [item]="template" editable="false" simple />
           </ng-container>
         </section>
+      </ng-template>
+      <ng-template uiStepperStep stepTitle="Terminé" stepIcon="check" [stepValidator]="true">
+        <div class="final-step"><h2>Création de la ressource en cours...</h2></div>
+        {{ endStep(stepper) }}
       </ng-template>
     </ui-stepper>
   </nz-skeleton>

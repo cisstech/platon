@@ -1,7 +1,7 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Patch, Post } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { ItemResponse, ListResponse, NoContentResponse, NotFoundResponse, UserRoles } from '@platon/core/common'
-import { Mapper, Roles } from '@platon/core/server'
+import { Mapper, Roles, UUIDParam } from '@platon/core/server'
 import { CourseSectionDTO, CreateCourseSectionDTO, UpdateCourseSectionDTO } from './section.dto'
 import { CourseSectionEntity } from './section.entity'
 import { CourseSectionService } from './section.service'
@@ -13,8 +13,8 @@ export class CourseSectionController {
 
   @Get('/:sectionId')
   async find(
-    @Param('courseId') courseId: string,
-    @Param('sectionId') sectionId: string
+    @UUIDParam('courseId') courseId: string,
+    @UUIDParam('sectionId') sectionId: string
   ): Promise<ItemResponse<CourseSectionDTO>> {
     const optional = await this.service.findById(courseId, sectionId)
     const resource = Mapper.map(
@@ -25,7 +25,7 @@ export class CourseSectionController {
   }
 
   @Get()
-  async list(@Param('courseId') courseId: string): Promise<ListResponse<CourseSectionDTO>> {
+  async list(@UUIDParam('courseId') courseId: string): Promise<ListResponse<CourseSectionDTO>> {
     const [items, total] = await this.service.ofCourse(courseId)
     return new ListResponse({
       total,
@@ -38,7 +38,7 @@ export class CourseSectionController {
   @Roles(UserRoles.teacher, UserRoles.admin)
   @Post()
   async create(
-    @Param('courseId') courseId: string,
+    @UUIDParam('courseId') courseId: string,
     @Body() input: CreateCourseSectionDTO
   ): Promise<ItemResponse<CourseSectionDTO>> {
     return new ItemResponse({
@@ -55,8 +55,8 @@ export class CourseSectionController {
   @Roles(UserRoles.teacher, UserRoles.admin)
   @Patch('/:sectionId')
   async update(
-    @Param('courseId') courseId: string,
-    @Param('sectionId') sectionId: string,
+    @UUIDParam('courseId') courseId: string,
+    @UUIDParam('sectionId') sectionId: string,
     @Body() input: UpdateCourseSectionDTO
   ): Promise<ItemResponse<CourseSectionDTO>> {
     return new ItemResponse({
@@ -66,7 +66,10 @@ export class CourseSectionController {
 
   @Roles(UserRoles.teacher, UserRoles.admin)
   @Delete('/:sectionId')
-  async delete(@Param('courseId') courseId: string, @Param('sectionId') sectionId: string): Promise<NoContentResponse> {
+  async delete(
+    @UUIDParam('courseId') courseId: string,
+    @UUIDParam('sectionId') sectionId: string
+  ): Promise<NoContentResponse> {
     await this.service.delete(courseId, sectionId)
     return new NoContentResponse()
   }

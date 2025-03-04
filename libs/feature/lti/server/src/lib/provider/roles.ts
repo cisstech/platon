@@ -69,6 +69,7 @@ export enum StudentRoles {
   Student = 'urn:lti:instrole:ims/lis/Student',
   Learner = 'urn:lti:instrole:ims/lis/Learner',
   Learner2 = 'urn:lti:role:ims/lis/Learner',
+  Learner3 = 'Learner',
   Guest = 'urn:lti:instrole:ims/lis/Guest',
   ProspectiveStudent = 'urn:lti:instrole:ims/lis/ProspectiveStudent',
   LearnerLearner = 'urn:lti:role:ims/lis/Learner/Learner',

@@ -1,4 +1,4 @@
-import { Topic } from '@platon/core/common'
+import { Topic, User } from '@platon/core/common'
 import {
   CircleTree,
   RESOURCE_ORDERING_DIRECTIONS,
@@ -77,6 +77,17 @@ export const ExerciseConfigurableFilterIndicator: FilterIndicator<ResourceFilter
     configurable: undefined,
   }),
   describe: () => 'Exercice configurable',
+}
+
+export const OwnerFilterIndicator = (owner: User): FilterIndicator<ResourceFilters> => {
+  return {
+    match: (filters) => !!filters.owners?.includes(owner.id),
+    remove: (filters: ResourceFilters) => ({
+      ...filters,
+      owners: filters.owners?.filter((e) => e !== owner.id),
+    }),
+    describe: () => `Propriétaire : ${owner.username}`,
+  }
 }
 
 export const TopicFilterIndicator = (topic: Topic): FilterIndicator<ResourceFilters> => {

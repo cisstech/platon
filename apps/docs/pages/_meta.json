@@ -3,8 +3,12 @@
     "title": "Introduction",
     "type": "page"
   },
-  "doc": {
+  "main": {
     "title": "Documentation",
+    "type": "page"
+  },
+  "components": {
+    "title": "Composants",
     "type": "page"
   },
   "showcase": {

@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Inject, Injectable, Logger } from '@nestjs/common'
-import { OnEvent } from '@nestjs/event-emitter'
 import { InjectRepository } from '@nestjs/typeorm'
-import { ForbiddenResponse, NotFoundResponse, User, isTeacherRole } from '@platon/core/common'
+import { ForbiddenResponse, NotFoundResponse, User } from '@platon/core/common'
 import { DatabaseService, EventService, IRequest, buildSelectQuery } from '@platon/core/server'
-import { ActivityVariables, PLSourceFile } from '@platon/feature/compiler'
+import { ActivityExerciseGroup, ActivityVariables, PLSourceFile } from '@platon/feature/compiler'
 import {
   ActivityFilters,
   CreateActivity,
@@ -22,17 +21,18 @@ import { ActivityMemberView } from '../activity-member/activity-member.view'
 import { CourseNotificationService } from '../course-notification/course-notification.service'
 import { ActivityEntity } from './activity.entity'
 import {
-  ON_CORRECT_ACTIVITY_EVENT,
+  ON_CLOSE_ACTIVITY_EVENT,
   ON_RELOAD_ACTIVITY_EVENT,
-  ON_TERMINATE_ACTIVITY_EVENT,
-  OnCorrectActivityEventPayload,
+  ON_REOPEN_ACTIVITY_EVENT,
+  OnCloseActivityEventPayload,
   OnReloadActivityEventPayload,
-  OnTerminateActivityEventPayload,
+  OnReopenActivityEventPayload,
 } from './activity.event'
 import { CourseGroupMemberEntity } from '../course-group-member/course-group-member.entity'
 import { CourseGroupEntity } from '../course-group/course-group.entity'
 import { ActivityGroupEntity } from '../activity-group/activity-group.entity'
 import { ActivityGroupService } from '../activity-group/activity-group.service'
+import { CourseMemberService } from '../course-member/course-member.service'
 
 type ActivityGuard = (activity: ActivityEntity) => void | Promise<void>
 
@@ -49,6 +49,7 @@ export class ActivityService {
     private readonly notificationService: CourseNotificationService,
     private readonly activityMemberService: ActivityMemberService,
     private readonly activityCorrectorService: ActivityCorrectorService,
+    private readonly courseMemberService: CourseMemberService,
 
     @InjectRepository(ActivityEntity)
     private readonly repository: Repository<ActivityEntity>,
@@ -72,6 +73,8 @@ export class ActivityService {
     if (filters?.challenge != null) {
       qb.andWhere(`is_challenge = :isChallenge`, { isChallenge: !!filters.challenge })
     }
+
+    qb.orderBy('activity.createdAt')
 
     const [entities, count] = await qb.getManyAndCount()
     await this.addVirtualColumns(...entities)
@@ -140,9 +143,17 @@ export class ActivityService {
   }
 
   async create(activity: Partial<ActivityEntity>): Promise<ActivityEntity> {
-    const result = await this.repository.save(activity)
+    const order =
+      ((await this.repository.maximum('order', { courseId: activity.courseId, sectionId: activity.sectionId })) ?? 0) +
+      1
+    const result = await this.repository.save({ ...activity, order })
     await this.addVirtualColumns(result)
     return result
+  }
+
+  async updateActivitesOrder(ids: string[]): Promise<void> {
+    const activitiesWithOrder = ids.map((activity, index) => ({ id: activity, order: index }))
+    await this.repository.save(activitiesWithOrder)
   }
 
   async update(
@@ -224,7 +235,20 @@ export class ActivityService {
     this.notificationService.notifyActivityBeingClosed(activityId).catch((error) => {
       this.logger.error('Failed to send notification', error)
     })
+    this.eventService.emit<OnCloseActivityEventPayload>(ON_CLOSE_ACTIVITY_EVENT, { activityId })
     return this.update(courseId, activityId, { closeAt: new Date() }, guard)
+  }
+
+  async reopen(courseId: string, activityId: string, guard?: ActivityGuard): Promise<ActivityEntity> {
+    const activity = await this.repository.findOne({ where: { courseId, id: activityId } })
+    if (!activity) {
+      throw new NotFoundResponse(`CourseActivity not found: ${activityId}`)
+    }
+    if (guard) {
+      await guard(activity)
+    }
+    this.eventService.emit<OnReopenActivityEventPayload>(ON_REOPEN_ACTIVITY_EVENT, { activityId })
+    return this.update(courseId, activityId, { closeAt: null })
   }
 
   async delete(courseId: string, activityId: string, guard?: ActivityGuard) {
@@ -275,24 +299,6 @@ export class ActivityService {
     return activity
   }
 
-  @OnEvent(ON_CORRECT_ACTIVITY_EVENT)
-  protected onCorrectActivity(payload: OnCorrectActivityEventPayload) {
-    const { userId, activity } = payload
-    this.notificationService.notifyUserAboutCorrection(activity.id, userId).catch((error) => {
-      this.logger.error('Failed to send notification', error)
-    })
-  }
-
-  @OnEvent(ON_TERMINATE_ACTIVITY_EVENT)
-  protected async onTerminateActivity(payload: OnTerminateActivityEventPayload): Promise<void> {
-    const { activity } = payload
-    this.notificationService
-      .notifyCorrectorsAboutPending(await this.activityCorrectorService.findViews(activity.id))
-      .catch((error) => {
-        this.logger.error('Failed to send notification', error)
-      })
-  }
-
   private createQueryBuilder(courseId: string) {
     // TODO select only the fields we need here
     if (this.request.user.role === 'admin') {
@@ -323,22 +329,31 @@ export class ActivityService {
         })
       : []
 
-    activities.forEach((activity) => {
-      const title = activity.source.variables.title as string
-      const exerciseGroups = (activity.source.variables.exerciseGroups as Record<string, unknown[]>) || {}
-      Object.assign(activity, {
-        state: calculateActivityOpenState(activity),
-        title: title?.trim() || resources.find((r) => r.id === activity.source.resource)?.name,
-        resourceId: activity.source.resource,
-        exerciseCount: Object.keys(exerciseGroups).reduce((acc, group) => acc + exerciseGroups[group].length, 0),
-        permissions: {
-          answer: true,
-          update: activity.creatorId === this.request.user.id,
-          viewStats: isTeacherRole(this.request.user.role),
-          viewResource: isTeacherRole(this.request.user.role),
-        },
-      } as Partial<ActivityEntity>)
-    })
+    await Promise.all(
+      activities.map(async (activity) => {
+        const title = activity.source.variables.title as string
+        const exerciseGroups = (activity.source.variables.exerciseGroups as Record<string, ActivityExerciseGroup>) || {}
+        const hasWritePermission = await this.courseMemberService.hasWritePermission(
+          activity.courseId,
+          this.request.user
+        )
+        Object.assign(activity, {
+          state: calculateActivityOpenState(activity),
+          title: title?.trim() || resources.find((r) => r.id === activity.source.resource)?.name,
+          resourceId: activity.source.resource,
+          exerciseCount: Object.keys(exerciseGroups).reduce(
+            (acc, group) => acc + exerciseGroups[group].exercises.length,
+            0
+          ),
+          permissions: {
+            answer: true,
+            update: hasWritePermission,
+            viewStats: hasWritePermission,
+            viewResource: hasWritePermission,
+          },
+        } as Partial<ActivityEntity>)
+      })
+    )
 
     await this.databaseService.resolveVirtualColumns(ActivityEntity, activities, this.request.user)
   }

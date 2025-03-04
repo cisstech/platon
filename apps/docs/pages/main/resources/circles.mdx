@@ -1,0 +1,97 @@
+---
+title: Gestion des cercles
+description: Guide complet sur les cercles PLaTon, incluant leur structure hiérarchique, création étape par étape, et gestion des collaborateurs. Présente aussi la vue d'ensemble avec statistiques et classification par tags.
+---
+
+import { Callout } from 'nextra/components'
+
+# Gestion des cercles
+
+## Fonctionnalités Clés
+
+- **Organisation et Héritage** :
+  Les cercles opèrent dans une structure hiérarchique où il peut y avoir des sous-cercles. Chaque cercle peut hériter des propriétés et des ressources d'un cercle parent, avec PLaTon étant le cercle le plus élevé. Cette structure d'héritage permet une organisation et une gestion efficaces des ressources éducatives à différents niveaux.
+
+- **Cercle Principal - PLaTon** :
+  PLaTon agit comme le cercle racine ou principal. En tant que tel, il constitue la base de l'organisation des ressources et des activités sur la plateforme, fournissant un cadre global pour les sous-cercles.
+
+- **Cercle Personnel** :
+  Chaque utilisateur a un cercle personnel qui lui est propre. Ce cercle est utilisé pour stocker les ressources personnelles de l'utilisateur, telles que les brouillons et les ressources en cours de développement
+  et n'est visible que par l'utilisateur lui-même sauf s'il décide de partager le cercle avec d'autres utilisateurs.
+
+- **Gestion des Collaborateurs** :
+  Les cercles sont tous visibles à la consultation, mais seuls les administrateurs et les utilisateurs définis comme "[collaborateurs](/doc/resources/members)" peuvent modifier les informations des cercles et y créer des activités et exercices. Cela permet aux administrateurs de contrôler les modifications apportées aux cercles et de s'assurer que les ressources sont correctement gérées.
+
+- **Flexibilité dans la Création de Sous-Cercles** : Les administrateurs peuvent créer des sous-cercles pour des besoins spécifiques, tels que des projets de groupe, des départements spécifiques, ou des initiatives de recherche.
+
+## Création
+
+### Comment créer un cercle ?
+
+#### Étape 1: Choix du Cercle Parent
+
+![Étape de création 1 d'un cercle](../../../public/screens/resources/circles/create-1.png)
+
+- Accédez à l'option "Créer un cercle" dans la barre de menu de PLaTon en cliquant sur le bouton `+`.
+- Sélectionnez le cercle parent dans lequel vous souhaitez ajouter votre nouveau cercle.
+- Cliquez sur 'Suivant' pour continuer.
+
+<Callout type="info">
+  Si vous ouvrez le formulaire de création de cercle à partir de la page d'une ressource, le cercle parent sera
+  automatiquement sélectionné comme étant le cercle dans lequel se trouve la ressource.
+</Callout>
+
+#### Étape 2: Entrer les Informations de Base
+
+![Étape de création 1 d'un cercle](../../../public/screens/resources/circles/create-2.png)
+
+- Remplissez le nom du cercle. Ce nom devrait être descriptif et refléter la thématique ou le groupe d'utilisateurs auquel le cercle est destiné.
+- Entrez un code unique pour le cercle. Ce code sert d'identifiant unique et non modifiable. Il sera utilisé pour faire référence aux fichiers du cercle depuis une autre ressource.
+- Fournissez une description claire et concise du cercle pour informer les utilisateurs de son contenu et de son objectif.
+- Cliquez sur 'Suivant' pour passer à l'étape suivante.
+
+#### Étape 3: Associer des Tags
+
+![Étape de création 3 d'un cercle](../../../public/screens/resources/circles/create-3.png)
+
+- Décidez si vous voulez associer des tags à votre cercle dès maintenant. Les tags facilitent la recherche et la classification des ressources.
+- Sélectionnez une liste de 'topics' (sujets) et de 'levels' (niveaux) pour classifier votre cercle. Cela aidera les autres utilisateurs à trouver le cercle lorsqu'ils recherchent des ressources spécifiques.
+- Après avoir sélectionné les tags appropriés, cliquez sur 'Créer' pour finaliser la création de votre cercle.
+
+<Callout type="info">
+  Vous pouvez toujours ajouter des tags à votre cercle plus tard en accédant à la page des paramètres du cercle.
+</Callout>
+
+En suivant ces étapes, vous aurez créé un cercle dans PLaTon, prêt à être peuplé avec des activités et des exercices pour vos étudiants ou collègues.
+N'oubliez pas que la gestion efficace des cercles est cruciale pour une organisation et une navigation optimales des ressources pédagogiques sur la plateforme.
+
+## Vue d'Ensemble
+
+![Page de vue d'Ensemble d'un cercle](../../../public/screens/resources/circles/overview.png)
+
+La page "Vue d'ensemble" dans PLaTon offre aux utilisateurs un aperçu rapide et intuitif de l'état actuel et de la structure d'un cercle donné.
+Elle présente des informations clés et des statistiques qui aident à comprendre la dynamique et l'utilisation des ressources au sein du cercle.
+
+### Suivi de l'État des Ressources
+
+Cette section centrale affiche un diagramme circulaire coloré qui représente la distribution des différents états des ressources du cercle (sous-cercles, activités et exercices):
+
+- **Prêt à l'Utilisation** : Indique le pourcentage de ressources qui sont complètes et disponibles pour être utilisées immédiatement dans les cours.
+- **Contient des bugs** : Représente les ressources qui ont été signalées pour contenir des erreurs et nécessitent une attention.
+- **Besoin d'être testé** : Ressources qui ont été créées ou modifiées et qui attendent une vérification ou un test d'efficacité.
+- **Brouillon** : Une grande partie des ressources peut être en phase de brouillon, indiquant qu'elles sont en cours de développement et ne sont pas encore prêtes pour la publication.
+
+Chaque état est cliquable et redirige vers la page de recherche avec les ressources correspondantes.
+
+À droite du diagramme, on trouve des indicateurs numériques clés qui offrent un accès rapide aux différentes catégories de ressources et utilisateurs associés au cercle :
+
+- **Observateurs** : Le nombre d'utilisateurs qui suivent le cercle pour recevoir des notifications sur les mises à jour.
+- **Collaborateurs** : Les utilisateurs actuellement impliqués dans la création ou la révision des ressources du cercle.
+- **Cercles Enfants** : Indique le nombre de sous-cercles reliés au cercle actuel.
+- **Activités** : Le nombre total d'activités liées à ce cercle.
+- **Exercices** : Une quantité d'exercices spécifiés qui sont associés au cercle.
+
+### Tags
+
+La section des tags souligne l'importance de classer efficacement les ressources à l'aide de topics (sujets) et de levels (niveaux) pour une organisation et une recherche optimisées.
+Elle contient un bouton "Ajouter des tags" qui facilite l'attribution de tags aux ressources pour augmenter leur visibilité et accessibilité.

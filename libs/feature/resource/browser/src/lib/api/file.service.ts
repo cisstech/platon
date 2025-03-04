@@ -80,4 +80,8 @@ export class ResourceFileService {
   log(resource: string | Resource): Observable<GitLogResult[]> {
     return this.provider.log(resource)
   }
+
+  content(resource: string): Observable<string> {
+    return this.provider.content(resource)
+  }
 }

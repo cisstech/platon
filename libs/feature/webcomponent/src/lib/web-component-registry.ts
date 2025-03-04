@@ -27,18 +27,9 @@ import { ChartViewerPiesComponentDefinition } from './widgets/chart-viewer-pies/
 import { ChartViewerBarsComponentDefinition } from './widgets/chart-viewer-bars/chart-viewer-bars'
 import { ChartViewerRadarComponentDefinition } from './widgets/chart-viewer-radar/chart-viewer-radar'
 import { FoldableFeedbackComponentDefinition } from './widgets/foldable-feedback/foldable-feedback'
+import { WordSelectorComponentDefinition } from './forms/word-selector/word-selector'
 
 export const WEB_COMPONENTS_BUNDLES: NgeElementDef[] = [
-  // INTERNALS
-  {
-    selector: 'wc-editorjs-viewer',
-    module: () =>
-      import(/* webpackChunkName: "wc-editorjs-viewer" */ './internals/editorjs-viewer/editorjs-viewer.module').then(
-        (m) => m.EditorjsViewerModule
-      ),
-  },
-
-  // PUBLICS
   {
     selector: 'wc-automaton-editor',
     module: () =>
@@ -95,6 +86,13 @@ export const WEB_COMPONENTS_BUNDLES: NgeElementDef[] = [
     module: () =>
       import(/* webpackChunkName: "wc-binded-bubbles" */ './forms/binded-bubbles/binded-bubbles.module').then(
         (m) => m.BindedBubblesModule
+      ),
+  },
+  {
+    selector: 'wc-word-selector',
+    module: () =>
+      import(/* webpackChunkName: "wc-word-selector" */ './forms/word-selector/word-selector.module').then(
+        (m) => m.WordSelectorModule
       ),
   },
   {
@@ -188,6 +186,15 @@ export const WEB_COMPONENTS_BUNDLES: NgeElementDef[] = [
         /* webpackChunkName: "wc-foldable-feedback" */ './widgets/foldable-feedback/foldable-feedback.module'
       ).then((m) => m.FoldableFeedbackModule),
   },
+
+  // INTERNALS
+  {
+    selector: 'wc-editorjs-viewer',
+    module: () =>
+      import(/* webpackChunkName: "wc-editorjs-viewer" */ './internals/editorjs-viewer/editorjs-viewer.module').then(
+        (m) => m.EditorjsViewerModule
+      ),
+  },
 ]
 
 export const WEB_COMPONENTS_REGISTRY: Provider[] = [
@@ -235,6 +242,11 @@ export const WEB_COMPONENTS_REGISTRY: Provider[] = [
     provide: WEB_COMPONENT_DEFINITIONS,
     multi: true,
     useValue: BindedBubblesComponentDefinition,
+  },
+  {
+    provide: WEB_COMPONENT_DEFINITIONS,
+    multi: true,
+    useValue: WordSelectorComponentDefinition,
   },
   {
     provide: WEB_COMPONENT_DEFINITIONS,

@@ -127,7 +127,7 @@ export class CourseDashboardPage implements OnInit, OnDestroy {
 
   protected async addSection(after?: CourseSection): Promise<void> {
     await this.presenter.addSection({
-      name: 'Modifiez le titre de votre section',
+      name: 'Section ' + (this.sections.length + 1),
       order: after ? after.order + 1 : 0,
     })
     await this.refresh()
@@ -160,6 +160,16 @@ export class CourseDashboardPage implements OnInit, OnDestroy {
     await this.refresh()
   }
 
+  protected async editModeOn(section: SectionWithActivities): Promise<void> {
+    section.editMode = true
+    this.changeDetectorRef.markForCheck()
+  }
+
+  protected async saveSection(section: SectionWithActivities): Promise<void> {
+    section.editMode = false
+    await this.presenter.updateActivityOrder(section.activities.map((a) => a.id))
+  }
+
   protected async deleteSection(section: CourseSection): Promise<void> {
     await this.presenter.deleteSection(section)
     await this.refresh()
@@ -184,7 +194,10 @@ export class CourseDashboardPage implements OnInit, OnDestroy {
     const [sections, activities] = await Promise.all([this.presenter.listSections(), this.presenter.listActivities()])
     this.sectionWithActivities = sections.map((section) => ({
       section,
-      activities: activities.filter((activity) => activity.sectionId === section.id),
+      editMode: false,
+      activities: activities
+        .filter((activity) => activity.sectionId === section.id)
+        .sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
     }))
 
     this.sections = sections
@@ -201,7 +214,10 @@ export class CourseDashboardPage implements OnInit, OnDestroy {
       this.filteredActivities = this.activities
       this.sectionWithActivities = this.sections.map((section) => ({
         section,
-        activities: this.filteredActivities.filter((activity) => activity.sectionId === section.id),
+        editMode: false,
+        activities: this.filteredActivities
+          .filter((activity) => activity.sectionId === section.id)
+          .sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
       }))
       return
     } else {
@@ -215,7 +231,10 @@ export class CourseDashboardPage implements OnInit, OnDestroy {
       this.sectionWithActivities = this.sections
         .map((section) => ({
           section,
-          activities: this.filteredActivities.filter((activity) => activity.sectionId === section.id),
+          editMode: false,
+          activities: this.filteredActivities
+            .filter((activity) => activity.sectionId === section.id)
+            .sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
         }))
         .filter((item) => item.activities.length > 0)
       return
@@ -225,9 +244,14 @@ export class CourseDashboardPage implements OnInit, OnDestroy {
   protected numberOfActivities(section: CourseSection): number {
     return this.sectionWithActivities.find((item) => item.section.id === section.id)?.activities.length ?? 0
   }
+
+  protected get flattenedActivities(): Activity[] {
+    return this.sectionWithActivities.flatMap((item) => item.activities)
+  }
 }
 
 interface SectionWithActivities {
   section: CourseSection
+  editMode: boolean
   activities: Activity[]
 }

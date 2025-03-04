@@ -48,4 +48,10 @@ export class UserEntity extends BaseEntity {
     query: (alias) => `SELECT ${alias}.password IS NOT NULL`,
   })
   hasPassword = false
+
+  @Column({ name: 'discord_id', nullable: true })
+  discordId?: string
+
+  @Column({ name: 'last_activity', type: 'timestamp with time zone', default: () => 'CURRENT_TIMESTAMP' })
+  lastActivity!: Date
 }

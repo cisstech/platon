@@ -10,7 +10,10 @@ services:
       - platon-network
 
   postgres:
-    image: postgres:13
+    build:
+      context: .
+      dockerfile: .docker/db/Dockerfile
+    image: platon/postgres
     container_name: platon_postgres
     ports:
       - '${DB_PORT}:5432'

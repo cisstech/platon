@@ -105,6 +105,57 @@ export interface UserResults {
   exercises: Record<string, UserExerciseResults>
 }
 
+export interface UserActivityResultsDistribution {
+  /**
+   * The unique identifier of the user.
+   */
+  id: string
+
+  /**
+   * The username of the user.
+   */
+  username: string
+  /**
+   * The first name of the user.
+   */
+  firstName: string
+
+  /**
+   * The last name of the user.
+   */
+  lastName: string
+
+  /**
+   * Map of the number of success for each date.
+   */
+
+  nbSuccess: Record<string, number>
+}
+
+export interface Datas {
+  /**
+   * The date of the data.
+   */
+  date?: string
+}
+
+export interface ExerciseDetails {
+  /**
+   * The unique identifier of the exercise.
+   */
+  id: string
+
+  /**
+   * The title of the exercise.
+   */
+  title: string
+
+  /**
+   * The success state of the exercise.
+   */
+  grade: number
+}
+
 /**
  * Aggregated results for an exercise across all users.
  */
@@ -168,6 +219,11 @@ export interface ExerciseResults {
    * Percentage of sessions that have been graded with a grade of 100 on the first attempt.
    */
   successRateOnFirstAttempt: ValueAverage
+
+  /**
+   * All notes for the exercise.
+   */
+  details: number[]
 }
 
 /**
@@ -207,6 +263,18 @@ export interface ActivityResults {
    * Results for all exercises in the activity.
    */
   exercises: ExerciseResults[]
+}
+
+export interface ActivityDistributionData {
+  /**
+   * Date from which nbSucess is calculated
+   */
+  date: Date
+
+  /**
+   * Number of success
+   */
+  nbSuccess: number
 }
 
 /**
@@ -259,6 +327,7 @@ export const emptyExerciseResults = (defaults?: { id: string; title: string }): 
     NOT_STARTED: 0,
     ERROR: 0,
   },
+  details: [],
 })
 
 export const emptyUserResults = (defaults?: Partial<UserResults>): UserResults => ({

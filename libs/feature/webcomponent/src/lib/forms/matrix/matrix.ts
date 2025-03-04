@@ -17,10 +17,9 @@ export interface MatrixState extends IWebComponent {
 export const MatrixComponentDefinition = defineWebComponent({
   type: WebComponentTypes.form,
   name: 'Matrix',
-  icon: 'assets/images/components/forms/matrix/matrix.svg',
   selector: 'wc-matrix',
-  description: 'Permets de saisir une matrice.',
-  fullDescriptionUrl: 'assets/docs/components/forms/matrix/matrix.md',
+  description:
+    "Composant permettant de saisir ou afficher une matrice de valeurs. Idéal pour les exercices de calcul matriciel, résolution de systèmes d'équations linéaires, transformations géométriques ou tout problème nécessitant l'entrée ou l'affichage de données tabulaires.",
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',

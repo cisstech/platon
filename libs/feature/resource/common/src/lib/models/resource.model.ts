@@ -2,6 +2,7 @@ import { ExpandableModel, Level, OrderingDirections, Topic } from '@platon/core/
 import { ActivityNavigationModes } from '@platon/feature/compiler'
 import { ResourceStatus } from '../enums/resource-status'
 import { ResourceTypes } from '../enums/resource-types'
+import { FileCreate } from './file.model'
 import { ResourceMeta } from './metadata.model'
 import { ResourcePermissions, emptyResourcePermissions } from './permissions.model'
 import { ResourceStatistic } from './statistic.model'
@@ -239,6 +240,15 @@ export interface CreateResource extends ExpandableModel<ResourceExpandableFields
    * List of topics (identifiers) associated to the resource.
    */
   readonly topics?: string[]
+
+  /**
+   * Optional list of files to create with the resource.
+   */
+  readonly files?: FileCreate[]
+}
+
+export interface CreatePreviewResource extends ExpandableModel<ResourceExpandableFields> {
+  readonly files: FileCreate[]
 }
 
 /**
@@ -604,8 +614,20 @@ export const circleTreeFromCircleList = (circles: Resource[], versions: Record<s
     name: root.name,
     code: root.code,
     versions: versions[root.id] || [],
+    children: [],
     permissions: emptyResourcePermissions(),
   }
+
+  const personnalCircles = circles.filter((c) => c.personal)
+  personnalCircles.forEach((c) => {
+    tree.children?.push({
+      id: c.id,
+      name: c.name,
+      code: c.code,
+      versions: versions[c.id] || [],
+      permissions: emptyResourcePermissions(),
+    })
+  })
 
   const traverse = (node: CircleTree) => {
     const children = circles.filter((c) => c.parentId === node.id).sort((a, b) => a.name.localeCompare(b.name))

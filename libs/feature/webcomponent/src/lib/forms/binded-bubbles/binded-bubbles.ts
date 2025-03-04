@@ -17,6 +17,8 @@ export interface PairBubbleItem {
 export interface BindedBubblesState extends IWebComponent {
   items: PairBubbleItem[]
   numberPairToShow: number
+  nbError: number
+  errors: PairBubbleItem[]
   mode: 'shuffle' | 'ordered'
   timeout: number
 }
@@ -24,10 +26,9 @@ export interface BindedBubblesState extends IWebComponent {
 export const BindedBubblesComponentDefinition = defineWebComponent({
   type: WebComponentTypes.form,
   name: 'BindedBubbles',
-  icon: 'assets/images/components/forms/binded-bubbles/binded-bubbles.svg', //FIXME
   selector: 'wc-binded-bubbles',
-  description: 'Permets de choisir 2 propositions parmi une liste.',
-  fullDescriptionUrl: 'assets/docs/components/forms/binded-bubbles/binded-bubbles.md',
+  description:
+    "Jeu interactif de correspondance entre paires d'éléments, présentés sous forme de bulles à sélectionner. Parfait pour les exercices ludiques d'apprentissage de vocabulaire, de correspondances entre termes et définitions, de relations entre concepts, ou pour des activités de mémorisation comme les jeux de cartes mémoire.",
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',
@@ -61,13 +62,38 @@ export const BindedBubblesComponentDefinition = defineWebComponent({
       mode: {
         type: 'string',
         description: 'Mode de jeu',
-        enum: ['ordered'],
+        enum: ['ordered', 'shuffle'],
         default: 'ordered',
       },
       timeout: {
         type: 'number',
         description: "Temps d'attente avant d'afficher la prochaine bonne proposition. (en millisecondes)",
         default: 1000,
+      },
+      nbError: {
+        type: 'number',
+        description: "Nombre d'erreurs",
+        default: 0,
+      },
+      errors: {
+        type: 'array',
+        description: 'Liste des erreurs',
+        default: [],
+        items: {
+          type: 'object',
+          properties: {
+            item1: {
+              type: 'object',
+              description: 'Contenu du premier item',
+              properties: { content: { type: 'string' } },
+            },
+            item2: {
+              type: 'object',
+              description: 'Contenu du deuxième item',
+              properties: { content: { type: 'string' } },
+            },
+          },
+        },
       },
     },
     required: ['items'],

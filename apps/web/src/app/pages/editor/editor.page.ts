@@ -12,8 +12,8 @@ import { PlaEditorContributionModule } from './contributions/editors/pla-editor'
 import { PlfEditorContributionModule } from './contributions/editors/plf-editor'
 
 import { ActivatedRoute } from '@angular/router'
-import { EditorService, FileService, IdeService, SettingsService } from '@cisstech/nge-ide/core'
-import { IntroService } from '@platon/core/browser'
+import { EditorService, FileService, IdeService, SettingsService, MonacoService } from '@cisstech/nge-ide/core'
+import { DialogModule, IntroService } from '@platon/core/browser'
 import { fadeInOnEnterAnimation, fadeOutDownOnLeaveAnimation } from 'angular-animations'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton'
@@ -31,8 +31,9 @@ import { PlSidebarContributionModule } from './contributions/sidebar/pl-sidebar.
 import { PlWorkbenchContributionModule } from './contributions/workbench/pl-workbench.contribution'
 import { EDITOR_TOUR } from './editor-tour'
 import { EditorPresenter } from './editor.presenter'
-import { ACTIVITY_MAIN_FILE } from '@platon/feature/compiler'
+import { ACTIVITY_MAIN_FILE, TEMPLATE_OVERRIDE_FILE } from '@platon/feature/compiler'
 import { Title } from '@angular/platform-browser'
+import { Resource } from '@platon/feature/resource/common'
 
 @Component({
   standalone: true,
@@ -67,6 +68,8 @@ import { Title } from '@angular/platform-browser'
     PlcEditorContributionModule,
     PloEditorContributionModule,
     ZipEditorContributionModule,
+
+    DialogModule,
   ],
 })
 export class EditorPage implements OnInit, OnDestroy {
@@ -81,30 +84,40 @@ export class EditorPage implements OnInit, OnDestroy {
   private readonly changeDetectorRef = inject(ChangeDetectorRef)
   private readonly resourceFileSystemProvider = inject(ResourceFileSystemProvider)
   private readonly settingsService = inject(SettingsService)
+  private readonly monacoService = inject(MonacoService)
   private readonly title = inject(Title)
   protected loading = true
   protected isReady = false
 
+  private registeredFolders: { id: string }[] = [] // this list is used to check whether a folder is already opened, not intended to be used for anything else
+
   async ngOnInit(): Promise<void> {
     const { resource, version, rootFolders, filesToOpen } = await this.presenter.init(this.activatedRoute)
     this.title.setTitle(resource.name)
+
     this.subscriptions.push(
       this.ide.onAfterStart(async () => {
-        if (filesToOpen.length === 0 && resource.type === 'ACTIVITY') {
-          this.settingsService.set('ide.layout', 'toggleSideBar', 'closed')
-          filesToOpen.push(ACTIVITY_MAIN_FILE)
-        } else {
-          this.settingsService.set('ide.layout', 'toggleSideBar', 'opened')
-        }
+        this.updateFileToOpen(filesToOpen, resource)
         this.fileService.registerProvider(this.resourceFileSystemProvider)
         await this.fileService.registerFolders(...rootFolders())
+        this.registeredFolders.push({ id: resource.id })
         filesToOpen.forEach((path) => {
           this.editorService
             .open(this.resourceFileSystemProvider.buildUri(resource.id, version, path))
             .catch(console.error)
         })
+
         this.loading = false
         this.changeDetectorRef.markForCheck()
+
+        this.monacoService.onDidFollowLink.subscribe(async (clickedLink) => {
+          const [id, version] = clickedLink.uri.authority.split(':')
+          if (this.registeredFolders.some((f) => f.id === id)) {
+            return
+          }
+          await this.fileService.registerFolders(await this.presenter.getNewResourceFolder(id, version))
+          this.registeredFolders.push({ id })
+        })
       })
     )
     this.isReady = true
@@ -114,6 +127,22 @@ export class EditorPage implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.resourceFileSystemProvider.cleanUp()
     this.subscriptions.forEach((s) => s.unsubscribe())
+  }
+
+  private updateFileToOpen(filesToOpen: string[], resource: Resource): void {
+    if (filesToOpen.length === 0) {
+      if (resource.type === 'ACTIVITY') {
+        this.settingsService.set('ide.layout', 'toggleSideBar', 'closed')
+        filesToOpen.push(ACTIVITY_MAIN_FILE)
+        return
+      }
+      if (resource.type === 'EXERCISE' && resource.templateId) {
+        this.settingsService.set('ide.layout', 'toggleSideBar', 'closed')
+        filesToOpen.push(TEMPLATE_OVERRIDE_FILE)
+        return
+      }
+    }
+    this.settingsService.set('ide.layout', 'toggleSideBar', 'opened')
   }
 
   protected async introTour(): Promise<void> {

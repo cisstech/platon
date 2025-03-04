@@ -86,7 +86,8 @@ export class RemoteTokenProvider extends TokenProvider {
       localStorage.setItem(KEY, JSON.stringify(token))
       return token
     } catch (error) {
-      await this.remove()
+      console.error('Unable to refresh token', error)
+      // await this.remove()
       throw error
     }
   }

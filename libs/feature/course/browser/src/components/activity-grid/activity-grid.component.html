@@ -1,5 +1,21 @@
 <ng-container *ngIf="!empty; else emptyState">
   <nz-segmented #segmented [(ngModel)]="selectedIndex" [nzOptions]="tabTitles" />
+  @if (editmode) {
+  <div
+    #preview
+    cdkDropList
+    [cdkDropListData]="tabs[0].items"
+    class="activities-list"
+    (cdkDropListDropped)="drop($event)"
+    cdkDropListOrientation="mixed"
+  >
+    @for (item of tabs[0].items; track item){
+    <course-activity-card cdkDrag [cdkDragPreviewContainer]="previewContainer" class="flex-item" [item]="item">
+      <course-activity-card *cdkDragPreview matchSize="true" [item]="item" />
+    </course-activity-card>
+    }
+  </div>
+  } @else {
   <ng-container *ngIf="tabs[selectedIndex] as tab">
     <ng-container *ngIf="tab.items.length; else emptyState">
       <nz-row [nzGutter]="[24, 24]" nzAlign="top">
@@ -11,6 +27,7 @@
       </nz-row>
     </ng-container>
   </ng-container>
+  }
 </ng-container>
 <ng-template #emptyState>
   <ng-content></ng-content>

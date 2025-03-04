@@ -1,0 +1,20 @@
+import { defineWebComponent, IWebComponent, WebComponentTypes } from '../../web-component'
+
+export interface <%- classify(name) %>State extends IWebComponent {
+  myproperty: string
+}
+
+export const <%- classify(name) %>ComponentDefinition = defineWebComponent({
+  type: WebComponentTypes.<%- type %>,
+  name: '<%- classify(name) %>',
+  selector: 'wc-<%- name %>',
+  description: 'REMPLACEZ CE TEXTE PAR UNE DESCRIPTION DE VOTRE COMPOSANT',
+  // https://json-schema.org/understanding-json-schema/
+  schema: {
+    $schema: 'http://json-schema.org/draft-07/schema',
+    type: 'object',
+    properties: {
+      myproperty: { type: 'string', default: '', description: '' }
+    }
+  }
+})

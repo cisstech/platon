@@ -6,6 +6,9 @@ import {
   FileService,
   ICommand,
   IContribution,
+  KeyCodes,
+  KeyModifiers,
+  Keybinding,
   Preview,
   PreviewHandler,
   PreviewService,
@@ -63,6 +66,11 @@ class ToolbarPreviewCommand implements ICommand {
   readonly id = 'platon.contrib.toolbar.commands.preview'
   readonly label = 'Prévisualiser'
   readonly icon = new CodIcon('play-circle')
+  readonly keybinding = new Keybinding({
+    key: KeyCodes.ENTER,
+    label: '⌘ ENTER',
+    modifiers: [KeyModifiers.CTRL_CMD],
+  })
 
   constructor(
     private readonly presenter: EditorPresenter,
@@ -89,10 +97,33 @@ class ToolbarPreviewCommand implements ICommand {
         query: PLAYER_EDITOR_PREVIEW,
       })
     this.editorService
-      .open(uri, {
-        preview: buildPreview(uri),
+      .saveAll()
+      .then(() => {
+        this.editorService
+          .open(uri, {
+            preview: buildPreview(uri),
+          })
+          .catch(console.error)
       })
       .catch(console.error)
+  }
+}
+
+export class ResourceCommand implements ICommand {
+  readonly id = 'platon.contrib.toolbar.commands.resource'
+  readonly label = 'Ressource'
+  readonly icon = new CodIcon('link-external')
+
+  constructor(private readonly presenter: EditorPresenter) {}
+
+  get enabled(): boolean {
+    const { currentResource } = this.presenter
+    if (!currentResource) return false
+    return true
+  }
+
+  async execute(): Promise<void> {
+    window.open('resources/' + this.presenter.currentResource.id, '_blank')
   }
 }
 
@@ -128,10 +159,19 @@ export class Contribution implements IContribution {
     editorService.registerCommands(new PreviewInNewTabCommand(presenter, editorService))
 
     const previewFromToolbar = new ToolbarPreviewCommand(presenter, fileService, editorService)
+    const resourceCommand = new ResourceCommand(presenter)
 
     commandService.register(previewFromToolbar)
     toolbarService.registerButton({
       command: previewFromToolbar,
+      colors: {
+        foreground: 'white',
+        background: 'var(--brand-color-primary)',
+      },
+    })
+
+    toolbarService.registerButton({
+      command: resourceCommand,
       colors: {
         foreground: 'white',
         background: 'var(--brand-color-primary)',

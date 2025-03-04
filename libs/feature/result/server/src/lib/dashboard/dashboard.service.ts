@@ -11,11 +11,13 @@ import {
   DashboardOutput,
   USER_ACTIVITY_COUNT,
   USER_COURSE_COUNT,
+  UserActivityResultsDistribution,
 } from '@platon/feature/result/common'
 import { In, IsNull, Not, Raw, Repository } from 'typeorm'
 import { SessionDataEntity } from '../sessions/session-data.entity'
 import {
   ActivityAnswerRate,
+  ActivityDistribution,
   ActivityDropoutRate,
   ActivityExerciseResults,
   ActivityTotalAttempts,
@@ -217,19 +219,19 @@ export class DashboardService {
 
   async ofActivity(activityId: string): Promise<DashboardOutput> {
     const output: DashboardOutput = {}
-
     const activity = await this.activityRepository.findOne({
       where: { id: activityId },
     })
+
     if (!activity) {
       throw new NotFoundResponse(`Activity: ${activityId}`)
     }
-
     const [sessions, activityMembers] = await Promise.all([
       this.sessionData.find({
         where: { activityId, userId: Not(IsNull()) },
         relations: { user: true },
       }),
+
       this.activityMemberView.find({
         where: { courseId: activity.courseId, activityId: activity.id },
       }),
@@ -354,5 +356,60 @@ export class DashboardService {
 
     output[ACTIVITY_COURSE_USED_IN_LIST] = usedInCourses.slice(0, 5)
     output[ACTIVITY_COURSE_USED_IN_COUNT] = usedInCourses.length
+  }
+
+  async ofActivityForDate(
+    activityId: string,
+    startDate: Date,
+    endDate: Date
+  ): Promise<UserActivityResultsDistribution[]> {
+    let output: UserActivityResultsDistribution[] = []
+
+    const activity = await this.activityRepository.findOne({
+      where: { id: activityId },
+    })
+
+    if (!activity) {
+      throw new NotFoundResponse(`Activity: ${activityId}`)
+    }
+
+    const [sessions, activityMembers] = await Promise.all([
+      this.sessionData
+        .createQueryBuilder('sd')
+        .innerJoinAndSelect('sd.user', 'u') // Inner join avec Users
+        .where('sd.activityId = :activityId', { activityId: activity.id })
+        .andWhere('sd.userId IS NOT NULL')
+        .andWhere(
+          `EXISTS (
+          SELECT 1
+          FROM jsonb_array_elements(sd.answers) AS answer_obj
+          WHERE (answer_obj->>'createdAt')::timestamp BETWEEN :startDate AND :endDate
+        )`
+        )
+        .setParameters({
+          startDate: startDate.toISOString(),
+          endDate: endDate.toISOString(),
+        })
+        .getMany(),
+      this.activityMemberView.find({
+        where: { courseId: activity.courseId, activityId: activity.id },
+      }),
+    ])
+
+    const exerciseSessions = sessions
+
+    const aggregators = [
+      new ActivityDistribution({
+        activityMembers,
+        exerciseSessions,
+      }),
+    ]
+
+    exerciseSessions.forEach((session) => aggregators.forEach((aggregator) => aggregator.next(session)))
+    aggregators.forEach((aggregator) => {
+      output = aggregator.complete()
+    })
+
+    return output
   }
 }

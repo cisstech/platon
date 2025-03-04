@@ -29,35 +29,61 @@ export class MathLiveComponent implements OnInit, WebComponentHooks<MathLiveStat
 
   @ViewChild('container', { static: true })
   container!: ElementRef<HTMLElement>
+  @ViewChild('box', { static: true })
+  box!: ElementRef<HTMLElement>
+
+  displayMenu = true
 
   constructor(readonly injector: Injector, readonly changeDetection: WebComponentChangeDetectorService) {}
 
   async ngOnInit() {
+    this.state.isFilled = false
     this.mathfield = new MathfieldElement()
-    this.mathfield.setOptions({
-      locale: 'fr',
-      smartFence: false,
-      smartSuperscript: true,
-      virtualKeyboards: 'all',
-      virtualKeyboardMode: 'manual',
-      virtualKeyboardTheme: 'material',
-      fontsDirectory: 'assets/vendors/mathlive/fonts',
-    })
+    this.mathfield.value = this.state.value
+    this.mathfield.smartFence = false
+    this.mathfield.smartSuperscript = true
+    this.mathfield.mathVirtualKeyboardPolicy = 'sandboxed'
+    MathfieldElement.fontsDirectory = 'assets/vendors/mathlive/fonts'
     this.mathfield.oninput = () => {
       this.changeDetection
         .ignore(this, () => {
           this.state.value = this.mathfield.getValue('latex')
+          this.state.isFilled = true
         })
         .catch(console.error)
     }
     this.container.nativeElement.replaceWith(this.mathfield)
+
+    window.addEventListener('click', () => {
+      // hide the virtual keyboard when clicking outside the mathfield
+      if (
+        window.mathVirtualKeyboard &&
+        window.mathVirtualKeyboard.visible &&
+        !this.mathfield.contains(document.activeElement) &&
+        !this.box.nativeElement.contains(document.activeElement)
+      ) {
+        window.mathVirtualKeyboard.hide()
+      }
+    })
   }
 
   onChangeState() {
     this.mathfield.disabled = this.state.disabled
-    this.mathfield.setValue(this.state.value, {
-      format: 'latex',
-    })
-    this.mathfield.setOptions(this.state.config || {})
+    if (this.state.config) {
+      Object.keys(this.state.config).forEach((key) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any, prettier/prettier
+        (this.mathfield as any)[key] = this.state.config[key]
+      })
+    }
+    if (this.mathfield.menuItems?.length == 0) {
+      this.box.nativeElement.classList.add('no-menu')
+    } else {
+      this.box.nativeElement.classList.remove('no-menu')
+    }
+    if (!this.state.layouts) {
+      this.state.layouts = 'default'
+    }
+    this.mathfield.value = this.state.value
+    window.mathVirtualKeyboard.layouts = this.state.layouts
   }
 }

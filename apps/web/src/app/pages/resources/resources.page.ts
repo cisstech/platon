@@ -69,6 +69,7 @@ interface QueryParams {
   levels?: string | string[]
   dependOn?: string | string[]
   configurable?: string | boolean
+  owners?: string | string[]
 }
 
 @Component({
@@ -118,7 +119,12 @@ export default class ResourcesPage implements OnInit, OnDestroy {
       run: (query) => {
         return this.completion.pipe(
           map((completion) => {
-            const suggestions = new Set<string>([...completion.names, ...completion.topics, ...completion.levels])
+            const suggestions = new Set<string>([
+              query,
+              ...completion.names,
+              ...completion.topics,
+              ...completion.levels,
+            ])
             return new Fuse(Array.from(suggestions), {
               includeMatches: true,
               findAllMatches: false,
@@ -158,16 +164,28 @@ export default class ResourcesPage implements OnInit, OnDestroy {
   protected circle!: Resource
   protected items: Resource[] = []
   protected views: Resource[] = []
+  protected owners: User[] = []
 
   async ngOnInit(): Promise<void> {
     this.user = (await this.authService.ready()) as User
+    const direction = localStorage.getItem('order-direction') as OrderingDirections
+    const order = localStorage.getItem('order') as ResourceOrderings
+    if (direction && order) {
+      this.filters = { ...this.filters, direction, order }
+      await this.router.navigate([], {
+        queryParams: { direction, order },
+        relativeTo: this.activatedRoute,
+        queryParamsHandling: 'merge',
+      })
+    }
 
-    const [tree, circle, views, topics, levels] = await Promise.all([
+    const [tree, circle, views, topics, levels, owners] = await Promise.all([
       firstValueFrom(this.resourceService.tree()),
       firstValueFrom(this.resourceService.circle(this.user.username)),
       firstValueFrom(this.resourceService.search({ views: true, expands: EXPANDS })),
       firstValueFrom(this.tagService.listTopics()),
       firstValueFrom(this.tagService.listLevels()),
+      firstValueFrom(this.resourceService.listOwners()),
     ])
 
     this.tree = tree
@@ -175,6 +193,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
     this.topics = topics
     this.levels = levels
     this.views = views.resources
+    this.owners = owners
 
     this.circles = []
 
@@ -197,6 +216,10 @@ export default class ResourcesPage implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this.activatedRoute.queryParams.subscribe(async (e: QueryParams) => {
+        if (e.direction && e.order) {
+          localStorage.setItem('order', e.order)
+          localStorage.setItem('order-direction', e.direction)
+        }
         this.filters = {
           ...this.filters,
           search: typeof e.q === 'string' ? (e.q.length > 0 ? e.q : undefined) : undefined,
@@ -211,6 +234,7 @@ export default class ResourcesPage implements OnInit, OnDestroy {
           status: typeof e.status === 'string' ? [e.status] : e.status,
           dependOn: typeof e.dependOn === 'string' ? [e.dependOn] : e.dependOn,
           configurable: e.configurable === 'true' || undefined, // do not pass false to prevent ignoring configurable resources by default
+          owners: e.owners ? (typeof e.owners === 'string' ? [e.owners] : e.owners) : undefined,
         }
 
         if (this.searchbar.value !== e.q) {
@@ -259,7 +283,10 @@ export default class ResourcesPage implements OnInit, OnDestroy {
       levels: filters.levels,
       configurable: filters.configurable ? true : undefined,
       dependOn: filters.dependOn,
+      owners: filters.owners,
     }
+
+    console.error(JSON.stringify(this.search, null, 2))
 
     this.router
       .navigate([], {

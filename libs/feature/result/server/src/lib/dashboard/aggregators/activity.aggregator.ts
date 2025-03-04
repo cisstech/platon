@@ -2,13 +2,16 @@ import { ExerciseVariables, extractExercisesFromActivityVariables } from '@plato
 import { ActivityEntity, ActivityMemberView } from '@platon/feature/course/server'
 import {
   ACTIVITY_ANSWER_RATE,
+  ACTIVITY_DISTRIBUTION,
   ACTIVITY_DROP_OUT_RATE,
   ACTIVITY_EXERCISE_RESULTS,
   ACTIVITY_TOTAL_ATTEMPTS,
   ACTIVITY_TOTAL_COMPLETIONS,
   ACTIVITY_USER_RESULTS,
   AnswerStates,
+  ExerciseDetails,
   ExerciseResults,
+  UserActivityResultsDistribution,
   UserResults,
   calculateAverage,
   emptyExerciseResults,
@@ -154,7 +157,6 @@ export class ActivityAnswerRate implements SessionDataAggregator<number> {
 
   next(input: SessionDataEntity): void {
     if (input.parentId) return
-    if (!input.activityNavigation?.terminated) return
 
     this.totalSessions++
     if (input.activityNavigation?.exercises?.some((exercise) => exercise.state !== AnswerStates.NOT_STARTED)) {
@@ -228,6 +230,8 @@ export class ActivityExerciseResults implements SessionDataAggregator<ExerciseRe
       exerciseResults.dropoutRate.sum += !session.lastGradedAt ? 1 : 0
       exerciseResults.dropoutRate.count += session.startedAt ? 1 : 0
 
+      exerciseResults.details.push(grade < 0 ? 0 : grade)
+
       if (session.startedAt && session.attempts && session.answers?.length) {
         exerciseResults.averageTimeToAttempt.count++
         exerciseResults.averageTimeToAttempt.sum += differenceInSeconds(
@@ -253,7 +257,6 @@ export class ActivityExerciseResults implements SessionDataAggregator<ExerciseRe
 
   complete(): ExerciseResults[] {
     const results = Array.from(this.exerciseResults.values())
-
     results.forEach((exerciseResult) => {
       calculateAverage(exerciseResult.grades)
       calculateAverage(exerciseResult.attempts)
@@ -265,7 +268,6 @@ export class ActivityExerciseResults implements SessionDataAggregator<ExerciseRe
       calculateAverage(exerciseResult.averageAttemptsToSuccess)
       calculateAverage(exerciseResult.successRateOnFirstAttempt)
     })
-
     return results
   }
 }
@@ -281,7 +283,6 @@ export class ActivityDropoutRate implements SessionDataAggregator<number> {
 
   next(input: SessionDataEntity): void {
     if (input.parentId) return
-    if (!input.activityNavigation?.terminated) return
 
     this.totalSessions++
 
@@ -309,7 +310,7 @@ export class ActivityTotalAttempts implements SessionDataAggregator<number> {
 
   next(input: SessionDataEntity): void {
     if (input.parentId) return
-    if (!input.activityNavigation?.terminated) return
+    // if (!input.activityNavigation?.terminated) return
 
     this.total += input.attempts ? 1 : 0
   }
@@ -329,7 +330,6 @@ export class ActivityTotalCompletions implements SessionDataAggregator<number> {
 
   next(input: SessionDataEntity): void {
     if (input.parentId) return
-    if (!input.activityNavigation?.terminated) return
 
     this.total += input.activityNavigation?.exercises?.every((exercise) => exercise.state !== AnswerStates.NOT_STARTED)
       ? 1
@@ -338,5 +338,58 @@ export class ActivityTotalCompletions implements SessionDataAggregator<number> {
 
   complete(): number {
     return this.total
+  }
+}
+
+export class ActivityDistribution implements SessionDataAggregator<UserActivityResultsDistribution[]> {
+  readonly id = ACTIVITY_DISTRIBUTION
+
+  private map = new Map<string, { user: UserActivityResultsDistribution; data: Map<string, ExerciseDetails[]> }>()
+  private readonly anonymous = 'anonymous'
+
+  constructor(args: ActivityUserResultsResultsArgs) {
+    const { activityMembers } = args
+
+    activityMembers
+      ?.sort((a, b) => a.username.localeCompare(b.username))
+      ?.forEach((member) => {
+        this.map.set(member.id, {
+          user: {
+            id: member.id,
+            username: member.username,
+            firstName: member.firstName,
+            lastName: member.lastName,
+            nbSuccess: {},
+          },
+          data: new Map<string, ExerciseDetails[]>(),
+        })
+      })
+  }
+
+  next(input: SessionDataEntity): void {
+    const userMap = this.map.get(input.user?.id ?? this.anonymous)
+    const answers = input.answers
+    const firstSuccess = answers?.find((answer) => answer.grade === 100) ?? answers?.find((answer) => answer.grade >= 0) // first success or first attempt
+    const date = new Date(firstSuccess?.createdAt ?? 0).setUTCHours(0, 0, 0, 0)
+    const formattedDate = new Date(date).toISOString().split('T')[0]
+    if (!userMap) return
+    let forDate = userMap.data.get(formattedDate)
+    if (!forDate) {
+      forDate = []
+      userMap.data.set(formattedDate, forDate)
+    }
+    forDate.push({ id: input.resourceId, title: input.resourceName, grade: input.grade })
+  }
+
+  complete(): UserActivityResultsDistribution[] {
+    return Array.from(this.map.values()).map((entry) => {
+      return {
+        ...entry.user,
+        nbSuccess: Array.from(entry.data.entries()).reduce((acc, [date, exercises]) => {
+          acc[date] = exercises.filter((exercise) => exercise.grade === 100).length ?? 0
+          return acc
+        }, {} as Record<string, number>),
+      }
+    })
   }
 }

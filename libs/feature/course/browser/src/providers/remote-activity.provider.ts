@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { buildHttpParams } from '@platon/core/browser'
-import { ItemResponse, ListResponse } from '@platon/core/common'
+import { ItemResponse, ListResponse, NoContentResponse } from '@platon/core/common'
 import { Activity, ActivityFilters, Course, CreateActivity, UpdateActivity } from '@platon/feature/course/common'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
@@ -40,6 +40,12 @@ export class RemoteActivityProvider extends ActivityProvider {
       .pipe(map((response) => response.resource))
   }
 
+  updateOrder(course: Course, sortedActivityIds: string[]): Observable<void> {
+    return this.http
+      .patch<NoContentResponse>(`/api/v1/courses/${course.id}/activities/change-order`, sortedActivityIds)
+      .pipe(map(() => undefined))
+  }
+
   reload(activity: Activity, version?: string): Observable<Activity> {
     return this.http
       .put<ItemResponse<Activity>>(
@@ -56,6 +62,12 @@ export class RemoteActivityProvider extends ActivityProvider {
   close(activity: Activity): Observable<Activity> {
     return this.http
       .post<ItemResponse<Activity>>(`/api/v1/courses/${activity.courseId}/activities/${activity.id}/close`, {})
+      .pipe(map((response) => response.resource))
+  }
+
+  reopen(activity: Activity): Observable<Activity> {
+    return this.http
+      .post<ItemResponse<Activity>>(`/api/v1/courses/${activity.courseId}/activities/${activity.id}/reopen`, {})
       .pipe(map((response) => response.resource))
   }
 }

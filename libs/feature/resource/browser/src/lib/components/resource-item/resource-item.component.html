@@ -14,7 +14,7 @@
 
     <ng-container *ngIf="item.type !== 'CIRCLE'">
       <ui-list-item-article-action
-        (click)="modalMode ? openTab(previewUrl) : iframe.open(previewUrl)"
+        (click)="$event.stopPropagation(); modalMode ? openTab(previewUrl) : iframe.open(previewUrl)"
         class="action"
         actionTitle="Prévisualiser"
       >
@@ -49,13 +49,7 @@
             </ng-container>
           </b>
         </p>
-        <button
-          nz-button
-          class="btn-show-references"
-          nzType="link"
-          [routerLink]="['/resources']"
-          [queryParams]="{ dependOn: [item.id] }"
-        >
+        <button nz-button class="btn-show-references" nzType="link" (click)="openTab(referencesUrl)">
           Afficher le listing
         </button>
       </ng-template>
@@ -74,9 +68,12 @@
 
 <ng-template #refActionTitleTemplate>
   <ng-container [ngPlural]="item.statistic?.exercise?.references?.total || 0">
-    <ng-template ngPluralCase="=0">Aucune référence</ng-template>
-    <ng-template ngPluralCase="=1">1 référence</ng-template>
-    <ng-template ngPluralCase="other">{{ item.statistic?.exercise?.references?.total || 0 }} références</ng-template>
+    <ng-template ngPluralCase="=0">Aucune réf<span class="hide-on-mobile">érence</span></ng-template>
+    <ng-template ngPluralCase="=1">1 réf<span class="hide-on-mobile">érence</span></ng-template>
+    <ng-template ngPluralCase="other"
+      >{{ item.statistic?.exercise?.references?.total || 0 }} réf<span class="hide-on-mobile">érence</span
+      >s</ng-template
+    >
   </ng-container>
 </ng-template>
 
@@ -93,8 +90,8 @@
     nz-popover
     nzPopoverPlacement="topLeft"
     [nzPopoverContent]="metadataResume"
-    [nzPopoverTrigger]="configurable ? 'hover' : undefined"
-    (mouseenter)="getReadmeContent()"
+    [nzPopoverTrigger]="configurable ? 'hover' : null"
+    (mouseenter)="configurable ? getReadmeContent() : null"
   >
     <span class="resource-item-title">{{ name }}</span>
     <i
@@ -107,7 +104,7 @@
     ></i>
   </div>
   <div class="resource-item-stats" *ngIf="attemptCount">
-    <span [style.color]="successRateColor">{{ successRate }}%</span> de réussite pour
+    Note moyenne de <span [style.color]="averageScoreColor">{{ averageScore }}%</span> pour
     <ng-container [ngPlural]="attemptCount">
       <ng-template ngPluralCase="=0">0 utilisation</ng-template>
       <ng-template ngPluralCase="=1">1 utilisation</ng-template>
@@ -126,7 +123,7 @@
       <nz-spin nzSimple nzSize="small" />
     </div>
     <div *ngIf="readme">
-      <nge-markdown [file]="readme.url" />
+      <nge-markdown [data]="readme" />
     </div>
     <div style="margin-top: 1rem">
       <ng-container [ngPlural]="((item.metadata! | exerciseResourceMeta)?.config?.inputs)!.length">

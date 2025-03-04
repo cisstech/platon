@@ -5,7 +5,7 @@
       [ngClass]="item.css | css : 'class'"
       [ngStyle]="item.css | css : 'style'"
       [class.checked]="item.checked"
-      (click)="item.checked = !item.checked; $event.stopPropagation()"
+      (click)="item.checked = !item.checked; state.isFilled = true; $event.stopPropagation()"
     >
       <mat-checkbox color="primary" [checked]="!!item.checked" [disabled]="state.disabled">
         <nge-markdown [data]="item.content" />

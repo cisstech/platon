@@ -21,15 +21,12 @@ export const appRoutes: Route[] = [
       ),
   },
   {
-    path: 'docs',
-    title: 'PLaTon - Documentation',
-    data: {
-      ...alwaysLightTheme,
-    },
+    path: 'playground',
+    title: 'PLaTon - Playground',
     loadChildren: () =>
       import(
-        /* webpackChunkName: "docs" */
-        './pages/docs/docs.routes'
+        /* webpackChunkName: "playground" */
+        './pages/playground/playground.routes'
       ),
   },
   {

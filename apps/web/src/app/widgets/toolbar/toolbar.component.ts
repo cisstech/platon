@@ -9,6 +9,7 @@ import {
   OnDestroy,
   OnInit,
   Output,
+  ViewChild,
   inject,
 } from '@angular/core'
 import { Router, RouterModule } from '@angular/router'
@@ -20,12 +21,14 @@ import { MatMenuModule } from '@angular/material/menu'
 import { AuthService, ThemeService, UserAvatarComponent } from '@platon/core/browser'
 import { User, UserRoles } from '@platon/core/common'
 import { NotificationDrawerComponent } from '@platon/feature/notification/browser'
+import { DiscordInvitationComponent, DiscordButtonComponent } from '@platon/feature/discord/browser'
 import { ResourcePipesModule, ResourceService } from '@platon/feature/resource/browser'
 import { NzBadgeModule } from 'ng-zorro-antd/badge'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzPopoverModule } from 'ng-zorro-antd/popover'
 import { firstValueFrom, Subscription } from 'rxjs'
+import { UiModalTemplateComponent } from '@platon/shared/ui'
 
 @Component({
   standalone: true,
@@ -49,6 +52,10 @@ import { firstValueFrom, Subscription } from 'rxjs'
     ResourcePipesModule,
     UserAvatarComponent,
     NotificationDrawerComponent,
+    DiscordInvitationComponent,
+    DiscordButtonComponent,
+
+    UiModalTemplateComponent,
   ],
 })
 export class ToolbarComponent implements OnInit, OnDestroy {
@@ -71,6 +78,10 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   protected canCreateCircle = false
   protected canCreateExercise = false
   protected canCreateActivity = false
+  protected loggedToDiscord = false
+
+  @ViewChild(UiModalTemplateComponent, { static: true })
+  protected modal!: UiModalTemplateComponent
 
   protected get canCreate(): boolean {
     return this.canCreateCourse || this.canCreateCircle || this.canCreateExercise || this.canCreateActivity
@@ -102,6 +113,8 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     this.drawerOpenedChange.emit(this.drawerOpened)
 
     this.user = (await this.authService.ready()) as User
+    this.loggedToDiscord =
+      this.user.discordId !== null && this.user.discordId !== undefined && this.user.discordId !== ''
     this.personalCircleId = (await firstValueFrom(this.resourceService.circle(this.user.username))).id
 
     this.canCreateCourse = this.user.role === UserRoles.admin || this.user.role === UserRoles.teacher
@@ -177,5 +190,9 @@ export class ToolbarComponent implements OnInit, OnDestroy {
       document.body.style.transition = 'none'
       this.changeDetectorRef.markForCheck()
     }, 500)
+  }
+
+  openDiscordModal(): void {
+    this.modal.open()
   }
 }

@@ -1,0 +1,124 @@
+---
+title: ChartViewer-Pies
+description: Graphique circulaire avec plusieurs variantes (simple, donut, demi-donut, diagramme de Nightingale) pour visualiser des proportions. Adapté aux exercices de statistiques, d'analyse de données, de répartition de budgets, de démographie, ou pour toute représentation de données où la proportion relative des parties par rapport au tout est importante.
+---
+
+import { Tabs, Tab } from 'nextra/components'
+import { ComponentProperties } from '../../../components'
+import { useAbsoluteUrl } from '../../../hooks'
+
+# ChartViewer-Pies
+
+`wc-chart-viewer-pies`
+
+Graphique circulaire avec plusieurs variantes (simple, donut, demi-donut, diagramme de Nightingale) pour visualiser des proportions. Adapté aux exercices de statistiques, d'analyse de données, de répartition de budgets, de démographie, ou pour toute représentation de données où la proportion relative des parties par rapport au tout est importante.
+
+## Documentation
+
+Le composant ChartViewerPies permet de créer des graphiques circulaires pour visualiser des proportions et distributions. Idéal pour représenter des parts d'un ensemble, des pourcentages ou des répartitions relatives entre différentes catégories.
+
+### Structure des données
+
+La propriété `data` attend un tableau d'objets avec la structure suivante:
+
+```typescript
+{
+    "name": string, // Nom de la catégorie (ex: "France")
+    "value": number // Valeur numérique associée (ex: 7200000)
+}
+```
+
+Chaque objet représente une portion du graphique, dont la taille sera proportionnelle à sa valeur par rapport à la somme totale.
+
+### Modes d'affichage
+
+Le composant offre quatre variantes visuelles pour s'adapter à différents contextes pédagogiques:
+
+- **simple**: Graphique circulaire classique
+- **donut**: Graphique en anneau avec un espace vide au centre
+- **half-donut**: Graphique en demi-cercle
+- **nightingale**: Diagramme en rose (de Florence Nightingale), où les segments ont tous le même angle mais des rayons différents
+
+### Exemple pratique
+
+```typescript
+{
+  mode: "donut",
+  data: [
+    { name: "Protéines", value: 25 },
+    { name: "Lipides", value: 30 },
+    { name: "Glucides", value: 45 }
+  ]
+}
+```
+
+### Recommandations
+
+Pour une visualisation optimale:
+
+- Limitez le nombre d'éléments à moins de 8 pour éviter la surcharge visuelle
+- Utilisez des noms courts mais descriptifs
+- Organisez vos données par ordre de grandeur pour faciliter la lecture
+- Envisagez d'utiliser le mode "nightingale" pour mettre en évidence les contrastes entre valeurs
+
+> Les différents modes offrent des perspectives visuelles complémentaires sur les mêmes données, permettant d'explorer différentes façons de communiquer l'information.
+
+## Exemple interactif
+
+<iframe
+  src={useAbsoluteUrl('playground/components/wc-chart-viewer-pies')}
+  style={{ width: '100%', height: '700px', border: 'none' }}
+></iframe>
+
+## API
+
+<Tabs items={['Graphique', 'JSON']}>
+  <Tab>
+    <ComponentProperties schema={{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "ChartViewer-Pies",
+  "required": [
+    "data"
+  ],
+  "properties": {
+    "mode": {
+      "type": "string",
+      "default": "simple",
+      "description": "Mode d'affichage du graphe : simple, donuts ou half-donuts",
+      "enum": [
+        "simple",
+        "donut",
+        "half-donut",
+        "nightingale"
+      ]
+    }
+  }
+}} />
+  </Tab>
+  <Tab>
+    ```json
+    {
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "ChartViewer-Pies",
+  "required": [
+    "data"
+  ],
+  "properties": {
+    "mode": {
+      "type": "string",
+      "default": "simple",
+      "description": "Mode d'affichage du graphe : simple, donuts ou half-donuts",
+      "enum": [
+        "simple",
+        "donut",
+        "half-donut",
+        "nightingale"
+      ]
+    }
+  }
+}
+    ```
+  </Tab>
+</Tabs>

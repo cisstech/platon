@@ -85,7 +85,7 @@ export class AuthSignInComponent implements OnInit {
           this.router.navigateByUrl(next || '/dashboard', { replaceUrl: true }).catch(console.error)
         })
         .catch((error) => {
-          console.log(error)
+          console.error(error)
         })
     }
   }

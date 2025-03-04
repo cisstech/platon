@@ -38,309 +38,550 @@
     </svg>
   </span>
 </ng-template>
-<nz-steps [nzCurrent]="step" (nzIndexChange)="step = $event" nzSize="small">
-  <nz-step nzTitle="Informations" nzIcon="info-circle" />
-  <nz-step nzTitle="Paramètres" nzIcon="setting" />
-  <nz-step nzTitle="Exercices" nzIcon="ordered-list" />
-</nz-steps>
-<form [formGroup]="form">
-  <ng-container *ngIf="step === 0">
-    <nz-form-item>
-      <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="title">Titre</nz-form-label>
-      <nz-form-control>
-        <input nz-input formControlName="title" id="title" />
-      </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-      <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="introduction">Introduction</nz-form-label>
-      <nz-form-control>
-        <textarea nz-input formControlName="introduction" id="introduction"></textarea>
-      </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-      <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="conclusion">Conclusion</nz-form-label>
-      <nz-form-control>
-        <textarea nz-input formControlName="conclusion" id="conclusion"></textarea>
-      </nz-form-control>
-    </nz-form-item>
-  </ng-container>
-  <ng-container *ngIf="step === 1">
-    <nz-collapse>
-      <nz-collapse-panel nzHeader="Temps" nzExpandedIcon="clock-circle" nzActive>
-        <nz-form-item>
-          <nz-form-label
-            [nzSpan]="3"
-            nzLabelAlign="left"
-            for="duration"
-            nzTooltipTitle="La durée de l'activité. Laissez vide pour ne pas mettre de limite."
-            >Durée</nz-form-label
-          >
-          <nz-form-control>
-            <nz-time-picker
-              formControlName="duration"
-              id="duration"
-              nzFormat="HH:mm:ss"
-              [nzSuffixIcon]="suffix"
-              [nzUse12Hours]="false"
-            />
-            <ng-template #suffix>hh:mm:ss</ng-template>
-          </nz-form-control>
-        </nz-form-item>
-      </nz-collapse-panel>
-      <nz-collapse-panel nzHeader="Aléatoire" [nzExpandedIcon]="CustomDiceIson" nzActive>
-        <nz-form-item>
-          <nz-form-label
-            [nzSpan]="3"
-            nzLabelAlign="left"
-            for="seedPerExercise"
-            nzTooltipTitle="Initialise une graine est tirée aléatoirement pour chaque exercice de l'activité."
-            >Exercices aléatoires</nz-form-label
-          >
-          <nz-form-control>
-            <label nz-checkbox formControlName="seedPerExercise" id="seedPerExercise"></label>
-          </nz-form-control>
-        </nz-form-item>
-      </nz-collapse-panel>
+<div class="pla-editor">
+  <!-- Boutons pour les étapes -->
+  <div class="button-group">
+    <button nz-button nzType="default" (click)="getToStep(0)" [ngClass]="{ active: step === 0 }">
+      <div class="vertical-align">
+        <span nz-icon nzType="info-circle"></span>
+        Informations
+      </div>
+    </button>
+    <button nz-button nzType="default" (click)="getToStep(1)" [ngClass]="{ active: step === 1 }">
+      <div class="vertical-align">
+        <span nz-icon nzType="setting"></span>
+        Paramètres
+      </div>
+    </button>
+    <button nz-button nzType="default" (click)="getToStep(2)" [ngClass]="{ active: step === 2 }">
+      <div class="vertical-align">
+        <span nz-icon nzType="ordered-list"></span>
+        Exercices
+      </div>
+    </button>
+    <button
+      *ngIf="activity?.settings?.navigation?.mode === 'next'"
+      nz-button
+      nzType="default"
+      (click)="getToStep(3)"
+      [ngClass]="{ active: step === 3 }"
+    >
+      <div class="vertical-align">
+        <span nz-icon nzType="fast-forward"></span>
+        Next
+      </div>
+    </button>
+  </div>
 
-      <nz-collapse-panel formGroupName="navigation" nzHeader="Navigation" nzExpandedIcon="compass" nzActive>
-        <nz-form-item>
-          <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="navigationMode">Mode</nz-form-label>
-          <nz-form-control>
-            <nz-select formControlName="mode" id="navigationMode">
-              <nz-option nzValue="composed" nzLabel="Composée" nzCustomContent>
-                <span
-                  nz-icon
-                  nzType="question-circle"
-                  nz-tooltip="Tous les exercices sont affichés simultanément."
-                ></span>
-                Composée
-              </nz-option>
-              <nz-option nzValue="manual" nzLabel="Progressive" nzCustomContent>
-                <span nz-icon nzType="question-circle" nz-tooltip="les exercices sont affichés un à un"></span>
-                Progressive
-              </nz-option>
-            </nz-select>
-          </nz-form-control>
-        </nz-form-item>
-      </nz-collapse-panel>
-      <nz-collapse-panel formGroupName="actions" nzHeader="Actions" nzExpandedIcon="play-circle" nzActive>
-        <nz-form-item>
-          <nz-form-label
-            [nzSpan]="3"
-            nzLabelAlign="left"
-            for="retry"
-            nzTooltipTitle="Indiquez le nombre maximal de validations autorisées avant la désactivation du bouton 'Valider'. Entrez 0 pour un nombre illimité de validations."
-            >Tentatives</nz-form-label
-          >
-          <nz-form-control>
-            <nz-input-number formControlName="retry" id="retry" [nzMin]="0" [nzStep]="1"></nz-input-number>
-          </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-          <nz-form-label
-            [nzSpan]="3"
-            nzLabelAlign="left"
-            for="hints"
-            nzTooltipTitle="Afficher le bouton 'Aides' des exercices si disponible."
-            >Aides</nz-form-label
-          >
-          <nz-form-control>
-            <label nz-checkbox formControlName="hints" id="hints"></label>
-          </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-          <nz-form-label
-            [nzSpan]="3"
-            nzLabelAlign="left"
-            for="reroll"
-            nzTooltipTitle="Afficher le bouton 'Autre question' des exercices si disponible."
-            >Autre question</nz-form-label
-          >
-          <nz-form-control>
-            <label nz-checkbox formControlName="reroll" id="reroll"></label>
-          </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-          <nz-form-label
-            [nzSpan]="3"
-            nzLabelAlign="left"
-            for="theories"
-            nzTooltipTitle="Afficher le bouton 'Théories' des exercices si disponible."
-            >Théories</nz-form-label
-          >
-          <nz-form-control>
-            <label nz-checkbox formControlName="theories" id="theories"></label>
-          </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-          <nz-form-label
-            [nzSpan]="3"
-            nzLabelAlign="left"
-            for="solution"
-            nzTooltipTitle="Afficher le bouton 'Solution' des exercices si disponible."
-            >Solution</nz-form-label
-          >
-          <nz-form-control>
-            <label nz-checkbox formControlName="solution" id="solution"></label>
-          </nz-form-control>
-        </nz-form-item>
-      </nz-collapse-panel>
-      <nz-collapse-panel formGroupName="feedback" nzHeader="Feedback" nzExpandedIcon="message" nzActive>
-        <nz-form-item>
-          <nz-form-label
-            [nzSpan]="3"
-            nzLabelAlign="left"
-            for="validation"
-            nzTooltipTitle="Afficher le feedback des exercices après une validation."
-            >Validation</nz-form-label
-          >
-          <nz-form-control>
-            <label nz-checkbox formControlName="validation" id="validation"></label>
-          </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-          <nz-form-label
-            [nzSpan]="3"
-            nzLabelAlign="left"
-            for="review"
-            nzTooltipTitle="Afficher le feedback des exercices à la fin de l'activité."
-            >Correction</nz-form-label
-          >
-          <nz-form-control>
-            <label nz-checkbox formControlName="review" id="review"></label>
-          </nz-form-control>
-        </nz-form-item>
-      </nz-collapse-panel>
-      <nz-collapse-panel formGroupName="security" nzHeader="Sécurité" nzExpandedIcon="safety" nzActive>
-        <nz-form-item>
-          <nz-form-label
-            [nzSpan]="5"
-            nzLabelAlign="left"
-            for="noCopyPaste"
-            nzTooltipTitle="Une fois activée, cette option désactivera la fonctionnalité de copier-coller dans l'activité, incluant les raccourcis clavier (Ctrl/Cmd + C, Ctrl/Cmd + V, Ctrl/Cmd + X) et le clic droit."
-            >Blocage du copier coller</nz-form-label
-          >
-          <nz-form-control>
-            <label nz-checkbox formControlName="noCopyPaste" id="noCopyPaste"></label>
-          </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-          <nz-form-label
-            [nzSpan]="5"
-            nzLabelAlign="left"
-            for="terminateOnLoseFocus"
-            nzTooltipTitle="Si activée, cette option entraînera la fin automatique de l'activité en cas de clic en dehors de sa page, que ce soit sur une autre fenêtre ou en dehors du cadre de la page."
-            >Terminer si clique en dehors</nz-form-label
-          >
-          <nz-form-control>
-            <label nz-checkbox formControlName="terminateOnLoseFocus" id="terminateOnLoseFocus"></label>
-          </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-          <nz-form-label
-            [nzSpan]="5"
-            nzLabelAlign="left"
-            for="terminateOnLeavePage"
-            nzTooltipTitle="Si activée, cette option entraînera la fin automatique de l'activité en cas de changement de visibilité de la page, tel qu'un changement d'onglet ou de fenêtre du système d'exploitation."
-            >Terminer si changement de page</nz-form-label
-          >
-          <nz-form-control>
-            <label nz-checkbox formControlName="terminateOnLeavePage" id="terminateOnLeavePage"></label>
-          </nz-form-control>
-        </nz-form-item>
-      </nz-collapse-panel>
-    </nz-collapse>
-  </ng-container>
-  <ng-container *ngIf="step === 2">
-    <div class="exercise-group-container">
-      <div class="exercise-group-list">
-        <h3>Groupes</h3>
-        <nz-list
-          cdkDropList
-          [cdkDropListDisabled]="readOnly"
-          (cdkDropListDropped)="onReorderGroups($any($event))"
-          [nzDataSource]="exerciseGroups"
-          nzBordered
-        >
-          <nz-list-item
-            cdkDrag
-            [class.selected]="selectedGroupIndex === i"
-            *ngFor="let group of exerciseGroups; trackBy: trackByIndex; index as i"
-            (click)="selectGroup(i)"
-          >
-            <span>
-              <b> Groupe {{ i + 1 }} </b> : <br />
-              <ng-container [ngPlural]="group.length">
-                <ng-template ngPluralCase="=0">0 exercice</ng-template>
-                <ng-template ngPluralCase="=1">1 exercice</ng-template>
-                <ng-template ngPluralCase="other">{{ group.length }} exercices</ng-template>
-              </ng-container></span
+  <hr />
+  <form [formGroup]="form">
+    <ng-container *ngIf="step === 0">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="title">Titre</nz-form-label>
+        <nz-form-control>
+          <input nz-input formControlName="title" id="title" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="introduction">Introduction</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input nzAutosize formControlName="introduction" id="introduction"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="conclusion">Conclusion</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input nzAutosize formControlName="conclusion" id="conclusion"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+    </ng-container>
+    <ng-container *ngIf="step === 1">
+      <nz-collapse>
+        <nz-collapse-panel nzHeader="Temps" nzExpandedIcon="clock-circle" nzActive>
+          <nz-form-item>
+            <nz-form-label
+              [nzSpan]="3"
+              nzLabelAlign="left"
+              for="duration"
+              nzTooltipTitle="La durée de l'activité. Laissez vide pour ne pas mettre de limite."
+              >Durée</nz-form-label
             >
-            <ul nz-list-item-actions>
-              <nz-list-item-action>
-                <button
-                  nz-button
-                  nzDanger
-                  nzType="text"
-                  nz-tooltip="Supprimer"
-                  [disabled]="readOnly"
-                  (click)="deleteGroup(i)"
-                >
-                  <span nz-icon nzType="delete" nzTheme="outline"></span>
-                </button>
-              </nz-list-item-action>
-              <nz-list-item-action *ngIf="!readOnly">
-                <button nz-button nzType="text" nz-tooltip="Maintenez et déplacez pour changer l'ordre">
-                  <mat-icon>swap_vert</mat-icon>
-                </button>
-              </nz-list-item-action>
-            </ul>
-          </nz-list-item>
-        </nz-list>
-        <button nz-button nzType="primary" [disabled]="readOnly" (click)="addGroup()">+</button>
-      </div>
-      <div class="exercise-list" *ngIf="selectedGroup !== undefined">
-        <ng-template [ngTemplateOutlet]="exerciseList"></ng-template>
-      </div>
-    </div>
-  </ng-container>
-</form>
+            <nz-form-control>
+              <nz-time-picker
+                formControlName="duration"
+                id="duration"
+                nzFormat="HH:mm:ss"
+                [nzSuffixIcon]="suffix"
+                [nzUse12Hours]="false"
+              />
+              <ng-template #suffix>hh:mm:ss</ng-template>
+            </nz-form-control>
+          </nz-form-item>
+        </nz-collapse-panel>
+        <nz-collapse-panel nzHeader="Aléatoire" nzExpandedIcon="question-circle" nzActive>
+          <nz-form-item>
+            <nz-form-label
+              [nzSpan]="3"
+              nzLabelAlign="left"
+              for="seedPerExercise"
+              nzTooltipTitle="Par défaut, tous les exercices auront une même seed. Cocher cette option pour que chaque exercice possède une graine tirée aléatoirement."
+              >Exercices avec des seeds aléatoires</nz-form-label
+            >
+            <nz-form-control>
+              <label nz-checkbox formControlName="seedPerExercise" id="seedPerExercise"></label>
+            </nz-form-control>
+          </nz-form-item>
+        </nz-collapse-panel>
 
+        <nz-collapse-panel formGroupName="navigation" nzHeader="Navigation" nzExpandedIcon="compass" nzActive>
+          <nz-form-item>
+            <nz-form-label [nzSpan]="3" nzLabelAlign="left" for="navigationMode">Mode</nz-form-label>
+            <nz-form-control>
+              <ng-template #selectedOptionTemplate let-selected>
+                <span nz-icon nzType="question-circle" [nz-tooltip]="getNavigationTooltip(selected.nzValue)"></span>
+                {{ getNavigationLabel(selected.nzValue) }}
+              </ng-template>
+              <nz-select formControlName="mode" id="navigationMode" [nzCustomTemplate]="selectedOptionTemplate">
+                @for(mode of navigationModes; track mode.value) {
+                <nz-option nzValue="{{ mode.value }}" nzLabel="{{ mode.label }}" nzCustomContent>
+                  <span nz-icon nzType="question-circle" nz-tooltip="{{ mode.tooltip }}"></span>
+                  {{ mode.label }}
+                </nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-alert
+            *ngIf="activity?.settings?.navigation?.mode === 'peer'"
+            nzType="warning"
+            nzMessage="Attention la fonctionnalité de comparaison par les pairs est en cours de développement."
+            nzShowIcon
+          ></nz-alert>
+          <nz-alert
+            *ngIf="activity?.settings?.navigation?.mode === 'next'"
+            nzType="warning"
+            nzMessage="Attention la fonctionnalité de navigation intelligente est en cours de développement."
+            nzShowIcon
+          ></nz-alert>
+        </nz-collapse-panel>
+        <nz-collapse-panel formGroupName="actions" nzHeader="Actions" nzExpandedIcon="play-circle" nzActive>
+          <nz-form-item>
+            <nz-form-label
+              [nzSpan]="3"
+              nzLabelAlign="left"
+              for="retry"
+              nzTooltipTitle="Indiquez le nombre maximal de validations autorisées avant la désactivation du bouton 'Valider'. Entrez 0 pour un nombre illimité de validations."
+              >Tentatives</nz-form-label
+            >
+            <nz-form-control>
+              <nz-input-number formControlName="retry" id="retry" [nzMin]="0" [nzStep]="1"></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label
+              [nzSpan]="3"
+              nzLabelAlign="left"
+              for="hints"
+              nzTooltipTitle="Afficher le bouton 'Aides' des exercices si disponible."
+              >Aides</nz-form-label
+            >
+            <nz-form-control>
+              <label nz-checkbox formControlName="hints" id="hints"></label>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label
+              [nzSpan]="3"
+              nzLabelAlign="left"
+              for="reroll"
+              nzTooltipTitle="Afficher le bouton 'Autre question' des exercices si disponible."
+              >Autre question</nz-form-label
+            >
+            <nz-form-control>
+              <label nz-checkbox formControlName="reroll" id="reroll"></label>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label
+              [nzSpan]="3"
+              nzLabelAlign="left"
+              for="theories"
+              nzTooltipTitle="Afficher le bouton 'Théories' des exercices si disponible."
+              >Théories</nz-form-label
+            >
+            <nz-form-control>
+              <label nz-checkbox formControlName="theories" id="theories"></label>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label
+              [nzSpan]="3"
+              nzLabelAlign="left"
+              for="solution"
+              nzTooltipTitle="Afficher le bouton 'Solution' des exercices si disponible."
+              >Solution</nz-form-label
+            >
+            <nz-form-control>
+              <label nz-checkbox formControlName="solution" id="solution"></label>
+            </nz-form-control>
+          </nz-form-item>
+        </nz-collapse-panel>
+        <nz-collapse-panel formGroupName="feedback" nzHeader="Feedback" nzExpandedIcon="message" nzActive>
+          <nz-form-item>
+            <nz-form-label
+              [nzSpan]="3"
+              nzLabelAlign="left"
+              for="validation"
+              nzTooltipTitle="Afficher le feedback des exercices après une validation."
+              >Validation</nz-form-label
+            >
+            <nz-form-control>
+              <label nz-checkbox formControlName="validation" id="validation"></label>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label
+              [nzSpan]="3"
+              nzLabelAlign="left"
+              for="review"
+              nzTooltipTitle="Afficher le feedback des exercices à la fin de l'activité."
+              >Correction</nz-form-label
+            >
+            <nz-form-control>
+              <label nz-checkbox formControlName="review" id="review"></label>
+            </nz-form-control>
+          </nz-form-item>
+        </nz-collapse-panel>
+        <nz-collapse-panel formGroupName="security" nzHeader="Sécurité" nzExpandedIcon="safety" nzActive>
+          <nz-form-item>
+            <nz-form-label
+              [nzSpan]="5"
+              nzLabelAlign="left"
+              for="noCopyPaste"
+              nzTooltipTitle="Une fois activée, cette option désactivera la fonctionnalité de copier-coller dans l'activité, incluant les raccourcis clavier (Ctrl/Cmd + C, Ctrl/Cmd + V, Ctrl/Cmd + X) et le clic droit."
+              >Blocage du copier coller</nz-form-label
+            >
+            <nz-form-control>
+              <label nz-checkbox formControlName="noCopyPaste" id="noCopyPaste"></label>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label
+              [nzSpan]="5"
+              nzLabelAlign="left"
+              for="terminateOnLoseFocus"
+              nzTooltipTitle="Si activée, cette option entraînera la fin automatique de l'activité en cas de clic en dehors de sa page, que ce soit sur une autre fenêtre ou en dehors du cadre de la page."
+              >Terminer si clique en dehors</nz-form-label
+            >
+            <nz-form-control>
+              <label nz-checkbox formControlName="terminateOnLoseFocus" id="terminateOnLoseFocus"></label>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label
+              [nzSpan]="5"
+              nzLabelAlign="left"
+              for="terminateOnLeavePage"
+              nzTooltipTitle="Si activée, cette option entraînera la fin automatique de l'activité en cas de changement de visibilité de la page, tel qu'un changement d'onglet ou de fenêtre du système d'exploitation."
+              >Terminer si changement de page</nz-form-label
+            >
+            <nz-form-control>
+              <label nz-checkbox formControlName="terminateOnLeavePage" id="terminateOnLeavePage"></label>
+            </nz-form-control>
+          </nz-form-item>
+        </nz-collapse-panel>
+      </nz-collapse>
+    </ng-container>
+    <ng-container *ngIf="step === 2">
+      <div class="exercise-group-container">
+        <div class="exercise-group-list">
+          <h3>Groupes d'exercices</h3>
+          <mat-accordion
+            cdkDropListGroup
+            cdkDropList
+            [cdkDropListDisabled]="readOnly"
+            (cdkDropListDropped)="onReorderGroups($any($event))"
+            class="draggable-container"
+            multi
+          >
+            <mat-expansion-panel
+              cdkDrag
+              cdkDropList
+              [cdkDropListDisabled]="readOnly"
+              [cdkDropListData]="group"
+              (cdkDropListDropped)="drop($any($event))"
+              [cdkDropListConnectedTo]="['itemList']"
+              id="panel{{ i }}"
+              [class.selected]="selectedGroupIndex === i"
+              (click)="selectGroup(i)"
+              *ngFor="let group of exerciseGroups; trackBy: trackByIndex; index as i"
+              class="expansion-panel draggable-item"
+              #panel
+            >
+              <mat-expansion-panel-header>
+                <mat-icon class="drag-icon">drag_indicator</mat-icon>
+                <div class="group-header">
+                  <div
+                    nz-typography
+                    [nzEditable]="!readOnly"
+                    [nzContent]="group.name"
+                    (nzContentChange)="onGroupeRename($event, i)"
+                    class="group-number"
+                    (keydown.Space)="$event.stopImmediatePropagation()"
+                  ></div>
+                  <div class="exercise-number">
+                    <ng-container [ngPlural]="group.exercises.length">
+                      <ng-template ngPluralCase="=0">0 exercice</ng-template>
+                      <ng-template ngPluralCase="=1">1 exercice</ng-template>
+                      <ng-template ngPluralCase="other">{{ group.exercises.length }} exercices</ng-template>
+                    </ng-container>
+                  </div>
+                </div>
+                <div class="button-div" #button>
+                  <button
+                    class="delete-button"
+                    nz-button
+                    nzDanger
+                    nzType="text"
+                    nz-tooltip="Supprimer"
+                    [disabled]="readOnly"
+                    (click)="deleteGroup(i)"
+                  >
+                    <span nz-icon nzType="close" nzTheme="outline"></span>
+                  </button>
+                </div>
+              </mat-expansion-panel-header>
+              <div class="mat-expansion-panel-content draggable-container">
+                <nz-list
+                  cdkDropList
+                  [cdkDropListDisabled]="readOnly"
+                  (cdkDropListDropped)="drop($any($event))"
+                  [cdkDropListConnectedTo]="connectedTo[i]"
+                  [cdkDropListData]="group.exercises"
+                  (cdkDropListDropped)="onReorderExercises($any($event))"
+                  [nzDataSource]="group.exercises"
+                  nzBordered
+                  class="draggable-container"
+                  id="array{{ i }}"
+                >
+                  <div
+                    *ngFor="let exercise of group.exercises; trackBy: trackByExerciseId; index as i"
+                    class="draggable-item exercise-in-group"
+                    cdkDrag
+                  >
+                    <app-pla-exercise-editor
+                      [disabled]="readOnly"
+                      [exercise]="exercise"
+                      (exerciseChange)="updateExercise($event)"
+                      (exerciseLoadFailed)="onExerciseLoadFailed($event)"
+                      (deleteClicked)="deleteExercise(i)"
+                    />
+                  </div>
+                </nz-list>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+          <button *ngIf="!readOnly" nz-button nzType="primary" (click)="addGroup()">
+            <span nz-icon nzType="plus" nzTheme="outline"></span><span>Ajouter un groupe</span>
+          </button>
+        </div>
+        <div class="exercise-list" *ngIf="selectedGroup !== undefined">
+          <ng-template [ngTemplateOutlet]="exerciseList"></ng-template>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="step === 3">
+      <nz-collapse>
+        <button nz-button nzType="primary" class="openNextButton" (click)="openNextFile()">
+          <span nz-icon nzType="file" nzTheme="outline"></span>
+          <span>Ouvrir le fichier next.{{ activity.settings?.nextSettings?.sandbox === 'python' ? 'py' : 'js' }}</span>
+        </button>
+        <nz-collapse-panel formGroupName="nextSettings" nzHeader="Paramètres du next" nzExpandedIcon="setting" nzActive>
+          <nz-form-item>
+            <nz-form-label
+              nzLabelAlign="left"
+              for="sandbox"
+              nzTooltipTitle="Langage à utiliser pour programmer le next."
+              >Sandbox</nz-form-label
+            >
+            <nz-form-control>
+              <nz-select formControlName="sandbox" id="sandbox">
+                <nz-option nzValue="python" nzLabel="Python" nzCustomContent> Python (next.py) </nz-option>
+                <nz-option nzValue="node" nzLabel="Node" nzCustomContent> Node (next.js) </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label
+              nzLabelAlign="left"
+              for="autoNext"
+              nzTooltipTitle="Passer automatiquement à l'exercice suivant après une soumission."
+            >
+              Passer automatiquement
+            </nz-form-label>
+            <nz-form-control>
+              <label nz-checkbox formControlName="autoNext" id="autoNext"></label>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item *ngIf="activity.settings?.nextSettings?.autoNext">
+            <nz-form-label
+              nzLabelAlign="left"
+              for="autoNextGrade"
+              nzTooltipTitle="Note nécessaire pour passer automatiquement à l'exercice suivant."
+            >
+              Note minimum pour passer automatiquement
+            </nz-form-label>
+            <nz-form-control>
+              <nz-input-number
+                formControlName="autoNextGrade"
+                id="autoNextGrade"
+                [nzMin]="0"
+                [nzMax]="100"
+              ></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+        </nz-collapse-panel>
+      </nz-collapse>
+      <!-- <div *ngIf="false" class="next">
+        <div class="exercise-group-list">
+          <h3>Groupes d'exercices</h3>
+          <mat-accordion
+            cdkDropListGroup
+            cdkDropList
+            [cdkDropListDisabled]="readOnly"
+            (cdkDropListDropped)="onReorderGroups($any($event))"
+            class="draggable-container"
+            multi
+          >
+            <mat-expansion-panel
+              cdkDrag
+              cdkDropList
+              [cdkDropListDisabled]="readOnly"
+              [cdkDropListData]="group"
+              (cdkDropListDropped)="drop($any($event))"
+              [cdkDropListConnectedTo]="['itemList']"
+              id="panel{{ i }}"
+              [class.selected]="selectedGroupIndex === i"
+              (click)="selectGroup(i)"
+              *ngFor="let group of exerciseGroups; trackBy: trackByIndex; index as i"
+              class="expansion-panel draggable-item"
+              #panel
+            >
+              <mat-expansion-panel-header>
+                <mat-icon class="drag-icon">drag_indicator</mat-icon>
+                <div class="group-header">
+                  <div class="group-number">
+                    {{ group.name }}
+                  </div>
+                  <div class="exercise-number">
+                    <ng-container [ngPlural]="group.exercises.length">
+                      <ng-template ngPluralCase="=0">0 exercice</ng-template>
+                      <ng-template ngPluralCase="=1">1 exercice</ng-template>
+                      <ng-template ngPluralCase="other">{{ group.exercises.length }} exercices</ng-template>
+                    </ng-container>
+                  </div>
+                </div>
+              </mat-expansion-panel-header>
+              <div class="mat-expansion-panel-content draggable-container">
+                <nz-list
+                  cdkDropList
+                  [cdkDropListDisabled]="readOnly"
+                  (cdkDropListDropped)="drop($any($event))"
+                  [cdkDropListConnectedTo]="connectedTo[i]"
+                  [cdkDropListData]="group.exercises"
+                  (cdkDropListDropped)="onReorderExercises($any($event))"
+                  [nzDataSource]="group.exercises"
+                  nzBordered
+                  class="draggable-container"
+                  id="array{{ i }}"
+                >
+                  <div
+                    *ngFor="let exercise of group.exercises; trackBy: trackByExerciseId; index as i"
+                    class="draggable-item exercise-in-group"
+                    cdkDrag
+                  >
+                    <app-pla-exercise-editor
+                      [disabled]="readOnly"
+                      [exercise]="exercise"
+                      (exerciseChange)="updateExercise($event)"
+                      (exerciseLoadFailed)="onExerciseLoadFailed($event)"
+                      (deleteClicked)="deleteExercise(i)"
+                    />
+                  </div>
+                </nz-list>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+        <div class="graph-container"></div>
+      </div> -->
+    </ng-container>
+  </form>
+</div>
 <ng-template #exerciseList>
   <h3>
     <nz-breadcrumb>
-      <nz-breadcrumb-item>Groupe {{ (selectedGroupIndex || 0) + 1 }}</nz-breadcrumb-item>
+      <nz-breadcrumb-item>{{ selectedGroup!.name }}</nz-breadcrumb-item>
       <nz-breadcrumb-item>Exercices</nz-breadcrumb-item>
     </nz-breadcrumb>
   </h3>
 
-  <div class="add-exercise">
-    <resource-search-bar
-      [modalMode]="true"
-      [simpleLayout]="true"
-      [disabled]="!!readOnly"
-      [(ngModel)]="selectedExercise"
-      [filters]="{ types: ['EXERCISE'], watchers: [user.id] }"
-    />
-    <button nz-button nzType="primary" (click)="addExercise()" [disabled]="!selectedExercise || readOnly">
-      Ajouter
-    </button>
+  <div *ngIf="!readOnly" class="add-exercise">
+    <ui-search-bar [searchbar]="searchbar" (filter)="filterDrawer.open()">
+      <ng-template let-context> {{ context }}</ng-template>
+    </ui-search-bar>
+
+    <span>Liste des exercices disponibles</span>
+    <div class="indicators">
+      <ui-filter-indicators
+        [filters]="filters"
+        (filtersChange)="search($event, $event.search)"
+        [indicators]="filterIndicators"
+      />
+    </div>
   </div>
 
-  <nz-list
+  <div *ngIf="readOnly" class="add-exercise">
+    <span class="no-permission"
+      >Vous n'avez pas les droits pour éditer cet exercice, vous pouvez cependant consulter les exercices utilisés par
+      cette activité en cliquant sur les groupes.</span
+    >
+  </div>
+  <app-exercise-list
+    *ngIf="!readOnly"
     cdkDropList
+    id="itemList"
+    cdkDropListSortingDisabled
     [cdkDropListDisabled]="readOnly"
-    (cdkDropListDropped)="onReorderExercises($any($event))"
-    [nzDataSource]="selectedGroup"
-    nzBordered
+    [cdkDropListConnectedTo]="allConnectedTo"
+    [cdkDropListData]="items"
+    (exerciseClicked)="handleExerciseClicked($event)"
+    [items]="items"
   >
-    <nz-list-item cdkDrag *ngFor="let exercise of selectedGroup; trackBy: trackByExerciseId; let index = index">
-      <app-pla-exercise-editor
-        [disabled]="readOnly"
-        [exercise]="exercise"
-        (exerciseChange)="updateExercise($event)"
-        (deleteClicked)="deleteExercise(index)"
-      />
-    </nz-list-item>
-  </nz-list>
+    <h2>Aucune ressource ne correspond à votre recherche</h2>
+    <ul>
+      <li>Vérifiez les termes de votre recherche</li>
+      <li>Essayez d'autres critères de recherche</li>
+    </ul>
+  </app-exercise-list>
+  <nz-spin class="spinner-pagination" nzSize="large" [nzTip]="'Chargement...'" [nzSpinning]="paginating" />
+  <div style="height: 8px" *ngIf="hasMore" viewportIntersection (intersected)="loadMore()"></div>
+  <div *ngIf="!hasMore && nbFilters > 1" class="no-result">
+    <span>Plus aucun résultat ne correspond à votre recherche. Essayez d'enlever des filtres...</span>
+    <span>({{ nbFilters }} filtres actifs)</span>
+  </div>
 </ng-template>
+
+<ng-template #treeTemplate>
+  <resource-circle-tree [tree]="tree" />
+</ng-template>
+
+<resource-filters
+  #filterDrawer
+  [filters]="filters"
+  [levels]="levels"
+  [topics]="topics"
+  [circles]="circles"
+  [disableTypesField]="true"
+  (triggered)="this.search($event, this.filters.search)"
+/>

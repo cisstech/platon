@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core'
 import { ListResponse, User, UserRoles } from '@platon/core/common'
 import {
   CircleTree,
+  CreatePreviewResource,
   CreateResource,
   CreateResourceInvitation,
   FindResource,
@@ -78,6 +79,10 @@ export class ResourceService {
 
   create(input: CreateResource): Observable<Resource> {
     return this.resourceProvider.create(input)
+  }
+
+  createPreview(input: CreatePreviewResource): Observable<Resource> {
+    return this.resourceProvider.createPreview(input)
   }
 
   move(id: string, parentId: string): Observable<Resource> {
@@ -169,6 +174,12 @@ export class ResourceService {
   //#region Events
   listEvents(resource: Resource, filters?: ResourceEventFilters): Observable<ListResponse<ResourceEvent>> {
     return this.resourceEventProvider.listEvents(resource, filters)
+  }
+  //#endregion
+
+  //#region Owners
+  listOwners(): Observable<User[]> {
+    return this.resourceProvider.listOwners()
   }
   //#endregion
 }

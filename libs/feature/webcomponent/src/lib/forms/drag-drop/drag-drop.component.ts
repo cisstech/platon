@@ -32,6 +32,7 @@ export class DragDropComponent implements OnInit, OnDestroy, WebComponentHooks<D
 
   ngOnInit(): void {
     this.dragdrop.register(this.directive.id, this)
+    this.state.isFilled = false
   }
 
   ngOnDestroy(): void {
@@ -54,6 +55,7 @@ export class DragDropComponent implements OnInit, OnDestroy, WebComponentHooks<D
         if (!src.state.draggable && src.state.content === dst.state.content) {
           // undo drop
           src.state.content = ''
+          src.state.isFilled = false
         }
         return
       }
@@ -65,12 +67,14 @@ export class DragDropComponent implements OnInit, OnDestroy, WebComponentHooks<D
       } else {
         dst.state.content = src.state.content
       }
+      dst.state.isFilled = !!dst.state.content
     }
   }
 
   clear() {
     if (!this.state.draggable) {
       this.state.content = ''
+      this.state.isFilled = false
     }
   }
 }

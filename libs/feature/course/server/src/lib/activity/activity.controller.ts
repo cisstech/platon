@@ -1,7 +1,7 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, Req } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Patch, Post, Put, Query, Req } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { ItemResponse, ListResponse, NoContentResponse, NotFoundResponse, UserRoles } from '@platon/core/common'
-import { IRequest, Mapper, Roles } from '@platon/core/server'
+import { IRequest, Mapper, Roles, UUIDParam } from '@platon/core/server'
 import { CoursePermissionsService } from '../permissions/permissions.service'
 import {
   ActivityDTO,
@@ -22,7 +22,7 @@ export class ActivityController {
 
   @Get()
   async search(
-    @Param('courseId') courseId: string,
+    @UUIDParam('courseId') courseId: string,
     @Query() filters?: ActivityFiltersDTO
   ): Promise<ListResponse<ActivityDTO>> {
     const [items, total] = await this.activityService.search(courseId, filters)
@@ -35,8 +35,8 @@ export class ActivityController {
   @Get('/:activityId')
   async find(
     @Req() req: IRequest,
-    @Param('courseId') courseId: string,
-    @Param('activityId') activityId: string
+    @UUIDParam('courseId') courseId: string,
+    @UUIDParam('activityId') activityId: string
   ): Promise<ItemResponse<ActivityDTO>> {
     const optional = await this.activityService.findByCourseId(courseId, activityId)
     const activity = optional.orElseThrow(() => new NotFoundResponse(`CourseActivity not found: ${activityId}`))
@@ -49,7 +49,7 @@ export class ActivityController {
   @Post()
   async create(
     @Req() req: IRequest,
-    @Param('courseId') courseId: string,
+    @UUIDParam('courseId') courseId: string,
     @Body() input: CreateCourseActivityDTO
   ): Promise<ItemResponse<ActivityDTO>> {
     await this.permissionsService.ensureCourseWritePermission(courseId, req)
@@ -64,11 +64,23 @@ export class ActivityController {
   }
 
   @Roles(UserRoles.teacher, UserRoles.admin)
+  @Patch('/change-order')
+  async changeOrder(
+    @Req() req: IRequest,
+    @UUIDParam('courseId') courseId: string,
+    @Body() input: string[]
+  ): Promise<NoContentResponse> {
+    await this.permissionsService.ensureCourseWritePermission(courseId, req)
+    await this.activityService.updateActivitesOrder(input)
+    return new NoContentResponse()
+  }
+
+  @Roles(UserRoles.teacher, UserRoles.admin)
   @Patch('/:activityId')
   async update(
     @Req() req: IRequest,
-    @Param('courseId') courseId: string,
-    @Param('activityId') activityId: string,
+    @UUIDParam('courseId') courseId: string,
+    @UUIDParam('activityId') activityId: string,
     @Body() input: UpdateCourseActivityDTO
   ): Promise<ItemResponse<ActivityDTO>> {
     const activity = await this.activityService.update(
@@ -86,8 +98,8 @@ export class ActivityController {
   @Put('/:activityId')
   async reload(
     @Req() req: IRequest,
-    @Param('courseId') courseId: string,
-    @Param('activityId') activityId: string,
+    @UUIDParam('courseId') courseId: string,
+    @UUIDParam('activityId') activityId: string,
     @Body() input: ReloadCourseActivityDTO
   ): Promise<ItemResponse<ActivityDTO>> {
     const activity = await this.activityService.reload(courseId, activityId, input, (activity) =>
@@ -102,8 +114,8 @@ export class ActivityController {
   @Delete('/:activityId')
   async delete(
     @Req() req: IRequest,
-    @Param('courseId') courseId: string,
-    @Param('activityId') activityId: string
+    @UUIDParam('courseId') courseId: string,
+    @UUIDParam('activityId') activityId: string
   ): Promise<NoContentResponse> {
     await this.activityService.delete(courseId, activityId, (activity) =>
       this.permissionsService.ensureActivityWritePermission(activity, req)
@@ -115,10 +127,25 @@ export class ActivityController {
   @Post('/:activityId/close')
   async close(
     @Req() req: IRequest,
-    @Param('courseId') courseId: string,
-    @Param('activityId') activityId: string
+    @UUIDParam('courseId') courseId: string,
+    @UUIDParam('activityId') activityId: string
   ): Promise<ItemResponse<ActivityDTO>> {
     const activity = await this.activityService.close(courseId, activityId, (activity) =>
+      this.permissionsService.ensureActivityWritePermission(activity, req)
+    )
+    return new ItemResponse({
+      resource: Mapper.map(activity, ActivityDTO),
+    })
+  }
+
+  @Roles(UserRoles.teacher, UserRoles.admin)
+  @Post('/:activityId/reopen')
+  async reopen(
+    @Req() req: IRequest,
+    @UUIDParam('courseId') courseId: string,
+    @UUIDParam('activityId') activityId: string
+  ): Promise<ItemResponse<ActivityDTO>> {
+    const activity = await this.activityService.reopen(courseId, activityId, (activity) =>
       this.permissionsService.ensureActivityWritePermission(activity, req)
     )
     return new ItemResponse({

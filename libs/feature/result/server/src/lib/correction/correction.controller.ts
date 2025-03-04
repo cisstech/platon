@@ -1,7 +1,7 @@
-import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common'
+import { Body, Controller, Get, Post, Req } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { ItemResponse, ListResponse } from '@platon/core/common'
-import { IRequest, Mapper } from '@platon/core/server'
+import { IRequest, Mapper, UUIDParam } from '@platon/core/server'
 import { ActivityCorrection, UpsertCorrection } from '@platon/feature/result/common'
 import { ActivityCorrectionDTO, CorrectionDTO } from './correction.dto'
 import { CorrectionService } from './correction.service'
@@ -19,7 +19,10 @@ export class CorrectionController {
   }
 
   @Get('/:activityId')
-  async find(@Req() req: IRequest, @Param('activityId') activityId: string): Promise<ListResponse<ActivityCorrection>> {
+  async find(
+    @Req() req: IRequest,
+    @UUIDParam('activityId') activityId: string
+  ): Promise<ListResponse<ActivityCorrection>> {
     const items = await this.service.list(req.user.id, activityId)
     const resources = Mapper.mapAll(items, ActivityCorrectionDTO)
     return new ListResponse({ total: resources.length, resources })
@@ -28,7 +31,7 @@ export class CorrectionController {
   @Post('/:sessionId')
   async upsert(
     @Req() req: IRequest,
-    @Param('sessionId') sessionId: string,
+    @UUIDParam('sessionId') sessionId: string,
     @Body() input: UpsertCorrection
   ): Promise<ItemResponse<CorrectionDTO>> {
     return new ItemResponse({

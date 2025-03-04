@@ -76,15 +76,61 @@
           </nz-col>
         </nz-row>
         <ng-container *ngIf="context.results">
+          <div class="spacer"></div>
           <section>
             <h4>Résultats par exercices</h4>
             <result-by-exercises [results]="context.results.exercises" />
           </section>
           <section>
-            <h4>Résultats par apprenants</h4>
-            <result-by-members [results]="context.results.users" />
+            <mat-card *ngIf="KCileInsightsOption.selectedBucket >= 2">
+              <mat-card-header>
+                <nz-select
+                  nzPlaceHolder="Sceaux"
+                  [(ngModel)]="KCileInsightsOption.selectedBucket"
+                  [nzOptions]="KCileInsightsOption.possibleBucket"
+                ></nz-select>
+                <nz-range-picker
+                  nzFormat="dd/MM/yyyy"
+                  [(ngModel)]="dates"
+                  (ngModelChange)="onDateChange($event)"
+                ></nz-range-picker>
+              </mat-card-header>
+              <mat-card-content style="height: 25rem; padding-bottom: 0">
+                <result-k-cile
+                  [bucket]="KCileInsightsOption.selectedBucket"
+                  [data]="userDistribution"
+                  [lastDate]="lastDate"
+                  [splitDate]="splitDate"
+                />
+              </mat-card-content>
+              <mat-card-actions style="display: flex; flex-direction: column; align-items: unset; padding-top: 0">
+                <nz-row nzGutter="8" style="display: flex; justify-content: center">
+                  <nz-col nzSpan="12">
+                    <nz-slider
+                      [nzMin]="1"
+                      [nzMax]="100"
+                      [(ngModel)]="cursorValue"
+                      (ngModelChange)="splitDateChange($event)"
+                    ></nz-slider>
+                  </nz-col>
+                  <div nz-col nzSpan="4">
+                    <nz-input-number
+                      style="width: unset; color: var(--brand-text-primary)"
+                      [nzMin]="1"
+                      [nzMax]="100"
+                      [nzFormatter]="formatterDate"
+                      [(ngModel)]="cursorValue"
+                      (ngModelChange)="splitDateChange($event)"
+                    ></nz-input-number>
+                  </div>
+                </nz-row>
+              </mat-card-actions>
+            </mat-card>
           </section>
         </ng-container>
+        <ng-container *ngIf="context.activity.isPeerComparison"
+          ><peer-tree [activityId]="context.activity.id"></peer-tree
+        ></ng-container>
       </nz-col>
       <nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" nzXl="8">
         <aside>
@@ -93,5 +139,19 @@
         </aside>
       </nz-col>
     </nz-row>
+    <section>
+      <mat-card>
+        <mat-card-header>
+          <h4>Boîte à moustaches</h4>
+        </mat-card-header>
+        <mat-card-content style="height: 25rem; padding-bottom: 0">
+          <result-box-plot [data]="context.results.exercises"></result-box-plot>
+        </mat-card-content>
+      </mat-card>
+    </section>
+    <section>
+      <h4>Résultats par apprenants</h4>
+      <result-by-members [results]="context.results.users" />
+    </section>
   </ng-container>
 </ui-layout-block>

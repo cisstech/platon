@@ -34,6 +34,7 @@ export interface User {
   readonly lastLogin?: Date
   readonly firstLogin?: Date
   readonly hasPassword?: boolean
+  readonly discordId?: string
 }
 
 export interface UpdateUser {
@@ -42,6 +43,7 @@ export interface UpdateUser {
   readonly lastName?: string
   readonly email?: string
   readonly active?: boolean
+  readonly discordId?: string
 }
 
 export interface UserPrefs {
@@ -109,3 +111,5 @@ export const userDisplayName = (user: User): string => {
 }
 
 export const isTeacherRole = (role: UserRoles) => [UserRoles.admin, UserRoles.teacher].includes(role)
+
+export const DEFAULT_USER_ID = '00000000-0000-0000-0000-000000000000'

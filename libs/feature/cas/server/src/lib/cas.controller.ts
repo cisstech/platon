@@ -12,7 +12,7 @@ import {
   HttpRedirectResponse,
 } from '@nestjs/common'
 import { CreateCasDTO, UpdateCasDTO } from './cas.dto'
-import { AuthService, Mapper, Public, UserService } from '@platon/core/server'
+import { AuthService, Mapper, Public, UserService, UUIDParam } from '@platon/core/server'
 import { CasService } from './cas.service'
 import { CasDTO, CasFiltersDTO } from './cas.dto'
 import { CreatedResponse, ItemResponse, ListResponse, NoContentResponse, NotFoundResponse } from '@platon/core/common'
@@ -100,17 +100,27 @@ export class CasController {
       )
 
       const username = await this.checkCasTicket(casEntity.serviceValidateURL, query.ticket, service)
-      const lmsUserEntity = await (
-        await this.LtiService.findLmsUserByUsername(
-          username.orElseThrow(() => new Error('User not found')),
-          casEntity.lmses
-        )
-      ).orElseThrow(() => new Error('User not found'))
-
-      const token = await this.authService.authenticate(
-        lmsUserEntity.userId,
-        (await this.userService.findById(lmsUserEntity.userId)).orElseThrow(() => new Error('User not found')).username
-      )
+      if (username.isEmpty()) {
+        return {
+          url: `/login/no-account`,
+          statusCode: 302,
+        }
+      }
+      const lmsUserEntity = await this.LtiService.findLmsUserByUsername(username.get(), casEntity.lmses)
+      if (lmsUserEntity.isEmpty()) {
+        return {
+          url: `/login/no-account`,
+          statusCode: 302,
+        }
+      }
+      const user = await this.userService.findById(lmsUserEntity.get().userId)
+      if (user.isEmpty()) {
+        return {
+          url: `/login/no-account`,
+          statusCode: 302,
+        }
+      }
+      const token = await this.authService.authenticate(lmsUserEntity.get().userId, user.get().username)
       return {
         url: `/login?access-token=${token.accessToken}&refresh-token=${token.refreshToken}&next=${query.next}`,
         statusCode: 302,
@@ -126,7 +136,7 @@ export class CasController {
   }
 
   @Get('/:id')
-  async findCas(@Param('id') id: string): Promise<ItemResponse<CasDTO>> {
+  async findCas(@UUIDParam('id') id: string): Promise<ItemResponse<CasDTO>> {
     const optional = await this.service.findCasById(id)
     const resource = Mapper.map(
       optional.orElseThrow(() => new NotFoundResponse(`Cas not found: ${id}`)),
@@ -143,14 +153,14 @@ export class CasController {
   }
 
   @Patch('/:id')
-  async updateCas(@Param('id') id: string, @Body() input: UpdateCasDTO): Promise<ItemResponse<CasDTO>> {
+  async updateCas(@UUIDParam('id') id: string, @Body() input: UpdateCasDTO): Promise<ItemResponse<CasDTO>> {
     const res = await this.service.updateCas(id, { ...(await this.service.fromInput(input)) })
     const resource = Mapper.map(res, CasDTO)
     return new ItemResponse({ resource })
   }
 
   @Delete('/:id')
-  async deleteCas(@Param('id') id: string): Promise<NoContentResponse> {
+  async deleteCas(@UUIDParam('id') id: string): Promise<NoContentResponse> {
     await this.service.deleteCas(id)
     return new NoContentResponse()
   }

@@ -69,13 +69,13 @@ export class ResourceItemComponent implements OnChanges {
   private readonly fileService = inject(ResourceFileService)
   protected name = ''
   protected desc = ''
-  protected successRate = 0
+  protected averageScore = 0
   protected attemptCount = 0
-  protected successRateColor = 'var(--brand-text-primary, #000)'
+  protected averageScoreColor = 'var(--brand-text-primary, #000)'
 
   protected configurable = false
   protected tags: ListItemTag[] = []
-  protected readme?: ResourceFile
+  protected readme?: string
 
   @Input() item!: Resource
   @Input({ transform: booleanAttribute }) simple = false
@@ -98,6 +98,10 @@ export class ResourceItemComponent implements OnChanges {
       ).catch(console.error)
     }
     return `/player/preview/${this.item.id}?version=latest&sessionId=${sessionId}`
+  }
+
+  get referencesUrl(): string {
+    return `/resources?dependOn=${this.item.id}`
   }
 
   ngOnChanges(): void {
@@ -128,9 +132,9 @@ export class ResourceItemComponent implements OnChanges {
 
     this.name = this.item.name
     this.desc = this.item.desc as string
-    this.successRate = this.item.statistic?.activity?.successRate ?? this.item.statistic?.exercise?.successRate ?? 0
+    this.averageScore = this.item.statistic?.activity?.averageScore ?? this.item.statistic?.exercise?.averageScore ?? 0
     this.attemptCount = this.item.statistic?.activity?.attemptCount ?? this.item.statistic?.exercise?.attemptCount ?? 0
-    this.successRateColor = positiveGreenColor(this.successRate)
+    this.averageScoreColor = positiveGreenColor(this.averageScore)
     this.configurable = (this.item.metadata as ExerciseResourceMeta)?.configurable ?? false
   }
 
@@ -146,9 +150,9 @@ export class ResourceItemComponent implements OnChanges {
     }
   }
 
-  protected getReadmeContent(): void {
-    this.fileService.read(`${this.item.id}`, 'readme.md').subscribe((file) => {
-      this.readme = file
-    })
+  protected async getReadmeContent(): Promise<void> {
+    if (!this.readme) {
+      this.readme = await firstValueFrom(this.fileService.content(`${this.item.id}/readme.md`))
+    }
   }
 }

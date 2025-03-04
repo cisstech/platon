@@ -11,6 +11,7 @@ import {
   FindActivityLeaderboard,
   FindCourseLeaderboard,
   UpsertCorrection,
+  UserActivityResultsDistribution,
   UserResults,
 } from '@platon/feature/result/common'
 import { Observable, map } from 'rxjs'
@@ -86,5 +87,15 @@ export class RemoteResultProvider extends ResultProvider {
     return this.http
       .post<ItemResponse<Correction>>(`/api/v1/results/corrections/${sessionId}`, input)
       .pipe(map((response) => response.resource))
+  }
+
+  activityResultsForDate(
+    activityId: string,
+    startDate: number,
+    endDate: number
+  ): Observable<UserActivityResultsDistribution[]> {
+    return this.http.get<UserActivityResultsDistribution[]>(
+      `/api/v1/results/dashboard/activities/${activityId}/${startDate}/${endDate}`
+    )
   }
 }

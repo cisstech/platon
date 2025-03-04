@@ -76,7 +76,7 @@ export const EDITOR_TOUR: Step[] = [
   {
     title: 'Documentation complémentaire',
     intro: `
-      <p>Ce tour d'horizon rapide ne couvre que les bases de l'IDE. Pour en savoir plus, consultez la documentation complète de l'IDE <a href="/docs/main/doc/programing/ide" target="_blank">sur cette page</a>.</p>
+      <p>Ce tour d'horizon rapide ne couvre que les bases de l'IDE. Pour en savoir plus, consultez la documentation complète de l'IDE <a href="/docs/main/programing/ide" target="_blank">sur cette page</a>.</p>
     `,
   },
 ]

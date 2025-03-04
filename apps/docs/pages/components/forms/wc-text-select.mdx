@@ -1,0 +1,221 @@
+---
+title: TextSelect
+description: Outil d'analyse textuelle permettant la sélection de segments spécifiques dans un texte. Parfaitement adapté aux exercices d'analyse grammaticale, d'identification de structures syntaxiques, de repérage d'éléments littéraires, de correction de textes, ou pour tout type d'exercice nécessitant une interaction précise avec des parties d'un texte.
+---
+
+import { Tabs, Tab } from 'nextra/components'
+import { ComponentProperties } from '../../../components'
+import { useAbsoluteUrl } from '../../../hooks'
+
+# TextSelect
+
+`wc-text-select`
+
+Outil d'analyse textuelle permettant la sélection de segments spécifiques dans un texte. Parfaitement adapté aux exercices d'analyse grammaticale, d'identification de structures syntaxiques, de repérage d'éléments littéraires, de correction de textes, ou pour tout type d'exercice nécessitant une interaction précise avec des parties d'un texte.
+
+## Documentation
+
+Le composant TextSelect vous permet de créer des exercices interactifs où les apprenants doivent identifier et sélectionner des segments spécifiques dans un texte. Cette fonctionnalité est particulièrement utile pour l'analyse textuelle, l'identification d'éléments grammaticaux ou syntaxiques, ou toute activité nécessitant une interaction précise avec le contenu textuel.
+
+### Trois modes de fonctionnement
+
+Le composant propose trois modes de sélection différents, adaptables à divers besoins pédagogiques:
+
+#### 1. Mode libre (`free`)
+
+Ce mode transforme l'intégralité du texte en zone sélectionnable. L'apprenant peut sélectionner n'importe quelle partie du texte, caractère par caractère, comme dans un éditeur de texte standard.
+
+- **Comportement**: Sélection par glisser-déposer, comme une sélection de texte classique
+- **Format des sélections**:
+  ```js
+  {
+    "content": "texte sélectionné",              // Le contenu exact sélectionné
+    "position": [5, 12],                         // Positions [début, fin] dans le texte original
+    "css": "highlight important" // optionnel    // Classes CSS pour styliser la sélection
+  }
+  ```
+
+#### 2. Mode unités (`units`)
+
+Ce mode permet de délimiter des unités prédéfinies sélectionnables dans le texte, en les encadrant par des accolades `{ }`. Seules ces unités peuvent être sélectionnées, et elles le sont toujours intégralement.
+
+- **Comportement**: Un simple clic sélectionne l'unité entière
+- **Format du texte**: `Voici un {mot sélectionnable} dans une {phrase}`
+- **Format des sélections**:
+  ```js
+  {
+    "content": "mot sélectionnable",             // Le contenu de l'unité
+    "position": 0,                               // Position ordinale de l'unité (0 = première unité)
+    "css": "correct-answer" // optionnel         // Classes CSS pour styliser la sélection
+  }
+  ```
+
+#### 3. Mode expression régulière (`regex`)
+
+Ce mode utilise une expression régulière pour identifier dynamiquement les parties sélectionnables du texte. Ce mode est particulièrement puissant pour les exercices d'identification de motifs spécifiques.
+
+- **Comportement**: Un simple clic sélectionne l'élément entier correspondant au motif
+- **Configuration**: Définissez le motif via la propriété `regex` (ex: `"\\b[A-Z][a-z]+\\b"` pour les mots commençant par une majuscule)
+- **Format des sélections**: Identique au mode `units`, avec une position ordinale
+
+### Combinaison avec HTML
+
+Dans les modes `free` et `units`, vous pouvez enrichir votre texte avec du HTML pour créer des mises en forme spécifiques:
+
+## Exemple interactif
+
+<iframe
+  src={useAbsoluteUrl('playground/components/wc-text-select')}
+  style={{ width: '100%', height: '700px', border: 'none' }}
+></iframe>
+
+## API
+
+<Tabs items={['Graphique', 'JSON']}>
+  <Tab>
+    <ComponentProperties schema={{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "TextSelect",
+  "required": [
+    "text",
+    "mode"
+  ],
+  "properties": {
+    "text": {
+      "type": "string",
+      "default": "",
+      "description": "Le texte à afficher."
+    },
+    "mode": {
+      "type": "string",
+      "enum": [
+        "free",
+        "units",
+        "regex"
+      ],
+      "default": "free",
+      "description": "Le mode de découpage."
+    },
+    "regex": {
+      "type": "string",
+      "description": "Une expression régulière (JavaScript) pour indiquer les parties selectionnables (si mode = regex).",
+      "default": ""
+    },
+    "selections": {
+      "type": "array",
+      "default": [],
+      "description": "La liste des éléments sélectionnés.",
+      "items": {
+        "type": "object",
+        "required": [
+          "position"
+        ],
+        "properties": {
+          "css": {
+            "type": "string",
+            "description": "Voir API CSS"
+          },
+          "content": {
+            "type": "string",
+            "description": "Texte de la sélection (sans les espaces de début et fin)."
+          },
+          "position": {
+            "type": [
+              "number",
+              "array"
+            ],
+            "description": "La position de la sélection",
+            "items": {
+              "type": "number",
+              "minItems": 2,
+              "maxItems": 2
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Désactive le composant."
+    }
+  }
+}} />
+  </Tab>
+  <Tab>
+    ```json
+    {
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "TextSelect",
+  "required": [
+    "text",
+    "mode"
+  ],
+  "properties": {
+    "text": {
+      "type": "string",
+      "default": "",
+      "description": "Le texte à afficher."
+    },
+    "mode": {
+      "type": "string",
+      "enum": [
+        "free",
+        "units",
+        "regex"
+      ],
+      "default": "free",
+      "description": "Le mode de découpage."
+    },
+    "regex": {
+      "type": "string",
+      "description": "Une expression régulière (JavaScript) pour indiquer les parties selectionnables (si mode = regex).",
+      "default": ""
+    },
+    "selections": {
+      "type": "array",
+      "default": [],
+      "description": "La liste des éléments sélectionnés.",
+      "items": {
+        "type": "object",
+        "required": [
+          "position"
+        ],
+        "properties": {
+          "css": {
+            "type": "string",
+            "description": "Voir API CSS"
+          },
+          "content": {
+            "type": "string",
+            "description": "Texte de la sélection (sans les espaces de début et fin)."
+          },
+          "position": {
+            "type": [
+              "number",
+              "array"
+            ],
+            "description": "La position de la sélection",
+            "items": {
+              "type": "number",
+              "minItems": 2,
+              "maxItems": 2
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Désactive le composant."
+    }
+  }
+}
+    ```
+  </Tab>
+</Tabs>

@@ -153,3 +153,98 @@ button.primary {
     }
   }
 }
+
+@keyframes fillButton {
+  from {
+    background-position: 100% 0%;
+  }
+  to {
+    background-position: 0% 0%;
+  }
+}
+
+#next-exercise-button {
+  background: linear-gradient(to right, #171c8f 50%, transparent 50%);
+  background-size: 200% 100%;
+  background-position: 100% 0%;
+  transition: background-position 0s;
+  mat-icon {
+    background: linear-gradient(to right, white 50%, black 50%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    background-size: 200% 100%;
+    background-position: 100% 0%;
+  }
+}
+
+#next-exercise-button.fill {
+  background-position: 0% 0%;
+  transition: background-position 2s linear;
+  mat-icon {
+    background-position: 0% 0%;
+    transition: background-position calc(2s / 3) linear calc(2s / 3);
+  }
+}
+
+
+.terminal-container {
+  margin-top: 1rem;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #1e1e1e;
+  font-family: monospace;
+  border: 1px solid #323233;
+}
+
+.terminal-header {
+  background: #323233;
+  padding: 8px 12px;
+  color: #fff;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .copy-button {
+    color: #fff;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+.terminal-body {
+  padding: 12px;
+  color: #fff;
+  max-height: 300px;
+  overflow-y: auto;
+
+  // La barre de défilement est là
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #ffffff;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #ffffff;
+    border-radius: 4px;
+  }
+
+  pre {
+    margin: 0;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  code {
+    font-family: 'Consolas', 'Monaco', monospace;
+    color: #ffffff;
+  }
+}

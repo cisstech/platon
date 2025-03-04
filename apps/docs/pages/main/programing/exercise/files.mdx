@@ -1,0 +1,22 @@
+---
+title: Fichiers d'un exercice
+description: Présentation des fichiers essentiels d'un exercice PLaTon (main.ple, main.plc, main.plo, readme.md) expliquant leur rôle, leur importance et comment ils s'intègrent dans le développement d'exercices.
+---
+
+# Fichiers d'un exercice
+
+En plus d'éventuels fichiers de ressources (images, sons, etc.), un exercice est composé de plusieurs fichiers importants et obligatoires pour certains :
+
+- **main.ple** (PLaTon exercice)
+  - Fichier principal contenant le code de l'exercice.
+  - Ce fichier ne peut pas être supprimé.
+- **main.plc** : (PLaTon config - Optionnel)
+  - Fichier de configuration des variables de l'exercice. Une fois créé, l'exercice sera considéré comme un template et sera donc affiché dans la liste des templates au moment de la création d'un nouvel exercice.
+- **main.plo** (PLaTon override - Optionnel)
+  - Uniquement créé si l'exercice est issu d'un template. Ce fichier permet de modifier graphiquement les variables configurées dans le template dont est issu l'exercice.
+  - Ce fichier ne peut n'y être créé, n'y supprimé manuellement s'il existe.
+- **readme.md**
+  - Document explicatif de l'exercice, à usage des enseignants.
+
+Lorsque vous créer un exercice, ces fichiers sont automatiquement générés avec un exemple fontionnel de base. Vous pouvez ensuite les modifier à votre guise
+et supprimer ceux qui ne vous sont pas utiles.

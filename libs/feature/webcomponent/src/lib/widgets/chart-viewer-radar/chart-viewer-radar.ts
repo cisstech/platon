@@ -11,10 +11,9 @@ export interface ChartViewerRadarState extends IWebComponent, ChartViewerBase2 {
 export const ChartViewerRadarComponentDefinition = defineWebComponent({
   type: WebComponentTypes.widget,
   name: 'ChartViewer-Radar',
-  icon: 'assets/images/components/forms/code-editor/code-editor.svg',
   selector: 'wc-chart-viewer-radar',
-  description: "Permets d'afficher une charte de type `radar` en fournissant des données",
-  fullDescriptionUrl: 'assets/docs/components/widgets/chart-viewer-radar/chart-viewer-radar.md',
+  description:
+    "Graphique en forme de radar (ou toile d'araignée) permettant de visualiser des données multidimensionnelles. Parfait pour les exercices de comparaison de caractéristiques multiples, l'évaluation de compétences, l'analyse de performances selon différents critères, ou l'illustration de concepts statistiques avec représentation visuelle de données complexes.",
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',

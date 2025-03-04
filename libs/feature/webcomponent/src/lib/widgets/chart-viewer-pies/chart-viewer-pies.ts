@@ -9,10 +9,9 @@ export interface ChartViewerPiesState extends IWebComponent, ChartViewerBase1 {
 export const ChartViewerPiesComponentDefinition = defineWebComponent({
   type: WebComponentTypes.widget,
   name: 'ChartViewer-Pies',
-  icon: 'assets/images/components/forms/code-editor/code-editor.svg',
   selector: 'wc-chart-viewer-pies',
-  description: "Permets d'afficher une charte de type `camembert` en fournissant des données",
-  fullDescriptionUrl: 'assets/docs/components/widgets/chart-viewer-pies/chart-viewer-pies.md',
+  description:
+    "Graphique circulaire avec plusieurs variantes (simple, donut, demi-donut, diagramme de Nightingale) pour visualiser des proportions. Adapté aux exercices de statistiques, d'analyse de données, de répartition de budgets, de démographie, ou pour toute représentation de données où la proportion relative des parties par rapport au tout est importante.",
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',

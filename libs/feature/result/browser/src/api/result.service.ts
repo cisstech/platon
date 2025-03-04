@@ -38,6 +38,7 @@ import {
   USER_COURSE_COUNT,
   USER_EXERCISE_COUNT,
   UpsertCorrection,
+  UserActivityResultsDistribution,
   UserResults,
 } from '@platon/feature/result/common'
 import { Observable, map } from 'rxjs'
@@ -125,6 +126,14 @@ export class ResultService {
 
   activityResults(activityId: string): Observable<ActivityResults> {
     return this.resultProvider.activityResults(activityId)
+  }
+
+  activityResultsForDate(
+    activityId: string,
+    startDate: Date,
+    endDate: Date
+  ): Observable<UserActivityResultsDistribution[]> {
+    return this.resultProvider.activityResultsForDate(activityId, startDate.getTime(), endDate.getTime())
   }
 
   courseLeaderboard(input: FindCourseLeaderboard): Observable<CourseLeaderboardEntry[]> {

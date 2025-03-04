@@ -44,7 +44,7 @@
           },
           {
             "glob": "**/*",
-            "input": "./node_modules/@cisstech/nge/assets/ui/icon/assets/icons/files",
+            "input": "./node_modules/@cisstech/nge/assets/ui/icon/icons/files",
             "output": "./assets/vendors/nge/ui/icon/icons/files/"
           },
           {
@@ -71,16 +71,6 @@
             "glob": "**/*",
             "input": "./node_modules/intro.js/",
             "output": "./assets/vendors/intro.js/"
-          },
-          {
-            "glob": "**/*.md",
-            "input": "libs/feature/webcomponent/src/lib",
-            "output": "./assets/docs/components"
-          },
-          {
-            "glob": "**/*.svg",
-            "input": "libs/feature/webcomponent/src/lib",
-            "output": "./assets/images/components"
           },
           {
             "glob": "**/*.js",
@@ -182,8 +172,8 @@
           "budgets": [
             {
               "type": "initial",
-              "maximumWarning": "2mb",
-              "maximumError": "5mb"
+              "maximumWarning": "6mb",
+              "maximumError": "7mb"
             },
             {
               "type": "anyComponentStyle",

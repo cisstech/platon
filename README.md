@@ -427,6 +427,9 @@ This project is built using a variety of key libraries and frameworks that provi
 
 The `bin` folder contains a collection of scripts to perform various tasks related to the platform's development, deployment, and maintenance. These scripts are organized into subfolders based on their purpose, and they are designed to streamline the development process.
 
+- `/bin/cli`: Shortcut scripts to execute nx generators in the [tools/cli/generators](/tools/cli/generators/) folder.
+  - `wc-docs`: Build webcomponent documentations into [docs](/apps/docs//pages/components/) application from source files in the [webcomponent](/libs/feature/webcomponent/src/lib/) lib.
+  - `wc-generate`: Generate new web component into the [webcomponent](/libs/feature/webcomponent/src/lib/) lib.
 - `/bin/docker`: These scripts are used to manage the Docker containers for the platform.
 
   - `down.sh`: Stops the Docker containers.
@@ -627,7 +630,7 @@ yarn publish:github
 Documentation is hosted at :
 <https://cisstech.github.io/platon/docs>
 
-There is also a self hosted version of the documentation that runs alongside of the application thanks to nginx reverse proxy at `/docs/main`
+There is also a self hosted version of the documentation that runs alongside of the application thanks to nginx reverse proxy at `/docs`
 
 In development mode the documentation can be served using the following command :
 
@@ -638,6 +641,8 @@ yarn serve:docs
 In production mode, nginx serve the documentation as static files inside the docker container
 
 > Before serving the docs, you should run `yarn` command inside `./apps/docs`.
+
+Both serving and building commands will invoke [/bin/cli/wc-docs.sh](bin/cli/wc-docs.sh) before running the command.
 
 ## Contributing
 

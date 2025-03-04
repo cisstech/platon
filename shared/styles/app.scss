@@ -16,11 +16,12 @@ body {
 
 .light-theme {
   --brand-background-components: #{$light-background};
-  --brand-background-primary: #{light-bg-darker-5};
+  --brand-background-primary: #{$light-bg-darker-1};
   --brand-background-hover: #{$dark-bg-alpha-4};
 
   --brand-text-primary: #{$dark-text};
   --brand-text-secondary: #{$dark-accent-text};
+  --brand-text-error: #{$dark-error-text};
   --brand-border-color: #{$dark-dividers};
 
   --brand-color-theme: #{$brand-color-primary};
@@ -33,6 +34,7 @@ body {
 
   --brand-text-primary: #{$light-text};
   --brand-text-secondary: #{$light-accent-text};
+  --brand-text-error: #{$light-error-text};
   --brand-border-color: #{$light-dividers};
 
   --brand-color-theme: #{$light-text};
@@ -88,5 +90,11 @@ nge-markdown {
 @media (max-width: 768px) {
   .hide-on-mobile {
     display: none;
+  }
+}
+
+pre.monaco-editor {
+  code {
+    overflow: auto !important;
   }
 }

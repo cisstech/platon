@@ -1,6 +1,6 @@
 <header>
   <button nz-button nzType="text" (click)="drawerOpenedChange.emit(!drawerOpened)">
-    <mat-icon>menu</mat-icon>
+    <mat-icon class="icon-color">menu</mat-icon>
   </button>
   <img
     *ngIf="!drawerOpened"
@@ -9,7 +9,7 @@
     alt="Logo PLaTon"
     [routerLink]="'/dashboard'"
   />
-  <span *ngIf="!mobile">PLaTon</span>
+  <span class="icon-color" *ngIf="!mobile">PLaTon</span>
   <div class="spacer"></div>
 
   <ng-container *ngIf="canCreate">
@@ -18,12 +18,17 @@
     </button>
   </ng-container>
 
+  <!-- *ngIf="!loggedToDiscord" -->
+  <button *ngIf="false" nz-button nzType="text" nzSize="small" (click)="openDiscordModal()" class="discord-button">
+    <discord-button class="discord-button" />
+  </button>
+
   <button nz-button nzType="text" nzSize="small" [matMenuTriggerFor]="themeMenu">
-    <mat-icon> {{ themeIcon }} </mat-icon>
+    <mat-icon class="icon-color"> {{ themeIcon }} </mat-icon>
   </button>
   <button nz-button nzType="text" nzSize="small" (click)="notifDrawer.open()">
     <nz-badge [nzCount]="(notifDrawer.count | async) || 0" [nzOffset]="[0, -4]">
-      <mat-icon> notifications </mat-icon>
+      <mat-icon class="icon-color"> notifications </mat-icon>
     </nz-badge>
   </button>
   <user-avatar
@@ -70,12 +75,12 @@
   </button>
 </mat-menu>
 
-<mat-menu #avatarMenu="matMenu">
+<mat-menu class="icon-color" #avatarMenu="matMenu">
   <button mat-menu-item [routerLink]="'/account'">
     <mat-icon>account_circle</mat-icon>
     <span>Mon compte</span>
   </button>
-  <button mat-menu-item [routerLink]="'/resources/' + personalCircleId">
+  <button *ngIf="canCreate" mat-menu-item [routerLink]="'/resources/' + personalCircleId">
     <mat-icon>group_work</mat-icon>
     <span>Mon cercle</span>
   </button>
@@ -110,5 +115,16 @@
     <span>Thème système</span>
   </button>
 </mat-menu>
+
+<div #discordModal>
+  <ui-modal-template [title]="'Discord'" #modal>
+    <ng-template>
+      <discord-invitation />
+    </ng-template>
+    <ng-template>
+      <button nz-button nzType="default" (click)="modal.close()">Fermer</button>
+    </ng-template>
+  </ui-modal-template>
+</div>
 
 <notif-drawer #notifDrawer />

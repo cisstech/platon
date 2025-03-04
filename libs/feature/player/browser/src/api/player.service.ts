@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core'
 import {
   EvalExerciseInput,
   EvalExerciseOutput,
+  NextOutput,
   PlayActivityInput,
   PlayActivityOuput,
   PlayAnswersInput,
@@ -18,6 +19,10 @@ import { PlayerProvider } from '../models/player-provider'
 export class PlayerService {
   constructor(private readonly provider: PlayerProvider) {}
 
+  get(sessionId: string): Observable<PlayExerciseOuput> {
+    return this.provider.get(sessionId)
+  }
+
   preview(input: PreviewInput): Observable<PreviewOuput> {
     return this.provider.preview(input)
   }
@@ -32,6 +37,10 @@ export class PlayerService {
 
   playExercises(input: PlayExerciseInput): Observable<PlayExerciseOuput> {
     return this.provider.playExercises(input)
+  }
+
+  next(input: PlayExerciseInput): Observable<NextOutput> {
+    return this.provider.next(input)
   }
 
   evaluate(input: EvalExerciseInput): Observable<EvalExerciseOutput> {

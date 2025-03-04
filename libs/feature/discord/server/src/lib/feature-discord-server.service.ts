@@ -18,7 +18,12 @@ export class FeatureDiscordServerService implements DiscordOptionsFactory {
     return {
       token: process.env['DISCORD_BOT_TOKEN'] as string,
       discordClientOptions: {
-        intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent],
+        intents: [
+          GatewayIntentBits.Guilds,
+          GatewayIntentBits.GuildMembers,
+          GatewayIntentBits.GuildMessages,
+          GatewayIntentBits.MessageContent,
+        ],
         rest: { agent },
         ws: { proxyAgentOptions: httpsproxyagent },
       },

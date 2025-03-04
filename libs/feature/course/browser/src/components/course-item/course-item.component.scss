@@ -2,8 +2,21 @@
   .ant-progress-text {
     color: white !important;
   }
+  .article-header {
+    display: flex;
+    align-items: center;
+    height: 3em;
+  }
   .article-title {
     max-width: 70%;
+    max-height: 3em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .article-description {
+    height: 1.5em;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 

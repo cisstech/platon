@@ -38,3 +38,11 @@
     }
   }
 }
+
+.no-menu {
+  &::ng-deep {
+    math-field::part(menu-toggle) {
+      display: none;
+    }
+  }
+}

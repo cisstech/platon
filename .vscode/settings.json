@@ -32,6 +32,8 @@
     "lti",
     "notification",
     "player",
-    "resource"
+    "resource",
+    "docs",
+    "webcomponents"
   ]
 }

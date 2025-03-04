@@ -5,17 +5,18 @@ import * as zlib from 'node:zlib'
 import * as path from 'path'
 
 import { HttpService } from '@nestjs/axios'
-import { Injectable } from '@nestjs/common'
-import { firstValueFrom } from 'rxjs'
+import { HttpException, Injectable } from '@nestjs/common'
+import { firstValueFrom, TimeoutError } from 'rxjs'
 
 import { ConfigService } from '@nestjs/config'
 import { Configuration } from '@platon/core/server'
 import { Sandbox, SandboxEnvironment, SandboxError, SandboxInput, SandboxOutput } from '@platon/feature/player/common'
 import { withTempFile } from '@platon/shared/server'
 import { RegisterSandbox } from '../sandbox'
-import { pythonRunnerScript } from './python-scripts'
+import { pythonNextScript, pythonRunnerScript } from './python-scripts'
 import { AxiosError } from 'axios'
 import { NotFoundResponse } from '@platon/core/common'
+import { timeout as rxjsTimeout } from 'rxjs'
 
 interface ExecutionResult {
   status: number
@@ -54,7 +55,9 @@ export class PythonSandbox implements Sandbox {
       const response = await withTempFile(
         async (path) => {
           const isEnvSaved: boolean = await firstValueFrom(
-            this.http.head(`${this.config.get('sandbox.url', { infer: true })}/environments/${input.envid}/`)
+            this.http
+              .head(`${this.config.get('sandbox.url', { infer: true })}/environments/${input.envid}/`)
+              .pipe(rxjsTimeout(timeout))
           )
             .then((response) => (response.status === 200 ? true : false))
             .catch(() => false)
@@ -78,12 +81,13 @@ export class PythonSandbox implements Sandbox {
           if (!url.endsWith('/')) {
             url += '/'
           }
-
           const result = await firstValueFrom(
-            this.http.post<ExecutionResult>(`${url}execute/`, data, {
-              headers: { 'Content-Type': 'multipart/form-data' },
-              timeout,
-            })
+            this.http
+              .post<ExecutionResult>(`${url}execute/`, data, {
+                headers: { 'Content-Type': 'multipart/form-data' },
+                timeout,
+              })
+              .pipe(rxjsTimeout(timeout))
           )
           return result.data
         },
@@ -91,7 +95,7 @@ export class PythonSandbox implements Sandbox {
       )
 
       if (response.status === -2) {
-        throw SandboxError.timeoutError(timeout)
+        throw new HttpException(`Evaluation failed due to timeout of ${timeout}. Please contact your teacher`, 504)
       }
 
       if (response.status !== 0) {
@@ -106,8 +110,27 @@ export class PythonSandbox implements Sandbox {
       if (error instanceof SandboxError) {
         throw error
       }
-      throw SandboxError.unknownError(error)
+      if (error instanceof HttpException) {
+        throw error
+      }
+      if (error instanceof TimeoutError) {
+        throw new HttpException('A timeout occurred while executing the script.', 504)
+      }
+      throw new HttpException(
+        `The sandbox is currently unavailable. Please try again later.\n\n${(error as AxiosError)?.message}`,
+        512
+      )
     }
+  }
+
+  /**
+   * Executes the next script in the Python sandbox.
+   * @param input The SandboxInput object.
+   * @param timeout The execution timeout in milliseconds.
+   * @returns A Promise that resolves to the SandboxOutput object.
+   */
+  async runNext(input: SandboxInput, timeout: number): Promise<SandboxOutput> {
+    return this.run(input, pythonNextScript, timeout)
   }
 
   /**

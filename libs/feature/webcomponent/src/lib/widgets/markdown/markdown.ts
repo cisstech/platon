@@ -9,10 +9,9 @@ export interface MarkdownState extends IWebComponent {
 export const MarkdownComponentDefinition = defineWebComponent({
   type: WebComponentTypes.widget,
   name: 'Markdown',
-  icon: 'assets/images/components/widgets/markdown/markdown.svg',
   selector: 'wc-markdown',
-  description: "Permets d'afficher du markdown.",
-  fullDescriptionUrl: 'assets/docs/components/widgets/markdown/markdown.md',
+  description:
+    "Composant de rendu Markdown avec support pour éléments avancés comme les admonitions, les onglets, et la mise en forme riche. Parfait pour afficher des énoncés d'exercices, des explications théoriques, des guides méthodologiques ou des ressources documentaires avec une mise en forme élégante et structurée.",
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',

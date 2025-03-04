@@ -81,6 +81,17 @@ export class NodeSandbox implements OnModuleInit, Sandbox {
   }
 
   /**
+   * Executes the next script in the NodeVM sandbox.
+   * @param input - The SandboxInput object.
+   * @param timeout - The execution timeout in milliseconds.
+   * @returns A Promise that resolves to the SandboxOutput object.
+   * @throws {SandboxError} If an error occurs during script execution.
+   */
+  async runNext(input: SandboxInput, timeout: number): Promise<SandboxOutput> {
+    return this.run(input, input.variables.next, timeout)
+  }
+
+  /**
    * Creates a zipfile containing the environment files.
    * @param envid - The environment ID.
    */

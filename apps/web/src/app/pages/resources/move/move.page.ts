@@ -22,14 +22,7 @@ import {
   ResourceSearchBarComponent,
   ResourceService,
 } from '@platon/feature/resource/browser'
-import {
-  CircleTree,
-  Resource,
-  ResourceTypes,
-  branchFromCircleTree,
-  circleTreeFromCircle,
-  removeNodeFromCircleTree,
-} from '@platon/feature/resource/common'
+import { CircleTree, Resource, ResourceTypes, branchFromCircleTree } from '@platon/feature/resource/common'
 import { UiStepDirective, UiStepperComponent } from '@platon/shared/ui'
 import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzPageHeaderModule } from 'ng-zorro-antd/page-header'
@@ -114,7 +107,6 @@ export class ResourceMovePage implements OnInit {
       firstValueFrom(this.resourceService.circle(user.username)),
     ])
 
-    // TODO : change if to check if user can move resource
     if (user.role !== 'admin' && circle.id !== this.parentId) {
       this.router
         .navigateByUrl('/resources', {
@@ -127,15 +119,9 @@ export class ResourceMovePage implements OnInit {
 
     this.tree = tree
 
-    if (this.type !== 'CIRCLE') {
-      this.tree.children?.unshift(circleTreeFromCircle(circle))
-    }
-
     this.sourceParentId = this.parentId
     this.parentId = undefined
     this.sourceParentName = branchFromCircleTree(this.tree, this.sourceParentId!)?.name
-
-    removeNodeFromCircleTree(this.tree, this.sourceParentId!)
 
     this.loading = false
     this.changeDetectorRef.markForCheck()

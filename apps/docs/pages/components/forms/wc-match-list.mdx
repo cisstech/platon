@@ -1,0 +1,226 @@
+---
+title: MatchList
+description: Composant interactif permettant d'associer des éléments entre deux colonnes en traçant des lignes. Parfait pour les exercices d'appariement comme associer des termes à leurs définitions, des mots à leurs traductions, des formules à leurs applications, ou encore des images à leurs descriptions.
+---
+
+import { Tabs, Tab } from 'nextra/components'
+import { ComponentProperties } from '../../../components'
+import { useAbsoluteUrl } from '../../../hooks'
+
+# MatchList
+
+`wc-match-list`
+
+Composant interactif permettant d'associer des éléments entre deux colonnes en traçant des lignes. Parfait pour les exercices d'appariement comme associer des termes à leurs définitions, des mots à leurs traductions, des formules à leurs applications, ou encore des images à leurs descriptions.
+
+## Documentation
+
+Le composant MatchList permet de créer des exercices interactifs d'appariement où les apprenants doivent établir des correspondances entre des éléments disposés dans deux colonnes distinctes. Il s'utilise typiquement en créant un ensemble d'éléments sources (colonne de gauche) et cibles (colonne de droite) que l'apprenant relie par des traits.
+
+### Organisation des éléments
+
+Le composant s'articule autour de deux collections principales:
+
+#### Éléments à relier (`nodes`)
+
+Chaque élément est défini par un objet avec trois propriétés essentielles:
+
+```typescript
+{
+    "id": string, // Identifiant du noeud.
+    "type": "source" | "target", // Type du noeud.
+    "content": string, // Contenu en markdown.
+}
+```
+
+#### Connexions entre éléments (`links`)
+
+```typescript
+{
+    "source": string, // Identifiant du noeud source.
+    "target": string, // identifiand du noeud cible.
+    "css"?: string, // Voir API CSS.
+}
+```
+
+Les éléments de type source apparaissent dans la colonne gauche, tandis que les éléments de type target sont placés dans la colonne droite.
+
+### Fonctionnalités interactives
+
+Par défaut, l'apprenant peut:
+
+- Créer des liens en cliquant successivement sur un élément source puis un élément cible
+- Supprimer un lien existant en cliquant dessus
+- Établir plusieurs connexions pour un même élément source ou cible
+
+Pour désactiver cette interactivité (par exemple pour afficher une solution), utilisez la propriété disabled: true.
+
+### Conseils de conception
+
+Pour créer des exercices d'association efficaces:
+
+Assurez-vous que les identifiants (id) sont uniques
+Équilibrez le nombre d'éléments entre les colonnes source et cible
+Utilisez le markdown dans la propriété content pour intégrer des formules, images ou mise en forme
+
+## Exemple interactif
+
+<iframe
+  src={useAbsoluteUrl('playground/components/wc-match-list')}
+  style={{ width: '100%', height: '700px', border: 'none' }}
+></iframe>
+
+## API
+
+<Tabs items={['Graphique', 'JSON']}>
+  <Tab>
+    <ComponentProperties schema={{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "MatchList",
+  "properties": {
+    "disabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Désactiver l'interaction avec le composant?"
+    },
+    "links": {
+      "type": "array",
+      "default": [],
+      "description": "La liste des associations.",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "target"
+      ],
+      "items": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string",
+            "description": "Identifiant du noeud source."
+          },
+          "target": {
+            "type": "string",
+            "description": "Identifiant du noeud cible."
+          },
+          "css": {
+            "type": "string",
+            "description": "Voir la page API CSS."
+          }
+        }
+      }
+    },
+    "nodes": {
+      "type": "array",
+      "default": [],
+      "description": "La liste des noeuds.",
+      "minItems": 2,
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "content",
+        "type"
+      ],
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Identifiant unique du noeud."
+          },
+          "content": {
+            "type": "string",
+            "description": "Contenu du noeud en markdown."
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "source",
+              "target"
+            ],
+            "description": "Type du noeud."
+          }
+        }
+      }
+    }
+  }
+}} />
+  </Tab>
+  <Tab>
+    ```json
+    {
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "MatchList",
+  "properties": {
+    "disabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Désactiver l'interaction avec le composant?"
+    },
+    "links": {
+      "type": "array",
+      "default": [],
+      "description": "La liste des associations.",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "target"
+      ],
+      "items": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string",
+            "description": "Identifiant du noeud source."
+          },
+          "target": {
+            "type": "string",
+            "description": "Identifiant du noeud cible."
+          },
+          "css": {
+            "type": "string",
+            "description": "Voir la page API CSS."
+          }
+        }
+      }
+    },
+    "nodes": {
+      "type": "array",
+      "default": [],
+      "description": "La liste des noeuds.",
+      "minItems": 2,
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "content",
+        "type"
+      ],
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Identifiant unique du noeud."
+          },
+          "content": {
+            "type": "string",
+            "description": "Contenu du noeud en markdown."
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "source",
+              "target"
+            ],
+            "description": "Type du noeud."
+          }
+        }
+      }
+    }
+  }
+}
+    ```
+  </Tab>
+</Tabs>

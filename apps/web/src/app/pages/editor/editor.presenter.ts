@@ -105,10 +105,6 @@ export class EditorPresenter {
       : circleAncestors(tree, resource.parentId!, true)
 
     this.tree = tree
-    if (resourceIsPersonalExerciseOrActivity) {
-      this.tree.children?.push(circleTreeFromCircle(personalCircle))
-    }
-
     this.version = version
     this.resource = resource
     this.ancestors = ancestors.map((ancestor) => ({
@@ -330,5 +326,13 @@ export class EditorPresenter {
         task.end()
       },
     })
+  }
+
+  async getNewResourceFolder(id: string, version: string): Promise<{ name: string; uri: monaco.Uri }> {
+    const resource = await firstValueFrom(this.resourceService.find({ id }))
+    return {
+      name: `${resource.name}#${version}`,
+      uri: this.fileSystemProvider.buildUri(id, version, '/'),
+    }
   }
 }

@@ -21,7 +21,9 @@ import {
   Validators,
 } from '@angular/forms'
 import { MatFormFieldModule } from '@angular/material/form-field'
+import { MatIconModule } from '@angular/material/icon'
 import { MatInputModule } from '@angular/material/input'
+import { NzIconModule } from 'ng-zorro-antd/icon'
 import { debounceTime, Subscription } from 'rxjs'
 
 @Component({
@@ -30,7 +32,7 @@ import { debounceTime, Subscription } from 'rxjs'
   templateUrl: './edit-password.component.html',
   styleUrls: ['./edit-password.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, ReactiveFormsModule, MatInputModule, MatFormFieldModule],
+  imports: [CommonModule, ReactiveFormsModule, MatInputModule, MatFormFieldModule, NzIconModule, MatIconModule],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -51,6 +53,9 @@ export class AuthEditPasswordComponent implements OnInit, OnDestroy, ControlValu
     },
     { validators: this.passwordMatchingValidator }
   )
+  passwordVisible = false
+  newPasswordVisible = false
+  confirmPasswordVisible = false
 
   @Input() username!: string
 
@@ -83,7 +88,8 @@ export class AuthEditPasswordComponent implements OnInit, OnDestroy, ControlValu
       this.valid =
         (!this.passwordRequired || password.trim()) &&
         newPassword.trim() &&
-        newPassword.trim() === confirmPassword.trim()
+        newPassword.trim() === confirmPassword.trim() &&
+        AuthEditPasswordComponent.isValidPasswordFormat(newPassword.trim())
 
       this.onChange([password?.trim() || '', newPassword.trim()])
       this.onTouched()
@@ -134,6 +140,11 @@ export class AuthEditPasswordComponent implements OnInit, OnDestroy, ControlValu
     const newPassword = control.get('newPassword')?.value || ''
     const confirmPassword = control.get('confirmPassword')?.value || ''
 
+    if (!AuthEditPasswordComponent.isValidPasswordFormat(newPassword)) {
+      control.get('newPassword')?.setErrors({ invalidPasswordFormat: true })
+      return { invalidPasswordFormat: true }
+    }
+
     if (newPassword !== confirmPassword) {
       control.get('confirmPassword')?.setErrors({ notMatching: true })
       return { notMatching: true }
@@ -141,5 +152,30 @@ export class AuthEditPasswordComponent implements OnInit, OnDestroy, ControlValu
 
     control.get('confirmPassword')?.setErrors(null)
     return null
+  }
+
+  private static isValidPasswordFormat(password: string): boolean {
+    const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?([^\w\s]|_)).{12,}$/
+    return passwordRegex.test(password)
+  }
+
+  is12CharactersLong(): boolean {
+    return this.form.get('newPassword')?.value.length >= 12
+  }
+
+  hasUpperCaseLetter(): boolean {
+    return /[A-Z]/.test(this.form.get('newPassword')?.value)
+  }
+
+  hasLowerCaseLetter(): boolean {
+    return /[a-z]/.test(this.form.get('newPassword')?.value)
+  }
+
+  hasNumber(): boolean {
+    return /[0-9]/.test(this.form.get('newPassword')?.value)
+  }
+
+  hasSpecialCharacter(): boolean {
+    return /[^\w\s]|_/.test(this.form.get('newPassword')?.value)
   }
 }

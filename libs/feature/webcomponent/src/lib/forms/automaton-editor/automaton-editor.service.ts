@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { Subject } from 'rxjs'
-import { Automaton, automatonFromString, emptyAutomaton, Point, Transition } from './automaton'
+import { Automaton, automatonFromString, emptyAutomaton, Point, State, Transition } from './automaton'
 import { AutomatonEditorState } from './automaton-editor'
 
 /**
@@ -9,13 +9,15 @@ import { AutomatonEditorState } from './automaton-editor'
 @Injectable()
 export class AutomatonEditorService {
   private state!: AutomatonEditorState
+  private stateId = 0
+  private uuidToName: Record<string, string> = {}
 
   private readonly createStateEvent = new Subject<string>()
   private readonly createTransitionEvent = new Subject<Transition>()
   private readonly createInitialStateEvent = new Subject<string>()
   private readonly createAcceptingStateEvent = new Subject<string>()
 
-  private readonly removeStateEvent = new Subject<string>()
+  private readonly removeStateEvent = new Subject<State>()
   private readonly removeTransitionEvent = new Subject<Transition>()
   private readonly removeInitialStateEvent = new Subject<string>()
   private readonly removeAcceptingStateEvent = new Subject<string>()
@@ -160,7 +162,11 @@ export class AutomatonEditorService {
    * Generates new state name.
    */
   stateName() {
-    return 'S' + (this.states.length + 1)
+    let name = 'S' + this.stateId++
+    while (this.isState(name)) {
+      name = 'S' + this.stateId++
+    }
+    return name
   }
 
   /**
@@ -196,12 +202,14 @@ export class AutomatonEditorService {
    */
   addState(name: string, x: number, y: number) {
     if (!this.isState(name)) {
+      this.uuidToName[name] = name
       this.states.push(name)
       this.moveState(name, x, y)
       if (!this.initialStates.length) {
         this.addInitial(name)
       }
       this.createStateEvent.next(name)
+      this.state.isFilled = true
       return true
     }
     return false
@@ -215,6 +223,7 @@ export class AutomatonEditorService {
    */
   moveState(name: string, x: number, y: number) {
     this.position[name] = { x, y }
+    this.state.isFilled = true
   }
 
   /**
@@ -227,6 +236,7 @@ export class AutomatonEditorService {
     if (!this.isInitial(name)) {
       this.initialStates.push(name)
       this.createInitialStateEvent.next(name)
+      this.state.isFilled = true
       return true
     }
     return false
@@ -244,6 +254,7 @@ export class AutomatonEditorService {
     if (!this.isAccepting(name)) {
       this.acceptingStates.push(name)
       this.createAcceptingStateEvent.next(name)
+      this.state.isFilled = true
       return true
     }
     return false
@@ -261,14 +272,15 @@ export class AutomatonEditorService {
    * @param name The state to remove.
    * @returns `true` if the state is removed `false` otherwises.
    */
-  removeState(name: string) {
-    if (this.remove(this.states, (e) => e === name)) {
-      delete this.position[name]
-      this.removeInitial(name)
-      this.removeAccepting(name)
-      this.remove(this.transitions, (t) => t.fromState === name || t.toState === name)
+  removeState(state: State) {
+    if (this.remove(this.states, (e) => e === state.name)) {
+      delete this.position[state.name]
+      this.removeInitial(state.name)
+      this.removeAccepting(state.name)
+      this.transitions = this.transitions.filter((t) => t.fromState !== state.name && t.toState !== state.name)
       this.validate()
-      this.removeStateEvent.next(name)
+      this.removeStateEvent.next(state)
+      this.state.isFilled = true
       return true
     }
     return false
@@ -283,6 +295,7 @@ export class AutomatonEditorService {
   removeInitial(name: string) {
     if (this.remove(this.initialStates, (e) => e === name)) {
       this.removeInitialStateEvent.next(name)
+      this.state.isFilled = true
       return true
     }
     return false
@@ -297,6 +310,7 @@ export class AutomatonEditorService {
   removeAccepting(name: string) {
     if (this.remove(this.acceptingStates, (e) => e === name)) {
       this.removeAcceptingStateEvent.next(name)
+      this.state.isFilled = true
       return true
     }
     return false
@@ -312,6 +326,8 @@ export class AutomatonEditorService {
     if (!this.isState(oldName)) {
       return false
     }
+    // update in uuidToName
+    this.uuidToName[oldName] = newName
 
     // replace in states
     this.states = [
@@ -354,6 +370,7 @@ export class AutomatonEditorService {
 
     this.validate()
     this.renameStateEvent.next({ oldName, newName })
+    this.state.isFilled = true
     return true
   }
 
@@ -378,6 +395,7 @@ export class AutomatonEditorService {
       this.transitions.push(transition)
       this.validate()
       this.createTransitionEvent.next(transition)
+      this.state.isFilled = true
       return true
     }
     return false
@@ -397,6 +415,7 @@ export class AutomatonEditorService {
     ) {
       this.validate()
       this.removeTransitionEvent.next(transition)
+      this.state.isFilled = true
       return true
     }
     return false
@@ -413,6 +432,7 @@ export class AutomatonEditorService {
       tr.symbols = [...symbols]
       this.validate()
       this.renameTransitionEvent.next(tr)
+      this.state.isFilled = true
       return true
     }
     return false
@@ -440,13 +460,14 @@ export class AutomatonEditorService {
 
   private remove<T>(array: T[], predicate: (e: T) => boolean) {
     let i = 0
+    let removed = false
     for (const e of array) {
       if (predicate(e)) {
         array.splice(i, 1)
-        return true
+        removed = true
       }
       i++
     }
-    return false
+    return removed
   }
 }

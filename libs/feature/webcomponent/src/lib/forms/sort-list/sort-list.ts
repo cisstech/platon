@@ -14,10 +14,9 @@ export interface SortListState extends IWebComponent {
 export const SortListComponentDefinition = defineWebComponent({
   type: WebComponentTypes.form,
   name: 'SortList',
-  icon: 'assets/images/components/forms/sort-list/sort-list.svg',
   selector: 'wc-sort-list',
-  description: 'Permets de créer une liste à ordonner.',
-  fullDescriptionUrl: 'assets/docs/components/forms/sort-list/sort-list.md',
+  description:
+    "Liste interactive d'éléments réorganisables par glisser-déposer. Parfait pour les exercices de séquençage, de tri logique, d'ordonnancement d'instructions ou d'événements, de classement chronologique, d'algorithmes de tri, ou toute activité pédagogique où l'ordre des éléments est significatif.",
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',

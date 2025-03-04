@@ -1,15 +1,6 @@
 import { Route } from '@angular/router'
 import { noTheme } from '@platon/core/browser'
 import { LandingPage } from './landing/landing.page'
-import { createWebComponentDoc } from '@platon/feature/webcomponent'
-
-export const baseUrl = () => {
-  let url = window.location.origin
-  if (url.includes('github')) {
-    url = `${url}/platon`
-  }
-  return url
-}
 
 export const appRoutes: Route[] = [
   {
@@ -20,15 +11,14 @@ export const appRoutes: Route[] = [
     },
   },
   {
-    path: 'docs/components',
-    loadChildren: () => import('@cisstech/nge/doc').then((m) => m.NgeDocModule),
-    data: [
-      createWebComponentDoc({
-        root: '/docs/components',
-        backUrl: undefined,
-        backUrlHref: baseUrl(),
-      }),
-    ],
+    path: 'playground',
+    title: 'PLaTon - Playground',
+    loadChildren: () =>
+      import(
+        /* webpackChunkName: "playground" */
+        './playground/playground.routes'
+      ),
   },
+
   { path: '**', redirectTo: '', pathMatch: 'full' },
 ]

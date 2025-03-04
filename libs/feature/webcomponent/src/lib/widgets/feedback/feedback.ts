@@ -8,10 +8,9 @@ export interface FeedbackState extends IWebComponent {
 export const FeedbackComponentDefinition = defineWebComponent({
   type: WebComponentTypes.widget,
   name: 'Feedback',
-  icon: 'assets/images/components/widgets/feedback/feedback.svg',
   selector: 'wc-feedback',
-  description: "Permets d'afficher un feedback.",
-  fullDescriptionUrl: 'assets/docs/components/widgets/feedback/feedback.md',
+  description:
+    "Composant d'affichage de messages de retour avec différents niveaux visuels (succès, information, avertissement, erreur). Essentiel pour fournir des retours clairs aux apprenants sur leurs réponses, donner des indications supplémentaires, ou afficher des messages contextuels dans tout type d'exercice interactif.",
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',

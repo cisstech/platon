@@ -1,7 +1,7 @@
-import { Body, Controller, Delete, Get, Param, Post, Req } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Post, Req } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { ItemResponse, ListResponse, NoContentResponse } from '@platon/core/common'
-import { IRequest, Mapper } from '@platon/core/server'
+import { IRequest, Mapper, UUIDParam } from '@platon/core/server'
 import { CreateSessionComment } from '@platon/feature/result/common'
 import { SessionCommentDTO } from './comment.dto'
 import { SessionCommentService } from './comment.service'
@@ -13,8 +13,8 @@ export class SessionCommentController {
 
   @Get('/:answerId')
   async list(
-    @Param('sessionId') sessionId: string,
-    @Param('answerId') answerId: string
+    @UUIDParam('sessionId') sessionId: string,
+    @UUIDParam('answerId') answerId: string
   ): Promise<ListResponse<SessionCommentDTO>> {
     const [items, total] = await this.service.findAll(sessionId, answerId)
     const resources = Mapper.mapAll(items, SessionCommentDTO)
@@ -24,8 +24,8 @@ export class SessionCommentController {
   @Post('/:answerId')
   async create(
     @Req() req: IRequest,
-    @Param('sessionId') sessionId: string,
-    @Param('answerId') answerId: string,
+    @UUIDParam('sessionId') sessionId: string,
+    @UUIDParam('answerId') answerId: string,
     @Body() input: CreateSessionComment
   ): Promise<ItemResponse<SessionCommentDTO>> {
     const resource = Mapper.map(
@@ -42,9 +42,9 @@ export class SessionCommentController {
 
   @Delete('/:answerId/:commentId')
   async delete(
-    @Param('sessionId') sessionId: string,
-    @Param('answerId') answerId: string,
-    @Param('commentId') commentId: string
+    @UUIDParam('sessionId') sessionId: string,
+    @UUIDParam('answerId') answerId: string,
+    @UUIDParam('commentId') commentId: string
   ): Promise<NoContentResponse> {
     await this.service.delete(sessionId, answerId, commentId)
     return new NoContentResponse()

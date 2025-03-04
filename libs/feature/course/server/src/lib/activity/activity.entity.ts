@@ -2,16 +2,17 @@ import { BaseEntity, UserEntity } from '@platon/core/server'
 import { ActivityVariables, PLSourceFile } from '@platon/feature/compiler'
 import { Activity, ActivityOpenStates, ActivityPermissions } from '@platon/feature/course/common'
 import { Column, Entity, Index, JoinColumn, ManyToOne, VirtualColumn } from 'typeorm'
-import { CourseEntity } from '../course.entity'
+import { CourseEntity } from '../entites/course.entity'
 import { CourseSectionEntity } from '../section/section.entity'
 
 @Entity('Activities')
 export class ActivityEntity extends BaseEntity implements Activity {
   @Index('Activities_creator_id_idx')
-  @Column({ name: 'creator_id' })
+  @Column({ name: 'creator_id', default: '00000000-0000-0000-0000-000000000000' })
   creatorId!: string
 
-  @ManyToOne(() => UserEntity, { onDelete: 'CASCADE' })
+  // @ts-expect-error: SET DEFAULT does not exist in OnDeleteType
+  @ManyToOne(() => UserEntity, { onDelete: 'SET DEFAULT' })
   @JoinColumn({ name: 'creator_id' })
   creator!: UserEntity
 
@@ -36,15 +37,18 @@ export class ActivityEntity extends BaseEntity implements Activity {
 
   @Index('Activities_open_at_idx')
   @Column({ name: 'open_at', nullable: true, type: 'timestamp with time zone' })
-  openAt?: Date
+  openAt?: Date | null
 
   @Index('Activities_close_at_idx')
   @Column({ name: 'close_at', nullable: true, type: 'timestamp with time zone' })
-  closeAt?: Date
+  closeAt?: Date | null
 
   @Index('Activities_is_challenge_idx')
   @Column({ name: 'is_challenge', default: false })
   isChallenge!: boolean
+
+  @Column({ default: 0 })
+  order!: number
 
   // VIRTUAL COLUMNS
   // TODO: use expanders instead of virtual columns
@@ -69,4 +73,9 @@ export class ActivityEntity extends BaseEntity implements Activity {
 
   @VirtualColumn({ query: () => `SELECT '{}'::jsonb` })
   readonly permissions!: ActivityPermissions
+
+  @VirtualColumn({
+    query: (alias) => `SELECT (${alias}.source->'variables'->'settings'->'navigation'->>'mode' = 'peer')::boolean`,
+  })
+  readonly isPeerComparison!: boolean
 }

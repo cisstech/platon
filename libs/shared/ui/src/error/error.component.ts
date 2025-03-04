@@ -7,12 +7,21 @@ import { CommonModule } from '@angular/common'
 import { UiError500Component } from './error-500.component'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { RouterModule } from '@angular/router'
+import { UiError512Component } from './error-512.component'
 
 @Component({
   standalone: true,
   selector: 'ui-error',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, RouterModule, UiError403Component, UiError404Component, UiError500Component, NzButtonModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    UiError403Component,
+    UiError404Component,
+    UiError500Component,
+    UiError512Component,
+    NzButtonModule,
+  ],
   template: `
     <ng-container [ngSwitch]="code">
       <ng-container *ngSwitchCase="'SERVER_ERROR'">
@@ -23,6 +32,9 @@ import { RouterModule } from '@angular/router'
       </ng-container>
       <ng-container *ngSwitchCase="'NOT_FOUND'">
         <ui-error-404 />
+      </ng-container>
+      <ng-container *ngSwitchCase="'SANDBOX_ERROR'">
+        <ui-error-512 />
       </ng-container>
     </ng-container>
     <ng-container *ngIf="showMessage">
@@ -56,14 +68,17 @@ import { RouterModule } from '@angular/router'
 })
 export class UiErrorComponent implements OnChanges {
   protected message = ''
-  protected code: 'FORBIDDEN' | 'NOT_FOUND' | 'SERVER_ERROR' = 'SERVER_ERROR'
+  protected code: 'FORBIDDEN' | 'NOT_FOUND' | 'SERVER_ERROR' | 'SANDBOX_ERROR' = 'SERVER_ERROR'
   @Input() error?: unknown
   @Input() showMessage = false
   @Input() showButtons = true
 
   ngOnChanges(): void {
     const status = (this.error as HttpErrorResponse)?.status || HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR
-    if (status === HTTP_STATUS_CODE.UNAUTHORIZED || status === HTTP_STATUS_CODE.FORBIDDEN) {
+
+    if (status === 512) {
+      this.code = 'SANDBOX_ERROR'
+    } else if (status === HTTP_STATUS_CODE.UNAUTHORIZED || status === HTTP_STATUS_CODE.FORBIDDEN) {
       this.code = 'FORBIDDEN'
     } else if (status >= HTTP_STATUS_CODE.BAD_REQUEST && status < HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR) {
       this.code = 'NOT_FOUND'

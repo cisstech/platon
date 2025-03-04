@@ -1,0 +1,166 @@
+---
+title: Picker
+description: Menu déroulant permettant de sélectionner une valeur parmi une liste prédéfinie. Idéal pour les exercices à choix limité, les sélections de paramètres, de catégories, ou de valeurs spécifiques dans un ensemble fermé, offrant une interface compacte pour les questions où l'espace est limité.
+---
+
+import { Tabs, Tab } from 'nextra/components'
+import { ComponentProperties } from '../../../components'
+import { useAbsoluteUrl } from '../../../hooks'
+
+# Picker
+
+`wc-picker`
+
+Menu déroulant permettant de sélectionner une valeur parmi une liste prédéfinie. Idéal pour les exercices à choix limité, les sélections de paramètres, de catégories, ou de valeurs spécifiques dans un ensemble fermé, offrant une interface compacte pour les questions où l'espace est limité.
+
+## Documentation
+
+Le composant Picker vous offre un menu déroulant élégant et facile à utiliser pour les situations où l'apprenant doit sélectionner une option parmi une liste prédéfinie. C'est la solution idéale quand l'espace est limité ou quand vous souhaitez restreindre les choix à un ensemble précis de valeurs.
+
+### Fonctionnement de base
+
+La valeur actuellement sélectionnée est définie par la propriété `selection`, qui doit correspondre à l'une des valeurs présentes dans le tableau `items`. Si aucune sélection n'est spécifiée, le menu affichera par défaut le texte indicatif défini dans `placeholder`.
+
+### Amélioration de l'expérience utilisateur
+
+#### Ajouter des icônes indicatives
+
+Pour améliorer la compréhension ou guider visuellement l'apprenant, vous pouvez ajouter des icônes à votre composant:
+
+- **Icône de début** (`prefix`): apparaît à gauche du sélecteur
+- **Icône de fin** (`suffix`): apparaît à droite du sélecteur
+
+Ces icônes sont définies avec la syntaxe: `bibliothèque nom-icône [color=CODE_COULEUR]`
+
+Par exemple:
+
+- `fontawesome check` affiche une icône de validation
+- `clarity filter color=3366FF` affiche une icône de filtre en bleu
+
+Vous trouverez la bibliothèque complète des icônes disponibles sur [icongr.am](https://icongr.am).
+
+#### Contexte supplémentaire
+
+Utilisez la propriété `hint` pour fournir une indication complémentaire qui apparaîtra sous le sélecteur. Cette indication peut être utile pour clarifier ce que l'apprenant doit sélectionner ou pour donner un indice sur la réponse attendue.
+
+### Applications pédagogiques
+
+Le Picker est particulièrement utile pour:
+
+- Sélection de catégories ou classifications
+- Choix d'unités de mesure
+- Sélection d'éléments dans une nomenclature
+- Navigation entre différentes parties d'un exercice
+- Exercices où l'ordre des options présentées est important
+
+## Exemple interactif
+
+<iframe
+  src={useAbsoluteUrl('playground/components/wc-picker')}
+  style={{ width: '100%', height: '700px', border: 'none' }}
+></iframe>
+
+## API
+
+<Tabs items={['Graphique', 'JSON']}>
+  <Tab>
+    <ComponentProperties schema={{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "required": [
+    "items"
+  ],
+  "properties": {
+    "items": {
+      "type": "array",
+      "default": [],
+      "description": "La liste des choix.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "prefix": {
+      "type": "string",
+      "default": "",
+      "description": "Une icône à afficher à gauche du picker."
+    },
+    "suffix": {
+      "type": "string",
+      "default": "",
+      "description": "Une icône à afficher à droite du picker."
+    },
+    "hint": {
+      "type": "string",
+      "default": "",
+      "description": "Une indication à afficher en bas du picker."
+    },
+    "selection": {
+      "type": "string",
+      "default": "",
+      "description": "L'élément sélectionné dans la liste items."
+    },
+    "placeholder": {
+      "type": "string",
+      "default": "",
+      "description": "Le texte indicatif du picker."
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Désactiver la sélection?"
+    }
+  }
+}} />
+  </Tab>
+  <Tab>
+    ```json
+    {
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "required": [
+    "items"
+  ],
+  "properties": {
+    "items": {
+      "type": "array",
+      "default": [],
+      "description": "La liste des choix.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "prefix": {
+      "type": "string",
+      "default": "",
+      "description": "Une icône à afficher à gauche du picker."
+    },
+    "suffix": {
+      "type": "string",
+      "default": "",
+      "description": "Une icône à afficher à droite du picker."
+    },
+    "hint": {
+      "type": "string",
+      "default": "",
+      "description": "Une indication à afficher en bas du picker."
+    },
+    "selection": {
+      "type": "string",
+      "default": "",
+      "description": "L'élément sélectionné dans la liste items."
+    },
+    "placeholder": {
+      "type": "string",
+      "default": "",
+      "description": "Le texte indicatif du picker."
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Désactiver la sélection?"
+    }
+  }
+}
+    ```
+  </Tab>
+</Tabs>

@@ -21,7 +21,7 @@ import { ApiTags } from '@nestjs/swagger'
 import { BadRequestResponse, SuccessResponse, UnauthorizedResponse } from '@platon/core/common'
 import { Configuration, EventService, IRequest, Public } from '@platon/core/server'
 import { PLSourceFile } from '@platon/feature/compiler'
-import { ExerciseTransformInput, FileTypes, LATEST, ResourceFile } from '@platon/feature/resource/common'
+import { ExerciseTransformInput, FileTypes, LATEST, ResourceFile, ResourceTypes } from '@platon/feature/resource/common'
 import { Response } from 'express'
 import * as fs from 'fs'
 import mime from 'mime-types'
@@ -99,7 +99,7 @@ export class ResourceFileController {
   @Get('/log/:resourceId')
   async log(@Req() request: IRequest, @Param('resourceId') resourceId: string) {
     const { repo, permissions } = await this.fileService.repo(resourceId, request)
-    if (!permissions.write) {
+    if (!permissions.read) {
       throw new UnauthorizedResponse('You are not allowed')
     }
     return repo.log()
@@ -191,7 +191,8 @@ export class ResourceFileController {
       res.set('Content-Type', mimeType || 'application/octet-stream')
 
       if (node.type === 'file') {
-        res.set('Content-Disposition', `attachment; filename=${basename(node.path)}`)
+        const encodedFilename = encodeURIComponent(basename(node.path))
+        res.set('Content-Disposition', `attachment; filename=${encodedFilename}`)
         const buffer = (await content) as Uint8Array
 
         const extension = node.path.split('.').pop()
@@ -201,7 +202,8 @@ export class ResourceFileController {
 
         file = new StreamableFile(buffer)
       } else {
-        res.set('Content-Disposition', `attachment; filename=platon-${resource.name.trim().replace(/\s/g, '-')}.zip`)
+        const encodedFilename = encodeURIComponent(`platon-${resource.name.trim().replace(/\s/g, '-')}.zip`)
+        res.set('Content-Disposition', `attachment; filename=${encodedFilename}`)
 
         const archive = await repo.archive(path, version)
         const stream = fs.createReadStream(archive)
@@ -412,6 +414,9 @@ export class ResourceFileController {
     const { repo, resource, permissions } = await this.fileService.repo(resourceId, request)
     if (!permissions.write) {
       throw new UnauthorizedResponse('You are not allowed to write this resource')
+    }
+    if (!resource.personal && resource.type === ResourceTypes.CIRCLE && request.user.role !== 'admin') {
+      throw new UnauthorizedResponse('You are not allowed to delete this resource')
     }
 
     await repo.remove(path)

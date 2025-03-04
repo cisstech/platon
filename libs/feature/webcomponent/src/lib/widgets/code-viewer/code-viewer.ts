@@ -11,9 +11,9 @@ export interface CodeViewerState extends IWebComponent {
 export const CodeViewerComponentDefinition = defineWebComponent({
   type: WebComponentTypes.widget,
   name: 'CodeViewer',
-  icon: 'assets/images/components/forms/code-editor/code-editor.svg',
   selector: 'wc-code-viewer',
-  description: "Permets d'afficher un code source avec de la coloration syntaxique.",
+  description:
+    "Composant d'affichage de code source avec coloration syntaxique, numérotation et surlignage de lignes. Idéal pour les exercices d'analyse de code, de débogage, d'explication d'algorithmes ou pour présenter des exemples de programmation avec mise en évidence des sections importantes.",
   schema: {
     $schema: 'http://json-schema.org/draft-07/schema',
     type: 'object',

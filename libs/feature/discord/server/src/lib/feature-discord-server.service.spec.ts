@@ -24,13 +24,14 @@ describe('FeatureDiscordServerService', () => {
     expect(options.discordClientOptions).toBeDefined()
     expect(options.discordClientOptions.intents).toEqual([
       GatewayIntentBits.Guilds,
+      GatewayIntentBits.GuildMembers,
       GatewayIntentBits.GuildMessages,
       GatewayIntentBits.MessageContent,
     ])
     expect(options.discordClientOptions.rest).toBeDefined()
-    expect(options.discordClientOptions!.rest!.agent).toEqual(agent)
+    expect(options.discordClientOptions?.rest?.agent).toEqual(agent)
     expect(options.discordClientOptions.ws).toBeDefined()
-    expect(options.discordClientOptions.ws!.proxyAgentOptions).toEqual(httpsproxyagent)
+    expect(options.discordClientOptions.ws?.proxyAgentOptions).toEqual(httpsproxyagent)
   })
 
   it('should not define agent and httpsproxyagent if process.env[PROXY_URL] is not defined', () => {

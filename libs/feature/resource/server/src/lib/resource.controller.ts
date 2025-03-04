@@ -1,16 +1,45 @@
 import { Expandable, Selectable } from '@cisstech/nestjs-expand'
-import { Body, Controller, Delete, Get, Logger, Param, Patch, Post, Query, Req } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  InternalServerErrorException,
+  Logger,
+  Patch,
+  Post,
+  Query,
+  Req,
+} from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
-import { CreatedResponse, ForbiddenResponse, ItemResponse, ListResponse, NotFoundResponse } from '@platon/core/common'
-import { IRequest, Mapper, UserService } from '@platon/core/server'
+import {
+  BadRequestResponse,
+  CreatedResponse,
+  DEFAULT_USER_ID,
+  ForbiddenResponse,
+  ItemResponse,
+  ListResponse,
+  NotFoundResponse,
+  User,
+} from '@platon/core/common'
+import { IRequest, Mapper, Public, UserService, UUIDParam } from '@platon/core/server'
+import { ACTIVITY_MAIN_FILE, EXERCISE_MAIN_FILE } from '@platon/feature/compiler'
+import { ResourceMovedByAdminNotification } from '@platon/feature/course/common'
+import { NotificationService } from '@platon/feature/notification/server'
+import { ResourceStatus, ResourceTypes } from '@platon/feature/resource/common'
 import { ResourceCompletionDTO } from './completion'
+import { ResourceFileService } from './files'
 import { ResourcePermissionService } from './permissions/permissions.service'
-import { CircleTreeDTO, CreateResourceDTO, ResourceDTO, ResourceFiltersDTO, UpdateResourceDTO } from './resource.dto'
+import {
+  CircleTreeDTO,
+  CreatePreviewResourceDTO,
+  CreateResourceDTO,
+  ResourceDTO,
+  ResourceFiltersDTO,
+  UpdateResourceDTO,
+} from './resource.dto'
 import { ResourceService } from './resource.service'
 import { ResourceViewService } from './views/view.service'
-import { NotificationService } from '@platon/feature/notification/server'
-import { ResourceMovedByAdminNotification } from '@platon/feature/course/common'
-import { ResourceFileService } from './files'
 
 @Controller('resources')
 @ApiTags('Resources')
@@ -31,7 +60,6 @@ export class ResourceController {
   @Selectable({ rootField: 'resources' })
   async search(@Req() req: IRequest, @Query() filters: ResourceFiltersDTO = {}): Promise<ListResponse<ResourceDTO>> {
     let resources: ResourceDTO[] = []
-
     let total = 0
     if (filters.views) {
       const response = await this.resourceViewService.findAll(req.user.id)
@@ -54,6 +82,7 @@ export class ResourceController {
       types: ['CIRCLE'],
       personal: false,
     })
+    await this.resourceService.getPersonal(req.user).then((personal) => circles.push(personal))
 
     const tree = Mapper.map(await this.resourceService.tree(circles), CircleTreeDTO)
     const permissions = await this.permissionService.userPermissionsOnResources(circles, req)
@@ -78,12 +107,18 @@ export class ResourceController {
     })
   }
 
+  @Get('/owners')
+  async listOwners(): Promise<ListResponse<User>> {
+    const owners = await this.resourceService.getAllOwners()
+    return new ListResponse({ resources: owners, total: owners.length })
+  }
+
   @Get('/:id')
   @Expandable(ResourceDTO, { rootField: 'resource' })
   @Selectable({ rootField: 'resource' })
   async find(
     @Req() req: IRequest,
-    @Param('id') id: string,
+    @UUIDParam('id') id: string,
     @Query('markAsViewed') markAsViewed?: string
   ): Promise<ItemResponse<ResourceDTO>> {
     const optional = await this.resourceService.findByIdOrCode(id)
@@ -121,15 +156,78 @@ export class ResourceController {
       throw new ForbiddenResponse(`Operation not allowed on resource: ${input.parentId}`)
     }
 
+    const { files, ...props } = input
+    if (files?.length) {
+      switch (props.type) {
+        case ResourceTypes.EXERCISE:
+          if (!files.some((f) => f.path === EXERCISE_MAIN_FILE)) {
+            throw new BadRequestResponse(`No ${EXERCISE_MAIN_FILE} file found`)
+          }
+          break
+        case ResourceTypes.ACTIVITY:
+          if (!files.some((f) => f.path === ACTIVITY_MAIN_FILE)) {
+            throw new BadRequestResponse(`No ${ACTIVITY_MAIN_FILE} file found`)
+          }
+          break
+      }
+    }
+
     const resource = Mapper.map(
       await this.resourceService.create({
-        ...(await this.resourceService.fromInput(input)),
+        ...(await this.resourceService.fromInput(props)),
         ownerId: req.user.id,
       }),
       ResourceDTO
     )
 
     Object.assign(resource, { permissions })
+
+    if (files?.length) {
+      await this.fileService.repo(
+        resource.id,
+        req,
+        files.reduce((acc, f) => ({ ...acc, [f.path]: f.content }), {})
+      )
+    }
+
+    return new CreatedResponse({ resource })
+  }
+
+  @Public()
+  @Post('/preview')
+  @Expandable(ResourceDTO, { rootField: 'resource' })
+  @Selectable({ rootField: 'resource' })
+  async createPreview(
+    @Req() req: IRequest,
+    @Body() input: CreatePreviewResourceDTO
+  ): Promise<CreatedResponse<ResourceDTO>> {
+    if (!input.files.some((f) => f.path === EXERCISE_MAIN_FILE)) {
+      throw new BadRequestResponse(`No ${EXERCISE_MAIN_FILE} file found`)
+    }
+
+    const user = (await this.userService.findById(DEFAULT_USER_ID)).orElseThrow(
+      () => new InternalServerErrorException(`Default user not found: ${DEFAULT_USER_ID}: should never happen`)
+    )
+    const circle = await this.resourceService.getPersonal(user)
+
+    const resource = Mapper.map(
+      await this.resourceService.create({
+        ownerId: DEFAULT_USER_ID,
+        name: `Preview: ${new Date().toISOString()}`,
+        publicPreview: true,
+        status: ResourceStatus.DRAFT,
+        type: ResourceTypes.EXERCISE,
+        personal: true,
+        parentId: circle.id,
+      }),
+      ResourceDTO
+    )
+
+    await this.fileService.repo(
+      resource.id,
+      req,
+      input.files.reduce((acc, f) => ({ ...acc, [f.path]: f.content }), {})
+    )
 
     return new CreatedResponse({ resource })
   }
@@ -139,7 +237,7 @@ export class ResourceController {
   @Selectable({ rootField: 'resource' })
   async update(
     @Req() req: IRequest,
-    @Param('id') id: string,
+    @UUIDParam('id') id: string,
     @Body() input: UpdateResourceDTO
   ): Promise<ItemResponse<ResourceDTO>> {
     const existing = await this.resourceService.findByIdOrCode(id)
@@ -167,7 +265,7 @@ export class ResourceController {
   @Selectable({ rootField: 'resource' })
   async move(
     @Req() req: IRequest,
-    @Param('id') id: string,
+    @UUIDParam('id') id: string,
     @Body('parentId') parentId: string
   ): Promise<ItemResponse<ResourceDTO>> {
     const existing = await this.resourceService.findByIdOrCode(id)
@@ -204,7 +302,7 @@ export class ResourceController {
   @Selectable({ rootField: 'resource' })
   async moveToOwnerCircle(
     @Req() req: IRequest,
-    @Param('id') id: string,
+    @UUIDParam('id') id: string,
     @Body('ownerId') ownerId: string
   ): Promise<ItemResponse<ResourceDTO>> {
     const existing = await this.resourceService.findByIdOrCode(id)
@@ -246,7 +344,7 @@ export class ResourceController {
   }
 
   @Delete('/:id')
-  async delete(@Req() req: IRequest, @Param('id') id: string): Promise<void> {
+  async delete(@Req() req: IRequest, @UUIDParam('id') id: string): Promise<void> {
     const existing = await this.resourceService.findByIdOrCode(id)
     if (!existing.isPresent()) {
       throw new NotFoundResponse(`Resource not found: ${id}`)

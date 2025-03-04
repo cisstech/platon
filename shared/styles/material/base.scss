@@ -26,6 +26,7 @@ $brand-color-tertiary-tint: #7e57ff;
 $dark-text: #000;
 $dark-primary-text: rgba($dark-text, 0.87);
 $dark-accent-text: rgba($dark-primary-text, 0.54);
+$dark-error-text: #de0029;
 $dark-disabled-text: rgba($dark-primary-text, 0.38);
 $dark-dividers: rgba($dark-primary-text, 0.12);
 $dark-focused: rgba($dark-primary-text, 0.12);
@@ -52,6 +53,8 @@ $mat-light-theme-foreground: (
 // BACKGROUND LIGHT
 
 $light-background: #ffffff;
+$light-bg-darker-1: darken($light-background, 1%);
+$light-bg-darker-2: darken($light-background, 2%);
 $light-bg-darker-5: darken($light-background, 5%);
 $light-bg-darker-10: darken($light-background, 10%);
 $light-bg-darker-20: darken($light-background, 20%);
@@ -80,9 +83,10 @@ $mat-light-theme-background: (
 
 // FOREGROUND DARK
 
-$light-text: #adbac7;
+$light-text: #f2f2f2;
 $light-primary-text: $light-text;
 $light-accent-text: rgba($light-primary-text, 0.7);
+$light-error-text: #ff1a44;
 $light-disabled-text: rgba($light-primary-text, 0.5);
 $light-dividers: rgba($light-primary-text, 0.12);
 $light-focused: rgba($light-primary-text, 0.12);

@@ -1,19 +1,39 @@
-Ce composant représente une matrice par un tableau `cells`.
-Ce tableau contient les cellules de la matrice dont le format est le suivant:
+Le composant Matrix vous permet d'afficher et de manipuler des tableaux de données sous forme matricielle. Idéal pour les exercices de mathématiques, d'algèbre linéaire ou tout autre contexte nécessitant une disposition tabulaire interactive.
 
-```typescript
-{
-    "css"?: string, // Voir API CSS.
-    "value": string, // La valeur d'une cellule de la matrice.
-    "disabled"?: boolean, // Une valeur indiquant si la cellule est désactivée.
-}
-```
+### Structure des données
 
-> Si vous voulez définir uniquement la propriété `value` d'un des éléments du tableau,
-> vous pouvez utiliser une chaine de caractère au lieu d'un objet et les autres propriétés
-> prendront leur valeur par défaut.
+Une matrice est représentée par un tableau unidimensionnel `cells` qui stocke toutes les cellules ligne par ligne. Pour une matrice de dimensions `rows × cols`, la cellule à la position (i, j) se trouve à l'index `i * cols + j` dans ce tableau.
 
-Les dimensions de la matrice sont représentées par les propriétés `cols` et `rows`.
-Si la propriété `cells` n'est pas définie ou ne contient pas `cols` \* `rows` cellules,
-alors le composant ajoutera automatiquement les cellules manquantes avec `0` comme valeur
-par défaut.
+Chaque cellule peut être définie de deux façons:
+
+1. **Format simple**: une chaîne représentant directement la valeur
+
+   ```js
+   '42' // Une cellule contenant la valeur 42
+   ```
+
+2. **Format complet**: un objet avec des propriétés configurables
+   ```js
+   {
+     "value": "42",         // Valeur affichée dans la cellule (obligatoire)
+     "css": "highlight",    // Classes CSS pour le style (optionnel)
+     "disabled": true       // Pour rendre la cellule non-éditable (optionnel)
+   }
+   ```
+
+### Adaptation automatique
+
+Si votre tableau `cells` ne contient pas suffisamment d'éléments pour remplir toute la matrice (moins que `rows × cols`), le composant complétera automatiquement les cellules manquantes avec la valeur `"0"`.
+
+### Redimensionnement
+
+La propriété `resizable` permet aux utilisateurs de modifier les dimensions de la matrice en ajoutant ou supprimant des lignes et des colonnes. Cette fonctionnalité est particulièrement utile pour les exercices où la taille de la solution n'est pas fixe à l'avance.
+
+### Applications pédagogiques
+
+Ce composant est parfaitement adapté pour:
+
+- Des calculs matriciels (addition, multiplication, déterminant)
+- La résolution de systèmes d'équations
+- L'implémentation d'algorithmes sur des tableaux 2D
+- La saisie de données dans des tableaux structurés

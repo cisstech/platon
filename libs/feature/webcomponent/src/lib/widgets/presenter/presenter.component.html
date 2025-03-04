@@ -1,4 +1,4 @@
-<div class="presenter">
+<div class="presenter" #presenterContainer>
   <button
     nz-button
     nzType="default"
@@ -14,11 +14,12 @@
     </ng-template>
   </button>
   <div
+    #revealContainer
     class="reveal r-container presenter-container"
     [class.presenter-fs-content]="fullscreen"
     [class.presenter-fs]="fullscreen"
   >
-    <div class="slides" [innerHtml]="template">
+    <div class="slides" [innerHtml]="content">
       <ng-content></ng-content>
     </div>
   </div>
