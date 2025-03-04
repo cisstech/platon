@@ -56,26 +56,26 @@ Lorsque vous ouvrez `main.plc` dans PLaTon, vous êtes accueilli par un formulai
 
 ## Types de Variables Disponibles
 
-- **Nombre** : Variables numériques avec ou sans contraintes de limite.
+- **Nombre** (`number`) : Variables numériques avec ou sans contraintes de limite.
   - **Options** :
-    - **Min** : Valeur minimale autorisée lors de la saisie.
-    - **Max** : Valeur maximale autorisée lors de la saisie.
-- **Texte** : Chaînes de caractères.
+    - **Min** (`min`): Valeur minimale autorisée lors de la saisie.
+    - **Max** (`max`): Valeur maximale autorisée lors de la saisie.
+- **Texte** (`text`) : Chaînes de caractères.
 - **Code** : Snippets de code qui peuvent être insérés dans l'exercice.
   - **Options** :
-    - **Langage** : Langage de programmation du code.
-- **Booléen** : Valeurs vraies ou fausses.
-- **Fichier** : Permet d'intégrer des URL ou du contenu de fichier directement.
-- **JSON** : Structures de données complexes sous forme d'objets JSON.
-- **Expression Mathématique** : Champ de saisie pour récupérer une expression mathématique (le format de sortie est du Latex)
-- **Liste** : Permet à l'utilisateur de saisir une liste de valeurs.
+    - **Langage** (`language`): Langage de programmation du code.
+- **Booléen** (`boolean`): Valeurs vraies ou fausses.
+- **Fichier** (`file`) : Permet d'intégrer des URL ou du contenu de fichier directement.
+- **JSON** (`json`): Structures de données complexes sous forme d'objets JSON.
+- **Expression Mathématique** (`mathexpr`): Champ de saisie pour récupérer une expression mathématique (le format de sortie est du Latex)
+- **Liste** (`list`): Permet à l'utilisateur de saisir une liste de valeurs.
   - **Options** :
-    - **multiligne** : Permet à l'utilisateur de saisir des valeurs sur plusieurs lignes.
-- **Select** : Permet à l'utilisateur de sélectionner une valeur parmi une liste de valeurs prédéfinies.
+    - **multiligne** (`multiline`): Permet à l'utilisateur de saisir des valeurs sur plusieurs lignes.
+- **Select** (`select`): Permet à l'utilisateur de sélectionner une valeur parmi une liste de valeurs prédéfinies.
   - **Options** :
-    - **Choix multiple** : Permet à l'utilisateur de sélectionner plusieurs valeurs.
-    - **Choix possibles** : La liste de valeurs que l'utilisateur peut sélectionner.
-- **Automate** : Permet à l'utilisateur de dessiner un automate.
+    - **Choix multiple** (`multiple`): Permet à l'utilisateur de sélectionner plusieurs valeurs.
+    - **Choix possibles** (`choices`): La liste de valeurs que l'utilisateur peut sélectionner.
+- **Automate** (`automaton`): Permet à l'utilisateur de dessiner un automate.
 
 <Callout type="info">
   Partout où vous pouvez écrire du texte, vous pouvez utiliser les opérateurs `@copyurl` et `@copycontent` pour insérer
@@ -103,28 +103,34 @@ Un professeur souhaite créer une série d'exercices sur les équations du secon
 
 ```json
 {
-  "a": {
-    "type": "Nombre",
-    "min": -10,
-    "max": 10,
-    "description": "Coefficient de x²"
-  },
-  "b": {
-    "type": "Nombre",
-    "min": -10,
-    "max": 10,
-    "description": "Coefficient de x"
-  },
-  "c": {
-    "type": "Nombre",
-    "min": -10,
-    "max": 10,
-    "description": "Terme constant"
-  },
-  "showHints": {
-    "type": "Booléen",
-    "description": "Afficher les aides pour la résolution des équations"
-  }
+  "inputs": [
+    {
+      "type": "Nombre",
+      "name": "a",
+      "min": -10,
+      "max": 10,
+      "description": "Coefficient de x²"
+    },
+    {
+      "type": "Nombre",
+      "name": "b",
+      "min": -10,
+      "max": 10,
+      "description": "Coefficient de x"
+    },
+    {
+      "type": "Nombre",
+      "name": "c",
+      "min": -10,
+      "max": 10,
+      "description": "Terme constant"
+    },
+    {
+      "type": "Booléen",
+      "name": "showHints",
+      "description": "Afficher les aides pour la résolution des équations"
+    }
+  ]
 }
 ```
 
@@ -143,14 +149,18 @@ Un exercice où les élèves doivent analyser un texte et répondre à des quest
 
 ```json
 {
-  "texte": {
-    "type": "Texte",
-    "description": "Le passage que les élèves doivent lire."
-  },
-  "questions": {
-    "type": "Fichier",
-    "description": "Un fichier JSON contenant les questions et options de réponse."
-  }
+  "inputs": [
+    {
+      "type": "Texte",
+      "name": "texte",
+      "description": "Le passage que les élèves doivent lire."
+    },
+    {
+      "type": "Fichier",
+      "name": "questions",
+      "description": "Un fichier JSON contenant les questions et options de réponse."
+    }
+  ]
 }
 ```
 
@@ -169,17 +179,21 @@ Les élèves doivent écrire un script pour résoudre un problème de programmat
 
 ```json
 {
-  "skeletonCode": {
-    "type": "Code",
-    "description": "Le squelette de code initial que les apprenants doivent compléter.",
-    "options": {
-      "language": "python"
+  "inputs": [
+    {
+      "type": "Code",
+      "name": "skeletonCode",
+      "description": "Le squelette de code initial que les apprenants doivent compléter.",
+      "options": {
+        "language": "python"
+      }
+    },
+    {
+      "type": "Booléen",
+      "name": "debugMode",
+      "description": "Activer ou désactiver le mode débogage pour cet exercice."
     }
-  },
-  "debugMode": {
-    "type": "Booléen",
-    "description": "Activer ou désactiver le mode débogage pour cet exercice."
-  }
+  ]
 }
 ```
 
@@ -198,23 +212,31 @@ Un exercice de langue où les élèves doivent traduire des phrases d'une langue
 
 ```json
 {
-  "sourcePhrase": {
-    "type": "Texte",
-    "description": "La phrase à traduire."
-  },
-  "targetPhrase": {
-    "type": "Texte",
-    "description": "La traduction attendue de la phrase."
-  }
+  "inputs": [
+    {
+      "type": "Texte",
+      "name": "sourcePhrase",
+      "description": "La phrase à traduire."
+    },
+    {
+      "type": "Texte",
+      "name": "targetPhrase",
+      "description": "La traduction attendue de la phrase."
+    }
+  ]
 }
 ```
-
-Chaque exemple montre comment `main.plc` peut être utilisé pour créer des modèles d'exercices flexibles qui peuvent être facilement adaptés et réutilisés pour différents besoins pédagogiques, sans nécessiter que les utilisateurs finaux modifient le code de l'exercice lui-même.
 
 <Callout type="info">
   Dans ces exemples, cette documentation affichage le contenu brut des fichiers `main.plc` pour illustrer les
   possibilités offertes par ce fichier mais dans la pratique, l'édition de ce fichier se fait via un formulaire.
 </Callout>
+
+## Lien entre PLC et PLE
+
+Avant l'exécution de l'exercice, les valeurs des variables configurées dans le fichier `main.plc` remplaceront les valeurs par défaut définies en dehors du builder.
+Si une variable n'est pas déclarée dans le `main.ple` en dehors d'un builder, elle sera automatiquement créée avec la valeur par défaut définie dans le `main.plc`. Il n'est donc pas nécessaire de déclarer toutes les variables dans le `main.ple`.
+Vous pouvez voir le plc comment une manière de définir des valeurs avant le lancement du builder de l'exercice.
 
 ## Bonnes Pratiques
 

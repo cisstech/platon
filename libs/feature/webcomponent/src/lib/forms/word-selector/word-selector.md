@@ -43,14 +43,14 @@ Voici comment évolue l'état du composant lors d'une interaction typique:
 ```typescript
 // État initial
 {
-  words: ["chat", "dort", "Le", "tapis", "sur", "tranquillement", "doucement"],
+  words: ["chat", "dort", "Le", "tapis", "sur", "tranquillement", "doucement", "le"],
   selectedWords: []
 }
 
 // Après sélection de quelques mots
 {
   words: ["tapis", "sur", "doucement"],
-  selectedWords: ["Le", "chat", "dort", "tranquillement"]
+  selectedWords: ["Le", "chat", "dort", "le", "tranquillement"]
 }
 ```
 
