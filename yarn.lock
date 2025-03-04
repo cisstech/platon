@@ -2242,25 +2242,25 @@
   resolved "https://registry.yarnpkg.com/@braintree/sanitize-url/-/sanitize-url-6.0.4.tgz#923ca57e173c6b232bbbb07347b1be982f03e783"
   integrity sha512-s3jaWicZd0pkP0jf5ysyHUI/RE7MHos6qlToFcGWXVp+ykHOy77OUMrfbgJ9it2C5bow7OIQwYYaHjk9XlBQ2A==
 
-"@cisstech/nestjs-expand@^1.5.0":
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/@cisstech/nestjs-expand/-/nestjs-expand-1.5.0.tgz#9f6d8e30879e5151c8853c066f9a4f36dea420f6"
-  integrity sha512-JLKJeM3h2Q3OnC3BjXNWSxMmmULk9Orl0UcmyE0PjhzH32o29rBQe79COhMq0rL+Bdlag9Zsa3Yh0WrFIs2s6g==
+"@cisstech/nestjs-expand@^1.6.0":
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/@cisstech/nestjs-expand/-/nestjs-expand-1.6.0.tgz#8a66f04e16a04071c4cd502d9b02bd2b6face833"
+  integrity sha512-hJ6C5V5WZfDnEeaDs33TqS4E0YZxEP1BBdw8Uc9vAPKP3P2bTE3S8m81x00Ej6XYIeqMvV/P1cmDtV11GAk/Bw==
   dependencies:
     rxjs "^7.8.0"
     tslib "^2.3.0"
 
-"@cisstech/nge-ide@^18.0.1":
-  version "18.0.1"
-  resolved "https://registry.yarnpkg.com/@cisstech/nge-ide/-/nge-ide-18.0.1.tgz#d776de3e27d3b9930a12229ead882468fbf2e74e"
-  integrity sha512-Fx5rYf7LMXslk2r1vNIbolRXngbPVqZiVv7R1K0q88D3DYtzq6RIBHYRIf+pr/ImPMGsXloBPp2SBluu1JUrlg==
+"@cisstech/nge-ide@^18.1.0":
+  version "18.1.0"
+  resolved "https://registry.yarnpkg.com/@cisstech/nge-ide/-/nge-ide-18.1.0.tgz#69133141a210c2c06e8ab5f512bb6fbf78b3a7f1"
+  integrity sha512-4DSj82mP6XzyenctEjIM+BbHpqG9hO06gQy4qI668Kzs0s1AG5lrTuIvgpJNzkXOHULqKxeF0v80sMsLvPu2hw==
   dependencies:
     tslib "^2.0.0"
 
-"@cisstech/nge@^18.0.4":
-  version "18.0.4"
-  resolved "https://registry.yarnpkg.com/@cisstech/nge/-/nge-18.0.4.tgz#dedd49c3322f002913fa144422892f98b562f96a"
-  integrity sha512-6sDMWiQVYLrMkgpPOoIcvHAJvBYRwsulPH9RERx2oWaoCxi8tMQGbaS2Zcce8rI1W5Lz8cWgoEK2ivT9sOrIAw==
+"@cisstech/nge@^18.1.0":
+  version "18.1.0"
+  resolved "https://registry.yarnpkg.com/@cisstech/nge/-/nge-18.1.0.tgz#61e2699d7c81b6a740dae6ca810584b92684b9f2"
+  integrity sha512-X8qbHJu403+NKLAv/rXGe/CHiUvHakd2KoZwKMhDFGhIcjziCb5Dh/zOZP9VTmeHFSxDOCFdSwXg7B+xeYWFAA==
   dependencies:
     tslib "^2.3.0"
 
@@ -17457,10 +17457,10 @@ module-details-from-path@^1.0.3:
   resolved "https://registry.yarnpkg.com/module-details-from-path/-/module-details-from-path-1.0.3.tgz#114c949673e2a8a35e9d35788527aa37b679da2b"
   integrity sha512-ySViT69/76t8VhE1xXHK6Ch4NcDd26gx0MzKXLO+F7NOtnqH68d9zF94nT8ZWSxXh8ELOERsnJO/sWt1xZYw5A==
 
-monaco-editor@^0.43.0:
-  version "0.43.0"
-  resolved "https://registry.yarnpkg.com/monaco-editor/-/monaco-editor-0.43.0.tgz#cb02a8d23d1249ad00b7cffe8bbecc2ac09d4baf"
-  integrity sha512-cnoqwQi/9fml2Szamv1XbSJieGJ1Dc8tENVMD26Kcfl7xGQWp7OBKMjlwKVGYFJ3/AXJjSOGvcqK7Ry/j9BM1Q==
+monaco-editor@^0.52.2:
+  version "0.52.2"
+  resolved "https://registry.yarnpkg.com/monaco-editor/-/monaco-editor-0.52.2.tgz#53c75a6fcc6802684e99fd1b2700299857002205"
+  integrity sha512-GEQWEZmfkOGLdd3XK8ryrfWz3AIP8YymVXiPHEdewrUq7mh0qrKrfHLNCXcbB6sTnMLnOZ3ztSiKcciFUkIJwQ==
 
 mri@^1.1.0:
   version "1.2.0"
