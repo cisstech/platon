@@ -1,21 +1,21 @@
-import * as ts from 'typescript';
+import * as ts from 'typescript'
 
 export interface Change {
-  description: string;
-  order: number;
-  path: string;
+  description: string
+  order: number
+  path: string
 }
 
 /**
  * An operation that inserts new text at the given position.
  */
 export class InsertChange implements Change {
-  order: number;
-  description: string;
+  order: number
+  description: string
 
   constructor(public path: string, public pos: number, public toAdd: string) {
-    this.description = `Inserted ${toAdd} into ${path} at ${pos}`;
-    this.order = pos;
+    this.description = `Inserted ${toAdd} into ${path} at ${pos}`
+    this.order = pos
   }
 }
 
@@ -27,33 +27,28 @@ export class InsertChange implements Change {
  * @param recursive Whether to check sub-children for the syntax kind.
  * @return all nodes of syntax kind, or [] if none is found
  */
-export function findNodes(
-  node: ts.Node,
-  kind: ts.SyntaxKind,
-  max = Infinity,
-  recursive = true
-): ts.Node[] {
+export function findNodes(node: ts.Node, kind: ts.SyntaxKind, max = Infinity, recursive = true): ts.Node[] {
   if (!node || max == 0) {
-    return [];
+    return []
   }
 
-  const arr: ts.Node[] = [];
+  const arr: ts.Node[] = []
   if (node.kind === kind) {
-    arr.push(node);
-    max--;
+    arr.push(node)
+    max--
   }
 
   if (max > 0 && recursive) {
     for (const child of node.getChildren()) {
       findNodes(child, kind, max - arr.length, recursive).forEach((node) => {
         if (max > arr.length) {
-          arr.push(node);
+          arr.push(node)
         }
-      });
+      })
     }
   }
 
-  return arr;
+  return arr
 }
 
 /**
@@ -66,21 +61,23 @@ export function insertImport(
   fileName: string,
   isDefault = false
 ): InsertChange {
-  const rootNode = source;
-  const allImports = findNodes(rootNode, ts.SyntaxKind.ImportDeclaration);
+  const rootNode = source
+  const allImports = findNodes(rootNode, ts.SyntaxKind.ImportDeclaration)
 
   // Get the index of the last import statement
   if (allImports.length > 0) {
-    const lastImport = allImports[allImports.length - 1];
+    const lastImport = allImports[allImports.length - 1]
     const text = isDefault
       ? `import ${symbolName} from '${fileName}';\n`
-      : `import { ${symbolName} } from '${fileName}';\n`;
+      : `import { ${symbolName} } from '${fileName}';\n`
 
-    return new InsertChange(fileToEdit, lastImport.end + 1, text);
+    return new InsertChange(fileToEdit, lastImport.end + 1, text)
   }
 
   // No imports found, insert at the beginning of the file
-  return new InsertChange(fileToEdit, 0, isDefault
-    ? `import ${symbolName} from '${fileName}';\n`
-    : `import { ${symbolName} } from '${fileName}';\n`);
+  return new InsertChange(
+    fileToEdit,
+    0,
+    isDefault ? `import ${symbolName} from '${fileName}';\n` : `import { ${symbolName} } from '${fileName}';\n`
+  )
 }

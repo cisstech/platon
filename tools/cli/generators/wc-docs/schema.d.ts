@@ -1,4 +1,4 @@
 export interface WcDocsGeneratorSchema {
-  sourceDir: string;
-  outputDir: string;
+  sourceDir: string
+  outputDir: string
 }

@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "dependencies": {
     "@nx/devkit": "19.6.4",
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "typescript": "5.5.4",
+    "@nrwl/devkit": "19.6.4"
   },
   "type": "commonjs",
   "main": "./src/index.js",

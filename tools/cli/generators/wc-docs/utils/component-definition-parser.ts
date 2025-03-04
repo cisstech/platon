@@ -1,15 +1,15 @@
-import * as ts from 'typescript';
-import * as fs from 'fs';
-import * as path from 'path';
+import * as ts from 'typescript'
+import * as fs from 'fs'
+import * as path from 'path'
 
 /**
  * Represents a component definition extracted from a TypeScript file
  */
 export interface ExtractedComponentDefinition {
-  name: string;
-  selector: string;
-  description: string;
-  schema: Record<string, any>;
+  name: string
+  selector: string
+  description: string
+  schema: Record<string, any>
 }
 
 /**
@@ -22,15 +22,10 @@ export class ComponentDefinitionParser {
    * @returns The extracted component definition or null if none found
    */
   static extractComponentDefinition(filePath: string): ExtractedComponentDefinition | null {
-    const fileContent = fs.readFileSync(filePath, 'utf8');
-    const sourceFile = ts.createSourceFile(
-      path.basename(filePath),
-      fileContent,
-      ts.ScriptTarget.Latest,
-      true
-    );
+    const fileContent = fs.readFileSync(filePath, 'utf8')
+    const sourceFile = ts.createSourceFile(path.basename(filePath), fileContent, ts.ScriptTarget.Latest, true)
 
-    let componentDefinition: ExtractedComponentDefinition | null = null;
+    let componentDefinition: ExtractedComponentDefinition | null = null
 
     // Traverse the AST to find the defineWebComponent call
     function visit(node: ts.Node) {
@@ -41,17 +36,17 @@ export class ComponentDefinitionParser {
         node.arguments.length > 0
       ) {
         // Found the defineWebComponent call, extract the object literal
-        const arg = node.arguments[0];
+        const arg = node.arguments[0]
         if (ts.isObjectLiteralExpression(arg)) {
-          componentDefinition = extractDefinitionFromObjectLiteral(arg);
+          componentDefinition = extractDefinitionFromObjectLiteral(arg)
         }
       }
 
-      ts.forEachChild(node, visit);
+      ts.forEachChild(node, visit)
     }
 
-    visit(sourceFile);
-    return componentDefinition;
+    visit(sourceFile)
+    return componentDefinition
   }
 }
 
@@ -61,29 +56,29 @@ export class ComponentDefinitionParser {
  * @returns Extracted component definition
  */
 function extractDefinitionFromObjectLiteral(objLiteral: ts.ObjectLiteralExpression): ExtractedComponentDefinition {
-  const result: Partial<ExtractedComponentDefinition> = {};
+  const result: Partial<ExtractedComponentDefinition> = {}
 
-  objLiteral.properties.forEach(prop => {
-    if (!ts.isPropertyAssignment(prop)) return;
+  objLiteral.properties.forEach((prop) => {
+    if (!ts.isPropertyAssignment(prop)) return
 
-    const propName = prop.name.getText();
+    const propName = prop.name.getText()
     switch (propName) {
       case 'name':
-        result.name =  extractObjectLiteralValue(prop.initializer);
-        break;
+        result.name = extractObjectLiteralValue(prop.initializer)
+        break
       case 'selector':
-        result.selector = extractObjectLiteralValue(prop.initializer);
-        break;
+        result.selector = extractObjectLiteralValue(prop.initializer)
+        break
       case 'description':
-        result.description = extractObjectLiteralValue(prop.initializer);
-        break;
+        result.description = extractObjectLiteralValue(prop.initializer)
+        break
       case 'schema':
-        result.schema = extractObjectLiteralValue(prop.initializer);
-        break;
+        result.schema = extractObjectLiteralValue(prop.initializer)
+        break
     }
-  });
+  })
 
-  return result as ExtractedComponentDefinition;
+  return result as ExtractedComponentDefinition
 }
 
 /**
@@ -93,24 +88,24 @@ function extractDefinitionFromObjectLiteral(objLiteral: ts.ObjectLiteralExpressi
  */
 function extractObjectLiteralValue(node: ts.Node): any {
   if (ts.isObjectLiteralExpression(node)) {
-    const obj: Record<string, any> = {};
-    node.properties.forEach(prop => {
+    const obj: Record<string, any> = {}
+    node.properties.forEach((prop) => {
       if (ts.isPropertyAssignment(prop)) {
-        const propName = prop.name.getText().replace(/['"`]/g, '');
-        obj[propName] = extractObjectLiteralValue(prop.initializer);
+        const propName = prop.name.getText().replace(/['"`]/g, '')
+        obj[propName] = extractObjectLiteralValue(prop.initializer)
       }
-    });
-    return obj;
+    })
+    return obj
   } else if (ts.isArrayLiteralExpression(node)) {
-    return node.elements.map(element => extractObjectLiteralValue(element));
+    return node.elements.map((element) => extractObjectLiteralValue(element))
   } else if (ts.isStringLiteral(node)) {
-    return node.text.replace(/[\`]/g, '');
+    return node.text.replace(/[\`]/g, '')
   } else if (ts.isNumericLiteral(node)) {
-    return Number(node.text);
+    return Number(node.text)
   } else if (node.kind === ts.SyntaxKind.TrueKeyword || node.kind === ts.SyntaxKind.FalseKeyword) {
-    return node.kind === ts.SyntaxKind.TrueKeyword;
+    return node.kind === ts.SyntaxKind.TrueKeyword
   } else {
     // For other types, return the text representation
-    return node.getText().replace(/[\`]/g, '');
+    return node.getText().replace(/[\`]/g, '')
   }
 }
