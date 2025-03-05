@@ -30,8 +30,6 @@ import { NgeMarkdownModule } from '@cisstech/nge/markdown'
 
 import { NzAlertModule } from 'ng-zorro-antd/alert'
 
-import { SafePipe } from '@cisstech/nge/pipes'
-
 import { DialogModule, DialogService, UserAvatarComponent } from '@platon/core/browser'
 import { ExercisePlayer, PlayerActions, PlayerNavigation } from '@platon/feature/player/common'
 
@@ -103,7 +101,6 @@ type FullscreenElement = HTMLElement & {
     NzStatisticModule,
     MatExpansionModule,
 
-    SafePipe,
     IsUUIDPipe,
     DialogModule,
     UserAvatarComponent,

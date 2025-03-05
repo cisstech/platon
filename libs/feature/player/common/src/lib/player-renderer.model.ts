@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { deepCopy, deepMerge } from '@platon/core/common'
+import { deepCopy, deepMerge, DEFAULT_USER_ID } from '@platon/core/common'
 import {
   ActivitySettings,
   ExerciseVariables,
@@ -219,7 +219,7 @@ export const withExercisePlayer = (session: ExerciseSession, answer?: Answer): E
     remainingAttempts,
     answerId: answer?.id,
     sessionId: session.id,
-    author: variables.author,
+    author: variables.author === DEFAULT_USER_ID ? undefined : variables.author,
     title: variables.title,
     form: variables.form,
     statement: variables.statement,
