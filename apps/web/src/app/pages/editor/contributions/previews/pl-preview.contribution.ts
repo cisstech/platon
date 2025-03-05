@@ -172,9 +172,10 @@ export class Contribution implements IContribution {
 
     toolbarService.registerButton({
       command: resourceCommand,
+      buttonType: 'text',
       colors: {
         foreground: 'white',
-        background: 'var(--brand-color-primary)',
+        background: 'transparent',
       },
     })
   }
