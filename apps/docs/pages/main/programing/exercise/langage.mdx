@@ -211,16 +211,17 @@ Sans besoin d'échapper les caractères spéciaux.
 ==
 ```
 
-### Pour du code exécutable (avec coloration syntaxique)
+### Pour du code (avec coloration syntaxique)
+
+Le shebang `#!lang=XXX` permet d'activer la coloration syntaxique du language dans la variable multiligne
+
 ```pl-js
 grader == #!lang=js
-// Ce code sera exécuté dans la sandbox JavaScript
 let somme = a + b;
 grade = (somme === input.value) ? 100 : 0;
 ==
 
 builder == #!lang=py
-# Ce code sera exécuté dans la sandbox Python
 import random
 a = random.randint(1, 10)
 b = random.randint(1, 10)
