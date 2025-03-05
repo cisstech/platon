@@ -4,7 +4,7 @@ description: Jeu interactif de correspondance entre paires d'éléments, présen
 ---
 
 import { Tabs, Tab } from 'nextra/components'
-import { ComponentProperties } from '../../../components'
+import { ComponentProperties, Playground } from '../../../components'
 import { useAbsoluteUrl } from '../../../hooks'
 
 # BindedBubbles
@@ -54,10 +54,23 @@ Pour optimiser l'expérience d'apprentissage, gardez un bon équilibre dans le n
 
 ## Exemple interactif
 
-<iframe
-  src={useAbsoluteUrl('playground/components/wc-binded-bubbles')}
-  style={{ width: '100%', height: '700px', border: 'none' }}
-></iframe>
+<Playground
+  width="100%"
+  height="700px"
+  items={[
+    {
+      name: 'Visualisation',
+      url: 'playground/components/wc-binded-bubbles',
+    },
+    ...[
+      {
+        name: 'Exemple: Traductions',
+        url: '/playground/exercises/binded-bubbles/translation.ple',
+        code: 'sandbox = "node"\n\nbubbles = :wc-binded-bubbles\nbubbles.items = [\n  { item1: { content: "Bonjour" }, item2: { content: "Hello" } },\n  { item1: { content: "Au revoir" }, item2: { content: "Goodbye" } },\n  { item1: { content: "Merci" }, item2: { content: "Thank you" } }\n]\n\ntitle ==\nMemory de traductions\n==\n\nstatement ==\nAssociez les mots français à leur traduction anglaise.\n==\n\nform ==\n{{ bubbles }}\n==\n\ngrader == #!lang=js\ngrade = 0\nfeedback.type = "error"\nfeedback.content = "Mauvaise réponse"\nif (bubbles.nbError == 0) {\n  grade = 100\n  feedback.type = "success"\n  feedback.content = "Bravo !"\n}\n==\n',
+      },
+    ],
+  ]}
+/>
 
 ## API
 

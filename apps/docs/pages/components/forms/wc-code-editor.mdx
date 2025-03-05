@@ -4,7 +4,7 @@ description: Éditeur de code complet avec coloration syntaxique pour multiples 
 ---
 
 import { Tabs, Tab } from 'nextra/components'
-import { ComponentProperties } from '../../../components'
+import { ComponentProperties, Playground } from '../../../components'
 import { useAbsoluteUrl } from '../../../hooks'
 
 # CodeEditor
@@ -44,10 +44,17 @@ Pour une expérience optimale, adaptez la hauteur de l'éditeur en fonction de l
 
 ## Exemple interactif
 
-<iframe
-  src={useAbsoluteUrl('playground/components/wc-code-editor')}
-  style={{ width: '100%', height: '700px', border: 'none' }}
-></iframe>
+<Playground
+  width="100%"
+  height="700px"
+  items={[
+    {
+      name: 'Visualisation',
+      url: 'playground/components/wc-code-editor',
+    },
+    ...[],
+  ]}
+/>
 
 ## API
 

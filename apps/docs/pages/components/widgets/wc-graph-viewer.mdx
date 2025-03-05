@@ -4,7 +4,7 @@ description: Visualiseur de graphes utilisant le format DOT pour représenter de
 ---
 
 import { Tabs, Tab } from 'nextra/components'
-import { ComponentProperties } from '../../../components'
+import { ComponentProperties, Playground } from '../../../components'
 import { useAbsoluteUrl } from '../../../hooks'
 
 # GraphViewer
@@ -122,10 +122,17 @@ La puissance du langage DOT permet de créer rapidement des visualisations compl
 
 ## Exemple interactif
 
-<iframe
-  src={useAbsoluteUrl('playground/components/wc-graph-viewer')}
-  style={{ width: '100%', height: '700px', border: 'none' }}
-></iframe>
+<Playground
+  width="100%"
+  height="700px"
+  items={[
+    {
+      name: 'Visualisation',
+      url: 'playground/components/wc-graph-viewer',
+    },
+    ...[],
+  ]}
+/>
 
 ## API
 

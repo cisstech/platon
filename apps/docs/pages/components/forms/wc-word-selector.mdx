@@ -4,7 +4,7 @@ description: Interface interactive pour sélectionner et organiser des mots afin
 ---
 
 import { Tabs, Tab } from 'nextra/components'
-import { ComponentProperties } from '../../../components'
+import { ComponentProperties, Playground } from '../../../components'
 import { useAbsoluteUrl } from '../../../hooks'
 
 # WordSelector
@@ -75,10 +75,17 @@ Ce composant permet de créer des exercices variés comme la construction de phr
 
 ## Exemple interactif
 
-<iframe
-  src={useAbsoluteUrl('playground/components/wc-word-selector')}
-  style={{ width: '100%', height: '700px', border: 'none' }}
-></iframe>
+<Playground
+  width="100%"
+  height="700px"
+  items={[
+    {
+      name: 'Visualisation',
+      url: 'playground/components/wc-word-selector',
+    },
+    ...[],
+  ]}
+/>
 
 ## API
 

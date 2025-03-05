@@ -4,7 +4,7 @@ description: Système avancé d'affichage de retours détaillés et hiérarchis�
 ---
 
 import { Tabs, Tab } from 'nextra/components'
-import { ComponentProperties } from '../../../components'
+import { ComponentProperties, Playground } from '../../../components'
 import { useAbsoluteUrl } from '../../../hooks'
 
 # FoldableFeedback
@@ -90,10 +90,17 @@ Ce composant est particulièrement utile pour les exercices de programmation, le
 
 ## Exemple interactif
 
-<iframe
-  src={useAbsoluteUrl('playground/components/wc-foldable-feedback')}
-  style={{ width: '100%', height: '700px', border: 'none' }}
-></iframe>
+<Playground
+  width="100%"
+  height="700px"
+  items={[
+    {
+      name: 'Visualisation',
+      url: 'playground/components/wc-foldable-feedback',
+    },
+    ...[],
+  ]}
+/>
 
 ## API
 

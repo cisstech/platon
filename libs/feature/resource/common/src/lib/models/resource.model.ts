@@ -247,8 +247,20 @@ export interface CreateResource extends ExpandableModel<ResourceExpandableFields
   readonly files?: FileCreate[]
 }
 
+/**
+ * Payload for dynamically creating a preview resource.
+ */
 export interface CreatePreviewResource extends ExpandableModel<ResourceExpandableFields> {
+  /**
+   * Content of files to create/update with the resource.
+   * @remarks main.ple file is mandatory.
+   */
   readonly files: FileCreate[]
+
+  /**
+   * Optional resource identifier retrieved from previous call to preview endpoint.
+   */
+  readonly resourceId?: string
 }
 
 /**

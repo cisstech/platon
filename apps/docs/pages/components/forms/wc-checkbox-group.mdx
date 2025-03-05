@@ -4,7 +4,7 @@ description: Ensemble de cases à cocher permettant la sélection multiple d'opt
 ---
 
 import { Tabs, Tab } from 'nextra/components'
-import { ComponentProperties } from '../../../components'
+import { ComponentProperties, Playground } from '../../../components'
 import { useAbsoluteUrl } from '../../../hooks'
 
 # CheckboxGroup
@@ -93,10 +93,23 @@ La prise en charge du format Markdown dans le contenu des options permet d'inclu
 
 ## Exemple interactif
 
-<iframe
-  src={useAbsoluteUrl('playground/components/wc-checkbox-group')}
-  style={{ width: '100%', height: '700px', border: 'none' }}
-></iframe>
+<Playground
+  width="100%"
+  height="700px"
+  items={[
+    {
+      name: 'Visualisation',
+      url: 'playground/components/wc-checkbox-group',
+    },
+    ...[
+      {
+        name: 'Exemple: Système solaire',
+        url: '/playground/exercises/checkbox-group/solar-system.ple',
+        code: '# Définition de la sandbox\nsandbox = "node"\n\n# Initialisation du composant CheckboxGroup\ncheckboxGroup = :wc-checkbox-group\ncheckboxGroup.items = [\n  "La Terre",\n  "Mars",\n  "Pluton",\n  "Jupiter",\n  "Venus"\n]\n\n# Titre de l\'exercice\ntitle ==\nQCM : Quelles sont les planètes du système solaire ?\n==\n\n# Énoncé de l\'exercice\nstatement ==\nVeuillez sélectionner toutes les planètes qui font partie de notre système solaire.\n==\n\n# Formulaire de l\'exercice\nform ==\n{{ checkboxGroup }}\n==\n\nhint = ["Un des choix n\'est plus une planète depuis 2006"]\n\n# Builder\nbuilder == #!lang=js\n// Mélangement aléatoire des choix\ncheckboxGroup.items = checkboxGroup.items.sort(() => Math.random() - 0.5);\n==\n\n\n# Grader\ngrader == #!lang=js\n\ngrade = 0;\nfeedback.type = "error";\nfeedback.content = "Incorrect. Veuillez réessayer.";\n\n// Réponses correctes\nconst correctAnswers = ["La Terre", "Mars", "Jupiter", "Venus"];\n\n// Récupérer les réponses sélectionnées\nconst selectedAnswers = checkboxGroup.items\n    .filter(item => item.checked)\n    .map(item => item.content);\n\n// Vérifier si toutes les réponses correctes ont été sélectionnées et aucune réponse incorrecte n\'a été sélectionnée\nif (selectedAnswers.length === correctAnswers.length && selectedAnswers.every(answer => correctAnswers.includes(answer))) {\n  grade = 100;\n  feedback.type = "success";\n  feedback.content = "Félicitations ! Vous avez correctement identifié toutes les planètes du système solaire.";\n}\n\n==\n',
+      },
+    ],
+  ]}
+/>
 
 ## API
 

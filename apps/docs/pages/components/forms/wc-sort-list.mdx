@@ -4,7 +4,7 @@ description: Liste interactive d'éléments réorganisables par glisser-déposer
 ---
 
 import { Tabs, Tab } from 'nextra/components'
-import { ComponentProperties } from '../../../components'
+import { ComponentProperties, Playground } from '../../../components'
 import { useAbsoluteUrl } from '../../../hooks'
 
 # SortList
@@ -64,10 +64,23 @@ L'ordre final des éléments est automatiquement enregistré, ce qui facilite l'
 
 ## Exemple interactif
 
-<iframe
-  src={useAbsoluteUrl('playground/components/wc-sort-list')}
-  style={{ width: '100%', height: '700px', border: 'none' }}
-></iframe>
+<Playground
+  width="100%"
+  height="700px"
+  items={[
+    {
+      name: 'Visualisation',
+      url: 'playground/components/wc-sort-list',
+    },
+    ...[
+      {
+        name: 'Exemple: Histoire',
+        url: '/playground/exercises/sort-list/history.ple',
+        code: 'sandbox = "node"\n\n// Initialisation du composant SortList\nmaListe = :wc-sort-list\nmaListe.items = [\n  // (1776)\n  "Déclaration d\'indépendance des États-Unis",\n  // (1789)\n  "Prise de la Bastille",\n  // (1918)\n  "Fin de la Première Guerre mondiale",\n  // (1989)\n  "Chute du mur de Berlin"\n]\n\n\n// Mélange des éléments au début de l\'exercice\nbuilder == #!lang=js\n\nfunction shuffleArray(array) {\n  for (let i = array.length - 1; i > 0; i--) {\n    const j = Math.floor(Math.random() * (i + 1));\n    [array[i], array[j]] = [array[j], array[i]];\n  }\n}\n\nshuffleArray(maListe.items)\n\n==\n\n// Évaluation de la réponse (exemple simplifié)\ngrader == #!lang=js\ngrade = 0\nfeedback.type = "error"\nfeedback.content = "Mauvaise réponse"\nconst correctOrder = [\n  "Déclaration d\'indépendance des États-Unis",\n  "Prise de la Bastille",\n  "Fin de la Première Guerre mondiale",\n  "Chute du mur de Berlin"\n]\n\n// Vérifier l\'ordre de la liste\nif (JSON.stringify(correctOrder) == JSON.stringify(maListe.items.map(e => e.content))) {\n    grade = 100\n    feedback.type = "success"\n    feedback.content = "Bonne réponse"\n}\n\n==\n\n// Énoncé de l\'exercice\ntitle==\nRemettre les événements historiques dans l\'ordre\n==\n\nstatement ==\nRéorganisez les événements suivants dans l\'ordre chronologique :\n==\n\nform==\n{{ maListe }}\n==\n\nsolution==\nVoici l\'ordre chronologique correct :\nDéclaration d\'indépendance des États-Unis (1776)\nPrise de la Bastille (1789)\nFin de la Première Guerre mondiale (1918)\nChute du mur de Berlin (1989)\n==\n',
+      },
+    ],
+  ]}
+/>
 
 ## API
 

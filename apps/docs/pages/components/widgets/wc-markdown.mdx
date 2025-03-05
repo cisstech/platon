@@ -4,7 +4,7 @@ description: Composant de rendu Markdown avec support pour éléments avancés c
 ---
 
 import { Tabs, Tab } from 'nextra/components'
-import { ComponentProperties } from '../../../components'
+import { ComponentProperties, Playground } from '../../../components'
 import { useAbsoluteUrl } from '../../../hooks'
 
 # Markdown
@@ -94,10 +94,17 @@ Pour explorer toutes les possibilités offertes par ce composant:
 
 ## Exemple interactif
 
-<iframe
-  src={useAbsoluteUrl('playground/components/wc-markdown')}
-  style={{ width: '100%', height: '700px', border: 'none' }}
-></iframe>
+<Playground
+  width="100%"
+  height="700px"
+  items={[
+    {
+      name: 'Visualisation',
+      url: 'playground/components/wc-markdown',
+    },
+    ...[],
+  ]}
+/>
 
 ## API
 

@@ -1,0 +1,71 @@
+sandbox = "node"
+
+// Initialisation du composant SortList
+maListe = :wc-sort-list
+maListe.items = [
+  // (1776)
+  "Déclaration d'indépendance des États-Unis",
+  // (1789)
+  "Prise de la Bastille",
+  // (1918)
+  "Fin de la Première Guerre mondiale",
+  // (1989)
+  "Chute du mur de Berlin"
+]
+
+
+// Mélange des éléments au début de l'exercice
+builder == #!lang=js
+
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
+shuffleArray(maListe.items)
+
+==
+
+// Évaluation de la réponse (exemple simplifié)
+grader == #!lang=js
+grade = 0
+feedback.type = "error"
+feedback.content = "Mauvaise réponse"
+const correctOrder = [
+  "Déclaration d'indépendance des États-Unis",
+  "Prise de la Bastille",
+  "Fin de la Première Guerre mondiale",
+  "Chute du mur de Berlin"
+]
+
+// Vérifier l'ordre de la liste
+if (JSON.stringify(correctOrder) == JSON.stringify(maListe.items.map(e => e.content))) {
+    grade = 100
+    feedback.type = "success"
+    feedback.content = "Bonne réponse"
+}
+
+==
+
+// Énoncé de l'exercice
+title==
+Remettre les événements historiques dans l'ordre
+==
+
+statement ==
+Réorganisez les événements suivants dans l'ordre chronologique :
+==
+
+form==
+{{ maListe }}
+==
+
+solution==
+Voici l'ordre chronologique correct :
+Déclaration d'indépendance des États-Unis (1776)
+Prise de la Bastille (1789)
+Fin de la Première Guerre mondiale (1918)
+Chute du mur de Berlin (1989)
+==

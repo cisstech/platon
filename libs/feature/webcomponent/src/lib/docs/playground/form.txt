@@ -1,0 +1,60 @@
+AutomatonEditor
+Créer un exercice où l'étudiant doit concevoir un automate fini qui reconnaît un langage régulier spécifique. AutomatonEditor
+Utiliser l'éditeur pour visualiser et manipuler des automates existants, permettant aux étudiants de comprendre leur fonctionnement. AutomatonEditor
+Demander aux étudiants de transformer une expression régulière donnée en un automate fini équivalent. AutomatonEditor
+BindedBubbles
+Concevoir un jeu de mémoire pour l'apprentissage du vocabulaire, où les étudiants doivent associer des mots à leurs définitions. BindedBubbles
+Créer un exercice d'association de paires, reliant des concepts à des exemples concrets. BindedBubbles
+Mettre en place une activité de type "memory" pour aider à la mémorisation de traductions de mots dans une langue étrangère. BindedBubbles
+CheckboxGroup
+Élaborer un QCM à réponses multiples où les étudiants doivent cocher toutes les bonnes réponses parmi une liste d'options. CheckboxGroup
+Créer une liste de vérification (checklist) pour s'assurer que les étudiants ont bien suivi toutes les étapes d'une procédure. CheckboxGroup
+Mettre en place un exercice de classification où les étudiants doivent cocher tous les éléments appartenant à une catégorie spécifique. CheckboxGroup
+CodeEditor
+Concevoir un exercice de programmation où les étudiants doivent écrire du code complet dans un langage spécifique. CodeEditor
+Créer une activité de débogage où un code avec des erreurs est présenté, et les étudiants doivent identifier et corriger ces erreurs. CodeEditor
+Mettre en place un exercice à trous où certaines parties du code doivent être complétées par les étudiants. CodeEditor
+DragDrop
+Créer un exercice d'association de termes avec leurs définitions, où les étudiants doivent faire glisser chaque terme vers sa définition correspondante. DragDrop
+Concevoir une activité de classification d'éléments dans diverses catégories, où les étudiants doivent faire glisser chaque élément vers la catégorie appropriée. DragDrop
+Mettre en place un exercice de placement d'étiquettes sur un schéma ou une image, où les étudiants doivent faire glisser chaque étiquette vers la zone correspondante. DragDrop
+InputBox
+Créer un exercice où les étudiants doivent entrer une réponse courte à une question. InputBox
+Concevoir un problème de calcul numérique où les étudiants doivent saisir la réponse sous forme de nombre. InputBox
+Mettre en place un exercice de saisie de code, où les étudiants doivent entrer une ligne de code spécifique. InputBox
+Jsx
+Créer une figure géométrique interactive où les étudiants peuvent explorer les propriétés géométriques en manipulant des points et des lignes. Jsx
+Concevoir une simulation physique interactive où les étudiants peuvent modifier des paramètres et observer les résultats en temps réel. Jsx
+Mettre en place un exercice d'exploration de lieux géométriques, où les étudiants peuvent déplacer des points pour tracer une courbe spécifique. Jsx
+MatchList
+Élaborer un exercice d'appariement où les étudiants doivent associer des termes à leurs définitions en traçant des lignes. MatchList
+Créer une activité d'association de mots à leurs traductions dans une langue étrangère. MatchList
+Mettre en place un exercice reliant des formules mathématiques à leurs applications concrètes. MatchList
+MathLive
+Concevoir un exercice de calcul différentiel et intégral où les étudiants doivent saisir des expressions mathématiques complexes en notation LaTeX. MathLive
+Créer une activité d'algèbre où les étudiants doivent résoudre des équations et saisir les solutions en utilisant la notation mathématique appropriée. MathLive
+Mettre en place un exercice sur les fractions, les racines et autres expressions complexes, où la précision de la notation est essentielle. MathLive
+Matrix
+Créer un exercice de calcul matriciel où les étudiants doivent effectuer des opérations telles que l'addition ou la multiplication de matrices. Matrix
+Concevoir un problème de résolution de systèmes d'équations linéaires où les étudiants doivent entrer les coefficients dans une matrice. Matrix
+Mettre en place une activité sur les transformations géométriques, où les étudiants doivent manipuler une matrice pour effectuer une rotation ou un redimensionnement. Matrix
+Picker
+Élaborer un exercice où les étudiants doivent sélectionner une catégorie parmi une liste prédéfinie. Picker
+Créer une activité où les étudiants doivent choisir une unité de mesure appropriée pour une quantité donnée. Picker
+Mettre en place un exercice de navigation entre différentes parties d'un module d'apprentissage. Picker
+RadioGroup
+Concevoir un questionnaire à choix unique (QCM) où les étudiants doivent sélectionner la bonne réponse parmi plusieurs propositions. RadioGroup
+Créer un sondage où les participants doivent choisir une option parmi une liste de possibilités. RadioGroup
+Mettre en place un test de connaissance où les étudiants doivent sélectionner la réponse correcte pour chaque question. RadioGroup
+SortList
+Créer un exercice où les étudiants doivent reconstruire une séquence d'événements historiques en ordonnant une liste d'éléments. SortList
+Concevoir une activité où les étudiants doivent ordonner les étapes d'un processus ou d'un algorithme. SortList
+Mettre en place un exercice où les étudiants doivent classer des éléments par ordre de priorité ou d'importance. SortList
+TextSelect
+Élaborer un exercice d'analyse grammaticale où les étudiants doivent sélectionner des segments spécifiques d'un texte pour identifier des éléments grammaticaux. TextSelect
+Créer une activité d'identification de structures syntaxiques dans un texte donné. TextSelect
+Mettre en place un exercice de repérage d'éléments littéraires dans un extrait de texte. TextSelect
+WordSelector
+Concevoir un exercice de construction de phrases grammaticalement correctes à partir d'une liste de mots disponibles. WordSelector
+Créer une activité d'apprentissage de langues étrangères où les étudiants doivent mettre en ordre des mots pour former des phrases dans la langue cible. WordSelector
+Mettre en place un exercice de logique séquentielle où l'ordre des mots est important pour la signification de la phrase. WordSelector

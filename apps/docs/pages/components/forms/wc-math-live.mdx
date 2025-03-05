@@ -4,7 +4,7 @@ description: Composant avancé pour saisir des expressions mathématiques en not
 ---
 
 import { Tabs, Tab } from 'nextra/components'
-import { ComponentProperties } from '../../../components'
+import { ComponentProperties, Playground } from '../../../components'
 import { useAbsoluteUrl } from '../../../hooks'
 
 # MathLive
@@ -56,10 +56,17 @@ Pour une expérience optimale, pensez à:
 
 ## Exemple interactif
 
-<iframe
-  src={useAbsoluteUrl('playground/components/wc-math-live')}
-  style={{ width: '100%', height: '700px', border: 'none' }}
-></iframe>
+<Playground
+  width="100%"
+  height="700px"
+  items={[
+    {
+      name: 'Visualisation',
+      url: 'playground/components/wc-math-live',
+    },
+    ...[],
+  ]}
+/>
 
 ## API
 

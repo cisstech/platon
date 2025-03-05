@@ -4,7 +4,7 @@ description: Composant permettant de créer des éléments déplaçables par gli
 ---
 
 import { Tabs, Tab } from 'nextra/components'
-import { ComponentProperties } from '../../../components'
+import { ComponentProperties, Playground } from '../../../components'
 import { useAbsoluteUrl } from '../../../hooks'
 
 # DragDrop
@@ -48,10 +48,17 @@ Ce composant est idéal pour créer des exercices comme:
 
 ## Exemple interactif
 
-<iframe
-  src={useAbsoluteUrl('playground/components/wc-drag-drop')}
-  style={{ width: '100%', height: '700px', border: 'none' }}
-></iframe>
+<Playground
+  width="100%"
+  height="700px"
+  items={[
+    {
+      name: 'Visualisation',
+      url: 'playground/components/wc-drag-drop',
+    },
+    ...[],
+  ]}
+/>
 
 ## API
 

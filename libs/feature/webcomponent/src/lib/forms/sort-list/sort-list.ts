@@ -59,4 +59,7 @@ export const SortListComponentDefinition = defineWebComponent({
   showcase: {
     items: ['Choix 1', 'Choix 2', 'Choix 3'],
   },
+  playgrounds: {
+    Histoire: 'history.ple',
+  },
 })

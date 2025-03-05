@@ -4,7 +4,7 @@ description: Composant d'affichage de code source avec coloration syntaxique, nu
 ---
 
 import { Tabs, Tab } from 'nextra/components'
-import { ComponentProperties } from '../../../components'
+import { ComponentProperties, Playground } from '../../../components'
 import { useAbsoluteUrl } from '../../../hooks'
 
 # CodeViewer
@@ -90,10 +90,17 @@ La coloration syntaxique et le surlignage permettent de focaliser l'attention de
 
 ## Exemple interactif
 
-<iframe
-  src={useAbsoluteUrl('playground/components/wc-code-viewer')}
-  style={{ width: '100%', height: '700px', border: 'none' }}
-></iframe>
+<Playground
+  width="100%"
+  height="700px"
+  items={[
+    {
+      name: 'Visualisation',
+      url: 'playground/components/wc-code-viewer',
+    },
+    ...[],
+  ]}
+/>
 
 ## API
 

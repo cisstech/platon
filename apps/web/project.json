@@ -29,6 +29,11 @@
           },
           {
             "glob": "**/*",
+            "input": "libs/feature/webcomponent/src/lib/docs/playground",
+            "output": "/assets/playground/exercises"
+          },
+          {
+            "glob": "**/*",
             "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
             "output": "/assets/vendors/@ant-design/assets/"
           },

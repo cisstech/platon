@@ -1,0 +1,30 @@
+sandbox = "node"
+
+input = :wc-input-box
+input.type = "number"
+input.placeholder = "Entrez votre réponse ici"
+
+title ==
+Calcul numérique
+==
+
+statement ==
+Résolvez le problème suivant et entrez la réponse sous forme de nombre.
+
+\( 2 + 2 = \)
+==
+
+form ==
+{{ input }}
+==
+
+grader == #!lang=js
+grade = 0
+feedback.type = "error"
+feedback.content = "Mauvaise réponse"
+if (input.value == 4) {
+  grade = 100
+  feedback.type = "success"
+  feedback.content = "Bonne réponse !"
+}
+==

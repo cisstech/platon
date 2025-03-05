@@ -1,0 +1,25 @@
+:host {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  overflow: auto;
+}
+
+.editor-container {
+  position: relative;
+  height: 100%;
+}
+
+.fab-preview-button {
+  position: absolute !important; // for some reason, antd overrides this when nzLoading is true
+  bottom: 24px;
+  right: 24px;
+  z-index: 10;
+  width: 56px;
+  height: 56px;
+  font-size: 22px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

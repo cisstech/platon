@@ -4,7 +4,7 @@ description: Ensemble de boutons radio pour sélection unique parmi une liste d'
 ---
 
 import { Tabs, Tab } from 'nextra/components'
-import { ComponentProperties } from '../../../components'
+import { ComponentProperties, Playground } from '../../../components'
 import { useAbsoluteUrl } from '../../../hooks'
 
 # RadioGroup
@@ -37,9 +37,7 @@ Les options de votre groupe de boutons radio sont définies dans le tableau `ite
 
 ### Gestion de la sélection
 
-La propriété `selection` détermine quelle option est sélectionnée. Sa valeur correspond à la position (index) de l'élément dans le tableau `items`, commençant à 0. Par exemple, pour présélectionner la deuxième option, utilisez `selection: "1"`.
-
-> Remarque: Même si l'index est un nombre, la valeur de `selection` doit être une chaîne de caractères.
+La propriété `selection` spécifie l'option actuellement sélectionnée. Sa valeur correspond au contenu textuel de l'élément dans le tableau `items`. Si les éléments du tableau sont des chaînes de caractères, la valeur sera cette chaîne. Si les éléments sont des objets, la valeur sera celle de la clé `content`.
 
 ### Disposition des options
 
@@ -62,10 +60,23 @@ Activez la validation automatique avec `autoValidation: true` pour que l'exercic
 
 ## Exemple interactif
 
-<iframe
-  src={useAbsoluteUrl('playground/components/wc-radio-group')}
-  style={{ width: '100%', height: '700px', border: 'none' }}
-></iframe>
+<Playground
+  width="100%"
+  height="700px"
+  items={[
+    {
+      name: 'Visualisation',
+      url: 'playground/components/wc-radio-group',
+    },
+    ...[
+      {
+        name: 'Exemple: Système solaire',
+        url: '/playground/exercises/radio-group/solar-system.ple',
+        code: '# Définition de la sandbox\nsandbox = "node"\n\n# Initialisation du composant RadioGroup\nradioGroup = :wc-radio-group\nradioGroup.items = [\n  "La Terre",\n  "Mars",\n  "Pluton",\n  "Jupiter",\n  "Venus"\n]\n\n# Titre de l\'exercice\ntitle ==\nQCM : Quelles sont les planètes du système solaire ?\n==\n\n# Énoncé de l\'exercice\nstatement ==\nVeuillez sélectionner la planète qui fait partie de notre système solaire.\n==\n\n# Formulaire de l\'exercice\nform ==\n{{ radioGroup }}\n==\n\nhint = ["Un des choix n\'est plus une planète depuis 2006"]\n\n# Builder\nbuilder == #!lang=js\n// Mélangement aléatoire des choix\nradioGroup.items = radioGroup.items.sort(() => Math.random() - 0.5);\n==\n\n\n# Grader\ngrader == #!lang=js\n\ngrade = 0;\nfeedback.type = "error";\nfeedback.content = "Veuillez sélectionner une réponse.";\n\n// Réponse correcte\nconst correctAnswer = "Pluton";\n\n// Vérifier si une réponse a été sélectionnée\nif (radioGroup.selection == correctAnswer) {\n  grade = 100;\n  feedback.type = "success";\n  feedback.content = "Félicitations ! Vous avez correctement identifié le bon choix.";\n}\n\n==\n',
+      },
+    ],
+  ]}
+/>
 
 ## API
 

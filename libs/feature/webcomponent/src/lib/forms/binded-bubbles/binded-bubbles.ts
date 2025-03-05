@@ -175,4 +175,7 @@ export const BindedBubblesComponentDefinition = defineWebComponent({
     ],
     numberPairToShow: 3,
   },
+  playgrounds: {
+    Traductions: 'translation.ple',
+  },
 })

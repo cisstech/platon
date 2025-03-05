@@ -4,7 +4,7 @@ description: Composant d'affichage de messages de retour avec différents niveau
 ---
 
 import { Tabs, Tab } from 'nextra/components'
-import { ComponentProperties } from '../../../components'
+import { ComponentProperties, Playground } from '../../../components'
 import { useAbsoluteUrl } from '../../../hooks'
 
 # Feedback
@@ -79,10 +79,17 @@ Le support du Markdown permet d'enrichir les messages avec des éléments comme 
 
 ## Exemple interactif
 
-<iframe
-  src={useAbsoluteUrl('playground/components/wc-feedback')}
-  style={{ width: '100%', height: '700px', border: 'none' }}
-></iframe>
+<Playground
+  width="100%"
+  height="700px"
+  items={[
+    {
+      name: 'Visualisation',
+      url: 'playground/components/wc-feedback',
+    },
+    ...[],
+  ]}
+/>
 
 ## API
 

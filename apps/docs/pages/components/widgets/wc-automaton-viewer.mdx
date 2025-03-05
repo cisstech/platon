@@ -4,7 +4,7 @@ description: Visualiseur d'automates finis permettant d'afficher des machines à
 ---
 
 import { Tabs, Tab } from 'nextra/components'
-import { ComponentProperties } from '../../../components'
+import { ComponentProperties, Playground } from '../../../components'
 import { useAbsoluteUrl } from '../../../hooks'
 
 # AutomatonViewer
@@ -106,10 +106,17 @@ Le composant génère automatiquement une représentation graphique de l'automat
 
 ## Exemple interactif
 
-<iframe
-  src={useAbsoluteUrl('playground/components/wc-automaton-viewer')}
-  style={{ width: '100%', height: '700px', border: 'none' }}
-></iframe>
+<Playground
+  width="100%"
+  height="700px"
+  items={[
+    {
+      name: 'Visualisation',
+      url: 'playground/components/wc-automaton-viewer',
+    },
+    ...[],
+  ]}
+/>
 
 ## API
 

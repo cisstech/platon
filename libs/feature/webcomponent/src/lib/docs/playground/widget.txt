@@ -1,0 +1,43 @@
+Bien sûr, voici trois idées d'utilisation pour chacun des composants widgets mentionnés dans la documentation, afin de vous aider à créer un playground :
+
+AutomatonViewer
+Créer un exercice où l'étudiant doit visualiser un automate fini représentant un langage régulier spécifique et déterminer si un mot donné est accepté par cet automate. AutomatonViewer
+Utiliser le visualiseur pour comparer différents automates finis équivalents et identifier leurs similarités et différences. AutomatonViewer
+Demander aux étudiants de modifier un automate existant pour qu'il reconnaisse un langage légèrement différent, en ajoutant ou supprimant des états et des transitions. AutomatonViewer
+ChartViewer-Bars
+Concevoir un exercice où les étudiants doivent analyser un graphique à barres représentant des données économiques et répondre à des questions sur les tendances observées. ChartViewer-Bars
+Utiliser le graphique à barres pour comparer les performances de différentes équipes ou entreprises sur plusieurs critères, et identifier les forces et faiblesses de chacune. ChartViewer-Bars
+Demander aux étudiants de créer leur propre graphique à barres à partir d'un ensemble de données brutes, en choisissant les axes et les étiquettes appropriés. ChartViewer-Bars
+ChartViewer-Pies
+Créer un exercice où les étudiants doivent interpréter un diagramme circulaire représentant la répartition d'un budget et déterminer quelle part est allouée à chaque catégorie. ChartViewer-Pies
+Utiliser le diagramme circulaire pour comparer la répartition des votes entre différents candidats lors d'une élection, et identifier le candidat ayant obtenu le plus de voix. ChartViewer-Pies
+Demander aux étudiants de modifier les données d'un diagramme circulaire existant pour simuler l'impact d'un changement de politique ou de stratégie. ChartViewer-Pies
+ChartViewer-Radar
+Concevoir un exercice où les étudiants doivent comparer les compétences de différents employés à l'aide d'un graphique radar et déterminer qui est le plus qualifié pour un poste donné. ChartViewer-Radar
+Utiliser le graphique radar pour analyser les performances d'une entreprise sur différents indicateurs clés, et identifier les domaines où elle doit s'améliorer. ChartViewer-Radar
+Demander aux étudiants de créer leur propre graphique radar à partir d'un ensemble de données brutes, en choisissant les indicateurs et les échelles appropriés. ChartViewer-Radar
+CodeViewer
+Créer un exercice où les étudiants doivent analyser un extrait de code et identifier les erreurs de syntaxe ou de logique. CodeViewer
+Utiliser le visualiseur de code pour comparer différentes implémentations d'un même algorithme et identifier leurs avantages et inconvénients. CodeViewer
+Demander aux étudiants de modifier un code existant pour ajouter une nouvelle fonctionnalité ou corriger un bug. CodeViewer
+Feedback
+Concevoir un exercice où les étudiants reçoivent un feedback personnalisé en fonction de leurs réponses, les encourageant à persévérer ou à corriger leurs erreurs. Feedback
+Utiliser le composant de feedback pour fournir des conseils méthodologiques aux étudiants, les aidant à mieux comprendre les concepts clés. Feedback
+Demander aux étudiants de rédiger leur propre feedback pour les réponses de leurs pairs, en utilisant un langage clair et constructif. Feedback
+FoldableFeedback
+Créer un exercice de programmation où les étudiants reçoivent un feedback détaillé sur les résultats de leurs tests unitaires, avec des sections pliables pour explorer les erreurs en profondeur. FoldableFeedback
+Utiliser le composant de feedback pliable pour présenter une analyse multicritère complexe, avec des sections pour chaque critère et des sous-sections pour les détails. FoldableFeedback
+Demander aux étudiants de créer leur propre système de feedback pliable pour évaluer les performances d'un algorithme, en définissant les critères, les tests et les messages appropriés. FoldableFeedback
+GraphViewer
+Concevoir un exercice où les étudiants doivent visualiser un graphe représentant un réseau social et identifier les personnes les plus influentes. GraphViewer
+Utiliser le visualiseur de graphes pour représenter un algorithme de parcours de graphe, en mettant en évidence les nœuds visités et les arêtes parcourues. GraphViewer
+Demander aux étudiants de créer leur propre graphe à partir d'un ensemble de données relationnelles, en choisissant les nœuds et les arêtes appropriés. GraphViewer
+Markdown
+Créer un exercice où les étudiants doivent lire un texte formaté en Markdown et répondre à des questions sur son contenu. Markdown
+Utiliser le composant Markdown pour présenter un guide méthodologique étape par étape, avec des instructions claires et des exemples concrets. Markdown
+Demander aux étudiants de rédiger leur propre texte en Markdown pour expliquer un concept clé, en utilisant les fonctionnalités avancées du composant. Markdown
+Presenter
+Concevoir un exercice où les étudiants doivent suivre une présentation interactive pour apprendre un nouveau concept, en répondant à des questions à la fin de chaque diapositive. Presenter
+Utiliser le composant Presenter pour créer un tutoriel visuel étape par étape, avec des exemples de code et des captures d'écran. Presenter
+Demander aux étudiants de créer leur propre présentation interactive pour expliquer un sujet de leur choix, en utilisant les fonctionnalités avancées du composant. Presenter
+Sources (11)

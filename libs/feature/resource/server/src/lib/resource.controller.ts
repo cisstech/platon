@@ -210,24 +210,30 @@ export class ResourceController {
     )
     const circle = await this.resourceService.getPersonal(user)
 
-    const resource = Mapper.map(
-      await this.resourceService.create({
-        ownerId: DEFAULT_USER_ID,
-        name: `Preview: ${new Date().toISOString()}`,
-        publicPreview: true,
-        status: ResourceStatus.DRAFT,
-        type: ResourceTypes.EXERCISE,
-        personal: true,
-        parentId: circle.id,
-      }),
-      ResourceDTO
-    )
+    const resource = input.resourceId
+      ? Mapper.map(await this.resourceService.getById(input.resourceId), ResourceDTO)
+      : Mapper.map(
+          await this.resourceService.create({
+            ownerId: DEFAULT_USER_ID,
+            name: `Preview: ${new Date().toISOString()}`,
+            publicPreview: true,
+            status: ResourceStatus.DRAFT,
+            type: ResourceTypes.EXERCISE,
+            personal: true,
+            parentId: circle.id,
+          }),
+          ResourceDTO
+        )
 
-    await this.fileService.repo(
+    const { repo } = await this.fileService.repo(
       resource.id,
       req,
       input.files.reduce((acc, f) => ({ ...acc, [f.path]: f.content }), {})
     )
+
+    if (input.resourceId) {
+      await Promise.all(input.files.map((f) => repo.write(f.path, f.content || '')))
+    }
 
     return new CreatedResponse({ resource })
   }

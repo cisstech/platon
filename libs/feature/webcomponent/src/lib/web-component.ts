@@ -32,6 +32,12 @@ export interface WebComponentDefinition {
   /** State to show in showcase section of the documentation page. */
   showcase?: Record<string, any>
 
+  /**
+   * List of playgrounds to show in the documentation page.
+   * Each playground is a code snippet that can be executed in the documentation page.
+   * The key is the title of the playground and the value refers to a file in the `playground/[component-name]` folder.
+   */
+  playgrounds?: Record<string, string>
   [key: string]: unknown // allow deprecated properties to be kept for compatibility reasons with forked projects
 }
 

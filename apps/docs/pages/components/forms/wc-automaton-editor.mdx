@@ -4,7 +4,7 @@ description: Éditeur graphique interactif pour créer et manipuler des automate
 ---
 
 import { Tabs, Tab } from 'nextra/components'
-import { ComponentProperties } from '../../../components'
+import { ComponentProperties, Playground } from '../../../components'
 import { useAbsoluteUrl } from '../../../hooks'
 
 # AutomatonEditor
@@ -66,10 +66,17 @@ s1:b>s2
 
 ## Exemple interactif
 
-<iframe
-  src={useAbsoluteUrl('playground/components/wc-automaton-editor')}
-  style={{ width: '100%', height: '700px', border: 'none' }}
-></iframe>
+<Playground
+  width="100%"
+  height="700px"
+  items={[
+    {
+      name: 'Visualisation',
+      url: 'playground/components/wc-automaton-editor',
+    },
+    ...[],
+  ]}
+/>
 
 ## API
 

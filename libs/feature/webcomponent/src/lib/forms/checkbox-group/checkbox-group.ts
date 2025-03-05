@@ -57,4 +57,7 @@ export const CheckboxGroupComponentDefinition = defineWebComponent({
   showcase: {
     items: ['Choix 1', 'Choix 2', 'Choix 3'],
   },
+  playgrounds: {
+    'Système solaire': 'solar-system.ple',
+  },
 })

@@ -1,0 +1,55 @@
+# Définition de la sandbox
+sandbox = "node"
+
+# Initialisation du composant RadioGroup
+radioGroup = :wc-radio-group
+radioGroup.items = [
+  "La Terre",
+  "Mars",
+  "Pluton",
+  "Jupiter",
+  "Venus"
+]
+
+# Titre de l'exercice
+title ==
+QCM : Quelles sont les planètes du système solaire ?
+==
+
+# Énoncé de l'exercice
+statement ==
+Veuillez sélectionner la planète qui fait partie de notre système solaire.
+==
+
+# Formulaire de l'exercice
+form ==
+{{ radioGroup }}
+==
+
+hint = ["Un des choix n'est plus une planète depuis 2006"]
+
+# Builder
+builder == #!lang=js
+// Mélangement aléatoire des choix
+radioGroup.items = radioGroup.items.sort(() => Math.random() - 0.5);
+==
+
+
+# Grader
+grader == #!lang=js
+
+grade = 0;
+feedback.type = "error";
+feedback.content = "Veuillez sélectionner une réponse.";
+
+// Réponse correcte
+const correctAnswer = "Pluton";
+
+// Vérifier si une réponse a été sélectionnée
+if (radioGroup.selection == correctAnswer) {
+  grade = 100;
+  feedback.type = "success";
+  feedback.content = "Félicitations ! Vous avez correctement identifié le bon choix.";
+}
+
+==

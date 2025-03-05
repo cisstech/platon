@@ -4,7 +4,7 @@ description: Menu déroulant permettant de sélectionner une valeur parmi une li
 ---
 
 import { Tabs, Tab } from 'nextra/components'
-import { ComponentProperties } from '../../../components'
+import { ComponentProperties, Playground } from '../../../components'
 import { useAbsoluteUrl } from '../../../hooks'
 
 # Picker
@@ -55,10 +55,17 @@ Le Picker est particulièrement utile pour:
 
 ## Exemple interactif
 
-<iframe
-  src={useAbsoluteUrl('playground/components/wc-picker')}
-  style={{ width: '100%', height: '700px', border: 'none' }}
-></iframe>
+<Playground
+  width="100%"
+  height="700px"
+  items={[
+    {
+      name: 'Visualisation',
+      url: 'playground/components/wc-picker',
+    },
+    ...[],
+  ]}
+/>
 
 ## API
 

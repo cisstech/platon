@@ -1,0 +1,20 @@
+@if (loading) {
+<nz-skeleton [nzActive]="true" />
+} @else if (content) {
+<div class="editor-container">
+  <nge-monaco-editor style="--editor-height: 100%" (ready)="onCreateEditor($any($event))" />
+  <button
+    nz-button
+    [nzLoading]="previewing"
+    nzType="primary"
+    nzShape="circle"
+    class="fab-preview-button"
+    (click)="preview()"
+  >
+    <span nz-icon nzType="play-circle" nzTheme="outline"></span>
+  </button>
+</div>
+} @else {
+<ui-error-404 />
+}
+<ui-modal-iframe width="100vw" height="100vh" closable #iframe />

@@ -20,9 +20,7 @@ Les options de votre groupe de boutons radio sont définies dans le tableau `ite
 
 ### Gestion de la sélection
 
-La propriété `selection` détermine quelle option est sélectionnée. Sa valeur correspond à la position (index) de l'élément dans le tableau `items`, commençant à 0. Par exemple, pour présélectionner la deuxième option, utilisez `selection: "1"`.
-
-> Remarque: Même si l'index est un nombre, la valeur de `selection` doit être une chaîne de caractères.
+La propriété `selection` spécifie l'option actuellement sélectionnée. Sa valeur correspond au contenu textuel de l'élément dans le tableau `items`. Si les éléments du tableau sont des chaînes de caractères, la valeur sera cette chaîne. Si les éléments sont des objets, la valeur sera celle de la clé `content`.
 
 ### Disposition des options
 

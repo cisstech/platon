@@ -4,7 +4,7 @@ description: Champ de saisie polyvalent supportant texte, nombres et zones de te
 ---
 
 import { Tabs, Tab } from 'nextra/components'
-import { ComponentProperties } from '../../../components'
+import { ComponentProperties, Playground } from '../../../components'
 import { useAbsoluteUrl } from '../../../hooks'
 
 # InputBox
@@ -132,10 +132,23 @@ Adaptez le style visuel du champ à vos besoins:
 
 ## Exemple interactif
 
-<iframe
-  src={useAbsoluteUrl('playground/components/wc-input-box')}
-  style={{ width: '100%', height: '700px', border: 'none' }}
-></iframe>
+<Playground
+  width="100%"
+  height="700px"
+  items={[
+    {
+      name: 'Visualisation',
+      url: 'playground/components/wc-input-box',
+    },
+    ...[
+      {
+        name: 'Exemple: Addition',
+        url: '/playground/exercises/input-box/sum.ple',
+        code: 'sandbox = "node"\n\ninput = :wc-input-box\ninput.type = "number"\ninput.placeholder = "Entrez votre réponse ici"\n\ntitle ==\nCalcul numérique\n==\n\nstatement ==\nRésolvez le problème suivant et entrez la réponse sous forme de nombre.\n\n\\( 2 + 2 = \\)\n==\n\nform ==\n{{ input }}\n==\n\ngrader == #!lang=js\ngrade = 0\nfeedback.type = "error"\nfeedback.content = "Mauvaise réponse"\nif (input.value == 4) {\n  grade = 100\n  feedback.type = "success"\n  feedback.content = "Bonne réponse !"\n}\n==\n',
+      },
+    ],
+  ]}
+/>
 
 ## API
 

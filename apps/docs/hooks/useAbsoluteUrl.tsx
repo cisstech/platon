@@ -8,6 +8,10 @@ import { useBaseUrl } from './useBaseUrl'
  */
 export const useAbsoluteUrl = (path: string) => {
   const baseUrl = useBaseUrl()
+  return buildAbsoluteUrl(baseUrl, path)
+}
+
+export const buildAbsoluteUrl = (baseUrl: string, path: string) => {
   if (path.startsWith('/')) {
     path = path.slice(1)
   }

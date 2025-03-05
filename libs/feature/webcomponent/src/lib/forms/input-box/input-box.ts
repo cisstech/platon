@@ -133,4 +133,7 @@ export const InputBoxComponentDefinition = defineWebComponent({
       ],
     ],
   },
+  playgrounds: {
+    Addition: 'sum.ple',
+  },
 })

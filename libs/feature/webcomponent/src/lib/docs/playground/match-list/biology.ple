@@ -1,0 +1,93 @@
+sandbox = "node"
+
+// Initialisation du composant MatchList
+matchList = :wc-match-list
+
+// Définition des nœuds
+especes = [
+  { id: "loup", type: "source", content: "Loup" },
+  { id: "ours", type: "source", content: "Ours" },
+  { id: "renard", type: "source", content: "Renard" },
+  { id: "aigle", type: "source", content: "Aigle royal" }
+]
+
+regimes = [
+  { id: "carnivore", type: "target", content: "Carnivore" },
+  { id: "omnivore", type: "target", content: "Omnivore" },
+  { id: "charognard", type: "target", content: "Charognard" },
+  { id: "rapace", type: "target", content: "Rapace" }
+]
+
+// Mélange des éléments au début de l'exercice
+builder == #!lang=js
+
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
+shuffleArray(especes);
+shuffleArray(regimes);
+
+matchList.nodes = [...especes, ...regimes];
+
+==
+
+title==
+Association Espèce - Régime Alimentaire
+==
+
+statement==
+Reliez chaque espèce à son régime alimentaire principal.
+==
+
+form==
+{{ matchList }}
+==
+
+hint = [
+  "Pensez aux proies typiques de chaque animal.",
+  "Certains animaux ont un régime alimentaire très varié.",
+  "\nSi vous êtes bloqué, essayez de commencer par les associations dont vous êtes le plus sûr."
+]
+
+grader== #!lang=js
+grade = 0
+feedback.type = "error"
+feedback.content = "Mauvaise réponse"
+
+let correctLinks = [
+  { source: "loup", target: "carnivore" },
+  { source: "ours", target: "omnivore" },
+  { source: "renard", target: "omnivore" },
+  { source: "aigle", target: "rapace" }
+];
+
+let userLinks = matchList.links;
+
+// Vérification des réponses
+let correctCount = 0;
+for (let i = 0; i < correctLinks.length; i++) {
+  let correctLink = correctLinks[i];
+  for (let j = 0; j < userLinks.length; j++) {
+    let userLink = userLinks[j];
+    if (correctLink.source === userLink.source && correctLink.target === userLink.target) {
+      correctCount++;
+      break;
+    }
+  }
+}
+
+if (correctCount === correctLinks.length) {
+  grade = 100
+  feedback.type = "success"
+  feedback.content = "Félicitations, toutes les associations sont correctes !"
+} else {
+  grade = (correctCount / correctLinks.length) * 100;
+  feedback.type = "error";
+  feedback.content = `Vous avez ${correctCount} associations correctes sur ${correctLinks.length}.`;
+}
+
+==

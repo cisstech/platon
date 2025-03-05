@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, Component, inject, Input, OnInit } from '@angular/core'
 import { DocsModule, WebComponentDefinition, WebComponentService } from '@platon/feature/webcomponent'
 import { UiError404Component } from '@platon/shared/ui'
 
@@ -8,6 +8,7 @@ import { UiError404Component } from '@platon/shared/ui'
   selector: 'app-wc-plaground',
   templateUrl: 'wc-playground.page.html',
   styleUrl: 'wc-playground.page.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WcPlaygroundPage implements OnInit {
   private readonly api = inject(WebComponentService)

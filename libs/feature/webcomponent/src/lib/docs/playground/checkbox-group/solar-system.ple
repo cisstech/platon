@@ -1,0 +1,60 @@
+# Définition de la sandbox
+sandbox = "node"
+
+# Initialisation du composant CheckboxGroup
+checkboxGroup = :wc-checkbox-group
+checkboxGroup.items = [
+  "La Terre",
+  "Mars",
+  "Pluton",
+  "Jupiter",
+  "Venus"
+]
+
+# Titre de l'exercice
+title ==
+QCM : Quelles sont les planètes du système solaire ?
+==
+
+# Énoncé de l'exercice
+statement ==
+Veuillez sélectionner toutes les planètes qui font partie de notre système solaire.
+==
+
+# Formulaire de l'exercice
+form ==
+{{ checkboxGroup }}
+==
+
+hint = ["Un des choix n'est plus une planète depuis 2006"]
+
+# Builder
+builder == #!lang=js
+// Mélangement aléatoire des choix
+checkboxGroup.items = checkboxGroup.items.sort(() => Math.random() - 0.5);
+==
+
+
+# Grader
+grader == #!lang=js
+
+grade = 0;
+feedback.type = "error";
+feedback.content = "Incorrect. Veuillez réessayer.";
+
+// Réponses correctes
+const correctAnswers = ["La Terre", "Mars", "Jupiter", "Venus"];
+
+// Récupérer les réponses sélectionnées
+const selectedAnswers = checkboxGroup.items
+    .filter(item => item.checked)
+    .map(item => item.content);
+
+// Vérifier si toutes les réponses correctes ont été sélectionnées et aucune réponse incorrecte n'a été sélectionnée
+if (selectedAnswers.length === correctAnswers.length && selectedAnswers.every(answer => correctAnswers.includes(answer))) {
+  grade = 100;
+  feedback.type = "success";
+  feedback.content = "Félicitations ! Vous avez correctement identifié toutes les planètes du système solaire.";
+}
+
+==

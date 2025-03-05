@@ -177,6 +177,11 @@ export class CreatePreviewResourceDTO implements CreatePreviewResource {
   @IsArray()
   @ApiProperty()
   files!: FileCreateDTO[]
+
+  @IsUUID()
+  @IsOptional()
+  @ApiProperty()
+  resourceId?: string
 }
 
 export class UpdateResourceDTO implements UpdateResource {

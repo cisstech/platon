@@ -1,0 +1,31 @@
+sandbox = "node"
+
+bubbles = :wc-binded-bubbles
+bubbles.items = [
+  { item1: { content: "Bonjour" }, item2: { content: "Hello" } },
+  { item1: { content: "Au revoir" }, item2: { content: "Goodbye" } },
+  { item1: { content: "Merci" }, item2: { content: "Thank you" } }
+]
+
+title ==
+Memory de traductions
+==
+
+statement ==
+Associez les mots français à leur traduction anglaise.
+==
+
+form ==
+{{ bubbles }}
+==
+
+grader == #!lang=js
+grade = 0
+feedback.type = "error"
+feedback.content = "Mauvaise réponse"
+if (bubbles.nbError == 0) {
+  grade = 100
+  feedback.type = "success"
+  feedback.content = "Bravo !"
+}
+==

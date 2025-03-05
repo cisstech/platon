@@ -123,4 +123,8 @@ export const MatchListComponentDefinition = defineWebComponent({
       { id: 'Node10', type: 'target', content: 'un malloc' },
     ],
   },
+
+  playgrounds: {
+    'Biologie animal': 'biology.ple',
+  },
 })

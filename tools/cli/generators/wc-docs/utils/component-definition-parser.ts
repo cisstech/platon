@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as ts from 'typescript'
 import * as fs from 'fs'
 import * as path from 'path'
@@ -9,6 +10,7 @@ export interface ExtractedComponentDefinition {
   name: string
   selector: string
   description: string
+  playgrounds?: Record<string, string>
   schema: Record<string, any>
 }
 
@@ -75,6 +77,9 @@ function extractDefinitionFromObjectLiteral(objLiteral: ts.ObjectLiteralExpressi
       case 'schema':
         result.schema = extractObjectLiteralValue(prop.initializer)
         break
+      case 'playgrounds':
+        result.playgrounds = extractObjectLiteralValue(prop.initializer)
+        break
     }
   })
 
@@ -99,13 +104,13 @@ function extractObjectLiteralValue(node: ts.Node): any {
   } else if (ts.isArrayLiteralExpression(node)) {
     return node.elements.map((element) => extractObjectLiteralValue(element))
   } else if (ts.isStringLiteral(node)) {
-    return node.text.replace(/[\`]/g, '')
+    return node.text.replace(/[`]/g, '')
   } else if (ts.isNumericLiteral(node)) {
     return Number(node.text)
   } else if (node.kind === ts.SyntaxKind.TrueKeyword || node.kind === ts.SyntaxKind.FalseKeyword) {
     return node.kind === ts.SyntaxKind.TrueKeyword
   } else {
     // For other types, return the text representation
-    return node.getText().replace(/[\`]/g, '')
+    return node.getText().replace(/[`]/g, '')
   }
 }

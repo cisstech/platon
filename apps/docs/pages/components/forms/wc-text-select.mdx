@@ -4,7 +4,7 @@ description: Outil d'analyse textuelle permettant la sélection de segments spé
 ---
 
 import { Tabs, Tab } from 'nextra/components'
-import { ComponentProperties } from '../../../components'
+import { ComponentProperties, Playground } from '../../../components'
 import { useAbsoluteUrl } from '../../../hooks'
 
 # TextSelect
@@ -64,10 +64,17 @@ Dans les modes `free` et `units`, vous pouvez enrichir votre texte avec du HTML 
 
 ## Exemple interactif
 
-<iframe
-  src={useAbsoluteUrl('playground/components/wc-text-select')}
-  style={{ width: '100%', height: '700px', border: 'none' }}
-></iframe>
+<Playground
+  width="100%"
+  height="700px"
+  items={[
+    {
+      name: 'Visualisation',
+      url: 'playground/components/wc-text-select',
+    },
+    ...[],
+  ]}
+/>
 
 ## API
 
