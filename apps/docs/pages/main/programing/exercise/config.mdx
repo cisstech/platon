@@ -5,7 +5,7 @@ description: Guide détaillé pour créer des exercices personnalisables avec ma
 
 import { Callout } from 'nextra/components'
 
-# Système de Configuration des Exercices avec main.plc dans PLaTon
+# Rendre un exercice configurable
 
 La personnalisation des exercices dans PLaTon peut être effectuée par le biais du fichier `main.plc` (PLaton config), qui définie un ensemble de variables paramétrables.
 Cela permet aux utilisateurs, même sans compétences en programmation PLaTon, de configurer et d'ajuster les exercices selon leurs besoins.
@@ -61,11 +61,11 @@ Lorsque vous ouvrez `main.plc` dans PLaTon, vous êtes accueilli par un formulai
     - **Min** (`min`): Valeur minimale autorisée lors de la saisie.
     - **Max** (`max`): Valeur maximale autorisée lors de la saisie.
 - **Texte** (`text`) : Chaînes de caractères.
-- **Code** : Snippets de code qui peuvent être insérés dans l'exercice.
+- **Code** (`code`) : Snippets de code qui peuvent être insérés dans l'exercice.
   - **Options** :
     - **Langage** (`language`): Langage de programmation du code.
 - **Booléen** (`boolean`): Valeurs vraies ou fausses.
-- **Fichier** (`file`) : Permet d'intégrer des URL ou du contenu de fichier directement.
+- **Fichier** (`file`) : Permet d'intégrer des URL ou du contenu de fichier directement. La valeur utilise les opérateurs `@copyurl` et `@copycontent` (e.g. `@copyurl readme.md`).
 - **JSON** (`json`): Structures de données complexes sous forme d'objets JSON.
 - **Expression Mathématique** (`mathexpr`): Champ de saisie pour récupérer une expression mathématique (le format de sortie est du Latex)
 - **Liste** (`list`): Permet à l'utilisateur de saisir une liste de valeurs.
@@ -80,6 +80,10 @@ Lorsque vous ouvrez `main.plc` dans PLaTon, vous êtes accueilli par un formulai
 <Callout type="info">
   Partout où vous pouvez écrire du texte, vous pouvez utiliser les opérateurs `@copyurl` et `@copycontent` pour insérer
   des URL ou du contenu de fichier directement.
+</Callout>
+
+<Callout type="tip">
+  Le fichier `main.plc` est en réalité un simple fichier JSON avec une extension spéciale. Si vous rencontrez des problèmes avec l'interface graphique ou si vous préférez éditer le fichier directement, vous pouvez simplement le renommer temporairement en `.json`, l'éditer avec n'importe quel éditeur de texte, puis le renommer à nouveau en `.plc`. Cela peut être utile pour corriger des erreurs ou pour comprendre la structure du fichier.
 </Callout>
 
 ## Exemple d'Utilisation
@@ -105,30 +109,40 @@ Un professeur souhaite créer une série d'exercices sur les équations du secon
 {
   "inputs": [
     {
-      "type": "Nombre",
+      "type": "number",
       "name": "a",
-      "min": -10,
-      "max": 10,
-      "description": "Coefficient de x²"
+      "description": "Coefficient de x²",
+      "value": 1,
+      "options": {
+        "min": -10,
+        "max": 10
+      }
     },
     {
-      "type": "Nombre",
+      "type": "number",
       "name": "b",
-      "min": -10,
-      "max": 10,
-      "description": "Coefficient de x"
+      "description": "Coefficient de x",
+      "value": -5,
+      "options": {
+        "min": -10,
+        "max": 10
+      }
     },
     {
-      "type": "Nombre",
+      "type": "number",
       "name": "c",
-      "min": -10,
-      "max": 10,
-      "description": "Terme constant"
+      "description": "Terme constant",
+      "value": 6,
+      "options": {
+        "min": -10,
+        "max": 10
+      }
     },
     {
-      "type": "Booléen",
+      "type": "boolean",
       "name": "showHints",
-      "description": "Afficher les aides pour la résolution des équations"
+      "description": "Afficher les aides pour la résolution des équations",
+      "value": true
     }
   ]
 }
@@ -151,14 +165,16 @@ Un exercice où les élèves doivent analyser un texte et répondre à des quest
 {
   "inputs": [
     {
-      "type": "Texte",
+      "type": "text",
       "name": "texte",
-      "description": "Le passage que les élèves doivent lire."
+      "description": "Le passage que les élèves doivent lire.",
+      "value": "La révolution industrielle, qui a débuté en Grande-Bretagne à la fin du XVIIIe siècle, a transformé l'économie mondiale en remplaçant le travail manuel par la mécanisation. Cette période a vu l'émergence de nouvelles technologies, de nouveaux modes de production et a profondément modifié la structure sociale et économique des pays concernés."
     },
     {
-      "type": "Fichier",
+      "type": "file",
       "name": "questions",
-      "description": "Un fichier JSON contenant les questions et options de réponse."
+      "description": "Un fichier JSON contenant les questions et options de réponse.",
+      "value": "@copyurl questions.json"
     }
   ]
 }
@@ -181,17 +197,19 @@ Les élèves doivent écrire un script pour résoudre un problème de programmat
 {
   "inputs": [
     {
-      "type": "Code",
+      "type": "code",
       "name": "skeletonCode",
       "description": "Le squelette de code initial que les apprenants doivent compléter.",
+      "value": "def fibonacci(n):\n    # TODO: Implémentez la fonction qui renvoie le n-ième nombre de Fibonacci\n    # n=0 -> 0, n=1 -> 1, n=2 -> 1, n=3 -> 2, etc.\n    pass\n\n# Tests\nassert fibonacci(0) == 0\nassert fibonacci(1) == 1\nassert fibonacci(5) == 5",
       "options": {
         "language": "python"
       }
     },
     {
-      "type": "Booléen",
+      "type": "boolean",
       "name": "debugMode",
-      "description": "Activer ou désactiver le mode débogage pour cet exercice."
+      "description": "Activer ou désactiver le mode débogage pour cet exercice.",
+      "value": false
     }
   ]
 }
@@ -214,21 +232,23 @@ Un exercice de langue où les élèves doivent traduire des phrases d'une langue
 {
   "inputs": [
     {
-      "type": "Texte",
+      "type": "text",
       "name": "sourcePhrase",
-      "description": "La phrase à traduire."
+      "description": "La phrase à traduire.",
+      "value": "Le chat dort sur le canapé pendant que le chien joue dans le jardin."
     },
     {
-      "type": "Texte",
+      "type": "text",
       "name": "targetPhrase",
-      "description": "La traduction attendue de la phrase."
+      "description": "La traduction attendue de la phrase.",
+      "value": "The cat is sleeping on the sofa while the dog plays in the garden."
     }
   ]
 }
 ```
 
 <Callout type="info">
-  Dans ces exemples, cette documentation affichage le contenu brut des fichiers `main.plc` pour illustrer les
+  Dans ces exemples, cette documentation affiche le contenu brut des fichiers `main.plc` pour illustrer les
   possibilités offertes par ce fichier mais dans la pratique, l'édition de ce fichier se fait via un formulaire.
 </Callout>
 
