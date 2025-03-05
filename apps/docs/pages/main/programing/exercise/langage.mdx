@@ -234,12 +234,10 @@ b = random.randint(1, 10)
 1. **Variables déclarées dans le contexte PLaTon**
    - Accessibles dans tout l'exercice (contexte PLaTon et sandbox)
    - Peuvent être modifiées par les scripts de la sandbox
-
 2. **Variables déclarées dans les scripts de la sandbox**
    - Si déclarées avec `var`, `let`, `const` (JS) ou comme variables locales Python:
      - Portée limitée au script où elles sont définies
      - Ne sont PAS accessibles dans les clés d'affichage ou autres scripts
-
    - Si déclarées sans mot-clé en JS ou comme variables globales en Python:
      - Deviennent accessibles globalement dans l'exercice
      - Peuvent être utilisées dans les clés d'affichage
@@ -283,6 +281,33 @@ feedback = { type: "success", content: "Bravo !" };
 // const feedback = { type: "success", content: "Bravo !" };
 ==
 ```
+
+### Fonctions et leur portée
+
+<Callout type="important">
+  Les fonctions déclarées dans un script ne sont pas partagées entre les scripts. Par exemple, une fonction définie dans le `builder` ne sera pas accessible dans le `grader`.
+</Callout>
+
+```pl-js
+builder == #!lang=js
+// Cette fonction n'est accessible que dans le builder
+function calculerBonus() {
+  return op1 * op2;
+}
+
+// Pour rendre le résultat disponible ailleurs:
+bonus = calculerBonus();
+==
+
+grader == #!lang=js
+// ERREUR: cette fonction n'existe pas dans le grader
+// let points = calculerBonus();
+
+// Correct: on accède à la variable globale créée dans le builder
+let points = bonus;
+==
+```
+
 
 ## Inclusion de fichiers
 
