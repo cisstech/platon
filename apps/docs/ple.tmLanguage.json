@@ -1,0 +1,208 @@
+{
+  "name": "PLE (PLaTon Exercise)",
+  "scopeName": "source.ple",
+  "fileTypes": ["ple"],
+  "patterns": [{ "include": "#comments" }, { "include": "#multiline-blocks" }, { "include": "#platon-context" }],
+  "repository": {
+    "platon-context": {
+      "patterns": [
+        {
+          "name": "keyword.control.directive.ple",
+          "match": "(@extends|@include|@copyurl|@copycontent)\\b"
+        },
+        {
+          "name": "variable.assignment.ple",
+          "match": "^\\s*([a-zA-Z_][a-zA-Z0-9_]*(\\.[a-zA-Z_][a-zA-Z0-9_]*)*)\\s*="
+        },
+        {
+          "name": "entity.name.tag.component.ple",
+          "match": ":\\w[\\w-]*\\b"
+        },
+        {
+          "name": "keyword.control.ple",
+          "match": "\\b(sandbox|title|form|hint|theories|statement|grader|builder|solution)\\b"
+        },
+        {
+          "name": "string.quoted.double.ple",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.ple",
+              "match": "\\\\."
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.single.ple",
+          "begin": "'",
+          "end": "'",
+          "patterns": [
+            {
+              "name": "constant.character.escape.ple",
+              "match": "\\\\."
+            }
+          ]
+        },
+        {
+          "name": "constant.numeric.ple",
+          "match": "\\b(\\d+(_\\d+)*(\\.\\d+(_\\d+)*)?|\\.\\d+(_\\d+)*)\\b"
+        },
+        {
+          "name": "constant.language.boolean.ple",
+          "match": "\\b(true|false|True|False)\\b"
+        },
+        {
+          "name": "variable.interpolation.ple",
+          "match": "{{\\s*([a-zA-Z_][a-zA-Z0-9_]*(\\.[a-zA-Z_][a-zA-Z0-9_]*)*)\\s*}}"
+        },
+        {
+          "name": "meta.object.ple",
+          "begin": "{",
+          "end": "}",
+          "patterns": [
+            {
+              "name": "entity.name.tag.ple",
+              "match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*:"
+            },
+            {
+              "name": "string.quoted.double.ple",
+              "begin": "\"",
+              "end": "\"",
+              "patterns": [
+                {
+                  "name": "constant.character.escape.ple",
+                  "match": "\\\\."
+                }
+              ]
+            },
+            { "include": "#platon-context" }
+          ]
+        },
+        {
+          "name": "meta.array.ple",
+          "begin": "\\[",
+          "end": "\\]",
+          "patterns": [{ "include": "#platon-context" }]
+        }
+      ]
+    },
+    "multiline-blocks": {
+      "patterns": [
+        {
+          "name": "meta.block.grader.js",
+          "begin": "^\\s*(grader)\\s*==\\s*(#!lang=js)?\\s*$",
+          "beginCaptures": {
+            "1": { "name": "keyword.control.ple" },
+            "2": { "name": "comment.line.shebang.ple" }
+          },
+          "end": "^\\s*==\\s*$",
+          "contentName": "source.js.embedded.ple",
+          "patterns": [{ "include": "source.js" }]
+        },
+        {
+          "name": "meta.block.grader.python",
+          "begin": "^\\s*(grader)\\s*==\\s*(#!lang=py)?\\s*$",
+          "beginCaptures": {
+            "1": { "name": "keyword.control.ple" },
+            "2": { "name": "comment.line.shebang.ple" }
+          },
+          "end": "^\\s*==\\s*$",
+          "contentName": "source.python.embedded.ple",
+          "patterns": [{ "include": "source.python" }]
+        },
+        {
+          "name": "meta.block.builder.js",
+          "begin": "^\\s*(builder)\\s*==\\s*(#!lang=js)?\\s*$",
+          "beginCaptures": {
+            "1": { "name": "keyword.control.ple" },
+            "2": { "name": "comment.line.shebang.ple" }
+          },
+          "end": "^\\s*==\\s*$",
+          "contentName": "source.js.embedded.ple",
+          "patterns": [{ "include": "source.js" }]
+        },
+        {
+          "name": "meta.block.builder.python",
+          "begin": "^\\s*(builder)\\s*==\\s*(#!lang=py)?\\s*$",
+          "beginCaptures": {
+            "1": { "name": "keyword.control.ple" },
+            "2": { "name": "comment.line.shebang.ple" }
+          },
+          "end": "^\\s*==\\s*$",
+          "contentName": "source.python.embedded.ple",
+          "patterns": [{ "include": "source.python" }]
+        },
+        {
+          "name": "meta.block.form",
+          "begin": "^\\s*(form|statement|title|solution)\\s*==\\s*$",
+          "beginCaptures": {
+            "1": { "name": "keyword.control.ple" }
+          },
+          "end": "^\\s*==\\s*$",
+          "patterns": [
+            {
+              "name": "variable.interpolation.ple",
+              "match": "{{\\s*([a-zA-Z_][a-zA-Z0-9_]*(\\.[a-zA-Z_][a-zA-Z0-9_]*)*)\\s*}}"
+            },
+            { "include": "text.html.markdown" }
+          ]
+        },
+        {
+          "name": "meta.block.generic",
+          "begin": "^\\s*([a-zA-Z_][a-zA-Z0-9_]*(\\.[a-zA-Z_][a-zA-Z0-9_]*)*)\\s*==\\s*$",
+          "beginCaptures": {
+            "1": { "name": "variable.other.ple" }
+          },
+          "end": "^\\s*==\\s*$",
+          "patterns": [
+            {
+              "name": "variable.interpolation.ple",
+              "match": "{{\\s*([a-zA-Z_][a-zA-Z0-9_]*(\\.[a-zA-Z_][a-zA-Z0-9_]*)*)\\s*}}"
+            },
+            { "include": "text.html.markdown" }
+          ]
+        },
+        {
+          "name": "meta.block.with-lang",
+          "begin": "^\\s*([a-zA-Z_][a-zA-Z0-9_]*(\\.[a-zA-Z_][a-zA-Z0-9_]*)*)\\s*==\\s*(#!lang=(\\w+))\\s*$",
+          "beginCaptures": {
+            "1": { "name": "variable.other.ple" },
+            "3": { "name": "comment.line.shebang.ple" }
+          },
+          "end": "^\\s*==\\s*$",
+          "patterns": [
+            {
+              "name": "variable.interpolation.ple",
+              "match": "{{\\s*([a-zA-Z_][a-zA-Z0-9_]*(\\.[a-zA-Z_][a-zA-Z0-9_]*)*)\\s*}}"
+            },
+            { "include": "text.html.markdown" }
+          ]
+        }
+      ]
+    },
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.number-sign.ple",
+          "match": "#.*$"
+        },
+        {
+          "name": "comment.line.double-slash.ple",
+          "match": "//.*$"
+        },
+        {
+          "name": "comment.block.ple",
+          "begin": "/\\*",
+          "end": "\\*/",
+          "patterns": [
+            {
+              "name": "comment.block.content.ple",
+              "match": "."
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

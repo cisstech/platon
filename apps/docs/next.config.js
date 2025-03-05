@@ -1,6 +1,28 @@
+const { BUNDLED_LANGUAGES, getHighlighter } = require('shiki');
+
 const withNextra = require('nextra')({
   theme: 'nextra-theme-docs',
   themeConfig: './theme.config.tsx',
+  // Add custom languages to syntax highlighting
+  mdxOptions: {
+    rehypePrettyCodeOptions: {
+      getHighlighter: options =>
+        getHighlighter({
+          ...options,
+          langs: [
+            ...BUNDLED_LANGUAGES,
+            {
+              id: 'ple',
+              scopeName: 'source.ple',
+              path: require.resolve('./ple.tmLanguage.json'),
+              aliases: ['pl-js', 'pl-py'],
+
+            },
+          ]
+        })
+    }
+  }
+
 })
 
 /**
