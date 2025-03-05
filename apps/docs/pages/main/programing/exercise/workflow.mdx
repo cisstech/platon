@@ -7,198 +7,218 @@ import { Callout } from 'nextra/components'
 
 # Construction, Affichage et Évaluation
 
-Le déroulement d'un exercice sous PLaTon se compose de 4 parties:
+Le cycle de vie d'un exercice PLaTon se déroule en quatre phases principales:
 
-- La Construction, à l'aide d'une clé `builder`
-- L'Affichage, à l'aide des clés `title`, `statement`, et `form`
-- L'Évaluation, à l'aide d'une clé `grader`
-- La Solution, à l'aide d'une clé `solution`
+- **Construction** - Génération des données et configuration de l'exercice (clé `builder`)
+- **Affichage** - Présentation de l'exercice à l'apprenant (clés `title`, `statement`, `form`)
+- **Évaluation** - Analyse de la réponse soumise et attribution d'une note (clé `grader`)
+- **Solution** - Affichage optionnel de la solution (clé `solution`)
 
-## Environnment d'exécution : Sandbox
+## Environnement d'exécution : Sandbox
 
-Les exercices sont executés dans un environnement isolé appelé sandbox. Il existe plusieurs types de sandbox, chacune ayant ses propres caractéristiques.
-Le choix de la sandbox se fait à l'aide de la clé `sandbox` dans la configuration de l'exercice.
+Les exercices s'exécutent dans un environnement isolé appelé "sandbox", qui garantit la sécurité et la reproductibilité de leur exécution.
 
-### Sandbox node
+### Sandbox node (par défaut)
 
 - **Syntaxe** : `sandbox = "node"`
-- **Description** : Sandbox permettant d'exécuter du code javascript. Cette sandbox est utilisée par défaut et utilise l'api de sandboxing de nodejs.
-- **Librairies disponibles** : Cette sandbox est pratique pour des exercices simples ne nécessitant pas d'opérations complexes ou de librairies système.
-  Vous avez accès à l'API de base de javascript ainsi que quelques [fonctions utilitaires](https://github.com/cisstech/platon/blob/main/libs/feature/player/server/src/lib/sandboxes/node/node-sandbox-api.ts#L22).
+- **Description** : Exécution de code JavaScript via l'API de sandboxing de Node.js
+- **Bibliothèques disponibles** : API standard de JavaScript et [fonctions utilitaires](https://github.com/cisstech/platon/blob/main/libs/feature/player/server/src/lib/sandboxes/node/node-sandbox-api.ts#L22)
+- **Cas d'usage** : Exercices simples à modérément complexes, sans besoin de bibliothèques système
 
 ### Sandbox python
 
 - **Syntaxe** : `sandbox = "python"`
-- **Description** : Sandbox permettant d'exécuter du code python. Cette sandbox utilise des containers docker pour exécuter du code python.
-- **Libraries disponibles** : Cette sandbox est plus complète que la sandbox node, et vous donne accès à un container Linux avec plusieurs librairies et outils pré-installés (python, gcc, java, postgresql...).
-  Vous pouvez consulter la liste des librairies disponibles [ici](https://github.com/PremierLangage/sandbox/blob/master/docker/Dockerfile)
+- **Description** : Exécution de code Python dans un conteneur Docker
+- **Bibliothèques disponibles** : Conteneur Linux complet avec de nombreux outils et bibliothèques préinstallés (python, gcc, java, postgresql...)
+- **Détails** : [Liste complète des bibliothèques disponibles](https://github.com/PremierLangage/sandbox/blob/master/docker/Dockerfile)
 
 <Callout type="warning">
-  La sandbox python n'est pas intégrée par défaut à PLaTon. Pour l'utiliser, vous devez contacter l'équipe de PLaTon ou
-  suivre les instructions de la [documentation](https://github.com/PremierLangage/sandbox) de la sandbox python.
+  La sandbox Python nécessite une configuration supplémentaire. Consultez la [documentation](https://github.com/PremierLangage/sandbox) pour son installation.
 </Callout>
 
 ## Construction: Builder
 
-Afin de construire des exercices ayant une part d'aléatoire, ou de faciliter la création de type d'exercices réutilisables, il peut être nécessaire de passer par un script de construction de l'exercice.
+La phase de construction permet de générer des données aléatoires et de préparer l'exercice avant son affichage.
 
-Pour cela, il est possible de déclarer un script python/node (en fonction de la sandbox) dans une clé `builder`.
-
-Par exemple :
-
-```js
+```pl-js
 builder == #!lang=js
-
+// Code exécuté avant l'affichage de l'exercice
 max = 10
 op1 = Math.round(Math.random() * max)
 op2 = Math.round(Math.random() * max)
-
+expected_result = op1 + op2
 ==
 ```
 
-Pour utiliser de l'aléatoire sur les sandboxes python, vous devez utiliser la fonction `random` en l'initialisant avec une graine (seed) automatiquement disponible dans les variables globales du builder.
+Pour l'aléatoire dans une sandbox Python:
 
-Par exemple:
-
-```python
+```pl-py
+builder == #!lang=py
+# Important: utilisez la graine (seed) fournie automatiquement
 import random
 random.seed(seed)
+op1 = random.randint(1, 10)
+op2 = random.randint(1, 10)
+expected_result = op1 + op2
+==
 ```
-
-<Callout type="info">
-Le contenu de la clé `builder`, ainsi que les autres clés exécutées sur la sandbox comme (`grader`, `hint.next`), doit être syntaxiquement correct dans le langage choisi.
-En particulier, les syntaxes d'affectation de variables PLe comme `myvar = :wc-input-box` ou `myurl = @copyurl /path/to/file.txt` ne sont pas disponibles.
-Pour créer un composant depuis la sandbox, vous pouvez appeler la fonction globale `component(selector: string)` pré-définie dans la sandbox. Par exemple, `myinput = :wc-input-box` devient `myinput = component(':wc-input-box')`.
-Ensuite, vous pourrez initialiser les propriétés du composant en utilisant la syntaxe python ou javascript classique.
-</Callout>
 
 ## Affichage: Title, Statement et Form
 
-Pour afficher un exercice, il est nécessaire de déclarer 3 clés dans la configuration de l'exercice. La valeur de ces clés peut être du HTML et/ou du [Markdown](https://fr.wikipedia.org/wiki/Markdown).
+### title - Le titre de l'exercice
 
-Il est possible d'afficher n'importe quelle variable de l'exercice à l'aide de la syntaxe `{{ nomvariable }}` dans le contenu de ces 3 clés.
-Si la variable affichée est un texte contenant d'autres affichage de variables, le processus de remplacement des variables s'appliquera récursivement.
-
-La plateforme utilise en interne la librairie [nunjunks](https://mozilla.github.io/nunjucks/) pour le rendu des variables. Il vous est donc possible d'utiliser les fonctionnalités de cette librairie dans vos exercices
-comme par exemple les [filtres](https://mozilla.github.io/nunjucks/templating.html#filters) ou les [expressions](https://mozilla.github.io/nunjucks/templating.html#if-expression).
-
-Pour le rendu du markdown, la plateforme utilise la librairie [nge-markdown](https://cisstech.github.io/nge/docs/nge-markdown/cheatsheet) qui contient quelques extensions supplémentaires par rapport au markdown de base comme le support du latex et des onglets.
-
-### title
-
-La clé `title` contient le titre de l'exercice. Par exemple :
-
-```markdown
-title ==
-Addition aléatoire
-==
+```pl-js
+title = "Addition aléatoire"
 ```
 
 <Callout type="warning">
-  Vous ne pouvez pas utiliser la syntaxe `{{ nomvariable }}` dans la clé `title`.
+  La clé `title` ne peut pas contenir de variables avec la syntaxe `{{ nomvariable }}`.
 </Callout>
 
-### statement
+### statement - L'énoncé de l'exercice
 
-La clé `statement` contient l'énoncé de l'exercice. Par exemple :
-
-```markdown
-text ==
-Quel est le **résultat** de: **{{ op1 }}** + **{{ op2 }}** ?
+```pl-js
+statement ==
+Calculez le résultat de **{{ op1 }}** + **{{ op2 }}**.
 ==
 ```
 
-A l'affichage, après traitement du markdown, du HTML et des variables, en supposant que `op1` contient `10` et `op2` `20`, le texte suivant sera affiché:
+### form - Le formulaire de réponse
 
-Quel est le **résultat** de: **10** + **20** ?
-
-### form
-
-La clé `form` contient le formulaire de l'exercice. Par exemple :
-
-```markdown
+```pl-js
 input = :wc-input-box
 input.type = "number"
-input.placeholder = "Entrez votre réponse ici"
 
 form ==
 {{ input }}
 ==
 ```
 
-<Callout type="info">
-  La récupération de la réponse de l'apprenant se fait à l'aide de variables de types composants dont la documentation
-  est disponible sur la barre de menu haut.
-</Callout>
+Ces clés supportent le HTML, le [Markdown](https://fr.wikipedia.org/wiki/Markdown), et les [templates Nunjucks](https://mozilla.github.io/nunjucks/templating.html) pour l'affichage dynamique de variables avec la syntaxe `{{ variable }}`.
 
 ## Évaluation: Grader
 
-Le grader est le script qui va évaluer la réponse de l'apprenant. Il est possible de déclarer un script python/node (en fonction de la sandbox) dans une clé `grader`.
+Le grader évalue la réponse de l'apprenant et lui attribue une note:
 
-Ce script à accès à l'ensemble des variables de l'exercice: celles déclarées dans le `ple`, celles créés par le script de construction, celles modifiées par l'apprenant dans le formulaire (les composants).
-
-En plus de vos variables, 2 variables spéciales sont disponibles :
-
-- `grade` : La note de l'apprenant, entre 0 et 100 (-1 si l'exercice est en erreur)
-
-- `feedback` : Un objet permettant de renvoyer un feedback à l'apprenant. Les clés de cet objet sont :
-  - `type` : Le type de feedback à renvoyer à l'apprenant. Les valeurs possibles sont `warning`, `error` et `success`
-  - `content` : Le message à afficher à l'apprenant (markdown|html)
-
-Vous devez modifier la valeur de ces clés pour renvoyer un feedback à l'apprenant et lui attribuer une note en fonction de sa réponse.
-
-Par exemple:
-
-```js
+```pl-js
 grader == #!lang=js
-
+// Important: grade et feedback doivent être déclarés comme variables globales (sans let/const/var)
 grade = 0
-feedback.type = "error"
-feedback.content = "Mauvaise réponse"
-
-// input.value contient la réponse de l'apprenant
-
-if (input.value === op1 + op2) {
-  grade = 100
-  feedback.type = "success"
-  feedback.content = "Bonne réponse"
+feedback = {
+  type: "error",
+  content: "Mauvaise réponse"
 }
 
-// A cet endroit vous pouvez modifer toutes les variables de l'exercice avant de les renvoyer à l'apprenant.
-// Par exemple, vous pouvez afficher la bonne réponse dans input.value
-
+if (parseInt(input.value) === expected_result) {
+  grade = 100
+  feedback.type = "success"
+  feedback.content = "Bonne réponse!"
+}
 ==
-
 ```
 
-<Callout type="info">
-  Par défaut, le type de feedback est un objet, mais il est possible d'afficher plusieurs feedbacks à l'apprenant en
-  utilisant un tableau d'objets de feedback. Pour cela, il suffit de déclarer la variable `feedback` comme un tableau au
-  début du grader et d'ajouter des objets de feedback à l'intérieur.
+<Callout type="warning">
+  Déclarez toujours `grade` et `feedback` sans mot-clé (`let`, `const`, `var`) pour qu'ils soient accessibles en dehors du grader.
 </Callout>
 
-## Affichage de la solution : Solution
+Pour afficher plusieurs feedbacks:
 
-Il est possible d'afficher la solution d'un exercice à l'aide de la clé `solution`. Cette clé suit la même logique que la clé `form`, sauf qu'elle contient le HTML/Markdown à afficher à l'apprenant lorsqu'il demande la solution.
+```pl-js
+grader == #!lang=js
+// Plusieurs feedbacks avec un tableau
+feedback = [
+  { type: "warning", content: "Premier commentaire" },
+  { type: "success", content: "Deuxième commentaire" }
+]
+==
+```
 
-Par exemple:
+## Solution: Affichage de la solution
 
-```js
+```pl-js
 inputSolution = :wc-input-box
 inputSolution.type = "number"
 inputSolution.disabled = true
-inputSolution.placeholder = "Solution"
 
 builder == #!lang=js
-
-max = 10
-op1 = Math.round(Math.random() * max)
-op2 = Math.round(Math.random() * max)
-inputSolution.value = op1 + op2
-
+// ...existing code...
+inputSolution.value = expected_result
 ==
 
 solution ==
 {{ inputSolution }}
 ==
 ```
+
+## Cycle de vie et portée des variables
+
+### Variables dans le contexte PLaTon
+
+Les variables déclarées dans le fichier `.ple` en dehors des blocs multilignes sont globales et accessibles dans tous les contextes:
+
+```pl-js
+max = 10         # Variable globale accessible partout
+```
+
+### Variables dans le contexte Sandbox
+
+1. **Variables globales**
+   ```pl-js
+   builder == #!lang=js
+   // Variable déclarée sans mot-clé: accessible partout après exécution du builder
+   resultat = op1 + op2;
+   ==
+   ```
+
+2. **Variables locales**
+   ```pl-js
+   builder == #!lang=js
+   // Variables avec let/const/var: accessibles uniquement dans ce script
+   let temp = op1 * 2;
+   const message = "Calculez";
+   ==
+   ```
+
+### Fonctions et leur portée
+
+<Callout type="important">
+  Les fonctions déclarées dans un script ne sont pas partagées entre les scripts. Par exemple, une fonction définie dans le `builder` ne sera pas accessible dans le `grader`.
+</Callout>
+
+```pl-js
+builder == #!lang=js
+// Cette fonction n'est accessible que dans le builder
+function calculerBonus() {
+  return op1 * op2;
+}
+
+// Pour rendre le résultat disponible ailleurs:
+bonus = calculerBonus();
+==
+
+grader == #!lang=js
+// ERREUR: cette fonction n'existe pas dans le grader
+// let points = calculerBonus();
+
+// Correct: on accède à la variable globale créée dans le builder
+let points = bonus;
+==
+```
+
+### Variables spéciales dans le grader
+
+```pl-js
+grader == #!lang=js
+// Ces variables DOIVENT être globales (sans let/const/var)
+grade = 100;  // Note entre 0 et 100
+feedback = {
+  type: "success",  // "success", "warning", ou "error"
+  content: "Bravo"  // Message de retour (supporte HTML/Markdown)
+};
+
+// INCORRECT - ne sera pas récupéré par PLaTon
+// const grade = 100;
+==
+```
+
+Ce système de variables et de portées permet de construire des exercices puissants tout en maintenant une séparation claire entre les différentes phases d'exécution.
