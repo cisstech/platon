@@ -5,7 +5,7 @@
     [articleTags]="tags"
     [articleIconTemplate]="imageTemplate"
     [articleDescription]="descriptionTemplate"
-    [articleUrl]="clickable ? ['/resources/', item.id] : undefined"
+    [articleUrl]="clickable ? detailsUrl : undefined"
     (didClickTagItem)="handleTagClick($event)"
   >
     <ui-list-item-article-action *ngIf="editable" (click)="openTab(editorUrl)" class="action" actionTitle="Éditer">
@@ -93,7 +93,11 @@
     [nzPopoverTrigger]="configurable ? 'hover' : null"
     (mouseenter)="configurable ? getReadmeContent() : null"
   >
+    @if( clickable) {
+    <a [routerLink]="detailsUrl" class="resource-item-title">{{ name }}</a>
+    } @else {
     <span class="resource-item-title">{{ name }}</span>
+    }
     <i
       class="icon-configurable"
       *ngIf="configurable"

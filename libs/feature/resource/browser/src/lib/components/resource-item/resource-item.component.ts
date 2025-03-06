@@ -17,20 +17,20 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 import { v4 as uuidv4 } from 'uuid'
 
 import { ListItemTag, NgeUiListModule } from '@cisstech/nge/ui/list'
-import { ExerciseResourceMeta, Resource, ResourceFile } from '@platon/feature/resource/common'
+import { ExerciseResourceMeta, Resource } from '@platon/feature/resource/common'
 
 import { UiModalIFrameComponent, positiveGreenColor } from '@platon/shared/ui'
 
 import { RouterModule } from '@angular/router'
+import { NgeMarkdownModule } from '@cisstech/nge/markdown'
 import { StorageService } from '@platon/core/browser'
 import { Variables } from '@platon/feature/compiler'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzPopoverModule } from 'ng-zorro-antd/popover'
-import { firstValueFrom } from 'rxjs'
-import { ResourcePipesModule } from '../../pipes'
-import { ResourceFileService } from '../../api/file.service'
-import { NgeMarkdownModule } from '@cisstech/nge/markdown'
 import { NzSpinModule } from 'ng-zorro-antd/spin'
+import { firstValueFrom } from 'rxjs'
+import { ResourceFileService } from '../../api/file.service'
+import { ResourcePipesModule } from '../../pipes'
 
 export const getPreviewOverridesStorageKey = (sessionId: string) => `preview.overrides.${sessionId}`
 type Tag = {
@@ -85,6 +85,10 @@ export class ResourceItemComponent implements OnChanges {
   @Input() previewOverrides?: Variables
   @Output() levelClicked = new EventEmitter<string>()
   @Output() topicClicked = new EventEmitter<string>()
+
+  get detailsUrl(): string {
+    return `/resources/${this.item.id}`
+  }
 
   get editorUrl(): string {
     return `/editor/${this.item.id}?version=latest`
@@ -143,10 +147,11 @@ export class ResourceItemComponent implements OnChanges {
   }
 
   protected handleTagClick(tag: ListItemTag<Tag>): void {
-    if (tag.data!.type === 'level') {
-      this.levelClicked.emit(tag.data!.id)
-    } else if (tag.data!.type === 'topic') {
-      this.topicClicked.emit(tag.data!.id)
+    if (!tag.data) return
+    if (tag.data.type === 'level') {
+      this.levelClicked.emit(tag.data.id)
+    } else if (tag.data.type === 'topic') {
+      this.topicClicked.emit(tag.data.id)
     }
   }
 
