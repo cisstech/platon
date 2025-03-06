@@ -5,7 +5,6 @@
     [articleTags]="tags"
     [articleIconTemplate]="imageTemplate"
     [articleDescription]="descriptionTemplate"
-    [articleUrl]="clickable ? detailsUrl : undefined"
     (didClickTagItem)="handleTagClick($event)"
   >
     <ui-list-item-article-action *ngIf="editable" (click)="openTab(editorUrl)" class="action" actionTitle="Éditer">

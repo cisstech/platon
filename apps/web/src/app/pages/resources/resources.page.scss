@@ -28,6 +28,7 @@ main {
   display: flex;
   flex-wrap: wrap;
   gap: 2rem;
+  position: relative;
 }
 
 article {
@@ -41,8 +42,21 @@ aside {
   box-sizing: border-box;
   flex-grow: 1;
   flex-basis: 40%;
-  align-self: start;
+  position: sticky;
   top: 2rem;
+  max-height: calc(100vh - 4rem);
+  overflow-y: auto;
+  padding-right: 0.5rem;
+  scrollbar-width: thin;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+  }
 }
 
 section {
@@ -81,16 +95,42 @@ ui-search-bar {
   margin-bottom: 1rem;
 }
 
-mat-card-content {
-  margin: 1rem 0;
-}
-
 nz-divider {
   margin-top: 0;
+}
+
+@media (max-width: 992px) {
+  main {
+    flex-direction: column;
+  }
+
+  article,
+  aside {
+    flex-basis: 100%;
+    min-width: 100%;
+  }
+
+  aside {
+    position: relative;
+    top: 0;
+    max-height: none;
+    overflow-y: visible;
+    order: -1; // Move the aside to the top on smaller screens
+    margin-bottom: 2rem;
+  }
 }
 
 @media (max-width: 720px) {
   ui-search-bar {
     width: 100%;
+  }
+
+  header {
+    margin-bottom: 1.5rem;
+  }
+
+  h1 {
+    font-size: 1.75rem;
+    margin-top: 1.5rem;
   }
 }

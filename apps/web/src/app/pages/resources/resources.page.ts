@@ -286,8 +286,6 @@ export default class ResourcesPage implements OnInit, OnDestroy {
       owners: filters.owners,
     }
 
-    console.error(JSON.stringify(this.search, null, 2))
-
     this.router
       .navigate([], {
         queryParams,

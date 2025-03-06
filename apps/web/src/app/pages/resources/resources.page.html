@@ -43,6 +43,7 @@
         [items]="items"
         (levelClicked)="applyTagFilter($event, 'level')"
         (topicClicked)="applyTagFilter($event, 'topic')"
+        class="resource-item-transition"
       >
         <h2>Aucune ressource ne correspond à votre recherche</h2>
         <ul>
@@ -55,19 +56,12 @@
     </ng-container>
   </article>
   <aside>
-    <nz-divider nzText="..." />
     <section>
-      <resource-item *ngIf="circle" [item]="circle" />
+      <resource-item *ngIf="circle" [item]="circle" class="resource-item-transition" />
     </section>
     <section>
-      <mat-card>
-        <mat-card-header>
-          <mat-card-title> Vu récemment </mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <resource-list [items]="views" [simple]="true" />
-        </mat-card-content>
-      </mat-card>
+      <h2>Vu récemment</h2>
+      <resource-list [items]="views" [simple]="true" class="resource-item-transition" />
     </section>
   </aside>
 </main>
