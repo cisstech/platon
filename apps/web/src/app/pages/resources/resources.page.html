@@ -3,8 +3,8 @@
   <ui-search-bar [searchbar]="searchbar" (filter)="filterDrawer.open()">
     <ng-template let-context> {{ context }}</ng-template>
   </ui-search-bar>
+  @if (tree) {
   <button
-    *ngIf="tree"
     nz-button
     nzType="primary"
     nzShape="round"
@@ -12,38 +12,42 @@
     [nz-popover]
     nzPopoverTrigger="click"
     [nzPopoverContent]="treeTemplate"
+    nz-tooltip="Afficher l'arbre des cercles"
   >
     <mat-icon>account_tree</mat-icon>
     <ng-template #treeTemplate>
       <resource-circle-tree [tree]="tree" />
     </ng-template>
   </button>
+  }
 </header>
-<main class="content">
+
+<main [class.sidebar-collapsed]="sidebarCollapsed">
   <article>
     <ng-container *ngIf="!searching; else spinner">
       <h2 *ngIf="items.length">Voici ce que nous avons trouvé selon vos critères de recherche...</h2>
-      <div class="indicators">
+      <div class="filter-indicators">
         <ui-filter-indicators
           [filters]="filters"
           (filtersChange)="search($event, $event.search)"
           [indicators]="filterIndicators"
         />
       </div>
+
       <ng-container [ngPlural]="totalMatches">
         <ng-template ngPluralCase="=0"></ng-template>
         <ng-template ngPluralCase="=1">
-          <p>1 résultat</p>
+          <p class="results-count">1 résultat</p>
         </ng-template>
         <ng-template ngPluralCase="other">
-          <p>{{ totalMatches }} résultats</p>
+          <p class="results-count">{{ totalMatches }} résultats</p>
         </ng-template>
       </ng-container>
+
       <resource-list
         [items]="items"
         (levelClicked)="applyTagFilter($event, 'level')"
         (topicClicked)="applyTagFilter($event, 'topic')"
-        class="resource-item-transition"
       >
         <h2>Aucune ressource ne correspond à votre recherche</h2>
         <ul>
@@ -51,20 +55,64 @@
           <li>Essayez d'autres critères de recherche</li>
         </ul>
       </resource-list>
+
       <nz-spin class="spinner-pagination" nzSize="large" [nzTip]="'Chargement...'" [nzSpinning]="paginating" />
       <div style="height: 8px" *ngIf="hasMore" viewportIntersection (intersected)="loadMore()"></div>
     </ng-container>
   </article>
+
   <aside>
+    <button
+      class="collapse-button"
+      (click)="toggleSidebar()"
+      [nz-tooltip]="sidebarCollapsed ? 'Afficher le menu' : 'Cacher le menu'"
+    >
+      <mat-icon>{{ sidebarCollapsed ? 'chevron_left' : 'chevron_right' }}</mat-icon>
+    </button>
     <section>
-      <resource-item *ngIf="circle" [item]="circle" class="resource-item-transition" />
+      <h2>Mon espace</h2>
+      @if (circle) {
+      <resource-item [item]="circle" />
+      }
     </section>
     <section>
       <h2>Vu récemment</h2>
-      <resource-list [items]="views" [simple]="true" class="resource-item-transition" />
+      <resource-list [items]="views" [simple]="true" />
     </section>
   </aside>
 </main>
+
+@if(isSmallScreen) {
+<button
+  class="mobile-fab"
+  (click)="toggleDrawer()"
+  nz-button
+  nzType="primary"
+  nzShape="circle"
+  nz-tooltip="Voir mon espace"
+>
+  <span nz-icon nzType="user" nzTheme="outline"></span>
+</button>
+}
+
+<nz-drawer
+  [nzVisible]="drawerVisible"
+  [nzHeight]="420"
+  nzPlacement="bottom"
+  nzTitle="Mon espace"
+  (nzOnClose)="toggleDrawer()"
+>
+  <ng-container *nzDrawerContent>
+    <section>
+      <h2>Mon espace</h2>
+      <resource-item *ngIf="circle" [item]="circle" />
+    </section>
+    <section>
+      <h2>Vu récemment</h2>
+      <resource-list [items]="views" [simple]="true" />
+    </section>
+  </ng-container>
+</nz-drawer>
 
 <ng-template #spinner>
   <nz-spin class="spinner-main" nzSimple nzSize="large" />
@@ -77,5 +125,5 @@
   [topics]="topics"
   [circles]="circles"
   [owners]="owners"
-  (triggered)="this.search($event, this.filters.search)"
+  (triggered)="search($event, filters.search)"
 />

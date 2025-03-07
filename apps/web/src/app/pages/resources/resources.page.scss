@@ -1,69 +1,150 @@
+// Base container
 :host {
   display: block;
   width: 100%;
 }
 
+// Typography
 h1 {
   width: 100%;
   text-align: center;
-  margin-top: 2rem;
-  color: var(--brand-text-primary);
+  margin: 2rem 0 1rem;
+  font-size: 2rem;
+  font-weight: 600;
+  position: relative;
+
+  &::after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 3px;
+    background: var(--brand-color-primary--gradient);
+    margin: 0.5rem auto 0;
+    border-radius: 2px;
+  }
 }
 
 h2 {
   margin-bottom: 1rem;
+  font-size: 1.25rem;
+  font-weight: 500;
 }
 
+// Layout components
 header {
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
+
   button {
-    margin: 1rem 0;
+    margin-top: 1.2rem;
   }
 }
 
 main {
   display: flex;
-  flex-wrap: wrap;
-  gap: 2rem;
+  gap: 2.5rem;
   position: relative;
+  align-items: flex-start;
+  transition: gap 0.3s ease;
+
+  &.sidebar-collapsed {
+    gap: 1rem;
+
+    aside {
+      flex: 0 0 40px;
+      overflow: hidden;
+      padding: 0;
+
+      .collapse-button {
+        right: auto;
+        left: 0;
+        border-radius: 0 4px 4px 0;
+
+        mat-icon {
+          transform: rotate(180deg);
+        }
+      }
+
+      section {
+        opacity: 0;
+        visibility: hidden;
+      }
+    }
+  }
 }
 
+// Main content area
 article {
-  box-sizing: border-box;
-  flex-basis: 0;
-  flex-grow: 999;
-  min-width: calc(60% - 2rem);
+  flex: 1 0 60%;
+  min-height: 50vh;
 }
 
+// Sidebar
 aside {
-  box-sizing: border-box;
-  flex-grow: 1;
-  flex-basis: 40%;
+  flex: 0 0 30%;
   position: sticky;
   top: 2rem;
-  max-height: calc(100vh - 4rem);
-  overflow-y: auto;
-  padding-right: 0.5rem;
-  scrollbar-width: thin;
+  max-height: calc(100vh - 4rem); // Limit height to viewport minus margins
+  padding: 0 0.5rem;
+  align-self: flex-start;
+  transition: flex 0.3s ease, padding 0.3s ease;
+  position: relative;
 
-  &::-webkit-scrollbar {
-    width: 6px;
+  .collapse-button {
+    position: absolute;
+    top: 0.5rem;
+    right: 0;
+    z-index: 10;
+    background: var(--brand-color-primary);
+    color: white;
+    border: none;
+    border-radius: 4px 0 0 4px;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+    mat-icon {
+      margin: 0;
+      font-size: 18px;
+      height: 18px;
+      width: 18px;
+      line-height: 18px;
+      transition: transform 0.3s ease;
+    }
+
+    &:hover {
+      background: var(--brand-color-primary-dark, #0056b3);
+    }
   }
 
-  &::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 3px;
+  section {
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    visibility: visible;
+    opacity: 1;
   }
 }
 
+// Content sections
 section {
-  margin: 0;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
+  border-radius: 8px;
+
+  h2 {
+    padding: 0 0.5rem;
+    margin-bottom: 0.75rem;
+    font-weight: 500;
+    border-left: 3px solid var(--brand-color-secondary);
+  }
 }
 
+// Common elements
 li {
   list-style: none;
 }
@@ -71,11 +152,31 @@ li {
 button {
   display: inline-flex;
   align-items: center;
+
   mat-icon {
     margin-right: 4px;
   }
 }
 
+// UI Components
+ui-search-bar {
+  width: 70%;
+  margin: 0 auto;
+}
+
+.filter-indicators {
+  margin-bottom: 1.5rem;
+}
+
+.results-count {
+  font-size: 1.1rem;
+  color: var(--brand-text-secondary);
+  margin-bottom: 1rem;
+  padding-left: 0.25rem;
+  font-weight: 500;
+}
+
+// Loading indicators
 .spinner-main {
   display: flex;
   justify-content: center;
@@ -86,37 +187,35 @@ button {
   margin-bottom: 1rem;
 }
 
-ui-search-bar {
-  width: 70%;
-  margin: 0 auto;
+// Mobile FAB button
+.mobile-fab {
+  display: none;
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 100;
+  width: 56px;
+  height: 56px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-.indicators {
-  margin-bottom: 1rem;
-}
-
-nz-divider {
-  margin-top: 0;
-}
-
+// Responsive styles
 @media (max-width: 992px) {
   main {
     flex-direction: column;
   }
 
-  article,
-  aside {
+  article {
     flex-basis: 100%;
-    min-width: 100%;
+    width: 100%;
   }
 
   aside {
-    position: relative;
-    top: 0;
-    max-height: none;
-    overflow-y: visible;
-    order: -1; // Move the aside to the top on smaller screens
-    margin-bottom: 2rem;
+    display: none;
+  }
+
+  .mobile-fab {
+    display: block;
   }
 }
 
@@ -132,5 +231,13 @@ nz-divider {
   h1 {
     font-size: 1.75rem;
     margin-top: 1.5rem;
+
+    &::after {
+      width: 60px;
+    }
+  }
+
+  .results-count {
+    font-size: 1rem;
   }
 }

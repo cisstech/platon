@@ -11,6 +11,9 @@ import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzPopoverModule } from 'ng-zorro-antd/popover'
 import { NzSpinModule } from 'ng-zorro-antd/spin'
+import { NzDividerModule } from 'ng-zorro-antd/divider'
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
+import { NzDrawerModule } from 'ng-zorro-antd/drawer'
 
 import { ViewportIntersectionDirective } from '@cisstech/nge/directives'
 
@@ -25,6 +28,7 @@ import {
 import { AuthService, TagService } from '@platon/core/browser'
 import { Level, OrderingDirections, Topic, uniquifyBy, User } from '@platon/core/common'
 import {
+  AntiTopicFilterIndicator,
   CircleFilterIndicator,
   CircleTreeComponent,
   ExerciseConfigurableFilterIndicator,
@@ -39,7 +43,6 @@ import {
   ResourceStatusFilterIndicator,
   ResourceTypeFilterIndicator,
   TopicFilterIndicator,
-  AntiTopicFilterIndicator,
 } from '@platon/feature/resource/browser'
 import {
   CircleTree,
@@ -51,7 +54,6 @@ import {
   ResourceStatus,
   ResourceTypes,
 } from '@platon/feature/resource/common'
-import { NzDividerModule } from 'ng-zorro-antd/divider'
 
 const PAGINATION_LIMIT = 15
 const EXPANDS: ResourceExpandableFields[] = ['metadata', 'statistic']
@@ -90,6 +92,8 @@ interface QueryParams {
     NzButtonModule,
     NzPopoverModule,
     NzDividerModule,
+    NzToolTipModule,
+    NzDrawerModule,
 
     ViewportIntersectionDirective,
 
@@ -166,8 +170,25 @@ export default class ResourcesPage implements OnInit, OnDestroy {
   protected views: Resource[] = []
   protected owners: User[] = []
 
+  protected sidebarCollapsed = true
+
+  protected isSmallScreen = false
+  protected drawerVisible = false
+
+  protected toggleSidebar(): void {
+    this.sidebarCollapsed = !this.sidebarCollapsed
+    localStorage.setItem('resources-sidebar-collapsed', this.sidebarCollapsed.toString())
+    this.changeDetectorRef.markForCheck()
+  }
+
   async ngOnInit(): Promise<void> {
-    this.user = (await this.authService.ready()) as User
+    this.user = await this.authService.ready()
+    if (!this.user) {
+      return
+    }
+
+    this.sidebarCollapsed = localStorage.getItem('resources-sidebar-collapsed') === 'true'
+
     const direction = localStorage.getItem('order-direction') as OrderingDirections
     const order = localStorage.getItem('order') as ResourceOrderings
     if (direction && order) {
@@ -263,10 +284,19 @@ export default class ResourcesPage implements OnInit, OnDestroy {
         this.changeDetectorRef.markForCheck()
       })
     )
+
+    this.checkScreenSize()
+    window.addEventListener('resize', this.handleResize)
   }
 
   ngOnDestroy(): void {
     this.subscriptions.forEach((s) => s.unsubscribe())
+    window.removeEventListener('resize', this.handleResize)
+  }
+
+  private handleResize = (): void => {
+    this.checkScreenSize()
+    this.changeDetectorRef.markForCheck()
   }
 
   protected search(filters: ResourceFilters, query?: string) {
@@ -328,5 +358,14 @@ export default class ResourcesPage implements OnInit, OnDestroy {
       },
       this.searchbar.value
     )
+  }
+
+  protected checkScreenSize(): void {
+    this.isSmallScreen = window.innerWidth <= 992
+  }
+
+  protected toggleDrawer(): void {
+    this.drawerVisible = !this.drawerVisible
+    this.changeDetectorRef.markForCheck()
   }
 }
