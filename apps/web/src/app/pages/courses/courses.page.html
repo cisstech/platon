@@ -12,14 +12,15 @@
     [routerLink]="['/courses/create']"
     [queryParamsHandling]="'merge'"
     [queryParams]="null"
+    nz-tooltip="Créer un nouveau cours"
   >
     <span nz-icon nzType="plus" nzTheme="outline"></span>
   </button>
 </header>
 <article>
   <ng-container *ngIf="!searching; else spinner">
-    <h2 *ngIf="items.length">Voici ce qu'on a trouvé selon vos critères de recherche...</h2>
-    <div class="indicators">
+    <h2 *ngIf="items.length">Voici ce que nous avons trouvé selon vos critères de recherche...</h2>
+    <div class="filter-indicators">
       <ui-filter-indicators
         [filters]="filters"
         (filtersChange)="search($event, $event.search)"

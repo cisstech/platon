@@ -1,28 +1,56 @@
+// Base container
 :host {
   display: block;
   width: 100%;
 }
 
+// Typography
 h1 {
   width: 100%;
   text-align: center;
-  margin-top: 2rem;
+  margin: 2rem 0 1rem;
+  font-size: 2rem;
+  font-weight: 600;
+  position: relative;
+
+  &::after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 3px;
+    background: var(--brand-color-primary--gradient);
+    margin: 0.5rem auto 0;
+    border-radius: 2px;
+  }
 }
 
 h2 {
   margin-bottom: 1rem;
+  font-size: 1.25rem;
+  font-weight: 500;
 }
 
+// Layout components
 header {
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
+
   button {
-    margin: 1rem 0;
+    margin-top: 1.2rem;
   }
 }
 
+// Content area
+article {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+// Common elements
 li {
   list-style: none;
 }
@@ -30,24 +58,24 @@ li {
 button {
   display: inline-flex;
   align-items: center;
-  mat-icon {
-    margin-right: 4px;
-  }
 }
 
-nz-spin {
-  display: flex;
-  justify-content: center;
-  margin: 10rem 0;
-}
-
+// UI Components
 ui-search-bar {
   width: 70%;
   margin: 0 auto;
 }
 
+.filter-indicators {
+  margin-bottom: 1.5rem;
+}
+
 .total-matches {
   display: inline-block;
+  font-size: 1.1rem;
+  color: var(--brand-text-secondary);
+  margin-bottom: 1rem;
+  font-weight: 500;
 }
 
 .show-all-button {
@@ -55,12 +83,33 @@ ui-search-bar {
   margin-bottom: 1rem;
 }
 
-.indicators {
-  margin-bottom: 1rem;
+// Loading indicators
+nz-spin {
+  display: flex;
+  justify-content: center;
+  margin: 10rem 0;
 }
 
+// Responsive styles
 @media (max-width: 720px) {
   ui-search-bar {
     width: 100%;
+  }
+
+  header {
+    margin-bottom: 1.5rem;
+  }
+
+  h1 {
+    font-size: 1.75rem;
+    margin-top: 1.5rem;
+
+    &::after {
+      width: 60px;
+    }
+  }
+
+  .total-matches {
+    font-size: 1rem;
   }
 }
