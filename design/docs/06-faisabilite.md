@@ -91,3 +91,31 @@ Chaque élément des maquettes est rapporté à ce qui existe dans le code de PL
    plus tard.
 3. Le nom de l'établissement en configuration.
 4. La réinitialisation de mot de passe par courriel, un jour, sur le service de courriel existant.
+
+## Corrections
+
+| Élément | Niveau | Ce qui existe |
+| --- | --- | --- |
+| File par épreuve avec le reste | existant | `/corrections/pendings` et `availables`, `CorrectionStatus` |
+| Liste des copies de l'épreuve | existant | Le lecteur de correction (`player-correction`) charge déjà les copies par exercice et par utilisateur |
+| Note automatique et étiquettes | existant | `Label` (nom, couleur, `gradeChange`) et `CorrectionLabel` relient une étiquette à une réponse |
+| Raccourcis 1 à 9, J et K | proposition | Côté client uniquement |
+| Annotation sur la réponse | existant | Commentaires sur les réponses (`player-comments`) |
+
+## Ressources
+
+| Élément | Niveau | Ce qui existe |
+| --- | --- | --- |
+| Recherche avec filtres type, statut, niveau, thème | existant | `ResourceFilters` et la barre de recherche actuelle |
+| « Utilisé dans N activités » | existant | `ResourceDependency` relie les activités à leurs exercices |
+| Trois chiffres d'utilisation | existant | `ResourceStatistic` et `DashboardService.ofResource` |
+| Mon cercle en raccourci | existant | Cercle personnel (`personal`, code = nom d'utilisateur) |
+
+## Tests d'entrée
+
+| Élément | Niveau | Ce qui existe |
+| --- | --- | --- |
+| Candidats, ajout, import CSV | existant | `TestsCandidates`, page `csv-import` |
+| État pas commencé, en cours, terminé | agrégation | Sessions de l'activité du test, par candidat |
+| État de l'invitation (envoyée ou non) | proposition | Aucun champ ne garde l'envoi ; un `invitedAt` sur `TestsCandidates` |
+| Page candidat avec conditions et acceptation | existant | `/candidate/terms`, `Test.terms` |

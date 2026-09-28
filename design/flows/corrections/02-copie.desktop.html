@@ -1,0 +1,58 @@
+<div style="min-height: 100vh; padding: var(--spacing-6) var(--spacing-8)"><div style="max-width: 1400px">
+  <div class="player-head">
+    <button class="btn btn-icon" aria-label="Revenir aux corrections" data-wf-to="file"><svg class="ico"><use href="#arrow_back" /></svg></button>
+    <div style="flex: 1">
+      <div class="heading">Examen partiel 1, exercice 4&nbsp;: recherche dichotomique</div>
+      <div class="muted" style="font-size: 13px">Algorithmique et programmation 1, groupe TD 2, copie 3 sur 26</div>
+    </div>
+    <span class="muted" style="font-size: 13px; display: inline-flex; gap: 6px; align-items: center"><span class="kbd">J</span><span class="kbd">K</span>copie précédente, suivante</span>
+  </div>
+  <div class="grading">
+    <aside class="card">
+      <div class="rail-head"><span class="subheading">Copies</span><span class="num">2 sur 26</span></div>
+      <div class="queue-item done"><span class="avatar">AR</span><span>Amélie Roux</span><svg class="ico"><use href="#check_circle" /></svg></div>
+      <div class="queue-item done"><span class="avatar">BM</span><span>Bastien Morel</span><svg class="ico"><use href="#check_circle" /></svg></div>
+      <div class="queue-item current"><span class="avatar">CG</span><span>Chloé Garnier</span><svg class="ico"><use href="#radio_button_unchecked" /></svg></div>
+      <div class="queue-item "><span class="avatar">DL</span><span>David Lemaire</span><svg class="ico"><use href="#radio_button_unchecked" /></svg></div>
+      <div class="queue-item "><span class="avatar">ÉF</span><span>Élise Faure</span><svg class="ico"><use href="#radio_button_unchecked" /></svg></div>
+      <div class="queue-item "><span class="avatar">FB</span><span>Farid Benkirane</span><svg class="ico"><use href="#radio_button_unchecked" /></svg></div>
+      <div class="queue-item "><span class="avatar">GP</span><span>Gaëlle Picard</span><svg class="ico"><use href="#radio_button_unchecked" /></svg></div>
+      <div class="queue-item "><span class="avatar">HM</span><span>Hugo Marchand</span><svg class="ico"><use href="#radio_button_unchecked" /></svg></div>
+    </aside>
+    <div class="copie">
+      <div class="q">
+        <div class="q-mark part"><span>1</span><svg class="ico"><use href="#pending" /></svg></div>
+        <h2 class="heading">Écrire une fonction <code>recherche(t, x)</code> qui renvoie l'indice de <code>x</code> dans le tableau trié <code>t</code>, ou -1.</h2>
+        <span class="code">def recherche(t, x):
+    g, d = 0, len(t)
+    while g &lt; d:
+        m = (g + d) // 2
+        if t[m] == x:
+            return m
+        elif t[m] &lt; x:
+            g = m
+        else:
+            d = m
+    return -1</span>
+        <div class="annotation">Ligne 8&nbsp;: <code>g = m</code> boucle à l'infini quand <code>d = g + 1</code>. Il fallait <code>g = m + 1</code>.</div>
+        <div class="feedback ko"><svg class="ico"><use href="#error" /></svg><p><strong>Tests automatiques&nbsp;: 4 réussis sur 6.</strong> Deux tests dépassent le temps limite (tableaux de taille paire).</p></div>
+      </div>
+    </div>
+    <aside class="card">
+      <div class="grade"><span class="big">55</span><small>/ 100</small><span class="auto">note automatique 67<br />étiquettes -12</span></div>
+      <div class="rail-head" style="border-top: 1px solid var(--color-line)"><span class="subheading">Étiquettes</span></div>
+      <div class="labels">
+        <div class="label-row on"><span class="key">1</span><span>Boucle infinie</span><span class="delta minus">-10</span></div>
+        <div class="label-row"><span class="key">2</span><span>Cas du tableau vide oublié</span><span class="delta minus">-5</span></div>
+        <div class="label-row on"><span class="key">3</span><span>Nommage peu clair</span><span class="delta minus">-2</span></div>
+        <div class="label-row"><span class="key">4</span><span>Solution élégante</span><span class="delta plus">+5</span></div>
+        <a class="btn btn-ghost btn-sm" style="justify-self: start"><svg class="ico"><use href="#add" /></svg>Nouvelle étiquette</a>
+      </div>
+      <div class="rail-head" style="border-top: 1px solid var(--color-line)"><span class="subheading">Commentaire</span></div>
+      <div class="input comment-box"><span class="placeholder">Visible par l'étudiant avec sa note.</span></div>
+      <div class="drawer-foot">
+        <a class="btn btn-primary" data-wf-to="copie">Valider et passer à la suivante</a>
+      </div>
+    </aside>
+  </div>
+</div></div>

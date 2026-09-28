@@ -7,44 +7,77 @@
         <div class="brand-org">Université Gustave Eiffel</div>
       </div>
     </div>
+    <a class="btn btn-cover btn-create"><svg class="ico"><use href="#add" /></svg>Créer</a>
     <nav class="nav">
-      <a class="nav-item active"><svg class="ico"><use href="#home" /></svg>Accueil</a>
+      <a class="nav-item"><svg class="ico"><use href="#home" /></svg>Accueil</a>
       <a class="nav-item"><svg class="ico"><use href="#school" /></svg>Cours</a>
+      <a class="nav-item"><svg class="ico"><use href="#rate_review" /></svg>Corrections<span class="count">14</span></a>
+      <a class="nav-item active"><svg class="ico"><use href="#folder_open" /></svg>Ressources</a>
+      <a class="nav-item"><svg class="ico"><use href="#fact_check" /></svg>Tests d'entrée</a>
     </nav>
     <div class="sidebar-foot">
       <a class="nav-item"><svg class="ico"><use href="#help" /></svg>Aide</a>
-      <a class="nav-item" data-wf-to="notifications"><svg class="ico"><use href="#notifications" /></svg>Notifications</a>
-      <div class="me" data-wf-to="profil">
-        <span class="avatar">IB</span>
+      <a class="nav-item"><svg class="ico"><use href="#notifications" /></svg>Notifications<span class="count">2</span></a>
+      <div class="me">
+        <span class="avatar">KH</span>
         <div>
-          <div class="me-name">Inès Benali</div>
-          <div class="me-role">Étudiante</div>
+          <div class="me-name">Karim Haddad</div>
+          <div class="me-role">Enseignant</div>
         </div>
         <svg class="ico ico-16"><use href="#expand_more" /></svg>
       </div>
     </div>
   </aside>
-
   <main class="main">
     <header class="page-head">
       <div>
-        <h1 class="title">Bonjour Inès</h1>
-        <p class="page-sub">Lundi 28 septembre.</p>
+        <h1 class="title">Ressources</h1>
+        <p class="page-sub">Les exercices, activités et cercles partagés entre enseignants.</p>
       </div>
+      <div class="actions"><a class="btn btn-secondary"><svg class="ico"><use href="#folder_open" /></svg>Mon cercle</a></div>
     </header>
-
-    <div class="card" style="max-width: 720px">
-      <div class="empty">
-        <svg class="illus"><use href="#illus-copie" /></svg>
-        <div class="empty-body">
-          <h2 class="heading">Aucun cours pour l'instant</h2>
-          <p>
-            Vos enseignants vous inscrivent depuis Moodle, ou vous envoient un lien d'accès à un cours. Dès que c'est
-            fait, les activités à rendre apparaissent ici, triées par échéance.
-          </p>
-          <p>Vous avez reçu un lien&nbsp;? Ouvrez-le dans ce navigateur&nbsp;: votre session est déjà ouverte.</p>
-          <a class="btn btn-secondary"><svg class="ico"><use href="#menu_book" /></svg>Comment rejoindre un cours</a>
+    <div class="filters">
+      <div class="input focused"><svg class="ico ico-18" style="margin: 0 8px 0 0; color: var(--color-subtle)"><use href="#search" /></svg><span>dichotomie</span></div>
+      <span class="chip on"><svg class="ico"><use href="#code" /></svg>Exercices</span>
+      <span class="chip"><svg class="ico"><use href="#quiz" /></svg>Activités</span>
+      <span class="chip"><svg class="ico"><use href="#folder_open" /></svg>Cercles</span>
+      <span class="chip"><svg class="ico"><use href="#filter_list" /></svg>Statut&nbsp;: prêt</span>
+      <span class="chip"><svg class="ico"><use href="#school" /></svg>Niveau&nbsp;: L1</span>
+      <span class="chip">Thème&nbsp;: Informatique</span>
+    </div>
+    <p class="muted" style="margin-bottom: var(--spacing-3); font-size: 13px">4 exercices pour « dichotomie », triés par pertinence. <a>Effacer les filtres</a></p>
+    <div class="card rows">
+      <div class="row" data-wf-to="ressource">
+        <span class="lead-icon"><svg class="ico"><use href="#code" /></svg></span>
+        <div class="row-main">
+          <div class="row-title">Recherche dichotomique</div>
+          <div class="row-meta"><span>Informatique, L1</span><span>Hélène Martin</span><span>utilisé dans 3 activités</span><span>modifié il y a 2 jours</span></div>
         </div>
+        <div class="row-side"><span class="tag success"><svg class="ico"><use href="#check_circle" /></svg>Prêt</span></div>
+      </div>
+      <div class="row">
+        <span class="lead-icon"><svg class="ico"><use href="#code" /></svg></span>
+        <div class="row-main">
+          <div class="row-title">Recherche dichotomique récursive</div>
+          <div class="row-meta"><span>Informatique, L1</span><span>Karim Haddad</span><span>utilisé dans 1 activité</span><span>modifié le 14 septembre</span></div>
+        </div>
+        <div class="row-side"><span class="tag warning"><svg class="ico"><use href="#science" /></svg>À tester</span></div>
+      </div>
+      <div class="row">
+        <span class="lead-icon"><svg class="ico"><use href="#code" /></svg></span>
+        <div class="row-main">
+          <div class="row-title">Dichotomie sur les réels&nbsp;: racine carrée</div>
+          <div class="row-meta"><span>Mathématiques, L1</span><span>Hélène Martin</span><span>modifié le 2 septembre</span></div>
+        </div>
+        <div class="row-side"><span class="tag"><svg class="ico"><use href="#edit" /></svg>Brouillon</span></div>
+      </div>
+      <div class="row">
+        <span class="lead-icon"><svg class="ico"><use href="#code" /></svg></span>
+        <div class="row-main">
+          <div class="row-title">Invariant de boucle d'une recherche</div>
+          <div class="row-meta"><span>Informatique, L2</span><span>Paul Renard</span><span>modifié en juin</span></div>
+        </div>
+        <div class="row-side"><span class="tag danger"><svg class="ico"><use href="#error" /></svg>Contient des bugs</span></div>
       </div>
     </div>
   </main>

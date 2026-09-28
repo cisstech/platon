@@ -1,0 +1,8 @@
+- screen: liste
+  note: "Les filtres sont des pastilles visibles, l'état de la recherche est écrit en toutes lettres avec Effacer les filtres."
+- screen: liste
+  note: "Une recherche sans résultat nomme le filtre qui écarte des résultats et propose de le retirer, ou d'écrire l'exercice."
+- screen: ressource
+  note: "Trois chiffres d'utilisation remplacent les onze cartes actuelles. Utilisé dans vient avant, parce que c'est ce qui dit si un exercice est éprouvé."
+- screen: ressource
+  note: "Prévisualiser est l'action principale ; Éditer ouvre l'éditeur ou le builder selon que l'exercice vient d'un modèle."

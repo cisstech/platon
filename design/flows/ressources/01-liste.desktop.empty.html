@@ -7,43 +7,51 @@
         <div class="brand-org">Université Gustave Eiffel</div>
       </div>
     </div>
+    <a class="btn btn-cover btn-create"><svg class="ico"><use href="#add" /></svg>Créer</a>
     <nav class="nav">
-      <a class="nav-item active"><svg class="ico"><use href="#home" /></svg>Accueil</a>
+      <a class="nav-item"><svg class="ico"><use href="#home" /></svg>Accueil</a>
       <a class="nav-item"><svg class="ico"><use href="#school" /></svg>Cours</a>
+      <a class="nav-item"><svg class="ico"><use href="#rate_review" /></svg>Corrections<span class="count">14</span></a>
+      <a class="nav-item active"><svg class="ico"><use href="#folder_open" /></svg>Ressources</a>
+      <a class="nav-item"><svg class="ico"><use href="#fact_check" /></svg>Tests d'entrée</a>
     </nav>
     <div class="sidebar-foot">
       <a class="nav-item"><svg class="ico"><use href="#help" /></svg>Aide</a>
-      <a class="nav-item" data-wf-to="notifications"><svg class="ico"><use href="#notifications" /></svg>Notifications</a>
-      <div class="me" data-wf-to="profil">
-        <span class="avatar">IB</span>
+      <a class="nav-item"><svg class="ico"><use href="#notifications" /></svg>Notifications<span class="count">2</span></a>
+      <div class="me">
+        <span class="avatar">KH</span>
         <div>
-          <div class="me-name">Inès Benali</div>
-          <div class="me-role">Étudiante</div>
+          <div class="me-name">Karim Haddad</div>
+          <div class="me-role">Enseignant</div>
         </div>
         <svg class="ico ico-16"><use href="#expand_more" /></svg>
       </div>
     </div>
   </aside>
-
   <main class="main">
     <header class="page-head">
       <div>
-        <h1 class="title">Bonjour Inès</h1>
-        <p class="page-sub">Lundi 28 septembre.</p>
+        <h1 class="title">Ressources</h1>
+        <p class="page-sub">Les exercices, activités et cercles partagés entre enseignants.</p>
       </div>
+      <div class="actions"><a class="btn btn-secondary"><svg class="ico"><use href="#folder_open" /></svg>Mon cercle</a></div>
     </header>
-
-    <div class="card" style="max-width: 720px">
-      <div class="empty">
+    <div class="filters">
+      <div class="input focused"><svg class="ico ico-18" style="margin: 0 8px 0 0; color: var(--color-subtle)"><use href="#search" /></svg><span>dichotomie</span></div>
+      <span class="chip on"><svg class="ico"><use href="#code" /></svg>Exercices</span>
+      <span class="chip"><svg class="ico"><use href="#quiz" /></svg>Activités</span>
+      <span class="chip"><svg class="ico"><use href="#folder_open" /></svg>Cercles</span>
+      <span class="chip"><svg class="ico"><use href="#filter_list" /></svg>Statut&nbsp;: prêt</span>
+      <span class="chip"><svg class="ico"><use href="#school" /></svg>Niveau&nbsp;: L1</span>
+      <span class="chip">Thème&nbsp;: Informatique</span>
+    </div>
+        <div class="card" style="max-width: 720px">
+      <div class="empty compact">
         <svg class="illus"><use href="#illus-copie" /></svg>
         <div class="empty-body">
-          <h2 class="heading">Aucun cours pour l'instant</h2>
-          <p>
-            Vos enseignants vous inscrivent depuis Moodle, ou vous envoient un lien d'accès à un cours. Dès que c'est
-            fait, les activités à rendre apparaissent ici, triées par échéance.
-          </p>
-          <p>Vous avez reçu un lien&nbsp;? Ouvrez-le dans ce navigateur&nbsp;: votre session est déjà ouverte.</p>
-          <a class="btn btn-secondary"><svg class="ico"><use href="#menu_book" /></svg>Comment rejoindre un cours</a>
+          <h2 class="subheading">Aucun exercice pour « dichotomie » avec ces filtres</h2>
+          <p>Le filtre Niveau&nbsp;: L1 en écarte 2. Essayez sans lui, ou écrivez l'exercice&nbsp;: il sera d'abord dans votre cercle.</p>
+          <div style="display: flex; gap: var(--spacing-2)"><a class="btn btn-secondary btn-sm">Retirer Niveau&nbsp;: L1</a><a class="btn btn-ghost btn-sm"><svg class="ico"><use href="#add" /></svg>Écrire un exercice</a></div>
         </div>
       </div>
     </div>
