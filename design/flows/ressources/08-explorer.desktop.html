@@ -51,26 +51,36 @@
     </header>
     <div class="tabs"><a class="tab" data-wf-to="ressource"><svg class="ico"><use href="#grid_view" /></svg>Vue d'ensemble</a><a class="tab active" data-wf-to="explorer"><svg class="ico"><use href="#folder_open" /></svg>Explorer</a><a class="tab" data-wf-to="evenements"><svg class="ico"><use href="#history" /></svg>Évènements</a><a class="tab" data-wf-to="ressource-parametres"><svg class="ico"><use href="#settings" /></svg>Paramètres</a></div>
     <div class="toolbar">
-      <span class="select"><svg class="ico ico-16"><use href="#history" /></svg>latest<svg class="ico ico-16"><use href="#expand_more" /></svg></span>
+      <span class="select"><svg class="ico ico-16"><use href="#bookmark" /></svg>Version&nbsp;: latest<svg class="ico ico-16"><use href="#expand_more" /></svg></span>
+      <span class="muted" style="font-size: 13px">4 versions publiées, la dernière v4 le 24 septembre</span>
       <span class="grow"></span>
       <a class="btn btn-ghost btn-sm"><svg class="ico"><use href="#upload" /></svg>Importer</a>
       <a class="btn btn-ghost btn-sm"><svg class="ico"><use href="#download" /></svg>Télécharger</a>
-      <a class="btn btn-secondary btn-sm"><svg class="ico"><use href="#bookmark" /></svg>Nouvelle version</a>
+      <a class="btn btn-secondary btn-sm"><svg class="ico"><use href="#bookmark" /></svg>Publier une version</a>
     </div>
-    <div style="display: grid; grid-template-columns: 300px minmax(0, 1fr) 280px; gap: var(--spacing-4); align-items: start">
-      <section class="card" style="padding: var(--spacing-2)">
-        <div class="tree-node " style="padding-left: 8px"><svg class="ico ico-18"><use href="#code" /></svg>main.ple</div><div class="tree-node " style="padding-left: 8px"><svg class="ico ico-18"><use href="#folder_open" /></svg>tests</div><div class="tree-node " style="padding-left: 26px"><svg class="ico ico-18"><use href="#code" /></svg>cas_limites.py</div><div class="tree-node " style="padding-left: 26px"><svg class="ico ico-18"><use href="#code" /></svg>generer.py</div><div class="tree-node hover" style="padding-left: 8px"><svg class="ico ico-18"><use href="#description" /></svg>readme.md</div>
-      </section>
-      <section class="card card-pad">
-        <div class="section-head"><h2 class="subheading">readme.md</h2></div>
-        <div class="statement" style="font-size: 15px; line-height: 24px"><p>L'exercice génère un tableau trié de 8 à 20 entiers et une valeur cherchée, présente ou non. La correction exécute 6 tests, dont un tableau vide et un tableau de taille paire.</p></div>
-      </section>
-      <section class="card">
-        <div class="section-head" style="padding: var(--spacing-3) var(--spacing-4) 0"><h2 class="subheading">Historique</h2></div>
-        <div class="mini"><span class="mini-title">Test du tableau vide</span><span class="muted" style="font-size: 13px">Hélène Martin, 24/09 à 18&nbsp;h&nbsp;12 <span class="tag" style="height: 18px">v4</span></span></div>
-        <div class="mini"><span class="mini-title">Tableaux de taille paire</span><span class="muted" style="font-size: 13px">Hélène Martin, 20/09 à 10&nbsp;h&nbsp;03</span></div>
-        <div class="mini"><a>Voir plus</a></div>
+    <div class="card explorer">
+      <nav class="explorer-tree" aria-label="Fichiers">
+        <div class="tree-tools"><div class="input" style="flex: 1; height: 32px"><svg class="ico ico-16" style="margin: 0 6px 0 0; color: var(--color-subtle)"><use href="#search" /></svg><span class="placeholder">Filtrer les fichiers</span></div></div>
+        <div style="padding: var(--spacing-2)">
+          <div class="tree-node active" style="padding-left: 8px"><svg class="ico ico-18"><use href="#description" /></svg>readme.md</div><div class="tree-node " style="padding-left: 8px"><svg class="ico ico-18"><use href="#code" /></svg>main.ple</div><div class="tree-node " style="padding-left: 8px"><svg class="ico ico-18"><use href="#folder_open" /></svg>tests</div><div class="tree-node " style="padding-left: 26px"><svg class="ico ico-18"><use href="#code" /></svg>cas_limites.py</div><div class="tree-node " style="padding-left: 26px"><svg class="ico ico-18"><use href="#code" /></svg>generer.py</div>
+        </div>
+        <div class="explorer-last"><svg class="ico ico-16"><use href="#history" /></svg> Modifié par Hélène Martin le 24 septembre</div>
+      </nav>
+      <section class="explorer-view">
+        <div class="explorer-view-head"><span class="path"><strong>readme.md</strong></span><span class="grow" style="flex: 1"></span><a class="btn btn-ghost btn-sm"><svg class="ico"><use href="#open_in_new" /></svg>Ouvrir dans l'éditeur</a><button class="btn btn-icon btn-sm" aria-label="Copier la référence PL"><svg class="ico ico-18"><use href="#content_copy" /></svg></button></div>
+        <div class="explorer-view-body statement">
+          <h2 class="heading" style="margin-bottom: var(--spacing-3)">Recherche dichotomique</h2>
+          <p>L'exercice génère un tableau trié de 8 à 20 entiers et une valeur cherchée, présente ou non.</p>
+          <p>La correction exécute 6 tests, dont un tableau vide et un tableau de taille paire. Les tests sont dans <code>tests/cas_limites.py</code>.</p>
+          <p>Variante récursive&nbsp;: voir « Recherche dichotomique récursive ».</p>
+        </div>
       </section>
     </div>
+    <section style="margin-top: var(--spacing-6)">
+      <div class="section-head"><h2 class="heading">Historique des fichiers</h2><a style="margin-left: auto">Voir plus</a></div>
+      <div class="card" style="padding: 0; overflow: hidden">
+        <div class="commit"><span class="msg">Test du tableau vide</span><span class="tag" style="height: 20px">v4</span><span class="who">Hélène Martin, 24/09 à 18&nbsp;h&nbsp;12</span></div><div class="commit"><span class="msg">Tableaux de taille paire</span><span class="who">Hélène Martin, 20/09 à 10&nbsp;h&nbsp;03</span></div><div class="commit"><span class="msg">Énoncé reformulé</span><span class="tag" style="height: 20px">v3</span><span class="who">Paul Renard, 18/09 à 16&nbsp;h&nbsp;30</span></div>
+      </div>
+    </section>
   </main>
 </div>

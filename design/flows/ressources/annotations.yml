@@ -25,7 +25,9 @@
 - screen: ressource-partager
   note: "Le partage actuel : visibilité (dans PLaTon ou partout), version, QR code, Copier le lien."
 - screen: explorer
-  note: "L'Explorer actuel : version, fichiers, readme, historique, importer, télécharger, nouvelle version (tag et description)."
+  note: "Mêmes fonctions que l'Explorer actuel (version, fichiers, readme, historique, importer, télécharger, nouvelle version). Nouvelle disposition : l'arbre et le fichier ouvert forment un seul bloc, comme sur un hébergeur de code ; le fichier se lit à largeur de lecture ; l'historique passe dessous, en secondaire."
+- screen: explorer
+  note: "Le fichier choisi s'affiche à côté de l'arbre au lieu d'un double-clic qui ouvre l'éditeur. Ouvrir dans l'éditeur reste à un clic, dans l'en-tête du fichier."
 - screen: evenements
   note: "Les quatre types d'évènements actuels (création, statut, membre ajouté, membre retiré), les 50 derniers, comme aujourd'hui."
 - screen: ressource-parametres

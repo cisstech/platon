@@ -45,13 +45,9 @@
     </header>
     <div class="tabs"><span class="tab active"><svg class="ico"><use href="#monitoring" /></svg>Statistiques</span><span class="tab"><svg class="ico"><use href="#groups" /></svg>Apprenants</span><span class="tab"><svg class="ico"><use href="#lock" /></svg>Modération</span></div>
     <p class="muted" style="margin: 0 0 var(--spacing-3); font-size: 13px">Calculé sur les sessions des élèves qui ont ouvert l'activité.</p>
-    <dl class="stat-grid" style="margin: 0 0 var(--spacing-6); grid-template-columns: repeat(5, minmax(0, 1fr))">
-      <div class="card"><dt>Note moyenne</dt><dd class="figure-value">74&nbsp;<small>/&nbsp;100</small></dd></div>
-      <div class="card"><dt>Durée moyenne</dt><dd class="figure-value">18&nbsp;min</dd></div>
-      <div class="card"><dt>Taux de réussite</dt><dd class="figure-value">68&nbsp;%</dd></div>
-      <div class="card"><dt>Taux de réponses</dt><dd class="figure-value">83&nbsp;%</dd></div>
-      <div class="card"><dt>Taux d'abandon</dt><dd class="figure-value">6&nbsp;%</dd></div>
-    </dl>
+    <div class="stat-row five" style="margin-bottom: var(--spacing-6)">
+      <div class="card stat-card hue-bleuet"><div class="stat-head"><span class="stat-icon"><svg class="ico"><use href="#star" /></svg></span>Note moyenne</div><div class="stat-value">74&nbsp;<small>/&nbsp;100</small></div></div><div class="card stat-card hue-ambre"><div class="stat-head"><span class="stat-icon"><svg class="ico"><use href="#timer" /></svg></span>Durée moyenne</div><div class="stat-value">18&nbsp;min</div></div><div class="card stat-card hue-olive"><div class="stat-head"><span class="stat-icon"><svg class="ico"><use href="#task_alt" /></svg></span>Taux de réussite</div><div class="stat-value">68&nbsp;%</div></div><div class="card stat-card hue-lagon"><div class="stat-head"><span class="stat-icon"><svg class="ico"><use href="#rate_review" /></svg></span>Taux de réponses</div><div class="stat-value">83&nbsp;%</div></div><div class="card stat-card hue-framboise"><div class="stat-head"><span class="stat-icon"><svg class="ico"><use href="#trending_down" /></svg></span>Abandons</div><div class="stat-value">6&nbsp;%</div></div>
+    </div>
     <section>
       <div class="section-head"><h2 class="heading">Par exercice</h2><span class="muted" style="font-size: 13px">Où vos élèves bloquent</span></div>
       <div class="card" style="padding: 0; overflow: hidden">

@@ -80,6 +80,22 @@ sur mobile.
 - Courbe `cubic-bezier(0.2, 0, 0, 1)` en entrée.
 - `prefers-reduced-motion` coupe tout.
 
+## Chiffres
+
+Une carte de chiffre porte une icône sur une pastille teintée. La teinte identifie l'indicateur,
+toujours la même partout, et ne juge jamais : une baisse n'est pas rouge.
+
+| Indicateur | Teinte | Icône |
+| --- | --- | --- |
+| Note moyenne | bleuet | `star` |
+| Juste du premier coup | menthe | `bolt` |
+| Durée | ambre | `timer` |
+| Taux de réussite | olive | `task_alt` |
+| Taux de réponses | lagon | `rate_review` |
+| Abandons | framboise | `trending_down` |
+
+Quatre ou cinq cartes au plus ; les autres chiffres vont dans un bloc repliable.
+
 ## Moments de joie
 
 Rares, donc précieux :

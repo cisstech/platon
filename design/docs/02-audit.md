@@ -102,12 +102,4 @@ Priorités : **P1** bloque, trompe ou touche un moment à enjeu. **P2** ralentit
 
 ## Bugs
 
-| Bug | Où |
-| --- | --- |
-| « Élève » crée un compte enseignant (`getRole` renvoie `UserRoles.teacher`) | `apps/web/src/app/pages/admin/users/users.page.ts` |
-| Balise `<bouton>` au lieu de `<button>` sur l'action Prévisualiser | `apps/web/src/app/pages/admin/announces/announces.page.html` |
-| Routes `/tests` sans garde de rôle | `apps/web/src/app/pages/tests/tests.routes.ts` |
-| Anneau des statuts d'un cercle : « (0%) » pour chaque statut malgré des effectifs non nuls (piste : les compteurs `SUM` arrivent en chaînes et le total est concaténé) | `buildStatusChart`, `resources/resource/overview/overview.page.ts` |
-| Erreur 500 sur la liste des activités si un groupe d'exercices n'a pas de clé `exercises` | `addVirtualColumns`, `libs/feature/course/server/src/lib/activity/activity.service.ts` |
-| Même cause sur les résultats d'une session | `extractExercisesFromActivityVariables`, `libs/feature/compiler/src/lib/pl.variables.ts` |
-| Accueil vide pour les rôles `demo` et `candidate` | `overview.presenter.ts` |
+Les bugs relevés sont suivis dans [08-bugs.md](08-bugs.md).
