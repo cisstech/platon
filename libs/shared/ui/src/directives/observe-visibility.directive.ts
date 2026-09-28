@@ -1,7 +1,7 @@
 import { Directive, ElementRef, Output, EventEmitter, Input, inject, OnDestroy } from '@angular/core'
 
 @Directive({
-  selector: '[appObserveVisibility]',
+  selector: '[uiObserveVisibility]',
   standalone: true,
 })
 export class ObserveVisibilityDirective implements OnDestroy {
@@ -10,7 +10,7 @@ export class ObserveVisibilityDirective implements OnDestroy {
 
   @Output() visible = new EventEmitter<void>()
 
-  @Input() set appObserveVisibility(shouldObserve: boolean) {
+  @Input() set uiObserveVisibility(shouldObserve: boolean) {
     if (shouldObserve) {
       this.startObserving()
     } else {

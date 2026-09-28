@@ -155,7 +155,7 @@
     }
     <section>
       @for (exercise of exercises; track trackBySessionId(i, exercise); let i = $index, count = $count) {
-      <nz-ribbon [nzText]="ribbon" [appObserveVisibility]="i === count - 1 && composed" (visible)="loadNextExercise()">
+      <nz-ribbon [nzText]="ribbon" [uiObserveVisibility]="i === count - 1 && composed" (visible)="loadNextExercise()">
         <ng-template #ribbon>
           @if (nextNavigation) { Exercice {{ player.navigation.nextExercisesHistoryPosition + 1 }}
           } @else {
