@@ -154,8 +154,8 @@
     </div>
     }
     <section>
-      @for (exercise of exercises; track trackBySessionId(i, exercise); let i = $index) {
-      <nz-ribbon [nzText]="ribbon">
+      @for (exercise of exercises; track trackBySessionId(i, exercise); let i = $index, count = $count) {
+      <nz-ribbon [nzText]="ribbon" [appObserveVisibility]="i === count - 1 && composed" (visible)="loadNextExercise()">
         <ng-template #ribbon>
           @if (nextNavigation) { Exercice {{ player.navigation.nextExercisesHistoryPosition + 1 }}
           } @else {
@@ -176,7 +176,11 @@
       </nz-ribbon>
       }
     </section>
-    @if(canShowTerminalLogs()) {
+    @if (isLoadingNextExercise) {
+    <div class="loading-next-exercise">
+      <nz-spin nzSimple nzSize="large" />
+    </div>
+    } @if(canShowTerminalLogs()) {
     <player-terminal-logs [logs]="activityLogs" title="Terminal Next" />
     }
   </div>
