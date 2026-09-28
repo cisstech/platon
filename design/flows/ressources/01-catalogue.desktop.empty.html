@@ -7,13 +7,13 @@
         <div class="brand-org">Université Gustave Eiffel</div>
       </div>
     </div>
-    <a class="btn btn-cover btn-create"><svg class="ico"><use href="#add" /></svg>Créer</a>
+    <a class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico"><use href="#add" /></svg>Créer</a>
     <nav class="nav">
-      <a class="nav-item"><svg class="ico"><use href="#home" /></svg>Accueil</a>
-      <a class="nav-item active"><svg class="ico"><use href="#school" /></svg>Cours</a>
-      <a class="nav-item"><svg class="ico"><use href="#rate_review" /></svg>Corrections<span class="count">14</span></a>
-      <a class="nav-item"><svg class="ico"><use href="#folder_open" /></svg>Ressources</a>
-      <a class="nav-item"><svg class="ico"><use href="#fact_check" /></svg>Tests d'entrée</a>
+      <a class="nav-item" data-wf-to="enseignant"><svg class="ico"><use href="#home" /></svg>Accueil</a>
+      <a class="nav-item" data-wf-to="mes-cours"><svg class="ico"><use href="#school" /></svg>Cours</a>
+      <a class="nav-item" data-wf-to="file"><svg class="ico"><use href="#rate_review" /></svg>Corrections<span class="count">14</span></a>
+      <a class="nav-item active" data-wf-to="catalogue"><svg class="ico"><use href="#folder_open" /></svg>Ressources</a>
+      <a class="nav-item" data-wf-to="test"><svg class="ico"><use href="#fact_check" /></svg>Tests d'entrée</a>
     </nav>
     <div class="sidebar-foot">
       <a class="nav-item"><svg class="ico"><use href="#help" /></svg>Aide</a>
@@ -31,19 +31,52 @@
   <main class="main">
     <header class="page-head">
       <div>
-        <h1 class="title">Cours</h1>
+        <h1 class="title">Ressources</h1>
+        <p class="page-sub">Les exercices, activités et cercles partagés entre enseignants.</p>
       </div>
-      <div class="actions"><a class="btn btn-primary" data-wf-to="nouveau"><svg class="ico"><use href="#add" /></svg>Créer un cours</a></div>
+      <div class="actions"><a class="btn btn-secondary" data-wf-to="cercles"><svg class="ico"><use href="#account_tree" /></svg>Cercles</a></div>
     </header>
-    <div class="card" style="max-width: 720px">
-      <div class="empty">
-        <svg class="illus"><use href="#illus-copie" /></svg>
-        <div class="empty-body">
-          <h2 class="heading">Aucun cours pour l'instant</h2>
-          <p>Un cours rassemble vos étudiants et vos activités, rangées en sections. Créez-en un, puis ajoutez-y une activité depuis vos ressources.</p>
-          <a class="btn btn-secondary" data-wf-to="nouveau"><svg class="ico"><use href="#add" /></svg>Créer un cours</a>
+    <div class="filters">
+      <div class="input focused" style="flex: 1; max-width: 420px"><svg class="ico ico-18" style="margin: 0 8px 0 0; color: var(--color-subtle)"><use href="#search" /></svg><span>dichotomie ternaire</span></div>
+      <span class="segmented"><span class="seg on"><svg class="ico ico-16"><use href="#code" /></svg>Exercices</span><span class="seg"><svg class="ico ico-16"><use href="#quiz" /></svg>Activités</span><span class="seg"><svg class="ico ico-16"><use href="#folder_open" /></svg>Cercles</span></span>
+      <a class="chip" data-wf-to="filtres"><svg class="ico"><use href="#filter_list" /></svg>Filtres<span class="n">3</span></a>
+      <span class="select" style="margin-left: auto"><svg class="ico ico-16"><use href="#sort" /></svg>Pertinence<svg class="ico ico-16"><use href="#expand_more" /></svg></span>
+    </div>
+    <div class="filters" style="margin-top: calc(-1 * var(--spacing-2))">
+      <span class="chip applied">Statut&nbsp;: prêt ou à tester<svg class="x"><use href="#close" /></svg></span>
+      <span class="chip applied">Niveau&nbsp;: L1<svg class="x"><use href="#close" /></svg></span>
+      <span class="chip applied">Cercle&nbsp;: Algorithmique<svg class="x"><use href="#close" /></svg></span>
+      <a style="font-size: 13px">Tout effacer</a>
+    </div>
+    <div class="layout">
+      <div>
+        <div class="card">
+          <div class="empty compact">
+            <svg class="illus"><use href="#illus-copie" /></svg>
+            <div class="empty-body">
+              <h2 class="subheading">Aucun exercice pour « dichotomie ternaire » avec ces filtres</h2>
+              <p>Sans le filtre Niveau&nbsp;: L1, 2 exercices correspondent. Vous pouvez aussi créer le vôtre à partir d'un modèle&nbsp;: il ira d'abord dans votre cercle.</p>
+              <div style="display: flex; gap: var(--spacing-2)"><a class="btn btn-secondary btn-sm">Retirer Niveau&nbsp;: L1</a><a class="btn btn-ghost btn-sm" data-wf-to="modeles"><svg class="ico"><use href="#add" /></svg>Partir d'un modèle</a></div>
+            </div>
+          </div>
         </div>
       </div>
+      <aside class="stack">
+        <section>
+          <div class="section-head"><h2 class="heading">Mon espace</h2></div>
+          <div class="card">
+            <div class="mini"><span class="mini-title"><svg class="ico ico-16"><use href="#folder_open" /></svg> Cercle de Karim Haddad</span><span class="muted" style="font-size: 13px">9 exercices, 2 activités, 3 brouillons</span></div>
+          </div>
+        </section>
+        <section>
+          <div class="section-head"><h2 class="heading">Vu récemment</h2></div>
+          <div class="card">
+            <div class="mini"><span class="mini-title">QCM&nbsp;: complexité</span><span class="muted" style="font-size: 13px">Exercice, hier</span></div>
+            <div class="mini"><span class="mini-title">TP 4&nbsp;: boucles et tableaux</span><span class="muted" style="font-size: 13px">Activité, lundi</span></div>
+            <div class="mini"><span class="mini-title">Algorithmique</span><span class="muted" style="font-size: 13px">Cercle, lundi</span></div>
+          </div>
+        </section>
+      </aside>
     </div>
   </main>
 </div>

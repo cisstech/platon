@@ -7,13 +7,13 @@
         <div class="brand-org">Université Gustave Eiffel</div>
       </div>
     </div>
-    <a class="btn btn-cover btn-create"><svg class="ico"><use href="#add" /></svg>Créer</a>
+    <a class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico"><use href="#add" /></svg>Créer</a>
     <nav class="nav">
-      <a class="nav-item"><svg class="ico"><use href="#home" /></svg>Accueil</a>
-      <a class="nav-item active"><svg class="ico"><use href="#school" /></svg>Cours</a>
-      <a class="nav-item"><svg class="ico"><use href="#rate_review" /></svg>Corrections<span class="count">14</span></a>
-      <a class="nav-item"><svg class="ico"><use href="#folder_open" /></svg>Ressources</a>
-      <a class="nav-item"><svg class="ico"><use href="#fact_check" /></svg>Tests d'entrée</a>
+      <a class="nav-item" data-wf-to="enseignant"><svg class="ico"><use href="#home" /></svg>Accueil</a>
+      <a class="nav-item active" data-wf-to="mes-cours"><svg class="ico"><use href="#school" /></svg>Cours</a>
+      <a class="nav-item" data-wf-to="file"><svg class="ico"><use href="#rate_review" /></svg>Corrections<span class="count">14</span></a>
+      <a class="nav-item" data-wf-to="catalogue"><svg class="ico"><use href="#folder_open" /></svg>Ressources</a>
+      <a class="nav-item" data-wf-to="test"><svg class="ico"><use href="#fact_check" /></svg>Tests d'entrée</a>
     </nav>
     <div class="sidebar-foot">
       <a class="nav-item"><svg class="ico"><use href="#help" /></svg>Aide</a>
@@ -64,11 +64,11 @@
       </div>
     </div>
   </main>
-  <div class="scrim" data-wf-to="liste"></div>
+  <div class="scrim" data-wf-to="mes-cours"></div>
   <div class="panel" role="dialog" aria-label="Créer un cours" style="left: 50%; top: 50%; transform: translate(-50%, -50%); width: 480px">
     <div class="panel-head">
       <h2 class="subheading">Créer un cours</h2>
-      <button class="btn btn-icon btn-sm" aria-label="Fermer" data-wf-to="liste" style="margin-left: auto"><svg class="ico ico-18"><use href="#close" /></svg></button>
+      <button class="btn btn-icon btn-sm" aria-label="Fermer" data-wf-to="mes-cours" style="margin-left: auto"><svg class="ico ico-18"><use href="#close" /></svg></button>
     </div>
     <div style="padding: var(--spacing-5)">
       <div class="field">
@@ -82,7 +82,7 @@
       </div>
     </div>
     <div class="drawer-foot">
-      <a class="btn btn-secondary" data-wf-to="liste">Annuler</a>
+      <a class="btn btn-secondary" data-wf-to="mes-cours">Annuler</a>
       <a class="btn btn-primary" data-wf-to="detail">Créer le cours</a>
     </div>
   </div>

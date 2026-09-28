@@ -11,11 +11,11 @@
       ><svg class="ico"><use href="#add" /></svg>Créer</a
     >
     <nav class="nav">
-      <a class="nav-item active"><svg class="ico"><use href="#home" /></svg>Accueil</a>
-      <a class="nav-item"><svg class="ico"><use href="#school" /></svg>Cours</a>
-      <a class="nav-item"><svg class="ico"><use href="#rate_review" /></svg>Corrections<span class="count">14</span></a>
-      <a class="nav-item"><svg class="ico"><use href="#folder_open" /></svg>Ressources</a>
-      <a class="nav-item"><svg class="ico"><use href="#fact_check" /></svg>Tests d'entrée</a>
+      <a class="nav-item active" data-wf-to="enseignant"><svg class="ico"><use href="#home" /></svg>Accueil</a>
+      <a class="nav-item" data-wf-to="mes-cours"><svg class="ico"><use href="#school" /></svg>Cours</a>
+      <a class="nav-item" data-wf-to="file"><svg class="ico"><use href="#rate_review" /></svg>Corrections<span class="count">14</span></a>
+      <a class="nav-item" data-wf-to="catalogue"><svg class="ico"><use href="#folder_open" /></svg>Ressources</a>
+      <a class="nav-item" data-wf-to="test"><svg class="ico"><use href="#fact_check" /></svg>Tests d'entrée</a>
     </nav>
     <div class="sidebar-foot">
       <a class="nav-item"><svg class="ico"><use href="#help" /></svg>Aide</a>
@@ -67,21 +67,21 @@
   </main>
 
   <div class="menu" role="menu" aria-label="Créer" style="left: 12px; top: 116px; width: 320px">
-    <div class="menu-item focused" role="menuitem">
+    <div class="menu-item focused" role="menuitem" data-wf-to="nouveau">
       <svg class="ico"><use href="#school" /></svg>
       <div>
         <div class="menu-item-title">Cours</div>
         <div class="menu-item-desc">Un espace pour vos étudiants, organisé en sections.</div>
       </div>
     </div>
-    <div class="menu-item" role="menuitem">
+    <div class="menu-item" role="menuitem" data-wf-to="ajouter">
       <svg class="ico"><use href="#quiz" /></svg>
       <div>
         <div class="menu-item-title">Activité</div>
         <div class="menu-item-desc">Une série d'exercices à faire dans un cours, notée ou non.</div>
       </div>
     </div>
-    <div class="menu-item" role="menuitem">
+    <div class="menu-item" role="menuitem" data-wf-to="modeles">
       <svg class="ico"><use href="#code" /></svg>
       <div>
         <div class="menu-item-title">Exercice</div>

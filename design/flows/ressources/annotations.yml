@@ -1,8 +1,20 @@
-- screen: liste
-  note: "Les filtres sont des pastilles visibles, l'état de la recherche est écrit en toutes lettres avec Effacer les filtres."
-- screen: liste
-  note: "Une recherche sans résultat nomme le filtre qui écarte des résultats et propose de le retirer, ou d'écrire l'exercice."
+- screen: catalogue
+  note: "Tout ce que la page actuelle filtre est conservé : type, tri, et dans le panneau Filtres le statut, les modèles, les cercles, l'auteur, les topics avec et sans, les niveaux et la période. Les pastilles actives se retirent une par une."
+- screen: catalogue
+  note: "Retirés volontairement : le ruban de statut, la bordure colorée et l'icône qui codaient le type trois fois (une icône suffit), et la phrase « Voici ce que nous avons trouvé »."
+- screen: catalogue
+  note: "Chaque ligne garde les chiffres qui aident à choisir (note moyenne, tentatives, activités qui l'utilisent) et les tags cliquables. Les actions apparaissent au survol et au focus : Prévisualiser, Éditer ou Paramétrer, et le menu."
+- screen: catalogue
+  note: "Ajout (agrégation) : l'auteur de la ligne. La ressource a ownerId, le filtre Auteur charge déjà les utilisateurs."
+- screen: catalogue
+  note: "Une recherche sans résultat nomme le filtre qui écarte des résultats et propose de le retirer, ou de partir d'un modèle."
+- screen: filtres
+  note: "Le bouton du pied donne le nombre de résultats avant d'appliquer (une recherche avec limit 0, le total existe déjà dans la réponse). Le tri reste dans la barre, parce qu'on le change plus souvent que les filtres."
+- screen: cercles
+  note: "L'arbre des cercles, en mode navigation comme aujourd'hui : un clic ouvre la page du cercle. Le cercle personnel est en tête."
+- screen: catalogue-actions
+  note: "Ajouter à une activité est une proposition (voir le flow creation, écran ajouter-au-cours)."
 - screen: ressource
-  note: "Trois chiffres d'utilisation remplacent les onze cartes actuelles. Utilisé dans vient avant, parce que c'est ce qui dit si un exercice est éprouvé."
+  note: "Les trois chiffres sont ceux que DashboardService.ofResource calcule déjà (note moyenne, réussite du premier coup, durée moyenne). Utilisé par liste les activités qui dépendent de l'exercice (filtre dependOn)."
 - screen: ressource
-  note: "Prévisualiser est l'action principale ; Éditer ouvre l'éditeur ou le builder selon que l'exercice vient d'un modèle."
+  note: "Derniers événements mélange les événements de ressource (statut, membres) et les versions, qui ont chacune un message."

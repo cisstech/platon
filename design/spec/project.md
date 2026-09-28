@@ -45,7 +45,7 @@ spec:
     - lecteur
     - corrections
     - ressources
-    - edition
+    - creation
     - tests
     - administration
     - compte

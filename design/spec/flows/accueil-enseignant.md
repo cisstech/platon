@@ -37,4 +37,5 @@ spec:
     - { from: creer, to: enseignant, on: dismiss }
     - { from: creer, to: cours, on: create }
     - { from: creer, to: activite, on: create }
-    - { from: creer, to: edition, on: create }
+    - { from: creer, to: creation, on: create }
+    - { from: enseignant, to: creation, on: template }

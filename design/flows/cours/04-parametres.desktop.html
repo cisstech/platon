@@ -7,13 +7,13 @@
         <div class="brand-org">Université Gustave Eiffel</div>
       </div>
     </div>
-    <a class="btn btn-cover btn-create"><svg class="ico"><use href="#add" /></svg>Créer</a>
+    <a class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico"><use href="#add" /></svg>Créer</a>
     <nav class="nav">
-      <a class="nav-item"><svg class="ico"><use href="#home" /></svg>Accueil</a>
-      <a class="nav-item active"><svg class="ico"><use href="#school" /></svg>Cours</a>
-      <a class="nav-item"><svg class="ico"><use href="#rate_review" /></svg>Corrections<span class="count">14</span></a>
-      <a class="nav-item"><svg class="ico"><use href="#folder_open" /></svg>Ressources</a>
-      <a class="nav-item"><svg class="ico"><use href="#fact_check" /></svg>Tests d'entrée</a>
+      <a class="nav-item" data-wf-to="enseignant"><svg class="ico"><use href="#home" /></svg>Accueil</a>
+      <a class="nav-item active" data-wf-to="mes-cours"><svg class="ico"><use href="#school" /></svg>Cours</a>
+      <a class="nav-item" data-wf-to="file"><svg class="ico"><use href="#rate_review" /></svg>Corrections<span class="count">14</span></a>
+      <a class="nav-item" data-wf-to="catalogue"><svg class="ico"><use href="#folder_open" /></svg>Ressources</a>
+      <a class="nav-item" data-wf-to="test"><svg class="ico"><use href="#fact_check" /></svg>Tests d'entrée</a>
     </nav>
     <div class="sidebar-foot">
       <a class="nav-item"><svg class="ico"><use href="#help" /></svg>Aide</a>
@@ -37,7 +37,7 @@
       </div>
       <div class="actions">
         <a class="btn btn-secondary"><svg class="ico"><use href="#share" /></svg>Partager</a>
-        <a class="btn btn-primary"><svg class="ico"><use href="#add" /></svg>Ajouter une activité</a>
+        <a class="btn btn-primary" data-wf-to="ajouter"><svg class="ico"><use href="#add" /></svg>Ajouter une activité</a>
       </div>
     </header>
     <div class="tabs">
@@ -62,7 +62,7 @@
                 <div class="row-title">Quiz&nbsp;: complexité des algorithmes</div>
                 <div class="row-meta"><span class="tag success"><svg class="ico"><use href="#check_circle" /></svg>Ouverte</span><span class="due soon"><svg class="ico"><use href="#schedule" /></svg>Ferme ce soir à 23&nbsp;h&nbsp;59</span><span>251 sur 302 ont commencé</span></div>
               </div>
-              <div class="row-side"><a class="btn btn-secondary btn-sm" data-wf-to="activite">Suivre</a><button class="btn btn-icon btn-sm" aria-label="Paramètres" data-wf-to="parametres"><svg class="ico ico-18"><use href="#settings" /></svg></button></div>
+              <div class="row-side"><a class="btn btn-secondary btn-sm" data-wf-to="suivi">Suivre</a><button class="btn btn-icon btn-sm" aria-label="Paramètres" data-wf-to="parametres"><svg class="ico ico-18"><use href="#settings" /></svg></button></div>
             </div>
             <div class="row">
               <span class="lead-icon hued hue-bleuet"><svg class="ico"><use href="#code" /></svg></span>
@@ -70,7 +70,7 @@
                 <div class="row-title">TP 4&nbsp;: boucles et tableaux</div>
                 <div class="row-meta"><span class="tag success"><svg class="ico"><use href="#check_circle" /></svg>Ouverte</span><span class="due none"><svg class="ico"><use href="#schedule" /></svg>Ferme jeudi à 18&nbsp;h</span><span>187 sur 302 ont commencé</span></div>
               </div>
-              <div class="row-side"><a class="btn btn-secondary btn-sm" data-wf-to="activite">Suivre</a><button class="btn btn-icon btn-sm" aria-label="Paramètres" data-wf-to="parametres"><svg class="ico ico-18"><use href="#settings" /></svg></button></div>
+              <div class="row-side"><a class="btn btn-secondary btn-sm" data-wf-to="suivi">Suivre</a><button class="btn btn-icon btn-sm" aria-label="Paramètres" data-wf-to="parametres"><svg class="ico ico-18"><use href="#settings" /></svg></button></div>
             </div>
           </div>
         </div>
@@ -95,7 +95,7 @@
                 <div class="row-title">Examen partiel 2</div>
                 <div class="row-meta"><span class="tag info"><svg class="ico"><use href="#calendar_month" /></svg>Planifiée</span><span class="tag graded"><svg class="ico"><use href="#grading" /></svg>Notée</span><span class="due planned"><svg class="ico"><use href="#calendar_month" /></svg>Ouvre le 12 octobre à 8&nbsp;h</span><span>1&nbsp;h&nbsp;30, une tentative, plein écran</span></div>
               </div>
-              <div class="row-side"><a class="btn btn-secondary btn-sm">Vérifier</a><button class="btn btn-icon btn-sm" aria-label="Paramètres" data-wf-to="parametres"><svg class="ico ico-18"><use href="#settings" /></svg></button></div>
+              <div class="row-side"><a class="btn btn-secondary btn-sm" data-wf-to="parametres">Vérifier</a><button class="btn btn-icon btn-sm" aria-label="Paramètres" data-wf-to="parametres"><svg class="ico ico-18"><use href="#settings" /></svg></button></div>
             </div>
           </div>
         </div>
@@ -132,18 +132,19 @@
     </div>
   </main>
   <div class="scrim" data-wf-to="detail"></div>
-  <div class="drawer-right" role="dialog" aria-label="Paramètres de l'activité">
+  <div class="drawer-right" role="dialog" aria-label="Paramètres de l'activité" style="width: 520px">
     <div class="drawer-head">
       <span class="lead-icon hued hue-bleuet"><svg class="ico"><use href="#code" /></svg></span>
       <div>
         <div class="subheading">TP 5&nbsp;: fonctions récursives</div>
-        <div class="muted" style="font-size: 13px">Semaine 5, 8 exercices</div>
+        <div class="muted" style="font-size: 13px">Semaine 5, 8 exercices, entraînement</div>
       </div>
       <button class="btn btn-icon btn-sm" aria-label="Fermer" data-wf-to="detail"><svg class="ico ico-18"><use href="#close" /></svg></button>
     </div>
+    <div class="tabs" style="margin: 0; padding: 0 var(--spacing-4)"><span class="tab active"><svg class="ico"><use href="#lock" /></svg>Accès</span><span class="tab"><svg class="ico"><use href="#tune" /></svg>Déroulement</span><span class="tab"><svg class="ico"><use href="#settings" /></svg>Gestion</span></div>
     <div class="drawer-body">
       <div class="form-section">
-        <h3 class="subheading">Dates</h3>
+        <h3 class="subheading">Quand</h3>
         <div class="field-row">
           <div class="field"><label>Ouverture</label><div class="input"><span>Lun. 5 oct., 8&nbsp;h</span><svg class="ico ico-18"><use href="#calendar_month" /></svg></div></div>
           <div class="field"><label>Fermeture</label><div class="input focused"><span>Dim. 11 oct., 23&nbsp;h&nbsp;59</span><svg class="ico ico-18"><use href="#calendar_month" /></svg></div></div>
@@ -151,33 +152,9 @@
         <span class="field-hint" style="display: block; margin-top: 6px">Sans fermeture, l'activité reste ouverte jusqu'à ce que vous la fermiez.</span>
       </div>
       <div class="form-section">
-        <h3 class="subheading">Fonction</h3>
-        <div class="choice-cards">
-          <div class="choice on"><span class="radio"></span><div class="choice-body"><strong>Entraînement</strong><p>Tentatives libres, aide et solution disponibles. Aucune note.</p></div></div>
-          <div class="choice"><span class="radio"></span><div class="choice-body"><strong>Notée</strong><p>Durée, nombre de tentatives et règles de sécurité. Une note sur 100.</p></div></div>
-          <div class="choice"><span class="radio"></span><div class="choice-body"><strong>Challenge</strong><p>Un classement entre les étudiants, sur le score et le temps.</p></div></div>
-        </div>
-      </div>
-      <div class="form-section">
-        <h3 class="subheading">Pendant l'exercice</h3>
-        <div class="switch-row"><p>Aide<small>Les indices écrits par l'auteur de l'exercice.</small></p><span class="switch on"></span></div>
-        <div class="switch-row"><p>Solution<small>Après la dernière tentative.</small></p><span class="switch on"></span></div>
-        <div class="switch-row"><p>Recharger l'exercice<small>Un nouveau tirage des variables.</small></p><span class="switch"></span></div>
-        <div class="switch-row"><p>Navigation libre entre les exercices</p><span class="switch on"></span></div>
-      </div>
-      <div class="form-section">
-        <h3 class="subheading">Couleur</h3>
-        <div style="display: flex; gap: 8px">
-          <span class="hue-corail" style="width: 28px; height: 28px; border-radius: 50%; background: var(--hue-strong)"></span>
-          <span class="hue-ambre" style="width: 28px; height: 28px; border-radius: 50%; background: var(--hue-strong)"></span>
-          <span class="hue-olive" style="width: 28px; height: 28px; border-radius: 50%; background: var(--hue-strong)"></span>
-          <span class="hue-menthe" style="width: 28px; height: 28px; border-radius: 50%; background: var(--hue-strong)"></span>
-          <span class="hue-lagon" style="width: 28px; height: 28px; border-radius: 50%; background: var(--hue-strong)"></span>
-          <span class="hue-bleuet" style="width: 28px; height: 28px; border-radius: 50%; background: var(--hue-strong); box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--hue-strong)"></span>
-          <span class="hue-lilas" style="width: 28px; height: 28px; border-radius: 50%; background: var(--hue-strong)"></span>
-          <span class="hue-framboise" style="width: 28px; height: 28px; border-radius: 50%; background: var(--hue-strong)"></span>
-        </div>
-        <span class="field-hint" style="display: block; margin-top: 8px">Par défaut, la couleur du cours.</span>
+        <h3 class="subheading">Qui</h3>
+        <div class="alert"><svg class="ico"><use href="#groups" /></svg><div><strong>Tous les membres du cours</strong><p class="muted" style="margin: 2px 0 0; font-size: 13px">Les mêmes dates pour tout le monde. Pour un tiers-temps ou un créneau par groupe de TD, ajoutez une période d'accès.</p></div></div>
+        <a class="btn btn-secondary btn-sm" style="margin-top: var(--spacing-3)"><svg class="ico"><use href="#add" /></svg>Ajouter une période d'accès</a>
       </div>
     </div>
     <div class="drawer-foot">

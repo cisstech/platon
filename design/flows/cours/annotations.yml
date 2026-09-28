@@ -1,4 +1,4 @@
-- screen: liste
+- screen: mes-cours
   note: "Une carte par cours, avec l'intercalaire de sa teinte en haut. L'étudiant voit son avancement et la prochaine échéance ; l'enseignant les effectifs et ce qui est ouvert. Les cours archivés vivent dans un onglet."
 - screen: detail
   note: "Un seul en-tête pour toutes les pages de détail : fil d'Ariane, titre, description, action principale à droite. Les onglets suivent le rôle."
@@ -8,7 +8,17 @@
   note: "Vue étudiante : pas d'effectifs, pas d'édition, pas de section vide. Une section sans nom s'appelle par son numéro."
 - screen: nouveau
   note: "Créer un cours tient dans un dialogue de deux champs, ce que le modèle demande. L'assistant actuel n'a qu'une étape."
-- screen: parametres
-  note: "Le panneau remplace l'assistant en quatre étapes. Tout est visible d'un coup, les réglages d'une activité notée se déplient quand on la choisit. Enregistrer reste actif, la validation se fait à l'envoi."
 - screen: detail
   note: "Créer (sur la couverture) et Ajouter une activité (sur la page) sont deux actions principales de deux surfaces différentes. La page n'a qu'un bouton primaire."
+- screen: parametres
+  note: "Les trois onglets du panneau actuel (Accès, Déroulement, Gestion), réécrits en mots simples. Pas de Fonction ici : isChallenge ne se modifie pas après l'ajout, et une activité notée n'est qu'un ensemble de réglages de Déroulement."
+- screen: parametres
+  note: "Accès : sans période, deux dates pour tout le cours. Avec des périodes (état periodes), chaque carte dit Quand, Qui (groupes, personnes, tous les autres) et Corrigé par, comme les règles actuelles DateRange, Groups, Members, Others et Correctors."
+- screen: parametres
+  note: "Gestion : Mettre à jour remplace Recharger, et dit quelle version l'activité suit et laquelle existe. Supprimer dit ce qui part avec l'activité."
+- screen: parametres
+  note: "Proposition : exposer le code de déblocage dans Déroulement. Il est déjà dans UpdateActivity, seule l'interface manque."
+- screen: suivi
+  note: "Les chiffres sont ceux de DashboardService.ofActivity : taux de réussite, note et durée moyennes, et par exercice taux de réponse, réussite du premier coup, abandons."
+- screen: suivi
+  note: "La ligne où la réussite du premier coup est la plus basse est mise en évidence : c'est l'exercice à reprendre en TD."

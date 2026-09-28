@@ -7,13 +7,13 @@
         <div class="brand-org">Université Gustave Eiffel</div>
       </div>
     </div>
-    <a class="btn btn-cover btn-create"><svg class="ico"><use href="#add" /></svg>Créer</a>
+    <a class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico"><use href="#add" /></svg>Créer</a>
     <nav class="nav">
-      <a class="nav-item"><svg class="ico"><use href="#home" /></svg>Accueil</a>
-      <a class="nav-item"><svg class="ico"><use href="#school" /></svg>Cours</a>
-      <a class="nav-item"><svg class="ico"><use href="#rate_review" /></svg>Corrections<span class="count">14</span></a>
-      <a class="nav-item active"><svg class="ico"><use href="#folder_open" /></svg>Ressources</a>
-      <a class="nav-item"><svg class="ico"><use href="#fact_check" /></svg>Tests d'entrée</a>
+      <a class="nav-item" data-wf-to="enseignant"><svg class="ico"><use href="#home" /></svg>Accueil</a>
+      <a class="nav-item" data-wf-to="mes-cours"><svg class="ico"><use href="#school" /></svg>Cours</a>
+      <a class="nav-item" data-wf-to="file"><svg class="ico"><use href="#rate_review" /></svg>Corrections<span class="count">14</span></a>
+      <a class="nav-item active" data-wf-to="catalogue"><svg class="ico"><use href="#folder_open" /></svg>Ressources</a>
+      <a class="nav-item" data-wf-to="test"><svg class="ico"><use href="#fact_check" /></svg>Tests d'entrée</a>
     </nav>
     <div class="sidebar-foot">
       <a class="nav-item"><svg class="ico"><use href="#help" /></svg>Aide</a>
@@ -31,28 +31,43 @@
   <main class="main">
     <header class="page-head">
       <div>
-        <h1 class="title">Ressources</h1>
-        <p class="page-sub">Les exercices, activités et cercles partagés entre enseignants.</p>
+        <div class="crumbs"><span>Ressources</span><svg class="ico"><use href="#chevron_right" /></svg><span>Nouvelle ressource</span></div>
+        <h1 class="title">Nouvelle ressource</h1>
+        <p class="page-sub">Un exercice, une activité ou un cercle, écrit dans l'éditeur.</p>
       </div>
-      <div class="actions"><a class="btn btn-secondary"><svg class="ico"><use href="#folder_open" /></svg>Mon cercle</a></div>
     </header>
-    <div class="filters">
-      <div class="input focused"><svg class="ico ico-18" style="margin: 0 8px 0 0; color: var(--color-subtle)"><use href="#search" /></svg><span>dichotomie</span></div>
-      <span class="chip on"><svg class="ico"><use href="#code" /></svg>Exercices</span>
-      <span class="chip"><svg class="ico"><use href="#quiz" /></svg>Activités</span>
-      <span class="chip"><svg class="ico"><use href="#folder_open" /></svg>Cercles</span>
-      <span class="chip"><svg class="ico"><use href="#filter_list" /></svg>Statut&nbsp;: prêt</span>
-      <span class="chip"><svg class="ico"><use href="#school" /></svg>Niveau&nbsp;: L1</span>
-      <span class="chip">Thème&nbsp;: Informatique</span>
-    </div>
-        <div class="card" style="max-width: 720px">
-      <div class="empty compact">
-        <svg class="illus"><use href="#illus-copie" /></svg>
-        <div class="empty-body">
-          <h2 class="subheading">Aucun exercice pour « dichotomie » avec ces filtres</h2>
-          <p>Le filtre Niveau&nbsp;: L1 en écarte 2. Essayez sans lui, ou écrivez l'exercice&nbsp;: il sera d'abord dans votre cercle.</p>
-          <div style="display: flex; gap: var(--spacing-2)"><a class="btn btn-secondary btn-sm">Retirer Niveau&nbsp;: L1</a><a class="btn btn-ghost btn-sm"><svg class="ico"><use href="#add" /></svg>Écrire un exercice</a></div>
+    <div class="card card-pad" style="max-width: 720px">
+      <div class="form-section">
+        <h3 class="subheading">Quoi</h3>
+        <div class="choice-cards" style="grid-template-columns: repeat(3, 1fr)">
+          <div class="choice on"><span class="radio"></span><div class="choice-body"><strong>Exercice</strong><p>Une question, écrite en PLE.</p></div></div>
+          <div class="choice"><span class="radio"></span><div class="choice-body"><strong>Activité</strong><p>Des exercices assemblés, en PLA.</p></div></div>
+          <div class="choice"><span class="radio"></span><div class="choice-body"><strong>Cercle</strong><p>Un dossier partagé avec des membres.</p></div></div>
         </div>
+      </div>
+      <div class="form-section">
+        <h3 class="subheading">Où</h3>
+        <div class="field"><label>Cercle</label><div class="input"><span><svg class="ico ico-16"><use href="#folder_open" /></svg> Algorithmique</span><a style="margin-left: auto; font-size: 13px" data-wf-to="cercles">Changer</a></div><span class="field-hint">Le cercle d'où vous venez. Ses membres pourront voir la ressource.</span></div>
+      </div>
+      <div class="form-section">
+        <h3 class="subheading">Présentation</h3>
+        <div class="field"><label>Nom</label><div class="input focused"><span>Parcours en largeur d'un graphe</span></div></div>
+        <div class="field" style="margin-top: var(--spacing-3)"><label>Description</label><div class="input" style="height: 64px; align-items: flex-start; padding-top: 8px"><span>Écrire un BFS et renvoyer l'ordre de visite depuis un sommet.</span></div></div>
+        <div class="field-row" style="margin-top: var(--spacing-3)">
+          <div class="field"><label>Topics <span class="muted">(facultatif)</span></label><div class="input"><span>Graphes</span></div></div>
+          <div class="field"><label>Niveaux <span class="muted">(facultatif)</span></label><div class="input"><span>L2</span></div></div>
+        </div>
+      </div>
+      <div class="form-section">
+        <h3 class="subheading">Comment</h3>
+        <div class="choice-cards">
+          <div class="choice"><span class="radio"></span><div class="choice-body"><strong>À partir d'un modèle</strong><p>Choisir un modèle de ce cercle ou certifié, puis le remplir dans l'atelier.</p></div></div>
+          <div class="choice on"><span class="radio"></span><div class="choice-body"><strong>De zéro</strong><p>Ouvre l'éditeur complet avec un fichier main.ple vide.</p></div></div>
+        </div>
+      </div>
+      <div style="display: flex; gap: var(--spacing-2); justify-content: flex-end">
+        <a class="btn btn-secondary" data-wf-to="catalogue">Annuler</a>
+        <a class="btn btn-primary"><svg class="ico"><use href="#open_in_new" /></svg>Créer et ouvrir l'éditeur</a>
       </div>
     </div>
   </main>

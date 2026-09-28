@@ -106,10 +106,45 @@ Chaque élément des maquettes est rapporté à ce qui existe dans le code de PL
 
 | Élément | Niveau | Ce qui existe |
 | --- | --- | --- |
-| Recherche avec filtres type, statut, niveau, thème | existant | `ResourceFilters` et la barre de recherche actuelle |
-| « Utilisé dans N activités » | existant | `ResourceDependency` relie les activités à leurs exercices |
-| Trois chiffres d'utilisation | existant | `ResourceStatistic` et `DashboardService.ofResource` |
-| Mon cercle en raccourci | existant | Cercle personnel (`personal`, code = nom d'utilisateur) |
+| Recherche, suggestions, type, tri et sens | existant | `ResourceFilters` (`search`, `types`, `order`, `direction`), suggestions Fuse sur la complétion |
+| Panneau Filtres : statut, modèles, cercles, auteur, topics avec et sans, niveaux, période | existant | `status`, `configurable`, `parents`, `owners`, `topics`, `antiTopics`, `levels`, `period` |
+| Pastilles de filtres retirables | existant | `ui-filter-indicators` et `resource-filters.matchers.ts` |
+| Nombre de résultats sur le bouton Afficher | agrégation | Une recherche avec `limit: 0`, le total est dans la réponse |
+| Arbre des cercles | existant | `resource-circle-tree` en mode navigation |
+| Note moyenne et tentatives sur la ligne | existant | `statistic.exercise` ou `statistic.activity` (`averageScore`, `attemptCount`) |
+| Utilisé par N activités, et le listing | existant | `statistic.exercise.references`, filtre `dependOn` |
+| Badge Modèle et variables à remplir | existant | `metadata.configurable`, `metadata.config.inputs` |
+| Actions Prévisualiser, Éditer ou Paramétrer, Créer à partir, Dupliquer | existant | `resource-item` |
+| Auteur sur la ligne | agrégation | `ownerId`, utilisateurs déjà chargés pour le filtre Auteur |
+| Mon espace, Vu récemment | existant | Cercle personnel, recherche `views: true` |
+| Trois chiffres de la page ressource | existant | `DashboardService.ofResource` (note moyenne, réussite du premier coup, durée moyenne) |
+| Derniers événements | existant | `ResourceEventTypes` (création, statut, membres) et versions avec message |
+| Retiré : ruban, bordure et icône qui codent le type trois fois | retrait | Une icône suffit ; le statut garde icône et mot |
+
+## Création d'un exercice
+
+| Élément | Niveau | Ce qui existe |
+| --- | --- | --- |
+| Galerie des modèles certifiés, image, gif, compteurs, aperçu | existant | `resource-template-selection`, `certifiedTemplate`, `references.template`, `referencesAttemptCount` |
+| Modèles des cercles de l'enseignant | existant | Recherche `configurable` sur le cercle et ses parents, faite par l'assistant |
+| Recherche dans la galerie | proposition | Filtrage côté client |
+| Choisir un modèle crée le brouillon et ouvre l'atelier | existant | `createQuickResource`, cercle personnel, `/builder/:id` |
+| Atelier : variables, éditeur, aperçu | existant | Builder, `main.plc` (entrées), `main.plo` (valeurs), 11 types d'entrée |
+| Nommer au premier enregistrement | existant | Redirection vers les informations si nom par défaut et brouillon ; ici en dialogue |
+| Supprimer l'exercice jamais enregistré en quittant | existant | Garde `canDeactivate` et suppression si `createdAt === updatedAt` |
+| Ajouter l'exercice à un cours depuis l'atelier | proposition | Un endpoint crée une ressource activité avec un seul groupe (`main.pla` généré) puis l'activité de cours (`createActivities`) |
+| Formulaire unique à la place de l'assistant en six étapes | proposition | Côté client, mêmes champs et même appel |
+
+## Activité
+
+| Élément | Niveau | Ce qui existe |
+| --- | --- | --- |
+| Choisir une ou plusieurs activités dans une recherche filtrée | existant | Étape Activité de `/activities/create`, `types: ['ACTIVITY']` |
+| Fonction Entraînement, Notée, Challenge à l'ajout | existant | `isChallenge` ; Notée = `activitySettings` (durée, tentatives, sécurité), `code`, correcteurs |
+| Fonction modifiable ensuite | n'existe pas | `isChallenge` absent de `UpdateActivity` ; le panneau l'affiche en lecture seule |
+| Panneau Accès, Déroulement, Gestion | existant | `activity-settings` : périodes et règles, paramètres, couleur, fermer, rouvrir, recharger, supprimer |
+| Code de déblocage dans le panneau | proposition | `code` est dans `UpdateActivity`, l'interface manque |
+| Suivi : réussite, note, durée, par exercice | existant | `DashboardService.ofActivity`, `ActivityExerciseResults` |
 
 ## Tests d'entrée
 

@@ -17,12 +17,18 @@ pour Karim, Suivre, Programmer, Paramètres. L'étudiant ne voit jamais les effe
 de section par défaut : une section sans nom s'appelle par son numéro.
 
 Créer un cours tient dans un dialogue : un nom, une description, c'est tout ce que le modèle
-demande. Régler une activité se fait dans un panneau latéral, sur place, sans quitter la liste :
-dates, fonction (entraînement, notée, challenge), et pour une activité notée, durée, tentatives
-et sécurité. Ce panneau remplace l'assistant en quatre étapes.
+demande. Régler une activité se fait dans un panneau latéral, sur place, avec les trois onglets
+qui existent aujourd'hui : Accès (dates, ou périodes d'accès par groupe, par personne, avec leurs
+correcteurs), Déroulement (durée, tentatives, aides, retour, tirage, sécurité) et Gestion
+(couleur, fermer ou rouvrir, mettre à jour la version, supprimer). La fonction (entraînement,
+notée, challenge) se choisit à l'ajout de l'activité (flow activite) ; le panneau l'affiche en
+lecture seule, parce que `isChallenge` n'est pas modifiable et qu'une activité « notée » n'est
+qu'un ensemble de réglages de Déroulement.
 
 ## Rules
 
+- le suivi met en évidence l'exercice où la réussite du premier coup est la plus basse
+- la fonction d'une activité ne se modifie pas dans le panneau de réglage
 - une carte de cours porte la teinte du cours ; la même teinte suit le cours partout
 - l'étudiant ne voit pas les effectifs, ni les actions d'édition, ni les titres de section par
   défaut
@@ -36,17 +42,22 @@ et sécurité. Ce panneau remplace l'assistant en quatre étapes.
 
 spec:
   screens:
-    - { id: liste, states: [default, empty] }
+    - { id: mes-cours, states: [default, empty] }
     - { id: detail, states: [default, etudiant] }
     - { id: nouveau, overlay: true, states: [default] }
-    - { id: parametres, overlay: true, states: [default] }
+    - { id: parametres, overlay: true, states: [default, periodes, deroulement, gestion] }
+    - { id: suivi, states: [default] }
   edges:
-    - { from: liste, to: detail, on: open }
-    - { from: liste, to: nouveau, on: create }
-    - { from: nouveau, to: liste, on: dismiss }
+    - { from: mes-cours, to: detail, on: open }
+    - { from: mes-cours, to: nouveau, on: create }
+    - { from: nouveau, to: mes-cours, on: dismiss }
     - { from: nouveau, to: detail, on: create }
     - { from: detail, to: parametres, on: settings }
-    - { from: detail, to: activite, on: follow }
+    - { from: detail, to: activite, on: add }
+    - { from: detail, to: suivi, on: follow }
+    - { from: suivi, to: parametres, on: settings }
+    - { from: suivi, to: corrections, on: correct }
+    - { from: suivi, to: detail, on: back }
     - { from: detail, to: lecteur, on: start }
-    - { from: detail, to: liste, on: back }
+    - { from: detail, to: mes-cours, on: back }
     - { from: parametres, to: detail, on: dismiss }

@@ -7,13 +7,13 @@
         <div class="brand-org">Université Gustave Eiffel</div>
       </div>
     </div>
-    <a class="btn btn-cover btn-create"><svg class="ico"><use href="#add" /></svg>Créer</a>
+    <a class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico"><use href="#add" /></svg>Créer</a>
     <nav class="nav">
-      <a class="nav-item"><svg class="ico"><use href="#home" /></svg>Accueil</a>
-      <a class="nav-item"><svg class="ico"><use href="#school" /></svg>Cours</a>
-      <a class="nav-item"><svg class="ico"><use href="#rate_review" /></svg>Corrections<span class="count">14</span></a>
-      <a class="nav-item active"><svg class="ico"><use href="#folder_open" /></svg>Ressources</a>
-      <a class="nav-item"><svg class="ico"><use href="#fact_check" /></svg>Tests d'entrée</a>
+      <a class="nav-item" data-wf-to="enseignant"><svg class="ico"><use href="#home" /></svg>Accueil</a>
+      <a class="nav-item" data-wf-to="mes-cours"><svg class="ico"><use href="#school" /></svg>Cours</a>
+      <a class="nav-item" data-wf-to="file"><svg class="ico"><use href="#rate_review" /></svg>Corrections<span class="count">14</span></a>
+      <a class="nav-item active" data-wf-to="catalogue"><svg class="ico"><use href="#folder_open" /></svg>Ressources</a>
+      <a class="nav-item" data-wf-to="test"><svg class="ico"><use href="#fact_check" /></svg>Tests d'entrée</a>
     </nav>
     <div class="sidebar-foot">
       <a class="nav-item"><svg class="ico"><use href="#help" /></svg>Aide</a>
@@ -35,13 +35,13 @@
         <h1 class="title">Recherche dichotomique</h1>
         <p class="page-sub">Trouver l'indice d'un élément dans un tableau trié, avec tests automatiques sur 6 cas.</p>
         <div style="display: flex; gap: var(--spacing-2); margin-top: var(--spacing-3)">
-          <span class="tag success"><svg class="ico"><use href="#check_circle" /></svg>Prêt à l'utilisation</span><span class="tag">L1</span><span class="tag">Algorithmique</span><span class="tag">Python</span>
+          <span class="tag success"><svg class="ico"><use href="#check_circle" /></svg>Prêt à l'utilisation</span><span class="tag-link">L1</span><span class="tag-link">Algorithmique</span><span class="tag-link">Python</span>
         </div>
       </div>
       <div class="actions">
         <a class="btn btn-secondary"><svg class="ico"><use href="#content_copy" /></svg>Dupliquer</a>
-        <a class="btn btn-secondary" data-wf-to="edition"><svg class="ico"><use href="#edit" /></svg>Éditer</a>
-        <a class="btn btn-primary" data-wf-to="lecteur"><svg class="ico"><use href="#play_arrow" /></svg>Prévisualiser</a>
+        <a class="btn btn-secondary"><svg class="ico"><use href="#open_in_new" /></svg>Éditer</a>
+        <a class="btn btn-primary"><svg class="ico"><use href="#visibility" /></svg>Prévisualiser</a>
       </div>
     </header>
     <div class="tabs">
@@ -53,23 +53,23 @@
     <div class="layout">
       <div class="stack">
         <section>
-          <div class="section-head"><h2 class="heading">Utilisation</h2><a>Toutes les statistiques</a></div>
+          <div class="section-head"><h2 class="heading">Résultats des étudiants</h2><span class="count">1&nbsp;204 tentatives</span></div>
           <dl class="card" style="margin: 0; display: grid; grid-template-columns: repeat(3, 1fr)">
             <div class="kv" style="flex-direction: column; align-items: flex-start"><dt>Note moyenne</dt><dd class="figure-value">71&nbsp;<small>/&nbsp;100</small></dd></div>
             <div class="kv" style="flex-direction: column; align-items: flex-start; border-top: 0; border-left: 1px solid var(--color-line)"><dt>Réussite du premier coup</dt><dd class="figure-value">58&nbsp;%</dd></div>
-            <div class="kv" style="flex-direction: column; align-items: flex-start; border-top: 0; border-left: 1px solid var(--color-line)"><dt>Temps médian</dt><dd class="figure-value">4&nbsp;min</dd></div>
+            <div class="kv" style="flex-direction: column; align-items: flex-start; border-top: 0; border-left: 1px solid var(--color-line)"><dt>Durée moyenne</dt><dd class="figure-value">4&nbsp;min</dd></div>
           </dl>
         </section>
         <section>
-          <div class="section-head"><h2 class="heading">Utilisé dans</h2><span class="count">3 activités</span></div>
+          <div class="section-head"><h2 class="heading">Utilisé par</h2><span class="count">3 activités</span><a style="margin-left: auto" data-wf-to="catalogue">Voir dans le catalogue</a></div>
           <div class="card rows">
-            <div class="row"><span class="lead-icon hued hue-bleuet"><svg class="ico"><use href="#event" /></svg></span><div class="row-main"><div class="row-title">Examen partiel 1</div><div class="row-meta"><span>Algorithmique et programmation 1</span><span>302 étudiants</span></div></div></div>
-            <div class="row"><span class="lead-icon hued hue-bleuet"><svg class="ico"><use href="#quiz" /></svg></span><div class="row-main"><div class="row-title">Entraînement&nbsp;: recherche</div><div class="row-meta"><span>Algorithmique et programmation 1</span></div></div></div>
-            <div class="row"><span class="lead-icon hued hue-ambre"><svg class="ico"><use href="#code" /></svg></span><div class="row-main"><div class="row-title">TP 2&nbsp;: tableaux</div><div class="row-meta"><span>Java, L3</span></div></div></div>
+            <div class="row"><span class="lead-icon"><svg class="ico"><use href="#quiz" /></svg></span><div class="row-main"><div class="row-title">Examen partiel 1</div><div class="row-meta"><span>Cercle Algorithmique</span><span>Karim Haddad</span></div></div></div>
+            <div class="row"><span class="lead-icon"><svg class="ico"><use href="#quiz" /></svg></span><div class="row-main"><div class="row-title">Entraînement&nbsp;: recherche</div><div class="row-meta"><span>Cercle Algorithmique</span><span>Hélène Martin</span></div></div></div>
+            <div class="row"><span class="lead-icon"><svg class="ico"><use href="#quiz" /></svg></span><div class="row-main"><div class="row-title">TP 2&nbsp;: tableaux</div><div class="row-meta"><span>Cercle Java, L3</span><span>Paul Renard</span></div></div></div>
           </div>
         </section>
         <section>
-          <div class="section-head"><h2 class="heading">Documentation</h2><a data-wf-to="edition">Modifier le README</a></div>
+          <div class="section-head"><h2 class="heading">Documentation</h2></div>
           <div class="card card-pad"><div class="statement" style="font-size: 15px; line-height: 24px"><p>L'exercice génère un tableau trié de 8 à 20 entiers et une valeur cherchée, présente ou non. La correction exécute 6 tests, dont un tableau vide et un tableau de taille paire.</p><p>Variante récursive&nbsp;: voir « Recherche dichotomique récursive ».</p></div></div>
         </section>
       </div>
@@ -80,14 +80,15 @@
             <div class="kv"><dt>Créée par</dt><dd>Hélène Martin</dd></div>
             <div class="kv"><dt>Cercle</dt><dd>Algorithmique</dd></div>
             <div class="kv"><dt>Version</dt><dd>v4, 26 sept.</dd></div>
-            <div class="kv"><dt>Modèle</dt><dd>Code Python</dd></div>
+            <div class="kv"><dt>Membres</dt><dd>3</dd></div>
           </dl>
         </section>
         <section>
-          <div class="section-head"><h2 class="heading">Historique</h2><a>Tout</a></div>
+          <div class="section-head"><h2 class="heading">Derniers événements</h2><a>Tout</a></div>
           <div class="card">
             <div class="mini"><span class="mini-title">Statut passé à Prêt</span><span class="muted" style="font-size: 13px">Hélène Martin, 26 septembre</span></div>
-            <div class="mini"><span class="mini-title">Test du tableau vide ajouté</span><span class="muted" style="font-size: 13px">Hélène Martin, 24 septembre</span></div>
+            <div class="mini"><span class="mini-title">Version v4&nbsp;: test du tableau vide</span><span class="muted" style="font-size: 13px">Hélène Martin, 24 septembre</span></div>
+            <div class="mini"><span class="mini-title">Paul Renard ajouté aux membres</span><span class="muted" style="font-size: 13px">Hélène Martin, 3 septembre</span></div>
           </div>
         </section>
       </aside>
