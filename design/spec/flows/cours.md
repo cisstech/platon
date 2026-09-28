@@ -22,7 +22,9 @@ l'export des notes en CSV, l'ajout et les actions de section (renommer, réordon
 activités, insérer, monter, descendre, supprimer). Chaque activité dit son état, ses dates, son
 nombre d'exercices ; pour l'élève son avancement et Commencer, Reprendre ou Voir mes résultats ;
 pour l'enseignant Suivre, Paramètres et un menu (Lancer, notes CSV, ouvrir ou éditer la
-ressource).
+ressource). Les effectifs passent dans l'en-tête ; la colonne de droite devient « À faire » : les
+copies à corriger, les activités sans dates, ce qui ferme bientôt. Un cours neuf affiche les trois
+prochaines étapes au lieu d'une page vide.
 
 Le suivi d'une activité réunit les deux pages actuelles, Statistiques et Suivi de l'activité, en
 trois onglets : Statistiques, Apprenants, Modération (ouverture et fermeture par élève, code de
@@ -32,6 +34,8 @@ activite) ; `isChallenge` ne se modifie pas ensuite.
 
 ## Rules
 
+- une ligne d'activité n'a un bouton que s'il y a quelque chose à faire (Programmer) ; sinon la ligne ouvre le suivi
+- la colonne À faire ne liste que des actions, chacune cliquable
 - un classeur porte la teinte du cours ; la même teinte suit le cours partout
 - l'élève ne voit ni les actions d'édition, ni l'onglet Paramètres, ni l'export des notes
 - l'onglet Challenges n'apparaît que si le cours a au moins un challenge
@@ -46,7 +50,7 @@ spec:
     - { id: mes-cours, states: [default, etudiant, empty] }
     - { id: mes-cours-actions, overlay: true, states: [default] }
     - { id: nouveau, overlay: true, states: [default] }
-    - { id: detail, states: [default, etudiant, tableau] }
+    - { id: detail, states: [default, etudiant, tableau, vide] }
     - { id: section-actions, overlay: true, states: [default] }
     - { id: activite-actions, overlay: true, states: [default] }
     - { id: partager, overlay: true, states: [default] }

@@ -5,7 +5,9 @@ activités, fonction et dates) et leur contenu : on choisit une ou plusieurs res
 activité dans une recherche filtrée, puis leur fonction. Entraînement ne règle rien de plus ;
 Notée ajoute durée, tentatives, code de déblocage, sécurité et désigne les enseignants du cours
 comme correcteurs ; Challenge marque l'activité comme challenge, un choix qui ne se défait pas.
-Fonction et configuration sont réunies sur une seule étape, parce que la configuration dépend de
+Si aucune activité ne convient, l'enseignant la compose avec des exercices du catalogue, dans
+l'ordre voulu ; PLaTon enregistre la ressource activité dans son cercle. Fonction et
+configuration sont réunies sur une seule étape, parce que la configuration dépend de
 la fonction.
 
 Le suivi (écran suivi du flow cours) montre ce que calcule déjà le tableau de bord d'une activité : qui a
@@ -21,9 +23,13 @@ réussite du premier coup et les abandons. C'est là que Karim voit où ses étu
 spec:
   screens:
     - { id: ajouter, states: [default] }
+    - { id: ajouter-composer, states: [default] }
     - { id: ajouter-fonction, states: [default] }
   edges:
     - { from: ajouter, to: ajouter-fonction, on: next }
+    - { from: ajouter, to: ajouter-composer, on: compose }
+    - { from: ajouter-composer, to: ajouter, on: back }
+    - { from: ajouter-composer, to: ajouter-fonction, on: next }
     - { from: ajouter, to: creation, on: template }
     - { from: ajouter-fonction, to: ajouter, on: back }
     - { from: ajouter-fonction, to: cours, on: add }

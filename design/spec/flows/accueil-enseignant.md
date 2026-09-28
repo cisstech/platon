@@ -6,8 +6,9 @@ au suivi de l'activité. Puis « À corriger » : les épreuves dont des copies 
 le nombre restant. Puis « À préparer » : les activités planifiées ou encore sans dates, pour qu'une
 séance ne commence pas sur une activité fermée.
 
-À droite, ses cours et ses ressources récemment modifiées avec leur statut. Le sélecteur de modèles
-d'exercice, qui occupe tout l'accueil actuel, rejoint la création d'exercice.
+À droite, ses cours et les ressources vues récemment, avec leur statut. Le sélecteur de modèles, qui
+occupe tout l'accueil actuel, devient un bloc de trois modèles, « Partir d'un modèle », qui mène à
+la galerie complète.
 
 Le bouton Créer, dans la barre latérale, ouvre un menu qui décrit chaque objet en une ligne :
 un enseignant qui découvre PLaTon apprend la différence entre un cours, une activité et un

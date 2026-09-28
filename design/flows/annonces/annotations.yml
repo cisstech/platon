@@ -1,4 +1,4 @@
 - screen: annonces
-  note: "La page Annonces actuelle : liste avec recherche à gauche, détail à droite (titre, date, auteur, contenu). Elle revient dans la navigation, où elle est aujourd'hui."
-- screen: annonce-nouvelle
-  note: "La fenêtre d'annonce qui s'ouvre après la connexion (checkForAnnouncements), avec un accès à toutes les annonces."
+  note: "La page Annonces actuelle : liste avec recherche à gauche, détail à droite (titre, date, auteur, contenu)."
+- screen: annonces
+  note: "Réorganisation : la fenêtre qui s'ouvre après la connexion (checkForAnnouncements) devient le bandeau de l'accueil. Même donnée, sans interrompre la personne qui vient pour rendre un TP."

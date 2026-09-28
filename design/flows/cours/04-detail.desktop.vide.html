@@ -12,9 +12,9 @@
     <nav class="nav">
       <a class="nav-item" data-wf-to="enseignant"><svg class="ico"><use href="#home" /></svg>Accueil</a>
       <a class="nav-item" data-wf-to="annonces"><svg class="ico"><use href="#campaign" /></svg>Annonces</a>
-      <a class="nav-item" data-wf-to="mes-cours"><svg class="ico"><use href="#school" /></svg>Cours</a>
+      <a class="nav-item active" data-wf-to="mes-cours"><svg class="ico"><use href="#school" /></svg>Cours</a>
       <a class="nav-item" data-wf-to="file"><svg class="ico"><use href="#rate_review" /></svg>Corrections<span class="count">14</span></a>
-      <a class="nav-item active" data-wf-to="catalogue"><svg class="ico"><use href="#folder_open" /></svg>Ressources</a>
+      <a class="nav-item" data-wf-to="catalogue"><svg class="ico"><use href="#folder_open" /></svg>Ressources</a>
       <a class="nav-item" data-wf-to="test"><svg class="ico"><use href="#fact_check" /></svg>Tests d'entrée</a>
     </nav>
     <div class="sidebar-foot">
@@ -33,28 +33,56 @@
   <main class="main" id="contenu">
     <header class="page-head">
       <div>
-        <div class="crumbs"><a data-wf-to="catalogue">Ressources</a><svg class="ico"><use href="#chevron_right" /></svg><span>Informatique</span><svg class="ico"><use href="#chevron_right" /></svg><a data-wf-to="cercle">Algorithmique</a></div>
-        <h1 class="title" style="display: flex; align-items: center; gap: 6px">Recherche dichotomique<button class="btn btn-icon btn-sm" aria-label="Modifier le nom"><svg class="ico ico-16"><use href="#edit" /></svg></button></h1>
-        <p class="page-sub">Trouver l'indice d'un élément dans un tableau trié, avec tests automatiques sur 6 cas.</p>
-        <div style="display: flex; gap: var(--spacing-2); margin-top: var(--spacing-3); align-items: center">
-          <span class="select"><svg class="ico ico-16"><use href="#check_circle" /></svg>Prêt à l'utilisation<svg class="ico ico-16"><use href="#expand_more" /></svg></span>
-          <a class="btn btn-secondary btn-sm" data-wf-to="suivi"><svg class="ico"><use href="#visibility" /></svg>Suivre</a>
-          <span class="tag-link">L1</span><span class="tag-link">Algorithmique</span><span class="tag-link">Python</span>
+        <div class="crumbs"><a data-wf-to="mes-cours">Cours</a><svg class="ico"><use href="#chevron_right" /></svg><span>Algorithmique et programmation 1</span></div>
+        <h1 class="title" style="display: flex; align-items: center; gap: 6px">Algorithmique et programmation 1<button class="btn btn-icon btn-sm" aria-label="Modifier le nom"><svg class="ico ico-16"><use href="#edit" /></svg></button></h1>
+        <p class="page-sub">Licence 1 Informatique, semestre 1. Bases de la programmation en Python.</p>
+        <p class="head-meta"><span><svg class="ico ico-16"><use href="#school" /></svg><strong>1</strong> enseignant</span><span><svg class="ico ico-16"><use href="#groups" /></svg><strong>0</strong> élève</span><span><svg class="ico ico-16"><use href="#widgets" /></svg><strong>0</strong> activité</span><span><svg class="ico ico-16"><use href="#calendar_month" /></svg>créé le 1er septembre par Karim Haddad</span></p>
+      </div>
+      <div class="actions"><a class="btn btn-secondary" data-wf-to="partager"><svg class="ico"><use href="#share" /></svg>Partager</a><a class="btn btn-primary" data-wf-to="ajouter"><svg class="ico"><use href="#add" /></svg>Ajouter une activité</a></div>
+    </header>
+    <div class="tabs"><a class="tab active" data-wf-to="detail"><svg class="ico"><use href="#grid_view" /></svg>Vue d'ensemble</a><a class="tab" data-wf-to="membres"><svg class="ico"><use href="#groups" /></svg>Membres <span class="count">1</span></a><a class="tab" data-wf-to="groupes"><svg class="ico"><use href="#group_add" /></svg>Groupes</a><a class="tab" data-wf-to="reglages"><svg class="ico"><use href="#settings" /></svg>Paramètres</a></div>
+    <div class="layout">
+      <div>
+        <div class="card" style="margin-bottom: var(--spacing-4)">
+          <div class="empty compact">
+            <svg class="illus"><use href="#illus-copie" /></svg>
+            <div class="empty-body">
+              <h2 class="heading">Votre cours est prêt, il ne manque que le contenu</h2>
+              <p>Trois étapes, dans cet ordre.</p>
+            </div>
+          </div>
+        </div>
+        <div class="card steps">
+        <div class="step current">
+          <div class="step-body">
+            <h2 class="subheading">Ajouter une activité</h2>
+            <p>Une activité existante, ou composée avec des exercices. Une section « Section 1 » est créée pour l'accueillir.</p>
+            <a class="btn btn-secondary btn-sm" style="margin-top: var(--spacing-3)" data-wf-to="ajouter">Ajouter une activité</a>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-body">
+            <h2 class="subheading">Ajouter vos élèves</h2>
+            <p>Un par un, ou d'un coup avec un groupe de la plateforme (une promotion, un TD).</p>
+            <a class="btn btn-secondary btn-sm" style="margin-top: var(--spacing-3)" data-wf-to="membres-ajouter">Ajouter des membres</a>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-body">
+            <h2 class="subheading">Partager le lien</h2>
+            <p>Le lien PLaTon, ou le lien LTI à coller dans Moodle.</p>
+            <a class="btn btn-secondary btn-sm" style="margin-top: var(--spacing-3)" data-wf-to="partager">Partager</a>
+          </div>
+        </div>
         </div>
       </div>
-      <div class="actions">
-        <a class="btn btn-secondary" data-wf-to="ressource-partager"><svg class="ico"><use href="#share" /></svg>Partager</a>
-        <a class="btn btn-secondary"><svg class="ico"><use href="#open_in_new" /></svg>Éditer</a>
-        <a class="btn btn-primary"><svg class="ico"><use href="#visibility" /></svg>Prévisualiser</a>
-        <button class="btn btn-icon" aria-label="Plus d&#39;actions" data-wf-to="ressource-actions"><svg class="ico"><use href="#more_horiz" /></svg></button>
-      </div>
-    </header>
-    <div class="tabs"><a class="tab" data-wf-to="ressource"><svg class="ico"><use href="#grid_view" /></svg>Vue d'ensemble</a><a class="tab" data-wf-to="explorer"><svg class="ico"><use href="#folder_open" /></svg>Explorer</a><a class="tab active" data-wf-to="evenements"><svg class="ico"><use href="#history" /></svg>Évènements</a><a class="tab" data-wf-to="ressource-parametres"><svg class="ico"><use href="#settings" /></svg>Paramètres</a></div>
-    <div class="card" style="max-width: 820px">
-<div class="mini" style="flex-direction: row; align-items: center; gap: var(--spacing-3)"><span class="lead-icon" style="width: 30px; height: 30px"><svg class="ico ico-18"><use href="#check_circle" /></svg></span><span class="mini-title" style="flex: 1">Hélène Martin a passé « Recherche dichotomique » à Prêt à l'utilisation</span><span class="muted" style="font-size: 13px">26/09/2026 à 09&nbsp;h&nbsp;41</span></div>
-<div class="mini" style="flex-direction: row; align-items: center; gap: var(--spacing-3)"><span class="lead-icon" style="width: 30px; height: 30px"><svg class="ico ico-18"><use href="#person_add" /></svg></span><span class="mini-title" style="flex: 1">Paul Renard est désormais membre de « Algorithmique »</span><span class="muted" style="font-size: 13px">03/09/2026 à 14&nbsp;h&nbsp;20</span></div>
-<div class="mini" style="flex-direction: row; align-items: center; gap: var(--spacing-3)"><span class="lead-icon" style="width: 30px; height: 30px"><svg class="ico ico-18"><use href="#science" /></svg></span><span class="mini-title" style="flex: 1">Hélène Martin a passé « Recherche dichotomique » à Besoin d'être testé</span><span class="muted" style="font-size: 13px">20/09/2026 à 10&nbsp;h&nbsp;05</span></div>
-<div class="mini" style="flex-direction: row; align-items: center; gap: var(--spacing-3)"><span class="lead-icon" style="width: 30px; height: 30px"><svg class="ico ico-18"><use href="#add" /></svg></span><span class="mini-title" style="flex: 1">Hélène Martin a ajouté « Recherche dichotomique » dans le cercle « Algorithmique »</span><span class="muted" style="font-size: 13px">18/09/2026 à 16&nbsp;h&nbsp;30</span></div>
+      <aside class="stack">
+        <section class="card card-pad">
+          <h2 class="subheading" style="margin-bottom: 4px">Déjà un cours l'an dernier&nbsp;?</h2>
+          <p class="muted" style="margin: 0 0 var(--spacing-3); font-size: 13px">Reprenez ses sections et activités, dates décalées d'un an.</p>
+          <a class="btn btn-ghost btn-sm" data-wf-to="reglages"><svg class="ico"><use href="#content_copy" /></svg>Reprendre un cours</a>
+        </section>
+      </aside>
     </div>
   </main>
 </div>

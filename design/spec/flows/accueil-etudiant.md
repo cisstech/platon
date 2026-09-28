@@ -6,8 +6,8 @@ cours, triées par échéance, avec l'avancement et un bouton qui dit ce qu'il f
 Reprendre). Puis « Bientôt » : ce qui ouvre dans les jours qui viennent, pour qu'un contrôle noté ne
 la prenne pas par surprise. Puis « Résultats récents », avec l'accès aux corrections disponibles.
 
-À droite, ses cours avec leur avancement, et trois chiffres de progression. Les huit statistiques de
-l'accueil actuel vont sur une page de progression, liée depuis ce bloc.
+À droite, ses cours avec leur avancement, et trois chiffres sur tous ses cours (moyenne, réussite,
+temps passé), ceux que calcule déjà le tableau de bord utilisateur.
 
 Le chemin heureux : Inès ouvre PLaTon, voit que le quiz de complexité ferme ce soir, clique sur
 Reprendre et arrive dans le lecteur, sur l'exercice où elle s'était arrêtée.

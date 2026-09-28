@@ -34,3 +34,7 @@
   note: "Vue d'ensemble d'un cercle : répartition par statut (chaque part ouvre le catalogue filtré), compteurs (exercices, activités, modèles, cercles enfants, collaborateurs, observateurs) et tags. Suivre et Demander à rejoindre dans l'en-tête."
 - screen: cercle-collaborateurs
   note: "Demandes, invitations et collaborateurs, gérés par l'administrateur comme aujourd'hui. Pas de droits par personne : le modèle en a (read, write), l'interface non, et on ne l'invente pas."
+- screen: ressource
+  note: "Passe UX : quatre chiffres en tête (note, juste du premier coup, durée, abandons), les six autres dans Tous les indicateurs. Même donnée, une hiérarchie. Prévisualiser est l'action principale ; le menu des actions rares est en bout de ligne."
+- screen: catalogue
+  note: "Passe UX : Créer un exercice devient l'action principale de la page, vers la galerie de modèles."

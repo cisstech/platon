@@ -1,17 +1,15 @@
 # annonces
 
 Les annonces de la plateforme : une liste avec recherche et le détail de l'annonce choisie, comme
-aujourd'hui. Une annonce nouvelle et ciblée s'ouvre dans une fenêtre après la connexion.
+aujourd'hui. Une annonce nouvelle apparaît en bandeau sur l'accueil, qu'on lit ou qu'on ferme ;
+elle n'interrompt plus la connexion par une fenêtre.
 
 ## Rules
 
-- la fenêtre d'annonce se ferme en un geste et ne revient pas pour la même annonce
+- un bandeau fermé ne revient pas pour la même annonce
 
 spec:
   screens:
     - { id: annonces, states: [default] }
-    - { id: annonce-nouvelle, overlay: true, states: [default] }
   edges:
-    - { from: annonces, to: annonce-nouvelle, on: new }
-    - { from: annonce-nouvelle, to: annonces, on: open }
-    - { from: annonce-nouvelle, to: accueil-etudiant, on: dismiss }
+    - { from: annonces, to: accueil-etudiant, on: home }

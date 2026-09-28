@@ -4,3 +4,5 @@
   note: "Quand la recherche ne donne rien, la page renvoie vers la création à partir d'un modèle."
 - screen: ajouter-fonction
   note: "C'est ici, et seulement ici, que vit la Fonction. Les étapes Fonction et Configuration sont réunies : Notée déplie ses réglages (durée, tentatives, code, sécurité), Challenge prévient qu'il est définitif."
+- screen: ajouter-composer
+  note: "Proposition, côté client : composer une activité avec des exercices du catalogue, dans l'ordre. PLaTon crée la ressource activité (POST /resources avec un main.pla à un groupe) dans le cercle de l'enseignant, puis l'ajoute au cours. Plus besoin de l'éditeur PLA pour assembler trois exercices."

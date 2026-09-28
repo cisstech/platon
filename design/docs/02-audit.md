@@ -1,137 +1,113 @@
 # Audit de l'expérience
 
-Exploration menée le 28 septembre 2026 sur la branche `main` (PlatonOrg `develop`, Angular 22), en
-local, avec la base du dump de développement migrée au schéma courant. Écrans parcourus avec les
-comptes administrateur, enseignant et étudiant, sur bureau (1440 x 900) et mobile (390 x 844).
+Exploration du 28 septembre 2026 (branche `main`, dump de développement) avec les comptes admin,
+enseignant et étudiant. Chaque constat renvoie au fichier qui le produit.
 
-Priorités :
+Priorités : **P1** bloque, trompe ou touche un moment à enjeu. **P2** ralentit ou fait douter.
+**P3** finition.
 
-- **P1** : bloque ou trompe l'utilisateur, ou touche un moment à enjeu (note, examen, test).
-- **P2** : ralentit, fait douter ou dégrade la confiance.
-- **P3** : finition, cohérence, polissage.
+## En bref
 
-## Ce qui ressort
-
-1. **L'accueil ne répond pas à la question du jour.** Ni l'étudiant ni l'enseignant ne voient ce
-   qu'ils ont à faire en arrivant. L'un voit des taux, l'autre un sélecteur de modèles.
-2. **Les états d'erreur et de chargement n'existent presque pas.** Une erreur serveur devient un
-   cours vide, une page blanche ou un squelette qui ne finit jamais.
-3. **Deux bibliothèques, deux langages visuels.** Les champs Material (fond gris, soulignés) côtoient
-   les champs ng-zorro (bordés) dans le même formulaire, les boutons changent de forme d'un écran à
-   l'autre, les en-têtes de page aussi.
-4. **La couleur ne veut rien dire.** Cinq teintes d'accent se disputent l'écran (violet de la barre
-   latérale, bleu nuit des boutons, bleu vif, violet tertiaire, or en thème sombre) et chaque carte
-   de statistique porte un coin de couleur décoratif. Le vert habille un taux d'abandon.
-5. **Le fond beige** (`#f4f2ed`) donne un teint jauni à toute l'application, et le thème sombre
-   bascule le primaire sur un or sans rapport.
+1. L'accueil ne dit à personne quoi faire.
+2. Une erreur s'affiche comme une liste vide ou un chargement sans fin.
+3. Material et ng-zorro cohabitent dans les mêmes écrans.
+4. La couleur ne porte pas de sens.
 
 ## Identité visuelle
 
-| Où | Constat | Effet | Proposition | Priorité |
-| --- | --- | --- | --- | --- |
-| Partout | Cinq accents : barre latérale `#3c2964`, primaire `#171c8f`, secondaire `#3466fe`, tertiaire `#7044ff`, primaire sombre `#d09000` | Rien ne se distingue, l'œil ne sait pas où agir | Un seul accent, l'encre violette dérivée du logo, réservé à l'action et à la sélection | P2 |
-| Partout | Fond de page `#f4f2ed` (teinte chaude, 95°) | Aspect jauni, sale sur les écrans froids | Fond neutre légèrement froid, teinté de l'accent | P2 |
-| Cartes de statistiques | Un ruban coloré par carte (violet, jaune, turquoise, bleu, rouge, vert, gris, orange) | Bruit, la couleur ne porte aucun sens | Pas de couleur décorative ; la couleur signale un état (réussi, en retard) | P2 |
-| Tableau de bord étudiant | Taux d'abandon 25 % en vert | Contresens | Couleur liée au sens de la métrique, ou neutre | P1 |
-| Connexion | Titre en anglais « Platform for Learning and Teaching online » sur une interface française, bandeau cookies incrusté dans la vidéo | Première impression brouillée | Page de connexion sobre, en français, vidéo optionnelle | P2 |
-| Typographie | Source Sans Pro et Roboto, Material Icons et icônes Ant, graisses et tailles libres | Aucune échelle, hiérarchie floue | Une famille (Atkinson Hyperlegible Next et Mono), une échelle fermée | P2 |
+| Constat | Prio. | Preuve |
+| --- | --- | --- |
+| Plusieurs accents : barre latérale `#3c2964`, primaire `#171c8f`, secondaire `#3466fe`, tertiaire `#7044ff`, primaire sombre `#d09000` | P2 | `shared/styles/_css-variables.scss` |
+| Fond de page beige `#f4f2ed` | P2 | `shared/styles/_css-variables.scss` |
+| Chaque carte de statistique porte un ruban d'une couleur arbitraire | P2 | `ribbonColor` dans `pages/dashboard/overview/overview.page.html` |
+| Taux d'abandon en vert jusqu'à 40 % : un quart d'abandon passe pour un succès | P2 | `positiveRedColor`, `libs/shared/ui/src/cards/statistic-card/statistic-card.component.ts` |
+| Page de connexion : titre en anglais « Platform for Learning and Teaching online », vidéo tierce en iframe | P2 | `pages/login/login.page.html` |
+| Typographie : `--brand-font` demande Inter puis Roboto, non chargées ; Source Sans Pro est déclarée à côté | P2 | `shared/styles/_css-variables.scss`, `shared/styles/fonts.scss` |
 
-## Navigation et cadre de l'application
+## Cadre et navigation
 
-| Où | Constat | Effet | Proposition | Priorité |
-| --- | --- | --- | --- | --- |
-| Admin, partout | Cadre rouge fixe de 6 px autour de l'écran (`app.page.html`, `.admin-box`) | Agressif, ressemble à une erreur, masque le bord du contenu | Mention discrète « Administrateur » dans le menu utilisateur, et une couleur de rappel seulement sur les actions à portée globale | P2 |
-| Barre latérale | 220 px de violet plein, logo sur 140 px de haut avant le premier lien | Espace perdu, poids visuel sur la navigation plutôt que sur le contenu | Barre latérale claire, repliable, logo compact | P3 |
-| Barre supérieure | « PLaTon » répété à côté du logo, bouton « + » sans libellé, bouton d'aide aux tutoriels sans libellé, thème à part | Actions ambiguës, doublons | « Créer » libellé, aide et thème dans le menu utilisateur, pas de titre de marque répété | P2 |
-| Rôle étudiant | « Annonces » et « Corrections » en navigation principale alors que l'étudiant n'a le plus souvent rien à corriger | Navigation qui ne lui parle pas | Navigation par rôle ; Corrections n'apparaît que s'il y a des corrections assignées | P2 |
-| Toutes pages | Deux gabarits d'en-tête : titre centré souligné (Cours, Espace de travail, Tests) ou titre à gauche (Administration, Corrections, Compte) | Incohérence | Un seul en-tête de page : fil d'Ariane, titre, description, actions à droite | P2 |
-| Toutes pages | Action principale sous forme de rond avec icône seule (Cours, Espace de travail), de pilule libellée (Tests), de rectangle (Admin) | L'action principale change de forme et de sens | Bouton primaire libellé, toujours au même endroit | P2 |
-| Espace de travail | L'icône de l'action principale est un arbre, sans libellé | Personne ne devine « parcourir les cercles » | Libellé explicite | P2 |
-| Recherche | Aucune recherche globale ; une barre différente par page | L'utilisateur doit savoir où chercher | Palette de commande (⌘K) en second temps, barre de recherche unique par liste | P3 |
+| Constat | Prio. | Preuve |
+| --- | --- | --- |
+| Cadre rouge fixe (`0.7vh`) autour de l'écran pour tout administrateur | P2 | `apps/web/src/app/app.page.html`, `app.page.scss` |
+| Barre latérale de 220 px, logo de 128 px avant le premier lien | P3 | `pages/dashboard/dashboard.page.scss`, `widgets/sidebar/sidebar.component.scss` |
+| Barre supérieure : « PLaTon » répété à côté du logo, bouton « + » et bouton tutoriels sans libellé ni infobulle | P2 | `widgets/toolbar/toolbar.component.html` |
+| « Annonces » et « Corrections » affichés à tous, même sans correction assignée | P2 | `widgets/sidebar/sidebar.component.ts` |
+| Titre de page centré sur Cours, Espace de travail, Tests ; à gauche ailleurs (fil d'Ariane) | P2 | `courses.page.scss`, `resources.page.scss`, `tests.page.scss` |
+| Action de création en rond à icône seule (Cours), en pilule libellée (Tests) | P2 | `courses.page.html`, `tests.page.html` |
+| Espace de travail : bouton icône « arbre » seul pour l'arbre des cercles | P3 | `pages/resources/resources.page.html` |
+| Premier accès enseignant : tutoriel lancé automatiquement | P3 | `firstLoginStartTuto`, `widgets/toolbar/toolbar.component.ts` |
 
 ## Accueils
 
-| Où | Constat | Effet | Proposition | Priorité |
-| --- | --- | --- | --- | --- |
-| Accueil étudiant | Huit statistiques et un graphique, aucune activité listée | L'étudiant ne sait pas quoi faire | « À faire » d'abord (activités ouvertes triées par échéance), puis « Bientôt », « Résultats récents », les chiffres ensuite | P1 |
-| Accueil enseignant | Sélecteur de modèles d'exercice, vide | Aucun pilotage | « En cours » (activités ouvertes, participation), « À corriger », « Mes cours », « Ressources récentes » ; les modèles vont dans la création d'exercice | P1 |
-| Accueil démo | Le rôle démo ne rend aucun contenu (`overview.page.ts`) | Première impression vide pour un prospect | Le démo voit l'accueil étudiant | P1 |
-| Premier accès enseignant | Tour guidé shepherd lancé automatiquement | Tunnel imposé, masque l'écran | État vide qui guide par l'action (créer un cours, trouver un exercice, ajouter une activité), tour à la demande | P3 |
+| Constat | Prio. | Preuve |
+| --- | --- | --- |
+| Étudiant : huit statistiques et deux graphiques, aucune activité listée | P1 | `pages/dashboard/overview/overview.page.html` |
+| Enseignant et admin : seulement le sélecteur de modèles d'exercice | P1 | idem, `canSeeTemplates` |
+| Démo (et candidat) : accueil vide, les statistiques ne sont chargées que pour `student` | P1 | `pages/dashboard/overview/overview.presenter.ts` |
 
-## Listes, cartes et pages de détail
+## Cours
 
-| Où | Constat | Effet | Proposition | Priorité |
-| --- | --- | --- | --- | --- |
-| Cours (étudiant) | Carte avec icônes sans libellé (4, 11, 2), une date sans signification (création du cours), un badge d'avancement orange avec une barre d'icône | Chiffres illisibles | Avancement explicite (« 3 activités sur 8 terminées »), prochaine échéance, pas de date de création | P2 |
-| Cours, onglet vue d'ensemble (étudiant) | Nombre d'enseignants et d'élèves, onglets Membres et Groupes, titre de section par défaut « Modifiez le titre de votre section » | Contenu d'enseignant montré à l'étudiant | Vue étudiant : sa progression, ses activités par section, rien de l'administration du cours | P2 |
-| Espace de travail | Le même cercle affiché deux fois (résultats et « Mon espace ») | Doute sur ce qui est affiché | Mon cercle en raccourci de navigation, pas en doublon de résultat | P3 |
-| Page d'un exercice | Onze cartes de statistiques de même poids | Rien n'est lisible | Trois indicateurs clés, le détail en tableau ou en graphique repliable | P2 |
-| Page d'un cercle | Titre en casse anglaise « Suivi de l'État des Ressources », légende de l'anneau à « (0%) » partout | Faute de casse, chiffres faux | Casse de phrase, pourcentages corrects | P2 |
-| Membres d'un cours | Bouton rouge plein de suppression sur chaque ligne ; ordre nom et prénom différent de l'administration | Risque d'erreur, incohérence | Suppression dans un menu de ligne avec confirmation, ordre « Prénom Nom » partout | P2 |
-| Paramètres du cours | Trois blocs, trois boutons primaires identiques | Pas de hiérarchie | Un primaire par écran, les autres en secondaire, la zone destructive à part | P3 |
+| Constat | Prio. | Preuve |
+| --- | --- | --- |
+| Si le chargement des sections ou activités échoue, l'écran affiche « Ce cours ne contient aucune section » | P1 | `refresh()` sans `catch`, `pages/courses/course/dashboard/dashboard.page.ts` |
+| L'étudiant voit le nombre d'enseignants et d'élèves, et les onglets Membres et Groupes | P2 | `course/dashboard/dashboard.page.html`, `course/course.page.html` |
+| Carte de cours : compteurs à icône seule (infobulle au survol), avancement en barre de 5 pas dans un ruban coloré | P2 | `libs/feature/course/browser/src/components/course-item/course-item.component.html` |
+| Membres : bouton rouge plein « retirer » sur chaque ligne (avec confirmation) | P3 | `course-member-table.component.html` |
+| Paramètres : Sauvegarder, Créer accès démo, Charger un cours et Supprimer l'accès démo sont tous des boutons primaires | P3 | `course/settings/settings.page.html` |
+| Ajout d'activité : assistant Section, Activité, Fonction, Configuration (la section est sautée depuis une section) | P2 | `pages/activities/create/create.page.html` |
+| Challenges : un échec de chargement laisse le squelette affiché indéfiniment | P1 | `loading` sans `finally`, `course/challenges/challenges.page.ts` |
+
+## Ressources
+
+| Constat | Prio. | Preuve |
+| --- | --- | --- |
+| Page d'un exercice : dix cartes de statistiques de même poids | P2 | `pages/resources/resource/overview/overview.page.html` |
+| Titre en casse anglaise « Suivi de l'État des Ressources » | P3 | idem |
+| Liste vide : « Vérifiez les termes de votre recherche » s'affiche même sans recherche | P2 | `resources.page.html`, `courses.page.html`, `activities/create/create.page.html` |
+| Création d'exercice : assistant en six étapes | P2 | `pages/resources/create/create.page.html` |
+
+## Lecteur d'activité
+
+| Constat | Prio. | Preuve |
+| --- | --- | --- |
+| La fin d'activité affiche toujours le champ « Code de déblocage », même sans code | P1 | `player-activity.component.html` |
+| Le résumé montre l'identifiant de session (UUID) | P2 | `player-results/player-results.component.html` |
+| Un échec du chargement des résultats n'est pas géré : le tableau n'apparaît pas, sans message | P2 | `ngOnInit`, `player-results.component.ts` |
+| Aucun délai maximal côté client : si l'exécution ne répond pas, le chargement ne finit pas | P1 | pas de `timeout` dans `libs/feature/player/browser` |
+| Consignes au tutoiement (« Demande le code à ton enseignant ») alors que le reste vouvoie | P3 | `player-activity.component.html` |
+
+## Corrections
+
+| Constat | Prio. | Preuve |
+| --- | --- | --- |
+| Sans correction, l'onglet reste blanc : le message vide passé au tableau n'est jamais projeté (pas de `ng-content`) | P2 | `correction-table.component.html`, `pages/corrections/pendings/pendings.page.html` |
 
 ## Formulaires
 
-| Où | Constat | Effet | Proposition | Priorité |
-| --- | --- | --- | --- | --- |
-| Compte, paramètres, administration | Champs Material remplis et sélecteurs ng-zorro bordés dans le même formulaire | Deux langages dans un même geste | Un seul champ, un seul sélecteur | P2 |
-| Connexion | Bouton désactivé en majuscules grises, champs Material « fill » | Aspect daté, bouton qui ne dit pas pourquoi il est inactif | Bouton actif, validation au moment de l'envoi, messages sous les champs | P2 |
-| Compte (étudiant) | Champ « Discord ID » avec un avertissement rouge, visible par un étudiant | Information technique exposée | Réservé aux rôles concernés, dans une section avancée | P3 |
-| Création d'activité | Assistant en quatre étapes ; la première n'est qu'un bouton isolé | Parcours long pour une action hebdomadaire | Création en un panneau : section, exercice ou activité, type, dates ; aperçu à droite | P2 |
-
-## États : vide, chargement, erreur
-
-| Où | Constat | Effet | Proposition | Priorité |
-| --- | --- | --- | --- | --- |
-| Cours de démonstration | Erreur 500 sur les activités affichée comme « Ce cours ne contient aucune section » | L'étudiant croit qu'il n'y a rien | État d'erreur distinct, avec « Réessayer » | P1 |
-| Lecteur d'activité fermée | Page entièrement blanche après une erreur 500 | Blocage total | État d'erreur du lecteur (le composant `player-error` existe) | P1 |
-| Challenges | Squelette de chargement qui ne se termine jamais | Attente sans fin | Délai, puis état d'erreur | P1 |
-| Prévisualisation d'exercice | Squelette infini quand l'exécution ne répond pas | L'autrice ne sait pas si c'est son code ou la plateforme | Délai, message qui distingue erreur d'exercice et indisponibilité du service | P1 |
-| Corrections en attente | Zone blanche sous les onglets | On ne sait pas si c'est vide ou en panne | État vide qui dit quand des corrections arriveront | P2 |
-| Listes | Illustration « boîte » grise générique, message de recherche (« Vérifiez les termes de votre recherche ») même sans recherche | Message faux quand la liste est vide par nature | Distinguer « rien encore » et « aucun résultat pour cette recherche » | P2 |
-
-## Lecteur d'activité (étudiant)
-
-| Où | Constat | Effet | Proposition | Priorité |
-| --- | --- | --- | --- | --- |
-| Conclusion d'activité | Tableau « Résumé » avec l'identifiant de session (UUID) | Donnée technique sans valeur pour l'étudiant | Résumé humain : durée, exercices réussis, note si disponible | P2 |
-| Conclusion | Contenu « .... » | Contenu de remplissage visible | Masquer une conclusion vide | P3 |
-| Mise en page | Titre dans une carte, puis cartes dans une carte, tout centré | Lecture difficile, poids visuel mal réparti | Une surface « copie » : énoncé et réponse sur une même feuille, alignés à gauche | P2 |
-| Code de déblocage | Six cases dans un encadré orange, consigne en orange | Ressemble à une alerte | Étape d'accès claire : pourquoi, à qui demander, saisie au clavier et collage | P2 |
-
-## Microcopie et langue
-
-| Où | Constat | Proposition | Priorité |
-| --- | --- | --- | --- |
-| Administration | « Status », « Active » | « Statut », « Actif » | P2 |
-| Compte | « A propos », « faîtes » | « À propos », « faites » | P3 |
-| Tableau de bord étudiant | « Temps d'apprentissage estimée » | « Temps d'apprentissage estimé » | P3 |
-| Charte des ressources | Tirets longs dans la liste des droits, « A condition » | Deux-points et virgules, « À condition » | P3 |
-| Titres | Casse anglaise (« Suivi de l'État des Ressources ») | Casse de phrase partout | P3 |
-| Général | Majuscules sans accent, espaces avant la ponctuation haute incohérentes | Accents sur les capitales, espace insécable avant `: ; ! ?` | P3 |
-
-## Accessibilité
-
-| Où | Constat | Proposition | Priorité |
-| --- | --- | --- | --- |
-| Éditeur | Titre gris foncé sur fond noir | Contraste d'au moins 4,5:1 | P1 |
-| Boutons à icône seule (barre supérieure, cartes) | Pas de libellé visible, infobulle seulement au survol | Libellé accessible sur chaque bouton, libellé visible pour les actions principales | P2 |
-| Cartes de cours | L'avancement passe par la couleur du badge | Texte explicite en plus de la couleur | P2 |
-| Focus clavier | Styles de focus hérités de deux bibliothèques, inégaux | Anneau de focus unique, visible sur tout élément interactif | P2 |
-
-## Bugs relevés pendant l'exploration
-
-Ces points sont des défauts de fonctionnement, à traiter indépendamment de la refonte.
-
-| Bug | Où | Détail |
+| Constat | Prio. | Preuve |
 | --- | --- | --- |
-| Le libellé « Élève » enregistre le rôle enseignant | `apps/web/src/app/pages/admin/users/users.page.ts` (vers la ligne 68) | Le formulaire d'un utilisateur associe « Élève » à `UserRoles.teacher` |
-| Pourcentages de l'anneau des statuts à 0 % | Vue d'ensemble d'un cercle | La légende affiche « (0%) » pour chaque statut, avec des effectifs non nuls |
-| Erreur 500 sur la liste des activités | `ActivityService.addVirtualColumns` | Plante sur une activité dont la structure de variables est ancienne au lieu de l'ignorer ou de la signaler |
-| Erreur 500 sur les résultats d'une session | `extractExercisesFromActivityVariables` (appelé par `DashboardService.ofSession`) | Même cause, même absence de garde |
-| Accueil vide pour le rôle démo | `pages/dashboard/overview/overview.page.ts` | Le rôle démo n'est traité ni comme étudiant ni comme enseignant |
-| Cadre rouge admin permanent | `apps/web/src/app/app.page.html` | Comportement voulu, mais à remplacer (voir la navigation) |
+| Champs Material `fill` et sélecteurs ng-zorro dans le même formulaire | P2 | `pages/account/about-me/about-me.page.html` |
+| Connexion : bouton « SE CONNECTER » désactivé tant que le formulaire est invalide | P2 | `libs/core/browser/src/lib/auth/components/sign-in/sign-in.component.html` |
+| Compte : champ « Discord ID » visible par tous, avec l'aide « si vous savez exactement ce que vous faîtes » | P3 | `about-me.page.html` |
 
-Les deux erreurs 500 ont été rencontrées sur des données au format de 2024 (dump de développement).
-Elles montrent tout de même qu'une activité mal formée casse l'écran entier au lieu d'être
-isolée.
+## Microcopie
+
+| Actuel | Correct | Où |
+| --- | --- | --- |
+| « Status », « Active » | « Statut », « Actif » | `libs/core/browser/src/lib/auth/components/user-table/`, `activity-table.component.html` |
+| « A propos » | « À propos » | `pages/account/account.page.html` |
+| « ce champs », « faîtes », « Centre d'intêret » | « ce champ », « faites », « Centre d'intérêt » | `about-me.page.html` |
+| « Temps d'apprentissage estimée » | « estimé » | `overview.page.html` |
+| « A condition », tirets longs | « À condition », deux-points | `widgets/toolbar/user-charter/user-charter.component.html` |
+
+## Bugs
+
+| Bug | Où |
+| --- | --- |
+| « Élève » crée un compte enseignant (`getRole` renvoie `UserRoles.teacher`) | `apps/web/src/app/pages/admin/users/users.page.ts` |
+| Balise `<bouton>` au lieu de `<button>` sur l'action Prévisualiser | `apps/web/src/app/pages/admin/announces/announces.page.html` |
+| Routes `/tests` sans garde de rôle | `apps/web/src/app/pages/tests/tests.routes.ts` |
+| Anneau des statuts d'un cercle : « (0%) » pour chaque statut malgré des effectifs non nuls (piste : les compteurs `SUM` arrivent en chaînes et le total est concaténé) | `buildStatusChart`, `resources/resource/overview/overview.page.ts` |
+| Erreur 500 sur la liste des activités si un groupe d'exercices n'a pas de clé `exercises` | `addVirtualColumns`, `libs/feature/course/server/src/lib/activity/activity.service.ts` |
+| Même cause sur les résultats d'une session | `extractExercisesFromActivityVariables`, `libs/feature/compiler/src/lib/pl.variables.ts` |
+| Accueil vide pour les rôles `demo` et `candidate` | `overview.presenter.ts` |

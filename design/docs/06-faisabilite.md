@@ -1,184 +1,140 @@
-# Faisabilité : ce que chaque écran demande au modèle
+# Faisabilité
 
-Chaque élément des maquettes est rapporté à ce qui existe dans le code de PLaTon au 28 septembre
-2026. Trois niveaux :
+Chaque élément des maquettes, rapporté au code au 28 septembre 2026.
 
-- **existant** : la donnée et le point d'accès sont là, il n'y a que l'écran à faire ;
-- **agrégation** : les données existent, il manque un point d'accès qui les rassemble (une requête,
-  pas de migration) ;
-- **proposition** : demande un champ ou une table, avec une migration, ou une décision produit.
+Niveaux : **existant** (seul l'écran est à faire), **agrégation** (données présentes, il manque une
+requête, pas de migration), **réorganisation** (même donnée, autre découpage), **proposition**
+(champ, migration ou décision produit), **n'existe pas** (écarté), **retrait**, **correction** (bug).
 
 ## Cadre et navigation
 
 | Élément | Niveau | Ce qui existe |
 | --- | --- | --- |
-| Navigation par rôle | existant | `UserRoles` (admin, teacher, student, demo, candidate) et `isTeacherRole` ; la barre latérale filtre déjà par rôle |
-| Compteur « Corrections » | existant | `/corrections/pendings` liste les corrections assignées ; il manque un compte, une ligne dans le service |
-| Bouton Créer et son menu | existant | Les quatre créations existent (`/courses/create`, `/activities/create`, `/resources/create?type=EXERCISE\|CIRCLE`) ; Cercle réservé aux administrateurs, comme `canUserCreateResource` |
-| « Ressources » à la place d'« Espace de travail » | existant | Un libellé |
-| Notifications avec compteur | existant | GraphQL `ListNotifications`, `OnChangeNotifications`, lu et non lu |
-| Menu du profil (compte, progression, thème, déconnexion) | existant | `/account`, `ThemeService` (clair, sombre, système), `signOut` ; « Ma progression » est l'écran de statistiques actuel |
-| Mention « Administrateur » dans le menu | existant | `user.role` |
-| Nom de l'établissement sous le logo | proposition | Aucune configuration d'établissement dans le modèle ; une variable d'environnement suffit |
-| Annonces : bandeau sur l'accueil, historique | existant | `Announcement` avec `active`, `targetedRoles`, `displayUntil` ; la page `/announcements` reste pour l'historique |
-| « Tests d'entrée » masqué quand l'enseignant n'en a aucun | agrégation | `courses?isTest=true` : un compte |
+| Navigation par rôle | existant | `UserRoles`, `isTeacherRole` ; la barre latérale filtre déjà |
+| Compteur « Corrections » | agrégation | `GET results/corrections` renvoie une liste, pas un compte |
+| Menu Créer | existant | Cours, cercle (admin), activité, exercice |
+| « Ressources » au lieu d'« Espace de travail » | existant | Un libellé |
+| Notifications, tout marquer comme lu, clic vers l'objet | existant | `ListNotifications`, `MarkAllAsRead`, `course-notification-parser.provider.ts` |
+| Menu profil : compte, cercle, thème, déconnexion | réorganisation | Menu compte actuel plus le menu thème de la barre |
+| Mention « Administrateur » | existant | `user.role` |
+| Cadre rouge admin | retrait | `app.page.html` |
+| Nom de l'établissement | proposition | Pas de configuration ; une variable d'environnement suffit |
+| Bandeau d'annonce, historique | existant | `Announcement` (`active`, `targetedRoles`, `displayUntil`), `/announcements` |
+| « Tests d'entrée » masqué si aucun test | agrégation | Filtre `isTest` sur les cours |
 
 ## Accueil étudiant
 
 | Élément | Niveau | Ce qui existe |
 | --- | --- | --- |
-| « À faire » : activités ouvertes de tous les cours, triées par échéance | agrégation | Les activités sont listées par cours (`GET courses/:id/activities`) avec `openAt`, `closeAt`, `state` (`opened`, `closed`, `planned`), `progression`, `exerciseCount`. La vue `ActivityMemberView` relie déjà un utilisateur à ses activités : un point d'accès `activities/mine` s'écrit dessus |
-| Avancement « 5 sur 6 » | existant | `activity.progression` (pour cent) et `exerciseCount` |
-| Bouton Commencer, Reprendre, Voir mes résultats | existant | `navigation.started` et `terminated` dans `ActivityPlayer`, `progression` |
-| Échéance relative, marquage à moins de 24 h et en retard | existant | `closeAt` ; le calcul est côté client |
-| « Notée », durée, nombre de tentatives | existant | Fonction de l'activité (`isChallenge`, notée), `activitySettings.duration`, tentatives |
-| « Bientôt » | agrégation | Même liste, `state === 'planned'` |
-| « Résultats récents » avec note et lien de correction | existant | Sessions et `Answers` avec la note ; `CorrectionStatus.available` pour le lien |
-| « 3 exercices à revoir » | existant | États de réponse `FAILED`, `PART_SUCC` par session |
-| Progression (moyenne, réussite, temps) | existant | `DashboardService.ofUser` calcule déjà taux de réussite, note moyenne, temps |
-| Mes cours avec avancement par activités | existant | `CourseStatistic.progression` ; le « 5 sur 8 » demande le compte d'activités terminées, présent dans les sessions |
-| Couleur du cours | proposition | `Activity.colorHue` existe (avec `GET activities/colors`), pas `Course.colorHue`. Deux options : dériver la teinte du cours de son identifiant (aucune migration, déterministe, pas de choix possible) ou ajouter `colorHue` au cours (une migration, réglable dans les paramètres). Recommandation : dériver maintenant, ajouter le champ quand des enseignants demanderont à choisir |
-| Accueil vide | existant | `CourseMember` vide |
+| « À faire » et « Bientôt », tous cours confondus | agrégation | `GET courses/:id/activities` par cours (`openAt`, `closeAt`, `state`, `progression`, `exerciseCount`) ; un `activities/mine` sur `ActivityMemberView` |
+| Avancement, Commencer ou Reprendre | existant | `progression`, `navigation.started`, `navigation.terminated` |
+| Échéance relative, en retard | existant | `closeAt`, calcul client |
+| « Notée », durée, tentatives | existant | `activitySettings.duration`, `actions.retry` |
+| Résultats récents, exercices à revoir | agrégation | Résultats par session (`results/session/:id`) ; rien ne liste les sessions récentes |
+| Progression globale | existant | `GET results/dashboard` |
+| Mes cours avec avancement | existant | `CourseStatistic.progression` (utilisateur connecté) |
+| Couleur du cours | proposition | `colorHue` existe sur `Activity`, pas sur `Course` ; dériver de l'id d'abord |
+| Accueil du rôle démo | correction | Vide aujourd'hui (`overview.presenter.ts`) |
 
 ## Accueil enseignant
 
 | Élément | Niveau | Ce qui existe |
 | --- | --- | --- |
-| « En cours » : activités ouvertes de ses cours | agrégation | Même point d'accès `activities/mine`, filtré sur les cours où il est enseignant (`CourseMemberRoles.teacher`) |
-| « 251 sur 302 ont commencé » | agrégation | `DashboardService.ofActivity` par activité ouverte : un appel chacune, à mettre dans `activities/mine` si la liste grossit |
-| Moyenne provisoire | agrégation | Même appel `ofActivity` |
-| « À corriger » avec le reste | existant | `/corrections/pendings`, `CorrectionStatus.pending` et `available`, groupés par activité |
-| « À préparer » : sans dates, planifiées | agrégation | `openAt`, `closeAt` nuls ou `state === 'planned'` sur la même liste |
-| « Programmer » vers les dates | existant | Le panneau de paramètres de l'activité (`activity-settings`) |
+| « En cours », « À préparer » | agrégation | Même `activities/mine`, filtré sur `CourseMemberRoles.teacher` |
+| Participation et moyenne par activité | agrégation | `GET results/dashboard/activities/:id`, un appel par activité |
+| « À corriger » | existant | `GET results/corrections`, `CorrectionStatus` |
 | Mes cours avec effectifs | existant | `CourseStatistic.studentCount`, `teacherCount` |
-| Ressources récentes avec statut | existant | Filtre « vu récemment » des ressources et `ResourceStatus` |
-| Accueil vide en trois étapes | existant | Les trois actions existent ; l'ordre est une règle d'écran |
-| Bloc Partir d'un modèle | existant | `resource-template-selection`, réduit à trois modèles et un lien vers la galerie |
+| Ressources récentes | existant | Recherche `views: true` |
+| Partir d'un modèle | existant | `resource-template-selection` |
 
 ## Connexion
 
 | Élément | Niveau | Ce qui existe |
 | --- | --- | --- |
-| Bouton par établissement CAS | existant | `GET cas/casnames`, puis `cas/login/:casname` ; c'est ce que fait `cas-sign-in` |
-| Mot de passe local | existant | `POST auth/signin` |
-| Erreur sans désigner le champ | existant | Le serveur renvoie une seule erreur |
-| Présentation en lien | existant | L'URL de la vidéo est déjà là ; elle devient un lien vers une page ou une fenêtre |
-| Connexion depuis une application externe | existant | `callbackUrl`, à garder comme étape supplémentaire |
-| Étape « lien Moodle » dans le texte | existant | LTI connecte sans écran |
-| Mot de passe oublié | proposition | Il n'y a pas de réinitialisation par courriel dans le modèle ; le service de courriel existe (`feature/email`). Tant qu'il n'est pas branché, le lien renvoie vers l'administration |
-
-## Cadre : surcouches
-
-| Élément | Niveau | Ce qui existe |
-| --- | --- | --- |
-| Panneau de notifications, tout marquer comme lu | existant | Mutations `MarkAllAsRead`, `DeleteAllNotifications` |
-| Clic sur une notification vers l'objet | existant | `course-notification-parser` navigue déjà vers le lecteur ou la correction |
-| Thème dans le menu du profil | existant | `ThemeService` |
-
-## Ce que les maquettes ne demandent pas
-
-- Aucune recherche globale (elle reste une idée pour plus tard).
-- Aucun nouveau type d'objet : cours, section, activité, exercice, cercle, correction, test,
-  candidat, annonce, notification existent tous.
-- Aucune réécriture du lecteur : les écrans du lecteur viendront dans le flow `lecteur`, sur les
-  composants `player-*` existants.
-
-## Résumé des propositions qui touchent le modèle
-
-1. Un point d'accès `activities/mine` (agrégation sur `ActivityMemberView`), utilisé par les deux
-   accueils. C'est le seul prérequis technique des accueils.
-2. Une teinte par cours : dérivée de l'identifiant pour commencer, champ `colorHue` sur `Course`
-   plus tard.
-3. Le nom de l'établissement en configuration.
-4. La réinitialisation de mot de passe par courriel, un jour, sur le service de courriel existant.
+| Boutons CAS, mot de passe local | existant | `GET cas/casnames`, `POST auth/signin` |
+| Retour vers une application externe | existant | `callbackUrl` |
+| Vidéo en lien | réorganisation | L'iframe devient un lien |
+| Mot de passe oublié | proposition | Seul le changement connecté existe (`resetPassword`) ; `libs/feature/email` existe |
 
 ## Corrections
 
 | Élément | Niveau | Ce qui existe |
 | --- | --- | --- |
-| File par épreuve avec le reste | existant | `/corrections/pendings` et `availables`, `CorrectionStatus` |
-| Liste des copies de l'épreuve | existant | Le lecteur de correction (`player-correction`) charge déjà les copies par exercice et par utilisateur |
-| Note automatique et étiquettes | existant | `Label` (nom, couleur, `gradeChange`) et `CorrectionLabel` relient une étiquette à une réponse |
-| Raccourcis 1 à 9, J et K | proposition | Côté client uniquement |
-| Annotation sur la réponse | existant | Commentaires sur les réponses (`player-comments`) |
+| File par activité avec le reste | existant | `correctedExercises` / `totalExercises` |
+| Copies, étiquettes, annotations | existant | `player-correction`, `Label` (`gradeChange`), `player-comments` |
+| Raccourcis clavier | proposition | Côté client |
+| État vide | correction | Message jamais affiché (`correction-table`, pas de `ng-content`) |
 
 ## Ressources
 
 | Élément | Niveau | Ce qui existe |
 | --- | --- | --- |
-| Recherche, suggestions, type, tri et sens | existant | `ResourceFilters` (`search`, `types`, `order`, `direction`), suggestions Fuse sur la complétion |
-| Panneau Filtres : statut, modèles, cercles, auteur, topics avec et sans, niveaux, période | existant | `status`, `configurable`, `parents`, `owners`, `topics`, `antiTopics`, `levels`, `period` |
-| Pastilles de filtres retirables | existant | `ui-filter-indicators` et `resource-filters.matchers.ts` |
-| Nombre de résultats sur le bouton Afficher | agrégation | Une recherche avec `limit: 0`, le total est dans la réponse |
-| Arbre des cercles | existant | `resource-circle-tree` en mode navigation |
-| Note moyenne et tentatives sur la ligne | existant | `statistic.exercise` ou `statistic.activity` (`averageScore`, `attemptCount`) |
-| Utilisé par N activités, et le listing | existant | `statistic.exercise.references`, filtre `dependOn` |
-| Badge Modèle et variables à remplir | existant | `metadata.configurable`, `metadata.config.inputs` |
-| Actions Prévisualiser, Éditer ou Paramétrer, Créer à partir, Dupliquer | existant | `resource-item` |
-| Auteur sur la ligne | agrégation | `ownerId`, utilisateurs déjà chargés pour le filtre Auteur |
-| Mon espace, Vu récemment | existant | Cercle personnel, recherche `views: true` |
-| Trois chiffres de la page ressource | existant | `DashboardService.ofResource` (note moyenne, réussite du premier coup, durée moyenne) |
-| Derniers événements | existant | `ResourceEventTypes` (création, statut, membres) et versions avec message |
-| Retiré : ruban, bordure et icône qui codent le type trois fois | retrait | Une icône suffit ; le statut garde icône et mot |
+| Recherche, filtres, pastilles | existant | `ResourceFilters`, `ui-filter-indicators` |
+| Nombre de résultats sur « Afficher » | agrégation | Une recherche de plus, `total` dans la réponse |
+| Arbre des cercles | existant | `resource-circle-tree` |
+| Note, tentatives, « utilisé par N activités » | existant | `statistic.exercise` (`averageScore`, `attemptCount`, `references`) |
+| Auteur sur la ligne | agrégation | `ownerId` |
+| Chiffres de la page ressource, événements | existant | `results/dashboard/resources/:id`, `ResourceEventTypes` |
+| Onglets de la ressource | existant | Vue d'ensemble, Explorer, Évènements, Paramètres |
+| Type codé trois fois | retrait | Une icône suffit |
+| Anneau des statuts à « (0%) » | correction | `buildStatusChart` |
 
 ## Création d'un exercice
 
 | Élément | Niveau | Ce qui existe |
 | --- | --- | --- |
-| Galerie des modèles certifiés, image, gif, compteurs, aperçu | existant | `resource-template-selection`, `certifiedTemplate`, `references.template`, `referencesAttemptCount` |
-| Modèles des cercles de l'enseignant | existant | Recherche `configurable` sur le cercle et ses parents, faite par l'assistant |
-| Recherche dans la galerie | proposition | Filtrage côté client |
-| Choisir un modèle crée le brouillon et ouvre l'atelier | existant | `createQuickResource`, cercle personnel, `/builder/:id` |
-| Atelier : variables, éditeur, aperçu | existant | Builder, `main.plc` (entrées), `main.plo` (valeurs), 11 types d'entrée |
-| Nommer au premier enregistrement | existant | Redirection vers les informations si nom par défaut et brouillon ; ici en dialogue |
-| Supprimer l'exercice jamais enregistré en quittant | existant | Garde `canDeactivate` et suppression si `createdAt === updatedAt` |
-| Ajouter l'exercice à un cours depuis l'atelier | proposition, côté client | `POST /resources` accepte `files` : ressource activité avec un `main.pla` à un groupe, puis `createActivities`. Aucun endpoint nouveau |
-| Formulaire unique à la place de l'assistant en six étapes | proposition | Côté client, mêmes champs et même appel |
+| Galerie des modèles | existant | `resource-template-selection`, `certifiedTemplate` |
+| Modèle vers brouillon vers atelier | existant | `createQuickResource`, `/builder/:id` |
+| Supprimer un brouillon jamais enregistré | existant | `canDeactivate` (`createdAt === updatedAt`) |
+| Ajouter l'exercice à un cours depuis l'atelier | proposition | `POST /resources` accepte des fichiers, puis création de l'activité ; aucun nouvel endpoint |
+| Un formulaire au lieu de six étapes | réorganisation | Mêmes champs, même appel |
 
 ## Activité
 
 | Élément | Niveau | Ce qui existe |
 | --- | --- | --- |
-| Choisir une ou plusieurs activités dans une recherche filtrée | existant | Étape Activité de `/activities/create`, `types: ['ACTIVITY']` |
-| Fonction Entraînement, Notée, Challenge à l'ajout | existant | `isChallenge` ; Notée = `activitySettings` (durée, tentatives, sécurité), `code`, correcteurs |
-| Fonction modifiable ensuite | n'existe pas | `isChallenge` absent de `UpdateActivity` ; le panneau l'affiche en lecture seule |
-| Panneau Accès, Déroulement, Gestion | existant | `activity-settings` : périodes et règles, paramètres, couleur, fermer, rouvrir, recharger, supprimer |
-| Code de déblocage | existant | Page Suivi de l'activité (modération) ; ici dans l'onglet Modération du suivi |
-| Suivi : réussite, note, durée, par exercice | existant | `DashboardService.ofActivity`, `ActivityExerciseResults` |
-| Suivi en trois onglets (Statistiques, Apprenants, Modération) | réorganisation | Réunit `/activities/:course/:activity` et `/activities/monitor/...` |
+| Fonction choisie à l'ajout | existant | `isChallenge` ; Notée = `activitySettings` + `code` |
+| Changer la fonction ensuite | n'existe pas | `isChallenge` absent de `UpdateActivity` |
+| Panneau de réglages | existant | Onglets Restrictions, Paramètres, Gestion |
+| Suivi en trois onglets | réorganisation | Réunit `/activities/:courseId/:activityId` et `/activities/monitor/...` |
+| Code de déblocage en fin d'activité | correction | Affiché même sans code |
 
 ## Tests d'entrée
 
 | Élément | Niveau | Ce qui existe |
 | --- | --- | --- |
-| Candidats, ajout, import CSV | existant | `TestsCandidates`, page `csv-import` |
-| État pas commencé, en cours, terminé | agrégation | Sessions de l'activité du test, par candidat |
-| État de l'invitation (envoyée ou non) | proposition | Aucun champ ne garde l'envoi ; un `invitedAt` sur `TestsCandidates` |
-| Page candidat avec conditions et acceptation | existant | `/candidate/terms`, `Test.terms` |
+| Candidats, import CSV, conditions | existant | `TestsCandidates`, `csv-import`, `/candidate/terms` |
+| État par candidat | agrégation | Sessions de l'activité du test |
+| Invitation envoyée ou non | proposition | Un `invitedAt` sur `TestsCandidates` |
+| Accès réservé aux enseignants | correction | Routes `/tests` sans garde |
 
 ## Cours
 
 | Élément | Niveau | Ce qui existe |
 | --- | --- | --- |
-| Recherche, Actuels et Archivés, tri, période | existant | `CourseFilters` (`search`, `archived`, `order`, `direction`, `period`) |
-| Tous les cours de la plateforme | existant | `showAll`, admin seulement |
-| Classeur : effectifs, activités, mise à jour, challenges | existant | `CourseStatistic` (`teacherCount`, `studentCount`, `activityCount`, `challengeCount`), `updatedAt` |
-| Avancement sur le classeur | existant | `statistic.progression`, propre à la personne connectée |
-| Teinte du cours | proposition | Pas de `colorHue` sur `Course` ; dérivée de l'id en attendant |
-| Archiver pour soi | existant | `archiveMember` (archivage de l'appartenance) |
-| Onglets Vue d'ensemble, Challenges, Membres, Groupes, Paramètres | existant | `course.routes.ts` |
-| Filtre d'état unique en tête | réorganisation | Aujourd'hui répété dans chaque section |
-| Résultats au niveau du cours | n'existe pas | Aucun endpoint ; pas d'onglet Résultats |
-| Podium du classement | réorganisation | Même donnée (`leaderboard/courses/:id`) |
-| Membres filtrés Enseignants ou Élèves | existant | Routes `teachers` et `students`, sans onglet aujourd'hui |
-| Accès démo, reprendre un cours, supprimer | existant | Onglet Paramètres |
+| Recherche, archivés, tri, tous les cours (admin) | existant | `CourseFilters`, `showAll` |
+| Carte : effectifs, activités, avancement | existant | `CourseStatistic` |
+| Archiver pour soi | existant | `archiveMember` |
+| Onglets du cours | existant | Vue d'ensemble, Challenges, Membres, Groupes, Paramètres |
+| Filtre d'état unique en tête | réorganisation | Existe dans chaque section (`activity-grid`, dans la boucle des sections) ; remonté une fois en tête |
+| Résultats du cours | n'existe pas | Aucun endpoint |
+| Podium | réorganisation | `results/leaderboard/courses/:id` |
+| Membres par rôle | existant | Routes `teachers`, `students` |
 
 ## Administration et compte
 
 | Élément | Niveau | Ce qui existe |
 | --- | --- | --- |
-| Utilisateurs, Groupes, LMS, CAS, Tags, Annonces | existant | `admin.routes.ts` |
-| Ajout d'un compte avec mot de passe généré | existant | À corriger : Élève crée un compte enseignant (`users.page.ts`) |
-| Mon compte : À propos, Sécurité | existant | `account.routes.ts` |
-| Annonces dans la navigation, fenêtre à la connexion | existant | `/announcements`, `checkForAnnouncements` |
-| Retiré : « Ma progression » du menu profil | correction | N'existait pas, je l'avais inventé |
+| Onglets admin | existant | Utilisateurs, Groupes, LMS, CAS, Tags, Annonces |
+| Ajout d'un compte, mot de passe généré | existant | `generatePassword` |
+| Rôle « Élève » | correction | Enregistre `teacher` (`users.page.ts`) |
+| Mon compte | existant | À propos, Sécurité |
+| « Ma progression » | retrait | N'existe pas dans l'app |
+
+## Ce qui touche le modèle
+
+1. `activities/mine` : seul prérequis des deux accueils.
+2. Teinte par cours : dérivée de l'id, puis `Course.colorHue` si besoin.
+3. Nom de l'établissement en configuration.
+4. `invitedAt` sur `TestsCandidates`.
+5. Plus tard : mot de passe oublié par courriel.

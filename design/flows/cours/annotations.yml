@@ -50,3 +50,9 @@
   note: "Statistiques : les cinq indicateurs et le tableau par exercice de la page actuelle (ActivityExerciseResults). La ligne où la réussite du premier coup est la plus basse est mise en évidence. Les graphiques actuels (boîte à moustaches, k-ciles) restent sous le tableau."
 - screen: suivi
   note: "Apprenants : le tableau Résultats par apprenants (un état par exercice, la note). Modération : ouvrir ou fermer pour des élèves choisis, et le code de déblocage (masqué, copier, régénérer), qui existe déjà ici."
+- screen: detail
+  note: "Passe UX : les effectifs montent dans l'en-tête, la colonne de droite devient À faire (copies à corriger, sans dates, ferme bientôt). Chaque élément ouvre l'endroit où agir. Données : corrections en attente (existant), dates et état des activités (existant)."
+- screen: detail
+  note: "Passe UX : un bouton texte seulement quand il y a une action attendue (Programmer). Sinon Suivre discret, Paramètres et le menu. La page n'a plus quinze boutons Suivre identiques."
+- screen: detail
+  note: "État vide : un cours neuf dit les trois étapes (activité, élèves, partage) et propose de reprendre un cours existant. Proposition côté client : créer « Section 1 » à la première activité, l'API d'ajout de section existe."

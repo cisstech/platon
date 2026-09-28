@@ -2683,3 +2683,164 @@ a {
 .state-dot.none {
   color: var(--color-subtle);
 }
+
+/* ---------- Passe UX : focus, alignements, hiérarchie ---------- */
+
+:where(a, button, .btn, .nav-item, .tab, .chip, .row[data-wf-to], .option, .choice, .menu-item, .card[data-wf-to]):focus-visible,
+.focus-ring {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+  border-radius: var(--rounded-sm);
+}
+.sidebar :where(a, button, .nav-item):focus-visible {
+  outline-color: var(--color-cover-primary);
+}
+.skip-link {
+  position: absolute;
+  left: var(--spacing-2);
+  top: -48px;
+  z-index: 20;
+  padding: var(--spacing-2) var(--spacing-3);
+  border-radius: var(--rounded-sm);
+  background: var(--color-surface);
+  color: var(--color-primary);
+  font-weight: 700;
+}
+.skip-link:focus {
+  top: var(--spacing-2);
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 1ms !important;
+    animation-duration: 1ms !important;
+  }
+}
+
+.select {
+  white-space: nowrap;
+}
+.q .statement,
+.q .answer {
+  max-width: 720px;
+}
+.q .statement .code {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.pick-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+.pick-card .pick-head {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-3);
+}
+.pick-card .pick-head .box {
+  position: static;
+  flex: none;
+  margin-top: 2px;
+}
+.pick-card .pick-tools {
+  display: flex;
+  gap: 2px;
+  margin-top: auto;
+  padding-top: var(--spacing-2);
+  border-top: 1px solid var(--color-line);
+}
+
+.headline {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--spacing-3);
+  margin: 0;
+}
+.headline .card {
+  padding: var(--spacing-4);
+}
+.headline dt {
+  font-size: 13px;
+  color: var(--color-muted);
+}
+.headline dd {
+  margin: 4px 0 0;
+}
+.more-figures {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2) var(--spacing-5);
+  margin-top: var(--spacing-3);
+  padding: var(--spacing-3) var(--spacing-4);
+  border-radius: var(--rounded-md);
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  font-size: 13px;
+  color: var(--color-muted);
+}
+.more-figures strong {
+  color: var(--color-text);
+}
+.chart-bar {
+  flex: 1;
+  border-radius: 4px 4px 0 0;
+  background: color-mix(in srgb, var(--color-primary) 28%, var(--color-surface));
+}
+.chart-bar.last {
+  background: linear-gradient(180deg, var(--color-primary), var(--color-lilas-strong));
+}
+
+.todo-list .mini {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--spacing-3);
+}
+.todo-list .mini .grow {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.head-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-1) var(--spacing-4);
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: var(--color-muted);
+}
+.head-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.head-meta strong {
+  color: var(--color-text);
+}
+.mini.inline {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-2);
+}
+
+.todo-list a.mini {
+  color: var(--color-text);
+  text-decoration: none;
+}
+.todo-list a.mini:hover {
+  background: var(--color-surface-muted);
+}
+details.more-figures {
+  display: block;
+}
+details.more-figures .figs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2) var(--spacing-5);
+  margin-top: var(--spacing-2);
+}

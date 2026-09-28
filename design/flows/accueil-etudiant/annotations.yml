@@ -18,3 +18,7 @@
   note: "La couverture (barre latérale) est toujours sombre, dans le prune du logo. L'élément actif est un intercalaire, il prend la couleur de la page et la rejoint. On sait où l'on est sans lire."
 - screen: etudiant
   note: "Chaque cours a une teinte, la même partout, sur l'icône de ses activités et sur l'onglet de son nom. Un cours achevé passe en chaleur (le dégradé du logo), le seul moment où ce dégradé sort du logo."
+- screen: etudiant
+  note: "Passe UX : Corrections disparaît de la navigation élève. La page ne liste que les corrections assignées : pour une élève qui ne corrige pas, c'était une page vide. Elle revient pour qui corrige."
+- screen: etudiant
+  note: "Le bloc chiffré vient de DashboardService.ofUser : moyenne, réussite, temps passé, sur tous les cours. « Tous mes résultats » est retiré : cette page n'existe pas."

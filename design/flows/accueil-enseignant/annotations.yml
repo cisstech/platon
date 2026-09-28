@@ -10,3 +10,5 @@
   note: "Chaque entrée décrit l'objet en une ligne, pour qu'un enseignant qui découvre PLaTon distingue cours, activité et exercice. Cercle n'apparaît qu'aux administrateurs, en dernière position."
 - screen: creer
   note: "Le menu s'ouvre sous le bouton en 180 ms, la première entrée a le focus, les flèches naviguent, Échap referme et rend le focus au bouton."
+- screen: enseignant
+  note: "Passe UX : une ligne dit une chose. « 251 / 302 » sur la barre, la moyenne dans les métadonnées ; plus de phrase qui passe sur deux lignes. Vu récemment tient en une ligne par ressource."
