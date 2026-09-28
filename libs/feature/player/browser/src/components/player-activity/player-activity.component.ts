@@ -89,7 +89,7 @@ import { ObserveVisibilityDirective } from '@platon/shared/ui'
     PlayerSettingsComponent,
     PlayerNavigationComponent,
     PlayerTerminalLogsComponent,
-    ObserveVisibilityDirective
+    ObserveVisibilityDirective,
   ],
 })
 export class PlayerActivityComponent implements OnInit, OnDestroy {
@@ -493,16 +493,21 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
   }
 
   protected async loadNextExercise(): Promise<void> {
-    if (!this.composed || this.isLoadingNextExercise || this.exercises?.length === this.player.navigation.exercises.length) return;
-    this.isLoadingNextExercise = true;
-    this.changeDetectorRef.markForCheck();
+    if (
+      !this.composed ||
+      this.isLoadingNextExercise ||
+      this.exercises?.length === this.player.navigation.exercises.length
+    )
+      return
+    this.isLoadingNextExercise = true
+    this.changeDetectorRef.markForCheck()
 
     const loadCount = this.exercises?.length ?? 0
-    const nextExerciseIndex = this.player.navigation.exercises[loadCount]?.sessionId;
+    const nextExerciseIndex = this.player.navigation.exercises[loadCount]?.sessionId
     if (!nextExerciseIndex) {
-      this.isLoadingNextExercise = false;
-      this.changeDetectorRef.markForCheck();
-      return;
+      this.isLoadingNextExercise = false
+      this.changeDetectorRef.markForCheck()
+      return
     }
 
     const nextExercise = await firstValueFrom(
@@ -510,17 +515,16 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
         activitySessionId: this.player.sessionId,
         exerciseSessionIds: [nextExerciseIndex],
       })
-    );
+    )
 
     if (this.exercises) {
-      this.exercises = [...this.exercises, ...nextExercise.exercises];
-    }
-    else {
-      this.exercises = nextExercise.exercises;
+      this.exercises = [...this.exercises, ...nextExercise.exercises]
+    } else {
+      this.exercises = nextExercise.exercises
     }
 
-    this.isLoadingNextExercise = false;
-    this.changeDetectorRef.markForCheck();
+    this.isLoadingNextExercise = false
+    this.changeDetectorRef.markForCheck()
   }
 
   protected async playComposed(): Promise<void> {
@@ -528,7 +532,9 @@ export class PlayerActivityComponent implements OnInit, OnDestroy {
       const output = await firstValueFrom(
         this.playerService.playExercises({
           activitySessionId: this.player.sessionId,
-          exerciseSessionIds: this.player.navigation.exercises.slice(0, this.INITIAL_EXERCISES_TO_LOAD).map((item) => item.sessionId),
+          exerciseSessionIds: this.player.navigation.exercises
+            .slice(0, this.INITIAL_EXERCISES_TO_LOAD)
+            .map((item) => item.sessionId),
         })
       )
 
