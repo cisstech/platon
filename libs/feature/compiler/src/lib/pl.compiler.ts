@@ -18,7 +18,7 @@ import {
   PLSourceFile,
   PLVisitor,
 } from './pl.parser'
-import { ActivityExercise, ActivityVariables, Variables } from './pl.variables'
+import { ActivityExercise, ActivityVariables, Variables, normalizeExerciseGroups } from './pl.variables'
 import * as crypto from 'crypto-js'
 
 export const ACTIVITY_MAIN_FILE = 'main.pla'
@@ -428,7 +428,8 @@ export class PLCompiler implements PLVisitor {
 
   private async compileActivity(content: string): Promise<void> {
     const variables = JSON.parse(content) as ActivityVariables
-    const groups = variables.exerciseGroups
+    const groups = normalizeExerciseGroups(variables.exerciseGroups)
+    variables.exerciseGroups = groups
     const exercises: ActivityExercise[] = []
 
     const [introduction, conclusion] = await Promise.all([

@@ -182,19 +182,47 @@ export interface ActivityVariables {
 }
 
 /**
+ * Reads the exercise groups of an activity in their named shape (`{ name, exercises, grader }`).
+ *
+ * A group can also be stored as a bare array of exercises, as older activity files and sessions
+ * do: such a group is wrapped with a default name and an empty grader, so every reader can rely
+ * on `group.exercises`. The stored data is left untouched.
+ * @param groups The `exerciseGroups` value of an activity or an activity session.
+ * @returns The groups, keyed as stored, in the named shape.
+ */
+export const normalizeExerciseGroups = (groups: unknown): ActivityExerciseGroups => {
+  if (!groups || typeof groups !== 'object') {
+    return {}
+  }
+  const entries: [string, unknown][] = Array.isArray(groups)
+    ? groups.map((group, index) => [String(index), group])
+    : Object.entries(groups)
+  return Object.fromEntries(
+    entries.map(([key, group], index) => {
+      if (Array.isArray(group)) {
+        return [key, { name: `Groupe ${index + 1}`, exercises: group as ActivityExercise[], grader: { type: 'empty' } }]
+      }
+      const named = (group ?? {}) as Partial<ActivityExerciseGroup>
+      return [
+        key,
+        {
+          ...named,
+          name: named.name ?? `Groupe ${index + 1}`,
+          exercises: named.exercises ?? [],
+          grader: named.grader ?? { type: 'empty' },
+        },
+      ]
+    })
+  )
+}
+
+/**
  * Extracts all exercises from all exercise groups of an activity variables.
  * @param variables Variables of an activity.
  * @returns List of exercises.
  */
 export const extractExercisesFromActivityVariables = (variables: ActivityVariables) => {
-  const groups = variables.exerciseGroups || {}
-  const exercises: ActivityExercise[] = []
-  Object.keys(groups).forEach((group) => {
-    groups[group]?.exercises.forEach((exercise) => {
-      exercises.push(exercise)
-    })
-  })
-  return exercises
+  return Object.values(normalizeExerciseGroups(variables.exerciseGroups)).flatMap((group) => group.exercises)
 }
 
 export const withExerciseMeta = (variables: ExerciseVariables): ExerciseVariables => {

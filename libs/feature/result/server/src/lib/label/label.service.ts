@@ -1,3 +1,4 @@
+import { normalizeExerciseGroups } from '@platon/feature/compiler'
 import { InjectRepository } from '@nestjs/typeorm'
 import { LabelEntity } from './label.entity'
 import { Repository } from 'typeorm'
@@ -37,11 +38,9 @@ export class LabelService {
     if (!resourceId) {
       throw new NotFoundException(`Resource ID not found for activity with ID ${activityId}`)
     }
-    const exerciseGroups = Array.isArray(activity.source?.variables.exerciseGroups)
-      ? activity.source?.variables.exerciseGroups
-      : Object.values(activity.source?.variables.exerciseGroups || {})
+    const exerciseGroups = Object.values(normalizeExerciseGroups(activity.source?.variables.exerciseGroups))
     for (const group of exerciseGroups) {
-      for (const exercise of group.exercises || []) {
+      for (const exercise of group.exercises) {
         if (exercise.id === navigationExerciseId) {
           return exercise.resource
         }
