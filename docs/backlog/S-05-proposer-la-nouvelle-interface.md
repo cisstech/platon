@@ -1,6 +1,6 @@
 # S-05 : Proposer la nouvelle interface, et en revenir
 
-Source : stratégie de code du 2026-09-28 ; décisions : D4, D5, D13.
+Source : stratégie de code du 2026-09-28 ; décisions : D4, D5, D13, D15.
 Statut : À faire.
 Dépend de : S-04.
 Taille : S.
@@ -36,7 +36,7 @@ Garder la préférence côté serveur (`UserPrefs`) : au palier 2 seulement (X-0
 
 ## 6. Points ouverts
 
-- Un lien « Donner votre avis » à côté de « Revenir » ? Vers quoi (formulaire, e-mail, issue) ?
+aucun
 
 ## 7. Definition of Done
 

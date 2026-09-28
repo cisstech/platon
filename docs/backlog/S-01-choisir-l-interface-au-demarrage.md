@@ -1,6 +1,6 @@
 # S-01 : Choisir l'interface au démarrage
 
-Source : stratégie de code du 2026-09-28 ; décisions : D2, D4, D5, D10.
+Source : stratégie de code du 2026-09-28 ; décisions : D2, D4, D5, D10, D14.
 Statut : À faire.
 Dépend de : aucun.
 Taille : M.
@@ -37,6 +37,8 @@ Vérifié le 2026-09-28.
 
 - `apps/web/src/ui-mode.ts` : `readUiMode(url, storage, flag): 'legacy' | 'next'`, pure, et
   `persistUiMode(mode)`.
+- `apps/web/src/assets/ui.json` : `{ "next": "off" }` ; `main.ts` le lit avant le démarrage et
+  retient `off` si le fichier manque ou ne se lit pas.
 - `apps/web/src/main.ts` : lit le mode, puis `import('./app/legacy.bootstrap')` ou
   `import('./next/next.bootstrap')`. L'import dynamique garde chaque interface dans ses propres
   fichiers.
@@ -53,12 +55,11 @@ choix (S-05).
 
 ## 6. Points ouverts
 
-- Le drapeau `ui.next` : fichier `assets/ui.json` lu par `main.ts` avant le démarrage (modifiable
-  sans rebuild), ou option `define` du build ? Recommandation : le fichier, avec `off` si absent.
+aucun (le drapeau est tranché par D14)
 
 ## 7. Definition of Done
 
-- [ ] `readUiMode` testé pour toutes les combinaisons.
+- [ ] `readUiMode` testé pour toutes les combinaisons, dont `ui.json` absent ou invalide.
 - [ ] L'ancienne interface démarre sans différence visible ni fonctionnelle.
 - [ ] `?ui=next` démarre la coquille ; le choix est gardé.
 - [ ] Les fichiers de l'une ne se chargent pas dans l'autre (onglet réseau vérifié).
