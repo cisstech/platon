@@ -15,10 +15,18 @@ menu avec Dupliquer et Voir les activités) apparaissent au survol et au focus c
 
 Mon espace (le cercle personnel) et Vu récemment restent en colonne de droite, comme aujourd'hui.
 
-La page d'un exercice répond d'abord à « est-il fiable et où sert-il » : statut, les trois
-chiffres que calcule déjà le tableau de bord d'une ressource (note moyenne, réussite du premier
-coup, durée moyenne), les activités qui l'utilisent (dépendances), la documentation, les
-derniers événements (statut, membres, versions).
+La page d'une ressource garde ses quatre onglets : Vue d'ensemble, Explorer (fichiers, version,
+historique, readme, import, téléchargement, nouvelle version), Évènements (statut, membres,
+création) et Paramètres (Informations, Modèle pour un exercice, Collaborateurs pour un cercle).
+L'en-tête garde le statut modifiable sur place, Suivre, Partager (visibilité, version, QR code),
+Éditer ou Paramétrer, Prévisualiser, et range dans un menu les actions plus rares : Dupliquer,
+Déplacer, et pour l'administrateur certifier un modèle ou renvoyer la ressource à son auteur.
+Supprimer dit pourquoi c'est impossible quand des activités en dépendent.
+
+La vue d'ensemble d'un exercice garde ses dix indicateurs et ses courbes ; celle d'un cercle, la
+répartition par statut (chaque part ouvre le catalogue filtré), les compteurs et les tags. Un
+cercle se rejoint sur demande ; ses collaborateurs, invitations et demandes se gèrent dans
+Paramètres.
 
 ## Rules
 
@@ -35,6 +43,13 @@ spec:
     - { id: filtres, overlay: true, states: [default] }
     - { id: cercles, overlay: true, states: [default] }
     - { id: ressource, states: [default] }
+    - { id: ressource-actions, overlay: true, states: [default] }
+    - { id: ressource-partager, overlay: true, states: [default] }
+    - { id: explorer, states: [default] }
+    - { id: evenements, states: [default] }
+    - { id: ressource-parametres, states: [default] }
+    - { id: cercle, states: [default] }
+    - { id: cercle-collaborateurs, states: [default] }
   edges:
     - { from: catalogue, to: ressource, on: open }
     - { from: catalogue, to: filtres, on: filter }
@@ -44,4 +59,14 @@ spec:
     - { from: filtres, to: catalogue, on: apply }
     - { from: cercles, to: catalogue, on: dismiss }
     - { from: catalogue-actions, to: catalogue, on: dismiss }
+    - { from: ressource, to: explorer, on: tab }
+    - { from: ressource, to: evenements, on: tab }
+    - { from: ressource, to: ressource-parametres, on: tab }
+    - { from: ressource, to: ressource-actions, on: more }
+    - { from: ressource, to: ressource-partager, on: share }
+    - { from: ressource, to: cercle, on: open }
+    - { from: ressource-actions, to: ressource, on: dismiss }
+    - { from: ressource-partager, to: ressource, on: dismiss }
+    - { from: cercle, to: cercle-collaborateurs, on: tab }
+    - { from: cercle, to: catalogue, on: filter }
     - { from: ressource, to: catalogue, on: back }

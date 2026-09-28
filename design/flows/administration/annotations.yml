@@ -1,0 +1,22 @@
+- screen: utilisateurs
+  note: "Onglets réels : Utilisateurs, Groupes, LMS, CAS, Tags, Annonces. Les filtres de rôle et de statut sont ceux des colonnes filtrables actuelles, sortis dans la barre."
+- screen: utilisateur-actions
+  note: "Changer le rôle (Admin, Enseignant, Élève) et désactiver, comme le menu actuel. Désactiver dit ce qui reste. Le rôle Démo ne s'attribue qu'à la création, comme aujourd'hui."
+- screen: utilisateur-nouveau
+  note: "Le formulaire actuel (prénom, nom, identifiant, e-mail, rôle, mot de passe généré de 12 caractères). À corriger au passage : aujourd'hui Élève crée un compte enseignant (users.page.ts)."
+- screen: groupes-plateforme
+  note: "Groupes de la plateforme : créer, rechercher, supprimer en lot. Le nombre de personnes est lu dans le groupe (users)."
+- screen: groupe-plateforme
+  note: "Le tiroir actuel : Informations (nom) et Membres (ajouter, retirer)."
+- screen: lms
+  note: "LMS reliés en LTI : nom, adresse, adresse de retour des notes, clé, secret."
+- screen: cas
+  note: "Serveurs CAS : nom, adresses de connexion et de validation, version (3.0 seule active aujourd'hui), LMS reliés."
+- screen: tags
+  note: "Topics et niveaux : ajouter, renommer au double-clic, supprimer."
+- screen: tag-similaire
+  note: "Le dialogue actuel de tag similaire, avec l'existant en action principale."
+- screen: annonces-admin
+  note: "Annonces : état, cible, date, aperçu, modification, suppression."
+- screen: annonce-edition
+  note: "Les champs actuels : titre, résumé, contenu riche, publication, durée en jours, rôles ciblés, icône."

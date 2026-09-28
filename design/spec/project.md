@@ -5,9 +5,10 @@ enseignants y écrivent des exercices auto-évalués, les rassemblent en activit
 dans leurs cours ; les étudiants les font et reçoivent un retour immédiat ; des correcteurs
 annotent les copies des épreuves notées ; des candidats y passent des tests d'entrée.
 
-La navigation dépend du rôle. Le menu déclaré ci-dessous est celui d'un enseignant ; l'étudiant
-ne voit que Accueil, Cours et, s'il a des copies à corriger, Corrections ; l'administrateur voit en
-plus Administration.
+La navigation dépend du rôle et reprend celle d'aujourd'hui. Tout le monde voit Accueil,
+Annonces, Cours et Corrections ; l'enseignant voit en plus Ressources (l'« Espace de travail »
+actuel), Tests d'entrée et Documentation ; l'administrateur voit en plus Administration. Mon
+compte, Mon cercle, le thème et la déconnexion vivent dans le menu du profil.
 
 ## Rules
 
@@ -31,6 +32,7 @@ Critères d'acceptation communs à tous les flows.
 spec:
   nav:
     - { flow: accueil-enseignant, label: Accueil, icon: home }
+    - { flow: annonces, label: Annonces, icon: campaign }
     - { flow: cours, label: Cours, icon: school }
     - { flow: corrections, label: Corrections, icon: rate_review }
     - { flow: ressources, label: Ressources, icon: folder_open }
@@ -40,6 +42,7 @@ spec:
     - connexion
     - accueil-etudiant
     - accueil-enseignant
+    - annonces
     - cours
     - activite
     - lecteur

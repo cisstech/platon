@@ -19,6 +19,6 @@
 - screen: atelier-quitter
   note: "Comportement actuel : un exercice jamais enregistré est supprimé en quittant. Le dialogue le dit avant."
 - screen: ajouter-au-cours
-  note: "Proposition, la plus importante du chantier pour Karim. Aujourd'hui un exercice ne va dans un cours qu'à travers une ressource activité, qu'on crée en PLA dans l'éditeur : le parcours sans code s'arrête là. Faisabilité : un endpoint qui crée une ressource activité avec un seul groupe d'exercices (main.pla généré), puis l'activité de cours avec createActivities. Pas de changement de modèle."
+  note: "Proposition, la plus importante du chantier pour Karim. Aujourd'hui un exercice ne va dans un cours qu'à travers une ressource activité, qu'on crée en PLA dans l'éditeur : le parcours sans code s'arrête là. Faisabilité vérifiée, sans nouvel endpoint : POST /resources accepte déjà files, donc le client crée une ressource activité dans le cercle personnel avec un main.pla (un groupe, cet exercice), puis appelle createActivities sur le cours. Deux appels existants."
 - screen: nouvelle
   note: "L'assistant actuel en six étapes (cercle, informations, tags, mode, modèle, terminé) devient un formulaire. Mêmes champs, même appel d'API. Le cercle est prérempli avec celui d'où l'on vient."

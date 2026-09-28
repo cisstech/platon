@@ -10,13 +10,14 @@
     <a class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico"><use href="#add" /></svg>Créer</a>
     <nav class="nav">
       <a class="nav-item" data-wf-to="enseignant"><svg class="ico"><use href="#home" /></svg>Accueil</a>
-      <a class="nav-item active" data-wf-to="mes-cours"><svg class="ico"><use href="#school" /></svg>Cours</a>
+      <a class="nav-item" data-wf-to="annonces"><svg class="ico"><use href="#campaign" /></svg>Annonces</a>
+      <a class="nav-item" data-wf-to="mes-cours"><svg class="ico"><use href="#school" /></svg>Cours</a>
       <a class="nav-item" data-wf-to="file"><svg class="ico"><use href="#rate_review" /></svg>Corrections<span class="count">14</span></a>
-      <a class="nav-item" data-wf-to="catalogue"><svg class="ico"><use href="#folder_open" /></svg>Ressources</a>
+      <a class="nav-item active" data-wf-to="catalogue"><svg class="ico"><use href="#folder_open" /></svg>Ressources</a>
       <a class="nav-item" data-wf-to="test"><svg class="ico"><use href="#fact_check" /></svg>Tests d'entrée</a>
     </nav>
     <div class="sidebar-foot">
-      <a class="nav-item"><svg class="ico"><use href="#help" /></svg>Aide</a>
+      <a class="nav-item"><svg class="ico"><use href="#help" /></svg>Documentation</a>
       <a class="nav-item"><svg class="ico"><use href="#notifications" /></svg>Notifications<span class="count">2</span></a>
       <div class="me">
         <span class="avatar">KH</span>
@@ -31,56 +32,28 @@
   <main class="main">
     <header class="page-head">
       <div>
-        <div class="crumbs"><span>Cours</span><svg class="ico"><use href="#chevron_right" /></svg><span>Algorithmique et programmation 1</span><svg class="ico"><use href="#chevron_right" /></svg><span>Semaine 4</span></div>
-        <h1 class="title">Quiz&nbsp;: complexité des algorithmes</h1>
-        <p class="page-sub"><span class="due soon"><svg class="ico"><use href="#schedule" /></svg>Ferme ce soir à 23&nbsp;h&nbsp;59</span></p>
+        <div class="crumbs"><a data-wf-to="catalogue">Ressources</a><svg class="ico"><use href="#chevron_right" /></svg><span>Informatique</span><svg class="ico"><use href="#chevron_right" /></svg><a data-wf-to="cercle">Algorithmique</a></div>
+        <h1 class="title" style="display: flex; align-items: center; gap: 6px">Recherche dichotomique<button class="btn btn-icon btn-sm" aria-label="Modifier le nom"><svg class="ico ico-16"><use href="#edit" /></svg></button></h1>
+        <p class="page-sub">Trouver l'indice d'un élément dans un tableau trié, avec tests automatiques sur 6 cas.</p>
+        <div style="display: flex; gap: var(--spacing-2); margin-top: var(--spacing-3); align-items: center">
+          <span class="select"><svg class="ico ico-16"><use href="#check_circle" /></svg>Prêt à l'utilisation<svg class="ico ico-16"><use href="#expand_more" /></svg></span>
+          <a class="btn btn-secondary btn-sm" data-wf-to="suivi"><svg class="ico"><use href="#visibility" /></svg>Suivre</a>
+          <span class="tag-link">L1</span><span class="tag-link">Algorithmique</span><span class="tag-link">Python</span>
+        </div>
       </div>
       <div class="actions">
-        <a class="btn btn-secondary"><svg class="ico"><use href="#visibility" /></svg>Prévisualiser</a>
-        <a class="btn btn-secondary" data-wf-to="parametres"><svg class="ico"><use href="#settings" /></svg>Paramètres</a>
-        <a class="btn btn-primary" data-wf-to="file"><svg class="ico"><use href="#rate_review" /></svg>Corriger</a>
+        <a class="btn btn-secondary" data-wf-to="ressource-partager"><svg class="ico"><use href="#share" /></svg>Partager</a>
+        <button class="btn btn-icon" aria-label="Plus d&#39;actions" data-wf-to="ressource-actions"><svg class="ico"><use href="#more_horiz" /></svg></button>
+        <a class="btn btn-secondary"><svg class="ico"><use href="#open_in_new" /></svg>Éditer</a>
+        <a class="btn btn-primary"><svg class="ico"><use href="#visibility" /></svg>Prévisualiser</a>
       </div>
     </header>
-    <dl class="stat-grid" style="margin: 0 0 var(--spacing-6)">
-      <div class="card"><dt>Ont commencé</dt><dd class="figure-value">251&nbsp;<small>/&nbsp;302</small></dd></div>
-      <div class="card"><dt>Taux de réussite</dt><dd class="figure-value">68&nbsp;%</dd></div>
-      <div class="card"><dt>Note moyenne</dt><dd class="figure-value">74&nbsp;<small>/&nbsp;100</small></dd></div>
-      <div class="card"><dt>Durée moyenne</dt><dd class="figure-value">18&nbsp;min</dd></div>
-    </dl>
-    <div class="layout">
-      <section>
-        <div class="section-head"><h2 class="heading">Par exercice</h2><span class="muted" style="font-size: 13px">Où vos étudiants bloquent</span></div>
-        <div class="card" style="padding: 0; overflow: hidden">
-          <table class="table">
-            <thead><tr><th style="width: 40px">N°</th><th>Exercice</th><th class="num">Ont répondu</th><th class="num">Justes du premier coup</th><th class="num">Abandons</th></tr></thead>
-            <tbody>
-          <tr><td class="num">1</td><td>Opérations d'une boucle simple</td><td class="num">97&nbsp;%</td><td class="num">81&nbsp;%</td><td class="num">2&nbsp;%</td></tr>
-          <tr><td class="num">2</td><td>Complexité de somme</td><td class="num">95&nbsp;%</td><td class="num">74&nbsp;%</td><td class="num">3&nbsp;%</td></tr>
-          <tr><td class="num">3</td><td>Boucles imbriquées</td><td class="num">88&nbsp;%</td><td class="num">52&nbsp;%</td><td class="num">8&nbsp;%</td></tr>
-          <tr><td class="num">4</td><td>Recherche dichotomique</td><td class="num">79&nbsp;%</td><td class="num" style="color: var(--color-danger-ink); font-weight: 700">23&nbsp;%</td><td class="num">17&nbsp;%</td></tr>
-          <tr><td class="num">5</td><td>Tri par insertion</td><td class="num">70&nbsp;%</td><td class="num">49&nbsp;%</td><td class="num">6&nbsp;%</td></tr>
-          <tr><td class="num">6</td><td>Comparer deux algorithmes</td><td class="num">64&nbsp;%</td><td class="num">58&nbsp;%</td><td class="num">4&nbsp;%</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-      <aside class="stack">
-        <section>
-          <div class="section-head"><h2 class="heading">À relancer</h2><span class="count">51</span></div>
-          <div class="card">
-            <div class="mini"><span class="mini-title">51 étudiants n'ont pas commencé</span><span class="muted" style="font-size: 13px">Sur 302 membres du cours</span></div>
-            <div class="mini"><a><svg class="ico ico-16"><use href="#groups" /></svg> Voir qui</a></div>
-          </div>
-        </section>
-        <section>
-          <div class="section-head"><h2 class="heading">Réglages actifs</h2></div>
-          <dl class="card" style="margin: 0">
-            <div class="kv"><dt>Tentatives</dt><dd>Illimitées</dd></div>
-            <div class="kv"><dt>Aides</dt><dd>Oui</dd></div>
-            <div class="kv"><dt>Solution</dt><dd>Non</dd></div>
-          </dl>
-        </section>
-      </aside>
+    <div class="tabs"><a class="tab" data-wf-to="ressource"><svg class="ico"><use href="#grid_view" /></svg>Vue d'ensemble</a><a class="tab" data-wf-to="explorer"><svg class="ico"><use href="#folder_open" /></svg>Explorer</a><a class="tab active" data-wf-to="evenements"><svg class="ico"><use href="#history" /></svg>Évènements</a><a class="tab" data-wf-to="ressource-parametres"><svg class="ico"><use href="#settings" /></svg>Paramètres</a></div>
+    <div class="card" style="max-width: 820px">
+<div class="mini" style="flex-direction: row; align-items: center; gap: var(--spacing-3)"><span class="lead-icon" style="width: 30px; height: 30px"><svg class="ico ico-18"><use href="#check_circle" /></svg></span><span class="mini-title" style="flex: 1">Hélène Martin a passé « Recherche dichotomique » à Prêt à l'utilisation</span><span class="muted" style="font-size: 13px">26/09/2026 à 09&nbsp;h&nbsp;41</span></div>
+<div class="mini" style="flex-direction: row; align-items: center; gap: var(--spacing-3)"><span class="lead-icon" style="width: 30px; height: 30px"><svg class="ico ico-18"><use href="#person_add" /></svg></span><span class="mini-title" style="flex: 1">Paul Renard est désormais membre de « Algorithmique »</span><span class="muted" style="font-size: 13px">03/09/2026 à 14&nbsp;h&nbsp;20</span></div>
+<div class="mini" style="flex-direction: row; align-items: center; gap: var(--spacing-3)"><span class="lead-icon" style="width: 30px; height: 30px"><svg class="ico ico-18"><use href="#science" /></svg></span><span class="mini-title" style="flex: 1">Hélène Martin a passé « Recherche dichotomique » à Besoin d'être testé</span><span class="muted" style="font-size: 13px">20/09/2026 à 10&nbsp;h&nbsp;05</span></div>
+<div class="mini" style="flex-direction: row; align-items: center; gap: var(--spacing-3)"><span class="lead-icon" style="width: 30px; height: 30px"><svg class="ico ico-18"><use href="#add" /></svg></span><span class="mini-title" style="flex: 1">Hélène Martin a ajouté « Recherche dichotomique » dans le cercle « Algorithmique »</span><span class="muted" style="font-size: 13px">18/09/2026 à 16&nbsp;h&nbsp;30</span></div>
     </div>
   </main>
 </div>

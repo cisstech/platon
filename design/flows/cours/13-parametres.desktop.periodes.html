@@ -10,13 +10,14 @@
     <a class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico"><use href="#add" /></svg>Créer</a>
     <nav class="nav">
       <a class="nav-item" data-wf-to="enseignant"><svg class="ico"><use href="#home" /></svg>Accueil</a>
+      <a class="nav-item" data-wf-to="annonces"><svg class="ico"><use href="#campaign" /></svg>Annonces</a>
       <a class="nav-item active" data-wf-to="mes-cours"><svg class="ico"><use href="#school" /></svg>Cours</a>
       <a class="nav-item" data-wf-to="file"><svg class="ico"><use href="#rate_review" /></svg>Corrections<span class="count">14</span></a>
       <a class="nav-item" data-wf-to="catalogue"><svg class="ico"><use href="#folder_open" /></svg>Ressources</a>
       <a class="nav-item" data-wf-to="test"><svg class="ico"><use href="#fact_check" /></svg>Tests d'entrée</a>
     </nav>
     <div class="sidebar-foot">
-      <a class="nav-item"><svg class="ico"><use href="#help" /></svg>Aide</a>
+      <a class="nav-item"><svg class="ico"><use href="#help" /></svg>Documentation</a>
       <a class="nav-item"><svg class="ico"><use href="#notifications" /></svg>Notifications<span class="count">2</span></a>
       <div class="me">
         <span class="avatar">KH</span>
@@ -31,55 +32,46 @@
   <main class="main">
     <header class="page-head">
       <div>
-        <div class="crumbs"><span>Cours</span><svg class="ico"><use href="#chevron_right" /></svg><span>Algorithmique et programmation 1</span></div>
-        <h1 class="title">Algorithmique et programmation 1</h1>
+        <div class="crumbs"><a data-wf-to="mes-cours">Cours</a><svg class="ico"><use href="#chevron_right" /></svg><span>Algorithmique et programmation 1</span></div>
+        <h1 class="title" style="display: flex; align-items: center; gap: 6px">Algorithmique et programmation 1<button class="btn btn-icon btn-sm" aria-label="Modifier le nom"><svg class="ico ico-16"><use href="#edit" /></svg></button></h1>
         <p class="page-sub">Licence 1 Informatique, semestre 1. Bases de la programmation en Python.</p>
+        <p class="muted" style="margin: 6px 0 0; font-size: 13px"><svg class="ico ico-16"><use href="#calendar_month" /></svg> Créé le 1er septembre 2026 par Karim Haddad</p>
       </div>
-      <div class="actions">
-        <a class="btn btn-secondary"><svg class="ico"><use href="#share" /></svg>Partager</a>
-        <a class="btn btn-primary" data-wf-to="ajouter"><svg class="ico"><use href="#add" /></svg>Ajouter une activité</a>
-      </div>
+      <div class="actions"><a class="btn btn-secondary" data-wf-to="partager"><svg class="ico"><use href="#share" /></svg>Partager</a><a class="btn btn-primary" data-wf-to="ajouter"><svg class="ico"><use href="#add" /></svg>Ajouter une activité</a></div>
     </header>
-    <div class="tabs">
-      <span class="tab active"><svg class="ico"><use href="#grid_view" /></svg>Vue d'ensemble</span>
-      <span class="tab"><svg class="ico"><use href="#groups" /></svg>Membres <span class="count">308</span></span>
-      <span class="tab"><svg class="ico"><use href="#group_add" /></svg>Groupes</span>
-      <span class="tab"><svg class="ico"><use href="#monitoring" /></svg>Résultats</span>
-      <span class="tab"><svg class="ico"><use href="#settings" /></svg>Paramètres</span>
+    <div class="tabs"><a class="tab active" data-wf-to="detail"><svg class="ico"><use href="#grid_view" /></svg>Vue d'ensemble</a><a class="tab" data-wf-to="challenges"><svg class="ico"><use href="#emoji_events" /></svg>Challenges <span class="count">1</span></a><a class="tab" data-wf-to="membres"><svg class="ico"><use href="#groups" /></svg>Membres <span class="count">308</span></a><a class="tab" data-wf-to="groupes"><svg class="ico"><use href="#group_add" /></svg>Groupes <span class="count">4</span></a><a class="tab" data-wf-to="reglages"><svg class="ico"><use href="#settings" /></svg>Paramètres</a></div>
+    <div class="toolbar">
+      <div class="input" style="width: 280px"><svg class="ico ico-18" style="margin: 0 8px 0 0; color: var(--color-subtle)"><use href="#search" /></svg><span class="placeholder">Activité ou section</span></div>
+      <span class="segmented"><span class="on">Toutes</span><span>Ouvertes</span><span>À venir</span><span>Fermées</span></span>
+      <span class="grow"></span>
+      <a class="btn btn-ghost btn-sm"><svg class="ico"><use href="#download" /></svg>Notes (CSV)</a>
+      <span class="segmented" role="radiogroup" aria-label="Affichage"><span class="on" title="Sections"><svg class="ico ico-16"><use href="#grid_view" /></svg></span><span class="" title="Tableau"><svg class="ico ico-16"><use href="#list" /></svg></span></span>
     </div>
     <div class="layout">
       <div>
         <div class="section-block">
-          <div class="section-head">
-            <h2 class="heading">Semaine 4</h2>
-            <span class="count">2 activités</span>
-            <button class="btn btn-icon btn-sm" aria-label="Actions de la section"><svg class="ico ico-18"><use href="#more_horiz" /></svg></button>
-          </div>
+          <div class="section-head"><h2 class="heading">Semaine 4</h2><span class="count">2 activités</span><span style="margin-left: auto; display: flex; gap: 2px"><a class="btn btn-ghost btn-sm" data-wf-to="ajouter"><svg class="ico"><use href="#add" /></svg>Activité</a><button class="btn btn-icon btn-sm" aria-label="Actions de la section" data-wf-to="section-actions"><svg class="ico ico-18"><use href="#more_horiz" /></svg></button></span></div>
           <div class="card rows">
             <div class="row">
               <span class="lead-icon hued hue-bleuet"><svg class="ico"><use href="#quiz" /></svg></span>
               <div class="row-main">
                 <div class="row-title">Quiz&nbsp;: complexité des algorithmes</div>
-                <div class="row-meta"><span class="tag success"><svg class="ico"><use href="#check_circle" /></svg>Ouverte</span><span class="due soon"><svg class="ico"><use href="#schedule" /></svg>Ferme ce soir à 23&nbsp;h&nbsp;59</span><span>251 sur 302 ont commencé</span></div>
+                <div class="row-meta"><span class="tag success"><svg class="ico"><use href="#check_circle" /></svg>Ouverte</span><span class="due soon"><svg class="ico"><use href="#schedule" /></svg>Ferme ce soir à 23&nbsp;h&nbsp;59</span><span>6 exercices</span></div>
               </div>
-              <div class="row-side"><a class="btn btn-secondary btn-sm" data-wf-to="suivi">Suivre</a><button class="btn btn-icon btn-sm" aria-label="Paramètres" data-wf-to="parametres"><svg class="ico ico-18"><use href="#settings" /></svg></button></div>
+              <div class="row-side"><a class="btn btn-secondary btn-sm" data-wf-to="suivi">Suivre</a><button class="btn btn-icon btn-sm" aria-label="Paramètres" data-wf-to="parametres"><svg class="ico ico-18"><use href="#settings" /></svg></button><button class="btn btn-icon btn-sm" aria-label="Plus d&#39;actions" data-wf-to="activite-actions"><svg class="ico ico-18"><use href="#more_horiz" /></svg></button></div>
             </div>
             <div class="row">
               <span class="lead-icon hued hue-bleuet"><svg class="ico"><use href="#code" /></svg></span>
               <div class="row-main">
                 <div class="row-title">TP 4&nbsp;: boucles et tableaux</div>
-                <div class="row-meta"><span class="tag success"><svg class="ico"><use href="#check_circle" /></svg>Ouverte</span><span class="due none"><svg class="ico"><use href="#schedule" /></svg>Ferme jeudi à 18&nbsp;h</span><span>187 sur 302 ont commencé</span></div>
+                <div class="row-meta"><span class="tag success"><svg class="ico"><use href="#check_circle" /></svg>Ouverte</span><span class="due none"><svg class="ico"><use href="#schedule" /></svg>Ferme jeudi à 18&nbsp;h</span><span>8 exercices</span></div>
               </div>
-              <div class="row-side"><a class="btn btn-secondary btn-sm" data-wf-to="suivi">Suivre</a><button class="btn btn-icon btn-sm" aria-label="Paramètres" data-wf-to="parametres"><svg class="ico ico-18"><use href="#settings" /></svg></button></div>
+              <div class="row-side"><a class="btn btn-secondary btn-sm" data-wf-to="suivi">Suivre</a><button class="btn btn-icon btn-sm" aria-label="Paramètres" data-wf-to="parametres"><svg class="ico ico-18"><use href="#settings" /></svg></button><button class="btn btn-icon btn-sm" aria-label="Plus d&#39;actions" data-wf-to="activite-actions"><svg class="ico ico-18"><use href="#more_horiz" /></svg></button></div>
             </div>
           </div>
         </div>
         <div class="section-block">
-          <div class="section-head">
-            <h2 class="heading">Semaine 5</h2>
-            <span class="count">2 activités</span>
-            <button class="btn btn-icon btn-sm" aria-label="Actions de la section"><svg class="ico ico-18"><use href="#more_horiz" /></svg></button>
-          </div>
+          <div class="section-head"><h2 class="heading">Semaine 5</h2><span class="count">3 activités</span><span style="margin-left: auto; display: flex; gap: 2px"><a class="btn btn-ghost btn-sm" data-wf-to="ajouter"><svg class="ico"><use href="#add" /></svg>Activité</a><button class="btn btn-icon btn-sm" aria-label="Actions de la section" data-wf-to="section-actions"><svg class="ico ico-18"><use href="#more_horiz" /></svg></button></span></div>
           <div class="card rows">
             <div class="row">
               <span class="lead-icon hued hue-bleuet"><svg class="ico"><use href="#code" /></svg></span>
@@ -87,46 +79,44 @@
                 <div class="row-title">TP 5&nbsp;: fonctions récursives</div>
                 <div class="row-meta"><span class="tag warning"><svg class="ico"><use href="#warning" /></svg>Pas encore de dates</span><span>8 exercices</span></div>
               </div>
-              <div class="row-side"><a class="btn btn-secondary btn-sm" data-wf-to="parametres">Programmer</a><button class="btn btn-icon btn-sm" aria-label="Paramètres" data-wf-to="parametres"><svg class="ico ico-18"><use href="#settings" /></svg></button></div>
+              <div class="row-side"><a class="btn btn-secondary btn-sm" data-wf-to="parametres">Programmer</a><button class="btn btn-icon btn-sm" aria-label="Paramètres" data-wf-to="parametres"><svg class="ico ico-18"><use href="#settings" /></svg></button><button class="btn btn-icon btn-sm" aria-label="Plus d&#39;actions" data-wf-to="activite-actions"><svg class="ico ico-18"><use href="#more_horiz" /></svg></button></div>
             </div>
             <div class="row">
               <span class="lead-icon hued hue-bleuet"><svg class="ico"><use href="#event" /></svg></span>
               <div class="row-main">
                 <div class="row-title">Examen partiel 2</div>
-                <div class="row-meta"><span class="tag info"><svg class="ico"><use href="#calendar_month" /></svg>Planifiée</span><span class="tag graded"><svg class="ico"><use href="#grading" /></svg>Notée</span><span class="due planned"><svg class="ico"><use href="#calendar_month" /></svg>Ouvre le 12 octobre à 8&nbsp;h</span><span>1&nbsp;h&nbsp;30, une tentative, plein écran</span></div>
+                <div class="row-meta"><span class="tag info"><svg class="ico"><use href="#calendar_month" /></svg>Planifiée</span><span class="due planned"><svg class="ico"><use href="#calendar_month" /></svg>Ouvre le 12 octobre à 8&nbsp;h</span><span>1&nbsp;h&nbsp;30, une tentative</span></div>
               </div>
-              <div class="row-side"><a class="btn btn-secondary btn-sm" data-wf-to="parametres">Vérifier</a><button class="btn btn-icon btn-sm" aria-label="Paramètres" data-wf-to="parametres"><svg class="ico ico-18"><use href="#settings" /></svg></button></div>
+              <div class="row-side"><a class="btn btn-secondary btn-sm" data-wf-to="suivi">Suivre</a><button class="btn btn-icon btn-sm" aria-label="Paramètres" data-wf-to="parametres"><svg class="ico ico-18"><use href="#settings" /></svg></button><button class="btn btn-icon btn-sm" aria-label="Plus d&#39;actions" data-wf-to="activite-actions"><svg class="ico ico-18"><use href="#more_horiz" /></svg></button></div>
+            </div>
+            <div class="row">
+              <span class="lead-icon hued hue-ambre"><svg class="ico"><use href="#emoji_events" /></svg></span>
+              <div class="row-main">
+                <div class="row-title">Challenge&nbsp;: tris <a class="stat-inline" data-wf-to="challenges" title="Classement du challenge"><svg class="ico ico-16"><use href="#emoji_events" /></svg></a></div>
+                <div class="row-meta"><span class="tag success"><svg class="ico"><use href="#check_circle" /></svg>Ouverte</span><span>Sans fermeture</span><span>5 exercices</span></div>
+              </div>
+              <div class="row-side"><a class="btn btn-secondary btn-sm" data-wf-to="suivi">Suivre</a><button class="btn btn-icon btn-sm" aria-label="Paramètres" data-wf-to="parametres"><svg class="ico ico-18"><use href="#settings" /></svg></button><button class="btn btn-icon btn-sm" aria-label="Plus d&#39;actions" data-wf-to="activite-actions"><svg class="ico ico-18"><use href="#more_horiz" /></svg></button></div>
             </div>
           </div>
         </div>
         <div class="section-block">
-          <div class="section-head">
-            <h2 class="heading">Semaine 6</h2>
-            <span class="count">vide</span>
-            <button class="btn btn-icon btn-sm" aria-label="Actions de la section"><svg class="ico ico-18"><use href="#more_horiz" /></svg></button>
-          </div>
+          <div class="section-head"><h2 class="heading">Semaine 6</h2><span class="count">vide</span><span style="margin-left: auto; display: flex; gap: 2px"><button class="btn btn-icon btn-sm" aria-label="Actions de la section" data-wf-to="section-actions"><svg class="ico ico-18"><use href="#more_horiz" /></svg></button></span></div>
           <div class="section-empty">
-            <span>Aucune activité dans cette section. Ajoutez-en une depuis vos ressources, ou glissez-en une depuis une autre section.</span>
-            <a class="btn btn-secondary btn-sm"><svg class="ico"><use href="#add" /></svg>Ajouter</a>
+            <span>Aucune activité dans cette section.</span>
+            <a class="btn btn-secondary btn-sm" data-wf-to="ajouter"><svg class="ico"><use href="#add" /></svg>Ajouter une activité</a>
           </div>
         </div>
+        <a class="btn btn-ghost" style="margin-top: var(--spacing-2)"><svg class="ico"><use href="#add" /></svg>Ajouter une section</a>
       </div>
       <aside class="stack">
         <section>
           <div class="section-head"><h2 class="heading">Le cours</h2></div>
           <dl class="card" style="margin: 0">
-            <div class="kv"><dt>Étudiants</dt><dd>302</dd></div>
-            <div class="kv"><dt>Enseignants</dt><dd>6</dd></div>
-            <div class="kv"><dt>Activités</dt><dd>8 <small>dont 2 ouvertes</small></dd></div>
-            <div class="kv"><dt>Avancement moyen</dt><dd>62&nbsp;%</dd></div>
+            <div class="kv"><dt><svg class="ico ico-16"><use href="#school" /></svg>Enseignants</dt><dd><a data-wf-to="membres">6</a></dd></div>
+            <div class="kv"><dt><svg class="ico ico-16"><use href="#groups" /></svg>Élèves</dt><dd><a data-wf-to="membres">302</a></dd></div>
+            <div class="kv"><dt><svg class="ico ico-16"><use href="#widgets" /></svg>Activités</dt><dd>9</dd></div>
+            <div class="kv"><dt><svg class="ico ico-16"><use href="#emoji_events" /></svg>Challenges</dt><dd><a data-wf-to="challenges">1</a></dd></div>
           </dl>
-        </section>
-        <section>
-          <div class="section-head"><h2 class="heading">Résultats</h2><a>Détail</a></div>
-          <div class="card">
-            <div class="mini"><span class="mini-title">TP 3&nbsp;: conditions</span><span class="muted num" style="font-size: 13px">Moyenne 71&nbsp;/&nbsp;100, 289 rendus</span></div>
-            <div class="mini"><span class="mini-title">Examen partiel 1</span><span class="muted num" style="font-size: 13px">Moyenne 64&nbsp;/&nbsp;100, 14 copies à corriger</span></div>
-          </div>
         </section>
       </aside>
     </div>

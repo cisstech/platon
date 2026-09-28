@@ -15,6 +15,22 @@
 - screen: catalogue-actions
   note: "Ajouter à une activité est une proposition (voir le flow creation, écran ajouter-au-cours)."
 - screen: ressource
-  note: "Les trois chiffres sont ceux que DashboardService.ofResource calcule déjà (note moyenne, réussite du premier coup, durée moyenne). Utilisé par liste les activités qui dépendent de l'exercice (filtre dependOn)."
+  note: "Onglets réels : Vue d'ensemble, Explorer, Évènements, Paramètres. Rien n'est ajouté."
 - screen: ressource
-  note: "Derniers événements mélange les événements de ressource (statut, membres) et les versions, qui ont chacune un message."
+  note: "Les dix indicateurs d'un exercice sont gardés, en grille compacte, avec la courbe d'évolution. Utilisé par (agrégation, filtre dependOn) remplace la bulle « N références »."
+- screen: ressource
+  note: "En-tête : statut modifiable sur place, Suivre, Partager, Éditer ou Paramétrer, Prévisualiser. Les actions rares passent dans le menu (voir ressource-actions)."
+- screen: ressource-actions
+  note: "Dupliquer, Déplacer, et pour l'administrateur certifier un modèle et renvoyer la ressource à son auteur. Supprimer dit pourquoi c'est impossible quand des activités en dépendent, au lieu d'un bouton désactivé."
+- screen: ressource-partager
+  note: "Le partage actuel : visibilité (dans PLaTon ou partout), version, QR code, Copier le lien."
+- screen: explorer
+  note: "L'Explorer actuel : version, fichiers, readme, historique, importer, télécharger, nouvelle version (tag et description)."
+- screen: evenements
+  note: "Les quatre types d'évènements actuels (création, statut, membre ajouté, membre retiré), les 50 derniers, comme aujourd'hui."
+- screen: ressource-parametres
+  note: "Sous-onglets réels : Informations (nom, description, topics, niveaux) et Modèle pour un exercice. Le statut reste dans l'en-tête."
+- screen: cercle
+  note: "Vue d'ensemble d'un cercle : répartition par statut (chaque part ouvre le catalogue filtré), compteurs (exercices, activités, modèles, cercles enfants, collaborateurs, observateurs) et tags. Suivre et Demander à rejoindre dans l'en-tête."
+- screen: cercle-collaborateurs
+  note: "Demandes, invitations et collaborateurs, gérés par l'administrateur comme aujourd'hui. Pas de droits par personne : le modèle en a (read, write), l'interface non, et on ne l'invente pas."

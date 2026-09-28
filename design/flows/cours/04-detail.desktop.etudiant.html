@@ -9,10 +9,11 @@
     </div>
     <nav class="nav">
       <a class="nav-item" data-wf-to="etudiant"><svg class="ico"><use href="#home" /></svg>Accueil</a>
+      <a class="nav-item" data-wf-to="annonces"><svg class="ico"><use href="#campaign" /></svg>Annonces</a>
       <a class="nav-item active" data-wf-to="mes-cours"><svg class="ico"><use href="#school" /></svg>Cours</a>
+      <a class="nav-item" data-wf-to="file"><svg class="ico"><use href="#rate_review" /></svg>Corrections</a>
     </nav>
     <div class="sidebar-foot">
-      <a class="nav-item"><svg class="ico"><use href="#help" /></svg>Aide</a>
       <a class="nav-item"><svg class="ico"><use href="#notifications" /></svg>Notifications<span class="count">3</span></a>
       <div class="me">
         <span class="avatar">IB</span>
@@ -27,19 +28,24 @@
   <main class="main">
     <header class="page-head">
       <div>
-        <div class="crumbs"><span>Cours</span><svg class="ico"><use href="#chevron_right" /></svg><span>Algorithmique et programmation 1</span></div>
-        <h1 class="title">Algorithmique et programmation 1</h1>
+        <div class="crumbs"><a data-wf-to="mes-cours">Cours</a><svg class="ico"><use href="#chevron_right" /></svg><span>Algorithmique et programmation 1</span></div>
+        <h1 class="title" style="display: flex; align-items: center; gap: 6px">Algorithmique et programmation 1</h1>
         <p class="page-sub">Licence 1 Informatique, semestre 1. Bases de la programmation en Python.</p>
+        <p class="muted" style="margin: 6px 0 0; font-size: 13px"><svg class="ico ico-16"><use href="#calendar_month" /></svg> Créé le 1er septembre 2026 par Karim Haddad</p>
       </div>
+      
     </header>
-    <div class="tabs">
-      <span class="tab active"><svg class="ico"><use href="#grid_view" /></svg>Vue d'ensemble</span>
-      <span class="tab"><svg class="ico"><use href="#monitoring" /></svg>Mes résultats</span>
+    <div class="tabs"><a class="tab active" data-wf-to="detail"><svg class="ico"><use href="#grid_view" /></svg>Vue d'ensemble</a><a class="tab" data-wf-to="challenges"><svg class="ico"><use href="#emoji_events" /></svg>Challenges <span class="count">1</span></a><a class="tab"><svg class="ico"><use href="#groups" /></svg>Membres <span class="count">308</span></a><a class="tab"><svg class="ico"><use href="#group_add" /></svg>Groupes <span class="count">4</span></a></div>
+    <div class="toolbar">
+      <div class="input" style="width: 280px"><svg class="ico ico-18" style="margin: 0 8px 0 0; color: var(--color-subtle)"><use href="#search" /></svg><span class="placeholder">Activité ou section</span></div>
+      <span class="segmented"><span class="on">Toutes</span><span>Ouvertes</span><span>À venir</span><span>Fermées</span></span>
+      <span class="grow"></span>
+      
     </div>
     <div class="layout">
       <div>
         <div class="section-block">
-          <div class="section-head"><h2 class="heading">Semaine 4</h2><span class="count">2 activités</span></div>
+          <div class="section-head"><h2 class="heading">Semaine 4</h2><span class="count">2 activités</span><span style="margin-left: auto; display: flex; gap: 2px"></span></div>
           <div class="card rows">
             <div class="row">
               <span class="lead-icon hued hue-bleuet"><svg class="ico"><use href="#quiz" /></svg></span>
@@ -60,28 +66,36 @@
           </div>
         </div>
         <div class="section-block">
-          <div class="section-head"><h2 class="heading">Semaine 5</h2><span class="count">1 activité</span></div>
+          <div class="section-head"><h2 class="heading">Semaine 5</h2><span class="count">2 activités</span><span style="margin-left: auto; display: flex; gap: 2px"></span></div>
           <div class="card rows">
             <div class="row">
               <span class="lead-icon hued hue-bleuet"><svg class="ico"><use href="#event" /></svg></span>
               <div class="row-main">
                 <div class="row-title">Examen partiel 2</div>
-                <div class="row-meta"><span class="tag graded"><svg class="ico"><use href="#grading" /></svg>Notée</span><span class="due planned"><svg class="ico"><use href="#calendar_month" /></svg>Ouvre le 12 octobre à 8&nbsp;h</span><span>1&nbsp;h&nbsp;30, une tentative</span></div>
+                <div class="row-meta"><span class="due planned"><svg class="ico"><use href="#calendar_month" /></svg>Ouvre le 12 octobre à 8&nbsp;h</span><span>1&nbsp;h&nbsp;30, une tentative</span></div>
               </div>
-              <div class="row-side"><span class="muted">Pas encore ouvert</span></div>
+              <div class="row-side"><span class="muted">Pas encore ouverte</span></div>
+            </div>
+            <div class="row">
+              <span class="lead-icon hued hue-ambre"><svg class="ico"><use href="#emoji_events" /></svg></span>
+              <div class="row-main">
+                <div class="row-title">Challenge&nbsp;: tris <a class="stat-inline" data-wf-to="challenges" title="Classement du challenge"><svg class="ico ico-16"><use href="#emoji_events" /></svg></a></div>
+                <div class="row-meta"><span>Sans fermeture</span><span>5 exercices</span></div>
+              </div>
+              <div class="row-side"><div class="progress stacked"><span>2 sur 5</span><div class="bar"><span style="width: 40%"></span></div></div><a class="btn btn-secondary btn-sm" data-wf-to="intro">Continuer</a></div>
             </div>
           </div>
         </div>
         <div class="section-block">
-          <div class="section-head"><h2 class="heading">Semaine 3</h2><span class="count">terminée</span></div>
+          <div class="section-head"><h2 class="heading">Semaine 3</h2><span class="count">1 activité</span><span style="margin-left: auto; display: flex; gap: 2px"></span></div>
           <div class="card rows">
             <div class="row">
               <span class="lead-icon hued hue-bleuet"><svg class="ico"><use href="#code" /></svg></span>
               <div class="row-main">
                 <div class="row-title">TP 3&nbsp;: conditions</div>
-                <div class="row-meta"><span class="tag"><svg class="ico"><use href="#lock" /></svg>Fermée</span><span>rendu le 21 septembre</span></div>
+                <div class="row-meta"><span class="tag"><svg class="ico"><use href="#lock" /></svg>Fermée</span><span>7 exercices</span></div>
               </div>
-              <div class="row-side"><span class="figure-value num">82&nbsp;<small>/&nbsp;100</small></span><a class="btn btn-secondary btn-sm">Voir mes résultats</a></div>
+              <div class="row-side"><a class="btn btn-secondary btn-sm"><svg class="ico"><use href="#monitoring" /></svg>Voir mes résultats</a></div>
             </div>
           </div>
         </div>
@@ -89,21 +103,17 @@
       <aside class="stack">
         <section>
           <div class="section-head"><h2 class="heading">Mon avancement</h2></div>
-          <div class="card">
-            <div class="mini">
-              <div class="bar wide"><span style="width: 62%"></span></div>
-              <span class="muted num" style="font-size: 13px">5 activités terminées sur 8</span>
-            </div>
-            <div class="kv"><dt>Moyenne dans ce cours</dt><dd>76&nbsp;<small>/&nbsp;100</small></dd></div>
-            <div class="kv"><dt>Temps passé</dt><dd>9&nbsp;h&nbsp;40</dd></div>
+          <div class="card card-pad">
+            <div class="classeur-progress"><div class="bar wide"><span style="width: 62%"></span></div><span class="num">62&nbsp;%</span></div>
+            <p class="muted" style="margin: var(--spacing-2) 0 0; font-size: 13px">des exercices des activités du cours</p>
           </div>
         </section>
         <section>
-          <div class="section-head"><h2 class="heading">Enseignants</h2></div>
-          <div class="card">
-            <div class="mini"><span class="mini-title">Karim Haddad</span><span class="muted" style="font-size: 13px">Responsable de l'UE</span></div>
-            <div class="mini"><span class="mini-title">Léa Fontaine</span><span class="muted" style="font-size: 13px">Groupe TD 2</span></div>
-          </div>
+          <dl class="card" style="margin: 0">
+            <div class="kv"><dt><svg class="ico ico-16"><use href="#timer" /></svg>Temps passé</dt><dd>9&nbsp;h&nbsp;40</dd></div>
+            <div class="kv"><dt><svg class="ico ico-16"><use href="#school" /></svg>Enseignants</dt><dd>6</dd></div>
+            <div class="kv"><dt><svg class="ico ico-16"><use href="#groups" /></svg>Élèves</dt><dd>302</dd></div>
+          </dl>
         </section>
       </aside>
     </div>

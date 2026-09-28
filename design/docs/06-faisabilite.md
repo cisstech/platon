@@ -45,15 +45,15 @@ Chaque élément des maquettes est rapporté à ce qui existe dans le code de PL
 | Élément | Niveau | Ce qui existe |
 | --- | --- | --- |
 | « En cours » : activités ouvertes de ses cours | agrégation | Même point d'accès `activities/mine`, filtré sur les cours où il est enseignant (`CourseMemberRoles.teacher`) |
-| « 251 sur 302 ont commencé » | existant | `DashboardService.ofActivity` et `result-by-members` donnent les sessions par membre ; le compte est un agrégat de la même requête |
-| Moyenne provisoire | existant | `ofActivity` calcule la moyenne |
+| « 251 sur 302 ont commencé » | agrégation | `DashboardService.ofActivity` par activité ouverte : un appel chacune, à mettre dans `activities/mine` si la liste grossit |
+| Moyenne provisoire | agrégation | Même appel `ofActivity` |
 | « À corriger » avec le reste | existant | `/corrections/pendings`, `CorrectionStatus.pending` et `available`, groupés par activité |
 | « À préparer » : sans dates, planifiées | agrégation | `openAt`, `closeAt` nuls ou `state === 'planned'` sur la même liste |
 | « Programmer » vers les dates | existant | Le panneau de paramètres de l'activité (`activity-settings`) |
 | Mes cours avec effectifs | existant | `CourseStatistic.studentCount`, `teacherCount` |
 | Ressources récentes avec statut | existant | Filtre « vu récemment » des ressources et `ResourceStatus` |
 | Accueil vide en trois étapes | existant | Les trois actions existent ; l'ordre est une règle d'écran |
-| Sélecteur de modèles retiré de l'accueil | existant | Il est déjà utilisé dans `/resources/create` (étape Template) |
+| Bloc Partir d'un modèle | existant | `resource-template-selection`, réduit à trois modèles et un lien vers la galerie |
 
 ## Connexion
 
@@ -132,7 +132,7 @@ Chaque élément des maquettes est rapporté à ce qui existe dans le code de PL
 | Atelier : variables, éditeur, aperçu | existant | Builder, `main.plc` (entrées), `main.plo` (valeurs), 11 types d'entrée |
 | Nommer au premier enregistrement | existant | Redirection vers les informations si nom par défaut et brouillon ; ici en dialogue |
 | Supprimer l'exercice jamais enregistré en quittant | existant | Garde `canDeactivate` et suppression si `createdAt === updatedAt` |
-| Ajouter l'exercice à un cours depuis l'atelier | proposition | Un endpoint crée une ressource activité avec un seul groupe (`main.pla` généré) puis l'activité de cours (`createActivities`) |
+| Ajouter l'exercice à un cours depuis l'atelier | proposition, côté client | `POST /resources` accepte `files` : ressource activité avec un `main.pla` à un groupe, puis `createActivities`. Aucun endpoint nouveau |
 | Formulaire unique à la place de l'assistant en six étapes | proposition | Côté client, mêmes champs et même appel |
 
 ## Activité
@@ -143,8 +143,9 @@ Chaque élément des maquettes est rapporté à ce qui existe dans le code de PL
 | Fonction Entraînement, Notée, Challenge à l'ajout | existant | `isChallenge` ; Notée = `activitySettings` (durée, tentatives, sécurité), `code`, correcteurs |
 | Fonction modifiable ensuite | n'existe pas | `isChallenge` absent de `UpdateActivity` ; le panneau l'affiche en lecture seule |
 | Panneau Accès, Déroulement, Gestion | existant | `activity-settings` : périodes et règles, paramètres, couleur, fermer, rouvrir, recharger, supprimer |
-| Code de déblocage dans le panneau | proposition | `code` est dans `UpdateActivity`, l'interface manque |
+| Code de déblocage | existant | Page Suivi de l'activité (modération) ; ici dans l'onglet Modération du suivi |
 | Suivi : réussite, note, durée, par exercice | existant | `DashboardService.ofActivity`, `ActivityExerciseResults` |
+| Suivi en trois onglets (Statistiques, Apprenants, Modération) | réorganisation | Réunit `/activities/:course/:activity` et `/activities/monitor/...` |
 
 ## Tests d'entrée
 
@@ -154,3 +155,30 @@ Chaque élément des maquettes est rapporté à ce qui existe dans le code de PL
 | État pas commencé, en cours, terminé | agrégation | Sessions de l'activité du test, par candidat |
 | État de l'invitation (envoyée ou non) | proposition | Aucun champ ne garde l'envoi ; un `invitedAt` sur `TestsCandidates` |
 | Page candidat avec conditions et acceptation | existant | `/candidate/terms`, `Test.terms` |
+
+## Cours
+
+| Élément | Niveau | Ce qui existe |
+| --- | --- | --- |
+| Recherche, Actuels et Archivés, tri, période | existant | `CourseFilters` (`search`, `archived`, `order`, `direction`, `period`) |
+| Tous les cours de la plateforme | existant | `showAll`, admin seulement |
+| Classeur : effectifs, activités, mise à jour, challenges | existant | `CourseStatistic` (`teacherCount`, `studentCount`, `activityCount`, `challengeCount`), `updatedAt` |
+| Avancement sur le classeur | existant | `statistic.progression`, propre à la personne connectée |
+| Teinte du cours | proposition | Pas de `colorHue` sur `Course` ; dérivée de l'id en attendant |
+| Archiver pour soi | existant | `archiveMember` (archivage de l'appartenance) |
+| Onglets Vue d'ensemble, Challenges, Membres, Groupes, Paramètres | existant | `course.routes.ts` |
+| Filtre d'état unique en tête | réorganisation | Aujourd'hui répété dans chaque section |
+| Résultats au niveau du cours | n'existe pas | Aucun endpoint ; pas d'onglet Résultats |
+| Podium du classement | réorganisation | Même donnée (`leaderboard/courses/:id`) |
+| Membres filtrés Enseignants ou Élèves | existant | Routes `teachers` et `students`, sans onglet aujourd'hui |
+| Accès démo, reprendre un cours, supprimer | existant | Onglet Paramètres |
+
+## Administration et compte
+
+| Élément | Niveau | Ce qui existe |
+| --- | --- | --- |
+| Utilisateurs, Groupes, LMS, CAS, Tags, Annonces | existant | `admin.routes.ts` |
+| Ajout d'un compte avec mot de passe généré | existant | À corriger : Élève crée un compte enseignant (`users.page.ts`) |
+| Mon compte : À propos, Sécurité | existant | `account.routes.ts` |
+| Annonces dans la navigation, fenêtre à la connexion | existant | `/announcements`, `checkForAnnouncements` |
+| Retiré : « Ma progression » du menu profil | correction | N'existait pas, je l'avais inventé |
