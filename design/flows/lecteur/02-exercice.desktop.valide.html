@@ -1,0 +1,61 @@
+<div style="min-height: 100vh; padding: var(--spacing-6) var(--spacing-8)"><div style="max-width: 1100px">
+  <div class="player-head">
+    <button class="btn btn-icon" aria-label="Quitter l'activité" data-wf-to="cours"><svg class="ico"><use href="#arrow_back" /></svg></button>
+    <div style="flex: 1">
+      <div class="heading">Examen partiel 2</div>
+      <div class="muted" style="font-size: 13px">Algorithmique et programmation 1, exercice 3 sur 8 : Tri par insertion</div>
+    </div>
+    <span class="tag graded"><svg class="ico"><use href="#grading" /></svg>Notée</span>
+    <a class="btn btn-secondary btn-sm" data-wf-to="quitter">Quitter</a>
+  </div>
+  <div class="player">
+  <div class="copie">
+    <div class="q">
+      <div class="q-mark ok"><span>1</span><svg class="ico"><use href="#check_circle" /></svg></div>
+      <h2 class="heading">Combien d'opérations élémentaires cette fonction effectue-t-elle pour un tableau de taille n&nbsp;?</h2>
+      <div class="statement">
+        <p>On considère la fonction suivante, qui calcule la somme des éléments d'un tableau.</p>
+        <span class="code">def somme(t):
+    s = 0
+    for x in t:
+        s = s + x
+    return s</span>
+      </div>
+      <div class="answer"><div class="input ok">n + 1</div></div>
+      <div class="feedback ok"><svg class="ico"><use href="#check_circle" /></svg><p><strong>Juste.</strong> Une affectation avant la boucle, puis une addition par élément.</p></div>
+    </div>
+    <div class="q">
+      <div class="q-mark ko"><span>2</span><svg class="ico"><use href="#error" /></svg></div>
+      <h2 class="heading">Quelle est la complexité de <code>somme</code> dans le pire cas&nbsp;?</h2>
+      <div class="answer options">
+        <div class="option"><span class="box"></span>O(1)</div>
+        <div class="option ko picked"><span class="box"></span>O(log n)<span class="why">Votre réponse</span></div>
+        <div class="option ok"><span class="box"></span>O(n)<span class="why" style="color: var(--color-success-ink)">Bonne réponse</span></div>
+        <div class="option"><span class="box"></span>O(n²)</div>
+      </div>
+      <div class="feedback ko"><svg class="ico"><use href="#error" /></svg><p><strong>Faux.</strong> La boucle parcourt chaque élément une fois : le nombre d'opérations croît comme n, pas comme log n. La bonne réponse est indiquée.</p></div>
+    </div>
+    <div class="copie-actions">
+      <span class="tag warning"><svg class="ico"><use href="#pending" /></svg>Partiellement réussi, 50&nbsp;%</span>
+      <span class="spacer"></span>
+      <a class="btn btn-primary" data-wf-to="exercice">Exercice suivant<svg class="ico"><use href="#chevron_right" /></svg></a>
+    </div>
+  </div>
+  <aside class="rail">
+    <div class="card">
+      <div class="countdown"><div class="figure-label">Temps restant</div><div class="figure-value">1:12:40</div></div>
+    </div>
+    <div class="card">
+      <div class="rail-head"><span class="subheading">Exercices</span><span class="num">2 sur 8 validés</span></div>
+      <div class="ex-item ok"><svg class="ico"><use href="#check_circle" /></svg><span>1. Complexité d'une boucle</span></div>
+      <div class="ex-item part"><svg class="ico"><use href="#pending" /></svg><span>2. Notation grand O</span></div>
+      <div class="ex-item current "><svg class="ico"><use href="#radio_button_unchecked" /></svg><span>3. Tri par insertion</span></div>
+      <div class="ex-item "><svg class="ico"><use href="#radio_button_unchecked" /></svg><span>4. Recherche dichotomique</span></div>
+      <div class="ex-item "><svg class="ico"><use href="#radio_button_unchecked" /></svg><span>5. Récursivité</span></div>
+      <div class="ex-item "><svg class="ico"><use href="#radio_button_unchecked" /></svg><span>6. Pile et file</span></div>
+      <div class="ex-item "><svg class="ico"><use href="#radio_button_unchecked" /></svg><span>7. Tableaux à deux dimensions</span></div>
+      <div class="ex-item "><svg class="ico"><use href="#radio_button_unchecked" /></svg><span>8. Fonctions de hachage</span></div>
+    </div>
+  </aside>
+  </div>
+</div></div>

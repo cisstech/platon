@@ -1,0 +1,14 @@
+- screen: liste
+  note: Une carte par cours, avec l'intercalaire de sa teinte en haut. L'étudiant voit son avancement et la prochaine échéance ; l'enseignant les effectifs et ce qui est ouvert. Les cours archivés vivent dans un onglet.
+- screen: detail
+  note: Un seul en-tête pour toutes les pages de détail : fil d'Ariane, titre, description, action principale à droite. Les onglets suivent le rôle.
+- screen: detail
+  note: Chaque ligne d'activité dit son état avec une icône et un mot, son échéance, et une action qui dit ce qu'elle fait. Une activité notée affiche ses règles sur sa ligne.
+- screen: detail
+  note: Vue étudiante : pas d'effectifs, pas d'édition, pas de section vide. Une section sans nom s'appelle par son numéro.
+- screen: nouveau
+  note: Créer un cours tient dans un dialogue de deux champs, ce que le modèle demande. L'assistant actuel n'a qu'une étape.
+- screen: parametres
+  note: Le panneau remplace l'assistant en quatre étapes. Tout est visible d'un coup, les réglages d'une activité notée se déplient quand on la choisit. Enregistrer reste actif, la validation se fait à l'envoi.
+- screen: detail
+  note: Créer (sur la couverture) et Ajouter une activité (sur la page) sont deux actions principales de deux surfaces différentes. La page n'a qu'un bouton primaire.

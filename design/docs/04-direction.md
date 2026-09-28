@@ -53,6 +53,11 @@ Sur mobile, une barre supérieure de 56 px, elle aussi dans la couverture, porte
 le titre de la page et les notifications ; la couverture devient un panneau qui glisse depuis la
 gauche.
 
+**Deux surfaces, deux actions principales.** La couverture a la sienne, Créer, et la page la
+sienne (Ajouter une activité, Créer un cours). Elles ne se concurrencent pas : l'une est globale et
+toujours au même endroit, l'autre est propre à la page, à droite du titre. Une page n'a jamais
+deux boutons primaires.
+
 ## Connexion
 
 La page de connexion est la couverture et la page côte à côte. La couverture porte le logo, une

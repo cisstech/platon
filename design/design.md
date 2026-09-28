@@ -186,8 +186,8 @@ spacing:
   '12': 48px
   '16': 64px
 statusBar:
-  background: '{colors.surface}'
-  tint: dark
+  background: '{colors.cover}'
+  tint: light
 ---
 
 ## La couverture et la page
@@ -249,6 +249,12 @@ Icônes **Material Symbols Rounded**, graisse 400 : les terminaisons arrondies l
 rondeur amicale sans les rendre enfantines, et le catalogue couvre déjà les 111 noms utilisés
 par l'application. Une icône par notion, la même partout : le chapeau pour un cours, le carré
 interrogatif pour une activité, les chevrons pour un exercice.
+
+L'identité ne passe pas par un jeu d'icônes réinventé : redessiner cent onze pictogrammes coûte
+cher et finit incohérent. Elle passe par les **glyphes PLaTon**, cinq objets du domaine dessinés
+dans le style des illustrations (cours, activité, exercice, cercle, copie) et utilisés aux
+grandes tailles : icônes de tête de ligne, états vides, menu Créer. Aux petites tailles, les
+icônes Material Rounded correspondantes prennent le relais.
 
 Les illustrations sont dessinées au trait dans les graphites, avec la marge rouge et un seul
 objet en chaleur. La première est **la copie vierge** : une feuille, sa marge, ses lignes et un

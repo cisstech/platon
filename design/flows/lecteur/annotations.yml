@@ -1,0 +1,14 @@
+- screen: intro
+  note: Avant de commencer, tout ce qui compte : le nombre d'exercices, l'échéance, et pour une activité notée, la durée, les tentatives et les règles de sécurité. Un seul bouton, qui dit que le chronomètre part au clic.
+- screen: exercice
+  note: La copie et sa marge. Le numéro de la question et son résultat vivent dans la marge, comme les annotations d'un correcteur. L'énoncé est en corps de lecture, 72 caractères par ligne.
+- screen: exercice
+  note: Valider est la seule action primaire. Les autres actions n'apparaissent que si l'activité les autorise (réglages existants : aide, solution, recharger, sauvegarder).
+- screen: exercice
+  note: Après validation, le résultat s'inscrit dans la marge en 180 ms et le retour s'affiche sous la réponse. Vert pour juste, rouge correcteur pour faux, ocre pour partiel. Rien ne saute.
+- screen: exercice
+  note: Une erreur du lecteur remplace la copie par un message qui nomme le problème, avec Réessayer et Revenir au cours. Plus jamais une page blanche.
+- screen: conclusion
+  note: Un résumé humain : exercices réussis, note si elle existe, durée. La chaleur (dégradé du logo) marque l'activité terminée. Aucun identifiant de session.
+- screen: quitter
+  note: Quitter une activité notée demande confirmation et dit ce qui arrive à la tentative. Le bouton de sortie est en danger, celui qui reste est primaire.
