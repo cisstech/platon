@@ -52,6 +52,13 @@ colors:
   repere-200: '#bedfff'
   repere-600: '#026bb2'
   repere-700: '#025792'
+  cover: '#321a40'
+  cover-raised: '#40264e'
+  cover-line: '#4f375d'
+  cover-text: '{colors.encre-100}'
+  cover-muted: '{colors.encre-300}'
+  cover-primary: '{colors.encre-300}'
+  cover-primary-text: '{colors.graphite-950}'
   ground: '{colors.graphite-50}'
   surface: '{colors.graphite-0}'
   surface-muted: '{colors.graphite-25}'
@@ -79,6 +86,33 @@ colors:
   info-ink: '{colors.repere-700}'
   info-soft: '{colors.repere-50}'
   margin: '{colors.correction-300}'
+  chaleur-1: '#e9048d'
+  chaleur-2: '#f37044'
+  chaleur-3: '#fabb12'
+  corail-tint: '#ffdfdc'
+  corail-strong: '#c74b47'
+  corail-ink: '#862726'
+  ambre-tint: '#fee3c5'
+  ambre-strong: '#a86b02'
+  ambre-ink: '#6c4300'
+  olive-tint: '#ddefcc'
+  olive-strong: '#5a8b00'
+  olive-ink: '#385800'
+  menthe-tint: '#caf3e0'
+  menthe-strong: '#009068'
+  menthe-ink: '#015c41'
+  lagon-tint: '#c3f1fd'
+  lagon-strong: '#0389a0'
+  lagon-ink: '#015766'
+  bleuet-tint: '#dbe9ff'
+  bleuet-strong: '#3d77d7'
+  bleuet-ink: '#1d4a93'
+  lilas-tint: '#ebe3ff'
+  lilas-strong: '#8a5fc9'
+  lilas-ink: '#593888'
+  framboise-tint: '#ffddec'
+  framboise-strong: '#bc4b87'
+  framboise-ink: '#7e2757'
 typography:
   display:
     fontFamily: "'Atkinson Hyperlegible Next', system-ui, sans-serif"
@@ -156,84 +190,95 @@ statusBar:
   tint: dark
 ---
 
-## Encre et copie
+## La couverture et la page
 
-PLaTon est l'endroit où l'on écrit, fait et corrige des exercices. Le design reprend les gestes de
-l'école française sans en imiter le décor : l'encre pour ce que l'on écrit et ce que l'on choisit,
-le rouge du correcteur pour ce qui est faux, le vert pour ce qui est juste, la marge de la copie
-pour les annotations. Pas de papier jauni, pas d'écriture manuscrite, pas de texture : des gestes,
-pas un costume.
+PLaTon est l'endroit où l'on écrit, fait et corrige des exercices. Le design reprend les objets
+de l'école sans en imiter le décor : le cahier a une couverture sombre et des pages claires, la
+copie a une marge, le classeur a des intercalaires de couleur. Chaque motif de l'identité a une
+fonction ; aucun n'est un costume.
+
+## Le logo
+
+Le logo PLaTon reste tel quel : la tuile inclinée et son dégradé, du magenta à l'orange. Il est le
+seul élément en dégradé de l'interface, et il vit sur la couverture, où ses couleurs ressortent.
+Ses teintes donnent deux choses au reste du design : l'encre, tirée de son prune, et la chaleur,
+tirée de son magenta et de son orange.
 
 ## Couleur
 
-Un seul accent, l'**encre violette**. C'est la teinte prune du logo (`#821b90`), décalée vers
-l'encre et assourdie, et c'est aussi l'encre des cahiers des écoles de la Troisième République.
-Elle fait une seule chose : désigner ce que l'on peut faire et ce qui est sélectionné. Bouton
-primaire, lien, élément de navigation actif, anneau de focus. Jamais un fond décoratif, jamais un
-titre.
+**La couverture** est un prune profond (`cover`, `#321a40`), tiré du logo. C'est le fond de la
+barre latérale et de la page de connexion, jamais celui d'un contenu. Elle est toujours sombre,
+même en thème clair, comme la couverture d'un cahier. Ses textes sont dans les encres claires
+(`cover-text` 13:1, `cover-muted` 8,2:1). Pour un utilisateur de PLaTon, c'est aussi une continuité :
+la barre latérale a toujours été violette.
 
-Les **neutres graphite** portent une pointe de la même teinte, à moins de 1 % de chroma. Ils
-restent froids et clairs : le fond de l'application n'est pas beige, il est à peine teinté.
+**La page** est claire et froide (`ground`, `surface`), avec des neutres graphite qui portent moins
+de 1 % de chroma de la même teinte. Pas de beige.
 
-Les couleurs d'état ont un sens fixe, le même partout, et viennent toujours avec une icône ou un
-mot :
+**L'encre** (`primary`, encre 700) fait une seule chose : désigner ce que l'on peut faire et ce
+qui est sélectionné. Bouton primaire, lien, onglet actif, anneau de focus.
 
-- **validation** (vert) : réussi, prêt, ouvert.
-- **correction** (rouge) : échoué, erreur, suppression, en retard. C'est le rouge du stylo du
-  correcteur ; il n'habille rien d'autre.
-- **attention** (ocre) : partiellement réussi, à tester, échéance proche.
-- **repère** (bleu) : information neutre, planifié.
+**Les couleurs d'état** ont un sens fixe et viennent toujours avec une icône ou un mot :
+validation (vert) pour juste, prêt, ouvert ; correction (rouge) pour faux, erreur, suppression, en
+retard ; attention (ocre) pour partiel, à tester, échéance proche ; repère (bleu) pour planifié.
 
-Contrastes vérifiés : texte courant 16:1, texte secondaire 6,3:1, primaire sous texte blanc 8,3:1,
-contour de champ 3,3:1 sur blanc et 3,05:1 sur le fond, texte d'état sur fond d'état entre 6,7:1
-et 9,6:1.
+**Les couleurs de cours** sont les intercalaires du classeur : huit teintes nommées (corail,
+ambre, olive, menthe, lagon, bleuet, lilas, framboise), chacune avec un fond clair (`tint`), une
+couleur pleine (`strong`) et une couleur de texte (`ink`, entre 6,7:1 et 7,3:1 sur son fond). Un
+cours reçoit une teinte et la garde partout : sur l'icône de ses activités, sur l'onglet de son
+nom, sur ses cartes. La couleur identifie, elle ne décore pas. Les activités ont déjà une teinte
+dans le modèle (`colorHue`), les cours en héritent.
+
+**La chaleur** est le dégradé du logo (magenta, orange, jaune). Elle est réservée aux moments de
+joie : une activité terminée, un cours achevé, la bienvenue. Elle ne marque jamais un résultat
+(un bon résultat est vert, la chaleur dit « c'est fini, bravo »).
 
 ## Typographie
 
-Une seule famille, **Atkinson Hyperlegible Next**, et sa version **Mono** pour le code. Elle a été
-dessinée par le Braille Institute pour distinguer les caractères qui se confondent : `l`, `I` et
-`1`, `O` et `0`. Sur une plateforme où l'on lit du code, des formules, des notes et des codes
-d'accès à six chiffres, c'est un choix fonctionnel avant d'être un style.
+Une seule famille, **Atkinson Hyperlegible Next**, et sa version Mono pour le code, dessinées
+par le Braille Institute pour distinguer `l`, `I` et `1`, `O` et `0`. Sur une plateforme où l'on
+lit du code, des formules, des notes et des codes d'accès, c'est un choix fonctionnel.
 
-Échelle fermée : `display` 28, `title` 22, `heading` 17, `subheading` 15, `body` 14, `reading` 16
-pour les énoncés et les textes longs, `small` 13, `caption` 12. Les chiffres des notes et des
-statistiques sont tabulaires (`figure`), pour s'aligner d'une ligne à l'autre. Graisses 400 et 600,
-rien d'autre.
+Échelle fermée : display 28, title 22, heading 17, subheading 15, body 14, reading 16 pour les
+énoncés et les textes longs, small 13, caption 12. Les chiffres des notes sont tabulaires (figure).
+Graisses 400 et 600, rien d'autre.
+
+## Icônes et illustrations
+
+Icônes **Material Symbols Rounded**, graisse 400 : les terminaisons arrondies leur donnent une
+rondeur amicale sans les rendre enfantines, et le catalogue couvre déjà les 111 noms utilisés
+par l'application. Une icône par notion, la même partout : le chapeau pour un cours, le carré
+interrogatif pour une activité, les chevrons pour un exercice.
+
+Les illustrations sont dessinées au trait dans les graphites, avec la marge rouge et un seul
+objet en chaleur. La première est **la copie vierge** : une feuille, sa marge, ses lignes et un
+crayon. Elle signe les états vides qui attendent une action. Une illustration ne remplace jamais
+le texte qui dit quoi faire.
 
 ## La marge
 
-Le seul motif de l'identité est la marge de la copie : un filet rouge clair de 1 px, placé à 48 px
-du bord gauche des surfaces où l'élève répond. La marge n'est pas un décor, elle a une fonction :
-c'est là que s'inscrivent le numéro de la question et son résultat (juste, faux, partiel),
-comme les annotations d'un correcteur. Elle n'apparaît que sur ces surfaces-là, jamais dans une
-liste ni dans l'administration.
+Un filet rouge clair de 1 px, à 48 px du bord gauche des surfaces où l'élève répond. C'est là que
+s'inscrivent le numéro de la question et son résultat, comme les annotations d'un correcteur. La
+marge n'apparaît que sur ces surfaces-là.
 
-## Formes
+## Formes et mouvement
 
-Rayons nets : 6 px pour les boutons et les champs, 8 px pour les menus, 12 px pour les cartes et
-les dialogues. Les cartes posées sur le fond ont un filet, pas d'ombre. L'ombre est réservée à ce
-qui flotte au-dessus de la page : menus, bulles, dialogues, panneaux.
-
-## Mouvement
-
-Court et utile. 120 ms pour un survol ou un changement de couleur, 180 ms pour l'apparition d'un
-menu ou d'une bulle, 260 ms pour un panneau ou un dialogue. Une sortie dure environ 70 % de
-l'entrée. Rien ne rebondit. Avec `prefers-reduced-motion`, seules les opacités changent.
+Rayons : 6 px pour les boutons et les champs, 8 px pour les menus, 12 px pour les cartes et les
+dialogues. Les cartes posées sur la page ont un filet, pas d'ombre ; l'ombre est réservée à ce qui
+flotte. Mouvement court et utile : 120 ms pour un survol, 180 ms pour un menu, 260 ms pour un
+panneau ; rien ne rebondit, sauf un moment de joie, qui a droit à une seule animation de 600 ms.
 
 ## Faire
 
 - une action principale par écran, libellée, au même endroit
-- la couleur d'état accompagnée d'un mot ou d'une icône
+- une couleur d'état accompagnée d'un mot ou d'une icône, une couleur de cours toujours la même
 - des données réelles dans les maquettes : noms d'UE, échéances, notes sur 100
 - l'insécable avant `: ; ! ?` et les majuscules accentuées
 
 ## Ne pas faire
 
-Les signes qui feraient ressembler PLaTon à n'importe quelle application générée, écartés une fois
-pour toutes :
-
-- pas de fond crème ni beige, pas de dégradé d'accent, pas d'effet de verre
-- pas de ruban, de pastille ni de coin coloré qui ne signale pas un état
+- pas de fond crème ni beige, pas de dégradé en dehors du logo et des moments de joie
+- pas de pastille ni de coin coloré qui ne signale ni un état ni un cours
 - pas de bouton rond avec une icône seule pour une action principale
 - pas de centrage par défaut : on lit de gauche à droite
 - pas de majuscules pour les boutons et les libellés, pas de casse anglaise dans les titres

@@ -18,17 +18,21 @@ comment un écran est construit, comment il répond à chaque action et dans cha
 
 ## Modèle de navigation
 
-La barre supérieure disparaît sur bureau. Tout ce qui est global vit dans une barre latérale
-claire de 248 px, repliable à 64 px ; le contenu récupère la hauteur.
+Le cadre est la couverture et la page. À gauche, la **couverture** : une barre latérale sombre de
+240 px, dans le prune du logo, repliable à 64 px. À droite, la **page**, claire. Il n'y a pas de
+barre supérieure sur bureau : ce qui est global vit dans la couverture, et la page garde toute sa
+hauteur. Pour ceux qui utilisent PLaTon aujourd'hui, la barre latérale reste violette et à la même
+place ; ce qui change est ce qu'elle contient.
 
 De haut en bas :
 
-1. Logo compact et nom de l'établissement
+1. Le logo PLaTon, tel quel, et le nom de l'établissement
 2. **Créer** (enseignants et administrateurs), bouton libellé qui ouvre un menu : cours,
-   activité, exercice, cercle
-3. Navigation principale, selon le rôle
-4. En bas : Aide (documentation, tutoriels), Notifications avec compteur, profil (compte, thème,
-   déconnexion, et la mention « Administrateur » quand c'est le cas)
+   activité, exercice, et cercle pour les administrateurs
+3. Navigation principale, selon le rôle. L'élément actif est un **intercalaire** : il prend la
+   couleur de la page et la rejoint, comme l'onglet d'un classeur. On sait où l'on est sans lire.
+4. En bas : Aide (documentation, tutoriels), Notifications avec compteur, profil (compte,
+   progression, thème, déconnexion, et la mention « Administrateur » quand c'est le cas)
 
 Navigation par rôle :
 
@@ -38,15 +42,23 @@ Navigation par rôle :
 | Cours | Cours | Cours |
 | Corrections, seulement si des copies lui sont assignées | Corrections, avec le nombre en attente | Corrections |
 | | Ressources | Ressources |
-| | Tests d'entrée | Tests d'entrée |
+| | Tests d'entrée, seulement s'il en a créé ou en surveille | Tests d'entrée |
 | | | Administration |
 
-« Espace de travail » devient **Ressources** : c'est ce que la page contient (cercles, exercices,
-activités). Les annonces ne sont plus une rubrique : la dernière annonce apparaît en tête de
-l'accueil, et l'historique reste accessible depuis les notifications.
+« Espace de travail » devient **Ressources** : c'est ce que la page contient. Les annonces ne sont
+plus une rubrique : la dernière annonce non lue apparaît en tête de l'accueil, et l'historique
+reste sur sa page, atteignable depuis ce bandeau et depuis les notifications.
 
-Sur mobile, une barre supérieure de 56 px porte le bouton de menu, le titre de la page et les
-notifications ; la barre latérale devient un panneau qui glisse depuis la gauche.
+Sur mobile, une barre supérieure de 56 px, elle aussi dans la couverture, porte le bouton de menu,
+le titre de la page et les notifications ; la couverture devient un panneau qui glisse depuis la
+gauche.
+
+## Connexion
+
+La page de connexion est la couverture et la page côte à côte. La couverture porte le logo, une
+phrase sur ce que fait PLaTon et un lien vers la vidéo de présentation. La page porte d'abord le
+compte de l'établissement (CAS), puis le mot de passe local. Les étudiants qui arrivent de Moodle
+ne la voient jamais ; elle le dit à ceux qui la voient par erreur.
 
 ## Gabarit de page
 
@@ -120,6 +132,25 @@ de la famille du contenu et une action.
 | Résultat d'une réponse | l'icône de marge apparaît en 180 ms ; une réussite ne déclenche ni confetti ni son | |
 
 Courbes : `ease-out` = `cubic-bezier(0.2, 0, 0, 1)`, `ease-in` = `cubic-bezier(0.3, 0, 1, 1)`.
+
+## Moments de joie
+
+Une plateforme d'apprentissage a le droit d'être contente pour vous, à condition de ne pas le faire
+à chaque clic. Trois moments, et seulement ceux-là :
+
+| Moment | Ce qui se passe |
+| --- | --- |
+| Une activité est terminée | La barre d'avancement finit de se remplir en 600 ms, puis prend la chaleur (le dégradé du logo). Le libellé passe à « Terminée ». Rien ne saute, rien ne tombe du ciel. |
+| Un cours est achevé | Le cours reçoit la mention « Cours terminé » en chaleur dans la liste, une fois. |
+| Première connexion | La bienvenue est écrite au nom de la personne et illustrée. |
+
+Un bon résultat à une question n'est pas un moment de joie : c'est une information (vert, dans la
+marge, en 180 ms). Les confettis restent l'affaire des auteurs d'exercices, qui disposent déjà du
+composant `wc-confetti` pour les moments qu'ils jugent bons dans leurs propres exercices.
+
+Le reste de la vie de l'interface est fait de petites réponses : un bouton qui s'enfonce d'un
+pixel, un onglet intercalaire qui glisse vers son nouvel élément en 180 ms, une barre d'avancement
+qui se remplit plutôt que d'apparaître remplie, une notification qui se marque lue en s'éclaircissant.
 
 ## Interaction et accessibilité
 

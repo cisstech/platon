@@ -14,3 +14,7 @@
   note: Le thème quitte la barre supérieure pour le menu du profil, en trois choix explicites. Pour un administrateur, ce menu porte la mention Administrateur, qui remplace le cadre rouge actuel.
 - screen: navigation
   note: Sur mobile, la barre latérale devient un panneau. Les cibles passent à 44 px de haut. Le voile et Échap ferment le panneau.
+- screen: etudiant
+  note: La couverture (barre latérale) est toujours sombre, dans le prune du logo. L'élément actif est un intercalaire, il prend la couleur de la page et la rejoint. On sait où l'on est sans lire.
+- screen: etudiant
+  note: Chaque cours a une teinte, la même partout, sur l'icône de ses activités et sur l'onglet de son nom. Un cours achevé passe en chaleur (le dégradé du logo), le seul moment où ce dégradé sort du logo.
