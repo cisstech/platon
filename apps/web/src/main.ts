@@ -1,11 +1,32 @@
-import { provideZoneChangeDetection } from '@angular/core'
-import { appConfig } from './app/app.config'
+import {
+  UI_MODE_PARAM,
+  UiFlag,
+  browserStorage,
+  loadUiFlag,
+  parseUiMode,
+  readStoredUiMode,
+  resolveUiMode,
+  withoutUiParam,
+  writeStoredUiMode,
+} from './ui-mode'
 
-import { bootstrapApplication } from '@angular/platform-browser'
+const start = async (): Promise<void> => {
+  const url = new URL(window.location.href)
+  const storage = browserStorage()
 
-import { AppPage } from './app/app.page'
+  const param = parseUiMode(url.searchParams.get(UI_MODE_PARAM))
+  if (param) {
+    writeStoredUiMode(storage, param)
+    window.history.replaceState(window.history.state, '', withoutUiParam(url))
+  }
 
-bootstrapApplication(AppPage, {
-  ...appConfig,
-  providers: [provideZoneChangeDetection(), ...appConfig.providers],
-}).catch((err) => console.error(err))
+  const stored = readStoredUiMode(storage)
+  // The flag only decides for people who have not chosen: skip the request otherwise.
+  const flag: UiFlag = param || stored ? 'off' : await loadUiFlag()
+  const mode = resolveUiMode({ param, stored, flag })
+
+  const { bootstrap } = mode === 'next' ? await import('./next/next.bootstrap') : await import('./app/legacy.bootstrap')
+  await bootstrap()
+}
+
+start().catch((error) => console.error(error))

@@ -21,6 +21,7 @@ Taille : M.
 ## 3. État actuel du code
 
 Vérifié le 2026-09-28.
+
 - `storybook` 10.5.10 et `@nx/storybook` 23.2.0 sont dans `package.json`, sans configuration :
   aucun dossier `.storybook` dans le dépôt.
 - `libs/shared/ui` (`@platon/shared/ui`) contient les composants `ui-*` actuels, adossés à

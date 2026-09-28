@@ -1,4 +1,3 @@
-import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http'
 import { provideAppInitializer, ApplicationConfig, importProvidersFrom, inject } from '@angular/core'
 import { provideAnimations } from '@angular/platform-browser/animations'
 import {
@@ -23,11 +22,12 @@ import { TUTO_PROVIDERS } from '@platon/feature/tuto/browser'
 import { BUILDER_PROVIDERS } from '@platon/feature/builder/browser'
 import { appRoutes } from './app.routes'
 import { TESTS_PROVIDERS } from '@platon/feature/tests/browser'
+import { sharedProviders } from '../shared.config'
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    ...sharedProviders,
     provideAnimations(),
-    provideHttpClient(withXhr(), withInterceptorsFromDi()),
     importProvidersFrom(CoreBrowserModule, FeatureWebComponentModule),
     provideRouter(
       appRoutes,

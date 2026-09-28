@@ -26,6 +26,7 @@ Taille : M.
 ## 3. État actuel du code
 
 Vérifié le 2026-09-28.
+
 - Les routes actuelles sont dans `apps/web/src/app/app.routes.ts` et
   `pages/dashboard/dashboard.routes.ts` (`dashboard`, `courses`, `resources`, `corrections`,
   `tests`, `admin`, `account`, `announcements`…), plus `player`, `editor`, `builder` à la racine.

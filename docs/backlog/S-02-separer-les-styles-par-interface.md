@@ -21,6 +21,7 @@ Taille : M.
 ## 3. État actuel du code
 
 Vérifié le 2026-09-28.
+
 - `apps/web/project.json`, `styles` : `shared/styles/app.scss` et `apps/web/src/styles.scss` sont
   injectés partout ; les thèmes Material et ng-zorro sont déjà des bundles `inject: false`.
 - `app.scss` importe normalize, les polices, les variables `--brand-*`, la base Material et

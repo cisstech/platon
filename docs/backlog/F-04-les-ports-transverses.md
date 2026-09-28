@@ -24,6 +24,7 @@ Taille : M.
 ## 3. État actuel du code
 
 Vérifié le 2026-09-28.
+
 - `DialogService` (`libs/core/browser/src/lib/dialog/dialog.service.ts`) injecte
   `NzModalService`, `NzMessageService`, `NzNotificationService` ; environ 80 usages dans le code.
 - `confirm` prend un `ModalOptions` de ng-zorro. Les appels n'utilisent que `nzTitle`,

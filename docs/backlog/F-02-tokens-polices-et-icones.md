@@ -24,6 +24,7 @@ Taille : M.
 ## 3. État actuel du code
 
 Vérifié le 2026-09-28.
+
 - Les valeurs de référence sont dans le frontmatter de `design/design.md` (palette encre,
   graphite, états, huit teintes de cours, couverture).
 - Le sprite des wireframes est dans `design/icons/*.svg` (Material Symbols Rounded, 400).
