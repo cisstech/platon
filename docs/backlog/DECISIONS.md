@@ -1,0 +1,19 @@
+# Décisions
+
+Une ligne par décision. Pour en changer, on ajoute une nouvelle ligne datée qui remplace l'ancienne.
+
+| # | Date | Décision | Pourquoi |
+| --- | --- | --- | --- |
+| D1 | 2026-09-28 | La nouvelle interface est construite **à côté** de l'ancienne, pas en modifiant les composants existants. | L'ancienne reste intacte et sûre ; chaque écran se livre quand il est prêt ; la synchronisation avec le dépôt amont ne crée pas de conflits dans des composants réécrits. |
+| D2 | 2026-09-28 | **Une seule application, deux interfaces choisies au démarrage** : `main.ts` lit le mode, puis démarre soit l'ancienne configuration, soit la nouvelle (composant racine, routes, providers et styles propres). Pas de deuxième application Nx. | Même build, même déploiement, même session, mêmes adresses. |
+| D3 | 2026-09-28 | **Les adresses sont un contrat** : la nouvelle interface reprend les mêmes routes. Une page pas encore portée ouvre l'ancienne interface pour cette page (le « pont »). | Les liens des notifications, des e-mails, de Moodle et de LTI doivent marcher dans les deux interfaces. |
+| D4 | 2026-09-28 | Le mode se choisit par, dans l'ordre : le paramètre `?ui=next` ou `?ui=legacy`, puis la clé `platon.ui` du `localStorage`, puis la valeur par défaut de l'environnement. | Le paramètre sert au support, aux démos et aux tests ; le stockage local suffit pour une bêta ; l'environnement décide quand on bascule tout le monde. |
+| D5 | 2026-09-28 | Un drapeau d'environnement `ui.next` vaut `off`, `opt-in` ou `default`. À `off`, la proposition n'apparaît pas et `?ui=next` reste possible. | On peut livrer le code sans le montrer, et revenir en arrière sans déploiement de code. |
+| D6 | 2026-09-28 | Tout ce qui est sous les composants est **partagé** : modèles `common`, services d'API `browser`, authentification, intercepteurs, gardes. Les composants et les pages ne le sont pas. | Les services d'API n'importent ni ng-zorro ni Material ; ils sont déjà les adaptateurs dont la nouvelle interface a besoin. |
+| D7 | 2026-09-28 | Les façades transverses (`DialogService`, thème) deviennent des ports : chaque interface fournit son implémentation dans sa configuration. | Les quelque 80 usages de `DialogService` ne bougent pas ; seule la liaison change selon le mode. |
+| D8 | 2026-09-28 | Architecture de la nouvelle interface : service d'API sans état, store propre à la route (signaux, `idle`, `loading`, `ready`, `error`), fonctions de vue pures (`*.vm.ts`), page qui ne fait que lire le store. | Chaque couche se teste seule ; la page n'a pas de logique ; l'état meurt avec la route. |
+| D9 | 2026-09-28 | La nouvelle interface vit dans `apps/web/src/next/` ; le design system dans `libs/design-system` (`@platon/design-system`, préfixe `pl-`). Une règle ESLint interdit à `next/` d'importer `ng-zorro-antd`, `@angular/material` et `apps/web/src/app/`. | Une frontière visible et vérifiée par la CI. |
+| D10 | 2026-09-28 | Les deux interfaces gardent zone.js au début. La nouvelle est écrite en OnPush et en signaux pour passer sans zone plus tard. | Un changement à la fois ; les bibliothèques nge et le lecteur n'ont pas été testés sans zone. |
+| D11 | 2026-09-28 | Les styles globaux actuels (`shared/styles/app.scss`, `apps/web/src/styles.scss`) deviennent un bundle chargé seulement par l'ancienne interface. La nouvelle a son propre bundle (tokens et base). | Sinon les resets et les surcharges `.ant-*` et `.mat-*` s'appliquent aussi à la nouvelle interface. |
+| D12 | 2026-09-28 | Le lecteur d'activité et les web components d'exercice restent sur l'ancienne interface jusqu'à la phase L. | Ce sont des pages plein écran à part ; le pont les couvre sans gêne. |
+| D13 | 2026-09-28 | La bascule suit trois paliers : proposition aux volontaires, défaut pour tous avec retour possible, retrait de l'ancienne interface. Chaque palier a ses critères dans la roadmap. | Pour ne pas maintenir deux interfaces indéfiniment. |
