@@ -4,7 +4,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { ForbiddenResponse, NotFoundResponse, User } from '@platon/core/common'
 import { DatabaseService, EventService, IRequest, buildSelectQuery } from '@platon/core/server'
-import { ActivityExerciseGroup, ActivitySettings, ActivityVariables, PLSourceFile } from '@platon/feature/compiler'
+import { ActivitySettings, ActivityVariables, PLSourceFile, normalizeExerciseGroups } from '@platon/feature/compiler'
 import {
   ActivityFilters,
   CreateActivity,
@@ -416,7 +416,7 @@ export class ActivityService {
     await Promise.all(
       activities.map(async (activity) => {
         const title = activity.source.variables.title as string
-        const exerciseGroups = (activity.source.variables.exerciseGroups as Record<string, ActivityExerciseGroup>) || {}
+        const exerciseGroups = normalizeExerciseGroups(activity.source.variables.exerciseGroups)
         const hasWritePermission = await this.courseMemberService.hasWritePermission(
           activity.courseId,
           this.request.user

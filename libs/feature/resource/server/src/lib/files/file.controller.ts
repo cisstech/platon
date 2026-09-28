@@ -20,7 +20,7 @@ import { FileInterceptor } from '@nestjs/platform-express'
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
 import { BadRequestResponse, CreatedResponse, SuccessResponse, UnauthorizedResponse } from '@platon/core/common'
 import { Configuration, EventService, IRequest, Public, getContentDisposition } from '@platon/core/server'
-import { PLSourceFile } from '@platon/feature/compiler'
+import { PLSourceFile, normalizeExerciseGroups } from '@platon/feature/compiler'
 import { ExerciseTransformInput, FileTypes, LATEST, ResourceFile, ResourceTypes } from '@platon/feature/resource/common'
 import { Response } from 'express'
 import * as fs from 'fs'
@@ -252,7 +252,9 @@ export class ResourceFileController {
       if (!main_pla) {
         throw new BadRequestResponse('Main file not found')
       }
-      const exerciseGroups = JSON.parse(Buffer.from(main_pla?.buffer).toString()).exerciseGroups
+      const exerciseGroups = normalizeExerciseGroups(
+        JSON.parse(Buffer.from(main_pla?.buffer).toString()).exerciseGroups
+      )
       const exerciseTree = (
         Object.entries(exerciseGroups) as [
           string,

@@ -13,6 +13,7 @@ import {
   ActivityExerciseGroup,
   ActivityVariables,
   GroupGrader,
+  normalizeExerciseGroups,
 } from '@platon/feature/compiler'
 import {
   CircleFilterIndicator,
@@ -737,6 +738,7 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
 
     this.fileService.update(this.request.uri, JSON.stringify(this.activity, null, 2))
 
+    this.activity.exerciseGroups = normalizeExerciseGroups(this.activity.exerciseGroups)
     this.exerciseGroups = Object.values(this.activity.exerciseGroups)
 
     this.changeDetectorRef.markForCheck()
@@ -802,6 +804,7 @@ export class PlaEditorComponent implements OnInit, OnDestroy {
       this.form.disable({ emitEvent: false })
     }
 
+    this.activity.exerciseGroups = normalizeExerciseGroups(this.activity.exerciseGroups)
     this.exerciseGroups = Object.values(this.activity.exerciseGroups)
     this.updateConnectedTo()
     this.changeDetectorRef.markForCheck()
