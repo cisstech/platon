@@ -23,15 +23,15 @@ De haut en bas : logo et établissement ; **Créer** (enseignant, admin) ; la na
 Documentation (enseignant), Notifications, profil. L'élément actif est un **intercalaire** : il
 prend la couleur de la page et la rejoint, comme l'onglet d'un classeur.
 
-| Élève | Enseignant | Admin |
-| --- | --- | --- |
-| Accueil | Accueil | Accueil |
-| Annonces | Annonces | Annonces |
-| Cours | Cours | Cours |
-| Corrections, s'il corrige | Corrections, avec le nombre en attente | Corrections |
-| | Ressources | Ressources |
-| | Tests d'entrée | Tests d'entrée |
-| | | Administration |
+| Élève                     | Enseignant                             | Admin          |
+| ------------------------- | -------------------------------------- | -------------- |
+| Accueil                   | Accueil                                | Accueil        |
+| Annonces                  | Annonces                               | Annonces       |
+| Cours                     | Cours                                  | Cours          |
+| Corrections, s'il corrige | Corrections, avec le nombre en attente | Corrections    |
+|                           | Ressources                             | Ressources     |
+|                           | Tests d'entrée                         | Tests d'entrée |
+|                           |                                        | Administration |
 
 - « Espace de travail » s'appelle **Ressources**.
 - **Créer** ouvre : Cours, Exercice (modèle ou PLE), Activité (PLA), et Cercle pour l'admin.
@@ -55,24 +55,24 @@ sur mobile.
 
 ## États
 
-| État | Règle |
-| --- | --- |
-| Chargement | Rien avant 300 ms, puis un squelette à la forme du contenu. Message à 10 s, erreur à 30 s. Un bouton qui travaille garde son libellé et affiche un indicateur. |
-| Vide, rien encore | Dire pourquoi et quelle action le remplit, avec l'illustration « copie vierge ». |
-| Vide, aucun résultat | Rappeler la recherche, nommer le filtre qui écarte des résultats, proposer de le retirer. |
-| Erreur de zone | Message court, cause si connue, « Réessayer » ; le reste de la page marche. |
-| Erreur de page | Titre humain, cause, deux sorties, code d'erreur en petit. |
-| Erreur de champ | Sous le champ, à l'envoi puis à chaque correction. |
+| État                 | Règle                                                                                                                                                          |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Chargement           | Rien avant 300 ms, puis un squelette à la forme du contenu. Message à 10 s, erreur à 30 s. Un bouton qui travaille garde son libellé et affiche un indicateur. |
+| Vide, rien encore    | Dire pourquoi et quelle action le remplit, avec l'illustration « copie vierge ».                                                                               |
+| Vide, aucun résultat | Rappeler la recherche, nommer le filtre qui écarte des résultats, proposer de le retirer.                                                                      |
+| Erreur de zone       | Message court, cause si connue, « Réessayer » ; le reste de la page marche.                                                                                    |
+| Erreur de page       | Titre humain, cause, deux sorties, code d'erreur en petit.                                                                                                     |
+| Erreur de champ      | Sous le champ, à l'envoi puis à chaque correction.                                                                                                             |
 
 ## Retours d'action
 
-| Action | Retour |
-| --- | --- |
-| Enregistrer | Toast de 4 s en bas à gauche |
-| Créer | On arrive sur l'objet créé |
-| Supprimer | En place pour une ligne ; dialogue qui nomme l'objet pour un cours, un cercle, une activité notée ; « Annuler » 8 s si c'est réversible |
-| Valider une réponse | Le résultat s'inscrit dans la marge de la copie, pas de toast |
-| Copier | Le bouton dit « Copié » 2 s |
+| Action              | Retour                                                                                                                                  |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| Enregistrer         | Toast de 4 s en bas à gauche                                                                                                            |
+| Créer               | On arrive sur l'objet créé                                                                                                              |
+| Supprimer           | En place pour une ligne ; dialogue qui nomme l'objet pour un cours, un cercle, une activité notée ; « Annuler » 8 s si c'est réversible |
+| Valider une réponse | Le résultat s'inscrit dans la marge de la copie, pas de toast                                                                           |
+| Copier              | Le bouton dit « Copié » 2 s                                                                                                             |
 
 `DialogService` garde ses méthodes et produit ces retours.
 
@@ -87,14 +87,14 @@ sur mobile.
 Une carte de chiffre porte une icône sur une pastille teintée. La teinte identifie l'indicateur,
 toujours la même partout, et ne juge jamais : une baisse n'est pas rouge.
 
-| Indicateur | Teinte | Icône |
-| --- | --- | --- |
-| Note moyenne | bleuet | `star` |
-| Juste du premier coup | menthe | `bolt` |
-| Durée | ambre | `timer` |
-| Taux de réussite | olive | `task_alt` |
-| Taux de réponses | lagon | `rate_review` |
-| Abandons | framboise | `trending_down` |
+| Indicateur            | Teinte    | Icône           |
+| --------------------- | --------- | --------------- |
+| Note moyenne          | bleuet    | `star`          |
+| Juste du premier coup | menthe    | `bolt`          |
+| Durée                 | ambre     | `timer`         |
+| Taux de réussite      | olive     | `task_alt`      |
+| Taux de réponses      | lagon     | `rate_review`   |
+| Abandons              | framboise | `trending_down` |
 
 Quatre ou cinq cartes au plus ; les autres chiffres vont dans un bloc repliable.
 

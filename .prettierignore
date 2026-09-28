@@ -21,6 +21,9 @@ shared/external_libs
 migrations
 dumps
 apps/docs/.next
+# Wireframes: files parsed by foundry keep their own syntax; only the prose docs are formatted
+/design/*
+!/design/docs
 
 /.nx/workspace-data
 .nx/self-healing

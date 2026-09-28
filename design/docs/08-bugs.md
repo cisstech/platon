@@ -127,14 +127,14 @@ Gravité : **P1** bloque, trompe ou expose. **P2** gêne ou fait douter. **P3** 
 ## Code mort
 
 - [ ] Pages `informations` et `demo` des paramètres de cours, jamais routées
-  (`apps/web/src/app/pages/courses/course/settings/`)
+      (`apps/web/src/app/pages/courses/course/settings/`)
 - [ ] « Transformer avec l'IA » commenté dans le builder, code et modale toujours présents
-  (`pages/builder/builder.page.html`, `libs/feature/builder/browser/.../ai-prompt-modal/`)
+      (`pages/builder/builder.page.html`, `libs/feature/builder/browser/.../ai-prompt-modal/`)
 - [ ] `isTemplateCreator` toujours `false`, `mode=configure` jamais positionné (`builder.page.ts`,
-  `pages/resources/create/create.page.ts`)
+      `pages/resources/create/create.page.ts`)
 - [ ] Pages `/forum` et `/agenda` vides (`pages/dashboard/dashboard.routes.ts`)
 
 ## Corrigés
 
 - [x] **Activités d'avant juillet 2024 en erreur 500** (groupes d'exercices stockés en tableau) :
-  `normalizeExerciseGroups`, PR cisstech/platon#115, mergée sur `main`.
+      `normalizeExerciseGroups`, PR cisstech/platon#115, mergée sur `main`.

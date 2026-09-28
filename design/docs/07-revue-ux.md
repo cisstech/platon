@@ -5,18 +5,18 @@ inventer côté données. Chaque changement est marqué dans les annotations de 
 
 ## Ce qui a changé, et pourquoi
 
-| Écran | Avant | Après | Pourquoi |
-| --- | --- | --- | --- |
-| Navigation élève | Corrections pour tout le monde | Seulement pour qui corrige | La page ne liste que les corrections assignées : vide pour une élève |
-| Annonces | Fenêtre à la connexion | Bandeau sur l'accueil | On vient pour rendre un TP, pas pour lire une fenêtre |
-| Page d'un cours | Quatre compteurs à droite | Compteurs dans l'en-tête, « À faire » à droite | La colonne doit dire quoi faire, pas répéter des chiffres |
-| Lignes d'activité | Trois contrôles par ligne | Un bouton seulement si une action est attendue | Quinze « Suivre » identiques ne guident personne |
-| Cours neuf | Page vide | Trois étapes : activité, élèves, partage | C'est le moment où Karim décroche |
-| Ajouter une activité | Seulement des activités déjà écrites en PLA | Ou composer avec des exercices | Assembler trois exercices ne doit pas demander l'éditeur |
-| Page ressource | Dix chiffres de même poids | Quatre en tête, six repliables | Une hiérarchie, même donnée |
-| Ressources | Pas d'action principale | Créer un exercice | Toute page a une action principale |
-| Accueil enseignant | Phrases de métadonnées sur deux lignes | Une information par emplacement | Lisible d'un coup d'œil |
-| Lecteur | Titre et contenu d'exercice incohérents | Alignés, largeurs de réponse alignées | Détail, mais c'est la copie |
+| Écran                | Avant                                       | Après                                          | Pourquoi                                                             |
+| -------------------- | ------------------------------------------- | ---------------------------------------------- | -------------------------------------------------------------------- |
+| Navigation élève     | Corrections pour tout le monde              | Seulement pour qui corrige                     | La page ne liste que les corrections assignées : vide pour une élève |
+| Annonces             | Fenêtre à la connexion                      | Bandeau sur l'accueil                          | On vient pour rendre un TP, pas pour lire une fenêtre                |
+| Page d'un cours      | Quatre compteurs à droite                   | Compteurs dans l'en-tête, « À faire » à droite | La colonne doit dire quoi faire, pas répéter des chiffres            |
+| Lignes d'activité    | Trois contrôles par ligne                   | Un bouton seulement si une action est attendue | Quinze « Suivre » identiques ne guident personne                     |
+| Cours neuf           | Page vide                                   | Trois étapes : activité, élèves, partage       | C'est le moment où Karim décroche                                    |
+| Ajouter une activité | Seulement des activités déjà écrites en PLA | Ou composer avec des exercices                 | Assembler trois exercices ne doit pas demander l'éditeur             |
+| Page ressource       | Dix chiffres de même poids                  | Quatre en tête, six repliables                 | Une hiérarchie, même donnée                                          |
+| Ressources           | Pas d'action principale                     | Créer un exercice                              | Toute page a une action principale                                   |
+| Accueil enseignant   | Phrases de métadonnées sur deux lignes      | Une information par emplacement                | Lisible d'un coup d'œil                                              |
+| Lecteur              | Titre et contenu d'exercice incohérents     | Alignés, largeurs de réponse alignées          | Détail, mais c'est la copie                                          |
 
 ## Accessibilité
 
@@ -27,16 +27,16 @@ inventer côté données. Chaque changement est marqué dans les annotations de 
 
 ## Parcours vérifiés
 
-| Qui | Parcours | Écrans |
-| --- | --- | --- |
-| Inès | Voir ce qui est à rendre, reprendre, finir | etudiant, intro, exercice, conclusion |
-| Karim | Créer un exercice sans code et le donner à ses élèves | modeles, atelier, enregistrer, ajouter-au-cours, detail |
-| Karim | Monter un TP à partir d'exercices existants | detail, ajouter, ajouter-composer, ajouter-fonction |
-| Karim | Savoir où ses élèves bloquent | detail, suivi |
-| Karim | Démarrer un cours | nouveau, detail (vide), membres-ajouter, partager |
-| Hélène | Trouver, vérifier, réutiliser un exercice | catalogue, filtres, ressource |
-| Julien | Corriger une épreuve | file, copie |
-| Sophie | Gérer comptes et connexions | utilisateurs, lms, cas |
+| Qui    | Parcours                                              | Écrans                                                  |
+| ------ | ----------------------------------------------------- | ------------------------------------------------------- |
+| Inès   | Voir ce qui est à rendre, reprendre, finir            | etudiant, intro, exercice, conclusion                   |
+| Karim  | Créer un exercice sans code et le donner à ses élèves | modeles, atelier, enregistrer, ajouter-au-cours, detail |
+| Karim  | Monter un TP à partir d'exercices existants           | detail, ajouter, ajouter-composer, ajouter-fonction     |
+| Karim  | Savoir où ses élèves bloquent                         | detail, suivi                                           |
+| Karim  | Démarrer un cours                                     | nouveau, detail (vide), membres-ajouter, partager       |
+| Hélène | Trouver, vérifier, réutiliser un exercice             | catalogue, filtres, ressource                           |
+| Julien | Corriger une épreuve                                  | file, copie                                             |
+| Sophie | Gérer comptes et connexions                           | utilisateurs, lms, cas                                  |
 
 ## Reste ouvert
 

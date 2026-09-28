@@ -39,14 +39,14 @@ administration), puis la bascule en trois paliers.
 
 ## Risques
 
-| Risque | Parade |
-| --- | --- |
-| Deux interfaces à maintenir en même temps | Tout ce qui est sous les composants est partagé ; la bascule a des paliers datés ; chaque écran livré sort du pont |
-| Les web components élève changent d'apparence dans des exercices existants | Captures avant et après sur le playground |
-| Les tutoriels ciblent des classes `.ant-*` et `.mat-*` | Les passer sur des attributs `data-tuto` |
-| Le champ `icon` des annonces stocke un nom d'icône Ant | Table de correspondance, puis migration |
-| ng-zorro 20 déclare Angular 20 | Raison de plus pour le retirer |
-| L'accueil demande des agrégats (activités ouvertes de tous ses cours) | Un point d'API `activities/mine` si le client ne suffit pas |
+| Risque                                                                     | Parade                                                                                                             |
+| -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Deux interfaces à maintenir en même temps                                  | Tout ce qui est sous les composants est partagé ; la bascule a des paliers datés ; chaque écran livré sort du pont |
+| Les web components élève changent d'apparence dans des exercices existants | Captures avant et après sur le playground                                                                          |
+| Les tutoriels ciblent des classes `.ant-*` et `.mat-*`                     | Les passer sur des attributs `data-tuto`                                                                           |
+| Le champ `icon` des annonces stocke un nom d'icône Ant                     | Table de correspondance, puis migration                                                                            |
+| ng-zorro 20 déclare Angular 20                                             | Raison de plus pour le retirer                                                                                     |
+| L'accueil demande des agrégats (activités ouvertes de tous ses cours)      | Un point d'API `activities/mine` si le client ne suffit pas                                                        |
 
 ## Décisions à valider
 
