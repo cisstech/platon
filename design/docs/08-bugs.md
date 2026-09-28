@@ -124,6 +124,17 @@ Gravité : **P1** bloque, trompe ou expose. **P2** gêne ou fait douter. **P3** 
 - « Status », « Active », « A propos », « ce champs », « faîtes », « Centre d'intêret »,
   « estimée ». Détail et fichiers : tableau Microcopie de `02-audit.md`.
 
+### B17. Feuilles de thème sans version
+
+- [ ] Corrigé
+- **Symptôme** : après un déploiement, un navigateur peut garder les anciennes feuilles de thème
+  ng-zorro et Material.
+- **Cause** : ces bundles `inject: false` n'ont pas d'empreinte dans leur nom et nginx n'envoie pas
+  de `Cache-Control` ; `ThemeService` les charge sans version.
+- **Où** : `libs/core/browser/src/lib/services/theme.service.ts`, `.docker/nginx/nginx.prod.conf`
+- **Piste** : réutiliser `buildVersion` et `stylesheetHref` (`apps/web/src/ui-styles.ts`), comme
+  pour `styles.legacy.css`.
+
 ## Code mort
 
 - [ ] Pages `informations` et `demo` des paramètres de cours, jamais routées

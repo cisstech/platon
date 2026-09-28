@@ -1,0 +1,16 @@
+// Global base of the new interface. Tokens and the full base come with the design system (F-02).
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+}

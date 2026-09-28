@@ -9,6 +9,7 @@ import {
   withoutUiParam,
   writeStoredUiMode,
 } from './ui-mode'
+import { buildVersion, loadStylesheet, stylesheetHref } from './ui-styles'
 
 const start = async (): Promise<void> => {
   const url = new URL(window.location.href)
@@ -25,7 +26,12 @@ const start = async (): Promise<void> => {
   const flag: UiFlag = param || stored ? 'off' : await loadUiFlag()
   const mode = resolveUiMode({ param, stored, flag })
 
-  const { bootstrap } = mode === 'next' ? await import('./next/next.bootstrap') : await import('./app/legacy.bootstrap')
+  // The interface code and its global styles download in parallel; Angular starts once both are in.
+  const scripts = [...document.scripts].map((script) => script.src)
+  const [{ bootstrap }] = await Promise.all([
+    mode === 'next' ? import('./next/next.bootstrap') : import('./app/legacy.bootstrap'),
+    loadStylesheet(document, stylesheetHref(`styles.${mode}.css`, buildVersion(scripts))),
+  ])
   await bootstrap()
 }
 
