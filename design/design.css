@@ -2983,3 +2983,31 @@ details.more-figures .figs {
 .stat-row.five {
   grid-template-columns: repeat(5, minmax(0, 1fr));
 }
+
+/* ---------- Mention du logiciel libre, en pied de couverture ---------- */
+
+.credit {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: var(--spacing-2);
+  padding: 6px var(--spacing-2);
+  border-radius: var(--rounded-sm);
+  font-size: 12px;
+  color: var(--color-cover-muted);
+  text-decoration: none;
+  opacity: 0.8;
+  transition: opacity 120ms ease-out;
+}
+.credit:hover,
+.credit:focus-visible {
+  opacity: 1;
+}
+.credit img {
+  width: 18px;
+  height: 18px;
+}
+.credit strong {
+  font-weight: 700;
+  color: var(--color-cover-text);
+}

@@ -28,7 +28,7 @@ captures avant et après sur les mêmes données.
 
 ## Storybook
 
-Comme sabyo et placy : Storybook 10 (compatibilité Angular 22 à confirmer), `addon-docs` et
+Storybook 10 (compatibilité Angular 22 à confirmer), `addon-docs` et
 `addon-a11y`, styles globaux de l'app, sélecteur de thème, stories CSF3 pilotées par `args`, une
 story par état (défaut, désactivé, chargement, erreur, vide), textes réels en français, une page
 de tokens.
@@ -38,7 +38,7 @@ de tokens.
 - Pas de couleur, taille ou rayon en dur dans `libs/design-system` ; toute `var(--pl-*)` existe.
 - Préfixe `pl-` imposé par ESLint.
 - Pas de tiret cadratin ni demi-cadratin.
-- `foundry check` vert sur `design/`.
+- Les wireframes de `design/` passent leur vérification en intégration continue.
 
 ## Phases
 

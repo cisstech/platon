@@ -22,3 +22,5 @@
   note: "Passe UX : Corrections disparaît de la navigation élève. La page ne liste que les corrections assignées : pour une élève qui ne corrige pas, c'était une page vide. Elle revient pour qui corrige."
 - screen: etudiant
   note: "Le bloc chiffré vient de DashboardService.ofUser : moyenne, réussite, temps passé, sur tous les cours. « Tous mes résultats » est retiré : cette page n'existe pas."
+- screen: etudiant
+  note: "Pied de couverture : « Logiciel libre, par cisstech » vers le dépôt, comme le « Propulsé par » actuel, mais en texte discret, sous le profil. Présent pour tous les rôles."

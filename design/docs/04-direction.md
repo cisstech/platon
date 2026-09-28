@@ -36,6 +36,8 @@ prend la couleur de la page et la rejoint, comme l'onglet d'un classeur.
 - « Espace de travail » s'appelle **Ressources**.
 - **Créer** ouvre : Cours, Exercice (modèle ou PLE), Activité (PLA), et Cercle pour l'admin.
 - **Profil** : Mon compte, Mon cercle (enseignant), thème, déconnexion.
+- **Pied de couverture** : « Logiciel libre, par cisstech », en petit et en teinte atténuée, vers
+  le dépôt `github.com/cisstech/platon`. Il remplace le « Propulsé par » actuel, sans logo.
 - **Mobile** : barre de 56 px dans la couverture (menu, titre, notifications) ; la couverture
   glisse depuis la gauche.
 - La couverture a son action (Créer), la page la sienne (à droite du titre). Jamais deux boutons
