@@ -1,8 +1,8 @@
 - screen: connexion
-  note: Le CAS de l'établissement est le chemin de la majorité, il prend le bouton primaire. Le mot de passe local est là pour les comptes créés par l'administration, en secondaire. S'il y a plusieurs CAS (le point d'API en renvoie la liste), un bouton par établissement.
+  note: "Le CAS de l'établissement est le chemin de la majorité, il prend le bouton primaire. Le mot de passe local est là pour les comptes créés par l'administration, en secondaire. S'il y a plusieurs CAS (le point d'API en renvoie la liste), un bouton par établissement."
 - screen: connexion
-  note: La vidéo de présentation quitte la page. Elle occupait la moitié de l'écran, se chargeait à chaque connexion et portait un titre en anglais. Elle devient un lien sur la couverture.
+  note: "La vidéo de présentation quitte la page. Elle occupait la moitié de l'écran, se chargeait à chaque connexion et portait un titre en anglais. Elle devient un lien sur la couverture."
 - screen: connexion
-  note: L'erreur nomme les deux champs sans dire lequel est faux, et oriente vers le bouton CAS, cause fréquente d'échec quand un utilisateur université tente le mot de passe local.
+  note: "L'erreur nomme les deux champs sans dire lequel est faux, et oriente vers le bouton CAS, cause fréquente d'échec quand un utilisateur université tente le mot de passe local."
 - screen: connexion
-  note: Pendant la vérification, le bouton garde sa place et sa taille, le libellé cède la place à l'indicateur, le CAS est atténué. Rien ne bouge.
+  note: "Pendant la vérification, le bouton garde sa place et sa taille, le libellé cède la place à l'indicateur, le CAS est atténué. Rien ne bouge."
