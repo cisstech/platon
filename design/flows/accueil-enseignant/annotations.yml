@@ -1,0 +1,12 @@
+- screen: enseignant
+  note: Créer, dans la barre latérale, est l'action primaire globale. Les boutons des lignes (Suivre, Corriger, Programmer) restent secondaires pour ne pas lui faire concurrence.
+- screen: enseignant
+  note: La participation s'écrit en toutes lettres au-dessus de la barre. La moyenne est dite provisoire tant que l'activité est ouverte.
+- screen: enseignant
+  note: À préparer dit ce qui manque, en attention quand l'activité ne peut pas s'ouvrir seule (pas de dates), en repère quand elle est planifiée.
+- screen: enseignant
+  note: Dans l'état vide, le bouton Créer de la barre latérale passe en secondaire. Créer un cours devient la seule action primaire de l'écran.
+- screen: creer
+  note: Chaque entrée décrit l'objet en une ligne, pour qu'un enseignant qui découvre PLaTon distingue cours, activité et exercice. Cercle n'apparaît qu'aux administrateurs, en dernière position.
+- screen: creer
+  note: Le menu s'ouvre sous le bouton en 180 ms, la première entrée a le focus, les flèches naviguent, Échap referme et rend le focus au bouton.

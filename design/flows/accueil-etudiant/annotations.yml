@@ -1,0 +1,16 @@
+- screen: etudiant
+  note: La seule action primaire de l'écran est celle de l'activité la plus urgente. Les autres lignes gardent un bouton secondaire, qui dit ce qu'il fait (Reprendre, Commencer).
+- screen: etudiant
+  note: L'échéance change de couleur à moins de 24 h (attention) et quand elle est dépassée (correction, avec le mot « En retard »). La couleur n'est jamais seule, l'icône et le texte la portent aussi.
+- screen: etudiant
+  note: Les huit statistiques de l'accueil actuel passent sur une page Progression. Ici, trois chiffres seulement, alignés en chiffres tabulaires.
+- screen: etudiant
+  note: Le chargement ne met en squelette que les données attendues. Le prénom, la date et les titres de section sont connus côté client et s'affichent tout de suite.
+- screen: etudiant
+  note: L'état vide ne montre aucun zéro. Il explique comment un cours apparaît et renvoie vers l'aide.
+- screen: notifications
+  note: Une notification non lue se distingue par un filet d'encre à gauche et un titre en gras, pas par une pastille. Cliquer une notification mène à l'objet concerné et la marque comme lue.
+- screen: profil
+  note: Le thème quitte la barre supérieure pour le menu du profil, en trois choix explicites. Pour un administrateur, ce menu porte la mention Administrateur, qui remplace le cadre rouge actuel.
+- screen: navigation
+  note: Sur mobile, la barre latérale devient un panneau. Les cibles passent à 44 px de haut. Le voile et Échap ferment le panneau.
