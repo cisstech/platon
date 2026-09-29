@@ -29,7 +29,9 @@
     "allowJs": true,
     "paths": {
       "@platon/cli": ["./tools/cli/src/index.ts"],
+      "@platon/design-system": ["./libs/design-system/src/index.ts"],
       "@platon/core/browser": ["./libs/core/browser/src/index.ts"],
+      "@platon/core/browser/shared": ["./libs/core/browser/src/shared.ts"],
       "@platon/core/common": ["./libs/core/common/src/index.ts"],
       "@platon/core/server": ["./libs/core/server/src/index.ts"],
       "@platon/core/testing/common": ["./libs/core/testing/common/src/index.ts"],

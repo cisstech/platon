@@ -1,0 +1,305 @@
+// Design tokens of the new interface: every color, size, radius, shadow, duration and layer comes
+// from here. Values come from design/design.md (light) and design/docs/04-direction.md (dark).
+//
+// Dark applies with `data-theme="dark"` on the root, or with the system preference while no theme
+// is set (before the saved theme is read, for instance).
+
+@mixin dark {
+  color-scheme: dark;
+
+  --pl-color-ground: var(--pl-graphite-950);
+  --pl-color-surface: #1a191d;
+  --pl-color-surface-muted: #201f23;
+  --pl-color-surface-raised: #252528;
+  --pl-color-line: #313034;
+  --pl-color-line-strong: #3f3e41;
+  --pl-color-control: var(--pl-graphite-450);
+  --pl-color-text: var(--pl-graphite-100);
+  --pl-color-muted: var(--pl-graphite-300);
+  --pl-color-subtle: var(--pl-graphite-400);
+
+  --pl-color-primary: var(--pl-plum-300);
+  --pl-color-primary-hover: var(--pl-plum-200);
+  --pl-color-on-primary: var(--pl-graphite-950);
+  --pl-color-primary-soft: var(--pl-plum-950);
+  --pl-color-primary-soft-strong: var(--pl-plum-900);
+  --pl-color-focus: var(--pl-plum-400);
+
+  --pl-color-success: var(--pl-green-500);
+  --pl-color-success-ink: var(--pl-green-200);
+  --pl-color-success-soft: #1d2d26;
+  --pl-color-danger: var(--pl-red-500);
+  --pl-color-danger-ink: var(--pl-red-200);
+  --pl-color-danger-soft: #392022;
+  --pl-color-danger-strong: var(--pl-red-300);
+  --pl-color-on-danger: var(--pl-graphite-950);
+  --pl-color-warning: var(--pl-ochre-400);
+  --pl-color-warning-ink: var(--pl-ochre-200);
+  --pl-color-warning-soft: #372c1f;
+  --pl-color-info: var(--pl-blue-600);
+  --pl-color-info-ink: var(--pl-blue-200);
+  --pl-color-info-soft: #15293b;
+
+  --pl-color-scrim: rgb(0 0 0 / 0.6);
+  --pl-shadow-color: 0 0 0;
+  --pl-shadow-strength: 0.5;
+
+  --pl-course-coral-tint: #442527;
+  --pl-course-coral-strong: #e08e8a;
+  --pl-course-coral-ink: #ffdfdc;
+  --pl-course-amber-tint: #3c2d17;
+  --pl-course-amber-strong: #cfa15a;
+  --pl-course-amber-ink: #fee3c5;
+  --pl-course-olive-tint: #293416;
+  --pl-course-olive-strong: #95b85c;
+  --pl-course-olive-ink: #ddefcc;
+  --pl-course-mint-tint: #14362f;
+  --pl-course-mint-strong: #5bbd9e;
+  --pl-course-mint-ink: #caf3e0;
+  --pl-course-lagoon-tint: #14343c;
+  --pl-course-lagoon-strong: #59b8ca;
+  --pl-course-lagoon-ink: #c3f1fd;
+  --pl-course-cornflower-tint: #22304a;
+  --pl-course-cornflower-strong: #84aae9;
+  --pl-course-cornflower-ink: #dbe9ff;
+  --pl-course-lilac-tint: #352a46;
+  --pl-course-lilac-strong: #b69ae1;
+  --pl-course-lilac-ink: #ebe3ff;
+  --pl-course-raspberry-tint: #412536;
+  --pl-course-raspberry-strong: #da8db4;
+  --pl-course-raspberry-ink: #ffddec;
+}
+
+:root {
+  color-scheme: light;
+
+  // Palette. Components use the roles below, the palette is for the rare exact shade.
+  --pl-plum-50: #faf4ff;
+  --pl-plum-100: #f5e7ff;
+  --pl-plum-200: #ebcdff;
+  --pl-plum-300: #dbaaf9;
+  --pl-plum-400: #be80e3;
+  --pl-plum-500: #a25cc8;
+  --pl-plum-600: #8742ac;
+  --pl-plum-700: #712f93;
+  --pl-plum-800: #592474;
+  --pl-plum-900: #401a54;
+  --pl-plum-950: #2a1038;
+
+  --pl-graphite-0: #ffffff;
+  --pl-graphite-25: #fbf9ff;
+  --pl-graphite-50: #f6f4fa;
+  --pl-graphite-100: #edecf2;
+  --pl-graphite-150: #e4e2e8;
+  --pl-graphite-200: #dad8de;
+  --pl-graphite-300: #bebcc3;
+  --pl-graphite-400: #9c9aa0;
+  --pl-graphite-450: #8e8c92;
+  --pl-graphite-500: #7b797f;
+  --pl-graphite-550: #6b6970;
+  --pl-graphite-600: #615f65;
+  --pl-graphite-700: #4a484d;
+  --pl-graphite-800: #353338;
+  --pl-graphite-900: #222125;
+  --pl-graphite-950: #141317;
+
+  --pl-green-50: #effaf1;
+  --pl-green-100: #dcf4e2;
+  --pl-green-200: #bde7c7;
+  --pl-green-500: #2a9754;
+  --pl-green-600: #027c3e;
+  --pl-green-700: #006531;
+  --pl-red-50: #fff4f2;
+  --pl-red-100: #ffe6e3;
+  --pl-red-200: #ffcdc6;
+  --pl-red-300: #ffa69b;
+  --pl-red-500: #db423c;
+  --pl-red-600: #bc2122;
+  --pl-red-700: #a0020f;
+  --pl-ochre-50: #fff5ea;
+  --pl-ochre-100: #fde9d2;
+  --pl-ochre-200: #f7d4aa;
+  --pl-ochre-400: #d18f2b;
+  --pl-ochre-700: #744a02;
+  --pl-ochre-800: #5b3900;
+  --pl-blue-50: #f1f8ff;
+  --pl-blue-100: #dfefff;
+  --pl-blue-200: #bedfff;
+  --pl-blue-600: #026bb2;
+  --pl-blue-700: #025792;
+
+  // The page.
+  --pl-color-ground: var(--pl-graphite-50);
+  --pl-color-surface: var(--pl-graphite-0);
+  --pl-color-surface-muted: var(--pl-graphite-25);
+  --pl-color-surface-raised: var(--pl-graphite-0);
+  --pl-color-line: var(--pl-graphite-150);
+  --pl-color-line-strong: var(--pl-graphite-200);
+  // Borders of fields and checkboxes: 3:1 against the surface.
+  --pl-color-control: var(--pl-graphite-450);
+  --pl-color-text: var(--pl-graphite-900);
+  --pl-color-muted: var(--pl-graphite-600);
+  --pl-color-subtle: var(--pl-graphite-550);
+
+  // The primary color: what can be done and what is selected.
+  --pl-color-primary: var(--pl-plum-700);
+  --pl-color-primary-hover: var(--pl-plum-800);
+  --pl-color-on-primary: var(--pl-graphite-0);
+  --pl-color-primary-soft: var(--pl-plum-50);
+  --pl-color-primary-soft-strong: var(--pl-plum-100);
+  --pl-color-focus: var(--pl-plum-600);
+
+  // States, always with a word or an icon. `-ink` is for text and icons, the plain role for fills and
+  // borders: the warning ocre does not reach 3:1 on white.
+  --pl-color-success: var(--pl-green-600);
+  --pl-color-success-ink: var(--pl-green-700);
+  --pl-color-success-soft: var(--pl-green-50);
+  --pl-color-danger: var(--pl-red-600);
+  --pl-color-danger-ink: var(--pl-red-700);
+  --pl-color-danger-soft: var(--pl-red-50);
+  // Fill of a destructive action, with its text.
+  --pl-color-danger-strong: var(--pl-red-600);
+  --pl-color-on-danger: var(--pl-graphite-0);
+  --pl-color-warning: var(--pl-ochre-400);
+  --pl-color-warning-ink: var(--pl-ochre-700);
+  --pl-color-warning-soft: var(--pl-ochre-50);
+  --pl-color-info: var(--pl-blue-600);
+  --pl-color-info-ink: var(--pl-blue-700);
+  --pl-color-info-soft: var(--pl-blue-50);
+
+  // The margin of the surfaces where a student answers.
+  --pl-color-margin: var(--pl-red-300);
+
+  // The cover: always dark, in both themes, like the cover of a notebook.
+  --pl-color-cover: #321a40;
+  --pl-color-cover-raised: #40264e;
+  --pl-color-cover-line: #4f375d;
+  --pl-color-cover-text: var(--pl-plum-100);
+  --pl-color-cover-muted: var(--pl-plum-300);
+  --pl-color-cover-primary: var(--pl-plum-300);
+  --pl-color-cover-primary-text: var(--pl-graphite-950);
+
+  // Joy: the colors of the logo, for a finished activity or a welcome, never for a result.
+  --pl-color-joy-1: #e9048d;
+  --pl-color-joy-2: #f37044;
+  --pl-color-joy-3: #fabb12;
+  --pl-gradient-joy: linear-gradient(135deg, var(--pl-color-joy-1), var(--pl-color-joy-2) 55%, var(--pl-color-joy-3));
+
+  --pl-color-scrim: rgb(20 19 23 / 0.48);
+
+  // Course colors, the tabs of the binder: a course keeps its hue everywhere.
+  --pl-course-coral-tint: #ffdfdc;
+  --pl-course-coral-strong: #c74b47;
+  --pl-course-coral-ink: #862726;
+  --pl-course-amber-tint: #fee3c5;
+  --pl-course-amber-strong: #a86b02;
+  --pl-course-amber-ink: #6c4300;
+  --pl-course-olive-tint: #ddefcc;
+  --pl-course-olive-strong: #5a8b00;
+  --pl-course-olive-ink: #385800;
+  --pl-course-mint-tint: #caf3e0;
+  --pl-course-mint-strong: #009068;
+  --pl-course-mint-ink: #015c41;
+  --pl-course-lagoon-tint: #c3f1fd;
+  --pl-course-lagoon-strong: #0389a0;
+  --pl-course-lagoon-ink: #015766;
+  --pl-course-cornflower-tint: #dbe9ff;
+  --pl-course-cornflower-strong: #3d77d7;
+  --pl-course-cornflower-ink: #1d4a93;
+  --pl-course-lilac-tint: #ebe3ff;
+  --pl-course-lilac-strong: #8a5fc9;
+  --pl-course-lilac-ink: #593888;
+  --pl-course-raspberry-tint: #ffddec;
+  --pl-course-raspberry-strong: #bc4b87;
+  --pl-course-raspberry-ink: #7e2757;
+
+  // Typography: one family, weights 400 and 600, a closed scale. Use with `font: var(--pl-font-body)`.
+  --pl-font-sans: 'Atkinson Hyperlegible Next', system-ui, sans-serif;
+  --pl-font-mono: 'Atkinson Hyperlegible Mono', ui-monospace, monospace;
+  --pl-weight-regular: 400;
+  --pl-weight-strong: 600;
+  --pl-font-display: 600 28px / 36px var(--pl-font-sans);
+  --pl-font-title: 600 22px / 30px var(--pl-font-sans);
+  --pl-font-heading: 600 17px / 24px var(--pl-font-sans);
+  --pl-font-subheading: 600 15px / 22px var(--pl-font-sans);
+  --pl-font-body: 400 14px / 21px var(--pl-font-sans);
+  --pl-font-reading: 400 16px / 26px var(--pl-font-sans);
+  --pl-font-small: 400 13px / 18px var(--pl-font-sans);
+  --pl-font-caption: 600 12px / 16px var(--pl-font-sans);
+  --pl-font-figure: 600 22px / 28px var(--pl-font-sans);
+  --pl-font-code: 400 13px / 20px var(--pl-font-mono);
+  --pl-tracking-display: -0.015em;
+  --pl-tracking-title: -0.01em;
+  --pl-tracking-caption: 0.01em;
+
+  --pl-space-1: 4px;
+  --pl-space-2: 8px;
+  --pl-space-3: 12px;
+  --pl-space-4: 16px;
+  --pl-space-5: 20px;
+  --pl-space-6: 24px;
+  --pl-space-8: 32px;
+  --pl-space-10: 40px;
+  --pl-space-12: 48px;
+  --pl-space-16: 64px;
+
+  // Scales are numbered, roles are named: components use the roles.
+  --pl-radius-1: 4px;
+  --pl-radius-2: 6px;
+  --pl-radius-3: 8px;
+  --pl-radius-4: 12px;
+  --pl-radius-control: var(--pl-radius-2);
+  --pl-radius-menu: var(--pl-radius-3);
+  --pl-radius-card: var(--pl-radius-4);
+  --pl-radius-pill: 999px;
+
+  // Cards on the page have a border, not a shadow: shadows are for what floats.
+  --pl-shadow-color: 20 19 23;
+  --pl-shadow-strength: 0.14;
+  --pl-shadow-float: 0 1px 2px rgb(var(--pl-shadow-color) / calc(var(--pl-shadow-strength) * 0.6)),
+    0 4px 12px rgb(var(--pl-shadow-color) / var(--pl-shadow-strength));
+  --pl-shadow-overlay: 0 2px 6px rgb(var(--pl-shadow-color) / calc(var(--pl-shadow-strength) * 0.6)),
+    0 16px 40px rgb(var(--pl-shadow-color) / calc(var(--pl-shadow-strength) * 1.4));
+
+  // Short and useful motion; nothing bounces, except a moment of joy.
+  --pl-duration-hover: 120ms;
+  --pl-duration-menu: 180ms;
+  --pl-duration-panel: 260ms;
+  --pl-duration-joy: 600ms;
+  --pl-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --pl-ease-exit: cubic-bezier(0.3, 0, 1, 1);
+
+  --pl-layer-sticky: 100;
+  --pl-layer-cover: 200;
+  --pl-layer-menu: 1000;
+  --pl-layer-dialog: 1100;
+  --pl-layer-toast: 1200;
+  --pl-layer-tooltip: 1300;
+
+  --pl-icon-size-1: 16px;
+  --pl-icon-size-2: 20px;
+  --pl-icon-size-3: 24px;
+
+  --pl-cover-width: 240px;
+  --pl-topbar-height: 56px;
+  --pl-answer-margin: 48px;
+}
+
+:root[data-theme='dark'] {
+  @include dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    @include dark;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --pl-duration-hover: 1ms;
+    --pl-duration-menu: 1ms;
+    --pl-duration-panel: 1ms;
+    --pl-duration-joy: 1ms;
+  }
+}

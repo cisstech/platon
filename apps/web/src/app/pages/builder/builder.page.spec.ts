@@ -9,7 +9,7 @@ import { NzModalService } from 'ng-zorro-antd/modal'
 import { provideNzIconsTesting } from 'ng-zorro-antd/icon/testing'
 import { of, throwError } from 'rxjs'
 
-import { DialogService, StorageService } from '@platon/core/browser'
+import { NzDialogService, StorageService } from '@platon/core/browser'
 import { InputFileService, ResourceFileService, ResourceService } from '@platon/feature/resource/browser'
 import { Resource } from '@platon/feature/resource/common'
 import { BuilderService } from '@platon/feature/builder/browser'
@@ -157,11 +157,11 @@ describe('BuilderPage', () => {
   let nzModalInfoSpy: jest.SpyInstance
 
   beforeEach(() => {
-    // DialogModule fournit sa propre instance de DialogService via son @NgModule({ providers: [...] }),
+    // DialogModule fournit sa propre instance de NzDialogService via son @NgModule({ providers: [...] }),
     // ce qui masque tout override de provider fourni au niveau racine de TestBed (BuilderPage importe
     // DialogModule directement) : on patch donc le prototype plutôt qu'un provider useValue inefficace.
-    dialogSuccessSpy = jest.spyOn(DialogService.prototype, 'success').mockImplementation(() => undefined as any)
-    dialogErrorSpy = jest.spyOn(DialogService.prototype, 'error').mockImplementation(() => undefined as any)
+    dialogSuccessSpy = jest.spyOn(NzDialogService.prototype, 'success').mockImplementation(() => undefined as any)
+    dialogErrorSpy = jest.spyOn(NzDialogService.prototype, 'error').mockImplementation(() => undefined as any)
 
     // Même piège pour NzModalService (voir le commentaire au-dessus de `activeMocks`).
     nzModalCreateSpy = jest
