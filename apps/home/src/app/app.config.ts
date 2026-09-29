@@ -9,7 +9,7 @@ import {
   withComponentInputBinding,
 } from '@angular/router'
 import { ResourceLoaderConfigProvider } from '@cisstech/nge/services'
-import { CoreBrowserModule, CoreService } from '@platon/core/browser'
+import { CoreBrowserModule, CoreService, NgZorroProviders } from '@platon/core/browser'
 import { FeatureWebComponentModule } from '@platon/feature/webcomponent'
 import { appRoutes } from './app.routes'
 
@@ -18,6 +18,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimations(),
     provideHttpClient(withXhr(), withInterceptorsFromDi()),
     importProvidersFrom(CoreBrowserModule, FeatureWebComponentModule),
+    NgZorroProviders,
     ResourceLoaderConfigProvider({
       useDocumentBaseURI: true,
     }),

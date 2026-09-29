@@ -8,6 +8,9 @@
     <meta name="format-detection" content="telephone=no" />
     <meta name="msapplication-tap-highlight" content="no" />
 
+    <!-- New interface for people who have not chosen one: off, opt-in (offered) or default (started). Can be changed in the deployed file. -->
+    <meta name="platon-ui-next" content="off" />
+
     <!-- OPEN GRAPH -->
     <meta
       name="description"
@@ -42,8 +45,79 @@
     <meta name="mobile-web-app-status-bar-style" content="black" />
 
     <link rel="icon" type="image/x-icon" href="assets/images/logo/platon.svg" />
+
+    <!-- Loading screen: shown after 400 ms only, so a fast start never flashes it. -->
+    <style>
+      .boot-screen {
+        position: fixed;
+        inset: 0;
+        display: grid;
+        place-content: center;
+        justify-items: center;
+        gap: 12px;
+        padding: 16px;
+        font: 15px/1.5 system-ui, sans-serif;
+        color: #615f65;
+        text-align: center;
+        opacity: 0;
+        animation: boot-in 200ms ease-out 400ms forwards;
+      }
+      .boot-logo {
+        width: 56px;
+        height: 56px;
+        margin-bottom: 4px;
+        animation: boot-breathe 1.8s ease-in-out infinite;
+      }
+      .boot-message {
+        margin: 0;
+      }
+      .boot-screen.is-error {
+        opacity: 1;
+        animation: none;
+        color: #222125;
+      }
+      .boot-reload {
+        margin-top: 8px;
+        padding: 8px 16px;
+        border: 0;
+        border-radius: 8px;
+        background: #712f93;
+        color: #ffffff;
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      .boot-reload:focus-visible {
+        outline: 2px solid #712f93;
+        outline-offset: 2px;
+      }
+      @keyframes boot-in {
+        to {
+          opacity: 1;
+        }
+      }
+      @keyframes boot-breathe {
+        50% {
+          opacity: 0.55;
+          transform: scale(0.94);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .boot-screen,
+        .boot-logo {
+          animation-duration: 1ms;
+          animation-iteration-count: 1;
+        }
+      }
+    </style>
   </head>
   <body>
-    <app-root></app-root>
+    <app-root>
+      <!-- Replaced by Angular on its first render. -->
+      <div id="boot-screen" class="boot-screen" role="status">
+        <img class="boot-logo" src="assets/images/logo/platon.svg" alt="" />
+        <p class="boot-message">Chargement de PLaTon</p>
+      </div>
+    </app-root>
   </body>
 </html>

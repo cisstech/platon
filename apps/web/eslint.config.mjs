@@ -50,6 +50,13 @@ export default [
         '@angular-eslint/prefer-on-push-component-change-detection': 'off',
       },
     })),
+  {
+    // New code follows the Angular style guide: no type suffix on class names (`Home`, not `HomePage`).
+    files: ['**/src/next/**/*.ts', '**/src/app/ui-switch/**/*.ts'],
+    rules: {
+      '@angular-eslint/component-class-suffix': 'off',
+    },
+  },
   ...nx.configs['flat/angular-template'],
   {
     files: ['**/*.html'],
