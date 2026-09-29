@@ -75,7 +75,7 @@ In order to run PLaTon you'll need the following tools installed
 - [`ca-certificates`](https://packages.debian.org/fr/sid/ca-certificates) (only on a linux system)
 - [`Visual Studio Code`](https://code.visualstudio.com)
 - [`Node`](https://nodejs.org/en)
-- [`Yarn`](https://classic.yarnpkg.com/lang/en/docs/install/#mac-stable)
+- [`Yarn`](https://yarnpkg.com/getting-started/install): any global `yarn` runs the version checked into `.yarn/releases`
 
 ```bash
 > docker --version
@@ -85,7 +85,7 @@ Docker version 20.10.22, build 3a2c30b
 v22.0.0
 
 > yarn --version
-1.22.19
+4.18.1
 
 > nvm --version
 0.37.2
