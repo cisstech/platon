@@ -2,7 +2,7 @@
 
 Source : `design/design.md` (tokens), `design/icons/`, `design/docs/04-direction.md` ; décisions :
 D9, D11.
-Statut : À faire.
+Statut : Livré (2026-09-29).
 Dépend de : F-01, S-02.
 Taille : M.
 
@@ -50,6 +50,22 @@ aucun
 
 ## 7. Definition of Done
 
-- [ ] Page Tokens dans Storybook, clair et sombre.
-- [ ] Aucune valeur en dur dans la bibliothèque (vérifié par F-03).
-- [ ] Polices et icônes servies localement.
+- [x] Page Tokens dans Storybook, clair et sombre.
+- [x] Aucune valeur en dur dans la bibliothèque (vérifié par F-03).
+- [x] Polices et icônes servies localement.
+
+> **Amendement à la livraison.** Les tokens vivent dans `tokens.scss` et la base dans `next.scss` : un
+> mixin porte les valeurs sombres une seule fois, appliquées à `data-theme="dark"` et à la préférence
+> système. Les noms sont en anglais et suivent une règle : une échelle est numérotée
+> (`--pl-space-4`, `--pl-radius-2`, `--pl-plum-700`), un rôle est nommé (`--pl-color-primary`,
+> `--pl-radius-card`) (D20). Les valeurs sombres absentes de la direction sont calculées puis vérifiées
+> au seuil AA. L'ocre d'attention n'atteint que 2,74:1 sur blanc : textes et icônes prennent
+> `--pl-color-warning-ink`.
+
+> **Amendement à la livraison.** Les icônes ne viennent pas du paquet npm Material Symbols, qui ne
+> livre que la taille optique 48, trop fine à 16 et 20 px. Leurs sources sont celles des wireframes
+> (taille optique 24), copiées dans `libs/design-system/icons/` ; un nom nouveau est téléchargé une fois
+> depuis Google Fonts puis livré. Le sprite porte un numéro de version dans son adresse.
+
+> **Défaut trouvé en chemin.** `design/icons/auto_awesome.svg` avait un tracé en coordonnées 48 dans
+> une boîte 960 : l'icône était invisible dans les wireframes. Remplacée par la version de Google.
