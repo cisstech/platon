@@ -1,7 +1,7 @@
 # F-01 : La bibliothèque `@platon/design-system` et Storybook
 
 Source : `design/docs/05-plan.md`, `design/docs/03-cartographie.md` ; décisions : D9, D16, D17.
-Statut : À faire.
+Statut : Livré (2026-09-29).
 Dépend de : aucun.
 Taille : M.
 
@@ -49,5 +49,11 @@ Les tokens (F-02), les composants eux-mêmes (phase C).
 
 ## 7. Definition of Done
 
-- [ ] Storybook démarre et se construit.
-- [ ] `pl-icon` a ses stories et passe le contrôle d'accessibilité.
+- [x] Storybook démarre et se construit.
+- [x] `pl-icon` a ses stories et passe le contrôle d'accessibilité.
+
+> **Amendement à la livraison.** Storybook 10.5 accepte Angular 18 à 22 : le point ouvert est levé.
+> Les stories et la documentation de la bibliothèque sont en anglais (D20), ce qui remplace « textes
+> réels en français » ; l'interface garde son texte français. `preview-head.html` n'a pas servi. La
+> taille de `pl-icon` suit l'échelle numérotée (`1`, `2`, `3`) et, sans taille, celle du texte.
+> `build-storybook` tourne en CI, avec son cache Nx.

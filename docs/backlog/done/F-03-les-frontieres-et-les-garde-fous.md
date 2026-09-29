@@ -1,7 +1,7 @@
 # F-03 : Les frontières et les garde-fous
 
 Source : stratégie de code du 2026-09-28 ; décisions : D8, D9.
-Statut : À faire.
+Statut : Livré (2026-09-29).
 Dépend de : F-01.
 Taille : S.
 
@@ -40,5 +40,14 @@ aucun
 
 ## 7. Definition of Done
 
-- [ ] Chaque règle échoue sur son fichier fautif et passe sur le code réel.
-- [ ] Les règles sont dans la CI.
+- [x] Chaque règle échoue sur son fichier fautif et passe sur le code réel.
+- [x] Les règles sont dans la CI.
+
+> **Amendement à la livraison.** Les garde-fous suivent ceux de Sabyoo, en scripts Node testables dans
+> `tools/lint` : `lint:tokens` (variable déclarée nulle part, nom inventé ou venu d'ailleurs avec le token
+> à utiliser, valeur en dur), `lint:dead-css`, `lint:em-dashes`, et `lint:icons` pour le sprite ;
+> `yarn lint:design` les enchaîne, en CI. Chaque règle a son cas fautif dans `node --test tools/lint`
+> (projet `tools-lint`), frontières ESLint comprises. La bibliothèque n'importe aucun code PLaTon.
+> Depuis Angular 22, OnPush est le défaut : la règle refuse d'en sortir. Les specs de `next/` peuvent
+> importer un jeton ng-zorro pour prouver qu'il n'est pas fourni. Les règles pour qui écrit le code
+> sont dans `.claude/rules/front/next.md`.
