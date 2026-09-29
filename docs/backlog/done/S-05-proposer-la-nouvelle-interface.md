@@ -1,7 +1,7 @@
 # S-05 : Proposer la nouvelle interface, et en revenir
 
 Source : stratégie de code du 2026-09-28 ; décisions : D4, D5, D13, D15.
-Statut : À faire.
+Statut : Livré (2026-09-28).
 Dépend de : S-04.
 Taille : S.
 
@@ -40,5 +40,20 @@ aucun
 
 ## 7. Definition of Done
 
-- [ ] Essayer et revenir, dans les deux sens, à la même adresse.
-- [ ] Le bandeau fermé ne revient pas.
+- [x] Essayer et revenir, dans les deux sens, à la même adresse.
+- [x] Le bandeau fermé ne revient pas.
+
+> **Amendement à la livraison.** La proposition ne s'adresse qu'aux personnes sans préférence :
+> celle qui a choisi « Revenir à l'interface actuelle » n'est plus sollicitée. « Connectée » veut dire
+> sur une page du cadre, toutes protégées par la garde d'authentification : aucun appel d'API de plus.
+> Textes : « PLaTon a une nouvelle interface. Essayez-la, vous pourrez revenir à celle-ci à tout
+> moment. », « Essayer la nouvelle interface », « Non merci ». Carte sombre aux couleurs de la
+> nouvelle identité, contrastes AA, animation coupée par `prefers-reduced-motion`.
+
+> **Amendement à la livraison.** « Revenir à l'interface actuelle » est sur l'accueil de la coquille
+> ; il passera dans le menu du profil avec C-02. Tant qu'aucun écran n'est porté, « Essayer » arrive
+> sur le pont : attendu, le drapeau reste `off` jusqu'au palier 1 (X-01).
+
+> **Vérification.** Dans Chrome, connecté avec le drapeau `opt-in` : la proposition s'affiche,
+> « Essayer » garde l'adresse et enregistre la préférence, « Non merci » ne revient pas ; drapeau
+> `off` : rien ; déconnecté : rien sur la page de connexion.

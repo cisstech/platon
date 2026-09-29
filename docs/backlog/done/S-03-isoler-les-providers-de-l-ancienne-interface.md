@@ -1,7 +1,7 @@
 # S-03 : Isoler les providers de l'ancienne interface
 
 Source : stratégie de code du 2026-09-28 ; décisions : D6, D7.
-Statut : À faire.
+Statut : Livré (2026-09-28).
 Dépend de : S-01.
 Taille : S.
 
@@ -49,5 +49,22 @@ Remplacer `DialogService` et le thème dans la nouvelle interface (F-04).
 
 ## 7. Definition of Done
 
-- [ ] Le test de configuration passe.
-- [ ] L'ancienne interface fonctionne à l'identique (tutoriels, annonces, icônes).
+- [x] Le test de configuration passe.
+- [x] L'ancienne interface fonctionne à l'identique (tutoriels, annonces, icônes).
+
+> **Amendement à la livraison.** `ANNOUNCEMENT_PROVIDERS` est un port de données, pas la fenêtre
+> d'annonce (elle vit dans la barre de l'ancienne interface) : il reste avec les autres ports. Seul
+> `TUTO_PROVIDERS` est propre à l'ancienne interface (services ng-zorro fournis au niveau de l'app).
+> `apps/web/src/app/legacy.providers.ts` réunit animations, `NgZorroProviders`, web components
+> d'exercice, tutoriels et initialiseur du thème. `NgZorroProviders` sort de `CoreBrowserModule`, est
+> exporté par la lib et ajouté explicitement à `apps/home` (inchangée). La locale française passe
+> dans `shared/shared.providers.ts`.
+
+> **Amendement à la livraison.** La nouvelle interface n'importe toujours pas `CoreBrowserModule` ni
+> l'authentification : le barrel `@platon/core/browser` exporte aussi les composants d'auth, qui
+> dépendent de ng-zorro. C'est la même question que le point ouvert ci-dessus, à trancher avant A-01.
+
+> **Vérification.** `next.config.spec.ts` (5 tests : locale, pas de ng-zorro, pas de tutoriels, pas
+> d'animations, pas d'initialiseur). Dans Chrome, connecté : un tutoriel se lance (visite Shepherd),
+> ng-zorro parle français (`jump_to` = « Aller à »), icônes Material et ng-zorro présentes, captures de
+> l'ancienne interface (accueil, cours, ressources, clair et sombre) identiques au pixel près.

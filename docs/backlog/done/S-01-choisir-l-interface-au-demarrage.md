@@ -66,18 +66,15 @@ aucun (le drapeau est tranché par D14)
 - [x] Les fichiers de l'une ne se chargent pas dans l'autre (onglet réseau vérifié).
 - [x] `yarn build`, `yarn lint`, `yarn test` verts.
 
-> **Amendement à la livraison.** La fonction pure s'appelle `resolveUiMode({ param, stored,
-flag })`, entourée de petites fonctions testées une à une (`parseUiMode`, `parseUiFlag`,
-> `readStoredUiMode`, `writeStoredUiMode`, `withoutUiParam`, `loadUiFlag`) : 18 tests. Le
-> paramètre `?ui=` est retiré de l'adresse une fois lu, pour qu'un lien copié ne le transporte pas.
-> `ui.json` n'est pas demandé quand une préférence existe, et la demande abandonne au bout de 2 s.
-> Les fichiers de la coquille suivent la règle de nommage du dépôt (`next-root.component.ts`,
-> `shell/placeholder.page.ts`). La coquille propose déjà « Ouvrir cette page dans l'interface
-> actuelle », construit sur l'adresse complète : un `?ui=legacy` relatif repartirait de
-> `<base href="/">`.
+> **Amendement à la livraison.** Le choix vit dans `apps/web/src/ui-switch/`, sans Angular :
+> `ui-mode.ts` (règle de priorité `resolveUiMode`), `ui-storage.ts` (préférence), `ui-flag.ts`
+> (`ui.json`), `ui-url.ts` (adresses), chacun testé. Le paramètre `?ui=` est retiré de l'adresse une
+> fois lu, pour qu'un lien copié ne le transporte pas. `ui.json` n'est pas demandé quand une
+> préférence existe, et la demande abandonne au bout de 2 s. Les liens `?ui=` sont construits sur
+> l'adresse complète : un lien relatif repartirait de `<base href="/">`.
 
-> **Amendement à la livraison.** `shared.config.ts` ne contient que la détection de changements et
-> HTTP. Les providers des features restent dans la configuration de l'ancienne interface : leurs
+> **Amendement à la livraison.** `shared/shared.providers.ts` ne contient que la détection de
+> changements, HTTP, la locale et le contexte de démarrage. Les providers des features restent dans la configuration de l'ancienne interface : leurs
 > barrels exportent aussi les composants de cette interface (point reporté dans S-03).
 
 > **Défaut trouvé en chemin.** Le dépôt n'a pas de projet de tests bout en bout pour le web. Les

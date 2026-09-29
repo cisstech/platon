@@ -1,7 +1,7 @@
 # S-04 : Le pont vers l'ancienne interface
 
 Source : stratégie de code du 2026-09-28 ; décisions : D3, D12.
-Statut : À faire.
+Statut : Livré (2026-09-28).
 Dépend de : S-01.
 Taille : M.
 
@@ -50,5 +50,30 @@ aucun
 
 ## 7. Definition of Done
 
-- [ ] Aucune adresse ne mène à une page vide dans la nouvelle interface.
-- [ ] La préférence survit au passage par le pont.
+- [x] Aucune adresse ne mène à une page vide dans la nouvelle interface.
+- [x] La préférence survit au passage par le pont.
+
+> **Amendement à la livraison.** La nouvelle interface n'a qu'une route portée, son accueil (`''`).
+> `**` passe par `legacyBridgeGuard` (`next/core/legacy-bridge/`, 4 tests) : au premier chargement il
+> remplace l'entrée d'historique (« Précédent » ne rebondit pas d'une interface à l'autre), lors d'une
+> navigation interne il en ajoute une. `legacy-once` n'est jamais gardé comme préférence (testé dans
+> `ui-switch/ui-mode.spec.ts`). Le contexte de démarrage (drapeau, préférence, passage par le pont) arrive aux deux
+> interfaces par le jeton `UI_BOOT_CONTEXT`.
+
+> **Amendement à la livraison.** L'avis est un composant de l'ancienne interface
+> (`app/ui-switch/`, 15 tests), monté par `legacy.bootstrap` à côté de la racine. Point ouvert
+> tranché : aucun avis sur les outils plein écran (lecteur, éditeur, builder, playground, démo).
+> Sans session, l'ancienne interface renvoie vers sa connexion en gardant l'adresse dans `next=`.
+
+> **Défaut trouvé en chemin.** `ViewEncapsulation.ShadowDom` recopie les styles de tous les
+> composants de l'application dans chaque racine d'ombre : l'avis embarquait tout le CSS de
+> l'ancienne interface. Encapsulation par défaut à la place, avec des classes scopées qui priment sur
+> les règles globales de ng-zorro. Décision D16.
+
+> **Limite connue.** Une fois dans l'ancienne interface par le pont, naviguer y reste (application
+> monopage) ; l'avis propose le retour. Ramener automatiquement vers un écran porté : S-06.
+
+> **Vérification.** Dans Chrome : adresse non portée ouverte dans l'ancienne interface avec l'avis,
+> préférence gardée, paramètre retiré, une seule entrée d'historique ajoutée ; « Revenir à la
+> nouvelle interface » ouvre son accueil ; « Masquer » ; rien sur le lecteur ; drapeau `default`
+> sans préférence enregistrée.

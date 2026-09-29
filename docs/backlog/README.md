@@ -49,6 +49,22 @@ Par couche : design system, core (providers, services, stores), pages, configura
 Après la livraison, les écarts s'ajoutent en citation : `> **Amendement à la livraison.** …`,
 `> **Défaut trouvé en chemin.** …`.
 
+## Où vit le code
+
+- `apps/web/src/main.ts` : choisit l'interface et ne charge qu'elle.
+- `apps/web/src/ui-switch/` : le choix, avant Angular et sans lui (mode, préférence, drapeau,
+  adresses, feuille globale).
+- `apps/web/src/shared/` : ce que les deux interfaces démarrent en commun (providers, contexte de
+  démarrage).
+- `apps/web/src/app/` : l'interface actuelle. `legacy.*` pour ce qui lui est propre, `ui-switch/`
+  pour l'avis qu'elle affiche sur la nouvelle.
+- `apps/web/src/next/` : la nouvelle interface. `core/` pour les services et gardes, `pages/` pour les
+  écrans.
+
+Nommage du nouveau code (D17) : `home.ts`, `home.html`, `home.scss` pour un composant `Home`,
+`legacy-bridge-guard.ts` pour une garde, `next.routes.ts` pour la configuration, `*.vm.ts` pour les
+fonctions de vue pures.
+
 ## Étapes d'un ticket d'écran
 
 1. **Wireframe validé** : l'écran et ses états existent dans `design/flows/`, avec ses annotations.

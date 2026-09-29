@@ -7,9 +7,7 @@
 
 Les wireframes sont faits pour tous les parcours (accueils, cours, activité, lecteur, corrections,
 ressources, création, tests, administration, compte, annonces), avec la direction, l'audit et la
-faisabilité dans [`design/docs`](../../design/docs). Côté code, le
-choix de l'interface au démarrage (S-01) et la séparation des styles (S-02) sont livrés ; la nouvelle interface n'est encore qu'une
-coquille.
+faisabilité dans [`design/docs`](../../design/docs). Côté code, le socle du basculement est livré (phase S : choix au démarrage, styles et providers séparés, pont, proposition d'essai) ; la nouvelle interface n'a encore que son accueil.
 
 ## Où on atterrit
 
@@ -34,13 +32,15 @@ Statuts : `À faire`, `À écrire` (le ticket n'est pas encore rédigé), `En co
 
 ## Phase S : le socle du basculement
 
-| Ticket                                                         | Titre                                         | Dépend de | Taille | Statut             |
-| -------------------------------------------------------------- | --------------------------------------------- | --------- | ------ | ------------------ |
-| [S-01](./done/S-01-choisir-l-interface-au-demarrage.md)        | Choisir l'interface au démarrage              | aucun     | M      | Livré (2026-09-28) |
-| [S-02](./done/S-02-separer-les-styles-par-interface.md)        | Séparer les styles par interface              | S-01      | M      | Livré (2026-09-28) |
-| [S-03](./S-03-isoler-les-providers-de-l-ancienne-interface.md) | Isoler les providers de l'ancienne interface  | S-01      | S      | À faire            |
-| [S-04](./S-04-le-pont-vers-l-ancienne-interface.md)            | Le pont vers l'ancienne interface             | S-01      | M      | À faire            |
-| [S-05](./S-05-proposer-la-nouvelle-interface.md)               | Proposer la nouvelle interface, et en revenir | S-04      | S      | À faire            |
+| Ticket                                                              | Titre                                                                                          | Dépend de | Taille | Statut             |
+| ------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- | ------ | ------------------ |
+| [S-01](./done/S-01-choisir-l-interface-au-demarrage.md)             | Choisir l'interface au démarrage                                                               | aucun     | M      | Livré (2026-09-28) |
+| [S-02](./done/S-02-separer-les-styles-par-interface.md)             | Séparer les styles par interface                                                               | S-01      | M      | Livré (2026-09-28) |
+| [S-03](./done/S-03-isoler-les-providers-de-l-ancienne-interface.md) | Isoler les providers de l'ancienne interface                                                   | S-01      | S      | Livré (2026-09-28) |
+| [S-04](./done/S-04-le-pont-vers-l-ancienne-interface.md)            | Le pont vers l'ancienne interface                                                              | S-01      | M      | Livré (2026-09-28) |
+| [S-05](./done/S-05-proposer-la-nouvelle-interface.md)               | Proposer la nouvelle interface, et en revenir                                                  | S-04      | S      | Livré (2026-09-28) |
+| S-06                                                                | Ramener vers la nouvelle interface les écrans portés ouverts depuis l'ancienne (après le pont) | A-01      | S      | À écrire           |
+| [S-07](./done/S-07-ecran-de-chargement.md)                          | Écran de chargement                                                                            | S-02      | S      | Livré (2026-09-29) |
 
 ## Phase F : les fondations du design system
 

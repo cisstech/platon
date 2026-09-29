@@ -1,6 +1,6 @@
 # F-01 : La bibliothèque `@platon/design-system` et Storybook
 
-Source : `design/docs/05-plan.md`, `design/docs/03-cartographie.md` ; décisions : D9.
+Source : `design/docs/05-plan.md`, `design/docs/03-cartographie.md` ; décisions : D9, D16, D17.
 Statut : À faire.
 Dépend de : aucun.
 Taille : M.
@@ -34,6 +34,9 @@ Vérifié le 2026-09-28.
 - `libs/design-system/.storybook/{main.ts,preview.ts,preview-head.html}` ; cibles `storybook`
   (port 6006) et `build-storybook` ; `@storybook/addon-docs`, `@storybook/addon-a11y`.
 - Décorateur de thème qui pose `data-theme` sur la racine de la story.
+- Encapsulation par défaut pour tous les composants, jamais `ShadowDom` (D16).
+- Nommage du guide de style Angular (D17) ; la règle de suffixe de classe du lint ne s'applique pas à la
+  bibliothèque.
 - Scripts `yarn storybook`, `yarn build:storybook`.
 
 ## 5. Hors scope

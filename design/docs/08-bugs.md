@@ -135,6 +135,18 @@ Gravité : **P1** bloque, trompe ou expose. **P2** gêne ou fait douter. **P3** 
 - **Piste** : réutiliser `buildVersion` et `stylesheetHref` (`apps/web/src/ui-styles.ts`), comme
   pour `styles.legacy.css`.
 
+### B18. `index.html` sans `Cache-Control`
+
+- [ ] Corrigé
+- **Symptôme** : après un déploiement ou un changement du drapeau `platon-ui-next`, un navigateur
+  peut garder l'ancien `index.html` (fraîcheur estimée par le navigateur), donc les anciens bundles et
+  l'ancienne valeur du drapeau.
+- **Cause** : nginx n'envoie aucun `Cache-Control` pour `index.html`.
+- **Où** : `.docker/nginx/nginx.prod.conf`
+- **Piste** : `location = /index.html` avec `Cache-Control: no-cache` (revalidation à chaque chargement,
+  réponse 304 si rien n'a changé), en répétant les en-têtes de sécurité, que nginx n'hérite pas quand
+  un `add_header` est posé dans le bloc.
+
 ## Code mort
 
 - [ ] Pages `informations` et `demo` des paramètres de cours, jamais routées

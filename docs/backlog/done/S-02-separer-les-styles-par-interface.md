@@ -53,7 +53,7 @@ aucun
 - [x] Pas de flash sans style au démarrage, dans les deux modes.
 
 > **Amendement à la livraison.** Les feuilles sont chargées par `main.ts`, en parallèle du code de
-> l'interface, et Angular démarre quand les deux sont arrivés (`ui-styles.ts`, 9 tests). La feuille
+> l'interface, et Angular démarre quand les deux sont arrivés (`ui-switch/ui-stylesheet.ts`, testé). La feuille
 > de la nouvelle interface vit dans `apps/web/src/next/styles.scss` en attendant la bibliothèque
 > (F-02 la fera pointer vers `libs/design-system`). Si une feuille échoue ou dépasse 10 s, l'app
 > démarre quand même et l'erreur est journalisée.
