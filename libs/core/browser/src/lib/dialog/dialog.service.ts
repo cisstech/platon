@@ -1,159 +1,89 @@
-import { Injectable, TemplateRef, inject } from '@angular/core'
-import { NzMessageService } from 'ng-zorro-antd/message'
-import { ModalOptions, NzModalRef, NzModalService } from 'ng-zorro-antd/modal'
-import { NzNotificationService } from 'ng-zorro-antd/notification'
-import { PromptDialogComponent } from './prompt/prompt.component'
-import { NzNotificationComponent } from 'ng-zorro-antd/notification'
+import { TemplateRef } from '@angular/core'
 
-interface MessageOptions {
+export interface MessageOptions {
+  /** Milliseconds before the message goes away; `0` keeps it until it is closed. */
   duration?: number
   notification?: {
     title: string
   }
 }
 
-interface TemplateOptions<T = unknown> {
+export interface TemplateOptions<T = unknown> {
   duration?: number
   data?: T
 }
 
-const DEFAULT_DIALOG_DURATION = 4500
+/**
+ * What a notification template receives: a handle on the notification, whose type depends on the
+ * implementation, and the data passed with it.
+ */
+export interface NotificationContext<T = any> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  $implicit: any
+  data: T
+}
 
-@Injectable({ providedIn: 'root' })
-export class DialogService {
-  private readonly nzModalService = inject(NzModalService)
-  private readonly nzMessageService = inject(NzMessageService)
-  private readonly nzNotificationService = inject(NzNotificationService)
+export interface ConfirmOptions {
+  title: string
+  /** Text of the question. Simple HTML (`<br>`, `<i>`) is rendered, through Angular sanitization. */
+  content?: string
+  okText?: string
+  cancelText?: string
+  /** The confirmation destroys or loses something. */
+  danger?: boolean
+}
 
+/** The ng-zorro keys still used by existing calls, accepted until they are rewritten. */
+export interface LegacyConfirmOptions {
+  nzTitle?: string
+  nzContent?: string
+  nzOkText?: string | null
+  nzCancelText?: string | null
+  nzOkDanger?: boolean
+  nzOkType?: string
+}
+
+export interface PromptOptions {
+  title: string
+  value?: string
+  label?: string
+  okTitle?: string
+  noTitle?: string
+}
+
+/** Neutral confirm options, whichever form the caller used. */
+export const toConfirmOptions = (options: ConfirmOptions | LegacyConfirmOptions): ConfirmOptions => {
+  if ('title' in options) return options
+  return {
+    title: options.nzTitle ?? '',
+    content: options.nzContent,
+    okText: options.nzOkText ?? undefined,
+    cancelText: options.nzCancelText ?? undefined,
+    danger: options.nzOkDanger,
+  }
+}
+
+/**
+ * Messages, confirmations and prompts shown to the person. Each interface binds its own
+ * implementation: ng-zorro in the current one, the design system in the new one.
+ */
+export abstract class DialogService {
   public static readonly DEFAULT_DIALOG_DURATION: number = 4500
 
-  error(content: string, options: MessageOptions = { duration: DialogService.DEFAULT_DIALOG_DURATION }) {
-    if (options.duration == undefined) options.duration = DialogService.DEFAULT_DIALOG_DURATION
-    const ref = options?.notification
-      ? this.nzNotificationService.error(options.notification.title, content, {
-          nzDuration: options?.duration,
-        })
-      : this.nzMessageService.error(content, { nzDuration: options?.duration })
-    return () => {
-      if (options?.notification) {
-        this.nzNotificationService.remove(ref.messageId)
-      } else {
-        this.nzMessageService.remove(ref.messageId)
-      }
-    }
-  }
+  /** Each message method returns a function that closes the message. */
+  abstract error(content: string, options?: MessageOptions): () => void
+  abstract info(content: string, options?: MessageOptions): () => void
+  abstract success(content: string, options?: MessageOptions): () => void
+  abstract warning(content: string, options?: MessageOptions): () => void
 
-  info(content: string, options: MessageOptions = { duration: DEFAULT_DIALOG_DURATION }) {
-    if (options.duration == undefined) options.duration = DEFAULT_DIALOG_DURATION
-    const ref = options?.notification
-      ? this.nzNotificationService.info(options.notification.title, content, {
-          nzDuration: options?.duration,
-        })
-      : this.nzMessageService.info(content, { nzDuration: options?.duration })
-    return () => {
-      if (options?.notification) {
-        this.nzNotificationService.remove(ref.messageId)
-      } else {
-        this.nzMessageService.remove(ref.messageId)
-      }
-    }
-  }
+  /** Resolves `true` when confirmed, `false` when cancelled or dismissed. */
+  abstract confirm(options: ConfirmOptions | LegacyConfirmOptions): Promise<boolean>
 
-  success(content: string, options: MessageOptions = { duration: DEFAULT_DIALOG_DURATION }) {
-    if (options.duration == undefined) options.duration = DEFAULT_DIALOG_DURATION
-    const ref = options?.notification
-      ? this.nzNotificationService.success(options.notification.title, content, {
-          nzDuration: options?.duration,
-        })
-      : this.nzMessageService.success(content, { nzDuration: options?.duration })
-    return () => {
-      if (options?.notification) {
-        this.nzNotificationService.remove(ref.messageId)
-      } else {
-        this.nzMessageService.remove(ref.messageId)
-      }
-    }
-  }
+  abstract notification(template: TemplateRef<NotificationContext>, options?: TemplateOptions): () => void
 
-  warning(content: string, options: MessageOptions = { duration: DEFAULT_DIALOG_DURATION }) {
-    if (options.duration == undefined) options.duration = DEFAULT_DIALOG_DURATION
-    const ref = options?.notification
-      ? this.nzNotificationService.warning(options.notification.title, content, {
-          nzDuration: options?.duration,
-        })
-      : this.nzMessageService.warning(content, { nzDuration: options?.duration })
-    return () => {
-      if (options?.notification) {
-        this.nzNotificationService.remove(ref.messageId)
-      } else {
-        this.nzMessageService.remove(ref.messageId)
-      }
-    }
-  }
+  /** Shows `content` while `consumer` runs. */
+  abstract loading(content: string, consumer: () => Promise<void>): Promise<void>
 
-  confirm(options: Omit<ModalOptions, 'nzOnOk' | 'nzOnCancel'>): Promise<boolean> {
-    return new Promise<boolean>((resolve) => {
-      this.nzModalService.confirm({
-        ...options,
-        nzOnOk: () => resolve(true),
-        nzOnCancel: () => resolve(false),
-      })
-    })
-  }
-
-  notification(
-    template: TemplateRef<{ $implicit: NzNotificationComponent; data: any }>,
-    options: TemplateOptions = { duration: DEFAULT_DIALOG_DURATION }
-  ) {
-    if (options.duration == undefined) options.duration = DEFAULT_DIALOG_DURATION
-    const ref = this.nzNotificationService.template(template, {
-      nzDuration: options?.duration,
-      nzData: options?.data as object,
-    })
-    return () => {
-      this.nzNotificationService.remove(ref.messageId)
-    }
-  }
-
-  async loading(content: string, consumer: () => Promise<void>): Promise<void> {
-    const messageId = this.nzMessageService.loading(content, { nzDuration: 0 }).messageId
-    try {
-      await consumer()
-    } finally {
-      this.nzMessageService.remove(messageId)
-    }
-  }
-
-  prompt(input: {
-    title: string
-    value?: string
-    label?: string
-    okTitle?: string
-    noTitle?: string
-  }): Promise<string | undefined> {
-    const dialogRef: NzModalRef = this.nzModalService.create({
-      nzTitle: input.title,
-      nzContent: PromptDialogComponent,
-      nzData: {
-        value: input.value,
-        label: input.label,
-        okTitle: input.okTitle,
-        noTitle: input.noTitle,
-      },
-      nzClosable: false,
-      nzFooter: null,
-    })
-
-    return new Promise<string>((resolve) => {
-      const subscription = dialogRef.componentInstance.confirmEvent.subscribe((result: string) => {
-        resolve(result)
-        dialogRef.close()
-      })
-
-      const afterClose = dialogRef.afterClose.subscribe(() => {
-        subscription.unsubscribe()
-        afterClose.unsubscribe()
-      })
-    })
-  }
+  /** Resolves the entered value, or `undefined` when cancelled. */
+  abstract prompt(input: PromptOptions): Promise<string | undefined>
 }

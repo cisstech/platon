@@ -57,6 +57,45 @@ export default [
       '@angular-eslint/component-class-suffix': 'off',
     },
   },
+  {
+    // The new interface is built beside the current one: none of its components, styles or vendors.
+    // A spec may import a vendor token to prove it is not provided.
+    files: ['**/src/next/**/*.ts'],
+    ignores: ['**/*.spec.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: '@platon/core/browser',
+              message:
+                'The main entry pulls in the current interface (ng-zorro, Material, Monaco): import from @platon/core/browser/shared.',
+            },
+          ],
+          patterns: [
+            {
+              group: ['ng-zorro-antd', 'ng-zorro-antd/*'],
+              message: 'ng-zorro stays in the current interface: use @platon/design-system.',
+            },
+            {
+              group: ['@angular/material', '@angular/material/*'],
+              message:
+                'Material stays in the current interface: use @platon/design-system, the Angular CDK or Angular Aria.',
+            },
+            {
+              group: ['@platon/shared/ui', '@platon/shared/ui/*'],
+              message: 'The ui-* components belong to the current interface: use @platon/design-system.',
+            },
+            {
+              regex: '^(\\.\\./)+app(/|$)',
+              message: 'apps/web/src/app is the current interface: share through a library or apps/web/src/shared.',
+            },
+          ],
+        },
+      ],
+    },
+  },
   ...nx.configs['flat/angular-template'],
   {
     files: ['**/*.html'],

@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core'
 
+import { NzMessageService } from 'ng-zorro-antd/message'
 import { NzModalModule } from 'ng-zorro-antd/modal'
 import { DialogService } from './dialog.service'
+import { NzDialogService } from './nz-dialog.service'
 import { PromptDialogComponent } from './prompt/prompt.component'
-import { NzMessageService } from 'ng-zorro-antd/message'
 
 @NgModule({
   imports: [NzModalModule, PromptDialogComponent],
   exports: [NzModalModule],
-  providers: [DialogService, NzMessageService],
+  providers: [{ provide: DialogService, useClass: NzDialogService }, NzMessageService],
 })
 export class DialogModule {}
