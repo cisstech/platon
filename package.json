@@ -24,16 +24,13 @@
     "serve:web": "nx serve web --host 0.0.0.0 --disable-host-check",
     "serve:api": "nx serve api",
     "serve:api:genkit": "genkit start -- nx serve api",
-    "serve:docs": "cd apps/docs && yarn serve",
-    "preserve:docs": "./bin/cli/wc-docs.sh",
+    "serve:docs": "./bin/cli/wc-docs.sh && cd apps/docs && yarn serve",
     "serve:home": "nx serve home",
     "build:web": "nx build web --configuration=production",
     "build:api": "nx build api --configuration=production",
     "build:migrations": "tsc -p tsconfig.migrations.json",
-    "build:docs": "cd apps/docs && yarn build",
-    "prebuild:docs": "./bin/cli/wc-docs.sh",
-    "build:docs:ghpage": "cd apps/docs && yarn build:ghpage",
-    "prebuild:docs:ghpage": "./bin/cli/wc-docs.sh",
+    "build:docs": "./bin/cli/wc-docs.sh && cd apps/docs && yarn build",
+    "build:docs:ghpage": "./bin/cli/wc-docs.sh && cd apps/docs && yarn build:ghpage",
     "build:home": "nx build home --configuration=production",
     "build:home:ghpage": "nx build home --configuration=production --base-href='https://cisstech.github.io/platon/'",
     "build:ghpage": "yarn build:home:ghpage; yarn build:docs:ghpage; touch ./dist/apps/home/.nojekyll",
@@ -350,7 +347,7 @@
       "@commitlint/config-conventional"
     ]
   },
-  "packageManager": "yarn@1.22.22",
+  "packageManager": "yarn@4.18.1",
   "resolutions": {
     "punycode": "^2.3.1",
     "tr46": "^6.0.0",
