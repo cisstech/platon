@@ -11,7 +11,7 @@ faisabilité dans [`design/docs`](../../design/docs). Côté code, le socle du b
 (phase S : choix au démarrage, styles et providers séparés, pont, proposition d'essai), puis les
 fondations (phase F : bibliothèque `@platon/design-system` et Storybook, tokens clair et sombre,
 polices et icônes, garde-fous `yarn lint:design`, dialogues et thème). La nouvelle interface n'a
-encore que son accueil ; la suite est le cadre (phase C).
+encore que son accueil ; la suite est le cadre (phase C), dont les tickets sont écrits.
 
 ## Où on atterrit
 
@@ -57,13 +57,17 @@ Statuts : `À faire`, `À écrire` (le ticket n'est pas encore rédigé), `En co
 
 ## Phase C : le cadre
 
-| Ticket | Titre                                                                                       | Dépend de  | Taille | Statut   |
-| ------ | ------------------------------------------------------------------------------------------- | ---------- | ------ | -------- |
-| C-01   | Boutons, menus, bulles, avatar, badge                                                       | F-02       | M      | À écrire |
-| C-02   | La couverture : navigation par rôle, intercalaire, Créer, profil, mention du logiciel libre | C-01, S-04 | L      | À écrire |
-| C-03   | Le cadre mobile : barre haute et panneau                                                    | C-02       | M      | À écrire |
-| C-04   | Le panneau des notifications                                                                | C-02, F-04 | M      | À écrire |
-| C-05   | Le gabarit de page : en-tête, onglets, états (vide, chargement, erreur)                     | C-01       | M      | À écrire |
+Ordre : C-01 et C-06 d'abord (indépendants), puis C-05, C-02, C-03 et C-04. Les points ouverts de
+C-02, C-03 et C-04 sont à trancher avant de coder ces tickets.
+
+| Ticket                                                    | Titre                                                                                       | Dépend de        | Taille | Statut             |
+| --------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ---------------- | ------ | ------------------ |
+| [C-01](./done/C-01-boutons-menus-bulles-avatar-badges.md) | Boutons, menus, bulles, avatar, badges et choix segmenté                                    | F-02             | M      | Livré (2026-09-29) |
+| [C-06](./C-06-la-session-dans-la-nouvelle-interface.md)   | La session : authentification, utilisateur courant, GraphQL                                 | F-04             | M      | À faire            |
+| [C-05](./C-05-le-gabarit-de-page.md)                      | Le gabarit de page : en-tête, onglets, états (vide, chargement, erreur)                     | C-01             | M      | À faire            |
+| [C-02](./C-02-la-couverture.md)                           | La couverture : navigation par rôle, intercalaire, Créer, profil, mention du logiciel libre | C-01, C-06       | L      | À faire            |
+| [C-03](./C-03-le-cadre-mobile.md)                         | Le cadre mobile : barre haute et panneau                                                    | C-02             | M      | À faire            |
+| [C-04](./C-04-le-panneau-des-notifications.md)            | Le panneau des notifications                                                                | C-02, C-06, F-04 | M      | À faire            |
 
 ## Phase A : les accueils
 

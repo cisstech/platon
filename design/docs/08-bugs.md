@@ -82,6 +82,18 @@ Gravité : **P1** bloque, trompe ou expose. **P2** gêne ou fait douter. **P3** 
 - **Cause** : erreur non gérée dans `ngOnInit`.
 - **Où** : `player-results.component.ts`
 
+### B20. Compteur de notifications à 0 au chargement
+
+- [ ] Corrigé
+- **Symptôme** : la cloche affiche 0 notification non lue à l'ouverture de PLaTon, même quand il y en
+  a ; le bon nombre n'apparaît qu'à la prochaine notification reçue.
+- **Cause** : le compteur part de 0 et n'est mis à jour que par l'abonnement `OnChangeNotifications`,
+  qui n'envoie rien à la connexion ; aucune requête ne lit le compte au départ.
+- **Où** : `libs/feature/notification/browser/src/lib/api/notification.service.ts`,
+  `components/notification-drawer/notification-drawer.component.ts`
+- **Piste** : lire `totalCount` de `notifications(filters: { unread: true })` au chargement ; C-04 le
+  fait pour la nouvelle interface.
+
 ## P3
 
 ### B11. Identifiant de session dans le résumé
@@ -132,8 +144,8 @@ Gravité : **P1** bloque, trompe ou expose. **P2** gêne ou fait douter. **P3** 
 - **Cause** : ces bundles `inject: false` n'ont pas d'empreinte dans leur nom et nginx n'envoie pas
   de `Cache-Control` ; `ThemeService` les charge sans version.
 - **Où** : `libs/core/browser/src/lib/services/theme.service.ts`, `.docker/nginx/nginx.prod.conf`
-- **Piste** : réutiliser `buildVersion` et `stylesheetHref` (`apps/web/src/ui-styles.ts`), comme
-  pour `styles.legacy.css`.
+- **Piste** : versionner l'adresse comme `uiStylesheetHref` le fait pour `styles.legacy.css`
+  (`apps/web/src/ui-switch/ui-stylesheet.ts`), avec l'empreinte de `main.js`.
 
 ### B18. `index.html` sans `Cache-Control`
 
@@ -146,6 +158,18 @@ Gravité : **P1** bloque, trompe ou expose. **P2** gêne ou fait douter. **P3** 
 - **Piste** : `location = /index.html` avec `Cache-Control: no-cache` (revalidation à chaque chargement,
   réponse 304 si rien n'a changé), en répétant les en-têtes de sécurité, que nginx n'hérite pas quand
   un `add_header` est posé dans le bloc.
+
+### B19. L'utilisateur courant est rechargé à chaque appel
+
+- [ ] Corrigé
+- **Symptôme** : une requête `GET /api/v1/users/{username}` à chaque garde de route et à chaque
+  service qui demande l'utilisateur (une trentaine d'appels à `ready()`).
+- **Cause** : `AuthService` déclare `user` mais ne l'affecte jamais ; seule la requête en cours est
+  partagée. Pour la même raison, `signOut` ne prévient jamais les observateurs de la déconnexion
+  (aucun n'est déclaré aujourd'hui).
+- **Où** : `libs/core/browser/src/lib/auth/api/auth.service.ts`
+- **Piste** : garder l'utilisateur dans `connect()`, le vider à la connexion, à la réinitialisation
+  du mot de passe et à la déconnexion.
 
 ## Code mort
 
