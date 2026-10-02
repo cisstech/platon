@@ -11,6 +11,7 @@
   --pl-color-surface: #1a191d;
   --pl-color-surface-muted: #201f23;
   --pl-color-surface-raised: #252528;
+  --pl-color-hover: #2f2e32;
   --pl-color-line: #313034;
   --pl-color-line-strong: #3f3e41;
   --pl-color-control: var(--pl-graphite-450);
@@ -133,6 +134,8 @@
   --pl-color-surface: var(--pl-graphite-0);
   --pl-color-surface-muted: var(--pl-graphite-25);
   --pl-color-surface-raised: var(--pl-graphite-0);
+  // Background of a neutral control under the pointer or the keyboard (icon button, menu entry).
+  --pl-color-hover: var(--pl-graphite-100);
   --pl-color-line: var(--pl-graphite-150);
   --pl-color-line-strong: var(--pl-graphite-200);
   // Borders of fields and checkboxes: 3:1 against the surface.
@@ -177,6 +180,7 @@
   --pl-color-cover-text: var(--pl-plum-100);
   --pl-color-cover-muted: var(--pl-plum-300);
   --pl-color-cover-primary: var(--pl-plum-300);
+  --pl-color-cover-primary-hover: var(--pl-plum-200);
   --pl-color-cover-primary-text: var(--pl-graphite-950);
 
   // Joy: the colors of the logo, for a finished activity or a welcome, never for a result.
@@ -277,8 +281,9 @@
   --pl-layer-tooltip: 1300;
 
   --pl-icon-size-1: 16px;
-  --pl-icon-size-2: 20px;
-  --pl-icon-size-3: 24px;
+  --pl-icon-size-2: 18px;
+  --pl-icon-size-3: 20px;
+  --pl-icon-size-4: 24px;
 
   --pl-cover-width: 240px;
   --pl-topbar-height: 56px;
