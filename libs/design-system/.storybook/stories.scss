@@ -48,3 +48,28 @@
 .story-danger {
   color: var(--pl-color-danger-ink);
 }
+
+.story-cover {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--pl-space-3);
+  inline-size: 240px;
+  padding: var(--pl-space-4) var(--pl-space-3);
+  border-radius: var(--pl-radius-card);
+  background: var(--pl-color-cover);
+  color: var(--pl-color-cover-text);
+}
+
+.story-relative {
+  position: relative;
+}
+
+.story-menu-name {
+  font-weight: var(--pl-weight-strong);
+}
+
+.story-menu-address {
+  color: var(--pl-color-muted);
+  font: var(--pl-font-small);
+}

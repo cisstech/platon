@@ -8,10 +8,10 @@ const meta: Meta<Icon> = {
   tags: ['autodocs'],
   argTypes: {
     name: { control: 'select', options: ICON_NAMES },
-    size: { control: 'inline-radio', options: [undefined, 1, 2, 3] },
+    size: { control: 'inline-radio', options: [undefined, 1, 2, 3, 4] },
     label: { control: 'text' },
   },
-  args: { name: 'school', size: 2 },
+  args: { name: 'school', size: 3 },
 }
 
 export default meta
@@ -30,8 +30,9 @@ export const Sizes: Story = {
     template: `
       <div class="story-row">
         <span><pl-icon [name]="name" [size]="1" /> 1, 16 px</span>
-        <span><pl-icon [name]="name" [size]="2" /> 2, 20 px</span>
-        <span><pl-icon [name]="name" [size]="3" /> 3, 24 px</span>
+        <span><pl-icon [name]="name" [size]="2" /> 2, 18 px</span>
+        <span><pl-icon [name]="name" [size]="3" /> 3, 20 px</span>
+        <span><pl-icon [name]="name" [size]="4" /> 4, 24 px</span>
       </div>
     `,
   }),
@@ -57,7 +58,7 @@ export const Catalog: Story = {
     template: `
       <ul class="story-grid">
         @for (name of names; track name) {
-          <li><pl-icon [name]="name" [size]="3" /><code>{{ name }}</code></li>
+          <li><pl-icon [name]="name" [size]="4" /><code>{{ name }}</code></li>
         }
       </ul>
     `,

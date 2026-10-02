@@ -2,13 +2,14 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
 import { IconName } from './icon-names'
 import { ICON_SPRITE_URL } from './icon-sprite'
 
-/** A step of the `--pl-icon-size-*` scale: 16, 20 and 24 px. */
-export type IconSize = 1 | 2 | 3
+/** A step of the `--pl-icon-size-*` scale: 16, 18, 20 and 24 px. */
+export type IconSize = 1 | 2 | 3 | 4
 
 const SIZES: Record<IconSize, string> = {
   1: 'var(--pl-icon-size-1)',
   2: 'var(--pl-icon-size-2)',
   3: 'var(--pl-icon-size-3)',
+  4: 'var(--pl-icon-size-4)',
 }
 
 /**

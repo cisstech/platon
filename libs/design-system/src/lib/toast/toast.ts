@@ -23,7 +23,7 @@ const TONE_ICONS: Record<Exclude<ToastTone, 'loading'>, IconName> = {
   },
   template: `
     @if (icon(); as icon) {
-    <pl-icon class="pl-toast__icon" [name]="icon" [size]="2" />
+    <pl-icon class="pl-toast__icon" [name]="icon" [size]="3" />
     } @else {
     <span class="pl-toast__spinner" aria-hidden="true"></span>
     }
@@ -74,8 +74,8 @@ const TONE_ICONS: Record<Exclude<ToastTone, 'loading'>, IconName> = {
     }
     .pl-toast__spinner {
       flex: none;
-      inline-size: var(--pl-icon-size-2);
-      block-size: var(--pl-icon-size-2);
+      inline-size: var(--pl-icon-size-3);
+      block-size: var(--pl-icon-size-3);
       border: 2px solid var(--pl-color-line-strong);
       border-block-start-color: var(--pl-color-primary);
       border-radius: var(--pl-radius-pill);
