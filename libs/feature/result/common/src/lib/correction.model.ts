@@ -18,6 +18,8 @@ export interface ActivityCorrectionSummary {
   courseName: string
   totalExercises: number
   correctedExercises: number
+  /** Submitted copies with at least one exercise still to correct. */
+  pendingCopies: number
 }
 /**
  * Represents a list of corrections assigned to a correctioner.
