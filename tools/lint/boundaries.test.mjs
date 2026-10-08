@@ -26,6 +26,7 @@ describe('boundaries of the new interface', () => {
     ['the ui-* components', '@platon/shared/ui'],
     ['the current interface', '../app/app.config'],
     ['the main entry of @platon/core/browser', '@platon/core/browser'],
+    ['the main entry of a feature library', '@platon/feature/result/browser'],
   ]) {
     it(`rejects an import of ${name}`, async () => {
       const messages = await lintNext(`import { x } from '${source}'\nexport const y = x\n`)
@@ -36,9 +37,9 @@ describe('boundaries of the new interface', () => {
     })
   }
 
-  it('accepts the design system, the shared core entry, the CDK and Angular Aria', async () => {
+  it('accepts the design system, the /shared entries, the CDK and Angular Aria', async () => {
     const messages = await lintNext(
-      "import { Icon } from '@platon/design-system'\nimport { DialogService } from '@platon/core/browser/shared'\nimport { Dialog } from '@angular/cdk/dialog'\nimport { Tabs } from '@angular/aria/tabs'\nexport const all = [Icon, DialogService, Dialog, Tabs]\n"
+      "import { Icon } from '@platon/design-system'\nimport { DialogService } from '@platon/core/browser/shared'\nimport { ResultService } from '@platon/feature/result/browser/shared'\nimport { Dialog } from '@angular/cdk/dialog'\nimport { Tabs } from '@angular/aria/tabs'\nexport const all = [Icon, DialogService, ResultService, Dialog, Tabs]\n"
     )
     assert.deepEqual(
       messages.filter((message) => message.startsWith('no-restricted-imports')),

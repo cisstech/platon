@@ -154,6 +154,11 @@ export class ResultService {
     return this.resultProvider.findCorrection(activityId, viewerMode)
   }
 
+  /** Every activity the user corrects or has corrected, whatever the state of its copies. */
+  listCorrectionSummaries(): Observable<ListResponse<ActivityCorrectionSummary>> {
+    return this.resultProvider.listCorrectionsSummary()
+  }
+
   listPendingCorrections(): Observable<ListResponse<ActivityCorrectionSummary>> {
     return this.resultProvider.listCorrectionsSummary(CorrectionStatus.pending)
   }

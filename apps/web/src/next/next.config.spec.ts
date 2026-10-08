@@ -1,6 +1,8 @@
 import { ANIMATION_MODULE_TYPE, APP_INITIALIZER, LOCALE_ID } from '@angular/core'
 import { TestBed } from '@angular/core/testing'
-import { DialogService } from '@platon/core/browser/shared'
+import { HTTP_INTERCEPTORS } from '@angular/common/http'
+import { Apollo } from 'apollo-angular'
+import { AuthService, DialogService, TokenService } from '@platon/core/browser/shared'
 import { NZ_DATE_LOCALE, NZ_I18N } from 'ng-zorro-antd/i18n'
 import { NzModalService } from 'ng-zorro-antd/modal'
 import { NextDialog } from './core/dialog/next-dialog'
@@ -17,6 +19,18 @@ describe('nextConfig', () => {
 
   it('shows messages and dialogs with the design system', () => {
     expect(TestBed.inject(DialogService)).toBeInstanceOf(NextDialog)
+  })
+
+  it('calls the API like the current interface: token, dates and parameters', () => {
+    expect(TestBed.inject(AuthService)).toBeTruthy()
+    expect(TestBed.inject(TokenService)).toBeTruthy()
+    expect(TestBed.inject(HTTP_INTERCEPTORS).map((interceptor) => interceptor.constructor.name)).toEqual(
+      expect.arrayContaining(['AuthInterceptor', 'DateConversionInterceptor', 'HttpParamEncoderInterceptor'])
+    )
+  })
+
+  it('has a GraphQL client', () => {
+    expect(TestBed.inject(Apollo)).toBeTruthy()
   })
 
   it('does not configure ng-zorro', () => {

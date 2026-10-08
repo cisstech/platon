@@ -22,6 +22,7 @@ import { sharedProviders } from '../shared/shared.providers'
 import { UiBootContext } from '../shared/ui-boot-context'
 import { appRoutes } from './app.routes'
 import { legacyProviders } from './legacy.providers'
+import { provideReturnToNext } from './ui-switch/return-to-next'
 
 /** Config of the current interface. */
 export const appConfig = (context: UiBootContext): ApplicationConfig => ({
@@ -35,6 +36,7 @@ export const appConfig = (context: UiBootContext): ApplicationConfig => ({
       withComponentInputBinding(),
       withPreloading(PreloadAllModules)
     ),
+    provideReturnToNext(),
     COURSE_PROVIDERS,
     RESOURCE_PROVIDERS,
     PLAYER_PROVIDERS,
