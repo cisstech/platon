@@ -27,7 +27,6 @@ import { PAGE_CONTENT_ID } from '../page/page'
       padding: var(--pl-space-2) var(--pl-space-3);
       border-radius: var(--pl-radius-control);
       background: var(--pl-color-surface);
-      box-shadow: var(--pl-shadow-overlay);
       color: var(--pl-color-primary);
       font: var(--pl-font-body);
       font-weight: var(--pl-weight-strong);
@@ -35,6 +34,7 @@ import { PAGE_CONTENT_ID } from '../page/page'
       transform: translateY(calc(-100% - var(--pl-space-4)));
     }
     :host(:focus) {
+      box-shadow: var(--pl-shadow-overlay);
       transform: none;
     }
   `,
