@@ -1,0 +1,118 @@
+/* Usage choice: each option shows the icon the activity will wear in the course, in the course's hue. */
+.usage-ico {
+  width: 28px;
+  height: 28px;
+  margin-bottom: var(--spacing-2);
+}
+
+/* Composed activity: the position of each exercise, in a small numbered tile. */
+.lead-icon.order-n {
+  width: 28px;
+  height: 28px;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 600;
+}
+
+/* Search and results: the field takes the room, the sort sits at the end of the bar. */
+.search-field {
+  flex: 1;
+  max-width: 420px;
+}
+.sort-end {
+  margin-left: auto;
+}
+.results-count {
+  margin: 0 0 var(--spacing-3);
+}
+.pick-text {
+  flex: 1;
+  min-width: 0;
+}
+.pick-text p {
+  margin: var(--spacing-1) 0 0;
+}
+.pick-open {
+  margin-left: auto;
+}
+.page-foot-note {
+  margin-top: var(--spacing-4);
+}
+
+/* Usage, dates and duration: one form; the security of a graded exam is folded, its defaults said in one line. */
+.usage-form {
+  max-width: 760px;
+}
+.usage-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--spacing-3);
+  margin-bottom: var(--spacing-3);
+}
+/* Two dates, then the duration and the attempts, which hold short values. */
+.field-row.four {
+  grid-template-columns: 1.4fr 1.4fr 1fr 1fr;
+}
+.dates-hint {
+  margin: var(--spacing-2) 0 0;
+}
+.fold-head {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+}
+.fold-text {
+  flex: 1;
+  min-width: 0;
+}
+.fold-text p {
+  margin-top: var(--spacing-1);
+}
+.fold-body {
+  margin-top: var(--spacing-3);
+}
+.ico.flip {
+  transform: rotate(180deg);
+}
+/* Resume code: masked, with Afficher inside the field and Copier, Nouveau code under it (as in the course's follow-up). */
+.code-block {
+  margin-top: var(--spacing-4);
+}
+.code-block .field-hint {
+  margin: 0;
+}
+.code-field {
+  max-width: calc(50% - var(--spacing-3) / 2);
+}
+
+/* Compose: the catalogue on the left, the activity being composed on the right, in order. */
+.compose-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  gap: var(--spacing-6);
+  align-items: start;
+}
+.compose-layout .search-field {
+  max-width: none;
+}
+.compose-aside {
+  position: sticky;
+  top: var(--spacing-4);
+}
+.order-head {
+  margin-top: var(--spacing-4);
+}
+.order-list {
+  box-shadow: none;
+}
+.order-row {
+  gap: var(--spacing-3);
+  padding-left: var(--spacing-2);
+}
+.compose-note {
+  margin: var(--spacing-3) 0;
+}
+.btn-block {
+  width: 100%;
+}

@@ -8,25 +8,25 @@
         <div class="brand-org">Université Gustave Eiffel</div>
       </div>
     </div>
-    <a class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico"><use href="#add" /></svg>Créer</a>
-    <nav class="nav">
-      <a class="nav-item" data-wf-to="enseignant"><svg class="ico"><use href="#home" /></svg>Accueil</a>
-      <a class="nav-item" data-wf-to="annonces"><svg class="ico"><use href="#campaign" /></svg>Annonces</a>
-      <a class="nav-item" data-wf-to="mes-cours"><svg class="ico"><use href="#school" /></svg>Cours</a>
-      <a class="nav-item active" data-wf-to="file"><svg class="ico"><use href="#rate_review" /></svg>Corrections<span class="count">14</span></a>
-      <a class="nav-item" data-wf-to="catalogue"><svg class="ico"><use href="#folder_open" /></svg>Ressources</a>
-      <a class="nav-item" data-wf-to="test"><svg class="ico"><use href="#fact_check" /></svg>Tests d'entrée</a>
+    <button type="button" class="btn btn-cover btn-create" aria-haspopup="menu" aria-expanded="false" data-wf-to="creer"><svg class="ico" aria-hidden="true"><use href="#add" /></svg>Créer</button>
+    <nav class="nav" aria-label="Navigation principale">
+      <a href="#" class="nav-item" data-wf-to="enseignant"><svg class="ico" aria-hidden="true"><use href="#home" /></svg>Accueil</a>
+      <a href="#" class="nav-item" data-wf-to="annonces"><svg class="ico" aria-hidden="true"><use href="#campaign" /></svg>Annonces</a>
+      <a href="#" class="nav-item" data-wf-to="mes-cours"><svg class="ico" aria-hidden="true"><use href="#school" /></svg>Cours</a>
+      <a href="#" class="nav-item active" aria-current="page" data-wf-to="file"><svg class="ico" aria-hidden="true"><use href="#rate_review" /></svg>Corrections<span class="count">14<span class="sr-only"> copies à corriger</span></span></a>
+      <a href="#" class="nav-item" data-wf-to="catalogue"><svg class="ico" aria-hidden="true"><use href="#folder_open" /></svg>Ressources</a>
+      <a href="#" class="nav-item" data-wf-to="test"><svg class="ico" aria-hidden="true"><use href="#fact_check" /></svg>Tests d'entrée</a>
     </nav>
     <div class="sidebar-foot">
-      <a class="nav-item"><svg class="ico"><use href="#help" /></svg>Documentation</a>
-      <a class="nav-item"><svg class="ico"><use href="#notifications" /></svg>Notifications<span class="count">2</span></a>
-      <div class="me">
-        <span class="avatar">KH</span>
+      <a href="#" class="nav-item"><svg class="ico" aria-hidden="true"><use href="#help" /></svg>Documentation</a>
+      <a href="#" class="nav-item" aria-haspopup="dialog"><svg class="ico" aria-hidden="true"><use href="#notifications" /></svg>Notifications</a>
+      <div class="me" role="button" tabindex="0" aria-haspopup="menu">
+        <span class="avatar" aria-hidden="true">JL</span>
         <div>
-          <div class="me-name">Karim Haddad</div>
-          <div class="me-role">Enseignant</div>
+          <div class="me-name">Julien Lefèvre</div>
+          <div class="me-role">Compte enseignant</div>
         </div>
-        <svg class="ico ico-16"><use href="#expand_more" /></svg>
+        <svg class="ico ico-16" aria-hidden="true"><use href="#expand_more" /></svg>
       </div>
       <a class="credit" href="https://github.com/cisstech/platon" aria-label="Code source de PLaTon, logiciel libre de cisstech"><svg class="ico ico-16" aria-hidden="true"><use href="#code" /></svg>Logiciel libre, par <strong>cisstech</strong></a>
     </div>
@@ -35,34 +35,42 @@
     <header class="page-head">
       <div>
         <h1 class="title">Corrections</h1>
-        <p class="page-sub">Les copies qui vous sont assignées. 14 à corriger.</p>
+        <p class="page-sub">Les copies qui vous sont assignées, rangées par lot. 14 à corriger.</p>
       </div>
     </header>
-    <div class="tabs">
-      <span class="tab active">À corriger <span class="count">14</span></span>
-      <span class="tab">Terminées <span class="count">46</span></span>
+    <div class="tabs" role="tablist" aria-label="Corrections">
+      <a href="#" class="tab active" role="tab" aria-selected="true" data-wf-to="file">À corriger <span class="count">14</span></a>
+      <a href="#" class="tab" role="tab" aria-selected="false" data-wf-to="file">Terminées</a>
     </div>
-    <div class="card rows">
-      <div class="row" data-wf-to="copie">
-        <span class="lead-icon hued hue-bleuet"><svg class="ico"><use href="#event" /></svg></span>
-        <div class="row-main">
-          <div class="row-title">Examen partiel 1</div>
-          <div class="row-meta"><span>Algorithmique et programmation 1</span><span>groupe TD 2</span><span>rendu le 22 septembre</span></div>
-        </div>
-        <div class="row-side">
-          <div class="progress stacked"><span>12 sur 26 restent</span><div class="bar"><span style="width: 54%"></span></div></div>
-          <a class="btn btn-primary btn-sm" data-wf-to="copie">Reprendre</a>
+    <div class="toolbar" role="group" aria-label="Filtrer et trier les lots">
+      <div class="filter"><label for="f-groupe">Groupe</label><span class="select" id="f-groupe" role="combobox" aria-haspopup="listbox" aria-expanded="false">Tous les groupes<svg class="ico ico-16" aria-hidden="true"><use href="#expand_more" /></svg></span></div>
+      <div class="filter"><label for="f-tri">Trier</label><span class="select" id="f-tri" role="combobox" aria-haspopup="listbox" aria-expanded="false">Plus anciennes d'abord<svg class="ico ico-16" aria-hidden="true"><use href="#expand_more" /></svg></span></div>
+    </div>
+    <div class="batches">
+      <div class="card pile thick">
+        <div class="row hue-lagon" data-wf-to="copie">
+          <span class="lead-icon hued"><svg class="ico" aria-hidden="true"><use href="#history_edu" /></svg></span>
+          <div class="row-main">
+            <div class="row-title">Examen partiel 1, groupe TD 2</div>
+            <div class="row-meta"><span class="meta-strong">12 copies à corriger</span><span>Algorithmique et programmation 1</span><span>rendues le 22 septembre</span></div>
+          </div>
+          <div class="row-side">
+            <div class="progress stacked"><span>14 copies corrigées sur 26</span><div class="bar" aria-hidden="true"><span style="width: 54%"></span></div></div>
+            <button type="button" class="btn btn-primary btn-sm" data-wf-to="copie">Reprendre</button>
+          </div>
         </div>
       </div>
-      <div class="row">
-        <span class="lead-icon hued hue-lagon"><svg class="ico"><use href="#code" /></svg></span>
-        <div class="row-main">
-          <div class="row-title">Projet 1&nbsp;: formulaire d'inscription</div>
-          <div class="row-meta"><span>Programmation web</span><span>rendu le 26 septembre</span></div>
-        </div>
-        <div class="row-side">
-          <div class="progress stacked"><span>2 sur 2 restent</span><div class="bar"><span style="width: 0%"></span></div></div>
-          <a class="btn btn-secondary btn-sm">Commencer</a>
+      <div class="card pile thin">
+        <div class="row hue-lagon" data-wf-to="copie">
+          <span class="lead-icon hued"><svg class="ico" aria-hidden="true"><use href="#history_edu" /></svg></span>
+          <div class="row-main">
+            <div class="row-title">Examen partiel 1, groupe TD 4, copies en retard</div>
+            <div class="row-meta"><span class="meta-strong">2 copies à corriger</span><span>Algorithmique et programmation 1</span><span>rendues le 23 septembre</span></div>
+          </div>
+          <div class="row-side">
+            <div class="progress stacked"><span>0 copie corrigée sur 2</span><div class="bar" aria-hidden="true"><span style="width: 0%"></span></div></div>
+            <button type="button" class="btn btn-secondary btn-sm" data-wf-to="copie">Commencer</button>
+          </div>
         </div>
       </div>
     </div>

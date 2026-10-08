@@ -19,9 +19,33 @@ Critères d'acceptation communs à tous les flows.
 - un écran a une seule action principale, libellée, placée à droite du titre ou en tête de sa zone
 - une erreur n'est jamais présentée comme un contenu vide ; un chargement affiche un message au
   bout de 10 s et devient une erreur au bout de 30 s
-- une couleur d'état est toujours accompagnée d'un mot ou d'une icône
-- une suppression se confirme : en place pour un élément de liste, par un dialogue qui nomme
-  l'objet pour un cours, un cercle ou une activité notée
+- une couleur d'état est toujours accompagnée d'un mot ou d'une icône, un chiffre mis en couleur aussi
+- une suppression se confirme : en place pour un élément de liste, avec une annulation possible
+  quelques secondes ; par un dialogue qui nomme l'objet et ce qui part avec lui pour un cours, une
+  section, un cercle, un groupe de la plateforme, une activité notée ou un compte
+- un changement de rôle ou de droits se confirme et nomme la personne
+- ce qui se réordonne à la souris se réordonne aussi au clavier
+- une notification qui porte une action reste jusqu'à ce qu'on la ferme
+- chaque écran a un titre de niveau 1 et un lien d'évitement vers son contenu ; un champ de
+  recherche a un libellé, visible ou lu par les lecteurs d'écran
+- le temps d'une épreuve court depuis son début, quoi qu'il arrive : c'est le comportement de la
+  plateforme (`isTimeouted`, `startedAt + duration`) et c'est ce que les écrans disent à
+  l'étudiant. Proposition, changement de modèle à valider : une panne de PLaTon détectée par le
+  serveur met le chronomètre en pause ; une coupure de la connexion de l'étudiant ne le met
+  jamais en pause
+- hors connexion, une réponse ne se modifie plus : elle redevient modifiable avec la connexion
+- quitter une épreuve notée, par n'importe quel chemin (fermer ou recharger la page, changer
+  d'onglet, de fenêtre ou d'application ; quitter le plein écran, quand il sera exigé : le plein
+  écran obligatoire est une proposition, la plateforme ne le demande pas aujourd'hui), l'arrête ; le code de reprise que donne l'enseignant la rouvre tant que
+  le temps n'est pas écoulé. Seul « Rendre ma copie » la termine. Une épreuve notée n'a ni flèche
+  de retour ni croix : le verbe est « arrêter », partout
+- une épreuve se rend : « Rendre ma copie » dit ce qui reste non validé avant de confirmer
+- sous le nom d'une personne, le type de compte (« Compte étudiant »), jamais un genre que la
+  plateforme ne connaît pas
+- l'étudiant et le candidat ont tout leur parcours sur téléphone ; les écrans des enseignants,
+  des correcteurs et de l'administration sont dessinés pour le bureau
+- les maquettes puisent leurs données dans `docs/09-donnees.md` : mêmes personnes, cours, dates
+  et notes partout
 - la navigation suit le rôle : l'étudiant ne voit ni Ressources, ni Tests d'entrée, ni
   Administration
 - les échéances proches sont relatives (« ferme jeudi à 18 h »), les dates des tableaux absolues

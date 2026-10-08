@@ -1,14 +1,20 @@
 - screen: enseignant
-  note: "Créer, dans la barre latérale, est l'action primaire globale. Les boutons des lignes (Suivre, Corriger, Programmer) restent secondaires pour ne pas lui faire concurrence."
+  note: "Quatre zones, dans l'ordre où Karim pilote : ce qui tourne (En cours), ce qui attend un geste de lui (À faire), puis ses cours et ses ressources. Les modèles quittent l'accueil : le menu Créer y mène par Exercice."
 - screen: enseignant
-  note: "La participation s'écrit en toutes lettres au-dessus de la barre. La moyenne est dite provisoire tant que l'activité est ouverte."
+  note: "En cours n'a pas de bouton : la ligne entière ouvre le suivi, le chevron le dit. Un bouton n'apparaît que lorsqu'il y a un geste à faire, et il le nomme : Corriger, Planifier, Relire les réglages. Tous restent secondaires, Créer est l'action primaire globale."
 - screen: enseignant
-  note: "À préparer dit ce qui manque, en attention quand l'activité ne peut pas s'ouvrir seule (pas de dates), en repère quand elle est planifiée."
+  note: "La participation s'écrit en toutes lettres au-dessus de la barre, à la teinte du cours (le même 83 % que le taux de réponses du suivi). La moyenne est dite provisoire tant que l'activité est ouverte."
 - screen: enseignant
-  note: "Dans l'état vide, le bouton Créer de la barre latérale passe en secondaire. Créer un cours devient la seule action primaire de l'écran."
+  note: "À faire ne liste que ce qui est confié à Karim : les 2 copies du Projet 1, que reprend le compteur Corrections, dites en toutes lettres et sans barre, puisque rien n'est encore corrigé. Les 14 copies de l'Examen partiel 1 sont confiées à Julien Lefèvre ; une ligne discrète le dit, sans action, pour que Karim sache où en est son cours sans les prendre pour siennes."
+- screen: enseignant
+  note: "TP 5 est ouvert sans dates : la plateforme l'ouvre aux étudiants (23 l'ont commencé). C'est un entraînement, l'accueil le dit donc en information neutre (info, graphite), avec Planifier ; une épreuve notée sans dates serait en attention. L'Examen partiel 2 est planifié, en repère, avec Relire les réglages ; son icône est history_edu, celle des épreuves notées."
+- screen: enseignant
+  note: "Vu récemment est la liste de Ressources ; l'accueil en montre les trois premiers. Chaque ressource dit ce qu'elle est et quand Karim l'a vue, avec son statut pour un exercice : Recherche dichotomique, l'exercice d'Hélène Martin, ce matin, Prêt (verified) ; Parcours en largeur d'un graphe, celui de Karim, hier, Brouillon (save) ; TP 4 : boucles et tableaux, une activité, vendredi."
+- screen: enseignant
+  note: "État vide : la bienvenue est un moment de joie. « Bienvenue sur PLaTon, Karim », la chaleur sur l'icône seule, qui s'allume une fois en 600 ms ; les mots restent dans la couleur du texte. La copie vierge signe le « rien encore », puis les trois étapes ; Créer un cours est la seule action primaire, le bouton Créer de la barre latérale passe en secondaire."
 - screen: creer
-  note: "Chaque entrée décrit l'objet en une ligne, pour qu'un enseignant qui découvre PLaTon distingue cours, activité et exercice. Cercle n'apparaît qu'aux administrateurs, en dernière position."
+  note: "Une seule décision : quel objet. Chaque entrée porte le glyphe PLaTon de l'objet à 40 px et le décrit en mots simples, dans l'ordre où ils s'emboîtent (un cours contient des activités, une activité des exercices). Plus de PLE ni de PLA. Exercice nomme les modèles et mène à leur galerie. Cercle n'apparaît qu'aux administrateurs, en dernière position, avec le glyphe du cercle ; Karim est enseignant, il ne le voit pas."
 - screen: creer
   note: "Le menu s'ouvre sous le bouton en 180 ms, la première entrée a le focus, les flèches naviguent, Échap referme et rend le focus au bouton."
 - screen: enseignant
-  note: "Passe UX : une ligne dit une chose. « 251 / 302 » sur la barre, la moyenne dans les métadonnées ; plus de phrase qui passe sur deux lignes. Vu récemment tient en une ligne par ressource."
+  note: "Le bandeau de service s'affiche aussi chez Karim : la maintenance du 4 octobre s'adresse à tout le monde, et un enseignant qui planifie une épreuve doit la voir. C'est le seul bandeau, sous le titre, comme chez Inès ; il appartient à l'en-tête de la page et ne compte pas parmi les quatre zones. Son icône construction reste graphite : une information, pas une alerte. Il se ferme et ne revient pas pour la même annonce."

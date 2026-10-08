@@ -1,49 +1,47 @@
 <div class="atelier">
+  <a class="skip-link" href="#contenu">Aller au contenu</a>
   <header class="atelier-head">
-    <button class="btn btn-icon" aria-label="Quitter l'atelier" data-wf-to="atelier-quitter"><svg class="ico"><use href="#arrow_back" /></svg></button>
-    <span class="lead-icon hued hue-bleuet" style="width: 30px; height: 30px"><svg class="ico ico-18"><use href="#quiz" /></svg></span>
-    <span class="title-edit">QCM&nbsp;: complexité d'une recherche<svg class="ico ico-16"><use href="#edit" /></svg></span>
-    <span class="tag warning"><svg class="ico"><use href="#pending" /></svg>Non enregistré</span>
-    <span style="flex: 1"></span>
-    <a class="btn btn-ghost btn-sm"><svg class="ico"><use href="#code" /></svg>Ouvrir dans l'éditeur</a>
-    <a class="btn btn-secondary btn-sm"><svg class="ico"><use href="#visibility" /></svg>Plein écran</a>
-    <a class="btn btn-secondary btn-sm" data-wf-to="ajouter-au-cours"><svg class="ico"><use href="#school" /></svg>Ajouter à un cours</a>
-    <a class="btn btn-primary btn-sm" data-wf-to="enregistrer"><svg class="ico"><use href="#save" /></svg>Enregistrer</a>
+    <button type="button" class="btn btn-icon" aria-label="Quitter l'atelier" data-wf-to="atelier-quitter"><svg class="ico" aria-hidden="true"><use href="#arrow_back" /></svg></button>
+    <span class="lead-icon head-icon" aria-hidden="true"><svg class="ico ico-18" aria-hidden="true"><use href="#quiz" /></svg></span>
+    <h1 class="title-edit">QCM&nbsp;: complexité d'une recherche</h1>
+    <button type="button" class="btn btn-icon btn-sm" aria-label="Renommer l'exercice" title="Renommer l'exercice"><svg class="ico ico-16" aria-hidden="true"><use href="#edit" /></svg></button>
+    <span class="tag" role="status"><svg class="ico" aria-hidden="true"><use href="#edit_note" /></svg>Modifications non enregistrées</span>
+    <span class="spacer"></span>
+    <button type="button" class="btn btn-icon btn-sm" aria-label="Ouvrir dans l'éditeur de code" title="Ouvrir dans l'éditeur de code"><svg class="ico ico-18" aria-hidden="true"><use href="#code" /></svg></button>
+    <span class="save-why" id="save-why">Corrigez le bloc Choix pour enregistrer</span>
+    <button type="button" class="btn btn-primary btn-sm" aria-disabled="true" aria-describedby="save-why">Enregistrer</button>
   </header>
-  <div class="atelier-body">
-    <nav class="atelier-nav">
-      <h3>Contenu</h3>
-      <div class="atelier-item">Énoncé<svg class="ico state done"><use href="#check_circle" /></svg></div><div class="atelier-item active">Choix<svg class="ico state done"><use href="#check_circle" /></svg></div><div class="atelier-item">Bonnes réponses<svg class="ico state done"><use href="#check_circle" /></svg></div><div class="atelier-item">Explication<svg class="ico state"><use href="#radio_button_unchecked" /></svg></div><div class="atelier-item">Mélanger les choix<svg class="ico state done"><use href="#check_circle" /></svg></div>
-      <h3>Exercice</h3>
-      <div class="atelier-item"><svg class="ico ico-18"><use href="#info" /></svg>Informations</div>
-      <div class="atelier-item"><svg class="ico ico-18"><use href="#history" /></svg>Versions</div>
-      <div class="atelier-item"><svg class="ico ico-18"><use href="#contrast" /></svg>Thème de l'aperçu</div>
+  <main class="atelier-body" id="contenu">
+    <nav class="atelier-nav" aria-label="Blocs de l'exercice">
+      <h2 class="caption nav-group">Contenu</h2>
+      <button type="button" class="atelier-item">Énoncé<svg class="ico state done" aria-hidden="true"><use href="#check" /></svg><span class="sr-only">, rempli</span></button><button type="button" class="atelier-item active" aria-current="true">Choix<span class="state-word">À corriger</span><svg class="ico state error" aria-hidden="true"><use href="#error" /></svg></button><button type="button" class="atelier-item">Bonnes réponses<svg class="ico state done" aria-hidden="true"><use href="#check" /></svg><span class="sr-only">, rempli</span></button><button type="button" class="atelier-item">Explication<svg class="ico state" aria-hidden="true"><use href="#radio_button_unchecked" /></svg><span class="sr-only">, facultatif, vide</span></button><button type="button" class="atelier-item">Mélanger les choix<svg class="ico state done" aria-hidden="true"><use href="#check" /></svg><span class="sr-only">, rempli</span></button>
+      <h2 class="caption nav-group">Exercice</h2>
+      <button type="button" class="atelier-item"><svg class="ico ico-18" aria-hidden="true"><use href="#info" /></svg>Informations</button><button type="button" class="atelier-item"><svg class="ico ico-18" aria-hidden="true"><use href="#history" /></svg>Versions</button><button type="button" class="atelier-item"><svg class="ico ico-18" aria-hidden="true"><use href="#dark_mode" /></svg>Thème de l'aperçu</button>
     </nav>
-    <section class="atelier-edit">
-      <h2 class="heading" style="margin-bottom: 4px">Choix</h2>
-      <p class="muted" style="margin: 0 0 var(--spacing-4); font-size: 13px">Les réponses proposées à l'étudiant. Glissez pour changer l'ordre&nbsp;; il est ignoré si les choix sont mélangés.</p>
-      <div class="alert" style="margin-bottom: var(--spacing-3); border-color: var(--color-danger); background: var(--color-danger-soft)"><svg class="ico"><use href="#error" /></svg><div><strong>L'aperçu ne se construit plus</strong><p style="margin: 2px 0 0; font-size: 13px">La bonne réponse « O(log n) » ne fait plus partie des choix. Rajoutez-la ici, ou changez-la dans <a>Bonnes réponses</a>.</p></div></div>
-      <div class="list-edit">
-        <div class="list-edit-row"><svg class="ico ico-18 grip"><use href="#drag_indicator" /></svg><div class="input"><span>O(1)</span></div><button class="btn btn-icon btn-sm" aria-label="Supprimer le choix"><svg class="ico ico-18"><use href="#delete" /></svg></button></div>
-        <div class="list-edit-row"><svg class="ico ico-18 grip"><use href="#drag_indicator" /></svg><div class="input"><span>O(n)</span></div><button class="btn btn-icon btn-sm" aria-label="Supprimer le choix"><svg class="ico ico-18"><use href="#delete" /></svg></button></div>
-        <div class="list-edit-row"><svg class="ico ico-18 grip"><use href="#drag_indicator" /></svg><div class="input focused"><span>O(n log n)</span></div><button class="btn btn-icon btn-sm" aria-label="Supprimer le choix"><svg class="ico ico-18"><use href="#delete" /></svg></button></div>
+    <section class="atelier-edit" aria-labelledby="bloc-t">
+      <h2 class="heading bloc-title" id="bloc-t">Choix</h2>
+      <p class="small muted bloc-desc">Les réponses proposées à l'étudiant. Glissez pour changer l'ordre&nbsp;; il est ignoré si les choix sont mélangés.</p>
+      <div class="alert danger bloc-alert" role="alert" id="choix-erreur"><svg class="ico" aria-hidden="true"><use href="#error" /></svg><div><strong class="subheading">La bonne réponse « O(log n) » n'est plus dans les choix</strong><p class="small alert-text">Rajoutez-la à la liste, ou choisissez une autre bonne réponse dans le bloc Bonnes réponses.</p><button type="button" class="btn btn-secondary btn-sm">Rajouter O(log n) aux choix</button></div></div>
+      <div class="list-edit" aria-describedby="choix-erreur">
+        <div class="list-edit-row"><button type="button" class="grip" aria-label="Déplacer le choix O(1). Espace pour saisir, flèches pour déplacer"><svg class="ico ico-18" aria-hidden="true"><use href="#drag_indicator" /></svg></button><label class="sr-only" for="choix-1">Choix 1</label><div class="input" id="choix-1"><span>O(1)</span></div><button type="button" class="btn btn-icon btn-sm" aria-label="Supprimer le choix O(1)"><svg class="ico ico-18" aria-hidden="true"><use href="#delete" /></svg></button></div>
+        <div class="list-edit-row"><button type="button" class="grip" aria-label="Déplacer le choix O(n). Espace pour saisir, flèches pour déplacer"><svg class="ico ico-18" aria-hidden="true"><use href="#drag_indicator" /></svg></button><label class="sr-only" for="choix-2">Choix 2</label><div class="input" id="choix-2"><span>O(n)</span></div><button type="button" class="btn btn-icon btn-sm" aria-label="Supprimer le choix O(n)"><svg class="ico ico-18" aria-hidden="true"><use href="#delete" /></svg></button></div>
+        <div class="list-edit-row"><button type="button" class="grip" aria-label="Déplacer le choix O(n log n). Espace pour saisir, flèches pour déplacer"><svg class="ico ico-18" aria-hidden="true"><use href="#drag_indicator" /></svg></button><label class="sr-only" for="choix-3">Choix 3</label><div class="input focused" id="choix-3"><span>O(n log n)</span></div><button type="button" class="btn btn-icon btn-sm" aria-label="Supprimer le choix O(n log n)"><svg class="ico ico-18" aria-hidden="true"><use href="#delete" /></svg></button></div>
       </div>
-      <a class="btn btn-ghost btn-sm" style="margin-top: var(--spacing-3)"><svg class="ico"><use href="#add" /></svg>Ajouter un choix</a>
-      <div style="display: flex; gap: var(--spacing-2); margin-top: var(--spacing-8)">
-        <a class="btn btn-secondary btn-sm"><svg class="ico"><use href="#chevron_left" /></svg>Énoncé</a>
-        <a class="btn btn-secondary btn-sm" style="margin-left: auto">Bonnes réponses<svg class="ico"><use href="#chevron_right" /></svg></a>
+      <p class="reorder-hint"><svg class="ico ico-16" aria-hidden="true"><use href="#keyboard" /></svg><span>Au clavier&nbsp;: placez-vous sur une poignée, Espace pour saisir, <span class="kbd">↑</span> <span class="kbd">↓</span> pour déplacer.</span></p>
+      <button type="button" class="btn btn-ghost btn-sm add-choice"><svg class="ico" aria-hidden="true"><use href="#add" /></svg>Ajouter un choix</button>
+      <div class="bloc-nav">
+        <button type="button" class="btn btn-secondary btn-sm"><svg class="ico" aria-hidden="true"><use href="#chevron_left" /></svg>Énoncé</button>
+        <button type="button" class="btn btn-secondary btn-sm bloc-next">Bonnes réponses<svg class="ico" aria-hidden="true"><use href="#chevron_right" /></svg></button>
       </div>
     </section>
-    <section class="atelier-preview">
-      <div class="atelier-preview-head"><svg class="ico ico-18"><use href="#visibility" /></svg>Ce que voient vos étudiants<span style="margin-left: auto">Actualisé à l'instant</span></div>
+    <section class="atelier-preview" aria-label="Aperçu">
+      <div class="atelier-preview-head"><svg class="ico ico-18" aria-hidden="true"><use href="#visibility" /></svg><h2 class="small">Aperçu&nbsp;: ce que voient vos étudiants</h2><span class="preview-state">Non actualisé</span><button type="button" class="btn btn-icon btn-sm" aria-label="Ouvrir l'aperçu en plein écran" title="Ouvrir l'aperçu en plein écran"><svg class="ico ico-18" aria-hidden="true"><use href="#open_in_new" /></svg></button></div>
       <div class="atelier-preview-body">
-        <div class="card" style="max-width: 420px; margin: var(--spacing-8) auto">
-          <div class="empty compact" style="padding: var(--spacing-6)">
-            <svg class="ico"><use href="#warning" /></svg>
-            <div class="empty-body"><h2 class="subheading">Aperçu en attente</h2><p>Le modèle ne trouve pas la bonne réponse dans les choix. L'aperçu revient dès que c'est corrigé.</p></div>
-          </div>
+        <div class="card empty with-icon preview-wait">
+          <div class="empty-icon"><svg class="ico" aria-hidden="true"><use href="#hourglass_empty" /></svg></div>
+          <div class="empty-body"><h3 class="subheading">Aperçu en attente</h3><p>Le modèle ne trouve pas la bonne réponse dans les choix. L'aperçu revient dès que le bloc Choix est corrigé.</p></div>
         </div>
       </div>
     </section>
-  </div>
+  </main>
 </div>

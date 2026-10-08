@@ -1,35 +1,41 @@
-<div style="min-height: 100vh; padding: var(--spacing-6) var(--spacing-8)"><div style="max-width: 1100px">
-  <div class="player-head">
-    <button class="btn btn-icon" aria-label="Quitter l'activité" data-wf-to="detail"><svg class="ico"><use href="#arrow_back" /></svg></button>
-    <div style="flex: 1">
+<div class="reader"><div class="reader-in">
+  <a class="skip-link" href="#contenu">Aller au contenu</a>
+  <header class="player-head">
+    <button type="button" class="btn btn-icon" aria-label="Revenir au cours" data-wf-to="detail"><svg class="ico" aria-hidden="true"><use href="#arrow_back" /></svg></button>
+    <div class="course-mark sm hue-lagon" aria-hidden="true">AP1</div>
+    <div class="player-title">
       <div class="heading">Examen partiel 2</div>
-      <div class="muted" style="font-size: 13px">Algorithmique et programmation 1, terminé le 12 octobre à 9&nbsp;h&nbsp;04</div>
+      <p class="small muted">Algorithmique et programmation 1, lundi 12 octobre</p>
     </div>
-  </div>
+  </header>
   <div class="layout">
-    <div class="card card-pad" style="padding: var(--spacing-8)">
-      <span class="done-label"><svg class="ico"><use href="#emoji_events" /></svg>Examen terminé</span>
-      <div class="score" style="margin-top: var(--spacing-3)"><span class="big warm">72</span><small>/ 100</small></div>
-      <p class="muted" style="margin-top: var(--spacing-2); max-width: 56ch">6 exercices réussis sur 8, en 1&nbsp;h&nbsp;04. La note est provisoire tant que vos enseignants n'ont pas relu les copies&nbsp;; une notification vous préviendra quand la correction sera disponible.</p>
-      <div class="card rows" style="margin-top: var(--spacing-6)">
-        <div class="row" style="min-height: 48px"><span class="q-mark ok" style="position: static; width: auto; flex-direction: row"><svg class="ico"><use href="#check_circle" /></svg></span><div class="row-main"><div class="row-title" style="font-size: 14px">1. Complexité d'une boucle</div></div><span class="num muted">10&nbsp;/&nbsp;10</span></div>
-        <div class="row" style="min-height: 48px"><span class="q-mark part" style="position: static; width: auto; flex-direction: row"><svg class="ico"><use href="#pending" /></svg></span><div class="row-main"><div class="row-title" style="font-size: 14px">2. Notation grand O</div></div><span class="num muted">5&nbsp;/&nbsp;10</span></div>
-        <div class="row" style="min-height: 48px"><span class="q-mark ok" style="position: static; width: auto; flex-direction: row"><svg class="ico"><use href="#check_circle" /></svg></span><div class="row-main"><div class="row-title" style="font-size: 14px">3. Complexité de somme</div></div><span class="num muted">15&nbsp;/&nbsp;15</span></div>
-        <div class="row" style="min-height: 48px"><span class="q-mark ko" style="position: static; width: auto; flex-direction: row"><svg class="ico"><use href="#error" /></svg></span><div class="row-main"><div class="row-title" style="font-size: 14px">4. Recherche dichotomique</div></div><span class="num muted">0&nbsp;/&nbsp;15</span></div>
-        <div class="row" style="min-height: 48px"><span class="q-mark ok" style="position: static; width: auto; flex-direction: row"><svg class="ico"><use href="#check_circle" /></svg></span><div class="row-main"><div class="row-title" style="font-size: 14px">5. Récursivité</div></div><span class="num muted">15&nbsp;/&nbsp;15</span></div>
-        <div class="row" style="min-height: 48px"><span class="q-mark ok" style="position: static; width: auto; flex-direction: row"><svg class="ico"><use href="#check_circle" /></svg></span><div class="row-main"><div class="row-title" style="font-size: 14px">6. Pile et file</div></div><span class="num muted">10&nbsp;/&nbsp;10</span></div>
-        <div class="row" style="min-height: 48px"><span class="q-mark ok" style="position: static; width: auto; flex-direction: row"><svg class="ico"><use href="#check_circle" /></svg></span><div class="row-main"><div class="row-title" style="font-size: 14px">7. Tableaux à deux dimensions</div></div><span class="num muted">12&nbsp;/&nbsp;15</span></div>
-        <div class="row" style="min-height: 48px"><span class="q-mark ok" style="position: static; width: auto; flex-direction: row"><svg class="ico"><use href="#check_circle" /></svg></span><div class="row-main"><div class="row-title" style="font-size: 14px">8. Fonctions de hachage</div></div><span class="num muted">5&nbsp;/&nbsp;10</span></div>
+    <main class="card player-card" id="contenu">
+      <div class="completion">
+        <h1 class="title done-title"><svg class="ico" aria-hidden="true"><use href="#task_alt" /></svg>Examen terminé</h1>
+        <div class="bar wide done" aria-hidden="true"><span style="width: 100%"></span></div>
+        <p class="small">Copie rendue à 9&nbsp;h&nbsp;04&nbsp;: 6 exercices validés, 2 rendus en brouillon.</p>
       </div>
-      <div style="display: flex; gap: var(--spacing-2); margin-top: var(--spacing-6)">
-        <a class="btn btn-primary" data-wf-to="detail">Revenir au cours</a>
-        <a class="btn btn-secondary" data-wf-to="etudiant">Accueil</a>
+      <p class="score result-score"><span class="big">72</span><small>/ 100</small><span class="tag">Note provisoire</span></p>
+      <p class="muted result-text">4 exercices réussis, 3 réussis en partie et 1 à revoir, en 1&nbsp;h&nbsp;04. Cette note est provisoire&nbsp;: vos enseignants relisent les copies, brouillons compris, et peuvent la changer. Les notes de chaque exercice paraîtront avec votre copie corrigée&nbsp;; une notification vous préviendra.</p>
+      <ul class="card rows result-list" aria-label="État de chaque exercice, chacun mène à votre copie">
+        <li class="row"><a href="#" data-wf-to="copie-corrigee"><span class="state-dot ok" aria-hidden="true"><svg class="ico" aria-hidden="true"><use href="#check_circle" /></svg></span><span class="row-main"><span class="row-title">1. Complexité d'une boucle</span><span class="row-meta">Réussi</span></span><svg class="ico go" aria-hidden="true"><use href="#chevron_right" /></svg></a></li>
+        <li class="row"><a href="#" data-wf-to="copie-corrigee"><span class="state-dot part" aria-hidden="true"><svg class="ico" aria-hidden="true"><use href="#contrast" /></svg></span><span class="row-main"><span class="row-title">2. Notation grand O</span><span class="row-meta">Réussi en partie</span></span><svg class="ico go" aria-hidden="true"><use href="#chevron_right" /></svg></a></li>
+        <li class="row"><a href="#" data-wf-to="copie-corrigee"><span class="state-dot ok" aria-hidden="true"><svg class="ico" aria-hidden="true"><use href="#check_circle" /></svg></span><span class="row-main"><span class="row-title">3. Complexité de somme</span><span class="row-meta">Réussi</span></span><svg class="ico go" aria-hidden="true"><use href="#chevron_right" /></svg></a></li>
+        <li class="row"><a href="#" data-wf-to="copie-corrigee"><span class="state-dot ko" aria-hidden="true"><svg class="ico" aria-hidden="true"><use href="#error" /></svg></span><span class="row-main"><span class="row-title">4. Recherche dichotomique</span><span class="row-meta">À revoir, rendu en brouillon</span></span><svg class="ico go" aria-hidden="true"><use href="#chevron_right" /></svg></a></li>
+        <li class="row"><a href="#" data-wf-to="copie-corrigee"><span class="state-dot ok" aria-hidden="true"><svg class="ico" aria-hidden="true"><use href="#check_circle" /></svg></span><span class="row-main"><span class="row-title">5. Récursivité</span><span class="row-meta">Réussi</span></span><svg class="ico go" aria-hidden="true"><use href="#chevron_right" /></svg></a></li>
+        <li class="row"><a href="#" data-wf-to="copie-corrigee"><span class="state-dot ok" aria-hidden="true"><svg class="ico" aria-hidden="true"><use href="#check_circle" /></svg></span><span class="row-main"><span class="row-title">6. Pile et file</span><span class="row-meta">Réussi</span></span><svg class="ico go" aria-hidden="true"><use href="#chevron_right" /></svg></a></li>
+        <li class="row"><a href="#" data-wf-to="copie-corrigee"><span class="state-dot part" aria-hidden="true"><svg class="ico" aria-hidden="true"><use href="#contrast" /></svg></span><span class="row-main"><span class="row-title">7. Tableaux à deux dimensions</span><span class="row-meta">Réussi en partie, rendu en brouillon</span></span><svg class="ico go" aria-hidden="true"><use href="#chevron_right" /></svg></a></li>
+        <li class="row"><a href="#" data-wf-to="copie-corrigee"><span class="state-dot part" aria-hidden="true"><svg class="ico" aria-hidden="true"><use href="#contrast" /></svg></span><span class="row-main"><span class="row-title">8. Fonctions de hachage</span><span class="row-meta">Réussi en partie</span></span><svg class="ico go" aria-hidden="true"><use href="#chevron_right" /></svg></a></li>
+      </ul>
+      <div class="player-actions">
+        <a href="#" class="btn btn-primary" data-wf-to="detail">Revenir au cours</a>
+        <a href="#" class="btn btn-secondary" data-wf-to="etudiant">Accueil</a>
       </div>
-    </div>
-    <aside class="card">
-      <div class="rail-head"><span class="subheading">Et ensuite</span></div>
-      <div class="mini"><span class="mini-title">Revoir la recherche dichotomique</span><span class="muted" style="font-size: 13px">L'entraînement de la semaine 4 reste ouvert.</span></div>
-      <div class="mini"><span class="mini-title">Correction</span><span class="muted" style="font-size: 13px">Une notification vous préviendra.</span></div>
+    </main>
+    <aside class="card" aria-labelledby="next-t">
+      <div class="rail-head"><h2 class="subheading" id="next-t">Et ensuite</h2></div>
+      <a href="#" class="mini next-link" data-wf-to="copie-corrigee"><span class="grow"><span class="mini-title">Votre copie corrigée de TP 3</span><span class="small muted">Les remarques de Julien Lefèvre sur les conditions et les valeurs limites.</span></span><svg class="ico" aria-hidden="true"><use href="#chevron_right" /></svg></a>
+      <a href="#" class="mini next-link" data-wf-to="challenges"><span class="grow"><span class="mini-title">Challenge&nbsp;: tris</span><span class="small muted">2 exercices sur 5, sans échéance.</span></span><svg class="ico" aria-hidden="true"><use href="#chevron_right" /></svg></a>
     </aside>
   </div>
 </div></div>

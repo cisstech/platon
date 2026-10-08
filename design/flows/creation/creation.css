@@ -1,0 +1,263 @@
+/* Atelier: the variable that breaks the preview says so, with a mark and a word. */
+.atelier-item .state.error {
+  color: var(--color-danger);
+}
+.atelier-item .state-word {
+  margin-left: auto;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+  color: var(--color-danger-ink);
+}
+.atelier-item .state-word + .state {
+  margin-left: 6px;
+}
+
+/* Saved: the save control becomes a quiet state once there is nothing left to save. */
+.btn-saved {
+  color: var(--color-muted);
+  cursor: default;
+}
+.btn-saved .ico {
+  color: var(--color-graphite-600);
+}
+
+/* Course choice: three tiles, each with the course mark, as on every course page. */
+.choice-cards.courses {
+  grid-template-columns: repeat(3, 1fr);
+}
+.choice.course-tile {
+  position: relative;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-2);
+}
+.choice.course-tile .radio {
+  position: absolute;
+  top: var(--spacing-3);
+  right: var(--spacing-3);
+  margin: 0;
+}
+.course-tile .tile-top {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+.choice.course-tile small {
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--color-muted);
+}
+
+/* What to create: the PLaTon glyph sits above the name. */
+.choice-body .glyph {
+  display: block;
+  margin-bottom: var(--spacing-2);
+}
+
+.atelier-nav .nav-group {
+  margin: var(--spacing-3) var(--spacing-2) var(--spacing-1);
+  color: var(--color-subtle);
+}
+
+/* A save that cannot happen says why, next to the button. */
+.save-why {
+  margin-left: var(--spacing-2);
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--color-muted);
+}
+
+/* Gallery: one certified model is recommended to start with; the others stay right below, at equal weight. */
+.model-feature {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  overflow: hidden;
+  margin-bottom: var(--spacing-4);
+}
+.model-feature .model-thumb {
+  height: auto;
+  min-height: 152px;
+}
+.model-feature .model-body {
+  gap: var(--spacing-1);
+  padding: var(--spacing-4) var(--spacing-5);
+}
+.model-feature .model-body p {
+  max-width: 64ch;
+  font-size: 14px;
+  line-height: 21px;
+}
+.model-feature .model-foot {
+  padding-top: var(--spacing-3);
+}
+.model-feature .model-foot .btn {
+  margin-left: 0;
+}
+.model-feature .feature-count {
+  margin-left: auto;
+}
+
+.atelier-head .head-icon {
+  width: 30px;
+  height: 30px;
+}
+.atelier-head .spacer {
+  flex: 1;
+}
+.atelier-preview-head .preview-state {
+  margin-left: auto;
+}
+
+/* Block editor: title, one line of help, the list, then the way to the previous and next blocks. */
+.bloc-title {
+  margin-bottom: var(--spacing-1);
+}
+.bloc-desc {
+  margin: 0 0 var(--spacing-4);
+}
+.bloc-alert {
+  margin-bottom: var(--spacing-3);
+}
+.bloc-alert .alert-text {
+  margin: 2px 0 var(--spacing-2);
+}
+.add-choice {
+  margin-top: var(--spacing-3);
+}
+.bloc-nav {
+  display: flex;
+  gap: var(--spacing-2);
+  margin-top: var(--spacing-8);
+}
+.bloc-nav .bloc-next {
+  margin-left: auto;
+}
+.preview-wait {
+  max-width: 420px;
+  padding: var(--spacing-5);
+}
+
+/* Dialogs and forms of the flow. */
+.add-dialog {
+  width: 680px;
+  max-height: calc(100% - 48px);
+}
+.add-dialog .add-row,
+.add-dialog .rules-summary {
+  margin-top: var(--spacing-3);
+}
+.add-row {
+  margin-top: var(--spacing-4);
+}
+.choice-cards.two {
+  grid-template-columns: 1fr 1fr;
+}
+.field-action {
+  margin: 0 calc(-1 * var(--spacing-2)) 0 auto;
+}
+.optional {
+  font-weight: 400;
+}
+.dialog-note {
+  margin: var(--spacing-4) 0 0;
+}
+.foot-note {
+  margin-right: auto;
+}
+.confirm-body {
+  padding-top: var(--spacing-5);
+}
+.confirm-body .subheading {
+  margin-bottom: var(--spacing-2);
+}
+.confirm-body p {
+  margin: 0;
+}
+.new-form {
+  max-width: 720px;
+}
+
+/* When: an open activity says until when, in words. The default closing is spelled out, never an empty field. */
+.when {
+  align-items: start;
+}
+.close-choice .option {
+  padding: var(--spacing-2) var(--spacing-3);
+}
+.when-hint {
+  margin: var(--spacing-2) 0 0;
+}
+
+/* Gallery: the search field, the certified block, the empty state, the preview dialog. */
+.model-search {
+  flex: 1;
+  max-width: 420px;
+}
+.model-search .ico {
+  order: -1;
+  margin: 0 var(--spacing-2) 0 0;
+  color: var(--color-subtle);
+}
+.models-certified {
+  margin-bottom: var(--spacing-8);
+}
+.models-empty {
+  max-width: 720px;
+}
+.apercu-close {
+  margin-left: auto;
+}
+.apercu-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  min-height: 0;
+}
+.apercu-stage {
+  padding: var(--spacing-6);
+  background: var(--color-surface-muted);
+}
+.apercu-side {
+  padding: var(--spacing-5);
+  border-left: 1px solid var(--color-line);
+}
+.apercu-side .subheading {
+  margin-bottom: var(--spacing-2);
+}
+.apercu-side dl {
+  margin: 0;
+}
+.apercu-note {
+  margin: var(--spacing-4) 0 0;
+}
+
+/* Usage: the same three answers as when adding an activity to a course. */
+/* Graded: dates, duration, then the exam rules in one line, with the way to the full form. */
+.field-row.when-three {
+  grid-template-columns: repeat(3, 1fr);
+}
+.rules-summary {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-3);
+  margin-top: var(--spacing-4);
+  padding: var(--spacing-3) var(--spacing-3) var(--spacing-3) var(--spacing-4);
+  border: 1px solid var(--color-line);
+  border-radius: var(--rounded-md);
+  background: var(--color-surface-muted);
+}
+.rules-summary > .ico {
+  flex: none;
+  margin-top: 1px;
+  color: var(--color-graphite-600);
+}
+.rules-summary p {
+  flex: 1;
+  margin: 0;
+  font-size: 13px;
+  line-height: 18px;
+}
+.rules-summary .btn {
+  flex: none;
+  margin: -6px 0 -6px auto;
+}

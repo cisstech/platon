@@ -1,0 +1,337 @@
+/* The queue of batches: each batch is a pile of copies, with room for the sheets behind it. */
+.batches {
+  display: grid;
+  gap: var(--spacing-5);
+}
+
+/* The pile thickens with what is left: the kit draws one sheet (thin, two copies or fewer) or two
+   (three to nine); ten copies or more add a third sheet, drawn under the two others. */
+.pile.thick {
+  margin: 0 12px 12px 0;
+  box-shadow:
+    12px 12px 0 -1px var(--color-surface),
+    12px 12px 0 0 var(--color-line);
+}
+
+/* What is left to correct leads the meta line; the bar shows what is done. */
+.meta-strong {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+/* A finished batch lies flat: corrected copies, graphite, with done_all. */
+.done-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+.done-count .ico {
+  width: 18px;
+  height: 18px;
+  color: var(--color-graphite-700);
+}
+.file-empty {
+  max-width: 720px;
+}
+.next-t {
+  margin: var(--spacing-2) 0 var(--spacing-3);
+}
+
+/* Group and sort keep a visible label next to their value. */
+.filter {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin-right: var(--spacing-4);
+}
+.filter label {
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+
+/* The correction screen: no sidebar, the three columns fill the page. */
+.corr {
+  min-height: 100vh;
+  padding: var(--spacing-6) var(--spacing-8);
+}
+.corr-title {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Keyboard legend of the correction screen: compact, wraps to a second line at most. */
+.shortcuts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--spacing-1) var(--spacing-4);
+  max-width: 500px;
+  margin: 0;
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--color-muted);
+}
+.shortcuts > div {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.shortcuts dt {
+  display: inline-flex;
+  gap: 2px;
+}
+.shortcuts dd {
+  margin: 0;
+}
+
+/* The queue of copies: a pile, searchable by name, that says how many corrected copies sit above. */
+/* Par exercice: what the mode has already done on every copy, said once above the list. */
+.queue-mode {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: var(--spacing-3) var(--spacing-3) 0;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--color-muted);
+}
+.queue-mode .ico {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  color: var(--color-graphite-700);
+}
+.queue-search {
+  padding: var(--spacing-3) var(--spacing-3) var(--spacing-2);
+}
+.queue-search .input {
+  height: 36px;
+  gap: var(--spacing-2);
+  font-size: 13px;
+}
+.queue-search .input .ico {
+  color: var(--color-subtle);
+}
+.queue-cue {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  min-height: 36px;
+  padding: 0 var(--spacing-3);
+  border: 0;
+  border-top: 1px solid var(--color-line);
+  background: var(--color-surface-muted);
+  font: inherit;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+  color: var(--color-muted);
+  text-align: left;
+  cursor: pointer;
+}
+.queue-cue.below {
+  border-radius: 0 0 var(--rounded-lg) var(--rounded-lg);
+  cursor: default;
+}
+.queue-list {
+  border-top: 1px solid var(--color-line);
+}
+.queue-item.current .ico {
+  color: var(--color-primary);
+}
+
+/* Exercise switcher of a copy: previous, next, the correction mode, and one pill per exercise. */
+.ex-switch {
+  margin-bottom: var(--spacing-3);
+}
+.ex-switch-head {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  margin-bottom: var(--spacing-2);
+}
+.ex-pos {
+  margin-right: var(--spacing-1);
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+.mode {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin-left: auto;
+}
+.mode .segmented span {
+  cursor: pointer;
+}
+.ex-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-1);
+}
+button.ex-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--color-line-strong);
+  border-radius: var(--rounded-sm);
+  background: var(--color-surface);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  font-feature-settings: 'tnum' 1;
+  color: var(--color-text);
+  cursor: pointer;
+}
+.ex-pill .ico {
+  width: 16px;
+  height: 16px;
+  color: var(--color-graphite-300);
+}
+.ex-pill.done .ico {
+  color: var(--color-graphite-700);
+}
+.ex-pill-grade {
+  margin-left: 4px;
+  padding-left: 6px;
+  border-left: 1px solid var(--color-line-strong);
+  font-weight: 400;
+  color: var(--color-muted);
+}
+.ex-pill[aria-current] {
+  border-color: var(--color-primary);
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+.ex-pill[aria-current] .ico {
+  color: var(--color-primary);
+}
+
+/* The grade says where it comes from: automatic grade, then each label. */
+.grade-panel {
+  overflow: hidden;
+}
+.grade-calc {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-4);
+  padding: var(--spacing-3) var(--spacing-4);
+}
+.grade-calc .grade {
+  padding: 0;
+}
+.calc {
+  flex: 1;
+  display: grid;
+  gap: 2px;
+  margin: 4px 0 0;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--color-muted);
+}
+.calc > div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--spacing-2);
+}
+.calc dd {
+  margin: 0;
+  font-weight: 600;
+  font-feature-settings: 'tnum' 1;
+  color: var(--color-text);
+}
+.calc dd.minus {
+  color: var(--color-danger-ink);
+}
+
+/* Accept the automatic grade: only when every test passes. */
+.accept {
+  display: grid;
+  gap: 4px;
+  padding: 0 var(--spacing-4) var(--spacing-3);
+}
+.accept .btn {
+  width: 100%;
+  justify-content: flex-start;
+}
+.accept .kbd {
+  margin-left: auto;
+}
+
+/* Sub-heads of the grade panel: compact, one line each. */
+.panel-sub {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-2);
+  min-height: 36px;
+  padding: var(--spacing-1) var(--spacing-2) 0 var(--spacing-4);
+  border-top: 1px solid var(--color-line);
+}
+.grade-panel .labels {
+  gap: 4px;
+  padding: 0 var(--spacing-4) var(--spacing-3);
+}
+.grade-panel .label-row {
+  padding: 6px var(--spacing-3);
+}
+.grade-panel .comment-box {
+  min-height: 60px;
+  margin-bottom: var(--spacing-3);
+  font-size: 13px;
+  line-height: 18px;
+}
+.copy-grade {
+  display: grid;
+  gap: 2px;
+  padding: var(--spacing-3) var(--spacing-4);
+  border-top: 1px solid var(--color-line);
+  background: var(--color-surface-muted);
+}
+.copy-grade p:first-child {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--spacing-2);
+  font-size: 13px;
+  line-height: 18px;
+}
+.copy-grade strong {
+  font-size: 15px;
+  line-height: 22px;
+}
+.copy-grade small {
+  font-weight: 400;
+  color: var(--color-muted);
+}
+
+/* End of a batch: a short moment, chaleur on the bar and the icon only. */
+.fin {
+  display: grid;
+  gap: var(--spacing-3);
+  justify-items: start;
+  max-width: 720px;
+  margin-bottom: var(--spacing-6);
+}
+.fin .done-label .ico {
+  width: 24px;
+  height: 24px;
+}
+.fin .bar {
+  max-width: 360px;
+}
+
+.grade-panel .comment-box {
+  height: auto;
+}
