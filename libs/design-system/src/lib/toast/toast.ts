@@ -1,22 +1,29 @@
 import { NgTemplateOutlet } from '@angular/common'
 import { ChangeDetectionStrategy, Component, TemplateRef, computed, input, output } from '@angular/core'
+import { Button } from '../button/button'
 import { Icon } from '../icon/icon'
 import { IconName } from '../icon/icon-names'
+import { Tooltip } from '../tooltip/tooltip'
 
 export type ToastTone = 'info' | 'success' | 'warning' | 'danger' | 'loading'
 
+/** A confirmation takes `check`, not the icon of success: staying is not succeeding. */
 const TONE_ICONS: Record<Exclude<ToastTone, 'loading'>, IconName> = {
   info: 'info',
-  success: 'check_circle',
+  success: 'check',
   warning: 'warning',
   danger: 'error',
 }
 
-/** A short message about what just happened. Its tone always comes with an icon, never color alone. */
+/**
+ * A short message floating over the page, on the color of the cover. Its tone comes with an icon,
+ * never with color alone; a confirmation or an information stays neutral. It may carry one action,
+ * such as « Annuler ».
+ */
 @Component({
   selector: 'pl-toast',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Icon, NgTemplateOutlet],
+  imports: [Button, Icon, NgTemplateOutlet, Tooltip],
   host: {
     class: 'pl-toast',
     '[attr.data-tone]': 'tone()',
@@ -36,48 +43,55 @@ const TONE_ICONS: Record<Exclude<ToastTone, 'loading'>, IconName> = {
       <ng-container [ngTemplateOutlet]="template" [ngTemplateOutletContext]="context()" />
       }
     </div>
-    @if (dismissLabel()) {
-    <button type="button" class="pl-toast__dismiss" [attr.aria-label]="dismissLabel()" (click)="dismissed.emit()">
-      <pl-icon name="close" [size]="1" />
+    @if (actionLabel(); as actionLabel) {
+    <button type="button" plButton variant="ghost" size="sm" class="pl-toast__action" (click)="acted.emit()">
+      @if (actionIcon(); as actionIcon) {
+      <pl-icon [name]="actionIcon" />
+      }
+      {{ actionLabel }}
+    </button>
+    } @if (dismissLabel(); as dismissLabel) {
+    <button
+      type="button"
+      plButton
+      variant="icon"
+      size="sm"
+      class="pl-toast__dismiss"
+      [plTooltip]="dismissLabel"
+      (click)="dismissed.emit()"
+    >
+      <pl-icon name="close" />
     </button>
     }
   `,
   styles: `
     :host {
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       gap: var(--pl-space-3);
-      inline-size: min(360px, 100%);
-      padding: var(--pl-space-3) var(--pl-space-3) var(--pl-space-3) var(--pl-space-4);
-      border: 1px solid var(--pl-color-line);
-      border-radius: var(--pl-radius-card);
-      background: var(--pl-color-surface-raised);
-      box-shadow: var(--pl-shadow-float);
-      color: var(--pl-color-text);
+      max-inline-size: min(520px, 100%);
+      padding: var(--pl-space-2) var(--pl-space-2) var(--pl-space-2) var(--pl-space-4);
+      border-radius: var(--pl-radius-3);
+      background: var(--pl-color-cover);
+      box-shadow: var(--pl-shadow-overlay);
+      color: var(--pl-color-cover-text);
       font: var(--pl-font-body);
     }
-    .pl-toast__icon,
-    .pl-toast__spinner {
-      margin-block-start: 1px;
-    }
-    :host([data-tone='info']) .pl-toast__icon {
-      color: var(--pl-color-info-ink);
-    }
-    :host([data-tone='success']) .pl-toast__icon {
-      color: var(--pl-color-success-ink);
+    .pl-toast__icon {
+      color: var(--pl-color-cover-muted);
     }
     :host([data-tone='warning']) .pl-toast__icon {
-      color: var(--pl-color-warning-ink);
+      color: var(--pl-color-cover-warning);
     }
     :host([data-tone='danger']) .pl-toast__icon {
-      color: var(--pl-color-danger-ink);
+      color: var(--pl-color-cover-danger);
     }
     .pl-toast__spinner {
       flex: none;
       inline-size: var(--pl-icon-size-3);
       block-size: var(--pl-icon-size-3);
-      border: 2px solid var(--pl-color-line-strong);
-      border-block-start-color: var(--pl-color-primary);
+      border: 2px solid var(--pl-color-cover-line);
+      border-block-start-color: var(--pl-color-cover-primary);
       border-radius: var(--pl-radius-pill);
       animation: pl-toast-spin var(--pl-duration-joy) linear infinite;
     }
@@ -86,31 +100,25 @@ const TONE_ICONS: Record<Exclude<ToastTone, 'loading'>, IconName> = {
       flex: 1;
       gap: var(--pl-space-1);
       min-inline-size: 0;
+      padding-block: var(--pl-space-1);
       overflow-wrap: anywhere;
     }
     .pl-toast__title {
       font: var(--pl-font-subheading);
     }
-    .pl-toast__message {
-      color: var(--pl-color-text);
-    }
     .pl-toast__title + .pl-toast__message {
-      color: var(--pl-color-muted);
+      color: var(--pl-color-cover-muted);
     }
-    .pl-toast__dismiss {
-      display: inline-flex;
-      flex: none;
-      padding: var(--pl-space-1);
-      border: 0;
-      border-radius: var(--pl-radius-control);
-      background: transparent;
-      color: var(--pl-color-muted);
-      cursor: pointer;
-      transition: background-color var(--pl-duration-hover) var(--pl-ease-standard);
+    :host .pl-toast__action {
+      color: var(--pl-color-cover-primary);
     }
-    .pl-toast__dismiss:hover {
-      background: var(--pl-color-surface-muted);
-      color: var(--pl-color-text);
+    :host .pl-toast__dismiss {
+      color: var(--pl-color-cover-muted);
+    }
+    :host .pl-toast__action:hover,
+    :host .pl-toast__dismiss:hover {
+      background: var(--pl-color-cover-raised);
+      color: var(--pl-color-cover-text);
     }
     @keyframes pl-toast-spin {
       to {
@@ -126,8 +134,12 @@ export class Toast {
   /** Rendered under the message, with `context`. */
   readonly template = input<TemplateRef<unknown>>()
   readonly context = input<unknown>()
+  /** Label of the one action the toast carries, such as « Annuler ». */
+  readonly actionLabel = input<string>()
+  readonly actionIcon = input<IconName>()
   /** Accessible name of the close button; without it, the toast has no close button. */
   readonly dismissLabel = input<string>()
+  readonly acted = output<void>()
   readonly dismissed = output<void>()
 
   protected readonly icon = computed(() => {

@@ -35,6 +35,12 @@ describe('Button', () => {
     expect(button().dataset).toMatchObject({ variant: 'primary', size: 'lg', tone: 'danger' })
   })
 
+  it('puts its spinner in front of the label, where its icon was', () => {
+    fixture.componentInstance.loading.set(true)
+    fixture.detectChanges()
+    expect(button().firstElementChild?.classList).toContain('pl-button__spinner')
+  })
+
   it('keeps its label while it works, announces it and ignores clicks', () => {
     fixture.componentInstance.loading.set(true)
     fixture.detectChanges()

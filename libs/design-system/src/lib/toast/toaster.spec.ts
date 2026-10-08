@@ -1,6 +1,6 @@
 import { LiveAnnouncer } from '@angular/cdk/a11y'
 import { TestBed, fakeAsync, tick } from '@angular/core/testing'
-import { DEFAULT_TOAST_DURATION, Toaster } from './toaster'
+import { DEFAULT_TOAST_DURATION, TOAST_INSET_START, Toaster } from './toaster'
 
 describe('Toaster', () => {
   let toaster: Toaster
@@ -27,6 +27,13 @@ describe('Toaster', () => {
     expect(document.querySelector('pl-toast-stack')?.getAttribute('aria-label')).toBe('Notifications')
   })
 
+  it('sits at the bottom left of the page, off the frame the application gives', () => {
+    toaster.show({ message: 'Exercice enregistré' })
+    shownToasts()
+    const stack = document.querySelector('pl-toast-stack') as HTMLElement
+    expect(stack.style.getPropertyValue('--pl-toast-inset-start')).toBe('0px')
+  })
+
   it('announces the title and the message, errors assertively', () => {
     toaster.show({ tone: 'info', title: 'Nouvelle version', message: 'Rechargez la page' })
     toaster.show({ tone: 'danger', message: 'Enregistrement impossible' })
@@ -40,6 +47,30 @@ describe('Toaster', () => {
     tick(DEFAULT_TOAST_DURATION)
     expect(toaster.toasts().map((toast) => toast.options.message)).toEqual(['Permanent'])
   }))
+
+  it('keeps a toast with an action until it is closed, and closes it once the action runs', fakeAsync(() => {
+    const run = jest.fn()
+    toaster.show({
+      message: 'Gaëlle Picard ne fait plus partie du cours.',
+      action: { label: 'Annuler', icon: 'undo', run },
+      dismissLabel: 'Fermer la notification',
+    })
+    tick(DEFAULT_TOAST_DURATION * 3)
+    expect(toaster.toasts()).toHaveLength(1)
+    TestBed.tick()
+    const action = [...document.querySelectorAll<HTMLButtonElement>('pl-toast-stack button')].find(
+      (button) => button.textContent?.trim() === 'Annuler'
+    ) as HTMLButtonElement
+    action.click()
+    expect(run).toHaveBeenCalledTimes(1)
+    expect(toaster.toasts()).toEqual([])
+  }))
+
+  it('confirms with a neutral check, not the icon of success', () => {
+    toaster.show({ tone: 'success', message: 'Exercice enregistré' })
+    TestBed.tick()
+    expect(document.querySelector('pl-toast .pl-toast__icon use')?.getAttribute('href')).toMatch(/#check$/)
+  })
 
   it('closes through its reference', () => {
     const toast = toaster.show({ message: 'Envoi en cours', duration: 0 })
@@ -88,4 +119,21 @@ describe('Toaster', () => {
     tick(DEFAULT_TOAST_DURATION)
     expect(toaster.toasts()).toEqual([])
   }))
+})
+
+describe('Toaster beside a cover', () => {
+  afterEach(() => document.querySelector('pl-toast-stack')?.remove())
+
+  it('starts after the cover', () => {
+    TestBed.configureTestingModule({
+      providers: [
+        { provide: LiveAnnouncer, useValue: { announce: jest.fn().mockResolvedValue(undefined) } },
+        { provide: TOAST_INSET_START, useValue: 'var(--pl-cover-width)' },
+      ],
+    })
+    TestBed.inject(Toaster).show({ message: 'Cours créé' })
+    TestBed.tick()
+    const stack = document.querySelector('pl-toast-stack') as HTMLElement
+    expect(stack.style.getPropertyValue('--pl-toast-inset-start')).toBe('var(--pl-cover-width)')
+  })
 })

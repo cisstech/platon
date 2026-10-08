@@ -47,7 +47,7 @@ export const Sizes: Story = {
   render: () => ({
     template: `
       <div class="story-row">
-        <button plButton variant="secondary" size="sm">Small, 32 px</button>
+        <button plButton variant="secondary" size="sm">Small, 36 px</button>
         <button plButton variant="secondary">Medium, 36 px</button>
         <button plButton variant="secondary" size="lg">Large, 44 px</button>
       </div>
@@ -59,8 +59,8 @@ export const Danger: Story = {
   render: () => ({
     template: `
       <div class="story-row">
-        <button plButton variant="secondary" tone="danger" size="sm"><pl-icon name="delete" />Delete the course</button>
         <button plButton variant="primary" tone="danger">Delete the course</button>
+        <button plButton variant="secondary" tone="danger"><pl-icon name="delete" />Delete the course</button>
         <button plButton variant="ghost" tone="danger"><pl-icon name="delete" />Remove</button>
       </div>
     `,
@@ -71,7 +71,7 @@ export const Loading: Story = {
   render: () => ({
     template: `
       <div class="story-row">
-        <button plButton variant="primary" loading>Save</button>
+        <button plButton variant="primary" loading><pl-icon name="add" />Add an activity</button>
         <button plButton variant="secondary" loading>Import grades</button>
       </div>
     `,

@@ -73,3 +73,13 @@
   color: var(--pl-color-muted);
   font: var(--pl-font-small);
 }
+
+.story-shell {
+  display: grid;
+  grid-template-columns: var(--pl-cover-width) minmax(0, 1fr);
+  block-size: 100vh;
+}
+
+.story-shell__page {
+  background: var(--pl-color-ground);
+}
