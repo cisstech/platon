@@ -9,7 +9,8 @@ export type CourseHue = 'coral' | 'amber' | 'olive' | 'mint' | 'lagoon' | 'cornf
 
 /**
  * A state or a category in a word, with an icon when it helps. The color never speaks alone: the
- * text always says the state.
+ * text always says the state. `graded` is an outline without color: the ink is kept for what can be
+ * done and what is selected.
  */
 @Component({
   selector: 'pl-tag',
@@ -56,8 +57,9 @@ export type CourseHue = 'coral' | 'amber' | 'olive' | 'mint' | 'lagoon' | 'cornf
       color: var(--pl-color-info-ink);
     }
     :host([data-tone='graded']) {
-      background: var(--pl-color-primary-soft);
-      color: var(--pl-color-primary);
+      border: 1px solid var(--pl-color-line-strong);
+      background: var(--pl-color-surface);
+      color: var(--pl-color-text);
     }
     :host([data-hue='coral']) {
       background: var(--pl-course-coral-tint);

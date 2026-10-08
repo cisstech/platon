@@ -18,6 +18,7 @@ export const ICON_NAMES = [
   'chevron_left',
   'chevron_right',
   'close',
+  'cloud_off',
   'code',
   'content_copy',
   'contrast',
@@ -87,6 +88,7 @@ export const ICON_NAMES = [
   'trending_down',
   'trending_up',
   'tune',
+  'undo',
   'upload',
   'verified',
   'visibility',
@@ -94,6 +96,7 @@ export const ICON_NAMES = [
   'vpn_key',
   'warning',
   'widgets',
+  'wifi_off',
 ] as const
 
 export type IconName = (typeof ICON_NAMES)[number]

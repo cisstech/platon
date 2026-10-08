@@ -15,6 +15,7 @@ import {
   inject,
   signal,
 } from '@angular/core'
+import { IconName } from '../icon/icon-names'
 import { Toast, ToastTone } from './toast'
 
 export const DEFAULT_TOAST_DURATION = 4000
@@ -22,6 +23,14 @@ export const DEFAULT_TOAST_DURATION = 4000
 /** Accessible name of the region that holds the toasts. */
 export const TOAST_REGION_LABEL = new InjectionToken<string>('TOAST_REGION_LABEL', {
   factory: () => 'Notifications',
+})
+
+/**
+ * Where the page starts, as a CSS length: the toasts sit at its bottom left, off the frame of the
+ * application (a cover on the left gives its width).
+ */
+export const TOAST_INSET_START = new InjectionToken<string>('TOAST_INSET_START', {
+  factory: () => '0px',
 })
 
 export interface ToastRef {
@@ -33,6 +42,13 @@ export interface ToastContext<T = unknown> {
   data: T
 }
 
+/** The one action a toast may carry, such as « Annuler » after a deletion. */
+export interface ToastAction {
+  label: string
+  icon?: IconName
+  run: () => void
+}
+
 export interface ToastOptions<T = unknown> {
   tone?: ToastTone
   title?: string
@@ -40,8 +56,12 @@ export interface ToastOptions<T = unknown> {
   /** Rendered in the toast with a `ToastContext`. */
   template?: TemplateRef<ToastContext<T>>
   data?: T
-  /** Milliseconds before the toast goes away; `0` keeps it until it is closed. */
+  /**
+   * Milliseconds before the toast goes away; `0` keeps it until it is closed. Without a value, a toast
+   * that only confirms goes away after 4 s, and a toast with an action stays until it is closed.
+   */
   duration?: number
+  action?: ToastAction
   /** Accessible name of the close button; without it, the toast has no close button. */
   dismissLabel?: string
 }
@@ -114,7 +134,7 @@ export class Toaster {
   }
 
   private startTimer(entry: ToastEntry): void {
-    const duration = entry.options.duration ?? DEFAULT_TOAST_DURATION
+    const duration = entry.options.duration ?? (entry.options.action ? 0 : DEFAULT_TOAST_DURATION)
     if (duration > 0 && !this.timers.has(entry.id)) {
       this.timers.set(
         entry.id,
@@ -139,6 +159,7 @@ export class Toaster {
   host: {
     role: 'region',
     '[attr.aria-label]': 'label',
+    '[style.--pl-toast-inset-start]': 'insetStart',
     '(mouseenter)': "toaster.hold('pointer', true)",
     '(mouseleave)': "toaster.hold('pointer', false)",
     '(focusin)': "toaster.hold('focus', true)",
@@ -152,7 +173,10 @@ export class Toaster {
       [message]="entry.options.message"
       [template]="entry.options.template"
       [context]="entry.context"
+      [actionLabel]="entry.options.action?.label"
+      [actionIcon]="entry.options.action?.icon"
       [dismissLabel]="entry.options.dismissLabel"
+      (acted)="act(entry)"
       (dismissed)="close(entry.ref)"
     />
     }
@@ -160,24 +184,32 @@ export class Toaster {
   styles: `
     :host {
       position: fixed;
-      inset-block-end: var(--pl-space-4);
-      inset-inline-start: var(--pl-space-4);
+      inset-block-end: var(--pl-space-6);
+      inset-inline-start: calc(var(--pl-toast-inset-start) + var(--pl-space-6));
       z-index: var(--pl-layer-toast);
       display: flex;
       flex-direction: column;
+      align-items: flex-start;
       gap: var(--pl-space-2);
-      max-inline-size: calc(100vw - 2 * var(--pl-space-4));
+      max-inline-size: calc(100vw - var(--pl-toast-inset-start) - 2 * var(--pl-space-6));
     }
   `,
 })
 export class ToastStack {
   protected readonly toaster = inject(Toaster)
   protected readonly label = inject(TOAST_REGION_LABEL)
+  protected readonly insetStart = inject(TOAST_INSET_START)
   private readonly host: HTMLElement = inject(ElementRef).nativeElement
   private readonly injector = inject(Injector)
 
   protected focusLeft(event: FocusEvent): void {
     if (!this.host.contains(event.relatedTarget as Node | null)) this.toaster.hold('focus', false)
+  }
+
+  /** Runs the toast's action, then closes it. */
+  protected act(entry: ToastEntry): void {
+    entry.options.action?.run()
+    this.close(entry.ref)
   }
 
   /**

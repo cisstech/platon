@@ -17,15 +17,15 @@ import {
  */
 export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'icon' | 'cover' | 'cover-quiet'
 
-/** 32, 36 and 44 px high; at least 44 px on a touch screen. */
+/** `sm` and `md` are 36 px high, the smallest target on a desktop; `lg` is 44 px, as on a touch screen. */
 export type ButtonSize = 'sm' | 'md' | 'lg'
 
 /** `danger` for an action that destroys or loses something. */
 export type ButtonTone = 'default' | 'danger'
 
 /**
- * A button or a link styled as a button. While it works (`loading`), it keeps its label, shows an
- * indicator, announces itself busy and ignores clicks.
+ * A button or a link styled as a button. While it works (`loading`), its spinner takes the place of
+ * its icon, in front of a label that does not move; it announces itself busy and ignores clicks.
  */
 @Component({
   // A component on a native button or link: the attribute keeps the form of the library's directives.
@@ -41,10 +41,10 @@ export type ButtonTone = 'default' | 'danger'
     '[attr.aria-disabled]': "loading() ? 'true' : null",
   },
   template: `
-    <ng-content />
     @if (loading()) {
     <span class="pl-button__spinner" aria-hidden="true"></span>
     }
+    <ng-content />
   `,
   styles: `
     :host {
@@ -70,7 +70,6 @@ export type ButtonTone = 'default' | 'danger'
         border-color var(--pl-duration-hover) var(--pl-ease-standard);
     }
     :host([data-size='sm']) {
-      block-size: var(--pl-space-8);
       padding: 0 var(--pl-space-3);
       font: var(--pl-font-small);
       font-weight: var(--pl-weight-strong);
@@ -96,6 +95,9 @@ export type ButtonTone = 'default' | 'danger'
       background: var(--pl-color-danger-strong);
       color: var(--pl-color-on-danger);
     }
+    :host([data-variant='primary'][data-tone='danger']:hover) {
+      background: var(--pl-color-danger-strong-hover);
+    }
 
     :host([data-variant='secondary']) {
       border-color: var(--pl-color-line-strong);
@@ -107,10 +109,11 @@ export type ButtonTone = 'default' | 'danger'
       background: var(--pl-color-surface-muted);
     }
     :host([data-variant='secondary'][data-tone='danger']) {
-      border-color: var(--pl-color-danger);
+      border-color: var(--pl-color-danger-line);
       color: var(--pl-color-danger-ink);
     }
     :host([data-variant='secondary'][data-tone='danger']:hover) {
+      border-color: var(--pl-color-danger);
       background: var(--pl-color-danger-soft);
     }
 
@@ -134,7 +137,7 @@ export type ButtonTone = 'default' | 'danger'
       color: var(--pl-color-muted);
     }
     :host([data-variant='icon'][data-size='sm']) {
-      inline-size: var(--pl-space-8);
+      --pl-icon-size: var(--pl-icon-size-1);
     }
     :host([data-variant='icon'][data-size='lg']) {
       inline-size: 44px;
@@ -170,6 +173,10 @@ export type ButtonTone = 'default' | 'danger'
       cursor: progress;
     }
 
+    /* The projected icon belongs to the page's template: only a deep selector reaches it. */
+    :host([aria-busy='true']) ::ng-deep > pl-icon {
+      display: none;
+    }
     .pl-button__spinner {
       flex: none;
       inline-size: var(--pl-icon-size-1);
