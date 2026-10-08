@@ -15,7 +15,8 @@ and the decisions live in `docs/backlog/` (French); the wireframes in `design/fl
 
 - `apps/web/src/main.ts` and `ui-switch/`: choose the interface before Angular boots. No Angular there.
 - `apps/web/src/shared/`: what both interfaces boot with (providers, boot context).
-- `apps/web/src/next/`: the new interface. `core/` for services and guards, `pages/<route>/` for screens.
+- `apps/web/src/next/`: the new interface. `core/` for services and guards, `pages/<route>/` for screens,
+  `shared/` for components several screens use with their French copy (`load-state`).
 - `libs/design-system` (`@platon/design-system`, prefix `pl-`): components and tokens. It imports no
   PLaTon code; the application passes data through inputs.
 
@@ -26,6 +27,7 @@ and the decisions live in `docs/backlog/` (French); the wireframes in `design/fl
   and vendors: `@platon/core/browser/shared` for the core (ESLint enforces it); a feature library gets
   its own `.../shared` entry the first time a screen needs it.
 - Store: one per route, provided by the route, signals with an `idle | loading | ready | error` state.
+  The shell store is the exception: what it loads only decorates the frame, so a failure hides it.
 - View functions: pure, in `<name>.vm.ts`, tested alone.
 - Page: reads the store and renders; no business logic in the template.
 - Cross-cutting facades (`DialogService`, theme) are ports: the new interface provides its own

@@ -6,7 +6,7 @@ import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
 import { getMainDefinition, relayStylePagination } from '@apollo/client/utilities'
 import { HttpLink } from 'apollo-angular/http'
 import { createClient } from 'graphql-ws'
-import { TokenService } from '../auth'
+import { TokenService } from '../auth/api/token.service'
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   // React only on graphql errors

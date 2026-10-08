@@ -1,0 +1,30 @@
+.shell {
+  display: grid;
+  grid-template-columns: var(--pl-cover-width) minmax(0, 1fr);
+  block-size: 100dvh;
+}
+
+.shell__cover {
+  block-size: 100dvh;
+}
+
+.shell__create {
+  justify-content: flex-start;
+}
+
+.shell__page {
+  min-inline-size: 0;
+  overflow-y: auto;
+  background: var(--pl-color-ground);
+}
+
+.shell__menu-name {
+  display: block;
+  font-weight: var(--pl-weight-strong);
+}
+
+.shell__menu-email {
+  display: block;
+  color: var(--pl-color-muted);
+  font: var(--pl-font-small);
+}

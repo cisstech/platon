@@ -1,0 +1,103 @@
+<a plSkipLink>Aller au contenu</a>
+<div class="shell">
+  <pl-cover class="shell__cover">
+    <a plCoverBrand routerLink="/dashboard" [institution]="institution">PLaTon</a>
+    @if (canCreate() && charterAccepted()) {
+    <button
+      type="button"
+      plButton
+      plCoverAction
+      class="shell__create"
+      [variant]="quietCreate() ? 'cover-quiet' : 'cover'"
+      [plMenuTrigger]="createMenu"
+      #createTrigger="plMenuTrigger"
+    >
+      <pl-icon name="add" />Créer
+    </button>
+    } @else if (canCreate()) {
+    <button
+      type="button"
+      plButton
+      plCoverAction
+      class="shell__create"
+      aria-haspopup="dialog"
+      [variant]="quietCreate() ? 'cover-quiet' : 'cover'"
+      (click)="acceptCharter()"
+    >
+      <pl-icon name="add" />Créer
+    </button>
+    }
+    <pl-cover-nav label="Navigation principale">
+      @for (entry of entries(); track entry.link) {
+      <a
+        plCoverItem
+        [routerLink]="entry.link"
+        [icon]="entry.icon"
+        [count]="entry.count"
+        [countLabel]="entry.countLabel"
+      >
+        {{ entry.label }}
+      </a>
+      }
+    </pl-cover-nav>
+    <pl-cover-foot>
+      @if (helpInFoot()) {
+      <a plCoverItem [href]="docsUrl" target="_blank" rel="noopener" icon="help">
+        Documentation<span class="pl-visually-hidden">, s'ouvre dans un nouvel onglet</span>
+      </a>
+      } @if (user(); as user) {
+      <button type="button" plCoverProfile [person]="user" [detail]="accountType()" [plMenuTrigger]="profileMenu">
+        {{ name() }}
+      </button>
+      }
+      <a plCoverCredit href="https://github.com/cisstech/platon" target="_blank" rel="noopener">
+        Logiciel libre, par <strong>cisstech</strong
+        ><span class="pl-visually-hidden"> : code source de PLaTon, s'ouvre dans un nouvel onglet</span>
+      </a>
+    </pl-cover-foot>
+  </pl-cover>
+  <!-- The page scrolls here, not the document: the CDK must know it, for menus and tooltips to follow. -->
+  <div class="shell__page" cdkScrollable><router-outlet /></div>
+</div>
+
+<pl-menu #createMenu="ngMenu" (itemSelected)="create($event)">
+  @for (entry of createEntries(); track entry.kind) {
+  <pl-menu-item [value]="entry.kind" [glyph]="entry.glyph" [description]="entry.description">{{
+    entry.label
+  }}</pl-menu-item>
+  }
+</pl-menu>
+
+<pl-menu #profileMenu="ngMenu" placement="above-start" (itemSelected)="chooseFromProfile($event)">
+  <pl-menu-header>
+    <span class="shell__menu-name">{{ name() }}</span>
+    @if (user()?.email) {
+    <span class="shell__menu-email">{{ user()?.email }}</span>
+    }
+  </pl-menu-header>
+  <pl-menu-separator />
+  <pl-menu-item value="account" icon="account_circle">Mon compte</pl-menu-item>
+  @if (canCreate() && circleId()) {
+  <pl-menu-item value="circle" icon="folder_open">Mon cercle</pl-menu-item>
+  } @if (!helpInFoot()) {
+  <pl-menu-item value="help" icon="help">
+    Aide <pl-icon name="open_in_new" [size]="1" /><span class="pl-visually-hidden"
+      >, s'ouvre dans un nouvel onglet</span
+    >
+  </pl-menu-item>
+  }
+  <pl-menu-separator />
+  <pl-menu-group label="Thème">
+    <pl-menu-item value="theme:light" role="menuitemradio" [checked]="theme.preference() === 'light'"
+      >Clair</pl-menu-item
+    >
+    <pl-menu-item value="theme:dark" role="menuitemradio" [checked]="theme.preference() === 'dark'"
+      >Sombre</pl-menu-item
+    >
+    <pl-menu-item value="theme:system" role="menuitemradio" [checked]="theme.preference() === 'system'"
+      >Auto</pl-menu-item
+    >
+  </pl-menu-group>
+  <pl-menu-separator />
+  <pl-menu-item value="sign-out" icon="logout">Se déconnecter</pl-menu-item>
+</pl-menu>
