@@ -1,6 +1,6 @@
 # Roadmap
 
-> Mise à jour : 2026-09-29. Wireframes : [`design/flows`](../../design/flows). Décisions :
+> Mise à jour : 2026-10-08. Wireframes : [`design/flows`](../../design/flows). Décisions :
 > [DECISIONS.md](./DECISIONS.md). Standard : [README.md](./README.md).
 
 ## Où on en est
@@ -10,8 +10,11 @@ ressources, création, tests, administration, compte, annonces), avec la directi
 faisabilité dans [`design/docs`](../../design/docs). Côté code, le socle du basculement est livré
 (phase S : choix au démarrage, styles et providers séparés, pont, proposition d'essai), puis les
 fondations (phase F : bibliothèque `@platon/design-system` et Storybook, tokens clair et sombre,
-polices et icônes, garde-fous `yarn lint:design`, dialogues et thème). La nouvelle interface n'a
-encore que son accueil ; la suite est le cadre (phase C), dont les tickets sont écrits.
+polices et icônes, garde-fous `yarn lint:design`, dialogues et thème). Les wireframes ont été repris
+après quatre tours de critique (154 écrans, règles communes, glyphes d'état, données de référence
+dans `design/docs/09-donnees.md`). Dans la phase C, la session, le gabarit de page et ses états sont
+livrés, puis la couverture ; le cadre mobile et les notifications sont prêts à coder, leurs points
+ouverts tranchés. La nouvelle interface n'a encore que son accueil provisoire.
 
 ## Où on atterrit
 
@@ -36,15 +39,15 @@ Statuts : `À faire`, `À écrire` (le ticket n'est pas encore rédigé), `En co
 
 ## Phase S : le socle du basculement
 
-| Ticket                                                              | Titre                                                                                          | Dépend de | Taille | Statut             |
-| ------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- | ------ | ------------------ |
-| [S-01](./done/S-01-choisir-l-interface-au-demarrage.md)             | Choisir l'interface au démarrage                                                               | aucun     | M      | Livré (2026-09-28) |
-| [S-02](./done/S-02-separer-les-styles-par-interface.md)             | Séparer les styles par interface                                                               | S-01      | M      | Livré (2026-09-28) |
-| [S-03](./done/S-03-isoler-les-providers-de-l-ancienne-interface.md) | Isoler les providers de l'ancienne interface                                                   | S-01      | S      | Livré (2026-09-28) |
-| [S-04](./done/S-04-le-pont-vers-l-ancienne-interface.md)            | Le pont vers l'ancienne interface                                                              | S-01      | M      | Livré (2026-09-28) |
-| [S-05](./done/S-05-proposer-la-nouvelle-interface.md)               | Proposer la nouvelle interface, et en revenir                                                  | S-04      | S      | Livré (2026-09-28) |
-| S-06                                                                | Ramener vers la nouvelle interface les écrans portés ouverts depuis l'ancienne (après le pont) | A-01      | S      | À écrire           |
-| [S-07](./done/S-07-ecran-de-chargement.md)                          | Écran de chargement                                                                            | S-02      | S      | Livré (2026-09-29) |
+| Ticket                                                               | Titre                                                                                          | Dépend de  | Taille | Statut             |
+| -------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ---------- | ------ | ------------------ |
+| [S-01](./done/S-01-choisir-l-interface-au-demarrage.md)              | Choisir l'interface au démarrage                                                               | aucun      | M      | Livré (2026-09-28) |
+| [S-02](./done/S-02-separer-les-styles-par-interface.md)              | Séparer les styles par interface                                                               | S-01       | M      | Livré (2026-09-28) |
+| [S-03](./done/S-03-isoler-les-providers-de-l-ancienne-interface.md)  | Isoler les providers de l'ancienne interface                                                   | S-01       | S      | Livré (2026-09-28) |
+| [S-04](./done/S-04-le-pont-vers-l-ancienne-interface.md)             | Le pont vers l'ancienne interface                                                              | S-01       | M      | Livré (2026-09-28) |
+| [S-05](./done/S-05-proposer-la-nouvelle-interface.md)                | Proposer la nouvelle interface, et en revenir                                                  | S-04       | S      | Livré (2026-09-28) |
+| [S-06](./done/S-06-revenir-a-la-nouvelle-interface-apres-le-pont.md) | Ramener vers la nouvelle interface les écrans portés ouverts depuis l'ancienne (après le pont) | S-04, C-06 | S      | Livré (2026-10-08) |
+| [S-07](./done/S-07-ecran-de-chargement.md)                           | Écran de chargement                                                                            | S-02       | S      | Livré (2026-09-29) |
 
 ## Phase F : les fondations du design system
 
@@ -57,17 +60,19 @@ Statuts : `À faire`, `À écrire` (le ticket n'est pas encore rédigé), `En co
 
 ## Phase C : le cadre
 
-Ordre : C-01 et C-06 d'abord (indépendants), puis C-05, C-02, C-03 et C-04. Les points ouverts de
-C-02, C-03 et C-04 sont à trancher avant de coder ces tickets.
+Ordre : C-01, C-07, C-06, C-05 et C-02 (livrés), puis C-03 et C-04. C-07 aligne ce qui est livré
+sur les wireframes révisés après quatre tours de critique. Les points ouverts de C-02 à C-05 sont
+tranchés (D22 à D30, 2026-10-08).
 
-| Ticket                                                    | Titre                                                                                       | Dépend de        | Taille | Statut             |
-| --------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ---------------- | ------ | ------------------ |
-| [C-01](./done/C-01-boutons-menus-bulles-avatar-badges.md) | Boutons, menus, bulles, avatar, badges et choix segmenté                                    | F-02             | M      | Livré (2026-09-29) |
-| [C-06](./C-06-la-session-dans-la-nouvelle-interface.md)   | La session : authentification, utilisateur courant, GraphQL                                 | F-04             | M      | À faire            |
-| [C-05](./C-05-le-gabarit-de-page.md)                      | Le gabarit de page : en-tête, onglets, états (vide, chargement, erreur)                     | C-01             | M      | À faire            |
-| [C-02](./C-02-la-couverture.md)                           | La couverture : navigation par rôle, intercalaire, Créer, profil, mention du logiciel libre | C-01, C-06       | L      | À faire            |
-| [C-03](./C-03-le-cadre-mobile.md)                         | Le cadre mobile : barre haute et panneau                                                    | C-02             | M      | À faire            |
-| [C-04](./C-04-le-panneau-des-notifications.md)            | Le panneau des notifications                                                                | C-02, C-06, F-04 | M      | À faire            |
+| Ticket                                                             | Titre                                                                                       | Dépend de        | Taille | Statut             |
+| ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------- | ---------------- | ------ | ------------------ |
+| [C-01](./done/C-01-boutons-menus-bulles-avatar-badges.md)          | Boutons, menus, bulles, avatar, badges et choix segmenté                                    | F-02             | M      | Livré (2026-09-29) |
+| [C-07](./done/C-07-aligner-f04-et-c01-sur-la-direction-revisee.md) | Aligner F-04 et C-01 sur la direction révisée                                               | C-01, F-04       | M      | Livré (2026-10-08) |
+| [C-06](./done/C-06-la-session-dans-la-nouvelle-interface.md)       | La session : authentification, utilisateur courant, GraphQL                                 | F-04             | M      | Livré (2026-10-08) |
+| [C-05](./done/C-05-le-gabarit-de-page.md)                          | Le gabarit de page : en-tête, onglets, états (vide, chargement, erreur)                     | C-01, C-07       | M      | Livré (2026-10-08) |
+| [C-02](./done/C-02-la-couverture.md)                               | La couverture : navigation par rôle, intercalaire, Créer, profil, mention du logiciel libre | C-01, C-06, C-07 | L      | Livré (2026-10-08) |
+| [C-03](./C-03-le-cadre-mobile.md)                                  | Le cadre mobile : barre haute et panneau                                                    | C-02             | M      | À faire            |
+| [C-04](./C-04-le-panneau-des-notifications.md)                     | Le panneau des notifications                                                                | C-02, C-06, F-04 | M      | À faire            |
 
 ## Phase A : les accueils
 
