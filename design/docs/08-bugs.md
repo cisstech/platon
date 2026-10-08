@@ -44,6 +44,17 @@ Gravité : **P1** bloque, trompe ou expose. **P2** gêne ou fait douter. **P3** 
 - **Cause** : les données ne sont chargées que pour `student`.
 - **Où** : `apps/web/src/app/pages/dashboard/overview/overview.presenter.ts`
 
+### B21. Suppression des notifications d'une autre personne
+
+- [ ] Corrigé
+- **Symptôme** : la mutation de suppression d'une notification accepte n'importe quel identifiant ;
+  une personne connectée peut supprimer les notifications d'une autre si elle connaît leurs
+  identifiants.
+- **Cause** : `NotificationService.delete(userId, ids)` appelle `repository.delete(ids)` sans filtrer
+  sur `userId`.
+- **Où** : `libs/feature/notification/server/src/lib/notification.service.ts`
+- **Piste** : supprimer par `{ userId, id: In(ids) }`, comme `markAsUnread` ; C-04 le fait.
+
 ## P2
 
 ### B6. `/tests` sans garde de rôle
@@ -93,6 +104,18 @@ Gravité : **P1** bloque, trompe ou expose. **P2** gêne ou fait douter. **P3** 
   `components/notification-drawer/notification-drawer.component.ts`
 - **Piste** : lire `totalCount` de `notifications(filters: { unread: true })` au chargement ; C-04 le
   fait pour la nouvelle interface.
+
+### B22. Un élève correcteur ne peut pas enregistrer ses corrections
+
+- [ ] Corrigé
+- **Symptôme** : un élève désigné correcteur d'une activité voit ses copies à corriger, mais chaque
+  correction enregistrée est refusée (403).
+- **Cause** : le choix des correcteurs propose tous les membres du cours, élèves compris, alors que
+  `POST /results/corrections/:sessionId` n'accepte que les rôles enseignant et administrateur.
+- **Où** : `libs/feature/result/server/src/lib/correction/correction.controller.ts` (`@Roles`),
+  `libs/feature/course/browser/src/components/activity-settings/restriction/`
+- **Piste** : autoriser l'enregistrement à toute personne désignée correctrice de l'activité
+  (`ActivityCorrectorView`), ou ne proposer que des enseignants comme correcteurs. À trancher.
 
 ## P3
 

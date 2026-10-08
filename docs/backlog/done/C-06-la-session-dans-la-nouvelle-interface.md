@@ -2,7 +2,7 @@
 
 Source : `design/docs/06-faisabilite.md` (cadre et navigation), inventaire du code du 2026-09-29 ;
 décisions : D6, D8, D21.
-Statut : À faire.
+Statut : Livré (2026-10-08).
 Dépend de : F-04.
 Taille : M.
 
@@ -79,6 +79,23 @@ aucun
 
 ## 7. Definition of Done
 
-- [ ] Les tests du §2 passent.
-- [ ] Une adresse du cadre ouverte sans session mène à la connexion, puis revient à l'adresse.
-- [ ] Le démarrage de la nouvelle interface est mesuré : aucun code ng-zorro, Material ou Monaco.
+- [x] Les tests du §2 passent.
+- [x] Une adresse du cadre ouverte sans session mène à la connexion, puis revient à l'adresse
+      (par S-06, le 2026-10-08).
+- [x] Le démarrage de la nouvelle interface est mesuré : aucun code ng-zorro, Material ou Monaco.
+
+> **Amendement à la livraison.** `@platon/core/browser/shared` expose l'authentification (service,
+> jeton, utilisateur, providers), le module GraphQL et l'intercepteur d'encodage des paramètres, que le
+> cœur fournit aussi à l'ancienne interface. Trois imports passaient par une entrée de dossier
+> (`../../services`, `../auth`) et tiraient intro.js et les composants d'authentification : ils visent
+> désormais leur fichier. Le store `Session` charge l'utilisateur une fois ; la garde `sessionGuard`
+> protège l'accueil, jamais le pont. ESLint refuse dans `next/` l'entrée principale d'une bibliothèque
+> `@platon/feature/*/browser` (une expression régulière : un motif d'exclusion ne peut pas réadmettre
+> `/shared`).
+
+> **Amendement à la livraison.** Le démarrage de la nouvelle interface passe de 576 Ko (178 Ko
+> compressés) à 827 Ko (254 Ko), surtout pour le client Apollo et `graphql-ws`, sans aucun code
+> ng-zorro, Material ni Monaco. Si ce poids gêne, Apollo pourra se charger à la demande quand C-04
+> s'en servira. Vérifié dans Chrome sur le build de production : `/?ui=next` sans session mène à
+> `/login?next=%2F` dans l'ancienne interface. Le retour à l'adresse après la connexion demande l'API :
+> non vérifié.
