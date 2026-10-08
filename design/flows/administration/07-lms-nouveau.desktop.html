@@ -8,26 +8,26 @@
         <div class="brand-org">Université Gustave Eiffel</div>
       </div>
     </div>
-    <a class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico"><use href="#add" /></svg>Créer</a>
+    <button type="button" class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico" aria-hidden="true"><use href="#add" /></svg>Créer</button>
     <nav class="nav">
-      <a class="nav-item" data-wf-to="enseignant"><svg class="ico"><use href="#home" /></svg>Accueil</a>
-      <a class="nav-item" data-wf-to="annonces"><svg class="ico"><use href="#campaign" /></svg>Annonces</a>
-      <a class="nav-item" data-wf-to="mes-cours"><svg class="ico"><use href="#school" /></svg>Cours</a>
-      <a class="nav-item" data-wf-to="file"><svg class="ico"><use href="#rate_review" /></svg>Corrections<span class="count">14</span></a>
-      <a class="nav-item" data-wf-to="catalogue"><svg class="ico"><use href="#folder_open" /></svg>Ressources</a>
-      <a class="nav-item" data-wf-to="test"><svg class="ico"><use href="#fact_check" /></svg>Tests d'entrée</a>
-      <a class="nav-item active" data-wf-to="utilisateurs"><svg class="ico"><use href="#shield_person" /></svg>Administration</a>
+      <a href="#" class="nav-item" data-wf-to="enseignant"><svg class="ico" aria-hidden="true"><use href="#home" /></svg>Accueil</a>
+      <a href="#" class="nav-item" data-wf-to="annonces"><svg class="ico" aria-hidden="true"><use href="#campaign" /></svg>Annonces</a>
+      <a href="#" class="nav-item" data-wf-to="mes-cours"><svg class="ico" aria-hidden="true"><use href="#school" /></svg>Cours</a>
+      <a href="#" class="nav-item" data-wf-to="file"><svg class="ico" aria-hidden="true"><use href="#rate_review" /></svg>Corrections</a>
+      <a href="#" class="nav-item" data-wf-to="catalogue"><svg class="ico" aria-hidden="true"><use href="#folder_open" /></svg>Ressources</a>
+      <a href="#" class="nav-item" data-wf-to="test"><svg class="ico" aria-hidden="true"><use href="#fact_check" /></svg>Tests d'entrée</a>
+      <a href="#" class="nav-item active" data-wf-to="utilisateurs"><svg class="ico" aria-hidden="true"><use href="#shield_person" /></svg>Administration</a>
     </nav>
     <div class="sidebar-foot">
-      <a class="nav-item"><svg class="ico"><use href="#help" /></svg>Documentation</a>
-      <a class="nav-item"><svg class="ico"><use href="#notifications" /></svg>Notifications<span class="count">2</span></a>
+      <a href="#" class="nav-item"><svg class="ico" aria-hidden="true"><use href="#help" /></svg>Documentation</a>
+      <a href="#" class="nav-item"><svg class="ico" aria-hidden="true"><use href="#notifications" /></svg>Notifications<span class="count">2</span></a>
       <div class="me">
         <span class="avatar">SL</span>
         <div>
           <div class="me-name">Sophie Lambert</div>
-          <div class="me-role">Administratrice</div>
+          <div class="me-role">Compte administrateur</div>
         </div>
-        <svg class="ico ico-16"><use href="#expand_more" /></svg>
+        <svg class="ico ico-16" aria-hidden="true"><use href="#expand_more" /></svg>
       </div>
       <a class="credit" href="https://github.com/cisstech/platon" aria-label="Code source de PLaTon, logiciel libre de cisstech"><svg class="ico ico-16" aria-hidden="true"><use href="#code" /></svg>Logiciel libre, par <strong>cisstech</strong></a>
     </div>
@@ -35,36 +35,47 @@
   <main class="main" id="contenu">
     <header class="page-head">
       <div>
+        <p class="crumbs admin-mode"><span class="tag"><svg class="ico" aria-hidden="true"><use href="#shield_person" /></svg>Mode administration</span><span>Ce que vous changez ici vaut pour toute la plateforme.</span></p>
         <h1 class="title">Administration</h1>
-        <p class="page-sub">Comptes, groupes, connexions et contenus de la plateforme.</p>
       </div>
-      <div class="actions"><a class="btn btn-primary" data-wf-to="lms-nouveau"><svg class="ico"><use href="#add" /></svg>Ajouter un LMS</a></div>
+      <div class="actions"><button type="button" class="btn btn-primary" data-wf-to="lms-nouveau"><svg class="ico" aria-hidden="true"><use href="#add" /></svg>Ajouter un LMS</button></div>
     </header>
-    <div class="tabs"><a class="tab" data-wf-to="utilisateurs"><svg class="ico"><use href="#person" /></svg>Utilisateurs</a><a class="tab" data-wf-to="groupes-plateforme"><svg class="ico"><use href="#groups" /></svg>Groupes</a><a class="tab active" data-wf-to="lms"><svg class="ico"><use href="#school" /></svg>LMS</a><a class="tab" data-wf-to="cas"><svg class="ico"><use href="#key" /></svg>CAS</a><a class="tab" data-wf-to="tags"><svg class="ico"><use href="#bookmark" /></svg>Tags</a><a class="tab" data-wf-to="annonces-admin"><svg class="ico"><use href="#campaign" /></svg>Annonces</a></div>
-    <div class="toolbar"><div class="input" style="width: 320px"><svg class="ico ico-18" style="margin: 0 8px 0 0; color: var(--color-subtle)"><use href="#search" /></svg><span class="placeholder">Nom du LMS</span></div></div>
-    <div class="card" style="padding: 0; overflow: hidden">
+    <nav class="tabs" aria-label="Rubriques de l'administration">
+      <a href="#" class="tab" data-wf-to="utilisateurs"><svg class="ico" aria-hidden="true"><use href="#person" /></svg>Utilisateurs</a>
+      <a href="#" class="tab" data-wf-to="groupes-plateforme"><svg class="ico" aria-hidden="true"><use href="#groups" /></svg>Groupes</a>
+      <a href="#" class="tab active" aria-current="page" data-wf-to="lms"><svg class="ico" aria-hidden="true"><use href="#hub" /></svg>Connexions</a>
+      <a href="#" class="tab" data-wf-to="tags"><svg class="ico" aria-hidden="true"><use href="#bookmark" /></svg>Tags</a>
+      <a href="#" class="tab" data-wf-to="annonces-admin"><svg class="ico" aria-hidden="true"><use href="#campaign" /></svg>Annonces</a>
+    </nav>
+    <div class="toolbar">
+      <div class="segmented" role="tablist" aria-label="Type de connexion">
+        <span class="on" role="tab" aria-selected="true" aria-controls="panneau-connexions" tabindex="0">LMS reliés<small>2</small></span>
+        <span data-wf-to="cas" role="tab" aria-selected="false" aria-controls="panneau-connexions" tabindex="-1">Serveurs CAS<small>1</small></span>
+      </div>
+    </div>
+    <div class="card table-card" id="panneau-connexions" role="tabpanel" aria-label="LMS reliés">
       <table class="table">
-        <thead><tr><th>LMS</th><th>Adresse</th><th>Ajouté le</th></tr></thead>
+        <thead><tr><th scope="col">LMS</th><th scope="col">Adresse</th><th scope="col">Ajouté le</th></tr></thead>
         <tbody>
-          <tr><td><strong>Moodle Université Gustave Eiffel</strong></td><td class="num">https://elearning.univ-eiffel.fr</td><td>4 févr. 2022</td></tr>
-          <tr><td><strong>Moodle IUT</strong></td><td class="num">https://moodle.iut.univ-eiffel.fr</td><td>11 sept. 2023</td></tr>
+          <tr><td><strong>Moodle Université Gustave Eiffel</strong></td><td>https://elearning.univ-eiffel.fr</td><td>4 févr. 2022</td></tr>
+          <tr><td><strong>Moodle IUT</strong></td><td>https://moodle.iut.univ-eiffel.fr</td><td>11 sept. 2023</td></tr>
         </tbody>
       </table>
     </div>
-    <p class="muted" style="font-size: 13px; margin-top: var(--spacing-3)">Un LMS relié en LTI ouvre les cours PLaTon depuis ses propres pages, avec connexion automatique, et reçoit les notes.</p>
+    <p class="muted small table-note">Un LMS relié en LTI ouvre les cours PLaTon depuis ses propres pages, avec connexion automatique, et reçoit les notes.</p>
   </main>
-  <div class="scrim" data-wf-to="lms"></div>
-  <div class="drawer-right" role="dialog" aria-label="Ajouter un LMS">
-    <div class="drawer-head"><div class="subheading">Ajouter un LMS</div><button class="btn btn-icon btn-sm" aria-label="Fermer" data-wf-to="lms" style="margin-left: auto"><svg class="ico ico-18"><use href="#close" /></svg></button></div>
+  <div class="scrim" data-wf-to="lms" aria-hidden="true"></div>
+  <div class="drawer-right" role="dialog" aria-modal="true" aria-labelledby="dlg-t">
+    <div class="drawer-head"><h2 class="subheading" id="dlg-t">Ajouter un LMS</h2><button type="button" class="btn btn-icon btn-sm" aria-label="Fermer" data-wf-to="lms"><svg class="ico ico-18" aria-hidden="true"><use href="#close" /></svg></button></div>
     <div class="drawer-body">
-      <div class="field"><label>Nom</label><div class="input focused"><span>Moodle IFSTTAR</span></div></div>
-      <div class="field" style="margin-top: var(--spacing-3)"><label>Adresse</label><div class="input"><span class="placeholder">https://</span></div><span class="field-hint">La page d'accueil du LMS.</span></div>
-      <div class="field" style="margin-top: var(--spacing-3)"><label>Adresse de retour des notes</label><div class="input"><span class="placeholder">https://</span></div></div>
-      <div class="field-row" style="margin-top: var(--spacing-3)">
-        <div class="field"><label>Clé</label><div class="input"><span class="placeholder">consumer key</span></div></div>
-        <div class="field"><label>Secret</label><div class="input"><span class="placeholder">●●●●●●</span></div></div>
+      <div class="field"><label for="lms-nom">Nom</label><div class="input focused" id="lms-nom"><span>Moodle IFSTTAR</span></div></div>
+      <div class="field"><label for="lms-adresse">Adresse</label><div class="input" id="lms-adresse" aria-describedby="lms-adresse-aide"><span class="placeholder">https://</span></div><span class="field-hint" id="lms-adresse-aide">La page d'accueil du LMS.</span></div>
+      <div class="field"><label for="lms-notes">Adresse de retour des notes</label><div class="input" id="lms-notes" aria-describedby="lms-notes-aide"><span class="placeholder">https://</span></div><span class="field-hint" id="lms-notes-aide">Le service qui reçoit les notes, appelé «&nbsp;outcome service&nbsp;» en LTI.</span></div>
+      <div class="field-row">
+        <div class="field"><label for="lms-cle">Clé client</label><div class="input" id="lms-cle" aria-describedby="lms-cle-aide"><span class="placeholder">platon-ifsttar</span></div><span class="field-hint" id="lms-cle-aide">Appelée «&nbsp;consumer key&nbsp;» dans Moodle.</span></div>
+        <div class="field"><label for="lms-secret">Secret partagé</label><div class="input" id="lms-secret" aria-describedby="lms-secret-aide"><span class="placeholder">●●●●●●</span></div><span class="field-hint" id="lms-secret-aide">Appelé «&nbsp;shared secret&nbsp;» dans Moodle.</span></div>
       </div>
     </div>
-    <div class="drawer-foot"><a class="btn btn-secondary" data-wf-to="lms">Annuler</a><a class="btn btn-primary" data-wf-to="lms">Ajouter</a></div>
+    <div class="drawer-foot"><button type="button" class="btn btn-secondary" data-wf-to="lms">Annuler</button><button type="button" class="btn btn-primary" data-wf-to="lms">Ajouter le LMS</button></div>
   </div>
 </div>

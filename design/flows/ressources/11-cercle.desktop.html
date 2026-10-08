@@ -8,25 +8,25 @@
         <div class="brand-org">Université Gustave Eiffel</div>
       </div>
     </div>
-    <a class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico"><use href="#add" /></svg>Créer</a>
+    <button type="button" class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico" aria-hidden="true"><use href="#add" /></svg>Créer</button>
     <nav class="nav">
-      <a class="nav-item" data-wf-to="enseignant"><svg class="ico"><use href="#home" /></svg>Accueil</a>
-      <a class="nav-item" data-wf-to="annonces"><svg class="ico"><use href="#campaign" /></svg>Annonces</a>
-      <a class="nav-item" data-wf-to="mes-cours"><svg class="ico"><use href="#school" /></svg>Cours</a>
-      <a class="nav-item" data-wf-to="file"><svg class="ico"><use href="#rate_review" /></svg>Corrections<span class="count">14</span></a>
-      <a class="nav-item active" data-wf-to="catalogue"><svg class="ico"><use href="#folder_open" /></svg>Ressources</a>
-      <a class="nav-item" data-wf-to="test"><svg class="ico"><use href="#fact_check" /></svg>Tests d'entrée</a>
+      <a href="#" class="nav-item" data-wf-to="enseignant"><svg class="ico" aria-hidden="true"><use href="#home" /></svg>Accueil</a>
+      <a href="#" class="nav-item" data-wf-to="annonces"><svg class="ico" aria-hidden="true"><use href="#campaign" /></svg>Annonces</a>
+      <a href="#" class="nav-item" data-wf-to="mes-cours"><svg class="ico" aria-hidden="true"><use href="#school" /></svg>Cours</a>
+      <a href="#" class="nav-item" data-wf-to="file"><svg class="ico" aria-hidden="true"><use href="#rate_review" /></svg>Corrections<span class="count">2</span></a>
+      <a href="#" class="nav-item active" data-wf-to="catalogue"><svg class="ico" aria-hidden="true"><use href="#folder_open" /></svg>Ressources</a>
+      <a href="#" class="nav-item" data-wf-to="test"><svg class="ico" aria-hidden="true"><use href="#fact_check" /></svg>Tests d'entrée</a>
     </nav>
     <div class="sidebar-foot">
-      <a class="nav-item"><svg class="ico"><use href="#help" /></svg>Documentation</a>
-      <a class="nav-item"><svg class="ico"><use href="#notifications" /></svg>Notifications<span class="count">2</span></a>
+      <a href="#" class="nav-item"><svg class="ico" aria-hidden="true"><use href="#help" /></svg>Documentation</a>
+      <a href="#" class="nav-item"><svg class="ico" aria-hidden="true"><use href="#notifications" /></svg>Notifications<span class="count">2</span></a>
       <div class="me">
         <span class="avatar">KH</span>
         <div>
           <div class="me-name">Karim Haddad</div>
-          <div class="me-role">Enseignant</div>
+          <div class="me-role">Compte enseignant</div>
         </div>
-        <svg class="ico ico-16"><use href="#expand_more" /></svg>
+        <svg class="ico ico-16" aria-hidden="true"><use href="#expand_more" /></svg>
       </div>
       <a class="credit" href="https://github.com/cisstech/platon" aria-label="Code source de PLaTon, logiciel libre de cisstech"><svg class="ico ico-16" aria-hidden="true"><use href="#code" /></svg>Logiciel libre, par <strong>cisstech</strong></a>
     </div>
@@ -34,32 +34,36 @@
   <main class="main" id="contenu">
     <header class="page-head">
       <div>
-        <div class="crumbs"><a data-wf-to="catalogue">Ressources</a><svg class="ico"><use href="#chevron_right" /></svg><span>Informatique</span></div>
-        <h1 class="title" style="display: flex; align-items: center; gap: 6px"><svg class="ico"><use href="#folder_open" /></svg>Algorithmique<button class="btn btn-icon btn-sm" aria-label="Modifier le nom"><svg class="ico ico-16"><use href="#edit" /></svg></button></h1>
+        <div class="crumbs"><a href="#" data-wf-to="catalogue">Ressources</a><svg class="ico" aria-hidden="true"><use href="#chevron_right" /></svg><span>Informatique</span></div>
+        <h1 class="title title-inline"><svg class="ico" aria-hidden="true"><use href="#folder_open" /></svg>Algorithmique<button type="button" class="btn btn-icon btn-sm" aria-label="Renommer le cercle Algorithmique" title="Renommer"><svg class="ico ico-16" aria-hidden="true"><use href="#edit" /></svg></button></h1>
         <p class="page-sub">Exercices et activités des UE d'algorithmique de la licence.</p>
-        <div style="display: flex; gap: var(--spacing-2); margin-top: var(--spacing-3)"><a class="btn btn-secondary btn-sm" data-wf-to="suivi"><svg class="ico"><use href="#visibility" /></svg>Suivre</a><a class="btn btn-secondary btn-sm"><svg class="ico"><use href="#person_add" /></svg>Demander à rejoindre</a></div>
+        <div class="head-tools"><button type="button" class="btn btn-secondary btn-sm" aria-pressed="false"><svg class="ico" aria-hidden="true"><use href="#visibility" /></svg>Suivre</button><span class="tag"><svg class="ico" aria-hidden="true"><use href="#groups" /></svg>Vous êtes collaborateur</span></div>
       </div>
-      <div class="actions"><a class="btn btn-secondary" data-wf-to="cercles"><svg class="ico"><use href="#account_tree" /></svg>Cercles</a><a class="btn btn-primary" data-wf-to="catalogue"><svg class="ico"><use href="#search" /></svg>Chercher dans ce cercle</a></div>
+      <div class="actions">
+        <label class="sr-only" for="q-cercle">Chercher dans ce cercle</label><div class="input head-search" id="q-cercle" data-wf-to="catalogue"><svg class="ico ico-18" aria-hidden="true"><use href="#search" /></svg><span class="placeholder">Chercher dans ce cercle</span></div>
+        <button type="button" class="btn btn-secondary" data-wf-to="cercles"><svg class="ico" aria-hidden="true"><use href="#account_tree" /></svg>Cercles</button>
+        <button type="button" class="btn btn-primary" data-wf-to="nouvelle"><svg class="ico" aria-hidden="true"><use href="#add" /></svg>Nouvelle ressource</button>
+      </div>
     </header>
-    <div class="tabs"><a class="tab active" data-wf-to="cercle"><svg class="ico"><use href="#grid_view" /></svg>Vue d'ensemble</a><a class="tab" data-wf-to="explorer"><svg class="ico"><use href="#folder_open" /></svg>Explorer</a><a class="tab" data-wf-to="evenements"><svg class="ico"><use href="#history" /></svg>Évènements</a><a class="tab" data-wf-to="cercle-collaborateurs"><svg class="ico"><use href="#settings" /></svg>Paramètres</a></div>
+    <nav class="tabs" aria-label="Sections du cercle"><a href="#" class="tab active" data-wf-to="cercle" aria-current="page"><svg class="ico" aria-hidden="true"><use href="#grid_view" /></svg>Vue d'ensemble</a><a href="#" class="tab" data-wf-to="explorer"><svg class="ico" aria-hidden="true"><use href="#folder_open" /></svg>Explorer</a><a href="#" class="tab" data-wf-to="evenements"><svg class="ico" aria-hidden="true"><use href="#history" /></svg>Évènements</a><a href="#" class="tab" data-wf-to="cercle-collaborateurs"><svg class="ico" aria-hidden="true"><use href="#settings" /></svg>Paramètres</a></nav>
     <div class="layout">
       <div class="stack">
         <section class="card card-pad">
           <div class="section-head"><h2 class="subheading">État des ressources</h2></div>
-          <p class="muted" style="margin: 0 0 var(--spacing-4); font-size: 13px">Des statuts à jour aident vos collègues à trouver vite ce qui est fiable.</p>
-          <div style="display: flex; gap: var(--spacing-6); align-items: center">
-            <span style="width: 132px; height: 132px; border-radius: 50%; background: radial-gradient(closest-side, var(--color-surface) 64%, transparent 65%), conic-gradient(var(--color-success) 0% 58%, var(--color-warning) 58% 72%, var(--color-graphite-300) 72% 90%, var(--color-danger) 90% 96%, var(--color-graphite-500) 96% 100%); flex: none"></span>
-            <ul style="list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; flex: 1; font-size: 14px"><li style="display: flex; align-items: center; gap: 8px"><span style="width: 10px; height: 10px; border-radius: 50%; background: var(--color-success)"></span><a data-wf-to="catalogue">Prêt à l'utilisation</a><span class="muted num" style="margin-left: auto">108</span></li><li style="display: flex; align-items: center; gap: 8px"><span style="width: 10px; height: 10px; border-radius: 50%; background: var(--color-warning)"></span><a data-wf-to="catalogue">Besoin d'être testé</a><span class="muted num" style="margin-left: auto">26</span></li><li style="display: flex; align-items: center; gap: 8px"><span style="width: 10px; height: 10px; border-radius: 50%; background: var(--color-graphite-300)"></span><a data-wf-to="catalogue">Brouillon</a><span class="muted num" style="margin-left: auto">33</span></li><li style="display: flex; align-items: center; gap: 8px"><span style="width: 10px; height: 10px; border-radius: 50%; background: var(--color-danger)"></span><a data-wf-to="catalogue">Contient des bugs</a><span class="muted num" style="margin-left: auto">11</span></li><li style="display: flex; align-items: center; gap: 8px"><span style="width: 10px; height: 10px; border-radius: 50%; background: var(--color-graphite-500)"></span><a data-wf-to="catalogue">Ne pas utiliser</a><span class="muted num" style="margin-left: auto">8</span></li></ul>
+          <p class="small muted section-desc">Des statuts à jour aident vos collègues à trouver vite ce qui est fiable.</p>
+          <div class="status-split">
+            <span class="status-ring" role="img" aria-label="Répartition des 186 ressources par statut&nbsp;: 108 prêtes, 26 à tester, 33 brouillons, 11 avec des bugs, 8 à ne pas utiliser" style="--ready: 58%; --to-test: 72%; --draft: 90%; --bugs: 96%"></span>
+            <ul class="status-legend"><li><span class="swatch ready" aria-hidden="true"></span><svg class="ico" aria-hidden="true"><use href="#verified" /></svg><a href="#" data-wf-to="catalogue">Prêt</a><span class="n">108</span></li><li><span class="swatch to-test" aria-hidden="true"></span><svg class="ico" aria-hidden="true"><use href="#science" /></svg><a href="#" data-wf-to="catalogue">À tester</a><span class="n">26</span></li><li><span class="swatch draft" aria-hidden="true"></span><svg class="ico" aria-hidden="true"><use href="#save" /></svg><a href="#" data-wf-to="catalogue">Brouillon</a><span class="n">33</span></li><li><span class="swatch bugs" aria-hidden="true"></span><svg class="ico" aria-hidden="true"><use href="#bug_report" /></svg><a href="#" data-wf-to="catalogue">Contient des bugs</a><span class="n">11</span></li><li><span class="swatch unused" aria-hidden="true"></span><svg class="ico" aria-hidden="true"><use href="#visibility_off" /></svg><a href="#" data-wf-to="catalogue">Ne pas utiliser</a><span class="n">8</span></li></ul>
           </div>
         </section>
         <section class="card card-pad">
-          <div class="section-head"><h2 class="subheading">Tags</h2></div>
-          <div class="filters" style="margin: 0"><span class="tag-link">Algorithmique</span><span class="tag-link">Complexité</span><span class="tag-link">Récursivité</span><span class="tag-link">Tris</span><span class="tag-link">L1</span><span class="tag-link">L2</span></div>
+          <div class="section-head"><h2 class="subheading">Topics et niveaux</h2></div>
+          <div class="tag-cloud"><button type="button" class="tag-link" aria-label="Filtrer par Algorithmique" data-wf-to="catalogue">Algorithmique</button><button type="button" class="tag-link" aria-label="Filtrer par Complexité" data-wf-to="catalogue">Complexité</button><button type="button" class="tag-link" aria-label="Filtrer par Récursivité" data-wf-to="catalogue">Récursivité</button><button type="button" class="tag-link" aria-label="Filtrer par Tris" data-wf-to="catalogue">Tris</button><button type="button" class="tag-link" aria-label="Filtrer par L1" data-wf-to="catalogue">L1</button><button type="button" class="tag-link" aria-label="Filtrer par L2" data-wf-to="catalogue">L2</button></div>
         </section>
       </div>
       <aside class="stack">
-        <dl class="card" style="margin: 0">
-          <div class="kv"><dt><svg class="ico ico-16"><use href="#widgets" /></svg>Exercices</dt><dd>152 <a style="font-size: 13px" data-wf-to="catalogue">Voir la liste</a></dd></div><div class="kv"><dt><svg class="ico ico-16"><use href="#quiz" /></svg>Activités</dt><dd>34 <a style="font-size: 13px" data-wf-to="catalogue">Voir la liste</a></dd></div><div class="kv"><dt><svg class="ico ico-16"><use href="#tune" /></svg>Modèles</dt><dd>6 <a style="font-size: 13px" data-wf-to="catalogue">Voir la liste</a></dd></div><div class="kv"><dt><svg class="ico ico-16"><use href="#folder_open" /></svg>Cercles enfants</dt><dd>2 <a style="font-size: 13px" data-wf-to="catalogue">Voir la liste</a></dd></div><div class="kv"><dt><svg class="ico ico-16"><use href="#groups" /></svg>Collaborateurs</dt><dd>9 </dd></div><div class="kv"><dt><svg class="ico ico-16"><use href="#visibility" /></svg>Observateurs</dt><dd>41 </dd></div>
+        <dl class="card facts">
+          <div class="kv"><dt><svg class="ico ico-16" aria-hidden="true"><use href="#widgets" /></svg>Exercices</dt><dd>152 <a href="#" class="more" data-wf-to="catalogue">Voir la liste</a></dd></div><div class="kv"><dt><svg class="ico ico-16" aria-hidden="true"><use href="#quiz" /></svg>Activités</dt><dd>34 <a href="#" class="more" data-wf-to="catalogue">Voir la liste</a></dd></div><div class="kv"><dt><svg class="ico ico-16" aria-hidden="true"><use href="#tune" /></svg>Modèles</dt><dd>6 <a href="#" class="more" data-wf-to="catalogue">Voir la liste</a></dd></div><div class="kv"><dt><svg class="ico ico-16" aria-hidden="true"><use href="#folder_open" /></svg>Sous-cercles</dt><dd>2 <a href="#" class="more" data-wf-to="catalogue">Voir la liste</a></dd></div><div class="kv"><dt><svg class="ico ico-16" aria-hidden="true"><use href="#groups" /></svg>Collaborateurs</dt><dd>9</dd></div><div class="kv"><dt><svg class="ico ico-16" aria-hidden="true"><use href="#visibility" /></svg>Abonnés</dt><dd>41</dd></div>
         </dl>
       </aside>
     </div>

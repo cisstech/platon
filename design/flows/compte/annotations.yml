@@ -2,5 +2,15 @@
   note: "Onglet À propos actuel. Les champs d'identité sont désactivés aujourd'hui ; ils deviennent du texte, parce qu'un champ qu'on ne peut pas modifier ne doit pas en avoir l'air."
 - screen: a-propos
   note: "Mon compte est rangé dans le menu du profil, comme aujourd'hui dans le menu de l'avatar."
+- screen: a-propos
+  note: "L'identité dit le type de compte, « Compte étudiant », comme sous le nom dans la barre latérale : la plateforme ne connaît pas le genre d'Inès. L'adresse est celle du menu du profil. La croix d'une puce est un bouton, atteignable au clavier, qui dit ce qu'il retire."
+- screen: a-propos
+  note: "Chaque libellé visible est relié à son champ. L'identifiant Discord est en lecture seule tant qu'on ne l'a pas déverrouillé par le bouton Modifier (edit) : le cadenas lock reste à la réponse enregistrée, son seul état. L'onglet Sécurité prend la clé (key) pour la même raison."
 - screen: securite
-  note: "Créer un mot de passe si le compte n'en a pas (hasPassword), sinon le changer avec le mot de passe actuel. Les cinq règles actuelles se cochent pendant la saisie."
+  note: "Créer un mot de passe si le compte n'en a pas (hasPassword), sinon le changer avec le mot de passe actuel. Les cinq règles actuelles se cochent pendant la saisie ; chacune dit aux lecteurs d'écran si elle est respectée."
+- screen: securite
+  note: "On parle de « compte université », le mot de la page de connexion ; « CAS » est un terme technique qu'Inès n'a pas à connaître."
+- screen: a-propos
+  note: "Sur téléphone, Inès arrive par le menu du profil. Les onglets restent en tête, les cartes s'empilent. L'identité se lit de haut en bas, libellé puis valeur, pour que son adresse tienne sans déborder. Chaque libellé est relié à son champ, y compris les champs à puces (aria-labelledby) ; Enregistrer prend toute la largeur, en 44 px."
+- screen: securite
+  note: "Sur téléphone, les cinq règles passent sur une colonne et se cochent pendant la saisie. Le champ et son bouton Afficher font 44 px ; Enregistrer prend toute la largeur."

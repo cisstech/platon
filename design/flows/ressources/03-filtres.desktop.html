@@ -8,25 +8,25 @@
         <div class="brand-org">Université Gustave Eiffel</div>
       </div>
     </div>
-    <a class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico"><use href="#add" /></svg>Créer</a>
+    <button type="button" class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico" aria-hidden="true"><use href="#add" /></svg>Créer</button>
     <nav class="nav">
-      <a class="nav-item" data-wf-to="enseignant"><svg class="ico"><use href="#home" /></svg>Accueil</a>
-      <a class="nav-item" data-wf-to="annonces"><svg class="ico"><use href="#campaign" /></svg>Annonces</a>
-      <a class="nav-item" data-wf-to="mes-cours"><svg class="ico"><use href="#school" /></svg>Cours</a>
-      <a class="nav-item" data-wf-to="file"><svg class="ico"><use href="#rate_review" /></svg>Corrections<span class="count">14</span></a>
-      <a class="nav-item active" data-wf-to="catalogue"><svg class="ico"><use href="#folder_open" /></svg>Ressources</a>
-      <a class="nav-item" data-wf-to="test"><svg class="ico"><use href="#fact_check" /></svg>Tests d'entrée</a>
+      <a href="#" class="nav-item" data-wf-to="enseignant"><svg class="ico" aria-hidden="true"><use href="#home" /></svg>Accueil</a>
+      <a href="#" class="nav-item" data-wf-to="annonces"><svg class="ico" aria-hidden="true"><use href="#campaign" /></svg>Annonces</a>
+      <a href="#" class="nav-item" data-wf-to="mes-cours"><svg class="ico" aria-hidden="true"><use href="#school" /></svg>Cours</a>
+      <a href="#" class="nav-item" data-wf-to="file"><svg class="ico" aria-hidden="true"><use href="#rate_review" /></svg>Corrections<span class="count">2</span></a>
+      <a href="#" class="nav-item active" data-wf-to="catalogue"><svg class="ico" aria-hidden="true"><use href="#folder_open" /></svg>Ressources</a>
+      <a href="#" class="nav-item" data-wf-to="test"><svg class="ico" aria-hidden="true"><use href="#fact_check" /></svg>Tests d'entrée</a>
     </nav>
     <div class="sidebar-foot">
-      <a class="nav-item"><svg class="ico"><use href="#help" /></svg>Documentation</a>
-      <a class="nav-item"><svg class="ico"><use href="#notifications" /></svg>Notifications<span class="count">2</span></a>
+      <a href="#" class="nav-item"><svg class="ico" aria-hidden="true"><use href="#help" /></svg>Documentation</a>
+      <a href="#" class="nav-item"><svg class="ico" aria-hidden="true"><use href="#notifications" /></svg>Notifications<span class="count">2</span></a>
       <div class="me">
         <span class="avatar">KH</span>
         <div>
           <div class="me-name">Karim Haddad</div>
-          <div class="me-role">Enseignant</div>
+          <div class="me-role">Compte enseignant</div>
         </div>
-        <svg class="ico ico-16"><use href="#expand_more" /></svg>
+        <svg class="ico ico-16" aria-hidden="true"><use href="#expand_more" /></svg>
       </div>
       <a class="credit" href="https://github.com/cisstech/platon" aria-label="Code source de PLaTon, logiciel libre de cisstech"><svg class="ico ico-16" aria-hidden="true"><use href="#code" /></svg>Logiciel libre, par <strong>cisstech</strong></a>
     </div>
@@ -37,114 +37,117 @@
         <h1 class="title">Ressources</h1>
         <p class="page-sub">Les exercices, activités et cercles partagés entre enseignants.</p>
       </div>
-      <div class="actions"><a class="btn btn-secondary" data-wf-to="cercles"><svg class="ico"><use href="#account_tree" /></svg>Cercles</a><a class="btn btn-primary" data-wf-to="modeles"><svg class="ico"><use href="#add" /></svg>Créer un exercice</a></div>
+      <div class="actions"><button type="button" class="btn btn-secondary" data-wf-to="cercles"><svg class="ico" aria-hidden="true"><use href="#account_tree" /></svg>Cercles</button><button type="button" class="btn btn-primary" data-wf-to="modeles"><svg class="ico" aria-hidden="true"><use href="#add" /></svg>Créer un exercice</button></div>
     </header>
-    <div class="filters">
-      <div class="input focused" style="flex: 1; max-width: 420px"><svg class="ico ico-18" style="margin: 0 8px 0 0; color: var(--color-subtle)"><use href="#search" /></svg><span>dichotomie</span></div>
-      <span class="segmented"><span class="seg on"><svg class="ico ico-16"><use href="#code" /></svg>Exercices</span><span class="seg"><svg class="ico ico-16"><use href="#quiz" /></svg>Activités</span><span class="seg"><svg class="ico ico-16"><use href="#folder_open" /></svg>Cercles</span></span>
-      <a class="chip" data-wf-to="filtres"><svg class="ico"><use href="#filter_list" /></svg>Filtres<span class="n">3</span></a>
-      <span class="select" style="margin-left: auto"><svg class="ico ico-16"><use href="#sort" /></svg>Pertinence<svg class="ico ico-16"><use href="#expand_more" /></svg></span>
+    <div class="filters catalogue-bar">
+      <label class="sr-only" for="q-ressources">Chercher dans les ressources</label><div class="input focused" id="q-ressources" role="searchbox"><svg class="ico ico-18" aria-hidden="true"><use href="#search" /></svg><span>dichotomie</span></div>
+      <span class="segmented" role="radiogroup" aria-label="Type de ressource"><span class="on" role="radio" aria-checked="true">Exercices</span><span role="radio" aria-checked="false">Activités</span><span role="radio" aria-checked="false">Cercles</span></span>
+      <button type="button" class="chip" data-wf-to="filtres"><svg class="ico" aria-hidden="true"><use href="#filter_list" /></svg>Filtres<span class="n" aria-label="3 filtres actifs">3</span></button>
+      <span class="select" role="button" aria-haspopup="listbox" aria-label="Trier par pertinence"><svg class="ico ico-16" aria-hidden="true"><use href="#sort" /></svg>Pertinence<svg class="ico ico-16" aria-hidden="true"><use href="#expand_more" /></svg></span>
     </div>
-    <div class="filters" style="margin-top: calc(-1 * var(--spacing-2))">
-      <span class="chip applied">Statut&nbsp;: prêt ou à tester<svg class="x"><use href="#close" /></svg></span>
-      <span class="chip applied">Niveau&nbsp;: L1<svg class="x"><use href="#close" /></svg></span>
-      <span class="chip applied">Cercle&nbsp;: Algorithmique<svg class="x"><use href="#close" /></svg></span>
-      <a style="font-size: 13px">Tout effacer</a>
+    <div class="applied-filters" role="group" aria-label="Filtres actifs">
+      <p class="small muted" role="status">4 exercices pour « dichotomie », avec</p>
+      <span class="chip applied">Statut&nbsp;: prêt ou à tester<button type="button" class="chip-remove" aria-label="Retirer le filtre Statut&nbsp;: prêt ou à tester"><svg class="x" aria-hidden="true"><use href="#close" /></svg></button></span><span class="chip applied">Niveau&nbsp;: L1<button type="button" class="chip-remove" aria-label="Retirer le filtre Niveau&nbsp;: L1"><svg class="x" aria-hidden="true"><use href="#close" /></svg></button></span><span class="chip applied">Cercle&nbsp;: Algorithmique<button type="button" class="chip-remove" aria-label="Retirer le filtre Cercle&nbsp;: Algorithmique"><svg class="x" aria-hidden="true"><use href="#close" /></svg></button></span>
     </div>
     <div class="layout">
-      <div>
-        <p class="muted" style="margin: 0 0 var(--spacing-3); font-size: 13px">4 exercices pour « dichotomie »</p>
+      <section aria-label="Résultats">
         <div class="card rows">
-      <div class="row res-row hover" data-wf-to="ressource">
-        <span class="lead-icon"><svg class="ico"><use href="#code" /></svg></span>
+      <div class="row res-row">
+        <span class="check" role="checkbox" aria-checked="false" tabindex="0" aria-label="Choisir Recherche dichotomique"></span>
+        <span class="lead-icon" aria-hidden="true"><svg class="ico" aria-hidden="true"><use href="#code" /></svg></span>
         <div class="row-main">
-          <div class="row-title">Recherche dichotomique</div>
+          <div class="row-title"><a href="#" data-wf-to="ressource">Recherche dichotomique</a></div>
           <p class="row-desc">Trouver l'indice d'un élément dans un tableau trié, avec tests automatiques sur 6 cas.</p>
-          <div class="row-meta"><span class="tag-link">L1</span><span class="tag-link">Algorithmique</span><span class="tag-link">Python</span><span class="stat-inline good"><svg class="ico ico-16"><use href="#monitoring" /></svg><strong>71&nbsp;%</strong> de moyenne sur 1&nbsp;204 tentatives</span><span class="stat-inline"><svg class="ico ico-16"><use href="#hub" /></svg>utilisé par <a>3 activités</a></span><span class="stat-inline"><svg class="ico ico-16"><use href="#history" /></svg>modifié il y a 2 jours</span></div>
         </div>
-        <div class="row-side"><span class="row-tools"><button class="btn btn-icon btn-sm" aria-label="Prévisualiser"><svg class="ico ico-18"><use href="#visibility" /></svg></button><a class="btn btn-ghost btn-sm"><svg class="ico"><use href="#open_in_new" /></svg>Éditer</a><button class="btn btn-icon btn-sm" aria-label="Plus d&#39;actions" data-wf-to="catalogue-actions"><svg class="ico ico-18"><use href="#more_horiz" /></svg></button></span><span class="tag success"><svg class="ico"><use href="#check_circle" /></svg>Prêt</span></div>
+        <div class="row-meta res-what"><button type="button" class="tag-link" aria-label="Filtrer par L1">L1</button><button type="button" class="tag-link" aria-label="Filtrer par Algorithmique">Algorithmique</button><button type="button" class="tag-link" aria-label="Filtrer par Python">Python</button><span>Hélène Martin, v4 du 24 septembre</span></div>
+        <div class="row-meta res-figures"><span class="stat-inline good"><svg class="ico ico-16" aria-hidden="true"><use href="#trending_up" /></svg><span>Moyenne&nbsp;<strong>71&nbsp;/&nbsp;100</strong>, parmi les plus réussis</span></span><span>1&nbsp;204 tentatives</span><span class="stat-inline"><svg class="ico ico-16" aria-hidden="true"><use href="#hub" /></svg><a href="#" data-wf-to="ressource" aria-label="Utilisé par 4 activités" title="Utilisé par 4 activités">4 activités</a></span></div>
+        <div class="row-side"><span class="tag success"><svg class="ico" aria-hidden="true"><use href="#verified" /></svg>Prêt</span><span class="row-tools"><button type="button" class="btn btn-icon btn-sm" aria-label="Prévisualiser Recherche dichotomique" title="Prévisualiser"><svg class="ico ico-18" aria-hidden="true"><use href="#visibility" /></svg></button><button type="button" class="btn btn-icon btn-sm" aria-label="Éditer Recherche dichotomique" title="Éditer"><svg class="ico ico-18" aria-hidden="true"><use href="#edit" /></svg></button><button type="button" class="btn btn-icon btn-sm" aria-label="Plus d&#39;actions pour Recherche dichotomique" title="Plus d&#39;actions" aria-haspopup="menu" data-wf-to="catalogue-actions"><svg class="ico ico-18" aria-hidden="true"><use href="#more_horiz" /></svg></button></span></div>
       </div>
       <div class="row res-row">
-        <span class="lead-icon"><svg class="ico"><use href="#code" /></svg></span>
+        <span class="check" role="checkbox" aria-checked="false" tabindex="0" aria-label="Choisir Recherche dichotomique récursive"></span>
+        <span class="lead-icon" aria-hidden="true"><svg class="ico" aria-hidden="true"><use href="#code" /></svg></span>
         <div class="row-main">
-          <div class="row-title">Recherche dichotomique récursive</div>
+          <div class="row-title"><a href="#">Recherche dichotomique récursive</a></div>
           <p class="row-desc">Même problème, solution récursive imposée&nbsp;; vérifie la profondeur d'appel.</p>
-          <div class="row-meta"><span class="tag-link">L1</span><span class="tag-link">Récursivité</span><span class="stat-inline "><svg class="ico ico-16"><use href="#monitoring" /></svg><strong>54&nbsp;%</strong> de moyenne sur 212 tentatives</span><span class="stat-inline"><svg class="ico ico-16"><use href="#hub" /></svg>utilisé par <a>1 activité</a></span><span class="stat-inline"><svg class="ico ico-16"><use href="#history" /></svg>14 septembre</span></div>
         </div>
-        <div class="row-side"><span class="row-tools"><button class="btn btn-icon btn-sm" aria-label="Prévisualiser"><svg class="ico ico-18"><use href="#visibility" /></svg></button><a class="btn btn-ghost btn-sm"><svg class="ico"><use href="#open_in_new" /></svg>Éditer</a><button class="btn btn-icon btn-sm" aria-label="Plus d&#39;actions" data-wf-to="catalogue-actions"><svg class="ico ico-18"><use href="#more_horiz" /></svg></button></span><span class="tag warning"><svg class="ico"><use href="#science" /></svg>À tester</span></div>
+        <div class="row-meta res-what"><button type="button" class="tag-link" aria-label="Filtrer par L1">L1</button><button type="button" class="tag-link" aria-label="Filtrer par Récursivité">Récursivité</button><span>Karim Haddad, v2 du 14 septembre</span></div>
+        <div class="row-meta res-figures"><span class="stat-inline"><svg class="ico ico-16" aria-hidden="true"><use href="#monitoring" /></svg><span>Moyenne&nbsp;<strong>54&nbsp;/&nbsp;100</strong></span></span><span>212 tentatives</span><span class="stat-inline"><svg class="ico ico-16" aria-hidden="true"><use href="#hub" /></svg><a href="#" aria-label="Utilisé par 1 activité" title="Utilisé par 1 activité">1 activité</a></span></div>
+        <div class="row-side"><span class="tag warning"><svg class="ico" aria-hidden="true"><use href="#science" /></svg>À tester</span><span class="row-tools"><button type="button" class="btn btn-icon btn-sm" aria-label="Prévisualiser Recherche dichotomique récursive" title="Prévisualiser"><svg class="ico ico-18" aria-hidden="true"><use href="#visibility" /></svg></button><button type="button" class="btn btn-icon btn-sm" aria-label="Éditer Recherche dichotomique récursive" title="Éditer"><svg class="ico ico-18" aria-hidden="true"><use href="#edit" /></svg></button><button type="button" class="btn btn-icon btn-sm" aria-label="Plus d&#39;actions pour Recherche dichotomique récursive" title="Plus d&#39;actions" aria-haspopup="menu" data-wf-to="catalogue-actions"><svg class="ico ico-18" aria-hidden="true"><use href="#more_horiz" /></svg></button></span></div>
       </div>
       <div class="row res-row">
-        <span class="lead-icon"><svg class="ico"><use href="#quiz" /></svg></span>
+        <span class="check" role="checkbox" aria-checked="false" tabindex="0" aria-label="Choisir QCM&nbsp;: recherche séquentielle ou dichotomique"></span>
+        <span class="lead-icon" aria-hidden="true"><svg class="ico" aria-hidden="true"><use href="#quiz" /></svg></span>
         <div class="row-main">
-          <div class="row-title">QCM&nbsp;: complexité d'une recherche <span class="tag" style="margin-left: 6px"><svg class="ico"><use href="#tune" /></svg>Modèle, 4 variables</span></div>
+          <div class="row-title"><a href="#">QCM&nbsp;: recherche séquentielle ou dichotomique</a> <span class="tag model-tag"><svg class="ico" aria-hidden="true"><use href="#tune" /></svg>Modèle à compléter, 4 champs</span></div>
           <p class="row-desc">Quatre choix, un seul juste, avec l'explication affichée après validation.</p>
-          <div class="row-meta"><span class="tag-link">L1</span><span class="tag-link">Complexité</span><span class="stat-inline low"><svg class="ico ico-16"><use href="#monitoring" /></svg><strong>38&nbsp;%</strong> de moyenne sur 96 tentatives</span><span class="stat-inline"><svg class="ico ico-16"><use href="#history" /></svg>2 septembre</span></div>
         </div>
-        <div class="row-side"><span class="row-tools"><button class="btn btn-icon btn-sm" aria-label="Prévisualiser"><svg class="ico ico-18"><use href="#visibility" /></svg></button><a class="btn btn-ghost btn-sm"><svg class="ico"><use href="#open_in_new" /></svg>Éditer</a><button class="btn btn-icon btn-sm" aria-label="Plus d&#39;actions" data-wf-to="catalogue-actions"><svg class="ico ico-18"><use href="#more_horiz" /></svg></button></span><span class="tag success"><svg class="ico"><use href="#check_circle" /></svg>Prêt</span></div>
+        <div class="row-meta res-what"><button type="button" class="tag-link" aria-label="Filtrer par L1">L1</button><button type="button" class="tag-link" aria-label="Filtrer par Complexité">Complexité</button><span>Hélène Martin, v3 du 2 septembre</span></div>
+        <div class="row-meta res-figures"><span class="stat-inline low"><svg class="ico ico-16" aria-hidden="true"><use href="#priority_high" /></svg><span>Moyenne&nbsp;<strong>38&nbsp;/&nbsp;100</strong>, à surveiller</span></span><span>96 tentatives</span></div>
+        <div class="row-side"><span class="tag success"><svg class="ico" aria-hidden="true"><use href="#verified" /></svg>Prêt</span><span class="row-tools"><button type="button" class="btn btn-icon btn-sm" aria-label="Prévisualiser QCM&nbsp;: recherche séquentielle ou dichotomique" title="Prévisualiser"><svg class="ico ico-18" aria-hidden="true"><use href="#visibility" /></svg></button><button type="button" class="btn btn-icon btn-sm" aria-label="Compléter le modèle QCM&nbsp;: recherche séquentielle ou dichotomique" title="Compléter" data-wf-to="atelier"><svg class="ico ico-18" aria-hidden="true"><use href="#tune" /></svg></button><button type="button" class="btn btn-icon btn-sm" aria-label="Plus d&#39;actions pour QCM&nbsp;: recherche séquentielle ou dichotomique" title="Plus d&#39;actions" aria-haspopup="menu" data-wf-to="catalogue-actions"><svg class="ico ico-18" aria-hidden="true"><use href="#more_horiz" /></svg></button></span></div>
       </div>
       <div class="row res-row">
-        <span class="lead-icon"><svg class="ico"><use href="#code" /></svg></span>
+        <span class="check" role="checkbox" aria-checked="false" tabindex="0" aria-label="Choisir Invariant de boucle d'une recherche"></span>
+        <span class="lead-icon" aria-hidden="true"><svg class="ico" aria-hidden="true"><use href="#code" /></svg></span>
         <div class="row-main">
-          <div class="row-title">Invariant de boucle d'une recherche</div>
+          <div class="row-title"><a href="#">Invariant de boucle d'une recherche</a></div>
           <p class="row-desc">Compléter l'invariant d'une dichotomie itérative.</p>
-          <div class="row-meta"><span class="tag-link">L2</span><span class="tag-link">Preuve</span><span class="stat-inline"><svg class="ico ico-16"><use href="#history" /></svg>juin</span></div>
         </div>
-        <div class="row-side"><span class="row-tools"><button class="btn btn-icon btn-sm" aria-label="Prévisualiser"><svg class="ico ico-18"><use href="#visibility" /></svg></button><a class="btn btn-ghost btn-sm"><svg class="ico"><use href="#open_in_new" /></svg>Éditer</a><button class="btn btn-icon btn-sm" aria-label="Plus d&#39;actions" data-wf-to="catalogue-actions"><svg class="ico ico-18"><use href="#more_horiz" /></svg></button></span><span class="tag danger"><svg class="ico"><use href="#error" /></svg>Contient des bugs</span></div>
+        <div class="row-meta res-what"><button type="button" class="tag-link" aria-label="Filtrer par L1">L1</button><button type="button" class="tag-link" aria-label="Filtrer par Preuve">Preuve</button><span>Paul Renard, v1 du 12 juin</span></div>
+        <div class="row-meta res-figures"><span>Pas encore de tentative</span></div>
+        <div class="row-side"><span class="tag warning"><svg class="ico" aria-hidden="true"><use href="#science" /></svg>À tester</span><span class="row-tools"><button type="button" class="btn btn-icon btn-sm" aria-label="Prévisualiser Invariant de boucle d'une recherche" title="Prévisualiser"><svg class="ico ico-18" aria-hidden="true"><use href="#visibility" /></svg></button><button type="button" class="btn btn-icon btn-sm" aria-label="Éditer Invariant de boucle d'une recherche" title="Éditer"><svg class="ico ico-18" aria-hidden="true"><use href="#edit" /></svg></button><button type="button" class="btn btn-icon btn-sm" aria-label="Plus d&#39;actions pour Invariant de boucle d'une recherche" title="Plus d&#39;actions" aria-haspopup="menu" data-wf-to="catalogue-actions"><svg class="ico ico-18" aria-hidden="true"><use href="#more_horiz" /></svg></button></span></div>
       </div>
         </div>
-      </div>
+      </section>
       <aside class="stack">
-        <section>
-          <div class="section-head"><h2 class="heading">Mon espace</h2></div>
-          <div class="card">
-            <div class="mini"><span class="mini-title"><svg class="ico ico-16"><use href="#folder_open" /></svg> Cercle de Karim Haddad</span><span class="muted" style="font-size: 13px">9 exercices, 2 activités, 3 brouillons</span></div>
-          </div>
+        <section aria-labelledby="mine-t">
+          <div class="section-head"><h2 class="heading" id="mine-t">Mon espace</h2></div>
+          <div class="card"><a href="#" class="mini"><span class="mini-title"><svg class="ico ico-16" aria-hidden="true"><use href="#person" /></svg> Cercle de Karim Haddad</span><span class="small muted">9 exercices, 2 activités, dont 3 brouillons</span></a></div>
         </section>
-        <section>
-          <div class="section-head"><h2 class="heading">Vu récemment</h2></div>
+        <section aria-labelledby="vu-t">
+          <div class="section-head"><h2 class="heading" id="vu-t">Vu récemment</h2></div>
           <div class="card">
-            <div class="mini"><span class="mini-title">QCM&nbsp;: complexité</span><span class="muted" style="font-size: 13px">Exercice, hier</span></div>
-            <div class="mini"><span class="mini-title">TP 4&nbsp;: boucles et tableaux</span><span class="muted" style="font-size: 13px">Activité, lundi</span></div>
-            <div class="mini"><span class="mini-title">Algorithmique</span><span class="muted" style="font-size: 13px">Cercle, lundi</span></div>
+            <a href="#" class="mini" data-wf-to="ressource"><span class="mini-title">Recherche dichotomique</span><span class="mini-meta"><span class="tag success"><svg class="ico" aria-hidden="true"><use href="#verified" /></svg>Prêt</span>Exercice, ce matin</span></a>
+            <a href="#" class="mini"><span class="mini-title">Parcours en largeur d'un graphe</span><span class="mini-meta"><span class="tag"><svg class="ico" aria-hidden="true"><use href="#save" /></svg>Brouillon</span>Exercice, hier</span></a>
+            <a href="#" class="mini"><span class="mini-title">TP 4&nbsp;: boucles et tableaux</span><span class="mini-meta">Activité, vendredi</span></a>
           </div>
         </section>
       </aside>
     </div>
   </main>
-  <div class="scrim" data-wf-to="catalogue"></div>
-  <div class="drawer-right" role="dialog" aria-label="Filtres">
+  <div class="scrim" data-wf-to="catalogue" aria-hidden="true"></div>
+  <div class="drawer-right" role="dialog" aria-modal="true" aria-labelledby="filtres-t">
     <div class="drawer-head">
-      <div class="subheading">Filtres</div>
-      <button class="btn btn-icon btn-sm" aria-label="Fermer" data-wf-to="catalogue" style="margin-left: auto"><svg class="ico ico-18"><use href="#close" /></svg></button>
+      <h2 class="subheading" id="filtres-t">Filtres</h2>
+      <button type="button" class="btn btn-icon btn-sm" aria-label="Fermer les filtres" data-wf-to="catalogue"><svg class="ico ico-18" aria-hidden="true"><use href="#close" /></svg></button>
     </div>
     <div class="drawer-body">
       <div class="form-section">
-        <h3 class="subheading">Statut</h3>
-        <div class="options" style="grid-template-columns: 1fr 1fr"><div class="option on" style="padding: 6px 10px"><span class="box"></span><svg class="ico ico-18"><use href="#check_circle" /></svg>Prêt</div><div class="option on" style="padding: 6px 10px"><span class="box"></span><svg class="ico ico-18"><use href="#science" /></svg>À tester</div><div class="option" style="padding: 6px 10px"><span class="box"></span><svg class="ico ico-18"><use href="#edit" /></svg>Brouillon</div><div class="option" style="padding: 6px 10px"><span class="box"></span><svg class="ico ico-18"><use href="#error" /></svg>Contient des bugs</div><div class="option" style="padding: 6px 10px"><span class="box"></span><svg class="ico ico-18"><use href="#visibility_off" /></svg>Ne pas utiliser</div></div>
+        <h3 class="subheading" id="f-statut">Statut</h3>
+        <div class="options compact two" role="group" aria-labelledby="f-statut"><div class="option on" role="checkbox" aria-checked="true"><span class="box"></span><svg class="ico ico-18" aria-hidden="true"><use href="#verified" /></svg>Prêt</div><div class="option on" role="checkbox" aria-checked="true"><span class="box"></span><svg class="ico ico-18" aria-hidden="true"><use href="#science" /></svg>À tester</div><div class="option" role="checkbox" aria-checked="false"><span class="box"></span><svg class="ico ico-18" aria-hidden="true"><use href="#save" /></svg>Brouillon</div><div class="option" role="checkbox" aria-checked="false"><span class="box"></span><svg class="ico ico-18" aria-hidden="true"><use href="#bug_report" /></svg>Contient des bugs</div><div class="option" role="checkbox" aria-checked="false"><span class="box"></span><svg class="ico ico-18" aria-hidden="true"><use href="#visibility_off" /></svg>Ne pas utiliser</div></div>
       </div>
       <div class="form-section">
         <h3 class="subheading">Exercices</h3>
-        <div class="option" style="padding: 6px 10px"><span class="box"></span><svg class="ico ico-18"><use href="#tune" /></svg>Seulement les modèles à paramétrer</div>
+        <div class="options compact"><div class="option" role="checkbox" aria-checked="false"><span class="box"></span><svg class="ico ico-18" aria-hidden="true"><use href="#tune" /></svg>Seulement les modèles à compléter</div></div>
       </div>
       <div class="form-section">
         <h3 class="subheading">Où</h3>
-        <div class="field"><label>Dans les cercles</label><div class="input"><span class="chip applied" style="height: 24px">Algorithmique<svg class="x"><use href="#close" /></svg></span></div></div>
-        <div class="field" style="margin-top: var(--spacing-3)"><label>Auteur</label><div class="input"><span class="placeholder">Tous les auteurs</span></div></div>
+        <div class="field"><label for="f-cercles">Dans les cercles</label><div class="input" id="f-cercles"><span class="chip applied in-field">Algorithmique<button type="button" class="chip-remove" aria-label="Retirer le cercle Algorithmique"><svg class="x" aria-hidden="true"><use href="#close" /></svg></button></span></div></div>
+        <div class="field"><label for="f-auteur">Auteur</label><div class="input" id="f-auteur"><span class="placeholder">Tous les auteurs</span></div></div>
       </div>
       <div class="form-section">
         <h3 class="subheading">Topics et niveaux</h3>
-        <div class="field"><label>Avec les topics</label><div class="input"><span class="placeholder">Algorithmique, Python…</span></div></div>
-        <div class="field" style="margin-top: var(--spacing-3)"><label>Sans les topics</label><div class="input"><span class="placeholder">Aucun</span></div></div>
-        <div class="field" style="margin-top: var(--spacing-3)"><label>Niveaux</label><div class="input"><span class="chip applied" style="height: 24px">L1<svg class="x"><use href="#close" /></svg></span></div></div>
+        <div class="field"><label for="f-avec">Avec les topics</label><div class="input" id="f-avec"><span class="placeholder">Algorithmique, Python…</span></div></div>
+        <div class="field"><label for="f-sans">Sans les topics</label><div class="input" id="f-sans"><span class="placeholder">Aucun</span></div></div>
+        <div class="field"><label for="f-niveaux">Niveaux</label><div class="input" id="f-niveaux"><span class="chip applied in-field">L1<button type="button" class="chip-remove" aria-label="Retirer le niveau L1"><svg class="x" aria-hidden="true"><use href="#close" /></svg></button></span></div></div>
       </div>
       <div class="form-section">
-        <h3 class="subheading">Modifié depuis</h3>
-        <span class="segmented"><span class="seg on">Toujours</span><span class="seg">1 jour</span><span class="seg">1 semaine</span><span class="seg">1 mois</span><span class="seg">6 mois</span><span class="seg">1 an</span></span>
+        <h3 class="subheading" id="f-depuis">Modifié depuis</h3>
+        <span class="segmented" role="radiogroup" aria-labelledby="f-depuis"><span class="on" role="radio" aria-checked="true">Toujours</span><span role="radio" aria-checked="false">1 jour</span><span role="radio" aria-checked="false">1 semaine</span><span role="radio" aria-checked="false">1 mois</span><span role="radio" aria-checked="false">6 mois</span><span role="radio" aria-checked="false">1 an</span></span>
       </div>
     </div>
     <div class="drawer-foot">
-      <a class="btn btn-ghost" style="margin-right: auto">Tout effacer</a>
-      <a class="btn btn-primary" data-wf-to="catalogue">Afficher 4 exercices</a>
+      <button type="button" class="btn btn-ghost foot-start">Tout effacer</button>
+      <button type="button" class="btn btn-primary" data-wf-to="catalogue">Afficher 4 exercices</button>
     </div>
   </div>
 </div>

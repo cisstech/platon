@@ -8,58 +8,67 @@
         <div class="brand-org">Université Gustave Eiffel</div>
       </div>
     </div>
-    <a class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico"><use href="#add" /></svg>Créer</a>
+    <button type="button" class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico" aria-hidden="true"><use href="#add" /></svg>Créer</button>
     <nav class="nav">
-      <a class="nav-item" data-wf-to="enseignant"><svg class="ico"><use href="#home" /></svg>Accueil</a>
-      <a class="nav-item" data-wf-to="annonces"><svg class="ico"><use href="#campaign" /></svg>Annonces</a>
-      <a class="nav-item active" data-wf-to="mes-cours"><svg class="ico"><use href="#school" /></svg>Cours</a>
-      <a class="nav-item" data-wf-to="file"><svg class="ico"><use href="#rate_review" /></svg>Corrections<span class="count">14</span></a>
-      <a class="nav-item" data-wf-to="catalogue"><svg class="ico"><use href="#folder_open" /></svg>Ressources</a>
-      <a class="nav-item" data-wf-to="test"><svg class="ico"><use href="#fact_check" /></svg>Tests d'entrée</a>
+      <a href="#" class="nav-item" data-wf-to="enseignant"><svg class="ico" aria-hidden="true"><use href="#home" /></svg>Accueil</a>
+      <a href="#" class="nav-item" data-wf-to="annonces"><svg class="ico" aria-hidden="true"><use href="#campaign" /></svg>Annonces</a>
+      <a href="#" class="nav-item active" data-wf-to="mes-cours"><svg class="ico" aria-hidden="true"><use href="#school" /></svg>Cours</a>
+      <a href="#" class="nav-item" data-wf-to="file"><svg class="ico" aria-hidden="true"><use href="#rate_review" /></svg>Corrections<span class="count">2</span></a>
+      <a href="#" class="nav-item" data-wf-to="catalogue"><svg class="ico" aria-hidden="true"><use href="#folder_open" /></svg>Ressources</a>
+      <a href="#" class="nav-item" data-wf-to="test"><svg class="ico" aria-hidden="true"><use href="#fact_check" /></svg>Tests d'entrée</a>
     </nav>
     <div class="sidebar-foot">
-      <a class="nav-item"><svg class="ico"><use href="#help" /></svg>Documentation</a>
-      <a class="nav-item"><svg class="ico"><use href="#notifications" /></svg>Notifications<span class="count">2</span></a>
+      <a href="#" class="nav-item"><svg class="ico" aria-hidden="true"><use href="#help" /></svg>Documentation</a>
+      <a href="#" class="nav-item"><svg class="ico" aria-hidden="true"><use href="#notifications" /></svg>Notifications<span class="count">2</span></a>
       <div class="me">
         <span class="avatar">KH</span>
         <div>
           <div class="me-name">Karim Haddad</div>
-          <div class="me-role">Enseignant</div>
+          <div class="me-role">Compte enseignant</div>
         </div>
-        <svg class="ico ico-16"><use href="#expand_more" /></svg>
+        <svg class="ico ico-16" aria-hidden="true"><use href="#expand_more" /></svg>
       </div>
       <a class="credit" href="https://github.com/cisstech/platon" aria-label="Code source de PLaTon, logiciel libre de cisstech"><svg class="ico ico-16" aria-hidden="true"><use href="#code" /></svg>Logiciel libre, par <strong>cisstech</strong></a>
     </div>
   </aside>
   <main class="main" id="contenu">
     <header class="page-head">
-      <div>
-        <div class="crumbs"><a data-wf-to="mes-cours">Cours</a><svg class="ico"><use href="#chevron_right" /></svg><span>Algorithmique et programmation 1</span></div>
-        <h1 class="title" style="display: flex; align-items: center; gap: 6px">Algorithmique et programmation 1<button class="btn btn-icon btn-sm" aria-label="Modifier le nom"><svg class="ico ico-16"><use href="#edit" /></svg></button></h1>
+      <div class="course-mark hue-lagon" aria-hidden="true">AP1</div>
+      <div class="head-main">
+        <div class="crumbs"><a href="#" data-wf-to="mes-cours">Cours</a><svg class="ico" aria-hidden="true"><use href="#chevron_right" /></svg><span>Algorithmique et programmation 1</span></div>
+        <h1 class="title title-edit">Algorithmique et programmation 1<button type="button" class="btn btn-icon btn-sm" aria-label="Modifier le nom du cours"><svg class="ico ico-16" aria-hidden="true"><use href="#edit" /></svg></button></h1>
         <p class="page-sub">Licence 1 Informatique, semestre 1. Bases de la programmation en Python.</p>
-        <p class="head-meta"><span><svg class="ico ico-16"><use href="#school" /></svg><strong>6</strong> enseignants</span><span><svg class="ico ico-16"><use href="#groups" /></svg><strong>302</strong> élèves</span><span><svg class="ico ico-16"><use href="#widgets" /></svg><strong>9</strong> activités</span><span><svg class="ico ico-16"><use href="#calendar_month" /></svg>créé le 1er septembre par Karim Haddad</span></p>
+        <p class="head-meta"><span><svg class="ico ico-16" aria-hidden="true"><use href="#person" /></svg><strong>6</strong> enseignants</span><span><svg class="ico ico-16" aria-hidden="true"><use href="#groups" /></svg><strong>302</strong> étudiants</span><span><svg class="ico ico-16" aria-hidden="true"><use href="#widgets" /></svg><strong>9</strong> activités</span><span><svg class="ico ico-16" aria-hidden="true"><use href="#calendar_month" /></svg>créé le 1er septembre par Karim Haddad</span></p>
       </div>
-      <div class="actions"><a class="btn btn-secondary" data-wf-to="partager"><svg class="ico"><use href="#share" /></svg>Partager</a><a class="btn btn-primary" data-wf-to="ajouter"><svg class="ico"><use href="#add" /></svg>Ajouter une activité</a></div>
+      <div class="actions">
+        <button type="button" class="btn btn-secondary" data-wf-to="partager"><svg class="ico" aria-hidden="true"><use href="#share" /></svg>Partager</button>
+        <button type="button" class="btn btn-primary" data-wf-to="membres-ajouter"><svg class="ico" aria-hidden="true"><use href="#person_add" /></svg>Ajouter des membres</button>
+        <button type="button" class="btn btn-icon" aria-label="Plus d'actions pour le cours" aria-haspopup="menu"><svg class="ico" aria-hidden="true"><use href="#more_horiz" /></svg></button>
+      </div>
     </header>
-    <div class="tabs"><a class="tab" data-wf-to="detail"><svg class="ico"><use href="#grid_view" /></svg>Vue d'ensemble</a><a class="tab" data-wf-to="challenges"><svg class="ico"><use href="#emoji_events" /></svg>Challenges <span class="count">1</span></a><a class="tab active" data-wf-to="membres"><svg class="ico"><use href="#groups" /></svg>Membres <span class="count">308</span></a><a class="tab" data-wf-to="groupes"><svg class="ico"><use href="#group_add" /></svg>Groupes <span class="count">4</span></a><a class="tab" data-wf-to="reglages"><svg class="ico"><use href="#settings" /></svg>Paramètres</a></div>
+    <nav class="tabs" aria-label="Onglets du cours"><a href="#" class="tab" data-wf-to="detail"><svg class="ico" aria-hidden="true"><use href="#grid_view" /></svg>Vue d'ensemble</a><a href="#" class="tab" data-wf-to="challenges"><svg class="ico" aria-hidden="true"><use href="#emoji_events" /></svg>Challenges <span class="count">1</span></a><a href="#" class="tab active" aria-current="page" data-wf-to="membres"><svg class="ico" aria-hidden="true"><use href="#groups" /></svg>Membres <span class="count">308</span></a><a href="#" class="tab" data-wf-to="groupes"><svg class="ico" aria-hidden="true"><use href="#group_add" /></svg>Groupes <span class="count">4</span></a><a href="#" class="tab" data-wf-to="reglages"><svg class="ico" aria-hidden="true"><use href="#settings" /></svg>Paramètres</a></nav>
     <div class="toolbar">
-      <div class="input" style="width: 320px"><svg class="ico ico-18" style="margin: 0 8px 0 0; color: var(--color-subtle)"><use href="#search" /></svg><span class="placeholder">Nom ou e-mail</span></div>
-      <span class="segmented"><span class="on">Tous <span class="count">308</span></span><span>Enseignants <span class="count">6</span></span><span>Élèves <span class="count">302</span></span></span>
-      <span class="grow"></span>
-      <a class="btn btn-primary" data-wf-to="membres-ajouter"><svg class="ico"><use href="#person_add" /></svg>Ajouter des membres</a>
+      <label class="sr-only" for="q-membres">Chercher un membre</label><div class="input search wide" id="q-membres" role="searchbox"><svg class="ico ico-18" aria-hidden="true"><use href="#search" /></svg><span class="placeholder">Nom ou e-mail</span></div>
+      <span class="segmented" role="radiogroup" aria-label="Rôle"><span class="on" role="radio" aria-checked="true">Tous <span class="count">308</span></span><span role="radio" aria-checked="false">Enseignants <span class="count">6</span></span><span role="radio" aria-checked="false">Étudiants <span class="count">302</span></span></span>
     </div>
-    <div class="card" style="padding: 0; overflow: hidden">
-      <table class="table">
-        <thead><tr><th>Membre</th><th>Ajouté le</th><th>Rôle</th><th></th></tr></thead>
+    <div class="card table-card">
+      <table class="table dense member-table">
+        <thead><tr><th scope="col">Membre</th><th scope="col">Courriel</th><th scope="col">Ajouté le</th><th scope="col">Rôle</th><th class="col-x" scope="col"><span class="sr-only">Retirer</span></th></tr></thead>
         <tbody>
-<tr><td><div class="person"><span class="avatar">KH</span><div>Karim Haddad<small>karim.haddad@univ-eiffel.fr</small></div></div></td><td>1 sept. 2026</td><td><span class="muted">Enseignant, propriétaire</span></td><td style="width: 44px"></td></tr>
-<tr><td><div class="person"><span class="avatar">LF</span><div>Léa Fontaine<small>lea.fontaine@univ-eiffel.fr</small></div></div></td><td>2 sept. 2026</td><td><span class="select">Enseignant<svg class="ico ico-16"><use href="#expand_more" /></svg></span></td><td style="width: 44px"><button class="btn btn-icon btn-sm" aria-label="Retirer du cours"><svg class="ico ico-18"><use href="#close" /></svg></button></td></tr>
-<tr><td><div class="person"><span class="avatar"><svg class="ico ico-16"><use href="#groups" /></svg></span><div>L1 Informatique 2026<small>Groupe de la plateforme, 296 personnes</small></div></div></td><td>2 sept. 2026</td><td><span class="muted">Étudiants</span></td><td style="width: 44px"><button class="btn btn-icon btn-sm" aria-label="Retirer du cours"><svg class="ico ico-18"><use href="#close" /></svg></button></td></tr>
-<tr><td><div class="person"><span class="avatar">AR</span><div>Amélie Roux<small>amelie.roux@etud.univ-eiffel.fr</small></div></div></td><td>4 sept. 2026</td><td><span class="select">Étudiant<svg class="ico ico-16"><use href="#expand_more" /></svg></span></td><td style="width: 44px"><button class="btn btn-icon btn-sm" aria-label="Retirer du cours"><svg class="ico ico-18"><use href="#close" /></svg></button></td></tr>
-<tr><td><div class="person"><span class="avatar">BM</span><div>Bastien Morel<small>bastien.morel@etud.univ-eiffel.fr</small></div></div></td><td>4 sept. 2026</td><td><span class="select">Étudiant<svg class="ico ico-16"><use href="#expand_more" /></svg></span></td><td style="width: 44px"><button class="btn btn-icon btn-sm" aria-label="Retirer du cours"><svg class="ico ico-18"><use href="#close" /></svg></button></td></tr>
+<tr><td><div class="person"><span class="avatar" aria-hidden="true">KH</span><span>Karim Haddad</span></div></td><td class="muted">karim.haddad@univ-eiffel.fr</td><td class="nowrap">1er sept. 2026</td><td><span class="muted">Enseignant, propriétaire</span></td><td class="col-x"></td></tr>
+<tr><td><div class="person"><span class="avatar" aria-hidden="true">LF</span><span>Léa Fontaine</span></div></td><td class="muted">lea.fontaine@univ-eiffel.fr</td><td class="nowrap">2 sept. 2026</td><td><span class="select" role="button" aria-haspopup="listbox" aria-label="Rôle de Léa Fontaine&nbsp;: Enseignant">Enseignant<svg class="ico ico-16" aria-hidden="true"><use href="#expand_more" /></svg></span></td><td class="col-x"><button type="button" class="btn btn-icon btn-sm" aria-label="Retirer Léa Fontaine du cours"><svg class="ico ico-18" aria-hidden="true"><use href="#close" /></svg></button></td></tr>
+<tr><td><div class="person"><span class="avatar" aria-hidden="true"><svg class="ico ico-16" aria-hidden="true"><use href="#groups" /></svg></span><span>L1 Informatique 2026</span></div></td><td class="muted">Groupe de la plateforme, 296 personnes</td><td class="nowrap">2 sept. 2026</td><td><span class="muted">Étudiants</span></td><td class="col-x"><button type="button" class="btn btn-icon btn-sm" aria-label="Retirer le groupe L1 Informatique 2026 du cours"><svg class="ico ico-18" aria-hidden="true"><use href="#close" /></svg></button></td></tr>
+<tr><td><div class="person"><span class="avatar" aria-hidden="true">AR</span><span>Amélie Roux</span></div></td><td class="muted">amelie.roux@etud.univ-eiffel.fr</td><td class="nowrap">4 sept. 2026</td><td><span class="select" role="button" aria-haspopup="listbox" aria-label="Rôle d'Amélie Roux&nbsp;: Étudiant">Étudiant<svg class="ico ico-16" aria-hidden="true"><use href="#expand_more" /></svg></span></td><td class="col-x"><button type="button" class="btn btn-icon btn-sm" aria-label="Retirer Amélie Roux du cours"><svg class="ico ico-18" aria-hidden="true"><use href="#close" /></svg></button></td></tr>
+<tr><td><div class="person"><span class="avatar" aria-hidden="true">BM</span><span>Bastien Morel</span></div></td><td class="muted">bastien.morel@etud.univ-eiffel.fr</td><td class="nowrap">4 sept. 2026</td><td><span class="select" role="button" aria-haspopup="listbox" aria-label="Rôle de Bastien Morel&nbsp;: Étudiant">Étudiant<svg class="ico ico-16" aria-hidden="true"><use href="#expand_more" /></svg></span></td><td class="col-x"><button type="button" class="btn btn-icon btn-sm" aria-label="Retirer Bastien Morel du cours"><svg class="ico ico-18" aria-hidden="true"><use href="#close" /></svg></button></td></tr>
         </tbody>
       </table>
-      <div class="table-foot"><span class="muted">1 à 5 sur 308</span><span style="margin-left: auto; display: flex; gap: 4px"><button class="btn btn-icon btn-sm" aria-label="Page précédente"><svg class="ico ico-18"><use href="#chevron_left" /></svg></button><button class="btn btn-icon btn-sm" aria-label="Page suivante"><svg class="ico ico-18"><use href="#chevron_right" /></svg></button></span></div>
+      <div class="table-foot"><span>1 à 5 sur 308</span><span class="spacer"></span><button type="button" class="btn btn-icon btn-sm" aria-label="Page précédente"><svg class="ico ico-18" aria-hidden="true"><use href="#chevron_left" /></svg></button><button type="button" class="btn btn-icon btn-sm" aria-label="Page suivante"><svg class="ico ico-18" aria-hidden="true"><use href="#chevron_right" /></svg></button></div>
     </div>
   </main>
+  <div class="toast" role="status">
+    <svg class="ico" aria-hidden="true"><use href="#check" /></svg>
+    <p>Gaëlle Picard ne fait plus partie du cours.</p>
+    <button type="button" class="btn btn-ghost btn-sm" data-wf-to="membres"><svg class="ico" aria-hidden="true"><use href="#undo" /></svg>Annuler</button>
+    <button type="button" class="btn btn-icon btn-sm" aria-label="Fermer la notification"><svg class="ico ico-18" aria-hidden="true"><use href="#close" /></svg></button>
+  </div>
 </div>

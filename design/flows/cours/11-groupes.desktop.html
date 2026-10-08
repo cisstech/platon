@@ -8,60 +8,63 @@
         <div class="brand-org">Université Gustave Eiffel</div>
       </div>
     </div>
-    <a class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico"><use href="#add" /></svg>Créer</a>
+    <button type="button" class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico" aria-hidden="true"><use href="#add" /></svg>Créer</button>
     <nav class="nav">
-      <a class="nav-item" data-wf-to="enseignant"><svg class="ico"><use href="#home" /></svg>Accueil</a>
-      <a class="nav-item" data-wf-to="annonces"><svg class="ico"><use href="#campaign" /></svg>Annonces</a>
-      <a class="nav-item active" data-wf-to="mes-cours"><svg class="ico"><use href="#school" /></svg>Cours</a>
-      <a class="nav-item" data-wf-to="file"><svg class="ico"><use href="#rate_review" /></svg>Corrections<span class="count">14</span></a>
-      <a class="nav-item" data-wf-to="catalogue"><svg class="ico"><use href="#folder_open" /></svg>Ressources</a>
-      <a class="nav-item" data-wf-to="test"><svg class="ico"><use href="#fact_check" /></svg>Tests d'entrée</a>
+      <a href="#" class="nav-item" data-wf-to="enseignant"><svg class="ico" aria-hidden="true"><use href="#home" /></svg>Accueil</a>
+      <a href="#" class="nav-item" data-wf-to="annonces"><svg class="ico" aria-hidden="true"><use href="#campaign" /></svg>Annonces</a>
+      <a href="#" class="nav-item active" data-wf-to="mes-cours"><svg class="ico" aria-hidden="true"><use href="#school" /></svg>Cours</a>
+      <a href="#" class="nav-item" data-wf-to="file"><svg class="ico" aria-hidden="true"><use href="#rate_review" /></svg>Corrections<span class="count">2</span></a>
+      <a href="#" class="nav-item" data-wf-to="catalogue"><svg class="ico" aria-hidden="true"><use href="#folder_open" /></svg>Ressources</a>
+      <a href="#" class="nav-item" data-wf-to="test"><svg class="ico" aria-hidden="true"><use href="#fact_check" /></svg>Tests d'entrée</a>
     </nav>
     <div class="sidebar-foot">
-      <a class="nav-item"><svg class="ico"><use href="#help" /></svg>Documentation</a>
-      <a class="nav-item"><svg class="ico"><use href="#notifications" /></svg>Notifications<span class="count">2</span></a>
+      <a href="#" class="nav-item"><svg class="ico" aria-hidden="true"><use href="#help" /></svg>Documentation</a>
+      <a href="#" class="nav-item"><svg class="ico" aria-hidden="true"><use href="#notifications" /></svg>Notifications<span class="count">2</span></a>
       <div class="me">
         <span class="avatar">KH</span>
         <div>
           <div class="me-name">Karim Haddad</div>
-          <div class="me-role">Enseignant</div>
+          <div class="me-role">Compte enseignant</div>
         </div>
-        <svg class="ico ico-16"><use href="#expand_more" /></svg>
+        <svg class="ico ico-16" aria-hidden="true"><use href="#expand_more" /></svg>
       </div>
       <a class="credit" href="https://github.com/cisstech/platon" aria-label="Code source de PLaTon, logiciel libre de cisstech"><svg class="ico ico-16" aria-hidden="true"><use href="#code" /></svg>Logiciel libre, par <strong>cisstech</strong></a>
     </div>
   </aside>
   <main class="main" id="contenu">
     <header class="page-head">
-      <div>
-        <div class="crumbs"><a data-wf-to="mes-cours">Cours</a><svg class="ico"><use href="#chevron_right" /></svg><span>Algorithmique et programmation 1</span></div>
-        <h1 class="title" style="display: flex; align-items: center; gap: 6px">Algorithmique et programmation 1<button class="btn btn-icon btn-sm" aria-label="Modifier le nom"><svg class="ico ico-16"><use href="#edit" /></svg></button></h1>
+      <div class="course-mark hue-lagon" aria-hidden="true">AP1</div>
+      <div class="head-main">
+        <div class="crumbs"><a href="#" data-wf-to="mes-cours">Cours</a><svg class="ico" aria-hidden="true"><use href="#chevron_right" /></svg><span>Algorithmique et programmation 1</span></div>
+        <h1 class="title title-edit">Algorithmique et programmation 1<button type="button" class="btn btn-icon btn-sm" aria-label="Modifier le nom du cours"><svg class="ico ico-16" aria-hidden="true"><use href="#edit" /></svg></button></h1>
         <p class="page-sub">Licence 1 Informatique, semestre 1. Bases de la programmation en Python.</p>
-        <p class="head-meta"><span><svg class="ico ico-16"><use href="#school" /></svg><strong>6</strong> enseignants</span><span><svg class="ico ico-16"><use href="#groups" /></svg><strong>302</strong> élèves</span><span><svg class="ico ico-16"><use href="#widgets" /></svg><strong>9</strong> activités</span><span><svg class="ico ico-16"><use href="#calendar_month" /></svg>créé le 1er septembre par Karim Haddad</span></p>
+        <p class="head-meta"><span><svg class="ico ico-16" aria-hidden="true"><use href="#person" /></svg><strong>6</strong> enseignants</span><span><svg class="ico ico-16" aria-hidden="true"><use href="#groups" /></svg><strong>302</strong> étudiants</span><span><svg class="ico ico-16" aria-hidden="true"><use href="#widgets" /></svg><strong>9</strong> activités</span><span><svg class="ico ico-16" aria-hidden="true"><use href="#calendar_month" /></svg>créé le 1er septembre par Karim Haddad</span></p>
       </div>
-      <div class="actions"><a class="btn btn-secondary" data-wf-to="partager"><svg class="ico"><use href="#share" /></svg>Partager</a><a class="btn btn-primary" data-wf-to="ajouter"><svg class="ico"><use href="#add" /></svg>Ajouter une activité</a></div>
+      <div class="actions">
+        <button type="button" class="btn btn-secondary" data-wf-to="partager"><svg class="ico" aria-hidden="true"><use href="#share" /></svg>Partager</button>
+        <button type="button" class="btn btn-primary"><svg class="ico" aria-hidden="true"><use href="#add" /></svg>Ajouter un groupe</button>
+        <button type="button" class="btn btn-icon" aria-label="Plus d'actions pour le cours" aria-haspopup="menu"><svg class="ico" aria-hidden="true"><use href="#more_horiz" /></svg></button>
+      </div>
     </header>
-    <div class="tabs"><a class="tab" data-wf-to="detail"><svg class="ico"><use href="#grid_view" /></svg>Vue d'ensemble</a><a class="tab" data-wf-to="challenges"><svg class="ico"><use href="#emoji_events" /></svg>Challenges <span class="count">1</span></a><a class="tab" data-wf-to="membres"><svg class="ico"><use href="#groups" /></svg>Membres <span class="count">308</span></a><a class="tab active" data-wf-to="groupes"><svg class="ico"><use href="#group_add" /></svg>Groupes <span class="count">4</span></a><a class="tab" data-wf-to="reglages"><svg class="ico"><use href="#settings" /></svg>Paramètres</a></div>
-    <div class="toolbar">
-      <p class="muted" style="margin: 0; font-size: 13px">Les groupes servent aux périodes d'accès d'une activité et à l'export des notes.</p>
-      <span class="grow"></span>
-      <a class="btn btn-primary"><svg class="ico"><use href="#group_add" /></svg>Ajouter un groupe</a>
+    <nav class="tabs" aria-label="Onglets du cours"><a href="#" class="tab" data-wf-to="detail"><svg class="ico" aria-hidden="true"><use href="#grid_view" /></svg>Vue d'ensemble</a><a href="#" class="tab" data-wf-to="challenges"><svg class="ico" aria-hidden="true"><use href="#emoji_events" /></svg>Challenges <span class="count">1</span></a><a href="#" class="tab" data-wf-to="membres"><svg class="ico" aria-hidden="true"><use href="#groups" /></svg>Membres <span class="count">308</span></a><a href="#" class="tab active" aria-current="page" data-wf-to="groupes"><svg class="ico" aria-hidden="true"><use href="#group_add" /></svg>Groupes <span class="count">4</span></a><a href="#" class="tab" data-wf-to="reglages"><svg class="ico" aria-hidden="true"><use href="#settings" /></svg>Paramètres</a></nav>
+    <p class="small muted lead-line">Les groupes servent aux périodes d'accès d'une activité et à l'export des notes. Retirer un groupe ne retire pas ses étudiants du cours.</p>
+    <div class="card group-block">
+      <div class="group-head"><button type="button" class="btn btn-icon btn-sm" aria-expanded="false" aria-label="Déplier TD 1"><svg class="ico ico-18" aria-hidden="true"><use href="#chevron_right" /></svg></button><strong>TD 1</strong><span class="count">38 étudiants</span><button type="button" class="btn btn-ghost btn-sm" aria-label="Ajouter des étudiants à TD 1"><svg class="ico" aria-hidden="true"><use href="#person_add" /></svg>Ajouter</button><button type="button" class="btn btn-icon btn-sm" aria-label="Renommer TD 1"><svg class="ico ico-18" aria-hidden="true"><use href="#edit" /></svg></button><button type="button" class="btn btn-icon btn-sm" aria-label="Supprimer le groupe TD 1"><svg class="ico ico-18" aria-hidden="true"><use href="#delete" /></svg></button></div>
     </div>
-        <div class="card group-block" style="padding: 0; overflow: hidden">
-          <div class="group-head"><svg class="ico ico-18"><use href="#expand_more" /></svg><strong>TD 1</strong><span class="count">38 élèves</span><button class="btn btn-ghost btn-sm"><svg class="ico"><use href="#person_add" /></svg>Ajouter</button><button class="btn btn-icon btn-sm" aria-label="Renommer"><svg class="ico ico-18"><use href="#edit" /></svg></button><button class="btn btn-icon btn-sm" aria-label="Supprimer le groupe"><svg class="ico ico-18"><use href="#delete" /></svg></button></div>
-          <table class="table" style="border-top: 1px solid var(--color-line)"><tbody>
-<tr><td><div class="person"><span class="avatar">AR</span><div>Amélie Roux<small>amelie.roux@etud.univ-eiffel.fr</small></div></div></td><td>5 sept. 2026</td><td></td><td style="width: 44px"><button class="btn btn-icon btn-sm" aria-label="Retirer du cours"><svg class="ico ico-18"><use href="#close" /></svg></button></td></tr>
-<tr><td><div class="person"><span class="avatar">HM</span><div>Hugo Marchand<small>hugo.marchand@etud.univ-eiffel.fr</small></div></div></td><td>5 sept. 2026</td><td></td><td style="width: 44px"><button class="btn btn-icon btn-sm" aria-label="Retirer du cours"><svg class="ico ico-18"><use href="#close" /></svg></button></td></tr>
-          </tbody></table>
-        </div>
-        <div class="card group-block" style="padding: 0; overflow: hidden">
-          <div class="group-head"><svg class="ico ico-18"><use href="#chevron_right" /></svg><strong>TD 2</strong><span class="count">37 élèves</span><button class="btn btn-ghost btn-sm"><svg class="ico"><use href="#person_add" /></svg>Ajouter</button><button class="btn btn-icon btn-sm" aria-label="Renommer"><svg class="ico ico-18"><use href="#edit" /></svg></button><button class="btn btn-icon btn-sm" aria-label="Supprimer le groupe"><svg class="ico ico-18"><use href="#delete" /></svg></button></div>
-        </div>
-        <div class="card group-block" style="padding: 0; overflow: hidden">
-          <div class="group-head"><svg class="ico ico-18"><use href="#chevron_right" /></svg><strong>TD 3</strong><span class="count">40 élèves</span><button class="btn btn-ghost btn-sm"><svg class="ico"><use href="#person_add" /></svg>Ajouter</button><button class="btn btn-icon btn-sm" aria-label="Renommer"><svg class="ico ico-18"><use href="#edit" /></svg></button><button class="btn btn-icon btn-sm" aria-label="Supprimer le groupe"><svg class="ico ico-18"><use href="#delete" /></svg></button></div>
-        </div>
-        <div class="card group-block" style="padding: 0; overflow: hidden">
-          <div class="group-head"><svg class="ico ico-18"><use href="#chevron_right" /></svg><strong>Tiers-temps</strong><span class="count">6 élèves</span><button class="btn btn-ghost btn-sm"><svg class="ico"><use href="#person_add" /></svg>Ajouter</button><button class="btn btn-icon btn-sm" aria-label="Renommer"><svg class="ico ico-18"><use href="#edit" /></svg></button><button class="btn btn-icon btn-sm" aria-label="Supprimer le groupe"><svg class="ico ico-18"><use href="#delete" /></svg></button></div>
-        </div>
+    <div class="card group-block">
+      <div class="group-head"><button type="button" class="btn btn-icon btn-sm" aria-expanded="false" aria-label="Déplier TD 2"><svg class="ico ico-18" aria-hidden="true"><use href="#chevron_right" /></svg></button><strong>TD 2</strong><span class="count">37 étudiants</span><button type="button" class="btn btn-ghost btn-sm" aria-label="Ajouter des étudiants à TD 2"><svg class="ico" aria-hidden="true"><use href="#person_add" /></svg>Ajouter</button><button type="button" class="btn btn-icon btn-sm" aria-label="Renommer TD 2"><svg class="ico ico-18" aria-hidden="true"><use href="#edit" /></svg></button><button type="button" class="btn btn-icon btn-sm" aria-label="Supprimer le groupe TD 2"><svg class="ico ico-18" aria-hidden="true"><use href="#delete" /></svg></button></div>
+    </div>
+    <div class="card group-block">
+      <div class="group-head"><button type="button" class="btn btn-icon btn-sm" aria-expanded="false" aria-label="Déplier TD 3"><svg class="ico ico-18" aria-hidden="true"><use href="#chevron_right" /></svg></button><strong>TD 3</strong><span class="count">40 étudiants</span><button type="button" class="btn btn-ghost btn-sm" aria-label="Ajouter des étudiants à TD 3"><svg class="ico" aria-hidden="true"><use href="#person_add" /></svg>Ajouter</button><button type="button" class="btn btn-icon btn-sm" aria-label="Renommer TD 3"><svg class="ico ico-18" aria-hidden="true"><use href="#edit" /></svg></button><button type="button" class="btn btn-icon btn-sm" aria-label="Supprimer le groupe TD 3"><svg class="ico ico-18" aria-hidden="true"><use href="#delete" /></svg></button></div>
+    </div>
+    <div class="card group-block">
+      <div class="group-head"><button type="button" class="btn btn-icon btn-sm" aria-expanded="false" aria-label="Déplier TD 4"><svg class="ico ico-18" aria-hidden="true"><use href="#chevron_right" /></svg></button><strong>TD 4</strong><span class="count">41 étudiants</span><button type="button" class="btn btn-ghost btn-sm" aria-label="Ajouter des étudiants à TD 4"><svg class="ico" aria-hidden="true"><use href="#person_add" /></svg>Ajouter</button><button type="button" class="btn btn-icon btn-sm" aria-label="Renommer TD 4"><svg class="ico ico-18" aria-hidden="true"><use href="#edit" /></svg></button><button type="button" class="btn btn-icon btn-sm" aria-label="Supprimer le groupe TD 4"><svg class="ico ico-18" aria-hidden="true"><use href="#delete" /></svg></button></div>
+    </div>
   </main>
+  <div class="toast" role="status">
+    <svg class="ico" aria-hidden="true"><use href="#check" /></svg>
+    <p>Le groupe «&nbsp;Soutien du jeudi&nbsp;» a été supprimé. Ses 12 étudiants restent dans le cours.</p>
+    <button type="button" class="btn btn-ghost btn-sm" data-wf-to="groupes"><svg class="ico" aria-hidden="true"><use href="#undo" /></svg>Annuler</button>
+    <button type="button" class="btn btn-icon btn-sm" aria-label="Fermer la notification"><svg class="ico ico-18" aria-hidden="true"><use href="#close" /></svg></button>
+  </div>
 </div>

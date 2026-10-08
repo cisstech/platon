@@ -8,25 +8,25 @@
         <div class="brand-org">Université Gustave Eiffel</div>
       </div>
     </div>
-    <a class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico"><use href="#add" /></svg>Créer</a>
+    <button type="button" class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico" aria-hidden="true"><use href="#add" /></svg>Créer</button>
     <nav class="nav">
-      <a class="nav-item" data-wf-to="enseignant"><svg class="ico"><use href="#home" /></svg>Accueil</a>
-      <a class="nav-item" data-wf-to="annonces"><svg class="ico"><use href="#campaign" /></svg>Annonces</a>
-      <a class="nav-item" data-wf-to="mes-cours"><svg class="ico"><use href="#school" /></svg>Cours</a>
-      <a class="nav-item" data-wf-to="file"><svg class="ico"><use href="#rate_review" /></svg>Corrections<span class="count">14</span></a>
-      <a class="nav-item active" data-wf-to="catalogue"><svg class="ico"><use href="#folder_open" /></svg>Ressources</a>
-      <a class="nav-item" data-wf-to="test"><svg class="ico"><use href="#fact_check" /></svg>Tests d'entrée</a>
+      <a href="#" class="nav-item" data-wf-to="enseignant"><svg class="ico" aria-hidden="true"><use href="#home" /></svg>Accueil</a>
+      <a href="#" class="nav-item" data-wf-to="annonces"><svg class="ico" aria-hidden="true"><use href="#campaign" /></svg>Annonces</a>
+      <a href="#" class="nav-item" data-wf-to="mes-cours"><svg class="ico" aria-hidden="true"><use href="#school" /></svg>Cours</a>
+      <a href="#" class="nav-item" data-wf-to="file"><svg class="ico" aria-hidden="true"><use href="#rate_review" /></svg>Corrections<span class="count">2</span></a>
+      <a href="#" class="nav-item active" data-wf-to="catalogue"><svg class="ico" aria-hidden="true"><use href="#folder_open" /></svg>Ressources</a>
+      <a href="#" class="nav-item" data-wf-to="test"><svg class="ico" aria-hidden="true"><use href="#fact_check" /></svg>Tests d'entrée</a>
     </nav>
     <div class="sidebar-foot">
-      <a class="nav-item"><svg class="ico"><use href="#help" /></svg>Documentation</a>
-      <a class="nav-item"><svg class="ico"><use href="#notifications" /></svg>Notifications<span class="count">2</span></a>
+      <a href="#" class="nav-item"><svg class="ico" aria-hidden="true"><use href="#help" /></svg>Documentation</a>
+      <a href="#" class="nav-item"><svg class="ico" aria-hidden="true"><use href="#notifications" /></svg>Notifications<span class="count">2</span></a>
       <div class="me">
         <span class="avatar">KH</span>
         <div>
           <div class="me-name">Karim Haddad</div>
-          <div class="me-role">Enseignant</div>
+          <div class="me-role">Compte enseignant</div>
         </div>
-        <svg class="ico ico-16"><use href="#expand_more" /></svg>
+        <svg class="ico ico-16" aria-hidden="true"><use href="#expand_more" /></svg>
       </div>
       <a class="credit" href="https://github.com/cisstech/platon" aria-label="Code source de PLaTon, logiciel libre de cisstech"><svg class="ico ico-16" aria-hidden="true"><use href="#code" /></svg>Logiciel libre, par <strong>cisstech</strong></a>
     </div>
@@ -37,46 +37,42 @@
         <h1 class="title">Ressources</h1>
         <p class="page-sub">Les exercices, activités et cercles partagés entre enseignants.</p>
       </div>
-      <div class="actions"><a class="btn btn-secondary" data-wf-to="cercles"><svg class="ico"><use href="#account_tree" /></svg>Cercles</a><a class="btn btn-primary" data-wf-to="modeles"><svg class="ico"><use href="#add" /></svg>Créer un exercice</a></div>
+      <div class="actions"><button type="button" class="btn btn-secondary" data-wf-to="cercles"><svg class="ico" aria-hidden="true"><use href="#account_tree" /></svg>Cercles</button><button type="button" class="btn btn-primary" data-wf-to="modeles"><svg class="ico" aria-hidden="true"><use href="#add" /></svg>Créer un exercice</button></div>
     </header>
-    <div class="filters">
-      <div class="input focused" style="flex: 1; max-width: 420px"><svg class="ico ico-18" style="margin: 0 8px 0 0; color: var(--color-subtle)"><use href="#search" /></svg><span>dichotomie ternaire</span></div>
-      <span class="segmented"><span class="seg on"><svg class="ico ico-16"><use href="#code" /></svg>Exercices</span><span class="seg"><svg class="ico ico-16"><use href="#quiz" /></svg>Activités</span><span class="seg"><svg class="ico ico-16"><use href="#folder_open" /></svg>Cercles</span></span>
-      <a class="chip" data-wf-to="filtres"><svg class="ico"><use href="#filter_list" /></svg>Filtres<span class="n">3</span></a>
-      <span class="select" style="margin-left: auto"><svg class="ico ico-16"><use href="#sort" /></svg>Pertinence<svg class="ico ico-16"><use href="#expand_more" /></svg></span>
+    <div class="filters catalogue-bar">
+      <label class="sr-only" for="q-ressources">Chercher dans les ressources</label><div class="input focused" id="q-ressources" role="searchbox"><svg class="ico ico-18" aria-hidden="true"><use href="#search" /></svg><span>dichotomie ternaire</span></div>
+      <span class="segmented" role="radiogroup" aria-label="Type de ressource"><span class="on" role="radio" aria-checked="true">Exercices</span><span role="radio" aria-checked="false">Activités</span><span role="radio" aria-checked="false">Cercles</span></span>
+      <button type="button" class="chip" data-wf-to="filtres"><svg class="ico" aria-hidden="true"><use href="#filter_list" /></svg>Filtres<span class="n" aria-label="3 filtres actifs">3</span></button>
+      <span class="select" role="button" aria-haspopup="listbox" aria-label="Trier par pertinence"><svg class="ico ico-16" aria-hidden="true"><use href="#sort" /></svg>Pertinence<svg class="ico ico-16" aria-hidden="true"><use href="#expand_more" /></svg></span>
     </div>
-    <div class="filters" style="margin-top: calc(-1 * var(--spacing-2))">
-      <span class="chip applied">Statut&nbsp;: prêt ou à tester<svg class="x"><use href="#close" /></svg></span>
-      <span class="chip applied">Niveau&nbsp;: L1<svg class="x"><use href="#close" /></svg></span>
-      <span class="chip applied">Cercle&nbsp;: Algorithmique<svg class="x"><use href="#close" /></svg></span>
-      <a style="font-size: 13px">Tout effacer</a>
+    <div class="applied-filters" role="group" aria-label="Filtres actifs">
+      <p class="small muted" role="status">Aucun exercice pour « dichotomie ternaire », avec</p>
+      <span class="chip applied">Statut&nbsp;: prêt ou à tester<button type="button" class="chip-remove" aria-label="Retirer le filtre Statut&nbsp;: prêt ou à tester"><svg class="x" aria-hidden="true"><use href="#close" /></svg></button></span><span class="chip applied">Niveau&nbsp;: L1<button type="button" class="chip-remove" aria-label="Retirer le filtre Niveau&nbsp;: L1"><svg class="x" aria-hidden="true"><use href="#close" /></svg></button></span><span class="chip applied">Cercle&nbsp;: Algorithmique<button type="button" class="chip-remove" aria-label="Retirer le filtre Cercle&nbsp;: Algorithmique"><svg class="x" aria-hidden="true"><use href="#close" /></svg></button></span>
     </div>
     <div class="layout">
-      <div>
+      <section aria-label="Résultats">
         <div class="card">
           <div class="empty compact">
-            <svg class="illus"><use href="#illus-copie" /></svg>
+            <svg class="glyph glyph-lg" aria-hidden="true"><use href="#glyph-exercice" /></svg>
             <div class="empty-body">
-              <h2 class="subheading">Aucun exercice pour « dichotomie ternaire » avec ces filtres</h2>
+              <h2 class="subheading">Ces filtres écartent tous les résultats</h2>
               <p>Sans le filtre Niveau&nbsp;: L1, 2 exercices correspondent. Vous pouvez aussi créer le vôtre à partir d'un modèle&nbsp;: il ira d'abord dans votre cercle.</p>
-              <div style="display: flex; gap: var(--spacing-2)"><a class="btn btn-secondary btn-sm">Retirer Niveau&nbsp;: L1</a><a class="btn btn-ghost btn-sm" data-wf-to="modeles"><svg class="ico"><use href="#add" /></svg>Partir d'un modèle</a></div>
+              <div class="empty-actions"><button type="button" class="btn btn-secondary btn-sm">Retirer le filtre Niveau&nbsp;: L1</button><button type="button" class="btn btn-ghost btn-sm" data-wf-to="modeles"><svg class="ico" aria-hidden="true"><use href="#add" /></svg>Partir d'un modèle</button></div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
       <aside class="stack">
-        <section>
-          <div class="section-head"><h2 class="heading">Mon espace</h2></div>
-          <div class="card">
-            <div class="mini"><span class="mini-title"><svg class="ico ico-16"><use href="#folder_open" /></svg> Cercle de Karim Haddad</span><span class="muted" style="font-size: 13px">9 exercices, 2 activités, 3 brouillons</span></div>
-          </div>
+        <section aria-labelledby="mine-t">
+          <div class="section-head"><h2 class="heading" id="mine-t">Mon espace</h2></div>
+          <div class="card"><a href="#" class="mini"><span class="mini-title"><svg class="ico ico-16" aria-hidden="true"><use href="#person" /></svg> Cercle de Karim Haddad</span><span class="small muted">9 exercices, 2 activités, dont 3 brouillons</span></a></div>
         </section>
-        <section>
-          <div class="section-head"><h2 class="heading">Vu récemment</h2></div>
+        <section aria-labelledby="vu-t">
+          <div class="section-head"><h2 class="heading" id="vu-t">Vu récemment</h2></div>
           <div class="card">
-            <div class="mini"><span class="mini-title">QCM&nbsp;: complexité</span><span class="muted" style="font-size: 13px">Exercice, hier</span></div>
-            <div class="mini"><span class="mini-title">TP 4&nbsp;: boucles et tableaux</span><span class="muted" style="font-size: 13px">Activité, lundi</span></div>
-            <div class="mini"><span class="mini-title">Algorithmique</span><span class="muted" style="font-size: 13px">Cercle, lundi</span></div>
+            <a href="#" class="mini" data-wf-to="ressource"><span class="mini-title">Recherche dichotomique</span><span class="mini-meta"><span class="tag success"><svg class="ico" aria-hidden="true"><use href="#verified" /></svg>Prêt</span>Exercice, ce matin</span></a>
+            <a href="#" class="mini"><span class="mini-title">Parcours en largeur d'un graphe</span><span class="mini-meta"><span class="tag"><svg class="ico" aria-hidden="true"><use href="#save" /></svg>Brouillon</span>Exercice, hier</span></a>
+            <a href="#" class="mini"><span class="mini-title">TP 4&nbsp;: boucles et tableaux</span><span class="mini-meta">Activité, vendredi</span></a>
           </div>
         </section>
       </aside>

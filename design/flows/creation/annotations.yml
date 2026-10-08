@@ -3,22 +3,66 @@
 - screen: modeles
   note: "Proposition légère : la recherche dans la galerie. Filtrage côté client sur le nom et la description, la liste est courte."
 - screen: modeles
-  note: "Écrire en PLE est secondaire : c'est le chemin d'Hélène, pas celui de Karim."
+  note: "Partir d'une page blanche, en code est secondaire : c'est le chemin d'Hélène, pas celui de Karim. Le libellé dit ce qui attend derrière, sans le jargon PLE."
+- screen: modeles
+  note: "Vignettes de modèle neutres, en graphites : une teinte de cours identifie un cours, jamais un type de modèle. Même règle pour l'icône de l'exercice dans l'en-tête de l'atelier et de l'aperçu."
+- screen: modeles
+  note: "État empty : rien n'existe encore, la page attend une action, c'est donc la copie vierge (état vide complet) et non un glyphe. Elle dit ce qu'est un modèle (un exercice dont il reste des champs à remplir, sans code), d'où il viendra, et propose de chercher l'exercice d'un collègue. Partir d'une page blanche reste dans l'en-tête, en secondaire."
 - screen: apercu
   note: "L'aperçu joue vraiment le modèle avec ses valeurs d'exemple (l'iframe du lecteur, comme aujourd'hui) et dit ce qu'il faudra remplir, lu dans main.plc."
 - screen: atelier
   note: "Le builder actuel : variables à gauche, éditeur au centre, aperçu à droite. Chaque variable affiche si elle est remplie. Précédent et Suivant guident dans l'ordre du modèle."
 - screen: atelier
-  note: "Le badge Non enregistré remplace « Non sauvegardé ». ⌘S enregistre, comme aujourd'hui."
+  note: "L'étiquette Modifications non enregistrées remplace « Non sauvegardé ». Elle est neutre et porte l'icône edit_note (le glyphe de l'atelier non enregistré dans design.md) : rien n'est en retard ni en erreur, il reste juste à enregistrer. Enregistrer ne porte pas d'icône d'état. ⌘S enregistre, comme aujourd'hui."
 - screen: atelier
-  note: "État error : quand l'aperçu ne peut pas se construire, l'éditeur dit quoi corriger, à l'endroit concerné. Jamais un aperçu blanc."
+  note: "En-tête : retour, titre, une seule action principale (Enregistrer). Ouvrir dans l'éditeur de code devient un bouton icône libellé (aria-label et infobulle), le plein écran passe dans l'en-tête de l'aperçu, qu'il concerne. Ajouter à un cours n'apparaît qu'après l'enregistrement (écran enregistre)."
+- screen: atelier
+  note: "L'aperçu est un cadre titré « Aperçu ». Son bouton Valider est celui de l'étudiant : le lecteur, en mode aperçu, le rend en secondaire pour que la page garde une seule action principale. Le plein écran le montre tel que l'étudiant le voit."
+- screen: atelier
+  note: "Les choix se réordonnent à la souris et au clavier : chaque poignée est un bouton nommé, l'indice clavier est sous la liste. Chaque champ a un libellé pour les lecteurs d'écran (Choix 1, Choix 2...)."
+- screen: atelier
+  note: "État error : quand l'aperçu ne peut pas se construire, l'éditeur dit quoi corriger, à l'endroit concerné. Jamais un aperçu blanc. La variable en cause perd sa coche : icône d'erreur et mot « À corriger » dans la navigation ; le message au-dessus de la liste nomme le problème et la correction, avec un bouton qui l'applique. L'aperçu dit qu'il attend, sans rouge : l'erreur est déjà montrée là où elle se corrige. Enregistrer est désactivé (aria-disabled, relié à sa raison par aria-describedby) et la raison est écrite à côté : « Corrigez le bloc Choix pour enregistrer ». Proposition : aujourd'hui Sauvegarder n'est désactivé que pendant l'enregistrement (builder.page.html, [disabled]=\"saving()\"), l'aperçu n'est pas vérifié ; à valider avec l'équipe."
 - screen: enregistrer
-  note: "Comportement actuel : au premier enregistrement d'un brouillon au nom par défaut, le builder envoie vers les informations. Ici c'est un dialogue au lieu d'un changement de page."
+  note: "Comportement actuel : au premier enregistrement d'un brouillon au nom par défaut, le builder envoie vers les informations. Ici c'est un dialogue au lieu d'un changement de page. Le nom par défaut écrit sa date en lettres, « Exercice du 29 sept. 2026 à 10 h 42 », comme toute date absolue des maquettes."
+- screen: enregistrer
+  note: "Brouillon porte save, le glyphe du brouillon dans design.md, partout dans les maquettes. Les topics sont définis en une ligne sous leur champ (les thèmes de l'exercice, qui aident à le retrouver) : un premier exercice ne doit pas buter sur un mot de la plateforme. Même ligne dans Nouvelle ressource et dans les paramètres d'une ressource."
 - screen: enregistre
-  note: "Après l'enregistrement, la suite logique est proposée : donner l'exercice à ses étudiants."
+  note: "Après l'enregistrement, la suite logique devient l'action principale de l'en-tête : Ajouter à un cours. Enregistrer devient un état calme (coche graphite, la confirmation neutre, et « Enregistré ») ; il redevient le bouton principal à la prochaine modification, avec le badge Modifications non enregistrées."
+- screen: enregistre
+  note: "La notification ne fait que confirmer (en bas à gauche, sur la couverture) et disparaît seule : l'action est déjà dans la page. Créer un autre exercice n'y figure plus ; on repart de l'accueil ou du menu Créer."
 - screen: atelier-quitter
-  note: "Comportement actuel : un exercice jamais enregistré est supprimé en quittant. Le dialogue le dit avant."
+  note: "Comportement actuel : un exercice jamais enregistré est supprimé en quittant. Le dialogue le dit avant. Quitter et supprimer est l'action destructive secondaire (btn-danger-quiet), à l'écart ; l'action principale du dialogue reste Enregistrer."
 - screen: ajouter-au-cours
   note: "Proposition, la plus importante du chantier pour Karim. Aujourd'hui un exercice ne va dans un cours qu'à travers une ressource activité, qu'on crée en PLA dans l'éditeur : le parcours sans code s'arrête là. Faisabilité vérifiée, sans nouvel endpoint : POST /resources accepte déjà files, donc le client crée une ressource activité dans le cercle personnel avec un main.pla (un groupe, cet exercice), puis appelle createActivities sur le cours. Deux appels existants."
 - screen: nouvelle
-  note: "L'assistant actuel en six étapes (cercle, informations, tags, mode, modèle, terminé) devient un formulaire. Mêmes champs, même appel d'API. Le cercle est prérempli avec celui d'où l'on vient."
+  note: "L'assistant actuel en six étapes (cercle, informations, tags, mode, modèle, terminé) devient un formulaire. Mêmes champs, même appel d'API. Le cercle est prérempli avec celui d'où l'on vient (par exemple Nouvelle ressource sur la page d'un cercle)."
+- screen: nouvelle
+  note: "Les rubriques sont des questions (titres de niveau 2 sous le titre de la page). Le choix de ce que l'on crée porte les glyphes PLaTon exercice et activité (et cercle pour un administrateur) : c'est l'un des trois usages des glyphes, avec le menu Créer et les états vides. Les descriptions disent ce qu'est l'objet, sans format PLE ni PLA."
+- screen: ajouter-au-cours
+  note: "Chaque cours se reconnaît à sa marque (teinte et sigle, comme sur sa page) et à son nombre d'étudiants, en trois tuiles côte à côte. La Fonction devient une question en clair, À quoi sert cette activité ?, comme à l'ajout d'activité. Une seule action principale dans le dialogue."
+- screen: modeles
+  note: "Le mot cercle est défini en une ligne à côté de Modèles de vos cercles (un dossier partagé avec des collègues), la même définition que dans Nouvelle ressource."
+- screen: modeles
+  note: "Pour commencer : un modèle recommandé, en tête de la galerie, pour l'enseignant qui n'a jamais créé d'exercice. Le QCM, parce qu'il est le plus simple à remplir (cinq blocs, aucune ligne de code) et le plus utilisé (412 exercices). Le choix suit l'usage, avec le compteur d'exercices créés que la galerie affiche déjà. Les cinq autres modèles certifiés restent visibles juste dessous, à égalité ; seul le QCM porte l'action principale de la page, Commencer avec un QCM."
+- screen: apercu
+  note: "La question n'a qu'une bonne réponse : l'aperçu montre des boutons radio (options single, radiogroup), comme le lecteur. Les cases à cocher sont réservées aux questions à plusieurs bonnes réponses. Même règle dans l'aperçu de l'atelier."
+- screen: atelier
+  note: "Titre de niveau 1 : le nom de l'exercice, dans l'en-tête ; le crayon à côté est un bouton Renommer. Les blocs à gauche sont de vrais boutons, groupés sous deux titres de niveau 2 (Contenu, Exercice) ; leur état (rempli, vide, à corriger) est dit aux lecteurs d'écran. Le lien d'évitement mène à l'éditeur."
+- screen: nouvelle
+  note: "Karim est enseignant : Que voulez-vous créer ? ne lui propose qu'Exercice et Activité. Le code réserve la création d'un cercle à l'administrateur : ResourceService.canUserCreateResource (libs/feature/resource/browser/src/lib/api/resource.service.ts) ne l'accorde pour CIRCLE qu'au rôle admin ; la barre d'outils s'en sert pour son entrée Créer un cercle (toolbar.component.ts, canCreateCircle) et la page de création renvoie vers /resources avec « Vous n'avez pas les droits pour cette action ! » (create.page.ts). L'API, elle, ne vérifie que le droit d'écriture sur le cercle parent (ResourceController.create) : l'interface est plus stricte que le serveur, et les maquettes suivent l'interface, comme le menu Créer de l'accueil. Pour un administrateur, une troisième carte Cercle s'ajoute, avec le champ Code unique de la page actuelle."
+- screen: nouvelle
+  note: "Le mot cercle est défini là où il apparaît, sous le champ Cercle, en une ligne pour qui n'en a jamais vu : un dossier partagé avec des collègues, qui voient et peuvent modifier ce qu'on y range. C'est le droit d'écriture des collaborateurs acceptés (ResourcePermissionService). Le champ est prérempli avec le cercle d'où l'on vient."
+- screen: ajouter-au-cours
+  note: "Les dates, sous l'usage, sur une ligne. Une activité sans dates est ouverte aux étudiants (calculateActivityOpenState) : le dialogue ne la crée jamais ainsi sans le dire. Un entraînement s'ouvre Maintenant ; la fermeture est un choix explicite dont le défaut se lit en toutes lettres, Sans fermeture : ouverte jusqu'à ce que vous la fermiez. À une date déplie le sélecteur. Côté enseignant, l'activité se lit ensuite « Sans fermeture » dans le cours, le mot du glossaire quand l'ouverture est fixée."
+- screen: ajouter-au-cours
+  note: "État notee : une épreuve notée exige ses deux dates. Les champs sont vides, obligatoires (aria-required) et reliés à la phrase qui dit pourquoi : sans dates, l'épreuve serait ouverte dès son ajout. Ajouter au cours reste désactivé (aria-disabled, relié à sa raison) tant qu'elles manquent, et la raison est écrite à côté, comme pour Enregistrer dans l'atelier. Proposition : aujourd'hui l'assistant d'ajout accepte une épreuve sans dates, qui s'ouvre aussitôt."
+- screen: ajouter-au-cours
+  note: "Une épreuve notée, un seul formulaire. Le dialogue reprend l'essentiel de l'ajout d'activité (flow activite, ajouter-fonction) : les dates, obligatoires, et la durée maximale à côté, facultative, dont le vide se lit « Jusqu'à la fermeture » (settings.duration absent : le chronomètre n'a que la fermeture). Les réglages de sécurité tiennent en une ligne, avec les valeurs par défaut du formulaire complet : une tentative par exercice, plein écran obligatoire, copier-coller bloqué, arrêt si l'étudiant quitte la page (onglet changé, fenêtre quittée), code de reprise créé. Une épreuve ajoutée depuis l'atelier n'a donc jamais de sécurité inconnue."
+- screen: ajouter-au-cours
+  note: "Régler ouvre le formulaire complet de l'ajout d'activité (ajouter-fonction), prérempli avec le cours, la section, le nom, l'exercice et les dates déjà saisis : chaque interrupteur, le nombre de tentatives et le code de reprise s'y règlent. C'est un lien de navigation, relié à la ligne qu'il règle (aria-describedby). Après l'ajout, les mêmes réglages vivent dans les paramètres de l'activité, onglet Déroulement."
+- screen: ajouter-au-cours
+  note: "Les trois usages de l'ajout d'activité : Entraînement, Notée, Challenge (pour se mesurer, avec un classement dans l'onglet Challenges ; choix définitif, comme dans le formulaire du cours). Le dialogue fait 680 px pour que chaque description tienne en deux lignes ; chaque tuile de cours met sa marque et son nombre d'étudiants sur une ligne, son nom dessous. L'épreuve notée tient sans défilement dans la fenêtre de 760 px."
+- screen: atelier
+  note: "Trois tailles de titre distinctes : le nom de l'exercice en title (22), le titre du bloc en heading (17), le titre d'un message de bloc en subheading (15). Thème de l'aperçu prend dark_mode : contrast est le glyphe de l'état partiel."
+- screen: atelier
+  note: "État error : l'aperçu en attente porte hourglass_empty, neutre ; visibility_off reste au statut Ne pas utiliser d'une ressource."

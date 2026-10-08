@@ -1,22 +1,46 @@
+- note: "Repère du mode administration : une étiquette neutre « Mode administration » au-dessus du titre de chaque page, avec ce qu'elle implique. Il remplace le cadre rouge actuel autour de l'écran : signalé, sans alarme (persona Sophie)."
+- note: "Cinq onglets : Utilisateurs, Groupes, Connexions, Tags, Annonces. Connexions rassemble les LMS et les serveurs CAS derrière un sélecteur à deux choix ; chaque choix garde son adresse (lms, cas) et son action principale. Le titre de niveau 1 est « Administration » sur chaque page ; l'onglet actif porte aria-current."
 - screen: utilisateurs
-  note: "Onglets réels : Utilisateurs, Groupes, LMS, CAS, Tags, Annonces. Les filtres de rôle et de statut sont ceux des colonnes filtrables actuelles, sortis dans la barre."
+  note: "La liste suit ses filtres : en « Actifs », seuls les comptes actifs ; la colonne Statut disparaît puisque le filtre le dit. Les comptes désactivés (Paul Renard) sont sous « Désactivés », d'où ils se réactivent. Le rôle est une liste déroulante (cinq rôles, dont Démo et Candidat). La recherche a un libellé lu par les lecteurs d'écran. La ligne de son propre compte n'a pas de case active ni de menu (« Vous »)."
+- screen: utilisateurs
+  note: "Tri : Utilisateur croissant par défaut (nom de famille, puis prénom, puis identifiant, comme UserOrderings.NAME), ou Ajouté le (CREATED_AT). L'en-tête trié porte aria-sort et une flèche en encre ; l'autre montre qu'il se trie. Les comptes démo n'ont pas de nom de famille propre : ils se rangent ensemble, sous « démo »."
+- screen: utilisateurs
+  note: "État selection : Sophie filtre sur le rôle Démo et coche les trois comptes démo de l'an dernier ; demo-ap1, celui de cette année, reste actif. Une case par ligne, libellée du nom ; la case d'en-tête coche la page et passe à l'état mixte quand une partie seulement est cochée. La barre de sélection, sur la couverture comme ailleurs, se pose sous la liste et n'en couvre aucune ligne ; quand la liste dépasse l'écran, elle reste collée au bas de la page et la liste garde sous elle la place de la barre. Elle porte « Changer le rôle » (même menu de rôles, puis le dialogue de rôle qui nomme les personnes) et « Désactiver »."
+- screen: utilisateurs
+  note: "Le bouton d'actions de chaque ligne nomme la personne (« Actions pour Hélène Martin ») ; c'est l'entrée vers le changement de rôle et la désactivation d'un compte. API : un compte se met à jour à la fois (PATCH /users/:id) ; les actions en lot sont à construire, en une requête par lot pour que la confirmation dise un seul résultat."
 - screen: utilisateur-actions
-  note: "Changer le rôle (Admin, Enseignant, Élève) et désactiver, comme le menu actuel. Désactiver dit ce qui reste. Le rôle Démo ne s'attribue qu'à la création, comme aujourd'hui."
+  note: "Sophie a cherché « Hélène Martin » : un seul compte actif trouvé. Le menu change le rôle (Administrateur, Enseignant, Étudiant) et désactive. Les rôles sont des boutons radio de menu, le rôle actuel coché ; en choisir un autre ouvre la confirmation. Le rôle Démo ne s'attribue qu'à la création, comme aujourd'hui."
+- screen: utilisateur-desactiver
+  note: "Il nomme la personne (avatar, nom, rôle, e-mail), dit ce qui part (la connexion) et ce qui reste (cours, ressources), et que le compte se réactive depuis le filtre Désactivés. Les compteurs de cours et de ressources sont lus à l'ouverture."
+- screen: utilisateurs-desactiver
+  note: "Désactivation d'une sélection : le titre dit le nombre, le dialogue nomme les comptes (au-delà de trois, les trois premiers puis « et N autres »), avec leur dernière connexion (lastLogin) pour vérifier qu'ils ne servent plus. Le bouton reprend le nombre. Les liens démo restent valables : la plateforme crée un compte démo à chaque visite."
+- screen: utilisateur-role
+  note: "Tout changement de rôle passe par ce dialogue, la montée vers Administrateur montrée ici. Descendre vers Enseignant ou Étudiant reprend le même dialogue et liste ce que la personne perd. Le bouton dit l'action sans genre (« Donner les droits d'administration ») : le modèle User n'a pas de champ de genre, la plateforme ne peut pas écrire « administratrice »."
 - screen: utilisateur-nouveau
-  note: "Le formulaire actuel (prénom, nom, identifiant, e-mail, rôle, mot de passe généré de 12 caractères). À corriger au passage : aujourd'hui Élève crée un compte enseignant (users.page.ts)."
+  note: "Le formulaire actuel (prénom, nom, identifiant, e-mail, rôle, mot de passe généré de 12 caractères). Le rôle est un groupe de choix avec sa légende. À corriger au passage : choisir le rôle étudiant crée aujourd'hui un compte enseignant (users.page.ts)."
 - screen: groupes-plateforme
-  note: "Groupes de la plateforme : créer, rechercher, supprimer en lot. Le nombre de personnes est lu dans le groupe (users)."
+  note: "Groupes de la plateforme : créer, rechercher, ouvrir (le nom du groupe), supprimer en lot. Tri par date de création, du plus récent au plus ancien (UserGroupOrderings) : les groupes de l'an dernier, qu'on supprime, sont en bas. Cocher des lignes fait apparaître la barre de sélection, qui nomme les groupes choisis et porte la suppression. Le nombre de personnes est lu dans le groupe (users)."
+- screen: groupes-supprimer
+  note: "Vérité produit : supprimer un groupe supprime en cascade ses inscriptions aux cours (CourseMembers.group_id, onDelete CASCADE), donc ses membres perdent l'accès aux cours où ils n'étaient inscrits que par lui. Les comptes restent. Le nombre de cours par groupe est à calculer depuis CourseMembers."
 - screen: groupe-plateforme
-  note: "Le tiroir actuel : Informations (nom) et Membres (ajouter, retirer)."
+  note: "Le tiroir actuel : Informations (nom) et Membres (ajouter, retirer), les membres par ordre alphabétique et paginés. Retirer un membre se fait en place, avec une notification d'annulation."
 - screen: lms
-  note: "LMS reliés en LTI : nom, adresse, adresse de retour des notes, clé, secret."
+  note: "Connexions, LMS reliés en LTI : nom, adresse, date d'ajout ; la clé et le secret ne s'affichent pas dans la liste. Le sélecteur dit combien il y a de LMS et de CAS. Pas de recherche : la liste tient en deux lignes."
+- screen: lms-nouveau
+  note: "Les libellés sont en français ; le terme que Sophie retrouve dans Moodle (consumer key, shared secret, outcome service) vient en aide sous le champ, pour qu'elle copie la bonne valeur au bon endroit."
 - screen: cas
-  note: "Serveurs CAS : nom, adresses de connexion et de validation, version (3.0 seule active aujourd'hui), LMS reliés."
+  note: "Connexions, serveurs CAS : nom, adresses de connexion et de validation, date d'ajout. La version (3.0 seule active aujourd'hui) et les LMS reliés se règlent dans le tiroir."
 - screen: tags
-  note: "Topics et niveaux : ajouter, renommer au double-clic, supprimer."
+  note: "Topics et niveaux côte à côte, chacun avec le nombre de ressources qui l'utilisent. Renommer passe par un bouton visible (crayon) qui ouvre le champ en place, avec son aide juste dessous : Entrée enregistre, Échap annule ; le double-clic actuel reste un raccourci."
+- screen: tags
+  note: "La suppression est en place, sans dialogue : la notification dit combien de ressources perdent le tag et reste jusqu'à ce qu'on la ferme, puisqu'elle porte l'annulation. Elle flotte en bas à gauche, sous les deux listes, sans en masquer une ligne."
 - screen: tag-similaire
-  note: "Le dialogue actuel de tag similaire, avec l'existant en action principale."
+  note: "Le dialogue actuel de tag similaire, avec l'existant en action principale et son nombre de ressources pour aider à choisir."
 - screen: annonces-admin
-  note: "Annonces : état, cible, date, aperçu, modification, suppression."
+  note: "Les quatre annonces de la page Annonces, de la plus récente à la plus ancienne. « Maintenance le 4 octobre » (25 septembre, tout le monde) est celle du bandeau des accueils, parce qu'une annonce sur la disponibilité du service passe avant les autres ; « Les corrections détaillées arrivent » (27 septembre, étudiants) reste non lue dans Annonces. État (Publiée avec public, ou Brouillon avec save), cible, date de publication, aperçu, modification, suppression. Modifier ouvre le même dialogue, titré « Modifier l'annonce »."
+- screen: annonces-admin
+  note: "Supprimer se fait en place ; la notification d'annulation reste jusqu'à ce qu'on la ferme et ne recouvre pas la liste."
 - screen: annonce-edition
-  note: "Les champs actuels : titre, résumé, contenu riche, publication, durée en jours, rôles ciblés, icône."
+  note: "Les champs actuels : titre, résumé, contenu riche, publication, durée en jours, rôles ciblés, icône. Sophie crée « Inscriptions pédagogiques du second semestre », pour les étudiants seuls. Une annonce nouvelle est un brouillon (active à false) : l'étiquette Brouillon (save) le dit en tête du dialogue. Le bouton principal suit l'interrupteur : « Enregistrer le brouillon » quand il est désactivé, « Publier pour 4 431 personnes » quand il est activé, avec le nombre réel de personnes ciblées, ici les étudiants. La durée est celle du bandeau sur l'accueil, qui remplace la fenêtre d'annonce."
+- screen: annonce-edition
+  note: "La liste derrière le dialogue est celle du 28 septembre : les quatre annonces publiées. La nouvelle n'y entre qu'une fois enregistrée, en brouillon, en tête de liste."

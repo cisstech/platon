@@ -1,0 +1,53 @@
+<div class="reader"><div class="reader-in">
+  <a class="skip-link" href="#contenu">Aller au contenu</a>
+  <header class="player-head">
+    <div class="player-title">
+      <h1 class="title">Test d'entrée Master Informatique</h1>
+      <p class="small muted">Université Gustave Eiffel, exercice 3 sur 6&nbsp;: jointure SQL</p>
+    </div>
+    <button type="button" class="btn btn-secondary btn-sm" aria-disabled="true" aria-describedby="offline-d">Rendre mon test</button>
+  </header>
+  <div class="alert neutral" role="status">
+    <svg class="ico" aria-hidden="true"><use href="#wifi_off" /></svg>
+    <div><strong>Connexion perdue depuis 15&nbsp;h&nbsp;12, nous nous reconnectons</strong><p id="offline-d">Le temps continue de s'écouler. Vos 2 réponses validées sont enregistrées, et votre réponse en cours reste à l'écran sans pouvoir être modifiée. Elle, Valider, Sauvegarder, le changement d'exercice et Rendre mon test reviennent avec la connexion.</p></div>
+    <button type="button" class="btn btn-secondary btn-sm alert-action loading" aria-disabled="true"><svg class="ico" aria-hidden="true"><use href="#autorenew" /></svg>Reconnexion en cours</button>
+  </div>
+  <div class="player">
+  <main class="copie" id="contenu">
+    <div class="q">
+      <div class="q-mark" aria-hidden="true"><span>3</span></div>
+      <h2 class="heading" id="q1-t"><span class="sr-only">Question 3&nbsp;: </span>Écrivez une requête qui renvoie le nom des étudiants inscrits à au moins deux cours.</h2>
+      <div class="statement">
+        <p>La base contient deux tables.</p>
+        <span class="code wrap"><span class="ln">etudiant(id, nom)</span>
+<span class="ln">inscription(etudiant_id, cours_id)</span></span>
+      </div>
+      <div class="answer"><div class="input code-input wrap offline" role="textbox" aria-multiline="true" aria-readonly="true" aria-labelledby="q1-t" aria-describedby="frozen-d"><span class="ln">SELECT e.nom</span>
+<span class="ln">FROM etudiant e</span>
+<span class="ln">JOIN inscription i ON i.etudiant_id = e.id</span>
+<span class="ln">GROUP BY e.id, e.nom</span></div>
+        <p class="answer-note" id="frozen-d"><svg class="ico" aria-hidden="true"><use href="#wifi_off" /></svg>Hors connexion, votre réponse ne se modifie pas. Elle redevient modifiable avec la connexion.</p></div>
+    </div>
+    <div class="copie-actions">
+      <button type="button" class="btn btn-primary" aria-describedby="valider-d offline-d" aria-disabled="true"><svg class="ico" aria-hidden="true"><use href="#check" /></svg>Valider</button>
+      <button type="button" class="btn btn-secondary" aria-disabled="true" aria-describedby="offline-d">Sauvegarder</button>
+      <span class="spacer"></span>
+      <button type="button" class="btn btn-secondary" aria-disabled="true" aria-describedby="offline-d">Exercice suivant<svg class="ico" aria-hidden="true"><use href="#chevron_right" /></svg></button>
+    </div>
+    <p class="copie-help"><span class="final"><svg class="ico" aria-hidden="true"><use href="#wifi_off" /></svg>Hors connexion&nbsp;: ces actions reviennent avec la connexion.</span><span id="valider-d">Valider est définitif, une seule tentative. Sauvegarder et Exercice suivant gardent votre réponse en brouillon, modifiable jusqu'à la fin de votre test.</span></p>
+  </main>
+  <aside class="rail" aria-label="Temps et exercices">
+    <div class="card"><div class="countdown"><div role="timer" aria-labelledby="cd-l"><div class="figure-label" id="cd-l">Temps restant</div><div class="figure-value num">0:46:00</div></div><p class="countdown-why">Il continue de s'écouler pendant la coupure.</p><p class="sr-only" aria-live="polite"></p></div></div>
+    <nav class="card" aria-labelledby="rail-t">
+      <div class="rail-head has-bar"><h2 class="subheading" id="rail-t">Exercices</h2><span class="num">2 sur 6 enregistrés</span></div>
+      <div class="rail-progress"><div class="bar wide" role="progressbar" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100" aria-label="2 sur 6 enregistrés"><span style="width: 33%"></span></div></div>
+      <button type="button" class="ex-item saved" aria-disabled="true" aria-describedby="offline-d" data-wf-to="exercice"><svg class="ico" aria-hidden="true"><use href="#lock" /></svg>1. Complexité d'un algorithme<span class="sr-only">, enregistré</span></button>
+      <button type="button" class="ex-item saved" aria-disabled="true" aria-describedby="offline-d" data-wf-to="exercice"><svg class="ico" aria-hidden="true"><use href="#lock" /></svg>2. Piles et files<span class="sr-only">, enregistré</span></button>
+      <button type="button" class="ex-item current" aria-current="step" data-wf-to="exercice"><svg class="ico" aria-hidden="true"><use href="#radio_button_unchecked" /></svg>3. Jointure SQL<span class="sr-only">, à faire</span></button>
+      <button type="button" class="ex-item" aria-disabled="true" aria-describedby="offline-d" data-wf-to="exercice"><svg class="ico" aria-hidden="true"><use href="#radio_button_unchecked" /></svg>4. Tri d'une liste<span class="sr-only">, à faire</span></button>
+      <button type="button" class="ex-item" aria-disabled="true" aria-describedby="offline-d" data-wf-to="exercice"><svg class="ico" aria-hidden="true"><use href="#radio_button_unchecked" /></svg>5. Plus court chemin<span class="sr-only">, à faire</span></button>
+      <button type="button" class="ex-item" aria-disabled="true" aria-describedby="offline-d" data-wf-to="exercice"><svg class="ico" aria-hidden="true"><use href="#radio_button_unchecked" /></svg>6. Logique propositionnelle<span class="sr-only">, à faire</span></button>
+    </nav>
+  </aside>
+  </div>
+</div></div>

@@ -8,26 +8,26 @@
         <div class="brand-org">Université Gustave Eiffel</div>
       </div>
     </div>
-    <a class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico"><use href="#add" /></svg>Créer</a>
+    <button type="button" class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico" aria-hidden="true"><use href="#add" /></svg>Créer</button>
     <nav class="nav">
-      <a class="nav-item" data-wf-to="enseignant"><svg class="ico"><use href="#home" /></svg>Accueil</a>
-      <a class="nav-item" data-wf-to="annonces"><svg class="ico"><use href="#campaign" /></svg>Annonces</a>
-      <a class="nav-item" data-wf-to="mes-cours"><svg class="ico"><use href="#school" /></svg>Cours</a>
-      <a class="nav-item" data-wf-to="file"><svg class="ico"><use href="#rate_review" /></svg>Corrections<span class="count">14</span></a>
-      <a class="nav-item" data-wf-to="catalogue"><svg class="ico"><use href="#folder_open" /></svg>Ressources</a>
-      <a class="nav-item" data-wf-to="test"><svg class="ico"><use href="#fact_check" /></svg>Tests d'entrée</a>
-      <a class="nav-item active" data-wf-to="utilisateurs"><svg class="ico"><use href="#shield_person" /></svg>Administration</a>
+      <a href="#" class="nav-item" data-wf-to="enseignant"><svg class="ico" aria-hidden="true"><use href="#home" /></svg>Accueil</a>
+      <a href="#" class="nav-item" data-wf-to="annonces"><svg class="ico" aria-hidden="true"><use href="#campaign" /></svg>Annonces</a>
+      <a href="#" class="nav-item" data-wf-to="mes-cours"><svg class="ico" aria-hidden="true"><use href="#school" /></svg>Cours</a>
+      <a href="#" class="nav-item" data-wf-to="file"><svg class="ico" aria-hidden="true"><use href="#rate_review" /></svg>Corrections</a>
+      <a href="#" class="nav-item" data-wf-to="catalogue"><svg class="ico" aria-hidden="true"><use href="#folder_open" /></svg>Ressources</a>
+      <a href="#" class="nav-item" data-wf-to="test"><svg class="ico" aria-hidden="true"><use href="#fact_check" /></svg>Tests d'entrée</a>
+      <a href="#" class="nav-item active" data-wf-to="utilisateurs"><svg class="ico" aria-hidden="true"><use href="#shield_person" /></svg>Administration</a>
     </nav>
     <div class="sidebar-foot">
-      <a class="nav-item"><svg class="ico"><use href="#help" /></svg>Documentation</a>
-      <a class="nav-item"><svg class="ico"><use href="#notifications" /></svg>Notifications<span class="count">2</span></a>
+      <a href="#" class="nav-item"><svg class="ico" aria-hidden="true"><use href="#help" /></svg>Documentation</a>
+      <a href="#" class="nav-item"><svg class="ico" aria-hidden="true"><use href="#notifications" /></svg>Notifications<span class="count">2</span></a>
       <div class="me">
         <span class="avatar">SL</span>
         <div>
           <div class="me-name">Sophie Lambert</div>
-          <div class="me-role">Administratrice</div>
+          <div class="me-role">Compte administrateur</div>
         </div>
-        <svg class="ico ico-16"><use href="#expand_more" /></svg>
+        <svg class="ico ico-16" aria-hidden="true"><use href="#expand_more" /></svg>
       </div>
       <a class="credit" href="https://github.com/cisstech/platon" aria-label="Code source de PLaTon, logiciel libre de cisstech"><svg class="ico ico-16" aria-hidden="true"><use href="#code" /></svg>Logiciel libre, par <strong>cisstech</strong></a>
     </div>
@@ -35,49 +35,57 @@
   <main class="main" id="contenu">
     <header class="page-head">
       <div>
+        <p class="crumbs admin-mode"><span class="tag"><svg class="ico" aria-hidden="true"><use href="#shield_person" /></svg>Mode administration</span><span>Ce que vous changez ici vaut pour toute la plateforme.</span></p>
         <h1 class="title">Administration</h1>
-        <p class="page-sub">Comptes, groupes, connexions et contenus de la plateforme.</p>
       </div>
-      <div class="actions"><a class="btn btn-primary" data-wf-to="annonce-edition"><svg class="ico"><use href="#add" /></svg>Créer une annonce</a></div>
+      <div class="actions"><button type="button" class="btn btn-primary" data-wf-to="annonce-edition"><svg class="ico" aria-hidden="true"><use href="#add" /></svg>Créer une annonce</button></div>
     </header>
-    <div class="tabs"><a class="tab" data-wf-to="utilisateurs"><svg class="ico"><use href="#person" /></svg>Utilisateurs</a><a class="tab" data-wf-to="groupes-plateforme"><svg class="ico"><use href="#groups" /></svg>Groupes</a><a class="tab" data-wf-to="lms"><svg class="ico"><use href="#school" /></svg>LMS</a><a class="tab" data-wf-to="cas"><svg class="ico"><use href="#key" /></svg>CAS</a><a class="tab" data-wf-to="tags"><svg class="ico"><use href="#bookmark" /></svg>Tags</a><a class="tab active" data-wf-to="annonces-admin"><svg class="ico"><use href="#campaign" /></svg>Annonces</a></div>
-    <div class="card" style="padding: 0; overflow: hidden">
+    <nav class="tabs" aria-label="Rubriques de l'administration">
+      <a href="#" class="tab" data-wf-to="utilisateurs"><svg class="ico" aria-hidden="true"><use href="#person" /></svg>Utilisateurs</a>
+      <a href="#" class="tab" data-wf-to="groupes-plateforme"><svg class="ico" aria-hidden="true"><use href="#groups" /></svg>Groupes</a>
+      <a href="#" class="tab" data-wf-to="lms"><svg class="ico" aria-hidden="true"><use href="#hub" /></svg>Connexions</a>
+      <a href="#" class="tab" data-wf-to="tags"><svg class="ico" aria-hidden="true"><use href="#bookmark" /></svg>Tags</a>
+      <a href="#" class="tab active" aria-current="page" data-wf-to="annonces-admin"><svg class="ico" aria-hidden="true"><use href="#campaign" /></svg>Annonces</a>
+    </nav>
+    <div class="card table-card">
       <table class="table">
-        <thead><tr><th>Annonce</th><th>État</th><th>Pour</th><th>Créée le</th><th></th></tr></thead>
+        <thead><tr><th scope="col">Annonce</th><th scope="col">État</th><th scope="col">Pour</th><th scope="col">Publiée le</th><th scope="col" class="cell-actions"><span class="sr-only">Actions</span></th></tr></thead>
         <tbody>
-<tr><td><strong>Maintenance le 4 octobre</strong><div class="muted" style="font-size: 13px">PLaTon sera indisponible de 7 h à 9 h.</div></td><td><span class="tag success"><svg class="ico"><use href="#check_circle" /></svg>Publiée</span></td><td>Tout le monde</td><td>25 sept. 2026</td><td style="white-space: nowrap"><button class="btn btn-icon btn-sm" aria-label="Aperçu"><svg class="ico ico-18"><use href="#visibility" /></svg></button><button class="btn btn-icon btn-sm" aria-label="Modifier" data-wf-to="annonce-edition"><svg class="ico ico-18"><use href="#edit" /></svg></button><button class="btn btn-icon btn-sm" aria-label="Supprimer"><svg class="ico ico-18"><use href="#delete" /></svg></button></td></tr>
-<tr><td><strong>Nouveau&nbsp;: les modèles d'exercice</strong><div class="muted" style="font-size: 13px">Créez un QCM sans écrire de code.</div></td><td><span class="tag success"><svg class="ico"><use href="#check_circle" /></svg>Publiée</span></td><td>Enseignants</td><td>10 sept. 2026</td><td style="white-space: nowrap"><button class="btn btn-icon btn-sm" aria-label="Aperçu"><svg class="ico ico-18"><use href="#visibility" /></svg></button><button class="btn btn-icon btn-sm" aria-label="Modifier" data-wf-to="annonce-edition"><svg class="ico ico-18"><use href="#edit" /></svg></button><button class="btn btn-icon btn-sm" aria-label="Supprimer"><svg class="ico ico-18"><use href="#delete" /></svg></button></td></tr>
-<tr><td><strong>Rentrée 2026</strong><div class="muted" style="font-size: 13px">Vos cours de l'an dernier sont dans Archivés.</div></td><td><span class="tag"><svg class="ico"><use href="#visibility_off" /></svg>Masquée</span></td><td>Tout le monde</td><td>28 août 2026</td><td style="white-space: nowrap"><button class="btn btn-icon btn-sm" aria-label="Aperçu"><svg class="ico ico-18"><use href="#visibility" /></svg></button><button class="btn btn-icon btn-sm" aria-label="Modifier" data-wf-to="annonce-edition"><svg class="ico ico-18"><use href="#edit" /></svg></button><button class="btn btn-icon btn-sm" aria-label="Supprimer"><svg class="ico ico-18"><use href="#delete" /></svg></button></td></tr>
+<tr><td><strong>Les corrections détaillées arrivent</strong><div class="muted small">Votre copie corrigée s'affiche à côté de votre note.</div></td><td><span class="tag success"><svg class="ico" aria-hidden="true"><use href="#public" /></svg>Publiée</span></td><td>Étudiants</td><td>27 sept. 2026</td><td class="cell-actions"><button type="button" class="btn btn-icon btn-sm" aria-label="Aperçu de l'annonce Les corrections détaillées arrivent"><svg class="ico ico-18" aria-hidden="true"><use href="#visibility" /></svg></button><button type="button" class="btn btn-icon btn-sm" aria-label="Modifier l'annonce Les corrections détaillées arrivent"><svg class="ico ico-18" aria-hidden="true"><use href="#edit" /></svg></button><button type="button" class="btn btn-icon btn-sm" aria-label="Supprimer l'annonce Les corrections détaillées arrivent"><svg class="ico ico-18" aria-hidden="true"><use href="#delete" /></svg></button></td></tr>
+<tr><td><strong>Maintenance le 4 octobre</strong><div class="muted small">PLaTon sera indisponible de 7 h à 9 h.</div></td><td><span class="tag success"><svg class="ico" aria-hidden="true"><use href="#public" /></svg>Publiée</span></td><td>Tout le monde</td><td>25 sept. 2026</td><td class="cell-actions"><button type="button" class="btn btn-icon btn-sm" aria-label="Aperçu de l'annonce Maintenance le 4 octobre"><svg class="ico ico-18" aria-hidden="true"><use href="#visibility" /></svg></button><button type="button" class="btn btn-icon btn-sm" aria-label="Modifier l'annonce Maintenance le 4 octobre"><svg class="ico ico-18" aria-hidden="true"><use href="#edit" /></svg></button><button type="button" class="btn btn-icon btn-sm" aria-label="Supprimer l'annonce Maintenance le 4 octobre"><svg class="ico ico-18" aria-hidden="true"><use href="#delete" /></svg></button></td></tr>
+<tr><td><strong>Nouveau&nbsp;: le lecteur d'exercices</strong><div class="muted small">Une copie plus lisible, des résultats dans la marge.</div></td><td><span class="tag success"><svg class="ico" aria-hidden="true"><use href="#public" /></svg>Publiée</span></td><td>Étudiants</td><td>12 sept. 2026</td><td class="cell-actions"><button type="button" class="btn btn-icon btn-sm" aria-label="Aperçu de l'annonce Nouveau&nbsp;: le lecteur d'exercices"><svg class="ico ico-18" aria-hidden="true"><use href="#visibility" /></svg></button><button type="button" class="btn btn-icon btn-sm" aria-label="Modifier l'annonce Nouveau&nbsp;: le lecteur d'exercices"><svg class="ico ico-18" aria-hidden="true"><use href="#edit" /></svg></button><button type="button" class="btn btn-icon btn-sm" aria-label="Supprimer l'annonce Nouveau&nbsp;: le lecteur d'exercices"><svg class="ico ico-18" aria-hidden="true"><use href="#delete" /></svg></button></td></tr>
+<tr><td><strong>Rentrée 2026</strong><div class="muted small">Vos cours de l'an dernier sont dans Archivés.</div></td><td><span class="tag success"><svg class="ico" aria-hidden="true"><use href="#public" /></svg>Publiée</span></td><td>Tout le monde</td><td>28 août 2026</td><td class="cell-actions"><button type="button" class="btn btn-icon btn-sm" aria-label="Aperçu de l'annonce Rentrée 2026"><svg class="ico ico-18" aria-hidden="true"><use href="#visibility" /></svg></button><button type="button" class="btn btn-icon btn-sm" aria-label="Modifier l'annonce Rentrée 2026"><svg class="ico ico-18" aria-hidden="true"><use href="#edit" /></svg></button><button type="button" class="btn btn-icon btn-sm" aria-label="Supprimer l'annonce Rentrée 2026"><svg class="ico ico-18" aria-hidden="true"><use href="#delete" /></svg></button></td></tr>
         </tbody>
       </table>
     </div>
   </main>
-  <div class="scrim" data-wf-to="annonces-admin"></div>
-  <div class="modal wide" role="dialog" aria-label="Créer une annonce" style="width: 880px">
-    <div class="drawer-head"><div class="subheading">Créer une annonce</div><button class="btn btn-icon btn-sm" aria-label="Fermer" data-wf-to="annonces-admin" style="margin-left: auto"><svg class="ico ico-18"><use href="#close" /></svg></button></div>
-    <div style="display: grid; grid-template-columns: minmax(0, 1fr) 280px">
+  <div class="scrim" data-wf-to="annonces-admin" aria-hidden="true"></div>
+  <div class="modal wide" role="dialog" aria-modal="true" aria-labelledby="dlg-t">
+    <div class="drawer-head"><h2 class="subheading" id="dlg-t">Créer une annonce</h2><span class="tag"><svg class="ico" aria-hidden="true"><use href="#save" /></svg>Brouillon</span><button type="button" class="btn btn-icon btn-sm" aria-label="Fermer" data-wf-to="annonces-admin"><svg class="ico ico-18" aria-hidden="true"><use href="#close" /></svg></button></div>
+    <div class="compose">
       <div class="drawer-body">
-        <div class="field"><label>Titre</label><div class="input focused"><span>Maintenance le 4 octobre</span></div></div>
-        <div class="field" style="margin-top: var(--spacing-3)"><label>Résumé</label><div class="input"><span>PLaTon sera indisponible de 7 h à 9 h.</span></div><span class="field-hint">Affiché dans la liste et dans la fenêtre d'annonce.</span></div>
-        <div class="field" style="margin-top: var(--spacing-3)"><label>Contenu</label><div class="input" style="height: 160px; align-items: flex-start; padding-top: 10px; flex-direction: column; gap: 8px"><strong>Pourquoi&nbsp;?</strong><span>Mise à jour du serveur d'exécution des exercices.</span><span class="muted">Écrivez, ou tapez / pour insérer un titre, une liste, une image.</span></div></div>
+        <div class="field"><label for="an-titre">Titre</label><div class="input focused" id="an-titre"><span>Inscriptions pédagogiques du second semestre</span></div></div>
+        <div class="field"><label for="an-resume">Résumé</label><div class="input" id="an-resume" aria-describedby="an-resume-aide"><span>Choisissez vos options sur l'ENT avant le vendredi 13 novembre.</span></div><span class="field-hint" id="an-resume-aide">Affiché dans la liste des annonces et dans le bandeau de l'accueil.</span></div>
+        <div class="field"><label for="an-contenu">Contenu</label><div class="input rich" id="an-contenu" aria-describedby="an-contenu-aide"><span>Les inscriptions pédagogiques du second semestre ont lieu du lundi 2 au vendredi 13 novembre, sur l'ENT.</span><span>Vos cours du second semestre apparaîtront dans PLaTon une fois vos choix validés par votre scolarité.</span></div><span class="field-hint" id="an-contenu-aide">Tapez / pour insérer un titre, une liste, une image.</span></div>
       </div>
-      <div class="drawer-body" style="border-left: 1px solid var(--color-line)">
-        <div class="switch-row"><p>Publiée</p><span class="switch on"></span></div>
-        <div class="field" style="margin-top: var(--spacing-3)"><label>Afficher pendant</label><div class="input"><span>7 jours</span></div></div>
-        <div class="field" style="margin-top: var(--spacing-3)"><label>Pour</label>
-          <div class="options">
-            <div class="option on" style="padding: 6px 10px"><span class="box"></span>Élèves</div>
-            <div class="option on" style="padding: 6px 10px"><span class="box"></span>Enseignants</div>
-            <div class="option on" style="padding: 6px 10px"><span class="box"></span>Administrateurs</div>
+      <div class="drawer-body compose-side">
+        <div class="switch-row"><p id="an-publier">Publier<small>Brouillon tant que c'est désactivé&nbsp;: personne ne la voit.</small></p><span class="switch" role="switch" aria-checked="false" aria-labelledby="an-publier" tabindex="0"></span></div>
+        <div class="field"><label for="an-duree">Bandeau affiché pendant</label><div class="input" id="an-duree" aria-describedby="an-duree-aide"><span>14 jours</span></div><span class="field-hint" id="an-duree-aide">Ensuite, l'annonce reste dans la page Annonces.</span></div>
+        <fieldset class="field"><legend>Pour</legend>
+          <div class="options compact" role="group" aria-label="Pour" aria-describedby="an-pour-aide">
+            <div class="option on" role="checkbox" aria-checked="true" tabindex="0"><span class="box"></span>Étudiants</div>
+            <div class="option" role="checkbox" aria-checked="false" tabindex="0"><span class="box"></span>Enseignants</div>
+            <div class="option" role="checkbox" aria-checked="false" tabindex="0"><span class="box"></span>Administrateurs</div>
           </div>
-        </div>
-        <div class="field" style="margin-top: var(--spacing-3)"><label>Icône</label><div class="input"><span><svg class="ico ico-16"><use href="#warning" /></svg> Maintenance</span><svg class="ico ico-18"><use href="#expand_more" /></svg></div></div>
+          <span class="field-hint" id="an-pour-aide">Les étudiants, soit 4&nbsp;431 personnes.</span>
+        </fieldset>
+        <div class="field"><label for="an-icone">Icône</label><div class="input" id="an-icone" role="button" aria-haspopup="listbox"><span class="input-value"><svg class="ico ico-16" aria-hidden="true"><use href="#campaign" /></svg>Annonce</span><svg class="ico ico-18" aria-hidden="true"><use href="#expand_more" /></svg></div></div>
       </div>
     </div>
     <div class="drawer-foot">
-      <a class="btn btn-ghost" style="margin-right: auto"><svg class="ico"><use href="#visibility" /></svg>Aperçu</a>
-      <a class="btn btn-secondary" data-wf-to="annonces-admin">Annuler</a>
-      <a class="btn btn-primary" data-wf-to="annonces-admin">Créer l'annonce</a>
+      <button type="button" class="btn btn-ghost foot-start"><svg class="ico" aria-hidden="true"><use href="#visibility" /></svg>Aperçu du bandeau</button>
+      <button type="button" class="btn btn-secondary" data-wf-to="annonces-admin">Annuler</button>
+      <button type="button" class="btn btn-primary" data-wf-to="annonces-admin">Enregistrer le brouillon</button>
     </div>
   </div>
 </div>

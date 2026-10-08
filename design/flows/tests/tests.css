@@ -1,0 +1,348 @@
+/* Tests d'entrée: the teacher's list and the candidate's pages. Tokens only, closed type scale, weights 400 and 600. */
+
+.chips {
+  display: flex;
+  gap: var(--spacing-2);
+}
+
+/* Conditions: unticked until the candidate ticks them; the start button waits for it. */
+.conditions {
+  margin-top: var(--spacing-6);
+}
+.conditions p {
+  margin-top: 6px;
+  font-size: 13px;
+  line-height: 18px;
+}
+.consent {
+  display: flex;
+  gap: var(--spacing-3);
+  align-items: flex-start;
+  margin: var(--spacing-5) 0;
+}
+.consent-box {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  margin-top: 1px;
+  border: 2px solid var(--color-control);
+  border-radius: var(--rounded-xs);
+  background: var(--color-surface);
+  cursor: pointer;
+}
+.consent-hint {
+  margin-top: var(--spacing-2);
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--color-muted);
+}
+
+/* Sent: the receipt the candidate keeps. */
+.sent .title {
+  margin: var(--spacing-3) 0 var(--spacing-2);
+}
+.receipt {
+  margin: var(--spacing-6) 0 0;
+}
+.receipt dd {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-1);
+}
+.receipt .btn-icon {
+  margin: -8px -8px -8px 0;
+}
+.next-title {
+  margin: var(--spacing-8) 0 var(--spacing-4);
+}
+
+/* Phone: the cover shrinks to a header, the start stays under the thumb. */
+.m-signin .m-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+}
+.m-signin .signin-page.has-start {
+  padding-bottom: 168px;
+}
+.m-start {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 6;
+  padding: 0 var(--spacing-4) var(--spacing-4);
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-line);
+  box-shadow: var(--shadow-overlay);
+}
+.m-start .consent {
+  margin: var(--spacing-3) 0;
+}
+.m-start .btn {
+  width: 100%;
+}
+.m-start .consent-box {
+  width: 24px;
+  height: 24px;
+  margin-top: -1px;
+}
+.m-contact {
+  margin-top: var(--spacing-6);
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--color-muted);
+}
+
+/* ---------- La liste des candidats : un seul vocabulaire, une sélection ---------- */
+
+.table-tools .input .ico {
+  margin: 0 var(--spacing-2) 0 0;
+  color: var(--color-subtle);
+}
+.table-tools.chips-row {
+  padding-top: var(--spacing-2);
+  padding-bottom: var(--spacing-2);
+}
+.chips {
+  flex-wrap: wrap;
+}
+.state-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+.state-cell small {
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--color-muted);
+}
+.selection-bar strong {
+  white-space: nowrap;
+}
+.sel-note {
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--color-cover-muted);
+}
+
+/* ---------- Le candidat : vérifier son navigateur avant de commencer ---------- */
+
+.cand-page {
+  align-items: flex-start;
+  overflow: auto;
+}
+.cand-form {
+  max-width: 440px;
+}
+.cand-form > h2 {
+  margin-bottom: var(--spacing-2);
+}
+.cand-intro {
+  margin-bottom: var(--spacing-6);
+}
+.check-card {
+  margin-top: var(--spacing-6);
+  padding: var(--spacing-4);
+}
+.checks {
+  display: grid;
+  gap: var(--spacing-3);
+  margin: var(--spacing-3) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.checks li {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+}
+.checks li > .ico {
+  color: var(--color-graphite-400);
+}
+.checks li.ok > .ico {
+  color: var(--color-graphite-700);
+}
+.checks li.warn {
+  flex-wrap: wrap;
+  margin: 0 calc(var(--spacing-2) * -1);
+  padding: var(--spacing-2);
+  border-radius: var(--rounded-md);
+  background: var(--color-warning-soft);
+}
+.checks li.warn > .ico {
+  color: var(--color-warning-ink);
+}
+.checks li.warn strong {
+  color: var(--color-warning-ink);
+}
+.checks li.warn span {
+  color: var(--color-text);
+}
+.checks li.tip {
+  align-items: flex-start;
+  padding-top: var(--spacing-3);
+  border-top: 1px solid var(--color-line);
+}
+.checks li.tip > .ico {
+  margin-top: 2px;
+  color: var(--color-graphite-600);
+}
+.checks li > div {
+  flex: 1;
+  min-width: 0;
+}
+.checks strong {
+  display: block;
+}
+.checks span {
+  display: block;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--color-muted);
+}
+.conditions .btn-ghost {
+  margin: var(--spacing-1) 0 0 calc(var(--spacing-2) * -1);
+}
+
+@media (max-width: 480px) {
+  .checks li {
+    flex-wrap: wrap;
+  }
+  .checks .btn {
+    width: 100%;
+    height: 44px;
+  }
+  .conditions .btn-ghost,
+  .receipt .btn-icon {
+    height: 44px;
+  }
+  .receipt .btn-icon {
+    width: 44px;
+    margin: -10px -12px -10px 0;
+  }
+}
+
+/* Ticked conditions: the box fills with the action colour and carries its check. */
+.consent-box.on {
+  display: grid;
+  place-items: center;
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: var(--color-graphite-0);
+}
+.consent-box.on .ico {
+  width: 16px;
+  height: 16px;
+}
+
+/* ---------- Les consignes : la page de garde de la copie, posée sur la couverture ---------- */
+
+/* A sheet on the cover: the copy's red margin, one numbered rule per ruled line, the candidate's name
+   in the corner as on an exam copy. No shadow: it lies on the cover, it does not float. */
+.cand-cover h1 {
+  margin-top: var(--spacing-6);
+}
+.consigne {
+  position: relative;
+  margin-top: var(--spacing-6);
+  padding: var(--spacing-3) var(--spacing-5) var(--spacing-1) 56px;
+  border-radius: var(--rounded-lg);
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+.consigne::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 40px;
+  width: 2px;
+  background: var(--color-margin);
+}
+.consigne-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--spacing-3);
+  padding-bottom: var(--spacing-2);
+  border-bottom: 1px solid var(--color-line-strong);
+}
+.consigne-head .small {
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--color-muted);
+}
+.consigne-list {
+  counter-reset: consigne;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.consigne-list li {
+  position: relative;
+  counter-increment: consigne;
+  padding: var(--spacing-2) 0;
+  border-bottom: 1px solid var(--color-line);
+  font-size: 14px;
+  line-height: 21px;
+  color: var(--color-muted);
+}
+.consigne-list li:last-child {
+  border-bottom: 0;
+}
+.consigne-list li::before {
+  content: counter(consigne);
+  position: absolute;
+  left: -56px;
+  width: 40px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-text);
+  font-feature-settings: 'tnum' 1;
+}
+.consigne-list strong {
+  font-weight: 600;
+  color: var(--color-text);
+}
+.cand-cover footer {
+  padding-top: var(--spacing-4);
+}
+
+@media (max-width: 480px) {
+  .consigne {
+    margin-top: var(--spacing-5);
+    padding: var(--spacing-3) var(--spacing-4) var(--spacing-1) 44px;
+  }
+  .consigne::before {
+    left: 32px;
+  }
+  .consigne-list li::before {
+    left: -44px;
+    width: 32px;
+  }
+  .consigne-list li {
+    font-size: 13px;
+    line-height: 18px;
+  }
+  .checks li.tip {
+    flex-wrap: nowrap;
+  }
+}
+
+/* The start bar of a phone that refuses full screen: the consequence stays in view, under the thumb. */
+.consent-hint.warn {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-weight: 600;
+  color: var(--color-warning-ink);
+}
+.consent-hint.warn .ico {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  margin-top: 1px;
+}

@@ -1,8 +1,32 @@
 - screen: file
-  note: "Une ligne par épreuve, avec ce qui reste et un bouton qui dit Reprendre ou Commencer. Le compteur de la navigation reprend le total."
+  note: "La file de Julien Lefèvre, correcteur d'AP1 : un lot par épreuve et par groupe. La ligne commence par ce qui reste (« 12 copies à corriger »), la barre montre ce qui est fait et son libellé le dit (« 14 copies corrigées sur 26 »), le bouton dit Reprendre ou Commencer. Les deux lots de l'Examen partiel 1 font les 14 du compteur de la navigation, qui disparaît quand il n'y a plus rien à corriger. Seuls les lots confiés à la personne connectée apparaissent."
+- screen: file
+  note: "Chaque lot est une pile : les feuilles devinées derrière la carte disent combien il reste à lire. Trois feuilles à partir de dix copies (le groupe TD 2, 12 copies), deux de trois à neuf, une pour deux copies ou moins (les 2 copies en retard du TD 4). Un lot terminé est posé à plat. Les feuilles sont dessinées sous la carte, jamais par-dessus son contenu."
+- screen: file
+  note: "Groupe et tri au-dessus de la file, chacun avec son libellé visible : Julien corrige souvent un seul groupe de TD, et veut d'abord les copies rendues le plus tôt. Les deux choix sont conservés d'une visite à l'autre."
+- screen: file
+  note: "Fin de lot : un court moment, pas une page de fête. La chaleur se pose sur la barre pleine et sur l'icône, le texte reste dans la couleur du texte ; la barre se remplit une fois, en 600 ms. La seule action principale est le lot suivant, ici les copies en retard du groupe TD 4."
+- screen: file
+  note: "Question produit ouverte : aujourd'hui, chaque étudiant est prévenu dès que tous les exercices de sa copie sont corrigés (notification « La correction est disponible »), sans action de publication. Si l'équipe veut que le responsable d'UE publie les notes d'une épreuve en une fois, il faut l'ajouter au modèle ; l'écran de fin dirait alors qui publie et quand. Rien n'est inventé ici."
 - screen: copie
-  note: "Trois colonnes : la file des copies, la copie avec sa marge, la note. La note affichée détaille sa composition : note automatique et étiquettes."
+  note: "Trois colonnes : la file des copies, la copie avec sa marge, la note. La note affichée est celle de l'exercice en cours et détaille sa composition : note automatique et étiquettes."
 - screen: copie
-  note: "Les étiquettes existent dans le modèle (nom, couleur, variation de note). Chacune a un raccourci de 1 à 9 ; J et K changent de copie. Julien corrige sans la souris."
+  note: "Deux modes, un sélecteur en tête de la copie, retenu d'une visite à l'autre. Par exercice, montré ici : J, K et Valider passent au même exercice de la copie voisine ; Julien corrige la recherche dichotomique sur toutes les copies d'affilée, avec les mêmes étiquettes sous la main, et Valider dit « Valider et passer à la copie suivante ». Par copie : Valider passe à l'exercice suivant non corrigé de la copie, puis à la copie suivante, et dit « Valider et passer à l'exercice 5 » ; J et K ouvrent la copie voisine sur son premier exercice non corrigé ; la liste dit alors l'état de chaque copie et son compteur compte les copies corrigées. Dans les deux modes, ← et → changent d'exercice."
 - screen: copie
-  note: "L'annotation du correcteur s'attache à la réponse, sur le filet de la marge, en rouge correcteur."
+  note: "Clavier façon Gmail et vim : J copie suivante, K précédente, ← et → pour changer d'exercice, 1 à 9 pour les étiquettes, A pour accepter la note automatique, C pour le commentaire, Ctrl + Entrée pour valider. Les raccourcis se taisent pendant la saisie, sauf Ctrl + Entrée et Échap."
+- screen: copie
+  note: "Une pastille par exercice, avec son état pour cette copie : corrigé (done_all, en graphite, suivi de sa note), en cours (pending), à corriger (cercle vide). Chez David, elles disent ce que dit la liste : 1 à 3 corrigés, comme sur toutes les copies du lot, 4 en cours, 5 et 6 à corriger. Le vert reste à l'étudiant, pour qui il veut dire réussi. Chaque pastille a un nom accessible complet, par exemple « Exercice 3 : inverser une liste, corrigé, 90 sur 100 »."
+- screen: copie
+  note: "La note dit son calcul : 67 de note automatique, -10 pour Boucle infinie, -2 pour Nommage peu clair, 55. Au pied du panneau, la note de la copie, provisoire : la moyenne des six exercices (100, 85, 90, 55, et 75 et 60 pour le 5 et le 6 à leur note automatique), soit 77,5."
+- screen: copie
+  note: "Accepter la note automatique n'agit que si tous les tests passent. Ici, deux tests échouent : le bouton reste à sa place, inactif, et dit pourquoi, pour que Julien sache qu'il existe."
+- screen: copie
+  note: "La marge se lit comme celle de la copie corrigée d'Inès : le numéro (4), l'état des tests (contrast, partiel, en attention) et la note finale, étiquettes comprises (55 sur 100). Sous la réponse, la ligne de note dit le calcul, 67 aux tests, -10 et -2 pour les deux étiquettes : c'est la phrase que lira David. « 67 aux tests » ne tient pas dans les 40 px de la marge sans la déborder, il vit donc sur cette ligne."
+- screen: copie
+  note: "Quatre pas de titre : la page en title (Examen partiel 1 : copie de David Lemaire), l'exercice en heading (Recherche dichotomique, au-dessus de son énoncé), les panneaux Copies et Note en subheading, leurs rubriques Étiquettes et Commentaire en caption. « Exercice 4 sur 6 » est un repère de navigation, pas un titre."
+- screen: copie
+  note: "Le commentaire s'inscrit sous la réponse au fil de la frappe, à l'encre rouge, avec le stylo ; le point sur la marge marque sa hauteur. Julien lit ce que lira David. Un compliment, comme l'étiquette Solution élégante, s'écrit à l'encre verte avec son point vert (annotation praise)."
+- screen: copie
+  note: "La liste des copies est une pile, triée par prénom, et suit le mode. Par exercice, elle dit l'état de l'exercice 4 sur chaque copie : corrigé jusqu'à Clara Nguyen, en cours chez David Lemaire, à corriger ensuite. Son compteur aussi (« exercice 4 : 14 sur 26 »), et une ligne rappelle ce que le mode a déjà fait sur tout le lot : exercices 1 à 3 corrigés sur les 26 copies. Julien a corrigé les 14 premières copies une par une, puis il est passé à Par exercice pour les 12 dernières ; la file compte donc toujours 14 copies corrigées et 12 à corriger. « Aller à un étudiant » saute par le nom ; deux repères disent ce qui n'est pas en vue, 12 plus haut, 7 plus bas, avec leur état. Chaque ligne est un bouton qui annonce son état."
+- screen: file
+  note: "État terminees, l'onglet Terminées : les lots que Julien a finis, du plus récent au plus ancien, chacun avec sa date de fin et le nombre de copies corrigées (done_all, graphite). Posés à plat : il ne reste rien à lire. « Revoir les copies » rouvre la copie de correction sur le lot, pour relire une note ou répondre à un étudiant."

@@ -8,48 +8,48 @@
         <div class="brand-org">Université Gustave Eiffel</div>
       </div>
     </div>
-    <nav class="nav">
-      <a class="nav-item" data-wf-to="etudiant"><svg class="ico"><use href="#home" /></svg>Accueil</a>
-      <a class="nav-item" data-wf-to="annonces"><svg class="ico"><use href="#campaign" /></svg>Annonces</a>
-      <a class="nav-item" data-wf-to="mes-cours"><svg class="ico"><use href="#school" /></svg>Cours</a>
+    <nav class="nav" aria-label="Navigation principale">
+      <a href="#" class="nav-item" data-wf-to="etudiant"><svg class="ico" aria-hidden="true"><use href="#home" /></svg>Accueil</a>
+      <a href="#" class="nav-item" data-wf-to="annonces"><svg class="ico" aria-hidden="true"><use href="#campaign" /></svg>Annonces</a>
+      <a href="#" class="nav-item" data-wf-to="mes-cours"><svg class="ico" aria-hidden="true"><use href="#school" /></svg>Cours</a>
     </nav>
     <div class="sidebar-foot">
-      <a class="nav-item"><svg class="ico"><use href="#notifications" /></svg>Notifications<span class="count">3</span></a>
-      <div class="me">
-        <span class="avatar">IB</span>
+      <a href="#" class="nav-item" aria-haspopup="dialog" aria-expanded="false" data-wf-to="notifications"><svg class="ico" aria-hidden="true"><use href="#notifications" /></svg>Notifications<span class="count">3<span class="sr-only"> non lues</span></span></a>
+      <div class="me" role="button" tabindex="0" aria-haspopup="menu" aria-expanded="false" data-wf-to="profil">
+        <span class="avatar" aria-hidden="true">IB</span>
         <div>
           <div class="me-name">Inès Benali</div>
-          <div class="me-role">Étudiante</div>
+          <div class="me-role">Compte étudiant</div>
         </div>
-        <svg class="ico ico-16"><use href="#expand_more" /></svg>
+        <svg class="ico ico-16" aria-hidden="true"><use href="#expand_more" /></svg>
       </div>
       <a class="credit" href="https://github.com/cisstech/platon" aria-label="Code source de PLaTon, logiciel libre de cisstech"><svg class="ico ico-16" aria-hidden="true"><use href="#code" /></svg>Logiciel libre, par <strong>cisstech</strong></a>
     </div>
   </aside>
   <main class="main" id="contenu">
     <header class="page-head"><div><h1 class="title">Mon compte</h1></div></header>
-    <div class="tabs"><a class="tab active" data-wf-to="a-propos"><svg class="ico"><use href="#person" /></svg>À propos</a><a class="tab" data-wf-to="securite"><svg class="ico"><use href="#lock" /></svg>Sécurité</a></div>
-    <div class="stack" style="max-width: 760px">
-      <section class="card card-pad">
-        <h2 class="subheading" style="margin-bottom: 4px">Identité</h2>
-        <p class="muted" style="margin: 0 0 var(--spacing-3); font-size: 13px">Ces informations ne se modifient pas ici. Une erreur&nbsp;? Écrivez à l'administration de PLaTon.</p>
-        <dl style="margin: 0">
+    <div class="tabs" role="tablist" aria-label="Mon compte"><a href="#" class="tab active" role="tab" aria-selected="true" data-wf-to="a-propos"><svg class="ico" aria-hidden="true"><use href="#person" /></svg>À propos</a><a href="#" class="tab" role="tab" aria-selected="false" data-wf-to="securite"><svg class="ico" aria-hidden="true"><use href="#key" /></svg>Sécurité</a></div>
+    <div class="stack compte-stack">
+      <section class="card card-pad" aria-labelledby="id-t">
+        <h2 class="subheading" id="id-t">Identité</h2>
+        <p class="muted small compte-hint">Ces informations ne se modifient pas ici. Une erreur&nbsp;? Écrivez à l'administration de PLaTon.</p>
+        <dl class="compte-dl">
           <div class="kv"><dt>Prénom et nom</dt><dd>Inès Benali</dd></div>
-          <div class="kv"><dt>E-mail</dt><dd>ines.benali@etud.univ-eiffel.fr</dd></div>
-          <div class="kv"><dt>Rôle</dt><dd>Élève</dd></div>
+          <div class="kv"><dt>Courriel</dt><dd>ines.benali@etud.univ-eiffel.fr</dd></div>
+          <div class="kv"><dt>Type de compte</dt><dd>Compte étudiant</dd></div>
         </dl>
       </section>
-      <section class="card card-pad">
-        <h2 class="subheading" style="margin-bottom: 4px">Centres d'intérêt</h2>
-        <p class="muted" style="margin: 0 0 var(--spacing-3); font-size: 13px">Les topics et niveaux qui vous concernent.</p>
-        <div class="field"><label>Topics</label><div class="input"><span class="chip applied" style="height: 24px">Python<svg class="x"><use href="#close" /></svg></span><span class="chip applied" style="height: 24px; margin-left: 4px">Algorithmique<svg class="x"><use href="#close" /></svg></span></div></div>
-        <div class="field" style="margin-top: var(--spacing-3)"><label>Niveaux</label><div class="input"><span class="chip applied" style="height: 24px">L1<svg class="x"><use href="#close" /></svg></span></div></div>
+      <section class="card card-pad" aria-labelledby="interets-t">
+        <h2 class="subheading" id="interets-t">Centres d'intérêt</h2>
+        <p class="muted small compte-hint">Les topics et niveaux qui vous concernent.</p>
+        <div class="field"><label for="f-topics">Topics</label><div class="input chips-input" id="f-topics" role="group"><span class="chip applied">Python<button class="chip-remove" type="button" aria-label="Retirer le topic Python"><svg class="x" aria-hidden="true"><use href="#close" /></svg></button></span><span class="chip applied">Algorithmique<button class="chip-remove" type="button" aria-label="Retirer le topic Algorithmique"><svg class="x" aria-hidden="true"><use href="#close" /></svg></button></span><span class="placeholder">Ajouter un topic</span></div></div>
+        <div class="field"><label for="f-niveaux">Niveaux</label><div class="input chips-input" id="f-niveaux" role="group"><span class="chip applied">L1<button class="chip-remove" type="button" aria-label="Retirer le niveau L1"><svg class="x" aria-hidden="true"><use href="#close" /></svg></button></span><span class="placeholder">Ajouter un niveau</span></div></div>
       </section>
-      <section class="card card-pad">
-        <h2 class="subheading" style="margin-bottom: 4px">Discord</h2>
-        <div class="field"><label>Identifiant Discord</label><div class="input"><span class="muted num">Non renseigné</span><button class="btn btn-icon btn-sm" aria-label="Déverrouiller pour modifier" style="margin-left: auto"><svg class="ico ico-18"><use href="#lock" /></svg></button></div><span class="field-hint">À ne modifier que si vous savez à quoi il sert.</span></div>
+      <section class="card card-pad" aria-labelledby="discord-t">
+        <h2 class="subheading" id="discord-t">Discord</h2>
+        <div class="field compte-first"><label for="f-discord">Identifiant Discord</label><div class="input" id="f-discord" role="textbox" aria-readonly="true" aria-describedby="discord-h"><span class="muted">Non renseigné</span><button type="button" class="btn btn-icon btn-sm" aria-label="Déverrouiller l'identifiant Discord pour le modifier"><svg class="ico ico-18" aria-hidden="true"><use href="#edit" /></svg></button></div><span class="field-hint" id="discord-h">À ne modifier que si vous savez à quoi il sert.</span></div>
       </section>
-      <div><a class="btn btn-primary">Enregistrer</a></div>
+      <div><button type="button" class="btn btn-primary">Enregistrer</button></div>
     </div>
   </main>
 </div>

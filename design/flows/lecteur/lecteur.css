@@ -1,6 +1,959 @@
-/* On a phone the copy keeps its margin, narrower. */
+/* Lecteur: the player pages. Tokens only, closed type scale (12, 13, 14, 15, 16, 17, 22, 28), weights 400 and 600. */
+
+/* Frame of the player: full screen, no cover, one way back to the course. */
+.reader {
+  min-height: 100vh;
+  padding: var(--spacing-6) var(--spacing-8);
+}
+.reader-in {
+  max-width: 1100px;
+}
+.player-title {
+  flex: 1;
+  min-width: 0;
+}
+.player-head .course-mark.sm {
+  margin-top: 0;
+}
+
+/* Intro and conclusion: a reading card, roomier than a list card. */
+.player-card {
+  padding: var(--spacing-8);
+}
+.player-card .page-sub {
+  max-width: 60ch;
+}
+.player-card .rules {
+  margin-top: var(--spacing-6);
+}
+.player-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+  margin-top: var(--spacing-8);
+}
+
+.actions-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+}
+
+/* Exam: one message for the whole exercise once its answers are saved. */
+.copie > .feedback {
+  margin-top: var(--spacing-6);
+}
+.option.ok .why {
+  color: var(--color-success-ink);
+}
+
+/* Quit confirmation */
+.modal.confirm .drawer-body .muted,
+.dlg-text {
+  margin-top: var(--spacing-2);
+}
+.dlg-time {
+  margin-top: var(--spacing-3);
+}
+
+/* Conclusion: completion first (chaleur on the bar and the icon only), then the score in text colour. */
+.completion {
+  display: grid;
+  gap: var(--spacing-2);
+  max-width: 440px;
+}
+.result-score {
+  margin-top: var(--spacing-6);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 22px;
+}
+.result-score .tag {
+  align-self: center;
+  margin-left: var(--spacing-2);
+}
+.result-text {
+  margin-top: var(--spacing-2);
+  max-width: 56ch;
+}
+.result-list {
+  margin: var(--spacing-6) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.result-list > li.row {
+  min-height: 0;
+  padding: 0;
+  cursor: default;
+}
+.result-list > li.row:hover {
+  background: none;
+}
+.result-list .row > a {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--spacing-4);
+  min-height: 52px;
+  padding: var(--spacing-2) var(--spacing-4);
+  border-radius: inherit;
+  color: var(--color-text);
+  cursor: pointer;
+}
+.result-list .row > a:hover {
+  background: var(--color-surface-muted);
+}
+.result-list .go {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  color: var(--color-primary);
+}
+.result-list .row-title {
+  display: block;
+  font-size: 14px;
+  line-height: 21px;
+}
+
+/* Corrected copy: points in the margin, test results and the red pen under each answer. */
+.q-pts {
+  font-size: 12px;
+  line-height: 16px;
+  font-feature-settings: 'tnum' 1;
+}
+.answer-label {
+  display: block;
+  margin-bottom: var(--spacing-1);
+  color: var(--color-muted);
+}
+.answer > .code {
+  margin-top: 0;
+}
+.tests {
+  display: flex;
+  gap: var(--spacing-2);
+  margin-top: var(--spacing-3);
+  max-width: 72ch;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--color-muted);
+}
+.tests .ico {
+  width: 16px;
+  height: 16px;
+  margin-top: 1px;
+}
+.tests.ok .ico {
+  color: var(--color-success);
+}
+.tests.part .ico {
+  color: var(--color-warning-ink);
+}
+.tests.ko .ico {
+  color: var(--color-danger);
+}
+.tests strong {
+  font-weight: 600;
+  color: var(--color-text);
+}
+.tests code {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--color-text);
+}
+.appreciation {
+  position: relative;
+  margin-top: var(--spacing-10);
+  padding-top: var(--spacing-6);
+  border-top: 1px solid var(--color-line);
+}
+.appreciation .annotation {
+  font-size: 16px;
+  line-height: 26px;
+}
+.appreciation .annotation .ico {
+  margin-top: 5px;
+}
+.copie .appreciation .annotation::before {
+  top: 9px;
+}
+.signature {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin-top: var(--spacing-3);
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--color-muted);
+}
+.ex-item .pts {
+  margin-left: auto;
+  color: var(--color-muted);
+  font-feature-settings: 'tnum' 1;
+}
+.kv-list {
+  margin: 0;
+}
+.breakdown {
+  margin: 0;
+  border-top: 1px solid var(--color-line);
+}
+.breakdown .kv dt {
+  display: block;
+}
+.breakdown .kv dt small {
+  display: block;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--color-subtle);
+}
+.breakdown .kv.sub {
+  padding-left: var(--spacing-6);
+  font-size: 13px;
+  line-height: 18px;
+}
+.breakdown .kv.sub dd {
+  font-weight: 400;
+}
+
+/* Phone: the copy keeps its margin, narrower, and the main action stays under the thumb. */
 @media (max-width: 480px) {
-  .copie::before {
-    left: 32px;
+  .appreciation {
+    margin-top: var(--spacing-8);
+  }
+  .player-card {
+    padding: var(--spacing-5) var(--spacing-4);
+  }
+}
+
+.m-reader {
+  padding: 0 0 var(--spacing-8);
+}
+.m-reader.has-bar {
+  padding-bottom: 136px;
+}
+.m-reader.has-bar-sm {
+  padding-bottom: 88px;
+}
+.m-pad {
+  padding: var(--spacing-4);
+}
+.m-card-flat {
+  border-radius: 0;
+  border-left: 0;
+  border-right: 0;
+}
+.m-grade {
+  margin: 0 var(--spacing-4) var(--spacing-4);
+}
+.m-end {
+  display: grid;
+  gap: var(--spacing-3);
+}
+.m-section-t {
+  margin-bottom: var(--spacing-3);
+}
+.m-head {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-3);
+  padding: var(--spacing-4);
+}
+.m-head > div:not(.course-mark) {
+  flex: 1;
+  min-width: 0;
+}
+.m-timer {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+  padding: 0 var(--spacing-2);
+  color: var(--color-cover-text);
+}
+.m-timer .ico {
+  width: 18px;
+  height: 18px;
+  color: var(--color-cover-muted);
+}
+.m-attempts {
+  margin-top: var(--spacing-6);
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--color-muted);
+}
+
+/* Bottom bar: the main action on top, the exercise navigation under it. */
+.m-bottom {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 6;
+  display: grid;
+  gap: var(--spacing-2);
+  padding: var(--spacing-3) var(--spacing-4) var(--spacing-4);
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-line);
+  box-shadow: var(--shadow-overlay);
+}
+.m-bottom .btn {
+  height: 44px;
+}
+.m-bottom.split {
+  grid-template-columns: 1fr 1fr;
+}
+.m-nav {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) 44px;
+  gap: var(--spacing-2);
+}
+.m-nav .btn-icon {
+  width: 44px;
+}
+
+/* Bottom sheet: the exercise list, or a confirmation, over the copy. */
+.sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  max-height: calc(100% - 48px);
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+  border-radius: var(--rounded-lg) var(--rounded-lg) 0 0;
+  box-shadow: var(--shadow-dialog);
+  color: var(--color-text);
+}
+.sheet::before {
+  content: '';
+  align-self: center;
+  width: 36px;
+  height: 4px;
+  margin-top: var(--spacing-2);
+  border-radius: var(--rounded-full);
+  background: var(--color-graphite-300);
+}
+.sheet-head {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-1) var(--spacing-2) var(--spacing-2) var(--spacing-4);
+  border-bottom: 1px solid var(--color-line);
+}
+.sheet-head .num {
+  margin-left: auto;
+  font-size: 13px;
+  color: var(--color-muted);
+}
+.sheet-head .btn-icon {
+  width: 44px;
+  height: 44px;
+}
+.sheet-body {
+  padding: var(--spacing-4);
+}
+.sheet .ex-item {
+  min-height: 48px;
+  font-size: 14px;
+}
+.sheet-foot {
+  display: grid;
+  gap: var(--spacing-2);
+  padding: var(--spacing-3) var(--spacing-4) var(--spacing-4);
+  border-top: 1px solid var(--color-line);
+}
+.sheet-foot .btn {
+  height: 44px;
+}
+
+/* ---------- Épreuve : en-tête, chronomètre, rendu de la copie ---------- */
+
+/* Player head: the course mark, one h1, and the exam's permanent hand-in action. */
+.player-title .small {
+  margin-top: 2px;
+}
+
+/* Countdown: the label, the value, then a note that only appears at a threshold. */
+.countdown .figure-label {
+  font-size: 13px;
+  line-height: 18px;
+}
+.countdown-why {
+  margin-top: var(--spacing-1);
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--color-muted);
+}
+.countdown.soon .countdown-why,
+.countdown.last .countdown-why {
+  color: inherit;
+}
+
+/* Course-owned progress under the rail counter, in the course hue. */
+.rail-head.has-bar {
+  border-bottom: 0;
+  padding-bottom: var(--spacing-2);
+}
+.rail-progress {
+  padding: 0 var(--spacing-4) var(--spacing-3);
+  border-bottom: 1px solid var(--color-line);
+}
+.ex-item .pts.draft {
+  font-size: 12px;
+  font-weight: 400;
+}
+
+/* What each action does to the answer, the final one at the Valider button. */
+.copie-help {
+  margin-top: var(--spacing-3);
+  max-width: 72ch;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--color-muted);
+}
+.copie-help .final {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 2px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+.copie-help .ico {
+  width: 16px;
+  height: 16px;
+}
+
+/* A neutral notice above the copy: a lost connection, a pause. */
+.reader .alert {
+  margin-bottom: var(--spacing-4);
+}
+.reader .alert .alert-action {
+  flex: none;
+}
+
+/* Hand-in dialog: the copy glyph, what is left unvalidated, each a link back to it. */
+.dlg-head {
+  display: flex;
+  gap: var(--spacing-4);
+  align-items: flex-start;
+}
+.dlg-head .glyph {
+  flex: none;
+}
+.to-finish {
+  display: grid;
+  margin: var(--spacing-4) 0 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--color-line);
+  border-radius: var(--rounded-md);
+}
+.to-finish li + li {
+  border-top: 1px solid var(--color-line);
+}
+.to-finish a {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  min-height: 48px;
+  padding: var(--spacing-2) var(--spacing-3);
+  border-radius: var(--rounded-md);
+  color: var(--color-text);
+  cursor: pointer;
+}
+.to-finish a:hover {
+  background: var(--color-surface-muted);
+}
+.to-finish .ico {
+  flex: none;
+  width: 18px;
+  height: 18px;
+}
+.to-finish .ico.draft {
+  color: var(--color-graphite-700);
+}
+.to-finish .to-t {
+  flex: 1;
+  min-width: 0;
+}
+.to-finish strong {
+  display: block;
+  color: var(--color-primary);
+}
+.to-finish small {
+  display: block;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--color-muted);
+}
+.to-finish .go {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  flex: none;
+  margin-left: auto;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+.all-saved {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin-top: var(--spacing-4);
+  padding: var(--spacing-3);
+  border: 1px solid var(--color-line);
+  border-radius: var(--rounded-md);
+}
+.all-saved .ico {
+  width: 18px;
+  height: 18px;
+  color: var(--color-graphite-700);
+}
+
+/* Conclusion and time up: the page message is the h1, the joy stays on the icon. */
+.done-title {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+.done-title .ico {
+  width: 24px;
+  height: 24px;
+  color: var(--color-chaleur-1);
+}
+.completion .small {
+  color: var(--color-muted);
+}
+.time-up .glyph {
+  margin-bottom: var(--spacing-4);
+}
+.time-up .consequences {
+  font-size: 14px;
+  line-height: 21px;
+}
+
+/* "Et ensuite": each item is a link, with its arrow. */
+a.next-link {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--spacing-3);
+  min-height: 56px;
+  color: var(--color-text);
+  cursor: pointer;
+}
+a.next-link:hover {
+  background: var(--color-surface-muted);
+}
+a.next-link .grow {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+a.next-link .mini-title {
+  color: var(--color-primary);
+}
+a.next-link > .ico {
+  width: 18px;
+  height: 18px;
+  color: var(--color-primary);
+}
+
+.breakdown .kv.group {
+  padding-bottom: var(--spacing-1);
+}
+.breakdown .kv.total {
+  border-top: 1px solid var(--color-line-strong);
+}
+.breakdown .kv.total dt {
+  color: var(--color-text);
+  font-weight: 600;
+}
+.breakdown .kv.total dt small {
+  font-weight: 400;
+}
+
+/* Phone: the exam bar keeps the way out, the time and the hand-in. */
+.exam-bar .m-timer {
+  margin-left: 0;
+}
+.exam-bar .m-submit {
+  margin-left: auto;
+  height: 44px;
+}
+.m-timer.soon {
+  height: 32px;
+  border-radius: var(--rounded-sm);
+  background: var(--color-attention-100);
+  color: var(--color-attention-800);
+}
+.m-timer.soon .ico {
+  color: var(--color-attention-800);
+}
+.m-timer.last {
+  height: 32px;
+  border-radius: var(--rounded-sm);
+  background: var(--color-correction-100);
+  color: var(--color-correction-700);
+}
+.m-timer.last .ico {
+  color: var(--color-correction-700);
+}
+.m-time-note {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-2);
+  padding: var(--spacing-2) var(--spacing-4);
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 600;
+}
+.m-time-note .ico {
+  width: 16px;
+  height: 16px;
+  margin-top: 1px;
+}
+.m-time-note.soon {
+  background: var(--color-warning-soft);
+  color: var(--color-warning-ink);
+  border-bottom: 1px solid var(--color-attention-200);
+}
+.m-time-note.last {
+  background: var(--color-danger-soft);
+  color: var(--color-danger-ink);
+  border-bottom: 1px solid var(--color-correction-200);
+}
+.m-actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
+  gap: var(--spacing-2);
+}
+.m-head .heading + .small {
+  margin-top: 2px;
+}
+.sheet .rail-progress {
+  padding-top: var(--spacing-3);
+}
+@media (max-width: 480px) {
+  .dlg-head .glyph-lg {
+    width: 48px;
+    height: 48px;
+  }
+  .to-finish a {
+    min-height: 52px;
+  }
+  .m-pad .alert {
+    margin-bottom: 0;
+  }
+}
+
+/* A code answer typed in the copy (a query, a function): monospace, kept as typed. */
+.answer .input.code-input {
+  display: block;
+  min-height: 120px;
+  padding: var(--spacing-3);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 20px;
+  white-space: pre;
+  overflow-x: auto;
+}
+
+/* Statement code and code answers: numbered lines. A line too long for the screen wraps under its own
+   start, one level further in, so the indentation stays legible on a phone; nothing scrolls sideways. */
+.code.wrap,
+.answer .input.code-input.wrap {
+  counter-reset: ln;
+  white-space: normal;
+  overflow-x: visible;
+}
+.code.wrap .ln,
+.code-input.wrap .ln {
+  position: relative;
+  display: block;
+  padding-left: calc(3ch + var(--ind, 0ch) + 4ch);
+  text-indent: -4ch;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  counter-increment: ln;
+}
+.code.wrap .ln::before,
+.code-input.wrap .ln::before {
+  content: counter(ln);
+  position: absolute;
+  left: 0;
+  width: 2ch;
+  text-align: right;
+  text-indent: 0;
+  color: var(--color-subtle);
+}
+.ln.i1 {
+  --ind: 4ch;
+}
+.ln.i2 {
+  --ind: 8ch;
+}
+.ln.i3 {
+  --ind: 12ch;
+}
+
+/* A draft in the exercise list: the save glyph, in graphite, with its word. */
+.ex-item.draft .ico {
+  color: var(--color-graphite-700);
+}
+.ex-item[aria-disabled='true'] {
+  cursor: default;
+  color: var(--color-muted);
+}
+
+/* A neutral notice under the exam bar: the connection is lost, the time keeps running. */
+.m-time-note.neutral {
+  background: var(--color-graphite-50);
+  border-bottom: 1px solid var(--color-line);
+  color: var(--color-text);
+  font-weight: 400;
+}
+.m-time-note.neutral strong {
+  font-weight: 600;
+}
+.m-time-note.neutral .ico {
+  color: var(--color-graphite-700);
+}
+
+/* Offline, the answer stays on screen but cannot be edited: dashed, not sealed, with its reason under it. */
+.answer .input.offline {
+  background: var(--color-surface-muted);
+  border-style: dashed;
+  border-color: var(--color-control);
+  color: var(--color-text);
+  cursor: default;
+}
+.answer-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: var(--spacing-2);
+  max-width: 72ch;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--color-muted);
+}
+.answer-note .ico {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  margin-top: 1px;
+  color: var(--color-graphite-700);
+}
+
+/* Phone: one line above the main action says what it does (Valider est définitif), or why it waits. */
+.m-bar-note {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+.m-bar-note .ico {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  color: var(--color-graphite-700);
+}
+.m-bar-note.wait {
+  font-weight: 400;
+  color: var(--color-muted);
+}
+.m-bar-note .attempts {
+  margin-left: auto;
+  font-weight: 400;
+}
+.m-reader.has-bar.has-note {
+  padding-bottom: 168px;
+}
+.m-reader.has-bar-code {
+  padding-bottom: 176px;
+}
+.m-reader.has-bar-code.has-error {
+  padding-bottom: 200px;
+}
+.m-reader.has-bar-start {
+  padding-bottom: 120px;
+}
+
+/* A stopped exam: the resume code given in the room, in a spaced monospace where O and 0, I and 1 differ. */
+.unlock {
+  margin-top: var(--spacing-6);
+  max-width: 440px;
+}
+.unlock .input {
+  width: 200px;
+  font-family: var(--font-mono);
+  font-size: 16px;
+  letter-spacing: 0.12em;
+}
+.m-bottom .unlock {
+  margin-top: 0;
+  max-width: none;
+}
+.m-bottom .unlock label .muted {
+  font-weight: 400;
+}
+.m-bottom .unlock .input {
+  width: 100%;
+  height: 44px;
+}
+
+/* Phone error: the message stands where the copy was. */
+.m-error {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  margin: 0 var(--spacing-4);
+  padding: var(--spacing-5) var(--spacing-4);
+}
+.m-error .empty-icon {
+  align-self: flex-start;
+}
+.m-error p {
+  color: var(--color-muted);
+}
+.m-error .small {
+  font-size: 13px;
+  line-height: 18px;
+}
+
+/* A stopped exam: an attention tile (stopped, not broken), what is kept, then the code and Reprendre on one line. */
+.empty-icon.warning {
+  background: var(--color-warning-soft);
+  color: var(--color-warning-ink);
+}
+.stopped .consequences {
+  margin-top: 0;
+  font-size: 14px;
+  line-height: 21px;
+}
+.stopped .consequences .ico {
+  width: 18px;
+  height: 18px;
+}
+.stopped .unlock {
+  margin-top: var(--spacing-3);
+}
+.resume-line {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+/* ---------- La page de garde : les consignes d'une épreuve, première page de la copie ---------- */
+
+/* The rules sheet carries the copy's margin: one numbered rule per ruled line, the student's name in the
+   corner as on an exam copy. The start sits beside it, at the head of its own zone. */
+.cover-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: var(--spacing-6);
+  align-items: start;
+}
+.consigne {
+  position: relative;
+  padding: var(--spacing-4) var(--spacing-8) var(--spacing-2) 72px;
+  border: 1px solid var(--color-line);
+  border-radius: var(--rounded-lg);
+  background: var(--color-surface);
+}
+.consigne::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 48px;
+  width: 2px;
+  background: var(--color-margin);
+}
+.consigne-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--spacing-3);
+  padding-bottom: var(--spacing-2);
+  border-bottom: 1px solid var(--color-line-strong);
+}
+.consigne-head .small {
+  color: var(--color-muted);
+}
+.consigne-list {
+  counter-reset: consigne;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.consigne-list li {
+  position: relative;
+  counter-increment: consigne;
+  padding: var(--spacing-3) 0;
+  border-bottom: 1px solid var(--color-line);
+  font-size: 16px;
+  line-height: 26px;
+  color: var(--color-muted);
+}
+.consigne-list li:last-child {
+  border-bottom: 0;
+}
+.consigne-list li::before {
+  content: counter(consigne);
+  position: absolute;
+  left: -72px;
+  width: 48px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-text);
+  font-feature-settings: 'tnum' 1;
+}
+.consigne-list strong {
+  font-weight: 600;
+  color: var(--color-text);
+}
+.start-card {
+  display: grid;
+  gap: var(--spacing-3);
+  padding: var(--spacing-5);
+}
+.start-card .btn {
+  width: 100%;
+}
+.start-text {
+  font-size: 14px;
+  line-height: 21px;
+}
+
+/* Phone: the sheet takes the full width like the copy, its margin at 42 px. */
+@media (max-width: 480px) {
+  .consigne.m-consigne {
+    padding: var(--spacing-3) var(--spacing-4) var(--spacing-1) 56px;
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+  }
+  .m-consigne::before {
+    left: 42px;
+  }
+  .m-consigne .consigne-list li {
+    font-size: 14px;
+    line-height: 21px;
+  }
+  .m-consigne .consigne-list li::before {
+    left: -56px;
+    width: 42px;
   }
 }

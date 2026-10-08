@@ -8,153 +8,154 @@
         <div class="brand-org">Université Gustave Eiffel</div>
       </div>
     </div>
-    <a class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico"><use href="#add" /></svg>Créer</a>
+    <button type="button" class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico" aria-hidden="true"><use href="#add" /></svg>Créer</button>
     <nav class="nav">
-      <a class="nav-item" data-wf-to="enseignant"><svg class="ico"><use href="#home" /></svg>Accueil</a>
-      <a class="nav-item" data-wf-to="annonces"><svg class="ico"><use href="#campaign" /></svg>Annonces</a>
-      <a class="nav-item" data-wf-to="mes-cours"><svg class="ico"><use href="#school" /></svg>Cours</a>
-      <a class="nav-item" data-wf-to="file"><svg class="ico"><use href="#rate_review" /></svg>Corrections<span class="count">14</span></a>
-      <a class="nav-item active" data-wf-to="catalogue"><svg class="ico"><use href="#folder_open" /></svg>Ressources</a>
-      <a class="nav-item" data-wf-to="test"><svg class="ico"><use href="#fact_check" /></svg>Tests d'entrée</a>
+      <a href="#" class="nav-item" data-wf-to="enseignant"><svg class="ico" aria-hidden="true"><use href="#home" /></svg>Accueil</a>
+      <a href="#" class="nav-item" data-wf-to="annonces"><svg class="ico" aria-hidden="true"><use href="#campaign" /></svg>Annonces</a>
+      <a href="#" class="nav-item" data-wf-to="mes-cours"><svg class="ico" aria-hidden="true"><use href="#school" /></svg>Cours</a>
+      <a href="#" class="nav-item" data-wf-to="file"><svg class="ico" aria-hidden="true"><use href="#rate_review" /></svg>Corrections<span class="count">2</span></a>
+      <a href="#" class="nav-item active" data-wf-to="catalogue"><svg class="ico" aria-hidden="true"><use href="#folder_open" /></svg>Ressources</a>
+      <a href="#" class="nav-item" data-wf-to="test"><svg class="ico" aria-hidden="true"><use href="#fact_check" /></svg>Tests d'entrée</a>
     </nav>
     <div class="sidebar-foot">
-      <a class="nav-item"><svg class="ico"><use href="#help" /></svg>Documentation</a>
-      <a class="nav-item"><svg class="ico"><use href="#notifications" /></svg>Notifications<span class="count">2</span></a>
+      <a href="#" class="nav-item"><svg class="ico" aria-hidden="true"><use href="#help" /></svg>Documentation</a>
+      <a href="#" class="nav-item"><svg class="ico" aria-hidden="true"><use href="#notifications" /></svg>Notifications<span class="count">2</span></a>
       <div class="me">
         <span class="avatar">KH</span>
         <div>
           <div class="me-name">Karim Haddad</div>
-          <div class="me-role">Enseignant</div>
+          <div class="me-role">Compte enseignant</div>
         </div>
-        <svg class="ico ico-16"><use href="#expand_more" /></svg>
+        <svg class="ico ico-16" aria-hidden="true"><use href="#expand_more" /></svg>
       </div>
       <a class="credit" href="https://github.com/cisstech/platon" aria-label="Code source de PLaTon, logiciel libre de cisstech"><svg class="ico ico-16" aria-hidden="true"><use href="#code" /></svg>Logiciel libre, par <strong>cisstech</strong></a>
     </div>
   </aside>
-  <main class="main" id="contenu">
+    <main class="main" id="contenu">
     <header class="page-head">
       <div>
         <h1 class="title">Créer un exercice</h1>
         <p class="page-sub">Choisissez un modèle, remplissez-le, voyez le résultat à côté. Aucun code à écrire.</p>
       </div>
-      <div class="actions"><a class="btn btn-secondary" data-wf-to="nouvelle"><svg class="ico"><use href="#code" /></svg>Écrire en PLE</a></div>
+      <div class="actions"><button type="button" class="btn btn-secondary" data-wf-to="nouvelle"><svg class="ico" aria-hidden="true"><use href="#code" /></svg>Partir d'une page blanche, en code</button></div>
     </header>
     <div class="filters">
-      <div class="input" style="flex: 1; max-width: 420px"><svg class="ico ico-18" style="margin: 0 8px 0 0; color: var(--color-subtle)"><use href="#search" /></svg><span class="placeholder">QCM, code, texte à trous…</span></div>
+      <label class="sr-only" for="q-modeles">Chercher un modèle</label><div class="input model-search" id="q-modeles" role="searchbox"><svg class="ico ico-18" aria-hidden="true"><use href="#search" /></svg><span class="placeholder">QCM, code, texte à trous…</span></div>
     </div>
-    <section style="margin-bottom: var(--spacing-8)">
-      <div class="section-head"><h2 class="heading">Modèles certifiés</h2><span class="count">6</span><span class="muted" style="font-size: 13px">Vérifiés par l'équipe PLaTon</span></div>
+    <section class="models-certified" aria-labelledby="certifies-t">
+      <div class="section-head"><h2 class="heading" id="certifies-t">Modèles certifiés</h2><span class="count">6</span><span class="small muted">Vérifiés par l'équipe PLaTon</span></div>
+      <article class="card model-feature" aria-labelledby="qcm-t">
+        <div class="model-thumb"><span class="certified"><svg class="ico" aria-hidden="true"><use href="#workspace_premium" /></svg>Certifié</span><svg class="ico" aria-hidden="true"><use href="#quiz" /></svg></div>
+        <div class="model-body">
+          <span class="caption muted">Pour commencer</span>
+          <h3 class="heading" id="qcm-t">QCM</h3>
+          <p>Le plus simple pour un premier exercice&nbsp;: une question, des choix, une ou plusieurs bonnes réponses. Vous remplissez cinq blocs, PLaTon corrige vos étudiants tout de suite.</p>
+          <div class="model-foot"><button type="button" class="btn btn-primary btn-sm" data-wf-to="atelier">Commencer avec un QCM</button><button type="button" class="btn btn-ghost btn-sm" data-wf-to="apercu" aria-label="Aperçu du modèle QCM"><svg class="ico" aria-hidden="true"><use href="#visibility" /></svg>Aperçu</button><span class="feature-count" title="38&nbsp;200 sessions d'étudiants">412 exercices créés, le plus utilisé</span></div>
+        </div>
+      </article>
       <div class="grid-cards">
-          <div class="card model-card hover" data-wf-to="atelier">
-            <div class="model-thumb hue-bleuet"><span class="certified"><svg class="ico"><use href="#verified" /></svg>Certifié</span><svg class="ico"><use href="#quiz" /></svg></div>
-            <div class="model-body">
-              <strong>QCM</strong>
-              <p>Une question, des choix, une ou plusieurs bonnes réponses. Les choix peuvent être mélangés.</p>
-              <div class="model-foot"><span title="38&nbsp;200 sessions d'étudiants">412 exercices créés</span><a class="btn btn-ghost btn-sm" data-wf-to="apercu"><svg class="ico"><use href="#visibility" /></svg>Aperçu</a></div>
-            </div>
-          </div>
           <div class="card model-card" data-wf-to="atelier">
-            <div class="model-thumb hue-menthe"><span class="certified"><svg class="ico"><use href="#verified" /></svg>Certifié</span><svg class="ico"><use href="#code" /></svg></div>
+            <div class="model-thumb"><span class="certified"><svg class="ico" aria-hidden="true"><use href="#workspace_premium" /></svg>Certifié</span><svg class="ico" aria-hidden="true"><use href="#code" /></svg></div>
             <div class="model-body">
-              <strong>Programme Python avec tests</strong>
+              <h3 class="subheading">Programme Python avec tests</h3>
               <p>L'étudiant écrit une fonction&nbsp;; vos tests la valident. Sortie et erreurs affichées.</p>
-              <div class="model-foot"><span title="51&nbsp;900 sessions d'étudiants">268 exercices créés</span><a class="btn btn-ghost btn-sm" data-wf-to="apercu"><svg class="ico"><use href="#visibility" /></svg>Aperçu</a></div>
+              <div class="model-foot"><span title="51&nbsp;900 sessions d'étudiants">268 exercices créés</span><button type="button" class="btn btn-ghost btn-sm" data-wf-to="apercu" aria-label="Aperçu du modèle Programme Python avec tests"><svg class="ico" aria-hidden="true"><use href="#visibility" /></svg>Aperçu</button></div>
             </div>
           </div>
           <div class="card model-card" data-wf-to="atelier">
-            <div class="model-thumb hue-ambre"><span class="certified"><svg class="ico"><use href="#verified" /></svg>Certifié</span><svg class="ico"><use href="#edit" /></svg></div>
+            <div class="model-thumb"><span class="certified"><svg class="ico" aria-hidden="true"><use href="#workspace_premium" /></svg>Certifié</span><svg class="ico" aria-hidden="true"><use href="#edit" /></svg></div>
             <div class="model-body">
-              <strong>Texte à trous</strong>
+              <h3 class="subheading">Texte à trous</h3>
               <p>Un texte où l'étudiant complète les mots manquants. Plusieurs réponses acceptées par trou.</p>
-              <div class="model-foot"><span title="12&nbsp;400 sessions d'étudiants">190 exercices créés</span><a class="btn btn-ghost btn-sm" data-wf-to="apercu"><svg class="ico"><use href="#visibility" /></svg>Aperçu</a></div>
+              <div class="model-foot"><span title="12&nbsp;400 sessions d'étudiants">190 exercices créés</span><button type="button" class="btn btn-ghost btn-sm" data-wf-to="apercu" aria-label="Aperçu du modèle Texte à trous"><svg class="ico" aria-hidden="true"><use href="#visibility" /></svg>Aperçu</button></div>
             </div>
           </div>
           <div class="card model-card" data-wf-to="atelier">
-            <div class="model-thumb hue-lilas"><span class="certified"><svg class="ico"><use href="#verified" /></svg>Certifié</span><svg class="ico"><use href="#functions" /></svg></div>
+            <div class="model-thumb"><span class="certified"><svg class="ico" aria-hidden="true"><use href="#workspace_premium" /></svg>Certifié</span><svg class="ico" aria-hidden="true"><use href="#functions" /></svg></div>
             <div class="model-body">
-              <strong>Expression mathématique</strong>
+              <h3 class="subheading">Expression mathématique</h3>
               <p>Une réponse sous forme d'expression, comparée à la vôtre de façon symbolique.</p>
-              <div class="model-foot"><span title="9&nbsp;800 sessions d'étudiants">133 exercices créés</span><a class="btn btn-ghost btn-sm" data-wf-to="apercu"><svg class="ico"><use href="#visibility" /></svg>Aperçu</a></div>
+              <div class="model-foot"><span title="9&nbsp;800 sessions d'étudiants">133 exercices créés</span><button type="button" class="btn btn-ghost btn-sm" data-wf-to="apercu" aria-label="Aperçu du modèle Expression mathématique"><svg class="ico" aria-hidden="true"><use href="#visibility" /></svg>Aperçu</button></div>
             </div>
           </div>
           <div class="card model-card" data-wf-to="atelier">
-            <div class="model-thumb hue-lagon"><span class="certified"><svg class="ico"><use href="#verified" /></svg>Certifié</span><svg class="ico"><use href="#list" /></svg></div>
+            <div class="model-thumb"><span class="certified"><svg class="ico" aria-hidden="true"><use href="#workspace_premium" /></svg>Certifié</span><svg class="ico" aria-hidden="true"><use href="#list" /></svg></div>
             <div class="model-body">
-              <strong>Appariement</strong>
+              <h3 class="subheading">Appariement</h3>
               <p>Relier les éléments de deux colonnes. Idéal pour le vocabulaire et les définitions.</p>
-              <div class="model-foot"><span title="6&nbsp;100 sessions d'étudiants">87 exercices créés</span><a class="btn btn-ghost btn-sm" data-wf-to="apercu"><svg class="ico"><use href="#visibility" /></svg>Aperçu</a></div>
+              <div class="model-foot"><span title="6&nbsp;100 sessions d'étudiants">87 exercices créés</span><button type="button" class="btn btn-ghost btn-sm" data-wf-to="apercu" aria-label="Aperçu du modèle Appariement"><svg class="ico" aria-hidden="true"><use href="#visibility" /></svg>Aperçu</button></div>
             </div>
           </div>
           <div class="card model-card" data-wf-to="atelier">
-            <div class="model-thumb hue-corail"><span class="certified"><svg class="ico"><use href="#verified" /></svg>Certifié</span><svg class="ico"><use href="#account_tree" /></svg></div>
+            <div class="model-thumb"><span class="certified"><svg class="ico" aria-hidden="true"><use href="#workspace_premium" /></svg>Certifié</span><svg class="ico" aria-hidden="true"><use href="#account_tree" /></svg></div>
             <div class="model-body">
-              <strong>Automate fini</strong>
+              <h3 class="subheading">Automate fini</h3>
               <p>L'étudiant dessine un automate&nbsp;; il est comparé au langage attendu.</p>
-              <div class="model-foot"><span title="3&nbsp;700 sessions d'étudiants">41 exercices créés</span><a class="btn btn-ghost btn-sm" data-wf-to="apercu"><svg class="ico"><use href="#visibility" /></svg>Aperçu</a></div>
+              <div class="model-foot"><span title="3&nbsp;700 sessions d'étudiants">41 exercices créés</span><button type="button" class="btn btn-ghost btn-sm" data-wf-to="apercu" aria-label="Aperçu du modèle Automate fini"><svg class="ico" aria-hidden="true"><use href="#visibility" /></svg>Aperçu</button></div>
             </div>
           </div>
       </div>
     </section>
-    <section>
-      <div class="section-head"><h2 class="heading">Modèles de vos cercles</h2><span class="count">2</span></div>
+    <section aria-labelledby="cercles-t">
+      <div class="section-head"><h2 class="heading" id="cercles-t">Modèles de vos cercles</h2><span class="count">2</span><span class="small muted">Un cercle est un dossier partagé avec des collègues</span></div>
       <div class="grid-cards">
           <div class="card model-card" data-wf-to="atelier">
-            <div class="model-thumb hue-olive"><svg class="ico"><use href="#code" /></svg></div>
+            <div class="model-thumb"><svg class="ico" aria-hidden="true"><use href="#code" /></svg></div>
             <div class="model-body">
-              <strong>Tri d'un tableau (Algorithmique)</strong>
+              <h3 class="subheading">Tri d'un tableau (Algorithmique)</h3>
               <p>Modèle du cercle Algorithmique&nbsp;: un algorithme de tri à écrire, testé sur tableaux aléatoires.</p>
-              <div class="model-foot"><span title="940 sessions d'étudiants">12 exercices créés</span><a class="btn btn-ghost btn-sm" data-wf-to="apercu"><svg class="ico"><use href="#visibility" /></svg>Aperçu</a></div>
+              <div class="model-foot"><span title="940 sessions d'étudiants">12 exercices créés</span><button type="button" class="btn btn-ghost btn-sm" data-wf-to="apercu" aria-label="Aperçu du modèle Tri d'un tableau"><svg class="ico" aria-hidden="true"><use href="#visibility" /></svg>Aperçu</button></div>
             </div>
           </div>
           <div class="card model-card" data-wf-to="atelier">
-            <div class="model-thumb hue-framboise"><svg class="ico"><use href="#quiz" /></svg></div>
+            <div class="model-thumb"><svg class="ico" aria-hidden="true"><use href="#quiz" /></svg></div>
             <div class="model-body">
-              <strong>Trace d'exécution</strong>
+              <h3 class="subheading">Trace d'exécution</h3>
               <p>Modèle du cercle Informatique&nbsp;: prédire la sortie d'un programme court.</p>
-              <div class="model-foot"><span title="510 sessions d'étudiants">8 exercices créés</span><a class="btn btn-ghost btn-sm" data-wf-to="apercu"><svg class="ico"><use href="#visibility" /></svg>Aperçu</a></div>
+              <div class="model-foot"><span title="510 sessions d'étudiants">8 exercices créés</span><button type="button" class="btn btn-ghost btn-sm" data-wf-to="apercu" aria-label="Aperçu du modèle Trace d'exécution"><svg class="ico" aria-hidden="true"><use href="#visibility" /></svg>Aperçu</button></div>
             </div>
           </div>
       </div>
     </section>
   </main>
-  <div class="scrim" data-wf-to="modeles"></div>
-  <div class="modal wide" role="dialog" aria-label="Aperçu du modèle QCM">
+  <div class="scrim" data-wf-to="modeles" aria-hidden="true"></div>
+  <div class="modal wide" role="dialog" aria-modal="true" aria-labelledby="apercu-t">
     <div class="drawer-head">
-      <span class="lead-icon hued hue-bleuet"><svg class="ico"><use href="#quiz" /></svg></span>
-      <div><div class="subheading">QCM</div><div class="muted" style="font-size: 13px">Aperçu avec des valeurs d'exemple</div></div>
-      <button class="btn btn-icon btn-sm" aria-label="Fermer" data-wf-to="modeles" style="margin-left: auto"><svg class="ico ico-18"><use href="#close" /></svg></button>
+      <span class="lead-icon" aria-hidden="true"><svg class="ico" aria-hidden="true"><use href="#quiz" /></svg></span>
+      <div><h2 class="subheading" id="apercu-t">Aperçu du modèle QCM</h2><p class="small muted">Avec des valeurs d'exemple. Essayez&nbsp;: l'aperçu corrige vraiment.</p></div>
+      <button type="button" class="btn btn-icon btn-sm apercu-close" aria-label="Fermer l'aperçu" data-wf-to="modeles"><svg class="ico ico-18" aria-hidden="true"><use href="#close" /></svg></button>
     </div>
-    <div style="display: grid; grid-template-columns: minmax(0, 1fr) 280px; min-height: 0">
-      <div style="padding: var(--spacing-6); background: var(--color-surface-muted)">
+    <div class="apercu-grid">
+      <div class="apercu-stage">
         <div class="copie">
           <div class="q">
             <div class="q-mark"><span>1</span></div>
-            <h2 class="heading">Quelle est la complexité d'une recherche dichotomique dans un tableau trié de taille n&nbsp;?</h2>
-            <div class="answer options">
-              <div class="option"><span class="box"></span>O(1)</div>
-              <div class="option on"><span class="box"></span>O(log n)</div>
-              <div class="option"><span class="box"></span>O(n)</div>
-              <div class="option"><span class="box"></span>O(n log n)</div>
+            <h3 class="heading" id="apercu-q1">Quelle est la complexité d'une recherche dichotomique dans un tableau trié de taille n&nbsp;?</h3>
+            <div class="answer options single" role="radiogroup" aria-labelledby="apercu-q1">
+              <div class="option" role="radio" aria-checked="false"><span class="box"></span>O(1)</div>
+              <div class="option on" role="radio" aria-checked="true"><span class="box"></span>O(log n)</div>
+              <div class="option" role="radio" aria-checked="false"><span class="box"></span>O(n)</div>
+              <div class="option" role="radio" aria-checked="false"><span class="box"></span>O(n log n)</div>
             </div>
           </div>
-          <div class="copie-actions"><a class="btn btn-primary"><svg class="ico"><use href="#check" /></svg>Valider</a><span class="spacer"></span><span class="attempts">Essayez&nbsp;: l'aperçu corrige vraiment</span></div>
+          <div class="copie-actions"><button type="button" class="btn btn-secondary"><svg class="ico" aria-hidden="true"><use href="#check" /></svg>Valider</button></div>
         </div>
       </div>
-      <div style="padding: var(--spacing-5); border-left: 1px solid var(--color-line)">
-        <h3 class="subheading" style="margin-bottom: var(--spacing-2)">Vous remplirez</h3>
-        <dl style="margin: 0">
+      <div class="apercu-side">
+        <h3 class="subheading">Vous remplirez</h3>
+        <dl>
           <div class="kv"><dt>Énoncé</dt><dd>Texte</dd></div>
           <div class="kv"><dt>Choix</dt><dd>Liste</dd></div>
-          <div class="kv"><dt>Bonnes réponses</dt><dd>Liste</dd></div>
+          <div class="kv"><dt>Bonnes réponses</dt><dd>Une ou plusieurs</dd></div>
           <div class="kv"><dt>Explication</dt><dd>Texte</dd></div>
           <div class="kv"><dt>Mélanger les choix</dt><dd>Oui ou non</dd></div>
         </dl>
-        <p class="muted" style="font-size: 13px; margin: var(--spacing-4) 0 0">412 exercices créés avec ce modèle, 38&nbsp;200 sessions d'étudiants.</p>
+        <p class="small muted apercu-note">Une seule bonne réponse&nbsp;: l'étudiant voit des boutons radio. Plusieurs&nbsp;: des cases à cocher.</p>
       </div>
     </div>
     <div class="drawer-foot">
-      <a class="btn btn-secondary" data-wf-to="modeles">Fermer</a>
-      <a class="btn btn-primary" data-wf-to="atelier">Utiliser ce modèle</a>
+      <button type="button" class="btn btn-secondary" data-wf-to="modeles">Fermer</button>
+      <button type="button" class="btn btn-primary" data-wf-to="atelier">Utiliser ce modèle</button>
     </div>
   </div>
 </div>

@@ -84,17 +84,18 @@ sur mobile.
 
 ## Chiffres
 
-Une carte de chiffre porte une icône sur une pastille teintée. La teinte identifie l'indicateur,
-toujours la même partout, et ne juge jamais : une baisse n'est pas rouge.
+Une carte de chiffre porte une icône sur une pastille graphite : les teintes restent aux cours,
+les couleurs aux états. L'icône identifie l'indicateur, toujours la même partout, et ne juge
+jamais : une baisse n'est pas rouge ; un chiffre à surveiller est en attention, avec un mot.
 
-| Indicateur            | Teinte    | Icône           |
-| --------------------- | --------- | --------------- |
-| Note moyenne          | bleuet    | `star`          |
-| Juste du premier coup | menthe    | `bolt`          |
-| Durée                 | ambre     | `timer`         |
-| Taux de réussite      | olive     | `task_alt`      |
-| Taux de réponses      | lagon     | `rate_review`   |
-| Abandons              | framboise | `trending_down` |
+| Indicateur            | Icône           |
+| --------------------- | --------------- |
+| Note moyenne          | `star`          |
+| Juste du premier coup | `bolt`          |
+| Durée                 | `timer`         |
+| Taux de réussite      | `task_alt`      |
+| Taux de réponses      | `rate_review`   |
+| Abandons              | `trending_down` |
 
 Quatre ou cinq cartes au plus ; les autres chiffres vont dans un bloc repliable.
 

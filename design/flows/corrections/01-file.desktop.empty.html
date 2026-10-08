@@ -8,44 +8,46 @@
         <div class="brand-org">Université Gustave Eiffel</div>
       </div>
     </div>
-    <a class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico"><use href="#add" /></svg>Créer</a>
-    <nav class="nav">
-      <a class="nav-item" data-wf-to="enseignant"><svg class="ico"><use href="#home" /></svg>Accueil</a>
-      <a class="nav-item" data-wf-to="annonces"><svg class="ico"><use href="#campaign" /></svg>Annonces</a>
-      <a class="nav-item" data-wf-to="mes-cours"><svg class="ico"><use href="#school" /></svg>Cours</a>
-      <a class="nav-item active" data-wf-to="file"><svg class="ico"><use href="#rate_review" /></svg>Corrections<span class="count">14</span></a>
-      <a class="nav-item" data-wf-to="catalogue"><svg class="ico"><use href="#folder_open" /></svg>Ressources</a>
-      <a class="nav-item" data-wf-to="test"><svg class="ico"><use href="#fact_check" /></svg>Tests d'entrée</a>
+    <button type="button" class="btn btn-cover btn-create" aria-haspopup="menu" aria-expanded="false" data-wf-to="creer"><svg class="ico" aria-hidden="true"><use href="#add" /></svg>Créer</button>
+    <nav class="nav" aria-label="Navigation principale">
+      <a href="#" class="nav-item" data-wf-to="enseignant"><svg class="ico" aria-hidden="true"><use href="#home" /></svg>Accueil</a>
+      <a href="#" class="nav-item" data-wf-to="annonces"><svg class="ico" aria-hidden="true"><use href="#campaign" /></svg>Annonces</a>
+      <a href="#" class="nav-item" data-wf-to="mes-cours"><svg class="ico" aria-hidden="true"><use href="#school" /></svg>Cours</a>
+      <a href="#" class="nav-item active" aria-current="page" data-wf-to="file"><svg class="ico" aria-hidden="true"><use href="#rate_review" /></svg>Corrections</a>
+      <a href="#" class="nav-item" data-wf-to="catalogue"><svg class="ico" aria-hidden="true"><use href="#folder_open" /></svg>Ressources</a>
+      <a href="#" class="nav-item" data-wf-to="test"><svg class="ico" aria-hidden="true"><use href="#fact_check" /></svg>Tests d'entrée</a>
     </nav>
     <div class="sidebar-foot">
-      <a class="nav-item"><svg class="ico"><use href="#help" /></svg>Documentation</a>
-      <a class="nav-item"><svg class="ico"><use href="#notifications" /></svg>Notifications<span class="count">2</span></a>
-      <div class="me">
-        <span class="avatar">KH</span>
+      <a href="#" class="nav-item"><svg class="ico" aria-hidden="true"><use href="#help" /></svg>Documentation</a>
+      <a href="#" class="nav-item" aria-haspopup="dialog"><svg class="ico" aria-hidden="true"><use href="#notifications" /></svg>Notifications</a>
+      <div class="me" role="button" tabindex="0" aria-haspopup="menu">
+        <span class="avatar" aria-hidden="true">JL</span>
         <div>
-          <div class="me-name">Karim Haddad</div>
-          <div class="me-role">Enseignant</div>
+          <div class="me-name">Julien Lefèvre</div>
+          <div class="me-role">Compte enseignant</div>
         </div>
-        <svg class="ico ico-16"><use href="#expand_more" /></svg>
+        <svg class="ico ico-16" aria-hidden="true"><use href="#expand_more" /></svg>
       </div>
       <a class="credit" href="https://github.com/cisstech/platon" aria-label="Code source de PLaTon, logiciel libre de cisstech"><svg class="ico ico-16" aria-hidden="true"><use href="#code" /></svg>Logiciel libre, par <strong>cisstech</strong></a>
     </div>
   </aside>
   <main class="main" id="contenu">
     <header class="page-head">
-      <div><h1 class="title">Corrections</h1></div>
+      <div>
+        <h1 class="title">Corrections</h1>
+      </div>
     </header>
-    <div class="tabs">
-      <span class="tab active">À corriger <span class="count">0</span></span>
-      <span class="tab">Terminées <span class="count">46</span></span>
+    <div class="tabs" role="tablist" aria-label="Corrections">
+      <a href="#" class="tab active" role="tab" aria-selected="true" data-wf-to="file">À corriger</a>
+      <a href="#" class="tab" role="tab" aria-selected="false" data-wf-to="file">Terminées</a>
     </div>
-    <div class="card" style="max-width: 720px">
+    <div class="card file-empty">
       <div class="empty">
-        <svg class="illus"><use href="#illus-copie" /></svg>
+        <svg class="illus" aria-hidden="true"><use href="#illus-copie" /></svg>
         <div class="empty-body">
           <h2 class="heading">Aucune copie à corriger</h2>
-          <p>Quand un enseignant vous assigne des copies d'une épreuve notée, elles arrivent ici, rangées par épreuve. Une notification vous prévient.</p>
-          <a class="btn btn-secondary">Voir les corrections terminées</a>
+          <p>Quand un enseignant vous confie des copies d'une épreuve notée, elles arrivent ici, rangées par lot. Une notification vous prévient.</p>
+          <a href="#" class="btn btn-secondary" data-wf-to="file">Voir les corrections terminées</a>
         </div>
       </div>
     </div>

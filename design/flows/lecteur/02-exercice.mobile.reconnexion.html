@@ -1,0 +1,43 @@
+<a class="skip-link" href="#contenu">Aller au contenu</a>
+<header class="topbar exam-bar">
+  <span class="m-timer subheading" role="timer" aria-label="Temps restant 46 min"><svg class="ico" aria-hidden="true"><use href="#timer" /></svg><span class="num">0:46:00</span></span>
+  <button type="button" class="btn btn-cover-quiet btn-sm m-submit" aria-disabled="true" aria-describedby="offline-d">Rendre mon test</button>
+</header>
+<div class="m-time-note neutral" role="status"><svg class="ico" aria-hidden="true"><use href="#wifi_off" /></svg><span id="offline-d"><strong>Connexion perdue depuis 15&nbsp;h&nbsp;12, nous nous reconnectons.</strong> Le temps continue de s'écouler. Votre réponse, Valider et Rendre mon test reviennent avec la connexion.</span></div>
+<main class="m-reader has-bar has-note" id="contenu">
+  <div class="m-head">
+    <div>
+      <h1 class="title">Test d'entrée Master Informatique</h1>
+      <p class="small muted">Exercice 3 sur 6&nbsp;: jointure SQL</p>
+    </div>
+  </div>
+  <div class="copie">
+    <div class="q">
+      <div class="q-mark" aria-hidden="true"><span>3</span></div>
+      <h2 class="heading" id="q1-t"><span class="sr-only">Question 3&nbsp;: </span>Écrivez une requête qui renvoie le nom des étudiants inscrits à au moins deux cours.</h2>
+      <div class="statement">
+        <p>La base contient deux tables.</p>
+        <span class="code wrap"><span class="ln">etudiant(id, nom)</span>
+<span class="ln">inscription(etudiant_id, cours_id)</span></span>
+      </div>
+      <div class="answer"><div class="input code-input wrap offline" role="textbox" aria-multiline="true" aria-readonly="true" aria-labelledby="q1-t" aria-describedby="frozen-d"><span class="ln">SELECT e.nom</span>
+<span class="ln">FROM etudiant e</span>
+<span class="ln">JOIN inscription i ON i.etudiant_id = e.id</span>
+<span class="ln">GROUP BY e.id, e.nom</span></div>
+        <p class="answer-note" id="frozen-d"><svg class="ico" aria-hidden="true"><use href="#wifi_off" /></svg>Hors connexion, votre réponse ne se modifie pas. Elle redevient modifiable avec la connexion.</p></div>
+    </div>
+    <p class="copie-help">Valider est définitif, une seule tentative. Sauvegarder et Exercice suivant gardent votre réponse en brouillon, modifiable jusqu'à la fin de votre test.</p>
+  </div>
+</main>
+<div class="m-bottom">
+  <p class="m-bar-note wait"><svg class="ico" aria-hidden="true"><use href="#wifi_off" /></svg>Hors connexion&nbsp;: Valider revient avec la connexion.</p>
+  <div class="m-actions">
+    <button type="button" class="btn btn-secondary" aria-disabled="true" aria-describedby="offline-d">Sauvegarder</button>
+    <button type="button" class="btn btn-primary btn-lg" aria-disabled="true" aria-describedby="offline-d"><svg class="ico" aria-hidden="true"><use href="#check" /></svg>Valider</button>
+  </div>
+  <nav class="m-nav" aria-label="Navigation entre les exercices">
+    <button type="button" class="btn btn-secondary btn-icon" aria-label="Exercice précédent" aria-disabled="true" aria-describedby="offline-d" data-wf-to="exercice"><svg class="ico" aria-hidden="true"><use href="#chevron_left" /></svg></button>
+    <button type="button" class="btn btn-secondary" aria-haspopup="dialog" data-wf-to="exercice"><svg class="ico" aria-hidden="true"><use href="#list" /></svg>Exercice 3 sur 6</button>
+    <button type="button" class="btn btn-secondary btn-icon" aria-label="Exercice suivant" aria-disabled="true" aria-describedby="offline-d" data-wf-to="exercice"><svg class="ico" aria-hidden="true"><use href="#chevron_right" /></svg></button>
+  </nav>
+</div>

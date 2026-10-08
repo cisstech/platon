@@ -8,26 +8,26 @@
         <div class="brand-org">Université Gustave Eiffel</div>
       </div>
     </div>
-    <a class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico"><use href="#add" /></svg>Créer</a>
+    <button type="button" class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico" aria-hidden="true"><use href="#add" /></svg>Créer</button>
     <nav class="nav">
-      <a class="nav-item" data-wf-to="enseignant"><svg class="ico"><use href="#home" /></svg>Accueil</a>
-      <a class="nav-item" data-wf-to="annonces"><svg class="ico"><use href="#campaign" /></svg>Annonces</a>
-      <a class="nav-item" data-wf-to="mes-cours"><svg class="ico"><use href="#school" /></svg>Cours</a>
-      <a class="nav-item" data-wf-to="file"><svg class="ico"><use href="#rate_review" /></svg>Corrections<span class="count">14</span></a>
-      <a class="nav-item" data-wf-to="catalogue"><svg class="ico"><use href="#folder_open" /></svg>Ressources</a>
-      <a class="nav-item" data-wf-to="test"><svg class="ico"><use href="#fact_check" /></svg>Tests d'entrée</a>
-      <a class="nav-item active" data-wf-to="utilisateurs"><svg class="ico"><use href="#shield_person" /></svg>Administration</a>
+      <a href="#" class="nav-item" data-wf-to="enseignant"><svg class="ico" aria-hidden="true"><use href="#home" /></svg>Accueil</a>
+      <a href="#" class="nav-item" data-wf-to="annonces"><svg class="ico" aria-hidden="true"><use href="#campaign" /></svg>Annonces</a>
+      <a href="#" class="nav-item" data-wf-to="mes-cours"><svg class="ico" aria-hidden="true"><use href="#school" /></svg>Cours</a>
+      <a href="#" class="nav-item" data-wf-to="file"><svg class="ico" aria-hidden="true"><use href="#rate_review" /></svg>Corrections</a>
+      <a href="#" class="nav-item" data-wf-to="catalogue"><svg class="ico" aria-hidden="true"><use href="#folder_open" /></svg>Ressources</a>
+      <a href="#" class="nav-item" data-wf-to="test"><svg class="ico" aria-hidden="true"><use href="#fact_check" /></svg>Tests d'entrée</a>
+      <a href="#" class="nav-item active" data-wf-to="utilisateurs"><svg class="ico" aria-hidden="true"><use href="#shield_person" /></svg>Administration</a>
     </nav>
     <div class="sidebar-foot">
-      <a class="nav-item"><svg class="ico"><use href="#help" /></svg>Documentation</a>
-      <a class="nav-item"><svg class="ico"><use href="#notifications" /></svg>Notifications<span class="count">2</span></a>
+      <a href="#" class="nav-item"><svg class="ico" aria-hidden="true"><use href="#help" /></svg>Documentation</a>
+      <a href="#" class="nav-item"><svg class="ico" aria-hidden="true"><use href="#notifications" /></svg>Notifications<span class="count">2</span></a>
       <div class="me">
         <span class="avatar">SL</span>
         <div>
           <div class="me-name">Sophie Lambert</div>
-          <div class="me-role">Administratrice</div>
+          <div class="me-role">Compte administrateur</div>
         </div>
-        <svg class="ico ico-16"><use href="#expand_more" /></svg>
+        <svg class="ico ico-16" aria-hidden="true"><use href="#expand_more" /></svg>
       </div>
       <a class="credit" href="https://github.com/cisstech/platon" aria-label="Code source de PLaTon, logiciel libre de cisstech"><svg class="ico ico-16" aria-hidden="true"><use href="#code" /></svg>Logiciel libre, par <strong>cisstech</strong></a>
     </div>
@@ -35,28 +35,39 @@
   <main class="main" id="contenu">
     <header class="page-head">
       <div>
+        <p class="crumbs admin-mode"><span class="tag"><svg class="ico" aria-hidden="true"><use href="#shield_person" /></svg>Mode administration</span><span>Ce que vous changez ici vaut pour toute la plateforme.</span></p>
         <h1 class="title">Administration</h1>
-        <p class="page-sub">Comptes, groupes, connexions et contenus de la plateforme.</p>
       </div>
-      <div class="actions"><a class="btn btn-primary" data-wf-to="groupe-plateforme"><svg class="ico"><use href="#group_add" /></svg>Créer un groupe</a></div>
+      <div class="actions"><button type="button" class="btn btn-primary" data-wf-to="groupe-plateforme"><svg class="ico" aria-hidden="true"><use href="#group_add" /></svg>Créer un groupe</button></div>
     </header>
-    <div class="tabs"><a class="tab" data-wf-to="utilisateurs"><svg class="ico"><use href="#person" /></svg>Utilisateurs</a><a class="tab active" data-wf-to="groupes-plateforme"><svg class="ico"><use href="#groups" /></svg>Groupes</a><a class="tab" data-wf-to="lms"><svg class="ico"><use href="#school" /></svg>LMS</a><a class="tab" data-wf-to="cas"><svg class="ico"><use href="#key" /></svg>CAS</a><a class="tab" data-wf-to="tags"><svg class="ico"><use href="#bookmark" /></svg>Tags</a><a class="tab" data-wf-to="annonces-admin"><svg class="ico"><use href="#campaign" /></svg>Annonces</a></div>
+    <nav class="tabs" aria-label="Rubriques de l'administration">
+      <a href="#" class="tab" data-wf-to="utilisateurs"><svg class="ico" aria-hidden="true"><use href="#person" /></svg>Utilisateurs</a>
+      <a href="#" class="tab active" aria-current="page" data-wf-to="groupes-plateforme"><svg class="ico" aria-hidden="true"><use href="#groups" /></svg>Groupes</a>
+      <a href="#" class="tab" data-wf-to="lms"><svg class="ico" aria-hidden="true"><use href="#hub" /></svg>Connexions</a>
+      <a href="#" class="tab" data-wf-to="tags"><svg class="ico" aria-hidden="true"><use href="#bookmark" /></svg>Tags</a>
+      <a href="#" class="tab" data-wf-to="annonces-admin"><svg class="ico" aria-hidden="true"><use href="#campaign" /></svg>Annonces</a>
+    </nav>
     <div class="toolbar">
-      <div class="input" style="width: 320px"><svg class="ico ico-18" style="margin: 0 8px 0 0; color: var(--color-subtle)"><use href="#search" /></svg><span class="placeholder">Nom du groupe</span></div>
-      <span class="grow"></span>
-      <a class="btn btn-secondary btn-sm" style="border-color: var(--color-danger); color: var(--color-danger-ink)"><svg class="ico"><use href="#delete" /></svg>Supprimer 1 groupe</a>
+      <label class="sr-only" for="recherche-groupes">Rechercher un groupe</label>
+      <div class="input search wide" id="recherche-groupes" role="searchbox"><svg class="ico ico-18" aria-hidden="true"><use href="#search" /></svg><span class="placeholder">Nom du groupe</span></div>
+      <p class="muted small">Un groupe de la plateforme s'ajoute d'un coup comme membre d'un cours.</p>
     </div>
-    <p class="muted" style="margin: 0 0 var(--spacing-3); font-size: 13px">Un groupe de la plateforme s'ajoute d'un coup comme membre d'un cours.</p>
-    <div class="card" style="padding: 0; overflow: hidden">
+    <div class="card table-card">
       <table class="table">
-        <thead><tr><th></th><th>Groupe</th><th class="num">Personnes</th><th>Créé le</th></tr></thead>
+        <thead><tr><th scope="col" class="col-check"><span class="check mixed" role="checkbox" aria-checked="mixed" tabindex="0" aria-label="Sélectionner tous les groupes de cette page"></span></th><th scope="col"><button type="button" class="th-sort">Groupe<svg class="ico" aria-hidden="true"><use href="#swap_vert" /></svg></button></th><th scope="col" class="num">Personnes</th><th scope="col" aria-sort="descending"><button type="button" class="th-sort">Créé le<svg class="ico" aria-hidden="true"><use href="#arrow_downward" /></svg></button></th></tr></thead>
         <tbody>
-<tr><td style="width: 36px"><div class="option" style="border: 0; padding: 0; background: none"><span class="box"></span></div></td><td><strong>L1 Informatique 2026</strong></td><td class="num">296</td><td>28 août 2026</td></tr>
-<tr><td style="width: 36px"><div class="option" style="border: 0; padding: 0; background: none"><span class="box"></span></div></td><td><strong>L2 Informatique 2026</strong></td><td class="num">211</td><td>28 août 2026</td></tr>
-<tr><td style="width: 36px"><div class="option" style="border: 0; padding: 0; background: none"><span class="box"></span></div></td><td><strong>Marchés financiers, M1</strong></td><td class="num">41</td><td>2 sept. 2026</td></tr>
-<tr style="background: var(--color-primary-soft)"><td style="width: 36px"><div class="option on" style="border: 0; padding: 0; background: none"><span class="box"></span></div></td><td><strong>L1 Informatique 2025</strong></td><td class="num">288</td><td>29 août 2025</td></tr>
+<tr><td class="col-check"><span class="check" role="checkbox" aria-checked="false" tabindex="0" aria-label="Sélectionner Marchés financiers, M1"></span></td><td><strong>Marchés financiers, M1</strong></td><td class="num">41</td><td>2 sept. 2026</td></tr>
+<tr><td class="col-check"><span class="check" role="checkbox" aria-checked="false" tabindex="0" aria-label="Sélectionner L1 Informatique 2026"></span></td><td><a href="#" class="row-link" data-wf-to="groupe-plateforme"><strong>L1 Informatique 2026</strong></a></td><td class="num">296</td><td>28 août 2026</td></tr>
+<tr><td class="col-check"><span class="check" role="checkbox" aria-checked="false" tabindex="0" aria-label="Sélectionner L2 Informatique 2026"></span></td><td><strong>L2 Informatique 2026</strong></td><td class="num">211</td><td>28 août 2026</td></tr>
+<tr class="is-picked"><td class="col-check"><span class="check on" role="checkbox" aria-checked="true" tabindex="0" aria-label="Sélectionner L1 Informatique 2025"><svg class="ico" aria-hidden="true"><use href="#check" /></svg></span></td><td><strong>L1 Informatique 2025</strong></td><td class="num">288</td><td>29 août 2025</td></tr>
+<tr class="is-picked"><td class="col-check"><span class="check on" role="checkbox" aria-checked="true" tabindex="0" aria-label="Sélectionner L2 Informatique 2025"><svg class="ico" aria-hidden="true"><use href="#check" /></svg></span></td><td><strong>L2 Informatique 2025</strong></td><td class="num">203</td><td>29 août 2025</td></tr>
         </tbody>
       </table>
+    </div>
+    <div class="selection-bar" role="region" aria-label="Groupes sélectionnés">
+      <strong>2 groupes sélectionnés</strong><span class="sel-names">L1 Informatique 2025, L2 Informatique 2025</span>
+      <button type="button" class="btn btn-cover-quiet btn-sm sel-first">Tout désélectionner</button>
+      <button type="button" class="btn btn-danger-quiet btn-sm" data-wf-to="groupes-supprimer"><svg class="ico" aria-hidden="true"><use href="#delete" /></svg>Supprimer les 2 groupes</button>
     </div>
   </main>
 </div>

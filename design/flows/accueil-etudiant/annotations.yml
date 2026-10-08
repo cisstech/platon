@@ -1,26 +1,44 @@
 - screen: etudiant
-  note: "La seule action primaire de l'écran est celle de l'activité la plus urgente. Les autres lignes gardent un bouton secondaire, qui dit ce qu'il fait (Reprendre, Commencer)."
+  note: "Le bandeau : une seule annonce non lue, et celle qui touche la disponibilité du service passe avant les autres. Le 28 septembre, c'est la maintenance du dimanche 4 octobre, de 7 h à 9 h ; son icône construction reste graphite, parce qu'une maintenance annoncée est une information, pas une erreur. « Les corrections détaillées arrivent » reste non lue dans Annonces et dans les notifications."
+- screen: etudiant
+  note: "Quatre zones : l'annonce non lue, À faire (qui se termine par Bientôt), Résultats récents, et Mes cours, qui porte aussi les trois chiffres. Les huit statistiques de l'accueil actuel n'y reviennent pas."
+- screen: etudiant
+  note: "Une seule action marquée : Reprendre, sur le quiz qui ferme ce soir. Les autres lignes sont des liens entiers ; leur action est écrite à l'encre, dans la colonne du bouton (Reprendre, Commencer, Lire les règles), pour que les barres restent alignées et que rien ne concurrence le bouton. C'est la règle du téléphone, appliquée au bureau."
+- screen: etudiant
+  note: "À faire liste les cinq activités ouvertes d'Inès le 28 septembre : le quiz (5 sur 6), TP 4 (3 sur 8), Challenge : tris (2 sur 5), TP 5 et Suites numériques, pas encore commencés. Chaque ligne est à la teinte de son cours, sur l'icône comme sur la barre : lagon pour AP1, olive pour Analyse 1."
 - screen: etudiant
   note: "L'échéance change de couleur à moins de 24 h (attention) et quand elle est dépassée (correction, avec le mot « En retard »). La couleur n'est jamais seule, l'icône et le texte la portent aussi."
 - screen: etudiant
-  note: "Les huit statistiques de l'accueil actuel passent sur une page Progression. Ici, trois chiffres seulement, alignés en chiffres tabulaires."
+  note: "Bientôt ferme la liste À faire : le Contrôle continu 2 d'Analyse 1 ouvre mercredi, noté, 45 minutes, une tentative. Il est dit avant d'ouvrir pour ne pas surprendre."
 - screen: etudiant
-  note: "Le chargement ne met en squelette que les données attendues. Le prénom, la date et les titres de section sont connus côté client et s'affichent tout de suite."
+  note: "Résultats récents : de petites copies, la feuille, sa marge rouge et la note écrite dans la marge, comme la copie corrigée qu'elles ouvrent. TP 3 : conditions porte 82 et Voir la correction ; la copie de l'Examen partiel 1, encore en correction, a la marge vide et le dit. Inès sait que sa copie n'est pas oubliée ; une notification la préviendra."
 - screen: etudiant
-  note: "L'état vide ne montre aucun zéro. Il explique comment un cours apparaît et renvoie vers l'aide."
+  note: "Mes cours : l'avancement se compte en exercices, sur la barre comme dans le pourcentage. Chaque cours le dit de la même façon sous sa barre : AP1 (lagon) à 58 %, 34 exercices sur 59 ; Analyse 1 (olive) à 40 %, 16 exercices sur 40 ; Algèbre 1 (framboise) à 100 %, « Cours terminé » : la chaleur se pose sur la barre pleine et sur l'icône task_alt, jamais sur la phrase. Sous les cours, trois chiffres de DashboardService.ofUser, en chiffres tabulaires."
+- screen: etudiant
+  note: "Le chargement ne met en squelette que les données attendues, dans leur forme : des lignes pour À faire, deux petites copies pour Résultats récents. Le prénom, la date et les titres de section sont connus côté client et s'affichent tout de suite. Le bandeau vient avec les données : il n'apparaît qu'une fois l'accueil chargé."
+- screen: etudiant
+  note: "Chargement lent : au bout de 10 s, le squelette reste en place et un message neutre (role status, sablier) dit que la plateforme réessaie. Une attente n'est pas une information à signaler en bleu. Rien ne bouge sous le message. À 30 s, l'état erreur prend le relais."
+- screen: etudiant
+  note: "Erreur : jamais une liste vide. Le message nomme ce qui n'a pas chargé, dit d'où vient la panne (la connexion d'Inès fonctionne, c'est PLaTon qui ne répond pas : cloud_off ; une coupure de son côté prendrait wifi_off), rassure sur ce qui est enregistré et propose une seule action, Réessayer. Pas de détour par Mes cours : la page des cours dépend du même serveur. Sur téléphone, Réessayer prend toute la largeur."
+- screen: etudiant
+  note: "État vide : la bienvenue est un moment de joie, comme pour Karim. « Bienvenue sur PLaTon, Inès », la chaleur sur l'icône seule, qui s'allume une fois en 600 ms ; les mots restent dans la couleur du texte. Puis la copie vierge, qui explique comment un cours apparaît et renvoie vers l'aide, sans aucun zéro. La maintenance, adressée à tout le monde, garde son bandeau."
+- screen: etudiant
+  note: "Sur téléphone, une annonce de service (la maintenance) passe en tête, courte ; une annonce ordinaire viendrait après À faire, pour que Reprendre tombe sous le pouce dès l'ouverture. Seul le quiz a un bouton plein ; les autres cartes sont des cibles entières, avec leur action écrite (Reprendre, Commencer). Chaque carte garde l'icône de son activité à la teinte de son cours (quiz, code, emoji_events, functions, history_edu), comme sur ordinateur. Tout le reste de l'accueil suit, avec des cibles de 44 px."
+- screen: etudiant
+  note: "La couverture (barre latérale) est toujours sombre, dans le prune du logo. L'élément actif est un intercalaire, il prend la couleur de la page et la rejoint. On sait où l'on est sans lire. Sous le nom, le type de compte : « Compte étudiant »."
+- screen: etudiant
+  note: "Pied de couverture : « Logiciel libre, par cisstech » vers le dépôt, comme le « Propulsé par » actuel, mais en texte discret, sous le profil. Présent pour tous les rôles."
 - screen: notifications
-  note: "Une notification non lue se distingue par un filet d'encre à gauche et un titre en gras, pas par une pastille. Cliquer une notification mène à l'objet concerné et la marque comme lue."
+  note: "Une notification non lue se distingue par un point graphite à gauche, un fond à peine teinté et un titre en gras ; un lecteur d'écran entend « Non lue ». Cliquer une notification mène à l'objet concerné (la copie corrigée, l'activité, l'annonce, le cours) et la marque comme lue."
+- screen: notifications
+  note: "Chaque notification dit un fait vrai au moment où on la lit : la correction de TP 3, le rappel du quiz qui ferme ce soir, l'annonce des corrections détaillées, l'ouverture du Contrôle continu 2. L'icône de tête prend la teinte du cours concerné."
+- screen: notifications
+  note: "Sur téléphone, la cloche de la barre du haut ouvre un écran entier : la flèche de retour et Échap le ferment, « Tout marquer comme lu » reste à portée de pouce sous la barre, chaque notification fait au moins 64 px de haut."
 - screen: profil
   note: "Le thème quitte la barre supérieure pour le menu du profil, en trois choix explicites. Pour un administrateur, ce menu porte la mention Administrateur, qui remplace le cadre rouge actuel."
 - screen: navigation
-  note: "Sur mobile, la barre latérale devient un panneau. Les cibles passent à 44 px de haut. Le voile et Échap ferment le panneau."
-- screen: etudiant
-  note: "La couverture (barre latérale) est toujours sombre, dans le prune du logo. L'élément actif est un intercalaire, il prend la couleur de la page et la rejoint. On sait où l'on est sans lire."
-- screen: etudiant
-  note: "Chaque cours a une teinte, la même partout, sur l'icône de ses activités et sur l'onglet de son nom. Un cours achevé passe en chaleur (le dégradé du logo), le seul moment où ce dégradé sort du logo."
-- screen: etudiant
-  note: "Passe UX : Corrections disparaît de la navigation élève. La page ne liste que les corrections assignées : pour une élève qui ne corrige pas, c'était une page vide. Elle revient pour qui corrige."
-- screen: etudiant
-  note: "Le bloc chiffré vient de DashboardService.ofUser : moyenne, réussite, temps passé, sur tous les cours. « Tous mes résultats » est retiré : cette page n'existe pas."
-- screen: etudiant
-  note: "Pied de couverture : « Logiciel libre, par cisstech » vers le dépôt, comme le « Propulsé par » actuel, mais en texte discret, sous le profil. Présent pour tous les rôles."
+  note: "Sur mobile, la barre latérale devient un panneau. Les cibles passent à 44 px de haut. Le voile, la croix et Échap ferment le panneau ; le profil ouvre le menu du profil."
+- screen: profil
+  note: "Sur téléphone, le menu du profil est une feuille qui monte du bas, ouverte depuis le profil du panneau de navigation : le nom, le type de compte (« Compte étudiant »), l'adresse de Mon compte, puis Mon compte, le thème en trois choix de 44 px et Se déconnecter. Le voile, la croix et Échap la ferment ; le focus revient sur le profil."
+- screen: profil
+  note: "Aide est dans le menu du profil, entre Mon compte et le thème : discrète, et au même endroit sur chaque écran, puisque tous partagent ce menu. Elle ouvre les pages d'aide de PLaTon dans un nouvel onglet, ce que dit l'icône open_in_new et, pour les lecteurs d'écran, la fin de son nom. L'état vide y mène aussi, par « Comment rejoindre un cours ». L'enseignant garde en plus Documentation dans la barre latérale, pour écrire des exercices."
