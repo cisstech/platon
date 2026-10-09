@@ -142,6 +142,16 @@ describe('NotificationService', () => {
       expect(qb.andWhere).toHaveBeenCalledWith('read_at IS NULL')
     })
 
+    it('devrait écarter les signaux déclarés quand demandé', async () => {
+      service.declareSignals('SIGNAL')
+
+      await service.ofUser('user-1', { excludeSignals: true })
+
+      expect(qb.andWhere).toHaveBeenCalledWith(expect.stringContaining('NOT IN (:...signals)'), {
+        signals: ['SIGNAL'],
+      })
+    })
+
     it('devrait appliquer offset et limit quand fournis', async () => {
       qb.getManyAndCount.mockResolvedValue([[], 0])
 
@@ -274,13 +284,32 @@ describe('NotificationService', () => {
   })
 
   describe('unreadCount', () => {
+    let qb: jest.Mocked<SelectQueryBuilder<NotificationEntity>>
+
+    beforeEach(() => {
+      qb = mockSelectQueryBuilder<NotificationEntity>()
+      repository.createQueryBuilder.mockReturnValue(qb)
+    })
+
     it("devrait compter les notifications non lues de l'utilisateur", async () => {
-      repository.count.mockResolvedValue(4)
+      qb.getCount.mockResolvedValue(4)
 
       const result = await service.unreadCount('user-1')
 
-      expect(repository.count).toHaveBeenCalledWith({ where: { userId: 'user-1', readAt: expect.anything() } })
+      expect(qb.where).toHaveBeenCalledWith('user_id = :userId', { userId: 'user-1' })
+      expect(qb.andWhere).toHaveBeenCalledWith('read_at IS NULL')
       expect(result).toBe(4)
+    })
+
+    it('devrait écarter les types déclarés comme signaux', async () => {
+      qb.getCount.mockResolvedValue(1)
+      service.declareSignals('SIGNAL-A', 'SIGNAL-B')
+
+      await service.unreadCount('user-1')
+
+      expect(qb.andWhere).toHaveBeenCalledWith(expect.stringContaining('NOT IN (:...signals)'), {
+        signals: ['SIGNAL-A', 'SIGNAL-B'],
+      })
     })
   })
 

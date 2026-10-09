@@ -30,7 +30,12 @@ export const NOTIFICATION_QUERIES = gql`
         hasNextPage
         endCursor
       }
+      totalCount
     }
+  }
+
+  query UnreadNotificationCount {
+    unreadNotificationCount
   }
 
   subscription OnChangeNotifications {

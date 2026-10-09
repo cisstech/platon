@@ -81,6 +81,7 @@ type Query {
   users(filters: UserFiltersInput): [User!]!
   user(input: String!): User!
   notifications(filters: NotificationFiltersInput, first: Int, after: String): NotificationConnection!
+  unreadNotificationCount: Int!
 }
 
 input UserFiltersInput {
@@ -107,6 +108,7 @@ enum OrderingDirections {
 
 input NotificationFiltersInput {
   unread: Boolean
+  excludeSignals: Boolean
 }
 
 type Mutation {

@@ -57,6 +57,11 @@ export class NotificationResolver {
     }
   }
 
+  @Query(() => Int)
+  unreadNotificationCount(@GqlReq() req: IRequest): Promise<number> {
+    return this.notificationService.unreadCount(req.user.id)
+  }
+
   @Mutation(() => Boolean)
   async markAsRead(@GqlReq() req: IRequest, @Args('id', { type: () => UUID }) id: string): Promise<boolean> {
     await this.notificationService.markAsRead(req.user.id, [id])
