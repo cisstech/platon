@@ -126,12 +126,12 @@ critique. Les points ouverts de C-02 à C-05 sont tranchés (D22 à D30, 2026-10
 
 ## Phase G : l'administration et le compte
 
-| Ticket | Titre                                    | Dépend de | Taille | Statut   |
-| ------ | ---------------------------------------- | --------- | ------ | -------- |
-| G-01   | Utilisateurs et groupes de la plateforme | C-05      | M      | À écrire |
-| G-02   | LMS, CAS, tags, annonces                 | G-01      | M      | À écrire |
-| G-03   | Mon compte : À propos, Sécurité          | C-05      | S      | À écrire |
-| G-04   | La connexion                             | F-02      | M      | À écrire |
+| Ticket                         | Titre                                    | Dépend de  | Taille | Statut   |
+| ------------------------------ | ---------------------------------------- | ---------- | ------ | -------- |
+| G-01                           | Utilisateurs et groupes de la plateforme | C-05       | M      | À écrire |
+| G-02                           | LMS, CAS, tags, annonces                 | G-01       | M      | À écrire |
+| G-03                           | Mon compte : À propos, Sécurité          | C-05       | S      | À écrire |
+| [G-04](./G-04-la-connexion.md) | La connexion                             | F-02, C-06 | L      | À faire  |
 
 ## Phase X : la bascule
 

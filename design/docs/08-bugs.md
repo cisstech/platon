@@ -56,6 +56,19 @@ Gravité : **P1** bloque, trompe ou expose. **P2** gêne ou fait douter. **P3** 
 - **Correctif** : supprimer par `{ userId, id: In(ids) }`, comme `markAsUnread` (PR #120, sur
   `main`, avant la nouvelle interface).
 
+### B23. Connexion sans limite de tentatives, qui dit si un compte existe
+
+- [ ] Corrigé
+- **Symptôme** : on peut essayer des mots de passe sans fin ; un nom d'utilisateur inconnu reçoit
+  « User not found » (404), un mauvais mot de passe « Password is incorrect » (400) : la réponse dit
+  quels comptes existent.
+- **Cause** : aucune limite de débit dans l'API ni dans nginx ; deux erreurs distinctes à la
+  connexion.
+- **Où** : `libs/core/server/src/lib/auth/auth.controller.ts` (`signin`),
+  `libs/core/server/src/lib/auth/auth.service.ts` (`signIn`), `.docker/nginx/nginx.prod.conf`
+- **Piste** : une même réponse pour les deux cas (G-04) ; une limite par adresse et par compte sur
+  `POST /auth/signin` (`@nestjs/throttler` ou `limit_req`).
+
 ## P2
 
 ### B6. `/tests` sans garde de rôle
@@ -117,6 +130,19 @@ Gravité : **P1** bloque, trompe ou expose. **P2** gêne ou fait douter. **P3** 
   `libs/feature/course/browser/src/components/activity-settings/restriction/`
 - **Piste** : autoriser l'enregistrement à toute personne désignée correctrice de l'activité
   (`ActivityCorrectorView`), ou ne proposer que des enseignants comme correcteurs. À trancher.
+
+### B24. Un échec du CAS finit sur une erreur JSON
+
+- [ ] Corrigé
+- **Symptôme** : un ticket CAS refusé ou un fournisseur injoignable affiche une erreur 500 en JSON à
+  l'adresse de l'API, sans retour à la page de connexion. Sans `next`, la redirection réussie envoie
+  `next=undefined`.
+- **Cause** : `checkCasTicket` lève une erreur au lieu de rediriger ; `next` et l'adresse de service
+  ne sont pas encodés, et `https` est écrit en dur.
+- **Où** : `libs/feature/cas/server/src/lib/cas.controller.ts`,
+  `libs/feature/lti/server/src/lib/lti.middleware.ts` (même `next` non encodé)
+- **Piste** : rediriger vers `/login` avec un code d'erreur que la page traduit ; encoder `next`, et
+  l'omettre quand il manque (G-04).
 
 ## P3
 
