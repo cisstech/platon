@@ -4,7 +4,7 @@ Source : `design/flows/accueil-etudiant` (écrans `etudiant` mobile, `navigation
 annotations), révisés après les quatre tours de critique ; `design/spec/project.md` (règles
 communes) ; `design/design.css` (`.topbar`, `.drawer`, `.scrim`) ; `design/docs/04-direction.md`
 (navigation, gabarit, accessibilité) ; décisions : D19, D26, D27, D28.
-Statut : À faire.
+Statut : Livré (2026-10-09).
 Dépend de : C-02.
 Taille : M.
 
@@ -80,6 +80,30 @@ Aucun : tranchés le 2026-10-08 par D28. Pour mémoire, les questions étaient :
 
 ## 7. Definition of Done
 
-- [ ] Les tests du §2 passent.
-- [ ] Le cadre est utilisable au clavier et au toucher à 380 px, sans défilement horizontal.
+- [x] Les tests du §2 passent.
+- [x] Le cadre est utilisable au clavier et au toucher à 380 px, sans défilement horizontal.
 - [x] Les points ouverts sont tranchés.
+
+> **Amendement à la livraison.** Bibliothèque : `pl-topbar` (le repère `banner` sur écran étroit),
+> la couverture en `layout="panel"` (entrées de 44 px, bouton de fermeture `plCoverClose` à côté de
+> la marque, profil avec un chevron vers la droite), `pl-sheet` avec `a[plSheetItem]`,
+> `button[plSheetItem]` et `pl-sheet-field` (la poignée referme la feuille au-delà de 80 px tirés ;
+> une pression ailleurs reste un clic), le bouton `cover-icon` et le choix segmenté en `size="lg"`
+> (44 px). Le cadre bascule avec `BreakpointObserver` sous 840 px ; la couverture est le même gabarit,
+> à côté de la page ou dans un dialogue du CDK nommé « Navigation ». Le panneau et la feuille se
+> ferment à chaque navigation et quand l'écran s'élargit. Le titre de la barre est celui de la route,
+> « PLaTon » à défaut : l'accueil provisoire n'en a pas d'autre.
+
+> **Amendement à la livraison.** Deux défauts trouvés en vérifiant, corrigés dans `plMenuTrigger` :
+> le CDK place ses surcouches dans la top layer du navigateur, dans l'ordre où elles s'affichent, et
+> le menu Créer, attaché au démarrage, s'ouvrait sous le panneau ; le déclencheur le remet au premier
+> plan juste avant de l'ouvrir. Angular Aria retient Échap sur un déclencheur même menu fermé : le
+> panneau ne se fermait plus ; le déclencheur rend Échap à son conteneur, avec son `keyCode`, que le
+> dialogue du CDK lit.
+
+> **Amendement à la livraison.** Hors de ce ticket : la cloche des notifications de la barre arrive
+> avec son écran entier (C-04). Vérifié dans Chrome sur le build de production, avec une API simulée,
+> à 390 px, en clair et en sombre : aucun débordement, aucune violation axe sur l'accueil, le panneau
+> et la feuille ; le focus entre dans le panneau, Échap ferme le menu puis le panneau et rend le focus
+> au bouton de navigation ; le menu Créer s'ouvre au-dessus du panneau ; la feuille change le thème
+> et se ferme d'un glissement. Le toucher est simulé par la souris : non vérifié sur un vrai téléphone.
