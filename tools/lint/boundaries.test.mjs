@@ -10,6 +10,9 @@ import { ESLint } from 'eslint'
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..')
 // The Nx ESLint configs take the TypeScript root from this variable: pin it to this workspace.
 process.env['NX_WORKSPACE_ROOT_PATH'] = root
+// On CI, typescript-eslint parses from a program built on the files on disk ("single run"), so the
+// first case would lint the real file instead of its faulty text.
+process.env['TSESTREE_SINGLE_RUN'] = 'false'
 
 const ruleIdsOf = async (configFile, filePath, code) => {
   const eslint = new ESLint({ cwd: root, overrideConfigFile: configFile })
