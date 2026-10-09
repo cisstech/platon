@@ -5,6 +5,7 @@ import { Apollo } from 'apollo-angular'
 import { AuthService, DialogService, TokenService } from '@platon/core/browser/shared'
 import { NZ_DATE_LOCALE, NZ_I18N } from 'ng-zorro-antd/i18n'
 import { NzModalService } from 'ng-zorro-antd/modal'
+import { ResourceService } from '@platon/feature/resource/browser/shared'
 import { NextDialog } from './core/dialog/next-dialog'
 import { nextConfig } from './next.config'
 
@@ -31,6 +32,10 @@ describe('nextConfig', () => {
 
   it('has a GraphQL client', () => {
     expect(TestBed.inject(Apollo)).toBeTruthy()
+  })
+
+  it('reaches the resources, for the invitations of the notifications', () => {
+    expect(TestBed.inject(ResourceService)).toBeInstanceOf(ResourceService)
   })
 
   it('does not configure ng-zorro', () => {

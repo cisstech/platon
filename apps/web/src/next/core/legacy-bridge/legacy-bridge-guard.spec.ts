@@ -4,9 +4,10 @@ import { Router, provideRouter } from '@angular/router'
 import { RouterTestingHarness } from '@angular/router/testing'
 import { User, UserRoles } from '@platon/core/common'
 import { DialogService } from '@platon/core/browser/shared'
-import { of } from 'rxjs'
+import { NEVER, of } from 'rxjs'
 import { nextRoutes } from '../../next.routes'
 import { Shell } from '../../shell/shell'
+import { NotificationsApi } from '../../shell/notifications/notifications-api'
 import { ShellApi } from '../../shell/shell-api'
 import { Session } from '../session/session'
 import { NextTheme } from '../theme/next-theme'
@@ -34,6 +35,7 @@ describe('legacyBridgeGuard', () => {
           },
         },
         { provide: ShellApi, useValue: { correctionSummaries: () => of([]) } },
+        { provide: NotificationsApi, useValue: { unreadCount: () => of(0), changes: () => NEVER } },
         { provide: DialogService, useValue: {} },
         { provide: NextTheme, useValue: { preference: signal('light') } },
       ],
