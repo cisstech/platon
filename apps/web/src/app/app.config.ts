@@ -11,7 +11,7 @@ import { CAS_PROVIDERS } from '@platon/feature/cas/browser'
 import { COURSE_PROVIDERS } from '@platon/feature/course/browser'
 import { LTI_PROVIDERS } from '@platon/feature/lti/browser'
 import { PLAYER_PROVIDERS } from '@platon/feature/player/browser'
-import { RESOURCE_PROVIDERS } from '@platon/feature/resource/browser'
+import { RESOURCE_NOTIFICATION_PROVIDERS, RESOURCE_PROVIDERS } from '@platon/feature/resource/browser'
 import { RESULT_PROVIDERS } from '@platon/feature/result/browser'
 import { PEER_PROVIDERS } from '@platon/feature/peer/browser'
 import { DISCORD_PROVIDERS } from '@platon/feature/discord/browser'
@@ -39,6 +39,7 @@ export const appConfig = (context: UiBootContext): ApplicationConfig => ({
     provideReturnToNext(),
     COURSE_PROVIDERS,
     RESOURCE_PROVIDERS,
+    RESOURCE_NOTIFICATION_PROVIDERS,
     PLAYER_PROVIDERS,
     RESULT_PROVIDERS,
     PEER_PROVIDERS,
