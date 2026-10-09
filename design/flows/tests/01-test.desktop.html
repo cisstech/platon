@@ -8,25 +8,25 @@
         <div class="brand-org">Université Gustave Eiffel</div>
       </div>
     </div>
-    <a class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico"><use href="#add" /></svg>Créer</a>
+    <button type="button" class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico" aria-hidden="true"><use href="#add" /></svg>Créer</button>
     <nav class="nav">
-      <a class="nav-item" data-wf-to="enseignant"><svg class="ico"><use href="#home" /></svg>Accueil</a>
-      <a class="nav-item" data-wf-to="annonces"><svg class="ico"><use href="#campaign" /></svg>Annonces</a>
-      <a class="nav-item" data-wf-to="mes-cours"><svg class="ico"><use href="#school" /></svg>Cours</a>
-      <a class="nav-item" data-wf-to="file"><svg class="ico"><use href="#rate_review" /></svg>Corrections<span class="count">14</span></a>
-      <a class="nav-item" data-wf-to="catalogue"><svg class="ico"><use href="#folder_open" /></svg>Ressources</a>
-      <a class="nav-item active" data-wf-to="test"><svg class="ico"><use href="#fact_check" /></svg>Tests d'entrée</a>
+      <a href="#" class="nav-item" data-wf-to="enseignant"><svg class="ico" aria-hidden="true"><use href="#home" /></svg>Accueil</a>
+      <a href="#" class="nav-item" data-wf-to="annonces"><svg class="ico" aria-hidden="true"><use href="#campaign" /></svg>Annonces</a>
+      <a href="#" class="nav-item" data-wf-to="mes-cours"><svg class="ico" aria-hidden="true"><use href="#school" /></svg>Cours</a>
+      <a href="#" class="nav-item" data-wf-to="file"><svg class="ico" aria-hidden="true"><use href="#rate_review" /></svg>Corrections<span class="count">2</span></a>
+      <a href="#" class="nav-item" data-wf-to="catalogue"><svg class="ico" aria-hidden="true"><use href="#folder_open" /></svg>Ressources</a>
+      <a href="#" class="nav-item active" data-wf-to="test"><svg class="ico" aria-hidden="true"><use href="#fact_check" /></svg>Tests d'entrée</a>
     </nav>
     <div class="sidebar-foot">
-      <a class="nav-item"><svg class="ico"><use href="#help" /></svg>Documentation</a>
-      <a class="nav-item"><svg class="ico"><use href="#notifications" /></svg>Notifications<span class="count">2</span></a>
+      <a href="#" class="nav-item"><svg class="ico" aria-hidden="true"><use href="#help" /></svg>Documentation</a>
+      <a href="#" class="nav-item"><svg class="ico" aria-hidden="true"><use href="#notifications" /></svg>Notifications<span class="count">2</span></a>
       <div class="me">
         <span class="avatar">KH</span>
         <div>
           <div class="me-name">Karim Haddad</div>
-          <div class="me-role">Enseignant</div>
+          <div class="me-role">Compte enseignant</div>
         </div>
-        <svg class="ico ico-16"><use href="#expand_more" /></svg>
+        <svg class="ico ico-16" aria-hidden="true"><use href="#expand_more" /></svg>
       </div>
       <a class="credit" href="https://github.com/cisstech/platon" aria-label="Code source de PLaTon, logiciel libre de cisstech"><svg class="ico ico-16" aria-hidden="true"><use href="#code" /></svg>Logiciel libre, par <strong>cisstech</strong></a>
     </div>
@@ -34,40 +34,44 @@
   <main class="main" id="contenu">
     <header class="page-head">
       <div>
-        <div class="crumbs"><span>Tests d'entrée</span><svg class="ico"><use href="#chevron_right" /></svg><span>Master Informatique 2027</span></div>
+        <div class="crumbs"><span>Tests d'entrée</span><svg class="ico" aria-hidden="true"><use href="#chevron_right" /></svg><span>Master Informatique 2027</span></div>
         <h1 class="title">Test d'entrée Master Informatique</h1>
-        <p class="page-sub">Ouvert du 1er au 15 octobre. 1&nbsp;h&nbsp;30, une tentative, plein écran.</p>
+        <p class="page-sub">Ouvert du 1er au 15 octobre. 6 exercices, 1&nbsp;h&nbsp;30 d'une traite, une tentative par exercice, plein écran.</p>
       </div>
       <div class="actions">
-        <a class="btn btn-secondary" data-wf-to="candidat"><svg class="ico"><use href="#visibility" /></svg>Aperçu candidat</a>
-        <a class="btn btn-secondary"><svg class="ico"><use href="#upload" /></svg>Importer un CSV</a>
-        <a class="btn btn-primary"><svg class="ico"><use href="#mail" /></svg>Envoyer 1 invitation</a>
+        <button type="button" class="btn btn-secondary" data-wf-to="candidat"><svg class="ico" aria-hidden="true"><use href="#visibility" /></svg>Aperçu candidat</button>
+        <button type="button" class="btn btn-primary"><svg class="ico" aria-hidden="true"><use href="#mail" /></svg>Envoyer 1 invitation</button>
       </div>
     </header>
-    <div class="tabs">
-      <span class="tab"><svg class="ico"><use href="#grid_view" /></svg>Vue d'ensemble</span>
-      <span class="tab active"><svg class="ico"><use href="#groups" /></svg>Candidats <span class="count">48</span></span>
-      <span class="tab"><svg class="ico"><use href="#monitoring" /></svg>Résultats</span>
-      <span class="tab"><svg class="ico"><use href="#settings" /></svg>Conditions et courriel</span>
-    </div>
-    <div class="card">
+    <nav class="tabs" aria-label="Vues du test">
+      <span class="tab"><svg class="ico" aria-hidden="true"><use href="#grid_view" /></svg>Vue d'ensemble</span>
+      <span class="tab active" aria-current="page"><svg class="ico" aria-hidden="true"><use href="#groups" /></svg>Candidats <span class="count">48</span></span>
+      <span class="tab"><svg class="ico" aria-hidden="true"><use href="#monitoring" /></svg>Résultats</span>
+      <span class="tab"><svg class="ico" aria-hidden="true"><use href="#settings" /></svg>Conditions et courriel</span>
+    </nav>
+    <section class="card" aria-label="Candidats">
       <div class="table-tools">
-        <div class="input"><svg class="ico ico-18" style="margin: 0 8px 0 0; color: var(--color-subtle)"><use href="#search" /></svg><span class="placeholder">Nom ou courriel</span></div>
-        <span class="chip">Tous <span class="muted">48</span></span><span class="chip">Terminé <span class="muted">21</span></span><span class="chip">En cours <span class="muted">3</span></span><span class="chip on">Pas commencé <span class="muted">24</span></span>
+        <label class="sr-only" for="q-candidats">Chercher un candidat par nom ou courriel</label>
+        <div class="input" id="q-candidats" role="searchbox"><svg class="ico ico-18" aria-hidden="true"><use href="#search" /></svg><span class="placeholder">Nom ou courriel</span></div>
         <span class="spacer"></span>
-        <a class="btn btn-ghost btn-sm"><svg class="ico"><use href="#person_add" /></svg>Ajouter</a>
+        <button type="button" class="btn btn-ghost btn-sm" aria-haspopup="menu"><svg class="ico" aria-hidden="true"><use href="#person_add" /></svg>Ajouter des candidats<svg class="ico" aria-hidden="true"><use href="#expand_more" /></svg></button>
+      </div>
+      <div class="table-tools chips-row">
+        <div class="chips" role="group" aria-label="Filtrer par état"><button type="button" class="chip on" aria-pressed="true">Tous <span class="muted">48</span></button><button type="button" class="chip" aria-pressed="false">Terminé <span class="muted">21</span></button><button type="button" class="chip" aria-pressed="false">En cours <span class="muted">3</span></button><button type="button" class="chip" aria-pressed="false">Invitation envoyée <span class="muted">23</span></button><button type="button" class="chip" aria-pressed="false">Invitation non envoyée <span class="muted">1</span></button></div>
       </div>
       <table class="table">
-        <thead><tr><th>Candidat</th><th>État</th><th class="num">Note</th><th></th></tr></thead>
+        <thead><tr><th class="col-check" scope="col"><span class="check" role="checkbox" aria-checked="false" tabindex="0" aria-label="Sélectionner les 48 candidats affichés"></span></th><th scope="col">Candidat</th><th scope="col">État</th><th class="num" scope="col">Note</th><th class="col-x" scope="col"><span class="sr-only">Actions</span></th></tr></thead>
         <tbody>
-          <tr><td><div class="person"><span class="avatar">MD</span><div>Mariam Diallo<small>mariam.diallo@gmail.com</small></div></div></td><td><span class="tag success"><svg class="ico"><use href="#check_circle" /></svg>Terminé</span></td><td class="num">78&nbsp;/&nbsp;100</td><td style="width: 44px"><button class="btn btn-icon btn-sm" aria-label="Actions"><svg class="ico ico-18"><use href="#more_horiz" /></svg></button></td></tr>
-          <tr><td><div class="person"><span class="avatar">LB</span><div>Lucas Bernard<small>l.bernard@outlook.fr</small></div></div></td><td><span class="tag info"><svg class="ico"><use href="#pending" /></svg>En cours</span></td><td class="num"></td><td style="width: 44px"><button class="btn btn-icon btn-sm" aria-label="Actions"><svg class="ico ico-18"><use href="#more_horiz" /></svg></button></td></tr>
-          <tr><td><div class="person"><span class="avatar">SR</span><div>Sofia Rossi<small>sofia.rossi@unimi.it</small></div></div></td><td><span class="tag"><svg class="ico"><use href="#mail" /></svg>Invitation envoyée</span></td><td class="num"></td><td style="width: 44px"><button class="btn btn-icon btn-sm" aria-label="Actions"><svg class="ico ico-18"><use href="#more_horiz" /></svg></button></td></tr>
-          <tr><td><div class="person"><span class="avatar">YB</span><div>Yanis Belkacem<small>yanis.belkacem@etu.univ-lyon1.fr</small></div></div></td><td><span class="tag success"><svg class="ico"><use href="#check_circle" /></svg>Terminé</span></td><td class="num">64&nbsp;/&nbsp;100</td><td style="width: 44px"><button class="btn btn-icon btn-sm" aria-label="Actions"><svg class="ico ico-18"><use href="#more_horiz" /></svg></button></td></tr>
-          <tr><td><div class="person"><span class="avatar">CV</span><div>Clara Vidal<small>clara.vidal@gmail.com</small></div></div></td><td><span class="tag warning"><svg class="ico"><use href="#warning" /></svg>Invitation non envoyée</span></td><td class="num"></td><td style="width: 44px"><button class="btn btn-icon btn-sm" aria-label="Actions"><svg class="ico ico-18"><use href="#more_horiz" /></svg></button></td></tr>
+          <tr><td class="col-check"><span class="check" role="checkbox" aria-checked="false" tabindex="0" aria-label="Sélectionner Mariam Diallo"></span></td><td><div class="person"><span class="avatar" aria-hidden="true">MD</span><div>Mariam Diallo<small>mariam.diallo@gmail.com</small></div></div></td><td><div class="state-cell"><span class="tag"><svg class="ico" aria-hidden="true"><use href="#check" /></svg>Terminé</span><small>9 octobre à 15&nbsp;h&nbsp;42</small></div></td><td class="num">78&nbsp;/&nbsp;100</td><td class="col-x"><button type="button" class="btn btn-icon btn-sm" aria-label="Actions pour Mariam Diallo"><svg class="ico ico-18" aria-hidden="true"><use href="#more_horiz" /></svg></button></td></tr>
+          <tr><td class="col-check"><span class="check" role="checkbox" aria-checked="false" tabindex="0" aria-label="Sélectionner Lucas Bernard"></span></td><td><div class="person"><span class="avatar" aria-hidden="true">LB</span><div>Lucas Bernard<small>l.bernard@outlook.fr</small></div></div></td><td><div class="state-cell"><span class="tag"><svg class="ico" aria-hidden="true"><use href="#pending" /></svg>En cours</span><small>commencé le 9 octobre à 15&nbsp;h&nbsp;20</small></div></td><td class="num"></td><td class="col-x"><button type="button" class="btn btn-icon btn-sm" aria-label="Actions pour Lucas Bernard"><svg class="ico ico-18" aria-hidden="true"><use href="#more_horiz" /></svg></button></td></tr>
+          <tr><td class="col-check"><span class="check" role="checkbox" aria-checked="false" tabindex="0" aria-label="Sélectionner Sofia Rossi"></span></td><td><div class="person"><span class="avatar" aria-hidden="true">SR</span><div>Sofia Rossi<small>sofia.rossi@unimi.it</small></div></div></td><td><div class="state-cell"><span class="tag"><svg class="ico" aria-hidden="true"><use href="#mail" /></svg>Invitation envoyée</span><small>le 1er octobre</small></div></td><td class="num"></td><td class="col-x"><button type="button" class="btn btn-icon btn-sm" aria-label="Actions pour Sofia Rossi"><svg class="ico ico-18" aria-hidden="true"><use href="#more_horiz" /></svg></button></td></tr>
+          <tr><td class="col-check"><span class="check" role="checkbox" aria-checked="false" tabindex="0" aria-label="Sélectionner Yanis Belkacem"></span></td><td><div class="person"><span class="avatar" aria-hidden="true">YB</span><div>Yanis Belkacem<small>yanis.belkacem@etu.univ-lyon1.fr</small></div></div></td><td><div class="state-cell"><span class="tag"><svg class="ico" aria-hidden="true"><use href="#check" /></svg>Terminé</span><small>5 octobre à 16&nbsp;h&nbsp;12</small></div></td><td class="num">64&nbsp;/&nbsp;100</td><td class="col-x"><button type="button" class="btn btn-icon btn-sm" aria-label="Actions pour Yanis Belkacem"><svg class="ico ico-18" aria-hidden="true"><use href="#more_horiz" /></svg></button></td></tr>
+          <tr><td class="col-check"><span class="check" role="checkbox" aria-checked="false" tabindex="0" aria-label="Sélectionner Clara Vidal"></span></td><td><div class="person"><span class="avatar" aria-hidden="true">CV</span><div>Clara Vidal<small>clara.vidal@gmail.com</small></div></div></td><td><div class="state-cell"><span class="tag warning"><svg class="ico" aria-hidden="true"><use href="#schedule_send" /></svg>Invitation non envoyée</span><small>compte créé le 9 octobre</small></div></td><td class="num"></td><td class="col-x"><button type="button" class="btn btn-icon btn-sm" aria-label="Actions pour Clara Vidal"><svg class="ico ico-18" aria-hidden="true"><use href="#more_horiz" /></svg></button></td></tr>
+          <tr><td class="col-check"><span class="check" role="checkbox" aria-checked="false" tabindex="0" aria-label="Sélectionner Thomas Girard"></span></td><td><div class="person"><span class="avatar" aria-hidden="true">TG</span><div>Thomas Girard<small>thomas.girard@etu.u-bordeaux.fr</small></div></div></td><td><div class="state-cell"><span class="tag"><svg class="ico" aria-hidden="true"><use href="#mail" /></svg>Invitation envoyée</span><small>le 1er octobre</small></div></td><td class="num"></td><td class="col-x"><button type="button" class="btn btn-icon btn-sm" aria-label="Actions pour Thomas Girard"><svg class="ico ico-18" aria-hidden="true"><use href="#more_horiz" /></svg></button></td></tr>
+          <tr><td class="col-check"><span class="check" role="checkbox" aria-checked="false" tabindex="0" aria-label="Sélectionner Awa Ndiaye"></span></td><td><div class="person"><span class="avatar" aria-hidden="true">AN</span><div>Awa Ndiaye<small>awa.ndiaye@ucad.edu.sn</small></div></div></td><td><div class="state-cell"><span class="tag"><svg class="ico" aria-hidden="true"><use href="#check" /></svg>Terminé</span><small>2 octobre à 18&nbsp;h&nbsp;05</small></div></td><td class="num">71&nbsp;/&nbsp;100</td><td class="col-x"><button type="button" class="btn btn-icon btn-sm" aria-label="Actions pour Awa Ndiaye"><svg class="ico ico-18" aria-hidden="true"><use href="#more_horiz" /></svg></button></td></tr>
         </tbody>
       </table>
-      <div class="table-foot"><span>5 sur 48</span><span class="spacer"></span><a class="btn btn-secondary btn-sm"><svg class="ico"><use href="#download" /></svg>Exporter les résultats</a></div>
-    </div>
+      <div class="table-foot"><span>7 sur 48</span><span class="spacer"></span><button type="button" class="btn btn-secondary btn-sm"><svg class="ico" aria-hidden="true"><use href="#download" /></svg>Exporter les résultats</button></div>
+    </section>
   </main>
 </div>

@@ -1,8 +1,16 @@
 - screen: connexion
-  note: "Le CAS de l'établissement est le chemin de la majorité, il prend le bouton primaire. Le mot de passe local est là pour les comptes créés par l'administration, en secondaire. S'il y a plusieurs CAS (le point d'API en renvoie la liste), un bouton par établissement."
+  note: "Le CAS de l'établissement est le chemin de la majorité, il prend le bouton primaire. Le mot de passe local est là pour les comptes créés par l'administration, comme celui de Sophie Lambert, en secondaire. S'il y a plusieurs CAS (le point d'API en renvoie la liste), un bouton par établissement."
 - screen: connexion
   note: "La vidéo de présentation quitte la page. Elle occupait la moitié de l'écran, se chargeait à chaque connexion et portait un titre en anglais. Elle devient un lien sur la couverture."
 - screen: connexion
-  note: "L'erreur nomme les deux champs sans dire lequel est faux, et oriente vers le bouton CAS, cause fréquente d'échec quand un utilisateur université tente le mot de passe local."
+  note: "L'erreur nomme les deux champs sans dire lequel est faux, et oriente vers le bouton du compte université, cause fréquente d'échec quand un utilisateur université tente le mot de passe local. Elle s'écrit sous le mot de passe, dans un emplacement réservé de deux lignes, vide par défaut : rien ne bouge entre les états et l'aide Moodle reste en bas."
 - screen: connexion
-  note: "Pendant la vérification, le bouton garde sa place et sa taille, le libellé cède la place à l'indicateur, le CAS est atténué. Rien ne bouge."
+  note: "Pendant la vérification, le bouton garde sa place, sa taille et sa couleur ; la roue prend la place de l'icône et le libellé dit « Connexion en cours ». Le compte université est atténué. L'emplacement du message reste vide à l'écran et annonce l'attente aux lecteurs d'écran (role status). Rien ne bouge."
+- screen: connexion
+  note: "Mot de passe oublié passe à droite du libellé, présent dans tous les états, avec une zone de clic de 36 px (44 px sur téléphone), au lieu de remplacer l'aide Moodle quand une erreur survient."
+- screen: connexion
+  note: "Sur téléphone, la couverture garde l'accroche, la phrase de présentation et le lien Voir la présentation, avec les mots de l'ordinateur : un collègue qui découvre PLaTon sur son téléphone doit savoir où il est. L'aide pour les étudiants de Moodle est la même phrase. Le bouton dit « Continuer avec le compte université », comme sur ordinateur."
+- screen: connexion
+  note: "Un lien d'évitement mène au formulaire ; l'accroche de la couverture est le titre de niveau 1, « Se connecter » le titre de niveau 2."
+- screen: connexion
+  note: "Erreur sur téléphone : la même que sur ordinateur, au même endroit. Le message s'inscrit dans l'emplacement réservé sous le mot de passe, nomme les deux champs sans dire lequel est faux et oriente vers le compte université ; rien ne bouge et l'aide Moodle reste en bas. Inès a tapé son identifiant université dans les champs du compte PLaTon, l'erreur la plus fréquente sur cette page."

@@ -8,67 +8,68 @@
         <div class="brand-org">Université Gustave Eiffel</div>
       </div>
     </div>
-    <a class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico"><use href="#add" /></svg>Créer</a>
+    <button type="button" class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico" aria-hidden="true"><use href="#add" /></svg>Créer</button>
     <nav class="nav">
-      <a class="nav-item" data-wf-to="enseignant"><svg class="ico"><use href="#home" /></svg>Accueil</a>
-      <a class="nav-item" data-wf-to="annonces"><svg class="ico"><use href="#campaign" /></svg>Annonces</a>
-      <a class="nav-item active" data-wf-to="mes-cours"><svg class="ico"><use href="#school" /></svg>Cours</a>
-      <a class="nav-item" data-wf-to="file"><svg class="ico"><use href="#rate_review" /></svg>Corrections<span class="count">14</span></a>
-      <a class="nav-item" data-wf-to="catalogue"><svg class="ico"><use href="#folder_open" /></svg>Ressources</a>
-      <a class="nav-item" data-wf-to="test"><svg class="ico"><use href="#fact_check" /></svg>Tests d'entrée</a>
+      <a href="#" class="nav-item" data-wf-to="enseignant"><svg class="ico" aria-hidden="true"><use href="#home" /></svg>Accueil</a>
+      <a href="#" class="nav-item" data-wf-to="annonces"><svg class="ico" aria-hidden="true"><use href="#campaign" /></svg>Annonces</a>
+      <a href="#" class="nav-item active" data-wf-to="mes-cours"><svg class="ico" aria-hidden="true"><use href="#school" /></svg>Cours</a>
+      <a href="#" class="nav-item" data-wf-to="file"><svg class="ico" aria-hidden="true"><use href="#rate_review" /></svg>Corrections</a>
+      <a href="#" class="nav-item" data-wf-to="catalogue"><svg class="ico" aria-hidden="true"><use href="#folder_open" /></svg>Ressources</a>
+      <a href="#" class="nav-item" data-wf-to="test"><svg class="ico" aria-hidden="true"><use href="#fact_check" /></svg>Tests d'entrée</a>
     </nav>
     <div class="sidebar-foot">
-      <a class="nav-item"><svg class="ico"><use href="#help" /></svg>Documentation</a>
-      <a class="nav-item"><svg class="ico"><use href="#notifications" /></svg>Notifications<span class="count">2</span></a>
+      <a href="#" class="nav-item"><svg class="ico" aria-hidden="true"><use href="#help" /></svg>Documentation</a>
+      <a href="#" class="nav-item"><svg class="ico" aria-hidden="true"><use href="#notifications" /></svg>Notifications<span class="count">2</span></a>
       <div class="me">
         <span class="avatar">KH</span>
         <div>
           <div class="me-name">Karim Haddad</div>
-          <div class="me-role">Enseignant</div>
+          <div class="me-role">Compte enseignant</div>
         </div>
-        <svg class="ico ico-16"><use href="#expand_more" /></svg>
+        <svg class="ico ico-16" aria-hidden="true"><use href="#expand_more" /></svg>
       </div>
       <a class="credit" href="https://github.com/cisstech/platon" aria-label="Code source de PLaTon, logiciel libre de cisstech"><svg class="ico ico-16" aria-hidden="true"><use href="#code" /></svg>Logiciel libre, par <strong>cisstech</strong></a>
     </div>
   </aside>
-  <main class="main" id="contenu">
+    <main class="main" id="contenu">
     <header class="page-head">
       <div>
-        <div class="crumbs"><span>Cours</span><svg class="ico"><use href="#chevron_right" /></svg><span>Algorithmique et programmation 1</span></div>
+        <div class="crumbs"><a href="#" data-wf-to="mes-cours">Cours</a><svg class="ico" aria-hidden="true"><use href="#chevron_right" /></svg><a href="#" data-wf-to="detail">Algorithmique et programmation 1</a></div>
         <h1 class="title">Ajouter une activité</h1>
-        <p class="page-sub">Dans la section Semaine 5.</p>
+        <p class="page-sub">Dans la section Semaine 5, qui contient Challenge&nbsp;: tris.</p>
       </div>
     </header>
-<div class="stepper-line"><span class="s done"><span class="n"><svg class="ico ico-16"><use href="#check" /></svg></span>Section</span><span class="sep"></span><span class="s now"><span class="n">2</span>Activités</span><span class="sep"></span><span class="s "><span class="n">3</span>Fonction et dates</span></div>    <div class="toolbar"><span class="segmented" role="tablist"><span class="on" data-wf-to="ajouter"><svg class="ico ico-16"><use href="#quiz" /></svg>Une activité prête</span><span class="" data-wf-to="ajouter-composer"><svg class="ico ico-16"><use href="#widgets" /></svg>Composer avec des exercices</span></span></div>
+    <div class="stepper-line" aria-label="Étapes de l'ajout"><span class="s done"><span class="n"><svg class="ico ico-16" aria-hidden="true"><use href="#check" /></svg></span>Section<span class="sr-only">, étape faite</span></span><span class="sep" aria-hidden="true"></span><span class="s now" aria-current="step"><span class="n">2</span>Activités</span><span class="sep" aria-hidden="true"></span><span class="s"><span class="n">3</span>Usage et dates</span></div>
+    <div class="toolbar"><span class="segmented" role="tablist" aria-label="D'où vient l'activité"><span role="tab" aria-selected="true" class="on" data-wf-to="ajouter"><svg class="ico ico-16" aria-hidden="true"><use href="#folder_open" /></svg>Une activité prête</span><span role="tab" aria-selected="false" data-wf-to="ajouter-composer"><svg class="ico ico-16" aria-hidden="true"><use href="#widgets" /></svg>Composer avec des exercices</span></span></div>
     <div class="filters">
-      <div class="input focused" style="flex: 1; max-width: 420px"><svg class="ico ico-18" style="margin: 0 8px 0 0; color: var(--color-subtle)"><use href="#search" /></svg><span>récursivité</span></div>
-      <a class="chip"><svg class="ico"><use href="#filter_list" /></svg>Filtres<span class="n">1</span></a>
-      <span class="chip applied">Statut&nbsp;: prêt<svg class="x"><use href="#close" /></svg></span>
-      <span class="select" style="margin-left: auto"><svg class="ico ico-16"><use href="#sort" /></svg>Pertinence<svg class="ico ico-16"><use href="#expand_more" /></svg></span>
+      <label class="sr-only" for="q-activites">Chercher une activité</label><div class="input focused search-field" id="q-activites" role="searchbox"><svg class="ico ico-18" aria-hidden="true"><use href="#search" /></svg><span>partiel</span></div>
+      <button type="button" class="chip"><svg class="ico" aria-hidden="true"><use href="#filter_list" /></svg>Filtres<span class="n" aria-label="1 filtre actif">1</span></button>
+      <span class="chip applied">Statut&nbsp;: prêt<button type="button" class="chip-remove" aria-label="Retirer le filtre Statut&nbsp;: prêt"><svg class="x" aria-hidden="true"><use href="#close" /></svg></button></span>
+      <span class="select sort-end" role="button" aria-haspopup="listbox" aria-label="Trier par pertinence"><svg class="ico ico-16" aria-hidden="true"><use href="#sort" /></svg>Pertinence<svg class="ico ico-16" aria-hidden="true"><use href="#expand_more" /></svg></span>
     </div>
-    <p class="muted" style="margin: 0 0 var(--spacing-3); font-size: 13px">3 activités trouvées. Vous pouvez en ajouter plusieurs d'un coup.</p>
+    <p class="small muted results-count" role="status">3 activités trouvées. Vous pouvez en ajouter plusieurs d'un coup.</p>
     <div class="grid-cards">
-          <div class="card pick-card on" role="checkbox" aria-checked="true">
-            <div class="pick-head"><span class="box"></span><div style="flex: 1; min-width: 0"><strong>TP 5&nbsp;: fonctions récursives</strong><p class="muted" style="margin: 4px 0 0; font-size: 13px; line-height: 19px">Factorielle, Fibonacci, puissance rapide, puis deux exercices sur les listes.</p></div></div>
+          <div class="card pick-card on" role="checkbox" aria-checked="true" aria-labelledby="pk-1">
+            <div class="pick-head"><span class="box"></span><div class="pick-text"><strong id="pk-1">Examen partiel 2</strong><p class="small muted">Récursivité, tris et tableaux&nbsp;: huit exercices, dont deux programmes à écrire en entier.</p></div></div>
             <div class="row-meta"><span class="tag-link">L1</span><span class="tag-link">Récursivité</span><span>8 exercices</span><span>Karim Haddad</span></div>
-            <div class="pick-tools"><button class="btn btn-ghost btn-sm"><svg class="ico"><use href="#visibility" /></svg>Prévisualiser</button><button class="btn btn-icon btn-sm" aria-label="Ouvrir la ressource" style="margin-left: auto"><svg class="ico ico-18"><use href="#open_in_new" /></svg></button></div>
+            <div class="pick-tools"><button type="button" class="btn btn-ghost btn-sm" aria-label="Prévisualiser Examen partiel 2"><svg class="ico" aria-hidden="true"><use href="#visibility" /></svg>Prévisualiser</button><button type="button" class="btn btn-icon btn-sm pick-open" aria-label="Ouvrir Examen partiel 2 dans les ressources" title="Ouvrir dans les ressources"><svg class="ico ico-18" aria-hidden="true"><use href="#open_in_new" /></svg></button></div>
           </div>
-          <div class="card pick-card" role="checkbox" aria-checked="false">
-            <div class="pick-head"><span class="box"></span><div style="flex: 1; min-width: 0"><strong>Entraînement&nbsp;: récursivité terminale</strong><p class="muted" style="margin: 4px 0 0; font-size: 13px; line-height: 19px">Réécrire quatre fonctions en récursivité terminale, avec tests.</p></div></div>
-            <div class="row-meta"><span class="tag-link">L1</span><span class="tag-link">Récursivité</span><span>4 exercices</span><span>Hélène Martin</span></div>
-            <div class="pick-tools"><button class="btn btn-ghost btn-sm"><svg class="ico"><use href="#visibility" /></svg>Prévisualiser</button><button class="btn btn-icon btn-sm" aria-label="Ouvrir la ressource" style="margin-left: auto"><svg class="ico ico-18"><use href="#open_in_new" /></svg></button></div>
+          <div class="card pick-card" role="checkbox" aria-checked="false" aria-labelledby="pk-2">
+            <div class="pick-head"><span class="box"></span><div class="pick-text"><strong id="pk-2">Examen partiel 2, session 2025</strong><p class="small muted">Le sujet de l'an dernier, gardé pour la seconde session.</p></div></div>
+            <div class="row-meta"><span class="tag-link">L1</span><span class="tag-link">Récursivité</span><span>8 exercices</span><span>Karim Haddad</span></div>
+            <div class="pick-tools"><button type="button" class="btn btn-ghost btn-sm" aria-label="Prévisualiser Examen partiel 2, session 2025"><svg class="ico" aria-hidden="true"><use href="#visibility" /></svg>Prévisualiser</button><button type="button" class="btn btn-icon btn-sm pick-open" aria-label="Ouvrir Examen partiel 2, session 2025 dans les ressources" title="Ouvrir dans les ressources"><svg class="ico ico-18" aria-hidden="true"><use href="#open_in_new" /></svg></button></div>
           </div>
-          <div class="card pick-card" role="checkbox" aria-checked="false">
-            <div class="pick-head"><span class="box"></span><div style="flex: 1; min-width: 0"><strong>Tours de Hanoï</strong><p class="muted" style="margin: 4px 0 0; font-size: 13px; line-height: 19px">Un exercice guidé en trois étapes, avec trace des appels.</p></div></div>
-            <div class="row-meta"><span class="tag-link">L2</span><span>3 exercices</span><span>Paul Renard</span></div>
-            <div class="pick-tools"><button class="btn btn-ghost btn-sm"><svg class="ico"><use href="#visibility" /></svg>Prévisualiser</button><button class="btn btn-icon btn-sm" aria-label="Ouvrir la ressource" style="margin-left: auto"><svg class="ico ico-18"><use href="#open_in_new" /></svg></button></div>
+          <div class="card pick-card" role="checkbox" aria-checked="false" aria-labelledby="pk-3">
+            <div class="pick-head"><span class="box"></span><div class="pick-text"><strong id="pk-3">Partiel blanc&nbsp;: récursivité</strong><p class="small muted">Six exercices au format de l'épreuve, corrigés automatiquement, pour s'entraîner avant.</p></div></div>
+            <div class="row-meta"><span class="tag-link">L1</span><span class="tag-link">Récursivité</span><span>6 exercices</span><span>Hélène Martin</span></div>
+            <div class="pick-tools"><button type="button" class="btn btn-ghost btn-sm" aria-label="Prévisualiser Partiel blanc&nbsp;: récursivité"><svg class="ico" aria-hidden="true"><use href="#visibility" /></svg>Prévisualiser</button><button type="button" class="btn btn-icon btn-sm pick-open" aria-label="Ouvrir Partiel blanc&nbsp;: récursivité dans les ressources" title="Ouvrir dans les ressources"><svg class="ico ico-18" aria-hidden="true"><use href="#open_in_new" /></svg></button></div>
           </div>
     </div>
-    <div class="selection-bar">
-      <strong>1 activité choisie</strong><span style="opacity: 0.8">TP 5&nbsp;: fonctions récursives</span>
-      <a class="btn btn-cover-quiet btn-sm" style="margin-left: auto">Tout désélectionner</a>
-      <a class="btn btn-cover btn-sm" data-wf-to="ajouter-fonction">Suivant<svg class="ico"><use href="#chevron_right" /></svg></a>
+    <div class="selection-bar" role="region" aria-label="Sélection">
+      <strong>1 activité choisie</strong><span class="sel-names">Examen partiel 2</span>
+      <button type="button" class="btn btn-cover-quiet btn-sm sel-first">Tout désélectionner</button>
+      <button type="button" class="btn btn-cover btn-sm" data-wf-to="ajouter-fonction">Suivant<svg class="ico" aria-hidden="true"><use href="#chevron_right" /></svg></button>
     </div>
-    <p class="muted" style="font-size: 13px; margin-top: var(--spacing-4)">Pas d'activité toute faite&nbsp;? <a data-wf-to="ajouter-composer">Composez-en une avec des exercices</a>, ou <a data-wf-to="modeles">créez un exercice à partir d'un modèle</a>.</p>
+    <p class="small muted page-foot-note">Pas d'activité toute faite&nbsp;? <a href="#" data-wf-to="ajouter-composer">Composez-en une avec des exercices</a>, ou <a href="#" data-wf-to="modeles">créez un exercice à partir d'un modèle</a>.</p>
   </main>
 </div>

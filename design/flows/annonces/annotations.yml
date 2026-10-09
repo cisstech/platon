@@ -1,4 +1,8 @@
 - screen: annonces
-  note: "La page Annonces actuelle : liste avec recherche à gauche, détail à droite (titre, date, auteur, contenu)."
+  note: "La page Annonces actuelle : liste avec recherche à gauche, détail à droite (titre, date, auteur, public, contenu). La recherche a un libellé lu par les lecteurs d'écran."
 - screen: annonces
   note: "Réorganisation : la fenêtre qui s'ouvre après la connexion (checkForAnnouncements) devient le bandeau de l'accueil. Même donnée, sans interrompre la personne qui vient pour rendre un TP."
+- screen: annonces
+  note: "Les quatre annonces de la plateforme, la plus récente en tête. « Les corrections détaillées arrivent » reste non lue, comme dans les notifications : elle porte un point. La maintenance est celle du bandeau de l'accueil, parce qu'une annonce sur la disponibilité du service passe avant les autres ; Inès arrive par « Lire l'annonce », la page s'ouvre donc sur elle : dimanche 4 octobre, de 7 h à 9 h. Son icône construction reste graphite, comme celle de chaque annonce : elle dit la nature de l'annonce, pas un état."
+- screen: annonces
+  note: "Sur téléphone, chaque annonce s'ouvre en place sous son titre, un bouton de 44 px qui dit s'il est ouvert. Arrivée par « Lire l'annonce » depuis l'accueil, la page s'ouvre sur l'annonce du bandeau, la maintenance ; les autres gardent leur icône, leur résumé et leur date, et la non lue son point."

@@ -1,0 +1,65 @@
+.shell {
+  display: grid;
+  grid-template-columns: var(--pl-cover-width) minmax(0, 1fr);
+  block-size: 100dvh;
+}
+
+.shell__cover {
+  block-size: 100dvh;
+}
+
+.shell__create {
+  justify-content: flex-start;
+}
+
+.shell__page {
+  min-inline-size: 0;
+  overflow-y: auto;
+  background: var(--pl-color-ground);
+}
+
+.shell__menu-name {
+  display: block;
+  font-weight: var(--pl-weight-strong);
+}
+
+.shell__menu-email {
+  display: block;
+  color: var(--pl-color-muted);
+  font: var(--pl-font-small);
+}
+
+.shell--narrow {
+  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.shell__sheet-head {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--pl-space-3);
+  padding: 0 var(--pl-space-2) var(--pl-space-3) var(--pl-space-4);
+  border-block-end: 1px solid var(--pl-color-line);
+}
+
+.shell__sheet-who {
+  display: grid;
+  flex: 1;
+  gap: var(--pl-space-1);
+  min-inline-size: 0;
+  padding-block-start: var(--pl-space-1);
+}
+
+.shell__sheet-name {
+  font: var(--pl-font-subheading);
+}
+
+.shell__sheet-detail {
+  overflow-wrap: anywhere;
+  color: var(--pl-color-muted);
+  font: var(--pl-font-small);
+}
+
+.shell__bell {
+  position: relative;
+}

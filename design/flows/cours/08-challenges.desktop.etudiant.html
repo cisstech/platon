@@ -9,64 +9,72 @@
       </div>
     </div>
     <nav class="nav">
-      <a class="nav-item" data-wf-to="etudiant"><svg class="ico"><use href="#home" /></svg>Accueil</a>
-      <a class="nav-item" data-wf-to="annonces"><svg class="ico"><use href="#campaign" /></svg>Annonces</a>
-      <a class="nav-item active" data-wf-to="mes-cours"><svg class="ico"><use href="#school" /></svg>Cours</a>
+      <a href="#" class="nav-item" data-wf-to="etudiant"><svg class="ico" aria-hidden="true"><use href="#home" /></svg>Accueil</a>
+      <a href="#" class="nav-item" data-wf-to="annonces"><svg class="ico" aria-hidden="true"><use href="#campaign" /></svg>Annonces</a>
+      <a href="#" class="nav-item active" data-wf-to="mes-cours"><svg class="ico" aria-hidden="true"><use href="#school" /></svg>Cours</a>
     </nav>
     <div class="sidebar-foot">
-      <a class="nav-item"><svg class="ico"><use href="#notifications" /></svg>Notifications<span class="count">3</span></a>
+      <a href="#" class="nav-item"><svg class="ico" aria-hidden="true"><use href="#notifications" /></svg>Notifications<span class="count">3</span></a>
       <div class="me">
         <span class="avatar">IB</span>
         <div>
           <div class="me-name">Inès Benali</div>
-          <div class="me-role">Étudiante</div>
+          <div class="me-role">Compte étudiant</div>
         </div>
-        <svg class="ico ico-16"><use href="#expand_more" /></svg>
+        <svg class="ico ico-16" aria-hidden="true"><use href="#expand_more" /></svg>
       </div>
       <a class="credit" href="https://github.com/cisstech/platon" aria-label="Code source de PLaTon, logiciel libre de cisstech"><svg class="ico ico-16" aria-hidden="true"><use href="#code" /></svg>Logiciel libre, par <strong>cisstech</strong></a>
     </div>
   </aside>
   <main class="main" id="contenu">
     <header class="page-head">
-      <div>
-        <div class="crumbs"><a data-wf-to="mes-cours">Cours</a><svg class="ico"><use href="#chevron_right" /></svg><span>Algorithmique et programmation 1</span></div>
-        <h1 class="title" style="display: flex; align-items: center; gap: 6px">Algorithmique et programmation 1</h1>
+      <div class="course-mark hue-lagon" aria-hidden="true">AP1</div>
+      <div class="head-main">
+        <div class="crumbs"><a href="#" data-wf-to="mes-cours">Cours</a><svg class="ico" aria-hidden="true"><use href="#chevron_right" /></svg><span>Algorithmique et programmation 1</span></div>
+        <h1 class="title">Algorithmique et programmation 1</h1>
         <p class="page-sub">Licence 1 Informatique, semestre 1. Bases de la programmation en Python.</p>
-        
+        <p class="head-meta"><span><svg class="ico ico-16" aria-hidden="true"><use href="#person" /></svg>Karim Haddad, responsable, et 5 autres enseignants</span><span class="due soon"><svg class="ico ico-16" aria-hidden="true"><use href="#schedule" /></svg>Prochaine échéance ce soir à 23&nbsp;h&nbsp;59</span></p>
       </div>
-      
     </header>
-    <div class="tabs"><a class="tab" data-wf-to="detail"><svg class="ico"><use href="#grid_view" /></svg>Vue d'ensemble</a><a class="tab active" data-wf-to="challenges"><svg class="ico"><use href="#emoji_events" /></svg>Challenges <span class="count">1</span></a><a class="tab"><svg class="ico"><use href="#groups" /></svg>Membres <span class="count">308</span></a><a class="tab"><svg class="ico"><use href="#group_add" /></svg>Groupes <span class="count">4</span></a></div>
+    <nav class="tabs" aria-label="Onglets du cours"><a href="#" class="tab" data-wf-to="detail"><svg class="ico" aria-hidden="true"><use href="#grid_view" /></svg>Vue d'ensemble</a><a href="#" class="tab active" aria-current="page" data-wf-to="challenges"><svg class="ico" aria-hidden="true"><use href="#emoji_events" /></svg>Challenges <span class="count">1</span></a></nav>
     <div class="layout">
       <div>
         <div class="toolbar">
-          <span class="select" style="min-width: 320px"><svg class="ico ico-16"><use href="#emoji_events" /></svg>Tous les challenges du cours<svg class="ico ico-16"><use href="#expand_more" /></svg></span>
+          <label class="sr-only" for="ch-select">Classement affiché</label><span class="select wide" id="ch-select" role="button" aria-haspopup="listbox"><svg class="ico ico-16" aria-hidden="true"><use href="#emoji_events" /></svg>Tous les challenges du cours<svg class="ico ico-16" aria-hidden="true"><use href="#expand_more" /></svg></span>
         </div>
-        <div class="podium">
-          <div class="podium-step second"><span class="avatar">BM</span><strong>Bastien Morel</strong><span class="num">287 points</span><span class="rank">2</span></div>
-          <div class="podium-step first"><span class="avatar">CG</span><strong>Chloé Garnier</strong><span class="num">300 points</span><span class="rank">1</span></div>
-          <div class="podium-step third"><span class="avatar">AR</span><strong>Amélie Roux</strong><span class="num">271 points</span><span class="rank">3</span></div>
-        </div>
-        <div class="card" style="padding: 0; overflow: hidden">
-<div class="rank-row"><span class="rank">4</span><span class="avatar">HM</span><span>Hugo Marchand</span><span class="pts num">256 points</span></div>
-<div class="rank-row"><span class="rank">5</span><span class="avatar">ÉF</span><span>Élise Faure</span><span class="pts num">249 points</span></div>
-<div class="rank-row me"><span class="rank">6</span><span class="avatar">IB</span><span>Inès Benali <span class="muted">(vous)</span></span><span class="pts num">231 points</span></div>
-<div class="rank-row"><span class="rank">7</span><span class="avatar">FB</span><span>Farid Benkirane</span><span class="pts num">214 points</span></div>
-<div class="rank-row"><span class="rank">8</span><span class="avatar">DL</span><span>David Lemaire</span><span class="pts num">198 points</span></div>
-        </div>
-        <p class="muted" style="font-size: 13px; margin-top: var(--spacing-3)">Les 100 meilleurs scores cumulés sur les challenges du cours. Sur un challenge, la 1re place rapporte 100 points, la 2e 99, jusqu'à 1 point à la 100e.</p>
+        <ol class="podium hue-lagon" aria-label="Les trois premiers">
+          <li class="podium-step first"><svg class="ico trophy" aria-hidden="true"><use href="#emoji_events" /></svg><span class="avatar" aria-hidden="true">CG</span><strong>Chloé Garnier</strong><span class="num">600&nbsp;points</span><span class="rank"><span class="sr-only">Place </span>1</span></li>
+          <li class="podium-step second"><span class="avatar" aria-hidden="true">BM</span><strong>Bastien Morel</strong><span class="num">599&nbsp;points</span><span class="rank"><span class="sr-only">Place </span>2</span></li>
+          <li class="podium-step third"><span class="avatar" aria-hidden="true">AR</span><strong>Amélie Roux</strong><span class="num">598&nbsp;points</span><span class="rank"><span class="sr-only">Place </span>3</span></li>
+        </ol>
+        <ol class="card rank-list" start="4">
+<li class="rank-row"><span class="rank">4</span><span class="avatar" aria-hidden="true">HM</span><span>Hugo Marchand</span><span class="pts num">597&nbsp;points</span></li>
+<li class="rank-row"><span class="rank">5</span><span class="avatar" aria-hidden="true">ÉF</span><span>Élise Faure</span><span class="pts num">596&nbsp;points</span></li>
+<li class="rank-row"><span class="rank">6</span><span class="avatar" aria-hidden="true">SK</span><span>Sarah Koné</span><span class="pts num">595&nbsp;points</span></li>
+<li class="rank-row"><span class="rank">7</span><span class="avatar" aria-hidden="true">FB</span><span>Farid Benkirane</span><span class="pts num">594&nbsp;points</span></li>
+<li class="rank-row"><span class="rank">8</span><span class="avatar" aria-hidden="true">DL</span><span>David Lemaire</span><span class="pts num">593&nbsp;points</span></li>
+        </ol>
+        <p class="small muted footnote">41 étudiants ont réussi le challenge. Le classement retient les 100 premiers à réussir tous ses exercices, dans l'ordre de réussite&nbsp;: 100 points par exercice, plus 100 points pour la 1re place, 99 pour la 2e, et ainsi de suite.</p>
       </div>
       <aside class="stack">
-        <section>
-          <div class="section-head"><h2 class="heading">Challenges du cours</h2></div>
-          <div class="card rows">
+        <section aria-labelledby="me-t">
+          <div class="section-head"><h2 class="heading" id="me-t">Votre place</h2></div>
+          <div class="card card-pad next-card hue-lagon">
+            <p class="subheading">Pas encore au classement</p>
+            <p class="small muted">Réussissez les 5 exercices de Challenge&nbsp;: tris pour y entrer. Plus tôt vous réussissez, plus vous gagnez de points.</p>
+            <div class="progress"><div class="bar wide" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" aria-label="2 sur 5 exercices réussis"><span style="width: 40%"></span></div><span class="nowrap">2 sur 5</span></div>
+            <button type="button" class="btn btn-primary" data-wf-to="exercice">Reprendre le challenge</button>
+          </div>
+        </section>
+        <section aria-labelledby="ch-t">
+          <div class="section-head"><h2 class="heading" id="ch-t">Challenges du cours</h2></div>
+          <div class="card rows hue-lagon">
             <div class="row">
-              <span class="lead-icon hued hue-ambre"><svg class="ico"><use href="#emoji_events" /></svg></span>
+              <span class="lead-icon hued" aria-hidden="true"><svg class="ico" aria-hidden="true"><use href="#emoji_events" /></svg></span>
               <div class="row-main">
                 <div class="row-title">Challenge&nbsp;: tris</div>
-                <div class="row-meta"><span>5 exercices</span><span>Sans fermeture</span></div>
+                <div class="row-meta"><span>5 exercices</span><span class="due none"><svg class="ico" aria-hidden="true"><use href="#schedule" /></svg>Sans échéance</span><span>41 réussites</span></div>
               </div>
-              <div class="row-side"></div>
             </div>
           </div>
         </section>

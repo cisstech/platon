@@ -42,11 +42,20 @@ export class NotificationChangeGraphModel {
   notifications?: NotificationGraphModel[]
 }
 
+/** A filter sent as null is not set: `toBoolean` alone would read it as true. */
+const toOptionalBoolean = ({ value }: { value: unknown }) => (value == null ? undefined : toBoolean(value as string))
+
 @InputType('NotificationFiltersInput')
 export class NotificationFiltersInput implements NotificationFilters {
   @Field(() => Boolean, { nullable: true })
-  @Transform(({ value }) => toBoolean(value))
+  @Transform(toOptionalBoolean)
   @IsBoolean()
   @IsOptional()
   readonly unread?: boolean
+
+  @Field(() => Boolean, { nullable: true })
+  @Transform(toOptionalBoolean)
+  @IsBoolean()
+  @IsOptional()
+  readonly excludeSignals?: boolean
 }

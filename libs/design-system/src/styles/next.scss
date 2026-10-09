@@ -19,6 +19,49 @@
   background: var(--pl-color-scrim);
 }
 
+// How the panels arrive: the cover from the start edge on a narrow screen, the sheets from the bottom,
+// a popover from just below, a whole screen from the end edge.
+.pl-cover-panel {
+  animation: pl-cover-panel-in var(--pl-duration-panel) var(--pl-ease-standard);
+}
+
+.pl-sheet-panel {
+  animation: pl-sheet-panel-in var(--pl-duration-panel) var(--pl-ease-standard);
+}
+
+.pl-popover-panel {
+  animation: pl-popover-panel-in var(--pl-duration-menu) var(--pl-ease-standard);
+}
+
+.pl-screen-panel {
+  animation: pl-screen-panel-in var(--pl-duration-panel) var(--pl-ease-standard);
+}
+
+@keyframes pl-cover-panel-in {
+  from {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes pl-sheet-panel-in {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes pl-popover-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--pl-space-2));
+  }
+}
+
+@keyframes pl-screen-panel-in {
+  from {
+    transform: translateX(100%);
+  }
+}
+
 *,
 *::before,
 *::after {

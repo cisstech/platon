@@ -1,0 +1,220 @@
+/* Administration: local patterns only. Tokens from design.md, closed type scale. */
+
+/* Admin mode marker: a neutral tag above the title of every administration page, never an alarm colour. */
+.crumbs.admin-mode {
+  gap: var(--spacing-2);
+}
+
+/* ---------- Lists: search, table card, selection, sorting ---------- */
+
+/* A card that holds a table: the rows run edge to edge and the corners clip them. */
+.card.table-card {
+  overflow: hidden;
+}
+.table-note {
+  margin-top: var(--spacing-3);
+}
+.table .cell-actions {
+  width: 1%;
+  white-space: nowrap;
+  text-align: right;
+}
+.table .person .tag {
+  margin-left: var(--spacing-1);
+}
+.table .url {
+  font-size: 13px;
+  line-height: 18px;
+  word-break: break-all;
+}
+
+.check.mixed::after {
+  content: '';
+  width: 8px;
+  height: 2px;
+  border-radius: var(--rounded-xs);
+  background: var(--color-surface);
+}
+.check[aria-disabled='true'] {
+  border-color: var(--color-line-strong);
+  background: var(--color-graphite-50);
+  cursor: not-allowed;
+}
+.table tr.is-open td {
+  background: var(--color-surface-muted);
+}
+
+.selection-bar .sel-first {
+  margin-left: auto;
+}
+.selection-bar strong {
+  white-space: nowrap;
+}
+
+/* Sub-switch inside a tab (Connexions: LMS, CAS), with the count of each. */
+.segmented small {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+  color: var(--color-subtle);
+  font-feature-settings: 'tnum' 1;
+}
+
+/* ---------- Dialogs and drawers ---------- */
+
+/* A dialog without a head opens on its question. */
+.modal > .drawer-body:first-child {
+  padding-top: var(--spacing-5);
+}
+.modal .drawer-body > h2 + p {
+  margin-top: var(--spacing-2);
+}
+.confirm-object + .confirm-object {
+  margin-top: var(--spacing-2);
+}
+.consequences-head {
+  margin-top: var(--spacing-4);
+}
+.consequences-head + .consequences {
+  margin-top: var(--spacing-2);
+}
+.drawer-foot .foot-start {
+  margin-right: auto;
+}
+
+/* A person named in a confirmation dialog gets the same 40 px footprint as a course mark. */
+.confirm-object .avatar,
+.confirm-object .lead-icon {
+  width: 40px;
+  height: 40px;
+}
+
+/* Forms: fields keep one rhythm, a group of choices is a fieldset with its legend. */
+.drawer-body > * + .field,
+.drawer-body > * + .field-row {
+  margin-top: var(--spacing-4);
+}
+fieldset.field {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+fieldset.field legend {
+  margin-bottom: 6px;
+  padding: 0;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 600;
+}
+.input .input-tools {
+  display: flex;
+  margin-left: auto;
+}
+.input .input-tools .btn-icon {
+  margin: 0;
+}
+.input .input-value {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+.input .input-value .ico {
+  margin: 0;
+}
+
+/* A platform group opens in a wider drawer, its tabs flush with the head. */
+.drawer-right.group-drawer {
+  width: 560px;
+}
+.drawer-right > .tabs {
+  margin: 0;
+  padding: 0 var(--spacing-4);
+}
+
+/* The row menu opens under the row it acts on; the clear scrim only catches the click outside. */
+.menu.row-menu {
+  top: 336px;
+  right: 40px;
+  width: 280px;
+}
+
+/* Announcement composer: the text on the left, the publication settings on the right. */
+.modal .compose {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  min-height: 0;
+}
+.compose-side {
+  border-left: 1px solid var(--color-line);
+}
+.input.rich {
+  height: 160px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-2);
+  padding-top: 10px;
+}
+
+/* ---------- Tags: two vocabularies side by side, renamed and deleted in place ---------- */
+
+.tag-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-6);
+  align-items: start;
+}
+.tag-columns .section-head {
+  margin-bottom: 0;
+}
+.tag-desc {
+  margin: 2px 0 var(--spacing-3);
+}
+.tag-add {
+  display: flex;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-2);
+}
+.tag-add .input {
+  flex: 1;
+  height: 36px;
+}
+.tag-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tag-list li {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  min-height: 40px;
+  border-bottom: 1px solid var(--color-line);
+}
+.tag-list .tag-name {
+  flex: 1;
+  min-width: 0;
+  font-weight: 600;
+}
+.tag-list .tag-uses {
+  margin-right: var(--spacing-2);
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--color-muted);
+  font-feature-settings: 'tnum' 1;
+}
+.tag-list li.editing {
+  flex-wrap: wrap;
+  padding: var(--spacing-1) 0 var(--spacing-2);
+}
+.tag-list li.editing .input {
+  flex: 1;
+  height: 36px;
+}
+.tag-list li.editing .field-hint {
+  flex-basis: 100%;
+  margin-top: var(--spacing-1);
+}
+.tag-foot {
+  margin-top: var(--spacing-2);
+}

@@ -8,7 +8,11 @@ const meta: Meta<Toast> = {
   argTypes: {
     tone: { control: 'inline-radio', options: ['info', 'success', 'warning', 'danger', 'loading'] },
   },
-  args: { tone: 'success', message: 'Exercise saved', dismissLabel: 'Close' },
+  args: {
+    tone: 'success',
+    message: 'Exercise saved in your personal circle, version 1.',
+    dismissLabel: 'Close the notification',
+  },
 }
 
 export default meta
@@ -36,12 +40,24 @@ export const Loading: Story = {
   args: { tone: 'loading', message: 'Importing 128 grades', dismissLabel: undefined },
 }
 
+export const WithAction: Story = {
+  name: 'With an action',
+  args: {
+    tone: 'success',
+    message: 'Gaëlle Picard is no longer a member of the course.',
+    actionLabel: 'Undo',
+    actionIcon: 'undo',
+    dismissLabel: 'Close the notification',
+  },
+}
+
 export const Stack: Story = {
   render: () => ({
     template: `
       <div class="story-stack">
-        <pl-toast tone="success" message="Exercise saved" dismissLabel="Close" />
-        <pl-toast tone="danger" title="Save failed" message="The server did not answer." dismissLabel="Close" />
+        <pl-toast tone="success" message="Exercise saved in your personal circle, version 1." dismissLabel="Close the notification" />
+        <pl-toast tone="success" message="The group « Thursday support » was deleted. Its 12 students stay in the course." actionLabel="Undo" actionIcon="undo" dismissLabel="Close the notification" />
+        <pl-toast tone="danger" title="Save failed" message="The server did not answer." dismissLabel="Close the notification" />
         <pl-toast tone="loading" message="Importing 128 grades" />
       </div>
     `,

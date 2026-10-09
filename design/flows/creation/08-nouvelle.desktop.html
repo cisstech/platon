@@ -8,25 +8,25 @@
         <div class="brand-org">Université Gustave Eiffel</div>
       </div>
     </div>
-    <a class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico"><use href="#add" /></svg>Créer</a>
+    <button type="button" class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico" aria-hidden="true"><use href="#add" /></svg>Créer</button>
     <nav class="nav">
-      <a class="nav-item" data-wf-to="enseignant"><svg class="ico"><use href="#home" /></svg>Accueil</a>
-      <a class="nav-item" data-wf-to="annonces"><svg class="ico"><use href="#campaign" /></svg>Annonces</a>
-      <a class="nav-item" data-wf-to="mes-cours"><svg class="ico"><use href="#school" /></svg>Cours</a>
-      <a class="nav-item" data-wf-to="file"><svg class="ico"><use href="#rate_review" /></svg>Corrections<span class="count">14</span></a>
-      <a class="nav-item active" data-wf-to="catalogue"><svg class="ico"><use href="#folder_open" /></svg>Ressources</a>
-      <a class="nav-item" data-wf-to="test"><svg class="ico"><use href="#fact_check" /></svg>Tests d'entrée</a>
+      <a href="#" class="nav-item" data-wf-to="enseignant"><svg class="ico" aria-hidden="true"><use href="#home" /></svg>Accueil</a>
+      <a href="#" class="nav-item" data-wf-to="annonces"><svg class="ico" aria-hidden="true"><use href="#campaign" /></svg>Annonces</a>
+      <a href="#" class="nav-item" data-wf-to="mes-cours"><svg class="ico" aria-hidden="true"><use href="#school" /></svg>Cours</a>
+      <a href="#" class="nav-item" data-wf-to="file"><svg class="ico" aria-hidden="true"><use href="#rate_review" /></svg>Corrections<span class="count">2</span></a>
+      <a href="#" class="nav-item active" data-wf-to="catalogue"><svg class="ico" aria-hidden="true"><use href="#folder_open" /></svg>Ressources</a>
+      <a href="#" class="nav-item" data-wf-to="test"><svg class="ico" aria-hidden="true"><use href="#fact_check" /></svg>Tests d'entrée</a>
     </nav>
     <div class="sidebar-foot">
-      <a class="nav-item"><svg class="ico"><use href="#help" /></svg>Documentation</a>
-      <a class="nav-item"><svg class="ico"><use href="#notifications" /></svg>Notifications<span class="count">2</span></a>
+      <a href="#" class="nav-item"><svg class="ico" aria-hidden="true"><use href="#help" /></svg>Documentation</a>
+      <a href="#" class="nav-item"><svg class="ico" aria-hidden="true"><use href="#notifications" /></svg>Notifications<span class="count">2</span></a>
       <div class="me">
         <span class="avatar">KH</span>
         <div>
           <div class="me-name">Karim Haddad</div>
-          <div class="me-role">Enseignant</div>
+          <div class="me-role">Compte enseignant</div>
         </div>
-        <svg class="ico ico-16"><use href="#expand_more" /></svg>
+        <svg class="ico ico-16" aria-hidden="true"><use href="#expand_more" /></svg>
       </div>
       <a class="credit" href="https://github.com/cisstech/platon" aria-label="Code source de PLaTon, logiciel libre de cisstech"><svg class="ico ico-16" aria-hidden="true"><use href="#code" /></svg>Logiciel libre, par <strong>cisstech</strong></a>
     </div>
@@ -34,43 +34,43 @@
   <main class="main" id="contenu">
     <header class="page-head">
       <div>
-        <div class="crumbs"><span>Ressources</span><svg class="ico"><use href="#chevron_right" /></svg><span>Nouvelle ressource</span></div>
+        <div class="crumbs"><a href="#" data-wf-to="catalogue">Ressources</a><svg class="ico" aria-hidden="true"><use href="#chevron_right" /></svg><span>Nouvelle ressource</span></div>
         <h1 class="title">Nouvelle ressource</h1>
-        <p class="page-sub">Un exercice, une activité ou un cercle, écrit dans l'éditeur.</p>
+        <p class="page-sub">Un exercice ou une activité, écrit dans l'éditeur de code.</p>
       </div>
     </header>
-    <div class="card card-pad" style="max-width: 720px">
+    <div class="card card-pad new-form">
       <div class="form-section">
-        <h3 class="subheading">Quoi</h3>
-        <div class="choice-cards" style="grid-template-columns: repeat(3, 1fr)">
-          <div class="choice on"><span class="radio"></span><div class="choice-body"><strong>Exercice</strong><p>Une question, écrite en PLE.</p></div></div>
-          <div class="choice"><span class="radio"></span><div class="choice-body"><strong>Activité</strong><p>Des exercices assemblés, en PLA.</p></div></div>
-          <div class="choice"><span class="radio"></span><div class="choice-body"><strong>Cercle</strong><p>Un dossier partagé avec des membres.</p></div></div>
+        <h2 class="subheading" id="quoi-l">Que voulez-vous créer&nbsp;?</h2>
+        <div class="choice-cards two" role="radiogroup" aria-labelledby="quoi-l">
+          <div class="choice on" role="radio" aria-checked="true" tabindex="0"><span class="radio"></span><div class="choice-body"><svg class="glyph" aria-hidden="true"><use href="#glyph-exercice" /></svg><strong>Exercice</strong><p>Une question corrigée automatiquement, écrite en code.</p></div></div>
+          <div class="choice" role="radio" aria-checked="false" tabindex="-1"><span class="radio"></span><div class="choice-body"><svg class="glyph" aria-hidden="true"><use href="#glyph-activite" /></svg><strong>Activité</strong><p>Une série d'exercices à proposer dans vos cours.</p></div></div>
         </div>
       </div>
       <div class="form-section">
-        <h3 class="subheading">Où</h3>
-        <div class="field"><label>Cercle</label><div class="input"><span><svg class="ico ico-16"><use href="#folder_open" /></svg> Algorithmique</span><a style="margin-left: auto; font-size: 13px" data-wf-to="cercles">Changer</a></div><span class="field-hint">Le cercle d'où vous venez. Ses membres pourront voir la ressource.</span></div>
+        <h2 class="subheading">Où la ranger&nbsp;?</h2>
+        <div class="field"><label for="nr-cercle">Cercle</label><div class="input" id="nr-cercle" aria-describedby="nr-cercle-hint"><svg class="ico ico-16" aria-hidden="true"><use href="#folder_open" /></svg><span>Algorithmique</span><button type="button" class="btn btn-ghost btn-sm field-action" data-wf-to="cercles" aria-label="Changer de cercle">Changer</button></div><span class="field-hint" id="nr-cercle-hint">Un cercle est un dossier partagé avec des collègues&nbsp;: ce que vous y rangez, ils le voient et peuvent le modifier.</span></div>
       </div>
       <div class="form-section">
-        <h3 class="subheading">Présentation</h3>
-        <div class="field"><label>Nom</label><div class="input focused"><span>Parcours en largeur d'un graphe</span></div></div>
-        <div class="field" style="margin-top: var(--spacing-3)"><label>Description</label><div class="input" style="height: 64px; align-items: flex-start; padding-top: 8px"><span>Écrire un BFS et renvoyer l'ordre de visite depuis un sommet.</span></div></div>
-        <div class="field-row" style="margin-top: var(--spacing-3)">
-          <div class="field"><label>Topics <span class="muted">(facultatif)</span></label><div class="input"><span>Graphes</span></div></div>
-          <div class="field"><label>Niveaux <span class="muted">(facultatif)</span></label><div class="input"><span>L2</span></div></div>
+        <h2 class="subheading">Comment la décrire&nbsp;?</h2>
+        <div class="field"><label for="nr-nom">Nom</label><div class="input focused" id="nr-nom"><span>Parcours en largeur d'un graphe</span></div></div>
+        <div class="field"><label for="nr-desc">Description</label><div class="input multiline" id="nr-desc"><span>Écrire un BFS et renvoyer l'ordre de visite depuis un sommet.</span></div></div>
+        <div class="field-row add-row">
+          <div class="field"><label for="nr-topics">Topics <span class="muted optional">(facultatif)</span></label><div class="input" id="nr-topics" aria-describedby="nr-topics-hint"><span>Graphes</span></div></div>
+          <div class="field"><label for="nr-niveaux">Niveaux <span class="muted optional">(facultatif)</span></label><div class="input" id="nr-niveaux" aria-describedby="nr-topics-hint"><span>L2</span></div></div>
         </div>
+        <p class="field-hint" id="nr-topics-hint">Les topics sont les thèmes de la ressource&nbsp;; avec les niveaux, ils aident vos collègues à la retrouver.</p>
       </div>
       <div class="form-section">
-        <h3 class="subheading">Comment</h3>
-        <div class="choice-cards">
-          <div class="choice"><span class="radio"></span><div class="choice-body"><strong>À partir d'un modèle</strong><p>Choisir un modèle de ce cercle ou certifié, puis le remplir dans l'atelier.</p></div></div>
-          <div class="choice on"><span class="radio"></span><div class="choice-body"><strong>De zéro</strong><p>Ouvre l'éditeur complet avec un fichier main.ple vide.</p></div></div>
+        <h2 class="subheading" id="debut-l">Par où commencer&nbsp;?</h2>
+        <div class="choice-cards" role="radiogroup" aria-labelledby="debut-l">
+          <div class="choice" role="radio" aria-checked="false" tabindex="-1"><span class="radio"></span><div class="choice-body"><strong>À partir d'un modèle</strong><p>Choisir un modèle de ce cercle ou certifié, puis le remplir dans l'atelier, sans code.</p></div></div>
+          <div class="choice on" role="radio" aria-checked="true" tabindex="0"><span class="radio"></span><div class="choice-body"><strong>Page blanche</strong><p>Ouvre l'éditeur de code complet, sur un exercice vide.</p></div></div>
         </div>
       </div>
-      <div style="display: flex; gap: var(--spacing-2); justify-content: flex-end">
-        <a class="btn btn-secondary" data-wf-to="catalogue">Annuler</a>
-        <a class="btn btn-primary"><svg class="ico"><use href="#open_in_new" /></svg>Créer et ouvrir l'éditeur</a>
+      <div class="form-foot">
+        <button type="button" class="btn btn-secondary" data-wf-to="catalogue">Annuler</button>
+        <button type="button" class="btn btn-primary"><svg class="ico" aria-hidden="true"><use href="#open_in_new" /></svg>Créer et ouvrir l'éditeur</button>
       </div>
     </div>
   </main>

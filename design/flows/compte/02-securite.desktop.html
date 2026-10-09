@@ -8,34 +8,34 @@
         <div class="brand-org">Université Gustave Eiffel</div>
       </div>
     </div>
-    <nav class="nav">
-      <a class="nav-item" data-wf-to="etudiant"><svg class="ico"><use href="#home" /></svg>Accueil</a>
-      <a class="nav-item" data-wf-to="annonces"><svg class="ico"><use href="#campaign" /></svg>Annonces</a>
-      <a class="nav-item" data-wf-to="mes-cours"><svg class="ico"><use href="#school" /></svg>Cours</a>
+    <nav class="nav" aria-label="Navigation principale">
+      <a href="#" class="nav-item" data-wf-to="etudiant"><svg class="ico" aria-hidden="true"><use href="#home" /></svg>Accueil</a>
+      <a href="#" class="nav-item" data-wf-to="annonces"><svg class="ico" aria-hidden="true"><use href="#campaign" /></svg>Annonces</a>
+      <a href="#" class="nav-item" data-wf-to="mes-cours"><svg class="ico" aria-hidden="true"><use href="#school" /></svg>Cours</a>
     </nav>
     <div class="sidebar-foot">
-      <a class="nav-item"><svg class="ico"><use href="#notifications" /></svg>Notifications<span class="count">3</span></a>
-      <div class="me">
-        <span class="avatar">IB</span>
+      <a href="#" class="nav-item" aria-haspopup="dialog" aria-expanded="false" data-wf-to="notifications"><svg class="ico" aria-hidden="true"><use href="#notifications" /></svg>Notifications<span class="count">3<span class="sr-only"> non lues</span></span></a>
+      <div class="me" role="button" tabindex="0" aria-haspopup="menu" aria-expanded="false" data-wf-to="profil">
+        <span class="avatar" aria-hidden="true">IB</span>
         <div>
           <div class="me-name">Inès Benali</div>
-          <div class="me-role">Étudiante</div>
+          <div class="me-role">Compte étudiant</div>
         </div>
-        <svg class="ico ico-16"><use href="#expand_more" /></svg>
+        <svg class="ico ico-16" aria-hidden="true"><use href="#expand_more" /></svg>
       </div>
       <a class="credit" href="https://github.com/cisstech/platon" aria-label="Code source de PLaTon, logiciel libre de cisstech"><svg class="ico ico-16" aria-hidden="true"><use href="#code" /></svg>Logiciel libre, par <strong>cisstech</strong></a>
     </div>
   </aside>
   <main class="main" id="contenu">
     <header class="page-head"><div><h1 class="title">Mon compte</h1></div></header>
-    <div class="tabs"><a class="tab" data-wf-to="a-propos"><svg class="ico"><use href="#person" /></svg>À propos</a><a class="tab active" data-wf-to="securite"><svg class="ico"><use href="#lock" /></svg>Sécurité</a></div>
-    <section class="card card-pad" style="max-width: 560px">
-      <h2 class="subheading" style="margin-bottom: 4px">Créer un mot de passe</h2>
-      <p class="muted" style="margin: 0 0 var(--spacing-3); font-size: 13px">Vous vous connectez par le CAS de l'université. Un mot de passe PLaTon permet aussi de vous connecter sans lui.</p>
-      <div class="field"><label>Nouveau mot de passe</label><div class="input focused"><span class="masked">●●●●●●●●●</span><button class="btn btn-icon btn-sm" aria-label="Afficher" style="margin-left: auto"><svg class="ico ico-18"><use href="#visibility" /></svg></button></div></div>
-      <ul style="list-style: none; margin: var(--spacing-2) 0 var(--spacing-3); padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; font-size: 13px"><li style="display: flex; align-items: center; gap: 6px; color: var(--color-muted)"><svg class="ico ico-16"><use href="#radio_button_unchecked" /></svg>12 caractères</li><li style="display: flex; align-items: center; gap: 6px; color: var(--color-success-ink)"><svg class="ico ico-16"><use href="#check_circle" /></svg>une majuscule</li><li style="display: flex; align-items: center; gap: 6px; color: var(--color-success-ink)"><svg class="ico ico-16"><use href="#check_circle" /></svg>une minuscule</li><li style="display: flex; align-items: center; gap: 6px; color: var(--color-success-ink)"><svg class="ico ico-16"><use href="#check_circle" /></svg>un chiffre</li><li style="display: flex; align-items: center; gap: 6px; color: var(--color-muted)"><svg class="ico ico-16"><use href="#radio_button_unchecked" /></svg>un caractère spécial</li></ul>
-      <div class="field"><label>Confirmer le mot de passe</label><div class="input"><span class="placeholder">Le même, une seconde fois</span></div></div>
-      <a class="btn btn-primary" style="margin-top: var(--spacing-4)">Enregistrer</a>
+    <div class="tabs" role="tablist" aria-label="Mon compte"><a href="#" class="tab" role="tab" aria-selected="false" data-wf-to="a-propos"><svg class="ico" aria-hidden="true"><use href="#person" /></svg>À propos</a><a href="#" class="tab active" role="tab" aria-selected="true" data-wf-to="securite"><svg class="ico" aria-hidden="true"><use href="#key" /></svg>Sécurité</a></div>
+    <section class="card card-pad compte-pass" aria-labelledby="pass-t">
+      <h2 class="subheading" id="pass-t">Créer un mot de passe</h2>
+      <p class="muted small compte-hint">Vous vous connectez avec votre compte université. Un mot de passe PLaTon vous permet aussi de vous connecter sans lui.</p>
+      <div class="field"><label for="f-pass">Nouveau mot de passe</label><div class="input focused" id="f-pass" role="textbox" aria-describedby="pass-rules"><span class="masked">●●●●●●●●●</span><button type="button" class="btn btn-icon btn-sm" aria-label="Afficher le mot de passe"><svg class="ico ico-18" aria-hidden="true"><use href="#visibility" /></svg></button></div></div>
+      <ul class="pass-rules" id="pass-rules" aria-live="polite"><li class=""><svg class="ico ico-16" aria-hidden="true"><use href="#radio_button_unchecked" /></svg>12 caractères<span class="sr-only">, pas encore</span></li><li class="ok"><svg class="ico ico-16" aria-hidden="true"><use href="#check" /></svg>une majuscule<span class="sr-only">, respectée</span></li><li class="ok"><svg class="ico ico-16" aria-hidden="true"><use href="#check" /></svg>une minuscule<span class="sr-only">, respectée</span></li><li class="ok"><svg class="ico ico-16" aria-hidden="true"><use href="#check" /></svg>un chiffre<span class="sr-only">, respectée</span></li><li class=""><svg class="ico ico-16" aria-hidden="true"><use href="#radio_button_unchecked" /></svg>un caractère spécial<span class="sr-only">, pas encore</span></li></ul>
+      <div class="field"><label for="f-pass2">Confirmer le mot de passe</label><div class="input" id="f-pass2" role="textbox"><span class="placeholder">Le même, une seconde fois</span></div></div>
+      <button type="button" class="btn btn-primary compte-save">Enregistrer</button>
     </section>
   </main>
 </div>

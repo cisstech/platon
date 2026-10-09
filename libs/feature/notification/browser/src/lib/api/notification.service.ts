@@ -106,7 +106,7 @@ export class NotificationService {
    */
   listUnreads(limit = 5): Observable<Notification[]> {
     const query = this.listNotificationsGQL.watch({
-      filters: { unread: true },
+      filters: { unread: true, excludeSignals: true },
       first: limit,
       after: null,
     })

@@ -58,12 +58,13 @@ describe('CorrectionController', () => {
     })
 
     it('devrait retourner le résumé mappé', async () => {
-      service.listSummary.mockResolvedValue([{ activityId: 'a1' } as ActivityCorrectionSummary])
+      service.listSummary.mockResolvedValue([{ activityId: 'a1', pendingCopies: 2 } as ActivityCorrectionSummary])
       const req = { user: { id: 'u1' } } as IRequest
 
       const result = await controller.listSummary(req)
 
       expect(result.total).toBe(1)
+      expect(result.resources[0].pendingCopies).toBe(2)
     })
   })
 

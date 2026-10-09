@@ -1,0 +1,20 @@
+<a class="skip-link" href="#contenu">Aller au contenu</a>
+<header class="topbar">
+  <button type="button" class="btn btn-icon m-tap" aria-label="Ouvrir la navigation" data-wf-to="navigation"><svg class="ico" aria-hidden="true"><use href="#menu" /></svg></button>
+  <span class="topbar-title">Mon compte</span>
+  <button type="button" class="btn btn-icon m-tap m-bell" aria-label="Notifications, 3 non lues" data-wf-to="notifications"><svg class="ico" aria-hidden="true"><use href="#notifications" /></svg><span class="badge-count" aria-hidden="true">3</span></button>
+</header>
+<main class="m-main" id="contenu">
+  <h1 class="title">Mon compte</h1>
+  <div class="tabs m-tabs-spaced" role="tablist" aria-label="Mon compte"><a href="#" class="tab" role="tab" aria-selected="false" data-wf-to="a-propos"><svg class="ico" aria-hidden="true"><use href="#person" /></svg>À propos</a><a href="#" class="tab active" role="tab" aria-selected="true" data-wf-to="securite"><svg class="ico" aria-hidden="true"><use href="#key" /></svg>Sécurité</a></div>
+  <div class="m-compte">
+  <section class="card card-pad" aria-labelledby="m-pass-t">
+    <h2 class="subheading" id="m-pass-t">Créer un mot de passe</h2>
+    <p class="muted small compte-hint">Vous vous connectez avec votre compte université. Un mot de passe PLaTon vous permet aussi de vous connecter sans lui.</p>
+    <div class="field"><label for="m-f-pass" id="m-l-pass">Nouveau mot de passe</label><div class="input focused" id="m-f-pass" role="textbox" aria-labelledby="m-l-pass" aria-describedby="m-pass-rules"><span class="masked">●●●●●●●●●</span><button type="button" class="btn btn-icon" aria-label="Afficher le mot de passe"><svg class="ico ico-18" aria-hidden="true"><use href="#visibility" /></svg></button></div></div>
+    <ul class="pass-rules m-pass-rules" id="m-pass-rules" aria-live="polite"><li><svg class="ico ico-16" aria-hidden="true"><use href="#radio_button_unchecked" /></svg>12 caractères<span class="sr-only">, pas encore</span></li><li class="ok"><svg class="ico ico-16" aria-hidden="true"><use href="#check" /></svg>une majuscule<span class="sr-only">, respectée</span></li><li class="ok"><svg class="ico ico-16" aria-hidden="true"><use href="#check" /></svg>une minuscule<span class="sr-only">, respectée</span></li><li class="ok"><svg class="ico ico-16" aria-hidden="true"><use href="#check" /></svg>un chiffre<span class="sr-only">, respectée</span></li><li><svg class="ico ico-16" aria-hidden="true"><use href="#radio_button_unchecked" /></svg>un caractère spécial<span class="sr-only">, pas encore</span></li></ul>
+    <div class="field"><label for="m-f-pass2" id="m-l-pass2">Confirmer le mot de passe</label><div class="input" id="m-f-pass2" role="textbox" aria-labelledby="m-l-pass2"><span class="placeholder">Le même, une seconde fois</span></div></div>
+    <button type="button" class="btn btn-primary compte-save m-save">Enregistrer</button>
+  </section>
+  </div>
+</main>

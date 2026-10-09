@@ -8,26 +8,26 @@
         <div class="brand-org">Université Gustave Eiffel</div>
       </div>
     </div>
-    <a class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico"><use href="#add" /></svg>Créer</a>
+    <button type="button" class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico" aria-hidden="true"><use href="#add" /></svg>Créer</button>
     <nav class="nav">
-      <a class="nav-item" data-wf-to="enseignant"><svg class="ico"><use href="#home" /></svg>Accueil</a>
-      <a class="nav-item" data-wf-to="annonces"><svg class="ico"><use href="#campaign" /></svg>Annonces</a>
-      <a class="nav-item" data-wf-to="mes-cours"><svg class="ico"><use href="#school" /></svg>Cours</a>
-      <a class="nav-item" data-wf-to="file"><svg class="ico"><use href="#rate_review" /></svg>Corrections<span class="count">14</span></a>
-      <a class="nav-item" data-wf-to="catalogue"><svg class="ico"><use href="#folder_open" /></svg>Ressources</a>
-      <a class="nav-item" data-wf-to="test"><svg class="ico"><use href="#fact_check" /></svg>Tests d'entrée</a>
-      <a class="nav-item active" data-wf-to="utilisateurs"><svg class="ico"><use href="#shield_person" /></svg>Administration</a>
+      <a href="#" class="nav-item" data-wf-to="enseignant"><svg class="ico" aria-hidden="true"><use href="#home" /></svg>Accueil</a>
+      <a href="#" class="nav-item" data-wf-to="annonces"><svg class="ico" aria-hidden="true"><use href="#campaign" /></svg>Annonces</a>
+      <a href="#" class="nav-item" data-wf-to="mes-cours"><svg class="ico" aria-hidden="true"><use href="#school" /></svg>Cours</a>
+      <a href="#" class="nav-item" data-wf-to="file"><svg class="ico" aria-hidden="true"><use href="#rate_review" /></svg>Corrections</a>
+      <a href="#" class="nav-item" data-wf-to="catalogue"><svg class="ico" aria-hidden="true"><use href="#folder_open" /></svg>Ressources</a>
+      <a href="#" class="nav-item" data-wf-to="test"><svg class="ico" aria-hidden="true"><use href="#fact_check" /></svg>Tests d'entrée</a>
+      <a href="#" class="nav-item active" data-wf-to="utilisateurs"><svg class="ico" aria-hidden="true"><use href="#shield_person" /></svg>Administration</a>
     </nav>
     <div class="sidebar-foot">
-      <a class="nav-item"><svg class="ico"><use href="#help" /></svg>Documentation</a>
-      <a class="nav-item"><svg class="ico"><use href="#notifications" /></svg>Notifications<span class="count">2</span></a>
+      <a href="#" class="nav-item"><svg class="ico" aria-hidden="true"><use href="#help" /></svg>Documentation</a>
+      <a href="#" class="nav-item"><svg class="ico" aria-hidden="true"><use href="#notifications" /></svg>Notifications<span class="count">2</span></a>
       <div class="me">
         <span class="avatar">SL</span>
         <div>
           <div class="me-name">Sophie Lambert</div>
-          <div class="me-role">Administratrice</div>
+          <div class="me-role">Compte administrateur</div>
         </div>
-        <svg class="ico ico-16"><use href="#expand_more" /></svg>
+        <svg class="ico ico-16" aria-hidden="true"><use href="#expand_more" /></svg>
       </div>
       <a class="credit" href="https://github.com/cisstech/platon" aria-label="Code source de PLaTon, logiciel libre de cisstech"><svg class="ico ico-16" aria-hidden="true"><use href="#code" /></svg>Logiciel libre, par <strong>cisstech</strong></a>
     </div>
@@ -35,21 +35,32 @@
   <main class="main" id="contenu">
     <header class="page-head">
       <div>
+        <p class="crumbs admin-mode"><span class="tag"><svg class="ico" aria-hidden="true"><use href="#shield_person" /></svg>Mode administration</span><span>Ce que vous changez ici vaut pour toute la plateforme.</span></p>
         <h1 class="title">Administration</h1>
-        <p class="page-sub">Comptes, groupes, connexions et contenus de la plateforme.</p>
       </div>
-      <div class="actions"><a class="btn btn-primary" data-wf-to="cas-nouveau"><svg class="ico"><use href="#add" /></svg>Ajouter un CAS</a></div>
+      <div class="actions"><button type="button" class="btn btn-primary" data-wf-to="cas-nouveau"><svg class="ico" aria-hidden="true"><use href="#add" /></svg>Ajouter un CAS</button></div>
     </header>
-    <div class="tabs"><a class="tab" data-wf-to="utilisateurs"><svg class="ico"><use href="#person" /></svg>Utilisateurs</a><a class="tab" data-wf-to="groupes-plateforme"><svg class="ico"><use href="#groups" /></svg>Groupes</a><a class="tab" data-wf-to="lms"><svg class="ico"><use href="#school" /></svg>LMS</a><a class="tab active" data-wf-to="cas"><svg class="ico"><use href="#key" /></svg>CAS</a><a class="tab" data-wf-to="tags"><svg class="ico"><use href="#bookmark" /></svg>Tags</a><a class="tab" data-wf-to="annonces-admin"><svg class="ico"><use href="#campaign" /></svg>Annonces</a></div>
-    <div class="toolbar"><div class="input" style="width: 320px"><svg class="ico ico-18" style="margin: 0 8px 0 0; color: var(--color-subtle)"><use href="#search" /></svg><span class="placeholder">Nom du CAS</span></div></div>
-    <div class="card" style="padding: 0; overflow: hidden">
+    <nav class="tabs" aria-label="Rubriques de l'administration">
+      <a href="#" class="tab" data-wf-to="utilisateurs"><svg class="ico" aria-hidden="true"><use href="#person" /></svg>Utilisateurs</a>
+      <a href="#" class="tab" data-wf-to="groupes-plateforme"><svg class="ico" aria-hidden="true"><use href="#groups" /></svg>Groupes</a>
+      <a href="#" class="tab active" aria-current="page" data-wf-to="lms"><svg class="ico" aria-hidden="true"><use href="#hub" /></svg>Connexions</a>
+      <a href="#" class="tab" data-wf-to="tags"><svg class="ico" aria-hidden="true"><use href="#bookmark" /></svg>Tags</a>
+      <a href="#" class="tab" data-wf-to="annonces-admin"><svg class="ico" aria-hidden="true"><use href="#campaign" /></svg>Annonces</a>
+    </nav>
+    <div class="toolbar">
+      <div class="segmented" role="tablist" aria-label="Type de connexion">
+        <span data-wf-to="lms" role="tab" aria-selected="false" aria-controls="panneau-connexions" tabindex="-1">LMS reliés<small>2</small></span>
+        <span class="on" role="tab" aria-selected="true" aria-controls="panneau-connexions" tabindex="0">Serveurs CAS<small>1</small></span>
+      </div>
+    </div>
+    <div class="card table-card" id="panneau-connexions" role="tabpanel" aria-label="Serveurs CAS">
       <table class="table">
-        <thead><tr><th>CAS</th><th>Connexion</th><th>Validation</th><th>Ajouté le</th></tr></thead>
+        <thead><tr><th scope="col">CAS</th><th scope="col">Connexion</th><th scope="col">Validation</th><th scope="col">Ajouté le</th></tr></thead>
         <tbody>
-          <tr><td><strong>Université Gustave Eiffel</strong></td><td class="num">https://cas.univ-eiffel.fr/login</td><td class="num">https://cas.univ-eiffel.fr/p3/serviceValidate</td><td>4 févr. 2022</td></tr>
+          <tr><td><strong>Université Gustave Eiffel</strong></td><td class="url">https://cas.univ-eiffel.fr/login</td><td class="url">https://cas.univ-eiffel.fr/p3/serviceValidate</td><td>4 févr. 2022</td></tr>
         </tbody>
       </table>
     </div>
-    <p class="muted" style="font-size: 13px; margin-top: var(--spacing-3)">Chaque CAS devient un bouton sur la page de connexion.</p>
+    <p class="muted small table-note">Chaque CAS devient un bouton sur la page de connexion.</p>
   </main>
 </div>

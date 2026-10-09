@@ -16,8 +16,20 @@ CAS et revient sur son accueil. Sophie, qui a un compte local, saisit son nom d'
 mot de passe.
 
 Quand la connexion échoue, le message reste à côté des champs, dit ce qui est faux sans révéler
-lequel des deux, et propose la marche à suivre. Pendant la vérification, le bouton garde son libellé
-et montre un indicateur ; les champs restent tels quels.
+lequel des deux, et propose la marche à suivre. Il s'inscrit dans un emplacement réservé sous le mot
+de passe, vide par défaut : la page ne bouge pas d'un pixel entre l'état normal, l'erreur et la
+vérification, et l'aide pour les étudiants qui arrivent de Moodle reste en bas dans les trois.
+Pendant la vérification, le bouton garde sa place, sa taille et sa couleur ; une roue remplace son
+icône et il dit « Connexion en cours ». Les champs restent tels quels, le compte université est
+atténué, et l'emplacement du message annonce l'attente aux lecteurs d'écran.
+
+Sur téléphone, la couverture garde le logo, l'accroche, la phrase qui dit ce qu'est PLaTon et le
+lien vers la présentation, avec les mêmes mots que sur ordinateur ; l'aide pour les étudiants qui
+arrivent de Moodle aussi. Le bouton du compte université garde le même libellé. L'erreur s'y
+comporte comme sur ordinateur : même emplacement réservé sous le mot de passe, même message, rien
+ne bouge, et l'aide Moodle reste en bas. La maquette montre Inès, qui a tapé son identifiant
+université dans les champs du compte PLaTon, le cas que le message oriente vers le bouton du haut.
+Les champs et le bouton qui affiche le mot de passe font 44 px.
 
 Ce qui reste hors de cet écran : l'invitation d'un candidat (lien reçu par courriel, flow `tests`),
 l'accès de démonstration (lien d'un enseignant), et la connexion depuis une application externe
@@ -29,6 +41,16 @@ l'accès de démonstration (lien d'un enseignant), et la connexion depuis une ap
   par établissement, nommé par l'établissement
 - le message d'erreur ne dit pas lequel du nom ou du mot de passe est faux
 - le bouton de connexion reste actif : la validation se fait à l'envoi, pas en amont
+- l'erreur s'écrit dans un emplacement réservé sous les champs, qui annonce aussi l'attente aux
+  lecteurs d'écran : la mise en page est identique dans tous les états, et l'aide Moodle ne
+  disparaît jamais
+- un bouton qui travaille garde sa place, sa taille et sa couleur, montre une roue à la place de
+  son icône et dit ce qu'il fait (« Connexion en cours »)
+- l'accroche, la phrase qui dit ce qu'est PLaTon, le lien vers la présentation et l'aide Moodle
+  sont présents sur ordinateur comme sur téléphone, avec les mêmes mots ; l'erreur aussi, au même
+  endroit et dans les mêmes mots
+- sur téléphone, les champs et le bouton qui affiche le mot de passe sont des cibles de 44 px
+- l'accroche de la couverture est le titre de niveau 1 de la page
 - la vidéo de présentation n'est pas sur la page, elle est un lien
 - aucun texte en anglais
 

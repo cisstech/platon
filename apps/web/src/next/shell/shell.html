@@ -1,0 +1,224 @@
+<a plSkipLink>Aller au contenu</a>
+<div class="shell" [class.shell--narrow]="narrow()">
+  @if (narrow()) {
+  <pl-topbar [heading]="pageTitle()">
+    <button
+      type="button"
+      plButton
+      plTopbarStart
+      variant="cover-icon"
+      size="lg"
+      aria-label="Ouvrir la navigation"
+      aria-haspopup="dialog"
+      #navigationButton
+      (click)="openNavigation()"
+    >
+      <pl-icon name="menu" />
+    </button>
+    <button
+      type="button"
+      plButton
+      plTopbarEnd
+      class="shell__bell"
+      variant="cover-icon"
+      size="lg"
+      aria-haspopup="dialog"
+      [attr.aria-label]="bellLabel()"
+      [attr.aria-expanded]="notificationsOpen()"
+      (click)="openNotifications($event.currentTarget)"
+    >
+      <pl-icon name="notifications" />
+      @if (unread()) {
+      <pl-count variant="badge" [value]="unread()" />
+      }
+    </button>
+  </pl-topbar>
+  } @else {
+  <ng-container [ngTemplateOutlet]="cover" [ngTemplateOutletContext]="{ $implicit: 'sidebar' }" />
+  }
+  <!-- The page scrolls here, not the document: the CDK must know it, for menus and tooltips to follow. -->
+  <div class="shell__page" cdkScrollable><router-outlet /></div>
+</div>
+
+<!-- The cover: beside the page on a wide screen, in a dialog opened from the top bar on a narrow one. -->
+<ng-template #cover let-layout>
+  <pl-cover class="shell__cover" [layout]="layout">
+    <a plCoverBrand routerLink="/dashboard" [institution]="institution">PLaTon</a>
+    @if (layout === 'panel') {
+    <button
+      type="button"
+      plButton
+      plCoverClose
+      variant="cover-icon"
+      size="lg"
+      aria-label="Fermer la navigation"
+      (click)="closeNavigation()"
+    >
+      <pl-icon name="close" />
+    </button>
+    } @if (canCreate() && charterAccepted()) {
+    <button
+      type="button"
+      plButton
+      plCoverAction
+      class="shell__create"
+      [variant]="quietCreate() ? 'cover-quiet' : 'cover'"
+      [plMenuTrigger]="createMenu"
+      #createTrigger="plMenuTrigger"
+    >
+      <pl-icon name="add" />Créer
+    </button>
+    } @else if (canCreate()) {
+    <button
+      type="button"
+      plButton
+      plCoverAction
+      class="shell__create"
+      aria-haspopup="dialog"
+      [variant]="quietCreate() ? 'cover-quiet' : 'cover'"
+      (click)="acceptCharter()"
+    >
+      <pl-icon name="add" />Créer
+    </button>
+    }
+    <pl-cover-nav label="Navigation principale">
+      @for (entry of entries(); track entry.link) {
+      <a
+        plCoverItem
+        [routerLink]="entry.link"
+        [icon]="entry.icon"
+        [count]="entry.count"
+        [countLabel]="entry.countLabel"
+      >
+        {{ entry.label }}
+      </a>
+      }
+    </pl-cover-nav>
+    <pl-cover-foot>
+      @if (layout === 'sidebar') {
+      <button
+        type="button"
+        plCoverItem
+        icon="notifications"
+        aria-haspopup="dialog"
+        [attr.aria-expanded]="notificationsOpen()"
+        [count]="unread()"
+        [countLabel]="unreadLabel()"
+        (click)="openNotifications($event.currentTarget)"
+      >
+        Notifications
+      </button>
+      } @if (helpInFoot()) {
+      <a plCoverItem [href]="docsUrl" target="_blank" rel="noopener" icon="help">
+        Documentation<span class="pl-visually-hidden">, s'ouvre dans un nouvel onglet</span>
+      </a>
+      } @if (user(); as user) { @if (layout === 'panel') {
+      <button
+        type="button"
+        plCoverProfile
+        aria-haspopup="dialog"
+        [person]="user"
+        [detail]="accountType()"
+        (click)="openProfile()"
+      >
+        {{ name() }}
+      </button>
+      } @else {
+      <button type="button" plCoverProfile [person]="user" [detail]="accountType()" [plMenuTrigger]="profileMenu">
+        {{ name() }}
+      </button>
+      } }
+      <a plCoverCredit href="https://github.com/cisstech/platon" target="_blank" rel="noopener">
+        Logiciel libre, par <strong>cisstech</strong
+        ><span class="pl-visually-hidden"> : code source de PLaTon, s'ouvre dans un nouvel onglet</span>
+      </a>
+    </pl-cover-foot>
+  </pl-cover>
+</ng-template>
+
+<ng-template #profileSheet>
+  @if (user(); as user) {
+  <pl-sheet (dismissed)="closeProfile()">
+    <div class="shell__sheet-head">
+      <pl-avatar [person]="user" />
+      <div class="shell__sheet-who">
+        <h2 class="shell__sheet-name" [id]="profileHeadingId">{{ name() }}</h2>
+        <p class="shell__sheet-detail">{{ accountType() }}</p>
+        @if (user.email) {
+        <p class="shell__sheet-detail">{{ user.email }}</p>
+        }
+      </div>
+      <button
+        type="button"
+        plButton
+        variant="icon"
+        size="lg"
+        aria-label="Fermer le menu du profil"
+        (click)="closeProfile()"
+      >
+        <pl-icon name="close" />
+      </button>
+    </div>
+    <a plSheetItem routerLink="/account" icon="account_circle" trailing="chevron_right">Mon compte</a>
+    @if (canCreate() && circleId()) {
+    <a plSheetItem [routerLink]="['/resources', circleId()]" icon="folder_open" trailing="chevron_right">Mon cercle</a>
+    } @if (!helpInFoot()) {
+    <a plSheetItem [href]="docsUrl" target="_blank" rel="noopener" icon="help" trailing="open_in_new">
+      Aide<span class="pl-visually-hidden">, s'ouvre dans un nouvel onglet</span>
+    </a>
+    }
+    <pl-sheet-field label="Thème" icon="light_mode">
+      <pl-segmented
+        label="Thème"
+        size="lg"
+        [options]="themeOptions"
+        [value]="theme.preference()"
+        (valueChange)="chooseTheme($event)"
+      />
+    </pl-sheet-field>
+    <button type="button" plSheetItem icon="logout" (click)="signOut()">Se déconnecter</button>
+  </pl-sheet>
+  }
+</ng-template>
+
+<pl-menu #createMenu="ngMenu" (itemSelected)="create($event)">
+  @for (entry of createEntries(); track entry.kind) {
+  <pl-menu-item [value]="entry.kind" [glyph]="entry.glyph" [description]="entry.description">{{
+    entry.label
+  }}</pl-menu-item>
+  }
+</pl-menu>
+
+<pl-menu #profileMenu="ngMenu" placement="above-start" (itemSelected)="chooseFromProfile($event)">
+  <pl-menu-header>
+    <span class="shell__menu-name">{{ name() }}</span>
+    @if (user()?.email) {
+    <span class="shell__menu-email">{{ user()?.email }}</span>
+    }
+  </pl-menu-header>
+  <pl-menu-separator />
+  <pl-menu-item value="account" icon="account_circle">Mon compte</pl-menu-item>
+  @if (canCreate() && circleId()) {
+  <pl-menu-item value="circle" icon="folder_open">Mon cercle</pl-menu-item>
+  } @if (!helpInFoot()) {
+  <pl-menu-item value="help" icon="help">
+    Aide <pl-icon name="open_in_new" [size]="1" /><span class="pl-visually-hidden"
+      >, s'ouvre dans un nouvel onglet</span
+    >
+  </pl-menu-item>
+  }
+  <pl-menu-separator />
+  <pl-menu-group label="Thème">
+    <pl-menu-item value="theme:light" role="menuitemradio" [checked]="theme.preference() === 'light'"
+      >Clair</pl-menu-item
+    >
+    <pl-menu-item value="theme:dark" role="menuitemradio" [checked]="theme.preference() === 'dark'"
+      >Sombre</pl-menu-item
+    >
+    <pl-menu-item value="theme:system" role="menuitemradio" [checked]="theme.preference() === 'system'"
+      >Auto</pl-menu-item
+    >
+  </pl-menu-group>
+  <pl-menu-separator />
+  <pl-menu-item value="sign-out" icon="logout">Se déconnecter</pl-menu-item>
+</pl-menu>

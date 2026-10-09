@@ -1,7 +1,8 @@
-<main class="home">
-  <h1>Nouvelle interface</h1>
-  <p>
-    Les écrans de PLaTon arrivent ici un par un. Ceux qui ne sont pas encore prêts s'ouvrent dans l'interface actuelle.
-  </p>
-  <a [href]="legacyHref">Revenir à l'interface actuelle</a>
-</main>
+<pl-page width="form">
+  <pl-page-header
+    heading="Nouvelle interface"
+    description="Les écrans de PLaTon arrivent ici un par un. Ceux qui ne sont pas encore prêts s'ouvrent dans l'interface actuelle."
+  >
+    <a plButton variant="secondary" plPageActions [href]="legacyHref">Revenir à l'interface actuelle</a>
+  </pl-page-header>
+</pl-page>

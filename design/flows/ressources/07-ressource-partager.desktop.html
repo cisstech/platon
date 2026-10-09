@@ -8,25 +8,25 @@
         <div class="brand-org">Université Gustave Eiffel</div>
       </div>
     </div>
-    <a class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico"><use href="#add" /></svg>Créer</a>
+    <button type="button" class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico" aria-hidden="true"><use href="#add" /></svg>Créer</button>
     <nav class="nav">
-      <a class="nav-item" data-wf-to="enseignant"><svg class="ico"><use href="#home" /></svg>Accueil</a>
-      <a class="nav-item" data-wf-to="annonces"><svg class="ico"><use href="#campaign" /></svg>Annonces</a>
-      <a class="nav-item" data-wf-to="mes-cours"><svg class="ico"><use href="#school" /></svg>Cours</a>
-      <a class="nav-item" data-wf-to="file"><svg class="ico"><use href="#rate_review" /></svg>Corrections<span class="count">14</span></a>
-      <a class="nav-item active" data-wf-to="catalogue"><svg class="ico"><use href="#folder_open" /></svg>Ressources</a>
-      <a class="nav-item" data-wf-to="test"><svg class="ico"><use href="#fact_check" /></svg>Tests d'entrée</a>
+      <a href="#" class="nav-item" data-wf-to="enseignant"><svg class="ico" aria-hidden="true"><use href="#home" /></svg>Accueil</a>
+      <a href="#" class="nav-item" data-wf-to="annonces"><svg class="ico" aria-hidden="true"><use href="#campaign" /></svg>Annonces</a>
+      <a href="#" class="nav-item" data-wf-to="mes-cours"><svg class="ico" aria-hidden="true"><use href="#school" /></svg>Cours</a>
+      <a href="#" class="nav-item" data-wf-to="file"><svg class="ico" aria-hidden="true"><use href="#rate_review" /></svg>Corrections<span class="count">2</span></a>
+      <a href="#" class="nav-item active" data-wf-to="catalogue"><svg class="ico" aria-hidden="true"><use href="#folder_open" /></svg>Ressources</a>
+      <a href="#" class="nav-item" data-wf-to="test"><svg class="ico" aria-hidden="true"><use href="#fact_check" /></svg>Tests d'entrée</a>
     </nav>
     <div class="sidebar-foot">
-      <a class="nav-item"><svg class="ico"><use href="#help" /></svg>Documentation</a>
-      <a class="nav-item"><svg class="ico"><use href="#notifications" /></svg>Notifications<span class="count">2</span></a>
+      <a href="#" class="nav-item"><svg class="ico" aria-hidden="true"><use href="#help" /></svg>Documentation</a>
+      <a href="#" class="nav-item"><svg class="ico" aria-hidden="true"><use href="#notifications" /></svg>Notifications<span class="count">2</span></a>
       <div class="me">
         <span class="avatar">KH</span>
         <div>
           <div class="me-name">Karim Haddad</div>
-          <div class="me-role">Enseignant</div>
+          <div class="me-role">Compte enseignant</div>
         </div>
-        <svg class="ico ico-16"><use href="#expand_more" /></svg>
+        <svg class="ico ico-16" aria-hidden="true"><use href="#expand_more" /></svg>
       </div>
       <a class="credit" href="https://github.com/cisstech/platon" aria-label="Code source de PLaTon, logiciel libre de cisstech"><svg class="ico ico-16" aria-hidden="true"><use href="#code" /></svg>Logiciel libre, par <strong>cisstech</strong></a>
     </div>
@@ -34,68 +34,70 @@
   <main class="main" id="contenu">
     <header class="page-head">
       <div>
-        <div class="crumbs"><a data-wf-to="catalogue">Ressources</a><svg class="ico"><use href="#chevron_right" /></svg><span>Informatique</span><svg class="ico"><use href="#chevron_right" /></svg><a data-wf-to="cercle">Algorithmique</a></div>
-        <h1 class="title" style="display: flex; align-items: center; gap: 6px">Recherche dichotomique<button class="btn btn-icon btn-sm" aria-label="Modifier le nom"><svg class="ico ico-16"><use href="#edit" /></svg></button></h1>
+        <div class="crumbs"><a href="#" data-wf-to="catalogue">Ressources</a><svg class="ico" aria-hidden="true"><use href="#chevron_right" /></svg><span>Informatique</span><svg class="ico" aria-hidden="true"><use href="#chevron_right" /></svg><a href="#" data-wf-to="cercle">Algorithmique</a></div>
+        <h1 class="title title-inline">Recherche dichotomique<button type="button" class="btn btn-icon btn-sm" aria-label="Renommer Recherche dichotomique" title="Renommer"><svg class="ico ico-16" aria-hidden="true"><use href="#edit" /></svg></button></h1>
         <p class="page-sub">Trouver l'indice d'un élément dans un tableau trié, avec tests automatiques sur 6 cas.</p>
-        <div style="display: flex; gap: var(--spacing-2); margin-top: var(--spacing-3); align-items: center">
-          <span class="select"><svg class="ico ico-16"><use href="#check_circle" /></svg>Prêt à l'utilisation<svg class="ico ico-16"><use href="#expand_more" /></svg></span>
-          <a class="btn btn-secondary btn-sm" data-wf-to="suivi"><svg class="ico"><use href="#visibility" /></svg>Suivre</a>
-          <span class="tag-link">L1</span><span class="tag-link">Algorithmique</span><span class="tag-link">Python</span>
+        <div class="head-tools">
+          <span class="select" role="button" tabindex="0" aria-haspopup="listbox" aria-label="Statut&nbsp;: Prêt. Changer le statut"><svg class="ico ico-16 status-ready" aria-hidden="true"><use href="#verified" /></svg>Prêt<svg class="ico ico-16" aria-hidden="true"><use href="#expand_more" /></svg></span>
+          <button type="button" class="tag-link" aria-label="Filtrer par L1" data-wf-to="catalogue">L1</button><button type="button" class="tag-link" aria-label="Filtrer par Algorithmique" data-wf-to="catalogue">Algorithmique</button><button type="button" class="tag-link" aria-label="Filtrer par Python" data-wf-to="catalogue">Python</button>
         </div>
+        <p class="head-facts">Par Hélène Martin, v4 du 24 septembre, 12 abonnés</p>
       </div>
       <div class="actions">
-        <a class="btn btn-secondary" data-wf-to="ressource-partager"><svg class="ico"><use href="#share" /></svg>Partager</a>
-        <a class="btn btn-secondary"><svg class="ico"><use href="#open_in_new" /></svg>Éditer</a>
-        <a class="btn btn-primary"><svg class="ico"><use href="#visibility" /></svg>Prévisualiser</a>
-        <button class="btn btn-icon" aria-label="Plus d&#39;actions" data-wf-to="ressource-actions"><svg class="ico"><use href="#more_horiz" /></svg></button>
+        <button type="button" class="btn btn-secondary" data-wf-to="ressource-partager"><svg class="ico" aria-hidden="true"><use href="#share" /></svg>Partager</button>
+        <button type="button" class="btn btn-secondary"><svg class="ico" aria-hidden="true"><use href="#visibility" /></svg>Prévisualiser</button>
+        <button type="button" class="btn btn-primary" data-wf-to="ajouter-au-cours"><svg class="ico" aria-hidden="true"><use href="#school" /></svg>Ajouter à un cours</button>
+        <button type="button" class="btn btn-icon" aria-label="Plus d&#39;actions sur Recherche dichotomique" title="Plus d&#39;actions" aria-haspopup="menu" data-wf-to="ressource-actions"><svg class="ico" aria-hidden="true"><use href="#more_horiz" /></svg></button>
       </div>
     </header>
-    <div class="tabs"><a class="tab active" data-wf-to="ressource"><svg class="ico"><use href="#grid_view" /></svg>Vue d'ensemble</a><a class="tab" data-wf-to="explorer"><svg class="ico"><use href="#folder_open" /></svg>Explorer</a><a class="tab" data-wf-to="evenements"><svg class="ico"><use href="#history" /></svg>Évènements</a><a class="tab" data-wf-to="ressource-parametres"><svg class="ico"><use href="#settings" /></svg>Paramètres</a></div>
+    <p class="head-note"><svg class="ico ico-16" aria-hidden="true"><use href="#groups" /></svg>Vous pouvez la modifier&nbsp;: vous êtes collaborateur du cercle Algorithmique.</p>
+    <nav class="tabs" aria-label="Sections de la ressource"><a href="#" class="tab active" data-wf-to="ressource" aria-current="page"><svg class="ico" aria-hidden="true"><use href="#grid_view" /></svg>Vue d'ensemble</a><a href="#" class="tab" data-wf-to="explorer"><svg class="ico" aria-hidden="true"><use href="#folder_open" /></svg>Explorer</a><a href="#" class="tab" data-wf-to="evenements"><svg class="ico" aria-hidden="true"><use href="#history" /></svg>Évènements</a><a href="#" class="tab" data-wf-to="ressource-parametres"><svg class="ico" aria-hidden="true"><use href="#settings" /></svg>Paramètres</a></nav>
     <div class="layout">
-      <div class="stack">
-        <section>
-          <div class="section-head"><h2 class="heading">Résultats des élèves</h2><span class="count">1&nbsp;204 évaluations</span></div>
-          <div class="stat-row four">
-            <div class="card stat-card hue-bleuet"><div class="stat-head"><span class="stat-icon"><svg class="ico"><use href="#star" /></svg></span>Note moyenne</div><div class="stat-value">71&nbsp;<small>/&nbsp;100</small></div></div><div class="card stat-card hue-menthe"><div class="stat-head"><span class="stat-icon"><svg class="ico"><use href="#bolt" /></svg></span>Juste du 1er coup</div><div class="stat-value">58&nbsp;%</div></div><div class="card stat-card hue-ambre"><div class="stat-head"><span class="stat-icon"><svg class="ico"><use href="#timer" /></svg></span>Durée moyenne</div><div class="stat-value">4&nbsp;min</div></div><div class="card stat-card hue-framboise"><div class="stat-head"><span class="stat-icon"><svg class="ico"><use href="#trending_down" /></svg></span>Abandons</div><div class="stat-value">5&nbsp;%</div></div>
+      <section aria-labelledby="resultats-t">
+        <div class="section-head"><h2 class="heading" id="resultats-t">Résultats des étudiants</h2><span class="count">1&nbsp;204 tentatives</span></div>
+        <div class="stat-row four">
+          <div class="card stat-card"><div class="stat-head"><span class="stat-icon"><svg class="ico" aria-hidden="true"><use href="#star" /></svg></span>Note moyenne</div><div class="stat-value">71&nbsp;<small>/&nbsp;100</small></div></div><div class="card stat-card"><div class="stat-head"><span class="stat-icon"><svg class="ico" aria-hidden="true"><use href="#bolt" /></svg></span>Juste du 1er coup</div><div class="stat-value">58&nbsp;%</div></div><div class="card stat-card"><div class="stat-head"><span class="stat-icon"><svg class="ico" aria-hidden="true"><use href="#timer" /></svg></span>Durée moyenne</div><div class="stat-value">4&nbsp;min</div></div><div class="card stat-card"><div class="stat-head"><span class="stat-icon"><svg class="ico" aria-hidden="true"><use href="#trending_down" /></svg></span>Abandons</div><div class="stat-value">5&nbsp;%</div></div>
+        </div>
+        <details class="fold">
+          <summary>Les 5 autres indicateurs<svg class="ico ico-18" aria-hidden="true"><use href="#expand_more" /></svg></summary>
+          <div class="figs"><span>Taux de réussite <strong>64&nbsp;%</strong></span><span>Taux de réponses <strong>92&nbsp;%</strong></span><span>Essais par étudiant <strong>1,8</strong></span><span>Essais avant succès <strong>1,6</strong></span><span>Avant la 1re réponse <strong>1&nbsp;min&nbsp;40</strong></span></div>
+        </details>
+        <details class="fold">
+          <summary>Évolution de la note moyenne, mois par mois<svg class="ico ico-18" aria-hidden="true"><use href="#expand_more" /></svg></summary>
+          <div class="trend" role="img" aria-label="Note moyenne sur 100 par mois, de 42 en février à 71 en septembre, le mois en cours">
+            <div class="trend-col"><div class="trend-plot"><span class="chart-bar" style="height: 42%"></span></div><span class="trend-month">févr.</span></div>
+            <div class="trend-col"><div class="trend-plot"><span class="chart-bar" style="height: 55%"></span></div><span class="trend-month">mars</span></div>
+            <div class="trend-col"><div class="trend-plot"><span class="chart-bar" style="height: 61%"></span></div><span class="trend-month">avr.</span></div>
+            <div class="trend-col"><div class="trend-plot"><span class="chart-bar" style="height: 58%"></span></div><span class="trend-month">mai</span></div>
+            <div class="trend-col"><div class="trend-plot"><span class="chart-bar" style="height: 66%"></span></div><span class="trend-month">juin</span></div>
+            <div class="trend-col"><div class="trend-plot"><span class="chart-bar" style="height: 70%"></span></div><span class="trend-month">juil.</span></div>
+            <div class="trend-col"><div class="trend-plot"><span class="chart-bar" style="height: 74%"></span></div><span class="trend-month">août</span></div>
+            <div class="trend-col now"><div class="trend-plot"><span class="trend-value">71</span><span class="chart-bar last" style="height: 71%"></span></div><span class="trend-month">sept.</span></div>
           </div>
-          <details class="more-figures" open><summary style="cursor: pointer; font-weight: 600; color: var(--color-text); width: 100%">Tous les indicateurs</summary><div class="figs"><span>Taux de réussite <strong>64&nbsp;%</strong></span><span>Taux de réponses <strong>92&nbsp;%</strong></span><span>Essais par élève <strong>1,8</strong></span><span>Essais avant succès <strong>1,6</strong></span><span>Avant la 1re réponse <strong>1&nbsp;min&nbsp;40</strong></span></div></details>
-        </section>
-        <section>
-          <div class="section-head"><h2 class="heading">Évolution</h2><span class="segmented" style="margin-left: auto"><span class="on">Note moyenne</span><span>Temps d'apprentissage</span></span></div>
-          <div class="card card-pad" style="height: 150px; display: flex; align-items: flex-end; gap: 10px" role="img" aria-label="Note moyenne par mois, de 42 en février à 71 en septembre">
-            <span class="chart-bar" style="height: 42%"></span><span class="chart-bar" style="height: 55%"></span><span class="chart-bar" style="height: 61%"></span><span class="chart-bar" style="height: 58%"></span><span class="chart-bar" style="height: 66%"></span><span class="chart-bar" style="height: 70%"></span><span class="chart-bar" style="height: 74%"></span><span class="chart-bar last" style="height: 71%"></span>
-          </div>
-        </section>
-        <section>
-          <div class="section-head"><h2 class="heading">Utilisé par</h2><span class="count">3 activités</span><a style="margin-left: auto" data-wf-to="catalogue">Voir dans le catalogue</a></div>
-          <div class="card rows">
-            <div class="row"><span class="lead-icon"><svg class="ico"><use href="#quiz" /></svg></span><div class="row-main"><div class="row-title">Examen partiel 1</div><div class="row-meta"><span>Cercle Algorithmique</span><span>Karim Haddad</span></div></div></div>
-            <div class="row"><span class="lead-icon"><svg class="ico"><use href="#quiz" /></svg></span><div class="row-main"><div class="row-title">Entraînement&nbsp;: recherche</div><div class="row-meta"><span>Cercle Algorithmique</span><span>Hélène Martin</span></div></div></div>
-          </div>
-        </section>
-      </div>
-      <aside class="stack">
-        <section>
-          <dl class="card" style="margin: 0">
-            <div class="kv"><dt><svg class="ico ico-16"><use href="#visibility" /></svg>Observateurs</dt><dd>12</dd></div>
-            <div class="kv"><dt>Créée par</dt><dd>Hélène Martin</dd></div>
-            <div class="kv"><dt>Cercle</dt><dd><a data-wf-to="cercle">Algorithmique</a></dd></div>
-            <div class="kv"><dt>Version</dt><dd>v4, 26 sept.</dd></div>
-          </dl>
-        </section>
+        </details>
+      </section>
+      <aside aria-labelledby="utilise-t">
+        <div class="section-head"><h2 class="heading" id="utilise-t">Utilisé par</h2><span class="count">4 activités</span></div>
+        <div class="card">
+          <a href="#" class="mini"><span class="mini-title"><svg class="ico ico-16" aria-hidden="true"><use href="#code" /></svg>TP 4&nbsp;: boucles et tableaux</span><span class="small muted">Votre activité, cercle Algorithmique</span></a>
+          <a href="#" class="mini"><span class="mini-title"><svg class="ico ico-16" aria-hidden="true"><use href="#history_edu" /></svg>Examen partiel 1</span><span class="small muted">Votre épreuve, cercle Algorithmique</span></a>
+          <a href="#" class="mini"><span class="mini-title"><svg class="ico ico-16" aria-hidden="true"><use href="#history_edu" /></svg>Examen partiel 2</span><span class="small muted">Votre épreuve, cercle Algorithmique</span></a>
+          <a href="#" class="mini"><span class="mini-title"><svg class="ico ico-16" aria-hidden="true"><use href="#code" /></svg>Entraînement&nbsp;: recherche</span><span class="small muted">Hélène Martin, cercle Algorithmique</span></a>
+        </div>
+        <a href="#" class="aside-link" data-wf-to="catalogue">Voir dans le catalogue</a>
       </aside>
     </div>
   </main>
-  <div class="scrim" style="background: transparent" data-wf-to="ressource"></div>
-  <div class="panel" role="dialog" aria-label="Partager la ressource" style="right: 330px; top: 110px; width: 380px">
-    <div class="panel-head"><strong>Partager</strong></div>
-    <div style="padding: var(--spacing-4); display: grid; grid-template-columns: 1fr 96px; gap: var(--spacing-3); align-items: start">
+  <div class="scrim clear" data-wf-to="ressource" aria-hidden="true"></div>
+  <div class="panel share-panel" role="dialog" aria-modal="true" aria-labelledby="partager-t">
+    <div class="panel-head"><h2 class="subheading" id="partager-t">Partager</h2></div>
+    <div class="share-body">
       <div>
-        <div class="field"><label>Visible</label><span class="segmented"><span class="on">Dans PLaTon</span><span>Partout</span></span></div>
-        <div class="field" style="margin-top: var(--spacing-3)"><label>Version</label><div class="input"><span>latest</span><svg class="ico ico-18"><use href="#expand_more" /></svg></div></div>
+        <div class="field"><span class="group-label" id="partager-vis">Visible</span><span class="segmented" role="radiogroup" aria-labelledby="partager-vis"><span class="on" role="radio" aria-checked="true">Dans PLaTon</span><span role="radio" aria-checked="false">Partout</span></span></div>
+        <div class="field"><label for="partager-version">Version</label><div class="input" id="partager-version" role="combobox" aria-expanded="false" aria-describedby="partager-hint"><span>La plus récente</span><svg class="ico ico-18" aria-hidden="true"><use href="#expand_more" /></svg></div><span class="field-hint" id="partager-hint">Le lien suit les nouvelles versions.</span></div>
       </div>
-      <span class="qr" aria-label="QR code du lien"></span>
+      <span class="qr" role="img" aria-label="QR code du lien vers Recherche dichotomique"></span>
     </div>
-    <div style="padding: 0 var(--spacing-4) var(--spacing-4)"><a class="btn btn-primary btn-sm" data-wf-to="ressource"><svg class="ico"><use href="#content_copy" /></svg>Copier le lien</a></div>
+    <div class="share-foot"><button type="button" class="btn btn-primary btn-sm" data-wf-to="ressource"><svg class="ico" aria-hidden="true"><use href="#content_copy" /></svg>Copier le lien</button></div>
   </div>
 </div>

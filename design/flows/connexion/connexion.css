@@ -1,0 +1,81 @@
+/* The password label carries the forgotten-password link on its right, in every state. */
+.signin-label {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--spacing-2);
+}
+.signin-label a {
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 600;
+}
+
+/* The message slot under the fields is reserved in every state: an error or a pending check never moves the form. */
+.signin-msg {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  min-height: 36px;
+  margin-top: 6px;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--color-danger-ink);
+}
+.signin-msg .ico {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  margin-top: 1px;
+  color: var(--color-danger);
+}
+.signin-msg strong {
+  font-weight: 600;
+}
+.signin-msg.pending {
+  color: var(--color-muted);
+}
+.signin-msg + .field {
+  margin-top: var(--spacing-3);
+}
+
+/* On a phone the page fills the screen under the cover. */
+.m-signin {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* The forgotten-password link gets a 36 px hit area on desktop, 44 px on a phone, without moving the label. */
+.signin-label .forgot {
+  padding: 9px 0;
+  margin: -9px 0;
+}
+.m-signin .signin-label .forgot {
+  padding: 13px 0;
+  margin: -13px 0;
+}
+
+/* On a phone the cover keeps the logo, the tagline, the sentence and the link to the presentation. */
+.m-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+}
+.m-signin .signin-cover .m-video {
+  height: 44px;
+  margin-top: var(--spacing-4);
+}
+.m-signin .signin-form h2 {
+  margin-bottom: var(--spacing-4);
+}
+
+/* On a phone the fields and the show-password button are 44 px touch targets. */
+.m-signin .input {
+  height: 44px;
+}
+.m-signin .input .btn-icon {
+  width: 44px;
+  height: 44px;
+  margin-right: -12px;
+}

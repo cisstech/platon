@@ -84,6 +84,11 @@ export default [
                 'Material stays in the current interface: use @platon/design-system, the Angular CDK or Angular Aria.',
             },
             {
+              regex: '^@platon/feature/[^/]+/browser$',
+              message:
+                'The main entry of a feature library pulls in its components and vendors: import from its /shared entry (D21).',
+            },
+            {
               group: ['@platon/shared/ui', '@platon/shared/ui/*'],
               message: 'The ui-* components belong to the current interface: use @platon/design-system.',
             },

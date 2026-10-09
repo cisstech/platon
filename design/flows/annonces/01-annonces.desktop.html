@@ -8,41 +8,55 @@
         <div class="brand-org">Université Gustave Eiffel</div>
       </div>
     </div>
-    <nav class="nav">
-      <a class="nav-item" data-wf-to="etudiant"><svg class="ico"><use href="#home" /></svg>Accueil</a>
-      <a class="nav-item active" data-wf-to="annonces"><svg class="ico"><use href="#campaign" /></svg>Annonces</a>
-      <a class="nav-item" data-wf-to="mes-cours"><svg class="ico"><use href="#school" /></svg>Cours</a>
+    <nav class="nav" aria-label="Navigation principale">
+      <a href="#" class="nav-item" data-wf-to="etudiant"><svg class="ico" aria-hidden="true"><use href="#home" /></svg>Accueil</a>
+      <a href="#" class="nav-item active" aria-current="page" data-wf-to="annonces"><svg class="ico" aria-hidden="true"><use href="#campaign" /></svg>Annonces</a>
+      <a href="#" class="nav-item" data-wf-to="mes-cours"><svg class="ico" aria-hidden="true"><use href="#school" /></svg>Cours</a>
     </nav>
     <div class="sidebar-foot">
-      <a class="nav-item"><svg class="ico"><use href="#notifications" /></svg>Notifications<span class="count">3</span></a>
-      <div class="me">
-        <span class="avatar">IB</span>
+      <a href="#" class="nav-item" aria-haspopup="dialog" aria-expanded="false" data-wf-to="notifications"><svg class="ico" aria-hidden="true"><use href="#notifications" /></svg>Notifications<span class="count">3<span class="sr-only"> non lues</span></span></a>
+      <div class="me" role="button" tabindex="0" aria-haspopup="menu" aria-expanded="false" data-wf-to="profil">
+        <span class="avatar" aria-hidden="true">IB</span>
         <div>
           <div class="me-name">Inès Benali</div>
-          <div class="me-role">Étudiante</div>
+          <div class="me-role">Compte étudiant</div>
         </div>
-        <svg class="ico ico-16"><use href="#expand_more" /></svg>
+        <svg class="ico ico-16" aria-hidden="true"><use href="#expand_more" /></svg>
       </div>
       <a class="credit" href="https://github.com/cisstech/platon" aria-label="Code source de PLaTon, logiciel libre de cisstech"><svg class="ico ico-16" aria-hidden="true"><use href="#code" /></svg>Logiciel libre, par <strong>cisstech</strong></a>
     </div>
   </aside>
   <main class="main" id="contenu">
     <header class="page-head"><div><h1 class="title">Annonces</h1><p class="page-sub">Les nouvelles de la plateforme.</p></div></header>
-    <div style="display: grid; grid-template-columns: 340px minmax(0, 1fr); gap: var(--spacing-6); align-items: start">
+    <div class="ann-layout">
       <div>
-        <div class="input" style="width: 340px"><svg class="ico ico-18" style="margin: 0 8px 0 0; color: var(--color-subtle)"><use href="#search" /></svg><span class="placeholder">Rechercher</span></div>
-        <div class="card rows" style="margin-top: var(--spacing-3)">
-<div class="row hover" style="background: var(--color-primary-soft)"><span class="lead-icon"><svg class="ico"><use href="#warning" /></svg></span><div class="row-main"><div class="row-title">Maintenance le 4 octobre</div><div class="row-meta"><span>PLaTon sera indisponible de 7 h à 9 h.</span></div><div class="row-meta"><span>25 sept.</span></div></div></div>
-<div class="row" style=""><span class="lead-icon"><svg class="ico"><use href="#auto_awesome" /></svg></span><div class="row-main"><div class="row-title">Nouveau&nbsp;: le lecteur d'exercices</div><div class="row-meta"><span>Une copie plus lisible, des résultats dans la marge.</span></div><div class="row-meta"><span>12 sept.</span></div></div></div>
-<div class="row" style=""><span class="lead-icon"><svg class="ico"><use href="#info" /></svg></span><div class="row-main"><div class="row-title">Rentrée 2026</div><div class="row-meta"><span>Vos cours de l'an dernier sont dans Archivés.</span></div><div class="row-meta"><span>28 août</span></div></div></div>
+        <label class="sr-only" for="recherche-annonces">Rechercher une annonce</label>
+        <div class="input ann-search" id="recherche-annonces" role="searchbox"><svg class="ico ico-18" aria-hidden="true"><use href="#search" /></svg><span class="placeholder">Rechercher une annonce</span></div>
+        <div class="card rows ann-list">
+          <button class="row ann-row unread" type="button">
+            <span class="lead-icon"><svg class="ico" aria-hidden="true"><use href="#rate_review" /></svg></span>
+            <span class="row-main"><span class="row-title"><span class="sr-only">Non lue&nbsp;: </span>Les corrections détaillées arrivent</span><span class="row-meta"><span>Votre copie corrigée s'affiche à côté de votre note.</span></span><span class="row-meta"><span>27 sept.</span></span></span>
+          </button>
+          <button class="row ann-row" type="button" aria-current="true">
+            <span class="lead-icon"><svg class="ico" aria-hidden="true"><use href="#construction" /></svg></span>
+            <span class="row-main"><span class="row-title">Maintenance le 4 octobre</span><span class="row-meta"><span>PLaTon sera indisponible dimanche 4 octobre de 7&nbsp;h à 9&nbsp;h.</span></span><span class="row-meta"><span>25 sept.</span></span></span>
+          </button>
+          <button class="row ann-row" type="button">
+            <span class="lead-icon"><svg class="ico" aria-hidden="true"><use href="#auto_awesome" /></svg></span>
+            <span class="row-main"><span class="row-title">Nouveau&nbsp;: le lecteur d'exercices</span><span class="row-meta"><span>Une copie plus lisible, des résultats dans la marge.</span></span><span class="row-meta"><span>12 sept.</span></span></span>
+          </button>
+          <button class="row ann-row" type="button">
+            <span class="lead-icon"><svg class="ico" aria-hidden="true"><use href="#info" /></svg></span>
+            <span class="row-main"><span class="row-title">Rentrée 2026</span><span class="row-meta"><span>Vos cours de l'an dernier sont dans Archivés.</span></span><span class="row-meta"><span>28 août</span></span></span>
+          </button>
         </div>
       </div>
-      <article class="card card-pad">
-        <h2 class="title" style="font-size: 26px; margin-bottom: 4px">Maintenance le 4 octobre</h2>
-        <p class="muted" style="margin: 0 0 var(--spacing-5); font-size: 13px">Publiée le 25 septembre 2026 par Sophie Lambert</p>
+      <article class="card card-pad" aria-labelledby="ann-t">
+        <h2 class="title" id="ann-t">Maintenance le 4 octobre</h2>
+        <p class="muted small ann-by">Publiée le 25 septembre 2026 par Sophie Lambert, pour tout le monde</p>
         <div class="statement">
-          <p>PLaTon sera indisponible le samedi 4 octobre de 7 h à 9 h, le temps de mettre à jour le serveur qui exécute les exercices.</p>
-          <p>Aucune activité notée n'est programmée sur ce créneau. Les tentatives en cours à 7 h seront enregistrées.</p>
+          <p>PLaTon sera indisponible le dimanche 4 octobre de 7&nbsp;h à 9&nbsp;h, le temps de mettre à jour le serveur qui exécute les exercices.</p>
+          <p>Aucune activité notée n'a lieu sur ce créneau. Les tentatives en cours à 7&nbsp;h seront enregistrées.</p>
         </div>
       </article>
     </div>

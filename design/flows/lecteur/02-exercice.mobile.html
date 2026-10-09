@@ -1,35 +1,56 @@
-<header class="topbar">
-  <button class="btn btn-icon" aria-label="Quitter l'activité" data-wf-to="quitter"><svg class="ico"><use href="#arrow_back" /></svg></button>
-  <span class="topbar-title" style="flex: 1; font-size: 15px">Exercice 3 sur 8</span>
-  <span class="num" style="font-family: var(--font-mono); font-size: 14px">1:12:40</span>
+<a class="skip-link" href="#contenu">Aller au contenu</a>
+<header class="topbar exam-bar">
+  <span class="m-timer subheading" role="timer" aria-label="Temps restant 1 h 12 min 40 s"><svg class="ico" aria-hidden="true"><use href="#timer" /></svg><span class="num">1:12:40</span></span>
+  <button type="button" class="btn btn-cover-quiet btn-sm m-submit" data-wf-to="rendre">Rendre ma copie</button>
 </header>
-<main class="m-main" style="padding: var(--spacing-4)">
-  <div class="copie" style="padding: var(--spacing-5) var(--spacing-4) var(--spacing-5) 56px">
-    <div class="q">
-      <div class="q-mark" style="left: -48px; width: 32px"><span>1</span></div>
-      <h2 class="heading">Combien d'opérations élémentaires pour un tableau de taille n&nbsp;?</h2>
-      <div class="statement" style="font-size: 15px; line-height: 24px">
-        <span class="code" style="margin-top: 0">def somme(t):
-    s = 0
-    for x in t:
-        s = s + x
-    return s</span>
-      </div>
-      <div class="answer"><div class="input focused" style="height: 44px"><span class="placeholder">Votre réponse</span></div></div>
+<p class="sr-only" aria-live="polite"></p>
+<main class="m-reader has-bar has-note" id="contenu">
+  <div class="m-head">
+    <div class="course-mark sm hue-lagon" aria-hidden="true">AP1</div>
+    <div>
+      <h1 class="title">Examen partiel 2</h1>
+      <p class="small muted"><span class="sr-only">Algorithmique et programmation 1, </span>Exercice 3 sur 8&nbsp;: complexité de somme</p>
     </div>
-    <div class="q">
-      <div class="q-mark" style="left: -48px; width: 32px"><span>2</span></div>
-      <h2 class="heading">Complexité de <code>somme</code> dans le pire cas&nbsp;?</h2>
-      <div class="answer options">
-        <div class="option" style="min-height: 44px"><span class="box"></span>O(1)</div>
-        <div class="option on" style="min-height: 44px"><span class="box"></span>O(log n)</div>
-        <div class="option" style="min-height: 44px"><span class="box"></span>O(n)</div>
-        <div class="option" style="min-height: 44px"><span class="box"></span>O(n²)</div>
-      </div>
-    </div>
+    <span class="tag graded"><svg class="ico" aria-hidden="true"><use href="#grading" /></svg>Notée</span>
   </div>
-  <div style="display: grid; gap: var(--spacing-2); margin-top: var(--spacing-4)">
-    <a class="btn btn-primary btn-lg"><svg class="ico"><use href="#check" /></svg>Valider</a>
-    <a class="btn btn-secondary" data-wf-to="exercice">Exercice suivant<svg class="ico"><use href="#chevron_right" /></svg></a>
+  <div class="copie">
+    <div class="q">
+      <div class="q-mark" aria-hidden="true"><span>3.1</span></div>
+      <h2 class="heading" id="q1-t"><span class="sr-only">Question 3.1&nbsp;: </span>Combien d'opérations élémentaires cette fonction effectue-t-elle pour un tableau de taille n&nbsp;?</h2>
+      <div class="statement">
+        <p>On considère la fonction suivante, qui calcule la somme des éléments d'un tableau.</p>
+        <span class="code wrap"><span class="ln">def somme(t):</span>
+<span class="ln i1">s = 0</span>
+<span class="ln i1">for x in t:</span>
+<span class="ln i2">s = s + x</span>
+<span class="ln i1">return s</span></span>
+      </div>
+      <div class="answer">
+        <div class="input focused" role="textbox" aria-labelledby="q1-t"><span class="placeholder">Votre réponse, en fonction de n</span></div>
+      </div>
+    </div>
+    <div class="q">
+      <div class="q-mark" aria-hidden="true"><span>3.2</span></div>
+      <h2 class="heading" id="q2-t"><span class="sr-only">Question 3.2&nbsp;: </span>Quelle est la complexité de <code>somme</code> dans le pire cas&nbsp;?</h2>
+      <div class="answer options single" role="radiogroup" aria-labelledby="q2-t">
+        <div class="option" role="radio" aria-checked="false" tabindex="-1"><span class="box"></span>O(1)</div>
+        <div class="option" role="radio" aria-checked="false" tabindex="-1"><span class="box"></span>O(log n)</div>
+        <div class="option on" role="radio" aria-checked="true" tabindex="0"><span class="box"></span>O(n)</div>
+        <div class="option" role="radio" aria-checked="false" tabindex="-1"><span class="box"></span>O(n²)</div>
+      </div>
+    </div>
+    <p class="copie-help">Sauvegarder et Exercice suivant gardent votre réponse en brouillon, modifiable jusqu'à la fin de l'examen.</p>
   </div>
 </main>
+<div class="m-bottom">
+  <p class="m-bar-note" id="valider-d"><svg class="ico" aria-hidden="true"><use href="#lock" /></svg>Valider est définitif&nbsp;: une seule tentative.</p>
+  <div class="m-actions">
+    <button type="button" class="btn btn-secondary">Sauvegarder</button>
+    <button type="button" class="btn btn-primary btn-lg" aria-describedby="valider-d"><svg class="ico" aria-hidden="true"><use href="#check" /></svg>Valider</button>
+  </div>
+  <nav class="m-nav" aria-label="Navigation entre les exercices">
+    <button type="button" class="btn btn-secondary btn-icon" aria-label="Exercice précédent" data-wf-to="exercice"><svg class="ico" aria-hidden="true"><use href="#chevron_left" /></svg></button>
+    <button type="button" class="btn btn-secondary" aria-haspopup="dialog" data-wf-to="exercice"><svg class="ico" aria-hidden="true"><use href="#list" /></svg>Exercice 3 sur 8</button>
+    <button type="button" class="btn btn-secondary btn-icon" aria-label="Exercice suivant" data-wf-to="exercice"><svg class="ico" aria-hidden="true"><use href="#chevron_right" /></svg></button>
+  </nav>
+</div>

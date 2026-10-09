@@ -1,5 +1,4 @@
 import { Provider } from '@angular/core'
-import { NOTIFICATION_PARSER } from '@platon/feature/notification/browser'
 import { ResourceEventProvider } from './models/resource-event-provider'
 import { ResourceFileProvider } from './models/resource-file-provider'
 import { ResourceInvitationProvider } from './models/resource-invitation-provider'
@@ -12,8 +11,8 @@ import { RemoteResourceInvitationProvider } from './providers/remote-resource-in
 import { RemoteResourceMemberProvider } from './providers/remote-resource-member.provider'
 import { RemoteResourceWatcherProvider } from './providers/remote-resource-watcher.provider'
 import { RemoteResourceProvider } from './providers/remote-resource.provider'
-import { ResourceNotificationParsers } from './providers/resource-notification-parser.provider'
 
+/** What `ResourceService` needs, over HTTP. Both interfaces provide it. */
 export const RESOURCE_PROVIDERS: Provider[] = [
   { provide: ResourceProvider, useClass: RemoteResourceProvider },
   { provide: ResourceFileProvider, useClass: RemoteResourceFileProvider },
@@ -21,10 +20,4 @@ export const RESOURCE_PROVIDERS: Provider[] = [
   { provide: ResourceInvitationProvider, useClass: RemoteResourceInvitationProvider },
   { provide: ResourceMemberProvider, useClass: RemoteResourceMemberProvider },
   { provide: ResourceWatcherProvider, useClass: RemoteResourceWatcherProvider },
-
-  ...ResourceNotificationParsers.map((provider) => ({
-    provide: NOTIFICATION_PARSER,
-    multi: true,
-    useValue: provider,
-  })),
 ]

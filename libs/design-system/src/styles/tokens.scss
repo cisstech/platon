@@ -11,8 +11,11 @@
   --pl-color-surface: #1a191d;
   --pl-color-surface-muted: #201f23;
   --pl-color-surface-raised: #252528;
+  --pl-color-hover: #2f2e32;
   --pl-color-line: #313034;
   --pl-color-line-strong: #3f3e41;
+  --pl-color-skeleton: #3a393d;
+  --pl-color-skeleton-shine: #29282c;
   --pl-color-control: var(--pl-graphite-450);
   --pl-color-text: var(--pl-graphite-100);
   --pl-color-muted: var(--pl-graphite-300);
@@ -28,17 +31,22 @@
   --pl-color-success: var(--pl-green-500);
   --pl-color-success-ink: var(--pl-green-200);
   --pl-color-success-soft: #1d2d26;
+  --pl-color-success-line: #2f5a44;
   --pl-color-danger: var(--pl-red-500);
   --pl-color-danger-ink: var(--pl-red-200);
   --pl-color-danger-soft: #392022;
   --pl-color-danger-strong: var(--pl-red-300);
+  --pl-color-danger-strong-hover: var(--pl-red-200);
   --pl-color-on-danger: var(--pl-graphite-950);
+  --pl-color-danger-line: #7b2e2d;
   --pl-color-warning: var(--pl-ochre-400);
   --pl-color-warning-ink: var(--pl-ochre-200);
   --pl-color-warning-soft: #372c1f;
+  --pl-color-warning-line: #6b5023;
   --pl-color-info: var(--pl-blue-600);
   --pl-color-info-ink: var(--pl-blue-200);
   --pl-color-info-soft: #15293b;
+  --pl-color-info-line: #24527a;
 
   --pl-color-scrim: rgb(0 0 0 / 0.6);
   --pl-shadow-color: 0 0 0;
@@ -133,8 +141,13 @@
   --pl-color-surface: var(--pl-graphite-0);
   --pl-color-surface-muted: var(--pl-graphite-25);
   --pl-color-surface-raised: var(--pl-graphite-0);
+  // Background of a neutral control under the pointer or the keyboard (icon button, menu entry).
+  --pl-color-hover: var(--pl-graphite-100);
   --pl-color-line: var(--pl-graphite-150);
   --pl-color-line-strong: var(--pl-graphite-200);
+  // The shape of content on its way, and the light that passes over it.
+  --pl-color-skeleton: var(--pl-graphite-150);
+  --pl-color-skeleton-shine: var(--pl-graphite-100);
   // Borders of fields and checkboxes: 3:1 against the surface.
   --pl-color-control: var(--pl-graphite-450);
   --pl-color-text: var(--pl-graphite-900);
@@ -154,18 +167,24 @@
   --pl-color-success: var(--pl-green-600);
   --pl-color-success-ink: var(--pl-green-700);
   --pl-color-success-soft: var(--pl-green-50);
+  --pl-color-success-line: var(--pl-green-200);
   --pl-color-danger: var(--pl-red-600);
   --pl-color-danger-ink: var(--pl-red-700);
   --pl-color-danger-soft: var(--pl-red-50);
   // Fill of a destructive action, with its text.
   --pl-color-danger-strong: var(--pl-red-600);
+  --pl-color-danger-strong-hover: var(--pl-red-700);
   --pl-color-on-danger: var(--pl-graphite-0);
+  // Border of a quiet destructive action, and of a message on a `-soft` background.
+  --pl-color-danger-line: var(--pl-red-200);
   --pl-color-warning: var(--pl-ochre-400);
   --pl-color-warning-ink: var(--pl-ochre-700);
   --pl-color-warning-soft: var(--pl-ochre-50);
+  --pl-color-warning-line: var(--pl-ochre-200);
   --pl-color-info: var(--pl-blue-600);
   --pl-color-info-ink: var(--pl-blue-700);
   --pl-color-info-soft: var(--pl-blue-50);
+  --pl-color-info-line: var(--pl-blue-200);
 
   // The margin of the surfaces where a student answers.
   --pl-color-margin: var(--pl-red-300);
@@ -177,7 +196,11 @@
   --pl-color-cover-text: var(--pl-plum-100);
   --pl-color-cover-muted: var(--pl-plum-300);
   --pl-color-cover-primary: var(--pl-plum-300);
+  --pl-color-cover-primary-hover: var(--pl-plum-200);
   --pl-color-cover-primary-text: var(--pl-graphite-950);
+  // State icons on the cover (a floating notification), readable in both themes.
+  --pl-color-cover-warning: var(--pl-ochre-200);
+  --pl-color-cover-danger: var(--pl-red-300);
 
   // Joy: the colors of the logo, for a finished activity or a welcome, never for a result.
   --pl-color-joy-1: #e9048d;
@@ -266,6 +289,8 @@
   --pl-duration-menu: 180ms;
   --pl-duration-panel: 260ms;
   --pl-duration-joy: 600ms;
+  // One pass of the light over a skeleton.
+  --pl-duration-shimmer: 1400ms;
   --pl-ease-standard: cubic-bezier(0.2, 0, 0, 1);
   --pl-ease-exit: cubic-bezier(0.3, 0, 1, 1);
 
@@ -277,8 +302,11 @@
   --pl-layer-tooltip: 1300;
 
   --pl-icon-size-1: 16px;
-  --pl-icon-size-2: 20px;
-  --pl-icon-size-3: 24px;
+  --pl-icon-size-2: 18px;
+  --pl-icon-size-3: 20px;
+  --pl-icon-size-4: 24px;
+  --pl-glyph-size-1: 40px;
+  --pl-glyph-size-2: 56px;
 
   --pl-cover-width: 240px;
   --pl-topbar-height: 56px;
@@ -295,11 +323,46 @@
   }
 }
 
+// The hue of a course on what carries `data-hue`: its tint behind, its ink on it.
+[data-hue='coral'] {
+  --pl-hue-tint: var(--pl-course-coral-tint);
+  --pl-hue-ink: var(--pl-course-coral-ink);
+}
+[data-hue='amber'] {
+  --pl-hue-tint: var(--pl-course-amber-tint);
+  --pl-hue-ink: var(--pl-course-amber-ink);
+}
+[data-hue='olive'] {
+  --pl-hue-tint: var(--pl-course-olive-tint);
+  --pl-hue-ink: var(--pl-course-olive-ink);
+}
+[data-hue='mint'] {
+  --pl-hue-tint: var(--pl-course-mint-tint);
+  --pl-hue-ink: var(--pl-course-mint-ink);
+}
+[data-hue='lagoon'] {
+  --pl-hue-tint: var(--pl-course-lagoon-tint);
+  --pl-hue-ink: var(--pl-course-lagoon-ink);
+}
+[data-hue='cornflower'] {
+  --pl-hue-tint: var(--pl-course-cornflower-tint);
+  --pl-hue-ink: var(--pl-course-cornflower-ink);
+}
+[data-hue='lilac'] {
+  --pl-hue-tint: var(--pl-course-lilac-tint);
+  --pl-hue-ink: var(--pl-course-lilac-ink);
+}
+[data-hue='raspberry'] {
+  --pl-hue-tint: var(--pl-course-raspberry-tint);
+  --pl-hue-ink: var(--pl-course-raspberry-ink);
+}
+
 @media (prefers-reduced-motion: reduce) {
   :root {
     --pl-duration-hover: 1ms;
     --pl-duration-menu: 1ms;
     --pl-duration-panel: 1ms;
     --pl-duration-joy: 1ms;
+    --pl-duration-shimmer: 1ms;
   }
 }

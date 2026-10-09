@@ -8,26 +8,26 @@
         <div class="brand-org">Université Gustave Eiffel</div>
       </div>
     </div>
-    <a class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico"><use href="#add" /></svg>Créer</a>
+    <button type="button" class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico" aria-hidden="true"><use href="#add" /></svg>Créer</button>
     <nav class="nav">
-      <a class="nav-item" data-wf-to="enseignant"><svg class="ico"><use href="#home" /></svg>Accueil</a>
-      <a class="nav-item" data-wf-to="annonces"><svg class="ico"><use href="#campaign" /></svg>Annonces</a>
-      <a class="nav-item" data-wf-to="mes-cours"><svg class="ico"><use href="#school" /></svg>Cours</a>
-      <a class="nav-item" data-wf-to="file"><svg class="ico"><use href="#rate_review" /></svg>Corrections<span class="count">14</span></a>
-      <a class="nav-item" data-wf-to="catalogue"><svg class="ico"><use href="#folder_open" /></svg>Ressources</a>
-      <a class="nav-item" data-wf-to="test"><svg class="ico"><use href="#fact_check" /></svg>Tests d'entrée</a>
-      <a class="nav-item active" data-wf-to="utilisateurs"><svg class="ico"><use href="#shield_person" /></svg>Administration</a>
+      <a href="#" class="nav-item" data-wf-to="enseignant"><svg class="ico" aria-hidden="true"><use href="#home" /></svg>Accueil</a>
+      <a href="#" class="nav-item" data-wf-to="annonces"><svg class="ico" aria-hidden="true"><use href="#campaign" /></svg>Annonces</a>
+      <a href="#" class="nav-item" data-wf-to="mes-cours"><svg class="ico" aria-hidden="true"><use href="#school" /></svg>Cours</a>
+      <a href="#" class="nav-item" data-wf-to="file"><svg class="ico" aria-hidden="true"><use href="#rate_review" /></svg>Corrections</a>
+      <a href="#" class="nav-item" data-wf-to="catalogue"><svg class="ico" aria-hidden="true"><use href="#folder_open" /></svg>Ressources</a>
+      <a href="#" class="nav-item" data-wf-to="test"><svg class="ico" aria-hidden="true"><use href="#fact_check" /></svg>Tests d'entrée</a>
+      <a href="#" class="nav-item active" data-wf-to="utilisateurs"><svg class="ico" aria-hidden="true"><use href="#shield_person" /></svg>Administration</a>
     </nav>
     <div class="sidebar-foot">
-      <a class="nav-item"><svg class="ico"><use href="#help" /></svg>Documentation</a>
-      <a class="nav-item"><svg class="ico"><use href="#notifications" /></svg>Notifications<span class="count">2</span></a>
+      <a href="#" class="nav-item"><svg class="ico" aria-hidden="true"><use href="#help" /></svg>Documentation</a>
+      <a href="#" class="nav-item"><svg class="ico" aria-hidden="true"><use href="#notifications" /></svg>Notifications<span class="count">2</span></a>
       <div class="me">
         <span class="avatar">SL</span>
         <div>
           <div class="me-name">Sophie Lambert</div>
-          <div class="me-role">Administratrice</div>
+          <div class="me-role">Compte administrateur</div>
         </div>
-        <svg class="ico ico-16"><use href="#expand_more" /></svg>
+        <svg class="ico ico-16" aria-hidden="true"><use href="#expand_more" /></svg>
       </div>
       <a class="credit" href="https://github.com/cisstech/platon" aria-label="Code source de PLaTon, logiciel libre de cisstech"><svg class="ico ico-16" aria-hidden="true"><use href="#code" /></svg>Logiciel libre, par <strong>cisstech</strong></a>
     </div>
@@ -35,38 +35,41 @@
   <main class="main" id="contenu">
     <header class="page-head">
       <div>
+        <p class="crumbs admin-mode"><span class="tag"><svg class="ico" aria-hidden="true"><use href="#shield_person" /></svg>Mode administration</span><span>Ce que vous changez ici vaut pour toute la plateforme.</span></p>
         <h1 class="title">Administration</h1>
-        <p class="page-sub">Comptes, groupes, connexions et contenus de la plateforme.</p>
       </div>
-      <div class="actions"><a class="btn btn-primary" data-wf-to="utilisateur-nouveau"><svg class="ico"><use href="#person_add" /></svg>Ajouter un utilisateur</a></div>
+      <div class="actions"><button type="button" class="btn btn-primary" data-wf-to="utilisateur-nouveau"><svg class="ico" aria-hidden="true"><use href="#person_add" /></svg>Ajouter un utilisateur</button></div>
     </header>
-    <div class="tabs"><a class="tab active" data-wf-to="utilisateurs"><svg class="ico"><use href="#person" /></svg>Utilisateurs</a><a class="tab" data-wf-to="groupes-plateforme"><svg class="ico"><use href="#groups" /></svg>Groupes</a><a class="tab" data-wf-to="lms"><svg class="ico"><use href="#school" /></svg>LMS</a><a class="tab" data-wf-to="cas"><svg class="ico"><use href="#key" /></svg>CAS</a><a class="tab" data-wf-to="tags"><svg class="ico"><use href="#bookmark" /></svg>Tags</a><a class="tab" data-wf-to="annonces-admin"><svg class="ico"><use href="#campaign" /></svg>Annonces</a></div>
+    <nav class="tabs" aria-label="Rubriques de l'administration">
+      <a href="#" class="tab active" aria-current="page" data-wf-to="utilisateurs"><svg class="ico" aria-hidden="true"><use href="#person" /></svg>Utilisateurs</a>
+      <a href="#" class="tab" data-wf-to="groupes-plateforme"><svg class="ico" aria-hidden="true"><use href="#groups" /></svg>Groupes</a>
+      <a href="#" class="tab" data-wf-to="lms"><svg class="ico" aria-hidden="true"><use href="#hub" /></svg>Connexions</a>
+      <a href="#" class="tab" data-wf-to="tags"><svg class="ico" aria-hidden="true"><use href="#bookmark" /></svg>Tags</a>
+      <a href="#" class="tab" data-wf-to="annonces-admin"><svg class="ico" aria-hidden="true"><use href="#campaign" /></svg>Annonces</a>
+    </nav>
     <div class="toolbar">
-      <div class="input" style="width: 320px"><svg class="ico ico-18" style="margin: 0 8px 0 0; color: var(--color-subtle)"><use href="#search" /></svg><span class="placeholder">Nom, identifiant ou e-mail</span></div>
-      <span class="segmented"><span class="on">Tous les rôles</span><span>Admin</span><span>Enseignant</span><span>Élève</span></span>
-      <span class="segmented"><span class="on">Actifs</span><span>Désactivés</span></span>
+      <label class="sr-only" for="recherche-utilisateurs">Rechercher un utilisateur</label>
+      <div class="input search wide" id="recherche-utilisateurs" role="searchbox"><svg class="ico ico-18" aria-hidden="true"><use href="#search" /></svg><span>Hélène Martin</span><button type="button" class="btn btn-icon btn-sm" aria-label="Effacer la recherche"><svg class="ico ico-18" aria-hidden="true"><use href="#close" /></svg></button></div>
+      <span class="select" role="button" tabindex="0" aria-haspopup="listbox" aria-label="Rôle, tous les rôles">Tous les rôles<svg class="ico ico-16" aria-hidden="true"><use href="#expand_more" /></svg></span>
+      <span class="segmented" role="radiogroup" aria-label="Statut"><span class="on" role="radio" aria-checked="true" tabindex="0">Actifs</span><span role="radio" aria-checked="false" tabindex="-1">Désactivés</span></span>
     </div>
-    <div class="card" style="padding: 0; overflow: hidden">
+    <div class="card table-card">
       <table class="table">
-        <thead><tr><th>Utilisateur</th><th>E-mail</th><th>Rôle</th><th>Statut</th><th>Ajouté le</th><th></th></tr></thead>
+        <thead><tr><th scope="col" class="col-check"><span class="check" role="checkbox" aria-checked="false" tabindex="0" aria-label="Sélectionner tous les comptes de cette page"></span></th><th scope="col" aria-sort="ascending"><button type="button" class="th-sort">Utilisateur<svg class="ico" aria-hidden="true"><use href="#arrow_upward" /></svg></button></th><th scope="col">E-mail</th><th scope="col">Rôle</th><th scope="col"><button type="button" class="th-sort">Ajouté le<svg class="ico" aria-hidden="true"><use href="#swap_vert" /></svg></button></th><th scope="col" class="cell-actions"><span class="sr-only">Actions</span></th></tr></thead>
         <tbody>
-<tr><td><div class="person"><span class="avatar">KH</span><div>Karim Haddad<small>khaddad</small></div></div></td><td>karim.haddad@univ-eiffel.fr</td><td>Enseignant</td><td><span class="tag success"><svg class="ico"><use href="#check_circle" /></svg>Actif</span></td><td>3 sept. 2024</td><td style="width: 44px"><button class="btn btn-icon btn-sm" aria-label="Actions" data-wf-to="utilisateur-actions"><svg class="ico ico-18"><use href="#more_horiz" /></svg></button></td></tr>
-<tr><td><div class="person"><span class="avatar">HM</span><div>Hélène Martin<small>hmartin</small></div></div></td><td>helene.martin@univ-eiffel.fr</td><td>Enseignant</td><td><span class="tag success"><svg class="ico"><use href="#check_circle" /></svg>Actif</span></td><td>12 janv. 2023</td><td style="width: 44px"><button class="btn btn-icon btn-sm" aria-label="Actions"><svg class="ico ico-18"><use href="#more_horiz" /></svg></button></td></tr>
-<tr><td><div class="person"><span class="avatar">IB</span><div>Inès Benali<small>ibenali</small></div></div></td><td>ines.benali@etud.univ-eiffel.fr</td><td>Élève</td><td><span class="tag success"><svg class="ico"><use href="#check_circle" /></svg>Actif</span></td><td>1er sept. 2026</td><td style="width: 44px"><button class="btn btn-icon btn-sm" aria-label="Actions"><svg class="ico ico-18"><use href="#more_horiz" /></svg></button></td></tr>
-<tr><td><div class="person"><span class="avatar">PR</span><div>Paul Renard<small>prenard</small></div></div></td><td>paul.renard@univ-eiffel.fr</td><td>Enseignant</td><td><span class="tag danger"><svg class="ico"><use href="#lock" /></svg>Désactivé</span></td><td>8 mars 2022</td><td style="width: 44px"><button class="btn btn-icon btn-sm" aria-label="Actions"><svg class="ico ico-18"><use href="#more_horiz" /></svg></button></td></tr>
-<tr><td><div class="person"><span class="avatar">Cd</span><div>Compte démo<small>demo-ap1</small></div></div></td><td></td><td>Démo</td><td><span class="tag success"><svg class="ico"><use href="#check_circle" /></svg>Actif</span></td><td>10 sept. 2026</td><td style="width: 44px"><button class="btn btn-icon btn-sm" aria-label="Actions"><svg class="ico ico-18"><use href="#more_horiz" /></svg></button></td></tr>
+<tr class="is-open"><td class="col-check"><span class="check" role="checkbox" aria-checked="false" tabindex="0" aria-label="Sélectionner Hélène Martin"></span></td><td><div class="person"><span class="avatar" aria-hidden="true">HM</span><div>Hélène Martin<small>helene.martin</small></div></div></td><td>helene.martin@univ-eiffel.fr</td><td>Enseignant</td><td>12 janv. 2023</td><td class="cell-actions"><button type="button" class="btn btn-icon btn-sm" aria-label="Actions pour Hélène Martin" aria-haspopup="menu" data-wf-to="utilisateur-actions" aria-expanded="true"><svg class="ico ico-18" aria-hidden="true"><use href="#more_horiz" /></svg></button></td></tr>
         </tbody>
       </table>
-      <div class="table-foot"><span class="muted">1 à 5 sur 4&nbsp;812</span><span style="margin-left: auto; display: flex; gap: 4px"><button class="btn btn-icon btn-sm" aria-label="Page précédente"><svg class="ico ico-18"><use href="#chevron_left" /></svg></button><button class="btn btn-icon btn-sm" aria-label="Page suivante"><svg class="ico ico-18"><use href="#chevron_right" /></svg></button></span></div>
+      <div class="table-foot"><span>1 compte actif trouvé</span></div>
     </div>
   </main>
-  <div class="scrim" style="background: transparent" data-wf-to="utilisateurs"></div>
-  <div class="menu" role="menu" aria-label="Actions sur Karim Haddad" style="right: 40px; top: 392px; width: 260px">
-    <div class="menu-head">Rôle</div>
-    <div class="menu-item" role="menuitem"><svg class="ico"><use href="#shield_person" /></svg><div><div class="menu-item-title">Admin</div></div></div>
-    <div class="menu-item focused" role="menuitem"><svg class="ico"><use href="#check" /></svg><div><div class="menu-item-title">Enseignant</div></div></div>
-    <div class="menu-item" role="menuitem"><svg class="ico"><use href="#school" /></svg><div><div class="menu-item-title">Élève</div></div></div>
+  <div class="scrim clear" data-wf-to="utilisateurs" aria-hidden="true"></div>
+  <div class="menu row-menu" role="menu" aria-label="Actions pour Hélène Martin">
+    <div class="menu-head caption muted">Rôle</div>
+    <div class="menu-item focused" role="menuitemradio" aria-checked="false" data-wf-to="utilisateur-role"><svg class="ico" aria-hidden="true"><use href="#radio_button_unchecked" /></svg><div><div class="menu-item-title">Administrateur</div></div></div>
+    <div class="menu-item" role="menuitemradio" aria-checked="true"><svg class="ico" aria-hidden="true"><use href="#radio_button_checked" /></svg><div><div class="menu-item-title">Enseignant</div><div class="menu-item-desc">Rôle actuel</div></div></div>
+    <div class="menu-item" role="menuitemradio" aria-checked="false"><svg class="ico" aria-hidden="true"><use href="#radio_button_unchecked" /></svg><div><div class="menu-item-title">Étudiant</div></div></div>
     <div class="menu-sep"></div>
-    <div class="menu-item" role="menuitem" style="color: var(--color-danger-ink)"><svg class="ico"><use href="#lock" /></svg><div><div class="menu-item-title">Désactiver le compte</div><div class="menu-item-desc">Karim Haddad ne pourra plus se connecter. Ses cours et ressources restent.</div></div></div>
+    <div class="menu-item danger" role="menuitem" data-wf-to="utilisateur-desactiver"><svg class="ico" aria-hidden="true"><use href="#block" /></svg><div><div class="menu-item-title">Désactiver le compte</div><div class="menu-item-desc">Hélène Martin ne pourra plus se connecter. Ses cours et ressources restent.</div></div></div>
   </div>
 </div>

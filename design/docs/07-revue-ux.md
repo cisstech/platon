@@ -40,7 +40,8 @@ inventer côté données. Chaque changement est marqué dans les annotations de 
 
 ## Reste ouvert
 
-1. Teinte des cours : un champ `colorHue` sur `Course`, ou la teinte dérivée de l'id.
+1. Teinte des cours : un champ `colorHue` sur `Course`, ou la teinte dérivée de l'id. Tranché le
+   2026-10-09 : dérivée de l'id (D32 dans `docs/backlog/DECISIONS.md`).
 2. Composer une activité et Ajouter à un cours créent des ressources dans le cercle personnel :
    faut-il les ranger dans un dossier dédié pour ne pas l'encombrer ?
 3. Le mobile enseignant n'est pas dessiné. L'usage réel est-il assez fort pour le faire ?

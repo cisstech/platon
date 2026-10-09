@@ -44,6 +44,31 @@ Gravité : **P1** bloque, trompe ou expose. **P2** gêne ou fait douter. **P3** 
 - **Cause** : les données ne sont chargées que pour `student`.
 - **Où** : `apps/web/src/app/pages/dashboard/overview/overview.presenter.ts`
 
+### B21. Suppression des notifications d'une autre personne
+
+- [ ] Corrigé
+- **Symptôme** : la mutation de suppression d'une notification accepte n'importe quel identifiant ;
+  une personne connectée peut supprimer les notifications d'une autre si elle connaît leurs
+  identifiants.
+- **Cause** : `NotificationService.delete(userId, ids)` appelle `repository.delete(ids)` sans filtrer
+  sur `userId`.
+- **Où** : `libs/feature/notification/server/src/lib/notification.service.ts`
+- **Correctif** : supprimer par `{ userId, id: In(ids) }`, comme `markAsUnread` (PR #120, sur
+  `main`, avant la nouvelle interface).
+
+### B23. Connexion sans limite de tentatives, qui dit si un compte existe
+
+- [ ] Corrigé
+- **Symptôme** : on peut essayer des mots de passe sans fin ; un nom d'utilisateur inconnu reçoit
+  « User not found » (404), un mauvais mot de passe « Password is incorrect » (400) : la réponse dit
+  quels comptes existent.
+- **Cause** : aucune limite de débit dans l'API ni dans nginx ; deux erreurs distinctes à la
+  connexion.
+- **Où** : `libs/core/server/src/lib/auth/auth.controller.ts` (`signin`),
+  `libs/core/server/src/lib/auth/auth.service.ts` (`signIn`), `.docker/nginx/nginx.prod.conf`
+- **Piste** : une même réponse pour les deux cas (G-04) ; une limite par adresse et par compte sur
+  `POST /auth/signin` (`@nestjs/throttler` ou `limit_req`).
+
 ## P2
 
 ### B6. `/tests` sans garde de rôle
@@ -81,6 +106,43 @@ Gravité : **P1** bloque, trompe ou expose. **P2** gêne ou fait douter. **P3** 
 - **Symptôme** : si les résultats ne chargent pas, rien ne s'affiche, sans message.
 - **Cause** : erreur non gérée dans `ngOnInit`.
 - **Où** : `player-results.component.ts`
+
+### B20. Compteur de notifications à 0 au chargement
+
+- [ ] Corrigé
+- **Symptôme** : la cloche affiche 0 notification non lue à l'ouverture de PLaTon, même quand il y en
+  a ; le bon nombre n'apparaît qu'à la prochaine notification reçue.
+- **Cause** : le compteur part de 0 et n'est mis à jour que par l'abonnement `OnChangeNotifications`,
+  qui n'envoie rien à la connexion ; aucune requête ne lit le compte au départ.
+- **Où** : `libs/feature/notification/browser/src/lib/api/notification.service.ts`,
+  `components/notification-drawer/notification-drawer.component.ts`
+- **Piste** : lire `totalCount` de `notifications(filters: { unread: true })` au chargement ; C-04 le
+  fait pour la nouvelle interface.
+
+### B22. Un élève correcteur ne peut pas enregistrer ses corrections
+
+- [ ] Corrigé
+- **Symptôme** : un élève désigné correcteur d'une activité voit ses copies à corriger, mais chaque
+  correction enregistrée est refusée (403).
+- **Cause** : le choix des correcteurs propose tous les membres du cours, élèves compris, alors que
+  `POST /results/corrections/:sessionId` n'accepte que les rôles enseignant et administrateur.
+- **Où** : `libs/feature/result/server/src/lib/correction/correction.controller.ts` (`@Roles`),
+  `libs/feature/course/browser/src/components/activity-settings/restriction/`
+- **Piste** : autoriser l'enregistrement à toute personne désignée correctrice de l'activité
+  (`ActivityCorrectorView`), ou ne proposer que des enseignants comme correcteurs. À trancher.
+
+### B24. Un échec du CAS finit sur une erreur JSON
+
+- [ ] Corrigé
+- **Symptôme** : un ticket CAS refusé ou un fournisseur injoignable affiche une erreur 500 en JSON à
+  l'adresse de l'API, sans retour à la page de connexion. Sans `next`, la redirection réussie envoie
+  `next=undefined`.
+- **Cause** : `checkCasTicket` lève une erreur au lieu de rediriger ; `next` et l'adresse de service
+  ne sont pas encodés, et `https` est écrit en dur.
+- **Où** : `libs/feature/cas/server/src/lib/cas.controller.ts`,
+  `libs/feature/lti/server/src/lib/lti.middleware.ts` (même `next` non encodé)
+- **Piste** : rediriger vers `/login` avec un code d'erreur que la page traduit ; encoder `next`, et
+  l'omettre quand il manque (G-04).
 
 ## P3
 
@@ -132,8 +194,8 @@ Gravité : **P1** bloque, trompe ou expose. **P2** gêne ou fait douter. **P3** 
 - **Cause** : ces bundles `inject: false` n'ont pas d'empreinte dans leur nom et nginx n'envoie pas
   de `Cache-Control` ; `ThemeService` les charge sans version.
 - **Où** : `libs/core/browser/src/lib/services/theme.service.ts`, `.docker/nginx/nginx.prod.conf`
-- **Piste** : réutiliser `buildVersion` et `stylesheetHref` (`apps/web/src/ui-styles.ts`), comme
-  pour `styles.legacy.css`.
+- **Piste** : versionner l'adresse comme `uiStylesheetHref` le fait pour `styles.legacy.css`
+  (`apps/web/src/ui-switch/ui-stylesheet.ts`), avec l'empreinte de `main.js`.
 
 ### B18. `index.html` sans `Cache-Control`
 
@@ -146,6 +208,18 @@ Gravité : **P1** bloque, trompe ou expose. **P2** gêne ou fait douter. **P3** 
 - **Piste** : `location = /index.html` avec `Cache-Control: no-cache` (revalidation à chaque chargement,
   réponse 304 si rien n'a changé), en répétant les en-têtes de sécurité, que nginx n'hérite pas quand
   un `add_header` est posé dans le bloc.
+
+### B19. L'utilisateur courant est rechargé à chaque appel
+
+- [ ] Corrigé
+- **Symptôme** : une requête `GET /api/v1/users/{username}` à chaque garde de route et à chaque
+  service qui demande l'utilisateur (une trentaine d'appels à `ready()`).
+- **Cause** : `AuthService` déclare `user` mais ne l'affecte jamais ; seule la requête en cours est
+  partagée. Pour la même raison, `signOut` ne prévient jamais les observateurs de la déconnexion
+  (aucun n'est déclaré aujourd'hui).
+- **Où** : `libs/core/browser/src/lib/auth/api/auth.service.ts`
+- **Piste** : garder l'utilisateur dans `connect()`, le vider à la connexion, à la réinitialisation
+  du mot de passe et à la déconnexion.
 
 ## Code mort
 

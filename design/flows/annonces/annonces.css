@@ -1,0 +1,122 @@
+/* List and detail side by side on desktop. */
+.ann-layout {
+  display: grid;
+  grid-template-columns: 340px minmax(0, 1fr);
+  gap: var(--spacing-6);
+  align-items: start;
+}
+.ann-search {
+  gap: var(--spacing-2);
+}
+.ann-search .ico {
+  color: var(--color-subtle);
+}
+.ann-list {
+  margin-top: var(--spacing-3);
+}
+button.ann-row {
+  width: 100%;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+}
+.ann-row .row-main,
+.ann-row .row-title,
+.ann-row .row-meta {
+  display: block;
+}
+.ann-row[aria-current] {
+  background: var(--color-primary-soft);
+}
+.ann-row.unread .row-title {
+  position: relative;
+}
+.ann-row.unread .row-title::after {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-left: 6px;
+  border-radius: 50%;
+  background: var(--color-graphite-800);
+  vertical-align: middle;
+}
+.ann-by {
+  margin: 4px 0 var(--spacing-5);
+}
+
+/* On a phone: one list, each announcement opens in place. */
+.m-search {
+  height: 44px;
+  margin-top: var(--spacing-5);
+}
+.m-ann-list {
+  margin-top: var(--spacing-3);
+}
+.m-ann {
+  padding: var(--spacing-1) var(--spacing-4) var(--spacing-3);
+}
+.m-ann + .m-ann {
+  border-top: 1px solid var(--color-line);
+}
+.m-ann-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-2);
+  width: 100%;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.m-ann-chev {
+  color: var(--color-subtle);
+}
+.m-ann.open .m-ann-chev {
+  transform: rotate(180deg);
+}
+.m-ann.unread .m-ann-title::after {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-left: 6px;
+  border-radius: 50%;
+  background: var(--color-graphite-800);
+  vertical-align: middle;
+}
+.m-ann-body {
+  margin-top: var(--spacing-3);
+  font-size: 16px;
+  line-height: 26px;
+}
+.m-ann-body p + p {
+  margin-top: var(--spacing-3);
+}
+.m-ann-date {
+  margin-top: 2px;
+  color: var(--color-subtle);
+}
+
+/* Each announcement says its kind with a neutral icon: a maintenance is information, not an alert. */
+.m-ann-kind {
+  flex: none;
+  color: var(--color-graphite-600);
+}
+.m-ann-title {
+  flex: 1;
+}
+.m-ann-sum,
+.m-ann-date {
+  padding-left: 26px;
+}
+.m-ann-body {
+  padding-left: 26px;
+}

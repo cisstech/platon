@@ -208,7 +208,8 @@ tirée de son magenta et de son orange.
 ## Couleur
 
 **La couverture** est un prune profond (`cover`, `#321a40`), tiré du logo. C'est le fond de la
-barre latérale et de la page de connexion, jamais celui d'un contenu. Elle est toujours sombre,
+barre latérale, de la page de connexion et des barres qui flottent au-dessus de la page (la barre
+de sélection, la notification), jamais celui d'un contenu. Elle est toujours sombre,
 même en thème clair, comme la couverture d'un cahier. Ses textes sont dans les encres claires
 (`cover-text` 13:1, `cover-muted` 8,2:1). Pour un utilisateur de PLaTon, c'est aussi une continuité :
 la barre latérale a toujours été violette.
@@ -217,22 +218,38 @@ la barre latérale a toujours été violette.
 de 1 % de chroma de la même teinte. Pas de beige.
 
 **L'encre** (`primary`, encre 700) fait une seule chose : désigner ce que l'on peut faire et ce
-qui est sélectionné. Bouton primaire, lien, onglet actif, anneau de focus.
+qui est sélectionné. Bouton primaire, lien, onglet actif, anneau de focus. Jamais une barre de
+progression, un graphique ni une étiquette : une progression prend la teinte de son cours, ou le
+graphite quand elle n'appartient à aucun cours ; un graphique est en graphites. « Notée » est une
+étiquette au filet, sans couleur.
 
 **Les couleurs d'état** ont un sens fixe et viennent toujours avec une icône ou un mot :
 validation (vert) pour juste, prêt, ouvert ; correction (rouge) pour faux, erreur, suppression, en
-retard ; attention (ocre) pour partiel, à tester, échéance proche ; repère (bleu) pour planifié.
+retard ; attention (ocre) pour partiel, à tester, échéance proche, à surveiller ; repère (bleu) pour
+planifié, et rien d'autre. Un chiffre bas n'est pas une erreur : il est « à surveiller », en
+attention, jamais en rouge. Un message d'attente reste neutre.
 
 **Les couleurs de cours** sont les intercalaires du classeur : huit teintes nommées (corail,
 ambre, olive, menthe, lagon, bleuet, lilas, framboise), chacune avec un fond clair (`tint`), une
-couleur pleine (`strong`) et une couleur de texte (`ink`, entre 6,7:1 et 7,3:1 sur son fond). Un
+couleur pleine (`strong`) et une couleur de texte (`ink`, entre 6,7:1 et 7,3:1 sur son fond).
+Une teinte de cours ne doit pas se lire comme un état : le cours le plus vu des maquettes (AP1)
+porte lagon, la teinte la plus éloignée des couleurs d'état (33° du repère en OKLCH) ; corail,
+ambre et framboise, voisines de la correction, de l'attention et de la chaleur, ne vont qu'à des
+cours qu'on voit peu à côté de ces états. Les
+sections d'un cours sont ses intercalaires : un onglet à la teinte du cours, posé sur un filet de
+la même teinte. Un
 cours reçoit une teinte et la garde partout : sur l'icône de ses activités, sur l'onglet de son
-nom, sur ses cartes. La couleur identifie, elle ne décore pas. Les activités ont déjà une teinte
-dans le modèle (`colorHue`), les cours en héritent.
+nom, sur ses cartes, sur la **marque de cours** (sa couverture en petit, avec son sigle) en tête de
+chacune de ses pages, sur sa progression et sur le podium de ses challenges. La couleur identifie,
+elle ne décore pas : ni un type de modèle, ni un indicateur, ni une médaille ne prennent une teinte
+de cours. Les activités ont déjà une teinte dans le modèle (`colorHue`) ; les cours la fixent et
+leurs activités en héritent, on ne la choisit pas activité par activité. Une progression qui
+appartient à un cours prend sa teinte partout, dans le cours comme dans l'accueil.
 
 **La chaleur** est le dégradé du logo (magenta, orange, jaune). Elle est réservée aux moments de
 joie : une activité terminée, un cours achevé, la bienvenue. Elle ne marque jamais un résultat
-(un bon résultat est vert, la chaleur dit « c'est fini, bravo »).
+(un bon résultat est vert, la chaleur dit « c'est fini, bravo »). Elle se pose sur la barre ou
+l'icône d'achèvement, jamais sur une note ni sur un texte : un mot reste dans la couleur du texte.
 
 ## Typographie
 
@@ -248,14 +265,58 @@ Graisses 400 et 600, rien d'autre.
 
 Icônes **Material Symbols Rounded**, graisse 400 : les terminaisons arrondies leur donnent une
 rondeur amicale sans les rendre enfantines, et le catalogue couvre déjà les 111 noms utilisés
-par l'application. Une icône par notion, la même partout : le chapeau pour un cours, le carré
-interrogatif pour une activité, les chevrons pour un exercice.
+par l'application. Une icône par notion, la même partout : le chapeau pour un cours, les chevrons
+pour un exercice. L'icône d'une activité dit sa forme : `quiz` pour un QCM, `code` pour du code,
+`functions` pour des mathématiques ; une épreuve notée prend `history_edu` (la copie et la plume),
+un challenge `emoji_events`. Une icône d'activité ne sert jamais d'état.
+
+Les états ont chacun leur glyphe, différent par la forme et pas seulement par la couleur, et
+toujours accompagné d'un mot. La dernière colonne donne les mots qui peuvent l'accompagner.
+
+| Notion                     | État                              | Icône               | Couleur    | Mots                                                       |
+| -------------------------- | --------------------------------- | ------------------- | ---------- | ---------------------------------------------------------- |
+| Réponse, exercice          | juste, réussi                     | `check_circle`      | validation | juste, réussi                                              |
+|                            | faux, à revoir, saisie incorrecte | `error`             | correction | faux, revoir, incorrect, erreur, corriger, manque          |
+|                            | partiel, réussi en partie         | `contrast`          | attention  | partiel, en partie                                         |
+|                            | enregistrée, scellée              | `lock`              | graphite   | enregistr, scell, définitif                                |
+|                            | brouillon                         | `save`              | graphite   | brouillon                                                  |
+| Activité dans le temps     | planifiée                         | `event`             | repère     | planifi, ouvre                                             |
+|                            | ouverte                           | `event_available`   | validation | ouvert                                                     |
+|                            | fermée                            | `event_busy`        | graphite   | fermé                                                      |
+| Travail                    | en cours, en correction           | `pending`           | graphite   | en cours, en correction                                    |
+| Copie, pour le correcteur  | corrigée                          | `done_all`          | graphite   | corrigé                                                    |
+| Ressource                  | prête                             | `verified`          | validation | prêt                                                       |
+|                            | à tester                          | `science`           | attention  | à tester                                                   |
+|                            | contient des bugs                 | `bug_report`        | correction | bug                                                        |
+| Modèle d'exercice          | certifié par l'équipe             | `workspace_premium` | graphite   | certifié                                                   |
+| Atelier                    | modifications non enregistrées    | `edit_note`         | graphite   | non enregistr                                              |
+| Chiffre                    | à surveiller                      | `priority_high`     | attention  | surveiller, le plus bas                                    |
+| Compte                     | désactivé                         | `person_off`        | graphite   | désactiv, ne pourra plus                                   |
+| Annonce                    | publiée                           | `public`            | validation | publié                                                     |
+|                            | de service (maintenance, panne)   | `construction`      | graphite   | maintenance, indisponible                                  |
+| Invitation à un test       | pas encore envoyée                | `schedule_send`     | attention  | non envoyé                                                 |
+| Vérification avant épreuve | échouée                           | `warning`           | attention  | refusé, échoué, impossible                                 |
+| Connexion                  | perdue chez l'utilisateur         | `wifi_off`          | graphite   | connexion perdue, hors connexion                           |
+|                            | PLaTon ne répond pas              | `cloud_off`         | correction | ne répond pas, pas pu être chargé, impossible de charger   |
+| Chronomètre                | en pause (proposition)            | `pause_circle`      | graphite   | pause                                                      |
+| Épreuve                    | arrêtée, à reprendre avec un code | `do_not_disturb_on` | attention  | arrêté                                                     |
+| Moment de joie             | terminé                           | `task_alt`          | chaleur    | termin, corrigées, envoyé                                  |
+
+Une icône d'état ne sert qu'à son état, et jamais sur un bouton ni dans un menu : une action porte
+une icône d'action, ou aucune (« Enregistrer », « Sauvegarder » et « Fermer » n'ont pas l'icône de
+l'état qu'ils produisent). Les indicateurs ont leur propre icône, jamais une icône d'état (le taux
+de réussite prend `percent`, les abandons `trending_down`). La confirmation neutre (une case
+remplie, une vérification réussie, ce qui reste dans une liste de conséquences, une notification
+qui confirme) prend `check` en graphite : rester n'est pas réussir. Dans une liste de
+conséquences, ce qui part prend `delete` en correction.
 
 L'identité ne passe pas par un jeu d'icônes réinventé : redessiner cent onze pictogrammes coûte
 cher et finit incohérent. Elle passe par les **glyphes PLaTon**, cinq objets du domaine dessinés
 dans le style des illustrations (cours, activité, exercice, cercle, copie) et utilisés aux
-grandes tailles : icônes de tête de ligne, états vides, menu Créer. Aux petites tailles, les
-icônes Material Rounded correspondantes prennent le relais.
+grandes tailles : états vides, menu Créer, choix du type d'objet à créer. Aux petites tailles, et
+sur les têtes de ligne où la teinte de cours identifie, les icônes Material Rounded
+correspondantes prennent le relais. Les glyphes vivent dans `icons/glyph-*.svg` et s'emploient à
+40 px (`.glyph`) ou 56 px (`.glyph-lg`).
 
 Les illustrations sont dessinées au trait dans les graphites, avec la marge rouge et un seul
 objet en chaleur. La première est **la copie vierge** : une feuille, sa marge, ses lignes et un
@@ -264,9 +325,13 @@ le texte qui dit quoi faire.
 
 ## La marge
 
-Un filet rouge clair de 1 px, à 48 px du bord gauche des surfaces où l'élève répond. C'est là que
-s'inscrivent le numéro de la question et son résultat, comme les annotations d'un correcteur. La
-marge n'apparaît que sur ces surfaces-là.
+Un filet rouge clair de 2 px, à 48 px du bord gauche des surfaces où l'élève répond et où le
+correcteur annote. C'est là que s'inscrivent le numéro de la question et son résultat. Les
+remarques du correcteur s'écrivent à l'encre rouge sous la réponse, et un point rouge sur la marge
+marque leur hauteur, comme le stylo d'un correcteur. Un compliment s'écrit à l'encre verte, avec
+son point vert. La marge n'apparaît que sur ces surfaces-là, et sur la page de consignes d'une
+épreuve, qui est la première page de la copie. La file des copies à corriger est une
+pile : des feuilles devinées derrière la carte.
 
 ## Formes et mouvement
 
@@ -274,6 +339,10 @@ Rayons : 6 px pour les boutons et les champs, 8 px pour les menus, 12 px pour le
 dialogues. Les cartes posées sur la page ont un filet, pas d'ombre ; l'ombre est réservée à ce qui
 flotte. Mouvement court et utile : 120 ms pour un survol, 180 ms pour un menu, 260 ms pour un
 panneau ; rien ne rebondit, sauf un moment de joie, qui a droit à une seule animation de 600 ms.
+Un bouton qui travaille garde son libellé et affiche une roue à sa place d'icône. Le temps
+restant d'une épreuve passe en attention à 10 minutes et en correction à la dernière minute,
+toujours avec un mot. Une notification flotte en bas à gauche de la page ; elle disparaît seule si elle ne fait que
+confirmer, elle reste jusqu'à ce qu'on la ferme si elle porte une action.
 
 ## Faire
 

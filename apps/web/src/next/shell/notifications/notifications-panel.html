@@ -1,0 +1,98 @@
+<pl-panel
+  heading="Notifications"
+  closeLabel="Fermer les notifications"
+  [headingId]="headingId"
+  [layout]="layout"
+  (closed)="close()"
+>
+  @if (layout === 'popover' && store.unreadCount()) {
+  <button type="button" plButton plPanelActions variant="ghost" size="sm" (click)="markAllAsRead()">
+    Tout marquer comme lu
+  </button>
+  } @if (store.total()) {
+  <button
+    type="button"
+    plButton
+    plPanelActions
+    [variant]="layout === 'screen' ? 'cover-icon' : 'icon'"
+    [size]="layout === 'screen' ? 'lg' : 'sm'"
+    aria-label="Plus d'actions"
+    [plMenuTrigger]="actions"
+  >
+    <pl-icon name="more_horiz" />
+  </button>
+  } @if (layout === 'screen' && store.unreadCount()) {
+  <ng-container ngProjectAs="[plPanelTools]">
+    <span class="notifications__unread">{{ unreadText() }}</span
+    >{{ ' ' }}
+    <button type="button" plButton variant="ghost" (click)="markAllAsRead()">Tout marquer comme lu</button>
+  </ng-container>
+  } @if (store.status() === 'ready') { @if (views().length) {
+  <pl-notification-list>
+    @for (view of views(); track view.id) {
+    <pl-notification-item
+      #row
+      [heading]="view.title"
+      [context]="view.context"
+      [date]="view.date"
+      [icon]="view.icon"
+      [hue]="view.hue"
+      [unread]="view.unread"
+      unreadLabel="Non lue&nbsp;:"
+      [href]="view.link"
+      [choosable]="view.unread"
+      (chosen)="choose(view, $event)"
+    >
+      @if (view.invitation; as invitation) {
+      <ng-container ngProjectAs="[plNotificationActions]">
+        <button
+          type="button"
+          plButton
+          variant="primary"
+          size="sm"
+          [attr.aria-describedby]="row.titleId()"
+          (click)="answer(view, invitation, true)"
+        >
+          Accepter
+        </button>
+        <button
+          type="button"
+          plButton
+          variant="secondary"
+          size="sm"
+          [attr.aria-describedby]="row.titleId()"
+          (click)="answer(view, invitation, false)"
+        >
+          Décliner
+        </button>
+      </ng-container>
+      }
+    </pl-notification-item>
+    }
+  </pl-notification-list>
+  @if (store.hasMore()) {
+  <div class="notifications__more">
+    <button type="button" plButton variant="ghost" [disabled]="store.loadingMore()" (click)="loadMore()">
+      Afficher les plus anciennes
+    </button>
+  </div>
+  } } @else {
+  <pl-empty heading="Aucune notification" icon="notifications" [level]="3" compact>
+    <p>Vous trouverez ici ce qui se passe dans vos cours et vos ressources.</p>
+  </pl-empty>
+  } } @else { @if (loading()) { @for (row of [1, 2, 3]; track row) {
+  <pl-notification-skeleton />
+  } }
+  <app-load-state
+    [phase]="phase()"
+    heading="Vos notifications n'ont pas pu être chargées"
+    [level]="3"
+    compact
+    (retry)="store.retry()"
+  />
+  }
+</pl-panel>
+
+<pl-menu #actions="ngMenu" (itemSelected)="act($event)">
+  <pl-menu-item value="delete-all" icon="delete" tone="danger">Tout supprimer</pl-menu-item>
+</pl-menu>

@@ -3,7 +3,7 @@ import { Injectable, Logger } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { DeleteWhereExpression, PubSubService, buildDeleteQuery } from '@platon/core/server'
 import { NotificationFilters } from '@platon/feature/notification/common'
-import { EntityManager, In, IsNull, Repository } from 'typeorm'
+import { EntityManager, In, IsNull, Repository, SelectQueryBuilder } from 'typeorm'
 import { NotificationEntity } from './notification.entity'
 import { NOTIFICATION_EXTRA_DATA, NotificationExtraDataProvider } from './notification.provider'
 import { ON_CHANGE_NOTIFICATIONS, OnChangeNotificationsPayload } from './notification.pubsub'
@@ -12,6 +12,7 @@ import { ON_CHANGE_NOTIFICATIONS, OnChangeNotificationsPayload } from './notific
 export class NotificationService {
   protected readonly logger = new Logger(NotificationService.name)
   private readonly extraDataProviders: NotificationExtraDataProvider[] = []
+  private readonly signals = new Set<string>()
 
   constructor(
     @InjectRepository(NotificationEntity)
@@ -26,6 +27,16 @@ export class NotificationService {
       this.logger.log(`Registering notification extra data provider ${provider.discoveredClass.name}`)
       this.extraDataProviders.push(provider.discoveredClass.instance as NotificationExtraDataProvider)
     }
+  }
+
+  /**
+   * Declares notification types that drive a screen rather than inform a person. They never count as
+   * unread; the list keeps them for the screens that read them, unless `excludeSignals` asks
+   * otherwise.
+   * @param types The `data.type` values of these notifications.
+   */
+  declareSignals(...types: string[]): void {
+    types.forEach((type) => this.signals.add(type))
   }
 
   async sendToUser<T extends object>(
@@ -53,14 +64,7 @@ export class NotificationService {
   }
 
   async ofUser(userId: string, filters: NotificationFilters = {}): Promise<[NotificationEntity[], number]> {
-    const query = this.repository
-      .createQueryBuilder('notification')
-      .where('user_id = :userId', { userId })
-      .orderBy('created_at', 'DESC')
-
-    if (filters.unread) {
-      query.andWhere('read_at IS NULL')
-    }
+    const query = this.whereOf(userId, filters).orderBy('created_at', 'DESC')
 
     if (filters.offset) {
       query.offset(filters.offset)
@@ -146,13 +150,24 @@ export class NotificationService {
     return affected
   }
 
+  /** The unread notifications of the person, signals left out. */
   async unreadCount(userId: string): Promise<number> {
-    return this.repository.count({
-      where: {
-        userId,
-        readAt: IsNull(),
-      },
-    })
+    return this.whereOf(userId, { unread: true, excludeSignals: true }).getCount()
+  }
+
+  /** The rows of the person a filter keeps: the list and the unread count select them the same way. */
+  private whereOf(
+    userId: string,
+    { unread, excludeSignals }: Pick<NotificationFilters, 'unread' | 'excludeSignals'>
+  ): SelectQueryBuilder<NotificationEntity> {
+    const query = this.repository.createQueryBuilder('notification').where('user_id = :userId', { userId })
+    if (unread) {
+      query.andWhere('read_at IS NULL')
+    }
+    if (excludeSignals && this.signals.size) {
+      query.andWhere(`COALESCE(data->>'type', '') NOT IN (:...signals)`, { signals: [...this.signals] })
+    }
+    return query
   }
 
   async withExtraData(notification: NotificationEntity): Promise<Record<string, unknown> | undefined> {
