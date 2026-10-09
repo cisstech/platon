@@ -1,0 +1,32 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Introduction" />
+
+# PLaTon design system
+
+The components of the new interface, imported from `@platon/design-system`. The current interface uses
+none of them.
+
+## What is here
+
+- **Tokens**: colors, typography, spacing, radii, shadows, motion and layers, light and dark. The Tokens
+  page lists them all; the theme switch in the toolbar toggles between both.
+- **Components**: `pl-` prefix, one story per state.
+
+## Rules
+
+- A value always comes from a `--pl-*` token: no hard-coded color, font size, radius, shadow or layer.
+  `yarn lint:tokens` checks it, and rejects a token that does not exist.
+- Scales are numbered (`--pl-space-4`, `--pl-radius-2`, `--pl-plum-700`), roles are named
+  (`--pl-color-primary`, `--pl-radius-card`, `--pl-font-body`). Components use roles first.
+- Standalone components, `OnPush`, driven by signals, default view encapsulation.
+- Angular style guide naming: `icon.ts`, class `Icon`, selector `pl-icon`.
+- Stories and docs are written in English; the copy of the application stays in French.
+- The Accessibility panel reports no violation on a delivered story.
+
+## Adding an icon
+
+1. Add its Material Symbols name to `src/lib/icon/icon-names.ts`.
+2. Run `yarn nx run design-system:icons`: the source is downloaded once into `icons/`, then the sprite
+   is rebuilt.
+3. Commit the source, the sprite and its version together.

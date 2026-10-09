@@ -1,7 +1,9 @@
 import { ANIMATION_MODULE_TYPE, APP_INITIALIZER, LOCALE_ID } from '@angular/core'
 import { TestBed } from '@angular/core/testing'
+import { DialogService } from '@platon/core/browser/shared'
 import { NZ_DATE_LOCALE, NZ_I18N } from 'ng-zorro-antd/i18n'
 import { NzModalService } from 'ng-zorro-antd/modal'
+import { NextDialog } from './core/dialog/next-dialog'
 import { nextConfig } from './next.config'
 
 describe('nextConfig', () => {
@@ -11,6 +13,10 @@ describe('nextConfig', () => {
 
   it('speaks French, like the current interface', () => {
     expect(TestBed.inject(LOCALE_ID)).toBe('fr-FR')
+  })
+
+  it('shows messages and dialogs with the design system', () => {
+    expect(TestBed.inject(DialogService)).toBeInstanceOf(NextDialog)
   })
 
   it('does not configure ng-zorro', () => {

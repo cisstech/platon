@@ -1,11 +1,13 @@
 .home {
-  max-width: 560px;
-  margin: 20vh auto 0;
-  padding: 0 16px;
-  line-height: 1.5;
+  display: grid;
+  gap: var(--pl-space-4);
+  max-inline-size: 560px;
+  margin-inline: auto;
+  padding: var(--pl-space-16) var(--pl-space-4);
+  font: var(--pl-font-reading);
 }
 
 h1 {
-  margin: 0 0 8px;
-  font-size: 28px;
+  font: var(--pl-font-display);
+  letter-spacing: var(--pl-tracking-display);
 }
