@@ -5,8 +5,9 @@ import { Session } from './session'
 
 /**
  * Lets in a signed-in, active person with one of `roles`. Otherwise it leads to the same pages as
- * the current interface: `/login?next=…`, `/403?reason=disabled` for a disabled account, `/403` for a
- * role that is not allowed. Those pages open in the current interface through the bridge.
+ * the current interface: `/login?next=…`, the sign-in page of this interface; `/403?reason=disabled`
+ * for a disabled account, `/403` for a role that is not allowed, which open in the current interface
+ * through the bridge.
  */
 export const sessionGuard =
   (roles: readonly UserRoles[]): CanActivateFn =>

@@ -1,9 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { AuthService, UserService } from '@platon/core/server'
 import { NotFoundResponse } from '@platon/core/common'
-import { LTIService } from '@platon/feature/lti/server'
 import { Optional } from 'typescript-optional'
-import { AxiosService } from './axios.service'
 import { CasController } from './cas.controller'
 import { CasEntity } from './entities/cas.entity'
 import { CasService } from './cas.service'
@@ -11,10 +8,6 @@ import { CasService } from './cas.service'
 describe('CasController', () => {
   let controller: CasController
   let service: jest.Mocked<CasService>
-  let ltiService: jest.Mocked<LTIService>
-  let authService: jest.Mocked<AuthService>
-  let userService: jest.Mocked<UserService>
-  let https: jest.Mocked<AxiosService>
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -30,61 +23,14 @@ describe('CasController', () => {
             updateCas: jest.fn(),
             deleteCas: jest.fn(),
             fromInput: jest.fn(),
+            signIn: jest.fn(),
           },
         },
-        { provide: LTIService, useValue: { findLmsUserByUsername: jest.fn() } },
-        { provide: AuthService, useValue: { authenticate: jest.fn() } },
-        { provide: UserService, useValue: { findById: jest.fn() } },
-        { provide: AxiosService, useValue: { get: jest.fn() } },
       ],
     }).compile()
 
     controller = module.get(CasController)
     service = module.get(CasService)
-    ltiService = module.get(LTIService)
-    authService = module.get(AuthService)
-    userService = module.get(UserService)
-    https = module.get(AxiosService)
-  })
-
-  describe('checkCasTicket', () => {
-    it('devrait retourner le username en cas de succès', async () => {
-      https.get.mockResolvedValue({
-        data: { serviceResponse: { authenticationSuccess: { user: 'jdoe' } } },
-      } as never)
-
-      const result = await controller.checkCasTicket('https://cas.test/validate', 'ST-1', 'https://app.test')
-
-      expect(result.get()).toBe('jdoe')
-    })
-
-    it("devrait lever une erreur avec la description en cas d'échec d'authentification CAS", async () => {
-      https.get.mockResolvedValue({
-        data: {
-          serviceResponse: { authenticationFailure: { code: 'INVALID_TICKET', description: 'Ticket invalide' } },
-        },
-      } as never)
-
-      await expect(controller.checkCasTicket('https://cas.test/validate', 'ST-1', 'https://app.test')).rejects.toThrow(
-        'Ticket invalide'
-      )
-    })
-
-    it('devrait retourner Optional.empty() si la réponse ne contient ni succès ni échec', async () => {
-      https.get.mockResolvedValue({ data: { serviceResponse: {} } } as never)
-
-      const result = await controller.checkCasTicket('https://cas.test/validate', 'ST-1', 'https://app.test')
-
-      expect(result.isEmpty()).toBe(true)
-    })
-
-    it('devrait lever une erreur explicite quand le fournisseur CAS est injoignable (erreur réseau)', async () => {
-      https.get.mockRejectedValue(new Error('ECONNREFUSED'))
-
-      await expect(controller.checkCasTicket('https://cas.test/validate', 'ST-1', 'https://app.test')).rejects.toThrow(
-        'Your CAS provider is not accessible'
-      )
-    })
   })
 
   describe('listCas', () => {
@@ -99,75 +45,60 @@ describe('CasController', () => {
   })
 
   describe('login', () => {
-    const buildQuery = (overrides: Record<string, unknown> = {}) => ({ ticket: '', ...overrides } as never)
     const buildReq = () =>
-      ({ get: jest.fn().mockReturnValue('app.test'), baseUrl: '', path: '/cas/login/my-cas' } as never)
+      ({ get: jest.fn().mockReturnValue('app.test'), baseUrl: '/api/v1', path: '/cas/login/my-cas' } as never)
 
-    it("devrait rejeter avec NotFoundResponse si le CAS n'existe pas", async () => {
+    it("devrait envoyer vers le CAS avec une adresse de service encodée, la même qu'à son retour", async () => {
+      service.findCasByName.mockResolvedValue(Optional.of({ loginURL: 'https://cas.test/login' } as CasEntity))
+      service.signIn.mockResolvedValue({ outcome: 'no-account' })
+
+      const toCas = await controller.login('my-cas', { next: '/courses/1?tab=a&b=c' } as never, buildReq())
+      const serviceUrl = new URL(toCas.url).searchParams.get('service') as string
+      expect(toCas.url.startsWith('https://cas.test/login?service=https%3A%2F%2Fapp.test')).toBe(true)
+
+      // The CAS sends the person back to the service address, with its ticket.
+      const back = new URL(serviceUrl)
+      back.searchParams.set('ticket', 'ST-1')
+      await controller.login('my-cas', Object.fromEntries(back.searchParams) as never, buildReq())
+
+      expect(service.signIn).toHaveBeenCalledWith('my-cas', 'ST-1', serviceUrl)
+    })
+
+    it('devrait ramener à la page de connexion quand le CAS est inconnu', async () => {
       service.findCasByName.mockResolvedValue(Optional.empty())
 
-      await expect(controller.login('unknown-cas', buildQuery(), buildReq())).rejects.toBeInstanceOf(NotFoundResponse)
+      const result = await controller.login('unknown-cas', { next: '/home' } as never, buildReq())
+
+      expect(result).toEqual({ url: '/login?error=cas&next=%2Fhome', statusCode: 302 })
     })
 
-    it("devrait rediriger vers l'URL de connexion du CAS quand aucun ticket n'est fourni", async () => {
-      service.findCasByName.mockResolvedValue(Optional.of({ loginURL: 'https://cas.test/login' } as CasEntity))
+    it('devrait passer les jetons à la page de connexion, sans next quand il manque', async () => {
+      service.signIn.mockResolvedValue({ outcome: 'signed-in', token: { accessToken: 'a', refreshToken: 'r' } })
 
-      const result = await controller.login('my-cas', buildQuery(), buildReq())
-
-      expect(result.statusCode).toBe(302)
-      expect(result.url).toContain('https://cas.test/login?service=')
-    })
-
-    it('devrait rediriger vers /login/no-account si le ticket CAS ne résout aucun utilisateur', async () => {
-      service.findCasByName.mockResolvedValue(
-        Optional.of({ serviceValidateURL: 'https://cas.test/validate', lmses: [] } as never)
+      expect((await controller.login('my-cas', { ticket: 'ST-1', next: '/home' } as never, buildReq())).url).toBe(
+        '/login?access-token=a&refresh-token=r&next=%2Fhome'
       )
-      jest.spyOn(controller, 'checkCasTicket').mockResolvedValue(Optional.empty())
+      expect((await controller.login('my-cas', { ticket: 'ST-1' } as never, buildReq())).url).toBe(
+        '/login?access-token=a&refresh-token=r'
+      )
+    })
 
-      const result = await controller.login('my-cas', buildQuery({ ticket: 'ST-1' }), buildReq())
+    it('devrait mener à /login/no-account quand aucun compte PLaTon ne correspond', async () => {
+      service.signIn.mockResolvedValue({ outcome: 'no-account' })
+
+      const result = await controller.login('my-cas', { ticket: 'ST-1' } as never, buildReq())
 
       expect(result).toEqual({ url: '/login/no-account', statusCode: 302 })
     })
 
-    it('devrait rediriger vers /login/no-account si aucun utilisateur LMS ne correspond au username CAS', async () => {
-      service.findCasByName.mockResolvedValue(
-        Optional.of({ serviceValidateURL: 'https://cas.test/validate', lmses: [] } as never)
-      )
-      jest.spyOn(controller, 'checkCasTicket').mockResolvedValue(Optional.of('jdoe'))
-      ltiService.findLmsUserByUsername.mockResolvedValue(Optional.empty())
+    it("devrait ramener à la page de connexion avec l'échec, avec ou sans next", async () => {
+      service.signIn.mockResolvedValue({ outcome: 'failed' })
 
-      const result = await controller.login('my-cas', buildQuery({ ticket: 'ST-1' }), buildReq())
-
-      expect(result).toEqual({ url: '/login/no-account', statusCode: 302 })
-    })
-
-    it("devrait rediriger vers /login/no-account si l'utilisateur platon associé est introuvable", async () => {
-      service.findCasByName.mockResolvedValue(
-        Optional.of({ serviceValidateURL: 'https://cas.test/validate', lmses: [] } as never)
-      )
-      jest.spyOn(controller, 'checkCasTicket').mockResolvedValue(Optional.of('jdoe'))
-      ltiService.findLmsUserByUsername.mockResolvedValue(Optional.of({ userId: 'user-1' } as never))
-      userService.findById.mockResolvedValue(Optional.empty())
-
-      const result = await controller.login('my-cas', buildQuery({ ticket: 'ST-1' }), buildReq())
-
-      expect(result).toEqual({ url: '/login/no-account', statusCode: 302 })
-    })
-
-    it("devrait authentifier l'utilisateur et rediriger avec les tokens quand tout est résolu", async () => {
-      service.findCasByName.mockResolvedValue(
-        Optional.of({ serviceValidateURL: 'https://cas.test/validate', lmses: [] } as never)
-      )
-      jest.spyOn(controller, 'checkCasTicket').mockResolvedValue(Optional.of('jdoe'))
-      ltiService.findLmsUserByUsername.mockResolvedValue(Optional.of({ userId: 'user-1' } as never))
-      userService.findById.mockResolvedValue(Optional.of({ username: 'jdoe' } as never))
-      authService.authenticate.mockResolvedValue({ accessToken: 'access-1', refreshToken: 'refresh-1' })
-
-      const result = await controller.login('my-cas', buildQuery({ ticket: 'ST-1', next: '/home' }), buildReq())
-
-      expect(authService.authenticate).toHaveBeenCalledWith('user-1', 'jdoe')
-      expect(result.statusCode).toBe(302)
-      expect(result.url).toBe('/login?access-token=access-1&refresh-token=refresh-1&next=/home')
+      expect(await controller.login('my-cas', { ticket: 'ST-1', next: '/home' } as never, buildReq())).toEqual({
+        url: '/login?error=cas&next=%2Fhome',
+        statusCode: 302,
+      })
+      expect((await controller.login('my-cas', { ticket: 'ST-1' } as never, buildReq())).url).toBe('/login?error=cas')
     })
   })
 
