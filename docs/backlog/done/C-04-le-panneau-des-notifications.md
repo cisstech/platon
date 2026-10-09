@@ -4,7 +4,7 @@ Source : `design/flows/accueil-etudiant/02-notifications` (bureau et téléphone
 révisés après les quatre tours de critique,
 `design/docs/06-faisabilite.md` (cadre et navigation), inventaire du code du 2026-09-29 ; décisions :
 D6, D19, D21, D29.
-Statut : À faire.
+Statut : Livré (2026-10-09).
 Dépend de : C-02, C-06, F-04.
 Taille : M.
 
@@ -107,7 +107,63 @@ Aucun : tranchés le 2026-10-08 par D29. Pour mémoire, les questions étaient :
 
 ## 7. Definition of Done
 
-- [ ] Les tests du §2 passent.
-- [ ] Le compteur est juste dès le chargement (B20 corrigé dans la nouvelle interface).
-- [ ] Chaque type connu a son rendu et sa cible, ou un écart décidé.
-- [ ] Le démarrage de la nouvelle interface reste sans code ng-zorro, Material ni Monaco.
+- [x] Les tests du §2 passent.
+- [x] Le compteur est juste dès le chargement (B20 corrigé dans la nouvelle interface).
+- [x] Chaque type connu a son rendu et sa cible, ou un écart décidé.
+- [x] Le démarrage de la nouvelle interface reste sans code ng-zorro, Material ni Monaco.
+
+> **Amendement à la livraison.** API : `unreadCount` écarte les signaux, que la bibliothèque des cours
+> déclare au démarrage (`declareSignals`, liste unique `COURSE_SIGNAL_NOTIFICATIONS` de
+> `@platon/feature/course/common`) : la bibliothèque des notifications ne connaît aucun type de cours.
+> Le compteur initial vient d'une requête `unreadNotificationCount` (le `totalCount` des non lues
+> compte les signaux). La liste reçoit un filtre `excludeSignals`, qui partage sa condition avec le
+> compteur, pour des pages de 20 vraies notifications ; sans lui, elle garde les signaux que le lecteur
+> lit par `paginate(1)`. Un filtre envoyé à `null` se lit comme absent : `toBoolean` le lisait comme
+> vrai, et la nouvelle interface n'aurait montré que les non lues. Le compteur de l'abonnement écarte
+> aussi les signaux dans l'ancienne interface.
+
+> **Amendement à la livraison.** Entrées légères : `@platon/feature/notification/browser/shared`
+> (opérations GraphQL générées, modèles) ; les parseurs et leurs jetons restent dans l'entrée
+> principale, car ils importent ng-zorro et `@cisstech/nge/ui/icon`, et la nouvelle interface a ses
+> propres fonctions de vue. `@platon/feature/resource/browser/shared` : `ResourceService`,
+> `RESOURCE_PROVIDERS` (les liaisons HTTP) et les libellés de statut ; les parseurs de l'ancienne
+> interface passent dans `RESOURCE_NOTIFICATION_PROVIDERS`. `@platon/core/browser/shared` gagne les
+> utilitaires HTTP. La nouvelle interface lit les notifications hors du cache Apollo et son store tient
+> la liste ; le `NotificationService` partagé reste celui de l'ancienne interface.
+
+> **Amendement à la livraison.** Textes : les acteurs des événements de ressource ne sont connus que
+> par leur identifiant ; les titres s'en passent (« Nouveau membre dans Graphes », « Nouvelle
+> ressource : Graphes »). La ligne de contexte nomme le cours, ou le cercle de la ressource, et rien
+> quand le titre nomme déjà l'objet. Les dates relatives passent par `Intl` dans la langue de
+> l'application (`relativeTime` du design system) : « il y a 18 min », « il y a 2 h », « hier »,
+> « jeudi », « 12 septembre » ; l'heure n'accompagne plus « hier » ni le jour (« hier à 17 h » au §1),
+> car `Intl` écrit « 09 h » et ne fournit pas le « à ». La teinte d'un cours dérive de son identifiant
+> (D32).
+
+> **Amendement à la livraison.** Choisir une notification la marque comme lue, puis mène à sa cible
+> une fois que l'API l'a enregistrée (une seconde au plus) : les cibles ne sont pas encore portées, le
+> pont recharge la page et coupait la requête. Une notification non lue sans cible est un bouton qui la
+> marque comme lue ; lue, elle informe seulement. Le clic du milieu et le Ctrl-clic l'ouvrent ailleurs
+> et la marquent comme lue. Répondre à une invitation supprime sa notification, comme aujourd'hui ; la
+> page suivante repart alors du début pour n'en sauter aucune. « Charger plus » devient « Afficher les
+> plus anciennes ».
+
+> **Amendement à la livraison.** « Tout supprimer » (menu « Plus d'actions », ton danger) nomme le
+> total sans les signaux et efface aussi les signaux, qui ne portent rien que le serveur ne sache déjà :
+> le lecteur recharge l'état de l'activité. Les actions de tête n'apparaissent que si elles
+> s'appliquent. Quand le bouton qui avait le focus disparaît, le focus va à la notification voisine ou
+> au bouton de fermeture, jamais à la page sous le dialogue. Une notification arrivée panneau ouvert
+> est annoncée. « Réessayer » relance le chargement même s'il est resté pendant. Le panneau se ferme à
+> chaque navigation et au passage de 840 px. Bibliothèque : `pl-notification-item`,
+> `pl-notification-list`, `pl-notification-skeleton`, `pl-panel` (`popover` et `screen`). Les toasts
+> passent désormais au-dessus des dialogues : une erreur levée panneau ouvert restait dessous.
+
+> **Amendement à la livraison.** Vérifié dans Chrome sur le build de production, avec une API simulée
+> (25 notifications, pages, invitation, échec de « Tout supprimer »), à 1280 et 390 px, en clair et en
+> sombre, sans violation axe ; et sur l'application lancée avec `ypicker` (36 notifications, aucune
+> donnée modifiée) : Échap, Fermer et un clic ailleurs rendent le focus à l'entrée ou à la cloche. Non
+> vérifié : l'arrivée en direct dans un navigateur (l'API simulée n'a pas de WebSocket ; couverte par
+> les tests) ; les specs d'intégration, qui démarrent un conteneur ; le coût du compteur sur un long
+> historique de signaux, la condition lisant `data` ligne à ligne (à mesurer avec `EXPLAIN` avant
+> d'indexer une colonne générée) ; Safari ; `NotificationsApi` n'a pas de spec, les classes GraphQL
+> générées ne se construisant pas sous Jest.
