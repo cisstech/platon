@@ -10,6 +10,9 @@ export interface SegmentedOption<T extends string = string> {
   iconOnly?: boolean
 }
 
+/** `md` fits a toolbar; `lg` gives each choice the 44 px a finger needs. */
+export type SegmentedSize = 'md' | 'lg'
+
 let lastGroupId = 0
 
 /**
@@ -23,6 +26,7 @@ let lastGroupId = 0
   host: {
     role: 'radiogroup',
     '[attr.aria-label]': 'label()',
+    '[attr.data-size]': 'size()',
   },
   template: `
     @for (option of options(); track option.value) {
@@ -63,6 +67,11 @@ let lastGroupId = 0
       font-weight: var(--pl-weight-strong);
       cursor: pointer;
     }
+    :host([data-size='lg']) .pl-segmented__option {
+      block-size: 44px;
+      font: var(--pl-font-body);
+      font-weight: var(--pl-weight-strong);
+    }
     .pl-segmented__option[data-checked='true'] {
       background: var(--pl-color-surface);
       box-shadow: var(--pl-shadow-float);
@@ -90,6 +99,7 @@ export class Segmented<T extends string = string> {
   /** Accessible name of the group. */
   readonly label = input.required<string>()
   readonly value = model<T>()
+  readonly size = input<SegmentedSize>('md')
 
   protected readonly name = `pl-segmented-${++lastGroupId}`
 }

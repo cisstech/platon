@@ -22,6 +22,20 @@ export const Theme: Story = {
   },
 }
 
+export const Touch: Story = {
+  name: 'Touch size, 44 px',
+  args: {
+    label: 'Theme',
+    value: 'dark',
+    size: 'lg',
+    options: [
+      { value: 'light', label: 'Light' },
+      { value: 'dark', label: 'Dark' },
+      { value: 'system', label: 'Auto' },
+    ],
+  },
+}
+
 export const Filters: Story = {
   args: {
     label: 'Activities',

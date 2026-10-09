@@ -323,6 +323,40 @@
   }
 }
 
+// The hue of a course on what carries `data-hue`: its tint behind, its ink on it.
+[data-hue='coral'] {
+  --pl-hue-tint: var(--pl-course-coral-tint);
+  --pl-hue-ink: var(--pl-course-coral-ink);
+}
+[data-hue='amber'] {
+  --pl-hue-tint: var(--pl-course-amber-tint);
+  --pl-hue-ink: var(--pl-course-amber-ink);
+}
+[data-hue='olive'] {
+  --pl-hue-tint: var(--pl-course-olive-tint);
+  --pl-hue-ink: var(--pl-course-olive-ink);
+}
+[data-hue='mint'] {
+  --pl-hue-tint: var(--pl-course-mint-tint);
+  --pl-hue-ink: var(--pl-course-mint-ink);
+}
+[data-hue='lagoon'] {
+  --pl-hue-tint: var(--pl-course-lagoon-tint);
+  --pl-hue-ink: var(--pl-course-lagoon-ink);
+}
+[data-hue='cornflower'] {
+  --pl-hue-tint: var(--pl-course-cornflower-tint);
+  --pl-hue-ink: var(--pl-course-cornflower-ink);
+}
+[data-hue='lilac'] {
+  --pl-hue-tint: var(--pl-course-lilac-tint);
+  --pl-hue-ink: var(--pl-course-lilac-ink);
+}
+[data-hue='raspberry'] {
+  --pl-hue-tint: var(--pl-course-raspberry-tint);
+  --pl-hue-ink: var(--pl-course-raspberry-ink);
+}
+
 @media (prefers-reduced-motion: reduce) {
   :root {
     --pl-duration-hover: 1ms;

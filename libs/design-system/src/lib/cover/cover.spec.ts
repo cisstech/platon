@@ -82,3 +82,28 @@ describe('Cover', () => {
     expect(text('button[plCoverProfile]')).toBe('Karim Haddad Compte enseignant')
   })
 })
+
+@Component({
+  imports: [Cover, CoverBrand, CoverFoot, CoverProfile],
+  template: `
+    <pl-cover layout="panel">
+      <a plCoverBrand href="/">PLaTon</a>
+      <button plCoverClose type="button" aria-label="Fermer la navigation">x</button>
+      <pl-cover-foot>
+        <button plCoverProfile [person]="{ firstName: 'Inès', lastName: 'Benali' }">Inès Benali</button>
+      </pl-cover-foot>
+    </pl-cover>
+  `,
+})
+class PanelHost {}
+
+describe('Cover as a panel', () => {
+  it('leaves the banner to the top bar, puts its close button beside the brand and opens a sheet', () => {
+    const fixture = TestBed.createComponent(PanelHost)
+    fixture.detectChanges()
+    const cover = fixture.nativeElement.querySelector('pl-cover') as HTMLElement
+    expect(cover.hasAttribute('role')).toBe(false)
+    expect(cover.querySelector('.pl-cover__brand [plCoverClose]')).not.toBeNull()
+    expect(cover.querySelector('.pl-cover-profile__chevron use')?.getAttribute('href')).toMatch(/#chevron_right$/)
+  })
+})
