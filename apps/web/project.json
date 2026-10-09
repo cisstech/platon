@@ -140,8 +140,21 @@
           }
         ],
         "styles": [
-          "shared/styles/app.scss",
-          "apps/web/src/styles.scss",
+          {
+            "input": "shared/styles/app.scss",
+            "bundleName": "styles.legacy",
+            "inject": false
+          },
+          {
+            "input": "apps/web/src/styles.scss",
+            "bundleName": "styles.legacy",
+            "inject": false
+          },
+          {
+            "input": "apps/web/src/next/styles.scss",
+            "bundleName": "styles.next",
+            "inject": false
+          },
           {
             "input": "shared/styles/material/dark.scss",
             "bundleName": "styles.material.dark",

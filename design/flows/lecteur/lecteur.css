@@ -1,0 +1,6 @@
+/* On a phone the copy keeps its margin, narrower. */
+@media (max-width: 480px) {
+  .copie::before {
+    left: 32px;
+  }
+}

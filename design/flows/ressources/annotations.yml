@@ -1,0 +1,42 @@
+- screen: catalogue
+  note: "Tout ce que la page actuelle filtre est conservé : type, tri, et dans le panneau Filtres le statut, les modèles, les cercles, l'auteur, les topics avec et sans, les niveaux et la période. Les pastilles actives se retirent une par une."
+- screen: catalogue
+  note: "Retirés volontairement : le ruban de statut, la bordure colorée et l'icône qui codaient le type trois fois (une icône suffit), et la phrase « Voici ce que nous avons trouvé »."
+- screen: catalogue
+  note: "Chaque ligne garde les chiffres qui aident à choisir (note moyenne, tentatives, activités qui l'utilisent) et les tags cliquables. Les actions apparaissent au survol et au focus : Prévisualiser, Éditer ou Paramétrer, et le menu."
+- screen: catalogue
+  note: "Ajout (agrégation) : l'auteur de la ligne. La ressource a ownerId, le filtre Auteur charge déjà les utilisateurs."
+- screen: catalogue
+  note: "Une recherche sans résultat nomme le filtre qui écarte des résultats et propose de le retirer, ou de partir d'un modèle."
+- screen: filtres
+  note: "Le bouton du pied donne le nombre de résultats avant d'appliquer (une recherche avec limit 0, le total existe déjà dans la réponse). Le tri reste dans la barre, parce qu'on le change plus souvent que les filtres."
+- screen: cercles
+  note: "L'arbre des cercles, en mode navigation comme aujourd'hui : un clic ouvre la page du cercle. Le cercle personnel est en tête."
+- screen: catalogue-actions
+  note: "Ajouter à une activité est une proposition (voir le flow creation, écran ajouter-au-cours)."
+- screen: ressource
+  note: "Onglets réels : Vue d'ensemble, Explorer, Évènements, Paramètres. Rien n'est ajouté."
+- screen: ressource
+  note: "Les dix indicateurs d'un exercice sont gardés, en grille compacte, avec la courbe d'évolution. Utilisé par (agrégation, filtre dependOn) remplace la bulle « N références »."
+- screen: ressource
+  note: "En-tête : statut modifiable sur place, Suivre, Partager, Éditer ou Paramétrer, Prévisualiser. Les actions rares passent dans le menu (voir ressource-actions)."
+- screen: ressource-actions
+  note: "Dupliquer, Déplacer, et pour l'administrateur certifier un modèle et renvoyer la ressource à son auteur. Supprimer dit pourquoi c'est impossible quand des activités en dépendent, au lieu d'un bouton désactivé."
+- screen: ressource-partager
+  note: "Le partage actuel : visibilité (dans PLaTon ou partout), version, QR code, Copier le lien."
+- screen: explorer
+  note: "Mêmes fonctions que l'Explorer actuel (version, fichiers, readme, historique, importer, télécharger, nouvelle version). Nouvelle disposition : l'arbre et le fichier ouvert forment un seul bloc, comme sur un hébergeur de code ; le fichier se lit à largeur de lecture ; l'historique passe dessous, en secondaire."
+- screen: explorer
+  note: "Le fichier choisi s'affiche à côté de l'arbre au lieu d'un double-clic qui ouvre l'éditeur. Ouvrir dans l'éditeur reste à un clic, dans l'en-tête du fichier."
+- screen: evenements
+  note: "Les quatre types d'évènements actuels (création, statut, membre ajouté, membre retiré), les 50 derniers, comme aujourd'hui."
+- screen: ressource-parametres
+  note: "Sous-onglets réels : Informations (nom, description, topics, niveaux) et Modèle pour un exercice. Le statut reste dans l'en-tête."
+- screen: cercle
+  note: "Vue d'ensemble d'un cercle : répartition par statut (chaque part ouvre le catalogue filtré), compteurs (exercices, activités, modèles, cercles enfants, collaborateurs, observateurs) et tags. Suivre et Demander à rejoindre dans l'en-tête."
+- screen: cercle-collaborateurs
+  note: "Demandes, invitations et collaborateurs, gérés par l'administrateur comme aujourd'hui. Pas de droits par personne : le modèle en a (read, write), l'interface non, et on ne l'invente pas."
+- screen: ressource
+  note: "Passe UX : quatre chiffres en tête (note, juste du premier coup, durée, abandons), les six autres dans Tous les indicateurs. Même donnée, une hiérarchie. Prévisualiser est l'action principale ; le menu des actions rares est en bout de ligne."
+- screen: catalogue
+  note: "Passe UX : Créer un exercice devient l'action principale de la page, vers la galerie de modèles."

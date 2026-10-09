@@ -1,0 +1,8 @@
+- screen: file
+  note: "Une ligne par épreuve, avec ce qui reste et un bouton qui dit Reprendre ou Commencer. Le compteur de la navigation reprend le total."
+- screen: copie
+  note: "Trois colonnes : la file des copies, la copie avec sa marge, la note. La note affichée détaille sa composition : note automatique et étiquettes."
+- screen: copie
+  note: "Les étiquettes existent dans le modèle (nom, couleur, variation de note). Chacune a un raccourci de 1 à 9 ; J et K changent de copie. Julien corrige sans la souris."
+- screen: copie
+  note: "L'annotation du correcteur s'attache à la réponse, sur le filet de la marge, en rouge correcteur."
