@@ -68,6 +68,8 @@ Gravité : **P1** bloque, trompe ou expose. **P2** gêne ou fait douter. **P3** 
   `libs/core/server/src/lib/auth/auth.service.ts` (`signIn`), `.docker/nginx/nginx.prod.conf`
 - **Piste** : une même réponse pour les deux cas (G-04) ; une limite par adresse et par compte sur
   `POST /auth/signin` (`@nestjs/throttler` ou `limit_req`).
+- **En partie corrigé (G-04)** : une même réponse, dans le même temps, pour un compte inconnu et un
+  mauvais mot de passe. Reste la limite de tentatives.
 
 ## P2
 
@@ -143,6 +145,9 @@ Gravité : **P1** bloque, trompe ou expose. **P2** gêne ou fait douter. **P3** 
   `libs/feature/lti/server/src/lib/lti.middleware.ts` (même `next` non encodé)
 - **Piste** : rediriger vers `/login` avec un code d'erreur que la page traduit ; encoder `next`, et
   l'omettre quand il manque (G-04).
+- **En partie corrigé (G-04)** : tout échec ramène à `/login?error=cas`, que la nouvelle interface
+  traduit (l'actuelle montre le formulaire sans message) ; `next` et l'adresse de service sont
+  encodés. Reste `https` écrit en dur dans l'adresse de service.
 
 ## P3
 
