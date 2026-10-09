@@ -83,3 +83,34 @@
 .story-shell__page {
   background: var(--pl-color-ground);
 }
+
+.story-sheet {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  max-inline-size: 420px;
+  block-size: 100vh;
+  background: var(--pl-color-scrim);
+}
+
+.story-panel {
+  inline-size: 300px;
+  block-size: 100vh;
+}
+
+.story-notifications {
+  max-inline-size: 380px;
+  border: 1px solid var(--pl-color-line);
+}
+
+.story-popover {
+  display: flex;
+  align-items: flex-end;
+  block-size: 100vh;
+  padding: var(--pl-space-4);
+  background: var(--pl-color-ground);
+}
+
+.story-screen {
+  max-inline-size: 390px;
+}

@@ -186,3 +186,50 @@ describe('Menu without a trigger', () => {
     document.querySelector('.cdk-overlay-container')?.remove()
   })
 })
+
+@Component({
+  imports: [Button, Menu, MenuItem, MenuTrigger],
+  template: `
+    <div class="container">
+      <button plButton [plMenuTrigger]="actions">Actions</button>
+    </div>
+    <pl-menu #actions="ngMenu"><pl-menu-item value="a">A</pl-menu-item></pl-menu>
+  `,
+})
+class ContainerHost {
+  heard: string[] = []
+}
+
+describe('Menu trigger inside a container', () => {
+  let fixture: ComponentFixture<ContainerHost>
+  const trigger = () => document.querySelector('button') as HTMLButtonElement
+
+  beforeEach(async () => {
+    fixture = TestBed.createComponent(ContainerHost)
+    document.body.appendChild(fixture.nativeElement)
+    fixture.detectChanges()
+    await fixture.whenStable()
+    const container = fixture.nativeElement.querySelector('.container') as HTMLElement
+    container.addEventListener('keydown', (event) => fixture.componentInstance.heard.push(event.key))
+  })
+
+  afterEach(() => {
+    fixture.destroy()
+    document.querySelector('.cdk-overlay-container')?.remove()
+  })
+
+  it('hands Escape to its container when its menu is closed, so a dialog holding it can close', () => {
+    key(trigger(), 'Escape')
+    expect(fixture.componentInstance.heard).toEqual(['Escape'])
+  })
+
+  it('keeps Escape for its menu while the menu is open', async () => {
+    trigger().click()
+    fixture.detectChanges()
+    await fixture.whenStable()
+    key(document.activeElement as Element, 'Escape')
+    fixture.detectChanges()
+    expect(document.querySelector('pl-menu')?.getAttribute('data-visible')).toBe('false')
+    expect(fixture.componentInstance.heard).toEqual([])
+  })
+})

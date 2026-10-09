@@ -2,6 +2,7 @@ import { type Meta, type StoryObj, moduleMetadata } from '@storybook/angular'
 import { Avatar } from '../avatar/avatar'
 import { Button } from '../button/button'
 import { Count } from '../count/count'
+import { COURSE_HUES } from '../hue/course-hue'
 import { Icon } from '../icon/icon'
 import { Tag } from './tag'
 
@@ -34,7 +35,7 @@ export const Tones: Story = {
 export const CourseHues: Story = {
   name: 'Course hues',
   render: () => ({
-    props: { hues: ['coral', 'amber', 'olive', 'mint', 'lagoon', 'cornflower', 'lilac', 'raspberry'] },
+    props: { hues: COURSE_HUES },
     template: `
       <div class="story-row">
         @for (hue of hues; track hue) {

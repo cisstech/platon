@@ -34,6 +34,24 @@ describe('Toaster', () => {
     expect(stack.style.getPropertyValue('--pl-toast-inset-start')).toBe('0px')
   })
 
+  it('rises above a dialog opened before it, the top layer ranking by the order things show', () => {
+    const shown: string[] = []
+    const proto = HTMLElement.prototype as HTMLElement & { showPopover?: () => void; hidePopover?: () => void }
+    const { showPopover, hidePopover } = proto
+    proto.showPopover = function (this: HTMLElement) {
+      shown.push(this.localName)
+    }
+    proto.hidePopover = jest.fn()
+
+    toaster.show({ tone: 'danger', message: "Vos notifications n'ont pas pu être supprimées." })
+    shownToasts()
+
+    expect(document.querySelector('pl-toast-stack')?.getAttribute('popover')).toBe('manual')
+    expect(shown).toEqual(['pl-toast-stack'])
+    proto.showPopover = showPopover
+    proto.hidePopover = hidePopover
+  })
+
   it('announces the title and the message, errors assertively', () => {
     toaster.show({ tone: 'info', title: 'Nouvelle version', message: 'Rechargez la page' })
     toaster.show({ tone: 'danger', message: 'Enregistrement impossible' })

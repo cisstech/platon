@@ -129,3 +129,31 @@ export const Administrator: Story = {
     }),
   }),
 }
+
+export const Panel: Story = {
+  name: 'Panel, on a narrow screen',
+  render: () => ({
+    template: `
+      <div class="story-panel">
+        <pl-cover layout="panel">
+          <a plCoverBrand routerLink="/" institution="Université Gustave Eiffel">PLaTon</a>
+          <button plButton plCoverClose variant="cover-icon" size="lg" aria-label="Close the navigation">
+            <pl-icon name="close" />
+          </button>
+          <button plButton plCoverAction variant="cover"><pl-icon name="add" />Create</button>
+          <pl-cover-nav label="Main navigation">
+            <a plCoverItem routerLink="/" [routerLinkActiveOptions]="{ exact: true }" icon="home">Home</a>
+            <a plCoverItem routerLink="/announcements" icon="campaign">Announcements</a>
+            <a plCoverItem routerLink="/courses" icon="school">Courses</a>
+          </pl-cover-nav>
+          <pl-cover-foot>
+            <button plCoverProfile [person]="{ firstName: 'Karim', lastName: 'Haddad' }" detail="Teacher account">
+              Karim Haddad
+            </button>
+            <a plCoverCredit href="https://github.com/cisstech/platon">Free software, by <strong>cisstech</strong></a>
+          </pl-cover-foot>
+        </pl-cover>
+      </div>
+    `,
+  }),
+}

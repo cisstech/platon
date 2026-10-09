@@ -13,9 +13,9 @@ import {
 /**
  * `primary`: the one main action of a surface. `secondary`: other actions. `ghost`: light actions
  * inside a list or a toolbar. `icon`: an icon alone, which needs a name (`aria-label` or
- * `plTooltip`). `cover` and `cover-quiet`: the actions of the cover.
+ * `plTooltip`). `cover`, `cover-quiet` and `cover-icon`: the same on the cover.
  */
-export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'icon' | 'cover' | 'cover-quiet'
+export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'icon' | 'cover' | 'cover-quiet' | 'cover-icon'
 
 /** `sm` and `md` are 36 px high, the smallest target on a desktop; `lg` is 44 px, as on a touch screen. */
 export type ButtonSize = 'sm' | 'md' | 'lg'
@@ -161,6 +161,20 @@ export type ButtonTone = 'default' | 'danger'
     :host([data-variant='cover-quiet']:hover) {
       background: var(--pl-color-cover-raised);
     }
+    :host([data-variant='cover-icon']) {
+      inline-size: 36px;
+      padding: 0;
+      color: var(--pl-color-cover-text);
+    }
+    :host([data-variant='cover-icon'][data-size='lg']) {
+      inline-size: 44px;
+    }
+    :host([data-variant='cover-icon']:hover) {
+      background: var(--pl-color-cover-raised);
+    }
+    :host([data-variant^='cover']:focus-visible) {
+      outline-color: var(--pl-color-cover-primary);
+    }
 
     :host(:disabled),
     :host([aria-disabled='true']:not([aria-busy='true'])) {
@@ -214,7 +228,7 @@ export class Button {
     if (isDevMode()) {
       afterNextRender(() => {
         if (
-          this.variant() === 'icon' &&
+          (this.variant() === 'icon' || this.variant() === 'cover-icon') &&
           !this.host.getAttribute('aria-label') &&
           !this.host.getAttribute('aria-labelledby')
         ) {

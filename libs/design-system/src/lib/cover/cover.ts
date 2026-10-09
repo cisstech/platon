@@ -1,26 +1,36 @@
 import { CdkScrollable } from '@angular/cdk/scrolling'
-import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core'
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core'
 import { RouterLinkActive } from '@angular/router'
 import { Avatar, AvatarPerson } from '../avatar/avatar'
 import { Count } from '../count/count'
 import { Icon } from '../icon/icon'
 import { IconName } from '../icon/icon-names'
 
+/** `sidebar`: beside the page on a wide screen. `panel`: opened over the page on a narrow one, with 44 px entries. */
+export type CoverLayout = 'sidebar' | 'panel'
+
 /**
  * The cover of the application, on the left of every page: always dark, in both themes, like the
- * cover of a notebook. From top to bottom: the brand (`plCoverBrand`), the main action
- * (`plCoverAction`), the navigation (`pl-cover-nav`) and the foot (`pl-cover-foot`). It is the
- * banner of the application: logo, navigation and account. It scrolls on its own, and tells the CDK,
- * so that a menu opened from it follows.
+ * cover of a notebook. From top to bottom: the brand (`plCoverBrand`, with `plCoverClose` beside it
+ * in a panel), the main action (`plCoverAction`), the navigation (`pl-cover-nav`) and the foot
+ * (`pl-cover-foot`). As a sidebar it is the banner of the application: logo, navigation and account.
+ * It scrolls on its own, and tells the CDK, so that a menu opened from it follows.
  */
 @Component({
   selector: 'pl-cover',
   changeDetection: ChangeDetectionStrategy.OnPush,
   hostDirectives: [CdkScrollable],
-  host: { class: 'pl-cover', role: 'banner' },
+  host: {
+    class: 'pl-cover',
+    '[attr.role]': "layout() === 'sidebar' ? 'banner' : null",
+    '[attr.data-layout]': 'layout()',
+  },
   template: `
     <div class="pl-cover__head">
-      <ng-content select="[plCoverBrand]" />
+      <div class="pl-cover__brand">
+        <ng-content select="[plCoverBrand]" />
+        <ng-content select="[plCoverClose]" />
+      </div>
       <ng-content select="[plCoverAction]" />
     </div>
     <ng-content select="pl-cover-nav" />
@@ -39,15 +49,26 @@ import { IconName } from '../icon/icon-names'
       font: var(--pl-font-body);
       scrollbar-width: thin;
     }
+    :host([data-layout='panel']) {
+      --pl-cover-item-size: 44px;
+    }
     .pl-cover__head {
       display: grid;
       gap: var(--pl-space-4);
       margin-block-end: var(--pl-space-3);
       margin-inline-end: var(--pl-space-3);
     }
+    .pl-cover__brand {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--pl-space-2);
+    }
   `,
 })
-export class Cover {}
+export class Cover {
+  readonly layout = input<CoverLayout>('sidebar')
+}
 
 /** The PLaTon logo: the tilted tile and its gradient, from magenta to orange. */
 export const LOGO_URL = 'assets/design-system/logo.svg'
@@ -175,7 +196,7 @@ export class CoverFoot {}
       display: flex;
       align-items: center;
       gap: var(--pl-space-3);
-      block-size: 38px;
+      block-size: var(--pl-cover-item-size, 38px);
       margin-inline-end: var(--pl-space-3);
       padding: 0 var(--pl-space-3);
       border: 0;
@@ -285,7 +306,7 @@ export class CoverItem {
       {{ ' ' }}<span class="pl-cover-profile__detail">{{ detail() }}</span>
       }
     </span>
-    <pl-icon class="pl-cover-profile__chevron" name="expand_more" [size]="1" />
+    <pl-icon class="pl-cover-profile__chevron" [name]="chevron()" [size]="1" />
   `,
   styles: `
     :host {
@@ -334,6 +355,12 @@ export class CoverProfile {
   readonly person = input.required<AvatarPerson>()
   /** The type of account, such as « Compte enseignant ». */
   readonly detail = input<string>()
+
+  private readonly cover = inject(Cover, { optional: true })
+  /** In a panel, the profile opens a sheet rather than a menu above it. */
+  protected readonly chevron = computed<IconName>(() =>
+    this.cover?.layout() === 'panel' ? 'chevron_right' : 'expand_more'
+  )
 }
 
 /** The quiet mention at the very bottom of the cover, such as « Logiciel libre, par cisstech ». */

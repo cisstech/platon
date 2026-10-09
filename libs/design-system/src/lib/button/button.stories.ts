@@ -9,7 +9,10 @@ const meta: Meta<Button> = {
   tags: ['autodocs'],
   decorators: [moduleMetadata({ imports: [Icon, Tooltip] })],
   argTypes: {
-    variant: { control: 'select', options: ['primary', 'secondary', 'ghost', 'icon', 'cover', 'cover-quiet'] },
+    variant: {
+      control: 'select',
+      options: ['primary', 'secondary', 'ghost', 'icon', 'cover', 'cover-quiet', 'cover-icon'],
+    },
     size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },
     tone: { control: 'inline-radio', options: ['default', 'danger'] },
     loading: { control: 'boolean' },
@@ -96,6 +99,7 @@ export const Cover: Story = {
       <div class="story-cover">
         <button plButton variant="cover"><pl-icon name="add" />Create</button>
         <button plButton variant="cover-quiet"><pl-icon name="add" />Create</button>
+        <button plButton variant="cover-icon" size="lg" aria-label="Close the navigation"><pl-icon name="close" /></button>
       </div>
     `,
   }),

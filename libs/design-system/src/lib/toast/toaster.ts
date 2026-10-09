@@ -12,8 +12,10 @@ import {
   TemplateRef,
   afterNextRender,
   createComponent,
+  effect,
   inject,
   signal,
+  untracked,
 } from '@angular/core'
 import { IconName } from '../icon/icon-names'
 import { Toast, ToastTone } from './toast'
@@ -158,6 +160,7 @@ export class Toaster {
   imports: [Toast],
   host: {
     role: 'region',
+    popover: 'manual',
     '[attr.aria-label]': 'label',
     '[style.--pl-toast-inset-start]': 'insetStart',
     '(mouseenter)': "toaster.hold('pointer', true)",
@@ -184,6 +187,7 @@ export class Toaster {
   styles: `
     :host {
       position: fixed;
+      inset: auto;
       inset-block-end: var(--pl-space-6);
       inset-inline-start: calc(var(--pl-toast-inset-start) + var(--pl-space-6));
       z-index: var(--pl-layer-toast);
@@ -192,6 +196,12 @@ export class Toaster {
       align-items: flex-start;
       gap: var(--pl-space-2);
       max-inline-size: calc(100vw - var(--pl-toast-inset-start) - 2 * var(--pl-space-6));
+      margin: 0;
+      padding: 0;
+      overflow: visible;
+      border: 0;
+      background: none;
+      color: inherit;
     }
   `,
 })
@@ -201,6 +211,24 @@ export class ToastStack {
   protected readonly insetStart = inject(TOAST_INSET_START)
   private readonly host: HTMLElement = inject(ElementRef).nativeElement
   private readonly injector = inject(Injector)
+
+  constructor() {
+    effect(() => {
+      const shown = this.toaster.toasts().length > 0
+      untracked(() => this.raise(shown))
+    })
+  }
+
+  /**
+   * Shows the stack again on each change: dialogs sit in the top layer, which ranks by the order
+   * things show, not by `z-index`, and a toast raised from a dialog must not hide under it.
+   */
+  private raise(shown: boolean): void {
+    const host = this.host as HTMLElement & { showPopover?: () => void; hidePopover?: () => void }
+    if (!host.showPopover || !host.hidePopover) return
+    if (host.matches(':popover-open')) host.hidePopover()
+    if (shown) host.showPopover()
+  }
 
   protected focusLeft(event: FocusEvent): void {
     if (!this.host.contains(event.relatedTarget as Node | null)) this.toaster.hold('focus', false)
