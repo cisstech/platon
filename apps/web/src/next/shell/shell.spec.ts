@@ -1,4 +1,6 @@
 import { Dialog as CdkDialog } from '@angular/cdk/dialog'
+import { BreakpointObserver } from '@angular/cdk/layout'
+import { TemplateRef } from '@angular/core'
 import { DialogService } from '@platon/core/browser/shared'
 import { Component, computed, signal } from '@angular/core'
 import { TestBed } from '@angular/core/testing'
@@ -6,11 +8,14 @@ import { Router, provideRouter } from '@angular/router'
 import { RouterTestingHarness } from '@angular/router/testing'
 import { User, UserCharter, UserRoles, isTeacherRole } from '@platon/core/common'
 import { ActivityCorrectionSummary } from '@platon/feature/result/common'
-import { of, throwError } from 'rxjs'
+import { NEVER, Subject, of, throwError } from 'rxjs'
 import { INSTITUTION_NAME } from '../core/institution/institution'
 import { Session } from '../core/session/session'
 import { NextTheme } from '../core/theme/next-theme'
 import { CharterDialog } from './charter-dialog'
+import { NotificationsApi } from './notifications/notifications-api'
+import { NotificationsPanel } from './notifications/notifications-panel'
+import { NotificationsStore } from './notifications/notifications-store'
 import { Shell } from './shell'
 import { ShellApi } from './shell-api'
 import { ShellStore } from './shell-store'
@@ -45,14 +50,14 @@ describe('Shell', () => {
   let theme: { preference: ReturnType<typeof signal<string>>; choose: jest.Mock }
   let session: ReturnType<typeof sessionOf> & { signOut: jest.Mock }
 
-  const setup = async (role: UserRoles, { charter = true, url = '/dashboard' } = {}) => {
+  const setup = async (role: UserRoles, { charter = true, url = '/dashboard', narrow = false } = {}) => {
     api = {
       correctionSummaries: jest.fn(() => of([summary])),
       charter: jest.fn(() => of({ id: 'u1', acceptedUserCharter: charter } as UserCharter)),
       acceptCharter: jest.fn(() => of({ id: 'u1', acceptedUserCharter: true } as UserCharter)),
       personalCircleId: jest.fn(() => of('circle-1')),
     }
-    dialog = { open: jest.fn(() => ({ closed: of(true) })) }
+    dialog = { open: jest.fn(() => ({ closed: of(true), close: jest.fn() })) }
     messages = { error: jest.fn() }
     theme = { preference: signal('light'), choose: jest.fn(() => Promise.resolve()) }
     session = { ...sessionOf(person(role)), signOut: jest.fn(() => Promise.resolve()) }
@@ -62,20 +67,25 @@ describe('Shell', () => {
           {
             path: '',
             component: Shell,
-            providers: [ShellStore],
+            providers: [ShellStore, NotificationsStore],
             children: [
-              { path: 'dashboard', component: Blank },
+              { path: 'dashboard', component: Blank, title: 'Accueil' },
               { path: 'courses', component: Blank, data: { quietCreate: true } },
               { path: '**', component: Blank },
             ],
           },
         ]),
         { provide: ShellApi, useValue: api },
+        { provide: NotificationsApi, useValue: { unreadCount: () => of(3), changes: () => NEVER } },
         { provide: CdkDialog, useValue: dialog },
         { provide: DialogService, useValue: messages },
         { provide: NextTheme, useValue: theme },
         { provide: Session, useValue: session },
         { provide: INSTITUTION_NAME, useValue: 'Université Gustave Eiffel' },
+        {
+          provide: BreakpointObserver,
+          useValue: { observe: () => of({ matches: narrow, breakpoints: {} }), isMatched: () => narrow },
+        },
       ],
     })
     const harness = await RouterTestingHarness.create()
@@ -129,6 +139,22 @@ describe('Shell', () => {
     expect(cover().querySelector('pl-cover-foot a[href="/docs"]')?.getAttribute('target')).toBe('_blank')
     expect(menuItem('Aide')).toBeUndefined()
     expect(menuItem('Mon cercle')).toBeDefined()
+  })
+
+  it('counts the unread notifications in the foot, and opens them beside the cover', async () => {
+    const harness = await setup(UserRoles.student)
+    dialog.open.mockReturnValueOnce({ closed: new Subject(), close: jest.fn() })
+    const entry = cover().querySelector('pl-cover-foot button[plCoverItem]') as HTMLButtonElement
+
+    expect(entry.textContent?.replace(/\s+/g, ' ').trim()).toBe('Notifications 3 non lues')
+    entry.click()
+    await settle(harness)
+
+    expect(dialog.open).toHaveBeenCalledWith(
+      NotificationsPanel,
+      expect.objectContaining({ data: 'popover', ariaLabelledBy: 'app-notifications-title', restoreFocus: entry })
+    )
+    expect(entry.getAttribute('aria-expanded')).toBe('true')
   })
 
   it('opens Create on the objects once the charter is accepted', async () => {
@@ -191,5 +217,43 @@ describe('Shell', () => {
     await settle(harness)
     expect(theme.choose).toHaveBeenCalledWith('dark')
     expect(session.signOut).toHaveBeenCalled()
+  })
+
+  describe('on a narrow screen', () => {
+    const navigationButton = () => document.querySelector('pl-topbar button') as HTMLButtonElement
+
+    it('gives way to a top bar titled like the page, with the navigation behind a button', async () => {
+      await setup(UserRoles.student, { narrow: true })
+      expect(document.querySelector('pl-cover')).toBeNull()
+      expect(document.querySelector('pl-topbar')?.textContent).toContain('Accueil')
+      expect(navigationButton().getAttribute('aria-label')).toBe('Ouvrir la navigation')
+      expect(navigationButton().getAttribute('aria-haspopup')).toBe('dialog')
+    })
+
+    it('rings the bell of the top bar, which opens the notifications on the whole screen', async () => {
+      await setup(UserRoles.student, { narrow: true })
+      const bell = document.querySelector('pl-topbar button[aria-label^="Notifications"]') as HTMLButtonElement
+
+      expect(bell.getAttribute('aria-label')).toBe('Notifications, 3 non lues')
+      expect(bell.querySelector('pl-count')?.textContent).toBe('3')
+      bell.click()
+
+      expect(dialog.open).toHaveBeenCalledWith(
+        NotificationsPanel,
+        expect.objectContaining({ data: 'screen', restoreFocus: bell })
+      )
+    })
+
+    it('opens the cover as a dialog named Navigation, and leaves it on navigation', async () => {
+      const harness = await setup(UserRoles.student, { narrow: true })
+      navigationButton().click()
+      expect(dialog.open).toHaveBeenCalledWith(
+        expect.any(TemplateRef),
+        expect.objectContaining({ data: 'panel', ariaLabel: 'Navigation', restoreFocus: true })
+      )
+      const panel = dialog.open.mock.results[0].value
+      await harness.navigateByUrl('/courses')
+      expect(panel.close).toHaveBeenCalled()
+    })
   })
 })

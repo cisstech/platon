@@ -2,6 +2,7 @@ import { Routes } from '@angular/router'
 import { legacyBridgeGuard } from './core/legacy-bridge/legacy-bridge-guard'
 import { SHELL_ROLES, sessionGuard } from './core/session/session-guard'
 import { Home } from './pages/home/home'
+import { NotificationsStore } from './shell/notifications/notifications-store'
 import { Shell } from './shell/shell'
 import { ShellStore } from './shell/shell-store'
 
@@ -13,7 +14,7 @@ export const nextRoutes: Routes = [
   {
     path: '',
     component: Shell,
-    providers: [ShellStore],
+    providers: [ShellStore, NotificationsStore],
     canActivate: [sessionGuard(SHELL_ROLES)],
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
