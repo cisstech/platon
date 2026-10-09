@@ -108,7 +108,7 @@ export class NotificationService {
   }
 
   async delete(userId: string, ids: string[]): Promise<number> {
-    const result = await this.repository.delete(ids)
+    const result = await this.repository.delete({ userId, id: In(ids) })
 
     const affected = result.affected || 0
     if (affected) {
