@@ -542,6 +542,9 @@ a {
   border-top: 1px solid var(--color-line);
 }
 .kv dt {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   color: var(--color-muted);
 }
 .kv dd {
@@ -1258,7 +1261,7 @@ a {
 .course-card::before {
   content: '';
   position: absolute;
-  inset: 0 0 auto 0;
+  inset: 0 0 auto;
   height: 4px;
   background: var(--hue-strong, var(--color-graphite-300));
 }
@@ -2254,7 +2257,14 @@ a {
   background: var(--color-surface-muted);
 }
 .res-row.hover .row-tools {
+  position: absolute;
+  top: var(--spacing-2);
+  right: var(--spacing-3);
   display: flex;
+  padding: 2px;
+  border-radius: var(--rounded-md);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-overlay);
 }
 .tag-link {
   display: inline-flex;
@@ -2314,9 +2324,13 @@ a {
   background: var(--color-surface);
   font-size: 13px;
   font-weight: 600;
+  white-space: nowrap;
 }
 .pick-card {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
   padding: var(--spacing-4);
   cursor: pointer;
 }
@@ -2424,20 +2438,6 @@ a {
 }
 .res-row {
   position: relative;
-}
-.res-row.hover .row-tools {
-  position: absolute;
-  top: var(--spacing-2);
-  right: var(--spacing-3);
-  padding: 2px;
-  border-radius: var(--rounded-md);
-  background: var(--color-surface);
-  box-shadow: var(--shadow-overlay);
-}
-.kv dt {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
 }
 
 /* ---------- Cours : classeurs, onglets réels, classement ---------- */
@@ -2718,9 +2718,6 @@ a {
   }
 }
 
-.select {
-  white-space: nowrap;
-}
 .q .statement,
 .q .answer {
   max-width: 720px;
@@ -2731,11 +2728,6 @@ a {
   width: 100%;
 }
 
-.pick-card {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-2);
-}
 .pick-card .pick-head {
   display: flex;
   align-items: flex-start;
@@ -2855,10 +2847,13 @@ details.more-figures .figs {
 }
 .stat-card .stat-head {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   gap: var(--spacing-2);
+  min-height: 32px;
   font-size: 13px;
   color: var(--color-muted);
+  white-space: nowrap;
 }
 .stat-card .stat-icon {
   display: grid;
@@ -2970,15 +2965,6 @@ details.more-figures .figs {
 }
 .stat-row.four {
   grid-template-columns: repeat(4, minmax(0, 1fr));
-}
-.stat-card .stat-head {
-  min-height: 32px;
-}
-.stat-card .stat-head {
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--spacing-2);
-  white-space: nowrap;
 }
 .stat-row.five {
   grid-template-columns: repeat(5, minmax(0, 1fr));
