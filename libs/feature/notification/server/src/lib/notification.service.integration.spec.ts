@@ -73,6 +73,29 @@ describe('NotificationService (integration)', () => {
     })
   })
 
+  describe('delete', () => {
+    it("ne devrait pas supprimer les notifications d'un autre utilisateur, même avec leur identifiant", async () => {
+      const owner = await seedUser()
+      const other = await seedUser()
+      await service.sendToUser(owner.id, { type: 'FOO' })
+      const [notification] = await notificationRepo.find({ where: { userId: owner.id } })
+
+      const affected = await service.delete(other.id, [notification.id])
+
+      expect(affected).toBe(0)
+      expect(await notificationRepo.find({ where: { userId: owner.id } })).toHaveLength(1)
+    })
+
+    it('devrait supprimer les notifications de son propriétaire', async () => {
+      const owner = await seedUser()
+      await service.sendToUser(owner.id, { type: 'FOO' })
+      const [notification] = await notificationRepo.find({ where: { userId: owner.id } })
+
+      expect(await service.delete(owner.id, [notification.id])).toBe(1)
+      expect(await notificationRepo.find({ where: { userId: owner.id } })).toHaveLength(0)
+    })
+  })
+
   describe('deleteWhere', () => {
     it('devrait supprimer uniquement les notifications correspondant à une expression additionnelle réelle', async () => {
       const user = await seedUser()

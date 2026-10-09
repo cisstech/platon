@@ -3,7 +3,7 @@ import { Test } from '@nestjs/testing'
 import { getRepositoryToken } from '@nestjs/typeorm'
 import { PubSubService } from '@platon/core/server'
 import { MockRepository, mockRepository, mockSelectQueryBuilder } from '@platon/core/testing/server'
-import { EntityManager, SelectQueryBuilder } from 'typeorm'
+import { EntityManager, In, SelectQueryBuilder } from 'typeorm'
 import { NotificationEntity } from './notification.entity'
 import { NOTIFICATION_EXTRA_DATA, NotificationExtraDataProvider } from './notification.provider'
 import { ON_CHANGE_NOTIFICATIONS } from './notification.pubsub'
@@ -192,12 +192,12 @@ describe('NotificationService', () => {
   })
 
   describe('delete', () => {
-    it('devrait supprimer les notifications et notifier si des lignes ont été affectées', async () => {
+    it("devrait supprimer les notifications de l'utilisateur et notifier si des lignes ont été affectées", async () => {
       repository.delete.mockResolvedValue({ affected: 2 } as never)
 
       const result = await service.delete('user-1', ['id-1', 'id-2'])
 
-      expect(repository.delete).toHaveBeenCalledWith(['id-1', 'id-2'])
+      expect(repository.delete).toHaveBeenCalledWith({ userId: 'user-1', id: In(['id-1', 'id-2']) })
       expect(result).toBe(2)
       expect(pubSubService.publish).toHaveBeenCalled()
     })
