@@ -114,3 +114,14 @@
 .story-screen {
   max-inline-size: 390px;
 }
+
+.story-form {
+  display: grid;
+  gap: var(--pl-space-4);
+  max-inline-size: 360px;
+}
+
+.story-message {
+  color: var(--pl-color-danger-ink);
+  font: var(--pl-font-small);
+}
