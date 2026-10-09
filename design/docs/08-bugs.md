@@ -53,7 +53,8 @@ Gravité : **P1** bloque, trompe ou expose. **P2** gêne ou fait douter. **P3** 
 - **Cause** : `NotificationService.delete(userId, ids)` appelle `repository.delete(ids)` sans filtrer
   sur `userId`.
 - **Où** : `libs/feature/notification/server/src/lib/notification.service.ts`
-- **Piste** : supprimer par `{ userId, id: In(ids) }`, comme `markAsUnread` ; C-04 le fait.
+- **Correctif** : supprimer par `{ userId, id: In(ids) }`, comme `markAsUnread` (PR #120, sur
+  `main`, avant la nouvelle interface).
 
 ## P2
 
