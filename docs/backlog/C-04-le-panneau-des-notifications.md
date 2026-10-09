@@ -88,8 +88,8 @@ Vérifié le 2026-09-29.
   le texte de chaque type au format du wireframe, dans des fonctions de vue (les parseurs gardent
   l'icône et la cible du clic) ; un rendu texte pour les événements de ressource, à la place du
   composant ng-zorro ; l'écran entier du téléphone.
-- API : `unreadCount` écarte `EXERCISE-CHANGES` et `MODERATION-ACTIVITY-CHANGES` (D29) ; la
-  suppression vérifie que les notifications appartiennent à la personne.
+- API : `unreadCount` écarte `EXERCISE-CHANGES` et `MODERATION-ACTIVITY-CHANGES` (D29). La
+  suppression limitée aux notifications de la personne (B21) est corrigée à part, PR #120.
 
 ## 5. Hors scope
 
