@@ -63,6 +63,14 @@ describe('legacyBridgeGuard', () => {
     expect(navigation.assign).not.toHaveBeenCalled()
   })
 
+  it('replaces the history entry when the navigation does, as after signing in', async () => {
+    const harness = await RouterTestingHarness.create()
+    await harness.navigateByUrl('/', Shell)
+    await TestBed.inject(Router).navigateByUrl('/courses', { replaceUrl: true })
+    expect(navigation.replace).toHaveBeenCalledWith('/courses?ui=legacy-once')
+    expect(navigation.assign).not.toHaveBeenCalled()
+  })
+
   it('adds a history entry when leaving a screen of the new interface', async () => {
     const harness = await RouterTestingHarness.create()
     await harness.navigateByUrl('/', Shell)

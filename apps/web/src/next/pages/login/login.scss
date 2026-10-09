@@ -1,0 +1,220 @@
+// The cover and the page side by side; on a narrow screen, the cover above the page. The cover stays
+// dark in both themes, like the one of the frame.
+:host {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-block-size: 100dvh;
+}
+
+.login__cover {
+  display: flex;
+  flex-direction: column;
+  padding: var(--pl-space-10);
+  background: var(--pl-color-cover);
+  color: var(--pl-color-cover-text);
+}
+
+.login__logo {
+  inline-size: 72px;
+  block-size: 64px;
+}
+
+.login__brand-text {
+  display: none;
+}
+
+.login__brand-name {
+  font: var(--pl-font-subheading);
+}
+
+.login__brand-org {
+  color: var(--pl-color-cover-muted);
+  font: var(--pl-font-caption);
+}
+
+.login__title {
+  max-inline-size: 18ch;
+  margin-block-start: var(--pl-space-8);
+  font: var(--pl-font-display);
+}
+
+.login__sentence {
+  max-inline-size: 44ch;
+  margin-block-start: var(--pl-space-4);
+  color: var(--pl-color-cover-muted);
+  font: var(--pl-font-reading);
+}
+
+.login__presentation {
+  align-self: flex-start;
+  margin-block-start: var(--pl-space-6);
+}
+
+.login__footer {
+  margin-block-start: auto;
+  padding-block-start: var(--pl-space-8);
+  color: var(--pl-color-cover-muted);
+  font: var(--pl-font-small);
+}
+
+.login__page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--pl-space-10);
+  background: var(--pl-color-surface);
+
+  // The skip link moves the focus here, to start the keyboard path at the form.
+  &:focus {
+    outline: none;
+  }
+}
+
+.login__form {
+  display: grid;
+  inline-size: 100%;
+  max-inline-size: 360px;
+}
+
+.login__heading {
+  margin-block-end: var(--pl-space-6);
+  font: var(--pl-font-title);
+}
+
+.login__cas {
+  inline-size: 100%;
+}
+
+.login__cas + .login__cas {
+  margin-block-start: var(--pl-space-2);
+}
+
+// A button and the separator under it.
+.login__cas-pending {
+  block-size: calc(44px + 2 * var(--pl-space-6) + 18px);
+}
+
+.login__cas-failure {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--pl-space-2);
+  color: var(--pl-color-muted);
+  font: var(--pl-font-small);
+}
+
+.login__or {
+  display: flex;
+  align-items: center;
+  gap: var(--pl-space-3);
+  margin-block: var(--pl-space-6);
+  color: var(--pl-color-subtle);
+  font: var(--pl-font-small);
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    block-size: 1px;
+    background: var(--pl-color-line);
+  }
+}
+
+.login__password {
+  margin-block-start: var(--pl-space-4);
+}
+
+// A hit area of 36 px (44 px on a touch screen) around a line of 18 px, that does not move the label.
+.login__forgot {
+  padding-block: calc(var(--pl-space-2) + 1px);
+  margin-block: calc(-1 * var(--pl-space-2) - 1px);
+
+  @media (pointer: coarse) {
+    padding-block: calc(var(--pl-space-3) + 1px);
+    margin-block: calc(-1 * var(--pl-space-3) - 1px);
+  }
+}
+
+// Reserved in every state: an error or a check at work never moves the form.
+.login__message {
+  --pl-icon-size: var(--pl-icon-size-1);
+
+  display: flex;
+  align-items: flex-start;
+  gap: var(--pl-space-2);
+  min-block-size: 36px;
+  margin-block-start: var(--pl-space-2);
+  color: var(--pl-color-danger-ink);
+  font: var(--pl-font-small);
+
+  pl-icon {
+    flex: none;
+    color: var(--pl-color-danger);
+  }
+
+  strong {
+    font-weight: var(--pl-weight-strong);
+  }
+}
+
+.login__submit {
+  inline-size: 100%;
+  margin-block-start: var(--pl-space-3);
+}
+
+.login__foot {
+  margin-block-start: var(--pl-space-6);
+  color: var(--pl-color-muted);
+  font: var(--pl-font-small);
+}
+
+// The breakpoint of the frame (`NARROW_SCREEN`, shell.ts).
+@media (max-width: 839.98px) {
+  :host {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .login__cover {
+    padding: var(--pl-space-6) var(--pl-space-4);
+  }
+
+  .login__brand {
+    display: flex;
+    align-items: center;
+    gap: var(--pl-space-3);
+  }
+
+  .login__logo {
+    inline-size: 44px;
+    block-size: 40px;
+  }
+
+  .login__brand-text {
+    display: grid;
+  }
+
+  .login__title {
+    margin-block-start: var(--pl-space-6);
+    font: var(--pl-font-title);
+  }
+
+  .login__presentation {
+    margin-block-start: var(--pl-space-4);
+  }
+
+  .login__footer {
+    display: none;
+  }
+
+  .login__page {
+    flex: 1;
+    align-items: flex-start;
+    padding: var(--pl-space-6) var(--pl-space-4);
+  }
+
+  .login__heading {
+    margin-block-end: var(--pl-space-4);
+    font: var(--pl-font-heading);
+  }
+}
