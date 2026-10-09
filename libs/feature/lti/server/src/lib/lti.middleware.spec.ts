@@ -103,7 +103,26 @@ describe('LTIMiddleware', () => {
     })
     expect(res.redirect).toHaveBeenCalledWith(
       302,
-      '/login?access-token=access-token&refresh-token=refresh-token&next=/course/1'
+      '/login?access-token=access-token&refresh-token=refresh-token&next=%2Fcourse%2F1'
+    )
+  })
+
+  it("devrait mener à l'adresse que les intercepteurs ont réécrite, encodée", async () => {
+    const lms = { id: 'lms-1', name: 'Moodle', consumerKey: 'key', consumerSecret: 'secret' } as LmsEntity
+    lti.findLmsByConsumerKey.mockResolvedValue(Optional.of(lms))
+    const payload = { user_id: 'ext-1' }
+    ;(LTIProvider as unknown as jest.Mock).mockImplementation(() => ({ validate: jest.fn(), body: payload }))
+    lti.withLmsUser.mockResolvedValue({ id: 'lmsuser-1', user: { id: 'user-1', username: 'john' } } as LmsUserEntity)
+    authService.authenticate.mockResolvedValue({ accessToken: 'a', refreshToken: 'r' } as never)
+    lti.interceptLaunch.mockImplementation(async (args: { nextUrl: string }) => {
+      args.nextUrl = '/player/activity/a1?x=1&y=2'
+    })
+
+    await middleware.use({ body: { oauth_consumer_key: 'key' }, query: {} } as never, res as never, next)
+
+    expect(res.redirect).toHaveBeenCalledWith(
+      302,
+      '/login?access-token=a&refresh-token=r&next=%2Fplayer%2Factivity%2Fa1%3Fx%3D1%26y%3D2'
     )
   })
 
