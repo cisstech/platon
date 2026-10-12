@@ -20,6 +20,10 @@ export interface ActivityCorrectionSummary {
   correctedExercises: number
   /** Submitted copies with at least one exercise still to correct. */
   pendingCopies: number
+  /** Submitted copies, counted as `pendingCopies` is. */
+  submittedCopies: number
+  /** When the last of them was submitted. */
+  lastSubmittedAt?: Date | null
 }
 /**
  * Represents a list of corrections assigned to a correctioner.

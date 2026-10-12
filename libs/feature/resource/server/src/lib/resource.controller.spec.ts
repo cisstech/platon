@@ -97,7 +97,8 @@ describe('ResourceController', () => {
   describe('search', () => {
     it('devrait rechercher via ResourceViewService quand filters.views est fourni', async () => {
       const resource = buildResource()
-      resourceViewService.findAll.mockResolvedValue([[{ resource } as never], 1])
+      const viewedAt = new Date('2026-10-12T08:00:00Z')
+      resourceViewService.findAll.mockResolvedValue([[{ resource, updatedAt: viewedAt } as never], 1])
       const req = buildReq()
 
       const result = await controller.search(req, { views: true } as never)
@@ -105,6 +106,7 @@ describe('ResourceController', () => {
       expect(resourceViewService.findAll).toHaveBeenCalledWith(req.user.id)
       expect(resourceService.search).not.toHaveBeenCalled()
       expect(result.total).toBe(1)
+      expect(result.resources[0]).toMatchObject({ id: resource.id, viewedAt })
     })
 
     it("devrait rechercher via ResourceService sinon, filtré sur l'utilisateur courant", async () => {

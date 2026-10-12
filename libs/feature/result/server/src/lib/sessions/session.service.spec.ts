@@ -323,6 +323,7 @@ describe('SessionService', () => {
 
       await service.onReopenActivity({ activityId: 'activity-1' })
 
+      expect(qb.set).toHaveBeenCalledWith(expect.objectContaining({ terminatedAt: null }))
       expect(qb.where).toHaveBeenCalledWith('activity_id = :activityId and parent_id is null', {
         activityId: 'activity-1',
       })

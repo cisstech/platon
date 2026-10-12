@@ -10,6 +10,12 @@ export enum AnswerStates {
   ERROR = 'ERROR',
 }
 
+/** The states of an exercise its student has not answered yet: any other state counts as done. */
+export const UNANSWERED_STATES: readonly AnswerStates[] = [AnswerStates.NOT_STARTED, AnswerStates.STARTED]
+
+/** Whether the student answered the exercise, as progress counts it. */
+export const isExerciseDone = (state: AnswerStates): boolean => !UNANSWERED_STATES.includes(state)
+
 export const AnswerStateIcons: Record<AnswerStates, string> = {
   ANSWERED: 'assignment_turned_in',
   SUCCEEDED: 'check_circle',

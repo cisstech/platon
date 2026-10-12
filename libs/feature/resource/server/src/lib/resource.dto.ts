@@ -15,7 +15,7 @@ import {
   UpdateResource,
 } from '@platon/feature/resource/common'
 import { Transform, Type } from 'class-transformer'
-import { IsArray, IsBoolean, IsEnum, IsNumber, IsOptional, IsString, IsUUID, Max, Min } from 'class-validator'
+import { IsArray, IsBoolean, IsDate, IsEnum, IsNumber, IsOptional, IsString, IsUUID, Max, Min } from 'class-validator'
 import { FileCreateDTO } from './files'
 import { ResourcePermissionsDTO } from './permissions'
 
@@ -45,6 +45,11 @@ export class ResourceDTO extends BaseDTO implements Resource {
   @IsBoolean()
   @ApiProperty()
   readonly publicPreview!: boolean
+
+  @IsOptional()
+  @IsDate()
+  @ApiProperty()
+  readonly viewedAt?: Date
 
   @IsEnum(ResourceStatus)
   @ApiProperty()

@@ -16,6 +16,7 @@ let announcementRepo: Repository<AnnouncementEntity>
 let admin: TestUser
 let teacher: TestUser
 let student: TestUser
+let demo: TestUser
 
 const http = () => request(ctx.app.getHttpServer())
 
@@ -29,6 +30,7 @@ beforeAll(async () => {
   admin = await ctx.createUser({ username: 'admin-e2e', role: UserRoles.admin })
   teacher = await ctx.createUser({ username: 'teacher-e2e', role: UserRoles.teacher })
   student = await ctx.createUser({ username: 'student-e2e', role: UserRoles.student })
+  demo = await ctx.createUser({ username: 'demo-e2e', role: UserRoles.demo })
 
   announcementRepo = ctx.getRepository(AnnouncementEntity)
 }, 60_000)
@@ -264,5 +266,23 @@ describe('GET /announcements/visible', () => {
     expect(studentTitles).toContain('ForStudent')
     expect(studentTitles).not.toContain('ForAdmin')
     expect(studentTitles).not.toContain('Inactive')
+  })
+
+  it('should answer a demo account with the announcements for everyone, list and detail', async () => {
+    const [forAll] = await announcementRepo.save([
+      announcementRepo.create({ title: 'ForAll', description: 'Desc', active: true, targetedRoles: [] }),
+      announcementRepo.create({
+        title: 'ForStudent',
+        description: 'Desc',
+        active: true,
+        targetedRoles: [UserRoles.student],
+      }),
+    ])
+
+    const list = await http().get('/announcements/visible').set(auth(demo.token)).expect(200)
+    expect(list.body.resources.map((r: { title: string }) => r.title)).toEqual(['ForAll'])
+
+    const detail = await http().get(`/announcements/visible/${forAll.id}`).set(auth(demo.token)).expect(200)
+    expect(detail.body.resource.title).toBe('ForAll')
   })
 })

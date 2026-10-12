@@ -36,7 +36,7 @@ export class AnnouncementController {
     return new CreatedResponse({ resource: Mapper.map(newAnnouncement, AnnouncementDTO) })
   }
 
-  @Roles(UserRoles.admin, UserRoles.teacher, UserRoles.student)
+  @Roles(UserRoles.admin, UserRoles.teacher, UserRoles.student, UserRoles.demo)
   @Get('visible')
   async getVisibleForUser(
     @Req() req: IRequest,
@@ -53,7 +53,7 @@ export class AnnouncementController {
     })
   }
 
-  @Roles(UserRoles.admin, UserRoles.teacher, UserRoles.student)
+  @Roles(UserRoles.admin, UserRoles.teacher, UserRoles.student, UserRoles.demo)
   @Get('visible/:id')
   async findVisibleById(@Req() req: IRequest, @UUIDParam('id') id: string): Promise<ItemResponse<AnnouncementDTO>> {
     if (!req.user || !req.user.role) {
