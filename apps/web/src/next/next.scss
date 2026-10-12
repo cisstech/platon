@@ -1,0 +1,20 @@
+// Global styles of the new interface that belong to the application, not to the design system.
+
+// The boot screen of index.html, once this sheet is loaded: in the colors of the tokens, light or dark
+// like the page under it, which the sheet darkens when the system is dark.
+.boot-screen {
+  color: var(--pl-color-muted);
+}
+
+.boot-screen.is-error {
+  color: var(--pl-color-text);
+}
+
+.boot-reload {
+  background: var(--pl-color-primary);
+  color: var(--pl-color-on-primary);
+}
+
+.boot-reload:focus-visible {
+  outline-color: var(--pl-color-focus);
+}
