@@ -14,8 +14,8 @@ polices et icônes, garde-fous `yarn lint:design`, dialogues et thème). Les wir
 après quatre tours de critique (154 écrans, règles communes, glyphes d'état, données de référence
 dans `design/docs/09-donnees.md`). Dans la phase C, la session, le gabarit de page et ses états sont
 livrés, puis la couverture, le cadre mobile et le panneau des notifications, dont le temps réel passe
-désormais par SSE : GraphQL a quitté le dépôt. La connexion (G-04) est livrée. La nouvelle interface
-n'a encore que son accueil provisoire.
+désormais par SSE : GraphQL a quitté le dépôt. La connexion (G-04) est livrée, puis les données des
+accueils (A-04) et les accueils de l'élève (A-01) et de l'enseignant (A-02).
 
 ## Où on atterrit
 
@@ -78,12 +78,12 @@ critique. Les points ouverts de C-02 à C-05 sont tranchés (D22 à D30, 2026-10
 
 ## Phase A : les accueils
 
-| Ticket | Titre                                                                     | Dépend de | Taille | Statut   |
-| ------ | ------------------------------------------------------------------------- | --------- | ------ | -------- |
-| A-01   | Accueil élève : À faire, Bientôt, Résultats récents, bandeau d'annonce    | C-05      | L      | À écrire |
-| A-02   | Accueil enseignant : En cours, À corriger, À préparer, Partir d'un modèle | C-05      | L      | À écrire |
-| A-03   | La page Annonces                                                          | C-05      | S      | À écrire |
-| A-04   | Point d'API `activities/mine` si l'agrégation côté client est trop lente  | A-01      | M      | À écrire |
+| Ticket                                           | Titre                                                                             | Dépend de        | Taille | Statut             |
+| ------------------------------------------------ | --------------------------------------------------------------------------------- | ---------------- | ------ | ------------------ |
+| [A-01](./done/A-01-l-accueil-de-l-eleve.md)      | Accueil élève : À faire, Bientôt, Résultats récents, Mes cours, bandeau d'annonce | C-05, A-04       | L      | Livré (2026-10-12) |
+| [A-02](./done/A-02-l-accueil-de-l-enseignant.md) | Accueil enseignant : En cours, À faire, Mes cours, Vu récemment                   | C-05, A-04, A-01 | L      | Livré (2026-10-12) |
+| A-03                                             | La page Annonces                                                                  | C-05             | S      | À écrire           |
+| [A-04](./done/A-04-les-donnees-des-accueils.md)  | Les données des accueils : `activities/mine`, copies récentes, participation      | aucun            | L      | Livré (2026-10-12) |
 
 ## Phase K : les cours
 
