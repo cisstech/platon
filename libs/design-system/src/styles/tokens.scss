@@ -16,6 +16,7 @@
   --pl-color-line-strong: #3f3e41;
   --pl-color-skeleton: #3a393d;
   --pl-color-skeleton-shine: #29282c;
+  --pl-color-track: #3f3e41;
   --pl-color-control: var(--pl-graphite-450);
   --pl-color-text: var(--pl-graphite-100);
   --pl-color-muted: var(--pl-graphite-300);
@@ -148,6 +149,8 @@
   // The shape of content on its way, and the light that passes over it.
   --pl-color-skeleton: var(--pl-graphite-150);
   --pl-color-skeleton-shine: var(--pl-graphite-100);
+  // The empty part of a progress bar.
+  --pl-color-track: var(--pl-graphite-150);
   // Borders of fields and checkboxes: 3:1 against the surface.
   --pl-color-control: var(--pl-graphite-450);
   --pl-color-text: var(--pl-graphite-900);
@@ -323,38 +326,47 @@
   }
 }
 
-// The hue of a course on what carries `data-hue`: its tint behind, its ink on it.
+// The hue of a course on what carries `data-hue`: its tint behind, its ink on it, its strong shade
+// where it fills (a progress bar).
 [data-hue='coral'] {
   --pl-hue-tint: var(--pl-course-coral-tint);
   --pl-hue-ink: var(--pl-course-coral-ink);
+  --pl-hue-strong: var(--pl-course-coral-strong);
 }
 [data-hue='amber'] {
   --pl-hue-tint: var(--pl-course-amber-tint);
   --pl-hue-ink: var(--pl-course-amber-ink);
+  --pl-hue-strong: var(--pl-course-amber-strong);
 }
 [data-hue='olive'] {
   --pl-hue-tint: var(--pl-course-olive-tint);
   --pl-hue-ink: var(--pl-course-olive-ink);
+  --pl-hue-strong: var(--pl-course-olive-strong);
 }
 [data-hue='mint'] {
   --pl-hue-tint: var(--pl-course-mint-tint);
   --pl-hue-ink: var(--pl-course-mint-ink);
+  --pl-hue-strong: var(--pl-course-mint-strong);
 }
 [data-hue='lagoon'] {
   --pl-hue-tint: var(--pl-course-lagoon-tint);
   --pl-hue-ink: var(--pl-course-lagoon-ink);
+  --pl-hue-strong: var(--pl-course-lagoon-strong);
 }
 [data-hue='cornflower'] {
   --pl-hue-tint: var(--pl-course-cornflower-tint);
   --pl-hue-ink: var(--pl-course-cornflower-ink);
+  --pl-hue-strong: var(--pl-course-cornflower-strong);
 }
 [data-hue='lilac'] {
   --pl-hue-tint: var(--pl-course-lilac-tint);
   --pl-hue-ink: var(--pl-course-lilac-ink);
+  --pl-hue-strong: var(--pl-course-lilac-strong);
 }
 [data-hue='raspberry'] {
   --pl-hue-tint: var(--pl-course-raspberry-tint);
   --pl-hue-ink: var(--pl-course-raspberry-ink);
+  --pl-hue-strong: var(--pl-course-raspberry-strong);
 }
 
 @media (prefers-reduced-motion: reduce) {

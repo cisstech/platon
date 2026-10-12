@@ -1,6 +1,7 @@
 import { Component, LOCALE_ID, signal, viewChild } from '@angular/core'
 import { TestBed } from '@angular/core/testing'
-import { NotificationItem, NotificationList } from './notification'
+import { NotificationItem } from './notification-item/notification-item'
+import { NotificationList } from './notification-list/notification-list'
 
 @Component({
   imports: [NotificationItem, NotificationList],

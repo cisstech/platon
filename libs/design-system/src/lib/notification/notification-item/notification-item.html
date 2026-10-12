@@ -1,0 +1,34 @@
+<span class="pl-notification-item__lead" [attr.data-hue]="hue() ?? null"><pl-icon [name]="icon()" /></span>
+<div class="pl-notification-item__body">
+  @if (href(); as href) {
+  <a
+    class="pl-notification-item__main"
+    #main
+    [href]="href"
+    (click)="chosen.emit($event)"
+    (auxclick)="chooseAside($event)"
+  >
+    <ng-container [ngTemplateOutlet]="text" />
+  </a>
+  } @else if (choosable()) {
+  <button type="button" class="pl-notification-item__main" #main (click)="chosen.emit($event)">
+    <ng-container [ngTemplateOutlet]="text" />
+  </button>
+  } @else {
+  <div class="pl-notification-item__main" #main tabindex="-1"><ng-container [ngTemplateOutlet]="text" /></div>
+  }
+  <div class="pl-notification-item__actions"><ng-content select="[plNotificationActions]" /></div>
+</div>
+<ng-template #text>
+  <span class="pl-notification-item__title" [id]="titleId()">
+    @if (unread() && unreadLabel()) {
+    <span class="pl-visually-hidden">{{ unreadLabel() }}{{ ' ' }}</span>
+    }
+    {{ heading() }}
+  </span>
+  {{ ' ' }}
+  <span class="pl-notification-item__detail">
+    @if (context()) { {{ context() }}, }
+    <time [attr.datetime]="dateTime()">{{ when() }}</time>
+  </span>
+</ng-template>

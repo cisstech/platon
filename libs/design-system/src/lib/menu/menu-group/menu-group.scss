@@ -1,0 +1,17 @@
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--pl-space-3);
+  padding: var(--pl-space-1) var(--pl-space-3);
+}
+.pl-menu-group__label {
+  color: var(--pl-color-muted);
+}
+.pl-menu-group__choices {
+  display: flex;
+  gap: calc(var(--pl-space-1) / 2);
+  padding: calc(var(--pl-space-1) / 2);
+  border-radius: var(--pl-radius-control);
+  background: var(--pl-color-hover);
+}

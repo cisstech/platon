@@ -1,0 +1,34 @@
+@if (icon(); as icon) {
+<pl-icon class="pl-toast__icon" [name]="icon" [size]="3" />
+} @else {
+<span class="pl-toast__spinner" aria-hidden="true"></span>
+}
+<div class="pl-toast__body">
+  @if (title()) {
+  <p class="pl-toast__title">{{ title() }}</p>
+  } @if (message()) {
+  <p class="pl-toast__message">{{ message() }}</p>
+  } @if (template(); as template) {
+  <ng-container [ngTemplateOutlet]="template" [ngTemplateOutletContext]="context()" />
+  }
+</div>
+@if (actionLabel(); as actionLabel) {
+<button type="button" plButton variant="ghost" size="sm" class="pl-toast__action" (click)="acted.emit()">
+  @if (actionIcon(); as actionIcon) {
+  <pl-icon [name]="actionIcon" />
+  }
+  {{ actionLabel }}
+</button>
+} @if (dismissLabel(); as dismissLabel) {
+<button
+  type="button"
+  plButton
+  variant="icon"
+  size="sm"
+  class="pl-toast__dismiss"
+  [plTooltip]="dismissLabel"
+  (click)="dismissed.emit()"
+>
+  <pl-icon name="close" />
+</button>
+}

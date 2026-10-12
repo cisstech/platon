@@ -1,6 +1,8 @@
 import { Component } from '@angular/core'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
-import { SHEET_DISMISS_DISTANCE, Sheet, SheetField, SheetItem } from './sheet'
+import { SHEET_DISMISS_DISTANCE, Sheet } from './sheet'
+import { SheetField } from './sheet-field/sheet-field'
+import { SheetItem } from './sheet-item/sheet-item'
 
 @Component({
   imports: [Sheet, SheetField, SheetItem],

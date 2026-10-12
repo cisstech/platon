@@ -1,7 +1,9 @@
 import { type Meta, type StoryObj, moduleMetadata } from '@storybook/angular'
 import { Button } from '../button/button'
 import { Icon } from '../icon/icon'
-import { Field, FieldInput, PasswordReveal } from './field'
+import { Field } from './field'
+import { FieldInput } from './field-input'
+import { PasswordReveal } from './password-reveal'
 
 const meta: Meta<Field> = {
   title: 'Components/Field',

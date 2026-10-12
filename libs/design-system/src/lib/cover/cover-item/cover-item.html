@@ -1,0 +1,7 @@
+<pl-icon class="pl-cover-item__icon" [name]="icon()" [size]="3" />
+<span class="pl-cover-item__label"><ng-content /></span>
+@if (count()) {
+{{ ' ' }}<pl-count class="pl-cover-item__count" [value]="count() ?? 0" />
+@if (countLabel()) {
+<span class="pl-visually-hidden"> {{ countLabel() }}</span>
+} }

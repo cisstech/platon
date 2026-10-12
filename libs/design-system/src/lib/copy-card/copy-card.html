@@ -1,0 +1,34 @@
+@if (href(); as href) {
+<a class="pl-copy-card__sheet" [routerLink]="href"><ng-container [ngTemplateOutlet]="sheet" /></a>
+} @else {
+<div class="pl-copy-card__sheet"><ng-container [ngTemplateOutlet]="sheet" /></div>
+}
+<ng-template #sheet>
+  <span class="pl-copy-card__margin" aria-hidden="true">
+    @if (grade() !== undefined) {
+    <span class="pl-copy-card__grade">{{ grade() }}</span
+    ><span class="pl-copy-card__max">/{{ max() }}</span>
+    }
+  </span>
+  <span class="pl-copy-card__body" [attr.data-hue]="hue() ?? null">
+    <span class="pl-copy-card__title"
+      >{{ heading() }}@if (grade() !== undefined && gradeLabel()) {<span class="pl-visually-hidden"
+        >, {{ gradeLabel() }}</span
+      >}</span
+    >
+    {{ ' ' }}
+    @if (context()) {
+    <span class="pl-copy-card__meta">{{ context() }}</span>
+    {{ ' ' }}
+    } @if (date()) {
+    <span class="pl-copy-card__meta">{{ date() }}</span>
+    {{ ' ' }}
+    } @if (action()) {
+    <span class="pl-copy-card__action"
+      >@if (actionIcon(); as icon) {<pl-icon [name]="icon" [size]="2" />}{{ action() }}</span
+    >
+    } @else if (state()) {
+    <pl-tag class="pl-copy-card__state" [icon]="stateIcon()">{{ state() }}</pl-tag>
+    }
+  </span>
+</ng-template>

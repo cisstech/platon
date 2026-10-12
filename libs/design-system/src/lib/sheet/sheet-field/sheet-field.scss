@@ -1,0 +1,19 @@
+:host {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--pl-space-3);
+  min-block-size: 60px;
+  padding: var(--pl-space-2) var(--pl-space-4);
+  border-block-end: 1px solid var(--pl-color-line);
+}
+.pl-sheet-field__label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--pl-space-3);
+  font-weight: var(--pl-weight-strong);
+}
+.pl-sheet-field__icon {
+  color: var(--pl-color-muted);
+}

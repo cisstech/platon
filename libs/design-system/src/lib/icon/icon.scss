@@ -1,0 +1,12 @@
+:host {
+  display: inline-flex;
+  flex: none;
+  inline-size: var(--pl-icon-size, 1em);
+  block-size: var(--pl-icon-size, 1em);
+  vertical-align: -0.125em;
+}
+svg {
+  inline-size: 100%;
+  block-size: 100%;
+  fill: currentColor;
+}

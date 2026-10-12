@@ -15,38 +15,8 @@ export type SkeletonShape = 'line' | 'heading' | 'button'
     '[attr.data-shape]': 'shape()',
     '[style.inline-size]': 'width()',
   },
-  template: '',
-  styles: `
-    :host {
-      display: block;
-      block-size: var(--pl-space-3);
-      border-radius: var(--pl-radius-1);
-      background: linear-gradient(
-        90deg,
-        var(--pl-color-skeleton) 0%,
-        var(--pl-color-skeleton-shine) 50%,
-        var(--pl-color-skeleton) 100%
-      );
-      background-size: 200% 100%;
-      animation: pl-skeleton var(--pl-duration-shimmer) ease-in-out infinite;
-    }
-    :host([data-shape='heading']) {
-      block-size: var(--pl-space-4);
-    }
-    :host([data-shape='button']) {
-      inline-size: 96px;
-      block-size: 36px;
-      border-radius: var(--pl-radius-control);
-    }
-    @keyframes pl-skeleton {
-      from {
-        background-position: 100% 0;
-      }
-      to {
-        background-position: -100% 0;
-      }
-    }
-  `,
+  templateUrl: './skeleton.html',
+  styleUrl: './skeleton.scss',
 })
 export class Skeleton {
   readonly shape = input<SkeletonShape>('line')

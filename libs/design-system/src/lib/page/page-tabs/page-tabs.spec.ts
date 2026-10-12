@@ -1,7 +1,8 @@
 import { Component } from '@angular/core'
 import { TestBed } from '@angular/core/testing'
 import { Router, RouterLink, provideRouter } from '@angular/router'
-import { PageTab, PageTabs } from './page-tabs'
+import { PageTab } from '../page-tab/page-tab'
+import { PageTabs } from './page-tabs'
 
 @Component({
   imports: [PageTab, PageTabs, RouterLink],

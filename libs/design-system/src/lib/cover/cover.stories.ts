@@ -3,9 +3,15 @@ import { type Meta, type StoryObj, applicationConfig, moduleMetadata } from '@st
 import { Button } from '../button/button'
 import { Icon } from '../icon/icon'
 import { Page } from '../page/page'
-import { PageHeader } from '../page/page-header'
+import { PageHeader } from '../page/page-header/page-header'
 import { SkipLink } from '../skip-link/skip-link'
-import { Cover, CoverBrand, CoverCredit, CoverFoot, CoverItem, CoverNav, CoverProfile } from './cover'
+import { Cover } from './cover'
+import { CoverBrand } from './cover-brand/cover-brand'
+import { CoverCredit } from './cover-credit/cover-credit'
+import { CoverFoot } from './cover-foot/cover-foot'
+import { CoverItem } from './cover-item/cover-item'
+import { CoverNav } from './cover-nav/cover-nav'
+import { CoverProfile } from './cover-profile/cover-profile'
 
 const meta: Meta<Cover> = {
   title: 'Components/Cover',
