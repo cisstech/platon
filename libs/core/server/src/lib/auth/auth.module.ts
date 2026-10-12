@@ -8,6 +8,7 @@ import { AuthController } from './auth.controller'
 import { AuthService } from './auth.service'
 import { AuthGuard } from './guards/auth.guard'
 import { RolesGuard, RolesIfBodyHasKeyGuard } from './guards/roles.guard'
+import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy'
 import { JwtStrategy } from './strategies/jwt.strategy'
 
 @Module({
@@ -23,6 +24,7 @@ import { JwtStrategy } from './strategies/jwt.strategy'
   providers: [
     AuthService,
     JwtStrategy,
+    JwtRefreshStrategy,
     { provide: APP_GUARD, useClass: AuthGuard },
     { provide: APP_GUARD, useClass: RolesGuard },
     { provide: APP_GUARD, useClass: RolesIfBodyHasKeyGuard },

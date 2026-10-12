@@ -16,7 +16,8 @@ import { Configuration } from '../config/configuration'
 import { UserService } from '../users/user.service'
 import { UserRoles } from '@platon/core/common'
 import { randomUUID } from 'crypto'
-import { IRequest } from './auth.types'
+import { UserEntity } from '../users/user.entity'
+import { IRequest, TokenPayload } from './auth.types'
 
 @Injectable()
 export class AuthService {
@@ -92,26 +93,8 @@ export class AuthService {
 
   async authenticate(userId: string, username: string): Promise<AuthToken> {
     const [accessToken, refreshToken] = await Promise.all([
-      this.jwtService.signAsync(
-        {
-          sub: userId,
-          username,
-        },
-        {
-          secret: this.configService.get('secret', { infer: true }),
-          expiresIn: this.configService.get('auth.accessLifetime', { infer: true }),
-        }
-      ),
-      this.jwtService.signAsync(
-        {
-          sub: userId,
-          username,
-        },
-        {
-          secret: this.configService.get('secret', { infer: true }),
-          expiresIn: this.configService.get('auth.refreshLifetime', { infer: true }),
-        }
-      ),
+      this.sign({ sub: userId, username, typ: 'access' }),
+      this.sign({ sub: userId, username, typ: 'refresh' }),
     ])
     // Intentionally not blocking authentication if login tracking fails
     this.userService.touchLastLogin(userId).catch((error) => {
@@ -122,6 +105,33 @@ export class AuthService {
       accessToken,
       refreshToken,
     }
+  }
+
+  /**
+   * A new access token for the session of a refresh token, which stays the same: the session ends when
+   * the refresh token expires, and the access token never outlives it. An untyped token gets a typed
+   * refresh token that ends when it ends.
+   */
+  async refresh(user: UserEntity, refreshToken: string): Promise<AuthToken> {
+    const { typ, exp: end } = this.jwtService.decode<TokenPayload>(refreshToken)
+    const claims = { sub: user.id, username: user.username }
+    const accessToken = await this.sign({ ...claims, typ: 'access' })
+    const accessEnd = this.jwtService.decode<TokenPayload>(accessToken).exp
+    return {
+      accessToken:
+        end !== undefined && accessEnd !== undefined && accessEnd > end
+          ? await this.sign({ ...claims, typ: 'access' }, end)
+          : accessToken,
+      refreshToken: typ === 'refresh' ? refreshToken : await this.sign({ ...claims, typ: 'refresh' }, end),
+    }
+  }
+
+  /** Signs a token for its configured lifetime, or until the given end, in seconds since the epoch. */
+  private sign(payload: TokenPayload, end?: number): Promise<string> {
+    const secret = this.configService.get('secret', { infer: true })
+    if (end !== undefined) return this.jwtService.signAsync({ ...payload, exp: end }, { secret })
+    const lifetime = payload.typ === 'access' ? 'auth.accessLifetime' : 'auth.refreshLifetime'
+    return this.jwtService.signAsync(payload, { secret, expiresIn: this.configService.get(lifetime, { infer: true }) })
   }
 
   private async hash(data: string): Promise<string> {

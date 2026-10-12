@@ -63,8 +63,10 @@ export class RemoteTokenProvider extends TokenProvider {
   }
 
   /**
-   * Refreshs the current auth token.
-   * @returns A promise that resolves with an auth token.
+   * Renews the access token with the refresh token, sent as the Bearer by this request itself. The API
+   * gives back the same refresh token, or a typed one for an untyped token: both are kept. A sign-in or
+   * a sign-out during the renewal wins: the renewed tokens are then dropped. Whether a failure ends the
+   * session is for `TokenService` to decide.
    */
   async refresh(): Promise<AuthToken> {
     const token = await this.token()
@@ -72,21 +74,27 @@ export class RemoteTokenProvider extends TokenProvider {
       throw new Error('auth/no-token')
     }
 
-    const helper = new JwtHelperService()
-    if (helper.isTokenExpired(token.refreshToken)) {
-      await this.remove()
+    if (new JwtHelperService().isTokenExpired(token.refreshToken)) {
       throw new Error('auth/refresh-token-expired')
     }
 
     try {
-      const response = await lastValueFrom(this.http.post<ItemResponse<AuthToken>>('/api/v1/auth/refresh/', {}))
-      token.accessToken = response.resource.accessToken
-      await firstValueFrom(this.storage.set(KEY, token))
-      localStorage.setItem(KEY, JSON.stringify(token))
-      return token
+      const response = await lastValueFrom(
+        this.http.post<ItemResponse<AuthToken>>(
+          '/api/v1/auth/refresh/',
+          {},
+          { headers: { Authorization: `Bearer ${token.refreshToken}` } }
+        )
+      )
+      const current = await this.token()
+      if (current?.refreshToken !== token.refreshToken) {
+        if (!current) throw new Error('auth/no-token')
+        return current
+      }
+      await this.save(response.resource)
+      return response.resource
     } catch (error) {
-      console.error('Unable to refresh token', error)
-      // await this.remove()
+      console.error('Unable to renew the session', error)
       throw error
     }
   }

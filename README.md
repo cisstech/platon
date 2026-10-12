@@ -370,7 +370,7 @@ This document describes the environnement configuration for the application, inc
 | REDIS_PORT                 | api      | Sets NestJs `REDIS_PORT` value setting                                              | 6379                    |
 | SECRET_KEY                 | api      | Secret key for the API service.                                                     | secret                  |
 | PASSWORD_SALT              | api      | Secret key for the API service.                                                     | 10                      |
-| JWT_ACCESS_TOKEN_LIFETIME  | api      | Access token lifetime for JWT authentication.                                       | 7d                      |
+| JWT_ACCESS_TOKEN_LIFETIME  | api      | Access token lifetime for JWT authentication.                                       | 15m                     |
 | JWT_REFRESH_TOKEN_LIFETIME | api      | Refresh token lifetime for JWT authentication.                                      | 7d                      |
 | FILES_CACHE_LIFETIME       | api      | Duration of cacheable files in seconds.                                             | 604800 (7 days)         |
 | GRAPHQL_PLAYGROUND         | api      | Enable/disable GraphQL Playground.                                                  | true                    |
