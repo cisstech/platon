@@ -22,9 +22,6 @@ export interface Configuration {
     accessLifetime: string
     refreshLifetime: string
   }
-  graphql: {
-    playground: boolean
-  }
   sandbox: {
     url: string
     envLifespan: number
@@ -65,9 +62,6 @@ export const configuration = (): Configuration => ({
     salt: Number.parseInt(process.env['PASSWORD_SALT'] || '10'),
     accessLifetime: process.env['JWT_ACCESS_TOKEN_LIFETIME'] || '15m',
     refreshLifetime: process.env['JWT_REFRESH_TOKEN_LIFETIME'] || '7d',
-  },
-  graphql: {
-    playground: process.env['GRAPHQL_PLAYGROUND'] ? process.env['GRAPHQL_PLAYGROUND'].toLowerCase() === 'true' : false,
   },
   sandbox: {
     url: process.env['SANDBOX_URL'] as string,

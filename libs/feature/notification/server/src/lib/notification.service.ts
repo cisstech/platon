@@ -2,7 +2,8 @@ import { DiscoveryService } from '@golevelup/nestjs-discovery'
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { DeleteWhereExpression, PubSubService, buildDeleteQuery } from '@platon/core/server'
-import { NotificationFilters } from '@platon/feature/notification/common'
+import { Notification, NotificationChange, NotificationFilters } from '@platon/feature/notification/common'
+import { Observable, concatMap, filter, startWith } from 'rxjs'
 import { EntityManager, In, IsNull, Repository, SelectQueryBuilder } from 'typeorm'
 import { NotificationEntity } from './notification.entity'
 import { NOTIFICATION_EXTRA_DATA, NotificationExtraDataProvider } from './notification.provider'
@@ -89,17 +90,6 @@ export class NotificationService {
     this.notifyUserAboutChanges(userId)
   }
 
-  async markAsUnread(userId: string, ids: string[]): Promise<void> {
-    await this.repository.update(
-      {
-        userId,
-        id: In(ids),
-      },
-      { readAt: null }
-    )
-    this.notifyUserAboutChanges(userId)
-  }
-
   async markAllAsRead(userId: string): Promise<void> {
     await this.repository.update(
       {
@@ -112,7 +102,7 @@ export class NotificationService {
   }
 
   async delete(userId: string, ids: string[]): Promise<number> {
-    const result = await this.repository.delete(ids)
+    const result = await this.repository.delete({ userId, id: In(ids) })
 
     const affected = result.affected || 0
     if (affected) {
@@ -170,7 +160,26 @@ export class NotificationService {
     return query
   }
 
-  async withExtraData(notification: NotificationEntity): Promise<Record<string, unknown> | undefined> {
+  /**
+   * The changes of the notifications of the person, wherever they happen in the API: the unread
+   * count, read again after each one, and the notification that has just arrived, if any. The count
+   * comes first, as soon as the observable is subscribed. The notification has crossed Redis as JSON:
+   * its dates are strings.
+   */
+  changesOf(userId: string): Observable<NotificationChange<Record<string, unknown>>> {
+    return this.pubSubService.observe<OnChangeNotificationsPayload>(ON_CHANGE_NOTIFICATIONS).pipe(
+      filter((payload) => payload.userId === userId),
+      startWith<Partial<OnChangeNotificationsPayload>>({}),
+      concatMap(async ({ newNotification }) => {
+        const unreadCount = await this.unreadCount(userId)
+        return newNotification ? { unreadCount, notification: newNotification } : { unreadCount }
+      })
+    )
+  }
+
+  async withExtraData(
+    notification: Notification<Record<string, unknown>>
+  ): Promise<Record<string, unknown> | undefined> {
     for (const provider of this.extraDataProviders) {
       if (provider.match(notification.data)) {
         return provider.provide(notification.data)

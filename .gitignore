@@ -63,10 +63,6 @@ envs/*
 dumps/*
 !dumps/.gitkeep
 
-.graphql/*
-!.graphql/.gitkeep
-**/*.generated.ts
-
 .nx/cache
 .nx/workspace-data
 !shared/external_libs/**/dist

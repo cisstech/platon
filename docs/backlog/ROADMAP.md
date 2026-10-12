@@ -1,6 +1,6 @@
 # Roadmap
 
-> Mise à jour : 2026-10-09. Wireframes : [`design/flows`](../../design/flows). Décisions :
+> Mise à jour : 2026-10-12. Wireframes : [`design/flows`](../../design/flows). Décisions :
 > [DECISIONS.md](./DECISIONS.md). Standard : [README.md](./README.md).
 
 ## Où on en est
@@ -13,8 +13,9 @@ fondations (phase F : bibliothèque `@platon/design-system` et Storybook, tokens
 polices et icônes, garde-fous `yarn lint:design`, dialogues et thème). Les wireframes ont été repris
 après quatre tours de critique (154 écrans, règles communes, glyphes d'état, données de référence
 dans `design/docs/09-donnees.md`). Dans la phase C, la session, le gabarit de page et ses états sont
-livrés, puis la couverture et le cadre mobile ; les notifications sont prêtes à coder, leurs points
-ouverts tranchés. La nouvelle interface n'a encore que son accueil provisoire.
+livrés, puis la couverture, le cadre mobile et le panneau des notifications, dont le temps réel passe
+désormais par SSE : GraphQL a quitté le dépôt. La connexion (G-04) est livrée. La nouvelle interface
+n'a encore que son accueil provisoire.
 
 ## Où on atterrit
 
@@ -60,8 +61,8 @@ Statuts : `À faire`, `À écrire` (le ticket n'est pas encore rédigé), `En co
 
 ## Phase C : le cadre
 
-Ordre : C-01, C-07, C-06, C-05, C-02, C-03 et C-04 (livrés), puis C-08, qui remplace GraphQL par
-REST et SSE (D33). C-07 aligne ce qui est livré sur les wireframes révisés après quatre tours de
+Ordre : C-01, C-07, C-06, C-05, C-02, C-03, C-04 et C-08 (livrés) ; C-08 remplace GraphQL par
+REST et SSE (D33, D35). C-07 aligne ce qui est livré sur les wireframes révisés après quatre tours de
 critique. Les points ouverts de C-02 à C-05 sont tranchés (D22 à D30, 2026-10-08).
 
 | Ticket                                                             | Titre                                                                                       | Dépend de        | Taille | Statut             |
@@ -73,7 +74,7 @@ critique. Les points ouverts de C-02 à C-05 sont tranchés (D22 à D30, 2026-10
 | [C-02](./done/C-02-la-couverture.md)                               | La couverture : navigation par rôle, intercalaire, Créer, profil, mention du logiciel libre | C-01, C-06, C-07 | L      | Livré (2026-10-08) |
 | [C-03](./done/C-03-le-cadre-mobile.md)                             | Le cadre mobile : barre haute et panneau                                                    | C-02             | M      | Livré (2026-10-09) |
 | [C-04](./done/C-04-le-panneau-des-notifications.md)                | Le panneau des notifications                                                                | C-02, C-06, F-04 | M      | Livré (2026-10-09) |
-| [C-08](./C-08-le-temps-reel-en-sse-sans-graphql.md)                | Le temps réel en SSE, sans GraphQL                                                          | C-04             | L      | À faire            |
+| [C-08](./done/C-08-le-temps-reel-en-sse-sans-graphql.md)           | Le temps réel en SSE, sans GraphQL                                                          | C-04             | L      | Livré (2026-10-12) |
 
 ## Phase A : les accueils
 
@@ -126,12 +127,13 @@ critique. Les points ouverts de C-02 à C-05 sont tranchés (D22 à D30, 2026-10
 
 ## Phase G : l'administration et le compte
 
-| Ticket                              | Titre                                    | Dépend de  | Taille | Statut             |
-| ----------------------------------- | ---------------------------------------- | ---------- | ------ | ------------------ |
-| G-01                                | Utilisateurs et groupes de la plateforme | C-05       | M      | À écrire           |
-| G-02                                | LMS, CAS, tags, annonces                 | G-01       | M      | À écrire           |
-| G-03                                | Mon compte : À propos, Sécurité          | C-05       | S      | À écrire           |
-| [G-04](./done/G-04-la-connexion.md) | La connexion                             | F-02, C-06 | L      | Livré (2026-10-09) |
+| Ticket                                                       | Titre                                             | Dépend de  | Taille | Statut             |
+| ------------------------------------------------------------ | ------------------------------------------------- | ---------- | ------ | ------------------ |
+| G-01                                                         | Utilisateurs et groupes de la plateforme          | C-05       | M      | À écrire           |
+| G-02                                                         | LMS, CAS, tags, annonces                          | G-01       | M      | À écrire           |
+| G-03                                                         | Mon compte : À propos, Sécurité                   | C-05       | S      | À écrire           |
+| [G-04](./done/G-04-la-connexion.md)                          | La connexion                                      | F-02, C-06 | L      | Livré (2026-10-09) |
+| [G-05](./done/G-05-les-jetons-de-session-chacun-son-role.md) | Les jetons de session, chacun son rôle (B25, B26) | aucun      | M      | Livré (2026-10-12) |
 
 ## Phase X : la bascule
 
@@ -149,6 +151,14 @@ critique. Les points ouverts de C-02 à C-05 sont tranchés (D22 à D30, 2026-10
   deux semaines de palier 1 sans défaut bloquant.
 - **Palier 3** : le lecteur et les corrections sont livrés ; plus aucun passage par le pont en
   un mois de palier 2.
+
+## Phase D : la dette de l'API
+
+Hors du chemin des paliers : un ticket D se prend quand il ne retarde aucun écran.
+
+| Ticket                                                                      | Titre                                                     | Dépend de | Taille | Statut  |
+| --------------------------------------------------------------------------- | --------------------------------------------------------- | --------- | ------ | ------- |
+| [D-01](./D-01-lire-les-parametres-des-dto-avec-des-decorateurs-partages.md) | Lire les paramètres des DTO avec des décorateurs partagés | C-08      | M      | À faire |
 
 ## Bugs de l'interface actuelle
 

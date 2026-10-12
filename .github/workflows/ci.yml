@@ -39,10 +39,6 @@ jobs:
         with:
           main-branch-name: ${{ github.base_ref || github.ref_name }}
 
-      - name: Generate Graphql Types
-        shell: bash
-        run: ./bin/graphql/generate.sh
-
       - run: yarn affected:build --parallel --base=${{ env.NX_BASE }}
 
       - name: Build Storybook of the design system
