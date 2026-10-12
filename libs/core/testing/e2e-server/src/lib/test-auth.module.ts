@@ -108,7 +108,10 @@ export const createAuthenticatedUser = async (
     })
   )
 
-  const token = await jwtService.signAsync({ sub: user.id, username: user.username }, { secret: JWT_SECRET })
+  const token = await jwtService.signAsync(
+    { sub: user.id, username: user.username, typ: 'access' },
+    { secret: JWT_SECRET }
+  )
 
   return { user, token }
 }
