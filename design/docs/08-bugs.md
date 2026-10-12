@@ -88,6 +88,22 @@ Gravité : **P1** bloque, trompe ou expose. **P2** gêne ou fait douter. **P3** 
   `refresh` que `refresh` et rend le même jeton de rafraîchissement ; côté navigateur,
   `RemoteTokenProvider.refresh` envoie lui-même le jeton de rafraîchissement, sinon le flux des
   notifications ne pourra plus rafraîchir son jeton.
+- **Corrigé dans G-05** (branche `fix/session-tokens`) ; la case se coche à la fusion.
+
+### B27. Un jeton d'accès suffit à poser un mot de passe et à ouvrir une nouvelle session
+
+- [ ] Corrigé
+- **Symptôme** : pour un compte sans mot de passe (CAS, LTI, démonstration, candidat),
+  `POST /api/v1/auth/reset-password` pose un mot de passe sans demander l'ancien et rend une nouvelle
+  paire de jetons : un jeton d'accès volé devient un accès permanent. Un administrateur qui change le
+  mot de passe d'une autre personne reçoit ses jetons, et le navigateur remplace sa propre session par
+  la sienne.
+- **Cause** : `AuthService.resetPassword` rend `authenticate(user)` pour la personne visée ; sans
+  mot de passe, aucune preuve n'est demandée.
+- **Où** : `libs/core/server/src/lib/auth/auth.service.ts` (`resetPassword`),
+  `libs/core/browser/src/lib/auth/providers/remote-auth.provider.ts` (`resetPassword`)
+- **Piste** : ne rendre aucune session, ou celle de l'appelant inchangée ; pour poser un premier mot
+  de passe, demander une connexion récente (CAS ou LTI).
 
 ## P2
 
@@ -182,6 +198,7 @@ Gravité : **P1** bloque, trompe ou expose. **P2** gêne ou fait douter. **P3** 
 - **Piste** : ticket G-05, avec B25 : un seul rafraîchissement partagé (`TokenService.refresh`), qui
   rejoue chaque requête avec le nouveau jeton ; le jeton de rafraîchissement ne part que vers
   `POST /auth/refresh`.
+- **Corrigé dans G-05** (branche `fix/session-tokens`) ; la case se coche à la fusion.
 
 ## P3
 

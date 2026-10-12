@@ -127,13 +127,13 @@ critique. Les points ouverts de C-02 à C-05 sont tranchés (D22 à D30, 2026-10
 
 ## Phase G : l'administration et le compte
 
-| Ticket                                                  | Titre                                             | Dépend de  | Taille | Statut             |
-| ------------------------------------------------------- | ------------------------------------------------- | ---------- | ------ | ------------------ |
-| G-01                                                    | Utilisateurs et groupes de la plateforme          | C-05       | M      | À écrire           |
-| G-02                                                    | LMS, CAS, tags, annonces                          | G-01       | M      | À écrire           |
-| G-03                                                    | Mon compte : À propos, Sécurité                   | C-05       | S      | À écrire           |
-| [G-04](./done/G-04-la-connexion.md)                     | La connexion                                      | F-02, C-06 | L      | Livré (2026-10-09) |
-| [G-05](./G-05-les-jetons-de-session-chacun-son-role.md) | Les jetons de session, chacun son rôle (B25, B26) | aucun      | M      | À faire            |
+| Ticket                                                       | Titre                                             | Dépend de  | Taille | Statut             |
+| ------------------------------------------------------------ | ------------------------------------------------- | ---------- | ------ | ------------------ |
+| G-01                                                         | Utilisateurs et groupes de la plateforme          | C-05       | M      | À écrire           |
+| G-02                                                         | LMS, CAS, tags, annonces                          | G-01       | M      | À écrire           |
+| G-03                                                         | Mon compte : À propos, Sécurité                   | C-05       | S      | À écrire           |
+| [G-04](./done/G-04-la-connexion.md)                          | La connexion                                      | F-02, C-06 | L      | Livré (2026-10-09) |
+| [G-05](./done/G-05-les-jetons-de-session-chacun-son-role.md) | Les jetons de session, chacun son rôle (B25, B26) | aucun      | M      | Livré (2026-10-12) |
 
 ## Phase X : la bascule
 
@@ -151,6 +151,14 @@ critique. Les points ouverts de C-02 à C-05 sont tranchés (D22 à D30, 2026-10
   deux semaines de palier 1 sans défaut bloquant.
 - **Palier 3** : le lecteur et les corrections sont livrés ; plus aucun passage par le pont en
   un mois de palier 2.
+
+## Phase D : la dette de l'API
+
+Hors du chemin des paliers : un ticket D se prend quand il ne retarde aucun écran.
+
+| Ticket                                                                      | Titre                                                     | Dépend de | Taille | Statut  |
+| --------------------------------------------------------------------------- | --------------------------------------------------------- | --------- | ------ | ------- |
+| [D-01](./D-01-lire-les-parametres-des-dto-avec-des-decorateurs-partages.md) | Lire les paramètres des DTO avec des décorateurs partagés | C-08      | M      | À faire |
 
 ## Bugs de l'interface actuelle
 

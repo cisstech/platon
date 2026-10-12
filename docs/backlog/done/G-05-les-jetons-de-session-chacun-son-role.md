@@ -1,8 +1,8 @@
 # G-05 : Les jetons de session, chacun son rôle
 
 Source : bugs B25 et B26 (`design/docs/08-bugs.md`), relevés pendant C-08 ; inventaire du code du
-2026-10-12 ; décisions : D35, D36.
-Statut : À faire.
+2026-10-12 ; décisions : D35, D36, D37.
+Statut : Livré (2026-10-12), sur la branche `fix/session-tokens` partie de `main`.
 Dépend de : aucun.
 Taille : M.
 
@@ -33,6 +33,18 @@ Taille : M.
 - Étant donné une connexion par CAS ou par LTI, alors elle reçoit des jetons typés sans autre
   changement : les deux passent par `AuthService.authenticate`.
 
+> **Amendement à la livraison.** La transition change (D37) : un jeton sans type reste accepté comme
+> jeton d'accès jusqu'à son expiration, et sur `/auth/refresh` jusqu'à son expiration aussi, chaque
+> fois en rendant une paire typée qui finit avec lui. Le lire comme expiré cassait les routes
+> publiques, qui servent un jeton expiré comme personne sans le dire : le lecteur refusait la réponse
+> d'un élève, et la page de démonstration remplaçait la session par un compte de démonstration. Pour
+> la même raison, le navigateur renouvelle **avant** d'envoyer un jeton d'accès expiré ou sans type
+> (`TokenService.fresh`), et garde le renouvellement après un 401 pour une horloge décalée. Un jeton
+> d'accès renouvelé ne dépasse jamais l'expiration de son jeton de rafraîchissement. Un
+> renouvellement qui ne répond pas cède au bout de 15 s ; une connexion ou une déconnexion pendant un
+> renouvellement l'emporte sur lui ; le flux GraphQL de `main` reprend un jeton frais à chaque
+> reconnexion. Les erreurs de la garde du rafraîchissement sont des `UnauthorizedResponse`.
+
 ## 2. Tests à écrire d'abord
 
 - API, unitaires : `authenticate` signe un jeton `access` à la durée d'accès et un jeton `refresh` à
@@ -51,6 +63,14 @@ Taille : M.
   nouveau jeton ; un rafraîchissement refusé fait échouer les requêtes en attente au lieu de les
   bloquer, et retire le jeton ; `TokenService.refresh` appelé deux fois de suite ne fait qu'une
   requête.
+
+> **Amendement à la livraison.** Le test de bout en bout devient une spec HTTP sans base de données
+> (`auth.controller.http.spec.ts`) : le vrai `AuthModule`, ses stratégies, ses gardes et le filtre
+> d'erreurs, de vrais jetons signés, et seulement les utilisateurs simulés, dans la cible `test` de
+> `core-server`. Une spec e2e de `core-server` sur `createE2EApp` aurait créé une dépendance
+> circulaire (le harnais e2e dépend de `core-server`), et l'authentification n'a pas besoin de la base.
+> Côté navigateur, les specs traversent les vraies classes (intercepteur, `TokenService`,
+> `RemoteTokenProvider`) sur `HttpTestingController`.
 
 ## 3. État actuel du code
 
@@ -119,11 +139,23 @@ faveur d'une transition que personne ne remarque.
 
 ## 7. Definition of Done
 
-- [ ] Les tests du §2 passent ; les specs e2e et d'intégration passent en CI.
-- [ ] Un jeton de rafraîchissement n'ouvre aucune route hors `/auth/refresh`, un jeton d'accès ne
+- [x] Les tests du §2 passent ; les specs e2e et d'intégration passent en CI.
+- [x] Un jeton de rafraîchissement n'ouvre aucune route hors `/auth/refresh`, un jeton d'accès ne
       rafraîchit pas, et une session finit à l'expiration de son jeton de rafraîchissement.
 - [ ] Vérifié sur l'application qui tourne, avec un jeton d'accès court (`JWT_ACCESS_TOKEN_LIFETIME`
       à 1 min en développement) : la page et le flux des notifications continuent après
       l'expiration, dans les deux interfaces ; plusieurs onglets et des requêtes simultanées ne
       bloquent pas ; la connexion par CAS et par LTI marche toujours.
 - [ ] B25 et B26 cochés à la fusion.
+
+> **Amendement à la livraison.** Non vérifié sur l'application qui tourne : il faut l'API de cette
+> branche, avec `JWT_ACCESS_TOKEN_LIFETIME` à 1 min. Les specs couvrent l'expiration, le
+> renouvellement partagé, le refus et la transition, sur de vrais jetons. Les specs e2e des autres
+> bibliothèques passent par `createAuthenticatedUser`, qui signe désormais des jetons `access`, et
+> tournent en CI. Restent à savoir : un client externe qui rafraîchirait avec son jeton d'accès
+> (l'aperçu « pour VS Code » reçoit les deux jetons dans l'adresse) reçoit désormais un 401 ; aucun
+> n'existe dans les dépôts cisstech. À la fusion avec C-08 : `TokenService.remove` y émet
+> `signedOut`, ce qu'un renouvellement refusé déclenche désormais, et le client SSE gagne à passer par
+> `fresh()` et `renewedAfter()` plutôt que par `refresh()`, dont il double la limite de 15 s.
+> `POST /auth/reset-password` rend une nouvelle session à tout porteur d'un jeton d'accès d'un compte
+> sans mot de passe : c'est B27, hors de ce ticket.
