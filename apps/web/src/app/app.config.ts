@@ -8,7 +8,7 @@ import {
 } from '@angular/router'
 import { CoreBrowserModule, TAG_PROVIDERS } from '@platon/core/browser'
 import { CAS_PROVIDERS } from '@platon/feature/cas/browser'
-import { COURSE_PROVIDERS } from '@platon/feature/course/browser'
+import { COURSE_NOTIFICATION_PROVIDERS, COURSE_PROVIDERS } from '@platon/feature/course/browser'
 import { LTI_PROVIDERS } from '@platon/feature/lti/browser'
 import { PLAYER_PROVIDERS } from '@platon/feature/player/browser'
 import { RESOURCE_NOTIFICATION_PROVIDERS, RESOURCE_PROVIDERS } from '@platon/feature/resource/browser'
@@ -38,6 +38,7 @@ export const appConfig = (context: UiBootContext): ApplicationConfig => ({
     ),
     provideReturnToNext(),
     COURSE_PROVIDERS,
+    COURSE_NOTIFICATION_PROVIDERS,
     RESOURCE_PROVIDERS,
     RESOURCE_NOTIFICATION_PROVIDERS,
     PLAYER_PROVIDERS,

@@ -26,7 +26,7 @@ import {
 import { CAS_SIGN_IN_FAILED } from '@platon/feature/cas/common'
 import { INSTITUTION_NAME, PRESENTATION_URL } from '../../core/institution/institution'
 import { SIGN_IN_OFFLINE } from './login-guard'
-import { LoginStore } from './login-store'
+import { LoginStore } from './data/login-store'
 import {
   SignInFailure,
   casEntries,

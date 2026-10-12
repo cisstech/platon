@@ -7,9 +7,9 @@ import { DialogService } from '@platon/core/browser/shared'
 import { Notification } from '@platon/feature/notification/common'
 import { NEVER, Observable, Subject, of, throwError } from 'rxjs'
 import { Session } from '../../core/session/session'
-import { NotificationChange, NotificationPage, NotificationsApi } from './notifications-api'
+import { NotificationChange, NotificationPage, NotificationsApi } from './data/notifications-api'
 import { NotificationsPanel } from './notifications-panel'
-import { NotificationsStore } from './notifications-store'
+import { NotificationsStore } from './data/notifications-store'
 
 @Component({ template: '' })
 class Blank {}

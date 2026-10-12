@@ -2,7 +2,7 @@ import { LiveAnnouncer } from '@angular/cdk/a11y'
 import { Component, signal } from '@angular/core'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { LoadPhase } from '@platon/design-system'
-import { Connectivity } from '../../core/connectivity/connectivity'
+import { Connectivity } from '../../../core/connectivity/connectivity'
 import { LoadState, failureCause } from './load-state'
 
 @Component({

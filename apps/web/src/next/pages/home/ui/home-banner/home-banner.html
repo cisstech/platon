@@ -1,0 +1,20 @@
+<pl-alert
+  icon="campaign"
+  role="region"
+  aria-label="Annonce"
+  dismissLabel="Masquer l'annonce"
+  (dismissed)="dismissed.emit()"
+>
+  <p class="home-banner__text">
+    <strong>{{ banner().title }}</strong> {{ banner().description }}
+  </p>
+  <a
+    plButton
+    variant="ghost"
+    size="sm"
+    plAlertAction
+    routerLink="/announcements"
+    [queryParams]="{ highlight: banner().id }"
+    >Lire l'annonce</a
+  >
+</pl-alert>

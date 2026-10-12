@@ -1,0 +1,78 @@
+// On a phone, the announcement comes after « À faire », inside the main column.
+.home__main > .home__announcement {
+  margin: 0;
+}
+
+.home__label {
+  margin: 0;
+  padding: var(--pl-space-3) var(--pl-space-4) var(--pl-space-1);
+  border-block-start: 1px solid var(--pl-color-line);
+  color: var(--pl-color-muted);
+  font: var(--pl-font-caption);
+}
+
+.home__copies {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--pl-space-4);
+}
+
+.home__course-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--pl-space-2);
+}
+
+.home__course-percent,
+.home__course-count {
+  color: var(--pl-color-muted);
+  font: var(--pl-font-small);
+  font-variant-numeric: tabular-nums;
+}
+
+.home__course-percent {
+  flex: none;
+}
+
+.home__course-done {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--pl-space-1);
+  font: var(--pl-font-small);
+  font-weight: var(--pl-weight-strong);
+}
+
+.home__course-done pl-icon {
+  color: var(--pl-color-joy-1);
+}
+
+.home__figures dl {
+  margin: 0;
+}
+
+.home__figure {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--pl-space-3);
+  padding: var(--pl-space-2) var(--pl-space-4);
+}
+
+.home__figure + .home__figure {
+  border-block-start: 1px solid var(--pl-color-line);
+}
+
+.home__figure dt {
+  color: var(--pl-color-muted);
+}
+
+.home__figure dd {
+  margin: 0;
+  font-weight: var(--pl-weight-strong);
+  font-variant-numeric: tabular-nums;
+}
+
+.home__figure small {
+  color: var(--pl-color-subtle);
+  font: var(--pl-font-caption);
+}

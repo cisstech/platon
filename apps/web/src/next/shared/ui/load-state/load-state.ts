@@ -10,7 +10,7 @@ import {
   output,
 } from '@angular/core'
 import { Alert, Button, Empty, Icon, LoadPhase, hasFailed } from '@platon/design-system'
-import { Connectivity } from '../../core/connectivity/connectivity'
+import { Connectivity } from '../../../core/connectivity/connectivity'
 
 /** Who failed: PLaTon, or the connection of the person. */
 export type FailureCause = 'server' | 'offline'
@@ -36,29 +36,7 @@ const CAUSES: Record<FailureCause, string> = {
   selector: 'app-load-state',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [Alert, Button, Empty, Icon],
-  template: `
-    @if (phase() === 'slow') {
-    <pl-alert icon="hourglass_empty" [heading]="slowHeading">
-      <p>{{ slowText }}</p>
-    </pl-alert>
-    } @else if (failed()) {
-    <pl-empty
-      role="alert"
-      [heading]="heading()"
-      [icon]="cause() === 'server' ? 'cloud_off' : 'wifi_off'"
-      [tone]="cause() === 'server' ? 'danger' : 'neutral'"
-      [code]="code()"
-      [level]="level()"
-      [compact]="compact()"
-    >
-      <p>{{ causeText() }} {{ reassurance() }}</p>
-      <button type="button" plButton variant="primary" plEmptyAction (click)="retry.emit()">
-        <pl-icon name="replay" />Réessayer
-      </button>
-      <ng-container ngProjectAs="[plEmptyAction]"><ng-content select="[appLoadStateExit]" /></ng-container>
-    </pl-empty>
-    }
-  `,
+  templateUrl: './load-state.html',
 })
 export class LoadState {
   readonly phase = input.required<LoadPhase>()

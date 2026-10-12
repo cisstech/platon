@@ -25,6 +25,14 @@ describe('appConfig', () => {
     expect(rendered('RESOURCE-INVITATION')).toBe(true)
   })
 
+  it('renders the notifications of courses in the drawer', () => {
+    const parsers = TestBed.inject(NOTIFICATION_PARSER)
+    const rendered = (type: string) => parsers.some((parser) => parser.support({ data: { type } } as Notification))
+
+    expect(rendered('COURSE-MEMBER-CREATION')).toBe(true)
+    expect(rendered('CORRECTOR-CREATED')).toBe(true)
+  })
+
   it('reaches the resources', () => {
     expect(TestBed.inject(ResourceService)).toBeInstanceOf(ResourceService)
   })

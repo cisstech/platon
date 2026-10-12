@@ -10,6 +10,7 @@ import {
   CourseLeaderboardEntry,
   FindActivityLeaderboard,
   FindCourseLeaderboard,
+  RecentCopy,
   UpsertCorrection,
   UserActivityResultsDistribution,
   UserResults,
@@ -22,6 +23,7 @@ export abstract class ResultProvider {
   abstract activityDashboard(activityId: string): Observable<DashboardOutput>
 
   abstract sessionResults(sessionId: string): Observable<UserResults>
+  abstract recentCopies(): Observable<RecentCopy[]>
   abstract activityResults(activityId: string): Observable<ActivityResults>
   abstract activityResultsForDate(
     activityId: string,

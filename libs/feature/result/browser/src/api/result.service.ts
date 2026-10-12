@@ -30,6 +30,7 @@ import {
   FindActivityLeaderboard,
   FindCourseLeaderboard,
   Label,
+  RecentCopy,
   SESSION_AVERAGE_DURATION,
   SESSION_AVERAGE_SCORE,
   SESSION_AVERAGE_SCORE_BY_MONTH,
@@ -56,6 +57,11 @@ export class ResultService {
   private readonly resultProvider = inject(ResultProvider)
   private readonly commentProvider = inject(SessionCommentProvider)
   private readonly labelProvider = inject(LabelProvider)
+
+  /** The last copies the user terminated, with their grade or what keeps it from them. */
+  recentCopies(): Observable<RecentCopy[]> {
+    return this.resultProvider.recentCopies()
+  }
 
   userDashboard() {
     return this.resultProvider.userDashboard().pipe(

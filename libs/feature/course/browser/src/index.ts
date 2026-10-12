@@ -1,5 +1,6 @@
 export * from './api/course.service'
 export * from './components'
 export * from './pipes'
+export * from './notification.providers'
 export * from './providers'
 export * from './services/course-monitor-presence.service'

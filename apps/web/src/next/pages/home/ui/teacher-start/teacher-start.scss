@@ -1,0 +1,15 @@
+:host {
+  display: block;
+  border: 1px solid var(--pl-color-line);
+  border-radius: var(--pl-radius-card);
+  background: var(--pl-color-surface);
+  overflow: hidden;
+}
+
+// The blank copy sits above the steps, in the same card, a rule between them.
+pl-empty {
+  max-inline-size: none;
+  border: 0;
+  border-block-end: 1px solid var(--pl-color-line);
+  border-radius: 0;
+}

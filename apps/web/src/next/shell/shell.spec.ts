@@ -1,24 +1,26 @@
 import { Dialog as CdkDialog } from '@angular/cdk/dialog'
 import { BreakpointObserver } from '@angular/cdk/layout'
-import { TemplateRef } from '@angular/core'
+import { ApplicationRef, TemplateRef } from '@angular/core'
 import { DialogService } from '@platon/core/browser/shared'
 import { Component, computed, signal } from '@angular/core'
 import { TestBed } from '@angular/core/testing'
+import { By } from '@angular/platform-browser'
 import { Router, provideRouter } from '@angular/router'
 import { RouterTestingHarness } from '@angular/router/testing'
 import { User, UserCharter, UserRoles, isTeacherRole } from '@platon/core/common'
 import { ActivityCorrectionSummary } from '@platon/feature/result/common'
 import { NEVER, Subject, of, throwError } from 'rxjs'
+import { PageNavigation } from '../../shared/page-navigation'
 import { INSTITUTION_NAME } from '../core/institution/institution'
 import { Session } from '../core/session/session'
 import { NextTheme } from '../core/theme/next-theme'
-import { CharterDialog } from './charter-dialog'
-import { NotificationsApi } from './notifications/notifications-api'
+import { CharterDialog } from './ui/charter-dialog/charter-dialog'
+import { NotificationsApi } from './notifications/data/notifications-api'
 import { NotificationsPanel } from './notifications/notifications-panel'
-import { NotificationsStore } from './notifications/notifications-store'
+import { NotificationsStore } from './notifications/data/notifications-store'
 import { Shell } from './shell'
-import { ShellApi } from './shell-api'
-import { ShellStore } from './shell-store'
+import { ShellApi } from './data/shell-api'
+import { ShellStore } from './data/shell-store'
 
 @Component({ template: '' })
 class Blank {}
@@ -41,6 +43,7 @@ const summary: ActivityCorrectionSummary = {
   totalExercises: 4,
   correctedExercises: 1,
   pendingCopies: 2,
+  submittedCopies: 2,
 }
 
 describe('Shell', () => {
@@ -49,6 +52,7 @@ describe('Shell', () => {
   let messages: { error: jest.Mock }
   let theme: { preference: ReturnType<typeof signal<string>>; choose: jest.Mock }
   let session: ReturnType<typeof sessionOf> & { signOut: jest.Mock }
+  let navigation: { assign: jest.Mock }
 
   const setup = async (role: UserRoles, { charter = true, url = '/dashboard', narrow = false } = {}) => {
     api = {
@@ -61,6 +65,7 @@ describe('Shell', () => {
     messages = { error: jest.fn() }
     theme = { preference: signal('light'), choose: jest.fn(() => Promise.resolve()) }
     session = { ...sessionOf(person(role)), signOut: jest.fn(() => Promise.resolve()) }
+    navigation = { assign: jest.fn() }
     TestBed.configureTestingModule({
       providers: [
         provideRouter([
@@ -81,6 +86,7 @@ describe('Shell', () => {
         { provide: DialogService, useValue: messages },
         { provide: NextTheme, useValue: theme },
         { provide: Session, useValue: session },
+        { provide: PageNavigation, useValue: navigation },
         { provide: INSTITUTION_NAME, useValue: 'Université Gustave Eiffel' },
         {
           provide: BreakpointObserver,
@@ -193,14 +199,36 @@ describe('Shell', () => {
     const navigate = jest.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true)
     button('Créer').click()
     await settle(harness)
-    menuItem('Exercice')?.click()
+    menuItem('Activité')?.click()
     await settle(harness)
-    expect(navigate).toHaveBeenCalledWith(['/resources/create'], { queryParams: { type: 'EXERCISE', parent: 'r1' } })
+    expect(navigate).toHaveBeenCalledWith(['/resources/create'], { queryParams: { type: 'ACTIVITY', parent: 'r1' } })
   })
 
   it('turns Create quiet on a page that has its own creation action', async () => {
     await setup(UserRoles.teacher, { url: '/courses' })
     expect(button('Créer').dataset['variant']).toBe('cover-quiet')
+  })
+
+  it('turns Create quiet when the page itself offers to create, as the home of a teacher without a course', async () => {
+    const harness = await setup(UserRoles.teacher)
+    const store = harness.fixture.debugElement.query(By.directive(Shell)).injector.get(ShellStore)
+    expect(button('Créer').dataset['variant']).toBe('cover')
+
+    store.quietCreate.set(true)
+    await settle(harness)
+
+    expect(button('Créer').dataset['variant']).toBe('cover-quiet')
+  })
+
+  it('goes back to the current interface from the profile, at the same address', async () => {
+    const harness = await setup(UserRoles.student, { url: '/courses?tab=archived' })
+    const profile = document.querySelector('button[plCoverProfile]') as HTMLButtonElement
+    profile.click()
+    await settle(harness)
+    menuItem("Revenir à l'interface actuelle")?.click()
+    await settle(harness)
+
+    expect(navigation.assign).toHaveBeenCalledWith('/courses?tab=archived&ui=legacy')
   })
 
   it('applies a theme and signs out from the profile', async () => {
@@ -221,6 +249,21 @@ describe('Shell', () => {
 
   describe('on a narrow screen', () => {
     const navigationButton = () => document.querySelector('pl-topbar button') as HTMLButtonElement
+
+    it('offers the way back to the current interface in the sheet of the profile, at the same address', async () => {
+      const harness = await setup(UserRoles.student, { narrow: true, url: '/courses?tab=archived' })
+      const shell = harness.fixture.debugElement.query(By.directive(Shell)).componentInstance as { openProfile(): void }
+      shell.openProfile()
+      const sheet = (dialog.open.mock.calls.at(-1)?.[0] as TemplateRef<unknown>).createEmbeddedView({})
+      TestBed.inject(ApplicationRef).attachView(sheet)
+      sheet.detectChanges()
+      const links = sheet.rootNodes
+        .filter((node): node is HTMLElement => node instanceof HTMLElement)
+        .flatMap((node) => [...node.querySelectorAll('a')])
+
+      const back = links.find((link) => link.textContent?.trim() === "Revenir à l'interface actuelle")
+      expect(back?.getAttribute('href')).toBe('/courses?tab=archived&ui=legacy')
+    })
 
     it('gives way to a top bar titled like the page, with the navigation behind a button', async () => {
       await setup(UserRoles.student, { narrow: true })

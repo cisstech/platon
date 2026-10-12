@@ -1,6 +1,7 @@
 import { GlyphName, IconName } from '@platon/design-system'
 import { UserRoles, isTeacherRole } from '@platon/core/common'
 import { ActivityCorrectionSummary } from '@platon/feature/result/common'
+import { copiesToCorrect, pendingCopies } from '../shared/copies'
 
 export interface CoverEntry {
   readonly label: string
@@ -9,12 +10,6 @@ export interface CoverEntry {
   readonly count?: number
   readonly countLabel?: string
 }
-
-/** Copies submitted with at least one exercise still to correct, over every activity. */
-export const pendingCopies = (summaries: readonly ActivityCorrectionSummary[]): number =>
-  summaries.reduce((total, summary) => total + (summary.pendingCopies ?? 0), 0)
-
-const copiesLabel = (count: number): string => (count > 1 ? 'copies à corriger' : 'copie à corriger')
 
 /**
  * The navigation of the cover for a role. Teachers and administrators always have Corrections; a
@@ -34,7 +29,7 @@ export const coverEntries = (role: UserRoles, summaries: readonly ActivityCorrec
       label: 'Corrections',
       icon: 'rate_review',
       link: '/corrections',
-      ...(toCorrect ? { count: toCorrect, countLabel: copiesLabel(toCorrect) } : {}),
+      ...(toCorrect ? { count: toCorrect, countLabel: copiesToCorrect(toCorrect) } : {}),
     })
   }
   if (teacher) {
@@ -116,15 +111,19 @@ export interface CreateTarget {
   readonly queryParams?: Record<string, string>
 }
 
-const RESOURCE_TYPES: Record<Exclude<CreateKind, 'course'>, string> = {
+const RESOURCE_TYPES: Record<Exclude<CreateKind, 'course' | 'exercise'>, string> = {
   activity: 'ACTIVITY',
-  exercise: 'EXERCISE',
   circle: 'CIRCLE',
 }
 
-/** Where creating `kind` starts, from the page at `url`. */
+/**
+ * Where creating `kind` starts, from the page at `url`. An exercise starts from the gallery of the
+ * templates, which also offers to write one without a template.
+ */
 export const createTarget = (kind: CreateKind, url: string): CreateTarget => {
   if (kind === 'course') return { path: '/courses/create' }
   const parent = parentResource(url)
-  return { path: '/resources/create', queryParams: { type: RESOURCE_TYPES[kind], ...(parent ? { parent } : {}) } }
+  const inParent: Record<string, string> = parent ? { parent } : {}
+  if (kind === 'exercise') return { path: '/templates', queryParams: inParent }
+  return { path: '/resources/create', queryParams: { type: RESOURCE_TYPES[kind], ...inParent } }
 }

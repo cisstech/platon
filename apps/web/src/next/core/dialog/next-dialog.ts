@@ -12,8 +12,8 @@ import {
 } from '@platon/core/browser/shared'
 import { DEFAULT_TOAST_DURATION, ToastTone, Toaster } from '@platon/design-system'
 import { firstValueFrom } from 'rxjs'
-import { ConfirmDialog, ConfirmDialogData } from './confirm-dialog'
-import { PromptDialog, PromptDialogData } from './prompt-dialog'
+import { ConfirmDialog, ConfirmDialogData } from './ui/confirm-dialog/confirm-dialog'
+import { PromptDialog, PromptDialogData } from './ui/prompt-dialog/prompt-dialog'
 
 const DISMISS_LABEL = 'Fermer'
 

@@ -3,4 +3,5 @@
 // Same files as the main entry, so a class here is the same injection token there.
 export * from './lib/api/resource.service'
 export * from './lib/pipes/resource-status.pipe'
+export * from './lib/pipes/resource-type.pipe'
 export * from './lib/providers'

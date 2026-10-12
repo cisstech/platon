@@ -8,8 +8,8 @@ import { Connectivity } from '../../core/connectivity/connectivity'
 import { INSTITUTION_NAME, PRESENTATION_URL } from '../../core/institution/institution'
 import { Session } from '../../core/session/session'
 import { Login } from './login'
-import { LoginApi } from './login-api'
-import { LoginStore } from './login-store'
+import { LoginApi } from './data/login-api'
+import { LoginStore } from './data/login-store'
 
 /** Lets the promises of the store settle. */
 const settle = () => new Promise<void>((resolve) => setTimeout(resolve))

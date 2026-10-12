@@ -4,7 +4,9 @@ import {
   ActivityFilters,
   Course,
   CreateActivity,
+  PlayableActivity,
   RestrictionList,
+  TaughtActivity,
   UpdateActivity,
 } from '@platon/feature/course/common'
 import { Observable } from 'rxjs'
@@ -23,4 +25,6 @@ export abstract class ActivityProvider {
   abstract regenerateCode(activity: Activity): Observable<Activity>
   abstract updateRestrictions(activity: Activity, restrictions: RestrictionList[]): Observable<Activity>
   abstract getCourseColors(courseId: string): Observable<number[]>
+  abstract playable(): Observable<PlayableActivity[]>
+  abstract taught(): Observable<TaughtActivity[]>
 }
