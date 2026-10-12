@@ -1,11 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { Optional } from 'typescript-optional'
 import { CLS_REQ } from 'nestjs-cls'
 import { makeUser } from '@platon/core/testing/common'
-import { RestrictionList } from '@platon/feature/course/common'
+import { RestrictionList, RestrictionSubject } from '@platon/feature/course/common'
 import { ActivityDatesService } from './activity-dates.service'
 import { CourseMemberService } from '../course-member/course-member.service'
-import { CourseGroupService } from '../course-group/course-group.service'
 import { ActivityEntity } from './activity.entity'
 
 const makeActivity = (overrides: Partial<ActivityEntity> = {}): ActivityEntity =>
@@ -19,7 +17,11 @@ const makeActivity = (overrides: Partial<ActivityEntity> = {}): ActivityEntity =
     ...overrides,
   } as unknown as ActivityEntity)
 
-const makeMemberEntity = (id: string) => ({ id })
+const subject = (memberIds: string[] = [], groupIds: string[] = []): RestrictionSubject => ({
+  userId: 'user-1',
+  memberIds: new Set(memberIds),
+  groupIds: new Set(groupIds),
+})
 
 const period = (...restrictions: RestrictionList['restriction']): RestrictionList => ({
   restriction: restrictions,
@@ -32,20 +34,17 @@ const END = new Date('2026-06-23T18:00:00.000Z')
 
 describe('ActivityDatesService', () => {
   let service: ActivityDatesService
-  let memberService: jest.Mocked<Pick<CourseMemberService, 'getByUserIdAndCourseId'>>
-  let groupService: jest.Mocked<Pick<CourseGroupService, 'isMember'>>
+  let memberService: jest.Mocked<Pick<CourseMemberService, 'restrictionSubject'>>
   const user = makeUser()
 
   beforeEach(async () => {
-    memberService = { getByUserIdAndCourseId: jest.fn() }
-    groupService = { isMember: jest.fn() }
+    memberService = { restrictionSubject: jest.fn().mockResolvedValue(subject()) }
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ActivityDatesService,
         { provide: CLS_REQ, useValue: { user } },
         { provide: CourseMemberService, useValue: memberService },
-        { provide: CourseGroupService, useValue: groupService },
       ],
     }).compile()
 
@@ -157,8 +156,7 @@ describe('ActivityDatesService', () => {
     it('ignore les restrictions avec ignoreRestrictions=true', async () => {
       const activity = makeActivity({ ignoreRestrictions: true })
       await service.updateActivitiesDates([activity])
-      expect(memberService.getByUserIdAndCourseId).not.toHaveBeenCalled()
-      expect(groupService.isMember).not.toHaveBeenCalled()
+      expect(memberService.restrictionSubject).not.toHaveBeenCalled()
     })
 
     it('retourne { start: undefined, end: undefined } si toutes les activités sont ignorées', async () => {
@@ -183,7 +181,7 @@ describe('ActivityDatesService', () => {
 
     describe('accès via Members', () => {
       it("retourne les dates de la période et met à jour l'activité si l'utilisateur est dans la liste des membres", async () => {
-        memberService.getByUserIdAndCourseId.mockResolvedValue(Optional.of(makeMemberEntity('member-1') as any))
+        memberService.restrictionSubject.mockResolvedValue(subject(['member-1']))
 
         const activity = makeActivity({
           restrictions: [
@@ -202,7 +200,7 @@ describe('ActivityDatesService', () => {
       })
 
       it("retourne no-access si le membre n'est pas dans la liste", async () => {
-        memberService.getByUserIdAndCourseId.mockResolvedValue(Optional.of(makeMemberEntity('member-99') as any))
+        memberService.restrictionSubject.mockResolvedValue(subject(['member-99']))
 
         const activity = makeActivity({
           restrictions: [period({ type: 'Members', config: { members: ['member-1'] } })],
@@ -215,7 +213,7 @@ describe('ActivityDatesService', () => {
       })
 
       it("retourne no-access si l'utilisateur n'est pas membre du cours", async () => {
-        memberService.getByUserIdAndCourseId.mockResolvedValue(Optional.empty())
+        memberService.restrictionSubject.mockResolvedValue(subject())
 
         const activity = makeActivity({
           restrictions: [period({ type: 'Members', config: { members: ['member-1'] } })],
@@ -229,7 +227,7 @@ describe('ActivityDatesService', () => {
 
     describe('accès via Correctors', () => {
       it("retourne les dates de la période si l'utilisateur est dans la liste des correcteurs", async () => {
-        memberService.getByUserIdAndCourseId.mockResolvedValue(Optional.of(makeMemberEntity('corrector-1') as any))
+        memberService.restrictionSubject.mockResolvedValue(subject(['corrector-1']))
 
         const activity = makeActivity({
           restrictions: [
@@ -248,7 +246,7 @@ describe('ActivityDatesService', () => {
 
     describe('accès via Groups', () => {
       it("retourne les dates de la période si l'utilisateur est membre du groupe", async () => {
-        groupService.isMember.mockResolvedValue(true)
+        memberService.restrictionSubject.mockResolvedValue(subject([], ['group-1']))
 
         const activity = makeActivity({
           restrictions: [
@@ -261,12 +259,12 @@ describe('ActivityDatesService', () => {
 
         const result = await service.updateActivitiesDates([activity])
 
-        expect(groupService.isMember).toHaveBeenCalledWith('group-1', user.id)
+        expect(memberService.restrictionSubject).toHaveBeenCalledWith('course-1', user.id)
         expect(result).toEqual({ start: START, end: END })
       })
 
       it("retourne no-access si l'utilisateur n'est membre d'aucun groupe autorisé", async () => {
-        groupService.isMember.mockResolvedValue(false)
+        memberService.restrictionSubject.mockResolvedValue(subject([], ['group-2']))
 
         const activity = makeActivity({
           restrictions: [period({ type: 'Groups', config: { groups: ['group-1'] } })],
@@ -285,13 +283,24 @@ describe('ActivityDatesService', () => {
         const result = await service.updateActivitiesDates([activity])
 
         expect(isNaN((result.start as Date).getTime())).toBe(true)
-        expect(groupService.isMember).not.toHaveBeenCalled()
+      })
+
+      it('retourne no-access sans erreur quand la restriction vise un groupe supprimé', async () => {
+        memberService.restrictionSubject.mockResolvedValue(subject([], ['group-1']))
+
+        const activity = makeActivity({
+          restrictions: [period({ type: 'Groups', config: { groups: ['group-supprime'] } })],
+        })
+
+        const result = await service.updateActivitiesDates([activity])
+
+        expect(isNaN((result.start as Date).getTime())).toBe(true)
       })
     })
 
     describe('accès via Others', () => {
       it("retourne les dates de la période Others si l'utilisateur n'est dans aucune période spécifique", async () => {
-        memberService.getByUserIdAndCourseId.mockResolvedValue(Optional.empty())
+        memberService.restrictionSubject.mockResolvedValue(subject())
 
         const activity = makeActivity({
           restrictions: [
@@ -309,7 +318,7 @@ describe('ActivityDatesService', () => {
       })
 
       it("ne donne pas accès via Others si l'utilisateur est déjà dans une période spécifique", async () => {
-        memberService.getByUserIdAndCourseId.mockResolvedValue(Optional.of(makeMemberEntity('member-1') as any))
+        memberService.restrictionSubject.mockResolvedValue(subject(['member-1']))
 
         const specificStart = new Date('2026-02-01T00:00:00.000Z')
         const specificEnd = new Date('2026-03-01T00:00:00.000Z')
@@ -332,30 +341,36 @@ describe('ActivityDatesService', () => {
         expect(result).toEqual({ start: specificStart, end: specificEnd })
       })
 
-      it('ignore une période qui contient Others dans checkUserAccessInPeriod puis la trouve via checkOthersAccess', async () => {
-        memberService.getByUserIdAndCourseId.mockResolvedValue(Optional.empty())
+      it('ouvre sans dates une période Others sans plage, même pour une requête sans utilisateur', async () => {
+        const anonymous = new ActivityDatesService({} as never, memberService as never)
+        const activity = makeActivity({ restrictions: [period({ type: 'Others', config: { enabled: true } })] })
 
-        const activity = makeActivity({
-          restrictions: [
-            // Période avec uniquement Others sans DateRange → accès ouvert sans contrainte
-            period({ type: 'Others', config: { enabled: true } }),
-          ],
-        })
+        const result = await anonymous.updateActivitiesDates([activity])
 
-        const result = await service.updateActivitiesDates([activity])
-
-        // Pas d'Invalid Date : Others a bien été trouvé
-        // Pas de DateRange dans la période → start/end undefined (ouvert sans contrainte)
-        expect(result.start).toBeUndefined()
-        expect(result.end).toBeUndefined()
+        expect(result).toEqual({ start: undefined, end: undefined })
+        expect(memberService.restrictionSubject).not.toHaveBeenCalled()
       })
     })
 
     describe('plusieurs activités', () => {
+      it('lit les appartenances une seule fois par cours, et pas pour une activité sans période', async () => {
+        const restricted = () =>
+          makeActivity({ restrictions: [period({ type: 'Members', config: { members: ['member-1'] } })] })
+
+        await service.updateActivitiesDates([
+          restricted(),
+          restricted(),
+          makeActivity({ restrictions: [] }),
+          makeActivity({ courseId: 'course-2', restrictions: null }),
+        ])
+
+        expect(memberService.restrictionSubject).toHaveBeenCalledTimes(1)
+      })
+
       it('traite toutes les activités et retourne les dates de la dernière traitée', async () => {
         const end2 = new Date('2026-09-01T00:00:00.000Z')
 
-        memberService.getByUserIdAndCourseId.mockResolvedValue(Optional.of(makeMemberEntity('member-1') as any))
+        memberService.restrictionSubject.mockResolvedValue(subject(['member-1']))
 
         const a1 = makeActivity({
           restrictions: [

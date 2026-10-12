@@ -13,6 +13,8 @@ import { CorrectionService } from './correction/correction.service'
 import { DashboardController } from './dashboard/dashboard.controller'
 import { DashboardService } from './dashboard/dashboard.service'
 import { CourseExpander } from './expanders/course.expander'
+import { HomeController } from './home/home.controller'
+import { HomeService } from './home/home.service'
 import { ResourceExpander } from './expanders/resource.expander'
 import { LeaderboardController } from './leaderboard/leaderboard.controller'
 import { LeaderboardService } from './leaderboard/leaderboard.service'
@@ -68,6 +70,7 @@ import { SessionStatsScheduler } from './sessions/session-stats.scheduler'
     SessionCommentController,
     LabelController,
     SubmissionController,
+    HomeController,
   ],
   providers: [
     AnswerService,
@@ -75,6 +78,7 @@ import { SessionStatsScheduler } from './sessions/session-stats.scheduler'
     SessionSubscriber,
     DashboardService,
     CorrectionService,
+    HomeService,
     LeaderboardService,
     SessionCommentService,
     ActivityResultsVirtualColumnsResolver,

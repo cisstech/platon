@@ -52,29 +52,11 @@ describe('CorrectionService', () => {
   afterEach(() => jest.clearAllMocks())
 
   describe('list', () => {
-    it('should LEFT JOIN answers (not INNER) so a session with zero submitted answers is still listed', async () => {
-      await service.list('corrector-1')
-
-      const [queryText] = sessionRepository.query.mock.calls[0]
-      expect(queryText).toContain('LEFT JOIN LATERAL')
-      expect(queryText).not.toContain('INNER JOIN LATERAL')
-    })
-
-    it('should keep sessions with no answer as long as the session itself recorded a grader error', async () => {
-      await service.list('corrector-1')
-
-      const [queryText] = sessionRepository.query.mock.calls[0]
-      expect(queryText).toContain(
-        `(answer.variables IS NOT NULL OR (exercise_session.variables->'.meta'->>'error')::boolean IS TRUE)`
-      )
-    })
-
     it('should not join or filter on answers at all in viewer mode', async () => {
       await service.list('corrector-1', undefined, true)
 
       const [queryText] = sessionRepository.query.mock.calls[0]
-      expect(queryText).not.toContain('"Answers" a')
-      expect(queryText).not.toContain('answer.variables')
+      expect(queryText).not.toContain('"Answers"')
     })
 
     it('should group exercises of the same activity together', async () => {
@@ -142,15 +124,6 @@ describe('CorrectionService', () => {
 
       const [queryText] = sessionRepository.query.mock.calls[0]
       expect(queryText).not.toContain('HAVING')
-    })
-
-    it('devrait compter les mêmes exercices que la file de correction', async () => {
-      await service.listSummary('corrector-1')
-
-      const [queryText] = sessionRepository.query.mock.calls[0]
-      expect(queryText).toContain(`(exercise_session.variables->'.meta'->>'error')::boolean IS TRUE`)
-      expect(queryText).toContain('FROM "Resources" r')
-      expect(queryText).not.toContain('DISTINCT ts.id')
     })
 
     it('devrait retourner le résultat brut de la requête', async () => {

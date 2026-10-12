@@ -114,6 +114,13 @@ export interface Resource {
    */
   readonly publicPreview?: boolean
 
+  /**
+   * Last time the requesting user viewed the resource.
+   * @remarks
+   * - Only in the list of the resources they viewed (`views=true`).
+   */
+  readonly viewedAt?: Date
+
   // Expandable fields
 
   /**
