@@ -12,6 +12,12 @@
     },
     {
       "path": "./tsconfig.spec.json"
+    },
+    {
+      "path": "./tsconfig.integration.json"
+    },
+    {
+      "path": "./tsconfig.e2e.json"
     }
   ]
 }

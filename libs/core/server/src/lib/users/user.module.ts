@@ -8,7 +8,6 @@ import { UserPrefsEntity, UserPrefsService } from './prefs'
 import { UserPrefsController } from './prefs/user-prefs.controller'
 import { UserController } from './user.controller'
 import { UserEntity } from './user.entity'
-import { UserResolver } from './user.resolver'
 import { UserService } from './user.service'
 import { UserSchedulerService } from './user-scheduler.service'
 import { UserCharterController, UserCharterEntity, UserCharterService } from './charter'
@@ -20,7 +19,7 @@ import { UserCharterController, UserCharterEntity, UserCharterService } from './
     TypeOrmModule.forFeature([UserEntity, UserPrefsEntity, UserGroupEntity, UserCharterEntity]),
   ],
   controllers: [UserController, UserGroupController, UserPrefsController, UserCharterController],
-  providers: [UserService, UserPrefsService, UserGroupService, UserResolver, UserSchedulerService, UserCharterService],
+  providers: [UserService, UserPrefsService, UserGroupService, UserSchedulerService, UserCharterService],
   exports: [UserService, UserPrefsService, UserGroupService],
 })
 export class UserModule {}

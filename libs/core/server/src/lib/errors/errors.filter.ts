@@ -1,18 +1,12 @@
 import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus, Logger } from '@nestjs/common'
 import { ErrorResponse } from '@platon/core/common'
-import { GraphQLError } from 'graphql'
-
-// https://docs.nestjs.com/graphql/exception-filters
 
 @Catch()
 export class ErrorsFilter implements ExceptionFilter {
   constructor(private readonly logger: Logger) {}
 
   catch(exception: unknown, host: ArgumentsHost) {
-    // TODO create util function to get request to handle both rest and graphql
-    const ctx = host.switchToHttp()
-    const request = ctx.getRequest<Request>()
-    const response = ctx.getResponse()
+    const response = host.switchToHttp().getResponse()
 
     let error: ErrorResponse
     if (exception instanceof ErrorResponse) {
@@ -35,19 +29,9 @@ export class ErrorsFilter implements ExceptionFilter {
       })
     }
 
-    // REST request
     this.logger.error(
       (exception && typeof exception === 'object' && 'stack' in exception ? exception.stack : null) ?? exception
     )
-    if (request) {
-      response.status(error.statusCode).json(error)
-      return
-    }
-
-    return new GraphQLError(Array.isArray(error.message) ? error.message.join(', ') : error.message, {
-      extensions: {
-        code: error.statusCode,
-      },
-    })
+    response.status(error.statusCode).json(error)
   }
 }
