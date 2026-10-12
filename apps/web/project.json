@@ -161,6 +161,11 @@
             "inject": false
           },
           {
+            "input": "apps/web/src/next/next.scss",
+            "bundleName": "styles.next",
+            "inject": false
+          },
+          {
             "input": "shared/styles/material/dark.scss",
             "bundleName": "styles.material.dark",
             "inject": false
