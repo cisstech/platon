@@ -1,25 +1,29 @@
 import { TestBed } from '@angular/core/testing'
-import { Router } from '@angular/router'
 import { AuthService } from '@platon/core/browser/shared'
 import { User, UserRoles } from '@platon/core/common'
+import { PageNavigation } from '../../../shared/page-navigation'
 import { Session } from './session'
 
 const teacher = { id: '1', username: 'khaddad', role: UserRoles.teacher, active: true } as User
+const token = { accessToken: 'access', refreshToken: 'refresh' }
 
 describe('Session', () => {
-  let ready: jest.Mock
-  let signOut: jest.Mock
-  let navigateByUrl: jest.Mock
+  let auth: { ready: jest.Mock; signIn: jest.Mock; signInWithToken: jest.Mock; signOut: jest.Mock }
+  let navigation: { replace: jest.Mock }
   let session: Session
 
   beforeEach(() => {
-    ready = jest.fn().mockResolvedValue(teacher)
-    signOut = jest.fn().mockResolvedValue(undefined)
-    navigateByUrl = jest.fn().mockResolvedValue(true)
+    auth = {
+      ready: jest.fn().mockResolvedValue(teacher),
+      signIn: jest.fn().mockResolvedValue(teacher),
+      signInWithToken: jest.fn().mockResolvedValue(teacher),
+      signOut: jest.fn().mockResolvedValue(undefined),
+    }
+    navigation = { replace: jest.fn() }
     TestBed.configureTestingModule({
       providers: [
-        { provide: AuthService, useValue: { ready, signOut } },
-        { provide: Router, useValue: { navigateByUrl } },
+        { provide: AuthService, useValue: auth },
+        { provide: PageNavigation, useValue: navigation },
       ],
     })
     session = TestBed.inject(Session)
@@ -30,7 +34,7 @@ describe('Session', () => {
     await session.load()
     expect(first).toBe(teacher)
     expect(second).toBe(teacher)
-    expect(ready).toHaveBeenCalledTimes(1)
+    expect(auth.ready).toHaveBeenCalledTimes(1)
     expect(session.user()).toBe(teacher)
   })
 
@@ -42,23 +46,43 @@ describe('Session', () => {
     expect(session.isAdmin()).toBe(false)
   })
 
-  it('removes the token before leaving for the sign-in page', async () => {
-    await session.load()
-    navigateByUrl.mockImplementation(() => {
-      expect(signOut).toHaveBeenCalledWith(false)
-      expect(session.user()).toBeUndefined()
-      return Promise.resolve(true)
-    })
-    await session.signOut()
-    expect(navigateByUrl).toHaveBeenCalledWith('/login', { replaceUrl: true })
+  it('signs in after finding nobody, so that the guard lets the person through', async () => {
+    auth.ready.mockResolvedValue(undefined)
+    expect(await session.load()).toBeUndefined()
+
+    await session.signIn('khaddad', 'secret')
+
+    expect(auth.signIn).toHaveBeenCalledWith('khaddad', 'secret')
+    expect(session.user()).toBe(teacher)
+    expect(await session.load()).toBe(teacher)
+    expect(auth.ready).toHaveBeenCalledTimes(1)
   })
 
-  it('forgets the user on sign out, and loads it again afterwards', async () => {
-    await session.load()
-    await session.signOut()
-    expect(signOut).toHaveBeenCalledTimes(1)
+  it('signs in with the tokens of an address', async () => {
+    await session.signInWithToken(token)
+
+    expect(auth.signInWithToken).toHaveBeenCalledWith(token)
+    expect(session.user()).toBe(teacher)
+  })
+
+  it('refuses tokens that bring nobody, and forgets them', async () => {
+    auth.signInWithToken.mockResolvedValue(undefined)
+
+    await expect(session.signInWithToken(token)).rejects.toThrow()
+
+    expect(auth.signOut).toHaveBeenCalledWith(false)
     expect(session.user()).toBeUndefined()
+  })
+
+  it('removes the token, then reloads the sign-in page, so that nothing of the person stays in memory', async () => {
     await session.load()
-    expect(ready).toHaveBeenCalledTimes(2)
+    navigation.replace.mockImplementation(() => {
+      expect(auth.signOut).toHaveBeenCalledWith(false)
+      expect(session.user()).toBeUndefined()
+    })
+
+    await session.signOut()
+
+    expect(navigation.replace).toHaveBeenCalledWith('/login')
   })
 })

@@ -1,11 +1,11 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
 import {
   AuthToken,
+  BadRequestResponse,
   CreateCandidateAccountInput,
   ForbiddenResponse,
-  NotFoundResponse,
   ResetPasswordInput,
   SignInDemoOutput,
   SignInInput,
@@ -21,6 +21,8 @@ import { IRequest } from './auth.types'
 @Injectable()
 export class AuthService {
   private readonly logger = new Logger(AuthService.name)
+  /** Hashed once, the first time a sign-in has no password to compare against. */
+  private decoy?: Promise<string>
 
   constructor(
     private readonly jwtService: JwtService,
@@ -28,11 +30,18 @@ export class AuthService {
     private readonly configService: ConfigService<Configuration>
   ) {}
 
+  /**
+   * One answer, in the same time, for an unknown account and a wrong password: a different one would
+   * tell which accounts exist. An account without a password is compared against a decoy hash.
+   */
   async signIn(input: SignInInput): Promise<AuthToken> {
-    const optionalUser = await this.userService.findByIdOrName(input.username)
-    const user = optionalUser.orElseThrow(() => new NotFoundResponse(`User not found: ${input.username}`))
-    if (!user.password || !(await bcrypt.compare(input.password, user.password))) {
-      throw new BadRequestException('Password is incorrect')
+    const user = (await this.userService.findByIdOrName(input.username)).orUndefined()
+    const matches = await bcrypt.compare(
+      input.password,
+      user?.password || (await (this.decoy ??= this.hash(randomUUID())))
+    )
+    if (!user?.password || !matches) {
+      throw new BadRequestResponse('Username or password is incorrect')
     }
 
     return this.authenticate(user.id, user.username)
@@ -41,7 +50,7 @@ export class AuthService {
   async signUp(input: SignUpInput): Promise<AuthToken> {
     const optionalUser = await this.userService.findByIdOrName(input.username)
     if (optionalUser.isPresent()) {
-      throw new BadRequestException(`User already found: ${input.username}`)
+      throw new BadRequestResponse(`User already found: ${input.username}`)
     }
 
     const user = await this.userService.create({
@@ -79,11 +88,11 @@ export class AuthService {
       throw new ForbiddenResponse('Password is incorrect')
     }
     if (input.newPassword === input.password) {
-      throw new BadRequestException('New password must be different from the old one')
+      throw new BadRequestResponse('New password must be different from the old one')
     }
     const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?([^\w\s]|_)).{12,}$/
     if (!passwordRegex.test(input.newPassword.trim())) {
-      throw new BadRequestException('Invalid password format')
+      throw new BadRequestResponse('Invalid password format')
     }
     user.password = await this.hash(input.newPassword.trim())
     await this.userService.update(input.username, user)

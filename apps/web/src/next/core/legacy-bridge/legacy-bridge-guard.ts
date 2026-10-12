@@ -13,8 +13,10 @@ export const legacyBridgeGuard: CanActivateFn = (_route, state) => {
   const navigation = inject(PageNavigation)
 
   // On the first load nothing of the new interface was shown: replace the entry, so Back does not
-  // return to an address that would bridge again.
-  if (inject(Router).navigated) {
+  // return to an address that would bridge again. A navigation that replaces its entry (a sign-in
+  // leaving its page) replaces it here too.
+  const router = inject(Router)
+  if (router.navigated && !router.currentNavigation()?.extras.replaceUrl) {
     navigation.assign(href)
   } else {
     navigation.replace(href)

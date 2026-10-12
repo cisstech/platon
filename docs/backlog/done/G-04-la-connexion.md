@@ -2,8 +2,8 @@
 
 Source : `design/flows/connexion` (bureau et téléphone, chargement, erreur) et ses annotations ;
 `design/spec/flows/connexion.md` ; inventaire du code du 2026-10-09 ; décisions : D2, D3, D6, D24,
-D26, D30.
-Statut : À faire.
+D26, D30, D34.
+Statut : Livré (2026-10-09).
 Dépend de : F-02, C-06.
 Taille : L.
 
@@ -105,29 +105,79 @@ côté serveur, un libellé d'affichage par CAS (G-02).
 
 ## 6. Points ouverts
 
-1. « Mot de passe oublié ? » : aucun parcours n'existe ; les comptes à mot de passe sont créés par
-   l'administration. Proposé : le lien mène à l'aide (`/docs/main/overview/login`), qui dit à qui
-   s'adresser.
-2. Le bouton de l'établissement : l'API ne donne que des noms techniques. Proposé : un CAS,
-   « Continuer avec le compte université » ; plusieurs, un bouton « Continuer avec <nom> » chacun ;
-   un libellé par CAS viendra avec G-02.
-3. « Voir la présentation, 2 min » : l'adresse dépend de l'établissement. Proposé : une balise
-   `<meta name="platon-presentation">`, lue comme `platon-institution` (D24) ; sans elle, pas de lien.
-4. La couverture sans établissement (balise vide) : proposé, « PLaTon est une plateforme
-   d'exercices. … » et un pied sans nom d'établissement.
-5. Un compte inconnu et un mauvais mot de passe : l'API les distingue et dit ainsi quels comptes
-   existent. Proposé : une même réponse 400, que l'interface actuelle affiche déjà par un message
-   unique.
-6. Le thème : l'interface actuelle force le clair sur la connexion. Proposé : la nouvelle page suit le
-   thème choisi, la couverture reste sombre dans les deux.
-7. Une session déjà ouverte : proposé, aller directement à `next` ; « Continuer en tant que … »
-   disparaît, sauf avec `callbackUrl`, qui passe par le pont.
+Aucun : tranchés le 2026-10-09 par D34, sur les propositions suivantes.
+
+1. « Mot de passe oublié ? » mène à l'aide (`/docs/main/overview/login`), qui dit à qui s'adresser.
+2. Un CAS : « Continuer avec le compte université » ; plusieurs : un bouton « Continuer avec <nom> »
+   chacun ; un libellé par CAS viendra avec G-02.
+3. « Voir la présentation, 2 min » vient d'une balise `<meta name="platon-presentation">`, lue comme
+   `platon-institution` (D24) ; sans elle, pas de lien.
+4. Sans établissement, la couverture dit « PLaTon est une plateforme d'exercices. … », et son pied
+   ne nomme pas d'établissement.
+5. L'API répond pareil (400) à un compte inconnu et à un mauvais mot de passe.
+6. La page suit le thème choisi ; sa couverture reste sombre dans les deux.
+7. Une session déjà ouverte va directement à `next` ; `callbackUrl` passe par le pont.
 
 ## 7. Definition of Done
 
-- [ ] Les tests du §2 passent.
-- [ ] Les connexions par mot de passe, par CAS, par LTI et par invitation de candidat mènent au bon
+- [x] Les tests du §2 passent.
+- [x] Les connexions par mot de passe, par CAS, par LTI et par invitation de candidat mènent au bon
       écran, dans la nouvelle interface ou par le pont.
-- [ ] Les captures au bureau et au téléphone, en clair et en sombre, au repos, en chargement et en
+- [x] Les captures au bureau et au téléphone, en clair et en sombre, au repos, en chargement et en
       erreur, comparées au wireframe ; aucune violation axe.
-- [ ] Le démarrage de la nouvelle interface reste sans code ng-zorro, Material ni Monaco.
+- [x] Le démarrage de la nouvelle interface reste sans code ng-zorro, Material ni Monaco.
+
+> **Amendement à la livraison.** API : un compte inconnu, un compte sans mot de passe et un mauvais
+> mot de passe reçoivent la même réponse 400, dans le même temps (une comparaison bcrypt contre un
+> leurre). La connexion par CAS passe dans `CasService.signIn`, qui rend un résultat (connecté, sans
+> compte, échec) que le contrôleur traduit en redirection : tout échec, CAS inconnu, ticket refusé,
+> fournisseur injoignable, réponse vide ou base indisponible, ramène à `/login?error=cas`.
+> L'adresse de service part encodée vers le CAS et reste la même au retour : un `next` avec `&`
+> faisait refuser le ticket. `https` écrit en dur dans l'adresse de service reste (B24) ; la limite de
+> tentatives aussi (B23). L'intergiciel LTI n'écrit plus les jetons dans le journal. L'adresse de
+> connexion et ses paramètres sont définis une fois, dans `@platon/core/common` (`signInUrl`,
+> `signInFailureUrl`, `SIGN_IN_PARAMS`) ; le CAS a `CAS_SIGN_IN_FAILED` et `casSignInUrl`.
+
+> **Amendement à la livraison.** Nouvelle interface : `/login` est une route hors du cadre, servie
+> sans garde de session. Sa garde laisse `callbackUrl` à l'interface actuelle, connecte avec les jetons
+> de l'adresse puis ouvre `next` sans les garder dans l'historique (hors connexion, elle ne les
+> dépense pas et le dit), et mène une session déjà ouverte à `next`. `next` ne mène jamais vers un
+> autre site. `Session` gagne `signIn` et `signInWithToken` ; la déconnexion recharge `/login`, pour
+> que rien de la personne ne reste en mémoire, stores du cadre compris. Le pont remplace l'entrée
+> d'historique quand la navigation le demande. La balise `platon-presentation` donne le lien de
+> présentation. La couverture est un `header`, la page un `main` que vise le lien d'évitement ; le
+> titre de l'onglet est « Connexion à PLaTon ».
+
+> **Amendement à la livraison.** Interface actuelle, contrairement au §4, deux corrections : le
+> retour vers la nouvelle interface ignore la première navigation d'un chargement par le pont, sans
+> quoi `/login?callbackUrl=…` rebouclait sans fin ; `AuthService.signOut` retire le jeton avant de
+> naviguer, sans quoi le rechargement de `/login` pouvait couper sa suppression et laisser la personne
+> connectée. Elle ne traduit pas `error=cas` : après un échec du CAS, son formulaire s'affiche sans
+> message.
+
+> **Amendement à la livraison.** La page : un échec de plus, « missing » (champs vides). Seul un 400
+> vaut identifiants refusés ; le reste suit la règle des autres écrans, PLaTon qui ne répond pas ou
+> l'appareil hors connexion. Les messages tiennent en deux lignes, le conseil à la ligne comme sur le
+> wireframe. Après un envoi refusé, le focus va au champ à reprendre, que le message décrit ; un échec
+> venu de l'adresse est lu à l'arrivée. La liste des CAS a son état : sa place est gardée pendant le
+> chargement, et un échec le dit, avec « Réessayer ». Avec plusieurs CAS, seul le premier bouton est
+> principal. L'établissement se lit « de l'Université … », « d'Aix-Marseille Université », « de
+> Sorbonne Université ». Une panne pendant une connexion par jeton se lit encore comme un lien qui
+> n'est plus valable : le service partagé avale l'erreur du chargement de l'utilisateur. Un candidat
+> connecté sans `next` arrive sur l'accueil, puis sur `/403` ; l'invitation passe toujours `next`.
+> Les textes « Étudiants : » et « les enseignants, les étudiants » sont ceux du wireframe.
+
+> **Amendement à la livraison.** Bibliothèque : `pl-field`, `input[plInput]` (une directive, que le
+> champ habille) et `button[plPasswordReveal]`, avec des cibles de 44 px au toucher. Le gabarit
+> couverture et page n'y est pas : une seule page s'en sert, il vit dans la page. Le champ n'a pas
+> d'aide, le wireframe n'en montre pas ; ses stories sont celles du bureau. La documentation dit
+> désormais quoi faire d'un mot de passe oublié (`apps/docs/pages/main/overview/login.mdx`).
+
+> **Amendement à la livraison.** Vérifié dans Chrome sur le build de production avec une API
+> simulée, sans établissement et avec Aix-Marseille Université, un CAS puis deux, au bureau et au
+> téléphone, en clair et en sombre, sans violation axe : lien d'évitement, champs vides, refus,
+> affichage du mot de passe, chargement sans mouvement, connexion, déconnexion, jetons de l'adresse,
+> échec du CAS. Une exécution du script a vu la page se recharger entre deux essais ; trois autres
+> sont passées, sans le reproduire. Vérifié sur l'application lancée avec `ypicker` : la nouvelle
+> page, le refus, la connexion, et la même réponse de l'API pour un compte inconnu. Non vérifié : un
+> vrai CAS (aucun n'est configuré en local), un lancement LTI réel, Safari, un lecteur d'écran.

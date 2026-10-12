@@ -104,10 +104,6 @@ export class AuthService {
    *
    **/
   async signOut(backToLogin = true): Promise<void> {
-    if (backToLogin) {
-      await this.router.navigateByUrl('/login', { replaceUrl: true })
-    }
-
     if (this.user) {
       for (const observer of this.observers) {
         await observer.onChangeAuth({
@@ -118,7 +114,13 @@ export class AuthService {
       this.user = undefined
     }
 
+    // The token goes first: the sign-in page may be served by the other interface, through a page
+    // load that would abort its removal from IndexedDB.
     await this.authProvider.signOut()
+
+    if (backToLogin) {
+      await this.router.navigateByUrl('/login', { replaceUrl: true })
+    }
   }
 
   private async connect(): Promise<User> {

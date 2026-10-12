@@ -1,0 +1,115 @@
+<a plSkipLink>Aller au contenu</a>
+<header class="login__cover">
+  <div class="login__brand">
+    <img class="login__logo" alt="PLaTon" [src]="logoUrl" />
+    <div class="login__brand-text" aria-hidden="true">
+      <span class="login__brand-name">PLaTon</span>
+      @if (institution) {
+      <span class="login__brand-org">{{ institution }}</span>
+      }
+    </div>
+  </div>
+  <h1 class="login__title">Des exercices qui corrigent, des cours qui suivent.</h1>
+  <p class="login__sentence">{{ sentence }}</p>
+  @if (presentationUrl) {
+  <a plButton variant="cover-quiet" class="login__presentation" [href]="presentationUrl" target="_blank" rel="noopener">
+    <pl-icon name="play_arrow" />Voir la présentation, 2&nbsp;min<span class="pl-visually-hidden"
+      >, s'ouvre dans un nouvel onglet</span
+    >
+  </a>
+  }
+  <p class="login__footer">{{ footer }}</p>
+</header>
+
+<main class="login__page" tabindex="-1" [id]="contentId">
+  <form class="login__form" novalidate (submit)="signIn($event, username.value, password.value)">
+    <h2 class="login__heading">Se connecter</h2>
+    @switch (store.casStatus()) { @case ('ready') { @for (entry of cas(); track entry.href; let first = $first) {
+    <a
+      plButton
+      size="lg"
+      class="login__cas"
+      [variant]="first ? 'primary' : 'secondary'"
+      [href]="entry.href"
+      [attr.aria-disabled]="store.submitting() || null"
+      (click)="holdWhileSigningIn($event)"
+    >
+      <pl-icon name="school" />{{ entry.label }}
+    </a>
+    } @if (cas().length) {
+    <p class="login__or">ou avec un compte PLaTon</p>
+    } } @case ('error') {
+    <p class="login__cas-failure">
+      <span>La connexion par l'établissement est indisponible pour le moment.</span>{{ ' ' }}
+      <button type="button" plButton variant="ghost" size="sm" (click)="store.loadCas()">Réessayer</button>
+    </p>
+    <p class="login__or">ou avec un compte PLaTon</p>
+    } @default {
+    <!-- The place of the institution account, kept while it loads: the form does not move under the pointer. -->
+    <div class="login__cas-pending" aria-hidden="true"></div>
+    } }
+
+    <pl-field label="Nom d'utilisateur">
+      <input
+        plInput
+        #username
+        name="username"
+        autocomplete="username"
+        autocapitalize="none"
+        spellcheck="false"
+        placeholder="prenom.nom"
+        [invalid]="invalid()"
+        [attr.aria-describedby]="message() ? 'login-message' : null"
+      />
+    </pl-field>
+    <pl-field label="Mot de passe" class="login__password">
+      <a plFieldAside class="login__forgot" [href]="accessHelpUrl" target="_blank" rel="noopener"
+        >Mot de passe oublié&nbsp;?<span class="pl-visually-hidden">, s'ouvre dans un nouvel onglet</span></a
+      >
+      <input
+        plInput
+        #password
+        type="password"
+        name="password"
+        autocomplete="current-password"
+        placeholder="Votre mot de passe"
+        [invalid]="invalid()"
+        [attr.aria-describedby]="message() ? 'login-message' : null"
+      />
+      <button
+        type="button"
+        plButton
+        variant="icon"
+        size="sm"
+        plPasswordReveal
+        #reveal="plPasswordReveal"
+        aria-label="Afficher le mot de passe"
+      >
+        <pl-icon [name]="reveal.shown() ? 'visibility_off' : 'visibility'" />
+      </button>
+    </pl-field>
+
+    <p class="login__message" id="login-message">
+      @if (message(); as message) {
+      <pl-icon name="error" />
+      <span>
+        <strong>{{ message.text }}</strong>
+        @if (message.hint) {{{ ' ' }}<br />{{ message.hint }}}
+      </span>
+      }
+    </p>
+
+    <button type="submit" plButton variant="secondary" size="lg" class="login__submit" [loading]="store.submitting()">
+      {{ store.submitting() ? 'Connexion en cours' : 'Se connecter' }}
+    </button>
+
+    <p class="login__foot">
+      Étudiants&nbsp;: votre cours vous a donné un lien depuis Moodle&nbsp;? Ouvrez-le, la connexion est automatique.<br />
+      <a [href]="accessHelpUrl" target="_blank" rel="noopener"
+        >Pas de compte ni de lien&nbsp;? Comment obtenir un accès.<span class="pl-visually-hidden"
+          >, s'ouvre dans un nouvel onglet</span
+        ></a
+      >
+    </p>
+  </form>
+</main>

@@ -47,6 +47,7 @@
       "@platon/feature/builder/common": ["./libs/feature/builder/common/src/index.ts"],
       "@platon/feature/builder/server": ["./libs/feature/builder/server/src/index.ts"],
       "@platon/feature/cas/browser": ["./libs/feature/cas/browser/src/index.ts"],
+      "@platon/feature/cas/browser/shared": ["./libs/feature/cas/browser/src/shared.ts"],
       "@platon/feature/cas/common": ["./libs/feature/cas/common/src/index.ts"],
       "@platon/feature/cas/server": ["./libs/feature/cas/server/src/index.ts"],
       "@platon/feature/compiler": ["./libs/feature/compiler/src/index.ts"],
