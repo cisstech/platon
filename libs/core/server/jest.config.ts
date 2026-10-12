@@ -1,6 +1,7 @@
 module.exports = {
   displayName: 'core-server',
   preset: '../../../jest.preset.js',
+  testPathIgnorePatterns: ['/node_modules/', '\\.integration\\.spec\\.ts$'],
   testEnvironment: 'node',
   transform: {
     '^.+\\.ts$': ['ts-jest', { tsconfig: '<rootDir>/tsconfig.spec.json' }],

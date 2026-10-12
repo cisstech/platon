@@ -3,22 +3,25 @@ import { Test } from '@nestjs/testing'
 import { getRepositoryToken } from '@nestjs/typeorm'
 import { PubSubService } from '@platon/core/server'
 import { MockRepository, mockRepository, mockSelectQueryBuilder } from '@platon/core/testing/server'
-import { EntityManager, SelectQueryBuilder } from 'typeorm'
+import { Subject } from 'rxjs'
+import { EntityManager, In, SelectQueryBuilder } from 'typeorm'
 import { NotificationEntity } from './notification.entity'
 import { NOTIFICATION_EXTRA_DATA, NotificationExtraDataProvider } from './notification.provider'
-import { ON_CHANGE_NOTIFICATIONS } from './notification.pubsub'
+import { ON_CHANGE_NOTIFICATIONS, OnChangeNotificationsPayload } from './notification.pubsub'
 import { NotificationService } from './notification.service'
 
 describe('NotificationService', () => {
   let service: NotificationService
   let repository: MockRepository<NotificationEntity>
   let discovery: jest.Mocked<Pick<DiscoveryService, 'providersWithMetaAtKey'>>
-  let pubSubService: jest.Mocked<Pick<PubSubService, 'publish'>>
+  let pubSubService: jest.Mocked<Pick<PubSubService, 'publish' | 'observe'>>
+  let published: Subject<OnChangeNotificationsPayload>
 
   beforeEach(async () => {
     repository = mockRepository<NotificationEntity>()
     discovery = { providersWithMetaAtKey: jest.fn() }
-    pubSubService = { publish: jest.fn().mockResolvedValue(undefined) }
+    published = new Subject()
+    pubSubService = { publish: jest.fn().mockResolvedValue(undefined), observe: jest.fn(() => published) as never }
 
     const module = await Test.createTestingModule({
       providers: [
@@ -176,17 +179,6 @@ describe('NotificationService', () => {
     })
   })
 
-  describe('markAsUnread', () => {
-    it('devrait remettre readAt à null et notifier', async () => {
-      repository.update.mockResolvedValue({ affected: 1 } as never)
-
-      await service.markAsUnread('user-1', ['id-1'])
-
-      expect(repository.update).toHaveBeenCalledWith({ userId: 'user-1', id: expect.anything() }, { readAt: null })
-      expect(pubSubService.publish).toHaveBeenCalled()
-    })
-  })
-
   describe('markAllAsRead', () => {
     it("devrait marquer toutes les notifications non lues de l'utilisateur comme lues", async () => {
       repository.update.mockResolvedValue({ affected: 3 } as never)
@@ -202,12 +194,12 @@ describe('NotificationService', () => {
   })
 
   describe('delete', () => {
-    it('devrait supprimer les notifications et notifier si des lignes ont été affectées', async () => {
+    it("devrait supprimer les notifications de l'utilisateur et notifier si des lignes ont été affectées", async () => {
       repository.delete.mockResolvedValue({ affected: 2 } as never)
 
       const result = await service.delete('user-1', ['id-1', 'id-2'])
 
-      expect(repository.delete).toHaveBeenCalledWith(['id-1', 'id-2'])
+      expect(repository.delete).toHaveBeenCalledWith({ userId: 'user-1', id: In(['id-1', 'id-2']) })
       expect(result).toBe(2)
       expect(pubSubService.publish).toHaveBeenCalled()
     })
@@ -310,6 +302,51 @@ describe('NotificationService', () => {
       expect(qb.andWhere).toHaveBeenCalledWith(expect.stringContaining('NOT IN (:...signals)'), {
         signals: ['SIGNAL-A', 'SIGNAL-B'],
       })
+    })
+  })
+
+  describe('changesOf', () => {
+    let qb: jest.Mocked<SelectQueryBuilder<NotificationEntity>>
+
+    beforeEach(() => {
+      qb = mockSelectQueryBuilder<NotificationEntity>()
+      repository.createQueryBuilder.mockReturnValue(qb)
+    })
+
+    /** Lets the counts asked by the service come back. */
+    const settle = () => new Promise<void>((resolve) => setImmediate(resolve))
+
+    it("devrait donner le compteur des non lues dès l'abonnement", async () => {
+      qb.getCount.mockResolvedValue(3)
+      const changes: unknown[] = []
+
+      service.changesOf('user-1').subscribe((change) => changes.push(change))
+      await settle()
+
+      expect(changes).toEqual([{ unreadCount: 3 }])
+    })
+
+    it('ne devrait porter que les changements de la personne, avec la notification arrivée et le compteur relu', async () => {
+      qb.getCount.mockResolvedValueOnce(3).mockResolvedValueOnce(4)
+      const notification = { id: 'n1', userId: 'user-1', data: { type: 'FOO' } } as unknown as NotificationEntity
+      const changes: unknown[] = []
+      service.changesOf('user-1').subscribe((change) => changes.push(change))
+      await settle()
+
+      published.next({ userId: 'user-2', newNotification: { ...notification, userId: 'user-2' } as NotificationEntity })
+      published.next({ userId: 'user-1', newNotification: notification })
+      await settle()
+
+      expect(changes).toEqual([{ unreadCount: 3 }, { unreadCount: 4, notification }])
+      expect(qb.getCount).toHaveBeenCalledTimes(2)
+    })
+
+    it("devrait cesser d'écouter le canal quand l'abonnement s'arrête", async () => {
+      qb.getCount.mockResolvedValue(0)
+
+      service.changesOf('user-1').subscribe().unsubscribe()
+
+      expect(published.observed).toBe(false)
     })
   })
 

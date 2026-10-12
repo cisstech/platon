@@ -13,7 +13,6 @@ export class RolesGuard implements CanActivate {
     if (!roles) {
       return true
     }
-    // TODO create util function to get request to handle both rest and graphql
     const { user } = context.switchToHttp().getRequest() as IRequest
     return roles.some((role) => role === user?.role)
   }
@@ -35,7 +34,6 @@ export class RolesIfBodyHasKeyGuard implements CanActivate {
 
     const [keys, roles] = metadata
 
-    // TODO create util function to get request to handle both rest and graphql
     const { user, body } = context.switchToHttp().getRequest() as IRequest
     if (!body) {
       return true

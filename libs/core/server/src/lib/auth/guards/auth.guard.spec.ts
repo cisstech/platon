@@ -1,19 +1,13 @@
 import { ExecutionContext } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
-import { GqlExecutionContext } from '@nestjs/graphql'
 import { User, UnauthorizedResponse } from '@platon/core/common'
 import { createUserEntity } from '@platon/core/testing/server'
 import { TokenExpiredError } from 'jsonwebtoken'
 import { of } from 'rxjs'
 import { AuthGuard } from './auth.guard'
 
-jest.mock('@nestjs/graphql', () => ({
-  GqlExecutionContext: { create: jest.fn() },
-}))
-
 const buildHttpContext = (request: Record<string, unknown>): ExecutionContext =>
   ({
-    getType: () => 'http',
     getHandler: jest.fn(),
     getClass: jest.fn(),
     switchToHttp: () => ({ getRequest: () => request }),
@@ -31,35 +25,6 @@ describe('AuthGuard', () => {
   })
 
   afterEach(() => jest.restoreAllMocks())
-
-  describe('getRequest', () => {
-    it('devrait retourner la requête HTTP pour un contexte HTTP', () => {
-      const request = { headers: {} }
-      const context = buildHttpContext(request)
-
-      expect(guard.getRequest(context)).toBe(request)
-    })
-
-    it('devrait retourner la requête GraphQL pour un contexte GraphQL', () => {
-      const req = { headers: {} }
-      ;(GqlExecutionContext.create as jest.Mock).mockReturnValue({
-        getContext: () => ({ req }),
-      })
-      const context = { getType: () => 'graphql' } as unknown as ExecutionContext
-
-      expect(guard.getRequest(context)).toBe(req)
-    })
-
-    it('devrait retourner le contexte de connexion pour une subscription GraphQL avec headers', () => {
-      const connection = { context: { headers: { authorization: 'Bearer x' } } }
-      ;(GqlExecutionContext.create as jest.Mock).mockReturnValue({
-        getContext: () => ({ req: { headers: {} }, connection }),
-      })
-      const context = { getType: () => 'graphql' } as unknown as ExecutionContext
-
-      expect(guard.getRequest(context)).toBe(connection.context)
-    })
-  })
 
   describe('canActivate', () => {
     it("devrait autoriser une route publique même si l'authentification échoue", async () => {

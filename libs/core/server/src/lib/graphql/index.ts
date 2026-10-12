@@ -1,5 +1,0 @@
-export * from './base.model'
-export * from './gql-req.decorator'
-export * from './relay/connection.args'
-export * from './relay/relay.types'
-export * from './scalars/uuid.scalar'
