@@ -137,6 +137,32 @@ describe('lint:dead-css', () => {
     )
   })
 
+  it('checks a stylesheet several components list against all their templates', () => {
+    const violations = dead({
+      'src/one.ts': "@Component({ templateUrl: './one.html', styleUrls: ['./zones.scss'] })",
+      'src/one.html': '<div class="zone"></div>',
+      'src/two.ts': "@Component({ templateUrl: './two.html', styleUrls: ['./zones.scss', './two.scss'] })",
+      'src/two.html': '<div class="entry"></div>',
+      'src/two.scss': '.entry { display: grid; }',
+      'src/zones.scss': '.zone { display: grid; }\n.entry { display: block; }\n.gone { display: none; }',
+    })
+    assert.deepEqual(
+      violations.map((violation) => violation.excerpt),
+      ['.gone']
+    )
+  })
+
+  it('leaves to their ancestor the classes of :host-context()', () => {
+    const violations = dead({
+      'src/item.ts':
+        '@Component({ template: \'<span class="label"></span>\', styles: `:host-context(.foot) { margin: 0; } .label { display: block; } .gone { display: none; }` })',
+    })
+    assert.deepEqual(
+      violations.map((violation) => violation.excerpt),
+      ['.gone']
+    )
+  })
+
   it('reads every selector of a list written over several lines', () => {
     const violations = dead({
       'src/card.ts':

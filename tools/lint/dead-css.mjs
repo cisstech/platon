@@ -2,15 +2,17 @@
 //
 // A dead rule never applies and never breaks anything, so it survives every rename that should
 // have removed it, and the next reader trusts it. For each component, every class its styles select
-// (the `.scss` next to it, or its inline `styles`) must appear in its template: the `.html` next to
-// it, or the `.ts` for inline templates, `[class.x]` bindings and `host` classes.
+// (the `.scss` next to it, the sheets of its `styleUrl` or `styleUrls`, or its inline `styles`) must
+// appear in its template: the `.html` next to it, or the `.ts` for inline templates, `[class.x]`
+// bindings and `host` classes. A sheet several components list may style any of their templates.
 //
-// Limits, on purpose: a rule under `::ng-deep` targets a child's template and is skipped; classes
-// the framework writes on our own elements are allowed below; `.a .b` needs both classes.
+// Limits, on purpose: a rule under `::ng-deep` targets a child's template and is skipped, and so is a
+// class inside `:host-context()`, which names an ancestor; classes the framework writes on our own
+// elements are allowed below; `.a .b` needs both classes.
 // Usage: node tools/lint/dead-css.mjs
 import { existsSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
-import { dirname, resolve } from 'node:path'
+import { dirname, join, resolve } from 'node:path'
 import { cssSegments, lineAt, listFiles, read, relativeTo, report, styleBlocks } from './files.mjs'
 
 export const DEAD_CSS_CONFIG = {
@@ -31,7 +33,8 @@ const selectedClasses = (css) => {
     if (segment.end === '{') {
       if (deepDepth === null && segment.text.includes('::ng-deep')) deepDepth = depth
       if (deepDepth === null && !segment.text.startsWith('@')) {
-        for (const match of segment.text.matchAll(/\.([a-zA-Z_][\w-]*)/g)) {
+        const own = segment.text.replace(/:host-context\([^)]*\)/g, (context) => ' '.repeat(context.length))
+        for (const match of own.matchAll(/\.([a-zA-Z_][\w-]*)/g)) {
           found.push({ name: match[1], offset: segment.offset + match.index })
         }
       }
@@ -44,14 +47,39 @@ const selectedClasses = (css) => {
   return found
 }
 
+const isComponent = (path) => existsSync(path) && read(path).includes('@Component')
+
+/** The stylesheets a component lists in `styleUrl` or `styleUrls`, as paths. */
+const listedSheets = (component) =>
+  [...read(component).matchAll(/styleUrls?:\s*(\[[^\]]*\]|'[^']*'|"[^"]*")/g)].flatMap((match) =>
+    [...match[1].matchAll(/['"]([^'"]+)['"]/g)].map((sheet) => join(dirname(component), sheet[1]))
+  )
+
+/** The components that a stylesheet styles: the one next to it, and every one that lists it. */
+const stylesOf = (files) => {
+  const users = new Map()
+  for (const component of files.filter((path) => path.endsWith('.ts') && isComponent(path))) {
+    for (const sheet of listedSheets(component)) users.set(sheet, [...(users.get(sheet) ?? []), component])
+  }
+  return (path) => {
+    if (path.endsWith('.ts')) return [path]
+    const beside = path.replace(/\.scss$/, '.ts')
+    return [...new Set([...(isComponent(beside) ? [beside] : []), ...(users.get(path) ?? [])])]
+  }
+}
+
 export const checkDeadCss = (root, config = DEAD_CSS_CONFIG) => {
   const violations = []
   const files = listFiles(root, config.targets, ['.scss', '.ts']).filter((path) => !path.endsWith('.stories.ts'))
+  const componentsOf = stylesOf(files)
   for (const path of files) {
-    const component = path.endsWith('.ts') ? path : path.replace(/\.scss$/, '.ts')
-    const template = component.replace(/\.ts$/, '.html')
-    if (!existsSync(component) || (path.endsWith('.scss') && !read(component).includes('@Component'))) continue
-    const markup = [component, template].filter(existsSync).map(read).join('\n')
+    const components = componentsOf(path)
+    if (components.length === 0 || (path.endsWith('.ts') && !isComponent(path))) continue
+    const markup = components
+      .flatMap((component) => [component, component.replace(/\.ts$/, '.html')])
+      .filter(existsSync)
+      .map(read)
+      .join('\n')
     const text = read(path)
     for (const block of styleBlocks(path, text)) {
       for (const { name, offset } of selectedClasses(block.css)) {
