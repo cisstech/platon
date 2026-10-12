@@ -71,6 +71,24 @@ Gravité : **P1** bloque, trompe ou expose. **P2** gêne ou fait douter. **P3** 
 - **En partie corrigé (G-04)** : une même réponse, dans le même temps, pour un compte inconnu et un
   mauvais mot de passe. Reste la limite de tentatives.
 
+### B25. Un jeton d'accès se renouvelle sans fin
+
+- [ ] Corrigé
+- **Symptôme** : avec un seul jeton d'accès, on obtient de nouveaux jetons sans limite en appelant
+  `POST /api/v1/auth/refresh`, qui rend chaque fois un jeton de rafraîchissement neuf pour 7 jours ;
+  un jeton de rafraîchissement ouvre aussi toutes les routes. Un jeton volé donne donc un accès qui
+  n'expire jamais. Le modèle d'environnement donne d'ailleurs 7 jours aux deux jetons (le code met
+  15 min au jeton d'accès par défaut).
+- **Cause** : les deux jetons ont le même secret et le même contenu (`sub`, `username`), seule leur
+  durée change ; `refresh` accepte tout jeton que la garde accepte.
+- **Où** : `libs/core/server/src/lib/auth/auth.service.ts` (`authenticate`),
+  `libs/core/server/src/lib/auth/auth.controller.ts` (`refresh`),
+  `libs/core/server/src/lib/auth/strategies/jwt.strategy.ts`
+- **Piste** : ticket G-05, avec B26 : un type dans chaque jeton, la garde n'accepte que `access`,
+  `refresh` que `refresh` et rend le même jeton de rafraîchissement ; côté navigateur,
+  `RemoteTokenProvider.refresh` envoie lui-même le jeton de rafraîchissement, sinon le flux des
+  notifications ne pourra plus rafraîchir son jeton.
+
 ## P2
 
 ### B6. `/tests` sans garde de rôle
@@ -120,6 +138,8 @@ Gravité : **P1** bloque, trompe ou expose. **P2** gêne ou fait douter. **P3** 
   `components/notification-drawer/notification-drawer.component.ts`
 - **Piste** : lire `totalCount` de `notifications(filters: { unread: true })` au chargement ; C-04 le
   fait pour la nouvelle interface.
+- **Corrigé dans C-08** : le flux SSE des notifications envoie le compteur dès son ouverture, et le
+  tiroir de l'interface actuelle le reçoit. La case se coche à la fusion.
 
 ### B22. Un élève correcteur ne peut pas enregistrer ses corrections
 
@@ -148,6 +168,20 @@ Gravité : **P1** bloque, trompe ou expose. **P2** gêne ou fait douter. **P3** 
 - **En partie corrigé (G-04)** : tout échec ramène à `/login?error=cas`, que la nouvelle interface
   traduit (l'actuelle montre le formulaire sans message) ; `next` et l'adresse de service sont
   encodés. Reste `https` écrit en dur dans l'adresse de service.
+
+### B26. Les requêtes en attente d'un rafraîchissement de jeton ne repartent jamais
+
+- [ ] Corrigé
+- **Symptôme** : quand plusieurs requêtes reçoivent « jeton expiré » en même temps, la première
+  rafraîchit le jeton et repart ; les autres restent en attente pour toujours, et l'écran qui les
+  attend charge sans fin.
+- **Cause** : `AuthInterceptor` les fait attendre `token$`, qui n'est jamais alimenté par le jeton
+  rafraîchi. Pendant le rafraîchissement, il envoie aussi le jeton de rafraîchissement comme Bearer
+  à toutes les requêtes, ce qui ne marche qu'à cause de B25.
+- **Où** : `libs/core/browser/src/lib/auth/interceptors/auth.interceptor.ts`
+- **Piste** : ticket G-05, avec B25 : un seul rafraîchissement partagé (`TokenService.refresh`), qui
+  rejoue chaque requête avec le nouveau jeton ; le jeton de rafraîchissement ne part que vers
+  `POST /auth/refresh`.
 
 ## P3
 
