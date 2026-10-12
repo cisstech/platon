@@ -1,0 +1,32 @@
+<div class="pl-panel__head">
+  @if (layout() === 'screen') {
+  <button
+    type="button"
+    plButton
+    variant="cover-icon"
+    size="lg"
+    #close
+    [attr.aria-label]="closeLabel()"
+    (click)="closed.emit()"
+  >
+    <pl-icon name="arrow_back" />
+  </button>
+  }
+  <h2 class="pl-panel__title" [id]="headingId()">{{ heading() }}</h2>
+  <div class="pl-panel__actions"><ng-content select="[plPanelActions]" /></div>
+  @if (layout() === 'popover') {
+  <button
+    type="button"
+    plButton
+    variant="icon"
+    size="sm"
+    #close
+    [attr.aria-label]="closeLabel()"
+    (click)="closed.emit()"
+  >
+    <pl-icon name="close" />
+  </button>
+  }
+</div>
+<div class="pl-panel__tools"><ng-content select="[plPanelTools]" /></div>
+<div class="pl-panel__body"><ng-content /></div>

@@ -1,0 +1,14 @@
+@for (entry of toaster.toasts(); track entry.id) {
+<pl-toast
+  [tone]="entry.options.tone ?? 'info'"
+  [title]="entry.options.title"
+  [message]="entry.options.message"
+  [template]="entry.options.template"
+  [context]="entry.context"
+  [actionLabel]="entry.options.action?.label"
+  [actionIcon]="entry.options.action?.icon"
+  [dismissLabel]="entry.options.dismissLabel"
+  (acted)="act(entry)"
+  (dismissed)="close(entry.ref)"
+/>
+}

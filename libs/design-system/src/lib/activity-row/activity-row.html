@@ -1,0 +1,65 @@
+<span class="pl-activity-row__lead" [attr.data-hue]="hue() ?? null" aria-hidden="true">
+  <pl-icon [name]="icon()" />
+</span>
+@if (button(); as variant) {
+<div class="pl-activity-row__body">
+  <ng-container [ngTemplateOutlet]="text" />
+  <div class="pl-activity-row__side">
+    <ng-container [ngTemplateOutlet]="state" />
+    <a
+      plButton
+      [variant]="variant"
+      size="sm"
+      [routerLink]="href()"
+      [queryParams]="queryParams()"
+      [attr.aria-describedby]="describedBy()"
+      >{{ action() }}</a
+    >
+  </div>
+</div>
+} @else {
+<a class="pl-activity-row__body pl-activity-row__link" [routerLink]="href()" [queryParams]="queryParams()">
+  <ng-container [ngTemplateOutlet]="text" />
+  <span class="pl-activity-row__side">
+    <ng-container [ngTemplateOutlet]="state" />
+    {{ ' '
+    }}<span class="pl-activity-row__action" [class.pl-activity-row__action--open]="!action()"
+      >{{ action() }}<pl-icon name="chevron_right" [size]="2"
+    /></span>
+  </span>
+</a>
+}
+<ng-template #text>
+  <span class="pl-activity-row__text">
+    <span class="pl-activity-row__title" [id]="ids.title">{{ heading() }}</span>
+    {{ ' ' }}
+    <span class="pl-activity-row__meta" [id]="ids.meta">
+      @if (context()) {
+      <span>{{ context() }}</span>
+      } @if (due()) { @if (context()) {<span class="pl-visually-hidden">, </span>}
+      <span class="pl-activity-row__due" [attr.data-tone]="dueTone()"
+        >@if (dueIcon(); as dueIcon) {<pl-icon [name]="dueIcon" [size]="1" />}{{ due() }}</span
+      >
+      } @if (detail()) { @if (context() || due()) {<span class="pl-visually-hidden">, </span>}
+      <span>{{ detail() }}</span>
+      }
+    </span>
+  </span>
+</ng-template>
+<ng-template #state>
+  @if (tag()) {
+  <span class="pl-visually-hidden">, </span>
+  <pl-tag tone="graded" [icon]="tagIcon()" [id]="ids.tag">{{ tag() }}</pl-tag>
+  } @if (progressText()) {
+  <span class="pl-visually-hidden">, </span>
+  <span class="pl-activity-row__progress">
+    <span [id]="ids.progress"
+      >{{ progressText() }}@if (progressHint()) {<span class="pl-visually-hidden"> {{ progressHint() }}</span
+      >}</span
+    >
+    @if (total() > 0) {
+    <pl-progress class="pl-activity-row__bar" [value]="done()" [max]="total()" [hue]="hue()" />
+    }
+  </span>
+  }
+</ng-template>

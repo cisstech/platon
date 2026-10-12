@@ -30,8 +30,8 @@ import {
   trackLoadPhase,
 } from '@platon/design-system'
 import { Session } from '../../core/session/session'
-import { LoadState } from '../../shared/load-state/load-state'
-import { NotificationsStore } from './notifications-store'
+import { LoadState } from '../../shared/ui/load-state/load-state'
+import { NotificationsStore } from './data/notifications-store'
 import { InvitationAnswer, NotificationView, notificationView, unreadLabel } from './notifications.vm'
 
 /** Id of the title, for the dialog that opens the panel. */

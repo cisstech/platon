@@ -1,0 +1,32 @@
+<div class="pl-page-header__head">
+  <ng-content select="[plPageMark]" />
+  <div class="pl-page-header__main">
+    @if (trail().length) {
+    <nav class="pl-page-header__crumbs" [attr.aria-label]="breadcrumbLabel">
+      <ol class="pl-page-header__trail">
+        @for (crumb of trail(); track $index) {
+        <li class="pl-page-header__crumb">
+          @if ($last || !crumb.link) {
+          <span [attr.aria-current]="$last ? 'page' : null">{{ crumb.label }}</span>
+          } @else {
+          <a class="pl-page-header__link" [routerLink]="crumb.link">{{ crumb.label }}</a>
+          } @if (!$last) {
+          <pl-icon class="pl-page-header__chevron" name="chevron_right" [size]="1" />
+          }
+        </li>
+        }
+      </ol>
+    </nav>
+    }
+    <div class="pl-page-header__title-row">
+      <h1 class="pl-page-header__title">{{ heading() }}</h1>
+      <ng-content select="[plPageTitleAction]" />
+      <div class="pl-page-header__actions"><ng-content select="[plPageActions]" /></div>
+    </div>
+    @if (description()) {
+    <p class="pl-page-header__description">{{ description() }}</p>
+    }
+    <div class="pl-page-header__figures"><ng-content select="pl-page-figure" /></div>
+  </div>
+</div>
+<ng-content select="pl-page-tabs" />

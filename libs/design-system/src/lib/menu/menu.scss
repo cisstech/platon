@@ -1,0 +1,26 @@
+:host {
+  display: grid;
+  gap: calc(var(--pl-space-1) / 2);
+  min-inline-size: 240px;
+  max-inline-size: 360px;
+  padding: var(--pl-space-1);
+  border: 1px solid var(--pl-color-line);
+  border-radius: var(--pl-radius-menu);
+  background: var(--pl-color-surface-raised);
+  box-shadow: var(--pl-shadow-overlay);
+  color: var(--pl-color-text);
+  font: var(--pl-font-body);
+}
+:host([data-visible='false']),
+:host([data-triggered='false']) {
+  display: none;
+}
+:host([data-visible='true']) {
+  animation: pl-menu-in var(--pl-duration-menu) var(--pl-ease-standard);
+}
+@keyframes pl-menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}

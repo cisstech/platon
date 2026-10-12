@@ -88,6 +88,10 @@ export class ActivityDTO extends BaseDTO implements Activity {
 
   @IsString()
   readonly code!: string
+
+  @IsBoolean()
+  @ApiProperty()
+  readonly graded = false
 }
 
 export class ActivityFiltersDTO implements ActivityFilters {
@@ -175,6 +179,11 @@ export class UpdateCourseActivityDTO implements UpdateActivity {
   @Matches(/^[A-Z0-9]{6}$/)
   @ApiProperty()
   readonly code?: string
+
+  @IsOptional()
+  @IsBoolean()
+  @ApiProperty()
+  readonly graded?: boolean
 }
 
 export class ReloadCourseActivityDTO implements ReloadActivity {

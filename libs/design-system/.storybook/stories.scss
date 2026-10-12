@@ -125,3 +125,43 @@
   color: var(--pl-color-danger-ink);
   font: var(--pl-font-small);
 }
+
+// A card holding rows, as the lists of a page do.
+.story-card {
+  max-inline-size: 760px;
+  border: 1px solid var(--pl-color-line);
+  border-radius: var(--pl-radius-card);
+  background: var(--pl-color-surface);
+  overflow: hidden;
+}
+
+.story-card > h3 {
+  margin: 0;
+  padding: var(--pl-space-3) var(--pl-space-4) var(--pl-space-1);
+  border-block-start: 1px solid var(--pl-color-line);
+  color: var(--pl-color-muted);
+  font: var(--pl-font-caption);
+}
+
+.story-copies {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--pl-space-4);
+  max-inline-size: 760px;
+}
+
+.story-narrow {
+  max-inline-size: 320px;
+}
+
+.story-title {
+  display: flex;
+  align-items: center;
+  gap: var(--pl-space-3);
+  margin: 0;
+  font: var(--pl-font-title);
+}
+
+.story-phone {
+  max-inline-size: 390px;
+}

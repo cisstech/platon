@@ -62,6 +62,9 @@ export class ActivityEntity extends BaseEntity implements Activity {
   @Column({ type: 'varchar', length: 6, default: () => 'upper(substr(md5(random()::text), 1, 6))' })
   code!: string
 
+  @Column({ default: false })
+  graded!: boolean
+
   // VIRTUAL COLUMNS
   // TODO: use expanders instead of virtual columns
 

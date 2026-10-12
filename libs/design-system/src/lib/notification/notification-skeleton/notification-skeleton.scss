@@ -1,0 +1,12 @@
+:host {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--pl-space-3);
+  min-block-size: 64px;
+  padding: var(--pl-space-3) var(--pl-space-4) var(--pl-space-3) var(--pl-space-6);
+}
+.pl-notification-skeleton__text {
+  display: grid;
+  align-content: start;
+  gap: var(--pl-space-2);
+}

@@ -31,6 +31,66 @@ export interface Activity {
 
   readonly activitySettings?: ActivitySettings
   readonly code: string
+
+  /** Whether the activity counts in the grades. False until a teacher says otherwise. */
+  readonly graded?: boolean
+}
+
+/** An activity a person can play, as their home lists it (`GET /activities/mine`). */
+export interface PlayableActivity {
+  readonly id: string
+  readonly courseId: string
+  readonly courseName: string
+  readonly title: string
+
+  /**
+   * Their dates: those of the restriction period that concerns them (none when it has no date
+   * range), or the activity's own when it has no restriction.
+   */
+  readonly openAt?: Date | null
+  readonly closeAt?: Date | null
+  readonly state: ActivityOpenStates
+
+  readonly isChallenge: boolean
+  readonly graded: boolean
+  /** In seconds, absent when unlimited. */
+  readonly duration?: number
+  /** Absent when unlimited. */
+  readonly attempts?: number
+
+  readonly exerciseCount: number
+  /** Exercises of their copy that they answered. */
+  readonly exercisesDone: number
+  readonly started: boolean
+  readonly terminated: boolean
+}
+
+/** An activity of a course a person teaches, as their home lists it (`GET /activities/taught`). */
+export interface TaughtActivity {
+  readonly id: string
+  readonly courseId: string
+  readonly courseName: string
+  readonly title: string
+
+  /** The activity's own dates, whatever its restrictions. */
+  readonly openAt?: Date | null
+  readonly closeAt?: Date | null
+  readonly state: ActivityOpenStates
+  /** Whether restriction periods give its students their own dates, in place of the dates above. */
+  readonly restricted: boolean
+
+  readonly isChallenge: boolean
+  readonly graded: boolean
+
+  /**
+   * Students of the course who can play it, by its members, its groups and its restriction periods;
+   * a person who also teaches the course is not one of them.
+   */
+  readonly studentCount: number
+  /** Those of them who started it. */
+  readonly startedCount: number
+  /** Average on 100 of their started copies, absent when none started. */
+  readonly averageGrade?: number
 }
 
 export interface ActivityFilters {
@@ -56,6 +116,7 @@ export interface UpdateActivity {
   readonly ignoreRestrictions?: boolean
   readonly activitySettings?: ActivitySettings
   readonly code?: string
+  readonly graded?: boolean
 }
 
 export interface ReloadActivity {

@@ -1,0 +1,13 @@
+:host {
+  --pl-icon-size: 28px;
+  display: inline-grid;
+  flex: none;
+  color: var(--pl-color-joy-1);
+  animation: pl-joy-mark-in var(--pl-duration-joy) var(--pl-ease-standard) 1;
+}
+@keyframes pl-joy-mark-in {
+  from {
+    opacity: 0;
+    transform: scale(0.6) rotate(-20deg);
+  }
+}

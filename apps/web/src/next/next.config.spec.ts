@@ -4,7 +4,9 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http'
 import { AuthService, DialogService, TokenService } from '@platon/core/browser/shared'
 import { NZ_DATE_LOCALE, NZ_I18N } from 'ng-zorro-antd/i18n'
 import { NzModalService } from 'ng-zorro-antd/modal'
+import { AnnouncementService } from '@platon/feature/announcement/browser/shared'
 import { CasService } from '@platon/feature/cas/browser/shared'
+import { CourseService } from '@platon/feature/course/browser/shared'
 import { ResourceService } from '@platon/feature/resource/browser/shared'
 import { NextDialog } from './core/dialog/next-dialog'
 import { nextConfig } from './next.config'
@@ -36,6 +38,14 @@ describe('nextConfig', () => {
 
   it('reaches the resources, for the invitations of the notifications', () => {
     expect(TestBed.inject(ResourceService)).toBeInstanceOf(ResourceService)
+  })
+
+  it('reaches the courses and their activities, for the home', () => {
+    expect(TestBed.inject(CourseService)).toBeInstanceOf(CourseService)
+  })
+
+  it('reaches the announcements, for the banner of the home', () => {
+    expect(TestBed.inject(AnnouncementService)).toBeInstanceOf(AnnouncementService)
   })
 
   it('does not configure ng-zorro', () => {

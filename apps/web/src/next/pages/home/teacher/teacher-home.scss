@@ -1,0 +1,29 @@
+.home__entry-detail {
+  color: var(--pl-color-muted);
+  font: var(--pl-font-small);
+  font-variant-numeric: tabular-nums;
+}
+
+.home__entry-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--pl-space-2);
+}
+
+// The hue of the course, a mark before its name.
+.home__entry--hued .home__entry-name {
+  display: flex;
+  align-items: center;
+  gap: var(--pl-space-2);
+}
+
+.home__entry--hued .home__entry-name::before {
+  content: '';
+  flex: none;
+  inline-size: 8px;
+  block-size: 14px;
+  border-radius: var(--pl-radius-1);
+  background: var(--pl-hue-strong);
+}

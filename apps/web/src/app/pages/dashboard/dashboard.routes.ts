@@ -31,6 +31,15 @@ export default [
           ),
       },
       {
+        title: "PLaTon - Modèles d'exercice",
+        path: 'templates',
+        loadChildren: () =>
+          import(
+            /* webpackChunkName: "templates" */
+            '../templates/templates.routes'
+          ),
+      },
+      {
         title: 'PLaTon - Mon compte',
         path: 'account',
         loadChildren: () =>

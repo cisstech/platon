@@ -1,16 +1,15 @@
-import { DOCUMENT } from '@angular/common'
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core'
-import { Button, Page, PageHeader } from '@platon/design-system'
-import { withUiParam } from '../../../ui-switch/ui-url'
+import { Session } from '../../core/session/session'
+import { StudentHome } from './student/student-home'
+import { TeacherHome } from './teacher/teacher-home'
 
-/** Home of the new interface, until the real one. */
+/** The home of the person, by role: a teacher or an administrator has theirs, a student or a demo account theirs. */
 @Component({
   selector: 'app-home',
-  imports: [Button, Page, PageHeader],
+  imports: [StudentHome, TeacherHome],
   templateUrl: './home.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Home {
-  /** Same address in the current interface, kept as the preference. */
-  protected readonly legacyHref = withUiParam(new URL(inject(DOCUMENT).location.href), 'legacy')
+  protected readonly teaches = inject(Session).isTeacher
 }

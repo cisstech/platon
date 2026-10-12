@@ -1,0 +1,7 @@
+:host {
+  display: flex;
+  gap: var(--pl-space-1);
+  overflow-x: auto;
+  border-block-end: 1px solid var(--pl-color-line);
+  scrollbar-width: none;
+}

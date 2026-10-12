@@ -98,6 +98,13 @@ export class ActivityCorrectionSummaryDTO implements ActivityCorrectionSummary {
 
   @IsNumber()
   pendingCopies!: number
+
+  @IsNumber()
+  submittedCopies!: number
+
+  @IsOptional()
+  @IsDate()
+  lastSubmittedAt?: Date | null
 }
 
 export class UpsertCorrectionDTO implements UpsertCorrection {

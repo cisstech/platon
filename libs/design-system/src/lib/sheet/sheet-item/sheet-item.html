@@ -1,0 +1,5 @@
+<pl-icon class="pl-sheet-item__icon" [name]="icon()" [size]="3" />
+<span class="pl-sheet-item__label"><ng-content /></span>
+@if (trailing(); as trailing) {
+<pl-icon class="pl-sheet-item__trailing" [name]="trailing" [size]="2" />
+}

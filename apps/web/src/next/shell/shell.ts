@@ -1,5 +1,4 @@
 import { Dialog as CdkDialog, DialogRef } from '@angular/cdk/dialog'
-import { BreakpointObserver } from '@angular/cdk/layout'
 import { createGlobalPositionStrategy } from '@angular/cdk/overlay'
 import { CdkScrollable } from '@angular/cdk/scrolling'
 import { DOCUMENT, NgTemplateOutlet } from '@angular/common'
@@ -50,17 +49,16 @@ import { filter, firstValueFrom, map } from 'rxjs'
 import { INSTITUTION_NAME } from '../core/institution/institution'
 import { Session } from '../core/session/session'
 import { NextTheme, ThemePreference } from '../core/theme/next-theme'
-import { CHARTER_HEADING_ID, CharterDialog } from './charter-dialog'
+import { CHARTER_HEADING_ID, CharterDialog } from './ui/charter-dialog/charter-dialog'
 import { CreateKind, accountType, coverEntries, createEntries, createTarget, helpInFoot } from './cover.vm'
 import { NOTIFICATIONS_HEADING_ID, NotificationsPanel } from './notifications/notifications-panel'
 import { unreadLabel } from './notifications/notifications.vm'
-import { NotificationsStore } from './notifications/notifications-store'
-import { ShellStore } from './shell-store'
-
-const DOCS_URL = '/docs'
-
-/** Below this width the cover gives way to the top bar and its panel. */
-export const NARROW_SCREEN = '(max-width: 839.98px)'
+import { NotificationsStore } from './notifications/data/notifications-store'
+import { ShellStore } from './data/shell-store'
+import { DOCS_URL } from '../shared/docs'
+import { narrowScreen } from '../shared/narrow-screen'
+import { PageNavigation } from '../../shared/page-navigation'
+import { withUiParam } from '../../ui-switch/ui-url'
 
 /** The notifications open beside the cover, at the bottom, near their entry. */
 const NOTIFICATIONS_INSET = 'calc(var(--pl-cover-width) + var(--pl-space-2))'
@@ -76,7 +74,8 @@ const THEME_OPTIONS: SegmentedOption<ThemePreference>[] = [
 /**
  * The frame of the ported screens: the cover on the left of the page, or, on a narrow screen, a top
  * bar that opens the cover as a panel and the profile as a sheet. A route that already has a main
- * creation action sets `data: { quietCreate: true }`, and Create turns quiet.
+ * creation action sets `data: { quietCreate: true }`, and Create turns quiet; a page that has one
+ * depending on its data sets `quietCreate` of `ShellStore`.
  */
 @Component({
   selector: 'app-shell',
@@ -116,11 +115,13 @@ const THEME_OPTIONS: SegmentedOption<ThemePreference>[] = [
 export class Shell {
   private readonly router = inject(Router)
   private readonly dialog = inject(CdkDialog)
-  private readonly window = inject(DOCUMENT).defaultView
+  private readonly document = inject(DOCUMENT)
+  private readonly window = this.document.defaultView
   private readonly session = inject(Session)
   private readonly store = inject(ShellStore)
   private readonly notifications = inject(NotificationsStore)
   private readonly messages = inject(DialogService)
+  private readonly navigation = inject(PageNavigation)
   protected readonly theme = inject(NextTheme)
   protected readonly institution = inject(INSTITUTION_NAME)
 
@@ -133,10 +134,8 @@ export class Shell {
   private sheetRef?: DialogRef<unknown>
   private notificationsRef?: DialogRef<unknown, NotificationsPanel>
 
-  private readonly breakpoints = inject(BreakpointObserver)
-  protected readonly narrow = toSignal(this.breakpoints.observe(NARROW_SCREEN).pipe(map((state) => state.matches)), {
-    initialValue: this.breakpoints.isMatched(NARROW_SCREEN),
-  })
+  /** On a narrow screen, the cover gives way to the top bar and its panel. */
+  protected readonly narrow = narrowScreen()
   private readonly url = toSignal(
     this.router.events.pipe(
       filter((event) => event instanceof NavigationEnd),
@@ -176,7 +175,11 @@ export class Shell {
     while (route.firstChild) route = route.firstChild
     return route
   })
-  protected readonly quietCreate = computed(() => this.page().data['quietCreate'] === true)
+  protected readonly quietCreate = computed(() => this.page().data['quietCreate'] === true || this.store.quietCreate())
+  /** The same address in the current interface, kept as the preference. */
+  protected readonly legacyHref = computed(() =>
+    withUiParam(new URL(this.url(), this.document.location.origin), 'legacy')
+  )
   /** The title of the page in the top bar, as in the browser tab. */
   protected readonly pageTitle = computed(() => this.page().title ?? 'PLaTon')
   protected readonly unread = this.notifications.unreadCount
@@ -330,6 +333,9 @@ export class Shell {
         break
       case 'help':
         this.window?.open(DOCS_URL, '_blank', 'noopener')
+        break
+      case 'legacy':
+        this.navigation.assign(this.legacyHref())
         break
       case 'sign-out':
         this.session.signOut().catch(console.error)

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable, inject } from '@angular/core'
-import { buildExpandableHttpParams, buildHttpParams } from '@platon/core/browser'
+import { buildExpandableHttpParams, buildHttpParams } from '@platon/core/browser/shared'
 import { ItemResponse, ListResponse } from '@platon/core/common'
 import { Course, FindCourse, CourseFilters, CreateCourse, UpdateCourse } from '@platon/feature/course/common'
 import { Observable } from 'rxjs'

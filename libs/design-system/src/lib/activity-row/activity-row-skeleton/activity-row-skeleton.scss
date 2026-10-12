@@ -1,0 +1,15 @@
+:host {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--pl-space-4);
+  min-block-size: 64px;
+  padding: var(--pl-space-3) var(--pl-space-4);
+}
+:host(:not(:first-child)) {
+  border-block-start: 1px solid var(--pl-color-line);
+}
+.pl-activity-row-skeleton__text {
+  display: grid;
+  gap: var(--pl-space-2);
+}

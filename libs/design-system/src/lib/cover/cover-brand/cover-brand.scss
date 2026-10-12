@@ -1,0 +1,28 @@
+:host {
+  display: flex;
+  align-items: center;
+  gap: var(--pl-space-3);
+  padding: var(--pl-space-1) var(--pl-space-2);
+  border-radius: var(--pl-radius-control);
+  color: inherit;
+  text-decoration: none;
+}
+:host(:focus-visible) {
+  outline-color: var(--pl-color-cover-primary);
+}
+.pl-cover-brand__logo {
+  flex: none;
+  inline-size: 36px;
+  block-size: 36px;
+}
+.pl-cover-brand__text {
+  display: grid;
+  min-inline-size: 0;
+}
+.pl-cover-brand__name {
+  font: var(--pl-font-subheading);
+}
+.pl-cover-brand__institution {
+  color: var(--pl-color-cover-muted);
+  font: var(--pl-font-caption);
+}

@@ -1,0 +1,9 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--pl-space-1) / 2);
+  margin-block-start: auto;
+  margin-inline-end: var(--pl-space-3);
+  padding-block-start: var(--pl-space-3);
+  border-block-start: 1px solid var(--pl-color-cover-line);
+}

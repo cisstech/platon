@@ -1,0 +1,16 @@
+@for (option of options(); track option.value) {
+<label class="pl-segmented__option" [attr.data-checked]="option.value === value()">
+  <input
+    class="pl-segmented__input"
+    type="radio"
+    [name]="name"
+    [value]="option.value"
+    [checked]="option.value === value()"
+    (change)="value.set(option.value)"
+  />
+  @if (option.icon; as icon) {
+  <pl-icon [name]="icon" [size]="1" />
+  }
+  <span [class.pl-segmented__hidden]="option.iconOnly">{{ option.label }}</span>
+</label>
+}

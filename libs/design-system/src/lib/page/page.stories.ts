@@ -1,5 +1,4 @@
-import { provideRouter, withHashLocation } from '@angular/router'
-import { RouterLink } from '@angular/router'
+import { RouterLink, provideRouter, withHashLocation } from '@angular/router'
 import { type Meta, type StoryObj, applicationConfig, moduleMetadata } from '@storybook/angular'
 import { Alert } from '../alert/alert'
 import { Button } from '../button/button'
@@ -8,8 +7,10 @@ import { Icon } from '../icon/icon'
 import { Skeleton } from '../skeleton/skeleton'
 import { Tooltip } from '../tooltip/tooltip'
 import { Page } from './page'
-import { PageFigure, PageHeader } from './page-header'
-import { PageTab, PageTabs } from './page-tabs'
+import { PageFigure } from './page-figure/page-figure'
+import { PageHeader } from './page-header/page-header'
+import { PageTab } from './page-tab/page-tab'
+import { PageTabs } from './page-tabs/page-tabs'
 
 const meta: Meta<Page> = {
   title: 'Components/Page',

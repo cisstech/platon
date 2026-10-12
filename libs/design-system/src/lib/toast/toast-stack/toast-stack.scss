@@ -1,0 +1,18 @@
+:host {
+  position: fixed;
+  inset: auto;
+  inset-block-end: var(--pl-space-6);
+  inset-inline-start: calc(var(--pl-toast-inset-start) + var(--pl-space-6));
+  z-index: var(--pl-layer-toast);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--pl-space-2);
+  max-inline-size: calc(100vw - var(--pl-toast-inset-start) - 2 * var(--pl-space-6));
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  background: none;
+  color: inherit;
+}

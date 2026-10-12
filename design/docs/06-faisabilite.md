@@ -24,28 +24,29 @@ requête, pas de migration), **réorganisation** (même donnée, autre découpag
 
 ## Accueil étudiant
 
-| Élément                                          | Niveau      | Ce qui existe                                                                                                                                         |
-| ------------------------------------------------ | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| « À faire » et « Bientôt », tous cours confondus | agrégation  | `GET courses/:id/activities` par cours (`openAt`, `closeAt`, `state`, `progression`, `exerciseCount`) ; un `activities/mine` sur `ActivityMemberView` |
-| Avancement, Commencer ou Reprendre               | existant    | `progression`, `navigation.started`, `navigation.terminated`                                                                                          |
-| Échéance relative, en retard                     | existant    | `closeAt`, calcul client                                                                                                                              |
-| « Notée », durée, tentatives                     | existant    | `activitySettings.duration`, `actions.retry`                                                                                                          |
-| Résultats récents, exercices à revoir            | agrégation  | Résultats par session (`results/session/:id`) ; rien ne liste les sessions récentes                                                                   |
-| Progression globale                              | existant    | `GET results/dashboard`                                                                                                                               |
-| Mes cours avec avancement                        | existant    | `CourseStatistic.progression` (utilisateur connecté)                                                                                                  |
-| Couleur du cours                                 | proposition | `colorHue` existe sur `Activity`, pas sur `Course` ; dériver de l'id d'abord                                                                          |
-| Accueil du rôle démo                             | correction  | Vide aujourd'hui (`overview.presenter.ts`)                                                                                                            |
+| Élément                                          | Niveau     | Ce qui existe                                                                                                          |
+| ------------------------------------------------ | ---------- | ---------------------------------------------------------------------------------------------------------------------- |
+| « À faire » et « Bientôt », tous cours confondus | agrégation | `GET activities/mine` (A-04) : les activités de tous ses cours, dates propres, avancement en exercices, en une requête |
+| Avancement, Commencer ou Reprendre               | existant   | `exercisesDone` sur `exerciseCount`, `started`, `terminated` (A-04)                                                    |
+| Échéance relative                                | existant   | `closeAt`, `upcomingTime` du design system (A-01) ; une activité ferme à son échéance, rien n'est « en retard »        |
+| « Notée », durée, tentatives                     | existant   | `graded`, `duration`, `attempts` d'`activities/mine` (A-04)                                                            |
+| Résultats récents                                | existant   | `GET results/recent` (A-04) : les trois dernières copies, notées, en correction ou cachées                             |
+| Progression globale                              | existant   | `GET results/dashboard`                                                                                                |
+| Mes cours avec avancement                        | existant   | `GET courses` pour la liste, la somme d'`activities/mine` par cours pour l'avancement (A-01)                           |
+| Couleur du cours                                 | existant   | `courseHue`, dérivée de l'identifiant du cours (D32)                                                                   |
+| Accueil du rôle démo                             | existant   | L'accueil de l'élève dans la nouvelle interface (A-01) ; l'interface actuelle reste vide (B5)                          |
 
 ## Accueil enseignant
 
-| Élément                               | Niveau     | Ce qui existe                                                  |
-| ------------------------------------- | ---------- | -------------------------------------------------------------- |
-| « En cours », « À préparer »          | agrégation | Même `activities/mine`, filtré sur `CourseMemberRoles.teacher` |
-| Participation et moyenne par activité | agrégation | `GET results/dashboard/activities/:id`, un appel par activité  |
-| « À corriger »                        | existant   | `GET results/corrections`, `CorrectionStatus`                  |
-| Mes cours avec effectifs              | existant   | `CourseStatistic.studentCount`, `teacherCount`                 |
-| Ressources récentes                   | existant   | Recherche `views: true`                                        |
-| Partir d'un modèle                    | existant   | `resource-template-selection`                                  |
+| Élément                               | Niveau     | Ce qui existe                                                                           |
+| ------------------------------------- | ---------- | --------------------------------------------------------------------------------------- |
+| « En cours », « À faire »             | agrégation | `GET activities/taught` (A-04), toutes les activités des cours où il enseigne           |
+| Participation et moyenne par activité | agrégation | `GET activities/taught` (A-04), en une requête                                          |
+| Copies à corriger                     | existant   | `GET results/corrections/summary`, avec `submittedCopies` et `lastSubmittedAt` (A-04)   |
+| Mes cours avec effectifs              | existant   | `GET courses?expands=statistic` : `CourseStatistic.studentCount`, `teacherCount`        |
+| Vu récemment                          | existant   | Recherche `views: true`, avec `viewedAt` (A-04)                                         |
+| Partir d'un modèle                    | existant   | `/templates` dans l'interface actuelle (D38), qui reprend `resource-template-selection` |
+| Copies confiées à un autre correcteur | à créer    | Aucune route ; reporté à la file de correction (L-04, D38)                              |
 
 ## Connexion
 
@@ -133,7 +134,7 @@ requête, pas de migration), **réorganisation** (même donnée, autre découpag
 
 ## Ce qui touche le modèle
 
-1. `activities/mine` : seul prérequis des deux accueils.
+1. Les données des accueils (A-04) : `activities/mine`, `activities/taught`, `results/recent`.
 2. Teinte par cours : dérivée de l'id, puis `Course.colorHue` si besoin.
 3. Nom de l'établissement en configuration.
 4. `invitedAt` sur `TestsCandidates`.

@@ -1,0 +1,15 @@
+<h2 class="pl-dialog__title" [id]="headingId()">{{ heading() }}</h2>
+<div class="pl-dialog__content"><ng-content /></div>
+<div class="pl-dialog__actions">
+  <button type="button" plButton variant="secondary" (click)="cancelled.emit()">{{ cancelLabel() }}</button>
+  <button
+    type="button"
+    plButton
+    variant="primary"
+    [tone]="tone() === 'danger' ? 'danger' : 'default'"
+    [disabled]="confirmDisabled()"
+    (click)="confirmed.emit()"
+  >
+    {{ confirmLabel() }}
+  </button>
+</div>

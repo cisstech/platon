@@ -5,6 +5,7 @@ import { IRequest } from '@platon/core/server'
 import { CourseStatistic } from '@platon/feature/course/common'
 import { ActivityEntity, ActivityMemberView, CourseDTO, CourseMemberService } from '@platon/feature/course/server'
 import { PlayerActivityVariables } from '@platon/feature/player/common'
+import { AnswerStates, isExerciseDone } from '@platon/feature/result/common'
 import differenceInSeconds from 'date-fns/differenceInSeconds'
 import { IsNull, Repository } from 'typeorm'
 import { SessionEntity } from '../sessions/session.entity'
@@ -56,8 +57,8 @@ export class CourseExpander {
       const { navigation } = session.variables
       if (navigation?.exercises) {
         const { exercises } = navigation
-        const graded = exercises.filter((e) => !['NOT_STARTED', 'STARTED'].includes(e.state)).length
-        const started = exercises.filter((e) => e.state !== 'NOT_STARTED').length
+        const graded = exercises.filter((e) => isExerciseDone(e.state)).length
+        const started = exercises.filter((e) => e.state !== AnswerStates.NOT_STARTED).length
         progressionSum += (100 * graded + 10 * (started - graded)) / exercises.length
       }
     })

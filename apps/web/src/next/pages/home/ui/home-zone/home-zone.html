@@ -1,0 +1,10 @@
+<div class="home-zone__head">
+  <h2 class="home-zone__title" tabindex="-1" [id]="headingId()" #title>{{ heading() }}</h2>
+  @if (count()) {
+  <pl-count [value]="count()" />
+  } @if (moreLink(); as link) {
+  <a class="home-zone__more" [routerLink]="link">{{ moreLabel() }}</a>
+  }
+</div>
+
+<div class="home-zone__body"><ng-content /></div>

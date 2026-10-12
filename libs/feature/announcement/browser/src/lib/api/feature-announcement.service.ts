@@ -1,8 +1,13 @@
 import { Injectable, signal, EventEmitter, OnDestroy, inject } from '@angular/core'
 import { User, UserRoles, isTeacherRole } from '@platon/core/common'
 import {
+  announcementStatsOf,
+  isOnDisplay,
+  readAnnouncementStats,
+  writeAnnouncementStats,
+} from '../models/announcement-display'
+import {
   AnnouncementDisplayStats,
-  STORAGE_KEY,
   MAX_DISPLAY_COUNT,
   MIN_INTERVAL_DAYS,
   TOTAL_PERIOD_DAYS,
@@ -52,42 +57,10 @@ export class FeatureAnnouncementService implements OnDestroy {
   }
 
   /**
-   * Vérifie si une annonce est encore valide temporellement
+   * Whether an announcement is still in its display window
    */
   private isAnnouncementStillValid(announcement: Announcement): boolean {
-    const now = new Date()
-
-    // Vérifier la date d'expiration explicite
-    if (announcement.displayUntil) {
-      const displayUntil = new Date(announcement.displayUntil)
-      if (now > displayUntil) {
-        return false
-      }
-    }
-
-    // Vérifier la durée d'affichage en jours
-    if (announcement.displayDurationInDays && announcement.createdAt) {
-      const createdAt = new Date(announcement.createdAt)
-      const durationMs = announcement.displayDurationInDays * MS_PER_DAY
-      const expirationDate = new Date(createdAt.getTime() + durationMs)
-
-      if (now > expirationDate) {
-        return false
-      }
-    }
-
-    // Si aucune date d'expiration n'est définie, utiliser TOTAL_PERIOD_DAYS
-    if (!announcement.displayUntil && !announcement.displayDurationInDays && announcement.createdAt) {
-      const createdAt = new Date(announcement.createdAt)
-      const defaultDurationMs = TOTAL_PERIOD_DAYS * MS_PER_DAY
-      const defaultExpirationDate = new Date(createdAt.getTime() + defaultDurationMs)
-
-      if (now > defaultExpirationDate) {
-        return false
-      }
-    }
-
-    return true
+    return isOnDisplay(announcement)
   }
 
   /**
@@ -271,57 +244,29 @@ export class FeatureAnnouncementService implements OnDestroy {
   }
 
   /**
-   * Nettoie les statistiques des annonces expirées du localStorage
+   * Forgets the stats of the announcements no longer shown
    */
   private cleanupExpiredAnnouncements(): void {
-    const stored = localStorage.getItem(STORAGE_KEY)
-    if (!stored) return
-
-    const allStats: Record<string, AnnouncementDisplayStats> = JSON.parse(stored)
     const validAnnouncementIds = new Set(this.announcements.map((a) => a.id))
-
-    // Filtrer les statistiques pour ne garder que celles des annonces encore valides
-    const cleanedStats: Record<string, AnnouncementDisplayStats> = {}
-
-    Object.entries(allStats).forEach(([announcementId, stats]) => {
-      // Garder les statistiques si l'annonce est encore valide
-      if (validAnnouncementIds.has(announcementId)) {
-        cleanedStats[announcementId] = stats
-      }
-    })
-
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(cleanedStats))
+    writeAnnouncementStats(
+      Object.fromEntries(Object.entries(readAnnouncementStats()).filter(([id]) => validAnnouncementIds.has(id)))
+    )
   }
 
   /**
-   * Supprime les statistiques d'une annonce du localStorage
+   * Forgets the stats of one announcement
    */
   private removeAnnouncementStats(announcementId: string): void {
-    const stored = localStorage.getItem(STORAGE_KEY)
-    if (!stored) return
-
-    const allStats: Record<string, AnnouncementDisplayStats> = JSON.parse(stored)
+    const allStats = readAnnouncementStats()
     delete allStats[announcementId]
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(allStats))
+    writeAnnouncementStats(allStats)
   }
 
   /**
-   * Récupère les statistiques d'affichage d'une annonce
+   * The display stats of one announcement
    */
   private getAnnouncementStats(announcementId: string): AnnouncementDisplayStats {
-    const stored = localStorage.getItem(STORAGE_KEY)
-    const allStats: Record<string, AnnouncementDisplayStats> = stored ? JSON.parse(stored) : {}
-
-    return (
-      allStats[announcementId] || {
-        announcementId,
-        firstShown: 0,
-        lastShown: 0,
-        timesShown: 0,
-        dismissed: false,
-        interacted: false,
-      }
-    )
+    return announcementStatsOf(readAnnouncementStats(), announcementId)
   }
 
   /**
@@ -362,14 +307,10 @@ export class FeatureAnnouncementService implements OnDestroy {
   }
 
   /**
-   * Sauvegarde les statistiques dans le localStorage
+   * Keeps the stats of one announcement
    */
   private saveAnnouncementStats(announcementId: string, stats: AnnouncementDisplayStats): void {
-    const stored = localStorage.getItem(STORAGE_KEY)
-    const allStats: Record<string, AnnouncementDisplayStats> = stored ? JSON.parse(stored) : {}
-
-    allStats[announcementId] = stats
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(allStats))
+    writeAnnouncementStats({ ...readAnnouncementStats(), [announcementId]: stats })
   }
 
   // Méthodes pour le debugging et testing
@@ -378,11 +319,10 @@ export class FeatureAnnouncementService implements OnDestroy {
   }
 
   resetAllAnnouncementStats(): void {
-    localStorage.removeItem(STORAGE_KEY)
+    writeAnnouncementStats({})
   }
 
   protected getAllAnnouncementStats(): Record<string, AnnouncementDisplayStats> {
-    const stored = localStorage.getItem(STORAGE_KEY)
-    return stored ? JSON.parse(stored) : {}
+    return readAnnouncementStats()
   }
 }

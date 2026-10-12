@@ -47,3 +47,15 @@ export const Tones: Story = {
     `,
   }),
 }
+
+export const Dismissible: Story = {
+  name: 'Dismissible, an announcement',
+  render: () => ({
+    template: `
+      <pl-alert icon="construction" dismissLabel="Hide the announcement">
+        <p><strong>Maintenance on Sunday 4 October, from 7 to 9 am.</strong> PLaTon is down for these two hours.</p>
+        <a href="#" plButton variant="ghost" size="sm" plAlertAction>Read the announcement</a>
+      </pl-alert>
+    `,
+  }),
+}

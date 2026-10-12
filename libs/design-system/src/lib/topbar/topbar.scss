@@ -1,0 +1,20 @@
+:host {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: var(--pl-layer-sticky);
+  display: flex;
+  align-items: center;
+  gap: var(--pl-space-2);
+  block-size: var(--pl-topbar-height);
+  padding: 0 var(--pl-space-2);
+  background: var(--pl-color-cover);
+  color: var(--pl-color-cover-text);
+}
+.pl-topbar__title {
+  flex: 1;
+  min-inline-size: 0;
+  overflow: hidden;
+  font: var(--pl-font-subheading);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

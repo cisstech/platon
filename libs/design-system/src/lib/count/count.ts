@@ -17,32 +17,8 @@ export type CountVariant = 'inline' | 'badge'
     '[attr.data-variant]': 'variant()',
     '[attr.aria-hidden]': "variant() === 'badge' ? 'true' : null",
   },
-  template: `{{ value() }}`,
-  styles: `
-    :host {
-      display: inline-grid;
-      place-items: center;
-      min-inline-size: 22px;
-      block-size: 20px;
-      padding: 0 var(--pl-space-1);
-      border-radius: var(--pl-radius-1);
-      background: var(--pl-color-hover);
-      color: var(--pl-color-muted);
-      font: var(--pl-font-caption);
-      font-variant-numeric: tabular-nums;
-      text-align: center;
-    }
-    :host([data-variant='badge']) {
-      position: absolute;
-      inset-block-start: 2px;
-      inset-inline-end: 0;
-      min-inline-size: var(--pl-icon-size-1);
-      block-size: var(--pl-icon-size-1);
-      border-radius: var(--pl-radius-pill);
-      background: var(--pl-color-cover-primary);
-      color: var(--pl-color-cover-primary-text);
-    }
-  `,
+  templateUrl: './count.html',
+  styleUrl: './count.scss',
 })
 export class Count {
   readonly value = input.required<number>()

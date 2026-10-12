@@ -1,0 +1,35 @@
+:host {
+  display: flex;
+  align-items: center;
+  gap: var(--pl-space-3);
+  inline-size: 100%;
+  min-block-size: 52px;
+  padding: 0 var(--pl-space-4);
+  border: 0;
+  border-block-end: 1px solid var(--pl-color-line);
+  background: none;
+  color: var(--pl-color-text);
+  font: var(--pl-font-body);
+  font-weight: var(--pl-weight-strong);
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+}
+:host(:last-child) {
+  border-block-end: 0;
+}
+:host(:hover) {
+  background: var(--pl-color-hover);
+}
+:host(:focus-visible) {
+  outline-offset: -2px;
+}
+.pl-sheet-item__icon {
+  color: var(--pl-color-muted);
+}
+.pl-sheet-item__label {
+  flex: 1;
+}
+.pl-sheet-item__trailing {
+  color: var(--pl-color-subtle);
+}

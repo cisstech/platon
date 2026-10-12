@@ -26,21 +26,8 @@ const SIZES: Record<IconSize, string> = {
     '[attr.aria-label]': 'label() || null',
     '[attr.aria-hidden]': "label() ? null : 'true'",
   },
-  template: `<svg focusable="false"><use [attr.href]="href()" /></svg>`,
-  styles: `
-    :host {
-      display: inline-flex;
-      flex: none;
-      inline-size: var(--pl-icon-size, 1em);
-      block-size: var(--pl-icon-size, 1em);
-      vertical-align: -0.125em;
-    }
-    svg {
-      inline-size: 100%;
-      block-size: 100%;
-      fill: currentColor;
-    }
-  `,
+  templateUrl: './icon.html',
+  styleUrl: './icon.scss',
 })
 export class Icon {
   readonly name = input.required<IconName>()

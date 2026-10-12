@@ -1,0 +1,7 @@
+<span class="pl-sheet-field__label">
+  @if (icon(); as icon) {
+  <pl-icon class="pl-sheet-field__icon" [name]="icon" [size]="3" />
+  }
+  {{ label() }}
+</span>
+<ng-content />
