@@ -9,33 +9,8 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core'
   selector: 'pl-topbar',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'pl-topbar', role: 'banner' },
-  template: `
-    <ng-content select="[plTopbarStart]" />
-    <span class="pl-topbar__title">{{ heading() }}</span>
-    <ng-content select="[plTopbarEnd]" />
-  `,
-  styles: `
-    :host {
-      position: sticky;
-      inset-block-start: 0;
-      z-index: var(--pl-layer-sticky);
-      display: flex;
-      align-items: center;
-      gap: var(--pl-space-2);
-      block-size: var(--pl-topbar-height);
-      padding: 0 var(--pl-space-2);
-      background: var(--pl-color-cover);
-      color: var(--pl-color-cover-text);
-    }
-    .pl-topbar__title {
-      flex: 1;
-      min-inline-size: 0;
-      overflow: hidden;
-      font: var(--pl-font-subheading);
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-  `,
+  templateUrl: './topbar.html',
+  styleUrl: './topbar.scss',
 })
 export class Topbar {
   /** The title of the page, as the browser tab shows it. */

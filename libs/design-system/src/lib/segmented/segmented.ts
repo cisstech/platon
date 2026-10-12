@@ -28,71 +28,8 @@ let lastGroupId = 0
     '[attr.aria-label]': 'label()',
     '[attr.data-size]': 'size()',
   },
-  template: `
-    @for (option of options(); track option.value) {
-    <label class="pl-segmented__option" [attr.data-checked]="option.value === value()">
-      <input
-        class="pl-segmented__input"
-        type="radio"
-        [name]="name"
-        [value]="option.value"
-        [checked]="option.value === value()"
-        (change)="value.set(option.value)"
-      />
-      @if (option.icon; as icon) {
-      <pl-icon [name]="icon" [size]="1" />
-      }
-      <span [class.pl-segmented__hidden]="option.iconOnly">{{ option.label }}</span>
-    </label>
-    }
-  `,
-  styles: `
-    :host {
-      display: inline-flex;
-      gap: calc(var(--pl-space-1) / 2);
-      padding: calc(var(--pl-space-1) / 2);
-      border-radius: var(--pl-radius-control);
-      background: var(--pl-color-hover);
-    }
-    .pl-segmented__option {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      gap: var(--pl-space-1);
-      block-size: 28px;
-      padding: 0 var(--pl-space-3);
-      border-radius: var(--pl-radius-1);
-      color: var(--pl-color-muted);
-      font: var(--pl-font-small);
-      font-weight: var(--pl-weight-strong);
-      cursor: pointer;
-    }
-    :host([data-size='lg']) .pl-segmented__option {
-      block-size: 44px;
-      font: var(--pl-font-body);
-      font-weight: var(--pl-weight-strong);
-    }
-    .pl-segmented__option[data-checked='true'] {
-      background: var(--pl-color-surface);
-      box-shadow: var(--pl-shadow-float);
-      color: var(--pl-color-text);
-    }
-    .pl-segmented__option:has(.pl-segmented__input:focus-visible) {
-      outline: 2px solid var(--pl-color-focus);
-      outline-offset: 1px;
-    }
-    .pl-segmented__input,
-    .pl-segmented__hidden {
-      position: absolute;
-      inline-size: 1px;
-      block-size: 1px;
-      margin: -1px;
-      overflow: hidden;
-      clip-path: inset(50%);
-      white-space: nowrap;
-      opacity: 0;
-    }
-  `,
+  templateUrl: './segmented.html',
+  styleUrl: './segmented.scss',
 })
 export class Segmented<T extends string = string> {
   readonly options = input.required<SegmentedOption<T>[]>()

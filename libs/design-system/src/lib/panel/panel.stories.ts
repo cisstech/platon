@@ -3,7 +3,9 @@ import { type Meta, type StoryObj, applicationConfig, moduleMetadata } from '@st
 import { Button } from '../button/button'
 import { Empty } from '../empty/empty'
 import { Icon } from '../icon/icon'
-import { NotificationItem, NotificationList, NotificationSkeleton } from '../notification/notification'
+import { NotificationItem } from '../notification/notification-item/notification-item'
+import { NotificationList } from '../notification/notification-list/notification-list'
+import { NotificationSkeleton } from '../notification/notification-skeleton/notification-skeleton'
 import { Panel } from './panel'
 
 const hoursAgo = (hours: number) => new Date(Date.now() - hours * 60 * 60_000)

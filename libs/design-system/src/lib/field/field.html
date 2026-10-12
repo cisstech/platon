@@ -1,0 +1,8 @@
+<div class="pl-field__head">
+  <label class="pl-field__label" [for]="control()?.id()">{{ label() }}</label>
+  <ng-content select="[plFieldAside]" />
+</div>
+<div class="pl-field__box">
+  <ng-content select="input[plInput]" />
+  <ng-content />
+</div>

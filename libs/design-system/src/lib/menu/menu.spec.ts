@@ -1,7 +1,10 @@
 import { Component } from '@angular/core'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { Button } from '../button/button'
-import { Menu, MenuGroup, MenuItem, MenuTrigger } from './menu'
+import { Menu } from './menu'
+import { MenuGroup } from './menu-group/menu-group'
+import { MenuItem } from './menu-item/menu-item'
+import { MenuTrigger } from './menu-trigger'
 
 @Component({
   imports: [Button, Menu, MenuItem, MenuTrigger],

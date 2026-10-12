@@ -1,0 +1,21 @@
+:host {
+  position: relative;
+  display: flex;
+  min-block-size: 124px;
+  padding: var(--pl-space-4) var(--pl-space-4) var(--pl-space-4) 0;
+  border: 1px solid var(--pl-color-line);
+  border-radius: var(--pl-radius-card);
+  background: var(--pl-color-surface);
+}
+.pl-copy-card-skeleton__margin {
+  flex: none;
+  inline-size: var(--pl-answer-margin);
+  border-inline-end: 2px solid var(--pl-color-margin);
+}
+.pl-copy-card-skeleton__body {
+  display: grid;
+  flex: 1;
+  align-content: start;
+  gap: var(--pl-space-2);
+  padding-inline-start: var(--pl-space-4);
+}

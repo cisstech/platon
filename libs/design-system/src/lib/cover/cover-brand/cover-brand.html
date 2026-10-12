@@ -1,0 +1,7 @@
+<img class="pl-cover-brand__logo" alt="" [src]="logoUrl" />
+<span class="pl-cover-brand__text">
+  <span class="pl-cover-brand__name"><ng-content /></span>
+  @if (institution()) {
+  {{ ' ' }}<span class="pl-cover-brand__institution">{{ institution() }}</span>
+  }
+</span>

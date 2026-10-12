@@ -1,0 +1,36 @@
+<div class="pl-empty__layout">
+  @if (icon(); as icon) {
+  <span class="pl-empty__pastille" [attr.data-tone]="tone()">
+    <pl-icon [name]="icon" [size]="4" />
+  </span>
+  } @else if (glyph(); as glyph) {
+  <pl-glyph class="pl-empty__glyph" [name]="glyph" [size]="2" />
+  } @else {
+  <svg class="pl-empty__illustration" viewBox="0 0 168 128" aria-hidden="true" focusable="false">
+    <rect class="e-paper" x="24" y="8" width="112" height="112" rx="6" stroke-width="2" />
+    <line class="e-margin" x1="52" y1="8" x2="52" y2="120" stroke-width="2" />
+    <line class="e-rule" x1="64" y1="40" x2="120" y2="40" stroke-width="3" stroke-linecap="round" />
+    <line class="e-rule" x1="64" y1="58" x2="112" y2="58" stroke-width="3" stroke-linecap="round" />
+    <line class="e-rule" x1="64" y1="76" x2="120" y2="76" stroke-width="3" stroke-linecap="round" />
+    <line class="e-rule" x1="64" y1="94" x2="96" y2="94" stroke-width="3" stroke-linecap="round" />
+    <g transform="rotate(-38 132 88)">
+      <rect class="e-warm" x="124" y="46" width="16" height="66" rx="2" />
+      <rect class="e-eraser" x="124" y="46" width="16" height="10" rx="2" />
+      <path class="e-wood" d="M124 112 L132 126 L140 112 Z" />
+      <path class="e-lead" d="M129 121 L132 126 L135 121 Z" />
+    </g>
+  </svg>
+  }
+  <div class="pl-empty__body">
+    @if (level() === 3) {
+    <h3 class="pl-empty__heading">{{ heading() }}</h3>
+    } @else {
+    <h2 class="pl-empty__heading">{{ heading() }}</h2>
+    }
+    <div class="pl-empty__text"><ng-content /></div>
+    <div class="pl-empty__actions"><ng-content select="[plEmptyAction]" /></div>
+    @if (code()) {
+    <p class="pl-empty__code">{{ code() }}</p>
+    }
+  </div>
+</div>

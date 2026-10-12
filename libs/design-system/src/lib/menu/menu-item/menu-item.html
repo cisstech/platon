@@ -1,0 +1,11 @@
+@if (glyph(); as glyph) {
+<pl-glyph [name]="glyph" />
+} @else if (icon(); as icon) {
+<pl-icon class="pl-menu-item__icon" [name]="icon" [size]="3" />
+}
+<span class="pl-menu-item__body">
+  <span class="pl-menu-item__title" [id]="titleId"><ng-content /></span>
+  @if (description()) {
+  <span class="pl-menu-item__description" [id]="descriptionId">{{ description() }}</span>
+  }
+</span>

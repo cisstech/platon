@@ -1,6 +1,8 @@
 import { type Meta, type StoryObj, moduleMetadata } from '@storybook/angular'
 import { Segmented } from '../segmented/segmented'
-import { Sheet, SheetField, SheetItem } from './sheet'
+import { Sheet } from './sheet'
+import { SheetField } from './sheet-field/sheet-field'
+import { SheetItem } from './sheet-item/sheet-item'
 
 const meta: Meta<Sheet> = {
   title: 'Components/Sheet',

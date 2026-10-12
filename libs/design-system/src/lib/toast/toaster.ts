@@ -2,23 +2,17 @@ import { LiveAnnouncer } from '@angular/cdk/a11y'
 import { DOCUMENT } from '@angular/common'
 import {
   ApplicationRef,
-  ChangeDetectionStrategy,
-  Component,
-  ElementRef,
   EnvironmentInjector,
   Injectable,
   InjectionToken,
-  Injector,
   TemplateRef,
-  afterNextRender,
   createComponent,
-  effect,
   inject,
   signal,
-  untracked,
 } from '@angular/core'
 import { IconName } from '../icon/icon-names'
-import { Toast, ToastTone } from './toast'
+import { ToastTone } from './toast'
+import { ToastStack } from './toast-stack/toast-stack'
 
 export const DEFAULT_TOAST_DURATION = 4000
 
@@ -71,7 +65,7 @@ export interface ToastOptions<T = unknown> {
 /** What holds the timers: the pointer over the stack, or the focus inside it. */
 export type ToastHold = 'pointer' | 'focus'
 
-interface ToastEntry {
+export interface ToastEntry {
   id: number
   options: ToastOptions
   context: ToastContext
@@ -151,110 +145,5 @@ export class Toaster {
     const stack = createComponent(ToastStack, { environmentInjector: this.injector })
     this.document.body.appendChild(stack.location.nativeElement)
     this.appRef.attachView(stack.hostView)
-  }
-}
-
-@Component({
-  selector: 'pl-toast-stack',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Toast],
-  host: {
-    role: 'region',
-    popover: 'manual',
-    '[attr.aria-label]': 'label',
-    '[style.--pl-toast-inset-start]': 'insetStart',
-    '(mouseenter)': "toaster.hold('pointer', true)",
-    '(mouseleave)': "toaster.hold('pointer', false)",
-    '(focusin)': "toaster.hold('focus', true)",
-    '(focusout)': 'focusLeft($event)',
-  },
-  template: `
-    @for (entry of toaster.toasts(); track entry.id) {
-    <pl-toast
-      [tone]="entry.options.tone ?? 'info'"
-      [title]="entry.options.title"
-      [message]="entry.options.message"
-      [template]="entry.options.template"
-      [context]="entry.context"
-      [actionLabel]="entry.options.action?.label"
-      [actionIcon]="entry.options.action?.icon"
-      [dismissLabel]="entry.options.dismissLabel"
-      (acted)="act(entry)"
-      (dismissed)="close(entry.ref)"
-    />
-    }
-  `,
-  styles: `
-    :host {
-      position: fixed;
-      inset: auto;
-      inset-block-end: var(--pl-space-6);
-      inset-inline-start: calc(var(--pl-toast-inset-start) + var(--pl-space-6));
-      z-index: var(--pl-layer-toast);
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: var(--pl-space-2);
-      max-inline-size: calc(100vw - var(--pl-toast-inset-start) - 2 * var(--pl-space-6));
-      margin: 0;
-      padding: 0;
-      overflow: visible;
-      border: 0;
-      background: none;
-      color: inherit;
-    }
-  `,
-})
-export class ToastStack {
-  protected readonly toaster = inject(Toaster)
-  protected readonly label = inject(TOAST_REGION_LABEL)
-  protected readonly insetStart = inject(TOAST_INSET_START)
-  private readonly host: HTMLElement = inject(ElementRef).nativeElement
-  private readonly injector = inject(Injector)
-
-  constructor() {
-    effect(() => {
-      const shown = this.toaster.toasts().length > 0
-      untracked(() => this.raise(shown))
-    })
-  }
-
-  /**
-   * Shows the stack again on each change: dialogs sit in the top layer, which ranks by the order
-   * things show, not by `z-index`, and a toast raised from a dialog must not hide under it.
-   */
-  private raise(shown: boolean): void {
-    const host = this.host as HTMLElement & { showPopover?: () => void; hidePopover?: () => void }
-    if (!host.showPopover || !host.hidePopover) return
-    if (host.matches(':popover-open')) host.hidePopover()
-    if (shown) host.showPopover()
-  }
-
-  protected focusLeft(event: FocusEvent): void {
-    if (!this.host.contains(event.relatedTarget as Node | null)) this.toaster.hold('focus', false)
-  }
-
-  /** Runs the toast's action, then closes it. */
-  protected act(entry: ToastEntry): void {
-    entry.options.action?.run()
-    this.close(entry.ref)
-  }
-
-  /**
-   * Closes a toast from its button. Browsers fire no `focusout` when the focused button goes away, so
-   * the focus moves to the next close button, or the focus hold is released.
-   */
-  protected close(toast: ToastRef): void {
-    const hadFocus = this.host.contains(this.host.ownerDocument.activeElement)
-    toast.dismiss()
-    if (!hadFocus) return
-    afterNextRender(
-      () => {
-        const next = this.host.querySelector<HTMLElement>('.pl-toast__dismiss')
-        if (next) next.focus()
-        else this.toaster.hold('focus', false)
-      },
-      { injector: this.injector }
-    )
   }
 }

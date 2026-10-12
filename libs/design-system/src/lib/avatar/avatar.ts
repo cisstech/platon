@@ -26,20 +26,8 @@ export const initialsOf = (person: AvatarPerson): string => {
     '[attr.aria-label]': 'label() || null',
     '[attr.aria-hidden]': "label() ? null : 'true'",
   },
-  template: `{{ initials() }}`,
-  styles: `
-    :host {
-      display: inline-grid;
-      flex: none;
-      place-items: center;
-      inline-size: 28px;
-      block-size: 28px;
-      border-radius: var(--pl-radius-pill);
-      background: var(--pl-plum-100);
-      color: var(--pl-plum-800);
-      font: var(--pl-font-caption);
-    }
-  `,
+  templateUrl: './avatar.html',
+  styleUrl: './avatar.scss',
 })
 export class Avatar {
   readonly person = input.required<AvatarPerson>()

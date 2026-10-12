@@ -1,8 +1,9 @@
 import { Component, signal } from '@angular/core'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { provideRouter } from '@angular/router'
-import { Button } from '../button/button'
-import { BREADCRUMB_LABEL, PageCrumb, PageFigure, PageHeader } from './page-header'
+import { Button } from '../../button/button'
+import { PageFigure } from '../page-figure/page-figure'
+import { BREADCRUMB_LABEL, PageCrumb, PageHeader } from './page-header'
 
 @Component({
   imports: [Button, PageFigure, PageHeader],

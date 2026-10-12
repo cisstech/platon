@@ -1,0 +1,23 @@
+@if (icon(); as icon) {
+<pl-icon class="pl-alert__icon" [name]="icon" [size]="3" />
+}
+<div class="pl-alert__body">
+  @if (heading()) {
+  <strong class="pl-alert__heading">{{ heading() }}</strong>
+  }
+  <ng-content />
+</div>
+<div class="pl-alert__action"><ng-content select="[plAlertAction]" /></div>
+@if (dismissLabel(); as label) {
+<button
+  type="button"
+  plButton
+  variant="icon"
+  size="sm"
+  class="pl-alert__close"
+  [attr.aria-label]="label"
+  (click)="dismissed.emit()"
+>
+  <pl-icon name="close" [size]="2" />
+</button>
+}

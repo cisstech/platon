@@ -1,34 +1,4 @@
-const MINUTE = 60_000
-const HOUR = 60 * MINUTE
-
-interface Formats {
-  readonly relative: Intl.RelativeTimeFormat
-  readonly weekday: Intl.DateTimeFormat
-  readonly dayMonth: Intl.DateTimeFormat
-  readonly dayMonthYear: Intl.DateTimeFormat
-}
-
-// Building an Intl formatter is costly next to formatting with it.
-const formats = new Map<string, Formats>()
-
-const formatsOf = (locale: string): Formats => {
-  let found = formats.get(locale)
-  if (!found) {
-    found = {
-      relative: new Intl.RelativeTimeFormat(locale, { numeric: 'auto', style: 'short' }),
-      weekday: new Intl.DateTimeFormat(locale, { weekday: 'long' }),
-      dayMonth: new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long' }),
-      dayMonthYear: new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long', year: 'numeric' }),
-    }
-    formats.set(locale, found)
-  }
-  return found
-}
-
-const startOfDay = (date: Date) => new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime()
-
-/** Calendar days, not periods of 24 h: 23:50 is « hier » at 00:10. */
-const daysBetween = (from: Date, to: Date) => Math.round((startOfDay(to) - startOfDay(from)) / (24 * HOUR))
+import { HOUR, MINUTE, daysBetween, formatsOf, toDate } from './calendar'
 
 /**
  * When something happened, in the language of `locale`, through the Intl APIs of the browser. In
@@ -37,8 +7,8 @@ const daysBetween = (from: Date, to: Date) => Math.round((startOfDay(to) - start
  * never quite agree.
  */
 export const relativeTime = (value: Date | string, locale: string, now = new Date()): string => {
-  const date = typeof value === 'string' ? new Date(value) : value
-  const { relative, weekday, dayMonth, dayMonthYear } = formatsOf(locale)
+  const date = toDate(value)
+  const { relative, weekday } = formatsOf(locale)
   const elapsed = Math.max(0, now.getTime() - date.getTime())
   const days = daysBetween(date, now)
 
@@ -50,5 +20,12 @@ export const relativeTime = (value: Date | string, locale: string, now = new Dat
   }
   if (days === 1) return relative.format(-1, 'day')
   if (days < 7) return weekday.format(date)
+  return calendarDay(date, locale, now)
+}
+
+/** A day of the calendar: « 22 septembre », with the year when it is not this one. */
+export const calendarDay = (value: Date | string, locale: string, now = new Date()): string => {
+  const date = toDate(value)
+  const { dayMonth, dayMonthYear } = formatsOf(locale)
   return date.getFullYear() === now.getFullYear() ? dayMonth.format(date) : dayMonthYear.format(date)
 }

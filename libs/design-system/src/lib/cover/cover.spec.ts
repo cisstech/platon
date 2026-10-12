@@ -1,7 +1,13 @@
 import { Component, signal } from '@angular/core'
 import { TestBed } from '@angular/core/testing'
 import { Router, RouterLink, provideRouter } from '@angular/router'
-import { Cover, CoverBrand, CoverCredit, CoverFoot, CoverItem, CoverNav, CoverProfile } from './cover'
+import { Cover } from './cover'
+import { CoverBrand } from './cover-brand/cover-brand'
+import { CoverCredit } from './cover-credit/cover-credit'
+import { CoverFoot } from './cover-foot/cover-foot'
+import { CoverItem } from './cover-item/cover-item'
+import { CoverNav } from './cover-nav/cover-nav'
+import { CoverProfile } from './cover-profile/cover-profile'
 
 @Component({ template: '' })
 class Blank {}

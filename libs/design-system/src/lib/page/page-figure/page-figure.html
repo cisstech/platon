@@ -1,0 +1,7 @@
+@if (icon(); as icon) {
+<pl-icon [name]="icon" [size]="1" />
+} @if (value() !== undefined) {
+<strong class="pl-page-figure__value">{{ value() }}</strong
+>{{ ' ' }}
+}
+<ng-content />

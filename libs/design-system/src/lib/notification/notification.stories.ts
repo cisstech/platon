@@ -1,7 +1,8 @@
 import { provideRouter, withHashLocation } from '@angular/router'
 import { type Meta, type StoryObj, applicationConfig, moduleMetadata } from '@storybook/angular'
 import { Button } from '../button/button'
-import { NotificationItem, NotificationList } from './notification'
+import { NotificationItem } from './notification-item/notification-item'
+import { NotificationList } from './notification-list/notification-list'
 
 const hoursAgo = (hours: number) => new Date(Date.now() - hours * 60 * 60_000)
 

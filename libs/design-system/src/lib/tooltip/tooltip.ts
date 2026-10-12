@@ -5,44 +5,12 @@ import {
   createRepositionScrollStrategy,
 } from '@angular/cdk/overlay'
 import { ComponentPortal } from '@angular/cdk/portal'
-import {
-  ChangeDetectionStrategy,
-  Component,
-  ComponentRef,
-  DestroyRef,
-  Directive,
-  ElementRef,
-  Injector,
-  effect,
-  inject,
-  input,
-} from '@angular/core'
+import { ComponentRef, DestroyRef, Directive, ElementRef, Injector, effect, inject, input } from '@angular/core'
 import { Placement, positionsFor } from '../overlay/placement'
+import { TooltipBubble } from './tooltip-bubble/tooltip-bubble'
 
 /** Hover delay before a tooltip shows; keyboard focus shows it at once. */
 export const TOOLTIP_DELAY = 500
-
-@Component({
-  selector: 'pl-tooltip-bubble',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { 'aria-hidden': 'true' },
-  template: `{{ text() }}`,
-  styles: `
-    :host {
-      display: block;
-      max-inline-size: 280px;
-      padding: var(--pl-space-1) var(--pl-space-2);
-      border-radius: var(--pl-radius-1);
-      background: var(--pl-color-text);
-      color: var(--pl-color-surface);
-      font: var(--pl-font-small);
-      pointer-events: none;
-    }
-  `,
-})
-export class TooltipBubble {
-  readonly text = input('')
-}
 
 /**
  * Shows a short text next to an element, on hover and on keyboard focus, never on touch. It shows
