@@ -153,7 +153,6 @@ v22.0.0
 - **Run the frontend server**: In a separate terminal, navigate to the project's root directory and start the frontend server by running the following script:
 
   ```sh
-  yarn graphql:generate
   yarn serve:web
   ```
 
@@ -220,9 +219,9 @@ The platform is built using a modern tech stack, ensuring high performance and r
 
 The platform is organized into four main components:
 
-- **Client-side (Front-end)**: The client-side application is built using Angular and provides a responsive and user-friendly interface for interacting with the platform. It consumes the GraphQL and REST APIs provided by the server-side application and handles user authentication, resource management, course and activity management, notifications, and LMS integration.
+- **Client-side (Front-end)**: The client-side application is built using Angular and provides a responsive and user-friendly interface for interacting with the platform. It consumes the REST API provided by the server-side application, with its server-sent event streams for live updates, and handles user authentication, resource management, course and activity management, notifications, and LMS integration.
 
-- **Server-side (Back-end)**: The server-side application is built using NestJS and provides a GraphQL API for interacting with the platform's data and services. It manages user authentication, resource management, course and activity management, notifications, and LMS integration. It also handles communication with the PostgreSQL database and Redis cache.
+- **Server-side (Back-end)**: The server-side application is built using NestJS and provides a REST API, with server-sent event streams for live updates, for interacting with the platform's data and services. It manages user authentication, resource management, course and activity management, notifications, and LMS integration. It also handles communication with the PostgreSQL database and Redis cache.
 
 - **Database and Cache**: PostgreSQL is used as the primary database for storing the platform's data, while Redis is used as a cache to improve performance and scalability.
   Modular Design
@@ -373,7 +372,6 @@ This document describes the environnement configuration for the application, inc
 | JWT_ACCESS_TOKEN_LIFETIME  | api      | Access token lifetime for JWT authentication.                                       | 7d                      |
 | JWT_REFRESH_TOKEN_LIFETIME | api      | Refresh token lifetime for JWT authentication.                                      | 7d                      |
 | FILES_CACHE_LIFETIME       | api      | Duration of cacheable files in seconds.                                             | 604800 (7 days)         |
-| GRAPHQL_PLAYGROUND         | api      | Enable/disable GraphQL Playground.                                                  | true                    |
 | SANDBOX_URL                | api      | Defines python sandbox url.                                                         | <http://localhost:7000> |
 | SANDBOX_ENV_LIFESPAN       | api      | Value in seconds that determins for how long node sandbox env files should be kept. | 604800 (7 days)         |
 | SERVER_NAME                | nginx    | Defines nginx server name.                                                          | localhost               |
@@ -407,11 +405,9 @@ This project is built using a variety of key libraries and frameworks that provi
 
 - **[PostgreSQL](https://www.postgresql.org/)**: PostgreSQL is a powerful, open-source object-relational database system. It is used in this project to store and manage the application's data. Docker is utilized to run PostgreSQL in a containerized environment, ensuring consistency across development and production environments.
 
-- **[Redis](https://redis.io/)**: Redis is an in-memory data structure store that can be used as a database, cache, and message broker. In this project, Redis is used as a cache service to improve the performance of the application by storing frequently accessed data in memory.
+- **[Redis](https://redis.io/)**: Redis is an in-memory data structure store that can be used as a database, cache, and message broker. In this project, Redis is used as a cache service to improve the performance of the application by storing frequently accessed data in memory. It also carries the live events, such as new notifications, between the instances of the API.
 
 - **[NestJS](https://nestjs.com/)**: NestJS is a progressive Node.js framework for building efficient, reliable, and scalable server-side applications. It is used in this project to create the API service, which handles the backend logic and communication with the PostgreSQL database and Redis cache.
-
-- **[NestJS GraphQL](https://docs.nestjs.com/graphql/quick-start)**: NestJS GraphQL is a module for NestJS that integrates the powerful [GraphQL](https://graphql.org/) query language into the framework. It allows the API service to expose a flexible and efficient GraphQL API for the frontend, enabling more precise and optimized data fetching.
 
 - **[Angular](https://angular.io/)**: Angular is a platform for building web applications with a declarative approach to building UI components. In this project, Angular is used to create the frontend application, which communicates with the NestJS API to provide a seamless user experience.
   In the development mode, the NestJS and Angular applications run on the host machine, while the Postgres, Redis, and other services run inside Docker containers. This hybrid approach allows for easier debugging and faster development, while still leveraging the benefits of containerization for the backend services.
@@ -433,10 +429,6 @@ The `bin` folder contains a collection of scripts to perform various tasks relat
 
   - `down.sh`: Stops the Docker containers.
   - `up.sh`: Starts the Docker containers. Use --prod to launch the containers with the docker-compose.prod.yml configuration and -d to run the containers in the background.
-
-- `/bin/graphql`: These scripts are used to generate GraphQL types based on the platform's schema.
-
-  - `build.sh`: Generates GraphQL types in the .graphql/types.ts folder from the schema.gql file.
 
 - `/bin/migration`: These scripts are used to manage TypeORM migrations.
 
@@ -568,8 +560,7 @@ graph TD
     D --> D1[Checkout Code]
     D --> D2[Setup Yarn]
     D --> D3[Set NX SHAs]
-    D --> D4[Generate GraphQL Types]
-    D --> D5[Run affected:build]
+    D --> D4[Run affected:build]
 
     E --> E1[Checkout Code]
     E --> E2[Setup Yarn]
@@ -605,8 +596,7 @@ This diagram provides a clear visual representation of the CI process as defined
 4. The Prepare job is a prerequisite for the other three jobs.
 5. Each job includes steps for checking out the code and setting up Yarn.
 6. The Build, Lint, and Test jobs use NX to determine affected projects and run their respective commands.
-7. The Build job includes an additional step to generate GraphQL types.
-8. The Test job includes a final step to upload coverage to Codecov.
+7. The Test job includes a final step to upload coverage to Codecov.
 
 #### Github Home page
 

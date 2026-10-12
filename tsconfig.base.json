@@ -84,7 +84,6 @@
       "@platon/feature/tests/server": ["./libs/feature/tests/server/src/index.ts"],
       "@platon/feature/tuto/browser": ["./libs/feature/tuto/browser/src/index.ts"],
       "@platon/feature/webcomponent": ["./libs/feature/webcomponent/src/index.ts"],
-      "@platon/graphql": ["./.graphql/types.ts"],
       "@platon/shared/server": ["./libs/shared/server/src/index.ts"],
       "@platon/shared/ui": ["./libs/shared/ui/src/index.ts"],
       "@platon/shared/utils": ["./libs/shared/utils/src/index.ts"],
@@ -95,7 +94,6 @@
     "ignoreDeprecations": "6.0"
   },
   "files": ["types/index.d.ts"],
-  "include": ["./.graphql/*.ts"],
   "exclude": ["node_modules", "tmp"],
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

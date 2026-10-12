@@ -43,18 +43,13 @@ RUN yarn install --immutable
 COPY --chown=node:node apps/docs/package.json apps/docs/yarn.lock ./apps/docs/
 RUN cd apps/docs && yarn install --immutable
 # Bundle app source
-COPY --chown=node:node .graphql ./.graphql
 COPY --chown=node:node apps ./apps
 COPY --chown=node:node libs ./libs
 COPY --chown=node:node types ./types
 COPY --chown=node:node nx.json  ./nx.json
 COPY --chown=node:node tools ./tools
-COPY --chown=node:node codegen.ts ./codegen.ts
-COPY --chown=node:node schema.gql ./schema.gql
 COPY --chown=node:node tsconfig.base.json  ./tsconfig.base.json
 COPY --chown=node:node bin/cli/wc-docs.sh ./bin/cli/wc-docs.sh
-# Generate GraphQL types
-RUN yarn graphql:generate
 
 # Build NestJS API, Angular web app and docs
 RUN NODE_OPTIONS="--max-old-space-size=8192" yarn build:web
@@ -93,7 +88,6 @@ COPY --chown=node:node --from=build /src/node_modules ./node_modules
 COPY --chown=node:node --from=build /src/dist/apps/api ./dist/apps/api
 COPY --chown=node:node --from=build /src/dist/migrations ./dist/migrations
 COPY --chown=node:node --from=build /src/dist/tools/datasource.prod.js ./dist/tools/datasource.prod.js
-COPY --chown=node:node --from=build /src/schema.gql ./schema.gql
 COPY --chown=node:node templates ./templates
 COPY --chown=node:node .docker/node/docker-entrypoint.sh ./docker-entrypoint.sh
 RUN chmod +x ./docker-entrypoint.sh

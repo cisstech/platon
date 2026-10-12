@@ -102,8 +102,6 @@ export default [
       'tmp',
       'CODEOWNERS',
       '**/pl.parser.ts',
-      '**/*.generated.ts',
-      '.graphql',
       'shared/external_libs',
       'migrations',
       'dumps',

@@ -40,7 +40,3 @@ runs:
       if: steps.cache.outputs.cache-hit != 'true'
       run: yarn install --immutable
       shell: bash
-
-    - name: Generate Graphql Types
-      shell: bash
-      run: ./bin/graphql/generate.sh

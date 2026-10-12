@@ -5,17 +5,14 @@
 /.angular
 /.github
 /.docker
-/.graphql
 /.vscode
 /tmp
 /node_modules
 /.yarn
-.gql
 /resources
 
 /.nx/cache
 
-**/*.generated.ts
 **/*.mdx
 .angular
 shared/external_libs
