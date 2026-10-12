@@ -1,0 +1,173 @@
+<pl-page [busy]="home.busy()">
+  <pl-page-header [heading]="home.heading()" [description]="description()">
+    @if (home.empty()) {
+    <pl-joy-mark plPageMark />
+    }
+  </pl-page-header>
+
+  @if (!home.ready()) {
+  <app-load-state
+    [phase]="home.phase()"
+    heading="Votre accueil n'a pas pu être chargé"
+    reassurance="Vos activités et les réponses que vous avez déjà validées sont enregistrées."
+    (retry)="home.retry()"
+  />
+  } @if (home.banner() && (!narrow() || home.empty())) {
+  <ng-container [ngTemplateOutlet]="announcement" />
+  } @if (home.empty()) {
+  <pl-empty heading="Aucun cours pour l'instant">
+    <p>
+      Vos enseignants vous inscrivent depuis Moodle, ou vous envoient un lien d'accès à un cours. Dès que c'est fait,
+      les activités à rendre apparaissent ici, triées par échéance.
+    </p>
+    <p>Vous avez reçu un lien&nbsp;? Ouvrez-le dans ce navigateur&nbsp;: votre session est déjà ouverte.</p>
+    <a plButton variant="secondary" plEmptyAction [href]="docsUrl" target="_blank" rel="noopener">
+      <pl-icon name="menu_book" />
+      Comment rejoindre un cours<span class="pl-visually-hidden">, dans un nouvel onglet</span>
+    </a>
+  </pl-empty>
+  } @else if (home.ready() || home.busy()) {
+  <div class="home__layout">
+    <div class="home__main">
+      <app-home-zone heading="À faire" headingId="home-todo" [count]="todo().length" #todoZone>
+        @if (todo().length) {
+        <pl-activity-list aria-labelledby="home-todo">
+          @for (row of todo(); track row.id) {
+          <pl-activity-row
+            [heading]="row.heading"
+            [context]="row.context"
+            [icon]="row.icon"
+            [hue]="row.hue"
+            [due]="row.due"
+            [dueTone]="row.dueTone"
+            [dueIcon]="row.dueIcon"
+            [done]="row.done"
+            [total]="row.total"
+            [progressText]="row.progressText"
+            [progressHint]="row.progressHint"
+            [action]="row.action"
+            [href]="row.href"
+            [button]="row.button"
+          />
+          }
+        </pl-activity-list>
+        } @else if (home.ready()) {
+        <p class="home__nothing">Rien à rendre pour l'instant.</p>
+        } @else if (home.loading()) {
+        <pl-activity-row-skeleton />
+        <pl-activity-row-skeleton />
+        <pl-activity-row-skeleton />
+        } @if (soon().length) {
+        <h3 class="home__label" id="home-soon">Bientôt</h3>
+        <pl-activity-list aria-labelledby="home-soon">
+          @for (row of soon(); track row.id) {
+          <pl-activity-row
+            [heading]="row.heading"
+            [context]="row.context"
+            [icon]="row.icon"
+            [hue]="row.hue"
+            [due]="row.due"
+            [dueTone]="row.dueTone"
+            [dueIcon]="row.dueIcon"
+            [detail]="row.detail"
+            [tag]="row.tag"
+            [tagIcon]="row.tagIcon"
+            [action]="row.action"
+            [href]="row.href"
+          />
+          }
+        </pl-activity-list>
+        }
+      </app-home-zone>
+
+      @if (home.banner() && narrow()) {
+      <ng-container [ngTemplateOutlet]="announcement" />
+      }
+
+      <app-home-zone heading="Résultats récents" headingId="home-results" plain #resultsZone>
+        @if (copies().length) {
+        <div class="home__copies">
+          @for (copy of copies(); track copy.id) {
+          <pl-copy-card
+            [heading]="copy.heading"
+            [context]="copy.context"
+            [hue]="copy.hue"
+            [date]="copy.date"
+            [grade]="copy.grade"
+            [gradeLabel]="copy.gradeLabel"
+            [state]="copy.state"
+            [stateIcon]="copy.stateIcon"
+            [action]="copy.action"
+            [actionIcon]="copy.actionIcon"
+            [href]="copy.href"
+          />
+          }
+        </div>
+        } @else if (home.ready()) {
+        <p class="home__nothing">Vos copies terminées apparaîtront ici.</p>
+        } @else if (home.loading()) {
+        <div class="home__copies">
+          <pl-copy-card-skeleton />
+          <pl-copy-card-skeleton />
+        </div>
+        }
+      </app-home-zone>
+    </div>
+
+    <aside class="home__side">
+      <app-home-zone heading="Mes cours" headingId="home-courses" moreLink="/courses" moreLabel="Tous">
+        @for (course of courses(); track course.id) {
+        <a class="home__entry" [routerLink]="course.href">
+          <span class="home__entry-name">{{ course.name }}</span>
+          @if (course.total) {
+          <span class="home__course-bar">
+            <pl-progress [value]="course.done" [max]="course.total" [hue]="course.hue" [done]="course.finished" />
+            <span class="home__course-percent"
+              ><span class="pl-visually-hidden">, </span>{{ course.percent }}&nbsp;%</span
+            >
+          </span>
+          }
+          <span class="pl-visually-hidden">, </span>
+          @if (course.finished) {
+          <span class="home__course-done">
+            <pl-icon name="task_alt" [size]="1" />
+            {{ course.progressText }}
+          </span>
+          } @else {
+          <span class="home__course-count">{{ course.progressText }}</span>
+          }
+        </a>
+        } @empty { @if (home.loading()) {
+        <div class="home__lines" aria-hidden="true">
+          <pl-skeleton width="80%" />
+          <pl-skeleton width="100%" />
+          <pl-skeleton width="55%" />
+          <pl-skeleton width="100%" />
+        </div>
+        } } @if (home.ready() && !narrow()) {
+        <div class="home__figures">
+          <h3 class="home__label" id="home-figures">Sur tous mes cours</h3>
+          <dl aria-labelledby="home-figures">
+            @for (figure of figures(); track figure.label) {
+            <div class="home__figure">
+              <dt>{{ figure.label }}</dt>
+              <dd>
+                {{ figure.value }}@if (figure.unit) {&nbsp;<small>{{ figure.unit }}</small
+                >}
+              </dd>
+            </div>
+            }
+          </dl>
+        </div>
+        }
+      </app-home-zone>
+    </aside>
+  </div>
+  }
+</pl-page>
+
+<ng-template #announcement>
+  @if (home.banner(); as banner) {
+  <app-home-banner class="home__announcement" [banner]="banner" (dismissed)="dismiss(banner.id)" />
+  }
+</ng-template>

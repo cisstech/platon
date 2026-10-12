@@ -6,7 +6,7 @@ import { PORTED_PATHS } from '../shared/ported-paths'
 import { Session } from './core/session/session'
 import { nextRoutes } from './next.routes'
 import { Login } from './pages/login/login'
-import { LoginApi } from './pages/login/login-api'
+import { LoginApi } from './pages/login/data/login-api'
 
 describe('nextRoutes', () => {
   it('serves exactly the ported addresses the current interface sends back, in the shell or out of it', () => {

@@ -5,10 +5,11 @@ import { LoadStatus } from '@platon/design-system'
 import { Notification } from '@platon/feature/notification/common'
 import { Subscription, firstValueFrom } from 'rxjs'
 import { NOTIFICATIONS_PAGE_SIZE, NotificationPage, NotificationsApi } from './notifications-api'
-import { InvitationAnswer, isSignal } from './notifications.vm'
+import { plural } from '../../../shared/plural'
+import { InvitationAnswer, isSignal } from '../notifications.vm'
 
 const deleteAllTitle = (total: number): string =>
-  total > 1 ? `Supprimer vos ${total} notifications\u00a0?` : 'Supprimer votre notification\u00a0?'
+  plural(total, 'Supprimer votre notification\u00a0?', `Supprimer vos ${total} notifications\u00a0?`)
 
 /**
  * The notifications of the person: the unread count from the start, kept live by the subscription,

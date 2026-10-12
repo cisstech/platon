@@ -28,6 +28,7 @@ import {
   ResourceInvitationNotification,
   ResourceStatusChangeEventData,
 } from '@platon/feature/resource/common'
+import { plural } from '../../shared/plural'
 
 /** What an invitation to collaborate needs to be accepted or declined. */
 export interface InvitationAnswer {
@@ -75,7 +76,7 @@ export const isSignal = (notification: Notification): boolean =>
   COURSE_SIGNAL_NOTIFICATIONS.includes(typeOf(notification) as string)
 
 /** What a count of unread notifications counts, read after it: « 1 non lue », « 3 non lues ». */
-export const unreadLabel = (count: number): string => (count > 1 ? 'non lues' : 'non lue')
+export const unreadLabel = (count: number): string => plural(count, 'non lue', 'non lues')
 
 /** About an activity: the course goes in the context line. About the course itself: the title names it. */
 const ofCourse = (

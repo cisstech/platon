@@ -1,10 +1,10 @@
 import { Injectable, inject, signal } from '@angular/core'
 import { LoadStatus } from '@platon/design-system'
 import { firstValueFrom } from 'rxjs'
-import { Connectivity } from '../../core/connectivity/connectivity'
-import { Session } from '../../core/session/session'
+import { Connectivity } from '../../../core/connectivity/connectivity'
+import { Session } from '../../../core/session/session'
 import { LoginApi } from './login-api'
-import { SignInFailure, failureOf } from './login.vm'
+import { SignInFailure, failureOf } from '../login.vm'
 
 /**
  * The sign-in page: the institution accounts, the sign-in at work, and why it failed. Provided by its

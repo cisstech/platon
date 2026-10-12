@@ -167,6 +167,7 @@
       Aide<span class="pl-visually-hidden">, s'ouvre dans un nouvel onglet</span>
     </a>
     }
+    <a plSheetItem [href]="legacyHref()" icon="undo">Revenir à l'interface actuelle</a>
     <pl-sheet-field label="Thème" icon="light_mode">
       <pl-segmented
         label="Thème"
@@ -207,6 +208,7 @@
     >
   </pl-menu-item>
   }
+  <pl-menu-item value="legacy" icon="undo">Revenir à l'interface actuelle</pl-menu-item>
   <pl-menu-separator />
   <pl-menu-group label="Thème">
     <pl-menu-item value="theme:light" role="menuitemradio" [checked]="theme.preference() === 'light'"

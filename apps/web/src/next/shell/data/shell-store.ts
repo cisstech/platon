@@ -2,7 +2,7 @@ import { Injectable, inject, signal } from '@angular/core'
 import { isTeacherRole } from '@platon/core/common'
 import { ActivityCorrectionSummary } from '@platon/feature/result/common'
 import { firstValueFrom } from 'rxjs'
-import { Session } from '../core/session/session'
+import { Session } from '../../core/session/session'
 import { ShellApi } from './shell-api'
 
 /**
@@ -20,6 +20,8 @@ export class ShellStore {
   readonly summaries = signal<ActivityCorrectionSummary[] | undefined>(undefined)
   readonly charterAccepted = signal(false)
   readonly circleId = signal<string | undefined>(undefined)
+  /** Set by a page whose data makes it offer the main creation action: the home of a teacher without a course. */
+  readonly quietCreate = signal(false)
 
   load(): void {
     const user = this.session.user()
