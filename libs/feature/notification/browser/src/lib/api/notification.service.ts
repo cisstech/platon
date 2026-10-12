@@ -1,235 +1,186 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { HttpClient } from '@angular/common/http'
 import { Injectable, inject } from '@angular/core'
-import { ApolloCache } from '@apollo/client/cache'
-import { Notification } from '@platon/feature/notification/common'
-import { BehaviorSubject, Observable, combineLatest } from 'rxjs'
-import { map } from 'rxjs/operators'
-import { decodeNotificationFragment } from '../models/notification.graphql'
+import { EventStreamClient, StreamEvent, StreamMessage, buildHttpParams } from '@platon/core/browser/shared'
+import { ItemResponse, ListResponse } from '@platon/core/common'
+import { Notification, NotificationChange, NotificationFilters } from '@platon/feature/notification/common'
 import {
-  DeleteAllNotificationsGQL,
-  DeleteNotificationGQL,
-  ListNotificationsGQL,
-  ListNotificationsQuery,
-  MarkAllAsReadGQL,
-  MarkAsReadGQL,
-  NotifFragment,
-  OnChangeNotificationsGQL,
-  OnChangeNotificationsSubscription,
-} from '../models/notification.graphql.generated'
+  Observable,
+  Subject,
+  Subscription,
+  defer,
+  filter,
+  finalize,
+  map,
+  retry,
+  share,
+  startWith,
+  tap,
+  timer,
+} from 'rxjs'
 import { NotificationPagination } from '../models/notification.model'
 
+const API = '/api/v1/notifications'
+
+/** What this service has just changed on the API, for the lists it keeps to show at once. */
+type LocalChange =
+  | { readonly kind: 'read'; readonly id: string }
+  | { readonly kind: 'all-read' }
+  | { readonly kind: 'deleted'; readonly id: string }
+  | { readonly kind: 'all-deleted' }
+
+const applyLocal = (notifications: Notification[], change: LocalChange): Notification[] => {
+  switch (change.kind) {
+    case 'read':
+      return notifications.map((item) =>
+        item.id === change.id ? { ...item, readAt: item.readAt ?? new Date() } : item
+      )
+    case 'all-read':
+      return notifications.map((item) => ({ ...item, readAt: item.readAt ?? new Date() }))
+    case 'deleted':
+      return notifications.filter((item) => item.id !== change.id)
+    case 'all-deleted':
+      return []
+  }
+}
+
+/** The notifications of the person signed in, read and changed through the REST API, kept live by its stream. */
 @Injectable({ providedIn: 'root' })
 export class NotificationService {
-  private readonly markAsReadGQL = inject(MarkAsReadGQL)
-  private readonly markAllAsReadGQL = inject(MarkAllAsReadGQL)
-  private readonly listNotificationsGQL = inject(ListNotificationsGQL)
-  private readonly deleteNotificationGQL = inject(DeleteNotificationGQL)
-  private readonly onChangeNotificationsGQL = inject(OnChangeNotificationsGQL)
-  private readonly deleteAllNotificationsGQL = inject(DeleteAllNotificationsGQL)
+  private readonly http = inject(HttpClient)
+  private readonly local = new Subject<LocalChange>()
+  /** The last unread count of the open stream, for a subscriber that arrives after it opened. */
+  private lastCount?: number
+  /** One connection for every subscriber, open while one listens. */
+  private readonly events = inject(EventStreamClient)
+    .open<NotificationChange>(`${API}/stream`)
+    .pipe(
+      finalize(() => (this.lastCount = undefined)),
+      share()
+    )
+  private readonly live: Observable<NotificationChange> = this.events.pipe(
+    filter(
+      (event: StreamEvent<NotificationChange>): event is StreamMessage<NotificationChange> =>
+        event.kind === 'message' && event.type === 'message'
+    ),
+    map((event) => event.data),
+    tap((change) => (this.lastCount = change.unreadCount))
+  )
+
+  /** The notifications a filter keeps, newest first. */
+  list(filters: NotificationFilters = {}): Observable<ListResponse<Notification>> {
+    return this.http.get<ListResponse<Notification>>(API, { params: buildHttpParams(filters) })
+  }
+
+  /** The unread notifications, signals left out. */
+  unreadCount(): Observable<number> {
+    return this.http.get<ItemResponse<number>>(`${API}/unread-count`).pipe(map((response) => response.resource))
+  }
 
   /**
-   * List the `limit` most recent notifications and subscribe to new notifications.
+   * The unread count when the stream opens, then after each change, with the notification that has
+   * just arrived. A subscriber that arrives while the stream is open starts with its last count.
+   */
+  changes(): Observable<NotificationChange> {
+    return defer(() => {
+      const known = this.lastCount
+      return known === undefined ? this.live : this.live.pipe(startWith({ unreadCount: known }))
+    })
+  }
+
+  /**
+   * The `limit` most recent notifications, signals included, kept up to date: each notification that
+   * arrives comes first, the changes made through this service show at once, and the first page is
+   * read again when the stream opens again, for what arrived while it was closed.
    *
-   * The emitted value will contains a fetchMore function to load more notifications from the last cursor.
-   *
-   * @param limit The maximum number of notifications to return (default to 20).
-   * @returns An observable of the list of notifications, the unread count and a function to fetch more notifications.
+   * The emitted value holds a `fetchMore` function that loads the next `limit` notifications.
+   * @param limit The number of notifications to load at a time (default to 20).
    */
   paginate(limit = 20): Observable<NotificationPagination> {
-    const pagination = this.listNotificationsGQL.watch({ filters: null, first: limit, after: null })
+    return new Observable<NotificationPagination>((subscriber) => {
+      let notifications: Notification[] = []
+      let total = 0
+      let unreadCount = 0
+      let loaded = false
 
-    const counter = new BehaviorSubject(0)
+      const emit = () => {
+        if (loaded) subscriber.next({ hasMore: notifications.length < total, unreadCount, fetchMore, notifications })
+      }
+      /** Adds the notifications of a page it does not hold yet, before or after the others. */
+      const merge = (page: ListResponse<Notification>, place: 'first' | 'last') => {
+        const known = new Set(notifications.map((item) => item.id))
+        const unknown = page.resources.filter((item) => !known.has(item.id))
+        notifications = place === 'first' ? [...unknown, ...notifications] : [...notifications, ...unknown]
+        total = page.total
+        loaded = true
+        emit()
+      }
+      const fetchMore = () => {
+        this.list({ offset: notifications.length, limit }).subscribe({
+          next: (page) => merge(page, 'last'),
+          error: console.error,
+        })
+      }
 
-    pagination.subscribeToMore<OnChangeNotificationsSubscription>({
-      document: this.onChangeNotificationsGQL.document,
-      updateQuery: (prev, payload) => {
-        if (!payload.subscriptionData.data) {
-          return prev
-        }
-
-        const change = payload.subscriptionData.data.onChangeNotifications
-        const pageInfo = prev.notifications?.pageInfo
-
-        counter.next(change.unreadCount)
-
-        return {
-          ...prev,
-          notifications: {
-            ...prev.notifications,
-            edges: [
-              ...(change.newNotification
-                ? [
-                    {
-                      node: change.newNotification,
-                      cursor: change.newNotification.id,
-                    },
-                  ]
-                : []),
-              ...(prev.notifications?.edges ?? []),
-            ],
-            pageInfo: {
-              ...pageInfo,
-              endCursor: pageInfo?.endCursor ?? null,
-              hasNextPage: pageInfo?.hasNextPage ?? false,
-            },
-          },
-        }
-      },
+      const subscription = new Subscription()
+      subscription.add(
+        this.list({ limit })
+          .pipe(retry({ delay: (_, attempt) => timer(Math.min(1_000 * 2 ** (attempt - 1), 30_000)) }))
+          .subscribe((page) => merge(page, 'last'))
+      )
+      subscription.add(
+        this.events.pipe(filter((event) => event.kind === 'opened' && loaded)).subscribe(() => {
+          this.list({ limit }).subscribe({ next: (page) => merge(page, 'first'), error: console.error })
+        })
+      )
+      subscription.add(
+        this.live.subscribe((change) => {
+          unreadCount = change.unreadCount
+          const { notification } = change
+          if (notification && !notifications.some((item) => item.id === notification.id)) {
+            notifications = [notification, ...notifications]
+            total++
+          }
+          emit()
+        })
+      )
+      subscription.add(
+        this.local.subscribe((change) => {
+          const kept = applyLocal(notifications, change)
+          total = change.kind === 'all-deleted' ? 0 : total - (notifications.length - kept.length)
+          notifications = kept
+          emit()
+        })
+      )
+      return subscription
     })
+  }
 
-    return combineLatest([pagination.valueChanges, counter]).pipe(
-      map(([queryResult, unreadCount]): NotificationPagination => {
-        const { edges, pageInfo } = queryResult.data.notifications
+  /** Marks a notification as read; emits `true` once the API has done it. */
+  markAsRead(id: string): Observable<boolean> {
+    return this.send(this.http.patch<void>(`${API}/${id}/read`, {}), { kind: 'read', id })
+  }
 
-        return {
-          hasMore: pageInfo.hasNextPage,
-          unreadCount,
-          fetchMore: () => {
-            pagination
-              .fetchMore({
-                variables: {
-                  after: pageInfo.endCursor,
-                },
-              })
-              .catch(console.error)
-          },
-          notifications: edges.map((edge) => decodeNotificationFragment(edge.node)),
-        }
+  /** Marks every notification as read; emits `true` once the API has done it. */
+  markAllAsRead(): Observable<boolean> {
+    return this.send(this.http.patch<void>(`${API}/read`, {}), { kind: 'all-read' })
+  }
+
+  /** Deletes a notification of the person; emits `true` once the API has answered, even if it was gone. */
+  deleteNotification(id: string): Observable<boolean> {
+    return this.send(this.http.delete<void>(`${API}/${id}`), { kind: 'deleted', id })
+  }
+
+  /** Deletes every notification of the person; emits `true` once the API has done it. */
+  deleteAllNotifications(): Observable<boolean> {
+    return this.send(this.http.delete<void>(API), { kind: 'all-deleted' })
+  }
+
+  private send(request: Observable<void>, change: LocalChange): Observable<boolean> {
+    return request.pipe(
+      map(() => {
+        this.local.next(change)
+        return true
       })
     )
-  }
-
-  /**
-   * List the most recent `limit` unread notifications.
-   * @param limit The maximum number of notifications to return (default to 5).
-   * @returns An observable of the list of notifications
-   */
-  listUnreads(limit = 5): Observable<Notification[]> {
-    const query = this.listNotificationsGQL.watch({
-      filters: { unread: true, excludeSignals: true },
-      first: limit,
-      after: null,
-    })
-
-    return query.valueChanges.pipe(
-      map((result) =>
-        result.data.notifications.edges
-          .filter((n) => !n.node.readAt)
-          .map((edge) => decodeNotificationFragment(edge.node))
-      )
-    )
-  }
-
-  /**
-   * Marks the notification identified by `id` as read.
-   * @remarks
-   * All the subcriptions to ({@link paginate}, {@link listUnreads}) will be notified of the change.
-   * @param id The notification id.
-   * @returns An observable of the success of the operation.
-   */
-  markAsRead(id: string): Observable<boolean> {
-    return this.markAsReadGQL
-      .mutate(
-        { id },
-        {
-          update: (store) => {
-            this.updateStore(store, (node) => (node.id === id ? { readAt: new Date().toISOString() } : node))
-          },
-        }
-      )
-      .pipe(map((result) => result!.data!.markAsRead))
-  }
-
-  /**
-   * Marks all the unread notifications as read.
-   * @remarks
-   * All the subcriptions to ({@link paginate}, {@link listUnreads}) will be notified of the change.
-   * @returns An observable of the success of the operation.
-   */
-  markAllAsRead(): Observable<boolean> {
-    return this.markAllAsReadGQL
-      .mutate(
-        {},
-        {
-          update: (store) => {
-            this.updateStore(store, (node) => ({
-              readAt: node.readAt ?? new Date().toISOString(),
-            }))
-          },
-        }
-      )
-      .pipe(map((result) => result!.data!.markAllAsRead))
-  }
-
-  /**
-   * Deletes the notification identified by `id`.
-   * @remarks
-   * All the subcriptions to ({@link paginate}, {@link listUnreads}) will be notified of the change.
-   * @param id The notification id.
-   * @returns An observable of the success of the operation.
-   */
-  deleteNotification(id: string): Observable<boolean> {
-    return this.deleteNotificationGQL
-      .mutate(
-        { id },
-        {
-          update: (store) => {
-            this.updateStore(store, (node) => (node.id === id ? undefined : node))
-          },
-        }
-      )
-      .pipe(map((result) => result!.data!.deleteNotification))
-  }
-
-  /**
-   * Deletes all the notifications.
-   * @remarks
-   * All the subcriptions to ({@link paginate}, {@link listUnreads}) will be notified of the change.
-   * @returns An observable of the success of the operation.
-   */
-  deleteAllNotifications(): Observable<boolean> {
-    return this.deleteAllNotificationsGQL
-      .mutate(
-        {},
-        {
-          update: (store) => {
-            this.updateStore(store, () => undefined)
-          },
-        }
-      )
-      .pipe(map((result) => result!.data!.deleteAllNotifications))
-  }
-
-  private updateStore(
-    store: ApolloCache<unknown>,
-    updater: (node: NotifFragment) => Partial<NotifFragment> | undefined
-  ) {
-    const data = store.readQuery<ListNotificationsQuery>({
-      query: this.listNotificationsGQL.document,
-    }) as ListNotificationsQuery
-
-    store.writeQuery({
-      query: this.listNotificationsGQL.document,
-      data: {
-        ...data,
-        notifications: {
-          ...data.notifications,
-          edges: data.notifications.edges
-            .map((edge) => {
-              const changes = updater(edge.node)
-              return changes
-                ? {
-                    ...edge,
-                    node: {
-                      ...edge.node,
-                      ...changes,
-                    },
-                  }
-                : undefined
-            })
-            .filter(Boolean),
-        },
-      } as ListNotificationsQuery,
-    })
   }
 }

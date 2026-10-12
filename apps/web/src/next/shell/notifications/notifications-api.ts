@@ -1,17 +1,11 @@
 import { Injectable, inject } from '@angular/core'
-import {
-  DeleteAllNotificationsGQL,
-  DeleteNotificationGQL,
-  ListNotificationsGQL,
-  MarkAllAsReadGQL,
-  MarkAsReadGQL,
-  OnChangeNotificationsGQL,
-  UnreadNotificationCountGQL,
-  decodeNotificationFragment,
-} from '@platon/feature/notification/browser/shared'
-import { Notification } from '@platon/feature/notification/common'
+import { MAX_PAGE_SIZE } from '@platon/core/common'
+import { NotificationService } from '@platon/feature/notification/browser/shared'
+import { Notification, NotificationChange } from '@platon/feature/notification/common'
 import { ResourceService } from '@platon/feature/resource/browser/shared'
-import { Observable, filter, map, switchMap } from 'rxjs'
+import { Observable, forkJoin, map, switchMap } from 'rxjs'
+
+export type { NotificationChange }
 
 /** As many as the current interface loads at a time. */
 export const NOTIFICATIONS_PAGE_SIZE = 20
@@ -25,72 +19,66 @@ export interface NotificationPage {
   readonly total: number
 }
 
-export interface NotificationChange {
-  readonly unreadCount: number
-  readonly notification?: Notification
-}
-
-/**
- * The notifications of the person, outside the Apollo cache: the store of the panel holds them, so
- * no cache policy of the current interface applies here.
- */
+/** The notifications of the person, for the panel: its store holds them, the API is only asked. */
 @Injectable({ providedIn: 'root' })
 export class NotificationsApi {
-  private readonly listGQL = inject(ListNotificationsGQL)
-  private readonly unreadCountGQL = inject(UnreadNotificationCountGQL)
-  private readonly changesGQL = inject(OnChangeNotificationsGQL)
-  private readonly markAsReadGQL = inject(MarkAsReadGQL)
-  private readonly markAllAsReadGQL = inject(MarkAllAsReadGQL)
-  private readonly deleteGQL = inject(DeleteNotificationGQL)
-  private readonly deleteAllGQL = inject(DeleteAllNotificationsGQL)
+  private readonly notifications = inject(NotificationService)
   private readonly resources = inject(ResourceService)
 
   unreadCount(): Observable<number> {
-    return this.unreadCountGQL
-      .fetch({}, { fetchPolicy: 'no-cache' })
-      .pipe(map((result) => result.data.unreadNotificationCount))
+    return this.notifications.unreadCount()
   }
 
-  /** The count after each change, with the notification that has just arrived, if any. */
+  /** The count when the stream opens and after each change, with the notification that has just arrived, if any. */
   changes(): Observable<NotificationChange> {
-    return this.changesGQL.subscribe().pipe(
-      map((result) => result.data?.onChangeNotifications),
-      filter((change) => !!change),
-      map((change) => ({
-        unreadCount: change.unreadCount,
-        notification: change.newNotification ? decodeNotificationFragment(change.newNotification) : undefined,
-      }))
+    return this.notifications.changes()
+  }
+
+  /**
+   * `first` notifications after the cursor, newest first, signals left out. The API gives at most
+   * 50 at a time, and loading a long list again after a deletion asks for more: the pages are then
+   * asked together.
+   */
+  page(after: string | null = null, first = NOTIFICATIONS_PAGE_SIZE): Observable<NotificationPage> {
+    const offset = after ? Number(after) : 0
+    const starts = Array.from(
+      { length: Math.ceil(first / MAX_PAGE_SIZE) },
+      (_, index) => offset + index * MAX_PAGE_SIZE
+    )
+    return forkJoin(
+      starts.map((start) =>
+        this.notifications.list({
+          excludeSignals: true,
+          offset: start,
+          limit: Math.min(MAX_PAGE_SIZE, offset + first - start),
+        })
+      )
+    ).pipe(
+      map((pages) => {
+        const received = pages.flatMap((page) => page.resources)
+        // A notification that arrives between two of the pages shifts the second one: one may repeat.
+        const notifications = received.filter((item, index) => received.findIndex(({ id }) => id === item.id) === index)
+        const end = offset + received.length
+        const total = pages[pages.length - 1].total
+        return { notifications, hasMore: end < total, cursor: String(end), total }
+      })
     )
   }
 
-  /** `first` notifications after the cursor, newest first, signals left out. */
-  page(after: string | null = null, first = NOTIFICATIONS_PAGE_SIZE): Observable<NotificationPage> {
-    return this.listGQL
-      .fetch({ filters: { unread: null, excludeSignals: true }, first, after }, { fetchPolicy: 'no-cache' })
-      .pipe(
-        map(({ data: { notifications } }) => ({
-          notifications: notifications.edges.map((edge) => decodeNotificationFragment(edge.node)),
-          hasMore: notifications.pageInfo.hasNextPage,
-          cursor: notifications.pageInfo.endCursor ?? null,
-          total: notifications.totalCount,
-        }))
-      )
-  }
-
   markAsRead(id: string): Observable<boolean> {
-    return this.markAsReadGQL.mutate({ id }).pipe(map((result) => result.data?.markAsRead ?? false))
+    return this.notifications.markAsRead(id)
   }
 
   markAllAsRead(): Observable<boolean> {
-    return this.markAllAsReadGQL.mutate().pipe(map((result) => result.data?.markAllAsRead ?? false))
+    return this.notifications.markAllAsRead()
   }
 
   delete(id: string): Observable<boolean> {
-    return this.deleteGQL.mutate({ id }).pipe(map((result) => result.data?.deleteNotification ?? false))
+    return this.notifications.deleteNotification(id)
   }
 
   deleteAll(): Observable<boolean> {
-    return this.deleteAllGQL.mutate().pipe(map((result) => result.data?.deleteAllNotifications ?? false))
+    return this.notifications.deleteAllNotifications()
   }
 
   /** Accepts or declines an invitation to collaborate on a resource; fails if it no longer exists. */

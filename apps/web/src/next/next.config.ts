@@ -1,7 +1,7 @@
 import { HTTP_INTERCEPTORS } from '@angular/common/http'
-import { ApplicationConfig, importProvidersFrom } from '@angular/core'
+import { ApplicationConfig } from '@angular/core'
 import { provideRouter, withComponentInputBinding } from '@angular/router'
-import { AuthProviders, DialogService, GraphQLModule, HttpParamEncoderInterceptor } from '@platon/core/browser/shared'
+import { AuthProviders, DialogService, HttpParamEncoderInterceptor } from '@platon/core/browser/shared'
 import { BREADCRUMB_LABEL, TOAST_INSET_START } from '@platon/design-system'
 import { CAS_PROVIDERS } from '@platon/feature/cas/browser/shared'
 import { RESOURCE_PROVIDERS } from '@platon/feature/resource/browser/shared'
@@ -18,7 +18,6 @@ export const nextConfig = (context: UiBootContext): ApplicationConfig => ({
     provideRouter(nextRoutes, withComponentInputBinding()),
     { provide: HTTP_INTERCEPTORS, useClass: HttpParamEncoderInterceptor, multi: true },
     AuthProviders,
-    importProvidersFrom(GraphQLModule),
     RESULT_PROVIDERS,
     RESOURCE_PROVIDERS,
     CAS_PROVIDERS,
