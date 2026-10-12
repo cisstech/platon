@@ -55,9 +55,9 @@ export function createDefaultApollo(httpLink: HttpLink, tokenService: TokenServi
     createClient({
       url: `wss://${location.host}/api/graphql`,
       shouldRetry: () => true,
-      connectionParams: () => ({
-        Authorization: `Bearer ${tokenService.tokenSync()?.accessToken}`,
-      }),
+      // Each (re)connection takes a fresh token: the subscription is checked only when it starts.
+      connectionParams: () =>
+        tokenService.fresh().then((token) => (token ? { Authorization: `Bearer ${token.accessToken}` } : {})),
     })
   )
 
