@@ -1,5 +1,5 @@
 import { Announcement } from '@platon/feature/announcement/common'
-import { AnnouncementDisplayStats, MS_PER_DAY, STORAGE_KEY, TOTAL_PERIOD_DAYS } from './data-storage.model'
+import { MS_PER_DAY, TOTAL_PERIOD_DAYS } from './data-storage.model'
 
 /**
  * Whether an announcement is still shown: until its display end, for its display duration after its
@@ -17,35 +17,26 @@ export const isOnDisplay = (
   return announcement.displayUntil ? true : !after(TOTAL_PERIOD_DAYS)
 }
 
-/** What this browser remembers of the announcements shown to its person, empty when it cannot read it. */
-export const readAnnouncementStats = (): Record<string, AnnouncementDisplayStats> => {
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY)
-    return stored ? JSON.parse(stored) : {}
-  } catch {
-    return {}
-  }
-}
+/** The kind « Maintenance » speaks of the availability of the service. */
+export const isServiceAnnouncement = (announcement: Pick<Announcement, 'icon'>) => announcement.icon === 'tool'
 
-/** Keeps what this browser remembers of the announcements; a storage it cannot write keeps nothing. */
-export const writeAnnouncementStats = (stats: Record<string, AnnouncementDisplayStats>): void => {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(stats))
-  } catch {
-    return
-  }
-}
+/**
+ * Unread: still on display, and neither opened nor closed in a banner by the person, as the server
+ * says or during this visit (`read`). Past its window, an announcement is never unread.
+ */
+export const isUnread = (announcement: Announcement, read: ReadonlySet<string>, now: Date) =>
+  isOnDisplay(announcement, now) && !announcement.readAt && !read.has(announcement.id)
 
-/** The stats of one announcement, those of an announcement never shown when the browser has none. */
-export const announcementStatsOf = (
-  stats: Record<string, AnnouncementDisplayStats>,
-  announcementId: string
-): AnnouncementDisplayStats =>
-  stats[announcementId] ?? {
-    announcementId,
-    firstShown: 0,
-    lastShown: 0,
-    timesShown: 0,
-    dismissed: false,
-    interacted: false,
-  }
+const createdAt = (announcement: Announcement) => new Date(announcement.createdAt).getTime()
+
+/** The announcement of a banner: an unread one, about the service before any other, then the most recent. */
+export const bannerAnnouncement = (
+  announcements: Announcement[],
+  read: ReadonlySet<string>,
+  now: Date
+): Announcement | undefined =>
+  announcements
+    .filter((announcement) => isUnread(announcement, read, now))
+    .sort(
+      (a, b) => Number(isServiceAnnouncement(b)) - Number(isServiceAnnouncement(a)) || createdAt(b) - createdAt(a)
+    )[0]

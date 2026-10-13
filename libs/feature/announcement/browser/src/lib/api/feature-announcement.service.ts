@@ -1,11 +1,7 @@
 import { Injectable, signal, EventEmitter, OnDestroy, inject } from '@angular/core'
 import { User, UserRoles, isTeacherRole } from '@platon/core/common'
-import {
-  announcementStatsOf,
-  isOnDisplay,
-  readAnnouncementStats,
-  writeAnnouncementStats,
-} from '../models/announcement-display'
+import { isOnDisplay } from '../models/announcement-display'
+import { announcementStatsOf, readAnnouncementStats, writeAnnouncementStats } from '../models/announcement-stats'
 import {
   AnnouncementDisplayStats,
   MAX_DISPLAY_COUNT,

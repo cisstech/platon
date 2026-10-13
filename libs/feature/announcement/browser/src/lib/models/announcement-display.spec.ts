@@ -1,4 +1,5 @@
-import { isOnDisplay, readAnnouncementStats, writeAnnouncementStats } from './announcement-display'
+import { Announcement } from '@platon/feature/announcement/common'
+import { bannerAnnouncement, isOnDisplay, isServiceAnnouncement, isUnread } from './announcement-display'
 
 const NOW = new Date('2026-10-12T08:00:00Z')
 const daysAgo = (days: number) => new Date(NOW.getTime() - days * 24 * 3600 * 1000)
@@ -20,25 +21,53 @@ describe('isOnDisplay', () => {
   })
 })
 
-describe('announcement stats', () => {
-  beforeEach(() => localStorage.clear())
+// A Monday afternoon, in the local time of the machine running the tests.
+const AFTERNOON = new Date(2026, 8, 28, 14, 30)
+const at = (day: number, month = 8) => new Date(2026, month, day, 9)
+const announcement = (id: string, createdAt: Date, values: Partial<Announcement> = {}) =>
+  ({ id, title: `Annonce ${id}`, description: 'Texte', createdAt, active: true, ...values } as Announcement)
 
-  it('keeps what this browser remembers of the announcements', () => {
-    writeAnnouncementStats({
-      n1: { announcementId: 'n1', firstShown: 1, lastShown: 1, timesShown: 1, dismissed: true, interacted: false },
-    })
+describe('isServiceAnnouncement', () => {
+  it('holds for the kind Maintenance only', () => {
+    expect(isServiceAnnouncement({ icon: 'tool' })).toBe(true)
+    expect(isServiceAnnouncement({ icon: 'warning' })).toBe(false)
+    expect(isServiceAnnouncement({})).toBe(false)
+  })
+})
 
-    expect(readAnnouncementStats()).toEqual({ n1: expect.objectContaining({ dismissed: true }) })
+describe('isUnread', () => {
+  it('holds for an announcement on display that the person has not read', () => {
+    expect(isUnread(announcement('a', at(27)), new Set(), AFTERNOON)).toBe(true)
   })
 
-  it('remembers nothing, without failing, when the storage is unusable or holds something else', () => {
-    localStorage.setItem('platon-feature-announcements', '{not json')
-    expect(readAnnouncementStats()).toEqual({})
+  it('does not hold once read, on the server or during this visit', () => {
+    expect(isUnread(announcement('a', at(27), { readAt: at(28) }), new Set(), AFTERNOON)).toBe(false)
+    expect(isUnread(announcement('a', at(27)), new Set(['a']), AFTERNOON)).toBe(false)
+  })
 
-    const setItem = jest.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
-      throw new Error('denied')
-    })
-    expect(() => writeAnnouncementStats({})).not.toThrow()
-    setItem.mockRestore()
+  it('never holds past the display window, read or not', () => {
+    expect(isUnread(announcement('a', at(28, 7)), new Set(), AFTERNOON)).toBe(false)
+  })
+})
+
+describe('bannerAnnouncement', () => {
+  it('offers an announcement of the service before any other, then the most recent', () => {
+    const list = [
+      announcement('recent', at(27)),
+      announcement('service', at(25), { icon: 'tool' }),
+      announcement('older', at(20)),
+    ]
+
+    expect(bannerAnnouncement(list, new Set(), AFTERNOON)?.id).toBe('service')
+    expect(bannerAnnouncement(list, new Set(['service']), AFTERNOON)?.id).toBe('recent')
+  })
+
+  it('offers only an unread one on display', () => {
+    const list = [
+      announcement('read', at(27), { readAt: at(27) }),
+      announcement('expired', at(27), { displayUntil: at(28, 7) }),
+    ]
+
+    expect(bannerAnnouncement(list, new Set(), AFTERNOON)).toBeUndefined()
   })
 })
