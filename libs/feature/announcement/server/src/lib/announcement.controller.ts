@@ -64,6 +64,13 @@ export class AnnouncementController {
     return new ItemResponse({ resource: Mapper.map(announcement, AnnouncementDTO) })
   }
 
+  /** The person has read it: opened it, or closed its banner. Only an announcement meant for them. */
+  @Roles(UserRoles.admin, UserRoles.teacher, UserRoles.student, UserRoles.demo)
+  @Patch(':id/read')
+  async markAsRead(@Req() req: IRequest, @UUIDParam('id') id: string): Promise<void> {
+    await this.service.markAsRead(id, req.user.id, req.user.role)
+  }
+
   @Roles(UserRoles.admin)
   @Get(':id')
   async findById(@UUIDParam('id') id: string): Promise<ItemResponse<AnnouncementDTO>> {
