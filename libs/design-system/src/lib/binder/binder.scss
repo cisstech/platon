@@ -1,0 +1,145 @@
+:host {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--pl-color-line);
+  border-radius: var(--pl-radius-card);
+  background: var(--pl-color-surface);
+  color: var(--pl-color-text);
+  transition: box-shadow var(--pl-duration-hover) var(--pl-ease-standard),
+    transform var(--pl-duration-hover) var(--pl-ease-standard);
+}
+:host(:hover) {
+  box-shadow: var(--pl-shadow-float);
+  transform: translateY(-2px);
+}
+:host([data-compact]) {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--pl-space-3);
+  padding: var(--pl-space-4);
+}
+
+/* The tab of the binder, above its cover. */
+.pl-binder__tab {
+  position: absolute;
+  inset-block-start: calc(-1 * var(--pl-space-2) - 2px);
+  inset-inline-start: var(--pl-space-5);
+  inline-size: 64px;
+  block-size: var(--pl-space-3);
+  border-radius: var(--pl-radius-1) var(--pl-radius-1) 0 0;
+  background: var(--pl-hue-strong);
+}
+/* Above the body, read after it: the name of the course comes before its badge. */
+.pl-binder__cover {
+  order: -1;
+  display: flex;
+  align-items: flex-end;
+  gap: var(--pl-space-3);
+  block-size: 92px;
+  padding: var(--pl-space-4);
+  border-radius: var(--pl-radius-card) var(--pl-radius-card) 0 0;
+  background: repeating-linear-gradient(0deg, transparent 0 23px, var(--pl-color-ruling) 23px 24px), var(--pl-hue-tint);
+  color: var(--pl-hue-ink);
+}
+.pl-binder__monogram {
+  font: var(--pl-font-display);
+  letter-spacing: var(--pl-tracking-display);
+}
+/* Above the link that covers the binder, so that it opens what it says. */
+.pl-binder__badge {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--pl-space-1);
+  min-block-size: 24px;
+  margin-inline-start: auto;
+  padding: 0 var(--pl-space-2);
+  border-radius: var(--pl-radius-pill);
+  background: var(--pl-color-surface);
+  color: var(--pl-color-text);
+  font: var(--pl-font-caption);
+  text-decoration: none;
+}
+.pl-binder__badge pl-icon {
+  color: var(--pl-hue-ink);
+}
+.pl-binder__badge:hover {
+  text-decoration: underline;
+}
+.pl-binder__badge:focus-visible {
+  outline: 2px solid var(--pl-color-focus);
+  outline-offset: 2px;
+}
+.pl-binder__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--pl-space-2);
+  min-inline-size: 0;
+  padding: var(--pl-space-4);
+}
+:host([data-compact]) .pl-binder__body {
+  /* The title runs beside the actions, not under them. */
+  padding: 0 var(--pl-space-8) 0 0;
+}
+.pl-binder__title {
+  margin: 0;
+  font: var(--pl-font-heading);
+  overflow-wrap: anywhere;
+}
+:host([data-compact]) .pl-binder__title {
+  font: var(--pl-font-subheading);
+}
+.pl-binder__link {
+  color: inherit;
+  text-decoration: none;
+}
+/* The link covers the whole binder: a click anywhere on it opens the course. */
+.pl-binder__link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--pl-radius-card);
+}
+.pl-binder__link:focus-visible {
+  outline: none;
+}
+.pl-binder__link:focus-visible::after {
+  outline: 2px solid var(--pl-color-focus);
+  outline-offset: 2px;
+}
+.pl-binder__description {
+  display: -webkit-box;
+  margin: 0;
+  overflow: hidden;
+  color: var(--pl-color-muted);
+  font: var(--pl-font-small);
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.pl-binder__foot {
+  margin-block-start: auto;
+  padding-block-start: var(--pl-space-3);
+  border-block-start: 1px solid var(--pl-color-line);
+  color: var(--pl-color-muted);
+  font: var(--pl-font-small);
+}
+:host([data-compact]) .pl-binder__foot {
+  padding-block-start: 0;
+  border-block-start: 0;
+}
+.pl-binder__actions {
+  position: absolute;
+  z-index: 1;
+  inset-block-start: var(--pl-space-2);
+  inset-inline-end: var(--pl-space-2);
+  color: var(--pl-hue-ink);
+}
+:host([data-compact]) .pl-binder__actions {
+  color: var(--pl-color-muted);
+}
+.pl-binder__actions:empty {
+  display: none;
+}

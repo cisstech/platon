@@ -30,6 +30,11 @@
     }
   </div>
   } @if (list.hasMore()) {
-  <app-announcement-more [state]="list.store.more()" (asked)="list.showMore()" />
+  <app-show-more
+    [state]="list.store.more()"
+    label="Afficher les annonces plus anciennes"
+    failure="Les annonces plus anciennes n'ont pas pu être chargées."
+    (asked)="list.showMore()"
+  />
   } }
 </div>

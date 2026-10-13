@@ -103,6 +103,30 @@ describe('CourseController', () => {
     })
   })
 
+  describe('search, whose courses', () => {
+    const searched = () => (courseService.search as jest.Mock).mock.calls[0][0]
+
+    beforeEach(() => jest.spyOn(courseService, 'search').mockResolvedValue([[], 0]))
+
+    it('lists the courses of the person only, whatever members the address adds', async () => {
+      const req = { user: { id: 'ines', role: UserRoles.student } } as IRequest
+
+      await controller.search(req, { members: ['karim'], showAll: true } as CourseFiltersDTO)
+
+      expect(searched().members).toEqual(['ines'])
+      expect(searched().showAll).toBe(false)
+    })
+
+    it('lets an administrator list the courses of other people, or of the whole platform', async () => {
+      const req = { user: { id: 'sophie', role: UserRoles.admin } } as IRequest
+
+      await controller.search(req, { members: ['karim'], showAll: true } as CourseFiltersDTO)
+
+      expect(searched().members).toEqual(['sophie', 'karim'])
+      expect(searched().showAll).toBe(true)
+    })
+  })
+
   describe('find', () => {
     it('should return a course', async () => {
       const req: IRequest = { user: { id: 'user1', role: UserRoles.teacher } } as IRequest

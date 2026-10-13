@@ -12,21 +12,9 @@ import { RESOURCE_STATUS_NAMES, RESOURCE_TYPE_NAMES } from '@platon/feature/reso
 import { Resource, ResourceStatus, ResourceTypes } from '@platon/feature/resource/common'
 import { ActivityCorrectionSummary } from '@platon/feature/result/common'
 import { copiesToCorrect, pendingCopies } from '../../../shared/copies'
+import { byDeadline, byOpening, closingDue, DueView, openingDue } from '../../../shared/due'
 import { plural } from '../../../shared/plural'
-import {
-  ActivityRowView,
-  byDeadline,
-  byOpening,
-  closesThisWeek,
-  closingDue,
-  closingThisWeek,
-  DueView,
-  gradedTag,
-  iconOf,
-  openingDue,
-  rowOf,
-  today,
-} from '../home.vm'
+import { ActivityRowView, closesThisWeek, closingThisWeek, gradedTag, iconOf, rowOf, today } from '../home.vm'
 
 /** « Vu récemment » shows the first ones of the list of Resources. */
 const VIEWED = 3

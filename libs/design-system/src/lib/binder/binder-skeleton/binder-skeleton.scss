@@ -1,0 +1,17 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--pl-color-line);
+  border-radius: var(--pl-radius-card);
+  background: var(--pl-color-surface);
+}
+.pl-binder-skeleton__cover {
+  block-size: 92px;
+  border-radius: var(--pl-radius-card) var(--pl-radius-card) 0 0;
+  background: var(--pl-color-skeleton);
+}
+.pl-binder-skeleton__body {
+  display: grid;
+  gap: var(--pl-space-3);
+  padding: var(--pl-space-4);
+}

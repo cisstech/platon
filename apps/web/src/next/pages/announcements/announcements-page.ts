@@ -1,6 +1,4 @@
-import { LiveAnnouncer } from '@angular/cdk/a11y'
-import { afterRenderEffect, computed, effect, inject, LOCALE_ID, Signal, untracked } from '@angular/core'
-import { plural } from '../../shared/plural'
+import { afterRenderEffect, computed, inject, LOCALE_ID, Signal } from '@angular/core'
 import { UNREAD_LABEL } from '../../shared/unread'
 import { announcementView, detailView, noMatch } from './announcements.vm'
 import { AnnouncementsStore } from './data/announcements-store'
@@ -53,20 +51,4 @@ export const announcementsList = (items: Signal<readonly Focusable[]>) => {
       store.loadMore()
     },
   }
-}
-
-/** Tells screen readers what a search found, once the server has answered it. Call it in an injection context. */
-export const announceSearches = (store: AnnouncementsStore): void => {
-  const announcer = inject(LiveAnnouncer)
-  let answered: string | undefined
-  effect(() => {
-    if (store.status() !== 'ready') return
-    const search = store.searched()
-    if (answered !== undefined && search !== answered) {
-      const total = untracked(store.total)
-      const said = total ? `${total} ${plural(total, 'annonce', 'annonces')}` : noMatch(search)
-      announcer.announce(said, 'polite').catch(console.error)
-    }
-    answered = search
-  })
 }

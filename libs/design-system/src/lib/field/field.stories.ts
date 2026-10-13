@@ -71,3 +71,16 @@ export const Search: Story = {
     `,
   }),
 }
+
+export const Lines: Story = {
+  name: 'Several lines',
+  render: () => ({
+    template: `
+      <div class="story-form">
+        <pl-field label="Description">
+          <textarea plInput rows="3" placeholder="Level, semester, what the course covers."></textarea>
+        </pl-field>
+      </div>
+    `,
+  }),
+}

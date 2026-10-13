@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing'
-import { Router, provideRouter, withComponentInputBinding } from '@angular/router'
+import { Route, Router, provideRouter, withComponentInputBinding } from '@angular/router'
 import { RouterTestingHarness } from '@angular/router/testing'
 import { of } from 'rxjs'
 import { PORTED_PATHS } from '../shared/ported-paths'
@@ -31,5 +31,18 @@ describe('nextRoutes', () => {
     expect(await harness.navigateByUrl('/login?next=%2Fcourses', Login)).toBeInstanceOf(Login)
     expect(TestBed.inject(Router).url).toBe('/login?next=%2Fcourses')
     expect(harness.fixture.nativeElement.querySelector('app-shell')).toBeNull()
+  })
+
+  it('opens the list of courses with its creation dialog at the address of the creation', async () => {
+    const shell = nextRoutes.find((route) => route.path === '')
+    const creation = shell?.children?.find((route) => route.path === 'courses/create') as Route
+    TestBed.configureTestingModule({
+      providers: [provideRouter([{ path: 'courses', children: [] }, creation], withComponentInputBinding())],
+    })
+    const router = TestBed.inject(Router)
+
+    await router.navigateByUrl('/courses/create')
+
+    expect(router.url).toBe('/courses?create=true')
   })
 })

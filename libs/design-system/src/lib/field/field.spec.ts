@@ -31,6 +31,9 @@ import { PasswordReveal } from './password-reveal'
     <pl-field label="Rechercher une annonce" icon="search" labelHidden>
       <input plInput type="search" placeholder="Rechercher une annonce" />
     </pl-field>
+    <pl-field label="Description">
+      <textarea plInput rows="3"></textarea>
+    </pl-field>
   `,
 })
 class Host {
@@ -41,8 +44,10 @@ describe('Field', () => {
   const render = () => {
     const fixture = TestBed.createComponent(Host)
     fixture.detectChanges()
-    const [user, password, search] = [...fixture.nativeElement.querySelectorAll('pl-field')] as HTMLElement[]
-    return { fixture, user, password, search }
+    const [user, password, search, description] = [
+      ...fixture.nativeElement.querySelectorAll('pl-field'),
+    ] as HTMLElement[]
+    return { fixture, user, password, search, description }
   }
 
   it('names its control by its label', () => {
@@ -67,6 +72,14 @@ describe('Field', () => {
     expect(label.classList).toContain('pl-visually-hidden')
     expect(label.getAttribute('for')).toBe(search.querySelector('input')?.id)
     expect(search.querySelector('.pl-field__head')).toBeNull()
+  })
+
+  it('names a control of several lines too', () => {
+    const { description } = render()
+    const textarea = description.querySelector('.pl-field__box textarea') as HTMLTextAreaElement
+
+    expect(textarea.classList).toContain('pl-field__input')
+    expect(description.querySelector('label')?.getAttribute('for')).toBe(textarea.id)
   })
 
   it('shows an icon before its control, hidden from screen readers', () => {

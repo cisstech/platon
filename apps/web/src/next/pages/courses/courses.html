@@ -1,0 +1,28 @@
+<pl-page [busy]="busy()">
+  <pl-page-header heading="Cours">
+    @if (teaches()) {
+    <button #createButton type="button" plButton variant="primary" plPageActions (click)="create()">
+      <pl-icon name="add" />Créer un cours
+    </button>
+    }
+  </pl-page-header>
+
+  @if (none()) {
+  <pl-empty heading="Aucun cours pour l'instant" glyph="course">
+    @if (teaches()) {
+    <p>
+      Un cours rassemble vos étudiants et vos activités, rangées en sections. Créez-en un, ou demandez à un collègue de
+      vous ajouter comme enseignant du sien.
+    </p>
+    } @else {
+    <p>Vos enseignants vous inscrivent à leurs cours&nbsp;: ils apparaîtront ici.</p>
+    } @if (teaches()) {
+    <button type="button" plButton variant="primary" plEmptyAction (click)="create()">
+      <pl-icon name="add" />Créer un cours
+    </button>
+    }
+  </pl-empty>
+  } @else {
+  <app-course-list [phase]="phase()" />
+  }
+</pl-page>

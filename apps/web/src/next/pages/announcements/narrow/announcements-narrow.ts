@@ -9,9 +9,9 @@ import {
   viewChildren,
 } from '@angular/core'
 import { AnnouncementDisclosure, AnnouncementRowSkeleton } from '@platon/design-system'
+import { ShowMore } from '../../../shared/ui/show-more/show-more'
 import { announcementsList } from '../announcements-page'
 import { AnnouncementDetail } from '../ui/announcement-detail/announcement-detail'
-import { AnnouncementMore } from '../ui/announcement-more/announcement-more'
 import { AnnouncementSearch } from '../ui/announcement-search/announcement-search'
 
 /**
@@ -22,7 +22,7 @@ import { AnnouncementSearch } from '../ui/announcement-search/announcement-searc
 @Component({
   selector: 'app-announcements-narrow',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [AnnouncementDetail, AnnouncementDisclosure, AnnouncementMore, AnnouncementRowSkeleton, AnnouncementSearch],
+  imports: [AnnouncementDetail, AnnouncementDisclosure, AnnouncementRowSkeleton, AnnouncementSearch, ShowMore],
   templateUrl: './announcements-narrow.html',
   styleUrls: ['../announcements-layout.scss', './announcements-narrow.scss'],
 })

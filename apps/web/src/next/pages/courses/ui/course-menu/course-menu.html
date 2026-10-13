@@ -1,0 +1,29 @@
+@if (archivable() || challenges()) {
+<button
+  #trigger
+  type="button"
+  plButton
+  variant="icon"
+  size="sm"
+  [attr.aria-label]="'Actions du cours ' + course()"
+  [plMenuTrigger]="menu"
+>
+  <pl-icon name="more_horiz" />
+</button>
+<pl-menu #menu="ngMenu" (itemSelected)="chosen.emit($event)">
+  @if (archivable() && !archived()) {
+  <pl-menu-item
+    value="archive"
+    icon="inbox"
+    description="Le cours passe dans vos archivés. Pour vous seulement&nbsp;: il reste actif pour ses membres."
+    >Archiver</pl-menu-item
+  >
+  } @if (archivable() && archived()) {
+  <pl-menu-item value="unarchive" icon="unarchive" description="Le cours revient dans vos cours actuels."
+    >Désarchiver</pl-menu-item
+  >
+  } @if (challenges()) {
+  <pl-menu-item value="challenges" icon="emoji_events">Voir les challenges</pl-menu-item>
+  }
+</pl-menu>
+}

@@ -1,0 +1,55 @@
+<app-course-toolbar
+  class="course-list__toolbar"
+  [filters]="store.filters()"
+  [current]="store.current().length"
+  [archived]="store.archived().length"
+  [platform]="admin()"
+  [compact]="narrow()"
+  (searched)="store.search($event)"
+  (chosen)="store.choose($event)"
+/>
+
+<app-load-state
+  [phase]="phase()"
+  heading="Vos cours n'ont pas pu être chargés"
+  reassurance="Vos cours et vos résultats sont enregistrés."
+  (retry)="retry()"
+/>
+
+@switch (view()) { @case ('waiting') {
+<div class="course-list__grid" [class.course-list__grid--compact]="narrow()">
+  <pl-binder-skeleton />
+  <pl-binder-skeleton />
+  <pl-binder-skeleton />
+</div>
+} @case ('empty') {
+<app-course-empty
+  [tab]="tab()"
+  [noMatch]="noMatch()"
+  [admin]="admin()"
+  [archived]="store.archived().length"
+  (cleared)="clearFilters()"
+/>
+} @case ('cards') {
+<ul role="list" class="course-list__grid" [class.course-list__grid--compact]="narrow()">
+  @for (card of cards(); track card.id) {
+  <li>
+    <app-course-card
+      [card]="card"
+      [archived]="tab() === 'archived'"
+      [compact]="narrow()"
+      (chosen)="act(card, $event)"
+    />
+  </li>
+  }
+</ul>
+
+@if (hasMore()) {
+<app-show-more
+  class="course-list__more"
+  [state]="store.more()"
+  label="Afficher plus de cours"
+  failure="Les cours suivants n'ont pas pu être chargés."
+  (asked)="loadMore()"
+/>
+} } }
