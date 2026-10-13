@@ -42,6 +42,11 @@
   color: var(--pl-color-text);
   font: var(--pl-font-body);
 }
+:host ::ng-deep textarea.pl-field__input {
+  min-block-size: calc(3 * var(--pl-space-6));
+  padding-block: var(--pl-space-2);
+  resize: vertical;
+}
 :host ::ng-deep .pl-field__input::placeholder {
   color: var(--pl-color-subtle);
 }

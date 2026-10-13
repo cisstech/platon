@@ -92,6 +92,7 @@ export const ICON_NAMES = [
   'trending_down',
   'trending_up',
   'tune',
+  'unarchive',
   'undo',
   'upload',
   'verified',

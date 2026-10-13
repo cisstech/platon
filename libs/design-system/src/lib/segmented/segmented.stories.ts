@@ -60,3 +60,15 @@ export const IconOnly: Story = {
     ],
   },
 }
+
+export const Counts: Story = {
+  name: 'With how many each choice holds',
+  args: {
+    label: 'Courses shown',
+    value: 'current',
+    options: [
+      { value: 'current', label: 'Current', count: 3 },
+      { value: 'archived', label: 'Archived', count: 5 },
+    ],
+  },
+}
