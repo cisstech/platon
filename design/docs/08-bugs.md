@@ -261,6 +261,18 @@ Gravité : **P1** bloque, trompe ou expose. **P2** gêne ou fait douter. **P3** 
   `ActivityService` le public partagé (`audienceOf`, `activity.sql.ts`). Aucune interface actuelle
   n'écrit de telles lignes : seules des données anciennes ou créées par l'API sont touchées.
 
+### B33. Le contenu écrit dans EditorJS passe sans assainissement
+
+- [ ] Corrigé
+- **Symptôme** : le HTML d'un contenu EditorJS (annonces et leur aperçu, conditions et courriel des
+  tests, composant `editorjs-viewer` des exercices) est inséré tel quel dans la page de l'interface
+  actuelle : un bloc `raw`, un `onerror` ou un lien `javascript:`
+  écrit dans l'éditeur s'exécute chez qui le lit.
+- **Cause** : `ui-editorjs-viewer` contourne l'assainisseur d'Angular (`bypassSecurityTrustHtml`).
+- **Où** : `libs/shared/ui/src/editorjs/editorjsViewer/editorjs-viewer.component.ts`
+- **Piste** : lier `[innerHTML]` sans contournement, comme `app-rich-text` de la nouvelle interface
+  (A-03), et vérifier les styles qui reposaient sur des attributs `style` retirés.
+
 ## P3
 
 ### B11. Identifiant de session dans le résumé
@@ -337,6 +349,28 @@ Gravité : **P1** bloque, trompe ou expose. **P2** gêne ou fait douter. **P3** 
 - **Où** : `libs/core/browser/src/lib/auth/api/auth.service.ts`
 - **Piste** : garder l'utilisateur dans `connect()`, le vider à la connexion, à la réinitialisation
   du mot de passe et à la déconnexion.
+
+### B34. Listes EditorJS mal formées
+
+- [x] Corrigé dans A-03 (branche `feat/announcements`).
+- **Symptôme** : une liste se fermait par `</ol style="padding-left: 1em;">`, une sous-liste suivait
+  son élément au lieu d'y être, et une liste plate (éléments en texte) levait une erreur.
+- **Où** : `libs/shared/utils/src/lib/editorjs/parsers/list-parser.ts`
+- **Note** : `editorjs-parser` écrit les parseurs qu'on lui donne dans ses défauts partagés ;
+  `editorjsToHtml` part d'une copie, pour qu'un remplacement ne vaille que pour son appel.
+
+### B35. Chaque migration générée embarque deux écarts sans rapport
+
+- [ ] Corrigé
+- **Symptôme** : `./bin/migration/generate.sh` ajoute à toute migration la création de
+  `Resources_template_idx` et la réécriture du défaut de `Activities.code` ; il faut les retirer à la
+  main.
+- **Cause** : l'index a été renommé dans l'entité (`Resources_parent_idx` vers `Resources_template_idx`)
+  sans migration ; le défaut de `code` est une expression que TypeORM relit autrement qu'il l'écrit.
+- **Où** : `libs/feature/resource/server/src/lib/resource.entity.ts`,
+  `migrations/1787242389696-SetDefaultValueForActivityCode.ts`
+- **Piste** : une migration qui renomme l'index ; pour `code`, écrire le défaut dans la forme que
+  PostgreSQL renvoie.
 
 ## Code mort
 
