@@ -41,9 +41,38 @@ describe('Segmented', () => {
     expect(radios().map((radio) => radio.checked)).toEqual([false, true, false])
   })
 
+  it('focuses the chosen option', () => {
+    fixture.componentInstance.theme.set('dark')
+    fixture.detectChanges()
+
+    fixture.debugElement.query((node) => node.name === 'pl-segmented').componentInstance.focus()
+
+    expect(document.activeElement).toBe(radios()[1])
+  })
+
   it('keeps the label of an icon-only option as its accessible name', () => {
     const auto = radios()[2].closest('label') as HTMLLabelElement
     expect(auto.textContent?.trim()).toBe('Auto')
     expect(auto.querySelector('pl-icon')).not.toBeNull()
+  })
+
+  it('says how many each choice holds, read after its label', () => {
+    TestBed.resetTestingModule()
+    @Component({
+      imports: [Segmented],
+      template: `<pl-segmented label="Cours affichés" [options]="options" value="current" />`,
+    })
+    class Counted {
+      readonly options: SegmentedOption[] = [
+        { value: 'current', label: 'Actuels', count: 3 },
+        { value: 'archived', label: 'Archivés', count: 0 },
+      ]
+    }
+    const counted = TestBed.createComponent(Counted)
+    counted.detectChanges()
+
+    const labels = [...counted.nativeElement.querySelectorAll('label')] as HTMLElement[]
+    expect(labels.map((label) => label.textContent?.replace(/\s+/g, ' ').trim())).toEqual(['Actuels, 3', 'Archivés, 0'])
+    expect(labels[0].querySelector('pl-count')?.textContent?.trim()).toBe('3')
   })
 })

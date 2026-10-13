@@ -10,6 +10,6 @@
   @if (icon(); as icon) {
   <pl-icon class="pl-field__icon" [name]="icon" />
   }
-  <ng-content select="input[plInput]" />
+  <ng-content select="input[plInput], textarea[plInput]" />
   <ng-content />
 </div>

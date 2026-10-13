@@ -1,0 +1,38 @@
+:host {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  align-items: flex-end;
+  inline-size: 56px;
+  block-size: 56px;
+  margin-block-start: var(--pl-space-2);
+  padding: var(--pl-space-2);
+  border-radius: var(--pl-radius-2);
+  background: repeating-linear-gradient(0deg, transparent 0 11px, var(--pl-color-ruling) 11px 12px), var(--pl-hue-tint);
+  color: var(--pl-hue-ink);
+  font: var(--pl-font-subheading);
+  letter-spacing: var(--pl-tracking-title);
+}
+/* The tab of the binder, above the cover. */
+:host::before {
+  content: '';
+  position: absolute;
+  inset-block-start: calc(-1 * var(--pl-space-2));
+  inset-inline-start: var(--pl-space-2);
+  inline-size: 22px;
+  block-size: var(--pl-space-2);
+  border-radius: var(--pl-radius-1) var(--pl-radius-1) 0 0;
+  background: var(--pl-hue-strong);
+}
+:host([data-size='sm']) {
+  inline-size: 40px;
+  block-size: 40px;
+  margin-block-start: var(--pl-space-1);
+  padding: var(--pl-space-1) var(--pl-space-2);
+  font: var(--pl-font-caption);
+}
+:host([data-size='sm'])::before {
+  inset-block-start: calc(-1 * var(--pl-space-1));
+  inline-size: 16px;
+  block-size: var(--pl-space-1);
+}

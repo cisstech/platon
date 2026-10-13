@@ -18,9 +18,9 @@ export class PasswordReveal {
   readonly shown = signal(false)
 
   protected toggle(): void {
-    const control = this.field.control()
-    if (!control) return
+    const element = this.field.control()?.element
+    if (!(element instanceof HTMLInputElement)) return
     this.shown.update((shown) => !shown)
-    control.element.type = this.shown() ? 'text' : 'password'
+    element.type = this.shown() ? 'text' : 'password'
   }
 }
