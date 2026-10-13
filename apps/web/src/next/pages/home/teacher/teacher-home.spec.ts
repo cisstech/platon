@@ -86,7 +86,7 @@ describe('TeacherHome', () => {
   let store: {
     status: ReturnType<typeof signal<LoadStatus>>
     data: ReturnType<typeof signal<TeacherHomeData | undefined>>
-    dismissed: ReturnType<typeof signal<ReadonlySet<string>>>
+    read: ReturnType<typeof signal<ReadonlySet<string>>>
     attempt: ReturnType<typeof signal<number>>
     load: jest.Mock
     retry: jest.Mock
@@ -103,12 +103,12 @@ describe('TeacherHome', () => {
     store = {
       status: signal(status),
       data: signal(data),
-      dismissed: signal(new Set<string>()),
+      read: signal(new Set<string>()),
       attempt: signal(0),
       load: jest.fn(),
       retry: jest.fn(),
       stop: jest.fn(),
-      dismissAnnouncement: jest.fn((id: string) => store.dismissed.update((closed) => new Set([...closed, id]))),
+      dismissAnnouncement: jest.fn((id: string) => store.read.update((read) => new Set([...read, id]))),
     }
     // As left by a page that turned Create quiet, and a count of the cover loaded earlier.
     shell = { quietCreate: signal(true), summaries: signal<ActivityCorrectionSummary[] | undefined>([]) }

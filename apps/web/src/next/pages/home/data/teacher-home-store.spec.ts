@@ -20,7 +20,6 @@ describe('TeacherHomeStore', () => {
       courses: jest.fn(() => of(courses)),
       viewed: () => of(viewed),
       announcements: () => of(announcements),
-      dismissedAnnouncements: () => new Set<string>(),
     }
     TestBed.configureTestingModule({ providers: [TeacherHomeStore, { provide: HomeApi, useValue: api }] })
     const store = TestBed.inject(TeacherHomeStore)

@@ -1,10 +1,5 @@
 import { inject, Injectable } from '@angular/core'
-import {
-  AnnouncementService,
-  announcementStatsOf,
-  readAnnouncementStats,
-  writeAnnouncementStats,
-} from '@platon/feature/announcement/browser/shared'
+import { AnnouncementService } from '@platon/feature/announcement/browser/shared'
 import { Announcement } from '@platon/feature/announcement/common'
 import { CourseService } from '@platon/feature/course/browser/shared'
 import {
@@ -84,14 +79,8 @@ export class HomeApi {
     return this.announcementService.getActiveAnnouncements().pipe(map((response) => response.resources))
   }
 
-  /** The announcements closed in this browser, in either interface. */
-  dismissedAnnouncements(): ReadonlySet<string> {
-    const stats = readAnnouncementStats()
-    return new Set(Object.keys(stats).filter((id) => stats[id].dismissed))
-  }
-
-  dismissAnnouncement(id: string): void {
-    const stats = readAnnouncementStats()
-    writeAnnouncementStats({ ...stats, [id]: { ...announcementStatsOf(stats, id), dismissed: true } })
+  /** The person has read it: they closed its banner. */
+  markAnnouncementRead(id: string): Observable<void> {
+    return this.announcementService.markAsRead(id)
   }
 }

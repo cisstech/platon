@@ -7,21 +7,21 @@ import { HomeLoader, HomeSources } from './data/home-loader'
 import { banner, BannerView, greeting, welcome } from './home.vm'
 
 /**
- * The banner of a page, chosen when its announcements come: closing it closes the banner, none other
- * follows until the page opens again. Call it in an injection context.
+ * The banner of a page, chosen when its announcements come: closing it reads it and closes the
+ * banner, none other follows until the page opens again. Call it in an injection context.
  */
 export const offeredBanner = (
   announcements: Signal<Announcement[] | undefined>,
-  dismissed: Signal<ReadonlySet<string>>,
+  read: Signal<ReadonlySet<string>>,
   now: Date
 ): Signal<BannerView | undefined> => {
   const offered = computed(() => {
     const list = announcements()
-    return list ? banner(list, untracked(dismissed), now) : undefined
+    return list ? banner(list, untracked(read), now) : undefined
   })
   return computed(() => {
     const shown = offered()
-    return shown && !dismissed().has(shown.id) ? shown : undefined
+    return shown && !read().has(shown.id) ? shown : undefined
   })
 }
 
@@ -70,7 +70,7 @@ export const homePage = <T extends HomeSources>(store: HomeLoader<T>, isEmpty: (
     }),
     banner: offeredBanner(
       computed(() => data()?.announcements),
-      store.dismissed,
+      store.read,
       now
     ),
     /** Starts loading again, the focus going to the content: the button that held it goes away. */
@@ -78,7 +78,7 @@ export const homePage = <T extends HomeSources>(store: HomeLoader<T>, isEmpty: (
       store.retry()
       focus()
     },
-    /** Closes the announcement, the focus going on to `next`, or to the content when there is none. */
+    /** Closes the announcement, read, the focus going on to `next`, or to the content when there is none. */
     dismiss: (id: string, next?: Focusable) => {
       store.dismissAnnouncement(id)
       focus(next)

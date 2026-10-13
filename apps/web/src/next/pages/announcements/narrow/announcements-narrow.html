@@ -1,0 +1,35 @@
+<div class="announcements__column">
+  <app-announcement-search
+    [value]="list.store.search()"
+    [noMatch]="list.noMatch()"
+    (searched)="list.store.searchFor($event)"
+    (cleared)="list.store.clearSearch()"
+  />
+  @if (!list.failed()) { @if (list.waiting()) {
+  <div class="announcements__list">
+    <pl-announcement-row-skeleton /><pl-announcement-row-skeleton /><pl-announcement-row-skeleton />
+  </div>
+  } @else if (list.rows().length) {
+  <div class="announcements__list">
+    @for (row of list.rows(); track row.id) {
+    <pl-announcement-disclosure
+      [id]="'announcement-' + row.id"
+      [heading]="row.heading"
+      [summary]="row.summary"
+      [date]="row.date"
+      [icon]="row.icon"
+      [unread]="row.unread"
+      [unreadLabel]="list.unreadLabel"
+      [expanded]="list.store.openedId() === row.id"
+      (expandedChange)="toggle(row.id, $event)"
+    >
+      @if (list.store.openedId() === row.id && list.detail(); as detail) {
+      <app-announcement-detail [detail]="detail" (retry)="retryContent(detail.id)" />
+      }
+    </pl-announcement-disclosure>
+    }
+  </div>
+  } @if (list.hasMore()) {
+  <app-announcement-more [state]="list.store.more()" (asked)="list.showMore()" />
+  } }
+</div>
