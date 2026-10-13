@@ -1,11 +1,29 @@
-import { ApiProperty } from '@nestjs/swagger'
+import { ApiProperty, PickType } from '@nestjs/swagger'
 import { MAX_PAGE_SIZE, MIN_PAGE_OFFSET, MIN_PAGE_SIZE, OrderingDirections } from '@platon/core/common'
-import { BaseDTO, toArray, toNumber } from '@platon/core/server'
-import { Course, CourseFilters, CourseOrderings, CreateCourse, UpdateCourse } from '@platon/feature/course/common'
+import { BaseDTO, toArray, toNumber, UserDTO } from '@platon/core/server'
+import {
+  Course,
+  CourseFilters,
+  CourseOrderings,
+  CourseOwner,
+  CreateCourse,
+  UpdateCourse,
+} from '@platon/feature/course/common'
 import { Transform, Type } from 'class-transformer'
 import { IsArray, IsBoolean, IsEnum, IsNumber, IsOptional, IsString, IsUUID, Max, Min } from 'class-validator'
 import { CourseStatisticDTO } from './course-statistic/course-statistic.dto'
 import { CoursePermissionsDTO } from './permissions/permissions.dto'
+
+export class CourseOwnerDTO
+  extends PickType(UserDTO, ['id', 'username', 'firstName', 'lastName'] as const)
+  implements CourseOwner {}
+
+const courseOwner = ({ id, username, firstName, lastName }: CourseOwner): CourseOwner => ({
+  id,
+  username,
+  firstName,
+  lastName,
+})
 
 export class CourseDTO extends BaseDTO implements Course {
   @IsString()
@@ -20,6 +38,13 @@ export class CourseDTO extends BaseDTO implements Course {
   @IsUUID()
   @ApiProperty()
   readonly ownerId!: string
+
+  /** Its owner's name, and nothing else: the user the search joins comes with defaults of its own. */
+  @IsOptional()
+  @ApiProperty({ type: CourseOwnerDTO, required: false })
+  @Type(() => CourseOwnerDTO)
+  @Transform(({ value }) => value && courseOwner(value))
+  readonly owner?: CourseOwnerDTO
 
   @ApiProperty()
   readonly isTest!: boolean

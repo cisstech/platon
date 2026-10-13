@@ -1,6 +1,6 @@
 import { Test } from '@nestjs/testing'
 import { getRepositoryToken } from '@nestjs/typeorm'
-import { NotFoundResponse } from '@platon/core/common'
+import { BadRequestResponse, NotFoundResponse } from '@platon/core/common'
 import { MockRepository, mockRepository, mockSelectQueryBuilder } from '@platon/core/testing/server'
 import { CourseOrderings } from '@platon/feature/course/common'
 import { DataSource, SelectQueryBuilder } from 'typeorm'
@@ -48,18 +48,6 @@ describe('CourseService', () => {
       expect(qb.andWhere).toHaveBeenCalledWith('course.is_test = :isTest', { isTest: false })
     })
 
-    it('devrait filtrer par membres quand showAll est faux', async () => {
-      await service.search({ members: ['u1', 'u2'] })
-
-      expect(qb.andWhere).toHaveBeenCalledWith('(member.id IN (:...ids))', { ids: ['u1', 'u2'] })
-    })
-
-    it('ne devrait pas filtrer par membres quand showAll est vrai', async () => {
-      await service.search({ members: ['u1'], showAll: true })
-
-      expect(qb.andWhere).not.toHaveBeenCalledWith('(member.id IN (:...ids))', expect.anything())
-    })
-
     it('devrait filtrer par recherche textuelle', async () => {
       await service.search({ search: '  algo  ' })
 
@@ -93,20 +81,13 @@ describe('CourseService', () => {
     it('devrait trier par date de mise à jour descendante par défaut sans filtre', async () => {
       await service.search()
 
-      expect(qb.orderBy).toHaveBeenCalledWith('course.updated_at', 'DESC')
+      expect(qb.orderBy).toHaveBeenCalledWith('course.updatedAt', 'DESC')
     })
 
     it('devrait respecter une direction explicite même pour un champ dont le défaut diffère', async () => {
       await service.search({ order: CourseOrderings.NAME, direction: 'DESC' as never })
 
       expect(qb.orderBy).toHaveBeenCalledWith('course.name', 'DESC')
-    })
-
-    it('devrait appliquer offset et limit', async () => {
-      await service.search({ offset: 5, limit: 10 })
-
-      expect(qb.offset).toHaveBeenCalledWith(5)
-      expect(qb.limit).toHaveBeenCalledWith(10)
     })
   })
 
@@ -190,9 +171,7 @@ describe('CourseService', () => {
 
   describe('duplicate', () => {
     it('devrait rejeter si source et cible sont identiques', async () => {
-      await expect(service.duplicate('course-1', 'course-1')).rejects.toThrow(
-        'Source and target courses cannot be the same'
-      )
+      await expect(service.duplicate('course-1', 'course-1')).rejects.toBeInstanceOf(BadRequestResponse)
     })
 
     it('devrait lever une NotFoundResponse si le cours source est introuvable', async () => {

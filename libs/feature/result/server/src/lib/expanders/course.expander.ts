@@ -1,9 +1,16 @@
 import { ExpandContext, Expander } from '@cisstech/nestjs-expand'
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
+import { User, UserRoles } from '@platon/core/common'
 import { IRequest } from '@platon/core/server'
-import { CourseStatistic } from '@platon/feature/course/common'
-import { ActivityEntity, ActivityMemberView, CourseDTO, CourseMemberService } from '@platon/feature/course/server'
+import { CourseMemberRoles, CourseStatistic } from '@platon/feature/course/common'
+import {
+  ActivityEntity,
+  ActivityMemberView,
+  CourseDTO,
+  CourseMemberService,
+  membershipsOf,
+} from '@platon/feature/course/server'
 import { PlayerActivityVariables } from '@platon/feature/player/common'
 import { AnswerStates, isExerciseDone } from '@platon/feature/result/common'
 import differenceInSeconds from 'date-fns/differenceInSeconds'
@@ -34,15 +41,7 @@ export class CourseExpander {
         },
         relations: { activity: true },
       }),
-      this.activityRepository
-        .createQueryBuilder('activity')
-        .leftJoin(ActivityMemberView, 'member', 'member.activity_id = activity.id AND member.id = :userId', {
-          userId: user.id,
-        })
-        .select(['activity.courseId', 'activity.isChallenge'])
-        .where('activity.course_id = :courseId', { courseId: parent.id })
-        .andWhere(`(activity.creator_id = :userId OR member.id IS NOT NULL)`, { userId: user.id })
-        .getMany(),
+      this.activitiesOf(parent.id, user),
     ])
 
     let timeSpent = 0
@@ -71,5 +70,26 @@ export class CourseExpander {
       challengeCount: activities.filter((activity) => activity.isChallenge).length,
       timeSpent,
     }
+  }
+
+  /** Who manages the course counts every activity of it; anyone else, those open to them. */
+  private activitiesOf(courseId: string, user: User): Promise<ActivityEntity[]> {
+    const query = this.activityRepository
+      .createQueryBuilder('activity')
+      .select(['activity.courseId', 'activity.isChallenge'])
+      .where('activity.course_id = :courseId', { courseId })
+    if (user.role === UserRoles.admin) return query.getMany()
+    return query
+      .leftJoin(ActivityMemberView, 'member', 'member.activity_id = activity.id AND member.id = :userId', {
+        userId: user.id,
+      })
+      .andWhere(
+        `(activity.creator_id = :userId OR member.id IS NOT NULL OR EXISTS (
+          SELECT 1 FROM (${membershipsOf(':userId')}) memberships
+          WHERE memberships.course_id = activity.course_id AND memberships.role = :teacher
+        ))`,
+        { userId: user.id, teacher: CourseMemberRoles.teacher }
+      )
+      .getMany()
   }
 }

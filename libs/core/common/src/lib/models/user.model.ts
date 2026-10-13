@@ -114,7 +114,7 @@ export const USER_GROUP_ORDERING_DIRECTIONS: Readonly<Record<UserGroupOrderings,
   UPDATED_AT: 'DESC',
 }
 
-export const userDisplayName = (user: User): string => {
+export const userDisplayName = (user: Pick<User, 'firstName' | 'lastName' | 'username'>): string => {
   return user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : user.username
 }
 
