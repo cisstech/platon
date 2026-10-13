@@ -217,6 +217,22 @@ describe('NotificationsPanel', () => {
     panel.remove()
   })
 
+  it('moves no focus once closed while marking everything as read', async () => {
+    const errors = jest.spyOn(console, 'error').mockImplementation(() => undefined)
+    const answer = new Subject<boolean>()
+    const { fixture, panel } = await render()
+    api['markAllAsRead'].mockReturnValue(answer)
+
+    button(panel, 'Tout marquer comme lu').click()
+    fixture.destroy()
+    answer.next(true)
+    answer.complete()
+    await settle()
+
+    expect(errors).not.toHaveBeenCalled()
+    errors.mockRestore()
+  })
+
   it('declines an invitation, the focus going to the next notification', async () => {
     const pending = notification('n2', { ...invitation.data!, type: 'RESOURCE-INVITATION' })
     const { fixture, panel } = await render({ notifications: [pending, correction] })
