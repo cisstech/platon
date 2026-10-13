@@ -59,4 +59,9 @@ export class AnnouncementService {
   findByIdForUser(id: string): Observable<Announcement> {
     return this.announcementProvider.findByIdForUser(id)
   }
+
+  /** The person signed in has read it: opened it, or closed its banner. */
+  markAsRead(id: string): Observable<void> {
+    return this.announcementProvider.markAsRead(id)
+  }
 }
