@@ -42,6 +42,10 @@ class Host {
 const words = (element: Element | null) => element?.textContent?.replace(/\s+/g, ' ').trim()
 
 describe('NotificationItem', () => {
+  // An afternoon: two hours ago is still today, whatever the time the tests run.
+  beforeEach(() => jest.useFakeTimers({ now: new Date(2026, 8, 28, 14, 30) }))
+  afterEach(() => jest.useRealTimers())
+
   const render = () => {
     TestBed.configureTestingModule({
       providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }],

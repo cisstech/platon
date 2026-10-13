@@ -1,0 +1,65 @@
+:host {
+  display: block;
+}
+:host(:not(:first-child)) {
+  border-block-start: 1px solid var(--pl-color-line);
+}
+.pl-announcement-row__button {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--pl-space-3);
+  inline-size: 100%;
+  min-block-size: 64px;
+  padding: var(--pl-space-3) var(--pl-space-4);
+  border: 0;
+  background: none;
+  color: var(--pl-color-text);
+  font: var(--pl-font-body);
+  text-align: start;
+  cursor: pointer;
+}
+.pl-announcement-row__button:hover {
+  background: var(--pl-color-hover);
+}
+:host([data-current]) .pl-announcement-row__button {
+  background: var(--pl-color-primary-soft);
+}
+.pl-announcement-row__button:focus-visible {
+  outline: 2px solid var(--pl-color-focus);
+  outline-offset: -2px;
+}
+.pl-announcement-row__lead {
+  display: grid;
+  flex: none;
+  place-items: center;
+  inline-size: 36px;
+  block-size: 36px;
+  border-radius: var(--pl-radius-control);
+  background: var(--pl-color-hover);
+  color: var(--pl-color-muted);
+}
+.pl-announcement-row__text {
+  display: grid;
+  gap: var(--pl-space-1);
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+.pl-announcement-row__title {
+  font-weight: var(--pl-weight-strong);
+}
+/* The dot of an unread announcement, in the color of the text: a state, not an alert. */
+:host([data-unread]) .pl-announcement-row__title::after {
+  content: '';
+  display: inline-block;
+  inline-size: 8px;
+  block-size: 8px;
+  margin-inline-start: var(--pl-space-2);
+  border-radius: var(--pl-radius-pill);
+  background: var(--pl-color-text);
+  vertical-align: middle;
+}
+.pl-announcement-row__summary,
+.pl-announcement-row__day {
+  color: var(--pl-color-muted);
+  font: var(--pl-font-small);
+}

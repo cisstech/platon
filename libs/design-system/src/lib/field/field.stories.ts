@@ -58,3 +58,16 @@ export const Invalid: Story = {
     `,
   }),
 }
+
+export const Search: Story = {
+  name: 'Search, its label for screen readers only',
+  render: () => ({
+    template: `
+      <div class="story-form">
+        <pl-field label="Search an announcement" icon="search" labelHidden>
+          <input plInput type="search" placeholder="Search an announcement" />
+        </pl-field>
+      </div>
+    `,
+  }),
+}
