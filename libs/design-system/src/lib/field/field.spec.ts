@@ -28,6 +28,9 @@ import { PasswordReveal } from './password-reveal'
       </button>
     </pl-field>
     <p id="message">Nom d'utilisateur ou mot de passe incorrect.</p>
+    <pl-field label="Rechercher une annonce" icon="search" labelHidden>
+      <input plInput type="search" placeholder="Rechercher une annonce" />
+    </pl-field>
   `,
 })
 class Host {
@@ -38,8 +41,8 @@ describe('Field', () => {
   const render = () => {
     const fixture = TestBed.createComponent(Host)
     fixture.detectChanges()
-    const [user, password] = [...fixture.nativeElement.querySelectorAll('pl-field')] as HTMLElement[]
-    return { fixture, user, password }
+    const [user, password, search] = [...fixture.nativeElement.querySelectorAll('pl-field')] as HTMLElement[]
+    return { fixture, user, password, search }
   }
 
   it('names its control by its label', () => {
@@ -55,6 +58,24 @@ describe('Field', () => {
     const { password } = render()
 
     expect(password.querySelector('.pl-field__head a')?.textContent).toBe('Mot de passe oublié\u00a0?')
+  })
+
+  it('can keep its label for screen readers only, its control still named by it', () => {
+    const { search } = render()
+    const label = search.querySelector('label') as HTMLLabelElement
+
+    expect(label.classList).toContain('pl-visually-hidden')
+    expect(label.getAttribute('for')).toBe(search.querySelector('input')?.id)
+    expect(search.querySelector('.pl-field__head')).toBeNull()
+  })
+
+  it('shows an icon before its control, hidden from screen readers', () => {
+    const { search, user } = render()
+    const icon = search.querySelector('.pl-field__box pl-icon') as HTMLElement
+
+    expect(icon.querySelector('use')?.getAttribute('href')).toContain('#search')
+    expect(icon.closest('[aria-hidden="true"]')).not.toBeNull()
+    expect(user.querySelector('.pl-field__box pl-icon')).toBeNull()
   })
 
   it('says its control is invalid, to the eye and to screen readers, and keeps the description it was given', () => {

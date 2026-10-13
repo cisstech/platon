@@ -1,4 +1,4 @@
-import { relativeTime } from './relative-time'
+import { fullCalendarDay, relativeTime, shortCalendarDay } from './relative-time'
 
 // A Monday afternoon, in the local time of the machine running the tests.
 const now = new Date(2026, 8, 28, 14, 30)
@@ -31,5 +31,19 @@ describe('relativeTime', () => {
 
   it('speaks the language of the locale', () => {
     expect(relativeTime(at(27, 17, 0), 'en-US', now)).toBe('yesterday')
+  })
+})
+
+describe('shortCalendarDay', () => {
+  it('says a day of this year with a short month, and one of another year with its year', () => {
+    expect(shortCalendarDay(at(27, 9), 'fr-FR', now)).toBe('27 sept.')
+    expect(shortCalendarDay(at(28, 9, 0, 7), 'fr-FR', now)).toBe('28 août')
+    expect(shortCalendarDay(at(3, 10, 0, 11, 2025), 'fr-FR', now)).toBe('3 déc. 2025')
+  })
+})
+
+describe('fullCalendarDay', () => {
+  it('says a day with its year, even this year', () => {
+    expect(fullCalendarDay(at(25, 9), 'fr-FR')).toBe('25 septembre 2026')
   })
 })

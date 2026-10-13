@@ -1,0 +1,71 @@
+:host {
+  display: block;
+  padding: var(--pl-space-1) var(--pl-space-4) var(--pl-space-3);
+  color: var(--pl-color-text);
+  font: var(--pl-font-body);
+}
+:host(:not(:first-child)) {
+  border-block-start: 1px solid var(--pl-color-line);
+}
+.pl-announcement-disclosure__toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--pl-space-2);
+  inline-size: 100%;
+  min-block-size: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-weight: var(--pl-weight-strong);
+  text-align: start;
+  cursor: pointer;
+}
+.pl-announcement-disclosure__toggle:focus-visible {
+  outline: 2px solid var(--pl-color-focus);
+  outline-offset: 2px;
+  border-radius: var(--pl-radius-1);
+}
+.pl-announcement-disclosure__kind {
+  flex: none;
+  color: var(--pl-color-muted);
+}
+.pl-announcement-disclosure__title {
+  flex: 1;
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+/* The dot of an unread announcement, in the color of the text: a state, not an alert. */
+:host([data-unread]) .pl-announcement-disclosure__title::after {
+  content: '';
+  display: inline-block;
+  inline-size: 8px;
+  block-size: 8px;
+  margin-inline-start: var(--pl-space-2);
+  border-radius: var(--pl-radius-pill);
+  background: var(--pl-color-text);
+  vertical-align: middle;
+}
+.pl-announcement-disclosure__chevron {
+  flex: none;
+  color: var(--pl-color-subtle);
+  transition: transform var(--pl-duration-hover) var(--pl-ease-standard);
+}
+:host([data-expanded]) .pl-announcement-disclosure__chevron {
+  transform: rotate(180deg);
+}
+.pl-announcement-disclosure__summary,
+.pl-announcement-disclosure__day,
+.pl-announcement-disclosure__panel {
+  margin: 0;
+  padding-inline-start: calc(var(--pl-icon-size-2) + var(--pl-space-2));
+}
+.pl-announcement-disclosure__summary {
+  color: var(--pl-color-muted);
+  font: var(--pl-font-small);
+}
+.pl-announcement-disclosure__day {
+  color: var(--pl-color-muted);
+  font: var(--pl-font-small);
+}

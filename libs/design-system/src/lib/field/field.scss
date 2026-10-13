@@ -20,6 +20,10 @@
   border-radius: var(--pl-radius-control);
   background: var(--pl-color-surface);
 }
+.pl-field__icon {
+  flex: none;
+  color: var(--pl-color-subtle);
+}
 :host([data-focused]) .pl-field__box {
   border-color: var(--pl-color-primary);
   outline: 2px solid var(--pl-color-focus);
