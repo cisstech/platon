@@ -1,0 +1,14 @@
+// What both views of the list share: the column of the search and the list, the list on its card.
+
+.announcements__column {
+  display: grid;
+  gap: var(--pl-space-3);
+  min-inline-size: 0;
+}
+
+.announcements__list {
+  border: 1px solid var(--pl-color-line);
+  border-radius: var(--pl-radius-card);
+  background: var(--pl-color-surface);
+  overflow: hidden;
+}

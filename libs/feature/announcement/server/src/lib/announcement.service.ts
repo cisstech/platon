@@ -1,7 +1,9 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { AnnouncementEntity } from './announcement.entity'
-import { Repository } from 'typeorm'
+import { AnnouncementReadEntity } from './announcement-read.entity'
+import { visibleTo } from './announcement.sql'
+import { In, Repository } from 'typeorm'
 //import { NotificationService } from "@cisstech/nge-ide/core";
 import { NotFoundResponse } from '@platon/core/common'
 import { UserRoles } from '@platon/core/common'
@@ -11,7 +13,10 @@ import { AnnouncementFilters } from '@platon/feature/announcement/common'
 export class AnnouncementService {
   private readonly logger = new Logger(AnnouncementService.name)
 
-  constructor(@InjectRepository(AnnouncementEntity) private readonly repository: Repository<AnnouncementEntity>) {}
+  constructor(
+    @InjectRepository(AnnouncementEntity) private readonly repository: Repository<AnnouncementEntity>,
+    @InjectRepository(AnnouncementReadEntity) private readonly reads: Repository<AnnouncementReadEntity>
+  ) {}
 
   async create(announcement: Partial<AnnouncementEntity>): Promise<AnnouncementEntity> {
     const newAnnouncennouncement = await this.repository.save(this.repository.create(announcement))
@@ -113,13 +118,7 @@ export class AnnouncementService {
         'publisher.lastName',
         'publisher.role',
       ])
-      .where('announcement.active = :active', { active: true })
-      .andWhere(
-        `(announcement."targetedRoles" IS NULL OR
-          array_length(announcement."targetedRoles", 1) IS NULL OR
-          :userRole = ANY(announcement."targetedRoles"))`,
-        { userRole }
-      )
+    visibleTo(queryBuilder, userRole)
 
     if (filters.search) {
       queryBuilder.andWhere('(announcement.title ILIKE :search OR announcement.description ILIKE :search)', {
@@ -136,7 +135,7 @@ export class AnnouncementService {
 
     try {
       const [items, count] = await queryBuilder.getManyAndCount()
-      return [items, count]
+      return [await this.withReads(items, userId), count]
     } catch (error) {
       const err = error instanceof Error ? error : new Error(String(error))
       this.logger.error(`Erreur lors de la récupération des annonces: ${err.message}`)
@@ -145,22 +144,40 @@ export class AnnouncementService {
   }
 
   async findByIdForUser(id: string, userRole: UserRoles): Promise<AnnouncementEntity> {
-    const announcement = await this.repository
-      .createQueryBuilder('announcement')
-      .leftJoinAndSelect('announcement.publisher', 'publisher')
-      .where('announcement.id = :id', { id })
-      .andWhere('announcement.active = :active', { active: true })
-      .andWhere(
-        `(announcement."targetedRoles" IS NULL OR
-          array_length(announcement."targetedRoles", 1) IS NULL OR
-          :userRole = ANY(announcement."targetedRoles"))`,
-        { userRole }
-      )
-      .getOne()
+    const announcement = await visibleTo(
+      this.repository
+        .createQueryBuilder('announcement')
+        .leftJoinAndSelect('announcement.publisher', 'publisher')
+        .where('announcement.id = :id', { id }),
+      userRole
+    ).getOne()
 
     if (!announcement) {
-      throw new NotFoundResponse(`Annonce avec id ${id} non trouvée`)
+      throw new NotFoundResponse(`Announcement ${id} not found`)
     }
     return announcement
+  }
+
+  /** Records that the person read the announcement, once, if it is meant for them. */
+  async markAsRead(id: string, userId: string, userRole: UserRoles): Promise<void> {
+    const visible = await visibleTo(
+      this.repository.createQueryBuilder('announcement').where('announcement.id = :id', { id }),
+      userRole
+    ).getExists()
+    if (!visible) {
+      throw new NotFoundResponse(`Announcement ${id} not found`)
+    }
+    await this.reads.createQueryBuilder().insert().values({ userId, announcementId: id }).orIgnore().execute()
+  }
+
+  /** Gives each announcement the date the person read it, from their own reads. */
+  private async withReads(announcements: AnnouncementEntity[], userId: string): Promise<AnnouncementEntity[]> {
+    if (!announcements.length) return announcements
+    const reads = await this.reads.find({
+      select: { announcementId: true, createdAt: true },
+      where: { userId, announcementId: In(announcements.map(({ id }) => id)) },
+    })
+    const readAt = new Map(reads.map((read) => [read.announcementId, read.createdAt]))
+    return announcements.map((announcement) => Object.assign(announcement, { readAt: readAt.get(announcement.id) }))
   }
 }

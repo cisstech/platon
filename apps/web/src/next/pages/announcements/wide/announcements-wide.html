@@ -1,0 +1,40 @@
+<div class="announcements__column">
+  <app-announcement-search
+    [value]="list.store.search()"
+    [noMatch]="list.noMatch()"
+    (searched)="list.store.searchFor($event)"
+    (cleared)="list.store.clearSearch()"
+  />
+  @if (!list.failed()) { @if (list.waiting()) {
+  <div class="announcements__list">
+    <pl-announcement-row-skeleton /><pl-announcement-row-skeleton /><pl-announcement-row-skeleton />
+  </div>
+  } @else if (list.rows().length) {
+  <pl-announcement-list class="announcements__list" aria-label="Annonces">
+    @for (row of list.rows(); track row.id) {
+    <pl-announcement-row
+      [heading]="row.heading"
+      [summary]="row.summary"
+      [date]="row.date"
+      [icon]="row.icon"
+      [unread]="row.unread"
+      [unreadLabel]="list.unreadLabel"
+      [current]="list.store.openedId() === row.id"
+      (chosen)="list.store.open(row.id)"
+    />
+    }
+  </pl-announcement-list>
+  } @if (list.hasMore()) {
+  <app-announcement-more [state]="list.store.more()" (asked)="list.showMore()" />
+  } }
+</div>
+
+@if (!list.failed() && list.detail(); as detail) {
+<app-announcement-detail class="announcements__detail" [detail]="detail" titled (retry)="retryContent(detail.id)" />
+} @else if (!list.store.loaded()) {
+<div class="announcements__detail announcements__detail-skeleton" aria-hidden="true">
+  <pl-skeleton shape="heading" width="60%" />
+  <pl-skeleton width="40%" />
+  <pl-skeleton /><pl-skeleton width="92%" /><pl-skeleton width="70%" />
+</div>
+}

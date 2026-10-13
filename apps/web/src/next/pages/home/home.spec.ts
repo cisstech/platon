@@ -16,7 +16,7 @@ describe('Home', () => {
     const storeFake = () => ({
       status: signal('loading'),
       data: signal(undefined),
-      dismissed: signal(new Set()),
+      read: signal(new Set()),
       attempt: signal(0),
       load: jest.fn(),
       stop: jest.fn(),

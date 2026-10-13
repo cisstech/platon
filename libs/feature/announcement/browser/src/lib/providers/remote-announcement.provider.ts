@@ -59,4 +59,8 @@ export class RemoteAnnouncementProvider extends AnnouncementProvider {
       .get<ItemResponse<Announcement>>(`${this.API_BASE_PATH}/visible/${id}`)
       .pipe(map((response) => response.resource))
   }
+
+  markAsRead(id: string): Observable<void> {
+    return this.http.patch<void>(`${this.API_BASE_PATH}/${id}/read`, {})
+  }
 }

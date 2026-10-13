@@ -32,6 +32,7 @@ import {
 import { Session } from '../../core/session/session'
 import { LoadState } from '../../shared/ui/load-state/load-state'
 import { NotificationsStore } from './data/notifications-store'
+import { UNREAD_LABEL } from '../../shared/unread'
 import { InvitationAnswer, NotificationView, notificationView, unreadLabel } from './notifications.vm'
 
 /** Id of the title, for the dialog that opens the panel. */
@@ -76,6 +77,7 @@ export class NotificationsPanel {
   protected readonly layout = inject<PanelLayout>(DIALOG_DATA)
 
   protected readonly headingId = NOTIFICATIONS_HEADING_ID
+  protected readonly unreadLabel = UNREAD_LABEL
   protected readonly phase = trackLoadPhase(this.store.status, this.store.attempt)
   protected readonly loading = computed(() => showsSkeleton(this.phase()))
   protected readonly views = computed(() => {

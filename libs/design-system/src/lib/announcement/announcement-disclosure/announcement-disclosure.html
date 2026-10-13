@@ -1,0 +1,28 @@
+<div class="pl-announcement-disclosure__heading" role="heading" [attr.aria-level]="level()">
+  <button
+    type="button"
+    class="pl-announcement-disclosure__toggle"
+    #button
+    [attr.aria-expanded]="expanded()"
+    [attr.aria-controls]="panelId"
+    (click)="toggle()"
+  >
+    <pl-icon class="pl-announcement-disclosure__kind" [name]="icon()" [size]="2" />
+    <span class="pl-announcement-disclosure__title">
+      @if (unread() && unreadLabel()) {
+      <span class="pl-visually-hidden">{{ unreadLabel() }}{{ ' ' }}</span>
+      }{{ heading() }}</span
+    >
+    <pl-icon class="pl-announcement-disclosure__chevron" name="expand_more" />
+  </button>
+</div>
+@if (!expanded()) { @if (summary()) {
+<p class="pl-announcement-disclosure__summary">{{ summary() }}</p>
+}
+<p class="pl-announcement-disclosure__day">
+  <time [attr.datetime]="dateTime()">{{ day() }}</time>
+</p>
+}
+<div class="pl-announcement-disclosure__panel" [id]="panelId" [hidden]="!expanded()">
+  <ng-content />
+</div>

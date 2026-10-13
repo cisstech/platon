@@ -19,7 +19,6 @@ describe('StudentHomeStore', () => {
       courses: () => of(courses),
       figures: () => of(figures),
       announcements: () => of(announcements),
-      dismissedAnnouncements: () => new Set<string>(),
     }
     TestBed.configureTestingModule({ providers: [StudentHomeStore, { provide: HomeApi, useValue: api }] })
     const store = TestBed.inject(StudentHomeStore)

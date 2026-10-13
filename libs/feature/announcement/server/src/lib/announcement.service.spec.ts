@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { AnnouncementService } from './announcement.service'
 import { getRepositoryToken } from '@nestjs/typeorm'
 import { AnnouncementEntity } from './announcement.entity'
+import { AnnouncementReadEntity } from './announcement-read.entity'
 import { mockRepository, mockSelectQueryBuilder, MockRepository } from '@platon/core/testing/server'
 import { createAnnouncementEntity } from './factories/announcement.factory'
 import { NotFoundResponse } from '@platon/core/common'
@@ -10,6 +11,7 @@ import { UserRoles } from '@platon/core/common'
 describe('AnnouncementService', () => {
   let service: AnnouncementService
   let repository: MockRepository<AnnouncementEntity>
+  let reads: MockRepository<AnnouncementReadEntity>
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -19,11 +21,17 @@ describe('AnnouncementService', () => {
           provide: getRepositoryToken(AnnouncementEntity),
           useValue: mockRepository<AnnouncementEntity>(),
         },
+        {
+          provide: getRepositoryToken(AnnouncementReadEntity),
+          useValue: mockRepository<AnnouncementReadEntity>(),
+        },
       ],
     }).compile()
 
     service = module.get<AnnouncementService>(AnnouncementService)
     repository = module.get(getRepositoryToken(AnnouncementEntity))
+    reads = module.get(getRepositoryToken(AnnouncementReadEntity))
+    reads.find.mockResolvedValue([])
   })
 
   describe('create', () => {
@@ -169,13 +177,28 @@ describe('AnnouncementService', () => {
       const [items, count] = await service.getVisibleForUser('user-test-id', UserRoles.teacher)
 
       expect(qb.leftJoin).toHaveBeenCalledWith('announcement.publisher', 'publisher')
-      expect(qb.where).toHaveBeenCalledWith('announcement.active = :active', { active: true })
+      expect(qb.andWhere).toHaveBeenCalledWith('announcement.active = :active', { active: true })
       expect(qb.andWhere).toHaveBeenCalledWith(
         expect.stringContaining('targetedRoles'),
         expect.objectContaining({ userRole: UserRoles.teacher })
       )
       expect(items).toHaveLength(1)
       expect(count).toBe(1)
+    })
+
+    it('gives each announcement the date the person read it', async () => {
+      const qb = mockSelectQueryBuilder<AnnouncementEntity>()
+      repository.createQueryBuilder.mockReturnValue(qb as any)
+      qb.getManyAndCount.mockResolvedValue([
+        [createAnnouncementEntity({ id: 'read-id' }), createAnnouncementEntity({ id: 'unread-id' })],
+        2,
+      ])
+      const readAt = new Date('2026-10-12T08:00:00Z')
+      reads.find.mockResolvedValue([{ announcementId: 'read-id', createdAt: readAt } as AnnouncementReadEntity])
+
+      const [items] = await service.getVisibleForUser('user-test-id', UserRoles.student)
+
+      expect(items.map((announcement) => announcement.readAt)).toEqual([readAt, undefined])
     })
 
     it('should select fields without the data field', async () => {

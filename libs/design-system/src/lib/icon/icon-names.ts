@@ -81,6 +81,7 @@ export const ICON_NAMES = [
   'school',
   'science',
   'search',
+  'search_off',
   'settings',
   'share',
   'shield_person',

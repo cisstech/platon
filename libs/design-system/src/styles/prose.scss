@@ -1,0 +1,172 @@
+// Rich content written elsewhere, an announcement for instance, set in the typography of the page:
+// paragraphs, headings, lists and checklists, quotes, code, images with their caption, tables. The
+// content arrives as HTML, so it is styled through its elements, under `.pl-prose`. Code keeps its
+// monospace without colors, and wraps rather than scroll.
+
+.pl-prose {
+  max-inline-size: 72ch;
+  color: var(--pl-color-text);
+  font: var(--pl-font-reading);
+  overflow-wrap: anywhere;
+
+  > :first-child {
+    margin-block-start: 0;
+  }
+
+  > :last-child {
+    margin-block-end: 0;
+  }
+
+  p,
+  ul,
+  ol,
+  blockquote,
+  pre,
+  figure,
+  table,
+  .checklist {
+    margin-block: 0 var(--pl-space-3);
+  }
+
+  h1,
+  h2 {
+    margin-block: var(--pl-space-5) var(--pl-space-2);
+    font: var(--pl-font-heading);
+  }
+
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin-block: var(--pl-space-4) var(--pl-space-2);
+    font: var(--pl-font-subheading);
+  }
+
+  ul,
+  ol {
+    padding-inline-start: var(--pl-space-5);
+  }
+
+  li + li,
+  li > ul,
+  li > ol {
+    margin-block-start: var(--pl-space-1);
+  }
+
+  li > ul,
+  li > ol {
+    margin-block-end: 0;
+  }
+
+  a {
+    color: var(--pl-color-primary);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  blockquote {
+    margin-inline: 0;
+    padding-inline-start: var(--pl-space-4);
+    border-inline-start: 3px solid var(--pl-color-line-strong);
+    color: var(--pl-color-muted);
+
+    p {
+      margin: 0;
+    }
+
+    cite {
+      display: block;
+      margin-block-start: var(--pl-space-1);
+      font: var(--pl-font-small);
+      font-style: normal;
+    }
+  }
+
+  code {
+    font: var(--pl-font-code);
+  }
+
+  pre {
+    padding: var(--pl-space-3) var(--pl-space-4);
+    border-radius: var(--pl-radius-control);
+    background: var(--pl-color-surface-muted);
+    white-space: pre-wrap;
+  }
+
+  img {
+    display: block;
+    max-inline-size: 100%;
+    block-size: auto;
+    border-radius: var(--pl-radius-control);
+  }
+
+  figure {
+    margin-inline: 0;
+  }
+
+  figcaption {
+    margin-block-start: var(--pl-space-2);
+    color: var(--pl-color-muted);
+    font: var(--pl-font-small);
+  }
+
+  table {
+    inline-size: 100%;
+    border-collapse: collapse;
+    font: var(--pl-font-body);
+  }
+
+  td,
+  th {
+    padding: var(--pl-space-2) var(--pl-space-3);
+    border: 1px solid var(--pl-color-line);
+    text-align: start;
+    vertical-align: top;
+  }
+
+  hr {
+    margin-block: var(--pl-space-5);
+    border: 0;
+    border-block-start: 1px solid var(--pl-color-line);
+  }
+
+  // A checklist: a box before each item, ticked when the item is done. The state is also written for
+  // screen readers by the content itself.
+  .checklist {
+    padding: 0;
+    list-style: none;
+  }
+
+  .checklist-item {
+    position: relative;
+    padding-inline-start: calc(var(--pl-space-5) + var(--pl-space-1));
+  }
+
+  .checklist-item::before {
+    content: '';
+    position: absolute;
+    inset-block-start: 5px;
+    inset-inline-start: 0;
+    inline-size: 16px;
+    block-size: 16px;
+    border: 1.5px solid var(--pl-color-control);
+    border-radius: var(--pl-radius-1);
+  }
+
+  .checklist-item.checked::before {
+    border-color: var(--pl-color-primary);
+    background: var(--pl-color-primary);
+  }
+
+  .checklist-item.checked::after {
+    content: '';
+    position: absolute;
+    inset-block-start: 8px;
+    inset-inline-start: 6px;
+    inline-size: 5px;
+    block-size: 9px;
+    border: solid var(--pl-color-on-primary);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+}

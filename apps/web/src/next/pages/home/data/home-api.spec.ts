@@ -10,7 +10,6 @@ import { firstValueFrom } from 'rxjs'
 import { HomeApi } from './home-api'
 
 const at = '2026-10-12T08:00:00.000Z'
-const STORAGE_KEY = 'platon-feature-announcements'
 
 describe('HomeApi', () => {
   let http: HttpTestingController
@@ -20,7 +19,6 @@ describe('HomeApi', () => {
     http.expectOne(url).flush({ success: true, statusCode: 200, resources, total: resources.length })
 
   beforeEach(() => {
-    localStorage.clear()
     TestBed.configureTestingModule({
       providers: [
         provideHttpClient(withInterceptorsFromDi()),
@@ -103,30 +101,12 @@ describe('HomeApi', () => {
     expect(await announcements).toEqual([{ id: 'n1', title: 'Maintenance', createdAt: new Date(at) }])
   })
 
-  it('remembers in this browser the announcements the person closed, as the current interface does', () => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ n0: { announcementId: 'n0', dismissed: true } }))
+  it('marks an announcement read on the server', async () => {
+    const done = firstValueFrom(api.markAnnouncementRead('n1'))
 
-    api.dismissAnnouncement('n1')
-
-    expect(api.dismissedAnnouncements()).toEqual(new Set(['n0', 'n1']))
-    expect(JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '{}').n1).toMatchObject({
-      announcementId: 'n1',
-      dismissed: true,
-    })
-  })
-
-  it('remembers nothing, without failing, when the browser refuses its storage', () => {
-    const getItem = jest.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
-      throw new Error('denied')
-    })
-    const setItem = jest.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
-      throw new Error('denied')
-    })
-
-    expect(() => api.dismissAnnouncement('n1')).not.toThrow()
-    expect(api.dismissedAnnouncements()).toEqual(new Set())
-
-    getItem.mockRestore()
-    setItem.mockRestore()
+    const request = http.expectOne('/api/v1/announcements/n1/read')
+    expect(request.request.method).toBe('PATCH')
+    request.flush(null)
+    await done
   })
 })

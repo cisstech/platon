@@ -26,6 +26,7 @@ describe('AnnouncementController', () => {
             update: jest.fn(),
             delete: jest.fn(),
             getVisibleForUser: jest.fn(),
+            markAsRead: jest.fn(),
           },
         },
       ],
@@ -109,6 +110,16 @@ describe('AnnouncementController', () => {
       await expect(controller.findVisibleById(req, 'announcement-test-id')).rejects.toBeInstanceOf(
         UnauthorizedException
       )
+    })
+  })
+
+  describe('markAsRead', () => {
+    it('marks the announcement read for the person who asks', async () => {
+      const user = createUserEntity({ role: UserRoles.student })
+
+      await controller.markAsRead({ user } as unknown as IRequest, 'announcement-test-id')
+
+      expect(service.markAsRead).toHaveBeenCalledWith('announcement-test-id', user.id, UserRoles.student)
     })
   })
 
