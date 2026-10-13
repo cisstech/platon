@@ -1,0 +1,52 @@
+<pl-binder
+  [heading]="card().heading"
+  [description]="card().description"
+  [monogram]="card().monogram"
+  [hue]="card().hue"
+  [href]="card().href"
+  [badge]="card().badge"
+  [badgeHref]="card().badgeHref"
+  badgeIcon="emoji_events"
+  [compact]="compact()"
+>
+  <app-course-menu
+    plBinderActions
+    [course]="card().heading"
+    [archivable]="card().archivable"
+    [archived]="archived()"
+    [challenges]="!!card().badge"
+    (chosen)="chosen.emit($event)"
+  />
+  @if (card().kind === 'teacher') {
+  <p class="course-card__line course-card__counts">
+    @for (count of card().counts; track count.icon; let first = $first) { @if (!first) {
+    <span class="pl-visually-hidden">, </span>
+    }
+    <span class="course-card__count"
+      ><pl-icon [name]="count.icon" [size]="1" /><strong>{{ count.value }}</strong> {{ count.label }}</span
+    >
+    }
+  </p>
+  <p class="course-card__line"><pl-icon name="history" [size]="1" />Mis à jour le {{ card().updated }}</p>
+  } @else { @if (card().progress; as progress) {
+  <div class="course-card__progress">
+    <pl-progress
+      [value]="progress.done"
+      [max]="progress.total"
+      [hue]="card().hue"
+      [done]="progress.finished"
+      [label]="'Votre avancement dans ' + card().heading"
+    />
+    <span class="course-card__percent">{{ card().percent }}&nbsp;%</span>
+  </div>
+  <p class="course-card__line" [class.course-card__line--finished]="progress.finished">
+    @if (progress.finished) {<pl-icon name="task_alt" [size]="1" />}{{ card().progressText }}
+  </p>
+  } @if (card().due; as due) {
+  <p class="course-card__line course-card__due" [attr.data-tone]="due.dueTone">
+    @if (due.dueIcon; as icon) {<pl-icon [name]="icon" [size]="1" />}{{ due.due }}
+  </p>
+  }
+  <p class="course-card__line course-card__teachers"><pl-icon name="person" [size]="1" />{{ card().teachers }}</p>
+  }
+</pl-binder>

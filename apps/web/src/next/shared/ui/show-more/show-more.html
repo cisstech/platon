@@ -1,6 +1,6 @@
 <button type="button" plButton variant="secondary" [loading]="state() === 'loading'" (click)="asked.emit()">
-  Afficher les annonces plus anciennes
+  {{ label() }}
 </button>
 @if (state() === 'error') {
-<p role="alert">Les annonces plus anciennes n'ont pas pu être chargées.</p>
+<p>{{ failure() }}</p>
 }

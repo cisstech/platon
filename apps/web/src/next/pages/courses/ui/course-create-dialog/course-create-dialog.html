@@ -1,0 +1,46 @@
+<pl-dialog
+  heading="Créer un cours"
+  [headingId]="headingId"
+  confirmLabel="Créer le cours"
+  cancelLabel="Annuler"
+  [confirmDisabled]="creating()"
+  (confirmed)="create()"
+  (cancelled)="cancel()"
+>
+  <form class="course-create" (submit)="$event.preventDefault(); create()">
+    <pl-field label="Nom du cours">
+      <input
+        plInput
+        autocomplete="off"
+        [invalid]="problem() === 'name'"
+        aria-describedby="course-create-name-hint"
+        [value]="name()"
+        (input)="typed('name', $event)"
+      />
+    </pl-field>
+    <p class="course-create__hint" id="course-create-name-hint">
+      @if (problem() === 'name') {
+      <span class="course-create__error">{{ problems.name }}</span>
+      } @else {Tel que vos étudiants le verront.}
+    </p>
+    <pl-field label="Description">
+      <textarea
+        plInput
+        rows="3"
+        placeholder="Niveau, semestre, ce que le cours couvre."
+        [invalid]="problem() === 'desc'"
+        aria-describedby="course-create-desc-hint"
+        [value]="desc()"
+        (input)="typed('desc', $event)"
+      ></textarea>
+    </pl-field>
+    <p class="course-create__hint" id="course-create-desc-hint">
+      @if (problem() === 'desc') {
+      <span class="course-create__error">{{ problems.desc }}</span>
+      }
+    </p>
+    @if (problem() === 'failed') {
+    <p class="course-create__error">{{ problems.failed }}</p>
+    }
+  </form>
+</pl-dialog>

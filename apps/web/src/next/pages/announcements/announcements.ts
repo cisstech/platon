@@ -1,11 +1,19 @@
 import { DOCUMENT } from '@angular/common'
 import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
-import { Empty, isBusy, Page, PAGE_CONTENT_ID, PageHeader, showsSkeleton, trackLoadPhase } from '@platon/design-system'
+import {
+  announceSearches,
+  Empty,
+  isBusy,
+  Page,
+  PAGE_CONTENT_ID,
+  PageHeader,
+  showsSkeleton,
+  trackLoadPhase,
+} from '@platon/design-system'
 import { narrowScreen } from '../../shared/narrow-screen'
 import { LoadState } from '../../shared/ui/load-state/load-state'
-import { announceSearches } from './announcements-page'
-import { openedOnArrival } from './announcements.vm'
+import { openedOnArrival, searchOutcome } from './announcements.vm'
 import { AnnouncementsStore } from './data/announcements-store'
 import { AnnouncementsNarrow } from './narrow/announcements-narrow'
 import { AnnouncementsWide } from './wide/announcements-wide'
@@ -43,7 +51,11 @@ export class Announcements {
       openedOnArrival(announcements, this.highlight, this.store.read(), this.store.now, !this.narrow())
     )
     inject(DestroyRef).onDestroy(() => this.store.stop())
-    announceSearches(this.store)
+
+    announceSearches(
+      computed(() => (this.store.status() === 'ready' ? this.store.searched() : undefined)),
+      () => searchOutcome(this.store.total(), this.store.searched())
+    )
   }
 
   /** Loads the list again, the focus going to the content: the button that held it goes away. */
