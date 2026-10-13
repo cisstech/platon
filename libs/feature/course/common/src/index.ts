@@ -1,6 +1,7 @@
 export * from './lib/activity.model'
 export * from './lib/corrector.model'
 export * from './lib/course.model'
+export * from './lib/course-progress'
 export * from './lib/member.model'
 export * from './lib/notification.model'
 export * from './lib/permissions.model'
