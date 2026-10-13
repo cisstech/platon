@@ -75,6 +75,7 @@ critique. Les points ouverts de C-02 à C-05 sont tranchés (D22 à D30, 2026-10
 | [C-03](./done/C-03-le-cadre-mobile.md)                             | Le cadre mobile : barre haute et panneau                                                    | C-02             | M      | Livré (2026-10-09) |
 | [C-04](./done/C-04-le-panneau-des-notifications.md)                | Le panneau des notifications                                                                | C-02, C-06, F-04 | M      | Livré (2026-10-09) |
 | [C-08](./done/C-08-le-temps-reel-en-sse-sans-graphql.md)           | Le temps réel en SSE, sans GraphQL                                                          | C-04             | L      | Livré (2026-10-12) |
+| [C-09](./C-09-decouper-le-cadre.md)                                | Découper le cadre : profil, Créer, panneaux                                                 | C-02, C-03, C-04 | M      | À faire            |
 
 ## Phase A : les accueils
 
@@ -82,7 +83,7 @@ critique. Les points ouverts de C-02 à C-05 sont tranchés (D22 à D30, 2026-10
 | ------------------------------------------------ | --------------------------------------------------------------------------------- | ---------------- | ------ | ------------------ |
 | [A-01](./done/A-01-l-accueil-de-l-eleve.md)      | Accueil élève : À faire, Bientôt, Résultats récents, Mes cours, bandeau d'annonce | C-05, A-04       | L      | Livré (2026-10-12) |
 | [A-02](./done/A-02-l-accueil-de-l-enseignant.md) | Accueil enseignant : En cours, À faire, Mes cours, Vu récemment                   | C-05, A-04, A-01 | L      | Livré (2026-10-12) |
-| A-03                                             | La page Annonces                                                                  | C-05             | S      | À écrire           |
+| [A-03](./done/A-03-la-page-annonces.md)          | La page Annonces                                                                  | C-05, A-01, A-02 | M      | Livré (2026-10-13) |
 | [A-04](./done/A-04-les-donnees-des-accueils.md)  | Les données des accueils : `activities/mine`, copies récentes, participation      | aucun            | L      | Livré (2026-10-12) |
 
 ## Phase K : les cours
