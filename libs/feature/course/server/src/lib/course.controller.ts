@@ -29,10 +29,12 @@ export class CourseController {
   @Get()
   @Expandable(CourseDTO, { rootField: 'resources' })
   async search(@Req() req: IRequest, @Query() filters: CourseFiltersDTO = {}): Promise<ListResponse<CourseDTO>> {
+    // Only an administrator may list the courses of other people, or of the whole platform.
+    const admin = req.user.role === UserRoles.admin
     filters = {
       ...filters,
-      members: Array.from(new Set([req.user.id, ...(filters.members || [])])),
-      showAll: filters.showAll == true && req.user.role == UserRoles.admin,
+      members: admin ? Array.from(new Set([req.user.id, ...(filters.members || [])])) : [req.user.id],
+      showAll: filters.showAll == true && admin,
     }
 
     const [items, total] = await this.courseService.search(filters)
