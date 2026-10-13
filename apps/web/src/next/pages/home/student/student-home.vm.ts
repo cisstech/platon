@@ -7,24 +7,13 @@ import {
   NO_BREAK_SPACE,
   percentOf,
 } from '@platon/design-system'
-import { Course, PlayableActivity } from '@platon/feature/course/common'
+import { Course, courseProgress, PlayableActivity } from '@platon/feature/course/common'
 import { RecentCopy } from '@platon/feature/result/common'
+import { byDeadline, byOpening, closingDue, DAY, DueView, openingDue } from '../../../shared/due'
 import { plural } from '../../../shared/plural'
+import { progressText } from '../../../shared/progress-text'
 import { HomeFigures } from '../data/home-api'
-import {
-  ActivityRowView,
-  byDeadline,
-  byOpening,
-  closesThisWeek,
-  closingDue,
-  closingThisWeek,
-  DAY,
-  DueView,
-  gradedTag,
-  openingDue,
-  rowOf,
-  today,
-} from '../home.vm'
+import { ActivityRowView, closesThisWeek, closingThisWeek, gradedTag, rowOf, today } from '../home.vm'
 
 /** « Bientôt » looks this far ahead. */
 const SOON_DAYS = 7
@@ -177,15 +166,8 @@ export const copyViews = (copies: RecentCopy[], now: Date, locale: string): Copy
 /** « Mes cours »: each course with its exercises done over all its activities. */
 export const courseViews = (courses: Course[], activities: PlayableActivity[]): CourseView[] =>
   courses.map((course) => {
-    const own = activities.filter((activity) => activity.courseId === course.id)
-    const done = own.reduce((sum, activity) => sum + activity.exercisesDone, 0)
-    const total = own.reduce((sum, activity) => sum + activity.exerciseCount, 0)
-    const finished = total > 0 && done >= total
-    const progressText = finished
-      ? 'Cours terminé'
-      : total
-      ? `${done} ${plural(done, 'exercice', 'exercices')} sur ${total}`
-      : "Aucune activité pour l'instant"
+    const progress = courseProgress(course.id, activities)
+    const { done, total, finished } = progress
     return {
       id: course.id,
       name: course.name,
@@ -194,7 +176,7 @@ export const courseViews = (courses: Course[], activities: PlayableActivity[]): 
       total,
       percent: percentOf(done, total),
       finished,
-      progressText,
+      progressText: progressText(progress),
       href: `/courses/${course.id}`,
     }
   })

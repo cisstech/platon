@@ -1,0 +1,22 @@
+@if (noMatch(); as match) {
+<pl-empty [heading]="match.heading" icon="search_off">
+  <p>Essayez un autre nom, ou une autre période de mise à jour.</p>
+  <button type="button" plButton variant="secondary" plEmptyAction (click)="cleared.emit()">{{ match.clear }}</button>
+</pl-empty>
+} @else if (tab() === 'archived') {
+<pl-empty heading="Aucun cours archivé" icon="inbox">
+  <p>Archivez un cours depuis son menu&nbsp;: il est rangé ici pour vous seulement.</p>
+</pl-empty>
+} @else if (tab() === 'platform') {
+<pl-empty heading="Aucun cours sur la plateforme" icon="school">
+  <p>Les cours que créent les enseignants apparaîtront ici.</p>
+</pl-empty>
+} @else if (admin() && !archived()) {
+<pl-empty heading="Aucun cours dont vous êtes membre" icon="school">
+  <p>«&nbsp;Toute la plateforme&nbsp;» montre tous les cours.</p>
+</pl-empty>
+} @else {
+<pl-empty heading="Aucun cours actuel" icon="school">
+  <p>Vos cours archivés restent dans Archivés.</p>
+</pl-empty>
+}

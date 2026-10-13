@@ -1,7 +1,9 @@
 import { userDisplayName, UserRoles } from '@platon/core/common'
-import { fullCalendarDay, IconName, NO_BREAK_SPACE } from '@platon/design-system'
+import { fullCalendarDay, IconName } from '@platon/design-system'
 import { Announcement, EditorOutputData } from '@platon/feature/announcement/common'
 import { isUnread } from '@platon/feature/announcement/browser/shared'
+import { plural } from '../../shared/plural'
+import { quoted } from '../../shared/quoted'
 import type { ContentState } from './data/announcements-store'
 
 /** The kinds an administrator gives an announcement, under the names of their icons in the current interface. */
@@ -112,5 +114,8 @@ export const detailView = (
 }
 
 /** « Aucune annonce ne correspond à « examen ». » */
-export const noMatch = (search: string) =>
-  `Aucune annonce ne correspond à «${NO_BREAK_SPACE}${search}${NO_BREAK_SPACE}».`
+export const noMatch = (search: string) => `Aucune annonce ne correspond à ${quoted(search)}.`
+
+/** What a search found, as a screen reader says it: « 3 annonces », or that none matches. */
+export const searchOutcome = (total: number, search: string): string =>
+  total ? `${total} ${plural(total, 'annonce', 'annonces')}` : noMatch(search)

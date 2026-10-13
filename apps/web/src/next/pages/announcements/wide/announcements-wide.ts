@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, viewChild, viewChildren } from '@angular/core'
 import { AnnouncementList, AnnouncementRow, AnnouncementRowSkeleton, Skeleton } from '@platon/design-system'
+import { ShowMore } from '../../../shared/ui/show-more/show-more'
 import { announcementsList } from '../announcements-page'
 import { AnnouncementDetail } from '../ui/announcement-detail/announcement-detail'
-import { AnnouncementMore } from '../ui/announcement-more/announcement-more'
 import { AnnouncementSearch } from '../ui/announcement-search/announcement-search'
 
 /** On a wide screen: the search and the list on the left, the open announcement beside them. */
@@ -12,10 +12,10 @@ import { AnnouncementSearch } from '../ui/announcement-search/announcement-searc
   imports: [
     AnnouncementDetail,
     AnnouncementList,
-    AnnouncementMore,
     AnnouncementRow,
     AnnouncementRowSkeleton,
     AnnouncementSearch,
+    ShowMore,
     Skeleton,
   ],
   templateUrl: './announcements-wide.html',

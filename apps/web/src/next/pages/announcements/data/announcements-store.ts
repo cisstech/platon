@@ -4,6 +4,7 @@ import { isUnread } from '@platon/feature/announcement/browser/shared'
 import { Announcement } from '@platon/feature/announcement/common'
 import { defer, Subscription } from 'rxjs'
 import { patiently } from '../../../shared/patiently'
+import { SEARCH_PAUSE } from '../../../shared/search-pause'
 import { AnnouncementsApi } from './announcements-api'
 
 /** The content of an open announcement: on its way, there, or failed. */
@@ -11,9 +12,6 @@ export type ContentState =
   | { readonly status: 'loading' }
   | { readonly status: 'ready'; readonly announcement: Announcement }
   | { readonly status: 'error' }
-
-/** How long the search waits for the person to pause before asking the server. */
-const SEARCH_PAUSE = 300
 
 /**
  * The store of the Annonces page, provided by its route: the list, page after page and searched on

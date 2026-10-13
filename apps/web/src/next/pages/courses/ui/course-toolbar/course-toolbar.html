@@ -1,0 +1,37 @@
+<pl-field class="course-toolbar__search" label="Chercher un cours" icon="search" labelHidden>
+  <input plInput type="search" placeholder="Nom d'un cours" [value]="filters().search" (input)="search($event)" />
+</pl-field>
+<pl-segmented
+  label="Cours affichés"
+  [options]="tabs()"
+  [value]="filters().tab"
+  (valueChange)="chosen.emit({ tab: $event })"
+/>
+@if (!compact() || filters().period) {
+<div class="course-toolbar__order">
+  @if (!compact()) {
+  <button type="button" plButton variant="secondary" size="sm" [plMenuTrigger]="orderMenu">
+    <pl-icon name="sort" /><span class="pl-visually-hidden">Trier&nbsp;: </span>{{ orderLabel()
+    }}<pl-icon name="expand_more" />
+  </button>
+  <pl-menu #orderMenu="ngMenu" (itemSelected)="chooseOrder($event)">
+    @for (order of orders; track order.value) {
+    <pl-menu-item [value]="order.value" role="menuitemradio" [checked]="order.value === filters().order">{{
+      order.label
+    }}</pl-menu-item>
+    }
+  </pl-menu>
+  }
+  <button type="button" plButton variant="secondary" size="sm" [plMenuTrigger]="periodMenu">
+    <pl-icon name="history" /><span class="pl-visually-hidden">Mis à jour&nbsp;: </span>{{ periodLabel()
+    }}<pl-icon name="expand_more" />
+  </button>
+  <pl-menu #periodMenu="ngMenu" (itemSelected)="choosePeriod($event)">
+    @for (period of periods; track period.value) {
+    <pl-menu-item [value]="'' + period.value" role="menuitemradio" [checked]="period.value === filters().period">{{
+      period.label
+    }}</pl-menu-item>
+    }
+  </pl-menu>
+</div>
+}

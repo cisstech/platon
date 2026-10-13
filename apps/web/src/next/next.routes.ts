@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router'
 import { legacyBridgeGuard } from './core/legacy-bridge/legacy-bridge-guard'
 import { AnnouncementsStore } from './pages/announcements/data/announcements-store'
+import { CoursesStore } from './pages/courses/data/courses-store'
 import { SHELL_ROLES, sessionGuard } from './core/session/session-guard'
 import { Home } from './pages/home/home'
 import { StudentHomeStore } from './pages/home/data/student-home-store'
@@ -40,6 +41,16 @@ export const nextRoutes: Routes = [
         title: 'Annonces',
         providers: [AnnouncementsStore],
       },
+      {
+        path: 'courses',
+        loadComponent: () => import('./pages/courses/courses').then((page) => page.Courses),
+        title: 'Cours',
+        // The page has its own « Créer un cours »: Create turns quiet in the cover.
+        data: { quietCreate: true },
+        providers: [CoursesStore],
+      },
+      // The address of the creation of a course: the list, with its dialog open.
+      { path: 'courses/create', redirectTo: '/courses?create=true' },
     ],
   },
   { path: '**', canActivate: [legacyBridgeGuard], children: [] },
