@@ -137,11 +137,11 @@ critique. Les points ouverts de C-02 à C-05 sont tranchés (D22 à D30, 2026-10
 
 ## Phase X : la bascule
 
-| Ticket | Titre                                                                 | Dépend de              | Taille | Statut   |
-| ------ | --------------------------------------------------------------------- | ---------------------- | ------ | -------- |
-| X-01   | Palier 1, proposition aux volontaires (`platon-ui-next` à `opt-in`)   | S-05, C-02, A-01, A-02 | S      | À écrire |
-| X-02   | Palier 2, la nouvelle interface par défaut, avec retour possible      | tous les écrans hors L | S      | À écrire |
-| X-03   | Palier 3, retrait de l'ancienne interface, de Material et de ng-zorro | X-02, phase L          | L      | À écrire |
+| Ticket                                                           | Titre                                                                 | Dépend de              | Taille | Statut   |
+| ---------------------------------------------------------------- | --------------------------------------------------------------------- | ---------------------- | ------ | -------- |
+| [X-01](./X-01-proposer-la-nouvelle-interface-aux-volontaires.md) | Palier 1, proposition aux volontaires (`platon-ui-next` à `opt-in`)   | S-05, C-02, A-01, A-02 | S      | À faire  |
+| X-02                                                             | Palier 2, la nouvelle interface par défaut, avec retour possible      | tous les écrans hors L | S      | À écrire |
+| X-03                                                             | Palier 3, retrait de l'ancienne interface, de Material et de ng-zorro | X-02, phase L          | L      | À écrire |
 
 ### Critères de passage
 
