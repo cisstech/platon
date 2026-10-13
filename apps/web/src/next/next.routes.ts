@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router'
 import { legacyBridgeGuard } from './core/legacy-bridge/legacy-bridge-guard'
+import { AnnouncementsStore } from './pages/announcements/data/announcements-store'
 import { SHELL_ROLES, sessionGuard } from './core/session/session-guard'
 import { Home } from './pages/home/home'
 import { StudentHomeStore } from './pages/home/data/student-home-store'
@@ -32,6 +33,13 @@ export const nextRoutes: Routes = [
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
       { path: 'dashboard', component: Home, title: 'Accueil', providers: [StudentHomeStore, TeacherHomeStore] },
+      // Loaded on demand: the content of an announcement brings its parser.
+      {
+        path: 'announcements',
+        loadComponent: () => import('./pages/announcements/announcements').then((page) => page.Announcements),
+        title: 'Annonces',
+        providers: [AnnouncementsStore],
+      },
     ],
   },
   { path: '**', canActivate: [legacyBridgeGuard], children: [] },

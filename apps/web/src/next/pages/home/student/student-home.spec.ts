@@ -74,7 +74,7 @@ describe('StudentHome', () => {
   let store: {
     status: ReturnType<typeof signal<LoadStatus>>
     data: ReturnType<typeof signal<StudentHomeData | undefined>>
-    dismissed: ReturnType<typeof signal<ReadonlySet<string>>>
+    read: ReturnType<typeof signal<ReadonlySet<string>>>
     attempt: ReturnType<typeof signal<number>>
     load: jest.Mock
     retry: jest.Mock
@@ -91,12 +91,12 @@ describe('StudentHome', () => {
     store = {
       status: signal(status),
       data: signal(data),
-      dismissed: signal(new Set<string>()),
+      read: signal(new Set<string>()),
       attempt: signal(0),
       load: jest.fn(),
       retry: jest.fn(),
       stop: jest.fn(),
-      dismissAnnouncement: jest.fn((id: string) => store.dismissed.update((closed) => new Set([...closed, id]))),
+      dismissAnnouncement: jest.fn((id: string) => store.read.update((read) => new Set([...read, id]))),
     }
     TestBed.configureTestingModule({
       providers: [

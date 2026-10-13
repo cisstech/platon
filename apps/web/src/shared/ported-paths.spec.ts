@@ -6,6 +6,7 @@ describe('isPorted', () => {
     expect(isPorted('/dashboard')).toBe(true)
     expect(isPorted('/dashboard/?tab=1#top')).toBe(true)
     expect(isPorted('/login?next=%2Fdashboard')).toBe(true)
+    expect(isPorted('/announcements?highlight=a1')).toBe(true)
   })
 
   it('leaves the others to the current interface', () => {

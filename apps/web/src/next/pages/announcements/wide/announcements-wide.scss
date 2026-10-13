@@ -1,0 +1,19 @@
+:host {
+  display: grid;
+  grid-template-columns: 340px minmax(0, 1fr);
+  align-items: start;
+  gap: var(--pl-space-6);
+}
+
+.announcements__detail {
+  min-block-size: 240px;
+  padding: var(--pl-space-5) var(--pl-space-6);
+  border: 1px solid var(--pl-color-line);
+  border-radius: var(--pl-radius-card);
+  background: var(--pl-color-surface);
+}
+
+.announcements__detail-skeleton {
+  display: grid;
+  gap: var(--pl-space-3);
+}
