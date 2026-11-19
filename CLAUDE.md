@@ -33,11 +33,12 @@ NX_WORKSPACE_ROOT_PATH NX_DAEMON=false NX_TUI=false` in front of nx (see `transv
 
 - The person starts and stops containers and dev servers; never do it, never build into what they serve.
 - Commit, push or open a pull request only when asked. Never a Claude author, co-author or "Generated
-  with" line. Commits: `type(scope): subject`, English, imperative, scope = library or area
-  (`web`, `design-system`, `result`, `backlog`). Pull requests: a few factual sentences.
+  with" line. Commits follow `CONTRIBUTING.md`: `type(scope): subject`, English, imperative, scope =
+  library or area (`web`, `design-system`, `result`, `backlog`). Pull requests: a few factual sentences.
 - No em or en dash anywhere, code, copy or docs: `yarn lint:em-dashes`.
-- French for product copy (formal "vous", gender neutral), `docs/` and `design/`; English for code,
-  comments, logs, server exceptions, commits and pull requests. User-facing error strings are French.
+- French for product copy (formal "vous", gender neutral), the backlog (`docs/backlog`) and `design/`;
+  English for code, comments, logs, server exceptions, commits, pull requests and the developer guides
+  (`README.md`, `CONTRIBUTING.md`, the other files of `docs/`). User-facing error strings are French.
 - A comment says what the code does and its non-obvious why: never its history, a ticket id or a
   decision id.
 - The current interface only receives fixes (`front/legacy.md`); new screens go to the new one.
