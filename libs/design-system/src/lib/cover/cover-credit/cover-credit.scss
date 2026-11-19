@@ -1,0 +1,18 @@
+:host {
+  display: flex;
+  align-items: center;
+  gap: var(--pl-space-2);
+  margin-block-start: var(--pl-space-2);
+  padding: var(--pl-space-1) var(--pl-space-2);
+  border-radius: var(--pl-radius-control);
+  color: var(--pl-color-cover-muted);
+  font: var(--pl-font-caption);
+  font-weight: var(--pl-weight-regular);
+  text-decoration: none;
+}
+:host(:hover) {
+  color: var(--pl-color-cover-text);
+}
+:host(:focus-visible) {
+  outline-color: var(--pl-color-cover-primary);
+}

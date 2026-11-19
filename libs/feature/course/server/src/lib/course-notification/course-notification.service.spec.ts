@@ -10,7 +10,7 @@ import { CourseNotificationService } from './course-notification.service'
 describe('CourseNotificationService', () => {
   let service: CourseNotificationService
   let dataSource: { query: jest.Mock }
-  let notificationService: jest.Mocked<Pick<NotificationService, 'sendToUser' | 'sendToAllUsers'>>
+  let notificationService: jest.Mocked<Pick<NotificationService, 'sendToUser' | 'sendToAllUsers' | 'declareSignals'>>
   let monitorPresenceService: jest.Mocked<Pick<CourseMonitorPresenceService, 'getActiveMonitoringUsers'>>
 
   beforeEach(async () => {
@@ -18,6 +18,7 @@ describe('CourseNotificationService', () => {
     notificationService = {
       sendToUser: jest.fn().mockResolvedValue(undefined),
       sendToAllUsers: jest.fn().mockResolvedValue(undefined),
+      declareSignals: jest.fn(),
     }
     monitorPresenceService = { getActiveMonitoringUsers: jest.fn() }
 
@@ -35,6 +36,14 @@ describe('CourseNotificationService', () => {
 
   afterEach(() => {
     jest.clearAllMocks()
+  })
+
+  describe('onModuleInit', () => {
+    it("devrait déclarer comme signaux les notifications du suivi d'une activité et du lecteur", () => {
+      service.onModuleInit()
+
+      expect(notificationService.declareSignals).toHaveBeenCalledWith('EXERCISE-CHANGES', 'MODERATION-ACTIVITY-CHANGES')
+    })
   })
 
   describe('notifyCourseMemberBeingCreated', () => {

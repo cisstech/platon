@@ -4,11 +4,14 @@ import { UserRoles } from '@platon/core/common'
 import { UserEntity } from '@platon/core/server'
 import { createTestDatabase, TestDatabase } from '@platon/core/testing/server'
 import { DataSource, Repository } from 'typeorm'
+import { AnnouncementReadEntity } from './announcement-read.entity'
 import { AnnouncementEntity } from './announcement.entity'
 import { AnnouncementService } from './announcement.service'
 
+const SOMEONE = '00000000-0000-4000-8000-000000000001'
+
 /**
- * Tests d'intégration — AnnouncementService
+ * Tests d'intégration : AnnouncementService
  *
  * Ici on utilise
  * un vrai container PostgreSQL (via testcontainers) pour valider que :
@@ -25,15 +28,17 @@ describe('AnnouncementService (integration)', () => {
   let testDb: TestDatabase
   let dataSource: DataSource
   let announcementRepository: Repository<AnnouncementEntity>
+  let readRepository: Repository<AnnouncementReadEntity>
   let userRepository: Repository<UserEntity>
   let service: AnnouncementService
 
   beforeAll(async () => {
-    testDb = await createTestDatabase([UserEntity, AnnouncementEntity])
+    testDb = await createTestDatabase([UserEntity, AnnouncementEntity, AnnouncementReadEntity])
     dataSource = testDb.dataSource
     announcementRepository = dataSource.getRepository(AnnouncementEntity)
+    readRepository = dataSource.getRepository(AnnouncementReadEntity)
     userRepository = dataSource.getRepository(UserEntity)
-    service = new AnnouncementService(announcementRepository)
+    service = new AnnouncementService(announcementRepository, readRepository)
   }, 60_000)
 
   afterAll(async () => {
@@ -177,7 +182,7 @@ describe('AnnouncementService (integration)', () => {
       await seedAnnouncement({ title: 'Bienvenue sur Platon' })
       await seedAnnouncement({ title: 'Maintenance planifiée' })
 
-      // Recherche en minuscules — doit correspondre à "Bienvenue" grâce à ILIKE
+      // Recherche en minuscules : doit correspondre à "Bienvenue" grâce à ILIKE
       const [items, count] = await service.search({ search: 'bienvenue' })
 
       expect(count).toBe(1)
@@ -223,7 +228,7 @@ describe('AnnouncementService (integration)', () => {
       await seedAnnouncement({ title: 'Active', active: true, targetedRoles: undefined })
       await seedAnnouncement({ title: 'Inactive', active: false, targetedRoles: undefined })
 
-      const [items] = await service.getVisibleForUser('user-id', UserRoles.teacher)
+      const [items] = await service.getVisibleForUser(SOMEONE, UserRoles.teacher)
 
       expect(items.every((a) => a.active)).toBe(true)
       expect(items.find((a) => a.title === 'Inactive')).toBeUndefined()
@@ -233,8 +238,8 @@ describe('AnnouncementService (integration)', () => {
       // targetedRoles = null → visible par tous les rôles
       await seedAnnouncement({ title: 'Pour tous', active: true, targetedRoles: undefined })
 
-      const [itemsTeacher] = await service.getVisibleForUser('user-id', UserRoles.teacher)
-      const [itemsStudent] = await service.getVisibleForUser('user-id', UserRoles.student)
+      const [itemsTeacher] = await service.getVisibleForUser(SOMEONE, UserRoles.teacher)
+      const [itemsStudent] = await service.getVisibleForUser(SOMEONE, UserRoles.student)
 
       expect(itemsTeacher).toHaveLength(1)
       expect(itemsStudent).toHaveLength(1)
@@ -247,8 +252,8 @@ describe('AnnouncementService (integration)', () => {
         targetedRoles: [UserRoles.teacher],
       })
 
-      const [teacherItems] = await service.getVisibleForUser('user-id', UserRoles.teacher)
-      const [studentItems] = await service.getVisibleForUser('user-id', UserRoles.student)
+      const [teacherItems] = await service.getVisibleForUser(SOMEONE, UserRoles.teacher)
+      const [studentItems] = await service.getVisibleForUser(SOMEONE, UserRoles.student)
 
       expect(teacherItems).toHaveLength(1)
       // Un student ne doit pas voir cette annonce
@@ -259,10 +264,65 @@ describe('AnnouncementService (integration)', () => {
       await seedAnnouncement({ title: 'Nouveauté importante', active: true })
       await seedAnnouncement({ title: 'Maintenance', active: true })
 
-      const [items] = await service.getVisibleForUser('user-id', UserRoles.teacher, { search: 'nouveauté' })
+      const [items] = await service.getVisibleForUser(SOMEONE, UserRoles.teacher, { search: 'nouveauté' })
 
       expect(items).toHaveLength(1)
       expect(items[0].title).toBe('Nouveauté importante')
+    })
+  })
+
+  describe('reads', () => {
+    it('gives each visible announcement the read of the person who asks, never of another', async () => {
+      const ines = await seedUser({ username: 'ines', email: 'ines@example.com', role: UserRoles.student })
+      const karim = await seedUser({ username: 'karim', email: 'karim@example.com', role: UserRoles.student })
+      const readByInes = await seedAnnouncement({ title: 'Read by Ines' })
+      const readByKarim = await seedAnnouncement({ title: 'Read by Karim only' })
+      await service.markAsRead(readByInes.id, ines.id, UserRoles.student)
+      await service.markAsRead(readByKarim.id, karim.id, UserRoles.student)
+
+      const [items] = await service.getVisibleForUser(ines.id, UserRoles.student)
+
+      expect(items.find((a) => a.title === 'Read by Ines')?.readAt).toBeInstanceOf(Date)
+      expect(items.find((a) => a.title === 'Read by Karim only')?.readAt).toBeUndefined()
+    })
+
+    it('records a read once, however often it is marked', async () => {
+      const ines = await seedUser({ username: 'ines', email: 'ines@example.com', role: UserRoles.student })
+      const announcement = await seedAnnouncement()
+
+      await service.markAsRead(announcement.id, ines.id, UserRoles.student)
+      await service.markAsRead(announcement.id, ines.id, UserRoles.student)
+
+      expect(await readRepository.count({ where: { userId: ines.id } })).toBe(1)
+    })
+
+    it('forgets the reads of an announcement deleted, and of a person deleted', async () => {
+      const ines = await seedUser({ username: 'ines', email: 'ines@example.com', role: UserRoles.student })
+      const karim = await seedUser({ username: 'karim', email: 'karim@example.com', role: UserRoles.student })
+      const deleted = await seedAnnouncement({ title: 'Deleted' })
+      const kept = await seedAnnouncement({ title: 'Kept' })
+      for (const reader of [ines, karim]) {
+        await service.markAsRead(deleted.id, reader.id, UserRoles.student)
+        await service.markAsRead(kept.id, reader.id, UserRoles.student)
+      }
+
+      await service.delete(deleted.id)
+      await userRepository.delete(karim.id)
+
+      const left = await readRepository.find()
+      expect(left.map(({ userId, announcementId }) => [userId, announcementId])).toEqual([[ines.id, kept.id]])
+    })
+
+    it('refuses to mark an announcement that is inactive or meant for another role', async () => {
+      const ines = await seedUser({ username: 'ines', email: 'ines@example.com', role: UserRoles.student })
+      const inactive = await seedAnnouncement({ active: false })
+      const forTeachers = await seedAnnouncement({ targetedRoles: [UserRoles.teacher] })
+
+      await expect(service.markAsRead(inactive.id, ines.id, UserRoles.student)).rejects.toBeInstanceOf(NotFoundResponse)
+      await expect(service.markAsRead(forTeachers.id, ines.id, UserRoles.student)).rejects.toBeInstanceOf(
+        NotFoundResponse
+      )
+      expect(await readRepository.count()).toBe(0)
     })
   })
 })

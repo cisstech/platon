@@ -36,7 +36,7 @@ export class AnnouncementController {
     return new CreatedResponse({ resource: Mapper.map(newAnnouncement, AnnouncementDTO) })
   }
 
-  @Roles(UserRoles.admin, UserRoles.teacher, UserRoles.student)
+  @Roles(UserRoles.admin, UserRoles.teacher, UserRoles.student, UserRoles.demo)
   @Get('visible')
   async getVisibleForUser(
     @Req() req: IRequest,
@@ -53,7 +53,7 @@ export class AnnouncementController {
     })
   }
 
-  @Roles(UserRoles.admin, UserRoles.teacher, UserRoles.student)
+  @Roles(UserRoles.admin, UserRoles.teacher, UserRoles.student, UserRoles.demo)
   @Get('visible/:id')
   async findVisibleById(@Req() req: IRequest, @UUIDParam('id') id: string): Promise<ItemResponse<AnnouncementDTO>> {
     if (!req.user || !req.user.role) {
@@ -62,6 +62,13 @@ export class AnnouncementController {
 
     const announcement = await this.service.findByIdForUser(id, req.user.role)
     return new ItemResponse({ resource: Mapper.map(announcement, AnnouncementDTO) })
+  }
+
+  /** The person has read it: opened it, or closed its banner. Only an announcement meant for them. */
+  @Roles(UserRoles.admin, UserRoles.teacher, UserRoles.student, UserRoles.demo)
+  @Patch(':id/read')
+  async markAsRead(@Req() req: IRequest, @UUIDParam('id') id: string): Promise<void> {
+    await this.service.markAsRead(id, req.user.id, req.user.role)
   }
 
   @Roles(UserRoles.admin)

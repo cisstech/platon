@@ -1,0 +1,15 @@
+:host {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--pl-space-3);
+  min-block-size: 64px;
+  padding: var(--pl-space-3) var(--pl-space-4);
+}
+:host(:not(:first-child)) {
+  border-block-start: 1px solid var(--pl-color-line);
+}
+.pl-announcement-row-skeleton__text {
+  display: grid;
+  flex: 1;
+  gap: var(--pl-space-2);
+}

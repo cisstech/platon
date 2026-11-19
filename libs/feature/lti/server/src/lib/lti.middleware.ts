@@ -1,4 +1,5 @@
 import { Injectable, NestMiddleware, Logger } from '@nestjs/common'
+import { signInUrl } from '@platon/core/common'
 import { AuthService } from '@platon/core/server'
 import { NextFunction, Request, Response } from 'express'
 import { LTIService } from './lti.service'
@@ -62,10 +63,10 @@ export class LTIMiddleware implements NestMiddleware {
       await this.lti.interceptLaunch(args)
       this.logger.log(`[LTI MIDDLEWARE] Intercepteurs LTI exécutés, URL finale: ${args.nextUrl}`)
 
-      const redirectUrl = `/login?access-token=${token.accessToken}&refresh-token=${token.refreshToken}&next=${args.nextUrl}`
-      this.logger.log(`[LTI MIDDLEWARE] Redirection vers: ${redirectUrl}`)
+      // The address carries the tokens: only where it leads is logged.
+      this.logger.log(`[LTI MIDDLEWARE] Redirection vers la connexion, puis ${args.nextUrl}`)
 
-      return res.redirect(302, redirectUrl)
+      return res.redirect(302, signInUrl(token, args.nextUrl))
     } catch (error) {
       this.logger.error(`[LTI MIDDLEWARE] Erreur lors du traitement LTI:`, error)
       res.redirect(302, '/')

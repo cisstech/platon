@@ -1,0 +1,7 @@
+@if (icon(); as icon) {
+<pl-icon [name]="icon" [size]="2" />
+}
+<ng-content />
+@if (count() !== undefined) {
+<span class="pl-page-tab__count">{{ count() }}</span>
+}

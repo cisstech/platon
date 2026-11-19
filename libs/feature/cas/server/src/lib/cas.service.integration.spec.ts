@@ -1,8 +1,10 @@
+import { AuthService, UserService } from '@platon/core/server'
 import { CasVersions } from '@platon/feature/cas/common'
 import { LmsEntity, LTIService } from '@platon/feature/lti/server'
 import { createTestDatabase, TestDatabase } from '@platon/core/testing/server'
 import { DataSource, QueryFailedError, Repository } from 'typeorm'
 import { CasEntity } from './entities/cas.entity'
+import { AxiosService } from './axios.service'
 import { CasService } from './cas.service'
 
 /**
@@ -26,7 +28,8 @@ describe('CasService (integration)', () => {
     casRepo = dataSource.getRepository(CasEntity)
     lmsRepo = dataSource.getRepository(LmsEntity)
 
-    service = new CasService(casRepo, fakeLtiService)
+    // The CAS sign-in is not exercised here: its collaborators stay empty.
+    service = new CasService(casRepo, fakeLtiService, {} as UserService, {} as AuthService, {} as AxiosService)
   }, 60_000)
 
   afterAll(async () => {

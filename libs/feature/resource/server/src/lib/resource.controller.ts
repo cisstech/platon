@@ -68,7 +68,7 @@ export class ResourceController {
     if (filters.views) {
       const response = await this.resourceViewService.findAll(req.user.id)
       resources = Mapper.mapAll(
-        response[0].map((r) => r.resource),
+        response[0].map((view) => ({ ...view.resource, viewedAt: view.updatedAt })),
         ResourceDTO
       )
       total = response[1]

@@ -1,0 +1,11 @@
+.notifications__unread {
+  color: var(--pl-color-muted);
+  font: var(--pl-font-small);
+}
+
+.notifications__more {
+  display: flex;
+  justify-content: center;
+  padding: var(--pl-space-2);
+  border-block-start: 1px solid var(--pl-color-line);
+}

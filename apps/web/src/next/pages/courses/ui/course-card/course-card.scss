@@ -1,0 +1,75 @@
+/* The binder takes the height of its row: the binders of a row end together, their feet aligned. */
+:host {
+  display: grid;
+}
+
+/* An icon then its text, which wraps beside it rather than under it. */
+.course-card__line {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--pl-space-1);
+  margin: 0;
+}
+
+.course-card__line pl-icon {
+  flex: none;
+  margin-block-start: calc(var(--pl-space-1) / 2);
+}
+
+.course-card__line + .course-card__line,
+.course-card__progress + .course-card__line {
+  margin-block-start: var(--pl-space-1);
+}
+
+.course-card__counts {
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--pl-space-1) var(--pl-space-3);
+}
+
+.course-card__counts pl-icon {
+  margin-block-start: 0;
+}
+
+.course-card__count {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--pl-space-1);
+}
+
+.course-card__count strong {
+  color: var(--pl-color-text);
+}
+
+.course-card__progress {
+  display: flex;
+  align-items: center;
+  gap: var(--pl-space-2);
+  color: var(--pl-color-text);
+  font-weight: var(--pl-weight-strong);
+}
+
+.course-card__progress pl-progress {
+  flex: 1;
+}
+
+.course-card__line--finished pl-icon {
+  color: var(--pl-color-joy-1);
+}
+
+/* A deadline reads as on the rows of activities of the home. */
+.course-card__due:not([data-tone='neutral']) {
+  font-weight: var(--pl-weight-strong);
+}
+
+.course-card__due[data-tone='warning'] {
+  color: var(--pl-color-warning-ink);
+}
+
+.course-card__due[data-tone='danger'] {
+  color: var(--pl-color-danger-ink);
+}
+
+.course-card__due[data-tone='info'] {
+  color: var(--pl-color-info-ink);
+}

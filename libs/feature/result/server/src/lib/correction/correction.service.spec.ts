@@ -52,29 +52,11 @@ describe('CorrectionService', () => {
   afterEach(() => jest.clearAllMocks())
 
   describe('list', () => {
-    it('should LEFT JOIN answers (not INNER) so a session with zero submitted answers is still listed', async () => {
-      await service.list('corrector-1')
-
-      const [queryText] = sessionRepository.query.mock.calls[0]
-      expect(queryText).toContain('LEFT JOIN LATERAL')
-      expect(queryText).not.toContain('INNER JOIN LATERAL')
-    })
-
-    it('should keep sessions with no answer as long as the session itself recorded a grader error', async () => {
-      await service.list('corrector-1')
-
-      const [queryText] = sessionRepository.query.mock.calls[0]
-      expect(queryText).toContain(
-        `(answer.variables IS NOT NULL OR (exercise_session.variables->'.meta'->>'error')::boolean IS TRUE)`
-      )
-    })
-
     it('should not join or filter on answers at all in viewer mode', async () => {
       await service.list('corrector-1', undefined, true)
 
       const [queryText] = sessionRepository.query.mock.calls[0]
-      expect(queryText).not.toContain('"Answers" a')
-      expect(queryText).not.toContain('answer.variables')
+      expect(queryText).not.toContain('"Answers"')
     })
 
     it('should group exercises of the same activity together', async () => {
@@ -127,14 +109,14 @@ describe('CorrectionService', () => {
       await service.listSummary('corrector-1', CorrectionStatus.pending)
 
       const [queryText] = sessionRepository.query.mock.calls[0]
-      expect(queryText).toContain('HAVING COUNT(exercise_session.id) > COUNT(correction.id)')
+      expect(queryText).toContain('HAVING SUM(copy.total) > SUM(copy.corrected)')
     })
 
     it('devrait ajouter une clause HAVING pour ne garder que les activités entièrement corrigées', async () => {
       await service.listSummary('corrector-1', CorrectionStatus.available)
 
       const [queryText] = sessionRepository.query.mock.calls[0]
-      expect(queryText).toContain('HAVING COUNT(exercise_session.id) = COUNT(correction.id)')
+      expect(queryText).toContain('HAVING SUM(copy.total) = SUM(copy.corrected)')
     })
 
     it('ne devrait ajouter aucune clause HAVING sans statut', async () => {

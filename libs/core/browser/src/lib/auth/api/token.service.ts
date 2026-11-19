@@ -2,6 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http'
 import { Injectable, inject } from '@angular/core'
 import { JwtHelperService } from '@auth0/angular-jwt'
 import { AuthToken } from '@platon/core/common'
+import { Observable, Subject } from 'rxjs'
 import { TokenProvider } from '../models/token-provider'
 
 /** A renewal that has not answered by then gives way to the next attempt. */
@@ -49,6 +50,10 @@ export class TokenService {
   private readonly provider = inject(TokenProvider)
   /** The renewal in progress, shared by everyone who needs one meanwhile. */
   private renewal?: Promise<AuthToken>
+  private readonly removed = new Subject<void>()
+
+  /** Emits once the token is removed, as when the person signs out in this tab or the session ends. */
+  readonly signedOut: Observable<void> = this.removed.asObservable()
 
   tokenSync(): AuthToken | undefined {
     return this.provider.tokenSync()
@@ -100,7 +105,7 @@ export class TokenService {
   /** Ends the session; a renewal in progress no longer stands for it. */
   remove(): Promise<void> {
     this.renewal = undefined
-    return this.provider.remove()
+    return this.provider.remove().then(() => this.removed.next())
   }
 
   obtain(username: string, password: string): Promise<AuthToken> {

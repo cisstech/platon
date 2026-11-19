@@ -1,0 +1,10 @@
+:host {
+  display: block;
+  max-inline-size: 280px;
+  padding: var(--pl-space-1) var(--pl-space-2);
+  border-radius: var(--pl-radius-1);
+  background: var(--pl-color-text);
+  color: var(--pl-color-surface);
+  font: var(--pl-font-small);
+  pointer-events: none;
+}

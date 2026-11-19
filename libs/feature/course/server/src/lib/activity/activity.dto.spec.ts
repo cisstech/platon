@@ -36,4 +36,15 @@ describe('UpdateCourseActivityDTO', () => {
       expect(await isValid(dto)).toBe(false)
     })
   })
+
+  describe('graded', () => {
+    it('accepte une activité notée ou non', async () => {
+      expect(await isValid(plainToInstance(UpdateCourseActivityDTO, { graded: true }))).toBe(true)
+      expect(await isValid(plainToInstance(UpdateCourseActivityDTO, { graded: false }))).toBe(true)
+    })
+
+    it('rejette une valeur qui n’est pas un booléen', async () => {
+      expect(await isValid(plainToInstance(UpdateCourseActivityDTO, { graded: 'oui' }))).toBe(false)
+    })
+  })
 })

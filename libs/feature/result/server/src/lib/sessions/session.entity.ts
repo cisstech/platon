@@ -10,6 +10,7 @@ import { StudentSubmissionEntity } from '../submissions/submission.entity'
 @Entity('Sessions')
 @Index('Sessions_exercise_idx', ['parentId', 'id'])
 @Index('Sessions_activity_user_idx', ['parentId', 'activityId', 'userId'])
+@Index('Sessions_user_terminated_idx', ['userId', 'terminatedAt'], { where: '"parent_id" IS NULL' })
 export class SessionEntity<TVariables = any> extends BaseEntity implements Session<TVariables> {
   @Column({ name: 'parent_id', nullable: true })
   parentId?: string | null
@@ -62,6 +63,9 @@ export class SessionEntity<TVariables = any> extends BaseEntity implements Sessi
 
   @Column({ type: 'timestamp with time zone', name: 'last_graded_at', nullable: true })
   lastGradedAt?: Date | null
+
+  @Column({ type: 'timestamp with time zone', name: 'terminated_at', nullable: true })
+  terminatedAt?: Date | null
 
   @Column({ type: 'jsonb' })
   source!: PLSourceFile<TVariables>

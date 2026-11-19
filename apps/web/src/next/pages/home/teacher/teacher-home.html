@@ -1,0 +1,147 @@
+<pl-page [busy]="home.busy()">
+  <pl-page-header [heading]="home.heading()" [description]="description()">
+    @if (home.empty()) {
+    <pl-joy-mark plPageMark />
+    }
+  </pl-page-header>
+
+  @if (!home.ready()) {
+  <app-load-state
+    [phase]="home.phase()"
+    heading="Votre accueil n'a pas pu être chargé"
+    reassurance="Vos cours, vos activités et les copies déjà corrigées sont enregistrés."
+    (retry)="home.retry()"
+  />
+  } @if (home.banner(); as banner) {
+  <app-home-banner class="home__announcement" [banner]="banner" (dismissed)="dismiss(banner.id)" />
+  } @if (home.empty()) {
+  <div class="home__layout">
+    <app-teacher-start />
+
+    <aside class="home__side">
+      <app-home-zone heading="Pour aller plus loin" headingId="home-further">
+        <a class="home__entry" [href]="docsUrl" target="_blank" rel="noopener">
+          <span class="home__entry-name">
+            Documentation enseignant<span class="pl-visually-hidden">, dans un nouvel onglet</span>
+            <pl-icon name="open_in_new" [size]="1" />
+          </span>
+          <span class="pl-visually-hidden">, </span>
+          <span class="home__entry-detail">Écrire un exercice, régler une activité notée, suivre une séance.</span>
+        </a>
+      </app-home-zone>
+    </aside>
+  </div>
+  } @else if (home.ready() || home.busy()) {
+  <div class="home__layout">
+    <div class="home__main">
+      <app-home-zone heading="En cours" headingId="home-running" [count]="running().length" #runningZone>
+        @if (running().length) {
+        <pl-activity-list aria-labelledby="home-running">
+          @for (row of running(); track row.id) {
+          <pl-activity-row
+            [heading]="row.heading"
+            [context]="row.context"
+            [icon]="row.icon"
+            [hue]="row.hue"
+            [due]="row.due"
+            [dueTone]="row.dueTone"
+            [dueIcon]="row.dueIcon"
+            [detail]="row.detail"
+            [done]="row.done"
+            [total]="row.total"
+            [progressText]="row.progressText"
+            [href]="row.href"
+          />
+          }
+        </pl-activity-list>
+        } @else if (home.ready()) {
+        <p class="home__nothing">Aucune activité en cours.</p>
+        } @else if (home.loading()) {
+        <pl-activity-row-skeleton />
+        <pl-activity-row-skeleton />
+        <pl-activity-row-skeleton />
+        }
+      </app-home-zone>
+
+      <app-home-zone heading="À faire" headingId="home-gestures" [count]="gestures().length">
+        @if (gestures().length) {
+        <pl-activity-list aria-labelledby="home-gestures">
+          @for (row of gestures(); track row.id) {
+          <pl-activity-row
+            [heading]="row.heading"
+            [context]="row.context"
+            [icon]="row.icon"
+            [hue]="row.hue"
+            [due]="row.due"
+            [dueTone]="row.dueTone"
+            [dueIcon]="row.dueIcon"
+            [detail]="row.detail"
+            [done]="row.done"
+            [total]="row.total"
+            [progressText]="row.progressText"
+            [tag]="row.tag"
+            [tagIcon]="row.tagIcon"
+            [action]="row.action"
+            [href]="row.href"
+            [queryParams]="row.queryParams"
+            [button]="row.button"
+          />
+          }
+        </pl-activity-list>
+        } @else if (home.ready()) {
+        <p class="home__nothing">Rien ne vous attend pour l'instant.</p>
+        } @else if (home.loading()) {
+        <pl-activity-row-skeleton />
+        <pl-activity-row-skeleton />
+        }
+      </app-home-zone>
+    </div>
+
+    <aside class="home__side">
+      <app-home-zone heading="Mes cours" headingId="home-courses" moreLink="/courses" moreLabel="Tous">
+        @for (course of courses(); track course.id) {
+        <a class="home__entry home__entry--hued" [routerLink]="course.href" [attr.data-hue]="course.hue">
+          <span class="home__entry-name">{{ course.name }}</span>
+          @if (course.members) {
+          <span class="pl-visually-hidden">, </span>
+          <span class="home__entry-detail">{{ course.members }}</span>
+          }
+        </a>
+        } @empty { @if (home.ready()) {
+        <p class="home__nothing">Aucun cours en dehors de vos archives.</p>
+        } @else if (home.loading()) {
+        <div class="home__lines" aria-hidden="true">
+          <pl-skeleton width="80%" />
+          <pl-skeleton width="55%" />
+          <pl-skeleton width="70%" />
+        </div>
+        } }
+      </app-home-zone>
+
+      <app-home-zone heading="Vu récemment" headingId="home-viewed" moreLink="/resources" moreLabel="Toutes">
+        @for (item of viewed(); track item.id) {
+        <a class="home__entry" [routerLink]="item.href">
+          <span class="home__entry-name">{{ item.name }}</span>
+          <span class="pl-visually-hidden">, </span>
+          <span class="home__entry-line">
+            <span class="home__entry-detail">{{ item.when }}</span>
+            @if (item.status; as status) {
+            <span class="pl-visually-hidden">, </span>
+            <pl-tag [tone]="status.tone" [icon]="status.icon">{{ status.label }}</pl-tag>
+            }
+          </span>
+        </a>
+        } @empty { @if (home.ready()) {
+        <p class="home__nothing">Les ressources que vous ouvrez apparaîtront ici.</p>
+        } @else if (home.loading()) {
+        <div class="home__lines" aria-hidden="true">
+          <pl-skeleton width="75%" />
+          <pl-skeleton width="60%" />
+          <pl-skeleton width="85%" />
+        </div>
+        } }
+      </app-home-zone>
+    </aside>
+  </div>
+  }
+</pl-page>

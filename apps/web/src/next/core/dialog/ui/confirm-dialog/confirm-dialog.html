@@ -1,0 +1,13 @@
+<pl-dialog
+  [heading]="data.title"
+  [headingId]="data.headingId"
+  [confirmLabel]="data.okText || 'Confirmer'"
+  [cancelLabel]="data.cancelText || 'Annuler'"
+  [tone]="data.danger ? 'danger' : 'default'"
+  (confirmed)="dialogRef.close(true)"
+  (cancelled)="dialogRef.close(false)"
+>
+  @if (data.content) {
+  <div [innerHTML]="data.content"></div>
+  }
+</pl-dialog>

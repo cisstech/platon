@@ -1,0 +1,22 @@
+:host {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--pl-space-2) var(--pl-space-3);
+}
+
+.course-toolbar__search {
+  flex: 0 1 280px;
+  min-inline-size: 200px;
+}
+
+:host([data-compact]) .course-toolbar__search {
+  flex-basis: 100%;
+}
+
+/* The order and the period go together, on the right, onto the next line if need be. */
+.course-toolbar__order {
+  display: flex;
+  gap: var(--pl-space-3);
+  margin-inline-start: auto;
+}

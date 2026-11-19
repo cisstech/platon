@@ -46,4 +46,7 @@ export class AnnouncementEntity extends BaseEntity implements Announcement {
 
   @Column({ type: 'jsonb', nullable: true })
   actions?: AnnouncementAction[]
+
+  /** When the person who asks read it, set on the visible announcements; not a column. */
+  readAt?: Date
 }

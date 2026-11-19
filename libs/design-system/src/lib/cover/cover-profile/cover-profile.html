@@ -1,0 +1,8 @@
+<pl-avatar [person]="person()" />
+<span class="pl-cover-profile__text">
+  <span class="pl-cover-profile__name"><ng-content /></span>
+  @if (detail()) {
+  {{ ' ' }}<span class="pl-cover-profile__detail">{{ detail() }}</span>
+  }
+</span>
+<pl-icon class="pl-cover-profile__chevron" [name]="chevron()" [size]="1" />

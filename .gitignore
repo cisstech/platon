@@ -31,6 +31,8 @@ node_modules
 /libpeerconnection.log
 npm-debug.log
 yarn-error.log
+**/.yarn/*
+!/.yarn/releases
 testem.log
 /typings
 
@@ -61,10 +63,6 @@ envs/*
 dumps/*
 !dumps/.gitkeep
 
-.graphql/*
-!.graphql/.gitkeep
-**/*.generated.ts
-
 .nx/cache
 .nx/workspace-data
 !shared/external_libs/**/dist
@@ -76,3 +74,6 @@ dumps/*
 .nx/polygraph
 .nx/self-healing
 .nx/migrate-runs
+
+# Impeccable (critiques, config locale)
+.impeccable/

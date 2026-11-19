@@ -1,6 +1,4 @@
-import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http'
-import { provideAppInitializer, ApplicationConfig, importProvidersFrom, inject } from '@angular/core'
-import { provideAnimations } from '@angular/platform-browser/animations'
+import { ApplicationConfig, importProvidersFrom } from '@angular/core'
 import {
   PreloadAllModules,
   provideRouter,
@@ -8,35 +6,41 @@ import {
   withEnabledBlockingInitialNavigation,
   withPreloading,
 } from '@angular/router'
-import { CoreBrowserModule, CoreService, TAG_PROVIDERS } from '@platon/core/browser'
+import { CoreBrowserModule, TAG_PROVIDERS } from '@platon/core/browser'
 import { CAS_PROVIDERS } from '@platon/feature/cas/browser'
-import { COURSE_PROVIDERS } from '@platon/feature/course/browser'
+import { COURSE_NOTIFICATION_PROVIDERS, COURSE_PROVIDERS } from '@platon/feature/course/browser'
 import { LTI_PROVIDERS } from '@platon/feature/lti/browser'
 import { PLAYER_PROVIDERS } from '@platon/feature/player/browser'
-import { RESOURCE_PROVIDERS } from '@platon/feature/resource/browser'
+import { RESOURCE_NOTIFICATION_PROVIDERS, RESOURCE_PROVIDERS } from '@platon/feature/resource/browser'
 import { RESULT_PROVIDERS } from '@platon/feature/result/browser'
 import { PEER_PROVIDERS } from '@platon/feature/peer/browser'
-import { FeatureWebComponentModule } from '@platon/feature/webcomponent'
 import { DISCORD_PROVIDERS } from '@platon/feature/discord/browser'
 import { ANNOUNCEMENT_PROVIDERS } from '@platon/feature/announcement/browser'
-import { TUTO_PROVIDERS } from '@platon/feature/tuto/browser'
 import { BUILDER_PROVIDERS } from '@platon/feature/builder/browser'
-import { appRoutes } from './app.routes'
 import { TESTS_PROVIDERS } from '@platon/feature/tests/browser'
+import { sharedProviders } from '../shared/shared.providers'
+import { UiBootContext } from '../shared/ui-boot-context'
+import { appRoutes } from './app.routes'
+import { legacyProviders } from './legacy.providers'
+import { provideReturnToNext } from './ui-switch/return-to-next'
 
-export const appConfig: ApplicationConfig = {
+/** Config of the current interface. */
+export const appConfig = (context: UiBootContext): ApplicationConfig => ({
   providers: [
-    provideAnimations(),
-    provideHttpClient(withXhr(), withInterceptorsFromDi()),
-    importProvidersFrom(CoreBrowserModule, FeatureWebComponentModule),
+    ...sharedProviders(context),
+    importProvidersFrom(CoreBrowserModule),
+    ...legacyProviders,
     provideRouter(
       appRoutes,
       withEnabledBlockingInitialNavigation(),
       withComponentInputBinding(),
       withPreloading(PreloadAllModules)
     ),
+    provideReturnToNext(),
     COURSE_PROVIDERS,
+    COURSE_NOTIFICATION_PROVIDERS,
     RESOURCE_PROVIDERS,
+    RESOURCE_NOTIFICATION_PROVIDERS,
     PLAYER_PROVIDERS,
     RESULT_PROVIDERS,
     PEER_PROVIDERS,
@@ -46,11 +50,6 @@ export const appConfig: ApplicationConfig = {
     DISCORD_PROVIDERS,
     TESTS_PROVIDERS,
     ANNOUNCEMENT_PROVIDERS,
-    TUTO_PROVIDERS,
     BUILDER_PROVIDERS,
-    provideAppInitializer(() => {
-      const core = inject(CoreService)
-      return core.init()
-    }),
   ],
-}
+})

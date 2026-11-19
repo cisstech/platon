@@ -1,0 +1,54 @@
+<a class="skip-link" href="#contenu">Aller au contenu</a>
+<header class="topbar">
+  <button type="button" class="btn btn-icon" aria-label="Revenir au cours" data-wf-to="detail"><svg class="ico" aria-hidden="true"><use href="#arrow_back" /></svg></button>
+  <span class="topbar-title">Algorithmique et programmation 1</span>
+</header>
+<main class="m-reader has-bar has-note" id="contenu">
+  <div class="m-head">
+    <div class="course-mark sm hue-lagon" aria-hidden="true">AP1</div>
+    <div>
+      <h1 class="title">Quiz&nbsp;: complexité des algorithmes</h1>
+      <p class="small muted">Exercice 3 sur 6&nbsp;: boucles imbriquées. Ferme ce soir à 23&nbsp;h&nbsp;59.</p>
+    </div>
+  </div>
+  <div class="copie">
+    <div class="q">
+      <div class="q-mark ok" aria-hidden="true"><span>3.1</span><svg class="ico" aria-hidden="true"><use href="#check_circle" /></svg></div>
+      <h2 class="heading" id="q1-t"><span class="sr-only">Question 3.1&nbsp;: </span>Combien de fois la ligne <code>c = c + 1</code> s'exécute-t-elle pour <code>compte(4)</code>&nbsp;?<span class="sr-only">, juste</span></h2>
+      <div class="statement">
+        <p>On considère la fonction suivante.</p>
+        <span class="code wrap"><span class="ln">def compte(n):</span>
+<span class="ln i1">c = 0</span>
+<span class="ln i1">for i in range(n):</span>
+<span class="ln i2">for j in range(i):</span>
+<span class="ln i3">c = c + 1</span>
+<span class="ln i1">return c</span></span>
+      </div>
+      <div class="answer"><div class="input ok" role="textbox" aria-readonly="true" aria-labelledby="q1-t">6</div></div>
+      <div class="feedback ok"><svg class="ico" aria-hidden="true"><use href="#check_circle" /></svg><p><strong>Juste.</strong> i vaut 0, 1, 2 puis 3&nbsp;: la boucle intérieure tourne 0 + 1 + 2 + 3 = 6 fois.</p></div>
+    </div>
+    <div class="q">
+      <div class="q-mark ko" aria-hidden="true"><span>3.2</span><svg class="ico" aria-hidden="true"><use href="#error" /></svg></div>
+      <h2 class="heading" id="q2-t"><span class="sr-only">Question 3.2&nbsp;: </span>Quelle est la complexité de <code>compte(n)</code>&nbsp;?<span class="sr-only">, faux</span></h2>
+      <div class="answer options single" role="radiogroup" aria-labelledby="q2-t" aria-readonly="true">
+        <div class="option ko picked" role="radio" aria-checked="true" tabindex="0"><span class="box"></span>O(n)<span class="why">Votre réponse</span></div>
+        <div class="option" role="radio" aria-checked="false" tabindex="-1"><span class="box"></span>O(n log n)</div>
+        <div class="option ok" role="radio" aria-checked="false" tabindex="-1"><span class="box"></span>O(n²)<span class="why">Bonne réponse</span></div>
+        <div class="option" role="radio" aria-checked="false" tabindex="-1"><span class="box"></span>O(n³)</div>
+      </div>
+      <div class="feedback ko"><svg class="ico" aria-hidden="true"><use href="#error" /></svg><p><strong>Faux.</strong> La boucle intérieure tourne i fois pour chaque i&nbsp;: 0 + 1 + ... + (n - 1) = n(n - 1) / 2 passages, un nombre qui croît comme n². Deux boucles imbriquées sur n donnent souvent du n².</p></div>
+    </div>
+  </div>
+</main>
+<div class="m-bottom">
+  <p class="m-bar-note" role="status"><span class="tag warning"><svg class="ico" aria-hidden="true"><use href="#contrast" /></svg>Réussi en partie, 50 / 100</span><span class="attempts">Tentative 2, sans limite</span></p>
+  <div class="m-actions">
+    <button type="button" class="btn btn-secondary" data-wf-to="exercice"><svg class="ico" aria-hidden="true"><use href="#replay" /></svg>Réessayer</button>
+    <button type="button" class="btn btn-primary btn-lg" data-wf-to="exercice">Exercice suivant<svg class="ico" aria-hidden="true"><use href="#chevron_right" /></svg></button>
+  </div>
+  <nav class="m-nav" aria-label="Navigation entre les exercices">
+    <button type="button" class="btn btn-secondary btn-icon" aria-label="Exercice précédent" data-wf-to="exercice"><svg class="ico" aria-hidden="true"><use href="#chevron_left" /></svg></button>
+    <button type="button" class="btn btn-secondary" aria-haspopup="dialog" data-wf-to="exercice"><svg class="ico" aria-hidden="true"><use href="#list" /></svg>Exercice 3 sur 6</button>
+    <button type="button" class="btn btn-secondary btn-icon" aria-label="Exercice suivant" data-wf-to="exercice"><svg class="ico" aria-hidden="true"><use href="#chevron_right" /></svg></button>
+  </nav>
+</div>
