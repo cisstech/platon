@@ -1,7 +1,6 @@
 import { ANIMATION_MODULE_TYPE, APP_INITIALIZER, LOCALE_ID } from '@angular/core'
 import { TestBed } from '@angular/core/testing'
 import { HTTP_INTERCEPTORS } from '@angular/common/http'
-import { Apollo } from 'apollo-angular'
 import { AuthService, DialogService, TokenService } from '@platon/core/browser/shared'
 import { NZ_DATE_LOCALE, NZ_I18N } from 'ng-zorro-antd/i18n'
 import { NzModalService } from 'ng-zorro-antd/modal'
@@ -29,10 +28,6 @@ describe('nextConfig', () => {
     expect(TestBed.inject(HTTP_INTERCEPTORS).map((interceptor) => interceptor.constructor.name)).toEqual(
       expect.arrayContaining(['AuthInterceptor', 'DateConversionInterceptor', 'HttpParamEncoderInterceptor'])
     )
-  })
-
-  it('has a GraphQL client', () => {
-    expect(TestBed.inject(Apollo)).toBeTruthy()
   })
 
   it('reaches the institution accounts, for the sign-in page', () => {

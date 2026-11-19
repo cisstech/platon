@@ -14,7 +14,9 @@ import { NotificationsStore } from './notifications-store'
 @Component({ template: '' })
 class Blank {}
 
-const at = new Date(Date.now() - 2 * 60 * 60_000)
+/** Mid-afternoon: two hours earlier is still the same day, whatever time the tests run. */
+const now = new Date(2026, 9, 9, 15, 0)
+const at = new Date(now.getTime() - 2 * 60 * 60_000)
 
 const notification = (id: string, data: object, readAt: Date | null = null): Notification => ({
   id,
@@ -57,6 +59,30 @@ interface Setup {
 }
 
 describe('NotificationsPanel', () => {
+  // Only the clock is fixed: the timers stay real, for the dialogs and the router.
+  beforeAll(() =>
+    jest.useFakeTimers({
+      now,
+      doNotFake: [
+        'setTimeout',
+        'clearTimeout',
+        'setInterval',
+        'clearInterval',
+        'setImmediate',
+        'clearImmediate',
+        'queueMicrotask',
+        'nextTick',
+        'requestAnimationFrame',
+        'cancelAnimationFrame',
+        'requestIdleCallback',
+        'cancelIdleCallback',
+        'hrtime',
+        'performance',
+      ],
+    })
+  )
+  afterAll(() => jest.useRealTimers())
+
   let api: Record<string, jest.Mock>
   let dialogRef: { close: jest.Mock }
   let messages: { confirm: jest.Mock; error: jest.Mock }

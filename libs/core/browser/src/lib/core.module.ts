@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core'
 import { HTTP_INTERCEPTORS } from '@angular/common/http'
 import { RouterModule } from '@angular/router'
 import { AuthProviders } from './auth'
-import { GraphQLModule } from './graphql/graphql.module'
 import { HttpParamEncoderInterceptor } from './http/http-param-encoder.interceptor'
 import { NgeDocProviders } from './vendors/nge-doc/nge-doc'
 import { NgeIconProviders } from './vendors/nge-icon/nge-icon'
@@ -12,8 +11,8 @@ import { NgeMonacoImports, NgeMonacoProviders } from './vendors/nge-monaco/nge-m
 import { NgxEChartsProviders } from './vendors/ngx-echarts/ngx-echarts'
 
 @NgModule({
-  imports: [RouterModule, NgeMonacoImports, GraphQLModule],
-  exports: [NgeMonacoImports, GraphQLModule],
+  imports: [RouterModule, NgeMonacoImports],
+  exports: [NgeMonacoImports],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: HttpParamEncoderInterceptor, multi: true },
     AuthProviders,

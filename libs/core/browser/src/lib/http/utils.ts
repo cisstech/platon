@@ -42,3 +42,17 @@ export const buildExpandableHttpParams = <T extends ExpandableModel>(object?: T 
 
   return params
 }
+
+const ISO_8601 = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(.\d+)?(([+-]\d{2}:\d{2})|Z)?$/
+
+/** Turns the ISO 8601 strings of a value read from JSON into dates, in place, nested ones included. */
+export const convertIsoDates = <T>(value: T): T => {
+  if (value === null || typeof value !== 'object') return value
+  const object = value as Record<string, unknown>
+  for (const key of Object.keys(object)) {
+    const item = object[key]
+    if (typeof item === 'string' && ISO_8601.test(item)) object[key] = new Date(item)
+    else if (typeof item === 'object') convertIsoDates(item)
+  }
+  return value
+}

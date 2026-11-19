@@ -2,7 +2,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { HttpErrorResponse } from '@angular/common/http'
 import { ActivatedRoute } from '@angular/router'
-import { of, throwError } from 'rxjs'
+import { Subject, of, throwError } from 'rxjs'
 
 import { NzDialogService } from '@platon/core/browser'
 import { NotificationService } from '@platon/feature/notification/browser'
@@ -70,6 +70,19 @@ describe('PlayerActivityComponent', () => {
 
   afterEach(() => {
     dialogErrorSpy.mockRestore()
+  })
+
+  it('cesse de suivre les notifications quand le lecteur se ferme', () => {
+    const notifications = new Subject()
+    ;(TestBed.inject(NotificationService).paginate as jest.Mock).mockReturnValue(notifications)
+    const other = TestBed.createComponent(PlayerActivityComponent)
+    other.componentInstance.player = createPlayer()
+    other.detectChanges()
+    expect(notifications.observed).toBe(true)
+
+    other.destroy()
+
+    expect(notifications.observed).toBe(false)
   })
 
   describe('onCodeComplete / open', () => {

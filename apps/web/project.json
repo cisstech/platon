@@ -184,7 +184,6 @@
         "scripts": [],
         "allowedCommonJsDependencies": [
           "jsplumb",
-          "subscriptions-transport-ws",
           "rfdc",
           "jsoneditor",
           "@ts-jison/lexer",

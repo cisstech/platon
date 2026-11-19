@@ -14,6 +14,21 @@
       "options": {
         "jestConfig": "libs/core/server/jest.config.ts"
       }
+    },
+    "test:integration": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}/integration"],
+      "options": {
+        "jestConfig": "libs/core/server/jest.integration.config.ts",
+        "passWithNoTests": false
+      }
+    },
+    "test:all": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["nx run core-server:test", "nx run core-server:test:integration"],
+        "parallel": false
+      }
     }
   }
 }
