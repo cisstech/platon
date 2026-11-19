@@ -1,4 +1,5 @@
 export * from './lib/activity.model'
+export * from './lib/activity-state'
 export * from './lib/corrector.model'
 export * from './lib/course.model'
 export * from './lib/course-progress'
