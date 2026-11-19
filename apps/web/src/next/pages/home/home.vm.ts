@@ -1,5 +1,5 @@
 import { User } from '@platon/core/common'
-import { isOnDisplay } from '@platon/feature/announcement/browser/shared'
+import { bannerAnnouncement } from '@platon/feature/announcement/browser/shared'
 import { Announcement } from '@platon/feature/announcement/common'
 import {
   capitalize,
@@ -142,14 +142,8 @@ export interface BannerView {
   readonly description: string
 }
 
-/** The banner: the most recent announcement on display that the person did not close. */
-export const banner = (
-  announcements: Announcement[],
-  dismissed: ReadonlySet<string>,
-  now: Date
-): BannerView | undefined => {
-  const [shown] = announcements
-    .filter((announcement) => isOnDisplay(announcement, now) && !dismissed.has(announcement.id))
-    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+/** The banner: an unread announcement on display, about the service before any other, then the most recent. */
+export const banner = (announcements: Announcement[], read: ReadonlySet<string>, now: Date): BannerView | undefined => {
+  const shown = bannerAnnouncement(announcements, read, now)
   return shown ? { id: shown.id, title: shown.title, description: shown.description } : undefined
 }

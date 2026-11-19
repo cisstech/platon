@@ -3,6 +3,7 @@ import { createE2EApp, E2EContext, TestUser } from '@platon/core/testing/e2e-ser
 
 const request = require('supertest')
 import { Repository } from 'typeorm'
+import { AnnouncementReadEntity } from './announcement-read.entity'
 import { AnnouncementEntity } from './announcement.entity'
 import { AnnouncementService } from './announcement.service'
 import { AnnouncementController } from './announcement.controller'
@@ -17,12 +18,13 @@ let admin: TestUser
 let teacher: TestUser
 let student: TestUser
 let demo: TestUser
+let candidate: TestUser
 
 const http = () => request(ctx.app.getHttpServer())
 
 beforeAll(async () => {
   ctx = await createE2EApp({
-    entities: [AnnouncementEntity],
+    entities: [AnnouncementEntity, AnnouncementReadEntity],
     controllers: [AnnouncementController],
     providers: [AnnouncementService],
   })
@@ -31,6 +33,7 @@ beforeAll(async () => {
   teacher = await ctx.createUser({ username: 'teacher-e2e', role: UserRoles.teacher })
   student = await ctx.createUser({ username: 'student-e2e', role: UserRoles.student })
   demo = await ctx.createUser({ username: 'demo-e2e', role: UserRoles.demo })
+  candidate = await ctx.createUser({ username: 'candidate-e2e', role: UserRoles.candidate })
 
   announcementRepo = ctx.getRepository(AnnouncementEntity)
 }, 60_000)
@@ -284,5 +287,54 @@ describe('GET /announcements/visible', () => {
 
     const detail = await http().get(`/announcements/visible/${forAll.id}`).set(auth(demo.token)).expect(200)
     expect(detail.body.resource.title).toBe('ForAll')
+  })
+})
+
+describe('PATCH /announcements/:id/read', () => {
+  it('records the read for the person, whose next list carries it, and for them only', async () => {
+    const [announcement] = await announcementRepo.save([
+      announcementRepo.create({ title: 'ForAll', description: 'Desc', active: true, targetedRoles: [] }),
+    ])
+
+    await http().patch(`/announcements/${announcement.id}/read`).set(auth(student.token)).expect(200)
+
+    const mine = await http().get('/announcements/visible').set(auth(student.token)).expect(200)
+    expect(Date.parse(mine.body.resources[0].readAt)).not.toBeNaN()
+    const theirs = await http().get('/announcements/visible').set(auth(teacher.token)).expect(200)
+    expect(theirs.body.resources[0].readAt).toBeUndefined()
+  })
+
+  it('answers every role of the frame', async () => {
+    const [announcement] = await announcementRepo.save([
+      announcementRepo.create({ title: 'ForAll', description: 'Desc', active: true }),
+    ])
+
+    for (const user of [admin, teacher, student, demo]) {
+      await http().patch(`/announcements/${announcement.id}/read`).set(auth(user.token)).expect(200)
+    }
+  })
+
+  it('answers 404 for an announcement that is inactive or meant for another role', async () => {
+    const [inactive, forTeachers] = await announcementRepo.save([
+      announcementRepo.create({ title: 'Inactive', description: 'Desc', active: false }),
+      announcementRepo.create({
+        title: 'ForTeachers',
+        description: 'Desc',
+        active: true,
+        targetedRoles: [UserRoles.teacher],
+      }),
+    ])
+
+    await http().patch(`/announcements/${inactive.id}/read`).set(auth(student.token)).expect(404)
+    await http().patch(`/announcements/${forTeachers.id}/read`).set(auth(student.token)).expect(404)
+  })
+
+  it('answers 403 to a candidate and 401 without a session', async () => {
+    const [announcement] = await announcementRepo.save([
+      announcementRepo.create({ title: 'ForAll', description: 'Desc', active: true }),
+    ])
+
+    await http().patch(`/announcements/${announcement.id}/read`).set(auth(candidate.token)).expect(403)
+    await http().patch(`/announcements/${announcement.id}/read`).expect(401)
   })
 })

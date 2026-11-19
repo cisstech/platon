@@ -1,0 +1,20 @@
+@if (titled()) {
+<h2 class="announcement-detail__title" [id]="headingId">{{ detail().heading }}</h2>
+}
+<p class="announcement-detail__byline">{{ detail().byline }}</p>
+@switch (detail().status) { @case ('loading') {
+<div class="announcement-detail__lines"><pl-skeleton /><pl-skeleton width="92%" /><pl-skeleton width="60%" /></div>
+} @case ('error') {
+<div class="announcement-detail__failure" role="alert">
+  <p>Cette annonce n'a pas pu être chargée.</p>
+  <button type="button" plButton variant="secondary" size="sm" (click)="retry.emit()">
+    <pl-icon name="replay" />Réessayer
+  </button>
+</div>
+} @default { @if (detail().content; as content) {
+<app-editor-content [content]="content" />
+} @else {
+<div class="pl-prose">
+  <p>{{ detail().summary }}</p>
+</div>
+} } }

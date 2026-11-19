@@ -1,8 +1,8 @@
-import { HttpErrorResponse } from '@angular/common/http'
 import { inject, signal } from '@angular/core'
-import { LOAD_DELAYS, LoadStatus } from '@platon/design-system'
+import { LoadStatus } from '@platon/design-system'
 import { Announcement } from '@platon/feature/announcement/common'
-import { catchError, defer, Observable, of, retry, Subscription, throwError, timeout, timer } from 'rxjs'
+import { catchError, defer, Observable, of, Subscription, timeout } from 'rxjs'
+import { patiently } from '../../../shared/patiently'
 import { HomeApi } from './home-api'
 
 /** What every home loads beside its own data: the announcements of its banner. */
@@ -10,15 +10,8 @@ export interface HomeSources {
   readonly announcements: Announcement[]
 }
 
-/** When the page says it failed, the store stops trying, the try under way included. */
-const GIVE_UP_AFTER = LOAD_DELAYS.timeout
-/** The waits between two tries, the last one repeated. */
-const RETRY_DELAYS = [1_000, 2_000, 5_000]
 /** The announcements only decorate the page: it does not wait for them longer. */
 const ANNOUNCEMENTS_WAIT = 3_000
-
-/** A failure that may pass: the network, or the server down. A refusal (4xx) will not. */
-const mayPass = (error: unknown) => !(error instanceof HttpErrorResponse) || error.status === 0 || error.status >= 500
 
 /**
  * The store of a home, provided by its route. It loads its sources together and, while the page says
@@ -32,8 +25,8 @@ export abstract class HomeLoader<T extends HomeSources> {
 
   readonly status = signal<LoadStatus>('idle')
   readonly data = signal<T | undefined>(undefined)
-  /** The announcements closed in this browser. */
-  readonly dismissed = signal<ReadonlySet<string>>(new Set())
+  /** The announcements read during this visit, before the server says so: the banners closed. */
+  readonly read = signal<ReadonlySet<string>>(new Set())
   /** Changes on each « Réessayer », so that the loading phase starts its clock again. */
   readonly attempt = signal(0)
 
@@ -51,16 +44,9 @@ export abstract class HomeLoader<T extends HomeSources> {
   load(): void {
     this.loading?.unsubscribe()
     this.status.set('loading')
-    this.dismissed.set(this.api.dismissedAnnouncements())
 
     this.loading = defer(() => this.sources())
-      .pipe(
-        retry({
-          delay: (error: unknown, count: number) =>
-            mayPass(error) ? timer(RETRY_DELAYS[Math.min(count, RETRY_DELAYS.length) - 1]) : throwError(() => error),
-        }),
-        timeout({ first: GIVE_UP_AFTER })
-      )
+      .pipe(patiently())
       .subscribe({
         next: (data) => {
           this.data.set(data)
@@ -84,8 +70,9 @@ export abstract class HomeLoader<T extends HomeSources> {
     this.load()
   }
 
+  /** Closes the banner of an announcement for good: it is read, on every device of the person. */
   dismissAnnouncement(id: string): void {
-    this.api.dismissAnnouncement(id)
-    this.dismissed.update((dismissed) => new Set([...dismissed, id]))
+    this.read.update((read) => new Set([...read, id]))
+    this.api.markAnnouncementRead(id).subscribe({ error: (error: unknown) => console.error(error) })
   }
 }

@@ -20,19 +20,17 @@ describe('banner', () => {
   const announcement = (id: string, createdAt: Date, values: Partial<Announcement> = {}) =>
     ({ id, title: `Annonce ${id}`, description: 'Texte', createdAt, active: true, ...values } as Announcement)
 
-  it('shows the most recent announcement on display that the person did not close', () => {
-    const shown = banner(
-      [
-        announcement('old', at(20, 8, 0)),
-        announcement('recent', at(27, 8, 0)),
-        announcement('closed', at(28, 8, 0)),
-        announcement('expired', at(28, 8, 0), { displayUntil: at(28, 9, 0) }),
-      ],
-      new Set(['closed']),
-      NOW
-    )
+  it('shows an unread announcement on display, about the service before any other, then the most recent', () => {
+    const list = [
+      announcement('old', at(20, 8, 0)),
+      announcement('recent', at(27, 8, 0)),
+      announcement('service', at(26, 8, 0), { icon: 'tool' }),
+      announcement('read', at(28, 8, 0), { readAt: at(28, 9, 0) }),
+      announcement('expired', at(28, 8, 0), { displayUntil: at(28, 9, 0) }),
+    ]
 
-    expect(shown).toEqual({ id: 'recent', title: 'Annonce recent', description: 'Texte' })
+    expect(banner(list, new Set(), NOW)).toEqual({ id: 'service', title: 'Annonce service', description: 'Texte' })
+    expect(banner(list, new Set(['service']), NOW)?.id).toBe('recent')
   })
 
   it('shows nothing when no announcement is left', () => {

@@ -8,6 +8,7 @@
     "moduleResolution": "bundler",
     "isolatedModules": true
   },
+  "files": ["src/test-setup.ts"],
   "include": [
     "jest.config.ts",
     "src/**/*.test.ts",

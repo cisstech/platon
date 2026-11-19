@@ -3,5 +3,4 @@
 // Same files as the main entry, so a class here is the same injection token there.
 export * from './lib/api/announcement.service'
 export * from './lib/models/announcement-display'
-export * from './lib/models/data-storage.model'
 export * from './lib/providers'

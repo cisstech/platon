@@ -29,3 +29,14 @@ export const calendarDay = (value: Date | string, locale: string, now = new Date
   const { dayMonth, dayMonthYear } = formatsOf(locale)
   return date.getFullYear() === now.getFullYear() ? dayMonth.format(date) : dayMonthYear.format(date)
 }
+
+/** A day of the calendar in a narrow column: « 27 sept. », with the year when it is not this one. */
+export const shortCalendarDay = (value: Date | string, locale: string, now = new Date()): string => {
+  const date = toDate(value)
+  const { dayShortMonth, dayShortMonthYear } = formatsOf(locale)
+  return date.getFullYear() === now.getFullYear() ? dayShortMonth.format(date) : dayShortMonthYear.format(date)
+}
+
+/** A day of the calendar with its year, whatever the year: « 25 septembre 2026 ». */
+export const fullCalendarDay = (value: Date | string, locale: string): string =>
+  formatsOf(locale).dayMonthYear.format(toDate(value))

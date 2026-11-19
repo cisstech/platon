@@ -1,6 +1,7 @@
 module.exports = {
   displayName: 'feature-announcement-browser',
   preset: '../../../../jest.preset.js',
+  setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory: '../../../../coverage/libs/feature/announcement/browser',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [

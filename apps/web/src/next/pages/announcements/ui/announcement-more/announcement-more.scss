@@ -1,0 +1,11 @@
+:host {
+  display: grid;
+  justify-items: start;
+  gap: var(--pl-space-2);
+}
+
+p {
+  margin: 0;
+  color: var(--pl-color-danger-ink);
+  font: var(--pl-font-small);
+}

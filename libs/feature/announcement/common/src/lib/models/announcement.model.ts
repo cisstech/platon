@@ -64,6 +64,8 @@ export interface Announcement {
   readonly icon?: string
   readonly data?: EditorOutputData
   readonly actions?: AnnouncementAction[]
+  /** When the person who asks read it (opened it, or closed its banner); in the visible list only. */
+  readonly readAt?: Date
 }
 
 export interface CreateAnnouncementInput {

@@ -14,8 +14,8 @@ describe('offeredBanner', () => {
   @Component({ template: '' })
   class Host {
     readonly announcements = signal<Announcement[] | undefined>(undefined)
-    readonly dismissed = signal<ReadonlySet<string>>(new Set())
-    readonly shown = offeredBanner(this.announcements, this.dismissed, NOW)
+    readonly read = signal<ReadonlySet<string>>(new Set())
+    readonly shown = offeredBanner(this.announcements, this.read, NOW)
   }
 
   it('keeps the announcement chosen when they came: closing it shows no other', () => {
@@ -25,7 +25,7 @@ describe('offeredBanner', () => {
     host.announcements.set([announcement('recent', 27), announcement('older', 26)])
     expect(host.shown()?.id).toBe('recent')
 
-    host.dismissed.set(new Set(['recent']))
+    host.read.set(new Set(['recent']))
     expect(host.shown()).toBeUndefined()
   })
 })

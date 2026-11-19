@@ -6,6 +6,8 @@ interface Formats {
   readonly weekday: Intl.DateTimeFormat
   readonly dayMonth: Intl.DateTimeFormat
   readonly dayMonthYear: Intl.DateTimeFormat
+  readonly dayShortMonth: Intl.DateTimeFormat
+  readonly dayShortMonthYear: Intl.DateTimeFormat
   readonly weekdayDayMonth: Intl.DateTimeFormat
   readonly weekdayDayMonthYear: Intl.DateTimeFormat
   readonly clock: Intl.DateTimeFormat
@@ -25,6 +27,8 @@ export const formatsOf = (locale: string): Formats => {
       weekday: new Intl.DateTimeFormat(locale, { weekday: 'long' }),
       dayMonth: new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long' }),
       dayMonthYear: new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long', year: 'numeric' }),
+      dayShortMonth: new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'short' }),
+      dayShortMonthYear: new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'short', year: 'numeric' }),
       weekdayDayMonth: new Intl.DateTimeFormat(locale, { weekday: 'long', day: 'numeric', month: 'long' }),
       weekdayDayMonthYear: new Intl.DateTimeFormat(locale, {
         weekday: 'long',

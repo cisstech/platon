@@ -1,8 +1,15 @@
+@if (labelHidden()) {
+<label class="pl-visually-hidden" [for]="control()?.id()">{{ label() }}</label>
+} @else {
 <div class="pl-field__head">
   <label class="pl-field__label" [for]="control()?.id()">{{ label() }}</label>
   <ng-content select="[plFieldAside]" />
 </div>
+}
 <div class="pl-field__box">
+  @if (icon(); as icon) {
+  <pl-icon class="pl-field__icon" [name]="icon" />
+  }
   <ng-content select="input[plInput]" />
   <ng-content />
 </div>

@@ -27,7 +27,7 @@ class Loader extends HomeLoader<Data> {
 }
 
 describe('HomeLoader', () => {
-  let api: { announcements: jest.Mock; dismissedAnnouncements: jest.Mock; dismissAnnouncement: jest.Mock }
+  let api: { announcements: jest.Mock; markAnnouncementRead: jest.Mock }
   let loader: Loader
 
   /** Fails the next `times` calls of a source, then answers. */
@@ -42,8 +42,7 @@ describe('HomeLoader', () => {
     sources.second.mockReset().mockReturnValue(of(['s1']))
     api = {
       announcements: jest.fn(() => of(announcements)),
-      dismissedAnnouncements: jest.fn(() => new Set(['n0'])),
-      dismissAnnouncement: jest.fn(),
+      markAnnouncementRead: jest.fn(() => of(undefined)),
     }
     TestBed.configureTestingModule({ providers: [Loader, { provide: HomeApi, useValue: api }] })
     loader = TestBed.inject(Loader)
@@ -51,12 +50,11 @@ describe('HomeLoader', () => {
 
   afterEach(() => jest.useRealTimers())
 
-  it('loads its sources together, and the announcements the person closed', () => {
+  it('loads its sources together', () => {
     loader.load()
 
     expect(loader.status()).toBe('ready')
     expect(loader.data()).toEqual({ first: ['f1'], second: ['s1'], announcements })
-    expect(loader.dismissed()).toEqual(new Set(['n0']))
   })
 
   it('stays loading until every source answers', () => {
@@ -172,12 +170,22 @@ describe('HomeLoader', () => {
     expect(loader.data()?.first).toEqual(['f1'])
   })
 
-  it('closes an announcement for good, in this browser', () => {
+  it('closes an announcement for good: read at once on the page, and on the server', () => {
     loader.load()
 
     loader.dismissAnnouncement('n1')
 
-    expect(api.dismissAnnouncement).toHaveBeenCalledWith('n1')
-    expect(loader.dismissed()).toEqual(new Set(['n0', 'n1']))
+    expect(api.markAnnouncementRead).toHaveBeenCalledWith('n1')
+    expect(loader.read()).toEqual(new Set(['n1']))
+  })
+
+  it('keeps an announcement closed on the page when the server fails to hear of it', () => {
+    api.markAnnouncementRead.mockReturnValue(throwError(() => new Error('502')))
+    jest.spyOn(console, 'error').mockImplementation(() => undefined)
+    loader.load()
+
+    loader.dismissAnnouncement('n1')
+
+    expect(loader.read()).toEqual(new Set(['n1']))
   })
 })

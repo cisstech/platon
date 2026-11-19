@@ -45,7 +45,6 @@ describe('legacyBridgeGuard', () => {
             courses: () => of([]),
             figures: () => of({ averageScore: 0, successRate: 0, timeSpent: 0 }),
             announcements: () => of([]),
-            dismissedAnnouncements: () => new Set(),
           },
         },
         { provide: DialogService, useValue: {} },

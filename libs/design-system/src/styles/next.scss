@@ -6,6 +6,7 @@
 @use '@fontsource/atkinson-hyperlegible-mono/400' as mono-400;
 @use '@angular/cdk';
 @use 'tokens';
+@use 'prose';
 
 // Overlays of the Angular CDK (dialogs, menus) and the hidden region of its live announcer.
 @include cdk.overlay();

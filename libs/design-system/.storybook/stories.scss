@@ -165,3 +165,18 @@
 .story-phone {
   max-inline-size: 390px;
 }
+
+.story-announcements {
+  max-inline-size: 340px;
+  border: 1px solid var(--pl-color-line);
+  border-radius: var(--pl-radius-card);
+  background: var(--pl-color-surface);
+  overflow: hidden;
+}
+
+.story-announcements-phone {
+  max-inline-size: 360px;
+  border: 1px solid var(--pl-color-line);
+  border-radius: var(--pl-radius-card);
+  background: var(--pl-color-surface);
+}
