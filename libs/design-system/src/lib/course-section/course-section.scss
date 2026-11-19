@@ -1,0 +1,79 @@
+:host {
+  display: block;
+}
+
+/* The tab of the binder, on its rule: both in the hue of the course. */
+.pl-course-section__divider {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--pl-space-2);
+  margin: 0 0 var(--pl-space-3);
+  border-block-end: 2px solid var(--pl-hue-strong, var(--pl-color-line-strong));
+  font: inherit;
+}
+
+.pl-course-section__tab {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--pl-space-2);
+  margin: 0;
+  padding: var(--pl-space-1) var(--pl-space-3);
+  border-radius: var(--pl-radius-1) var(--pl-radius-1) 0 0;
+  background: var(--pl-hue-tint);
+  color: var(--pl-hue-ink);
+  font: var(--pl-font-subheading);
+}
+
+.pl-course-section__count {
+  font-weight: var(--pl-weight-regular);
+  font-variant-numeric: tabular-nums;
+}
+
+.pl-course-section__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--pl-space-1);
+  margin-inline-start: auto;
+  padding-block-end: var(--pl-space-1);
+}
+
+/* Folded on a narrow screen: the whole divider is the button, at the size of a thumb. */
+:host([data-collapsible]) .pl-course-section__divider {
+  margin-block-end: var(--pl-space-2);
+}
+
+.pl-course-section__toggle {
+  display: flex;
+  flex: 1;
+  align-items: flex-end;
+  gap: var(--pl-space-2);
+  min-block-size: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.pl-course-section__toggle:focus-visible {
+  outline: 2px solid var(--pl-color-focus);
+  outline-offset: 2px;
+}
+
+.pl-course-section__summary {
+  padding-block-end: var(--pl-space-1);
+  color: var(--pl-color-muted);
+  font: var(--pl-font-small);
+}
+
+.pl-course-section__chevron {
+  margin: 0 var(--pl-space-1) var(--pl-space-1) auto;
+  color: var(--pl-hue-ink);
+  transition: transform var(--pl-duration-hover) var(--pl-ease-standard);
+}
+
+.pl-course-section__toggle[aria-expanded='true'] .pl-course-section__chevron {
+  transform: rotate(180deg);
+}
