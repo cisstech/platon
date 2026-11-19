@@ -27,6 +27,7 @@ export const EM_DASHES_CONFIG = {
     'docs/backlog',
     'design/docs',
     '.claude',
+    'CLAUDE.md',
   ],
 }
 
