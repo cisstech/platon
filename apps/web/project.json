@@ -24,6 +24,11 @@
         "assets": [
           "apps/web/src/assets",
           {
+            "glob": "icons.svg",
+            "input": "libs/design-system/src/assets",
+            "output": "./assets/design-system"
+          },
+          {
             "glob": "**/*",
             "input": "shared/assets",
             "output": "./assets"
@@ -151,7 +156,7 @@
             "inject": false
           },
           {
-            "input": "apps/web/src/next/styles.scss",
+            "input": "libs/design-system/src/styles/next.scss",
             "bundleName": "styles.next",
             "inject": false
           },

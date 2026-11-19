@@ -1,7 +1,7 @@
 # F-04 : Les ports transverses : dialogues, notifications, thème
 
 Source : `design/docs/04-direction.md` (retours d'action) ; décisions : D6, D7.
-Statut : À faire.
+Statut : Livré (2026-09-29).
 Dépend de : F-02, S-03.
 Taille : M.
 
@@ -52,6 +52,30 @@ Réécrire les appels existants : inutile, c'est le but du port.
 
 ## 7. Definition of Done
 
-- [ ] Les huit méthodes ont leur implémentation et leurs tests.
-- [ ] Aucun appel existant n'est modifié.
-- [ ] Le thème suit la personne entre les deux interfaces.
+- [x] Les huit méthodes ont leur implémentation et leurs tests.
+- [x] Aucun appel existant n'est modifié.
+- [x] Le thème suit la personne entre les deux interfaces.
+
+> **Amendement à la livraison.** `DialogService` devient une classe abstraite sans import ng-zorro ;
+> l'implémentation ng-zorro, `NzDialogService`, est liée par `DialogModule` et `legacyProviders`.
+> Celle de la nouvelle interface, `NextDialog`, s'appuie sur le `Dialog` du CDK (piège du focus,
+> Échap, retour du focus) et sur `Toaster` : toasts de 4 s en bas à gauche, annoncés aux lecteurs
+> d'écran, en pause sous le pointeur ou le focus. Le contenu d'une confirmation reste interprété en
+> HTML, assaini par Angular, comme avec ng-zorro. `pl-toast`, `pl-toast-stack` et `pl-dialog` sont dans
+> la bibliothèque ; un bouton destructif a ses rôles `--pl-color-danger-strong` et
+> `--pl-color-on-danger`, lisibles en sombre.
+
+> **Amendement à la livraison.** Le thème de la nouvelle interface (`NextTheme`) n'est pas un port :
+> `ThemeService` reste à l'ancienne, avec ses feuilles Material et ng-zorro. Il partage la clé
+> `app.theme` et ses valeurs ; sans choix enregistré, il est clair, comme l'ancienne interface. Le
+> composant racine le restaure sans bloquer le démarrage. Le choix dans l'interface arrive avec le
+> menu du profil (C-02).
+
+> **Défaut trouvé en chemin.** Importer `@platon/core/browser` par son entrée principale faisait
+> charger toute la bibliothèque au démarrage de la nouvelle interface (Apollo, Monaco, ECharts,
+> Material, ng-zorro) : 5,2 Mo, que webpack ne peut pas élaguer. Une entrée légère,
+> `@platon/core/browser/shared`, expose ce que les deux interfaces partagent sans vendeur d'interface
+> (le port `DialogService`, `StorageService`) ; ESLint refuse l'entrée principale dans `next/`. Le
+> démarrage de la nouvelle interface retombe à 576 Ko (178 Ko compressés). Les bibliothèques
+> `@platon/feature/*/browser` ont le même défaut : les premiers écrans qui utilisent leurs services
+> d'API (phases A et K) devront leur ouvrir une entrée du même genre.

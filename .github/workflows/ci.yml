@@ -45,6 +45,9 @@ jobs:
 
       - run: yarn affected:build --parallel --base=${{ env.NX_BASE }}
 
+      - name: Build Storybook of the design system
+        run: yarn nx affected --target=build-storybook --base=${{ env.NX_BASE }}
+
   lint:
     name: Lint
     runs-on: ubuntu-latest
@@ -63,6 +66,9 @@ jobs:
           main-branch-name: ${{ github.base_ref || github.ref_name }}
 
       - run: yarn affected:lint --parallel --base=${{ env.NX_BASE }}
+
+      - name: Design lints of the new interface
+        run: yarn lint:design
 
   test:
     name: Test

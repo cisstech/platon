@@ -1,0 +1,50 @@
+// Layout helpers of the stories only; never shipped with the application.
+
+.story-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--pl-space-6);
+}
+
+.story-row > * {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--pl-space-2);
+}
+
+.story-stack {
+  display: grid;
+  gap: var(--pl-space-4);
+}
+
+.story-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--pl-space-2);
+  padding: 0;
+  list-style: none;
+}
+
+.story-grid > li {
+  display: grid;
+  justify-items: center;
+  gap: var(--pl-space-2);
+  padding: var(--pl-space-3);
+  border: 1px solid var(--pl-color-line);
+  border-radius: var(--pl-radius-card);
+  background: var(--pl-color-surface);
+}
+
+.story-grid code {
+  color: var(--pl-color-muted);
+  font: var(--pl-font-small);
+}
+
+.story-success {
+  color: var(--pl-color-success-ink);
+}
+
+.story-danger {
+  color: var(--pl-color-danger-ink);
+}

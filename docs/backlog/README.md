@@ -58,8 +58,11 @@ Après la livraison, les écarts s'ajoutent en citation : `> **Amendement à la 
   démarrage).
 - `apps/web/src/app/` : l'interface actuelle. `legacy.*` pour ce qui lui est propre, `ui-switch/`
   pour l'avis qu'elle affiche sur la nouvelle.
-- `apps/web/src/next/` : la nouvelle interface. `core/` pour les services et gardes, `pages/` pour les
-  écrans.
+- `apps/web/src/next/` : la nouvelle interface. `core/` pour les services et gardes (dialogues, thème,
+  pont), `pages/` pour les écrans.
+- `libs/design-system/` (`@platon/design-system`, préfixe `pl-`) : tokens, composants, Storybook
+  (`yarn storybook`). En anglais (D20), sans code PLaTon.
+- `tools/lint/` : les garde-fous de `yarn lint:design` (tokens, CSS morte, tirets) et leurs tests.
 
 Nommage du nouveau code (D17) : `home.ts`, `home.html`, `home.scss` pour un composant `Home`,
 `legacy-bridge-guard.ts` pour une garde, `next.routes.ts` pour la configuration, `*.vm.ts` pour les

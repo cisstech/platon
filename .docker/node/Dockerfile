@@ -17,7 +17,8 @@ RUN apk add --no-cache --update \
 WORKDIR /src
 
 # Copy dependencies
-COPY --chown=node:node package.json yarn.lock ./
+COPY --chown=node:node package.json yarn.lock .yarnrc.yml ./
+COPY --chown=node:node .yarn/releases ./.yarn/releases
 COPY --chown=node:node shared ./shared
 
 RUN apk add --no-cache \
@@ -30,16 +31,17 @@ RUN apk add --no-cache \
   librsvg-dev \
   pixman-dev
 
-# Install yarn
+# Install yarn: corepack provides the entry point, the release checked into .yarn/releases runs
 RUN npm install -g corepack \
-  && corepack enable \
-  && corepack prepare yarn@1.22.22 --activate
+  && corepack enable
+
+ENV YARN_HTTP_TIMEOUT=600000
 
 # Install dependencies
-RUN yarn install --frozen-lockfile --non-interactive --network-timeout 600000
+RUN yarn install --immutable
 
 COPY --chown=node:node apps/docs/package.json apps/docs/yarn.lock ./apps/docs/
-RUN cd apps/docs && yarn install --frozen-lockfile --non-interactive --network-timeout 600000
+RUN cd apps/docs && yarn install --immutable
 # Bundle app source
 COPY --chown=node:node .graphql ./.graphql
 COPY --chown=node:node apps ./apps
@@ -67,7 +69,7 @@ RUN yarn build:migrations
 
 # Rebuild node_modules with only production dependencies
 ENV NODE_ENV=production
-RUN yarn install --frozen-lockfile --non-interactive --production
+RUN yarn workspaces focus --production
 
 USER node
 

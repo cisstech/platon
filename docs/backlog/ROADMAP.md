@@ -1,13 +1,17 @@
 # Roadmap
 
-> Mise à jour : 2026-09-28. Wireframes : [`design/flows`](../../design/flows). Décisions :
+> Mise à jour : 2026-09-29. Wireframes : [`design/flows`](../../design/flows). Décisions :
 > [DECISIONS.md](./DECISIONS.md). Standard : [README.md](./README.md).
 
 ## Où on en est
 
 Les wireframes sont faits pour tous les parcours (accueils, cours, activité, lecteur, corrections,
 ressources, création, tests, administration, compte, annonces), avec la direction, l'audit et la
-faisabilité dans [`design/docs`](../../design/docs). Côté code, le socle du basculement est livré (phase S : choix au démarrage, styles et providers séparés, pont, proposition d'essai) ; la nouvelle interface n'a encore que son accueil.
+faisabilité dans [`design/docs`](../../design/docs). Côté code, le socle du basculement est livré
+(phase S : choix au démarrage, styles et providers séparés, pont, proposition d'essai), puis les
+fondations (phase F : bibliothèque `@platon/design-system` et Storybook, tokens clair et sombre,
+polices et icônes, garde-fous `yarn lint:design`, dialogues et thème). La nouvelle interface n'a
+encore que son accueil ; la suite est le cadre (phase C).
 
 ## Où on atterrit
 
@@ -44,12 +48,12 @@ Statuts : `À faire`, `À écrire` (le ticket n'est pas encore rédigé), `En co
 
 ## Phase F : les fondations du design system
 
-| Ticket                                             | Titre                                                   | Dépend de  | Taille | Statut  |
-| -------------------------------------------------- | ------------------------------------------------------- | ---------- | ------ | ------- |
-| [F-01](./F-01-la-bibliotheque-et-storybook.md)     | La bibliothèque `@platon/design-system` et Storybook    | aucun      | M      | À faire |
-| [F-02](./F-02-tokens-polices-et-icones.md)         | Tokens, polices et icônes                               | F-01, S-02 | M      | À faire |
-| [F-03](./F-03-les-frontieres-et-les-garde-fous.md) | Les frontières et les garde-fous                        | F-01       | S      | À faire |
-| [F-04](./F-04-les-ports-transverses.md)            | Les ports transverses : dialogues, notifications, thème | F-02, S-03 | M      | À faire |
+| Ticket                                                  | Titre                                                   | Dépend de  | Taille | Statut             |
+| ------------------------------------------------------- | ------------------------------------------------------- | ---------- | ------ | ------------------ |
+| [F-01](./done/F-01-la-bibliotheque-et-storybook.md)     | La bibliothèque `@platon/design-system` et Storybook    | aucun      | M      | Livré (2026-09-29) |
+| [F-02](./done/F-02-tokens-polices-et-icones.md)         | Tokens, polices et icônes                               | F-01, S-02 | M      | Livré (2026-09-29) |
+| [F-03](./done/F-03-les-frontieres-et-les-garde-fous.md) | Les frontières et les garde-fous                        | F-01       | S      | Livré (2026-09-29) |
+| [F-04](./done/F-04-les-ports-transverses.md)            | Les ports transverses : dialogues, notifications, thème | F-02, S-03 | M      | Livré (2026-09-29) |
 
 ## Phase C : le cadre
 
@@ -123,7 +127,7 @@ Statuts : `À faire`, `À écrire` (le ticket n'est pas encore rédigé), `En co
 
 | Ticket | Titre                                                                 | Dépend de              | Taille | Statut   |
 | ------ | --------------------------------------------------------------------- | ---------------------- | ------ | -------- |
-| X-01   | Palier 1, proposition aux volontaires (`ui.next = opt-in`)            | S-05, C-02, A-01, A-02 | S      | À écrire |
+| X-01   | Palier 1, proposition aux volontaires (`platon-ui-next` à `opt-in`)   | S-05, C-02, A-01, A-02 | S      | À écrire |
 | X-02   | Palier 2, la nouvelle interface par défaut, avec retour possible      | tous les écrans hors L | S      | À écrire |
 | X-03   | Palier 3, retrait de l'ancienne interface, de Material et de ng-zorro | X-02, phase L          | L      | À écrire |
 

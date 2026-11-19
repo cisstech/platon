@@ -1,0 +1,15 @@
+{
+  "name": "tools-lint",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "tools/lint",
+  "tags": ["scope:tooling"],
+  "targets": {
+    "test": {
+      "command": "node --test tools/lint/",
+      "options": { "forwardAllArgs": false },
+      "cache": true,
+      "inputs": ["{projectRoot}/**/*"]
+    }
+  }
+}
