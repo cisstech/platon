@@ -8,6 +8,7 @@ import {
   detailView,
   noMatch,
   openedOnArrival,
+  searchOutcome,
 } from './announcements.vm'
 
 // A Monday afternoon, in the local time of the machine running the tests.
@@ -159,5 +160,13 @@ describe('detailView', () => {
 describe('noMatch', () => {
   it('quotes the search that found nothing', () => {
     expect(noMatch('examen')).toBe('Aucune annonce ne correspond à « examen ».')
+  })
+})
+
+describe('searchOutcome', () => {
+  it('says how many announcements a search found, or that none matches', () => {
+    expect(searchOutcome(1, 'examen')).toBe('1 annonce')
+    expect(searchOutcome(3, 'examen')).toBe('3 annonces')
+    expect(searchOutcome(0, 'examen')).toBe('Aucune annonce ne correspond à «\u00a0examen\u00a0».')
   })
 })

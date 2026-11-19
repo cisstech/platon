@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../../../dist/out-tsc",
+    "module": "commonjs",
+    "target": "es2018",
+    "types": ["jest", "node"],
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true
+  },
+  "include": ["jest.e2e.config.ts", "src/**/*.e2e.spec.ts", "src/**/*.d.ts"]
+}

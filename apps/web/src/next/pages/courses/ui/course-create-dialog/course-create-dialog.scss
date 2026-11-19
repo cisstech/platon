@@ -1,0 +1,18 @@
+.course-create {
+  display: grid;
+  gap: var(--pl-space-2);
+  min-inline-size: min(440px, 80vw);
+}
+
+.course-create__hint {
+  min-block-size: var(--pl-space-4);
+  margin: 0 0 var(--pl-space-2);
+  color: var(--pl-color-muted);
+  font: var(--pl-font-small);
+}
+
+.course-create__error {
+  margin: 0;
+  color: var(--pl-color-danger-ink);
+  font: var(--pl-font-small);
+}

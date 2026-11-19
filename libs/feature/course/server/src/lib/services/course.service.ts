@@ -1,10 +1,10 @@
-import { BadRequestException, Injectable } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { NotFoundResponse } from '@platon/core/common'
+import { BadRequestResponse, NotFoundResponse } from '@platon/core/common'
 import { CourseFilters, CourseOrderings, COURSE_ORDERING_DIRECTIONS } from '@platon/feature/course/common'
 import { DataSource, Repository } from 'typeorm'
 import { Optional } from 'typescript-optional'
-import { CourseMemberView } from '../course-member/course-member.view'
+import { membershipsOf } from '../course-member/course-member.sql'
 import { CourseEntity } from '../entites/course.entity'
 import { CourseSectionEntity } from '../section/section.entity'
 import { ActivityEntity } from '../activity/activity.entity'
@@ -28,7 +28,8 @@ export class CourseService {
   async search(filters: CourseFilters = {}): Promise<[CourseEntity[], number]> {
     const query = this.courseRepository
       .createQueryBuilder('course')
-      .leftJoin(CourseMemberView, 'member', 'member.course_id = course.id')
+      .leftJoin('course.owner', 'owner')
+      .addSelect(['owner.id', 'owner.username', 'owner.firstName', 'owner.lastName'])
 
     filters = {
       ...filters,
@@ -39,8 +40,8 @@ export class CourseService {
     query.andWhere('course.is_test = :isTest', { isTest: filters.isTest })
 
     if (!filters.showAll && filters.members?.length) {
-      query.andWhere('(member.id IN (:...ids))', {
-        ids: filters.members,
+      query.andWhere(`course.id IN (SELECT course_id FROM (${membershipsOf('ANY(:members)')}) memberships)`, {
+        members: filters.members,
       })
     }
 
@@ -85,13 +86,14 @@ export class CourseService {
     if (filters.order) {
       const fields: Record<CourseOrderings, string> = {
         NAME: 'course.name',
-        CREATED_AT: 'course.created_at',
-        UPDATED_AT: 'course.updated_at',
+        CREATED_AT: 'course.createdAt',
+        UPDATED_AT: 'course.updatedAt',
       }
 
       query.orderBy(fields[filters.order], filters.direction || COURSE_ORDERING_DIRECTIONS[filters.order])
     }
 
+    // One row per course, its owner being one: the page is the plain offset and limit of the query.
     if (filters.offset) {
       query.offset(filters.offset)
     }
@@ -153,7 +155,7 @@ export class CourseService {
 
   async duplicate(sourceCourseId: string, targetCourseId: string, guards?: DuplicateGuards): Promise<CourseEntity> {
     if (sourceCourseId === targetCourseId) {
-      throw new BadRequestException('Source and target courses cannot be the same')
+      throw new BadRequestResponse('Source and target courses cannot be the same')
     }
 
     const sourceCourse = await this.courseRepository.findOne({ where: { id: sourceCourseId } })

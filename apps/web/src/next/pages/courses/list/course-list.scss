@@ -1,0 +1,26 @@
+.course-list__toolbar {
+  margin-block-end: var(--pl-space-5);
+}
+
+.course-list__grid {
+  display: grid;
+  /* Wide enough for a headcount on one line: the binders of a row keep their feet aligned. */
+  grid-template-columns: repeat(auto-fill, minmax(min(360px, 100%), 1fr));
+  gap: var(--pl-space-6) var(--pl-space-4);
+  margin: 0;
+  padding: var(--pl-space-3) 0 0;
+  list-style: none;
+}
+
+.course-list__grid > li {
+  display: grid;
+}
+
+.course-list__grid--compact {
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--pl-space-3);
+}
+
+.course-list__more {
+  margin-block-start: var(--pl-space-5);
+}

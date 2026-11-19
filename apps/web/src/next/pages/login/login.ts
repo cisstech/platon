@@ -3,9 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
-  Injector,
   OnInit,
-  afterNextRender,
   computed,
   inject,
   input,
@@ -22,6 +20,7 @@ import {
   PAGE_CONTENT_ID,
   PasswordReveal,
   SkipLink,
+  whenRendered,
 } from '@platon/design-system'
 import { CAS_SIGN_IN_FAILED } from '@platon/feature/cas/common'
 import { INSTITUTION_NAME, PRESENTATION_URL } from '../../core/institution/institution'
@@ -68,7 +67,7 @@ export class Login implements OnInit {
   protected readonly store = inject(LoginStore)
   private readonly router = inject(Router)
   private readonly announcer = inject(LiveAnnouncer)
-  private readonly injector = inject(Injector)
+  private readonly later = whenRendered()
   protected readonly institution = inject(INSTITUTION_NAME)
   protected readonly presentationUrl = inject(PRESENTATION_URL)
 
@@ -118,7 +117,7 @@ export class Login implements OnInit {
       return
     }
     const field = !username.trim() ? this.username() : this.password()
-    afterNextRender(() => field.nativeElement.focus(), { injector: this.injector })
+    this.later(() => field.nativeElement.focus())
   }
 
   /** The institution account waits while a sign-in by password is at work. */

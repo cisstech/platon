@@ -106,6 +106,15 @@ Gravité : **P1** bloque, trompe ou expose. **P2** gêne ou fait douter. **P3** 
 - **Piste** : ne rendre aucune session, ou celle de l'appelant inchangée ; pour poser un premier mot
   de passe, demander une connexion récente (CAS ou LTI).
 
+### B36. Tout compte lit les cours d'un autre par `members`
+
+- [x] Corrigé dans K-01 (branche `feat/courses-list`).
+- **Symptôme** : `GET /api/v1/courses?members=<identifiant>` rend à tout compte connecté les cours
+  d'un autre compte : leurs noms, leurs descriptions et leurs effectifs.
+- **Cause** : la recherche ajoutait la personne à `members` sans retirer ceux de l'adresse.
+- **Où** : `libs/feature/course/server/src/lib/course.controller.ts` (`search`)
+- **Note** : seul l'administrateur garde `members` et `showAll` ; une spec e2e le prouve.
+
 ## P2
 
 ### B6. `/tests` sans garde de rôle
@@ -273,6 +282,36 @@ Gravité : **P1** bloque, trompe ou expose. **P2** gêne ou fait douter. **P3** 
 - **Piste** : lier `[innerHTML]` sans contournement, comme `app-rich-text` de la nouvelle interface
   (A-03), et vérifier les styles qui reposaient sur des attributs `style` retirés.
 
+### B37. Archiver un cours suivi par un groupe ne fait rien
+
+- [ ] Corrigé
+- **Symptôme** : l'interface actuelle propose Archiver à tout compte qui n'est pas administrateur. Pour
+  une personne inscrite par un groupe, `PATCH /courses/:id/members/me` répond 404, et rien ne se
+  passe à l'écran.
+- **Cause** : le bouton ne lit aucun droit, et `onArchiveToggle` n'a pas de `catch`.
+- **Où** : `apps/web/src/app/pages/courses/courses.page.ts`
+- **Piste** : lire `permissions.archive` (ajouté par K-01) et dire l'échec.
+
+### B38. « Afficher tous les cours » mélange les listes de l'administrateur
+
+- [ ] Corrigé
+- **Symptôme** : tous les cours de la plateforme arrivent d'un coup ; Cours actuels liste aussi ceux
+  que l'administrateur a archivés ; changer d'onglet garde toute la plateforme, et seul un
+  rechargement ramène ses propres cours.
+- **Cause** : `showAll` reste dans les filtres, sans `archived` ni pagination.
+- **Où** : `apps/web/src/app/pages/courses/courses.page.ts`
+- **Piste** : un choix à part, paginé, comme « Toute la plateforme » de la nouvelle interface (K-01).
+
+### B39. Les effectifs d'un cours ne comptent que les activités de qui les lit
+
+- [x] Corrigé dans K-01 (branche `feat/courses-list`).
+- **Symptôme** : sur un cours dont il n'est pas membre, l'administrateur lit 0 activité et aucun
+  challenge. Un co-enseignant ne compte pas les activités réservées qu'un autre enseignant a créées.
+- **Cause** : `statistic` ne gardait que les activités créées par la personne ou ouvertes à elle.
+- **Où** : `libs/feature/result/server/src/lib/expanders/course.expander.ts`
+- **Note** : l'administrateur et qui enseigne le cours comptent toutes ses activités ; une spec
+  d'intégration le prouve.
+
 ## P3
 
 ### B11. Identifiant de session dans le résumé
@@ -371,6 +410,39 @@ Gravité : **P1** bloque, trompe ou expose. **P2** gêne ou fait douter. **P3** 
   `migrations/1787242389696-SetDefaultValueForActivityCode.ts`
 - **Piste** : une migration qui renomme l'index ; pour `code`, écrire le défaut dans la forme que
   PostgreSQL renvoie.
+
+### B40. Les pages de la recherche des cours comptaient des lignes de membres
+
+- [x] Corrigé dans K-01 (branche `feat/courses-list`).
+- **Symptôme** : `GET /courses?limit=20` rendait moins de 20 cours, et deux pages pouvaient se
+  recouvrir.
+- **Cause** : la recherche joignait `CourseMemberView`, et `offset` et `limit` comptaient les lignes
+  de cette jointure.
+- **Où** : `libs/feature/course/server/src/lib/services/course.service.ts` (`search`)
+- **Note** : l'appartenance est désormais un filtre parti des lignes de la personne
+  (`membershipsOf`), sans jointure.
+
+### B41. L'auteur d'une annonce arrive avec `hasPassword: false`
+
+- [ ] Corrigé
+- **Symptôme** : l'API rend `publisher.hasPassword: false` pour toute annonce, que la personne ait un
+  mot de passe ou non.
+- **Cause** : TypeORM construit l'utilisateur joint avec `new UserEntity()`, dont l'initialiseur
+  `hasPassword = false` survit à une sélection partielle, et le DTO garde tout.
+- **Où** : `libs/feature/announcement/server/src/lib/announcement.dto.ts` (`publisher`)
+- **Piste** : ne garder que les champs choisis, comme `CourseDTO.owner` (K-01).
+
+### B42. Le panneau des notifications se ferme en pleine action et lève une erreur
+
+- [x] Corrigé dans K-01 (branche `feat/courses-list`).
+- **Symptôme** : fermer le panneau pendant « Tout marquer comme lu », « Afficher les plus
+  anciennes », « Tout supprimer » ou le refus d'une invitation laisse une erreur `NG0911: View has
+already been destroyed` dans la console.
+- **Cause** : le focus qui suit l'action est demandé par `afterNextRender` sur l'injecteur d'une vue
+  déjà détruite.
+- **Où** : `apps/web/src/next/shell/notifications/notifications-panel.ts` (`keepFocus`)
+- **Note** : `whenRendered` (design system) ne lance plus rien une fois la vue partie ; la page de
+  connexion et le dialogue de création de cours s'en servent aussi.
 
 ## Code mort
 

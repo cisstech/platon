@@ -12,11 +12,11 @@ export class CourseExpander {
 
   async permissions(context: ExpandContext<IRequest, CourseDTO>): Promise<CoursePermissions> {
     const { request, parent } = context
-
-    return {
-      update:
-        request.user.id === parent.ownerId ||
-        (await this.courseMemberService.hasWritePermission(parent.id, request.user)),
-    }
+    const [update, member] = await Promise.all([
+      request.user.id === parent.ownerId || this.courseMemberService.hasWritePermission(parent.id, request.user),
+      // Archiving is for oneself, on one's own row of members: a member through a group has none.
+      this.courseMemberService.getByUserIdAndCourseId(request.user.id, parent.id),
+    ])
+    return { update, archive: member.isPresent() }
   }
 }

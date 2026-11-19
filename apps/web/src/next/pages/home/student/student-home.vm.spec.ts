@@ -258,7 +258,7 @@ describe('courseViews', () => {
       ]
     )
 
-    expect(views.map((view) => [view.name, view.percent, view.progressText, view.finished])).toEqual([
+    expect(views.map((view) => [view.name, view.percent, words(view.progressText), view.finished])).toEqual([
       ['Algorithmique 1', 58, '34 exercices sur 59', false],
       ['Analyse 1', 3, '1 exercice sur 40', false],
       ['Algèbre 1', 100, 'Cours terminé', true],

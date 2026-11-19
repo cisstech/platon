@@ -1,0 +1,26 @@
+@if (compact()) {
+<pl-course-mark [monogram]="monogram()" [hue]="hue()" size="sm" />
+} @else {
+<span class="pl-binder__tab" aria-hidden="true"></span>
+}
+<div class="pl-binder__body">
+  <h2 class="pl-binder__title">
+    <a #link class="pl-binder__link" [routerLink]="href()">{{ heading() }}</a>
+  </h2>
+  @if (description() && !compact()) {
+  <p class="pl-binder__description">{{ description() }}</p>
+  }
+  <div class="pl-binder__foot"><ng-content /></div>
+</div>
+@if (!compact()) {
+<div class="pl-binder__cover">
+  <span class="pl-binder__monogram" aria-hidden="true">{{ monogram() }}</span>
+  @if (badge() && badgeHref()) {
+  <a class="pl-binder__badge" [routerLink]="badgeHref()"
+    >@if (badgeIcon(); as icon) {<pl-icon [name]="icon" [size]="1" />}{{ badge()
+    }}<span class="pl-visually-hidden">, {{ heading() }}</span></a
+  >
+  }
+</div>
+}
+<div class="pl-binder__actions"><ng-content select="[plBinderActions]" /></div>

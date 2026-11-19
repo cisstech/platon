@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, input, model } from '@angular/core'
+import { ChangeDetectionStrategy, Component, ElementRef, input, model, viewChildren } from '@angular/core'
+import { Count } from '../count/count'
 import { Icon } from '../icon/icon'
 import { IconName } from '../icon/icon-names'
 
@@ -8,6 +9,8 @@ export interface SegmentedOption<T extends string = string> {
   icon?: IconName
   /** Shows the icon alone; the label stays the option's accessible name. */
   iconOnly?: boolean
+  /** How many things the choice holds, after its label: « Actuels 3 ». */
+  count?: number
 }
 
 /** `md` fits a toolbar; `lg` gives each choice the 44 px a finger needs. */
@@ -22,7 +25,7 @@ let lastGroupId = 0
 @Component({
   selector: 'pl-segmented',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Icon],
+  imports: [Count, Icon],
   host: {
     role: 'radiogroup',
     '[attr.aria-label]': 'label()',
@@ -39,4 +42,11 @@ export class Segmented<T extends string = string> {
   readonly size = input<SegmentedSize>('md')
 
   protected readonly name = `pl-segmented-${++lastGroupId}`
+  private readonly radios = viewChildren<ElementRef<HTMLInputElement>>('radio')
+
+  /** Focuses the chosen option, as a tab into the group would. */
+  focus(): void {
+    const radios = this.radios().map(({ nativeElement }) => nativeElement)
+    ;(radios.find(({ checked }) => checked) ?? radios[0])?.focus()
+  }
 }

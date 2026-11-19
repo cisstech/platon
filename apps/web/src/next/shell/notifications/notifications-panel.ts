@@ -5,8 +5,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
-  Injector,
-  afterNextRender,
   computed,
   effect,
   inject,
@@ -28,6 +26,7 @@ import {
   PanelLayout,
   showsSkeleton,
   trackLoadPhase,
+  whenRendered,
 } from '@platon/design-system'
 import { Session } from '../../core/session/session'
 import { LoadState } from '../../shared/ui/load-state/load-state'
@@ -71,7 +70,7 @@ export class NotificationsPanel {
   private readonly dialogRef = inject(DialogRef)
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef)
   private readonly document = inject(DOCUMENT)
-  private readonly injector = inject(Injector)
+  private readonly later = whenRendered()
   private readonly panel = viewChild.required(Panel)
   private readonly rows = viewChildren(NotificationItem)
   protected readonly layout = inject<PanelLayout>(DIALOG_DATA)
@@ -157,15 +156,12 @@ export class NotificationsPanel {
    * dialog.
    */
   private keepFocus(index?: number): void {
-    afterNextRender(
-      () => {
-        if (this.host.nativeElement.contains(this.document.activeElement)) return
-        const rows = this.rows()
-        if (index !== undefined && index >= 0 && rows.length) rows[Math.min(index, rows.length - 1)].focus()
-        else this.panel().focusClose()
-      },
-      { injector: this.injector }
-    )
+    this.later(() => {
+      if (this.host.nativeElement.contains(this.document.activeElement)) return
+      const rows = this.rows()
+      if (index !== undefined && index >= 0 && rows.length) rows[Math.min(index, rows.length - 1)].focus()
+      else this.panel().focusClose()
+    })
   }
 
   /** A notification that arrives while the panel is open appears first, and is read out. */

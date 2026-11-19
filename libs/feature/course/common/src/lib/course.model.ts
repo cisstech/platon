@@ -1,4 +1,4 @@
-import { ExpandableModel, OrderingDirections } from '@platon/core/common'
+import { ExpandableModel, OrderingDirections, User } from '@platon/core/common'
 import { CoursePermissions } from './permissions.model'
 import { CourseStatistic } from './statistic.model'
 
@@ -10,6 +10,9 @@ export enum CourseOrderings {
   UPDATED_AT = 'UPDATED_AT',
 }
 
+/** Who is responsible for a course, as its members see them. */
+export type CourseOwner = Pick<User, 'id' | 'username' | 'firstName' | 'lastName'>
+
 export interface Course {
   readonly id: string
   readonly createdAt: Date
@@ -17,6 +20,8 @@ export interface Course {
   readonly name: string
   readonly desc?: string
   readonly ownerId: string
+  /** Who is responsible for it, in the search of the courses. */
+  readonly owner?: CourseOwner
   readonly isTest: boolean
 
   readonly statistic?: CourseStatistic

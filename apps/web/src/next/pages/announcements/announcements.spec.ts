@@ -354,7 +354,7 @@ describe('Announcements', () => {
     refresh()
 
     expect(document.activeElement).toBe(more)
-    expect(spoken(page.querySelector('app-announcement-more [role="alert"]'))).toBe(
+    expect(spoken(page.querySelector('app-show-more p'))).toBe(
       "Les annonces plus anciennes n'ont pas pu être chargées."
     )
   })

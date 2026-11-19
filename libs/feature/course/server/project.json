@@ -23,10 +23,22 @@
         "passWithNoTests": false
       }
     },
+    "test:e2e": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}/e2e"],
+      "options": {
+        "jestConfig": "libs/feature/course/server/jest.e2e.config.ts",
+        "passWithNoTests": false
+      }
+    },
     "test:all": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["nx run feature-course-server:test", "nx run feature-course-server:test:integration"],
+        "commands": [
+          "nx run feature-course-server:test",
+          "nx run feature-course-server:test:integration",
+          "nx run feature-course-server:test:e2e"
+        ],
         "parallel": false
       }
     }

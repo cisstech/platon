@@ -17,6 +17,7 @@
   --pl-color-skeleton: #3a393d;
   --pl-color-skeleton-shine: #29282c;
   --pl-color-track: #3f3e41;
+  --pl-color-ruling: rgb(255 255 255 / 6%);
   --pl-color-control: var(--pl-graphite-450);
   --pl-color-text: var(--pl-graphite-100);
   --pl-color-muted: var(--pl-graphite-300);
@@ -151,6 +152,8 @@
   --pl-color-skeleton-shine: var(--pl-graphite-100);
   // The empty part of a progress bar.
   --pl-color-track: var(--pl-graphite-150);
+  // The ruled lines of a course cover, over the tint of its course.
+  --pl-color-ruling: rgb(255 255 255 / 45%);
   // Borders of fields and checkboxes: 3:1 against the surface.
   --pl-color-control: var(--pl-graphite-450);
   --pl-color-text: var(--pl-graphite-900);
