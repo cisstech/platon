@@ -171,7 +171,7 @@ describe('ActivityController', () => {
     await controller.changeOrder(req, 'course-1', ['a1', 'a2'])
 
     expect(permissionsService.ensureCourseWritePermission).toHaveBeenCalledWith('course-1', req)
-    expect(activityService.updateActivitesOrder).toHaveBeenCalledWith(['a1', 'a2'])
+    expect(activityService.updateActivitesOrder).toHaveBeenCalledWith('course-1', ['a1', 'a2'])
   })
 
   it('update devrait déléguer avec un guard de permission écriture', async () => {

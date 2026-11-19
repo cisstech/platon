@@ -16,6 +16,7 @@ import {
   CreateCourseMemberDTO,
   UpdateCourseMemberRoleDTO,
 } from './course-member.dto'
+import { CoursePermissionsService } from '../permissions/permissions.service'
 import { CourseMemberService } from './course-member.service'
 import { CourseMemberRoles, CreateTestMember } from '@platon/feature/course/common'
 
@@ -23,13 +24,20 @@ import { CourseMemberRoles, CreateTestMember } from '@platon/feature/course/comm
 @Controller('courses/:courseId/members')
 @ApiTags('Courses')
 export class CourseMemberController {
-  constructor(private readonly courseMemberService: CourseMemberService, private readonly authService: AuthService) {}
+  constructor(
+    private readonly courseMemberService: CourseMemberService,
+    private readonly authService: AuthService,
+    private readonly permissionsService: CoursePermissionsService
+  ) {}
 
+  /** The members of a course, read by its members only: they come with their email. */
   @Get()
   async search(
+    @Req() req: IRequest,
     @UUIDParam('courseId') courseId: string,
     @Query() filters: CourseMemberFiltersDTO = {}
   ): Promise<ListResponse<CourseMemberDTO>> {
+    await this.permissionsService.ensureCourseReadPermission(courseId, req)
     const [items, total] = await this.courseMemberService.search(courseId, filters)
     return new ListResponse({
       total,

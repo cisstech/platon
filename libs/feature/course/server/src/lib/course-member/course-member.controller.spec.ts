@@ -6,6 +6,7 @@ import { Optional } from 'typescript-optional'
 import { CourseMemberController } from './course-member.controller'
 import { CourseMemberEntity } from './course-member.entity'
 import { CourseMemberService } from './course-member.service'
+import { CoursePermissionsService } from '../permissions/permissions.service'
 
 describe('CourseMemberController', () => {
   let controller: CourseMemberController
@@ -47,6 +48,7 @@ describe('CourseMemberController', () => {
         CourseMemberController,
         { provide: CourseMemberService, useValue: service },
         { provide: AuthService, useValue: authService },
+        { provide: CoursePermissionsService, useValue: { ensureCourseReadPermission: jest.fn() } },
       ],
     }).compile()
 
@@ -61,7 +63,7 @@ describe('CourseMemberController', () => {
     it('devrait retourner la liste mappée des membres', async () => {
       service.search.mockResolvedValue([[{ id: 'm1' } as CourseMemberEntity], 1])
 
-      const result = await controller.search('course-1', {})
+      const result = await controller.search(req, 'course-1', {})
 
       expect(service.search).toHaveBeenCalledWith('course-1', {})
       expect(result.total).toBe(1)

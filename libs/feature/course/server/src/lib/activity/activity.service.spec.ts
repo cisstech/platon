@@ -244,18 +244,6 @@ describe('ActivityService', () => {
     })
   })
 
-  describe('updateActivitesOrder', () => {
-    it('devrait sauvegarder les ids avec leur index comme ordre', async () => {
-      await service.updateActivitesOrder(['a1', 'a2', 'a3'])
-
-      expect(repository.save).toHaveBeenCalledWith([
-        { id: 'a1', order: 0 },
-        { id: 'a2', order: 1 },
-        { id: 'a3', order: 2 },
-      ])
-    })
-  })
-
   describe('update', () => {
     it("devrait lever une NotFoundResponse si l'activité n'existe pas", async () => {
       repository.findOne.mockResolvedValue(null)

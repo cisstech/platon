@@ -6,6 +6,8 @@ import { ActivityEntity } from '../activity/activity.entity'
 import { CourseMemberService } from '../course-member/course-member.service'
 import { ActivityGroupService } from '../activity-group/activity-group.service'
 import { ActivityService } from '../activity/activity.service'
+import { CourseGroupEntity } from '../course-group/course-group.entity'
+import { CourseGroupService } from '../course-group/course-group.service'
 
 @Injectable()
 export class CoursePermissionsService {
@@ -13,7 +15,8 @@ export class CoursePermissionsService {
     private readonly courseMemberService: CourseMemberService,
     private readonly activityMemberService: ActivityMemberService,
     private readonly activityGroupService: ActivityGroupService,
-    private readonly activityService: ActivityService
+    private readonly activityService: ActivityService,
+    private readonly courseGroupService: CourseGroupService
   ) {}
 
   async ensureCourseReadPermission(courseId: string, req: IRequest): Promise<void> {
@@ -26,6 +29,18 @@ export class CoursePermissionsService {
     if (!(await this.courseMemberService.hasWritePermission(courseId, req.user))) {
       throw new ForbiddenResponse('You cannot modify this course')
     }
+  }
+
+  /** A group of the course, read by its members; a group of another course is not found. */
+  async ensureGroupReadPermission(courseId: string, groupId: string, req: IRequest): Promise<CourseGroupEntity> {
+    await this.ensureCourseReadPermission(courseId, req)
+    return this.groupOf(courseId, groupId)
+  }
+
+  /** A group of the course, written by who may change the course; a group of another course is not found. */
+  async ensureGroupWritePermission(courseId: string, groupId: string, req: IRequest): Promise<CourseGroupEntity> {
+    await this.ensureCourseWritePermission(courseId, req)
+    return this.groupOf(courseId, groupId)
   }
 
   async ensureActivityReadPermission(activity: string | ActivityEntity, req: IRequest): Promise<void> {
@@ -55,5 +70,13 @@ export class CoursePermissionsService {
         : activity
     if (activityEntity.creatorId == req.user.id) return
     await this.ensureCourseWritePermission(activityEntity.courseId, req)
+  }
+
+  private async groupOf(courseId: string, groupId: string): Promise<CourseGroupEntity> {
+    const group = await this.courseGroupService.findInCourse(courseId, groupId)
+    if (!group) {
+      throw new NotFoundResponse(`Group not found in this course: ${groupId}`)
+    }
+    return group
   }
 }

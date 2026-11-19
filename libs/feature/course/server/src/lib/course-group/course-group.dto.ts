@@ -1,5 +1,6 @@
 import { BaseDTO } from '@platon/core/server'
 import { CourseGroup, UpdateGroup } from '@platon/feature/course/common'
+import { IsNotEmpty, IsString } from 'class-validator'
 
 export class CourseGroupDTO extends BaseDTO implements CourseGroup {
   readonly groupId!: string
@@ -10,5 +11,7 @@ export class CourseGroupDTO extends BaseDTO implements CourseGroup {
 }
 
 export class UpdateGroupDTO implements UpdateGroup {
+  @IsString()
+  @IsNotEmpty()
   readonly name!: string
 }
