@@ -1,0 +1,14 @@
+@if (notice(); as notice) {
+<aside class="notice" aria-label="Nouvelle interface">
+  <p>
+    @if (notice.title) {
+    <strong>{{ notice.title }}</strong>
+    }
+    {{ notice.message }}
+  </p>
+  <div class="actions">
+    <a class="primary" [href]="notice.action.href">{{ notice.action.label }}</a>
+    <button type="button" class="quiet" (click)="dismiss(notice.kind)">{{ notice.dismissLabel }}</button>
+  </div>
+</aside>
+}

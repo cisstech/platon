@@ -1,0 +1,24 @@
+- screen: modeles
+  note: "La galerie de la sélection de modèles actuelle (templates certifiés, image, gif, nombre d'exercices et de sessions, aperçu), sortie du tableau de bord pour avoir sa page. Les modèles des cercles viennent de la recherche que fait déjà l'assistant (paramétrables du cercle et de ses parents)."
+- screen: modeles
+  note: "Proposition légère : la recherche dans la galerie. Filtrage côté client sur le nom et la description, la liste est courte."
+- screen: modeles
+  note: "Écrire en PLE est secondaire : c'est le chemin d'Hélène, pas celui de Karim."
+- screen: apercu
+  note: "L'aperçu joue vraiment le modèle avec ses valeurs d'exemple (l'iframe du lecteur, comme aujourd'hui) et dit ce qu'il faudra remplir, lu dans main.plc."
+- screen: atelier
+  note: "Le builder actuel : variables à gauche, éditeur au centre, aperçu à droite. Chaque variable affiche si elle est remplie. Précédent et Suivant guident dans l'ordre du modèle."
+- screen: atelier
+  note: "Le badge Non enregistré remplace « Non sauvegardé ». ⌘S enregistre, comme aujourd'hui."
+- screen: atelier
+  note: "État error : quand l'aperçu ne peut pas se construire, l'éditeur dit quoi corriger, à l'endroit concerné. Jamais un aperçu blanc."
+- screen: enregistrer
+  note: "Comportement actuel : au premier enregistrement d'un brouillon au nom par défaut, le builder envoie vers les informations. Ici c'est un dialogue au lieu d'un changement de page."
+- screen: enregistre
+  note: "Après l'enregistrement, la suite logique est proposée : donner l'exercice à ses étudiants."
+- screen: atelier-quitter
+  note: "Comportement actuel : un exercice jamais enregistré est supprimé en quittant. Le dialogue le dit avant."
+- screen: ajouter-au-cours
+  note: "Proposition, la plus importante du chantier pour Karim. Aujourd'hui un exercice ne va dans un cours qu'à travers une ressource activité, qu'on crée en PLA dans l'éditeur : le parcours sans code s'arrête là. Faisabilité vérifiée, sans nouvel endpoint : POST /resources accepte déjà files, donc le client crée une ressource activité dans le cercle personnel avec un main.pla (un groupe, cet exercice), puis appelle createActivities sur le cours. Deux appels existants."
+- screen: nouvelle
+  note: "L'assistant actuel en six étapes (cercle, informations, tags, mode, modèle, terminé) devient un formulaire. Mêmes champs, même appel d'API. Le cercle est prérempli avec celui d'où l'on vient."

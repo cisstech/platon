@@ -1,0 +1,6 @@
+- screen: test
+  note: "L'état d'un candidat se déduit de sa session (pas commencé, en cours, terminé). L'état de l'invitation (envoyée ou non) demande un champ : voir la carte de faisabilité."
+- screen: test
+  note: "Aperçu candidat montre à l'enseignant la page que verront les candidats, conditions comprises."
+- screen: candidat
+  note: "La couverture de la connexion, pour une personne qui ne connaît pas PLaTon. Règles, conditions, acceptation, un seul bouton. Rien ne commence sans l'acceptation."

@@ -1,0 +1,58 @@
+- screen: mes-cours
+  note: "Tout ce que la liste actuelle permet est là : recherche sur le nom, Actuels et Archivés, tri (nom, création, mise à jour), période. L'administrateur a en plus Tous les cours de la plateforme (showAll)."
+- screen: mes-cours
+  note: "Le classeur : intercalaire et couverture à la teinte du cours, sigle tiré du nom, lignes de cahier. Les chiffres sont ceux de la carte actuelle (enseignants, élèves, activités, mise à jour), le trophée ouvre les challenges."
+- screen: mes-cours
+  note: "Proposition : un champ colorHue sur Course, comme sur Activity. En attendant, la teinte est dérivée de l'id du cours côté client."
+- screen: mes-cours
+  note: "État etudiant : la barre Votre avancement est statistic.progression, propre à la personne connectée. Elle n'apparaît pas pour l'enseignant, pour qui elle ne veut rien dire."
+- screen: mes-cours-actions
+  note: "Archiver range le cours pour soi seulement (archivage de l'appartenance). Le libellé le dit, parce que « Archiver ce cours » laisse croire qu'on le ferme pour tous."
+- screen: nouveau
+  note: "L'assistant actuel n'a qu'une étape : Nom et Description, tous deux obligatoires. Un dialogue suffit."
+- screen: detail
+  note: "Onglets réels : Vue d'ensemble, Challenges (si challengeCount), Membres, Groupes, Paramètres (si permissions.update). Il n'y a pas d'onglet Résultats : aucun endpoint ne calcule de résultats au niveau du cours."
+- screen: detail
+  note: "La barre garde la recherche, le filtre d'état, l'export des notes (CSV, par groupe si le cours en a) et le choix Sections ou Tableau. Changement : le filtre Toutes, Ouvertes, À venir, Fermées est unique en tête, au lieu d'être répété dans chaque section."
+- screen: detail
+  note: "Colonne de droite : enseignants, élèves, activités, challenges. Retirés pour l'enseignant : Avancement et Temps passé, qui sont les siens et pas ceux de la classe."
+- screen: detail
+  note: "État etudiant : pas d'édition, pas d'export ; son avancement et son temps passé à droite. Les actions sont celles de la carte actuelle : Lancer (ici Commencer ou Reprendre) et Voir mes résultats quand l'activité est fermée."
+- screen: detail
+  note: "État tableau : les colonnes de la vue tableau actuelle, sauf Avancement pour l'enseignant. Une date manquante se définit d'un clic."
+- screen: activite-actions
+  note: "Le menu de la carte actuelle : Suivi et Statistiques (réunis dans Suivre l'activité), notes CSV, ouvrir la ressource, l'éditer, Paramètres (le bouton à côté). Lancer y est aussi, l'enseignant peut tester."
+- screen: section-actions
+  note: "Les actions de section actuelles, avec Renommer (aujourd'hui sur place) ; la suppression dit ce qui part avec la section."
+- screen: partager
+  note: "Le partage actuel : Lien PLaTon ou Lien LTI, Copier le lien."
+- screen: challenges
+  note: "Le classement actuel (100 meilleurs, points cumulés), avec un podium pour les trois premiers : même donnée, plus de fête. Le sélecteur passe au classement d'un challenge, qui ajoute la date de réussite."
+- screen: challenges
+  note: "État etudiant : sa ligne est surlignée, avec (vous)."
+- screen: membres
+  note: "Table actuelle : membre, date d'ajout, rôle modifiable (Étudiant, Enseignant ; verrouillé pour le propriétaire), retrait. Tous, Enseignants, Élèves reprend les routes teachers et students qui existent sans onglet."
+- screen: membres-ajouter
+  note: "Le dialogue actuel : rôle, recherche de personnes ou de groupes de la plateforme, sélection multiple. Seuls les comptes enseignants peuvent devenir enseignants."
+- screen: groupes
+  note: "Groupes du cours : créer (nommé Groupe N), renommer, ajouter des élèves, supprimer. La phrase d'intro dit à quoi ils servent, ce que la page actuelle ne dit pas."
+- screen: reglages
+  note: "L'onglet Paramètres actuel : Informations, Accès démo (lien, QR code, suppression), Charger un cours (ici Reprendre un cours existant), Supprimer le cours."
+- screen: parametres
+  note: "Les trois onglets du panneau actuel (Restrictions devient Accès, Paramètres devient Déroulement, Gestion). Pas de Fonction ici : isChallenge ne se modifie pas après l'ajout, et une activité notée n'est qu'un ensemble de réglages de Déroulement."
+- screen: parametres
+  note: "Accès : sans période, deux dates pour tout le cours. Avec des périodes (état periodes), chaque carte dit Quand, Qui (groupes, personnes, tous les autres) et Corrigé par, comme les règles DateRange, Groups, Members, Others et Correctors."
+- screen: parametres
+  note: "Gestion : Mettre à jour remplace Recharger et dit quelle version l'activité suit. Supprimer dit ce qui part avec l'activité."
+- screen: suivi
+  note: "Réunit les deux pages actuelles : Statistiques (/activities/:course/:activity) et Suivi de l'activité (/activities/monitor/…). Onglets Statistiques, Apprenants, Modération ; mêmes données, une seule adresse à retenir."
+- screen: suivi
+  note: "Statistiques : les cinq indicateurs et le tableau par exercice de la page actuelle (ActivityExerciseResults). La ligne où la réussite du premier coup est la plus basse est mise en évidence. Les graphiques actuels (boîte à moustaches, k-ciles) restent sous le tableau."
+- screen: suivi
+  note: "Apprenants : le tableau Résultats par apprenants (un état par exercice, la note). Modération : ouvrir ou fermer pour des élèves choisis, et le code de déblocage (masqué, copier, régénérer), qui existe déjà ici."
+- screen: detail
+  note: "Passe UX : les effectifs montent dans l'en-tête, la colonne de droite devient À faire (copies à corriger, sans dates, ferme bientôt). Chaque élément ouvre l'endroit où agir. Données : corrections en attente (existant), dates et état des activités (existant)."
+- screen: detail
+  note: "Passe UX : un bouton texte seulement quand il y a une action attendue (Programmer). Sinon Suivre discret, Paramètres et le menu. La page n'a plus quinze boutons Suivre identiques."
+- screen: detail
+  note: "État vide : un cours neuf dit les trois étapes (activité, élèves, partage) et propose de reprendre un cours existant. Proposition côté client : créer « Section 1 » à la première activité, l'API d'ajout de section existe."

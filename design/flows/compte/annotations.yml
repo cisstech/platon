@@ -1,0 +1,6 @@
+- screen: a-propos
+  note: "Onglet À propos actuel. Les champs d'identité sont désactivés aujourd'hui ; ils deviennent du texte, parce qu'un champ qu'on ne peut pas modifier ne doit pas en avoir l'air."
+- screen: a-propos
+  note: "Mon compte est rangé dans le menu du profil, comme aujourd'hui dans le menu de l'avatar."
+- screen: securite
+  note: "Créer un mot de passe si le compte n'en a pas (hasPassword), sinon le changer avec le mot de passe actuel. Les cinq règles actuelles se cochent pendant la saisie."

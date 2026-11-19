@@ -5,7 +5,6 @@ import { RouterModule } from '@angular/router'
 import { AuthProviders } from './auth'
 import { GraphQLModule } from './graphql/graphql.module'
 import { HttpParamEncoderInterceptor } from './http/http-param-encoder.interceptor'
-import { NgZorroProviders } from './vendors/ng-zorro/ng-zorro.'
 import { NgeDocProviders } from './vendors/nge-doc/nge-doc'
 import { NgeIconProviders } from './vendors/nge-icon/nge-icon'
 import { NgeMarkdownProviders } from './vendors/nge-markdown/nge-markdown'
@@ -19,7 +18,6 @@ import { NgxEChartsProviders } from './vendors/ngx-echarts/ngx-echarts'
     { provide: HTTP_INTERCEPTORS, useClass: HttpParamEncoderInterceptor, multi: true },
     AuthProviders,
     NgeDocProviders,
-    NgZorroProviders,
     NgeIconProviders,
     NgeMonacoProviders,
     NgxEChartsProviders,

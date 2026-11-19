@@ -1,0 +1,68 @@
+<div class="atelier">
+  <header class="atelier-head">
+    <button class="btn btn-icon" aria-label="Quitter l'atelier" data-wf-to="atelier-quitter"><svg class="ico"><use href="#arrow_back" /></svg></button>
+    <span class="lead-icon hued hue-bleuet" style="width: 30px; height: 30px"><svg class="ico ico-18"><use href="#quiz" /></svg></span>
+    <span class="title-edit">Exercice du 29/09/2026 à 10&nbsp;h&nbsp;42<svg class="ico ico-16"><use href="#edit" /></svg></span>
+    <span class="tag warning"><svg class="ico"><use href="#pending" /></svg>Non enregistré</span>
+    <span style="flex: 1"></span>
+    <a class="btn btn-ghost btn-sm"><svg class="ico"><use href="#code" /></svg>Ouvrir dans l'éditeur</a>
+    <a class="btn btn-secondary btn-sm"><svg class="ico"><use href="#visibility" /></svg>Plein écran</a>
+    <a class="btn btn-secondary btn-sm" data-wf-to="ajouter-au-cours"><svg class="ico"><use href="#school" /></svg>Ajouter à un cours</a>
+    <a class="btn btn-primary btn-sm" data-wf-to="enregistrer"><svg class="ico"><use href="#save" /></svg>Enregistrer</a>
+  </header>
+  <div class="atelier-body">
+    <nav class="atelier-nav">
+      <h3>Contenu</h3>
+      <div class="atelier-item">Énoncé<svg class="ico state done"><use href="#check_circle" /></svg></div><div class="atelier-item active">Choix<svg class="ico state done"><use href="#check_circle" /></svg></div><div class="atelier-item">Bonnes réponses<svg class="ico state done"><use href="#check_circle" /></svg></div><div class="atelier-item">Explication<svg class="ico state"><use href="#radio_button_unchecked" /></svg></div><div class="atelier-item">Mélanger les choix<svg class="ico state done"><use href="#check_circle" /></svg></div>
+      <h3>Exercice</h3>
+      <div class="atelier-item"><svg class="ico ico-18"><use href="#info" /></svg>Informations</div>
+      <div class="atelier-item"><svg class="ico ico-18"><use href="#history" /></svg>Versions</div>
+      <div class="atelier-item"><svg class="ico ico-18"><use href="#contrast" /></svg>Thème de l'aperçu</div>
+    </nav>
+    <section class="atelier-edit">
+      <h2 class="heading" style="margin-bottom: 4px">Choix</h2>
+      <p class="muted" style="margin: 0 0 var(--spacing-4); font-size: 13px">Les réponses proposées à l'étudiant. Glissez pour changer l'ordre&nbsp;; il est ignoré si les choix sont mélangés.</p>
+      <div class="list-edit">
+        <div class="list-edit-row"><svg class="ico ico-18 grip"><use href="#drag_indicator" /></svg><div class="input"><span>O(1)</span></div><button class="btn btn-icon btn-sm" aria-label="Supprimer le choix"><svg class="ico ico-18"><use href="#delete" /></svg></button></div>
+        <div class="list-edit-row"><svg class="ico ico-18 grip"><use href="#drag_indicator" /></svg><div class="input"><span>O(log n)</span></div><button class="btn btn-icon btn-sm" aria-label="Supprimer le choix"><svg class="ico ico-18"><use href="#delete" /></svg></button></div>
+        <div class="list-edit-row"><svg class="ico ico-18 grip"><use href="#drag_indicator" /></svg><div class="input"><span>O(n)</span></div><button class="btn btn-icon btn-sm" aria-label="Supprimer le choix"><svg class="ico ico-18"><use href="#delete" /></svg></button></div>
+        <div class="list-edit-row"><svg class="ico ico-18 grip"><use href="#drag_indicator" /></svg><div class="input focused"><span>O(n log n)</span></div><button class="btn btn-icon btn-sm" aria-label="Supprimer le choix"><svg class="ico ico-18"><use href="#delete" /></svg></button></div>
+      </div>
+      <a class="btn btn-ghost btn-sm" style="margin-top: var(--spacing-3)"><svg class="ico"><use href="#add" /></svg>Ajouter un choix</a>
+      <div style="display: flex; gap: var(--spacing-2); margin-top: var(--spacing-8)">
+        <a class="btn btn-secondary btn-sm"><svg class="ico"><use href="#chevron_left" /></svg>Énoncé</a>
+        <a class="btn btn-secondary btn-sm" style="margin-left: auto">Bonnes réponses<svg class="ico"><use href="#chevron_right" /></svg></a>
+      </div>
+    </section>
+    <section class="atelier-preview">
+      <div class="atelier-preview-head"><svg class="ico ico-18"><use href="#visibility" /></svg>Ce que voient vos étudiants<span style="margin-left: auto">Actualisé à l'instant</span></div>
+      <div class="atelier-preview-body">
+        <div class="copie">
+          <div class="q">
+            <div class="q-mark"><span>1</span></div>
+            <h2 class="heading">Quelle est la complexité d'une recherche dichotomique dans un tableau trié de taille n&nbsp;?</h2>
+            <div class="answer options">
+              <div class="option"><span class="box"></span>O(1)</div>
+              <div class="option"><span class="box"></span>O(log n)</div>
+              <div class="option"><span class="box"></span>O(n)</div>
+              <div class="option"><span class="box"></span>O(n log n)</div>
+            </div>
+          </div>
+          <div class="copie-actions"><a class="btn btn-primary"><svg class="ico"><use href="#check" /></svg>Valider</a><span class="spacer"></span><a class="btn btn-ghost btn-sm"><svg class="ico"><use href="#autorenew" /></svg>Nouveau tirage</a></div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <div class="scrim" data-wf-to="atelier"></div>
+  <div class="modal" role="alertdialog" aria-label="Quitter l'atelier" style="width: 460px">
+    <div class="drawer-body" style="padding-top: var(--spacing-5)">
+      <h2 class="subheading" style="margin-bottom: var(--spacing-2)">Cet exercice n'a jamais été enregistré</h2>
+      <p class="muted" style="margin: 0">Si vous quittez maintenant, il sera supprimé avec ce que vous avez rempli.</p>
+    </div>
+    <div class="drawer-foot">
+      <a class="btn btn-secondary" style="border-color: var(--color-danger); color: var(--color-danger-ink); margin-right: auto" data-wf-to="modeles">Quitter et supprimer</a>
+      <a class="btn btn-secondary" data-wf-to="atelier">Rester</a>
+      <a class="btn btn-primary" data-wf-to="enregistrer">Enregistrer</a>
+    </div>
+  </div>
+</div>
