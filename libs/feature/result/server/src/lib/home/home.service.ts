@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common'
+import { User, userDisplayName } from '@platon/core/common'
 import {
   activityDatesFor,
   calculateActivityOpenState,
@@ -30,9 +31,21 @@ import {
 
 const RECENT_COPIES = 3
 
+/** Whether a copy waits for the correctors of its activity: an exercise of it to correct has no correction yet. */
+const waitsForCorrectors = (copy: string) => `(
+  EXISTS (SELECT 1 FROM "ActivityCorrectors" corrector WHERE corrector.activity_id = ${copy}.activity_id)
+  AND EXISTS (
+    SELECT 1 FROM "Sessions" exercise_session
+    WHERE exercise_session.parent_id = ${copy}.id
+      AND exercise_session.correction_id IS NULL
+      AND ${toCorrect('exercise_session')}
+  )
+)`
+
 /**
  * The activities a person plays: those open to them in the courses they study (not archived, not
- * entrance tests), with their own copy and what the restrictions need to know of them.
+ * entrance tests), with their own copy and what the restrictions need to know of them. Given one
+ * course (`$2`), those of that course, archived or not, with the grade and the correction of the copy.
  */
 const MINE = `
   WITH memberships AS (${membershipsOf('$1')}),
@@ -41,8 +54,9 @@ const MINE = `
     SELECT membership.course_id, array_agg(membership.member_id::text) AS member_ids
     FROM memberships membership
     INNER JOIN "Courses" studied_course ON studied_course.id = membership.course_id AND studied_course.is_test = FALSE
+    WHERE $2::uuid IS NULL OR membership.course_id = $2::uuid
     GROUP BY membership.course_id
-    HAVING ${IS_STUDENT} AND NOT bool_or(own AND archived)
+    HAVING ${IS_STUDENT} AND ($2::uuid IS NOT NULL OR NOT bool_or(own AND archived))
   ),
   person AS (SELECT course_id, $1::uuid AS user_id FROM studied),
   flagged AS (${audienceFlags('activity.course_id IN (SELECT course_id FROM studied)')}),
@@ -51,6 +65,8 @@ const MINE = `
     activity.id,
     course.id AS "courseId",
     course.name AS "courseName",
+    activity.section_id AS "sectionId",
+    activity."order",
     ${activityTitle('resource')} AS title,
     activity.open_at AS "openAt",
     activity.close_at AS "closeAt",
@@ -64,6 +80,14 @@ const MINE = `
     ${exercisesDone('own_copy.navigation')} AS "exercisesDone",
     own_copy.started_at IS NOT NULL AS started,
     ${isTrue("own_copy.navigation->'terminated'")} AS terminated,
+    CASE WHEN $2::uuid IS NOT NULL AND own_copy.id IS NOT NULL THEN (
+      own_copy.terminated_at IS NOT NULL OR ${isTrue("own_copy.navigation->'terminated'")}
+    ) END AS "handedIn",
+    CASE WHEN $2::uuid IS NOT NULL THEN
+      ${isTrue("activity_source.variables->'settings'->'feedback'->'review'")}
+    END AS review,
+    CASE WHEN $2::uuid IS NOT NULL AND own_copy.id IS NOT NULL THEN ${waitsForCorrectors('own_copy')} END AS correcting,
+    CASE WHEN $2::uuid IS NOT NULL AND own_copy.id IS NOT NULL THEN ${copyGrade('own_copy')} END AS grade,
     studied.member_ids AS "memberIds",
     ARRAY(SELECT group_id::text FROM held_groups WHERE held_groups.course_id = course.id) AS "groupIds"
   FROM playable
@@ -73,7 +97,7 @@ const MINE = `
   ${activitySource('activity')}
   ${activityResource('resource')}
   LEFT JOIN LATERAL (
-    SELECT copy.started_at, copy.variables->'navigation' AS navigation
+    SELECT copy.id, copy.activity_id, copy.started_at, copy.terminated_at, copy.variables->'navigation' AS navigation
     FROM "Sessions" copy
     WHERE copy.activity_id = activity.id AND copy.user_id = $1 AND copy.parent_id IS NULL
     ORDER BY copy.created_at DESC
@@ -87,12 +111,19 @@ const MINE = `
  * their courses shows those courses, with the students they are open to,
  * those who started them and the mean of their copies, aggregated per student then per activity.
  * For an activity with restriction periods, its students come back one by one, for the periods to
- * say who can play it.
+ * say who can play it. Given one course (`$2`), those of that course, archived or not, also for who
+ * may change it without teaching it (`$3`), with the copies of its students to correct and the
+ * correctors of each.
  */
 const TAUGHT = `
   WITH memberships AS (${membershipsOf('$1')}),
   taught AS (
-    SELECT course_id FROM memberships GROUP BY course_id HAVING ${IS_TEACHER} AND NOT bool_or(own AND archived)
+    SELECT course_id FROM memberships
+    WHERE $2::uuid IS NULL OR course_id = $2::uuid
+    GROUP BY course_id
+    HAVING ${IS_TEACHER} AND ($2::uuid IS NOT NULL OR NOT bool_or(own AND archived))
+    UNION
+    SELECT $2::uuid WHERE $3::boolean AND $2::uuid IS NOT NULL
   ),
   course_people AS (
     SELECT
@@ -132,12 +163,18 @@ const TAUGHT = `
     activity.id,
     course.id AS "courseId",
     course.name AS "courseName",
+    activity.section_id AS "sectionId",
+    activity."order",
     ${activityTitle('resource')} AS title,
+    resource.id AS "resourceId",
     activity.open_at AS "openAt",
     activity.close_at AS "closeAt",
     ${isRestricted('activity')} AS restricted,
     activity.is_challenge AS "isChallenge",
     activity.graded,
+    activity_source.variables->'settings'->'duration' AS duration,
+    activity_source.variables->'settings'->'actions'->'retry' AS retry,
+    ${exerciseCount('NULL::jsonb')} AS "exerciseCount",
     COALESCE(summary.students, 0) AS "studentCount",
     COALESCE(summary.started, 0) AS "startedCount",
     summary.average AS "averageGrade",
@@ -156,7 +193,27 @@ const TAUGHT = `
       FROM progress player
       INNER JOIN students student ON student.course_id = activity.course_id AND student.user_id = player.user_id
       WHERE player.activity_id = activity.id
-    ) END AS audience
+    ) END AS audience,
+    CASE WHEN $2::uuid IS NOT NULL THEN (
+      SELECT COUNT(*)::int FROM "Sessions" copy
+      INNER JOIN students student ON student.course_id = activity.course_id AND student.user_id = copy.user_id
+      WHERE copy.activity_id = activity.id
+        AND copy.parent_id IS NULL
+        AND ${isTrue("copy.variables->'navigation'->'terminated'")}
+        AND ${waitsForCorrectors('copy')}
+    ) END AS "pendingCopies",
+    CASE WHEN $2::uuid IS NOT NULL THEN (
+      SELECT COALESCE(jsonb_agg(DISTINCT jsonb_build_object(
+        'username', person.username, 'firstName', person.first_name, 'lastName', person.last_name
+      )), '[]'::jsonb)
+      FROM "ActivityCorrectors" corrector
+      INNER JOIN "CourseMembers" corrector_member ON corrector_member.id = corrector.member_id
+      LEFT JOIN "UserGroupsUsers" corrector_group
+        ON corrector.user_id IS NULL AND corrector_group.group_id = corrector_member.group_id
+      INNER JOIN "Users" person
+        ON person.id = COALESCE(corrector.user_id, corrector_member.user_id, corrector_group.user_id)
+      WHERE corrector.activity_id = activity.id
+    ) END AS correctors
   FROM taught
   INNER JOIN "Courses" course ON course.id = taught.course_id
   INNER JOIN "Activities" activity ON activity.course_id = course.id
@@ -198,15 +255,7 @@ const RECENT = `
     course.name AS "courseName",
     copy.terminated_at AS "terminatedAt",
     ${isTrue("activity_source.variables->'settings'->'feedback'->'review'")} AS review,
-    (
-      EXISTS (SELECT 1 FROM "ActivityCorrectors" corrector WHERE corrector.activity_id = activity.id)
-      AND EXISTS (
-        SELECT 1 FROM "Sessions" exercise_session
-        WHERE exercise_session.parent_id = copy.id
-          AND exercise_session.correction_id IS NULL
-          AND ${toCorrect('exercise_session')}
-      )
-    ) AS correcting,
+    ${waitsForCorrectors('copy')} AS correcting,
     ${copyGrade('copy')} AS grade
   FROM recent copy
   INNER JOIN "Activities" activity ON activity.id = copy.activity_id
@@ -216,13 +265,17 @@ const RECENT = `
   ORDER BY copy.terminated_at DESC
 `
 
-interface MineRow extends Omit<PlayableActivity, 'state' | 'duration' | 'attempts'> {
+interface MineRow extends Omit<PlayableActivity, 'state' | 'duration' | 'attempts' | 'correcting' | 'grade'> {
   ignoreRestrictions: boolean | null
   restrictions: RestrictionList[] | null
   duration: unknown
   retry: unknown
   memberIds: string[]
   groupIds: string[]
+  handedIn: boolean | null
+  review: boolean | null
+  correcting: boolean | null
+  grade: number | null
 }
 
 interface Player {
@@ -233,10 +286,27 @@ interface Player {
   grade: number | null
 }
 
-interface TaughtRow extends Omit<TaughtActivity, 'state' | 'averageGrade'> {
+type CorrectorName = Pick<User, 'username' | 'firstName' | 'lastName'>
+
+interface TaughtRow
+  extends Omit<
+    TaughtActivity,
+    'state' | 'averageGrade' | 'resourceId' | 'duration' | 'attempts' | 'pendingCopies' | 'correctors'
+  > {
   averageGrade: number | null
+  resourceId: string | null
+  duration: unknown
+  retry: unknown
   restrictions: RestrictionList[] | null
   audience: Player[] | null
+  pendingCopies: number | null
+  correctors: CorrectorName[] | null
+}
+
+/** Which activities of `taughtActivities`: one course, and whether the person may change it without teaching it. */
+export interface TaughtFilter {
+  readonly courseId?: string
+  readonly manages?: boolean
 }
 
 interface RecentRow extends Omit<RecentCopy, 'status' | 'grade'> {
@@ -270,13 +340,28 @@ const countPlayers = (restrictions: RestrictionList[] | null, audience: Player[]
   }
 }
 
+/**
+ * The copy of a person in a graded activity of one course, once handed in and when the activity shows
+ * its correction: whether it waits for its correctors, else its grade. Of any other copy, nothing.
+ */
+const copyOf = (row: MineRow): Pick<PlayableActivity, 'correcting' | 'grade'> => {
+  const told = !!row.handedIn && !!row.review && row.graded
+  const correcting = told && !!row.correcting
+  return { correcting, grade: told && !correcting && row.grade != null ? row.grade : undefined }
+}
+
+/** The names of the correctors of an activity, in alphabetical order. */
+const namesOf = (correctors: CorrectorName[] | null): string[] =>
+  (correctors ?? []).map(userDisplayName).sort((a, b) => a.localeCompare(b))
+
 /** What the homes show of a person's activities and copies, each in one query. */
 @Injectable()
 export class HomeService {
   constructor(private readonly dataSource: DataSource) {}
 
-  async playableActivities(userId: string): Promise<PlayableActivity[]> {
-    const rows: MineRow[] = await this.dataSource.query(MINE, [userId])
+  /** The activities a person plays, in every course they study, or in the one given. */
+  async playableActivities(userId: string, courseId?: string): Promise<PlayableActivity[]> {
+    const rows: MineRow[] = await this.dataSource.query(MINE, [userId, courseId ?? null])
     return rows.flatMap((row) => {
       const subject = { userId, memberIds: new Set(row.memberIds), groupIds: new Set(row.groupIds) }
       const dates = activityDatesFor(row, subject)
@@ -286,6 +371,8 @@ export class HomeService {
           id: row.id,
           courseId: row.courseId,
           courseName: row.courseName,
+          sectionId: row.sectionId,
+          order: row.order,
           title: row.title,
           openAt: dates.openAt ?? null,
           closeAt: dates.closeAt ?? null,
@@ -298,19 +385,28 @@ export class HomeService {
           exercisesDone: row.exercisesDone,
           started: row.started,
           terminated: row.terminated,
+          ...(courseId ? copyOf(row) : {}),
         },
       ]
     })
   }
 
-  async taughtActivities(userId: string): Promise<TaughtActivity[]> {
-    const rows: TaughtRow[] = await this.dataSource.query(TAUGHT, [userId])
-    return rows.map(({ restrictions, audience, averageGrade, ...row }) => ({
-      ...row,
-      state: calculateActivityOpenState(row),
-      averageGrade: averageGrade ?? undefined,
-      ...(audience ? countPlayers(restrictions, audience) : {}),
-    }))
+  /** The activities of the courses a person teaches, or of the one given. */
+  async taughtActivities(userId: string, filter: TaughtFilter = {}): Promise<TaughtActivity[]> {
+    const { courseId, manages = false } = filter
+    const rows: TaughtRow[] = await this.dataSource.query(TAUGHT, [userId, courseId ?? null, manages])
+    return rows.map(
+      ({ restrictions, audience, averageGrade, resourceId, duration, retry, pendingCopies, correctors, ...row }) => ({
+        ...row,
+        state: calculateActivityOpenState(row),
+        resourceId: resourceId ?? undefined,
+        duration: limit(duration),
+        attempts: limit(retry),
+        averageGrade: averageGrade ?? undefined,
+        ...(audience ? countPlayers(restrictions, audience) : {}),
+        ...(courseId ? { pendingCopies: pendingCopies ?? 0, correctors: namesOf(correctors) } : {}),
+      })
+    )
   }
 
   async recentCopies(userId: string): Promise<RecentCopy[]> {
