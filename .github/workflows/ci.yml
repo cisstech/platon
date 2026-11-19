@@ -67,9 +67,7 @@ jobs:
         run: yarn lint:design
 
       - name: Coherence of the design spec
-        run: npx --yes @cisstech/foundry@0.1.0-beta.2 -C design check
-        env:
-          npm_config_omit: optional
+        run: yarn design:check
 
   test:
     name: Test
