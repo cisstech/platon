@@ -45,4 +45,17 @@ describe('nextRoutes', () => {
 
     expect(router.url).toBe('/courses?create=true')
   })
+
+  it('opens the page of a course at the address of its overview in the current interface', async () => {
+    const shell = nextRoutes.find((route) => route.path === '')
+    const overview = shell?.children?.find((route) => route.path === 'courses/:id/dashboard') as Route
+    TestBed.configureTestingModule({
+      providers: [provideRouter([{ path: 'courses/:id', children: [] }, overview], withComponentInputBinding())],
+    })
+    const router = TestBed.inject(Router)
+
+    await router.navigateByUrl('/courses/ap1/dashboard')
+
+    expect(router.url).toBe('/courses/ap1')
+  })
 })

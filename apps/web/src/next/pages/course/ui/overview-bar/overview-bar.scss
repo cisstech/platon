@@ -1,0 +1,11 @@
+:host {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--pl-space-2) var(--pl-space-3);
+}
+
+.overview-bar__search {
+  flex: 1 1 280px;
+  max-inline-size: 360px;
+}

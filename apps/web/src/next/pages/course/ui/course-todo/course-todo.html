@@ -1,0 +1,21 @@
+<h2 class="course-todo__title" id="course-todo-title">
+  À faire@if (items().length) {<span class="pl-visually-hidden">, </span><pl-count [value]="items().length" />}
+</h2>
+@if (items().length) {
+<ul role="list" class="course-todo__list" aria-labelledby="course-todo-title">
+  @for (item of items(); track item.id) {
+  <li>
+    <a class="course-todo__item" [attr.data-tone]="item.tone" [routerLink]="item.href" [queryParams]="item.queryParams">
+      <pl-icon class="course-todo__icon" [name]="item.icon" />
+      <span class="course-todo__text">
+        <span class="course-todo__heading">{{ item.heading }}</span>
+        <span class="pl-visually-hidden">, </span>
+        <span class="course-todo__detail">{{ item.detail }}</span>
+      </span>
+    </a>
+  </li>
+  }
+</ul>
+} @else {
+<p class="course-todo__nothing">Rien à faire pour l'instant.</p>
+}

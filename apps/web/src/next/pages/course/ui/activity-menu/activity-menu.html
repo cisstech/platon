@@ -1,0 +1,18 @@
+<button
+  type="button"
+  plButton
+  variant="icon"
+  size="sm"
+  [attr.aria-label]="'Plus d\'actions pour ' + activity()"
+  [plMenuTrigger]="menu"
+>
+  <pl-icon name="more_horiz" />
+</button>
+<pl-menu #menu="ngMenu" (itemSelected)="chosen.emit($event)">
+  <pl-menu-item value="settings" icon="tune">Régler l'activité</pl-menu-item>
+  <pl-menu-item value="test" icon="play_arrow">Tester l'activité</pl-menu-item>
+  @if (resource()) {
+  <pl-menu-separator />
+  <pl-menu-item value="resource" icon="open_in_new">Ouvrir la ressource</pl-menu-item>
+  }
+</pl-menu>

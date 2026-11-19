@@ -2,6 +2,7 @@ import { userDisplayName, UserRoles } from '@platon/core/common'
 import { fullCalendarDay, IconName } from '@platon/design-system'
 import { Announcement, EditorOutputData } from '@platon/feature/announcement/common'
 import { isUnread } from '@platon/feature/announcement/browser/shared'
+import { listOf } from '../../shared/list-of'
 import { plural } from '../../shared/plural'
 import { quoted } from '../../shared/quoted'
 import type { ContentState } from './data/announcements-store'
@@ -53,12 +54,10 @@ const PUBLICS: [UserRoles, string][] = [
   [UserRoles.candidate, 'les candidats'],
 ]
 
-const CONJUNCTION = new Intl.ListFormat('fr-FR', { type: 'conjunction' })
-
 /** Who it is for: « pour tout le monde » without a role, else « pour les étudiants et les enseignants ». */
 export const audience = (roles?: UserRoles[]): string => {
   const named = PUBLICS.filter(([role]) => roles?.includes(role)).map(([, words]) => words)
-  return named.length ? `pour ${CONJUNCTION.format(named)}` : 'pour tout le monde'
+  return named.length ? `pour ${listOf(named)}` : 'pour tout le monde'
 }
 
 /** « Publiée le 25 septembre 2026 par Sophie Lambert, pour tout le monde »; without « par » once the account is gone. */

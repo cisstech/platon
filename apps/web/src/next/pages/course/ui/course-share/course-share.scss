@@ -1,0 +1,16 @@
+.course-share {
+  display: grid;
+  justify-items: start;
+  gap: var(--pl-space-3);
+  padding: var(--pl-space-4);
+}
+
+.course-share pl-field {
+  justify-self: stretch;
+}
+
+.course-share__hint {
+  margin: 0;
+  color: var(--pl-color-muted);
+  font: var(--pl-font-small);
+}

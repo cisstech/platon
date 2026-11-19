@@ -23,6 +23,8 @@ const activity = (id: string, values: Partial<PlayableActivity>): PlayableActivi
   id,
   courseId: 'c-ap1',
   courseName: 'Algorithmique 1',
+  sectionId: 's-1',
+  order: 0,
   title: id,
   openAt: at(1, 8, 0, 8),
   closeAt: null,

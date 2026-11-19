@@ -1,0 +1,39 @@
+/* The overview of a course: its sections, and beside them what to do or how far the student has gone. */
+.course-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 320px);
+  align-items: start;
+  gap: var(--pl-space-8);
+}
+
+.course-layout__main {
+  display: grid;
+  gap: var(--pl-space-8);
+  min-inline-size: 0;
+}
+
+.course-layout__aside {
+  position: sticky;
+  inset-block-start: var(--pl-space-4);
+  display: grid;
+  gap: var(--pl-space-6);
+}
+
+/* On a narrow screen, one column: what to do first, then the sections, which fold. */
+.course-layout--narrow {
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--pl-space-6);
+}
+
+.course-layout__rows {
+  border: 1px solid var(--pl-color-line);
+  border-radius: var(--pl-radius-card);
+  background: var(--pl-color-surface);
+  overflow: hidden;
+}
+
+.course-layout__none {
+  margin: 0;
+  color: var(--pl-color-muted);
+  font: var(--pl-font-small);
+}

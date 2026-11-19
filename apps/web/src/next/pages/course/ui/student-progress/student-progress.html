@@ -1,0 +1,18 @@
+<h2 class="student-progress__title" id="student-progress-title">Votre avancement</h2>
+<p class="student-progress__figures">
+  <span class="student-progress__percent">{{ panel().percent }}&nbsp;%</span>
+  @if (panel().time; as time) {<span class="pl-visually-hidden">, </span><span>{{ time }}</span
+  >}
+</p>
+<pl-progress
+  [value]="panel().done"
+  [max]="panel().total"
+  [hue]="hue()"
+  [done]="panel().finished"
+  label="Votre avancement dans le cours"
+/>
+<p class="student-progress__line">{{ panel().progressLine }}</p>
+@if (resume() && panel().resume; as row) {
+<h3 class="student-progress__resume">À reprendre</h3>
+<app-student-rows [rows]="[row]" label="À reprendre" />
+}

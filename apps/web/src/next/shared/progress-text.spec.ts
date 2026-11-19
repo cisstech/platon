@@ -1,5 +1,5 @@
 import { courseProgress, PlayableActivity } from '@platon/feature/course/common'
-import { progressText } from './progress-text'
+import { progressLine, progressText } from './progress-text'
 
 const activity = (exercisesDone: number, exerciseCount: number) =>
   ({ courseId: 'ap1', exercisesDone, exerciseCount, terminated: false } as PlayableActivity)
@@ -10,5 +10,19 @@ describe('progressText', () => {
     expect(words(progressText(courseProgress('ap1', [activity(34, 59)])))).toBe('34 exercices sur 59')
     expect(progressText(courseProgress('ap1', [activity(4, 4)]))).toBe('Cours terminé')
     expect(progressText(courseProgress('ap1', []))).toBe("Aucune activité pour l'instant")
+  })
+})
+
+describe('progressLine', () => {
+  it('says the exercises done, then the activities finished, in words', () => {
+    expect(words(progressLine({ done: 34, total: 59, finished: false, activitiesDone: 4, activityCount: 9 }))).toBe(
+      '34 exercices sur 59, 4 activités terminées sur 9'
+    )
+    expect(words(progressLine({ done: 12, total: 12, finished: true, activitiesDone: 4, activityCount: 4 }))).toBe(
+      'Cours terminé, 4 activités sur 4'
+    )
+    expect(progressLine({ done: 0, total: 0, finished: false, activitiesDone: 0, activityCount: 0 })).toBe(
+      "Aucune activité pour l'instant"
+    )
   })
 })

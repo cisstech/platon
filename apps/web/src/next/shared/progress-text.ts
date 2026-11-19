@@ -8,3 +8,13 @@ export const progressText = ({ done, total, finished }: CourseProgress): string 
   if (!total) return "Aucune activité pour l'instant"
   return `${done} ${plural(done, 'exercice', 'exercices')} sur${NO_BREAK_SPACE}${total}`
 }
+
+/** « 34 exercices sur 59, 4 activités terminées sur 9 », or « Cours terminé, 4 activités sur 4 ». */
+export const progressLine = (progress: CourseProgress): string => {
+  const { total, finished, activitiesDone, activityCount } = progress
+  if (!total) return progressText(progress)
+  const activities = finished
+    ? plural(activitiesDone, 'activité', 'activités')
+    : plural(activitiesDone, 'activité terminée', 'activités terminées')
+  return `${progressText(progress)}, ${activitiesDone} ${activities} sur${NO_BREAK_SPACE}${activityCount}`
+}

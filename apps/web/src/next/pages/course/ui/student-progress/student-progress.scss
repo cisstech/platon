@@ -1,0 +1,35 @@
+:host {
+  display: grid;
+  gap: var(--pl-space-2);
+}
+
+.student-progress__title {
+  margin: 0;
+  font: var(--pl-font-subheading);
+}
+
+.student-progress__figures {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--pl-space-3);
+  margin: 0;
+  color: var(--pl-color-muted);
+}
+
+.student-progress__percent {
+  color: var(--pl-color-text);
+  font: var(--pl-font-figure);
+}
+
+.student-progress__line {
+  margin: 0;
+  color: var(--pl-color-muted);
+  font: var(--pl-font-small);
+}
+
+.student-progress__resume {
+  margin: var(--pl-space-4) 0 0;
+  font: var(--pl-font-body);
+  font-weight: var(--pl-weight-strong);
+}

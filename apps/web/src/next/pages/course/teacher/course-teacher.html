@@ -1,0 +1,70 @@
+@if (empty()) {
+<app-course-start [courseId]="course().id" (shared)="shared.emit($event)" />
+} @else {
+<div class="course-layout" [class.course-layout--narrow]="narrow()">
+  <div class="course-layout__main">
+    @if (narrow()) {
+    <app-course-todo [items]="todo()" />
+    }
+    <app-overview-bar
+      [search]="store.search()"
+      [state]="store.state()"
+      (searched)="store.search.set($event)"
+      (chosen)="store.state.set($event)"
+    />
+
+    @for (group of groups(); track group.id) {
+    <pl-course-section [heading]="group.heading" [summary]="group.summary" [hue]="hue()" [collapsible]="narrow()">
+      @if (group.rows.length) {
+      <pl-activity-list class="course-layout__rows" [attr.aria-label]="group.heading">
+        @for (row of group.rows; track row.id) {
+        <pl-activity-row
+          [heading]="row.heading"
+          [icon]="row.icon"
+          [hue]="row.hue"
+          [status]="row.status"
+          [statusTone]="row.statusTone"
+          [statusIcon]="row.statusIcon"
+          [due]="row.due"
+          [dueTone]="row.dueTone"
+          [dueIcon]="row.dueIcon"
+          [detail]="row.detail"
+          [tag]="row.tag"
+          [tagIcon]="row.tagIcon"
+          [href]="row.href"
+        >
+          @if (row.plan) {
+          <a plButton plActivityRowActions variant="secondary" size="sm" [routerLink]="row.plan">
+            <pl-icon name="calendar_month" />Planifier<span class="pl-visually-hidden"> {{ row.heading }}</span>
+          </a>
+          }
+          <app-activity-menu
+            plActivityRowActions
+            [activity]="row.heading"
+            [resource]="!!row.menu.resource"
+            (chosen)="act(row, $event)"
+          />
+        </pl-activity-row>
+        }
+      </pl-activity-list>
+      } @else {
+      <p class="course-layout__none">Aucune activité dans cette section.</p>
+      }
+    </pl-course-section>
+    } @empty {
+    <app-overview-none (cleared)="clearFilters()" />
+    }
+
+    <p class="course-teacher__organize">
+      Ajouter, renommer, réordonner ou supprimer une section&nbsp;:
+      <a [href]="organize()">organiser dans l'interface actuelle</a>
+    </p>
+  </div>
+
+  @if (!narrow()) {
+  <aside class="course-layout__aside" aria-labelledby="course-todo-title">
+    <app-course-todo [items]="todo()" />
+  </aside>
+  }
+</div>
+}

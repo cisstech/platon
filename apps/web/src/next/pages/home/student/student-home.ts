@@ -23,7 +23,8 @@ import { HomeBanner } from '../ui/home-banner/home-banner'
 import { homePage } from '../home-page'
 import { HomeZone } from '../ui/home-zone/home-zone'
 import { StudentHomeStore } from '../data/student-home-store'
-import { copyViews, courseViews, emptySubtitle, figureViews, soonRows, subtitle, todoRows } from './student-home.vm'
+import { soonRows, todoRows } from '../../../shared/playable-activity'
+import { copyViews, courseViews, emptySubtitle, figureViews, subtitle } from './student-home.vm'
 
 /**
  * The home of a student: what to do and for when. Four zones at most: the announcement, « À faire »
