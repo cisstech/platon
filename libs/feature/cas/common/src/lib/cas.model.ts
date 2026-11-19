@@ -14,6 +14,13 @@ export enum CasOrdering {
   UPDATED_AT = 'UPDATED_AT',
 }
 
+/** The `error` the API puts on `/login` when the CAS refused the sign-in or could not be reached. */
+export const CAS_SIGN_IN_FAILED = 'cas'
+
+/** Where the browser starts a sign-in through the CAS `name`; the API brings the person back to `next`. */
+export const casSignInUrl = (name: string, next?: string | null): string =>
+  `/api/v1/cas/login/${encodeURIComponent(name)}${next ? `?next=${encodeURIComponent(next)}` : ''}`
+
 export interface Cas {
   readonly id: string
   readonly createdAt: Date

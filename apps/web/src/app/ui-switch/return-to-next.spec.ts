@@ -22,18 +22,33 @@ describe('provideReturnToNext', () => {
     return { navigation, router: TestBed.inject(Router) }
   }
 
-  it('goes back to the new interface for an address it serves, as after signing in', async () => {
+  it('goes back to the new interface for an address it serves', async () => {
     const { navigation, router } = setup({ bridged: true })
-    await router.navigateByUrl('/login?next=%2Fdashboard')
+    await router.navigateByUrl('/courses')
     expect(navigation.assign).not.toHaveBeenCalled()
     await router.navigateByUrl('/dashboard')
     expect(navigation.assign).toHaveBeenCalledWith('/dashboard')
   })
 
-  it('replaces the history entry when the navigation does, as the sign in', async () => {
+  it('replaces the history entry when the navigation does', async () => {
     const { navigation, router } = setup({ bridged: true })
+    await router.navigateByUrl('/courses')
     await router.navigateByUrl('/dashboard', { replaceUrl: true })
     expect(navigation.replace).toHaveBeenCalledWith('/dashboard')
+    expect(navigation.assign).not.toHaveBeenCalled()
+  })
+
+  it('goes back to the new interface for its sign-in page, as on signing out', async () => {
+    const { navigation, router } = setup({ bridged: true })
+    await router.navigateByUrl('/courses')
+    await router.navigateByUrl('/login', { replaceUrl: true })
+    expect(navigation.replace).toHaveBeenCalledWith('/login')
+  })
+
+  it('stays on the address the new interface sent it to, even one it serves, so as not to bounce back', async () => {
+    const { navigation, router } = setup({ bridged: true })
+    await router.navigateByUrl('/login?callbackUrl=https%3A%2F%2Fapp.example', { replaceUrl: true })
+    expect(navigation.replace).not.toHaveBeenCalled()
     expect(navigation.assign).not.toHaveBeenCalled()
   })
 

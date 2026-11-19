@@ -1,10 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { getRepositoryToken } from '@nestjs/typeorm'
 import { NotFoundResponse } from '@platon/core/common'
+import { AuthService, UserService } from '@platon/core/server'
 import { MockRepository, mockRepository, mockSelectQueryBuilder } from '@platon/core/testing/server'
 import { CasOrdering, CasVersions } from '@platon/feature/cas/common'
 import { LTIService } from '@platon/feature/lti/server'
 import { Optional } from 'typescript-optional'
+import { AxiosService } from './axios.service'
 import { CasEntity } from './entities/cas.entity'
 import { CasService } from './cas.service'
 
@@ -12,19 +14,87 @@ describe('CasService', () => {
   let service: CasService
   let repository: MockRepository<CasEntity>
   let ltiService: jest.Mocked<LTIService>
+  let userService: jest.Mocked<Pick<UserService, 'findById'>>
+  let authService: jest.Mocked<Pick<AuthService, 'authenticate'>>
+  let https: jest.Mocked<Pick<AxiosService, 'get'>>
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         CasService,
         { provide: getRepositoryToken(CasEntity), useValue: mockRepository<CasEntity>() },
-        { provide: LTIService, useValue: { findLmsById: jest.fn() } },
+        { provide: LTIService, useValue: { findLmsById: jest.fn(), findLmsUserByUsername: jest.fn() } },
+        { provide: UserService, useValue: { findById: jest.fn() } },
+        { provide: AuthService, useValue: { authenticate: jest.fn() } },
+        { provide: AxiosService, useValue: { get: jest.fn() } },
       ],
     }).compile()
 
     service = module.get(CasService)
     repository = module.get(getRepositoryToken(CasEntity))
     ltiService = module.get(LTIService)
+    userService = module.get(UserService)
+    authService = module.get(AuthService)
+    https = module.get(AxiosService)
+  })
+
+  describe('signIn', () => {
+    const cas = { name: 'univ', serviceValidateURL: 'https://cas.test/validate', lmses: [] } as unknown as CasEntity
+    const validated = (serviceResponse: object) => https.get.mockResolvedValue({ data: { serviceResponse } } as never)
+
+    let qb: ReturnType<typeof mockSelectQueryBuilder<CasEntity>>
+
+    beforeEach(() => {
+      qb = mockSelectQueryBuilder<CasEntity>()
+      qb.getOne.mockResolvedValue(cas)
+      repository.createQueryBuilder.mockReturnValue(qb)
+    })
+
+    it("devrait connecter la personne liée au compte de l'établissement", async () => {
+      validated({ authenticationSuccess: { user: 'jdoe' } })
+      ltiService.findLmsUserByUsername.mockResolvedValue(Optional.of({ userId: 'user-1' } as never))
+      userService.findById.mockResolvedValue(Optional.of({ username: 'jdoe' } as never))
+      authService.authenticate.mockResolvedValue({ accessToken: 'a', refreshToken: 'r' })
+
+      const result = await service.signIn('univ', 'ST-1', 'https://app.test/cas/login/univ')
+
+      expect(https.get).toHaveBeenCalledWith('https://cas.test/validate', {
+        params: { ticket: 'ST-1', service: 'https://app.test/cas/login/univ', format: 'JSON' },
+      })
+      expect(authService.authenticate).toHaveBeenCalledWith('user-1', 'jdoe')
+      expect(result).toEqual({ outcome: 'signed-in', token: { accessToken: 'a', refreshToken: 'r' } })
+    })
+
+    it("devrait dire qu'aucun compte PLaTon ne correspond, sans utilisateur LMS ni utilisateur PLaTon", async () => {
+      validated({ authenticationSuccess: { user: 'jdoe' } })
+      ltiService.findLmsUserByUsername.mockResolvedValue(Optional.empty())
+      expect(await service.signIn('univ', 'ST-1', 'https://app.test')).toEqual({ outcome: 'no-account' })
+
+      ltiService.findLmsUserByUsername.mockResolvedValue(Optional.of({ userId: 'user-1' } as never))
+      userService.findById.mockResolvedValue(Optional.empty())
+      expect(await service.signIn('univ', 'ST-1', 'https://app.test')).toEqual({ outcome: 'no-account' })
+    })
+
+    it.each([
+      [
+        'un ticket refusé',
+        () => validated({ authenticationFailure: { code: 'INVALID_TICKET', description: 'Ticket invalide' } }),
+      ],
+      ['un fournisseur injoignable', () => https.get.mockRejectedValue(new Error('ECONNREFUSED'))],
+      ['une réponse sans succès ni échec', () => validated({})],
+      ['un CAS inconnu', () => qb.getOne.mockResolvedValue(null)],
+      [
+        'une base indisponible',
+        () => {
+          validated({ authenticationSuccess: { user: 'jdoe' } })
+          ltiService.findLmsUserByUsername.mockRejectedValue(new Error('database down'))
+        },
+      ],
+    ])('devrait échouer sans lever devant %s', async (_case, arrange) => {
+      arrange()
+
+      expect(await service.signIn('univ', 'ST-1', 'https://app.test')).toEqual({ outcome: 'failed' })
+    })
   })
 
   describe('findCasById', () => {
