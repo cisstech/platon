@@ -110,7 +110,7 @@ spec:
     - { from: enregistre, to: ajouter-au-cours, on: add }
     - { from: atelier-quitter, to: modeles, on: discard }
     - { from: atelier-quitter, to: atelier, on: dismiss }
-    - { from: ajouter-au-cours, to: detail, on: add }
+    - { from: ajouter-au-cours, to: cours, on: add }
     - { from: ajouter-au-cours, to: enregistre, on: dismiss }
-    - { from: ajouter-au-cours, to: ajouter-fonction, on: settings }
+    - { from: ajouter-au-cours, to: activite, on: settings }
     - { from: nouvelle, to: ressources, on: dismiss }

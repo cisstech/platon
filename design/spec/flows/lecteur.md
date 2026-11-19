@@ -264,11 +264,13 @@ spec:
     - { from: exercice, to: exercice, on: wrong-code }
     - { from: exercice, to: rendre, on: submit }
     - { from: exercice, to: temps-ecoule, on: timeout }
+    - { from: exercice, to: tests, on: timeout-test }
     - { from: exercice, to: temps-ecoule, on: code-expired }
     - { from: exercice, to: quitter, on: browser-back }
     - { from: exercice, to: cours, on: back }
     - { from: rendre, to: exercice, on: dismiss }
     - { from: rendre, to: conclusion, on: submit }
+    - { from: rendre, to: tests, on: submit-test }
     - { from: temps-ecoule, to: conclusion, on: next }
     - { from: temps-ecoule, to: cours, on: back }
     - { from: quitter, to: exercice, on: stay }
@@ -276,7 +278,5 @@ spec:
     - { from: conclusion, to: cours, on: back }
     - { from: conclusion, to: accueil-etudiant, on: home }
     - { from: conclusion, to: copie-corrigee, on: open }
-    - { from: conclusion, to: challenges, on: challenge }
-    - { from: etudiant, to: copie-corrigee, on: open }
-    - { from: detail, to: copie-corrigee, on: open }
-    - { from: copie-corrigee, to: detail, on: back }
+    - { from: conclusion, to: cours, on: challenge }
+    - { from: copie-corrigee, to: cours, on: back }
