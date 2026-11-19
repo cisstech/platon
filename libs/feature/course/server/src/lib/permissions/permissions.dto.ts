@@ -24,4 +24,8 @@ export class CoursePermissionsDTO implements CoursePermissions {
   @IsBoolean()
   @ApiProperty()
   readonly update!: boolean
+
+  @IsBoolean()
+  @ApiProperty({ description: 'The person may archive the course for themselves: they belong to it directly.' })
+  readonly archive!: boolean
 }

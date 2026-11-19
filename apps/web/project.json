@@ -24,6 +24,11 @@
         "assets": [
           "apps/web/src/assets",
           {
+            "glob": "*.svg",
+            "input": "libs/design-system/src/assets",
+            "output": "./assets/design-system"
+          },
+          {
             "glob": "**/*",
             "input": "shared/assets",
             "output": "./assets"
@@ -140,8 +145,26 @@
           }
         ],
         "styles": [
-          "shared/styles/app.scss",
-          "apps/web/src/styles.scss",
+          {
+            "input": "shared/styles/app.scss",
+            "bundleName": "styles.legacy",
+            "inject": false
+          },
+          {
+            "input": "apps/web/src/styles.scss",
+            "bundleName": "styles.legacy",
+            "inject": false
+          },
+          {
+            "input": "libs/design-system/src/styles/next.scss",
+            "bundleName": "styles.next",
+            "inject": false
+          },
+          {
+            "input": "apps/web/src/next/next.scss",
+            "bundleName": "styles.next",
+            "inject": false
+          },
           {
             "input": "shared/styles/material/dark.scss",
             "bundleName": "styles.material.dark",
@@ -166,7 +189,6 @@
         "scripts": [],
         "allowedCommonJsDependencies": [
           "jsplumb",
-          "subscriptions-transport-ws",
           "rfdc",
           "jsoneditor",
           "@ts-jison/lexer",

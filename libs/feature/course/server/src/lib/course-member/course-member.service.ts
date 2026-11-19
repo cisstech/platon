@@ -9,12 +9,13 @@ import {
   User,
   UserRoles,
 } from '@platon/core/common'
-import { CourseMemberFilters } from '@platon/feature/course/common'
+import { CourseMemberFilters, RestrictionSubject } from '@platon/feature/course/common'
 import { In, Repository } from 'typeorm'
 import { Optional } from 'typescript-optional'
 import { CourseNotificationService } from '../course-notification/course-notification.service'
 import { CourseMemberEntity } from './course-member.entity'
 import { CourseMemberRoles } from '@platon/feature/course/common'
+import { courseGroupsOf, membershipsOf } from './course-member.sql'
 import { CourseMemberView } from './course-member.view'
 import { UserGroupService, UserService } from '@platon/core/server'
 
@@ -32,6 +33,20 @@ export class CourseMemberService {
     @InjectRepository(CourseMemberEntity)
     private readonly repository: Repository<CourseMemberEntity>
   ) {}
+
+  /** What the restrictions of a course's activities need to know of a person, in one query. */
+  async restrictionSubject(courseId: string, userId: string): Promise<RestrictionSubject> {
+    const [{ memberIds, groupIds }] = await this.repository.query(
+      `
+      WITH memberships AS (${membershipsOf('$2')}), held_groups AS (${courseGroupsOf('$2')})
+      SELECT
+        ARRAY(SELECT member_id::text FROM memberships WHERE course_id = $1) AS "memberIds",
+        ARRAY(SELECT group_id::text FROM held_groups WHERE course_id = $1) AS "groupIds"
+      `,
+      [courseId, userId]
+    )
+    return { userId, memberIds: new Set(memberIds), groupIds: new Set(groupIds) }
+  }
 
   async getByUserIdAndCourseId(userId: string, courseId: string): Promise<Optional<CourseMemberEntity>> {
     return Optional.ofNullable(await this.repository.findOne({ where: { userId, courseId } }))

@@ -1,0 +1,77 @@
+/* A row that only opens its follow-up ends on a chevron: the row is the target, no button competes with it. */
+.row-go {
+  color: var(--color-subtle);
+}
+.row-side .progress.stacked {
+  min-width: 152px;
+}
+
+/* A quiet line at the foot of a list: context, not an action. */
+.rows-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  padding: var(--spacing-3) var(--spacing-4);
+  border-top: 1px solid var(--color-line);
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--color-muted);
+}
+.rows-note .ico {
+  margin-top: 1px;
+  color: var(--color-subtle);
+}
+
+/* The three steps are an ordered list; the kit's counter draws the numbers. */
+ol.steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Copies to correct: the count in words, no bar (nothing is done yet, the button says what to do). */
+.side-count {
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+
+/* Vu récemment: the title, then what it is and when, with the resource's status on the right. */
+.mini-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-2);
+}
+
+/* The Créer menu: each entry centres its glyph against its two lines. */
+.menu-item.glyph-item {
+  align-items: center;
+}
+
+/* Empty home: the blank copy sits above the steps, separated by a rule. */
+.empty.empty-sep {
+  border-bottom: 1px solid var(--color-line);
+}
+.step-action {
+  margin-top: var(--spacing-3);
+}
+.step-actions {
+  display: flex;
+  gap: var(--spacing-2);
+  margin-top: var(--spacing-3);
+}
+
+/* The Créer menu opens under the Créer button of the sidebar. */
+.menu.create-menu {
+  left: var(--spacing-3);
+  top: 116px;
+  width: 380px;
+}
+
+/* A service announcement (maintenance) is information, not a state: its icon stays graphite. */
+.notice.service > .ico {
+  flex: none;
+  color: var(--color-graphite-700);
+}

@@ -10,7 +10,7 @@ import {
 } from '@platon/feature/announcement/common'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
-import { buildHttpParams } from '@platon/core/browser'
+import { buildHttpParams } from '@platon/core/browser/shared'
 
 @Injectable()
 export class RemoteAnnouncementProvider extends AnnouncementProvider {
@@ -58,5 +58,9 @@ export class RemoteAnnouncementProvider extends AnnouncementProvider {
     return this.http
       .get<ItemResponse<Announcement>>(`${this.API_BASE_PATH}/visible/${id}`)
       .pipe(map((response) => response.resource))
+  }
+
+  markAsRead(id: string): Observable<void> {
+    return this.http.patch<void>(`${this.API_BASE_PATH}/${id}/read`, {})
   }
 }

@@ -3,26 +3,21 @@ interface ListItem {
   items: ListItem[]
 }
 
+/** A nested list gives objects; a flat list, written by the older list tool, gives strings. */
 interface ListData {
   style: 'ordered' | 'unordered'
-  items: ListItem[]
+  items: (ListItem | string)[]
 }
 
-const processNestedLists = function testNest(style: string, data: ListItem[]): string {
-  const result = data.reduce((acc: string, res: ListItem) => {
-    if (res.items.length > 0) return acc + `<li>${res.content}</li>` + testNest(style, res.items)
-    else return acc + `<li>${res.content}</li>`
-  }, '')
-  return `<${style}>${result}</${style}>`
+const listOf = (tag: 'ol' | 'ul', items: (ListItem | string)[]): string => {
+  const children = items.map((item) =>
+    typeof item === 'string'
+      ? `<li>${item}</li>`
+      : `<li>${item.content}${item.items?.length ? listOf(tag, item.items) : ''}</li>`
+  )
+  return `<${tag} style="padding-left: 1em;">${children.join('')}</${tag}>`
 }
 
 export const ListParser = function (data: ListData): string {
-  const style = (data.style === 'ordered' ? 'ol' : 'ul') + ' style="padding-left: 1em;"'
-
-  const items = data.items.reduce((acc: string, res: ListItem) => {
-    if (res.items.length > 0) {
-      return acc + `<li>${res.content}</li>` + processNestedLists(style, res.items)
-    } else return acc + `<li>${res.content}</li>`
-  }, '')
-  return `<${style}>${items}</${style}>`
+  return listOf(data.style === 'ordered' ? 'ol' : 'ul', data.items)
 }

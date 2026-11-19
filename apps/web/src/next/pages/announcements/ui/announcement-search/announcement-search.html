@@ -1,0 +1,9 @@
+<pl-field label="Rechercher une annonce" icon="search" labelHidden>
+  <input plInput type="search" placeholder="Rechercher une annonce" [value]="value()" (input)="search($event)" />
+</pl-field>
+@if (noMatch(); as heading) {
+<pl-empty [heading]="heading" icon="search_off">
+  <p>Essayez avec d'autres mots du titre ou du résumé.</p>
+  <button type="button" plButton variant="secondary" plEmptyAction (click)="clear()">Effacer la recherche</button>
+</pl-empty>
+}

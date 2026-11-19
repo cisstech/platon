@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http'
-import { buildExpandableHttpParams, buildHttpParams } from './utils'
+import { buildExpandableHttpParams, buildHttpParams, convertIsoDates } from './utils'
 
 describe('buildHttpParams', () => {
   it('should return an empty HttpParams object when input object is empty', () => {
@@ -91,5 +91,23 @@ describe('buildExpandableHttpParams', () => {
     const result = buildExpandableHttpParams(object)
     expect(result instanceof HttpParams).toBe(true)
     expect(result.toString()).toBe('expands=expand1,expand2&selects=select1,select2')
+  })
+})
+
+describe('convertIsoDates', () => {
+  it('turns the ISO 8601 strings into dates, nested ones included, and leaves the rest', () => {
+    const value = {
+      createdAt: '2026-10-09T12:00:00.000Z',
+      readAt: null,
+      data: { type: 'COURSE-MEMBER-CREATION', closesAt: '2026-10-10T08:00:00Z', code: '2026-10-09' },
+      list: ['2026-10-09T12:00:00Z'],
+    }
+
+    expect(convertIsoDates(value)).toEqual({
+      createdAt: new Date('2026-10-09T12:00:00.000Z'),
+      readAt: null,
+      data: { type: 'COURSE-MEMBER-CREATION', closesAt: new Date('2026-10-10T08:00:00Z'), code: '2026-10-09' },
+      list: [new Date('2026-10-09T12:00:00Z')],
+    })
   })
 })

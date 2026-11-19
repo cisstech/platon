@@ -1,0 +1,35 @@
+<pl-empty heading="Vos cours apparaîtront ici">
+  <p>Avec eux, les activités ouvertes, les copies à corriger et ce qui reste à préparer.</p>
+</pl-empty>
+
+<pl-steps aria-label="Pour commencer">
+  <pl-step heading="Créer votre cours" current>
+    <p>Un cours rassemble vos étudiants et vos activités, rangées en sections&nbsp;: des semaines, des chapitres.</p>
+    <a plButton variant="primary" plStepAction routerLink="/courses/create">
+      <pl-icon name="add" />
+      Créer un cours
+    </a>
+  </pl-step>
+
+  <pl-step heading="Trouver ou écrire un exercice">
+    <p>
+      Les ressources partagées contiennent déjà des exercices prêts à l'emploi. Vous pouvez aussi en écrire un, seul ou
+      à partir d'un modèle.
+    </p>
+    <a plButton variant="secondary" plStepAction routerLink="/templates">
+      <pl-icon name="tune" />
+      Partir d'un modèle
+    </a>
+    <a plButton variant="ghost" plStepAction routerLink="/resources">
+      <pl-icon name="folder_open" />
+      Parcourir les ressources
+    </a>
+  </pl-step>
+
+  <pl-step heading="Ajouter une activité">
+    <p>
+      Une activité propose une série d'exercices dans une section de votre cours, avec des dates d'ouverture et, si vous
+      le souhaitez, une note. Disponible dès que votre cours existe.
+    </p>
+  </pl-step>
+</pl-steps>

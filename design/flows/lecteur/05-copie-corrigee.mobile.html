@@ -1,0 +1,128 @@
+<a class="skip-link" href="#contenu">Aller au contenu</a>
+<header class="topbar">
+  <button type="button" class="btn btn-icon" aria-label="Revenir au cours" data-wf-to="detail"><svg class="ico" aria-hidden="true"><use href="#arrow_back" /></svg></button>
+  <span class="topbar-title">Copie corrigée</span>
+</header>
+<main class="m-reader" id="contenu">
+  <div class="m-head">
+    <div class="course-mark sm hue-lagon" aria-hidden="true">AP1</div>
+    <div>
+      <h1 class="title">TP 3&nbsp;: conditions</h1>
+      <p class="small muted">Algorithmique et programmation 1, rendu le 21 septembre, corrigé par Julien Lefèvre le 28 septembre</p>
+    </div>
+  </div>
+  <section class="card m-grade" aria-labelledby="note-t">
+    <div class="grade"><h2 class="sr-only" id="note-t">Note</h2><span class="big">82</span><small>/ 100</small><span class="auto">4 exercices réussis sur 7</span></div>
+    <dl class="breakdown">
+      <div class="kv"><dt>Note automatique<small>moyenne des tests des 7 exercices</small></dt><dd>81,6</dd></div>
+      <div class="kv group"><dt>Étiquettes du correcteur<small>chacune change la note de son exercice</small></dt><dd></dd></div>
+      <div class="kv sub"><dt>Solution élégante<small>exercice 3, de 95 à 100</small></dt><dd>+5</dd></div>
+      <div class="kv sub"><dt>Nommage peu clair<small>exercice 7, de 36 à 34</small></dt><dd>-2</dd></div>
+      <div class="kv total"><dt>Note de la copie<small>moyenne des 7 exercices</small></dt><dd>82 / 100</dd></div>
+    </dl>
+  </section>
+  <div class="copie">
+    <section class="q" aria-labelledby="ex1-t">
+      <div class="q-mark ok" aria-hidden="true"><span>1</span><svg class="ico" aria-hidden="true"><use href="#check_circle" /></svg><span class="q-pts">100<small>/&nbsp;100</small></span></div>
+      <h2 class="heading" id="ex1-t"><span class="sr-only">Exercice 1, </span>Signe d'un nombre<span class="sr-only">, réussi, 100 sur 100</span></h2>
+      <p class="statement">Écrivez une fonction <code>signe(x)</code> qui renvoie -1, 0 ou 1 selon le signe de <code>x</code>.</p>
+      <div class="answer"><span class="answer-label caption">Votre réponse</span><span class="code">def signe(x):
+    if x &lt; 0:
+        return -1
+    elif x == 0:
+        return 0
+    return 1</span></div>
+      <p class="tests ok"><svg class="ico" aria-hidden="true"><use href="#check_circle" /></svg><span><strong>6 tests sur 6 réussis.</strong></span></p>
+    </section>
+    <section class="q" aria-labelledby="ex2-t">
+      <div class="q-mark part" aria-hidden="true"><span>2</span><svg class="ico" aria-hidden="true"><use href="#contrast" /></svg><span class="q-pts">80<small>/&nbsp;100</small></span></div>
+      <h2 class="heading" id="ex2-t"><span class="sr-only">Exercice 2, </span>Année bissextile<span class="sr-only">, réussi en partie, 80 sur 100</span></h2>
+      <p class="statement">Écrivez une fonction <code>bissextile(annee)</code> qui renvoie <code>True</code> si l'année est bissextile, <code>False</code> sinon.</p>
+      <div class="answer"><span class="answer-label caption">Votre réponse</span><span class="code">def bissextile(annee):
+    if annee % 400 == 0:
+        return True
+    return annee % 4 == 0</span></div>
+      <p class="tests part"><svg class="ico" aria-hidden="true"><use href="#contrast" /></svg><span><strong>4 tests sur 5 réussis.</strong> Échoue&nbsp;: <code>bissextile(1900)</code> renvoie <code>True</code>, attendu <code>False</code>.</span></p>
+      <p class="annotation"><svg class="ico" aria-hidden="true"><use href="#ink_pen" /></svg><span>Il manque la règle des siècles&nbsp;: une année divisible par 100 n'est pas bissextile, sauf si elle l'est aussi par 400. Ajoutez ce cas entre vos deux tests.</span></p>
+    </section>
+    <section class="q" aria-labelledby="ex3-t">
+      <div class="q-mark ok" aria-hidden="true"><span>3</span><svg class="ico" aria-hidden="true"><use href="#check_circle" /></svg><span class="q-pts">100<small>/&nbsp;100</small></span></div>
+      <h2 class="heading" id="ex3-t"><span class="sr-only">Exercice 3, </span>Maximum de trois nombres<span class="sr-only">, réussi, 100 sur 100</span></h2>
+      <p class="statement">Écrivez une fonction documentée <code>maximum(a, b, c)</code> qui renvoie le plus grand des trois nombres, sans utiliser <code>max</code>.</p>
+      <div class="answer"><span class="answer-label caption">Votre réponse</span><span class="code">def maximum(a, b, c):
+    m = a
+    if b &gt; m:
+        m = b
+    if c &gt; m:
+        m = c
+    return m</span></div>
+      <p class="tests part"><svg class="ico" aria-hidden="true"><use href="#contrast" /></svg><span><strong>19 tests sur 20 réussis.</strong> Échoue&nbsp;: la fonction n'a pas de docstring.</span></p>
+      <p class="annotation praise"><svg class="ico" aria-hidden="true"><use href="#ink_pen" /></svg><span>Très clair&nbsp;: une variable garde le plus grand nombre vu jusqu'ici. C'est déjà l'algorithme du maximum d'un tableau, que vous retrouverez au TP 4.</span></p>
+      <p class="ex-grade"><svg class="ico" aria-hidden="true"><use href="#grading" /></svg><span>Note de l'exercice&nbsp;: 95 aux tests, +5 pour l'étiquette «&nbsp;Solution élégante&nbsp;», soit <strong>100 / 100</strong>.</span></p>
+    </section>
+    <section class="q" aria-labelledby="ex4-t">
+      <div class="q-mark ok" aria-hidden="true"><span>4</span><svg class="ico" aria-hidden="true"><use href="#check_circle" /></svg><span class="q-pts">100<small>/&nbsp;100</small></span></div>
+      <h2 class="heading" id="ex4-t"><span class="sr-only">Exercice 4, </span>Tarif selon l'âge<span class="sr-only">, réussi, 100 sur 100</span></h2>
+      <p class="statement">Écrivez une fonction <code>tarif(age)</code>&nbsp;: gratuit avant 4 ans, 5&nbsp;€ jusqu'à 17 ans inclus, 9&nbsp;€ ensuite.</p>
+      <div class="answer"><span class="answer-label caption">Votre réponse</span><span class="code">def tarif(age):
+    if age &lt; 4:
+        return 0
+    elif age &lt;= 17:
+        return 5
+    return 9</span></div>
+      <p class="tests ok"><svg class="ico" aria-hidden="true"><use href="#check_circle" /></svg><span><strong>5 tests sur 5 réussis.</strong></span></p>
+    </section>
+    <section class="q" aria-labelledby="ex5-t">
+      <div class="q-mark part" aria-hidden="true"><span>5</span><svg class="ico" aria-hidden="true"><use href="#contrast" /></svg><span class="q-pts">60<small>/&nbsp;100</small></span></div>
+      <h2 class="heading" id="ex5-t"><span class="sr-only">Exercice 5, </span>Mention au baccalauréat<span class="sr-only">, réussi en partie, 60 sur 100</span></h2>
+      <p class="statement">Écrivez une fonction <code>mention(note)</code> qui renvoie la mention d'une note sur 20&nbsp;: «&nbsp;Très bien&nbsp;» à partir de 16, «&nbsp;Bien&nbsp;» à partir de 14, «&nbsp;Assez bien&nbsp;» à partir de 12.</p>
+      <div class="answer"><span class="answer-label caption">Votre réponse</span><span class="code">def mention(note):
+    if note &gt;= 12:
+        return "Assez bien"
+    elif note &gt;= 14:
+        return "Bien"
+    elif note &gt;= 16:
+        return "Très bien"
+    return "Sans mention"</span></div>
+      <p class="tests part"><svg class="ico" aria-hidden="true"><use href="#contrast" /></svg><span><strong>3 tests sur 5 réussis.</strong> Échouent&nbsp;: <code>mention(15)</code> renvoie <code>"Assez bien"</code>, attendu <code>"Bien"</code>&nbsp;; <code>mention(17)</code> renvoie <code>"Assez bien"</code>, attendu <code>"Très bien"</code>.</span></p>
+      <p class="annotation"><svg class="ico" aria-hidden="true"><use href="#ink_pen" /></svg><span>L'ordre des conditions compte&nbsp;: dès que <code>note &gt;= 12</code> est vrai, les branches suivantes ne sont jamais lues. Commencez par la mention la plus haute.</span></p>
+    </section>
+    <section class="q" aria-labelledby="ex6-t">
+      <div class="q-mark ok" aria-hidden="true"><span>6</span><svg class="ico" aria-hidden="true"><use href="#check_circle" /></svg><span class="q-pts">100<small>/&nbsp;100</small></span></div>
+      <h2 class="heading" id="ex6-t"><span class="sr-only">Exercice 6, </span>Jour de la semaine<span class="sr-only">, réussi, 100 sur 100</span></h2>
+      <p class="statement">Écrivez une fonction <code>jour(n)</code> qui renvoie le nom du jour, de 1 pour lundi à 7 pour dimanche, et <code>None</code> sinon.</p>
+      <div class="answer"><span class="answer-label caption">Votre réponse</span><span class="code">def jour(n):
+    noms = ["lundi", "mardi",
+            "mercredi", "jeudi",
+            "vendredi", "samedi",
+            "dimanche"]
+    if 1 &lt;= n &lt;= 7:
+        return noms[n - 1]
+    return None</span></div>
+      <p class="tests ok"><svg class="ico" aria-hidden="true"><use href="#check_circle" /></svg><span><strong>8 tests sur 8 réussis.</strong></span></p>
+    </section>
+    <section class="q" aria-labelledby="ex7-t">
+      <div class="q-mark part" aria-hidden="true"><span>7</span><svg class="ico" aria-hidden="true"><use href="#contrast" /></svg><span class="q-pts">34<small>/&nbsp;100</small></span></div>
+      <h2 class="heading" id="ex7-t"><span class="sr-only">Exercice 7, </span>Équation du second degré<span class="sr-only">, réussi en partie, 34 sur 100</span></h2>
+      <p class="statement">Écrivez une fonction <code>racines(a, b, c)</code> qui renvoie le nombre de solutions réelles de ax² + bx + c = 0, avec a non nul.</p>
+      <div class="answer"><span class="answer-label caption">Votre réponse</span><span class="code">def racines(a, b, c):
+    x = b ** 2 - 4 * a * c
+    if x &gt;= 0:
+        return 2
+    return 0</span></div>
+      <p class="tests part"><svg class="ico" aria-hidden="true"><use href="#contrast" /></svg><span><strong>9 tests sur 25 réussis.</strong> Échouent&nbsp;: les 16 cas où le discriminant est nul, par exemple <code>racines(1, 2, 1)</code> renvoie 2, attendu 1.</span></p>
+      <p class="annotation"><svg class="ico" aria-hidden="true"><use href="#ink_pen" /></svg><span>Un discriminant nul donne une racine double, donc une seule solution&nbsp;: <code>x &gt;= 0</code> mélange deux cas. Testez <code>x == 0</code> à part.</span></p>
+      <p class="annotation"><svg class="ico" aria-hidden="true"><use href="#ink_pen" /></svg><span>Appelez cette variable <code>delta</code>&nbsp;: <code>x</code> se lit comme l'inconnue de l'équation.</span></p>
+      <p class="ex-grade"><svg class="ico" aria-hidden="true"><use href="#grading" /></svg><span>Note de l'exercice&nbsp;: 36 aux tests, -2 pour l'étiquette «&nbsp;Nommage peu clair&nbsp;», soit <strong>34 / 100</strong>.</span></p>
+    </section>
+    <section class="appreciation" aria-labelledby="app-t">
+      <h2 class="heading" id="app-t">Appréciation</h2>
+      <p class="annotation praise"><svg class="ico" aria-hidden="true"><use href="#ink_pen" /></svg><span>Un bon TP, Inès&nbsp;: vos fonctions sont lisibles et tous vos cas simples sont justes.</span></p>
+      <p class="annotation"><svg class="ico" aria-hidden="true"><use href="#ink_pen" /></svg><span>À travailler&nbsp;: écrivez vos conditions de la plus précise à la plus générale, et testez les valeurs à la frontière (1900, 15, un discriminant nul).</span></p>
+      <p class="signature"><span class="avatar" aria-hidden="true">JL</span>Julien Lefèvre, correcteur, le 28 septembre</p>
+    </section>
+  </div>
+  <div class="m-pad m-end">
+    <a href="#" class="btn btn-primary btn-lg" data-wf-to="detail">Revenir au cours</a>
+  </div>
+</main>

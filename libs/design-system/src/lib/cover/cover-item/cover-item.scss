@@ -1,0 +1,83 @@
+:host {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--pl-space-3);
+  block-size: var(--pl-cover-item-size, 38px);
+  margin-inline-end: var(--pl-space-3);
+  padding: 0 var(--pl-space-3);
+  border: 0;
+  border-radius: var(--pl-radius-menu);
+  background: none;
+  color: var(--pl-color-cover-text);
+  font: var(--pl-font-body);
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+}
+:host-context(.pl-cover-foot) {
+  margin-inline-end: 0;
+}
+:host(:hover),
+:host([aria-expanded='true']) {
+  background: var(--pl-color-cover-raised);
+}
+:host(:focus-visible) {
+  outline-color: var(--pl-color-cover-primary);
+  outline-offset: -2px;
+}
+.pl-cover-item__icon {
+  color: var(--pl-color-cover-muted);
+}
+.pl-cover-item__label {
+  flex: 1;
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+pl-count.pl-cover-item__count {
+  background: var(--pl-color-cover-raised);
+  color: var(--pl-color-cover-text);
+}
+:host([aria-current='page']) {
+  margin-inline-end: 0;
+  border-radius: var(--pl-radius-menu) 0 0 var(--pl-radius-menu);
+  background: var(--pl-color-ground);
+  color: var(--pl-color-primary);
+  font-weight: var(--pl-weight-strong);
+}
+:host([aria-current='page']) .pl-cover-item__icon {
+  color: var(--pl-color-primary);
+}
+:host([aria-current='page']) pl-count.pl-cover-item__count {
+  background: var(--pl-color-primary-soft-strong);
+  color: var(--pl-color-primary);
+}
+:host([aria-current='page']:focus-visible) {
+  outline-color: var(--pl-color-focus);
+}
+:host([aria-current='page'])::before,
+:host([aria-current='page'])::after {
+  position: absolute;
+  inset-inline-end: 0;
+  inline-size: var(--pl-space-3);
+  block-size: var(--pl-space-3);
+  content: '';
+}
+:host([aria-current='page'])::before {
+  inset-block-start: calc(-1 * var(--pl-space-3));
+  background: radial-gradient(
+    circle at 0 0,
+    transparent calc(var(--pl-space-3) - 0.5px),
+    var(--pl-color-ground) var(--pl-space-3)
+  );
+}
+:host([aria-current='page'])::after {
+  inset-block-end: calc(-1 * var(--pl-space-3));
+  background: radial-gradient(
+    circle at 0 100%,
+    transparent calc(var(--pl-space-3) - 0.5px),
+    var(--pl-color-ground) var(--pl-space-3)
+  );
+}

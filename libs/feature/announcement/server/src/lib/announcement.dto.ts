@@ -90,6 +90,11 @@ export class AnnouncementDTO extends BaseDTO implements Announcement {
   @Type(() => AnnouncementActionDTO)
   @ApiProperty({ required: false, type: [AnnouncementActionDTO] })
   readonly actions?: AnnouncementAction[]
+
+  @IsOptional()
+  @IsDate()
+  @ApiProperty({ required: false, description: 'When the person who asks read it, in the visible list only.' })
+  readonly readAt?: Date
 }
 
 export class CreateAnnouncementDTO {

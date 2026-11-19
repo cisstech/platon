@@ -301,6 +301,16 @@ describe('ActivityService', () => {
       expect(savedArg?.title).toBeUndefined()
       expect(savedArg?.state).toBeUndefined()
     })
+
+    it("devrait enregistrer qu'une activité est notée", async () => {
+      const activity = buildActivity()
+      repository.findOne.mockResolvedValue(activity)
+      repository.save.mockImplementation(async (a) => a as ActivityEntity)
+
+      await service.update('course-1', 'activity-1', { graded: true })
+
+      expect(repository.save).toHaveBeenCalledWith(expect.objectContaining({ graded: true }))
+    })
   })
 
   describe('updateRestrictions', () => {

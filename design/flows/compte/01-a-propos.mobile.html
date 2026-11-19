@@ -1,0 +1,32 @@
+<a class="skip-link" href="#contenu">Aller au contenu</a>
+<header class="topbar">
+  <button type="button" class="btn btn-icon m-tap" aria-label="Ouvrir la navigation" data-wf-to="navigation"><svg class="ico" aria-hidden="true"><use href="#menu" /></svg></button>
+  <span class="topbar-title">Mon compte</span>
+  <button type="button" class="btn btn-icon m-tap m-bell" aria-label="Notifications, 3 non lues" data-wf-to="notifications"><svg class="ico" aria-hidden="true"><use href="#notifications" /></svg><span class="badge-count" aria-hidden="true">3</span></button>
+</header>
+<main class="m-main" id="contenu">
+  <h1 class="title">Mon compte</h1>
+  <div class="tabs m-tabs-spaced" role="tablist" aria-label="Mon compte"><a href="#" class="tab active" role="tab" aria-selected="true" data-wf-to="a-propos"><svg class="ico" aria-hidden="true"><use href="#person" /></svg>À propos</a><a href="#" class="tab" role="tab" aria-selected="false" data-wf-to="securite"><svg class="ico" aria-hidden="true"><use href="#key" /></svg>Sécurité</a></div>
+  <div class="m-compte">
+    <section class="card card-pad" aria-labelledby="m-id-t">
+      <h2 class="subheading" id="m-id-t">Identité</h2>
+      <p class="muted small compte-hint">Ces informations ne se modifient pas ici. Une erreur&nbsp;? Écrivez à l'administration de PLaTon.</p>
+      <dl class="compte-dl m-kv-stack">
+        <div class="kv"><dt>Prénom et nom</dt><dd>Inès Benali</dd></div>
+        <div class="kv"><dt>Courriel</dt><dd>ines.benali@etud.univ-eiffel.fr</dd></div>
+        <div class="kv"><dt>Type de compte</dt><dd>Compte étudiant</dd></div>
+      </dl>
+    </section>
+    <section class="card card-pad" aria-labelledby="m-interets-t">
+      <h2 class="subheading" id="m-interets-t">Centres d'intérêt</h2>
+      <p class="muted small compte-hint">Les topics et niveaux qui vous concernent.</p>
+      <div class="field"><label for="m-f-topics" id="m-l-topics">Topics</label><div class="input chips-input" id="m-f-topics" role="group" aria-labelledby="m-l-topics"><span class="chip applied">Python<button class="chip-remove" type="button" aria-label="Retirer le topic Python"><svg class="x" aria-hidden="true"><use href="#close" /></svg></button></span><span class="chip applied">Algorithmique<button class="chip-remove" type="button" aria-label="Retirer le topic Algorithmique"><svg class="x" aria-hidden="true"><use href="#close" /></svg></button></span><span class="placeholder">Ajouter un topic</span></div></div>
+      <div class="field"><label for="m-f-niveaux" id="m-l-niveaux">Niveaux</label><div class="input chips-input" id="m-f-niveaux" role="group" aria-labelledby="m-l-niveaux"><span class="chip applied">L1<button class="chip-remove" type="button" aria-label="Retirer le niveau L1"><svg class="x" aria-hidden="true"><use href="#close" /></svg></button></span><span class="placeholder">Ajouter un niveau</span></div></div>
+    </section>
+    <section class="card card-pad" aria-labelledby="m-discord-t">
+      <h2 class="subheading" id="m-discord-t">Discord</h2>
+      <div class="field compte-first"><label for="m-f-discord" id="m-l-discord">Identifiant Discord</label><div class="input" id="m-f-discord" role="textbox" aria-readonly="true" aria-labelledby="m-l-discord" aria-describedby="m-discord-h"><span class="muted">Non renseigné</span><button type="button" class="btn btn-icon" aria-label="Déverrouiller l'identifiant Discord pour le modifier"><svg class="ico ico-18" aria-hidden="true"><use href="#edit" /></svg></button></div><span class="field-hint" id="m-discord-h">À ne modifier que si vous savez à quoi il sert.</span></div>
+    </section>
+    <button type="button" class="btn btn-primary m-save">Enregistrer</button>
+  </div>
+</main>

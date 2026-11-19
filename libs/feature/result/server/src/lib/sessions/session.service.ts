@@ -333,6 +333,7 @@ WHERE session.id = $1;
       .update(SessionEntity)
       .set({
         variables: () => `jsonb_set(variables, '{navigation,terminated}', 'false', false)`,
+        terminatedAt: null,
       })
       .where('activity_id = :activityId and parent_id is null', { activityId })
       .execute()
@@ -345,6 +346,7 @@ WHERE session.id = $1;
       .update(SessionEntity)
       .set({
         variables: () => `jsonb_set(variables, '{navigation,terminated}', 'true', false)`,
+        terminatedAt: () => 'COALESCE(terminated_at, now())',
       })
       .where('activity_id = :activityId and parent_id is null', { activityId })
       .execute()

@@ -1,0 +1,206 @@
+// Layout helpers of the stories only; never shipped with the application.
+
+.story-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--pl-space-6);
+}
+
+.story-row > * {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--pl-space-2);
+}
+
+.story-stack {
+  display: grid;
+  gap: var(--pl-space-4);
+}
+
+.story-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--pl-space-2);
+  padding: 0;
+  list-style: none;
+}
+
+.story-grid > li {
+  display: grid;
+  justify-items: center;
+  gap: var(--pl-space-2);
+  padding: var(--pl-space-3);
+  border: 1px solid var(--pl-color-line);
+  border-radius: var(--pl-radius-card);
+  background: var(--pl-color-surface);
+}
+
+.story-grid code {
+  color: var(--pl-color-muted);
+  font: var(--pl-font-small);
+}
+
+.story-success {
+  color: var(--pl-color-success-ink);
+}
+
+.story-danger {
+  color: var(--pl-color-danger-ink);
+}
+
+.story-cover {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--pl-space-3);
+  inline-size: 240px;
+  padding: var(--pl-space-4) var(--pl-space-3);
+  border-radius: var(--pl-radius-card);
+  background: var(--pl-color-cover);
+  color: var(--pl-color-cover-text);
+}
+
+.story-relative {
+  position: relative;
+}
+
+.story-menu-name {
+  font-weight: var(--pl-weight-strong);
+}
+
+.story-menu-address {
+  color: var(--pl-color-muted);
+  font: var(--pl-font-small);
+}
+
+.story-shell {
+  display: grid;
+  grid-template-columns: var(--pl-cover-width) minmax(0, 1fr);
+  block-size: 100vh;
+}
+
+.story-shell__page {
+  background: var(--pl-color-ground);
+}
+
+.story-sheet {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  max-inline-size: 420px;
+  block-size: 100vh;
+  background: var(--pl-color-scrim);
+}
+
+.story-panel {
+  inline-size: 300px;
+  block-size: 100vh;
+}
+
+.story-notifications {
+  max-inline-size: 380px;
+  border: 1px solid var(--pl-color-line);
+}
+
+.story-popover {
+  display: flex;
+  align-items: flex-end;
+  block-size: 100vh;
+  padding: var(--pl-space-4);
+  background: var(--pl-color-ground);
+}
+
+.story-screen {
+  max-inline-size: 390px;
+}
+
+.story-form {
+  display: grid;
+  gap: var(--pl-space-4);
+  max-inline-size: 360px;
+}
+
+.story-message {
+  color: var(--pl-color-danger-ink);
+  font: var(--pl-font-small);
+}
+
+// A card holding rows, as the lists of a page do.
+.story-card {
+  max-inline-size: 760px;
+  border: 1px solid var(--pl-color-line);
+  border-radius: var(--pl-radius-card);
+  background: var(--pl-color-surface);
+  overflow: hidden;
+}
+
+.story-card > h3 {
+  margin: 0;
+  padding: var(--pl-space-3) var(--pl-space-4) var(--pl-space-1);
+  border-block-start: 1px solid var(--pl-color-line);
+  color: var(--pl-color-muted);
+  font: var(--pl-font-caption);
+}
+
+.story-copies {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--pl-space-4);
+  max-inline-size: 760px;
+}
+
+.story-narrow {
+  max-inline-size: 320px;
+}
+
+.story-title {
+  display: flex;
+  align-items: center;
+  gap: var(--pl-space-3);
+  margin: 0;
+  font: var(--pl-font-title);
+}
+
+.story-phone {
+  max-inline-size: 390px;
+}
+
+.story-announcements {
+  max-inline-size: 340px;
+  border: 1px solid var(--pl-color-line);
+  border-radius: var(--pl-radius-card);
+  background: var(--pl-color-surface);
+  overflow: hidden;
+}
+
+.story-announcements-phone {
+  max-inline-size: 360px;
+  border: 1px solid var(--pl-color-line);
+  border-radius: var(--pl-radius-card);
+  background: var(--pl-color-surface);
+}
+
+.story-binders {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--pl-space-6) var(--pl-space-4);
+  padding-block-start: var(--pl-space-3);
+}
+
+.story-binders-compact {
+  display: grid;
+  gap: var(--pl-space-3);
+  max-inline-size: 380px;
+}
+
+.story-binder-line {
+  margin: 0;
+}
+
+.story-marks {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--pl-space-4);
+}

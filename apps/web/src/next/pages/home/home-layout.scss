@@ -1,0 +1,82 @@
+// The layout both homes share: a main column and a side one, the banner above, and the entries of a
+// zone that are links (a course, a resource).
+
+:host {
+  display: block;
+}
+
+.home__announcement {
+  margin-block-end: var(--pl-space-6);
+}
+
+.home__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 320px);
+  align-items: start;
+  gap: var(--pl-space-8);
+}
+
+.home__main,
+.home__side {
+  display: grid;
+  gap: var(--pl-space-8);
+  min-inline-size: 0;
+}
+
+// The message of a slow loading sits above the skeletons.
+app-load-state + .home__layout {
+  margin-block-start: var(--pl-space-6);
+}
+
+.home__nothing {
+  margin: 0;
+  padding: var(--pl-space-4);
+  color: var(--pl-color-muted);
+}
+
+// Lines of text on their way.
+.home__lines {
+  display: grid;
+  gap: var(--pl-space-3);
+  padding: var(--pl-space-4);
+}
+
+.home__entry {
+  display: grid;
+  gap: var(--pl-space-2);
+  padding: var(--pl-space-3) var(--pl-space-4);
+  color: var(--pl-color-text);
+  text-decoration: none;
+}
+
+.home__entry + .home__entry {
+  border-block-start: 1px solid var(--pl-color-line);
+}
+
+.home__entry:hover {
+  background: var(--pl-color-hover);
+}
+
+.home__entry:focus-visible {
+  outline: 2px solid var(--pl-color-focus);
+  outline-offset: -2px;
+}
+
+.home__entry-name {
+  font-weight: var(--pl-weight-strong);
+}
+
+@media (max-width: 839.98px) {
+  .home__layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--pl-space-6);
+  }
+
+  .home__main {
+    gap: var(--pl-space-6);
+  }
+
+  .home__entry {
+    min-block-size: 44px;
+  }
+}

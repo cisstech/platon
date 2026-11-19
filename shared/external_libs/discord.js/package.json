@@ -39,7 +39,7 @@
   },
   "homepage": "https://discord.js.org",
   "dependencies": {
-    "@discordjs/collection": "./shared/external_libs/@discordjs/collection",
+    "@discordjs/collection": "file:../@discordjs/collection",
     "@sapphire/snowflake": "3.5.1",
     "@types/ws": "8.5.9",
     "discord-api-types": "0.37.61",
@@ -48,11 +48,11 @@
     "tslib": "2.6.2",
     "undici": "5.27.2",
     "ws": "8.14.2",
-    "@discordjs/builders": "./shared/external_libs/@discordjs/builders",
-    "@discordjs/formatters": "./shared/external_libs/@discordjs/formatters",
-    "@discordjs/util": "./shared/external_libs/@discordjs/util",
-    "@discordjs/rest": "./shared/external_libs/@discordjs/rest",
-    "@discordjs/ws": "./shared/external_libs/@discordjs/ws"
+    "@discordjs/builders": "file:../@discordjs/builders",
+    "@discordjs/formatters": "file:../@discordjs/formatters",
+    "@discordjs/util": "file:../@discordjs/util",
+    "@discordjs/rest": "file:../@discordjs/rest",
+    "@discordjs/ws": "file:../@discordjs/ws"
   },
   "devDependencies": {
     "@favware/cliff-jumper": "2.2.1",

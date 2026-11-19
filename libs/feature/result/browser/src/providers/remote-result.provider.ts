@@ -12,6 +12,7 @@ import {
   DashboardOutput,
   FindActivityLeaderboard,
   FindCourseLeaderboard,
+  RecentCopy,
   UpsertCorrection,
   UserActivityResultsDistribution,
   UserResults,
@@ -58,6 +59,10 @@ export class RemoteResultProvider extends ResultProvider {
         params,
       })
       .pipe(map((response) => response.resources))
+  }
+
+  recentCopies(): Observable<RecentCopy[]> {
+    return this.http.get<ListResponse<RecentCopy>>('/api/v1/results/recent').pipe(map((response) => response.resources))
   }
 
   sessionResults(sessionId: string): Observable<UserResults> {

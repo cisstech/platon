@@ -39,11 +39,10 @@ jobs:
         with:
           main-branch-name: ${{ github.base_ref || github.ref_name }}
 
-      - name: Generate Graphql Types
-        shell: bash
-        run: ./bin/graphql/generate.sh
-
       - run: yarn affected:build --parallel --base=${{ env.NX_BASE }}
+
+      - name: Build Storybook of the design system
+        run: yarn nx affected --target=build-storybook --base=${{ env.NX_BASE }}
 
   lint:
     name: Lint
@@ -63,6 +62,9 @@ jobs:
           main-branch-name: ${{ github.base_ref || github.ref_name }}
 
       - run: yarn affected:lint --parallel --base=${{ env.NX_BASE }}
+
+      - name: Design lints of the new interface
+        run: yarn lint:design
 
   test:
     name: Test

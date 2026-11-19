@@ -1,0 +1,20 @@
+<pl-page [busy]="busy()">
+  <pl-page-header heading="Annonces" description="Les nouvelles de la plateforme." />
+
+  <app-load-state
+    [phase]="phase()"
+    heading="Les annonces n'ont pas pu être chargées"
+    reassurance="Les annonces de la plateforme n'ont pas changé."
+    (retry)="retry()"
+  />
+
+  @if (none()) {
+  <pl-empty heading="Aucune annonce pour le moment" icon="campaign">
+    <p>Les nouvelles de la plateforme s'afficheront ici.</p>
+  </pl-empty>
+  } @else if (shown()) { @if (narrow()) {
+  <app-announcements-narrow [highlight]="highlight" />
+  } @else {
+  <app-announcements-wide />
+  } }
+</pl-page>

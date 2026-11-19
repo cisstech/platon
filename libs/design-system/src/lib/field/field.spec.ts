@@ -1,0 +1,123 @@
+import { Component, signal } from '@angular/core'
+import { TestBed } from '@angular/core/testing'
+import { Button } from '../button/button'
+import { Icon } from '../icon/icon'
+import { Field } from './field'
+import { FieldInput } from './field-input'
+import { PasswordReveal } from './password-reveal'
+
+@Component({
+  imports: [Button, Field, FieldInput, Icon, PasswordReveal],
+  template: `
+    <pl-field label="Nom d'utilisateur">
+      <input plInput autocomplete="username" [invalid]="invalid()" aria-describedby="message" />
+    </pl-field>
+    <pl-field label="Mot de passe">
+      <a plFieldAside href="/docs">Mot de passe oublié&nbsp;?</a>
+      <input plInput type="password" autocomplete="current-password" [invalid]="invalid()" />
+      <button
+        type="button"
+        plButton
+        variant="icon"
+        size="sm"
+        plPasswordReveal
+        #reveal="plPasswordReveal"
+        aria-label="Afficher le mot de passe"
+      >
+        <pl-icon [name]="reveal.shown() ? 'visibility_off' : 'visibility'" />
+      </button>
+    </pl-field>
+    <p id="message">Nom d'utilisateur ou mot de passe incorrect.</p>
+    <pl-field label="Rechercher une annonce" icon="search" labelHidden>
+      <input plInput type="search" placeholder="Rechercher une annonce" />
+    </pl-field>
+    <pl-field label="Description">
+      <textarea plInput rows="3"></textarea>
+    </pl-field>
+  `,
+})
+class Host {
+  readonly invalid = signal(false)
+}
+
+describe('Field', () => {
+  const render = () => {
+    const fixture = TestBed.createComponent(Host)
+    fixture.detectChanges()
+    const [user, password, search, description] = [
+      ...fixture.nativeElement.querySelectorAll('pl-field'),
+    ] as HTMLElement[]
+    return { fixture, user, password, search, description }
+  }
+
+  it('names its control by its label', () => {
+    const { user } = render()
+    const input = user.querySelector('input') as HTMLInputElement
+
+    expect(input.id).toMatch(/^pl-input-\d+$/)
+    expect(user.querySelector('label')?.getAttribute('for')).toBe(input.id)
+    expect(user.querySelector('label')?.textContent?.trim()).toBe("Nom d'utilisateur")
+  })
+
+  it('keeps an aside, such as a link, beside its label', () => {
+    const { password } = render()
+
+    expect(password.querySelector('.pl-field__head a')?.textContent).toBe('Mot de passe oublié\u00a0?')
+  })
+
+  it('can keep its label for screen readers only, its control still named by it', () => {
+    const { search } = render()
+    const label = search.querySelector('label') as HTMLLabelElement
+
+    expect(label.classList).toContain('pl-visually-hidden')
+    expect(label.getAttribute('for')).toBe(search.querySelector('input')?.id)
+    expect(search.querySelector('.pl-field__head')).toBeNull()
+  })
+
+  it('names a control of several lines too', () => {
+    const { description } = render()
+    const textarea = description.querySelector('.pl-field__box textarea') as HTMLTextAreaElement
+
+    expect(textarea.classList).toContain('pl-field__input')
+    expect(description.querySelector('label')?.getAttribute('for')).toBe(textarea.id)
+  })
+
+  it('shows an icon before its control, hidden from screen readers', () => {
+    const { search, user } = render()
+    const icon = search.querySelector('.pl-field__box pl-icon') as HTMLElement
+
+    expect(icon.querySelector('use')?.getAttribute('href')).toContain('#search')
+    expect(icon.closest('[aria-hidden="true"]')).not.toBeNull()
+    expect(user.querySelector('.pl-field__box pl-icon')).toBeNull()
+  })
+
+  it('says its control is invalid, to the eye and to screen readers, and keeps the description it was given', () => {
+    const { fixture, user } = render()
+    fixture.componentInstance.invalid.set(true)
+    fixture.detectChanges()
+
+    const input = user.querySelector('input') as HTMLInputElement
+    expect(input.getAttribute('aria-invalid')).toBe('true')
+    expect(input.getAttribute('aria-describedby')).toBe('message')
+    expect(user.hasAttribute('data-invalid')).toBe(true)
+  })
+
+  it('shows the password, then hides it again, the button saying which', () => {
+    const { fixture, password } = render()
+    const input = password.querySelector('input') as HTMLInputElement
+    const reveal = password.querySelector('button') as HTMLButtonElement
+
+    expect(input.type).toBe('password')
+    expect(reveal.getAttribute('aria-pressed')).toBe('false')
+
+    reveal.click()
+    fixture.detectChanges()
+    expect(input.type).toBe('text')
+    expect(reveal.getAttribute('aria-pressed')).toBe('true')
+    expect(reveal.querySelector('use')?.getAttribute('href')).toContain('#visibility_off')
+
+    reveal.click()
+    fixture.detectChanges()
+    expect(input.type).toBe('password')
+  })
+})

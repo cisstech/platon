@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { RegisterVirtualColumnsResolver, UserEntity, VirtualColumnResolver } from '@platon/core/server'
 import { ActivityVariables } from '@platon/feature/compiler'
 import { ActivityEntity } from '@platon/feature/course/server'
+import { AnswerStates, isExerciseDone } from '@platon/feature/result/common'
 import differenceInSeconds from 'date-fns/differenceInSeconds'
 import { In, IsNull, Repository } from 'typeorm'
 import { SessionEntity } from '../sessions/session.entity'
@@ -48,8 +49,8 @@ export class ActivityResultsVirtualColumnsResolver implements VirtualColumnResol
       const { navigation } = session.variables
       if (navigation?.exercises?.length) {
         const { exercises } = navigation
-        const graded = exercises.filter((e: any) => !['NOT_STARTED', 'STARTED'].includes(e.state)).length
-        const started = exercises.filter((e: any) => e.state !== 'NOT_STARTED').length
+        const graded = exercises.filter((e: any) => isExerciseDone(e.state)).length
+        const started = exercises.filter((e: any) => e.state !== AnswerStates.NOT_STARTED).length
         Object.assign(activity, {
           // the progression is a percentage of graded exercises
           // and started exercises (but not graded)

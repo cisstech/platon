@@ -1,0 +1,6 @@
+<button type="button" plButton variant="secondary" [loading]="state() === 'loading'" (click)="asked.emit()">
+  {{ label() }}
+</button>
+@if (state() === 'error') {
+<p>{{ failure() }}</p>
+}

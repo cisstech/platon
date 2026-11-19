@@ -1,0 +1,8 @@
+:host {
+  display: block;
+}
+
+/* Brought into view below the top bar of a phone, which stays. */
+.announcements__list pl-announcement-disclosure {
+  scroll-margin-block-start: calc(var(--pl-topbar-height) + var(--pl-space-4));
+}

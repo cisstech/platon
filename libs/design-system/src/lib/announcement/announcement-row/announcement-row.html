@@ -1,0 +1,22 @@
+<button
+  type="button"
+  class="pl-announcement-row__button"
+  #button
+  [attr.aria-current]="current() ? 'true' : null"
+  (click)="chosen.emit()"
+>
+  <span class="pl-announcement-row__lead" aria-hidden="true"><pl-icon [name]="icon()" /></span>
+  <span class="pl-announcement-row__text">
+    <span class="pl-announcement-row__title">
+      @if (unread() && unreadLabel()) {
+      <span class="pl-visually-hidden">{{ unreadLabel() }}{{ ' ' }}</span>
+      }{{ heading() }}</span
+    >
+    @if (summary()) {
+    <span class="pl-visually-hidden">, </span>
+    <span class="pl-announcement-row__summary">{{ summary() }}</span>
+    }
+    <span class="pl-visually-hidden">, </span>
+    <time class="pl-announcement-row__day" [attr.datetime]="dateTime()">{{ day() }}</time>
+  </span>
+</button>

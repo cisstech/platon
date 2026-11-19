@@ -1,73 +1,36 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  HttpRedirectResponse,
   Param,
   Patch,
   Post,
-  Delete,
   Query,
   Redirect,
   Req,
-  HttpRedirectResponse,
 } from '@nestjs/common'
-import { CreateCasDTO, UpdateCasDTO } from './cas.dto'
-import { AuthService, Mapper, Public, Roles, UserService, UUIDParam } from '@platon/core/server'
-import { CasService } from './cas.service'
-import { CasDTO, CasFiltersDTO } from './cas.dto'
-import { CreatedResponse, ItemResponse, ListResponse, NoContentResponse, NotFoundResponse } from '@platon/core/common'
-import { Request } from 'express'
-import { CasServiceValidateResponse } from './payloads'
-import { AxiosError, AxiosResponse } from 'axios'
-import { Optional } from 'typescript-optional'
-import { LTIService } from '@platon/feature/lti/server'
-import { AxiosService } from './axios.service'
 import { ApiBearerAuth } from '@nestjs/swagger'
+import {
+  CreatedResponse,
+  ItemResponse,
+  ListResponse,
+  NoContentResponse,
+  NotFoundResponse,
+  signInFailureUrl,
+  signInUrl,
+} from '@platon/core/common'
+import { Mapper, Public, Roles, UUIDParam } from '@platon/core/server'
+import { CAS_SIGN_IN_FAILED } from '@platon/feature/cas/common'
+import { Request } from 'express'
 import { URL } from 'url'
+import { CasDTO, CasFiltersDTO, CreateCasDTO, UpdateCasDTO } from './cas.dto'
+import { CasService } from './cas.service'
 
 @Controller('cas')
 export class CasController {
-  constructor(
-    private readonly service: CasService,
-    private readonly LtiService: LTIService,
-    private readonly authService: AuthService,
-    private readonly userService: UserService,
-    private readonly https: AxiosService
-  ) {}
-
-  async checkCasTicket(serviceValidateURL: string, ticket: string, service: string): Promise<Optional<string>> {
-    const data = await this.https
-      .get<CasServiceValidateResponse>(serviceValidateURL, {
-        params: {
-          ticket: ticket,
-          service: service,
-          format: 'JSON',
-        },
-      })
-      .catch((_error: AxiosError) => {
-        return {
-          serviceResponse: {
-            authenticationFailure: { code: 'NO_RESPONSE', description: 'Your CAS provider is not accessible' },
-          },
-        }
-      })
-
-    let response: CasServiceValidateResponse
-    if (Object.prototype.hasOwnProperty.call(data, 'data')) {
-      response = (data as AxiosResponse<CasServiceValidateResponse>).data
-    } else {
-      response = data as unknown as CasServiceValidateResponse
-    }
-
-    if (response.serviceResponse.authenticationFailure) {
-      throw new Error(response.serviceResponse.authenticationFailure.description)
-    } else if (response.serviceResponse.authenticationSuccess) {
-      const user = response.serviceResponse.authenticationSuccess.user
-      //   const attributes = response.serviceResponse.authenticationSuccess.attributes
-      return Optional.of(user)
-    }
-    return Optional.empty()
-  }
+  constructor(private readonly service: CasService) {}
 
   @Public()
   @Get('/casnames')
@@ -77,12 +40,16 @@ export class CasController {
     return new ListResponse({ total, resources })
   }
 
+  /**
+   * Sends the person to the CAS, which sends them back here with a ticket; then hands the tokens, or
+   * the failure, to the sign-in page. The service address is the same both ways: the CAS checks it.
+   */
   @Public()
   @Get('/login/:casname')
   @Redirect()
   async login(
     @Param('casname') casname: string,
-    @Query() query: { ticket: string; next?: string },
+    @Query() query: { ticket?: string; next?: string },
     @Req() request: Request
   ): Promise<HttpRedirectResponse> {
     const service = new URL(`https://${request.get('host')}${request.baseUrl}${request.path}`)
@@ -91,44 +58,23 @@ export class CasController {
     }
 
     if (!query.ticket) {
-      return {
-        url:
-          (await this.service.findCasByName(casname)).orElseThrow(
-            () => new NotFoundResponse(`Cas not found: ${casname}`)
-          ).loginURL + `?service=${service}`,
-        statusCode: 302,
+      const cas = await this.service.findCasByName(casname)
+      if (cas.isEmpty()) {
+        return { url: signInFailureUrl(CAS_SIGN_IN_FAILED, query.next), statusCode: 302 }
       }
-    } else {
-      const casEntity = (await this.service.findCasByName(casname)).orElseThrow(
-        () => new NotFoundResponse(`Cas not found: ${casname}`)
-      )
+      const login = new URL(cas.get().loginURL)
+      login.searchParams.set('service', service.toString())
+      return { url: login.toString(), statusCode: 302 }
+    }
 
-      const username = await this.checkCasTicket(casEntity.serviceValidateURL, query.ticket, service.toString())
-      if (username.isEmpty()) {
-        return {
-          url: `/login/no-account`,
-          statusCode: 302,
-        }
-      }
-      const lmsUserEntity = await this.LtiService.findLmsUserByUsername(username.get(), casEntity.lmses)
-      if (lmsUserEntity.isEmpty()) {
-        return {
-          url: `/login/no-account`,
-          statusCode: 302,
-        }
-      }
-      const user = await this.userService.findById(lmsUserEntity.get().userId)
-      if (user.isEmpty()) {
-        return {
-          url: `/login/no-account`,
-          statusCode: 302,
-        }
-      }
-      const token = await this.authService.authenticate(lmsUserEntity.get().userId, user.get().username)
-      return {
-        url: `/login?access-token=${token.accessToken}&refresh-token=${token.refreshToken}&next=${query.next}`,
-        statusCode: 302,
-      }
+    const signIn = await this.service.signIn(casname, query.ticket, service.toString())
+    switch (signIn.outcome) {
+      case 'signed-in':
+        return { url: signInUrl(signIn.token, query.next), statusCode: 302 }
+      case 'no-account':
+        return { url: '/login/no-account', statusCode: 302 }
+      case 'failed':
+        return { url: signInFailureUrl(CAS_SIGN_IN_FAILED, query.next), statusCode: 302 }
     }
   }
 

@@ -1,0 +1,16 @@
+.field {
+  display: grid;
+  gap: var(--pl-space-2);
+}
+label {
+  font: var(--pl-font-subheading);
+}
+input {
+  min-block-size: var(--pl-space-10);
+  padding: 0 var(--pl-space-3);
+  border: 1px solid var(--pl-color-control);
+  border-radius: var(--pl-radius-control);
+  background: var(--pl-color-surface);
+  color: var(--pl-color-text);
+  font: var(--pl-font-body);
+}
