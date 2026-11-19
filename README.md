@@ -78,15 +78,16 @@ The current interface opens by default. Add `?ui=next` to the address to switch 
 The new interface is designed before it is built, and both stages can be browsed without running
 PLaTon:
 
-- **The wireframes** of every journey, desktop and phone, with their states, open as a navigable
-  canvas with [Foundry](https://foundry.cisstech.com/docs) (in beta):
+- **The wireframes** of every journey, desktop and phone, with their states, form a navigable
+  canvas built with [Foundry](https://foundry.cisstech.com/docs) (in beta). Browse it
+  [online](https://cisstech.github.io/platon/wireframes/), or live from `design/` while you edit it:
 
   ```sh
-  npx @cisstech/foundry -C design serve
+  yarn design:serve
   ```
 
   `design/spec/` describes what each journey does, and [`design/AGENTS.md`](design/AGENTS.md) how
-  its screens are written.
+  its screens are written; `yarn design:check` checks that the spec holds together.
 
 - **The design system**, every component in each of its states, light and dark, in Storybook:
 
