@@ -112,7 +112,7 @@ spec:
     - { id: navigation, overlay: true, states: [default] }
   edges:
     - { from: etudiant, to: lecteur, on: start }
-    - { from: etudiant, to: copie-corrigee, on: review }
+    - { from: etudiant, to: lecteur, on: review }
     - { from: etudiant, to: annonces, on: open }
     - { from: etudiant, to: cours, on: open }
     - { from: etudiant, to: notifications, on: open }
@@ -120,7 +120,7 @@ spec:
     - { from: etudiant, to: navigation, on: menu }
     - { from: notifications, to: etudiant, on: dismiss }
     - { from: notifications, to: lecteur, on: open }
-    - { from: notifications, to: copie-corrigee, on: open }
+    - { from: notifications, to: lecteur, on: open }
     - { from: notifications, to: annonces, on: open }
     - { from: notifications, to: cours, on: open }
     - { from: profil, to: etudiant, on: dismiss }

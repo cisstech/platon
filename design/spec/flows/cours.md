@@ -196,7 +196,7 @@ spec:
     - { from: detail, to: suivi, on: follow }
     - { from: detail, to: activite, on: add }
     - { from: detail, to: lecteur, on: start }
-    - { from: detail, to: copie-corrigee, on: results }
+    - { from: detail, to: lecteur, on: results }
     - { from: detail, to: corrections, on: correct }
     - { from: detail, to: mes-cours, on: back }
     - { from: partager, to: detail, on: dismiss }

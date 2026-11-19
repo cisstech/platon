@@ -145,10 +145,10 @@ spec:
     - { from: ressource-partager, to: ressource, on: dismiss }
     - { from: cercle, to: cercle-collaborateurs, on: tab }
     - { from: cercle, to: catalogue, on: filter }
-    - { from: cercle, to: nouvelle, on: create }
+    - { from: cercle, to: creation, on: create }
     - { from: ressource, to: catalogue, on: back }
-    - { from: catalogue, to: ajouter-au-cours, on: add }
-    - { from: catalogue-actions, to: ajouter-au-cours, on: add }
-    - { from: ressource, to: ajouter-au-cours, on: add }
-    - { from: catalogue, to: atelier, on: complete }
+    - { from: catalogue, to: creation, on: add }
+    - { from: catalogue-actions, to: creation, on: add }
+    - { from: ressource, to: creation, on: add }
+    - { from: catalogue, to: creation, on: complete }
     - { from: ressource, to: catalogue, on: filter }

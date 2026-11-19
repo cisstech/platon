@@ -66,6 +66,9 @@ jobs:
       - name: Design lints of the new interface
         run: yarn lint:design
 
+      - name: Coherence of the design spec
+        run: yarn design:check
+
   test:
     name: Test
     runs-on: ubuntu-latest

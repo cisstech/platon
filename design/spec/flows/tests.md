@@ -101,8 +101,7 @@ spec:
   edges:
     - { from: test, to: candidat, on: preview }
     - { from: test, to: test, on: select }
-    - { from: candidat, to: exercice, on: start }
+    - { from: candidat, to: lecteur, on: start }
+    - { from: candidat, to: envoye, on: finish }
     - { from: candidat, to: test, on: back }
     - { from: candidat, to: candidat, on: check }
-    - { from: rendre, to: envoye, on: submit }
-    - { from: exercice, to: envoye, on: timeout }
