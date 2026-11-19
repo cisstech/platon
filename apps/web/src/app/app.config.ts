@@ -11,7 +11,7 @@ import { CAS_PROVIDERS } from '@platon/feature/cas/browser'
 import { COURSE_PROVIDERS } from '@platon/feature/course/browser'
 import { LTI_PROVIDERS } from '@platon/feature/lti/browser'
 import { PLAYER_PROVIDERS } from '@platon/feature/player/browser'
-import { RESOURCE_PROVIDERS } from '@platon/feature/resource/browser'
+import { RESOURCE_NOTIFICATION_PROVIDERS, RESOURCE_PROVIDERS } from '@platon/feature/resource/browser'
 import { RESULT_PROVIDERS } from '@platon/feature/result/browser'
 import { PEER_PROVIDERS } from '@platon/feature/peer/browser'
 import { DISCORD_PROVIDERS } from '@platon/feature/discord/browser'
@@ -22,6 +22,7 @@ import { sharedProviders } from '../shared/shared.providers'
 import { UiBootContext } from '../shared/ui-boot-context'
 import { appRoutes } from './app.routes'
 import { legacyProviders } from './legacy.providers'
+import { provideReturnToNext } from './ui-switch/return-to-next'
 
 /** Config of the current interface. */
 export const appConfig = (context: UiBootContext): ApplicationConfig => ({
@@ -35,8 +36,10 @@ export const appConfig = (context: UiBootContext): ApplicationConfig => ({
       withComponentInputBinding(),
       withPreloading(PreloadAllModules)
     ),
+    provideReturnToNext(),
     COURSE_PROVIDERS,
     RESOURCE_PROVIDERS,
+    RESOURCE_NOTIFICATION_PROVIDERS,
     PLAYER_PROVIDERS,
     RESULT_PROVIDERS,
     PEER_PROVIDERS,

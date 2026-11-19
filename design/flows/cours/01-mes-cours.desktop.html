@@ -8,25 +8,25 @@
         <div class="brand-org">Université Gustave Eiffel</div>
       </div>
     </div>
-    <a class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico"><use href="#add" /></svg>Créer</a>
+    <button type="button" class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico" aria-hidden="true"><use href="#add" /></svg>Créer</button>
     <nav class="nav">
-      <a class="nav-item" data-wf-to="enseignant"><svg class="ico"><use href="#home" /></svg>Accueil</a>
-      <a class="nav-item" data-wf-to="annonces"><svg class="ico"><use href="#campaign" /></svg>Annonces</a>
-      <a class="nav-item active" data-wf-to="mes-cours"><svg class="ico"><use href="#school" /></svg>Cours</a>
-      <a class="nav-item" data-wf-to="file"><svg class="ico"><use href="#rate_review" /></svg>Corrections<span class="count">14</span></a>
-      <a class="nav-item" data-wf-to="catalogue"><svg class="ico"><use href="#folder_open" /></svg>Ressources</a>
-      <a class="nav-item" data-wf-to="test"><svg class="ico"><use href="#fact_check" /></svg>Tests d'entrée</a>
+      <a href="#" class="nav-item" data-wf-to="enseignant"><svg class="ico" aria-hidden="true"><use href="#home" /></svg>Accueil</a>
+      <a href="#" class="nav-item" data-wf-to="annonces"><svg class="ico" aria-hidden="true"><use href="#campaign" /></svg>Annonces</a>
+      <a href="#" class="nav-item active" data-wf-to="mes-cours"><svg class="ico" aria-hidden="true"><use href="#school" /></svg>Cours</a>
+      <a href="#" class="nav-item" data-wf-to="file"><svg class="ico" aria-hidden="true"><use href="#rate_review" /></svg>Corrections<span class="count">2</span></a>
+      <a href="#" class="nav-item" data-wf-to="catalogue"><svg class="ico" aria-hidden="true"><use href="#folder_open" /></svg>Ressources</a>
+      <a href="#" class="nav-item" data-wf-to="test"><svg class="ico" aria-hidden="true"><use href="#fact_check" /></svg>Tests d'entrée</a>
     </nav>
     <div class="sidebar-foot">
-      <a class="nav-item"><svg class="ico"><use href="#help" /></svg>Documentation</a>
-      <a class="nav-item"><svg class="ico"><use href="#notifications" /></svg>Notifications<span class="count">2</span></a>
+      <a href="#" class="nav-item"><svg class="ico" aria-hidden="true"><use href="#help" /></svg>Documentation</a>
+      <a href="#" class="nav-item"><svg class="ico" aria-hidden="true"><use href="#notifications" /></svg>Notifications<span class="count">2</span></a>
       <div class="me">
         <span class="avatar">KH</span>
         <div>
           <div class="me-name">Karim Haddad</div>
-          <div class="me-role">Enseignant</div>
+          <div class="me-role">Compte enseignant</div>
         </div>
-        <svg class="ico ico-16"><use href="#expand_more" /></svg>
+        <svg class="ico ico-16" aria-hidden="true"><use href="#expand_more" /></svg>
       </div>
       <a class="credit" href="https://github.com/cisstech/platon" aria-label="Code source de PLaTon, logiciel libre de cisstech"><svg class="ico ico-16" aria-hidden="true"><use href="#code" /></svg>Logiciel libre, par <strong>cisstech</strong></a>
     </div>
@@ -36,58 +36,55 @@
       <div>
         <h1 class="title">Cours</h1>
       </div>
-      <div class="actions"><a class="btn btn-primary" data-wf-to="nouveau"><svg class="ico"><use href="#add" /></svg>Créer un cours</a></div>
+      <div class="actions"><button type="button" class="btn btn-primary" data-wf-to="nouveau"><svg class="ico" aria-hidden="true"><use href="#add" /></svg>Créer un cours</button></div>
     </header>
     <div class="toolbar">
-      <div class="input" style="width: 240px"><svg class="ico ico-18" style="margin: 0 8px 0 0; color: var(--color-subtle)"><use href="#search" /></svg><span class="placeholder">Nom d'un cours</span></div>
-      <span class="segmented"><span class="on">Actuels <span class="count">3</span></span><span>Archivés <span class="count">5</span></span></span>
+      <label class="sr-only" for="q-liste">Chercher un cours</label><div class="input search narrow" id="q-liste" role="searchbox"><svg class="ico ico-18" aria-hidden="true"><use href="#search" /></svg><span class="placeholder">Nom d'un cours</span></div>
+      <span class="segmented" role="radiogroup" aria-label="Cours affichés"><span class="on" role="radio" aria-checked="true">Actuels <span class="count">3</span></span><span role="radio" aria-checked="false">Archivés <span class="count">5</span></span></span>
       <span class="grow"></span>
-      <span class="select"><svg class="ico ico-16"><use href="#sort" /></svg>Mis à jour récemment<svg class="ico ico-16"><use href="#expand_more" /></svg></span>
-      <span class="select"><svg class="ico ico-16"><use href="#history" /></svg>Toutes les périodes<svg class="ico ico-16"><use href="#expand_more" /></svg></span>
+      <span class="select"><svg class="ico ico-16" aria-hidden="true"><use href="#sort" /></svg>Mis à jour récemment<svg class="ico ico-16" aria-hidden="true"><use href="#expand_more" /></svg></span>
+      <span class="select"><svg class="ico ico-16" aria-hidden="true"><use href="#history" /></svg>Toutes les périodes<svg class="ico ico-16" aria-hidden="true"><use href="#expand_more" /></svg></span>
     </div>
-    <div class="grid-cards" style="row-gap: var(--spacing-6); padding-top: 10px">
-      <div class="card classeur hue-bleuet hover" data-wf-to="detail">
+    <div class="grid-cards binders">
+      <div class="card classeur hue-lagon hover" data-wf-to="detail">
         <span class="classeur-tab"></span>
-        <div class="classeur-cover"><span class="classeur-mono">AP1</span><span class="classeur-trophy"><svg class="ico"><use href="#emoji_events" /></svg>1 challenge</span><button class="btn btn-icon btn-sm" aria-label="Actions du cours" data-wf-to="mes-cours-actions"><svg class="ico ico-18"><use href="#more_horiz" /></svg></button></div>
+        <div class="classeur-cover"><span class="classeur-mono">AP1</span><span class="classeur-trophy"><svg class="ico" aria-hidden="true"><use href="#emoji_events" /></svg>1 challenge</span><button type="button" class="btn btn-icon btn-sm" aria-label="Actions du cours" aria-haspopup="menu" data-wf-to="mes-cours-actions"><svg class="ico ico-18" aria-hidden="true"><use href="#more_horiz" /></svg></button></div>
         <div class="classeur-body">
           <h2 class="heading">Algorithmique et programmation 1</h2>
           <p>Licence 1 Informatique, semestre 1. Bases de la programmation en Python.</p>
-          
           <div class="classeur-foot">
-            <span class="n" title="Enseignants"><svg class="ico ico-16"><use href="#school" /></svg><strong>6</strong></span>
-            <span class="n" title="Élèves"><svg class="ico ico-16"><use href="#groups" /></svg><strong>302</strong></span>
-            <span class="n" title="Activités"><svg class="ico ico-16"><use href="#widgets" /></svg><strong>8</strong></span>
-            <span class="when"><svg class="ico ico-16"><use href="#history" /></svg> 26 sept.</span>
+            <span class="n"><svg class="ico ico-16" aria-hidden="true"><use href="#person" /></svg><strong>6</strong> enseignants</span>
+            <span class="n"><svg class="ico ico-16" aria-hidden="true"><use href="#groups" /></svg><strong>302</strong> étudiants</span>
+            <span class="n"><svg class="ico ico-16" aria-hidden="true"><use href="#widgets" /></svg><strong>9</strong> activités</span>
+            <span class="when"><svg class="ico ico-16" aria-hidden="true"><use href="#history" /></svg><span class="sr-only">Mis à jour le </span>26 sept.</span>
           </div>
         </div>
       </div>
-      <div class="card classeur hue-lagon" data-wf-to="detail">
+      <div class="card classeur hue-bleuet" data-wf-to="detail">
         <span class="classeur-tab"></span>
-        <div class="classeur-cover"><span class="classeur-mono">PW</span><button class="btn btn-icon btn-sm" aria-label="Actions du cours" data-wf-to="mes-cours-actions"><svg class="ico ico-18"><use href="#more_horiz" /></svg></button></div>
+        <div class="classeur-cover"><span class="classeur-mono">PW</span><button type="button" class="btn btn-icon btn-sm" aria-label="Actions du cours" aria-haspopup="menu" data-wf-to="mes-cours-actions"><svg class="ico ico-18" aria-hidden="true"><use href="#more_horiz" /></svg></button></div>
         <div class="classeur-body">
           <h2 class="heading">Programmation web</h2>
           <p>HTML, CSS et JavaScript, du formulaire à l'application. Projet en binôme.</p>
-          
           <div class="classeur-foot">
-            <span class="n" title="Enseignants"><svg class="ico ico-16"><use href="#school" /></svg><strong>2</strong></span>
-            <span class="n" title="Élèves"><svg class="ico ico-16"><use href="#groups" /></svg><strong>84</strong></span>
-            <span class="n" title="Activités"><svg class="ico ico-16"><use href="#widgets" /></svg><strong>11</strong></span>
-            <span class="when"><svg class="ico ico-16"><use href="#history" /></svg> 24 sept.</span>
+            <span class="n"><svg class="ico ico-16" aria-hidden="true"><use href="#person" /></svg><strong>2</strong> enseignants</span>
+            <span class="n"><svg class="ico ico-16" aria-hidden="true"><use href="#groups" /></svg><strong>84</strong> étudiants</span>
+            <span class="n"><svg class="ico ico-16" aria-hidden="true"><use href="#widgets" /></svg><strong>11</strong> activités</span>
+            <span class="when"><svg class="ico ico-16" aria-hidden="true"><use href="#history" /></svg><span class="sr-only">Mis à jour le </span>24 sept.</span>
           </div>
         </div>
       </div>
       <div class="card classeur hue-ambre" data-wf-to="detail">
         <span class="classeur-tab"></span>
-        <div class="classeur-cover"><span class="classeur-mono">J3</span><button class="btn btn-icon btn-sm" aria-label="Actions du cours" data-wf-to="mes-cours-actions"><svg class="ico ico-18"><use href="#more_horiz" /></svg></button></div>
+        <div class="classeur-cover"><span class="classeur-mono">J3</span><button type="button" class="btn btn-icon btn-sm" aria-label="Actions du cours" aria-haspopup="menu" data-wf-to="mes-cours-actions"><svg class="ico ico-18" aria-hidden="true"><use href="#more_horiz" /></svg></button></div>
         <div class="classeur-body">
           <h2 class="heading">Java, L3</h2>
           <p>Programmation objet avancée&nbsp;: généricité, collections, flux.</p>
-          
           <div class="classeur-foot">
-            <span class="n" title="Enseignants"><svg class="ico ico-16"><use href="#school" /></svg><strong>1</strong></span>
-            <span class="n" title="Élèves"><svg class="ico ico-16"><use href="#groups" /></svg><strong>41</strong></span>
-            <span class="n" title="Activités"><svg class="ico ico-16"><use href="#widgets" /></svg><strong>6</strong></span>
-            <span class="when"><svg class="ico ico-16"><use href="#history" /></svg> 12 sept.</span>
+            <span class="n"><svg class="ico ico-16" aria-hidden="true"><use href="#person" /></svg><strong>1</strong> enseignant</span>
+            <span class="n"><svg class="ico ico-16" aria-hidden="true"><use href="#groups" /></svg><strong>41</strong> étudiants</span>
+            <span class="n"><svg class="ico ico-16" aria-hidden="true"><use href="#widgets" /></svg><strong>6</strong> activités</span>
+            <span class="when"><svg class="ico ico-16" aria-hidden="true"><use href="#history" /></svg><span class="sr-only">Mis à jour le </span>12 sept.</span>
           </div>
         </div>
       </div>

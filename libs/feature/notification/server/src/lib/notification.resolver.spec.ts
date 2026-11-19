@@ -190,6 +190,17 @@ describe('NotificationResolver', () => {
     })
   })
 
+  describe('unreadNotificationCount', () => {
+    it('devrait retourner le compteur des notifications non lues de la personne connectée', async () => {
+      notificationService.unreadCount.mockResolvedValue(3)
+
+      const result = await resolver.unreadNotificationCount(req)
+
+      expect(notificationService.unreadCount).toHaveBeenCalledWith('user-1')
+      expect(result).toBe(3)
+    })
+  })
+
   describe('NotificationChangeResolver.unreadCount', () => {
     it('devrait déléguer au service le comptage des notifications non lues', async () => {
       notificationService.unreadCount.mockResolvedValue(7)

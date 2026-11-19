@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable, inject } from '@angular/core'
-import { buildExpandableHttpParams, buildHttpParams } from '@platon/core/browser'
+import { buildExpandableHttpParams, buildHttpParams } from '@platon/core/browser/shared'
 import { ItemResponse, ListResponse, User } from '@platon/core/common'
 import {
   CircleTree,
@@ -25,7 +25,7 @@ export class RemoteResourceProvider extends ResourceProvider {
 
   circle(username: string): Observable<Resource> {
     return this.http
-      .get<ItemResponse<Resource>>(`/api/v1/users/${username}/circle`)
+      .get<ItemResponse<Resource>>(`/api/v1/users/${encodeURIComponent(username)}/circle`)
       .pipe(map((response) => response.resource))
   }
   completion(): Observable<ResourceCompletion> {

@@ -2,7 +2,7 @@ import { DOCUMENT } from '@angular/common'
 import { inject } from '@angular/core'
 import { CanActivateFn, Router } from '@angular/router'
 import { withUiParam } from '../../../ui-switch/ui-url'
-import { PageNavigation } from './page-navigation'
+import { PageNavigation } from '../../../shared/page-navigation'
 
 /**
  * Opens a screen the new interface does not have yet in the current one, at the same address and for

@@ -1,0 +1,494 @@
+/* A labelled group inside a list card: "Bientôt" closes À faire, the figures close Mes cours. */
+.rows-label {
+  margin: 0;
+  padding: var(--spacing-2) var(--spacing-4);
+  border-top: 1px solid var(--color-line);
+  background: var(--color-surface-muted);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--color-muted);
+}
+.rows > .rows-label + .row,
+.rows-label + .m-card {
+  border-top: 1px solid var(--color-line);
+}
+.figs dl {
+  margin: 0;
+}
+.figs .kv {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+.figs .mini .sk {
+  height: 12px;
+}
+.score-inline {
+  min-width: 72px;
+  font-size: 15px;
+  line-height: 22px;
+  font-weight: 600;
+  text-align: right;
+}
+.score-inline small {
+  font-weight: 400;
+  color: var(--color-muted);
+}
+.sk-lines {
+  display: grid;
+  gap: 8px;
+}
+.actions-line {
+  display: flex;
+  gap: var(--spacing-2);
+}
+
+a.notif,
+a.m-card,
+a.row,
+a.mini {
+  color: inherit;
+}
+
+/* À faire: one button for the most urgent activity; every other row is a link whose action is
+   written, in the column of the button so the progress bars line up. */
+.row-act {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 2px;
+  min-width: 112px;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 600;
+  color: var(--color-primary);
+  white-space: nowrap;
+}
+a.row:hover .row-act,
+a.m-card:hover .m-act {
+  text-decoration: underline;
+}
+
+/* Skeleton line lengths, varied so a placeholder reads as text and not as a grid. */
+.sk.w-30 {
+  width: 30%;
+}
+.sk.w-40 {
+  width: 40%;
+}
+.sk.w-45 {
+  width: 45%;
+}
+.sk.w-50 {
+  width: 50%;
+}
+.sk.w-55 {
+  width: 55%;
+}
+.sk.w-60 {
+  width: 60%;
+}
+.sk.w-70 {
+  width: 70%;
+}
+.sk.w-80 {
+  width: 80%;
+}
+.sk.w-full {
+  width: 100%;
+}
+.sk.sk-bar {
+  width: 100%;
+  height: 6px;
+}
+.sk.sk-count {
+  width: 72px;
+}
+/* A written action takes the right edge of the button column. */
+.sk.sk-act {
+  width: 72px;
+  margin-left: var(--spacing-6);
+}
+
+/* Overlays of the frame: the notifications panel beside the sidebar, the profile menu above the profile. */
+.panel.notif-panel {
+  left: calc(var(--sidebar-width) + var(--spacing-2));
+  bottom: var(--spacing-4);
+}
+.menu.profile-menu {
+  left: var(--spacing-3);
+  bottom: 72px;
+  width: 256px;
+}
+.profile-menu .menu-item {
+  align-items: center;
+}
+.profile-menu .menu-item > span:not(.sr-only) {
+  flex: 1;
+}
+.profile-menu .menu-go {
+  color: var(--color-subtle);
+}
+.theme-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-3);
+}
+
+.m-tap-text {
+  height: 44px;
+  margin: 0 0 calc(var(--spacing-2) * -1) calc(var(--spacing-2) * -1);
+}
+.m-sec {
+  margin-top: var(--spacing-6);
+}
+/* An activity card on a phone: the course-hue lead icon, then the title, the due date and the progress. */
+.m-todo {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-3);
+}
+.m-todo-body {
+  display: grid;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+.m-todo-body .row-meta {
+  margin-top: 0;
+}
+.m-foot {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  min-height: 28px;
+  margin-top: var(--spacing-1);
+}
+.m-foot .bar {
+  flex: 1;
+}
+.m-count {
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+.m-act {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: auto;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 600;
+  color: var(--color-primary);
+  white-space: nowrap;
+}
+.m-btn {
+  width: 100%;
+  height: 44px;
+  margin-top: var(--spacing-2);
+}
+.m-notice {
+  align-items: flex-start;
+  margin: var(--spacing-6) 0 0;
+  padding-right: var(--spacing-1);
+}
+.m-notice > .ico {
+  margin-top: 1px;
+}
+.m-notice-body {
+  flex: 1;
+  min-width: 0;
+}
+.m-notice .m-tap {
+  margin-top: calc(var(--spacing-2) * -1);
+}
+.m-score-line {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--spacing-3);
+}
+.m-head-link {
+  min-height: 44px;
+  margin-top: -12px;
+  margin-bottom: -12px;
+}
+.m-empty {
+  grid-template-columns: 1fr;
+  gap: var(--spacing-4);
+  padding: var(--spacing-5) var(--spacing-4);
+}
+.m-empty .illus {
+  width: 112px;
+  height: 86px;
+}
+.m-stack {
+  display: grid;
+  gap: var(--spacing-2);
+  width: 100%;
+}
+.m-stack .btn {
+  height: 44px;
+}
+
+/* Notifications on a phone: a full-screen sheet opened from the bell of the top bar. */
+.m-sheet {
+  min-height: 100vh;
+  background: var(--color-surface);
+}
+.m-sheet-tools {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-3);
+  padding: var(--spacing-1) var(--spacing-2) var(--spacing-1) var(--spacing-4);
+  border-bottom: 1px solid var(--color-line);
+}
+.m-sheet-tools .m-tap-text {
+  margin: 0;
+}
+.m-notifs .notif {
+  min-height: 64px;
+  padding-top: var(--spacing-4);
+  padding-bottom: var(--spacing-4);
+}
+.m-notifs .notif.unread::before {
+  top: 23px;
+}
+
+/* The navigation panel: 44 px targets. */
+.m-nav-item {
+  min-height: 44px;
+}
+
+/* A service announcement (maintenance) is information, not a state: its icon stays graphite. */
+.notice.service > .ico {
+  flex: none;
+  color: var(--color-graphite-700);
+}
+.notice.service p strong {
+  font-weight: 600;
+}
+.state-card {
+  max-width: 720px;
+}
+.slow-note {
+  margin-bottom: var(--spacing-6);
+}
+
+/* Course progress in Mes cours: the bar in the course hue, the share in exercises beside it. */
+.course-progress .bar {
+  flex: 1;
+}
+.course-pct {
+  min-width: 40px;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 600;
+  color: var(--color-text);
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* Recent results are small copies: a sheet with its margin, the grade written in the margin. */
+.copies {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-4);
+}
+.copies.m-copies {
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--spacing-3);
+}
+.copie-mini {
+  position: relative;
+  display: flex;
+  min-height: 124px;
+  padding: var(--spacing-4) var(--spacing-4) var(--spacing-4) 0;
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--rounded-lg);
+  color: var(--color-text);
+  text-decoration: none;
+}
+a.copie-mini:hover {
+  border-color: var(--color-line-strong);
+}
+.copie-mini::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 48px;
+  width: 2px;
+  background: var(--color-margin);
+}
+.copie-mini-marge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: none;
+  width: 48px;
+}
+.copie-mini-sur {
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--color-subtle);
+  font-feature-settings: 'tnum' 1;
+}
+.copie-mini-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+  padding-left: var(--spacing-4);
+}
+.copie-mini-title {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  font-size: 15px;
+  line-height: 22px;
+  font-weight: 600;
+}
+.copie-mini-title::before {
+  content: '';
+  width: 8px;
+  height: 14px;
+  flex: none;
+  border-radius: var(--rounded-xs);
+  background: var(--hue-strong, var(--color-graphite-300));
+}
+.copie-mini-meta {
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--color-muted);
+}
+.copie-mini-act {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: auto;
+  padding-top: var(--spacing-2);
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+.copie-mini-state {
+  align-self: flex-start;
+  margin-top: auto;
+}
+.copie-mini-body.sk-lines {
+  padding-top: 2px;
+}
+
+.m-main .notice.m-notice + .m-sec,
+.m-main .page-sub + .notice.m-notice {
+  margin-top: var(--spacing-5);
+}
+
+/* The navigation panel's brand: the logo on the left, the close button on the right. */
+.m-drawer-brand {
+  justify-content: space-between;
+}
+.m-drawer-logo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+/* The profile menu on a phone: a sheet from the bottom, with 44 px targets. */
+.m-profile {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: var(--spacing-4);
+  background: var(--color-surface);
+  border-radius: var(--rounded-lg) var(--rounded-lg) 0 0;
+  box-shadow: var(--shadow-dialog);
+  color: var(--color-text);
+}
+.m-profile::before {
+  content: '';
+  align-self: center;
+  width: 36px;
+  height: 4px;
+  margin-top: var(--spacing-2);
+  border-radius: var(--rounded-full);
+  background: var(--color-graphite-300);
+}
+.m-profile-head {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-3);
+  padding: var(--spacing-2) var(--spacing-2) var(--spacing-3) var(--spacing-4);
+  border-bottom: 1px solid var(--color-line);
+}
+.m-profile-head .avatar {
+  margin-top: var(--spacing-3);
+}
+.m-profile-who {
+  flex: 1;
+  min-width: 0;
+  padding-top: var(--spacing-2);
+}
+.m-profile-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  width: 100%;
+  min-height: 52px;
+  padding: 0 var(--spacing-4);
+  border: 0;
+  border-bottom: 1px solid var(--color-line);
+  background: none;
+  font: inherit;
+  font-weight: 600;
+  color: var(--color-text);
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+.m-profile-item:last-child {
+  border-bottom: 0;
+}
+.m-profile-item > span {
+  flex: 1;
+}
+.m-profile-item .ico,
+.m-profile-label .ico {
+  color: var(--color-graphite-600);
+}
+.m-profile-go {
+  color: var(--color-subtle);
+}
+.m-profile-theme {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-3);
+  min-height: 60px;
+  padding: 0 var(--spacing-4);
+  border-bottom: 1px solid var(--color-line);
+}
+.m-profile-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  font-weight: 600;
+}
+.m-segmented span {
+  height: 40px;
+  padding: 0 var(--spacing-3);
+  font-size: 14px;
+}

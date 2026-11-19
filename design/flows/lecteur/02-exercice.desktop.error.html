@@ -1,43 +1,45 @@
-<div style="min-height: 100vh; padding: var(--spacing-6) var(--spacing-8)"><div style="max-width: 1100px">
-  <div class="player-head">
-    <button class="btn btn-icon" aria-label="Quitter l'activité" data-wf-to="detail"><svg class="ico"><use href="#arrow_back" /></svg></button>
-    <div style="flex: 1">
-      <div class="heading">Examen partiel 2</div>
-      <div class="muted" style="font-size: 13px">Algorithmique et programmation 1, exercice 3 sur 8&nbsp;: complexité de somme</div>
+<div class="reader"><div class="reader-in">
+  <a class="skip-link" href="#contenu">Aller au contenu</a>
+  <header class="player-head">
+    <div class="course-mark sm hue-lagon" aria-hidden="true">AP1</div>
+    <div class="player-title">
+      <h1 class="title">Examen partiel 2</h1>
+      <p class="small muted">Algorithmique et programmation 1, exercice 4 sur 8&nbsp;: recherche dichotomique</p>
     </div>
-    <span class="tag graded"><svg class="ico"><use href="#grading" /></svg>Notée</span>
-    <a class="btn btn-secondary btn-sm" data-wf-to="quitter">Quitter</a>
-  </div>
+    <span class="tag graded"><svg class="ico" aria-hidden="true"><use href="#grading" /></svg>Notée</span>
+    <button type="button" class="btn btn-secondary btn-sm" aria-disabled="true" aria-describedby="down-d">Rendre ma copie</button>
+  </header>
   <div class="player">
-  <div class="card card-pad">
-    <div class="empty" style="padding: var(--spacing-6) 0">
-      <span class="empty-icon" style="background: var(--color-danger-soft); color: var(--color-danger)"><svg class="ico"><use href="#error" /></svg></span>
-      <div class="empty-body">
-        <h2 class="heading">Impossible de charger cet exercice</h2>
-        <p>Le service qui exécute les exercices ne répond pas. Vos réponses aux exercices précédents sont enregistrées, et le chronomètre continue.</p>
-        <div style="display: flex; gap: var(--spacing-2)">
-          <a class="btn btn-primary" data-wf-to="exercice"><svg class="ico"><use href="#replay" /></svg>Réessayer</a>
-          <a class="btn btn-secondary" data-wf-to="exercice">Passer à l'exercice suivant</a>
-        </div>
-        <span class="muted" style="font-size: 12px">Code d'erreur SANDBOX_TIMEOUT, à indiquer à votre enseignant si le problème persiste.</span>
+  <main class="card empty with-icon" id="contenu">
+    <div class="empty-icon danger" aria-hidden="true"><svg class="ico" aria-hidden="true"><use href="#cloud_off" /></svg></div>
+    <div class="empty-body">
+      <h2 class="heading">Impossible de charger cet exercice</h2>
+      <p role="alert">PLaTon ne répond pas depuis 8&nbsp;h&nbsp;18. Vos réponses aux exercices 1, 2 et 3 sont enregistrées.</p>
+      <ul class="consequences">
+        <li><svg class="ico" aria-hidden="true"><use href="#timer" /></svg><span>Le temps continue de s'écouler pendant la panne.</span></li>
+        <li><svg class="ico" aria-hidden="true"><use href="#person" /></svg><span><strong>Signalez-le à l'enseignant présent dans la salle</strong>, puis réessayez dans un instant.</span></li>
+        <li id="down-d"><svg class="ico" aria-hidden="true"><use href="#hourglass_empty" /></svg><span>Rendre ma copie attend que PLaTon réponde&nbsp;: il ne peut pas recevoir votre copie pour l'instant.</span></li>
+      </ul>
+      <div class="actions-row">
+        <button type="button" class="btn btn-primary" data-wf-to="exercice"><svg class="ico" aria-hidden="true"><use href="#replay" /></svg>Réessayer</button>
       </div>
+      <p class="small">Code de l'erreur, à donner à l'enseignant&nbsp;: SANDBOX_TIMEOUT.</p>
     </div>
-  </div>
-  <aside class="rail">
-    <div class="card">
-      <div class="countdown"><div class="figure-label">Temps restant</div><div class="figure-value">1:12:40</div></div>
-    </div>
-    <div class="card">
-      <div class="rail-head"><span class="subheading">Exercices</span><span class="num">2 sur 8 validés</span></div>
-      <div class="ex-item ok"><svg class="ico"><use href="#check_circle" /></svg><span>1. Complexité d'une boucle</span></div>
-      <div class="ex-item part"><svg class="ico"><use href="#pending" /></svg><span>2. Notation grand O</span></div>
-      <div class="ex-item current "><svg class="ico"><use href="#radio_button_unchecked" /></svg><span>3. Complexité de somme</span></div>
-      <div class="ex-item "><svg class="ico"><use href="#radio_button_unchecked" /></svg><span>4. Recherche dichotomique</span></div>
-      <div class="ex-item "><svg class="ico"><use href="#radio_button_unchecked" /></svg><span>5. Récursivité</span></div>
-      <div class="ex-item "><svg class="ico"><use href="#radio_button_unchecked" /></svg><span>6. Pile et file</span></div>
-      <div class="ex-item "><svg class="ico"><use href="#radio_button_unchecked" /></svg><span>7. Tableaux à deux dimensions</span></div>
-      <div class="ex-item "><svg class="ico"><use href="#radio_button_unchecked" /></svg><span>8. Fonctions de hachage</span></div>
-    </div>
+  </main>
+  <aside class="rail" aria-label="Temps et exercices">
+    <div class="card"><div class="countdown"><div role="timer" aria-labelledby="cd-l"><div class="figure-label" id="cd-l">Temps restant</div><div class="figure-value num">1:09:40</div></div><p class="countdown-why">Il continue de s'écouler pendant la panne.</p><p class="sr-only" aria-live="polite"></p></div></div>
+    <nav class="card hue-lagon" aria-labelledby="rail-t">
+      <div class="rail-head has-bar"><h2 class="subheading" id="rail-t">Exercices</h2><span class="num">3 sur 8 enregistrés</span></div>
+      <div class="rail-progress"><div class="bar wide" role="progressbar" aria-valuenow="38" aria-valuemin="0" aria-valuemax="100" aria-label="3 sur 8 enregistrés"><span style="width: 38%"></span></div></div>
+      <button type="button" class="ex-item saved" data-wf-to="exercice"><svg class="ico" aria-hidden="true"><use href="#lock" /></svg>1. Complexité d'une boucle<span class="sr-only">, enregistré</span></button>
+      <button type="button" class="ex-item saved" data-wf-to="exercice"><svg class="ico" aria-hidden="true"><use href="#lock" /></svg>2. Notation grand O<span class="sr-only">, enregistré</span></button>
+      <button type="button" class="ex-item saved" data-wf-to="exercice"><svg class="ico" aria-hidden="true"><use href="#lock" /></svg>3. Complexité de somme<span class="sr-only">, enregistré</span></button>
+      <button type="button" class="ex-item current" aria-current="step" data-wf-to="exercice"><svg class="ico" aria-hidden="true"><use href="#radio_button_unchecked" /></svg>4. Recherche dichotomique<span class="sr-only">, à faire</span></button>
+      <button type="button" class="ex-item" data-wf-to="exercice"><svg class="ico" aria-hidden="true"><use href="#radio_button_unchecked" /></svg>5. Récursivité<span class="sr-only">, à faire</span></button>
+      <button type="button" class="ex-item" data-wf-to="exercice"><svg class="ico" aria-hidden="true"><use href="#radio_button_unchecked" /></svg>6. Pile et file<span class="sr-only">, à faire</span></button>
+      <button type="button" class="ex-item" data-wf-to="exercice"><svg class="ico" aria-hidden="true"><use href="#radio_button_unchecked" /></svg>7. Tableaux à deux dimensions<span class="sr-only">, à faire</span></button>
+      <button type="button" class="ex-item" data-wf-to="exercice"><svg class="ico" aria-hidden="true"><use href="#radio_button_unchecked" /></svg>8. Fonctions de hachage<span class="sr-only">, à faire</span></button>
+    </nav>
   </aside>
   </div>
 </div></div>

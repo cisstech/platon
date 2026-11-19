@@ -9,112 +9,165 @@
       </div>
     </div>
     <nav class="nav">
-      <a class="nav-item" data-wf-to="etudiant"><svg class="ico"><use href="#home" /></svg>Accueil</a>
-      <a class="nav-item" data-wf-to="annonces"><svg class="ico"><use href="#campaign" /></svg>Annonces</a>
-      <a class="nav-item active" data-wf-to="mes-cours"><svg class="ico"><use href="#school" /></svg>Cours</a>
+      <a href="#" class="nav-item" data-wf-to="etudiant"><svg class="ico" aria-hidden="true"><use href="#home" /></svg>Accueil</a>
+      <a href="#" class="nav-item" data-wf-to="annonces"><svg class="ico" aria-hidden="true"><use href="#campaign" /></svg>Annonces</a>
+      <a href="#" class="nav-item active" data-wf-to="mes-cours"><svg class="ico" aria-hidden="true"><use href="#school" /></svg>Cours</a>
     </nav>
     <div class="sidebar-foot">
-      <a class="nav-item"><svg class="ico"><use href="#notifications" /></svg>Notifications<span class="count">3</span></a>
+      <a href="#" class="nav-item"><svg class="ico" aria-hidden="true"><use href="#notifications" /></svg>Notifications<span class="count">3</span></a>
       <div class="me">
         <span class="avatar">IB</span>
         <div>
           <div class="me-name">Inès Benali</div>
-          <div class="me-role">Étudiante</div>
+          <div class="me-role">Compte étudiant</div>
         </div>
-        <svg class="ico ico-16"><use href="#expand_more" /></svg>
+        <svg class="ico ico-16" aria-hidden="true"><use href="#expand_more" /></svg>
       </div>
       <a class="credit" href="https://github.com/cisstech/platon" aria-label="Code source de PLaTon, logiciel libre de cisstech"><svg class="ico ico-16" aria-hidden="true"><use href="#code" /></svg>Logiciel libre, par <strong>cisstech</strong></a>
     </div>
   </aside>
   <main class="main" id="contenu">
     <header class="page-head">
-      <div>
-        <div class="crumbs"><a data-wf-to="mes-cours">Cours</a><svg class="ico"><use href="#chevron_right" /></svg><span>Algorithmique et programmation 1</span></div>
-        <h1 class="title" style="display: flex; align-items: center; gap: 6px">Algorithmique et programmation 1</h1>
+      <div class="course-mark hue-lagon" aria-hidden="true">AP1</div>
+      <div class="head-main">
+        <div class="crumbs"><a href="#" data-wf-to="mes-cours">Cours</a><svg class="ico" aria-hidden="true"><use href="#chevron_right" /></svg><span>Algorithmique et programmation 1</span></div>
+        <h1 class="title">Algorithmique et programmation 1</h1>
         <p class="page-sub">Licence 1 Informatique, semestre 1. Bases de la programmation en Python.</p>
-        
+        <p class="head-meta"><span><svg class="ico ico-16" aria-hidden="true"><use href="#person" /></svg>Karim Haddad, responsable, et 5 autres enseignants</span><span class="due soon"><svg class="ico ico-16" aria-hidden="true"><use href="#schedule" /></svg>Prochaine échéance ce soir à 23&nbsp;h&nbsp;59</span></p>
       </div>
-      
     </header>
-    <div class="tabs"><a class="tab active" data-wf-to="detail"><svg class="ico"><use href="#grid_view" /></svg>Vue d'ensemble</a><a class="tab" data-wf-to="challenges"><svg class="ico"><use href="#emoji_events" /></svg>Challenges <span class="count">1</span></a><a class="tab"><svg class="ico"><use href="#groups" /></svg>Membres <span class="count">308</span></a><a class="tab"><svg class="ico"><use href="#group_add" /></svg>Groupes <span class="count">4</span></a></div>
+    <nav class="tabs" aria-label="Onglets du cours"><a href="#" class="tab active" aria-current="page" data-wf-to="detail"><svg class="ico" aria-hidden="true"><use href="#grid_view" /></svg>Vue d'ensemble</a><a href="#" class="tab" data-wf-to="challenges"><svg class="ico" aria-hidden="true"><use href="#emoji_events" /></svg>Challenges <span class="count">1</span></a></nav>
     <div class="toolbar">
-      <div class="input" style="width: 280px"><svg class="ico ico-18" style="margin: 0 8px 0 0; color: var(--color-subtle)"><use href="#search" /></svg><span class="placeholder">Activité ou section</span></div>
-      <span class="segmented"><span class="on">Toutes</span><span>Ouvertes</span><span>À venir</span><span>Fermées</span></span>
-      <span class="grow"></span>
-      
+      <label class="sr-only" for="q-cours">Chercher une activité ou une section</label><div class="input search" id="q-cours" role="searchbox"><svg class="ico ico-18" aria-hidden="true"><use href="#search" /></svg><span class="placeholder">Activité ou section</span></div>
+      <span class="segmented" role="radiogroup" aria-label="État des activités"><span class="on" role="radio" aria-checked="true">Toutes</span><span role="radio" aria-checked="false">Ouvertes</span><span role="radio" aria-checked="false">Planifiées</span><span role="radio" aria-checked="false">Fermées</span></span>
     </div>
     <div class="layout">
       <div>
-        <div class="section-block">
-          <div class="section-head"><h2 class="heading">Semaine 4</h2><span class="count">2 activités</span><span style="margin-left: auto; display: flex; gap: 2px"></span></div>
-          <div class="card rows">
-            <div class="row">
-              <span class="lead-icon hued hue-bleuet"><svg class="ico"><use href="#quiz" /></svg></span>
-              <div class="row-main">
-                <div class="row-title">Quiz&nbsp;: complexité des algorithmes</div>
-                <div class="row-meta"><span class="due soon"><svg class="ico"><use href="#schedule" /></svg>Ferme ce soir à 23&nbsp;h&nbsp;59</span><span>6 exercices</span></div>
-              </div>
-              <div class="row-side"><div class="progress stacked"><span>5 sur 6</span><div class="bar"><span style="width: 83%"></span></div></div><a class="btn btn-primary btn-sm" data-wf-to="intro">Reprendre</a></div>
-            </div>
-            <div class="row">
-              <span class="lead-icon hued hue-bleuet"><svg class="ico"><use href="#code" /></svg></span>
-              <div class="row-main">
-                <div class="row-title">TP 4&nbsp;: boucles et tableaux</div>
-                <div class="row-meta"><span class="due none"><svg class="ico"><use href="#schedule" /></svg>Ferme jeudi à 18&nbsp;h</span><span>8 exercices</span></div>
-              </div>
-              <div class="row-side"><div class="progress stacked"><span>3 sur 8</span><div class="bar"><span style="width: 37%"></span></div></div><a class="btn btn-secondary btn-sm" data-wf-to="intro">Reprendre</a></div>
-            </div>
+        <div class="section-block hue-lagon">
+          <div class="section-divider">
+            <h2 class="divider-tab">Semaine 5 <span class="count">3 activités</span></h2>
           </div>
-        </div>
-        <div class="section-block">
-          <div class="section-head"><h2 class="heading">Semaine 5</h2><span class="count">2 activités</span><span style="margin-left: auto; display: flex; gap: 2px"></span></div>
           <div class="card rows">
             <div class="row">
-              <span class="lead-icon hued hue-bleuet"><svg class="ico"><use href="#event" /></svg></span>
+              <span class="lead-icon hued" aria-hidden="true"><svg class="ico" aria-hidden="true"><use href="#code" /></svg></span>
+              <div class="row-main">
+                <div class="row-title">TP 5&nbsp;: fonctions récursives</div>
+                <div class="row-meta"><span class="due none"><svg class="ico" aria-hidden="true"><use href="#schedule" /></svg>Sans échéance</span><span>8 exercices</span></div>
+              </div>
+              <div class="row-side"><div class="progress stacked"><span>0 sur 8</span><div class="bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="0 sur 8 exercices faits"><span style="width: 0%"></span></div></div><button type="button" class="btn btn-secondary btn-sm" data-wf-to="intro">Commencer</button></div>
+            </div>
+            <div class="row">
+              <span class="lead-icon hued" aria-hidden="true"><svg class="ico" aria-hidden="true"><use href="#history_edu" /></svg></span>
               <div class="row-main">
                 <div class="row-title">Examen partiel 2</div>
-                <div class="row-meta"><span class="due planned"><svg class="ico"><use href="#calendar_month" /></svg>Ouvre le 12 octobre à 8&nbsp;h</span><span>1&nbsp;h&nbsp;30, une tentative</span></div>
+                <div class="row-meta"><span class="due planned"><svg class="ico" aria-hidden="true"><use href="#event" /></svg>Ouvre le 12 octobre à 8&nbsp;h</span><span>1&nbsp;h&nbsp;30, une tentative</span><span class="tag graded"><svg class="ico" aria-hidden="true"><use href="#grading" /></svg>Notée</span></div>
               </div>
-              <div class="row-side"><span class="muted">Pas encore ouverte</span></div>
+              <div class="row-side"><span class="state-line">Pas encore ouverte</span></div>
             </div>
             <div class="row">
-              <span class="lead-icon hued hue-ambre"><svg class="ico"><use href="#emoji_events" /></svg></span>
+              <span class="lead-icon hued" aria-hidden="true"><svg class="ico" aria-hidden="true"><use href="#emoji_events" /></svg></span>
               <div class="row-main">
-                <div class="row-title">Challenge&nbsp;: tris <a class="stat-inline" data-wf-to="challenges" title="Classement du challenge"><svg class="ico ico-16"><use href="#emoji_events" /></svg></a></div>
-                <div class="row-meta"><span>Sans fermeture</span><span>5 exercices</span></div>
+                <div class="row-title">Challenge&nbsp;: tris</div>
+                <div class="row-meta"><span class="due none"><svg class="ico" aria-hidden="true"><use href="#schedule" /></svg>Sans échéance</span><span>5 exercices</span><a href="#" class="meta-link" data-wf-to="challenges"><svg class="ico" aria-hidden="true"><use href="#emoji_events" /></svg>Classement</a></div>
               </div>
-              <div class="row-side"><div class="progress stacked"><span>2 sur 5</span><div class="bar"><span style="width: 40%"></span></div></div><a class="btn btn-secondary btn-sm" data-wf-to="intro">Continuer</a></div>
+              <div class="row-side"><div class="progress stacked"><span>2 sur 5</span><div class="bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" aria-label="2 sur 5 exercices faits"><span style="width: 40%"></span></div></div><button type="button" class="btn btn-secondary btn-sm" data-wf-to="exercice">Reprendre</button></div>
             </div>
           </div>
         </div>
-        <div class="section-block">
-          <div class="section-head"><h2 class="heading">Semaine 3</h2><span class="count">1 activité</span><span style="margin-left: auto; display: flex; gap: 2px"></span></div>
+        <div class="section-block hue-lagon">
+          <div class="section-divider">
+            <h2 class="divider-tab">Semaine 4 <span class="count">2 activités</span></h2>
+          </div>
           <div class="card rows">
             <div class="row">
-              <span class="lead-icon hued hue-bleuet"><svg class="ico"><use href="#code" /></svg></span>
+              <span class="lead-icon hued" aria-hidden="true"><svg class="ico" aria-hidden="true"><use href="#quiz" /></svg></span>
+              <div class="row-main">
+                <div class="row-title">Quiz&nbsp;: complexité des algorithmes</div>
+                <div class="row-meta"><span class="due soon"><svg class="ico" aria-hidden="true"><use href="#schedule" /></svg>Ferme ce soir à 23&nbsp;h&nbsp;59</span><span>6 exercices</span></div>
+              </div>
+              <div class="row-side"><div class="progress stacked"><span>5 sur 6</span><div class="bar" role="progressbar" aria-valuenow="83" aria-valuemin="0" aria-valuemax="100" aria-label="5 sur 6 exercices faits"><span style="width: 83%"></span></div></div><button type="button" class="btn btn-secondary btn-sm" data-wf-to="exercice">Reprendre</button></div>
+            </div>
+            <div class="row">
+              <span class="lead-icon hued" aria-hidden="true"><svg class="ico" aria-hidden="true"><use href="#code" /></svg></span>
+              <div class="row-main">
+                <div class="row-title">TP 4&nbsp;: boucles et tableaux</div>
+                <div class="row-meta"><span class="due none"><svg class="ico" aria-hidden="true"><use href="#schedule" /></svg>Ferme jeudi à 18&nbsp;h</span><span>8 exercices</span></div>
+              </div>
+              <div class="row-side"><div class="progress stacked"><span>3 sur 8</span><div class="bar" role="progressbar" aria-valuenow="38" aria-valuemin="0" aria-valuemax="100" aria-label="3 sur 8 exercices faits"><span style="width: 38%"></span></div></div><button type="button" class="btn btn-secondary btn-sm" data-wf-to="exercice">Reprendre</button></div>
+            </div>
+          </div>
+        </div>
+        <div class="section-block hue-lagon">
+          <div class="section-divider">
+            <h2 class="divider-tab">Semaine 3 <span class="count">2 activités</span></h2>
+          </div>
+          <div class="card rows">
+            <div class="row">
+              <span class="lead-icon hued" aria-hidden="true"><svg class="ico" aria-hidden="true"><use href="#code" /></svg></span>
               <div class="row-main">
                 <div class="row-title">TP 3&nbsp;: conditions</div>
-                <div class="row-meta"><span class="tag"><svg class="ico"><use href="#lock" /></svg>Fermée</span><span>7 exercices</span></div>
+                <div class="row-meta"><span class="tag"><svg class="ico" aria-hidden="true"><use href="#event_busy" /></svg>Fermée le 21 sept.</span><span>7 exercices</span><span class="tag graded"><svg class="ico" aria-hidden="true"><use href="#grading" /></svg>Notée</span></div>
               </div>
-              <div class="row-side"><a class="btn btn-secondary btn-sm"><svg class="ico"><use href="#monitoring" /></svg>Voir mes résultats</a></div>
+              <div class="row-side"><span class="row-score">82&nbsp;<small>/&nbsp;100</small></span><a href="#" class="btn btn-secondary btn-sm" data-wf-to="copie-corrigee"><svg class="ico" aria-hidden="true"><use href="#description" /></svg>Voir mes résultats</a></div>
+            </div>
+            <div class="row">
+              <span class="lead-icon hued" aria-hidden="true"><svg class="ico" aria-hidden="true"><use href="#history_edu" /></svg></span>
+              <div class="row-main">
+                <div class="row-title">Examen partiel 1</div>
+                <div class="row-meta"><span class="tag"><svg class="ico" aria-hidden="true"><use href="#event_busy" /></svg>Fermée le 22 sept.</span><span>6 exercices</span><span class="tag graded"><svg class="ico" aria-hidden="true"><use href="#grading" /></svg>Notée</span></div>
+              </div>
+              <div class="row-side"><span class="state-line"><svg class="ico" aria-hidden="true"><use href="#pending" /></svg>Copie en correction</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="section-block hue-lagon">
+          <div class="section-divider">
+            <h2 class="divider-tab">Semaine 2 <span class="count">1 activité</span></h2>
+          </div>
+          <div class="card rows">
+            <div class="row">
+              <span class="lead-icon hued" aria-hidden="true"><svg class="ico" aria-hidden="true"><use href="#code" /></svg></span>
+              <div class="row-main">
+                <div class="row-title">TP 2&nbsp;: variables et types</div>
+                <div class="row-meta"><span class="tag"><svg class="ico" aria-hidden="true"><use href="#event_busy" /></svg>Fermée le 14 sept.</span><span>6 exercices</span></div>
+              </div>
+              <div class="row-side"><div class="progress stacked"><span>6 sur 6</span><div class="bar done" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" aria-label="6 sur 6 exercices faits"><span style="width: 100%"></span></div></div><a href="#" class="btn btn-secondary btn-sm" data-wf-to="copie-corrigee"><svg class="ico" aria-hidden="true"><use href="#description" /></svg>Voir mes résultats</a></div>
+            </div>
+          </div>
+        </div>
+        <div class="section-block hue-lagon">
+          <div class="section-divider">
+            <h2 class="divider-tab">Semaine 1 <span class="count">1 activité</span></h2>
+          </div>
+          <div class="card rows">
+            <div class="row">
+              <span class="lead-icon hued" aria-hidden="true"><svg class="ico" aria-hidden="true"><use href="#code" /></svg></span>
+              <div class="row-main">
+                <div class="row-title">TP 1&nbsp;: premiers pas</div>
+                <div class="row-meta"><span class="tag"><svg class="ico" aria-hidden="true"><use href="#event_busy" /></svg>Fermée le 7 sept.</span><span>5 exercices</span></div>
+              </div>
+              <div class="row-side"><div class="progress stacked"><span>5 sur 5</span><div class="bar done" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" aria-label="5 sur 5 exercices faits"><span style="width: 100%"></span></div></div><a href="#" class="btn btn-secondary btn-sm" data-wf-to="copie-corrigee"><svg class="ico" aria-hidden="true"><use href="#description" /></svg>Voir mes résultats</a></div>
             </div>
           </div>
         </div>
       </div>
-      <aside class="stack">
-        <section>
-          <div class="section-head"><h2 class="heading">Mon avancement</h2></div>
+      <aside class="stack hue-lagon">
+        <section aria-labelledby="avancement-t">
+          <div class="section-head"><h2 class="heading" id="avancement-t">Votre avancement</h2></div>
           <div class="card card-pad">
-            <div class="classeur-progress"><div class="bar wide"><span style="width: 62%"></span></div><span class="num">62&nbsp;%</span></div>
-            <p class="muted" style="margin: var(--spacing-2) 0 0; font-size: 13px">des exercices des activités du cours</p>
+            <div class="figure-line"><span class="figure">58&nbsp;%</span><span class="small muted">9&nbsp;h&nbsp;40 passées</span></div>
+            <div class="bar wide" role="progressbar" aria-valuenow="58" aria-valuemin="0" aria-valuemax="100" aria-label="Votre avancement dans le cours"><span style="width: 58%"></span></div>
+            <p class="small muted">34 exercices sur&nbsp;59, 4&nbsp;activités&nbsp;terminées&nbsp;sur&nbsp;9</p>
           </div>
         </section>
-        <section>
-          <dl class="card" style="margin: 0">
-            <div class="kv"><dt><svg class="ico ico-16"><use href="#timer" /></svg>Temps passé</dt><dd>9&nbsp;h&nbsp;40</dd></div>
-            <div class="kv"><dt><svg class="ico ico-16"><use href="#school" /></svg>Enseignants</dt><dd>6</dd></div>
-            <div class="kv"><dt><svg class="ico ico-16"><use href="#groups" /></svg>Élèves</dt><dd>302</dd></div>
-          </dl>
+        <section aria-labelledby="next-t">
+          <div class="section-head"><h2 class="heading" id="next-t">À reprendre</h2></div>
+          <div class="card card-pad next-card">
+            <p class="subheading">Quiz&nbsp;: complexité des algorithmes</p>
+            <span class="due soon small"><svg class="ico" aria-hidden="true"><use href="#schedule" /></svg>Ferme ce soir à 23&nbsp;h&nbsp;59</span>
+            <div class="progress"><div class="bar wide" role="progressbar" aria-valuenow="83" aria-valuemin="0" aria-valuemax="100" aria-label="5 sur 6 exercices faits"><span style="width: 83%"></span></div><span class="nowrap">5 sur 6</span></div>
+            <button type="button" class="btn btn-primary" data-wf-to="exercice">Reprendre</button>
+          </div>
         </section>
       </aside>
     </div>

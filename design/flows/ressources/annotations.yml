@@ -3,7 +3,15 @@
 - screen: catalogue
   note: "Retirés volontairement : le ruban de statut, la bordure colorée et l'icône qui codaient le type trois fois (une icône suffit), et la phrase « Voici ce que nous avons trouvé »."
 - screen: catalogue
-  note: "Chaque ligne garde les chiffres qui aident à choisir (note moyenne, tentatives, activités qui l'utilisent) et les tags cliquables. Les actions apparaissent au survol et au focus : Prévisualiser, Éditer ou Paramétrer, et le menu."
+  note: "Chaque ligne garde les chiffres qui aident à choisir (note moyenne, tentatives, activités qui l'utilisent) et les tags, en deux lignes de méta qui ne reviennent jamais à la ligne : ce qu'est la ressource (niveaux, topics, auteur, version), puis ce qu'elle donne (« Moyenne 71 / 100 », tentatives, activités). Le nom et la description sont à côté du statut et des outils ; les deux lignes de méta passent dessous, sur toute la largeur de la ligne, colonne de droite comprise. Les outils (Prévisualiser, Éditer ou Compléter, le menu) restent dans la colonne de droite, sous le statut : ils apparaissent au survol et au focus clavier (opacité, pas display, pour rester dans l'ordre de tabulation) et ne recouvrent jamais le texte. Ce sont des boutons icône nommés d'après la ressource (« Prévisualiser Recherche dichotomique »), avec infobulle."
+- screen: catalogue
+  note: "Niveaux et topics sont des boutons (« Filtrer par Algorithmique ») : ils ajoutent le filtre, au clavier comme à la souris. Le nombre d'activités est un lien nommé « Utilisé par 4 activités », qui ouvre la liste sur la page de la ressource. Recherche dichotomique sert dans 4 activités : Examen partiel 1, Examen partiel 2, TP 4 et Entraînement : recherche."
+- screen: catalogue
+  note: "Modèle à compléter, 4 champs : le mot modèle dit ce qu'on fait de l'exercice, le remplir sans code. Son outil est Compléter (tune), qui ouvre l'atelier sur ce modèle ; le filtre correspondant s'appelle Seulement les modèles à compléter."
+- screen: catalogue
+  note: "Une moyenne s'écrit sur 100, comme une note (« 71 / 100 ») ; un taux garde le pourcentage. En couleur, elle porte son icône et son mot : tendance montante et « parmi les plus réussis » en validation, priority_high et « à surveiller » en attention, le glyphe du chiffre à surveiller dans design.md. Une moyenne basse n'est pas une erreur de la ressource : jamais de rouge. Proposition de seuils, à valider avec l'équipe : 70 / 100 et plus, moins de 40 / 100. Entre les deux, la moyenne reste neutre."
+- screen: catalogue
+  note: "Chaque pastille de filtre se retire par un bouton nommé (« Retirer le filtre Niveau : L1 ») ; la recherche a un libellé pour les lecteurs d'écran. État empty : glyphe exercice, comme tout état vide compact."
 - screen: catalogue
   note: "Ajout (agrégation) : l'auteur de la ligne. La ressource a ownerId, le filtre Auteur charge déjà les utilisateurs."
 - screen: catalogue
@@ -12,31 +20,71 @@
   note: "Le bouton du pied donne le nombre de résultats avant d'appliquer (une recherche avec limit 0, le total existe déjà dans la réponse). Le tri reste dans la barre, parce qu'on le change plus souvent que les filtres."
 - screen: cercles
   note: "L'arbre des cercles, en mode navigation comme aujourd'hui : un clic ouvre la page du cercle. Le cercle personnel est en tête."
+- screen: filtres
+  note: "Le panneau est sa propre surface : son action principale (Afficher 4 exercices) ne concurrence pas Créer un exercice, recouvert. Les cases de statut sont des cases à cocher accessibles, les pastilles se retirent par un bouton nommé."
 - screen: catalogue-actions
-  note: "Ajouter à une activité est une proposition (voir le flow creation, écran ajouter-au-cours)."
+  note: "Trois entrées en deux groupes : Ajouter à un cours, la suite la plus utile pour un enseignant qui cherche, puis Dupliquer et Voir les 4 activités qui l'utilisent. Prévisualiser et Éditer ne s'y répètent pas, ils sont déjà dans la ligne. Ajouter à un cours est une proposition : le même dialogue que l'atelier (flow creation, écran ajouter-au-cours), qui crée l'activité dans le cercle de l'enseignant puis l'ajoute au cours."
 - screen: ressource
   note: "Onglets réels : Vue d'ensemble, Explorer, Évènements, Paramètres. Rien n'est ajouté."
 - screen: ressource
-  note: "Les dix indicateurs d'un exercice sont gardés, en grille compacte, avec la courbe d'évolution. Utilisé par (agrégation, filtre dependOn) remplace la bulle « N références »."
+  note: "Les dix indicateurs d'un exercice restent tous accessibles : quatre en tête, le nombre de tentatives à côté du titre, les cinq autres repliés, puis la courbe d'évolution repliée sous eux. Utilisé par (agrégation, filtre dependOn) remplace la bulle « N références »."
 - screen: ressource
-  note: "En-tête : statut modifiable sur place, Suivre, Partager, Éditer ou Paramétrer, Prévisualiser. Les actions rares passent dans le menu (voir ressource-actions)."
+  note: "En-tête : statut modifiable sur place et étiquettes sous le titre ; à droite Partager et Prévisualiser en secondaire, une action principale, le menu pour le reste (Éditer, Suivre, Dupliquer, Supprimer). Vue de Karim, qui consulte l'exercice d'Hélène : l'action principale est Ajouter à un cours (le dialogue de l'atelier, posé sur cette page). Pour l'autrice, Éditer prend sa place et Ajouter à un cours passe dans le menu."
+- screen: ressource
+  note: "Suivre passe dans le menu : aujourd'hui il permet notamment d'ajouter la ressource à ses cours et activités, et d'être prévenu de ses mises à jour ; Ajouter à un cours fait la première chose directement. Le nombre d'abonnés, les collègues qui la suivent, est dans la ligne de faits de l'en-tête (« 12 abonnés ») : le mot va avec Suivre, là où « observateurs » ne disait pas ce qu'on observe."
+- screen: ressource
+  note: "Les quatre indicateurs de tête sont neutres : aucune teinte de cours sur un chiffre. La courbe, une fois dépliée, est en graphites, le mois en cours plus foncé et libellé de sa valeur, pour ne pas dépendre de la couleur. Au survol d'une barre, une infobulle donne le mois et la note."
+- screen: explorer
+  note: "L'action principale suit l'onglet : ici Publier une version, en tête de la zone. L'en-tête de la ressource garde ses boutons, en secondaire. Importer et Télécharger rejoignent l'arbre des fichiers, en boutons icône nommés. La version se dit « la plus récente », jamais latest."
 - screen: ressource-actions
-  note: "Dupliquer, Déplacer, et pour l'administrateur certifier un modèle et renvoyer la ressource à son auteur. Supprimer dit pourquoi c'est impossible quand des activités en dépendent, au lieu d'un bouton désactivé."
+  note: "Menu vu par Karim, collaborateur du cercle Algorithmique : Éditer, Suivre, Dupliquer. Pas de Supprimer : la ressource est dans un cercle partagé, et la plateforme ne supprime que dans un cercle personnel (ResourceController.delete refuse sinon, pour tout le monde, administrateur compris ; resource.page.html ne montre le bouton que si parent.personal). Le menu le dit à la place de l'action et propose le statut Ne pas utiliser. Dans un cercle personnel, Supprimer reste et dit pourquoi c'est impossible quand des activités en dépendent."
+- screen: ressource-actions
+  note: "Comportement actuel, gardé : Déplacer n'apparaît que pour une ressource du cercle personnel ou pour l'administrateur ; Supprimer, que pour une ressource du cercle personnel. Pour Sophie, administratrice, le menu ajoute une section Administration : Déplacer vers un cercle, Marquer comme modèle certifié (exercice paramétrable) et Renvoyer dans le cercle de son auteur."
 - screen: ressource-partager
-  note: "Le partage actuel : visibilité (dans PLaTon ou partout), version, QR code, Copier le lien."
+  note: "Le partage actuel : visibilité (dans PLaTon ou partout), version, QR code, Copier le lien. La version latest se dit « La plus récente », et le champ dit que le lien suit les nouvelles versions."
 - screen: explorer
   note: "Mêmes fonctions que l'Explorer actuel (version, fichiers, readme, historique, importer, télécharger, nouvelle version). Nouvelle disposition : l'arbre et le fichier ouvert forment un seul bloc, comme sur un hébergeur de code ; le fichier se lit à largeur de lecture ; l'historique passe dessous, en secondaire."
 - screen: explorer
-  note: "Le fichier choisi s'affiche à côté de l'arbre au lieu d'un double-clic qui ouvre l'éditeur. Ouvrir dans l'éditeur reste à un clic, dans l'en-tête du fichier."
+  note: "Le fichier choisi s'affiche à côté de l'arbre au lieu d'un double-clic qui ouvre l'éditeur. Ouvrir dans l'éditeur reste à un clic, dans l'en-tête du fichier. Les noms de fichiers (readme.md, main.ple) ne vivent qu'ici, où ce sont des fichiers ; ailleurs, la ressource se décrit avec des mots."
 - screen: evenements
-  note: "Les quatre types d'évènements actuels (création, statut, membre ajouté, membre retiré), les 50 derniers, comme aujourd'hui."
+  note: "Les quatre types d'évènements actuels (création, statut, membre ajouté, membre retiré), les 50 derniers, comme aujourd'hui, du plus récent au plus ancien. Les statuts y prennent leur nom court et leur glyphe (Prêt verified, À tester science). L'onglet n'a pas d'action propre : Ajouter à un cours reste l'action principale de l'en-tête."
 - screen: ressource-parametres
-  note: "Sous-onglets réels : Informations (nom, description, topics, niveaux) et Modèle pour un exercice. Le statut reste dans l'en-tête."
+  note: "Sous-onglets réels : Informations (nom, description, topics, niveaux) et Modèle pour un exercice. Le statut reste dans l'en-tête. L'action principale de l'onglet est Enregistrer ; Prévisualiser et Ajouter à un cours restent en secondaire."
 - screen: cercle
-  note: "Vue d'ensemble d'un cercle : répartition par statut (chaque part ouvre le catalogue filtré), compteurs (exercices, activités, modèles, cercles enfants, collaborateurs, observateurs) et tags. Suivre et Demander à rejoindre dans l'en-tête."
+  note: "Vue d'ensemble d'un cercle : répartition par statut (chaque part ouvre le catalogue filtré), compteurs (exercices, activités, modèles, sous-cercles, collaborateurs, abonnés) et ses topics et niveaux, des boutons de filtre. Chaque statut garde son glyphe : Prêt verified, À tester science, Brouillon save, Contient des bugs bug_report, Ne pas utiliser visibility_off."
+- screen: cercle
+  note: "Choix : l'anneau garde les couleurs d'état. Un graphique est en graphites, mais chaque part de celui-ci est un état de ressource, avec son icône et son mot dans la légende et la même couleur que son étiquette dans le catalogue (Prêt en validation, À tester en attention, Contient des bugs en correction, Brouillon et Ne pas utiliser en graphites). Cinq graphites ne se distingueraient pas et casseraient le lien avec les étiquettes. L'exception est écrite dans les règles du flow et ne vaut que pour une légende d'états. L'anneau a un nom accessible qui donne les cinq nombres."
+- screen: cercle
+  note: "Vue de Karim, collaborateur du cercle : pas de Demander à rejoindre (comportement actuel : réservé à qui n'est ni membre, ni propriétaire, ni administrateur, avec Annuler la demande pendant l'attente), mais l'étiquette Vous êtes collaborateur. Chercher dans ce cercle devient un champ ; l'action principale est Nouvelle ressource, le formulaire de création avec ce cercle prérempli."
+- screen: cercle
+  note: "Pas de suppression de cercle : aujourd'hui l'interface ne propose Supprimer que pour une ressource d'un cercle personnel, jamais pour un cercle, et l'API le refuse ailleurs. Si l'équipe l'ouvre un jour, ce sera par un dialogue qui nomme le cercle, ses membres et ses ressources (règle du projet)."
 - screen: cercle-collaborateurs
   note: "Demandes, invitations et collaborateurs, gérés par l'administrateur comme aujourd'hui. Pas de droits par personne : le modèle en a (read, write), l'interface non, et on ne l'invente pas."
+- screen: cercle-collaborateurs
+  note: "Vue de Sophie, administratrice : pas de Demander à rejoindre. Inviter est l'action principale de l'onglet ; l'en-tête garde la recherche en champ et Nouvelle ressource en secondaire. Chaque Retirer nomme la personne."
 - screen: ressource
-  note: "Passe UX : quatre chiffres en tête (note, juste du premier coup, durée, abandons), les six autres dans Tous les indicateurs. Même donnée, une hiérarchie. Prévisualiser est l'action principale ; le menu des actions rares est en bout de ligne."
+  note: "La page sert le travail de Karim : décider s'il prend cet exercice, puis l'ajouter à un cours. D'où, dans l'ordre : l'action principale Ajouter à un cours, le statut et une ligne de faits dans l'en-tête (autrice, version, observateurs), quatre chiffres (note moyenne, juste du premier coup, durée, abandons), et à droite les 4 activités qui l'utilisent déjà, dont trois à lui (TP 4, Examen partiel 1 et Examen partiel 2, ses deux épreuves) et l'Entraînement : recherche d'Hélène. Les cinq autres indicateurs et l'évolution mensuelle se replient : même donnée, une hiérarchie. L'icône de chaque activité dit sa forme : history_edu pour les deux épreuves notées, code pour TP 4 et l'entraînement."
 - screen: catalogue
-  note: "Passe UX : Créer un exercice devient l'action principale de la page, vers la galerie de modèles."
+  note: "Créer un exercice est l'action principale de la page, vers la galerie de modèles. La barre n'a que quatre contrôles : la recherche, le type (sans icônes, le mot suffit), Filtres avec le nombre de filtres actifs, le tri. Les filtres actifs sont des pastilles sous la barre, précédées du nombre de résultats ; Tout effacer vit dans le panneau Filtres."
+- screen: ressource
+  note: "Droits vérifiés dans le code. Karim est collaborateur accepté du cercle Algorithmique ; ResourcePermissionService.userPermissionsOnResource (libs/feature/resource/server/src/lib/permissions/permissions.service.ts) lui donne write sur toute ressource du cercle : propriétaire du cercle, ou membre non en attente (memberships.includes(circle.id) && !isWaitingForBeingMember), ou membre d'un cercle parent (parentPermissionOnResources), ou administrateur hors cercle personnel. Les droits read et write stockés sur chaque membre ne sont pas lus. Il peut donc éditer, publier une version et changer les paramètres ; l'en-tête le lui dit en une ligne, sous le titre."
+- screen: ressource
+  note: "Sans ce droit, l'enseignant garde Prévisualiser, Partager (le lien, sans changer la visibilité : canEditSharing suit write), Dupliquer (ResourceController.duplicateResource ne demande que la lecture), Suivre et Ajouter à un cours ; l'éditeur s'ouvre en lecture seule (FileController : readOnly = !permissions.write) et les champs des Paramètres sont désactivés (InformationsPage.canEdit). La ligne de l'en-tête dit alors « Lecture seule : demandez à rejoindre le cercle Algorithmique pour la modifier »."
+- screen: explorer
+  note: "Publier une version demande le droit d'écriture (FileController.release, libs/feature/resource/server/src/lib/files/file.controller.ts) : Karim l'a comme collaborateur du cercle, l'action reste."
+- screen: ressource-parametres
+  note: "Les topics sont définis en une ligne sous leur champ (les thèmes de la ressource, qui aident vos collègues à la retrouver), la même ligne qu'au premier enregistrement dans l'atelier."
+- screen: ressource-parametres
+  note: "Les champs sont modifiables pour qui a le droit d'écriture (InformationsPage.canEdit lit permissions.write ; ResourceController.update le vérifie côté serveur). Karim l'a comme collaborateur du cercle Algorithmique ; sans lui, les champs seraient désactivés et Enregistrer absent."
+- screen: evenements
+  note: "Les dates d'un journal sont absolues et en lettres, « 26 sept. 2026, 9 h 41 », comme l'historique des fichiers de l'Explorer."
+- screen: evenements
+  note: "Du plus récent au plus ancien : statut Prêt le 26 septembre, après la v4 du 24 ; À tester le 20, deux minutes après le commit des tableaux de taille paire ; l'arrivée de Paul Renard dans le cercle le 3 septembre ; la création en janvier, d'où les tentatives depuis février."
+- screen: catalogue
+  note: "État selection : chaque ligne a sa case (role checkbox, nommée d'après la ressource), qu'on coche pour en prendre plusieurs ; la ligne choisie prend le fond de la sélection. La barre de sélection flotte sur la couverture, comme toute barre de sélection, et porte l'action de la sélection : Ajouter 3 exercices à un cours. Elle ouvre le dialogue de l'atelier, qui crée une activité avec les trois exercices, dans l'ordre du choix, nommée d'après le premier ; même faisabilité, POST /resources avec un main.pla à un groupe puis createActivities. Utile à qui prépare une séance d'un coup."
+- screen: catalogue
+  note: "Vu récemment est la liste de l'accueil enseignant, la même partout : Recherche dichotomique (exercice, ce matin, Prêt), Parcours en largeur d'un graphe (exercice, hier, Brouillon), TP 4 : boucles et tableaux (activité, vendredi). Chaque entrée est un lien ; le statut d'un exercice garde son icône et son mot."
+- screen: ressource
+  note: "Ajouter à un cours ouvre le dialogue de l'atelier (flow creation, écran ajouter-au-cours), posé sur cette page, avec ses règles de dates : un entraînement dit jusqu'à quand il reste ouvert, une épreuve notée exige ses deux dates et montre sa durée et, en une ligne, sa sécurité par défaut, avec Régler."
+- screen: cercle-collaborateurs
+  note: "Une invitation dit son état et sa date, « invitation envoyée le 22 sept. » : la plateforme ne connaît pas le genre de la personne."

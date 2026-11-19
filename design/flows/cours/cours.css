@@ -1,0 +1,803 @@
+/* Cours: the course list, the course pages and their overlays. Tokens only, closed type scale (12, 13, 14, 15, 16, 17, 22, 28), weights 400 and 600. */
+
+/* ---------- Course cards: every count says what it counts ---------- */
+
+.grid-cards.binders {
+  row-gap: var(--spacing-6);
+  padding-top: var(--spacing-3);
+}
+.empty-card {
+  max-width: 720px;
+}
+.modal.narrow {
+  width: 480px;
+}
+.classeur-line {
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--color-muted);
+}
+.classeur-body p.classeur-line {
+  display: block;
+  margin-top: calc(var(--spacing-1) * -1);
+}
+/* Student card foot: who teaches and the next deadline, never the headcount. */
+.classeur-foot.who {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-1);
+}
+
+/* ---------- Page head of a course page: mark, title block, the actions of the active tab ---------- */
+
+.head-main {
+  flex: 1;
+  min-width: 0;
+}
+.title-edit {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+}
+.head-meta .due {
+  gap: 4px;
+}
+
+/* ---------- Activity rows: the whole row opens the suivi, the title is its link for the keyboard ---------- */
+
+/* A text link inside a row's meta (Classement): a real target, not a 16 px icon. */
+.meta-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 24px;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+.meta-link .ico {
+  width: 16px;
+  height: 16px;
+}
+
+/* Student rows: a grade, or a state said in words. */
+.row-score {
+  font-size: 15px;
+  line-height: 22px;
+  font-weight: 600;
+  font-feature-settings: 'tnum' 1;
+  white-space: nowrap;
+}
+.row-score small {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--color-muted);
+}
+.state-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+.state-line .ico {
+  width: 16px;
+  height: 16px;
+}
+
+/* "À faire": an action per line, the state colour when the line is a state. */
+.todo-list .lead-icon {
+  width: 32px;
+  height: 32px;
+}
+.todo-list .mini > .ico:last-child {
+  color: var(--color-subtle);
+}
+.lead-icon.warning {
+  background: var(--color-warning-soft);
+  color: var(--color-warning-ink);
+}
+
+/* Student side column: progress, then the activity that closes first with the one primary action. */
+.next-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-2);
+}
+.next-card .progress {
+  align-self: stretch;
+}
+.next-card .btn {
+  margin-top: var(--spacing-1);
+}
+.figure-line {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-2);
+}
+.card-pad > .small + .small,
+.card-pad > .bar + .small {
+  margin-top: var(--spacing-2);
+}
+
+.panel-body {
+  padding: var(--spacing-4);
+}
+.panel-body .input {
+  margin-top: var(--spacing-3);
+}
+.panel-body p {
+  margin: var(--spacing-2) 0 var(--spacing-3);
+}
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+}
+.intro-card {
+  margin-bottom: var(--spacing-4);
+}
+.step-body .btn {
+  margin-top: var(--spacing-3);
+}
+
+/* Section and activity menus: grouped, the destructive item last and in correction ink. */
+.section-tools {
+  display: flex;
+  gap: 2px;
+  margin-left: auto;
+}
+.add-section {
+  margin-top: var(--spacing-2);
+}
+
+/* ---------- Tableau: dense rows (44 px), dates on one line ---------- */
+
+.table-card {
+  padding: 0;
+  overflow: hidden;
+}
+.nowrap {
+  white-space: nowrap;
+}
+.table.dense {
+  font-size: 13px;
+}
+.table.dense th,
+.table.dense td {
+  padding-left: var(--spacing-3);
+  padding-right: var(--spacing-3);
+}
+.table.dense td {
+  padding-top: var(--spacing-1);
+  padding-bottom: var(--spacing-1);
+}
+.table td.cell-actions {
+  width: 1%;
+  white-space: nowrap;
+  text-align: right;
+}
+.table tr[data-wf-to] {
+  cursor: pointer;
+}
+.table .tag.graded {
+  margin-left: var(--spacing-2);
+}
+
+.table th.num .th-sort {
+  flex-direction: row-reverse;
+}
+
+/* The lowest first-try success: icon and word with the colour, the row marked. */
+.low-flag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  font-weight: 600;
+  color: var(--color-warning-ink);
+}
+.low-flag .ico {
+  width: 16px;
+  height: 16px;
+}
+.table tr.is-low td {
+  background: var(--color-warning-soft);
+}
+
+.check-all {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+/* ---------- Challenges: the podium in the course hue, ranked by number and height ---------- */
+
+ol.podium {
+  margin: 0 0 var(--spacing-4);
+  padding: 0;
+  list-style: none;
+}
+.podium-step .trophy {
+  width: 24px;
+  height: 24px;
+}
+.rank-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.rank-list {
+  overflow: hidden;
+}
+.select.wide {
+  min-width: 320px;
+}
+.footnote {
+  margin-top: var(--spacing-3);
+}
+
+/* ---------- Members and groups ---------- */
+
+.pick-search {
+  margin-top: var(--spacing-3);
+}
+.pick-list {
+  margin-top: var(--spacing-2);
+}
+.pick-row {
+  min-height: 56px;
+}
+.pick-hint {
+  margin-top: var(--spacing-3);
+}
+/* A result that is already a member: listed, not selectable. */
+.pick-row[aria-disabled='true'] {
+  cursor: default;
+}
+.pick-row[aria-disabled='true']:hover {
+  background: none;
+}
+.pick-row[aria-disabled='true'] .row-title {
+  color: var(--color-muted);
+}
+.check.disabled {
+  border-color: var(--color-line-strong);
+  background: var(--color-graphite-100);
+}
+/* The label of a group of controls, where there is no single field to point at. */
+.field-label {
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 18px;
+}
+.group-block .table-foot {
+  padding: var(--spacing-1) var(--spacing-2);
+}
+.group-table {
+  border-top: 1px solid var(--color-line);
+}
+
+/* ---------- Course settings: one form saved by its footer, the danger zone apart ---------- */
+
+.settings {
+  max-width: 760px;
+  gap: var(--spacing-4);
+}
+.card-title {
+  margin-bottom: var(--spacing-1);
+}
+.form-title {
+  margin-bottom: var(--spacing-3);
+}
+.card-desc {
+  margin-bottom: var(--spacing-3);
+}
+.card-foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-2);
+  padding: var(--spacing-3) var(--spacing-4);
+  border-top: 1px solid var(--color-line);
+}
+.field.tall .input {
+  height: 64px;
+  align-items: flex-start;
+  padding-top: var(--spacing-2);
+}
+.field.tall.lg .input {
+  height: 88px;
+}
+.demo-access {
+  display: flex;
+  gap: var(--spacing-4);
+  align-items: center;
+}
+.demo-access > div {
+  flex: 1;
+}
+.demo-access .btn {
+  margin-top: var(--spacing-2);
+}
+.danger-zone {
+  margin-top: var(--spacing-4);
+  padding-top: var(--spacing-6);
+  border-top: 1px solid var(--color-line-strong);
+}
+.danger-zone > .subheading {
+  margin-bottom: var(--spacing-3);
+}
+.danger-zone .card {
+  border-color: var(--color-correction-200);
+}
+.danger-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+}
+.danger-row > div {
+  flex: 1;
+}
+
+/* Confirmation dialogs: the field under the consequences. */
+.confirm .drawer-body {
+  padding-top: var(--spacing-5);
+}
+.confirm .dlg-desc {
+  margin-top: var(--spacing-2);
+}
+.confirm .field {
+  margin-top: var(--spacing-4);
+}
+
+/* ---------- Activity settings drawer ---------- */
+
+.drawer-right.wide {
+  width: 520px;
+}
+.drawer-tabs {
+  margin: 0;
+  padding: 0 var(--spacing-4);
+}
+.field-hint.block {
+  display: block;
+  margin-top: var(--spacing-2);
+}
+.drawer-foot .foot-hint {
+  margin-right: auto;
+  align-self: center;
+}
+.alert .alert-text {
+  margin-top: var(--spacing-1);
+}
+.form-section .btn-sm {
+  margin-top: var(--spacing-3);
+}
+
+/* Access periods: each card has a keyboard handle. */
+.period {
+  padding: var(--spacing-2) var(--spacing-4) var(--spacing-3) var(--spacing-2);
+  margin-bottom: var(--spacing-2);
+}
+.period-head {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+}
+.period-head .btn-icon {
+  margin-left: auto;
+}
+.period dl {
+  margin: 0 0 0 var(--spacing-6);
+}
+.period .kv {
+  padding: var(--spacing-1) 0;
+}
+.reorder-hint + .btn {
+  margin-top: var(--spacing-4);
+}
+/* The first period that names a person applies to them: the rule is written above, the first card says it. */
+.period-rule {
+  margin-bottom: var(--spacing-3);
+}
+.period.first {
+  border-color: var(--color-line-strong);
+}
+.period-head .first-tag {
+  margin-left: var(--spacing-2);
+}
+.when-alert {
+  margin-bottom: var(--spacing-3);
+}
+
+/* Gestion: the course colour, read only; the actions that act now, apart from the form. */
+.hue-line {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+.hue-sample {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  border-radius: var(--rounded-full);
+  background: var(--hue-strong);
+}
+.now-block {
+  margin-top: var(--spacing-6);
+  padding: var(--spacing-4);
+  border: 1px solid var(--color-line);
+  border-radius: var(--rounded-lg);
+  background: var(--color-surface-muted);
+}
+.now-head {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+.now-head .ico {
+  color: var(--color-graphite-600);
+}
+.now-block > .small {
+  margin: var(--spacing-1) 0 var(--spacing-2);
+}
+.now-block .switch-row + .switch-row {
+  border-top: 1px solid var(--color-line);
+}
+.now-block .switch-row {
+  padding: var(--spacing-3) 0;
+}
+
+/* ---------- Suivi ---------- */
+
+.lead-line {
+  margin: 0 0 var(--spacing-3);
+}
+.stat-row.spaced {
+  margin-bottom: var(--spacing-6);
+}
+.legend {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1) var(--spacing-3);
+  flex-wrap: wrap;
+}
+.legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+.table.learners .state-dot {
+  vertical-align: middle;
+}
+.legend-line {
+  margin: calc(var(--spacing-2) * -1) 0 var(--spacing-3);
+}
+/* En cours is neutral: the pending glyph in graphite. */
+.state-dot.started {
+  color: var(--color-graphite-600);
+}
+.mod-tools {
+  margin-bottom: var(--spacing-3);
+}
+
+/* ---------- Phone: the course page for a student ---------- */
+
+.course-topbar .course-mark.sm {
+  margin-top: 0;
+}
+.course-topbar .btn-icon {
+  width: 44px;
+  height: 44px;
+}
+/* The page title lives in the bar: an h1 at heading size, never smaller than the h2s below. */
+.topbar h1.topbar-title {
+  margin: 0;
+  font-size: 17px;
+  line-height: 24px;
+}
+.course-topbar .topbar-title {
+  flex: 1;
+  min-width: 0;
+  text-wrap: balance;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.topbar .has-badge {
+  position: relative;
+}
+.m-tabs .tab {
+  height: 44px;
+  white-space: nowrap;
+}
+.m-course {
+  padding: var(--spacing-4) var(--spacing-4) 120px;
+}
+.m-course section + section {
+  margin-top: var(--spacing-6);
+}
+.m-course .m-card .btn {
+  width: 100%;
+  height: 44px;
+  margin-top: var(--spacing-3);
+}
+.m-course .m-card .row-meta {
+  flex-direction: column;
+  align-items: flex-start;
+}
+.m-course .m-card .progress {
+  margin-top: var(--spacing-3);
+}
+.m-link {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  color: var(--color-text);
+}
+.m-link > div {
+  flex: 1;
+  min-width: 0;
+}
+.m-link > .ico {
+  color: var(--color-subtle);
+}
+.m-cta {
+  font-weight: 600;
+  color: var(--color-primary);
+}
+.m-progress {
+  padding: var(--spacing-3) var(--spacing-4);
+  margin-bottom: var(--spacing-6);
+}
+.m-progress-line {
+  margin-top: var(--spacing-2);
+}
+.m-result {
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-3);
+  margin-top: var(--spacing-2);
+}
+
+/* Sections on the phone: binder dividers that fold; each says what it holds. */
+.m-course section + .m-section {
+  margin-top: var(--spacing-8);
+}
+.m-section + .m-section {
+  margin-top: var(--spacing-2);
+}
+.m-divider {
+  margin: 0;
+  font: inherit;
+}
+.divider-toggle {
+  width: 100%;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  border-bottom: 2px solid var(--hue-strong, var(--color-line-strong));
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.divider-toggle[aria-expanded='false'] {
+  margin-bottom: 0;
+}
+.divider-toggle .divider-sum {
+  padding-bottom: 6px;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--color-muted);
+}
+.divider-toggle > .ico {
+  margin: 0 var(--spacing-1) 6px auto;
+  color: var(--hue-ink);
+}
+.divider-toggle[aria-expanded='true'] > .ico {
+  transform: rotate(180deg);
+}
+.m-teachers {
+  margin-top: var(--spacing-8);
+}
+
+/* Phone error: the message first, the two ways out at thumb size. */
+.m-course-error {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-3);
+  padding: var(--spacing-5) var(--spacing-4);
+}
+.m-course-error .btn,
+.m-course .btn-block {
+  width: 100%;
+  height: 44px;
+}
+
+/* Challenges on the phone: your place first, then the podium at a narrower size. */
+.m-challenges section + section {
+  margin-top: var(--spacing-6);
+}
+.m-challenges .select.wide {
+  width: 100%;
+  min-width: 0;
+  height: 44px;
+  margin-bottom: var(--spacing-4);
+}
+.m-challenges .podium {
+  gap: var(--spacing-2);
+}
+.m-challenges .podium-step {
+  padding: var(--spacing-3) var(--spacing-2) var(--spacing-2);
+  font-size: 13px;
+  line-height: 18px;
+}
+.m-challenges .podium-step .avatar {
+  width: 36px;
+  height: 36px;
+  font-size: 13px;
+}
+.m-challenges .podium-step .rank {
+  font-size: 22px;
+}
+.m-challenges .podium-step.first {
+  min-height: 156px;
+}
+.m-challenges .podium-step.second {
+  min-height: 136px;
+}
+.m-challenges .podium-step.third {
+  min-height: 120px;
+}
+.m-challenges .rank-row {
+  min-height: 44px;
+}
+
+/* The course list on the phone: one card per course, its mark, your progress, the next deadline. */
+.m-list-tools {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-3);
+  margin-bottom: var(--spacing-4);
+}
+.m-list-tools .input.search {
+  width: 100%;
+  height: 44px;
+}
+.m-binders {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+.m-binder {
+  display: flex;
+  gap: var(--spacing-3);
+  padding: var(--spacing-4);
+  color: var(--color-text);
+}
+.m-binder > div {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.m-binder .course-mark.sm {
+  margin-top: 6px;
+}
+.m-binder .progress {
+  margin-top: 2px;
+}
+.m-binder .progress .bar {
+  flex: 1;
+}
+.m-binder-line {
+  font-size: 13px;
+  line-height: 18px;
+}
+.m-teachers {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin-top: var(--spacing-6);
+}
+.m-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-3) var(--spacing-4) var(--spacing-4);
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-line);
+  box-shadow: var(--shadow-overlay);
+}
+.m-bar > div {
+  flex: 1;
+  min-width: 0;
+}
+.m-bar .row-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px;
+  line-height: 21px;
+}
+.m-bar .btn {
+  height: 44px;
+}
+
+/* ---------- Planning, the lowest figure, the unlock code ---------- */
+
+/* Tableau: an activity without dates says so, with Planifier right next to it. */
+.cell-dates {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-3);
+}
+
+/* Suivi: one "Provisoire" for the five figures, said once above them. */
+.lead-line .tag {
+  margin-right: var(--spacing-2);
+}
+
+/* The lowest figure: a jump to its row, and from the row to the students concerned. */
+.low-jump {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 36px;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+.low-jump .ico {
+  color: var(--color-warning-ink);
+}
+.cell-link {
+  display: block;
+  width: fit-content;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+/* The trigger of an open menu stays pressed, so the menu reads as its own. */
+.btn-icon[aria-expanded='true'] {
+  background: var(--color-graphite-150);
+  color: var(--color-text);
+}
+
+/* An activity that never stops on leaving has no resume code: one quiet line says so. */
+.quiet-line {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin: var(--spacing-2) 0 var(--spacing-4);
+}
+.quiet-line .ico {
+  flex: none;
+  color: var(--color-subtle);
+}
+/* Members: one line per member, the e-mail in its own column. */
+.member-table .person {
+  min-height: 36px;
+}

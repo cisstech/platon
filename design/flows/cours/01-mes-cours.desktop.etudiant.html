@@ -9,19 +9,19 @@
       </div>
     </div>
     <nav class="nav">
-      <a class="nav-item" data-wf-to="etudiant"><svg class="ico"><use href="#home" /></svg>Accueil</a>
-      <a class="nav-item" data-wf-to="annonces"><svg class="ico"><use href="#campaign" /></svg>Annonces</a>
-      <a class="nav-item active" data-wf-to="mes-cours"><svg class="ico"><use href="#school" /></svg>Cours</a>
+      <a href="#" class="nav-item" data-wf-to="etudiant"><svg class="ico" aria-hidden="true"><use href="#home" /></svg>Accueil</a>
+      <a href="#" class="nav-item" data-wf-to="annonces"><svg class="ico" aria-hidden="true"><use href="#campaign" /></svg>Annonces</a>
+      <a href="#" class="nav-item active" data-wf-to="mes-cours"><svg class="ico" aria-hidden="true"><use href="#school" /></svg>Cours</a>
     </nav>
     <div class="sidebar-foot">
-      <a class="nav-item"><svg class="ico"><use href="#notifications" /></svg>Notifications<span class="count">3</span></a>
+      <a href="#" class="nav-item"><svg class="ico" aria-hidden="true"><use href="#notifications" /></svg>Notifications<span class="count">3</span></a>
       <div class="me">
         <span class="avatar">IB</span>
         <div>
           <div class="me-name">Inès Benali</div>
-          <div class="me-role">Étudiante</div>
+          <div class="me-role">Compte étudiant</div>
         </div>
-        <svg class="ico ico-16"><use href="#expand_more" /></svg>
+        <svg class="ico ico-16" aria-hidden="true"><use href="#expand_more" /></svg>
       </div>
       <a class="credit" href="https://github.com/cisstech/platon" aria-label="Code source de PLaTon, logiciel libre de cisstech"><svg class="ico ico-16" aria-hidden="true"><use href="#code" /></svg>Logiciel libre, par <strong>cisstech</strong></a>
     </div>
@@ -31,73 +31,54 @@
       <div>
         <h1 class="title">Cours</h1>
       </div>
-      
     </header>
     <div class="toolbar">
-      <div class="input" style="width: 240px"><svg class="ico ico-18" style="margin: 0 8px 0 0; color: var(--color-subtle)"><use href="#search" /></svg><span class="placeholder">Nom d'un cours</span></div>
-      <span class="segmented"><span class="on">Actuels <span class="count">4</span></span><span>Archivés <span class="count">5</span></span></span>
+      <label class="sr-only" for="q-liste">Chercher un cours</label><div class="input search narrow" id="q-liste" role="searchbox"><svg class="ico ico-18" aria-hidden="true"><use href="#search" /></svg><span class="placeholder">Nom d'un cours</span></div>
+      <span class="segmented" role="radiogroup" aria-label="Cours affichés"><span class="on" role="radio" aria-checked="true">Actuels <span class="count">3</span></span><span role="radio" aria-checked="false">Archivés <span class="count">0</span></span></span>
       <span class="grow"></span>
-      <span class="select"><svg class="ico ico-16"><use href="#sort" /></svg>Mis à jour récemment<svg class="ico ico-16"><use href="#expand_more" /></svg></span>
-      <span class="select"><svg class="ico ico-16"><use href="#history" /></svg>Toutes les périodes<svg class="ico ico-16"><use href="#expand_more" /></svg></span>
+      <span class="select"><svg class="ico ico-16" aria-hidden="true"><use href="#sort" /></svg>Mis à jour récemment<svg class="ico ico-16" aria-hidden="true"><use href="#expand_more" /></svg></span>
+      <span class="select"><svg class="ico ico-16" aria-hidden="true"><use href="#history" /></svg>Toutes les périodes<svg class="ico ico-16" aria-hidden="true"><use href="#expand_more" /></svg></span>
     </div>
-    <div class="grid-cards" style="row-gap: var(--spacing-6); padding-top: 10px">
-      <div class="card classeur hue-bleuet hover" data-wf-to="detail">
+    <div class="grid-cards binders">
+      <div class="card classeur hue-lagon" data-wf-to="detail">
         <span class="classeur-tab"></span>
-        <div class="classeur-cover"><span class="classeur-mono">AP1</span><span class="classeur-trophy"><svg class="ico"><use href="#emoji_events" /></svg>1 challenge</span><button class="btn btn-icon btn-sm" aria-label="Actions du cours" data-wf-to="mes-cours-actions"><svg class="ico ico-18"><use href="#more_horiz" /></svg></button></div>
+        <div class="classeur-cover"><span class="classeur-mono">AP1</span><span class="classeur-trophy"><svg class="ico" aria-hidden="true"><use href="#emoji_events" /></svg>1 challenge</span><button type="button" class="btn btn-icon btn-sm" aria-label="Actions du cours Algorithmique et programmation 1" aria-haspopup="menu" data-wf-to="mes-cours-actions"><svg class="ico ico-18" aria-hidden="true"><use href="#more_horiz" /></svg></button></div>
         <div class="classeur-body">
           <h2 class="heading">Algorithmique et programmation 1</h2>
           <p>Licence 1 Informatique, semestre 1. Bases de la programmation en Python.</p>
-          <div class="classeur-progress"><span>Votre avancement</span><div class="bar wide"><span style="width: 62%"></span></div><span class="num">62&nbsp;%</span></div>
-          <div class="classeur-foot">
-            <span class="n" title="Enseignants"><svg class="ico ico-16"><use href="#school" /></svg><strong>6</strong></span>
-            <span class="n" title="Élèves"><svg class="ico ico-16"><use href="#groups" /></svg><strong>302</strong></span>
-            <span class="n" title="Activités"><svg class="ico ico-16"><use href="#widgets" /></svg><strong>8</strong></span>
-            <span class="when"><svg class="ico ico-16"><use href="#history" /></svg> 26 sept.</span>
+          <div class="classeur-progress"><span>Votre avancement</span><div class="bar wide" role="progressbar" aria-valuenow="58" aria-valuemin="0" aria-valuemax="100" aria-label="Votre avancement dans Algorithmique et programmation 1"><span style="width: 58%"></span></div><span class="num">58&nbsp;%</span></div>
+          <p class="classeur-line">34 exercices sur&nbsp;59, 4&nbsp;activités&nbsp;terminées&nbsp;sur&nbsp;9</p>
+          <div class="classeur-foot who">
+            <span class="n"><svg class="ico ico-16" aria-hidden="true"><use href="#person" /></svg>Karim Haddad et 5 autres enseignants</span>
+            <span class="due soon"><svg class="ico ico-16" aria-hidden="true"><use href="#schedule" /></svg>Quiz&nbsp;: ferme ce soir à 23&nbsp;h&nbsp;59</span>
           </div>
         </div>
       </div>
-      <div class="card classeur hue-lagon" data-wf-to="detail">
+      <div class="card classeur hue-olive" data-wf-to="detail">
         <span class="classeur-tab"></span>
-        <div class="classeur-cover"><span class="classeur-mono">PW</span><button class="btn btn-icon btn-sm" aria-label="Actions du cours" data-wf-to="mes-cours-actions"><svg class="ico ico-18"><use href="#more_horiz" /></svg></button></div>
+        <div class="classeur-cover"><span class="classeur-mono">AN1</span><button type="button" class="btn btn-icon btn-sm" aria-label="Actions du cours Analyse 1" aria-haspopup="menu" data-wf-to="mes-cours-actions"><svg class="ico ico-18" aria-hidden="true"><use href="#more_horiz" /></svg></button></div>
         <div class="classeur-body">
-          <h2 class="heading">Programmation web</h2>
-          <p>HTML, CSS et JavaScript, du formulaire à l'application. Projet en binôme.</p>
-          <div class="classeur-progress"><span>Votre avancement</span><div class="bar wide"><span style="width: 35%"></span></div><span class="num">35&nbsp;%</span></div>
-          <div class="classeur-foot">
-            <span class="n" title="Enseignants"><svg class="ico ico-16"><use href="#school" /></svg><strong>2</strong></span>
-            <span class="n" title="Élèves"><svg class="ico ico-16"><use href="#groups" /></svg><strong>84</strong></span>
-            <span class="n" title="Activités"><svg class="ico ico-16"><use href="#widgets" /></svg><strong>11</strong></span>
-            <span class="when"><svg class="ico ico-16"><use href="#history" /></svg> 24 sept.</span>
+          <h2 class="heading">Analyse 1</h2>
+          <p>Licence 1 Informatique, semestre 1. Suites, limites, fonctions d'une variable réelle.</p>
+          <div class="classeur-progress"><span>Votre avancement</span><div class="bar wide" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" aria-label="Votre avancement dans Analyse 1"><span style="width: 40%"></span></div><span class="num">40&nbsp;%</span></div>
+          <p class="classeur-line">16 exercices sur&nbsp;40, 2&nbsp;activités&nbsp;terminées&nbsp;sur&nbsp;5</p>
+          <div class="classeur-foot who">
+            <span class="n"><svg class="ico ico-16" aria-hidden="true"><use href="#person" /></svg>Nadia Ferrand et 3 autres enseignants</span>
+            <span class="due planned"><svg class="ico ico-16" aria-hidden="true"><use href="#event" /></svg>Contrôle continu 2&nbsp;: ouvre mercredi à 10&nbsp;h</span>
           </div>
         </div>
       </div>
-      <div class="card classeur hue-ambre" data-wf-to="detail">
+      <div class="card classeur hue-framboise" data-wf-to="detail">
         <span class="classeur-tab"></span>
-        <div class="classeur-cover"><span class="classeur-mono">J3</span><button class="btn btn-icon btn-sm" aria-label="Actions du cours" data-wf-to="mes-cours-actions"><svg class="ico ico-18"><use href="#more_horiz" /></svg></button></div>
+        <div class="classeur-cover"><span class="classeur-mono">AL1</span><button type="button" class="btn btn-icon btn-sm" aria-label="Actions du cours Algèbre 1" aria-haspopup="menu" data-wf-to="mes-cours-actions"><svg class="ico ico-18" aria-hidden="true"><use href="#more_horiz" /></svg></button></div>
         <div class="classeur-body">
-          <h2 class="heading">Java, L3</h2>
-          <p>Programmation objet avancée&nbsp;: généricité, collections, flux.</p>
-          <div class="classeur-progress"><span>Votre avancement</span><div class="bar wide"><span style="width: 90%"></span></div><span class="num">90&nbsp;%</span></div>
-          <div class="classeur-foot">
-            <span class="n" title="Enseignants"><svg class="ico ico-16"><use href="#school" /></svg><strong>1</strong></span>
-            <span class="n" title="Élèves"><svg class="ico ico-16"><use href="#groups" /></svg><strong>41</strong></span>
-            <span class="n" title="Activités"><svg class="ico ico-16"><use href="#widgets" /></svg><strong>6</strong></span>
-            <span class="when"><svg class="ico ico-16"><use href="#history" /></svg> 12 sept.</span>
-          </div>
-        </div>
-      </div>
-      <div class="card classeur hue-menthe" data-wf-to="detail">
-        <span class="classeur-tab"></span>
-        <div class="classeur-cover"><span class="classeur-mono">M1</span><span class="classeur-trophy"><svg class="ico"><use href="#emoji_events" /></svg>2 challenges</span><button class="btn btn-icon btn-sm" aria-label="Actions du cours" data-wf-to="mes-cours-actions"><svg class="ico ico-18"><use href="#more_horiz" /></svg></button></div>
-        <div class="classeur-body">
-          <h2 class="heading">Mathématiques pour l'informatique</h2>
-          <p>Logique, ensembles, récurrence, dénombrement.</p>
-          <div class="classeur-progress"><span>Votre avancement</span><div class="bar wide"><span style="width: 48%"></span></div><span class="num">48&nbsp;%</span></div>
-          <div class="classeur-foot">
-            <span class="n" title="Enseignants"><svg class="ico ico-16"><use href="#school" /></svg><strong>3</strong></span>
-            <span class="n" title="Élèves"><svg class="ico ico-16"><use href="#groups" /></svg><strong>290</strong></span>
-            <span class="n" title="Activités"><svg class="ico ico-16"><use href="#widgets" /></svg><strong>9</strong></span>
-            <span class="when"><svg class="ico ico-16"><use href="#history" /></svg> 20 sept.</span>
+          <h2 class="heading">Algèbre 1</h2>
+          <p>Licence 1 Informatique, semestre 1. Logique, ensembles, matrices et systèmes linéaires.</p>
+          <div class="classeur-progress"><span>Votre avancement</span><div class="bar wide done" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" aria-label="Votre avancement dans Algèbre 1"><span style="width: 100%"></span></div><span class="num">100&nbsp;%</span></div>
+          <p class="classeur-line"><span class="done-label"><svg class="ico ico-16" aria-hidden="true"><use href="#task_alt" /></svg>Cours terminé, 4 activités sur 4</span></p>
+          <div class="classeur-foot who">
+            <span class="n"><svg class="ico ico-16" aria-hidden="true"><use href="#person" /></svg>Olivier Lacroix et 2 autres enseignants</span>
+            <span class="due none">Aucune échéance à venir</span>
           </div>
         </div>
       </div>

@@ -1,62 +1,118 @@
+<a class="skip-link" href="#contenu">Aller au contenu</a>
 <header class="topbar">
-  <button class="btn btn-icon" aria-label="Ouvrir la navigation" data-wf-to="navigation"><svg class="ico"><use href="#menu" /></svg></button>
+  <button type="button" class="btn btn-icon m-tap" aria-label="Ouvrir la navigation" data-wf-to="navigation"><svg class="ico" aria-hidden="true"><use href="#menu" /></svg></button>
   <span class="topbar-title">Accueil</span>
-  <button class="btn btn-icon" aria-label="Notifications, 3 non lues" data-wf-to="notifications" style="position: relative">
-    <svg class="ico"><use href="#notifications" /></svg>
-    <span class="badge-count">3</span>
-  </button>
+  <button type="button" class="btn btn-icon m-tap m-bell" aria-label="Notifications, 3 non lues" data-wf-to="notifications"><svg class="ico" aria-hidden="true"><use href="#notifications" /></svg><span class="badge-count" aria-hidden="true">3</span></button>
 </header>
-
-<main class="m-main">
+<main class="m-main" id="contenu">
   <h1 class="title">Bonjour Inès</h1>
-  <p class="page-sub">Trois activités à rendre cette semaine.</p>
-
-  <section style="margin-top: var(--spacing-6)">
-    <div class="section-head">
-      <h2 class="heading">À faire</h2>
-      <span class="count">3</span>
+  <p class="page-sub">Lundi 28 septembre. Deux activités ferment cette semaine.</p>
+  <div class="notice m-notice service" role="region" aria-label="Annonce, disponibilité du service">
+    <svg class="ico" aria-hidden="true"><use href="#construction" /></svg>
+    <div class="m-notice-body">
+      <p><strong>Maintenance dimanche 4 octobre, de 7&nbsp;h à 9&nbsp;h.</strong> PLaTon sera indisponible pendant ces deux heures.</p>
+      <a href="#" class="btn btn-ghost m-tap-text" data-wf-to="annonces">Lire l'annonce</a>
     </div>
+    <button type="button" class="btn btn-icon m-tap" aria-label="Masquer l'annonce"><svg class="ico ico-18" aria-hidden="true"><use href="#close" /></svg></button>
+  </div>
+  <section class="m-sec" aria-labelledby="m-afaire-t">
+    <div class="section-head"><h2 class="heading" id="m-afaire-t">À faire</h2><span class="count">5</span></div>
     <div class="card">
-      <div class="m-card">
-        <div class="row-title">Quiz&nbsp;: complexité des algorithmes</div>
-        <div class="row-meta" style="flex-direction: column; align-items: flex-start">
-          <span>Algorithmique et programmation 1</span>
-          <span class="due soon"><svg class="ico"><use href="#schedule" /></svg>Ferme ce soir à 23&nbsp;h&nbsp;59</span>
+      <div class="m-card hue-lagon">
+        <div class="m-todo">
+          <span class="lead-icon hued"><svg class="ico" aria-hidden="true"><use href="#quiz" /></svg></span>
+          <div class="m-todo-body">
+            <div class="row-title">Quiz&nbsp;: complexité des algorithmes</div>
+            <div class="row-meta"><span>Algorithmique et programmation 1</span><span class="due soon"><svg class="ico" aria-hidden="true"><use href="#schedule" /></svg>Ferme ce soir à 23&nbsp;h&nbsp;59</span></div>
+            <div class="m-foot"><div class="bar wide" aria-hidden="true"><span style="width: 83%"></span></div><span class="m-count num">5 sur 6<span class="sr-only"> exercices faits</span></span></div>
+          </div>
         </div>
-        <div class="progress" style="margin: 12px 0"><div class="bar wide"><span style="width: 83%"></span></div><span style="white-space: nowrap">5 sur 6</span></div>
-        <a class="btn btn-primary" style="width: 100%; height: 44px">Reprendre</a>
+        <button type="button" class="btn btn-primary m-btn" data-wf-to="exercice">Reprendre</button>
       </div>
-      <div class="m-card">
-        <div class="row-title">TP 4&nbsp;: boucles et tableaux</div>
-        <div class="row-meta" style="flex-direction: column; align-items: flex-start">
-          <span>Algorithmique et programmation 1</span>
-          <span class="due none"><svg class="ico"><use href="#schedule" /></svg>Ferme jeudi à 18&nbsp;h</span>
-        </div>
-        <div class="progress" style="margin: 12px 0"><div class="bar wide"><span style="width: 37%"></span></div><span style="white-space: nowrap">3 sur 8</span></div>
-        <a class="btn btn-secondary" style="width: 100%; height: 44px">Reprendre</a>
-      </div>
-      <div class="m-card">
-        <div class="row-title">Suites numériques&nbsp;: entraînement</div>
-        <div class="row-meta"><span>Analyse 1</span><span class="due none">Sans échéance</span></div>
-        <div class="progress" style="margin: 12px 0"><div class="bar wide"><span style="width: 0%"></span></div><span style="white-space: nowrap">0 sur 12</span></div>
-        <a class="btn btn-secondary" style="width: 100%; height: 44px">Commencer</a>
-      </div>
+      <a href="#" class="m-card m-todo hue-lagon" data-wf-to="exercice">
+          <span class="lead-icon hued"><svg class="ico" aria-hidden="true"><use href="#code" /></svg></span>
+          <div class="m-todo-body">
+            <div class="row-title">TP 4&nbsp;: boucles et tableaux</div>
+            <div class="row-meta"><span>Algorithmique et programmation 1</span><span class="due none"><svg class="ico" aria-hidden="true"><use href="#schedule" /></svg>Ferme jeudi à 18&nbsp;h</span></div>
+            <div class="m-foot"><div class="bar wide" aria-hidden="true"><span style="width: 38%"></span></div><span class="m-count num">3 sur 8<span class="sr-only"> exercices faits</span></span><span class="m-act">Reprendre<svg class="ico ico-18" aria-hidden="true"><use href="#chevron_right" /></svg></span></div>
+          </div>
+      </a>
+      <a href="#" class="m-card m-todo hue-lagon" data-wf-to="exercice">
+          <span class="lead-icon hued"><svg class="ico" aria-hidden="true"><use href="#emoji_events" /></svg></span>
+          <div class="m-todo-body">
+            <div class="row-title">Challenge&nbsp;: tris</div>
+            <div class="row-meta"><span>Algorithmique et programmation 1</span><span class="due none">Sans échéance</span></div>
+            <div class="m-foot"><div class="bar wide" aria-hidden="true"><span style="width: 40%"></span></div><span class="m-count num">2 sur 5<span class="sr-only"> exercices faits</span></span><span class="m-act">Reprendre<svg class="ico ico-18" aria-hidden="true"><use href="#chevron_right" /></svg></span></div>
+          </div>
+      </a>
+      <a href="#" class="m-card m-todo hue-lagon" data-wf-to="intro">
+          <span class="lead-icon hued"><svg class="ico" aria-hidden="true"><use href="#code" /></svg></span>
+          <div class="m-todo-body">
+            <div class="row-title">TP 5&nbsp;: fonctions récursives</div>
+            <div class="row-meta"><span>Algorithmique et programmation 1</span><span class="due none">Sans échéance</span></div>
+            <div class="m-foot"><div class="bar wide" aria-hidden="true"><span style="width: 0%"></span></div><span class="m-count num">0 sur 8<span class="sr-only"> exercices faits</span></span><span class="m-act">Commencer<svg class="ico ico-18" aria-hidden="true"><use href="#chevron_right" /></svg></span></div>
+          </div>
+      </a>
+      <a href="#" class="m-card m-todo hue-olive" data-wf-to="intro">
+          <span class="lead-icon hued"><svg class="ico" aria-hidden="true"><use href="#functions" /></svg></span>
+          <div class="m-todo-body">
+            <div class="row-title">Suites numériques&nbsp;: entraînement</div>
+            <div class="row-meta"><span>Analyse 1</span><span class="due none">Sans échéance</span></div>
+            <div class="m-foot"><div class="bar wide" aria-hidden="true"><span style="width: 0%"></span></div><span class="m-count num">0 sur 12<span class="sr-only"> exercices faits</span></span><span class="m-act">Commencer<svg class="ico ico-18" aria-hidden="true"><use href="#chevron_right" /></svg></span></div>
+          </div>
+      </a>
+      <h3 class="rows-label" id="m-bientot-t">Bientôt</h3>
+      <a href="#" class="m-card m-todo hue-olive" data-wf-to="intro" aria-describedby="m-bientot-t">
+          <span class="lead-icon hued"><svg class="ico" aria-hidden="true"><use href="#history_edu" /></svg></span>
+          <div class="m-todo-body">
+            <div class="row-title">Contrôle continu 2</div>
+            <div class="row-meta"><span>Analyse 1</span><span class="due planned"><svg class="ico" aria-hidden="true"><use href="#event" /></svg>Ouvre mercredi à 10&nbsp;h</span></div>
+            <div class="m-foot"><span class="tag graded"><svg class="ico" aria-hidden="true"><use href="#grading" /></svg>Notée</span><span class="small muted">45 min, une tentative</span><span class="m-act">Lire les règles<svg class="ico ico-18" aria-hidden="true"><use href="#chevron_right" /></svg></span></div>
+          </div>
+      </a>
     </div>
   </section>
-
-  <section style="margin-top: var(--spacing-6)">
-    <div class="section-head">
-      <h2 class="heading">Bientôt</h2>
-      <span class="count">1</span>
-    </div>
+  <section class="m-sec" aria-labelledby="m-resultats-t">
+    <div class="section-head"><h2 class="heading" id="m-resultats-t">Résultats récents</h2></div>
+    <div class="copies m-copies">
+            <a href="#" class="copie-mini hue-lagon" data-wf-to="copie-corrigee">
+              <span class="copie-mini-marge" aria-hidden="true"><span class="figure">82</span><span class="copie-mini-sur">/100</span></span>
+              <span class="copie-mini-body">
+                <span class="copie-mini-title">TP 3&nbsp;: conditions<span class="sr-only">, 82 sur 100</span></span>
+                <span class="copie-mini-meta">Algorithmique et programmation 1</span>
+                <span class="copie-mini-meta">Corrigé le 28 septembre</span>
+                <span class="copie-mini-act"><svg class="ico ico-18" aria-hidden="true"><use href="#rate_review" /></svg>Voir la correction</span>
+              </span>
+            </a>
+            <div class="copie-mini hue-lagon">
+              <span class="copie-mini-marge" aria-hidden="true"></span>
+              <span class="copie-mini-body">
+                <span class="copie-mini-title">Examen partiel 1</span>
+                <span class="copie-mini-meta">Algorithmique et programmation 1</span>
+                <span class="copie-mini-meta">Rendu le 22 septembre</span>
+                <span class="tag copie-mini-state"><svg class="ico" aria-hidden="true"><use href="#pending" /></svg>En correction</span>
+              </span>
+            </div>
+          </div>
+  </section>
+  <section class="m-sec" aria-labelledby="m-cours-t">
+    <div class="section-head"><h2 class="heading" id="m-cours-t">Mes cours</h2><a href="#" class="head-link m-head-link" data-wf-to="mes-cours">Tous</a></div>
     <div class="card">
-      <div class="m-card">
-        <div class="row-title">Contrôle continu 2</div>
-        <div class="row-meta" style="flex-direction: column; align-items: flex-start">
-          <span>Analyse 1, 45 min, une tentative</span>
-          <span class="due planned"><svg class="ico"><use href="#calendar_month" /></svg>Ouvre mercredi à 10&nbsp;h</span>
-        </div>
-      </div>
+            <a href="#" class="mini hued hue-lagon" data-wf-to="detail">
+              <span class="mini-title">Algorithmique et programmation 1</span>
+              <div class="progress course-progress"><div class="bar wide" role="progressbar" aria-valuenow="58" aria-valuemin="0" aria-valuemax="100" aria-label="Votre avancement dans Algorithmique et programmation 1"><span style="width: 58%"></span></div><span class="num course-pct">58&nbsp;%</span></div>
+              <span class="muted num small">34 exercices sur 59</span>
+            </a>
+            <a href="#" class="mini hued hue-olive" data-wf-to="detail">
+              <span class="mini-title">Analyse 1</span>
+              <div class="progress course-progress"><div class="bar wide" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" aria-label="Votre avancement dans Analyse 1"><span style="width: 40%"></span></div><span class="num course-pct">40&nbsp;%</span></div>
+              <span class="muted num small">16 exercices sur 40</span>
+            </a>
+            <a href="#" class="mini hued hue-framboise" data-wf-to="detail">
+              <span class="mini-title">Algèbre 1</span>
+              <div class="progress course-progress"><div class="bar wide done" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" aria-label="Votre avancement dans Algèbre 1"><span style="width: 100%"></span></div><span class="num course-pct">100&nbsp;%</span></div>
+              <span class="done-label small"><svg class="ico ico-16" aria-hidden="true"><use href="#task_alt" /></svg>Cours terminé</span>
+            </a>
     </div>
   </section>
 </main>

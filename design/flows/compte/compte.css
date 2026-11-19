@@ -1,0 +1,93 @@
+/* Mon compte: cards of read-only facts and editable fields. */
+.compte-stack {
+  max-width: 760px;
+  gap: var(--spacing-5);
+}
+.compte-hint {
+  margin: 4px 0 var(--spacing-3);
+}
+.compte-dl {
+  margin: 0;
+}
+.compte-dl .kv {
+  padding-left: 0;
+  padding-right: 0;
+}
+.compte-first {
+  margin-top: var(--spacing-3);
+}
+.chips-input {
+  flex-wrap: wrap;
+  gap: 4px;
+  height: auto;
+  min-height: 40px;
+  padding-top: 7px;
+  padding-bottom: 7px;
+}
+.chips-input .chip {
+  height: 24px;
+}
+.chips-input .placeholder {
+  margin-left: 4px;
+}
+.compte-pass {
+  max-width: 560px;
+}
+.pass-rules {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  margin: var(--spacing-2) 0 var(--spacing-4);
+  padding: 0;
+  list-style: none;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--color-muted);
+}
+.pass-rules li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.pass-rules li.ok {
+  color: var(--color-success-ink);
+}
+.compte-save {
+  margin-top: var(--spacing-4);
+}
+
+/* Mon compte on a phone: stacked cards, facts read top to bottom, 44 px targets. */
+.m-tabs-spaced {
+  margin-top: var(--spacing-4);
+}
+.m-compte {
+  display: grid;
+  gap: var(--spacing-4);
+}
+.m-kv-stack .kv {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+.m-kv-stack dd {
+  overflow-wrap: anywhere;
+}
+.m-compte .input {
+  min-height: 44px;
+}
+.m-compte .input .btn-icon {
+  width: 44px;
+  height: 44px;
+  margin-right: -12px;
+}
+.m-compte .chip-remove {
+  min-width: 24px;
+  min-height: 24px;
+}
+.m-pass-rules {
+  grid-template-columns: 1fr;
+}
+.m-save {
+  width: 100%;
+  height: 44px;
+}

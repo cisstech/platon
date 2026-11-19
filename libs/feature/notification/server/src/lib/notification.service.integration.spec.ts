@@ -29,12 +29,15 @@ describe('NotificationService (integration)', () => {
     dataSource = testDb.dataSource
     userRepo = dataSource.getRepository(UserEntity)
     notificationRepo = dataSource.getRepository(NotificationEntity)
+  }, 60_000)
 
+  beforeEach(() => {
     // Le pubsub ne fait pas partie de ce qu'on veut valider ici (DB réelle) ; PubSub réel exige
     // Redis, donc on garde un simple stub côté publish comme dans les specs unitaires.
+    // A fresh service per test: the signals one test declares do not leak into the next.
     const pubSubService = { publish: jest.fn().mockResolvedValue(undefined) } as unknown as PubSubService
     service = new NotificationService(notificationRepo, discovery, pubSubService)
-  }, 60_000)
+  })
 
   afterAll(async () => {
     await testDb.teardown()
@@ -132,6 +135,41 @@ describe('NotificationService (integration)', () => {
 
       await service.markAllAsRead(user.id)
       expect(await service.unreadCount(user.id)).toBe(0)
+    })
+
+    it('ne devrait pas compter les signaux déclarés, que la liste garde', async () => {
+      const user = await seedUser()
+      service.declareSignals('SIGNAL')
+      await service.sendToUser(user.id, { type: 'FOO' })
+      await service.sendToUser(user.id, { label: 'sans type' })
+      await new Promise((resolve) => setTimeout(resolve, 5))
+      await service.sendToUser(user.id, { type: 'SIGNAL' })
+
+      expect(await service.unreadCount(user.id)).toBe(2)
+
+      const [all, count] = await service.ofUser(user.id)
+      expect(all).toHaveLength(3)
+      expect(count).toBe(3)
+
+      // The player reads the latest signal as the first notification of the list.
+      const [first] = await service.ofUser(user.id, { limit: 1 })
+      expect(first.map((n) => n.data['type'])).toEqual(['SIGNAL'])
+    })
+
+    it('devrait écarter les signaux de la liste quand demandé, en gardant pages et total justes', async () => {
+      const user = await seedUser()
+      service.declareSignals('SIGNAL')
+      for (const type of ['FOO', 'SIGNAL', 'BAR']) {
+        await service.sendToUser(user.id, { type })
+        await new Promise((resolve) => setTimeout(resolve, 5))
+      }
+
+      const [page1, total] = await service.ofUser(user.id, { excludeSignals: true, limit: 1 })
+      const [page2] = await service.ofUser(user.id, { excludeSignals: true, offset: 1, limit: 1 })
+
+      expect(page1.map((n) => n.data['type'])).toEqual(['BAR'])
+      expect(page2.map((n) => n.data['type'])).toEqual(['FOO'])
+      expect(total).toBe(2)
     })
   })
 })

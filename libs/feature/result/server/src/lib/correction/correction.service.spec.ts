@@ -127,14 +127,14 @@ describe('CorrectionService', () => {
       await service.listSummary('corrector-1', CorrectionStatus.pending)
 
       const [queryText] = sessionRepository.query.mock.calls[0]
-      expect(queryText).toContain('HAVING COUNT(exercise_session.id) > COUNT(correction.id)')
+      expect(queryText).toContain('HAVING SUM(copy.total) > SUM(copy.corrected)')
     })
 
     it('devrait ajouter une clause HAVING pour ne garder que les activités entièrement corrigées', async () => {
       await service.listSummary('corrector-1', CorrectionStatus.available)
 
       const [queryText] = sessionRepository.query.mock.calls[0]
-      expect(queryText).toContain('HAVING COUNT(exercise_session.id) = COUNT(correction.id)')
+      expect(queryText).toContain('HAVING SUM(copy.total) = SUM(copy.corrected)')
     })
 
     it('ne devrait ajouter aucune clause HAVING sans statut', async () => {
@@ -142,6 +142,15 @@ describe('CorrectionService', () => {
 
       const [queryText] = sessionRepository.query.mock.calls[0]
       expect(queryText).not.toContain('HAVING')
+    })
+
+    it('devrait compter les mêmes exercices que la file de correction', async () => {
+      await service.listSummary('corrector-1')
+
+      const [queryText] = sessionRepository.query.mock.calls[0]
+      expect(queryText).toContain(`(exercise_session.variables->'.meta'->>'error')::boolean IS TRUE`)
+      expect(queryText).toContain('FROM "Resources" r')
+      expect(queryText).not.toContain('DISTINCT ts.id')
     })
 
     it('devrait retourner le résultat brut de la requête', async () => {

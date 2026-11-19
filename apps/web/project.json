@@ -24,7 +24,7 @@
         "assets": [
           "apps/web/src/assets",
           {
-            "glob": "icons.svg",
+            "glob": "*.svg",
             "input": "libs/design-system/src/assets",
             "output": "./assets/design-system"
           },

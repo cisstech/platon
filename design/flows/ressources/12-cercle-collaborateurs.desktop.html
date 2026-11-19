@@ -8,26 +8,26 @@
         <div class="brand-org">Université Gustave Eiffel</div>
       </div>
     </div>
-    <a class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico"><use href="#add" /></svg>Créer</a>
+    <button type="button" class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico" aria-hidden="true"><use href="#add" /></svg>Créer</button>
     <nav class="nav">
-      <a class="nav-item" data-wf-to="enseignant"><svg class="ico"><use href="#home" /></svg>Accueil</a>
-      <a class="nav-item" data-wf-to="annonces"><svg class="ico"><use href="#campaign" /></svg>Annonces</a>
-      <a class="nav-item" data-wf-to="mes-cours"><svg class="ico"><use href="#school" /></svg>Cours</a>
-      <a class="nav-item" data-wf-to="file"><svg class="ico"><use href="#rate_review" /></svg>Corrections<span class="count">14</span></a>
-      <a class="nav-item active" data-wf-to="catalogue"><svg class="ico"><use href="#folder_open" /></svg>Ressources</a>
-      <a class="nav-item" data-wf-to="test"><svg class="ico"><use href="#fact_check" /></svg>Tests d'entrée</a>
-      <a class="nav-item" data-wf-to="utilisateurs"><svg class="ico"><use href="#shield_person" /></svg>Administration</a>
+      <a href="#" class="nav-item" data-wf-to="enseignant"><svg class="ico" aria-hidden="true"><use href="#home" /></svg>Accueil</a>
+      <a href="#" class="nav-item" data-wf-to="annonces"><svg class="ico" aria-hidden="true"><use href="#campaign" /></svg>Annonces</a>
+      <a href="#" class="nav-item" data-wf-to="mes-cours"><svg class="ico" aria-hidden="true"><use href="#school" /></svg>Cours</a>
+      <a href="#" class="nav-item" data-wf-to="file"><svg class="ico" aria-hidden="true"><use href="#rate_review" /></svg>Corrections</a>
+      <a href="#" class="nav-item active" data-wf-to="catalogue"><svg class="ico" aria-hidden="true"><use href="#folder_open" /></svg>Ressources</a>
+      <a href="#" class="nav-item" data-wf-to="test"><svg class="ico" aria-hidden="true"><use href="#fact_check" /></svg>Tests d'entrée</a>
+      <a href="#" class="nav-item" data-wf-to="utilisateurs"><svg class="ico" aria-hidden="true"><use href="#shield_person" /></svg>Administration</a>
     </nav>
     <div class="sidebar-foot">
-      <a class="nav-item"><svg class="ico"><use href="#help" /></svg>Documentation</a>
-      <a class="nav-item"><svg class="ico"><use href="#notifications" /></svg>Notifications<span class="count">2</span></a>
+      <a href="#" class="nav-item"><svg class="ico" aria-hidden="true"><use href="#help" /></svg>Documentation</a>
+      <a href="#" class="nav-item"><svg class="ico" aria-hidden="true"><use href="#notifications" /></svg>Notifications<span class="count">2</span></a>
       <div class="me">
         <span class="avatar">SL</span>
         <div>
           <div class="me-name">Sophie Lambert</div>
-          <div class="me-role">Administratrice</div>
+          <div class="me-role">Compte administrateur</div>
         </div>
-        <svg class="ico ico-16"><use href="#expand_more" /></svg>
+        <svg class="ico ico-16" aria-hidden="true"><use href="#expand_more" /></svg>
       </div>
       <a class="credit" href="https://github.com/cisstech/platon" aria-label="Code source de PLaTon, logiciel libre de cisstech"><svg class="ico ico-16" aria-hidden="true"><use href="#code" /></svg>Logiciel libre, par <strong>cisstech</strong></a>
     </div>
@@ -35,33 +35,37 @@
   <main class="main" id="contenu">
     <header class="page-head">
       <div>
-        <div class="crumbs"><a data-wf-to="catalogue">Ressources</a><svg class="ico"><use href="#chevron_right" /></svg><span>Informatique</span></div>
-        <h1 class="title" style="display: flex; align-items: center; gap: 6px"><svg class="ico"><use href="#folder_open" /></svg>Algorithmique<button class="btn btn-icon btn-sm" aria-label="Modifier le nom"><svg class="ico ico-16"><use href="#edit" /></svg></button></h1>
+        <div class="crumbs"><a href="#" data-wf-to="catalogue">Ressources</a><svg class="ico" aria-hidden="true"><use href="#chevron_right" /></svg><span>Informatique</span></div>
+        <h1 class="title title-inline"><svg class="ico" aria-hidden="true"><use href="#folder_open" /></svg>Algorithmique<button type="button" class="btn btn-icon btn-sm" aria-label="Renommer le cercle Algorithmique" title="Renommer"><svg class="ico ico-16" aria-hidden="true"><use href="#edit" /></svg></button></h1>
         <p class="page-sub">Exercices et activités des UE d'algorithmique de la licence.</p>
-        <div style="display: flex; gap: var(--spacing-2); margin-top: var(--spacing-3)"><a class="btn btn-secondary btn-sm" data-wf-to="suivi"><svg class="ico"><use href="#visibility" /></svg>Suivre</a><a class="btn btn-secondary btn-sm"><svg class="ico"><use href="#person_add" /></svg>Demander à rejoindre</a></div>
+        <div class="head-tools"><button type="button" class="btn btn-secondary btn-sm" aria-pressed="false"><svg class="ico" aria-hidden="true"><use href="#visibility" /></svg>Suivre</button></div>
       </div>
-      <div class="actions"><a class="btn btn-secondary" data-wf-to="cercles"><svg class="ico"><use href="#account_tree" /></svg>Cercles</a><a class="btn btn-primary" data-wf-to="catalogue"><svg class="ico"><use href="#search" /></svg>Chercher dans ce cercle</a></div>
+      <div class="actions">
+        <label class="sr-only" for="q-cercle">Chercher dans ce cercle</label><div class="input head-search" id="q-cercle" data-wf-to="catalogue"><svg class="ico ico-18" aria-hidden="true"><use href="#search" /></svg><span class="placeholder">Chercher dans ce cercle</span></div>
+        <button type="button" class="btn btn-secondary" data-wf-to="cercles"><svg class="ico" aria-hidden="true"><use href="#account_tree" /></svg>Cercles</button>
+        <button type="button" class="btn btn-secondary" data-wf-to="nouvelle"><svg class="ico" aria-hidden="true"><use href="#add" /></svg>Nouvelle ressource</button>
+      </div>
     </header>
-    <div class="tabs"><a class="tab" data-wf-to="cercle"><svg class="ico"><use href="#grid_view" /></svg>Vue d'ensemble</a><a class="tab" data-wf-to="explorer"><svg class="ico"><use href="#folder_open" /></svg>Explorer</a><a class="tab" data-wf-to="evenements"><svg class="ico"><use href="#history" /></svg>Évènements</a><a class="tab active" data-wf-to="cercle-collaborateurs"><svg class="ico"><use href="#settings" /></svg>Paramètres</a></div>
-    <div style="display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: var(--spacing-6); align-items: start; max-width: 1000px">
-      <nav class="card" style="padding: var(--spacing-2)"><div class="atelier-item"><svg class="ico ico-18"><use href="#info" /></svg>Informations</div><div class="atelier-item active"><svg class="ico ico-18"><use href="#groups" /></svg>Collaborateurs</div></nav>
+    <nav class="tabs" aria-label="Sections du cercle"><a href="#" class="tab" data-wf-to="cercle"><svg class="ico" aria-hidden="true"><use href="#grid_view" /></svg>Vue d'ensemble</a><a href="#" class="tab" data-wf-to="explorer"><svg class="ico" aria-hidden="true"><use href="#folder_open" /></svg>Explorer</a><a href="#" class="tab" data-wf-to="evenements"><svg class="ico" aria-hidden="true"><use href="#history" /></svg>Évènements</a><a href="#" class="tab active" data-wf-to="cercle-collaborateurs" aria-current="page"><svg class="ico" aria-hidden="true"><use href="#settings" /></svg>Paramètres</a></nav>
+    <div class="settings-layout">
+      <nav class="card sub-nav" aria-label="Paramètres du cercle"><button type="button" class="atelier-item"><svg class="ico ico-18" aria-hidden="true"><use href="#info" /></svg>Informations</button><button type="button" class="atelier-item active" aria-current="true"><svg class="ico ico-18" aria-hidden="true"><use href="#groups" /></svg>Collaborateurs</button></nav>
       <div class="stack">
         <section class="card card-pad">
           <div class="section-head"><h2 class="subheading">Demandes</h2><span class="count">1</span></div>
-          <table class="table"><tbody><tr><td><div class="person"><span class="avatar">NK</span><div>Nora Kessler</div></div></td><td>demandé hier</td><td style="white-space: nowrap; text-align: right"><a class="btn btn-secondary btn-sm"><svg class="ico"><use href="#check" /></svg>Accepter</a> <a class="btn btn-ghost btn-sm">Refuser</a></td></tr>
+          <table class="table"><tbody><tr><td><div class="person"><span class="avatar">JL</span><div>Julien Lefèvre</div></div></td><td>demandé hier</td><td class="cell-end"><button type="button" class="btn btn-secondary btn-sm" aria-label="Accepter Julien Lefèvre"><svg class="ico" aria-hidden="true"><use href="#check" /></svg>Accepter</button> <button type="button" class="btn btn-ghost btn-sm" aria-label="Refuser Julien Lefèvre">Refuser</button></td></tr>
 </tbody></table>
         </section>
         <section class="card card-pad">
           <div class="section-head"><h2 class="subheading">Inviter</h2></div>
-          <div class="toolbar" style="margin: 0"><div class="input" style="flex: 1"><span class="placeholder">Nom d'un enseignant</span></div><a class="btn btn-primary btn-sm">Inviter</a></div>
-          <table class="table" style="margin-top: var(--spacing-3)"><tbody><tr><td><div class="person"><span class="avatar">LF</span><div>Léa Fontaine</div></div></td><td>invitée le 22 sept.</td><td style="white-space: nowrap; text-align: right"><button class="btn btn-icon btn-sm" aria-label="Retirer"><svg class="ico ico-18"><use href="#close" /></svg></button></td></tr>
+          <div class="toolbar invite-bar"><label class="sr-only" for="inviter">Enseignant à inviter</label><div class="input" id="inviter"><span class="placeholder">Nom d'un enseignant</span></div><button type="button" class="btn btn-primary btn-sm"><svg class="ico" aria-hidden="true"><use href="#person_add" /></svg>Inviter</button></div>
+          <table class="table invites"><tbody><tr><td><div class="person"><span class="avatar">LF</span><div>Léa Fontaine</div></div></td><td>invitation envoyée le 22 sept.</td><td class="cell-end"><button type="button" class="btn btn-icon btn-sm" aria-label="Annuler l'invitation de Léa Fontaine"><svg class="ico ico-18" aria-hidden="true"><use href="#close" /></svg></button></td></tr>
 </tbody></table>
         </section>
         <section class="card card-pad">
           <div class="section-head"><h2 class="subheading">Collaborateurs</h2><span class="count">9</span></div>
-          <table class="table"><tbody><tr><td><div class="person"><span class="avatar">HM</span><div>Hélène Martin</div></div></td><td>propriétaire</td><td style="white-space: nowrap; text-align: right"></td></tr>
-<tr><td><div class="person"><span class="avatar">KH</span><div>Karim Haddad</div></div></td><td>depuis le 3 sept. 2024</td><td style="white-space: nowrap; text-align: right"><button class="btn btn-icon btn-sm" aria-label="Retirer"><svg class="ico ico-18"><use href="#close" /></svg></button></td></tr>
-<tr><td><div class="person"><span class="avatar">PR</span><div>Paul Renard</div></div></td><td>depuis le 3 sept. 2026</td><td style="white-space: nowrap; text-align: right"><button class="btn btn-icon btn-sm" aria-label="Retirer"><svg class="ico ico-18"><use href="#close" /></svg></button></td></tr>
+          <table class="table"><tbody><tr><td><div class="person"><span class="avatar">HM</span><div>Hélène Martin</div></div></td><td>propriétaire</td><td class="cell-end"></td></tr>
+<tr><td><div class="person"><span class="avatar">KH</span><div>Karim Haddad</div></div></td><td>depuis le 3 sept. 2024</td><td class="cell-end"><button type="button" class="btn btn-icon btn-sm" aria-label="Retirer Karim Haddad du cercle"><svg class="ico ico-18" aria-hidden="true"><use href="#close" /></svg></button></td></tr>
+<tr><td><div class="person"><span class="avatar">PR</span><div>Paul Renard</div></div></td><td>depuis le 3 sept. 2026</td><td class="cell-end"><button type="button" class="btn btn-icon btn-sm" aria-label="Retirer Paul Renard du cercle"><svg class="ico ico-18" aria-hidden="true"><use href="#close" /></svg></button></td></tr>
 </tbody></table>
         </section>
       </div>

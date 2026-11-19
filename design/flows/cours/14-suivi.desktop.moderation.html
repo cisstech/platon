@@ -8,61 +8,68 @@
         <div class="brand-org">Université Gustave Eiffel</div>
       </div>
     </div>
-    <a class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico"><use href="#add" /></svg>Créer</a>
+    <button type="button" class="btn btn-cover btn-create" data-wf-to="creer"><svg class="ico" aria-hidden="true"><use href="#add" /></svg>Créer</button>
     <nav class="nav">
-      <a class="nav-item" data-wf-to="enseignant"><svg class="ico"><use href="#home" /></svg>Accueil</a>
-      <a class="nav-item" data-wf-to="annonces"><svg class="ico"><use href="#campaign" /></svg>Annonces</a>
-      <a class="nav-item active" data-wf-to="mes-cours"><svg class="ico"><use href="#school" /></svg>Cours</a>
-      <a class="nav-item" data-wf-to="file"><svg class="ico"><use href="#rate_review" /></svg>Corrections<span class="count">14</span></a>
-      <a class="nav-item" data-wf-to="catalogue"><svg class="ico"><use href="#folder_open" /></svg>Ressources</a>
-      <a class="nav-item" data-wf-to="test"><svg class="ico"><use href="#fact_check" /></svg>Tests d'entrée</a>
+      <a href="#" class="nav-item" data-wf-to="enseignant"><svg class="ico" aria-hidden="true"><use href="#home" /></svg>Accueil</a>
+      <a href="#" class="nav-item" data-wf-to="annonces"><svg class="ico" aria-hidden="true"><use href="#campaign" /></svg>Annonces</a>
+      <a href="#" class="nav-item active" data-wf-to="mes-cours"><svg class="ico" aria-hidden="true"><use href="#school" /></svg>Cours</a>
+      <a href="#" class="nav-item" data-wf-to="file"><svg class="ico" aria-hidden="true"><use href="#rate_review" /></svg>Corrections<span class="count">2</span></a>
+      <a href="#" class="nav-item" data-wf-to="catalogue"><svg class="ico" aria-hidden="true"><use href="#folder_open" /></svg>Ressources</a>
+      <a href="#" class="nav-item" data-wf-to="test"><svg class="ico" aria-hidden="true"><use href="#fact_check" /></svg>Tests d'entrée</a>
     </nav>
     <div class="sidebar-foot">
-      <a class="nav-item"><svg class="ico"><use href="#help" /></svg>Documentation</a>
-      <a class="nav-item"><svg class="ico"><use href="#notifications" /></svg>Notifications<span class="count">2</span></a>
+      <a href="#" class="nav-item"><svg class="ico" aria-hidden="true"><use href="#help" /></svg>Documentation</a>
+      <a href="#" class="nav-item"><svg class="ico" aria-hidden="true"><use href="#notifications" /></svg>Notifications<span class="count">2</span></a>
       <div class="me">
         <span class="avatar">KH</span>
         <div>
           <div class="me-name">Karim Haddad</div>
-          <div class="me-role">Enseignant</div>
+          <div class="me-role">Compte enseignant</div>
         </div>
-        <svg class="ico ico-16"><use href="#expand_more" /></svg>
+        <svg class="ico ico-16" aria-hidden="true"><use href="#expand_more" /></svg>
       </div>
       <a class="credit" href="https://github.com/cisstech/platon" aria-label="Code source de PLaTon, logiciel libre de cisstech"><svg class="ico ico-16" aria-hidden="true"><use href="#code" /></svg>Logiciel libre, par <strong>cisstech</strong></a>
     </div>
   </aside>
   <main class="main" id="contenu">
     <header class="page-head">
-      <div>
-        <div class="crumbs"><a data-wf-to="detail">Algorithmique et programmation 1</a><svg class="ico"><use href="#chevron_right" /></svg><span>Semaine 4</span></div>
+      <div class="course-mark hue-lagon" aria-hidden="true">AP1</div>
+      <div class="head-main">
+        <div class="crumbs"><a href="#" data-wf-to="mes-cours">Cours</a><svg class="ico" aria-hidden="true"><use href="#chevron_right" /></svg><a href="#" data-wf-to="detail">Algorithmique et programmation 1</a><svg class="ico" aria-hidden="true"><use href="#chevron_right" /></svg><span>Semaine 4</span></div>
         <h1 class="title">Quiz&nbsp;: complexité des algorithmes</h1>
-        <p class="page-sub"><span class="due soon"><svg class="ico"><use href="#schedule" /></svg>Ferme ce soir à 23&nbsp;h&nbsp;59</span></p>
+        <p class="head-meta"><span class="due soon"><svg class="ico ico-16" aria-hidden="true"><use href="#schedule" /></svg>Ferme ce soir à 23&nbsp;h&nbsp;59</span><span>6 exercices, entraînement</span></p>
       </div>
       <div class="actions">
-        <a class="btn btn-secondary"><svg class="ico"><use href="#download" /></svg>Notes (CSV)</a>
-        <a class="btn btn-secondary" data-wf-to="parametres"><svg class="ico"><use href="#settings" /></svg>Paramètres</a>
-        <a class="btn btn-primary" data-wf-to="file"><svg class="ico"><use href="#rate_review" /></svg>Corriger</a>
+        <button type="button" class="btn btn-secondary"><svg class="ico" aria-hidden="true"><use href="#download" /></svg>Exporter les notes (CSV)</button>
+        <button type="button" class="btn btn-secondary" data-wf-to="parametres"><svg class="ico" aria-hidden="true"><use href="#tune" /></svg>Régler l'activité</button>
       </div>
     </header>
-    <div class="tabs"><span class="tab"><svg class="ico"><use href="#monitoring" /></svg>Statistiques</span><span class="tab"><svg class="ico"><use href="#groups" /></svg>Apprenants</span><span class="tab active"><svg class="ico"><use href="#lock" /></svg>Modération</span></div>
-    <div class="layout">
-      <section class="card card-pad">
-        <h2 class="subheading" style="margin-bottom: 4px">Ouvrir ou fermer pour certains élèves</h2>
-        <p class="muted" style="margin: 0 0 var(--spacing-3); font-size: 13px">Pour un élève en retard, une connexion perdue, un tiers-temps de dernière minute.</p>
-        <div class="toolbar" style="margin-bottom: var(--spacing-3)">
-          <div class="input" style="flex: 1"><svg class="ico ico-18" style="margin: 0 8px 0 0; color: var(--color-subtle)"><use href="#search" /></svg><span class="placeholder">Nom d'un élève</span></div>
-          <a class="btn btn-ghost btn-sm">Tout sélectionner</a>
+    <nav class="tabs" aria-label="Vues du suivi"><a href="#" class="tab" data-wf-to="suivi"><svg class="ico" aria-hidden="true"><use href="#monitoring" /></svg>Statistiques</a><a href="#" class="tab" data-wf-to="suivi"><svg class="ico" aria-hidden="true"><use href="#groups" /></svg>Étudiants</a><a href="#" class="tab active" aria-current="page" data-wf-to="suivi"><svg class="ico" aria-hidden="true"><use href="#key" /></svg>Accès individuels</a></nav>
+    <section class="card card-pad" aria-labelledby="mod-t">
+        <h2 class="subheading card-title" id="mod-t">Ouvrir ou fermer pour certains étudiants</h2>
+        <p class="small muted card-desc">Pour un étudiant en retard, une connexion perdue, un tiers-temps de dernière minute.</p>
+        <p class="small muted quiet-line"><svg class="ico ico-16" aria-hidden="true"><use href="#info" /></svg>Ce quiz ne s'arrête pas quand on le quitte&nbsp;: il n'a pas de code de reprise.</p>
+        <div class="toolbar mod-tools">
+          <label class="sr-only" for="q-acces">Chercher un étudiant</label><div class="input search fill" id="q-acces" role="searchbox"><svg class="ico ico-18" aria-hidden="true"><use href="#search" /></svg><span class="placeholder">Nom d'un étudiant</span></div>
+          <label class="sr-only" for="f-groupe-acces">Groupe</label><span class="select" id="f-groupe-acces" role="button" aria-haspopup="listbox"><svg class="ico ico-16" aria-hidden="true"><use href="#groups" /></svg>Tous les groupes<svg class="ico ico-16" aria-hidden="true"><use href="#expand_more" /></svg></span>
         </div>
-        <div class="filters"><span class="chip">Amélie Roux</span><span class="chip applied">Bastien Morel</span><span class="chip">Chloé Garnier</span><span class="chip applied">David Lemaire</span><span class="chip">Élise Faure</span><span class="chip">Farid Benkirane</span><span class="chip">Gaëlle Picard</span><span class="chip">Hugo Marchand</span></div>
-        <div style="display: flex; gap: var(--spacing-2)"><a class="btn btn-primary btn-sm"><svg class="ico"><use href="#play_arrow" /></svg>Ouvrir pour 2 élèves</a><a class="btn btn-secondary btn-sm"><svg class="ico"><use href="#lock" /></svg>Fermer pour 2 élèves</a></div>
-      </section>
-      <aside class="stack">
-        <section class="card card-pad">
-          <h2 class="subheading" style="margin-bottom: 4px">Code de déblocage</h2>
-          <p class="muted" style="margin: 0 0 var(--spacing-3); font-size: 13px">À donner en salle le jour de l'épreuve.</p>
-          <div class="input"><span class="masked">●●●●●●</span><span style="margin-left: auto; display: flex"><button class="btn btn-icon btn-sm" aria-label="Afficher"><svg class="ico ico-18"><use href="#visibility" /></svg></button><button class="btn btn-icon btn-sm" aria-label="Copier"><svg class="ico ico-18"><use href="#content_copy" /></svg></button><button class="btn btn-icon btn-sm" aria-label="Nouveau code"><svg class="ico ico-18"><use href="#autorenew" /></svg></button></span></div>
-        </section>
-      </aside>
-    </div>
+        <table class="table dense mod-table">
+          <thead><tr><th class="col-check" scope="col"><span class="check" role="checkbox" aria-checked="false" aria-label="Sélectionner les 302 étudiants"></span></th><th scope="col" aria-sort="ascending"><button type="button" class="th-sort">Étudiant<svg class="ico" aria-hidden="true"><use href="#arrow_upward" /></svg></button></th><th scope="col">Groupe</th><th class="num" scope="col">Exercices faits</th></tr></thead>
+          <tbody>
+<tr><td class="col-check"><span class="check" role="checkbox" aria-checked="false" aria-label="Sélectionner Amélie Roux"></span></td><td>Amélie Roux</td><td>TD 1</td><td class="num">6 sur 6</td></tr>
+<tr class="is-picked"><td class="col-check"><span class="check on" role="checkbox" aria-checked="true" aria-label="Sélectionner Bastien Morel"><svg class="ico" aria-hidden="true"><use href="#check" /></svg></span></td><td>Bastien Morel</td><td>TD 2</td><td class="num">5 sur 6</td></tr>
+<tr><td class="col-check"><span class="check" role="checkbox" aria-checked="false" aria-label="Sélectionner Chloé Garnier"></span></td><td>Chloé Garnier</td><td>TD 3</td><td class="num">6 sur 6</td></tr>
+<tr class="is-picked"><td class="col-check"><span class="check on" role="checkbox" aria-checked="true" aria-label="Sélectionner David Lemaire"><svg class="ico" aria-hidden="true"><use href="#check" /></svg></span></td><td>David Lemaire</td><td>TD 2</td><td class="num">2 sur 6</td></tr>
+<tr><td class="col-check"><span class="check" role="checkbox" aria-checked="false" aria-label="Sélectionner Élise Faure"></span></td><td>Élise Faure</td><td>TD 3</td><td class="num">6 sur 6</td></tr>
+<tr><td class="col-check"><span class="check" role="checkbox" aria-checked="false" aria-label="Sélectionner Farid Benkirane"></span></td><td>Farid Benkirane</td><td>TD 1</td><td class="num">4 sur 6</td></tr>
+          </tbody>
+        </table>
+        <div class="table-foot"><span>1 à 50 sur 302</span><span class="spacer"></span><button type="button" class="btn btn-icon btn-sm" aria-label="Page précédente"><svg class="ico ico-18" aria-hidden="true"><use href="#chevron_left" /></svg></button><button type="button" class="btn btn-icon btn-sm" aria-label="Page suivante"><svg class="ico ico-18" aria-hidden="true"><use href="#chevron_right" /></svg></button></div>
+        <div class="selection-bar" role="region" aria-label="Étudiants sélectionnés">
+          <strong>2 sélectionnés</strong>
+          <button type="button" class="btn btn-cover-quiet btn-sm sel-first"><svg class="ico" aria-hidden="true"><use href="#block" /></svg>Fermer pour 2 étudiants</button>
+          <button type="button" class="btn btn-cover btn-sm"><svg class="ico" aria-hidden="true"><use href="#key" /></svg>Ouvrir pour 2 étudiants</button>
+        </div>
+    </section>
   </main>
 </div>

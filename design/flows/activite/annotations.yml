@@ -1,8 +1,30 @@
 - screen: ajouter
-  note: "Étape Activités de l'assistant actuel : recherche filtrée de ressources de type activité, sélection multiple, bandeau de sélection. Le bandeau reprend la couleur de la couverture."
+  note: "Le moment : lundi 21 septembre, 14 h. Karim ajoute Examen partiel 2 à AP1, dans la section Semaine 5, qui ne contient alors que Challenge : tris (ouverte depuis le 15 septembre) ; TP 5 y arrive plus tard. Ce jour-là, TP 3 ferme le soir à 23 h 59, Examen partiel 1 a lieu le lendemain, et Karim n'a aucune copie à corriger : Projet 1 sera rendu le 26 septembre, d'où Corrections sans compteur."
+- screen: ajouter
+  note: "Étape Activités de l'assistant actuel : recherche filtrée de ressources de type activité, sélection multiple, bandeau de sélection. Le bandeau reprend la couleur de la couverture, comme toute barre qui flotte au-dessus de la page (design.md) ; son Suivant est l'action principale de l'écran, en bouton de couverture."
+- screen: ajouter
+  note: "Le filtre actif se retire par un vrai bouton nommé (« Retirer le filtre Statut : prêt ») ; la recherche a un libellé pour les lecteurs d'écran."
 - screen: ajouter
   note: "Quand la recherche ne donne rien, la page renvoie vers la création à partir d'un modèle."
 - screen: ajouter-fonction
-  note: "C'est ici, et seulement ici, que vit la Fonction. Les étapes Fonction et Configuration sont réunies : Notée déplie ses réglages (durée, tentatives, code, sécurité), Challenge prévient qu'il est définitif."
+  note: "C'est ici, et seulement ici, que vit la Fonction du modèle. Le mot ne s'affiche plus : l'étape s'appelle Usage et dates et pose la question À quoi sert cette activité ?, chaque option commençant par son but. Les étapes Fonction et Configuration sont réunies : Notée rend les dates obligatoires et ajoute la durée et les tentatives, Challenge prévient qu'il est définitif."
+- screen: ajouter-fonction
+  note: "Une étape légère : l'usage, les dates et la durée restent en vue, et l'écran tient sans défiler. Les tentatives (1 par exercice, comme dans le cours) partagent la ligne des dates. Sécurité de l'épreuve est repliée : une ligne dit ce qui est actif par défaut, avec les mots de la page d'entrée de l'épreuve (« Quitter le plein écran, la page ou la fenêtre arrête l'examen »), et Régler la déplie sur place (bouton à aria-expanded, qui devient Replier). L'état securite montre la page défilée jusqu'aux dates, la sécurité dépliée."
+- screen: ajouter-fonction
+  note: "Dépliée, chaque règle est un interrupteur au verbe arrêter, celui du lecteur : Arrêter l'épreuve si l'étudiant quitte la page (terminateOnLeavePage : onglet changé, page fermée ou rechargée), Arrêter l'épreuve si l'étudiant quitte la fenêtre (terminateOnLoseFocus : une autre fenêtre, une autre application). Par défaut, pour une épreuve notée : plein écran et les deux règles actifs, copier-coller libre, parce qu'un étudiant recopie son propre code d'un exercice à l'autre."
 - screen: ajouter-composer
   note: "Proposition, côté client : composer une activité avec des exercices du catalogue, dans l'ordre. PLaTon crée la ressource activité (POST /resources avec un main.pla à un groupe) dans le cercle de l'enseignant, puis l'ajoute au cours. Plus besoin de l'éditeur PLA pour assembler trois exercices."
+- screen: ajouter-composer
+  note: "L'ordre se change à la souris et au clavier : poignée bouton en tête de ligne, indice clavier sous la liste. Retirer et Prévisualiser nomment l'exercice concerné."
+- screen: ajouter-fonction
+  note: "Chaque usage montre l'icône que portera l'activité dans le cours, à la teinte d'AP1 : sa forme pour un entraînement (ici code, des programmes à écrire), history_edu (la copie et la plume) pour une épreuve notée, emoji_events pour un challenge. Une icône d'activité dit sa forme ou son usage, jamais un état : event reste l'état planifié. Sous le titre, l'étape nomme l'activité qu'elle règle : Examen partiel 2, notée, lundi 12 octobre de 8 h à 9 h 30, comme dans le cours."
+- screen: ajouter-fonction
+  note: "Chaque libellé est lié à son champ ; les interrupteurs de sécurité sont des role switch nommés par leur phrase. Le bouton Régler porte en texte lu « la sécurité de l'épreuve », et la ligne de résumé le décrit."
+- screen: ajouter-composer
+  note: "La recherche a un libellé lu par les lecteurs d'écran, le nom de l'activité un libellé lié. L'icône de tête dit la forme de l'exercice : code pour un programme, functions pour des mathématiques. Un exercice déjà pris est marqué Ajouté, sans couleur d'état : ce n'est ni juste ni prêt, c'est une sélection."
+- screen: ajouter-fonction
+  note: "Une épreuve notée a ses deux dates, obligatoires (aria-required, reliées à la phrase qui dit pourquoi) : une activité sans dates est ouverte aux étudiants (calculateActivityOpenState), ce qu'une épreuve ne doit jamais être par défaut. Même règle que le dialogue Ajouter à un cours de l'atelier. Pour un entraînement, les dates restent facultatives."
+- screen: ajouter-fonction
+  note: "Le code de reprise (K7Q2XM pour Examen partiel 2) s'affiche masqué, avec le même champ que le suivi du cours : Afficher dans le champ (aria-pressed), Copier et Nouveau code dessous. Il vit dans Sécurité de l'épreuve parce qu'il en dépend : sans règle qui arrête l'épreuve, il n'y a rien à reprendre. La phrase dit à quoi il sert : rouvrir une épreuve arrêtée tant que son temps n'est pas écoulé, le temps continuant de courir pendant l'arrêt ; l'enseignant le donne en salle, et il ne sert pas à commencer. C'est l'usage du code dans la plateforme (graded-activity-settings.component : code demandé à l'étudiant pour se débloquer après une fin automatique, toujours généré au hasard). Le libellé dit aux lecteurs d'écran qu'il est masqué."
+- screen: ajouter-fonction
+  note: "Plein écran obligatoire est le premier réglage de sécurité, parce que la page d'entrée de l'épreuve l'annonce à l'étudiant (flow lecteur, intro). Proposition : le modèle n'a pas ce réglage aujourd'hui ; ActivitySecuritySettings (libs/feature/compiler/src/lib/pl.settings.ts) ne connaît que noCopyPaste, terminateOnLoseFocus et terminateOnLeavePage. Il faut un champ de plus et la demande de plein écran au démarrage du lecteur."

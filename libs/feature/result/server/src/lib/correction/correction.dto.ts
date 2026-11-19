@@ -95,6 +95,9 @@ export class ActivityCorrectionSummaryDTO implements ActivityCorrectionSummary {
 
   @IsNumber()
   correctedExercises!: number
+
+  @IsNumber()
+  pendingCopies!: number
 }
 
 export class UpsertCorrectionDTO implements UpsertCorrection {

@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core'
 import { JwtHelperService } from '@auth0/angular-jwt'
 import { AuthToken, ItemResponse } from '@platon/core/common'
 import { firstValueFrom, lastValueFrom } from 'rxjs'
-import { StorageService } from '../../services'
+import { StorageService } from '../../services/storage.service'
 import { TokenProvider } from '../models/token-provider'
 
 const KEY = 'auth-token'

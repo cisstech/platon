@@ -1,29 +1,68 @@
-<div style="min-height: 100vh; padding: var(--spacing-6) var(--spacing-8)"><div style="max-width: 1400px">
-  <div class="player-head">
-    <button class="btn btn-icon" aria-label="Revenir aux corrections" data-wf-to="file"><svg class="ico"><use href="#arrow_back" /></svg></button>
-    <div style="flex: 1">
-      <div class="heading">Examen partiel 1, exercice 4&nbsp;: recherche dichotomique</div>
-      <div class="muted" style="font-size: 13px">Algorithmique et programmation 1, groupe TD 2, copie 3 sur 26</div>
+<div class="corr">
+  <a class="skip-link" href="#contenu">Aller au contenu</a>
+  <header class="player-head">
+    <button type="button" class="btn btn-icon" aria-label="Revenir aux corrections" data-wf-to="file"><svg class="ico" aria-hidden="true"><use href="#arrow_back" /></svg></button>
+    <div class="corr-title">
+      <h1 class="title">Examen partiel 1&nbsp;: copie de David Lemaire</h1>
+      <p class="small muted">Algorithmique et programmation 1, groupe TD 2, copie 15 sur 26</p>
     </div>
-    <span class="muted" style="font-size: 13px; display: inline-flex; gap: 6px; align-items: center"><span class="kbd">J</span><span class="kbd">K</span>copie précédente, suivante</span>
-  </div>
-  <div class="grading">
-    <aside class="card">
-      <div class="rail-head"><span class="subheading">Copies</span><span class="num">2 sur 26</span></div>
-      <div class="queue-item done"><span class="avatar">AR</span><span>Amélie Roux</span><svg class="ico"><use href="#check_circle" /></svg></div>
-      <div class="queue-item done"><span class="avatar">BM</span><span>Bastien Morel</span><svg class="ico"><use href="#check_circle" /></svg></div>
-      <div class="queue-item current"><span class="avatar">CG</span><span>Chloé Garnier</span><svg class="ico"><use href="#radio_button_unchecked" /></svg></div>
-      <div class="queue-item "><span class="avatar">DL</span><span>David Lemaire</span><svg class="ico"><use href="#radio_button_unchecked" /></svg></div>
-      <div class="queue-item "><span class="avatar">ÉF</span><span>Élise Faure</span><svg class="ico"><use href="#radio_button_unchecked" /></svg></div>
-      <div class="queue-item "><span class="avatar">FB</span><span>Farid Benkirane</span><svg class="ico"><use href="#radio_button_unchecked" /></svg></div>
-      <div class="queue-item "><span class="avatar">GP</span><span>Gaëlle Picard</span><svg class="ico"><use href="#radio_button_unchecked" /></svg></div>
-      <div class="queue-item "><span class="avatar">HM</span><span>Hugo Marchand</span><svg class="ico"><use href="#radio_button_unchecked" /></svg></div>
+    <dl class="shortcuts" aria-label="Raccourcis clavier, mode Par exercice">
+      <div><dt><span class="kbd">J</span></dt><dd>copie suivante</dd></div>
+      <div><dt><span class="kbd">K</span></dt><dd>copie précédente</dd></div>
+      <div><dt><span class="kbd">←</span><span class="kbd">→</span></dt><dd>exercice</dd></div>
+      <div><dt><span class="kbd">C</span></dt><dd>commentaire</dd></div>
+      <div><dt><span class="kbd">Ctrl</span><span class="kbd">Entrée</span></dt><dd>valider</dd></div>
+    </dl>
+  </header>
+  <main class="grading" id="contenu">
+    <aside class="card pile thick queue" aria-labelledby="copies-t">
+      <div class="rail-head"><h2 class="subheading" id="copies-t">Copies</h2><span class="num">exercice 4&nbsp;: 14 sur 26</span></div>
+      <p class="queue-mode"><svg class="ico" aria-hidden="true"><use href="#done_all" /></svg>Exercices 1 à 3&nbsp;: tous corrigés</p>
+      <div class="queue-search">
+        <label class="sr-only" for="q-etudiant">Aller à un étudiant</label>
+        <div class="input" id="q-etudiant" role="searchbox"><svg class="ico ico-18" aria-hidden="true"><use href="#search" /></svg><span class="placeholder">Aller à un étudiant</span></div>
+      </div>
+      <button class="queue-cue" type="button"><svg class="ico ico-16" aria-hidden="true"><use href="#arrow_upward" /></svg>12 plus haut, exercice 4 corrigé</button>
+      <div class="queue-list">
+        <button type="button" class="queue-item done" data-wf-to="copie"><span class="avatar" aria-hidden="true">BM</span><span>Bastien Morel</span><svg class="ico" aria-hidden="true"><use href="#done_all" /></svg><span class="sr-only">, exercice 4 corrigé</span></button>
+        <button type="button" class="queue-item done" data-wf-to="copie"><span class="avatar" aria-hidden="true">CN</span><span>Clara Nguyen</span><svg class="ico" aria-hidden="true"><use href="#done_all" /></svg><span class="sr-only">, exercice 4 corrigé</span></button>
+        <button type="button" class="queue-item current" aria-current="true"><span class="avatar" aria-hidden="true">DL</span><span>David Lemaire</span><svg class="ico" aria-hidden="true"><use href="#pending" /></svg><span class="sr-only">, exercice 4 en cours de correction</span></button>
+        <button type="button" class="queue-item" data-wf-to="copie"><span class="avatar" aria-hidden="true">IB</span><span>Inès Benali</span><svg class="ico" aria-hidden="true"><use href="#radio_button_unchecked" /></svg><span class="sr-only">, exercice 4 à corriger</span></button>
+        <button type="button" class="queue-item" data-wf-to="copie"><span class="avatar" aria-hidden="true">LC</span><span>Léo Chevalier</span><svg class="ico" aria-hidden="true"><use href="#radio_button_unchecked" /></svg><span class="sr-only">, exercice 4 à corriger</span></button>
+        <button type="button" class="queue-item" data-wf-to="copie"><span class="avatar" aria-hidden="true">MR</span><span>Manon Roussel</span><svg class="ico" aria-hidden="true"><use href="#radio_button_unchecked" /></svg><span class="sr-only">, exercice 4 à corriger</span></button>
+        <button type="button" class="queue-item" data-wf-to="copie"><span class="avatar" aria-hidden="true">NB</span><span>Nathan Briand</span><svg class="ico" aria-hidden="true"><use href="#radio_button_unchecked" /></svg><span class="sr-only">, exercice 4 à corriger</span></button>
+      </div>
+      <p class="queue-cue below"><svg class="ico ico-16" aria-hidden="true"><use href="#arrow_downward" /></svg>7 plus bas, exercice 4 à corriger</p>
     </aside>
-    <div class="copie">
-      <div class="q">
-        <div class="q-mark part"><span>1</span><svg class="ico"><use href="#pending" /></svg></div>
-        <h2 class="heading">Écrire une fonction <code>recherche(t, x)</code> qui renvoie l'indice de <code>x</code> dans le tableau trié <code>t</code>, ou -1.</h2>
-        <span class="code">def recherche(t, x):
+    <div class="corr-center">
+      <nav class="ex-switch" aria-labelledby="ex-t">
+        <div class="ex-switch-head">
+          <p class="ex-pos" id="ex-t">Exercice 4 sur 6</p>
+          <button type="button" class="btn btn-icon btn-sm" aria-label="Exercice précédent&nbsp;: inverser une liste" aria-keyshortcuts="ArrowLeft" data-wf-to="copie"><svg class="ico" aria-hidden="true"><use href="#chevron_left" /></svg></button>
+          <button type="button" class="btn btn-icon btn-sm" aria-label="Exercice suivant&nbsp;: tri par insertion" aria-keyshortcuts="ArrowRight" data-wf-to="copie"><svg class="ico" aria-hidden="true"><use href="#chevron_right" /></svg></button>
+          <div class="mode">
+            <span class="small muted" id="mode-t">Corriger</span>
+            <div class="segmented" role="radiogroup" aria-labelledby="mode-t">
+              <span role="radio" aria-checked="false" tabindex="-1">Par copie</span>
+              <span class="on" role="radio" aria-checked="true" tabindex="0">Par exercice</span>
+            </div>
+          </div>
+        </div>
+        <div class="ex-pills">
+          <button type="button" class="ex-pill done" data-wf-to="copie" aria-label="Exercice 1&nbsp;: somme d'un tableau, corrigé, 100 sur 100"><svg class="ico" aria-hidden="true"><use href="#done_all" /></svg>1<span class="ex-pill-grade" aria-hidden="true">100</span></button>
+          <button type="button" class="ex-pill done" data-wf-to="copie" aria-label="Exercice 2&nbsp;: maximum et sa position, corrigé, 85 sur 100"><svg class="ico" aria-hidden="true"><use href="#done_all" /></svg>2<span class="ex-pill-grade" aria-hidden="true">85</span></button>
+          <button type="button" class="ex-pill done" data-wf-to="copie" aria-label="Exercice 3&nbsp;: inverser une liste, corrigé, 90 sur 100"><svg class="ico" aria-hidden="true"><use href="#done_all" /></svg>3<span class="ex-pill-grade" aria-hidden="true">90</span></button>
+          <button type="button" class="ex-pill current" aria-current="step" aria-label="Exercice 4&nbsp;: recherche dichotomique, en cours de correction"><svg class="ico" aria-hidden="true"><use href="#pending" /></svg>4</button>
+          <button type="button" class="ex-pill" data-wf-to="copie" aria-label="Exercice 5&nbsp;: tri par insertion, à corriger"><svg class="ico" aria-hidden="true"><use href="#radio_button_unchecked" /></svg>5</button>
+          <button type="button" class="ex-pill" data-wf-to="copie" aria-label="Exercice 6&nbsp;: fusion de deux listes triées, à corriger"><svg class="ico" aria-hidden="true"><use href="#radio_button_unchecked" /></svg>6</button>
+        </div>
+      </nav>
+      <div class="copie">
+        <section class="q" aria-labelledby="q4-t">
+          <div class="q-mark part" aria-hidden="true"><span>4</span><svg class="ico" aria-hidden="true"><use href="#contrast" /></svg><span class="q-pts">55<small>/100</small></span></div>
+          <h2 class="heading" id="q4-t"><span class="sr-only">Exercice 4, </span>Recherche dichotomique<span class="sr-only">, réussi en partie, 55 sur 100</span></h2>
+          <p class="statement">Écrivez une fonction <code>recherche(t, x)</code> qui renvoie l'indice de <code>x</code> dans le tableau trié <code>t</code>, ou -1.</p>
+          <span class="code">def recherche(t, x):
     g, d = 0, len(t)
     while g &lt; d:
         m = (g + d) // 2
@@ -34,25 +73,42 @@
         else:
             d = m
     return -1</span>
-        <div class="annotation">Ligne 8&nbsp;: <code>g = m</code> boucle à l'infini quand <code>d = g + 1</code>. Il fallait <code>g = m + 1</code>.</div>
-        <div class="feedback ko"><svg class="ico"><use href="#error" /></svg><p><strong>Tests automatiques&nbsp;: 4 réussis sur 6.</strong> Deux tests dépassent le temps limite (tableaux de taille paire).</p></div>
+          <div class="feedback part"><svg class="ico" aria-hidden="true"><use href="#contrast" /></svg><p><strong>Partiel&nbsp;: 4 tests réussis sur 6.</strong> Deux tests dépassent le temps limite (tableaux de taille paire).</p></div>
+          <p class="annotation"><svg class="ico" aria-hidden="true"><use href="#ink_pen" /></svg><span>Ligne 8&nbsp;: <code>g = m</code> boucle à l'infini quand <code>d = g + 1</code>. Il fallait <code>g = m + 1</code>.</span></p>
+          <p class="ex-grade"><svg class="ico" aria-hidden="true"><use href="#grading" /></svg><span>Note de l'exercice&nbsp;: 67 aux tests, -10 pour l'étiquette «&nbsp;Boucle infinie&nbsp;», -2 pour l'étiquette «&nbsp;Nommage peu clair&nbsp;», soit <strong>55 / 100</strong>.</span></p>
+        </section>
       </div>
     </div>
-    <aside class="card">
-      <div class="grade"><span class="big">55</span><small>/ 100</small><span class="auto">note automatique 67<br />étiquettes -12</span></div>
-      <div class="rail-head" style="border-top: 1px solid var(--color-line)"><span class="subheading">Étiquettes</span></div>
-      <div class="labels">
-        <div class="label-row on"><span class="key">1</span><span>Boucle infinie</span><span class="delta minus">-10</span></div>
-        <div class="label-row"><span class="key">2</span><span>Cas du tableau vide oublié</span><span class="delta minus">-5</span></div>
-        <div class="label-row on"><span class="key">3</span><span>Nommage peu clair</span><span class="delta minus">-2</span></div>
-        <div class="label-row"><span class="key">4</span><span>Solution élégante</span><span class="delta plus">+5</span></div>
-        <a class="btn btn-ghost btn-sm" style="justify-self: start"><svg class="ico"><use href="#add" /></svg>Nouvelle étiquette</a>
+    <aside class="card grade-panel" aria-labelledby="note-t">
+      <div class="rail-head"><h2 class="subheading" id="note-t">Note de l'exercice 4</h2></div>
+      <div class="grade-calc">
+        <p class="grade"><span class="big">55</span><small>/&nbsp;100</small></p>
+        <dl class="calc" aria-label="Calcul de la note">
+          <div><dt>Note automatique</dt><dd>67</dd></div>
+          <div><dt>Boucle infinie</dt><dd class="minus">-10</dd></div>
+          <div><dt>Nommage peu clair</dt><dd class="minus">-2</dd></div>
+        </dl>
       </div>
-      <div class="rail-head" style="border-top: 1px solid var(--color-line)"><span class="subheading">Commentaire</span></div>
-      <div class="input comment-box"><span class="placeholder">Visible par l'étudiant avec sa note.</span></div>
+      <div class="accept">
+        <button type="button" class="btn btn-secondary btn-sm disabled" aria-disabled="true" aria-keyshortcuts="A" aria-describedby="accept-why"><svg class="ico" aria-hidden="true"><use href="#check" /></svg>Accepter la note automatique<span class="kbd" aria-hidden="true">A</span></button>
+        <p class="field-hint" id="accept-why">Tous les tests doivent passer (ici 4 sur 6).</p>
+      </div>
+      <div class="panel-sub"><h3 class="caption" id="labels-t">Étiquettes</h3><button type="button" class="btn btn-ghost btn-sm"><svg class="ico ico-16" aria-hidden="true"><use href="#add" /></svg>Nouvelle étiquette</button></div>
+      <div class="labels" role="group" aria-labelledby="labels-t">
+        <button type="button" class="label-row on" aria-pressed="true" aria-keyshortcuts="1"><span class="key" aria-hidden="true">1</span><span>Boucle infinie</span><span class="delta minus">-10</span></button>
+        <button type="button" class="label-row" aria-pressed="false" aria-keyshortcuts="2"><span class="key" aria-hidden="true">2</span><span>Cas du tableau vide oublié</span><span class="delta minus">-5</span></button>
+        <button type="button" class="label-row on" aria-pressed="true" aria-keyshortcuts="3"><span class="key" aria-hidden="true">3</span><span>Nommage peu clair</span><span class="delta minus">-2</span></button>
+        <button type="button" class="label-row" aria-pressed="false" aria-keyshortcuts="4"><span class="key" aria-hidden="true">4</span><span>Solution élégante</span><span class="delta plus">+5</span></button>
+      </div>
+      <div class="panel-sub"><h3 class="caption" id="comment-t">Commentaire</h3><span class="small muted">visible par l'étudiant</span></div>
+      <div class="input comment-box" role="textbox" aria-multiline="true" aria-labelledby="comment-t" aria-keyshortcuts="C">Ligne 8&nbsp;: g = m boucle à l'infini quand d = g + 1. Il fallait g = m + 1.</div>
+      <div class="copy-grade">
+        <p><span>Note de la copie, provisoire</span><strong class="num">77,5&nbsp;<small>/&nbsp;100</small></strong></p>
+        <p class="small muted">Moyenne des 6 exercices, le 5 et le 6 à leur note automatique.</p>
+      </div>
       <div class="drawer-foot">
-        <a class="btn btn-primary" data-wf-to="copie">Valider et passer à la suivante</a>
+        <button type="button" class="btn btn-primary" data-wf-to="copie" aria-keyshortcuts="Control+Enter">Valider et passer à la copie suivante</button>
       </div>
     </aside>
-  </div>
-</div></div>
+  </main>
+</div>
