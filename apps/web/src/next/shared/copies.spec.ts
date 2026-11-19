@@ -1,5 +1,5 @@
 import { ActivityCorrectionSummary } from '@platon/feature/result/common'
-import { copiesToCorrect, pendingCopies } from './copies'
+import { copiesCount, copiesToCorrect, gradeOn100, pendingCopies } from './copies'
 
 const summary = (pending?: number) => ({ pendingCopies: pending } as ActivityCorrectionSummary)
 
@@ -11,5 +11,10 @@ describe('copies to correct', () => {
 
   it('says what follows their number, in the singular up to one', () => {
     expect([1, 2].map(copiesToCorrect)).toEqual(['copie à corriger', 'copies à corriger'])
+  })
+
+  it('writes a number of copies to correct, and a grade on 100 rounded', () => {
+    expect(copiesCount(14)).toBe('14 copies à corriger')
+    expect(gradeOn100(46.67).replace(/\s/g, ' ')).toBe('47 / 100')
   })
 })

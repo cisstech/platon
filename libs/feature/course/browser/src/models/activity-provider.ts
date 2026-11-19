@@ -25,6 +25,8 @@ export abstract class ActivityProvider {
   abstract regenerateCode(activity: Activity): Observable<Activity>
   abstract updateRestrictions(activity: Activity, restrictions: RestrictionList[]): Observable<Activity>
   abstract getCourseColors(courseId: string): Observable<number[]>
-  abstract playable(): Observable<PlayableActivity[]>
-  abstract taught(): Observable<TaughtActivity[]>
+  /** The activities the person plays, in every course they study, or in the one given. */
+  abstract playable(courseId?: string): Observable<PlayableActivity[]>
+  /** The activities of the courses the person teaches, or of the one given. */
+  abstract taught(courseId?: string): Observable<TaughtActivity[]>
 }

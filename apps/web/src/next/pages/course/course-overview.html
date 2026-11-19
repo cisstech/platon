@@ -1,0 +1,55 @@
+<pl-page [busy]="busy()">
+  @if (store.missing()) {
+  <pl-page-header heading="Cours" />
+  <pl-empty heading="Ce cours est introuvable" icon="search_off">
+    <p>Il n'existe pas, ou vous n'en êtes pas membre.</p>
+    <a plButton variant="secondary" plEmptyAction routerLink="/courses">Voir vos cours</a>
+  </pl-empty>
+  } @else {
+  <pl-page-header [heading]="course()?.name ?? 'Cours'" [description]="course()?.desc || undefined" [crumbs]="crumbs()">
+    @if (mark(); as mark) {
+    <pl-course-mark plPageMark [monogram]="mark.monogram" [hue]="mark.hue" size="md" />
+    } @if (teacher()) {
+    <ng-container ngProjectAs="[plPageActions]">
+      <button type="button" plButton variant="secondary" (click)="share($event.currentTarget)">
+        <pl-icon name="share" />Partager
+      </button>
+      <a plButton variant="primary" routerLink="/activities/create" [queryParams]="{ course: id() }">
+        <pl-icon name="add" />Ajouter une activité
+      </a>
+    </ng-container>
+    } @for (figure of figures(); track figure.label) {
+    <pl-page-figure [icon]="figure.icon" [value]="figure.value">{{ figure.label }}</pl-page-figure>
+    } @if (tabs().length) {
+    <pl-page-tabs label="Onglets du cours">
+      @for (tab of tabs(); track tab.href) {
+      <a
+        plPageTab
+        [routerLink]="tab.href"
+        [icon]="tab.icon"
+        [count]="tab.count"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >{{ tab.label }}</a
+      >
+      }
+    </pl-page-tabs>
+    }
+  </pl-page-header>
+
+  <app-load-state
+    [phase]="phase()"
+    heading="Ce cours n'a pas pu être chargé"
+    reassurance="Il n'est pas vide&nbsp;: ses activités et les réponses validées sont enregistrées."
+    (retry)="retry()"
+  />
+
+  @if (course(); as course) { @if (teacher()) {
+  <app-course-teacher [course]="course" (shared)="share($event)" />
+  } @else {
+  <app-course-student [course]="course" />
+  } } @else if (waiting()) {
+  <div class="course-overview__waiting" aria-hidden="true">
+    <pl-activity-row-skeleton /><pl-activity-row-skeleton /><pl-activity-row-skeleton />
+  </div>
+  } }
+</pl-page>

@@ -4,20 +4,18 @@ import {
   asked,
   cardViews,
   challengesBadge,
+  CourseTab,
   DEFAULT_FILTERS,
   filtersFrom,
-  headcount,
   isFiltered,
   nextDue,
   noMatch,
   ORDERS,
   paramsOf,
   PERIODS,
-  progressLine,
   searchOutcome,
   studentCard,
   teacherCard,
-  teachersLine,
 } from './courses.vm'
 
 // A Monday afternoon, in the local time of the machine running the tests.
@@ -51,48 +49,11 @@ const activity = (values: Partial<PlayableActivity>) =>
     ...values,
   } as PlayableActivity)
 
-describe('headcount and challengesBadge', () => {
-  it('says what each figure counts, in full', () => {
-    expect(headcount(course().statistic).map(({ icon, value, label }) => [icon, value, label])).toEqual([
-      ['person', 6, 'enseignants'],
-      ['groups', 302, 'étudiants'],
-      ['widgets', 9, 'activités'],
-    ])
-    expect(
-      headcount({ teacherCount: 1, studentCount: 1, activityCount: 0 } as Course['statistic']).map((f) => f.label)
-    ).toEqual(['enseignant', 'étudiant', 'activité'])
-    expect(headcount(undefined)).toEqual([])
-  })
-
+describe('challengesBadge', () => {
   it('names the challenges of a course, and none when it has none', () => {
     expect(challengesBadge(1)).toBe('1 challenge')
     expect(challengesBadge(3)).toBe('3 challenges')
     expect(challengesBadge(0)).toBeUndefined()
-  })
-})
-
-describe('teachersLine', () => {
-  it('names who is responsible, then how many others teach', () => {
-    expect(teachersLine(course())).toBe('Karim Haddad et 5 autres enseignants')
-    expect(teachersLine(course({ statistic: { teacherCount: 2 } as Course['statistic'] }))).toBe(
-      'Karim Haddad et 1 autre enseignant'
-    )
-    expect(teachersLine(course({ statistic: { teacherCount: 1 } as Course['statistic'] }))).toBe('Karim Haddad')
-    expect(teachersLine(course({ owner: undefined }))).toBe('6 enseignants')
-  })
-})
-
-describe('progressLine', () => {
-  it('says the exercises done, then the activities finished, in words', () => {
-    expect(
-      words(progressLine({ done: 34, total: 59, percent: 58, finished: false, activitiesDone: 4, activityCount: 9 }))
-    ).toBe('34 exercices sur 59, 4 activités terminées sur 9')
-    expect(
-      words(progressLine({ done: 12, total: 12, percent: 100, finished: true, activitiesDone: 4, activityCount: 4 }))
-    ).toBe('Cours terminé, 4 activités sur 4')
-    expect(progressLine({ done: 0, total: 0, percent: 0, finished: false, activitiesDone: 0, activityCount: 0 })).toBe(
-      "Aucune activité pour l'instant"
-    )
   })
 })
 
@@ -237,7 +198,7 @@ describe('noMatch', () => {
 })
 
 describe('cardViews', () => {
-  const context = { tab: 'current' as const, teaches: false, missing: new Set<string>(), now: NOW, locale: LOCALE }
+  const context = { tab: 'current' as CourseTab, teaches: false, missing: new Set<string>(), now: NOW, locale: LOCALE }
   const activities = [activity({ exercisesDone: 1 })]
 
   it('offers no archiving on the whole platform, where every course shows as it is', () => {

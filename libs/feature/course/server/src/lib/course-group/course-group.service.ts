@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
+import { NotFoundResponse } from '@platon/core/common'
+import { UpdateGroup } from '@platon/feature/course/common'
 import { CourseGroupEntity } from './course-group.entity'
 import { Repository } from 'typeorm'
 import { v4 as uuidv4 } from 'uuid'
@@ -45,28 +47,32 @@ export class CourseGroupService {
     return this.repository.count({ where: { courseId } })
   }
 
-  async update(groupId: string, changes: Partial<CourseGroupEntity>): Promise<CourseGroupEntity> {
-    const group = await this.repository.findOne({ where: { groupId } })
+  /** Renames the group `groupId` of the course: its name is all a client may change. */
+  async update(courseId: string, groupId: string, changes: UpdateGroup): Promise<CourseGroupEntity> {
+    const group = await this.findInCourse(courseId, groupId)
     if (!group) {
-      throw new Error(`Group with id ${groupId} not found`)
+      throw new NotFoundResponse(`Group not found in this course: ${groupId}`)
     }
-    Object.assign(group, changes)
+    group.name = changes.name
     return this.repository.save(group)
   }
 
-  async delete(groupId: string): Promise<void> {
-    await this.repository.delete({ groupId })
+  async delete(courseId: string, groupId: string): Promise<void> {
+    await this.repository.delete({ courseId, groupId })
   }
 
   async findById(groupId: string): Promise<CourseGroupEntity | null> {
     return this.repository.findOne({ where: { groupId } })
   }
 
+  /** The group `groupId` of the course `courseId`: the identifier of a group is only unique within its course. */
+  async findInCourse(courseId: string, groupId: string): Promise<CourseGroupEntity | null> {
+    return this.repository.findOne({ where: { courseId, groupId } })
+  }
+
+  /** Whether a person is in a group, given by its own id as restrictions name it; a missing group has no one. */
   async isMember(id: string, userId: string): Promise<boolean> {
     const group = await this.repository.findOne({ where: { id } })
-    if (!group) {
-      throw new Error(`Group with id ${id} not found`)
-    }
-    return this.courseGroupMemberService.isMember(group.groupId, userId)
+    return !!group && this.courseGroupMemberService.isMember(group.groupId, userId)
   }
 }

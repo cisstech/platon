@@ -1,0 +1,24 @@
+<pl-activity-list [attr.aria-label]="label()">
+  @for (row of rows(); track row.id) {
+  <pl-activity-row
+    [heading]="row.heading"
+    [context]="row.context"
+    [icon]="row.icon"
+    [hue]="row.hue"
+    [due]="row.due"
+    [dueTone]="row.dueTone"
+    [dueIcon]="row.dueIcon"
+    [detail]="row.detail"
+    [done]="row.done"
+    [total]="row.total"
+    [progressText]="row.progressText"
+    [progressHint]="row.progressHint"
+    [tag]="row.tag"
+    [tagIcon]="row.tagIcon"
+    [action]="row.action"
+    [href]="row.href"
+    [queryParams]="row.queryParams"
+    [button]="row.button"
+  />
+  }
+</pl-activity-list>

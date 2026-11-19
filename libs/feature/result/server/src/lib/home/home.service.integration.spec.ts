@@ -4,6 +4,7 @@ import { createTestDatabase, TestDatabase } from '@platon/core/testing/server'
 import { CourseMemberRoles, PlayableActivity, RestrictionList } from '@platon/feature/course/common'
 import {
   ActivityCorrectorEntity,
+  ActivityCorrectorView,
   ActivityEntity,
   ActivityGroupEntity,
   ActivityMemberEntity,
@@ -140,6 +141,7 @@ describe('HomeService (integration)', () => {
       ActivityMemberEntity,
       ActivityGroupEntity,
       ActivityCorrectorEntity,
+      ActivityCorrectorView,
       CorrectionEntity,
       StudentSubmissionEntity,
       AnswerEntity,
@@ -372,6 +374,8 @@ describe('HomeService (integration)', () => {
         id: toAll.id,
         courseId: ap1.id,
         courseName: 'AP1',
+        sectionId: section.get(ap1.id) as string,
+        order: 0,
         title: 'TP 1',
         openAt: PAST,
         closeAt: FUTURE,
@@ -407,6 +411,69 @@ describe('HomeService (integration)', () => {
       })
       expect(byId.get(toAll.id)).not.toHaveProperty('code')
       expect(byId.get(toAll.id)).not.toHaveProperty('restrictions')
+    })
+
+    it('lists the activities of one course, archived or not, with the grade or the correction of their copy', async () => {
+      const w = await world()
+      const { ines, theo, ap1, archives } = w
+      const review = { feedback: { review: true } }
+      const corrected = async (activity: ActivityEntity) =>
+        save(ActivityCorrectorEntity, { activityId: activity.id, memberId: w.theoMember.id, userId: theo.id })
+
+      const graded = await activity(ap1, theo, { title: 'Notée', graded: true, settings: review, order: 2 })
+      await copy(graded, ines, {
+        terminatedAt: PAST,
+        exercises: [{ grade: 100, answered: true }, { grade: 0, corrected: 40 }, { grade: -1 }],
+      })
+      const correcting = await activity(ap1, theo, { title: 'En correction', graded: true, settings: review, order: 1 })
+      await corrected(correcting)
+      await copy(correcting, ines, {
+        terminatedAt: PAST,
+        exercises: [
+          { grade: 100, answered: true, corrected: 100 },
+          { grade: 0, answered: true },
+        ],
+      })
+      const hidden = await activity(ap1, theo, {
+        title: 'Cachée',
+        graded: true,
+        settings: { feedback: { review: false } },
+      })
+      await corrected(hidden)
+      await copy(hidden, ines, { terminatedAt: PAST, exercises: [{ grade: 0, answered: true }] })
+      const running = await activity(ap1, theo, { title: 'En cours', graded: true, settings: review })
+      await corrected(running)
+      await copy(running, ines, { exercises: [{ grade: 0, answered: true }] })
+      const practice = await activity(ap1, theo, { title: 'Entraînement', settings: review })
+      await copy(practice, ines, { terminatedAt: PAST, exercises: [{ grade: 100, answered: true }] })
+      await activity(w.ap2, theo, { title: 'Autre cours' })
+      const archived = await activity(archives, theo, { title: 'Cours archivé' })
+
+      const ofAp1 = new Map((await service.playableActivities(ines.id, ap1.id)).map((a) => [a.id, a]))
+
+      expect(new Set(ofAp1.keys())).toEqual(new Set([graded.id, correcting.id, hidden.id, running.id, practice.id]))
+      expect(ofAp1.get(graded.id)).toMatchObject({
+        sectionId: section.get(ap1.id),
+        order: 2,
+        correcting: false,
+        grade: 46.67,
+      })
+      expect(ofAp1.get(correcting.id)).toMatchObject({ order: 1, correcting: true, grade: undefined })
+      expect(ofAp1.get(hidden.id)).toMatchObject({ correcting: false, grade: undefined })
+      expect(ofAp1.get(running.id)).toMatchObject({ correcting: false, grade: undefined })
+      expect(ofAp1.get(practice.id)).toMatchObject({ correcting: false, grade: undefined })
+      expect((await service.playableActivities(ines.id, archives.id)).map((a) => a.id)).toEqual([archived.id])
+    })
+
+    it('leaves the grades out of the activities of every course, as the homes read them', async () => {
+      const { ines, theo, ap1 } = await world()
+      const graded = await activity(ap1, theo, { settings: { feedback: { review: true } } })
+      await copy(graded, ines, { terminatedAt: PAST, exercises: [{ grade: 100 }] })
+
+      const [mine] = await service.playableActivities(ines.id)
+
+      expect(mine).not.toHaveProperty('grade')
+      expect(mine).not.toHaveProperty('correcting')
     })
 
     it('leaves out a course the person also teaches', async () => {
@@ -499,6 +566,75 @@ describe('HomeService (integration)', () => {
       await activity(old, theo)
 
       expect((await service.taughtActivities(theo.id)).map((a) => a.id)).toEqual([kept.id])
+    })
+
+    it('lists the activities of one course with their place, their size, their limits and their copies to correct', async () => {
+      const w = await world()
+      const { ines, bob, carl, theo, ap1 } = w
+      const exam = await activity(ap1, theo, {
+        title: 'Examen',
+        graded: true,
+        order: 1,
+        settings: { duration: 5400, actions: { retry: 1 } },
+        exerciseGroups: { 0: [{ id: 'e1' }, { id: 'e2' }] },
+      })
+      await save(ActivityCorrectorEntity, { activityId: exam.id, memberId: w.theoMember.id, userId: theo.id })
+      await copy(exam, ines, {
+        terminatedAt: PAST,
+        exercises: [
+          { grade: 0, answered: true },
+          { grade: 100, answered: true, corrected: 100 },
+        ],
+      })
+      await copy(exam, bob, { terminatedAt: PAST, exercises: [{ grade: 0, answered: true, corrected: 50 }] })
+      await copy(exam, carl, { exercises: [{ grade: 0, answered: true }] })
+      await copy(exam, theo, { terminatedAt: PAST, exercises: [{ grade: 0, answered: true }] })
+      const practice = await activity(ap1, theo, { title: 'TP' })
+      await copy(practice, ines, { terminatedAt: PAST, exercises: [{ grade: 0, answered: true }] })
+      const other = await course('AP3', theo)
+      await member(other, { userId: theo.id, role: CourseMemberRoles.teacher })
+      await activity(other, theo)
+
+      const ofAp1 = new Map((await service.taughtActivities(theo.id, { courseId: ap1.id })).map((a) => [a.id, a]))
+
+      expect(new Set(ofAp1.keys())).toEqual(new Set([exam.id, practice.id]))
+      expect(ofAp1.get(exam.id)).toMatchObject({
+        sectionId: section.get(ap1.id),
+        order: 1,
+        exerciseCount: 2,
+        duration: 5400,
+        attempts: 1,
+        resourceId: exercise.id,
+        pendingCopies: 1,
+        correctors: ['theo'],
+      })
+      expect(ofAp1.get(practice.id)).toMatchObject({ order: 0, pendingCopies: 0, correctors: [] })
+    })
+
+    it('lists a course the person archived, and to who may change it, when one course is asked', async () => {
+      const { theo, ap1 } = await world()
+      const old = await course('Ancien', theo)
+      await member(old, { userId: theo.id, role: CourseMemberRoles.teacher, archived: true })
+      const archived = await activity(old, theo)
+      const ofAp1 = await activity(ap1, theo)
+      const admin = await user('admin', UserRoles.admin)
+
+      expect((await service.taughtActivities(theo.id, { courseId: old.id })).map((a) => a.id)).toEqual([archived.id])
+      expect((await service.taughtActivities(admin.id, { courseId: ap1.id, manages: true })).map((a) => a.id)).toEqual([
+        ofAp1.id,
+      ])
+      expect(await service.taughtActivities(admin.id, { courseId: ap1.id })).toEqual([])
+      expect(await service.taughtActivities(admin.id, { manages: true })).toEqual([])
+    })
+
+    it('leaves the copies to correct out of the activities of every course, as the homes read them', async () => {
+      const { theo, ap1 } = await world()
+      await activity(ap1, theo)
+
+      const [taught] = await service.taughtActivities(theo.id)
+
+      expect(taught).not.toHaveProperty('pendingCopies')
+      expect(taught).not.toHaveProperty('correctors')
     })
 
     it('lists only the courses the person teaches, even for an administrator', async () => {

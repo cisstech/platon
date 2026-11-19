@@ -1,20 +1,20 @@
+import { calendarDay, CourseHue, courseHue, IconName, relativeTime, TagTone } from '@platon/design-system'
 import {
-  calendarDay,
-  CourseHue,
-  courseHue,
-  IconName,
-  NO_BREAK_SPACE,
-  relativeTime,
-  TagTone,
-} from '@platon/design-system'
-import { Course, CourseStatistic, TaughtActivity } from '@platon/feature/course/common'
+  Course,
+  CourseStatistic,
+  followsDates,
+  isOpenWithoutDates,
+  TaughtActivity,
+} from '@platon/feature/course/common'
 import { RESOURCE_STATUS_NAMES, RESOURCE_TYPE_NAMES } from '@platon/feature/resource/browser/shared'
 import { Resource, ResourceStatus, ResourceTypes } from '@platon/feature/resource/common'
 import { ActivityCorrectionSummary } from '@platon/feature/result/common'
-import { copiesToCorrect, pendingCopies } from '../../../shared/copies'
-import { byDeadline, byOpening, closingDue, DueView, openingDue } from '../../../shared/due'
+import { copiesCount, gradeOn100, pendingCopies } from '../../../shared/copies'
+import { byDeadline, byOpening, openingDue } from '../../../shared/due'
 import { plural } from '../../../shared/plural'
-import { ActivityRowView, closesThisWeek, closingThisWeek, gradedTag, iconOf, rowOf, today } from '../home.vm'
+import { ActivityRowView, gradedTag, iconOf, rowOf } from '../../../shared/activity-row'
+import { monitorOf, participation, runningDue, settingsOf } from '../../../shared/taught-activity'
+import { closesThisWeek, closingThisWeek, today } from '../home.vm'
 
 /** « Vu récemment » shows the first ones of the list of Resources. */
 const VIEWED = 3
@@ -56,19 +56,12 @@ export const teacherSubtitle = (
   const closing = activities.filter((activity) => activity.state === 'opened' && closesThisWeek(activity.closeAt, now))
   const copies = pendingCopies(corrections)
 
-  const parts = [closingThisWeek(closing.length), copies ? `${copies} ${copiesToCorrect(copies)}` : undefined].filter(
-    Boolean
-  )
+  const parts = [closingThisWeek(closing.length), copies ? copiesCount(copies) : undefined].filter(Boolean)
 
   return parts.length ? `${today(now, locale)} ${parts.join(', ')}.` : today(now, locale)
 }
 
-/** An activity that follows its dates: it has some, or its restriction periods give them. */
-const followsDates = (activity: TaughtActivity) => !!(activity.openAt || activity.closeAt || activity.restricted)
-
 const isRunning = (activity: TaughtActivity) => activity.state === 'opened' && followsDates(activity)
-
-const isOpenWithoutDates = (activity: TaughtActivity) => activity.state === 'opened' && !followsDates(activity)
 
 const isPlannedTest = (activity: TaughtActivity) =>
   activity.state === 'planned' && !!activity.openAt && !!activity.graded
@@ -77,29 +70,9 @@ const isPlannedTest = (activity: TaughtActivity) =>
 const gradedFirst = (a: TaughtActivity, b: TaughtActivity) =>
   Number(!!b.graded) - Number(!!a.graded) || a.title.localeCompare(b.title)
 
-const settingsOf = (activity: TaughtActivity) => `/activities/${activity.courseId}/${activity.id}`
-
-/** When a running activity closes, or why it does not say: no deadline, or one per period. */
-const runningDue = (activity: TaughtActivity, now: Date, locale: string): DueView =>
-  activity.closeAt
-    ? closingDue(activity.closeAt, now, locale)
-    : { due: activity.restricted ? 'Dates par période' : 'Sans fermeture', dueTone: 'neutral' }
-
-/** « 251 sur 302 ont commencé », « 1 sur 302 participe ». */
-const participation = (activity: TaughtActivity): string => {
-  const started = activity.startedCount
-  const verb = activity.isChallenge
-    ? plural(started, 'participe', 'participent')
-    : plural(started, 'a commencé', 'ont commencé')
-
-  return `${started} sur ${activity.studentCount} ${verb}`
-}
-
 /** « moyenne provisoire 74 / 100 », while the activity is open. */
 const provisionalMean = (activity: TaughtActivity): string | undefined =>
-  activity.averageGrade === undefined
-    ? undefined
-    : `moyenne provisoire ${Math.round(activity.averageGrade)}${NO_BREAK_SPACE}/${NO_BREAK_SPACE}100`
+  activity.averageGrade === undefined ? undefined : `moyenne provisoire ${gradeOn100(activity.averageGrade)}`
 
 /**
  * « En cours »: the open activities that follow their dates, the closest deadline first. A row opens
@@ -116,7 +89,7 @@ export const runningRows = (activities: TaughtActivity[], now: Date, locale: str
       done: activity.startedCount,
       total: activity.studentCount,
       progressText: participation(activity),
-      href: `/activities/monitor/${activity.courseId}/${activity.id}`,
+      href: monitorOf(activity),
     }))
 
 /** Copies entrusted to the person, counted out of those handed in, with a bar once some are corrected. */
@@ -141,7 +114,7 @@ const correctionRow = (
     detail: lastSubmitted ? `dernière copie rendue le ${calendarDay(lastSubmitted, locale, now)}` : undefined,
     done: corrected,
     total: corrected > 0 ? correction.submittedCopies : 0,
-    progressText: `${pending} ${copiesToCorrect(pending)} sur ${correction.submittedCopies}`,
+    progressText: `${copiesCount(pending)} sur ${correction.submittedCopies}`,
     action: 'Corriger',
     button: 'secondary',
     href: `/player/correction/${correction.courseId}`,

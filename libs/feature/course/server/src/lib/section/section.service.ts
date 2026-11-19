@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { NotFoundResponse } from '@platon/core/common'
+import { UpdateCourseSection } from '@platon/feature/course/common'
 import { DataSource, Repository, MoreThanOrEqual, And, MoreThan, LessThanOrEqual, LessThan, Not } from 'typeorm'
 import { Optional } from 'typescript-optional'
 import { CourseSectionEntity } from './section.entity'
@@ -43,11 +44,8 @@ export class CourseSectionService {
     })
   }
 
-  async update(
-    courseId: string,
-    sectionId: string,
-    changes: Partial<CourseSectionEntity>
-  ): Promise<CourseSectionEntity> {
+  /** Renames or moves a section of the course: its name and its order are all a client may change. */
+  async update(courseId: string, sectionId: string, changes: UpdateCourseSection): Promise<CourseSectionEntity> {
     return this.dataSource.transaction(async (manager) => {
       const section = await manager.findOne(CourseSectionEntity, {
         where: { courseId, id: sectionId },
@@ -79,7 +77,8 @@ export class CourseSectionService {
         }
       }
 
-      Object.assign(section, changes)
+      if (changes.name != null) section.name = changes.name
+      if (changes.order != null) section.order = changes.order
       return manager.save(section)
     })
   }

@@ -11,9 +11,17 @@ describe('isPorted', () => {
     expect(isPorted('/courses/create')).toBe(true)
   })
 
+  it('knows the page of any course, at its address or at the one of its overview', () => {
+    expect(isPorted('/courses/ap1')).toBe(true)
+    expect(isPorted('/courses/ap1/')).toBe(true)
+    expect(isPorted('/courses/ap1/dashboard?ui=next')).toBe(true)
+  })
+
   it('leaves the others to the current interface', () => {
-    expect(isPorted('/courses/ap1')).toBe(false)
+    expect(isPorted('/courses/ap1/members')).toBe(false)
+    expect(isPorted('/courses/ap1/dashboard/x')).toBe(false)
     expect(isPorted('/dashboard-old')).toBe(false)
     expect(isPorted('/login/no-account')).toBe(false)
+    expect(isPorted('/resources/r1')).toBe(false)
   })
 })

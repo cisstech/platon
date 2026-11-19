@@ -46,6 +46,12 @@ describe('PageTabs', () => {
 
   it('keeps an exact tab from staying current under its children', async () => {
     const { current } = await setup('/course/members')
-    expect(current()).toMatch(/^Membres\s*48$/)
+    expect(current()).toMatch(/^Membres\s*,\s*48$/)
+  })
+
+  it('reads the count of a tab apart from its label', async () => {
+    const { el } = await setup('/course')
+    const members = el.querySelector('a[href="/course/members"]')
+    expect(members?.textContent?.replace(/\s+/g, ' ').trim()).toBe('Membres, 48')
   })
 })

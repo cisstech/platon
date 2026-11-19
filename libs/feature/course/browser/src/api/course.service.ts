@@ -172,14 +172,17 @@ export class CourseService {
     return this.activityProvider.search(course, filters)
   }
 
-  /** The activities the user plays, in every course they study, with their own dates and progress. */
-  playableActivities(): Observable<PlayableActivity[]> {
-    return this.activityProvider.playable()
+  /** The activities the user plays, in every course they study or in the one given, with their own dates and progress. */
+  playableActivities(courseId?: string): Observable<PlayableActivity[]> {
+    return this.activityProvider.playable(courseId)
   }
 
-  /** The activities of every course the user teaches, with the participation of their students. */
-  taughtActivities(): Observable<TaughtActivity[]> {
-    return this.activityProvider.taught()
+  /**
+   * The activities of every course the user teaches, or of the one given, with the participation of
+   * their students.
+   */
+  taughtActivities(courseId?: string): Observable<TaughtActivity[]> {
+    return this.activityProvider.taught(courseId)
   }
 
   createActivity(course: Course, input: CreateActivity): Observable<Activity> {

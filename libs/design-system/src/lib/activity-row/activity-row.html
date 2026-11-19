@@ -17,6 +17,14 @@
     >
   </div>
 </div>
+} @else if (hasActions()) {
+<div class="pl-activity-row__body">
+  <ng-container [ngTemplateOutlet]="text" [ngTemplateOutletContext]="{ linked: true }" />
+  <div class="pl-activity-row__side">
+    <ng-container [ngTemplateOutlet]="state" />
+    <span class="pl-activity-row__actions"><ng-content select="[plActivityRowActions]" /></span>
+  </div>
+</div>
 } @else {
 <a class="pl-activity-row__body pl-activity-row__link" [routerLink]="href()" [queryParams]="queryParams()">
   <ng-container [ngTemplateOutlet]="text" />
@@ -29,18 +37,31 @@
   </span>
 </a>
 }
-<ng-template #text>
+<ng-template #text let-linked="linked">
   <span class="pl-activity-row__text">
+    @if (linked) {
+    <a
+      class="pl-activity-row__title pl-activity-row__link"
+      [id]="ids.title"
+      [routerLink]="href()"
+      [queryParams]="queryParams()"
+      [attr.aria-describedby]="details()"
+      >{{ heading() }}</a
+    >
+    } @else {
     <span class="pl-activity-row__title" [id]="ids.title">{{ heading() }}</span>
+    }
     {{ ' ' }}
     <span class="pl-activity-row__meta" [id]="ids.meta">
-      @if (context()) {
+      @if (status()) {
+      <pl-tag [tone]="statusTone()" [icon]="statusIcon()">{{ status() }}</pl-tag>
+      } @if (context()) { @if (status()) {<span class="pl-visually-hidden">, </span>}
       <span>{{ context() }}</span>
-      } @if (due()) { @if (context()) {<span class="pl-visually-hidden">, </span>}
+      } @if (due()) { @if (status() || context()) {<span class="pl-visually-hidden">, </span>}
       <span class="pl-activity-row__due" [attr.data-tone]="dueTone()"
         >@if (dueIcon(); as dueIcon) {<pl-icon [name]="dueIcon" [size]="1" />}{{ due() }}</span
       >
-      } @if (detail()) { @if (context() || due()) {<span class="pl-visually-hidden">, </span>}
+      } @if (detail()) { @if (status() || context() || due()) {<span class="pl-visually-hidden">, </span>}
       <span>{{ detail() }}</span>
       }
     </span>

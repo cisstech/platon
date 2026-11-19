@@ -1,0 +1,28 @@
+@if (collapsible()) {
+<h2 class="pl-course-section__divider">
+  <button
+    type="button"
+    class="pl-course-section__toggle"
+    [attr.aria-expanded]="expanded()"
+    [attr.aria-controls]="bodyId"
+    (click)="expanded.set(!expanded())"
+  >
+    <span class="pl-course-section__tab">{{ heading() }}</span>
+    @if (summary()) {
+    <span class="pl-visually-hidden">, </span>
+    <span class="pl-course-section__summary">{{ summary() }}</span>
+    }
+    <pl-icon class="pl-course-section__chevron" name="expand_more" />
+  </button>
+</h2>
+} @else {
+<div class="pl-course-section__divider">
+  <h2 class="pl-course-section__tab">
+    {{ heading() }}@if (summary()) {<span class="pl-visually-hidden">, </span>
+    <span class="pl-course-section__count">{{ summary() }}</span
+    >}
+  </h2>
+  <div class="pl-course-section__actions"><ng-content select="[plCourseSectionActions]" /></div>
+</div>
+}
+<div class="pl-course-section__body" [id]="bodyId" [hidden]="collapsible() && !expanded()"><ng-content /></div>

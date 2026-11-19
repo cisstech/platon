@@ -1,0 +1,9 @@
+:host {
+  display: grid;
+  gap: var(--pl-space-5);
+}
+
+.course-start__again {
+  margin: 0;
+  color: var(--pl-color-muted);
+}

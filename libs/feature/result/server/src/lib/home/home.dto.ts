@@ -1,6 +1,18 @@
-import { ActivityOpenStates, PlayableActivity, TaughtActivity } from '@platon/feature/course/common'
+import {
+  CourseActivitiesFilter,
+  ActivityOpenStates,
+  PlayableActivity,
+  TaughtActivity,
+} from '@platon/feature/course/common'
 import { RecentCopy, RecentCopyStatus } from '@platon/feature/result/common'
 import { IsBoolean, IsDate, IsIn, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator'
+
+/** The activities of the homes, or of one course with `course`. */
+export class HomeActivitiesFilterDTO implements CourseActivitiesFilter {
+  @IsOptional()
+  @IsUUID()
+  readonly course?: string
+}
 
 export class PlayableActivityDTO implements PlayableActivity {
   @IsUUID()
@@ -11,6 +23,12 @@ export class PlayableActivityDTO implements PlayableActivity {
 
   @IsString()
   readonly courseName!: string
+
+  @IsUUID()
+  readonly sectionId!: string
+
+  @IsNumber()
+  readonly order!: number
 
   @IsString()
   readonly title!: string
@@ -51,6 +69,14 @@ export class PlayableActivityDTO implements PlayableActivity {
 
   @IsBoolean()
   readonly terminated!: boolean
+
+  @IsOptional()
+  @IsBoolean()
+  readonly correcting?: boolean
+
+  @IsOptional()
+  @IsNumber()
+  readonly grade?: number
 }
 
 export class TaughtActivityDTO implements TaughtActivity {
@@ -63,8 +89,18 @@ export class TaughtActivityDTO implements TaughtActivity {
   @IsString()
   readonly courseName!: string
 
+  @IsUUID()
+  readonly sectionId!: string
+
+  @IsNumber()
+  readonly order!: number
+
   @IsString()
   readonly title!: string
+
+  @IsOptional()
+  @IsUUID()
+  readonly resourceId?: string
 
   @IsOptional()
   @IsDate()
@@ -86,6 +122,17 @@ export class TaughtActivityDTO implements TaughtActivity {
   @IsBoolean()
   readonly graded!: boolean
 
+  @IsOptional()
+  @IsNumber()
+  readonly duration?: number
+
+  @IsOptional()
+  @IsNumber()
+  readonly attempts?: number
+
+  @IsNumber()
+  readonly exerciseCount!: number
+
   @IsNumber()
   readonly studentCount!: number
 
@@ -95,6 +142,14 @@ export class TaughtActivityDTO implements TaughtActivity {
   @IsOptional()
   @IsNumber()
   readonly averageGrade?: number
+
+  @IsOptional()
+  @IsNumber()
+  readonly pendingCopies?: number
+
+  @IsOptional()
+  @IsString({ each: true })
+  readonly correctors?: string[]
 }
 
 export class RecentCopyDTO implements RecentCopy {

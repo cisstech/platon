@@ -1,0 +1,15 @@
+<pl-panel heading="Partager le cours" closeLabel="Fermer le partage" [headingId]="headingId" (closed)="close()">
+  <div class="course-share">
+    <pl-segmented label="Type de lien" [options]="kinds" [value]="kind()" (valueChange)="choose($event)" />
+    <pl-field label="Lien du cours">
+      <input plInput readonly aria-describedby="course-share-hint" [value]="link()" (focus)="select($event)" />
+    </pl-field>
+    <p class="course-share__hint" id="course-share-hint">
+      @if (kind() === 'lti') {À coller dans Moodle, ou dans un autre environnement compatible LTI.} @else {Pour les
+      personnes qui ont déjà un compte PLaTon.}
+    </p>
+    <button type="button" plButton variant="primary" (click)="copy()">
+      <pl-icon [name]="copied() ? 'check' : 'content_copy'" />{{ copied() ? 'Lien copié' : 'Copier le lien' }}
+    </button>
+  </div>
+</pl-panel>

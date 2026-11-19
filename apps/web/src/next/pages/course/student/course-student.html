@@ -1,0 +1,68 @@
+@if (empty()) {
+<pl-empty heading="Aucune activité pour l'instant" glyph="course">
+  <p>Vos enseignants n'ont encore rien ouvert dans ce cours&nbsp;: ses activités apparaîtront ici.</p>
+</pl-empty>
+} @else if (narrow()) {
+<div class="course-layout course-layout--narrow">
+  <app-student-progress [panel]="panel()" [hue]="hue()" [resume]="false" />
+
+  <section class="course-student__zone" aria-labelledby="course-student-todo">
+    <h2 class="course-student__title" id="course-student-todo">
+      À faire@if (todo().length) {<span class="pl-visually-hidden">, </span><pl-count [value]="todo().length" />}
+    </h2>
+    @if (todo().length) {
+    <app-student-rows class="course-layout__rows" [rows]="todo()" label="À faire" />
+    } @else {
+    <p class="course-layout__none">Rien à rendre pour l'instant.</p>
+    }
+  </section>
+
+  @if (soon().length) {
+  <section class="course-student__zone" aria-labelledby="course-student-soon">
+    <h2 class="course-student__title" id="course-student-soon">
+      Bientôt<span class="pl-visually-hidden">, </span><pl-count [value]="soon().length" />
+    </h2>
+    <app-student-rows class="course-layout__rows" [rows]="soon()" label="Bientôt" />
+  </section>
+  } @for (group of groups(); track group.id) {
+  <pl-course-section [heading]="group.heading" [summary]="group.summary" [hue]="hue()" collapsible [expanded]="false">
+    @if (group.rows.length) {
+    <app-student-rows class="course-layout__rows" [rows]="group.rows" [label]="group.heading" />
+    } @else {
+    <p class="course-layout__none">Aucune activité dans cette section.</p>
+    }
+  </pl-course-section>
+  } @if (panel().resume; as resume) {
+  <div class="course-student__thumb">
+    <a plButton variant="primary" [routerLink]="resume.href"
+      >{{ resume.action }}<span class="pl-visually-hidden"> {{ resume.heading }}</span></a
+    >
+  </div>
+  }
+</div>
+} @else {
+<div class="course-layout">
+  <div class="course-layout__main">
+    <app-overview-bar
+      [search]="store.search()"
+      [state]="store.state()"
+      (searched)="store.search.set($event)"
+      (chosen)="store.state.set($event)"
+    />
+    @for (group of groups(); track group.id) {
+    <pl-course-section [heading]="group.heading" [summary]="group.summary" [hue]="hue()">
+      @if (group.rows.length) {
+      <app-student-rows class="course-layout__rows" [rows]="group.rows" [label]="group.heading" />
+      } @else {
+      <p class="course-layout__none">Aucune activité dans cette section.</p>
+      }
+    </pl-course-section>
+    } @empty {
+    <app-overview-none (cleared)="clearFilters()" />
+    }
+  </div>
+  <aside class="course-layout__aside" aria-labelledby="student-progress-title">
+    <app-student-progress [panel]="panel()" [hue]="hue()" />
+  </aside>
+</div>
+}

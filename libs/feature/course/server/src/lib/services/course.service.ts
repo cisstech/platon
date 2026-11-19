@@ -106,7 +106,10 @@ export class CourseService {
   }
 
   async findById(id: string): Promise<Optional<CourseEntity>> {
-    const query = this.courseRepository.createQueryBuilder('course')
+    const query = this.courseRepository
+      .createQueryBuilder('course')
+      .leftJoin('course.owner', 'owner')
+      .addSelect(['owner.id', 'owner.username', 'owner.firstName', 'owner.lastName'])
 
     const course = await query.where('course.id = :id', { id }).getOne()
 

@@ -1,3 +1,4 @@
+import { NotFoundResponse } from '@platon/core/common'
 import { Test } from '@nestjs/testing'
 import { getRepositoryToken } from '@nestjs/typeorm'
 import { MockRepository, mockRepository } from '@platon/core/testing/server'
@@ -84,28 +85,28 @@ describe('CourseGroupService', () => {
   })
 
   describe('update', () => {
-    it("devrait lever une erreur si le groupe n'existe pas", async () => {
+    it('says a group missing from the course is not found', async () => {
       repository.findOne.mockResolvedValue(null)
 
-      await expect(service.update('g1', { name: 'New' })).rejects.toThrow('Group with id g1 not found')
+      await expect(service.update('course-1', 'g1', { name: 'New' })).rejects.toBeInstanceOf(NotFoundResponse)
     })
 
-    it('devrait fusionner les changements et sauvegarder', async () => {
-      const group = { groupId: 'g1', name: 'Old' } as CourseGroupEntity
+    it('renames the group, and changes nothing else the body carries', async () => {
+      const group = { groupId: 'g1', courseId: 'course-1', name: 'Old' } as CourseGroupEntity
       repository.findOne.mockResolvedValue(group)
       repository.save.mockImplementation(async (g) => g as CourseGroupEntity)
 
-      const result = await service.update('g1', { name: 'New' })
+      const result = await service.update('course-1', 'g1', { name: 'New', courseId: 'course-2' } as never)
 
-      expect(result.name).toBe('New')
+      expect(result).toMatchObject({ name: 'New', courseId: 'course-1', groupId: 'g1' })
     })
   })
 
   describe('isMember', () => {
-    it("devrait lever une erreur si le groupe n'existe pas", async () => {
+    it('has no one in a missing group', async () => {
       repository.findOne.mockResolvedValue(null)
 
-      await expect(service.isMember('id-1', 'user-1')).rejects.toThrow('Group with id id-1 not found')
+      await expect(service.isMember('id-1', 'user-1')).resolves.toBe(false)
     })
 
     it('devrait déléguer au CourseGroupMemberService avec le groupId réel', async () => {

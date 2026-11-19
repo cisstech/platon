@@ -1,7 +1,10 @@
 import { provideRouter, withHashLocation } from '@angular/router'
 import { type Meta, type StoryObj, applicationConfig, moduleMetadata } from '@storybook/angular'
+import { Button } from '../button/button'
+import { Icon } from '../icon/icon'
 import { ActivityList } from './activity-list/activity-list'
 import { ActivityRow } from './activity-row'
+import { ActivityRowActions } from './activity-row-actions'
 import { ActivityRowSkeleton } from './activity-row-skeleton/activity-row-skeleton'
 
 const meta: Meta<ActivityRow> = {
@@ -10,7 +13,7 @@ const meta: Meta<ActivityRow> = {
   tags: ['autodocs'],
   decorators: [
     applicationConfig({ providers: [provideRouter([{ path: '**', children: [] }], withHashLocation())] }),
-    moduleMetadata({ imports: [ActivityList, ActivityRowSkeleton] }),
+    moduleMetadata({ imports: [ActivityList, ActivityRowActions, ActivityRowSkeleton, Button, Icon] }),
   ],
 }
 
@@ -106,6 +109,35 @@ export const Teaching: Story = {
           <pl-activity-row heading="Lab 5: recursive functions" context="Algorithms 1" icon="assignment" hue="lagoon"
             due="Open, without dates" dueIcon="info" detail="23 students started" action="Plan" href="/settings"
             button="secondary" />
+        </pl-activity-list>
+      </div>
+    `,
+  }),
+}
+
+export const Teacher: Story = {
+  name: 'For a teacher: its state, the row opening its monitoring, its actions apart',
+  render: () => ({
+    template: `
+      <div class="story-card">
+        <pl-activity-list aria-label="Week 5">
+          <pl-activity-row heading="Lab 5: recursive functions" icon="code" hue="lagoon" status="Open" statusTone="success"
+            statusIcon="event_available" due="No dates" detail="8 exercises" href="/monitor">
+            <a plButton plActivityRowActions variant="secondary" size="sm" href="#/settings"><pl-icon name="calendar_month" />Schedule</a>
+            <button plButton plActivityRowActions variant="icon" size="sm" type="button" aria-label="More actions for Lab 5">
+              <pl-icon name="more_horiz" /></button>
+          </pl-activity-row>
+          <pl-activity-row heading="Midterm 2" icon="history_edu" hue="lagoon" status="Scheduled" statusTone="info"
+            statusIcon="event" due="Opens on 12 October at 8 am" detail="1 h 30, one attempt, 8 exercises" tag="Graded"
+            tagIcon="grading" href="/monitor">
+            <button plButton plActivityRowActions variant="icon" size="sm" type="button" aria-label="More actions for Midterm 2">
+              <pl-icon name="more_horiz" /></button>
+          </pl-activity-row>
+          <pl-activity-row heading="Lab 3: conditions" icon="code" hue="lagoon" status="Closed" statusIcon="event_busy"
+            due="Closed on 21 Sept." detail="7 exercises" href="/monitor">
+            <button plButton plActivityRowActions variant="icon" size="sm" type="button" aria-label="More actions for Lab 3">
+              <pl-icon name="more_horiz" /></button>
+          </pl-activity-row>
         </pl-activity-list>
       </div>
     `,

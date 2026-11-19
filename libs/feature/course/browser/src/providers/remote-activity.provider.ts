@@ -6,6 +6,7 @@ import {
   Activity,
   ActivityFilters,
   Course,
+  CourseActivitiesFilter,
   CreateActivity,
   PlayableActivity,
   RestrictionList,
@@ -15,6 +16,10 @@ import {
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { ActivityProvider } from '../models/activity-provider'
+
+/** The activities of one course, else of every course, as query parameters. */
+const activitiesOf = (courseId?: string): Required<CourseActivitiesFilter> | Record<string, never> =>
+  courseId ? { course: courseId } : {}
 
 @Injectable()
 export class RemoteActivityProvider extends ActivityProvider {
@@ -108,15 +113,15 @@ export class RemoteActivityProvider extends ActivityProvider {
       .pipe(map((response) => response.resource))
   }
 
-  playable(): Observable<PlayableActivity[]> {
+  playable(courseId?: string): Observable<PlayableActivity[]> {
     return this.http
-      .get<ListResponse<PlayableActivity>>('/api/v1/activities/mine')
+      .get<ListResponse<PlayableActivity>>('/api/v1/activities/mine', { params: activitiesOf(courseId) })
       .pipe(map((response) => response.resources))
   }
 
-  taught(): Observable<TaughtActivity[]> {
+  taught(courseId?: string): Observable<TaughtActivity[]> {
     return this.http
-      .get<ListResponse<TaughtActivity>>('/api/v1/activities/taught')
+      .get<ListResponse<TaughtActivity>>('/api/v1/activities/taught', { params: activitiesOf(courseId) })
       .pipe(map((response) => response.resources))
   }
 }

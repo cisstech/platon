@@ -1,12 +1,13 @@
 import { NgTemplateOutlet } from '@angular/common'
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core'
+import { ChangeDetectionStrategy, Component, computed, contentChildren, input } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { Button } from '../button/button'
 import { CourseHue } from '../hue/course-hue'
 import { Icon } from '../icon/icon'
 import { IconName } from '../icon/icon-names'
 import { Progress } from '../progress/progress'
-import { Tag } from '../tag/tag'
+import { Tag, TagTone } from '../tag/tag'
+import { ActivityRowActions } from './activity-row-actions'
 
 let lastId = 0
 
@@ -14,10 +15,12 @@ let lastId = 0
 export type DueTone = 'neutral' | 'warning' | 'danger' | 'info'
 
 /**
- * An activity: an icon in the hue of its course, its title, its course and its deadline, how far it
- * has gone, and what to do with it, written out, or only a chevron when it just opens. The whole row
- * is a link of the router, so that an address of the other interface goes through its bridge; with a
- * `button`, its action is a button of that variant instead, the row itself not a link.
+ * An activity: an icon in the hue of its course, its title, its state, its course and its deadline,
+ * how far it has gone, and what to do with it, written out, or only a chevron when it just opens. The
+ * whole row is a link of the router, so that an address of the other interface goes through its
+ * bridge; with a `button`, its action is a button of that variant instead, the row itself not a link.
+ * With actions of its own (`plActivityRowActions`), the row opens from its title, over the whole row,
+ * and the actions stay apart.
  */
 @Component({
   selector: 'pl-activity-row',
@@ -29,6 +32,10 @@ export type DueTone = 'neutral' | 'warning' | 'danger' | 'info'
 })
 export class ActivityRow {
   readonly heading = input.required<string>()
+  /** Its state, first after its title, with its glyph: « Ouverte ». */
+  readonly status = input<string>()
+  readonly statusTone = input<TagTone>('neutral')
+  readonly statusIcon = input<IconName>()
   /** The course it belongs to. */
   readonly context = input<string>()
   readonly icon = input.required<IconName>()
@@ -56,6 +63,9 @@ export class ActivityRow {
   /** Makes the action a button of this variant: `primary` for the one thing to do first. */
   readonly button = input<'primary' | 'secondary'>()
 
+  private readonly actions = contentChildren(ActivityRowActions)
+  protected readonly hasActions = computed(() => this.actions().length > 0)
+
   protected readonly ids = (() => {
     const id = ++lastId
     return {
@@ -66,13 +76,11 @@ export class ActivityRow {
     }
   })()
 
-  protected readonly describedBy = computed(() =>
-    [
-      this.ids.title,
-      this.ids.meta,
-      this.tag() ? this.ids.tag : undefined,
-      this.progressText() ? this.ids.progress : undefined,
-    ]
+  /** What the action button is read with: the row it acts on. */
+  protected readonly describedBy = computed(() => [this.ids.title, this.details()].join(' '))
+  /** What the title read as a link is read with: the rest of the row. */
+  protected readonly details = computed(() =>
+    [this.ids.meta, this.tag() ? this.ids.tag : undefined, this.progressText() ? this.ids.progress : undefined]
       .filter(Boolean)
       .join(' ')
   )

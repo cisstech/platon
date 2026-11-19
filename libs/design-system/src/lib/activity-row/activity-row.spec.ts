@@ -2,6 +2,7 @@ import { Component, signal } from '@angular/core'
 import { TestBed } from '@angular/core/testing'
 import { provideRouter } from '@angular/router'
 import { ActivityRow } from './activity-row'
+import { ActivityRowActions } from './activity-row-actions'
 import { spoken } from '../testing/spoken'
 
 @Component({
@@ -130,4 +131,58 @@ describe('ActivityRow', () => {
     expect(spoken(link)).toBe('Quiz : complexité Algorithmique 1, Ferme ce soir à 23 h 59, 5 sur 6 exercices faits')
     expect(link.querySelector('pl-icon:last-child')).not.toBeNull()
   })
+
+  it('says its state with its glyph, first of what it says after its title', () => {
+    TestBed.configureTestingModule({ providers: [provideRouter([])] })
+    const fixture = TestBed.createComponent(TeacherHost)
+    fixture.detectChanges()
+    const row = fixture.nativeElement.querySelector('pl-activity-row') as HTMLElement
+
+    const status = row.querySelector('pl-tag') as HTMLElement
+    expect(spoken(status)).toBe('Ouverte')
+    expect(status.getAttribute('data-tone')).toBe('success')
+    expect(status.querySelector('use')?.getAttribute('href')).toMatch(/#event_available$/)
+    expect(spoken(row.querySelector('.pl-activity-row__meta'))).toBe('Ouverte, Sans dates, 8 exercices')
+  })
+
+  it('opens from its whole row through its title, its own actions apart', () => {
+    TestBed.configureTestingModule({ providers: [provideRouter([])] })
+    const fixture = TestBed.createComponent(TeacherHost)
+    fixture.detectChanges()
+    const row = fixture.nativeElement.querySelector('pl-activity-row') as HTMLElement
+    const title = row.querySelector('.pl-activity-row__title') as HTMLAnchorElement
+
+    expect(title.tagName).toBe('A')
+    expect(title.getAttribute('href')).toBe('/activities/monitor/ap1/tp5')
+    expect(spoken(title)).toBe('TP 5 : fonctions récursives')
+    const described = (title.getAttribute('aria-describedby') ?? '')
+      .split(' ')
+      .map((id) => spoken(row.querySelector(`[id="${id}"]`)))
+    expect(described).toEqual(['Ouverte, Sans dates, 8 exercices'])
+    expect(
+      [...row.querySelectorAll('[plActivityRowActions]')].map((action) => action.closest('a.pl-activity-row__title'))
+    ).toEqual([null, null])
+    expect(row.querySelector('.pl-activity-row__action')).toBeNull()
+  })
 })
+
+@Component({
+  imports: [ActivityRow, ActivityRowActions],
+  template: `
+    <pl-activity-row
+      heading="TP 5 : fonctions récursives"
+      icon="code"
+      hue="lagoon"
+      status="Ouverte"
+      statusTone="success"
+      statusIcon="event_available"
+      due="Sans dates"
+      detail="8 exercices"
+      href="/activities/monitor/ap1/tp5"
+    >
+      <a plActivityRowActions href="/activities/ap1/tp5">Planifier</a>
+      <button plActivityRowActions type="button" aria-label="Plus d'actions pour TP 5">…</button>
+    </pl-activity-row>
+  `,
+})
+class TeacherHost {}

@@ -14,6 +14,7 @@ import {
   calculateActivityOpenState,
 } from '@platon/feature/course/common'
 import { ResourceEntity, ResourceFileService, ResourceService } from '@platon/feature/resource/server'
+import { isUUID } from 'class-validator'
 import { CLS_REQ } from 'nestjs-cls'
 import { Brackets, In, Repository, SelectQueryBuilder } from 'typeorm'
 import { Optional } from 'typescript-optional'
@@ -179,9 +180,21 @@ export class ActivityService {
     return result
   }
 
-  async updateActivitesOrder(ids: string[]): Promise<void> {
-    const activitiesWithOrder = ids.map((activity, index) => ({ id: activity, order: index }))
-    await this.repository.save(activitiesWithOrder)
+  /**
+   * Gives the activities of a course their place, in the order of `ids`. An id of another course, or
+   * that is no id at all, is left out; the others take the places that follow.
+   */
+  async updateActivitesOrder(courseId: string, ids: string[]): Promise<void> {
+    const candidates = (Array.isArray(ids) ? ids : []).filter((id) => typeof id === 'string' && isUUID(id))
+    if (!candidates.length) return
+    await this.repository.manager.transaction(async (manager) => {
+      const own = await manager.find(ActivityEntity, { where: { courseId, id: In(candidates) }, select: { id: true } })
+      const owned = new Set(own.map(({ id }) => id))
+      const ordered = candidates.filter((id) => owned.has(id))
+      for (const [order, id] of ordered.entries()) {
+        await manager.update(ActivityEntity, { id, courseId }, { order })
+      }
+    })
   }
 
   async update(

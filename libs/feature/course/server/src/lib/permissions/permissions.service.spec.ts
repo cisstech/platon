@@ -6,6 +6,8 @@ import { ActivityGroupService } from '../activity-group/activity-group.service'
 import { ActivityMemberService } from '../activity-member/activity-member.service'
 import { ActivityEntity } from '../activity/activity.entity'
 import { ActivityService } from '../activity/activity.service'
+import { CourseGroupEntity } from '../course-group/course-group.entity'
+import { CourseGroupService } from '../course-group/course-group.service'
 import { CourseMemberService } from '../course-member/course-member.service'
 import { CoursePermissionsService } from './permissions.service'
 
@@ -15,6 +17,7 @@ describe('CoursePermissionsService', () => {
   let activityMemberService: jest.Mocked<Pick<ActivityMemberService, 'isPrivateMember' | 'isMember'>>
   let activityGroupService: jest.Mocked<Pick<ActivityGroupService, 'isUserInActivityGroup' | 'numberOfGroups'>>
   let activityService: jest.Mocked<Pick<ActivityService, 'findByActivityId'>>
+  let courseGroupService: jest.Mocked<Pick<CourseGroupService, 'findInCourse'>>
 
   const req = { user: { id: 'user-1', role: 'student' } } as IRequest
 
@@ -23,6 +26,7 @@ describe('CoursePermissionsService', () => {
     activityMemberService = { isPrivateMember: jest.fn(), isMember: jest.fn() }
     activityGroupService = { isUserInActivityGroup: jest.fn(), numberOfGroups: jest.fn() }
     activityService = { findByActivityId: jest.fn() }
+    courseGroupService = { findInCourse: jest.fn() }
 
     const module = await Test.createTestingModule({
       providers: [
@@ -31,6 +35,7 @@ describe('CoursePermissionsService', () => {
         { provide: ActivityMemberService, useValue: activityMemberService },
         { provide: ActivityGroupService, useValue: activityGroupService },
         { provide: ActivityService, useValue: activityService },
+        { provide: CourseGroupService, useValue: courseGroupService },
       ],
     }).compile()
 
@@ -39,6 +44,40 @@ describe('CoursePermissionsService', () => {
 
   afterEach(() => {
     jest.clearAllMocks()
+  })
+
+  describe('ensureGroupReadPermission and ensureGroupWritePermission', () => {
+    const group = { groupId: 'td-1', courseId: 'course-1' } as CourseGroupEntity
+
+    it('give the group of the course to who may read it, or write it', async () => {
+      courseMemberService.isMember.mockResolvedValue(true)
+      courseMemberService.hasWritePermission.mockResolvedValue(true)
+      courseGroupService.findInCourse.mockResolvedValue(group)
+
+      await expect(service.ensureGroupReadPermission('course-1', 'td-1', req)).resolves.toBe(group)
+      await expect(service.ensureGroupWritePermission('course-1', 'td-1', req)).resolves.toBe(group)
+      expect(courseGroupService.findInCourse).toHaveBeenCalledWith('course-1', 'td-1')
+    })
+
+    it('say a group missing from the course is not found', async () => {
+      courseMemberService.isMember.mockResolvedValue(true)
+      courseMemberService.hasWritePermission.mockResolvedValue(true)
+      courseGroupService.findInCourse.mockResolvedValue(null)
+
+      await expect(service.ensureGroupReadPermission('course-1', 'td-9', req)).rejects.toBeInstanceOf(NotFoundResponse)
+      await expect(service.ensureGroupWritePermission('course-1', 'td-9', req)).rejects.toBeInstanceOf(NotFoundResponse)
+    })
+
+    it('refuse who may not read or write the course before looking for the group', async () => {
+      courseMemberService.isMember.mockResolvedValue(false)
+      courseMemberService.hasWritePermission.mockResolvedValue(false)
+
+      await expect(service.ensureGroupReadPermission('course-1', 'td-1', req)).rejects.toBeInstanceOf(ForbiddenResponse)
+      await expect(service.ensureGroupWritePermission('course-1', 'td-1', req)).rejects.toBeInstanceOf(
+        ForbiddenResponse
+      )
+      expect(courseGroupService.findInCourse).not.toHaveBeenCalled()
+    })
   })
 
   describe('ensureCourseReadPermission', () => {

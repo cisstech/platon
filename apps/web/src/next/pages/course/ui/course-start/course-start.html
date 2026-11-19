@@ -1,0 +1,37 @@
+<pl-empty heading="Votre cours est prêt, il ne manque que le contenu" glyph="course">
+  <p>Trois étapes, dans cet ordre.</p>
+</pl-empty>
+
+<pl-steps aria-label="Pour commencer">
+  <pl-step heading="Ajouter une activité" current>
+    <p>
+      Une activité existante, ou composée avec des exercices&nbsp;; elle se range dans «&nbsp;Section 1&nbsp;» pour
+      commencer.
+    </p>
+    <a plButton variant="primary" plStepAction routerLink="/activities/create" [queryParams]="{ course: courseId() }">
+      <pl-icon name="add" />
+      Ajouter une activité
+    </a>
+  </pl-step>
+
+  <pl-step heading="Ajouter vos étudiants">
+    <p>Un par un, ou d'un coup avec un groupe de la plateforme&nbsp;: une promotion, un TD.</p>
+    <a plButton variant="secondary" plStepAction [routerLink]="members()">
+      <pl-icon name="group_add" />
+      Ajouter des membres
+    </a>
+  </pl-step>
+
+  <pl-step heading="Partager le lien">
+    <p>Le lien PLaTon, ou le lien LTI à coller dans Moodle.</p>
+    <button type="button" plButton variant="secondary" plStepAction (click)="share($event)">
+      <pl-icon name="share" />
+      Partager
+    </button>
+  </pl-step>
+</pl-steps>
+
+<p class="course-start__again">
+  Déjà un cours l'an dernier&nbsp;? Ses sections et ses activités se reprennent depuis les paramètres&nbsp;:
+  <a [routerLink]="settings()">Reprendre un cours</a>
+</p>

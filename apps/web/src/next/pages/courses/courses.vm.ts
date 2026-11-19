@@ -1,26 +1,17 @@
 import { ParamMap, Params } from '@angular/router'
-import { userDisplayName } from '@platon/core/common'
-import {
-  CourseHue,
-  courseHue,
-  IconName,
-  monogram,
-  NO_BREAK_SPACE,
-  percentOf,
-  shortCalendarDay,
-} from '@platon/design-system'
+import { CourseHue, courseHue, monogram, NO_BREAK_SPACE, percentOf, shortCalendarDay } from '@platon/design-system'
 import {
   activityDone,
   Course,
   CourseOrderings,
   CourseProgress,
   courseProgress,
-  CourseStatistic,
   PlayableActivity,
 } from '@platon/feature/course/common'
 import { byDeadline, byOpening, closingDue, DueView, openingDue } from '../../shared/due'
+import { headcount, HeadcountView, teachersLine } from '../../shared/course-people'
 import { plural } from '../../shared/plural'
-import { progressText } from '../../shared/progress-text'
+import { progressLine } from '../../shared/progress-text'
 import { quoted } from '../../shared/quoted'
 
 /** The courses shown: the person's own, those they archived, or, for an administrator, every one. */
@@ -86,56 +77,9 @@ export const paramsOf = (filters: CourseListFilters): Params => ({
   direction: null,
 })
 
-/** A figure of the headcount, in full: « 302 étudiants ». */
-export interface HeadcountView {
-  readonly icon: IconName
-  readonly value: number
-  readonly label: string
-}
-
-export const headcount = (statistic?: CourseStatistic): HeadcountView[] =>
-  statistic
-    ? [
-        {
-          icon: 'person',
-          value: statistic.teacherCount,
-          label: plural(statistic.teacherCount, 'enseignant', 'enseignants'),
-        },
-        {
-          icon: 'groups',
-          value: statistic.studentCount,
-          label: plural(statistic.studentCount, 'étudiant', 'étudiants'),
-        },
-        {
-          icon: 'widgets',
-          value: statistic.activityCount,
-          label: plural(statistic.activityCount, 'activité', 'activités'),
-        },
-      ]
-    : []
-
 /** « 1 challenge », « 3 challenges », nothing without any. */
 export const challengesBadge = (count?: number): string | undefined =>
   count ? `${count} ${plural(count, 'challenge', 'challenges')}` : undefined
-
-/** « Karim Haddad et 5 autres enseignants »: who is responsible, then how many others teach. */
-export const teachersLine = (course: Course): string => {
-  const count = course.statistic?.teacherCount ?? 1
-  if (!course.owner) return `${count} ${plural(count, 'enseignant', 'enseignants')}`
-  const others = count - 1
-  const name = userDisplayName(course.owner)
-  return others > 0 ? `${name} et ${others} ${plural(others, 'autre enseignant', 'autres enseignants')}` : name
-}
-
-/** « 34 exercices sur 59, 4 activités terminées sur 9 », or « Cours terminé, 4 activités sur 4 ». */
-export const progressLine = (progress: CourseProgress): string => {
-  const { total, finished, activitiesDone, activityCount } = progress
-  if (!total) return progressText(progress)
-  const activities = finished
-    ? plural(activitiesDone, 'activité', 'activités')
-    : plural(activitiesDone, 'activité terminée', 'activités terminées')
-  return `${progressText(progress)}, ${activitiesDone} ${activities} sur${NO_BREAK_SPACE}${activityCount}`
-}
 
 /**
  * The next deadline of a student in a course, among what is left to do: the activity that closes

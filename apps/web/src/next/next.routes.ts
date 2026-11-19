@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router'
 import { legacyBridgeGuard } from './core/legacy-bridge/legacy-bridge-guard'
 import { AnnouncementsStore } from './pages/announcements/data/announcements-store'
+import { CourseStore } from './pages/course/data/course-store'
 import { CoursesStore } from './pages/courses/data/courses-store'
 import { SHELL_ROLES, sessionGuard } from './core/session/session-guard'
 import { Home } from './pages/home/home'
@@ -51,6 +52,14 @@ export const nextRoutes: Routes = [
       },
       // The address of the creation of a course: the list, with its dialog open.
       { path: 'courses/create', redirectTo: '/courses?create=true' },
+      {
+        path: 'courses/:id',
+        loadComponent: () => import('./pages/course/course-overview').then((page) => page.CourseOverview),
+        title: 'Cours',
+        providers: [CourseStore],
+      },
+      // The address of the overview in the current interface, as its links and its tabs still give it.
+      { path: 'courses/:id/dashboard', redirectTo: '/courses/:id' },
     ],
   },
   { path: '**', canActivate: [legacyBridgeGuard], children: [] },

@@ -1,3 +1,5 @@
+import { withoutAccents } from '../text/text'
+
 /** Words that do not make a monogram. */
 const MINOR_WORDS = new Set([
   'a',
@@ -28,7 +30,7 @@ const MINOR_WORDS = new Set([
  * gives AP1, « Analyse 1 » AN1, « Programmation web » PW.
  */
 export const monogram = (name: string): string => {
-  const plain = name.normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase()
+  const plain = withoutAccents(name).toUpperCase()
   const tokens = plain.split(/[^A-Z0-9]+/).filter(Boolean)
   const last = tokens[tokens.length - 1] ?? ''
   const number = /\d/.test(last) ? last.replace(/\D/g, '') : ''

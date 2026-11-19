@@ -1,0 +1,4 @@
+<pl-field class="overview-bar__search" label="Chercher une activité ou une section" icon="search" labelHidden>
+  <input plInput type="search" placeholder="Activité ou section" [value]="search()" (input)="type($event)" />
+</pl-field>
+<pl-segmented label="État des activités" [options]="states" [value]="state()" (valueChange)="choose($event)" />
