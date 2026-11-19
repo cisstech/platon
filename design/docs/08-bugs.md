@@ -22,6 +22,8 @@ Gravité : **P1** bloque, trompe ou expose. **P2** gêne ou fait douter. **P3** 
   ne contient aucune section ».
 - **Cause** : `refresh()` n'a pas de `catch`, les sections restent `[]`.
 - **Où** : `apps/web/src/app/pages/courses/course/dashboard/dashboard.page.ts`
+- **Note** : la page d'un cours de la nouvelle interface (K-02) dit qu'il n'a pas pu être chargé,
+  avec Réessayer ; sa spec le prouve.
 
 ### B3. Challenges : squelette infini
 
@@ -114,6 +116,46 @@ Gravité : **P1** bloque, trompe ou expose. **P2** gêne ou fait douter. **P3** 
 - **Cause** : la recherche ajoutait la personne à `members` sans retirer ceux de l'adresse.
 - **Où** : `libs/feature/course/server/src/lib/course.controller.ts` (`search`)
 - **Note** : seul l'administrateur garde `members` et `showAll` ; une spec e2e le prouve.
+
+### B43. Tout compte lit les membres et les groupes d'un cours
+
+- [x] Corrigé dans K-02 (branche `feat/course-page`).
+- **Symptôme** : `GET /api/v1/courses/:id/members` rend à tout compte connecté les membres de
+  n'importe quel cours, avec leur adresse électronique et les membres de leurs groupes ;
+  `GET /api/v1/courseGroups/:id` rend ses groupes, `courseGroupMembers` les membres de chacun, avec
+  l'empreinte de leur mot de passe. Tout compte enseignant écrit les groupes et leurs membres.
+- **Cause** : aucune de ces routes ne vérifie l'appartenance au cours ; les membres d'un groupe
+  partent tels que TypeORM les charge, sans DTO.
+- **Où** : `libs/feature/course/server/src/lib/course-member/course-member.controller.ts` (`search`),
+  `libs/feature/course/server/src/lib/course-group/course-group.controller.ts`,
+  `libs/feature/course/server/src/lib/course-group-member/course-group-member.controller.ts`
+- **Note** : lecture par les membres et l'administrateur, écriture par qui peut modifier le cours,
+  sur un groupe de ce cours, et les membres par leur DTO ; `course.controller.e2e.spec.ts` le
+  prouve.
+
+### B44. Les sections d'un cours se lisent par tout compte et s'écrivent par tout enseignant
+
+- [x] Corrigé dans K-02 (branche `feat/course-page`).
+- **Symptôme** : tout compte liste les sections de n'importe quel cours ; tout compte enseignant les
+  crée, les renomme, les réordonne et les supprime, et leurs activités partent avec elles. Le corps
+  d'un `PATCH` déplace une section ou un groupe dans un autre cours.
+- **Cause** : le contrôleur ne vérifie ni l'appartenance ni le droit de modifier (`TODO` en place) ;
+  le corps reçu est copié tel quel sur l'entité, et le `ValidationPipe` garde les clés inconnues.
+- **Où** : `libs/feature/course/server/src/lib/section/section.controller.ts`,
+  `libs/feature/course/server/src/lib/course-group/course-group.service.ts`
+- **Note** : `ensureCourseReadPermission` en lecture, `ensureCourseWritePermission` en écriture, et
+  seuls le nom et l'ordre s'écrivent ; `course.controller.e2e.spec.ts` le prouve.
+
+### B50. Les groupes d'une activité s'écrivent sans vérification
+
+- [ ] Corrigé
+- **Symptôme** : tout compte enseignant lit, ajoute, remplace et retire les groupes de n'importe
+  quelle activité ; l'ajout cherche le groupe par un identifiant qui n'est pas celui qu'il enregistre.
+- **Cause** : `ActivityGroupController` ne vérifie ni l'appartenance ni le droit sur l'activité, et
+  `create` cherche le groupe par `groupId` alors que la ligne enregistre `CourseGroups.id`.
+- **Où** : `libs/feature/course/server/src/lib/activity-group/activity-group.controller.ts`
+- **Piste** : `ensureActivityReadPermission` et `ensureActivityWritePermission`, et chercher le
+  groupe par sa ligne dans le cours de l'activité (K-05).
 
 ## P2
 
@@ -312,6 +354,43 @@ Gravité : **P1** bloque, trompe ou expose. **P2** gêne ou fait douter. **P3** 
 - **Note** : l'administrateur et qui enseigne le cours comptent toutes ses activités ; une spec
   d'intégration le prouve.
 
+### B45. Réordonner les activités d'un cours touche celles d'un autre
+
+- [x] Corrigé dans K-02 (branche `feat/course-page`).
+- **Symptôme** : `PATCH /courses/:id/activities/change-order` vérifie le droit sur le cours de
+  l'adresse, puis réécrit l'ordre de tous les identifiants reçus, ceux d'un autre cours compris.
+- **Cause** : `updateActivitesOrder` enregistre les identifiants sans filtre de cours.
+- **Où** : `libs/feature/course/server/src/lib/activity/activity.service.ts` (`updateActivitesOrder`)
+- **Note** : seules les activités du cours prennent leur place ; une spec d'intégration le prouve
+  (`activity-order.integration.spec.ts`).
+
+### B48. Le temps passé dans un cours compte les jours entre deux visites
+
+- [ ] Corrigé
+- **Symptôme** : un étudiant qui ouvre une activité le lundi et rend son dernier exercice le
+  vendredi a « passé » quatre jours. Sur les données de démonstration, Inès Benali lit « 1 248 h
+  passées » dans Algorithmique et programmation 1, l'interface actuelle aussi.
+- **Cause** : `statistic` additionne, pour chaque copie, l'écart entre son début (`startedAt`) et sa
+  dernière note (`lastGradedAt`) : une durée de calendrier, pauses comprises, pas un temps de
+  travail. Les données de démonstration le grossissent encore (débuts en septembre, notes posées
+  au moment du remplissage).
+- **Où** : `libs/feature/result/server/src/lib/expanders/course.expander.ts` (`timeSpent`)
+- **Piste** : mesurer le temps actif (par exercice, en plafonnant les écarts entre deux réponses),
+  ou ne plus afficher ce temps tant qu'il n'est pas mesuré.
+
+### B49. Deux cours qui ont le même groupe LTI partagent ses membres
+
+- [ ] Corrigé
+- **Symptôme** : deux cours reçoivent de leur plateforme un groupe du même nom (« Groupe 1 ») ;
+  ajouter un étudiant à l'un l'ajoute à l'autre, et supprimer le groupe d'un cours vide celui de
+  l'autre.
+- **Cause** : `CourseGroupsMember` range ses lignes par l'identifiant du groupe (`group_id`), qui
+  n'est unique qu'à l'intérieur d'un cours, sans le cours.
+- **Où** : `libs/feature/course/server/src/lib/course-group-member/course-group-member.entity.ts`,
+  `course-group-member.service.ts` (`deleteAllMembersFromGroup`)
+- **Piste** : ranger les membres par la ligne du groupe (`CourseGroups.id`), migration comprise
+  (K-03).
+
 ## P3
 
 ### B11. Identifiant de session dans le résumé
@@ -443,6 +522,26 @@ already been destroyed` dans la console.
 - **Où** : `apps/web/src/next/shell/notifications/notifications-panel.ts` (`keepFocus`)
 - **Note** : `whenRendered` (design system) ne lance plus rien une fois la vue partie ; la page de
   connexion et le dialogue de création de cours s'en servent aussi.
+
+### B46. Une carte d'activité écrit sa couleur en s'affichant
+
+- [ ] Corrigé
+- **Symptôme** : dans la vue d'ensemble actuelle, chaque activité sans couleur envoie un `PATCH` en
+  s'affichant ; pour un étudiant, le serveur répond 403 et l'erreur reste sans réponse.
+- **Cause** : `ngOnInit` met `colorHue` à -1 quand il manque, sans `try`.
+- **Où** : `libs/feature/course/browser/src/components/activity-card/activity-card.component.ts`
+- **Piste** : lire la couleur sans l'écrire ; la nouvelle interface la tire du cours (D32).
+
+### B47. « Descendre » reste proposé sur la dernière section
+
+- [ ] Corrigé
+- **Symptôme** : la dernière section d'un cours propose Descendre ; le serveur lui donne alors un
+  ordre au-delà des autres.
+- **Cause** : le bouton se cache quand `order` vaut le nombre de sections, alors que la dernière a
+  ce nombre moins un.
+- **Où** :
+  `apps/web/src/app/pages/courses/course/dashboard/section-actions/section-actions.component.html`
+- **Piste** : comparer à `sectionCount - 1`.
 
 ## Code mort
 

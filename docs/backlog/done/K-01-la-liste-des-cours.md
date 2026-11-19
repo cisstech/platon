@@ -174,10 +174,7 @@ Aucun : tranchés le 2026-10-13 par D43, comme proposé. Pour mémoire, les ques
 ## 7. Definition of Done
 
 - [x] Les comportements du § 1, chacun couvert par un test du § 2.
-- [ ] Les specs d'intégration et e2e de l'API vertes : écrites et compilées, pas lancées en local
-      (testcontainers). À lancer, ou laisser à la CI :
-      `nx run feature-course-server:test:integration`, `nx run feature-course-server:test:e2e`,
-      `nx run feature-result-server:test:integration`.
+- [x] Les specs d'intégration et e2e de l'API vertes (testcontainers, lancées par la personne).
 - [x] Tests et lint des projets touchés (`web`, `design-system`, `feature-course-server`,
       `feature-result-server`, `feature-course-common`, `core-common`), `tsc` de l'API et du web,
       `yarn lint:design`, le build de production du web et celui de Storybook verts.

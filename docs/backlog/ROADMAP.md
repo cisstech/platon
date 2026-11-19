@@ -1,6 +1,6 @@
 # Roadmap
 
-> Mise à jour : 2026-10-12. Wireframes : [`design/flows`](../../design/flows). Décisions :
+> Mise à jour : 2026-10-13. Wireframes : [`design/flows`](../../design/flows). Décisions :
 > [DECISIONS.md](./DECISIONS.md). Standard : [README.md](./README.md).
 
 ## Où on en est
@@ -88,15 +88,16 @@ critique. Les points ouverts de C-02 à C-05 sont tranchés (D22 à D30, 2026-10
 
 ## Phase K : les cours
 
-| Ticket                                    | Titre                                                             | Dépend de  | Taille | Statut             |
-| ----------------------------------------- | ----------------------------------------------------------------- | ---------- | ------ | ------------------ |
-| [K-01](./done/K-01-la-liste-des-cours.md) | La liste des cours (classeurs)                                    | C-05, A-04 | L      | Livré (2026-10-13) |
-| K-02                                      | La page d'un cours : vue d'ensemble, sections, À faire, état neuf | K-01       | L      | À écrire           |
-| K-03                                      | Membres et groupes                                                | K-02       | M      | À écrire           |
-| K-04                                      | Challenges et paramètres du cours                                 | K-02       | M      | À écrire           |
-| K-05                                      | Le panneau de réglage d'une activité                              | K-02       | L      | À écrire           |
-| K-06                                      | Ajouter une activité, et la composer avec des exercices           | K-02       | L      | À écrire           |
-| K-07                                      | Le suivi d'une activité : statistiques, apprenants, modération    | K-02       | L      | À écrire           |
+| Ticket                                    | Titre                                                                | Dépend de  | Taille | Statut             |
+| ----------------------------------------- | -------------------------------------------------------------------- | ---------- | ------ | ------------------ |
+| [K-01](./done/K-01-la-liste-des-cours.md) | La liste des cours (classeurs)                                       | C-05, A-04 | L      | Livré (2026-10-13) |
+| [K-02](./done/K-02-la-page-d-un-cours.md) | La page d'un cours : vue d'ensemble, sections, À faire, état neuf    | K-01, A-04 | L      | Livré (2026-10-13) |
+| K-03                                      | Membres et groupes                                                   | K-02       | M      | À écrire           |
+| K-04                                      | Challenges et paramètres du cours                                    | K-02       | M      | À écrire           |
+| K-05                                      | Le panneau de réglage d'une activité                                 | K-02       | L      | À écrire           |
+| K-06                                      | Ajouter une activité, et la composer avec des exercices              | K-02       | L      | À écrire           |
+| K-07                                      | Le suivi d'une activité : statistiques, apprenants, modération       | K-02       | L      | À écrire           |
+| K-08                                      | Organiser un cours : sections, ordre, nom, Tableau, export des notes | K-02       | M      | À écrire           |
 
 ## Phase R : les ressources et la création
 
