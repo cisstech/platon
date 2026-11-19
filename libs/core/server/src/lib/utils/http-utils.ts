@@ -1,3 +1,5 @@
+import { ExtractJwt } from 'passport-jwt'
+
 /**
  * Génère un header Content-Disposition RFC 5987 compatible avec les navigateurs modernes
  * Supporte les caractères non-ASCII dans les noms de fichiers
@@ -11,3 +13,7 @@ export function getContentDisposition(fileName: string, dispositionType = 'attac
   const encodedFileName = encodeURIComponent(fileName)
   return `${dispositionType}; filename*=UTF-8''${encodedFileName}`
 }
+
+/** The Bearer token of a request, as the authentication strategies read it. */
+export const bearerToken = (req: Parameters<ReturnType<typeof ExtractJwt.fromAuthHeaderAsBearerToken>>[0]) =>
+  ExtractJwt.fromAuthHeaderAsBearerToken()(req) ?? undefined

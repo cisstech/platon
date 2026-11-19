@@ -97,7 +97,7 @@ describe('AuthService', () => {
 
       expect(result).toEqual({ accessToken: 'signed-token', refreshToken: 'signed-token' })
       expect(jwtService.signAsync).toHaveBeenCalledWith(
-        { sub: 'user-1', username: 'testuser' },
+        { sub: 'user-1', username: 'testuser', typ: 'access' },
         { secret: 'test-secret', expiresIn: '1h' }
       )
     })
@@ -234,15 +234,15 @@ describe('AuthService', () => {
   })
 
   describe('authenticate', () => {
-    it('devrait générer un access token et un refresh token avec les bonnes durées de vie', async () => {
+    it('devrait générer un access token et un refresh token, chacun typé et avec sa durée de vie', async () => {
       await service.authenticate('user-1', 'testuser')
 
       expect(jwtService.signAsync).toHaveBeenCalledWith(
-        { sub: 'user-1', username: 'testuser' },
+        { sub: 'user-1', username: 'testuser', typ: 'access' },
         { secret: 'test-secret', expiresIn: '1h' }
       )
       expect(jwtService.signAsync).toHaveBeenCalledWith(
-        { sub: 'user-1', username: 'testuser' },
+        { sub: 'user-1', username: 'testuser', typ: 'refresh' },
         { secret: 'test-secret', expiresIn: '7d' }
       )
     })

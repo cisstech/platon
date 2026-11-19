@@ -31,3 +31,11 @@ export interface IRequest extends Request {
 
   [key: string]: unknown
 }
+
+/** The claims of a session token; older tokens have no `typ`. */
+export interface TokenPayload {
+  sub: string
+  username: string
+  typ?: 'access' | 'refresh'
+  exp?: number
+}

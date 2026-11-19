@@ -21,6 +21,7 @@ describe('AuthController', () => {
             signIn: jest.fn(),
             resetPassword: jest.fn(),
             authenticate: jest.fn(),
+            refresh: jest.fn(),
           },
         },
       ],
@@ -73,14 +74,14 @@ describe('AuthController', () => {
   })
 
   describe('refresh', () => {
-    it("devrait ré-authentifier l'utilisateur de la requête courante", async () => {
-      service.authenticate.mockResolvedValue(authToken)
+    it('devrait renouveler la session du jeton de rafraîchissement de la requête', async () => {
+      service.refresh.mockResolvedValue(authToken)
       const user = createUserEntity({ id: 'user-1', username: 'testuser' })
-      const req = { user } as unknown as IRequest
+      const req = { user, headers: { authorization: 'Bearer refresh-token' } } as unknown as IRequest
 
       const result = await controller.refresh(req)
 
-      expect(service.authenticate).toHaveBeenCalledWith('user-1', 'testuser')
+      expect(service.refresh).toHaveBeenCalledWith(user, 'refresh-token')
       expect(result.resource).toEqual(authToken)
     })
   })
