@@ -24,10 +24,12 @@ export const EM_DASHES_CONFIG = {
     'apps/web/src/app/ui-switch',
     'libs/design-system',
     'tools/lint',
-    'docs/backlog',
+    'docs',
     'design/docs',
     '.claude',
     'CLAUDE.md',
+    'README.md',
+    'CONTRIBUTING.md',
   ],
 }
 
