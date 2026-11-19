@@ -1,51 +1,42 @@
 #!/usr/bin/env bash
+# Replaces the database of the running platon_postgres container with a dump: a plain SQL file, or a
+# custom-format dump such as bin/backup.sh writes. The current database is dropped.
+# Usage: ./bin/restore-db.sh path/to/dump
+set -euo pipefail
 
 # Authorize the execution of this script from anywhere
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 cd "$DIR/.."
 
-#!/bin/sh
-
 source .env
+: "${DB_USERNAME:?DB_USERNAME is not set in .env}"
+: "${DB_NAME:?DB_NAME is not set in .env}"
 
-# Check if the script received an argument
-if [ "$#" -ne 1 ]; then
-  echo "Usage: $0 path_to_sql_file"
+if [ "$#" -ne 1 ] || [ ! -f "$1" ]; then
+  echo "Usage: $0 path/to/dump"
   exit 1
 fi
 
-echo "Check if the DB_USERNAME and DB_NAME environment variables are set"
-if [ -z "$DB_USERNAME" ]; then
-  echo "Error: DB_USERNAME environment variable is not set"
+if ! docker ps --format '{{.Names}}' | grep -qx platon_postgres; then
+  echo "The platon_postgres container is not running: start it with ./bin/docker/up.sh first."
   exit 1
 fi
-if [ -z "$DB_NAME" ]; then
-  echo "Error: DB_NAME environment variable is not set"
-  exit 1
+
+dump=$1
+copy=/tmp/$(basename "$dump")
+
+echo "Copying $dump into the container"
+docker cp "$dump" "platon_postgres:$copy"
+
+echo "Dropping and creating the database $DB_NAME"
+docker exec platon_postgres dropdb --if-exists -U "$DB_USERNAME" "$DB_NAME"
+docker exec platon_postgres createdb -U "$DB_USERNAME" "$DB_NAME"
+
+# A custom-format dump starts with PGDMP and needs pg_restore; anything else is plain SQL.
+if [ "$(head -c 5 "$dump")" = "PGDMP" ]; then
+  docker exec platon_postgres pg_restore -U "$DB_USERNAME" -d "$DB_NAME" --no-owner "$copy"
+else
+  docker exec platon_postgres psql -q -U "$DB_USERNAME" -d "$DB_NAME" -f "$copy"
 fi
-echo "DB_NAME: $DB_NAME, DB_USERNAME: $DB_USERNAME"
-echo
-
-# Get the path to the SQL file from the script arguments
-sql_file_path=$1
-sql_file_name=$(basename $sql_file_path)
-
-echo "### Starting postgres ..."
-docker-compose -f docker-compose.dev.yml up --force-recreate -d postgres
-echo
-
-echo "Copying the SQL file to the running Docker container"
-docker cp $sql_file_path platon_postgres:/tmp/
-echo
-
-echo "Dropping the database"
-docker exec -it platon_postgres dropdb --if-exists -U $DB_USERNAME $DB_NAME
-echo
-
-echo "Creating the database"
-docker exec -it platon_postgres createdb -U $DB_USERNAME $DB_NAME
-echo
-
-echo "Restoring the database using the SQL file $sql_file_name"
-docker exec -it platon_postgres psql -U $DB_USERNAME -d $DB_NAME -f /tmp/$sql_file_name
-echo
+docker exec platon_postgres rm -f "$copy"
+echo "Done"
