@@ -6,7 +6,14 @@ import {
   ExerciseTheory,
   ExerciseVariables,
 } from '@platon/feature/compiler'
-import { ActivitySession, Answer, AnswerStates, ExerciseSession, Session } from '@platon/feature/result/common'
+import {
+  ActivitySession,
+  Answer,
+  AnswerStates,
+  ExerciseSession,
+  isExerciseDone,
+  Session,
+} from '@platon/feature/result/common'
 import { PlayerActivityVariables, PlayerNavigation } from './player.model'
 
 /**
@@ -120,9 +127,7 @@ export const withActivityFeedbacksGuard = <T extends object = PlayerActivityVari
 
   const disable = () => {
     navigation.exercises.forEach((exercise) => {
-      return (exercise.state = ![AnswerStates.NOT_STARTED, AnswerStates.STARTED].includes(exercise.state)
-        ? AnswerStates.ANSWERED
-        : exercise.state)
+      return (exercise.state = isExerciseDone(exercise.state) ? AnswerStates.ANSWERED : exercise.state)
     })
   }
 

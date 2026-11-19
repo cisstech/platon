@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ForbiddenResponse } from '@platon/core/common'
+import { ForbiddenResponse, User, UserRoles } from '@platon/core/common'
 import { ExerciseSession, Session } from '@platon/feature/result/common'
 import { PlayerManager } from './player-manager.model'
 import { SandboxManager } from './sandbox-manager.model'
@@ -202,6 +202,40 @@ describe('PlayerManager', () => {
       manager.findSessionById.mockResolvedValue(session)
 
       await expect(manager.openSessionWithCode('session-id', 'ABC123')).rejects.toBeInstanceOf(ForbiddenResponse)
+    })
+  })
+
+  describe('date de fin de la copie', () => {
+    it('date la copie quand elle est terminée', async () => {
+      manager.findSessionById.mockResolvedValue(createActivitySession())
+
+      await manager.terminate('session-id', { id: 'user-id', role: UserRoles.student } as User)
+
+      expect(manager.updateSession).toHaveBeenCalledWith(
+        'activity-session-id',
+        expect.objectContaining({ terminatedAt: expect.any(Date) })
+      )
+    })
+
+    it('efface la date quand la copie est rouverte, avec ou sans code', async () => {
+      const terminated = () =>
+        createActivitySession({ variables: { navigation: createNavigation({ terminated: true }), settings: {} } })
+      manager.findSessionById.mockResolvedValueOnce(terminated()).mockResolvedValueOnce(terminated())
+
+      await manager.openSession('session-id')
+      await manager.openSessionWithCode('session-id', 'ABC123')
+
+      expect(manager.updateSession).toHaveBeenCalledTimes(2)
+      expect(manager.updateSession).toHaveBeenNthCalledWith(
+        1,
+        'activity-session-id',
+        expect.objectContaining({ terminatedAt: null })
+      )
+      expect(manager.updateSession).toHaveBeenNthCalledWith(
+        2,
+        'activity-session-id',
+        expect.objectContaining({ terminatedAt: null })
+      )
     })
   })
 

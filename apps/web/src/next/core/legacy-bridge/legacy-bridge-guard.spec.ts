@@ -6,9 +6,10 @@ import { User, UserRoles } from '@platon/core/common'
 import { DialogService } from '@platon/core/browser/shared'
 import { NEVER, of } from 'rxjs'
 import { nextRoutes } from '../../next.routes'
+import { HomeApi } from '../../pages/home/data/home-api'
 import { Shell } from '../../shell/shell'
-import { NotificationsApi } from '../../shell/notifications/notifications-api'
-import { ShellApi } from '../../shell/shell-api'
+import { NotificationsApi } from '../../shell/notifications/data/notifications-api'
+import { ShellApi } from '../../shell/data/shell-api'
 import { Session } from '../session/session'
 import { NextTheme } from '../theme/next-theme'
 import { PageNavigation } from '../../../shared/page-navigation'
@@ -36,6 +37,17 @@ describe('legacyBridgeGuard', () => {
         },
         { provide: ShellApi, useValue: { correctionSummaries: () => of([]) } },
         { provide: NotificationsApi, useValue: { unreadCount: () => of(0), changes: () => NEVER } },
+        {
+          provide: HomeApi,
+          useValue: {
+            activities: () => of([]),
+            copies: () => of([]),
+            courses: () => of([]),
+            figures: () => of({ averageScore: 0, successRate: 0, timeSpent: 0 }),
+            announcements: () => of([]),
+            dismissedAnnouncements: () => new Set(),
+          },
+        },
         { provide: DialogService, useValue: {} },
         { provide: NextTheme, useValue: { preference: signal('light') } },
       ],

@@ -10,7 +10,7 @@ import {
 } from '@platon/feature/announcement/common'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
-import { buildHttpParams } from '@platon/core/browser'
+import { buildHttpParams } from '@platon/core/browser/shared'
 
 @Injectable()
 export class RemoteAnnouncementProvider extends AnnouncementProvider {

@@ -1,0 +1,12 @@
+:host {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--pl-space-1);
+  color: var(--pl-color-muted);
+  font: var(--pl-font-small);
+}
+.pl-page-figure__value {
+  color: var(--pl-color-text);
+  font-weight: var(--pl-weight-strong);
+  font-variant-numeric: tabular-nums;
+}

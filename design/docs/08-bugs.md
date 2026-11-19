@@ -39,7 +39,8 @@ Gravité : **P1** bloque, trompe ou expose. **P2** gêne ou fait douter. **P3** 
 
 ### B5. Accueil vide pour les comptes démo et candidat
 
-- [ ] Corrigé
+- [ ] Corrigé. Dans la nouvelle interface, le compte de démonstration a l'accueil de l'élève (A-01) ;
+      l'interface actuelle et le compte candidat restent sans accueil.
 - **Symptôme** : l'accueil ne montre rien à ces rôles.
 - **Cause** : les données ne sont chargées que pour `student`.
 - **Où** : `apps/web/src/app/pages/dashboard/overview/overview.presenter.ts`
@@ -199,6 +200,66 @@ Gravité : **P1** bloque, trompe ou expose. **P2** gêne ou fait douter. **P3** 
   rejoue chaque requête avec le nouveau jeton ; le jeton de rafraîchissement ne part que vers
   `POST /auth/refresh`.
 - **Corrigé dans G-05** (branche `fix/session-tokens`) ; la case se coche à la fusion.
+
+### B28. `correction_enabled` vrai pour une seule activité de toute la plateforme
+
+- [ ] Corrigé
+- **Symptôme** : dans les données des copies (`SessionData`), une activité qui a des correcteurs est
+  dite sans correction, sauf une seule activité de toute la plateforme ; la table n'est pas non plus
+  rafraîchie par les corrections ni par la fermeture d'une activité.
+- **Cause** : la sous-requête `SELECT id, activity_id FROM "ActivityCorrectors" corrector LIMIT 1`
+  garde une seule ligne de la table entière avant la jointure sur l'activité.
+- **Où** : `libs/feature/result/server/src/lib/sessions/session.subscriber.ts`,
+  `libs/feature/result/server/src/lib/sessions/session.service.ts`
+- **Piste** : une jointure `EXISTS` sur l'activité de la copie ; rafraîchir la table là où la
+  correction et la fermeture écrivent, ou ne plus la lire (A-04 ne s'en sert pas).
+
+### B29. La note corrigée d'une copie n'est pas reportée sur la copie
+
+- [ ] Corrigé
+- **Symptôme** : une copie corrigée garde sa note automatique quand un de ses exercices est resté
+  sans réponse, et une copie corrigée à 0 aussi ; l'événement « copie corrigée » n'est pas émis.
+- **Cause** : la note de la copie n'est remplacée que si tous ses exercices ont une correction, y
+  compris ceux sans réponse, que la file de correction ne montre jamais ; et `if (grade && ...)`
+  écarte un total de 0.
+- **Où** : `libs/feature/result/server/src/lib/correction/correction.service.ts`
+- **Piste** : considérer la copie corrigée quand tous les exercices de la file le sont, les autres
+  comptant 0, et enregistrer la note même nulle.
+
+### B30. Une restriction vers un groupe supprimé casse la liste des activités
+
+- [x] Corrigé dans A-04 (branche `feat/home-data`) : les restrictions se lisent sur les groupes de la
+      personne, chargés une fois (`activityDatesFor`), et un groupe absent ne nomme personne.
+- **Symptôme** : quand une période de restriction vise un groupe du cours qui a été supprimé, la
+  liste des activités du cours répond 500 pour les membres concernés.
+- **Cause** : `CourseGroupService.isMember` lève `Group with id … not found` au lieu de répondre
+  « non membre ».
+- **Où** : `libs/feature/course/server/src/lib/activity/activity-dates.service.ts`
+- **Piste restante** : retirer le groupe des restrictions quand il est supprimé, pour que le panneau
+  de réglage ne montre pas une période vide.
+
+### B31. Un élève d'un groupe nommé dans une période de restriction n'y a jamais accès
+
+- [x] Corrigé dans A-04 (branche `feat/home-data`).
+- **Symptôme** : un élève inscrit par un groupe d'utilisateurs, choisi dans la liste des membres ou
+  des correcteurs d'une période, reçoit les dates de « Autres » ou aucune ; le panneau de réglage,
+  lui, le dit dans la période.
+- **Cause** : le sélecteur de membres écrit la ligne du groupe ou `<ligne>:<utilisateur>`, et le
+  serveur ne comparait que la ligne propre de l'élève.
+- **Où** : `libs/feature/course/browser/src/components/course-member-select/course-member-select.component.ts`,
+  `libs/feature/course/common/src/lib/activity-restriction.model.ts` (`activityDatesFor`)
+
+### B32. Une activité réservée à un groupe nommé comme membre ne s'ouvre qu'à un de ses élèves
+
+- [ ] Corrigé
+- **Symptôme** : une ligne `ActivityMembers` qui vise la ligne d'un groupe d'utilisateurs, sans
+  `user_id`, n'ouvre l'activité qu'à un élève du groupe, choisi au hasard, dans la page du cours et
+  dans le lecteur ; l'accueil d'A-04 la montre à tout le groupe.
+- **Cause** : `ActivityMemberView` garde une ligne par membre d'activité (`DISTINCT ON (member_id)`).
+- **Où** : `libs/feature/course/server/src/lib/activity-member/activity-member.view.ts`
+- **Piste** : `DISTINCT ON (member_id, u.id)`, par une migration générée, ou faire lire à
+  `ActivityService` le public partagé (`audienceOf`, `activity.sql.ts`). Aucune interface actuelle
+  n'écrit de telles lignes : seules des données anciennes ou créées par l'API sont touchées.
 
 ## P3
 

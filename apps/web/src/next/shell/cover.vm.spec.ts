@@ -1,14 +1,6 @@
 import { UserRoles } from '@platon/core/common'
 import { ActivityCorrectionSummary } from '@platon/feature/result/common'
-import {
-  accountType,
-  coverEntries,
-  createEntries,
-  createTarget,
-  helpInFoot,
-  parentResource,
-  pendingCopies,
-} from './cover.vm'
+import { accountType, coverEntries, createEntries, createTarget, helpInFoot, parentResource } from './cover.vm'
 
 const summary = (pendingCopies: number): ActivityCorrectionSummary => ({
   activityId: 'a',
@@ -18,6 +10,7 @@ const summary = (pendingCopies: number): ActivityCorrectionSummary => ({
   totalExercises: 10,
   correctedExercises: 4,
   pendingCopies,
+  submittedCopies: pendingCopies,
 })
 
 const labels = (role: UserRoles, summaries?: ActivityCorrectionSummary[]) =>
@@ -51,7 +44,6 @@ describe('coverEntries', () => {
   it('counts the copies to correct over every activity, and says so', () => {
     const corrections = coverEntries(UserRoles.teacher, [summary(2), summary(1)]).find((e) => e.label === 'Corrections')
     expect(corrections).toMatchObject({ count: 3, countLabel: 'copies à corriger' })
-    expect(pendingCopies([summary(1)])).toBe(1)
     expect(coverEntries(UserRoles.teacher, [summary(1)]).find((e) => e.count)?.countLabel).toBe('copie à corriger')
   })
 
@@ -107,14 +99,19 @@ describe('createTarget', () => {
   })
 
   it('creates a resource inside the resource open at the time', () => {
-    expect(createTarget('exercise', '/resources/abc/overview?tab=1')).toEqual({
+    expect(createTarget('circle', '/resources/abc/overview?tab=1')).toEqual({
       path: '/resources/create',
-      queryParams: { type: 'EXERCISE', parent: 'abc' },
+      queryParams: { type: 'CIRCLE', parent: 'abc' },
     })
     expect(createTarget('activity', '/dashboard')).toEqual({
       path: '/resources/create',
       queryParams: { type: 'ACTIVITY' },
     })
+  })
+
+  it('starts an exercise from the gallery of the templates, which writes one without a template in the resource open', () => {
+    expect(createTarget('exercise', '/dashboard')).toEqual({ path: '/templates', queryParams: {} })
+    expect(createTarget('exercise', '/resources/abc')).toEqual({ path: '/templates', queryParams: { parent: 'abc' } })
   })
 
   it('never takes the creation page for a parent', () => {

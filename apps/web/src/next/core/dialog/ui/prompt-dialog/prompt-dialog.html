@@ -1,0 +1,23 @@
+<pl-dialog
+  [heading]="data.title"
+  [headingId]="data.headingId"
+  [confirmLabel]="data.okTitle || 'OK'"
+  [cancelLabel]="data.noTitle || 'Annuler'"
+  [confirmDisabled]="!value()"
+  (confirmed)="confirm()"
+  (cancelled)="dialogRef.close(undefined)"
+>
+  <form class="field" (submit)="$event.preventDefault(); confirm()">
+    @if (data.label) {
+    <label [for]="inputId">{{ data.label }}</label>
+    }
+    <input
+      [id]="inputId"
+      type="text"
+      autocomplete="off"
+      [value]="value()"
+      [attr.aria-labelledby]="data.label ? null : data.headingId"
+      (input)="value.set($any($event.target).value)"
+    />
+  </form>
+</pl-dialog>

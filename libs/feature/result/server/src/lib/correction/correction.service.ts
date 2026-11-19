@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { NotFoundResponse } from '@platon/core/common'
-import { EventService } from '@platon/core/server'
+import { asUuid, EventService } from '@platon/core/server'
 import { ON_CORRECT_ACTIVITY_EVENT, OnCorrectActivityEventPayload } from '@platon/feature/course/server'
 import {
   ActivityCorrection,
@@ -13,12 +13,7 @@ import {
 import { Repository } from 'typeorm'
 import { SessionEntity } from '../sessions/session.entity'
 import { CorrectionEntity } from './correction.entity'
-
-/**
- * An exercise that crashed before its student could answer still waits for a correction. Shared by
- * `list` and `listSummary`, so that the queue and its counts agree.
- */
-const FAILED_BEFORE_ANSWER = `(exercise_session.variables->'.meta'->>'error')::boolean IS TRUE`
+import { toCorrect } from './correction.sql'
 
 type Projection = {
   userId: string
@@ -67,18 +62,8 @@ export class CorrectionService {
     viewerMode = false,
     status?: CorrectionStatus
   ): Promise<ActivityCorrection[]> {
-    // In viewer mode, list exercise sessions directly from the activity without requiring answers.
-    // Uses a LEFT JOIN (not INNER) so exercises that crashed before the student could submit an
-    // answer (no "Answers" row at all) are still listed, as long as the session itself recorded an error.
-    const answerJoin = viewerMode
-      ? ''
-      : `LEFT JOIN LATERAL (
-      SELECT * FROM "Answers" a
-      WHERE a.session_id = exercise_session.id AND a.variables IS NOT NULL
-      ORDER BY a.created_at DESC
-      LIMIT 1
-    ) answer ON true`
-
+    // In viewer mode, every exercise of the activity; otherwise those its corrector has to look at,
+    // as the summary counts them.
     const queryParams: string[] = []
     const userParam = viewerMode ? undefined : '$1'
     const activityParam = viewerMode ? '$1' : '$2'
@@ -97,7 +82,7 @@ export class CorrectionService {
     const whereConditions = [
       activityId ? `activity.id=${activityParam}` : undefined,
       userParam ? `(exercise_session.user_id IS NULL OR exercise_session.user_id <> ${userParam})` : undefined,
-      viewerMode ? undefined : `(answer.variables IS NOT NULL OR ${FAILED_BEFORE_ANSWER})`,
+      viewerMode ? undefined : toCorrect('exercise_session'),
       viewerMode ? undefined : "(activity_session.variables->'navigation'->>'terminated')::boolean = TRUE",
       userParam
         ? `EXISTS (
@@ -138,11 +123,10 @@ export class CorrectionService {
       ) THEN true ELSE false END as "hasUploads",
       lbl.labels AS "labels"
     FROM "Sessions" exercise_session
-    INNER JOIN "Resources" resources on resources.id = (exercise_session.source->>'resource')::uuid
+    INNER JOIN "Resources" resources on resources.id = ${asUuid(`exercise_session.source->>'resource'`)}
     INNER JOIN "Sessions" activity_session ON activity_session.id=exercise_session.parent_id
     INNER JOIN "Activities" activity ON activity.id=exercise_session.activity_id
     INNER JOIN "Courses" course ON course.id=activity.course_id
-    ${answerJoin}
     LEFT JOIN "Corrections" correction ON correction.id=exercise_session.correction_id
     LEFT JOIN LATERAL (
       SELECT COALESCE(
@@ -197,10 +181,10 @@ export class CorrectionService {
   }
 
   /**
-   * One line per activity the user corrects: its exercises to correct, those corrected, and the
-   * copies with at least one exercise still to correct. Counts the same exercises as `list`: answered
-   * or crashed, of an exercise that still exists, outside the user's own copy. Aggregated per copy
-   * first, so that no `COUNT(DISTINCT)` keeps PostgreSQL from hashing.
+   * One line per activity the user corrects: its exercises to correct, those corrected, the copies
+   * submitted with when the last one was, and those with at least one exercise still to correct.
+   * Counts the exercises `list` gives (`toCorrect`), outside the user's own copy. Aggregated per copy first, so that no `COUNT(DISTINCT)` keeps
+   * PostgreSQL from hashing.
    */
   async listSummary(correctorUserId: string, status?: CorrectionStatus): Promise<ActivityCorrectionSummary[]> {
     let havingClause = ''
@@ -220,6 +204,7 @@ export class CorrectionService {
         SELECT
           ts.activity_id,
           ts.id,
+          MAX(ts.terminated_at) AS terminated_at,
           COUNT(*) AS total,
           COUNT(correction.id) AS corrected
         FROM "Sessions" ts
@@ -230,16 +215,7 @@ export class CorrectionService {
         WHERE ts.activity_id IN (SELECT activity_id FROM corrector_activities)
           AND ts.parent_id IS NULL
           AND (ts.variables->'navigation'->>'terminated')::boolean = TRUE
-          AND (
-            EXISTS (
-              SELECT 1 FROM "Answers" a
-              WHERE a.session_id = exercise_session.id AND a.variables IS NOT NULL
-            )
-            OR ${FAILED_BEFORE_ANSWER}
-          )
-          AND EXISTS (
-            SELECT 1 FROM "Resources" r WHERE r.id = (exercise_session.source->>'resource')::uuid
-          )
+          AND ${toCorrect('exercise_session')}
         GROUP BY ts.activity_id, ts.id
       )
       SELECT
@@ -249,7 +225,9 @@ export class CorrectionService {
         ca.course_name AS "courseName",
         SUM(copy.total)::int AS "totalExercises",
         SUM(copy.corrected)::int AS "correctedExercises",
-        COUNT(*) FILTER (WHERE copy.corrected < copy.total)::int AS "pendingCopies"
+        COUNT(*) FILTER (WHERE copy.corrected < copy.total)::int AS "pendingCopies",
+        COUNT(*)::int AS "submittedCopies",
+        MAX(copy.terminated_at) AS "lastSubmittedAt"
       FROM corrector_activities ca
       INNER JOIN copies copy ON copy.activity_id = ca.activity_id
       GROUP BY ca.activity_id, ca.activity_name, ca.course_id, ca.course_name

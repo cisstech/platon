@@ -2,7 +2,9 @@ import { Component, signal } from '@angular/core'
 import { TestBed } from '@angular/core/testing'
 import { Button } from '../button/button'
 import { Icon } from '../icon/icon'
-import { Field, FieldInput, PasswordReveal } from './field'
+import { Field } from './field'
+import { FieldInput } from './field-input'
+import { PasswordReveal } from './password-reveal'
 
 @Component({
   imports: [Button, Field, FieldInput, Icon, PasswordReveal],

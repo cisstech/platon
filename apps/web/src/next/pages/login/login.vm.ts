@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http'
 import { casSignInUrl } from '@platon/feature/cas/common'
-import { failureCause } from '../../shared/load-state/load-state'
+import { failureCause } from '../../shared/ui/load-state/load-state'
 
 /** Why a sign-in did not happen. */
 export type SignInFailure = 'missing' | 'credentials' | 'token' | 'cas' | 'server' | 'offline'

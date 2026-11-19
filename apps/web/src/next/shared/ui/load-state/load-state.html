@@ -1,0 +1,21 @@
+@if (phase() === 'slow') {
+<pl-alert icon="hourglass_empty" [heading]="slowHeading">
+  <p>{{ slowText }}</p>
+</pl-alert>
+} @else if (failed()) {
+<pl-empty
+  role="alert"
+  [heading]="heading()"
+  [icon]="cause() === 'server' ? 'cloud_off' : 'wifi_off'"
+  [tone]="cause() === 'server' ? 'danger' : 'neutral'"
+  [code]="code()"
+  [level]="level()"
+  [compact]="compact()"
+>
+  <p>{{ causeText() }} {{ reassurance() }}</p>
+  <button type="button" plButton variant="primary" plEmptyAction (click)="retry.emit()">
+    <pl-icon name="replay" />Réessayer
+  </button>
+  <ng-container ngProjectAs="[plEmptyAction]"><ng-content select="[appLoadStateExit]" /></ng-container>
+</pl-empty>
+}

@@ -2,7 +2,12 @@ import { type Meta, type StoryObj, moduleMetadata } from '@storybook/angular'
 import { Avatar } from '../avatar/avatar'
 import { Button } from '../button/button'
 import { Icon } from '../icon/icon'
-import { Menu, MenuGroup, MenuHeader, MenuItem, MenuSeparator, MenuTrigger } from './menu'
+import { Menu } from './menu'
+import { MenuGroup } from './menu-group/menu-group'
+import { MenuHeader } from './menu-header/menu-header'
+import { MenuItem } from './menu-item/menu-item'
+import { MenuSeparator } from './menu-separator/menu-separator'
+import { MenuTrigger } from './menu-trigger'
 
 const meta: Meta<Menu> = {
   title: 'Components/Menu',

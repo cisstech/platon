@@ -1,13 +1,15 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable, inject } from '@angular/core'
-import { buildHttpParams } from '@platon/core/browser'
+import { buildHttpParams } from '@platon/core/browser/shared'
 import { ItemResponse, ListResponse, NoContentResponse } from '@platon/core/common'
 import {
   Activity,
   ActivityFilters,
   Course,
   CreateActivity,
+  PlayableActivity,
   RestrictionList,
+  TaughtActivity,
   UpdateActivity,
 } from '@platon/feature/course/common'
 import { Observable } from 'rxjs'
@@ -104,5 +106,17 @@ export class RemoteActivityProvider extends ActivityProvider {
     return this.http
       .get<ItemResponse<number[]>>(`/api/v1/courses/${courseId}/activities/colors`)
       .pipe(map((response) => response.resource))
+  }
+
+  playable(): Observable<PlayableActivity[]> {
+    return this.http
+      .get<ListResponse<PlayableActivity>>('/api/v1/activities/mine')
+      .pipe(map((response) => response.resources))
+  }
+
+  taught(): Observable<TaughtActivity[]> {
+    return this.http
+      .get<ListResponse<TaughtActivity>>('/api/v1/activities/taught')
+      .pipe(map((response) => response.resources))
   }
 }

@@ -1,0 +1,19 @@
+:host {
+  position: relative;
+  display: block;
+  inline-size: 100%;
+  block-size: 6px;
+  border-radius: var(--pl-radius-pill);
+  background: var(--pl-color-track);
+  overflow: hidden;
+}
+.pl-progress__fill {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  border-radius: inherit;
+  background: var(--pl-hue-strong, var(--pl-color-muted));
+}
+:host([data-done]) .pl-progress__fill {
+  background: var(--pl-gradient-joy);
+}

@@ -1,0 +1,53 @@
+:host {
+  display: inline-flex;
+  flex: none;
+  inline-size: var(--pl-glyph-size-1);
+  block-size: var(--pl-glyph-size-1);
+}
+:host([data-size='2']) {
+  inline-size: var(--pl-glyph-size-2);
+  block-size: var(--pl-glyph-size-2);
+}
+svg {
+  inline-size: 100%;
+  block-size: 100%;
+}
+.g-paper {
+  fill: var(--pl-color-surface);
+}
+.g-outline {
+  stroke: var(--pl-color-control);
+}
+.g-outline-fill {
+  fill: var(--pl-color-control);
+}
+.g-rule {
+  stroke: var(--pl-color-line);
+}
+.g-rule-fill {
+  fill: var(--pl-color-line);
+}
+.g-rule-strong {
+  stroke: var(--pl-color-line-strong);
+}
+.g-margin {
+  stroke: var(--pl-color-margin);
+}
+.g-mark {
+  stroke: var(--pl-color-danger);
+}
+.g-ink {
+  stroke: var(--pl-color-muted);
+}
+.g-ink-fill {
+  fill: var(--pl-color-muted);
+}
+.g-warm {
+  fill: var(--pl-color-joy-2);
+}
+.g-warm-stroke {
+  stroke: var(--pl-color-joy-2);
+}
+.g-eraser {
+  fill: var(--pl-course-raspberry-tint);
+}
