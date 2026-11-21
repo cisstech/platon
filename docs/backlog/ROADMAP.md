@@ -75,7 +75,7 @@ critique. Les points ouverts de C-02 à C-05 sont tranchés (D22 à D30, 2026-10
 | [C-03](./done/C-03-le-cadre-mobile.md)                             | Le cadre mobile : barre haute et panneau                                                    | C-02             | M      | Livré (2026-10-09) |
 | [C-04](./done/C-04-le-panneau-des-notifications.md)                | Le panneau des notifications                                                                | C-02, C-06, F-04 | M      | Livré (2026-10-09) |
 | [C-08](./done/C-08-le-temps-reel-en-sse-sans-graphql.md)           | Le temps réel en SSE, sans GraphQL                                                          | C-04             | L      | Livré (2026-10-12) |
-| [C-09](./C-09-decouper-le-cadre.md)                                | Découper le cadre : profil, Créer, panneaux                                                 | C-02, C-03, C-04 | M      | À faire            |
+| [C-09](./todo/C-09-decouper-le-cadre.md)                                | Découper le cadre : profil, Créer, panneaux                                                 | C-02, C-03, C-04 | M      | À faire            |
 
 ## Phase A : les accueils
 
@@ -141,7 +141,7 @@ critique. Les points ouverts de C-02 à C-05 sont tranchés (D22 à D30, 2026-10
 
 | Ticket                                                           | Titre                                                                 | Dépend de              | Taille | Statut   |
 | ---------------------------------------------------------------- | --------------------------------------------------------------------- | ---------------------- | ------ | -------- |
-| [X-01](./X-01-proposer-la-nouvelle-interface-aux-volontaires.md) | Palier 1, proposition aux volontaires (`platon-ui-next` à `opt-in`)   | S-05, C-02, A-01, A-02 | S      | À faire  |
+| [X-01](./todo/X-01-proposer-la-nouvelle-interface-aux-volontaires.md) | Palier 1, proposition aux volontaires (`platon-ui-next` à `opt-in`)   | S-05, C-02, A-01, A-02 | S      | À faire  |
 | X-02                                                             | Palier 2, la nouvelle interface par défaut, avec retour possible      | tous les écrans hors L | S      | À écrire |
 | X-03                                                             | Palier 3, retrait de l'ancienne interface, de Material et de ng-zorro | X-02, phase L          | L      | À écrire |
 
@@ -160,7 +160,7 @@ Hors du chemin des paliers : un ticket D se prend quand il ne retarde aucun écr
 
 | Ticket                                                                      | Titre                                                     | Dépend de | Taille | Statut  |
 | --------------------------------------------------------------------------- | --------------------------------------------------------- | --------- | ------ | ------- |
-| [D-01](./D-01-lire-les-parametres-des-dto-avec-des-decorateurs-partages.md) | Lire les paramètres des DTO avec des décorateurs partagés | C-08      | M      | À faire |
+| [D-01](./todo/D-01-lire-les-parametres-des-dto-avec-des-decorateurs-partages.md) | Lire les paramètres des DTO avec des décorateurs partagés | C-08      | M      | À faire |
 
 ## Bugs de l'interface actuelle
 
