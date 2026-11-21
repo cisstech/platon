@@ -6,8 +6,8 @@ la direction artistique sont dans [`design/`](../../design/) ; ici, on décrit l
 - [ROADMAP.md](./ROADMAP.md) : où on en est, l'ordre, les phases.
 - [DECISIONS.md](./DECISIONS.md) : les décisions numérotées. Une décision se remplace par une
   nouvelle ligne datée ; elle ne se rediscute pas dans un ticket.
-- Les tickets ouverts sont à la racine du dossier ; livrés, ils vont dans [`done/`](./done/) ;
-  abandonnés, dans `retired/` avec un bandeau « Retiré le … ».
+- Les tickets ouverts sont dans [`todo/`](./todo/), à écrire, à faire ou en cours ; livrés, ils vont
+  dans [`done/`](./done/) ; abandonnés, dans `retired/` avec un bandeau « Retiré le … ».
 
 ## Nommer un ticket
 
